@@ -50,6 +50,12 @@ pipenv shell
 
 Note that all the required Python packages are automatically installed the first time you run this command.
 
+If packages are not installed:
+
+```sh
+pipenv install
+```
+
 
 ### Settings
 
@@ -58,7 +64,7 @@ You can create a settings file for your personal use in the project's settings f
 If you name it `local.py`, it will not be commited to the project and its content will automatically be applied as overrides in all the other settings files.
 
 ```sh
-tee fun_portal/settings/local.py << 'EOF'
+tee fun_cms/settings/local.py << 'EOF'
 # your customizations here:
 # ...
 EOF
@@ -71,6 +77,12 @@ Make sure your database is up-to-date before running the application the first t
 
 ```sh
 python manage.py migrate
+```
+
+You have to create a superuser account
+
+```sh
+python manage.py createsuperuser
 ```
 
 
