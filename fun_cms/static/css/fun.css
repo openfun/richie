@@ -5,6 +5,9 @@ body {
     font-family: 'Raleway', sans-serif;
     -ms-overflow-style: scrollbar;
 }
+.container {
+    width: 100%;
+}
 .simple-content-page section,
 .simple-content-page article { 
 	max-width:	80em;
@@ -250,11 +253,11 @@ a:hover {
     border: 1px solid #FB453E;
 }
 #login-overlay input[name="email"] {
-    background: url("../images/icones/login-email.c6a73c6bd890.png") 8px 8px no-repeat #F1F2F3;
+    background: url('../images/icones/login-email.png') 8px 8px no-repeat #F1F2F3;
 
 }
 #login-overlay input[name="password"] {
-    background: url("../images/icones/login-password.bad69101d99e.png") 8px 8px no-repeat #F1F2F3;
+    background: url('../images/icones/login-password.png') 8px 8px no-repeat #F1F2F3;
 }
 
 #login-overlay input.loginerror {
@@ -342,10 +345,10 @@ h3.big-title {
     margin-left: 6px;
     margin-right: 6px;
     margin-bottom: 30px;
-    background: url("../images/icones/social-networks.665a630cbce0.png") 0px 0px no-repeat;
+    background: url('../images/icones/social-networks.png') 0px 0px no-repeat;
 }
 .social-networks span:hover {
-    background: url("../images/icones/social-networks-hover.a27910016ce2.png") 0px 0px no-repeat;
+    background: url('../images/icones/social-networks-hover.png') 0px 0px no-repeat;
 }
 .social-networks span.facebook {
 }
@@ -402,11 +405,6 @@ ul.breadcrumbs li a:focus {
  *       xs       sm        md        lg
 */
 
-.homepage-header-image .banner-fun {
-    z-index: -1;
-    width: 100%;
-}
-
 @media (min-width: 1900px) {
     .main-width {
         width: 1900px;
@@ -431,7 +429,7 @@ ul.breadcrumbs li a:focus {
 
     .homepage-header {
         height: 450px;
-        background-image: url("../images/homepage2495.jpg");
+        background-image: url('../images/homepage2495.jpg');
     }
     .homepage-header h1 {
         font-size: 48px;
@@ -441,7 +439,6 @@ ul.breadcrumbs li a:focus {
         margin-left: -320px;
         bottom: -82px;
     }
-
     .homepage-header-image {
         height: 450px;
     }
@@ -452,10 +449,6 @@ ul.breadcrumbs li a:focus {
         width: 640px;
         margin-left: -320px;
         bottom: -82px;
-    }
-
-    .main-content .right {
-        width: 730px;
     }
 
     .course-about .right .register-course-button {
@@ -491,24 +484,12 @@ ul.breadcrumbs li a:focus {
 
     .homepage-header {
         height: 360px;
-        background-image: url("../images/homepage1900.jpg")
+        background-image: url('../images/homepage1900.jpg')
     }
     .homepage-header h1 {
         font-size: 42px;
     }
     .homepage-header img.logo-fun {
-        width: 320px;
-        margin-left: -160px;
-        bottom: -40px;
-    }
-
-    .homepage-header-image {
-        height: 360px;
-    }
-    .homepage-header-image h1 {
-        font-size: 42px;
-    }
-    .homepage-header-image img.logo-fun {
         width: 320px;
         margin-left: -160px;
         bottom: -40px;
@@ -554,7 +535,7 @@ ul.breadcrumbs li a:focus {
 
     .homepage-header {
         height: 320px;
-        background-image: url("../images/homepage1280.jpg");
+        background-image: url('../images/homepage1280.jpg')
     }
     .homepage-header h1 {
         font-size: 38px;
@@ -603,7 +584,7 @@ ul.breadcrumbs li a:focus {
         font-size: 38px;
     }
     h2.big-title {
-        fo1xnt-size: 32px;
+        font-size: 32px;
     }
     h3.big-title {
         font-size: 28px;
@@ -633,7 +614,7 @@ ul.breadcrumbs li a:focus {
 
     .homepage-header {
         height: 260px;
-        background-image: url("../images/homepage768.jpg");
+        background-image: url('../images/homepage768.jpg')
     }
     .homepage-header h1 {
         font-size: 22px;
@@ -860,7 +841,7 @@ ul.breadcrumbs li a:focus {
     position: absolute;
     width: 50px;
     height: 37px;
-    background: url("../images/icones/verified-course.125f511a8549.png") no-repeat;
+    background: url('../images/icones/verified-course.png') no-repeat;
     z-index: 1;
 }
 .course-block .small-course span.verified {
@@ -935,7 +916,7 @@ ul.breadcrumbs li a:focus {
 .small-course .footer .date {
     padding-left: 46px;
     padding-top: 4px;
-    background: url("../images/icones/calendar.98df3ce4be64.png") 10px 8px no-repeat;
+    background: url('../images/icones/calendar.png') 10px 8px no-repeat;
     font-weight: 500;
     color: #656667;
 }
@@ -988,7 +969,7 @@ ul.breadcrumbs li a:focus {
 .big-course .footer .date {
     padding-left: 48px;
     padding-top: 16px;
-    background: url("../images/icones/calendar.98df3ce4be64.png") 12px 14px no-repeat;
+    background: url('../images/icones/calendar.png') 12px 14px no-repeat;
     font-weight: 600;
     line-height: 28px;
 }
@@ -1105,7 +1086,7 @@ ul.universities-list {
 }
 
 .fun-news-background {
-    background: #2B2B2B url("../images/news-background.63f40f1b6fdf.jpg") no-repeat;
+    background: #2B2B2B url('../images/news-background.jpg') no-repeat;
 }
 
 .fun-news .big {
@@ -1219,7 +1200,7 @@ ul.universities-list {
 .fun-news .secondary>div {
     position: absolute;
     background-color: white;
-    width: 300px;
+    width: 295px;
     right: 0;
     top: 0;
     height: 167px;
@@ -1650,19 +1631,19 @@ ul.universities-list {
 }
 .criteria li.icon.fr-flag,
 .course-info li.icon.fr-flag {
-    background: url("../images/icones/french-flag.79b95273cdea.png") 6px 2px no-repeat;
+    background: url('../images/icones/french-flag.png') 6px 2px no-repeat;
 }
 .criteria li.icon.en-flag,
 .course-info li.icon.en-flag {
-    background: url("../images/icones/english-flag.75b4240a4f4d.png") 6px 2px no-repeat;
+    background: url('../images/icones/english-flag.png') 6px 2px no-repeat;
 }
 .criteria li.icon.de-flag,
 .course-info li.icon.de-flag {
-    background: url("../images/icones/german-flag.b2619ffde79d.png") 6px 2px no-repeat;
+    background: url('../images/icones/german-flag.png') 6px 2px no-repeat;
 }
 .criteria li.icon.es-flag,
 .course-info li.icon.es-flag {
-    background: url("../images/icones/spanish-flag.0f0fb400c588.png") 6px 2px no-repeat;
+    background: url('../images/icones/spanish-flag.png') 6px 2px no-repeat;
 }
 .course-info li.icon {
     margin-left: -8px;
@@ -1672,11 +1653,11 @@ ul.universities-list {
 .criteria li.filter-checkbox {
     padding-left: 36px !important;
     height: 36px;
-    background: url("../images/icones/filter-checkbox.1e1829a14684.png") 6px 2px no-repeat;
+    background: url('../images/icones/filter-checkbox.png') 6px 2px no-repeat;
 
 }
 .criteria li.filter-checkbox.checked {
-    background: url("../images/icones/filter-checkbox-checked.94b635ce8e9b.png") 6px 2px no-repeat;
+    background: url('../images/icones/filter-checkbox-checked.png') 6px 2px no-repeat;
     }
 
 
@@ -1797,7 +1778,7 @@ ul.universities-list {
     position: absolute;
     width: 60px;
     height: 45px;
-    background: url("../images/icones/verified-course60.4b8e47a61c88.png") no-repeat;
+    background: url('../images/icones/verified-course60.png') no-repeat;
     z-index: 1;
 }
 
@@ -1826,13 +1807,13 @@ ul.universities-list {
     left: 45%;
     padding-top: 4px;
     padding-left: 30px;
-    background: url("../images/icones/register.fadae45e6660.png") 0px 0px no-repeat;
+    background: url('../images/icones/register.png') 0px 0px no-repeat;
 }
 .course-about .right .register-course-button:hover {
     background-color: #F72D30;
 }
 .course-about .right .register-course-button:hover span {
-    background: url("../images/icones/register-hover.8153035de706.png") 0px 0px no-repeat;
+    background: url('../images/icones/register-hover.png') 0px 0px no-repeat;
 }
 .course-about .right .register-course-button.registration-closed,
 .course-about .right .register-course-button.registration-closed:hover {
@@ -1858,7 +1839,7 @@ ul.universities-list {
     position: absolute;
     width: 100%;
     height: 100%;
-    background: url("../images/icones/video-play-button.574926db8f98.png") no-repeat center;
+    background: url('../images/icones/video-play-button.png') no-repeat center;
     opacity: 0.7;
 }
 .course-about .course-image .video-button:hover {
@@ -1909,34 +1890,34 @@ ul.universities-list {
     padding-bottom: 20px;
 }
 .main-content .right .course-info.exclamation {
-    background: url("../images/icones/exclamation-red.296abd9d9e68.png") 0px 20px no-repeat;
+    background: url('../images/icones/exclamation-red.png') 0px 20px no-repeat;
 }
 .main-content .right .course-info.calendar {
-    background: url("../images/icones/calendar-red.9b32a8f0c3a8.png") 0px 20px no-repeat;
+    background: url('../images/icones/calendar-red.png') 0px 20px no-repeat;
 }
 .main-content .right .course-info.clock{
-    background: url("../images/icones/clock-red.ca36a7951085.png") 0px 20px no-repeat;
+    background: url('../images/icones/clock-red.png') 0px 20px no-repeat;
 }
 .main-content .right .course-info.diploma {
-    background: url("../images/icones/diploma-red.8e3b5505973d.png") 0px 20px no-repeat;
+    background: url('../images/icones/diploma-red.png') 0px 20px no-repeat;
 }
 .main-content .right .course-info.accessibility {
-    background: url("../images/icones/accessibility-red.58cf9d057ae5.png") 0px 20px no-repeat;
+    background: url('../images/icones/accessibility-red.png') 0px 20px no-repeat;
 }
 .main-content .right .course-info.bubble {
-    background: url("../images/icones/bubble-red.790fe36dd0e0.png") 0px 20px no-repeat;
+    background: url('../images/icones/bubble-red.png') 0px 20px no-repeat;
 }
 .main-content .right .course-info.letter {
-    background: url("../images/icones/letter-red.8c33168becf2.png") 0px 20px no-repeat;
+    background: url('../images/icones/letter-red.png') 0px 20px no-repeat;
 }
 .main-content .right .course-info.link {
-    background: url("../images/icones/link-red.0cc0d070fff2.png") 0px 20px no-repeat;
+    background: url('../images/icones/link-red.png') 0px 20px no-repeat;
 }
 .main-content .right .course-info.star {
-    background: url("../images/icones/star-red.595443b5591c.png") 0px 20px no-repeat;
+    background: url('../images/icones/star-red.png') 0px 20px no-repeat;
 }
 .main-content .right .course-info.folder {
-    background: url("../images/icones/folder-red.7c7e1c8965dd.png") 0px 20px no-repeat;
+    background: url('../images/icones/folder-red.png') 0px 20px no-repeat;
 }
 .main-content .right .course-info ul {
     list-style: none;
@@ -2081,42 +2062,42 @@ ul.universities-list {
         text-decoration: none;
     }
     .course-about .description section.social-networks div.facebook {
-        background: url("../images/icones/small-facebook.2414d24c20b1.png") 0px 0px no-repeat;
+        background: url('../images/icones/small-facebook.png') 0px 0px no-repeat;
     }
     .course-about .description section.social-networks div.twitter {
-        background: url("../images/icones/small-twitter.950d603b7b39.png") 0px 0px no-repeat;
+        background: url('../images/icones/small-twitter.png') 0px 0px no-repeat;
     }
     .course-about .description section.social-networks div.google-plus {
-        background: url("../images/icones/small-gplus.36fc14290a13.png") 0px 0px no-repeat;
+        background: url('../images/icones/small-gplus.png') 0px 0px no-repeat;
     }
     .course-about .description section.social-networks div.linkedin {
-        background: url("../images/icones/small-linkedin.0084e4d8455a.png") 0px 0px no-repeat;
+        background: url('../images/icones/small-linkedin.png') 0px 0px no-repeat;
     }
     .course-about .description section.social-networks div.blog {
-        background: url("../images/icones/small-blog.ebdae7ad1d16.png") 0px 0px no-repeat;
+        background: url('../images/icones/small-blog.png') 0px 0px no-repeat;
     }
     .course-about .description section.social-networks div.tumblr {
-        background: url("../images/icones/small-tumblr.01ae9cc06375.png") 0px 0px no-repeat;
+        background: url('../images/icones/small-tumblr.png') 0px 0px no-repeat;
     }
 
 
-.course-about .description section.licence {
-}
+    .course-about .description section.licence {
+    }
     .course-about .description section.licence article {
         margin-bottom: 26px;
     }
     .course-about .description section.licence article.cc-by-nc {
-        background: url("../images/icones/by-nc.eu.d5c05ebd4299.png") 0px 0px no-repeat;
+        background: url('../images/icones/by-nc.eu.png') 0px 0px no-repeat;
         background-position: bottom left;
         padding-bottom: 40px;
     }
     .course-about .description section.licence article.cc-by-nc-sa {
-        background: url("../images/icones/by-nc-sa.eu.e835e4283e6a.png") 0px 0px no-repeat;
+        background: url('../images/icones/by-nc-sa.eu.png') 0px 0px no-repeat;
         background-position: bottom left;
         padding-bottom: 40px;
     }
     .course-about .description section.licence article.cc-by-nc-nd {
-        background: url("../images/icones/by-nc-nd.eu.39115e786e3a.png") 0px 0px no-repeat;
+        background: url('../images/icones/by-nc-nd.eu.png') 0px 0px no-repeat;
         background-position: bottom left;
         padding-bottom: 40px;
     }

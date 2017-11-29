@@ -1,0 +1,19 @@
+{% load i18n apphooks_config_tags %}
+<div class="news_categories_content new_hidden">
+    <ul>
+        <li>
+            <strong>{% trans "In the same category | All categories" %}</strong>
+        </li>
+
+        <li{% if not newsblog_category %} class="active"{% endif %}>
+            <a href="{% namespace_url "article-list" namespace=instance.app_config.namespace default='' %}">{% trans "All articles" %}</a>
+        </li>
+
+        {% for category in categories %}
+        <li{% if newsblog_category.id == category.id %} class="active"{% endif %}>
+            <a href="{% namespace_url "article-list-by-category" category.slug namespace=instance.app_config.namespace default='' %}">{{ category.name }}</a>
+            <span>({{ category.article_count }})</span>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
