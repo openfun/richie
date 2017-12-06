@@ -28,7 +28,16 @@ WSGI_APPLICATION = 'fun_cms.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/1.8/ref/settings/#databases
+DATABASES = {
+    'default': {
+        'ENGINE': get_config('DATABASE_ENGINE', default='django.db.backends.postgresql_psycopg2'),
+        'NAME': get_config('DATABASE_NAME', default='fun_cms'),
+        'USER': get_config('DATABASE_USER', default='funadmin'),
+        'PASSWORD': get_config('DATABASE_PASSWORD', default='funadmin'),
+        'HOST': get_config('DATABASE_HOST', default='localhost'),
+        'PORT': get_config('DATABASE_PORT', default=5432)
+    }
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
@@ -165,15 +174,8 @@ CMS_PERMISSION = True
 
 CMS_PLACEHOLDER_CONF = {}
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'fun_cms.db',
-    }
-}
-
 MIGRATION_MODULES = {
-    
+
 }
 
 THUMBNAIL_PROCESSORS = (
