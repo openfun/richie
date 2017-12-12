@@ -24,7 +24,29 @@ sudo apt-get -y dist-upgrade
 
 ## Database part
 
-For a start, we will be using the sqllite3 database.
+You must first install `postgresql`.
+
+```sh
+sudo apt-get -y install postgresql-9.5
+```
+
+`Postgresql` is now running.
+
+Then you can create the database owner and the database itself, using the `postgres` user:
+
+```sh
+sudo -u postgres -i
+createuser funadmin -sP
+```
+
+Note: we created the user as a superuser. This should only be done in dev/test environments.
+
+Now, create the database with this user:
+
+```sh
+createdb fun_cms -O funadmin -W
+exit
+```
 
 
 ## Application part
