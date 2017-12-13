@@ -60,24 +60,18 @@ We use `Python 3.5` which is the one installed by default in `Ubuntu 16.04`.
 
 We choose to run our application in a virtual environment and manage our Python dependencies using `pipenv` which you can install with pip:
 
-```sh
-pip install pipenv
-```
+    pip install pipenv
+
 
 You can now open a new shell with the virtualenv activated:
 
-```sh
-pipenv shell
-```
-
-Note that all the required Python packages are automatically installed the first time you run this command.
+    pipenv shell
 
 If packages are not installed:
 
-```sh
-pipenv install
-```
+    pipenv install --dev
 
+The "dev" option installs packages specific to a dev environment and should not be used in production.
 
 ### Settings
 
@@ -97,19 +91,16 @@ For development, you can add your own settings file named `local.py` to customiz
 
 Make sure your database is up-to-date before running the application the first time and after each modification to your models:
 
-```sh
-python manage.py migrate
-```
+    python manage.py migrate
 
-You have to create a superuser account
+You can now create a superuser account:
 
-```sh
-python manage.py createsuperuser
-```
+    python manage.py createsuperuser
 
+Run the tests
+
+    python manage.py test
 
 You should now be able to start Django and view the site at [localhost:8000](http://localhost:8000)
 
-```sh
-python manage.py runserver
-```
+    python manage.py runserver
