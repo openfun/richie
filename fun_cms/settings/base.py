@@ -12,7 +12,8 @@ gettext = lambda s: s
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.dirname(BASE_DIR)
 
-# Django settings for the fun-cms project.
+# Group to add plugin to placeholder "Content"
+FUN_PLUGINS_GROUP = "Fun Plugins"
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = get_config('SECRET_KEY', default='insecure-secret-key')
@@ -143,7 +144,9 @@ INSTALLED_APPS = (
     'djangocms_snippet',
     'djangocms_googlemap',
     'djangocms_video',
-    'fun_cms'
+
+    # FUN stuffs
+    'plugins.large_banner',
 )
 
 LANGUAGES = (
