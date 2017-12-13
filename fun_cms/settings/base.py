@@ -45,7 +45,7 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-LANGUAGE_CODE = 'en'
+LANGUAGE_CODE = 'fr'
 
 TIME_ZONE = 'Europe/Paris'
 
@@ -147,7 +147,7 @@ INSTALLED_APPS = (
 )
 
 LANGUAGES = (
-    ## Customize this
+    ('fr', gettext('fr')),
     ('en', gettext('en')),
 )
 
@@ -158,6 +158,13 @@ CMS_LANGUAGES = {
         'redirect_on_fallback': True,
     },
     1: [
+        {
+            'public': True,
+            'code': 'fr',
+            'hide_untranslated': False,
+            'name': gettext('fr'),
+            'redirect_on_fallback': True,
+        },
         {
             'public': True,
             'code': 'en',
