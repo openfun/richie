@@ -10,8 +10,8 @@ __pycache__/
 *.py[cod]
 
 # Site media
-media/
-static/
+/media/
+/static/
 
 # Settings
 local.py

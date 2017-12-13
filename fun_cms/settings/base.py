@@ -7,10 +7,10 @@ from .utils import get_config
 
 
 gettext = lambda s: s
-DATA_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_DIR = os.path.dirname(BASE_DIR)
 
 # Django settings for the fun-cms project.
 
@@ -65,7 +65,7 @@ MEDIA_ROOT = os.path.join(DATA_DIR, 'media')
 STATIC_ROOT = os.path.join(DATA_DIR, 'static')
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'fun_cms', 'static'),
+    os.path.join(BASE_DIR, 'static'),
 )
 SITE_ID = 1
 
@@ -73,7 +73,7 @@ SITE_ID = 1
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'fun_cms', 'templates'),],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'OPTIONS': {
             'context_processors': [
                 'django.contrib.auth.context_processors.auth',
