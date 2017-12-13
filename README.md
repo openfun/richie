@@ -81,17 +81,17 @@ pipenv install
 
 ### Settings
 
-You can create a settings file for your personal use in the project's settings folder.
+Settings are defined in different files for each of the following environments:
 
-If you name it `local.py`, it will not be commited to the project and its content will automatically be applied as overrides in all the other settings files.
+- dev: settings for development on developpers' local environment,
+- ci: settings used on the continuous integration platform,
+- staging: settings for deployment to the staging environment,
+- preprod: settings for deployment to the pre-production environment,
+- prod: settings for deployment to the production environment.
 
-```sh
-tee fun_cms/settings/local.py << 'EOF'
-# your customizations here:
-# ...
-EOF
-```
+The dev environment is defined as the default environment.
 
+For development, you can add your own settings file named `local.py` to customize settings to your needs. It will be ignored by git.
 
 ### Run server
 

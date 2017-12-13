@@ -1,5 +1,8 @@
-import os
+"""
+Django settings for fun_cms project.
+"""
 
+import os
 from .utils import get_config
 
 
@@ -111,6 +114,7 @@ MIDDLEWARE_CLASSES = (
 )
 
 INSTALLED_APPS = (
+    # Django
     'djangocms_admin_style',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -120,6 +124,8 @@ INSTALLED_APPS = (
     'django.contrib.sitemaps',
     'django.contrib.staticfiles',
     'django.contrib.messages',
+
+    # Django-cms
     'cms',
     'menus',
     'sekizai',
@@ -146,7 +152,6 @@ LANGUAGES = (
 )
 
 CMS_LANGUAGES = {
-    ## Customize this
     'default': {
         'public': True,
         'hide_untranslated': False,
@@ -164,7 +169,6 @@ CMS_LANGUAGES = {
 }
 
 CMS_TEMPLATES = (
-    ## Customize this
     ('fullwidth.html', 'Fullwidth'),
     ('sidebar_left.html', 'Sidebar Left'),
     ('sidebar_right.html', 'Sidebar Right')
