@@ -2,6 +2,7 @@
 from django.db import IntegrityError
 from django.test import TestCase
 from django.test.client import RequestFactory
+import re
 
 from cms.api import add_plugin
 from cms.models import Placeholder
@@ -70,11 +71,18 @@ class LargeBannerTests(TestCase):
         self.assertIn('<h1>{:s}</h1>'.format(large_banner.title), html)
         background_image_base = large_banner.background_image.url.replace('/media', '')
         self.assertIn('<div class="homepage-header-image">', html)
+        rexp_background = re.compile(
+            'src="/media/(.)*{:s}__1900x450_q85_crop-%2C0'.format(background_image_base))
+        self.assertRegexpMatches(html, rexp_background)
+        self.assertIn('{:s}__2495x550_q85_crop-%2C0'.format(background_image_base), html)
         self.assertIn('{:s}__2495x550_q85_crop-%2C0'.format(background_image_base), html)
         self.assertIn('{:s}__1900x450_q85_crop-%2C0'.format(background_image_base), html)
         self.assertIn('{:s}__1280x400_q85_crop-%2C0'.format(background_image_base), html)
         self.assertIn('{:s}__768x450_q85_crop-%2C0'.format(background_image_base), html)
         logo_base = large_banner.logo.url.replace('/media', '')
+        rexp_logo = re.compile(
+            'src="/media/(.)*{:s}__593x237_q85_crop'.format(logo_base))
+        self.assertRegexpMatches(html, rexp_logo)
         self.assertIn('{:s}__593x237_q85_crop'.format(logo_base), html)
         self.assertIn('alt="{:s}"'.format(large_banner.logo_alt_text), html)
 

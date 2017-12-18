@@ -12,7 +12,7 @@
        A div contains image to display a black background
     {% endcomment %}
     <div class="content-image">
-        <img class="banner-fun" src="{{ background_thumb }}"
+        <img class="banner-fun" src="{{ background_thumb.url }}"
                                 srcset="{% thumbnail instance.background_image 2495x550 crop=',0' %} 2495w,
                                         {% thumbnail instance.background_image 1900x450 crop=',0' %} 1900w,
                                         {% thumbnail instance.background_image 1280x400 crop=',0' %} 1280w,
@@ -23,5 +23,5 @@
 <div class="homepage-header">
 {% endif %}
     <h1>{{ instance.title }}</h1>
-    <img src="{{ logo_thumb }}" class="logo-fun" alt="{{ instance.logo_alt_text }}"/>
+    <img src="{{ logo_thumb.url }}" class="logo-fun" alt="{{ instance.logo_alt_text }}"/>
 </div>
