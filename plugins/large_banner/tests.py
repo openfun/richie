@@ -129,3 +129,27 @@ class LargeBannerTests(TestCase):
 
         # Check that all expected elements are in the html
         self.assertFalse('<img class="logo-fun" alt=""/>' in html)
+
+    def test_large_banner_comment_in_template(self):
+        """
+        Django comments in templates should not appear in rendered html
+        """
+        placeholder = Placeholder.objects.create(slot='test')
+
+        # Create random values for parameters with a factory
+        large_banner = LargeBannerFactory()
+        fields_list = ['title', 'background_image', 'logo', 'logo_alt_text']
+
+        model_instance = add_plugin(
+            placeholder,
+            LargeBannerPlugin,
+            'en',
+            **{field: getattr(large_banner, field) for field in fields_list}
+        )
+
+        # Get the generated html
+        renderer = ContentRenderer(request=RequestFactory())
+        html = renderer.render_plugin(model_instance, {})
+
+        self.assertFalse("{% comment" in html)
+        self.assertFalse("{#" in html)
