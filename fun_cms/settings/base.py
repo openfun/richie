@@ -1,15 +1,19 @@
-import os
+"""
+Django settings for fun_cms project.
+"""
 
+import os
 from .utils import get_config
 
 
 gettext = lambda s: s
-DATA_DIR = os.path.dirname(os.path.dirname(__file__))
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_DIR = os.path.dirname(BASE_DIR)
 
-# Django settings for the fun-cms project.
+# Group to add plugin to placeholder "Content"
+FUN_PLUGINS_GROUP = "Fun Plugins"
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = get_config('SECRET_KEY', default='insecure-secret-key')
@@ -42,7 +46,7 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-LANGUAGE_CODE = 'en'
+LANGUAGE_CODE = 'fr'
 
 TIME_ZONE = 'Europe/Paris'
 
@@ -62,7 +66,7 @@ MEDIA_ROOT = os.path.join(DATA_DIR, 'media')
 STATIC_ROOT = os.path.join(DATA_DIR, 'static')
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'fun_cms', 'static'),
+    os.path.join(BASE_DIR, 'static'),
 )
 SITE_ID = 1
 
@@ -70,7 +74,7 @@ SITE_ID = 1
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'fun_cms', 'templates'),],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'OPTIONS': {
             'context_processors': [
                 'django.contrib.auth.context_processors.auth',
@@ -111,6 +115,7 @@ MIDDLEWARE_CLASSES = (
 )
 
 INSTALLED_APPS = (
+    # Django
     'djangocms_admin_style',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -120,6 +125,8 @@ INSTALLED_APPS = (
     'django.contrib.sitemaps',
     'django.contrib.staticfiles',
     'django.contrib.messages',
+
+    # Django-cms
     'cms',
     'menus',
     'sekizai',
@@ -137,22 +144,30 @@ INSTALLED_APPS = (
     'djangocms_snippet',
     'djangocms_googlemap',
     'djangocms_video',
-    'fun_cms'
+
+    # FUN stuffs
+    'plugins.large_banner',
 )
 
 LANGUAGES = (
-    ## Customize this
+    ('fr', gettext('fr')),
     ('en', gettext('en')),
 )
 
 CMS_LANGUAGES = {
-    ## Customize this
     'default': {
         'public': True,
         'hide_untranslated': False,
         'redirect_on_fallback': True,
     },
     1: [
+        {
+            'public': True,
+            'code': 'fr',
+            'hide_untranslated': False,
+            'name': gettext('fr'),
+            'redirect_on_fallback': True,
+        },
         {
             'public': True,
             'code': 'en',
@@ -164,7 +179,6 @@ CMS_LANGUAGES = {
 }
 
 CMS_TEMPLATES = (
-    ## Customize this
     ('fullwidth.html', 'Fullwidth'),
     ('sidebar_left.html', 'Sidebar Left'),
     ('sidebar_right.html', 'Sidebar Right')

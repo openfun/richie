@@ -1,0 +1,27 @@
+{% load thumbnail %}
+{% thumbnail instance.logo 593x237 crop as logo_thumb %}
+
+{% if instance.background_image.url %}
+{% thumbnail instance.background_image 1900x450 crop=',0' as background_thumb %}
+<div class="homepage-header-image">
+    {% comment %}
+       For the banner image, we decided to crop it from the top edge.
+       We used 4 images for responsive design.
+       We modified the thumbnail height size to resize the image display.
+       The main image (src) is used by browsers not supporting srcset.
+       A div contains image to display a black background
+    {% endcomment %}
+    <div class="content-image">
+        <img class="banner-fun" src="{{ background_thumb.url }}"
+                                srcset="{% thumbnail instance.background_image 2495x550 crop=',0' %} 2495w,
+                                        {% thumbnail instance.background_image 1900x450 crop=',0' %} 1900w,
+                                        {% thumbnail instance.background_image 1280x400 crop=',0' %} 1280w,
+                                        {% thumbnail instance.background_image 768x450 crop=',0' %} 768w" alt="banner"/>
+    </div>
+{% else %}
+{# In case no banner image is set, a "default" background image is displayed from static using media queries for responsiveness #}
+<div class="homepage-header">
+{% endif %}
+    <h1>{{ instance.title }}</h1>
+    <img src="{{ logo_thumb.url }}" class="logo-fun" alt="{{ instance.logo_alt_text }}"/>
+</div>
