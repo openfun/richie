@@ -1,0 +1,93 @@
+{% extends "aldryn_newsblog/base.html" %}
+{% load i18n %}
+
+{% block newsblog_content %}
+<div class="main-width">
+    <div class="container-fluid drop-down">
+
+        <h1 class="big-title text-center">Nos actualités</h1>
+        <div class="row">
+            <div class="fun-news news-list">
+
+                <div class="row hidden-sm hidden-xs">
+                    <div class="col-lg-36">
+                        {% for article in article_list|slice:":1" %}
+                        <article class="article big
+                            {% if article.is_featured %} featured{% endif %}
+                            {% if not article.published %} unpublished{% endif %}">
+                            {% include "aldryn_newsblog/includes/article.html" %}
+                        </article>
+                        {% empty %}
+                        <p>{% trans "No items available" %}</p>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="row hidden-md hidden-lg">
+                    <div class="col-sm-36 text-center">
+                        {% for article in article_list|slice:":1" %}
+                        <article class="primary hidden-sm
+                            {% if article.is_featured %} featured{% endif %}
+                            {% if not article.published %} unpublished{% endif %}">
+                            {% include "aldryn_newsblog/includes/article.html" %}
+                        </article>
+                        {% empty %}
+                        <p>{% trans "No items available" %}</p>
+                        {% endfor %}
+                    </div>
+
+                    <div class="col-xs-36 hidden-lg hidden-md hidden-sm text-center">
+                        {% for article in article_list|slice:"1:" %}
+                        <article class="primary
+                            {% if article.is_featured %} featured{% endif %}
+                            {% if not article.published %} unpublished{% endif %}">
+                            {% include "aldryn_newsblog/includes/article.html" %}
+                        </article>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="row hidden-xs">
+                    <div class="col-lg-3"></div>
+                    <div class="col-lg-30 text-center double_center">
+                        {% for article in article_list|slice:":1" %}
+                        <article class="col-lg-6 secondary double_column hidden-md hidden-lg
+                            {% if article.is_featured %} featured{% endif %}
+                            {% if not article.published %} unpublished{% endif %}">
+                            {% include "aldryn_newsblog/includes/article.html" %}
+                        </article>
+                        {% endfor %}
+                        {% for article in article_list|slice:"1:11" %}
+                        <article class="col-lg-6 secondary double_column
+                            {% if article.is_featured %} featured{% endif %}
+                            {% if not article.published %} unpublished{% endif %}">
+                            {% include "aldryn_newsblog/includes/article.html" %}
+                        </article>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row"></div>
+            <div class="col-lg-6"></div>
+            <div class="col-lg-24">
+                <div class="result-navigation result-navigation-top">
+                    <div class="navigation-bar color-denim-blue">
+                        <div class="navigation-left"></div>
+                        <div class="navigation-right">
+                            <div class="navigation-block page-list">
+                                <div lass="color-iron pages">
+                                    {% include "aldryn_newsblog/includes/pagination.html" %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6"></div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% load i18n %}
+
+{% if article %}
+{% if article_list %}
+<div class="course-info star news_related_articles_content new_hidden">        
+    <div class="news_related_articles_content new_hidden">
+        <ul>
+            <li>
+                <strong>{% trans "Related articles" %}</strong>
+            </li>
+            {% for article in article_list %}
+            <li>
+                <a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
+            </li>                               
+            {% empty %}
+            <p>{% trans "No items available" %}</p>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endif %}
+{% endif %}
