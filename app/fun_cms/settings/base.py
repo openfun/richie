@@ -158,6 +158,7 @@ INSTALLED_APPS = (
     'reversion',
 
     # FUN stuffs
+    'core',
     'plugins.large_banner',
 )
 

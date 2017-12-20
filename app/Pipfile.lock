@@ -1,6 +1,7 @@
 {
     "_meta": {
         "hash": {
+<<<<<<< HEAD:app/Pipfile.lock
             "sha256": "8bcd65262c6783fdd7d5f85ee7887aac69d9c93646b88d458f90994c709a20ea"
         },
         "host-environment-markers": {
@@ -15,6 +16,22 @@
             "python_full_version": "3.5.2",
             "python_version": "3.5",
             "sys_platform": "linux"
+=======
+            "sha256": "d239ab01b6330343900a2707daa6bb3708510f85f548498f321e8c4b54e7e1af"
+        },
+        "host-environment-markers": {
+            "implementation_name": "cpython",
+            "implementation_version": "3.5.0c2",
+            "os_name": "posix",
+            "platform_machine": "x86_64",
+            "platform_python_implementation": "CPython",
+            "platform_release": "17.3.0",
+            "platform_system": "Darwin",
+            "platform_version": "Darwin Kernel Version 17.3.0: Thu Nov  9 18:09:22 PST 2017; root:xnu-4570.31.3~1/RELEASE_X86_64",
+            "python_full_version": "3.5.0rc2",
+            "python_version": "3.5",
+            "sys_platform": "darwin"
+>>>>>>> Script to create working site tree:Pipfile.lock
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -462,6 +479,14 @@
         }
     },
     "develop": {
+        "appnope": {
+            "hashes": [
+                "sha256:5b26757dc6f79a3b7dc9fab95359328d5747fcb2409d331ea66d0272b90ab2a0",
+                "sha256:8b995ffe925347a2138d7ac0fe77155e4311a0ea6d6da4f5128fe4b3cbe5ed71"
+            ],
+            "markers": "sys_platform == 'darwin'",
+            "version": "==0.1.0"
+        },
         "backports.shutil-get-terminal-size": {
             "hashes": [
                 "sha256:0975ba55054c15e346944b38956a4c9cbee9009391e41b86c68990effb8c1f64",
