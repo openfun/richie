@@ -27,7 +27,13 @@ sudo apt-get -y dist-upgrade
 You must first install `postgresql`.
 
 ```sh
+// On Linux
 sudo apt-get -y install postgresql-9.5
+
+// On OS X
+brew install postgresql@9.5
+brew services start postgresql@9.5
+// don't forget to add your new postgres install to the $PATH
 ```
 
 `Postgresql` is now running.
@@ -35,7 +41,7 @@ sudo apt-get -y install postgresql-9.5
 Then you can create the database owner and the database itself, using the `postgres` user:
 
 ```sh
-sudo -u postgres -i
+sudo -u postgres -i // skip this on OS X as the default install will use your local user
 createuser funadmin -sP
 ```
 
@@ -54,6 +60,13 @@ exit
 ### Python and other requirements
 
 We use `Python 3.5` which is the one installed by default in `Ubuntu 16.04`.
+
+You can install it on OS X using the following commands. Make sure to always run `python3` instead of `python` and `pip3` instead of `pip` to ensure the correct version of Python (your homebrew install of 3) is used.
+
+```
+brew install python3
+brew postinstall python3
+```
 
 
 ### The virtualenv
