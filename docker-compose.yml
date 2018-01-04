@@ -1,0 +1,23 @@
+version: "3"
+services:
+  nginx:
+    build: ./nginx
+    image: fun_cms-nginx
+    ports:
+      - "8080:80"
+  db:
+    image: postgres:9.6
+    ports:
+        - "5440:5432"
+    environment:
+      POSTGRES_USER: "fun"
+      POTGRES_PASSWORD: "pass"
+  app:
+    build: ./
+    image: fun_cms-app
+    environment:
+      DATABASE_HOST: "db"
+      DATABASE_USER: "fun"
+      DATABASE_PASSWORD: "pass"
+    command: bash -c "pipenv run python manage.py runserver 0.0.0.0:8000"
+
