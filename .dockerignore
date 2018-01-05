@@ -1,6 +1,0 @@
-Dockerfile
-Pipefile
-nginx/
-media/
-*.db
-*.md

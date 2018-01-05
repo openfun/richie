@@ -1,0 +1,1 @@
+createdb -U fun fun_cms

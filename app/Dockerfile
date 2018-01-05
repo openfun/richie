@@ -13,8 +13,6 @@ RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' > /etc
 
 # Start by adding only the pipfile so that the next layer with all
 # Python installs does not change each time our code changes
-ADD Pipfile.lock /app/Pipfile.lock
-RUN pip install pipenv && pipenv install --ignore-pipfile
-
-ADD . /app
-
+ADD Pipfile /app/Pipfile
+RUN pip install pipenv && \
+    pipenv install --dev
