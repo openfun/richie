@@ -1,6 +1,8 @@
 # Installing FUN CMS
 
-This document aims to list all needed steps to have a working `FUN CMS` installation.
+This document aims to list all needed steps to have a working `FUN CMS` installation on your laptop.
+
+A better approach is to use [`Docker`](https://docs.docker.com). To get started, you can read [explanations](docs/docker.md) on how `FUN CMS` uses Docker for development.
 
 
 ## Installing a fresh server
@@ -71,6 +73,11 @@ brew postinstall python3
 
 ### The virtualenv
 
+Place yourself in the application directory `app`:
+
+    cd app
+
+
 We choose to run our application in a virtual environment and manage our Python dependencies using `pipenv` which you can install with pip:
 
     pip install pipenv
@@ -86,6 +93,7 @@ If packages are not installed:
 
 The "dev" option installs packages specific to a dev environment and should not be used in production.
 
+
 ### Settings
 
 Settings are defined in different files for each of the following environments:
@@ -99,6 +107,7 @@ Settings are defined in different files for each of the following environments:
 The dev environment is defined as the default environment.
 
 For development, you can add your own settings file named `local.py` to customize settings to your needs. It will be ignored by git.
+
 
 ### Run server
 
