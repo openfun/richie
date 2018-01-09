@@ -59,3 +59,9 @@ coverage.xml
 
 # Swap files
 *.sw[po]
+
+# JS dependencies
+node_modules
+
+# SASS
+.sass-cache

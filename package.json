@@ -1,0 +1,23 @@
+{
+  "name": "fun-cms",
+  "version": "0.1.0",
+  "description": "This document aims to list all needed steps to have a working `FUN CMS` installation.",
+  "main": "manage.py",
+  "scripts": {
+    "sass": "mkdir -p static/css; sass app/fun_cms/static/scss/main.scss static/css/main.css",
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/openfun/fun-cms.git"
+  },
+  "author": "FUN",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/openfun/fun-cms/issues"
+  },
+  "homepage": "https://github.com/openfun/fun-cms#readme",
+  "devDependencies": {
+    "bootstrap": "^4.0.0-beta.3"
+  }
+}

@@ -1,0 +1,22 @@
+
+// TWITTER BOOTSTRAP V4
+// Required
+@import "../../../../node_modules/bootstrap/scss/functions";
+@import "../../../../node_modules/bootstrap/scss/variables";
+@import "../../../../node_modules/bootstrap/scss/mixins";
+
+// Only what we use
+@import "../../../../node_modules/bootstrap/scss/grid";
+
+
+// FUNCMS
+// Global styles
+@import "./fun.scss";
+@import "./news.scss";
+
+
+// Component styles
+
+
+// Template specific styles
+@import "../../templates/search/search.scss";

@@ -108,6 +108,33 @@ The dev environment is defined as the default environment.
 
 For development, you can add your own settings file named `local.py` to customize settings to your needs. It will be ignored by git.
 
+### Frontend build
+
+This projet is a hybrid that uses both Django generated pages and frontend JS code. As such, it includes a frontend build process that comes in two parts: JS & CSS.
+
+We need NPM to install the dependencies and run the build, which depends on a version of Nodejs specified in `.nvmrc`. See [the repo](https://github.com/creationix/nvm) for instructions on how to install NVM. To take advantage of `.nvmrc`, run this in the context of the repository: 
+
+    nvm install
+    nvm use
+
+
+We also need the `sass` ruby gem. If you need instructions on how to install ruby you will find them [there](https://www.ruby-lang.org/en/documentation/installation/#apt). You can install `sass` this way:
+
+    sudo gem install sass
+
+As a prerequisite to running the frontend build for either JS or CSS, you'll need to download the dependencies:
+
+    npm install
+
+- JS build
+
+TBD.
+
+- CSS build
+
+This will compile all our SCSS files into one bundle and put it in the static folder we're serving.
+
+    npm run sass
 
 ### Run server
 
