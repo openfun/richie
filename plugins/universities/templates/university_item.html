@@ -1,0 +1,11 @@
+{% comment %}
+    An university item displayed in list.
+    (all_universities_list.html and university_list.html)
+{% endcomment %}
+<li>
+    <a href="{{ university.get_absolute_url }}">
+        <div class="university-logo center-block">
+            <img src="{{ university.get_logo_thumbnail }}" alt="{{ university.name }}" title="{{ university.name }}" class="img-responsive">
+        </div>
+    </a>
+</li>
