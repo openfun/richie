@@ -59,3 +59,4 @@ Unidecode==0.4.21
 urllib3==1.22
 wcwidth==0.1.7
 YURL==0.13
+requests

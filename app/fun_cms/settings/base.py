@@ -36,8 +36,8 @@ DATABASES = {
     'default': {
         'ENGINE': get_config('DATABASE_ENGINE', default='django.db.backends.postgresql_psycopg2'),
         'NAME': get_config('DATABASE_NAME', default='fun_cms'),
-        'USER': get_config('DATABASE_USER', default='funadmin'),
-        'PASSWORD': get_config('DATABASE_PASSWORD', default='funadmin'),
+        'USER': get_config('DATABASE_USER', default='fun'),
+        'PASSWORD': get_config('DATABASE_PASSWORD', default='pass'),
         'HOST': get_config('DATABASE_HOST', default='localhost'),
         'PORT': get_config('DATABASE_PORT', default=5432)
     }
@@ -160,6 +160,8 @@ INSTALLED_APPS = (
 
     # FUN stuffs
     'core',
+    'organizations',
+
     'plugins.large_banner',
 )
 
@@ -187,25 +189,25 @@ CMS_LANGUAGES = {
             'code': 'en',
             'hide_untranslated': False,
             'name': gettext('en'),
+            'fallbacks': ['fr'],
             'redirect_on_fallback': True,
         },
     ],
 }
 
 CMS_TEMPLATES = (
-    ('fullwidth.html', _('Fullwidth')),
+    ('organizations/cms/organization.html', _("Organization page")),
+    ('organizations/cms/organization_list.html', _("Organizations list page")),
+
     ('search/search.html', _('Search')),
-    ('sidebar_left.html', _('Sidebar Left')),
-    ('sidebar_right.html', _('Sidebar Right'))
+    ('fun_cms/fullwidth.html', 'Fullwidth'),
 )
 
 CMS_PERMISSION = True
 
 CMS_PLACEHOLDER_CONF = {}
 
-MIGRATION_MODULES = {
-
-}
+MIGRATION_MODULES = {}
 
 THUMBNAIL_PROCESSORS = (
     'easy_thumbnails.processors.colorspace',

@@ -1,0 +1,16 @@
+{% extends "fun_cms/fullwidth.html" %}
+{% load cms_tags staticfiles menu_tags i18n %}
+
+{% block content %}
+
+<ul>
+    {% for page in current_page.children.all %}
+    <p>{{page.get_title}}</p>
+    <a href="{{ page.get_absolute_url }}">
+        <img src="{{ page.organizationpage.get_data.logo }}">
+    </a>
+    {% empty %}
+    <p>{% trans "No items available" %}</p>
+    {% endfor %}
+</ul>
+{% endblock content %}
