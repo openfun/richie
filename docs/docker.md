@@ -10,7 +10,8 @@ The project is defined using a [docker-compose file](../docker-compose.yml) and 
 - **nginx:** the front end web server configured to serve static/media files and proxy other requests to Django,
 - **db:** the SQL database,
 - **app:** the actual Django CMS project with all our application code,
-- **typescript:** a webpack process that transpiles our sources and bundles them into a JS package.
+- **typescript:** a webpack process that transpiles our sources and bundles them into a JS package,
+- **sass:** builds the output CSS file from `app/` to `static/`.
 
 This default `docker-compose` configuration is intended for development, so we are:
 
