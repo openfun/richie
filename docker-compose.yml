@@ -20,8 +20,8 @@ services:
         - "8070:8000"
     volumes:
       - ./app:/app
-      - ./static:/data/static
-      - ./media:/data/media
+      - ./data/static:/data/static
+      - ./data/media:/data/media
     depends_on:
       - "db"
     ## Sleep 3 seconds while the database container is creating the database
@@ -36,7 +36,7 @@ services:
       - "8071:80"
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d:ro
-      - ./static:/data/static:ro
-      - ./media:/data/media:ro
+      - ./data/static:/data/static:ro
+      - ./data/media:/data/media:ro
     depends_on:
       - "app"
