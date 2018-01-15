@@ -40,3 +40,10 @@ services:
       - ./data/media:/data/media:ro
     depends_on:
       - "app"
+  js:
+    build: './typescript'
+    image: fun_cms-typescript
+    volumes:
+      - ./:/fun-cms
+    entrypoint: >
+      bash -c "npm install && webpack --watch"

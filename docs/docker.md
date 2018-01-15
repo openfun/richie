@@ -5,11 +5,12 @@
 
 ## Services
 
-The project is defined using a [docker-compose file](../docker-compose.yml) and consists of 3 services:
+The project is defined using a [docker-compose file](../docker-compose.yml) and consists of 4 services:
 
 - **nginx:** the front end web server configured to serve static/media files and proxy other requests to Django,
 - **db:** the SQL database,
-- **app:** the actual Django CMS project with all our application code.
+- **app:** the actual Django CMS project with all our application code,
+- **typescript:** a webpack process that transpiles our sources and bundles them into a JS package.
 
 This default `docker-compose` configuration is intended for development, so we are:
 
