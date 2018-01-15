@@ -1,22 +1,21 @@
 from django.contrib import admin
+from django.utils.translation import ugettext_lazy as _
 
 from cms.admin.placeholderadmin import PlaceholderAdminMixin
 
-from django.utils.translation import ugettext_lazy as _
+from .models import Organization
 
-from .models import University
-
-class UniversityAdmin(PlaceholderAdminMixin, admin.ModelAdmin):
+class OrganizationAdmin(PlaceholderAdminMixin, admin.ModelAdmin):
     """
     Placeholder and Model Admin to customize administration page
     """
 
     list_display = ('name', 'short_name', 'code', 'slug',
-        'detail_page_enabled', 'is_obsolete', 'partnership_level', 'score')
+        'is_detail_page_enabled', 'is_obsolete', 'partnership_level', 'score')
 
-    list_editable = ('score', 'detail_page_enabled', 'is_obsolete')
+    list_editable = ('score', 'is_detail_page_enabled', 'is_obsolete')
 
-    list_filter = ('detail_page_enabled', 'is_obsolete', 'partnership_level')
+    list_filter = ('is_detail_page_enabled', 'is_obsolete', 'partnership_level')
 
     search_fields = ('name', 'code', 'short_name', 'slug', 'description')
 
@@ -32,14 +31,9 @@ class UniversityAdmin(PlaceholderAdminMixin, admin.ModelAdmin):
                 'score',
             )
         }),
-        (_('Advanced'), {
-            'fields': (
-                'prevent_auto_update',
-            )
-        }),
         (_('Displayed On Site | Banner | Description'), {
             'fields': (
-                ('detail_page_enabled',),
+                ('is_detail_page_enabled',),
                 ('is_obsolete',),
                 ('slug',),
                 ('banner',),
@@ -48,4 +42,4 @@ class UniversityAdmin(PlaceholderAdminMixin, admin.ModelAdmin):
         }),
     )
 
-admin.site.register(University, UniversityAdmin)
+admin.site.register(Organization, OrganizationAdmin)

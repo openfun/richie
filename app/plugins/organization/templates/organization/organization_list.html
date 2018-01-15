@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load cms_tags staticfiles menu_tags %}
+
+{% block content %}
+<div class="simple-content-page ">
+    <div class="row">
+        <div class="col-lg-offset-3 col-lg-30 col-sm-36">
+            <div class="breadcrumbs-alignment">
+                {% show_breadcrumb %}
+            </div>
+            <div class="universities universities-page">
+                <div class="row">
+                    <div class="col-lg-offset-3 col-lg-30 col-md-36">
+                        <div class="introduction">
+                            {% static_placeholder "organization_header" %}
+                        </div>
+                        <div class="space-40px"></div>
+                        <ul class="universities-list">
+                            {% for organization in object_list %}
+                            {% include "item.html" %}
+                            {% empty %}
+                            <p>No items available</p>
+                            {% endfor %}
+                        </ul>
+                        <div class="space-40px"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

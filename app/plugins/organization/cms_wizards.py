@@ -4,9 +4,9 @@ from django.utils.translation import ugettext_lazy as _
 
 from djangocms_text_ckeditor.widgets import TextEditorWidget
 
-from .forms import UniversityForm
+from .forms import OrganizationForm
 
-class UniversityWizard(Wizard):
+class OrganizationWizard(Wizard):
     """
     Simple Wizard class
     """
@@ -16,11 +16,11 @@ class UniversityWizard(Wizard):
 """
 Wizard to customize ... 
 """
-university_wizard = UniversityWizard(
-    title="New University",
+organization_wizard = OrganizationWizard(
+    title="New Organization",
     weight=200,
-    form=UniversityForm,
-    description="Create a new University",
+    form=OrganizationForm,
+    description="Create a new Organization",
 )
 
-wizard_pool.register(university_wizard)
+wizard_pool.register(organization_wizard)

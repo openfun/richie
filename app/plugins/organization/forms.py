@@ -1,11 +1,11 @@
 from django import forms
 
-from .models import University
+from .models import Organization
 
-class UniversityForm(forms.ModelForm):
+class OrganizationForm(forms.ModelForm):
     """
     Simple ModelForm for wizard creation
     """
     class Meta:
-        model = University
+        model = Organization
         exclude = []

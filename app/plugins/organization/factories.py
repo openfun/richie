@@ -1,48 +1,42 @@
 
 from django.conf import settings
 from django.contrib.auth.hashers import make_password
+from django.template.defaultfilters import slugify
 
 import factory
 from filer.models.imagemodels import Image
 
 from fun_cms.common.factories import FilerImageFactory
 
-from .models import University, UniversitiesList, AllUniversitiesList
+from .models import Organization, OrganizationList
 
 
-class UniversityFactory(factory.django.DjangoModelFactory):
+class OrganizationFactory(factory.django.DjangoModelFactory):
     """
-    Factory to create random instances of University for testing.
+    Factory to create random instances of Organization for testing.
     """
 
     class Meta:
-        model = University
+        model = Organization
 
     name = factory.Faker('sentence', nb_words=8)
     short_name = factory.Faker('sentence', nb_words=4)
     code = factory.Faker('sentence', nb_words=4)
     certificate_logo = factory.django.ImageField()
     logo = factory.django.ImageField()
-    detail_page_enabled = factory.Faker('pybool')
+    is_detail_page_enabled = factory.Faker('pybool')
     is_obsolete = factory.Faker('pybool')
-    slug = factory.Faker('sha1')
+    slug = factory.LazyAttribute(lambda o:slugify(o.name))
     banner = factory.django.ImageField()
     description = factory.Faker('text')
     partnership_level = 'Partner'
     score = factory.Faker('pyint')
-    prevent_auto_update = factory.Faker('pybool')
 
-class UniversitiesListFactory(factory.django.DjangoModelFactory):
+class OrganizationListFactory(factory.django.DjangoModelFactory):
     
     class Meta:
-        model = UniversitiesList
-    
-    limit = factory.Faker('random_int', min=1, max=30)
-
-class AllUniversitiesListFactory(factory.django.DjangoModelFactory):
-    
-    class Meta:
-        model = AllUniversitiesList
+        model = OrganizationList
     
     title = factory.Faker('sentence', nb_words=6)
     description = factory.Faker('text', max_nb_chars=500)
+    limit = factory.Faker('random_int', min=1, max=30)

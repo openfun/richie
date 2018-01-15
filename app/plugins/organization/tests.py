@@ -1,0 +1,181 @@
+
+import re
+
+from django.core.urlresolvers import reverse
+from django.db import IntegrityError
+from django.http import HttpRequest
+from django.test import TestCase
+from django.test.client import RequestFactory
+from django.template.loader import render_to_string
+
+from cms.api import add_plugin, create_page
+from cms.models import Placeholder
+from cms.plugin_rendering import ContentRenderer
+
+from .cms_plugins import OrganizationListPlugin
+from .cms_wizards import OrganizationWizard
+from .factories import OrganizationFactory, OrganizationListFactory
+from .forms import OrganizationForm
+from .models import Organization
+from .views import OrganizationDetailView
+
+
+class OrganizationTests(TestCase):
+    
+    def test_organization_url(self):
+        """
+        Instanciating a organization, check his status code from his url
+        and check the rendered template.
+        """
+
+        #Create random values for parameters with a factory
+        organization = OrganizationFactory()
+
+        #Get a response from the Organization url
+        response = self.client.get(organization.get_absolute_url())
+
+        #Check the response status code
+        self.assertEqual(response.status_code, 200)
+
+        #Get the rendered html
+        expected_html = render_to_string('organization/detail.html',
+                                            response.context[0])
+
+        # Check that all expected elements are in the html
+        self.assertIn('<h1>{:s}</h1>'.format(organization.name), expected_html)
+        self.assertIn('<img src="{:s}"'.format(organization.get_logo_thumbnail()),
+                                                expected_html)
+        self.assertIn('<img src="{:s}"'.format(organization.get_banner_thumbnail()),
+                                                expected_html)
+        self.assertIn('<p>{:s}</p>'.format(organization.description),
+                                                expected_html)
+        
+    def create_organization_list(self, limit=30):
+        """
+        Create organization
+        """
+
+        organization_list = []
+        i=0
+        while (i < limit):
+            organization_list.append(OrganizationFactory())
+            i+=1
+        return organization_list
+
+    def check_nb_organization_displayed(self, html, organization_list, limit=None):
+        """
+        Check if a correct number of organization are displayed in the html template
+        """
+
+        #Get the number of organization displayed in the html template
+        nb_organization_html = html.count('<div class="university-logo center-block">')
+
+        #Calculate how much organization in plugin
+        nb_organization_plugin = 0
+        for organization in organization_list:
+            if organization.is_detail_page_enabled == True and organization.is_obsolete == False:
+                nb_organization_plugin += 1
+        
+        #Check with a limit
+        if limit is not None :
+            # organization number displayed in the template can not be greater than limit
+            if limit < nb_organization_html:
+                self.assertTrue(False, "limit < nb_organization_html")
+            if limit > nb_organization_html and nb_organization_html < nb_organization_plugin:
+                self.assertTrue(False, "limit > nb_organization_html")
+        #check without limit
+        else:
+            # organization number displayed in the template have to be equal to the
+            # organization number in plugin
+            if nb_organization_html == nb_organization_plugin:
+                self.assertTrue(True)
+            else:
+                self.assertTrue(False, 
+                    "organization number in html and organization number in plugin are not equal")
+        self.assertTrue(True)
+
+    def test_organization_list_limit_context_and_html(self):
+        """
+        Instanciating this plugin with an instance should populate the context
+        and render in the template.
+        This will check if organization list is correctly displayed with a
+        correct limit and if "is_detail_page_enabled" and "is_obsolete" properties
+        of university are set to True and False.
+        """
+
+        placeholder = Placeholder.objects.create(slot='test')
+
+        # Create random values for parameters with a factory
+        organization_list = OrganizationListFactory()
+        fields_list = ['limit']
+
+        model_instance = add_plugin(
+            placeholder,
+            OrganizationListPlugin,
+            'en',
+            **{field: getattr(organization_list, field) for field in fields_list}
+        )
+        plugin_instance = model_instance.get_plugin_class_instance()
+        context = plugin_instance.render({}, model_instance, None)
+        
+        self.create_organization_list()
+
+        # Check if "instance" is in context
+        self.assertIn('instance', context)
+
+        # Check if parameters, generated by the factory, are correctly set in "instance"
+        # of context
+        self.assertEqual(context['instance'].limit, organization_list.limit)
+
+        # Get the generated html
+        renderer = ContentRenderer(request=RequestFactory())
+        html = renderer.render_plugin(model_instance, {})
+
+        self.check_nb_organization_displayed(html, context['instance'].get_organization(), context['instance'].limit)
+
+
+    def test_organization_list_context_and_html(self):
+        
+        #Instanciating this plugin with an instance should populate the context
+        #and render in the template.
+        #This will check if all organization are correctly displayed if 
+        #"is_detail_page_enabled" and "is_obsolete" properties of organization are 
+        #set to True and False.
+        
+        
+        placeholder = Placeholder.objects.create(slot='test')
+
+        # Create random values for parameters with a factory
+        organization_list = OrganizationListFactory()
+        organization_list.limit = 0
+        fields_list = ['title', 'description', 'limit']
+
+        model_instance = add_plugin(
+            placeholder,
+            OrganizationListPlugin,
+            'en',
+            **{field: getattr(organization_list, field) for field in fields_list}
+        )
+        plugin_instance = model_instance.get_plugin_class_instance()
+        context = plugin_instance.render({}, model_instance, None)
+
+        self.create_organization_list()
+
+
+        # Check if "instance" is in context
+        self.assertIn('instance', context)
+
+        # Check if parameters, generated by the factory, are correctly set in "instance"
+        # of context
+        self.assertEqual(context['instance'].title, organization_list.title)
+        self.assertEqual(context['instance'].description, organization_list.description)
+
+        # Get the generated html
+        renderer = ContentRenderer(request=RequestFactory())
+        html = renderer.render_plugin(model_instance, {})
+
+        # Check that all expected elements are in the html
+        self.assertIn('<h1>{:s}</h1>'.format(organization_list.title), html)
+        self.assertIn('<p>{:s}</p>'.format(organization_list.description), html)
+
+        self.check_nb_organization_displayed(html, organization_list.get_organization())
