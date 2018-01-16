@@ -54,6 +54,6 @@ services:
       - ./:/fun-cms
     entrypoint: >
       bash -c "mkdir -p /fun-cms/data/static/css &&
-      sass --watch /fun-cms/app/fun_cms/static/scss/main.scss:/fun-cms/data/static/css/main.css -E \"UTF-8\"";
+      sass --watch /fun-cms/app /fun-cms/app/fun_cms/static/scss/_main.scss:/fun-cms/data/static/css/main.css -E \"UTF-8\"";
     depends_on:
       - "js"

@@ -4,7 +4,7 @@
   "description": "This document aims to list all needed steps to have a working `FUN CMS` installation.",
   "main": "manage.py",
   "scripts": {
-    "sass": "mkdir -p static/css; sass app/fun_cms/static/scss/main.scss static/css/main.css",
+    "sass": "mkdir -p data/static/css; sass --watch app/fun_cms/static/scss/_main.scss:data/static/css/main.css app",
     "test": "npm run test"
   },
   "repository": {

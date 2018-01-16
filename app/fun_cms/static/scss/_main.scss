@@ -11,12 +11,11 @@
 
 // FUNCMS
 // Global styles
-@import "./fun.scss";
-@import "./news.scss";
-
+@import "./_fun.scss";
+@import "./_news.scss";
 
 // Component styles
 
 
 // Template specific styles
-@import "../../templates/search/search.scss";
+@import "../../templates/search/_search.scss";
