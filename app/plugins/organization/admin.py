@@ -9,18 +9,7 @@ class OrganizationAdmin(PlaceholderAdminMixin, admin.ModelAdmin):
     """
     Placeholder and Model Admin to customize administration page
     """
-
-    list_display = ('name', 'short_name', 'code', 'slug',
-        'is_detail_page_enabled', 'is_obsolete', 'partnership_level', 'score')
-
-    list_editable = ('score', 'is_detail_page_enabled', 'is_obsolete')
-
-    list_filter = ('is_detail_page_enabled', 'is_obsolete', 'partnership_level')
-
-    search_fields = ('name', 'code', 'short_name', 'slug', 'description')
-
-    prepopulated_fields = {'slug': ('name',)}
-
+    exclude = ('app_config',)
     fieldsets = (
         (None, {
             'fields': (
@@ -41,5 +30,16 @@ class OrganizationAdmin(PlaceholderAdminMixin, admin.ModelAdmin):
             )
         }),
     )
+
+    list_display = ('name', 'short_name', 'code', 'slug',
+        'is_detail_page_enabled', 'is_obsolete', 'partnership_level', 'score')
+
+    list_editable = ('score', 'is_detail_page_enabled', 'is_obsolete')
+
+    list_filter = ('is_detail_page_enabled', 'is_obsolete', 'partnership_level')
+
+    search_fields = ('name', 'code', 'short_name', 'slug', 'description')
+
+    prepopulated_fields = {'slug': ('name',)}
 
 admin.site.register(Organization, OrganizationAdmin)

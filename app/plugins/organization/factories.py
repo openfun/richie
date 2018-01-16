@@ -21,7 +21,7 @@ class OrganizationFactory(factory.django.DjangoModelFactory):
 
     name = factory.Faker('sentence', nb_words=8)
     short_name = factory.Faker('sentence', nb_words=4)
-    code = factory.Faker('sentence', nb_words=4)
+    code = factory.LazyAttribute(lambda o:slugify(o.name))
     certificate_logo = factory.django.ImageField()
     logo = factory.django.ImageField()
     is_detail_page_enabled = factory.Faker('pybool')
@@ -37,6 +37,4 @@ class OrganizationListFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = OrganizationList
     
-    title = factory.Faker('sentence', nb_words=6)
-    description = factory.Faker('text', max_nb_chars=500)
     limit = factory.Faker('random_int', min=1, max=30)

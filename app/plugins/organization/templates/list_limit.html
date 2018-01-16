@@ -1,10 +1,9 @@
-{% load cms_tags staticfiles %}
+{% load cms_tags staticfiles i18n %}
 
-<link rel="stylesheet" type="text/css" href="{% static 'css/organizations_style.css' %}">
 <div class="universities">
     <div class="row ">
         <div class="col-lg-36 text-center">
-            <h2 class="big-title big-margin">Universities</h2>
+            <h2 class="big-title big-margin">{% trans "Organizations" %}</h2>
         </div>
     </div>
     
@@ -14,7 +13,7 @@
                 {% for organization in instance.get_organizations_limit %}
                 {% include "item.html" %}
                 {% empty %}
-                <p>No items available</p>
+                <p>{% trans "No items available" %}</p>
                 {% endfor %}
             </ul>
         </div>

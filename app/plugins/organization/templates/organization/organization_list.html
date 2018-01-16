@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load cms_tags staticfiles menu_tags %}
+{% load cms_tags staticfiles menu_tags i18n %}
 
 {% block content %}
 <div class="simple-content-page ">
@@ -19,7 +19,7 @@
                             {% for organization in object_list %}
                             {% include "item.html" %}
                             {% empty %}
-                            <p>No items available</p>
+                            <p>{% trans "No items available" %}</p>
                             {% endfor %}
                         </ul>
                         <div class="space-40px"></div>

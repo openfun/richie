@@ -59,7 +59,10 @@ class Organization(CMSPlugin):
 
     def get_absolute_url(self):
         if self.slug:
-            return reverse('organization_detail', kwargs={'slug':self.slug})
+            try:
+                return reverse('organization_detail', kwargs={'slug':self.slug})
+            except:
+                return reverse('{0}:organization_detail'.format('Organization App'), kwargs={'slug':self.slug})
     
     def get_banner_thumbnail(self):
         options = {'size': (1030, 410), }
@@ -93,4 +96,7 @@ class OrganizationList(CMSPlugin):
         return Organization.objects.filter(is_detail_page_enabled=True, is_obsolete=False).order_by('-score')
 
     def get_breadcrumb(self):
-        return reverse('organization_list')
+        try:
+            return reverse('organization_list')
+        except:
+            return reverse('{0}:organization_list'.format('Organization App'))
