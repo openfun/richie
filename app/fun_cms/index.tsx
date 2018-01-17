@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     if (isComponentName(componentName)) {
       // Do get the component dynamically. We know this WILL produce a valid component thanks to the type guard
       const Component = componentLibrary[componentName];
-      ReactDOM.render(<Component example={'React/TS'} />, element);
+      ReactDOM.render(<Component />, element);
     }
     // Emit a warning at runtime when we fail to find a matching component for an element that required one
     else {

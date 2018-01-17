@@ -1,0 +1,13 @@
+.search {
+  @include make-row();
+
+  &__filters {
+    @include make-col-ready();
+    @include make-col(3);
+  }
+
+  &__results {
+    @include make-col-ready();
+    @include make-col(9);
+  }
+}

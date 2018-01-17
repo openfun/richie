@@ -1,21 +1,18 @@
 
 // TWITTER BOOTSTRAP V4
 // Required
-@import "../../../../node_modules/bootstrap/scss/functions";
-@import "../../../../node_modules/bootstrap/scss/variables";
-@import "../../../../node_modules/bootstrap/scss/mixins";
+@import "../../../../node_modules/bootstrap/scss/bootstrap-reboot";
 
 // Only what we use
-@import "../../../../node_modules/bootstrap/scss/grid";
 
 
 // FUNCMS
 // Global styles
-@import "./_fun.scss";
-@import "./_news.scss";
+@import "./_fun";
+@import "./_news";
 
 // Component styles
-
+@import "../../components/search/_search";
 
 // Template specific styles
 @import "../../templates/search/_search";
