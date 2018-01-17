@@ -15,7 +15,7 @@ class OrganizationDetailView(DetailView):
 
 class OrganizationListView(ListView):
     template = 'organization/organization_list.html'
-    context_object_name = 'organization'
+    context_object_name = 'organizations'
 
     def get_queryset(self):
         return Organization.objects.filter(is_detail_page_enabled=True, is_obsolete=False).order_by('-score')

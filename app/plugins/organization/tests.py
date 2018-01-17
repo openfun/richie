@@ -16,7 +16,7 @@ from cms.test_utils.testcases import CMSTestCase
 from cms.models import Placeholder
 from cms.plugin_rendering import ContentRenderer
 
-from .cms_apps import UniversityApp
+from .cms_apps import OrganizationApp
 from .cms_plugins import OrganizationListPlugin
 from .cms_wizards import OrganizationWizard
 from .factories import OrganizationFactory, OrganizationListFactory
@@ -24,9 +24,9 @@ from .forms import OrganizationForm
 from .models import Organization
 from .views import OrganizationDetailView
 
+from django.contrib.auth.models import AnonymousUser, User
 
 class OrganizationTests(CMSTestCase):
-
     def create_page(self):
         """
         Create a main page and a child page to put an apphook
@@ -49,8 +49,9 @@ class OrganizationTests(CMSTestCase):
             'en',
             parent = main_page,
             published = True,
-            apphook = UniversityApp,
-            apphook_namespace = "Organization App",
+            apphook = OrganizationApp,
+            apphook_namespace = "OrganizationApp",
+            navigation_extenders = 'OrganizationMenu'
             )
         child.publish('en')
         return child
@@ -71,6 +72,8 @@ class OrganizationTests(CMSTestCase):
         organization.is_detail_page_enabled = True
         organization.is_obsolete = False
         organization.save()
+
+        print(page.get_absolute_url())
 
         # Get a response from the Organization list page url
         response = self.client.get(page.get_absolute_url())

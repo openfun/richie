@@ -2,7 +2,7 @@
     An organization item displayed in list.
 {% endcomment %}
 <li>
-    <a href="{{ organization.get_absolute_url }}">
+    <a href="{{ organization.get_absolute_url }}"  title="organizations_detail">
         <div class="university-logo center-block">
             <img src="{{ organization.get_logo_thumbnail }}" alt="{{ organization.name }}" title="{{ organization.name }}" class="img-responsive">
         </div>

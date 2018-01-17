@@ -16,7 +16,7 @@
                         </div>
                         <div class="space-40px"></div>
                         <ul class="universities-list">
-                            {% for organization in object_list %}
+                            {% for organization in organizations %}
                             {% include "item.html" %}
                             {% empty %}
                             <p>{% trans "No items available" %}</p>
