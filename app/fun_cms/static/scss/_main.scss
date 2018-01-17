@@ -1,9 +1,14 @@
+// Our variables must bu imported before Bootstrap code so they can override it
+@import './_variables';
 
 // TWITTER BOOTSTRAP V4
 // Required
 @import "../../../../node_modules/bootstrap/scss/bootstrap-reboot";
 
 // Only what we use
+@import "../../../../node_modules/bootstrap/scss/card";
+@import "../../../../node_modules/bootstrap/scss/type";
+@import "../../../../node_modules/bootstrap/scss/utilities/text";
 
 
 // FUNCMS
@@ -12,6 +17,8 @@
 @import "./_news";
 
 // Component styles
+@import "../../components/courseGlimpse/_courseGlimpse";
+@import "../../components/courseGlimpseList/_courseGlimpseList";
 @import "../../components/search/_search";
 
 // Template specific styles

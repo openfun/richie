@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { Course } from '../../types/Course';
+import { CourseGlimpseList } from "../courseGlimpseList/courseGlimpseList";
 import courses from '../../api_response';
 
 interface SearchState {
@@ -24,6 +25,7 @@ export class Search extends React.Component<SearchProps, SearchState> {
       <div className="search__filters">
       </div>
       <div className="search__results">
+        <CourseGlimpseList courses={courses} />
       </div>
     </div>;
   }
