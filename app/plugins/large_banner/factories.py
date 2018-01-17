@@ -5,7 +5,7 @@ from django.contrib.auth.hashers import make_password
 import factory
 from filer.models.imagemodels import Image
 
-from core.common.factories import FilerImageFactory
+from core.factories import FilerImageFactory
 
 from .models import LargeBanner
 

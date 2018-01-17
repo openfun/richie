@@ -1,22 +1,6 @@
 {
     "_meta": {
         "hash": {
-<<<<<<< HEAD:app/Pipfile.lock
-            "sha256": "8bcd65262c6783fdd7d5f85ee7887aac69d9c93646b88d458f90994c709a20ea"
-        },
-        "host-environment-markers": {
-            "implementation_name": "cpython",
-            "implementation_version": "3.5.2",
-            "os_name": "posix",
-            "platform_machine": "x86_64",
-            "platform_python_implementation": "CPython",
-            "platform_release": "4.4.0-37-generic",
-            "platform_system": "Linux",
-            "platform_version": "#56-Ubuntu SMP Mon Aug 29 16:50:40 UTC 2016",
-            "python_full_version": "3.5.2",
-            "python_version": "3.5",
-            "sys_platform": "linux"
-=======
             "sha256": "d239ab01b6330343900a2707daa6bb3708510f85f548498f321e8c4b54e7e1af"
         },
         "host-environment-markers": {
@@ -31,7 +15,6 @@
             "python_full_version": "3.5.0rc2",
             "python_version": "3.5",
             "sys_platform": "darwin"
->>>>>>> Script to create working site tree:Pipfile.lock
         },
         "pipfile-spec": 6,
         "requires": {},
