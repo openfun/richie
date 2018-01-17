@@ -12,14 +12,12 @@
     </head>
     <body>
         {% cms_toolbar %}
-        <div class="container">
+        <div>
             <ul class="nav">
                 {% show_menu 0 100 100 100 %}
             </ul>
             {% block content %}{% endblock content %}
         </div>
         {% render_block "js" %}
-
-        <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
     </body>
 </html>

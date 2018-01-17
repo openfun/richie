@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load cms_tags %}
+
+{% block title %}{% page_attribute "page_title" %}{% endblock title %}
+
+{% block content %}
+  <div class="search-template">
+    <h1 class="search-template__title">{% page_attribute "page_title" %}</h1>
+    <div class="search-template__content">
+      {% placeholder "content" %}
+      <div class="fun-react fun-react--search"></div>
+    </div>
+  </div>
+{% endblock content %}

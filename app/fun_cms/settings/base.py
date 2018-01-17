@@ -4,6 +4,7 @@ Django settings for fun_cms project.
 
 import os
 from .utils import get_config
+from django.utils.translation import ugettext_lazy as _
 
 
 gettext = lambda s: s
@@ -192,9 +193,10 @@ CMS_LANGUAGES = {
 }
 
 CMS_TEMPLATES = (
-    ('fullwidth.html', 'Fullwidth'),
-    ('sidebar_left.html', 'Sidebar Left'),
-    ('sidebar_right.html', 'Sidebar Right')
+    ('fullwidth.html', _('Fullwidth')),
+    ('search/search.html', _('Search')),
+    ('sidebar_left.html', _('Sidebar Left')),
+    ('sidebar_right.html', _('Sidebar Right'))
 )
 
 CMS_PERMISSION = True

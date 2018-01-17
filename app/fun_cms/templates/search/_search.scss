@@ -1,0 +1,10 @@
+.search-template {
+
+  &__title {
+    @extend .text-center;
+  }
+
+  &__content {
+    @include make-container();
+  }
+}
