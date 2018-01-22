@@ -161,6 +161,7 @@ INSTALLED_APPS = (
     # FUN stuffs
     'core',
     'plugins.large_banner',
+    'plugins.organization'
 )
 
 LANGUAGES = (

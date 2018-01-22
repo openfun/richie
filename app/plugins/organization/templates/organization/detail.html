@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% load menu_tags thumbnail %}
+
+{% thumbnail organization.logo 180x100 crop as logo_thumb %}
+{% thumbnail organization.banner 1030x410 crop as banner_thumb %}
+
+{% block content %}
+<div class="university-page simple-content-page">
+    <div class="row">
+        <div class="col-lg-offset-3 col-lg-30 col-sm-36">
+            <div class="breadcrumbs-alignment">
+                {% show_breadcrumb %}
+            </div>
+            <section class="university">
+
+                <section class="header">
+                    <h1>{{ organization.name }}</h1>
+
+                    <div class="logo">
+                        <img src="{{ organization.get_logo_thumbnail }}" class="center-block">
+                    </div>
+
+                    <div class="space-40px"></div>
+
+                    <div class="banner">
+                        <img src="{{ organization.get_banner_thumbnail }}" class="img-responsive center-block">
+                    </div>
+
+                    <div class="space-40px"></div>
+
+                </section>
+
+                <section class="description">
+                    <p>{{ organization.description }}</p>
+                </section>
+
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,26 @@
+{% load cms_tags staticfiles i18n %}
+
+<div class="universities">
+    <div class="row ">
+        <div class="col-lg-36 text-center">
+            <h2 class="big-title big-margin">{% trans "Organizations" %}</h2>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-36">
+            <ul class="universities-list">
+                {% for organization in instance.get_organizations_limit %}
+                {% include "item.html" %}
+                {% empty %}
+                <p>{% trans "No items available" %}</p>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-36 text-center">
+            <a href="{{ instance.get_breadcrumb }}" class="btn btn-default btn-spaced" title="{% trans 'Organization list' %}">{% trans "All universities" %}</a>
+        </div>
+    </div>
+</div>
