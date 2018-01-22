@@ -30,19 +30,7 @@ class OrganizationMenu(CMSAttachMenu):
         If there isn't a page with apphook defined, the absolute url
         of the organization is None
         """
-        nodes = []
-        organizations = self.get_queryset(request)
-
-        for organization in organizations:
-            try:
-                url = organization.get_absolute_url()
-            except NoReverseMatch:
-                url = None
-
-            if url:
-                node = NavigationNode(organization.name, url, organization.pk)
-                nodes.append(node)
-        return nodes
+        return [NavigationNode(o.name, o.get_absolute_url(), o.pk) for o in self.get_queryset(request)]
 
 
 menu_pool.register_menu(OrganizationMenu)

@@ -73,8 +73,6 @@ class OrganizationTests(CMSTestCase):
         organization.is_obsolete = False
         organization.save()
 
-        print(page.get_absolute_url())
-
         # Get a response from the Organization list page url
         response = self.client.get(page.get_absolute_url())
 

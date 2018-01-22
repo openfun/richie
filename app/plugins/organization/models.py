@@ -59,11 +59,7 @@ class Organization(CMSPlugin):
 
     def get_absolute_url(self):
         if self.slug:
-            # return reverse('organization_detail', kwargs={'slug':self.slug})
-            try:
-                return reverse('organization_detail', kwargs={'slug':self.slug})
-            except:
-                return reverse('{0}:organization_detail'.format('OrganizationApp'), kwargs={'slug':self.slug})
+            return reverse('{0}:organization_detail'.format('OrganizationApp'), kwargs={'slug':self.slug})
     
     def get_banner_thumbnail(self):
         options = {'size': (1030, 410), }
@@ -71,7 +67,7 @@ class Organization(CMSPlugin):
             thumbnail = get_thumbnailer(self.banner).get_thumbnail(options)
             return thumbnail.url
         except InvalidImageFormatError:
-            return ''  # we could return a nice grey image
+            return ''
 
     def get_short_name(self):
         return self.short_name or self.name
@@ -82,7 +78,7 @@ class Organization(CMSPlugin):
             thumbnail = get_thumbnailer(self.logo).get_thumbnail(options)
             return thumbnail.url
         except InvalidImageFormatError:
-            return '' # we could return a nice grey image
+            return ''
 
 class OrganizationList(CMSPlugin):
     """
@@ -97,8 +93,4 @@ class OrganizationList(CMSPlugin):
         return Organization.objects.filter(is_detail_page_enabled=True, is_obsolete=False).order_by('-score')
 
     def get_breadcrumb(self):
-        # return reverse('organization_list')
-        try:
-            return reverse('organization_list')
-        except:
-            return reverse('{0}:organization_list'.format('OrganizationApp'))
+        return reverse('{0}:organization_list'.format('OrganizationApp'))
