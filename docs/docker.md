@@ -46,13 +46,13 @@ The 3 containers (nginx, db and app) should now be running and you should see th
 
 The first time you start the project, the `db` container automatically creates a fresh database named `fun_cms`. From the `app` container, you should now synchronize the database schema by running all available migrations:
 
-    $ docker-compose exec app pipenv run python manage.py migrate
+    $ docker-compose exec app python manage.py migrate
 
 You should also run the same command on the `app` container each time a new **database migration** is added to the code.
 
 You can also create a superuser account:
 
-    $ docker-compose exec app pipenv run python manage.py createsuperuser
+    $ docker-compose exec app python manage.py createsuperuser
 
 You should now be able to view the site:
 
@@ -89,14 +89,14 @@ If you need to debug inside a container, you can open a Linux shell with the `ex
 
 While developping on `FUN CMS`, you will also need to run a `Django shell` and it has to be done in the `app` container:
 
-    $ docker-compose exec app pipenv run python manage.py shell
+    $ docker-compose exec app python manage.py shell
 
 
 ### Running tests
 
 The test suite should be run from within the `app` container:
 
-    $ docker-compose exec app pipenv run python manage.py test
+    $ docker-compose exec app python manage.py test
 
 
 ### Cleanup

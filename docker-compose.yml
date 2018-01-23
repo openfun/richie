@@ -27,8 +27,8 @@ services:
     ## Sleep 3 seconds while the database container is creating the database
     entrypoint: >
       bash -c "sleep 3 &&
-      pipenv run python manage.py collectstatic --no-input &&
-      pipenv run python manage.py runserver 0.0.0.0:8000"
+      python manage.py collectstatic --no-input &&
+      python manage.py runserver 0.0.0.0:8000"
   nginx:
     build: ./nginx
     image: fun_cms-nginx

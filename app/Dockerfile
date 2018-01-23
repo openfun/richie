@@ -11,8 +11,7 @@ RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' > /etc
     apt-get install -y python3-dev postgresql-server-dev-9.6 && \
     rm -rf /var/lib/apt/lists/*
 
-# Start by adding only the pipfile so that the next layer with all
+# Start by adding only the requirements file so that the next layer with all
 # Python installs does not change each time our code changes
-ADD Pipfile /app/Pipfile
-RUN pip install pipenv && \
-    pipenv install --dev
+ADD requirements/ /app/requirements/
+RUN pip install -r requirements/dev.txt

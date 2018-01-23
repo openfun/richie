@@ -77,21 +77,25 @@ Place yourself in the application directory `app`:
 
     cd app
 
+We choose to run our application in a virtual environment.
 
-We choose to run our application in a virtual environment and manage our Python dependencies using `pipenv` which you can install with pip:
+For this, we'll install `virtualenvwrapper` and add an environment:
 
-    pip install pipenv
+    pip install virtualenvwrapper
 
+You can open a new shell to activate the virtualenvwrapper commands, or simply do:
 
-You can now open a new shell with the virtualenv activated:
+    source $(which virtualenvwrapper.sh)
 
-    pipenv shell
+Then create the virtual environment for `fun_cms`:
 
-If packages are not installed:
+    mkvirtualenv fun_cms --no-site-packages --python=python3
 
-    pipenv install --dev
+The virtualenv should now be activated and you can install the Python dependencies for development:
 
-The "dev" option installs packages specific to a dev environment and should not be used in production.
+    pip install -r requirements/dev.txt
+
+The "dev.txt" requirement file installs packages specific to a dev environment and should not be used in production.
 
 
 ### Settings
@@ -104,7 +108,7 @@ Settings are defined in different files for each of the following environments:
 - preprod: settings for deployment to the pre-production environment,
 - prod: settings for deployment to the production environment.
 
-The dev environment is defined as the default environment.
+The `dev` environment is defined as the default environment.
 
 For development, you can add your own settings file named `local.py` to customize settings to your needs. It will be ignored by git.
 
