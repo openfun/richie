@@ -5,7 +5,6 @@ export interface Course {
   course_ended: boolean;
   course_started: boolean;
   end_date: string;
-  end_date_display: string;
   enrollment_end_date: string;
   enrollment_ended: boolean;
   enrollment_start_date: string;
@@ -15,11 +14,9 @@ export interface Course {
   key: string;
   level: string;
   main_university: University;
-  session_display: string;
   session_number: number;
   short_description: string;
   start_date: string;
-  start_date_display: string;
   subjects: Subject[];
   thumbnails: {
     about: string;

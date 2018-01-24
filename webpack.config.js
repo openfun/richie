@@ -1,3 +1,6 @@
+const SETTINGS = require('./app/fun_cms/settings.json');
+const webpack = require('webpack');
+
 module.exports = {
   entry: "./app/fun_cms/index.tsx",
   output: {
@@ -21,4 +24,12 @@ module.exports = {
       { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
     ]
   },
+
+  plugins: [
+    // Only load the locales we need to support in moment.js
+    new webpack.ContextReplacementPlugin(
+      /moment[\/\\]locale$/,
+      new RegExp(SETTINGS.SUPPORTED_LANGUAGES.join('|')),
+    ),
+  ],
 };

@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { Course } from '../../types/Course';
+import * as moment from 'moment';
 
 interface CourseGlimpseState {}
 
@@ -19,7 +20,7 @@ export class CourseGlimpse extends React.Component<CourseGlimpseProps, CourseGli
           <div className="course-glimpse__body__title">{course.title}</div>
           <div className="course-glimpse__body__org">{course.main_university.name}</div>
         </div>
-        <div className="course-glimpse__date">Starts on {course.start_date_display}</div>
+        <div className="course-glimpse__date">Starts on {moment(course.start_date, moment.ISO_8601).format('ll')}</div>
       </div>
     </div>
   }

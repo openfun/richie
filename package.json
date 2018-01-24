@@ -23,11 +23,13 @@
     "@types/react-dom": "^16.0.3",
     "awesome-typescript-loader": "^3.4.1",
     "source-map-loader": "^0.2.3",
-    "typescript": "^2.6.2"
+    "typescript": "^2.6.2",
+    "webpack": "^3.10.0"
   },
   "dependencies": {
     "bootstrap": "^4.0.0-beta.3",
     "lodash-es": "^4.17.4",
+    "moment": "^2.20.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0"
   }
