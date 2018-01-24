@@ -5,7 +5,7 @@ Django settings for fun_cms project.
 import os
 from .utils import get_config
 from django.utils.translation import ugettext_lazy as _
-
+from .parts.elasticsearch import *  # pylint: disable=wildcard-import
 
 gettext = lambda s: s
 

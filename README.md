@@ -56,6 +56,33 @@ createdb fun_cms -O funadmin -W
 exit
 ```
 
+## Elasticsearch
+
+### Ubuntu
+
+Download and install the Public Signing Key
+
+    $ wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+
+You may need to install the apt-transport-https package on Debian before proceeding:
+
+    $ sudo apt-get install apt-transport-https
+
+Save the repository definition to /etc/apt/sources.list.d/elastic-6.1.2.list:
+
+    $ echo "deb https://artifacts.elastic.co/packages/6.1.2/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-6.1.2.list
+
+Update repository and install
+
+    $ sudo apt-get update
+    $ sudo apt-get install elasticsearch
+    $ sudo /etc/init.d/elasticsearch start
+
+
+### OS X
+
+    $ brew install elasticsearch
+
 
 ## Application part
 

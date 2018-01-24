@@ -9,6 +9,8 @@ services:
         - "5440:5432"
     volumes:
       - ./scripts/development/createdb.sh:/docker-entrypoint-initdb.d/createdb.sh:ro
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.1.2
   app:
     build: ./app
     image: fun_cms-app
@@ -16,6 +18,7 @@ services:
       DATABASE_HOST: "db"
       DATABASE_USER: "fun"
       DATABASE_PASSWORD: "pass"
+      ES_CLIENT: "elasticsearch"
     ports:
         - "8070:8000"
     volumes:
