@@ -1,11 +1,11 @@
-const SETTINGS = require('./app/fun_cms/settings.json');
+const SETTINGS = require('./fun_cms/settings.json');
 const webpack = require('webpack');
 
 module.exports = {
-  entry: "./app/fun_cms/index.tsx",
+  entry: "./fun_cms/index.tsx",
   output: {
     filename: "index.js",
-    path: __dirname + "/data/static/js"
+    path: __dirname + "/../" + "/data/static/js"
   },
 
   // Enable sourcemaps for debugging webpack's output.
