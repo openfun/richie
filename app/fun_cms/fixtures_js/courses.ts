@@ -6,7 +6,7 @@ export default {
     {
       id: 3342,
       key: 'course-v1:itii+119002+session03',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -26,7 +26,7 @@ export default {
           detail_page_enabled: false,
           banner: null } ],
       university_name: 'La conférence des ITII',
-      main_university: 
+      main_university:
       { id: 255,
         name: 'La conférence des ITII',
         code: 'itii',
@@ -36,7 +36,7 @@ export default {
       title: 'Socle en Mathématiques ',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 58, name: 'Mathématiques et statistiques' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
@@ -49,7 +49,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1itii119002session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1itii119002session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1itii119002session03.730x412_q85_crop-scale.jpg',
@@ -59,7 +59,7 @@ export default {
     {
       id: 3347,
       key: 'course-v1:MinesTelecom+04004+session05',
-      universities: 
+      universities:
       [ { id: 5,
           name: 'IMT',
           code: 'MinesTelecom',
@@ -67,7 +67,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/baniere_imt_EDX-02-02.jpg' } ],
       university_name: 'IMT',
-      main_university: 
+      main_university:
       { id: 5,
         name: 'IMT',
         code: 'MinesTelecom',
@@ -77,7 +77,7 @@ export default {
       title: 'Roches et minéraux courants : genèse, identification et utilisations',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 88, name: 'Sciences' },
         { id: 115, name: 'Développement durable' },
@@ -93,7 +93,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 5,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1minestelecom04004session05.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1minestelecom04004session05.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1minestelecom04004session05.730x412_q85_crop-scale.jpg',
@@ -104,7 +104,7 @@ export default {
     {
       id: 3100,
       key: 'course-v1:CNAM+01031+session01',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -118,7 +118,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Le_Cnam_facade.jpg' } ],
       university_name: 'Le Cnam',
-      main_university: 
+      main_university:
       { id: 1,
         name: 'Le Cnam',
         code: 'CNAM',
@@ -128,7 +128,7 @@ export default {
       title: 'Deep Learning',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 112, name: 'Programmation' },
         { id: 91, name: 'Sciences cognitives' } ],
@@ -141,7 +141,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1cnam01031session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1cnam01031session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1cnam01031session01.730x412_q85_crop-scale.jpg',
@@ -151,7 +151,7 @@ export default {
     {
       id: 3115,
       key: 'course-v1:CNAM+01034+session01',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -165,7 +165,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Le_Cnam_facade.jpg' } ],
       university_name: 'Le Cnam',
-      main_university: 
+      main_university:
       { id: 1,
         name: 'Le Cnam',
         code: 'CNAM',
@@ -175,7 +175,7 @@ export default {
       title: ' Manager augmenté par l’intelligence artificielle ? ',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 55, name: 'Management' } ],
       image_url: 'asset-v1:CNAM+01034+session01+type@asset+block@mooc-dejoux-s7_vignette.png',
@@ -187,7 +187,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1cnam01034session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1cnam01034session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1cnam01034session01.730x412_q85_crop-scale.jpg',
@@ -197,7 +197,7 @@ export default {
     {
       id: 3372,
       key: 'course-v1:CNAM+01001+session05',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -211,7 +211,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Le_Cnam_facade.jpg' } ],
       university_name: 'Le Cnam',
-      main_university: 
+      main_university:
       { id: 1,
         name: 'Le Cnam',
         code: 'CNAM',
@@ -221,7 +221,7 @@ export default {
       title: 'Concepts et méthodes en épidémiologie',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 85, name: 'Santé' },
         { id: 58, name: 'Mathématiques et statistiques' },
         { id: 67, name: 'Outils pour la recherche' } ],
@@ -234,7 +234,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 5,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1cnam01001session05.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1cnam01001session05.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1cnam01001session05.730x412_q85_crop-scale.jpg',
@@ -244,7 +244,7 @@ export default {
     {
       id: 3127,
       key: 'course-v1:CNAM+01035+session01',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -258,7 +258,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Le_Cnam_facade.jpg' } ],
       university_name: 'Le Cnam',
-      main_university: 
+      main_university:
       { id: 1,
         name: 'Le Cnam',
         code: 'CNAM',
@@ -268,7 +268,7 @@ export default {
       title: 'Programmation objet : premiers pas en java',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 112, name: 'Programmation' } ],
       image_url: 'asset-v1:CNAM+01035+session01+type@asset+block@Vignette2.png',
@@ -280,7 +280,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1cnam01035session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1cnam01035session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1cnam01035session01.730x412_q85_crop-scale.jpg',
@@ -290,7 +290,7 @@ export default {
     {
       id: 3154,
       key: 'course-v1:dgef-interieur+134001+session01',
-      universities: 
+      universities:
       [ { id: 337,
           name: 'Direction générale des étrangers en France',
           code: 'dgef-interieur',
@@ -298,7 +298,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/banniere_minist.jpg' } ],
       university_name: 'Direction générale des étrangers en France',
-      main_university: 
+      main_university:
       { id: 337,
         name: 'Direction générale des étrangers en France',
         code: 'dgef-interieur',
@@ -308,7 +308,7 @@ export default {
       title: 'Vivre en France - A2',
       short_description: '',
       level: '',
-      subjects: [ { id: 49, name: 'Langues' } ],
+      subjects:[ { id: 49, name: 'Langues' } ],
       image_url: 'asset-v1:dgef-interieur+134001+session01+type@asset+block@Vignette-FUN-A2-600px.jpg',
       start_date: '2017-12-20T09:00:00Z',
       end_date: '2020-12-31T23:00:00Z',
@@ -318,7 +318,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1dgef-interieur134001session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1dgef-interieur134001session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1dgef-interieur134001session01.730x412_q85_crop-scale.jpg',
@@ -328,7 +328,7 @@ export default {
     {
       id: 3157,
       key: 'course-v1:dgef-interieur+134002+session01',
-      universities: 
+      universities:
       [ { id: 337,
           name: 'Direction générale des étrangers en France',
           code: 'dgef-interieur',
@@ -336,7 +336,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/banniere_minist.jpg' } ],
       university_name: 'Direction générale des étrangers en France',
-      main_university: 
+      main_university:
       { id: 337,
         name: 'Direction générale des étrangers en France',
         code: 'dgef-interieur',
@@ -346,7 +346,7 @@ export default {
       title: 'Vivre en France - B1',
       short_description: '',
       level: '',
-      subjects: [ { id: 49, name: 'Langues' } ],
+      subjects:[ { id: 49, name: 'Langues' } ],
       image_url: 'asset-v1:dgef-interieur+134002+session01+type@asset+block@Vignette-FUN-B1-600px.jpg',
       start_date: '2017-12-20T09:00:00Z',
       end_date: '2020-12-31T23:30:00Z',
@@ -356,7 +356,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1dgef-interieur134002session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1dgef-interieur134002session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1dgef-interieur134002session01.730x412_q85_crop-scale.jpg',
@@ -366,7 +366,7 @@ export default {
     {
       id: 2924,
       key: 'course-v1:CNAM+01029+session01',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -380,7 +380,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Le_Cnam_facade.jpg' } ],
       university_name: 'Le Cnam',
-      main_university: 
+      main_university:
       { id: 1,
         name: 'Le Cnam',
         code: 'CNAM',
@@ -390,7 +390,7 @@ export default {
       title: 'Les mots de la GRH : exploration',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 55, name: 'Management' },
         { id: 109, name: 'Vie de l\'entreprise' } ],
       image_url: 'asset-v1:CNAM+01029+session01+type@asset+block@Les_mots_de_la_GRH__exploration_vignette_V3.png',
@@ -402,7 +402,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1cnam01029session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1cnam01029session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1cnam01029session01.730x412_q85_crop-scale.jpg',
@@ -412,7 +412,7 @@ export default {
     {
       id: 3191,
       key: 'course-v1:CNFPT+87014+session01',
-      universities: 
+      universities:
       [ { id: 179,
           name: 'Centre national de la fonction publique territoriale (CNFPT)',
           code: 'CNFPT',
@@ -420,7 +420,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Bandeau_CNFPT_original.jpg' } ],
       university_name: 'Centre national de la fonction publique territoriale (CNFPT)',
-      main_university: 
+      main_university:
       { id: 179,
         name: 'Centre national de la fonction publique territoriale (CNFPT)',
         code: 'CNFPT',
@@ -430,7 +430,7 @@ export default {
       title: 'Monnaies complémentaires, un nouvel outil au service des territoires',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 22, name: 'Économie et finance' },
         { id: 25, name: 'Enjeux de société' },
         { id: 109, name: 'Vie de l\'entreprise' } ],
@@ -443,7 +443,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1cnfpt87014session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1cnfpt87014session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1cnfpt87014session01.730x412_q85_crop-scale.jpg',
@@ -453,7 +453,7 @@ export default {
     {
       id: 2974,
       key: 'course-v1:CNAM+01030+session01',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -467,7 +467,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Le_Cnam_facade.jpg' } ],
       university_name: 'Le Cnam',
-      main_university: 
+      main_university:
       { id: 1,
         name: 'Le Cnam',
         code: 'CNAM',
@@ -477,7 +477,7 @@ export default {
       title: 'Discriminations dans le travail : que dit le droit ?',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 19, name: 'Droit et juridique' },
         { id: 109, name: 'Vie de l\'entreprise' } ],
       image_url: 'asset-v1:CNAM+01030+session01+type@asset+block@vignette_discriminations.jpg',
@@ -489,7 +489,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1cnam01030session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1cnam01030session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1cnam01030session01.730x412_q85_crop-scale.jpg',
@@ -499,7 +499,7 @@ export default {
     {
       id: 2729,
       key: 'course-v1:CNAM+01027+session01',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -513,7 +513,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Le_Cnam_facade.jpg' } ],
       university_name: 'Le Cnam',
-      main_university: 
+      main_university:
       { id: 1,
         name: 'Le Cnam',
         code: 'CNAM',
@@ -523,7 +523,7 @@ export default {
       title: 'Comprendre le droit des contrats de travail',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 19, name: 'Droit et juridique' },
         { id: 109, name: 'Vie de l\'entreprise' } ],
       image_url: 'asset-v1:CNAM+01027+session01+type@asset+block@DCT_image.png',
@@ -535,7 +535,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1cnam01027session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1cnam01027session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1cnam01027session01.730x412_q85_crop-scale.jpg',
@@ -545,7 +545,7 @@ export default {
     {
       id: 2743,
       key: 'course-v1:CNAM+01028+session01',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -559,7 +559,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Le_Cnam_facade.jpg' } ],
       university_name: 'Le Cnam',
-      main_university: 
+      main_university:
       { id: 1,
         name: 'Le Cnam',
         code: 'CNAM',
@@ -569,7 +569,7 @@ export default {
       title: 'La transition énergétique : les clés du développement durable de l\'Europe et de l\'Afrique',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 25, name: 'Enjeux de société' } ],
       image_url: 'asset-v1:CNAM+01028+session01+type@asset+block@eoliennes.jpg',
@@ -581,7 +581,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1cnam01028session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1cnam01028session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1cnam01028session01.730x412_q85_crop-scale.jpg',
@@ -591,7 +591,7 @@ export default {
     {
       id: 3031,
       key: 'course-v1:ulb+44011+session01',
-      universities: 
+      universities:
       [ { id: 90,
           name: 'Université libre de Bruxelles (ULB)',
           code: 'ulb',
@@ -599,7 +599,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/ULB_baniere_980x200.jpg' } ],
       university_name: 'Université libre de Bruxelles (ULB)',
-      main_university: 
+      main_university:
       { id: 90,
         name: 'Université libre de Bruxelles (ULB)',
         code: 'ulb',
@@ -609,7 +609,7 @@ export default {
       title: 'Fautomaton - À la chasse aux fautoz !',
       short_description: '',
       level: '',
-      subjects: [ { id: 49, name: 'Langues' } ],
+      subjects:[ { id: 49, name: 'Langues' } ],
       image_url: 'asset-v1:ulb+44011+session01+type@asset+block@Vignette_Photomaton.png',
       start_date: '2018-03-28T10:00:00Z',
       end_date: '2018-05-28T17:00:00Z',
@@ -619,7 +619,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ulb44011session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ulb44011session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ulb44011session01.730x412_q85_crop-scale.jpg',
@@ -629,7 +629,7 @@ export default {
     {
       id: 3308,
       key: 'course-v1:itii+119001+session04',
-      universities: 
+      universities:
       [ { id: 255,
           name: 'La conférence des ITII',
           code: 'itii',
@@ -637,7 +637,7 @@ export default {
           detail_page_enabled: false,
           banner: null } ],
       university_name: 'La conférence des ITII',
-      main_university: 
+      main_university:
       { id: 255,
         name: 'La conférence des ITII',
         code: 'itii',
@@ -647,7 +647,7 @@ export default {
       title: 'Devenir ingénieur, c\'est possible!',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 58, name: 'Mathématiques et statistiques' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
@@ -660,7 +660,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 4,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1itii119001session04.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1itii119001session04.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1itii119001session04.730x412_q85_crop-scale.jpg',
@@ -670,7 +670,7 @@ export default {
     {
       id: 2936,
       key: 'course-v1:supagro+120002+session01',
-      universities: 
+      universities:
       [ { id: 113,
           name: 'Agreenium',
           code: 'Agreenium',
@@ -684,7 +684,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/banniere_supagro.jpg' } ],
       university_name: 'Montpellier SupAgro',
-      main_university: 
+      main_university:
       { id: 252,
         name: 'Montpellier SupAgro',
         code: 'supagro',
@@ -694,7 +694,7 @@ export default {
       title: 'Vine & Wine',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 22, name: 'Économie et finance' },
         { id: 34, name: 'Environnement' },
         { id: 88, name: 'Sciences' },
@@ -709,7 +709,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1supagro120002session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1supagro120002session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1supagro120002session01.730x412_q85_crop-scale.jpg',
@@ -719,7 +719,7 @@ export default {
     {
       id: 3055,
       key: 'course-v1:Agreenium+66001S03EN+session03',
-      universities: 
+      universities:
       [ { id: 113,
           name: 'Agreenium',
           code: 'Agreenium',
@@ -733,7 +733,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/banniere_supagro.jpg' } ],
       university_name: 'Montpellier SupAgro',
-      main_university: 
+      main_university:
       { id: 113,
         name: 'Agreenium',
         code: 'Agreenium',
@@ -743,7 +743,7 @@ export default {
       title: 'Agroecology, an introduction',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 1, name: 'Agronomie et agriculture' },
         { id: 115, name: 'Développement durable' },
@@ -758,7 +758,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1agreenium66001s03ensession03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1agreenium66001s03ensession03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1agreenium66001s03ensession03.730x412_q85_crop-scale.jpg',
@@ -768,7 +768,7 @@ export default {
     {
       id: 3133,
       key: 'course-v1:AgroParisTech+32002+session03',
-      universities: 
+      universities:
       [ { id: 113,
           name: 'Agreenium',
           code: 'Agreenium',
@@ -782,7 +782,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Banniere_Grignon_ciel_Ph-Joyet.jpg' } ],
       university_name: 'AgroParisTech',
-      main_university: 
+      main_university:
       { id: 93,
         name: 'AgroParisTech',
         code: 'AgroParisTech',
@@ -792,7 +792,7 @@ export default {
       title: 'MOOC de la Coopération Agricole',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 22, name: 'Économie et finance' },
         { id: 1, name: 'Agronomie et agriculture' },
         { id: 115, name: 'Développement durable' },
@@ -806,7 +806,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1agroparistech32002session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1agroparistech32002session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1agroparistech32002session03.730x412_q85_crop-scale.jpg',
@@ -816,7 +816,7 @@ export default {
     {
       id: 3142,
       key: 'course-v1:Inalco+52006+session02',
-      universities: 
+      universities:
       [ { id: 228,
           name: 'Institut National des Langues et Civilisations Orientales',
           code: 'Inalco',
@@ -824,7 +824,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/bandeau-inalco.png' } ],
       university_name: 'Institut National des Langues et Civilisations Orientales',
-      main_university: 
+      main_university:
       { id: 228,
         name: 'Institut National des Langues et Civilisations Orientales',
         code: 'Inalco',
@@ -834,7 +834,7 @@ export default {
       title: 'Kit de contact en langue tchèque',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 49, name: 'Langues' },
         { id: 100, name: 'Sciences humaines et sociales' },
         { id: 13, name: 'Cultures et civilisations' },
@@ -848,7 +848,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1inalco52006session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1inalco52006session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1inalco52006session02.730x412_q85_crop-scale.jpg',
@@ -858,7 +858,7 @@ export default {
     {
       id: 3151,
       key: 'course-v1:ENSDeLyon+14003+session04',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -878,7 +878,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/image-bandeau-ENSdeLyon.jpg' } ],
       university_name: 'ENS de Lyon',
-      main_university: 
+      main_university:
       { id: 24,
         name: 'ENS de Lyon',
         code: 'ENSDeLyon',
@@ -888,7 +888,7 @@ export default {
       title: 'Enseigner et former avec le numérique en mathématiques',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 58, name: 'Mathématiques et statistiques' },
         { id: 64, name: 'Numérique, technologie' } ],
@@ -901,7 +901,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 4,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ensdelyon14003session04.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ensdelyon14003session04.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ensdelyon14003session04.730x412_q85_crop-scale.jpg',
@@ -911,7 +911,7 @@ export default {
     {
       id: 2906,
       key: 'course-v1:lorraine+30008+session01',
-      universities: 
+      universities:
       [ { id: 168,
           name: 'Université de Lorraine',
           code: 'lorraine',
@@ -919,7 +919,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Image_Universite_de_Lorraine.jpg' } ],
       university_name: 'Université de Lorraine',
-      main_university: 
+      main_university:
       { id: 168,
         name: 'Université de Lorraine',
         code: 'lorraine',
@@ -929,7 +929,7 @@ export default {
       title: 'Supervision de Réseaux et Services',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 64, name: 'Numérique, technologie' },
         { id: 82, name: 'Réseaux et télécommunications' },
@@ -943,7 +943,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1lorraine30008session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1lorraine30008session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1lorraine30008session01.730x412_q85_crop-scale.jpg',
@@ -953,7 +953,7 @@ export default {
     {
       id: 3173,
       key: 'course-v1:ENSCachan+20010+session04',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -967,7 +967,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/enscachan.921fde30c904.jpg' } ],
       university_name: 'ENS Paris-Saclay',
-      main_university: 
+      main_university:
       { id: 14,
         name: 'ENS Paris-Saclay',
         code: 'ENSCachan',
@@ -977,7 +977,7 @@ export default {
       title: 'Pratiques du Dimensionnement en Mécanique - Partie 2',
       short_description: '',
       level: '',
-      subjects: [ { id: 103, name: 'Sciences pour l\'ingénieur' } ],
+      subjects:[ { id: 103, name: 'Sciences pour l\'ingénieur' } ],
       image_url: 'asset-v1:ENSCachan+20010+session04+type@asset+block@images_course_small.jpg',
       start_date: '2018-02-05T00:00:00Z',
       end_date: '2018-04-22T23:00:00Z',
@@ -987,7 +987,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 4,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1enscachan20010session04.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1enscachan20010session04.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1enscachan20010session04.730x412_q85_crop-scale.jpg',
@@ -997,7 +997,7 @@ export default {
     {
       id: 3176,
       key: 'course-v1:USPC+37013+session01',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -1005,7 +1005,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Recherche_montaGabirelle-3.jpg' } ],
       university_name: 'Université Sorbonne Paris Cité',
-      main_university: 
+      main_university:
       { id: 198,
         name: 'Université Sorbonne Paris Cité',
         code: 'USPC',
@@ -1015,7 +1015,7 @@ export default {
       title: 'Comment faire un laboratoire d’innovation publique ?',
       short_description: '',
       level: '',
-      subjects: [ { id: 67, name: 'Outils pour la recherche' } ],
+      subjects:[ { id: 67, name: 'Outils pour la recherche' } ],
       image_url: 'asset-v1:USPC+37013+session01+type@asset+block@f.jpg',
       start_date: '2018-01-04T00:00:00Z',
       end_date: '2018-05-31T00:00:00Z',
@@ -1025,7 +1025,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1uspc37013session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1uspc37013session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1uspc37013session01.730x412_q85_crop-scale.jpg',
@@ -1035,7 +1035,7 @@ export default {
     {
       id: 3185,
       key: 'course-v1:USPC+37008+session02',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -1043,7 +1043,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Recherche_montaGabirelle-3.jpg' } ],
       university_name: 'Université Sorbonne Paris Cité',
-      main_university: 
+      main_university:
       { id: 198,
         name: 'Université Sorbonne Paris Cité',
         code: 'USPC',
@@ -1053,7 +1053,7 @@ export default {
       title: 'Éducation par la recherche : conversion numérique à l\'École II',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 64, name: 'Numérique, technologie' } ],
       image_url: 'asset-v1:USPC+37008+session02+type@asset+block@6-MOOCNUMERIQUE_couv-fixe.png',
@@ -1065,7 +1065,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1uspc37008session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1uspc37008session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1uspc37008session02.730x412_q85_crop-scale.jpg',
@@ -1075,7 +1075,7 @@ export default {
     {
       id: 3194,
       key: 'course-v1:ParisSaclay+71005+session01',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -1083,7 +1083,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Banniere_UP-Saclay.png' } ],
       university_name: 'Université Paris-Saclay',
-      main_university: 
+      main_university:
       { id: 160,
         name: 'Université Paris-Saclay',
         code: 'ParisSaclay',
@@ -1093,7 +1093,7 @@ export default {
       title: 'L\'énergie nucléaire en France',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 85, name: 'Santé' },
         { id: 67, name: 'Outils pour la recherche' },
         { id: 73, name: 'Physique' },
@@ -1107,7 +1107,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1parissaclay71005session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1parissaclay71005session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1parissaclay71005session01.730x412_q85_crop-scale.jpg',
@@ -1117,7 +1117,7 @@ export default {
     {
       id: 3232,
       key: 'course-v1:MinesTelecom+04026+session02',
-      universities: 
+      universities:
       [ { id: 5,
           name: 'IMT',
           code: 'MinesTelecom',
@@ -1125,7 +1125,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/baniere_imt_EDX-02-02.jpg' } ],
       university_name: 'IMT',
-      main_university: 
+      main_university:
       { id: 5,
         name: 'IMT',
         code: 'MinesTelecom',
@@ -1135,7 +1135,7 @@ export default {
       title: 'S\'initier à la fabrication numérique - session 2',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 46, name: 'Innovation' },
         { id: 64, name: 'Numérique, technologie' },
@@ -1149,7 +1149,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1minestelecom04026session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1minestelecom04026session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1minestelecom04026session02.730x412_q85_crop-scale.jpg',
@@ -1159,7 +1159,7 @@ export default {
     {
       id: 3235,
       key: 'course-v1:MinesTelecom+04017+session04',
-      universities: 
+      universities:
       [ { id: 5,
           name: 'IMT',
           code: 'MinesTelecom',
@@ -1167,7 +1167,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/baniere_imt_EDX-02-02.jpg' } ],
       university_name: 'IMT',
-      main_university: 
+      main_university:
       { id: 5,
         name: 'IMT',
         code: 'MinesTelecom',
@@ -1177,7 +1177,7 @@ export default {
       title: 'Programmer un objet avec Arduino',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 46, name: 'Innovation' },
         { id: 64, name: 'Numérique, technologie' },
@@ -1191,7 +1191,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 4,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1minestelecom04017session04.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1minestelecom04017session04.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1minestelecom04017session04.730x412_q85_crop-scale.jpg',
@@ -1201,7 +1201,7 @@ export default {
     {
       id: 3247,
       key: 'course-v1:MinesTelecom+04021+session04',
-      universities: 
+      universities:
       [ { id: 5,
           name: 'IMT',
           code: 'MinesTelecom',
@@ -1209,7 +1209,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/baniere_imt_EDX-02-02.jpg' } ],
       university_name: 'IMT',
-      main_university: 
+      main_university:
       { id: 5,
         name: 'IMT',
         code: 'MinesTelecom',
@@ -1219,7 +1219,7 @@ export default {
       title: 'Imprimer en 3D',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 46, name: 'Innovation' },
         { id: 64, name: 'Numérique, technologie' },
@@ -1233,7 +1233,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 4,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1minestelecom04021session04.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1minestelecom04021session04.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1minestelecom04021session04.730x412_q85_crop-scale.jpg',
@@ -1243,7 +1243,7 @@ export default {
     {
       id: 3250,
       key: 'course-v1:MinesTelecom+04018+session04',
-      universities: 
+      universities:
       [ { id: 5,
           name: 'IMT',
           code: 'MinesTelecom',
@@ -1251,7 +1251,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/baniere_imt_EDX-02-02.jpg' } ],
       university_name: 'IMT',
-      main_university: 
+      main_university:
       { id: 5,
         name: 'IMT',
         code: 'MinesTelecom',
@@ -1261,7 +1261,7 @@ export default {
       title: 'Fabriquer un objet connecté',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 46, name: 'Innovation' },
         { id: 64, name: 'Numérique, technologie' },
@@ -1275,7 +1275,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1minestelecom04018session04.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1minestelecom04018session04.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1minestelecom04018session04.730x412_q85_crop-scale.jpg',
@@ -1285,7 +1285,7 @@ export default {
     {
       id: 3256,
       key: 'course-v1:MinesTelecom+04014+session05',
-      universities: 
+      universities:
       [ { id: 5,
           name: 'IMT',
           code: 'MinesTelecom',
@@ -1293,7 +1293,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/baniere_imt_EDX-02-02.jpg' } ],
       university_name: 'IMT',
-      main_university: 
+      main_university:
       { id: 5,
         name: 'IMT',
         code: 'MinesTelecom',
@@ -1303,7 +1303,7 @@ export default {
       title: 'Innover et entreprendre dans un monde numérique',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 31, name: 'Entrepreneuriat' },
         { id: 25, name: 'Enjeux de société' },
         { id: 46, name: 'Innovation' },
@@ -1317,7 +1317,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 5,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1minestelecom04014session05.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1minestelecom04014session05.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1minestelecom04014session05.730x412_q85_crop-scale.jpg',
@@ -1327,7 +1327,7 @@ export default {
     {
       id: 3271,
       key: 'course-v1:ulb+44012+session01',
-      universities: 
+      universities:
       [ { id: 90,
           name: 'Université libre de Bruxelles (ULB)',
           code: 'ulb',
@@ -1335,7 +1335,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/ULB_baniere_980x200.jpg' } ],
       university_name: 'Université libre de Bruxelles (ULB)',
-      main_university: 
+      main_university:
       { id: 90,
         name: 'Université libre de Bruxelles (ULB)',
         code: 'ulb',
@@ -1345,7 +1345,7 @@ export default {
       title: 'What\'s Up Doc - Formation documentaire pour tous',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 67, name: 'Outils pour la recherche' } ],
       image_url: 'asset-v1:ulb+44012+session01+type@asset+block@Vignette_WUD.001.png',
@@ -1357,7 +1357,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ulb44012session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ulb44012session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ulb44012session01.730x412_q85_crop-scale.jpg',
@@ -1367,7 +1367,7 @@ export default {
     {
       id: 3019,
       key: 'course-v1:inria+41015+session01',
-      universities: 
+      universities:
       [ { id: 42,
           name: 'Inria',
           code: 'inria',
@@ -1375,7 +1375,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/bandeau_MoocInria.0124-121.jpg' } ],
       university_name: 'Inria',
-      main_university: 
+      main_university:
       { id: 42,
         name: 'Inria',
         code: 'inria',
@@ -1385,7 +1385,7 @@ export default {
       title: 'Protection de la vie privée dans le monde numérique',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 19, name: 'Droit et juridique' },
         { id: 64, name: 'Numérique, technologie' } ],
       image_url: 'asset-v1:inria+41015+session01+type@asset+block@vie-privee-clavier.jpg',
@@ -1397,7 +1397,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1inria41015session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1inria41015session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1inria41015session01.730x412_q85_crop-scale.jpg',
@@ -1407,7 +1407,7 @@ export default {
     {
       id: 2766,
       key: 'course-v1:ubordeaux+28006+session01',
-      universities: 
+      universities:
       [ { id: 195,
           name: 'ComUE d’Aquitaine',
           code: 'cuea',
@@ -1421,7 +1421,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/UBx-980X200.jpg' } ],
       university_name: 'Université de Bordeaux',
-      main_university: 
+      main_university:
       { id: 52,
         name: 'Université de Bordeaux',
         code: 'ubordeaux',
@@ -1431,7 +1431,7 @@ export default {
       title: 'Apprendre le marketing autrement : la méthode du produit fil rouge 2',
       short_description: '',
       level: '',
-      subjects: [ { id: 31, name: 'Entrepreneuriat' } ],
+      subjects:[ { id: 31, name: 'Entrepreneuriat' } ],
       image_url: 'asset-v1:ubordeaux+28006+session01+type@asset+block@LOGO_PFR_-_MOOC_2_-_v2_-_test.png',
       start_date: '2018-03-26T08:00:00Z',
       end_date: '2018-06-06T23:30:00Z',
@@ -1441,7 +1441,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ubordeaux28006session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ubordeaux28006session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ubordeaux28006session01.730x412_q85_crop-scale.jpg',
@@ -1451,7 +1451,7 @@ export default {
     {
       id: 3283,
       key: 'course-v1:CNAM+01023+session02',
-      universities: 
+      universities:
       [ { id: 1,
           name: 'Le Cnam',
           code: 'CNAM',
@@ -1459,7 +1459,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Le_Cnam_facade.jpg' } ],
       university_name: 'Le CNAM',
-      main_university: 
+      main_university:
       { id: 1,
         name: 'Le Cnam',
         code: 'CNAM',
@@ -1469,7 +1469,7 @@ export default {
       title: 'Fabriquer l\'innovation',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 55, name: 'Management' },
         { id: 40, name: 'Histoire' },
         { id: 46, name: 'Innovation' } ],
@@ -1482,7 +1482,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1cnam01023session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1cnam01023session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1cnam01023session02.730x412_q85_crop-scale.jpg',
@@ -1492,7 +1492,7 @@ export default {
     {
       id: 3286,
       key: 'course-v1:ubordeaux+28003+session03',
-      universities: 
+      universities:
       [ { id: 195,
           name: 'ComUE d’Aquitaine',
           code: 'cuea',
@@ -1506,7 +1506,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/UBx-980X200.jpg' } ],
       university_name: 'Université de Bordeaux',
-      main_university: 
+      main_university:
       { id: 52,
         name: 'Université de Bordeaux',
         code: 'ubordeaux',
@@ -1516,7 +1516,7 @@ export default {
       title: 'Physique des objets du quotidien : du four à micro-ondes au smartphone',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 73, name: 'Physique' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
@@ -1529,7 +1529,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ubordeaux28003session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ubordeaux28003session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ubordeaux28003session03.730x412_q85_crop-scale.jpg',
@@ -1539,7 +1539,7 @@ export default {
     {
       id: 3295,
       key: 'course-v1:lille1+54005+session01',
-      universities: 
+      universities:
       [ { id: 225,
           name: 'ComUE Lille Nord de France',
           code: 'cuelnf',
@@ -1553,7 +1553,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/VisuelUnivLille199.jpg' } ],
       university_name: 'Université Lille 1',
-      main_university: 
+      main_university:
       { id: 87,
         name: 'Université de Lille 1, Sciences et technologies',
         code: 'lille1',
@@ -1563,7 +1563,7 @@ export default {
       title: 'Java EE Spring prêt à l\'emploi',
       short_description: '',
       level: '',
-      subjects: [ { id: 43, name: 'Informatique' } ],
+      subjects:[ { id: 43, name: 'Informatique' } ],
       image_url: 'asset-v1:lille1+54005+session01+type@asset+block@JavaEE-730x411.jpg',
       start_date: '2018-03-12T09:00:00Z',
       end_date: '2018-05-14T23:00:00Z',
@@ -1573,7 +1573,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1lille154005session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1lille154005session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1lille154005session01.730x412_q85_crop-scale.jpg',
@@ -1583,7 +1583,7 @@ export default {
     {
       id: 3301,
       key: 'course-v1:USPC+37004+session02',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -1591,7 +1591,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Recherche_montaGabirelle-3.jpg' } ],
       university_name: 'Université Sorbonne Paris Cité',
-      main_university: 
+      main_university:
       { id: 198,
         name: 'Université Sorbonne Paris Cité',
         code: 'USPC',
@@ -1601,7 +1601,7 @@ export default {
       title: 'Éducation par la recherche : neurosciences à l\'École Extension',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 64, name: 'Numérique, technologie' },
         { id: 91, name: 'Sciences cognitives' } ],
@@ -1614,7 +1614,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1uspc37004session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1uspc37004session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1uspc37004session02.730x412_q85_crop-scale.jpg',
@@ -1624,7 +1624,7 @@ export default {
     {
       id: 3311,
       key: 'course-v1:CNAM+01008+session04',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -1638,7 +1638,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Le_Cnam_facade.jpg' } ],
       university_name: 'Le CNAM',
-      main_university: 
+      main_university:
       { id: 1,
         name: 'Le Cnam',
         code: 'CNAM',
@@ -1648,7 +1648,7 @@ export default {
       title: 'Introduction au traitement du signal',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 73, name: 'Physique' },
         { id: 82, name: 'Réseaux et télécommunications' },
@@ -1662,7 +1662,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 4,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1cnam01008session04.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1cnam01008session04.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1cnam01008session04.730x412_q85_crop-scale.jpg',
@@ -1672,7 +1672,7 @@ export default {
     {
       id: 3317,
       key: 'course-v1:ulg+108001+session03',
-      universities: 
+      universities:
       [ { id: 264,
           name: 'Université de Liège',
           code: 'ulg',
@@ -1680,7 +1680,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/bandeauULg1.png' } ],
       university_name: 'Université de Liège',
-      main_university: 
+      main_university:
       { id: 264,
         name: 'Université de Liège',
         code: 'ulg',
@@ -1690,7 +1690,7 @@ export default {
       title: 'Introduction à l’histologie : exploration des tissus du corps humain',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 85, name: 'Santé' },
         { id: 88, name: 'Sciences' },
         { id: 97, name: 'Sciences de la vie' } ],
@@ -1703,7 +1703,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ulg108001session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ulg108001session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ulg108001session03.730x412_q85_crop-scale.jpg',
@@ -1713,7 +1713,7 @@ export default {
     {
       id: 2834,
       key: 'course-v1:lyon3+26001+session04',
-      universities: 
+      universities:
       [ { id: 172,
           name: 'Université de Lyon',
           code: 'universite-lyon',
@@ -1727,7 +1727,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/JeanMoulin1.jpg' } ],
       university_name: 'Université Jean Moulin Lyon 3',
-      main_university: 
+      main_university:
       { id: 81,
         name: 'Université Jean Moulin Lyon 3',
         code: 'lyon3',
@@ -1737,7 +1737,7 @@ export default {
       title: 'Introduction à la cartographie des processus métiers avec BPMN - CARTOPRO\'S 2018',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 55, name: 'Management' },
         { id: 64, name: 'Numérique, technologie' },
         { id: 109, name: 'Vie de l\'entreprise' } ],
@@ -1750,7 +1750,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 4,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1lyon326001session04.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1lyon326001session04.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1lyon326001session04.730x412_q85_crop-scale.jpg',
@@ -1760,7 +1760,7 @@ export default {
     {
       id: 2590,
       key: 'course-v1:lyon3+26005+session02',
-      universities: 
+      universities:
       [ { id: 172,
           name: 'Université de Lyon',
           code: 'universite-lyon',
@@ -1774,7 +1774,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/JeanMoulin1.jpg' } ],
       university_name: 'Université Jean Moulin Lyon 3',
-      main_university: 
+      main_university:
       { id: 81,
         name: 'Université Jean Moulin Lyon 3',
         code: 'lyon3',
@@ -1784,7 +1784,7 @@ export default {
       title: 'Le comportement du commercial B to B à l\'ère 2.0',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 7, name: 'Communication' },
         { id: 61, name: 'Médias' },
         { id: 64, name: 'Numérique, technologie' } ],
@@ -1797,7 +1797,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1lyon326005session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1lyon326005session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1lyon326005session02.730x412_q85_crop-scale.jpg',
@@ -1807,7 +1807,7 @@ export default {
     {
       id: 3136,
       key: 'course-v1:MinesTelecom+04006+session09',
-      universities: 
+      universities:
       [ { id: 5,
           name: 'IMT',
           code: 'MinesTelecom',
@@ -1815,7 +1815,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/baniere_imt_EDX-02-02.jpg' } ],
       university_name: 'IMT',
-      main_university: 
+      main_university:
       { id: 5,
         name: 'IMT',
         code: 'MinesTelecom',
@@ -1825,7 +1825,7 @@ export default {
       title: 'Fondamentaux pour le Big Data',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 58, name: 'Mathématiques et statistiques' } ],
       image_url: 'asset-v1:MinesTelecom+04006+session09+type@asset+block@Fotolia_40675854_M.jpg',
@@ -1837,7 +1837,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 9,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1minestelecom04006session09.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1minestelecom04006session09.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1minestelecom04006session09.730x412_q85_crop-scale.jpg',
@@ -1847,7 +1847,7 @@ export default {
     {
       id: 2888,
       key: 'course-v1:UT2J+59001+session03',
-      universities: 
+      universities:
       [ { id: 188,
           name: 'Université Fédérale Toulouse Midi-Pyrénées',
           code: 'univ-toulouse',
@@ -1855,7 +1855,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/presentationMOOC-UFTMP.jpg' } ],
       university_name: 'Université Fédérale Toulouse Midi-Pyrénées',
-      main_university: 
+      main_university:
       { id: 188,
         name: 'Université Fédérale Toulouse Midi-Pyrénées',
         code: 'univ-toulouse',
@@ -1865,7 +1865,7 @@ export default {
       title: 'Introduction à la psychologie à l\'Université',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 118, name: 'Orientation' },
         { id: 100, name: 'Sciences humaines et sociales' },
         { id: 91, name: 'Sciences cognitives' } ],
@@ -1878,7 +1878,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ut2j59001session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ut2j59001session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ut2j59001session03.730x412_q85_crop-scale.jpg',
@@ -1888,7 +1888,7 @@ export default {
     {
       id: 3164,
       key: 'course-v1:MinesTelecom+04024+session02',
-      universities: 
+      universities:
       [ { id: 5,
           name: 'IMT',
           code: 'MinesTelecom',
@@ -1902,7 +1902,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/banni%C3%A8re.jpg' } ],
       university_name: 'IMT',
-      main_university: 
+      main_university:
       { id: 5,
         name: 'IMT',
         code: 'MinesTelecom',
@@ -1912,7 +1912,7 @@ export default {
       title: 'Conversion Thermodynamique de la Chaleur : Cycles classiques et innovants',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 73, name: 'Physique' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
       image_url: 'asset-v1:MinesTelecom+04024+session02+type@asset+block@Titre_teaser_cycles.png',
@@ -1924,7 +1924,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1minestelecom04024session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1minestelecom04024session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1minestelecom04024session02.730x412_q85_crop-scale.jpg',
@@ -1934,7 +1934,7 @@ export default {
     {
       id: 2656,
       key: 'course-v1:univ-toulouse+101008+session01',
-      universities: 
+      universities:
       [ { id: 188,
           name: 'Université Fédérale Toulouse Midi-Pyrénées',
           code: 'univ-toulouse',
@@ -1942,7 +1942,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/presentationMOOC-UFTMP.jpg' } ],
       university_name: 'Université Fédérale Toulouse Midi-Pyrénées',
-      main_university: 
+      main_university:
       { id: 188,
         name: 'Université Fédérale Toulouse Midi-Pyrénées',
         code: 'univ-toulouse',
@@ -1952,7 +1952,7 @@ export default {
       title: 'Les Réseaux Locaux',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 64, name: 'Numérique, technologie' },
         { id: 82, name: 'Réseaux et télécommunications' },
@@ -1966,7 +1966,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1univ-toulouse101008session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1univ-toulouse101008session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1univ-toulouse101008session01.730x412_q85_crop-scale.jpg',
@@ -1976,7 +1976,7 @@ export default {
     {
       id: 2690,
       key: 'course-v1:univ-reunion+128001+session01',
-      universities: 
+      universities:
       [ { id: 326,
           name: 'Université de la Réunion',
           code: 'univ-reunion',
@@ -1984,7 +1984,7 @@ export default {
           detail_page_enabled: false,
           banner: null } ],
       university_name: 'Université de la Réunion',
-      main_university: 
+      main_university:
       { id: 326,
         name: 'Université de la Réunion',
         code: 'univ-reunion',
@@ -1994,7 +1994,7 @@ export default {
       title: 'Maîtriser le shell Bash',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 64, name: 'Numérique, technologie' },
         { id: 112, name: 'Programmation' },
@@ -2008,7 +2008,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1univ-reunion128001session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1univ-reunion128001session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1univ-reunion128001session01.730x412_q85_crop-scale.jpg',
@@ -2018,7 +2018,7 @@ export default {
     {
       id: 2962,
       key: 'course-v1:Paris1+16001+session03',
-      universities: 
+      universities:
       [ { id: 13,
           name: 'Université Paris 1 Panthéon-Sorbonne',
           code: 'Paris1',
@@ -2026,7 +2026,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/banniere_paris1-pantheon-sorbonne_980x200.jpg' } ],
       university_name: 'Université Paris 1 Panthéon-Sorbonne',
-      main_university: 
+      main_university:
       { id: 13,
         name: 'Université Paris 1 Panthéon-Sorbonne',
         code: 'Paris1',
@@ -2036,7 +2036,7 @@ export default {
       title: 'Droit des entreprises - Session 3',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 19, name: 'Droit et juridique' },
         { id: 109, name: 'Vie de l\'entreprise' } ],
       image_url: 'asset-v1:Paris1+16001+session03+type@asset+block@images_course_small.jpg',
@@ -2048,7 +2048,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1paris116001session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1paris116001session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1paris116001session03.730x412_q85_crop-scale.jpg',
@@ -2058,7 +2058,7 @@ export default {
     {
       id: 3229,
       key: 'course-v1:pasteur+96010+session01',
-      universities: 
+      universities:
       [ { id: 186,
           name: 'Institut Pasteur',
           code: 'pasteur',
@@ -2066,7 +2066,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Bandeau_IP_Buste_LP_980x200_V2.png' } ],
       university_name: 'Institut Pasteur',
-      main_university: 
+      main_university:
       { id: 186,
         name: 'Institut Pasteur',
         code: 'pasteur',
@@ -2076,7 +2076,7 @@ export default {
       title: 'Malaria',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 85, name: 'Santé' },
         { id: 25, name: 'Enjeux de société' },
         { id: 97, name: 'Sciences de la vie' } ],
@@ -2089,7 +2089,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1pasteur96010session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1pasteur96010session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1pasteur96010session01.730x412_q85_crop-scale.jpg',
@@ -2099,7 +2099,7 @@ export default {
     {
       id: 3262,
       key: 'course-v1:Paris1+16004+session03',
-      universities: 
+      universities:
       [ { id: 13,
           name: 'Université Paris 1 Panthéon-Sorbonne',
           code: 'Paris1',
@@ -2107,7 +2107,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/banniere_paris1-pantheon-sorbonne_980x200.jpg' } ],
       university_name: 'Université Paris 1 Panthéon-Sorbonne',
-      main_university: 
+      main_university:
       { id: 13,
         name: 'Université Paris 1 Panthéon-Sorbonne',
         code: 'Paris1',
@@ -2117,7 +2117,7 @@ export default {
       title: 'Échanges et proximité : la première loi de la géographie',
       short_description: '',
       level: '',
-      subjects: [ { id: 37, name: 'Géographie' } ],
+      subjects:[ { id: 37, name: 'Géographie' } ],
       image_url: 'asset-v1:Paris1+16004+session03+type@asset+block@Preview-FUN-730x411-2.png',
       start_date: '2018-03-12T08:00:00Z',
       end_date: '2018-05-07T00:00:00Z',
@@ -2127,7 +2127,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1paris116004session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1paris116004session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1paris116004session03.730x412_q85_crop-scale.jpg',
@@ -2137,7 +2137,7 @@ export default {
     {
       id: 3010,
       key: 'course-v1:agrocampusouest+40001S04+session04',
-      universities: 
+      universities:
       [ { id: 113,
           name: 'Agreenium',
           code: 'Agreenium',
@@ -2151,7 +2151,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/agrocampusouest.jpg' } ],
       university_name: 'AgroCampus Ouest',
-      main_university: 
+      main_university:
       { id: 78,
         name: 'AGROCAMPUS OUEST',
         code: 'agrocampusouest',
@@ -2161,7 +2161,7 @@ export default {
       title: 'Analyse des données multidimensionnelles',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 58, name: 'Mathématiques et statistiques' },
         { id: 67, name: 'Outils pour la recherche' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
@@ -2174,7 +2174,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 4,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1agrocampusouest40001s04session04.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1agrocampusouest40001s04session04.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1agrocampusouest40001s04session04.730x412_q85_crop-scale.jpg',
@@ -2184,7 +2184,7 @@ export default {
     {
       id: 3013,
       key: 'course-v1:agrocampusouest+40001S04EN+session04',
-      universities: 
+      universities:
       [ { id: 113,
           name: 'Agreenium',
           code: 'Agreenium',
@@ -2198,7 +2198,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/agrocampusouest.jpg' } ],
       university_name: 'AgroCampus Ouest',
-      main_university: 
+      main_university:
       { id: 78,
         name: 'AGROCAMPUS OUEST',
         code: 'agrocampusouest',
@@ -2208,7 +2208,7 @@ export default {
       title: 'Exploratory Multivariate Data Analysis',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 58, name: 'Mathématiques et statistiques' },
         { id: 67, name: 'Outils pour la recherche' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
@@ -2221,7 +2221,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 4,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1agrocampusouest40001s04ensession04.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1agrocampusouest40001s04ensession04.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1agrocampusouest40001s04ensession04.730x412_q85_crop-scale.jpg',
@@ -2231,7 +2231,7 @@ export default {
     {
       id: 2503,
       key: 'course-v1:ENSDeLyon+14006+session01',
-      universities: 
+      universities:
       [ { id: 172,
           name: 'Université de Lyon',
           code: 'universite-lyon',
@@ -2245,7 +2245,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/image-bandeau-ENSdeLyon.jpg' } ],
       university_name: 'ENS de Lyon',
-      main_university: 
+      main_university:
       { id: 24,
         name: 'ENS de Lyon',
         code: 'ENSDeLyon',
@@ -2255,7 +2255,7 @@ export default {
       title: 'Étudiants dyslexiques dans mon amphi : comprendre et aider',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 85, name: 'Santé' },
         { id: 91, name: 'Sciences cognitives' } ],
@@ -2268,7 +2268,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ensdelyon14006session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ensdelyon14006session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ensdelyon14006session01.730x412_q85_crop-scale.jpg',
@@ -2278,7 +2278,7 @@ export default {
     {
       id: 3025,
       key: 'course-v1:lyon3+26004+session03',
-      universities: 
+      universities:
       [ { id: 172,
           name: 'Université de Lyon',
           code: 'universite-lyon',
@@ -2292,7 +2292,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/JeanMoulin1.jpg' } ],
       university_name: 'Université Jean Moulin Lyon 3',
-      main_university: 
+      main_university:
       { id: 81,
         name: 'Université Jean Moulin Lyon 3',
         code: 'lyon3',
@@ -2302,7 +2302,7 @@ export default {
       title: 'Pilotage des organisations et processus métiers - PILOPRO\'s 2018',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 55, name: 'Management' },
         { id: 64, name: 'Numérique, technologie' },
         { id: 109, name: 'Vie de l\'entreprise' } ],
@@ -2315,7 +2315,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1lyon326004session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1lyon326004session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1lyon326004session03.730x412_q85_crop-scale.jpg',
@@ -2325,7 +2325,7 @@ export default {
     {
       id: 2268,
       key: 'inria/41014/session01',
-      universities: 
+      universities:
       [ { id: 42,
           name: 'Inria',
           code: 'inria',
@@ -2333,7 +2333,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/bandeau_MoocInria.0124-121.jpg' } ],
       university_name: 'Inria',
-      main_university: 
+      main_university:
       { id: 42,
         name: 'Inria',
         code: 'inria',
@@ -2343,7 +2343,7 @@ export default {
       title: 'Se former pour l’ICN Informatique et Création Numérique                        ',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 43, name: 'Informatique' },
         { id: 100, name: 'Sciences humaines et sociales' },
@@ -2358,7 +2358,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/inria41014session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/inria41014session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/inria41014session01.730x412_q85_crop-scale.jpg',
@@ -2368,7 +2368,7 @@ export default {
     {
       id: 2438,
       key: 'course-v1:OBSPM+62004+session01',
-      universities: 
+      universities:
       [ { id: 58,
           name: 'Paris Sciences Lettres',
           code: 'psl',
@@ -2382,7 +2382,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/banniere-obspm.png' } ],
       university_name: 'Observatoire de Paris',
-      main_university: 
+      main_university:
       { id: 136,
         name: 'Observatoire de Paris',
         code: 'OBSPM',
@@ -2392,7 +2392,7 @@ export default {
       title: '(Astro)Physique : Hydrodynamique et MHD',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 73, name: 'Physique' },
         { id: 94, name: 'Sciences de la Terre et de l\'Univers' } ],
@@ -2405,7 +2405,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1obspm62004session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1obspm62004session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1obspm62004session01.730x412_q85_crop-scale.jpg',
@@ -2415,7 +2415,7 @@ export default {
     {
       id: 3211,
       key: 'course-v1:Polytechnique+03004+session01',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -2429,7 +2429,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/polytechnique_banner.jpg' } ],
       university_name: 'Ecole Polytechnique',
-      main_university: 
+      main_university:
       { id: 4,
         name: 'Ecole Polytechnique',
         code: 'Polytechnique',
@@ -2439,7 +2439,7 @@ export default {
       title: 'Collection Mathématiques : 1- Dérivation et Étude de fonctions',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 118, name: 'Orientation' },
         { id: 58, name: 'Mathématiques et statistiques' } ],
@@ -2452,7 +2452,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1polytechnique03004session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1polytechnique03004session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1polytechnique03004session01.730x412_q85_crop-scale.jpg',
@@ -2462,7 +2462,7 @@ export default {
     {
       id: 489,
       key: 'FUN/00101/Trimestre_3_2014',
-      universities: 
+      universities:
       [ { id: 27,
           name: 'FUN',
           code: 'FUN',
@@ -2470,7 +2470,7 @@ export default {
           detail_page_enabled: false,
           banner: null } ],
       university_name: 'France Université Numérique',
-      main_university: 
+      main_university:
       { id: 27,
         name: 'FUN',
         code: 'FUN',
@@ -2480,7 +2480,7 @@ export default {
       title: 'Bienvenue sur FUN',
       short_description: '',
       level: 'introductory',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 64, name: 'Numérique, technologie' } ],
       image_url: '/c4x/FUN/00101/asset/images_course_small.jpg',
@@ -2492,7 +2492,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/fun00101trimestre_3_2014.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/fun00101trimestre_3_2014.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/fun00101trimestre_3_2014.730x412_q85_crop-scale.jpg',
@@ -2502,7 +2502,7 @@ export default {
     {
       id: 3214,
       key: 'course-v1:Polytechnique+03005+session01',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -2516,7 +2516,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/polytechnique_banner.jpg' } ],
       university_name: 'Ecole Polytechnique',
-      main_university: 
+      main_university:
       { id: 4,
         name: 'Ecole Polytechnique',
         code: 'Polytechnique',
@@ -2526,7 +2526,7 @@ export default {
       title: 'Collection Mathématiques : 2- Équations du second degré, équations algébriques',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 118, name: 'Orientation' },
         { id: 58, name: 'Mathématiques et statistiques' } ],
@@ -2539,7 +2539,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1polytechnique03005session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1polytechnique03005session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1polytechnique03005session01.730x412_q85_crop-scale.jpg',
@@ -2549,7 +2549,7 @@ export default {
     {
       id: 3217,
       key: 'course-v1:Polytechnique+03006+session01',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -2563,7 +2563,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/polytechnique_banner.jpg' } ],
       university_name: 'Ecole Polytechnique',
-      main_university: 
+      main_university:
       { id: 4,
         name: 'Ecole Polytechnique',
         code: 'Polytechnique',
@@ -2573,7 +2573,7 @@ export default {
       title: 'Collection Mathématiques : 3- Nombres complexes',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 118, name: 'Orientation' },
         { id: 58, name: 'Mathématiques et statistiques' } ],
@@ -2586,7 +2586,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1polytechnique03006session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1polytechnique03006session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1polytechnique03006session01.730x412_q85_crop-scale.jpg',
@@ -2596,7 +2596,7 @@ export default {
     {
       id: 3220,
       key: 'course-v1:Polytechnique+03007+session01',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -2610,7 +2610,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/polytechnique_banner.jpg' } ],
       university_name: 'Ecole Polytechnique',
-      main_university: 
+      main_university:
       { id: 4,
         name: 'Ecole Polytechnique',
         code: 'Polytechnique',
@@ -2620,7 +2620,7 @@ export default {
       title: 'Collection Mathématiques : 4- Raisonnement par récurrence et suites numériques',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 118, name: 'Orientation' },
         { id: 58, name: 'Mathématiques et statistiques' } ],
@@ -2633,7 +2633,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1polytechnique03007session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1polytechnique03007session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1polytechnique03007session01.730x412_q85_crop-scale.jpg',
@@ -2643,7 +2643,7 @@ export default {
     {
       id: 3223,
       key: 'course-v1:Polytechnique+03008+session01',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -2657,7 +2657,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/polytechnique_banner.jpg' } ],
       university_name: 'Ecole Polytechnique',
-      main_university: 
+      main_university:
       { id: 4,
         name: 'Ecole Polytechnique',
         code: 'Polytechnique',
@@ -2667,7 +2667,7 @@ export default {
       title: 'Collection Mathématiques : 5- Intégration',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 118, name: 'Orientation' },
         { id: 58, name: 'Mathématiques et statistiques' } ],
@@ -2680,7 +2680,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1polytechnique03008session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1polytechnique03008session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1polytechnique03008session01.730x412_q85_crop-scale.jpg',
@@ -2690,7 +2690,7 @@ export default {
     {
       id: 3085,
       key: 'course-v1:ubordeaux+28004+session02',
-      universities: 
+      universities:
       [ { id: 195,
           name: 'ComUE d’Aquitaine',
           code: 'cuea',
@@ -2704,7 +2704,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/UBx-980X200.jpg' } ],
       university_name: 'Université de Bordeaux',
-      main_university: 
+      main_university:
       { id: 52,
         name: 'Université de Bordeaux',
         code: 'ubordeaux',
@@ -2714,7 +2714,7 @@ export default {
       title: 'Enquêter sur la santé : comment ça marche?',
       short_description: '',
       level: '',
-      subjects: [ { id: 85, name: 'Santé' }, { id: 88, name: 'Sciences' } ],
+      subjects:[ { id: 85, name: 'Santé' }, { id: 88, name: 'Sciences' } ],
       image_url: 'asset-v1:ubordeaux+28004+session02+type@asset+block@Logo_MOOC-PopHealth.jpg',
       start_date: '2018-02-01T12:00:00Z',
       end_date: '2018-04-05T12:00:00Z',
@@ -2724,7 +2724,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ubordeaux28004session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ubordeaux28004session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ubordeaux28004session02.730x412_q85_crop-scale.jpg',
@@ -2734,7 +2734,7 @@ export default {
     {
       id: 3088,
       key: 'course-v1:supagro+120001+session02',
-      universities: 
+      universities:
       [ { id: 113,
           name: 'Agreenium',
           code: 'Agreenium',
@@ -2748,7 +2748,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/banniere_supagro.jpg' } ],
       university_name: 'Montpellier SupAgro',
-      main_university: 
+      main_university:
       { id: 252,
         name: 'Montpellier SupAgro',
         code: 'supagro',
@@ -2758,7 +2758,7 @@ export default {
       title: 'NECTAR : Nématodes Cultures Taxonomie Arthropodes',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 1, name: 'Agronomie et agriculture' },
         { id: 25, name: 'Enjeux de société' },
@@ -2773,7 +2773,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1supagro120001session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1supagro120001session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1supagro120001session02.730x412_q85_crop-scale.jpg',
@@ -2783,7 +2783,7 @@ export default {
     {
       id: 3091,
       key: 'course-v1:pasteur+96008+session01',
-      universities: 
+      universities:
       [ { id: 186,
           name: 'Institut Pasteur',
           code: 'pasteur',
@@ -2791,7 +2791,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Bandeau_IP_Buste_LP_980x200_V2.png' } ],
       university_name: 'Institut Pasteur',
-      main_university: 
+      main_university:
       { id: 186,
         name: 'Institut Pasteur',
         code: 'pasteur',
@@ -2801,7 +2801,7 @@ export default {
       title: 'Tuberculosis',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 85, name: 'Santé' },
         { id: 25, name: 'Enjeux de société' },
         { id: 97, name: 'Sciences de la vie' } ],
@@ -2814,7 +2814,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1pasteur96008session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1pasteur96008session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1pasteur96008session01.730x412_q85_crop-scale.jpg',
@@ -2824,7 +2824,7 @@ export default {
     {
       id: 2581,
       key: 'course-v1:lorraine+30003+session03',
-      universities: 
+      universities:
       [ { id: 113,
           name: 'Agreenium',
           code: 'Agreenium',
@@ -2838,7 +2838,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Image_Universite_de_Lorraine.jpg' } ],
       university_name: 'Université de Lorraine',
-      main_university: 
+      main_university:
       { id: 168,
         name: 'Université de Lorraine',
         code: 'lorraine',
@@ -2848,7 +2848,7 @@ export default {
       title: 'Anatomie du Bois',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 94, name: 'Sciences de la Terre et de l\'Univers' },
         { id: 97, name: 'Sciences de la vie' } ],
@@ -2861,7 +2861,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1lorraine30003session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1lorraine30003session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1lorraine30003session03.730x412_q85_crop-scale.jpg',
@@ -2871,7 +2871,7 @@ export default {
     {
       id: 3094,
       key: 'course-v1:CNAM+01002+session05',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -2885,7 +2885,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Le_Cnam_facade.jpg' } ],
       university_name: 'Le CNAM',
-      main_university: 
+      main_university:
       { id: 1,
         name: 'Le Cnam',
         code: 'CNAM',
@@ -2895,7 +2895,7 @@ export default {
       title: 'Du manager agile au leader designer / From an agile manager to a designer leader',
       short_description: '',
       level: '',
-      subjects: [ { id: 55, name: 'Management' } ],
+      subjects:[ { id: 55, name: 'Management' } ],
       image_url: 'asset-v1:CNAM+01002+session05+type@asset+block@mooc-manager-S04.jpg',
       start_date: '2018-02-15T09:00:00Z',
       end_date: '2018-03-25T23:00:00Z',
@@ -2905,7 +2905,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 5,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1cnam01002session05.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1cnam01002session05.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1cnam01002session05.730x412_q85_crop-scale.jpg',
@@ -2915,7 +2915,7 @@ export default {
     {
       id: 3097,
       key: 'course-v1:lille1+54003+session02',
-      universities: 
+      universities:
       [ { id: 225,
           name: 'ComUE Lille Nord de France',
           code: 'cuelnf',
@@ -2929,7 +2929,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/VisuelUnivLille199.jpg' } ],
       university_name: 'Université Lille 1',
-      main_university: 
+      main_university:
       { id: 87,
         name: 'Université de Lille 1, Sciences et technologies',
         code: 'lille1',
@@ -2939,7 +2939,7 @@ export default {
       title: 'Une SAGE introduction au calcul formel',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 88, name: 'Sciences' },
         { id: 58, name: 'Mathématiques et statistiques' } ],
@@ -2952,7 +2952,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1lille154003session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1lille154003session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1lille154003session02.730x412_q85_crop-scale.jpg',
@@ -2962,7 +2962,7 @@ export default {
     {
       id: 3103,
       key: 'course-v1:univ-toulouse+61003+session03',
-      universities: 
+      universities:
       [ { id: 188,
           name: 'Université Fédérale Toulouse Midi-Pyrénées',
           code: 'univ-toulouse',
@@ -2970,7 +2970,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/presentationMOOC-UFTMP.jpg' } ],
       university_name: 'Université Fédérale Toulouse Midi-Pyrénées',
-      main_university: 
+      main_university:
       { id: 188,
         name: 'Université Fédérale Toulouse Midi-Pyrénées',
         code: 'univ-toulouse',
@@ -2980,7 +2980,7 @@ export default {
       title: 'L\'entraînement sportif en trail et ultra-trail',
       short_description: '',
       level: '',
-      subjects: [ { id: 85, name: 'Santé' }, { id: 106, name: 'Sport' } ],
+      subjects:[ { id: 85, name: 'Santé' }, { id: 106, name: 'Sport' } ],
       image_url: 'asset-v1:univ-toulouse+61003+session03+type@asset+block@page_mooc_trail.PNG',
       start_date: '2018-01-26T21:00:00Z',
       end_date: '2018-03-30T20:00:00Z',
@@ -2990,7 +2990,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1univ-toulouse61003session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1univ-toulouse61003session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1univ-toulouse61003session03.730x412_q85_crop-scale.jpg',
@@ -3000,7 +3000,7 @@ export default {
     {
       id: 2858,
       key: 'course-v1:ensam+022005+session02',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -3014,7 +3014,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Angers-2013-cour_ecole__etudiants_-_0613_M.jpg_1.jpeg' } ],
       university_name: 'Ecole Nationale Supérieure d’Arts et Métiers',
-      main_university: 
+      main_university:
       { id: 43,
         name: 'Ecole Nationale Supérieure d’Arts et Métiers',
         code: 'ensam',
@@ -3024,7 +3024,7 @@ export default {
       title: 'Socle en Electricité',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
       image_url: 'asset-v1:ensam+022005+session02+type@asset+block@Elec_ITII_Teaser_Vignette.png',
@@ -3036,7 +3036,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ensam022005session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ensam022005session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ensam022005session02.730x412_q85_crop-scale.jpg',
@@ -3046,7 +3046,7 @@ export default {
     {
       id: 2867,
       key: 'course-v1:Paris1+16008+session01',
-      universities: 
+      universities:
       [ { id: 13,
           name: 'Université Paris 1 Panthéon-Sorbonne',
           code: 'Paris1',
@@ -3054,7 +3054,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/banniere_paris1-pantheon-sorbonne_980x200.jpg' } ],
       university_name: 'Université Paris 1 Panthéon-Sorbonne',
-      main_university: 
+      main_university:
       { id: 13,
         name: 'Université Paris 1 Panthéon-Sorbonne',
         code: 'Paris1',
@@ -3064,7 +3064,7 @@ export default {
       title: 'Tourism Management at UNESCO World Heritage Sites',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 22, name: 'Économie et finance' },
         { id: 25, name: 'Enjeux de société' },
         { id: 37, name: 'Géographie' } ],
@@ -3077,7 +3077,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1paris116008session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1paris116008session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1paris116008session01.730x412_q85_crop-scale.jpg',
@@ -3087,7 +3087,7 @@ export default {
     {
       id: 3130,
       key: 'course-v1:Inalco+52004+session02',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -3101,7 +3101,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/bandeau-inalco.png' } ],
       university_name: 'Institut National des Langues et Civilisations Orientales',
-      main_university: 
+      main_university:
       { id: 228,
         name: 'Institut National des Langues et Civilisations Orientales',
         code: 'Inalco',
@@ -3111,7 +3111,7 @@ export default {
       title: 'Kit de contact en langues orientales : chinois',
       short_description: '',
       level: '',
-      subjects: [ { id: 49, name: 'Langues' } ],
+      subjects:[ { id: 49, name: 'Langues' } ],
       image_url: 'asset-v1:Inalco+52004+session02+type@asset+block@image_cours_zi.png',
       start_date: '2018-02-05T00:30:00Z',
       end_date: '2018-04-15T23:30:00Z',
@@ -3121,7 +3121,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1inalco52004session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1inalco52004session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1inalco52004session02.730x412_q85_crop-scale.jpg',
@@ -3131,7 +3131,7 @@ export default {
     {
       id: 3139,
       key: 'course-v1:Paris2+09004+session05',
-      universities: 
+      universities:
       [ { id: 9,
           name: 'Université Panthéon-Assas, Paris II',
           code: 'Paris2',
@@ -3139,7 +3139,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/paris2.e025b3182afe.jpg' } ],
       university_name: 'Université Panthéon-Assas Paris II',
-      main_university: 
+      main_university:
       { id: 9,
         name: 'Université Panthéon-Assas, Paris II',
         code: 'Paris2',
@@ -3149,7 +3149,7 @@ export default {
       title: 'Gestion de crise',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 55, name: 'Management' },
         { id: 79, name: 'Relations internationales' } ],
       image_url: 'asset-v1:Paris2+09004+session05+type@asset+block@2016MINT0281_079_petite_Def_bleu.jpg',
@@ -3161,7 +3161,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 5,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1paris209004session05.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1paris209004session05.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1paris209004session05.730x412_q85_crop-scale.jpg',
@@ -3171,7 +3171,7 @@ export default {
     {
       id: 3145,
       key: 'course-v1:Inalco+52001+session02',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -3185,7 +3185,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/bandeau-inalco.png' } ],
       university_name: 'Institut National des Langues et Civilisations Orientales',
-      main_university: 
+      main_university:
       { id: 228,
         name: 'Institut National des Langues et Civilisations Orientales',
         code: 'Inalco',
@@ -3195,7 +3195,7 @@ export default {
       title: 'Kit de contact en langues orientales : arabe',
       short_description: '',
       level: '',
-      subjects: [ { id: 49, name: 'Langues' } ],
+      subjects:[ { id: 49, name: 'Langues' } ],
       image_url: 'asset-v1:Inalco+52001+session02+type@asset+block@PALESTINE__4_.JPG',
       start_date: '2018-02-08T09:00:00Z',
       end_date: '2018-04-15T22:00:00Z',
@@ -3205,7 +3205,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1inalco52001session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1inalco52001session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1inalco52001session02.730x412_q85_crop-scale.jpg',
@@ -3215,7 +3215,7 @@ export default {
     {
       id: 3148,
       key: 'course-v1:ensam+022001+session07',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -3229,7 +3229,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Angers-2013-cour_ecole__etudiants_-_0613_M.jpg_1.jpeg' } ],
       university_name: 'Arts et Métiers ParisTech',
-      main_university: 
+      main_university:
       { id: 43,
         name: 'Ecole Nationale Supérieure d’Arts et Métiers',
         code: 'ensam',
@@ -3239,7 +3239,7 @@ export default {
       title: 'Mécanique des solides déformables - Session 7',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 73, name: 'Physique' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
@@ -3252,7 +3252,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 7,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ensam022001session07.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ensam022001session07.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ensam022001session07.730x412_q85_crop-scale.jpg',
@@ -3262,7 +3262,7 @@ export default {
     {
       id: 3160,
       key: 'course-v1:MinesTelecom+04023+session02',
-      universities: 
+      universities:
       [ { id: 5,
           name: 'IMT',
           code: 'MinesTelecom',
@@ -3276,7 +3276,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/banni%C3%A8re.jpg' } ],
       university_name: 'IMT',
-      main_university: 
+      main_university:
       { id: 5,
         name: 'IMT',
         code: 'MinesTelecom',
@@ -3286,7 +3286,7 @@ export default {
       title: 'Conversion Thermodynamique de la Chaleur : Modéliser et Simuler',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 73, name: 'Physique' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
@@ -3299,7 +3299,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1minestelecom04023session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1minestelecom04023session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1minestelecom04023session02.730x412_q85_crop-scale.jpg',
@@ -3309,7 +3309,7 @@ export default {
     {
       id: 3161,
       key: 'course-v1:ulb+44002+session03',
-      universities: 
+      universities:
       [ { id: 90,
           name: 'Université libre de Bruxelles (ULB)',
           code: 'ulb',
@@ -3317,7 +3317,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/ULB_baniere_980x200.jpg' } ],
       university_name: 'Université libre de Bruxelles (ULB)',
-      main_university: 
+      main_university:
       { id: 90,
         name: 'Université libre de Bruxelles (ULB)',
         code: 'ulb',
@@ -3327,7 +3327,7 @@ export default {
       title: 'Méthodes de sondage et d\'enquête',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 58, name: 'Mathématiques et statistiques' },
         { id: 67, name: 'Outils pour la recherche' } ],
       image_url: 'asset-v1:ulb+44002+session03+type@asset+block@images_course_small.jpg',
@@ -3339,7 +3339,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ulb44002session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ulb44002session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ulb44002session03.730x412_q85_crop-scale.jpg',
@@ -3349,7 +3349,7 @@ export default {
     {
       id: 3179,
       key: 'course-v1:parisdescartes+70001+session03',
-      universities: 
+      universities:
       [ { id: 167,
           name: 'Université Paris Descartes',
           code: 'parisdescartes',
@@ -3357,7 +3357,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/ParisDescartes_7_1-1.jpg' } ],
       university_name: 'Université Paris Descartes',
-      main_university: 
+      main_university:
       { id: 167,
         name: 'Université Paris Descartes',
         code: 'parisdescartes',
@@ -3367,7 +3367,7 @@ export default {
       title: 'Environnement et santé : un homme sain dans un environnement sain',
       short_description: '',
       level: '',
-      subjects: [ { id: 34, name: 'Environnement' } ],
+      subjects:[ { id: 34, name: 'Environnement' } ],
       image_url: 'asset-v1:parisdescartes+70001+session03+type@asset+block@image_course_small.jpg',
       start_date: '2018-02-08T14:30:00Z',
       end_date: '2018-04-04T23:30:00Z',
@@ -3377,7 +3377,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1parisdescartes70001session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1parisdescartes70001session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1parisdescartes70001session03.730x412_q85_crop-scale.jpg',
@@ -3387,7 +3387,7 @@ export default {
     {
       id: 2939,
       key: 'course-v1:amu+38001+session02',
-      universities: 
+      universities:
       [ { id: 118,
           name: 'Aix-Marseille Université',
           code: 'amu',
@@ -3395,7 +3395,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Aix-Marseille-BANDEAU.jpg' } ],
       university_name: 'Aix-Marseille Université',
-      main_university: 
+      main_university:
       { id: 118,
         name: 'Aix-Marseille Université',
         code: 'amu',
@@ -3405,7 +3405,7 @@ export default {
       title: 'Astrophysique : du système solaire au big bang',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 94, name: 'Sciences de la Terre et de l\'Univers' } ],
       image_url: 'asset-v1:amu+38001+session02+type@asset+block@images_course_small.png',
@@ -3417,7 +3417,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1amu38001session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1amu38001session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1amu38001session02.730x412_q85_crop-scale.jpg',
@@ -3427,7 +3427,7 @@ export default {
     {
       id: 3197,
       key: 'course-v1:ulb+44003+session03',
-      universities: 
+      universities:
       [ { id: 90,
           name: 'Université libre de Bruxelles (ULB)',
           code: 'ulb',
@@ -3435,7 +3435,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/ULB_baniere_980x200.jpg' } ],
       university_name: 'Université libre de Bruxelles (ULB)',
-      main_university: 
+      main_university:
       { id: 90,
         name: 'Université libre de Bruxelles (ULB)',
         code: 'ulb',
@@ -3445,7 +3445,7 @@ export default {
       title: 'Développer sa pensée critique',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 100, name: 'Sciences humaines et sociales' },
         { id: 70, name: 'Philosophie' } ],
       image_url: 'asset-v1:ulb+44003+session03+type@asset+block@images_course_image.png',
@@ -3457,7 +3457,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ulb44003session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ulb44003session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ulb44003session03.730x412_q85_crop-scale.jpg',
@@ -3467,7 +3467,7 @@ export default {
     {
       id: 3238,
       key: 'course-v1:CNFPT+87015+session01',
-      universities: 
+      universities:
       [ { id: 179,
           name: 'Centre national de la fonction publique territoriale (CNFPT)',
           code: 'CNFPT',
@@ -3475,7 +3475,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Bandeau_CNFPT_original.jpg' } ],
       university_name: 'Centre national de la fonction publique territoriale (CNFPT)',
-      main_university: 
+      main_university:
       { id: 179,
         name: 'Centre national de la fonction publique territoriale (CNFPT)',
         code: 'CNFPT',
@@ -3485,7 +3485,7 @@ export default {
       title: 'Les clés de la laïcité - le rôle des collectivités territoriales',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 19, name: 'Droit et juridique' },
         { id: 100, name: 'Sciences humaines et sociales' },
         { id: 25, name: 'Enjeux de société' },
@@ -3499,7 +3499,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1cnfpt87015session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1cnfpt87015session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1cnfpt87015session01.730x412_q85_crop-scale.jpg',
@@ -3509,7 +3509,7 @@ export default {
     {
       id: 2984,
       key: 'course-v1:UPVD+95003+session02',
-      universities: 
+      universities:
       [ { id: 99,
           name: 'Université de Perpignan',
           code: 'UPVD',
@@ -3517,7 +3517,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/photo-campus-UPVD-980x199-2.jpg' } ],
       university_name: 'Université de Perpignan',
-      main_university: 
+      main_university:
       { id: 99,
         name: 'Université de Perpignan',
         code: 'UPVD',
@@ -3527,7 +3527,7 @@ export default {
       title: 'Le tourisme culturel aujourd\'hui : quels enjeux ?',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 25, name: 'Enjeux de société' },
         { id: 46, name: 'Innovation' },
         { id: 79, name: 'Relations internationales' },
@@ -3541,7 +3541,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1upvd95003session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1upvd95003session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1upvd95003session02.730x412_q85_crop-scale.jpg',
@@ -3551,7 +3551,7 @@ export default {
     {
       id: 3241,
       key: 'course-v1:ENSCachan+20013+session03',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -3565,7 +3565,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/enscachan.921fde30c904.jpg' } ],
       university_name: 'ENS Paris-Saclay',
-      main_university: 
+      main_university:
       { id: 14,
         name: 'ENS Paris-Saclay',
         code: 'ENSCachan',
@@ -3575,7 +3575,7 @@ export default {
       title: 'PCSC - Modélisation des composites',
       short_description: '',
       level: '',
-      subjects: [ { id: 103, name: 'Sciences pour l\'ingénieur' } ],
+      subjects:[ { id: 103, name: 'Sciences pour l\'ingénieur' } ],
       image_url: 'asset-v1:ENSCachan+20013+session03+type@asset+block@images_cours.png',
       start_date: '2018-02-05T01:00:00Z',
       end_date: '2018-04-23T23:59:00Z',
@@ -3585,7 +3585,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1enscachan20013session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1enscachan20013session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1enscachan20013session03.730x412_q85_crop-scale.jpg',
@@ -3595,7 +3595,7 @@ export default {
     {
       id: 2993,
       key: 'course-v1:groupeinsa+13001S05+session05',
-      universities: 
+      universities:
       [ { id: 188,
           name: 'Université Fédérale Toulouse Midi-Pyrénées',
           code: 'univ-toulouse',
@@ -3609,7 +3609,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/groupeinsa.3d33fea5c0b6.jpg' } ],
       university_name: 'Groupe INSA',
-      main_university: 
+      main_university:
       { id: 11,
         name: 'Groupe INSA',
         code: 'groupeinsa',
@@ -3619,7 +3619,7 @@ export default {
       title: 'Introduction à HTML5 - Animations et jeux',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 112, name: 'Programmation' } ],
       image_url: 'asset-v1:groupeinsa+13001S05+session05+type@asset+block@images_course_small.jpg',
@@ -3631,7 +3631,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 5,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1groupeinsa13001s05session05.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1groupeinsa13001s05session05.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1groupeinsa13001s05session05.730x412_q85_crop-scale.jpg',
@@ -3641,7 +3641,7 @@ export default {
     {
       id: 2742,
       key: 'course-v1:EPHE+126002+session01',
-      universities: 
+      universities:
       [ { id: 58,
           name: 'Paris Sciences Lettres',
           code: 'psl',
@@ -3655,7 +3655,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Banni%C3%A8re-EPHE.jpg' } ],
       university_name: 'École Pratique des Hautes Études',
-      main_university: 
+      main_university:
       { id: 298,
         name: 'École Pratique des Hautes Études',
         code: 'EPHE',
@@ -3665,7 +3665,7 @@ export default {
       title: 'La sculpture grecque d\'Alexandre à Cléopâtre (Partie II)',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 100, name: 'Sciences humaines et sociales' },
         { id: 10, name: 'Arts, création et design' },
         { id: 13, name: 'Cultures et civilisations' },
@@ -3679,7 +3679,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ephe126002session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ephe126002session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ephe126002session01.730x412_q85_crop-scale.jpg',
@@ -3689,7 +3689,7 @@ export default {
     {
       id: 2763,
       key: 'course-v1:Paris2+09008+session02',
-      universities: 
+      universities:
       [ { id: 9,
           name: 'Université Panthéon-Assas, Paris II',
           code: 'Paris2',
@@ -3697,7 +3697,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/paris2.e025b3182afe.jpg' } ],
       university_name: 'Université Panthéon-Assas, Paris II',
-      main_university: 
+      main_university:
       { id: 9,
         name: 'Université Panthéon-Assas, Paris II',
         code: 'Paris2',
@@ -3707,7 +3707,7 @@ export default {
       title: 'Le droit, est-ce pour moi ?',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 19, name: 'Droit et juridique' },
         { id: 28, name: 'Education et formation' },
         { id: 118, name: 'Orientation' } ],
@@ -3720,7 +3720,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1paris209008session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1paris209008session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1paris209008session02.730x412_q85_crop-scale.jpg',
@@ -3730,7 +3730,7 @@ export default {
     {
       id: 2025,
       key: 'pasteur/96002S02/session02',
-      universities: 
+      universities:
       [ { id: 186,
           name: 'Institut Pasteur',
           code: 'pasteur',
@@ -3738,7 +3738,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Bandeau_IP_Buste_LP_980x200_V2.png' } ],
       university_name: 'Institut Pasteur',
-      main_university: 
+      main_university:
       { id: 186,
         name: 'Institut Pasteur',
         code: 'pasteur',
@@ -3748,7 +3748,7 @@ export default {
       title: 'Vaccinology',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 85, name: 'Santé' },
         { id: 88, name: 'Sciences' },
         { id: 25, name: 'Enjeux de société' },
@@ -3762,7 +3762,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/pasteur96002s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/pasteur96002s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/pasteur96002s02session02.730x412_q85_crop-scale.jpg',
@@ -3772,7 +3772,7 @@ export default {
     {
       id: 3049,
       key: 'course-v1:univ-toulouse+101002+session02',
-      universities: 
+      universities:
       [ { id: 188,
           name: 'Université Fédérale Toulouse Midi-Pyrénées',
           code: 'univ-toulouse',
@@ -3792,7 +3792,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/INP_Toulouse2_banni%C3%A8re.jpg' } ],
       university_name: 'Université Fédérale Toulouse Midi-Pyrénées',
-      main_university: 
+      main_university:
       { id: 188,
         name: 'Université Fédérale Toulouse Midi-Pyrénées',
         code: 'univ-toulouse',
@@ -3802,7 +3802,7 @@ export default {
       title: 'Agroressources et agro-industries durables',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 88, name: 'Sciences' },
         { id: 4, name: 'Chimie' },
@@ -3819,7 +3819,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1univ-toulouse101002session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1univ-toulouse101002session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1univ-toulouse101002session02.730x412_q85_crop-scale.jpg',
@@ -3829,7 +3829,7 @@ export default {
     {
       id: 3052,
       key: 'course-v1:Agreenium+66001S03+session03',
-      universities: 
+      universities:
       [ { id: 113,
           name: 'Agreenium',
           code: 'Agreenium',
@@ -3843,7 +3843,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/banniere_supagro.jpg' } ],
       university_name: 'Montpellier SupAgro',
-      main_university: 
+      main_university:
       { id: 113,
         name: 'Agreenium',
         code: 'Agreenium',
@@ -3853,7 +3853,7 @@ export default {
       title: 'Agroécologie',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 1, name: 'Agronomie et agriculture' },
         { id: 115, name: 'Développement durable' },
@@ -3868,7 +3868,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1agreenium66001s03session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1agreenium66001s03session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1agreenium66001s03session03.730x412_q85_crop-scale.jpg',
@@ -3878,7 +3878,7 @@ export default {
     {
       id: 3058,
       key: 'course-v1:univ-toulouse+101005+session02',
-      universities: 
+      universities:
       [ { id: 188,
           name: 'Université Fédérale Toulouse Midi-Pyrénées',
           code: 'univ-toulouse',
@@ -3886,7 +3886,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/presentationMOOC-UFTMP.jpg' } ],
       university_name: 'Université Fédérale Toulouse Midi-Pyrénées',
-      main_university: 
+      main_university:
       { id: 188,
         name: 'Université Fédérale Toulouse Midi-Pyrénées',
         code: 'univ-toulouse',
@@ -3896,7 +3896,7 @@ export default {
       title: 'Chirurgie de l\'obésité',
       short_description: '',
       level: '',
-      subjects: [ { id: 85, name: 'Santé' } ],
+      subjects:[ { id: 85, name: 'Santé' } ],
       image_url: 'asset-v1:univ-toulouse+101005+session02+type@asset+block@image_mooc_2.png',
       start_date: '2018-01-09T08:00:00Z',
       end_date: '2018-03-06T08:00:00Z',
@@ -3906,7 +3906,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1univ-toulouse101005session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1univ-toulouse101005session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1univ-toulouse101005session02.730x412_q85_crop-scale.jpg',
@@ -3916,7 +3916,7 @@ export default {
     {
       id: 3067,
       key: 'course-v1:drhatform+124001+session02',
-      universities: 
+      universities:
       [ { id: 280,
           name: 'Direction des Ressources Humaines de l\'Armée de Terre ',
           code: 'drhatform',
@@ -3924,7 +3924,7 @@ export default {
           detail_page_enabled: false,
           banner: null } ],
       university_name: 'Direction des Ressources Humaines de l\'Armée de Terre ',
-      main_university: 
+      main_university:
       { id: 280,
         name: 'Direction des Ressources Humaines de l\'Armée de Terre ',
         code: 'drhatform',
@@ -3934,7 +3934,7 @@ export default {
       title: 'Apprendre et enseigner avec les sciences cognitives',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 91, name: 'Sciences cognitives' } ],
       image_url: 'asset-v1:drhatform+124001+session02+type@asset+block@LOGO_MOOC.jpg',
@@ -3946,7 +3946,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1drhatform124001session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1drhatform124001session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1drhatform124001session02.730x412_q85_crop-scale.jpg',
@@ -3956,7 +3956,7 @@ export default {
     {
       id: 2813,
       key: 'course-v1:UPSUD+42003+session02',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -3970,7 +3970,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/paris11.ea38002e63b9_1.jpg' } ],
       university_name: 'Université Paris-Sud',
-      main_university: 
+      main_university:
       { id: 39,
         name: 'Université Paris-Sud',
         code: 'UPSUD',
@@ -3980,7 +3980,7 @@ export default {
       title: 'Comprendre les Nanosciences',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 85, name: 'Santé' },
         { id: 88, name: 'Sciences' },
         { id: 4, name: 'Chimie' },
@@ -3995,7 +3995,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1upsud42003session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1upsud42003session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1upsud42003session02.730x412_q85_crop-scale.jpg',
@@ -4005,7 +4005,7 @@ export default {
     {
       id: 3070,
       key: 'course-v1:universiteLilleDroitSante+103001+session02',
-      universities: 
+      universities:
       [ { id: 225,
           name: 'ComUE Lille Nord de France',
           code: 'cuelnf',
@@ -4019,7 +4019,7 @@ export default {
           detail_page_enabled: true,
           banner: null } ],
       university_name: 'Université de Lille, Droit et Santé',
-      main_university: 
+      main_university:
       { id: 276,
         name: 'Université de Lille, Droit et Santé',
         code: 'universiteLilleDroitSante',
@@ -4029,7 +4029,7 @@ export default {
       title: 'Comprendre un budget communal',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 19, name: 'Droit et juridique' },
         { id: 22, name: 'Économie et finance' } ],
       image_url: 'asset-v1:universiteLilleDroitSante+103001+session02+type@asset+block@moocBC.jpg',
@@ -4041,7 +4041,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1universitelilledroitsante103001session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1universitelilledroitsante103001session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1universitelilledroitsante103001session02.730x412_q85_crop-scale.jpg',
@@ -4051,7 +4051,7 @@ export default {
     {
       id: 2668,
       key: 'course-v1:parisdiderot+56003+session02',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -4065,7 +4065,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/FUN-MOOC_Paris_Diderot.jpg' } ],
       university_name: 'Université Paris Diderot',
-      main_university: 
+      main_university:
       { id: 108,
         name: 'Université Paris Diderot',
         code: 'parisdiderot',
@@ -4075,7 +4075,7 @@ export default {
       title: 'Stratégies diagnostiques des cancers',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 85, name: 'Santé' },
         { id: 88, name: 'Sciences' },
         { id: 25, name: 'Enjeux de société' },
@@ -4089,7 +4089,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1parisdiderot56003session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1parisdiderot56003session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1parisdiderot56003session02.730x412_q85_crop-scale.jpg',
@@ -4099,7 +4099,7 @@ export default {
     {
       id: 2739,
       key: 'course-v1:ENSTA+73001+session03',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -4113,7 +4113,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/bandeau_FUN_ENSTAParisTech.jpg' } ],
       university_name: 'ENSTA ParisTech',
-      main_university: 
+      main_university:
       { id: 184,
         name: 'ENSTA Paristech',
         code: 'ENSTA',
@@ -4123,7 +4123,7 @@ export default {
       title: 'Introduction à la physique quantique - partie 1',
       short_description: '',
       level: '',
-      subjects: [ { id: 88, name: 'Sciences' }, { id: 73, name: 'Physique' } ],
+      subjects:[ { id: 88, name: 'Sciences' }, { id: 73, name: 'Physique' } ],
       image_url: 'asset-v1:ENSTA+73001+session03+type@asset+block@Image_MOOC_Physique_Quantique.png',
       start_date: '2017-11-14T10:00:00Z',
       end_date: '2018-01-30T10:00:00Z',
@@ -4133,7 +4133,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ensta73001session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ensta73001session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ensta73001session03.730x412_q85_crop-scale.jpg',
@@ -4143,7 +4143,7 @@ export default {
     {
       id: 2909,
       key: 'course-v1:lorraine+30001+session05',
-      universities: 
+      universities:
       [ { id: 168,
           name: 'Université de Lorraine',
           code: 'lorraine',
@@ -4151,7 +4151,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Image_Universite_de_Lorraine.jpg' } ],
       university_name: 'Université de Lorraine',
-      main_university: 
+      main_university:
       { id: 168,
         name: 'Université de Lorraine',
         code: 'lorraine',
@@ -4161,7 +4161,7 @@ export default {
       title: 'De l\'atome à l\'humain : à la racine des mots scientifiques',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 49, name: 'Langues' },
         { id: 118, name: 'Orientation' },
         { id: 85, name: 'Santé' },
@@ -4175,7 +4175,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 5,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1lorraine30001session05.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1lorraine30001session05.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1lorraine30001session05.730x412_q85_crop-scale.jpg',
@@ -4185,7 +4185,7 @@ export default {
     {
       id: 3022,
       key: 'course-v1:ParisSaclay+71001+session03',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -4205,7 +4205,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/polytechnique_banner.jpg' } ],
       university_name: 'Université Paris-Saclay',
-      main_university: 
+      main_university:
       { id: 160,
         name: 'Université Paris-Saclay',
         code: 'ParisSaclay',
@@ -4215,7 +4215,7 @@ export default {
       title: 'Des particules aux étoiles',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 16, name: 'Découverte de l\'Univers' },
         { id: 94, name: 'Sciences de la Terre et de l\'Univers' } ],
@@ -4228,7 +4228,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1parissaclay71001session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1parissaclay71001session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1parissaclay71001session03.730x412_q85_crop-scale.jpg',
@@ -4238,7 +4238,7 @@ export default {
     {
       id: 2007,
       key: 'OBSPM/62002/session01',
-      universities: 
+      universities:
       [ { id: 58,
           name: 'Paris Sciences Lettres',
           code: 'psl',
@@ -4252,7 +4252,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/banniere-obspm.png' } ],
       university_name: 'Observatoire de Paris',
-      main_university: 
+      main_university:
       { id: 136,
         name: 'Observatoire de Paris',
         code: 'OBSPM',
@@ -4262,7 +4262,7 @@ export default {
       title: '(Astro)Physique I : Électromagnétisme',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 73, name: 'Physique' },
         { id: 94, name: 'Sciences de la Terre et de l\'Univers' } ],
@@ -4275,7 +4275,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/obspm62002session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/obspm62002session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/obspm62002session01.730x412_q85_crop-scale.jpg',
@@ -4285,7 +4285,7 @@ export default {
     {
       id: 2560,
       key: 'course-v1:lyon3+26006+session01',
-      universities: 
+      universities:
       [ { id: 172,
           name: 'Université de Lyon',
           code: 'universite-lyon',
@@ -4299,7 +4299,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/JeanMoulin1.jpg' } ],
       university_name: 'Université Jean Moulin Lyon 3',
-      main_university: 
+      main_university:
       { id: 81,
         name: 'Université Jean Moulin Lyon 3',
         code: 'lyon3',
@@ -4309,7 +4309,7 @@ export default {
       title: 'Projet FAC : les recettes pour réussir en Sciences Humaines',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 118, name: 'Orientation' },
         { id: 100, name: 'Sciences humaines et sociales' } ],
@@ -4322,7 +4322,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1lyon326006session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1lyon326006session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1lyon326006session01.730x412_q85_crop-scale.jpg',
@@ -4332,7 +4332,7 @@ export default {
     {
       id: 2802,
       key: 'course-v1:itii+119003+session02',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -4346,7 +4346,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Le_Cnam_facade.jpg' } ],
       university_name: 'Le Cnam',
-      main_university: 
+      main_university:
       { id: 1,
         name: 'Le Cnam',
         code: 'CNAM',
@@ -4356,7 +4356,7 @@ export default {
       title: 'Socle en Informatique',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 43, name: 'Informatique' },
         { id: 58, name: 'Mathématiques et statistiques' },
@@ -4370,7 +4370,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1itii119003session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1itii119003session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1itii119003session02.730x412_q85_crop-scale.jpg',
@@ -4380,7 +4380,7 @@ export default {
     {
       id: 3061,
       key: 'course-v1:parisdescartes+70002+session04',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -4394,7 +4394,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/ParisDescartes_7_1-1.jpg' } ],
       university_name: 'Université Paris Descartes',
-      main_university: 
+      main_university:
       { id: 167,
         name: 'Université Paris Descartes',
         code: 'parisdescartes',
@@ -4404,7 +4404,7 @@ export default {
       title: 'Entrer à l\'IUT : les codes pour booster ton dossier',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 118, name: 'Orientation' } ],
       image_url: 'asset-v1:parisdescartes+70002+session04+type@asset+block@images_course_small2.jpg',
@@ -4416,7 +4416,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 4,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1parisdescartes70002session04.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1parisdescartes70002session04.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1parisdescartes70002session04.730x412_q85_crop-scale.jpg',
@@ -4426,7 +4426,7 @@ export default {
     {
       id: 2897,
       key: 'course-v1:UPVD+95002+session02',
-      universities: 
+      universities:
       [ { id: 99,
           name: 'Université de Perpignan',
           code: 'UPVD',
@@ -4434,7 +4434,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/photo-campus-UPVD-980x199-2.jpg' } ],
       university_name: 'Université de Perpignan',
-      main_university: 
+      main_university:
       { id: 99,
         name: 'Université de Perpignan',
         code: 'UPVD',
@@ -4444,7 +4444,7 @@ export default {
       title: 'Introduction aux STAPS ',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 118, name: 'Orientation' },
         { id: 106, name: 'Sport' } ],
@@ -4457,7 +4457,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1upvd95002session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1upvd95002session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1upvd95002session02.730x412_q85_crop-scale.jpg',
@@ -4467,7 +4467,7 @@ export default {
     {
       id: 2807,
       key: 'course-v1:enseignementsup+131001+session01',
-      universities: 
+      universities:
       [ { id: 322,
           name: 'Le Ministère de l\'Enseignement  Supérieur, de la Recherche et de l\'Innovation',
           code: 'enseignementsup',
@@ -4475,7 +4475,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/MESRI_funmooc_980x200_01123.jpg' } ],
       university_name: 'Le Ministère de l\'Enseignement  Supérieur, de la Recherche et de l\'Innovation',
-      main_university: 
+      main_university:
       { id: 322,
         name: 'Le Ministère de l\'Enseignement  Supérieur, de la Recherche et de l\'Innovation',
         code: 'enseignementsup',
@@ -4485,7 +4485,7 @@ export default {
       title: 'Se former pour enseigner dans le supérieur',
       short_description: '',
       level: '',
-      subjects: [ { id: 28, name: 'Education et formation' } ],
+      subjects:[ { id: 28, name: 'Education et formation' } ],
       image_url: 'asset-v1:enseignementsup+131001+session01+type@asset+block@Fotolia_128131378_XXL.jpg',
       start_date: '2017-11-08T15:00:00Z',
       end_date: '2018-02-07T22:00:00Z',
@@ -4495,7 +4495,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1enseignementsup131001session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1enseignementsup131001session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1enseignementsup131001session01.730x412_q85_crop-scale.jpg',
@@ -4505,7 +4505,7 @@ export default {
     {
       id: 3124,
       key: 'course-v1:parisdiderot+56005+session01',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -4519,7 +4519,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/FUN-MOOC_Paris_Diderot.jpg' } ],
       university_name: 'USPC',
-      main_university: 
+      main_university:
       { id: 198,
         name: 'Université Sorbonne Paris Cité',
         code: 'USPC',
@@ -4529,7 +4529,7 @@ export default {
       title: 'Santé sexuelle pour tous (partie 1)',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 19, name: 'Droit et juridique' },
         { id: 85, name: 'Santé' } ],
       image_url: 'asset-v1:parisdiderot+56005+session01+type@asset+block@_image_accueil_finale.jpg',
@@ -4541,7 +4541,7 @@ export default {
       course_ended: false,
       enrollment_ended: false,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1parisdiderot56005session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1parisdiderot56005session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1parisdiderot56005session01.730x412_q85_crop-scale.jpg',
@@ -4551,7 +4551,7 @@ export default {
     {
       id: 2632,
       key: 'course-v1:EPHE+126001+session01',
-      universities: 
+      universities:
       [ { id: 58,
           name: 'Paris Sciences Lettres',
           code: 'psl',
@@ -4565,7 +4565,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Banni%C3%A8re-EPHE.jpg' } ],
       university_name: 'École Pratique des Hautes Études',
-      main_university: 
+      main_university:
       { id: 298,
         name: 'École Pratique des Hautes Études',
         code: 'EPHE',
@@ -4575,7 +4575,7 @@ export default {
       title: 'La sculpture grecque d\'Alexandre à Cléopâtre (Partie I)',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 100, name: 'Sciences humaines et sociales' },
         { id: 10, name: 'Arts, création et design' },
         { id: 13, name: 'Cultures et civilisations' },
@@ -4589,7 +4589,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ephe126001session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ephe126001session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ephe126001session01.730x412_q85_crop-scale.jpg',
@@ -4599,7 +4599,7 @@ export default {
     {
       id: 2458,
       key: 'course-v1:umontpellier+08008+session01',
-      universities: 
+      universities:
       [ { id: 8,
           name: 'Université de Montpellier',
           code: 'umontpellier',
@@ -4607,7 +4607,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Photo-campus_rlrvHDS.png' } ],
       university_name: 'Université de Montpellier',
-      main_university: 
+      main_university:
       { id: 8,
         name: 'Université de Montpellier',
         code: 'umontpellier',
@@ -4617,7 +4617,7 @@ export default {
       title: 'Penser et piloter son Business Model avec le Balanced Scorecard',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 31, name: 'Entrepreneuriat' },
         { id: 55, name: 'Management' },
         { id: 109, name: 'Vie de l\'entreprise' } ],
@@ -4630,7 +4630,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1umontpellier08008session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1umontpellier08008session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1umontpellier08008session01.730x412_q85_crop-scale.jpg',
@@ -4640,7 +4640,7 @@ export default {
     {
       id: 2482,
       key: 'course-v1:pasteur+96005+session01',
-      universities: 
+      universities:
       [ { id: 186,
           name: 'Institut Pasteur',
           code: 'pasteur',
@@ -4648,7 +4648,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Bandeau_IP_Buste_LP_980x200_V2.png' } ],
       university_name: 'Institut Pasteur',
-      main_university: 
+      main_university:
       { id: 186,
         name: 'Institut Pasteur',
         code: 'pasteur',
@@ -4658,7 +4658,7 @@ export default {
       title: 'Diagnosis and prognosis biomarkers in global health',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 85, name: 'Santé' },
         { id: 25, name: 'Enjeux de société' },
         { id: 97, name: 'Sciences de la vie' } ],
@@ -4671,7 +4671,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1pasteur96005session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1pasteur96005session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1pasteur96005session01.730x412_q85_crop-scale.jpg',
@@ -4681,7 +4681,7 @@ export default {
     {
       id: 2512,
       key: 'course-v1:USPC+37010+session01',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -4689,7 +4689,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Recherche_montaGabirelle-3.jpg' } ],
       university_name: 'Université Sorbonne Paris Cité',
-      main_university: 
+      main_university:
       { id: 198,
         name: 'Université Sorbonne Paris Cité',
         code: 'USPC',
@@ -4699,7 +4699,7 @@ export default {
       title: 'Éducation par la recherche : ingénierie à l\'École',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 88, name: 'Sciences' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
@@ -4712,7 +4712,7 @@ export default {
       course_ended: false,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1uspc37010session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1uspc37010session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1uspc37010session01.730x412_q85_crop-scale.jpg',
@@ -4722,7 +4722,7 @@ export default {
     {
       id: 2530,
       key: 'course-v1:univnantes+31006+session01',
-      universities: 
+      universities:
       [ { id: 72,
           name: 'Université de Nantes',
           code: 'univnantes',
@@ -4730,7 +4730,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/photo-illustration-un_copie.png' } ],
       university_name: 'Université de Nantes',
-      main_university: 
+      main_university:
       { id: 72,
         name: 'Université de Nantes',
         code: 'univnantes',
@@ -4740,7 +4740,7 @@ export default {
       title: 'Maître d\'Apprentissage : "Encadrer et faire Grandir"',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 55, name: 'Management' } ],
       image_url: 'asset-v1:univnantes+31006+session01+type@asset+block@image_cours.png',
@@ -4752,7 +4752,7 @@ export default {
       course_ended: false,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1univnantes31006session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1univnantes31006session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1univnantes31006session01.730x412_q85_crop-scale.jpg',
@@ -4762,7 +4762,7 @@ export default {
     {
       id: 2139,
       key: 'CNAM/01020S02/session02',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -4776,7 +4776,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Le_Cnam_facade.jpg' } ],
       university_name: 'Le Cnam',
-      main_university: 
+      main_university:
       { id: 1,
         name: 'Le Cnam',
         code: 'CNAM',
@@ -4786,7 +4786,7 @@ export default {
       title: 'Le développement durable, un levier de croissance',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 115, name: 'Développement durable' },
         { id: 25, name: 'Enjeux de société' } ],
@@ -4799,7 +4799,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/cnam01020s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/cnam01020s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/cnam01020s02session02.730x412_q85_crop-scale.jpg',
@@ -4809,7 +4809,7 @@ export default {
     {
       id: 2283,
       key: 'ENSDeLyon/14003S03/session03',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -4829,7 +4829,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/image-bandeau-ENSdeLyon.jpg' } ],
       university_name: 'ENS de Lyon',
-      main_university: 
+      main_university:
       { id: 24,
         name: 'ENS de Lyon',
         code: 'ENSDeLyon',
@@ -4839,7 +4839,7 @@ export default {
       title: 'Enseigner et former avec le numérique en mathématiques - Session 3',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 58, name: 'Mathématiques et statistiques' },
         { id: 64, name: 'Numérique, technologie' } ],
@@ -4852,7 +4852,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/ensdelyon14003s03session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/ensdelyon14003s03session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/ensdelyon14003s03session03.730x412_q85_crop-scale.jpg',
@@ -4862,7 +4862,7 @@ export default {
     {
       id: 2208,
       key: 'univnantes/31005/session01',
-      universities: 
+      universities:
       [ { id: 249,
           name: 'Université Bretagne Loire',
           code: 'u-bretagneloire',
@@ -4876,7 +4876,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/photo-illustration-un_copie.png' } ],
       university_name: 'Université de Nantes',
-      main_university: 
+      main_university:
       { id: 72,
         name: 'Université de Nantes',
         code: 'univnantes',
@@ -4886,7 +4886,7 @@ export default {
       title: 'Au cœur de la radioactivité médicale',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 85, name: 'Santé' },
         { id: 88, name: 'Sciences' },
         { id: 73, name: 'Physique' } ],
@@ -4899,7 +4899,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/univnantes31005session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/univnantes31005session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/univnantes31005session01.730x412_q85_crop-scale.jpg',
@@ -4909,7 +4909,7 @@ export default {
     {
       id: 2280,
       key: 'MinesTelecom/04012S03/session03',
-      universities: 
+      universities:
       [ { id: 5,
           name: 'IMT',
           code: 'MinesTelecom',
@@ -4917,7 +4917,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/baniere_imt_EDX-02-02.jpg' } ],
       university_name: 'IMT',
-      main_university: 
+      main_university:
       { id: 5,
         name: 'IMT',
         code: 'MinesTelecom',
@@ -4927,7 +4927,7 @@ export default {
       title: 'Objectif IPv6',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 82, name: 'Réseaux et télécommunications' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
@@ -4940,7 +4940,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/minestelecom04012s03session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/minestelecom04012s03session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/minestelecom04012s03session03.730x412_q85_crop-scale.jpg',
@@ -4950,7 +4950,7 @@ export default {
     {
       id: 1881,
       key: 'umontpellier/08002S02/session02',
-      universities: 
+      universities:
       [ { id: 8,
           name: 'Université de Montpellier',
           code: 'umontpellier',
@@ -4958,7 +4958,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Photo-campus_rlrvHDS.png' } ],
       university_name: 'Université de Montpellier',
-      main_university: 
+      main_university:
       { id: 8,
         name: 'Université de Montpellier',
         code: 'umontpellier',
@@ -4968,7 +4968,7 @@ export default {
       title: 'Management de la force de vente',
       short_description: '',
       level: '',
-      subjects: [ { id: 55, name: 'Management' } ],
+      subjects:[ { id: 55, name: 'Management' } ],
       image_url: '/c4x/umontpellier/08002S02/asset/vignette-MOOC-FDV2.png',
       start_date: '2016-09-22T08:00:00Z',
       end_date: '2016-11-16T22:00:00Z',
@@ -4978,7 +4978,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/umontpellier08002s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/umontpellier08002s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/umontpellier08002s02session02.730x412_q85_crop-scale.jpg',
@@ -4988,7 +4988,7 @@ export default {
     {
       id: 1893,
       key: 'parisdiderot/56002S02/session02',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -5002,7 +5002,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/FUN-MOOC_Paris_Diderot.jpg' } ],
       university_name: 'Université Paris Diderot',
-      main_university: 
+      main_university:
       { id: 108,
         name: 'Université Paris Diderot',
         code: 'parisdiderot',
@@ -5012,7 +5012,7 @@ export default {
       title: 'Introduction to Functional Programming     in OCaml',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 112, name: 'Programmation' } ],
       image_url: '/c4x/parisdiderot/56002S02/asset/images_course_small.png',
@@ -5024,7 +5024,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/parisdiderot56002s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/parisdiderot56002s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/parisdiderot56002s02session02.730x412_q85_crop-scale.jpg',
@@ -5034,7 +5034,7 @@ export default {
     {
       id: 2058,
       key: 'ICP/84002/session01',
-      universities: 
+      universities:
       [ { id: 182,
           name: 'Institut Catholique de Paris',
           code: 'ICP',
@@ -5042,7 +5042,7 @@ export default {
           detail_page_enabled: false,
           banner: null } ],
       university_name: 'Institut Catholique de Paris',
-      main_university: 
+      main_university:
       { id: 182,
         name: 'Institut Catholique de Paris',
         code: 'ICP',
@@ -5052,7 +5052,7 @@ export default {
       title: 'La loi des hommes et la loi de Dieu',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 19, name: 'Droit et juridique' },
         { id: 100, name: 'Sciences humaines et sociales' },
         { id: 13, name: 'Cultures et civilisations' },
@@ -5068,7 +5068,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/icp84002session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/icp84002session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/icp84002session01.730x412_q85_crop-scale.jpg',
@@ -5078,7 +5078,7 @@ export default {
     {
       id: 2334,
       key: 'course-v1:grenoblealpes+92005+session01',
-      universities: 
+      universities:
       [ { id: 201,
           name: 'Communauté Université Grenoble Alpes',
           code: 'grenoblealpes',
@@ -5086,7 +5086,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/campus_bu-001.jpg' } ],
       university_name: 'Communauté Université Grenoble Alpes',
-      main_university: 
+      main_university:
       { id: 201,
         name: 'Communauté Université Grenoble Alpes',
         code: 'grenoblealpes',
@@ -5096,7 +5096,7 @@ export default {
       title: 'Smart Grids : les réseaux électriques au cœur de la transition énergétique',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 115, name: 'Développement durable' },
         { id: 25, name: 'Enjeux de société' },
@@ -5111,7 +5111,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1grenoblealpes92005session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1grenoblealpes92005session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1grenoblealpes92005session01.730x412_q85_crop-scale.jpg',
@@ -5121,7 +5121,7 @@ export default {
     {
       id: 2118,
       key: 'USPC/37006/session01',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -5129,7 +5129,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Recherche_montaGabirelle-3.jpg' } ],
       university_name: 'Université Sorbonne Paris Cité',
-      main_university: 
+      main_university:
       { id: 198,
         name: 'Université Sorbonne Paris Cité',
         code: 'USPC',
@@ -5139,7 +5139,7 @@ export default {
       title: 'Changement climatique et santé en contexte africain ',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 85, name: 'Santé' },
         { id: 25, name: 'Enjeux de société' } ],
@@ -5152,7 +5152,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/uspc37006session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/uspc37006session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/uspc37006session01.730x412_q85_crop-scale.jpg',
@@ -5162,7 +5162,7 @@ export default {
     {
       id: 2193,
       key: 'ferrandiparis/49002/session01',
-      universities: 
+      universities:
       [ { id: 96,
           name: 'FERRANDI Paris - l\'école française de gastronomie',
           code: 'ferrandiparis',
@@ -5170,7 +5170,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/bandeau_ferrandi.png' } ],
       university_name: 'FERRANDI Paris - l\'école française de gastronomie',
-      main_university: 
+      main_university:
       { id: 96,
         name: 'FERRANDI Paris - l\'école française de gastronomie',
         code: 'ferrandiparis',
@@ -5180,7 +5180,7 @@ export default {
       title: 'Tendances Culinaires : évolutions, scénarios et innovation',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 10, name: 'Arts, création et design' },
         { id: 13, name: 'Cultures et civilisations' },
         { id: 25, name: 'Enjeux de société' },
@@ -5194,7 +5194,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/ferrandiparis49002session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/ferrandiparis49002session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/ferrandiparis49002session01.730x412_q85_crop-scale.jpg',
@@ -5204,7 +5204,7 @@ export default {
     {
       id: 2214,
       key: 'ENSCachan/20013S02/session02',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -5218,7 +5218,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/enscachan.921fde30c904.jpg' } ],
       university_name: 'ENS Paris-Saclay',
-      main_university: 
+      main_university:
       { id: 14,
         name: 'ENS Paris-Saclay',
         code: 'ENSCachan',
@@ -5228,7 +5228,7 @@ export default {
       title: 'PCSC - Modélisation des composites - session 2',
       short_description: '',
       level: '',
-      subjects: [ { id: 103, name: 'Sciences pour l\'ingénieur' } ],
+      subjects:[ { id: 103, name: 'Sciences pour l\'ingénieur' } ],
       image_url: '/c4x/ENSCachan/20013S02/asset/images_cours.png',
       start_date: '2017-04-01T01:00:00Z',
       end_date: '2017-06-17T23:59:00Z',
@@ -5238,7 +5238,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/enscachan20013s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/enscachan20013s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/enscachan20013s02session02.730x412_q85_crop-scale.jpg',
@@ -5248,7 +5248,7 @@ export default {
     {
       id: 2226,
       key: 'MinesTelecom/04015S02/session02',
-      universities: 
+      universities:
       [ { id: 5,
           name: 'IMT',
           code: 'MinesTelecom',
@@ -5256,7 +5256,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/baniere_imt_EDX-02-02.jpg' } ],
       university_name: 'IMT',
-      main_university: 
+      main_university:
       { id: 5,
         name: 'IMT',
         code: 'MinesTelecom',
@@ -5266,7 +5266,7 @@ export default {
       title: 'Challenges et enjeux de la mobilité 3.0',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 25, name: 'Enjeux de société' },
         { id: 64, name: 'Numérique, technologie' },
         { id: 82, name: 'Réseaux et télécommunications' } ],
@@ -5279,7 +5279,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/minestelecom04015s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/minestelecom04015s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/minestelecom04015s02session02.730x412_q85_crop-scale.jpg',
@@ -5289,7 +5289,7 @@ export default {
     {
       id: 2022,
       key: 'AFPIF/79001S03/session03',
-      universities: 
+      universities:
       [ { id: 148,
           name: 'Alliance française Paris Ile-de-France',
           code: 'AFPIF',
@@ -5297,7 +5297,7 @@ export default {
           detail_page_enabled: false,
           banner: null } ],
       university_name: 'Alliance française de Paris Ile-de-France',
-      main_university: 
+      main_university:
       { id: 148,
         name: 'Alliance française Paris Ile-de-France',
         code: 'AFPIF',
@@ -5307,7 +5307,7 @@ export default {
       title: 'Cours de français langue étrangère A2',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 49, name: 'Langues' } ],
       image_url: '/c4x/AFPIF/79001S03/asset/Images_course_small.JPG',
@@ -5319,7 +5319,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/afpif79001s03session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/afpif79001s03session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/afpif79001s03session03.730x412_q85_crop-scale.jpg',
@@ -5329,7 +5329,7 @@ export default {
     {
       id: 2289,
       key: 'SciencesPo/05008ENG/session01',
-      universities: 
+      universities:
       [ { id: 6,
           name: 'Sciences Po.',
           code: 'SciencesPo',
@@ -5337,7 +5337,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/sciencespo.21764b4b23e5.jpg' } ],
       university_name: 'Sciences Po.',
-      main_university: 
+      main_university:
       { id: 6,
         name: 'Sciences Po.',
         code: 'SciencesPo',
@@ -5347,7 +5347,7 @@ export default {
       title: 'International migrations :a global issue',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 37, name: 'Géographie' },
         { id: 79, name: 'Relations internationales' },
@@ -5361,7 +5361,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/sciencespo05008engsession01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/sciencespo05008engsession01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/sciencespo05008engsession01.730x412_q85_crop-scale.jpg',
@@ -5371,7 +5371,7 @@ export default {
     {
       id: 2295,
       key: 'course-v1:SciencesPo+05008+session01',
-      universities: 
+      universities:
       [ { id: 6,
           name: 'Sciences Po.',
           code: 'SciencesPo',
@@ -5379,7 +5379,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/sciencespo.21764b4b23e5.jpg' } ],
       university_name: 'Sciences Po.',
-      main_university: 
+      main_university:
       { id: 6,
         name: 'Sciences Po.',
         code: 'SciencesPo',
@@ -5389,7 +5389,7 @@ export default {
       title: 'Migrations internationales : un enjeu mondial',
       short_description: '',
       level: '',
-      subjects: [],
+      subjects:[],
       image_url: 'asset-v1:SciencesPo+05008+session01+type@asset+block@image-mooc-Catherine-de-Wenden.jpg',
       start_date: '2017-01-23T08:00:00Z',
       end_date: '2017-04-03T19:00:00Z',
@@ -5399,7 +5399,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1sciencespo05008session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1sciencespo05008session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1sciencespo05008session01.730x412_q85_crop-scale.jpg',
@@ -5409,7 +5409,7 @@ export default {
     {
       id: 1810,
       key: 'inria/41001S03/session03',
-      universities: 
+      universities:
       [ { id: 42,
           name: 'Inria',
           code: 'inria',
@@ -5417,7 +5417,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/bandeau_MoocInria.0124-121.jpg' } ],
       university_name: 'Inria',
-      main_university: 
+      main_university:
       { id: 42,
         name: 'Inria',
         code: 'inria',
@@ -5427,7 +5427,7 @@ export default {
       title: 'Python : des fondamentaux à l\'utilisation du langage',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 64, name: 'Numérique, technologie' },
         { id: 112, name: 'Programmation' } ],
@@ -5440,7 +5440,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/inria41001s03session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/inria41001s03session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/inria41001s03session03.730x412_q85_crop-scale.jpg',
@@ -5450,7 +5450,7 @@ export default {
     {
       id: 1941,
       key: 'ENSCachan/20001S03/session03',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -5464,7 +5464,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/enscachan.921fde30c904.jpg' } ],
       university_name: 'ENS Paris-Saclay',
-      main_university: 
+      main_university:
       { id: 14,
         name: 'ENS Paris-Saclay',
         code: 'ENSCachan',
@@ -5474,7 +5474,7 @@ export default {
       title: 'PDM : Pratiques du Dimensionnement en Mécanique - Partie 1 - Session 3',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 73, name: 'Physique' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
@@ -5487,7 +5487,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/enscachan20001s03session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/enscachan20001s03session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/enscachan20001s03session03.730x412_q85_crop-scale.jpg',
@@ -5497,7 +5497,7 @@ export default {
     {
       id: 1875,
       key: 'CNAM/01010S03/session03',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -5511,7 +5511,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Le_Cnam_facade.jpg' } ],
       university_name: 'Le CNAM',
-      main_university: 
+      main_university:
       { id: 1,
         name: 'Le Cnam',
         code: 'CNAM',
@@ -5521,7 +5521,7 @@ export default {
       title: 'Défis énergétiques et risques sanitaires dans les transports',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 85, name: 'Santé' },
         { id: 115, name: 'Développement durable' },
@@ -5535,7 +5535,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/cnam01010s03session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/cnam01010s03session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/cnam01010s03session03.730x412_q85_crop-scale.jpg',
@@ -5545,7 +5545,7 @@ export default {
     {
       id: 1878,
       key: 'umontpellier/08006/session01',
-      universities: 
+      universities:
       [ { id: 8,
           name: 'Université de Montpellier',
           code: 'umontpellier',
@@ -5553,7 +5553,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Photo-campus_rlrvHDS.png' } ],
       university_name: 'Université de Montpellier',
-      main_university: 
+      main_university:
       { id: 8,
         name: 'Université de Montpellier',
         code: 'umontpellier',
@@ -5563,7 +5563,7 @@ export default {
       title: 'Entrepreneuriat et Croissance Attitude',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 31, name: 'Entrepreneuriat' },
         { id: 55, name: 'Management' },
         { id: 25, name: 'Enjeux de société' },
@@ -5577,7 +5577,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/umontpellier08006session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/umontpellier08006session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/umontpellier08006session01.730x412_q85_crop-scale.jpg',
@@ -5587,7 +5587,7 @@ export default {
     {
       id: 1983,
       key: 'MinesTelecom/04011S03/session03',
-      universities: 
+      universities:
       [ { id: 5,
           name: 'IMT',
           code: 'MinesTelecom',
@@ -5595,7 +5595,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/baniere_imt_EDX-02-02.jpg' } ],
       university_name: 'IMT',
-      main_university: 
+      main_university:
       { id: 5,
         name: 'IMT',
         code: 'MinesTelecom',
@@ -5605,7 +5605,7 @@ export default {
       title: 'Routage et qualité de service dans l\'Internet',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 82, name: 'Réseaux et télécommunications' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
@@ -5618,7 +5618,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/minestelecom04011s03session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/minestelecom04011s03session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/minestelecom04011s03session03.730x412_q85_crop-scale.jpg',
@@ -5628,7 +5628,7 @@ export default {
     {
       id: 2343,
       key: 'course-v1:umontpellier+08005+session02',
-      universities: 
+      universities:
       [ { id: 8,
           name: 'Université de Montpellier',
           code: 'umontpellier',
@@ -5636,7 +5636,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Photo-campus_rlrvHDS.png' } ],
       university_name: 'Université de Montpellier',
-      main_university: 
+      main_university:
       { id: 8,
         name: 'Université de Montpellier',
         code: 'umontpellier',
@@ -5646,7 +5646,7 @@ export default {
       title: 'Comptabilité de gestion et pratique du tableur',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 55, name: 'Management' },
         { id: 109, name: 'Vie de l\'entreprise' } ],
       image_url: 'asset-v1:umontpellier+08005+session02+type@asset+block@Vignettes_FUN_s2.jpg',
@@ -5658,7 +5658,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1umontpellier08005session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1umontpellier08005session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1umontpellier08005session02.730x412_q85_crop-scale.jpg',
@@ -5668,7 +5668,7 @@ export default {
     {
       id: 1905,
       key: 'CNAM/01004S03/session03',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -5682,7 +5682,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Le_Cnam_facade.jpg' } ],
       university_name: 'Le Cnam',
-      main_university: 
+      main_university:
       { id: 1,
         name: 'Le Cnam',
         code: 'CNAM',
@@ -5692,7 +5692,7 @@ export default {
       title: 'Introduction aux technologies des médias interactifs numériques',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 61, name: 'Médias' },
         { id: 64, name: 'Numérique, technologie' } ],
@@ -5705,7 +5705,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/cnam01004s03session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/cnam01004s03session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/cnam01004s03session03.730x412_q85_crop-scale.jpg',
@@ -5715,7 +5715,7 @@ export default {
     {
       id: 1852,
       key: 'ENSDeLyon/14005/session01',
-      universities: 
+      universities:
       [ { id: 172,
           name: 'Université de Lyon',
           code: 'universite-lyon',
@@ -5729,7 +5729,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/image-bandeau-ENSdeLyon.jpg' } ],
       university_name: 'ENS de Lyon',
-      main_university: 
+      main_university:
       { id: 24,
         name: 'ENS de Lyon',
         code: 'ENSDeLyon',
@@ -5739,7 +5739,7 @@ export default {
       title: 'Décision, Complexité, Risques   ',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 100, name: 'Sciences humaines et sociales' },
         { id: 25, name: 'Enjeux de société' },
         { id: 76, name: 'Sciences Politiques' } ],
@@ -5752,7 +5752,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/ensdelyon14005session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/ensdelyon14005session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/ensdelyon14005session01.730x412_q85_crop-scale.jpg',
@@ -5762,7 +5762,7 @@ export default {
     {
       id: 1869,
       key: 'uved/34005S02/session02',
-      universities: 
+      universities:
       [ { id: 33,
           name: 'Université Virtuelle Environnement et Développement durable (UVED) ',
           code: 'uved',
@@ -5770,7 +5770,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/unnamed_attachment_1.png' } ],
       university_name: 'UVED',
-      main_university: 
+      main_university:
       { id: 33,
         name: 'Université Virtuelle Environnement et Développement durable (UVED) ',
         code: 'uved',
@@ -5780,7 +5780,7 @@ export default {
       title: 'Environnement et développement durable',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 115, name: 'Développement durable' },
         { id: 25, name: 'Enjeux de société' } ],
@@ -5793,7 +5793,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/uved34005s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/uved34005s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/uved34005s02session02.730x412_q85_crop-scale.jpg',
@@ -5803,7 +5803,7 @@ export default {
     {
       id: 1992,
       key: 'CNAM/01005S03/session03',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -5817,7 +5817,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Le_Cnam_facade.jpg' } ],
       university_name: 'Le CNAM',
-      main_university: 
+      main_university:
       { id: 1,
         name: 'Le Cnam',
         code: 'CNAM',
@@ -5827,7 +5827,7 @@ export default {
       title: 'Le droit des contrats de travail en France',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 19, name: 'Droit et juridique' },
         { id: 109, name: 'Vie de l\'entreprise' } ],
       image_url: '/c4x/CNAM/01005S03/asset/bandeau_fun.png',
@@ -5839,7 +5839,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/cnam01005s03session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/cnam01005s03session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/cnam01005s03session03.730x412_q85_crop-scale.jpg',
@@ -5849,7 +5849,7 @@ export default {
     {
       id: 1828,
       key: 'usousse/74001S02/session02',
-      universities: 
+      universities:
       [ { id: 135,
           name: 'Université de Sousse',
           code: 'usousse',
@@ -5857,7 +5857,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Batiment_US.jpg' } ],
       university_name: 'Université de Sousse',
-      main_university: 
+      main_university:
       { id: 135,
         name: 'Université de Sousse',
         code: 'usousse',
@@ -5867,7 +5867,7 @@ export default {
       title: 'Initiation à la conception orientée objet',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 112, name: 'Programmation' },
         { id: 103, name: 'Sciences pour l\'ingénieur' },
@@ -5881,7 +5881,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/usousse74001s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/usousse74001s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/usousse74001s02session02.730x412_q85_crop-scale.jpg',
@@ -5891,7 +5891,7 @@ export default {
     {
       id: 1911,
       key: 'UVHC/23001S01/session01',
-      universities: 
+      universities:
       [ { id: 225,
           name: 'ComUE Lille Nord de France',
           code: 'cuelnf',
@@ -5905,7 +5905,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/bandeauUVHC.jpg' } ],
       university_name: 'Université de Valenciennes et du Hainaut-Cambrésis (UVHC)',
-      main_university: 
+      main_university:
       { id: 231,
         name: 'Université de Valenciennes et du Hainaut-Cambrésis (UVHC)',
         code: 'UVHC',
@@ -5915,7 +5915,7 @@ export default {
       title: 'Num e-Sport. Le numérique sportif',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 64, name: 'Numérique, technologie' },
         { id: 106, name: 'Sport' } ],
       image_url: '/c4x/UVHC/23001S01/asset/NumEsport.png',
@@ -5927,7 +5927,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/uvhc23001s01session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/uvhc23001s01session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/uvhc23001s01session01.730x412_q85_crop-scale.jpg',
@@ -5937,7 +5937,7 @@ export default {
     {
       id: 1968,
       key: 'ubourgogne/82003/session01',
-      universities: 
+      universities:
       [ { id: 163,
           name: 'Université de Bourgogne',
           code: 'ubourgogne',
@@ -5951,7 +5951,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Image_page_de_garde_Funmooc_Ubfc.png' } ],
       university_name: 'Université de Bourgogne',
-      main_university: 
+      main_university:
       { id: 163,
         name: 'Université de Bourgogne',
         code: 'ubourgogne',
@@ -5961,7 +5961,7 @@ export default {
       title: 'Marey : l\'Art et la Science du mouvement',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 85, name: 'Santé' },
         { id: 100, name: 'Sciences humaines et sociales' },
         { id: 10, name: 'Arts, création et design' },
@@ -5977,7 +5977,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/ubourgogne82003session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/ubourgogne82003session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/ubourgogne82003session01.730x412_q85_crop-scale.jpg',
@@ -5987,7 +5987,7 @@ export default {
     {
       id: 2325,
       key: 'course-v1:lorraine+30002+session03',
-      universities: 
+      universities:
       [ { id: 168,
           name: 'Université de Lorraine',
           code: 'lorraine',
@@ -5995,7 +5995,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Image_Universite_de_Lorraine.jpg' } ],
       university_name: 'Université de Lorraine',
-      main_university: 
+      main_university:
       { id: 168,
         name: 'Université de Lorraine',
         code: 'lorraine',
@@ -6005,7 +6005,7 @@ export default {
       title: 'Sur les pas des combattants de Verdun : 1916 - 2016',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 100, name: 'Sciences humaines et sociales' },
         { id: 40, name: 'Histoire' } ],
       image_url: 'asset-v1:lorraine+30002+session03+type@asset+block@Verdun3.png',
@@ -6017,7 +6017,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1lorraine30002session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1lorraine30002session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1lorraine30002session03.730x412_q85_crop-scale.jpg',
@@ -6027,7 +6027,7 @@ export default {
     {
       id: 2356,
       key: 'course-v1:parisdiderot+56004+session02',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -6041,7 +6041,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/FUN-MOOC_Paris_Diderot.jpg' } ],
       university_name: 'Université Paris Diderot',
-      main_university: 
+      main_university:
       { id: 108,
         name: 'Université Paris Diderot',
         code: 'parisdiderot',
@@ -6051,7 +6051,7 @@ export default {
       title: 'Les origines moléculaires de la vie',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 97, name: 'Sciences de la vie' } ],
       image_url: 'asset-v1:parisdiderot+56004+session02+type@asset+block@IllustrationMOOC.png',
@@ -6063,7 +6063,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1parisdiderot56004session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1parisdiderot56004session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1parisdiderot56004session02.730x412_q85_crop-scale.jpg',
@@ -6073,7 +6073,7 @@ export default {
     {
       id: 2380,
       key: 'course-v1:pasteur+96004+session01',
-      universities: 
+      universities:
       [ { id: 186,
           name: 'Institut Pasteur',
           code: 'pasteur',
@@ -6081,7 +6081,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Bandeau_IP_Buste_LP_980x200_V2.png' } ],
       university_name: 'Institut Pasteur',
-      main_university: 
+      main_university:
       { id: 186,
         name: 'Institut Pasteur',
         code: 'pasteur',
@@ -6091,7 +6091,7 @@ export default {
       title: 'Innate Immunity',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 85, name: 'Santé' },
         { id: 88, name: 'Sciences' },
         { id: 97, name: 'Sciences de la vie' } ],
@@ -6104,7 +6104,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1pasteur96004session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1pasteur96004session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1pasteur96004session01.730x412_q85_crop-scale.jpg',
@@ -6114,7 +6114,7 @@ export default {
     {
       id: 2386,
       key: 'course-v1:Paris1+16006+session01',
-      universities: 
+      universities:
       [ { id: 13,
           name: 'Université Paris 1 Panthéon-Sorbonne',
           code: 'Paris1',
@@ -6122,7 +6122,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/banniere_paris1-pantheon-sorbonne_980x200.jpg' } ],
       university_name: 'Université Paris 1 Panthéon-Sorbonne',
-      main_university: 
+      main_university:
       { id: 13,
         name: 'Université Paris 1 Panthéon-Sorbonne',
         code: 'Paris1',
@@ -6132,7 +6132,7 @@ export default {
       title: 'Villes du monde en système',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 100, name: 'Sciences humaines et sociales' },
         { id: 37, name: 'Géographie' } ],
       image_url: 'asset-v1:Paris1+16006+session01+type@asset+block@preview_FUN.png',
@@ -6144,7 +6144,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1paris116006session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1paris116006session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1paris116006session01.730x412_q85_crop-scale.jpg',
@@ -6154,7 +6154,7 @@ export default {
     {
       id: 2387,
       key: 'course-v1:inria+41012+session02',
-      universities: 
+      universities:
       [ { id: 42,
           name: 'Inria',
           code: 'inria',
@@ -6162,7 +6162,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/bandeau_MoocInria.0124-121.jpg' } ],
       university_name: 'Inria',
-      main_university: 
+      main_university:
       { id: 42,
         name: 'Inria',
         code: 'inria',
@@ -6172,7 +6172,7 @@ export default {
       title: 'Accessibilité numérique - Session 2',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 100, name: 'Sciences humaines et sociales' },
         { id: 25, name: 'Enjeux de société' },
@@ -6186,7 +6186,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1inria41012session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1inria41012session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1inria41012session02.730x412_q85_crop-scale.jpg',
@@ -6196,7 +6196,7 @@ export default {
     {
       id: 2410,
       key: 'course-v1:uved+34003+session02',
-      universities: 
+      universities:
       [ { id: 33,
           name: 'Université Virtuelle Environnement et Développement durable (UVED) ',
           code: 'uved',
@@ -6204,7 +6204,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/unnamed_attachment_1.png' } ],
       university_name: 'UVED',
-      main_university: 
+      main_university:
       { id: 33,
         name: 'Université Virtuelle Environnement et Développement durable (UVED) ',
         code: 'uved',
@@ -6214,7 +6214,7 @@ export default {
       title: 'Causes et enjeux du changement climatique',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 115, name: 'Développement durable' },
         { id: 25, name: 'Enjeux de société' } ],
@@ -6227,7 +6227,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1uved34003session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1uved34003session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1uved34003session02.730x412_q85_crop-scale.jpg',
@@ -6237,7 +6237,7 @@ export default {
     {
       id: 2190,
       key: 'CNAM/01009S03/session03',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -6251,7 +6251,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Le_Cnam_facade.jpg' } ],
       university_name: 'Le CNAM',
-      main_university: 
+      main_university:
       { id: 1,
         name: 'Le Cnam',
         code: 'CNAM',
@@ -6261,7 +6261,7 @@ export default {
       title: 'Écrivez votre premier programme avec Java',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 112, name: 'Programmation' } ],
       image_url: '/c4x/CNAM/01009S03/asset/images_course_small.jpg',
@@ -6273,7 +6273,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/cnam01009s03session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/cnam01009s03session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/cnam01009s03session03.730x412_q85_crop-scale.jpg',
@@ -6283,7 +6283,7 @@ export default {
     {
       id: 2447,
       key: 'course-v1:grenoblealpes+92009+session01',
-      universities: 
+      universities:
       [ { id: 201,
           name: 'Communauté Université Grenoble Alpes',
           code: 'grenoblealpes',
@@ -6291,7 +6291,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/campus_bu-001.jpg' } ],
       university_name: 'Communauté Université Grenoble Alpes',
-      main_university: 
+      main_university:
       { id: 201,
         name: 'Communauté Université Grenoble Alpes',
         code: 'grenoblealpes',
@@ -6301,7 +6301,7 @@ export default {
       title: 'Développement de l\'adolescent',
       short_description: '',
       level: '',
-      subjects: [ { id: 100, name: 'Sciences humaines et sociales' } ],
+      subjects:[ { id: 100, name: 'Sciences humaines et sociales' } ],
       image_url: 'asset-v1:grenoblealpes+92009+session01+type@asset+block@image-mooc-psychoado.png',
       start_date: '2017-06-06T08:00:00Z',
       end_date: '2017-07-26T08:00:00Z',
@@ -6311,7 +6311,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1grenoblealpes92009session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1grenoblealpes92009session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1grenoblealpes92009session01.730x412_q85_crop-scale.jpg',
@@ -6321,7 +6321,7 @@ export default {
     {
       id: 2450,
       key: 'course-v1:grenoblealpes+92007+session03',
-      universities: 
+      universities:
       [ { id: 201,
           name: 'Communauté Université Grenoble Alpes',
           code: 'grenoblealpes',
@@ -6329,7 +6329,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/campus_bu-001.jpg' } ],
       university_name: 'Communauté Université Grenoble Alpes',
-      main_university: 
+      main_university:
       { id: 201,
         name: 'Communauté Université Grenoble Alpes',
         code: 'grenoblealpes',
@@ -6339,7 +6339,7 @@ export default {
       title: 'Enseigner et former avec le numérique en langues',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 49, name: 'Langues' },
         { id: 64, name: 'Numérique, technologie' } ],
@@ -6352,7 +6352,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1grenoblealpes92007session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1grenoblealpes92007session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1grenoblealpes92007session03.730x412_q85_crop-scale.jpg',
@@ -6362,7 +6362,7 @@ export default {
     {
       id: 1944,
       key: 'CNAM/01019S02/session02',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -6376,7 +6376,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Le_Cnam_facade.jpg' } ],
       university_name: 'Le CNAM',
-      main_university: 
+      main_university:
       { id: 1,
         name: 'Le Cnam',
         code: 'CNAM',
@@ -6386,7 +6386,7 @@ export default {
       title: 'Terrorismes',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 100, name: 'Sciences humaines et sociales' },
         { id: 13, name: 'Cultures et civilisations' },
         { id: 25, name: 'Enjeux de société' },
@@ -6402,7 +6402,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/cnam01019s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/cnam01019s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/cnam01019s02session02.730x412_q85_crop-scale.jpg',
@@ -6412,7 +6412,7 @@ export default {
     {
       id: 2277,
       key: 'MinesTelecom/04008S03/session03',
-      universities: 
+      universities:
       [ { id: 5,
           name: 'IMT',
           code: 'MinesTelecom',
@@ -6420,7 +6420,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/baniere_imt_EDX-02-02.jpg' } ],
       university_name: 'Institut Mines-Télécom',
-      main_university: 
+      main_university:
       { id: 5,
         name: 'IMT',
         code: 'MinesTelecom',
@@ -6430,7 +6430,7 @@ export default {
       title: 'Statistique pour l\'ingénieur',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 58, name: 'Mathématiques et statistiques' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
       image_url: '/c4x/MinesTelecom/04008S03/asset/video_image.png',
@@ -6442,7 +6442,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/minestelecom04008s03session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/minestelecom04008s03session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/minestelecom04008s03session03.730x412_q85_crop-scale.jpg',
@@ -6452,7 +6452,7 @@ export default {
     {
       id: 1938,
       key: 'CNAM/01014S02/session02',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -6466,7 +6466,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Le_Cnam_facade.jpg' } ],
       university_name: 'Le CNAM',
-      main_university: 
+      main_university:
       { id: 1,
         name: 'Le Cnam',
         code: 'CNAM',
@@ -6476,7 +6476,7 @@ export default {
       title: 'Gérer les documents numériques : maîtriser les risques',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 25, name: 'Enjeux de société' },
         { id: 61, name: 'Médias' },
         { id: 64, name: 'Numérique, technologie' },
@@ -6490,7 +6490,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/cnam01014s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/cnam01014s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/cnam01014s02session02.730x412_q85_crop-scale.jpg',
@@ -6500,7 +6500,7 @@ export default {
     {
       id: 1977,
       key: 'ENSCachan/20008S03/session03',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -6520,7 +6520,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/image-bandeau-ENSdeLyon.jpg' } ],
       university_name: 'ENS Paris-Saclay',
-      main_university: 
+      main_university:
       { id: 14,
         name: 'ENS Paris-Saclay',
         code: 'ENSCachan',
@@ -6530,7 +6530,7 @@ export default {
       title: 'Education aux médias et à l\'information à l\'ère du numérique (eFAN)',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 61, name: 'Médias' },
         { id: 64, name: 'Numérique, technologie' } ],
@@ -6543,7 +6543,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/enscachan20008s03session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/enscachan20008s03session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/enscachan20008s03session03.730x412_q85_crop-scale.jpg',
@@ -6553,7 +6553,7 @@ export default {
     {
       id: 1859,
       key: 'uved/34001S02/session02',
-      universities: 
+      universities:
       [ { id: 33,
           name: 'Université Virtuelle Environnement et Développement durable (UVED) ',
           code: 'uved',
@@ -6561,7 +6561,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/unnamed_attachment_1.png' } ],
       university_name: 'Université Virtuelle Environnement et Développement durable (UVED) ',
-      main_university: 
+      main_university:
       { id: 33,
         name: 'Université Virtuelle Environnement et Développement durable (UVED) ',
         code: 'uved',
@@ -6571,7 +6571,7 @@ export default {
       title: 'Economie circulaire et innovation',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 22, name: 'Économie et finance' },
         { id: 34, name: 'Environnement' },
         { id: 25, name: 'Enjeux de société' },
@@ -6585,7 +6585,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/uved34001s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/uved34001s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/uved34001s02session02.730x412_q85_crop-scale.jpg',
@@ -6595,7 +6595,7 @@ export default {
     {
       id: 1962,
       key: 'CoR/114001/session01',
-      universities: 
+      universities:
       [ { id: 237,
           name: 'CoR',
           code: 'CoR',
@@ -6603,7 +6603,7 @@ export default {
           detail_page_enabled: false,
           banner: null } ],
       university_name: 'EU Committee of the Regions',
-      main_university: 
+      main_university:
       { id: 237,
         name: 'CoR',
         code: 'CoR',
@@ -6613,7 +6613,7 @@ export default {
       title: 'EU budget and funding for regions and cities                        ',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 19, name: 'Droit et juridique' },
         { id: 22, name: 'Économie et finance' },
         { id: 31, name: 'Entrepreneuriat' },
@@ -6630,7 +6630,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/cor114001session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/cor114001session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/cor114001session01.730x412_q85_crop-scale.jpg',
@@ -6640,7 +6640,7 @@ export default {
     {
       id: 2316,
       key: 'course-v1:grenoblealpes+92001+session01',
-      universities: 
+      universities:
       [ { id: 201,
           name: 'Communauté Université Grenoble Alpes',
           code: 'grenoblealpes',
@@ -6648,7 +6648,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/campus_bu-001.jpg' } ],
       university_name: 'Communauté Université Grenoble Alpes',
-      main_university: 
+      main_university:
       { id: 201,
         name: 'Communauté Université Grenoble Alpes',
         code: 'grenoblealpes',
@@ -6658,7 +6658,7 @@ export default {
       title: 'Analyse de données quantitatives en sciences humaines et sociales (ADSHS)',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 100, name: 'Sciences humaines et sociales' },
         { id: 58, name: 'Mathématiques et statistiques' },
         { id: 67, name: 'Outils pour la recherche' } ],
@@ -6671,7 +6671,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1grenoblealpes92001session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1grenoblealpes92001session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1grenoblealpes92001session01.730x412_q85_crop-scale.jpg',
@@ -6681,7 +6681,7 @@ export default {
     {
       id: 2067,
       key: 'MinesTelecom/04009S02/session02',
-      universities: 
+      universities:
       [ { id: 5,
           name: 'IMT',
           code: 'MinesTelecom',
@@ -6689,7 +6689,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/baniere_imt_EDX-02-02.jpg' } ],
       university_name: 'IMT',
-      main_university: 
+      main_university:
       { id: 5,
         name: 'IMT',
         code: 'MinesTelecom',
@@ -6699,7 +6699,7 @@ export default {
       title: 'Introduction aux communications par satellites',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 82, name: 'Réseaux et télécommunications' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
       image_url: '/c4x/MinesTelecom/04009S02/asset/MOOC_SAT_COM_visuel.jpg',
@@ -6711,7 +6711,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/minestelecom04009s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/minestelecom04009s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/minestelecom04009s02session02.730x412_q85_crop-scale.jpg',
@@ -6721,7 +6721,7 @@ export default {
     {
       id: 2328,
       key: 'course-v1:ulg+108002+session01',
-      universities: 
+      universities:
       [ { id: 264,
           name: 'Université de Liège',
           code: 'ulg',
@@ -6729,7 +6729,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/bandeauULg1.png' } ],
       university_name: 'Université de Liège',
-      main_university: 
+      main_university:
       { id: 264,
         name: 'Université de Liège',
         code: 'ulg',
@@ -6739,7 +6739,7 @@ export default {
       title: 'Il était une fois la littérature pour la jeunesse',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 13, name: 'Cultures et civilisations' },
         { id: 40, name: 'Histoire' },
         { id: 52, name: 'Lettres' } ],
@@ -6752,7 +6752,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ulg108002session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ulg108002session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ulg108002session01.730x412_q85_crop-scale.jpg',
@@ -6762,7 +6762,7 @@ export default {
     {
       id: 2362,
       key: 'course-v1:ENSDeLyon+14004+session02',
-      universities: 
+      universities:
       [ { id: 172,
           name: 'Université de Lyon',
           code: 'universite-lyon',
@@ -6776,7 +6776,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/image-bandeau-ENSdeLyon.jpg' } ],
       university_name: 'ENS de Lyon',
-      main_university: 
+      main_university:
       { id: 24,
         name: 'ENS de Lyon',
         code: 'ENSDeLyon',
@@ -6786,7 +6786,7 @@ export default {
       title: 'C\'est quoi l\'éco ?',
       short_description: '',
       level: '',
-      subjects: [ { id: 22, name: 'Économie et finance' } ],
+      subjects:[ { id: 22, name: 'Économie et finance' } ],
       image_url: 'asset-v1:ENSDeLyon+14004+session02+type@asset+block@vignette-FUN-MOOC-Cquoileco.png',
       start_date: '2017-05-03T09:00:00Z',
       end_date: '2017-06-30T22:00:00Z',
@@ -6796,7 +6796,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ensdelyon14004session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ensdelyon14004session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ensdelyon14004session02.730x412_q85_crop-scale.jpg',
@@ -6806,7 +6806,7 @@ export default {
     {
       id: 2393,
       key: 'course-v1:ujendouba+36002+session02',
-      universities: 
+      universities:
       [ { id: 129,
           name: 'Université de Jendouba',
           code: 'ujendouba',
@@ -6814,7 +6814,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/banniereujb3.png' } ],
       university_name: 'Université de Jendouba',
-      main_university: 
+      main_university:
       { id: 129,
         name: 'Université de Jendouba',
         code: 'ujendouba',
@@ -6824,7 +6824,7 @@ export default {
       title: 'Préparer et Réussir le DELF B2 et le DALF C1',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 49, name: 'Langues' } ],
       image_url: 'asset-v1:ujendouba+36002+session02+type@asset+block@4-logo_fichier_technique.jpg',
@@ -6836,7 +6836,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ujendouba36002session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ujendouba36002session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ujendouba36002session02.730x412_q85_crop-scale.jpg',
@@ -6846,7 +6846,7 @@ export default {
     {
       id: 2396,
       key: 'course-v1:inria+41003+session03',
-      universities: 
+      universities:
       [ { id: 42,
           name: 'Inria',
           code: 'inria',
@@ -6854,7 +6854,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/bandeau_MoocInria.0124-121.jpg' } ],
       university_name: 'Inria',
-      main_university: 
+      main_university:
       { id: 42,
         name: 'Inria',
         code: 'inria',
@@ -6864,7 +6864,7 @@ export default {
       title: 'Bioinformatique : algorithmes et génomes',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 67, name: 'Outils pour la recherche' },
         { id: 97, name: 'Sciences de la vie' } ],
@@ -6877,7 +6877,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1inria41003session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1inria41003session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1inria41003session03.730x412_q85_crop-scale.jpg',
@@ -6887,7 +6887,7 @@ export default {
     {
       id: 2399,
       key: 'course-v1:inria+41007+session02',
-      universities: 
+      universities:
       [ { id: 42,
           name: 'Inria',
           code: 'inria',
@@ -6895,7 +6895,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/bandeau_MoocInria.0124-121.jpg' } ],
       university_name: 'Inria',
-      main_university: 
+      main_university:
       { id: 42,
         name: 'Inria',
         code: 'inria',
@@ -6905,7 +6905,7 @@ export default {
       title: 'Bioinformatics: Genomes and Algorithms',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 67, name: 'Outils pour la recherche' },
         { id: 97, name: 'Sciences de la vie' } ],
@@ -6918,7 +6918,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1inria41007session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1inria41007session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1inria41007session02.730x412_q85_crop-scale.jpg',
@@ -6928,7 +6928,7 @@ export default {
     {
       id: 2160,
       key: 'pasteur/96003/session01',
-      universities: 
+      universities:
       [ { id: 186,
           name: 'Institut Pasteur',
           code: 'pasteur',
@@ -6936,7 +6936,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Bandeau_IP_Buste_LP_980x200_V2.png' } ],
       university_name: 'Institut Pasteur',
-      main_university: 
+      main_university:
       { id: 186,
         name: 'Institut Pasteur',
         code: 'pasteur',
@@ -6946,7 +6946,7 @@ export default {
       title: 'Medical Entomology',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 85, name: 'Santé' },
         { id: 97, name: 'Sciences de la vie' } ],
       image_url: '/c4x/pasteur/96003/asset/vignette_insects.jpg',
@@ -6958,7 +6958,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/pasteur96003session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/pasteur96003session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/pasteur96003session01.730x412_q85_crop-scale.jpg',
@@ -6968,7 +6968,7 @@ export default {
     {
       id: 2172,
       key: 'gobelins/83002/session01',
-      universities: 
+      universities:
       [ { id: 154,
           name: 'GOBELINS, l\'école de l\'image',
           code: 'gobelins',
@@ -6976,7 +6976,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/baniere_goblins.png' } ],
       university_name: 'GOBELINS, l\'école de l\'image',
-      main_university: 
+      main_university:
       { id: 154,
         name: 'GOBELINS, l\'école de l\'image',
         code: 'gobelins',
@@ -6986,7 +6986,7 @@ export default {
       title: 'Art-duino : fabriquer des objets connectés créatifs',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 10, name: 'Arts, création et design' },
         { id: 46, name: 'Innovation' },
         { id: 64, name: 'Numérique, technologie' } ],
@@ -6999,7 +6999,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/gobelins83002session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/gobelins83002session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/gobelins83002session01.730x412_q85_crop-scale.jpg',
@@ -7009,7 +7009,7 @@ export default {
     {
       id: 2434,
       key: 'course-v1:IPGP+51001+session02',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -7023,7 +7023,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/IPGP_nuit.jpg' } ],
       university_name: 'Institut de physique du globe de Paris (IPGP)',
-      main_university: 
+      main_university:
       { id: 145,
         name: 'Institut de Physique du Globe de Paris',
         code: 'IPGP',
@@ -7033,7 +7033,7 @@ export default {
       title: 'Volcanologie physique : des phénomènes aux processus',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 73, name: 'Physique' },
         { id: 94, name: 'Sciences de la Terre et de l\'Univers' } ],
@@ -7046,7 +7046,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ipgp51001session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ipgp51001session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ipgp51001session02.730x412_q85_crop-scale.jpg',
@@ -7056,7 +7056,7 @@ export default {
     {
       id: 1956,
       key: 'MinesTelecom/04013S02/session02',
-      universities: 
+      universities:
       [ { id: 5,
           name: 'IMT',
           code: 'MinesTelecom',
@@ -7064,7 +7064,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/baniere_imt_EDX-02-02.jpg' } ],
       university_name: 'IMT',
-      main_university: 
+      main_university:
       { id: 5,
         name: 'IMT',
         code: 'MinesTelecom',
@@ -7074,7 +7074,7 @@ export default {
       title: 'À la découverte des télécommunications',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 82, name: 'Réseaux et télécommunications' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
       image_url: '/c4x/MinesTelecom/04013S02/asset/Visuel-ALDDT.jpg',
@@ -7086,7 +7086,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/minestelecom04013s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/minestelecom04013s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/minestelecom04013s02session02.730x412_q85_crop-scale.jpg',
@@ -7096,7 +7096,7 @@ export default {
     {
       id: 2244,
       key: 'MinesTelecom/04019S02/session02',
-      universities: 
+      universities:
       [ { id: 5,
           name: 'IMT',
           code: 'MinesTelecom',
@@ -7104,7 +7104,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/baniere_imt_EDX-02-02.jpg' } ],
       university_name: 'IMT',
-      main_university: 
+      main_university:
       { id: 5,
         name: 'IMT',
         code: 'MinesTelecom',
@@ -7114,7 +7114,7 @@ export default {
       title: 'ABC du langage C',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 64, name: 'Numérique, technologie' },
         { id: 112, name: 'Programmation' },
@@ -7128,7 +7128,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/minestelecom04019s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/minestelecom04019s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/minestelecom04019s02session02.730x412_q85_crop-scale.jpg',
@@ -7138,7 +7138,7 @@ export default {
     {
       id: 2298,
       key: 'course-v1:USPC+37009+session01',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -7146,7 +7146,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Recherche_montaGabirelle-3.jpg' } ],
       university_name: 'Université Sorbonne Paris Cité',
-      main_university: 
+      main_university:
       { id: 198,
         name: 'Université Sorbonne Paris Cité',
         code: 'USPC',
@@ -7156,7 +7156,7 @@ export default {
       title: 'MOOC PRE-ECLAMPSIE',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 85, name: 'Santé' },
         { id: 64, name: 'Numérique, technologie' },
         { id: 91, name: 'Sciences cognitives' } ],
@@ -7169,7 +7169,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1uspc37009session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1uspc37009session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1uspc37009session01.730x412_q85_crop-scale.jpg',
@@ -7179,7 +7179,7 @@ export default {
     {
       id: 1802,
       key: 'grenoblealpes/92003S03/session03',
-      universities: 
+      universities:
       [ { id: 201,
           name: 'Communauté Université Grenoble Alpes',
           code: 'grenoblealpes',
@@ -7187,7 +7187,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/campus_bu-001.jpg' } ],
       university_name: 'Communauté Université Grenoble Alpes',
-      main_university: 
+      main_university:
       { id: 201,
         name: 'Communauté Université Grenoble Alpes',
         code: 'grenoblealpes',
@@ -7197,7 +7197,7 @@ export default {
       title: 'Des rivières et des hommes : hydrologie, hydraulique et géomorphologie',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 13, name: 'Cultures et civilisations' },
         { id: 115, name: 'Développement durable' },
@@ -7213,7 +7213,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/grenoblealpes92003s03session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/grenoblealpes92003s03session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/grenoblealpes92003s03session03.730x412_q85_crop-scale.jpg',
@@ -7223,7 +7223,7 @@ export default {
     {
       id: 1920,
       key: 'EcoleAir/65001S02/session02',
-      universities: 
+      universities:
       [ { id: 139,
           name: 'École de l\'air',
           code: 'EcoleAir',
@@ -7231,7 +7231,7 @@ export default {
           detail_page_enabled: false,
           banner: null } ],
       university_name: 'École de l\'air',
-      main_university: 
+      main_university:
       { id: 139,
         name: 'École de l\'air',
         code: 'EcoleAir',
@@ -7241,7 +7241,7 @@ export default {
       title: 'Compréhension de l\'arme aérienne',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 25, name: 'Enjeux de société' },
         { id: 73, name: 'Physique' },
         { id: 79, name: 'Relations internationales' },
@@ -7255,7 +7255,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/ecoleair65001s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/ecoleair65001s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/ecoleair65001s02session02.730x412_q85_crop-scale.jpg',
@@ -7265,7 +7265,7 @@ export default {
     {
       id: 2052,
       key: 'unormandie/68001S02/session02',
-      universities: 
+      universities:
       [ { id: 46,
           name: 'Normandie Université',
           code: 'unormandie',
@@ -7273,7 +7273,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/illustration_normandie_universit%C3%A9.jpg' } ],
       university_name: 'Normandie Université',
-      main_university: 
+      main_university:
       { id: 46,
         name: 'Normandie Université',
         code: 'unormandie',
@@ -7283,7 +7283,7 @@ export default {
       title: 'Soyez acteur de la sécurité de l\'information',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 25, name: 'Enjeux de société' },
         { id: 64, name: 'Numérique, technologie' },
         { id: 109, name: 'Vie de l\'entreprise' } ],
@@ -7296,7 +7296,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/unormandie68001s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/unormandie68001s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/unormandie68001s02session02.730x412_q85_crop-scale.jpg',
@@ -7306,7 +7306,7 @@ export default {
     {
       id: 2055,
       key: 'inria/41008S02/session02',
-      universities: 
+      universities:
       [ { id: 42,
           name: 'Inria',
           code: 'inria',
@@ -7314,7 +7314,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/bandeau_MoocInria.0124-121.jpg' } ],
       university_name: 'Inria',
-      main_university: 
+      main_university:
       { id: 42,
         name: 'Inria',
         code: 'inria',
@@ -7324,7 +7324,7 @@ export default {
       title: 'Bases de données relationnelles : Comprendre pour maîtriser',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 64, name: 'Numérique, technologie' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
@@ -7337,7 +7337,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/inria41008s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/inria41008s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/inria41008s02session02.730x412_q85_crop-scale.jpg',
@@ -7347,7 +7347,7 @@ export default {
     {
       id: 2061,
       key: 'amu/38004/session01',
-      universities: 
+      universities:
       [ { id: 118,
           name: 'Aix-Marseille Université',
           code: 'amu',
@@ -7355,7 +7355,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Aix-Marseille-BANDEAU.jpg' } ],
       university_name: 'Aix-Marseille Université',
-      main_university: 
+      main_university:
       { id: 118,
         name: 'Aix-Marseille Université',
         code: 'amu',
@@ -7365,7 +7365,7 @@ export default {
       title: 'Le paludisme',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 85, name: 'Santé' },
         { id: 25, name: 'Enjeux de société' } ],
       image_url: '/c4x/amu/38004/asset/mosquito.jpg',
@@ -7377,7 +7377,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/amu38004session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/amu38004session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/amu38004session01.730x412_q85_crop-scale.jpg',
@@ -7387,7 +7387,7 @@ export default {
     {
       id: 2070,
       key: 'MinesTelecom/04022/session01',
-      universities: 
+      universities:
       [ { id: 5,
           name: 'IMT',
           code: 'MinesTelecom',
@@ -7395,7 +7395,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/baniere_imt_EDX-02-02.jpg' } ],
       university_name: 'IMT',
-      main_university: 
+      main_university:
       { id: 5,
         name: 'IMT',
         code: 'MinesTelecom',
@@ -7405,7 +7405,7 @@ export default {
       title: 'Introduction aux ressources minérales : un enjeu pour la planète',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 115, name: 'Développement durable' },
         { id: 94, name: 'Sciences de la Terre et de l\'Univers' } ],
@@ -7418,7 +7418,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/minestelecom04022session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/minestelecom04022session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/minestelecom04022session01.730x412_q85_crop-scale.jpg',
@@ -7428,7 +7428,7 @@ export default {
     {
       id: 2596,
       key: 'course-v1:ParisSaclay+71002+session01',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -7442,7 +7442,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/polytechnique_banner.jpg' } ],
       university_name: 'Université Paris-Saclay',
-      main_university: 
+      main_university:
       { id: 160,
         name: 'Université Paris-Saclay',
         code: 'ParisSaclay',
@@ -7452,7 +7452,7 @@ export default {
       title: 'Voyage au cœur du vivant avec les rayons X : la cristallographie',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 85, name: 'Santé' },
         { id: 88, name: 'Sciences' },
         { id: 73, name: 'Physique' },
@@ -7466,7 +7466,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1parissaclay71002session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1parissaclay71002session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1parissaclay71002session01.730x412_q85_crop-scale.jpg',
@@ -7476,7 +7476,7 @@ export default {
     {
       id: 3118,
       key: 'course-v1:grenoblealpes+92012+session01',
-      universities: 
+      universities:
       [ { id: 201,
           name: 'Communauté Université Grenoble Alpes',
           code: 'grenoblealpes',
@@ -7484,7 +7484,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/campus_bu-001.jpg' } ],
       university_name: 'Communauté Université Grenoble Alpes',
-      main_university: 
+      main_university:
       { id: 201,
         name: 'Communauté Université Grenoble Alpes',
         code: 'grenoblealpes',
@@ -7494,7 +7494,7 @@ export default {
       title: 'Des neurones à la psyché, Introduction aux réseaux de neurones biologiques et artificiels',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 100, name: 'Sciences humaines et sociales' },
         { id: 58, name: 'Mathématiques et statistiques' },
@@ -7509,7 +7509,7 @@ export default {
       course_ended: false,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1grenoblealpes92012session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1grenoblealpes92012session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1grenoblealpes92012session01.730x412_q85_crop-scale.jpg',
@@ -7519,7 +7519,7 @@ export default {
     {
       id: 2097,
       key: 'ENSDeLyon/14002S03/session03',
-      universities: 
+      universities:
       [ { id: 172,
           name: 'Université de Lyon',
           code: 'universite-lyon',
@@ -7533,7 +7533,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/image-bandeau-ENSdeLyon.jpg' } ],
       university_name: 'ENS de Lyon',
-      main_university: 
+      main_university:
       { id: 24,
         name: 'ENS de Lyon',
         code: 'ENSDeLyon',
@@ -7543,7 +7543,7 @@ export default {
       title: 'Architecture de l\'information',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 7, name: 'Communication' },
         { id: 64, name: 'Numérique, technologie' } ],
       image_url: '/c4x/ENSDeLyon/14002S03/asset/vignette-archinfo-fun.jpg',
@@ -7555,7 +7555,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/ensdelyon14002s03session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/ensdelyon14002s03session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/ensdelyon14002s03session03.730x412_q85_crop-scale.jpg',
@@ -7565,7 +7565,7 @@ export default {
     {
       id: 2103,
       key: 'UPVD/95001/session01',
-      universities: 
+      universities:
       [ { id: 99,
           name: 'Université de Perpignan',
           code: 'UPVD',
@@ -7573,7 +7573,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/photo-campus-UPVD-980x199-2.jpg' } ],
       university_name: 'Université de Perpignan',
-      main_university: 
+      main_university:
       { id: 99,
         name: 'Université de Perpignan',
         code: 'UPVD',
@@ -7583,7 +7583,7 @@ export default {
       title: 'Aspects juridiques de la création d\'entreprises innovantes',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 19, name: 'Droit et juridique' },
         { id: 31, name: 'Entrepreneuriat' } ],
       image_url: '/c4x/UPVD/95001/asset/images_course_image.jpg',
@@ -7595,7 +7595,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/upvd95001session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/upvd95001session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/upvd95001session01.730x412_q85_crop-scale.jpg',
@@ -7605,7 +7605,7 @@ export default {
     {
       id: 2368,
       key: 'course-v1:lille1+54004+session01',
-      universities: 
+      universities:
       [ { id: 225,
           name: 'ComUE Lille Nord de France',
           code: 'cuelnf',
@@ -7619,7 +7619,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/VisuelUnivLille199.jpg' } ],
       university_name: 'Université Lille 1',
-      main_university: 
+      main_university:
       { id: 87,
         name: 'Université de Lille 1, Sciences et technologies',
         code: 'lille1',
@@ -7629,7 +7629,7 @@ export default {
       title: 'Scratch au collège',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 43, name: 'Informatique' },
         { id: 58, name: 'Mathématiques et statistiques' } ],
@@ -7642,7 +7642,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1lille154004session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1lille154004session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1lille154004session01.730x412_q85_crop-scale.jpg',
@@ -7652,7 +7652,7 @@ export default {
     {
       id: 2115,
       key: 'amu/38005S02/session02',
-      universities: 
+      universities:
       [ { id: 118,
           name: 'Aix-Marseille Université',
           code: 'amu',
@@ -7660,7 +7660,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Aix-Marseille-BANDEAU.jpg' } ],
       university_name: 'Aix-Marseille Université',
-      main_university: 
+      main_university:
       { id: 118,
         name: 'Aix-Marseille Université',
         code: 'amu',
@@ -7670,7 +7670,7 @@ export default {
       title: 'Neurophysiologie cellulaire 1: Comment les neurones communiquent',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 91, name: 'Sciences cognitives' },
         { id: 97, name: 'Sciences de la vie' } ],
@@ -7683,7 +7683,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/amu38005s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/amu38005s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/amu38005s02session02.730x412_q85_crop-scale.jpg',
@@ -7693,7 +7693,7 @@ export default {
     {
       id: 2641,
       key: 'course-v1:inria+41002+session03',
-      universities: 
+      universities:
       [ { id: 42,
           name: 'Inria',
           code: 'inria',
@@ -7701,7 +7701,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/bandeau_MoocInria.0124-121.jpg' } ],
       university_name: 'Inria',
-      main_university: 
+      main_university:
       { id: 42,
         name: 'Inria',
         code: 'inria',
@@ -7711,7 +7711,7 @@ export default {
       title: 'Web sémantique et Web de données',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 64, name: 'Numérique, technologie' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
@@ -7724,7 +7724,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1inria41002session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1inria41002session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1inria41002session03.730x412_q85_crop-scale.jpg',
@@ -7734,7 +7734,7 @@ export default {
     {
       id: 2142,
       key: 'ICP/84001S02/session02',
-      universities: 
+      universities:
       [ { id: 182,
           name: 'Institut Catholique de Paris',
           code: 'ICP',
@@ -7742,7 +7742,7 @@ export default {
           detail_page_enabled: false,
           banner: null } ],
       university_name: 'Institut Catholique de Paris',
-      main_university: 
+      main_university:
       { id: 182,
         name: 'Institut Catholique de Paris',
         code: 'ICP',
@@ -7752,7 +7752,7 @@ export default {
       title: 'Géopolitique de la Chine contemporaine',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 100, name: 'Sciences humaines et sociales' },
         { id: 37, name: 'Géographie' },
         { id: 40, name: 'Histoire' },
@@ -7767,7 +7767,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/icp84001s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/icp84001s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/icp84001s02session02.730x412_q85_crop-scale.jpg',
@@ -7777,7 +7777,7 @@ export default {
     {
       id: 2145,
       key: 'lorraine/30004/session01',
-      universities: 
+      universities:
       [ { id: 168,
           name: 'Université de Lorraine',
           code: 'lorraine',
@@ -7785,7 +7785,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Image_Universite_de_Lorraine.jpg' } ],
       university_name: 'Université de Lorraine',
-      main_university: 
+      main_university:
       { id: 168,
         name: 'Université de Lorraine',
         code: 'lorraine',
@@ -7795,7 +7795,7 @@ export default {
       title: 'VITRA arts et techniques du verre',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 10, name: 'Arts, création et design' },
         { id: 13, name: 'Cultures et civilisations' } ],
       image_url: '/c4x/lorraine/30004/asset/banniere_du_cours.jpg',
@@ -7807,7 +7807,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/lorraine30004session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/lorraine30004session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/lorraine30004session01.730x412_q85_crop-scale.jpg',
@@ -7817,7 +7817,7 @@ export default {
     {
       id: 2405,
       key: 'course-v1:umontpellier+08007+session01',
-      universities: 
+      universities:
       [ { id: 8,
           name: 'Université de Montpellier',
           code: 'umontpellier',
@@ -7825,7 +7825,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Photo-campus_rlrvHDS.png' } ],
       university_name: 'Université de Montpellier',
-      main_university: 
+      main_university:
       { id: 8,
         name: 'Université de Montpellier',
         code: 'umontpellier',
@@ -7835,7 +7835,7 @@ export default {
       title: 'Enseigner avec les Serious Games',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 64, name: 'Numérique, technologie' } ],
       image_url: 'asset-v1:umontpellier+08007+session01+type@asset+block@image.png',
@@ -7847,7 +7847,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1umontpellier08007session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1umontpellier08007session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1umontpellier08007session01.730x412_q85_crop-scale.jpg',
@@ -7857,7 +7857,7 @@ export default {
     {
       id: 2169,
       key: 'ENSCachan/20010S03/session03',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -7871,7 +7871,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/enscachan.921fde30c904.jpg' } ],
       university_name: 'ENS Paris-Saclay',
-      main_university: 
+      main_university:
       { id: 14,
         name: 'ENS Paris-Saclay',
         code: 'ENSCachan',
@@ -7881,7 +7881,7 @@ export default {
       title: 'Pratiques du Dimensionnement en Mécanique - Partie 2 - session 3',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 73, name: 'Physique' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
@@ -7894,7 +7894,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/enscachan20010s03session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/enscachan20010s03session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/enscachan20010s03session03.730x412_q85_crop-scale.jpg',
@@ -7904,7 +7904,7 @@ export default {
     {
       id: 2983,
       key: 'course-v1:gobelins+83001+session03',
-      universities: 
+      universities:
       [ { id: 154,
           name: 'GOBELINS, l\'école de l\'image',
           code: 'gobelins',
@@ -7912,7 +7912,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/baniere_goblins.png' } ],
       university_name: 'GOBELINS, l\'école de l\'image',
-      main_university: 
+      main_university:
       { id: 154,
         name: 'GOBELINS, l\'école de l\'image',
         code: 'gobelins',
@@ -7922,7 +7922,7 @@ export default {
       title: 'Réaliser des vidéos pro avec son smartphone',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 10, name: 'Arts, création et design' },
         { id: 7, name: 'Communication' },
         { id: 61, name: 'Médias' },
@@ -7936,7 +7936,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1gobelins83001session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1gobelins83001session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1gobelins83001session03.730x412_q85_crop-scale.jpg',
@@ -7946,7 +7946,7 @@ export default {
     {
       id: 2220,
       key: 'lille1/54002S02/session02',
-      universities: 
+      universities:
       [ { id: 87,
           name: 'Université de Lille 1, Sciences et technologies',
           code: 'lille1',
@@ -7954,7 +7954,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/VisuelUnivLille199.jpg' } ],
       university_name: 'Université Lille 1',
-      main_university: 
+      main_university:
       { id: 87,
         name: 'Université de Lille 1, Sciences et technologies',
         code: 'lille1',
@@ -7964,7 +7964,7 @@ export default {
       title: 'Nuclear Magnetic Resonance a Compass to Nanoworld',
       short_description: '',
       level: '',
-      subjects: [ { id: 88, name: 'Sciences' }, { id: 4, name: 'Chimie' } ],
+      subjects:[ { id: 88, name: 'Sciences' }, { id: 4, name: 'Chimie' } ],
       image_url: '/c4x/lille1/54002S02/asset/nmr.png',
       start_date: '2017-02-20T09:00:00Z',
       end_date: '2017-04-30T23:30:00Z',
@@ -7974,7 +7974,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/lille154002s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/lille154002s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/lille154002s02session02.730x412_q85_crop-scale.jpg',
@@ -7984,7 +7984,7 @@ export default {
     {
       id: 2223,
       key: 'WMFr/86001S02/session02',
-      universities: 
+      universities:
       [ { id: 173,
           name: 'Wikimédia France',
           code: 'WMFr',
@@ -7992,7 +7992,7 @@ export default {
           detail_page_enabled: false,
           banner: null } ],
       university_name: 'Wikimédia France',
-      main_university: 
+      main_university:
       { id: 173,
         name: 'Wikimédia France',
         code: 'WMFr',
@@ -8002,7 +8002,7 @@ export default {
       title: 'WikiMOOC : apprenez à contribuer sur Wikipédia !',
       short_description: '',
       level: '',
-      subjects: [ { id: 64, name: 'Numérique, technologie' } ],
+      subjects:[ { id: 64, name: 'Numérique, technologie' } ],
       image_url: '/c4x/WMFr/86001S02/asset/Blanc_WikipediA.png',
       start_date: '2017-03-06T00:00:00Z',
       end_date: '2017-04-19T23:00:00Z',
@@ -8012,7 +8012,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/wmfr86001s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/wmfr86001s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/wmfr86001s02session02.730x412_q85_crop-scale.jpg',
@@ -8022,7 +8022,7 @@ export default {
     {
       id: 2735,
       key: 'course-v1:grenoblealpes+92003+session4',
-      universities: 
+      universities:
       [ { id: 201,
           name: 'Communauté Université Grenoble Alpes',
           code: 'grenoblealpes',
@@ -8030,7 +8030,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/campus_bu-001.jpg' } ],
       university_name: 'Communauté Université Grenoble Alpes',
-      main_university: 
+      main_university:
       { id: 201,
         name: 'Communauté Université Grenoble Alpes',
         code: 'grenoblealpes',
@@ -8040,7 +8040,7 @@ export default {
       title: 'Des rivières et des hommes : hydrologie, hydraulique et géomorphologie',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 115, name: 'Développement durable' },
         { id: 25, name: 'Enjeux de société' },
@@ -8056,7 +8056,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 4,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1grenoblealpes92003session4.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1grenoblealpes92003session4.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1grenoblealpes92003session4.730x412_q85_crop-scale.jpg',
@@ -8066,7 +8066,7 @@ export default {
     {
       id: 2741,
       key: 'course-v1:USPC+37011+session01',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -8074,7 +8074,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Recherche_montaGabirelle-3.jpg' } ],
       university_name: 'Université Sorbonne Paris Cité',
-      main_university: 
+      main_university:
       { id: 198,
         name: 'Université Sorbonne Paris Cité',
         code: 'USPC',
@@ -8084,7 +8084,7 @@ export default {
       title: 'Violences faites aux femmes',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 85, name: 'Santé' },
         { id: 100, name: 'Sciences humaines et sociales' },
         { id: 25, name: 'Enjeux de société' } ],
@@ -8097,7 +8097,7 @@ export default {
       course_ended: false,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1uspc37011session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1uspc37011session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1uspc37011session01.730x412_q85_crop-scale.jpg',
@@ -8107,7 +8107,7 @@ export default {
     {
       id: 2235,
       key: 'fmsh/121001/session01',
-      universities: 
+      universities:
       [ { id: 261,
           name: 'Fondation Maison des      Sciences de l\'Homme',
           code: 'fmsh',
@@ -8115,7 +8115,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Banni%C3%A8re.jpg' } ],
       university_name: 'Fondation Maison des      Sciences de l\'Homme',
-      main_university: 
+      main_university:
       { id: 261,
         name: 'Fondation Maison des      Sciences de l\'Homme',
         code: 'fmsh',
@@ -8125,7 +8125,7 @@ export default {
       title: 'Le racisme et l\'antisémitisme',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 100, name: 'Sciences humaines et sociales' },
         { id: 25, name: 'Enjeux de société' } ],
       image_url: '/c4x/fmsh/121001/asset/Vignette_mooc_730_x_411.png',
@@ -8137,7 +8137,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/fmsh121001session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/fmsh121001session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/fmsh121001session01.730x412_q85_crop-scale.jpg',
@@ -8147,7 +8147,7 @@ export default {
     {
       id: 3005,
       key: 'course-v1:uved+34006+session01',
-      universities: 
+      universities:
       [ { id: 33,
           name: 'Université Virtuelle Environnement et Développement durable (UVED) ',
           code: 'uved',
@@ -8155,7 +8155,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/unnamed_attachment_1.png' } ],
       university_name: 'Université Virtuelle Environnement et Développement durable (UVED) ',
-      main_university: 
+      main_university:
       { id: 33,
         name: 'Université Virtuelle Environnement et Développement durable (UVED) ',
         code: 'uved',
@@ -8165,7 +8165,7 @@ export default {
       title: 'Biodiversité et changements globaux',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 115, name: 'Développement durable' },
         { id: 25, name: 'Enjeux de société' } ],
@@ -8178,7 +8178,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1uved34006session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1uved34006session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1uved34006session01.730x412_q85_crop-scale.jpg',
@@ -8188,7 +8188,7 @@ export default {
     {
       id: 3008,
       key: 'course-v1:isipca+111001+session02',
-      universities: 
+      universities:
       [ { id: 223,
           name: 'Institut Supérieur International du Parfum, de la Cosmétique et de l\'Aromatique alimentaire',
           code: 'isipca',
@@ -8196,7 +8196,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/ISIPCA-banner-980x200-FUN-MOOC-v2016-06-15.png' } ],
       university_name: 'Institut Supérieur International du Parfum, de la Cosmétique et de l\'Aromatique alimentaire',
-      main_university: 
+      main_university:
       { id: 223,
         name: 'Institut Supérieur International du Parfum, de la Cosmétique et de l\'Aromatique alimentaire',
         code: 'isipca',
@@ -8206,7 +8206,7 @@ export default {
       title: 'Parfums : de l\'art de sentir au marketing sensoriel ',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 10, name: 'Arts, création et design' } ],
       image_url: 'asset-v1:isipca+111001+session02+type@asset+block@Visuel-MOOC-ISIPCAv2.png',
@@ -8218,7 +8218,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1isipca111001session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1isipca111001session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1isipca111001session02.730x412_q85_crop-scale.jpg',
@@ -8228,7 +8228,7 @@ export default {
     {
       id: 2247,
       key: 'MinesTelecom/04020S02/session02',
-      universities: 
+      universities:
       [ { id: 5,
           name: 'IMT',
           code: 'MinesTelecom',
@@ -8236,7 +8236,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/baniere_imt_EDX-02-02.jpg' } ],
       university_name: 'IMT',
-      main_university: 
+      main_university:
       { id: 5,
         name: 'IMT',
         code: 'MinesTelecom',
@@ -8246,7 +8246,7 @@ export default {
       title: 'Programmer en C',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 64, name: 'Numérique, technologie' },
         { id: 112, name: 'Programmation' },
@@ -8260,7 +8260,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/minestelecom04020s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/minestelecom04020s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/minestelecom04020s02session02.730x412_q85_crop-scale.jpg',
@@ -8270,7 +8270,7 @@ export default {
     {
       id: 3034,
       key: 'course-v1:ensae+53001+session02',
-      universities: 
+      universities:
       [ { id: 289,
           name: 'ENSAE ParisTech',
           code: 'ensae',
@@ -8278,7 +8278,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/ensae2.png' } ],
       university_name: 'ENSAE ParisTech',
-      main_university: 
+      main_university:
       { id: 289,
         name: 'ENSAE ParisTech',
         code: 'ensae',
@@ -8288,7 +8288,7 @@ export default {
       title: 'Modèles de durée',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 58, name: 'Mathématiques et statistiques' },
         { id: 67, name: 'Outils pour la recherche' } ],
       image_url: 'asset-v1:ensae+53001+session02+type@asset+block@MOOC-titrage-image.png',
@@ -8300,7 +8300,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ensae53001session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ensae53001session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ensae53001session02.730x412_q85_crop-scale.jpg',
@@ -8310,7 +8310,7 @@ export default {
     {
       id: 3037,
       key: 'course-v1:UMONS+88001+session02',
-      universities: 
+      universities:
       [ { id: 243,
           name: 'Université de Mons',
           code: 'UMONS',
@@ -8318,7 +8318,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/banniere_umons_2016.png' } ],
       university_name: 'Université de Mons',
-      main_university: 
+      main_university:
       { id: 243,
         name: 'Université de Mons',
         code: 'UMONS',
@@ -8328,7 +8328,7 @@ export default {
       title: 'L’innovation pédagogique dont vous êtes le héros... (2.0)',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 64, name: 'Numérique, technologie' } ],
       image_url: 'asset-v1:UMONS+88001+session02+type@asset+block@UMOOC20.png',
@@ -8340,7 +8340,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1umons88001session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1umons88001session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1umons88001session02.730x412_q85_crop-scale.jpg',
@@ -8350,7 +8350,7 @@ export default {
     {
       id: 2784,
       key: 'course-v1:ensci+39001+session02',
-      universities: 
+      universities:
       [ { id: 165,
           name: 'Ecole Nationale Supérieure de Céramique Industrielle',
           code: 'ensci',
@@ -8364,7 +8364,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Photo_V2.jpg' } ],
       university_name: 'Université de Limoges',
-      main_university: 
+      main_university:
       { id: 327,
         name: 'Université de Limoges',
         code: 'unilim',
@@ -8374,7 +8374,7 @@ export default {
       title: 'High performance ceramic materials',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 4, name: 'Chimie' },
         { id: 73, name: 'Physique' },
@@ -8388,7 +8388,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ensci39001session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ensci39001session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ensci39001session02.730x412_q85_crop-scale.jpg',
@@ -8398,7 +8398,7 @@ export default {
     {
       id: 3043,
       key: 'course-v1:Polytechnique+03003+session02',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -8412,7 +8412,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/polytechnique_banner.jpg' } ],
       university_name: 'Ecole Polytechnique',
-      main_university: 
+      main_university:
       { id: 4,
         name: 'Ecole Polytechnique',
         code: 'Polytechnique',
@@ -8422,7 +8422,7 @@ export default {
       title: 'Mathématiques : préparation à l\'entrée dans l\'enseignement supérieur',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 118, name: 'Orientation' },
         { id: 58, name: 'Mathématiques et statistiques' } ],
@@ -8435,7 +8435,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1polytechnique03003session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1polytechnique03003session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1polytechnique03003session02.730x412_q85_crop-scale.jpg',
@@ -8445,7 +8445,7 @@ export default {
     {
       id: 2790,
       key: 'course-v1:USPC+37012+session01',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -8453,7 +8453,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Recherche_montaGabirelle-3.jpg' } ],
       university_name: 'Université Sorbonne Paris Cité',
-      main_university: 
+      main_university:
       { id: 198,
         name: 'Université Sorbonne Paris Cité',
         code: 'USPC',
@@ -8463,7 +8463,7 @@ export default {
       title: 'Accompagner les transitions éducatives',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 64, name: 'Numérique, technologie' },
         { id: 91, name: 'Sciences cognitives' } ],
@@ -8476,7 +8476,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1uspc37012session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1uspc37012session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1uspc37012session01.730x412_q85_crop-scale.jpg',
@@ -8486,7 +8486,7 @@ export default {
     {
       id: 2037,
       key: 'UVSQ/113001/session01',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -8500,7 +8500,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/panorama_UVSQ_sept16_EG_980x200px72.jpg' } ],
       university_name: 'Université de Versailles Saint-Quentin-en-Yvelines (UVSQ)',
-      main_university: 
+      main_university:
       { id: 246,
         name: 'Université de Versailles Saint-Quentin-en-Yvelines (UVSQ)',
         code: 'UVSQ',
@@ -8510,7 +8510,7 @@ export default {
       title: 'Traitement médiatique du changement climatique : le niveau des mers',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 7, name: 'Communication' },
         { id: 61, name: 'Médias' } ],
@@ -8523,7 +8523,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/uvsq113001session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/uvsq113001session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/uvsq113001session01.730x412_q85_crop-scale.jpg',
@@ -8533,7 +8533,7 @@ export default {
     {
       id: 2882,
       key: 'course-v1:agrocampusouest+40002+session01',
-      universities: 
+      universities:
       [ { id: 113,
           name: 'Agreenium',
           code: 'Agreenium',
@@ -8547,7 +8547,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/agrocampusouest.jpg' } ],
       university_name: 'AgroCampus Ouest',
-      main_university: 
+      main_university:
       { id: 78,
         name: 'AGROCAMPUS OUEST',
         code: 'agrocampusouest',
@@ -8557,7 +8557,7 @@ export default {
       title: 'Santé des plantes : de l’observation au diagnostic',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 1, name: 'Agronomie et agriculture' },
         { id: 97, name: 'Sciences de la vie' } ],
@@ -8570,7 +8570,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1agrocampusouest40002session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1agrocampusouest40002session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1agrocampusouest40002session01.730x412_q85_crop-scale.jpg',
@@ -8580,7 +8580,7 @@ export default {
     {
       id: 2831,
       key: 'course-v1:CNFPT+87013+session01',
-      universities: 
+      universities:
       [ { id: 179,
           name: 'Centre national de la fonction publique territoriale (CNFPT)',
           code: 'CNFPT',
@@ -8588,7 +8588,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Bandeau_CNFPT_original.jpg' } ],
       university_name: 'Centre national de la fonction publique territoriale (CNFPT)',
-      main_university: 
+      main_university:
       { id: 179,
         name: 'Centre national de la fonction publique territoriale (CNFPT)',
         code: 'CNFPT',
@@ -8598,7 +8598,7 @@ export default {
       title: 'Le sens de l\'action publique',
       short_description: '',
       level: '',
-      subjects: [ { id: 76, name: 'Sciences Politiques' } ],
+      subjects:[ { id: 76, name: 'Sciences Politiques' } ],
       image_url: 'asset-v1:CNFPT+87013+session01+type@asset+block@wordcloud.jpg',
       start_date: '2017-10-02T08:00:00Z',
       end_date: '2017-11-19T22:00:00Z',
@@ -8608,7 +8608,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1cnfpt87013session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1cnfpt87013session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1cnfpt87013session01.730x412_q85_crop-scale.jpg',
@@ -8618,7 +8618,7 @@ export default {
     {
       id: 2584,
       key: 'course-v1:univ-toulouse+101001+session02',
-      universities: 
+      universities:
       [ { id: 188,
           name: 'Université Fédérale Toulouse Midi-Pyrénées',
           code: 'univ-toulouse',
@@ -8638,7 +8638,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/INP_Toulouse2_banni%C3%A8re.jpg' } ],
       university_name: 'Université Fédérale Toulouse Midi-Pyrénées',
-      main_university: 
+      main_university:
       { id: 188,
         name: 'Université Fédérale Toulouse Midi-Pyrénées',
         code: 'univ-toulouse',
@@ -8648,7 +8648,7 @@ export default {
       title: 'Systèmes embarqués et objets connectés - Démarche de conception',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 88, name: 'Sciences' },
         { id: 25, name: 'Enjeux de société' },
@@ -8664,7 +8664,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1univ-toulouse101001session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1univ-toulouse101001session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1univ-toulouse101001session02.730x412_q85_crop-scale.jpg',
@@ -8674,7 +8674,7 @@ export default {
     {
       id: 2843,
       key: 'course-v1:ENSCachan+20014+session02',
-      universities: 
+      universities:
       [ { id: 14,
           name: 'ENS Paris-Saclay',
           code: 'ENSCachan',
@@ -8682,7 +8682,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/enscachan.921fde30c904.jpg' } ],
       university_name: 'ENS Paris-Saclay',
-      main_university: 
+      main_university:
       { id: 14,
         name: 'ENS Paris-Saclay',
         code: 'ENSCachan',
@@ -8692,7 +8692,7 @@ export default {
       title: 'PCSC - Fabrication et caractérisation des composites',
       short_description: '',
       level: '',
-      subjects: [ { id: 103, name: 'Sciences pour l\'ingénieur' } ],
+      subjects:[ { id: 103, name: 'Sciences pour l\'ingénieur' } ],
       image_url: 'asset-v1:ENSCachan+20014+session02+type@asset+block@images_cours.png',
       start_date: '2017-09-29T00:30:00Z',
       end_date: '2018-01-12T23:50:00Z',
@@ -8702,7 +8702,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1enscachan20014session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1enscachan20014session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1enscachan20014session02.730x412_q85_crop-scale.jpg',
@@ -8712,7 +8712,7 @@ export default {
     {
       id: 2849,
       key: 'course-v1:ensam+022004+session02',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -8726,7 +8726,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Angers-2013-cour_ecole__etudiants_-_0613_M.jpg_1.jpeg' } ],
       university_name: 'Ecole Nationale Supérieure d’Arts et Métiers',
-      main_university: 
+      main_university:
       { id: 43,
         name: 'Ecole Nationale Supérieure d’Arts et Métiers',
         code: 'ensam',
@@ -8736,7 +8736,7 @@ export default {
       title: 'Socle en Mécanique -Session 2',
       short_description: '',
       level: '',
-      subjects: [ { id: 103, name: 'Sciences pour l\'ingénieur' } ],
+      subjects:[ { id: 103, name: 'Sciences pour l\'ingénieur' } ],
       image_url: 'asset-v1:ensam+022004+session02+type@asset+block@Vignette_Teaser_Meca.png',
       start_date: '2017-11-13T10:00:00Z',
       end_date: '2018-01-31T22:30:00Z',
@@ -8746,7 +8746,7 @@ export default {
       course_ended: false,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ensam022004session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ensam022004session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ensam022004session02.730x412_q85_crop-scale.jpg',
@@ -8756,7 +8756,7 @@ export default {
     {
       id: 2885,
       key: 'course-v1:ulb+44010+session01',
-      universities: 
+      universities:
       [ { id: 90,
           name: 'Université libre de Bruxelles (ULB)',
           code: 'ulb',
@@ -8764,7 +8764,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/ULB_baniere_980x200.jpg' } ],
       university_name: 'Université libre de Bruxelles (ULB)',
-      main_university: 
+      main_university:
       { id: 90,
         name: 'Université libre de Bruxelles (ULB)',
         code: 'ulb',
@@ -8774,7 +8774,7 @@ export default {
       title: 'Neurosciences : audition, langage et musique',
       short_description: '',
       level: '',
-      subjects: [ { id: 88, name: 'Sciences' } ],
+      subjects:[ { id: 88, name: 'Sciences' } ],
       image_url: 'asset-v1:ulb+44010+session01+type@asset+block@logo_G3_Neurosciences_720x411-bis.jpg',
       start_date: '2017-10-02T10:00:00Z',
       end_date: '2018-02-10T10:00:00Z',
@@ -8784,7 +8784,7 @@ export default {
       course_ended: false,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ulb44010session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ulb44010session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ulb44010session01.730x412_q85_crop-scale.jpg',
@@ -8794,7 +8794,7 @@ export default {
     {
       id: 2644,
       key: 'course-v1:umontpellier+08003+session02',
-      universities: 
+      universities:
       [ { id: 8,
           name: 'Université de Montpellier',
           code: 'umontpellier',
@@ -8802,7 +8802,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Photo-campus_rlrvHDS.png' } ],
       university_name: 'Université de Montpellier',
-      main_university: 
+      main_university:
       { id: 8,
         name: 'Université de Montpellier',
         code: 'umontpellier',
@@ -8812,7 +8812,7 @@ export default {
       title: 'Création d\'entreprises innovantes : de l\'idée à la start-up',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 31, name: 'Entrepreneuriat' },
         { id: 46, name: 'Innovation' } ],
       image_url: 'asset-v1:umontpellier+08003+session02+type@asset+block@vignette_FUN_S2.png',
@@ -8824,7 +8824,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1umontpellier08003session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1umontpellier08003session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1umontpellier08003session02.730x412_q85_crop-scale.jpg',
@@ -8834,7 +8834,7 @@ export default {
     {
       id: 2942,
       key: 'course-v1:MinesTelecom+04010+session04',
-      universities: 
+      universities:
       [ { id: 5,
           name: 'IMT',
           code: 'MinesTelecom',
@@ -8842,7 +8842,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/baniere_imt_EDX-02-02.jpg' } ],
       university_name: 'IMT',
-      main_university: 
+      main_university:
       { id: 5,
         name: 'IMT',
         code: 'MinesTelecom',
@@ -8852,7 +8852,7 @@ export default {
       title: 'Comprendre la 4G',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 82, name: 'Réseaux et télécommunications' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
@@ -8865,7 +8865,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 4,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1minestelecom04010session04.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1minestelecom04010session04.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1minestelecom04010session04.730x412_q85_crop-scale.jpg',
@@ -8875,7 +8875,7 @@ export default {
     {
       id: 2956,
       key: 'course-v1:CNFPT+87004+session04',
-      universities: 
+      universities:
       [ { id: 179,
           name: 'Centre national de la fonction publique territoriale (CNFPT)',
           code: 'CNFPT',
@@ -8883,7 +8883,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Bandeau_CNFPT_original.jpg' } ],
       university_name: 'Centre national de la fonction publique territoriale (CNFPT)',
-      main_university: 
+      main_university:
       { id: 179,
         name: 'Centre national de la fonction publique territoriale (CNFPT)',
         code: 'CNFPT',
@@ -8893,7 +8893,7 @@ export default {
       title: 'Les fondamentaux de la fonction publique territoriale',
       short_description: '',
       level: '',
-      subjects: [ { id: 55, name: 'Management' } ],
+      subjects:[ { id: 55, name: 'Management' } ],
       image_url: 'asset-v1:CNFPT+87004+session04+type@asset+block@teaser-2.png',
       start_date: '2017-11-13T09:00:00Z',
       end_date: '2018-01-28T22:30:00Z',
@@ -8903,7 +8903,7 @@ export default {
       course_ended: false,
       enrollment_ended: true,
       session_number: 4,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1cnfpt87004session04.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1cnfpt87004session04.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1cnfpt87004session04.730x412_q85_crop-scale.jpg',
@@ -8913,7 +8913,7 @@ export default {
     {
       id: 2968,
       key: 'course-v1:grenoblealpes+92008+session01bis',
-      universities: 
+      universities:
       [ { id: 201,
           name: 'Communauté Université Grenoble Alpes',
           code: 'grenoblealpes',
@@ -8921,7 +8921,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/campus_bu-001.jpg' } ],
       university_name: 'Communauté Université Grenoble Alpes',
-      main_university: 
+      main_university:
       { id: 201,
         name: 'Communauté Université Grenoble Alpes',
         code: 'grenoblealpes',
@@ -8931,7 +8931,7 @@ export default {
       title: 'Aide à la Décision Multicritère',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 25, name: 'Enjeux de société' },
         { id: 97, name: 'Sciences de la vie' },
         { id: 109, name: 'Vie de l\'entreprise' } ],
@@ -8944,7 +8944,7 @@ export default {
       course_ended: false,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1grenoblealpes92008session01bis.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1grenoblealpes92008session01bis.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1grenoblealpes92008session01bis.730x412_q85_crop-scale.jpg',
@@ -8954,7 +8954,7 @@ export default {
     {
       id: 2971,
       key: 'course-v1:UCA+107001+session01',
-      universities: 
+      universities:
       [ { id: 304,
           name: 'Université Côte d\'Azur',
           code: 'UCA',
@@ -8962,7 +8962,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/bandeau_UCA_980x200_tiO0zfJ.jpg' } ],
       university_name: 'Université Côte d\'Azur',
-      main_university: 
+      main_university:
       { id: 304,
         name: 'Université Côte d\'Azur',
         code: 'UCA',
@@ -8972,7 +8972,7 @@ export default {
       title: 'Python 3 : des fondamentaux aux concepts avancés du langage',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 64, name: 'Numérique, technologie' },
         { id: 112, name: 'Programmation' } ],
@@ -8985,7 +8985,7 @@ export default {
       course_ended: false,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1uca107001session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1uca107001session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1uca107001session01.730x412_q85_crop-scale.jpg',
@@ -8995,7 +8995,7 @@ export default {
     {
       id: 2769,
       key: 'course-v1:ubordeaux+28005+session01',
-      universities: 
+      universities:
       [ { id: 195,
           name: 'ComUE d’Aquitaine',
           code: 'cuea',
@@ -9009,7 +9009,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/UBx-980X200.jpg' } ],
       university_name: 'Université de Bordeaux',
-      main_university: 
+      main_university:
       { id: 52,
         name: 'Université de Bordeaux',
         code: 'ubordeaux',
@@ -9019,7 +9019,7 @@ export default {
       title: 'Apprendre le marketing autrement : la méthode du produit fil rouge 1',
       short_description: '',
       level: '',
-      subjects: [ { id: 31, name: 'Entrepreneuriat' } ],
+      subjects:[ { id: 31, name: 'Entrepreneuriat' } ],
       image_url: 'asset-v1:ubordeaux+28005+session01+type@asset+block@LOGO_PFR_-_MOOC_1_-_v2-test.png',
       start_date: '2017-10-02T10:00:00Z',
       end_date: '2017-12-09T23:30:00Z',
@@ -9029,7 +9029,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ubordeaux28005session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ubordeaux28005session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ubordeaux28005session01.730x412_q85_crop-scale.jpg',
@@ -9039,7 +9039,7 @@ export default {
     {
       id: 2533,
       key: 'course-v1:paris13+78001+session01',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -9053,7 +9053,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/exterieur_forum980x200px.jpg' } ],
       university_name: 'Université Paris 13',
-      main_university: 
+      main_university:
       { id: 198,
         name: 'Université Sorbonne Paris Cité',
         code: 'USPC',
@@ -9063,7 +9063,7 @@ export default {
       title: 'La physique: vive[z] l\'expérience !',
       short_description: '',
       level: '',
-      subjects: [ { id: 88, name: 'Sciences' }, { id: 73, name: 'Physique' } ],
+      subjects:[ { id: 88, name: 'Sciences' }, { id: 73, name: 'Physique' } ],
       image_url: 'asset-v1:paris13+78001+session01+type@asset+block@logo-MOOC.jpg',
       start_date: '2017-10-16T08:00:00Z',
       end_date: '2018-01-15T08:00:00Z',
@@ -9073,7 +9073,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1paris1378001session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1paris1378001session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1paris1378001session01.730x412_q85_crop-scale.jpg',
@@ -9083,7 +9083,7 @@ export default {
     {
       id: 2557,
       key: 'course-v1:SciencesPo+05009+session01',
-      universities: 
+      universities:
       [ { id: 6,
           name: 'Sciences Po.',
           code: 'SciencesPo',
@@ -9091,7 +9091,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/sciencespo.21764b4b23e5.jpg' } ],
       university_name: 'Sciences Po.',
-      main_university: 
+      main_university:
       { id: 6,
         name: 'Sciences Po.',
         code: 'SciencesPo',
@@ -9101,7 +9101,7 @@ export default {
       title: 'A la recherche du Grand Paris',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 100, name: 'Sciences humaines et sociales' },
         { id: 25, name: 'Enjeux de société' },
         { id: 37, name: 'Géographie' } ],
@@ -9114,7 +9114,7 @@ export default {
       course_ended: false,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1sciencespo05009session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1sciencespo05009session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1sciencespo05009session01.730x412_q85_crop-scale.jpg',
@@ -9124,7 +9124,7 @@ export default {
     {
       id: 2724,
       key: 'course-v1:UPSUD+42001+session08',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -9138,7 +9138,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/paris11.ea38002e63b9_1.jpg' } ],
       university_name: 'Université Paris-Sud',
-      main_university: 
+      main_university:
       { id: 39,
         name: 'Université Paris-Sud',
         code: 'UPSUD',
@@ -9148,7 +9148,7 @@ export default {
       title: 'Introduction à la statistique avec R V8',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 58, name: 'Mathématiques et statistiques' },
         { id: 67, name: 'Outils pour la recherche' } ],
@@ -9161,7 +9161,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 8,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1upsud42001session08.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1upsud42001session08.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1upsud42001session08.730x412_q85_crop-scale.jpg',
@@ -9171,7 +9171,7 @@ export default {
     {
       id: 2819,
       key: 'course-v1:uved+34007+session01',
-      universities: 
+      universities:
       [ { id: 33,
           name: 'Université Virtuelle Environnement et Développement durable (UVED) ',
           code: 'uved',
@@ -9179,7 +9179,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/unnamed_attachment_1.png' } ],
       university_name: 'Université Virtuelle Environnement et Développement durable (UVED) ',
-      main_university: 
+      main_university:
       { id: 33,
         name: 'Université Virtuelle Environnement et Développement durable (UVED) ',
         code: 'uved',
@@ -9189,7 +9189,7 @@ export default {
       title: 'Ingénierie écologique ',
       short_description: '',
       level: '',
-      subjects: [ { id: 34, name: 'Environnement' } ],
+      subjects:[ { id: 34, name: 'Environnement' } ],
       image_url: 'asset-v1:uved+34007+session01+type@asset+block@Miniature_01.png',
       start_date: '2017-10-23T12:00:00Z',
       end_date: '2017-12-11T23:00:00Z',
@@ -9199,7 +9199,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1uved34007session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1uved34007session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1uved34007session01.730x412_q85_crop-scale.jpg',
@@ -9209,7 +9209,7 @@ export default {
     {
       id: 2822,
       key: 'course-v1:CNAM+01024+session02',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -9223,7 +9223,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Le_Cnam_facade.jpg' } ],
       university_name: 'Le CNAM',
-      main_university: 
+      main_university:
       { id: 1,
         name: 'Le Cnam',
         code: 'CNAM',
@@ -9233,7 +9233,7 @@ export default {
       title: 'Les mots de la GRH : fondamentaux',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 55, name: 'Management' },
         { id: 100, name: 'Sciences humaines et sociales' },
         { id: 109, name: 'Vie de l\'entreprise' } ],
@@ -9246,7 +9246,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1cnam01024session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1cnam01024session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1cnam01024session02.730x412_q85_crop-scale.jpg',
@@ -9256,7 +9256,7 @@ export default {
     {
       id: 2825,
       key: 'course-v1:pasteur+96006+session01',
-      universities: 
+      universities:
       [ { id: 186,
           name: 'Institut Pasteur',
           code: 'pasteur',
@@ -9264,7 +9264,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Bandeau_IP_Buste_LP_980x200_V2.png' } ],
       university_name: 'Institut Pasteur',
-      main_university: 
+      main_university:
       { id: 186,
         name: 'Institut Pasteur',
         code: 'pasteur',
@@ -9274,7 +9274,7 @@ export default {
       title: 'Microbes and Brain',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 85, name: 'Santé' },
         { id: 25, name: 'Enjeux de société' },
         { id: 97, name: 'Sciences de la vie' } ],
@@ -9287,7 +9287,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1pasteur96006session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1pasteur96006session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1pasteur96006session01.730x412_q85_crop-scale.jpg',
@@ -9297,7 +9297,7 @@ export default {
     {
       id: 2578,
       key: 'course-v1:lorraine+30005+session01',
-      universities: 
+      universities:
       [ { id: 168,
           name: 'Université de Lorraine',
           code: 'lorraine',
@@ -9305,7 +9305,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Image_Universite_de_Lorraine.jpg' } ],
       university_name: 'Université de Lorraine',
-      main_university: 
+      main_university:
       { id: 168,
         name: 'Université de Lorraine',
         code: 'lorraine',
@@ -9315,7 +9315,7 @@ export default {
       title: 'Conduite de réunion en anglais',
       short_description: '',
       level: '',
-      subjects: [ { id: 49, name: 'Langues' } ],
+      subjects:[ { id: 49, name: 'Langues' } ],
       image_url: 'asset-v1:lorraine+30005+session01+type@asset+block@image-du-cours.png',
       start_date: '2017-11-06T06:00:00Z',
       end_date: '2017-12-19T21:00:00Z',
@@ -9325,7 +9325,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1lorraine30005session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1lorraine30005session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1lorraine30005session01.730x412_q85_crop-scale.jpg',
@@ -9335,7 +9335,7 @@ export default {
     {
       id: 2840,
       key: 'course-v1:grenoblealpes+92004+session04',
-      universities: 
+      universities:
       [ { id: 201,
           name: 'Communauté Université Grenoble Alpes',
           code: 'grenoblealpes',
@@ -9343,7 +9343,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/campus_bu-001.jpg' } ],
       university_name: 'Communauté Université Grenoble Alpes',
-      main_university: 
+      main_university:
       { id: 201,
         name: 'Communauté Université Grenoble Alpes',
         code: 'grenoblealpes',
@@ -9353,7 +9353,7 @@ export default {
       title: 'Innovation et société',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 31, name: 'Entrepreneuriat' },
         { id: 25, name: 'Enjeux de société' },
         { id: 46, name: 'Innovation' } ],
@@ -9366,7 +9366,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 4,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1grenoblealpes92004session04.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1grenoblealpes92004session04.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1grenoblealpes92004session04.730x412_q85_crop-scale.jpg',
@@ -9376,7 +9376,7 @@ export default {
     {
       id: 2599,
       key: 'course-v1:MinesTelecom+04016+session02',
-      universities: 
+      universities:
       [ { id: 5,
           name: 'IMT',
           code: 'MinesTelecom',
@@ -9384,7 +9384,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/baniere_imt_EDX-02-02.jpg' } ],
       university_name: 'IMT',
-      main_university: 
+      main_university:
       { id: 5,
         name: 'IMT',
         code: 'MinesTelecom',
@@ -9394,7 +9394,7 @@ export default {
       title: 'Comprendre l’économie collaborative',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 22, name: 'Économie et finance' },
         { id: 25, name: 'Enjeux de société' },
         { id: 64, name: 'Numérique, technologie' } ],
@@ -9407,7 +9407,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1minestelecom04016session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1minestelecom04016session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1minestelecom04016session02.730x412_q85_crop-scale.jpg',
@@ -9417,7 +9417,7 @@ export default {
     {
       id: 2626,
       key: 'course-v1:Paris1+16007+session01',
-      universities: 
+      universities:
       [ { id: 13,
           name: 'Université Paris 1 Panthéon-Sorbonne',
           code: 'Paris1',
@@ -9425,7 +9425,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/banniere_paris1-pantheon-sorbonne_980x200.jpg' } ],
       university_name: 'Université Paris 1 Panthéon-Sorbonne',
-      main_university: 
+      main_university:
       { id: 13,
         name: 'Université Paris 1 Panthéon-Sorbonne',
         code: 'Paris1',
@@ -9435,7 +9435,7 @@ export default {
       title: 'Ressources naturelles et développement des territoires en Afrique',
       short_description: '',
       level: '',
-      subjects: [ { id: 37, name: 'Géographie' } ],
+      subjects:[ { id: 37, name: 'Géographie' } ],
       image_url: 'asset-v1:Paris1+16007+session01+type@asset+block@MOOC_Afrique-vignette_de_previsualisation.png',
       start_date: '2017-10-05T08:00:00Z',
       end_date: '2017-11-16T23:00:00Z',
@@ -9445,7 +9445,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1paris116007session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1paris116007session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1paris116007session01.730x412_q85_crop-scale.jpg',
@@ -9455,7 +9455,7 @@ export default {
     {
       id: 2891,
       key: 'course-v1:ulb+44001+session04',
-      universities: 
+      universities:
       [ { id: 90,
           name: 'Université libre de Bruxelles (ULB)',
           code: 'ulb',
@@ -9463,7 +9463,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/ULB_baniere_980x200.jpg' } ],
       university_name: 'Université libre de Bruxelles (ULB)',
-      main_university: 
+      main_university:
       { id: 90,
         name: 'Université libre de Bruxelles (ULB)',
         code: 'ulb',
@@ -9473,7 +9473,7 @@ export default {
       title: 'L\'anglais pour tous - Spice up Your English',
       short_description: '',
       level: '',
-      subjects: [ { id: 49, name: 'Langues' } ],
+      subjects:[ { id: 49, name: 'Langues' } ],
       image_url: 'asset-v1:ulb+44001+session04+type@asset+block@images_course_small.jpg',
       start_date: '2017-10-23T12:00:00Z',
       end_date: '2018-01-26T15:00:00Z',
@@ -9483,7 +9483,7 @@ export default {
       course_ended: false,
       enrollment_ended: true,
       session_number: 4,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ulb44001session04.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ulb44001session04.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ulb44001session04.730x412_q85_crop-scale.jpg',
@@ -9493,7 +9493,7 @@ export default {
     {
       id: 2647,
       key: 'course-v1:CNAM+01007+session02',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -9507,7 +9507,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Le_Cnam_facade.jpg' } ],
       university_name: 'Le CNAM',
-      main_university: 
+      main_university:
       { id: 1,
         name: 'Le Cnam',
         code: 'CNAM',
@@ -9517,7 +9517,7 @@ export default {
       title: 'Désir d’entreprendre',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 31, name: 'Entrepreneuriat' },
         { id: 55, name: 'Management' },
         { id: 109, name: 'Vie de l\'entreprise' } ],
@@ -9530,7 +9530,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1cnam01007session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1cnam01007session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1cnam01007session02.730x412_q85_crop-scale.jpg',
@@ -9540,7 +9540,7 @@ export default {
     {
       id: 2461,
       key: 'course-v1:univartois+35001+session03',
-      universities: 
+      universities:
       [ { id: 225,
           name: 'ComUE Lille Nord de France',
           code: 'cuelnf',
@@ -9554,7 +9554,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/banniere.jpg' } ],
       university_name: 'Université d\'Artois',
-      main_university: 
+      main_university:
       { id: 123,
         name: 'Université d\'Artois',
         code: 'univartois',
@@ -9564,7 +9564,7 @@ export default {
       title: 'Fantasy, de l\'Angleterre victorienne au Trône de fer',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 13, name: 'Cultures et civilisations' },
         { id: 52, name: 'Lettres' } ],
       image_url: 'asset-v1:univartois+35001+session03+type@asset+block@course_image_MOOC_Fantasy_V3.jpg',
@@ -9576,7 +9576,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1univartois35001session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1univartois35001session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1univartois35001session03.730x412_q85_crop-scale.jpg',
@@ -9586,7 +9586,7 @@ export default {
     {
       id: 2732,
       key: 'course-v1:unicaen+48001+session02',
-      universities: 
+      universities:
       [ { id: 204,
           name: 'Université de Caen',
           code: 'unicaen',
@@ -9594,7 +9594,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/banniere-unicaen.png' } ],
       university_name: 'Université de Caen',
-      main_university: 
+      main_university:
       { id: 204,
         name: 'Université de Caen',
         code: 'unicaen',
@@ -9604,7 +9604,7 @@ export default {
       title: 'MOOC Former et développer les compétences',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 55, name: 'Management' },
         { id: 109, name: 'Vie de l\'entreprise' } ],
@@ -9617,7 +9617,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1unicaen48001session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1unicaen48001session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1unicaen48001session02.730x412_q85_crop-scale.jpg',
@@ -9627,7 +9627,7 @@ export default {
     {
       id: 2736,
       key: 'course-v1:inria+41011+session02',
-      universities: 
+      universities:
       [ { id: 42,
           name: 'Inria',
           code: 'inria',
@@ -9635,7 +9635,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/bandeau_MoocInria.0124-121.jpg' } ],
       university_name: 'Inria',
-      main_university: 
+      main_university:
       { id: 42,
         name: 'Inria',
         code: 'inria',
@@ -9645,7 +9645,7 @@ export default {
       title: 'Internet Measurements: a Hands-on Introduction',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 64, name: 'Numérique, technologie' },
         { id: 82, name: 'Réseaux et télécommunications' } ],
@@ -9658,7 +9658,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1inria41011session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1inria41011session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1inria41011session02.730x412_q85_crop-scale.jpg',
@@ -9668,7 +9668,7 @@ export default {
     {
       id: 2738,
       key: 'course-v1:inria+41013+session03',
-      universities: 
+      universities:
       [ { id: 42,
           name: 'Inria',
           code: 'inria',
@@ -9676,7 +9676,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/bandeau_MoocInria.0124-121.jpg' } ],
       university_name: 'Inria',
-      main_university: 
+      main_university:
       { id: 42,
         name: 'Inria',
         code: 'inria',
@@ -9686,7 +9686,7 @@ export default {
       title: 'Introduction to a Web of Linked Data',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 64, name: 'Numérique, technologie' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
@@ -9699,7 +9699,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1inria41013session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1inria41013session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1inria41013session03.730x412_q85_crop-scale.jpg',
@@ -9709,7 +9709,7 @@ export default {
     {
       id: 2740,
       key: 'course-v1:UVHC+23002+session01',
-      universities: 
+      universities:
       [ { id: 225,
           name: 'ComUE Lille Nord de France',
           code: 'cuelnf',
@@ -9723,7 +9723,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/bandeauUVHC.jpg' } ],
       university_name: 'Université de Valenciennes et du Hainaut-Cambrésis (UVHC)',
-      main_university: 
+      main_university:
       { id: 231,
         name: 'Université de Valenciennes et du Hainaut-Cambrésis (UVHC)',
         code: 'UVHC',
@@ -9733,7 +9733,7 @@ export default {
       title: 'Droit comparé des contrats : Allemagne - France',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 19, name: 'Droit et juridique' },
         { id: 109, name: 'Vie de l\'entreprise' } ],
       image_url: 'asset-v1:UVHC+23002+session01+type@asset+block@droit-contrat_france-allemagne.png',
@@ -9745,7 +9745,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1uvhc23002session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1uvhc23002session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1uvhc23002session01.730x412_q85_crop-scale.jpg',
@@ -9755,7 +9755,7 @@ export default {
     {
       id: 2744,
       key: 'course-v1:lyon3+26002+session03',
-      universities: 
+      universities:
       [ { id: 172,
           name: 'Université de Lyon',
           code: 'universite-lyon',
@@ -9769,7 +9769,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/JeanMoulin1.jpg' } ],
       university_name: 'Université Jean Moulin Lyon 3',
-      main_university: 
+      main_university:
       { id: 81,
         name: 'Université Jean Moulin Lyon 3',
         code: 'lyon3',
@@ -9779,7 +9779,7 @@ export default {
       title: 'La Francophonie : essence culturelle, nécessité politique 2017',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 100, name: 'Sciences humaines et sociales' },
         { id: 13, name: 'Cultures et civilisations' },
         { id: 25, name: 'Enjeux de société' },
@@ -9794,7 +9794,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1lyon326002session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1lyon326002session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1lyon326002session03.730x412_q85_crop-scale.jpg',
@@ -9804,7 +9804,7 @@ export default {
     {
       id: 2500,
       key: 'course-v1:univnantes+31001+session03',
-      universities: 
+      universities:
       [ { id: 249,
           name: 'Université Bretagne Loire',
           code: 'u-bretagneloire',
@@ -9818,7 +9818,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/photo-illustration-un_copie.png' } ],
       university_name: 'Université de Nantes',
-      main_university: 
+      main_university:
       { id: 72,
         name: 'Université de Nantes',
         code: 'univnantes',
@@ -9828,7 +9828,7 @@ export default {
       title: 'Paroles de FLE {Français Langue Etrangère} niveau B2',
       short_description: '',
       level: '',
-      subjects: [ { id: 49, name: 'Langues' } ],
+      subjects:[ { id: 49, name: 'Langues' } ],
       image_url: 'asset-v1:univnantes+31001+session03+type@asset+block@pano_image2.jpg',
       start_date: '2017-10-16T07:00:00Z',
       end_date: '2017-12-18T23:00:00Z',
@@ -9838,7 +9838,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1univnantes31001session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1univnantes31001session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1univnantes31001session03.730x412_q85_crop-scale.jpg',
@@ -9848,7 +9848,7 @@ export default {
     {
       id: 2793,
       key: 'course-v1:devinci+118001+session02',
-      universities: 
+      universities:
       [ { id: 258,
           name: 'Ecole Supérieure d\'Ingénieurs Léonard de Vinci',
           code: 'devinci',
@@ -9856,7 +9856,7 @@ export default {
           detail_page_enabled: false,
           banner: 'https://www.fun-mooc.fr/media/universities/cover_pulv.jpg' } ],
       university_name: 'ESILV',
-      main_university: 
+      main_university:
       { id: 258,
         name: 'Ecole Supérieure d\'Ingénieurs Léonard de Vinci',
         code: 'devinci',
@@ -9866,7 +9866,7 @@ export default {
       title: 'Le risque de crédit : des modèles au pilotage de la banque',
       short_description: '',
       level: '',
-      subjects: [ { id: 22, name: 'Économie et finance' } ],
+      subjects:[ { id: 22, name: 'Économie et finance' } ],
       image_url: 'asset-v1:devinci+118001+session02+type@asset+block@covermooc_pulv.jpg',
       start_date: '2017-09-25T09:00:00Z',
       end_date: '2017-12-26T09:00:00Z',
@@ -9876,7 +9876,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1devinci118001session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1devinci118001session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1devinci118001session02.730x412_q85_crop-scale.jpg',
@@ -9886,7 +9886,7 @@ export default {
     {
       id: 2545,
       key: 'course-v1:MinesTelecom+04003+session06',
-      universities: 
+      universities:
       [ { id: 5,
           name: 'IMT',
           code: 'MinesTelecom',
@@ -9894,7 +9894,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/baniere_imt_EDX-02-02.jpg' } ],
       university_name: 'IMT',
-      main_university: 
+      main_university:
       { id: 5,
         name: 'IMT',
         code: 'MinesTelecom',
@@ -9904,7 +9904,7 @@ export default {
       title: 'Principes des réseaux de données',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 82, name: 'Réseaux et télécommunications' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
@@ -9917,7 +9917,7 @@ export default {
       course_ended: false,
       enrollment_ended: true,
       session_number: 6,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1minestelecom04003session06.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1minestelecom04003session06.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1minestelecom04003session06.730x412_q85_crop-scale.jpg',
@@ -9927,7 +9927,7 @@ export default {
     {
       id: 2554,
       key: 'course-v1:ubordeaux+28002+session01',
-      universities: 
+      universities:
       [ { id: 195,
           name: 'ComUE d’Aquitaine',
           code: 'cuea',
@@ -9941,7 +9941,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/UBx-980X200.jpg' } ],
       university_name: 'Université de Bordeaux',
-      main_university: 
+      main_university:
       { id: 52,
         name: 'Université de Bordeaux',
         code: 'ubordeaux',
@@ -9951,7 +9951,7 @@ export default {
       title: 'De la créativité à l\'innovation',
       short_description: '',
       level: '',
-      subjects: [ { id: 100, name: 'Sciences humaines et sociales' } ],
+      subjects:[ { id: 100, name: 'Sciences humaines et sociales' } ],
       image_url: 'asset-v1:ubordeaux+28002+session01+type@asset+block@logo.png',
       start_date: '2017-10-26T13:00:00Z',
       end_date: '2018-01-04T23:30:00Z',
@@ -9961,7 +9961,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ubordeaux28002session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ubordeaux28002session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ubordeaux28002session01.730x412_q85_crop-scale.jpg',
@@ -9971,7 +9971,7 @@ export default {
     {
       id: 2927,
       key: 'course-v1:itii+119001+session03',
-      universities: 
+      universities:
       [ { id: 255,
           name: 'La conférence des ITII',
           code: 'itii',
@@ -9979,7 +9979,7 @@ export default {
           detail_page_enabled: false,
           banner: null } ],
       university_name: 'La conférence des ITII',
-      main_university: 
+      main_university:
       { id: 255,
         name: 'La conférence des ITII',
         code: 'itii',
@@ -9989,7 +9989,7 @@ export default {
       title: 'Devenir ingénieur, c\'est possible! - session 3',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 58, name: 'Mathématiques et statistiques' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
@@ -10002,7 +10002,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1itii119001session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1itii119001session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1itii119001session03.730x412_q85_crop-scale.jpg',
@@ -10012,7 +10012,7 @@ export default {
     {
       id: 2772,
       key: 'course-v1:UPSUD+42004+session02',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -10026,7 +10026,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/paris11.ea38002e63b9_1.jpg' } ],
       university_name: 'Université Paris-Sud',
-      main_university: 
+      main_university:
       { id: 39,
         name: 'Université Paris-Sud',
         code: 'UPSUD',
@@ -10036,7 +10036,7 @@ export default {
       title: 'Comprendre les addictions',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 85, name: 'Santé' },
         { id: 88, name: 'Sciences' },
         { id: 97, name: 'Sciences de la vie' } ],
@@ -10049,7 +10049,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1upsud42004session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1upsud42004session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1upsud42004session02.730x412_q85_crop-scale.jpg',
@@ -10059,7 +10059,7 @@ export default {
     {
       id: 2566,
       key: 'course-v1:grenoblealpes+92006+session01',
-      universities: 
+      universities:
       [ { id: 201,
           name: 'Communauté Université Grenoble Alpes',
           code: 'grenoblealpes',
@@ -10067,7 +10067,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/campus_bu-001.jpg' } ],
       university_name: 'Communauté Université Grenoble Alpes',
-      main_university: 
+      main_university:
       { id: 201,
         name: 'Communauté Université Grenoble Alpes',
         code: 'grenoblealpes',
@@ -10077,7 +10077,7 @@ export default {
       title: 'Fun Walking for Golden Ageing',
       short_description: '',
       level: '',
-      subjects: [ { id: 85, name: 'Santé' } ],
+      subjects:[ { id: 85, name: 'Santé' } ],
       image_url: 'asset-v1:grenoblealpes+92006+session01+type@asset+block@FW4GA-Photo-730x411.png',
       start_date: '2017-05-02T12:00:00Z',
       end_date: '2017-07-17T12:00:00Z',
@@ -10087,7 +10087,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1grenoblealpes92006session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1grenoblealpes92006session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1grenoblealpes92006session01.730x412_q85_crop-scale.jpg',
@@ -10097,7 +10097,7 @@ export default {
     {
       id: 3079,
       key: 'course-v1:eclyon+109001+session02',
-      universities: 
+      universities:
       [ { id: 172,
           name: 'Université de Lyon',
           code: 'universite-lyon',
@@ -10111,7 +10111,7 @@ export default {
           detail_page_enabled: true,
           banner: null } ],
       university_name: 'Ecole Centrale Lyon',
-      main_university: 
+      main_university:
       { id: 234,
         name: 'Ecole Centrale Lyon',
         code: 'eclyon',
@@ -10121,7 +10121,7 @@ export default {
       title: 'Concevoir un emballage responsable (ECORESP)',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 22, name: 'Économie et finance' },
         { id: 34, name: 'Environnement' },
         { id: 115, name: 'Développement durable' } ],
@@ -10134,7 +10134,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1eclyon109001session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1eclyon109001session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1eclyon109001session02.730x412_q85_crop-scale.jpg',
@@ -10144,7 +10144,7 @@ export default {
     {
       id: 2828,
       key: 'course-v1:CNAM+01022+session02',
-      universities: 
+      universities:
       [ { id: 1,
           name: 'Le Cnam',
           code: 'CNAM',
@@ -10152,7 +10152,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Le_Cnam_facade.jpg' } ],
       university_name: 'Le CNAM',
-      main_university: 
+      main_university:
       { id: 1,
         name: 'Le Cnam',
         code: 'CNAM',
@@ -10162,7 +10162,7 @@ export default {
       title: 'Droit européen du travail',
       short_description: '',
       level: '',
-      subjects: [ { id: 19, name: 'Droit et juridique' } ],
+      subjects:[ { id: 19, name: 'Droit et juridique' } ],
       image_url: 'asset-v1:CNAM+01022+session02+type@asset+block@image_course.png',
       start_date: '2017-10-30T10:00:00Z',
       end_date: '2017-12-10T23:00:00Z',
@@ -10172,7 +10172,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1cnam01022session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1cnam01022session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1cnam01022session02.730x412_q85_crop-scale.jpg',
@@ -10182,7 +10182,7 @@ export default {
     {
       id: 2837,
       key: 'course-v1:inria+41010+session02',
-      universities: 
+      universities:
       [ { id: 42,
           name: 'Inria',
           code: 'inria',
@@ -10190,7 +10190,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/bandeau_MoocInria.0124-121.jpg' } ],
       university_name: 'Inria',
-      main_university: 
+      main_university:
       { id: 42,
         name: 'Inria',
         code: 'inria',
@@ -10200,7 +10200,7 @@ export default {
       title: 'Programmation objet immersive en Pharo / Live Object Programming in Pharo',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 64, name: 'Numérique, technologie' },
         { id: 112, name: 'Programmation' } ],
@@ -10213,7 +10213,7 @@ export default {
       course_ended: false,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1inria41010session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1inria41010session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1inria41010session02.730x412_q85_crop-scale.jpg',
@@ -10223,7 +10223,7 @@ export default {
     {
       id: 2879,
       key: 'course-v1:psl+47002+session02',
-      universities: 
+      universities:
       [ { id: 58,
           name: 'Paris Sciences Lettres',
           code: 'psl',
@@ -10231,7 +10231,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/baniere-PSL-2.jpg' } ],
       university_name: 'Paris Sciences Lettres',
-      main_university: 
+      main_university:
       { id: 58,
         name: 'Paris Sciences Lettres',
         code: 'psl',
@@ -10241,7 +10241,7 @@ export default {
       title: 'Les fondamentaux de la gestion des risques financiers',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 22, name: 'Économie et finance' },
         { id: 31, name: 'Entrepreneuriat' },
         { id: 55, name: 'Management' },
@@ -10255,7 +10255,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1psl47002session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1psl47002session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1psl47002session02.730x412_q85_crop-scale.jpg',
@@ -10265,7 +10265,7 @@ export default {
     {
       id: 2671,
       key: 'course-v1:univ-fcomte+89002+session01',
-      universities: 
+      universities:
       [ { id: 175,
           name: 'Université de Franche-Comté',
           code: 'univ-fcomte',
@@ -10279,7 +10279,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Image_page_de_garde_Funmooc_Ubfc.png' } ],
       university_name: 'Université de Franche-Comté',
-      main_university: 
+      main_university:
       { id: 175,
         name: 'Université de Franche-Comté',
         code: 'univ-fcomte',
@@ -10289,7 +10289,7 @@ export default {
       title: 'Galaxie Tennis',
       short_description: '',
       level: '',
-      subjects: [ { id: 106, name: 'Sport' } ],
+      subjects:[ { id: 106, name: 'Sport' } ],
       image_url: 'asset-v1:univ-fcomte+89002+session01+type@asset+block@Gtennis.jpg',
       start_date: '2017-09-15T12:00:00Z',
       end_date: '2017-12-30T23:30:00Z',
@@ -10299,7 +10299,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1univ-fcomte89002session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1univ-fcomte89002session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1univ-fcomte89002session01.730x412_q85_crop-scale.jpg',
@@ -10309,7 +10309,7 @@ export default {
     {
       id: 2945,
       key: 'course-v1:IFOCA+85001+session04',
-      universities: 
+      universities:
       [ { id: 171,
           name: 'IFOCA',
           code: 'IFOCA',
@@ -10317,7 +10317,7 @@ export default {
           detail_page_enabled: false,
           banner: null } ],
       university_name: 'IFOCA',
-      main_university: 
+      main_university:
       { id: 171,
         name: 'IFOCA',
         code: 'IFOCA',
@@ -10327,7 +10327,7 @@ export default {
       title: 'À la découverte du Caoutchouc : un matériau remarquable',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 4, name: 'Chimie' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
@@ -10340,7 +10340,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 4,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ifoca85001session04.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ifoca85001session04.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ifoca85001session04.730x412_q85_crop-scale.jpg',
@@ -10350,7 +10350,7 @@ export default {
     {
       id: 2959,
       key: 'course-v1:inria+41009+session03',
-      universities: 
+      universities:
       [ { id: 42,
           name: 'Inria',
           code: 'inria',
@@ -10358,7 +10358,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/bandeau_MoocInria.0124-121.jpg' } ],
       university_name: 'Inria',
-      main_university: 
+      main_university:
       { id: 42,
         name: 'Inria',
         code: 'inria',
@@ -10368,7 +10368,7 @@ export default {
       title: 'Défis technologiques des villes intelligentes participatives',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 115, name: 'Développement durable' },
         { id: 25, name: 'Enjeux de société' },
@@ -10383,7 +10383,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1inria41009session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1inria41009session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1inria41009session03.730x412_q85_crop-scale.jpg',
@@ -10393,7 +10393,7 @@ export default {
     {
       id: 2796,
       key: 'course-v1:lorraine+30007+session01',
-      universities: 
+      universities:
       [ { id: 168,
           name: 'Université de Lorraine',
           code: 'lorraine',
@@ -10401,7 +10401,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Image_Universite_de_Lorraine.jpg' } ],
       university_name: 'Université de Lorraine',
-      main_university: 
+      main_university:
       { id: 168,
         name: 'Université de Lorraine',
         code: 'lorraine',
@@ -10411,7 +10411,7 @@ export default {
       title: 'Gènes sans gêne',
       short_description: '',
       level: '',
-      subjects: [ { id: 88, name: 'Sciences' } ],
+      subjects:[ { id: 88, name: 'Sciences' } ],
       image_url: 'asset-v1:lorraine+30007+session01+type@asset+block@VignetteCours.png',
       start_date: '2017-09-18T06:00:00Z',
       end_date: '2017-11-06T21:00:00Z',
@@ -10421,7 +10421,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1lorraine30007session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1lorraine30007session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1lorraine30007session01.730x412_q85_crop-scale.jpg',
@@ -10431,7 +10431,7 @@ export default {
     {
       id: 2953,
       key: 'course-v1:USPC+37003+session02',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -10439,7 +10439,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Recherche_montaGabirelle-3.jpg' } ],
       university_name: 'Université Sorbonne Paris Cité',
-      main_university: 
+      main_university:
       { id: 198,
         name: 'Université Sorbonne Paris Cité',
         code: 'USPC',
@@ -10449,7 +10449,7 @@ export default {
       title: 'Éducation par la recherche : climatologie à l\'École II',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 34, name: 'Environnement' },
         { id: 64, name: 'Numérique, technologie' },
@@ -10463,7 +10463,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1uspc37003session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1uspc37003session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1uspc37003session02.730x412_q85_crop-scale.jpg',
@@ -10473,7 +10473,7 @@ export default {
     {
       id: 2623,
       key: 'course-v1:amu+38008+session01',
-      universities: 
+      universities:
       [ { id: 118,
           name: 'Aix-Marseille Université',
           code: 'amu',
@@ -10481,7 +10481,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Aix-Marseille-BANDEAU.jpg' } ],
       university_name: 'Aix-Marseille Université',
-      main_university: 
+      main_university:
       { id: 118,
         name: 'Aix-Marseille Université',
         code: 'amu',
@@ -10491,7 +10491,7 @@ export default {
       title: 'Cellular neurophysiology: how neurons communicate',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 97, name: 'Sciences de la vie' } ],
       image_url: 'asset-v1:amu+38008+session01+type@asset+block@MOOC-AMU-Neurophysiologie-2.png',
@@ -10503,7 +10503,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1amu38008session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1amu38008session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1amu38008session01.730x412_q85_crop-scale.jpg',
@@ -10513,7 +10513,7 @@ export default {
     {
       id: 2903,
       key: 'course-v1:ENSCachan+20001+session04',
-      universities: 
+      universities:
       [ { id: 14,
           name: 'ENS Paris-Saclay',
           code: 'ENSCachan',
@@ -10521,7 +10521,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/enscachan.921fde30c904.jpg' } ],
       university_name: 'ENS Paris-Saclay',
-      main_university: 
+      main_university:
       { id: 14,
         name: 'ENS Paris-Saclay',
         code: 'ENSCachan',
@@ -10531,7 +10531,7 @@ export default {
       title: 'PDM : Pratiques du Dimensionnement en Mécanique - Partie 1',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 73, name: 'Physique' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
@@ -10544,7 +10544,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 4,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1enscachan20001session04.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1enscachan20001session04.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1enscachan20001session04.730x412_q85_crop-scale.jpg',
@@ -10554,7 +10554,7 @@ export default {
     {
       id: 2485,
       key: 'course-v1:ulg+108003+session01',
-      universities: 
+      universities:
       [ { id: 264,
           name: 'Université de Liège',
           code: 'ulg',
@@ -10562,7 +10562,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/bandeauULg1.png' } ],
       university_name: 'Université de Liège',
-      main_university: 
+      main_university:
       { id: 264,
         name: 'Université de Liège',
         code: 'ulg',
@@ -10572,7 +10572,7 @@ export default {
       title: 'Migrations Internationales : Comment les mobilités transforment les sociétés ?',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 25, name: 'Enjeux de société' },
         { id: 37, name: 'Géographie' },
@@ -10587,7 +10587,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ulg108003session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ulg108003session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ulg108003session01.730x412_q85_crop-scale.jpg',
@@ -10597,7 +10597,7 @@ export default {
     {
       id: 2491,
       key: 'course-v1:ubordeaux+28001+session04',
-      universities: 
+      universities:
       [ { id: 195,
           name: 'ComUE d’Aquitaine',
           code: 'cuea',
@@ -10611,7 +10611,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/UBx-980X200.jpg' } ],
       university_name: 'Université de Bordeaux',
-      main_university: 
+      main_university:
       { id: 52,
         name: 'Université de Bordeaux',
         code: 'ubordeaux',
@@ -10621,7 +10621,7 @@ export default {
       title: 'Introduction à l\'économie de l\'innovation',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 22, name: 'Économie et finance' },
         { id: 25, name: 'Enjeux de société' },
         { id: 46, name: 'Innovation' } ],
@@ -10634,7 +10634,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 4,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ubordeaux28001session04.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ubordeaux28001session04.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ubordeaux28001session04.730x412_q85_crop-scale.jpg',
@@ -10644,7 +10644,7 @@ export default {
     {
       id: 2536,
       key: 'course-v1:dauphine+125001+session01',
-      universities: 
+      universities:
       [ { id: 313,
           name: 'Université Paris-Dauphine ',
           code: 'dauphine',
@@ -10652,7 +10652,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/illustration_dauphine_980x200.png' } ],
       university_name: 'Université Paris-Dauphine ',
-      main_university: 
+      main_university:
       { id: 313,
         name: 'Université Paris-Dauphine ',
         code: 'dauphine',
@@ -10662,7 +10662,7 @@ export default {
       title: 'Introduction aux méthodes d’évaluation d’impact des politiques publiques',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 22, name: 'Économie et finance' },
         { id: 88, name: 'Sciences' },
         { id: 58, name: 'Mathématiques et statistiques' } ],
@@ -10675,7 +10675,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1dauphine125001session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1dauphine125001session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1dauphine125001session01.730x412_q85_crop-scale.jpg',
@@ -10685,7 +10685,7 @@ export default {
     {
       id: 2271,
       key: 'ucarthage/115001/session01',
-      universities: 
+      universities:
       [ { id: 267,
           name: 'Université de Carthage',
           code: 'ucarthage',
@@ -10693,7 +10693,7 @@ export default {
           detail_page_enabled: false,
           banner: null } ],
       university_name: 'Université de Carthage',
-      main_university: 
+      main_university:
       { id: 267,
         name: 'Université de Carthage',
         code: 'ucarthage',
@@ -10703,7 +10703,7 @@ export default {
       title: 'L\'essentiel pour maîtriser Linux',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 64, name: 'Numérique, technologie' },
         { id: 112, name: 'Programmation' } ],
@@ -10716,7 +10716,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/ucarthage115001session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/ucarthage115001session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/ucarthage115001session01.730x412_q85_crop-scale.jpg',
@@ -10726,7 +10726,7 @@ export default {
     {
       id: 2760,
       key: 'course-v1:CNFPT+87011+session01',
-      universities: 
+      universities:
       [ { id: 179,
           name: 'Centre national de la fonction publique territoriale (CNFPT)',
           code: 'CNFPT',
@@ -10734,7 +10734,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Bandeau_CNFPT_original.jpg' } ],
       university_name: 'Centre national de la fonction publique territoriale (CNFPT)',
-      main_university: 
+      main_university:
       { id: 179,
         name: 'Centre national de la fonction publique territoriale (CNFPT)',
         code: 'CNFPT',
@@ -10744,7 +10744,7 @@ export default {
       title: 'Les fondamentaux des finances locales',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 22, name: 'Économie et finance' },
         { id: 25, name: 'Enjeux de société' } ],
       image_url: 'asset-v1:CNFPT+87011+session01+type@asset+block@Image.png',
@@ -10756,7 +10756,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1cnfpt87011session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1cnfpt87011session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1cnfpt87011session01.730x412_q85_crop-scale.jpg',
@@ -10766,7 +10766,7 @@ export default {
     {
       id: 2064,
       key: 'animafac-cnous/45001S03/session03',
-      universities: 
+      universities:
       [ { id: 49,
           name: 'Animafac-Cnous',
           code: 'animafac-cnous',
@@ -10774,7 +10774,7 @@ export default {
           detail_page_enabled: false,
           banner: null } ],
       university_name: 'Animafac-CNOUS',
-      main_university: 
+      main_university:
       { id: 49,
         name: 'Animafac-Cnous',
         code: 'animafac-cnous',
@@ -10784,7 +10784,7 @@ export default {
       title: 'Créer et développer son association étudiante',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 31, name: 'Entrepreneuriat' },
         { id: 55, name: 'Management' } ],
@@ -10797,7 +10797,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/animafac-cnous45001s03session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/animafac-cnous45001s03session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/animafac-cnous45001s03session03.730x412_q85_crop-scale.jpg',
@@ -10807,7 +10807,7 @@ export default {
     {
       id: 2912,
       key: 'course-v1:CNFPT+87006+session02',
-      universities: 
+      universities:
       [ { id: 179,
           name: 'Centre national de la fonction publique territoriale (CNFPT)',
           code: 'CNFPT',
@@ -10815,7 +10815,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Bandeau_CNFPT_original.jpg' } ],
       university_name: 'Centre national de la fonction publique territoriale (CNFPT)',
-      main_university: 
+      main_university:
       { id: 179,
         name: 'Centre national de la fonction publique territoriale (CNFPT)',
         code: 'CNFPT',
@@ -10825,7 +10825,7 @@ export default {
       title: 'La participation du public dans le champ environnemental',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 115, name: 'Développement durable' },
         { id: 25, name: 'Enjeux de société' } ],
       image_url: 'asset-v1:CNFPT+87006+session02+type@asset+block@IMGMOOC.png',
@@ -10837,7 +10837,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1cnfpt87006session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1cnfpt87006session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1cnfpt87006session02.730x412_q85_crop-scale.jpg',
@@ -10847,7 +10847,7 @@ export default {
     {
       id: 2686,
       key: 'course-v1:Agreenium+66002+session02A',
-      universities: 
+      universities:
       [ { id: 113,
           name: 'Agreenium',
           code: 'Agreenium',
@@ -10855,7 +10855,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Banniere-Fixe-04.jpg' } ],
       university_name: 'Agreenium',
-      main_university: 
+      main_university:
       { id: 113,
         name: 'Agreenium',
         code: 'Agreenium',
@@ -10865,7 +10865,7 @@ export default {
       title: 'Chemoocs-advanced : chimiométrie avancée, validation de méthodes',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 85, name: 'Santé' },
         { id: 1, name: 'Agronomie et agriculture' },
         { id: 4, name: 'Chimie' },
@@ -10880,7 +10880,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1agreenium66002session02a.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1agreenium66002session02a.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1agreenium66002session02a.730x412_q85_crop-scale.jpg',
@@ -10890,7 +10890,7 @@ export default {
     {
       id: 2211,
       key: 'CNFPT/87002S02/session02',
-      universities: 
+      universities:
       [ { id: 179,
           name: 'Centre national de la fonction publique territoriale (CNFPT)',
           code: 'CNFPT',
@@ -10898,7 +10898,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Bandeau_CNFPT_original.jpg' } ],
       university_name: 'Centre national de la fonction publique territoriale (CNFPT)',
-      main_university: 
+      main_university:
       { id: 179,
         name: 'Centre national de la fonction publique territoriale (CNFPT)',
         code: 'CNFPT',
@@ -10908,7 +10908,7 @@ export default {
       title: 'La gouvernance territoriale',
       short_description: '',
       level: '',
-      subjects: [ { id: 55, name: 'Management' } ],
+      subjects:[ { id: 55, name: 'Management' } ],
       image_url: '/c4x/CNFPT/87002S02/asset/Vignette-teaser.png',
       start_date: '2017-02-06T09:00:00Z',
       end_date: '2017-04-17T22:00:00Z',
@@ -10918,7 +10918,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/cnfpt87002s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/cnfpt87002s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/cnfpt87002s02session02.730x412_q85_crop-scale.jpg',
@@ -10928,7 +10928,7 @@ export default {
     {
       id: 1763,
       key: 'cirad/100001/session01',
-      universities: 
+      universities:
       [ { id: 113,
           name: 'Agreenium',
           code: 'Agreenium',
@@ -10942,7 +10942,7 @@ export default {
           detail_page_enabled: false,
           banner: null } ],
       university_name: 'Agreenium',
-      main_university: 
+      main_university:
       { id: 113,
         name: 'Agreenium',
         code: 'Agreenium',
@@ -10952,7 +10952,7 @@ export default {
       title: 'Bases en épidémiologie des maladies animales',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 85, name: 'Santé' },
         { id: 1, name: 'Agronomie et agriculture' } ],
       image_url: '/c4x/cirad/100001/asset/Image_du_cours_bien.png',
@@ -10964,7 +10964,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/cirad100001session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/cirad100001session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/cirad100001session01.730x412_q85_crop-scale.jpg',
@@ -10974,7 +10974,7 @@ export default {
     {
       id: 2337,
       key: 'course-v1:isaesupaero+25001+session03',
-      universities: 
+      universities:
       [ { id: 188,
           name: 'Université Fédérale Toulouse Midi-Pyrénées',
           code: 'univ-toulouse',
@@ -10988,7 +10988,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Bandeau_%C3%A9tablissement_ISAE.jpg' } ],
       university_name: 'ISAE-SUPAERO',
-      main_university: 
+      main_university:
       { id: 69,
         name: 'ISAE-SUPAERO',
         code: 'isaesupaero',
@@ -10998,7 +10998,7 @@ export default {
       title: 'MOOC-Avion : Comment vole un avion ?',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 73, name: 'Physique' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
@@ -11011,7 +11011,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1isaesupaero25001session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1isaesupaero25001session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1isaesupaero25001session03.730x412_q85_crop-scale.jpg',
@@ -11021,7 +11021,7 @@ export default {
     {
       id: 2307,
       key: 'course-v1:C2i+11006+session01',
-      universities: 
+      universities:
       [ { id: 18,
           name: 'C2i',
           code: 'C2i',
@@ -11041,7 +11041,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/FABLAB_ciel_bleu_FUN_980x200.jpg' } ],
       university_name: 'Compétences numériques et C2i',
-      main_university: 
+      main_university:
       { id: 18,
         name: 'C2i',
         code: 'C2i',
@@ -11051,7 +11051,7 @@ export default {
       title: 'Usages du web',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 64, name: 'Numérique, technologie' } ],
       image_url: 'asset-v1:C2i+11006+session01+type@asset+block@image-MOOC.jpg',
@@ -11063,7 +11063,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1c2i11006session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1c2i11006session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1c2i11006session01.730x412_q85_crop-scale.jpg',
@@ -11073,7 +11073,7 @@ export default {
     {
       id: 2310,
       key: 'course-v1:C2i+11007+session01',
-      universities: 
+      universities:
       [ { id: 18,
           name: 'C2i',
           code: 'C2i',
@@ -11093,7 +11093,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/FABLAB_ciel_bleu_FUN_980x200.jpg' } ],
       university_name: 'Compétences numériques et C2i',
-      main_university: 
+      main_university:
       { id: 18,
         name: 'C2i',
         code: 'C2i',
@@ -11103,7 +11103,7 @@ export default {
       title: 'Documents dans le Cloud',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 64, name: 'Numérique, technologie' } ],
       image_url: 'asset-v1:C2i+11007+session01+type@asset+block@image-MOOC.jpg',
@@ -11115,7 +11115,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1c2i11007session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1c2i11007session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1c2i11007session01.730x412_q85_crop-scale.jpg',
@@ -11125,7 +11125,7 @@ export default {
     {
       id: 2587,
       key: 'course-v1:USPC+37007+session01',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -11133,7 +11133,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Recherche_montaGabirelle-3.jpg' } ],
       university_name: 'Université Sorbonne Paris Cité',
-      main_university: 
+      main_university:
       { id: 198,
         name: 'Université Sorbonne Paris Cité',
         code: 'USPC',
@@ -11143,7 +11143,7 @@ export default {
       title: 'Éducation par la recherche : astrophysique à l\'École',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 64, name: 'Numérique, technologie' },
         { id: 91, name: 'Sciences cognitives' } ],
@@ -11156,7 +11156,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1uspc37007session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1uspc37007session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1uspc37007session01.730x412_q85_crop-scale.jpg',
@@ -11166,7 +11166,7 @@ export default {
     {
       id: 2855,
       key: 'course-v1:ENSDeLyon+14007+session01',
-      universities: 
+      universities:
       [ { id: 172,
           name: 'Université de Lyon',
           code: 'universite-lyon',
@@ -11180,7 +11180,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/image-bandeau-ENSdeLyon.jpg' } ],
       university_name: 'ENS de Lyon',
-      main_university: 
+      main_university:
       { id: 24,
         name: 'ENS de Lyon',
         code: 'ENSDeLyon',
@@ -11190,7 +11190,7 @@ export default {
       title: 'La fabrique du progrès',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 100, name: 'Sciences humaines et sociales' },
         { id: 25, name: 'Enjeux de société' },
@@ -11205,7 +11205,7 @@ export default {
       course_ended: false,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ensdelyon14007session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ensdelyon14007session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ensdelyon14007session01.730x412_q85_crop-scale.jpg',
@@ -11215,7 +11215,7 @@ export default {
     {
       id: 2900,
       key: 'course-v1:uved+34008+session01',
-      universities: 
+      universities:
       [ { id: 33,
           name: 'Université Virtuelle Environnement et Développement durable (UVED) ',
           code: 'uved',
@@ -11223,7 +11223,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/unnamed_attachment_1.png' } ],
       university_name: 'Université Virtuelle Environnement et Développement durable (UVED) ',
-      main_university: 
+      main_university:
       { id: 33,
         name: 'Université Virtuelle Environnement et Développement durable (UVED) ',
         code: 'uved',
@@ -11233,7 +11233,7 @@ export default {
       title: 'Education à l\'Environnement et au Développement Durable',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 34, name: 'Environnement' },
         { id: 115, name: 'Développement durable' } ],
@@ -11246,7 +11246,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1uved34008session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1uved34008session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1uved34008session01.730x412_q85_crop-scale.jpg',
@@ -11256,7 +11256,7 @@ export default {
     {
       id: 2659,
       key: 'course-v1:education-et-numerique+127001+session01',
-      universities: 
+      universities:
       [ { id: 325,
           name: 'Education & Numérique',
           code: 'education-et-numerique',
@@ -11264,7 +11264,7 @@ export default {
           detail_page_enabled: false,
           banner: null } ],
       university_name: 'Education & Numérique',
-      main_university: 
+      main_university:
       { id: 325,
         name: 'Education & Numérique',
         code: 'education-et-numerique',
@@ -11274,7 +11274,7 @@ export default {
       title: 'Bac2Sciences',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 88, name: 'Sciences' } ],
       image_url: 'asset-v1:education-et-numerique+127001+session01+type@asset+block@Logo_MoocBac2sciences_mosaique.png',
@@ -11286,7 +11286,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1education-et-numerique127001session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1education-et-numerique127001session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1education-et-numerique127001session01.730x412_q85_crop-scale.jpg',
@@ -11296,7 +11296,7 @@ export default {
     {
       id: 2665,
       key: 'course-v1:lorraine+30006+session01',
-      universities: 
+      universities:
       [ { id: 168,
           name: 'Université de Lorraine',
           code: 'lorraine',
@@ -11304,7 +11304,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Image_Universite_de_Lorraine.jpg' } ],
       university_name: 'Université de Lorraine',
-      main_university: 
+      main_university:
       { id: 168,
         name: 'Université de Lorraine',
         code: 'lorraine',
@@ -11314,7 +11314,7 @@ export default {
       title: 'Verdun 1917-1918 : batailles oubliées ? Français, Allemands et Américains dans la tourmente ',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 100, name: 'Sciences humaines et sociales' },
         { id: 40, name: 'Histoire' } ],
       image_url: 'asset-v1:lorraine+30006+session01+type@asset+block@course-image.png',
@@ -11326,7 +11326,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1lorraine30006session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1lorraine30006session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1lorraine30006session01.730x412_q85_crop-scale.jpg',
@@ -11336,7 +11336,7 @@ export default {
     {
       id: 2415,
       key: 'course-v1:MinesTelecom+04025+session01',
-      universities: 
+      universities:
       [ { id: 5,
           name: 'IMT',
           code: 'MinesTelecom',
@@ -11344,7 +11344,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/baniere_imt_EDX-02-02.jpg' } ],
       university_name: 'IMT',
-      main_university: 
+      main_university:
       { id: 5,
         name: 'IMT',
         code: 'MinesTelecom',
@@ -11354,7 +11354,7 @@ export default {
       title: 'Transitions énergétiques : mécanismes et leviers',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 115, name: 'Développement durable' },
         { id: 25, name: 'Enjeux de société' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
@@ -11367,7 +11367,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1minestelecom04025session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1minestelecom04025session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1minestelecom04025session01.730x412_q85_crop-scale.jpg',
@@ -11377,7 +11377,7 @@ export default {
     {
       id: 2419,
       key: 'course-v1:UPF+67001+session01',
-      universities: 
+      universities:
       [ { id: 279,
           name: 'Université de la Polynésie Française',
           code: 'UPF',
@@ -11385,7 +11385,7 @@ export default {
           detail_page_enabled: false,
           banner: null } ],
       university_name: 'Université de la Polynésie Française',
-      main_university: 
+      main_university:
       { id: 279,
         name: 'Université de la Polynésie Française',
         code: 'UPF',
@@ -11395,7 +11395,7 @@ export default {
       title: 'Manager le fait religieux au travail',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 55, name: 'Management' },
         { id: 100, name: 'Sciences humaines et sociales' },
         { id: 25, name: 'Enjeux de société' },
@@ -11409,7 +11409,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1upf67001session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1upf67001session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1upf67001session01.730x412_q85_crop-scale.jpg',
@@ -11419,7 +11419,7 @@ export default {
     {
       id: 2473,
       key: 'course-v1:ENSMP+76002+session02',
-      universities: 
+      universities:
       [ { id: 58,
           name: 'Paris Sciences Lettres',
           code: 'psl',
@@ -11433,7 +11433,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/banni%C3%A8re.jpg' } ],
       university_name: 'Mines ParisTech',
-      main_university: 
+      main_university:
       { id: 170,
         name: 'MINES ParisTech',
         code: 'ENSMP',
@@ -11443,7 +11443,7 @@ export default {
       title: 'Concevoir pour innover : introduction à la théorie C-K',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 55, name: 'Management' },
         { id: 46, name: 'Innovation' } ],
       image_url: 'asset-v1:ENSMP+76002+session02+type@asset+block@imageMOOC-TMCI.jpg',
@@ -11455,7 +11455,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ensmp76002session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ensmp76002session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ensmp76002session02.730x412_q85_crop-scale.jpg',
@@ -11465,7 +11465,7 @@ export default {
     {
       id: 2476,
       key: 'course-v1:univnantes+31004+session04',
-      universities: 
+      universities:
       [ { id: 249,
           name: 'Université Bretagne Loire',
           code: 'u-bretagneloire',
@@ -11479,7 +11479,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/photo-illustration-un_copie.png' } ],
       university_name: 'Université de Nantes',
-      main_university: 
+      main_university:
       { id: 72,
         name: 'Université de Nantes',
         code: 'univnantes',
@@ -11489,7 +11489,7 @@ export default {
       title: 'Ouvrez les portes du laboratoire : cellules et cellules souches',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 85, name: 'Santé' },
         { id: 97, name: 'Sciences de la vie' } ],
       image_url: 'asset-v1:univnantes+31004+session04+type@asset+block@images_course_small.jpg',
@@ -11501,7 +11501,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 4,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1univnantes31004session04.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1univnantes31004session04.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1univnantes31004session04.730x412_q85_crop-scale.jpg',
@@ -11511,7 +11511,7 @@ export default {
     {
       id: 2521,
       key: 'course-v1:UPSUD+42002+session02',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -11525,7 +11525,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/paris11.ea38002e63b9_1.jpg' } ],
       university_name: 'Université Paris-Sud',
-      main_university: 
+      main_university:
       { id: 39,
         name: 'Université Paris-Sud',
         code: 'UPSUD',
@@ -11535,7 +11535,7 @@ export default {
       title: 'Essentials of child and adolescent psychiatry across the world',
       short_description: '',
       level: '',
-      subjects: [ { id: 85, name: 'Santé' } ],
+      subjects:[ { id: 85, name: 'Santé' } ],
       image_url: 'asset-v1:UPSUD+42002+session02+type@asset+block@IACAPP_Logosstxt4_80.jpg',
       start_date: '2017-05-22T00:00:00Z',
       end_date: '2017-07-02T23:30:00Z',
@@ -11545,7 +11545,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1upsud42002session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1upsud42002session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1upsud42002session02.730x412_q85_crop-scale.jpg',
@@ -11555,7 +11555,7 @@ export default {
     {
       id: 2778,
       key: 'course-v1:CNFPT+87012+session01',
-      universities: 
+      universities:
       [ { id: 179,
           name: 'Centre national de la fonction publique territoriale (CNFPT)',
           code: 'CNFPT',
@@ -11563,7 +11563,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Bandeau_CNFPT_original.jpg' } ],
       university_name: 'Centre national de la fonction publique territoriale (CNFPT)',
-      main_university: 
+      main_university:
       { id: 179,
         name: 'Centre national de la fonction publique territoriale (CNFPT)',
         code: 'CNFPT',
@@ -11573,7 +11573,7 @@ export default {
       title: 'La SCIC, une coopérative au service des territoires',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 22, name: 'Économie et finance' },
         { id: 109, name: 'Vie de l\'entreprise' } ],
       image_url: 'asset-v1:CNFPT+87012+session01+type@asset+block@header_mooc_des_scic_HD.jpg',
@@ -11585,7 +11585,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1cnfpt87012session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1cnfpt87012session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1cnfpt87012session01.730x412_q85_crop-scale.jpg',
@@ -11595,7 +11595,7 @@ export default {
     {
       id: 2013,
       key: 'univ-toulouse/101006S02/session02',
-      universities: 
+      universities:
       [ { id: 188,
           name: 'Université Fédérale Toulouse Midi-Pyrénées',
           code: 'univ-toulouse',
@@ -11603,7 +11603,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/presentationMOOC-UFTMP.jpg' } ],
       university_name: 'Université Fédérale Toulouse Midi-Pyrénées',
-      main_university: 
+      main_university:
       { id: 188,
         name: 'Université Fédérale Toulouse Midi-Pyrénées',
         code: 'univ-toulouse',
@@ -11613,7 +11613,7 @@ export default {
       title: 'Gérer son entreprise avec un ERP ou un Progiciel de Gestion Intégré',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 64, name: 'Numérique, technologie' },
         { id: 109, name: 'Vie de l\'entreprise' } ],
@@ -11626,7 +11626,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/univ-toulouse101006s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/univ-toulouse101006s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/univ-toulouse101006s02session02.730x412_q85_crop-scale.jpg',
@@ -11636,7 +11636,7 @@ export default {
     {
       id: 2542,
       key: 'course-v1:ENSMP+76001+session03',
-      universities: 
+      universities:
       [ { id: 58,
           name: 'Paris Sciences Lettres',
           code: 'psl',
@@ -11650,7 +11650,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/banni%C3%A8re.jpg' } ],
       university_name: 'MINES ParisTech',
-      main_university: 
+      main_university:
       { id: 170,
         name: 'MINES ParisTech',
         code: 'ENSMP',
@@ -11660,7 +11660,7 @@ export default {
       title: 'Problèmes Energétiques Globaux',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 22, name: 'Économie et finance' },
         { id: 34, name: 'Environnement' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
@@ -11673,7 +11673,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1ensmp76001session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1ensmp76001session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1ensmp76001session03.730x412_q85_crop-scale.jpg',
@@ -11683,7 +11683,7 @@ export default {
     {
       id: 2805,
       key: 'course-v1:MinesTelecom+04007S03+session03',
-      universities: 
+      universities:
       [ { id: 5,
           name: 'IMT',
           code: 'MinesTelecom',
@@ -11691,7 +11691,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/baniere_imt_EDX-02-02.jpg' } ],
       university_name: 'IMT',
-      main_university: 
+      main_university:
       { id: 5,
         name: 'IMT',
         code: 'MinesTelecom',
@@ -11701,7 +11701,7 @@ export default {
       title: 'Introduction à la mécanique des fluides',
       short_description: '',
       level: '',
-      subjects: [ { id: 88, name: 'Sciences' } ],
+      subjects:[ { id: 88, name: 'Sciences' } ],
       image_url: 'asset-v1:MinesTelecom+04007S03+session03+type@asset+block@images_course_small.jpg',
       start_date: '2017-09-19T08:00:00Z',
       end_date: '2017-11-21T22:59:00Z',
@@ -11711,7 +11711,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1minestelecom04007s03session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1minestelecom04007s03session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1minestelecom04007s03session03.730x412_q85_crop-scale.jpg',
@@ -11721,7 +11721,7 @@ export default {
     {
       id: 1917,
       key: 'CNFPT/87003/session01',
-      universities: 
+      universities:
       [ { id: 179,
           name: 'Centre national de la fonction publique territoriale (CNFPT)',
           code: 'CNFPT',
@@ -11729,7 +11729,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Bandeau_CNFPT_original.jpg' } ],
       university_name: 'Centre national de la fonction publique territoriale (CNFPT)',
-      main_university: 
+      main_university:
       { id: 179,
         name: 'Centre national de la fonction publique territoriale (CNFPT)',
         code: 'CNFPT',
@@ -11739,7 +11739,7 @@ export default {
       title: 'La démocratie participative',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 55, name: 'Management' },
         { id: 25, name: 'Enjeux de société' } ],
       image_url: '/c4x/CNFPT/87003/asset/Image.jpg',
@@ -11751,7 +11751,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/cnfpt87003session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/cnfpt87003session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/cnfpt87003session01.730x412_q85_crop-scale.jpg',
@@ -11761,7 +11761,7 @@ export default {
     {
       id: 2757,
       key: 'course-v1:CNFPT+87010+session01',
-      universities: 
+      universities:
       [ { id: 179,
           name: 'Centre national de la fonction publique territoriale (CNFPT)',
           code: 'CNFPT',
@@ -11769,7 +11769,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Bandeau_CNFPT_original.jpg' } ],
       university_name: 'Centre national de la fonction publique territoriale (CNFPT)',
-      main_university: 
+      main_university:
       { id: 179,
         name: 'Centre national de la fonction publique territoriale (CNFPT)',
         code: 'CNFPT',
@@ -11779,7 +11779,7 @@ export default {
       title: 'Décentralisation et collectivités territoriales',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 19, name: 'Droit et juridique' },
         { id: 55, name: 'Management' },
         { id: 25, name: 'Enjeux de société' } ],
@@ -11792,7 +11792,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1cnfpt87010session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1cnfpt87010session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1cnfpt87010session01.730x412_q85_crop-scale.jpg',
@@ -11802,7 +11802,7 @@ export default {
     {
       id: 2344,
       key: 'course-v1:groupeinsa+13004+session01',
-      universities: 
+      universities:
       [ { id: 188,
           name: 'Université Fédérale Toulouse Midi-Pyrénées',
           code: 'univ-toulouse',
@@ -11816,7 +11816,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/groupeinsa.3d33fea5c0b6.jpg' } ],
       university_name: 'Groupe INSA',
-      main_university: 
+      main_university:
       { id: 11,
         name: 'Groupe INSA',
         code: 'groupeinsa',
@@ -11826,7 +11826,7 @@ export default {
       title: 'Répondre à un appel d\'offres local ou international',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 31, name: 'Entrepreneuriat' },
         { id: 7, name: 'Communication' },
         { id: 109, name: 'Vie de l\'entreprise' } ],
@@ -11839,7 +11839,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1groupeinsa13004session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1groupeinsa13004session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1groupeinsa13004session01.730x412_q85_crop-scale.jpg',
@@ -11849,7 +11849,7 @@ export default {
     {
       id: 1465,
       key: 'Polytechnique/03001/Trimestre_1_2014',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -11863,7 +11863,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/polytechnique_banner.jpg' } ],
       university_name: 'Ecole Polytechnique',
-      main_university: 
+      main_university:
       { id: 4,
         name: 'Ecole Polytechnique',
         code: 'Polytechnique',
@@ -11873,7 +11873,7 @@ export default {
       title: 'Optique non-linéaire',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 73, name: 'Physique' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
       image_url: '/c4x/Polytechnique/03001/asset/images_course_small.jpg',
@@ -11885,7 +11885,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/polytechnique03001trimestre_1_2014.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/polytechnique03001trimestre_1_2014.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/polytechnique03001trimestre_1_2014.730x412_q85_crop-scale.jpg',
@@ -11895,7 +11895,7 @@ export default {
     {
       id: 2846,
       key: 'course-v1:Canope+80001+session03',
-      universities: 
+      universities:
       [ { id: 151,
           name: 'CANOPÉ',
           code: 'Canope',
@@ -11903,7 +11903,7 @@ export default {
           detail_page_enabled: false,
           banner: null } ],
       university_name: 'CANOPÉ',
-      main_university: 
+      main_university:
       { id: 151,
         name: 'CANOPÉ',
         code: 'Canope',
@@ -11913,7 +11913,7 @@ export default {
       title: 'La classe inversée à l\'ère du numérique',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 25, name: 'Enjeux de société' },
         { id: 64, name: 'Numérique, technologie' } ],
@@ -11926,7 +11926,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1canope80001session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1canope80001session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1canope80001session03.730x412_q85_crop-scale.jpg',
@@ -11936,7 +11936,7 @@ export default {
     {
       id: 2751,
       key: 'course-v1:CNFPT+87008+session01',
-      universities: 
+      universities:
       [ { id: 179,
           name: 'Centre national de la fonction publique territoriale (CNFPT)',
           code: 'CNFPT',
@@ -11944,7 +11944,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Bandeau_CNFPT_original.jpg' } ],
       university_name: 'Centre national de la fonction publique territoriale (CNFPT)',
-      main_university: 
+      main_university:
       { id: 179,
         name: 'Centre national de la fonction publique territoriale (CNFPT)',
         code: 'CNFPT',
@@ -11954,7 +11954,7 @@ export default {
       title: 'Gestion locale : les clefs de la fonction de régisseur d\'avances et de recettes',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 22, name: 'Économie et finance' },
         { id: 25, name: 'Enjeux de société' } ],
       image_url: 'asset-v1:CNFPT+87008+session01+type@asset+block@Img-Mooc-regie.png',
@@ -11966,7 +11966,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1cnfpt87008session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1cnfpt87008session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1cnfpt87008session01.730x412_q85_crop-scale.jpg',
@@ -11976,7 +11976,7 @@ export default {
     {
       id: 2754,
       key: 'course-v1:CNFPT+87009+session01',
-      universities: 
+      universities:
       [ { id: 179,
           name: 'Centre national de la fonction publique territoriale (CNFPT)',
           code: 'CNFPT',
@@ -11984,7 +11984,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Bandeau_CNFPT_original.jpg' } ],
       university_name: 'Centre national de la fonction publique territoriale (CNFPT)',
-      main_university: 
+      main_university:
       { id: 179,
         name: 'Centre national de la fonction publique territoriale (CNFPT)',
         code: 'CNFPT',
@@ -11994,7 +11994,7 @@ export default {
       title: 'Les fondamentaux de la communication publique territoriale',
       short_description: '',
       level: '',
-      subjects: [ { id: 7, name: 'Communication' } ],
+      subjects:[ { id: 7, name: 'Communication' } ],
       image_url: 'asset-v1:CNFPT+87009+session01+type@asset+block@couv9.png',
       start_date: '2017-10-16T08:00:00Z',
       end_date: '2017-11-26T23:00:00Z',
@@ -12004,7 +12004,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1cnfpt87009session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1cnfpt87009session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1cnfpt87009session01.730x412_q85_crop-scale.jpg',
@@ -12014,7 +12014,7 @@ export default {
     {
       id: 2040,
       key: 'groupeinsa/13002S04/session04',
-      universities: 
+      universities:
       [ { id: 11,
           name: 'Groupe INSA',
           code: 'groupeinsa',
@@ -12028,7 +12028,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/illustration_normandie_universit%C3%A9.jpg' } ],
       university_name: 'Groupe INSA',
-      main_university: 
+      main_university:
       { id: 11,
         name: 'Groupe INSA',
         code: 'groupeinsa',
@@ -12038,7 +12038,7 @@ export default {
       title: 'Soyez acteurs du web!',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 7, name: 'Communication' },
         { id: 61, name: 'Médias' },
         { id: 64, name: 'Numérique, technologie' } ],
@@ -12051,7 +12051,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 4,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/groupeinsa13002s04session04.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/groupeinsa13002s04session04.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/groupeinsa13002s04session04.730x412_q85_crop-scale.jpg',
@@ -12061,7 +12061,7 @@ export default {
     {
       id: 1849,
       key: 'univ-toulouse/101004/session01',
-      universities: 
+      universities:
       [ { id: 188,
           name: 'Université Fédérale Toulouse Midi-Pyrénées',
           code: 'univ-toulouse',
@@ -12075,7 +12075,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/groupeinsa.3d33fea5c0b6.jpg' } ],
       university_name: 'Groupe INSA',
-      main_university: 
+      main_university:
       { id: 11,
         name: 'Groupe INSA',
         code: 'groupeinsa',
@@ -12085,7 +12085,7 @@ export default {
       title: 'Initiation aux applications dynamiques',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 64, name: 'Numérique, technologie' } ],
       image_url: '/c4x/univ-toulouse/101004/asset/image_dates_et_details.png',
@@ -12097,7 +12097,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/univ-toulouse101004session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/univ-toulouse101004session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/univ-toulouse101004session01.730x412_q85_crop-scale.jpg',
@@ -12107,7 +12107,7 @@ export default {
     {
       id: 723,
       key: 'SciencesPo/05001S02/Trimestre_1_2015',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -12121,7 +12121,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/sciencespo.21764b4b23e5.jpg' } ],
       university_name: 'Sciences Po',
-      main_university: 
+      main_university:
       { id: 6,
         name: 'Sciences Po.',
         code: 'SciencesPo',
@@ -12131,7 +12131,7 @@ export default {
       title: 'Espace Mondial',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 19, name: 'Droit et juridique' },
         { id: 22, name: 'Économie et finance' },
         { id: 100, name: 'Sciences humaines et sociales' },
@@ -12148,7 +12148,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/sciencespo05001s02trimestre_1_2015.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/sciencespo05001s02trimestre_1_2015.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/sciencespo05001s02trimestre_1_2015.730x412_q85_crop-scale.jpg',
@@ -12158,7 +12158,7 @@ export default {
     {
       id: 84,
       key: 'bordeauxmontaigne/07001S02/Trimestre_1_2015',
-      universities: 
+      universities:
       [ { id: 195,
           name: 'ComUE d’Aquitaine',
           code: 'cuea',
@@ -12172,7 +12172,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/ubordeauxmontaignepano.jpg' } ],
       university_name: 'Université Bordeaux Montaigne',
-      main_university: 
+      main_university:
       { id: 63,
         name: 'Université Bordeaux Montaigne',
         code: 'bordeauxmontaigne',
@@ -12182,7 +12182,7 @@ export default {
       title: 'Comprendre le Transmedia Storytelling',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 100, name: 'Sciences humaines et sociales' },
         { id: 7, name: 'Communication' },
         { id: 13, name: 'Cultures et civilisations' },
@@ -12196,7 +12196,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/bordeauxmontaigne07001s02trimestre_1_2015.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/bordeauxmontaigne07001s02trimestre_1_2015.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/bordeauxmontaigne07001s02trimestre_1_2015.730x412_q85_crop-scale.jpg',
@@ -12206,7 +12206,7 @@ export default {
     {
       id: 2683,
       key: 'course-v1:Agreenium+66002+session02B',
-      universities: 
+      universities:
       [ { id: 113,
           name: 'Agreenium',
           code: 'Agreenium',
@@ -12214,7 +12214,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Banniere-Fixe-04.jpg' } ],
       university_name: 'Agreenium',
-      main_university: 
+      main_university:
       { id: 113,
         name: 'Agreenium',
         code: 'Agreenium',
@@ -12224,7 +12224,7 @@ export default {
       title: 'Chemoocs-basic : les bases de la chimiométrie',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 85, name: 'Santé' },
         { id: 1, name: 'Agronomie et agriculture' },
         { id: 4, name: 'Chimie' },
@@ -12239,7 +12239,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1agreenium66002session02b.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1agreenium66002session02b.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1agreenium66002session02b.730x412_q85_crop-scale.jpg',
@@ -12249,7 +12249,7 @@ export default {
     {
       id: 1793,
       key: 'psl/47001S02/Session2',
-      universities: 
+      universities:
       [ { id: 58,
           name: 'Paris Sciences Lettres',
           code: 'psl',
@@ -12257,7 +12257,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/baniere-PSL-2.jpg' } ],
       university_name: 'Paris Sciences Lettres',
-      main_university: 
+      main_university:
       { id: 58,
         name: 'Paris Sciences Lettres',
         code: 'psl',
@@ -12267,7 +12267,7 @@ export default {
       title: 'La régulation financière au service de l\'économie',
       short_description: '',
       level: '',
-      subjects: [ { id: 22, name: 'Économie et finance' } ],
+      subjects:[ { id: 22, name: 'Économie et finance' } ],
       image_url: '/c4x/psl/47001S02/asset/Photo_ILB.jpg',
       start_date: '2016-06-06T05:00:00Z',
       end_date: '2016-07-13T23:00:00Z',
@@ -12277,7 +12277,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/psl47001s02session2.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/psl47001s02session2.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/psl47001s02session2.730x412_q85_crop-scale.jpg',
@@ -12287,7 +12287,7 @@ export default {
     {
       id: 1559,
       key: 'ENSCachan/20012/session01',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -12313,7 +12313,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/image-bandeau-ENSdeLyon.jpg' } ],
       university_name: 'ENS Paris-Saclay',
-      main_university: 
+      main_university:
       { id: 14,
         name: 'ENS Paris-Saclay',
         code: 'ENSCachan',
@@ -12323,7 +12323,7 @@ export default {
       title: 'Enseigner et Former dans le Supérieur',
       short_description: '',
       level: '',
-      subjects: [ { id: 28, name: 'Education et formation' } ],
+      subjects:[ { id: 28, name: 'Education et formation' } ],
       image_url: '/c4x/ENSCachan/20012/asset/amphi-UP1B.png',
       start_date: '2016-03-03T13:00:00Z',
       end_date: '2016-04-03T23:00:00Z',
@@ -12333,7 +12333,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/enscachan20012session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/enscachan20012session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/enscachan20012session01.730x412_q85_crop-scale.jpg',
@@ -12343,7 +12343,7 @@ export default {
     {
       id: 1734,
       key: 'UBO/63001S02/session02',
-      universities: 
+      universities:
       [ { id: 249,
           name: 'Université Bretagne Loire',
           code: 'u-bretagneloire',
@@ -12357,7 +12357,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/UBO-technopole-980x200.png' } ],
       university_name: 'Université de Bretagne Occidentale',
-      main_university: 
+      main_university:
       { id: 120,
         name: 'Université de Bretagne Occidentale',
         code: 'UBO',
@@ -12367,7 +12367,7 @@ export default {
       title: 'FlotRisCo : les sociétés littorales face aux risques côtiers',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 88, name: 'Sciences' },
         { id: 100, name: 'Sciences humaines et sociales' } ],
@@ -12380,7 +12380,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/ubo63001s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/ubo63001s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/ubo63001s02session02.730x412_q85_crop-scale.jpg',
@@ -12390,7 +12390,7 @@ export default {
     {
       id: 1737,
       key: 'ENSDeLyon/14004/session01',
-      universities: 
+      universities:
       [ { id: 172,
           name: 'Université de Lyon',
           code: 'universite-lyon',
@@ -12404,7 +12404,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/image-bandeau-ENSdeLyon.jpg' } ],
       university_name: 'ENS de Lyon',
-      main_university: 
+      main_university:
       { id: 24,
         name: 'ENS de Lyon',
         code: 'ENSDeLyon',
@@ -12414,7 +12414,7 @@ export default {
       title: 'C\'est quoi l\'éco ? - session 1',
       short_description: '',
       level: '',
-      subjects: [ { id: 22, name: 'Économie et finance' } ],
+      subjects:[ { id: 22, name: 'Économie et finance' } ],
       image_url: '/c4x/ENSDeLyon/14004/asset/vignette-FUN-MOOC-Cquoileco.png',
       start_date: '2016-05-11T09:00:00Z',
       end_date: '2016-06-30T22:00:00Z',
@@ -12424,7 +12424,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/ensdelyon14004session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/ensdelyon14004session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/ensdelyon14004session01.730x412_q85_crop-scale.jpg',
@@ -12434,7 +12434,7 @@ export default {
     {
       id: 1519,
       key: 'Paris2/09007/session01',
-      universities: 
+      universities:
       [ { id: 9,
           name: 'Université Panthéon-Assas, Paris II',
           code: 'Paris2',
@@ -12442,7 +12442,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/paris2.e025b3182afe.jpg' } ],
       university_name: 'Université Panthéon-Assas (Paris 2)',
-      main_university: 
+      main_university:
       { id: 9,
         name: 'Université Panthéon-Assas, Paris II',
         code: 'Paris2',
@@ -12452,7 +12452,7 @@ export default {
       title: 'Problèmes économiques contemporains',
       short_description: '',
       level: 'intermediate',
-      subjects: [ { id: 22, name: 'Économie et finance' } ],
+      subjects:[ { id: 22, name: 'Économie et finance' } ],
       image_url: '/c4x/Paris2/09007/asset/PEC_images_course_small.jpeg',
       start_date: '2016-01-04T14:00:00Z',
       end_date: '2016-04-30T23:00:00Z',
@@ -12462,7 +12462,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/paris209007session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/paris209007session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/paris209007session01.730x412_q85_crop-scale.jpg',
@@ -12472,7 +12472,7 @@ export default {
     {
       id: 1775,
       key: 'univrennes1/110001/session01',
-      universities: 
+      universities:
       [ { id: 113,
           name: 'Agreenium',
           code: 'Agreenium',
@@ -12492,7 +12492,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/UR1-FUN.jpg' } ],
       university_name: 'Université de Rennes 1',
-      main_university: 
+      main_university:
       { id: 215,
         name: 'Université de Rennes 1',
         code: 'univrennes1',
@@ -12502,7 +12502,7 @@ export default {
       title: 'Dynamiques des paysages',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 88, name: 'Sciences' } ],
       image_url: '/c4x/univrennes1/110001/asset/presentation.png',
@@ -12514,7 +12514,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/univrennes1110001session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/univrennes1110001session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/univrennes1110001session01.730x412_q85_crop-scale.jpg',
@@ -12524,7 +12524,7 @@ export default {
     {
       id: 60,
       key: 'essec/46001/Trimestre_3_2014',
-      universities: 
+      universities:
       [ { id: 55,
           name: 'Essec',
           code: 'essec',
@@ -12532,7 +12532,7 @@ export default {
           detail_page_enabled: false,
           banner: 'https://www.fun-mooc.fr/media/universities/ESSEC_Banni%C3%A8re_2.jpg' } ],
       university_name: 'ESSEC',
-      main_university: 
+      main_university:
       { id: 55,
         name: 'Essec',
         code: 'essec',
@@ -12542,7 +12542,7 @@ export default {
       title: 'L\'entrepreneuriat qui change le monde',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 31, name: 'Entrepreneuriat' },
         { id: 25, name: 'Enjeux de société' } ],
       image_url: '/c4x/essec/46001/asset/images_course_small.jpg',
@@ -12554,7 +12554,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/essec46001trimestre_3_2014.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/essec46001trimestre_3_2014.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/essec46001trimestre_3_2014.730x412_q85_crop-scale.jpg',
@@ -12564,7 +12564,7 @@ export default {
     {
       id: 2389,
       key: 'course-v1:CNAM+01003+session04',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -12578,7 +12578,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Le_Cnam_facade.jpg' } ],
       university_name: 'Le Cnam',
-      main_university: 
+      main_university:
       { id: 1,
         name: 'Le Cnam',
         code: 'CNAM',
@@ -12588,7 +12588,7 @@ export default {
       title: 'Eléments de santé au travail pour les ingénieurs et managers',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 55, name: 'Management' },
         { id: 85, name: 'Santé' },
         { id: 109, name: 'Vie de l\'entreprise' } ],
@@ -12601,7 +12601,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 4,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1cnam01003session04.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1cnam01003session04.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1cnam01003session04.730x412_q85_crop-scale.jpg',
@@ -12611,7 +12611,7 @@ export default {
     {
       id: 1557,
       key: 'Paris10/10004/session01',
-      universities: 
+      universities:
       [ { id: 10,
           name: 'Université Paris Nanterre',
           code: 'Paris10',
@@ -12619,7 +12619,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/paris10.f6605d9f5319.jpg' } ],
       university_name: 'Université Paris Ouest Nanterre La Défense',
-      main_university: 
+      main_university:
       { id: 10,
         name: 'Université Paris Nanterre',
         code: 'Paris10',
@@ -12629,7 +12629,7 @@ export default {
       title: 'Consommer responsable',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 22, name: 'Économie et finance' },
         { id: 34, name: 'Environnement' } ],
       image_url: '/c4x/Paris10/10004/asset/images_course_smal.jpg',
@@ -12641,7 +12641,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/paris1010004session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/paris1010004session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/paris1010004session01.730x412_q85_crop-scale.jpg',
@@ -12651,7 +12651,7 @@ export default {
     {
       id: 2930,
       key: 'course-v1:CNFPT+87001+session04',
-      universities: 
+      universities:
       [ { id: 179,
           name: 'Centre national de la fonction publique territoriale (CNFPT)',
           code: 'CNFPT',
@@ -12659,7 +12659,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Bandeau_CNFPT_original.jpg' } ],
       university_name: 'Centre national de la fonction publique territoriale (CNFPT)',
-      main_university: 
+      main_university:
       { id: 179,
         name: 'Centre national de la fonction publique territoriale (CNFPT)',
         code: 'CNFPT',
@@ -12669,7 +12669,7 @@ export default {
       title: 'TVA et collectivités territoriales : ayez les bons réflexes',
       short_description: '',
       level: '',
-      subjects: [ { id: 22, name: 'Économie et finance' } ],
+      subjects:[ { id: 22, name: 'Économie et finance' } ],
       image_url: 'asset-v1:CNFPT+87001+session04+type@asset+block@Clom_TVA_v4.png',
       start_date: '2017-10-09T09:00:00Z',
       end_date: '2017-11-19T22:30:00Z',
@@ -12679,7 +12679,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 4,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1cnfpt87001session04.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1cnfpt87001session04.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1cnfpt87001session04.730x412_q85_crop-scale.jpg',
@@ -12689,7 +12689,7 @@ export default {
     {
       id: 510,
       key: 'MinesTelecom/04002S02/Trimestre_4_2014',
-      universities: 
+      universities:
       [ { id: 5,
           name: 'IMT',
           code: 'MinesTelecom',
@@ -12697,7 +12697,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/baniere_imt_EDX-02-02.jpg' } ],
       university_name: 'IMT',
-      main_university: 
+      main_university:
       { id: 5,
         name: 'IMT',
         code: 'MinesTelecom',
@@ -12707,7 +12707,7 @@ export default {
       title: 'La Fabrication numérique',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 46, name: 'Innovation' },
         { id: 64, name: 'Numérique, technologie' } ],
@@ -12720,7 +12720,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/minestelecom04002s02trimestre_4_2014.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/minestelecom04002s02trimestre_4_2014.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/minestelecom04002s02trimestre_4_2014.730x412_q85_crop-scale.jpg',
@@ -12730,7 +12730,7 @@ export default {
     {
       id: 2861,
       key: 'course-v1:univ-toulouse+101003+session02',
-      universities: 
+      universities:
       [ { id: 188,
           name: 'Université Fédérale Toulouse Midi-Pyrénées',
           code: 'univ-toulouse',
@@ -12738,7 +12738,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/presentationMOOC-UFTMP.jpg' } ],
       university_name: 'Université Fédérale Toulouse Midi-Pyrénées',
-      main_university: 
+      main_university:
       { id: 188,
         name: 'Université Fédérale Toulouse Midi-Pyrénées',
         code: 'univ-toulouse',
@@ -12748,7 +12748,7 @@ export default {
       title: 'Objets connectés : des radiofréquences aux réseaux',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 64, name: 'Numérique, technologie' },
         { id: 82, name: 'Réseaux et télécommunications' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
@@ -12761,7 +12761,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1univ-toulouse101003session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1univ-toulouse101003session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1univ-toulouse101003session02.730x412_q85_crop-scale.jpg',
@@ -12771,7 +12771,7 @@ export default {
     {
       id: 1599,
       key: 'ENSCachan/20009/session01',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -12785,7 +12785,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/enscachan.921fde30c904.jpg' } ],
       university_name: 'ENS Paris-Saclay',
-      main_university: 
+      main_university:
       { id: 14,
         name: 'ENS Paris-Saclay',
         code: 'ENSCachan',
@@ -12795,7 +12795,7 @@ export default {
       title: 'Introduction à la logique informatique - Partie 2 : calcul des prédicats',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 88, name: 'Sciences' },
         { id: 58, name: 'Mathématiques et statistiques' } ],
@@ -12808,7 +12808,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/enscachan20009session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/enscachan20009session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/enscachan20009session01.730x412_q85_crop-scale.jpg',
@@ -12818,7 +12818,7 @@ export default {
     {
       id: 2915,
       key: 'course-v1:CNFPT+87007+session02',
-      universities: 
+      universities:
       [ { id: 179,
           name: 'Centre national de la fonction publique territoriale (CNFPT)',
           code: 'CNFPT',
@@ -12826,7 +12826,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Bandeau_CNFPT_original.jpg' } ],
       university_name: 'Centre national de la fonction publique territoriale (CNFPT)',
-      main_university: 
+      main_university:
       { id: 179,
         name: 'Centre national de la fonction publique territoriale (CNFPT)',
         code: 'CNFPT',
@@ -12836,7 +12836,7 @@ export default {
       title: 'Les pouvoirs de police du maire',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 19, name: 'Droit et juridique' },
         { id: 25, name: 'Enjeux de société' } ],
       image_url: 'asset-v1:CNFPT+87007+session02+type@asset+block@Marianne.png',
@@ -12848,7 +12848,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1cnfpt87007session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1cnfpt87007session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1cnfpt87007session02.730x412_q85_crop-scale.jpg',
@@ -12858,7 +12858,7 @@ export default {
     {
       id: 984,
       key: 'CNAM/01011/Trimestre_2_2015',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -12872,7 +12872,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Le_Cnam_facade.jpg' } ],
       university_name: 'Le CNAM',
-      main_university: 
+      main_university:
       { id: 1,
         name: 'Le Cnam',
         code: 'CNAM',
@@ -12882,7 +12882,7 @@ export default {
       title: 'Défi santé : vos aliments',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 85, name: 'Santé' },
         { id: 25, name: 'Enjeux de société' } ],
       image_url: '/c4x/CNAM/01011/asset/images_course_small.jpg',
@@ -12894,7 +12894,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/cnam01011trimestre_2_2015.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/cnam01011trimestre_2_2015.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/cnam01011trimestre_2_2015.730x412_q85_crop-scale.jpg',
@@ -12904,7 +12904,7 @@ export default {
     {
       id: 1498,
       key: 'VirchowVillerme/06005/session01',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -12918,7 +12918,7 @@ export default {
           detail_page_enabled: false,
           banner: 'https://www.fun-mooc.fr/media/universities/virchowvillerme_banner.jpg' } ],
       university_name: 'Université Sorbonne Paris Cité',
-      main_university: 
+      main_university:
       { id: 198,
         name: 'Université Sorbonne Paris Cité',
         code: 'USPC',
@@ -12928,7 +12928,7 @@ export default {
       title: 'Numérique et recherche en santé et sciences du vivant',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 85, name: 'Santé' },
         { id: 64, name: 'Numérique, technologie' },
@@ -12942,7 +12942,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/virchowvillerme06005session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/virchowvillerme06005session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/virchowvillerme06005session01.730x412_q85_crop-scale.jpg',
@@ -12952,7 +12952,7 @@ export default {
     {
       id: 525,
       key: 'MinesTelecom/04001S03/session03',
-      universities: 
+      universities:
       [ { id: 5,
           name: 'IMT',
           code: 'MinesTelecom',
@@ -12960,7 +12960,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/baniere_imt_EDX-02-02.jpg' } ],
       university_name: 'IMT',
-      main_university: 
+      main_university:
       { id: 5,
         name: 'IMT',
         code: 'MinesTelecom',
@@ -12970,7 +12970,7 @@ export default {
       title: 'Introduction aux réseaux mobiles',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 82, name: 'Réseaux et télécommunications' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
       image_url: '/c4x/MinesTelecom/04001S03/asset/images_course_small.jpg',
@@ -12982,7 +12982,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/minestelecom04001s03session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/minestelecom04001s03session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/minestelecom04001s03session03.730x412_q85_crop-scale.jpg',
@@ -12992,7 +12992,7 @@ export default {
     {
       id: 1556,
       key: 'parisdescartes/70003/session01',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -13006,7 +13006,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/ParisDescartes_7_1-1.jpg' } ],
       university_name: 'Université Paris Descartes',
-      main_university: 
+      main_university:
       { id: 167,
         name: 'Université Paris Descartes',
         code: 'parisdescartes',
@@ -13016,7 +13016,7 @@ export default {
       title: 'Smartphone Pocket Lab: Experimental Classical Mechanics',
       short_description: '',
       level: '',
-      subjects: [ { id: 88, name: 'Sciences' }, { id: 73, name: 'Physique' } ],
+      subjects:[ { id: 88, name: 'Sciences' }, { id: 73, name: 'Physique' } ],
       image_url: '/c4x/parisdescartes/70003/asset/smartphone_image_trailer.png',
       start_date: '2016-01-29T08:00:00Z',
       end_date: '2016-04-08T16:00:00Z',
@@ -13026,7 +13026,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/parisdescartes70003session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/parisdescartes70003session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/parisdescartes70003session01.730x412_q85_crop-scale.jpg',
@@ -13036,7 +13036,7 @@ export default {
     {
       id: 39,
       key: 'ENSCachan/20003S02/Trimestre_1_2015',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -13062,7 +13062,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/image-bandeau-ENSdeLyon.jpg' } ],
       university_name: 'ENS Paris-Saclay',
-      main_university: 
+      main_university:
       { id: 14,
         name: 'ENS Paris-Saclay',
         code: 'ENSCachan',
@@ -13072,7 +13072,7 @@ export default {
       title: 'Enseigner et former avec le numérique',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 64, name: 'Numérique, technologie' } ],
       image_url: '/c4x/ENSCachan/20003S02/asset/images_course_small.jpg',
@@ -13084,7 +13084,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/enscachan20003s02trimestre_1_2015.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/enscachan20003s02trimestre_1_2015.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/enscachan20003s02trimestre_1_2015.730x412_q85_crop-scale.jpg',
@@ -13094,7 +13094,7 @@ export default {
     {
       id: 42,
       key: 'ENSCachan/20005/Trimestre_3_2014',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -13120,7 +13120,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/image-bandeau-ENSdeLyon.jpg' } ],
       university_name: 'ENS Paris-Saclay',
-      main_university: 
+      main_university:
       { id: 14,
         name: 'ENS Paris-Saclay',
         code: 'ENSCachan',
@@ -13130,7 +13130,7 @@ export default {
       title: 'Enseigner et former avec le numérique : formateur d\'adultes',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 64, name: 'Numérique, technologie' } ],
       image_url: '/c4x/ENSCachan/20005/asset/images_course_small.jpg',
@@ -13142,7 +13142,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/enscachan20005trimestre_3_2014.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/enscachan20005trimestre_3_2014.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/enscachan20005trimestre_3_2014.730x412_q85_crop-scale.jpg',
@@ -13152,7 +13152,7 @@ export default {
     {
       id: 1588,
       key: 'univ-fcomte/89001/session01',
-      universities: 
+      universities:
       [ { id: 175,
           name: 'Université de Franche-Comté',
           code: 'univ-fcomte',
@@ -13166,7 +13166,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Image_page_de_garde_Funmooc_Ubfc.png' } ],
       university_name: 'Université de Franche-Comté',
-      main_university: 
+      main_university:
       { id: 175,
         name: 'Université de Franche-Comté',
         code: 'univ-fcomte',
@@ -13176,7 +13176,7 @@ export default {
       title: 'Lutte Contre les Discriminations "être acteur de la diversité"',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 100, name: 'Sciences humaines et sociales' },
         { id: 25, name: 'Enjeux de société' } ],
       image_url: '/c4x/univ-fcomte/89001/asset/etudiants-etrangers-13.jpg',
@@ -13188,7 +13188,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/univ-fcomte89001session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/univ-fcomte89001session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/univ-fcomte89001session01.730x412_q85_crop-scale.jpg',
@@ -13198,7 +13198,7 @@ export default {
     {
       id: 90,
       key: 'AgroParisTech/32001/Trimestre_1_2015',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -13212,7 +13212,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Banniere_Grignon_ciel_Ph-Joyet.jpg' } ],
       university_name: 'AgroParisTech',
-      main_university: 
+      main_university:
       { id: 93,
         name: 'AgroParisTech',
         code: 'AgroParisTech',
@@ -13222,7 +13222,7 @@ export default {
       title: 'Les nouveaux challenges du marketing de la grande consommation',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 22, name: 'Économie et finance' },
         { id: 7, name: 'Communication' } ],
       image_url: '/c4x/AgroParisTech/32001/asset/visuel_MOOC_FUN_VF.jpg',
@@ -13234,7 +13234,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/agroparistech32001trimestre_1_2015.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/agroparistech32001trimestre_1_2015.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/agroparistech32001trimestre_1_2015.730x412_q85_crop-scale.jpg',
@@ -13244,7 +13244,7 @@ export default {
     {
       id: 96,
       key: 'unice/33001/Trimestre_4_2014',
-      universities: 
+      universities:
       [ { id: 304,
           name: 'Université Côte d\'Azur',
           code: 'UCA',
@@ -13252,7 +13252,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/bandeau_UCA_980x200_tiO0zfJ.jpg' } ],
       university_name: 'Université Nice Sophia Antipolis',
-      main_university: 
+      main_university:
       { id: 304,
         name: 'Université Côte d\'Azur',
         code: 'UCA',
@@ -13262,7 +13262,7 @@ export default {
       title: 'BD**2: Des Bases de Données à Big Data',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 58, name: 'Mathématiques et statistiques' } ],
       image_url: '/c4x/unice/33001/asset/image_course_small.jpg',
@@ -13274,7 +13274,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/unice33001trimestre_4_2014.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/unice33001trimestre_4_2014.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/unice33001trimestre_4_2014.730x412_q85_crop-scale.jpg',
@@ -13284,7 +13284,7 @@ export default {
     {
       id: 357,
       key: 'SciencesPo/05004S02/Trimestre_1_2015',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -13298,7 +13298,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/sciencespo.21764b4b23e5.jpg' } ],
       university_name: 'Sciences Po',
-      main_university: 
+      main_university:
       { id: 6,
         name: 'Sciences Po.',
         code: 'SciencesPo',
@@ -13308,7 +13308,7 @@ export default {
       title: 'Scientific Humanities',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 100, name: 'Sciences humaines et sociales' },
         { id: 76, name: 'Sciences Politiques' } ],
       image_url: '/c4x/SciencesPo/05004S02/asset/images_course_small.jpg',
@@ -13320,7 +13320,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/sciencespo05004s02trimestre_1_2015.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/sciencespo05004s02trimestre_1_2015.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/sciencespo05004s02trimestre_1_2015.730x412_q85_crop-scale.jpg',
@@ -13330,7 +13330,7 @@ export default {
     {
       id: 1641,
       key: 'Paris1/16003/session01',
-      universities: 
+      universities:
       [ { id: 13,
           name: 'Université Paris 1 Panthéon-Sorbonne',
           code: 'Paris1',
@@ -13338,7 +13338,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/banniere_paris1-pantheon-sorbonne_980x200.jpg' } ],
       university_name: 'Université Paris 1 Panthéon-Sorbonne',
-      main_university: 
+      main_university:
       { id: 13,
         name: 'Université Paris 1 Panthéon-Sorbonne',
         code: 'Paris1',
@@ -13348,7 +13348,7 @@ export default {
       title: 'Droit des contrats',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 19, name: 'Droit et juridique' },
         { id: 109, name: 'Vie de l\'entreprise' } ],
       image_url: '/c4x/Paris1/16003/asset/images_course_Paris1-Droit-des-contrats.png',
@@ -13360,7 +13360,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/paris116003session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/paris116003session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/paris116003session01.730x412_q85_crop-scale.jpg',
@@ -13370,7 +13370,7 @@ export default {
     {
       id: 1643,
       key: 'umontpellier/08004/session01',
-      universities: 
+      universities:
       [ { id: 8,
           name: 'Université de Montpellier',
           code: 'umontpellier',
@@ -13378,7 +13378,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Photo-campus_rlrvHDS.png' } ],
       university_name: 'Université de Montpellier',
-      main_university: 
+      main_university:
       { id: 8,
         name: 'Université de Montpellier',
         code: 'umontpellier',
@@ -13388,7 +13388,7 @@ export default {
       title: 'Histoire des sciences : une introduction',
       short_description: '',
       level: '',
-      subjects: [ { id: 88, name: 'Sciences' }, { id: 40, name: 'Histoire' } ],
+      subjects:[ { id: 88, name: 'Sciences' }, { id: 40, name: 'Histoire' } ],
       image_url: '/c4x/umontpellier/08004/asset/vignette.png',
       start_date: '2016-04-18T08:00:00Z',
       end_date: '2016-06-13T23:30:00Z',
@@ -13398,7 +13398,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/umontpellier08004session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/umontpellier08004session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/umontpellier08004session01.730x412_q85_crop-scale.jpg',
@@ -13408,7 +13408,7 @@ export default {
     {
       id: 1149,
       key: 'Paris2/09006/session01',
-      universities: 
+      universities:
       [ { id: 9,
           name: 'Université Panthéon-Assas, Paris II',
           code: 'Paris2',
@@ -13416,7 +13416,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/paris2.e025b3182afe.jpg' } ],
       university_name: 'Université Panthéon-Assas - Paris II',
-      main_university: 
+      main_university:
       { id: 9,
         name: 'Université Panthéon-Assas, Paris II',
         code: 'Paris2',
@@ -13426,7 +13426,7 @@ export default {
       title: 'Economie du droit',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 19, name: 'Droit et juridique' },
         { id: 22, name: 'Économie et finance' } ],
       image_url: '/c4x/Paris2/09006/asset/images_course_small.jpg',
@@ -13438,7 +13438,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/paris209006session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/paris209006session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/paris209006session01.730x412_q85_crop-scale.jpg',
@@ -13448,7 +13448,7 @@ export default {
     {
       id: 1664,
       key: 'umontpellier/08005/session01',
-      universities: 
+      universities:
       [ { id: 8,
           name: 'Université de Montpellier',
           code: 'umontpellier',
@@ -13456,7 +13456,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Photo-campus_rlrvHDS.png' } ],
       university_name: 'Université de Montpellier',
-      main_university: 
+      main_university:
       { id: 8,
         name: 'Université de Montpellier',
         code: 'umontpellier',
@@ -13466,7 +13466,7 @@ export default {
       title: 'Comptabilité de gestion et pratique du tableur - session 1',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 55, name: 'Management' },
         { id: 109, name: 'Vie de l\'entreprise' } ],
       image_url: '/c4x/umontpellier/08005/asset/Vignette_fun.jpg',
@@ -13478,7 +13478,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/umontpellier08005session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/umontpellier08005session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/umontpellier08005session01.730x412_q85_crop-scale.jpg',
@@ -13488,7 +13488,7 @@ export default {
     {
       id: 2479,
       key: 'course-v1:agrosupdijon+99001+session02',
-      universities: 
+      universities:
       [ { id: 113,
           name: 'Agreenium',
           code: 'Agreenium',
@@ -13502,7 +13502,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Photo_Ecole_AgroSup_Dijon_980x200pixels.png' } ],
       university_name: 'AgroSup Dijon',
-      main_university: 
+      main_university:
       { id: 207,
         name: 'AgroSup Dijon',
         code: 'agrosupdijon',
@@ -13512,7 +13512,7 @@ export default {
       title: 'ProtéiNNOV : Protéines végétales et Innovation',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 1, name: 'Agronomie et agriculture' } ],
       image_url: 'asset-v1:agrosupdijon+99001+session02+type@asset+block@photo-présentation-mooc.jpg',
@@ -13524,7 +13524,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1agrosupdijon99001session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1agrosupdijon99001session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1agrosupdijon99001session02.730x412_q85_crop-scale.jpg',
@@ -13534,7 +13534,7 @@ export default {
     {
       id: 1722,
       key: 'USPC/37001/session01',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -13542,7 +13542,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Recherche_montaGabirelle-3.jpg' } ],
       university_name: 'Université Sorbonne Paris Cité',
-      main_university: 
+      main_university:
       { id: 198,
         name: 'Université Sorbonne Paris Cité',
         code: 'USPC',
@@ -13552,7 +13552,7 @@ export default {
       title: 'Simulation en Santé, des principes aux applications',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 85, name: 'Santé' },
         { id: 7, name: 'Communication' },
@@ -13567,7 +13567,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/uspc37001session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/uspc37001session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/uspc37001session01.730x412_q85_crop-scale.jpg',
@@ -13577,7 +13577,7 @@ export default {
     {
       id: 1299,
       key: 'SciencesPo/05006S02/session02',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -13591,7 +13591,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/sciencespo.21764b4b23e5.jpg' } ],
       university_name: 'Sciences Po',
-      main_university: 
+      main_university:
       { id: 6,
         name: 'Sciences Po.',
         code: 'SciencesPo',
@@ -13601,7 +13601,7 @@ export default {
       title: 'Politics and Economics of International Energy ',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 22, name: 'Économie et finance' },
         { id: 34, name: 'Environnement' },
         { id: 115, name: 'Développement durable' },
@@ -13616,7 +13616,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/sciencespo05006s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/sciencespo05006s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/sciencespo05006s02session02.730x412_q85_crop-scale.jpg',
@@ -13626,7 +13626,7 @@ export default {
     {
       id: 1065,
       key: 'CNAM/01013/session01',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -13640,7 +13640,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Le_Cnam_facade.jpg' } ],
       university_name: 'Le CNAM',
-      main_university: 
+      main_university:
       { id: 1,
         name: 'Le Cnam',
         code: 'CNAM',
@@ -13650,7 +13650,7 @@ export default {
       title: 'Informatique et libertés sur internet',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 19, name: 'Droit et juridique' },
         { id: 25, name: 'Enjeux de société' },
         { id: 64, name: 'Numérique, technologie' } ],
@@ -13663,7 +13663,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/cnam01013session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/cnam01013session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/cnam01013session01.730x412_q85_crop-scale.jpg',
@@ -13673,7 +13673,7 @@ export default {
     {
       id: 1068,
       key: 'Paris2/09003S02/session02',
-      universities: 
+      universities:
       [ { id: 9,
           name: 'Université Panthéon-Assas, Paris II',
           code: 'Paris2',
@@ -13681,7 +13681,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/paris2.e025b3182afe.jpg' } ],
       university_name: 'Université Panthéon-Assas - Paris II',
-      main_university: 
+      main_university:
       { id: 9,
         name: 'Université Panthéon-Assas, Paris II',
         code: 'Paris2',
@@ -13691,7 +13691,7 @@ export default {
       title: 'Comprendre l’exercice de la Justice : panorama des institutions juridictionnelles',
       short_description: '',
       level: 'intermediate',
-      subjects: [ { id: 19, name: 'Droit et juridique' } ],
+      subjects:[ { id: 19, name: 'Droit et juridique' } ],
       image_url: '/c4x/Paris2/09003S02/asset/images_course_small.jpg',
       start_date: '2015-05-11T11:00:00Z',
       end_date: '2015-07-25T23:30:00Z',
@@ -13701,7 +13701,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/paris209003s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/paris209003s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/paris209003s02session02.730x412_q85_crop-scale.jpg',
@@ -13711,7 +13711,7 @@ export default {
     {
       id: 1369,
       key: 'CNAM/01016/session01',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -13725,7 +13725,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Le_Cnam_facade.jpg' } ],
       university_name: 'Le CNAM',
-      main_university: 
+      main_university:
       { id: 1,
         name: 'Le Cnam',
         code: 'CNAM',
@@ -13735,7 +13735,7 @@ export default {
       title: 'Dialogue social et formation continue',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 28, name: 'Education et formation' },
         { id: 25, name: 'Enjeux de société' },
         { id: 109, name: 'Vie de l\'entreprise' } ],
@@ -13748,7 +13748,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/cnam01016session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/cnam01016session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/cnam01016session01.730x412_q85_crop-scale.jpg',
@@ -13758,7 +13758,7 @@ export default {
     {
       id: 2402,
       key: 'course-v1:CNAM+01021+session02',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -13772,7 +13772,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Le_Cnam_facade.jpg' } ],
       university_name: 'Le Cnam',
-      main_university: 
+      main_university:
       { id: 1,
         name: 'Le Cnam',
         code: 'CNAM',
@@ -13782,7 +13782,7 @@ export default {
       title: 'La compta pour tous',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 55, name: 'Management' },
         { id: 109, name: 'Vie de l\'entreprise' } ],
       image_url: 'asset-v1:CNAM+01021+session02+type@asset+block@p3_hd.png',
@@ -13794,7 +13794,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1cnam01021session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1cnam01021session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1cnam01021session02.730x412_q85_crop-scale.jpg',
@@ -13804,7 +13804,7 @@ export default {
     {
       id: 2921,
       key: 'course-v1:CNFPT+87005+session03',
-      universities: 
+      universities:
       [ { id: 179,
           name: 'Centre national de la fonction publique territoriale (CNFPT)',
           code: 'CNFPT',
@@ -13812,7 +13812,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Bandeau_CNFPT_original.jpg' } ],
       university_name: 'Centre national de la fonction publique territoriale (CNFPT)',
-      main_university: 
+      main_university:
       { id: 179,
         name: 'Centre national de la fonction publique territoriale (CNFPT)',
         code: 'CNFPT',
@@ -13822,7 +13822,7 @@ export default {
       title: 'Les fondamentaux des marchés publics',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 19, name: 'Droit et juridique' },
         { id: 109, name: 'Vie de l\'entreprise' } ],
       image_url: 'asset-v1:CNFPT+87005+session03+type@asset+block@MOOC-marches-publics.png',
@@ -13834,7 +13834,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1cnfpt87005session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1cnfpt87005session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1cnfpt87005session03.730x412_q85_crop-scale.jpg',
@@ -13844,7 +13844,7 @@ export default {
     {
       id: 1137,
       key: 'VirchowVillerme/06004S02/Trimestre_2_2015',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -13852,7 +13852,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Recherche_montaGabirelle-3.jpg' } ],
       university_name: 'Université Sorbonne Paris Cité',
-      main_university: 
+      main_university:
       { id: 198,
         name: 'Université Sorbonne Paris Cité',
         code: 'USPC',
@@ -13862,7 +13862,7 @@ export default {
       title: 'La bombe démographique est-elle désamorcée ?',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 100, name: 'Sciences humaines et sociales' },
         { id: 25, name: 'Enjeux de société' },
         { id: 37, name: 'Géographie' } ],
@@ -13875,7 +13875,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/virchowvillerme06004s02trimestre_2_2015.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/virchowvillerme06004s02trimestre_2_2015.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/virchowvillerme06004s02trimestre_2_2015.730x412_q85_crop-scale.jpg',
@@ -13885,7 +13885,7 @@ export default {
     {
       id: 2428,
       key: 'course-v1:isentoulon+112001+session01',
-      universities: 
+      universities:
       [ { id: 283,
           name: 'Institut supérieur de l\'électronique et du numérique (ISEN)',
           code: 'isentoulon',
@@ -13893,7 +13893,7 @@ export default {
           detail_page_enabled: false,
           banner: null } ],
       university_name: 'Institut supérieur de l\'électronique et du numérique (ISEN)',
-      main_university: 
+      main_university:
       { id: 283,
         name: 'Institut supérieur de l\'électronique et du numérique (ISEN)',
         code: 'isentoulon',
@@ -13903,7 +13903,7 @@ export default {
       title: 'Socle en Electronique Analogique                        ',
       short_description: '',
       level: '',
-      subjects: [ { id: 103, name: 'Sciences pour l\'ingénieur' } ],
+      subjects:[ { id: 103, name: 'Sciences pour l\'ingénieur' } ],
       image_url: 'asset-v1:isentoulon+112001+session01+type@asset+block@ITII-STORY-MOOC-electronique_fin_30092016.png',
       start_date: '2017-05-09T08:00:00Z',
       end_date: '2017-07-20T18:00:00Z',
@@ -13913,7 +13913,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/course-v1isentoulon112001session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/course-v1isentoulon112001session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/course-v1isentoulon112001session01.730x412_q85_crop-scale.jpg',
@@ -13923,7 +13923,7 @@ export default {
     {
       id: 174,
       key: 'VirchowVillerme/06003S02/Trimestre_1_2015',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -13931,7 +13931,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Recherche_montaGabirelle-3.jpg' } ],
       university_name: 'Université Sorbonne Paris Cité',
-      main_university: 
+      main_university:
       { id: 198,
         name: 'Université Sorbonne Paris Cité',
         code: 'USPC',
@@ -13941,7 +13941,7 @@ export default {
       title: 'SRAS : une « révolution » de la gouvernance mondiale des épidémies ?',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 85, name: 'Santé' },
         { id: 25, name: 'Enjeux de société' },
         { id: 79, name: 'Relations internationales' } ],
@@ -13954,7 +13954,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/virchowvillerme06003s02trimestre_1_2015.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/virchowvillerme06003s02trimestre_1_2015.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/virchowvillerme06003s02trimestre_1_2015.730x412_q85_crop-scale.jpg',
@@ -13964,7 +13964,7 @@ export default {
     {
       id: 1769,
       key: 'USPC/37002S03/session03',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -13972,7 +13972,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Recherche_montaGabirelle-3.jpg' } ],
       university_name: 'Université Sorbonne Paris Cité',
-      main_university: 
+      main_university:
       { id: 198,
         name: 'Université Sorbonne Paris Cité',
         code: 'USPC',
@@ -13982,7 +13982,7 @@ export default {
       title: 'Contrôler une épidémie de maladies infectieuses émergentes',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 22, name: 'Économie et finance' },
         { id: 85, name: 'Santé' },
         { id: 7, name: 'Communication' },
@@ -13998,7 +13998,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 3,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/uspc37002s03session03.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/uspc37002s03session03.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/uspc37002s03session03.730x412_q85_crop-scale.jpg',
@@ -14008,7 +14008,7 @@ export default {
     {
       id: 1309,
       key: 'ENSCachan/20001S02/session02',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -14022,7 +14022,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/enscachan.921fde30c904.jpg' } ],
       university_name: 'ENS Paris-Saclay',
-      main_university: 
+      main_university:
       { id: 14,
         name: 'ENS Paris-Saclay',
         code: 'ENSCachan',
@@ -14032,7 +14032,7 @@ export default {
       title: 'Pratiques du Dimensionnement en Mécanique - Partie 1 - session 2',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 73, name: 'Physique' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
@@ -14045,7 +14045,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/enscachan20001s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/enscachan20001s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/enscachan20001s02session02.730x412_q85_crop-scale.jpg',
@@ -14055,7 +14055,7 @@ export default {
     {
       id: 1605,
       key: 'enac/81001/session01',
-      universities: 
+      universities:
       [ { id: 177,
           name: 'ENAC',
           code: 'enac',
@@ -14063,7 +14063,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/campus_ENAC3_ydgt5kP.jpg' } ],
       university_name: 'ENAC',
-      main_university: 
+      main_university:
       { id: 177,
         name: 'ENAC',
         code: 'enac',
@@ -14073,7 +14073,7 @@ export default {
       title: 'Quel avion pour quelle mission ?',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 25, name: 'Enjeux de société' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
@@ -14086,7 +14086,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/enac81001session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/enac81001session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/enac81001session01.730x412_q85_crop-scale.jpg',
@@ -14096,7 +14096,7 @@ export default {
     {
       id: 72,
       key: 'ENSDeLyon/14001/Trimestre_4_2014',
-      universities: 
+      universities:
       [ { id: 172,
           name: 'Université de Lyon',
           code: 'universite-lyon',
@@ -14110,7 +14110,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/image-bandeau-ENSdeLyon.jpg' } ],
       university_name: 'ENS de Lyon',
-      main_university: 
+      main_university:
       { id: 24,
         name: 'ENS de Lyon',
         code: 'ENSDeLyon',
@@ -14120,7 +14120,7 @@ export default {
       title: 'L\'Union Européenne au défi de l\'intégration économique',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 22, name: 'Économie et finance' },
         { id: 79, name: 'Relations internationales' },
         { id: 76, name: 'Sciences Politiques' } ],
@@ -14133,7 +14133,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/ensdelyon14001trimestre_4_2014.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/ensdelyon14001trimestre_4_2014.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/ensdelyon14001trimestre_4_2014.730x412_q85_crop-scale.jpg',
@@ -14143,7 +14143,7 @@ export default {
     {
       id: 363,
       key: 'lille1/54001/Trimestre_1_2015',
-      universities: 
+      universities:
       [ { id: 225,
           name: 'ComUE Lille Nord de France',
           code: 'cuelnf',
@@ -14157,7 +14157,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/VisuelUnivLille199.jpg' } ],
       university_name: 'Université Lille 1',
-      main_university: 
+      main_university:
       { id: 87,
         name: 'Université de Lille 1, Sciences et technologies',
         code: 'lille1',
@@ -14167,7 +14167,7 @@ export default {
       title: 'Arithmétique : en route pour la cryptographie',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 58, name: 'Mathématiques et statistiques' },
         { id: 112, name: 'Programmation' } ],
@@ -14180,7 +14180,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/lille154001trimestre_1_2015.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/lille154001trimestre_1_2015.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/lille154001trimestre_1_2015.730x412_q85_crop-scale.jpg',
@@ -14190,7 +14190,7 @@ export default {
     {
       id: 888,
       key: 'Montpellier2/08001/Trimestre_1_2014',
-      universities: 
+      universities:
       [ { id: 8,
           name: 'Université de Montpellier',
           code: 'umontpellier',
@@ -14198,7 +14198,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Photo-campus_rlrvHDS.png' } ],
       university_name: 'Université de Montpellier',
-      main_university: 
+      main_university:
       { id: 8,
         name: 'Université de Montpellier',
         code: 'umontpellier',
@@ -14208,7 +14208,7 @@ export default {
       title: 'Ville durable : être acteur du changement',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 115, name: 'Développement durable' },
         { id: 25, name: 'Enjeux de société' } ],
@@ -14221,7 +14221,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/montpellier208001trimestre_1_2014.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/montpellier208001trimestre_1_2014.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/montpellier208001trimestre_1_2014.730x412_q85_crop-scale.jpg',
@@ -14231,7 +14231,7 @@ export default {
     {
       id: 1670,
       key: 'CNAM/01006S02/session02',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -14245,7 +14245,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Le_Cnam_facade.jpg' } ],
       university_name: 'Le Cnam',
-      main_university: 
+      main_university:
       { id: 1,
         name: 'Le Cnam',
         code: 'CNAM',
@@ -14255,7 +14255,7 @@ export default {
       title: 'Dernières nouvelles du crime',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 100, name: 'Sciences humaines et sociales' },
         { id: 13, name: 'Cultures et civilisations' },
         { id: 25, name: 'Enjeux de société' },
@@ -14269,7 +14269,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/cnam01006s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/cnam01006s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/cnam01006s02session02.730x412_q85_crop-scale.jpg',
@@ -14279,7 +14279,7 @@ export default {
     {
       id: 1672,
       key: 'parisdiderot/56001S02/session02',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -14293,7 +14293,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/FUN-MOOC_Paris_Diderot.jpg' } ],
       university_name: 'Université Paris Diderot',
-      main_university: 
+      main_university:
       { id: 108,
         name: 'Université Paris Diderot',
         code: 'parisdiderot',
@@ -14303,7 +14303,7 @@ export default {
       title: 'Gravité! Du Big Bang aux Trous Noirs ',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 16, name: 'Découverte de l\'Univers' },
         { id: 73, name: 'Physique' } ],
@@ -14316,7 +14316,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/parisdiderot56001s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/parisdiderot56001s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/parisdiderot56001s02session02.730x412_q85_crop-scale.jpg',
@@ -14326,7 +14326,7 @@ export default {
     {
       id: 1164,
       key: 'EHESP/60001/session01',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -14340,7 +14340,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/ehesp-banniere.png' } ],
       university_name: 'Ecole des hautes études en santé publique',
-      main_university: 
+      main_university:
       { id: 116,
         name: 'Ecole des hautes études en santé publique',
         code: 'EHESP',
@@ -14350,7 +14350,7 @@ export default {
       title: 'Comprendre la santé publique et le système de santé',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 85, name: 'Santé' },
         { id: 25, name: 'Enjeux de société' },
         { id: 76, name: 'Sciences Politiques' } ],
@@ -14363,7 +14363,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/ehesp60001session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/ehesp60001session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/ehesp60001session01.730x412_q85_crop-scale.jpg',
@@ -14373,7 +14373,7 @@ export default {
     {
       id: 1682,
       key: 'CNAM/01018S02/session02',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -14387,7 +14387,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Le_Cnam_facade.jpg' } ],
       university_name: 'Le Cnam',
-      main_university: 
+      main_university:
       { id: 1,
         name: 'Le Cnam',
         code: 'CNAM',
@@ -14397,7 +14397,7 @@ export default {
       title: 'Questions stratégiques',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 100, name: 'Sciences humaines et sociales' },
         { id: 25, name: 'Enjeux de société' },
         { id: 79, name: 'Relations internationales' },
@@ -14411,7 +14411,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/cnam01018s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/cnam01018s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/cnam01018s02session02.730x412_q85_crop-scale.jpg',
@@ -14421,7 +14421,7 @@ export default {
     {
       id: 1704,
       key: 'inria/41006S02/session02',
-      universities: 
+      universities:
       [ { id: 42,
           name: 'Inria',
           code: 'inria',
@@ -14429,7 +14429,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/bandeau_MoocInria.0124-121.jpg' } ],
       university_name: 'Inria',
-      main_university: 
+      main_university:
       { id: 42,
         name: 'Inria',
         code: 'inria',
@@ -14439,7 +14439,7 @@ export default {
       title: 'Code-Based Cryptography',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 58, name: 'Mathématiques et statistiques' },
         { id: 112, name: 'Programmation' } ],
@@ -14452,7 +14452,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/inria41006s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/inria41006s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/inria41006s02session02.730x412_q85_crop-scale.jpg',
@@ -14462,7 +14462,7 @@ export default {
     {
       id: 1796,
       key: 'amu/38003S02/session02',
-      universities: 
+      universities:
       [ { id: 118,
           name: 'Aix-Marseille Université',
           code: 'amu',
@@ -14470,7 +14470,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Aix-Marseille-BANDEAU.jpg' } ],
       university_name: 'Aix-Marseille Université',
-      main_university: 
+      main_university:
       { id: 118,
         name: 'Aix-Marseille Université',
         code: 'amu',
@@ -14480,7 +14480,7 @@ export default {
       title: 'Le langage entre nature et culture',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 49, name: 'Langues' },
         { id: 100, name: 'Sciences humaines et sociales' },
         { id: 13, name: 'Cultures et civilisations' },
@@ -14494,7 +14494,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/amu38003s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/amu38003s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/amu38003s02session02.730x412_q85_crop-scale.jpg',
@@ -14504,7 +14504,7 @@ export default {
     {
       id: 1613,
       key: 'Strasbourg/17002/session01',
-      universities: 
+      universities:
       [ { id: 36,
           name: 'Université de Strasbourg',
           code: 'Strasbourg',
@@ -14512,7 +14512,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/illustration_etablissement_UNISTRA.jpg' } ],
       university_name: 'Université de Strasbourg',
-      main_university: 
+      main_university:
       { id: 36,
         name: 'Université de Strasbourg',
         code: 'Strasbourg',
@@ -14522,7 +14522,7 @@ export default {
       title: 'Groupes finis : les mathématiques du Rubik\'s cube',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 58, name: 'Mathématiques et statistiques' } ],
       image_url: '/c4x/Strasbourg/17002/asset/rubiks2.png',
@@ -14534,7 +14534,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/strasbourg17002session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/strasbourg17002session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/strasbourg17002session01.730x412_q85_crop-scale.jpg',
@@ -14544,7 +14544,7 @@ export default {
     {
       id: 1633,
       key: 'OBSPM/62001S02/session02',
-      universities: 
+      universities:
       [ { id: 58,
           name: 'Paris Sciences Lettres',
           code: 'psl',
@@ -14558,7 +14558,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/banniere-obspm.png' } ],
       university_name: 'Observatoire de Paris',
-      main_university: 
+      main_university:
       { id: 136,
         name: 'Observatoire de Paris',
         code: 'OBSPM',
@@ -14568,7 +14568,7 @@ export default {
       title: 'Peser l\'Univers',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 16, name: 'Découverte de l\'Univers' },
         { id: 73, name: 'Physique' },
@@ -14582,7 +14582,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/obspm62001s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/obspm62001s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/obspm62001s02session02.730x412_q85_crop-scale.jpg',
@@ -14592,7 +14592,7 @@ export default {
     {
       id: 1390,
       key: 'ENSCachan/20004S02/session02',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -14606,7 +14606,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/enscachan.921fde30c904.jpg' } ],
       university_name: 'ENS Paris-Saclay',
-      main_university: 
+      main_university:
       { id: 14,
         name: 'ENS Paris-Saclay',
         code: 'ENSCachan',
@@ -14616,7 +14616,7 @@ export default {
       title: 'Introduction à la logique informatique - Partie 1 : calcul propositionnel',
       short_description: '',
       level: 'advanced',
-      subjects: 
+      subjects:
       [ { id: 43, name: 'Informatique' },
         { id: 58, name: 'Mathématiques et statistiques' },
         { id: 112, name: 'Programmation' },
@@ -14630,7 +14630,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/enscachan20004s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/enscachan20004s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/enscachan20004s02session02.730x412_q85_crop-scale.jpg',
@@ -14640,7 +14640,7 @@ export default {
     {
       id: 1676,
       key: 'ensam/022003S02/session02',
-      universities: 
+      universities:
       [ { id: 240,
           name: 'HESAM Université',
           code: 'hesam',
@@ -14654,7 +14654,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Angers-2013-cour_ecole__etudiants_-_0613_M.jpg_1.jpeg' } ],
       university_name: 'Ecole Nationale Supérieure d’Arts et Métiers',
-      main_university: 
+      main_university:
       { id: 43,
         name: 'Ecole Nationale Supérieure d’Arts et Métiers',
         code: 'ensam',
@@ -14664,7 +14664,7 @@ export default {
       title: 'Eco-Concevoir Demain',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 115, name: 'Développement durable' },
         { id: 25, name: 'Enjeux de société' },
@@ -14678,7 +14678,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/ensam022003s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/ensam022003s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/ensam022003s02session02.730x412_q85_crop-scale.jpg',
@@ -14688,7 +14688,7 @@ export default {
     {
       id: 1447,
       key: 'oca/27001/Trimestre_1_2015',
-      universities: 
+      universities:
       [ { id: 126,
           name: 'L\'observatoire de la Côte d\'Azur',
           code: 'oca',
@@ -14696,7 +14696,7 @@ export default {
           detail_page_enabled: false,
           banner: null } ],
       university_name: 'L\'Observatoire de la Côte d\'Azur',
-      main_university: 
+      main_university:
       { id: 126,
         name: 'L\'observatoire de la Côte d\'Azur',
         code: 'oca',
@@ -14706,7 +14706,7 @@ export default {
       title: 'Eagle-Eye Astronomy',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 67, name: 'Outils pour la recherche' },
         { id: 94, name: 'Sciences de la Terre et de l\'Univers' },
@@ -14720,7 +14720,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/oca27001trimestre_1_2015.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/oca27001trimestre_1_2015.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/oca27001trimestre_1_2015.730x412_q85_crop-scale.jpg',
@@ -14730,7 +14730,7 @@ export default {
     {
       id: 1240,
       key: 'Paris10/10002S02/session02',
-      universities: 
+      universities:
       [ { id: 10,
           name: 'Université Paris Nanterre',
           code: 'Paris10',
@@ -14738,7 +14738,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/paris10.f6605d9f5319.jpg' } ],
       university_name: 'Université Paris Ouest Nanterre La Défense',
-      main_university: 
+      main_university:
       { id: 10,
         name: 'Université Paris Nanterre',
         code: 'Paris10',
@@ -14748,7 +14748,7 @@ export default {
       title: 'Philosophie et modes de vie ; de Socrate à Pierre Hadot et Michel Foucault',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 100, name: 'Sciences humaines et sociales' },
         { id: 70, name: 'Philosophie' } ],
       image_url: '/c4x/Paris10/10002S02/asset/images_course_small-Copy.jpg',
@@ -14760,7 +14760,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/paris1010002s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/paris1010002s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/paris1010002s02session02.730x412_q85_crop-scale.jpg',
@@ -14770,7 +14770,7 @@ export default {
     {
       id: 1258,
       key: 'inria/41004/session01',
-      universities: 
+      universities:
       [ { id: 42,
           name: 'Inria',
           code: 'inria',
@@ -14778,7 +14778,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/bandeau_MoocInria.0124-121.jpg' } ],
       university_name: 'Inria',
-      main_university: 
+      main_university:
       { id: 42,
         name: 'Inria',
         code: 'inria',
@@ -14788,7 +14788,7 @@ export default {
       title: 'Binaural Hearing for Robots',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 46, name: 'Innovation' },
         { id: 112, name: 'Programmation' },
@@ -14802,7 +14802,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/inria41004session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/inria41004session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/inria41004session01.730x412_q85_crop-scale.jpg',
@@ -14812,7 +14812,7 @@ export default {
     {
       id: 1530,
       key: 'inria/41005S02/session02',
-      universities: 
+      universities:
       [ { id: 42,
           name: 'Inria',
           code: 'inria',
@@ -14820,7 +14820,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/bandeau_MoocInria.0124-121.jpg' } ],
       university_name: 'Inria',
-      main_university: 
+      main_university:
       { id: 42,
         name: 'Inria',
         code: 'inria',
@@ -14830,7 +14830,7 @@ export default {
       title: 'Mobile Robots and Autonomous Vehicles',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 46, name: 'Innovation' },
         { id: 112, name: 'Programmation' },
@@ -14844,7 +14844,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/inria41005s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/inria41005s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/inria41005s02session02.730x412_q85_crop-scale.jpg',
@@ -14854,7 +14854,7 @@ export default {
     {
       id: 735,
       key: 'VirchowVillerme/06002S02/Trimestre_1_2015',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -14862,7 +14862,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Recherche_montaGabirelle-3.jpg' } ],
       university_name: 'Université Sorbonne Paris Cité',
-      main_university: 
+      main_university:
       { id: 198,
         name: 'Université Sorbonne Paris Cité',
         code: 'USPC',
@@ -14872,7 +14872,7 @@ export default {
       title: 'Fondamentaux en statistique',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 58, name: 'Mathématiques et statistiques' },
         { id: 67, name: 'Outils pour la recherche' },
         { id: 103, name: 'Sciences pour l\'ingénieur' } ],
@@ -14885,7 +14885,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/virchowvillerme06002s02trimestre_1_2015.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/virchowvillerme06002s02trimestre_1_2015.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/virchowvillerme06002s02trimestre_1_2015.730x412_q85_crop-scale.jpg',
@@ -14895,7 +14895,7 @@ export default {
     {
       id: 27,
       key: 'unige/57001/Trimestre_1_2015',
-      universities: 
+      universities:
       [ { id: 75,
           name: 'Université de Genève',
           code: 'unige',
@@ -14903,7 +14903,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/UNIGE-Banner1-980x200.jpg' } ],
       university_name: 'Université de Genève - UNF3S',
-      main_university: 
+      main_university:
       { id: 75,
         name: 'Université de Genève',
         code: 'unige',
@@ -14913,7 +14913,7 @@ export default {
       title: 'Ebola, vaincre ensemble !',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 85, name: 'Santé' },
         { id: 25, name: 'Enjeux de société' } ],
       image_url: '/c4x/unige/57001/asset/images_course_small.jpg',
@@ -14925,7 +14925,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/unige57001trimestre_1_2015.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/unige57001trimestre_1_2015.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/unige57001trimestre_1_2015.730x412_q85_crop-scale.jpg',
@@ -14935,7 +14935,7 @@ export default {
     {
       id: 1062,
       key: 'upmf/69002/session01',
-      universities: 
+      universities:
       [ { id: 201,
           name: 'Communauté Université Grenoble Alpes',
           code: 'grenoblealpes',
@@ -14943,7 +14943,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/campus_bu-001.jpg' } ],
       university_name: 'Université Pierre-Mendès-France (Grenoble 2)',
-      main_university: 
+      main_university:
       { id: 201,
         name: 'Communauté Université Grenoble Alpes',
         code: 'grenoblealpes',
@@ -14953,7 +14953,7 @@ export default {
       title: 'Développement et durabilité',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 115, name: 'Développement durable' },
         { id: 25, name: 'Enjeux de société' } ],
@@ -14966,7 +14966,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/upmf69002session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/upmf69002session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/upmf69002session01.730x412_q85_crop-scale.jpg',
@@ -14976,7 +14976,7 @@ export default {
     {
       id: 1321,
       key: 'ubourgogne/82001/session01',
-      universities: 
+      universities:
       [ { id: 163,
           name: 'Université de Bourgogne',
           code: 'ubourgogne',
@@ -14990,7 +14990,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Image_page_de_garde_Funmooc_Ubfc.png' } ],
       university_name: 'Université de Bourgogne',
-      main_university: 
+      main_university:
       { id: 163,
         name: 'Université de Bourgogne',
         code: 'ubourgogne',
@@ -15000,7 +15000,7 @@ export default {
       title: 'Digital Culture and Writing - Culture et Ecriture Numériques',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 7, name: 'Communication' },
         { id: 52, name: 'Lettres' },
         { id: 64, name: 'Numérique, technologie' } ],
@@ -15013,7 +15013,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/ubourgogne82001session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/ubourgogne82001session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/ubourgogne82001session01.730x412_q85_crop-scale.jpg',
@@ -15023,7 +15023,7 @@ export default {
     {
       id: 1324,
       key: 'ubourgogne/82002/session01',
-      universities: 
+      universities:
       [ { id: 163,
           name: 'Université de Bourgogne',
           code: 'ubourgogne',
@@ -15037,7 +15037,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Image_page_de_garde_Funmooc_Ubfc.png' } ],
       university_name: 'Université de Bourgogne',
-      main_university: 
+      main_university:
       { id: 163,
         name: 'Université de Bourgogne',
         code: 'ubourgogne',
@@ -15047,7 +15047,7 @@ export default {
       title: 'Open Wine University - Université de la vigne et du vin pour tous',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 1, name: 'Agronomie et agriculture' },
         { id: 13, name: 'Cultures et civilisations' } ],
       image_url: '/c4x/ubourgogne/82002/asset/images_course_small.jpg',
@@ -15059,7 +15059,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/ubourgogne82002session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/ubourgogne82002session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/ubourgogne82002session01.730x412_q85_crop-scale.jpg',
@@ -15069,7 +15069,7 @@ export default {
     {
       id: 1609,
       key: 'bordeauxmontaigne/07002S02/session02',
-      universities: 
+      universities:
       [ { id: 195,
           name: 'ComUE d’Aquitaine',
           code: 'cuea',
@@ -15083,7 +15083,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/ubordeauxmontaignepano.jpg' } ],
       university_name: 'Université Bordeaux Montaigne',
-      main_university: 
+      main_university:
       { id: 63,
         name: 'Université Bordeaux Montaigne',
         code: 'bordeauxmontaigne',
@@ -15093,7 +15093,7 @@ export default {
       title: 'Les chansons des troubadours',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 10, name: 'Arts, création et design' },
         { id: 13, name: 'Cultures et civilisations' },
         { id: 40, name: 'Histoire' } ],
@@ -15106,7 +15106,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/bordeauxmontaigne07002s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/bordeauxmontaigne07002s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/bordeauxmontaigne07002s02session02.730x412_q85_crop-scale.jpg',
@@ -15116,7 +15116,7 @@ export default {
     {
       id: 1378,
       key: 'en3s/77001/session01',
-      universities: 
+      universities:
       [ { id: 142,
           name: 'Ecole Nationale Supérieure de Sécurité Sociale',
           code: 'en3s',
@@ -15124,7 +15124,7 @@ export default {
           detail_page_enabled: false,
           banner: null } ],
       university_name: 'Ecole Nationale Supérieure de Sécurité Sociale',
-      main_university: 
+      main_university:
       { id: 142,
         name: 'Ecole Nationale Supérieure de Sécurité Sociale',
         code: 'en3s',
@@ -15134,7 +15134,7 @@ export default {
       title: 'Comprendre les enjeux de la protection sociale',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 85, name: 'Santé' },
         { id: 25, name: 'Enjeux de société' } ],
       image_url: '/c4x/en3s/77001/asset/images_course_small2.jpg',
@@ -15146,7 +15146,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/en3s77001session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/en3s77001session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/en3s77001session01.730x412_q85_crop-scale.jpg',
@@ -15156,7 +15156,7 @@ export default {
     {
       id: 612,
       key: 'SciencesPo/05007/Trimestre_1_2015',
-      universities: 
+      universities:
       [ { id: 198,
           name: 'Université Sorbonne Paris Cité',
           code: 'USPC',
@@ -15170,7 +15170,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/sciencespo.21764b4b23e5.jpg' } ],
       university_name: 'Sciences Po',
-      main_university: 
+      main_university:
       { id: 6,
         name: 'Sciences Po.',
         code: 'SciencesPo',
@@ -15180,7 +15180,7 @@ export default {
       title: 'Géopolitique de l\'Europe',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 79, name: 'Relations internationales' },
         { id: 76, name: 'Sciences Politiques' } ],
       image_url: '/c4x/SciencesPo/05007/asset/images_course_small.jpg',
@@ -15192,7 +15192,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/sciencespo05007trimestre_1_2015.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/sciencespo05007trimestre_1_2015.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/sciencespo05007trimestre_1_2015.730x412_q85_crop-scale.jpg',
@@ -15202,7 +15202,7 @@ export default {
     {
       id: 1637,
       key: 'ENSCachan/20013/session01',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -15216,7 +15216,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/enscachan.921fde30c904.jpg' } ],
       university_name: 'ENS Paris-Saclay',
-      main_university: 
+      main_university:
       { id: 14,
         name: 'ENS Paris-Saclay',
         code: 'ENSCachan',
@@ -15226,7 +15226,7 @@ export default {
       title: 'PCSC - Modélisation des composites - session 1',
       short_description: '',
       level: '',
-      subjects: [ { id: 103, name: 'Sciences pour l\'ingénieur' } ],
+      subjects:[ { id: 103, name: 'Sciences pour l\'ingénieur' } ],
       image_url: '/c4x/ENSCachan/20013/asset/images_cours.png',
       start_date: '2016-04-04T01:00:00Z',
       end_date: '2016-06-13T23:00:00Z',
@@ -15236,7 +15236,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/enscachan20013session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/enscachan20013session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/enscachan20013session01.730x412_q85_crop-scale.jpg',
@@ -15246,7 +15246,7 @@ export default {
     {
       id: 1387,
       key: 'ENSCachan/20002S04/session04',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -15260,7 +15260,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/enscachan.921fde30c904.jpg' } ],
       university_name: 'ENS Paris-Saclay',
-      main_university: 
+      main_university:
       { id: 14,
         name: 'ENS Paris-Saclay',
         code: 'ENSCachan',
@@ -15270,7 +15270,7 @@ export default {
       title: 'Monter un MOOC de A à Z',
       short_description: '',
       level: 'intermediate',
-      subjects: [],
+      subjects:[],
       image_url: '/c4x/ENSCachan/20002S04/asset/images_course_small36.jpg',
       start_date: '2015-11-02T10:00:00Z',
       end_date: '2015-12-16T23:00:00Z',
@@ -15280,7 +15280,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 4,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/enscachan20002s04session04.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/enscachan20002s04session04.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/enscachan20002s04session04.730x412_q85_crop-scale.jpg',
@@ -15290,7 +15290,7 @@ export default {
     {
       id: 1146,
       key: 'Paris2/09005/session01',
-      universities: 
+      universities:
       [ { id: 9,
           name: 'Université Panthéon-Assas, Paris II',
           code: 'Paris2',
@@ -15298,7 +15298,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/paris2.e025b3182afe.jpg' } ],
       university_name: 'Université Panthéon-Assas - Paris II',
-      main_university: 
+      main_university:
       { id: 9,
         name: 'Université Panthéon-Assas, Paris II',
         code: 'Paris2',
@@ -15308,7 +15308,7 @@ export default {
       title: 'Propriété, voisinage, possession, usufruit : mieux connaître le droit des biens',
       short_description: '',
       level: 'intermediate',
-      subjects: [ { id: 19, name: 'Droit et juridique' } ],
+      subjects:[ { id: 19, name: 'Droit et juridique' } ],
       image_url: '/c4x/Paris2/09005/asset/images_course_small.jpeg',
       start_date: '2015-04-13T11:00:00Z',
       end_date: '2015-06-06T23:00:00Z',
@@ -15318,7 +15318,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/paris209005session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/paris209005session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/paris209005session01.730x412_q85_crop-scale.jpg',
@@ -15328,7 +15328,7 @@ export default {
     {
       id: 1688,
       key: 'Paris1/16002S02/session02',
-      universities: 
+      universities:
       [ { id: 13,
           name: 'Université Paris 1 Panthéon-Sorbonne',
           code: 'Paris1',
@@ -15336,7 +15336,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/banniere_paris1-pantheon-sorbonne_980x200.jpg' } ],
       university_name: 'Université Paris 1 Panthéon-Sorbonne',
-      main_university: 
+      main_university:
       { id: 13,
         name: 'Université Paris 1 Panthéon-Sorbonne',
         code: 'Paris1',
@@ -15346,7 +15346,7 @@ export default {
       title: 'Découper le temps : les périodes de l\'histoire',
       short_description: '',
       level: '',
-      subjects: [ { id: 40, name: 'Histoire' } ],
+      subjects:[ { id: 40, name: 'Histoire' } ],
       image_url: '/c4x/Paris1/16002S02/asset/images_course_small.jpg',
       start_date: '2016-05-02T11:00:00Z',
       end_date: '2016-06-28T11:00:00Z',
@@ -15356,7 +15356,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/paris116002s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/paris116002s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/paris116002s02session02.730x412_q85_crop-scale.jpg',
@@ -15366,7 +15366,7 @@ export default {
     {
       id: 1179,
       key: 'Strasbourg/17001S02/session02',
-      universities: 
+      universities:
       [ { id: 36,
           name: 'Université de Strasbourg',
           code: 'Strasbourg',
@@ -15374,7 +15374,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/illustration_etablissement_UNISTRA.jpg' } ],
       university_name: 'Université de Strasbourg',
-      main_university: 
+      main_university:
       { id: 36,
         name: 'Université de Strasbourg',
         code: 'Strasbourg',
@@ -15384,7 +15384,7 @@ export default {
       title: 'Optimisation Stochastique Évolutionnaire',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 58, name: 'Mathématiques et statistiques' },
         { id: 97, name: 'Sciences de la vie' } ],
@@ -15397,7 +15397,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/strasbourg17001s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/strasbourg17001s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/strasbourg17001s02session02.730x412_q85_crop-scale.jpg',
@@ -15407,7 +15407,7 @@ export default {
     {
       id: 747,
       key: 'ferrandiparis/49001/session01',
-      universities: 
+      universities:
       [ { id: 96,
           name: 'FERRANDI Paris - l\'école française de gastronomie',
           code: 'ferrandiparis',
@@ -15415,7 +15415,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/bandeau_ferrandi.png' } ],
       university_name: 'Ferrandi - Paris',
-      main_university: 
+      main_university:
       { id: 96,
         name: 'FERRANDI Paris - l\'école française de gastronomie',
         code: 'ferrandiparis',
@@ -15425,7 +15425,7 @@ export default {
       title: 'Design culinaire',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 10, name: 'Arts, création et design' },
         { id: 13, name: 'Cultures et civilisations' } ],
       image_url: '/c4x/ferrandiparis/49001/asset/images_course_small.jpg',
@@ -15437,7 +15437,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/ferrandiparis49001session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/ferrandiparis49001session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/ferrandiparis49001session01.730x412_q85_crop-scale.jpg',
@@ -15447,7 +15447,7 @@ export default {
     {
       id: 1725,
       key: 'grenoblealpes/92002/session01',
-      universities: 
+      universities:
       [ { id: 201,
           name: 'Communauté Université Grenoble Alpes',
           code: 'grenoblealpes',
@@ -15455,7 +15455,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/campus_bu-001.jpg' } ],
       university_name: 'Communauté Université Grenoble Alpes',
-      main_university: 
+      main_university:
       { id: 201,
         name: 'Communauté Université Grenoble Alpes',
         code: 'grenoblealpes',
@@ -15465,7 +15465,7 @@ export default {
       title: 'À la recherche d\'autres planètes habitables',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 16, name: 'Découverte de l\'Univers' },
         { id: 73, name: 'Physique' },
@@ -15479,7 +15479,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/grenoblealpes92002session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/grenoblealpes92002session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/grenoblealpes92002session01.730x412_q85_crop-scale.jpg',
@@ -15489,7 +15489,7 @@ export default {
     {
       id: 1311,
       key: 'uved/34004/session01',
-      universities: 
+      universities:
       [ { id: 33,
           name: 'Université Virtuelle Environnement et Développement durable (UVED) ',
           code: 'uved',
@@ -15497,7 +15497,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/unnamed_attachment_1.png' } ],
       university_name: 'UVED',
-      main_university: 
+      main_university:
       { id: 33,
         name: 'Université Virtuelle Environnement et Développement durable (UVED) ',
         code: 'uved',
@@ -15507,7 +15507,7 @@ export default {
       title: 'Énergies renouvelables',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 115, name: 'Développement durable' },
         { id: 25, name: 'Enjeux de société' } ],
@@ -15520,7 +15520,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/uved34004session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/uved34004session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/uved34004session01.730x412_q85_crop-scale.jpg',
@@ -15530,7 +15530,7 @@ export default {
     {
       id: 1176,
       key: 'uved/34002/session01',
-      universities: 
+      universities:
       [ { id: 33,
           name: 'Université Virtuelle Environnement et Développement durable (UVED) ',
           code: 'uved',
@@ -15538,7 +15538,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/unnamed_attachment_1.png' } ],
       university_name: 'UVED',
-      main_university: 
+      main_university:
       { id: 33,
         name: 'Université Virtuelle Environnement et Développement durable (UVED) ',
         code: 'uved',
@@ -15548,7 +15548,7 @@ export default {
       title: 'Biodiversité',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 115, name: 'Développement durable' },
         { id: 97, name: 'Sciences de la vie' } ],
@@ -15561,7 +15561,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/uved34002session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/uved34002session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/uved34002session01.730x412_q85_crop-scale.jpg',
@@ -15571,7 +15571,7 @@ export default {
     {
       id: 1188,
       key: 'Paris2/09001/Trimestre_1_2014',
-      universities: 
+      universities:
       [ { id: 9,
           name: 'Université Panthéon-Assas, Paris II',
           code: 'Paris2',
@@ -15579,7 +15579,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/paris2.e025b3182afe.jpg' } ],
       university_name: 'Université Panthéon-Assas - Paris II',
-      main_university: 
+      main_university:
       { id: 9,
         name: 'Université Panthéon-Assas, Paris II',
         code: 'Paris2',
@@ -15589,7 +15589,7 @@ export default {
       title: 'Dans le secret des rouages de l\'Etat occidental: décryptage du droit constitutionnel',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 19, name: 'Droit et juridique' },
         { id: 76, name: 'Sciences Politiques' } ],
       image_url: '/c4x/Paris2/09001/asset/images_course_small.jpg',
@@ -15601,7 +15601,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/paris209001trimestre_1_2014.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/paris209001trimestre_1_2014.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/paris209001trimestre_1_2014.730x412_q85_crop-scale.jpg',
@@ -15611,7 +15611,7 @@ export default {
     {
       id: 1456,
       key: 'Paris2/09002/Trimestre_1_2014',
-      universities: 
+      universities:
       [ { id: 9,
           name: 'Université Panthéon-Assas, Paris II',
           code: 'Paris2',
@@ -15619,7 +15619,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/paris2.e025b3182afe.jpg' } ],
       university_name: 'Université Panthéon-Assas - Paris II',
-      main_university: 
+      main_university:
       { id: 9,
         name: 'Université Panthéon-Assas, Paris II',
         code: 'Paris2',
@@ -15629,7 +15629,7 @@ export default {
       title: 'Aux origines de notre système juridique: histoire du droit et des institutions',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 19, name: 'Droit et juridique' },
         { id: 40, name: 'Histoire' } ],
       image_url: '/c4x/Paris2/09002/asset/images_course_small.jpg',
@@ -15641,7 +15641,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/paris209002trimestre_1_2014.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/paris209002trimestre_1_2014.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/paris209002trimestre_1_2014.730x412_q85_crop-scale.jpg',
@@ -15651,7 +15651,7 @@ export default {
     {
       id: 24,
       key: 'CentraleParis/02001S02/Trimestre_1_2015',
-      universities: 
+      universities:
       [ { id: 160,
           name: 'Université Paris-Saclay',
           code: 'ParisSaclay',
@@ -15665,7 +15665,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/centraleparis_banner.jpg' } ],
       university_name: 'Ecole CentraleSupelec',
-      main_university: 
+      main_university:
       { id: 2,
         name: 'Ecole CentraleSupelec',
         code: 'CentraleParis',
@@ -15675,7 +15675,7 @@ export default {
       title: 'Développement Durable',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 115, name: 'Développement durable' },
         { id: 25, name: 'Enjeux de société' } ],
@@ -15688,7 +15688,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/centraleparis02001s02trimestre_1_2015.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/centraleparis02001s02trimestre_1_2015.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/centraleparis02001s02trimestre_1_2015.730x412_q85_crop-scale.jpg',
@@ -15698,7 +15698,7 @@ export default {
     {
       id: 1690,
       key: 'pasteur/96001/session01',
-      universities: 
+      universities:
       [ { id: 1,
           name: 'Le Cnam',
           code: 'CNAM',
@@ -15712,7 +15712,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/Bandeau_IP_Buste_LP_980x200_V2.png' } ],
       university_name: 'Institut Pasteur',
-      main_university: 
+      main_university:
       { id: 186,
         name: 'Institut Pasteur',
         code: 'pasteur',
@@ -15722,7 +15722,7 @@ export default {
       title: 'From neuron to behavior',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 91, name: 'Sciences cognitives' },
         { id: 97, name: 'Sciences de la vie' } ],
@@ -15735,7 +15735,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 1,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/pasteur96001session01.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/pasteur96001session01.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/pasteur96001session01.730x412_q85_crop-scale.jpg',
@@ -15745,7 +15745,7 @@ export default {
     {
       id: 1450,
       key: 'Paris10/10003S02/session02',
-      universities: 
+      universities:
       [ { id: 10,
           name: 'Université Paris Nanterre',
           code: 'Paris10',
@@ -15753,7 +15753,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/paris10.f6605d9f5319.jpg' } ],
       university_name: 'Université Paris Ouest Nanterre La Défense',
-      main_university: 
+      main_university:
       { id: 10,
         name: 'Université Paris Nanterre',
         code: 'Paris10',
@@ -15763,7 +15763,7 @@ export default {
       title: 'Bien archiver : la réponse au désordre numérique',
       short_description: '',
       level: 'intermediate',
-      subjects: 
+      subjects:
       [ { id: 64, name: 'Numérique, technologie' },
         { id: 109, name: 'Vie de l\'entreprise' } ],
       image_url: '/c4x/Paris10/10003S02/asset/images_course_small.jpg',
@@ -15775,7 +15775,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/paris1010003s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/paris1010003s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/paris1010003s02session02.730x412_q85_crop-scale.jpg',
@@ -15785,7 +15785,7 @@ export default {
     {
       id: 1243,
       key: 'Paris10/10001S02/session02',
-      universities: 
+      universities:
       [ { id: 10,
           name: 'Université Paris Nanterre',
           code: 'Paris10',
@@ -15793,7 +15793,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/paris10.f6605d9f5319.jpg' } ],
       university_name: 'Université Paris Ouest Nanterre La Défense',
-      main_university: 
+      main_university:
       { id: 10,
         name: 'Université Paris Nanterre',
         code: 'Paris10',
@@ -15803,7 +15803,7 @@ export default {
       title: 'La Première Guerre mondiale expliquée à travers ses archives',
       short_description: '',
       level: 'intermediate',
-      subjects: [ { id: 40, name: 'Histoire' } ],
+      subjects:[ { id: 40, name: 'Histoire' } ],
       image_url: '/c4x/Paris10/10001S02/asset/images_course_small.jpg',
       start_date: '2015-04-27T12:00:00Z',
       end_date: '2015-06-15T21:30:00Z',
@@ -15813,7 +15813,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/paris1010001s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/paris1010001s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/paris1010001s02session02.730x412_q85_crop-scale.jpg',
@@ -15823,7 +15823,7 @@ export default {
     {
       id: 1787,
       key: 'ujendouba/36001S02/session02',
-      universities: 
+      universities:
       [ { id: 188,
           name: 'Université Fédérale Toulouse Midi-Pyrénées',
           code: 'univ-toulouse',
@@ -15837,7 +15837,7 @@ export default {
           detail_page_enabled: true,
           banner: 'https://www.fun-mooc.fr/media/universities/banniereujb3.png' } ],
       university_name: 'Université de Jendouba',
-      main_university: 
+      main_university:
       { id: 129,
         name: 'Université de Jendouba',
         code: 'ujendouba',
@@ -15847,7 +15847,7 @@ export default {
       title: 'L\'écotourisme : Imaginons-le ensemble',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 34, name: 'Environnement' },
         { id: 115, name: 'Développement durable' },
         { id: 25, name: 'Enjeux de société' },
@@ -15861,7 +15861,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/ujendouba36001s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/ujendouba36001s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/ujendouba36001s02session02.730x412_q85_crop-scale.jpg',
@@ -15871,7 +15871,7 @@ export default {
     {
       id: 1680,
       key: 'Unisciel/12002S02/session02',
-      universities: 
+      universities:
       [ { id: 21,
           name: 'Unisciel',
           code: 'Unisciel',
@@ -15879,7 +15879,7 @@ export default {
           detail_page_enabled: false,
           banner: null } ],
       university_name: 'Unisciel',
-      main_university: 
+      main_university:
       { id: 21,
         name: 'Unisciel',
         code: 'Unisciel',
@@ -15889,7 +15889,7 @@ export default {
       title: 'Quidquam ? Comprendre le monde au quotidien',
       short_description: '',
       level: '',
-      subjects: 
+      subjects:
       [ { id: 88, name: 'Sciences' },
         { id: 4, name: 'Chimie' },
         { id: 16, name: 'Découverte de l\'Univers' },
@@ -15905,7 +15905,7 @@ export default {
       course_ended: true,
       enrollment_ended: true,
       session_number: 2,
-      thumbnails: 
+      thumbnails:
       { small: '/media/courses-thumbnails/unisciel12002s02session02.270x152_q85_crop-smart.jpg',
         big: '/media/courses-thumbnails/unisciel12002s02session02.337x191_q85_crop-smart.jpg',
         about: '/media/courses-thumbnails/unisciel12002s02session02.730x412_q85_crop-scale.jpg',
