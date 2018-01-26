@@ -2,7 +2,8 @@ import * as React from "react";
 
 import { Course } from '../../types/Course';
 import { CourseGlimpseList } from "../courseGlimpseList/courseGlimpseList";
-import courses from '../../api_response';
+import { SearchFiltersPane } from '../searchFiltersPane/searchFiltersPane';
+import courses from '../../fixtures_js/courses';
 
 interface SearchState {
   courses: Course[];
@@ -23,6 +24,7 @@ export class Search extends React.Component<SearchProps, SearchState> {
     const { courses } = this.state;
     return <div className="search">
       <div className="search__filters">
+        <SearchFiltersPane />
       </div>
       <div className="search__results">
         <CourseGlimpseList courses={courses} />

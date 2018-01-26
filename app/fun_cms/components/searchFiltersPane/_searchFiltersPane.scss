@@ -1,0 +1,12 @@
+.search-filters-pane {
+  width: 100%;
+  height: 100%;
+  background: $brand-darkblue;
+  color: white;
+  overflow: hidden; // Prevent margin-collapsing as .search-filters-pane has a background
+
+  &__title {
+    padding: 2rem 0;
+    text-align: center;
+  }
+}
