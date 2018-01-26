@@ -1,5 +1,5 @@
 import { Subject } from './Subject';
-import { University } from './University';
+import { Organization } from './Organization';
 
 export interface Course {
   course_ended: boolean;
@@ -13,7 +13,7 @@ export interface Course {
   image_url: string;
   key: string;
   level: string;
-  main_university: University;
+  main_university: Organization;
   session_number: number;
   short_description: string;
   start_date: string;
@@ -25,6 +25,6 @@ export interface Course {
     small: string;
   };
   title: string;
-  universities: University[];
+  universities: Organization[];
   university_name: string;
 }

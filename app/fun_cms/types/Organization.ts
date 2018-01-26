@@ -1,4 +1,4 @@
-export interface University {
+export interface Organization {
   banner: string | null;
   code: string;
   detail_page_enabled: boolean;
