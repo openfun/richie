@@ -1,12 +1,13 @@
 import * as React from "react";
+import { Subscription } from 'rxjs/Subscription';
 
 import { FilterDefinition } from '../../types/FilterDefinition';
 import { SearchFilterGroup } from '../searchFilterGroup/searchFilterGroup';
-import organizationsResp from '../../fixtures_js/organizations';
-import subjectsResp from '../../fixtures_js/subjects';
+import filters$ from '../../data/search/filters';
 
 interface SearchFiltersPaneState {
   filters: Array<FilterDefinition>,
+  filtersSubscription?: Subscription;
 }
 
 export interface SearchFiltersPaneProps {}
@@ -15,58 +16,23 @@ export class SearchFiltersPane extends React.Component<SearchFiltersPaneProps, S
   constructor (props: SearchFiltersPaneProps) {
     super(props);
 
-    const newFilter: FilterDefinition = {
-      human_name: 'New courses',
-      machine_name: 'status',
-      values: [
-        [ 'new', 'First session' ],
-      ],
-    };
-
-    const statusFilter: FilterDefinition = {
-      human_name: 'Availability',
-      machine_name: 'availability',
-      values: [
-        [ 'coming_soon', 'Coming soon' ],
-        [ 'current', 'Current session' ],
-        [ 'open', 'Open, no session' ]
-      ],
-    };
-
-    const subjectsFilter: FilterDefinition = {
-      human_name: 'subjects',
-      machine_name: 'Subjects',
-      values: subjectsResp.results.map((subject) => {
-        return [ subject.code, subject.name ];
-      }),
-    };
-
-    const organizationsFilter: FilterDefinition = {
-      human_name: 'Organization',
-      machine_name: 'organization',
-      values: organizationsResp.results.map((organization) => {
-        return [ organization.code, organization.name ];
-      }),
-    };
-    
-    const languagesFilter: FilterDefinition = {
-      human_name: 'Language',
-      machine_name: 'language',
-      values: [
-        [ 'en', 'English' ],
-        [ 'fr', 'French' ],
-      ],
-    };
-    
     this.state = {
-      filters: [
-        newFilter,
-        statusFilter,
-        subjectsFilter,
-        organizationsFilter,
-        languagesFilter,
-      ],
+      filters: [],
     };
+  }
+
+  componentDidMount () {
+    this.setState({
+      filtersSubscription: filters$.subscribe((filters) => {
+        this.setState({ filters });
+      }),
+    });
+  }
+
+  componentWillUnmount () {
+    if (this.state.filtersSubscription) {
+      this.state.filtersSubscription.unsubscribe();
+    }
   }
 
   render () {

@@ -1,12 +1,13 @@
 {
-    "compilerOptions": {
-        "sourceMap": true,
-        "noImplicitAny": true,
-        "module": "commonjs",
-        "target": "es5",
-        "jsx": "react"
-    },
-    "include": [
-        "./**/*"
-    ]
+  "compilerOptions": {
+    "jsx": "react",
+    "lib": [ "dom", "es5", "scripthost", "es2015.promise" ],
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "target": "es5"
+  },
+  "include": [
+    "./**/*"
+  ]
 }
