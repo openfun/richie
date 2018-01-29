@@ -67,6 +67,7 @@ STATIC_ROOT = os.path.join(DATA_DIR, '..', 'data', 'static')
 
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'build'),
 )
 SITE_ID = 1
 

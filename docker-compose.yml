@@ -56,7 +56,7 @@ services:
     volumes:
       - ./:/fun-cms
     entrypoint: >
-      bash -c "mkdir -p /fun-cms/data/static/css &&
-      sass --watch /fun-cms/app /fun-cms/app/fun_cms/static/scss/_main.scss:/fun-cms/data/static/css/main.css -E \"UTF-8\"";
+      bash -c "mkdir -p /fun-cms/app/fun_cms/build/css &&
+      sass --watch /fun-cms/app /fun-cms/app/fun_cms/static/scss/_main.scss:/fun-cms/app/fun_cms/build/css/main.css -E \"UTF-8\"";
     depends_on:
       - "js"

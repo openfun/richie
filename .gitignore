@@ -11,6 +11,7 @@ __pycache__/
 
 # Site media
 /data/
+app/fun_cms/build
 
 # Settings
 local.py

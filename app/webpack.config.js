@@ -5,7 +5,7 @@ module.exports = {
   entry: "./fun_cms/index.tsx",
   output: {
     filename: "index.js",
-    path: __dirname + "/../" + "/data/static/js"
+    path: __dirname + "/fun_cms/build/js"
   },
 
   // Enable sourcemaps for debugging webpack's output.
