@@ -2,7 +2,7 @@ const SETTINGS = require('./fun_cms/settings.json');
 const webpack = require('webpack');
 
 module.exports = {
-  entry: "./fun_cms/index.tsx",
+  entry: "./fun_cms/js/index.tsx",
   output: {
     filename: "index.js",
     path: __dirname + "/fun_cms/build/js"

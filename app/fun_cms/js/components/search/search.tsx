@@ -3,7 +3,7 @@ import * as React from "react";
 import { Course } from '../../types/Course';
 import { CourseGlimpseList } from "../courseGlimpseList/courseGlimpseList";
 import { SearchFiltersPane } from '../searchFiltersPane/searchFiltersPane';
-import courses from '../../fixtures_js/courses';
+import courses from '../../fixtures/courses';
 
 interface SearchState {
   courses: Course[];
