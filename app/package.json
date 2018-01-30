@@ -5,7 +5,7 @@
   "main": "manage.py",
   "scripts": {
     "sass": "mkdir -p data/static/css; sass --watch app/fun_cms/static/scss/_main.scss:data/static/css/main.css app",
-    "test": "npm run test"
+    "test": "./node_modules/karma/bin/karma start ./karma.conf.js"
   },
   "repository": {
     "type": "git",
@@ -18,13 +18,22 @@
   },
   "homepage": "https://github.com/openfun/fun-cms#readme",
   "devDependencies": {
+    "@types/jasmine": "^2.8.6",
     "@types/lodash-es": "^4.17.0",
     "@types/react": "^16.0.34",
     "@types/react-dom": "^16.0.3",
     "awesome-typescript-loader": "^3.4.1",
+    "jasmine": "^2.9.0",
+    "karma": "^2.0.0",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-jasmine": "^1.1.1",
+    "karma-mocha-reporter": "^2.2.5",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-webpack": "^2.0.9",
     "source-map-loader": "^0.2.3",
     "typescript": "^2.6.2",
-    "webpack": "^3.10.0"
+    "webpack": "^3.10.0",
+    "xhr-mock": "^2.0.3"
   },
   "dependencies": {
     "bootstrap": "4.0.0",
