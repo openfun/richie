@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
-
-from .base import *
+from .base import *  # noqa
 
 DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 try:
-    from .local import *
+    from .local import *  # noqa
 except ImportError:
     pass
