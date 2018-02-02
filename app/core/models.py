@@ -1,7 +1,3 @@
-
-from django.db import models
-
-
 def get_courses():
     """
     Generator returning all courses.
