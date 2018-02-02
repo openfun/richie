@@ -10,9 +10,9 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "app/requirements/dev.txt" }}
+          - v2-dependencies-{{ checksum "app/requirements/dev.txt" }}
           # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-
+          - v2-dependencies-
       - run:
           name: Install dependencies
           command: |
@@ -22,7 +22,7 @@ jobs:
       - save_cache:
           paths:
             - ./venv
-          key: v1-dependencies-{{ checksum "app/requirements/dev.txt" }}
+          key: v2-dependencies-{{ checksum "app/requirements/dev.txt" }}
 
   lint:
     docker:
@@ -32,8 +32,8 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "app/requirements/dev.txt" }}
-          - v1-dependencies-
+          - v2-dependencies-{{ checksum "app/requirements/dev.txt" }}
+          - v2-dependencies-
       - run:
           name: Lint code
           command: |
@@ -51,8 +51,8 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "app/requirements/dev.txt" }}
-          - v1-dependencies-
+          - v2-dependencies-{{ checksum "app/requirements/dev.txt" }}
+          - v2-dependencies-
       - run:
           name: Run tests
           command: |
