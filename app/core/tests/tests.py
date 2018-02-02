@@ -6,7 +6,7 @@ from ..management.commands.create_cms_data import create_cms_data, PAGES
 
 
 class SiteStructureBaseTestCase(TestCase):
-    """The purpose of this testcase is to be used by other applications 
+    """The purpose of this testcase is to be used by other applications
     and CMS plugins to run theirs tests in a realistic site structure."""
     def setUp(self):
         create_cms_data()

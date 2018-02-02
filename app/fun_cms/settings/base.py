@@ -5,9 +5,9 @@ Django settings for fun_cms project.
 import os
 from .utils import get_config
 from django.utils.translation import ugettext_lazy as _
-from .parts.elasticsearch import *  # pylint: disable=wildcard-import
+from .parts.elasticsearch import *  # noqa
 
-gettext = lambda s: s
+gettext = lambda s: s  # noqa
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

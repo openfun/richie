@@ -14,4 +14,3 @@ ES_COURSE_TYPE = 'course'
 
 ES_MAPPING = {
     'properties': {'key': {'type': 'keyword'}}}
-
