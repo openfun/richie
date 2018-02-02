@@ -3,7 +3,7 @@ jobs:
 
   build:
     docker:
-      - image: circleci/python:3.6.1
+      - image: python:3.6-stretch
     working_directory: ~/fun-cms
     steps:
       - checkout
@@ -26,7 +26,7 @@ jobs:
 
   lint:
     docker:
-      - image: circleci/python:3.6.1
+      - image: python:3.6-stretch
     working_directory: ~/fun-cms
     steps:
       - checkout
@@ -42,10 +42,10 @@ jobs:
 
   test:
     docker:
-      - image: circleci/python:3.6.1
+      - image: python:3.6-stretch
         environment:
           DJANGO_SETTINGS_MODULE: 'fun_cms.settings.ci'
-      - image: circleci/postgres:9.6
+      - image: postgres:9.6
     working_directory: ~/fun-cms
     steps:
       - checkout
