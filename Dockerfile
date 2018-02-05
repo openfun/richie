@@ -1,5 +1,7 @@
 FROM python:3.6-stretch
+
 WORKDIR /app
+
 ENV LC_ALL C.UTF-8
 ENV LANG C.UTF-8
 
@@ -15,3 +17,6 @@ RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ stretch-pgdg main' > /etc
 # Python installs does not change each time our code changes
 ADD requirements/ /app/requirements/
 RUN pip install -r requirements/dev.txt
+
+# Default command is the Django development server
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
