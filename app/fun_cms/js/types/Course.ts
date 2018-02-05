@@ -1,7 +1,7 @@
-import { Subject } from './Subject';
-import { Organization } from './Organization';
+import Subject from './Subject';
+import Organization from './Organization';
 
-export interface Course {
+export default interface Course {
   course_ended: boolean;
   course_started: boolean;
   end_date: string;

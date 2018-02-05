@@ -1,4 +1,4 @@
-export interface Organization {
+export default interface Organization {
   banner: string | null;
   code: string;
   detail_page_enabled: boolean;

@@ -1,7 +1,7 @@
-import * as React from "react";
-
-import { Course } from '../../types/Course';
 import * as moment from 'moment';
+import * as React from 'react';
+
+import Course from '../../types/Course';
 
 interface CourseGlimpseState {}
 
@@ -25,3 +25,5 @@ export class CourseGlimpse extends React.Component<CourseGlimpseProps, CourseGli
     </div>
   }
 }
+
+export default CourseGlimpse;

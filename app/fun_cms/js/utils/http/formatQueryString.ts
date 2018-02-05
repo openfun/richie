@@ -1,4 +1,4 @@
-import toPairs from "lodash-es/toPairs";
+import toPairs from 'lodash-es/toPairs';
 
 export default function formatQueryString (params: { [key: string]: string | string[] } = null) {
   if (params) {

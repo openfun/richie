@@ -1,6 +1,6 @@
-import * as React from "react";
+import * as React from 'react';
 
-import { FilterDefinition } from '../../types/FilterDefinition';
+import FilterDefinition from '../../types/FilterDefinition';
 
 interface SearchFilterGroupState {}
 
@@ -25,3 +25,5 @@ export class SearchFilterGroup extends React.Component<SearchFilterGroupProps, S
     </div>    
   }
 }
+
+export default SearchFilterGroup;

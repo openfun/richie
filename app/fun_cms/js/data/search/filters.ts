@@ -1,9 +1,9 @@
 import { Observable } from 'rxjs/Observable';
-import '../../utils/observable/extensions';
 
-import { FilterDefinition } from '../../types/FilterDefinition';
 import organizationsResp from '../../fixtures/organizations';
 import subjectsResp from '../../fixtures/subjects';
+import '../../utils/observable/extensions';
+import FilterDefinition from '../../types/FilterDefinition';
 
 // Define hardcoded filters
 // Wrap them in Observable so we can combine them with the async ones

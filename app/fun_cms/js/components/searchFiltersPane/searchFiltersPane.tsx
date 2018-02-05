@@ -1,9 +1,9 @@
-import * as React from "react";
+import * as React from 'react';
 import { Subscription } from 'rxjs/Subscription';
 
-import { FilterDefinition } from '../../types/FilterDefinition';
-import { SearchFilterGroup } from '../searchFilterGroup/searchFilterGroup';
+import SearchFilterGroupContainer from '../searchFilterGroupContainer/searchFilterGroupContainer';
 import filters$ from '../../data/search/filters';
+import FilterDefinition from '../../types/FilterDefinition';
 
 interface SearchFiltersPaneState {
   filters: Array<FilterDefinition>,
@@ -45,4 +45,6 @@ export class SearchFiltersPane extends React.Component<SearchFiltersPaneProps, S
       )}
     </div>    
   }
-}
+}}
+
+export default SearchFiltersPane;

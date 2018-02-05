@@ -1,7 +1,7 @@
-import * as React from "react";
+import * as React from 'react';
 
-import { Course } from '../../types/Course';
-import { CourseGlimpse } from '../courseGlimpse/courseGlimpse';
+import CourseGlimpse from '../courseGlimpse/courseGlimpse';
+import Course from '../../types/Course';
 
 interface CourseGlimpseListState {}
 
@@ -18,3 +18,5 @@ export class CourseGlimpseList extends React.Component<CourseGlimpseListProps, C
     </div>    
   }
 }
+
+export default CourseGlimpseList;

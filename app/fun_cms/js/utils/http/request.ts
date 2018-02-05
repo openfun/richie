@@ -1,10 +1,10 @@
-import includes from "lodash-es/includes";
-import partial from "lodash-es/partial";
-import { Observable } from "rxjs/Observable";
-import { Observer } from "rxjs/Observer";
-import '../../utils/observable/extensions';
+import includes from 'lodash-es/includes';
+import partial from 'lodash-es/partial';
+import { Observable } from 'rxjs/Observable';
+import { Observer } from 'rxjs/Observer';
 
-import formatQueryString from "./formatQueryString";
+import formatQueryString from './formatQueryString';
+import '../../utils/observable/extensions';
 
 export interface RequestFormattedResponse {
   headers: string,

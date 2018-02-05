@@ -1,9 +1,9 @@
-import * as React from "react";
+import * as React from 'react';
 
-import { Course } from '../../types/Course';
-import { CourseGlimpseList } from "../courseGlimpseList/courseGlimpseList";
-import { SearchFiltersPane } from '../searchFiltersPane/searchFiltersPane';
+import CourseGlimpseList from '../courseGlimpseList/courseGlimpseList';
+import SearchFiltersPane from '../searchFiltersPane/searchFiltersPane';
 import courses from '../../fixtures/courses';
+import Course from '../../types/Course';
 
 interface SearchState {
   courses: Course[];
@@ -32,3 +32,5 @@ export class Search extends React.Component<SearchProps, SearchState> {
     </div>;
   }
 }
+
+export default Search;
