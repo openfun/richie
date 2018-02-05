@@ -3,12 +3,11 @@ services:
   db:
     image: postgres:9.6
     environment:
+      POSTGRES_DB: "fun_cms"
       POSTGRES_USER: "fun"
       POSTGRES_PASSWORD: "pass"
     ports:
         - "5440:5432"
-    volumes:
-      - ./scripts/development/createdb.sh:/docker-entrypoint-initdb.d/createdb.sh:ro
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.1.2
   app:
