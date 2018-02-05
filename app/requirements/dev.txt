@@ -1,8 +1,11 @@
 -r base.txt
 
-factory-boy[django]==2.9.2
 Faker==0.8.8
+factory-boy[django]==2.9.2
+flake8==3.5.0
 ipdb==0.10.3
 ipython==5.5.0
 ipython-genutils==0.2.0
-
+pytest==3.3.2
+pytest-cov==2.5.1
+pytest-django==3.1.2

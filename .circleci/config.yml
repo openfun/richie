@@ -1,0 +1,83 @@
+version: 2
+jobs:
+
+  build:
+    docker:
+      - image: python:3.6-stretch
+    working_directory: ~/fun-cms
+    steps:
+      - checkout
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v2-dependencies-{{ checksum "app/requirements/dev.txt" }}
+          # fallback to using the latest cache if no exact match is found
+          - v2-dependencies-
+      - run:
+          name: Install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r app/requirements/dev.txt
+      - save_cache:
+          paths:
+            - ./venv
+          key: v2-dependencies-{{ checksum "app/requirements/dev.txt" }}
+
+  lint:
+    docker:
+      - image: python:3.6-stretch
+    working_directory: ~/fun-cms
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v2-dependencies-{{ checksum "app/requirements/dev.txt" }}
+          - v2-dependencies-
+      - run:
+          name: Lint code
+          command: |
+            . venv/bin/activate
+            flake8
+
+  test:
+    docker:
+      - image: python:3.6-stretch
+        environment:
+          DJANGO_SETTINGS_MODULE: 'fun_cms.settings.ci'
+      - image: postgres:9.6
+      - image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.1.2
+    working_directory: ~/fun-cms
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v2-dependencies-{{ checksum "app/requirements/dev.txt" }}
+          - v2-dependencies-
+      - run:
+          name: Run tests
+          command: |
+            . venv/bin/activate
+            pytest
+
+workflows:
+  version: 2
+
+  fun_cms:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+      - lint:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /.*/
+      - test:
+          requires:
+            - lint
+          filters:
+            tags:
+              only: /.*/
