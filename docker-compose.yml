@@ -44,8 +44,7 @@ services:
     depends_on:
       - "app"
   js:
-    build: './typescript'
-    image: fun_cms-typescript
+    image: node:9.4.0
     volumes:
       - ./:/fun-cms
     entrypoint: >
