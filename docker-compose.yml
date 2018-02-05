@@ -33,12 +33,11 @@ services:
       python manage.py collectstatic --no-input &&
       python manage.py runserver 0.0.0.0:8000"
   nginx:
-    build: ./nginx
-    image: fun_cms-nginx
+    image: nginx:1.12.2
     ports:
       - "8071:80"
     volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./docker/etc/nginx/conf.d:/etc/nginx/conf.d:ro
       - ./data/static:/data/static:ro
       - ./data/media:/data/media:ro
     depends_on:
