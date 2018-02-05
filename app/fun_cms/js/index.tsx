@@ -12,6 +12,8 @@ import * as ReactDOM from 'react-dom';
 import includes from 'lodash-es/includes';
 import startCase from 'lodash-es/startCase';
 
+import bootstrapStore from './bootstrap';
+
 // Import the top-level components that can be directly called from the CMS
 import { Search } from './components/search/search';
 // List them in an interface for type-safety when we call them. This will let us use the props for
@@ -31,6 +33,10 @@ function isComponentName (candidate: keyof ComponentLibrary | string): candidate
 
 // Wait for the DOM to load before we scour it for an element that requires React to be rendered
 document.addEventListener('DOMContentLoaded', (event) => {
+  // Bootstrap the Redux store using the configureStore function from /data. Can make use of embedded
+  // data put there by the Django page.
+  bootstrapStore();
+
   // Find all the elements that need React to render a component
   Array.prototype.forEach.call(document.querySelectorAll('.fun-react'),
   (element: Element) => {
