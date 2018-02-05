@@ -11,7 +11,7 @@ gettext = lambda s: s  # noqa
 
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA_DIR = os.path.dirname(BASE_DIR)
+DATA_DIR = BASE_DIR
 
 # Group to add plugin to placeholder "Content"
 FUN_PLUGINS_GROUP = "Fun Plugins"
