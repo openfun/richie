@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from cms.models import Page
 
-from ..management.commands.create_cms_data import create_cms_data, PAGES
+from ..management.commands.create_cms_data import create_cms_data, PAGES, ORGANIZATIONS
 
 
 class SiteStructureBaseTestCase(TestCase):
@@ -16,4 +16,4 @@ class SiteStructureTest(SiteStructureBaseTestCase):
     """Test SiteStructureBaseTestCase works"""
     def test(self):
         """Test testcase created root page + all children pages for 2 languages."""
-        self.assertEqual((1 + len(PAGES)) * 2, Page.objects.all().count())
+        self.assertEqual((1 + len(PAGES) + len(ORGANIZATIONS)) * 2, Page.objects.all().count())
