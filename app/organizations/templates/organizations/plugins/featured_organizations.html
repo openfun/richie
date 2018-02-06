@@ -1,0 +1,7 @@
+<ul>
+{% for organization in featured_organizations %}
+   <li>
+       <a href=""></a><img src="{{ organization.logo }}" title="{{ organization.name }}">
+    </li>
+{% endfor %}
+</ul>

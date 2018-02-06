@@ -5,6 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from cms.extensions import PageExtension
 from cms.extensions.extension_pool import extension_pool
+from cms.models import CMSPlugin
 
 FUN_ORGANIZATION_API = "https://www.fun-mooc.fr/fun/api/universities/"
 
@@ -20,6 +21,14 @@ def get_organizations(pagination=None):
     url = '{endpoint}?rpp={pagination}'.format(endpoint=FUN_ORGANIZATION_API,
                                                pagination=pagination or 1000)
     return requests.get(url).json()['results']
+
+
+class FeaturedOrganizations(CMSPlugin):
+
+    number = models.IntegerField(_("Number of organizations to display"), default=18)
+
+    def __unicode__(self):
+        return _("Featured organizations")
 
 
 class OrganizationPage(PageExtension):
@@ -42,3 +51,4 @@ class OrganizationPage(PageExtension):
 
 
 extension_pool.register(OrganizationPage)
+
