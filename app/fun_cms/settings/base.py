@@ -196,11 +196,16 @@ CMS_LANGUAGES = {
 }
 
 CMS_TEMPLATES = (
+    # Application specific templates, should not be used out of own application context
     ('organizations/cms/organization.html', _("Organization page")),
     ('organizations/cms/organization_list.html', _("Organizations list page")),
 
-    ('search/search.html', _('Search')),
-    ('fun_cms/fullwidth.html', 'Fullwidth'),
+    # Site structure specific templates
+    ('fun_cms/homepage.html', _("Home page")),
+    ('search/search.html', _("Search")),
+
+    # Generic templates
+    ('fun_cms/fullwidth.html', _("Fullwidth")),
 )
 
 CMS_PERMISSION = True
