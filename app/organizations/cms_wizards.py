@@ -37,12 +37,20 @@ class OrganizationForm(forms.ModelForm):
         self.fields['organization_key'].choices = choices
 
     organization_key = forms.ChoiceField(required=True, choices=[])
-    title = forms.CharField(max_length=255, required=False, widget=forms.TextInput(),
-            label=_("Page title"),
-            help_text=_("French title of the page (leave blank for Oganization name)"))
-    slug = forms.CharField(max_length=255, required=False, widget=forms.TextInput(),
-            label=_("Page slug"),
-            help_text=_("French slug of the page (leave blank for automatic slug from title)"))
+    title = forms.CharField(
+        max_length=255,
+        required=False,
+        widget=forms.TextInput(),
+        label=_("Page title"),
+        help_text=_("French title of the page (leave blank for Oganization name)"),
+    )
+    slug = forms.CharField(
+        max_length=255,
+        required=False,
+        widget=forms.TextInput(),
+        label=_("Page slug"),
+        help_text=_("French slug of the page (leave blank for automatic slug from title)"),
+    )
 
     def clean(self):
         """ Create title from API and slug from title if left blank by user
@@ -71,14 +79,21 @@ class OrganizationForm(forms.ModelForm):
             reverse_id=self.cleaned_data['slug'],
             in_navigation=True,
             published=True,
-            site=site)
+            site=site,
+        )
         organization_page = OrganizationPage(
-            organization_key=self.cleaned_data['organization_key'], extended_object=page)
+            organization_key=self.cleaned_data['organization_key'],
+            extended_object=page,
+        )
         organization_page.save()
         placeholder = page.placeholders.get(slot='maincontent')
 
-        add_plugin(placeholder=placeholder, plugin_type='TextPlugin', language='fr',
-            body='Le Lorem ipsum...')
+        add_plugin(
+            placeholder=placeholder,
+            plugin_type='TextPlugin',
+            language='fr',
+            body='Le Lorem ipsum...',
+        )
         return organization_page
 
 
