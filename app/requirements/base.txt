@@ -51,6 +51,7 @@ Pygments==2.2.0
 python-dateutil==2.6.1
 python-slugify==1.2.0
 pytz==2017.3
+requests==2.18.4
 simplegeneric==0.8.1
 six==1.11.0
 text-unidecode==1.1
@@ -59,4 +60,3 @@ Unidecode==0.4.21
 urllib3==1.22
 wcwidth==0.1.7
 YURL==0.13
-requests
