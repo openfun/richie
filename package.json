@@ -4,7 +4,7 @@
   "description": "This document aims to list all needed steps to have a working `FUN CMS` installation.",
   "main": "manage.py",
   "scripts": {
-    "sass": "mkdir -p data/static/css; sass --watch app/fun_cms/static/scss/_main.scss:data/static/css/main.css app",
+    "sass": "mkdir -p data/static/css; sass --watch fun_cms/static/scss/_main.scss:data/static/css/main.css apps",
     "test": "./node_modules/karma/bin/karma start ./karma.conf.js"
   },
   "repository": {
