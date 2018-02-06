@@ -108,20 +108,30 @@ def create_cms_data():
             reverse_id=datas['code'],
             in_navigation=True,
             published=True,
-            site=site)
+            site=site,
+        )
 
         create_title(
             language='en',
             title=datas['name']+"_en",
             slug=datas['code']+"_en",
-            page=page)
+            page=page,
+        )
         OrganizationPage(organization_key=organization_key, extended_object=page).save()
 
         placeholder = page.placeholders.get(slot='maincontent')
-        add_plugin(placeholder=placeholder, plugin_type='TextPlugin', language='fr',
-            body='Le Lorem ipsum...')
-        add_plugin(placeholder=placeholder, plugin_type='TextPlugin', language='en',
-            body='The Lorem ipsum...')
+        add_plugin(
+            placeholder=placeholder,
+            plugin_type='TextPlugin',
+            language='fr',
+            body='Le Lorem ipsum...',
+        )
+        add_plugin(
+            placeholder=placeholder,
+            plugin_type='TextPlugin',
+            language='en',
+            body='The Lorem ipsum...',
+        )
         page.published = True
         page.save()
 
@@ -135,7 +145,7 @@ class Command(BaseCommand):
             '--force',
             action='store_true',
             default=False,
-            help="Force command execution despite DEBUG is set to False"
+            help="Force command execution despite DEBUG is set to False",
         ),
     )
 

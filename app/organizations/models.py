@@ -24,8 +24,12 @@ def get_organizations(pagination=None):
 
 class OrganizationPage(PageExtension):
 
-    organization_key = models.IntegerField(_('Organization key'), blank=False,
-                                        default=1, null=False)
+    organization_key = models.IntegerField(
+        _('Organization key'),
+        blank=False,
+        default=1,
+        null=False,
+    )
 
     def get_data(self):
         return get_organization_data(self.organization_key)
