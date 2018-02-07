@@ -40,13 +40,3 @@ services:
     working_dir: /app
     volumes:
       - .:/app
-  sass:
-    image: ruby:2.4
-    volumes:
-      - ./:/fun-cms
-    entrypoint: >
-      bash -c "gem install sass &&
-        mkdir -p /fun-cms/fun_cms/build/css &&
-        sass --watch /fun-cms /fun-cms/fun_cms/static/scss/_main.scss:/fun-cms/fun_cms/build/css/main.css -E \"UTF-8\"";
-    depends_on:
-      - "node"
