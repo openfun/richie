@@ -7,6 +7,7 @@
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 
 // Import submodules so we don't get the whole of lodash in the bundle
 import includes from 'lodash-es/includes';
@@ -35,7 +36,7 @@ function isComponentName (candidate: keyof ComponentLibrary | string): candidate
 document.addEventListener('DOMContentLoaded', (event) => {
   // Bootstrap the Redux store using the configureStore function from /data. Can make use of embedded
   // data put there by the Django page.
-  bootstrapStore();
+  const store = bootstrapStore();
 
   // Find all the elements that need React to render a component
   Array.prototype.forEach.call(document.querySelectorAll('.fun-react'),
@@ -46,7 +47,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
     if (isComponentName(componentName)) {
       // Do get the component dynamically. We know this WILL produce a valid component thanks to the type guard
       const Component = componentLibrary[componentName];
-      ReactDOM.render(<Component />, element);
+      // Render the component inside a `react-redux` store Provider so its children can be `connect`ed
+      ReactDOM.render(
+        <Provider store={store}>
+          <Component />
+        </Provider>,
+        element,
+      );
     }
     // Emit a warning at runtime when we fail to find a matching component for an element that required one
     else {

@@ -3,7 +3,7 @@ import organizations from './fixtures/organizations';
 import subjects from './fixtures/subjects';
 
 export default function bootstrapStore () {
-  configureStore({
+  return configureStore({
     organization: {
       byId: organizations.results.reduce((acc, organization) => {
         return {
