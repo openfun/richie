@@ -32,7 +32,7 @@ class RegenerateIndexTestCase(TestCase):
         self.indices_client.delete(index='_all')
 
     @mock.patch(
-        'core.management.commands.regenerate_index.get_courses',
+        'apps.core.management.commands.regenerate_index.get_courses',
         return_value=[{'id': 1, 'key': 'key_1'}])
     def test_regenerate_index_creation_aliasing_and_deleting(self, mock_get, *args):
         """
@@ -90,7 +90,10 @@ class RegenerateIndexTestCase(TestCase):
         self.assertEqual(settings.ES_CLIENT.count(expected_name2)['count'], 1)
 
     @override_settings(ES_CHUNK_SIZE=2)
-    @mock.patch('core.management.commands.regenerate_index.get_courses', return_value=BULK_COURSES)
+    @mock.patch(
+        'apps.core.management.commands.regenerate_index.get_courses',
+        return_value=BULK_COURSES
+    )
     def test_regenerate_index_bulk(self, mock_get, *args):
         """
         Bulk indexing should work as expected when the number of records is higher than chunk size.
@@ -109,7 +112,7 @@ class RegenerateIndexTestCase(TestCase):
         """
         # Create a first index
         with mock.patch(
-                'core.management.commands.regenerate_index.get_courses',
+                'apps.core.management.commands.regenerate_index.get_courses',
                 return_value=[{'id': 1, 'key': 'key_1'}]):
             call_command('regenerate_index')
         self.indices_client.refresh()
@@ -123,7 +126,7 @@ class RegenerateIndexTestCase(TestCase):
             raise MyException
 
         with mock.patch(
-                'core.management.commands.regenerate_index.get_courses', side_effect=effect):
+                'apps.core.management.commands.regenerate_index.get_courses', side_effect=effect):
             with self.assertRaises(MyException):
                 call_command('regenerate_index')
 

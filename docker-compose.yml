@@ -3,17 +3,15 @@ services:
   db:
     image: postgres:9.6
     environment:
+      POSTGRES_DB: "fun_cms"
       POSTGRES_USER: "fun"
       POSTGRES_PASSWORD: "pass"
     ports:
         - "5440:5432"
-    volumes:
-      - ./scripts/development/createdb.sh:/docker-entrypoint-initdb.d/createdb.sh:ro
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.1.2
   app:
-    build: ./app
-    image: fun_cms-app
+    build: .
     environment:
       DATABASE_HOST: "db"
       DATABASE_USER: "fun"
@@ -22,7 +20,7 @@ services:
     ports:
         - "8070:8000"
     volumes:
-      - ./app:/app
+      - .:/app
       - ./data/static:/data/static
       - ./data/media:/data/media
     depends_on:
@@ -33,30 +31,27 @@ services:
       python manage.py collectstatic --no-input &&
       python manage.py runserver 0.0.0.0:8000"
   nginx:
-    build: ./nginx
-    image: fun_cms-nginx
+    image: nginx:1.12.2
     ports:
       - "8071:80"
     volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./docker/etc/nginx/conf.d:/etc/nginx/conf.d:ro
       - ./data/static:/data/static:ro
       - ./data/media:/data/media:ro
     depends_on:
       - "app"
-  js:
-    build: './typescript'
-    image: fun_cms-typescript
+  node:
+    image: node:9.4.0
+    working_dir: /app
     volumes:
-      - ./:/fun-cms
-    entrypoint: >
-      bash -c "npm install && webpack --watch"
+      - .:/app
   sass:
-    build: './sass'
-    image: fun_cms-sass
+    image: ruby:2.4
     volumes:
       - ./:/fun-cms
     entrypoint: >
-      bash -c "mkdir -p /fun-cms/app/fun_cms/build/css &&
-      sass --watch /fun-cms/app /fun-cms/app/fun_cms/static/scss/_main.scss:/fun-cms/app/fun_cms/build/css/main.css -E \"UTF-8\"";
+      bash -c "gem install sass &&
+        mkdir -p /fun-cms/fun_cms/build/css &&
+        sass --watch /fun-cms /fun-cms/fun_cms/static/scss/_main.scss:/fun-cms/fun_cms/build/css/main.css -E \"UTF-8\"";
     depends_on:
-      - "js"
+      - "node"

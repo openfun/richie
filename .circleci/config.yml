@@ -10,7 +10,7 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v4-dependencies-{{ checksum "app/requirements/base.txt" }}
+          - v4-dependencies-{{ checksum "requirements/base.txt" }}
           # fallback to using the latest cache if no exact match is found
           - v4-dependencies-
       - run:
@@ -18,11 +18,11 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            pip install -r app/requirements/dev.txt
+            pip install -r requirements/dev.txt
       - save_cache:
           paths:
             - ./venv
-          key: v4-dependencies-{{ checksum "app/requirements/base.txt" }}
+          key: v4-dependencies-{{ checksum "requirements/base.txt" }}
 
   lint:
     docker:
@@ -32,7 +32,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v4-dependencies-{{ checksum "app/requirements/base.txt" }}
+          - v4-dependencies-{{ checksum "requirements/base.txt" }}
           - v4-dependencies-
       - run:
           name: Lint code
@@ -52,7 +52,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v4-dependencies-{{ checksum "app/requirements/base.txt" }}
+          - v4-dependencies-{{ checksum "requirements/base.txt" }}
           - v4-dependencies-
       - run:
           name: Run tests
