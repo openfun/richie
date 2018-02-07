@@ -1,6 +1,6 @@
 import factory
 
-from core.factories import FilerImageFactory
+from apps.core.factories import FilerImageFactory
 from .models import LargeBanner
 
 

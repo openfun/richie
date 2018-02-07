@@ -7,7 +7,7 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 
 
-from organizations.models import OrganizationPage, get_organization_data
+from apps.organizations.models import OrganizationPage, get_organization_data
 
 PAGES = {
     'news':
