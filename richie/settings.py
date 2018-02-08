@@ -234,6 +234,8 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         'easy_thumbnails.processors.background',
     )
 
+    ORGANIZATION_API_ENDPOINT = 'https://www.fun-mooc.fr/fun/api/universities/'
+
 
 class Development(Base):
     """

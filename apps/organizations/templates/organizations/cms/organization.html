@@ -5,9 +5,8 @@
 
 <h1>{{ current_page.get_title }}</h1>
 
-<img src="{{ current_page.organizationpage.get_data.logo }}">
+<img src="/media/{{ current_page.organizationpage.organization.logo }}">
 <br>
-<img src="{{ current_page.organizationpage.get_data.banner }}">
 
 
 {% placeholder "maincontent" %}
