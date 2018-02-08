@@ -4,8 +4,10 @@
   "description": "This document aims to list all needed steps to have a working `FUN CMS` installation.",
   "main": "manage.py",
   "scripts": {
-    "sass": "mkdir -p data/static/css; sass --watch fun_cms/static/scss/_main.scss:data/static/css/main.css apps",
-    "test": "./node_modules/karma/bin/karma start ./karma.conf.js"
+    "build": "webpack",
+    "sass": "node-sass fun_cms/static/scss/_main.scss data/static/css/main.css",
+    "test": "karma start ./karma.conf.js",
+    "watch-sass": "nodemon -e scss -x 'yarn sass'"
   },
   "repository": {
     "type": "git",
@@ -40,6 +42,8 @@
     "bootstrap": "4.0.0",
     "lodash-es": "^4.17.4",
     "moment": "^2.20.1",
+    "node-sass": "^4.7.2",
+    "nodemon": "^1.14.12",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
