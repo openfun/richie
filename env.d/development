@@ -1,0 +1,13 @@
+# Django
+DJANGO_SETTINGS_MODULE=fun_cms.settings
+DJANGO_CONFIGURATION=Development
+DJANGO_SECRET_KEY=ThisIsAnExampleKeyForDevPurposeOnly
+
+# Database
+POSTGRES_HOST=db
+POSTGRES_DB=fun_cms
+POSTGRES_USER=fun
+POSTGRES_PASSWORD=pass
+
+# Elastic search
+ES_CLIENT=elasticsearch
