@@ -1,7 +1,7 @@
 version: 2
 jobs:
 
-  build:
+  build-back:
     docker:
       - image: python:3.6-stretch
     working_directory: ~/fun-cms
@@ -10,11 +10,11 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v5-dependencies-{{ checksum "requirements/base.txt" }}
+          - v1-back-dependencies-{{ checksum "requirements/base.txt" }}
           # fallback to using the latest cache if no exact match is found
-          - v5-dependencies-
+          - v1-back-dependencies-
       - run:
-          name: Install dependencies
+          name: Install back-end dependencies
           command: |
             python3 -m venv venv
             . venv/bin/activate
@@ -22,9 +22,33 @@ jobs:
       - save_cache:
           paths:
             - ./venv
-          key: v5-dependencies-{{ checksum "requirements/base.txt" }}
+          key: v1-back-dependencies-{{ checksum "requirements/base.txt" }}
 
-  lint-flake8:
+  build-front:
+    docker:
+      - image: circleci/node:9-browsers
+    working_directory: ~/fun-cms
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v2-front-dependencies-{{ checksum "package.json" }}
+          - v2-front-dependencies-
+      - run:
+          name: Install front-end dependencies
+          command: npm install
+      - run:
+          name: Build front-end application
+          command: yarn build
+      - run:
+          name: Build application styles
+          command: yarn sass
+      - save_cache:
+          paths:
+            - ./node_modules
+          key: v2-front-dependencies-{{ checksum "package.json" }}
+
+  lint-back-flake8:
     docker:
       - image: python:3.6-stretch
     working_directory: ~/fun-cms
@@ -32,15 +56,15 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v5-dependencies-{{ checksum "requirements/base.txt" }}
-          - v5-dependencies-
+          - v1-back-dependencies-{{ checksum "requirements/base.txt" }}
+          - v1-back-dependencies-
       - run:
           name: Lint code with flake8
           command: |
             . venv/bin/activate
             flake8
 
-  lint-pylint:
+  lint-back-pylint:
     docker:
       - image: python:3.6-stretch
     working_directory: ~/fun-cms
@@ -48,15 +72,29 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v5-dependencies-{{ checksum "requirements/base.txt" }}
-          - v5-dependencies-
+          - v1-back-dependencies-{{ checksum "requirements/base.txt" }}
+          - v1-back-dependencies-
       - run:
           name: Lint code with pylint
           command: |
             . venv/bin/activate
             pylint apps plugins fun_cms
 
-  test:
+  lint-front:
+    docker:
+      - image: circleci/node:9-browsers
+    working_directory: ~/fun-cms
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v2-front-dependencies-{{ checksum "package.json" }}
+          - v2-front-dependencies-
+      - run:
+          name: Lint code with tslint
+          command: yarn lint
+
+  test-back:
     docker:
       - image: python:3.6-stretch
         environment:
@@ -74,38 +112,68 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v5-dependencies-{{ checksum "requirements/base.txt" }}
-          - v5-dependencies-
+          - v1-back-dependencies-{{ checksum "requirements/base.txt" }}
+          - v1-back-dependencies-
       - run:
           name: Run tests
           command: |
             . venv/bin/activate
             pytest
 
+  test-front:
+    docker:
+      - image: circleci/node:9-browsers
+    working_directory: ~/fun-cms
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v2-front-dependencies-{{ checksum "package.json" }}
+          - v2-front-dependencies-
+      - run:
+          name: Run tests
+          command: yarn test --single-run
+
 workflows:
   version: 2
 
   fun_cms:
     jobs:
-      - build:
+      - build-back:
           filters:
             tags:
               only: /.*/
-      - lint-flake8:
-          requires:
-            - build
+      - build-front:
           filters:
             tags:
               only: /.*/
-      - lint-pylint:
+      - lint-back-flake8:
           requires:
-            - build
+            - build-back
           filters:
             tags:
               only: /.*/
-      - test:
+      - lint-back-pylint:
           requires:
-            - build
+            - build-back
+          filters:
+            tags:
+              only: /.*/
+      - lint-front:
+          requires:
+            - build-front
+          filters:
+            tags:
+              only: /.*/
+      - test-back:
+          requires:
+            - build-back
+          filters:
+            tags:
+              only: /.*/
+      - test-front:
+          requires:
+            - build-front
           filters:
             tags:
               only: /.*/
