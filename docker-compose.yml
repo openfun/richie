@@ -30,7 +30,7 @@ services:
     depends_on:
       - "app"
   node:
-    image: node:9.4.0
+    image: circleci/node:9-browsers
     working_dir: /app
     volumes:
       - .:/app
