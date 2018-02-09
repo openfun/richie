@@ -34,6 +34,10 @@ build-ts: ## build TypeScript application
 	@$(YARN) build
 .PHONY: build-ts
 
+lint-front: ## lint TypeScript sources
+	@$(YARN) lint
+.PHONY: lint-front
+
 logs: ## get development logs
 	@$(COMPOSE) logs -f
 .PHONY: logs
