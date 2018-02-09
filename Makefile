@@ -1,14 +1,17 @@
 # Docker
-COMPOSE          = docker-compose
-COMPOSE_RUN      = $(COMPOSE) run --rm
-COMPOSE_RUN_APP  = $(COMPOSE_RUN) app
-COMPOSE_RUN_NODE = $(COMPOSE_RUN) node
+COMPOSE              = docker-compose
+COMPOSE_RUN          = $(COMPOSE) run --rm
+COMPOSE_RUN_APP      = $(COMPOSE_RUN) app
+COMPOSE_RUN_NODE     = $(COMPOSE_RUN) node
+COMPOSE_TEST         = $(COMPOSE) -p fun-cms-test -f docker-compose.test.yml
+COMPOSE_TEST_RUN     = $(COMPOSE_TEST) run --rm
+COMPOSE_TEST_RUN_APP = $(COMPOSE_TEST_RUN) app
 
 # Node
-YARN             = $(COMPOSE_RUN_NODE) yarn
+YARN                 = $(COMPOSE_RUN_NODE) yarn
 
 # Django
-MANAGE           = $(COMPOSE_RUN_APP) python manage.py
+MANAGE               = $(COMPOSE_RUN_APP) python manage.py
 
 default: help
 
@@ -34,6 +37,21 @@ build-ts: ## build TypeScript application
 	@$(YARN) build
 .PHONY: build-ts
 
+lint-back: ## lint back-end python sources
+	${MAKE} lint-back-flake8;
+	${MAKE} lint-back-pylint;
+.PHONY: lint-back
+
+lint-back-flake8: ## lint back-end python sources with flake8
+	@echo 'lint:flake8 started…';
+	@$(COMPOSE_TEST_RUN_APP) flake8;
+.PHONY: lint-back-flake8
+
+lint-back-pylint: ## lint back-end python sources with pylint
+	@echo 'lint:pylint started…';
+	@$(COMPOSE_TEST_RUN_APP) pylint apps plugins fun_cms;
+.PHONY: lint-back-pylint
+
 lint-front: ## lint TypeScript sources
 	@$(YARN) lint
 .PHONY: lint-front
@@ -57,6 +75,10 @@ run: ## start the development server
 stop: ## stop the development server
 	@$(COMPOSE) stop
 .PHONY: stop
+
+test-back: ## run back-end tests
+	@$(COMPOSE_TEST_RUN_APP) pytest
+.PHONY: test-back
 
 test-front: ## run front-end tests
 	@$(YARN) test
