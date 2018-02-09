@@ -66,7 +66,7 @@ class OrganizationForm(forms.ModelForm):
         site = Site.objects.get(id=1)
         try:  # retrieve correct parent page
             organizations_page = Page.objects.get(reverse_id='organizations_fr', languages='fr')
-        except (IndexError, Page.DoesNotExist) as e:
+        except (IndexError, Page.DoesNotExist):
             raise Http404("You can't create Organization Page when no organizations \
                 list parent page exists")
 
