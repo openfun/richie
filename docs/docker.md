@@ -129,7 +129,7 @@ Each time you add new front-end or back-end dependencies, you will need to rebui
 
 The test suite should be run from within the `app` container:
 
-    $ docker-compose exec app python manage.py test
+    $ make test-back
 
 
 ### Cleanup

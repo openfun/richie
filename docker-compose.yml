@@ -18,6 +18,7 @@ services:
       - ./data/media:/data/media
     depends_on:
       - "db"
+      - "elasticsearch"
   nginx:
     image: nginx:1.12.2
     ports:
