@@ -148,9 +148,9 @@ We need NPM to install the dependencies and run the build, which depends on a ve
     nvm install
     nvm use
 
-As a prerequisite to running the frontend build for either JS or CSS, you'll need to download the dependencies:
+As a prerequisite to running the frontend build for either JS or CSS, you'll need to [install yarn](https://yarnpkg.com/lang/en/docs/install/) and download dependencies _via_:
 
-    npm install
+    yarn install
 
 - JS build
 
