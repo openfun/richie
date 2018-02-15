@@ -102,3 +102,12 @@ watch-ts: ## watch changes in TypeScript files
 help:
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 .PHONY: help
+
+run-debug:  ## run developpment server and show output in current shell
+	@$(COMPOSE) stop app;
+	@$(COMPOSE_RUN) --service-ports app python manage.py runserver 0.0.0.0:8000
+.PHONY: run-debug
+
+shell:  ## run Django shell
+	@$(COMPOSE_RUN) app python manage.py shell
+.PHONY: shell
