@@ -1,8 +1,11 @@
 # Docker
 COMPOSE              = docker-compose
 COMPOSE_RUN          = $(COMPOSE) run --rm
+COMPOSE_EXEC         = $(COMPOSE) exec
+COMPOSE_EXEC_APP     = $(COMPOSE_EXEC) app
+COMPOSE_EXEC_NODE    = $(COMPOSE_EXEC) --user="$(id -u):$(id -g)" node
 COMPOSE_RUN_APP      = $(COMPOSE_RUN) app
-COMPOSE_RUN_NODE     = $(COMPOSE_RUN) node
+COMPOSE_RUN_NODE     = $(COMPOSE_RUN) --user="$(id -u):$(id -g)" node
 COMPOSE_TEST         = $(COMPOSE) -p fun-cms-test -f docker-compose.test.yml
 COMPOSE_TEST_RUN     = $(COMPOSE_TEST) run --rm
 COMPOSE_TEST_RUN_APP = $(COMPOSE_TEST_RUN) app
