@@ -108,6 +108,6 @@ run-debug:  ## run developpment server and show output in current shell
 	@$(COMPOSE_RUN) --service-ports app python manage.py runserver 0.0.0.0:8000
 .PHONY: run-debug
 
-shell:  ## run Django shell
-	@$(COMPOSE_RUN) app python manage.py shell
-.PHONY: shell
+django-shell:  ## run Django shell
+	@$(MANAGE) shell
+.PHONY: django-shell
