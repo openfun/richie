@@ -28,7 +28,7 @@ build-saas: ## build Sass files to CSS
 .PHONY: build-saas
 
 build-front: ## build front-end application
-	@$(COMPOSE_RUN_NODE) npm install;
+	@$(YARN) install;
 	${MAKE} build-ts;
 	${MAKE} build-saas;
 .PHONY: build-front
