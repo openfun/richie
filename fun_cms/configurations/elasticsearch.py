@@ -16,6 +16,6 @@ class ElasticSearchMixin(object):
         values.Value('localhost', environ_name='ES_CLIENT', environ_prefix=None),
     ])
     ES_CHUNK_SIZE = 500
-    ES_INDEX = 'fun_cms_courses'
-    ES_COURSE_TYPE = 'course'
-    ES_MAPPING = {'properties': {'key': {'type': 'keyword'}}}
+    ES_INDEXES = [
+        'apps.organizations.index.OrganizationIndexer',
+    ]
