@@ -1,14 +1,14 @@
 import { combineReducers, Reducer } from 'redux';
 
-import { organization, organizationState } from './organization/reducer';
-import { subject, subjectState } from './subject/reducer';
+import { organization, OrganizationState } from './organization/reducer';
+import { subject, SubjectState } from './subject/reducer';
 
-export type rootState = {
-  organization?: organizationState;
-  subject?: subjectState;
+export interface RootState {
+  organization?: OrganizationState;
+  subject?: SubjectState;
 }
 
-export const rootReducer: Reducer<rootState> = combineReducers({
+export const rootReducer: Reducer<RootState> = combineReducers({
   organization,
   subject,
 });

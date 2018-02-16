@@ -24,11 +24,11 @@ interface ComponentLibrary {
 }
 // Actually create the component map that we'll use below to access our component classes
 const componentLibrary: ComponentLibrary = {
-  Search
+  Search,
 };
 // Type guard: ensures a given string (candidate) is indeed a proper key of the componentLibrary with a corresponding
 // component. This is a runtime check but it allows TS to check the component prop types at compile time
-function isComponentName (candidate: keyof ComponentLibrary | string): candidate is keyof ComponentLibrary {
+function isComponentName(candidate: keyof ComponentLibrary | string): candidate is keyof ComponentLibrary {
   return includes(Object.keys(componentLibrary), candidate);
 }
 
@@ -54,9 +54,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
         </Provider>,
         element,
       );
-    }
-    // Emit a warning at runtime when we fail to find a matching component for an element that required one
-    else {
+    } else {
+      // Emit a warning at runtime when we fail to find a matching component for an element that required one
       console.warn('Failed to load React component: no such component in Library ' + componentName);
     }
   });

@@ -25,22 +25,22 @@ describe('data/organization reducer', () => {
 
   it('returns the state as is when called with an unknown action', () => {
     const previousState = {
-      byId: { '43': org43  },
+      byId: { 43: org43  },
     };
     expect(organizationReducer(previousState, { type: 'TODO_ADD' })).toEqual(previousState);
   });
 
   it('adds the organization to the state when called with ORGANIZATION_ADD', () => {
     const previousState = {
-      byId: { '43': org43  },
+      byId: { 43: org43  },
     };
     expect(organizationReducer(previousState, {
       organization: org44,
       type: 'ORGANIZATION_ADD',
     })).toEqual({
       byId: {
-        '43': org43,
-        '44': org44,
+        43: org43,
+        44: org44,
       },
     });
   });

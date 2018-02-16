@@ -1,5 +1,5 @@
-import Subject from './Subject';
 import Organization from './Organization';
+import Subject from './Subject';
 
 export default interface Course {
   course_ended: boolean;

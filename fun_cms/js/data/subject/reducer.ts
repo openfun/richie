@@ -1,17 +1,17 @@
 import { Reducer } from 'redux';
 
-import { SUBJECT_ADD } from './actions';
 import Subject from '../../types/Subject';
+import { SubjectAdd } from './actions';
 
 const initialState = {};
 
-export type subjectState = {
+export interface SubjectState {
   byId?: {
     [id: string]: Subject;
   };
 }
 
-export const subject: Reducer<subjectState> = (state: subjectState = initialState, action: SUBJECT_ADD) => {
+export const subject: Reducer<SubjectState> = (state: SubjectState = initialState, action: SubjectAdd) => {
   switch (action && action.type) {
     case 'SUBJECT_ADD':
       return {

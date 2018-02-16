@@ -1,9 +1,9 @@
-import { connect } from 'react-redux';
 import values from 'lodash-es/values';
+import { connect } from 'react-redux';
 
-import SearchFilterGroup from '../searchFilterGroup/searchFilterGroup';
-import { rootState } from '../../data/rootReducer';
+import { RootState } from '../../data/rootReducer';
 import FilterDefinition from '../../types/FilterDefinition';
+import SearchFilterGroup from '../searchFilterGroup/searchFilterGroup';
 
 export interface SearchFilterGroupContainerProps {
   machineName: string;
@@ -12,8 +12,8 @@ export interface SearchFilterGroupContainerProps {
 // Some of our filters are hardcoded and do not rely on any external data
 const hardcodedFilters: { [machineName: string]: FilterDefinition; } = {
   language: {
-    human_name: 'Language',
-    machine_name: 'language',
+    humanName: 'Language',
+    machineName: 'language',
     values: [
       [ 'en', 'English' ],
       [ 'fr', 'French' ],
@@ -21,45 +21,45 @@ const hardcodedFilters: { [machineName: string]: FilterDefinition; } = {
   },
 
   new: {
-    human_name: 'New courses',
-    machine_name: 'status',
+    humanName: 'New courses',
+    machineName: 'status',
     values: [
       [ 'new', 'First session' ],
     ],
   },
 
   status: {
-    human_name: 'Availability',
-    is_drilldown: true,
-    machine_name: 'availability',
+    humanName: 'Availability',
+    isDrilldown: true,
+    machineName: 'availability',
     values: [
       [ 'coming_soon', 'Coming soon' ],
       [ 'current', 'Current session' ],
-      [ 'open', 'Open, no session' ]
+      [ 'open', 'Open, no session' ],
     ],
   },
 };
 
 // Some filters need to be derived from the data
-const getFilterFromData = (state: rootState, machine_name: string) => {
-  switch (machine_name) {
+const getFilterFromData = (state: RootState, machineName: string) => {
+  switch (machineName) {
     case 'organization':
       return {
-        human_name: 'Organizations',
-        machine_name,
-        values: values(state[machine_name].byId).map(organization => [ organization.code, organization.name ]),
+        humanName: 'Organizations',
+        machineName,
+        values: values(state[machineName].byId).map((organization) => [ organization.code, organization.name ]),
       };
 
     case 'subject':
       return {
-        human_name: 'Subjects',
-        machine_name,
-        values: values(state[machine_name].byId).map(subject => [ subject.code, subject.name ]),
-      }
+        humanName: 'Subjects',
+        machineName,
+        values: values(state[machineName].byId).map((subject) => [ subject.code, subject.name ]),
+      };
   }
-}
+};
 
-const mapStateToProps = (state: rootState, { machineName }: SearchFilterGroupContainerProps) => {
+const mapStateToProps = (state: RootState, { machineName }: SearchFilterGroupContainerProps) => {
   return { filter: hardcodedFilters[machineName] || getFilterFromData(state, machineName) };
 };
 

@@ -1,3 +1,6 @@
+// Fixture files are temporary development helpers and will be removed once we get
+// fixtures in our local backend. There's no point in taking the time to fix their linting here.
+/* tslint:disable */
 export default {
   count: 367,
   previous: null,
@@ -99,7 +102,7 @@ export default {
         about: '/media/courses-thumbnails/course-v1minestelecom04004session05.730x412_q85_crop-scale.jpg',
         facebook: '/media/courses-thumbnails/course-v1minestelecom04004session05.600x315_q85_crop-smart.jpg' },
       has_verified_course_mode: false
-  
+
     },
     {
       id: 3100,
