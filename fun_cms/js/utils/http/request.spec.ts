@@ -1,7 +1,7 @@
 import isEqual from 'lodash-es/isEqual';
 import mock from 'xhr-mock';
 
-import { RequestFormattedResponse, r } from './request';
+import { r, RequestFormattedResponse } from './request';
 
 describe('utils/http - request()', () => {
   beforeEach(() => {
@@ -20,13 +20,13 @@ describe('utils/http - request()', () => {
       return res.status(200);
     });
 
-    let request$ = r.get('/api/v1/subject');
+    const request$ = r.get('/api/v1/subject');
     expect(spy).not.toHaveBeenCalled();
 
     request$.subscribe(() => {
       expect(spy).toHaveBeenCalled();
     });
-  })
+  });
 
   it('sends the request and returns the response through an observable', () => {
     mock.get('/api/v1/subject', (req, res) => {
@@ -97,7 +97,7 @@ describe('utils/http - request()', () => {
       return res.status(200);
     });
 
-    r.get('/api/v1/user/42', { headers: { 'Authorization': 'Bearer 0000' } })
+    r.get('/api/v1/user/42', { headers: { Authorization: 'Bearer 0000' } })
     .subscribe(() => {});
   });
 });

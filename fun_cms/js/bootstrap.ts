@@ -2,7 +2,7 @@ import configureStore from './data/configureStore';
 import organizations from './fixtures/organizations';
 import subjects from './fixtures/subjects';
 
-export default function bootstrapStore () {
+export default function bootstrapStore() {
   return configureStore({
     organization: {
       byId: organizations.results.reduce((acc, organization) => {
@@ -19,6 +19,6 @@ export default function bootstrapStore () {
           [subject.id]: subject,
         };
       }, {}),
-    }
+    },
   });
 }

@@ -3,50 +3,49 @@ import partial from 'lodash-es/partial';
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 
-import formatQueryString from './formatQueryString';
 import '../../utils/observable/extensions';
+import formatQueryString from './formatQueryString';
 
 export interface RequestFormattedResponse {
-  headers: string,
-  response: any,
+  headers: string;
+  response: any;
   status: number;
   statusText: string;
 }
 
 export interface RequestOptions {
-  headers?: { [name: string]: string },
-  params?: { [key: string]: string | string[] },
-  data?: Object | string,
+  headers?: { [name: string]: string };
+  params?: { [key: string]: string | string[] };
+  data?: object | string;
 }
 
-function request (
+function request(
   method: string,
   url: string,
   { headers, params, data }: RequestOptions = {},
 ): Observable<RequestFormattedResponse | Error> {
-  return Observable.create((observer: Observer<Object>) => {
+  return Observable.create((observer: Observer<object>) => {
     const xhr = new XMLHttpRequest();
 
     xhr.onreadystatechange = () => {
       if (xhr.readyState === XMLHttpRequest.DONE) {
         if (xhr.status) {
-          let formattedResponse: RequestFormattedResponse = {
+          const formattedResponse: RequestFormattedResponse = {
             headers: xhr.getAllResponseHeaders(),
             response: xhr.getResponseHeader('Content-Type') === 'application/json' ?
               JSON.parse(xhr.responseText) : xhr.responseText,
             status: xhr.status,
             statusText: xhr.statusText,
-          }
+          };
+
           // Successful response codes
           if (includes([ 200, 201, 202 ], xhr.status)) {
             observer.next(formattedResponse);
-          }
-          // Other response codes mean there was an error of some kind
-          else {
+          } else {
+            // Other response codes mean there was an error of some kind
             observer.error(formattedResponse);
           }
-        }
-        else {
+        } else {
           observer.error(new Error('Request failed to launch.'));
         }
         // Whatever happened, complete the observable sequence
@@ -67,7 +66,7 @@ function request (
       xhr.setRequestHeader('Content-Type', 'application/json');
     }
 
-    var payload;
+    let payload;
     switch (typeof data) {
       case 'string':
         payload = data;
@@ -76,14 +75,13 @@ function request (
       case 'object':
         payload = JSON.stringify(data);
         break;
-    } 
+    }
     xhr.send(payload || null);
   });
 }
 
-
 // For some reason TS does not infer a correct typing from _.partial, which is why we force it ourselves.
-type requestMethod = (url: string, options?: RequestOptions) => Observable<RequestFormattedResponse | Error>; 
+type requestMethod = (url: string, options?: RequestOptions) => Observable<RequestFormattedResponse | Error>;
 export let r: {
   delete: requestMethod;
   get: requestMethod;
@@ -94,4 +92,4 @@ export let r: {
   get: partial(request, 'GET'),
   post: partial(request, 'POST'),
   put: partial(request, 'PUT'),
-}
+};

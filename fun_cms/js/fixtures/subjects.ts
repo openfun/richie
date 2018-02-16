@@ -1,3 +1,6 @@
+// Fixture files are temporary development helpers and will be removed once we get
+// fixtures in our local backend. There's no point in taking the time to fix their linting here.
+/* tslint:disable */
 export default {
   count: 41,
   previous: null,

@@ -2,7 +2,7 @@
  * Centralized place to add methods & operators on observable
  *
  * There are several options to consume RxJS operators & methods:
- * 
+ *
  * - include the whole Kitchen Sink
  *   => this is unacceptable as it would increase payload size too much
  *
