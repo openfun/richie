@@ -1,3 +1,6 @@
+"""
+Tests for the regenerate_index command
+"""
 import logging
 
 from unittest import mock
@@ -14,12 +17,13 @@ class RegenerateIndexesTestCase(TestCase):
     """
     Test the command that regenerates the Elasticsearch indexes.
     """
+
     @mock.patch.object(es_index, 'regenerate_indexes')
     @mock.patch.object(logger, 'info')
-    def test_regenerate_indexes(self, *args):
+    def test_regenerate_indexes(self, mock_info, mock_regenerate):
         """
         Delegate all logic to the es_index module, log time elapsed at the end
         """
         call_command('regenerate_indexes')
-        es_index.regenerate_indexes.assert_called()
-        self.assertEqual(logger.info.call_count, 2)
+        mock_regenerate.assert_called()
+        self.assertEqual(mock_info.call_count, 2)

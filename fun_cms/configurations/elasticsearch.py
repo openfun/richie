@@ -1,3 +1,7 @@
+"""
+ElasticSearch settings mixin
+"""
+
 from configurations import values
 from elasticsearch import Elasticsearch
 

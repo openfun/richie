@@ -1,3 +1,8 @@
+"""
+Organizations models
+"""
+
+
 def get_courses():
     """
     Generator returning all courses.

@@ -1,35 +1,38 @@
-
-from django.db import IntegrityError
-from django.test import TestCase
-from django.test.client import RequestFactory
+"""
+Large banner plugin tests
+"""
 import re
 
 from cms.api import add_plugin
 from cms.models import Placeholder
 from cms.plugin_rendering import ContentRenderer
+from django.db import IntegrityError
+from django.test import TestCase
+from django.test.client import RequestFactory
 
 from .cms_plugins import LargeBannerPlugin
 from .factories import LargeBannerFactory
 
 
 class LargeBannerTests(TestCase):
+    """Large banner plugin tests case"""
 
     def test_large_banner_title_required(self):
         """
         A "title" is required when instantiating a large banner.
         """
-        with self.assertRaises(IntegrityError) as e:
+        with self.assertRaises(IntegrityError) as cm:
             LargeBannerFactory(title=None)
         self.assertIn(
-            'null value in column "title" violates not-null constraint', str(e.exception))
+            'null value in column "title" violates not-null constraint', str(cm.exception))
 
     def test_large_banner_logo_required(self):
         """
         A "logo" is required when instantiating a large banner.
         """
-        with self.assertRaises(ValueError) as e:
+        with self.assertRaises(ValueError) as cm:
             LargeBannerFactory(logo=None)
-        self.assertIn('"LargeBanner.logo" does not allow null values.', str(e.exception))
+        self.assertIn('"LargeBanner.logo" does not allow null values.', str(cm.exception))
 
     def test_large_banner_context_and_html(self):
         """
@@ -73,7 +76,7 @@ class LargeBannerTests(TestCase):
         self.assertIn('<div class="homepage-header-image">', html)
         rexp_background = re.compile(
             'src="/media/(.)*{:s}__1900x450_q85_crop-%2C0'.format(background_image_base))
-        self.assertRegexpMatches(html, rexp_background)
+        self.assertRegex(html, rexp_background)
         self.assertIn('{:s}__2495x550_q85_crop-%2C0'.format(background_image_base), html)
         self.assertIn('{:s}__2495x550_q85_crop-%2C0'.format(background_image_base), html)
         self.assertIn('{:s}__1900x450_q85_crop-%2C0'.format(background_image_base), html)
@@ -82,7 +85,7 @@ class LargeBannerTests(TestCase):
         logo_base = large_banner.logo.url.replace('/media', '')
         rexp_logo = re.compile(
             'src="/media/(.)*{:s}__593x237_q85_crop'.format(logo_base))
-        self.assertRegexpMatches(html, rexp_logo)
+        self.assertRegex(html, rexp_logo)
         self.assertIn('{:s}__593x237_q85_crop'.format(logo_base), html)
         self.assertIn('alt="{:s}"'.format(large_banner.logo_alt_text), html)
 

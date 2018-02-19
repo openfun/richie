@@ -1,6 +1,10 @@
+"""
+Large banner CMS plugin factories
+"""
 import factory
 
 from apps.core.factories import FilerImageFactory
+
 from .models import LargeBanner
 
 
