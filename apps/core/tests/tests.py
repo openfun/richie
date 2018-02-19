@@ -1,3 +1,6 @@
+"""
+Organizations tests
+"""
 from django.test import TestCase
 
 from cms.models import Page

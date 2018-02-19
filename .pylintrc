@@ -22,7 +22,7 @@ jobs=1
 
 # List of plugins (as comma separated values of python modules names) to load,
 # usually to register additional checkers.
-load-plugins=
+load-plugins=pylint_django
 
 # Pickle collected data for later comparisons.
 persistent=yes
@@ -379,7 +379,7 @@ const-naming-style=UPPER_CASE
 
 # Regular expression matching correct constant names. Overrides const-naming-
 # style
-#const-rgx=
+const-rgx=(([A-Z_][A-Z0-9_]*)|(__.*__)|urlpatterns|logger)$
 
 # Minimum line length for functions/classes that require docstrings, shorter
 # ones are exempt.
@@ -396,6 +396,7 @@ function-naming-style=snake_case
 good-names=i,
            j,
            k,
+           cm,
            ex,
            Run,
            _
@@ -415,7 +416,7 @@ method-naming-style=snake_case
 
 # Regular expression matching correct method names. Overrides method-naming-
 # style
-#method-rgx=
+method-rgx=([a-z_][a-z0-9_]{2,40}|setUp|set[Uu]pClass|tearDown|tear[Dd]ownClass|assert[A-Z]\w*|maxDiff|test_[a-z0-9_]+)$
 
 # Naming style matching correct module names
 module-naming-style=snake_case
@@ -529,7 +530,7 @@ max-returns=6
 max-statements=50
 
 # Minimum number of public methods for a class (see R0903).
-min-public-methods=2
+min-public-methods=0
 
 
 [EXCEPTIONS]

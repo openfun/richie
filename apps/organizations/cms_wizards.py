@@ -1,26 +1,31 @@
+"""
+CMS Wizard
+"""
+
+from cms.api import add_plugin, create_page
+from cms.models import Page
+from cms.wizards.wizard_base import Wizard
+from cms.wizards.wizard_pool import wizard_pool
 from django import forms
-from django.utils.text import slugify
-from django.utils.translation import ugettext_lazy as _
 from django.contrib.sites.models import Site
 from django.http import Http404
+from django.utils.text import slugify
+from django.utils.translation import ugettext_lazy as _
 
-from cms.models import Page
-from cms.wizards.wizard_pool import wizard_pool
-from cms.wizards.wizard_base import Wizard
-from cms.api import add_plugin, create_page
 
 from .models import OrganizationPage, get_organizations, get_organization_data
 
 
 class OrganizationForm(forms.ModelForm):
+    """Organization model form"""
 
     class Meta:
         model = OrganizationPage
         exclude = []
 
     def __init__(self, *args, **kwargs):
-        """ Populate oganization_key list with available organizations
-        """
+        """Populate oganization_key list with available organizations"""
+
         super(OrganizationForm, self).__init__(*args, **kwargs)
 
         # Retrieve existing organizations from API
@@ -62,7 +67,7 @@ class OrganizationForm(forms.ModelForm):
             slugify(self.cleaned_data['title'])
         return self.cleaned_data
 
-    def save(self, *args, **kwargs):
+    def save(self, commit=True):
         site = Site.objects.get(id=1)
         try:  # retrieve correct parent page
             organizations_page = Page.objects.get(reverse_id='organizations_fr', languages='fr')
@@ -92,21 +97,23 @@ class OrganizationForm(forms.ModelForm):
             placeholder=placeholder,
             plugin_type='TextPlugin',
             language='fr',
-            body='Le Lorem ipsum...',
+            body='Tapez votre contenu ici.',
         )
         return organization_page
 
 
 class OrganizationWizard(Wizard):
+    """Organization wizard"""
 
     def get_success_url(self, obj, **kwargs):
         return obj.get_absolute_url()
 
 
-organization_wizard = OrganizationWizard(
-    title=_("New Organization page"),
-    weight=200,
-    form=OrganizationForm,
-    description=_("Create a new Organization page"),
+wizard_pool.register(
+    OrganizationWizard(
+        title=_("New Organization page"),
+        weight=200,
+        form=OrganizationForm,
+        description=_("Create a new Organization page"),
+    )
 )
-wizard_pool.register(organization_wizard)

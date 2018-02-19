@@ -12,6 +12,6 @@ import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fun_cms.settings')
 os.environ.setdefault('DJANGO_CONFIGURATION', 'Development')
 
-from configurations.wsgi import get_wsgi_application  # noqa
+from configurations.wsgi import get_wsgi_application  # noqa, pylint: disable=wrong-import-position
 
-application = get_wsgi_application()
+application = get_wsgi_application()  # pylint: disable=invalid-name

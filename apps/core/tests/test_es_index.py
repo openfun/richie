@@ -1,3 +1,6 @@
+"""
+Tests for the es_index utilities
+"""
 from datetime import datetime
 from unittest import mock
 
@@ -25,7 +28,7 @@ class ESIndexTestCase(TestCase):
         self.indices_client = IndicesClient(client=settings.ES_CLIENT)
         self.indices_client.delete(index='_all')
 
-    def test_get_indexes_by_alias(self, *args):
+    def test_get_indexes_by_alias(self):
         """
         Receive a generator that contains the n-1 index for an alias.
         """
@@ -43,7 +46,7 @@ class ESIndexTestCase(TestCase):
             ('fun_cms_courses_2015-05-04-03h12m33.123456s', 'fun_cms_courses'),
         ])
 
-    def test_get_indexes_by_alias_with_duplicate(self, *args):
+    def test_get_indexes_by_alias_with_duplicate(self):
         """
         Clean up the aliases when starting from a broken state: duplicate indexes for an alias.
         """
@@ -65,7 +68,7 @@ class ESIndexTestCase(TestCase):
             ('fun_cms_courses_2015-05-04-03h12m33.123456s', 'fun_cms_courses'),
         ])
 
-    def test_get_indexes_by_alias_empty(self, *args):
+    def test_get_indexes_by_alias_empty(self):
         """
         Don't wrongly push values when there is nothing to return.
         """
@@ -80,13 +83,16 @@ class ESIndexTestCase(TestCase):
 
     # Make sure indexing still works when the number of records is higher than chunk size
     @override_settings(ES_CHUNK_SIZE=2)
-    def test_perform_create_index(self, *args):
+    def test_perform_create_index(self):
         """
         Perform all side-effects through the ES client and return the index name (incl. timestamp)
         """
+
         # Create an indexable from scratch that mimicks the expected shape of the dynamic
         # import in es_index
         class IndexableClass():
+            """Indexable stub"""
+
             document_type = 'course'
             index_name = 'fun_cms_courses'
             mapping = {
@@ -96,7 +102,10 @@ class ESIndexTestCase(TestCase):
                 },
             }
 
+            # pylint: disable=no-self-use
             def get_data_for_es(self, index, action):
+                """Stub method"""
+
                 for i in range(0, 10):
                     yield {
                         '_id': i,
@@ -106,6 +115,7 @@ class ESIndexTestCase(TestCase):
                         'code': 'course-{:d}'.format(i),
                         'name': 'Course Number {:d}'.format(i),
                     }
+
         indexable = IndexableClass()
 
         # Set a fake time to check the name of the index
@@ -136,6 +146,7 @@ class ESIndexTestCase(TestCase):
         })
         mock_logger.info.assert_called()
 
+    # pylint: disable=no-member,unused-argument
     @mock.patch.object(settings, 'ES_INDEXES', [
         'example.ExOneIndexable',
         'example.ExTwoIndexable',
@@ -179,12 +190,16 @@ class ESIndexTestCase(TestCase):
 
 
 class ExOneIndexable():
+    """First example indexable"""
+
     document_type = 'example'
     index_name = 'fun_cms_example'
     mapping = {'properties': {'name': 'text'}}
 
 
 class ExTwoIndexable():
+    """Second example indexable"""
+
     document_type = 'stub'
     index_name = 'fun_cms_stub'
     mapping = {'properties': {'code': 'keyword'}}

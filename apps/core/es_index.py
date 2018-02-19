@@ -1,3 +1,6 @@
+"""
+ElasticSearch indexes utilities.
+"""
 from itertools import chain
 
 from django.conf import settings
@@ -12,8 +15,8 @@ def get_indexable_from_string(indexable_module_string):
     """
     Load the indexable from the module.Class path in settings
     """
-    IndexableClass = import_string(indexable_module_string)
-    return IndexableClass()
+    klass = import_string(indexable_module_string)
+    return klass()
 
 
 def get_indexes_by_alias(existing_indexes, alias):
@@ -116,4 +119,9 @@ def regenerate_indexes(logger):
 
     # Cleanup step: do prune older indexes that are now useless
     for useless_index in useless_indexes:
+        # Disable keyword arguments checking as elasticsearch-py uses a decorator to list
+        # valid query parameters and inject them as kwargs. I won't say a word about this
+        # anti-pattern.
+        #
+        # pylint: disable=unexpected-keyword-arg
         indices_client.delete(index=useless_index, ignore=[400, 404])

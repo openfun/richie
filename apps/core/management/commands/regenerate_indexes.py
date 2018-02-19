@@ -1,3 +1,6 @@
+"""
+regenerate_indexes management command
+"""
 import logging
 
 from django.core.management.base import BaseCommand
@@ -8,11 +11,13 @@ logger = logging.getLogger('fun_cms.core.regenerate_indexes')
 
 
 class Command(BaseCommand):
-    help = """
-        Index all courses to Elasticsearch in bulk.
-        This command creates a new index each time, populates it, and
-        atomically replaces the old index once the new one is ready.
     """
+    Index all courses to Elasticsearch in bulk.
+    This command creates a new index each time, populates it, and
+    atomically replaces the old index once the new one is ready.
+    """
+
+    help = __doc__
 
     def handle(self, *args, **options):
         # Keep track of starting time for logging purposes
