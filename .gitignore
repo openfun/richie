@@ -1,6 +1,10 @@
 # env
 .env
 
+# virtualenv
+.venv
+venv
+
 # sqlite DB
 db.sqlite3
 *.db
@@ -49,6 +53,9 @@ coverage.xml
 
 # TextMate 2
 .tm_properties
+
+# VS Code
+.vscode
 
 # Mac Os
 .DS_Store
