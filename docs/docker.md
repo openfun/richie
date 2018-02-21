@@ -137,3 +137,25 @@ The test suite should be run from within the `app` container:
 If you work on the Docker configuration and make repeated modifications, remember to periodically clean the unused docker images by running:
 
     $ docker image prune
+
+### Troubleshooting
+
+#### ElasticSearch service is always down
+
+If your `elasticsearch` container fails at booting, checkout the logs via:
+
+```bash
+$ docker-compose logs elasticsearch
+```
+
+You may see entries similar to:
+
+```
+[1]: max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]
+```
+
+In this case, increase virtual memory as follows (UNIX systems):
+
+```
+$ sudo sysctl -w vm/max_map_count=262144
+```
