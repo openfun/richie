@@ -71,6 +71,10 @@ rebuild: ## rebuild the app container
 	@$(COMPOSE) build app
 .PHONY: rebuild
 
+rebuild-test: ## rebuild the app container (test)
+	@$(COMPOSE_TEST) build app
+.PHONY: rebuild-test
+
 run: ## start the development server
 	@$(COMPOSE) up -d
 .PHONY: run
