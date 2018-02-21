@@ -2,26 +2,28 @@ const SETTINGS = require('./fun_cms/settings.json');
 const webpack = require('webpack');
 
 module.exports = {
-  entry: "./fun_cms/js/index.tsx",
+  // Include whatwg fetch as an entry point (and not an import) as it's replacing (when necessary)
+  // a globally available browser-provided function
+  entry: [ 'whatwg-fetch', './fun_cms/js/index.tsx' ],
   output: {
-    filename: "index.js",
-    path: __dirname + "/fun_cms/build/js"
+    filename: 'index.js',
+    path: __dirname + '/fun_cms/build/js'
   },
 
   // Enable sourcemaps for debugging webpack's output.
-  devtool: "source-map",
+  devtool: 'source-map',
 
   resolve: {
     // Add '.ts' and '.tsx' as resolvable extensions.
-    extensions: [ ".ts", ".tsx", ".js", ".json" ]
+    extensions: [ '.ts', '.tsx', '.js', '.json' ]
   },
 
   module: {
     rules: [
       // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
-      { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
+      { test: /\.tsx?$/, loader: 'awesome-typescript-loader' },
       // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-      { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
+      { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' }
     ]
   },
 
