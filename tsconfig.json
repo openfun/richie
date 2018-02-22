@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "jsx": "react",
-    "lib": [ "dom", "es5", "scripthost", "es2015.promise" ],
+    "lib": [ "dom", "es5", "scripthost", "es2015.promise", "es2015.iterable" ],
     "module": "commonjs",
     "noImplicitAny": true,
     "sourceMap": true,
