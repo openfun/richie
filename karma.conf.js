@@ -33,7 +33,7 @@ module.exports = function (config) {
       plugins: [
         new webpack.SourceMapDevToolPlugin({
           filename: null, // if no value is provided the sourcemap is inlined
-          test: /\.(ts|js)($|\?)/i // process .js and .ts files only
+          test: /\.(ts|tsx|js)($|\?)/i // process .js and .ts files only
         })
       ],
       // Reuse our existing webpack config
