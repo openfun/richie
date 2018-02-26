@@ -21,5 +21,5 @@ class ElasticSearchMixin(object):
     ])
     ES_CHUNK_SIZE = 500
     ES_INDEXES = [
-        'apps.organizations.index.OrganizationIndexer',
+        'apps.search.indexers.organization.OrganizationIndexer',
     ]

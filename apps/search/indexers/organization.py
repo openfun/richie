@@ -3,7 +3,7 @@ Indexing utility for the ElasticSearch-related regenerate_index command
 """
 from django.conf import settings
 
-from .models import OrganizationPage
+from ...organizations.models import OrganizationPage
 
 
 class OrganizationIndexer():

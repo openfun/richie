@@ -173,6 +173,7 @@ class Base(ElasticSearchMixin, Configuration):
         # FUN stuff
         'apps.core',
         'apps.organizations',
+        'apps.search',
         'plugins.large_banner',
     )
 

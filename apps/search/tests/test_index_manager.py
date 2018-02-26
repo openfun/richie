@@ -1,5 +1,5 @@
 """
-Tests for the es_index utilities
+Tests for the index_manager utilities
 """
 from datetime import datetime
 from unittest import mock
@@ -12,10 +12,10 @@ from django.test.utils import override_settings
 from django.utils import timezone
 from elasticsearch.client import IndicesClient
 
-from ..es_index import get_indexes_by_alias, perform_create_index, regenerate_indexes
+from ..index_manager import get_indexes_by_alias, perform_create_index, regenerate_indexes
 
 
-class ESIndexTestCase(TestCase):
+class IndexManagerTestCase(TestCase):
     """
     Test the functions that generate and maintain our elasticsearch indexes.
     """
@@ -152,15 +152,15 @@ class ESIndexTestCase(TestCase):
         'example.ExTwoIndexable',
     ])
     @mock.patch(
-        'apps.core.es_index.get_indexable_from_string',
+        'apps.search.index_manager.get_indexable_from_string',
         lambda name: ExOneIndexable() if name == 'example.ExOneIndexable' else ExTwoIndexable(),
     )
     @mock.patch(
-        'apps.core.es_index.get_indexes_by_alias',
+        'apps.search.index_manager.get_indexes_by_alias',
         side_effect=lambda existing_indexes, alias: (alias + '_previous', alias),
     )
     @mock.patch(
-        'apps.core.es_index.perform_create_index',
+        'apps.search.index_manager.perform_create_index',
         side_effect=lambda ix, *args: ix.index_name + '_created_index',
     )
     @mock.patch('elasticsearch.client.IndicesClient.delete')
