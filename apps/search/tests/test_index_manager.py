@@ -147,17 +147,15 @@ class IndexManagerTestCase(TestCase):
         mock_logger.info.assert_called()
 
     # pylint: disable=no-member,unused-argument
-    @mock.patch.object(settings, 'ES_INDEXES', [
-        'example.ExOneIndexable',
-        'example.ExTwoIndexable',
-    ])
+    @override_settings(ES_INDEXES=['example.ExOneIndexable', 'example.ExTwoIndexable'])
     @mock.patch(
         'apps.search.index_manager.get_indexable_from_string',
         lambda name: ExOneIndexable() if name == 'example.ExOneIndexable' else ExTwoIndexable(),
     )
     @mock.patch(
         'apps.search.index_manager.get_indexes_by_alias',
-        side_effect=lambda existing_indexes, alias: (alias + '_previous', alias),
+        side_effect=lambda existing_indexes, alias:
+        [(alias + '_forgotten', alias), (alias + '_previous', alias)],
     )
     @mock.patch(
         'apps.search.index_manager.perform_create_index',
@@ -182,11 +180,47 @@ class IndexManagerTestCase(TestCase):
             'actions': [
                 {'add': {'index': 'fun_cms_example_created_index', 'alias': 'fun_cms_example'}},
                 {'add': {'index': 'fun_cms_stub_created_index', 'alias': 'fun_cms_stub'}},
+                {'remove': {'index': 'fun_cms_example_forgotten', 'alias': 'fun_cms_example'}},
                 {'remove': {'index': 'fun_cms_example_previous', 'alias': 'fun_cms_example'}},
-                {'remove': {'index': 'fun_cms_stub_previous', 'alias': 'fun_cms_stub'}}
+                {'remove': {'index': 'fun_cms_stub_forgotten', 'alias': 'fun_cms_stub'}},
+                {'remove': {'index': 'fun_cms_stub_previous', 'alias': 'fun_cms_stub'}},
             ],
         })
         self.indices_client.delete.assert_called_with(ignore=[400, 404], index='fun_cms_orphan')
+
+    @override_settings(ES_INDEXES=['example.ExOneIndexable', 'example.ExTwoIndexable'])
+    @mock.patch(
+        'apps.search.index_manager.get_indexable_from_string',
+        lambda name: ExOneIndexable() if name == 'example.ExOneIndexable' else ExTwoIndexable(),
+    )
+    @mock.patch(
+        'apps.search.index_manager.get_indexes_by_alias',
+        side_effect=lambda existing_indexes, alias: [],
+    )
+    @mock.patch(
+        'apps.search.index_manager.perform_create_index',
+        side_effect=lambda ix, *args: ix.index_name + '_created_index',
+    )
+    @mock.patch('elasticsearch.client.IndicesClient.delete')
+    @mock.patch(
+        'elasticsearch.client.IndicesClient.get_alias',
+        return_value=dict({}),
+    )
+    @mock.patch('elasticsearch.client.IndicesClient.update_aliases')
+    def test_regenerate_indexes_with_empty_index(self, *args):
+        """
+        Make sure `regenerate_indexes` still works when there are no existing indexes. This
+        test case was added to reproduce a bug.
+        """
+        regenerate_indexes(None)
+
+        self.indices_client.update_aliases.assert_called_with({
+            'actions': [
+                {'add': {'index': 'fun_cms_example_created_index', 'alias': 'fun_cms_example'}},
+                {'add': {'index': 'fun_cms_stub_created_index', 'alias': 'fun_cms_stub'}},
+            ],
+        })
+        self.indices_client.delete.assert_not_called()
 
 
 class ExOneIndexable():

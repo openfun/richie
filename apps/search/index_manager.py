@@ -1,7 +1,7 @@
 """
 ElasticSearch indexes utilities.
 """
-from itertools import chain
+from functools import reduce
 
 from django.conf import settings
 from django.utils import timezone
@@ -92,17 +92,16 @@ def regenerate_indexes(logger):
     ]
 
     # Get the previous indexes for every alias
-    indexes_to_unalias = map(
-        lambda ix: get_indexes_by_alias(existing_indexes, ix.index_name),
+    indexes_to_unalias = reduce(
+        lambda acc, ix: acc + list(get_indexes_by_alias(existing_indexes, ix.index_name)),
         indexables,
+        [],
     )
 
     # Prepare to un-alias them so they can be swapped-out for the new versions
     # NB: use chain to flatten the list of generators
     actions_to_delete_aliases = [
-        {'remove': {'index': index, 'alias': alias}} for index, alias in chain(
-            indexes_to_unalias,
-        )
+        {'remove': {'index': index, 'alias': alias}} for index, alias in indexes_to_unalias
     ]
 
     # Identify orphaned indexes
