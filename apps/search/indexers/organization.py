@@ -8,11 +8,11 @@ from ...organizations.models import OrganizationPage
 
 class OrganizationIndexer():
     """
-    Makes available the static data the indexer requires as well as a function to shape
+    Makes available the parameters the indexer requires as well as a function to shape
     objects into what we want to index in ElasticSearch
     """
     document_type = 'organization'
-    index_name = 'fun_cms_{:s}s'.format(document_type)
+    index_name = 'fun_cms_organizations'
     mapping = {
         'properties': {
             'code': {'type': 'keyword'},

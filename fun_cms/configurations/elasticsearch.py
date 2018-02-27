@@ -21,5 +21,8 @@ class ElasticSearchMixin(object):
     ])
     ES_CHUNK_SIZE = 500
     ES_INDEXES = [
+        'apps.search.indexers.course.CourseIndexer',
         'apps.search.indexers.organization.OrganizationIndexer',
     ]
+
+    COURSE_API_ENDPOINT = 'https://www.fun-mooc.fr/fun/api/courses'
