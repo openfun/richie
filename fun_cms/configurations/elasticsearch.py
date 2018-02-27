@@ -23,6 +23,8 @@ class ElasticSearchMixin(object):
     ES_INDEXES = [
         'apps.search.indexers.course.CourseIndexer',
         'apps.search.indexers.organization.OrganizationIndexer',
+        'apps.search.indexers.subject.SubjectIndexer',
     ]
 
     COURSE_API_ENDPOINT = 'https://www.fun-mooc.fr/fun/api/courses'
+    SUBJECT_API_ENDPOINT = 'https://www.fun-mooc.fr/fun/api/course_subjects'
