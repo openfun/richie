@@ -1,13 +1,11 @@
 """
 Indexing utility for the ElasticSearch-related regenerate_index command
 """
-import math
-
 from django.conf import settings
-import requests
 
-from ..partial_mappings import MULTILINGUAL_TEXT
 from ..exceptions import IndexerDataException
+from ..partial_mappings import MULTILINGUAL_TEXT
+from ..utils.api_consumption import walk_api_json_list
 
 
 class CourseIndexer():
@@ -44,38 +42,11 @@ class CourseIndexer():
         """
         Load all the courses from the API and format them for the ElasticSearch index
         """
-        # Set initial request params. Use math.inf so the first request always fires
-        offset = 0
-        page_length = 50
-        total_count = math.inf
+        content_pages = walk_api_json_list(settings.COURSE_API_ENDPOINT)
 
-        # Iterate over the API as long as there are results to get
-        while total_count > offset:
-            response = requests.get(
-                settings.COURSE_API_ENDPOINT,
-                params={'page': 1 + offset // page_length, 'rpp': page_length}
-            )
-
-            # Make sure we throw if we received an invalid status code so everything is stopped
+        for content_page in content_pages:
             try:
-                response.raise_for_status()
-            except requests.HTTPError:
-                raise IndexerDataException(
-                    'HTTP Request for ES data failed with code {:n}'.format(response.status_code),
-                )
-
-            # Get the parsed JSON content from the request
-            try:
-                content = response.json()
-            except requests.compat.json.decoder.JSONDecodeError:
-                raise IndexerDataException('Invalid JSON received from remote API')
-
-            try:
-                # Set the params for the next request (or to exit the loop)
-                total_count = content['count']
-
-                # Iterate over the results to put each of them in our index
-                for course in content['results']:
+                for course in content_page['results']:
                     yield {
                         '_id': course['id'],
                         '_index': index,
@@ -95,6 +66,3 @@ class CourseIndexer():
                     }
             except KeyError:
                 raise IndexerDataException('Unexpected data shape in courses to index')
-
-            # Prepare the offset for the next request
-            offset = offset + page_length

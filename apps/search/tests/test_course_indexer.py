@@ -114,40 +114,6 @@ class CourseIndexerTestCase(TestCase):
         )
 
     @responses.activate
-    def test_get_data_for_es_with_error_status(self):
-        """
-        Error case: the API responds with an error status
-        """
-        responses.add(
-            method='GET',
-            url=settings.COURSE_API_ENDPOINT,
-            status=500,
-        )
-
-        indexer = CourseIndexer()
-
-        # The call raised the correct exception
-        with self.assertRaises(IndexerDataException):
-            list(indexer.get_data_for_es(index='some_index', action='some_action'))
-
-    @responses.activate
-    def test_get_data_for_es_with_invalid_json(self):
-        """
-        Error case: the API did not return valid JSON
-        """
-        responses.add(
-            method='GET',
-            url=settings.COURSE_API_ENDPOINT,
-            status=200,
-            body='broken_json',
-        )
-
-        indexer = CourseIndexer()
-
-        with self.assertRaises(IndexerDataException):
-            list(indexer.get_data_for_es(index='some_index', action='some_action'))
-
-    @responses.activate
     def test_get_data_for_es_with_unexpected_data_shape(self):
         """
         Error case: the API returned an object that is not shape like an expected course
