@@ -36,7 +36,7 @@ jobs:
           - v2-front-dependencies-
       - run:
           name: Install front-end dependencies
-          command: yarn install
+          command: yarn install --frozen-lockfile
       - run:
           name: Build front-end application
           command: yarn build
