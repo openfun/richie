@@ -26,5 +26,7 @@ class ElasticSearchMixin(object):
         'apps.search.indexers.subject.SubjectIndexer',
     ]
 
+    ES_DEFAULT_PAGE_SIZE = 10
+
     COURSE_API_ENDPOINT = 'https://www.fun-mooc.fr/fun/api/courses'
     SUBJECT_API_ENDPOINT = 'https://www.fun-mooc.fr/fun/api/course_subjects'

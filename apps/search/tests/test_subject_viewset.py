@@ -1,0 +1,140 @@
+"""
+Tests for the subject viewset
+"""
+from unittest import mock
+
+from django.conf import settings
+from django.test import TestCase
+from elasticsearch.exceptions import NotFoundError
+from rest_framework.test import APIRequestFactory
+
+from ..viewsets.subject import SubjectViewSet
+
+
+class SubjectViewsetTestCase(TestCase):
+    """
+    Test the API endpoints for subjects (list and details)
+    """
+    def test_retrieve_subject(self):
+        """
+        Happy path: the client requests an existing subject, gets it back
+        """
+        factory = APIRequestFactory()
+        request = factory.get('/api/v1.0/subject/42')
+
+        with mock.patch.object(settings.ES_CLIENT, 'get',
+                               return_value={
+                                   '_id': 42, '_source': {'name': {'fr': 'Some Subject'}}
+                               }):
+            # Note: we need to use a separate argument for the ID as that is what the ViewSet uses
+            response = SubjectViewSet.as_view({'get': 'retrieve'})(request, 42, version='1.0')
+
+        # The client received a proper response with the relevant subject
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, {'id': 42, 'name': 'Some Subject'})
+
+    def test_retrieve_unknown_subject(self):
+        """
+        Error case: the client is asking for a subject that does not exist
+        """
+        factory = APIRequestFactory()
+        request = factory.get('/api/v1.0/subject/43')
+
+        # Act like the ES client would when we attempt to get a non-existent document
+        with mock.patch.object(settings.ES_CLIENT, 'get', side_effect=NotFoundError):
+            response = SubjectViewSet.as_view({'get': 'retrieve'})(request, 43, version='1.0')
+
+        # The client received a standard NotFound response
+        self.assertEqual(response.status_code, 404)
+
+    @mock.patch.object(settings.ES_CLIENT, 'search')
+    def test_search_all_subjects(self, mock_search):
+        """
+        Happy path: the subject is not filtering the subjects for anything
+        """
+        factory = APIRequestFactory()
+        request = factory.get('/api/v1.0/subject?limit=2&offset=10')
+
+        mock_search.return_value = {
+            'hits': {
+                'hits': [
+                    {'_id': 42, '_source': {'name': {'fr': 'Subject Forty-Two'}}},
+                    {'_id': 44, '_source': {'name': {'fr': 'Subject Forty-Four'}}},
+                ],
+                'total': 90,
+            },
+        }
+
+        response = SubjectViewSet.as_view({'get': 'list'})(request, version='1.0')
+
+        # The client received a properly formatted response
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, {
+            'meta': {'count': 2, 'offset': 10, 'total_count': 90},
+            'objects': [
+                {'id': 42, 'name': 'Subject Forty-Two'},
+                {'id': 44, 'name': 'Subject Forty-Four'},
+            ],
+        })
+        # The ES connector was called with appropriate arguments for the client's request
+        mock_search.assert_called_with(
+            body={'query': {'match_all': {}}},
+            doc_type='subject',
+            from_=10,
+            index='fun_cms_subjects',
+            size=2,
+        )
+
+    @mock.patch.object(settings.ES_CLIENT, 'search')
+    def test_search_subjects_by_name(self, mock_search):
+        """
+        Happy path: the subject is filtering the subjects by name
+        """
+        factory = APIRequestFactory()
+        request = factory.get('/api/v1.0/subject?name=Science&limit=2')
+
+        mock_search.return_value = {
+            'hits': {
+                'hits': [
+                    {'_id': 21, '_source': {'name': {'fr': 'Computer Science'}}},
+                    {'_id': 61, '_source': {'name': {'fr': 'Engineering Sciences'}}},
+                ],
+                'total': 32,
+            },
+        }
+
+        response = SubjectViewSet.as_view({'get': 'list'})(request, version='1.0')
+
+        # The client received a properly formatted response
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, {
+            'meta': {'count': 2, 'offset': 0, 'total_count': 32},
+            'objects': [
+                {'id': 21, 'name': 'Computer Science'},
+                {'id': 61, 'name': 'Engineering Sciences'},
+            ],
+        })
+        # The ES connector was called with a query that matches the client's request
+        mock_search.assert_called_with(
+            body={'query': {'match': {'name.fr': {'query': 'Science', 'analyzer': 'french'}}}},
+            doc_type='subject',
+            from_=0,
+            index='fun_cms_subjects',
+            size=2,
+        )
+
+    def test_search_subjects_with_invalid_params(self):
+        """
+        Error case: the client used an incorrectly formatted request
+        """
+        factory = APIRequestFactory()
+        # The request contains incorrect params: limit should be a positive integer
+        request = factory.get('/api/v1.0/subject?name=&limit=-2')
+
+        response = SubjectViewSet.as_view({'get': 'list'})(request, version='1.0')
+
+        # The client received a BadRequest response with the relevant data
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.data, {
+            'errors': {'limit': ['Ensure this value is greater than or equal to 1.']}
+        })

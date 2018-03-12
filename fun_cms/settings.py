@@ -7,12 +7,13 @@ from configurations import Configuration, values
 from django.utils.translation import ugettext_lazy as _
 
 from .configurations.elasticsearch import ElasticSearchMixin
+from .configurations.rest_framework import DRFMixin
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(BASE_DIR, '..', 'data')
 
 
-class Base(ElasticSearchMixin, Configuration):
+class Base(DRFMixin, ElasticSearchMixin, Configuration):
     """
     This is the base configuration every configuration (aka environnement) should inherit from. It
     is recommended to configure third-party applications by creating a configuration mixins in
