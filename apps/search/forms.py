@@ -1,5 +1,5 @@
 """
-Validate and clean request parameters for the subject endpoints using Django forms
+Validate and clean request parameters for our endpoints using Django forms
 """
 from django import forms
 

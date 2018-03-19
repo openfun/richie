@@ -6,8 +6,8 @@ from elasticsearch.exceptions import NotFoundError
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
+from ..forms import SubjectListForm
 from ..indexers.subject import SubjectIndexer
-from ..request_cleaners.subject import SubjectListForm
 
 
 class SubjectViewSet(ViewSet):
