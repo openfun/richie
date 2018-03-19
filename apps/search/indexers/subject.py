@@ -1,17 +1,18 @@
 """
-Indexing utility for the ElasticSearch-related regenerate_index command
+ElasticSearch subject document management utilities
 """
 from django.conf import settings
 
 from ..partial_mappings import MULTILINGUAL_TEXT
 from ..exceptions import IndexerDataException
 from ..utils.api_consumption import walk_api_json_list
+from ..utils.i18n import get_best_field_language
 
 
 class SubjectIndexer():
     """
-    Makes available the params the indexer requires as well as a function to shape
-    objects into what we want to index in ElasticSearch
+    Makes available the parameters the indexer requires as well as functions to shape
+    objects getting into and out of ElasticSearch
     """
     document_type = 'subject'
     index_name = 'fun_cms_subjects'
@@ -41,3 +42,15 @@ class SubjectIndexer():
                     }
             except KeyError:
                 raise IndexerDataException('Unexpected data shape in subjects to index')
+
+    @staticmethod
+    def format_es_subject_for_api(es_course, best_language):
+        """
+        Format a subject stored in ES into a consistent and easy-to-consume record for
+        API consumers
+        """
+        return {
+            'id': es_course['_id'],
+            'image': es_course['_source']['image'],
+            'name': get_best_field_language(es_course['_source']['name'], best_language),
+        }

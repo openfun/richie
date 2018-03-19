@@ -2,6 +2,7 @@
 API endpoints to access subjects through ElasticSearch
 """
 from django.conf import settings
+from django.utils.translation import get_language_from_request
 from elasticsearch.exceptions import NotFoundError
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
@@ -63,12 +64,11 @@ class SubjectViewSet(ViewSet):
                 'total_count': query_response['hits']['total']
             },
             'objects': [
-                {
-                    **subject['_source'],
-                    'id': subject['_id'],
-                    'name': subject['_source']['name']['fr'],
-                }
-                for subject in query_response['hits']['hits']
+                SubjectIndexer.format_es_subject_for_api(
+                    subject,
+                    # Get the best language we can return multilingual fields in
+                    get_language_from_request(request),
+                ) for subject in query_response['hits']['hits']
             ]
         }
 
@@ -91,8 +91,10 @@ class SubjectViewSet(ViewSet):
             return Response(status=404)
 
         # Format a clean subject object as a response
-        return Response({
-            **query_response['_source'],
-            'id': query_response['_id'],
-            'name': query_response['_source']['name']['fr'],
-        })
+        return Response(
+            SubjectIndexer.format_es_subject_for_api(
+                query_response,
+                # Get the best language we can return multilingual fields in
+                get_language_from_request(request),
+            )
+        )

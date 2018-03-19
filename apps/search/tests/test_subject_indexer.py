@@ -102,3 +102,26 @@ class SubjectIndexerTestCase(TestCase):
 
         with self.assertRaises(IndexerDataException):
             list(indexer.get_data_for_es(index='some_index', action='some_action'))
+
+    def test_format_es_subject_for_api(self):
+        """
+        Make sure format_es_subject_for_api returns a properly formatted subject
+        """
+        es_subject = {
+            '_id': 89,
+            '_source': {
+                'image': 'example.com/image.png',
+                'name': {
+                    'en': 'Computer science',
+                    'fr': 'Informatique',
+                },
+            },
+        }
+        self.assertEqual(
+            SubjectIndexer.format_es_subject_for_api(es_subject, 'en'),
+            {
+                'id': 89,
+                'image': 'example.com/image.png',
+                'name': 'Computer science',
+            },
+        )

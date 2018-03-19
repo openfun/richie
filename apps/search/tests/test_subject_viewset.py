@@ -24,14 +24,20 @@ class SubjectViewsetTestCase(TestCase):
 
         with mock.patch.object(settings.ES_CLIENT, 'get',
                                return_value={
-                                   '_id': 42, '_source': {'name': {'fr': 'Some Subject'}}
+                                   '_id': 42,
+                                   '_source': {
+                                       'image': 'example.com/image.png',
+                                       'name': {'fr': 'Some Subject'}},
                                }):
             # Note: we need to use a separate argument for the ID as that is what the ViewSet uses
             response = SubjectViewSet.as_view({'get': 'retrieve'})(request, 42, version='1.0')
 
         # The client received a proper response with the relevant subject
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, {'id': 42, 'name': 'Some Subject'})
+        self.assertEqual(
+            response.data,
+            {'id': 42, 'image': 'example.com/image.png', 'name': 'Some Subject'},
+        )
 
     def test_retrieve_unknown_subject(self):
         """
@@ -58,8 +64,14 @@ class SubjectViewsetTestCase(TestCase):
         mock_search.return_value = {
             'hits': {
                 'hits': [
-                    {'_id': 42, '_source': {'name': {'fr': 'Subject Forty-Two'}}},
-                    {'_id': 44, '_source': {'name': {'fr': 'Subject Forty-Four'}}},
+                    {'_id': 42, '_source': {
+                        'image': 'example.com/image.png',
+                        'name': {'fr': 'Subject Forty-Two'},
+                    }},
+                    {'_id': 44, '_source': {
+                        'image': 'example.com/image.png',
+                        'name': {'fr': 'Subject Forty-Four'}
+                    }},
                 ],
                 'total': 90,
             },
@@ -72,8 +84,8 @@ class SubjectViewsetTestCase(TestCase):
         self.assertEqual(response.data, {
             'meta': {'count': 2, 'offset': 10, 'total_count': 90},
             'objects': [
-                {'id': 42, 'name': 'Subject Forty-Two'},
-                {'id': 44, 'name': 'Subject Forty-Four'},
+                {'id': 42, 'image': 'example.com/image.png', 'name': 'Subject Forty-Two'},
+                {'id': 44, 'image': 'example.com/image.png', 'name': 'Subject Forty-Four'},
             ],
         })
         # The ES connector was called with appropriate arguments for the client's request
@@ -96,8 +108,14 @@ class SubjectViewsetTestCase(TestCase):
         mock_search.return_value = {
             'hits': {
                 'hits': [
-                    {'_id': 21, '_source': {'name': {'fr': 'Computer Science'}}},
-                    {'_id': 61, '_source': {'name': {'fr': 'Engineering Sciences'}}},
+                    {'_id': 21, '_source': {
+                        'image': 'example.com/image.png',
+                        'name': {'fr': 'Computer Science'},
+                    }},
+                    {'_id': 61, '_source': {
+                        'image': 'example.com/image.png',
+                        'name': {'fr': 'Engineering Sciences'},
+                    }},
                 ],
                 'total': 32,
             },
@@ -110,8 +128,8 @@ class SubjectViewsetTestCase(TestCase):
         self.assertEqual(response.data, {
             'meta': {'count': 2, 'offset': 0, 'total_count': 32},
             'objects': [
-                {'id': 21, 'name': 'Computer Science'},
-                {'id': 61, 'name': 'Engineering Sciences'},
+                {'id': 21, 'image': 'example.com/image.png', 'name': 'Computer Science'},
+                {'id': 61, 'image': 'example.com/image.png', 'name': 'Engineering Sciences'},
             ],
         })
         # The ES connector was called with a query that matches the client's request
@@ -135,6 +153,4 @@ class SubjectViewsetTestCase(TestCase):
 
         # The client received a BadRequest response with the relevant data
         self.assertEqual(response.status_code, 400)
-        self.assertEqual(response.data, {
-            'errors': {'limit': ['Ensure this value is greater than or equal to 1.']}
-        })
+        self.assertTrue('limit' in response.data['errors'])

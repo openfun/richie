@@ -79,9 +79,13 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
     USE_L10N = True
     USE_TZ = True
     LANGUAGE_CODE = 'fr'
+    # Careful! Languages should be ordered by priority, as this tuple is used to get
+    # fallback/default languages throughout the app.
+    # Use "en" as default as it is the language that is most likely to be spoken by any visitor
+    # when their preferred language, whatever it is, is unavailable
     LANGUAGES = (
-        ('fr', _('fr')),
         ('en', _('en')),
+        ('fr', _('fr')),
     )
 
     # Templates
