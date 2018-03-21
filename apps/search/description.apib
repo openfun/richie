@@ -4,6 +4,26 @@ FORMAT: 1A
 
 # Data Structures
 
+## Course
+A single course as saved in our ElasticSearch index. Includes all fields useful for indexing it and displaying it in the client side. Foreign keys as fun-cms knows them (eg. Subjects & Organizations) are referenced by their IDs.
+
++ end_date: `2018-02-28T06:00:00Z` (string, required) - ISO 8601 date, when this session of the course ends
++ enrollment_end_date: `2018-01-31T06:00:00Z` (string, required) - ISO 8601 date, when enrollment for the latest session of the course ends
++ enrollment_start_date: `2018-01-01T06:00:00Z` (string, required) - ISO 8601 date, when enrollment for the latest session of the course starts
++ id: 42 (number, required) - SQL database ID, reused in ElasticSearch
++ language: fr (string, required) - ISO 639-1 code (2 letters) for the course's main language
++ organizations: [17, 83] (array[number], required) - IDs of the organizations linked to this course
++ session_number: 3 (number, required) - Ordinal number for the session count, starting at 1
++ short_description: In this course you'll learn to use Python to accomplish tasks and automate some of your workflows... (string, required) - Brief summary of the course, going into more detail than the title, but smaller than the whole syllabus
++ start_date: `2018-02-01T06:00:00Z` (string, required) - ISO 8601 date, when this session of the course starts
++ subjects: [42, 44] (array[number], required) - IDs of the subjects this course has been tagged with
++ thumbnails:
+    + about https://example.com/about.png (string) - URL to an image, a size of the thumbnail
+    + big https://example.com/big.png (string) - URL to an image, a size of the thumbnail
+    + facebook https://example.com/facebook.png (string) - URL to an image, a size of the thumbnail
+    + small https://example.com/small.png (string) - URL to an image, a size of the thumbnail
++ title: Python for Data Scientists (string, required) - Title for the course
+
 ## Subject
 A single subject as saved in our ElasticSearch index. Includes a small subset of the fields and data in the the SQL database model, in order to be as small and consumer-friendly as possible.
 
@@ -11,6 +31,51 @@ A single subject as saved in our ElasticSearch index. Includes a small subset of
 + image: https://example.com/image.png (string) - a logo for the subject, only the most prominent ones have it
 + name: Computer Science (string, required)
 
+
+# Group Course
+Course-related resources for the fun-cms search API.
+
+## GET /course/{course_id}
+A single course object. Access through this API is read-only (and thus GET only) as we're interacting with ElasticSearch and not the underlying model.
+
+See the Course data structure for more information.
+
++ Request
+    + Headers
+
+            Accept: application/json
+            Accept-Language: fr-FR; fr; q=0.9, en-US; en; q=0.7, *; q=0.5
+
++ Response 200 (application/json)
+    + Attributes (Course)
+
+## GET /course?limit&offset&search
+Collection of all courses indexed in ElasticSearch. Can be filtered and selected through search query parameters.
+
++ Request
+    + Parameters
+        + end_date: ["2018-04-30T06:00:00Z", "2018-06-30T06:00:00Z"] (string, optional) - JSON array containing two datetimes (or 1 datetime and null); filter courses which have a start_date between those two datetimes (or before/after one date if array contains null)
+        + enrollment_end_date: ["2018-04-30T06:00:00Z", "2018-06-30T06:00:00Z"] (string, optional) - cf. end_date
+        + enrollment_start_date: ["2018-04-30T06:00:00Z", "2018-06-30T06:00:00Z"] (string, optional) - cf. end_date
+        + organizations: [13, 42] (array[number], optional) - return courses that have one of those organizations as a foreign key. NB: can be one number for one organization
+        + match: python mathematics (string, optional) - search for courses that include (at least some of) those words in their title or short_description
+        + limit: 10 (number, optional) - return {limit} courses
+        + offset: 0 (number, optional) - skip the first {offset} results; used for pagination
+        + start_date: ["2018-04-30T06:00:00Z", "2018-06-30T06:00:00Z"] (string, optional) - cf. end_date
+        + subjects: [13, 42] (array[number], optional) - return courses that have one of those subjects as a foreign key. NB: can be one number for one subject
+    + Headers
+
+            Accept: application/json
+            Accept-Language: fr-FR; fr; q=0.9, en-US; en; q=0.7, *; q=0.5
+
+
++ Response 200 (application/json)
+    + Attributes
+        + meta
+            + count: 10 (number, required) - number of courses effectively returned
+            + offset: 0 (number, required) - number of courses skipped
+            + total_count: 240 (number, required) - total number of hits for the search parameters
+        + objects: array[Course]
 
 # Group Subject
 Subject-related resources for the fun-cms search API.
@@ -29,7 +94,7 @@ See the Subject data structure for more information.
 + Response 200 (application/json)
     + Attributes (Subject)
 
-## GET /subject?limit&offset
+## GET /subject?limit&offset&name
 Collection of all subjects indexed in ElasticSearch. Can be filtered and selected through search query parameters.
 
 + Request
