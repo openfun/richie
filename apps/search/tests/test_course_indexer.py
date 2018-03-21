@@ -147,3 +147,41 @@ class CourseIndexerTestCase(TestCase):
 
         with self.assertRaises(IndexerDataException):
             list(indexer.get_data_for_es(index='some_index', action='some_action'))
+
+    def test_format_es_course_for_api(self):
+        """
+        Make sure format_es_course_for_api returns a properly formatted course
+        """
+        es_course = {
+            '_id': 93,
+            '_source': {
+                'end_date': '2018-02-28T06:00:00Z',
+                'enrollment_end_date': '2018-01-31T06:00:00Z',
+                'enrollment_start_date': '2018-01-01T06:00:00Z',
+                'language': 'en',
+                'organizations': [42, 84],
+                'session_number': 1,
+                'short_description': {'en': 'Nam aliquet, arcu at sagittis sollicitudin.'},
+                'start_date': '2018-02-01T06:00:00Z',
+                'subjects': [43, 86],
+                'thumbnails': {'big': 'whatever_else.png'},
+                'title': {'en': 'Duis eu arcu erat'},
+            },
+        }
+        self.assertEqual(
+            CourseIndexer.format_es_course_for_api(es_course, 'en'),
+            {
+                'end_date': '2018-02-28T06:00:00Z',
+                'enrollment_end_date': '2018-01-31T06:00:00Z',
+                'enrollment_start_date': '2018-01-01T06:00:00Z',
+                'id': 93,
+                'language': 'en',
+                'organizations': [42, 84],
+                'session_number': 1,
+                'short_description': 'Nam aliquet, arcu at sagittis sollicitudin.',
+                'start_date': '2018-02-01T06:00:00Z',
+                'subjects': [43, 86],
+                'thumbnails': {'big': 'whatever_else.png'},
+                'title': 'Duis eu arcu erat',
+            },
+        )
