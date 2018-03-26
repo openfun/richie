@@ -1,17 +1,18 @@
 version: "3"
+
 services:
   db:
     image: postgres:9.6
     env_file: env.d/test
+
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.1.2
+
   app:
-    build: .
+    image: richie:dev
     env_file: env.d/test
     volumes:
       - .:/app
-      - ./data/static:/data/static
-      - ./data/media:/data/media
     depends_on:
       - "db"
       - "elasticsearch"

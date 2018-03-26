@@ -6,7 +6,7 @@ COMPOSE_EXEC_APP     = $(COMPOSE_EXEC) app
 COMPOSE_EXEC_NODE    = $(COMPOSE_EXEC) --user="$(id -u):$(id -g)" node
 COMPOSE_RUN_APP      = $(COMPOSE_RUN) app
 COMPOSE_RUN_NODE     = $(COMPOSE_RUN) --user="$(id -u):$(id -g)" node
-COMPOSE_TEST         = $(COMPOSE) -p fun-cms-test -f docker-compose.test.yml
+COMPOSE_TEST         = $(COMPOSE) -p richie-test -f docker/compose/test/docker-compose.yml --project-directory .
 COMPOSE_TEST_RUN     = $(COMPOSE_TEST) run --rm
 COMPOSE_TEST_RUN_APP = $(COMPOSE_TEST_RUN) app
 
@@ -22,7 +22,7 @@ bootstrap:  ## install development dependencies
 	@$(COMPOSE) build app;
 	${MAKE} build-front;
 	@echo 'Waiting until database is up…';
-	@sleep 20;
+	$(COMPOSE_RUN_APP) dockerize -wait tcp://db:5432 -timeout 60s
 	${MAKE} migrate;
 .PHONY: bootstrap
 
@@ -70,10 +70,6 @@ migrate:  ## perform database migrations
 rebuild: ## rebuild the app container
 	@$(COMPOSE) build app
 .PHONY: rebuild
-
-rebuild-test: ## rebuild the app container (test)
-	@$(COMPOSE_TEST) build app
-.PHONY: rebuild-test
 
 run: ## start the development server
 	@$(COMPOSE) up -d

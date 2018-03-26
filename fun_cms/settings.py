@@ -10,7 +10,7 @@ from .configurations.elasticsearch import ElasticSearchMixin
 from .configurations.rest_framework import DRFMixin
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(BASE_DIR, '..', 'data')
+DATA_DIR = os.path.join('/', 'data')
 
 
 class Base(DRFMixin, ElasticSearchMixin, Configuration):
