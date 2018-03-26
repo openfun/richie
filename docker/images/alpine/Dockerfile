@@ -15,10 +15,32 @@
 #
 
 # ---- base image to inherit from ----
-FROM python:3.6-stretch as base
+FROM python:3.6-alpine as base
 
 # ---- builder image ----
 FROM base as builder
+
+# Install development libraries required for compiled python dependencies (lxml,
+# Pillow and psycopg2)
+RUN apk --no-cache add --update \
+        # lxml dependencies
+        libxml2-dev \
+        libxslt-dev \
+        # Pillow dependencies
+        build-base \
+        freetype-dev \
+        fribidi-dev \
+        harfbuzz-dev \
+        jpeg-dev \
+        lcms2-dev \
+        openjpeg-dev \
+        tcl-dev \
+        tiff-dev \
+        tk-dev \
+        zlib-dev \
+        # psycopg2 dependencies
+        postgresql-dev && \
+    rm -rf /var/cache/apk/*
 
 WORKDIR /install
 
@@ -31,6 +53,27 @@ FROM base
 
 # Copy installed python dependencies
 COPY --from=builder /install /usr/local
+
+# Install only (linked) libraries required for compiled python dependencies
+# (lxml, Pillow and psycopg2)
+RUN apk --no-cache add --update \
+        # lxml dependencies
+        libxml2 \
+        libxslt \
+        # Pillow dependencies
+        freetype \
+        fribidi \
+        harfbuzz \
+        jpeg \
+        lcms2 \
+        openjpeg \
+        tcl \
+        tiff \
+        tk \
+        zlib \
+        # psycopg2 dependencies
+        postgresql && \
+    rm -rf /var/cache/apk/*
 
 # Copy richie application (see .dockerignore)
 COPY . /app/

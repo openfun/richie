@@ -1,15 +1,36 @@
 version: "3"
+
 services:
   db:
     image: postgres:9.6
     env_file: env.d/development
     ports:
         - "5440:5432"
+
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.1.2
-  app:
+
+  # We use our production image as a basis for the development image, hence, we
+  # define a "base" service upon which the "app" service depends to force
+  # richie:latest build.
+  base:
     build: .
+    image: richie:latest
+    # Override the default command so that the container exists immediately when
+    # it is run (no server).
+    command: echo "I should exit now. Bye."
+
+  app:
+    build:
+      context: .
+      dockerfile: ./docker/images/dev/Dockerfile
+    image: richie:dev
     env_file: env.d/development
+    # Override production container command that runs gunicorn in favor to the
+    # django development server (wrapped by dockerize to ensure the db is ready
+    # to accept connections before running the development server)
+    command: >
+      dockerize -wait tcp://db:5432 -timeout 60s python ./manage.py runserver 0.0.0.0:8000
     ports:
         - "8070:8000"
     volumes:
@@ -17,18 +38,10 @@ services:
       - ./data/static:/data/static
       - ./data/media:/data/media
     depends_on:
+      - "base"
       - "db"
       - "elasticsearch"
-  nginx:
-    image: nginx:1.12.2
-    ports:
-      - "8071:80"
-    volumes:
-      - ./docker/etc/nginx/conf.d:/etc/nginx/conf.d:ro
-      - ./data/static:/data/static:ro
-      - ./data/media:/data/media:ro
-    depends_on:
-      - "app"
+
   node:
     image: circleci/node:9-browsers
     working_dir: /app
