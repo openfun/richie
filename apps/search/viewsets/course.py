@@ -36,6 +36,8 @@ class CourseViewSet(ViewSet):
         if not params_form.is_valid():
             return Response(status=400, data={'errors': params_form.errors})
 
+        # Note: test_elasticsearch_feature.py needs to be updated whenever the search call
+        # is updated and makes use new features.
         query = {}
         for param, value in params_form.cleaned_data.items():
             # Skip falsy values as we're not using them in our query

@@ -30,6 +30,8 @@ class SubjectViewSet(ViewSet):
             return Response(status=400, data={'errors': params_form.errors})
 
         # Build a query that matches on the name field if it was handed by the client
+        # Note: test_elasticsearch_feature.py needs to be updated whenever the search call
+        # is updated and makes use new features.
         if params_form.cleaned_data.get('name'):
             search_body = {
                 'query': {
