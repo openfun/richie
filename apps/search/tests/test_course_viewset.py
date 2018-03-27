@@ -76,6 +76,14 @@ class CourseViewsetTestCase(TestCase):
                 'hits': [{'_id': 89}, {'_id': 94}],
                 'total': 90,
             },
+            'aggregations': {
+                'organizations': {
+                    'buckets': [
+                        {'key': '1', 'doc_count': 7},
+                        {'key': '2', 'doc_count': 9},
+                    ],
+                },
+            },
         }
 
         response = CourseViewSet.as_view({'get': 'list'})(request, version='1.0')
@@ -85,10 +93,17 @@ class CourseViewsetTestCase(TestCase):
         self.assertEqual(response.data, {
             'meta': {'count': 2, 'offset': 10, 'total_count': 90},
             'objects': ['Course #89', 'Course #94'],
+            'facets': {'organizations': {'1': 7, '2': 9}},
         })
         # The ES connector was called with appropriate arguments for the client's request
         mock_search.assert_called_with(
-            body={'query': {'match_all': {}}},
+            body={
+                'query': {'match_all': {}},
+                'aggs': {
+                    'organizations': {'terms': {'field': 'organizations'}},
+                    'subjects': {'terms': {'field': 'subjects'}}
+                },
+            },
             doc_type='course',
             from_=10,
             index='fun_cms_courses',
@@ -108,6 +123,14 @@ class CourseViewsetTestCase(TestCase):
                 'hits': [{'_id': 523}, {'_id': 861}],
                 'total': 35,
             },
+            'aggregations': {
+                'subjects': {
+                    'buckets': [
+                        {'key': '11', 'doc_count': 17},
+                        {'key': '21', 'doc_count': 19},
+                    ],
+                },
+            },
         }
 
         response = CourseViewSet.as_view({'get': 'list'})(request, version='1.0')
@@ -117,14 +140,24 @@ class CourseViewsetTestCase(TestCase):
         self.assertEqual(response.data, {
             'meta': {'count': 2, 'offset': 20, 'total_count': 35},
             'objects': ['Course #523', 'Course #861'],
+            'facets': {'subjects': {'11': 17, '21': 19}},
         })
         # The ES connector was called with appropriate arguments for the client's request
         mock_search.assert_called_with(
-            body={'query': {'multi_match': {
-                'fields': ['short_description.*', 'title.*'],
-                'query': 'some phrase terms',
-                'type': 'cross_fields',
-            }}},
+            body={
+                'query': {
+                    'multi_match': {
+                        'fields': ['short_description.*', 'title.*'],
+                        'query': 'some phrase terms',
+                        'type': 'cross_fields',
+                    }
+                },
+                'aggs': {
+                    'organizations': {'terms': {'field': 'organizations'}},
+                    'subjects': {'terms': {'field': 'subjects'}}
+                },
+
+            },
             doc_type='course',
             from_=20,
             index='fun_cms_courses',
@@ -144,6 +177,20 @@ class CourseViewsetTestCase(TestCase):
                 'hits': [{'_id': 221}, {'_id': 42}],
                 'total': 29,
             },
+            'aggregations': {
+                'organizations': {
+                    'buckets': [
+                        {'key': '13', 'doc_count': 21},
+                        {'key': '15', 'doc_count': 13},
+                    ],
+                },
+                'subjects': {
+                    'buckets': [
+                        {'key': '12', 'doc_count': 3},
+                        {'key': '22', 'doc_count': 5},
+                    ],
+                },
+            },
         }
 
         response = CourseViewSet.as_view({'get': 'list'})(request, version='1.0')
@@ -153,10 +200,20 @@ class CourseViewsetTestCase(TestCase):
         self.assertEqual(response.data, {
             'meta': {'count': 2, 'offset': 0, 'total_count': 29},
             'objects': ['Course #221', 'Course #42'],
+            'facets': {
+                'organizations': {'13': 21, '15': 13},
+                'subjects': {'12': 3, '22': 5},
+            },
         })
         # The ES connector was called with appropriate arguments for the client's request
         mock_search.assert_called_with(
-            body={'query': {'terms': {'organizations': [13, 15]}}},
+            body={
+                'query': {'terms': {'organizations': [13, 15]}},
+                'aggs': {
+                    'organizations': {'terms': {'field': 'organizations'}},
+                    'subjects': {'terms': {'field': 'subjects'}}
+                },
+            },
             doc_type='course',
             from_=0,
             index='fun_cms_courses',
@@ -177,6 +234,14 @@ class CourseViewsetTestCase(TestCase):
                 'hits': [{'_id': 37}, {'_id': 98}],
                 'total': 12,
             },
+            'aggregations': {
+                'organizations': {
+                    'buckets': [
+                        {'key': '3', 'doc_count': 6},
+                        {'key': '14', 'doc_count': 7},
+                    ],
+                },
+            },
         }
 
         response = CourseViewSet.as_view({'get': 'list'})(request, version='1.0')
@@ -186,10 +251,17 @@ class CourseViewsetTestCase(TestCase):
         self.assertEqual(response.data, {
             'meta': {'count': 2, 'offset': 0, 'total_count': 12},
             'objects': ['Course #37', 'Course #98'],
+            'facets': {'organizations': {'3': 6, '14': 7}},
         })
         # The ES connector was called with appropriate arguments for the client's request
         mock_search.assert_called_with(
-            body={'query': {'terms': {'organizations': [3]}}},
+            body={
+                'query': {'terms': {'organizations': [3]}},
+                'aggs': {
+                    'organizations': {'terms': {'field': 'organizations'}},
+                    'subjects': {'terms': {'field': 'subjects'}}
+                },
+            },
             doc_type='course',
             from_=0,
             index='fun_cms_courses',
@@ -215,6 +287,14 @@ class CourseViewsetTestCase(TestCase):
                 'hits': [{'_id': 13}, {'_id': 15}],
                 'total': 7,
             },
+            'aggregations': {
+                'subjects': {
+                    'buckets': [
+                        {'key': '61', 'doc_count': 4},
+                        {'key': '122', 'doc_count': 5},
+                    ],
+                },
+            },
         }
 
         response = CourseViewSet.as_view({'get': 'list'})(request, version='1.0')
@@ -224,21 +304,28 @@ class CourseViewsetTestCase(TestCase):
         self.assertEqual(response.data, {
             'meta': {'count': 2, 'offset': 0, 'total_count': 7},
             'objects': ['Course #13', 'Course #15'],
+            'facets': {'subjects': {'61': 4, '122': 5}},
         })
         # The ES connector was called with appropriate arguments for the client's request
         mock_search.assert_called_with(
-            body={'query': {
-                'range': {
-                    'end_date': {
-                        'gte': datetime.datetime(2018, 4, 30, 6, 0, tzinfo=pytz.utc),
-                        'lte': datetime.datetime(2018, 6, 30, 6, 0, tzinfo=pytz.utc),
-                    },
-                    'start_date': {
-                        'gte': datetime.datetime(2018, 1, 1, 6, 0, tzinfo=pytz.utc),
-                        'lte': None,
+            body={
+                'query': {
+                    'range': {
+                        'end_date': {
+                            'gte': datetime.datetime(2018, 4, 30, 6, 0, tzinfo=pytz.utc),
+                            'lte': datetime.datetime(2018, 6, 30, 6, 0, tzinfo=pytz.utc),
+                        },
+                        'start_date': {
+                            'gte': datetime.datetime(2018, 1, 1, 6, 0, tzinfo=pytz.utc),
+                            'lte': None,
+                        }
                     }
-                }
-            }},
+                },
+                'aggs': {
+                    'organizations': {'terms': {'field': 'organizations'}},
+                    'subjects': {'terms': {'field': 'subjects'}}
+                },
+            },
             doc_type='course',
             from_=0,
             index='fun_cms_courses',
@@ -266,6 +353,14 @@ class CourseViewsetTestCase(TestCase):
                 'hits': [{'_id': 999}, {'_id': 888}],
                 'total': 3,
             },
+            'aggregations': {
+                'subjects': {
+                    'buckets': [
+                        {'key': '42', 'doc_count': 3},
+                        {'key': '84', 'doc_count': 1},
+                    ],
+                },
+            },
         }
 
         response = CourseViewSet.as_view({'get': 'list'})(request, version='1.0')
@@ -275,27 +370,34 @@ class CourseViewsetTestCase(TestCase):
         self.assertEqual(response.data, {
             'meta': {'count': 2, 'offset': 0, 'total_count': 3},
             'objects': ['Course #999', 'Course #888'],
+            'facets': {'subjects': {'42': 3, '84': 1}},
         })
         # The ES connector was called with appropriate arguments for the client's request
         mock_search.assert_called_with(
-            body={'query': {
-                'multi_match': {
-                    'fields': ['short_description.*', 'title.*'],
-                    'query': 'these phrase terms',
-                    'type': 'cross_fields',
-                },
-                'range': {
-                    'end_date': {
-                        'gte': datetime.datetime(2018, 4, 30, 6, 0, tzinfo=pytz.utc),
-                        'lte': datetime.datetime(2018, 6, 30, 6, 0, tzinfo=pytz.utc),
+            body={
+                'query': {
+                    'multi_match': {
+                        'fields': ['short_description.*', 'title.*'],
+                        'query': 'these phrase terms',
+                        'type': 'cross_fields',
                     },
-                    'start_date': {
-                        'gte': datetime.datetime(2018, 1, 1, 6, 0, tzinfo=pytz.utc),
-                        'lte': None,
-                    }
+                    'range': {
+                        'end_date': {
+                            'gte': datetime.datetime(2018, 4, 30, 6, 0, tzinfo=pytz.utc),
+                            'lte': datetime.datetime(2018, 6, 30, 6, 0, tzinfo=pytz.utc),
+                        },
+                        'start_date': {
+                            'gte': datetime.datetime(2018, 1, 1, 6, 0, tzinfo=pytz.utc),
+                            'lte': None,
+                        }
+                    },
+                    'terms': {'subjects': [42, 84]}
                 },
-                'terms': {'subjects': [42, 84]}
-            }},
+                'aggs': {
+                    'organizations': {'terms': {'field': 'organizations'}},
+                    'subjects': {'terms': {'field': 'subjects'}}
+                },
+            },
             doc_type='course',
             from_=0,
             index='fun_cms_courses',

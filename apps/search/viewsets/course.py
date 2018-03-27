@@ -68,10 +68,20 @@ class CourseViewSet(ViewSet):
         if not query:
             query = {'match_all': {}}
 
+        # Build organizations and subjects terms aggregations for our query
+        aggs = {
+            'organizations': {
+                'terms': {'field': 'organizations'},
+            },
+            'subjects': {
+                'terms': {'field': 'subjects'},
+            },
+        }
+
         course_query_response = settings.ES_CLIENT.search(
             index=CourseIndexer.index_name,
             doc_type=CourseIndexer.document_type,
-            body={'query': query},
+            body={'aggs': aggs, 'query': query},
             # Directly pass meta-params through as arguments to the ES client
             from_=params_form.cleaned_data.get('offset') or 0,
             size=params_form.cleaned_data.get('limit') or settings.ES_DEFAULT_PAGE_SIZE,
@@ -89,7 +99,14 @@ class CourseViewSet(ViewSet):
                     # Get the best language we can return multilingual fields in
                     get_language_from_request(request),
                 ) for es_course in course_query_response['hits']['hits']
-            ]
+            ],
+            # Transform facets (terms aggregations) into an easier-to-consume form: drop the meta
+            # data and return objects with terms as keys and counts as values
+            'facets': {
+                field: {
+                    term_value['key']: term_value['doc_count'] for term_value in value['buckets']
+                } for field, value in course_query_response['aggregations'].items()
+            },
         }
 
         # Will be formatting a response_object for consumption
