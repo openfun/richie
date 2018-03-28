@@ -1,9 +1,11 @@
 """
-Indexing utility for the ElasticSearch-related regenerate_index command
+ElasticSearch organization document management utilities
 """
 from django.conf import settings
 
-from ...organizations.models import OrganizationPage
+from ..exceptions import IndexerDataException
+from ..partial_mappings import MULTILINGUAL_TEXT
+from ..utils.api_consumption import walk_api_json_list
 
 
 class OrganizationIndexer():
@@ -14,31 +16,32 @@ class OrganizationIndexer():
     document_type = 'organization'
     index_name = 'fun_cms_organizations'
     mapping = {
+        'dynamic_templates': MULTILINGUAL_TEXT,
         'properties': {
+            'banner': {'type': 'text', 'index': False},
             'code': {'type': 'keyword'},
-            'name': {
-                'properties': {
-                    lang: {'type': 'text'} for lang, name in settings.LANGUAGES
-                },
-            },
+            'logo': {'type': 'text', 'index': False},
         },
     }
 
     def get_data_for_es(self, index, action):
         """
-        Load all the organizations and format them for the ElasticSearch index
+        Load all the organizations from the API and format them for the ElasticSearch index
         """
-        for organization in OrganizationPage.objects.all().prefetch_related('name'):
-            yield {
-                '_id': organization.id,
-                '_index': index,
-                '_op_type': action,
-                '_type': self.document_type,
-                'code': organization.code,
-                'name': {
-                    lang: organization.safe_translation_getter(
-                        'name',
-                        language_code=lang,
-                    ) for lang, name in settings.LANGUAGES
-                },
-            }
+        content_pages = walk_api_json_list(settings.ORGANIZATION_API_ENDPOINT)
+
+        for content_page in content_pages:
+            try:
+                for organization in content_page['results']:
+                    yield {
+                        '_id': organization['id'],
+                        '_index': index,
+                        '_op_type': action,
+                        '_type': self.document_type,
+                        'banner': organization['banner'],
+                        'code': organization['code'],
+                        'logo': organization['logo'],
+                        'name': {'fr': organization['name']},
+                    }
+            except KeyError:
+                raise IndexerDataException('Unexpected data shape in organizations to index')

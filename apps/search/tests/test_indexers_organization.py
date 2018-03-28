@@ -1,0 +1,114 @@
+"""
+Tests for the organization indexer
+"""
+from django.conf import settings
+from django.test import TestCase
+import responses
+
+from ..exceptions import IndexerDataException
+from ..indexers.organization import OrganizationIndexer
+
+
+class OrganizationIndexerTestCase(TestCase):
+    """
+    Test the get_data_for_es() function on the organization indexer, as well as our mapping,
+    and especially dynamic mapping shape in ES
+    """
+
+    @responses.activate
+    def test_get_data_for_es(self):
+        """
+        Happy path: organization data is fetched from the API properly formatted
+        """
+        responses.add(
+            method='GET',
+            url=settings.ORGANIZATION_API_ENDPOINT + '?page=1&rpp=50',
+            match_querystring=True,
+            json={
+                'count': 51,
+                'results': [
+                    {
+                        'id': 1,
+                        'banner': 'example.com/banner_1.png',
+                        'code': 'org-1',
+                        'logo': 'example.com/logo_1.png',
+                        'name': 'Organization N°1',
+                    },
+                ],
+            },
+        )
+
+        responses.add(
+            method='GET',
+            url=settings.ORGANIZATION_API_ENDPOINT + '?page=2&rpp=50',
+            match_querystring=True,
+            json={
+                'count': 51,
+                'results': [
+                    {
+                        'id': 80,
+                        'banner': 'example.com/banner_80.png',
+                        'code': 'org-80',
+                        'logo': 'example.com/logo_80.png',
+                        'name': 'Organization N°80',
+                    },
+                ],
+            },
+        )
+
+        indexer = OrganizationIndexer()
+
+        # The results were properly formatted and passed to the consumer
+        self.assertEqual(
+            list(indexer.get_data_for_es(index='some_index', action='some_action')),
+            [
+                {
+                    '_id': 1,
+                    '_index': 'some_index',
+                    '_op_type': 'some_action',
+                    '_type': 'organization',
+                    'banner': 'example.com/banner_1.png',
+                    'code': 'org-1',
+                    'logo': 'example.com/logo_1.png',
+                    'name': {'fr': 'Organization N°1'},
+                },
+                {
+                    '_id': 80,
+                    '_index': 'some_index',
+                    '_op_type': 'some_action',
+                    '_type': 'organization',
+                    'banner': 'example.com/banner_80.png',
+                    'code': 'org-80',
+                    'logo': 'example.com/logo_80.png',
+                    'name': {'fr': 'Organization N°80'},
+                }
+            ],
+        )
+
+    @responses.activate
+    def test_get_data_for_es_with_unexpected_organization_shape(self):
+        """
+        Error case: the API returned an object that is not shaped like an expected organization
+        """
+        responses.add(
+            method='GET',
+            url=settings.ORGANIZATION_API_ENDPOINT,
+            status=200,
+            json={
+                'count': 1,
+                'results': [
+                    {
+                        'id': 62,
+                        'banner': 'example.com/banner_62.png',
+                        # 'code': 'org-62', missing code key will trigger the KeyError
+                        'logo': 'example.com/logo_62.png',
+                        'name': {'fr': 'Organization N°62'},
+                    },
+                ],
+            },
+        )
+
+        indexer = OrganizationIndexer()
+
+        with self.assertRaises(IndexerDataException):
+            list(indexer.get_data_for_es(index='some_index', action='some_action'))
