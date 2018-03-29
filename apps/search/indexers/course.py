@@ -15,7 +15,7 @@ class CourseIndexer():
     objects getting into and out of ElasticSearch
     """
     document_type = 'course'
-    index_name = 'fun_cms_courses'
+    index_name = 'richie_courses'
     mapping = {
         'dynamic_templates': MULTILINGUAL_TEXT,
         'properties': {

@@ -14,7 +14,7 @@ class OrganizationIndexer():
     objects into what we want to index in ElasticSearch
     """
     document_type = 'organization'
-    index_name = 'fun_cms_organizations'
+    index_name = 'richie_organizations'
     mapping = {
         'dynamic_templates': MULTILINGUAL_TEXT,
         'properties': {

@@ -106,7 +106,7 @@ class CourseViewsetTestCase(TestCase):
             },
             doc_type='course',
             from_=10,
-            index='fun_cms_courses',
+            index='richie_courses',
             size=2,
         )
 
@@ -160,7 +160,7 @@ class CourseViewsetTestCase(TestCase):
             },
             doc_type='course',
             from_=20,
-            index='fun_cms_courses',
+            index='richie_courses',
             size=2,
         )
 
@@ -216,7 +216,7 @@ class CourseViewsetTestCase(TestCase):
             },
             doc_type='course',
             from_=0,
-            index='fun_cms_courses',
+            index='richie_courses',
             size=2,
         )
 
@@ -264,7 +264,7 @@ class CourseViewsetTestCase(TestCase):
             },
             doc_type='course',
             from_=0,
-            index='fun_cms_courses',
+            index='richie_courses',
             size=2,
         )
 
@@ -328,7 +328,7 @@ class CourseViewsetTestCase(TestCase):
             },
             doc_type='course',
             from_=0,
-            index='fun_cms_courses',
+            index='richie_courses',
             size=2,
         )
 
@@ -400,7 +400,7 @@ class CourseViewsetTestCase(TestCase):
             },
             doc_type='course',
             from_=0,
-            index='fun_cms_courses',
+            index='richie_courses',
             size=2,
         )
 

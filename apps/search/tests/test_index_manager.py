@@ -32,51 +32,51 @@ class IndexManagerTestCase(TestCase):
         """
         Receive a generator that contains the n-1 index for an alias.
         """
-        alias = 'fun_cms_courses'
+        alias = 'richie_courses'
         existing_indexes = {
-            'fun_cms_courses_2014-05-04-03h12m33.123456s': {},
-            'fun_cms_courses_2015-05-04-03h12m33.123456s': {
-                'aliases': {'fun_cms_courses': True},
+            'richie_courses_2014-05-04-03h12m33.123456s': {},
+            'richie_courses_2015-05-04-03h12m33.123456s': {
+                'aliases': {'richie_courses': True},
             },
-            'fun_cms_organizations_2017-05-04-03h12m33.123456s': {
-                'aliases': {'fun_cms_organizations': True},
+            'richie_organizations_2017-05-04-03h12m33.123456s': {
+                'aliases': {'richie_organizations': True},
             },
         }
         self.assertEqual(list(get_indexes_by_alias(existing_indexes, alias)), [
-            ('fun_cms_courses_2015-05-04-03h12m33.123456s', 'fun_cms_courses'),
+            ('richie_courses_2015-05-04-03h12m33.123456s', 'richie_courses'),
         ])
 
     def test_get_indexes_by_alias_with_duplicate(self):
         """
         Clean up the aliases when starting from a broken state: duplicate indexes for an alias.
         """
-        alias = 'fun_cms_courses'
+        alias = 'richie_courses'
         existing_indexes = {
-            'fun_cms_courses_2013-05-04-03h12m33.123456s': {},
-            'fun_cms_courses_2014-05-04-03h12m33.123456s': {
-                'aliases': {'fun_cms_courses': True},
+            'richie_courses_2013-05-04-03h12m33.123456s': {},
+            'richie_courses_2014-05-04-03h12m33.123456s': {
+                'aliases': {'richie_courses': True},
             },
-            'fun_cms_courses_2015-05-04-03h12m33.123456s': {
-                'aliases': {'fun_cms_courses': True},
+            'richie_courses_2015-05-04-03h12m33.123456s': {
+                'aliases': {'richie_courses': True},
             },
-            'fun_cms_organizations_2017-05-04-03h12m33.123456s': {
-                'aliases': {'fun_cms_organizations': True},
+            'richie_organizations_2017-05-04-03h12m33.123456s': {
+                'aliases': {'richie_organizations': True},
             },
         }
         self.assertEqual(list(get_indexes_by_alias(existing_indexes, alias)), [
-            ('fun_cms_courses_2014-05-04-03h12m33.123456s', 'fun_cms_courses'),
-            ('fun_cms_courses_2015-05-04-03h12m33.123456s', 'fun_cms_courses'),
+            ('richie_courses_2014-05-04-03h12m33.123456s', 'richie_courses'),
+            ('richie_courses_2015-05-04-03h12m33.123456s', 'richie_courses'),
         ])
 
     def test_get_indexes_by_alias_empty(self):
         """
         Don't wrongly push values when there is nothing to return.
         """
-        alias = 'fun_cms_courses'
+        alias = 'richie_courses'
         existing_indexes = {
-            'fun_cms_courses_2013-05-04-03h12m33.123456s': {},
-            'fun_cms_organizations_2017-05-04-03h12m33.123456s': {
-                'aliases': {'fun_cms_organizations': True},
+            'richie_courses_2013-05-04-03h12m33.123456s': {},
+            'richie_organizations_2017-05-04-03h12m33.123456s': {
+                'aliases': {'richie_organizations': True},
             },
         }
         self.assertEqual(list(get_indexes_by_alias(existing_indexes, alias)), [])
@@ -94,7 +94,7 @@ class IndexManagerTestCase(TestCase):
             """Indexable stub"""
 
             document_type = 'course'
-            index_name = 'fun_cms_courses'
+            index_name = 'richie_courses'
             mapping = {
                 'properties': {
                     'code': {'type': 'keyword'},
@@ -130,10 +130,10 @@ class IndexManagerTestCase(TestCase):
             new_index = perform_create_index(indexable, mock_logger)
         self.indices_client.refresh()
 
-        self.assertEqual(new_index, 'fun_cms_courses_2016-05-04-03h12m33.123456s')
+        self.assertEqual(new_index, 'richie_courses_2016-05-04-03h12m33.123456s')
         self.assertEqual(settings.ES_CLIENT.count()['count'], 10)
         self.assertEqual(self.indices_client.get_mapping(), {
-            'fun_cms_courses_2016-05-04-03h12m33.123456s': {
+            'richie_courses_2016-05-04-03h12m33.123456s': {
                 'mappings': {
                     'course': {
                         'properties': {
@@ -164,7 +164,7 @@ class IndexManagerTestCase(TestCase):
     @mock.patch('elasticsearch.client.IndicesClient.delete')
     @mock.patch(
         'elasticsearch.client.IndicesClient.get_alias',
-        return_value=dict({'fun_cms_orphan': {}}),
+        return_value=dict({'richie_orphan': {}}),
     )
     @mock.patch('elasticsearch.client.IndicesClient.update_aliases')
     def test_regenerate_indexes(self, *args):
@@ -178,15 +178,15 @@ class IndexManagerTestCase(TestCase):
 
         self.indices_client.update_aliases.assert_called_with({
             'actions': [
-                {'add': {'index': 'fun_cms_example_created_index', 'alias': 'fun_cms_example'}},
-                {'add': {'index': 'fun_cms_stub_created_index', 'alias': 'fun_cms_stub'}},
-                {'remove': {'index': 'fun_cms_example_forgotten', 'alias': 'fun_cms_example'}},
-                {'remove': {'index': 'fun_cms_example_previous', 'alias': 'fun_cms_example'}},
-                {'remove': {'index': 'fun_cms_stub_forgotten', 'alias': 'fun_cms_stub'}},
-                {'remove': {'index': 'fun_cms_stub_previous', 'alias': 'fun_cms_stub'}},
+                {'add': {'index': 'richie_example_created_index', 'alias': 'richie_example'}},
+                {'add': {'index': 'richie_stub_created_index', 'alias': 'richie_stub'}},
+                {'remove': {'index': 'richie_example_forgotten', 'alias': 'richie_example'}},
+                {'remove': {'index': 'richie_example_previous', 'alias': 'richie_example'}},
+                {'remove': {'index': 'richie_stub_forgotten', 'alias': 'richie_stub'}},
+                {'remove': {'index': 'richie_stub_previous', 'alias': 'richie_stub'}},
             ],
         })
-        self.indices_client.delete.assert_called_with(ignore=[400, 404], index='fun_cms_orphan')
+        self.indices_client.delete.assert_called_with(ignore=[400, 404], index='richie_orphan')
 
     @override_settings(ES_INDEXES=['example.ExOneIndexable', 'example.ExTwoIndexable'])
     @mock.patch(
@@ -216,8 +216,8 @@ class IndexManagerTestCase(TestCase):
 
         self.indices_client.update_aliases.assert_called_with({
             'actions': [
-                {'add': {'index': 'fun_cms_example_created_index', 'alias': 'fun_cms_example'}},
-                {'add': {'index': 'fun_cms_stub_created_index', 'alias': 'fun_cms_stub'}},
+                {'add': {'index': 'richie_example_created_index', 'alias': 'richie_example'}},
+                {'add': {'index': 'richie_stub_created_index', 'alias': 'richie_stub'}},
             ],
         })
         self.indices_client.delete.assert_not_called()
@@ -227,7 +227,7 @@ class ExOneIndexable():
     """First example indexable"""
 
     document_type = 'example'
-    index_name = 'fun_cms_example'
+    index_name = 'richie_example'
     mapping = {'properties': {'name': 'text'}}
 
 
@@ -235,5 +235,5 @@ class ExTwoIndexable():
     """Second example indexable"""
 
     document_type = 'stub'
-    index_name = 'fun_cms_stub'
+    index_name = 'richie_stub'
     mapping = {'properties': {'code': 'keyword'}}

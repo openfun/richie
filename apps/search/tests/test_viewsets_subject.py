@@ -93,7 +93,7 @@ class SubjectViewsetTestCase(TestCase):
             body={'query': {'match_all': {}}},
             doc_type='subject',
             from_=10,
-            index='fun_cms_subjects',
+            index='richie_subjects',
             size=2,
         )
 
@@ -137,7 +137,7 @@ class SubjectViewsetTestCase(TestCase):
             body={'query': {'match': {'name.fr': {'query': 'Science', 'analyzer': 'french'}}}},
             doc_type='subject',
             from_=0,
-            index='fun_cms_subjects',
+            index='richie_subjects',
             size=2,
         )
 
