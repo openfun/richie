@@ -15,7 +15,7 @@ class SubjectIndexer():
     objects getting into and out of ElasticSearch
     """
     document_type = 'subject'
-    index_name = 'fun_cms_subjects'
+    index_name = 'richie_subjects'
     mapping = {
         'dynamic_templates': MULTILINGUAL_TEXT,
         'properties': {
