@@ -16,6 +16,7 @@ __pycache__/
 # Site media
 /data/
 richie/build
+richie/static/css
 
 # Settings
 local.py
