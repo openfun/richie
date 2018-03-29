@@ -18,7 +18,7 @@
 FROM python:3.6-alpine as base
 
 # ---- builder image ----
-FROM base as builder
+FROM base as back-builder
 
 # Install development libraries required for compiled python dependencies (lxml,
 # Pillow and psycopg2)
@@ -48,11 +48,22 @@ COPY requirements/base.txt /requirements.txt
 
 RUN pip install --prefix=/install -r /requirements.txt
 
+# ---- front-end builder image ----
+FROM node:9-alpine as front-builder
+
+WORKDIR /app
+
+COPY . /app/
+
+RUN yarn install && \
+    yarn build && \
+    yarn sass
+
 # ---- final application image ----
 FROM base
 
 # Copy installed python dependencies
-COPY --from=builder /install /usr/local
+COPY --from=back-builder /install /usr/local
 
 # Install only (linked) libraries required for compiled python dependencies
 # (lxml, Pillow and psycopg2)
@@ -77,6 +88,10 @@ RUN apk --no-cache add --update \
 
 # Copy richie application (see .dockerignore)
 COPY . /app/
+
+# Copy front-end dependencies
+COPY --from=front-builder /app/richie/build /app/richie/build
+COPY --from=front-builder /app/richie/static /app/richie/static
 
 WORKDIR /app
 

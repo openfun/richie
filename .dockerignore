@@ -26,6 +26,8 @@ docs
 
 # Assets
 data
+richie/build
+richie/static/css
 
 # Font-end
 node_modules

@@ -17,8 +17,8 @@
 # ---- base image to inherit from ----
 FROM python:3.6-stretch as base
 
-# ---- builder image ----
-FROM base as builder
+# ---- back-end builder image ----
+FROM base as back-builder
 
 WORKDIR /install
 
@@ -26,14 +26,29 @@ COPY requirements/base.txt /requirements.txt
 
 RUN pip install --prefix=/install -r /requirements.txt
 
+# ---- front-end builder image ----
+FROM node:9 as front-builder
+
+WORKDIR /app
+
+COPY . /app/
+
+RUN yarn install && \
+    yarn build && \
+    yarn sass
+
 # ---- final application image ----
 FROM base
 
 # Copy installed python dependencies
-COPY --from=builder /install /usr/local
+COPY --from=back-builder /install /usr/local
 
 # Copy richie application (see .dockerignore)
 COPY . /app/
+
+# Copy front-end dependencies
+COPY --from=front-builder /app/richie/build /app/richie/build
+COPY --from=front-builder /app/richie/static /app/richie/static
 
 WORKDIR /app
 
