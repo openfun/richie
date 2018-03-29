@@ -1,3 +1,7 @@
 #!/usr/bin/env bash
 
-docker-compose -p richie-test -f docker-compose.test.yml run --rm app pytest "$@"
+docker-compose \
+    -p richie-test \
+    -f docker/compose/test/docker-compose.yml \
+    --project-directory . \
+    run --rm app pytest "$@"
