@@ -34,7 +34,7 @@ class LargeBannerTests(TestCase):
             LargeBannerFactory(logo=None)
         self.assertIn('"LargeBanner.logo" does not allow null values.', str(cm.exception))
 
-    # pylint: disable=deprecated-method
+    # pylint: disable=deprecated-method,no-member
     # Due to a conflict between Django 1.11 and pylint with the assertRegex method that is
     # *not* deprecated but is marked so by pylint
     def test_large_banner_context_and_html(self):
