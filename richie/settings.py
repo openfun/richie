@@ -214,7 +214,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         ('organizations/cms/organization.html', _("Organization page")),
         ('organizations/cms/organization_list.html', _("Organizations list page")),
         ('search/search.html', _('Search')),
-        ('fun_cms/fullwidth.html', 'Fullwidth'),
+        ('richie/fullwidth.html', 'Fullwidth'),
     )
     CMS_PERMISSION = True
     CMS_PLACEHOLDER_CONF = {}

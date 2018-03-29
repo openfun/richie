@@ -13,20 +13,20 @@ from apps.organizations.models import OrganizationPage, get_organization_data
 PAGES = {
     'news':
         {'fr': "Actualité", 'en': "News", 'slug_fr': 'news_fr', 'slug_en': 'news', 'cms': True,
-         'kwargs': {'template': 'fun_cms/fullwidth.html'}},
+         'kwargs': {'template': 'richie/fullwidth.html'}},
     'courses':
         {'fr': "Tous les cours", 'en': "All courses", 'slug_fr': 'courses_fr',
-         'slug_en': 'courses', 'cms': True, 'kwargs': {'template': 'fun_cms/fullwidth.html'}},
+         'slug_en': 'courses', 'cms': True, 'kwargs': {'template': 'richie/fullwidth.html'}},
     'universities':
         {'fr': "Etablissements", 'en': "Universities", 'slug_fr': 'organizations_fr',
          'slug_en': 'organizations', 'cms': True,
          'kwargs': {'template': 'organizations/cms/organization_list.html', }},
     'dashboard':
         {'fr': "Mes courses", 'en': "Dashboard", 'slug_fr': 'dashboard', 'slug_en': 'dashboard',
-         'cms': False, 'kwargs': {'template': 'fun_cms/fullwidth.html'}},
+         'cms': False, 'kwargs': {'template': 'richie/fullwidth.html'}},
     'about':
         {'fr': "A propos", 'en': "About", 'slug_fr': 'apropos', 'slug_en': 'about', 'cms': True,
-         'kwargs': {'template': 'fun_cms/fullwidth.html'}},
+         'kwargs': {'template': 'richie/fullwidth.html'}},
 }
 
 ORGANIZATIONS = ['1', '2', '3', '4', '5']  # ids of real organizations
@@ -53,7 +53,7 @@ def create_cms_data():
     root = create_page(
         title="Accueil",
         slug='/',
-        template='fun_cms/fullwidth.html',
+        template='richie/fullwidth.html',
         language='fr',
         in_navigation=True,
         reverse_id='index',
