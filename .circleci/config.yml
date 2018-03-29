@@ -4,7 +4,7 @@ jobs:
   build-back:
     docker:
       - image: python:3.6-stretch
-    working_directory: ~/fun-cms
+    working_directory: ~/richie
     steps:
       - checkout
       # Download and cache dependencies
@@ -27,7 +27,7 @@ jobs:
   build-front:
     docker:
       - image: circleci/node:9-browsers
-    working_directory: ~/fun-cms
+    working_directory: ~/richie
     steps:
       - checkout
       - restore_cache:
@@ -51,7 +51,7 @@ jobs:
   lint-back-flake8:
     docker:
       - image: python:3.6-stretch
-    working_directory: ~/fun-cms
+    working_directory: ~/richie
     steps:
       - checkout
       - restore_cache:
@@ -66,7 +66,7 @@ jobs:
   lint-back-pylint:
     docker:
       - image: python:3.6-stretch
-    working_directory: ~/fun-cms
+    working_directory: ~/richie
     steps:
       - checkout
       - restore_cache:
@@ -76,12 +76,12 @@ jobs:
           name: Lint code with pylint
           command: |
             . venv/bin/activate
-            pylint apps plugins fun_cms
+            pylint apps plugins richie
 
   lint-front:
     docker:
       - image: circleci/node:9-browsers
-    working_directory: ~/fun-cms
+    working_directory: ~/richie
     steps:
       - checkout
       - restore_cache:
@@ -95,7 +95,7 @@ jobs:
     docker:
       - image: python:3.6-stretch
         environment:
-          DJANGO_SETTINGS_MODULE: 'fun_cms.settings'
+          DJANGO_SETTINGS_MODULE: 'richie.settings'
           DJANGO_CONFIGURATION: 'ContinuousIntegration'
           DJANGO_SECRET_KEY: 'ThisIsAnExampleKeyForCIPurposeOnly'
           POSTGRES_HOST: '127.0.0.1'
@@ -104,7 +104,7 @@ jobs:
           POSTGRES_PASSWORD: ''
       - image: postgres:9.6
       - image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.1.2
-    working_directory: ~/fun-cms
+    working_directory: ~/richie
     steps:
       - checkout
       - restore_cache:
@@ -119,7 +119,7 @@ jobs:
   test-front:
     docker:
       - image: circleci/node:9-browsers
-    working_directory: ~/fun-cms
+    working_directory: ~/richie
     steps:
       - checkout
       - restore_cache:
@@ -132,7 +132,7 @@ jobs:
 workflows:
   version: 2
 
-  fun_cms:
+  richie:
     jobs:
       - build-back:
           filters:
