@@ -1,5 +1,7 @@
 # Installing FUN CMS
 
+[![CircleCI](https://circleci.com/gh/openfun/richie/tree/master.svg?style=svg)](https://circleci.com/gh/openfun/richie/tree/master)
+
 This document aims to list all needed steps to have a working `FUN CMS` installation on your laptop.
 
 A better approach is to use [`Docker`](https://docs.docker.com). To get started, you can read [explanations](docs/docker.md) on how `FUN CMS` uses Docker for development.
