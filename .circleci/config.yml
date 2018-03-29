@@ -10,9 +10,9 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v2-back-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/dev.txt" }}
+          - v3-back-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/dev.txt" }}
           # fallback to using the latest cache if no exact match is found
-          - v2-back-dependencies-
+          - v3-back-dependencies-
       - run:
           name: Install back-end dependencies
           command: |
@@ -22,7 +22,7 @@ jobs:
       - save_cache:
           paths:
             - ./venv
-          key: v2-back-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/dev.txt" }}
+          key: v3-back-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/dev.txt" }}
 
   build-front:
     docker:
@@ -32,8 +32,8 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v2-front-dependencies-{{ checksum "package.json" }}
-          - v2-front-dependencies-
+          - v3-front-dependencies-{{ checksum "package.json" }}
+          - v3-front-dependencies-
       - run:
           name: Install front-end dependencies
           command: yarn install --frozen-lockfile
@@ -46,7 +46,7 @@ jobs:
       - save_cache:
           paths:
             - ./node_modules
-          key: v2-front-dependencies-{{ checksum "package.json" }}
+          key: v3-front-dependencies-{{ checksum "package.json" }}
 
   lint-back-flake8:
     docker:
@@ -56,7 +56,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v2-back-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/dev.txt" }}
+          - v3-back-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/dev.txt" }}
       - run:
           name: Lint code with flake8
           command: |
@@ -71,7 +71,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v2-back-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/dev.txt" }}
+          - v3-back-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/dev.txt" }}
       - run:
           name: Lint code with pylint
           command: |
@@ -86,7 +86,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v2-front-dependencies-{{ checksum "package.json" }}
+          - v3-front-dependencies-{{ checksum "package.json" }}
       - run:
           name: Lint code with tslint
           command: yarn lint
@@ -109,7 +109,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v2-back-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/dev.txt" }}
+          - v3-back-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/dev.txt" }}
       - run:
           name: Run tests
           command: |
@@ -124,7 +124,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v2-front-dependencies-{{ checksum "package.json" }}
+          - v3-front-dependencies-{{ checksum "package.json" }}
       - run:
           name: Run tests
           command: yarn test --single-run
