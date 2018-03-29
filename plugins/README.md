@@ -1,6 +1,6 @@
-# Plugins module 
+# Plugins module
 
-This Python module contains all our Django-CMS plugins as Django applications, 
+This Python module contains all our Django-CMS plugins as Django applications,
 therefore should be designed so.
 
     myplugin
@@ -24,5 +24,4 @@ They sould be added to Django project `INSTALLED_APPS` constant as follow:
     )
 
 
-Factories related to the `fun-cms` Django project or shared by several plugins should be placed in the `common` module
-
+Factories related to the `richie` Django project or shared by several plugins should be placed in the `common` module

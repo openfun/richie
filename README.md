@@ -54,7 +54,7 @@ Note: we created the user as a superuser. This should only be done in dev/test e
 Now, create the database with this user:
 
 ```sh
-createdb fun_cms -O funadmin -W
+createdb richie -O funadmin -W
 exit
 ```
 
@@ -116,9 +116,9 @@ You can open a new shell to activate the virtualenvwrapper commands, or simply d
 
     source $(which virtualenvwrapper.sh)
 
-Then create the virtual environment for `fun_cms`:
+Then create the virtual environment for `richie`:
 
-    mkvirtualenv fun_cms --no-site-packages --python=python3
+    mkvirtualenv richie --no-site-packages --python=python3
 
 The virtualenv should now be activated and you can install the Python dependencies for development:
 

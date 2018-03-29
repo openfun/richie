@@ -1,11 +1,11 @@
 FORMAT: 1A
 
-# Search: an ElasticSearch-based read API to access fun-cms resources
+# Search: an ElasticSearch-based read API to access richie resources
 
 # Data Structures
 
 ## Course
-A single course as saved in our ElasticSearch index. Includes all fields useful for indexing it and displaying it in the client side. Foreign keys as fun-cms knows them (eg. Subjects & Organizations) are referenced by their IDs.
+A single course as saved in our ElasticSearch index. Includes all fields useful for indexing it and displaying it in the client side. Foreign keys as richie knows them (eg. Subjects & Organizations) are referenced by their IDs.
 
 + end_date: `2018-02-28T06:00:00Z` (string, required) - ISO 8601 date, when this session of the course ends
 + enrollment_end_date: `2018-01-31T06:00:00Z` (string, required) - ISO 8601 date, when enrollment for the latest session of the course ends
@@ -33,7 +33,7 @@ A single subject as saved in our ElasticSearch index. Includes a small subset of
 
 
 # Group Course
-Course-related resources for the fun-cms search API.
+Course-related resources for the richie search API.
 
 ## GET /course/{course_id}
 A single course object. Access through this API is read-only (and thus GET only) as we're interacting with ElasticSearch and not the underlying model.
@@ -78,7 +78,7 @@ Collection of all courses indexed in ElasticSearch. Can be filtered and selected
         + objects: array[Course]
 
 # Group Subject
-Subject-related resources for the fun-cms search API.
+Subject-related resources for the richie search API.
 
 ## GET /subject/{subject_id}
 A single subject object. Access through this API is read-only (and thus GET only) as we're interacting with ElasticSearch and not the underlying model.

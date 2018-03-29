@@ -57,7 +57,7 @@ The 3 containers (`nginx`, `db` and `app`) should now be running and you should 
 
     $ docker-compose ps
 
-The first time you start the project with `make bootstrap`, the `db` container automatically creates a fresh database named `fun_cms` and performs database migrations. Each time a new **database migration** is added to the code, you can synchronize the database schema by running:
+The first time you start the project with `make bootstrap`, the `db` container automatically creates a fresh database named `richie` and performs database migrations. Each time a new **database migration** is added to the code, you can synchronize the database schema by running:
 
 ```bash
 $ docker-compose exec app python manage.py migrate
