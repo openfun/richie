@@ -15,7 +15,7 @@ __pycache__/
 
 # Site media
 /data/
-fun_cms/build
+richie/build
 
 # Settings
 local.py

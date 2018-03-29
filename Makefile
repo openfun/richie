@@ -52,7 +52,7 @@ lint-back-flake8: ## lint back-end python sources with flake8
 
 lint-back-pylint: ## lint back-end python sources with pylint
 	@echo 'lint:pylint started…';
-	@$(COMPOSE_TEST_RUN_APP) pylint apps plugins fun_cms;
+	@$(COMPOSE_TEST_RUN_APP) pylint apps plugins richie;
 .PHONY: lint-back-pylint
 
 lint-front: ## lint TypeScript sources

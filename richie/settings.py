@@ -1,5 +1,5 @@
 """
-Django settings for fun_cms project.
+Django settings for richie project.
 """
 import os
 
@@ -39,8 +39,8 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
     SITE_ID = 1
 
     # Application definition
-    ROOT_URLCONF = 'fun_cms.urls'
-    WSGI_APPLICATION = 'fun_cms.wsgi.application'
+    ROOT_URLCONF = 'richie.urls'
+    WSGI_APPLICATION = 'richie.wsgi.application'
 
     # Database
     DATABASES = {
@@ -50,7 +50,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
                 environ_name='DATABASE_ENGINE',
                 environ_prefix=None
             ),
-            'NAME': values.Value('fun_cms', environ_name='POSTGRES_DB', environ_prefix=None),
+            'NAME': values.Value('richie', environ_name='POSTGRES_DB', environ_prefix=None),
             'USER': values.Value('fun', environ_name='POSTGRES_USER', environ_prefix=None),
             'PASSWORD': values.Value(
                 'pass',

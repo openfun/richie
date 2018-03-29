@@ -7,7 +7,7 @@ from django.core.management.base import BaseCommand
 
 from ...index_manager import regenerate_indexes
 
-logger = logging.getLogger('fun_cms.core.regenerate_indexes')
+logger = logging.getLogger('richie.core.regenerate_indexes')
 
 
 class Command(BaseCommand):
