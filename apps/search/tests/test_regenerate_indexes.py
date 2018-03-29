@@ -10,7 +10,7 @@ from django.test import TestCase
 
 from apps.search import index_manager
 
-logger = logging.getLogger('fun_cms.core.regenerate_indexes')
+logger = logging.getLogger('richie.core.regenerate_indexes')
 
 
 class RegenerateIndexesTestCase(TestCase):

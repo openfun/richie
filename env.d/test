@@ -1,11 +1,11 @@
 # Django
-DJANGO_SETTINGS_MODULE=fun_cms.settings
+DJANGO_SETTINGS_MODULE=richie.settings
 DJANGO_CONFIGURATION=Test
 DJANGO_SECRET_KEY=ThisIsAnExampleKeyForTestPurposeOnly
 
 # Database
 POSTGRES_HOST=db
-POSTGRES_DB=fun_cms
+POSTGRES_DB=richie
 POSTGRES_USER=fun
 POSTGRES_PASSWORD=pass
 

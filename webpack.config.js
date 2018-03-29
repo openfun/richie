@@ -1,13 +1,13 @@
-const SETTINGS = require('./fun_cms/settings.json');
+const SETTINGS = require('./richie/settings.json');
 const webpack = require('webpack');
 
 module.exports = {
   // Include whatwg fetch as an entry point (and not an import) as it's replacing (when necessary)
   // a globally available browser-provided function
-  entry: [ 'whatwg-fetch', './fun_cms/js/index.tsx' ],
+  entry: [ 'whatwg-fetch', './richie/js/index.tsx' ],
   output: {
     filename: 'index.js',
-    path: __dirname + '/fun_cms/build/js'
+    path: __dirname + '/richie/build/js'
   },
 
   // Enable sourcemaps for debugging webpack's output.

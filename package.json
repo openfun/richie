@@ -1,25 +1,25 @@
 {
-  "name": "fun-cms",
+  "name": "richie",
   "version": "0.1.0",
   "description": "This document aims to list all needed steps to have a working `FUN CMS` installation.",
   "main": "manage.py",
   "scripts": {
     "build": "webpack",
-    "lint": "tslint -c tslint.json 'fun_cms/js/**/*.ts'",
-    "sass": "node-sass fun_cms/static/scss/_main.scss data/static/css/main.css",
+    "lint": "tslint -c tslint.json 'richie/js/**/*.ts'",
+    "sass": "node-sass richie/static/scss/_main.scss data/static/css/main.css",
     "test": "karma start ./karma.conf.js",
     "watch-sass": "nodemon -e scss -x 'yarn sass'"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/openfun/fun-cms.git"
+    "url": "git+https://github.com/openfun/richie.git"
   },
   "author": "FUN",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/openfun/fun-cms/issues"
+    "url": "https://github.com/openfun/richie/issues"
   },
-  "homepage": "https://github.com/openfun/fun-cms#readme",
+  "homepage": "https://github.com/openfun/richie#readme",
   "devDependencies": {
     "@types/enzyme": "^3.1.9",
     "@types/enzyme-adapter-react-16": "^1.0.2",

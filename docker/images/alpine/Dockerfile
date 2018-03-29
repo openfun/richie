@@ -82,7 +82,7 @@ WORKDIR /app
 
 # Gunicorn
 RUN mkdir -p /usr/local/etc/gunicorn
-COPY docker/files/usr/local/etc/gunicorn/fun_cms.py /usr/local/etc/gunicorn/fun_cms.py
+COPY docker/files/usr/local/etc/gunicorn/richie.py /usr/local/etc/gunicorn/richie.py
 
 # Give the "root" group the same permissions as the "root" user on /etc/passwd
 # to allow a user belonging to the root group to add new users; typically the
@@ -95,7 +95,7 @@ RUN chmod g=u /etc/passwd
 ENTRYPOINT [ "/app/bin/entrypoint" ]
 
 # The default command runs gunicorn WSGI server
-CMD gunicorn -c /usr/local/etc/gunicorn/fun_cms.py fun_cms.wsgi:application
+CMD gunicorn -c /usr/local/etc/gunicorn/richie.py richie.wsgi:application
 
 # Un-privileged user running the application
 USER 10000
