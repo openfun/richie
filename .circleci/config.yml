@@ -1,29 +1,369 @@
 version: 2
 jobs:
 
-  build-back:
-    docker:
-      - image: python:3.6-stretch
-    working_directory: ~/richie
+  # Docker/back-end jobs
+  # Build job
+  # Build the Docker image ready for production
+  build:
+
+    # We use the machine executor, i.e. a VM, not a container
+    machine:
+      # Cache docker layers so that we strongly speed up this job execution
+      docker_layer_caching: true
+
+    working_directory: ~/fun
+
     steps:
+      # Checkout repository sources
       - checkout
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-          - v3-back-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/dev.txt" }}
-          # fallback to using the latest cache if no exact match is found
-          - v3-back-dependencies-
+
+      # Each image is tagged with the current git commit sha1 to avoid
+      # collisions in parallel builds.
       - run:
-          name: Install back-end dependencies
+          name: Build production image
           command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install -r requirements/dev.txt
+            docker build \
+              -t richie:${CIRCLE_SHA1} \
+              .
+
+      - run:
+          name: Check built image availability
+          command: docker images "richie:${CIRCLE_SHA1}*"
+
+      # Since we cannot rely on CircleCI's Docker layers cache (for obscure
+      # reasons some subsequent jobs will benefit from a previous job cache and
+      # some others won't), we choose to save built docker images in cached
+      # directories. This ensures that we will be able to load built docker
+      # images in subsequent jobs.
+      - run:
+          name: Store docker image in cache
+          command: |
+            docker save \
+              -o docker/images/richie.tar \
+              richie:${CIRCLE_SHA1}
+
       - save_cache:
           paths:
-            - ./venv
-          key: v3-back-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/dev.txt" }}
+            - ~/fun/docker/images/
+          key: docker-debian-images-{{ .Revision }}
 
+  # Build dev job
+  # Build the Docker image ready for development
+  build-dev:
+
+    machine:
+      docker_layer_caching: true
+
+    working_directory: ~/fun
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - docker-debian-images-{{ .Revision }}
+
+      - run:
+          name: Load images to docker engine
+          command: |
+            docker load < docker/images/richie.tar
+
+      - run:
+          name: List available images
+          command: docker images "richie:${CIRCLE_SHA1}*"
+
+      # Development image build, it uses the dev Dockerfile file
+      - run:
+          name: Build development image
+          command: |
+            docker build \
+              -t richie:${CIRCLE_SHA1}-dev \
+              -f docker/images/dev/Dockerfile \
+              --build-arg BASE_TAG=${CIRCLE_SHA1} \
+              .
+
+      - run:
+          name: Check built image availability
+          command: docker images "richie:${CIRCLE_SHA1}*"
+
+      - run:
+          name: Store docker image in cache
+          command: |
+            docker save \
+              -o docker/images/dev/richie.tar \
+              richie:${CIRCLE_SHA1} \
+              richie:${CIRCLE_SHA1}-dev
+
+      - save_cache:
+          paths:
+            - ~/fun/docker/images/
+          key: docker-debian-images-dev-{{ .Revision }}
+
+  lint-back-flake8:
+
+    machine: true
+
+    working_directory: ~/fun
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - docker-debian-images-dev-{{ .Revision }}
+
+      - run:
+          name: Load images to docker engine
+          command: |
+            docker load < docker/images/dev/richie.tar
+
+      - run:
+          name: Lint code with flake8
+          command: |
+            docker-compose \
+              -p richie-test \
+              -f docker/compose/ci/docker-compose.yml \
+              --project-directory . \
+              run --rm --no-deps app \
+                flake8
+
+  lint-back-pylint:
+
+    machine: true
+
+    working_directory: ~/fun
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - docker-debian-images-dev-{{ .Revision }}
+
+      - run:
+          name: Load images to docker engine
+          command: |
+            docker load < docker/images/dev/richie.tar
+
+      - run:
+          name: Lint code with pylint
+          command: |
+            docker-compose \
+              -p richie-test \
+              -f docker/compose/ci/docker-compose.yml \
+              --project-directory . \
+              run --rm --no-deps app \
+                pylint apps plugins richie
+
+  test-back:
+
+    machine: true
+
+    working_directory: ~/fun
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - docker-debian-images-dev-{{ .Revision }}
+
+      - run:
+          name: Load images to docker engine
+          command: |
+            docker load < docker/images/dev/richie.tar
+
+      # ElasticSearch configuration
+      #
+      # We need to increase the VM max memory size, or else, ElasticSearch (ES)
+      # service won't bootstrap.
+      #
+      # Source:
+      # https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-cli-run-prod-mode
+      - run:
+          name: Increase VM max memory size for ES
+          command: |
+            sudo sysctl -w vm.max_map_count=262144
+            sudo sysctl vm.max_map_count
+
+      # Run back-end (Django) test suite
+      #
+      # Nota bene: to run the django test suite, we need to ensure that both
+      # PostgreSQL and ElasticSearch services are up and ready. To achieve this,
+      # we wrap the pytest command execution with dockerize, a tiny tool
+      # installed in the development image. In our case, dockerize will wait
+      # up to one minute that both the database and elastisearch containers
+      # opened their expected tcp port (5432 and 9200 resp.).
+      - run:
+          name: Run tests
+          command: |
+            docker-compose \
+              -p richie-test \
+              -f docker/compose/ci/docker-compose.yml \
+              --project-directory . \
+              run --rm app \
+                dockerize \
+                  -wait tcp://db:5432 \
+                  -wait tcp://elasticsearch:9200 \
+                  -timeout 60s \
+                    pytest
+
+  # ---- Alpine jobs ----
+  build-alpine:
+
+    machine:
+      docker_layer_caching: true
+
+    working_directory: ~/fun
+
+    steps:
+      - checkout
+
+      - run:
+          name: Build alpine production image
+          command: |
+            docker build \
+              -t richie:${CIRCLE_SHA1}-alpine \
+              -f docker/images/alpine/Dockerfile \
+              .
+
+      - run:
+          name: Build alpine development image
+          command: |
+            docker build \
+              -t richie:${CIRCLE_SHA1}-alpine-dev \
+              -f docker/images/alpine/dev/Dockerfile \
+              --build-arg BASE_TAG=${CIRCLE_SHA1}-alpine \
+              .
+
+      - run:
+          name: List available images
+          command: docker images richie
+
+      - run:
+          name: Store docker image in cache
+          command: |
+            docker save \
+              -o docker/images/alpine/richie.tar \
+              richie:${CIRCLE_SHA1}-alpine \
+              richie:${CIRCLE_SHA1}-alpine-dev
+
+      - save_cache:
+          paths:
+            - ~/fun/docker/images/
+          key: docker-alpine-images-dev-{{ .Revision }}
+
+  test-alpine:
+
+    machine: true
+
+    working_directory: ~/fun
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - docker-alpine-images-dev-{{ .Revision }}
+
+      - run:
+          name: Load images to docker engine
+          command: |
+            docker load < docker/images/alpine/richie.tar
+
+      - run:
+          name: Increase VM max memory size
+          command: |
+            sudo sysctl -w vm.max_map_count=262144
+            sudo sysctl vm.max_map_count
+
+      - run:
+          name: Run tests
+          command: |
+            IMAGE_SUFFIX="-alpine" \
+            docker-compose \
+              -p richie-test \
+              -f docker/compose/ci/docker-compose.yml \
+              --project-directory . \
+              run --rm app \
+                dockerize \
+                  -wait tcp://db:5432 \
+                  -wait tcp://elasticsearch:9200 \
+                  -timeout 60s \
+                    pytest
+
+  # ---- DockerHub publication job ----
+  hub:
+
+    machine: true
+
+    working_directory: ~/fun
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - docker-debian-images-dev-{{ .Revision }}
+
+      - restore_cache:
+          keys:
+            - docker-alpine-images-dev-{{ .Revision }}
+
+      # Load all built images in all flavors
+      - run:
+          name: Load images to docker engine
+          command: |
+            docker load < docker/images/richie.tar
+            docker load < docker/images/alpine/richie.tar
+
+      # Login to DockerHub to Publish new images
+      #
+      # Nota bene: you'll need to define the following secrets environment vars
+      # in CircleCI interface:
+      #
+      #   - DOCKER_USER
+      #   - DOCKER_PASS
+      - run:
+          name: Login to DockerHub
+          command: echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+
+      # Tag docker images with the same pattern used in Git (Semantic Versioning)
+      #
+      # Git tag: v1.0.1
+      # Docker tag: 1.0.1(-alpine)(-dev)
+      - run:
+          name: Tag images
+          command: |
+            docker images fundocker/richie
+            DOCKER_TAG=$(echo ${CIRCLE_TAG} | sed 's/^v//')
+            echo "DOCKER_TAG: ${DOCKER_TAG} (from Git tag: ${CIRCLE_TAG})"
+            docker tag richie:${CIRCLE_SHA1} fundocker/richie:latest
+            docker tag richie:${CIRCLE_SHA1} fundocker/richie:${DOCKER_TAG}
+            docker tag richie:${CIRCLE_SHA1}-dev fundocker/richie:${DOCKER_TAG}-dev
+            docker tag richie:${CIRCLE_SHA1}-alpine fundocker/richie:alpine
+            docker tag richie:${CIRCLE_SHA1}-alpine fundocker/richie:${DOCKER_TAG}-alpine
+            docker tag richie:${CIRCLE_SHA1}-alpine-dev fundocker/richie:${DOCKER_TAG}-alpine-dev
+            docker images "fundocker/richie:${DOCKER_TAG}*"
+
+      # Publish images to DockerHub
+      #
+      # Nota bene: logged user (see "Login to DockerHub" step) must have write
+      # permission for the project's repository; this also implies that the
+      # DockerHub repository already exists.
+      - run:
+          name: Publish images
+          command: |
+            DOCKER_TAG=$(echo ${CIRCLE_TAG} | sed 's/^v//')
+            echo "DOCKER_TAG: ${DOCKER_TAG} (from Git tag: ${CIRCLE_TAG})"
+            docker push fundocker/richie:latest
+            docker push fundocker/richie:${DOCKER_TAG}
+            docker push fundocker/richie:${DOCKER_TAG}-dev
+            docker push fundocker/richie:alpine
+            docker push fundocker/richie:${DOCKER_TAG}-alpine
+            docker push fundocker/richie:${DOCKER_TAG}-alpine-dev
+
+  # ---- Front-end jobs ----
   build-front:
     docker:
       - image: circleci/node:9-browsers
@@ -48,36 +388,6 @@ jobs:
             - ./node_modules
           key: v3-front-dependencies-{{ checksum "package.json" }}
 
-  lint-back-flake8:
-    docker:
-      - image: python:3.6-stretch
-    working_directory: ~/richie
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-          - v3-back-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/dev.txt" }}
-      - run:
-          name: Lint code with flake8
-          command: |
-            . venv/bin/activate
-            flake8
-
-  lint-back-pylint:
-    docker:
-      - image: python:3.6-stretch
-    working_directory: ~/richie
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-          - v3-back-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/dev.txt" }}
-      - run:
-          name: Lint code with pylint
-          command: |
-            . venv/bin/activate
-            pylint apps plugins richie
-
   lint-front:
     docker:
       - image: circleci/node:9-browsers
@@ -90,31 +400,6 @@ jobs:
       - run:
           name: Lint code with tslint
           command: yarn lint
-
-  test-back:
-    docker:
-      - image: python:3.6-stretch
-        environment:
-          DJANGO_SETTINGS_MODULE: 'richie.settings'
-          DJANGO_CONFIGURATION: 'ContinuousIntegration'
-          DJANGO_SECRET_KEY: 'ThisIsAnExampleKeyForCIPurposeOnly'
-          POSTGRES_HOST: '127.0.0.1'
-          POSTGRES_DB: 'postgres'
-          POSTGRES_USER: 'postgres'
-          POSTGRES_PASSWORD: ''
-      - image: postgres:9.6
-      - image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.1.2
-    working_directory: ~/richie
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-          - v3-back-dependencies-{{ checksum "requirements/base.txt" }}-{{ checksum "requirements/dev.txt" }}
-      - run:
-          name: Run tests
-          command: |
-            . venv/bin/activate
-            pytest
 
   test-front:
     docker:
@@ -134,23 +419,10 @@ workflows:
 
   richie:
     jobs:
-      - build-back:
-          filters:
-            tags:
-              only: /.*/
+      # Front-end jobs
+      #
+      # Build, lint and test the front-end apps
       - build-front:
-          filters:
-            tags:
-              only: /.*/
-      - lint-back-flake8:
-          requires:
-            - build-back
-          filters:
-            tags:
-              only: /.*/
-      - lint-back-pylint:
-          requires:
-            - build-back
           filters:
             tags:
               only: /.*/
@@ -160,15 +432,71 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - test-back:
-          requires:
-            - build-back
-          filters:
-            tags:
-              only: /.*/
       - test-front:
           requires:
-            - build-front
+            - lint-front
           filters:
             tags:
               only: /.*/
+
+      # Docker jobs
+      #
+      # Build, lint and test production and development Docker images
+      # (debian-based)
+      - build:
+          filters:
+            tags:
+              only: /.*/
+      - build-dev:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /.*/
+      - lint-back-flake8:
+          requires:
+            - build-dev
+          filters:
+            tags:
+              only: /.*/
+      - lint-back-pylint:
+          requires:
+            - build-dev
+          filters:
+            tags:
+              only: /.*/
+      - test-back:
+          requires:
+            - build-dev
+          filters:
+            tags:
+              only: /.*/
+
+      # Docker alpine jobs
+      #
+      # Build and run tests in alpine based images
+      - build-alpine:
+          filters:
+            tags:
+              only: /.*/
+      - test-alpine:
+          requires:
+            - build-alpine
+          filters:
+            tags:
+              only: /.*/
+
+      # DockerHub publication.
+      #
+      # Publish docker images only if all build, lint and test jobs succeed and
+      # it has been tagged with a tag starting with the letter v
+      - hub:
+          requires:
+            - test-front
+            - test-back
+            - test-alpine
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
