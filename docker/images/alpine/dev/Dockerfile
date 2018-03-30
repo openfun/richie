@@ -1,4 +1,11 @@
-FROM richie:alpine
+# The base image we inherit from is richie:alpine, but you can override this by
+# passing a build argument to your build command, e.g.:
+#
+# docker build --build-arg BASE_TAG=${CIRCLE_SHA1}-alpine .
+#
+ARG BASE_TAG=alpine
+
+FROM richie:${BASE_TAG}
 
 # Switch back to the root user to install development dependencies
 USER root:root
