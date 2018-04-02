@@ -112,3 +112,30 @@ class OrganizationIndexerTestCase(TestCase):
 
         with self.assertRaises(IndexerDataException):
             list(indexer.get_data_for_es(index='some_index', action='some_action'))
+
+    def test_format_es_organization_for_api(self):
+        """
+        Make sure format_es_organization_for_api returns a properly formatted organization
+        """
+        es_organization = {
+            '_id': 217,
+            '_source': {
+                'banner': 'example.com/banner.png',
+                'code': 'univ-paris-13',
+                'logo': 'example.com/logo.png',
+                'name': {
+                    'en': 'University of Paris XIII',
+                    'fr': 'Université Paris 13',
+                },
+            },
+        }
+        self.assertEqual(
+            OrganizationIndexer.format_es_organization_for_api(es_organization, 'en'),
+            {
+                'banner': 'example.com/banner.png',
+                'code': 'univ-paris-13',
+                'id': 217,
+                'logo': 'example.com/logo.png',
+                'name': 'University of Paris XIII',
+            },
+        )
