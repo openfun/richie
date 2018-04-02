@@ -24,6 +24,15 @@ A single course as saved in our ElasticSearch index. Includes all fields useful 
     + small https://example.com/small.png (string) - URL to an image, a size of the thumbnail
 + title: Python for Data Scientists (string, required) - Title for the course
 
+## Organization
+A single organization as saved in our ElasticSearch index. Includes only the fields necessary for indexing and displaying them on the consumer side.
+
++ id: 42 (number, required) - SQL database ID, reused in ElasticSearch
++ banner: https://example.com/banner.png (string) - URL to an image appropriate to use as a banner for the organization (larger)
++ code: univ-paris-13 (string, required) - slug, machine name for the organization
++ logo: https://example.com/logo.png (string) - URL to and image containing the logo for the organization (smaller)
++ name: Université Paris 13 (string, required) - full text name of the organization; may be translated
+
 ## Subject
 A single subject as saved in our ElasticSearch index. Includes a small subset of the fields and data in the the SQL database model, in order to be as small and consumer-friendly as possible.
 
@@ -76,6 +85,44 @@ Collection of all courses indexed in ElasticSearch. Can be filtered and selected
             + offset: 0 (number, required) - number of courses skipped
             + total_count: 240 (number, required) - total number of hits for the search parameters
         + objects: array[Course]
+
+# Group Organization
+Organization-related resources for the richie search API.
+
+## GET /organization/{organization_id}
+A single organization object. Access through this API is read-only (and thus GET only) as we're interacting with ElasticSearch and not the underlying model.
+
+See the Organization data structure for more information.
+
++ Request
+    + Headers
+
+            Accept: application/json
+            Accept-Language: fr-FR; fr; q=0.9, en-US; en; q=0.7, *; q=0.5
+
++ Response 200 (application/json)
+    + Attributes (Organization)
+
+## GET /organization?limit&offset&name
+Collection of all organizations indexed in ElasticSearch. Can be filtered and selected through search query parameters.
+
++ Request
+    + Parameters
+        + limit: 10 (number, optional) - return {limit} subjects
+        + offset: 0 (number, optional) - skip the first {offset} results; used for pagination
+        + name: université (string, optional) - match on the name field
+    + Headers
+
+            Accept: application/json
+            Accept-Language: fr-FR; fr; q=0.9, en-US; en; q=0.7, *; q=0.5
+
++ Response 200 (application/json)
+    + Attributes
+        + meta
+            + count: 10 (number, required) - number of organizations effectively returned
+            + offset: 0 (number, required) - number of organizations skipped
+            + total_count: 89 (number, required) - total number of hits for the search parameters
+        + objects: array[Organization]
 
 # Group Subject
 Subject-related resources for the richie search API.

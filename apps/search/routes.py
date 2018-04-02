@@ -4,6 +4,7 @@ API Routes exposed by our Search app
 from rest_framework import routers
 
 from .viewsets.course import CourseViewSet
+from .viewsets.organization import OrganizationViewSet
 from .viewsets.subject import SubjectViewSet
 
 
@@ -17,6 +18,7 @@ ROUTER = routers.SimpleRouter()
 
 # Define our app's routes with the router
 ROUTER.register(r'course', CourseViewSet, 'course')
+ROUTER.register(r'organization', OrganizationViewSet, 'organization')
 ROUTER.register(r'subject', SubjectViewSet, 'subject')
 
 # Use the standard name for our urlpatterns so urls.py can import it effortlessly
