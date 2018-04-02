@@ -44,13 +44,13 @@ class SubjectIndexer():
                 raise IndexerDataException('Unexpected data shape in subjects to index')
 
     @staticmethod
-    def format_es_subject_for_api(es_course, best_language):
+    def format_es_subject_for_api(es_subject, best_language):
         """
         Format a subject stored in ES into a consistent and easy-to-consume record for
         API consumers
         """
         return {
-            'id': es_course['_id'],
-            'image': es_course['_source']['image'],
-            'name': get_best_field_language(es_course['_source']['name'], best_language),
+            'id': es_subject['_id'],
+            'image': es_subject['_source']['image'],
+            'name': get_best_field_language(es_subject['_source']['name'], best_language),
         }
