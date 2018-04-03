@@ -19,6 +19,7 @@ MANAGE               = $(COMPOSE_RUN_APP) python manage.py
 default: help
 
 bootstrap:  ## install development dependencies
+	@$(COMPOSE) build base;
 	@$(COMPOSE) build app;
 	${MAKE} build-front;
 	@echo 'Waiting until database is up…';
