@@ -15,7 +15,8 @@ export const Search = () => {
       <SearchFiltersPane />
     </div>
     <div className="search__results">
-      <CourseGlimpseList courses={courses.results} />
+      /* TODO: Remove any when we stop using fixtures to display courses */
+      <CourseGlimpseList courses={courses.results as any} />
     </div>
   </div>;
 };

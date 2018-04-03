@@ -2,14 +2,14 @@ import subjectReducer from './reducer';
 
 describe('data/subject reducer', () => {
   const subj43 = {
-    code: 'subj-43',
     id: 43,
+    image: 'https://example.com/subject_43.png',
     name: 'Subject 43',
   };
 
   const subj44 = {
-    code: 'subj-44',
     id: 44,
+    image: 'https://example.com/subject_44.png',
     name: 'Subject 44',
   };
 

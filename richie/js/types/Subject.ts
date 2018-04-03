@@ -1,5 +1,5 @@
 export default interface Subject {
-  code: string;
   id: number;
+  image: string | null;
   name: string;
 }
