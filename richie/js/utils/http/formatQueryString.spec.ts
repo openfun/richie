@@ -10,6 +10,14 @@ describe('utils/http - formatQueryString()', () => {
     expect(formatQueryString({ foo: 'bar', fizz: 'buzz' })).toEqual('?foo=bar&fizz=buzz');
   });
 
+  it('supports null as a param value', () => {
+    expect(formatQueryString({ foo: 'bar', fizz: null })).toEqual('?foo=bar&fizz=null');
+  });
+
+  it('supports numbers as param values', () => {
+    expect(formatQueryString({ foo: 12, bar: 98 })).toEqual('?foo=12&bar=98');
+  });
+
   it('handles arrays as param values', () => {
     expect(formatQueryString({ foo: [ 'bar', 'baz' ], fizz: 'buzz' })).toEqual('?foo=bar&foo=baz&fizz=buzz');
   });
