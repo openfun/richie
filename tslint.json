@@ -6,6 +6,7 @@
     "jsRules": {},
     "rules": {
         "interface-name": [ true, "never-prefix" ],
+        "member-access": [ true, "no-public" ],
         "no-console": [ true, "log", "error" ],
         "no-empty": false,
         "quotemark": [ true, "single", "avoid-escape", "jsx-double" ]
