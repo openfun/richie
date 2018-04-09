@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-import courses from '../../fixtures/courses';
 import Course from '../../types/Course';
 import CourseGlimpseListContainer from '../courseGlimpseListContainer/courseGlimpseListContainer';
 import SearchFiltersPane from '../searchFiltersPane/searchFiltersPane';
