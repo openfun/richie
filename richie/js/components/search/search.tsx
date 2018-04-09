@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import courses from '../../fixtures/courses';
 import Course from '../../types/Course';
-import CourseGlimpseList from '../courseGlimpseList/courseGlimpseList';
+import CourseGlimpseListContainer from '../courseGlimpseListContainer/courseGlimpseListContainer';
 import SearchFiltersPane from '../searchFiltersPane/searchFiltersPane';
 
 interface SearchState {
@@ -15,8 +15,7 @@ export const Search = () => {
       <SearchFiltersPane />
     </div>
     <div className="search__results">
-      /* TODO: Remove any when we stop using fixtures to display courses */
-      <CourseGlimpseList courses={courses.results as any} />
+      <CourseGlimpseListContainer />
     </div>
   </div>;
 };
