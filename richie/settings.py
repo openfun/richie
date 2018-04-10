@@ -78,15 +78,6 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
     USE_I18N = True
     USE_L10N = True
     USE_TZ = True
-    LANGUAGE_CODE = 'fr'
-    # Careful! Languages should be ordered by priority, as this tuple is used to get
-    # fallback/default languages throughout the app.
-    # Use "en" as default as it is the language that is most likely to be spoken by any visitor
-    # when their preferred language, whatever it is, is unavailable
-    LANGUAGES = (
-        ('en', _('en')),
-        ('fr', _('fr')),
-    )
 
     # Templates
     TEMPLATES = [
@@ -185,21 +176,25 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
     # Group to add plugin to placeholder "Content"
     FUN_PLUGINS_GROUP = "Fun Plugins"
 
+    LANGUAGE_CODE = 'fr'
+    # Careful! Languages should be ordered by priority, as this tuple is used to get
+    # fallback/default languages throughout the app.
+    # Use "en" as default as it is the language that is most likely to be spoken by any visitor
+    # when their preferred language, whatever it is, is unavailable
+    LANGUAGES = (
+        ('en', _('en')),
+        ('fr', _('fr')),
+    )
+
     # Django CMS settings
     CMS_LANGUAGES = {
         'default': {
             'public': True,
             'hide_untranslated': False,
             'redirect_on_fallback': True,
+            'fallbacks': ['en', 'fr'],
         },
         1: [
-            {
-                'public': True,
-                'code': 'fr',
-                'hide_untranslated': False,
-                'name': _('fr'),
-                'redirect_on_fallback': True,
-            },
             {
                 'public': True,
                 'code': 'en',
@@ -208,8 +203,19 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
                 'fallbacks': ['fr'],
                 'redirect_on_fallback': True,
             },
+            {
+                'public': True,
+                'code': 'fr',
+                'hide_untranslated': False,
+                'name': _('fr'),
+                'fallbacks': ['en'],
+                'redirect_on_fallback': True,
+            },
         ],
     }
+
+    PARLER_LANGUAGES = CMS_LANGUAGES
+
     CMS_TEMPLATES = (
         ('organizations/cms/organization.html', _("Organization page")),
         ('organizations/cms/organization_list.html', _("Organizations list page")),
