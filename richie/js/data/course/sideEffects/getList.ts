@@ -1,5 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 
+import { API_ENDPOINTS } from '../../../settings.json';
 import Course from '../../../types/Course';
 import formatQueryString from '../../../utils/http/formatQueryString';
 import { addCourse, CourseListGet, didGetCourseList, failedToGetCourseList } from '../actions';
@@ -22,7 +23,7 @@ interface Response {
 // Wrap fetch to handle params, headers, parsing & sane response handling
 // NB: some of this logic should be move in a separate module when we reuse it elsewhere
 export function fetchCourses(params?: CourseListGet['params']): Promise<Response> {
-  return fetch('/api/v1.0/course' + formatQueryString(params), {
+  return fetch(API_ENDPOINTS.COURSE + formatQueryString(params), {
     headers: {
       'Content-Type': 'application/json',
     },

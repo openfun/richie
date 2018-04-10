@@ -1,4 +1,7 @@
 {
+  "API_ENDPOINTS": {
+    "COURSE": "/api/v1.0/course"
+  },
   "SUPPORTED_LANGUAGES": [
     "de",
     "en",

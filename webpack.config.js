@@ -1,4 +1,4 @@
-const SETTINGS = require('./richie/settings.json');
+const SETTINGS = require('./richie/js/settings.json');
 const webpack = require('webpack');
 
 module.exports = {
