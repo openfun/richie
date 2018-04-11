@@ -1,11 +1,11 @@
 import Organization from './Organization';
+import Resource from './Resource';
 import Subject from './Subject';
 
-export default interface Course {
+export default interface Course extends Resource {
   end_date: string;
   enrollment_end_date: string;
   enrollment_start_date: string;
-  id: number;
   language: string;
   organizations: number[];
   session_number: number;

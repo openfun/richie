@@ -1,7 +1,8 @@
-export default interface Organization {
+import Resource from './Resource';
+
+export default interface Organization extends Resource {
   banner: string | null;
   code: string;
-  id: number;
   logo: string | null;
   name: string;
 }
