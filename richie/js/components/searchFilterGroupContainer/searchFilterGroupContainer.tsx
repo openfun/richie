@@ -47,14 +47,22 @@ const getFilterFromData = (state: RootState, machineName: string) => {
       return {
         humanName: 'Organizations',
         machineName,
-        values: values(state[machineName].byId).map((organization) => [ String(organization.id), organization.name ]),
+        values:
+          values(state.resources &&
+                 state.resources[machineName] &&
+                 state.resources[machineName].byId || {})
+          .map((organization) => [ String(organization.id), organization.name ]),
       };
 
     case 'subject':
       return {
         humanName: 'Subjects',
         machineName,
-        values: values(state[machineName].byId).map((subject) => [ String(subject.id), subject.name ]),
+        values:
+          values(state.resources &&
+                 state.resources[machineName] &&
+                 state.resources[machineName].byId || {})
+          .map((subject) => [ String(subject.id), subject.name ]),
       };
   }
 };

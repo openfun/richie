@@ -44,12 +44,14 @@ describe('components/courseGlimpseListContainer', () => {
     };
 
     const state = {
-      course: {
-        byId: { 43: course43, 44: course44 },
-        currentQuery: {
-          items: { 0: 44, 1: 43 },
-          queryKey: '{}',
-          total_count: 2,
+      resources: {
+        course: {
+          byId: { 43: course43, 44: course44 },
+          currentQuery: {
+            items: { 0: 44, 1: 43 },
+            queryKey: '{}',
+            total_count: 2,
+          },
         },
       },
     };
