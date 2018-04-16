@@ -1,15 +1,20 @@
+import flow from 'lodash-es/flow';
 import get from 'lodash-es/get';
+import partialRight from 'lodash-es/partialRight';
 import { Reducer } from 'redux';
 
 import Course from '../../types/Course';
-import { CourseAdd, CourseListGetSuccess } from './actions';
+import { ResourceAdd } from '../genericReducers/resourceById/actions';
+import {
+  byId,
+  initialState as resourceByIdInit,
+  ResourceByIdState,
+} from '../genericReducers/resourceById/resourceById';
+import { CourseListGetSuccess } from './actions';
 
-const initialState = {};
+const initialState = { ...resourceByIdInit };
 
-export interface CourseState {
-  byId?: {
-    [id: string]: Course;
-  };
+export type CourseState = ResourceByIdState<Course> & {
   currentQuery?: {
     // A number-keyed object is more stable than an array to keep a list with a moving starting
     // index and potential gaps throughout.
@@ -18,23 +23,13 @@ export interface CourseState {
     queryKey: string;
     total_count: number;
   };
-}
+};
 
-export const course: Reducer<CourseState> = (
+const courseReducerExtension: Reducer<CourseState> = (
   state: CourseState = initialState,
-  action?: CourseAdd | CourseListGetSuccess,
+  action?: ResourceAdd<Course> | CourseListGetSuccess | { type: '' },
 ) => {
-  if (!action) { return state; } // Compiler needs help
   switch (action.type) {
-    // Add a single course record to our state
-    case 'COURSE_ADD':
-      return {
-        ...state,
-        byId: {
-          ...state.byId,
-          [action.course.id]: action.course,
-        },
-      };
 
     // Create or update the latest course list we fetched from the server
     case 'COURSE_LIST_GET_SUCCESS':
@@ -59,6 +54,25 @@ export const course: Reducer<CourseState> = (
       };
   }
   return state;
+};
+
+export const course: Reducer<CourseState> = (
+  state: CourseState = initialState,
+  action?: ResourceAdd<Course> | CourseListGetSuccess | { type: '' },
+) => {
+  if (!action) { return state; } // Compiler needs help
+
+  // Discriminate resource related actions by resource name
+  if (get(action, 'resourceName') &&
+      get(action, 'resourceName') !== 'course'
+  ) {
+    return state;
+  }
+
+  return flow([
+    partialRight(byId, action),
+    partialRight(courseReducerExtension, action),
+  ])(state, action);
 };
 
 export default course;

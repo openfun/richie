@@ -1,15 +1,12 @@
 import { APIListCommonRequestParams, APIResponseListMeta } from '../../types/api';
 import Course from '../../types/Course';
+import { ResourceAdd } from '../genericReducers/resourceById/actions';
 
-export interface CourseAdd {
-  course: Course;
-  type: 'COURSE_ADD';
-}
-
-export function addCourse(course: Course): CourseAdd {
+export function addCourse(course: Course): ResourceAdd<Course> {
   return {
-    course,
-    type: 'COURSE_ADD',
+    resource: course,
+    resourceName: 'course',
+    type: 'RESOURCE_ADD',
   };
 }
 

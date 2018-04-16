@@ -19,29 +19,25 @@ describe('data/organization reducer', () => {
     name: 'Org 44',
   };
 
-  it('returns an empty object for initialization', () => {
-    expect(organizationReducer(undefined, undefined)).toEqual({});
-  });
+  describe('resourceById', () => {
+    it('drops actions that do not match the resourceName', () => {
+      const previousState = { byId: { 43: org43  } };
 
-  it('returns the state as is when called with an unknown action', () => {
-    const previousState = {
-      byId: { 43: org43  },
-    };
-    expect(organizationReducer(previousState, { type: 'TODO_ADD' })).toEqual(previousState);
-  });
+      expect(organizationReducer(previousState, {
+        resource: org44,
+        resourceName: 'subject',
+        type: 'RESOURCE_ADD',
+      })).toEqual(previousState);
+    });
 
-  it('adds the organization to the state when called with ORGANIZATION_ADD', () => {
-    const previousState = {
-      byId: { 43: org43  },
-    };
-    expect(organizationReducer(previousState, {
-      organization: org44,
-      type: 'ORGANIZATION_ADD',
-    })).toEqual({
-      byId: {
-        43: org43,
-        44: org44,
-      },
+    it('uses actions that match the resourceName', () => {
+      const previousState = { byId: { 43: org43  } };
+
+      expect(organizationReducer(previousState, {
+        resource: org44,
+        resourceName: 'organization',
+        type: 'RESOURCE_ADD',
+      })).toEqual({ byId: { 43: org43, 44: org44 } });
     });
   });
 });

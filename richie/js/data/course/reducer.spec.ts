@@ -41,8 +41,8 @@ describe('data/course reducer', () => {
     title: 'Programming 101 in Python',
   };
 
-  it('returns an empty object for initialization', () => {
-    expect(courseReducer(undefined, undefined)).toEqual({});
+  it('returns an empty state for initialization', () => {
+    expect(courseReducer(undefined, undefined)).toEqual({ byId: {} });
   });
 
   it('returns the state as is when called with an unknown action', () => {
@@ -52,23 +52,25 @@ describe('data/course reducer', () => {
     expect(courseReducer(previousState, { type: 'TODO_ADD' })).toEqual(previousState);
   });
 
-  describe('COURSE_ADD', () => {
-    it('adds the course to the state', () => {
-      const previousState = {
-        byId: { 43: course43 },
-      };
-      expect(courseReducer(
-        previousState,
-        {
-          course: course44,
-          type: 'COURSE_ADD',
-        },
-      )).toEqual({
-        byId: {
-          43: course43,
-          44: course44,
-        },
-      });
+  describe('resourceById', () => {
+    it('drops actions that do not match the resourceName', () => {
+      const previousState = { byId: { 43: course43  } };
+
+      expect(courseReducer(previousState, {
+        resource: course44,
+        resourceName: 'subject',
+        type: 'RESOURCE_ADD',
+      })).toEqual(previousState);
+    });
+
+    it('uses actions that match the resourceName', () => {
+      const previousState = { byId: { 43: course43  } };
+
+      expect(courseReducer(previousState, {
+        resource: course44,
+        resourceName: 'course',
+        type: 'RESOURCE_ADD',
+      })).toEqual({ byId: { 43: course43, 44: course44 } });
     });
   });
 

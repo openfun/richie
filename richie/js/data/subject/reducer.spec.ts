@@ -13,29 +13,25 @@ describe('data/subject reducer', () => {
     name: 'Subject 44',
   };
 
-  it('returns an empty object for initialization', () => {
-    expect(subjectReducer(undefined, undefined)).toEqual({});
-  });
+  describe('resourceById', () => {
+    it('drops actions that do not match the resourceName', () => {
+      const previousState = { byId: { 43: subj43  } };
 
-  it('returns the state as is when called with an unknown action', () => {
-    const previousState = {
-      byId: { 43: subj43  },
-    };
-    expect(subjectReducer(previousState, { type: 'TODO_ADD' })).toEqual(previousState);
-  });
+      expect(subjectReducer(previousState, {
+        resource: subj44,
+        resourceName: 'organization',
+        type: 'RESOURCE_ADD',
+      })).toEqual(previousState);
+    });
 
-  it('adds the subject to the state when called with SUBJECT_ADD', () => {
-    const previousState = {
-      byId: { 43: subj43  },
-    };
-    expect(subjectReducer(previousState, {
-      subject: subj44,
-      type: 'SUBJECT_ADD',
-    })).toEqual({
-      byId: {
-        43: subj43,
-        44: subj44,
-      },
+    it('uses actions that match the resourceName', () => {
+      const previousState = { byId: { 43: subj43  } };
+
+      expect(subjectReducer(previousState, {
+        resource: subj44,
+        resourceName: 'subject',
+        type: 'RESOURCE_ADD',
+      })).toEqual({ byId: { 43: subj43, 44: subj44 } });
     });
   });
 });

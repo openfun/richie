@@ -1,32 +1,32 @@
+import flow from 'lodash-es/flow';
+import get from 'lodash-es/get';
+import partialRight from 'lodash-es/partialRight';
 import { Reducer } from 'redux';
 
 import Organization from '../../types/Organization';
-import { OrganizationAdd } from './actions';
+import { ResourceAdd } from '../genericReducers/resourceById/actions';
+import {
+  byId,
+  initialState as resourceByIdInit,
+  ResourceByIdState,
+} from '../genericReducers/resourceById/resourceById';
 
-const initialState = {};
+const initialState = { ...resourceByIdInit };
 
-export interface OrganizationState {
-  byId?: {
-    [id: string]: Organization;
-  };
-}
+export type OrganizationState = ResourceByIdState<Organization>;
 
 export const organization: Reducer<OrganizationState> = (
   state: OrganizationState = initialState,
-  action?: OrganizationAdd,
+  action?: ResourceAdd<Organization> | { type: '' },
 ) => {
-  switch (action && action.type) {
-    case 'ORGANIZATION_ADD':
-      return {
-        ...state,
-        byId: {
-          ...state.byId,
-          [action.organization.id]: action.organization,
-        },
-      };
+  // Discriminate resource related actions by resource name
+  if (get(action, 'resourceName') &&
+      get(action, 'resourceName') !== 'organization'
+  ) {
+    return state;
   }
 
-  return state;
+  return flow([ partialRight(byId, action) ])(state, action);
 };
 
 export default organization;

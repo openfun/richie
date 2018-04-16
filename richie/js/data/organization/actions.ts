@@ -1,14 +1,11 @@
 import Organization from '../../types/Organization';
+import { ResourceAdd } from '../genericReducers/resourceById/actions';
 
-export interface OrganizationAdd {
-  organization: Organization;
-  type: 'ORGANIZATION_ADD';
-}
-
-export function addOrganization(organization: Organization): OrganizationAdd {
+export function addOrganization(organization: Organization): ResourceAdd<Organization> {
   return {
-    organization,
-    type: 'ORGANIZATION_ADD',
+    resource: organization,
+    resourceName: 'organization',
+    type: 'RESOURCE_ADD',
   };
 }
 

@@ -1,13 +1,10 @@
 import Subject from '../../types/Subject';
+import { ResourceAdd } from '../genericReducers/resourceById/actions';
 
-export interface SubjectAdd {
-  subject: Subject;
-  type: 'SUBJECT_ADD';
-}
-
-export function addSubject(subject: Subject): SubjectAdd {
+export function addSubject(subject: Subject): ResourceAdd<Subject> {
   return {
-    subject,
-    type: 'SUBJECT_ADD',
+    resource: subject,
+    resourceName: 'subject',
+    type: 'RESOURCE_ADD',
   };
 }
