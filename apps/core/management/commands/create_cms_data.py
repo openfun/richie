@@ -22,7 +22,7 @@ PAGES = {
          'slug_en': 'organizations', 'cms': True,
          'kwargs': {'template': 'organizations/cms/organization_list.html', }},
     'dashboard':
-        {'fr': "Mes courses", 'en': "Dashboard", 'slug_fr': 'dashboard', 'slug_en': 'dashboard',
+        {'fr': "Mes cours", 'en': "Dashboard", 'slug_fr': 'dashboard', 'slug_en': 'dashboard',
          'cms': False, 'kwargs': {'template': 'richie/fullwidth.html'}},
     'about':
         {'fr': "A propos", 'en': "About", 'slug_fr': 'apropos', 'slug_en': 'about', 'cms': True,
@@ -52,7 +52,6 @@ def create_cms_data():
     # root page
     root = create_page(
         title="Accueil",
-        slug='/',
         template='richie/fullwidth.html',
         language='fr',
         in_navigation=True,
@@ -68,10 +67,13 @@ def create_cms_data():
         slug='/',
         page=root
     )
+    root.publish('en')
+    root.set_as_homepage()
+    root.save()
 
     for name, page in PAGES.items():
 
-        page_fr = create_page(
+        base_page = create_page(
             title=page['fr'],
             slug=page['slug_fr'],
             language='fr',
@@ -88,9 +90,10 @@ def create_cms_data():
             language='en',
             title=page['en'],
             slug=page['slug_en'],
-            page=page_fr
+            page=base_page
         )
-        PAGES[name]['instance_fr'] = page_fr
+        base_page.publish('en')
+        PAGES[name]['instance_fr'] = base_page  # store the instance for later
 
     # Page object is unique among languages, i18n is handled by titles (which also handle slug)
     # and content plugins.
