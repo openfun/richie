@@ -1,12 +1,12 @@
 import * as React from 'react';
 
-import { CourseListGet } from '../../data/course/actions';
+import { ResourceListGet } from '../../data/genericSideEffects/getResourceList/actions';
 import Course from '../../types/Course';
 import CourseGlimpse from '../courseGlimpse/courseGlimpse';
 
 export interface CourseGlimpseListProps {
   courses: Course[];
-  requestCourses: () => CourseListGet;
+  requestCourses: () => ResourceListGet;
 }
 
 export class CourseGlimpseList extends React.Component<CourseGlimpseListProps> {

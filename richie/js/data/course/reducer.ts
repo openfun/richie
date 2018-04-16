@@ -10,7 +10,7 @@ import {
   initialState as resourceByIdInit,
   ResourceByIdState,
 } from '../genericReducers/resourceById/resourceById';
-import { CourseListGetSuccess } from './actions';
+import { ResourceListGetSuccess } from '../genericSideEffects/getResourceList/actions';
 
 const initialState = { ...resourceByIdInit };
 
@@ -27,12 +27,12 @@ export type CourseState = ResourceByIdState<Course> & {
 
 const courseReducerExtension: Reducer<CourseState> = (
   state: CourseState = initialState,
-  action?: ResourceAdd<Course> | CourseListGetSuccess | { type: '' },
+  action?: ResourceAdd<Course> | ResourceListGetSuccess<Course> | { type: '' },
 ) => {
   switch (action.type) {
 
     // Create or update the latest course list we fetched from the server
-    case 'COURSE_LIST_GET_SUCCESS':
+    case 'RESOURCE_LIST_GET_SUCCESS':
       const { objects, meta } = action.apiResponse;
       // Generate a generic representation of our query as a string with pagination params removed
       const { limit, offset = 0, ...cleanQuery } = action.params;
@@ -58,7 +58,7 @@ const courseReducerExtension: Reducer<CourseState> = (
 
 export const course: Reducer<CourseState> = (
   state: CourseState = initialState,
-  action?: ResourceAdd<Course> | CourseListGetSuccess | { type: '' },
+  action?: ResourceAdd<Course> | ResourceListGetSuccess<Course> | { type: '' },
 ) => {
   if (!action) { return state; } // Compiler needs help
 

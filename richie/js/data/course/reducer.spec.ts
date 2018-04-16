@@ -74,7 +74,7 @@ describe('data/course reducer', () => {
     });
   });
 
-  describe('COURSE_LIST_GET_SUCCESS', () => {
+  describe('RESOURCE_LIST_GET_SUCCESS', () => {
     it('creates a new query when there is none', () => {
       const previousState = {
         byId: { 43: course43 },
@@ -87,7 +87,7 @@ describe('data/course reducer', () => {
             objects: [ course43, course44 ],
           },
           params: { limit: 12, offset: 2 },
-          type: 'COURSE_LIST_GET_SUCCESS',
+          type: 'RESOURCE_LIST_GET_SUCCESS',
         },
       )).toEqual({
         byId: { 43: course43 },
@@ -108,7 +108,7 @@ describe('data/course reducer', () => {
             objects: [ course44, course43 ],
           },
           params: { limit: 2, match: 'some query', offset: 0 },
-          type: 'COURSE_LIST_GET_SUCCESS',
+          type: 'RESOURCE_LIST_GET_SUCCESS',
         },
       )).toEqual({
         byId: { 43: course43 },
@@ -150,7 +150,7 @@ describe('data/course reducer', () => {
             objects: [ course45 ],
           },
           params: { limit: 1, match: 'some query', offset: 2 },
-          type: 'COURSE_LIST_GET_SUCCESS',
+          type: 'RESOURCE_LIST_GET_SUCCESS',
         },
       )).toEqual({
         byId: { 43: course43 },

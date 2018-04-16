@@ -2,7 +2,7 @@ import get from 'lodash-es/get';
 import partial from 'lodash-es/partial';
 import { connect } from 'react-redux';
 
-import { getCourseList } from '../../data/course/actions';
+import { getResourceList } from '../../data/genericSideEffects/getResourceList/actions';
 import { RootState } from '../../data/rootReducer';
 import { CourseGlimpseList } from '../courseGlimpseList/courseGlimpseList';
 
@@ -24,7 +24,7 @@ export const mapStateToProps = (state: RootState) => {
 };
 
 const mapDispatchToProps = {
-  requestCourses: partial(getCourseList, { limit: 999 }),
+  requestCourses: partial(getResourceList, 'course', { limit: 999 }),
 };
 
 export const CourseGlimpseListContainer = connect(
