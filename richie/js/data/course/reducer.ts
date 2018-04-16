@@ -10,51 +10,12 @@ import {
   initialState as resourceByIdInit,
   ResourceByIdState,
 } from '../genericReducers/resourceById/resourceById';
+import { currentQuery, ResourceListState } from '../genericReducers/resourceList/resourceList';
 import { ResourceListGetSuccess } from '../genericSideEffects/getResourceList/actions';
 
 const initialState = { ...resourceByIdInit };
 
-export type CourseState = ResourceByIdState<Course> & {
-  currentQuery?: {
-    // A number-keyed object is more stable than an array to keep a list with a moving starting
-    // index and potential gaps throughout.
-    // NB: we still use string as the index type as keys of an objects are always converted to strings
-    items: { [index: string]: Course['id'] };
-    queryKey: string;
-    total_count: number;
-  };
-};
-
-const courseReducerExtension: Reducer<CourseState> = (
-  state: CourseState = initialState,
-  action?: ResourceAdd<Course> | ResourceListGetSuccess<Course> | { type: '' },
-) => {
-  switch (action.type) {
-
-    // Create or update the latest course list we fetched from the server
-    case 'RESOURCE_LIST_GET_SUCCESS':
-      const { objects, meta } = action.apiResponse;
-      // Generate a generic representation of our query as a string with pagination params removed
-      const { limit, offset = 0, ...cleanQuery } = action.params;
-      const queryKey = JSON.stringify(cleanQuery);
-
-      return {
-        ...state,
-        currentQuery: {
-          items: objects.reduce(
-            // Transform the array into an object with indexes as keys
-            (acc, item, index) => ({ ...acc, [offset + index]: item.id }),
-            // Extend the items list if we're receiving more items for the query we have in memory
-            // (e.g. for pagination), replace it otherwise
-            queryKey === get(state, 'currentQuery.queryKey') ? { ...state.currentQuery.items } : {},
-          ),
-          queryKey,
-          total_count: meta.total_count,
-        },
-      };
-  }
-  return state;
-};
+export type CourseState = ResourceByIdState<Course> & ResourceListState<Course>;
 
 export const course: Reducer<CourseState> = (
   state: CourseState = initialState,
@@ -71,7 +32,7 @@ export const course: Reducer<CourseState> = (
 
   return flow([
     partialRight(byId, action),
-    partialRight(courseReducerExtension, action),
+    partialRight(currentQuery, action),
   ])(state, action);
 };
 
