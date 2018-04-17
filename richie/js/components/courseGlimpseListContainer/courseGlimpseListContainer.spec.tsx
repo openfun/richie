@@ -48,6 +48,7 @@ describe('components/courseGlimpseListContainer', () => {
         course: {
           byId: { 43: course43, 44: course44 },
           currentQuery: {
+            facets: {},
             items: { 0: 44, 1: 43 },
             queryKey: '{}',
             total_count: 2,

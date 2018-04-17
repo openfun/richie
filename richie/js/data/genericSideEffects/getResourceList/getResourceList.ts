@@ -2,7 +2,7 @@ import partial from 'lodash-es/partial';
 import { call, put, takeEvery } from 'redux-saga/effects';
 
 import { API_ENDPOINTS } from '../../../settings.json';
-import { APIResponseListMeta } from '../../../types/api';
+import { APIResponseListFacets, APIResponseListMeta } from '../../../types/api';
 import Resource from '../../../types/Resource';
 import formatQueryString from '../../../utils/http/formatQueryString';
 import { addMultipleResources } from '../../genericReducers/resourceById/actions';
@@ -18,11 +18,8 @@ import {
 // Use a polymorphic response object so it can be elegantly consumed through destructuration
 export interface Response {
   error?: string;
-  meta?: {
-    limit: number;
-    offset: number;
-    total_count: number;
-  };
+  facets?: APIResponseListFacets;
+  meta?: APIResponseListMeta;
   objects?: Resource[];
 }
 

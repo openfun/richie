@@ -56,17 +56,19 @@ describe('data/genericReducers/resourceList reducer', () => {
           type: 'RESOURCE_LIST_GET_SUCCESS',
         },
       ))
-      .toEqual({ currentQuery: { items: { 2: 43, 3: 44 }, queryKey: '{}', total_count: 4 } });
+      // No facets in the apiResponse: we get an empty object in the state
+      .toEqual({ currentQuery: { facets: {}, items: { 2: 43, 3: 44 }, queryKey: '{}', total_count: 4 } });
     });
 
     it('replaces the existing query if the new one has different params', () => {
       const previousState = {
-        currentQuery: { items: { 2: 43, 3: 44 }, queryKey: '{}', total_count: 4 },
+        currentQuery: { facets: {}, items: { 2: 43, 3: 44 }, queryKey: '{}', total_count: 4 },
       };
       expect(currentQuery(
         previousState,
         {
           apiResponse: {
+            facets: { organizations: { 11: 1, 23: 1, 31: 1 } },
             meta: { limit: 2, offset: 0, total_count: 240 },
             objects: [ course44, course43 ],
           },
@@ -77,6 +79,8 @@ describe('data/genericReducers/resourceList reducer', () => {
       ))
       .toEqual({
         currentQuery: {
+          // Facets are copied over on the state as-is
+          facets: { organizations: { 11: 1, 23: 1, 31: 1 } },
           items: { 0: 44, 1: 43 },
           queryKey: '{"match":"some query"}',
           total_count: 240,
