@@ -5,7 +5,7 @@ import { organization, OrganizationState } from './organization/reducer';
 import { subject, SubjectState } from './subject/reducer';
 
 export interface RootState {
-  resources?: {
+  resources: {
     course?: CourseState;
     organization?: OrganizationState;
     subject?: SubjectState;
@@ -15,9 +15,9 @@ export interface RootState {
 export const rootReducer: Reducer<RootState> = (state, action) => {
   return {
     resources: {
-      course: course(state.resources && state.resources.course, action),
-      organization: organization(state.resources && state.resources.organization, action),
-      subject: subject(state.resources && state.resources.subject, action),
+      course: course(state.resources.course, action),
+      organization: organization(state.resources.organization, action),
+      subject: subject(state.resources.subject, action),
     },
   };
 };

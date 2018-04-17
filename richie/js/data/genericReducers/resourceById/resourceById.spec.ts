@@ -20,7 +20,7 @@ describe('data/genericReducers/resourceById reducer', () => {
   };
 
   it('returns an empty state for initialization', () => {
-    expect(resourceByIdReducer(undefined, undefined)).toEqual({ byId: {} });
+    expect(resourceByIdReducer({ byId: {} }, { type: '' })).toEqual({ byId: {} });
   });
 
   it('returns the state as is when called with an unknown action', () => {

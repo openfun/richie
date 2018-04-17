@@ -4,6 +4,7 @@ import partialRight from 'lodash-es/partialRight';
 import { Reducer } from 'redux';
 
 import Organization from '../../types/Organization';
+import { Maybe } from '../../utils/types';
 import { ResourceAdd } from '../genericReducers/resourceById/actions';
 import {
   byId,
@@ -15,7 +16,7 @@ import { ResourceListGetSuccess } from '../genericSideEffects/getResourceList/ac
 
 const initialState = { ...resourceByIdInit };
 
-export type OrganizationState = ResourceByIdState<Organization> & ResourceListState<Organization>;
+export type OrganizationState = Maybe<ResourceByIdState<Organization> & ResourceListState<Organization>>;
 
 export const organization: Reducer<OrganizationState> = (
   state: OrganizationState = initialState,

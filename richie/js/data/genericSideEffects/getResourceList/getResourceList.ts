@@ -61,8 +61,8 @@ export function* getList(action: ResourceListGet) {
   } else {
     // Add each individual resource to the state before we put the success action in
     // order to avoid race conditions / incomplete data sets
-    yield put(addMultipleResources(resourceName, objects));
-    yield put(didGetResourceList(resourceName, { meta, objects, ...restProps }, params));
+    yield put(addMultipleResources(resourceName, objects!));
+    yield put(didGetResourceList(resourceName, { meta: meta!, objects: objects!, ...restProps }, params!));
   }
 }
 

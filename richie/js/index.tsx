@@ -10,6 +10,7 @@ import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
 // Import submodules so we don't get the whole of lodash in the bundle
+import get from 'lodash-es/get';
 import includes from 'lodash-es/includes';
 import startCase from 'lodash-es/startCase';
 
@@ -42,7 +43,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
   Array.prototype.forEach.call(document.querySelectorAll('.fun-react'),
   (element: Element) => {
     // Generate a component name. It should be a key of the componentLibrary object / ComponentLibrary interface
-    const componentName = startCase(element.className.match(/fun-react--([a-zA-Z-]*)/)[1] || '').split(' ').join('');
+    const componentName =
+      startCase(get(element.className.match(/fun-react--([a-zA-Z-]*)/), '[1]') || '')
+      .split(' ')
+      .join('');
     // Sanity check: only attempt to access and render components for which we do have a valid name
     if (isComponentName(componentName)) {
       // Do get the component dynamically. We know this WILL produce a valid component thanks to the type guard

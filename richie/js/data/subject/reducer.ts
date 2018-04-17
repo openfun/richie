@@ -4,6 +4,7 @@ import partialRight from 'lodash-es/partialRight';
 import { Reducer } from 'redux';
 
 import Subject from '../../types/Subject';
+import { Maybe } from '../../utils/types';
 import { ResourceAdd } from '../genericReducers/resourceById/actions';
 import {
   byId,
@@ -15,10 +16,10 @@ import { ResourceListGetSuccess } from '../genericSideEffects/getResourceList/ac
 
 const initialState = { ...resourceByIdInit };
 
-export type SubjectState = ResourceByIdState<Subject> & ResourceListState<Subject>;
+export type SubjectState = Maybe<ResourceByIdState<Subject> & ResourceListState<Subject>>;
 
 export const subject: Reducer<SubjectState> = (
-  state: SubjectState = initialState,
+  state = initialState,
   action?: ResourceAdd<Subject> | ResourceListGetSuccess<Subject> | { type: '' },
 ) => {
   if (!action) { return state; } // Compiler needs help

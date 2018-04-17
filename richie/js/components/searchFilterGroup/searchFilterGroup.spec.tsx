@@ -11,6 +11,7 @@ describe('components/searchFilterGroup', () => {
   it('renders the name of the filter', () => {
     const filter = {
       humanName: 'Example filter',
+      machineName: 'example-filter',
       values: [],
     } as FilterDefinition;
     const wrapper = shallow(<SearchFilterGroup filter={filter} />);

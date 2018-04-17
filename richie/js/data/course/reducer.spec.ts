@@ -42,7 +42,7 @@ describe('data/course reducer', () => {
   };
 
   it('returns an empty state for initialization', () => {
-    expect(courseReducer(undefined, undefined)).toEqual({ byId: {} });
+    expect(courseReducer(undefined, { type: '' })).toEqual({ byId: {} });
   });
 
   it('returns the state as is when called with an unknown action', () => {

@@ -6,7 +6,7 @@ import rootSaga from './rootSaga';
 
 const sagaMiddleware = createSagaMiddleware();
 
-export default function configureStore(preloadedState: RootState = {}) {
+export default function configureStore(preloadedState: RootState) {
   const store = createStore(
     rootReducer,
     preloadedState,

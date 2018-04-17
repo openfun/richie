@@ -4,7 +4,7 @@ import { mapStateToProps } from './searchFilterGroupContainer';
 
 describe('components/searchFilterGroupContainer', () => {
   it('mapStateToProps returns a FilterDefinition for a hardcoded filter group', () => {
-    expect(mapStateToProps({}, { machineName: 'new' }))
+    expect(mapStateToProps({ resources: {} }, { machineName: 'new' }))
     .toEqual({
       filter: {
         humanName: 'New courses',
