@@ -5,7 +5,7 @@ import { API_ENDPOINTS } from '../../../settings.json';
 import { APIResponseListMeta } from '../../../types/api';
 import Resource from '../../../types/Resource';
 import formatQueryString from '../../../utils/http/formatQueryString';
-import { addResource } from '../../genericReducers/resourceById/actions';
+import { addMultipleResources } from '../../genericReducers/resourceById/actions';
 import { RootState } from '../../rootReducer';
 import {
   didGetResourceList,
@@ -64,9 +64,7 @@ export function* getList(action: ResourceListGet) {
   } else {
     // Add each individual resource to the state before we put the success action in
     // order to avoid race conditions / incomplete data sets
-    for (const resource of objects) {
-      yield put(addResource(resourceName, resource));
-    }
+    yield put(addMultipleResources(resourceName, objects));
     yield put(didGetResourceList(resourceName, { meta, objects, ...restProps }, params));
   }
 }
