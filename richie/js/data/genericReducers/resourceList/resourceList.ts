@@ -37,10 +37,7 @@ export function currentQuery<R extends Resource>(
         currentQuery: {
           items: objects.reduce(
             // Transform the array into an object with indexes as keys
-            (acc, item, index) => ({ ...acc, [offset + index]: item.id }),
-            // Extend the items list if we're receiving more items for the query we have in memory
-            // (e.g. for pagination), replace it otherwise
-            queryKey === get(state, 'currentQuery.queryKey') ? { ...state.currentQuery.items } : {},
+            (acc, item, index) => ({ ...acc, [offset + index]: item.id }), {},
           ),
           queryKey,
           total_count: meta.total_count,
