@@ -72,7 +72,7 @@ describe('data/genericSideEffects/getResourceList saga', () => {
       .then((response) => {
         // The correct request given parameters is performed
         expect(mockFetch).toHaveBeenCalledWith(
-          '/api/v1.0/course?limit=2&offset=43',
+          '/api/v1.0/course/?limit=2&offset=43',
           { headers: { 'Content-Type': 'application/json' },
         });
         // Our polymorphic response object is properly shaped

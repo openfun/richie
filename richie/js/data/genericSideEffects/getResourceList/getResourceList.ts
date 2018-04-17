@@ -36,7 +36,7 @@ export function fetchList(
   resourceName: keyof RootState['resources'],
   params?: ResourceListGet['params'],
 ): Promise<Response> {
-  const endpoint = API_ENDPOINTS.COURSE;
+  const endpoint = API_ENDPOINTS[resourceName];
 
   return fetch(endpoint + formatQueryString(params), {
     headers: {
