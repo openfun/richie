@@ -1,5 +1,5 @@
 import partial from 'lodash-es/partial';
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, put, takeEvery } from 'redux-saga/effects';
 
 import { API_ENDPOINTS } from '../../../settings.json';
 import { APIResponseListMeta } from '../../../types/api';
@@ -74,5 +74,5 @@ export function* getList(action: ResourceListGet) {
 export default function* watch() {
   // We can cancel ongoing requests whenever there's a new one: the user will not request several different sets
   // of filters of the same kind at the same time.
-  yield takeLatest('RESOURCE_LIST_GET', getList);
+  yield takeEvery('RESOURCE_LIST_GET', getList);
 }
