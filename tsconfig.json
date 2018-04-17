@@ -3,7 +3,7 @@
     "jsx": "react",
     "lib": [ "dom", "es5", "scripthost", "es2015.promise", "es2015.iterable" ],
     "module": "commonjs",
-    "noImplicitAny": true,
+    "strict": true,
     "sourceMap": true,
     "target": "es5"
   },
