@@ -1,7 +1,7 @@
 import partial from 'lodash-es/partial';
 import { call, put, takeLatest } from 'redux-saga/effects';
 
-import { addResource } from '../../genericReducers/resourceById/actions';
+import { addMultipleResources } from '../../genericReducers/resourceById/actions';
 import { didGetResourceList, failedToGetResourceList } from './actions';
 import { fetchList, getList, GetListSagaSpecifics } from './getResourceList';
 
@@ -128,8 +128,7 @@ describe('data/genericSideEffects/getResourceList saga', () => {
       // The call to fetch (the actual side-effect) is triggered
       expect(gen.next().value).toEqual(call(fetchList, 'course', action.params));
       // Both courses are added to the state
-      expect(gen.next(response).value).toEqual(put(addResource('course', response.objects[0])));
-      expect(gen.next().value).toEqual(put(addResource('course', response.objects[1])));
+      expect(gen.next(response).value).toEqual(put(addMultipleResources('course', response.objects)));
       // The success action is dispatched
       expect(gen.next().value).toEqual(put(didGetResourceList('course', response, action.params)));
     });

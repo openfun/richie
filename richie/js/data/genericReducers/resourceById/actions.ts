@@ -15,3 +15,20 @@ export function addResource(resourceName: keyof RootState['resources'], resource
     type: 'RESOURCE_ADD',
   };
 }
+
+export interface ResourceMultipleAdd<R extends Resource> {
+  type: 'RESOURCE_MULTIPLE_ADD';
+  resourceName: keyof RootState['resources'];
+  resources: R[];
+}
+
+export function addMultipleResources(
+  resourceName: keyof RootState['resources'],
+  resources: Resource[],
+): ResourceMultipleAdd<Resource> {
+  return {
+    resourceName,
+    resources,
+    type: 'RESOURCE_MULTIPLE_ADD',
+  };
+}
