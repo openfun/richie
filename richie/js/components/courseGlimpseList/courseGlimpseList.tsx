@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { ResourceListGet } from '../../data/genericSideEffects/getResourceList/actions';
 import Course from '../../types/Course';
-import CourseGlimpse from '../courseGlimpse/courseGlimpse';
+import CourseGlimpseContainer from '../courseGlimpseContainer/courseGlimpseContainer';
 
 export interface CourseGlimpseListProps {
   courses: Course[];
@@ -18,7 +18,7 @@ export class CourseGlimpseList extends React.Component<CourseGlimpseListProps> {
     const { courses } = this.props;
 
     return <div className="course-glimpse-list">
-      {courses.map((course) => <CourseGlimpse course={course} key={course.id} />)}
+      {courses.map((course) => <CourseGlimpseContainer course={course} key={course.id} />)}
     </div>;
   }
 }

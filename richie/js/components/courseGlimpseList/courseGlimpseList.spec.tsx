@@ -4,7 +4,7 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 
 import Course from '../../types/Course';
-import CourseGlimpse from '../courseGlimpse/courseGlimpse';
+import CourseGlimpseContainer from '../courseGlimpseContainer/courseGlimpseContainer';
 import CourseGlimpseList from './courseGlimpseList';
 
 describe('components/courseGlimpseList', () => {
@@ -14,7 +14,7 @@ describe('components/courseGlimpseList', () => {
     const wrapper = shallow(<CourseGlimpseList courses={courses} requestCourses={requestCourses} />);
 
     const [ course42, course43 ] = courses;
-    expect(wrapper.childAt(0).equals(<CourseGlimpse course={course42} />)).toBeTruthy();
-    expect(wrapper.childAt(1).equals(<CourseGlimpse course={course43} />)).toBeTruthy();
+    expect(wrapper.childAt(0).equals(<CourseGlimpseContainer course={course42} />)).toBeTruthy();
+    expect(wrapper.childAt(1).equals(<CourseGlimpseContainer course={course43} />)).toBeTruthy();
   });
 });

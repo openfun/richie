@@ -4,6 +4,7 @@ import { render } from 'enzyme';
 import * as React from 'react';
 
 import Course from '../../types/Course';
+import Organization from '../../types/Organization';
 import CourseGlimpse from './courseGlimpse';
 
 describe('components/courseGlimpse', () => {
@@ -13,10 +14,14 @@ describe('components/courseGlimpse', () => {
       thumbnails: { small: '/thumbs/small.png' },
       title: 'Course 42',
     } as Course;
-    const wrapper = render(<CourseGlimpse course={course} />);
+    const organization = {
+      name: 'Some Organization',
+    } as Organization;
+    const wrapper = render(<CourseGlimpse course={course} organization={organization} />);
 
     expect(wrapper.html()).toContain('Course 42');
     expect(wrapper.find('img').attr('src')).toContain('/thumbs/small.png');
     expect(wrapper.html()).toContain('Starts on Mar 12, 2018');
+    expect(wrapper.html()).toContain('Some Organization');
   });
 });
