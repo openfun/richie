@@ -10,15 +10,19 @@ import {
   initialState as resourceByIdInit,
   ResourceByIdState,
 } from '../genericReducers/resourceById/resourceById';
+import { currentQuery, ResourceListState } from '../genericReducers/resourceList/resourceList';
+import { ResourceListGetSuccess } from '../genericSideEffects/getResourceList/actions';
 
 const initialState = { ...resourceByIdInit };
 
-export type OrganizationState = ResourceByIdState<Organization>;
+export type OrganizationState = ResourceByIdState<Organization> & ResourceListState<Organization>;
 
 export const organization: Reducer<OrganizationState> = (
   state: OrganizationState = initialState,
-  action?: ResourceAdd<Organization> | { type: '' },
+  action?: ResourceAdd<Organization> | ResourceListGetSuccess<Organization> | { type: '' },
 ) => {
+  if (!action) { return state; } // Compiler needs help
+
   // Discriminate resource related actions by resource name
   if (get(action, 'resourceName') &&
       get(action, 'resourceName') !== 'organization'
@@ -26,7 +30,10 @@ export const organization: Reducer<OrganizationState> = (
     return state;
   }
 
-  return flow([ partialRight(byId, action) ])(state, action);
+  return flow([
+    partialRight(byId, action),
+    partialRight(currentQuery, action),
+  ])(state, action);
 };
 
 export default organization;
