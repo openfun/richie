@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import FilterDefinition from '../../types/FilterDefinition';
+import { FilterDefinition } from '../../types/FilterDefinition';
 import SearchFilter from '../searchFilter/searchFilter';
 
 export interface SearchFilterGroupProps {
@@ -13,7 +13,7 @@ export const SearchFilterGroup = (props: SearchFilterGroupProps) => {
   return <div className="search-filter-group">
     <h3 className="search-filter-group__title">{humanName}</h3>
     <div className="search-filter-group__list">
-      {values.map((value) => <SearchFilter filter={value} key={value[0]} /> )}
+      {values.map((value) => <SearchFilter filter={value} key={value.primaryKey} /> )}
     </div>
   </div>;
 };

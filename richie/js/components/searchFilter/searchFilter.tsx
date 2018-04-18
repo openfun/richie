@@ -1,15 +1,20 @@
 import * as React from 'react';
 
+import { FilterValue } from '../../types/FilterDefinition';
+
 export interface SearchFilterGroupProps {
-  filter: string[];
+  filter: FilterValue;
 }
 
 export const SearchFilter = (props: SearchFilterGroupProps) => {
   const { filter } = props;
 
   return <button className="search-filter">
-    {filter[1]}
-    <span className="search-filter__count">358</span>
+    {filter.humanName}
+    {filter.count || filter.count === 0 ?
+      <span className="search-filter__count">{filter.count}</span> :
+      ''
+    }
   </button>;
 };
 
