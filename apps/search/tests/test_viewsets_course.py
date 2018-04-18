@@ -77,7 +77,7 @@ class CourseViewsetTestCase(TestCase):
                 'total': 90,
             },
             'aggregations': {
-                'organizations': {
+                'organization': {
                     'buckets': [
                         {'key': '1', 'doc_count': 7},
                         {'key': '2', 'doc_count': 9},
@@ -93,15 +93,15 @@ class CourseViewsetTestCase(TestCase):
         self.assertEqual(response.data, {
             'meta': {'count': 2, 'offset': 10, 'total_count': 90},
             'objects': ['Course #89', 'Course #94'],
-            'facets': {'organizations': {'1': 7, '2': 9}},
+            'facets': {'organization': {'1': 7, '2': 9}},
         })
         # The ES connector was called with appropriate arguments for the client's request
         mock_search.assert_called_with(
             body={
                 'query': {'match_all': {}},
                 'aggs': {
-                    'organizations': {'terms': {'field': 'organizations'}},
-                    'subjects': {'terms': {'field': 'subjects'}}
+                    'organization': {'terms': {'field': 'organizations'}},
+                    'subject': {'terms': {'field': 'subjects'}}
                 },
             },
             doc_type='course',
@@ -124,7 +124,7 @@ class CourseViewsetTestCase(TestCase):
                 'total': 35,
             },
             'aggregations': {
-                'subjects': {
+                'subject': {
                     'buckets': [
                         {'key': '11', 'doc_count': 17},
                         {'key': '21', 'doc_count': 19},
@@ -140,7 +140,7 @@ class CourseViewsetTestCase(TestCase):
         self.assertEqual(response.data, {
             'meta': {'count': 2, 'offset': 20, 'total_count': 35},
             'objects': ['Course #523', 'Course #861'],
-            'facets': {'subjects': {'11': 17, '21': 19}},
+            'facets': {'subject': {'11': 17, '21': 19}},
         })
         # The ES connector was called with appropriate arguments for the client's request
         mock_search.assert_called_with(
@@ -153,8 +153,8 @@ class CourseViewsetTestCase(TestCase):
                     }
                 },
                 'aggs': {
-                    'organizations': {'terms': {'field': 'organizations'}},
-                    'subjects': {'terms': {'field': 'subjects'}}
+                    'organization': {'terms': {'field': 'organizations'}},
+                    'subject': {'terms': {'field': 'subjects'}}
                 },
 
             },
@@ -178,13 +178,13 @@ class CourseViewsetTestCase(TestCase):
                 'total': 29,
             },
             'aggregations': {
-                'organizations': {
+                'organization': {
                     'buckets': [
                         {'key': '13', 'doc_count': 21},
                         {'key': '15', 'doc_count': 13},
                     ],
                 },
-                'subjects': {
+                'subject': {
                     'buckets': [
                         {'key': '12', 'doc_count': 3},
                         {'key': '22', 'doc_count': 5},
@@ -201,8 +201,8 @@ class CourseViewsetTestCase(TestCase):
             'meta': {'count': 2, 'offset': 0, 'total_count': 29},
             'objects': ['Course #221', 'Course #42'],
             'facets': {
-                'organizations': {'13': 21, '15': 13},
-                'subjects': {'12': 3, '22': 5},
+                'organization': {'13': 21, '15': 13},
+                'subject': {'12': 3, '22': 5},
             },
         })
         # The ES connector was called with appropriate arguments for the client's request
@@ -210,8 +210,8 @@ class CourseViewsetTestCase(TestCase):
             body={
                 'query': {'terms': {'organizations': [13, 15]}},
                 'aggs': {
-                    'organizations': {'terms': {'field': 'organizations'}},
-                    'subjects': {'terms': {'field': 'subjects'}}
+                    'organization': {'terms': {'field': 'organizations'}},
+                    'subject': {'terms': {'field': 'subjects'}}
                 },
             },
             doc_type='course',
@@ -235,7 +235,7 @@ class CourseViewsetTestCase(TestCase):
                 'total': 12,
             },
             'aggregations': {
-                'organizations': {
+                'organization': {
                     'buckets': [
                         {'key': '3', 'doc_count': 6},
                         {'key': '14', 'doc_count': 7},
@@ -251,15 +251,15 @@ class CourseViewsetTestCase(TestCase):
         self.assertEqual(response.data, {
             'meta': {'count': 2, 'offset': 0, 'total_count': 12},
             'objects': ['Course #37', 'Course #98'],
-            'facets': {'organizations': {'3': 6, '14': 7}},
+            'facets': {'organization': {'3': 6, '14': 7}},
         })
         # The ES connector was called with appropriate arguments for the client's request
         mock_search.assert_called_with(
             body={
                 'query': {'terms': {'organizations': [3]}},
                 'aggs': {
-                    'organizations': {'terms': {'field': 'organizations'}},
-                    'subjects': {'terms': {'field': 'subjects'}}
+                    'organization': {'terms': {'field': 'organizations'}},
+                    'subject': {'terms': {'field': 'subjects'}}
                 },
             },
             doc_type='course',
@@ -288,7 +288,7 @@ class CourseViewsetTestCase(TestCase):
                 'total': 7,
             },
             'aggregations': {
-                'subjects': {
+                'subject': {
                     'buckets': [
                         {'key': '61', 'doc_count': 4},
                         {'key': '122', 'doc_count': 5},
@@ -304,7 +304,7 @@ class CourseViewsetTestCase(TestCase):
         self.assertEqual(response.data, {
             'meta': {'count': 2, 'offset': 0, 'total_count': 7},
             'objects': ['Course #13', 'Course #15'],
-            'facets': {'subjects': {'61': 4, '122': 5}},
+            'facets': {'subject': {'61': 4, '122': 5}},
         })
         # The ES connector was called with appropriate arguments for the client's request
         mock_search.assert_called_with(
@@ -322,8 +322,8 @@ class CourseViewsetTestCase(TestCase):
                     }
                 },
                 'aggs': {
-                    'organizations': {'terms': {'field': 'organizations'}},
-                    'subjects': {'terms': {'field': 'subjects'}}
+                    'organization': {'terms': {'field': 'organizations'}},
+                    'subject': {'terms': {'field': 'subjects'}}
                 },
             },
             doc_type='course',
@@ -354,7 +354,7 @@ class CourseViewsetTestCase(TestCase):
                 'total': 3,
             },
             'aggregations': {
-                'subjects': {
+                'subject': {
                     'buckets': [
                         {'key': '42', 'doc_count': 3},
                         {'key': '84', 'doc_count': 1},
@@ -370,7 +370,7 @@ class CourseViewsetTestCase(TestCase):
         self.assertEqual(response.data, {
             'meta': {'count': 2, 'offset': 0, 'total_count': 3},
             'objects': ['Course #999', 'Course #888'],
-            'facets': {'subjects': {'42': 3, '84': 1}},
+            'facets': {'subject': {'42': 3, '84': 1}},
         })
         # The ES connector was called with appropriate arguments for the client's request
         mock_search.assert_called_with(
@@ -394,8 +394,8 @@ class CourseViewsetTestCase(TestCase):
                     'terms': {'subjects': [42, 84]}
                 },
                 'aggs': {
-                    'organizations': {'terms': {'field': 'organizations'}},
-                    'subjects': {'terms': {'field': 'subjects'}}
+                    'organization': {'terms': {'field': 'organizations'}},
+                    'subject': {'terms': {'field': 'subjects'}}
                 },
             },
             doc_type='course',

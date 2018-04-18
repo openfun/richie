@@ -72,10 +72,10 @@ class CourseViewSet(ViewSet):
 
         # Build organizations and subjects terms aggregations for our query
         aggs = {
-            'organizations': {
+            'organization': {
                 'terms': {'field': 'organizations'},
             },
-            'subjects': {
+            'subject': {
                 'terms': {'field': 'subjects'},
             },
         }
