@@ -1,5 +1,5 @@
 """
-Organizations factories
+Core factories
 """
 
 from django.conf import settings
