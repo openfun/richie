@@ -1,37 +1,66 @@
 """
 create_cms_data management command
 """
-from cms import models as cms_models
-from cms.api import add_plugin, create_page, create_title
+import logging
+
 from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 from django.contrib.sites.models import Site
 
-from apps.organizations.models import OrganizationPage, get_organization_data
+from cms import models as cms_models
 
+from apps.organizations.factories import OrganizationFactory
+from apps.organizations.models import Organization, OrganizationPage
+from ...helpers import create_i18n_page
 
-PAGES = {
-    'news':
-        {'fr': "Actualité", 'en': "News", 'slug_fr': 'news_fr', 'slug_en': 'news', 'cms': True,
-         'kwargs': {'template': 'richie/fullwidth.html'}},
-    'courses':
-        {'fr': "Tous les cours", 'en': "All courses", 'slug_fr': 'courses_fr',
-         'slug_en': 'courses', 'cms': True, 'kwargs': {'template': 'richie/fullwidth.html'}},
-    'universities':
-        {'fr': "Etablissements", 'en': "Universities", 'slug_fr': 'organizations_fr',
-         'slug_en': 'organizations', 'cms': True,
-         'kwargs': {'template': 'organizations/cms/organization_list.html', }},
-    'dashboard':
-        {'fr': "Mes cours", 'en': "Dashboard", 'slug_fr': 'dashboard', 'slug_en': 'dashboard',
-         'cms': False, 'kwargs': {'template': 'richie/fullwidth.html'}},
-    'about':
-        {'fr': "A propos", 'en': "About", 'slug_fr': 'apropos', 'slug_en': 'about', 'cms': True,
-         'kwargs': {'template': 'richie/fullwidth.html'}},
+logger = logging.getLogger('richie.commands.core.create_cms_data')
+
+NB_ORGANIZATIONS = 8
+PAGE_INFOS = {
+    'home': {
+        'content': {
+            'en': 'Home',
+            'fr': 'Accueil',
+        },
+        'kwargs': {'template': 'richie/fullwidth.html'}
+    },
+    'news': {
+        'content': {
+            'en': 'News',
+            'fr': 'Actualités',
+        },
+        'kwargs': {'template': 'richie/fullwidth.html'}
+    },
+    'courses': {
+        'content': {
+            'en': 'All courses',
+            'fr': 'Tous les cours',
+        },
+        'kwargs': {'template': 'richie/fullwidth.html'}
+    },
+    'organizations': {
+        'content': {
+            'en': 'Organizations',
+            'fr': 'Etablissements',
+        },
+        'kwargs': {'template': 'richie/fullwidth.html', }
+    },
+    'dashboard': {
+        'content': {
+            'en': 'Dashboard',
+            'fr': 'Tableau de bord',
+        },
+        'cms': False,
+        'kwargs': {'template': 'richie/fullwidth.html'}
+    },
+    'about': {
+        'content': {
+            'en': 'About',
+            'fr': 'A propos',
+        },
+        'kwargs': {'template': 'richie/fullwidth.html'}
+    },
 }
-
-ORGANIZATIONS = ['1', '2', '3', '4', '5']  # ids of real organizations
-
-FUN_ORGANIZATION_API = "https://www.fun-mooc.fr/fun/api/universities/"
 
 
 def clear_cms_data():
@@ -42,102 +71,43 @@ def clear_cms_data():
     cms_models.CMSPlugin.objects.all().delete()
     cms_models.Placeholder.objects.all().delete()
     OrganizationPage.objects.all().delete()
+    Organization.objects.all().delete()
 
 
 def create_cms_data():
-    """Create base CMS data"""
+    """
+    Create a simple site tree structure for developpers to work in realistic environment.
 
+    We create multilingual pages, add organizations under the related page and add
+    plugins to each page.
+    """
     site = Site.objects.get(id=1)
 
-    # root page
-    root = create_page(
-        title="Accueil",
-        template='richie/fullwidth.html',
-        language='fr',
-        in_navigation=True,
-        reverse_id='index',
-        soft_root=True,
-        site=site,
-        published=True,
-    )
-
-    create_title(
-        language='en',
-        title='Home',
-        slug='/',
-        page=root
-    )
-    root.publish('en')
-    root.set_as_homepage()
-    root.save()
-
-    for name, page in PAGES.items():
-
-        base_page = create_page(
-            title=page['fr'],
-            slug=page['slug_fr'],
-            language='fr',
-            menu_title=page['fr'],
-            parent=root,
-            reverse_id=page['slug_fr'],
+    # Create pages as described in PAGES_INFOS
+    pages_created = {}
+    for name, info in PAGE_INFOS.items():
+        page = create_i18n_page(
+            info['content'],
+            is_homepage=(name == 'home'),
             in_navigation=True,
             published=True,
             site=site,
-            **page['kwargs']
+            **info['kwargs'],
         )
 
-        create_title(
-            language='en',
-            title=page['en'],
-            slug=page['slug_en'],
-            page=base_page
-        )
-        base_page.publish('en')
-        PAGES[name]['instance_fr'] = base_page  # store the instance for later
+        pages_created[name] = page
 
-    # Page object is unique among languages, i18n is handled by titles (which also handle slug)
-    # and content plugins.
-    # We create a single page, with french as language, wich will create its Title object
-    # for french, then we create a Title object for english
-    # Finnaly we add to the main content placeholder a text plugin for each language
-    for organization_key in ORGANIZATIONS:
-        datas = get_organization_data(organization_key)
-        organizations_page = PAGES['universities']['instance_fr']
-        page = create_page(
-            title=datas['name'],
-            slug=datas['code'],
-            language='fr',
-            parent=organizations_page,
-            template='organizations/cms/organization.html',
-            reverse_id=datas['code'],
-            in_navigation=True,
+    # Create organizations under the `organizations` page
+    for i, _ in enumerate(range(NB_ORGANIZATIONS)):
+        page = create_i18n_page(
+            {'en': 'Organization #{:d}'.format(i), 'fr': 'Organisation #{:d}'.format(i)},
+            parent=pages_created['organizations'],
             published=True,
             site=site,
+            template='organizations/cms/organization_detail.html',
         )
-
-        create_title(
-            language='en',
-            title=datas['name']+"_en",
-            slug=datas['code']+"_en",
-            page=page,
-        )
-        OrganizationPage(organization_key=organization_key, extended_object=page).save()
-
-        placeholder = page.placeholders.get(slot='maincontent')
-        add_plugin(
-            placeholder=placeholder,
-            plugin_type='TextPlugin',
-            language='fr',
-            body='Le Lorem ipsum...',
-        )
-        add_plugin(
-            placeholder=placeholder,
-            plugin_type='TextPlugin',
-            language='en',
-            body='The Lorem ipsum...',
-        )
-        page.published = True
-        page.save()
+        organization = OrganizationFactory()
+        OrganizationPage.objects.create(organization=organization, extended_object=page)
 
 
 class Command(BaseCommand):
@@ -166,4 +136,4 @@ class Command(BaseCommand):
         clear_cms_data()
         create_cms_data()
 
-        self.stdout.write("done")
+        logger.info('done')
