@@ -168,7 +168,6 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
 
         # FUN stuff
         'apps.core',
-        'apps.organizations',
         'apps.search',
         'plugins.large_banner',
     )
@@ -217,8 +216,6 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
     PARLER_LANGUAGES = CMS_LANGUAGES
 
     CMS_TEMPLATES = (
-        ('organizations/cms/organization.html', _("Organization page")),
-        ('organizations/cms/organization_list.html', _("Organizations list page")),
         ('search/search.html', _('Search')),
         ('richie/fullwidth.html', 'Fullwidth'),
     )
