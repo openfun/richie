@@ -30,9 +30,9 @@ class LargeBannerTests(TestCase):
         """
         A "logo" is required when instantiating a large banner.
         """
-        with self.assertRaises(ValueError) as cm:
+        with self.assertRaises(IntegrityError) as cm:
             LargeBannerFactory(logo=None)
-        self.assertIn('"LargeBanner.logo" does not allow null values.', str(cm.exception))
+        self.assertIn('null value in column "logo_id" violates not-null', str(cm.exception))
 
     # pylint: disable=deprecated-method,no-member
     # Due to a conflict between Django 1.11 and pylint with the assertRegex method that is
