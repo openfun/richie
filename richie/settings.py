@@ -182,9 +182,11 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
     # Use "en" as default as it is the language that is most likely to be spoken by any visitor
     # when their preferred language, whatever it is, is unavailable
     LANGUAGES = (
-        ('en', _('en')),
-        ('fr', _('fr')),
+        ('en', _("English")),
+        ('fr', _("French")),
     )
+    LANGUAGES_DICT = dict(LANGUAGES)
+    LANGUAGE_NAME = LANGUAGES_DICT[LANGUAGE_CODE]
 
     # Django CMS settings
     CMS_LANGUAGES = {
@@ -199,7 +201,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
                 'public': True,
                 'code': 'en',
                 'hide_untranslated': False,
-                'name': _('en'),
+                'name': _("English"),
                 'fallbacks': ['fr'],
                 'redirect_on_fallback': True,
             },
@@ -207,7 +209,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
                 'public': True,
                 'code': 'fr',
                 'hide_untranslated': False,
-                'name': _('fr'),
+                'name': _("French"),
                 'fallbacks': ['en'],
                 'redirect_on_fallback': True,
             },
