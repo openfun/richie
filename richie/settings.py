@@ -175,7 +175,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
     # Group to add plugin to placeholder "Content"
     FUN_PLUGINS_GROUP = "Fun Plugins"
 
-    LANGUAGE_CODE = 'fr'
+    LANGUAGE_CODE = 'en'
     # Careful! Languages should be ordered by priority, as this tuple is used to get
     # fallback/default languages throughout the app.
     # Use "en" as default as it is the language that is most likely to be spoken by any visitor
