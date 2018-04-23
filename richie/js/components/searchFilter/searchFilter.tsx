@@ -2,11 +2,11 @@ import * as React from 'react';
 
 import { FilterValue } from '../../types/FilterDefinition';
 
-export interface SearchFilterGroupProps {
+export interface SearchFilterProps {
   filter: FilterValue;
 }
 
-export const SearchFilter = (props: SearchFilterGroupProps) => {
+export const SearchFilter = (props: SearchFilterProps) => {
   const { filter } = props;
 
   return <button className="search-filter">
