@@ -5,5 +5,10 @@ declare module '*settings.json' {
     subjects: string;
   };
 
+  export const API_LIST_DEFAULT_PARAMS: {
+    limit: number;
+    offset: number;
+  };
+
   export const SUPPORTED_LANGUAGES: string[];
 }

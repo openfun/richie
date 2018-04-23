@@ -13,6 +13,6 @@ export interface APIResponseListFacets {
 }
 
 export interface APIListCommonRequestParams {
-  limit?: number;
-  offset?: number;
+  limit: number;
+  offset: number;
 }

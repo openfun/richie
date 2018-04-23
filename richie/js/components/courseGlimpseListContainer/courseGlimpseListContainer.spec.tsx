@@ -50,7 +50,7 @@ describe('components/courseGlimpseListContainer', () => {
           currentQuery: {
             facets: {},
             items: { 0: 44, 1: 43 },
-            queryKey: '{}',
+            params: { limit: 2, offset: 0 },
             total_count: 2,
           },
         },

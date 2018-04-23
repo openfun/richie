@@ -24,7 +24,7 @@ describe('components/searchFilterGroupContainer', () => {
           currentQuery: {
             facets: { organizations: { 21: 3, 42: 15, 84: 7 } },
             items: {},
-            queryKey: '',
+            params: { limit: 20, offset: 0 },
             total_count: 22,
           },
         } as CoursesState,

@@ -1,10 +1,14 @@
 import get from 'lodash-es/get';
 
-import { APIResponseListFacets } from '../../../types/api';
+import { API_LIST_DEFAULT_PARAMS as defaultParams } from '../../../settings.json';
+import { APIListCommonRequestParams, APIResponseListFacets } from '../../../types/api';
 import Resource from '../../../types/Resource';
-import { ResourceListGetSuccess } from '../../genericSideEffects/getResourceList/actions';
+import { ResourceListGet, ResourceListGetSuccess } from '../../genericSideEffects/getResourceList/actions';
 
 export const initialState = {};
+
+export type ResourceListStateParams = APIListCommonRequestParams &
+  { [key: string]: string | number | null | Array<string | number> };
 
 export interface ResourceListState<R extends Resource> {
   currentQuery?: {
@@ -13,7 +17,7 @@ export interface ResourceListState<R extends Resource> {
     // index and potential gaps throughout.
     // NB: we still use string as the index type as keys of an objects are always converted to strings
     items: { [index: string]: R['id'] };
-    queryKey: string;
+    params: ResourceListStateParams;
     total_count: number;
   };
 }
@@ -30,9 +34,8 @@ export function currentQuery<R extends Resource>(
     // Create or update the latest resource list we fetched from the server
     case 'RESOURCE_LIST_GET_SUCCESS':
       const { facets = {}, objects, meta } = action.apiResponse;
-      // Generate a generic representation of our query as a string with pagination params removed
-      const { limit, offset = 0, ...cleanQuery } = action.params;
-      const queryKey = JSON.stringify(cleanQuery);
+      // Get the limit/offset from our params, set our defaults
+      const { limit = defaultParams.limit, offset = defaultParams.offset, ...restParams } = action.params;
 
       return {
         ...state,
@@ -42,7 +45,8 @@ export function currentQuery<R extends Resource>(
             // Transform the array into an object with indexes as keys
             (acc, item, index) => ({ ...acc, [offset + index]: item.id }), {},
           ),
-          queryKey,
+          // Copy back the params, now with proper defaults on limit/offset
+          params: { ...restParams, limit, offset },
           total_count: meta.total_count,
         },
       };

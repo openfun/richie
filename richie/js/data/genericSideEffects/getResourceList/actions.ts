@@ -3,7 +3,7 @@ import Resource from '../../../types/Resource';
 import { RootState } from '../../rootReducer';
 
 export interface ResourceListGet {
-  params?: APIListCommonRequestParams & { [key: string]: string | number | null | Array<string | number> };
+  params?: Partial<APIListCommonRequestParams> & { [key: string]: string | number | null | Array<string | number> };
   resourceName: keyof RootState['resources'];
   type: 'RESOURCE_LIST_GET';
 }
@@ -38,7 +38,7 @@ export function failedToGetResourceList(
 
 export interface ResourceListGetSuccess<R extends Resource> {
   apiResponse: { facets?: APIResponseListFacets, meta: APIResponseListMeta, objects: R[] };
-  params: APIListCommonRequestParams & { [key: string]: string | number | null | Array<string | number> };
+  params: Partial<APIListCommonRequestParams> & { [key: string]: string | number | null | Array<string | number> };
   resourceName: keyof RootState['resources'];
   type: 'RESOURCE_LIST_GET_SUCCESS';
 }

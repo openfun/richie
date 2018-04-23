@@ -4,6 +4,10 @@
     "organizations": "/api/v1.0/organizations/",
     "subjects": "/api/v1.0/subjects/"
   },
+  "API_LIST_DEFAULT_PARAMS": {
+    "limit": 20,
+    "offset": 0
+  },
   "SUPPORTED_LANGUAGES": [
     "de",
     "en",
