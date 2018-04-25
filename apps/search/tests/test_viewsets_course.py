@@ -227,7 +227,7 @@ class CourseViewsetTestCase(TestCase):
         valid, is accepted (added after catching an error during manual testing)
         """
         factory = APIRequestFactory()
-        request = factory.get('/api/v1.0/course?organizations=3&limit=2')
+        request = factory.get('/api/v1.0/course?organizations=345&limit=2')
 
         mock_search.return_value = {
             'hits': {
@@ -256,7 +256,7 @@ class CourseViewsetTestCase(TestCase):
         # The ES connector was called with appropriate arguments for the client's request
         mock_search.assert_called_with(
             body={
-                'query': {'terms': {'organizations': [3]}},
+                'query': {'terms': {'organizations': [345]}},
                 'aggs': {
                     'organization': {'terms': {'field': 'organizations'}},
                     'subject': {'terms': {'field': 'subjects'}}

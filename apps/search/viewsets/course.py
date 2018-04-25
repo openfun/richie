@@ -24,13 +24,15 @@ class CourseViewSet(ViewSet):
         """
         # QueryDict/MultiValueDict breaks lists: we need to normalize them
         # Unpacking does not trigger the broken accessor so we get the proper value
-        params_form = CourseListForm({
+        params_form_values = {
             k: v[0] if len(v) == 1 else v for k, v in request.query_params.lists()
-        })
+        }
         # Use QueryDict/MultiValueDict as a shortcut to make sure we get arrays for these two
         # fields, which should be arrays even if their length is one
-        params_form.organizations = request.query_params.getlist('organizations')
-        params_form.subjects = request.query_params.getlist('subjects')
+        params_form_values['organizations'] = request.query_params.getlist('organizations')
+        params_form_values['subjects'] = request.query_params.getlist('subjects')
+        # Instantiate the form to allow validation/cleaning
+        params_form = CourseListForm(params_form_values)
 
         # Return a 400 with error information if the query params are not as expected
         if not params_form.is_valid():
