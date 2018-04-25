@@ -3,14 +3,23 @@
 
 {% block content %}
 
-<ul>
-    {% for page in current_page.children.all %}
-    <p>{{page.get_title}}</p>
-    <a href="{{ page.get_absolute_url }}">
-        <img src="{{ page.organizationpage.get_data.logo }}">
-    </a>
+<div class="universities universities-page">
+
+<div class="introduction">
+{% placeholder "" %}
+</div>
+
+<ul class="universities-list">
+    {% for page in current_page.get_child_pages %}
+    <li>
+        <a href="{{ page.get_absolute_url }}">{{ page.get_title }}({{ page.id }})<br>
+            <img class="university-logo" src="/media/{{ page.organizationpage.organization.logo }}">
+        </a>
+    </li>
     {% empty %}
     <p>{% trans "No items available" %}</p>
     {% endfor %}
 </ul>
 {% endblock content %}
+
+</div>
