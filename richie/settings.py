@@ -272,6 +272,15 @@ class Production(Base):
     ALLOWED_HOSTS = values.ListValue(None)
 
 
+class Feature(Production):
+    """
+    Feature environment settings
+
+    nota bene: it should inherit from the Production environment.
+    """
+    pass
+
+
 class Staging(Production):
     """
     Staging environment settings
