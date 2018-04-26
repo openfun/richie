@@ -261,8 +261,15 @@ class ContinuousIntegration(Test):
 
 
 class Production(Base):
-    """Production environment settings"""
-    pass
+    """Production environment settings
+
+    You must define the DJANGO_ALLOWED_HOSTS environment variable in Production
+    configuration (and derived configurations):
+
+    DJANGO_ALLOWED_HOSTS="foo.com,foo.fr"
+    """
+
+    ALLOWED_HOSTS = values.ListValue(None)
 
 
 class Staging(Production):
