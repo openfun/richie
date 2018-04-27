@@ -15,23 +15,20 @@ from apps.search.routes import API_PREFIX, urlpatterns as search_urlpatterns
 
 admin.autodiscover()
 
-urlpatterns = [
-    url(r'^sitemap\.xml$', sitemap,
-        {'sitemaps': {'cmspages': CMSSitemap}}),
-]
+urlpatterns = [url(r"^sitemap\.xml$", sitemap, {"sitemaps": {"cmspages": CMSSitemap}})]
 
-urlpatterns += [
-    url(r'^api/{}/'.format(API_PREFIX), include(search_urlpatterns)),
-]
+urlpatterns += [url(r"^api/{}/".format(API_PREFIX), include(search_urlpatterns))]
 
 urlpatterns += i18n_patterns(
-    url(r'^admin/', include(admin.site.urls)),  # NOQA
-    url(r'^', include('cms.urls')),
+    url(r"^admin/", include(admin.site.urls)), url(r"^", include("cms.urls"))  # NOQA
 )
 
 # This is only needed when using runserver.
 if settings.DEBUG:
     urlpatterns = [
-        url(r'^media/(?P<path>.*)$', serve,
-            {'document_root': settings.MEDIA_ROOT, 'show_indexes': True}),
-        ] + staticfiles_urlpatterns() + urlpatterns
+        url(
+            r"^media/(?P<path>.*)$",
+            serve,
+            {"document_root": settings.MEDIA_ROOT, "show_indexes": True},
+        )
+    ] + staticfiles_urlpatterns() + urlpatterns

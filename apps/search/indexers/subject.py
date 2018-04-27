@@ -14,13 +14,11 @@ class SubjectIndexer():
     Makes available the parameters the indexer requires as well as functions to shape
     objects getting into and out of ElasticSearch
     """
-    document_type = 'subject'
-    index_name = 'richie_subjects'
+    document_type = "subject"
+    index_name = "richie_subjects"
     mapping = {
-        'dynamic_templates': MULTILINGUAL_TEXT,
-        'properties': {
-            'image': {'type': 'text', 'index': False},
-        },
+        "dynamic_templates": MULTILINGUAL_TEXT,
+        "properties": {"image": {"type": "text", "index": False}},
     }
 
     def get_data_for_es(self, index, action):
@@ -31,17 +29,17 @@ class SubjectIndexer():
 
         for content_page in content_pages:
             try:
-                for subject in content_page['results']:
+                for subject in content_page["results"]:
                     yield {
-                        '_id': subject['id'],
-                        '_index': index,
-                        '_op_type': action,
-                        '_type': self.document_type,
-                        'image': subject['image'],
-                        'name': {'fr': subject['name']},
+                        "_id": subject["id"],
+                        "_index": index,
+                        "_op_type": action,
+                        "_type": self.document_type,
+                        "image": subject["image"],
+                        "name": {"fr": subject["name"]},
                     }
             except KeyError:
-                raise IndexerDataException('Unexpected data shape in subjects to index')
+                raise IndexerDataException("Unexpected data shape in subjects to index")
 
     @staticmethod
     def format_es_subject_for_api(es_subject, best_language):
@@ -50,7 +48,9 @@ class SubjectIndexer():
         API consumers
         """
         return {
-            'id': es_subject['_id'],
-            'image': es_subject['_source']['image'],
-            'name': get_best_field_language(es_subject['_source']['name'], best_language),
+            "id": es_subject["_id"],
+            "image": es_subject["_source"]["image"],
+            "name": get_best_field_language(
+                es_subject["_source"]["name"], best_language
+            ),
         }

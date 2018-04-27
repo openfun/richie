@@ -21,19 +21,9 @@ class LargeBannerPlugin(CMSPluginBase):
     module = settings.FUN_PLUGINS_GROUP
 
     fieldsets = (
-        (None, {
-            'fields': [
-                'title',
-                'background_image',
-                'logo',
-                'logo_alt_text',
-            ]
-        }),
+        (None, {"fields": ["title", "background_image", "logo", "logo_alt_text"]}),
     )
 
     def render(self, context, instance, placeholder):
-        context.update({
-            'instance': instance,
-            'placeholder': placeholder
-        })
+        context.update({"instance": instance, "placeholder": placeholder})
         return context

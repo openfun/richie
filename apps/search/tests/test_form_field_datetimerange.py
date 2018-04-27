@@ -16,12 +16,13 @@ class DatetimeRangeFieldTestCase(TestCase):
     Test whether our DatetimeRangeField returns the proper value when it is valid and properly
     reports any errors when it is invalid
     """
+
     def setUp(self):
         """
         Make sure all our tests are timezone-agnostic. As we're using datetimes, our tests would
         be dependent upon the host machine's timezone otherwise.
         """
-        timezone.activate('UTC')
+        timezone.activate("UTC")
 
     def test_no_input_optional(self):
         """
@@ -41,10 +42,7 @@ class DatetimeRangeFieldTestCase(TestCase):
         # None is not valid input when the field is required
         with self.assertRaises(ValidationError) as context:
             daterange.clean(None)
-        self.assertEqual(
-            context.exception.message,
-            'Missing required field',
-        )
+        self.assertEqual(context.exception.message, "Missing required field")
 
     def test_empty_array_input(self):
         """
@@ -54,11 +52,8 @@ class DatetimeRangeFieldTestCase(TestCase):
         daterange = DatetimeRangeField(required=True)
         # The field raises an error, an empty array is the same as no value
         with self.assertRaises(ValidationError) as context:
-            daterange.clean('[]')
-        self.assertEqual(
-            context.exception.message,
-            'Empty datetimerange is invalid',
-        )
+            daterange.clean("[]")
+        self.assertEqual(context.exception.message, "Empty datetimerange is invalid")
 
     def test_broken_input_python_list(self):
         """
@@ -70,10 +65,7 @@ class DatetimeRangeFieldTestCase(TestCase):
         # query string param), and raises an error
         with self.assertRaises(ValidationError) as context:
             daterange.clean([])
-        self.assertEqual(
-            context.exception.message,
-            'Missing required field',
-        )
+        self.assertEqual(context.exception.message, "Missing required field")
 
     def test_broken_input_not_json(self):
         """
@@ -84,10 +76,7 @@ class DatetimeRangeFieldTestCase(TestCase):
         # The field is supposed to receive JSON, not eval-able python code
         with self.assertRaises(ValidationError) as context:
             daterange.clean('("2018-01-01T06:00:00Z", null)')
-        self.assertEqual(
-            context.exception.message,
-            'Invalid JSON formatting',
-        )
+        self.assertEqual(context.exception.message, "Invalid JSON formatting")
 
     def test_array_of_null_input(self):
         """
@@ -98,10 +87,9 @@ class DatetimeRangeFieldTestCase(TestCase):
         daterange = DatetimeRangeField(required=False)
         # We need at least one datetime: the field raises an error
         with self.assertRaises(ValidationError) as context:
-            daterange.clean('[null, null]')
+            daterange.clean("[null, null]")
         self.assertEqual(
-            context.exception.message,
-            'A valid datetimerange needs at least 1 datetime',
+            context.exception.message, "A valid datetimerange needs at least 1 datetime"
         )
 
     def test_start_and_null_input(self):
@@ -113,7 +101,7 @@ class DatetimeRangeFieldTestCase(TestCase):
         # The field is marked as valid and returns a tuple with a datetime and None
         self.assertEqual(
             daterange.clean('["2018-01-01T06:00:00Z", null]'),
-            (arrow.get(datetime(2018, 1, 1, 6, 0), 'UTC'), None),
+            (arrow.get(datetime(2018, 1, 1, 6, 0), "UTC"), None),
         )
 
     def test_null_and_end_input(self):
@@ -125,7 +113,7 @@ class DatetimeRangeFieldTestCase(TestCase):
         # The field is marked as valid and returns a tuple with None and a datetime
         self.assertEqual(
             daterange.clean('[null, "2018-01-31T06:00:00Z"]'),
-            (None, arrow.get(datetime(2018, 1, 31, 6, 0), 'UTC')),
+            (None, arrow.get(datetime(2018, 1, 31, 6, 0), "UTC")),
         )
 
     def test_start_and_end_input(self):
@@ -139,8 +127,8 @@ class DatetimeRangeFieldTestCase(TestCase):
         self.assertEqual(
             daterange.clean('["2018-01-01T06:00:00Z", "2018-01-31T06:00:00Z"]'),
             (
-                arrow.get(datetime(2018, 1, 1, 6, 0), 'UTC'),
-                arrow.get(datetime(2018, 1, 31, 6, 0), 'UTC'),
+                arrow.get(datetime(2018, 1, 1, 6, 0), "UTC"),
+                arrow.get(datetime(2018, 1, 31, 6, 0), "UTC"),
             ),
         )
 
@@ -155,10 +143,16 @@ class DatetimeRangeFieldTestCase(TestCase):
         # Pass 2 ISO dates with different timezone data. The field is valid and returns a tuple
         # with two datetimes and properly set timezones
         self.assertEqual(
-            daterange.clean('["2018-01-01T06:00:00+02:00", "2018-01-31T06:00:00+05:00"]'),
+            daterange.clean(
+                '["2018-01-01T06:00:00+02:00", "2018-01-31T06:00:00+05:00"]'
+            ),
             (
-                arrow.get(datetime(2018, 1, 1, 6, 0), 'Africa/Cairo'),  # A timezone with +2h
-                arrow.get(datetime(2018, 1, 31, 6, 0), 'Indian/Kerguelen'),  # A timezone with +5h
+                arrow.get(
+                    datetime(2018, 1, 1, 6, 0), "Africa/Cairo"
+                ),  # A timezone with +2h
+                arrow.get(
+                    datetime(2018, 1, 31, 6, 0), "Indian/Kerguelen"
+                ),  # A timezone with +5h
             ),
         )
 
@@ -173,6 +167,5 @@ class DatetimeRangeFieldTestCase(TestCase):
         with self.assertRaises(ValidationError) as context:
             daterange.clean('[null, "Mardi 27 mars à 16 heures heure de Paris"]')
         self.assertEqual(
-            context.exception.message,
-            'Invalid datetime format; use ISO 8601',
+            context.exception.message, "Invalid datetime format; use ISO 8601"
         )

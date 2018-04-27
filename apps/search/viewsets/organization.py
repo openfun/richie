@@ -27,51 +27,53 @@ class OrganizationViewSet(ViewSet):
 
         # Return a 400 with error information if the query params are not as expected
         if not query_params_form.is_valid():
-            return Response(status=400, data={'errors': query_params_form.errors})
+            return Response(status=400, data={"errors": query_params_form.errors})
 
         # Build a query that matches on the organization name field if it was passed by the client
         # Note: test_elasticsearch_feature.py needs to be updated whenever the search call
         # is updated and makes use new features.
-        if query_params_form.cleaned_data.get('name'):
+        if query_params_form.cleaned_data.get("name"):
             search_payload = {
-                'query': {
-                    'match': {
-                        'name.fr': {
-                            'query': query_params_form.cleaned_data.get('name'),
-                            'analyzer': 'french',
-                        },
-                    },
-                },
+                "query": {
+                    "match": {
+                        "name.fr": {
+                            "query": query_params_form.cleaned_data.get("name"),
+                            "analyzer": "french",
+                        }
+                    }
+                }
             }
         # Build a match_all query by default
         else:
-            search_payload = {'query': {'match_all': {}}}
+            search_payload = {"query": {"match_all": {}}}
 
         query_response = settings.ES_CLIENT.search(
             index=OrganizationIndexer.index_name,
             doc_type=OrganizationIndexer.document_type,
             body=search_payload,
             # Directly pass meta-params through as arguments to the ES client
-            from_=query_params_form.cleaned_data.get('offset') or 0,
-            size=query_params_form.cleaned_data.get('limit') or settings.ES_DEFAULT_PAGE_SIZE,
+            from_=query_params_form.cleaned_data.get("offset") or 0,
+            size=query_params_form.cleaned_data.get("limit")
+            or settings.ES_DEFAULT_PAGE_SIZE,
         )
 
         # Format the response in a consumer-friendly way
         # NB: if there are 0 hits the query_response is formatted the exact same way, only the
         # .hits.hits array is empty.
         response_object = {
-            'meta': {
-                'count': len(query_response['hits']['hits']),
-                'offset': query_params_form.cleaned_data.get('offset') or 0,
-                'total_count': query_response['hits']['total']
+            "meta": {
+                "count": len(query_response["hits"]["hits"]),
+                "offset": query_params_form.cleaned_data.get("offset") or 0,
+                "total_count": query_response["hits"]["total"],
             },
-            'objects': [
+            "objects": [
                 OrganizationIndexer.format_es_organization_for_api(
                     organization,
                     # Get the best language to return multilingual fields
                     get_language_from_request(request),
-                ) for organization in query_response['hits']['hits']
-            ]
+                )
+                for organization in query_response["hits"]["hits"]
+            ],
         }
 
         return Response(response_object)

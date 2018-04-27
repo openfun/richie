@@ -20,48 +20,39 @@ class ApiConsumptionTestCase(TestCase):
         Happy path: the API responds as intended and we get to yield the successive pages
         """
         response_page_1 = {
-            'count': 51,
-            'results': [{'id': 42, 'name': 'Stub Forty-Two'}],
+            "count": 51, "results": [{"id": 42, "name": "Stub Forty-Two"}]
         }
         responses.add(
-            method='GET',
-            url='https://example.com/api/stub?page=1&rpp=50',
+            method="GET",
+            url="https://example.com/api/stub?page=1&rpp=50",
             match_querystring=True,
             json=response_page_1,
         )
 
         response_page_2 = {
-            'count': 51,
-            'results': [{'id': 44, 'name': 'Stub Forty-Four'}],
+            "count": 51, "results": [{"id": 44, "name": "Stub Forty-Four"}]
         }
         responses.add(
-            method='GET',
-            url='https://example.com/api/stub?page=2&rpp=50',
+            method="GET",
+            url="https://example.com/api/stub?page=2&rpp=50",
             match_querystring=True,
             json=response_page_2,
         )
 
-        content_pages = list(walk_api_json_list('https://example.com/api/stub'))
+        content_pages = list(walk_api_json_list("https://example.com/api/stub"))
 
-        self.assertEqual(
-            content_pages,
-            [response_page_1, response_page_2],
-        )
+        self.assertEqual(content_pages, [response_page_1, response_page_2])
 
     @responses.activate
     def test_walk_api_json_list_with_error_status(self):
         """
         Error case: the API responds with an HTTP error code
         """
-        responses.add(
-            method='GET',
-            url='https://example.com/api/stub',
-            status=500,
-        )
+        responses.add(method="GET", url="https://example.com/api/stub", status=500)
 
         # The call raised the correct exception
         with self.assertRaises(ApiConsumingException):
-            list(walk_api_json_list('https://example.com/api/stub'))
+            list(walk_api_json_list("https://example.com/api/stub"))
 
     @responses.activate
     def test_walk_api_json_list_with_invalid_json(self):
@@ -69,14 +60,14 @@ class ApiConsumptionTestCase(TestCase):
         Error case: the API did not return valid JSON
         """
         responses.add(
-            method='GET',
-            url='https://example.com/api/stub',
+            method="GET",
+            url="https://example.com/api/stub",
             status=200,
-            body='broken_json',
+            body="broken_json",
         )
 
         with self.assertRaises(ApiConsumingException):
-            list(walk_api_json_list('https://example.com/api/stub'))
+            list(walk_api_json_list("https://example.com/api/stub"))
 
     @responses.activate
     def test_walk_api_json_list_with_incorrect_count_path(self):
@@ -84,13 +75,11 @@ class ApiConsumptionTestCase(TestCase):
         Error case: our count argument is not where we expected to find it
         """
         responses.add(
-            method='GET',
-            url='https://example.com/api/stub',
+            method="GET",
+            url="https://example.com/api/stub",
             status=200,
-            json={
-                'results': [{'id': 42, 'name': 'Stub Forty-Two'}],
-            },
+            json={"results": [{"id": 42, "name": "Stub Forty-Two"}]},
         )
 
         with self.assertRaises(ApiConsumingException):
-            list(walk_api_json_list('https://example.com/api/stub'))
+            list(walk_api_json_list("https://example.com/api/stub"))

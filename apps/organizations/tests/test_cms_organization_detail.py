@@ -13,15 +13,14 @@ class OrganizationCMSTestCase(TestCase):
     """
     End-to-end test suite to validate the content and Ux of the organization detail view
     """
+
     def test_organization_cms_published_content(self):
         """
         Validate that the important elements are displayed once a page is published
         """
         organization = OrganizationFactory(name="la Sorbonne", logo="my_logo.jpg")
         page = create_page(
-            'La Sorbonne',
-            'organizations/cms/organization_detail.html',
-            'en',
+            "La Sorbonne", "organizations/cms/organization_detail.html", "en"
         )
         OrganizationPage.objects.create(organization=organization, extended_object=page)
 
@@ -31,21 +30,12 @@ class OrganizationCMSTestCase(TestCase):
         self.assertEqual(response.status_code, 404)
 
         # Now publish the page and check that it is now visible
-        page.publish('en')
+        page.publish("en")
         response = self.client.get(url)
         self.assertContains(
-            response,
-            "<title>La Sorbonne</title>",
-            status_code=200,
-            html=True,
+            response, "<title>La Sorbonne</title>", status_code=200, html=True
         )
+        self.assertContains(response, "<h1>La Sorbonne</h1>", html=True)
         self.assertContains(
-            response,
-            "<h1>La Sorbonne</h1>",
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<img src="/media/my_logo.jpg" alt="La Sorbonne logo">',
-            html=True,
+            response, '<img src="/media/my_logo.jpg" alt="La Sorbonne logo">', html=True
         )

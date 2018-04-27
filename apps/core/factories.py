@@ -18,9 +18,9 @@ class UserFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = settings.AUTH_USER_MODEL
 
-    username = factory.Faker('user_name')
-    email = factory.Faker('email')
-    password = make_password('password')
+    username = factory.Faker("user_name")
+    email = factory.Faker("email")
+    password = make_password("password")
 
 
 class FilerImageFactory(factory.django.DjangoModelFactory):
@@ -33,4 +33,4 @@ class FilerImageFactory(factory.django.DjangoModelFactory):
 
     owner = factory.SubFactory(UserFactory)
     file = factory.django.ImageField()
-    original_filename = factory.Faker('file_name', category='image')
+    original_filename = factory.Faker("file_name", category="image")

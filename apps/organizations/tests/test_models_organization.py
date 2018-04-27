@@ -17,6 +17,7 @@ class OrganizationTestCase(TestCase):
     """
     Unit test suite to validate the behavior of the Organization model
     """
+
     def test_organization_fields_id(self):
         """
         The `id` field should be a UUID
@@ -37,17 +38,17 @@ class OrganizationTestCase(TestCase):
         """
         The `name` field should be limited to 255 characters
         """
-        OrganizationFactory(name='a'*255)
+        OrganizationFactory(name="a" * 255)
         with self.assertRaises(DataError):
-            OrganizationFactory(name='a'*256)
+            OrganizationFactory(name="a" * 256)
 
     def test_organization_fields_code_normalization(self):
         """
         The `code` field should be normalized to improve its uniqueness
         Test with a chinese character, an emoji and a french ç...
         """
-        organization = OrganizationFactory(code=' r5G yç👷学pm 44 ')
-        self.assertEqual(organization.code, 'R5G-YÇ学PM-44')
+        organization = OrganizationFactory(code=" r5G yç👷学pm 44 ")
+        self.assertEqual(organization.code, "R5G-YÇ学PM-44")
 
     def test_organization_fields_code_required(self):
         """
@@ -60,17 +61,17 @@ class OrganizationTestCase(TestCase):
         """
         The `code` field should be unique
         """
-        OrganizationFactory(code='the-unique-code')
+        OrganizationFactory(code="the-unique-code")
         with self.assertRaises(IntegrityError):
-            OrganizationFactory(code='the-unique-code')
+            OrganizationFactory(code="the-unique-code")
 
     def test_organization_fields_code_max_length(self):
         """
         The `code` field should be limited to 100 characters
         """
-        OrganizationFactory(code='a'*100)
+        OrganizationFactory(code="a" * 100)
         with self.assertRaises(DataError):
-            OrganizationFactory(code='a'*101)
+            OrganizationFactory(code="a" * 101)
 
     def test_organization_fields_logo_not_required(self):
         """
@@ -85,9 +86,9 @@ class OrganizationTestCase(TestCase):
         The str representation should be built with name and code fields only
         No queries to associated models should be generated
         """
-        organization = Organization(name='Sorbonne', code='SOR')
+        organization = Organization(name="Sorbonne", code="SOR")
         with self.assertNumQueries(0):
-            self.assertEqual(str(organization), 'Organization: Sorbonne (SOR)')
+            self.assertEqual(str(organization), "Organization: Sorbonne (SOR)")
 
     def test_organization_get_page_exists(self):
         """
@@ -95,13 +96,11 @@ class OrganizationTestCase(TestCase):
         retrieve the draft version of the page.
         """
         page = create_page(
-            'La Sorbonne',
-            'organizations/cms/organization_detail.html',
-            'en',
+            "La Sorbonne", "organizations/cms/organization_detail.html", "en"
         )
-        organization = OrganizationFactory(name='Sorbonne', code='SOR')
+        organization = OrganizationFactory(name="Sorbonne", code="SOR")
         OrganizationPage.objects.create(organization=organization, extended_object=page)
-        page.publish('en')
+        page.publish("en")
 
         # Check that the page exists in 2 version (draft an published)
         self.assertEqual(Page.objects.count(), 2)
@@ -119,5 +118,5 @@ class OrganizationTestCase(TestCase):
         Trying to retrieve the page from an organization should return "None" if it
         does not exist.
         """
-        organization = OrganizationFactory(name='Sorbonne', code='SOR')
+        organization = OrganizationFactory(name="Sorbonne", code="SOR")
         self.assertIsNone(organization.get_page())

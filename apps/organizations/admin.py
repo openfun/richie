@@ -11,7 +11,7 @@ class OrganizationAdmin(admin.ModelAdmin):
     """
     Admin class for the Organization model
     """
-    list_display = ['name', 'code', 'view_in_cms']
+    list_display = ["name", "code", "view_in_cms"]
 
     # pylint: disable=no-self-use
     def view_in_cms(self, organization):
@@ -23,11 +23,11 @@ class OrganizationAdmin(admin.ModelAdmin):
         page = organization.get_page()
         if page:
             return '<a href="{url:s}" target="_blank">{anchor!s}</a>'.format(
-                anchor=_("View"),
-                url=page.get_absolute_url(),
+                anchor=_("View"), url=page.get_absolute_url()
             )
         # If there is no page, we display "(no page)" as often seen in Django
-        return '({t!s})'.format(t=_("no page"))
+        return "({t!s})".format(t=_("no page"))
+
     view_in_cms.allow_tags = True
     view_in_cms.short_description = _("View organization in the CMS")
 

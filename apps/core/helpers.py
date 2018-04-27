@@ -29,7 +29,7 @@ def create_i18n_page(content, is_homepage=False, **kwargs):
         title=content[first_language],
         slug=slug,
         reverse_id=slug,
-        **kwargs,
+        **kwargs
     )
 
     if is_homepage is True:
@@ -42,20 +42,20 @@ def create_i18n_page(content, is_homepage=False, **kwargs):
             menu_title=content[language],
             title=content[language],
             slug=slugify(content[language]),
-            page=page
+            page=page,
         )
         # Publish page in each additional language
-        if kwargs.get('published') is True:
+        if kwargs.get("published") is True:
             page.publish(language)
 
     # Add a plugin for each language (including the first language this time...)
-    placeholder = page.placeholders.get(slot='maincontent')
+    placeholder = page.placeholders.get(slot="maincontent")
     for language in content.keys():
         add_plugin(
-            body='[{:s}] Lorem ipsum...'.format(language),
+            body="[{:s}] Lorem ipsum...".format(language),
             language=language,
             placeholder=placeholder,
-            plugin_type='TextPlugin',
+            plugin_type="TextPlugin",
         )
 
     return page
