@@ -96,7 +96,7 @@ jobs:
 
       - save_cache:
           paths:
-            - ~/fun/docker/images/
+            - ~/fun/docker/images/dev/
           key: docker-debian-images-dev-{{ .Revision }}
 
   lint-back-flake8:
@@ -342,7 +342,7 @@ jobs:
       - run:
           name: Load images to docker engine
           command: |
-            docker load < docker/images/richie.tar
+            docker load < docker/images/dev/richie.tar
             docker load < docker/images/alpine/richie.tar
 
       # Login to DockerHub to Publish new images
