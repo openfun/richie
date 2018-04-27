@@ -23,12 +23,13 @@ def create_i18n_page(content, is_homepage=False, **kwargs):
     languages = list(content.keys())  # convert `dict_keys` to list so it can be poped
     first_language = languages.pop(0)
     slug = slugify(content[first_language])
+    reverse_id = kwargs.get("reverse_id", slug)
     page = create_page(
         language=first_language,
         menu_title=content[first_language],
         title=content[first_language],
         slug=slug,
-        reverse_id=slug,
+        reverse_id=reverse_id,
         **kwargs
     )
 

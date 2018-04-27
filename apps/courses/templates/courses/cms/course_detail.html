@@ -1,0 +1,30 @@
+{% extends "richie/fullwidth.html" %}
+{% load cms_tags i18n %}
+
+{% block content %}
+
+  <h1>{{ current_page.get_title }}</h1>
+
+  {% with current_page.coursepage.course as course %}
+
+  <ul>
+    {% for subject in course.subjects.all %}
+    <li>
+      {{ subject.name }}
+    </li>
+    {% endfor %}
+  </ul>
+
+{% if course.active_session %}
+  <span>{{ course.active_session }}</span>
+{% else %}
+  <span>No active session</span>
+{% endif %}
+
+  {% endwith %}
+
+  {% placeholder "course_video" %}
+
+  {% placeholder "course_syllabus" %}
+
+{% endblock content %}

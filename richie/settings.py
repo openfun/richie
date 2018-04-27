@@ -170,6 +170,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         "reversion",
         # FUN stuff
         "apps.core",
+        "apps.courses",
         "apps.organizations",
         "apps.search",
         "plugins.large_banner",
@@ -218,12 +219,24 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
     PARLER_LANGUAGES = CMS_LANGUAGES
 
     CMS_TEMPLATES = (
+        ("courses/cms/course_detail.html", _("Course page")),
+        ("courses/cms/course_subject_detail.html", _("Course subject page")),
         ("organizations/cms/organization_detail.html", _("Organization page")),
         ("search/search.html", _("Search")),
         ("richie/fullwidth.html", "Fullwidth"),
     )
     CMS_PERMISSION = True
-    CMS_PLACEHOLDER_CONF = {}
+
+    CMS_PLACEHOLDER_CONF = {
+        "courses/cms/course_detail.html course_video": {
+            "plugins": ("VideoPlayerPlugin",),
+            "limits": {"VideoPlayerPlugin": 1},
+            "name": _("Course teaser"),
+        },
+        "courses/cms/course_detail.html course_syllabus": {  # all plugins allowed
+            "name": _("Course Syllabus")
+        },
+    }
 
     # Thumbnails settings
     THUMBNAIL_PROCESSORS = (
