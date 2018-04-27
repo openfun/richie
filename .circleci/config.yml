@@ -155,6 +155,34 @@ jobs:
               run --rm --no-deps app \
                 pylint apps plugins richie
 
+  lint-back-black:
+
+    machine: true
+
+    working_directory: ~/fun
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - docker-debian-images-dev-{{ .Revision }}
+
+      - run:
+          name: Load images to docker engine
+          command: |
+            docker load < docker/images/dev/richie.tar
+
+      - run:
+          name: Lint code with black
+          command: |
+            docker-compose \
+              -p richie-test \
+              -f docker/compose/ci/docker-compose.yml \
+              --project-directory . \
+              run --rm --no-deps app \
+                black apps plugins richie --check
+
   test-back:
 
     machine: true
@@ -450,6 +478,12 @@ workflows:
       - build-dev:
           requires:
             - build
+          filters:
+            tags:
+              only: /.*/
+      - lint-back-black:
+          requires:
+            - build-dev
           filters:
             tags:
               only: /.*/
