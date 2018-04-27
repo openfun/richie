@@ -16,16 +16,12 @@ class CourseListForm(forms.Form):
     enrollment_start_date = DatetimeRangeField(required=False)
     limit = forms.IntegerField(required=False, min_value=1, initial=10)
     organizations = ArrayField(
-        required=False,
-        base_type=forms.IntegerField(min_value=0),
+        required=False, base_type=forms.IntegerField(min_value=0)
     )
     match = forms.CharField(required=False, min_length=3, max_length=200)
     offset = forms.IntegerField(required=False, min_value=0, initial=0)
     start_date = DatetimeRangeField(required=False)
-    subjects = ArrayField(
-        required=False,
-        base_type=forms.IntegerField(min_value=0),
-    )
+    subjects = ArrayField(required=False, base_type=forms.IntegerField(min_value=0))
 
 
 class OrganizationListForm(forms.Form):

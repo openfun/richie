@@ -41,8 +41,8 @@ class OrganizationWizardForm(forms.Form):
         """
         cleaned_data = super().clean()
         # If the slug is not explicitly set, generate it from the title
-        if cleaned_data.get('title') and not cleaned_data.get('slug'):
-            cleaned_data['slug'] = slugify(cleaned_data['title'])[:200]
+        if cleaned_data.get("title") and not cleaned_data.get("slug"):
+            cleaned_data["slug"] = slugify(cleaned_data["title"])[:200]
 
     def clean_title(self):
         """
@@ -50,15 +50,16 @@ class OrganizationWizardForm(forms.Form):
         general error because the wizard page does not display them...
         """
         if not Page.objects.filter(
-                reverse_id=ORGANIZATIONS_PAGE_REVERSE_ID,
-                publisher_is_draft=True,
+            reverse_id=ORGANIZATIONS_PAGE_REVERSE_ID, publisher_is_draft=True
         ).exists():
-            raise forms.ValidationError(_(
-                'You must first create an `organization list` page and set its `reverse_id` to '
-                '`organizations`.'
-            ))
+            raise forms.ValidationError(
+                _(
+                    "You must first create an `organization list` page and set its `reverse_id` "
+                    "to `organizations`."
+                )
+            )
         # Return the field value
-        return self.cleaned_data['title']
+        return self.cleaned_data["title"]
 
     def save(self):
         """
@@ -66,34 +67,32 @@ class OrganizationWizardForm(forms.Form):
         """
         # We checked in the "clean" method that the parent page exists. Let's retrieve it:
         parent = Page.objects.get(
-            reverse_id=ORGANIZATIONS_PAGE_REVERSE_ID,
-            publisher_is_draft=True,
+            reverse_id=ORGANIZATIONS_PAGE_REVERSE_ID, publisher_is_draft=True
         )
         # Create the Organization
-        organization = Organization.objects.create(name=self.cleaned_data['title'])
+        organization = Organization.objects.create(name=self.cleaned_data["title"])
 
         # Create the organization CMS page
         page = create_page(
-            title=self.cleaned_data['title'],
-            slug=self.cleaned_data['slug'],
+            title=self.cleaned_data["title"],
+            slug=self.cleaned_data["slug"],
             language=get_language(),
             parent=parent,
-            template='organizations/cms/organization_detail.html',
+            template="organizations/cms/organization_detail.html",
             published=False,  # The creation wizard should not publish the page
         )
         # Create the organization page extension
-        OrganizationPage.objects.create(
-            extended_object=page,
-            organization=organization,
-        )
+        OrganizationPage.objects.create(extended_object=page, organization=organization)
 
         return page
 
 
-wizard_pool.register(Wizard(
-    title=_("New Organization page"),
-    description=_("Create a new Organization page"),
-    model=Organization,
-    form=OrganizationWizardForm,
-    weight=200,
-))
+wizard_pool.register(
+    Wizard(
+        title=_("New Organization page"),
+        description=_("Create a new Organization page"),
+        model=Organization,
+        form=OrganizationWizardForm,
+        weight=200,
+    )
+)

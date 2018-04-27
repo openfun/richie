@@ -16,7 +16,7 @@ class LargeBannerFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = LargeBanner
 
-    title = factory.Faker('sentence', nb_words=8)
+    title = factory.Faker("sentence", nb_words=8)
     background_image = factory.SubFactory(FilerImageFactory)
     logo = factory.SubFactory(FilerImageFactory)
-    logo_alt_text = factory.Faker('sentence', nb_words=5)
+    logo_alt_text = factory.Faker("sentence", nb_words=5)

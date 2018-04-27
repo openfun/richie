@@ -7,7 +7,7 @@ from django.core.management.base import BaseCommand
 
 from ...index_manager import regenerate_indexes
 
-logger = logging.getLogger('richie.core.regenerate_indexes')
+logger = logging.getLogger("richie.core.regenerate_indexes")
 
 
 class Command(BaseCommand):
@@ -21,10 +21,10 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # Keep track of starting time for logging purposes
-        logger.info('Starting to regenerate ES indexes...')
+        logger.info("Starting to regenerate ES indexes...")
 
         # Delegate business logic to a dedicated module
         regenerate_indexes(logger)
 
         # Confirm operation success through a console log
-        logger.info('ES Indexes regenerated')
+        logger.info("ES Indexes regenerated")

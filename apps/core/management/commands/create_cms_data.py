@@ -13,52 +13,34 @@ from apps.organizations.factories import OrganizationFactory
 from apps.organizations.models import Organization, OrganizationPage
 from ...helpers import create_i18n_page
 
-logger = logging.getLogger('richie.commands.core.create_cms_data')
+logger = logging.getLogger("richie.commands.core.create_cms_data")
 
 NB_ORGANIZATIONS = 8
 PAGE_INFOS = {
-    'home': {
-        'content': {
-            'en': 'Home',
-            'fr': 'Accueil',
-        },
-        'kwargs': {'template': 'richie/fullwidth.html'}
+    "home": {
+        "content": {"en": "Home", "fr": "Accueil"},
+        "kwargs": {"template": "richie/fullwidth.html"},
     },
-    'news': {
-        'content': {
-            'en': 'News',
-            'fr': 'Actualités',
-        },
-        'kwargs': {'template': 'richie/fullwidth.html'}
+    "news": {
+        "content": {"en": "News", "fr": "Actualités"},
+        "kwargs": {"template": "richie/fullwidth.html"},
     },
-    'courses': {
-        'content': {
-            'en': 'All courses',
-            'fr': 'Tous les cours',
-        },
-        'kwargs': {'template': 'richie/fullwidth.html'}
+    "courses": {
+        "content": {"en": "All courses", "fr": "Tous les cours"},
+        "kwargs": {"template": "richie/fullwidth.html"},
     },
-    'organizations': {
-        'content': {
-            'en': 'Organizations',
-            'fr': 'Etablissements',
-        },
-        'kwargs': {'template': 'richie/fullwidth.html', }
+    "organizations": {
+        "content": {"en": "Organizations", "fr": "Etablissements"},
+        "kwargs": {"template": "richie/fullwidth.html"},
     },
-    'dashboard': {
-        'content': {
-            'en': 'Dashboard',
-            'fr': 'Tableau de bord',
-        },
-        'cms': False,
-        'kwargs': {'template': 'richie/fullwidth.html'}
+    "dashboard": {
+        "content": {"en": "Dashboard", "fr": "Tableau de bord"},
+        "cms": False,
+        "kwargs": {"template": "richie/fullwidth.html"},
     },
-    'about': {
-        'content': {
-            'en': 'About',
-            'fr': 'A propos',
-        },
-        'kwargs': {'template': 'richie/fullwidth.html'}
+    "about": {
+        "content": {"en": "About", "fr": "A propos"},
+        "kwargs": {"template": "richie/fullwidth.html"},
     },
 }
 
@@ -87,12 +69,12 @@ def create_cms_data():
     pages_created = {}
     for name, info in PAGE_INFOS.items():
         page = create_i18n_page(
-            info['content'],
-            is_homepage=(name == 'home'),
+            info["content"],
+            is_homepage=(name == "home"),
             in_navigation=True,
             published=True,
             site=site,
-            **info['kwargs'],
+            **info["kwargs"]
         )
 
         pages_created[name] = page
@@ -100,11 +82,14 @@ def create_cms_data():
     # Create organizations under the `organizations` page
     for i, _ in enumerate(range(NB_ORGANIZATIONS)):
         page = create_i18n_page(
-            {'en': 'Organization #{:d}'.format(i), 'fr': 'Organisation #{:d}'.format(i)},
-            parent=pages_created['organizations'],
+            {
+                "en": "Organization #{:d}".format(i),
+                "fr": "Organisation #{:d}".format(i),
+            },
+            parent=pages_created["organizations"],
             published=True,
             site=site,
-            template='organizations/cms/organization_detail.html',
+            template="organizations/cms/organization_detail.html",
         )
         organization = OrganizationFactory()
         OrganizationPage.objects.create(organization=organization, extended_object=page)
@@ -118,22 +103,24 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
 
         parser.add_argument(
-            '-f',
-            '--force',
-            action='store_true',
+            "-f",
+            "--force",
+            action="store_true",
             default=False,
             help="Force command execution despite DEBUG is set to False",
         )
 
     def handle(self, *args, **options):
 
-        if not settings.DEBUG and not options['force']:
-            raise CommandError((
-                "This command is not meant to be used in production environment "
-                "except you know what you are doing, if so use --force parameter"
-            ))
+        if not settings.DEBUG and not options["force"]:
+            raise CommandError(
+                (
+                    "This command is not meant to be used in production environment "
+                    "except you know what you are doing, if so use --force parameter"
+                )
+            )
 
         clear_cms_data()
         create_cms_data()
 
-        logger.info('done')
+        logger.info("done")

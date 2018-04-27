@@ -29,14 +29,16 @@ class CourseViewSet(ViewSet):
         }
         # Use QueryDict/MultiValueDict as a shortcut to make sure we get arrays for these two
         # fields, which should be arrays even if their length is one
-        params_form_values['organizations'] = request.query_params.getlist('organizations')
-        params_form_values['subjects'] = request.query_params.getlist('subjects')
+        params_form_values["organizations"] = request.query_params.getlist(
+            "organizations"
+        )
+        params_form_values["subjects"] = request.query_params.getlist("subjects")
         # Instantiate the form to allow validation/cleaning
         params_form = CourseListForm(params_form_values)
 
         # Return a 400 with error information if the query params are not as expected
         if not params_form.is_valid():
-            return Response(status=400, data={'errors': params_form.errors})
+            return Response(status=400, data={"errors": params_form.errors})
 
         # Note: test_elasticsearch_feature.py needs to be updated whenever the search call
         # is updated and makes use new features.
@@ -47,69 +49,70 @@ class CourseViewSet(ViewSet):
                 continue
 
             # The datetimerange fields are all translated to the ES query DSL the same way
-            if param in ['end_date', 'enrollment_end_date', 'enrollment_start_date', 'start_date']:
+            if param in [
+                "end_date", "enrollment_end_date", "enrollment_start_date", "start_date"
+            ]:
                 # Add the relevant range criteria to the query, creating the prop if necessary
                 start, end = value
-                query.setdefault('range', {})[param] = {
-                    'gte': start.datetime if start else None,
-                    'lte': end.datetime if end else None,
+                query.setdefault("range", {})[param] = {
+                    "gte": start.datetime if start else None,
+                    "lte": end.datetime if end else None,
                 }
 
             # organizations & subjects are both array of related element IDs
-            elif param in ['organizations', 'subjects']:
+            elif param in ["organizations", "subjects"]:
                 # Add the relevant term search to our query, creating the prop if necessary
-                query.setdefault('terms', {})[param] = value
+                query.setdefault("terms", {})[param] = value
 
             # Search is a regular (multilingual) match query
-            elif param == 'match':
-                query['multi_match'] = {
-                    'fields': ['short_description.*', 'title.*'],
-                    'query': value,
-                    'type': 'cross_fields',
+            elif param == "match":
+                query["multi_match"] = {
+                    "fields": ["short_description.*", "title.*"],
+                    "query": value,
+                    "type": "cross_fields",
                 }
 
         # Default to a match_all query
         if not query:
-            query = {'match_all': {}}
+            query = {"match_all": {}}
 
         # Build organizations and subjects terms aggregations for our query
         aggs = {
-            'organization': {
-                'terms': {'field': 'organizations'},
-            },
-            'subject': {
-                'terms': {'field': 'subjects'},
-            },
+            "organization": {"terms": {"field": "organizations"}},
+            "subject": {"terms": {"field": "subjects"}},
         }
 
         course_query_response = settings.ES_CLIENT.search(
             index=CourseIndexer.index_name,
             doc_type=CourseIndexer.document_type,
-            body={'aggs': aggs, 'query': query},
+            body={"aggs": aggs, "query": query},
             # Directly pass meta-params through as arguments to the ES client
-            from_=params_form.cleaned_data.get('offset') or 0,
-            size=params_form.cleaned_data.get('limit') or settings.ES_DEFAULT_PAGE_SIZE,
+            from_=params_form.cleaned_data.get("offset") or 0,
+            size=params_form.cleaned_data.get("limit") or settings.ES_DEFAULT_PAGE_SIZE,
         )
 
         response_object = {
-            'meta': {
-                'count': len(course_query_response['hits']['hits']),
-                'offset': params_form.cleaned_data.get('offset') or 0,
-                'total_count': course_query_response['hits']['total']
+            "meta": {
+                "count": len(course_query_response["hits"]["hits"]),
+                "offset": params_form.cleaned_data.get("offset") or 0,
+                "total_count": course_query_response["hits"]["total"],
             },
-            'objects': [
+            "objects": [
                 CourseIndexer.format_es_course_for_api(
                     es_course,
                     # Get the best language we can return multilingual fields in
                     get_language_from_request(request),
-                ) for es_course in course_query_response['hits']['hits']
+                )
+                for es_course in course_query_response["hits"]["hits"]
             ],
             # Transform facets (terms aggregations) into an easier-to-consume form: drop the meta
             # data and return objects with terms as keys and counts as values
-            'facets': {
+            "facets": {
                 field: {
-                    term_value['key']: term_value['doc_count'] for term_value in value['buckets']
-                } for field, value in course_query_response['aggregations'].items()
+                    term_value["key"]: term_value["doc_count"]
+                    for term_value in value["buckets"]
+                }
+                for field, value in course_query_response["aggregations"].items()
             },
         }
 
@@ -138,5 +141,5 @@ class CourseViewSet(ViewSet):
                 query_response,
                 # Get the best language we can return multilingual fields in
                 get_language_from_request(request),
-            ),
+            )
         )

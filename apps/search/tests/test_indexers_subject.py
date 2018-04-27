@@ -21,33 +21,29 @@ class SubjectIndexerTestCase(TestCase):
         Happy path: the data is fetched from the API properly formatted
         """
         responses.add(
-            method='GET',
-            url=settings.SUBJECT_API_ENDPOINT + '?page=1&rpp=50',
+            method="GET",
+            url=settings.SUBJECT_API_ENDPOINT + "?page=1&rpp=50",
             match_querystring=True,
             json={
-                'count': 51,
-                'results': [
-                    {
-                        'id': 62,
-                        'image': 'example_cs.png',
-                        'name': 'Computer Science',
-                    },
+                "count": 51,
+                "results": [
+                    {"id": 62, "image": "example_cs.png", "name": "Computer Science"}
                 ],
             },
         )
 
         responses.add(
-            method='GET',
-            url=settings.SUBJECT_API_ENDPOINT + '?page=2&rpp=50',
+            method="GET",
+            url=settings.SUBJECT_API_ENDPOINT + "?page=2&rpp=50",
             match_querystring=True,
             json={
-                'count': 51,
-                'results': [
+                "count": 51,
+                "results": [
                     {
-                        'id': 64,
-                        'image': 'example_se.png',
-                        'name': 'Software Engineering',
-                    },
+                        "id": 64,
+                        "image": "example_se.png",
+                        "name": "Software Engineering",
+                    }
                 ],
             },
         )
@@ -56,24 +52,24 @@ class SubjectIndexerTestCase(TestCase):
 
         # The results were properly formatted and passed to the consumer
         self.assertEqual(
-            list(indexer.get_data_for_es(index='some_index', action='some_action')),
+            list(indexer.get_data_for_es(index="some_index", action="some_action")),
             [
                 {
-                    '_id': 62,
-                    '_index': 'some_index',
-                    '_op_type': 'some_action',
-                    '_type': 'subject',
-                    'image': 'example_cs.png',
-                    'name': {'fr': 'Computer Science'},
+                    "_id": 62,
+                    "_index": "some_index",
+                    "_op_type": "some_action",
+                    "_type": "subject",
+                    "image": "example_cs.png",
+                    "name": {"fr": "Computer Science"},
                 },
                 {
-                    '_id': 64,
-                    '_index': 'some_index',
-                    '_op_type': 'some_action',
-                    '_type': 'subject',
-                    'image': 'example_se.png',
-                    'name': {'fr': 'Software Engineering'},
-                }
+                    "_id": 64,
+                    "_index": "some_index",
+                    "_op_type": "some_action",
+                    "_type": "subject",
+                    "image": "example_se.png",
+                    "name": {"fr": "Software Engineering"},
+                },
             ],
         )
 
@@ -83,17 +79,17 @@ class SubjectIndexerTestCase(TestCase):
         Error case: the API returned an object that is not shaped like an expected subject
         """
         responses.add(
-            method='GET',
+            method="GET",
             url=settings.SUBJECT_API_ENDPOINT,
             status=200,
             json={
-                'count': 1,
-                'results': [
+                "count": 1,
+                "results": [
                     {
-                        'id': 62,
+                        "id": 62,
                         # 'name': 'Lambda Calculus', missing name key will trigger the KeyError
-                        'image': 'example_lc.png',
-                    },
+                        "image": "example_lc.png",
+                    }
                 ],
             },
         )
@@ -101,27 +97,20 @@ class SubjectIndexerTestCase(TestCase):
         indexer = SubjectIndexer()
 
         with self.assertRaises(IndexerDataException):
-            list(indexer.get_data_for_es(index='some_index', action='some_action'))
+            list(indexer.get_data_for_es(index="some_index", action="some_action"))
 
     def test_format_es_subject_for_api(self):
         """
         Make sure format_es_subject_for_api returns a properly formatted subject
         """
         es_subject = {
-            '_id': 89,
-            '_source': {
-                'image': 'example.com/image.png',
-                'name': {
-                    'en': 'Computer science',
-                    'fr': 'Informatique',
-                },
+            "_id": 89,
+            "_source": {
+                "image": "example.com/image.png",
+                "name": {"en": "Computer science", "fr": "Informatique"},
             },
         }
         self.assertEqual(
-            SubjectIndexer.format_es_subject_for_api(es_subject, 'en'),
-            {
-                'id': 89,
-                'image': 'example.com/image.png',
-                'name': 'Computer science',
-            },
+            SubjectIndexer.format_es_subject_for_api(es_subject, "en"),
+            {"id": 89, "image": "example.com/image.png", "name": "Computer science"},
         )

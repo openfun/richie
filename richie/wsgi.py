@@ -9,8 +9,8 @@ https://docs.djangoproject.com/en/1.8/howto/deployment/wsgi/
 
 import os
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'richie.settings')
-os.environ.setdefault('DJANGO_CONFIGURATION', 'Development')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "richie.settings")
+os.environ.setdefault("DJANGO_CONFIGURATION", "Development")
 
 from configurations.wsgi import get_wsgi_application  # noqa, pylint: disable=wrong-import-position
 
