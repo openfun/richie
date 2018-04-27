@@ -42,9 +42,15 @@ build-ts: ## build TypeScript application
 .PHONY: build-ts
 
 lint-back: ## lint back-end python sources
+	${MAKE} lint-back-black;
 	${MAKE} lint-back-flake8;
 	${MAKE} lint-back-pylint;
 .PHONY: lint-back
+
+lint-back-black: ## lint back-end python sources with black
+	@echo 'lint:black started…';
+	@$(COMPOSE_TEST_RUN_APP) black apps plugins richie;
+.PHONY: lint-back-black
 
 lint-back-flake8: ## lint back-end python sources with flake8
 	@echo 'lint:flake8 started…';
