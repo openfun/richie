@@ -1,15 +1,15 @@
 -r base.txt
 
-black==18.4a3
-Faker==0.8.8
-factory-boy[django]==2.9.2
+black==18.4a4
+Faker==0.8.13
+factory-boy[django]==2.10.0
 flake8==3.5.0
-ipdb==0.10.3
-ipython==5.5.0
+ipdb==0.11
+ipython==6.3.1
 ipython-genutils==0.2.0
-pylint==1.8.2
-pylint-django==0.9.0
-pytest==3.3.2
+pylint==1.8.4
+pylint-django==0.11
+pytest==3.5.1
 pytest-cov==2.5.1
-pytest-django==3.1.2
-responses==0.8.1
+pytest-django==3.2.1
+responses==0.9.0
