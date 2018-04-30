@@ -46,6 +46,7 @@
   },
   "dependencies": {
     "bootstrap": "4.0.0",
+    "greenkeeper-lockfile": "^1.14.0",
     "lodash-es": "^4.17.4",
     "moment": "^2.20.1",
     "node-sass": "^4.7.2",

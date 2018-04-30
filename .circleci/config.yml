@@ -392,6 +392,27 @@ jobs:
             docker push fundocker/richie:${DOCKER_TAG}-alpine-dev
 
   # ---- Front-end jobs ----
+  # Generate an up-to-date yarn.lock file (sync with package.json) and commit
+  # the new lockfile to the current PR
+  lockfile-front:
+    docker:
+      - image: circleci/node:9-browsers
+    working_directory: ~/richie
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v3-front-dependencies-{{ checksum "package.json" }}
+          - v3-front-dependencies-
+      - run:
+          name: Install Greenkeeper-lockfile
+          command: yarn add greenkeeper-lockfile
+      - run:
+          name: Update yarn.lock
+          command: |
+            yarn greenkeeper-lockfile-update && \
+              yarn greenkeeper-lockfile-upload
+
   build-front:
     docker:
       - image: circleci/node:9-browsers
@@ -450,7 +471,13 @@ workflows:
       # Front-end jobs
       #
       # Build, lint and test the front-end apps
+      - lockfile-front:
+          filters:
+            tags:
+              only: /.*/
       - build-front:
+          requires:
+            - lockfile-front
           filters:
             tags:
               only: /.*/
