@@ -1,5 +1,7 @@
 # Installing FUN CMS
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/openfun/richie.svg)](https://greenkeeper.io/)
+
 [![CircleCI](https://circleci.com/gh/openfun/richie/tree/master.svg?style=svg)](https://circleci.com/gh/openfun/richie/tree/master)
 
 This document aims to list all needed steps to have a working `FUN CMS` installation on your laptop.
