@@ -54,7 +54,7 @@ prompt-toolkit==1.0.15
 psycopg2==2.7.4
 ptyprocess==0.5.2
 Pygments==2.2.0
-python-dateutil==2.6.1
+python-dateutil==2.7.2
 python-slugify==1.2.0
 pytz==2018.3
 requests==2.18.4
