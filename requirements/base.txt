@@ -42,7 +42,7 @@ djangocms-text-ckeditor==3.6.0
 djangocms-video==2.0.4
 djangorestframework==3.8.2
 easy-thumbnails==2.5
-elasticsearch==6.1.1
+elasticsearch==6.2.0
 gunicorn==19.7.1
 html5lib==0.9999999
 lxml==4.2.1
