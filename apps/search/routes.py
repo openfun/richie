@@ -3,9 +3,9 @@ API Routes exposed by our Search app
 """
 from rest_framework import routers
 
-from .viewsets.course import CourseViewSet
-from .viewsets.organization import OrganizationViewSet
-from .viewsets.subject import SubjectViewSet
+from .viewsets.courses import CoursesViewSet
+from .viewsets.organizations import OrganizationsViewSet
+from .viewsets.subjects import SubjectsViewSet
 
 
 # For now, we use URLPathVersioning to be consistent with fonzie. Fonzie uses it
@@ -17,9 +17,9 @@ API_PREFIX = r"v(?P<version>[0-9]+\.[0-9]+)"
 ROUTER = routers.SimpleRouter()
 
 # Define our app's routes with the router
-ROUTER.register(r"course", CourseViewSet, "course")
-ROUTER.register(r"organization", OrganizationViewSet, "organization")
-ROUTER.register(r"subject", SubjectViewSet, "subject")
+ROUTER.register(r"courses", CoursesViewSet, "courses")
+ROUTER.register(r"organizations", OrganizationsViewSet, "organizations")
+ROUTER.register(r"subjects", SubjectsViewSet, "subjects")
 
 # Use the standard name for our urlpatterns so urls.py can import it effortlessly
 urlpatterns = ROUTER.urls

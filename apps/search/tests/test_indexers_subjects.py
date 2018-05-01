@@ -6,10 +6,10 @@ from django.test import TestCase
 import responses
 
 from ..exceptions import IndexerDataException
-from ..indexers.subject import SubjectIndexer
+from ..indexers.subjects import SubjectsIndexer
 
 
-class SubjectIndexerTestCase(TestCase):
+class SubjectsIndexerTestCase(TestCase):
     """
     Test the get_data_for_es() function on the subject indexer, as well as our mapping,
     and especially dynamic mapping shape in ES
@@ -48,7 +48,7 @@ class SubjectIndexerTestCase(TestCase):
             },
         )
 
-        indexer = SubjectIndexer()
+        indexer = SubjectsIndexer()
 
         # The results were properly formatted and passed to the consumer
         self.assertEqual(
@@ -94,7 +94,7 @@ class SubjectIndexerTestCase(TestCase):
             },
         )
 
-        indexer = SubjectIndexer()
+        indexer = SubjectsIndexer()
 
         with self.assertRaises(IndexerDataException):
             list(indexer.get_data_for_es(index="some_index", action="some_action"))
@@ -111,6 +111,6 @@ class SubjectIndexerTestCase(TestCase):
             },
         }
         self.assertEqual(
-            SubjectIndexer.format_es_subject_for_api(es_subject, "en"),
+            SubjectsIndexer.format_es_subject_for_api(es_subject, "en"),
             {"id": 89, "image": "example.com/image.png", "name": "Computer science"},
         )

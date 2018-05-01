@@ -6,10 +6,10 @@ from django.test import TestCase
 import responses
 
 from ..exceptions import IndexerDataException
-from ..indexers.organization import OrganizationIndexer
+from ..indexers.organizations import OrganizationsIndexer
 
 
-class OrganizationIndexerTestCase(TestCase):
+class OrganizationsIndexerTestCase(TestCase):
     """
     Test the get_data_for_es() function on the organization indexer, as well as our mapping,
     and especially dynamic mapping shape in ES
@@ -56,7 +56,7 @@ class OrganizationIndexerTestCase(TestCase):
             },
         )
 
-        indexer = OrganizationIndexer()
+        indexer = OrganizationsIndexer()
 
         # The results were properly formatted and passed to the consumer
         self.assertEqual(
@@ -108,7 +108,7 @@ class OrganizationIndexerTestCase(TestCase):
             },
         )
 
-        indexer = OrganizationIndexer()
+        indexer = OrganizationsIndexer()
 
         with self.assertRaises(IndexerDataException):
             list(indexer.get_data_for_es(index="some_index", action="some_action"))
@@ -127,7 +127,7 @@ class OrganizationIndexerTestCase(TestCase):
             },
         }
         self.assertEqual(
-            OrganizationIndexer.format_es_organization_for_api(es_organization, "en"),
+            OrganizationsIndexer.format_es_organization_for_api(es_organization, "en"),
             {
                 "banner": "example.com/banner.png",
                 "code": "univ-paris-13",

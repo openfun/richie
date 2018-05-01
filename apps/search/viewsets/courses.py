@@ -8,10 +8,10 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
 from ..forms import CourseListForm
-from ..indexers.course import CourseIndexer
+from ..indexers.courses import CoursesIndexer
 
 
-class CourseViewSet(ViewSet):
+class CoursesViewSet(ViewSet):
     """
     A simple viewset with GET endpoints to fetch courses
     See API Blueprint for details on consumer use
@@ -78,13 +78,13 @@ class CourseViewSet(ViewSet):
 
         # Build organizations and subjects terms aggregations for our query
         aggs = {
-            "organization": {"terms": {"field": "organizations"}},
-            "subject": {"terms": {"field": "subjects"}},
+            "organizations": {"terms": {"field": "organizations"}},
+            "subjects": {"terms": {"field": "subjects"}},
         }
 
         course_query_response = settings.ES_CLIENT.search(
-            index=CourseIndexer.index_name,
-            doc_type=CourseIndexer.document_type,
+            index=CoursesIndexer.index_name,
+            doc_type=CoursesIndexer.document_type,
             body={"aggs": aggs, "query": query},
             # Directly pass meta-params through as arguments to the ES client
             from_=params_form.cleaned_data.get("offset") or 0,
@@ -98,7 +98,7 @@ class CourseViewSet(ViewSet):
                 "total_count": course_query_response["hits"]["total"],
             },
             "objects": [
-                CourseIndexer.format_es_course_for_api(
+                CoursesIndexer.format_es_course_for_api(
                     es_course,
                     # Get the best language we can return multilingual fields in
                     get_language_from_request(request),
@@ -128,8 +128,8 @@ class CourseViewSet(ViewSet):
         # raise and end up in a 500 error otherwise
         try:
             query_response = settings.ES_CLIENT.get(
-                index=CourseIndexer.index_name,
-                doc_type=CourseIndexer.document_type,
+                index=CoursesIndexer.index_name,
+                doc_type=CoursesIndexer.document_type,
                 id=pk,
             )
         except NotFoundError:
@@ -137,7 +137,7 @@ class CourseViewSet(ViewSet):
 
         # Format a clean course object as a response
         return Response(
-            CourseIndexer.format_es_course_for_api(
+            CoursesIndexer.format_es_course_for_api(
                 query_response,
                 # Get the best language we can return multilingual fields in
                 get_language_from_request(request),

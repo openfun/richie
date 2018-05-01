@@ -1,5 +1,5 @@
 """
-API endpoints to access subjects through ElasticSearch
+API endpoints to access organizations through ElasticSearch
 """
 from django.conf import settings
 from django.utils.translation import get_language_from_request
@@ -7,37 +7,37 @@ from elasticsearch.exceptions import NotFoundError
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
-from ..forms import SubjectListForm
-from ..indexers.subject import SubjectIndexer
+from ..forms import OrganizationListForm
+from ..indexers.organizations import OrganizationsIndexer
 
 
-class SubjectViewSet(ViewSet):
+class OrganizationsViewSet(ViewSet):
     """
-    A simple viewset with GET endpoints to fetch subjects
+    A simple viewset with GET endpoints to fetch organizations
     See API Blueprint for details on consumer use.
     """
     # pylint: disable=no-self-use,unused-argument
     def list(self, request, version):
         """
-        Subject search endpoint: pass query params to ElasticSearch so it filters subjects
-        and returns a list of matching items
+        Organization search endpoint: pass query params to ElasticSearch so it filters
+        organizations and returns a list of matching items
         """
         # Instantiate a form with our query_params to check & sanitize them
-        params_form = SubjectListForm(request.query_params)
+        query_params_form = OrganizationListForm(request.query_params)
 
         # Return a 400 with error information if the query params are not as expected
-        if not params_form.is_valid():
-            return Response(status=400, data={"errors": params_form.errors})
+        if not query_params_form.is_valid():
+            return Response(status=400, data={"errors": query_params_form.errors})
 
-        # Build a query that matches on the name field if it was handed by the client
+        # Build a query that matches on the organization name field if it was passed by the client
         # Note: test_elasticsearch_feature.py needs to be updated whenever the search call
         # is updated and makes use new features.
-        if params_form.cleaned_data.get("name"):
-            search_body = {
+        if query_params_form.cleaned_data.get("name"):
+            search_payload = {
                 "query": {
                     "match": {
                         "name.fr": {
-                            "query": params_form.cleaned_data.get("name"),
+                            "query": query_params_form.cleaned_data.get("name"),
                             "analyzer": "french",
                         }
                     }
@@ -45,15 +45,16 @@ class SubjectViewSet(ViewSet):
             }
         # Build a match_all query by default
         else:
-            search_body = {"query": {"match_all": {}}}
+            search_payload = {"query": {"match_all": {}}}
 
         query_response = settings.ES_CLIENT.search(
-            index=SubjectIndexer.index_name,
-            doc_type=SubjectIndexer.document_type,
-            body=search_body,
+            index=OrganizationsIndexer.index_name,
+            doc_type=OrganizationsIndexer.document_type,
+            body=search_payload,
             # Directly pass meta-params through as arguments to the ES client
-            from_=params_form.cleaned_data.get("offset") or 0,
-            size=params_form.cleaned_data.get("limit") or settings.ES_DEFAULT_PAGE_SIZE,
+            from_=query_params_form.cleaned_data.get("offset") or 0,
+            size=query_params_form.cleaned_data.get("limit")
+            or settings.ES_DEFAULT_PAGE_SIZE,
         )
 
         # Format the response in a consumer-friendly way
@@ -62,16 +63,16 @@ class SubjectViewSet(ViewSet):
         response_object = {
             "meta": {
                 "count": len(query_response["hits"]["hits"]),
-                "offset": params_form.cleaned_data.get("offset") or 0,
+                "offset": query_params_form.cleaned_data.get("offset") or 0,
                 "total_count": query_response["hits"]["total"],
             },
             "objects": [
-                SubjectIndexer.format_es_subject_for_api(
-                    subject,
-                    # Get the best language we can return multilingual fields in
+                OrganizationsIndexer.format_es_organization_for_api(
+                    organization,
+                    # Get the best language to return multilingual fields
                     get_language_from_request(request),
                 )
-                for subject in query_response["hits"]["hits"]
+                for organization in query_response["hits"]["hits"]
             ],
         }
 
@@ -80,22 +81,22 @@ class SubjectViewSet(ViewSet):
     # pylint: disable=no-self-use,invalid-name,unused-argument
     def retrieve(self, request, pk, version):
         """
-        Return a single item by ID
+        Return a single organization by ID
         """
-        # Wrap the ES get in a try/catch to we control the exception we emit — it would
+        # Wrap the ES get in a try/catch so we control the exception we emit — it would
         # raise and end up in a 500 error otherwise
         try:
             query_response = settings.ES_CLIENT.get(
-                index=SubjectIndexer.index_name,
-                doc_type=SubjectIndexer.document_type,
+                index=OrganizationsIndexer.index_name,
+                doc_type=OrganizationsIndexer.document_type,
                 id=pk,
             )
         except NotFoundError:
             return Response(status=404)
 
-        # Format a clean subject object as a response
+        # Format a clean organization object as a response
         return Response(
-            SubjectIndexer.format_es_subject_for_api(
+            OrganizationsIndexer.format_es_organization_for_api(
                 query_response,
                 # Get the best language we can return multilingual fields in
                 get_language_from_request(request),

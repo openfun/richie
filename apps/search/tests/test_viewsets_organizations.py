@@ -8,10 +8,10 @@ from django.test import TestCase
 from elasticsearch.exceptions import NotFoundError
 from rest_framework.test import APIRequestFactory
 
-from ..viewsets.organization import OrganizationViewSet
+from ..viewsets.organizations import OrganizationsViewSet
 
 
-class OrganizationViewsetTestCase(TestCase):
+class OrganizationsViewsetTestCase(TestCase):
     """
     Test the API endpoints for organizations (list and details)
     """
@@ -21,7 +21,7 @@ class OrganizationViewsetTestCase(TestCase):
         Happy path: the client requests an existing organization, gets it back
         """
         factory = APIRequestFactory()
-        request = factory.get("/api/v1.0/organization/42")
+        request = factory.get("/api/v1.0/organizations/42")
 
         with mock.patch.object(
             settings.ES_CLIENT,
@@ -37,7 +37,7 @@ class OrganizationViewsetTestCase(TestCase):
             },
         ):
             # Note: we need to use a separate argument for the ID as that is what the ViewSet uses
-            response = OrganizationViewSet.as_view({"get": "retrieve"})(
+            response = OrganizationsViewSet.as_view({"get": "retrieve"})(
                 request, 42, version="1.0"
             )
 
@@ -59,11 +59,11 @@ class OrganizationViewsetTestCase(TestCase):
         Error case: the client is asking for an organization that does not exist
         """
         factory = APIRequestFactory()
-        request = factory.get("/api/v1.0/organization/43")
+        request = factory.get("/api/v1.0/organizations/43")
 
         # Act like the ES client would when we attempt to get a non-existent document
         with mock.patch.object(settings.ES_CLIENT, "get", side_effect=NotFoundError):
-            response = OrganizationViewSet.as_view({"get": "retrieve"})(
+            response = OrganizationsViewSet.as_view({"get": "retrieve"})(
                 request, 43, version="1.0"
             )
 
@@ -76,7 +76,7 @@ class OrganizationViewsetTestCase(TestCase):
         Happy path: the consumer is not filtering the organizations for anything
         """
         factory = APIRequestFactory()
-        request = factory.get("/api/v1.0/organization?limit=2&offset=10")
+        request = factory.get("/api/v1.0/organizations?limit=2&offset=10")
 
         mock_search.return_value = {
             "hits": {
@@ -104,7 +104,7 @@ class OrganizationViewsetTestCase(TestCase):
             }
         }
 
-        response = OrganizationViewSet.as_view({"get": "list"})(request, version="1.0")
+        response = OrganizationsViewSet.as_view({"get": "list"})(request, version="1.0")
 
         # The client received a properly formatted response
         self.assertEqual(response.status_code, 200)
@@ -145,7 +145,7 @@ class OrganizationViewsetTestCase(TestCase):
         Happy path: the consumer is filtering the organizations by name
         """
         factory = APIRequestFactory()
-        request = factory.get("/api/v1.0/organization?name=Université&limit=2")
+        request = factory.get("/api/v1.0/organizations?name=Université&limit=2")
 
         mock_search.return_value = {
             "hits": {
@@ -173,7 +173,7 @@ class OrganizationViewsetTestCase(TestCase):
             }
         }
 
-        response = OrganizationViewSet.as_view({"get": "list"})(request, version="1.0")
+        response = OrganizationsViewSet.as_view({"get": "list"})(request, version="1.0")
 
         # The client received a properly formatted response
         self.assertEqual(response.status_code, 200)
@@ -218,9 +218,9 @@ class OrganizationViewsetTestCase(TestCase):
         """
         factory = APIRequestFactory()
         # The request contains incorrect params: limit should be a positive integer
-        request = factory.get("/api/v1.0/organization?name=&limit=-2")
+        request = factory.get("/api/v1.0/organizations?name=&limit=-2")
 
-        response = OrganizationViewSet.as_view({"get": "list"})(request, version="1.0")
+        response = OrganizationsViewSet.as_view({"get": "list"})(request, version="1.0")
 
         # The client received a BadRequest response with the relevant data
         self.assertEqual(response.status_code, 400)

@@ -8,10 +8,10 @@ from django.test import TestCase
 from elasticsearch.exceptions import NotFoundError
 from rest_framework.test import APIRequestFactory
 
-from ..viewsets.subject import SubjectViewSet
+from ..viewsets.subjects import SubjectsViewSet
 
 
-class SubjectViewsetTestCase(TestCase):
+class SubjectsViewsetTestCase(TestCase):
     """
     Test the API endpoints for subjects (list and details)
     """
@@ -21,7 +21,7 @@ class SubjectViewsetTestCase(TestCase):
         Happy path: the client requests an existing subject, gets it back
         """
         factory = APIRequestFactory()
-        request = factory.get("/api/v1.0/subject/42")
+        request = factory.get("/api/v1.0/subjects/42")
 
         with mock.patch.object(
             settings.ES_CLIENT,
@@ -34,7 +34,7 @@ class SubjectViewsetTestCase(TestCase):
             },
         ):
             # Note: we need to use a separate argument for the ID as that is what the ViewSet uses
-            response = SubjectViewSet.as_view({"get": "retrieve"})(
+            response = SubjectsViewSet.as_view({"get": "retrieve"})(
                 request, 42, version="1.0"
             )
 
@@ -50,11 +50,11 @@ class SubjectViewsetTestCase(TestCase):
         Error case: the client is asking for a subject that does not exist
         """
         factory = APIRequestFactory()
-        request = factory.get("/api/v1.0/subject/43")
+        request = factory.get("/api/v1.0/subjects/43")
 
         # Act like the ES client would when we attempt to get a non-existent document
         with mock.patch.object(settings.ES_CLIENT, "get", side_effect=NotFoundError):
-            response = SubjectViewSet.as_view({"get": "retrieve"})(
+            response = SubjectsViewSet.as_view({"get": "retrieve"})(
                 request, 43, version="1.0"
             )
 
@@ -91,7 +91,7 @@ class SubjectViewsetTestCase(TestCase):
             }
         }
 
-        response = SubjectViewSet.as_view({"get": "list"})(request, version="1.0")
+        response = SubjectsViewSet.as_view({"get": "list"})(request, version="1.0")
 
         # The client received a properly formatted response
         self.assertEqual(response.status_code, 200)
@@ -152,7 +152,7 @@ class SubjectViewsetTestCase(TestCase):
             }
         }
 
-        response = SubjectViewSet.as_view({"get": "list"})(request, version="1.0")
+        response = SubjectsViewSet.as_view({"get": "list"})(request, version="1.0")
 
         # The client received a properly formatted response
         self.assertEqual(response.status_code, 200)
@@ -195,7 +195,7 @@ class SubjectViewsetTestCase(TestCase):
         # The request contains incorrect params: limit should be a positive integer
         request = factory.get("/api/v1.0/subject?name=&limit=-2")
 
-        response = SubjectViewSet.as_view({"get": "list"})(request, version="1.0")
+        response = SubjectsViewSet.as_view({"get": "list"})(request, version="1.0")
 
         # The client received a BadRequest response with the relevant data
         self.assertEqual(response.status_code, 400)

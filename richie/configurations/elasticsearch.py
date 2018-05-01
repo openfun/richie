@@ -21,9 +21,9 @@ class ElasticSearchMixin(object):
     )
     ES_CHUNK_SIZE = 500
     ES_INDEXES = [
-        "apps.search.indexers.course.CourseIndexer",
-        "apps.search.indexers.organization.OrganizationIndexer",
-        "apps.search.indexers.subject.SubjectIndexer",
+        "apps.search.indexers.courses.CoursesIndexer",
+        "apps.search.indexers.organizations.OrganizationsIndexer",
+        "apps.search.indexers.subjects.SubjectsIndexer",
     ]
 
     ES_DEFAULT_PAGE_SIZE = 10

@@ -44,7 +44,7 @@ A single subject as saved in our ElasticSearch index. Includes a small subset of
 # Group Course
 Course-related resources for the richie search API.
 
-## GET /course/{course_id}
+## GET /courses/{course_id}
 A single course object. Access through this API is read-only (and thus GET only) as we're interacting with ElasticSearch and not the underlying model.
 
 See the Course data structure for more information.
@@ -58,7 +58,7 @@ See the Course data structure for more information.
 + Response 200 (application/json)
     + Attributes (Course)
 
-## GET /course?limit&offset&search
+## GET /courses?limit&offset&search
 Collection of all courses indexed in ElasticSearch. Can be filtered and selected through search query parameters.
 
 + Request
@@ -89,7 +89,7 @@ Collection of all courses indexed in ElasticSearch. Can be filtered and selected
 # Group Organization
 Organization-related resources for the richie search API.
 
-## GET /organization/{organization_id}
+## GET /organizations/{organization_id}
 A single organization object. Access through this API is read-only (and thus GET only) as we're interacting with ElasticSearch and not the underlying model.
 
 See the Organization data structure for more information.
@@ -103,7 +103,7 @@ See the Organization data structure for more information.
 + Response 200 (application/json)
     + Attributes (Organization)
 
-## GET /organization?limit&offset&name
+## GET /organizations?limit&offset&name
 Collection of all organizations indexed in ElasticSearch. Can be filtered and selected through search query parameters.
 
 + Request
@@ -127,7 +127,7 @@ Collection of all organizations indexed in ElasticSearch. Can be filtered and se
 # Group Subject
 Subject-related resources for the richie search API.
 
-## GET /subject/{subject_id}
+## GET /subjects/{subject_id}
 A single subject object. Access through this API is read-only (and thus GET only) as we're interacting with ElasticSearch and not the underlying model.
 
 See the Subject data structure for more information.
@@ -141,7 +141,7 @@ See the Subject data structure for more information.
 + Response 200 (application/json)
     + Attributes (Subject)
 
-## GET /subject?limit&offset&name
+## GET /subjects?limit&offset&name
 Collection of all subjects indexed in ElasticSearch. Can be filtered and selected through search query parameters.
 
 + Request

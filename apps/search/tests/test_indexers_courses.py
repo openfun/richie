@@ -6,10 +6,10 @@ from django.test import TestCase
 import responses
 
 from ..exceptions import IndexerDataException
-from ..indexers.course import CourseIndexer
+from ..indexers.courses import CoursesIndexer
 
 
-class CourseIndexerTestCase(TestCase):
+class CoursesIndexerTestCase(TestCase):
     """
     Test the get_data_for_es() function on the course indexer, as well as our mapping,
     and especially dynamic mapping shape in ES
@@ -70,7 +70,7 @@ class CourseIndexerTestCase(TestCase):
             },
         )
 
-        indexer = CourseIndexer()
+        indexer = CoursesIndexer()
 
         # The results were properly formatted and passed to the consumer
         self.assertEqual(
@@ -143,7 +143,7 @@ class CourseIndexerTestCase(TestCase):
             },
         )
 
-        indexer = CourseIndexer()
+        indexer = CoursesIndexer()
 
         with self.assertRaises(IndexerDataException):
             list(indexer.get_data_for_es(index="some_index", action="some_action"))
@@ -171,7 +171,7 @@ class CourseIndexerTestCase(TestCase):
             },
         }
         self.assertEqual(
-            CourseIndexer.format_es_course_for_api(es_course, "en"),
+            CoursesIndexer.format_es_course_for_api(es_course, "en"),
             {
                 "end_date": "2018-02-28T06:00:00Z",
                 "enrollment_end_date": "2018-01-31T06:00:00Z",
