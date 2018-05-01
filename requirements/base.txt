@@ -29,7 +29,7 @@ django-sekizai==0.10.0
 django-sortedm2m==1.5.0
 django-taggit==0.22.2
 django-treebeard==4.2.1
-djangocms-admin-style==1.2.7
+djangocms-admin-style==1.2.8
 djangocms-attributes-field==0.3.0
 djangocms-column==1.7.0
 djangocms-file==2.0.2
