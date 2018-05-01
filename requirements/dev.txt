@@ -12,4 +12,4 @@ pylint-django==0.11
 pytest==3.5.1
 pytest-cov==2.5.1
 pytest-django==3.2.1
-responses==0.8.1
+responses==0.9.0
