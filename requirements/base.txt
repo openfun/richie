@@ -63,7 +63,7 @@ six==1.11.0
 text-unidecode==1.2
 traitlets==4.3.2
 tzlocal==1.5.1
-Unidecode==0.4.21
+Unidecode==1.0.22
 urllib3==1.22
 wcwidth==0.1.7
 YURL==0.13
