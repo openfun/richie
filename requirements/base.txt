@@ -60,7 +60,7 @@ pytz==2018.4
 requests==2.18.4
 simplegeneric==0.8.1
 six==1.11.0
-text-unidecode==1.1
+text-unidecode==1.2
 traitlets==4.3.2
 tzlocal==1.5.1
 Unidecode==0.4.21
