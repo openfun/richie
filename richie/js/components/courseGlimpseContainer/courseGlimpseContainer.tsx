@@ -10,8 +10,8 @@ export interface CourseGlimpseContainerProps {
 
 export const mapStateToProps = (state: RootState, ownProps: CourseGlimpseContainerProps) => {
   return {
-    organization: state.resources.organization &&
-                  state.resources.organization.byId[ownProps.course.organizations[0]] || null,
+    organization: state.resources.organizations &&
+                  state.resources.organizations.byId[ownProps.course.organizations[0]] || null,
   };
 };
 

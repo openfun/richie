@@ -37,7 +37,7 @@ describe('data/genericReducers/resourceById reducer', () => {
       };
       expect(resourceByIdReducer(previousState, {
         resource: subj44,
-        resourceName: 'subject',
+        resourceName: 'subjects',
         type: 'RESOURCE_ADD',
       })).toEqual({ byId: { 43: subj43, 44: subj44 } });
     });
@@ -49,7 +49,7 @@ describe('data/genericReducers/resourceById reducer', () => {
         byId: { 43: subj43  },
       };
       expect(resourceByIdReducer(previousState, {
-        resourceName: 'subject',
+        resourceName: 'subjects',
         resources: [ subj44, subj45 ],
         type: 'RESOURCE_MULTIPLE_ADD',
       })).toEqual({ byId: { 43: subj43, 44: subj44, 45: subj45 } });

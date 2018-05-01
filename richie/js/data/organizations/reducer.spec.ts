@@ -1,6 +1,6 @@
-import organizationReducer from './reducer';
+import organizationsReducer from './reducer';
 
-describe('data/organization reducer', () => {
+describe('data/organizations reducer', () => {
   const org43 = {
     banner: 'https://example.com/banner43.png',
     code: 'org-43',
@@ -23,9 +23,9 @@ describe('data/organization reducer', () => {
     it('drops actions that do not match the resourceName', () => {
       const previousState = { byId: { 43: org43  } };
 
-      expect(organizationReducer(previousState, {
+      expect(organizationsReducer(previousState, {
         resource: org44,
-        resourceName: 'subject',
+        resourceName: 'subjects',
         type: 'RESOURCE_ADD',
       })).toEqual(previousState);
     });
@@ -33,9 +33,9 @@ describe('data/organization reducer', () => {
     it('uses actions that match the resourceName', () => {
       const previousState = { byId: { 43: org43  } };
 
-      expect(organizationReducer(previousState, {
+      expect(organizationsReducer(previousState, {
         resource: org44,
-        resourceName: 'organization',
+        resourceName: 'organizations',
         type: 'RESOURCE_ADD',
       })).toEqual({ byId: { 43: org43, 44: org44 } });
     });

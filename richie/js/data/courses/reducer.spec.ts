@@ -1,6 +1,6 @@
-import courseReducer from './reducer';
+import coursesReducer from './reducer';
 
-describe('data/course reducer', () => {
+describe('data/courses reducer', () => {
   const course43 = {
     end_date: '2018-05-31T06:00:00.000Z',
     enrollment_end_date: '2018-03-15T06:00:00.000Z',
@@ -42,23 +42,23 @@ describe('data/course reducer', () => {
   };
 
   it('returns an empty state for initialization', () => {
-    expect(courseReducer(undefined, { type: '' })).toEqual({ byId: {} });
+    expect(coursesReducer(undefined, { type: '' })).toEqual({ byId: {} });
   });
 
   it('returns the state as is when called with an unknown action', () => {
     const previousState = {
       byId: { 43: course43  },
     };
-    expect(courseReducer(previousState, { type: 'TODO_ADD' })).toEqual(previousState);
+    expect(coursesReducer(previousState, { type: 'TODO_ADD' })).toEqual(previousState);
   });
 
   describe('resourceById', () => {
     it('drops actions that do not match the resourceName', () => {
       const previousState = { byId: { 43: course43  } };
 
-      expect(courseReducer(previousState, {
+      expect(coursesReducer(previousState, {
         resource: course44,
-        resourceName: 'subject',
+        resourceName: 'subjects',
         type: 'RESOURCE_ADD',
       })).toEqual(previousState);
     });
@@ -66,9 +66,9 @@ describe('data/course reducer', () => {
     it('uses actions that match the resourceName', () => {
       const previousState = { byId: { 43: course43  } };
 
-      expect(courseReducer(previousState, {
+      expect(coursesReducer(previousState, {
         resource: course44,
-        resourceName: 'course',
+        resourceName: 'courses',
         type: 'RESOURCE_ADD',
       })).toEqual({ byId: { 43: course43, 44: course44 } });
     });

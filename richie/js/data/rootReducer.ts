@@ -1,23 +1,23 @@
 import { Reducer } from 'redux';
 
-import { course, CourseState } from './course/reducer';
-import { organization, OrganizationState } from './organization/reducer';
-import { subject, SubjectState } from './subject/reducer';
+import { courses, CoursesState } from './courses/reducer';
+import { organizations, OrganizationsState } from './organizations/reducer';
+import { subjects, SubjectsState } from './subjects/reducer';
 
 export interface RootState {
   resources: {
-    course?: CourseState;
-    organization?: OrganizationState;
-    subject?: SubjectState;
+    courses?: CoursesState;
+    organizations?: OrganizationsState;
+    subjects?: SubjectsState;
   };
 }
 
 export const rootReducer: Reducer<RootState> = (state, action) => {
   return {
     resources: {
-      course: course(state.resources.course, action),
-      organization: organization(state.resources.organization, action),
-      subject: subject(state.resources.subject, action),
+      courses: courses(state.resources.courses, action),
+      organizations: organizations(state.resources.organizations, action),
+      subjects: subjects(state.resources.subjects, action),
     },
   };
 };

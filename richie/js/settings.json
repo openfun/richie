@@ -1,8 +1,8 @@
 {
   "API_ENDPOINTS": {
-    "course": "/api/v1.0/course/",
-    "organization": "/api/v1.0/organization/",
-    "subject": "/api/v1.0/subject/"
+    "courses": "/api/v1.0/courses/",
+    "organizations": "/api/v1.0/organizations/",
+    "subjects": "/api/v1.0/subjects/"
   },
   "SUPPORTED_LANGUAGES": [
     "de",

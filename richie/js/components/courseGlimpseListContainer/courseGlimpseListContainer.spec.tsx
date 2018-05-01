@@ -45,7 +45,7 @@ describe('components/courseGlimpseListContainer', () => {
 
     const state = {
       resources: {
-        course: {
+        courses: {
           byId: { 43: course43, 44: course44 },
           currentQuery: {
             facets: {},

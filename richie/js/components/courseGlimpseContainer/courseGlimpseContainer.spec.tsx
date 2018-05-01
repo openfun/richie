@@ -34,7 +34,7 @@ describe('components/courseGlimpseContainer', () => {
   it('mapStateToProps picks in state the organization relevant to the current course', () => {
     const state = {
       resources: {
-        organization: { byId: { 23: org23 } },
+        organizations: { byId: { 23: org23 } },
       },
     };
 

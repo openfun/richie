@@ -52,7 +52,7 @@ describe('data/genericReducers/resourceList reducer', () => {
             objects: [ course43, course44 ],
           },
           params: { limit: 12, offset: 2 },
-          resourceName: 'course',
+          resourceName: 'courses',
           type: 'RESOURCE_LIST_GET_SUCCESS',
         },
       ))
@@ -73,7 +73,7 @@ describe('data/genericReducers/resourceList reducer', () => {
             objects: [ course44, course43 ],
           },
           params: { limit: 2, match: 'some query', offset: 0 },
-          resourceName: 'course',
+          resourceName: 'courses',
           type: 'RESOURCE_LIST_GET_SUCCESS',
         },
       ))

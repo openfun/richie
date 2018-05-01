@@ -1,4 +1,4 @@
-import { CourseState } from '../../data/course/reducer';
+import { CoursesState } from '../../data/courses/reducer';
 import Organization from '../../types/Organization';
 import { mapStateToProps } from './searchFilterGroupContainer';
 
@@ -19,16 +19,16 @@ describe('components/searchFilterGroupContainer', () => {
   it('mapStateToProps builds a filter definition from the facet for a resource-based filter group', () => {
     const state = {
       resources: {
-        course: {
+        courses: {
           byId: {},
           currentQuery: {
-            facets: { organization: { 21: 3, 42: 15, 84: 7 } },
+            facets: { organizations: { 21: 3, 42: 15, 84: 7 } },
             items: {},
             queryKey: '',
             total_count: 22,
           },
-        } as CourseState,
-        organization: {
+        } as CoursesState,
+        organizations: {
           byId: {
             21: { id: 21, name: 'Organization #Twenty-One' } as Organization,
             42: { id: 42, name: 'Organization #Fourty-Two' } as Organization,
@@ -38,11 +38,11 @@ describe('components/searchFilterGroupContainer', () => {
       },
     };
 
-    expect(mapStateToProps(state, { machineName: 'organization' }))
+    expect(mapStateToProps(state, { machineName: 'organizations' }))
     .toEqual({
       filter: {
         humanName: 'Organizations',
-        machineName: 'organization',
+        machineName: 'organizations',
         values: [
           { count: 15, humanName: 'Organization #Fourty-Two', primaryKey: '42' },
           { count: 7, humanName: 'Organization #Eighty-Four', primaryKey: '84' },
@@ -55,7 +55,7 @@ describe('components/searchFilterGroupContainer', () => {
   it('mapStateToProps still builds a default filter group when missing a resource-related facet', () => {
     const state = {
       resources: {
-        organization: {
+        organizations: {
           byId: {
             21: { id: 21, name: 'Organization #Twenty-One' } as Organization,
             42: { id: 42, name: 'Organization #Fourty-Two' } as Organization,
@@ -65,11 +65,11 @@ describe('components/searchFilterGroupContainer', () => {
       },
     };
 
-    expect(mapStateToProps(state, { machineName: 'organization' }))
+    expect(mapStateToProps(state, { machineName: 'organizations' }))
     .toEqual({
       filter: {
         humanName: 'Organizations',
-        machineName: 'organization',
+        machineName: 'organizations',
         values: [
           { humanName: 'Organization #Twenty-One', primaryKey: '21' },
           { humanName: 'Organization #Fourty-Two', primaryKey: '42' },

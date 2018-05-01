@@ -7,8 +7,8 @@ export const SearchFiltersPane = (props: {}) => {
     <h2 className="search-filters-pane__title">Filter results</h2>
     <SearchFilterGroupContainer machineName="new" />
     <SearchFilterGroupContainer machineName="status" />
-    <SearchFilterGroupContainer machineName="subject" />
-    <SearchFilterGroupContainer machineName="organization" />
+    <SearchFilterGroupContainer machineName="subjects" />
+    <SearchFilterGroupContainer machineName="organizations" />
     <SearchFilterGroupContainer machineName="language" />
   </div>;
 };

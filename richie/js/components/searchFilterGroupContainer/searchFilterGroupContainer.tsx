@@ -9,7 +9,7 @@ export interface SearchFilterGroupContainerProps {
   machineName: filterGroups;
 }
 
-type resourceBasedFilterGroups = 'organization' | 'subject';
+type resourceBasedFilterGroups = 'organizations' | 'subjects';
 type hardcodedFilterGroups = 'language' | 'new' | 'status';
 export type filterGroups = resourceBasedFilterGroups | hardcodedFilterGroups;
 
@@ -47,19 +47,19 @@ const hardcodedFilters: { [machineName in hardcodedFilterGroups]: FilterDefiniti
 // Some filters need to be derived from the data
 function getFilterFromData(state: RootState, machineName: filterGroups): FilterDefinition {
   // Default to empty object as it is the default value for currentQuery.facets
-  const facets = state.resources.course &&
-                 state.resources.course.currentQuery &&
-                 state.resources.course.currentQuery.facets || {};
+  const facets = state.resources.courses &&
+                 state.resources.courses.currentQuery &&
+                 state.resources.courses.currentQuery.facets || {};
 
   switch (machineName) {
-    case 'organization':
+    case 'organizations':
       return {
         humanName: 'Organizations',
         machineName,
         values: getFacetedValues(state, facets, machineName),
       };
 
-    case 'subject':
+    case 'subjects':
       return {
         humanName: 'Subjects',
         machineName,

@@ -3,7 +3,7 @@ import get from 'lodash-es/get';
 import partialRight from 'lodash-es/partialRight';
 import { Reducer } from 'redux';
 
-import Subject from '../../types/Subject';
+import Organization from '../../types/Organization';
 import { Maybe } from '../../utils/types';
 import { ResourceAdd } from '../genericReducers/resourceById/actions';
 import {
@@ -16,17 +16,17 @@ import { ResourceListGetSuccess } from '../genericSideEffects/getResourceList/ac
 
 const initialState = { ...resourceByIdInit };
 
-export type SubjectState = Maybe<ResourceByIdState<Subject> & ResourceListState<Subject>>;
+export type OrganizationsState = Maybe<ResourceByIdState<Organization> & ResourceListState<Organization>>;
 
-export const subject: Reducer<SubjectState> = (
-  state = initialState,
-  action?: ResourceAdd<Subject> | ResourceListGetSuccess<Subject> | { type: '' },
+export const organizations: Reducer<OrganizationsState> = (
+  state: OrganizationsState = initialState,
+  action?: ResourceAdd<Organization> | ResourceListGetSuccess<Organization> | { type: '' },
 ) => {
   if (!action) { return state; } // Compiler needs help
 
   // Discriminate resource related actions by resource name
   if (get(action, 'resourceName') &&
-      get(action, 'resourceName') !== 'subject'
+      get(action, 'resourceName') !== 'organizations'
   ) {
     return state;
   }
@@ -37,4 +37,4 @@ export const subject: Reducer<SubjectState> = (
   ])(state, action);
 };
 
-export default subject;
+export default organizations;

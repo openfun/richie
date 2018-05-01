@@ -1,6 +1,6 @@
-import subjectReducer from './reducer';
+import subjectsReducer from './reducer';
 
-describe('data/subject reducer', () => {
+describe('data/subjects reducer', () => {
   const subj43 = {
     id: 43,
     image: 'https://example.com/subject_43.png',
@@ -17,9 +17,9 @@ describe('data/subject reducer', () => {
     it('drops actions that do not match the resourceName', () => {
       const previousState = { byId: { 43: subj43  } };
 
-      expect(subjectReducer(previousState, {
+      expect(subjectsReducer(previousState, {
         resource: subj44,
-        resourceName: 'organization',
+        resourceName: 'organizations',
         type: 'RESOURCE_ADD',
       })).toEqual(previousState);
     });
@@ -27,9 +27,9 @@ describe('data/subject reducer', () => {
     it('uses actions that match the resourceName', () => {
       const previousState = { byId: { 43: subj43  } };
 
-      expect(subjectReducer(previousState, {
+      expect(subjectsReducer(previousState, {
         resource: subj44,
-        resourceName: 'subject',
+        resourceName: 'subjects',
         type: 'RESOURCE_ADD',
       })).toEqual({ byId: { 43: subj43, 44: subj44 } });
     });

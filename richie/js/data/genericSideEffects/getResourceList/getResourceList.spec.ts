@@ -68,11 +68,11 @@ describe('data/genericSideEffects/getResourceList saga', () => {
         ok: true,
       }));
 
-      fetchList('course', { limit: 2, offset: 43 })
+      fetchList('courses', { limit: 2, offset: 43 })
       .then((response) => {
         // The correct request given parameters is performed
         expect(mockFetch).toHaveBeenCalledWith(
-          '/api/v1.0/course/?limit=2&offset=43',
+          '/api/v1.0/courses/?limit=2&offset=43',
           { headers: { 'Content-Type': 'application/json' },
         });
         // Our polymorphic response object is properly shaped
@@ -86,7 +86,7 @@ describe('data/genericSideEffects/getResourceList saga', () => {
       mockFetch.and.returnValue(Promise.reject(new Error('Could not perform fetch.')));
 
       // Don't check params again as it was done in the first test
-      fetchList('course', { limit: 2, offset: 43 })
+      fetchList('courses', { limit: 2, offset: 43 })
       .then((response) => {
         // Our polymorphic response object is properly shaped - with an error this time
         expect(response.objects).not.toBeDefined();
@@ -99,7 +99,7 @@ describe('data/genericSideEffects/getResourceList saga', () => {
       mockFetch.and.returnValue(Promise.resolve({ ok: false, status: 404 }));
 
       // Don't check params again as it was done in the first test
-      fetchList('course', { limit: 2, offset: 43 })
+      fetchList('courses', { limit: 2, offset: 43 })
       .then((response) => {
         // Our polymorphic response object is properly shaped - with an error this time
         expect(response.objects).not.toBeDefined();
@@ -112,7 +112,7 @@ describe('data/genericSideEffects/getResourceList saga', () => {
   describe('getList', () => {
     const action = {
       params: { limit: 10, name: 'python', offset: 0 },
-      resourceName: 'course' as 'course',
+      resourceName: 'courses' as 'courses',
       type: 'RESOURCE_LIST_GET' as 'RESOURCE_LIST_GET',
     };
 
@@ -126,11 +126,11 @@ describe('data/genericSideEffects/getResourceList saga', () => {
       };
 
       // The call to fetch (the actual side-effect) is triggered
-      expect(gen.next().value).toEqual(call(fetchList, 'course', action.params));
+      expect(gen.next().value).toEqual(call(fetchList, 'courses', action.params));
       // Both courses are added to the state
-      expect(gen.next(response).value).toEqual(put(addMultipleResources('course', response.objects)));
+      expect(gen.next(response).value).toEqual(put(addMultipleResources('courses', response.objects)));
       // The success action is dispatched
-      expect(gen.next().value).toEqual(put(didGetResourceList('course', response, action.params)));
+      expect(gen.next().value).toEqual(put(didGetResourceList('courses', response, action.params)));
     });
 
     it('yields a failure action when fetchList fails', () => {
@@ -141,9 +141,9 @@ describe('data/genericSideEffects/getResourceList saga', () => {
       };
 
       // The call to fetch is triggered, but fails for some reason
-      expect(gen.next().value).toEqual(call(fetchList, 'course', action.params));
+      expect(gen.next().value).toEqual(call(fetchList, 'courses', action.params));
       // The failure action is dispatched
-      expect(gen.next(response).value).toEqual(put(failedToGetResourceList('course', response.error)));
+      expect(gen.next(response).value).toEqual(put(failedToGetResourceList('courses', response.error)));
     });
   });
 });
