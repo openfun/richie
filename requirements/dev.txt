@@ -4,7 +4,7 @@ black==18.4a4
 Faker==0.8.13
 factory-boy[django]==2.10.0
 flake8==3.5.0
-ipdb==0.10.3
+ipdb==0.11
 ipython==5.5.0
 ipython-genutils==0.2.0
 pylint==1.8.2
