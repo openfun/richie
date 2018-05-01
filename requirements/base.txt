@@ -6,7 +6,7 @@ aldryn-newsblog==2.1.1
 aldryn-people==2.1.0
 aldryn-reversion==1.1.0
 aldryn-translation-tools==0.2.1
-arrow==0.10.0
+arrow==0.12.1
 Babel==2.5.3
 backport-collections==0.1
 cmsplugin-filer==1.1.3
