@@ -51,7 +51,7 @@ phonenumbers==8.9.4
 pickleshare==0.7.4
 Pillow==5.1.0
 prompt-toolkit==1.0.15
-psycopg2==2.7.3.2
+psycopg2==2.7.4
 ptyprocess==0.5.2
 Pygments==2.2.0
 python-dateutil==2.6.1
