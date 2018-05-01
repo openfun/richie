@@ -1,4 +1,4 @@
-aldryn-apphooks-config==0.4.0
+aldryn-apphooks-config==0.4.1
 aldryn-boilerplates==0.7.7
 aldryn-categories==1.1.0
 aldryn-common==1.0.4
