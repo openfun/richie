@@ -13,3 +13,6 @@ pytest==3.3.2
 pytest-cov==2.5.1
 pytest-django==3.1.2
 responses==0.8.1
+
+# Don't merge to master: only used by migrate_old_db command
+beautifulsoup4
