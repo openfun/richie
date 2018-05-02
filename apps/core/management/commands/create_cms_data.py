@@ -45,6 +45,11 @@ PAGE_INFOS = {
 }
 
 
+# pylint: disable=no-member
+#
+# Looks like pylint is not relevant at guessing object types when cascading
+# methods over querysets: Instance of 'list' has no 'delete' member (no-member).
+# We choose to ignore this false positive warning.
 def clear_cms_data():
     """Clear all CMS data (CMS models + organization page)"""
 
