@@ -1,3 +1,18 @@
+# Configuration file anchors
+generate-version-file: &generate-version-file
+  run:
+    name: Create a version.json
+    command: |
+      # Create a version.json à-la-mozilla
+      # https://github.com/mozilla-services/Dockerflow/blob/master/docs/version_object.md
+      printf '{"commit":"%s","version":"%s","source":"https://github.com/%s/%s","build":"%s"}\n' \
+        "$CIRCLE_SHA1" \
+        "$CIRCLE_TAG" \
+        "$CIRCLE_PROJECT_USERNAME" \
+        "$CIRCLE_PROJECT_REPONAME" \
+        "$CIRCLE_BUILD_URL" > version.json
+
+
 version: 2
 jobs:
 
@@ -16,6 +31,9 @@ jobs:
     steps:
       # Checkout repository sources
       - checkout
+
+      # Generate a version.json file describing app release
+      - <<: *generate-version-file
 
       # Each image is tagged with the current git commit sha1 to avoid
       # collisions in parallel builds.
@@ -71,6 +89,9 @@ jobs:
       - run:
           name: List available images
           command: docker images "richie:${CIRCLE_SHA1}*"
+
+      # Generate a version.json file describing app release
+      - <<: *generate-version-file
 
       # Development image build, it uses the dev Dockerfile file
       - run:
@@ -246,6 +267,9 @@ jobs:
 
     steps:
       - checkout
+
+      # Generate a version.json file describing app release
+      - <<: *generate-version-file
 
       - run:
           name: Build alpine production image
