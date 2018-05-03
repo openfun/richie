@@ -1,3 +1,4 @@
+import { FilterDefinitionState } from '../../data/filterDefinitions/reducer';
 import Course from '../../types/Course';
 import { mapStateToProps, mergeProps } from './courseGlimpseContainer';
 
@@ -33,6 +34,7 @@ describe('components/courseGlimpseContainer', () => {
 
   it('mapStateToProps picks in state the organization relevant to the current course', () => {
     const state = {
+      filterDefinitions: {} as FilterDefinitionState,
       resources: {
         organizations: { byId: { 23: org23 } },
       },

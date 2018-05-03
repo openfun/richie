@@ -1,3 +1,4 @@
+import { FilterDefinitionState } from '../../data/filterDefinitions/reducer';
 import Course from '../../types/Course';
 import { mapStateToProps } from './courseGlimpseListContainer';
 
@@ -44,6 +45,7 @@ describe('components/courseGlimpseListContainer', () => {
     };
 
     const state = {
+      filterDefinitions: {} as FilterDefinitionState,
       resources: {
         courses: {
           byId: { 43: course43, 44: course44 },
