@@ -10,12 +10,13 @@ from cms.test_utils.testcases import CMSTestCase
 from apps.core.factories import UserFactory
 
 from ..cms_wizards import OrganizationWizardForm
-from ..factories import OrganizationFactory
 from ..models import Organization
 
 
 class OrganizationCMSWizardTestCase(CMSTestCase):
-    """Organization tests"""
+    """
+    Unit test suite to validate the behavior of the Wizard to create organization pages
+    """
 
     def test_organization_create_wizards_list(self):
         """
@@ -41,8 +42,8 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
 
     def test_organization_wizard_submit_form(self):
         """
-        Submitting a valid OrganizationWizardForm should create an organization and its
-        related page.
+        Submitting a valid OrganizationWizardForm should create a page and its
+        related extension.
         """
         # A parent page to list organizations should pre-exist
         create_page(
@@ -53,9 +54,9 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         form = OrganizationWizardForm(data={"title": "My title"})
         self.assertTrue(form.is_valid())
         page = form.save()
-        organization = page.organizationpage.organization
+        organization = page.organization
 
-        # The organization and its related page should have been created as draft
+        # The page and its related extension have been created as draft
         self.assertEqual(Page.objects.count(), 2)
         self.assertEqual(Page.objects.drafts().count(), 2)
         self.assertEqual(page.get_title(), "My title")
@@ -67,7 +68,7 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
     def test_organization_wizard_submit_form_max_lengths(self):
         """
         Check that max lengths on each form field are compatible with max lengths on the
-        Organization and Page models. Notably the "path" field on the Page model includes
+        Page and Organization models. Notably the "path" field on the Page model includes
         the slug + other elements for a max_length of 255.
         """
         # A parent page to list organizations should pre-exist
@@ -84,7 +85,6 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
 
         organizations = Organization.objects.all()
         self.assertEqual(len(organizations), 1)
-        self.assertEqual(organizations[0].name, data["title"])
         self.assertIsNone(organizations[0].code)
 
     def test_organization_wizard_submit_form_slugify_long_title(self):
@@ -139,7 +139,6 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         We should not be able to create a CMS Organization Page if the
         parent page to list organizations was not created
         """
-        OrganizationFactory()
         form = OrganizationWizardForm(data={"title": "My title"})
         self.assertFalse(form.is_valid())
         self.assertEqual(

@@ -3,6 +3,7 @@ Organization factories
 """
 from django.utils.text import slugify
 
+from cms.api import create_page
 import factory
 
 from .models import Organization
@@ -10,17 +11,25 @@ from .models import Organization
 
 class OrganizationFactory(factory.django.DjangoModelFactory):
     """
-    A factory to automatically generate random yet meaningful organizations in our tests.
+    A factory to automatically generate random yet meaningful organization page extensions
+    in our tests.
     """
 
     class Meta:
         model = Organization
+        exclude = ["title"]
 
-    # Don't automatically create the page as there are many ways to do it: with or without parent,
-    # multilingual or not, with or without plugins, etc. It is better to let each test do what
-    # it needs to do.
-    name = factory.Faker("catch_phrase")
     logo = factory.django.ImageField(width=180, height=100)
+    title = factory.Faker("catch_phrase")
+
+    @factory.lazy_attribute
+    def extended_object(self):
+        """
+        Automatically create a related page with a random title
+        """
+        return create_page(
+            self.title, "organizations/cms/organization_detail.html", "en"
+        )
 
     @factory.lazy_attribute
     def code(self):
@@ -28,4 +37,4 @@ class OrganizationFactory(factory.django.DjangoModelFactory):
         Since `name` is required, let's just slugify it to get a meaningful code (and keep it
         below 100 characters)
         """
-        return slugify(self.name)[:100]
+        return slugify(self.title)[:100]

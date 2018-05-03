@@ -13,7 +13,6 @@ from django.test.utils import override_settings
 from cms.test_utils.testcases import CMSTestCase
 
 from apps.organizations.factories import OrganizationFactory
-from apps.organizations.models import OrganizationPage
 
 from ..management.commands.create_cms_data import create_cms_data
 
@@ -44,12 +43,9 @@ class CreateCmsDataTests(CMSTestCase):
         mock_create.assert_called_once_with()
         mock_logger.assert_called_once_with("done")
 
-    @mock.patch.object(OrganizationPage.objects, "create")
     @mock.patch.object(OrganizationFactory, "create")
     @mock.patch("apps.core.management.commands.create_cms_data.create_i18n_page")
-    def test_command_create_cms_data(
-        self, mock_page, mock_organization, mock_organization_page
-    ):
+    def test_command_create_cms_data(self, mock_page, mock_organization):
         """
         Calling the `create_cms_data` function should trigger creating root i18n pages and
         organizations below the related page
@@ -131,8 +127,6 @@ class CreateCmsDataTests(CMSTestCase):
 
         # Check that the calls to create the organizations were triggered as expected
         self.assertEqual(mock_organization.call_count, 8)
-        # Check OrganizationPage creation were called as expected
-        self.assertEqual(mock_organization_page.call_count, 8)
 
         for i, actual_call in enumerate(mock_page.call_args_list[6:]):
             expected_call = (

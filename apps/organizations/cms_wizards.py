@@ -12,7 +12,7 @@ from cms.models import Page
 from cms.wizards.wizard_base import Wizard
 from cms.wizards.wizard_pool import wizard_pool
 
-from .models import Organization, OrganizationPage, ORGANIZATIONS_PAGE_REVERSE_ID
+from .models import Organization, ORGANIZATIONS_PAGE_REVERSE_ID
 
 
 class OrganizationWizardForm(forms.Form):
@@ -69,10 +69,7 @@ class OrganizationWizardForm(forms.Form):
         parent = Page.objects.get(
             reverse_id=ORGANIZATIONS_PAGE_REVERSE_ID, publisher_is_draft=True
         )
-        # Create the Organization
-        organization = Organization.objects.create(name=self.cleaned_data["title"])
-
-        # Create the organization CMS page
+        # Create the organization page
         page = create_page(
             title=self.cleaned_data["title"],
             slug=self.cleaned_data["slug"],
@@ -82,7 +79,7 @@ class OrganizationWizardForm(forms.Form):
             published=False,  # The creation wizard should not publish the page
         )
         # Create the organization page extension
-        OrganizationPage.objects.create(extended_object=page, organization=organization)
+        Organization.objects.create(extended_object=page)
 
         return page
 

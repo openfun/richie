@@ -4,11 +4,11 @@
 {% block content %}
   <h1>{{ current_page.get_title }}</h1>
 
-  {% with current_page.organizationpage.organization as org %}
-    {% if org.logo %}
+  {% with current_page.organization as organization %}
+    {% if organization.logo %}
       <img
-        src="{{ org.logo.url }}"
-        alt="{% blocktrans with name=org.name|capfirst %}{{ name }} logo{% endblocktrans %}">
+        src="{{ organization.logo.url }}"
+        alt="{% blocktrans with title=current_page.get_title|capfirst %}{{ title }} logo{% endblocktrans %}">
     {% endif %}
   {% endwith %}
 
