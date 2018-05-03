@@ -8,13 +8,16 @@ import SearchFilter from '../searchFilter/searchFilter';
 import SearchFilterGroup from './searchFilterGroup';
 
 describe('components/searchFilterGroup', () => {
+  const addFilter = jasmine.createSpy('addFilter');
+  const removeFilter = jasmine.createSpy('removeFilter');
+
   it('renders the name of the filter', () => {
     const filter = {
       humanName: 'Example filter',
       machineName: 'example-filter',
       values: [],
     } as FilterDefinition;
-    const wrapper = shallow(<SearchFilterGroup filter={filter} />);
+    const wrapper = shallow(<SearchFilterGroup addFilter={addFilter} filter={filter} removeFilter={removeFilter} />);
 
     expect(wrapper.text()).toContain('Example filter');
   });
@@ -24,7 +27,7 @@ describe('components/searchFilterGroup', () => {
       humanName: 'Example filter',
       values: [ { primaryKey: 'value-1', humanName: 'Value One' }, { primaryKey: 'value-2', humanName: 'Value Two' } ],
     } as FilterDefinition;
-    const wrapper = shallow(<SearchFilterGroup filter={filter} />);
+    const wrapper = shallow(<SearchFilterGroup addFilter={addFilter} filter={filter} removeFilter={removeFilter} />);
 
     expect(wrapper.find(SearchFilter).length).toEqual(2);
   });

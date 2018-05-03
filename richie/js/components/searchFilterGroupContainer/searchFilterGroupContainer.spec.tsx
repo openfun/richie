@@ -1,81 +1,141 @@
-import { CoursesState } from '../../data/courses/reducer';
-import Organization from '../../types/Organization';
-import { mapStateToProps } from './searchFilterGroupContainer';
+import { FilterDefinition } from '../../types/FilterDefinition';
+import * as filterComputer from './computeNewFilterValue';
+import { mergeProps } from './searchFilterGroupContainer';
 
-describe('components/searchFilterGroupContainer', () => {
-  it('mapStateToProps returns a FilterDefinition for a hardcoded filter group', () => {
-    expect(mapStateToProps({ resources: {} }, { machineName: 'new' }))
-    .toEqual({
-      filter: {
-        humanName: 'New courses',
-        machineName: 'status',
-        values: [
-          { primaryKey: 'new', humanName: 'First session'},
-        ],
-      },
+describe('components/searchFilterGroupContainer/mergeProps', () => {
+  let dispatch: jasmine.Spy;
+
+  beforeEach(() => {
+    dispatch = jasmine.createSpy('dispatch');
+    spyOn(filterComputer, 'computeNewFilterValue').and.returnValue('some filter value');
+  });
+
+  describe('addFilter', () => {
+    describe('when the filter is drilldown', () => {
+      it('dispatches the action with params -> the current params with the new filter added on', () => {
+        const props = mergeProps(
+          { currentParams: { limit: 20, offset: 0 }, filter: { isDrilldown: true } as FilterDefinition },
+          { dispatch },
+          { machineName: 'new' },
+        );
+        props.addFilter('some_value');
+
+        expect(dispatch).toHaveBeenCalledWith({
+          params: { limit: 20, new: 'some_value', offset: 0 },
+          resourceName: 'courses',
+          type: 'RESOURCE_LIST_GET',
+        });
+      });
+
+      it('dispatches action with params -> replaces any existing value for the filter in the params', () => {
+        const props = mergeProps(
+          {
+            currentParams: { limit: 20, new: 'old_value', offset: 0 },
+            filter: { isDrilldown: true } as FilterDefinition,
+          },
+          { dispatch },
+          { machineName: 'new' },
+        );
+        props.addFilter('new_value');
+
+        expect(dispatch).toHaveBeenCalledWith({
+          params: { limit: 20, new: 'new_value', offset: 0 },
+          resourceName: 'courses',
+          type: 'RESOURCE_LIST_GET',
+        });
+      });
+    });
+
+    describe('when the filter is not drilldown', () => {
+      it('delegates to computeNewFilterValue', () => {
+        const props = mergeProps(
+          { currentParams: { limit: 20, offset: 0 }, filter: {} as FilterDefinition },
+          { dispatch },
+          { machineName: 'new' },
+        );
+        props.addFilter('mocked_out_value');
+
+        expect(dispatch).toHaveBeenCalledWith({
+          params: { limit: 20, new: 'some filter value', offset: 0 },
+          resourceName: 'courses',
+          type: 'RESOURCE_LIST_GET',
+        });
+      });
     });
   });
 
-  it('mapStateToProps builds a filter definition from the facet for a resource-based filter group', () => {
-    const state = {
-      resources: {
-        courses: {
-          byId: {},
-          currentQuery: {
-            facets: { organizations: { 21: 3, 42: 15, 84: 7 } },
-            items: {},
-            params: { limit: 20, offset: 0 },
-            total_count: 22,
+  describe('removeFilter', () => {
+    describe('when the filter is drilldown', () => {
+      it('nulls the existing filter value when it matches the passed value', () => {
+        const props = mergeProps(
+          {
+            currentParams: { limit: 20, new: 'value_to_remove', offset: 0 },
+            filter: { isDrilldown: true } as FilterDefinition,
           },
-        } as CoursesState,
-        organizations: {
-          byId: {
-            21: { id: 21, name: 'Organization #Twenty-One' } as Organization,
-            42: { id: 42, name: 'Organization #Fourty-Two' } as Organization,
-            84: { id: 84, name: 'Organization #Eighty-Four' } as Organization,
-          },
-        },
-      },
-    };
+          { dispatch },
+          { machineName: 'new' },
+        );
+        props.removeFilter('value_to_remove');
 
-    expect(mapStateToProps(state, { machineName: 'organizations' }))
-    .toEqual({
-      filter: {
-        humanName: 'Organizations',
-        machineName: 'organizations',
-        values: [
-          { count: 15, humanName: 'Organization #Fourty-Two', primaryKey: '42' },
-          { count: 7, humanName: 'Organization #Eighty-Four', primaryKey: '84' },
-          { count: 3, humanName: 'Organization #Twenty-One', primaryKey: '21' },
-        ],
-      },
+        expect(dispatch).toHaveBeenCalledWith({
+          params: { limit: 20, new: null, offset: 0 },
+          resourceName: 'courses',
+          type: 'RESOURCE_LIST_GET',
+        });
+      });
+
+      it('keeps the existing filter value when it does not match the passed value', () => {
+        const props = mergeProps(
+          {
+            currentParams: { limit: 20, new: 'existing_value', offset: 0 },
+            filter: { isDrilldown: true } as FilterDefinition,
+          },
+          { dispatch },
+          { machineName: 'new' },
+        );
+        props.removeFilter('imaginary_value');
+
+        expect(dispatch).toHaveBeenCalledWith({
+          params: { limit: 20, new: 'existing_value', offset: 0 },
+          resourceName: 'courses',
+          type: 'RESOURCE_LIST_GET',
+        });
+      });
+
+      it('adds a null value and does not throw when there was no existing value', () => {
+        const props = mergeProps(
+          {
+            currentParams: { limit: 20, offset: 0 },
+            filter: { isDrilldown: true } as FilterDefinition,
+          },
+          { dispatch },
+          { machineName: 'new' },
+        );
+        props.removeFilter('where_does_this_come_from');
+
+        expect(dispatch).toHaveBeenCalledWith({
+          params: { limit: 20, new: null, offset: 0 },
+          resourceName: 'courses',
+          type: 'RESOURCE_LIST_GET',
+        });
+      });
     });
-  });
 
-  it('mapStateToProps still builds a default filter group when missing a resource-related facet', () => {
-    const state = {
-      resources: {
-        organizations: {
-          byId: {
-            21: { id: 21, name: 'Organization #Twenty-One' } as Organization,
-            42: { id: 42, name: 'Organization #Fourty-Two' } as Organization,
-            84: { id: 84, name: 'Organization #Eighty-Four' } as Organization,
-          },
-        },
-      },
-    };
+    describe('when the filter is not drilldown', () => {
+      it('delegates to computeNewFilterValue', () => {
+        const props = mergeProps(
+          { currentParams: { limit: 20, offset: 0 }, filter: {} as FilterDefinition },
+          { dispatch },
+          { machineName: 'new' },
+        );
+        props.removeFilter('mocked_out_value');
 
-    expect(mapStateToProps(state, { machineName: 'organizations' }))
-    .toEqual({
-      filter: {
-        humanName: 'Organizations',
-        machineName: 'organizations',
-        values: [
-          { humanName: 'Organization #Twenty-One', primaryKey: '21' },
-          { humanName: 'Organization #Fourty-Two', primaryKey: '42' },
-          { humanName: 'Organization #Eighty-Four', primaryKey: '84' },
-        ],
-      },
+        expect(dispatch).toHaveBeenCalledWith({
+          params: { limit: 20, new: 'some filter value', offset: 0 },
+          resourceName: 'courses',
+          type: 'RESOURCE_LIST_GET',
+        });
+      });
     });
   });
 });
