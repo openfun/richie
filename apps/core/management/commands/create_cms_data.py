@@ -10,7 +10,8 @@ from django.contrib.sites.models import Site
 from cms import models as cms_models
 
 from apps.organizations.factories import OrganizationFactory
-from apps.organizations.models import Organization, OrganizationPage
+from apps.organizations.models import Organization
+
 from ...helpers import create_i18n_page
 
 logger = logging.getLogger("richie.commands.core.create_cms_data")
@@ -51,13 +52,12 @@ PAGE_INFOS = {
 # methods over querysets: Instance of 'list' has no 'delete' member (no-member).
 # We choose to ignore this false positive warning.
 def clear_cms_data():
-    """Clear all CMS data (CMS models + organization page)"""
+    """Clear all CMS data (CMS models + organizations)"""
 
     cms_models.Page.objects.all().delete()
     cms_models.Title.objects.all().delete()
     cms_models.CMSPlugin.objects.all().delete()
     cms_models.Placeholder.objects.all().delete()
-    OrganizationPage.objects.all().delete()
     Organization.objects.all().delete()
 
 
@@ -96,8 +96,7 @@ def create_cms_data():
             site=site,
             template="organizations/cms/organization_detail.html",
         )
-        organization = OrganizationFactory()
-        OrganizationPage.objects.create(organization=organization, extended_object=page)
+        OrganizationFactory(extended_object=page)
 
 
 class Command(BaseCommand):

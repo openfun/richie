@@ -6,7 +6,6 @@ from django.test import TestCase
 from cms.api import create_page
 
 from ..factories import OrganizationFactory
-from ..models import OrganizationPage
 
 
 class OrganizationCMSTestCase(TestCase):
@@ -18,11 +17,10 @@ class OrganizationCMSTestCase(TestCase):
         """
         Validate that the important elements are displayed once a page is published
         """
-        organization = OrganizationFactory(name="la Sorbonne", logo="my_logo.jpg")
         page = create_page(
             "La Sorbonne", "organizations/cms/organization_detail.html", "en"
         )
-        OrganizationPage.objects.create(organization=organization, extended_object=page)
+        OrganizationFactory(extended_object=page, logo="my_logo.jpg")
 
         # The page should not be visible before it is published
         url = page.get_absolute_url()
