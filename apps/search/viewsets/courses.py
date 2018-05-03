@@ -42,7 +42,10 @@ class CoursesViewSet(ViewSet):
 
         # Note: test_elasticsearch_feature.py needs to be updated whenever the search call
         # is updated and makes use new features.
-        query = {}
+        # queries is an array of individual queries that will be combined through "bool" before
+        # we pass them to ES. See the docs en bool queries.
+        # https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-bool-query.html
+        queries = []
         for param, value in params_form.cleaned_data.items():
             # Skip falsy values as we're not using them in our query
             if not value:
@@ -52,29 +55,43 @@ class CoursesViewSet(ViewSet):
             if param in [
                 "end_date", "enrollment_end_date", "enrollment_start_date", "start_date"
             ]:
-                # Add the relevant range criteria to the query, creating the prop if necessary
+                # Add the relevant range criteria to the queries
                 start, end = value
-                query.setdefault("range", {})[param] = {
-                    "gte": start.datetime if start else None,
-                    "lte": end.datetime if end else None,
-                }
+                queries = [
+                    *queries,
+                    {
+                        "range": {
+                            param: {
+                                "gte": start.datetime if start else None,
+                                "lte": end.datetime if end else None,
+                            }
+                        }
+                    },
+                ]
 
             # organizations & subjects are both array of related element IDs
             elif param in ["organizations", "subjects"]:
-                # Add the relevant term search to our query, creating the prop if necessary
-                query.setdefault("terms", {})[param] = value
+                # Add the relevant term search to our queries
+                queries = [*queries, {"terms": {param: value}}]
 
             # Search is a regular (multilingual) match query
             elif param == "match":
-                query["multi_match"] = {
-                    "fields": ["short_description.*", "title.*"],
-                    "query": value,
-                    "type": "cross_fields",
-                }
+                queries = [
+                    *queries,
+                    {
+                        "multi_match": {
+                            "fields": ["short_description.*", "title.*"],
+                            "query": value,
+                            "type": "cross_fields",
+                        }
+                    },
+                ]
 
         # Default to a match_all query
-        if not query:
+        if not queries:
             query = {"match_all": {}}
+        else:
+            query = {"bool": {"must": queries}}
 
         # Build organizations and subjects terms aggregations for our query
         aggs = {

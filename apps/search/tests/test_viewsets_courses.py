@@ -150,16 +150,22 @@ class CoursesViewsetTestCase(TestCase):
         # The ES connector was called with appropriate arguments for the client's request
         mock_search.assert_called_with(
             body={
-                "query": {
-                    "multi_match": {
-                        "fields": ["short_description.*", "title.*"],
-                        "query": "some phrase terms",
-                        "type": "cross_fields",
-                    }
-                },
                 "aggs": {
                     "organizations": {"terms": {"field": "organizations"}},
                     "subjects": {"terms": {"field": "subjects"}},
+                },
+                "query": {
+                    "bool": {
+                        "must": [
+                            {
+                                "multi_match": {
+                                    "fields": ["short_description.*", "title.*"],
+                                    "query": "some phrase terms",
+                                    "type": "cross_fields",
+                                }
+                            }
+                        ]
+                    }
                 },
             },
             doc_type="course",
@@ -212,11 +218,11 @@ class CoursesViewsetTestCase(TestCase):
         # The ES connector was called with appropriate arguments for the client's request
         mock_search.assert_called_with(
             body={
-                "query": {"terms": {"organizations": [13, 15]}},
                 "aggs": {
                     "organizations": {"terms": {"field": "organizations"}},
                     "subjects": {"terms": {"field": "subjects"}},
                 },
+                "query": {"bool": {"must": [{"terms": {"organizations": [13, 15]}}]}},
             },
             doc_type="course",
             from_=0,
@@ -259,11 +265,11 @@ class CoursesViewsetTestCase(TestCase):
         # The ES connector was called with appropriate arguments for the client's request
         mock_search.assert_called_with(
             body={
-                "query": {"terms": {"organizations": [345]}},
                 "aggs": {
                     "organizations": {"terms": {"field": "organizations"}},
                     "subjects": {"terms": {"field": "subjects"}},
                 },
+                "query": {"bool": {"must": [{"terms": {"organizations": [345]}}]}},
             },
             doc_type="course",
             from_=0,
@@ -312,25 +318,37 @@ class CoursesViewsetTestCase(TestCase):
         # The ES connector was called with appropriate arguments for the client's request
         mock_search.assert_called_with(
             body={
-                "query": {
-                    "range": {
-                        "end_date": {
-                            "gte": datetime.datetime(
-                                2018, 4, 30, 6, 0, tzinfo=pytz.utc
-                            ),
-                            "lte": datetime.datetime(
-                                2018, 6, 30, 6, 0, tzinfo=pytz.utc
-                            ),
-                        },
-                        "start_date": {
-                            "gte": datetime.datetime(2018, 1, 1, 6, 0, tzinfo=pytz.utc),
-                            "lte": None,
-                        },
-                    }
-                },
                 "aggs": {
                     "organizations": {"terms": {"field": "organizations"}},
                     "subjects": {"terms": {"field": "subjects"}},
+                },
+                "query": {
+                    "bool": {
+                        "must": [
+                            {
+                                "range": {
+                                    "end_date": {
+                                        "gte": datetime.datetime(
+                                            2018, 4, 30, 6, 0, tzinfo=pytz.utc
+                                        ),
+                                        "lte": datetime.datetime(
+                                            2018, 6, 30, 6, 0, tzinfo=pytz.utc
+                                        ),
+                                    }
+                                }
+                            },
+                            {
+                                "range": {
+                                    "start_date": {
+                                        "gte": datetime.datetime(
+                                            2018, 1, 1, 6, 0, tzinfo=pytz.utc
+                                        ),
+                                        "lte": None,
+                                    }
+                                }
+                            },
+                        ]
+                    }
                 },
             },
             doc_type="course",
@@ -382,31 +400,45 @@ class CoursesViewsetTestCase(TestCase):
         # The ES connector was called with appropriate arguments for the client's request
         mock_search.assert_called_with(
             body={
-                "query": {
-                    "multi_match": {
-                        "fields": ["short_description.*", "title.*"],
-                        "query": "these phrase terms",
-                        "type": "cross_fields",
-                    },
-                    "range": {
-                        "end_date": {
-                            "gte": datetime.datetime(
-                                2018, 4, 30, 6, 0, tzinfo=pytz.utc
-                            ),
-                            "lte": datetime.datetime(
-                                2018, 6, 30, 6, 0, tzinfo=pytz.utc
-                            ),
-                        },
-                        "start_date": {
-                            "gte": datetime.datetime(2018, 1, 1, 6, 0, tzinfo=pytz.utc),
-                            "lte": None,
-                        },
-                    },
-                    "terms": {"subjects": [42, 84]},
-                },
                 "aggs": {
                     "organizations": {"terms": {"field": "organizations"}},
                     "subjects": {"terms": {"field": "subjects"}},
+                },
+                "query": {
+                    "bool": {
+                        "must": [
+                            {
+                                "range": {
+                                    "end_date": {
+                                        "gte": datetime.datetime(
+                                            2018, 4, 30, 6, 0, tzinfo=pytz.utc
+                                        ),
+                                        "lte": datetime.datetime(
+                                            2018, 6, 30, 6, 0, tzinfo=pytz.utc
+                                        ),
+                                    }
+                                }
+                            },
+                            {
+                                "multi_match": {
+                                    "fields": ["short_description.*", "title.*"],
+                                    "query": "these phrase terms",
+                                    "type": "cross_fields",
+                                }
+                            },
+                            {
+                                "range": {
+                                    "start_date": {
+                                        "gte": datetime.datetime(
+                                            2018, 1, 1, 6, 0, tzinfo=pytz.utc
+                                        ),
+                                        "lte": None,
+                                    }
+                                }
+                            },
+                            {"terms": {"subjects": [42, 84]}},
+                        ]
+                    }
                 },
             },
             doc_type="course",
