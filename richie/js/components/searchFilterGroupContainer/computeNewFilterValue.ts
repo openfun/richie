@@ -7,34 +7,38 @@ export function computeNewFilterValue(
   existingValue: Maybe<Nullable<string | number | Array<string | number>>>,
   relevantValue: string | number,
 ) {
+  // There is no existing value for this filter
   if (!existingValue) {
-    // There is no existing value for this filter
-    return action === 'add' ?
+    return {
       // ADD: Make an array with the existing value
-      [ relevantValue ] :
+      add: () => [ relevantValue ],
       // REMOVE: There's nothing that could possibly removed, return null
-      null;
-  } else if (typeof existingValue === 'string' || typeof existingValue === 'number') {
-    // The existing value for this filter is a single primitive type value
-    return action === 'add' ?
-      // ADD: Make an array with the existing value and the new one
-      [ existingValue, relevantValue ] :
-      (existingValue === relevantValue ?
-        // REMOVE: Return nothing if we had to drop the existing value we had
-        null :
-        // REMOVE: Keep the existing value if it's not the one we needed to drop
-        existingValue);
-  } else {
-    // The existing value is an array of strings or numbers
-    const nullEmptyArray = (array: Array<string | number>) => {
-      return array.length === 0 ? null : array;
-    };
+      remove: () => null,
+    }[action]();
+  }
 
-    return action === 'add' ?
-      // ADD: Just push the new value into our existing array of values
-      [ ...existingValue, relevantValue ] :
-      // REMOVE: Return the existing array of values without the one we needed to remove
-      nullEmptyArray(existingValue.filter((v) => v !== relevantValue));
+  // The existing value for this filter is a single primitive type value
+  if (typeof existingValue === 'string' || typeof existingValue === 'number') {
+    return {
+      // ADD: Make an array with the existing value and the new one
+      add: () => [ existingValue, relevantValue ],
+      // REMOVE:
+      // - Return nothing if we had to drop the existing value we had
+      // - Keep the existing value if it's not the one we needed to drop
+      remove: () => existingValue === relevantValue ? null : existingValue,
+    }[action]();
+  }
+
+  // The existing value is an array of strings or numbers (see function signature)
+  return {
+    // ADD: Just push the new value into our existing array of values
+    add: () => [ ...existingValue as Array<string | number>, relevantValue ],
+    // REMOVE: Return the existing array of values without the one we needed to remove
+    remove: () => nullEmptyArray((existingValue as Array<string | number>).filter((v) => v !== relevantValue)),
+  }[action]();
+
+  function nullEmptyArray(array: Array<string | number>) {
+    return array.length === 0 ? null : array;
   }
 }
 
