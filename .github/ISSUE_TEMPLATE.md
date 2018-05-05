@@ -1,23 +1,6 @@
-## Expected Behavior
+<!---
+Thanks for filing an issue 😄 ! Before you submit, please read the following:
 
-Description...
-
-
-## Actual Behavior
-
-Description...
-
-
-## Steps to Reproduce
-
-Description...
-
-1. item 1...
-2. item 2...
-
-
-## Specifications
-
-- Version: ...
-- Platform: ...
-
+Check the other issue templates if you are trying to submit a bug report, feature request, or question
+Search open/closed issues before submitting since someone might have asked the same thing before!
+-->
