@@ -52,6 +52,7 @@
     "moment": "^2.20.1",
     "node-sass": "^4.7.2",
     "nodemon": "^1.14.12",
+    "prettier": "1.12.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
