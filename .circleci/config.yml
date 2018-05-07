@@ -437,7 +437,7 @@ jobs:
             - ./node_modules
           key: v3-front-dependencies-{{ checksum "package.json" }}
 
-  lint-front:
+  lint-front-tslint:
     docker:
       - image: circleci/node:9-browsers
     working_directory: ~/richie
@@ -449,6 +449,19 @@ jobs:
       - run:
           name: Lint code with tslint
           command: yarn lint
+
+  lint-front-prettier:
+    docker:
+      - image: circleci/node:9-browsers
+    working_directory: ~/richie
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v3-front-dependencies-{{ checksum "package.json" }}
+      - run:
+          name: Lint code with prettier
+          command: yarn prettier --list-different "richie/js/**/*.+(ts|tsx|json|js|jsx)" "*.+(ts|tsx|json|js|jsx)"
 
   test-front:
     docker:
@@ -481,7 +494,13 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - lint-front:
+      - lint-front-tslint:
+          requires:
+            - build-front
+          filters:
+            tags:
+              only: /.*/
+      - lint-front-prettier:
           requires:
             - build-front
           filters:
@@ -489,7 +508,7 @@ workflows:
               only: /.*/
       - test-front:
           requires:
-            - lint-front
+            - build-front
           filters:
             tags:
               only: /.*/
