@@ -17,9 +17,13 @@ export class CourseGlimpseList extends React.Component<CourseGlimpseListProps> {
   render() {
     const { courses } = this.props;
 
-    return <div className="course-glimpse-list">
-      {courses.map((course) => <CourseGlimpseContainer course={course} key={course.id} />)}
-    </div>;
+    return (
+      <div className="course-glimpse-list">
+        {courses.map(course => (
+          <CourseGlimpseContainer course={course} key={course.id} />
+        ))}
+      </div>
+    );
   }
 }
 

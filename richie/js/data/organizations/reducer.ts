@@ -11,30 +11,41 @@ import {
   initialState as resourceByIdInit,
   ResourceByIdState,
 } from '../genericReducers/resourceById/resourceById';
-import { currentQuery, ResourceListState } from '../genericReducers/resourceList/resourceList';
+import {
+  currentQuery,
+  ResourceListState,
+} from '../genericReducers/resourceList/resourceList';
 import { ResourceListGetSuccess } from '../genericSideEffects/getResourceList/actions';
 
 const initialState = { ...resourceByIdInit };
 
-export type OrganizationsState = Maybe<ResourceByIdState<Organization> & ResourceListState<Organization>>;
+export type OrganizationsState = Maybe<
+  ResourceByIdState<Organization> & ResourceListState<Organization>
+>;
 
 export const organizations: Reducer<OrganizationsState> = (
   state: OrganizationsState = initialState,
-  action?: ResourceAdd<Organization> | ResourceListGetSuccess<Organization> | { type: '' },
+  action?:
+    | ResourceAdd<Organization>
+    | ResourceListGetSuccess<Organization>
+    | { type: '' },
 ) => {
-  if (!action) { return state; } // Compiler needs help
+  if (!action) {
+    return state;
+  } // Compiler needs help
 
   // Discriminate resource related actions by resource name
-  if (get(action, 'resourceName') &&
-      get(action, 'resourceName') !== 'organizations'
+  if (
+    get(action, 'resourceName') &&
+    get(action, 'resourceName') !== 'organizations'
   ) {
     return state;
   }
 
-  return flow([
-    partialRight(byId, action),
-    partialRight(currentQuery, action),
-  ])(state, action);
+  return flow([partialRight(byId, action), partialRight(currentQuery, action)])(
+    state,
+    action,
+  );
 };
 
 export default organizations;

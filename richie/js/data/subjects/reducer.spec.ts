@@ -15,23 +15,27 @@ describe('data/subjects reducer', () => {
 
   describe('resourceById', () => {
     it('drops actions that do not match the resourceName', () => {
-      const previousState = { byId: { 43: subj43  } };
+      const previousState = { byId: { 43: subj43 } };
 
-      expect(subjectsReducer(previousState, {
-        resource: subj44,
-        resourceName: 'organizations',
-        type: 'RESOURCE_ADD',
-      })).toEqual(previousState);
+      expect(
+        subjectsReducer(previousState, {
+          resource: subj44,
+          resourceName: 'organizations',
+          type: 'RESOURCE_ADD',
+        }),
+      ).toEqual(previousState);
     });
 
     it('uses actions that match the resourceName', () => {
-      const previousState = { byId: { 43: subj43  } };
+      const previousState = { byId: { 43: subj43 } };
 
-      expect(subjectsReducer(previousState, {
-        resource: subj44,
-        resourceName: 'subjects',
-        type: 'RESOURCE_ADD',
-      })).toEqual({ byId: { 43: subj43, 44: subj44 } });
+      expect(
+        subjectsReducer(previousState, {
+          resource: subj44,
+          resourceName: 'subjects',
+          type: 'RESOURCE_ADD',
+        }),
+      ).toEqual({ byId: { 43: subj43, 44: subj44 } });
     });
   });
 });

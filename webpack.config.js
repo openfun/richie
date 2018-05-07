@@ -9,10 +9,10 @@ module.exports = {
 
   // Include whatwg fetch as an entry point (and not an import) as it's replacing (when necessary)
   // a globally available browser-provided function
-  entry: [ 'whatwg-fetch', './richie/js/index.tsx' ],
+  entry: ['whatwg-fetch', './richie/js/index.tsx'],
   output: {
     filename: 'index.js',
-    path: __dirname + '/richie/build/js'
+    path: __dirname + '/richie/build/js',
   },
 
   // Enable sourcemaps for debugging webpack's output.
@@ -20,7 +20,7 @@ module.exports = {
 
   resolve: {
     // Add '.ts' and '.tsx' as resolvable extensions.
-    extensions: [ '.ts', '.tsx', '.js', '.json' ]
+    extensions: ['.ts', '.tsx', '.js', '.json'],
   },
 
   module: {
@@ -28,8 +28,8 @@ module.exports = {
       // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
       { test: /\.tsx?$/, loader: 'ts-loader' },
       // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-      { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' }
-    ]
+      { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },
+    ],
   },
 
   plugins: [

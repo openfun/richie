@@ -17,7 +17,9 @@ describe('components/courseGlimpse', () => {
     const organization = {
       name: 'Some Organization',
     } as Organization;
-    const wrapper = render(<CourseGlimpse course={course} organization={organization} />);
+    const wrapper = render(
+      <CourseGlimpse course={course} organization={organization} />,
+    );
 
     expect(wrapper.html()).toContain('Course 42');
     expect(wrapper.find('img').attr('src')).toContain('/thumbs/small.png');

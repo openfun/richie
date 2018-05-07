@@ -40,21 +40,27 @@ export function fetchList(
       'Content-Type': 'application/json',
     },
   })
-  .then((response) => {
-    // Fetch treats remote errors (400, 404, 503...) as successes. The ok flag is the way to discriminate.
-    if (response.ok) {
-      return response;
-    }
-    // Push remote errors to the error channel for consistency
-    throw new Error('Failed to get list from ' + endpoint + ' : ' + response.status);
-  })
-  .then((response) => response.json())
-  .catch((error) => ({ error }));
+    .then(response => {
+      // Fetch treats remote errors (400, 404, 503...) as successes. The ok flag is the way to discriminate.
+      if (response.ok) {
+        return response;
+      }
+      // Push remote errors to the error channel for consistency
+      throw new Error(
+        'Failed to get list from ' + endpoint + ' : ' + response.status,
+      );
+    })
+    .then(response => response.json())
+    .catch(error => ({ error }));
 }
 
 export function* getList(action: ResourceListGet) {
   const { params, resourceName } = action;
-  const { error, meta, objects, ...restProps }: Response = yield call(fetchList, resourceName, params);
+  const { error, meta, objects, ...restProps }: Response = yield call(
+    fetchList,
+    resourceName,
+    params,
+  );
 
   if (error) {
     yield put(failedToGetResourceList(resourceName, error));
@@ -62,7 +68,13 @@ export function* getList(action: ResourceListGet) {
     // Add each individual resource to the state before we put the success action in
     // order to avoid race conditions / incomplete data sets
     yield put(addMultipleResources(resourceName, objects!));
-    yield put(didGetResourceList(resourceName, { meta: meta!, objects: objects!, ...restProps }, params!));
+    yield put(
+      didGetResourceList(
+        resourceName,
+        { meta: meta!, objects: objects!, ...restProps },
+        params!,
+      ),
+    );
   }
 }
 

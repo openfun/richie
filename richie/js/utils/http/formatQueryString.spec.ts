@@ -7,11 +7,15 @@ describe('utils/http - formatQueryString()', () => {
   });
 
   it('returns a query string built from the params', () => {
-    expect(formatQueryString({ foo: 'bar', fizz: 'buzz' })).toEqual('?foo=bar&fizz=buzz');
+    expect(formatQueryString({ foo: 'bar', fizz: 'buzz' })).toEqual(
+      '?foo=bar&fizz=buzz',
+    );
   });
 
   it('supports null as a param value', () => {
-    expect(formatQueryString({ foo: 'bar', fizz: null })).toEqual('?foo=bar&fizz=null');
+    expect(formatQueryString({ foo: 'bar', fizz: null })).toEqual(
+      '?foo=bar&fizz=null',
+    );
   });
 
   it('supports numbers as param values', () => {
@@ -19,6 +23,8 @@ describe('utils/http - formatQueryString()', () => {
   });
 
   it('handles arrays as param values', () => {
-    expect(formatQueryString({ foo: [ 'bar', 'baz' ], fizz: 'buzz' })).toEqual('?foo=bar&foo=baz&fizz=buzz');
+    expect(formatQueryString({ foo: ['bar', 'baz'], fizz: 'buzz' })).toEqual(
+      '?foo=bar&foo=baz&fizz=buzz',
+    );
   });
 });

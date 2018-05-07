@@ -12,7 +12,8 @@ describe('components/courseGlimpseListContainer', () => {
       language: 'fr',
       organizations: [23, 31],
       session_number: 1,
-      short_description: 'Lorem ipsum dolor sit amet consectetur adipiscim elit.',
+      short_description:
+        'Lorem ipsum dolor sit amet consectetur adipiscim elit.',
       start_date: '2018-03-01T06:00:00.000Z',
       subjects: [45],
       thumbnails: {
@@ -32,7 +33,8 @@ describe('components/courseGlimpseListContainer', () => {
       language: 'fr',
       organizations: [11],
       session_number: 1,
-      short_description: 'Phasellus hendrerit tortor nulla, ut tristique ante aliquam sed.',
+      short_description:
+        'Phasellus hendrerit tortor nulla, ut tristique ante aliquam sed.',
       start_date: '2018-03-01T06:00:00.000Z',
       subjects: [7, 128],
       thumbnails: {
@@ -60,7 +62,7 @@ describe('components/courseGlimpseListContainer', () => {
     };
 
     expect(mapStateToProps(state)).toEqual({
-      courses: [ course44, course43 ],
+      courses: [course44, course43],
     });
   });
 });

@@ -1,14 +1,21 @@
 import get from 'lodash-es/get';
 
 import { API_LIST_DEFAULT_PARAMS as defaultParams } from '../../../settings.json';
-import { APIListCommonRequestParams, APIResponseListFacets } from '../../../types/api';
+import {
+  APIListCommonRequestParams,
+  APIResponseListFacets,
+} from '../../../types/api';
 import Resource from '../../../types/Resource';
-import { ResourceListGet, ResourceListGetSuccess } from '../../genericSideEffects/getResourceList/actions';
+import {
+  ResourceListGet,
+  ResourceListGetSuccess,
+} from '../../genericSideEffects/getResourceList/actions';
 
 export const initialState = {};
 
-export type ResourceListStateParams = APIListCommonRequestParams &
-  { [key: string]: string | number | null | Array<string | number> };
+export type ResourceListStateParams = APIListCommonRequestParams & {
+  [key: string]: string | number | null | Array<string | number>;
+};
 
 export interface ResourceListState<R extends Resource> {
   currentQuery?: {
@@ -27,15 +34,24 @@ export function currentQuery<R extends Resource>(
   action: ResourceListGetSuccess<R> | { type: '' },
 ): ResourceListState<Resource> {
   // Initialize the state to an empty version of itself
-  if (!state) { state = initialState; }
-  if (!action) { return state; } // Compiler needs help
+  if (!state) {
+    state = initialState;
+  }
+  if (!action) {
+    return state;
+  } // Compiler needs help
 
   switch (action.type) {
     // Create or update the latest resource list we fetched from the server
     case 'RESOURCE_LIST_GET_SUCCESS':
       const { facets = {}, objects, meta } = action.apiResponse;
       // Get the limit/offset from our params, set our defaults
-      const { limit = defaultParams.limit, offset = defaultParams.offset, ...restParams } = action.params;
+      // tslint:disable:trailing-comma // Prettier does not format this syntax properly
+      const {
+        limit = defaultParams.limit,
+        offset = defaultParams.offset,
+        ...restParams
+      } = action.params;
 
       return {
         ...state,
@@ -43,7 +59,8 @@ export function currentQuery<R extends Resource>(
           facets,
           items: objects.reduce(
             // Transform the array into an object with indexes as keys
-            (acc, item, index) => ({ ...acc, [offset + index]: item.id }), {},
+            (acc, item, index) => ({ ...acc, [offset + index]: item.id }),
+            {},
           ),
           // Copy back the params, now with proper defaults on limit/offset
           params: { ...restParams, limit, offset },

@@ -12,9 +12,7 @@ const hardcodedFilterDefinitions = {
   new: {
     humanName: 'New courses',
     machineName: 'status',
-    values: [
-      { primaryKey: 'new', humanName: 'First session'},
-    ],
+    values: [{ primaryKey: 'new', humanName: 'First session' }],
   },
 
   status: {
@@ -41,6 +39,9 @@ const resourceBasedFilterDefinitions = {
   },
 };
 
-export const initialState = { ...hardcodedFilterDefinitions, ...resourceBasedFilterDefinitions };
+export const initialState = {
+  ...hardcodedFilterDefinitions,
+  ...resourceBasedFilterDefinitions,
+};
 
 export default initialState;

@@ -11,7 +11,7 @@ export function computeNewFilterValue(
   if (!existingValue) {
     return {
       // ADD: Make an array with the existing value
-      add: () => [ relevantValue ],
+      add: () => [relevantValue],
       // REMOVE: There's nothing that could possibly removed, return null
       remove: () => null,
     }[action]();
@@ -21,20 +21,25 @@ export function computeNewFilterValue(
   if (typeof existingValue === 'string' || typeof existingValue === 'number') {
     return {
       // ADD: Make an array with the existing value and the new one
-      add: () => [ existingValue, relevantValue ],
+      add: () => [existingValue, relevantValue],
       // REMOVE:
       // - Return nothing if we had to drop the existing value we had
       // - Keep the existing value if it's not the one we needed to drop
-      remove: () => existingValue === relevantValue ? null : existingValue,
+      remove: () => (existingValue === relevantValue ? null : existingValue),
     }[action]();
   }
 
   // The existing value is an array of strings or numbers (see function signature)
   return {
     // ADD: Just push the new value into our existing array of values
-    add: () => [ ...existingValue as Array<string | number>, relevantValue ],
+    add: () => [...(existingValue as Array<string | number>), relevantValue],
     // REMOVE: Return the existing array of values without the one we needed to remove
-    remove: () => nullEmptyArray((existingValue as Array<string | number>).filter((v) => v !== relevantValue)),
+    remove: () =>
+      nullEmptyArray(
+        (existingValue as Array<string | number>).filter(
+          v => v !== relevantValue,
+        ),
+      ),
   }[action]();
 
   function nullEmptyArray(array: Array<string | number>) {

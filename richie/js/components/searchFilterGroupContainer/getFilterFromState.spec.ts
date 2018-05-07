@@ -11,9 +11,7 @@ describe('components/searchFilterGroupContainer/getFilterFromState', () => {
         new: {
           humanName: 'New courses',
           machineName: 'status',
-          values: [
-            { primaryKey: 'new', humanName: 'First session'},
-          ],
+          values: [{ primaryKey: 'new', humanName: 'First session' }],
         },
         organizations: {} as FilterDefinition,
         status: {} as FilterDefinition,
@@ -21,13 +19,10 @@ describe('components/searchFilterGroupContainer/getFilterFromState', () => {
       },
       resources: {},
     };
-    expect(getFilterFromState(state, 'new'))
-    .toEqual({
+    expect(getFilterFromState(state, 'new')).toEqual({
       humanName: 'New courses',
       machineName: 'status',
-      values: [
-        { primaryKey: 'new', humanName: 'First session'},
-      ],
+      values: [{ primaryKey: 'new', humanName: 'First session' }],
     });
   });
 
@@ -63,8 +58,7 @@ describe('components/searchFilterGroupContainer/getFilterFromState', () => {
       },
     };
 
-    expect(getFilterFromState(state, 'organizations'))
-    .toEqual({
+    expect(getFilterFromState(state, 'organizations')).toEqual({
       humanName: 'Organizations',
       machineName: 'organizations',
       values: [
@@ -98,8 +92,7 @@ describe('components/searchFilterGroupContainer/getFilterFromState', () => {
       },
     };
 
-    expect(getFilterFromState(state, 'organizations'))
-    .toEqual({
+    expect(getFilterFromState(state, 'organizations')).toEqual({
       humanName: 'Organizations',
       machineName: 'organizations',
       values: [

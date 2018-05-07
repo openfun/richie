@@ -18,8 +18,12 @@ export function byId<R extends Resource>(
   action: ResourceAdd<R> | ResourceMultipleAdd<R> | { type: '' },
 ): ResourceByIdState<R> {
   // Initialize the state to an empty version of itself
-  if (!state) { state = initialState; }
-  if (!action) { return state; } // Compiler needs help
+  if (!state) {
+    state = initialState;
+  }
+  if (!action) {
+    return state;
+  } // Compiler needs help
 
   switch (action.type) {
     // Add a single record to our state
@@ -32,14 +36,17 @@ export function byId<R extends Resource>(
         },
       };
 
-      case 'RESOURCE_MULTIPLE_ADD':
-        return {
-          ...state,
-          byId: {
-            ...state.byId,
-            ...action.resources.reduce((acc, resource) => ({ ...acc, [resource.id]: resource }), {}),
-          },
-        };
+    case 'RESOURCE_MULTIPLE_ADD':
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          ...action.resources.reduce(
+            (acc, resource) => ({ ...acc, [resource.id]: resource }),
+            {},
+          ),
+        },
+      };
   }
 
   return state;

@@ -29,7 +29,8 @@ describe('data/courses reducer', () => {
     language: 'fr',
     organizations: [11],
     session_number: 1,
-    short_description: 'Phasellus hendrerit tortor nulla, ut tristique ante aliquam sed.',
+    short_description:
+      'Phasellus hendrerit tortor nulla, ut tristique ante aliquam sed.',
     start_date: '2018-03-01T06:00:00.000Z',
     subjects: [7, 128],
     thumbnails: {
@@ -47,30 +48,36 @@ describe('data/courses reducer', () => {
 
   it('returns the state as is when called with an unknown action', () => {
     const previousState = {
-      byId: { 43: course43  },
+      byId: { 43: course43 },
     };
-    expect(coursesReducer(previousState, { type: 'TODO_ADD' })).toEqual(previousState);
+    expect(coursesReducer(previousState, { type: 'TODO_ADD' })).toEqual(
+      previousState,
+    );
   });
 
   describe('resourceById', () => {
     it('drops actions that do not match the resourceName', () => {
-      const previousState = { byId: { 43: course43  } };
+      const previousState = { byId: { 43: course43 } };
 
-      expect(coursesReducer(previousState, {
-        resource: course44,
-        resourceName: 'subjects',
-        type: 'RESOURCE_ADD',
-      })).toEqual(previousState);
+      expect(
+        coursesReducer(previousState, {
+          resource: course44,
+          resourceName: 'subjects',
+          type: 'RESOURCE_ADD',
+        }),
+      ).toEqual(previousState);
     });
 
     it('uses actions that match the resourceName', () => {
-      const previousState = { byId: { 43: course43  } };
+      const previousState = { byId: { 43: course43 } };
 
-      expect(coursesReducer(previousState, {
-        resource: course44,
-        resourceName: 'courses',
-        type: 'RESOURCE_ADD',
-      })).toEqual({ byId: { 43: course43, 44: course44 } });
+      expect(
+        coursesReducer(previousState, {
+          resource: course44,
+          resourceName: 'courses',
+          type: 'RESOURCE_ADD',
+        }),
+      ).toEqual({ byId: { 43: course43, 44: course44 } });
     });
   });
 });

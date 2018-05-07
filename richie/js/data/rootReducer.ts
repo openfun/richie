@@ -1,7 +1,10 @@
 import { Reducer } from 'redux';
 
 import { courses, CoursesState } from './courses/reducer';
-import { filterDefinitions, FilterDefinitionState } from './filterDefinitions/reducer';
+import {
+  filterDefinitions,
+  FilterDefinitionState,
+} from './filterDefinitions/reducer';
 import { organizations, OrganizationsState } from './organizations/reducer';
 import { subjects, SubjectsState } from './subjects/reducer';
 

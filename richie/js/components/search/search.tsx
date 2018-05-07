@@ -21,14 +21,16 @@ export class Search extends React.Component<SearchProps, SearchState> {
   }
 
   render() {
-    return <div className="search">
-      <div className="search__filters">
-        <SearchFiltersPane />
+    return (
+      <div className="search">
+        <div className="search__filters">
+          <SearchFiltersPane />
+        </div>
+        <div className="search__results">
+          <CourseGlimpseListContainer />
+        </div>
       </div>
-      <div className="search__results">
-        <CourseGlimpseListContainer />
-      </div>
-    </div>;
+    );
   }
 }
 

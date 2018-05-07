@@ -8,7 +8,10 @@ export interface ResourceAdd<R extends Resource> {
   resource: R;
 }
 
-export function addResource(resourceName: keyof RootState['resources'], resource: Resource): ResourceAdd<Resource> {
+export function addResource(
+  resourceName: keyof RootState['resources'],
+  resource: Resource,
+): ResourceAdd<Resource> {
   return {
     resource,
     resourceName,

@@ -8,9 +8,5 @@
     "limit": 20,
     "offset": 0
   },
-  "SUPPORTED_LANGUAGES": [
-    "de",
-    "en",
-    "fr"
-  ]
+  "SUPPORTED_LANGUAGES": ["de", "en", "fr"]
 }

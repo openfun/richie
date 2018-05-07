@@ -29,7 +29,8 @@ describe('data/genericReducers/resourceList reducer', () => {
     language: 'fr',
     organizations: [11],
     session_number: 1,
-    short_description: 'Phasellus hendrerit tortor nulla, ut tristique ante aliquam sed.',
+    short_description:
+      'Phasellus hendrerit tortor nulla, ut tristique ante aliquam sed.',
     start_date: '2018-03-01T06:00:00.000Z',
     subjects: [7, 128],
     thumbnails: {
@@ -44,27 +45,26 @@ describe('data/genericReducers/resourceList reducer', () => {
   describe('RESOURCE_LIST_GET_SUCCESS', () => {
     it('creates a new query when there is none', () => {
       const previousState = {};
-      expect(currentQuery(
-        previousState,
-        {
+      expect(
+        currentQuery(previousState, {
           apiResponse: {
             meta: { limit: 12, offset: 2, total_count: 4 },
-            objects: [ course43, course44 ],
+            objects: [course43, course44],
           },
           params: { limit: 12, offset: 2 },
           resourceName: 'courses',
           type: 'RESOURCE_LIST_GET_SUCCESS',
-        },
-      ))
-      // No facets in the apiResponse: we get an empty object in the state
-      .toEqual({
-        currentQuery: {
-          facets: {},
-          items: { 2: 43, 3: 44 },
-          params: { limit: 12, offset: 2 },
-          total_count: 4,
-        },
-      });
+        }),
+      )
+        // No facets in the apiResponse: we get an empty object in the state
+        .toEqual({
+          currentQuery: {
+            facets: {},
+            items: { 2: 43, 3: 44 },
+            params: { limit: 12, offset: 2 },
+            total_count: 4,
+          },
+        });
     });
 
     it('replaces the existing query if the new one has different params', () => {
@@ -76,20 +76,18 @@ describe('data/genericReducers/resourceList reducer', () => {
           total_count: 4,
         },
       };
-      expect(currentQuery(
-        previousState,
-        {
+      expect(
+        currentQuery(previousState, {
           apiResponse: {
             facets: { organizations: { 11: 1, 23: 1, 31: 1 } },
             meta: { limit: 2, offset: 0, total_count: 240 },
-            objects: [ course44, course43 ],
+            objects: [course44, course43],
           },
           params: { limit: 2, match: 'some query', offset: 0 },
           resourceName: 'courses',
           type: 'RESOURCE_LIST_GET_SUCCESS',
-        },
-      ))
-      .toEqual({
+        }),
+      ).toEqual({
         currentQuery: {
           // Facets are copied over on the state as-is
           facets: { organizations: { 11: 1, 23: 1, 31: 1 } },

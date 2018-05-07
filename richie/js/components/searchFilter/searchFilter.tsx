@@ -10,13 +10,19 @@ export interface SearchFilterProps {
 export const SearchFilter = (props: SearchFilterProps) => {
   const { filter, addFilter } = props;
 
-  return <button className="search-filter" onClick={() => addFilter(filter.primaryKey)}>
-    {filter.humanName}
-    {filter.count || filter.count === 0 ?
-      <span className="search-filter__count">{filter.count}</span> :
-      ''
-    }
-  </button>;
+  return (
+    <button
+      className="search-filter"
+      onClick={() => addFilter(filter.primaryKey)}
+    >
+      {filter.humanName}
+      {filter.count || filter.count === 0 ? (
+        <span className="search-filter__count">{filter.count}</span>
+      ) : (
+        ''
+      )}
+    </button>
+  );
 };
 
 export default SearchFilter;

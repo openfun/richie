@@ -40,13 +40,18 @@ describe('components/courseGlimpseContainer', () => {
       },
     };
 
-    expect(mapStateToProps(state, { course: course43 })).toEqual({ organization: org23 });
+    expect(mapStateToProps(state, { course: course43 })).toEqual({
+      organization: org23,
+    });
   });
 
   it('mergeProps takes the organization from mapState and the course from ownProps', () => {
     const stateProps = { organization: org23 };
     const ownProps = { course: course43 };
 
-    expect(mergeProps(stateProps, null, ownProps)).toEqual({ course: course43, organization: org23 });
+    expect(mergeProps(stateProps, null, ownProps)).toEqual({
+      course: course43,
+      organization: org23,
+    });
   });
 });

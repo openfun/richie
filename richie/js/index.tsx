@@ -29,38 +29,46 @@ const componentLibrary: ComponentLibrary = {
 };
 // Type guard: ensures a given string (candidate) is indeed a proper key of the componentLibrary with a corresponding
 // component. This is a runtime check but it allows TS to check the component prop types at compile time
-function isComponentName(candidate: keyof ComponentLibrary | string): candidate is keyof ComponentLibrary {
+function isComponentName(
+  candidate: keyof ComponentLibrary | string,
+): candidate is keyof ComponentLibrary {
   return includes(Object.keys(componentLibrary), candidate);
 }
 
 // Wait for the DOM to load before we scour it for an element that requires React to be rendered
-document.addEventListener('DOMContentLoaded', (event) => {
+document.addEventListener('DOMContentLoaded', event => {
   // Bootstrap the Redux store using the configureStore function from /data. Can make use of embedded
   // data put there by the Django page.
   const store = bootstrapStore();
 
   // Find all the elements that need React to render a component
-  Array.prototype.forEach.call(document.querySelectorAll('.fun-react'),
-  (element: Element) => {
-    // Generate a component name. It should be a key of the componentLibrary object / ComponentLibrary interface
-    const componentName =
-      startCase(get(element.className.match(/fun-react--([a-zA-Z-]*)/), '[1]') || '')
-      .split(' ')
-      .join('');
-    // Sanity check: only attempt to access and render components for which we do have a valid name
-    if (isComponentName(componentName)) {
-      // Do get the component dynamically. We know this WILL produce a valid component thanks to the type guard
-      const Component = componentLibrary[componentName];
-      // Render the component inside a `react-redux` store Provider so its children can be `connect`ed
-      ReactDOM.render(
-        <Provider store={store}>
-          <Component />
-        </Provider>,
-        element,
-      );
-    } else {
-      // Emit a warning at runtime when we fail to find a matching component for an element that required one
-      console.warn('Failed to load React component: no such component in Library ' + componentName);
-    }
-  });
+  Array.prototype.forEach.call(
+    document.querySelectorAll('.fun-react'),
+    (element: Element) => {
+      // Generate a component name. It should be a key of the componentLibrary object / ComponentLibrary interface
+      const componentName = startCase(
+        get(element.className.match(/fun-react--([a-zA-Z-]*)/), '[1]') || '',
+      )
+        .split(' ')
+        .join('');
+      // Sanity check: only attempt to access and render components for which we do have a valid name
+      if (isComponentName(componentName)) {
+        // Do get the component dynamically. We know this WILL produce a valid component thanks to the type guard
+        const Component = componentLibrary[componentName];
+        // Render the component inside a `react-redux` store Provider so its children can be `connect`ed
+        ReactDOM.render(
+          <Provider store={store}>
+            <Component />
+          </Provider>,
+          element,
+        );
+      } else {
+        // Emit a warning at runtime when we fail to find a matching component for an element that required one
+        console.warn(
+          'Failed to load React component: no such component in Library ' +
+            componentName,
+        );
+      }
+    },
+  );
 });

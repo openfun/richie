@@ -36,7 +36,8 @@ describe('data/genericSideEffects/getResourceList saga', () => {
     language: 'fr',
     organizations: [11],
     session_number: 1,
-    short_description: 'Phasellus hendrerit tortor nulla, ut tristique ante aliquam sed.',
+    short_description:
+      'Phasellus hendrerit tortor nulla, ut tristique ante aliquam sed.',
     start_date: '2018-03-01T06:00:00.000Z',
     subjects: [7, 128],
     thumbnails: {
@@ -62,32 +63,36 @@ describe('data/genericSideEffects/getResourceList saga', () => {
       window.fetch = realFetch;
     });
 
-    it('requests the resource list, parses the JSON response and resolves with the results', (done) => {
-      mockFetch.and.returnValue(Promise.resolve({
-        json: () => Promise.resolve({ objects: [ course43, course44 ] }),
-        ok: true,
-      }));
+    it('requests the resource list, parses the JSON response and resolves with the results', done => {
+      mockFetch.and.returnValue(
+        Promise.resolve({
+          json: () => Promise.resolve({ objects: [course43, course44] }),
+          ok: true,
+        }),
+      );
 
-      fetchList('courses', { limit: 2, offset: 43 })
-      .then((response) => {
+      fetchList('courses', { limit: 2, offset: 43 }).then(response => {
         // The correct request given parameters is performed
         expect(mockFetch).toHaveBeenCalledWith(
           '/api/v1.0/courses/?limit=2&offset=43',
-          { headers: { 'Content-Type': 'application/json' },
-        });
+          {
+            headers: { 'Content-Type': 'application/json' },
+          },
+        );
         // Our polymorphic response object is properly shaped
         expect(response.error).not.toBeTruthy();
-        expect(response.objects).toEqual([ course43, course44 ]);
+        expect(response.objects).toEqual([course43, course44]);
         done();
       });
     });
 
-    it('returns an { error } object when it fails to get the resource list (local)', (done) => {
-      mockFetch.and.returnValue(Promise.reject(new Error('Could not perform fetch.')));
+    it('returns an { error } object when it fails to get the resource list (local)', done => {
+      mockFetch.and.returnValue(
+        Promise.reject(new Error('Could not perform fetch.')),
+      );
 
       // Don't check params again as it was done in the first test
-      fetchList('courses', { limit: 2, offset: 43 })
-      .then((response) => {
+      fetchList('courses', { limit: 2, offset: 43 }).then(response => {
         // Our polymorphic response object is properly shaped - with an error this time
         expect(response.objects).not.toBeDefined();
         expect(response.error).toEqual(jasmine.any(Error));
@@ -95,12 +100,11 @@ describe('data/genericSideEffects/getResourceList saga', () => {
       });
     });
 
-    it('returns an { error } object when it fails to get the resource list (network)', (done) => {
+    it('returns an { error } object when it fails to get the resource list (network)', done => {
       mockFetch.and.returnValue(Promise.resolve({ ok: false, status: 404 }));
 
       // Don't check params again as it was done in the first test
-      fetchList('courses', { limit: 2, offset: 43 })
-      .then((response) => {
+      fetchList('courses', { limit: 2, offset: 43 }).then(response => {
         // Our polymorphic response object is properly shaped - with an error this time
         expect(response.objects).not.toBeDefined();
         expect(response.error).toEqual(jasmine.any(Error));
@@ -122,15 +126,21 @@ describe('data/genericSideEffects/getResourceList saga', () => {
       // Mock a 'list of courses' response with which to trigger the call to fetchCourses
       const response = {
         meta: { limit: 10, offset: 0, total_count: 120 },
-        objects: [ course43, course44 ],
+        objects: [course43, course44],
       };
 
       // The call to fetch (the actual side-effect) is triggered
-      expect(gen.next().value).toEqual(call(fetchList, 'courses', action.params));
+      expect(gen.next().value).toEqual(
+        call(fetchList, 'courses', action.params),
+      );
       // Both courses are added to the state
-      expect(gen.next(response).value).toEqual(put(addMultipleResources('courses', response.objects)));
+      expect(gen.next(response).value).toEqual(
+        put(addMultipleResources('courses', response.objects)),
+      );
       // The success action is dispatched
-      expect(gen.next().value).toEqual(put(didGetResourceList('courses', response, action.params)));
+      expect(gen.next().value).toEqual(
+        put(didGetResourceList('courses', response, action.params)),
+      );
     });
 
     it('yields a failure action when fetchList fails', () => {
@@ -141,9 +151,13 @@ describe('data/genericSideEffects/getResourceList saga', () => {
       };
 
       // The call to fetch is triggered, but fails for some reason
-      expect(gen.next().value).toEqual(call(fetchList, 'courses', action.params));
+      expect(gen.next().value).toEqual(
+        call(fetchList, 'courses', action.params),
+      );
       // The failure action is dispatched
-      expect(gen.next(response).value).toEqual(put(failedToGetResourceList('courses', response.error)));
+      expect(gen.next(response).value).toEqual(
+        put(failedToGetResourceList('courses', response.error)),
+      );
     });
   });
 });

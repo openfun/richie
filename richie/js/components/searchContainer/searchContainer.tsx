@@ -5,13 +5,12 @@ import { getResourceList } from '../../data/genericSideEffects/getResourceList/a
 import { Search } from '../search/search';
 
 const mapDispatchToProps = {
-  requestOrganizations: partial(getResourceList, 'organizations', { limit: 999 }),
+  requestOrganizations: partial(getResourceList, 'organizations', {
+    limit: 999,
+  }),
   requestSubjects: partial(getResourceList, 'subjects', { limit: 999 }),
 };
 
-export const SearchContainer = connect(
-  null,
-  mapDispatchToProps,
-)(Search);
+export const SearchContainer = connect(null, mapDispatchToProps)(Search);
 
 export default SearchContainer;

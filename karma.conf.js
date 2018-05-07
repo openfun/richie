@@ -2,19 +2,19 @@ let fs = require('fs');
 let webpack = require('webpack');
 let webpackConfig = require('./webpack.config');
 
-module.exports = function (config) {
+module.exports = function(config) {
   config.set({
-    frameworks: [ 'jasmine' ],
+    frameworks: ['jasmine'],
 
-    files: [ 'richie/**/*.spec.@(ts|tsx)' ],
+    files: ['richie/**/*.spec.@(ts|tsx)'],
 
     preprocessors: {
-      '**/*.@(ts|tsx)': [ 'webpack', 'sourcemap' ],
+      '**/*.@(ts|tsx)': ['webpack', 'sourcemap'],
     },
 
-    reporters: [ 'mocha' ],
+    reporters: ['mocha'],
 
-    browsers: [ 'Chrome' ],
+    browsers: ['Chrome'],
 
     plugins: [
       'karma-chrome-launcher',
@@ -26,15 +26,15 @@ module.exports = function (config) {
 
     // Absolutely necessary to run typescript tests
     mime: {
-      'text/x-typescript': [ 'ts', 'tsx' ],
+      'text/x-typescript': ['ts', 'tsx'],
     },
 
     webpack: {
       plugins: [
         new webpack.SourceMapDevToolPlugin({
           filename: null, // if no value is provided the sourcemap is inlined
-          test: /\.(ts|tsx|js)($|\?)/i // process .js and .ts files only
-        })
+          test: /\.(ts|tsx|js)($|\?)/i, // process .js and .ts files only
+        }),
       ],
       // Reuse our existing webpack config
       module: webpackConfig.module,
@@ -44,6 +44,6 @@ module.exports = function (config) {
     webpackMiddleware: {
       log: () => {},
       stats: 'errors-only',
-    }
+    },
   });
 };

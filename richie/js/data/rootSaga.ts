@@ -4,7 +4,5 @@ import getResourceListSaga from './genericSideEffects/getResourceList/getResourc
 
 // Aggregate all our sagas through the parallelization effect
 export default function* rootSaga() {
-  yield all([
-    getResourceListSaga(),
-  ]);
+  yield all([getResourceListSaga()]);
 }

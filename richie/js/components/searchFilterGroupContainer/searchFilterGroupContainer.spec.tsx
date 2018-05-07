@@ -7,14 +7,19 @@ describe('components/searchFilterGroupContainer/mergeProps', () => {
 
   beforeEach(() => {
     dispatch = jasmine.createSpy('dispatch');
-    spyOn(filterComputer, 'computeNewFilterValue').and.returnValue('some filter value');
+    spyOn(filterComputer, 'computeNewFilterValue').and.returnValue(
+      'some filter value',
+    );
   });
 
   describe('addFilter', () => {
     describe('when the filter is drilldown', () => {
       it('dispatches the action with params -> the current params with the new filter added on', () => {
         const props = mergeProps(
-          { currentParams: { limit: 20, offset: 0 }, filter: { isDrilldown: true } as FilterDefinition },
+          {
+            currentParams: { limit: 20, offset: 0 },
+            filter: { isDrilldown: true } as FilterDefinition,
+          },
           { dispatch },
           { machineName: 'new' },
         );
@@ -49,7 +54,10 @@ describe('components/searchFilterGroupContainer/mergeProps', () => {
     describe('when the filter is not drilldown', () => {
       it('delegates to computeNewFilterValue', () => {
         const props = mergeProps(
-          { currentParams: { limit: 20, offset: 0 }, filter: {} as FilterDefinition },
+          {
+            currentParams: { limit: 20, offset: 0 },
+            filter: {} as FilterDefinition,
+          },
           { dispatch },
           { machineName: 'new' },
         );
@@ -124,7 +132,10 @@ describe('components/searchFilterGroupContainer/mergeProps', () => {
     describe('when the filter is not drilldown', () => {
       it('delegates to computeNewFilterValue', () => {
         const props = mergeProps(
-          { currentParams: { limit: 20, offset: 0 }, filter: {} as FilterDefinition },
+          {
+            currentParams: { limit: 20, offset: 0 },
+            filter: {} as FilterDefinition,
+          },
           { dispatch },
           { machineName: 'new' },
         );
