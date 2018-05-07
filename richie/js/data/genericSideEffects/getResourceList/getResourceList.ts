@@ -1,10 +1,10 @@
 import partial from 'lodash-es/partial';
+import { stringify } from 'query-string';
 import { call, put, takeEvery } from 'redux-saga/effects';
 
-import { API_ENDPOINTS } from '../../../settings.json';
+import { API_ENDPOINTS, API_LIST_DEFAULT_PARAMS } from '../../../settings.json';
 import { APIResponseListFacets, APIResponseListMeta } from '../../../types/api';
 import Resource from '../../../types/Resource';
-import formatQueryString from '../../../utils/http/formatQueryString';
 import { addMultipleResources } from '../../genericReducers/resourceById/actions';
 import { RootState } from '../../rootReducer';
 import {
@@ -31,11 +31,11 @@ export interface GetListSagaSpecifics {
 // NB: some of this logic should be move in a separate module when we reuse it elsewhere
 export function fetchList(
   resourceName: keyof RootState['resources'],
-  params?: ResourceListGet['params'],
+  params: ResourceListGet['params'] = API_LIST_DEFAULT_PARAMS,
 ): Promise<Response> {
   const endpoint = API_ENDPOINTS[resourceName];
 
-  return fetch(endpoint + formatQueryString(params), {
+  return fetch(`${endpoint}?${stringify(params)}`, {
     headers: {
       'Content-Type': 'application/json',
     },
