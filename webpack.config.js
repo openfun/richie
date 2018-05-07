@@ -2,6 +2,11 @@ const SETTINGS = require('./richie/js/settings.json');
 const webpack = require('webpack');
 
 module.exports = {
+  // Disable production-specific optimizations by default
+  // They can be re-enabled by running the cli with `--mode=production` or making a separate
+  // webpack config for production.
+  mode: 'development',
+
   // Include whatwg fetch as an entry point (and not an import) as it's replacing (when necessary)
   // a globally available browser-provided function
   entry: [ 'whatwg-fetch', './richie/js/index.tsx' ],
@@ -21,7 +26,7 @@ module.exports = {
   module: {
     rules: [
       // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
-      { test: /\.tsx?$/, loader: 'awesome-typescript-loader' },
+      { test: /\.tsx?$/, loader: 'ts-loader' },
       // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
       { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' }
     ]
