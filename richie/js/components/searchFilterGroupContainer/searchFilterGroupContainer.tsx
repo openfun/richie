@@ -6,6 +6,7 @@ import {
 } from '../../data/filterDefinitions/reducer';
 import { ResourceListStateParams } from '../../data/genericReducers/resourceList/resourceList';
 import { getResourceList } from '../../data/genericSideEffects/getResourceList/actions';
+import { pushQueryStringToHistory } from '../../data/genericSideEffects/pushHistoryState/actions';
 import { RootState } from '../../data/rootReducer';
 import { API_LIST_DEFAULT_PARAMS as defaultParams } from '../../settings.json';
 import {
@@ -42,41 +43,39 @@ export const mergeProps = (
   { dispatch }: { dispatch: Dispatch<RootState> },
   { machineName }: SearchFilterGroupContainerProps,
 ) => ({
-  addFilter: (filterValue: string) =>
-    dispatch(
-      getResourceList('courses', {
-        ...currentParams,
-        [machineName]: filter.isDrilldown
-          ? // Drilldown filters only support one value at a time
-            filterValue
-          : // For other filters use the standard computation
-            computeNewFilterValue(
-              'add',
-              currentParams[machineName],
-              filterValue,
-            ),
-      }),
-    ),
+  addFilter: (filterValue: string) => {
+    const newParams = {
+      ...currentParams,
+      [machineName]: filter.isDrilldown
+        ? // Drilldown filters only support one value at a time
+          filterValue
+        : // For other filters use the standard computation
+          computeNewFilterValue('add', currentParams[machineName], filterValue),
+    };
+    dispatch(getResourceList('courses', newParams));
+    dispatch(pushQueryStringToHistory(newParams));
+  },
   filter,
-  removeFilter: (filterValue: string) =>
-    dispatch(
-      getResourceList('courses', {
-        ...currentParams,
-        [machineName]: filter.isDrilldown
-          ? // Drilldown filters only support one value at a time
-            filterValue === currentParams[machineName]
-            ? // Remove the value if it matches current value
-              null
-            : // Don't remove a non matching existing value
-              currentParams[machineName] || null
-          : // For other filters use the standard computation
-            computeNewFilterValue(
-              'remove',
-              currentParams[machineName],
-              filterValue,
-            ),
-      }),
-    ),
+  removeFilter: (filterValue: string) => {
+    const newParams = {
+      ...currentParams,
+      [machineName]: filter.isDrilldown
+        ? // Drilldown filters only support one value at a time
+          filterValue === currentParams[machineName]
+          ? // Remove the value if it matches current value
+            null
+          : // Don't remove a non matching existing value
+            currentParams[machineName] || null
+        : // For other filters use the standard computation
+          computeNewFilterValue(
+            'remove',
+            currentParams[machineName],
+            filterValue,
+          ),
+    };
+    dispatch(getResourceList('courses', newParams));
+    dispatch(pushQueryStringToHistory(newParams));
+  },
 });
 
 export const SearchFilterGroupContainer = connect(
