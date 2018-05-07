@@ -1,9 +1,12 @@
 import get from 'lodash-es/get';
 import partial from 'lodash-es/partial';
-import { connect } from 'react-redux';
+import { connect, Dispatch } from 'react-redux';
 
+import { ResourceListStateParams } from '../../data/genericReducers/resourceList/resourceList';
 import { getResourceList } from '../../data/genericSideEffects/getResourceList/actions';
 import { RootState } from '../../data/rootReducer';
+import Course from '../../types/Course';
+import { Maybe } from '../../utils/types';
 import { CourseGlimpseList } from '../courseGlimpseList/courseGlimpseList';
 
 export const mapStateToProps = (state: RootState) => {
@@ -33,16 +36,37 @@ export const mapStateToProps = (state: RootState) => {
         )
         // Drop unknown indexes or broken keys so we don't pollute the UI
         .filter(item => !!item),
+    currentParams:
+      state.resources.courses &&
+      state.resources.courses.currentQuery &&
+      state.resources.courses.currentQuery.params,
   };
 };
 
-const mapDispatchToProps = {
-  requestCourses: partial(getResourceList, 'courses', { limit: 999 }),
-};
+export const mergeProps = (
+  {
+    courses,
+    currentParams,
+  }: {
+    courses: Array<Maybe<Course>>;
+    currentParams: Maybe<ResourceListStateParams>;
+  },
+  { dispatch }: { dispatch: Dispatch<RootState> },
+) => ({
+  courses,
+  requestCourses: () =>
+    dispatch(
+      getResourceList('courses', {
+        ...(currentParams || {}),
+        limit: 999,
+      }),
+    ),
+});
 
 export const CourseGlimpseListContainer = connect(
   mapStateToProps,
-  mapDispatchToProps,
+  null!,
+  mergeProps,
 )(CourseGlimpseList);
 
 export default CourseGlimpseListContainer;
