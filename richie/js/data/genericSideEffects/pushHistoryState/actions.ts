@@ -19,6 +19,6 @@ export function pushQueryStringToHistory(
     state: null,
     title: '',
     type: 'HISTORY_PUSH_STATE',
-    url: stringify(queryStringParams),
+    url: `?${stringify(queryStringParams)}`,
   };
 }

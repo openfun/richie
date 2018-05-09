@@ -24,7 +24,7 @@ describe('components/searchFilterGroupContainer/mergeProps', () => {
       state: null,
       title: '',
       type: 'HISTORY_PUSH_STATE',
-      url: stringify(expectedParams),
+      url: `?${stringify(expectedParams)}`,
     });
   };
 
