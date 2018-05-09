@@ -4,11 +4,12 @@ import {
   APIResponseListMeta,
 } from '../../../types/api';
 import Resource from '../../../types/Resource';
+import { Maybe } from '../../../utils/types';
 import { RootState } from '../../rootReducer';
 
 export interface ResourceListGet {
   params?: Partial<APIListCommonRequestParams> & {
-    [key: string]: string | number | null | Array<string | number>;
+    [key: string]: Maybe<string | number | Array<string | number>>;
   };
   resourceName: keyof RootState['resources'];
   type: 'RESOURCE_LIST_GET';
@@ -49,7 +50,7 @@ export interface ResourceListGetSuccess<R extends Resource> {
     objects: R[];
   };
   params: Partial<APIListCommonRequestParams> & {
-    [key: string]: string | number | null | Array<string | number>;
+    [key: string]: Maybe<string | number | Array<string | number>>;
   };
   resourceName: keyof RootState['resources'];
   type: 'RESOURCE_LIST_GET_SUCCESS';

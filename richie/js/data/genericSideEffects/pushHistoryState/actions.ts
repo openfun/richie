@@ -1,7 +1,7 @@
 import { stringify } from 'query-string';
 
 import { APIListCommonRequestParams } from '../../../types/api';
-import { Nullable } from '../../../utils/types';
+import { Maybe, Nullable } from '../../../utils/types';
 
 export interface HistoryPushState {
   state: Nullable<{}>;
@@ -12,7 +12,7 @@ export interface HistoryPushState {
 
 export function pushQueryStringToHistory(
   queryStringParams: APIListCommonRequestParams & {
-    [key: string]: Nullable<string | number | Array<string | number>>;
+    [key: string]: Maybe<string | number | Array<string | number>>;
   },
 ) {
   return {

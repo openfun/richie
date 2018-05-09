@@ -6,6 +6,7 @@ import {
   APIResponseListFacets,
 } from '../../../types/api';
 import Resource from '../../../types/Resource';
+import { Maybe } from '../../../utils/types';
 import {
   ResourceListGet,
   ResourceListGetSuccess,
@@ -14,7 +15,7 @@ import {
 export const initialState = {};
 
 export type ResourceListStateParams = APIListCommonRequestParams & {
-  [key: string]: string | number | null | Array<string | number>;
+  [key: string]: Maybe<string | number | Array<string | number>>;
 };
 
 export interface ResourceListState<R extends Resource> {

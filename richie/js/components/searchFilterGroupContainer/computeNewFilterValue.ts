@@ -1,10 +1,10 @@
-import { Maybe, Nullable } from '../../utils/types';
+import { Maybe } from '../../utils/types';
 
 // Compute a new value for a filter to apply to course search, reacting to a user interaction by
 // either adding a new filter or removing one
 export function computeNewFilterValue(
   action: 'add' | 'remove',
-  existingValue: Maybe<Nullable<string | number | Array<string | number>>>,
+  existingValue: Maybe<string | number | Array<string | number>>,
   relevantValue: string | number,
 ) {
   // There is no existing value for this filter
@@ -12,8 +12,8 @@ export function computeNewFilterValue(
     return {
       // ADD: Make an array with the existing value
       add: () => [relevantValue],
-      // REMOVE: There's nothing that could possibly removed, return null
-      remove: () => null,
+      // REMOVE: There's nothing that could possibly removed, return undefined
+      remove: () => undefined,
     }[action]();
   }
 
@@ -25,7 +25,8 @@ export function computeNewFilterValue(
       // REMOVE:
       // - Return nothing if we had to drop the existing value we had
       // - Keep the existing value if it's not the one we needed to drop
-      remove: () => (existingValue === relevantValue ? null : existingValue),
+      remove: () =>
+        existingValue === relevantValue ? undefined : existingValue,
     }[action]();
   }
 
@@ -35,15 +36,15 @@ export function computeNewFilterValue(
     add: () => [...(existingValue as Array<string | number>), relevantValue],
     // REMOVE: Return the existing array of values without the one we needed to remove
     remove: () =>
-      nullEmptyArray(
+      dropEmptyArray(
         (existingValue as Array<string | number>).filter(
           v => v !== relevantValue,
         ),
       ),
   }[action]();
 
-  function nullEmptyArray(array: Array<string | number>) {
-    return array.length === 0 ? null : array;
+  function dropEmptyArray(array: Array<string | number>) {
+    return array.length === 0 ? undefined : array;
   }
 }
 

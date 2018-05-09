@@ -82,7 +82,7 @@ describe('components/searchFilterGroupContainer/mergeProps', () => {
 
   describe('removeFilter', () => {
     describe('when the filter is drilldown', () => {
-      it('nulls the existing filter value when it matches the passed value', () => {
+      it('returns undefined when it matches the passed value', () => {
         const props = mergeProps(
           {
             currentParams: { limit: 20, new: 'value_to_remove', offset: 0 },
@@ -93,7 +93,7 @@ describe('components/searchFilterGroupContainer/mergeProps', () => {
         );
         props.removeFilter('value_to_remove');
 
-        expectDispatches(dispatch, { limit: 20, new: null, offset: 0 });
+        expectDispatches(dispatch, { limit: 20, new: undefined, offset: 0 });
       });
 
       it('keeps the existing filter value when it does not match the passed value', () => {
@@ -114,7 +114,7 @@ describe('components/searchFilterGroupContainer/mergeProps', () => {
         });
       });
 
-      it('adds a null value and does not throw when there was no existing value', () => {
+      it('returns undefined and does not throw when there was no existing value', () => {
         const props = mergeProps(
           {
             currentParams: { limit: 20, offset: 0 },
@@ -125,7 +125,7 @@ describe('components/searchFilterGroupContainer/mergeProps', () => {
         );
         props.removeFilter('where_does_this_come_from');
 
-        expectDispatches(dispatch, { limit: 20, new: null, offset: 0 });
+        expectDispatches(dispatch, { limit: 20, new: undefined, offset: 0 });
       });
     });
 

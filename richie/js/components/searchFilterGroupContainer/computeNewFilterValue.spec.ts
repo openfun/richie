@@ -6,8 +6,8 @@ describe('components/searchFilterGroupContainer/computeNewFilterValue', () => {
   describe('add', () => {
     const addFilter = partial(computeNewFilterValue, 'add');
 
-    it('returns an array with the value when the existing value was null | undefined', () => {
-      expect(addFilter(null, 42)).toEqual([42]);
+    it('returns an array with the value when the existing value was undefined', () => {
+      expect(addFilter(undefined, 42)).toEqual([42]);
       expect(addFilter(undefined, 'new_value')).toEqual(['new_value']);
     });
 
@@ -32,14 +32,16 @@ describe('components/searchFilterGroupContainer/computeNewFilterValue', () => {
   describe('remove', () => {
     const removeFilter = partial(computeNewFilterValue, 'remove');
 
-    it('returns null when the existing value was null | undefined', () => {
-      expect(removeFilter(null, 42)).toEqual(null);
-      expect(removeFilter(null, 'imaginary_value')).toEqual(null);
+    it('returns undefined when the existing value was undefined', () => {
+      expect(removeFilter(undefined, 42)).toEqual(undefined);
+      expect(removeFilter(undefined, 'imaginary_value')).toEqual(undefined);
     });
 
-    it('returns null when the existing value was the passed value', () => {
-      expect(removeFilter(42, 42)).toEqual(null);
-      expect(removeFilter('existing_value', 'existing_value')).toEqual(null);
+    it('returns undefined when the existing value was the passed value', () => {
+      expect(removeFilter(42, 42)).toEqual(undefined);
+      expect(removeFilter('existing_value', 'existing_value')).toEqual(
+        undefined,
+      );
     });
 
     it('returns the existing value when the existing value was not the passed value', () => {
@@ -54,9 +56,9 @@ describe('components/searchFilterGroupContainer/computeNewFilterValue', () => {
       expect(removeFilter(['val_A', 'val_B'], 'val_B')).toEqual(['val_A']);
     });
 
-    it('returns null when the passed value was the only value in the existing value as an array', () => {
-      expect(removeFilter([43], 43)).toEqual(null);
-      expect(removeFilter(['val_B'], 'val_B')).toEqual(null);
+    it('returns undefined when the passed value was the only value in the existing value as an array', () => {
+      expect(removeFilter([43], 43)).toEqual(undefined);
+      expect(removeFilter(['val_B'], 'val_B')).toEqual(undefined);
     });
   });
 });

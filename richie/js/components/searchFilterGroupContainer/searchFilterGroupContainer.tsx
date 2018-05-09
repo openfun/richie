@@ -55,6 +55,7 @@ export const mergeProps = (
     dispatch(getResourceList('courses', newParams));
     dispatch(pushQueryStringToHistory(newParams));
   },
+  currentValue: currentParams[filter.machineName],
   filter,
   removeFilter: (filterValue: string) => {
     const newParams = {
@@ -63,9 +64,9 @@ export const mergeProps = (
         ? // Drilldown filters only support one value at a time
           filterValue === currentParams[machineName]
           ? // Remove the value if it matches current value
-            null
+            undefined
           : // Don't remove a non matching existing value
-            currentParams[machineName] || null
+            currentParams[machineName] || undefined
         : // For other filters use the standard computation
           computeNewFilterValue(
             'remove',
