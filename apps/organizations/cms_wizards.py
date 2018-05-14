@@ -15,6 +15,7 @@ from cms.wizards.wizard_pool import wizard_pool
 from .models import Organization, OrganizationPage, ORGANIZATIONS_PAGE_REVERSE_ID
 
 
+# pylint:disable=duplicate-code
 class OrganizationWizardForm(forms.Form):
     """
     This form is used by the wizard that creates a new organization page
@@ -43,6 +44,8 @@ class OrganizationWizardForm(forms.Form):
         # If the slug is not explicitly set, generate it from the title
         if cleaned_data.get("title") and not cleaned_data.get("slug"):
             cleaned_data["slug"] = slugify(cleaned_data["title"])[:200]
+
+        return cleaned_data
 
     def clean_title(self):
         """

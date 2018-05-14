@@ -10,7 +10,12 @@ from django.contrib.sites.models import Site
 from cms import models as cms_models
 
 from apps.organizations.factories import OrganizationFactory
-from apps.organizations.models import Organization, OrganizationPage
+from apps.courses.models import COURSES_PAGE_REVERSE_ID, COURSE_SUBJECTS_PAGE_REVERSE_ID
+from apps.organizations.models import (
+    Organization,
+    OrganizationPage,
+    ORGANIZATIONS_PAGE_REVERSE_ID,
+)
 from ...helpers import create_i18n_page
 
 logger = logging.getLogger("richie.commands.core.create_cms_data")
@@ -27,11 +32,23 @@ PAGE_INFOS = {
     },
     "courses": {
         "content": {"en": "All courses", "fr": "Tous les cours"},
-        "kwargs": {"template": "richie/fullwidth.html"},
+        "kwargs": {
+            "reverse_id": COURSES_PAGE_REVERSE_ID, "template": "richie/fullwidth.html"
+        },
+    },
+    "subjects": {
+        "content": {"en": "All course subjects", "fr": "Tous les sujets de cours"},
+        "kwargs": {
+            "reverse_id": COURSE_SUBJECTS_PAGE_REVERSE_ID,
+            "template": "richie/fullwidth.html",
+        },
     },
     "organizations": {
         "content": {"en": "Organizations", "fr": "Etablissements"},
-        "kwargs": {"template": "richie/fullwidth.html"},
+        "kwargs": {
+            "reverse_id": ORGANIZATIONS_PAGE_REVERSE_ID,
+            "template": "richie/fullwidth.html",
+        },
     },
     "dashboard": {
         "content": {"en": "Dashboard", "fr": "Tableau de bord"},
