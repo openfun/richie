@@ -38,3 +38,10 @@ class OrganizationFactory(factory.django.DjangoModelFactory):
         below 100 characters)
         """
         return slugify(self.title)[:100]
+
+    @factory.post_generation
+    # pylint: disable=unused-argument, attribute-defined-outside-init, no-member
+    def with_courses(self, create, extracted, **kwargs):
+        """Add courses to ManyToMany relation."""
+        if create and extracted:
+            self.courses.set(extracted)

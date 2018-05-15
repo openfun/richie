@@ -144,9 +144,9 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         self.assertEqual(
             form.errors,
             {
-                "title": [
-                    "You must first create an `organization list` page and set its `reverse_id` "
-                    "to `organizations`."
+                "slug": [
+                    "You must first create a parent page and set its `reverse_id` to "
+                    "`organizations`."
                 ]
             },
         )
