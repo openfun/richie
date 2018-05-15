@@ -2,15 +2,47 @@
 {% load cms_tags i18n %}
 
 {% block content %}
-  <h1>{{ current_page.get_title }}</h1>
+<div class="organization-template">
+
+  <h1 class="organization-template__title">{{ current_page.get_title }}</h1>
 
   {% with current_page.organization as organization %}
+
     {% if organization.logo %}
       <img
         src="{{ organization.logo.url }}"
         alt="{% blocktrans with title=current_page.get_title|capfirst %}{{ title }} logo{% endblocktrans %}">
     {% endif %}
-  {% endwith %}
+
+    <ul class="organization-detail__courses">
+      {% for course in organization.courses.all %}
+        {# If the current page is a draft, show draft courses with a class annotation for styling #}
+        {% if current_page.publisher_is_draft %}
+          {% if course.public_extension %}
+            <li class="organization-detail__courses__item">
+              {{ course.public_extension.extended_object.get_title }}
+            </li>
+          {% else %}
+            <li class="organization-detail__courses__item--draft">
+              {{ course.extended_object.get_title }}
+            </li>
+          {% endif %}
+        {# If the current course page is the published version, show only the courses that are published #}
+        {% elif course.public_extension %}
+          <li class="organization-detail__courses__item">
+            {{ course.public_extension.extended_object.get_title }}
+          </li>
+        {% endif %}
+      {% empty %}
+        <li class="organization-detail__courses--empty">
+          {% trans "No associated courses" %}
+        </li>
+      {% endfor %}
+    </ul>
+
+    {% endwith %}
 
   {% placeholder "maincontent" %}
+
+</div>
 {% endblock content %}

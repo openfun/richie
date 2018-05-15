@@ -32,6 +32,9 @@ class Organization(PageExtension):
         blank=True,
     )
 
+    ROOT_REVERSE_ID = "organizations"
+    TEMPLATE_DETAIL = "organizations/cms/organization_detail.html"
+
     class Meta:
         verbose_name = _("organization")
 
@@ -42,6 +45,13 @@ class Organization(PageExtension):
             name=self.extended_object.get_title(),
             model=self._meta.verbose_name.title(),
         )
+
+    def copy_relations(self, oldinstance, language):
+        """
+        We must manually copy the many-to-many relations from the "draft" instance of
+        to the "published" instance.
+        """
+        self.courses.set(oldinstance.courses.all())
 
     def clean(self):
         """

@@ -25,15 +25,16 @@ class OrganizationAdminTestCase(CMSTestCase):
         self.client.login(username=user.username, password="password")
 
         # Create an organization linked to a page
-        page = create_page("My title", "richie/fullwidth.html", "en")
-        organization = OrganizationFactory(extended_object=page)
+        organization = OrganizationFactory()
 
         # Get the admin list view
         url = reverse("admin:organizations_organization_changelist")
         response = self.client.get(url, follow=True)
 
         # Check that the page includes all our fields
-        self.assertContains(response, page.get_title(), status_code=200)
+        self.assertContains(
+            response, organization.extended_object.get_title(), status_code=200
+        )
         self.assertContains(response, organization.code)
 
     def test_organization_add_view(self):
@@ -51,7 +52,7 @@ class OrganizationAdminTestCase(CMSTestCase):
         for field in ["code", "logo"]:
             self.assertContains(response, "id_{:s}".format(field))
 
-    def test_organization_change_view(self):
+    def test_organization_change_view_get(self):
         """
         The admin change view should work for organizations
         """
@@ -69,3 +70,23 @@ class OrganizationAdminTestCase(CMSTestCase):
         # Check that the page includes all our fields
         self.assertContains(response, "My title", status_code=200)
         self.assertContains(response, organization.code)
+
+    def test_organization_change_view_post(self):
+        """
+        Validate that the organization can be updated via the admin.
+        """
+        user = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=user.username, password="password")
+
+        # Create an organization
+        organization = OrganizationFactory()
+
+        # Get the admin change view
+        url = reverse("admin:organizations_organization_change", args=[organization.id])
+        data = {"code": " r5G yç👷学pm 44 "}
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 302)
+
+        # Check that the organization was updated as expected
+        organization.refresh_from_db()
+        self.assertEqual(organization.code, "R5G-YÇ学PM-44")
