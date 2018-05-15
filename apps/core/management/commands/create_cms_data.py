@@ -9,6 +9,7 @@ from django.contrib.sites.models import Site
 
 from cms import models as cms_models
 
+from apps.courses.models import Course, Subject
 from apps.organizations.factories import OrganizationFactory
 from apps.organizations.models import Organization
 
@@ -27,12 +28,23 @@ PAGE_INFOS = {
         "kwargs": {"template": "richie/fullwidth.html"},
     },
     "courses": {
-        "content": {"en": "All courses", "fr": "Tous les cours"},
-        "kwargs": {"template": "richie/fullwidth.html"},
+        "content": {"en": "Courses", "fr": "Cours"},
+        "kwargs": {
+            "reverse_id": Course.ROOT_REVERSE_ID, "template": "richie/fullwidth.html"
+        },
+    },
+    "subjects": {
+        "content": {"en": "Subjects", "fr": "Sujets"},
+        "kwargs": {
+            "reverse_id": Subject.ROOT_REVERSE_ID, "template": "richie/fullwidth.html"
+        },
     },
     "organizations": {
         "content": {"en": "Organizations", "fr": "Etablissements"},
-        "kwargs": {"template": "richie/fullwidth.html"},
+        "kwargs": {
+            "reverse_id": Organization.ROOT_REVERSE_ID,
+            "template": "richie/fullwidth.html",
+        },
     },
     "dashboard": {
         "content": {"en": "Dashboard", "fr": "Tableau de bord"},
@@ -58,7 +70,9 @@ def clear_cms_data():
     cms_models.Title.objects.all().delete()
     cms_models.CMSPlugin.objects.all().delete()
     cms_models.Placeholder.objects.all().delete()
+    Course.objects.all().delete()
     Organization.objects.all().delete()
+    Subject.objects.all().delete()
 
 
 def create_cms_data():

@@ -51,13 +51,13 @@ class CreateCmsDataTests(CMSTestCase):
         organizations below the related page
         """
         # Let the mock return a number instead of the page so we can easily reference them below
-        mock_page.side_effect = range(14)
+        mock_page.side_effect = range(7 + 8)
 
         # Call the method and check its effects in what follows
         create_cms_data()
 
         # Check that the number of pages created is as expected
-        self.assertEqual(mock_page.call_count, 6 + 8)  # 6 root pages + 8 organizations
+        self.assertEqual(mock_page.call_count, 7 + 8)  # 7 root pages + 8 organizations
 
         # Check that the calls to create the root pages are triggered as expected
         site = Site.objects.get()
@@ -83,12 +83,24 @@ class CreateCmsDataTests(CMSTestCase):
                 },
             ),
             (
-                ({"en": "All courses", "fr": "Tous les cours"},),
+                ({"en": "Courses", "fr": "Cours"},),
                 {
                     "in_navigation": True,
                     "is_homepage": False,
                     "published": True,
                     "site": site,
+                    "reverse_id": "courses",
+                    "template": "richie/fullwidth.html",
+                },
+            ),
+            (
+                ({"en": "Subjects", "fr": "Sujets"},),
+                {
+                    "in_navigation": True,
+                    "is_homepage": False,
+                    "published": True,
+                    "site": site,
+                    "reverse_id": "subjects",
                     "template": "richie/fullwidth.html",
                 },
             ),
@@ -99,6 +111,7 @@ class CreateCmsDataTests(CMSTestCase):
                     "is_homepage": False,
                     "published": True,
                     "site": site,
+                    "reverse_id": "organizations",
                     "template": "richie/fullwidth.html",
                 },
             ),
@@ -123,12 +136,12 @@ class CreateCmsDataTests(CMSTestCase):
                 },
             ),
         ]
-        self.assertEqual(mock_page.call_args_list[:6], expected_calls_for_root_pages)
+        self.assertEqual(mock_page.call_args_list[:7], expected_calls_for_root_pages)
 
         # Check that the calls to create the organizations were triggered as expected
         self.assertEqual(mock_organization.call_count, 8)
 
-        for i, actual_call in enumerate(mock_page.call_args_list[6:]):
+        for i, actual_call in enumerate(mock_page.call_args_list[7:]):
             expected_call = (
                 (
                     {
@@ -137,7 +150,7 @@ class CreateCmsDataTests(CMSTestCase):
                     },
                 ),
                 {
-                    "parent": 3,
+                    "parent": 4,
                     "published": True,
                     "site": site,
                     "template": "organizations/cms/organization_detail.html",
