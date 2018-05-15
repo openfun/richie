@@ -28,7 +28,6 @@ def create_i18n_page(content, is_homepage=False, **kwargs):
         menu_title=content[first_language],
         title=content[first_language],
         slug=slug,
-        reverse_id=slug,
         **kwargs
     )
 

@@ -1,0 +1,74 @@
+{% extends "richie/fullwidth.html" %}
+{% load cms_tags i18n %}
+
+{% block content %}
+<div class="course-detail">
+
+  <h1 class="course-detail__title">{{ current_page.get_title }}</h1>
+
+  {% with current_page.course as course %}
+
+    <ul class="course-detail__subjects">
+      {% for subject in course.subjects.all %}
+        {# If the current page is a draft, show draft subjects with a class annotation for styling #}
+        {% if current_page.publisher_is_draft %}
+          {% if subject.public_extension %}
+            <li class="course-detail__subjects__item">
+              {{ subject.public_extension.extended_object.get_title }}
+            </li>
+          {% else %}
+            <li class="course-detail__subjects__item--draft">
+              {{ subject.extended_object.get_title }}
+            </li>
+          {% endif %}
+        {# If the current course page is the published version, show only the subjects that are published #}
+        {% elif subject.public_extension %}
+          <li class="course-detail__subjects__item">
+            {{ subject.public_extension.extended_object.get_title }}
+          </li>
+        {% endif %}
+      {% empty %}
+        <li class="course-detail__subjects--empty">
+          {% trans "No associated subjects" %}
+        </li>
+      {% endfor %}
+    </ul>
+
+    <ul class="course-detail__organizations">
+      {% for organization in course.organizations.all %}
+        {# If the current page is a draft, show draft organizations with a class annotation for styling #}
+        {% if current_page.publisher_is_draft %}
+          {% if organization.public_extension %}
+            <li class="course-detail__organizations__item">
+              {{ organization.public_extension.extended_object.get_title }}
+            </li>
+          {% else %}
+            <li class="course-detail__organizations__item--draft">
+              {{ organization.extended_object.get_title }}
+            </li>
+          {% endif %}
+        {# If the current page is the published version, show only the organizations that are published #}
+        {% elif organization.public_extension %}
+          <li class="course-detail__organizations__item">
+            {{ organization.public_extension.extended_object.get_title }}
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+
+    <div class="course-detail__active-session">
+      {% if course.active_session %}
+        {{ course.active_session }}
+      {% else %}
+        {% trans "No active session" %}
+      {% endif %}
+    </div>
+
+    {% endwith %}
+
+  {% placeholder "course_video" %}
+
+  {% placeholder "course_syllabus" %}
+
+</div>
+{% endblock content %}
