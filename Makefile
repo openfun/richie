@@ -41,6 +41,10 @@ build-ts: ## build TypeScript application
 	@$(YARN) build
 .PHONY: build-ts
 
+demo-site:  ## create a demo site
+	@$(MANAGE) create_demo_site
+.PHONY: demo-site
+
 lint-back: ## lint back-end python sources
 	${MAKE} lint-back-black;
 	${MAKE} lint-back-flake8;
