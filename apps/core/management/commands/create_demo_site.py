@@ -9,9 +9,8 @@ from django.contrib.sites.models import Site
 
 from cms import models as cms_models
 
-from apps.courses.models import Course, Subject
-from apps.organizations.factories import OrganizationFactory
-from apps.organizations.models import Organization
+from apps.courses.models import Course, Organization, Subject
+from apps.courses.factories import OrganizationFactory
 
 from ...helpers import create_i18n_page
 
@@ -108,7 +107,7 @@ def create_demo_site():
             parent=pages_created["organizations"],
             published=True,
             site=site,
-            template="organizations/cms/organization_detail.html",
+            template="courses/cms/organization_detail.html",
         )
         OrganizationFactory(extended_object=page)
 

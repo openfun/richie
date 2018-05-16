@@ -4,9 +4,8 @@ End-to-end tests for the course detail view
 from django.test import TestCase
 
 from apps.core.factories import UserFactory
-from apps.organizations.factories import OrganizationFactory
 
-from ..factories import CourseFactory, SubjectFactory
+from ..factories import CourseFactory, OrganizationFactory, SubjectFactory
 
 
 class CourseCMSTestCase(TestCase):

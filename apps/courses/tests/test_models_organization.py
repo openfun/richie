@@ -74,9 +74,7 @@ class OrganizationTestCase(TestCase):
         The str representation should be built with the page title and code field only.
         A query to the associated page should be generated.
         """
-        page = create_page(
-            "La Sorbonne", "organizations/cms/organization_detail.html", "en"
-        )
+        page = create_page("La Sorbonne", "courses/cms/organization_detail.html", "en")
         organization = Organization(code="SOR", extended_object=page)
         with self.assertNumQueries(1):
             self.assertEqual(str(organization), "Organization: La Sorbonne (SOR)")

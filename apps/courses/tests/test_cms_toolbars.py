@@ -1,59 +1,27 @@
 """
-Test suite of the toolbar extension for course pages
+Test suite of the toolbar extension for organization pages
 """
 from django.contrib.auth.models import AnonymousUser, Permission
 from django.core.exceptions import ImproperlyConfigured
-from django.test.client import RequestFactory
 from django.test.utils import override_settings
 
 from cms.api import create_page
-from cms.middleware.toolbar import ToolbarMiddleware
 from cms.test_utils.testcases import CMSTestCase
 from cms.toolbar.items import Menu, ModalItem
 
 from apps.core.factories import UserFactory
 
-from ..factories import CourseFactory
-from ..models import Course
+from ..factories import CourseFactory, OrganizationFactory
+from .utils import get_toolbar_for_page
 
 
-class CourseCMSToolbarTestCase(CMSTestCase):
-    """Testing the integration of course page extensions in the toolbar"""
+class OrganizationCMSToolbarTestCase(CMSTestCase):
+    """Testing the integration of organization page extensions in the toolbar"""
 
-    @staticmethod
-    def get_page_menu(page, user, edit, preview):
+    def check_toolbar_item(self, page_extension, menu_item_text):
         """
-        This method is a helper to build a request to test the toolbar in different states
-        for different users
-        """
-        url = page.get_absolute_url()
-        factory = RequestFactory()
-
-        if edit:
-            url = "{:s}?edit".format(url)
-        else:
-            url = "{:s}?edit_off".format(url)
-
-        if preview:
-            url = "{:s}&preview".format(url)
-
-        request = factory.get(url)
-        request.user = user
-        request.current_page = page
-        request.session = {}
-
-        middleware = ToolbarMiddleware()
-        middleware.process_request(request)
-
-        # pylint: disable=no-member
-        request.toolbar.get_left_items()
-        return request.toolbar
-
-    @override_settings(CMS_PERMISSION=False)
-    def test_toolbar_course_has_course_settings_item(self):
-        """
-        Validate that a new item to edit the course is available only when visiting the page in
-        edit mode and for users with permission to edit the page.
+        Not a test. This method is a helper to test the toolbar for the presence of a menu item
+        for editing page extensions.
         """
         # Create different users for each possible level of access
         # pylint: disable=too-many-locals
@@ -68,10 +36,6 @@ class CourseCMSToolbarTestCase(CMSTestCase):
         can_change_page = Permission.objects.get(codename="change_page")
         staff_with_permission.user_permissions.add(can_change_page)
         user_with_permission.user_permissions.add(can_change_page)
-
-        # Create a course page
-        course = CourseFactory()
-        page = course.extended_object
 
         cases = [
             ([superuser, False, False], "disabled"),
@@ -93,26 +57,31 @@ class CourseCMSToolbarTestCase(CMSTestCase):
             ([anonymous, True, False], "absent"),
             ([anonymous, False, True], "absent"),
         ]
-        admin_url = "/en/admin/courses/course/{:d}/change/".format(course.id)
+        admin_url = "/en/admin/{app_name:s}/{model_name:s}/{id:d}/change/".format(
+            app_name=page_extension._meta.app_label,
+            model_name=page_extension.__class__.__name__.lower(),
+            id=page_extension.id,
+        )
 
+        page = page_extension.extended_object
         for args, state in cases:
-            toolbar = self.get_page_menu(page, *args)
+            toolbar = get_toolbar_for_page(page, *args)
 
             if state in ["active", "disabled", "missing"]:
                 page_menu_result = toolbar.find_items(Menu, name="Page")[0]
                 results = page_menu_result.item.find_items(
-                    ModalItem, name="Course settings..."
+                    ModalItem, name=menu_item_text
                 )
                 if state in ["active", "disabled"]:
                     self.assertEqual(len(results), 1)
-                    course_item = results[0].item
-                    self.assertEqual(course_item.url, admin_url)
+                    item = results[0].item
+                    self.assertEqual(item.url, admin_url)
 
                     if state == "active":
-                        self.assertFalse(course_item.disabled)
+                        self.assertFalse(item.disabled)
 
                     elif state == "disabled":
-                        self.assertTrue(course_item.disabled)
+                        self.assertTrue(item.disabled)
 
                 elif state == "missing":
                     self.assertEqual(results, [])
@@ -128,21 +97,45 @@ class CourseCMSToolbarTestCase(CMSTestCase):
                 raise ImproperlyConfigured()
 
     @override_settings(CMS_PERMISSION=False)
-    def test_toolbar_course_no_course_page(self):
+    def test_toolbar_course_has_page_extension_settings_item(self):
         """
-        The toolbar should not include the item to edit the course on a page not related
-        to a course page extension.
+        Validate that a new item to edit the course is available only when visiting the page
+        in edit mode and for users with permission to edit the page.
+        """
+        course = CourseFactory()
+        self.check_toolbar_item(course, "Course settings...")
+
+    @override_settings(CMS_PERMISSION=False)
+    def test_toolbar_organization_has_page_extension_settings_item(self):
+        """
+        Validate that a new item to edit the organization is available only when visiting the page
+        in edit mode and for users with permission to edit the page.
+        """
+        organization = OrganizationFactory()
+        self.check_toolbar_item(organization, "Organization settings...")
+
+    @override_settings(CMS_PERMISSION=False)
+    def test_toolbar_no_page_extension(self):
+        """
+        The toolbar should not include any item to edit a page extension on a page not related
+        to any page extension.
         """
         # Testing with a superuser proves our point
         superuser = UserFactory(is_staff=True, is_superuser=True)
 
-        # Create a page not related to a course
-        page = create_page("A course", template=Course.TEMPLATE_DETAIL, language="en")
+        # Create a page not related to any page extension
+        page = create_page("A page", template="richie/fullwidth.html", language="en")
 
         cases = [[False, False], [False, True], [True, False]]
 
         for args in cases:
-            toolbar = self.get_page_menu(page, superuser, *args)
+            toolbar = get_toolbar_for_page(page, superuser, *args)
             page_menu = toolbar.find_items(Menu, name="Page")[0].item
+
+            # Check that the course item is absent
             results = page_menu.find_items(ModalItem, name="Course settings...")
+            self.assertEqual(results, [])
+
+            # Check that the organization item is absent
+            results = page_menu.find_items(ModalItem, name="Organization settings...")
             self.assertEqual(results, [])

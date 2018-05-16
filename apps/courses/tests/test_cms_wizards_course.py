@@ -8,10 +8,9 @@ from cms.models import Page
 from cms.test_utils.testcases import CMSTestCase
 
 from apps.core.factories import UserFactory
-from apps.organizations.factories import OrganizationFactory
 
 from ..cms_wizards import CourseWizardForm
-from ..factories import CourseFactory
+from ..factories import CourseFactory, OrganizationFactory
 from ..models import Course
 
 

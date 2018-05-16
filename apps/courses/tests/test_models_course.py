@@ -6,9 +6,7 @@ from django.test import TestCase
 
 from cms.api import create_page
 
-from apps.organizations.factories import OrganizationFactory
-
-from ..factories import CourseFactory, SubjectFactory
+from ..factories import CourseFactory, OrganizationFactory, SubjectFactory
 from ..models import Course
 
 
