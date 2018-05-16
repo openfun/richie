@@ -28,7 +28,7 @@ class OrganizationAdminTestCase(CMSTestCase):
         organization = OrganizationFactory()
 
         # Get the admin list view
-        url = reverse("admin:organizations_organization_changelist")
+        url = reverse("admin:courses_organization_changelist")
         response = self.client.get(url, follow=True)
 
         # Check that the page includes all our fields
@@ -45,7 +45,7 @@ class OrganizationAdminTestCase(CMSTestCase):
         self.client.login(username=user.username, password="password")
 
         # Get the admin change view
-        url = reverse("admin:organizations_organization_add")
+        url = reverse("admin:courses_organization_add")
         response = self.client.get(url, follow=True)
 
         # Check that the page includes all our fields
@@ -64,7 +64,7 @@ class OrganizationAdminTestCase(CMSTestCase):
         organization = OrganizationFactory(extended_object=page)
 
         # Get the admin change view
-        url = reverse("admin:organizations_organization_change", args=[organization.id])
+        url = reverse("admin:courses_organization_change", args=[organization.id])
         response = self.client.get(url)
 
         # Check that the page includes all our fields
@@ -82,7 +82,7 @@ class OrganizationAdminTestCase(CMSTestCase):
         organization = OrganizationFactory()
 
         # Get the admin change view
-        url = reverse("admin:organizations_organization_change", args=[organization.id])
+        url = reverse("admin:courses_organization_change", args=[organization.id])
         data = {"code": " r5G yç👷学pm 44 "}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 302)

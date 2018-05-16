@@ -12,7 +12,7 @@ from django.test.utils import override_settings
 
 from cms.test_utils.testcases import CMSTestCase
 
-from apps.organizations.factories import OrganizationFactory
+from apps.courses.factories import OrganizationFactory
 
 from ..management.commands.create_demo_site import create_demo_site
 
@@ -153,7 +153,7 @@ class CreateCmsDataTests(CMSTestCase):
                     "parent": 4,
                     "published": True,
                     "site": site,
-                    "template": "organizations/cms/organization_detail.html",
+                    "template": "courses/cms/organization_detail.html",
                 },
             )
             self.assertEqual(actual_call, expected_call)

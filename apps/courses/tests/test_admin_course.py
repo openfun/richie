@@ -6,9 +6,8 @@ from django.core.urlresolvers import reverse
 from cms.test_utils.testcases import CMSTestCase
 
 from apps.core.factories import UserFactory
-from apps.organizations.factories import OrganizationFactory
 
-from ..factories import CourseFactory, SubjectFactory
+from ..factories import CourseFactory, OrganizationFactory, SubjectFactory
 
 
 class CourseAdminTestCase(CMSTestCase):

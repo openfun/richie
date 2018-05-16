@@ -195,7 +195,6 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         # FUN stuff
         "apps.core",
         "apps.courses",
-        "apps.organizations",
         "apps.search",
         "plugins.large_banner",
         # Third party apps
@@ -247,7 +246,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
     CMS_TEMPLATES = (
         ("courses/cms/course_detail.html", _("Course page")),
         ("courses/cms/subject_detail.html", _("Subject page")),
-        ("organizations/cms/organization_detail.html", _("Organization page")),
+        ("courses/cms/organization_detail.html", _("Organization page")),
         ("search/search.html", _("Search")),
         ("richie/fullwidth.html", "Fullwidth"),
     )
