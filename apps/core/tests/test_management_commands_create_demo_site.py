@@ -1,5 +1,5 @@
 """
-create_cms_data management command tests
+create_demo_site management command tests
 """
 from logging import Logger
 from unittest import mock
@@ -14,7 +14,7 @@ from cms.test_utils.testcases import CMSTestCase
 
 from apps.organizations.factories import OrganizationFactory
 
-from ..management.commands.create_cms_data import create_cms_data
+from ..management.commands.create_demo_site import create_demo_site
 
 
 class CreateCmsDataTests(CMSTestCase):
@@ -26,35 +26,35 @@ class CreateCmsDataTests(CMSTestCase):
         The command should not run whitout the --force option if DEBUG is False
         """
         with self.assertRaises(CommandError):
-            call_command("create_cms_data")
+            call_command("create_demo_site")
 
     @override_settings(DEBUG=True)
     @mock.patch.object(Logger, "info")
-    @mock.patch("apps.core.management.commands.create_cms_data.clear_cms_data")
-    @mock.patch("apps.core.management.commands.create_cms_data.create_cms_data")
+    @mock.patch("apps.core.management.commands.create_demo_site.clear_cms_data")
+    @mock.patch("apps.core.management.commands.create_demo_site.create_demo_site")
     def test_command_success(self, mock_create, mock_clear, mock_logger):
         """
         The command should delete and recreate the sample site when DEBUG is True
         The result should be posted to an info logger
         """
         self.assertTrue(settings.DEBUG)
-        call_command("create_cms_data")
+        call_command("create_demo_site")
         mock_clear.assert_called_once_with()
         mock_create.assert_called_once_with()
         mock_logger.assert_called_once_with("done")
 
     @mock.patch.object(OrganizationFactory, "create")
-    @mock.patch("apps.core.management.commands.create_cms_data.create_i18n_page")
-    def test_command_create_cms_data(self, mock_page, mock_organization):
+    @mock.patch("apps.core.management.commands.create_demo_site.create_i18n_page")
+    def test_command_create_demo_site(self, mock_page, mock_organization):
         """
-        Calling the `create_cms_data` function should trigger creating root i18n pages and
+        Calling the `create_demo_site` function should trigger creating root i18n pages and
         organizations below the related page
         """
         # Let the mock return a number instead of the page so we can easily reference them below
         mock_page.side_effect = range(7 + 8)
 
         # Call the method and check its effects in what follows
-        create_cms_data()
+        create_demo_site()
 
         # Check that the number of pages created is as expected
         self.assertEqual(mock_page.call_count, 7 + 8)  # 7 root pages + 8 organizations

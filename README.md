@@ -85,6 +85,14 @@ Once the CMS is up and running, you can create a superuser account:
 
     $ make superuser
 
+You can create a basic demo site by running:
+
+    $ make demo-site
+
+Note that if you don't create the demo site and start from a blank CMS, you will get some errors
+requesting you to create some required root pages. So it is easier as a first approach to test the
+CMS with the demo site.
+
 
 ## Contributing
 

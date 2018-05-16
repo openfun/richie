@@ -1,5 +1,5 @@
 """
-create_cms_data management command
+create_demo_site management command
 """
 import logging
 
@@ -15,7 +15,7 @@ from apps.organizations.models import Organization
 
 from ...helpers import create_i18n_page
 
-logger = logging.getLogger("richie.commands.core.create_cms_data")
+logger = logging.getLogger("richie.commands.core.create_demo_site")
 
 NB_ORGANIZATIONS = 8
 PAGE_INFOS = {
@@ -75,7 +75,7 @@ def clear_cms_data():
     Subject.objects.all().delete()
 
 
-def create_cms_data():
+def create_demo_site():
     """
     Create a simple site tree structure for developpers to work in realistic environment.
 
@@ -139,6 +139,6 @@ class Command(BaseCommand):
             )
 
         clear_cms_data()
-        create_cms_data()
+        create_demo_site()
 
         logger.info("done")
