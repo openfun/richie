@@ -43,7 +43,7 @@ class OrganizationCMSTestCase(TestCase):
         )
         self.assertContains(
             response,
-            '<h1 class="organization-template__title">La Sorbonne</h1>',
+            '<h1 class="organization-detail__title">La Sorbonne</h1>',
             html=True,
         )
         self.assertContains(
@@ -54,7 +54,7 @@ class OrganizationCMSTestCase(TestCase):
         for course in [course1, course2]:
             self.assertContains(
                 response,
-                '<li class="organization-template__courses__item">{:s}</li>'.format(
+                '<li class="organization-detail__courses__item">{:s}</li>'.format(
                     course.extended_object.get_title()
                 ),
                 html=True,
@@ -89,7 +89,7 @@ class OrganizationCMSTestCase(TestCase):
         )
         self.assertContains(
             response,
-            '<h1 class="organization-template__title">La Sorbonne</h1>',
+            '<h1 class="organization-detail__title">La Sorbonne</h1>',
             html=True,
         )
         self.assertContains(
@@ -100,7 +100,7 @@ class OrganizationCMSTestCase(TestCase):
         for course in [course1, course2]:
             self.assertContains(
                 response,
-                '<li class="organization-template__courses__item">{:s}</li>'.format(
+                '<li class="organization-detail__courses__item">{:s}</li>'.format(
                     course.extended_object.get_title()
                 ),
                 html=True,
@@ -108,7 +108,7 @@ class OrganizationCMSTestCase(TestCase):
         # The draft course should also be present on the page with an annotation for styling
         self.assertContains(
             response,
-            '<li class="organization-template__courses__item--draft">{:s}</li>'.format(
+            '<li class="organization-detail__courses__item--draft">{:s}</li>'.format(
                 course3.extended_object.get_title()
             ),
             html=True,

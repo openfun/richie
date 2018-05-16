@@ -86,6 +86,10 @@ stop: ## stop the development server
 	@$(COMPOSE) stop
 .PHONY: stop
 
+superuser: ## create a DjangoCMS superuser
+	@$(MANAGE) createsuperuser
+.PHONY: superuser
+
 test-back: ## run back-end tests
 	@$(COMPOSE_TEST_RUN_APP) pytest
 .PHONY: test-back
