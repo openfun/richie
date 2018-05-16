@@ -1,185 +1,148 @@
-# Installing FUN CMS
+# Richie, a FUN CMS for Open edX
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/openfun/richie.svg)](https://greenkeeper.io/)
 
 [![CircleCI](https://circleci.com/gh/openfun/richie/tree/master.svg?style=svg)](https://circleci.com/gh/openfun/richie/tree/master)
 
-This document aims to list all needed steps to have a working `FUN CMS` installation on your laptop.
+## Overview
 
-A better approach is to use [`Docker`](https://docs.docker.com). To get started, you can read [explanations](docs/docker.md) on how `FUN CMS` uses Docker for development.
+`Open edX` is a great tool for authoring (**Studio**), hosting and playing (**LMS**) interactive
+online courses and MOOCs.
+
+However, if you need to build a complete website with flexible content to aggregate your courses,
+in several languages and from different sources, **you will soon need a CMS**.
+
+For example, the [edx.org](https://www.edx.org) website is built on `Drupal` for content pages and
+on [edX course discovery](https://github.com/edx/course-discovery) for the catalog.
+
+At "France Université Numérique", we wanted to build a similar portal but with `Python` and
+`Django`. That's why we built `Richie` on top of [DjangoCMS](https://www.django-cms.org), one of
+the best CMS on the market, as a toolbox to easily create full fledged websites with a catalog of
+online courses.
+
+Among the features that `Richie` offers out of the box:
+
+- multi-site and multi-lingual by default,
+- advanced access rights and moderation,
+- catalog of courses synchronized with one or more `Open edX` instances,
+- search engine based on `Elasticsearch` and pre-configured to offer full-text queries,
+  multi-facetting, auto-complete,...
+- flexible custom pages for courses, organizations, subjects, teachers (and their inter-relations),
+- Extensible with any third-party `DjangoCMS` plugin or any third-party `Django` application.
 
 
-## Installing a fresh server
+## Architecture
 
-### Version
+`Richie` is a **container-native application** but can also be installed [on your machine]
+(./docs/native_installation.md).
 
-You need a `Ubuntu 16.04 Xenial Xerus` (the latest LTS version) fresh installation.
+For development, the project is defined using a [docker-compose file](../docker-compose.yml) and
+consists of 4 services:
 
-If you are using another operating system or distribution, you can use [`Vagrant`](https://docs.vagrantup.com/v2/getting-started/index.html) to get a running Ubuntu 16.04 server in seconds.
+- **db**: the `Postgresql` database,
+- **elasticsearch**: the search engine,
+- **app**: the actual `DjangoCMS` project with all our application code,
+- **node**: used for front-end related tasks, _i.e._ transpiling `TypeScript` sources, bundling
+  them into a JS package, and building the CSS files from Sass sources.
+
+We provide alternative `Docker Compose` configurations for test, CI and production, but the
+application can also be run with your favorite orchestrator. At France Université Numérique, we
+deploy our applications on `OpenShift` using [`Arnold`](https://github.com/openfun/arnold).
 
 
-### System update
+## Getting started
 
-Be sure to have fresh packages on the server (kernel, libc, ssl patches...):
-post
-```sh
-sudo apt-get -y update
-sudo apt-get -y dist-upgrade
+First, make sure you have a recent version of Docker and
+[Docker Compose](https://docs.docker.com/compose/install) installed on your laptop:
+
+```bash
+$ docker -v
+  Docker version 1.13.1, build 092cba3
+
+$ docker-compose --version
+  docker-compose version 1.17.1, build 6d101fb
 ```
 
+⚠️ You may need to run the following commands with `sudo` but this can be avoided by assigning your
+user to the `docker` group.
 
-## Database part
+The easiest way to start working on the project is to use our `Makefile`:
 
-You must first install `postgresql`.
+    $ make bootstrap
 
-```sh
-// On Linux
-sudo apt-get -y install postgresql-9.5
+This command builds the `app` container, installs front-end and back-end dependencies, builds the
+front-end application and styles, and performs database migrations. It's a good idea to use this
+command each time you are pulling code from the project repository to avoid dependency-related or
+migration-related issues.
 
-// On OS X
-brew install postgresql@9.5
-brew services start postgresql@9.5
-// don't forget to add your new postgres install to the $PATH
-```
+Now that your `Docker` services are ready to be used, start the full CMS by running:
 
-`Postgresql` is now running.
+    $ make run
 
-Then you can create the database owner and the database itself, using the `postgres` user:
+You should be able to view the site at [localhost:8070](http://localhost:8070)
 
-```sh
-sudo -u postgres -i // skip this on OS X as the default install will use your local user
-createuser funadmin -sP
-```
+Once the CMS is up and running, you can create a superuser account:
 
-Note: we created the user as a superuser. This should only be done in dev/test environments.
+    $ make superuser
 
-Now, create the database with this user:
 
-```sh
-createdb richie -O funadmin -W
-exit
-```
+## Contributing
 
-## Elasticsearch
+This project is intended to be community-driven, so please, do not hesitate to get in touch if you
+have any question related to our implementation or design decisions.
 
-### Ubuntu
+We try to raise our code quality standards and expect contributors to follow the recommandations
+from our [handbook](https://openfun.gitbooks.io/handbook/content).
 
-Download and install the Public Signing Key
 
-    $ wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+### Checking your code
 
-You may need to install the apt-transport-https package on Debian before proceeding:
+We use strict flake8, pylint and black linters to check the validity of our backend code:
 
-    $ sudo apt-get install apt-transport-https
+    $ make lint-back
 
-Save the repository definition to /etc/apt/sources.list.d/elastic-6.1.2.list:
+We use strict tslint and prettier to check the validity of our frontend code:
 
-    $ echo "deb https://artifacts.elastic.co/packages/6.1.2/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-6.1.2.list
+    $ make lint-front
 
-Update repository and install
 
-    $ sudo apt-get update
-    $ sudo apt-get install elasticsearch
-    $ sudo /etc/init.d/elasticsearch start
+### Running tests
 
+On the backend, we use pytest to run our test suite:
 
-### OS X
+    $ make test-back
 
-    $ brew install elasticsearch
+On the frontend, we use karma to run our test suite:
 
+    $ make test-front
 
-## Application part
 
-### Python and other requirements
+### Running migrations
 
-We use `Python 3.5` which is the one installed by default in `Ubuntu 16.04`.
+The first time you start the project with `make bootstrap`, the `db` container automatically
+creates a fresh database named `richie` and performs database migrations. Each time a new
+**database migration** is added to the code, you can synchronize the database schema by running:
 
-You can install it on OS X using the following commands. Make sure to always run `python3` instead of `python` and `pip3` instead of `pip` to ensure the correct version of Python (your homebrew install of 3) is used.
+    $ make migrate
 
-```
-brew install python3
-brew postinstall python3
-```
 
+### Handling new dependencies
 
-### The virtualenv
+Each time you add new front-end or back-end dependencies, you will need to rebuild the
+application. We recommend to use:
 
-Place yourself in the application directory `app`:
+    $ make bootstrap
 
-    cd app
 
-We choose to run our application in a virtual environment.
+### To go further
 
-For this, we'll install `virtualenvwrapper` and add an environment:
+To see all available commands, run:
 
-    pip install virtualenvwrapper
+    $ make
 
-You can open a new shell to activate the virtualenvwrapper commands, or simply do:
+See our [tips and tricks](./docs/docker_development.md) for development with Docker
 
-    source $(which virtualenvwrapper.sh)
 
-Then create the virtual environment for `richie`:
+## License
 
-    mkvirtualenv richie --no-site-packages --python=python3
-
-The virtualenv should now be activated and you can install the Python dependencies for development:
-
-    pip install -r requirements/dev.txt
-
-The "dev.txt" requirement file installs packages specific to a dev environment and should not be used in production.
-
-
-### Settings
-
-Settings are defined in different files for each of the following environments:
-
-- dev: settings for development on developpers' local environment,
-- ci: settings used on the continuous integration platform,
-- staging: settings for deployment to the staging environment,
-- preprod: settings for deployment to the pre-production environment,
-- prod: settings for deployment to the production environment.
-
-The `dev` environment is defined as the default environment.
-
-For development, you can add your own settings file named `local.py` to customize settings to your needs. It will be ignored by git.
-
-### Frontend build
-
-This projet is a hybrid that uses both Django generated pages and frontend JS code. As such, it includes a frontend build process that comes in two parts: JS & CSS.
-
-We need NPM to install the dependencies and run the build, which depends on a version of Nodejs specified in `.nvmrc`. See [the repo](https://github.com/creationix/nvm) for instructions on how to install NVM. To take advantage of `.nvmrc`, run this in the context of the repository:
-
-    nvm install
-    nvm use
-
-As a prerequisite to running the frontend build for either JS or CSS, you'll need to [install yarn](https://yarnpkg.com/lang/en/docs/install/) and download dependencies _via_:
-
-    yarn install
-
-- JS build
-
-    npm run build
-
-- CSS build
-
-This will compile all our SCSS files into one bundle and put it in the static folder we're serving.
-
-    npm run sass
-
-### Run server
-
-Make sure your database is up-to-date before running the application the first time and after each modification to your models:
-
-    python manage.py migrate
-
-You can now create a superuser account:
-
-    python manage.py createsuperuser
-
-Run the tests
-
-    python manage.py test
-
-You should now be able to start Django and view the site at [localhost:8000](http://localhost:8000)
-
-    python manage.py runserver
+This work is released under the MIT License (see [LICENSE](./LICENSE)).
