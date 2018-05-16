@@ -9,6 +9,7 @@ from cms.toolbar_pool import toolbar_pool
 from cms.utils.page_permissions import user_can_change_page
 
 from .models import Course
+from .defaults import PAGE_EXTENSION_TOOLBAR_ITEM_POSITION
 
 
 class BaseExtensionToolbar(ExtensionToolbar):
@@ -45,7 +46,7 @@ class BaseExtensionToolbar(ExtensionToolbar):
                     _("{:s} settings").format(self.model.__name__),
                     url=admin_url,
                     disabled=edit_mode_inactive,
-                    position=4,
+                    position=PAGE_EXTENSION_TOOLBAR_ITEM_POSITION,
                 )
 
 
