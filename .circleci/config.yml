@@ -16,6 +16,22 @@ generate-version-file: &generate-version-file
 version: 2
 jobs:
 
+  # Git jobs
+  # Check that the git history is clean and complies with our expectations
+  lint-git:
+
+    machine: true
+
+    working_directory: ~/fun
+
+    steps:
+      - checkout
+
+      - run:
+          name: Check absence of fixup commits
+          command: |
+            ! git log | grep 'fixup!'
+
   # Docker/back-end jobs
   # Build job
   # Build the Docker image ready for production
@@ -505,6 +521,14 @@ workflows:
 
   richie:
     jobs:
+      # Git jobs
+      #
+      # Check validity of git history
+      - lint-git:
+          filters:
+            tags:
+              only: /.*/
+
       # Front-end jobs
       #
       # Build, lint and test the front-end apps
