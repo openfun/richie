@@ -33,8 +33,8 @@ Among the features that `Richie` offers out of the box:
 
 ## Architecture
 
-`Richie` is a **container-native application** but can also be installed [on your machine]
-(./docs/native_installation.md).
+`Richie` is a **container-native application** but can also be installed
+[on your machine](./docs/native_installation.md).
 
 For development, the project is defined using a [docker-compose file](../docker-compose.yml) and
 consists of 4 services:
@@ -46,7 +46,7 @@ consists of 4 services:
   them into a JS package, and building the CSS files from Sass sources.
 
 We provide alternative `Docker Compose` configurations for test, CI and production, but the
-application can also be run with your favorite orchestrator. At France Université Numérique, we
+application can also be run with your favorite orchestrator. At "France Université Numérique", we
 deploy our applications on `OpenShift` using [`Arnold`](https://github.com/openfun/arnold).
 
 
