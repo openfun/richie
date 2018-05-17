@@ -192,18 +192,6 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         "djangocms_snippet",
         "djangocms_googlemap",
         "djangocms_video",
-        # Aldryn news blog
-        "aldryn_apphooks_config",
-        "aldryn_categories",
-        "aldryn_common",
-        "aldryn_newsblog",
-        "aldryn_people",
-        "aldryn_reversion",
-        "aldryn_translation_tools",
-        "parler",
-        "sortedm2m",
-        "taggit",
-        "reversion",
         # FUN stuff
         "apps.core",
         "apps.courses",
