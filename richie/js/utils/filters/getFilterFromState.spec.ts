@@ -3,7 +3,7 @@ import { FilterDefinition } from '../../types/FilterDefinition';
 import Organization from '../../types/Organization';
 import { getFilterFromState } from './getFilterFromState';
 
-describe('components/searchFilterGroupContainer/getFilterFromState', () => {
+describe('utils/filters/getFilterFromState', () => {
   it('returns a FilterDefinition for a hardcoded filter group', () => {
     const state = {
       filterDefinitions: {

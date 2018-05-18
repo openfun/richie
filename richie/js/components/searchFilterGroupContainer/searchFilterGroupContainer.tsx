@@ -10,12 +10,12 @@ import { getResourceList } from '../../data/genericSideEffects/getResourceList/a
 import { pushQueryStringToHistory } from '../../data/genericSideEffects/pushHistoryState/actions';
 import { RootState } from '../../data/rootReducer';
 import { API_LIST_DEFAULT_PARAMS as defaultParams } from '../../settings.json';
+import { getFilterFromState } from '../../utils/filters/getFilterFromState';
 import {
   SearchFilterGroup,
   SearchFilterGroupProps,
 } from '../searchFilterGroup/searchFilterGroup';
 import { computeNewFilterValue } from './computeNewFilterValue';
-import { getFilterFromState } from './getFilterFromState';
 
 export interface SearchFilterGroupContainerProps {
   machineName: filterGroupName;
