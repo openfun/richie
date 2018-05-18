@@ -1,152 +1,58 @@
 import { stringify } from 'query-string';
 
-import { FilterDefinition } from '../../types/filters';
-import * as filterComputer from './computeNewFilterValue';
-import { mergeProps } from './searchFilterGroupContainer';
+import { FilterDefinitionState } from '../../data/filterDefinitions/reducer';
+import { ResourceListState } from '../../data/genericReducers/resourceList/resourceList';
+import { RootState } from '../../data/rootReducer';
+import Course from '../../types/Course';
+import * as filterFromStateGetter from '../../utils/filters/getFilterFromState';
+import * as filterUpdater from '../../utils/filters/updateFilter';
+import { mapStateToProps, mergeProps } from './searchFilterGroupContainer';
 
 describe('components/searchFilterGroupContainer/mergeProps', () => {
-  let dispatch: jasmine.Spy;
+  const exampleFilter = {
+    humanName: 'Organizations',
+    machineName: 'organizations' as 'organizations',
+    values: [
+      { count: 3, humanName: 'Organization #31', primaryKey: '31' },
+      { count: 5, humanName: 'Organization #41', primaryKey: '41' },
+    ],
+  };
 
   beforeEach(() => {
-    dispatch = jasmine.createSpy('dispatch');
-    spyOn(filterComputer, 'computeNewFilterValue').and.returnValue(
-      'some filter value',
+    spyOn(filterUpdater, 'updateFilter').and.callFake(
+      (...params: any[]) => params,
+    );
+    spyOn(filterFromStateGetter, 'getFilterFromState').and.returnValue(
+      exampleFilter,
     );
   });
 
-  const expectDispatches = (disp: jasmine.Spy, expectedParams: any) => {
-    expect(disp).toHaveBeenCalledWith({
-      params: expectedParams,
-      resourceName: 'courses',
-      type: 'RESOURCE_LIST_GET',
-    });
-    expect(disp).toHaveBeenCalledWith({
-      state: null,
-      title: '',
-      type: 'HISTORY_PUSH_STATE',
-      url: `?${stringify(expectedParams)}`,
-    });
-  };
+  it('returns the relevant filter, its current value & partially applied update helpers', () => {
+    const dispatch: any = () => undefined;
+    const props = { machineName: 'organizations' as 'organizations' };
+    const state = {
+      filterDefinitions: {} as FilterDefinitionState,
+      resources: {
+        courses: {
+          byId: {},
+          currentQuery: {
+            params: { limit: 17, offset: 7, organizations: [12, 24] },
+          } as ResourceListState<Course>,
+        },
+        organizations: {},
+      },
+    } as RootState;
 
-  describe('addFilter', () => {
-    describe('when the filter is drilldown', () => {
-      it('dispatches actions with params -> the current params with the new filter added on', () => {
-        const props = mergeProps(
-          {
-            currentParams: { limit: 20, offset: 0 },
-            filter: { isDrilldown: true } as FilterDefinition,
-          },
-          { dispatch },
-          { machineName: 'new' },
-        );
-        props.addFilter('some_value');
+    // We're not interested in the internal implementation of mapStateToProps, only test the final output
+    const { addFilter, currentValue, filter, removeFilter } = mergeProps(
+      mapStateToProps(state, props),
+      { dispatch },
+      props,
+    );
 
-        expectDispatches(dispatch, { limit: 20, new: 'some_value', offset: 0 });
-      });
-
-      it('dispatches actions with params -> replaces any existing value for the filter in the params', () => {
-        const props = mergeProps(
-          {
-            currentParams: { limit: 20, new: 'old_value', offset: 0 },
-            filter: { isDrilldown: true } as FilterDefinition,
-          },
-          { dispatch },
-          { machineName: 'new' },
-        );
-        props.addFilter('new_value');
-
-        expectDispatches(dispatch, { limit: 20, new: 'new_value', offset: 0 });
-      });
-    });
-
-    describe('when the filter is not drilldown', () => {
-      it('delegates to computeNewFilterValue', () => {
-        const props = mergeProps(
-          {
-            currentParams: { limit: 20, offset: 0 },
-            filter: {} as FilterDefinition,
-          },
-          { dispatch },
-          { machineName: 'new' },
-        );
-        props.addFilter('mocked_out_value');
-
-        expectDispatches(dispatch, {
-          limit: 20,
-          new: 'some filter value',
-          offset: 0,
-        });
-      });
-    });
-  });
-
-  describe('removeFilter', () => {
-    describe('when the filter is drilldown', () => {
-      it('returns undefined when it matches the passed value', () => {
-        const props = mergeProps(
-          {
-            currentParams: { limit: 20, new: 'value_to_remove', offset: 0 },
-            filter: { isDrilldown: true } as FilterDefinition,
-          },
-          { dispatch },
-          { machineName: 'new' },
-        );
-        props.removeFilter('value_to_remove');
-
-        expectDispatches(dispatch, { limit: 20, new: undefined, offset: 0 });
-      });
-
-      it('keeps the existing filter value when it does not match the passed value', () => {
-        const props = mergeProps(
-          {
-            currentParams: { limit: 20, new: 'existing_value', offset: 0 },
-            filter: { isDrilldown: true } as FilterDefinition,
-          },
-          { dispatch },
-          { machineName: 'new' },
-        );
-        props.removeFilter('imaginary_value');
-
-        expectDispatches(dispatch, {
-          limit: 20,
-          new: 'existing_value',
-          offset: 0,
-        });
-      });
-
-      it('returns undefined and does not throw when there was no existing value', () => {
-        const props = mergeProps(
-          {
-            currentParams: { limit: 20, offset: 0 },
-            filter: { isDrilldown: true } as FilterDefinition,
-          },
-          { dispatch },
-          { machineName: 'new' },
-        );
-        props.removeFilter('where_does_this_come_from');
-
-        expectDispatches(dispatch, { limit: 20, new: undefined, offset: 0 });
-      });
-    });
-
-    describe('when the filter is not drilldown', () => {
-      it('delegates to computeNewFilterValue', () => {
-        const props = mergeProps(
-          {
-            currentParams: { limit: 20, offset: 0 },
-            filter: {} as FilterDefinition,
-          },
-          { dispatch },
-          { machineName: 'new' },
-        );
-        props.removeFilter('mocked_out_value');
-
-        expectDispatches(dispatch, {
-          limit: 20,
-          new: 'some filter value',
-          offset: 0,
-        });
-      });
-    });
+    expect(currentValue).toEqual([12, 24]);
+    expect(filter).toEqual(exampleFilter);
+    expect(addFilter()).toEqual([dispatch, 'add', filter]);
+    expect(removeFilter()).toEqual([dispatch, 'remove', filter]);
   });
 });

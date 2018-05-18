@@ -1,21 +1,17 @@
+import partial from 'lodash-es/partial';
 import { connect, Dispatch } from 'react-redux';
 import { Action } from 'redux';
 
 import { ResourceListStateParams } from '../../data/genericReducers/resourceList/resourceList';
-import { getResourceList } from '../../data/genericSideEffects/getResourceList/actions';
-import { pushQueryStringToHistory } from '../../data/genericSideEffects/pushHistoryState/actions';
 import { RootState } from '../../data/rootReducer';
 import { API_LIST_DEFAULT_PARAMS as defaultParams } from '../../settings.json';
-import {
-  filterGroupName,
-  resourceBasedFilterGroupName,
-} from '../../types/filters';
+import { filterGroupName } from '../../types/filters';
 import { getFilterFromState } from '../../utils/filters/getFilterFromState';
+import { updateFilter } from '../../utils/filters/updateFilter';
 import {
   SearchFilterGroup,
   SearchFilterGroupProps,
 } from '../searchFilterGroup/searchFilterGroup';
-import { computeNewFilterValue } from './computeNewFilterValue';
 
 export interface SearchFilterGroupContainerProps {
   machineName: filterGroupName;
@@ -44,40 +40,10 @@ export const mergeProps = (
   { dispatch }: { dispatch: Dispatch<Action> },
   { machineName }: SearchFilterGroupContainerProps,
 ) => ({
-  addFilter: (filterValue: string) => {
-    const newParams = {
-      ...currentParams,
-      [machineName]: filter.isDrilldown
-        ? // Drilldown filters only support one value at a time
-          filterValue
-        : // For other filters use the standard computation
-          computeNewFilterValue('add', currentParams[machineName], filterValue),
-    };
-    dispatch(getResourceList('courses', newParams));
-    dispatch(pushQueryStringToHistory(newParams));
-  },
+  addFilter: partial(updateFilter, dispatch, 'add', filter),
   currentValue: currentParams[filter.machineName],
   filter,
-  removeFilter: (filterValue: string) => {
-    const newParams = {
-      ...currentParams,
-      [machineName]: filter.isDrilldown
-        ? // Drilldown filters only support one value at a time
-          filterValue === currentParams[machineName]
-          ? // Remove the value if it matches current value
-            undefined
-          : // Don't remove a non matching existing value
-            currentParams[machineName] || undefined
-        : // For other filters use the standard computation
-          computeNewFilterValue(
-            'remove',
-            currentParams[machineName],
-            filterValue,
-          ),
-    };
-    dispatch(getResourceList('courses', newParams));
-    dispatch(pushQueryStringToHistory(newParams));
-  },
+  removeFilter: partial(updateFilter, dispatch, 'remove', filter),
 });
 
 export const SearchFilterGroupContainer = connect(
