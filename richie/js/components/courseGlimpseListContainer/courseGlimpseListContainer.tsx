@@ -1,6 +1,7 @@
 import get from 'lodash-es/get';
 import partial from 'lodash-es/partial';
 import { connect, Dispatch } from 'react-redux';
+import { Action } from 'redux';
 
 import { ResourceListStateParams } from '../../data/genericReducers/resourceList/resourceList';
 import { getResourceList } from '../../data/genericSideEffects/getResourceList/actions';
@@ -51,7 +52,7 @@ export const mergeProps = (
     courses: Array<Maybe<Course>>;
     currentParams: Maybe<ResourceListStateParams>;
   },
-  { dispatch }: { dispatch: Dispatch<RootState> },
+  { dispatch }: { dispatch: Dispatch<Action> },
 ) => ({
   courses,
   requestCourses: () =>

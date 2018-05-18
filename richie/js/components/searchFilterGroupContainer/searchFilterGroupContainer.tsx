@@ -1,4 +1,5 @@
 import { connect, Dispatch } from 'react-redux';
+import { Action } from 'redux';
 
 import {
   filterGroupName,
@@ -40,7 +41,7 @@ export const mergeProps = (
     currentParams: ResourceListStateParams;
     filter: SearchFilterGroupProps['filter'];
   },
-  { dispatch }: { dispatch: Dispatch<RootState> },
+  { dispatch }: { dispatch: Dispatch<Action> },
   { machineName }: SearchFilterGroupContainerProps,
 ) => ({
   addFilter: (filterValue: string) => {

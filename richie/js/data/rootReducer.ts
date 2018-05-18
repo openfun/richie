@@ -19,11 +19,20 @@ export interface RootState {
 
 export const rootReducer: Reducer<RootState> = (state, action) => {
   return {
-    filterDefinitions: filterDefinitions(state.filterDefinitions, action),
+    filterDefinitions: filterDefinitions(
+      (state && state.filterDefinitions) || undefined,
+      action,
+    ),
     resources: {
-      courses: courses(state.resources.courses, action),
-      organizations: organizations(state.resources.organizations, action),
-      subjects: subjects(state.resources.subjects, action),
+      courses: courses((state && state.resources.courses) || undefined, action),
+      organizations: organizations(
+        (state && state.resources.organizations) || undefined,
+        action,
+      ),
+      subjects: subjects(
+        (state && state.resources.subjects) || undefined,
+        action,
+      ),
     },
   };
 };
