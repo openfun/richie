@@ -1,8 +1,11 @@
-import { FilterDefinition } from '../../types/FilterDefinition';
+import {
+  FilterDefinition,
+  hardcodedFilterGroupName,
+  resourceBasedFilterGroupName,
+} from '../../types/filters';
 import initialState from './initialState';
 
 // Hardcoded filter groups have all their data contained in this slice of state
-export type hardcodedFilterGroupName = 'language' | 'new' | 'status';
 type FilterDefinitionStateHardcoded = {
   [key in hardcodedFilterGroupName]: FilterDefinition
 };
@@ -10,18 +13,13 @@ type FilterDefinitionStateHardcoded = {
 // Resource based filter groups are partly derived from other slice of states:
 // - the parts that are their own are stored here
 // - the derived parts are computed in mapStateToProps
-export type resourceBasedFilterGroupName = 'organizations' | 'subjects';
 type FilterDefinitionStateResourceBased = {
   [key in resourceBasedFilterGroupName]: {
     humanName: string;
-    machineName: string;
+    machineName: resourceBasedFilterGroupName;
   }
 };
 
-// Provide general types for export
-export type filterGroupName =
-  | resourceBasedFilterGroupName
-  | hardcodedFilterGroupName;
 export type FilterDefinitionState = FilterDefinitionStateHardcoded &
   FilterDefinitionStateResourceBased;
 

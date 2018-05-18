@@ -1,6 +1,6 @@
 import { stringify } from 'query-string';
 
-import { FilterDefinition } from '../../types/FilterDefinition';
+import { FilterDefinition } from '../../types/filters';
 import * as filterComputer from './computeNewFilterValue';
 import { mergeProps } from './searchFilterGroupContainer';
 

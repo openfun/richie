@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { FilterValue } from '../../types/FilterDefinition';
+import { FilterValue } from '../../types/filters';
 
 export interface SearchFilterProps {
   addFilter: (filterValue: string) => void;

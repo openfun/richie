@@ -1,15 +1,15 @@
 import { connect, Dispatch } from 'react-redux';
 import { Action } from 'redux';
 
-import {
-  filterGroupName,
-  resourceBasedFilterGroupName,
-} from '../../data/filterDefinitions/reducer';
 import { ResourceListStateParams } from '../../data/genericReducers/resourceList/resourceList';
 import { getResourceList } from '../../data/genericSideEffects/getResourceList/actions';
 import { pushQueryStringToHistory } from '../../data/genericSideEffects/pushHistoryState/actions';
 import { RootState } from '../../data/rootReducer';
 import { API_LIST_DEFAULT_PARAMS as defaultParams } from '../../settings.json';
+import {
+  filterGroupName,
+  resourceBasedFilterGroupName,
+} from '../../types/filters';
 import { getFilterFromState } from '../../utils/filters/getFilterFromState';
 import {
   SearchFilterGroup,

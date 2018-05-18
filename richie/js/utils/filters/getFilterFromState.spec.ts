@@ -1,5 +1,6 @@
 import { CoursesState } from '../../data/courses/reducer';
-import { FilterDefinition } from '../../types/FilterDefinition';
+import { RootState } from '../../data/rootReducer';
+import { FilterDefinition } from '../../types/filters';
 import Organization from '../../types/Organization';
 import { getFilterFromState } from './getFilterFromState';
 
@@ -10,7 +11,7 @@ describe('utils/filters/getFilterFromState', () => {
         language: {} as FilterDefinition,
         new: {
           humanName: 'New courses',
-          machineName: 'status',
+          machineName: 'new' as 'new',
           values: [{ primaryKey: 'new', humanName: 'First session' }],
         },
         organizations: {} as FilterDefinition,
@@ -18,10 +19,10 @@ describe('utils/filters/getFilterFromState', () => {
         subjects: {} as FilterDefinition,
       },
       resources: {},
-    };
+    } as RootState;
     expect(getFilterFromState(state, 'new')).toEqual({
       humanName: 'New courses',
-      machineName: 'status',
+      machineName: 'new',
       values: [{ primaryKey: 'new', humanName: 'First session' }],
     });
   });
@@ -58,7 +59,7 @@ describe('utils/filters/getFilterFromState', () => {
       },
     };
 
-    expect(getFilterFromState(state, 'organizations')).toEqual({
+    expect(getFilterFromState(state as RootState, 'organizations')).toEqual({
       humanName: 'Organizations',
       machineName: 'organizations',
       values: [
@@ -92,7 +93,7 @@ describe('utils/filters/getFilterFromState', () => {
       },
     };
 
-    expect(getFilterFromState(state, 'organizations')).toEqual({
+    expect(getFilterFromState(state as RootState, 'organizations')).toEqual({
       humanName: 'Organizations',
       machineName: 'organizations',
       values: [

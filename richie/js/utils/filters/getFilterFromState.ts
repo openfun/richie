@@ -1,11 +1,11 @@
 import values from 'lodash-es/values';
 
+import { RootState } from '../../data/rootReducer';
 import {
+  FilterDefinition,
   filterGroupName,
   resourceBasedFilterGroupName,
-} from '../../data/filterDefinitions/reducer';
-import { RootState } from '../../data/rootReducer';
-import { FilterDefinition } from '../../types/FilterDefinition';
+} from '../../types/filters';
 
 // Get (or build) a complete filter definition for `machineName` from the state, using:
 // - filterDefinitions for hardcoded filters and hardcoded props of resource based filters

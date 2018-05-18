@@ -2,7 +2,7 @@
 const hardcodedFilterDefinitions = {
   language: {
     humanName: 'Language',
-    machineName: 'language',
+    machineName: 'language' as 'language',
     values: [
       { primaryKey: 'en', humanName: 'English' },
       { primaryKey: 'fr', humanName: 'French' },
@@ -11,14 +11,14 @@ const hardcodedFilterDefinitions = {
 
   new: {
     humanName: 'New courses',
-    machineName: 'status',
+    machineName: 'new' as 'new',
     values: [{ primaryKey: 'new', humanName: 'First session' }],
   },
 
   status: {
     humanName: 'Availability',
     isDrilldown: true,
-    machineName: 'availability',
+    machineName: 'status' as 'status',
     values: [
       { primaryKey: 'coming_soon', humanName: 'Coming soon' },
       { primaryKey: 'current', humanName: 'Current session' },
@@ -30,12 +30,12 @@ const hardcodedFilterDefinitions = {
 const resourceBasedFilterDefinitions = {
   organizations: {
     humanName: 'Organizations',
-    machineName: 'organizations',
+    machineName: 'organizations' as 'organizations',
   },
 
   subjects: {
     humanName: 'Subjects',
-    machineName: 'subjects',
+    machineName: 'subjects' as 'subjects',
   },
 };
 

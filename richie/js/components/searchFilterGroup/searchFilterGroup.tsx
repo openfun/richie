@@ -3,7 +3,7 @@ import isArray from 'lodash-es/isArray';
 import sortBy from 'lodash-es/sortBy';
 import * as React from 'react';
 
-import { FilterDefinition, FilterValue } from '../../types/FilterDefinition';
+import { FilterDefinition, FilterValue } from '../../types/filters';
 import { Maybe, Nullable } from '../../utils/types';
 import SearchFilter from '../searchFilter/searchFilter';
 
