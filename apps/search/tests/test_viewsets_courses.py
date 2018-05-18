@@ -79,11 +79,15 @@ class CoursesViewsetTestCase(TestCase):
         mock_search.return_value = {
             "hits": {"hits": [{"_id": 89}, {"_id": 94}], "total": 90},
             "aggregations": {
-                "organizations": {
-                    "buckets": [
-                        {"key": "1", "doc_count": 7},
-                        {"key": "2", "doc_count": 9},
-                    ]
+                "all_courses": {
+                    "organizations": {
+                        "organizations": {
+                            "buckets": [
+                                {"key": "1", "doc_count": 7},
+                                {"key": "2", "doc_count": 9},
+                            ]
+                        }
+                    }
                 }
             },
         }
@@ -103,11 +107,28 @@ class CoursesViewsetTestCase(TestCase):
         # The ES connector was called with appropriate arguments for the client's request
         mock_search.assert_called_with(
             body={
-                "query": {"match_all": {}},
                 "aggs": {
-                    "organizations": {"terms": {"field": "organizations"}},
-                    "subjects": {"terms": {"field": "subjects"}},
+                    "all_courses": {
+                        "global": {},
+                        "aggregations": {
+                            "organizations": {
+                                "filter": {"bool": {"must": []}},
+                                "aggregations": {
+                                    "organizations": {
+                                        "terms": {"field": "organizations"}
+                                    }
+                                },
+                            },
+                            "subjects": {
+                                "filter": {"bool": {"must": []}},
+                                "aggregations": {
+                                    "subjects": {"terms": {"field": "subjects"}}
+                                },
+                            },
+                        },
+                    }
                 },
+                "query": {"match_all": {}},
             },
             doc_type="course",
             from_=10,
@@ -128,11 +149,15 @@ class CoursesViewsetTestCase(TestCase):
         mock_search.return_value = {
             "hits": {"hits": [{"_id": 523}, {"_id": 861}], "total": 35},
             "aggregations": {
-                "subjects": {
-                    "buckets": [
-                        {"key": "11", "doc_count": 17},
-                        {"key": "21", "doc_count": 19},
-                    ]
+                "all_courses": {
+                    "subjects": {
+                        "subjects": {
+                            "buckets": [
+                                {"key": "11", "doc_count": 17},
+                                {"key": "21", "doc_count": 19},
+                            ]
+                        }
+                    }
                 }
             },
         }
@@ -150,11 +175,35 @@ class CoursesViewsetTestCase(TestCase):
             },
         )
         # The ES connector was called with appropriate arguments for the client's request
+        multi_match = {
+            "multi_match": {
+                "fields": ["short_description.*", "title.*"],
+                "query": "some phrase terms",
+                "type": "cross_fields",
+            }
+        }
         mock_search.assert_called_with(
             body={
                 "aggs": {
-                    "organizations": {"terms": {"field": "organizations"}},
-                    "subjects": {"terms": {"field": "subjects"}},
+                    "all_courses": {
+                        "global": {},
+                        "aggregations": {
+                            "organizations": {
+                                "filter": {"bool": {"must": [multi_match]}},
+                                "aggregations": {
+                                    "organizations": {
+                                        "terms": {"field": "organizations"}
+                                    }
+                                },
+                            },
+                            "subjects": {
+                                "filter": {"bool": {"must": [multi_match]}},
+                                "aggregations": {
+                                    "subjects": {"terms": {"field": "subjects"}}
+                                },
+                            },
+                        },
+                    }
                 },
                 "query": {
                     "bool": {
@@ -189,18 +238,24 @@ class CoursesViewsetTestCase(TestCase):
         mock_search.return_value = {
             "hits": {"hits": [{"_id": 221}, {"_id": 42}], "total": 29},
             "aggregations": {
-                "organizations": {
-                    "buckets": [
-                        {"key": "13", "doc_count": 21},
-                        {"key": "15", "doc_count": 13},
-                    ]
-                },
-                "subjects": {
-                    "buckets": [
-                        {"key": "12", "doc_count": 3},
-                        {"key": "22", "doc_count": 5},
-                    ]
-                },
+                "all_courses": {
+                    "organizations": {
+                        "organizations": {
+                            "buckets": [
+                                {"key": "13", "doc_count": 21},
+                                {"key": "15", "doc_count": 13},
+                            ]
+                        }
+                    },
+                    "subjects": {
+                        "subjects": {
+                            "buckets": [
+                                {"key": "12", "doc_count": 3},
+                                {"key": "22", "doc_count": 5},
+                            ]
+                        }
+                    },
+                }
             },
         }
 
@@ -220,13 +275,31 @@ class CoursesViewsetTestCase(TestCase):
             },
         )
         # The ES connector was called with appropriate arguments for the client's request
+        terms_organizations = {"terms": {"organizations": [13, 15]}}
         mock_search.assert_called_with(
             body={
                 "aggs": {
-                    "organizations": {"terms": {"field": "organizations"}},
-                    "subjects": {"terms": {"field": "subjects"}},
+                    "all_courses": {
+                        "global": {},
+                        "aggregations": {
+                            "organizations": {
+                                "filter": {"bool": {"must": []}},
+                                "aggregations": {
+                                    "organizations": {
+                                        "terms": {"field": "organizations"}
+                                    }
+                                },
+                            },
+                            "subjects": {
+                                "filter": {"bool": {"must": [terms_organizations]}},
+                                "aggregations": {
+                                    "subjects": {"terms": {"field": "subjects"}}
+                                },
+                            },
+                        },
+                    }
                 },
-                "query": {"bool": {"must": [{"terms": {"organizations": [13, 15]}}]}},
+                "query": {"bool": {"must": [terms_organizations]}},
             },
             doc_type="course",
             from_=0,
@@ -246,11 +319,15 @@ class CoursesViewsetTestCase(TestCase):
         mock_search.return_value = {
             "hits": {"hits": [{"_id": 37}, {"_id": 98}], "total": 12},
             "aggregations": {
-                "organizations": {
-                    "buckets": [
-                        {"key": "3", "doc_count": 6},
-                        {"key": "14", "doc_count": 7},
-                    ]
+                "all_courses": {
+                    "organizations": {
+                        "organizations": {
+                            "buckets": [
+                                {"key": "3", "doc_count": 6},
+                                {"key": "14", "doc_count": 7},
+                            ]
+                        }
+                    }
                 }
             },
         }
@@ -268,13 +345,31 @@ class CoursesViewsetTestCase(TestCase):
             },
         )
         # The ES connector was called with appropriate arguments for the client's request
+        term_organization = {"terms": {"organizations": [345]}}
         mock_search.assert_called_with(
             body={
                 "aggs": {
-                    "organizations": {"terms": {"field": "organizations"}},
-                    "subjects": {"terms": {"field": "subjects"}},
+                    "all_courses": {
+                        "global": {},
+                        "aggregations": {
+                            "organizations": {
+                                "filter": {"bool": {"must": []}},
+                                "aggregations": {
+                                    "organizations": {
+                                        "terms": {"field": "organizations"}
+                                    }
+                                },
+                            },
+                            "subjects": {
+                                "filter": {"bool": {"must": [term_organization]}},
+                                "aggregations": {
+                                    "subjects": {"terms": {"field": "subjects"}}
+                                },
+                            },
+                        },
+                    }
                 },
-                "query": {"bool": {"must": [{"terms": {"organizations": [345]}}]}},
+                "query": {"bool": {"must": [term_organization]}},
             },
             doc_type="course",
             from_=0,
@@ -300,11 +395,15 @@ class CoursesViewsetTestCase(TestCase):
         mock_search.return_value = {
             "hits": {"hits": [{"_id": 13}, {"_id": 15}], "total": 7},
             "aggregations": {
-                "subjects": {
-                    "buckets": [
-                        {"key": "61", "doc_count": 4},
-                        {"key": "122", "doc_count": 5},
-                    ]
+                "all_courses": {
+                    "subjects": {
+                        "subjects": {
+                            "buckets": [
+                                {"key": "61", "doc_count": 4},
+                                {"key": "122", "doc_count": 5},
+                            ]
+                        }
+                    }
                 }
             },
         }
@@ -322,40 +421,50 @@ class CoursesViewsetTestCase(TestCase):
             },
         )
         # The ES connector was called with appropriate arguments for the client's request
+        range_end_date = {
+            "range": {
+                "end_date": {
+                    "gte": datetime.datetime(2018, 4, 30, 6, 0, tzinfo=pytz.utc),
+                    "lte": datetime.datetime(2018, 6, 30, 6, 0, tzinfo=pytz.utc),
+                }
+            }
+        }
+        range_start_date = {
+            "range": {
+                "start_date": {
+                    "gte": datetime.datetime(2018, 1, 1, 6, 0, tzinfo=pytz.utc),
+                    "lte": None,
+                }
+            }
+        }
         mock_search.assert_called_with(
             body={
                 "aggs": {
-                    "organizations": {"terms": {"field": "organizations"}},
-                    "subjects": {"terms": {"field": "subjects"}},
-                },
-                "query": {
-                    "bool": {
-                        "must": [
-                            {
-                                "range": {
-                                    "end_date": {
-                                        "gte": datetime.datetime(
-                                            2018, 4, 30, 6, 0, tzinfo=pytz.utc
-                                        ),
-                                        "lte": datetime.datetime(
-                                            2018, 6, 30, 6, 0, tzinfo=pytz.utc
-                                        ),
+                    "all_courses": {
+                        "global": {},
+                        "aggregations": {
+                            "organizations": {
+                                "filter": {
+                                    "bool": {"must": [range_end_date, range_start_date]}
+                                },
+                                "aggregations": {
+                                    "organizations": {
+                                        "terms": {"field": "organizations"}
                                     }
-                                }
+                                },
                             },
-                            {
-                                "range": {
-                                    "start_date": {
-                                        "gte": datetime.datetime(
-                                            2018, 1, 1, 6, 0, tzinfo=pytz.utc
-                                        ),
-                                        "lte": None,
-                                    }
-                                }
+                            "subjects": {
+                                "filter": {
+                                    "bool": {"must": [range_end_date, range_start_date]}
+                                },
+                                "aggregations": {
+                                    "subjects": {"terms": {"field": "subjects"}}
+                                },
                             },
-                        ]
+                        },
                     }
                 },
+                "query": {"bool": {"must": [range_end_date, range_start_date]}},
             },
             doc_type="course",
             from_=0,
@@ -383,11 +492,15 @@ class CoursesViewsetTestCase(TestCase):
         mock_search.return_value = {
             "hits": {"hits": [{"_id": 999}, {"_id": 888}], "total": 3},
             "aggregations": {
-                "subjects": {
-                    "buckets": [
-                        {"key": "42", "doc_count": 3},
-                        {"key": "84", "doc_count": 1},
-                    ]
+                "all_courses": {
+                    "subjects": {
+                        "subjects": {
+                            "buckets": [
+                                {"key": "42", "doc_count": 3},
+                                {"key": "84", "doc_count": 1},
+                            ]
+                        }
+                    }
                 }
             },
         }
@@ -405,45 +518,77 @@ class CoursesViewsetTestCase(TestCase):
             },
         )
         # The ES connector was called with appropriate arguments for the client's request
+        range_end_date = {
+            "range": {
+                "end_date": {
+                    "gte": datetime.datetime(2018, 4, 30, 6, 0, tzinfo=pytz.utc),
+                    "lte": datetime.datetime(2018, 6, 30, 6, 0, tzinfo=pytz.utc),
+                }
+            }
+        }
+        multi_match = {
+            "multi_match": {
+                "fields": ["short_description.*", "title.*"],
+                "query": "these phrase terms",
+                "type": "cross_fields",
+            }
+        }
+        range_start_date = {
+            "range": {
+                "start_date": {
+                    "gte": datetime.datetime(2018, 1, 1, 6, 0, tzinfo=pytz.utc),
+                    "lte": None,
+                }
+            }
+        }
+        terms_subjects = {"terms": {"subjects": [42, 84]}}
         mock_search.assert_called_with(
             body={
                 "aggs": {
-                    "organizations": {"terms": {"field": "organizations"}},
-                    "subjects": {"terms": {"field": "subjects"}},
+                    "all_courses": {
+                        "global": {},
+                        "aggregations": {
+                            "organizations": {
+                                "filter": {
+                                    "bool": {
+                                        "must": [
+                                            range_end_date,
+                                            multi_match,
+                                            range_start_date,
+                                            terms_subjects,
+                                        ]
+                                    }
+                                },
+                                "aggregations": {
+                                    "organizations": {
+                                        "terms": {"field": "organizations"}
+                                    }
+                                },
+                            },
+                            "subjects": {
+                                "filter": {
+                                    "bool": {
+                                        "must": [
+                                            range_end_date,
+                                            multi_match,
+                                            range_start_date,
+                                        ]
+                                    }
+                                },
+                                "aggregations": {
+                                    "subjects": {"terms": {"field": "subjects"}}
+                                },
+                            },
+                        },
+                    }
                 },
                 "query": {
                     "bool": {
                         "must": [
-                            {
-                                "range": {
-                                    "end_date": {
-                                        "gte": datetime.datetime(
-                                            2018, 4, 30, 6, 0, tzinfo=pytz.utc
-                                        ),
-                                        "lte": datetime.datetime(
-                                            2018, 6, 30, 6, 0, tzinfo=pytz.utc
-                                        ),
-                                    }
-                                }
-                            },
-                            {
-                                "multi_match": {
-                                    "fields": ["short_description.*", "title.*"],
-                                    "query": "these phrase terms",
-                                    "type": "cross_fields",
-                                }
-                            },
-                            {
-                                "range": {
-                                    "start_date": {
-                                        "gte": datetime.datetime(
-                                            2018, 1, 1, 6, 0, tzinfo=pytz.utc
-                                        ),
-                                        "lte": None,
-                                    }
-                                }
-                            },
-                            {"terms": {"subjects": [42, 84]}},
+                            range_end_date,
+                            multi_match,
+                            range_start_date,
+                            terms_subjects,
                         ]
                     }
                 },

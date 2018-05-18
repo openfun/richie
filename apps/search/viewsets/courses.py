@@ -16,7 +16,7 @@ class CoursesViewSet(ViewSet):
     A simple viewset with GET endpoints to fetch courses
     See API Blueprint for details on consumer use
     """
-    # pylint: disable=no-self-use,unused-argument
+    # pylint: disable=no-self-use,unused-argument,too-many-locals
     def list(self, request, version):
         """
         Course search endpoint: build an ElasticSearch request from our query params so
@@ -39,6 +39,10 @@ class CoursesViewSet(ViewSet):
         # Return a 400 with error information if the query params are not as expected
         if not params_form.is_valid():
             return Response(status=400, data={"errors": params_form.errors})
+
+        # Define our aggregations names, for our ES query, which will match with the field
+        # names on the objects & the facets we return on the API response
+        facets = ["organizations", "subjects"]
 
         # Note: test_elasticsearch_feature.py needs to be updated whenever the search call
         # is updated and makes use new features.
@@ -98,8 +102,25 @@ class CoursesViewSet(ViewSet):
 
         # Build organizations and subjects terms aggregations for our query
         aggs = {
-            "organizations": {"terms": {"field": "organizations"}},
-            "subjects": {"terms": {"field": "subjects"}},
+            "all_courses": {
+                "global": {},
+                "aggregations": {
+                    facet: {
+                        "filter": {
+                            "bool": {
+                                "must": [
+                                    query
+                                    for query in queries
+                                    if "terms" not in query
+                                    or facet not in query.get("terms")
+                                ]
+                            }
+                        },
+                        "aggregations": {facet: {"terms": {"field": facet}}},
+                    }
+                    for facet in facets
+                },
+            }
         }
 
         course_query_response = settings.ES_CLIENT.search(
@@ -130,9 +151,12 @@ class CoursesViewSet(ViewSet):
             "facets": {
                 field: {
                     term_value["key"]: term_value["doc_count"]
-                    for term_value in value["buckets"]
+                    for term_value in value[field]["buckets"]
                 }
-                for field, value in course_query_response["aggregations"].items()
+                for field, value in course_query_response["aggregations"][
+                    "all_courses"
+                ].items()
+                if field in facets
             },
         }
 
