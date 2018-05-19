@@ -9,7 +9,7 @@ from ..utils.api_consumption import walk_api_json_list
 from ..utils.i18n import get_best_field_language
 
 
-class OrganizationsIndexer():
+class OrganizationsIndexer:
     """
     Makes available the parameters the indexer requires as well as a function to shape
     objects into what we want to index in ElasticSearch

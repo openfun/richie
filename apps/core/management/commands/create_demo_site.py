@@ -29,13 +29,15 @@ PAGE_INFOS = {
     "courses": {
         "content": {"en": "Courses", "fr": "Cours"},
         "kwargs": {
-            "reverse_id": Course.ROOT_REVERSE_ID, "template": "richie/fullwidth.html"
+            "reverse_id": Course.ROOT_REVERSE_ID,
+            "template": "richie/fullwidth.html",
         },
     },
     "subjects": {
         "content": {"en": "Subjects", "fr": "Sujets"},
         "kwargs": {
-            "reverse_id": Subject.ROOT_REVERSE_ID, "template": "richie/fullwidth.html"
+            "reverse_id": Subject.ROOT_REVERSE_ID,
+            "template": "richie/fullwidth.html",
         },
     },
     "organizations": {

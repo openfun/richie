@@ -76,9 +76,7 @@ class ESFeaturesTestCase(TestCase):
                 index="test_index",
                 doc_type="test_doc",
                 body={"sort": ["_id"], "query": {"match_all": {}}},
-            )[
-                "hits"
-            ],
+            )["hits"],
             {
                 "total": 3,
                 "max_score": None,
@@ -161,9 +159,7 @@ class ESFeaturesTestCase(TestCase):
                         }
                     }
                 },
-            )[
-                "hits"
-            ],
+            )["hits"],
             {
                 "total": 2,
                 "max_score": 2.7725887,
@@ -234,9 +230,7 @@ class ESFeaturesTestCase(TestCase):
                         }
                     }
                 },
-            )[
-                "hits"
-            ],
+            )["hits"],
             {
                 "total": 1,
                 "max_score": 1.0,
@@ -294,9 +288,7 @@ class ESFeaturesTestCase(TestCase):
                 index="test_index",
                 doc_type="test_doc",
                 body={"query": {"terms": {"keyword_field": ["alpha", "foxtrot"]}}},
-            )[
-                "hits"
-            ],
+            )["hits"],
             {
                 "total": 2,
                 "max_score": 1.0,
@@ -364,9 +356,7 @@ class ESFeaturesTestCase(TestCase):
                     "query": {"match_all": {}},
                     "aggs": {"keyword_field": {"terms": {"field": "keyword_field"}}},
                 },
-            )[
-                "aggregations"
-            ],
+            )["aggregations"],
             {
                 "keyword_field": {
                     "buckets": [

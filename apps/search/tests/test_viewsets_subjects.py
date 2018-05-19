@@ -29,7 +29,8 @@ class SubjectsViewsetTestCase(TestCase):
             return_value={
                 "_id": 42,
                 "_source": {
-                    "image": "example.com/image.png", "name": {"fr": "Some Subject"}
+                    "image": "example.com/image.png",
+                    "name": {"fr": "Some Subject"},
                 },
             },
         ):

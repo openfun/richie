@@ -81,7 +81,8 @@ class CoursesViewsetTestCase(TestCase):
             "aggregations": {
                 "organizations": {
                     "buckets": [
-                        {"key": "1", "doc_count": 7}, {"key": "2", "doc_count": 9}
+                        {"key": "1", "doc_count": 7},
+                        {"key": "2", "doc_count": 9},
                     ]
                 }
             },
@@ -129,7 +130,8 @@ class CoursesViewsetTestCase(TestCase):
             "aggregations": {
                 "subjects": {
                     "buckets": [
-                        {"key": "11", "doc_count": 17}, {"key": "21", "doc_count": 19}
+                        {"key": "11", "doc_count": 17},
+                        {"key": "21", "doc_count": 19},
                     ]
                 }
             },
@@ -189,12 +191,14 @@ class CoursesViewsetTestCase(TestCase):
             "aggregations": {
                 "organizations": {
                     "buckets": [
-                        {"key": "13", "doc_count": 21}, {"key": "15", "doc_count": 13}
+                        {"key": "13", "doc_count": 21},
+                        {"key": "15", "doc_count": 13},
                     ]
                 },
                 "subjects": {
                     "buckets": [
-                        {"key": "12", "doc_count": 3}, {"key": "22", "doc_count": 5}
+                        {"key": "12", "doc_count": 3},
+                        {"key": "22", "doc_count": 5},
                     ]
                 },
             },
@@ -244,7 +248,8 @@ class CoursesViewsetTestCase(TestCase):
             "aggregations": {
                 "organizations": {
                     "buckets": [
-                        {"key": "3", "doc_count": 6}, {"key": "14", "doc_count": 7}
+                        {"key": "3", "doc_count": 6},
+                        {"key": "14", "doc_count": 7},
                     ]
                 }
             },
@@ -297,7 +302,8 @@ class CoursesViewsetTestCase(TestCase):
             "aggregations": {
                 "subjects": {
                     "buckets": [
-                        {"key": "61", "doc_count": 4}, {"key": "122", "doc_count": 5}
+                        {"key": "61", "doc_count": 4},
+                        {"key": "122", "doc_count": 5},
                     ]
                 }
             },
@@ -379,7 +385,8 @@ class CoursesViewsetTestCase(TestCase):
             "aggregations": {
                 "subjects": {
                     "buckets": [
-                        {"key": "42", "doc_count": 3}, {"key": "84", "doc_count": 1}
+                        {"key": "42", "doc_count": 3},
+                        {"key": "84", "doc_count": 1},
                     ]
                 }
             },

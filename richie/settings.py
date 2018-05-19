@@ -111,7 +111,8 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
     MEDIA_ROOT = os.path.join(DATA_DIR, "media")
     STATIC_ROOT = os.path.join(DATA_DIR, "static")
     STATICFILES_DIRS = (
-        os.path.join(BASE_DIR, "static"), os.path.join(BASE_DIR, "build")
+        os.path.join(BASE_DIR, "static"),
+        os.path.join(BASE_DIR, "build"),
     )
 
     # Internationalization
@@ -306,11 +307,15 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         },
         "loggers": {
             "django.db.backends": {
-                "level": "ERROR", "handlers": ["console"], "propagate": False
+                "level": "ERROR",
+                "handlers": ["console"],
+                "propagate": False,
             },
             "raven": {"level": "DEBUG", "handlers": ["console"], "propagate": False},
             "sentry.errors": {
-                "level": "DEBUG", "handlers": ["console"], "propagate": False
+                "level": "DEBUG",
+                "handlers": ["console"],
+                "propagate": False,
             },
         },
     }

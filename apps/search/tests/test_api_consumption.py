@@ -20,7 +20,8 @@ class ApiConsumptionTestCase(TestCase):
         Happy path: the API responds as intended and we get to yield the successive pages
         """
         response_page_1 = {
-            "count": 51, "results": [{"id": 42, "name": "Stub Forty-Two"}]
+            "count": 51,
+            "results": [{"id": 42, "name": "Stub Forty-Two"}],
         }
         responses.add(
             method="GET",
@@ -30,7 +31,8 @@ class ApiConsumptionTestCase(TestCase):
         )
 
         response_page_2 = {
-            "count": 51, "results": [{"id": 44, "name": "Stub Forty-Four"}]
+            "count": 51,
+            "results": [{"id": 44, "name": "Stub Forty-Four"}],
         }
         responses.add(
             method="GET",

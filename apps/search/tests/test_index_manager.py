@@ -98,7 +98,7 @@ class IndexManagerTestCase(TestCase):
 
         # Create an indexable from scratch that mimicks the expected shape of the dynamic
         # import in es_index
-        class IndexableClass():
+        class IndexableClass:
             """Indexable stub"""
 
             document_type = "course"
@@ -144,7 +144,8 @@ class IndexManagerTestCase(TestCase):
                     "mappings": {
                         "course": {
                             "properties": {
-                                "code": {"type": "keyword"}, "name": {"type": "text"}
+                                "code": {"type": "keyword"},
+                                "name": {"type": "text"},
                             }
                         }
                     }
@@ -164,7 +165,8 @@ class IndexManagerTestCase(TestCase):
     @mock.patch(
         "apps.search.index_manager.get_indexes_by_alias",
         side_effect=lambda existing_indexes, alias: [
-            (alias + "_forgotten", alias), (alias + "_previous", alias)
+            (alias + "_forgotten", alias),
+            (alias + "_previous", alias),
         ],
     )
     @mock.patch(
@@ -197,7 +199,8 @@ class IndexManagerTestCase(TestCase):
                     },
                     {
                         "add": {
-                            "index": "richie_stub_created_index", "alias": "richie_stub"
+                            "index": "richie_stub_created_index",
+                            "alias": "richie_stub",
                         }
                     },
                     {
@@ -214,12 +217,14 @@ class IndexManagerTestCase(TestCase):
                     },
                     {
                         "remove": {
-                            "index": "richie_stub_forgotten", "alias": "richie_stub"
+                            "index": "richie_stub_forgotten",
+                            "alias": "richie_stub",
                         }
                     },
                     {
                         "remove": {
-                            "index": "richie_stub_previous", "alias": "richie_stub"
+                            "index": "richie_stub_previous",
+                            "alias": "richie_stub",
                         }
                     },
                 ]
@@ -265,7 +270,8 @@ class IndexManagerTestCase(TestCase):
                     },
                     {
                         "add": {
-                            "index": "richie_stub_created_index", "alias": "richie_stub"
+                            "index": "richie_stub_created_index",
+                            "alias": "richie_stub",
                         }
                     },
                 ]
@@ -274,7 +280,7 @@ class IndexManagerTestCase(TestCase):
         self.indices_client.delete.assert_not_called()
 
 
-class ExOneIndexable():
+class ExOneIndexable:
     """First example indexable"""
 
     document_type = "example"
@@ -282,7 +288,7 @@ class ExOneIndexable():
     mapping = {"properties": {"name": "text"}}
 
 
-class ExTwoIndexable():
+class ExTwoIndexable:
     """Second example indexable"""
 
     document_type = "stub"

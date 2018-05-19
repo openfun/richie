@@ -53,7 +53,10 @@ class CoursesViewSet(ViewSet):
 
             # The datetimerange fields are all translated to the ES query DSL the same way
             if param in [
-                "end_date", "enrollment_end_date", "enrollment_start_date", "start_date"
+                "end_date",
+                "enrollment_end_date",
+                "enrollment_start_date",
+                "start_date",
             ]:
                 # Add the relevant range criteria to the queries
                 start, end = value
