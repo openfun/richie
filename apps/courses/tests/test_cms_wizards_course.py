@@ -133,7 +133,9 @@ class CourseCMSWizardTestCase(CMSTestCase):
         )
         # Submit a title that is too long and a slug that is ok
         invalid_data = {
-            "title": "t" * 256, "slug": "s" * 200, "organization": organization.id
+            "title": "t" * 256,
+            "slug": "s" * 200,
+            "organization": organization.id,
         }
 
         form = CourseWizardForm(data=invalid_data)
@@ -155,7 +157,9 @@ class CourseCMSWizardTestCase(CMSTestCase):
         )
         # Submit a slug that is too long and a title that is ok
         invalid_data = {
-            "title": "t" * 255, "slug": "s" * 201, "organization": organization.id
+            "title": "t" * 255,
+            "slug": "s" * 201,
+            "organization": organization.id,
         }
 
         form = CourseWizardForm(data=invalid_data)

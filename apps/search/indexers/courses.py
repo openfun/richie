@@ -9,7 +9,7 @@ from ..utils.api_consumption import walk_api_json_list
 from ..utils.i18n import get_best_field_language
 
 
-class CoursesIndexer():
+class CoursesIndexer:
     """
     Makes available the parameters the indexer requires as well as functions to shape
     objects getting into and out of ElasticSearch

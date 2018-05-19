@@ -14,6 +14,7 @@ from raven.contrib.django.raven_compat.middleware.wsgi import Sentry
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "richie.settings")
 os.environ.setdefault("DJANGO_CONFIGURATION", "Development")
 
-from configurations.wsgi import get_wsgi_application  # noqa, pylint: disable=wrong-import-position
+# pylint: disable=wrong-import-position
+from configurations.wsgi import get_wsgi_application  # noqa
 
 application = Sentry(get_wsgi_application())  # pylint: disable=invalid-name
