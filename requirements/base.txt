@@ -29,7 +29,7 @@ elasticsearch==6.2.0
 gunicorn==19.8.1
 lxml==4.2.1
 pexpect==4.5.0
-phonenumbers==8.9.5
+phonenumbers==8.9.6
 pickleshare==0.7.4
 Pillow==5.1.0
 prompt-toolkit==1.0.15
