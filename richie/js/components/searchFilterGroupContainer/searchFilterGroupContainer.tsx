@@ -40,10 +40,16 @@ export const mergeProps = (
   { dispatch }: { dispatch: Dispatch<Action> },
   { machineName }: SearchFilterGroupContainerProps,
 ) => ({
-  addFilter: partial(updateFilter, dispatch, 'add', filter),
+  addFilter: partial(updateFilter, dispatch, currentParams, 'add', filter),
   currentValue: currentParams[filter.machineName],
   filter,
-  removeFilter: partial(updateFilter, dispatch, 'remove', filter),
+  removeFilter: partial(
+    updateFilter,
+    dispatch,
+    currentParams,
+    'remove',
+    filter,
+  ),
 });
 
 export const SearchFilterGroupContainer = connect(

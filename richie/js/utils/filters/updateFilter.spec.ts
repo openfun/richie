@@ -17,10 +17,10 @@ describe('utils/filters/updateFilter', () => {
   it('dispatches relevant actions with the updated params', () => {
     updateFilter(
       dispatch,
+      { limit: 13, offset: 3, organizations: [42, 84] },
       'add',
       { isDrilldown: true, machineName: 'status' } as FilterDefinition,
       'some filter value',
-      { limit: 13, offset: 3, organizations: [42, 84] },
     );
 
     expect(dispatch).toHaveBeenCalledWith({

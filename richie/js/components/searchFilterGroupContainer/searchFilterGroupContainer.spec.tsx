@@ -52,7 +52,17 @@ describe('components/searchFilterGroupContainer/mergeProps', () => {
 
     expect(currentValue).toEqual([12, 24]);
     expect(filter).toEqual(exampleFilter);
-    expect(addFilter()).toEqual([dispatch, 'add', filter]);
-    expect(removeFilter()).toEqual([dispatch, 'remove', filter]);
+    expect(addFilter()).toEqual([
+      dispatch,
+      { limit: 17, offset: 7, organizations: [12, 24] },
+      'add',
+      filter,
+    ]);
+    expect(removeFilter()).toEqual([
+      dispatch,
+      { limit: 17, offset: 7, organizations: [12, 24] },
+      'remove',
+      filter,
+    ]);
   });
 });

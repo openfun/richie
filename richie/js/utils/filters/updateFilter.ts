@@ -14,10 +14,10 @@ import { computeNewFilterValue } from './computeNewFilterValue';
 // have it duplicated in several connected components, and once in each component for each action it supports.
 export const updateFilter = (
   dispatch: Dispatch<Action>,
+  currentParams: ResourceListStateParams,
   action: 'add' | 'remove',
   filter: FilterDefinition,
   filterValue: string,
-  currentParams: ResourceListStateParams,
 ) => {
   // Use our other utils to build the new params from the existing state and filter information,
   // and the incoming filter value & definition
