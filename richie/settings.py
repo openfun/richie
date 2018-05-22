@@ -196,10 +196,12 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         # FUN stuff
         "apps.core",
         "apps.courses",
+        "apps.persons",
         "apps.search",
         "plugins.large_banner",
         # Third party apps
         "raven.contrib.django.raven_compat",
+        "parler",
     )
 
     # Group to add plugin to placeholder "Content"
@@ -247,8 +249,9 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
     CMS_TEMPLATES = (
         ("core/cms/child_pages_list.html", _("List of child pages")),
         ("courses/cms/course_detail.html", _("Course page")),
-        ("courses/cms/subject_detail.html", _("Subject page")),
         ("courses/cms/organization_detail.html", _("Organization page")),
+        ("courses/cms/subject_detail.html", _("Subject page")),
+        ("persons/cms/person_detail.html", _("Person page")),
         ("search/search.html", _("Search")),
         ("richie/fullwidth.html", "Fullwidth"),
     )
@@ -263,6 +266,12 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         "courses/cms/course_detail.html course_syllabus": {  # all plugins allowed
             "name": _("Course Syllabus")
         },
+        "person/cms/person_detail.html portrait": {
+            "plugins": ("ImagePlugin",),
+            "limits": {"ImagePlugin": 1},
+            "name": _("Portrait"),
+        },
+        "person/cms/person_detail.html resume": {"name": _("Resume")},
     }
 
     # Thumbnails settings

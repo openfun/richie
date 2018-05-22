@@ -10,6 +10,7 @@ from django.contrib.sites.models import Site
 from cms import models as cms_models
 
 from apps.courses.models import Course, Organization, Subject
+from apps.persons.models import Person
 from apps.courses.factories import OrganizationFactory
 
 from ...helpers import create_i18n_page
@@ -44,6 +45,13 @@ PAGE_INFOS = {
         "content": {"en": "Organizations", "fr": "Etablissements"},
         "kwargs": {
             "reverse_id": Organization.ROOT_REVERSE_ID,
+            "template": "richie/fullwidth.html",
+        },
+    },
+    "persons": {
+        "content": {"en": "Persons", "fr": "Personnes"},
+        "kwargs": {
+            "reverse_id": Person.ROOT_REVERSE_ID,
             "template": "richie/fullwidth.html",
         },
     },
