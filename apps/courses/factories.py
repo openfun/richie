@@ -25,7 +25,7 @@ class OrganizationFactory(factory.django.DjangoModelFactory):
     @factory.lazy_attribute
     def extended_object(self):
         """
-        Automatically create a related page with a random title
+        Automatically create a related page with the random title
         """
         return create_page(self.title, "courses/cms/organization_detail.html", "en")
 

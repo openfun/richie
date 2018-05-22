@@ -51,13 +51,13 @@ class CreateCmsDataTests(CMSTestCase):
         organizations below the related page
         """
         # Let the mock return a number instead of the page so we can easily reference them below
-        mock_page.side_effect = range(7 + 8)
+        mock_page.side_effect = range(8 + 8)
 
         # Call the method and check its effects in what follows
         create_demo_site()
 
         # Check that the number of pages created is as expected
-        self.assertEqual(mock_page.call_count, 7 + 8)  # 7 root pages + 8 organizations
+        self.assertEqual(mock_page.call_count, 8 + 8)  # 7 root pages + 8 organizations
 
         # Check that the calls to create the root pages are triggered as expected
         site = Site.objects.get()
@@ -116,6 +116,17 @@ class CreateCmsDataTests(CMSTestCase):
                 },
             ),
             (
+                ({"en": "Persons", "fr": "Personnes"},),
+                {
+                    "in_navigation": True,
+                    "is_homepage": False,
+                    "published": True,
+                    "site": site,
+                    "reverse_id": "persons",
+                    "template": "richie/fullwidth.html",
+                },
+            ),
+            (
                 ({"en": "Dashboard", "fr": "Tableau de bord"},),
                 {
                     "in_navigation": True,
@@ -136,12 +147,12 @@ class CreateCmsDataTests(CMSTestCase):
                 },
             ),
         ]
-        self.assertEqual(mock_page.call_args_list[:7], expected_calls_for_root_pages)
+        self.assertEqual(mock_page.call_args_list[:8], expected_calls_for_root_pages)
 
         # Check that the calls to create the organizations were triggered as expected
         self.assertEqual(mock_organization.call_count, 8)
 
-        for i, actual_call in enumerate(mock_page.call_args_list[7:]):
+        for i, actual_call in enumerate(mock_page.call_args_list[8:]):
             expected_call = (
                 (
                     {

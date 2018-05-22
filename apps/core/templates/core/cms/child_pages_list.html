@@ -17,7 +17,8 @@
         </li>
 
     </ul>
-
+    {% empty %}
+        <span>{% trans "This page has no child objects" %}</span>
     {% endfor %}
 
 </div>
