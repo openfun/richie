@@ -245,6 +245,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
     PARLER_LANGUAGES = CMS_LANGUAGES
 
     CMS_TEMPLATES = (
+        ("core/cms/child_pages_list.html", _("List of child pages")),
         ("courses/cms/course_detail.html", _("Course page")),
         ("courses/cms/subject_detail.html", _("Subject page")),
         ("courses/cms/organization_detail.html", _("Organization page")),
