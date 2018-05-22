@@ -1,0 +1,24 @@
+{% extends "richie/fullwidth.html" %}
+{% load cms_tags i18n %}
+
+{# This is a generic page template that will list and link its child pages #}
+
+{% block content %}
+<div class="generic-list">
+
+    <h1 class="generic-list__title">{{ current_page.id }}: {{ current_page.get_title }}</h1>
+
+    {% for page in current_page.get_child_pages %}
+
+    <ul class="generic-list__items">
+
+        <li class="generic-list__item">
+           <a href="{{ page.get_absolute_url }}">{{ page.get_title }}</a>
+        </li>
+
+    </ul>
+
+    {% endfor %}
+
+</div>
+{% endblock content %}
