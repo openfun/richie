@@ -56,11 +56,11 @@ export interface ResourceListGetSuccess<R extends Resource> {
   type: 'RESOURCE_LIST_GET_SUCCESS';
 }
 
-export function didGetResourceList(
+export function didGetResourceList<R extends Resource>(
   resourceName: keyof RootState['resources'],
-  apiResponse: ResourceListGetSuccess<Resource>['apiResponse'],
-  params: ResourceListGetSuccess<Resource>['params'],
-): ResourceListGetSuccess<Resource> {
+  apiResponse: ResourceListGetSuccess<R>['apiResponse'],
+  params: ResourceListGetSuccess<R>['params'],
+): ResourceListGetSuccess<R> {
   return {
     apiResponse,
     params,

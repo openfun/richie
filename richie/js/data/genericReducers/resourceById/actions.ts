@@ -8,10 +8,10 @@ export interface ResourceAdd<R extends Resource> {
   resource: R;
 }
 
-export function addResource(
+export function addResource<R extends Resource>(
   resourceName: keyof RootState['resources'],
-  resource: Resource,
-): ResourceAdd<Resource> {
+  resource: R,
+): ResourceAdd<R> {
   return {
     resource,
     resourceName,
@@ -25,10 +25,10 @@ export interface ResourceMultipleAdd<R extends Resource> {
   resources: R[];
 }
 
-export function addMultipleResources(
+export function addMultipleResources<R extends Resource>(
   resourceName: keyof RootState['resources'],
-  resources: Resource[],
-): ResourceMultipleAdd<Resource> {
+  resources: R[],
+): ResourceMultipleAdd<R> {
   return {
     resourceName,
     resources,
