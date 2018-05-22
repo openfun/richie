@@ -1,6 +1,7 @@
 import { Reducer } from 'redux';
 
 import Resource from '../../../types/Resource';
+import { Maybe } from '../../../utils/types';
 import { ResourceAdd, ResourceMultipleAdd } from './actions';
 
 export const initialState = {
@@ -9,7 +10,7 @@ export const initialState = {
 
 export interface ResourceByIdState<R extends Resource> {
   byId: {
-    [id: string]: R;
+    [id: string]: Maybe<R>;
   };
 }
 

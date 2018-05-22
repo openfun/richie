@@ -48,12 +48,12 @@ export function getFilterFromState(
     // We don't have the facets yet or something broke upstream: provide some filtering
     // capabilities anyway (without counts, as we can't generate those)
     if (!facets_[resourceName] || !Object.keys(facets_[resourceName]).length) {
-      return values(state.resources[resourceName]!.byId || {}).map(
-        organization => ({
-          humanName: organization.name,
-          primaryKey: String(organization.id),
-        }),
-      );
+      return values(state.resources[resourceName]!.byId)
+        .filter(organization => !!organization)
+        .map(organization => ({
+          humanName: organization!.name,
+          primaryKey: String(organization!.id),
+        }));
     }
 
     return (
@@ -62,10 +62,17 @@ export function getFilterFromState(
           // Facet current query by this resource id (count)
           count: facets[resourceName][resourceId],
           // Get the resource name from the state
-          humanName: state.resources[resourceName]!.byId[resourceId].name,
+          humanName:
+            (state.resources[resourceName]!.byId[resourceId] &&
+              state.resources[resourceName]!.byId[resourceId]!.name) ||
+            '',
           // resourceId is already a string as it was a key on the facets.organization object
           primaryKey: resourceId,
         }))
+        .filter(
+          ({ count, humanName, primaryKey }) =>
+            !!count && !!humanName && !!primaryKey,
+        )
         // Sort by highest count first
         .sort(
           (filterValueA, filterValueB) =>
