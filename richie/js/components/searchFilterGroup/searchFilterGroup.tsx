@@ -3,14 +3,14 @@ import isArray from 'lodash-es/isArray';
 import sortBy from 'lodash-es/sortBy';
 import * as React from 'react';
 
-import { FilterDefinition, FilterValue } from '../../types/filters';
+import { FilterDefinitionWithValues, FilterValue } from '../../types/filters';
 import { Maybe, Nullable } from '../../utils/types';
 import SearchFilter from '../searchFilter/searchFilter';
 
 export interface SearchFilterGroupProps {
   addFilter: (filterKey: string) => void;
   currentValue: Maybe<string | number | Array<string | number>>;
-  filter: FilterDefinition;
+  filter: FilterDefinitionWithValues;
   removeFilter: (filterKey: string) => void;
 }
 

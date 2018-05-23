@@ -16,5 +16,8 @@ export interface FilterDefinition {
   humanName: string;
   machineName: filterGroupName;
   isDrilldown?: boolean;
+}
+
+export interface FilterDefinitionWithValues extends FilterDefinition {
   values: FilterValue[];
 }

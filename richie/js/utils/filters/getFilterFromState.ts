@@ -2,7 +2,7 @@ import values from 'lodash-es/values';
 
 import { RootState } from '../../data/rootReducer';
 import {
-  FilterDefinition,
+  FilterDefinitionWithValues,
   filterGroupName,
   resourceBasedFilterGroupName,
 } from '../../types/filters';
@@ -13,7 +13,7 @@ import {
 export function getFilterFromState(
   state: RootState,
   machineName: filterGroupName,
-): FilterDefinition {
+): FilterDefinitionWithValues {
   // Default to empty object as it is the default value for currentQuery.facets
   const facets =
     (state.resources.courses &&

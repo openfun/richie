@@ -1,6 +1,9 @@
 import { CoursesState } from '../../data/courses/reducer';
 import { RootState } from '../../data/rootReducer';
-import { FilterDefinition } from '../../types/filters';
+import {
+  FilterDefinition,
+  FilterDefinitionWithValues,
+} from '../../types/filters';
 import Organization from '../../types/Organization';
 import { getFilterFromState } from './getFilterFromState';
 
@@ -8,14 +11,14 @@ describe('utils/filters/getFilterFromState', () => {
   it('returns a FilterDefinition for a hardcoded filter group', () => {
     const state = {
       filterDefinitions: {
-        language: {} as FilterDefinition,
+        language: {} as FilterDefinitionWithValues,
         new: {
           humanName: 'New courses',
           machineName: 'new' as 'new',
           values: [{ primaryKey: 'new', humanName: 'First session' }],
         },
         organizations: {} as FilterDefinition,
-        status: {} as FilterDefinition,
+        status: {} as FilterDefinitionWithValues,
         subjects: {} as FilterDefinition,
       },
       resources: {},
@@ -30,13 +33,14 @@ describe('utils/filters/getFilterFromState', () => {
   it('builds a filter definition from the facet for a resource-based filter group', () => {
     const state = {
       filterDefinitions: {
-        language: {} as FilterDefinition,
-        new: {} as FilterDefinition,
+        language: {} as FilterDefinitionWithValues,
+        new: {} as FilterDefinitionWithValues,
         organizations: {
           humanName: 'Organizations',
           machineName: 'organizations',
+          values: [],
         },
-        status: {} as FilterDefinition,
+        status: {} as FilterDefinitionWithValues,
         subjects: {} as FilterDefinition,
       },
       resources: {
@@ -73,13 +77,14 @@ describe('utils/filters/getFilterFromState', () => {
   it('still builds a default filter group when missing a resource-related facet', () => {
     const state = {
       filterDefinitions: {
-        language: {} as FilterDefinition,
-        new: {} as FilterDefinition,
+        language: {} as FilterDefinitionWithValues,
+        new: {} as FilterDefinitionWithValues,
         organizations: {
           humanName: 'Organizations',
           machineName: 'organizations',
+          values: [],
         },
-        status: {} as FilterDefinition,
+        status: {} as FilterDefinitionWithValues,
         subjects: {} as FilterDefinition,
       },
       resources: {

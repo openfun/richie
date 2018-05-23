@@ -3,7 +3,7 @@ import '../../testSetup.spec';
 import { shallow } from 'enzyme';
 import * as React from 'react';
 
-import { FilterDefinition } from '../../types/filters';
+import { FilterDefinitionWithValues } from '../../types/filters';
 import SearchFilter from '../searchFilter/searchFilter';
 import SearchFilterGroup from './searchFilterGroup';
 
@@ -16,7 +16,7 @@ describe('components/searchFilterGroup', () => {
       humanName: 'Organizations',
       machineName: 'organizations',
       values: [],
-    } as FilterDefinition;
+    } as FilterDefinitionWithValues;
     const wrapper = shallow(
       <SearchFilterGroup
         addFilter={addFilter}
@@ -36,7 +36,7 @@ describe('components/searchFilterGroup', () => {
         { primaryKey: 'value-1', humanName: 'Value One' },
         { primaryKey: 'value-2', humanName: 'Value Two' },
       ],
-    } as FilterDefinition;
+    } as FilterDefinitionWithValues;
     const wrapper = shallow(
       <SearchFilterGroup
         addFilter={addFilter}
@@ -57,7 +57,7 @@ describe('components/searchFilterGroup', () => {
         { primaryKey: 'value-2', humanName: 'Value Two' },
         { primaryKey: 'value-3', humanName: 'Value Three' },
       ],
-    } as FilterDefinition;
+    } as FilterDefinitionWithValues;
     const wrapper = shallow(
       <SearchFilterGroup
         addFilter={addFilter}
