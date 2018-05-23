@@ -1,0 +1,49 @@
+.react-autosuggest {
+  &__container {
+    position: relative;
+    margin-bottom: 20px;
+
+    &--open {}
+  }
+
+  &__input {
+    @extend .form-control;
+
+    &--open {}
+    &--focused {}
+  }
+
+  &__suggestions-container {
+    @extend .dropdown-menu;
+    width: 100%;
+
+    &--open {
+      display: block; // Show/hide is managed by react-autosuggest with the --open state
+    }
+  }
+
+  &__suggestions-list {
+    display: block;
+  }
+
+  &__suggestion {
+    @extend .dropdown-item;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &--first {}
+    &--highlighted {
+      @extend .active;
+    }
+  }
+
+  &__section-container {
+    &--first {}
+  }
+
+  &__section-title {
+    @extend .dropdown-header;
+  }
+}

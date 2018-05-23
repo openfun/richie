@@ -8,6 +8,8 @@
 // Only what we use
 @import "../../../node_modules/bootstrap/scss/badge";
 @import "../../../node_modules/bootstrap/scss/card";
+@import "../../../node_modules/bootstrap/scss/dropdown";
+@import "../../../node_modules/bootstrap/scss/forms";
 @import "../../../node_modules/bootstrap/scss/list-group";
 @import "../../../node_modules/bootstrap/scss/type";
 @import "../../../node_modules/bootstrap/scss/utilities/display";
@@ -19,6 +21,9 @@
 // Global styles
 @import "./_fun";
 @import "./_news";
+
+// Partials (eg. styles for templates produced by dependencies)
+@import "./partials/react-autosuggest";
 
 // Component styles
 @import "../../js/components/courseGlimpse/_courseGlimpse";
