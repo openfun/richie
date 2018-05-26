@@ -52,6 +52,7 @@ class BaseWizardForm(forms.Form):
         a page `path` is limited to 255 chars, therefore the course page slug should
         always be shorter than (255 - length of parent page path - 1 character for the "/")
         """
+        # pylint: disable=no-member
         parent_page = Page.objects.filter(
             reverse_id=self.model.ROOT_REVERSE_ID, publisher_is_draft=True
         ).first()
