@@ -4,6 +4,7 @@ import { ResourceListGet } from '../../data/genericSideEffects/getResourceList/a
 import Course from '../../types/Course';
 import CourseGlimpseListContainer from '../courseGlimpseListContainer/courseGlimpseListContainer';
 import SearchFiltersPane from '../searchFiltersPane/searchFiltersPane';
+import { SearchSuggestFieldContainer } from '../searchSuggestFieldContainer/searchSuggestFieldContainer';
 
 export interface SearchProps {
   requestOrganizations: () => ResourceListGet;
@@ -27,6 +28,7 @@ export class Search extends React.Component<SearchProps, SearchState> {
           <SearchFiltersPane />
         </div>
         <div className="search__results">
+          <SearchSuggestFieldContainer />
           <CourseGlimpseListContainer />
         </div>
       </div>
