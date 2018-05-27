@@ -30,8 +30,9 @@ PAGE_INFOS = {
     "courses": {
         "content": {"en": "Courses", "fr": "Cours"},
         "kwargs": {
+            "has_maincontent": False,
             "reverse_id": Course.ROOT_REVERSE_ID,
-            "template": "richie/fullwidth.html",
+            "template": "search/search.html",
         },
     },
     "subjects": {

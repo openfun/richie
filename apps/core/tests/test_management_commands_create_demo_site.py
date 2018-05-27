@@ -85,12 +85,13 @@ class CreateCmsDataTests(CMSTestCase):
             (
                 ({"en": "Courses", "fr": "Cours"},),
                 {
+                    "has_maincontent": False,
                     "in_navigation": True,
                     "is_homepage": False,
                     "published": True,
                     "site": site,
                     "reverse_id": "courses",
-                    "template": "richie/fullwidth.html",
+                    "template": "search/search.html",
                 },
             ),
             (

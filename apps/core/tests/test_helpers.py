@@ -63,6 +63,17 @@ class CreateI18nPageTestCase(CMSTestCase):
 
         self.assertFalse(mock_homepage.called)
 
+    @mock.patch("apps.core.helpers.create_title")
+    @mock.patch("apps.core.helpers.add_plugin")
+    def test_utils_create_i18n_page_without_maincontent(self, mock_plugin, *_):
+        """
+        Make sure we can create pages without the maincontent placeholder. These are pages that
+        use specific templates to perform their function.
+        """
+        content = {"fr": "Titre français", "en": "English title"}
+        create_i18n_page(content, has_maincontent=False, template="search/search.html")
+        self.assertFalse(mock_plugin.called)
+
     # pylint: disable=no-member,unused-argument
     @mock.patch("apps.core.helpers.add_plugin")
     @mock.patch("apps.core.helpers.create_title")
