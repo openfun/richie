@@ -11,4 +11,7 @@ const mapDispatchToProps = {
   requestSubjects: partial(getResourceList, 'subjects', { limit: 999 }),
 };
 
-export const SearchContainer = connect(null, mapDispatchToProps)(Search);
+export const SearchContainer = connect(
+  null,
+  mapDispatchToProps,
+)(Search);

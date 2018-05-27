@@ -1,14 +1,12 @@
 {
   "name": "richie",
   "version": "0.1.0",
-  "description":
-    "This document aims to list all needed steps to have a working `FUN CMS` installation.",
+  "description": "This document aims to list all needed steps to have a working `FUN CMS` installation.",
   "main": "manage.py",
   "scripts": {
     "build": "webpack",
     "lint": "tslint -c tslint.json 'richie/js/**/*.ts'",
-    "sass":
-      "node-sass richie/static/scss/_main.scss richie/static/css/main.css",
+    "sass": "node-sass richie/static/scss/_main.scss richie/static/css/main.css",
     "test": "karma start ./karma.conf.js",
     "watch-sass": "nodemon -e scss -x 'yarn sass'"
   },
@@ -58,7 +56,7 @@
     "moment": "2.20.1",
     "node-sass": "4.7.2",
     "nodemon": "1.14.12",
-    "prettier": "1.12.1",
+    "prettier": "1.13.0",
     "query-string": "6.1.0",
     "react": "16.2.0",
     "react-autosuggest": "9.3.4",
