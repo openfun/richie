@@ -32,12 +32,12 @@ class SubjectsViewSet(ViewSet):
         # Build a query that matches on the name field if it was handed by the client
         # Note: test_elasticsearch_feature.py needs to be updated whenever the search call
         # is updated and makes use new features.
-        if params_form.cleaned_data.get("name"):
+        if params_form.cleaned_data.get("query"):
             search_body = {
                 "query": {
                     "match": {
                         "name.fr": {
-                            "query": params_form.cleaned_data.get("name"),
+                            "query": params_form.cleaned_data.get("query"),
                             "analyzer": "french",
                         }
                     }

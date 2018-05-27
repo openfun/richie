@@ -143,7 +143,7 @@ class CoursesViewsetTestCase(TestCase):
         """
         factory = APIRequestFactory()
         request = factory.get(
-            "/api/v1.0/courses?match=some%20phrase%20terms&limit=2&offset=20"
+            "/api/v1.0/courses?query=some%20phrase%20terms&limit=2&offset=20"
         )
 
         mock_search.return_value = {
@@ -483,7 +483,7 @@ class CoursesViewsetTestCase(TestCase):
         end_date = json.dumps(["2018-04-30T06:00:00Z", "2018-06-30T06:00:00Z"])
 
         request = factory.get(
-            "/api/v1.0/courses?subjects=42&subjects=84&match=these%20phrase%20terms&limit=2&"
+            "/api/v1.0/courses?subjects=42&subjects=84&query=these%20phrase%20terms&limit=2&"
             + "start_date={start_date}&end_date={end_date}".format(
                 start_date=start_date, end_date=end_date
             )

@@ -18,7 +18,7 @@ class CourseListForm(forms.Form):
     organizations = ArrayField(
         required=False, base_type=forms.IntegerField(min_value=0)
     )
-    match = forms.CharField(required=False, min_length=3, max_length=200)
+    query = forms.CharField(required=False, min_length=3, max_length=200)
     offset = forms.IntegerField(required=False, min_value=0, initial=0)
     start_date = DatetimeRangeField(required=False)
     subjects = ArrayField(required=False, base_type=forms.IntegerField(min_value=0))
@@ -29,7 +29,7 @@ class OrganizationListForm(forms.Form):
     Validate the query string params in the organization list request
     """
     limit = forms.IntegerField(required=False, min_value=1, initial=10)
-    name = forms.CharField(required=False, min_length=3, max_length=100)
+    query = forms.CharField(required=False, min_length=3, max_length=100)
     offset = forms.IntegerField(required=False, min_value=0, initial=0)
 
 
@@ -38,5 +38,5 @@ class SubjectListForm(forms.Form):
     Validate the query string params in the subject list request
     """
     limit = forms.IntegerField(required=False, min_value=1, initial=10)
-    name = forms.CharField(required=False, min_length=3, max_length=100)
+    query = forms.CharField(required=False, min_length=3, max_length=100)
     offset = forms.IntegerField(required=False, min_value=0, initial=0)

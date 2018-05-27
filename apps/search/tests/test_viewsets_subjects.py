@@ -129,7 +129,7 @@ class SubjectsViewsetTestCase(TestCase):
         Happy path: the subject is filtering the subjects by name
         """
         factory = APIRequestFactory()
-        request = factory.get("/api/v1.0/subject?name=Science&limit=2")
+        request = factory.get("/api/v1.0/subject?query=Science&limit=2")
 
         mock_search.return_value = {
             "hits": {

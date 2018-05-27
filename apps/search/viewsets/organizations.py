@@ -32,12 +32,12 @@ class OrganizationsViewSet(ViewSet):
         # Build a query that matches on the organization name field if it was passed by the client
         # Note: test_elasticsearch_feature.py needs to be updated whenever the search call
         # is updated and makes use new features.
-        if query_params_form.cleaned_data.get("name"):
+        if query_params_form.cleaned_data.get("query"):
             search_payload = {
                 "query": {
                     "match": {
                         "name.fr": {
-                            "query": query_params_form.cleaned_data.get("name"),
+                            "query": query_params_form.cleaned_data.get("query"),
                             "analyzer": "french",
                         }
                     }

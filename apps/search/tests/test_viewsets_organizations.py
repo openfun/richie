@@ -145,7 +145,7 @@ class OrganizationsViewsetTestCase(TestCase):
         Happy path: the consumer is filtering the organizations by name
         """
         factory = APIRequestFactory()
-        request = factory.get("/api/v1.0/organizations?name=Université&limit=2")
+        request = factory.get("/api/v1.0/organizations?query=Université&limit=2")
 
         mock_search.return_value = {
             "hits": {

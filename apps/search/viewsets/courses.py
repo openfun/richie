@@ -82,7 +82,7 @@ class CoursesViewSet(ViewSet):
                 queries = [*queries, {"terms": {param: value}}]
 
             # Search is a regular (multilingual) match query
-            elif param == "match":
+            elif param == "query":
                 queries = [
                     *queries,
                     {
