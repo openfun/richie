@@ -31,6 +31,4 @@ class LargeBanner(CMSPlugin):
     logo = FilerImageField(
         related_name="logo", verbose_name=_("logo"), on_delete=models.PROTECT
     )
-    logo_alt_text = models.CharField(
-        _("logo alt text"), max_length=255, null=True, blank=True
-    )
+    logo_alt_text = models.CharField(max_length=255)
