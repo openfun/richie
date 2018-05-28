@@ -3,9 +3,9 @@ import '../../testSetup.spec';
 import { shallow } from 'enzyme';
 import * as React from 'react';
 
-import CourseGlimpseListContainer from '../courseGlimpseListContainer/courseGlimpseListContainer';
-import SearchFiltersPane from '../searchFiltersPane/searchFiltersPane';
-import Search from './search';
+import { CourseGlimpseListContainer } from '../courseGlimpseListContainer/courseGlimpseListContainer';
+import { SearchFiltersPane } from '../searchFiltersPane/searchFiltersPane';
+import { Search } from './search';
 
 describe('components/search', () => {
   it('renders the filters pane and the list of courses', () => {

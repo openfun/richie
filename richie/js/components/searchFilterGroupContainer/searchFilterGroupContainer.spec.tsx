@@ -3,7 +3,7 @@ import { stringify } from 'query-string';
 import { FilterDefinitionState } from '../../data/filterDefinitions/reducer';
 import { ResourceListState } from '../../data/genericReducers/resourceList/resourceList';
 import { RootState } from '../../data/rootReducer';
-import Course from '../../types/Course';
+import { Course } from '../../types/Course';
 import * as filterFromStateGetter from '../../utils/filters/getFilterFromState';
 import * as filterUpdater from '../../utils/filters/updateFilter';
 import { mapStateToProps, mergeProps } from './searchFilterGroupContainer';

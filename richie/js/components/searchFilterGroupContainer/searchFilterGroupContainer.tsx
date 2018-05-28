@@ -57,5 +57,3 @@ export const SearchFilterGroupContainer = connect(
   null!,
   mergeProps,
 )(SearchFilterGroup);
-
-export default SearchFilterGroupContainer;

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import SearchFilterGroupContainer from '../searchFilterGroupContainer/searchFilterGroupContainer';
+import { SearchFilterGroupContainer } from '../searchFilterGroupContainer/searchFilterGroupContainer';
 
 export const SearchFiltersPane = (props: {}) => {
   return (
@@ -14,5 +14,3 @@ export const SearchFiltersPane = (props: {}) => {
     </div>
   );
 };
-
-export default SearchFiltersPane;

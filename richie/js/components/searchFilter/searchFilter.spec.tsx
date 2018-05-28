@@ -3,7 +3,7 @@ import '../../testSetup.spec';
 import { shallow } from 'enzyme';
 import * as React from 'react';
 
-import SearchFilter from './searchFilter';
+import { SearchFilter } from './searchFilter';
 
 describe('components/searchFilter', () => {
   let addFilter: jasmine.Spy;

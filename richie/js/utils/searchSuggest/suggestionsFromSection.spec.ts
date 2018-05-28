@@ -1,6 +1,6 @@
-import Course from '../../types/Course';
-import Organization from '../../types/Organization';
-import Subject from '../../types/Subject';
+import { Course } from '../../types/Course';
+import { Organization } from '../../types/Organization';
+import { Subject } from '../../types/Subject';
 import { suggestionsFromSection } from './suggestionsFromSection';
 
 describe('utils/searchSuggest/suggestionsFromSection', () => {

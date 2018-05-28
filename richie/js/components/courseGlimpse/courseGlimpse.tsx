@@ -1,8 +1,8 @@
 import * as moment from 'moment';
 import * as React from 'react';
 
-import Course from '../../types/Course';
-import Organization from '../../types/Organization';
+import { Course } from '../../types/Course';
+import { Organization } from '../../types/Organization';
 import { Nullable } from '../../utils/types';
 
 export interface CourseGlimpseProps {
@@ -34,5 +34,3 @@ export const CourseGlimpse = (props: CourseGlimpseProps) => {
     </div>
   );
 };
-
-export default CourseGlimpse;

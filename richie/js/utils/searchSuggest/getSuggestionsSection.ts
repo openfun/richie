@@ -6,7 +6,7 @@ import {
   API_ENDPOINTS_KEYS,
   API_LIST_DEFAULT_PARAMS,
 } from '../../settings.json';
-import Resource from '../../types/Resource';
+import { Resource } from '../../types/Resource';
 import {
   SearchSuggestion,
   SearchSuggestionSection,

@@ -1,8 +1,8 @@
-import Course from './Course';
+import { Course } from './Course';
 import { modelNameList } from './models';
-import Organization from './Organization';
-import Resource from './Resource';
-import Subject from './Subject';
+import { Organization } from './Organization';
+import { Resource } from './Resource';
+import { Subject } from './Subject';
 
 interface ResourceSuggestion<M extends modelNameList, T extends Resource> {
   model: M;

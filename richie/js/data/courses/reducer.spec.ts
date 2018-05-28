@@ -1,4 +1,4 @@
-import coursesReducer from './reducer';
+import { courses } from './reducer';
 
 describe('data/courses reducer', () => {
   const course43 = {
@@ -43,16 +43,14 @@ describe('data/courses reducer', () => {
   };
 
   it('returns an empty state for initialization', () => {
-    expect(coursesReducer(undefined, { type: '' })).toEqual({ byId: {} });
+    expect(courses(undefined, { type: '' })).toEqual({ byId: {} });
   });
 
   it('returns the state as is when called with an unknown action', () => {
     const previousState = {
       byId: { 43: course43 },
     };
-    expect(coursesReducer(previousState, { type: 'TODO_ADD' })).toEqual(
-      previousState,
-    );
+    expect(courses(previousState, { type: 'TODO_ADD' })).toEqual(previousState);
   });
 
   describe('resourceById', () => {
@@ -60,7 +58,7 @@ describe('data/courses reducer', () => {
       const previousState = { byId: { 43: course43 } };
 
       expect(
-        coursesReducer(previousState, {
+        courses(previousState, {
           resource: course44,
           resourceName: 'subjects',
           type: 'RESOURCE_ADD',
@@ -72,7 +70,7 @@ describe('data/courses reducer', () => {
       const previousState = { byId: { 43: course43 } };
 
       expect(
-        coursesReducer(previousState, {
+        courses(previousState, {
           resource: course44,
           resourceName: 'courses',
           type: 'RESOURCE_ADD',

@@ -1,6 +1,6 @@
 import * as fetchMock from 'fetch-mock';
 
-import Course from '../../types/Course';
+import { Course } from '../../types/Course';
 import * as errors from '../../utils/errors/handle';
 import { getSuggestionsSection } from './getSuggestionsSection';
 

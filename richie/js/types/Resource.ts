@@ -1,3 +1,3 @@
-export default interface Resource {
+export interface Resource {
   id: number;
 }

@@ -3,7 +3,7 @@ import '../../testSetup.spec';
 import { shallow } from 'enzyme';
 import * as React from 'react';
 
-import Course from '../../types/Course';
+import { Course } from '../../types/Course';
 import { SearchSuggestionSection } from '../../types/searchSuggest';
 import * as errors from '../../utils/errors/handle';
 import { location } from '../../utils/indirection/location';

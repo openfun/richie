@@ -3,9 +3,9 @@ import '../../testSetup.spec';
 import { shallow } from 'enzyme';
 import * as React from 'react';
 
-import Course from '../../types/Course';
-import CourseGlimpseContainer from '../courseGlimpseContainer/courseGlimpseContainer';
-import CourseGlimpseList from './courseGlimpseList';
+import { Course } from '../../types/Course';
+import { CourseGlimpseContainer } from '../courseGlimpseContainer/courseGlimpseContainer';
+import { CourseGlimpseList } from './courseGlimpseList';
 
 describe('components/courseGlimpseList', () => {
   it('renders a list of Courses into a list of CourseGlimpses', () => {

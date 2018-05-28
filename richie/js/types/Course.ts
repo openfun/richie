@@ -1,8 +1,8 @@
-import Organization from './Organization';
-import Resource from './Resource';
-import Subject from './Subject';
+import { Organization } from './Organization';
+import { Resource } from './Resource';
+import { Subject } from './Subject';
 
-export default interface Course extends Resource {
+export interface Course extends Resource {
   end_date: string;
   enrollment_end_date: string;
   enrollment_start_date: string;

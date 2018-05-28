@@ -4,7 +4,7 @@ import {
   FilterDefinition,
   FilterDefinitionWithValues,
 } from '../../types/filters';
-import Organization from '../../types/Organization';
+import { Organization } from '../../types/Organization';
 import { getFilterFromState } from './getFilterFromState';
 
 describe('utils/filters/getFilterFromState', () => {

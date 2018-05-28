@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import { RootState } from '../../data/rootReducer';
-import Course from '../../types/Course';
+import { Course } from '../../types/Course';
 import {
   CourseGlimpse,
   CourseGlimpseProps,
@@ -38,5 +38,3 @@ export const CourseGlimpseContainer = connect(
   null,
   mergeProps,
 )(CourseGlimpse);
-
-export default CourseGlimpseContainer;

@@ -3,7 +3,7 @@ import {
   APIResponseListFacets,
   APIResponseListMeta,
 } from '../../../types/api';
-import Resource from '../../../types/Resource';
+import { Resource } from '../../../types/Resource';
 import { Maybe } from '../../../utils/types';
 import { RootState } from '../../rootReducer';
 

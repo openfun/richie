@@ -1,9 +1,9 @@
 import * as React from 'react';
 
 import { ResourceListGet } from '../../data/genericSideEffects/getResourceList/actions';
-import Course from '../../types/Course';
-import CourseGlimpseListContainer from '../courseGlimpseListContainer/courseGlimpseListContainer';
-import SearchFiltersPane from '../searchFiltersPane/searchFiltersPane';
+import { Course } from '../../types/Course';
+import { CourseGlimpseListContainer } from '../courseGlimpseListContainer/courseGlimpseListContainer';
+import { SearchFiltersPane } from '../searchFiltersPane/searchFiltersPane';
 import { SearchSuggestFieldContainer } from '../searchSuggestFieldContainer/searchSuggestFieldContainer';
 
 export interface SearchProps {
@@ -35,5 +35,3 @@ export class Search extends React.Component<SearchProps, SearchState> {
     );
   }
 }
-
-export default Search;

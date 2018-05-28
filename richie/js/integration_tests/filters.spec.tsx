@@ -6,7 +6,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider, Store } from 'react-redux';
 
-import bootstrapStore from '../bootstrap';
+import { bootstrapStore } from '../bootstrap';
 import { SearchFilter } from '../components/searchFilter/searchFilter';
 import { SearchFilterGroupContainer } from '../components/searchFilterGroupContainer/searchFilterGroupContainer';
 import { SearchFiltersPane } from '../components/searchFiltersPane/searchFiltersPane';

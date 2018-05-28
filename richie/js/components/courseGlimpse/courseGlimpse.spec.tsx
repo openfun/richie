@@ -3,9 +3,9 @@ import '../../testSetup.spec';
 import { render } from 'enzyme';
 import * as React from 'react';
 
-import Course from '../../types/Course';
-import Organization from '../../types/Organization';
-import CourseGlimpse from './courseGlimpse';
+import { Course } from '../../types/Course';
+import { Organization } from '../../types/Organization';
+import { CourseGlimpse } from './courseGlimpse';
 
 describe('components/courseGlimpse', () => {
   it('renders a course glimpse with its data', () => {

@@ -5,7 +5,7 @@ import {
   APIListCommonRequestParams,
   APIResponseListFacets,
 } from '../../../types/api';
-import Resource from '../../../types/Resource';
+import { Resource } from '../../../types/Resource';
 import { Maybe } from '../../../utils/types';
 import {
   ResourceListGet,
@@ -71,5 +71,3 @@ export function currentQuery<R extends Resource>(
   }
   return state;
 }
-
-export default currentQuery;

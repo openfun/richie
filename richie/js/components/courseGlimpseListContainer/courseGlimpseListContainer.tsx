@@ -6,7 +6,7 @@ import { Action } from 'redux';
 import { ResourceListStateParams } from '../../data/genericReducers/resourceList/resourceList';
 import { getResourceList } from '../../data/genericSideEffects/getResourceList/actions';
 import { RootState } from '../../data/rootReducer';
-import Course from '../../types/Course';
+import { Course } from '../../types/Course';
 import { Maybe } from '../../utils/types';
 import { CourseGlimpseList } from '../courseGlimpseList/courseGlimpseList';
 
@@ -69,5 +69,3 @@ export const CourseGlimpseListContainer = connect(
   null!,
   mergeProps,
 )(CourseGlimpseList);
-
-export default CourseGlimpseListContainer;

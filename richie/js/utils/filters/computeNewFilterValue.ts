@@ -66,5 +66,3 @@ export function computeNewFilterValue(
     return array.length === 0 ? undefined : array;
   }
 }
-
-export default computeNewFilterValue;

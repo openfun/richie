@@ -14,7 +14,7 @@ import get from 'lodash-es/get';
 import includes from 'lodash-es/includes';
 import startCase from 'lodash-es/startCase';
 
-import bootstrapStore from './bootstrap';
+import { bootstrapStore } from './bootstrap';
 
 // Import the top-level components that can be directly called from the CMS
 import { SearchContainer } from './components/searchContainer/searchContainer';

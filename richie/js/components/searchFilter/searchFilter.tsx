@@ -30,5 +30,3 @@ export const SearchFilter = (props: SearchFilterProps) => {
     </button>
   );
 };
-
-export default SearchFilter;

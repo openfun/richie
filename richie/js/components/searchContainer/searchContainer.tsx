@@ -12,5 +12,3 @@ const mapDispatchToProps = {
 };
 
 export const SearchContainer = connect(null, mapDispatchToProps)(Search);
-
-export default SearchContainer;

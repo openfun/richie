@@ -1,4 +1,4 @@
-import Resource from './Resource';
+import { Resource } from './Resource';
 
 export interface APIResponseListMeta {
   limit: number;

@@ -4,8 +4,8 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 
 import { FilterDefinitionWithValues } from '../../types/filters';
-import SearchFilter from '../searchFilter/searchFilter';
-import SearchFilterGroup from './searchFilterGroup';
+import { SearchFilter } from '../searchFilter/searchFilter';
+import { SearchFilterGroup } from './searchFilterGroup';
 
 describe('components/searchFilterGroup', () => {
   const addFilter = jasmine.createSpy('addFilter');

@@ -4,7 +4,7 @@ import {
   hardcodedFilterGroupName,
   resourceBasedFilterGroupName,
 } from '../../types/filters';
-import initialState from './initialState';
+import { initialState } from './initialState';
 
 // Hardcoded filter groups have all their data contained in this slice of state
 type FilterDefinitionStateHardcoded = {
@@ -29,5 +29,3 @@ export const filterDefinitions = (
 ) => {
   return state;
 };
-
-export default filterDefinitions;

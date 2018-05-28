@@ -1,4 +1,4 @@
-import subjectsReducer from './reducer';
+import { subjects } from './reducer';
 
 describe('data/subjects reducer', () => {
   const subj43 = {
@@ -18,7 +18,7 @@ describe('data/subjects reducer', () => {
       const previousState = { byId: { 43: subj43 } };
 
       expect(
-        subjectsReducer(previousState, {
+        subjects(previousState, {
           resource: subj44,
           resourceName: 'organizations',
           type: 'RESOURCE_ADD',
@@ -30,7 +30,7 @@ describe('data/subjects reducer', () => {
       const previousState = { byId: { 43: subj43 } };
 
       expect(
-        subjectsReducer(previousState, {
+        subjects(previousState, {
           resource: subj44,
           resourceName: 'subjects',
           type: 'RESOURCE_ADD',

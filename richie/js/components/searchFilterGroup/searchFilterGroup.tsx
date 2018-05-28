@@ -5,7 +5,7 @@ import * as React from 'react';
 
 import { FilterDefinitionWithValues, FilterValue } from '../../types/filters';
 import { Maybe, Nullable } from '../../utils/types';
-import SearchFilter from '../searchFilter/searchFilter';
+import { SearchFilter } from '../searchFilter/searchFilter';
 
 export interface SearchFilterGroupProps {
   addFilter: (filterKey: string) => void;
@@ -52,5 +52,3 @@ export const SearchFilterGroup = (props: SearchFilterGroupProps) => {
     </div>
   );
 };
-
-export default SearchFilterGroup;

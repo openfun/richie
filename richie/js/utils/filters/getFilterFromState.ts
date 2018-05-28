@@ -84,5 +84,3 @@ export function getFilterFromState(
   }
   /* tslint:enable */
 }
-
-export default getFilterFromState;

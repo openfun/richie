@@ -43,5 +43,3 @@ export const initialState = {
   ...hardcodedFilterDefinitions,
   ...resourceBasedFilterDefinitions,
 };
-
-export default initialState;

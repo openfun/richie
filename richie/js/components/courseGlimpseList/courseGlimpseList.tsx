@@ -1,8 +1,8 @@
 import * as React from 'react';
 
 import { ResourceListGet } from '../../data/genericSideEffects/getResourceList/actions';
-import Course from '../../types/Course';
-import CourseGlimpseContainer from '../courseGlimpseContainer/courseGlimpseContainer';
+import { Course } from '../../types/Course';
+import { CourseGlimpseContainer } from '../courseGlimpseContainer/courseGlimpseContainer';
 
 export interface CourseGlimpseListProps {
   courses: Course[];
@@ -26,5 +26,3 @@ export class CourseGlimpseList extends React.Component<CourseGlimpseListProps> {
     );
   }
 }
-
-export default CourseGlimpseList;

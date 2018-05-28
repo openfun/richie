@@ -1,4 +1,4 @@
-import organizationsReducer from './reducer';
+import { organizations } from './reducer';
 
 describe('data/organizations reducer', () => {
   const org43 = {
@@ -24,7 +24,7 @@ describe('data/organizations reducer', () => {
       const previousState = { byId: { 43: org43 } };
 
       expect(
-        organizationsReducer(previousState, {
+        organizations(previousState, {
           resource: org44,
           resourceName: 'subjects',
           type: 'RESOURCE_ADD',
@@ -36,7 +36,7 @@ describe('data/organizations reducer', () => {
       const previousState = { byId: { 43: org43 } };
 
       expect(
-        organizationsReducer(previousState, {
+        organizations(previousState, {
           resource: org44,
           resourceName: 'organizations',
           type: 'RESOURCE_ADD',

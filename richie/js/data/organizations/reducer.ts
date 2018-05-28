@@ -3,7 +3,7 @@ import get from 'lodash-es/get';
 import partialRight from 'lodash-es/partialRight';
 import { Reducer } from 'redux';
 
-import Organization from '../../types/Organization';
+import { Organization } from '../../types/Organization';
 import { Maybe } from '../../utils/types';
 import { ResourceAdd } from '../genericReducers/resourceById/actions';
 import {
@@ -47,5 +47,3 @@ export const organizations: Reducer<OrganizationsState> = (
     action,
   );
 };
-
-export default organizations;

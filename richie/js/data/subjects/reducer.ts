@@ -3,7 +3,7 @@ import get from 'lodash-es/get';
 import partialRight from 'lodash-es/partialRight';
 import { Reducer } from 'redux';
 
-import Subject from '../../types/Subject';
+import { Subject } from '../../types/Subject';
 import { Maybe } from '../../utils/types';
 import { ResourceAdd } from '../genericReducers/resourceById/actions';
 import {
@@ -47,5 +47,3 @@ export const subjects: Reducer<SubjectsState> = (
     action,
   );
 };
-
-export default subjects;

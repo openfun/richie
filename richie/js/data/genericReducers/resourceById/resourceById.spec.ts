@@ -1,4 +1,4 @@
-import resourceByIdReducer from './resourceById';
+import { byId } from './resourceById';
 
 describe('data/genericReducers/resourceById reducer', () => {
   const subj43 = {
@@ -20,7 +20,7 @@ describe('data/genericReducers/resourceById reducer', () => {
   };
 
   it('returns an empty state for initialization', () => {
-    expect(resourceByIdReducer({ byId: {} }, { type: '' })).toEqual({
+    expect(byId({ byId: {} }, { type: '' })).toEqual({
       byId: {},
     });
   });
@@ -29,9 +29,7 @@ describe('data/genericReducers/resourceById reducer', () => {
     const previousState = {
       byId: { 43: subj43 },
     };
-    expect(resourceByIdReducer(previousState, { type: '' })).toEqual(
-      previousState,
-    );
+    expect(byId(previousState, { type: '' })).toEqual(previousState);
   });
 
   describe('RESOURCE_ADD', () => {
@@ -40,7 +38,7 @@ describe('data/genericReducers/resourceById reducer', () => {
         byId: { 43: subj43 },
       };
       expect(
-        resourceByIdReducer(previousState, {
+        byId(previousState, {
           resource: subj44,
           resourceName: 'subjects',
           type: 'RESOURCE_ADD',
@@ -55,7 +53,7 @@ describe('data/genericReducers/resourceById reducer', () => {
         byId: { 43: subj43 },
       };
       expect(
-        resourceByIdReducer(previousState, {
+        byId(previousState, {
           resourceName: 'subjects',
           resources: [subj44, subj45],
           type: 'RESOURCE_MULTIPLE_ADD',

@@ -4,7 +4,7 @@ import { call, put, takeEvery } from 'redux-saga/effects';
 
 import { API_ENDPOINTS, API_LIST_DEFAULT_PARAMS } from '../../../settings.json';
 import { APIResponseListFacets, APIResponseListMeta } from '../../../types/api';
-import Resource from '../../../types/Resource';
+import { Resource } from '../../../types/Resource';
 import { addMultipleResources } from '../../genericReducers/resourceById/actions';
 import { RootState } from '../../rootReducer';
 import {
@@ -78,7 +78,7 @@ export function* getList(action: ResourceListGet) {
   }
 }
 
-export default function* watch() {
+export function* getResourceListSaga() {
   // We can cancel ongoing requests whenever there's a new one: the user will not request several different sets
   // of filters of the same kind at the same time.
   yield takeEvery('RESOURCE_LIST_GET', getList);

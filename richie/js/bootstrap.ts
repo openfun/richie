@@ -1,12 +1,12 @@
 import { parse } from 'query-string';
 
-import configureStore from './data/configureStore';
+import { configureStore } from './data/configureStore';
 import { initialState as filterDefinitionsInitialState } from './data/filterDefinitions/initialState';
 import { RootState } from './data/rootReducer';
 
 const params = parse(location.search);
 
-export default function bootstrapStore() {
+export function bootstrapStore() {
   return configureStore({
     filterDefinitions: filterDefinitionsInitialState,
     resources: {

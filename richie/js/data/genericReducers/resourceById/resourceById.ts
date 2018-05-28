@@ -1,6 +1,6 @@
 import { Reducer } from 'redux';
 
-import Resource from '../../../types/Resource';
+import { Resource } from '../../../types/Resource';
 import { Maybe } from '../../../utils/types';
 import { ResourceAdd, ResourceMultipleAdd } from './actions';
 
@@ -52,5 +52,3 @@ export function byId<R extends Resource>(
 
   return state;
 }
-
-export default byId;
