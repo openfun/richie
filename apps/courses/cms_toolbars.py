@@ -55,6 +55,7 @@ class CourseExtensionToolbar(BaseExtensionToolbar):
     """
     This extension class customizes the toolbar for the course page extension
     """
+
     model = Course
 
 
@@ -63,4 +64,5 @@ class OrganizationExtensionToolbar(BaseExtensionToolbar):
     """
     This extension class customizes the toolbar for the organization page extension
     """
+
     model = Organization

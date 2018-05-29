@@ -16,6 +16,7 @@ class OrganizationsViewSet(ViewSet):
     A simple viewset with GET endpoints to fetch organizations
     See API Blueprint for details on consumer use.
     """
+
     # pylint: disable=no-self-use,unused-argument
     def list(self, request, version):
         """

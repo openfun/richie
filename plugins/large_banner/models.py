@@ -20,6 +20,7 @@ class LargeBanner(CMSPlugin):
     """
     Model to configure a home page banner with background image, logo and title.
     """
+
     title = models.CharField(max_length=255)
     background_image = FilerImageField(
         related_name="background_image",

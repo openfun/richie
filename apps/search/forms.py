@@ -11,6 +11,7 @@ class CourseListForm(forms.Form):
     """
     Validate the query string params in the course list request
     """
+
     end_date = DatetimeRangeField(required=False)
     enrollment_end_date = DatetimeRangeField(required=False)
     enrollment_start_date = DatetimeRangeField(required=False)
@@ -28,6 +29,7 @@ class OrganizationListForm(forms.Form):
     """
     Validate the query string params in the organization list request
     """
+
     limit = forms.IntegerField(required=False, min_value=1, initial=10)
     query = forms.CharField(required=False, min_length=3, max_length=100)
     offset = forms.IntegerField(required=False, min_value=0, initial=0)
@@ -37,6 +39,7 @@ class SubjectListForm(forms.Form):
     """
     Validate the query string params in the subject list request
     """
+
     limit = forms.IntegerField(required=False, min_value=1, initial=10)
     query = forms.CharField(required=False, min_length=3, max_length=100)
     offset = forms.IntegerField(required=False, min_value=0, initial=0)

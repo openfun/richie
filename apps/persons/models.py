@@ -14,6 +14,7 @@ class PersonTitle(TranslatableModel):
     PersonTitle define i18ned list of people titles and there abbreviations
     Instances of this models should only be created by CMS administrators
     """
+
     translations = TranslatedFields(
         title=models.CharField(_("Title"), max_length=200),
         abbreviation=models.CharField(_("Title abbreviation"), max_length=10),

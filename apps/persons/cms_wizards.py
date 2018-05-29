@@ -19,6 +19,7 @@ class BaseWizardForm(forms.Form):
     Factorize the part of the wizard form that handles the title and the slug as they are
     common to all our wizard forms.
     """
+
     title = forms.CharField(
         max_length=255,
         required=True,
@@ -132,6 +133,7 @@ class PersonWizardForm(BaseWizardForm):
 
 class PersonWizard(Wizard):
     """Inherit from Wizard because each wizard must have its own Python class."""
+
     pass
 
 

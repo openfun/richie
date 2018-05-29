@@ -13,4 +13,5 @@ class PersonExtensionToolbar(BaseExtensionToolbar):
     """
     This extension class customizes the toolbar for the person page extension
     """
+
     model = Person

@@ -10,6 +10,7 @@ from .models import Course, Organization
 
 class CourseAdmin(PageExtensionAdmin):
     """Admin class for the Course model"""
+
     list_display = ["title", "main_organization", "active_session"]
 
     # pylint: disable=no-self-use
@@ -36,6 +37,7 @@ class OrganizationAdmin(PageExtensionAdmin):
     """
     Admin class for the Organization model
     """
+
     list_display = ["title", "code"]
 
     # pylint: disable=no-self-use

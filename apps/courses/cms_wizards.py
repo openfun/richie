@@ -68,6 +68,7 @@ class CourseWizardForm(BaseWizardForm):
 
 class CourseWizard(Wizard):
     """Inherit from Wizard because each wizard must have its own Python class."""
+
     pass
 
 
@@ -102,6 +103,7 @@ class OrganizationWizardForm(BaseWizardForm):
 
 class OrganizationWizard(Wizard):
     """Inherit from Wizard because each wizard must have its own Python class."""
+
     pass
 
 
@@ -136,6 +138,7 @@ class SubjectWizardForm(BaseWizardForm):
 
 class SubjectWizard(Wizard):
     """Inherit from Wizard because each wizard must have its own Python class."""
+
     pass
 
 

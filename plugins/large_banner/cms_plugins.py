@@ -14,6 +14,7 @@ class LargeBannerPlugin(CMSPluginBase):
     """
     CMSPlugin to customize a home page header.
     """
+
     model = LargeBanner
     name = _("Large Banner")
     render_template = "large_banner.html"

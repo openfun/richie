@@ -14,6 +14,7 @@ class CoursesIndexer:
     Makes available the parameters the indexer requires as well as functions to shape
     objects getting into and out of ElasticSearch
     """
+
     document_type = "course"
     index_name = "richie_courses"
     mapping = {

@@ -16,6 +16,7 @@ class CoursesViewSet(ViewSet):
     A simple viewset with GET endpoints to fetch courses
     See API Blueprint for details on consumer use
     """
+
     # pylint: disable=no-self-use,unused-argument,too-many-locals
     def list(self, request, version):
         """

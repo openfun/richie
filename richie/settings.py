@@ -344,6 +344,7 @@ class Development(Base):
 
 class Test(Base):
     """Test environment settings"""
+
     pass
 
 
@@ -353,6 +354,7 @@ class ContinuousIntegration(Test):
 
     nota bene: it should inherit from the Test environment.
     """
+
     pass
 
 
@@ -374,6 +376,7 @@ class Feature(Production):
 
     nota bene: it should inherit from the Production environment.
     """
+
     pass
 
 
@@ -383,6 +386,7 @@ class Staging(Production):
 
     nota bene: it should inherit from the Production environment.
     """
+
     pass
 
 
@@ -392,4 +396,5 @@ class PreProduction(Production):
 
     nota bene: it should inherit from the Production environment.
     """
+
     pass

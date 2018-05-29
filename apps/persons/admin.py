@@ -13,6 +13,7 @@ from .models import Person, PersonTitle
 
 class PersonAdmin(PageExtensionAdmin):
     """Admin class for the Person model"""
+
     list_display = ["title", "person_title", "first_name", "last_name"]
 
     # pylint: disable=no-self-use
@@ -25,6 +26,7 @@ class PersonAdmin(PageExtensionAdmin):
 
 class PersonTitleAdmin(TranslatableAdmin):
     """Admin class for the PersonTitle model"""
+
     list_display = ["title", "abbreviation"]
 
 

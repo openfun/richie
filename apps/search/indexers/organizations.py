@@ -14,6 +14,7 @@ class OrganizationsIndexer:
     Makes available the parameters the indexer requires as well as a function to shape
     objects into what we want to index in ElasticSearch
     """
+
     document_type = "organization"
     index_name = "richie_organizations"
     mapping = {

@@ -101,6 +101,7 @@ class Course(PageExtension):
 
     The `active_session` field is the edX course_key of the current session.
     """
+
     active_session = models.CharField(
         max_length=200,
         verbose_name=_("Course key of active course session"),
