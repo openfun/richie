@@ -17,7 +17,7 @@ import startCase from 'lodash-es/startCase';
 import { bootstrapStore } from './bootstrap';
 
 // Import the top-level components that can be directly called from the CMS
-import { SearchContainer } from './components/searchContainer/searchContainer';
+import { SearchContainer } from './components/SearchContainer/SearchContainer';
 // List them in an interface for type-safety when we call them. This will let us use the props for
 // any top-level component in a way TypeScript understand and accepts
 interface ComponentLibrary {

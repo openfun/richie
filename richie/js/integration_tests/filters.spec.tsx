@@ -7,9 +7,9 @@ import * as ReactDOM from 'react-dom';
 import { Provider, Store } from 'react-redux';
 
 import { bootstrapStore } from '../bootstrap';
-import { SearchFilter } from '../components/searchFilter/searchFilter';
-import { SearchFilterGroupContainer } from '../components/searchFilterGroupContainer/searchFilterGroupContainer';
-import { SearchFiltersPane } from '../components/searchFiltersPane/searchFiltersPane';
+import { SearchFilter } from '../components/SearchFilter/SearchFilter';
+import { SearchFilterGroupContainer } from '../components/SearchFilterGroupContainer/SearchFilterGroupContainer';
+import { SearchFiltersPane } from '../components/SearchFiltersPane/SearchFiltersPane';
 import { addMultipleResources } from '../data/genericReducers/resourceById/actions';
 import { didGetResourceList } from '../data/genericSideEffects/getResourceList/actions';
 import { RootState } from '../data/rootReducer';
