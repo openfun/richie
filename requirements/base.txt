@@ -1,5 +1,6 @@
 arrow==0.12.1
 Babel==2.6.0
+cmsplugin-plain-text==0.1.2
 decorator==4.2.1
 dj-database-url==0.5.0
 Django==1.11.13 # pyup: <2.0

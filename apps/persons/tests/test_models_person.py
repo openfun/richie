@@ -61,3 +61,15 @@ class PersonTestCase(TestCase):
             self.assertEqual(
                 str(person), "Person: Page of Lady Louise Dupont (Madam Louise Dupont)"
             )
+
+    def test_person_get_full_name(self):
+        """
+        The get_full_name method should return title, first name and last name separated by space.
+        No SQL query should be generated.
+        """
+        person_title = PersonTitleFactory(title="Madam", abbreviation="Mme")
+        person = PersonFactory(
+            first_name="Louise", last_name="Dupont", person_title=person_title
+        )
+        with self.assertNumQueries(0):
+            self.assertEqual(person.get_full_name(), "Madam Louise Dupont")

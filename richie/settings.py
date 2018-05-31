@@ -191,6 +191,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         "djangocms_googlemap",
         "djangocms_video",
         "djangocms_picture",
+        "cmsplugin_plain_text",
         # FUN stuff
         "apps.core",
         "apps.courses",
@@ -266,7 +267,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         },
         "courses/cms/organization_detail.html banner": {
             "name": _("Banner"),
-            "plugins": ["ImagePlugin"],
+            "plugins": ["PicturePlugin"],
             "limits": {"ImagePlugin": 1},
         },
         "courses/cms/organization_detail.html description": {
@@ -274,12 +275,16 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
             "plugins": ["TextPlugin"],
             "limits": {"TextPlugin": 1},
         },
-        "person/cms/person_detail.html portrait": {
+        "persons/cms/person_detail.html portrait": {
             "name": _("Portrait"),
-            "plugins": ["ImagePlugin"],
-            "limits": {"ImagePlugin": 1},
+            "plugins": ["PicturePlugin"],
+            "limits": {"PicturePlugin": 1},
         },
-        "person/cms/person_detail.html resume": {"name": _("Resume")},
+        "persons/cms/person_detail.html resume": {
+            "name": _("Resume"),
+            "plugins": ["PlaintextPlugin"],
+            "limits": {"PlaintextPlugin": 1},
+        },
     }
 
     # Thumbnails settings

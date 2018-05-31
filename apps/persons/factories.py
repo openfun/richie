@@ -47,7 +47,7 @@ class PersonFactory(factory.django.DjangoModelFactory):
         Automatically create a related page with the person's name as title
         """
         return create_page(
-            "Page of {title} {first_name} {last_name}".format(
+            "{title} {first_name} {last_name}".format(
                 title=self.person_title.title,
                 first_name=self.first_name,
                 last_name=self.last_name,

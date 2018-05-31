@@ -4,7 +4,9 @@ Declare and configure the model for the person application
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from cms.api import Page
 from cms.extensions import PageExtension
+from cms.models.pluginmodel import CMSPlugin
 from parler.models import TranslatableModel, TranslatedFields
 
 
@@ -54,12 +56,10 @@ class Person(PageExtension):
 
     def __str__(self):
         """Human representation of a person"""
-        return "{model}: {title} ({person_title} {first_name} {last_name})".format(
+        return "{model}: {title} ({full_name})".format(
             model=self._meta.verbose_name.title(),
             title=self.extended_object.get_title(),
-            person_title=self.person_title.title,  # pylint: disable=no-member
-            first_name=self.first_name,
-            last_name=self.last_name,
+            full_name=self.get_full_name(),
         )
 
     def save(self, *args, **kwargs):
@@ -68,3 +68,31 @@ class Person(PageExtension):
         """
         self.full_clean()
         super().save(*args, **kwargs)
+
+    def get_full_name(self):
+        """
+        Return person's full name
+        """
+        return "{person_title} {first_name} {last_name}".format(
+            person_title=self.person_title.title,
+            first_name=self.first_name,
+            last_name=self.last_name,
+        )
+
+
+class PersonPluginModel(CMSPlugin):
+    """
+    Person plugin model handles the relation from PersonPlugin
+    to their Person instance
+    """
+
+    page = models.ForeignKey(Page)
+
+    class Meta:
+        verbose_name = _("person plugin model")
+
+    def __str__(self):
+        """Human representation of a person plugin"""
+        return "{model:s}: {id:d}".format(
+            model=self._meta.verbose_name.title(), id=self.id
+        )
