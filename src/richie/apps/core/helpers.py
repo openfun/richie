@@ -19,6 +19,8 @@ def create_i18n_page(content, is_homepage=False, **kwargs):
         }
 
     """
+    template = kwargs.pop("template", None) or "richie/fullwidth.html"
+
     # Create the page with a first language from what is given to us
     languages = list(content.keys())  # convert `dict_keys` to list so it can be poped
     first_language = languages.pop(0)
@@ -28,6 +30,7 @@ def create_i18n_page(content, is_homepage=False, **kwargs):
         menu_title=content[first_language],
         title=content[first_language],
         slug=slug,
+        template=template,
         **kwargs
     )
 
