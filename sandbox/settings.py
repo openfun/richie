@@ -217,6 +217,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         "django.contrib.messages",
         # Django-cms
         "cms",
+        "cmsplugin_plain_text",
         "menus",
         "sekizai",
         "treebeard",
@@ -313,12 +314,16 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
             "plugins": ["TextPlugin"],
             "limits": {"TextPlugin": 1},
         },
-        "person/cms/person_detail.html portrait": {
+        "persons/cms/person_detail.html portrait": {
             "name": _("Portrait"),
             "plugins": ["PicturePlugin"],
             "limits": {"PicturePlugin": 1},
         },
-        "person/cms/person_detail.html resume": {"name": _("Resume")},
+        "persons/cms/person_detail.html resume": {
+            "name": _("Resume"),
+            "plugins": ["PlaintextPlugin"],
+            "limits": {"PlaintextPlugin": 1},
+        },
     }
 
     # Thumbnails settings
