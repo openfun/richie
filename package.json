@@ -47,7 +47,7 @@
     "typescript": "2.8.3",
     "webpack": "4.10.1",
     "webpack-cli": "2.1.2",
-    "xhr-mock": "2.0.3"
+    "xhr-mock": "2.4.0"
   },
   "dependencies": {
     "bootstrap": "4.0.0",
