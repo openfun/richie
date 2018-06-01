@@ -33,7 +33,7 @@
     "@types/react-redux": "6.0.0",
     "enzyme": "3.3.0",
     "enzyme-adapter-react-16": "1.1.1",
-    "fetch-mock": "6.4.2",
+    "fetch-mock": "6.4.3",
     "jasmine": "2.9.0",
     "karma": "2.0.0",
     "karma-chrome-launcher": "2.2.0",
