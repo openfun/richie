@@ -10,10 +10,10 @@
   justify-content: center;
   align-items: center;
 
-  background-color: $brand-darkblue; // Default background color; will be overridden by the background image
+  background-color: $dark; // Default background color; will be overridden by the background image
 
   color: white;
-  text-shadow: 0 0 3px darken($brand-darkgray, 20%);
+  text-shadow: 0 0 3px $dark;
 
   @include media-breakpoint-up(md) {
     height: 20rem;
