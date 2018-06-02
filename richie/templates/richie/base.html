@@ -13,11 +13,9 @@
     <body>
         {% cms_toolbar %}
         <div>
-            <ul class="nav">
-                {% show_menu 0 100 100 100 %}
-            </ul>
+            {% show_menu 0 100 100 100 %}
             {% block content %}
-            
+
             {% endblock content %}
         </div>
         {% render_block "js" %}

@@ -1,0 +1,22 @@
+{# Override the menu template so we can use BEM classes #}
+{% load menu_tags %}
+
+<nav class="main-menu">
+	<div class="navbar-brand">Richie</div>
+	<ul class="main-menu__list">
+		{% for child in children %}
+		<li class="main-menu__list__item
+			{% if child.selected %} main-menu__list__item--selected{% endif %}
+			{% if child.ancestor %} main-menu__list__item--ancestor{% endif %}
+			{% if child.sibling %} main-menu__list__item--sibling{% endif %}
+			{% if child.descendant %} main-menu__list__item--descendant{% endif %}">
+			<a class="menu__list__item__link" href="{{ child.attr.redirect_url|default:child.get_absolute_url }}">{{ child.get_menu_title }}</a>
+			{% if child.children %}
+			<ul>
+				{% show_menu from_level to_level extra_inactive extra_active template "" "" child %}
+			</ul>
+			{% endif %}
+		</li>
+		{% endfor %}
+	</ul>
+</nav>
