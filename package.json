@@ -1,7 +1,7 @@
 {
   "name": "richie",
   "version": "0.1.0",
-  "description": "This document aims to list all needed steps to have a working `FUN CMS` installation.",
+  "description": "A Django-CMS based portal for Open edX courses discovery",
   "main": "manage.py",
   "scripts": {
     "build": "webpack",
