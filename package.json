@@ -14,8 +14,11 @@
     "type": "git",
     "url": "git+https://github.com/openfun/richie.git"
   },
-  "author": "FUN",
-  "license": "UNLICENSED",
+  "author": {
+    "name": "Open FUN (France Université Numérique)",
+    "email": "fun.dev@fun-mooc.fr"
+  },
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/openfun/richie/issues"
   },
