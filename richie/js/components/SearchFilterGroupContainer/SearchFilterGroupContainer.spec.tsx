@@ -39,7 +39,7 @@ describe('components/SearchFilterGroupContainer/mergeProps', () => {
             params: { limit: 17, offset: 7, organizations: [12, 24] },
           } as ResourceListState<Course>,
         },
-        organizations: {},
+        organizations: { byId: {} },
       },
     } as RootState;
 

@@ -19,8 +19,8 @@ describe('components/SearchFilterGroup', () => {
     } as FilterDefinitionWithValues;
     const wrapper = shallow(
       <SearchFilterGroup
+        activeFilterValues={[]}
         addFilter={addFilter}
-        currentValue={undefined}
         filter={filter}
         removeFilter={removeFilter}
       />,
@@ -39,8 +39,8 @@ describe('components/SearchFilterGroup', () => {
     } as FilterDefinitionWithValues;
     const wrapper = shallow(
       <SearchFilterGroup
+        activeFilterValues={[]}
         addFilter={addFilter}
-        currentValue={undefined}
         filter={filter}
         removeFilter={removeFilter}
       />,
@@ -49,19 +49,21 @@ describe('components/SearchFilterGroup', () => {
     expect(wrapper.find(SearchFilter).length).toEqual(2);
   });
 
-  it('orders the list by putting active filters at the top', () => {
+  it('renders any active filter values at the top of the list', () => {
+    const activeFilterValues = [
+      { primaryKey: 'value-2', humanName: 'Value Two' },
+    ];
     const filter = {
       humanName: 'Example filter',
       values: [
         { primaryKey: 'value-1', humanName: 'Value One' },
-        { primaryKey: 'value-2', humanName: 'Value Two' },
         { primaryKey: 'value-3', humanName: 'Value Three' },
       ],
     } as FilterDefinitionWithValues;
     const wrapper = shallow(
       <SearchFilterGroup
+        activeFilterValues={activeFilterValues}
         addFilter={addFilter}
-        currentValue={'value-2'}
         filter={filter}
         removeFilter={removeFilter}
       />,
@@ -88,5 +90,49 @@ describe('components/SearchFilterGroup', () => {
         .shallow()
         .text(),
     ).toContain('Value Three');
+  });
+
+  it('deduplicates keys between the filter and the active filter values', () => {
+    const activeFilterValues = [
+      { primaryKey: 'value-2', humanName: 'Value Two' },
+      { primaryKey: 'value-3', humanName: 'Value Three' },
+    ];
+    const filter = {
+      humanName: 'Example filter',
+      values: [
+        { primaryKey: 'value-1', humanName: 'Value One' },
+        { primaryKey: 'value-3', humanName: 'Value Three' },
+      ],
+    } as FilterDefinitionWithValues;
+    const wrapper = shallow(
+      <SearchFilterGroup
+        activeFilterValues={activeFilterValues}
+        addFilter={addFilter}
+        filter={filter}
+        removeFilter={removeFilter}
+      />,
+    );
+
+    expect(
+      wrapper
+        .find(SearchFilter)
+        .at(0)
+        .shallow()
+        .text(),
+    ).toContain('Value Two');
+    expect(
+      wrapper
+        .find(SearchFilter)
+        .at(1)
+        .shallow()
+        .text(),
+    ).toContain('Value Three');
+    expect(
+      wrapper
+        .find(SearchFilter)
+        .at(2)
+        .shallow()
+        .text(),
+    ).toContain('Value One');
   });
 });
