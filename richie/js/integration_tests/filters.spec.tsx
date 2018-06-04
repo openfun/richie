@@ -16,7 +16,7 @@ import { RootState } from '../data/rootReducer';
 
 describe('Integration tests - filters', () => {
   let store: Store<RootState>;
-  let searchFiltersPane: ReactWrapper;
+  let makeSearchFilterPane: () => ReactWrapper;
 
   beforeEach(() => {
     spyOn(window.history, 'pushState');
@@ -89,12 +89,13 @@ describe('Integration tests - filters', () => {
         { limit: 0, offset: 0 },
       ),
     );
-    // Render and mount our whole filters pane
-    searchFiltersPane = mount(
-      <Provider store={store}>
-        <SearchFiltersPane />
-      </Provider>,
-    );
+    // Mount our whole filters pane whhenever we need it.
+    makeSearchFilterPane = () =>
+      mount(
+        <Provider store={store}>
+          <SearchFiltersPane />
+        </Provider>,
+      );
   });
 
   afterEach(() => {
@@ -102,7 +103,7 @@ describe('Integration tests - filters', () => {
   });
 
   it('shows the values for the hardcoded filters in their groups', () => {
-    const filterGroupNew = searchFiltersPane
+    const filterGroupNew = makeSearchFilterPane()
       .find(SearchFilterGroupContainer)
       .filterWhere(wrapper => wrapper.prop('machineName') === 'new');
     expect(
@@ -113,7 +114,7 @@ describe('Integration tests - filters', () => {
   });
 
   it('shows the values for the resource-based filters in their groups, ordered by facet count', () => {
-    const filtersOrganizations = searchFiltersPane
+    const filtersOrganizations = makeSearchFilterPane()
       .find(SearchFilterGroupContainer)
       .filterWhere(wrapper => wrapper.prop('machineName') === 'organizations')
       .find(SearchFilter);
@@ -143,7 +144,7 @@ describe('Integration tests - filters', () => {
     });
 
     // Simulate a click on the filter we wish to add
-    searchFiltersPane
+    makeSearchFilterPane()
       .find(SearchFilter)
       .filterWhere(
         wrapper => wrapper.html().indexOf('Organization Five') !== -1,
@@ -154,16 +155,15 @@ describe('Integration tests - filters', () => {
     await new Promise(resolve => setImmediate(resolve));
 
     // Our newly active filter should be at the top
-    const topOrgsFilter = searchFiltersPane
+    const topOrgsFilter = makeSearchFilterPane()
       .find(SearchFilterGroupContainer)
       .filterWhere(wrapper => wrapper.prop('machineName') === 'organizations')
-      .render()
-      .find('.search-filter')
+      .find(SearchFilter)
       .first();
 
     // The correct filter is at the top and marked as active
     expect(topOrgsFilter.html()).toContain('Organization Five');
-    expect(topOrgsFilter.hasClass('active')).toBeTruthy();
+    expect(topOrgsFilter.find('button').hasClass('active')).toBeTruthy();
 
     // URL has been updated with the filter
     expect(window.history.pushState).toHaveBeenCalledWith(
@@ -182,6 +182,7 @@ describe('Integration tests - filters', () => {
       },
       meta: { limit: 0, offset: 0, total_count: 400 },
       objects: [],
+      params: { limit: 0, offset: 0, subjects: '41' },
     });
 
     // Set the subjects filter to '41'
@@ -202,14 +203,14 @@ describe('Integration tests - filters', () => {
 
     // Ensure the value is active before we go on to disable it
     expect(
-      searchFiltersPane
-        .render()
-        .find('.search-filter.active')
+      makeSearchFilterPane()
+        .find(SearchFilter)
+        .filterWhere(wrapper => wrapper.find('button').hasClass('active'))
         .html(),
     ).toContain('Subject Forty-One');
 
     // Simulate a click on the filter we want to disable
-    searchFiltersPane
+    makeSearchFilterPane()
       .find(SearchFilter)
       .filterWhere(
         wrapper => wrapper.html().indexOf('Subject Forty-One') !== -1,
@@ -221,23 +222,22 @@ describe('Integration tests - filters', () => {
 
     // Our previously active filter is not at the top, instead it is the filter with the highest facet count
     expect(
-      searchFiltersPane
+      makeSearchFilterPane()
         .find(SearchFilterGroupContainer)
         .filterWhere(wrapper => wrapper.prop('machineName') === 'subjects')
-        .render()
-        .find('.search-filter')
+        .find(SearchFilter)
         .first()
         .html(),
     ).toContain('Subject Fifty-One');
 
     // Our previously active filter is not marked as active any more
     expect(
-      searchFiltersPane
+      makeSearchFilterPane()
         .find(SearchFilter)
         .filterWhere(
           wrapper => wrapper.html().indexOf('Subject Forty-One') !== -1,
         )
-        .render()
+        .find('button')
         .hasClass('active'),
     ).not.toBeTruthy();
 
