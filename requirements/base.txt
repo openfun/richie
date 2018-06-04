@@ -32,7 +32,7 @@ lxml==4.2.1
 pexpect==4.6.0
 pickleshare==0.7.4
 Pillow==5.1.0
-prompt-toolkit==2.0.1
+prompt-toolkit==2.0.2
 psycopg2==2.7.4
 ptyprocess==0.5.2
 Pygments==2.2.0
