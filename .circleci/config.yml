@@ -32,6 +32,16 @@ jobs:
           command: |
             ! git log | grep 'fixup!'
 
+      - run:
+          name: Install gitlint
+          command: |
+            pip install gitlint
+
+      - run:
+          name: lint commit messages added to master
+          command: |
+            gitlint --commits origin/master..HEAD
+
   # Docker/back-end jobs
   # Build job
   # Build the Docker image ready for production
