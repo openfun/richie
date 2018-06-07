@@ -549,17 +549,14 @@ workflows:
 
   richie:
     jobs:
-      # Git jobs
-      #
-      # Check validity of git history
-      - lint-git:
-          filters:
-            tags:
-              only: /.*/
-
       # Front-end jobs
       #
       # Build, lint and test the front-end apps
+      #
+      # NOTA BENE: the lockfile-front job SHOULD be the first job to run in the
+      # CI or else it will refuse to update the yarn.lock file. As a
+      # consequence, every first job of a workflow MUST require the
+      # "lockfile-front" job.
       - lockfile-front:
           filters:
             tags:
@@ -589,11 +586,23 @@ workflows:
             tags:
               only: /.*/
 
+      # Git jobs
+      #
+      # Check validity of git history
+      - lint-git:
+          requires:
+            - lockfile-front
+          filters:
+            tags:
+              only: /.*/
+
       # Docker jobs
       #
       # Build, lint and test production and development Docker images
       # (debian-based)
       - build:
+          requires:
+            - lockfile-front
           filters:
             tags:
               only: /.*/
@@ -632,6 +641,8 @@ workflows:
       #
       # Build and run tests in alpine based images
       - build-alpine:
+          requires:
+            - lockfile-front
           filters:
             tags:
               only: /.*/
