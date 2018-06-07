@@ -63,9 +63,10 @@ words=wip
 # regex=[^@]+@foo.com
 
 [ignore-by-title]
-# Allow empty body only when upgrading dependendies
-regex=^⬆️.*$
-ignore=B6
+# Allow empty body & wrong title pattern only when bots (pyup/greenkeeper)
+# upgrade dependencies
+regex=^(⬆️.*|Update (.*) from (.*) to (.*)|chore\(package\): update .*)$
+ignore=B6,UC1
 
 # [ignore-by-body]
 # Ignore certain rules for commits of which the body has a line that matches a regex
