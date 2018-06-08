@@ -59,7 +59,7 @@
     "moment": "2.22.2",
     "node-sass": "4.7.2",
     "nodemon": "1.14.12",
-    "prettier": "1.13.4",
+    "prettier": "1.13.5",
     "query-string": "6.1.0",
     "react": "16.2.0",
     "react-autosuggest": "9.3.4",
