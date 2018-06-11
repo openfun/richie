@@ -57,7 +57,8 @@ class CreateCmsDataTests(CMSTestCase):
         create_demo_site()
 
         # Check that the number of pages created is as expected
-        self.assertEqual(mock_page.call_count, 8 + 8)  # 7 root pages + 8 organizations
+        self.assertEqual(mock_page.call_count, 8)
+        self.assertEqual(mock_organization.call_count, 8)
 
         # Check that the calls to create the root pages are triggered as expected
         site = Site.objects.get()
@@ -85,7 +86,6 @@ class CreateCmsDataTests(CMSTestCase):
             (
                 ({"en": "Courses", "fr": "Cours"},),
                 {
-                    "has_maincontent": False,
                     "in_navigation": True,
                     "is_homepage": False,
                     "published": True,

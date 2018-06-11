@@ -17,17 +17,23 @@ class OrganizationFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Organization
-        exclude = ["title"]
+        exclude = ["parent", "title"]
 
     logo = factory.django.ImageField(width=180, height=100)
-    title = factory.Faker("catch_phrase")
+    parent = None
+    title = factory.Faker("company")
 
     @factory.lazy_attribute
     def extended_object(self):
         """
         Automatically create a related page with the random title
         """
-        return create_page(self.title, "courses/cms/organization_detail.html", "en")
+        return create_page(
+            self.title,
+            "courses/cms/organization_detail.html",
+            settings.LANGUAGE_CODE,
+            parent=self.parent,
+        )
 
     @factory.lazy_attribute
     def code(self):
@@ -85,7 +91,7 @@ class CourseFactory(factory.django.DjangoModelFactory):
         """
         Automatically create a related page with the random title
         """
-        return create_page(self.title, Course.TEMPLATE_DETAIL, "en")
+        return create_page(self.title, Course.TEMPLATE_DETAIL, settings.LANGUAGE_CODE)
 
     @factory.post_generation
     # pylint: disable=unused-argument, attribute-defined-outside-init, no-member
@@ -119,7 +125,7 @@ class SubjectFactory(factory.django.DjangoModelFactory):
         """
         Automatically create a related page with the random title
         """
-        return create_page(self.title, Subject.TEMPLATE_DETAIL, "en")
+        return create_page(self.title, Subject.TEMPLATE_DETAIL, settings.LANGUAGE_CODE)
 
     @factory.post_generation
     # pylint: disable=unused-argument, attribute-defined-outside-init, no-member

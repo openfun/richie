@@ -3,12 +3,12 @@ Helpers that can be useful throughout the whole project
 """
 from django.utils.text import slugify
 
-from cms.api import add_plugin, create_page, create_title
+from cms.api import create_page, create_title
 
 
-def create_i18n_page(content, has_maincontent=True, is_homepage=False, **kwargs):
+def create_i18n_page(content, is_homepage=False, **kwargs):
     """
-    Creating a multilingual page is not straightforward so we thought we should have a helper
+    Creating a multilingual page is not straightforward so we should have a helper
 
     This content argument should be a dictionary with the title of the page in each language:
 
@@ -46,18 +46,5 @@ def create_i18n_page(content, has_maincontent=True, is_homepage=False, **kwargs)
         # Publish page in each additional language
         if kwargs.get("published") is True:
             page.publish(language)
-
-    # Some pages have specific purpose templates that do not have a user-editable maincontent area
-    # One such page is the "Courses" page which uses the Search template
-    if has_maincontent:
-        # Add a plugin for each language
-        placeholder = page.placeholders.get(slot="maincontent")
-        for language in content.keys():
-            add_plugin(
-                body="[{:s}] Lorem ipsum...".format(language),
-                language=language,
-                placeholder=placeholder,
-                plugin_type="TextPlugin",
-            )
 
     return page
