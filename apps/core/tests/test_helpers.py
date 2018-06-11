@@ -13,9 +13,8 @@ class CreateI18nPageTestCase(CMSTestCase):
     """Test suite for the `create_i18n_page` helper"""
 
     @mock.patch.object(Page, "set_as_homepage")
-    @mock.patch("apps.core.helpers.add_plugin")
     @mock.patch("apps.core.helpers.create_title")
-    def test_utils_create_i18n_page(self, mock_title, mock_plugin, mock_homepage):
+    def test_utils_create_i18n_page(self, mock_title, mock_homepage):
         """
         Calling `create_i18n_page` should delegate create actions to DjangoCMS' methods
         Don't mock `create_page` so we can easily check the absence of call to set it as homepage
@@ -36,46 +35,9 @@ class CreateI18nPageTestCase(CMSTestCase):
             slug="english-title",
             title="English title",
         )
-        # add_plugin
-        self.assertEqual(mock_plugin.call_count, 2)
-        self.assertEqual(
-            mock_plugin.call_args_list[0],
-            (
-                {
-                    "body": "[fr] Lorem ipsum...",
-                    "language": "fr",
-                    "placeholder": mock.ANY,
-                    "plugin_type": "TextPlugin",
-                },
-            ),
-        )
-        self.assertEqual(
-            mock_plugin.call_args_list[1],
-            (
-                {
-                    "body": "[en] Lorem ipsum...",
-                    "language": "en",
-                    "placeholder": mock.ANY,
-                    "plugin_type": "TextPlugin",
-                },
-            ),
-        )
-
         self.assertFalse(mock_homepage.called)
 
-    @mock.patch("apps.core.helpers.create_title")
-    @mock.patch("apps.core.helpers.add_plugin")
-    def test_utils_create_i18n_page_without_maincontent(self, mock_plugin, *_):
-        """
-        Make sure we can create pages without the maincontent placeholder. These are pages that
-        use specific templates to perform their function.
-        """
-        content = {"fr": "Titre français", "en": "English title"}
-        create_i18n_page(content, has_maincontent=False, template="search/search.html")
-        self.assertFalse(mock_plugin.called)
-
     # pylint: disable=no-member,unused-argument
-    @mock.patch("apps.core.helpers.add_plugin")
     @mock.patch("apps.core.helpers.create_title")
     @mock.patch.object(Page, "set_as_homepage")
     def test_utils_create_i18n_page_homepage(self, mock_homepage, *args):

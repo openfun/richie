@@ -30,7 +30,6 @@ PAGE_INFOS = {
     "courses": {
         "content": {"en": "Courses", "fr": "Cours"},
         "kwargs": {
-            "has_maincontent": False,
             "reverse_id": Course.ROOT_REVERSE_ID,
             "template": "search/search.html",
         },
@@ -105,22 +104,12 @@ def create_demo_site():
             site=site,
             **info["kwargs"]
         )
-
         pages_created[name] = page
 
     # Create organizations under the `organizations` page
-    for i, _ in enumerate(range(NB_ORGANIZATIONS)):
-        page = create_i18n_page(
-            {
-                "en": "Organization #{:d}".format(i),
-                "fr": "Organisation #{:d}".format(i),
-            },
-            parent=pages_created["organizations"],
-            published=True,
-            site=site,
-            template="courses/cms/organization_detail.html",
-        )
-        OrganizationFactory(extended_object=page)
+    OrganizationFactory.create_batch(
+        NB_ORGANIZATIONS, parent=pages_created["organizations"], with_content=True
+    )
 
 
 class Command(BaseCommand):

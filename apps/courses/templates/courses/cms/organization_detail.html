@@ -14,6 +14,8 @@
         alt="{% blocktrans with title=current_page.get_title|capfirst %}{{ title }} logo{% endblocktrans %}">
     {% endif %}
 
+    {% placeholder "maincontent" %}
+
     <ul class="organization-detail__courses">
       {% for course in organization.courses.all %}
         {# If the current page is a draft, show draft courses with a class annotation for styling #}
@@ -41,8 +43,6 @@
     </ul>
 
     {% endwith %}
-
-  {% placeholder "maincontent" %}
 
 </div>
 {% endblock content %}
