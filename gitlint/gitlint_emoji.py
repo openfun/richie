@@ -24,7 +24,8 @@ pattern = re.compile(regex, re.UNICODE)
 class GitmojiTitle(LineRule):
     """
     This rule will enforce that each commit title is of the form "<gitmoji>(<scope>) <subject>"
-    where gitmoji is an emoji from the list defined in https://gitmoji.carloscuesta.me
+    where gitmoji is an emoji from the list defined in https://gitmoji.carloscuesta.me and
+    subject should be all lowercase
     """
 
     id = "UC1"
@@ -33,5 +34,5 @@ class GitmojiTitle(LineRule):
 
     def validate(self, title, _commit):
         if not pattern.search(title):
-            violation_msg = "Title does not match regex <gitmoji>(<scope>) <subject>"
+            violation_msg = "Title does not match regex \"<gitmoji>(<scope>) <subject>\""
             return [RuleViolation(self.id, violation_msg, title)]
