@@ -1,12 +1,46 @@
 """
 Courses factories
 """
+import io
+import os
+import random
+
+from django.conf import settings
+from django.core.files import File
 from django.utils.text import slugify
 
-from cms.api import create_page
 import factory
+from cms.api import add_plugin, create_page
+from filer.models.imagemodels import Image
 
 from .models import Course, Organization, Subject
+
+
+def file_getter(image_type):
+    """
+    Return a function that picks a random image for a given type of image (logo, banner,...)
+    This function can be passed to factory boy's ImageField to dynamically generate image fields.
+    """
+
+    def pick_random():
+        """
+        Pick a random file from fixtures within the image type passed as argument to the parent
+        function.
+        """
+        image_directory = os.path.join(
+            os.path.dirname(__file__), os.path.join("fixtures", image_type)
+        )
+        filename = random.choice(os.listdir(image_directory))
+
+        # Factory boy's "from_func" param is expecting a file but does not seem to close it
+        # properly. Let's load the content of the file in memory and pass it as a BytesIO to
+        # factory boy so that the file is nicely closed
+        with open(os.path.join(image_directory, filename), "rb") as image_file:
+            in_memory_file = io.BytesIO(image_file.read())
+            in_memory_file.name = filename
+        return in_memory_file
+
+    return pick_random
 
 
 class OrganizationFactory(factory.django.DjangoModelFactory):
@@ -19,8 +53,10 @@ class OrganizationFactory(factory.django.DjangoModelFactory):
         model = Organization
         exclude = ["parent", "title"]
 
-    logo = factory.django.ImageField(width=180, height=100)
     parent = None
+    logo = factory.django.ImageField(
+        width=180, height=100, from_func=file_getter("logo")
+    )
     title = factory.Faker("company")
 
     @factory.lazy_attribute
@@ -49,6 +85,46 @@ class OrganizationFactory(factory.django.DjangoModelFactory):
         """Add courses to ManyToMany relation."""
         if create and extracted:
             self.courses.set(extracted)
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def with_content(self, create, extracted, **kwargs):
+        """
+        Add content plugins displayed in the "maincontent" placeholder of the organization page:
+        - Picture plugin featuring a random banner image,
+        - Text plugin featuring a long random description.
+        """
+        if create and extracted:
+            language = settings.LANGUAGE_CODE
+            placeholder = self.extended_object.placeholders.get(slot="maincontent")
+
+            # Add a banner with a random image
+            banner_file = file_getter("banner")()
+            wrapped_banner = File(banner_file, banner_file.name)
+            banner = Image.objects.create(file=wrapped_banner)
+            add_plugin(
+                language=language,
+                placeholder=placeholder,
+                plugin_type="PicturePlugin",
+                picture=banner,
+                attributes={"alt": "banner image"},
+            )
+
+            # Add a text plugin with a long random description
+            nb_paragraphs = random.randint(2, 4)
+            paragraphs = [
+                factory.Faker("text", max_nb_chars=random.randint(200, 1000)).generate(
+                    {}
+                )
+                for i in range(nb_paragraphs)
+            ]
+            body = ["<p>{:s}</p>".format(p) for p in paragraphs]
+            add_plugin(
+                language=language,
+                placeholder=placeholder,
+                plugin_type="TextPlugin",
+                body="".join(body),
+            )
 
 
 class CourseFactory(factory.django.DjangoModelFactory):
