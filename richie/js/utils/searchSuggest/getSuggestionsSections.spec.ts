@@ -1,4 +1,4 @@
-import * as fetchMock from 'fetch-mock';
+import fetchMock from 'fetch-mock';
 
 import { Course } from '../../types/Course';
 import * as errors from '../../utils/errors/handle';
