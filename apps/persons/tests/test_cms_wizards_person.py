@@ -10,8 +10,8 @@ from cms.test_utils.testcases import CMSTestCase
 from apps.core.factories import UserFactory
 
 from ..cms_wizards import PersonWizardForm
-from ..models import Person
 from ..factories import PersonTitleFactory
+from ..models import Person
 
 
 class PersonCMSWizardTestCase(CMSTestCase):

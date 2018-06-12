@@ -3,12 +3,13 @@ Large banner plugin tests
 """
 import re
 
-from cms.api import add_plugin
-from cms.models import Placeholder
-from cms.plugin_rendering import ContentRenderer
 from django.db import IntegrityError
 from django.test import TestCase
 from django.test.client import RequestFactory
+
+from cms.api import add_plugin
+from cms.models import Placeholder
+from cms.plugin_rendering import ContentRenderer
 
 from .cms_plugins import LargeBannerPlugin
 from .factories import LargeBannerFactory

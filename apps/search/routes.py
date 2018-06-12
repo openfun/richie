@@ -7,7 +7,6 @@ from .viewsets.courses import CoursesViewSet
 from .viewsets.organizations import OrganizationsViewSet
 from .viewsets.subjects import SubjectsViewSet
 
-
 # For now, we use URLPathVersioning to be consistent with fonzie. Fonzie uses it
 # because DRF OpenAPI only supports URLPathVersioning for now.
 # See fonzie API_PREFIX config for more information.

@@ -8,8 +8,9 @@ from unittest import mock
 from django.conf import settings
 from django.test import TestCase
 from django.utils import timezone
-from elasticsearch.exceptions import NotFoundError
+
 import pytz
+from elasticsearch.exceptions import NotFoundError
 from rest_framework.test import APIRequestFactory
 
 from ..indexers.courses import CoursesIndexer

@@ -3,15 +3,15 @@ create_demo_site management command
 """
 import logging
 
-from django.core.management.base import BaseCommand, CommandError
 from django.conf import settings
 from django.contrib.sites.models import Site
+from django.core.management.base import BaseCommand, CommandError
 
 from cms import models as cms_models
 
+from apps.courses.factories import OrganizationFactory
 from apps.courses.models import Course, Organization, Subject
 from apps.persons.models import Person
-from apps.courses.factories import OrganizationFactory
 
 from ...helpers import create_i18n_page
 

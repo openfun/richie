@@ -3,10 +3,11 @@ Django settings for richie project.
 """
 import json
 import os
-import raven
 
-from configurations import Configuration, values
 from django.utils.translation import ugettext_lazy as _
+
+import raven
+from configurations import Configuration, values
 
 from .configurations.elasticsearch import ElasticSearchMixin
 from .configurations.rest_framework import DRFMixin

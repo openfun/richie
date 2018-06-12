@@ -1,8 +1,8 @@
 """
 Persons factories
 """
-from cms.api import create_page
 import factory
+from cms.api import create_page
 
 from .models import Person, PersonTitle
 

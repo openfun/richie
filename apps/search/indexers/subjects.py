@@ -3,8 +3,8 @@ ElasticSearch subject document management utilities
 """
 from django.conf import settings
 
-from ..partial_mappings import MULTILINGUAL_TEXT
 from ..exceptions import IndexerDataException
+from ..partial_mappings import MULTILINGUAL_TEXT
 from ..utils.api_consumption import walk_api_json_list
 from ..utils.i18n import get_best_field_language
 

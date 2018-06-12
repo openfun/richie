@@ -3,6 +3,7 @@ Tests for the subject indexer
 """
 from django.conf import settings
 from django.test import TestCase
+
 import responses
 
 from ..exceptions import IndexerDataException

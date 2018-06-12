@@ -3,6 +3,7 @@ Test for our partial mappings
 """
 from django.conf import settings
 from django.test import TestCase
+
 from elasticsearch.client import IndicesClient
 
 from ..partial_mappings import MULTILINGUAL_TEXT

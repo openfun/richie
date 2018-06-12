@@ -1,10 +1,11 @@
 """
 Large banner CMS plugin
 """
+from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
+
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
-from django.utils.translation import ugettext_lazy as _
-from django.conf import settings
 
 from .models import LargeBanner
 
