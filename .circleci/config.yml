@@ -146,6 +146,34 @@ jobs:
             - ~/fun/docker/images/dev/
           key: docker-debian-images-dev-{{ .Revision }}
 
+  lint-back-isort:
+
+    machine: true
+
+    working_directory: ~/fun
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - docker-debian-images-dev-{{ .Revision }}
+
+      - run:
+          name: Load images to docker engine
+          command: |
+            docker load < docker/images/dev/richie.tar
+
+      - run:
+          name: Lint code with isort
+          command: |
+            docker-compose \
+              -p richie-test \
+              -f docker/compose/ci/docker-compose.yml \
+              --project-directory . \
+              run --rm --no-deps app \
+                isort --recursive --check-only .
+
   lint-back-flake8:
 
     machine: true
@@ -613,6 +641,12 @@ workflows:
             tags:
               only: /.*/
       - lint-back-black:
+          requires:
+            - build-dev
+          filters:
+            tags:
+              only: /.*/
+      - lint-back-isort:
           requires:
             - build-dev
           filters:
