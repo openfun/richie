@@ -5,7 +5,6 @@ Persons application admin
 from django.contrib import admin
 
 from cms.extensions import PageExtensionAdmin
-
 from parler.admin import TranslatableAdmin
 
 from .models import Person, PersonTitle

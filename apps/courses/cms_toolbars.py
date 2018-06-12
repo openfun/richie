@@ -8,8 +8,8 @@ from cms.extensions.toolbar import ExtensionToolbar
 from cms.toolbar_pool import toolbar_pool
 from cms.utils.page_permissions import user_can_change_page
 
-from .models import Course, Organization
 from .defaults import PAGE_EXTENSION_TOOLBAR_ITEM_POSITION
+from .models import Course, Organization
 
 
 class BaseExtensionToolbar(ExtensionToolbar):

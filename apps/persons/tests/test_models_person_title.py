@@ -1,7 +1,7 @@
 """
 Unit tests for the Person model
 """
-from django.db.utils import IntegrityError, DataError
+from django.db.utils import DataError, IntegrityError
 from django.test import TestCase
 
 from ..factories import PersonTitleFactory

@@ -2,7 +2,6 @@
 Tests for the regenerate_index command
 """
 import logging
-
 from unittest import mock
 
 from django.core.management import call_command

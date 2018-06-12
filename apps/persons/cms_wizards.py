@@ -3,7 +3,8 @@ CMS Wizard to add a person page
 """
 from django import forms
 from django.template.defaultfilters import slugify
-from django.utils.translation import get_language, ugettext_lazy as _
+from django.utils.translation import get_language
+from django.utils.translation import ugettext_lazy as _
 
 from cms.api import create_page
 from cms.forms.wizards import SlugWidget
@@ -11,7 +12,7 @@ from cms.models import Page
 from cms.wizards.wizard_base import Wizard
 from cms.wizards.wizard_pool import wizard_pool
 
-from .models import PersonTitle, Person
+from .models import Person, PersonTitle
 
 
 class BaseWizardForm(forms.Form):

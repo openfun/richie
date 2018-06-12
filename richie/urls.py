@@ -1,7 +1,6 @@
 """
 FUN CMS urls
 """
-from cms.sitemaps import CMSSitemap
 from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.i18n import i18n_patterns
@@ -10,8 +9,10 @@ from django.contrib.sitemaps.views import sitemap
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.static import serve
 
-from apps.search.routes import API_PREFIX, urlpatterns as search_urlpatterns
+from cms.sitemaps import CMSSitemap
 
+from apps.search.routes import API_PREFIX
+from apps.search.routes import urlpatterns as search_urlpatterns
 
 admin.autodiscover()
 

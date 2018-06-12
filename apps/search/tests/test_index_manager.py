@@ -4,12 +4,12 @@ Tests for the index_manager utilities
 from datetime import datetime
 from unittest import mock
 
-import pytz
-
 from django.conf import settings
 from django.test import TestCase
 from django.test.utils import override_settings
 from django.utils import timezone
+
+import pytz
 from elasticsearch.client import IndicesClient
 
 from ..index_manager import (

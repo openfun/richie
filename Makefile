@@ -46,7 +46,8 @@ demo-site:  ## create a demo site
 .PHONY: demo-site
 
 lint-back: ## lint back-end python sources
-	${MAKE} lint-back-black;
+	${MAKE} lint-back-isort;
+	${MAKE} lint-back-black;  # black should come after isort just in case they don't agree...
 	${MAKE} lint-back-flake8;
 	${MAKE} lint-back-pylint;
 .PHONY: lint-back
@@ -60,6 +61,11 @@ lint-back-flake8: ## lint back-end python sources with flake8
 	@echo 'lint:flake8 started…';
 	@$(COMPOSE_TEST_RUN_APP) flake8;
 .PHONY: lint-back-flake8
+
+lint-back-isort: ## automatically re-arrange python imports in back-end code base
+	@echo 'lint:isort started…';
+	@$(COMPOSE_TEST_RUN_APP) isort --recursive --atomic .;
+.PHONY: lint-back-isort
 
 lint-back-pylint: ## lint back-end python sources with pylint
 	@echo 'lint:pylint started…';

@@ -6,6 +6,7 @@ from functools import reduce
 from django.conf import settings
 from django.utils import timezone
 from django.utils.module_loading import import_string
+
 from elasticsearch.client import IndicesClient
 from elasticsearch.exceptions import NotFoundError
 from elasticsearch.helpers import bulk

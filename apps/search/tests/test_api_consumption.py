@@ -2,6 +2,7 @@
 Test for the API consumption utils
 """
 from django.test import TestCase
+
 import responses
 
 from ..exceptions import ApiConsumingException

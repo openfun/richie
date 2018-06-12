@@ -3,6 +3,7 @@ Tests for environment ElasticSearch support
 """
 from django.conf import settings
 from django.test import TestCase
+
 from elasticsearch.client import IndicesClient
 from elasticsearch.helpers import bulk
 

@@ -7,6 +7,7 @@ from cms.api import create_page
 from cms.test_utils.testcases import CMSTestCase
 
 from apps.core.factories import UserFactory
+
 from ..factories import OrganizationFactory
 
 

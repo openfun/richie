@@ -4,8 +4,8 @@ from django.contrib.auth.models import AnonymousUser, Permission
 from django.core.exceptions import ImproperlyConfigured
 from django.test.client import RequestFactory
 
-from cms.toolbar.items import Menu, ModalItem
 from cms.middleware.toolbar import ToolbarMiddleware
+from cms.toolbar.items import Menu, ModalItem
 
 from apps.core.factories import UserFactory
 

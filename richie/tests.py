@@ -4,6 +4,7 @@ Test suite for Richie's main module
 from unittest import mock
 
 from django.test import TestCase
+
 from raven.exceptions import InvalidGitRepository
 
 from .settings import get_release

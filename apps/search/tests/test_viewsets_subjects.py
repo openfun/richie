@@ -5,6 +5,7 @@ from unittest import mock
 
 from django.conf import settings
 from django.test import TestCase
+
 from elasticsearch.exceptions import NotFoundError
 from rest_framework.test import APIRequestFactory
 
