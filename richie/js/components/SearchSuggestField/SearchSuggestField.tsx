@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as Autosuggest from 'react-autosuggest';
+import Autosuggest from 'react-autosuggest';
 
 import {
   SearchSuggestion,

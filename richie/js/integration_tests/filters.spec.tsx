@@ -1,7 +1,7 @@
 import '../testSetup.spec';
 
 import { mount, ReactWrapper } from 'enzyme';
-import * as fetchMock from 'fetch-mock';
+import fetchMock from 'fetch-mock';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider, Store } from 'react-redux';
