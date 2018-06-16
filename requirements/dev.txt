@@ -1,7 +1,7 @@
 -r base.txt
 
 black==18.6b2
-Faker==0.8.15
+Faker==0.8.16
 factory-boy[django]==2.11.1
 flake8==3.5.0
 ipdb==0.11
