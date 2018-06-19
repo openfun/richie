@@ -257,17 +257,27 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
 
     CMS_PLACEHOLDER_CONF = {
         "courses/cms/course_detail.html course_video": {
-            "plugins": ("VideoPlayerPlugin",),
-            "limits": {"VideoPlayerPlugin": 1},
             "name": _("Course teaser"),
+            "plugins": ["VideoPlayerPlugin"],
+            "limits": {"VideoPlayerPlugin": 1},
         },
         "courses/cms/course_detail.html course_syllabus": {  # all plugins allowed
             "name": _("Course Syllabus")
         },
-        "person/cms/person_detail.html portrait": {
-            "plugins": ("ImagePlugin",),
+        "courses/cms/organization_detail.html banner": {
+            "name": _("Banner"),
+            "plugins": ["ImagePlugin"],
             "limits": {"ImagePlugin": 1},
+        },
+        "courses/cms/organization_detail.html description": {
+            "name": _("Description"),
+            "plugins": ["TextPlugin"],
+            "limits": {"TextPlugin": 1},
+        },
+        "person/cms/person_detail.html portrait": {
             "name": _("Portrait"),
+            "plugins": ["ImagePlugin"],
+            "limits": {"ImagePlugin": 1},
         },
         "person/cms/person_detail.html resume": {"name": _("Resume")},
     }
