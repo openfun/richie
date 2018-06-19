@@ -29,7 +29,7 @@
     "@types/fetch-mock": "6.0.3",
     "@types/jasmine": "2.8.8",
     "@types/lodash-es": "4.17.0",
-    "@types/query-string": "5.1.0",
+    "@types/query-string": "6.1.0",
     "@types/react": "16.3.18",
     "@types/react-autosuggest": "9.3.4",
     "@types/react-dom": "16.0.6",
