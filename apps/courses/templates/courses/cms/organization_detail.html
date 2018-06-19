@@ -4,17 +4,25 @@
 {% block content %}
 <div class="organization-detail">
 
-  <h1 class="organization-detail__title">{{ current_page.get_title }}</h1>
-
   {% with current_page.organization as organization %}
 
     {% if organization.logo %}
-      <img
-        src="{{ organization.logo.url }}"
-        alt="{% blocktrans with title=current_page.get_title|capfirst %}{{ title }} logo{% endblocktrans %}">
+      <div class="organization-detail__logo">
+        <img
+          src="{{ organization.logo.url }}"
+          alt="{% blocktrans with title=current_page.get_title|capfirst %}{{ title }} logo{% endblocktrans %}">
+      </div>
     {% endif %}
 
-    {% placeholder "maincontent" %}
+    <div class="organization-detail__banner">
+      {% placeholder "banner" %}
+    </div>
+
+    <h1 class="organization-detail__title">{{ current_page.get_title }}</h1>
+
+    <div class="organization-detail__description">
+      {% placeholder "description" %}
+    </div>
 
     <ul class="organization-detail__courses">
       {% for course in organization.courses.all %}

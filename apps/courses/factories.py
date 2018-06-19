@@ -96,9 +96,9 @@ class OrganizationFactory(factory.django.DjangoModelFactory):
         """
         if create and extracted:
             language = settings.LANGUAGE_CODE
-            placeholder = self.extended_object.placeholders.get(slot="maincontent")
 
             # Add a banner with a random image
+            placeholder = self.extended_object.placeholders.get(slot="banner")
             banner_file = file_getter("banner")()
             wrapped_banner = File(banner_file, banner_file.name)
             banner = Image.objects.create(file=wrapped_banner)
@@ -111,6 +111,7 @@ class OrganizationFactory(factory.django.DjangoModelFactory):
             )
 
             # Add a text plugin with a long random description
+            placeholder = self.extended_object.placeholders.get(slot="description")
             nb_paragraphs = random.randint(2, 4)
             paragraphs = [
                 factory.Faker("text", max_nb_chars=random.randint(200, 1000)).generate(
