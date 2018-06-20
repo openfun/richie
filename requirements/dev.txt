@@ -10,7 +10,7 @@ ipython-genutils==0.2.0
 isort==4.3.4
 pylint==1.9.2
 pylint-django==0.11.1
-pytest==3.6.1
+pytest==3.6.2
 pytest-cov==2.5.1
 pytest-django==3.3.0
 responses==0.9.0
