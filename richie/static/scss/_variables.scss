@@ -1,2 +1,9 @@
+@import "../../../node_modules/bootstrap/scss/functions";
+@import "../../../node_modules/bootstrap/scss/variables";
+
 // Smaller gutters in grid to increase information density in search results
 $grid-gutter-width: 20px;
+
+// Light gray default background for the body so containers can be enhanced as page structuring elements
+$body-bg: $light;
+/* local */$container-bg: white;
