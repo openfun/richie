@@ -105,7 +105,7 @@ from our [handbook](https://openfun.gitbooks.io/handbook/content).
 
 ### Checking your code
 
-We use strict flake8, pylint and black linters to check the validity of our backend code:
+We use strict flake8, pylint, isort and black linters to check the validity of our backend code:
 
     $ make lint-back
 
