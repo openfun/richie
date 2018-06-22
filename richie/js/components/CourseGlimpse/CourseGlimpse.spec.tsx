@@ -18,7 +18,7 @@ describe('components/CourseGlimpse', () => {
       name: 'Some Organization',
     } as Organization;
     const wrapper = render(
-      <CourseGlimpse course={course} organization={organization} />,
+      <CourseGlimpse course={course} organizationMain={organization} />,
     );
 
     expect(wrapper.html()).toContain('Course 42');

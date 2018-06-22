@@ -9,6 +9,7 @@ describe('components/CourseGlimpseContainer', () => {
     enrollment_start_date: '2018-02-01T06:00:00.000Z',
     id: 43,
     language: 'fr',
+    organization_main: 23,
     organizations: [23, 31],
     session_number: 1,
     short_description: 'Lorem ipsum dolor sit amet consectetur adipiscim elit.',
@@ -41,17 +42,17 @@ describe('components/CourseGlimpseContainer', () => {
     };
 
     expect(mapStateToProps(state, { course: course43 })).toEqual({
-      organization: org23,
+      organizationMain: org23,
     });
   });
 
   it('mergeProps takes the organization from mapState and the course from ownProps', () => {
-    const stateProps = { organization: org23 };
+    const stateProps = { organizationMain: org23 };
     const ownProps = { course: course43 };
 
     expect(mergeProps(stateProps, null, ownProps)).toEqual({
       course: course43,
-      organization: org23,
+      organizationMain: org23,
     });
   });
 });

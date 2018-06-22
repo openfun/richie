@@ -7,11 +7,11 @@ import { Nullable } from '../../utils/types';
 
 export interface CourseGlimpseProps {
   course: Course;
-  organization: Nullable<Organization>;
+  organizationMain: Nullable<Organization>;
 }
 
 export const CourseGlimpse = (props: CourseGlimpseProps) => {
-  const { course, organization } = props;
+  const { course, organizationMain } = props;
 
   return (
     <div className="course-glimpse-container">
@@ -24,7 +24,7 @@ export const CourseGlimpse = (props: CourseGlimpseProps) => {
         <div className="course-glimpse__body">
           <div className="course-glimpse__body__title">{course.title}</div>
           <div className="course-glimpse__body__org">
-            {(organization && organization.name) || ''}
+            {(organizationMain && organizationMain.name) || ''}
           </div>
         </div>
         <div className="course-glimpse__date">

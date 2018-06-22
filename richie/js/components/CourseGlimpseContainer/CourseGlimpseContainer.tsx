@@ -16,21 +16,23 @@ export const mapStateToProps = (
   ownProps: CourseGlimpseContainerProps,
 ) => {
   return {
-    organization:
+    organizationMain:
       (state.resources.organizations &&
-        state.resources.organizations.byId[ownProps.course.organizations[0]]) ||
+        state.resources.organizations.byId[
+          ownProps.course.organization_main
+        ]) ||
       null,
   };
 };
 
 export const mergeProps = (
-  stateProps: Pick<CourseGlimpseProps, 'organization'>,
+  stateProps: Pick<CourseGlimpseProps, 'organizationMain'>,
   dispatchProps: null,
   ownProps: CourseGlimpseContainerProps,
 ): CourseGlimpseProps => {
-  const { organization, ...restState } = stateProps;
+  const { organizationMain, ...restState } = stateProps;
   const { course, ...restOwn } = ownProps;
-  return { course, organization };
+  return { course, organizationMain };
 };
 
 export const CourseGlimpseContainer = connect(

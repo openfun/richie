@@ -58,6 +58,7 @@ class CoursesIndexer:
                         "enrollment_end_date": course["enrollment_end_date"],
                         "enrollment_start_date": course["enrollment_start_date"],
                         "language": course["language"],
+                        "organization_main": course["main_university"]["id"],
                         "organizations": [org["id"] for org in course["universities"]],
                         "session_number": course["session_number"],
                         "short_description": {
@@ -83,6 +84,7 @@ class CoursesIndexer:
             "enrollment_start_date": es_course["_source"]["enrollment_start_date"],
             "id": es_course["_id"],
             "language": es_course["_source"]["language"],
+            "organization_main": es_course["_source"]["organization_main"],
             "organizations": es_course["_source"]["organizations"],
             "session_number": es_course["_source"]["session_number"],
             "short_description": get_best_field_language(

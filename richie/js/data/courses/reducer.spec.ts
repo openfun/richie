@@ -7,6 +7,7 @@ describe('data/courses reducer', () => {
     enrollment_start_date: '2018-02-01T06:00:00.000Z',
     id: 43,
     language: 'fr',
+    organization_main: 23,
     organizations: [23, 31],
     session_number: 1,
     short_description: 'Lorem ipsum dolor sit amet consectetur adipiscim elit.',
@@ -27,6 +28,7 @@ describe('data/courses reducer', () => {
     enrollment_start_date: '2018-02-01T06:00:00.000Z',
     id: 44,
     language: 'fr',
+    organization_main: 11,
     organizations: [11],
     session_number: 1,
     short_description:

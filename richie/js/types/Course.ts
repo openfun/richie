@@ -7,6 +7,7 @@ export interface Course extends Resource {
   enrollment_end_date: string;
   enrollment_start_date: string;
   language: string;
+  organization_main: number;
   organizations: number[];
   session_number: number;
   short_description: string;
