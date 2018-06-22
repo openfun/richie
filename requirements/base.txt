@@ -26,7 +26,7 @@ djangocms-video==2.0.4
 djangocms-picture==2.0.6
 djangorestframework==3.8.2
 easy-thumbnails==2.5
-elasticsearch==6.2.0
+elasticsearch==6.3.0
 gunicorn==19.8.1
 lxml==4.2.1
 pexpect==4.6.0
