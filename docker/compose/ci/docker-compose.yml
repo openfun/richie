@@ -12,7 +12,7 @@ services:
   #
   # [1] https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#_notes_for_production_use_and_defaults
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.1.2
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.3.0
     ulimits:
       memlock:
         soft: -1
