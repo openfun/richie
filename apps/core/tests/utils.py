@@ -1,5 +1,5 @@
 """
-Usefull stuff for unittest
+Useful stuff for testing
 """
 import io
 import os
@@ -8,7 +8,7 @@ import random
 
 def file_getter(basedir, image_type):
     """
-    This function can be passed to factory boy's ImageField to dynamically generate
+    This function can be passed to factory boy ImageField to dynamically generate
     image fields.
 
     It randomly pick up an image from targeted directory (base dir + 'fixtures' dir +

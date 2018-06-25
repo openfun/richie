@@ -61,9 +61,11 @@ class PersonFactory(factory.django.DjangoModelFactory):
     # pylint: disable=unused-argument
     def with_content(self, create, extracted, **kwargs):
         """
-        Add content plugins displayed in the "maincontent" placeholder of the organization page:
+        Add content plugins displayed in the "maincontent" placeholder of the person
+        page:
+
         - Picture plugin featuring a random portrait image,
-        - Text plugin featuring a long random description.
+        - Text plugin featuring the person resume with a random long text.
         """
         if create and extracted:
             language = settings.LANGUAGE_CODE
@@ -84,7 +86,7 @@ class PersonFactory(factory.django.DjangoModelFactory):
                 attributes={"alt": "portrait image"},
             )
 
-            # Add a text plugin with a long random description
+            # Add a text plugin for resume with a long random text
             nb_paragraphs = random.randint(2, 4)
             paragraphs = [
                 factory.Faker("text", max_nb_chars=random.randint(200, 1000)).generate(

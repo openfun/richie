@@ -16,7 +16,12 @@ from cms.test_utils.testcases import CMSTestCase
 from apps.courses.factories import OrganizationFactory
 from apps.persons.factories import PersonFactory
 
-from ..management.commands.create_demo_site import create_demo_site
+from ..management.commands.create_demo_site import (
+    NB_ORGANIZATIONS,
+    NB_PERSONS,
+    PAGE_INFOS,
+    create_demo_site,
+)
 
 
 class CreateCmsDataTests(CMSTestCase):
@@ -53,16 +58,18 @@ class CreateCmsDataTests(CMSTestCase):
         Calling the `create_demo_site` function should trigger creating root i18n pages and
         organizations below the related page
         """
-        # Let the mock return a number instead of the page so we can easily reference them below
-        mock_page.side_effect = [Page(id=i) for i in range(8)]
+        root_pages_length = len(PAGE_INFOS)
+
+        # Mock returns a dummy page
+        mock_page.side_effect = [Page(id=i) for i in range(root_pages_length)]
 
         # Call the method and check its effects in what follows
         create_demo_site()
 
         # Check that the number of pages created is as expected
-        self.assertEqual(mock_page.call_count, 8)
-        self.assertEqual(mock_organization.call_count, 8)
-        self.assertEqual(mock_person.call_count, 10)
+        self.assertEqual(mock_page.call_count, root_pages_length)
+        self.assertEqual(mock_organization.call_count, NB_ORGANIZATIONS)
+        self.assertEqual(mock_person.call_count, NB_PERSONS)
 
         # Check that the calls to create the root pages are triggered as expected
         site = Site.objects.get()
@@ -152,14 +159,16 @@ class CreateCmsDataTests(CMSTestCase):
                 },
             ),
         ]
-        self.assertEqual(mock_page.call_args_list[:8], expected_calls_for_root_pages)
+        self.assertEqual(
+            mock_page.call_args_list[:root_pages_length], expected_calls_for_root_pages
+        )
 
         # Check that the calls to create organizations and persons were triggered as
         # expected
-        self.assertEqual(mock_organization.call_count, 8)
-        self.assertEqual(mock_person.call_count, 10)
+        self.assertEqual(mock_organization.call_count, NB_ORGANIZATIONS)
+        self.assertEqual(mock_person.call_count, NB_PERSONS)
 
-        for i, actual_call in enumerate(mock_page.call_args_list[8:]):
+        for i, actual_call in enumerate(mock_page.call_args_list[root_pages_length:]):
             expected_call = (
                 (
                     {
