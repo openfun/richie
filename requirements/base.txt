@@ -28,7 +28,7 @@ djangorestframework==3.8.2
 easy-thumbnails==2.5
 elasticsearch==6.3.0
 gunicorn==19.8.1
-lxml==4.2.1
+lxml==4.2.2
 pexpect==4.6.0
 pickleshare==0.7.4
 Pillow==5.1.0
