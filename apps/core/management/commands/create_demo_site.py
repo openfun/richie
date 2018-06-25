@@ -6,11 +6,13 @@ import logging
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.management.base import BaseCommand, CommandError
+from django.utils import translation
 
 from cms import models as cms_models
 
 from apps.courses.factories import OrganizationFactory
 from apps.courses.models import Course, Organization, Subject
+from apps.persons.factories import PersonFactory
 from apps.persons.models import Person
 
 from ...helpers import create_i18n_page
@@ -18,6 +20,7 @@ from ...helpers import create_i18n_page
 logger = logging.getLogger("richie.commands.core.create_demo_site")
 
 NB_ORGANIZATIONS = 8
+NB_PERSONS = 10
 PAGE_INFOS = {
     "home": {
         "content": {"en": "Home", "fr": "Accueil"},
@@ -73,7 +76,7 @@ PAGE_INFOS = {
 # methods over querysets: Instance of 'list' has no 'delete' member (no-member).
 # We choose to ignore this false positive warning.
 def clear_cms_data():
-    """Clear all CMS data (CMS models + organizations)"""
+    """Clear all CMS data (CMS models + apps models)"""
 
     cms_models.Page.objects.all().delete()
     cms_models.Title.objects.all().delete()
@@ -82,6 +85,7 @@ def clear_cms_data():
     Course.objects.all().delete()
     Organization.objects.all().delete()
     Subject.objects.all().delete()
+    Person.objects.all().delete()
 
 
 def create_demo_site():
@@ -109,6 +113,15 @@ def create_demo_site():
     # Create organizations under the `organizations` page
     OrganizationFactory.create_batch(
         NB_ORGANIZATIONS, parent=pages_created["organizations"], with_content=True
+    )
+
+    # Django parler require a language to be manually set when working out of
+    # request/response flow and PersonTitle use 'parler'
+    translation.activate(settings.LANGUAGE_CODE)
+
+    # Create persons under the `persons` page
+    PersonFactory.create_batch(
+        NB_PERSONS, parent=pages_created["persons"], with_content=True
     )
 
 

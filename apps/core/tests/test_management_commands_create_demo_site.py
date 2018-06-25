@@ -10,9 +10,11 @@ from django.core.management import call_command
 from django.core.management.base import CommandError
 from django.test.utils import override_settings
 
+from cms.models import Page
 from cms.test_utils.testcases import CMSTestCase
 
 from apps.courses.factories import OrganizationFactory
+from apps.persons.factories import PersonFactory
 
 from ..management.commands.create_demo_site import create_demo_site
 
@@ -43,15 +45,16 @@ class CreateCmsDataTests(CMSTestCase):
         mock_create.assert_called_once_with()
         mock_logger.assert_called_once_with("done")
 
+    @mock.patch.object(PersonFactory, "create")
     @mock.patch.object(OrganizationFactory, "create")
     @mock.patch("apps.core.management.commands.create_demo_site.create_i18n_page")
-    def test_command_create_demo_site(self, mock_page, mock_organization):
+    def test_command_create_demo_site(self, mock_page, mock_organization, mock_person):
         """
         Calling the `create_demo_site` function should trigger creating root i18n pages and
         organizations below the related page
         """
         # Let the mock return a number instead of the page so we can easily reference them below
-        mock_page.side_effect = range(8 + 8)
+        mock_page.side_effect = [Page(id=i) for i in range(8)]
 
         # Call the method and check its effects in what follows
         create_demo_site()
@@ -59,6 +62,7 @@ class CreateCmsDataTests(CMSTestCase):
         # Check that the number of pages created is as expected
         self.assertEqual(mock_page.call_count, 8)
         self.assertEqual(mock_organization.call_count, 8)
+        self.assertEqual(mock_person.call_count, 10)
 
         # Check that the calls to create the root pages are triggered as expected
         site = Site.objects.get()
@@ -150,8 +154,10 @@ class CreateCmsDataTests(CMSTestCase):
         ]
         self.assertEqual(mock_page.call_args_list[:8], expected_calls_for_root_pages)
 
-        # Check that the calls to create the organizations were triggered as expected
+        # Check that the calls to create organizations and persons were triggered as
+        # expected
         self.assertEqual(mock_organization.call_count, 8)
+        self.assertEqual(mock_person.call_count, 10)
 
         for i, actual_call in enumerate(mock_page.call_args_list[8:]):
             expected_call = (
