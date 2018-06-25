@@ -15,12 +15,12 @@ class CourseTestCase(TestCase):
     Unit test suite to validate the behavior of the Course model
     """
 
-    def test_course_fields_main_organization_required(self):
+    def test_course_fields_organization_main_required(self):
         """
-        The `main_organization` field should be required
+        The `organization_main` field should be required
         """
         with self.assertRaises(ValidationError) as context:
-            CourseFactory(main_organization=None)
+            CourseFactory(organization_main=None)
         self.assertEqual(context.exception.messages[0], "This field cannot be null.")
 
     def test_course_fields_active_session_required(self):
@@ -64,26 +64,26 @@ class CourseTestCase(TestCase):
             Course.objects.filter(active_session="the-unique-key").count(), 2
         )
 
-    def test_course_main_organization_always_included_in_organizations(self):
+    def test_course_organization_main_always_included_in_organizations(self):
         """
         The main organization should always be in the organizations linked via many-to-many
         """
         organization1, organization2 = OrganizationFactory.create_batch(2)
-        course = CourseFactory(main_organization=organization1)
+        course = CourseFactory(organization_main=organization1)
         self.assertEqual(list(course.organizations.all()), [organization1])
 
         # Now set the second organization as the main
-        course.main_organization = organization2
+        course.organization_main = organization2
         course.save()
-        self.assertEqual(course.main_organization, organization2)
+        self.assertEqual(course.organization_main, organization2)
         self.assertEqual(
             list(course.organizations.all()), [organization1, organization2]
         )
 
         # Setting an organization that is already included as many-to-many should not fail
-        course.main_organization = organization1
+        course.organization_main = organization1
         course.save()
-        self.assertEqual(course.main_organization, organization1)
+        self.assertEqual(course.organization_main, organization1)
         self.assertEqual(
             list(course.organizations.all()), [organization1, organization2]
         )
@@ -127,19 +127,19 @@ class CourseTestCase(TestCase):
         published_course = Course.objects.get(extended_object__publisher_is_draft=False)
         self.assertEqual(
             set(published_course.organizations.all()),
-            {organization1, organization2, course.main_organization},
+            {organization1, organization2, course.organization_main},
         )
         # When publishing, the organizations that are obsolete should be cleared
         course.organizations.remove(organization2)
         self.assertEqual(
             set(published_course.organizations.all()),
-            {organization1, organization2, course.main_organization},
+            {organization1, organization2, course.organization_main},
         )
         # Organizations on the published course are only cleared after publishing the draft page
         course.extended_object.publish("en")
         self.assertEqual(
             set(published_course.organizations.all()),
-            {organization1, course.main_organization},
+            {organization1, course.organization_main},
         )
 
     def test_course_subjects_copied_when_publishing(self):

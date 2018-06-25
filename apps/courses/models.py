@@ -109,7 +109,7 @@ class Course(PageExtension):
         null=True,
         db_index=True,
     )
-    main_organization = models.ForeignKey(
+    organization_main = models.ForeignKey(
         "Organization",
         related_name="main_courses",
         limit_choices_to={"extended_object__publisher_is_draft": True},
@@ -188,7 +188,7 @@ class Course(PageExtension):
 
         if self.pk:
             # pylint: disable=no-member
-            self.organizations.add(self.main_organization)
+            self.organizations.add(self.organization_main)
 
 
 class Subject(PageExtension):

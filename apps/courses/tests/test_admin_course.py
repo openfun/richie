@@ -18,7 +18,7 @@ class CourseAdminTestCase(CMSTestCase):
     def test_course_list_view(self):
         """
         The admin list view of courses should display their active session, their
-        main_organization and the title of the related page
+        organization_main and the title of the related page
         """
         user = UserFactory(is_staff=True, is_superuser=True)
         self.client.login(username=user.username, password="password")
@@ -35,7 +35,7 @@ class CourseAdminTestCase(CMSTestCase):
             response, course.extended_object.get_title(), status_code=200
         )
         self.assertContains(
-            response, course.main_organization.extended_object.get_title()
+            response, course.organization_main.extended_object.get_title()
         )
         self.assertContains(response, course.active_session)
 
@@ -51,7 +51,7 @@ class CourseAdminTestCase(CMSTestCase):
         response = self.client.get(url, follow=True)
 
         # Check that the page includes all our editable fields
-        for field in ["active_session", "main_organization"]:
+        for field in ["active_session", "organization_main"]:
             self.assertContains(response, "id_{:s}".format(field))
 
     def test_course_change_view_get(self):
@@ -86,7 +86,7 @@ class CourseAdminTestCase(CMSTestCase):
         )
         self.assertContains(response, course.active_session)
         self.assertContains(
-            response, course.main_organization.extended_object.get_title()
+            response, course.organization_main.extended_object.get_title()
         )
         # Only the draft organization and subject should be proposed as options in select boxes
         self.assertContains(
@@ -127,7 +127,7 @@ class CourseAdminTestCase(CMSTestCase):
             with_organizations=[organization1], with_subjects=[subject1]
         )
         self.assertEqual(
-            set(course.organizations.all()), {organization1, course.main_organization}
+            set(course.organizations.all()), {organization1, course.organization_main}
         )
         self.assertEqual(set(course.subjects.all()), {subject1})
 
@@ -135,7 +135,7 @@ class CourseAdminTestCase(CMSTestCase):
         url = reverse("admin:courses_course_change", args=[course.id])
         data = {
             "active_session": "xyz",
-            "main_organization": organization2.id,
+            "organization_main": organization2.id,
             "organizations": [organization3.id],
             "subjects": [subject2.id],
         }
@@ -145,7 +145,7 @@ class CourseAdminTestCase(CMSTestCase):
         # Check that the course was updated as expected
         course.refresh_from_db()
         self.assertEqual(course.active_session, "xyz")
-        self.assertEqual(course.main_organization, organization2)
+        self.assertEqual(course.organization_main, organization2)
         self.assertEqual(set(course.subjects.all()), {subject2})
         # Check that the main organization was added and the old organization cleared
         self.assertEqual(

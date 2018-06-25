@@ -11,7 +11,7 @@ from .models import Course, Organization
 class CourseAdmin(PageExtensionAdmin):
     """Admin class for the Course model"""
 
-    list_display = ["title", "main_organization", "active_session"]
+    list_display = ["title", "organization_main", "active_session"]
 
     # pylint: disable=no-self-use
     def title(self, obj):
@@ -30,7 +30,7 @@ class CourseAdmin(PageExtensionAdmin):
         the `organizations` many-to-many field and make sure it includes the main organization.
         """
         super().save_related(request, form, formsets, change)
-        form.instance.organizations.add(form.instance.main_organization)
+        form.instance.organizations.add(form.instance.organization_main)
 
 
 class OrganizationAdmin(PageExtensionAdmin):

@@ -60,7 +60,7 @@ class CourseWizardForm(BaseWizardForm):
         page = super().save()
         Course.objects.create(
             extended_object=page,
-            main_organization=self.cleaned_data["organization"],
+            organization_main=self.cleaned_data["organization"],
             active_session=self.cleaned_data["active_session"],
         )
         return page

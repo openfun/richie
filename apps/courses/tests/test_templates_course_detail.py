@@ -22,7 +22,7 @@ class CourseCMSTestCase(TestCase):
         )
         subject1, subject2, subject3 = SubjectFactory.create_batch(3)
         course = CourseFactory(
-            main_organization=organization1,
+            organization_main=organization1,
             title="Very interesting course",
             with_organizations=[organization1, organization2, organization3],
             with_subjects=[subject1, subject2, subject3],
@@ -96,7 +96,7 @@ class CourseCMSTestCase(TestCase):
             3
         )
         course = CourseFactory(
-            main_organization=organization1,
+            organization_main=organization1,
             title="Very interesting course",
             with_organizations=[organization1, organization2, organization3],
             with_subjects=[subject1, subject2, subject3],

@@ -68,8 +68,8 @@ class CourseCMSWizardTestCase(CMSTestCase):
         # The slug should have been automatically set
         self.assertEqual(page.get_slug(), "my-title")
 
-        # The "active_session" and "main_organization" fields should be set
-        self.assertEqual(course.main_organization, organization)
+        # The "active_session" and "organization_main" fields should be set
+        self.assertEqual(course.organization_main, organization)
         self.assertEqual(course.active_session, "course-key")
 
     def test_course_wizard_submit_form_max_lengths(self):

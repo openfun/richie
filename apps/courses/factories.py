@@ -154,14 +154,14 @@ class CourseFactory(factory.django.DjangoModelFactory):
     active_session = factory.LazyAttribute(
         lambda o: "{version}:{organization_code}+{number}+{session}".format(
             version=o.version,
-            organization_code=o.main_organization.code
-            if o.main_organization
+            organization_code=o.organization_main.code
+            if o.organization_main
             else "xyz",
             number=o.number,
             session=o.session,
         )
     )
-    main_organization = factory.SubFactory(OrganizationFactory)
+    organization_main = factory.SubFactory(OrganizationFactory)
 
     @factory.lazy_attribute
     def extended_object(self):
