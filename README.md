@@ -1,7 +1,5 @@
 # Richie, a FUN CMS for Open edX
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/openfun/richie.svg)](https://greenkeeper.io/)
-
 [![CircleCI](https://circleci.com/gh/openfun/richie/tree/master.svg?style=svg)](https://circleci.com/gh/openfun/richie/tree/master)
 
 ## Overview

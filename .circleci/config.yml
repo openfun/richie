@@ -470,39 +470,6 @@ jobs:
             docker push fundocker/richie:${DOCKER_TAG}-alpine-dev
 
   # ---- Front-end jobs ----
-  # Generate an up-to-date yarn.lock file (sync with package.json) and commit
-  # the new lockfile to the current PR. The new yarn.lock file is persisted to
-  # the workspace.
-  lockfile-front:
-    docker:
-      - image: circleci/node:9-browsers
-    working_directory: ~/richie
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-          - v3-front-dependencies-{{ checksum "package.json" }}
-          - v3-front-dependencies-
-      # Install Greenkeeper-lockfile (if it is not in the restored cached)
-      # without updating the lockfile; we just need the
-      # greenkeeper-lockfile-update tool installed and prevent any potentially
-      # conflicting updates of the yarn.lock file.
-      - run:
-          name: Install Greenkeeper-lockfile
-          command: |
-            if ! yarn greenkeeper-lockfile-update; then
-              yarn install --no-lockfile
-            fi
-      - run:
-          name: Update yarn.lock
-          command: |
-            yarn greenkeeper-lockfile-update && \
-              yarn greenkeeper-lockfile-upload
-      - persist_to_workspace:
-          root: ~/richie
-          paths:
-            - yarn.lock
-
   build-front:
     docker:
       - image: circleci/node:9-browsers
@@ -513,8 +480,7 @@ jobs:
           keys:
           - v3-front-dependencies-{{ checksum "package.json" }}
           - v3-front-dependencies-
-      # Copy an up-to-date yarn.lock file (if updated, see the lockfile-front
-      # job).
+      # Copy an up-to-date yarn.lock file
       - attach_workspace:
           at: ~/richie
       # If the yarn.lock file is not up-to-date with the package.json file,
@@ -580,18 +546,7 @@ workflows:
       # Front-end jobs
       #
       # Build, lint and test the front-end apps
-      #
-      # NOTA BENE: the lockfile-front job SHOULD be the first job to run in the
-      # CI or else it will refuse to update the yarn.lock file. As a
-      # consequence, every first job of a workflow MUST require the
-      # "lockfile-front" job.
-      - lockfile-front:
-          filters:
-            tags:
-              only: /.*/
       - build-front:
-          requires:
-            - lockfile-front
           filters:
             tags:
               only: /.*/
@@ -618,8 +573,6 @@ workflows:
       #
       # Check validity of git history
       - lint-git:
-          requires:
-            - lockfile-front
           filters:
             tags:
               only: /.*/
@@ -629,8 +582,6 @@ workflows:
       # Build, lint and test production and development Docker images
       # (debian-based)
       - build:
-          requires:
-            - lockfile-front
           filters:
             tags:
               only: /.*/
@@ -675,8 +626,6 @@ workflows:
       #
       # Build and run tests in alpine based images
       - build-alpine:
-          requires:
-            - lockfile-front
           filters:
             tags:
               only: /.*/
