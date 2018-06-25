@@ -20,7 +20,7 @@ class PersonFactoryTestCase(TestCase):
         """
         person = PersonFactory(with_content=True)
 
-        # The banner plugin should point to one of our fixtures images
+        # The portrait plugin should point to one of our fixtures images
         portrait_placeholder = person.extended_object.placeholders.get(slot="portrait")
         portrait_plugin = portrait_placeholder.cmsplugin_set.get(
             plugin_type="PicturePlugin"
@@ -32,7 +32,7 @@ class PersonFactoryTestCase(TestCase):
             ),
         )
 
-        # The description plugin should contain paragraphs
+        # The resume plugin should contain paragraphs
         resume_placeholder = person.extended_object.placeholders.get(slot="resume")
         resume_plugin = resume_placeholder.cmsplugin_set.get(plugin_type="TextPlugin")
         self.assertIn("<p>", resume_plugin.djangocms_text_ckeditor_text.body)
