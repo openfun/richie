@@ -61,8 +61,8 @@ class PersonFactory(factory.django.DjangoModelFactory):
     # pylint: disable=unused-argument
     def with_content(self, create, extracted, **kwargs):
         """
-        Add content plugins displayed in the "maincontent" placeholder of the person
-        page:
+        Add content plugins displayed in the "portrait" and "resume" placeholder
+        of the person page:
 
         - Picture plugin featuring a random portrait image,
         - Text plugin featuring the person resume with a random long text.
