@@ -82,6 +82,14 @@ class PersonPluginTestCase(TestCase):
         self.assertContains(response, image.file.name)
         # Short resume should be present
         self.assertContains(response, "A short resume")
+        # The person's full name should be wrapped in a h2
+        self.assertContains(
+            response,
+            '<h2 class="person-plugin__body__title">{:s}</h2>'.format(
+                person.get_full_name()
+            ),
+            html=True,
+        )
 
         # Same checks in French
         url = page.get_absolute_url(language="fr")

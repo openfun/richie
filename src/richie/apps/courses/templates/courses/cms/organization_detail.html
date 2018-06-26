@@ -4,7 +4,7 @@
 {% block content %}
 <div class="organization-detail">
 
-  {% with current_page.organization as organization %}
+  {% with organization=current_page.organization header_level=2 %}
 
     <div class="organization-detail__banner">
       {% placeholder "banner" %}
@@ -52,7 +52,6 @@
         {% endfor %}
       </ul>
     </div>
-
   {% endwith %}
 
 </div>

@@ -3,11 +3,13 @@
 
     <h1 class="person-detail__title">{{ current_page.get_title }}</h1>
 
-    {% placeholder "portrait" %}
+    {% with header_level=2 %}
+      {% placeholder "portrait" %}
 
-    {% placeholder "resume" %}
+      {% placeholder "resume" %}
 
-    {% placeholder "maincontent" %}
+      {% placeholder "maincontent" %}
+    {% endwith %}
 
 </div>
 {% endblock content %}
