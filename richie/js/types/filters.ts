@@ -1,4 +1,4 @@
-export type hardcodedFilterGroupName = 'language' | 'new' | 'status';
+export type hardcodedFilterGroupName = 'availability' | 'language' | 'new';
 
 export type resourceBasedFilterGroupName = 'organizations' | 'subjects';
 

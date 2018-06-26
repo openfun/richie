@@ -11,6 +11,7 @@ describe('utils/filters/getFilterFromState', () => {
   it('returns a FilterDefinition for a hardcoded filter group', () => {
     const state = {
       filterDefinitions: {
+        availability: {} as FilterDefinitionWithValues,
         language: {} as FilterDefinitionWithValues,
         new: {
           humanName: 'New courses',
@@ -18,7 +19,6 @@ describe('utils/filters/getFilterFromState', () => {
           values: [{ primaryKey: 'new', humanName: 'First session' }],
         },
         organizations: {} as FilterDefinition,
-        status: {} as FilterDefinitionWithValues,
         subjects: {} as FilterDefinition,
       },
       resources: {},
@@ -33,6 +33,7 @@ describe('utils/filters/getFilterFromState', () => {
   it('builds a filter definition from the facet for a resource-based filter group', () => {
     const state = {
       filterDefinitions: {
+        availability: {} as FilterDefinitionWithValues,
         language: {} as FilterDefinitionWithValues,
         new: {} as FilterDefinitionWithValues,
         organizations: {
@@ -40,7 +41,6 @@ describe('utils/filters/getFilterFromState', () => {
           machineName: 'organizations',
           values: [],
         },
-        status: {} as FilterDefinitionWithValues,
         subjects: {} as FilterDefinition,
       },
       resources: {
@@ -77,6 +77,7 @@ describe('utils/filters/getFilterFromState', () => {
   it('still builds a default filter group when missing a resource-related facet', () => {
     const state = {
       filterDefinitions: {
+        availability: {} as FilterDefinitionWithValues,
         language: {} as FilterDefinitionWithValues,
         new: {} as FilterDefinitionWithValues,
         organizations: {
@@ -84,7 +85,6 @@ describe('utils/filters/getFilterFromState', () => {
           machineName: 'organizations',
           values: [],
         },
-        status: {} as FilterDefinitionWithValues,
         subjects: {} as FilterDefinition,
       },
       resources: {

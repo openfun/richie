@@ -1,6 +1,7 @@
 import get from 'lodash-es/get';
 
-import { API_LIST_DEFAULT_PARAMS as defaultParams } from '../../../settings.json';
+import { Settings } from '../../../settings';
+import settings from '../../../settings.json';
 import {
   APIListCommonRequestParams,
   APIResponseListFacets,
@@ -11,6 +12,8 @@ import {
   ResourceListGet,
   ResourceListGetSuccess,
 } from '../../genericSideEffects/getResourceList/actions';
+
+const { API_LIST_DEFAULT_PARAMS } = settings as Settings;
 
 export const initialState = {};
 
@@ -49,8 +52,8 @@ export function currentQuery<R extends Resource>(
       // Get the limit/offset from our params, set our defaults
       // tslint:disable:trailing-comma // Prettier does not format this syntax properly
       const {
-        limit = defaultParams.limit,
-        offset = defaultParams.offset,
+        limit = API_LIST_DEFAULT_PARAMS.limit,
+        offset = API_LIST_DEFAULT_PARAMS.offset,
         ...restParams
       } = action.params;
 

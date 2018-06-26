@@ -19,16 +19,20 @@ describe('utils/filters/updateFilter', () => {
       dispatch,
       { limit: 13, offset: 3, organizations: [42, 84] },
       'add',
-      { isDrilldown: true, machineName: 'status' } as FilterDefinition,
+      {
+        humanName: 'Availability',
+        isDrilldown: true,
+        machineName: 'availability',
+      } as FilterDefinition,
       'some filter value',
     );
 
     expect(dispatch).toHaveBeenCalledWith({
       params: {
+        availability: 'some filter value',
         limit: 13,
         offset: 3,
         organizations: [42, 84],
-        status: 'some filter value',
       },
       resourceName: 'courses',
       type: 'RESOURCE_LIST_GET',
@@ -38,10 +42,10 @@ describe('utils/filters/updateFilter', () => {
       title: '',
       type: 'HISTORY_PUSH_STATE',
       url: `?${stringify({
+        availability: 'some filter value',
         limit: 13,
         offset: 3,
         organizations: [42, 84],
-        status: 'some filter value',
       })}`,
     });
   });

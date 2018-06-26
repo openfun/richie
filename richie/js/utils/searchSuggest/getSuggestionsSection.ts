@@ -1,17 +1,15 @@
 import take from 'lodash-es/take';
 import { stringify } from 'query-string';
 
-import {
-  API_ENDPOINTS,
-  API_ENDPOINTS_KEYS,
-  API_LIST_DEFAULT_PARAMS,
-} from '../../settings.json';
+import settings from '../../settings.json';
 import { Resource } from '../../types/Resource';
 import {
   SearchSuggestion,
   SearchSuggestionSection,
 } from '../../types/searchSuggest';
 import { handle } from '../../utils/errors/handle';
+
+const { API_ENDPOINTS, API_LIST_DEFAULT_PARAMS } = settings;
 
 // Build a suggestion section from a model name and a title, requesting the relevant
 // values to populate it from the API
