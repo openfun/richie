@@ -7,7 +7,9 @@
   <div class="search-template">
     <h1 class="search-template__title">{% page_attribute "page_title" %}</h1>
     <div class="search-template__content">
-      {% placeholder "content" %}
+      {% with header_level=2 %}
+        {% placeholder "content" %}
+      {% endwith %}
       <div class="fun-react fun-react--search-container"></div>
     </div>
   </div>

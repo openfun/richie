@@ -6,7 +6,7 @@
 
   <h1 class="course-detail__title">{{ current_page.get_title }}</h1>
 
-  {% with current_page.course as course %}
+  {% with course=current_page.course header_level=2 %}
 
     <ul class="course-detail__subjects">
       {% for subject in course.subjects.all %}
@@ -64,11 +64,10 @@
       {% endif %}
     </div>
 
-    {% endwith %}
+    {% placeholder "course_video" %}
 
-  {% placeholder "course_video" %}
-
-  {% placeholder "course_syllabus" %}
+    {% placeholder "course_syllabus" %}
+  {% endwith %}
 
 </div>
 {% endblock content %}
