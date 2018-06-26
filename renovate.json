@@ -1,0 +1,21 @@
+{
+  "commitMessageAction": "update",
+  "commitMessagePrefix": "⬆️(dependencies)",
+  "commitMessageTopic": "{{depName}}",
+  "enabledManagers": ["npm"],
+  "extends": ["config:base"],
+  "packageRules": [
+    {
+      "packagePatterns": ["*"],
+      "groupName": "npm dependencies",
+      "schedule": ["before 7am on monday"]
+    }
+  ],
+  "prConcurrentLimit": 2,
+  "prHourlyLimit": 1,
+  "prCreation": "not-pending",
+  "rebaseStalePrs": true,
+  "semanticCommits": false,
+  "separateMajorMinor": false,
+  "updateNotScheduled": true
+}
