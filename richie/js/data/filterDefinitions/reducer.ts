@@ -1,10 +1,13 @@
+import { Settings } from '../../settings';
+import settings from '../../settings.json';
 import {
   FilterDefinition,
   FilterDefinitionWithValues,
   hardcodedFilterGroupName,
   resourceBasedFilterGroupName,
 } from '../../types/filters';
-import { initialState } from './initialState';
+
+const { FILTERS_HARDCODED, FILTERS_RESOURCES } = settings as Settings;
 
 // Hardcoded filter groups have all their data contained in this slice of state
 type FilterDefinitionStateHardcoded = {
@@ -24,7 +27,7 @@ export type FilterDefinitionState = FilterDefinitionStateHardcoded &
 // This reducer's only job is to set the initial value.
 // It's also useful to to host the typings for its slice of the data.
 export const filterDefinitions = (
-  state: FilterDefinitionState = initialState,
+  state: FilterDefinitionState = { ...FILTERS_HARDCODED, ...FILTERS_RESOURCES },
   action: { type: '' },
 ) => {
   return state;

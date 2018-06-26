@@ -5,17 +5,19 @@ import { Action } from 'redux';
 import { ResourceListStateParams } from '../../data/genericReducers/resourceList/resourceList';
 import { getResourceList } from '../../data/genericSideEffects/getResourceList/actions';
 import { RootState } from '../../data/rootReducer';
-import { API_LIST_DEFAULT_PARAMS as defaultParams } from '../../settings.json';
+import settings from '../../settings.json';
 import { resourceBasedFilterGroupName } from '../../types/filters';
 import { updateFilter } from '../../utils/filters/updateFilter';
 import { SearchSuggestField } from '../SearchSuggestField/SearchSuggestField';
+
+const { API_LIST_DEFAULT_PARAMS } = settings;
 
 export const mapStateToProps = (state: RootState) => ({
   currentParams:
     (state.resources.courses &&
       state.resources.courses.currentQuery &&
       state.resources.courses.currentQuery.params) ||
-    defaultParams,
+    API_LIST_DEFAULT_PARAMS,
   filterDefinitions: state.filterDefinitions,
 });
 
