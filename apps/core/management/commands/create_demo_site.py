@@ -10,7 +10,7 @@ from django.utils import translation
 
 from cms import models as cms_models
 
-from apps.courses.factories import OrganizationFactory
+from apps.courses.factories import OrganizationFactory, SubjectFactory
 from apps.courses.models import Course, Organization, Subject
 from apps.persons.factories import PersonFactory
 from apps.persons.models import Person
@@ -20,6 +20,7 @@ from ...helpers import create_i18n_page
 logger = logging.getLogger("richie.commands.core.create_demo_site")
 
 NB_ORGANIZATIONS = 8
+NB_SUBJECTS = 8
 NB_PERSONS = 10
 PAGE_INFOS = {
     "home": {
@@ -113,6 +114,15 @@ def create_demo_site():
     # Create organizations under the `organizations` page
     OrganizationFactory.create_batch(
         NB_ORGANIZATIONS, parent=pages_created["organizations"], with_content=True
+    )
+
+    # Create subjects under the `subjects` page
+    SubjectFactory.create_batch(
+        NB_SUBJECTS,
+        parent=pages_created["subjects"],
+        fill_banner=True,
+        fill_description=True,
+        fill_logo=True,
     )
 
     # Django parler require a language to be manually set when working out of
