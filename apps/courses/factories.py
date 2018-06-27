@@ -166,8 +166,9 @@ class SubjectFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Subject
-        exclude = ["title"]
+        exclude = ["title", "parent"]
 
+    parent = None
     title = factory.Faker("catch_phrase")
 
     @factory.lazy_attribute
@@ -175,7 +176,78 @@ class SubjectFactory(factory.django.DjangoModelFactory):
         """
         Automatically create a related page with the random title
         """
-        return create_page(self.title, Subject.TEMPLATE_DETAIL, settings.LANGUAGE_CODE)
+        return create_page(
+            self.title,
+            Subject.TEMPLATE_DETAIL,
+            settings.LANGUAGE_CODE,
+            parent=self.parent,
+        )
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def fill_banner(self, create, extracted, **kwargs):
+        """
+        Add a banner with a random image
+        """
+        language = settings.LANGUAGE_CODE
+        banner_placeholder = self.extended_object.placeholders.get(slot="banner")
+
+        banner_file = file_getter(os.path.dirname(__file__), "banner")()
+        wrapped_banner = File(banner_file, banner_file.name)
+        banner = Image.objects.create(file=wrapped_banner)
+
+        add_plugin(
+            language=language,
+            placeholder=banner_placeholder,
+            plugin_type="PicturePlugin",
+            picture=banner,
+            attributes={"alt": "banner image"},
+        )
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def fill_logo(self, create, extracted, **kwargs):
+        """
+        Add a logo with a random image
+        """
+        language = settings.LANGUAGE_CODE
+        logo_placeholder = self.extended_object.placeholders.get(slot="logo")
+
+        logo_file = file_getter(os.path.dirname(__file__), "logo")()
+        wrapped_logo = File(logo_file, logo_file.name)
+        logo = Image.objects.create(file=wrapped_logo)
+        add_plugin(
+            language=language,
+            placeholder=logo_placeholder,
+            plugin_type="PicturePlugin",
+            picture=logo,
+            attributes={"alt": "logo image"},
+        )
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def fill_description(self, create, extracted, **kwargs):
+        """
+        Add a text plugin for description with a long random text
+        """
+        language = settings.LANGUAGE_CODE
+        description_placeholder = self.extended_object.placeholders.get(
+            slot="description"
+        )
+
+        nb_paragraphs = random.randint(2, 4)
+        paragraphs = [
+            factory.Faker("text", max_nb_chars=random.randint(200, 1000)).generate({})
+            for i in range(nb_paragraphs)
+        ]
+        body = ["<p>{:s}</p>".format(p) for p in paragraphs]
+
+        add_plugin(
+            language=language,
+            placeholder=description_placeholder,
+            plugin_type="TextPlugin",
+            body="".join(body),
+        )
 
     @factory.post_generation
     # pylint: disable=unused-argument, attribute-defined-outside-init, no-member

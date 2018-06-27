@@ -13,12 +13,13 @@ from django.test.utils import override_settings
 from cms.models import Page
 from cms.test_utils.testcases import CMSTestCase
 
-from apps.courses.factories import OrganizationFactory
+from apps.courses.factories import OrganizationFactory, SubjectFactory
 from apps.persons.factories import PersonFactory
 
 from ..management.commands.create_demo_site import (
     NB_ORGANIZATIONS,
     NB_PERSONS,
+    NB_SUBJECTS,
     PAGE_INFOS,
     create_demo_site,
 )
@@ -50,13 +51,16 @@ class CreateCmsDataTests(CMSTestCase):
         mock_create.assert_called_once_with()
         mock_logger.assert_called_once_with("done")
 
-    @mock.patch.object(PersonFactory, "create")
     @mock.patch.object(OrganizationFactory, "create")
+    @mock.patch.object(PersonFactory, "create")
+    @mock.patch.object(SubjectFactory, "create")
     @mock.patch("apps.core.management.commands.create_demo_site.create_i18n_page")
-    def test_command_create_demo_site(self, mock_page, mock_organization, mock_person):
+    def test_command_create_demo_site(
+        self, mock_page, mock_organization, mock_person, mock_subject
+    ):
         """
-        Calling the `create_demo_site` function should trigger creating root i18n pages and
-        organizations below the related page
+        Calling the `create_demo_site` function should trigger creating root
+        i18n pages and organizations below the related page
         """
         root_pages_length = len(PAGE_INFOS)
 
@@ -69,6 +73,7 @@ class CreateCmsDataTests(CMSTestCase):
         # Check that the number of pages created is as expected
         self.assertEqual(mock_page.call_count, root_pages_length)
         self.assertEqual(mock_organization.call_count, NB_ORGANIZATIONS)
+        self.assertEqual(mock_subject.call_count, NB_SUBJECTS)
         self.assertEqual(mock_person.call_count, NB_PERSONS)
 
         # Check that the calls to create the root pages are triggered as expected
@@ -166,6 +171,7 @@ class CreateCmsDataTests(CMSTestCase):
         # Check that the calls to create organizations and persons were triggered as
         # expected
         self.assertEqual(mock_organization.call_count, NB_ORGANIZATIONS)
+        self.assertEqual(mock_subject.call_count, NB_SUBJECTS)
         self.assertEqual(mock_person.call_count, NB_PERSONS)
 
         for i, actual_call in enumerate(mock_page.call_args_list[root_pages_length:]):
