@@ -23,7 +23,15 @@
     "url": "https://github.com/openfun/richie/issues"
   },
   "homepage": "https://github.com/openfun/richie#readme",
+  "browserslist": [
+    "last 2 versions",
+    ">1%",
+    "not dead"
+  ],
   "devDependencies": {
+    "@babel/core": "7.0.0-beta.51",
+    "@babel/polyfill": "7.0.0-beta.51",
+    "@babel/preset-env": "7.0.0-beta.51",
     "@types/enzyme": "3.1.9",
     "@types/enzyme-adapter-react-16": "1.0.2",
     "@types/fetch-mock": "6.0.3",
@@ -34,6 +42,7 @@
     "@types/react-autosuggest": "9.3.4",
     "@types/react-dom": "16.0.6",
     "@types/react-redux": "6.0.2",
+    "babel-loader": "8.0.0-beta.4",
     "enzyme": "3.3.0",
     "enzyme-adapter-react-16": "1.1.1",
     "fetch-mock": "6.4.4",
@@ -65,7 +74,6 @@
     "react-dom": "16.4.1",
     "react-redux": "5.0.7",
     "redux": "4.0.0",
-    "redux-saga": "0.16.0",
-    "whatwg-fetch": "2.0.3"
+    "redux-saga": "0.16.0"
   }
 }

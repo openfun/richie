@@ -9,7 +9,7 @@ module.exports = {
 
   // Include whatwg fetch as an entry point (and not an import) as it's replacing (when necessary)
   // a globally available browser-provided function
-  entry: ['whatwg-fetch', './richie/js/index.tsx'],
+  entry: ['./richie/js/index.tsx'],
   output: {
     filename: 'index.js',
     path: __dirname + '/richie/build/js',
@@ -26,7 +26,18 @@ module.exports = {
   module: {
     rules: [
       // All files with a '.ts' or '.tsx' extension will be handled by 'awesome-typescript-loader'.
-      { test: /\.tsx?$/, loader: 'ts-loader' },
+      {
+        test: /\.tsx?$/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              babelrc: true,
+            },
+          },
+          { loader: 'ts-loader' },
+        ],
+      },
       // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
       { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },
     ],
