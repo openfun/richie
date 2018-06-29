@@ -1,7 +1,8 @@
 # Django
-DJANGO_SETTINGS_MODULE=richie.settings
+DJANGO_SETTINGS_MODULE=settings
 DJANGO_CONFIGURATION=Test
 DJANGO_SECRET_KEY=ThisIsAnExampleKeyForTestPurposeOnly
+PYTHONPATH=/app/sandbox
 
 # Database
 POSTGRES_HOST=db
