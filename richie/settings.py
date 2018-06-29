@@ -191,12 +191,12 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         "djangocms_googlemap",
         "djangocms_video",
         "djangocms_picture",
-        # FUN stuff
-        "apps.core",
-        "apps.courses",
-        "apps.persons",
-        "apps.search",
-        "plugins.large_banner",
+        # Richie stuff
+        "richie.apps.core",
+        "richie.apps.courses",
+        "richie.apps.persons",
+        "richie.apps.search",
+        "richie.plugins.large_banner",
         # Third party apps
         "raven.contrib.django.raven_compat",
         "parler",

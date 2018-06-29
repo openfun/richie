@@ -11,8 +11,8 @@ from django.views.static import serve
 
 from cms.sitemaps import CMSSitemap
 
-from apps.search.routes import API_PREFIX
-from apps.search.routes import urlpatterns as search_urlpatterns
+from richie.apps.search.routes import API_PREFIX
+from richie.apps.search.routes import urlpatterns as search_urlpatterns
 
 admin.autodiscover()
 

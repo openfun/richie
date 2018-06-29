@@ -54,7 +54,7 @@ lint-back: ## lint back-end python sources
 
 lint-back-black: ## lint back-end python sources with black
 	@echo 'lint:black started…';
-	@$(COMPOSE_TEST_RUN_APP) black apps plugins richie;
+	@$(COMPOSE_TEST_RUN_APP) black src/richie/apps src/richie/plugins richie;
 .PHONY: lint-back-black
 
 lint-back-flake8: ## lint back-end python sources with flake8
@@ -69,7 +69,7 @@ lint-back-isort: ## automatically re-arrange python imports in back-end code bas
 
 lint-back-pylint: ## lint back-end python sources with pylint
 	@echo 'lint:pylint started…';
-	@$(COMPOSE_TEST_RUN_APP) pylint apps plugins richie;
+	@$(COMPOSE_TEST_RUN_APP) pylint src/richie/apps src/richie/plugins richie;
 .PHONY: lint-back-pylint
 
 lint-front: ## lint TypeScript sources
