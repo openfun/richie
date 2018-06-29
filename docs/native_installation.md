@@ -162,16 +162,16 @@ This will compile all our SCSS files into one bundle and put it in the static fo
 Make sure your database is up-to-date before running the application the first time and after each
 modification to your models:
 
-    python manage.py migrate
+    python sandbox/manage.py migrate
 
 You can create a superuser account:
 
-    python manage.py createsuperuser
+    python sandbox/manage.py createsuperuser
 
 Run the tests
 
-    python manage.py test
+    python sandbox/manage.py test
 
 You should now be able to start Django and view the site at [localhost:8000](http://localhost:8000)
 
-    python manage.py runserver
+    python sandbox/manage.py runserver

@@ -57,7 +57,7 @@ If you need to debug a running container, you can open a Linux shell with the `e
 While developing on `Richie`, you will also need to run a `Django shell` and it has to be done in
 the `app` container:
 
-    $ docker-compose run --rm app python manage.py shell
+    $ docker-compose run --rm app python sandbox/manage.py shell
 
 
 ### Cleanup

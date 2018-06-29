@@ -26,8 +26,8 @@ docs
 
 # Assets
 data
-richie/build
-richie/static/css
+sandbox/build
+sandbox/static/css
 
 # Font-end
 node_modules

@@ -14,7 +14,7 @@ COMPOSE_TEST_RUN_APP = $(COMPOSE_TEST_RUN) app
 YARN                 = $(COMPOSE_RUN_NODE) yarn
 
 # Django
-MANAGE               = $(COMPOSE_RUN_APP) python manage.py
+MANAGE               = $(COMPOSE_RUN_APP) python sandbox/manage.py
 
 default: help
 
@@ -54,7 +54,7 @@ lint-back: ## lint back-end python sources
 
 lint-back-black: ## lint back-end python sources with black
 	@echo 'lint:black started…';
-	@$(COMPOSE_TEST_RUN_APP) black src/richie/apps src/richie/plugins richie;
+	@$(COMPOSE_TEST_RUN_APP) black src/richie/apps src/richie/plugins sandbox;
 .PHONY: lint-back-black
 
 lint-back-flake8: ## lint back-end python sources with flake8
@@ -69,7 +69,7 @@ lint-back-isort: ## automatically re-arrange python imports in back-end code bas
 
 lint-back-pylint: ## lint back-end python sources with pylint
 	@echo 'lint:pylint started…';
-	@$(COMPOSE_TEST_RUN_APP) pylint src/richie/apps src/richie/plugins richie;
+	@$(COMPOSE_TEST_RUN_APP) pylint src/richie/apps src/richie/plugins sandbox;
 .PHONY: lint-back-pylint
 
 lint-front: ## lint TypeScript sources

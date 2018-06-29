@@ -9,8 +9,8 @@ from django.utils.translation import ugettext_lazy as _
 import raven
 from configurations import Configuration, values
 
-from .configurations.elasticsearch import ElasticSearchMixin
-from .configurations.rest_framework import DRFMixin
+from configurations_mixins.elasticsearch import ElasticSearchMixin
+from configurations_mixins.rest_framework import DRFMixin
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join("/", "data")
@@ -76,8 +76,8 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
     SITE_ID = 1
 
     # Application definition
-    ROOT_URLCONF = "richie.urls"
-    WSGI_APPLICATION = "richie.wsgi.application"
+    ROOT_URLCONF = "urls"
+    WSGI_APPLICATION = "wsgi.application"
 
     # Database
     DATABASES = {
