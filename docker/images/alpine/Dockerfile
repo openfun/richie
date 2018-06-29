@@ -11,7 +11,7 @@
 # Once mounted, you will need to collect static files via the eponym django
 # admin command:
 #
-#     python ./manage.py collectstatic
+#     python sandbox/manage.py collectstatic
 #
 
 # ---- base image to inherit from ----
@@ -23,30 +23,32 @@ FROM base as back-builder
 # Install development libraries required for compiled python dependencies (lxml,
 # Pillow and psycopg2)
 RUN apk --no-cache add --update \
-        # lxml dependencies
-        libxml2-dev \
-        libxslt-dev \
-        # Pillow dependencies
-        build-base \
-        freetype-dev \
-        fribidi-dev \
-        harfbuzz-dev \
-        jpeg-dev \
-        lcms2-dev \
-        openjpeg-dev \
-        tcl-dev \
-        tiff-dev \
-        tk-dev \
-        zlib-dev \
-        # psycopg2 dependencies
-        postgresql-dev && \
+    # lxml dependencies
+    libxml2-dev \
+    libxslt-dev \
+    # Pillow dependencies
+    build-base \
+    freetype-dev \
+    fribidi-dev \
+    harfbuzz-dev \
+    jpeg-dev \
+    lcms2-dev \
+    openjpeg-dev \
+    tcl-dev \
+    tiff-dev \
+    tk-dev \
+    zlib-dev \
+    # psycopg2 dependencies
+    postgresql-dev && \
     rm -rf /var/cache/apk/*
 
-WORKDIR /install
+WORKDIR /builder
 
-COPY requirements/base.txt /requirements.txt
+COPY setup.py setup.cfg MANIFEST.in /builder/
+COPY ./src /builder/src/
 
-RUN pip install --prefix=/install -r /requirements.txt
+RUN mkdir /install && \
+    pip install --prefix=/install .
 
 # ---- front-end builder image ----
 FROM node:9-alpine as front-builder
@@ -68,30 +70,30 @@ COPY --from=back-builder /install /usr/local
 # Install only (linked) libraries required for compiled python dependencies
 # (lxml, Pillow and psycopg2)
 RUN apk --no-cache add --update \
-        # lxml dependencies
-        libxml2 \
-        libxslt \
-        # Pillow dependencies
-        freetype \
-        fribidi \
-        harfbuzz \
-        jpeg \
-        lcms2 \
-        openjpeg \
-        tcl \
-        tiff \
-        tk \
-        zlib \
-        # psycopg2 dependencies
-        postgresql && \
+    # lxml dependencies
+    libxml2 \
+    libxslt \
+    # Pillow dependencies
+    freetype \
+    fribidi \
+    harfbuzz \
+    jpeg \
+    lcms2 \
+    openjpeg \
+    tcl \
+    tiff \
+    tk \
+    zlib \
+    # psycopg2 dependencies
+    postgresql && \
     rm -rf /var/cache/apk/*
 
 # Copy richie application (see .dockerignore)
 COPY . /app/
 
 # Copy front-end dependencies
-COPY --from=front-builder /app/richie/build /app/richie/build
-COPY --from=front-builder /app/richie/static /app/richie/static
+COPY --from=front-builder /app/sandbox/build /app/sandbox/build
+COPY --from=front-builder /app/sandbox/static /app/sandbox/static
 
 WORKDIR /app
 

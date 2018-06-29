@@ -5,6 +5,9 @@
 .venv
 venv
 
+# Packaging
+build
+
 # sqlite DB
 db.sqlite3
 *.db

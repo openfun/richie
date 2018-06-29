@@ -11,7 +11,7 @@
 # Once mounted, you will need to collect static files via the eponym django
 # admin command:
 #
-#     python ./manage.py collectstatic
+#     python sandbox/manage.py collectstatic
 #
 
 # ---- base image to inherit from ----
@@ -20,11 +20,13 @@ FROM python:3.6-stretch as base
 # ---- back-end builder image ----
 FROM base as back-builder
 
-WORKDIR /install
+WORKDIR /builder
 
-COPY requirements/base.txt /requirements.txt
+COPY setup.py setup.cfg MANIFEST.in /builder/
+COPY ./src /builder/src/
 
-RUN pip install --prefix=/install -r /requirements.txt
+RUN mkdir /install && \
+    pip install --prefix=/install .
 
 # ---- front-end builder image ----
 FROM node:9 as front-builder
@@ -47,8 +49,8 @@ COPY --from=back-builder /install /usr/local
 COPY . /app/
 
 # Copy front-end dependencies
-COPY --from=front-builder /app/richie/build /app/richie/build
-COPY --from=front-builder /app/richie/static /app/richie/static
+COPY --from=front-builder /app/sandbox/build /app/sandbox/build
+COPY --from=front-builder /app/sandbox/static /app/sandbox/static
 
 WORKDIR /app
 
