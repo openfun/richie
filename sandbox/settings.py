@@ -235,6 +235,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         "richie.apps.persons",
         "richie.apps.search",
         "richie.plugins.large_banner",
+        "richie.plugins.section",
         # Third party apps
         "raven.contrib.django.raven_compat",
         "parler",
@@ -294,14 +295,40 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
     CMS_PERMISSION = True
 
     CMS_PLACEHOLDER_CONF = {
-        "courses/cms/course_detail.html course_video": {
+        # Course detail
+        "courses/cms/course_detail.html course_teaser": {
             "name": _("Course teaser"),
             "plugins": ["VideoPlayerPlugin"],
             "limits": {"VideoPlayerPlugin": 1},
         },
-        "courses/cms/course_detail.html course_syllabus": {  # all plugins allowed
-            "name": _("Course Syllabus")
+        "courses/cms/course_detail.html course_syllabus": {
+            "name": _("Course Syllabus"),
+            "plugins": ["TextPlugin"],
         },
+        "courses/cms/course_detail.html course_format": {
+            "name": _("Format"),
+            "plugins": ["TextPlugin"],
+        },
+        "courses/cms/course_detail.html course_prerequisites": {
+            "name": _("Prerequisites"),
+            "plugins": ["TextPlugin"],
+        },
+        "courses/cms/course_detail.html course_team": {
+            "name": _("Course team"),
+            "plugins": ["PersonPlugin"],
+        },
+        "courses/cms/course_detail.html course_plan": {"name": _("Course plan")},
+        "courses/cms/course_detail.html course_information": {
+            "name": _("Complementary information"),
+            "plugins": ["SectionPlugin"],
+        },
+        "courses/cms/course_detail.html license_course_content": {
+            "name": _("License for the course content")
+        },
+        "courses/cms/course_detail.html license_course_participation": {
+            "name": _("License for the content created by course participants")
+        },
+        # Organization detail
         "courses/cms/organization_detail.html banner": {
             "name": _("Banner"),
             "plugins": ["PicturePlugin"],
@@ -312,6 +339,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
             "plugins": ["TextPlugin"],
             "limits": {"TextPlugin": 1},
         },
+        # Person detail
         "persons/cms/person_detail.html portrait": {
             "name": _("Portrait"),
             "plugins": ["PicturePlugin"],

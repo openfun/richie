@@ -1,0 +1,8 @@
+{% load cms_tags %}
+
+<div class="section">
+    <h{{ header_level|default:2 }} class="section__title">{{ instance.title }}</h{{ header_level|default:2 }}>
+    {% for plugin in instance.child_plugin_instances %}
+        {% render_plugin plugin %}
+    {% endfor %}
+</div>
