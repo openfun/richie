@@ -59,7 +59,7 @@ class CourseCMSTestCase(TestCase):
         )
         self.assertContains(
             response,
-            '<div class="course-detail__active-session">{:s}</div>'.format(
+            '<div class="course-detail__aside__active-session">{:s}</div>'.format(
                 course.active_session
             ),
             html=True,
@@ -69,27 +69,39 @@ class CourseCMSTestCase(TestCase):
         for subject in [subject1, subject2]:
             self.assertContains(
                 response,
-                '<li class="course-detail__subjects__item">{:s}</li>'.format(
+                '<li class="course-detail__content__subjects__item">{:s}</li>'.format(
                     subject.extended_object.get_title()
                 ),
                 html=True,
             )
         self.assertNotContains(response, subject3.extended_object.get_title())
 
-        # Only published organizations should be present on the page
-        for organization in [organization1, organization2]:
-            self.assertContains(
-                response,
-                '<li class="course-detail__organizations__item">{:s}</li>'.format(
-                    organization.extended_object.get_title()
-                ),
-                html=True,
-            )
+        # organization1 is marked as main organization
+        self.assertContains(
+            response,
+            ('<li class="course-detail__content__organizations__item '
+             'course-detail__content__organizations__item--main">{:s}</li>').format(
+                organization1.extended_object.get_title()
+            ),
+            html=True,
+        )
+        # organization 2 is the only "common" org in listing since
+        self.assertContains(
+            response,
+            '<li class="course-detail__content__organizations__item">{:s}</li>'.format(
+                organization2.extended_object.get_title()
+            ),
+            html=True,
+        )
+        # Draft organization should not be in response content
+        # TODO: This is wrong, we show draft but marked with a class modifier,
+        # this may work because of unused html attribute ?
         self.assertNotContains(response, organization3.extended_object.get_title())
 
     def test_course_cms_draft_content(self):
         """
-        A staff user should see a draft course including its draft elements with an annotation
+        A staff user should see a draft course including its draft elements with
+        an annotation
         """
         user = UserFactory(is_staff=True, is_superuser=True)
         self.client.login(username=user.username, password="password")
@@ -128,24 +140,23 @@ class CourseCMSTestCase(TestCase):
         )
         self.assertContains(
             response,
-            '<div class="course-detail__active-session">{:s}</div>'.format(
+            '<div class="course-detail__aside__active-session">{:s}</div>'.format(
                 course.active_session
             ),
             html=True,
         )
 
+        # organization2 is not marked as a draft since it has been published
+        self.assertNotContains(
+            response,
+            '<li class="course-detail__content__organizations__item--draft">{:s}</li>'.format(
+                organization2.extended_object.get_title()
+            ),
+        )
         # Draft organization should be present on the page with an annotation for styling
-        for organization in [organization1, organization2]:
-            self.assertContains(
-                response,
-                '<li class="course-detail__organizations__item">{:s}</li>'.format(
-                    organization.extended_object.get_title()
-                ),
-                html=True,
-            )
         self.assertContains(
             response,
-            '<li class="course-detail__organizations__item--draft">{:s}</li>'.format(
+            '<li class="course-detail__content__organizations__item--draft">{:s}</li>'.format(
                 organization3.extended_object.get_title()
             ),
             html=True,
@@ -155,14 +166,14 @@ class CourseCMSTestCase(TestCase):
         for subject in [subject1, subject2]:
             self.assertContains(
                 response,
-                '<li class="course-detail__subjects__item">{:s}</li>'.format(
+                '<li class="course-detail__content__subjects__item">{:s}</li>'.format(
                     subject.extended_object.get_title()
                 ),
                 html=True,
             )
         self.assertContains(
             response,
-            '<li class="course-detail__subjects__item--draft">{:s}</li>'.format(
+            '<li class="course-detail__content__subjects__item--draft">{:s}</li>'.format(
                 subject3.extended_object.get_title()
             ),
             html=True,
@@ -187,6 +198,6 @@ class CourseCMSTestCase(TestCase):
         )
         self.assertContains(
             response,
-            '<div class="course-detail__active-session">No active session</div>',
+            '<div class="course-detail__aside__active-session">No active session</div>',
             html=True,
         )
