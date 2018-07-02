@@ -49,8 +49,7 @@ COPY --from=back-builder /install /usr/local
 COPY . /app/
 
 # Copy front-end dependencies
-COPY --from=front-builder /app/sandbox/build /app/sandbox/build
-COPY --from=front-builder /app/sandbox/static /app/sandbox/static
+COPY --from=front-builder /app/src/richie/static/richie /app/src/richie/static/richie
 
 WORKDIR /app
 

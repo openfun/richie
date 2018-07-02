@@ -12,7 +12,7 @@ module.exports = {
   entry: ['./src/richie-front/js/index.tsx'],
   output: {
     filename: 'index.js',
-    path: __dirname + '/sandbox/build/js',
+    path: __dirname + '/src/richie/static/richie/js',
   },
 
   // Enable sourcemaps for debugging webpack's output.
