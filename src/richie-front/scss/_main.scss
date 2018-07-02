@@ -23,15 +23,16 @@
 @import "./partials/react-autosuggest";
 
 // Component styles
-@import "../../../src/richie-front/js/components/CourseGlimpse/_CourseGlimpse";
-@import "../../../src/richie-front/js/components/CourseGlimpseList/_CourseGlimpseList";
-@import "../../../src/richie-front/js/components/Search/_Search";
-@import "../../../src/richie-front/js/components/SearchFilter/_SearchFilter";
-@import "../../../src/richie-front/js/components/SearchFilterGroup/_SearchFilterGroup";
-@import "../../../src/richie-front/js/components/SearchFiltersPane/_SearchFiltersPane";
+@import "../js/components/CourseGlimpse/_CourseGlimpse";
+@import "../js/components/CourseGlimpseList/_CourseGlimpseList";
+@import "../js/components/Search/_Search";
+@import "../js/components/SearchFilter/_SearchFilter";
+@import "../js/components/SearchFilterGroup/_SearchFilterGroup";
+@import "../js/components/SearchFiltersPane/_SearchFiltersPane";
 
 // Template specific styles
-@import "../../../src/richie/apps/courses/templates/courses/cms/organization_detail";
-@import "../../../src/richie/apps/search/templates/search/search";
-@import "../../../src/richie/plugins/large_banner/templates/large_banner";
-@import "../../templates/menu/_menu";
+@import "../../richie/apps/courses/templates/courses/cms/organization_detail";
+@import "../../richie/apps/search/templates/search/search";
+@import "../../richie/plugins/large_banner/templates/large_banner";
+// FIXME: the menu template/style should be distributed with Richie?
+@import "../../../sandbox/templates/menu/_menu";
