@@ -6,7 +6,7 @@ module.exports = function(config) {
   config.set({
     frameworks: ['jasmine'],
 
-    files: ['sandbox/**/*.spec.@(ts|tsx)'],
+    files: ['src/richie-front/**/*.spec.@(ts|tsx)'],
 
     preprocessors: {
       '**/*.@(ts|tsx)': ['webpack', 'sourcemap'],

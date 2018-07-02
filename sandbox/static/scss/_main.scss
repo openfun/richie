@@ -23,12 +23,12 @@
 @import "./partials/react-autosuggest";
 
 // Component styles
-@import "../../js/components/CourseGlimpse/_CourseGlimpse";
-@import "../../js/components/CourseGlimpseList/_CourseGlimpseList";
-@import "../../js/components/Search/_Search";
-@import "../../js/components/SearchFilter/_SearchFilter";
-@import "../../js/components/SearchFilterGroup/_SearchFilterGroup";
-@import "../../js/components/SearchFiltersPane/_SearchFiltersPane";
+@import "../../../src/richie-front/js/components/CourseGlimpse/_CourseGlimpse";
+@import "../../../src/richie-front/js/components/CourseGlimpseList/_CourseGlimpseList";
+@import "../../../src/richie-front/js/components/Search/_Search";
+@import "../../../src/richie-front/js/components/SearchFilter/_SearchFilter";
+@import "../../../src/richie-front/js/components/SearchFilterGroup/_SearchFilterGroup";
+@import "../../../src/richie-front/js/components/SearchFiltersPane/_SearchFiltersPane";
 
 // Template specific styles
 @import "../../../src/richie/apps/courses/templates/courses/cms/organization_detail";

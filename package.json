@@ -5,7 +5,7 @@
   "main": "sandbox/manage.py",
   "scripts": {
     "build": "webpack",
-    "lint": "tslint -c tslint.json 'sandbox/js/**/*.ts'",
+    "lint": "tslint -c tslint.json 'src/richie-front/js/**/*.ts'",
     "sass": "node-sass sandbox/static/scss/_main.scss sandbox/static/css/main.css",
     "test": "karma start ./karma.conf.js",
     "watch-sass": "nodemon -e scss -x 'yarn sass'"
