@@ -398,6 +398,88 @@ jobs:
                   -timeout 60s \
                     pytest
 
+  # ---- Packaging jobs ----
+  package-back:
+
+    machine: true
+
+    working_directory: ~/fun
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - docker-debian-images-dev-{{ .Revision }}
+
+      - run:
+          name: Load images to docker engine
+          command: |
+            docker load < docker/images/dev/richie.tar
+
+      - run:
+          name: Build python packages
+          command: |
+            docker-compose \
+              -p richie-test \
+              -f docker/compose/ci/docker-compose.yml \
+              --project-directory . \
+              run --rm --no-deps app \
+                python setup.py sdist bdist_wheel
+
+      # Persist build packages to the workspace
+      - persist_to_workspace:
+          root: ~/fun
+          paths:
+            - dist
+
+      # Store packages as artifacts
+      - store_artifacts:
+          path: ~/fun/dist
+
+  # Publishing to PyPI requires that:
+  #   * you already registered to pypi.org
+  #   * you have define both the TWINE_USERNAME & TWINE_PASSWORD secret
+  #     environment variables in CircleCI UI (with your PyPI credentials)
+  pypi:
+
+    machine: true
+
+    working_directory: ~/fun
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - docker-debian-images-dev-{{ .Revision }}
+
+      - run:
+          name: Load images to docker engine
+          command: |
+            docker load < docker/images/dev/richie.tar
+
+      # Restore built python packages
+      - attach_workspace:
+          at: ~/fun
+
+      - run:
+          name: List built packages
+          command: ls dist/*
+
+      - run:
+          name: Upload built packages to PyPI
+          command: |
+            docker-compose \
+              -p richie-test \
+              -f docker/compose/ci/docker-compose.yml \
+              --project-directory . \
+              run --rm --no-deps \
+                -e TWINE_USERNAME \
+                -e TWINE_PASSWORD \
+                app \
+                twine upload dist/*
+
   # ---- DockerHub publication job ----
   hub:
 
@@ -480,9 +562,6 @@ jobs:
           keys:
           - v3-front-dependencies-{{ checksum "package.json" }}
           - v3-front-dependencies-
-      # Copy an up-to-date yarn.lock file
-      - attach_workspace:
-          at: ~/richie
       # If the yarn.lock file is not up-to-date with the package.json file,
       # using the --frozen-lockfile should fail.
       - run:
@@ -636,6 +715,18 @@ workflows:
             tags:
               only: /.*/
 
+      # Packaging: python
+      #
+      # Build the python package
+      - package-back:
+          requires:
+            - test-front
+            - test-back
+            - test-alpine
+          filters:
+            tags:
+              only: /.*/
+
       # DockerHub publication.
       #
       # Publish docker images only if all build, lint and test jobs succeed and
@@ -645,6 +736,19 @@ workflows:
             - test-front
             - test-back
             - test-alpine
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
+
+      # PyPI publication.
+      #
+      # Publish python package to PYPI only if all build, lint and test jobs
+      # succeed and it has been tagged with a tag starting with the letter v
+      - pypi:
+          requires:
+            - package-back
           filters:
             branches:
               ignore: /.*/
