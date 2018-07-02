@@ -1,4 +1,4 @@
-const SETTINGS = require('./sandbox/js/settings.json');
+const SETTINGS = require('./src/richie-front/js/settings.json');
 const webpack = require('webpack');
 
 module.exports = {
@@ -9,7 +9,7 @@ module.exports = {
 
   // Include whatwg fetch as an entry point (and not an import) as it's replacing (when necessary)
   // a globally available browser-provided function
-  entry: ['./sandbox/js/index.tsx'],
+  entry: ['./src/richie-front/js/index.tsx'],
   output: {
     filename: 'index.js',
     path: __dirname + '/sandbox/build/js',
