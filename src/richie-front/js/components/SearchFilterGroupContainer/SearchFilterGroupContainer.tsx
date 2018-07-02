@@ -1,6 +1,6 @@
 import partial from 'lodash-es/partial';
-import { connect, Dispatch } from 'react-redux';
-import { Action } from 'redux';
+import { connect } from 'react-redux';
+import { Action, Dispatch } from 'redux';
 
 import { ResourceListStateParams } from '../../data/genericReducers/resourceList/resourceList';
 import { RootState } from '../../data/rootReducer';

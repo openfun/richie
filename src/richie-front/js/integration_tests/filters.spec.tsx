@@ -4,7 +4,8 @@ import { mount, ReactWrapper } from 'enzyme';
 import fetchMock from 'fetch-mock';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Provider, Store } from 'react-redux';
+import { Provider } from 'react-redux';
+import { Store } from 'redux';
 
 import { bootstrapStore } from '../bootstrap';
 import { SearchFilter } from '../components/SearchFilter/SearchFilter';

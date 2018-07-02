@@ -1,5 +1,4 @@
-import { Dispatch } from 'react-redux';
-import { Action } from 'redux';
+import { Action, Dispatch } from 'redux';
 
 import { ResourceListStateParams } from '../../data/genericReducers/resourceList/resourceList';
 import { getResourceList } from '../../data/genericSideEffects/getResourceList/actions';
