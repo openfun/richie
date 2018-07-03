@@ -1,4 +1,12 @@
 module.exports = {
+  plugins: [
+    [
+      'react-intl',
+      {
+        messagesDir: './strings/',
+      },
+    ],
+  ],
   presets: [
     [
       '@babel/preset-env',
@@ -7,5 +15,6 @@ module.exports = {
         useBuiltIns: 'usage',
       },
     ],
+    'react',
   ],
 };
