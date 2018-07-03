@@ -1,20 +1,38 @@
-# Docker
+# Richie's Makefile
+#
+# /!\ /!\ /!\ /!\ /!\ /!\ /!\ DISCLAIMER /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\
+#
+# This Makefile is only meant to be used for DEVELOPMENT purpose as we are
+# changing the user id that will run in the container.
+#
+# PLEASE DO NOT USE IT FOR YOUR CI/PRODUCTION/WHATEVER...
+#
+# /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\
+
+# -- Docker
+
+# Get the current user ID to use for docker run and docker exec commands
+UID                  = $(shell id -u)
 COMPOSE              = docker-compose
-COMPOSE_RUN          = $(COMPOSE) run --rm
-COMPOSE_EXEC         = $(COMPOSE) exec
+COMPOSE_RUN          = $(COMPOSE) run --rm --user=$(UID)
+COMPOSE_EXEC         = $(COMPOSE) exec --user=$(UID)
 COMPOSE_EXEC_APP     = $(COMPOSE_EXEC) app
-COMPOSE_EXEC_NODE    = $(COMPOSE_EXEC) --user="$(id -u):$(id -g)" node
+COMPOSE_EXEC_NODE    = $(COMPOSE_EXEC) node
 COMPOSE_RUN_APP      = $(COMPOSE_RUN) app
-COMPOSE_RUN_NODE     = $(COMPOSE_RUN) --user="$(id -u):$(id -g)" node
+COMPOSE_RUN_NODE     = $(COMPOSE_RUN) node
 COMPOSE_TEST         = $(COMPOSE) -p richie-test -f docker/compose/test/docker-compose.yml --project-directory .
-COMPOSE_TEST_RUN     = $(COMPOSE_TEST) run --rm
+COMPOSE_TEST_RUN     = $(COMPOSE_TEST) run --rm --user=$(UID)
 COMPOSE_TEST_RUN_APP = $(COMPOSE_TEST_RUN) app
 
-# Node
+# -- Node
+
 YARN                 = $(COMPOSE_RUN_NODE) yarn
 
-# Django
+# -- Django
+
 MANAGE               = $(COMPOSE_RUN_APP) python sandbox/manage.py
+
+# -- Rules
 
 default: help
 
