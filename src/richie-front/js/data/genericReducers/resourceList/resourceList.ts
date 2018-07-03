@@ -1,7 +1,6 @@
 import get from 'lodash-es/get';
 
-import { Settings } from '../../../settings';
-import settings from '../../../settings.json';
+import { API_LIST_DEFAULT_PARAMS } from '../../../settings';
 import {
   APIListCommonRequestParams,
   APIResponseListFacets,
@@ -12,8 +11,6 @@ import {
   ResourceListGet,
   ResourceListGetSuccess,
 } from '../../genericSideEffects/getResourceList/actions';
-
-const { API_LIST_DEFAULT_PARAMS } = settings as Settings;
 
 export const initialState = {};
 

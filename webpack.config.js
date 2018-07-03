@@ -1,4 +1,3 @@
-const SETTINGS = require('./src/richie-front/js/settings.json');
 const webpack = require('webpack');
 
 module.exports = {
@@ -47,7 +46,7 @@ module.exports = {
     // Only load the locales we need to support in moment.js
     new webpack.ContextReplacementPlugin(
       /moment[\/\\]locale$/,
-      new RegExp(SETTINGS.SUPPORTED_LANGUAGES.join('|')),
+      new RegExp(['de', 'en', 'fr'].join('|')),
     ),
   ],
 };

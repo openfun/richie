@@ -5,12 +5,10 @@ import { Action, Dispatch } from 'redux';
 import { ResourceListStateParams } from '../../data/genericReducers/resourceList/resourceList';
 import { getResourceList } from '../../data/genericSideEffects/getResourceList/actions';
 import { RootState } from '../../data/rootReducer';
-import settings from '../../settings.json';
+import { API_LIST_DEFAULT_PARAMS } from '../../settings';
 import { resourceBasedFilterGroupName } from '../../types/filters';
 import { updateFilter } from '../../utils/filters/updateFilter';
 import { SearchSuggestField } from '../SearchSuggestField/SearchSuggestField';
-
-const { API_LIST_DEFAULT_PARAMS } = settings;
 
 export const mapStateToProps = (state: RootState) => ({
   currentParams:

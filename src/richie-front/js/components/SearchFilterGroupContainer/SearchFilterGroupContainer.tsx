@@ -4,8 +4,7 @@ import { Action, Dispatch } from 'redux';
 
 import { ResourceListStateParams } from '../../data/genericReducers/resourceList/resourceList';
 import { RootState } from '../../data/rootReducer';
-import { Settings } from '../../settings';
-import settings from '../../settings.json';
+import { API_LIST_DEFAULT_PARAMS } from '../../settings';
 import { filterGroupName, FilterValue } from '../../types/filters';
 import { getActiveFilterValues } from '../../utils/filters/getActiveFilterValues';
 import { getFilterFromState } from '../../utils/filters/getFilterFromState';
@@ -14,8 +13,6 @@ import {
   SearchFilterGroup,
   SearchFilterGroupProps,
 } from '../SearchFilterGroup/SearchFilterGroup';
-
-const { API_LIST_DEFAULT_PARAMS } = settings as Settings;
 
 export interface SearchFilterGroupContainerProps {
   machineName: filterGroupName;

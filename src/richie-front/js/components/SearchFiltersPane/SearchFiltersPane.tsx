@@ -1,10 +1,7 @@
 import * as React from 'react';
 
-import { Settings } from '../../settings';
-import settings from '../../settings.json';
+import { FILTERS_ACTIVE } from '../../settings';
 import { SearchFilterGroupContainer } from '../SearchFilterGroupContainer/SearchFilterGroupContainer';
-
-const { FILTERS_ACTIVE } = settings as Settings;
 
 export const SearchFiltersPane = (props: {}) => {
   return (
