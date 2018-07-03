@@ -12,7 +12,7 @@ describe('components/SearchSuggestFieldContainer/mergeProps', () => {
     const state = {
       filterDefinitions: {
         organizations: {
-          humanName: 'Organizations',
+          humanName: { defaultMessage: 'Organizations', id: 'organizations' },
           machineName: 'organizations',
         },
       } as FilterDefinitionState,
@@ -37,7 +37,7 @@ describe('components/SearchSuggestFieldContainer/mergeProps', () => {
       { limit: 20, offset: 0 },
       'add',
       {
-        humanName: 'Organizations',
+        humanName: { defaultMessage: 'Organizations', id: 'organizations' },
         machineName: 'organizations',
       },
       '84',

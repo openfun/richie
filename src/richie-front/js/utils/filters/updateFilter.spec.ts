@@ -20,7 +20,7 @@ describe('utils/filters/updateFilter', () => {
       { limit: 13, offset: 3, organizations: [42, 84] },
       'add',
       {
-        humanName: 'Availability',
+        humanName: { defaultMessage: 'Availability', id: 'availability' },
         isDrilldown: true,
         machineName: 'availability',
       } as FilterDefinition,

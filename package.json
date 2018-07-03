@@ -41,6 +41,7 @@
     "@types/react": "16.4.6",
     "@types/react-autosuggest": "9.3.4",
     "@types/react-dom": "16.0.6",
+    "@types/react-intl": "2.3.8",
     "@types/react-redux": "6.0.3",
     "babel-loader": "8.0.0-beta.4",
     "enzyme": "3.3.0",
@@ -72,6 +73,7 @@
     "react": "16.4.1",
     "react-autosuggest": "9.3.4",
     "react-dom": "16.4.1",
+    "react-intl": "2.4.0",
     "react-redux": "5.0.7",
     "redux": "4.0.0",
     "redux-saga": "0.16.0"

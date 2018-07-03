@@ -14,7 +14,7 @@ describe('utils/filters/getFilterFromState', () => {
         availability: {} as FilterDefinitionWithValues,
         language: {} as FilterDefinitionWithValues,
         new: {
-          humanName: 'New courses',
+          humanName: { defaultMessage: 'New courses', id: 'newCourses' },
           machineName: 'new' as 'new',
           values: [{ primaryKey: 'new', humanName: 'First session' }],
         },
@@ -24,7 +24,7 @@ describe('utils/filters/getFilterFromState', () => {
       resources: {},
     } as RootState;
     expect(getFilterFromState(state, 'new')).toEqual({
-      humanName: 'New courses',
+      humanName: { defaultMessage: 'New courses', id: 'newCourses' },
       machineName: 'new',
       values: [{ primaryKey: 'new', humanName: 'First session' }],
     });
@@ -37,7 +37,7 @@ describe('utils/filters/getFilterFromState', () => {
         language: {} as FilterDefinitionWithValues,
         new: {} as FilterDefinitionWithValues,
         organizations: {
-          humanName: 'Organizations',
+          humanName: { defaultMessage: 'Organizations', id: 'organizations' },
           machineName: 'organizations',
           values: [],
         },
@@ -64,7 +64,7 @@ describe('utils/filters/getFilterFromState', () => {
     };
 
     expect(getFilterFromState(state as RootState, 'organizations')).toEqual({
-      humanName: 'Organizations',
+      humanName: { defaultMessage: 'Organizations', id: 'organizations' },
       machineName: 'organizations',
       values: [
         { count: 15, humanName: 'Organization #Fourty-Two', primaryKey: '42' },
@@ -81,7 +81,7 @@ describe('utils/filters/getFilterFromState', () => {
         language: {} as FilterDefinitionWithValues,
         new: {} as FilterDefinitionWithValues,
         organizations: {
-          humanName: 'Organizations',
+          humanName: { defaultMessage: 'Organizations', id: 'organizations' },
           machineName: 'organizations',
           values: [],
         },
@@ -99,7 +99,7 @@ describe('utils/filters/getFilterFromState', () => {
     };
 
     expect(getFilterFromState(state as RootState, 'organizations')).toEqual({
-      humanName: 'Organizations',
+      humanName: { defaultMessage: 'Organizations', id: 'organizations' },
       machineName: 'organizations',
       values: [
         { humanName: 'Organization #Twenty-One', primaryKey: '21' },

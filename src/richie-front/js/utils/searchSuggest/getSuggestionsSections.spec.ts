@@ -22,7 +22,7 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
     try {
       suggestionsSection = await getSuggestionsSection(
         'courses',
-        'Courses',
+        { defaultMessage: 'Courses', id: 'coursesHumanName' },
         'some search',
       );
     } catch (error) {
@@ -30,8 +30,8 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
     }
 
     expect(suggestionsSection).toEqual({
+      message: { defaultMessage: 'Courses', id: 'coursesHumanName' },
       model: 'courses',
-      title: 'Courses',
       values: [
         { title: 'Course #1' } as Course,
         { title: 'Course #2' } as Course,
@@ -43,7 +43,11 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
     fetchMock.get('/api/v1.0/courses/?query=some%20search', {
       throws: 'Failed to send API request',
     });
-    await getSuggestionsSection('courses', 'Courses', 'some search');
+    await getSuggestionsSection(
+      'courses',
+      { defaultMessage: 'Courses', id: 'coursesHumanName' },
+      'some search',
+    );
     expect(errors.handle).toHaveBeenCalledWith(
       new Error('Failed to send API request'),
     );
@@ -54,7 +58,11 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
       body: {},
       status: 403,
     });
-    await getSuggestionsSection('courses', 'Courses', 'some search');
+    await getSuggestionsSection(
+      'courses',
+      { defaultMessage: 'Courses', id: 'coursesHumanName' },
+      'some search',
+    );
     expect(errors.handle).toHaveBeenCalledWith(
       new Error('Failed to get list from /api/v1.0/courses/ : 403'),
     );
@@ -65,7 +73,11 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
       '/api/v1.0/courses/?query=some%20search',
       new Response('not json'),
     );
-    await getSuggestionsSection('courses', 'Courses', 'some search');
+    await getSuggestionsSection(
+      'courses',
+      { defaultMessage: 'Courses', id: 'coursesHumanName' },
+      'some search',
+    );
     expect(errors.handle).toHaveBeenCalledWith(
       new Error(
         'Failed to decode JSON in getSuggestionSection SyntaxError: Unexpected token o in JSON at position 1',

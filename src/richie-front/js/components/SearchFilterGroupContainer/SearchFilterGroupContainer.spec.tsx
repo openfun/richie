@@ -10,11 +10,19 @@ import { mapStateToProps, mergeProps } from './SearchFilterGroupContainer';
 
 describe('components/SearchFilterGroupContainer/mergeProps', () => {
   const exampleFilter = {
-    humanName: 'Organizations',
+    humanName: { defaultMessage: 'Organizations', id: 'organizations' },
     machineName: 'organizations' as 'organizations',
     values: [
-      { count: 3, humanName: 'Organization #31', primaryKey: '31' },
-      { count: 5, humanName: 'Organization #41', primaryKey: '41' },
+      {
+        count: 3,
+        humanName: { defaultMessage: 'Organization #31', id: 'org31' },
+        primaryKey: '31',
+      },
+      {
+        count: 5,
+        humanName: { defaultMessage: 'Organization #41', id: 'org41' },
+        primaryKey: '41',
+      },
     ],
   };
 

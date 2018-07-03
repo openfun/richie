@@ -2,6 +2,7 @@ import '../../testSetup.spec';
 
 import { shallow } from 'enzyme';
 import * as React from 'react';
+import { IntlProvider } from 'react-intl';
 
 import { Course } from '../../types/Course';
 import { SearchSuggestionSection } from '../../types/searchSuggest';
@@ -23,8 +24,13 @@ describe('components/SearchSuggestField', () => {
   });
 
   it('renders', () => {
-    const { SearchSuggestField } = searchSuggestField;
-    const wrapper = shallow(<SearchSuggestField addFilter={addFilter} />);
+    const { SearchSuggestFieldBase } = searchSuggestField;
+    const wrapper = shallow(
+      <SearchSuggestFieldBase
+        addFilter={addFilter}
+        intl={{ formatMessage: (message: any) => message.defaultMessage } as any}
+      />,
+    );
     expect(wrapper.html()).toContain(
       'Search for courses, organizations, subjects',
     );
@@ -44,9 +50,15 @@ describe('components/SearchSuggestField', () => {
   describe('renderSectionTitle()', () => {
     it('renders a section title', () => {
       expect(
-        searchSuggestField.renderSectionTitle({
-          title: 'Some section title',
-        } as SearchSuggestionSection),
+        searchSuggestField.renderSectionTitle(
+          { formatMessage: ({ defaultMessage }: any) => defaultMessage } as any,
+          {
+            message: {
+              defaultMessage: 'Some section title',
+              id: 'someMessage',
+            },
+          } as SearchSuggestionSection,
+        ),
       ).toEqual(<span>Some section title</span>);
     });
   });

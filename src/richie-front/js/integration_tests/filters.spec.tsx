@@ -4,6 +4,7 @@ import { mount, ReactWrapper } from 'enzyme';
 import fetchMock from 'fetch-mock';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
 
@@ -93,9 +94,11 @@ describe('Integration tests - filters', () => {
     // Mount our whole filters pane whhenever we need it.
     makeSearchFilterPane = () =>
       mount(
-        <Provider store={store}>
-          <SearchFiltersPane />
-        </Provider>,
+        <IntlProvider>
+          <Provider store={store}>
+            <SearchFiltersPane />
+          </Provider>
+        </IntlProvider>,
       );
   });
 
@@ -107,11 +110,7 @@ describe('Integration tests - filters', () => {
     const filterGroupNew = makeSearchFilterPane()
       .find(SearchFilterGroupContainer)
       .filterWhere(wrapper => wrapper.prop('machineName') === 'new');
-    expect(
-      filterGroupNew.containsMatchingElement(
-        <button className="search-filter ">First session</button>,
-      ),
-    ).toBeTruthy();
+    expect(filterGroupNew.html()).toContain('search-filter', 'First session');
   });
 
   it('shows the values for the resource-based filters in their groups, ordered by facet count', () => {

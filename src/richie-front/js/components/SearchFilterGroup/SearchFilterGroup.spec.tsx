@@ -1,7 +1,8 @@
 import '../../testSetup.spec';
 
-import { shallow } from 'enzyme';
+import { mount, ReactWrapper, shallow } from 'enzyme';
 import * as React from 'react';
+import { IntlProvider } from 'react-intl';
 
 import { FilterDefinitionWithValues } from '../../types/filters';
 import { SearchFilter } from '../SearchFilter/SearchFilter';
@@ -10,128 +11,164 @@ import { SearchFilterGroup } from './SearchFilterGroup';
 describe('components/SearchFilterGroup', () => {
   const addFilter = jasmine.createSpy('addFilter');
   const removeFilter = jasmine.createSpy('removeFilter');
+  let makeSearchFilterGroup: (element: JSX.Element) => ReactWrapper;
+
+  beforeEach(() => {
+    // Mount our whole filters group whenever we need it.
+    makeSearchFilterGroup = element =>
+      mount(<IntlProvider>{element}</IntlProvider>);
+  });
 
   it('renders the name of the filter', () => {
     const filter = {
-      humanName: 'Organizations',
+      humanName: { defaultMessage: 'Organizations', id: 'organizations' },
       machineName: 'organizations',
       values: [],
     } as FilterDefinitionWithValues;
-    const wrapper = shallow(
+    const element = (
       <SearchFilterGroup
         activeFilterValues={[]}
         addFilter={addFilter}
         filter={filter}
         removeFilter={removeFilter}
-      />,
+      />
     );
 
-    expect(wrapper.text()).toContain('Organizations');
+    expect(makeSearchFilterGroup(element).text()).toContain('Organizations');
   });
 
   it('renders the list of filter values into a list of SearchFilters', () => {
     const filter = {
-      humanName: 'Example filter',
+      humanName: { defaultMessage: 'Example filter', id: 'exampleFilter' },
       values: [
-        { primaryKey: 'value-1', humanName: 'Value One' },
-        { primaryKey: 'value-2', humanName: 'Value Two' },
+        {
+          humanName: { defaultMessage: 'Value One', id: 'valueOne' },
+          primaryKey: 'value-1',
+        },
+        {
+          humanName: { defaultMessage: 'Value Two', id: 'valueTwo' },
+          primaryKey: 'value-2',
+        },
       ],
     } as FilterDefinitionWithValues;
-    const wrapper = shallow(
+    const element = (
       <SearchFilterGroup
         activeFilterValues={[]}
         addFilter={addFilter}
         filter={filter}
         removeFilter={removeFilter}
-      />,
+      />
     );
 
-    expect(wrapper.find(SearchFilter).length).toEqual(2);
+    expect(makeSearchFilterGroup(element).find(SearchFilter).length).toEqual(2);
   });
 
   it('renders any active filter values at the top of the list', () => {
     const activeFilterValues = [
-      { primaryKey: 'value-2', humanName: 'Value Two' },
+      {
+        humanName: { defaultMessage: 'Value Two', id: 'valueTwo' },
+        primaryKey: 'value-2',
+      },
     ];
     const filter = {
-      humanName: 'Example filter',
+      humanName: { defaultMessage: 'Example filter', id: 'exampleFilter' },
       values: [
-        { primaryKey: 'value-1', humanName: 'Value One' },
-        { primaryKey: 'value-3', humanName: 'Value Three' },
+        {
+          humanName: { defaultMessage: 'Value One', id: 'valueOne' },
+          primaryKey: 'value-1',
+        },
+        {
+          humanName: { defaultMessage: 'Value Three', id: 'valueThree' },
+          primaryKey: 'value-3',
+        },
       ],
     } as FilterDefinitionWithValues;
-    const wrapper = shallow(
+    const element = (
       <SearchFilterGroup
         activeFilterValues={activeFilterValues}
         addFilter={addFilter}
         filter={filter}
         removeFilter={removeFilter}
-      />,
+      />
     );
 
     expect(
-      wrapper
+      makeSearchFilterGroup(element)
         .find(SearchFilter)
         .at(0)
-        .shallow()
+        .render()
         .text(),
     ).toContain('Value Two');
     expect(
-      wrapper
+      makeSearchFilterGroup(element)
         .find(SearchFilter)
         .at(1)
-        .shallow()
+        .render()
         .text(),
     ).toContain('Value One');
     expect(
-      wrapper
+      makeSearchFilterGroup(element)
         .find(SearchFilter)
         .at(2)
-        .shallow()
+        .render()
         .text(),
     ).toContain('Value Three');
   });
 
   it('deduplicates keys between the filter and the active filter values', () => {
     const activeFilterValues = [
-      { primaryKey: 'value-2', humanName: 'Value Two' },
-      { primaryKey: 'value-3', humanName: 'Value Three' },
+      {
+        humanName: { defaultMessage: 'Value Two', id: 'valueTwo' },
+        primaryKey: 'value-2',
+      },
+      {
+        humanName: { defaultMessage: 'Value Three', id: 'valueThree' },
+        primaryKey: 'value-3',
+      },
     ];
     const filter = {
-      humanName: 'Example filter',
+      humanName: { defaultMessage: 'Example filter', id: 'exampleFilter' },
       values: [
-        { primaryKey: 'value-1', humanName: 'Value One' },
-        { primaryKey: 'value-3', humanName: 'Value Three' },
+        {
+          humanName: { defaultMessage: 'Value One', id: 'valueOne' },
+          primaryKey: 'value-1',
+        },
+        {
+          humanName: { defaultMessage: 'Value Three', id: 'valueThree' },
+          primaryKey: 'value-3',
+        },
       ],
     } as FilterDefinitionWithValues;
-    const wrapper = shallow(
-      <SearchFilterGroup
-        activeFilterValues={activeFilterValues}
-        addFilter={addFilter}
-        filter={filter}
-        removeFilter={removeFilter}
-      />,
+    const element = (
+      <IntlProvider>
+        <SearchFilterGroup
+          activeFilterValues={activeFilterValues}
+          addFilter={addFilter}
+          filter={filter}
+          removeFilter={removeFilter}
+        />
+      </IntlProvider>
     );
 
     expect(
-      wrapper
+      makeSearchFilterGroup(element)
         .find(SearchFilter)
         .at(0)
-        .shallow()
+        .render()
         .text(),
     ).toContain('Value Two');
     expect(
-      wrapper
+      makeSearchFilterGroup(element)
         .find(SearchFilter)
         .at(1)
-        .shallow()
+        .render()
         .text(),
     ).toContain('Value Three');
     expect(
-      wrapper
+      makeSearchFilterGroup(element)
         .find(SearchFilter)
         .at(2)
-        .shallow()
+        .render()
         .text(),
     ).toContain('Value One');
   });

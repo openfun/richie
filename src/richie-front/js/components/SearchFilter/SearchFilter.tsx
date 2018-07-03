@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import { FilterValue } from '../../types/filters';
 
@@ -21,7 +22,11 @@ export const SearchFilter = (props: SearchFilterProps) => {
           : addFilter(filter.primaryKey)
       }
     >
-      {filter.humanName}
+      {typeof filter.humanName === 'string' ? (
+        <span>{filter.humanName}</span>
+      ) : (
+        <FormattedMessage {...filter.humanName} />
+      )}
       {filter.count || filter.count === 0 ? (
         <span className="search-filter__count">{filter.count}</span>
       ) : (

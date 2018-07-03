@@ -7,6 +7,7 @@
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
 
 // Import submodules so we don't get the whole of lodash in the bundle
@@ -57,9 +58,11 @@ document.addEventListener('DOMContentLoaded', event => {
         const Component = componentLibrary[componentName];
         // Render the component inside a `react-redux` store Provider so its children can be `connect`ed
         ReactDOM.render(
-          <Provider store={store}>
-            <Component />
-          </Provider>,
+          <IntlProvider>
+            <Provider store={store}>
+              <Component />
+            </Provider>
+          </IntlProvider>,
           element,
         );
       } else {

@@ -1,5 +1,6 @@
 import take from 'lodash-es/take';
 import { stringify } from 'query-string';
+import { FormattedMessage } from 'react-intl';
 
 import { API_ENDPOINTS } from '../../settings';
 import { Resource } from '../../types/Resource';
@@ -13,7 +14,7 @@ import { handle } from '../../utils/errors/handle';
 // values to populate it from the API
 export const getSuggestionsSection = async (
   sectionModel: SearchSuggestionSection['model'],
-  sectionTitle: string,
+  sectionTitleMessage: FormattedMessage.MessageDescriptor,
   query: string,
 ) => {
   // Run the search for the section on the API
@@ -52,8 +53,8 @@ export const getSuggestionsSection = async (
 
   // Build out the section. Compiler needs help as it is unable to infer model name matches
   return {
+    message: sectionTitleMessage,
     model: sectionModel,
-    title: sectionTitle,
     values: take(data.objects, 3),
   } as SearchSuggestionSection;
 };

@@ -7,8 +7,8 @@ describe('utils/searchSuggest/suggestionsFromSection', () => {
   it('turns a course suggestion section into a list of individual course suggestions', () => {
     expect(
       suggestionsFromSection({
+        message: { defaultMessage: 'Courses', id: 'coursesHumanName' },
         model: 'courses',
-        title: 'Courses',
         values: [
           { title: 'Example course #1' } as Course,
           { title: 'Example course #2' } as Course,
@@ -29,8 +29,8 @@ describe('utils/searchSuggest/suggestionsFromSection', () => {
   it('turns an organization suggestion section into a list of individual organization suggestions', () => {
     expect(
       suggestionsFromSection({
+        message: { defaultMessage: 'Organizations', id: 'organizationsHumanName' },
         model: 'organizations',
-        title: 'Organizations',
         values: [
           { name: 'Example organization #1' } as Organization,
           { name: 'Example organization #2' } as Organization,
@@ -51,8 +51,8 @@ describe('utils/searchSuggest/suggestionsFromSection', () => {
   it('turns a subject suggestion section into a list of individual subject suggestions', () => {
     expect(
       suggestionsFromSection({
+        message: { defaultMessage: 'Subjects', id: 'subjectsHumanName' },
         model: 'subjects',
-        title: 'Subjects',
         values: [
           { name: 'Example subject #1' } as Subject,
           { name: 'Example subject #2' } as Subject,

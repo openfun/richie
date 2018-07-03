@@ -1,5 +1,6 @@
 import differenceBy from 'lodash-es/differenceBy';
 import * as React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import { FilterDefinitionWithValues, FilterValue } from '../../types/filters';
 import { Maybe } from '../../utils/types';
@@ -17,7 +18,7 @@ export const SearchFilterGroup = (props: SearchFilterGroupProps) => {
 
   return (
     <div className="search-filter-group">
-      <h3 className="search-filter-group__title">{humanName}</h3>
+      <h3 className="search-filter-group__title"><FormattedMessage {...humanName} /></h3>
       <div className="search-filter-group__list">
         {/* First we render the active filter values */}
         {props.activeFilterValues.map(value => (

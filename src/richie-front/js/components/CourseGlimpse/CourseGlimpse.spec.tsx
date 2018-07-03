@@ -2,6 +2,7 @@ import '../../testSetup.spec';
 
 import { render } from 'enzyme';
 import * as React from 'react';
+import { IntlProvider } from 'react-intl';
 
 import { Course } from '../../types/Course';
 import { Organization } from '../../types/Organization';
@@ -18,12 +19,14 @@ describe('components/CourseGlimpse', () => {
       name: 'Some Organization',
     } as Organization;
     const wrapper = render(
-      <CourseGlimpse course={course} organizationMain={organization} />,
+      <IntlProvider>
+        <CourseGlimpse course={course} organizationMain={organization} />
+      </IntlProvider>,
     );
 
     expect(wrapper.html()).toContain('Course 42');
     expect(wrapper.find('img').attr('src')).toContain('/thumbs/small.png');
-    expect(wrapper.html()).toContain('Starts on Mar 12, 2018');
+    expect(wrapper.html()).toContain('Starts on <span>Mar 12, 2018</span>');
     expect(wrapper.html()).toContain('Some Organization');
   });
 });

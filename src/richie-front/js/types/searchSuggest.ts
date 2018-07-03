@@ -1,3 +1,5 @@
+import { FormattedMessage } from 'react-intl';
+
 import { Course } from './Course';
 import { modelNameList } from './models';
 import { Organization } from './Organization';
@@ -25,8 +27,8 @@ interface ResourceSuggestionSection<
   M extends modelNameList,
   T extends Resource
 > {
+  message: FormattedMessage.MessageDescriptor;
   model: M;
-  title: string;
   values: T[];
 }
 
