@@ -70,7 +70,6 @@
   "dependencies": {
     "bootstrap": "4.1.1",
     "lodash-es": "4.17.10",
-    "moment": "2.22.2",
     "query-string": "6.1.0",
     "react": "16.4.1",
     "react-autosuggest": "9.3.4",
