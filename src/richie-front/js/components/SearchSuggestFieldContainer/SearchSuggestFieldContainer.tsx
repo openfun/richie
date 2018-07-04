@@ -1,9 +1,7 @@
-import partial from 'lodash-es/partial';
 import { connect } from 'react-redux';
 import { Action, Dispatch } from 'redux';
 
 import { ResourceListStateParams } from '../../data/genericReducers/resourceList/resourceList';
-import { getResourceList } from '../../data/genericSideEffects/getResourceList/actions';
 import { RootState } from '../../data/rootReducer';
 import { API_LIST_DEFAULT_PARAMS } from '../../settings';
 import { resourceBasedFilterGroupName } from '../../types/filters';

@@ -4,10 +4,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { API_ENDPOINTS } from '../../settings';
 import { Resource } from '../../types/Resource';
-import {
-  SearchSuggestion,
-  SearchSuggestionSection,
-} from '../../types/searchSuggest';
+import { SearchSuggestionSection } from '../../types/searchSuggest';
 import { handle } from '../../utils/errors/handle';
 
 // Build a suggestion section from a model name and a title, requesting the relevant

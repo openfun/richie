@@ -1,4 +1,3 @@
-import partial from 'lodash-es/partial';
 import { stringify } from 'query-string';
 import { call, put, takeEvery } from 'redux-saga/effects';
 
@@ -11,8 +10,6 @@ import {
   didGetResourceList,
   failedToGetResourceList,
   ResourceListGet,
-  ResourceListGetFailure,
-  ResourceListGetSuccess,
 } from './actions';
 
 // Use a polymorphic response object so it can be elegantly consumed through destructuration

@@ -1,7 +1,6 @@
 import { parse } from 'query-string';
 
 import { configureStore } from './data/configureStore';
-import { RootState } from './data/rootReducer';
 import { FILTERS_HARDCODED, FILTERS_RESOURCES } from './settings';
 
 const params = parse(location.search);

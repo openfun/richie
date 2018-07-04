@@ -1,5 +1,3 @@
-import get from 'lodash-es/get';
-
 import { API_LIST_DEFAULT_PARAMS } from '../../../settings';
 import {
   APIListCommonRequestParams,
@@ -7,10 +5,7 @@ import {
 } from '../../../types/api';
 import { Resource } from '../../../types/Resource';
 import { Maybe } from '../../../utils/types';
-import {
-  ResourceListGet,
-  ResourceListGetSuccess,
-} from '../../genericSideEffects/getResourceList/actions';
+import { ResourceListGetSuccess } from '../../genericSideEffects/getResourceList/actions';
 
 export const initialState = {};
 

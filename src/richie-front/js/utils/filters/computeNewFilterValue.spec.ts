@@ -1,5 +1,3 @@
-import partial from 'lodash-es/partial';
-
 import { computeNewFilterValue } from './computeNewFilterValue';
 
 describe('utils/filters/computeNewFilterValue', () => {

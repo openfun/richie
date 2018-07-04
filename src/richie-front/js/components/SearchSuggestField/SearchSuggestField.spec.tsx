@@ -2,7 +2,6 @@ import '../../testSetup.spec';
 
 import { shallow } from 'enzyme';
 import * as React from 'react';
-import { IntlProvider } from 'react-intl';
 
 import { Course } from '../../types/Course';
 import { SearchSuggestionSection } from '../../types/searchSuggest';

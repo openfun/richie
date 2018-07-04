@@ -3,7 +3,6 @@ import '../testSetup.spec';
 import { mount, ReactWrapper } from 'enzyme';
 import fetchMock from 'fetch-mock';
 import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';

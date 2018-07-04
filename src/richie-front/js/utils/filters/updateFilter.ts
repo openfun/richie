@@ -3,7 +3,6 @@ import { Action, Dispatch } from 'redux';
 import { ResourceListStateParams } from '../../data/genericReducers/resourceList/resourceList';
 import { getResourceList } from '../../data/genericSideEffects/getResourceList/actions';
 import { pushQueryStringToHistory } from '../../data/genericSideEffects/pushHistoryState/actions';
-import { RootState } from '../../data/rootReducer';
 import { FilterDefinition } from '../../types/filters';
 import { computeNewFilterValue } from './computeNewFilterValue';
 

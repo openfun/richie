@@ -1,5 +1,4 @@
 import { FilterDefinitionState } from '../../data/filterDefinitions/reducer';
-import { Course } from '../../types/Course';
 import { mapStateToProps, mergeProps } from './CourseGlimpseContainer';
 
 describe('components/CourseGlimpseContainer', () => {

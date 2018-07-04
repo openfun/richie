@@ -1,6 +1,6 @@
 import '../../testSetup.spec';
 
-import { mount, ReactWrapper, shallow } from 'enzyme';
+import { mount, ReactWrapper } from 'enzyme';
 import * as React from 'react';
 import { IntlProvider } from 'react-intl';
 

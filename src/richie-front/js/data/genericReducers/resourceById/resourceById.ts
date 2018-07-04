@@ -1,5 +1,3 @@
-import { Reducer } from 'redux';
-
 import { Resource } from '../../../types/Resource';
 import { Maybe } from '../../../utils/types';
 import { ResourceAdd, ResourceMultipleAdd } from './actions';

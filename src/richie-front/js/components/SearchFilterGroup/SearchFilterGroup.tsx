@@ -3,7 +3,6 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { FilterDefinitionWithValues, FilterValue } from '../../types/filters';
-import { Maybe } from '../../utils/types';
 import { SearchFilter } from '../SearchFilter/SearchFilter';
 
 export interface SearchFilterGroupProps {

@@ -1,9 +1,8 @@
-import partial from 'lodash-es/partial';
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, put } from 'redux-saga/effects';
 
 import { addMultipleResources } from '../../genericReducers/resourceById/actions';
 import { didGetResourceList, failedToGetResourceList } from './actions';
-import { fetchList, getList, GetListSagaSpecifics } from './getResourceList';
+import { fetchList, getList } from './getResourceList';
 
 // We'll be testing with the a course-lik Resource as the saga needs some specifics to operate: we want
 // something simple but we don't want to rely on the specific implementation of a resource

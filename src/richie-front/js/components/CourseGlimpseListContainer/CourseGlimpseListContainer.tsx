@@ -1,5 +1,3 @@
-import get from 'lodash-es/get';
-import partial from 'lodash-es/partial';
 import { connect } from 'react-redux';
 import { Action, Dispatch } from 'redux';
 

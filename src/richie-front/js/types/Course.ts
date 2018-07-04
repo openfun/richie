@@ -1,6 +1,4 @@
-import { Organization } from './Organization';
 import { Resource } from './Resource';
-import { Subject } from './Subject';
 
 export interface Course extends Resource {
   end_date: string;

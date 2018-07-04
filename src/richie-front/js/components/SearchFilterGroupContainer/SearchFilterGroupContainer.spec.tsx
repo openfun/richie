@@ -1,5 +1,3 @@
-import { stringify } from 'query-string';
-
 import { FilterDefinitionState } from '../../data/filterDefinitions/reducer';
 import { ResourceListState } from '../../data/genericReducers/resourceList/resourceList';
 import { RootState } from '../../data/rootReducer';

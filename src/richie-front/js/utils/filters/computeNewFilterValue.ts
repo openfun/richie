@@ -1,4 +1,3 @@
-import { FilterDefinition } from '../../types/filters';
 import { Maybe } from '../../utils/types';
 
 // Compute a new value for a filter to apply to course search, reacting to a user interaction by

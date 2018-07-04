@@ -1,5 +1,3 @@
-import { Resource } from './Resource';
-
 export interface APIResponseListMeta {
   limit: number;
   offset: number;

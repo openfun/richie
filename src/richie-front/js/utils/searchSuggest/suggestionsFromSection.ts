@@ -1,5 +1,3 @@
-import { Course } from '../../types/Course';
-import { Organization } from '../../types/Organization';
 import {
   CourseSuggestion,
   CourseSuggestionSection,
@@ -10,7 +8,6 @@ import {
   SubjectSuggestion,
   SubjectSuggestionSection,
 } from '../../types/searchSuggest';
-import { Subject } from '../../types/Subject';
 
 export function suggestionsFromSection(
   coursesSection: CourseSuggestionSection,
