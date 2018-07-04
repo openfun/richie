@@ -28,7 +28,6 @@ Among the features that `Richie` offers out of the box:
 - flexible custom pages for courses, organizations, subjects, teachers (and their inter-relations),
 - Extensible with any third-party `DjangoCMS` plugin or any third-party `Django` application.
 
-
 ## Architecture
 
 `Richie` is a **container-native application** but can also be installed
@@ -46,7 +45,6 @@ consists of 4 services:
 We provide alternative `Docker Compose` configurations for test, CI and production, but the
 application can also be run with your favorite orchestrator. At "France Université Numérique", we
 deploy our applications on `OpenShift` using [`Arnold`](https://github.com/openfun/arnold).
-
 
 ## Getting started
 
@@ -91,7 +89,6 @@ Note that if you don't create the demo site and start from a blank CMS, you will
 requesting you to create some required root pages. So it is easier as a first approach to test the
 CMS with the demo site.
 
-
 ## Contributing
 
 This project is intended to be community-driven, so please, do not hesitate to get in touch if you
@@ -99,7 +96,6 @@ have any question related to our implementation or design decisions.
 
 We try to raise our code quality standards and expect contributors to follow the recommandations
 from our [handbook](https://openfun.gitbooks.io/handbook/content).
-
 
 ### Checking your code
 
@@ -111,7 +107,6 @@ We use strict tslint and prettier to check the validity of our frontend code:
 
     $ make lint-front
 
-
 ### Running tests
 
 On the backend, we use pytest to run our test suite:
@@ -122,7 +117,6 @@ On the frontend, we use karma to run our test suite:
 
     $ make test-front
 
-
 ### Running migrations
 
 The first time you start the project with `make bootstrap`, the `db` container automatically
@@ -131,7 +125,6 @@ creates a fresh database named `richie` and performs database migrations. Each t
 
     $ make migrate
 
-
 ### Handling new dependencies
 
 Each time you add new front-end or back-end dependencies, you will need to rebuild the
@@ -139,15 +132,25 @@ application. We recommend to use:
 
     $ make bootstrap
 
-
 ### To go further
 
 To see all available commands, run:
 
     $ make
 
-See our [tips and tricks](./docs/docker_development.md) for development with Docker
+We also provide shortcuts for docker-compose commands as sugar scripts in the
+`bin/` directory:
 
+```
+bin
+├── exec
+├── pylint
+├── pytest
+└── run
+```
+
+More details and tips & tricks can be found in our [development with Docker
+documentation](./docs/docker_development.md)
 
 ## License
 
