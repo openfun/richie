@@ -7,6 +7,7 @@ import {
   hardcodedFilterGroupName,
   resourceBasedFilterGroupName,
 } from './types/filters';
+import { commonMessages } from './utils/commonMessages';
 
 export const API_ENDPOINTS = {
   courses: '/api/v1.0/courses/',
@@ -138,23 +139,11 @@ export const FILTERS_RESOURCES: {
   [key in resourceBasedFilterGroupName]: FilterDefinition
 } = {
   organizations: {
-    humanName: defineMessages({
-      message: {
-        defaultMessage: 'Organizations',
-        description: 'Title for the "Organizations" section of course filters',
-        id: 'settings.filters.organizations.title',
-      },
-    }).message,
+    humanName: commonMessages.organizationsHumanName,
     machineName: 'organizations',
   },
   subjects: {
-    humanName: defineMessages({
-      message: {
-        defaultMessage: 'Subjects',
-        description: 'Title for the "Subjects" section of course filters',
-        id: 'settings.filters.subjects.title',
-      },
-    }).message,
+    humanName: commonMessages.subjectsHumanName,
     machineName: 'subjects',
   },
 };
