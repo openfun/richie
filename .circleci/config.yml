@@ -417,15 +417,16 @@ jobs:
           command: |
             docker load < docker/images/dev/richie.tar
 
+      # Run commands using CircleCI's user and mount the app volume to have
+      # write permission on it, and thus, being able to create the package.
       - run:
-          name: Build python packages
+          name: Build python package
           command: |
-            docker-compose \
-              -p richie-test \
-              -f docker/compose/ci/docker-compose.yml \
-              --project-directory . \
-              run --rm --no-deps app \
-                python setup.py sdist bdist_wheel
+            docker run --rm \
+              --user="$(id -u)" \
+              --volume "$PWD:/app" \
+              "richie:${CIRCLE_SHA1}-dev" \
+              python setup.py sdist bdist_wheel
 
       # Persist build packages to the workspace
       - persist_to_workspace:

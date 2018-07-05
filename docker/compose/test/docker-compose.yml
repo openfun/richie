@@ -16,3 +16,4 @@ services:
     depends_on:
       - "db"
       - "elasticsearch"
+    tmpfs: /data
