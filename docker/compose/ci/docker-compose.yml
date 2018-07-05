@@ -21,8 +21,7 @@ services:
   app:
     image: "richie:${CIRCLE_SHA1}${IMAGE_SUFFIX}-dev"
     env_file: env.d/ci
-    volumes:
-      - ./dist:/app/dist
     depends_on:
       - "db"
       - "elasticsearch"
+    tmpfs: /data
