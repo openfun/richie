@@ -5,6 +5,7 @@
   "main": "sandbox/manage.py",
   "scripts": {
     "build": "webpack",
+    "generate-l10n-template": "rip json2pot 'src/richie-front/i18n/src/**/*.json' -o src/richie-front/i18n/richie-front.pot",
     "lint": "tslint -c tslint.json 'src/richie-front/js/**/*.ts'",
     "sass": "node-sass src/richie-front/scss/_main.scss src/richie/static/richie/css/main.css",
     "test": "karma start ./karma.conf.js",
@@ -59,6 +60,7 @@
     "node-sass": "4.9.2",
     "nodemon": "1.17.5",
     "prettier": "1.13.7",
+    "react-intl-po": "2.2.2",
     "source-map-loader": "0.2.3",
     "ts-loader": "4.4.2",
     "tslint": "5.10.0",
