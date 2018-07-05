@@ -37,6 +37,8 @@ MANAGE               = $(COMPOSE_RUN_APP) python sandbox/manage.py
 default: help
 
 bootstrap:  ## install development dependencies
+	@echo 'Preparing data directory...';
+	@mkdir -p data/media data/static
 	@$(COMPOSE) build base;
 	@$(COMPOSE) build app;
 	${MAKE} build-front;
