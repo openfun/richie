@@ -3,7 +3,7 @@ module.exports = {
     [
       'react-intl',
       {
-        messagesDir: './strings/',
+        messagesDir: './src/richie-front/i18n',
       },
     ],
   ],
