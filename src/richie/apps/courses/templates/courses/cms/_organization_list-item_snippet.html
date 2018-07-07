@@ -1,0 +1,16 @@
+{% if current_page.publisher_is_draft %}
+  {% if organization.public_extension %}
+    <li class="course-detail__content__organizations__item{% if is_main %} course-detail__content__organizations__item--main{% endif %}">
+      {{ organization.public_extension.extended_object.get_title }}
+    </li>
+  {% else %}
+    <li class="course-detail__content__organizations__item--draft{% if is_main %} course-detail__content__organizations__item--main{% endif %}">
+      {{ organization.extended_object.get_title }}
+    </li>
+  {% endif %}
+{# If the current page is the published version, show only the organizations that are published #}
+{% elif organization.public_extension %}
+  <li class="course-detail__content__organizations__item{% if is_main %} course-detail__content__organizations__item--main{% endif %}">
+    {{ organization.public_extension.extended_object.get_title }}
+  </li>
+{% endif %}
