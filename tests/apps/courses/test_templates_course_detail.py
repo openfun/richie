@@ -14,6 +14,10 @@ from richie.apps.courses.factories import (
 class CourseCMSTestCase(CMSTestCase):
     """
     End-to-end test suite to validate the content and Ux of the course detail view
+
+    It's worth to notice related draft items (Person, Organization) are only
+    displayed on a draft course page so admin can preview them. But draft items are
+    hidden from published page so common users can not see them.
     """
 
     def test_course_cms_published_content(self):
@@ -53,11 +57,11 @@ class CourseCMSTestCase(CMSTestCase):
         # Publish and ensure content is correct
         page.publish("en")
         response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+
         self.assertContains(
-            response,
-            "<title>Very interesting course</title>",
-            status_code=200,
-            html=True,
+            response, "<title>Very interesting course</title>", html=True
         )
         self.assertContains(
             response,
@@ -93,7 +97,8 @@ class CourseCMSTestCase(CMSTestCase):
             ),
             html=True,
         )
-        # organization 2 is the only "common" org in listing since
+
+        # organization 2 is the only "common" org in listing
         self.assertContains(
             response,
             '<li class="course-detail__content__organizations__item">{:s}</li>'.format(
@@ -101,9 +106,12 @@ class CourseCMSTestCase(CMSTestCase):
             ),
             html=True,
         )
+
         # Draft organization should not be in response content
         for organization in organizations[-2:]:
-            self.assertNotContains(response, organization.extended_object.get_title())
+            self.assertNotContains(
+                response, organization.extended_object.get_title(), html=True
+            )
 
     def test_course_cms_draft_content(self):
         """
@@ -141,11 +149,11 @@ class CourseCMSTestCase(CMSTestCase):
         # The page should be visible as draft to the staff user
         url = page.get_absolute_url()
         response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+
         self.assertContains(
-            response,
-            "<title>Very interesting course</title>",
-            status_code=200,
-            html=True,
+            response, "<title>Very interesting course</title>", html=True
         )
         self.assertContains(
             response,
@@ -258,9 +266,10 @@ class CourseCMSTestCase(CMSTestCase):
         page.publish("en")
         url = page.get_absolute_url()
         response = self.client.get(url)
-        self.assertContains(
-            response, "<title>Inactive course</title>", status_code=200, html=True
-        )
+
+        self.assertEqual(response.status_code, 200)
+
+        self.assertContains(response, "<title>Inactive course</title>", html=True)
         self.assertContains(
             response, '<h1 class="course-detail__title">Inactive course</h1>', html=True
         )
