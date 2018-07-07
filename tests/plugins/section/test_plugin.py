@@ -48,7 +48,10 @@ class SectionTests(CMSPluginTestCase):
         section = SectionFactory()
 
         model_instance = add_plugin(
-            placeholder, SectionPlugin, "en", title=section.title
+            placeholder,
+            SectionPlugin,
+            "en",
+            title=section.title
         )
         plugin_instance = model_instance.get_plugin_class_instance()
         plugin_context = plugin_instance.render({}, model_instance, None)
