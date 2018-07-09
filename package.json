@@ -61,6 +61,8 @@
     "nodemon": "1.17.5",
     "prettier": "1.13.7",
     "react-intl-po": "2.2.2",
+    "request": "2.87.0",
+    "request-promise": "4.2.2",
     "source-map-loader": "0.2.3",
     "ts-loader": "4.4.2",
     "tslint": "5.10.0",
