@@ -17,7 +17,8 @@ class SubjectCMSTestCase(TestCase):
         Validate that the important elements are displayed on a published subject page
         """
         courses = CourseFactory.create_batch(4)
-        subject = SubjectFactory(title="Very interesting subject", with_courses=courses)
+        subject = SubjectFactory(
+            title="Very interesting subject", with_courses=courses)
         page = subject.extended_object
 
         # Publish only 2 out of 3 courses
@@ -53,13 +54,14 @@ class SubjectCMSTestCase(TestCase):
         for course in courses[:2]:
             self.assertContains(
                 response,
-                '<li class="subject-detail__courses__item">{:s}</li>'.format(
+                '<li class="subject-detail__content__courses__item">{:s}</li>'.format(
                     course.extended_object.get_title()
                 ),
                 html=True,
             )
         for course in courses[-2:]:
-            self.assertNotContains(response, course.extended_object.get_title())
+            self.assertNotContains(
+                response, course.extended_object.get_title())
 
     def test_subject_cms_draft_content(self):
         """
@@ -69,7 +71,8 @@ class SubjectCMSTestCase(TestCase):
         self.client.login(username=user.username, password="password")
 
         courses = CourseFactory.create_batch(4)
-        subject = SubjectFactory(title="Very interesting subject", with_courses=courses)
+        subject = SubjectFactory(
+            title="Very interesting subject", with_courses=courses)
         page = subject.extended_object
 
         # Publish only 2 out of 4 courses
@@ -100,7 +103,7 @@ class SubjectCMSTestCase(TestCase):
         for course in courses[:2]:
             self.assertContains(
                 response,
-                '<li class="subject-detail__courses__item">{:s}</li>'.format(
+                '<li class="subject-detail__content__courses__item">{:s}</li>'.format(
                     course.extended_object.get_title()
                 ),
                 html=True,
@@ -110,7 +113,7 @@ class SubjectCMSTestCase(TestCase):
             self.assertContains(
                 response,
                 '<li class="{element:s} {element:s}--draft">{title:s}</li>'.format(
-                    element="subject-detail__courses__item",
+                    element="subject-detail__content__courses__item",
                     title=course.extended_object.get_title(),
                 ),
                 html=True,
