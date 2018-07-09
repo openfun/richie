@@ -86,7 +86,7 @@ class PersonPluginModel(CMSPlugin):
     to their Person instance
     """
 
-    page = models.ForeignKey(Page)
+    page = models.ForeignKey(Page, limit_choices_to={"person__isnull": False})
 
     class Meta:
         verbose_name = _("person plugin model")
