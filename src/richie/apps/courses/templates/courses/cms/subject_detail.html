@@ -4,50 +4,50 @@
 {% block content %}
 <div class="subject-detail">
 
-  <h1 class="subject-detail__title">{{ current_page.get_title }}</h1>
-
   {% with subject=current_page.subject header_level=2 %}
 
-    <div class="subject-detail__content">
-      <div class="subject-detail__content__banner">
-        {% placeholder "banner" %}
-      </div>
+    <div class="subject-detail__banner">
+      {% placeholder "banner" %}
+    </div>
 
-      <div class="subject-detail__content__logo">
-        {% placeholder "logo" %}
-      </div>
+    <div class="subject-detail__logo">
+      {% placeholder "logo" %}
+    </div>
+
+    <h1 class="subject-detail__title">{{ current_page.get_title }}</h1>
+
+    <div class="subject-detail__content">
 
       <div class="subject-detail__content__description">
         {% placeholder "description" %}
       </div>
-    </div>
-
-    <ul class="subject-detail__courses">
-      {% for course in subject.courses.drafts %}
-        {# If the current page is a draft, show draft courses with a class annotation for styling #}
-        {% if current_page.publisher_is_draft %}
-          {% if course.check_publication is True %}
-            <li class="subject-detail__courses__item">
+    
+      <ul class="subject-detail__content__courses">
+        {% for course in subject.courses.drafts %}
+          {# If the current page is a draft, show draft courses with a class annotation for styling #}
+          {% if current_page.publisher_is_draft %}
+            {% if course.check_publication is True %}
+              <li class="subject-detail__content__courses__item">
+                {{ course.public_extension.extended_object.get_title }}
+              </li>
+            {% else %}
+              <li class="subject-detail__content__courses__item subject-detail__content__courses__item--draft">
+                {{ course.extended_object.get_title }}
+              </li>
+            {% endif %}
+          {# If the current course page is the published version, show only the courses that are published #}
+          {% elif course.check_publication is True %}
+            <li class="subject-detail__content__courses__item">
               {{ course.public_extension.extended_object.get_title }}
             </li>
-          {% else %}
-            <li class="subject-detail__courses__item subject-detail__courses__item--draft">
-              {{ course.extended_object.get_title }}
-            </li>
           {% endif %}
-        {# If the current course page is the published version, show only the courses that are published #}
-        {% elif course.check_publication is True %}
-          <li class="subject-detail__courses__item">
-            {{ course.public_extension.extended_object.get_title }}
+        {% empty %}
+          <li class="subject-detail__content__courses subject-detail__content__courses--empty">
+            {% trans "No associated courses" %}
           </li>
-        {% endif %}
-      {% empty %}
-        <li class="subject-detail__courses subject-detail__courses--empty">
-          {% trans "No associated courses" %}
-        </li>
-      {% endfor %}
-    </ul>
-
+        {% endfor %}
+      </ul>
+    </div>
   {% endwith %}
 
 </div>

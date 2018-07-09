@@ -1,0 +1,103 @@
+// Overridable & namespaced global variables
+$subject-detail-view-banner-logo-sizing: 15rem !default;
+$subject-detail-view-banner-logo-sizing-md: 20rem !default;
+$subject-detail-view-banner-logo-sizing-xl: 25rem !default;
+
+.subject-detail {
+  $banner-logo-sizing: $subject-detail-view-banner-logo-sizing;
+  $banner-logo-sizing-md: $subject-detail-view-banner-logo-sizing-md;
+  $banner-logo-sizing-xl: $subject-detail-view-banner-logo-sizing-xl;
+
+  @include make-container();
+  @include make-container-max-widths();
+  background: $container-bg;
+
+  &__banner {
+    @include make-row();
+
+    // position & overflow are part of the img hack below
+    position: relative;
+    width: calc(100% + #{$grid-gutter-width});
+    height: $banner-logo-sizing;
+    overflow: hidden;
+
+    @include media-breakpoint-up(md) {
+      height: $banner-logo-sizing-md;
+    }
+
+    @include media-breakpoint-up(xl) {
+      height: $banner-logo-sizing-xl;
+    }
+
+    img {
+      // Hack to center+fill an image we have no control over and can't make into a background image
+      position: absolute;
+      top: -1000%; right: -1000%; bottom: -1000%; left: -1000%;
+      min-width: 100%;
+      min-height: 100%;
+      margin: auto;
+    }
+  }
+
+  &__logo {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid darken($light, 20%);
+
+    width: $banner-logo-sizing * 0.75;
+    height: $banner-logo-sizing * 0.75;
+    margin: (-$banner-logo-sizing * 0.75 / 2) auto $grid-gutter-width;
+
+    @include media-breakpoint-up(md) {
+      float: right;
+      width: $banner-logo-sizing-md * 0.75;
+      height: $banner-logo-sizing-md * 0.75;
+      margin: (-$banner-logo-sizing-md / 2) 3rem $grid-gutter-width;
+    }
+
+    @include media-breakpoint-up(xl) {
+      width: $banner-logo-sizing-xl * 0.75;
+      height: $banner-logo-sizing-xl * 0.75;
+      margin: (-$banner-logo-sizing-xl / 2) 8rem $grid-gutter-width;
+    }
+
+    img {
+      // Hack to center+fill an image we have no control over and can't make into a background image
+      position: absolute;
+      top: -1000%; right: -1000%; bottom: -1000%; left: -1000%;
+      // Make the width fixed so we can never overflow logos - we make the assumption most non-square
+      // logos would be wider as opposed to taller
+      width: 100%;
+      min-height: 100%;
+      margin: auto;
+    }
+  }
+
+  &__title {
+    $h1-calculated-height: $h1-font-size * $headings-line-height;
+    @include media-breakpoint-up(md) {
+      $logo-height: $banner-logo-sizing-md * 0.75;
+      $logo-overflow-height: $logo-height / 3;
+      margin: ($logo-overflow-height - $h1-calculated-height) / 2 $grid-gutter-width;
+    }
+
+    @include media-breakpoint-up(xl) {
+      $logo-height: $banner-logo-sizing-xl * 0.75;
+      $logo-overflow-height: $logo-height / 3;
+      margin: ($logo-overflow-height - $h1-calculated-height) / 2 $grid-gutter-width;
+    }
+  }
+
+  &__content {
+    clear: both;
+    @include make-row();
+    padding-left: $grid-gutter-width;
+    padding-right: $grid-gutter-width;
+
+    &__description,
+    &__courses {
+      @include make-col-ready();
+      @include make-col(12);
+    }
+  }
+}
