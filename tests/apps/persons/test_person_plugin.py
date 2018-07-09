@@ -2,17 +2,19 @@
 """
 Unit tests for the Person plugin and its model
 """
+from django import forms
+from django.conf import settings
 from django.test import TestCase
 
-from cms.api import add_plugin
+from cms.api import add_plugin, create_page
 from cmsplugin_plain_text.cms_plugins import PlaintextPlugin
 from djangocms_picture.cms_plugins import PicturePlugin
 
 from richie.apps.core.factories import FilerImageFactory, UserFactory
 from richie.apps.core.helpers import create_i18n_page
-
-from ..cms_plugins import PersonPlugin
-from ..factories import PersonFactory
+from richie.apps.persons.cms_plugins import PersonPlugin
+from richie.apps.persons.factories import PersonFactory
+from richie.apps.persons.models import PersonPluginModel
 
 
 class PersonPluginTestCase(TestCase):

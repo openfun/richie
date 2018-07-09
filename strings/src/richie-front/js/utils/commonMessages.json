@@ -1,0 +1,17 @@
+[
+  {
+    "id": "common.coursesHumanName",
+    "description": "Title/name to use when we display a list of courses",
+    "defaultMessage": "Courses"
+  },
+  {
+    "id": "common.organizationsHumanName",
+    "description": "Title/name to use when we display a list of organizations",
+    "defaultMessage": "Organizations"
+  },
+  {
+    "id": "common.subjectsHumanName",
+    "description": "Title/name to use when we display a list of subjects",
+    "defaultMessage": "Subjects"
+  }
+]

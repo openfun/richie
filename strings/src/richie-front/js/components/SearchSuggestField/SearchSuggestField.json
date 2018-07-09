@@ -1,0 +1,7 @@
+[
+  {
+    "id": "components.SearchSuggestField.searchFieldPlaceholder",
+    "description": "Placeholder text displayed in the search field when it is empty.",
+    "defaultMessage": "Search for courses, organizations, subjects"
+  }
+]
