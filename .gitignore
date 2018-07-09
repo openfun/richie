@@ -33,9 +33,6 @@ htmlcov/
 nosetests.xml
 coverage.xml
 
-# Translations
-*.mo
-
 # Vagrant
 .vagrant
 
@@ -81,3 +78,7 @@ node_modules
 
 # logs
 yarn-error.log
+
+# Exported strings & generated translation templates
+src/richie-front/i18n/src
+*.pot
