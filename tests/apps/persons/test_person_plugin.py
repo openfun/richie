@@ -22,6 +22,24 @@ class PersonPluginTestCase(TestCase):
     Test that PersonPlugin correctly displays a Person's page placeholders content
     """
 
+    def test_person_plugin_form_page_choices(self):
+        """
+        The form to create a person plugin should only list person pages in the select box.
+        """
+
+        class PersonPluginModelForm(forms.ModelForm):
+            class Meta:
+                model = PersonPluginModel
+                exclude = ()
+
+        person = PersonFactory()
+        other_page_title = "other page"
+        create_page(other_page_title, "richie/fullwidth.html", settings.LANGUAGE_CODE)
+        plugin_form = PersonPluginModelForm()
+        print(plugin_form)
+        self.assertIn(person.get_full_name(), plugin_form.as_table())
+        self.assertNotIn(other_page_title, plugin_form.as_table())
+
     def test_person_plugin_render(self):
         """
         Test that a PersonPlugin correctly renders person's page specific information
