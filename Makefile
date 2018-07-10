@@ -61,6 +61,9 @@ build-ts: ## build TypeScript application
 	@$(YARN) build
 .PHONY: build-ts
 
+compilemessages: ## compile the gettext files
+	@$(COMPOSE_RUN) -w /app/src/richie app python /app/sandbox/manage.py compilemessages
+
 demo-site:  ## create a demo site
 	@$(MANAGE) create_demo_site
 .PHONY: demo-site
@@ -99,6 +102,9 @@ lint-front: ## lint TypeScript sources
 logs: ## get development logs
 	@$(COMPOSE) logs -f
 .PHONY: logs
+
+messages: ## create the .po files used for i18n
+	@$(COMPOSE_RUN) -w /app/src/richie app python /app/sandbox/manage.py makemessages --keep-pot
 
 migrate:  ## perform database migrations
 	@$(MANAGE) migrate
