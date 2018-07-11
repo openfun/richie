@@ -55,7 +55,7 @@
       <div class="course-detail__content__subjects">
         <h2>{% trans 'Subjects' %}</h2>
         <ul class="course-detail__content__subjects__list">
-          {% for subject in course.subjects.all %}
+          {% for subject in course.subjects.drafts %}
             {# If the current page is a draft, show draft subjects with a class annotation for styling #}
             {% if current_page.publisher_is_draft %}
               {% if subject.public_extension %}
@@ -89,7 +89,7 @@
             {{ course.organization_main.extended_object.get_title }}
           </li>
           {% endif %}
-          {% for organization in course.organizations.all %}
+          {% for organization in course.organizations.drafts %}
             {# If the current page is a draft, show draft organizations with a class annotation for styling #}
             {% if organization.id != course.organization_main.id %}
               {% if current_page.publisher_is_draft %}
