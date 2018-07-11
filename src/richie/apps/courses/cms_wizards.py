@@ -42,6 +42,7 @@ class CourseWizardForm(BaseWizardForm):
 
         if (
             self.cleaned_data.get("active_session")
+            # pylint: disable=no-member
             and Course.objects.filter(
                 active_session=self.cleaned_data["active_session"]
             ).exists()

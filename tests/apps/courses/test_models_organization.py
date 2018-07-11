@@ -6,7 +6,7 @@ from django.test import TestCase
 
 from cms.api import create_page
 
-from richie.apps.courses.factories import OrganizationFactory
+from richie.apps.courses.factories import CourseFactory, OrganizationFactory
 from richie.apps.courses.models import Organization
 
 
@@ -78,3 +78,43 @@ class OrganizationTestCase(TestCase):
         organization = Organization(code="SOR", extended_object=page)
         with self.assertNumQueries(1):
             self.assertEqual(str(organization), "Organization: La Sorbonne (SOR)")
+
+    def test_organization_courses_copied_when_publishing(self):
+        """
+        When publishing a organization, the links to draft courses on the draft version of the
+        organization should be copied (clear then add) to the published version.
+        Links to published courses should not be copied as they are redundant and not
+        up-to-date.
+        """
+        # Create draft courses
+        course1, course2 = CourseFactory.create_batch(2)
+
+        # Create a draft organization
+        draft_organization = OrganizationFactory(with_courses=[course1, course2])
+
+        # Publish course1
+        course1.extended_object.publish("en")
+        course1.refresh_from_db()
+
+        # The draft organization should see all courses and propose a custom filter to easily
+        # access the draft versions
+        self.assertEqual(
+            set(draft_organization.courses.all()),
+            {course1, course1.public_extension, course2},
+        )
+        self.assertEqual(set(draft_organization.courses.drafts()), {course1, course2})
+
+        # Publish the organization and check that the courses are copied
+        draft_organization.extended_object.publish("en")
+        published_organization = Organization.objects.get(
+            extended_object__publisher_is_draft=False
+        )
+        self.assertEqual(set(published_organization.courses.all()), {course1, course2})
+
+        # When publishing, the courses that are obsolete should be cleared
+        draft_organization.courses.remove(course2)
+        self.assertEqual(set(published_organization.courses.all()), {course1, course2})
+
+        # courses on the published organization are only cleared after publishing the draft page
+        draft_organization.extended_object.publish("en")
+        self.assertEqual(set(published_organization.courses.all()), {course1})

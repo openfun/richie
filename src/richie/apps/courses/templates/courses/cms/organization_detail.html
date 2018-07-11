@@ -27,7 +27,7 @@
       </div>
 
       <ul class="organization-detail__content__courses">
-        {% for course in organization.courses.all %}
+        {% for course in organization.courses.drafts %}
           {# If the current page is a draft, show draft courses with a class annotation for styling #}
           {% if current_page.publisher_is_draft %}
             {% if course.public_extension %}

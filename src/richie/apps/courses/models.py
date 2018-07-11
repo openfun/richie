@@ -6,11 +6,12 @@ from django.db import models
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 
-from cms.extensions import PageExtension
 from cms.extensions.extension_pool import extension_pool
 
+from ..core.models import BasePageExtension
 
-class Organization(PageExtension):
+
+class Organization(BasePageExtension):
     """
     The organization page extension represents and records entities that manage courses.
     It could be a university or a training company for example.
@@ -49,7 +50,7 @@ class Organization(PageExtension):
         We must manually copy the many-to-many relations from the "draft" instance of
         to the "published" instance.
         """
-        self.courses.set(oldinstance.courses.all())
+        self.courses.set(oldinstance.courses.drafts())
 
     def clean(self):
         """
@@ -74,6 +75,7 @@ class Organization(PageExtension):
 
             # If the page is being updated, we should exclude it while looking for duplicates
             if self.pk:
+                # pylint: disable=no-member
                 uniqueness_query = uniqueness_query.exclude(pk=self.pk)
 
             # Raise a ValidationError if the code already exists
@@ -91,7 +93,7 @@ class Organization(PageExtension):
         super().save(*args, **kwargs)
 
 
-class Course(PageExtension):
+class Course(BasePageExtension):
     """
     The course page extension represents and records a course in the catalog.
 
@@ -147,8 +149,8 @@ class Course(PageExtension):
         to the "published" instance.
         """
         # pylint: disable=no-member
-        self.organizations.set(oldinstance.organizations.all())
-        self.subjects.set(oldinstance.subjects.all())
+        self.organizations.set(oldinstance.organizations.drafts())
+        self.subjects.set(oldinstance.subjects.drafts())
 
     def validate_unique(self, exclude=None):
         """
@@ -165,6 +167,7 @@ class Course(PageExtension):
 
             # If the page is being updated, we should exclude it while looking for duplicates
             if self.pk:
+                # pylint: disable=no-member
                 uniqueness_query = uniqueness_query.exclude(pk=self.pk)
 
             # Raise a ValidationError if the active session already exists
@@ -191,7 +194,7 @@ class Course(PageExtension):
             self.organizations.add(self.organization_main)
 
 
-class Subject(PageExtension):
+class Subject(BasePageExtension):
     """
     The subject page extension represents and records a thematic in the catalog.
 
@@ -218,7 +221,7 @@ class Subject(PageExtension):
         We must manually copy the many-to-many relations from the "draft" instance
         to the "published" instance.
         """
-        self.courses.set(oldinstance.courses.all())
+        self.courses.set(oldinstance.courses.drafts())
 
 
 extension_pool.register(Course)

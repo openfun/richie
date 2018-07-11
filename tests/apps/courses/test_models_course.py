@@ -114,45 +114,81 @@ class CourseTestCase(TestCase):
 
     def test_course_organizations_copied_when_publishing(self):
         """
-        When publishing a course, the organizations on the draft version of the course
-        should be copied (clear then add) to the published version.
+        When publishing a course, the links to draft organizations on the draft version of the
+        course should be copied (clear then add) to the published version.
+        Links to published organizations should not be copied as they are redundant and not
+        up-to-date.
         """
         # Create draft organizations
         organization1, organization2 = OrganizationFactory.create_batch(2)
-        # Publish the organizations
-        organization1.extended_object.publish("en")
-        organization2.extended_object.publish("en")
 
         # Create a draft course
-        course = CourseFactory(with_organizations=[organization1, organization2])
+        draft_course = CourseFactory(with_organizations=[organization1, organization2])
+
+        # Publish organization1
+        organization1.extended_object.publish("en")
+        organization1.refresh_from_db()
+
+        # The course should see all organizations and propose a custom filter to easily access
+        # the draft versions
+        self.assertEqual(
+            set(draft_course.organizations.all()),
+            {
+                organization1,
+                organization1.public_extension,
+                organization2,
+                draft_course.organization_main,
+            },
+        )
+        self.assertEqual(
+            set(draft_course.organizations.drafts()),
+            {organization1, organization2, draft_course.organization_main},
+        )
 
         # Publish the course and check that the organizations are copied
-        course.extended_object.publish("en")
+        draft_course.extended_object.publish("en")
         published_course = Course.objects.get(extended_object__publisher_is_draft=False)
         self.assertEqual(
             set(published_course.organizations.all()),
-            {organization1, organization2, course.organization_main},
+            {organization1, organization2, draft_course.organization_main},
         )
         # When publishing, the organizations that are obsolete should be cleared
-        course.organizations.remove(organization2)
+        draft_course.organizations.remove(organization2)
         self.assertEqual(
             set(published_course.organizations.all()),
-            {organization1, organization2, course.organization_main},
+            {organization1, organization2, draft_course.organization_main},
         )
         # Organizations on the published course are only cleared after publishing the draft page
-        course.extended_object.publish("en")
+        draft_course.extended_object.publish("en")
         self.assertEqual(
             set(published_course.organizations.all()),
-            {organization1, course.organization_main},
+            {organization1, draft_course.organization_main},
         )
 
     def test_course_subjects_copied_when_publishing(self):
         """
-        When publishing a course, the subjects on the draft version of the course
-        should be copied (clear then add) to the published version.
+        When publishing a course, the links to draft subjects on the draft version of the
+        course should be copied (clear then add) to the published version.
+        Links to published subjects should not be copied as they are redundant and not
+        up-to-date.
         """
+        # Create draft subjects
         subject1, subject2 = SubjectFactory.create_batch(2)
+
+        # Create a draft course
         draft_course = CourseFactory(with_subjects=[subject1, subject2])
+
+        # Publish subject1
+        subject1.extended_object.publish("en")
+        subject1.refresh_from_db()
+
+        # The draft course should see all subjects and propose a custom filter to easily access
+        # the draft versions
+        self.assertEqual(
+            set(draft_course.subjects.all()),
+            {subject1, subject1.public_extension, subject2},
+        )
+        self.assertEqual(set(draft_course.subjects.drafts()), {subject1, subject2})
 
         # Publish the course and check that the subjects are copied
         draft_course.extended_object.publish("en")
@@ -162,6 +198,7 @@ class CourseTestCase(TestCase):
         # When publishing, the subjects that are obsolete should be cleared
         draft_course.subjects.remove(subject2)
         self.assertEqual(set(published_course.subjects.all()), {subject1, subject2})
+
         # Subjects on the published course are only cleared after publishing the draft page
         draft_course.extended_object.publish("en")
         self.assertEqual(set(published_course.subjects.all()), {subject1})

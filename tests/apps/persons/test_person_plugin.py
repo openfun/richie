@@ -36,7 +36,6 @@ class PersonPluginTestCase(TestCase):
         other_page_title = "other page"
         create_page(other_page_title, "richie/fullwidth.html", settings.LANGUAGE_CODE)
         plugin_form = PersonPluginModelForm()
-        print(plugin_form)
         self.assertIn(person.get_full_name(), plugin_form.as_table())
         self.assertNotIn(other_page_title, plugin_form.as_table())
 

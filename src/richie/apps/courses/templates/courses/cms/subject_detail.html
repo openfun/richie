@@ -23,7 +23,7 @@
     </div>
 
     <ul class="subject-detail__courses">
-      {% for course in subject.courses.all %}
+      {% for course in subject.courses.drafts %}
         {# If the current page is a draft, show draft courses with a class annotation for styling #}
         {% if current_page.publisher_is_draft %}
           {% if course.public_extension %}
