@@ -16,15 +16,19 @@ class SubjectCMSTestCase(TestCase):
         """
         Validate that the important elements are displayed on a published subject page
         """
-        course1, course2, course3 = CourseFactory.create_batch(3)
-        subject = SubjectFactory(
-            title="Very interesting subject", with_courses=[course1, course2, course3]
-        )
+        courses = CourseFactory.create_batch(4)
+        subject = SubjectFactory(title="Very interesting subject", with_courses=courses)
         page = subject.extended_object
 
         # Publish only 2 out of 3 courses
-        course1.extended_object.publish("en")
-        course2.extended_object.publish("en")
+        courses[0].extended_object.publish("en")
+        courses[1].extended_object.publish("en")
+
+        # The unpublished objects may have been published and unpublished which puts them in a
+        # status different from objects that have never been published.
+        # We want to test both cases.
+        courses[2].extended_object.publish("en")
+        courses[2].extended_object.unpublish("en")
 
         # The page should not be visible before it is published
         url = page.get_absolute_url()
@@ -46,7 +50,7 @@ class SubjectCMSTestCase(TestCase):
             html=True,
         )
         # Only published courses should be present on the page
-        for course in [course1, course2]:
+        for course in courses[:2]:
             self.assertContains(
                 response,
                 '<li class="subject-detail__courses__item">{:s}</li>'.format(
@@ -54,7 +58,8 @@ class SubjectCMSTestCase(TestCase):
                 ),
                 html=True,
             )
-        self.assertNotContains(response, course3.extended_object.get_title())
+        for course in courses[-2:]:
+            self.assertNotContains(response, course.extended_object.get_title())
 
     def test_subject_cms_draft_content(self):
         """
@@ -63,15 +68,19 @@ class SubjectCMSTestCase(TestCase):
         user = UserFactory(is_staff=True, is_superuser=True)
         self.client.login(username=user.username, password="password")
 
-        course1, course2, course3 = CourseFactory.create_batch(3)
-        subject = SubjectFactory(
-            title="Very interesting subject", with_courses=[course1, course2, course3]
-        )
+        courses = CourseFactory.create_batch(4)
+        subject = SubjectFactory(title="Very interesting subject", with_courses=courses)
         page = subject.extended_object
 
-        # Publish only 2 out of 3 courses
-        course1.extended_object.publish("en")
-        course2.extended_object.publish("en")
+        # Publish only 2 out of 4 courses
+        courses[0].extended_object.publish("en")
+        courses[1].extended_object.publish("en")
+
+        # The unpublished objects may have been published and unpublished which puts them in a
+        # status different from objects that have never been published.
+        # We want to test both cases.
+        courses[2].extended_object.publish("en")
+        courses[2].extended_object.unpublish("en")
 
         # The page should be visible as draft to the staff user
         url = page.get_absolute_url()
@@ -88,7 +97,7 @@ class SubjectCMSTestCase(TestCase):
             html=True,
         )
         # The published courses should be present on the page
-        for course in [course1, course2]:
+        for course in courses[:2]:
             self.assertContains(
                 response,
                 '<li class="subject-detail__courses__item">{:s}</li>'.format(
@@ -97,10 +106,11 @@ class SubjectCMSTestCase(TestCase):
                 html=True,
             )
         # The draft course should also be present on the page with an annotation for styling
-        self.assertContains(
-            response,
-            '<li class="subject-detail__courses__item--draft">{:s}</li>'.format(
-                course3.extended_object.get_title()
-            ),
-            html=True,
-        )
+        for course in courses[-2:]:
+            self.assertContains(
+                response,
+                '<li class="subject-detail__courses__item--draft">{:s}</li>'.format(
+                    course.extended_object.get_title()
+                ),
+                html=True,
+            )
