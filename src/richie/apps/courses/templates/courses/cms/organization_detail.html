@@ -30,7 +30,7 @@
         {% for course in organization.courses.drafts %}
           {# If the current page is a draft, show draft courses with a class annotation for styling #}
           {% if current_page.publisher_is_draft %}
-            {% if course.public_extension %}
+            {% if course.check_publication is True %}
               <li class="organization-detail__content__courses__item">
                 {{ course.public_extension.extended_object.get_title }}
               </li>
@@ -40,7 +40,7 @@
               </li>
             {% endif %}
           {# If the current course page is the published version, show only the courses that are published #}
-          {% elif course.public_extension %}
+          {% elif course.check_publication is True %}
             <li class="organization-detail__content__courses__item">
               {{ course.public_extension.extended_object.get_title }}
             </li>

@@ -1,7 +1,7 @@
 """
 End-to-end tests for the course detail view
 """
-from django.test import TestCase
+from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
 from richie.apps.courses.factories import (
@@ -11,7 +11,7 @@ from richie.apps.courses.factories import (
 )
 
 
-class CourseCMSTestCase(TestCase):
+class CourseCMSTestCase(CMSTestCase):
     """
     End-to-end test suite to validate the content and Ux of the course detail view
     """
@@ -20,23 +20,30 @@ class CourseCMSTestCase(TestCase):
         """
         Validate that the important elements are displayed on a published course page
         """
-        organization1, organization2, organization3 = OrganizationFactory.create_batch(
-            3
-        )
-        subject1, subject2, subject3 = SubjectFactory.create_batch(3)
+        subjects = SubjectFactory.create_batch(4)
+        organizations = OrganizationFactory.create_batch(4)
+
         course = CourseFactory(
-            organization_main=organization1,
+            organization_main=organizations[0],
             title="Very interesting course",
-            with_organizations=[organization1, organization2, organization3],
-            with_subjects=[subject1, subject2, subject3],
+            with_organizations=organizations,
+            with_subjects=subjects,
         )
         page = course.extended_object
 
-        # Publish only 2 out of 3 organizations and 2 out of 3 subjects
-        organization1.extended_object.publish("en")
-        organization2.extended_object.publish("en")
-        subject1.extended_object.publish("en")
-        subject2.extended_object.publish("en")
+        # Publish only 2 out of 4 subjects and 2 out of 4 organizations
+        subjects[0].extended_object.publish("en")
+        subjects[1].extended_object.publish("en")
+        organizations[0].extended_object.publish("en")
+        organizations[1].extended_object.publish("en")
+
+        # The unpublished objects may have been published and unpublished which puts them in a
+        # status different from objects that have never been published.
+        # We want to test both cases.
+        subjects[2].extended_object.publish("en")
+        subjects[2].extended_object.unpublish("en")
+        organizations[2].extended_object.publish("en")
+        organizations[2].extended_object.unpublish("en")
 
         # The page should not be visible before it is published
         url = page.get_absolute_url()
@@ -66,7 +73,7 @@ class CourseCMSTestCase(TestCase):
         )
 
         # Only published subjects should be present on the page
-        for subject in [subject1, subject2]:
+        for subject in subjects[:2]:
             self.assertContains(
                 response,
                 '<li class="course-detail__content__subjects__item">{:s}</li>'.format(
@@ -74,29 +81,28 @@ class CourseCMSTestCase(TestCase):
                 ),
                 html=True,
             )
-        self.assertNotContains(response, subject3.extended_object.get_title())
+        for subject in subjects[-2:]:
+            self.assertNotContains(response, subject.extended_object.get_title())
 
-        # organization1 is marked as main organization
+        # organization 1 is marked as main organization
         self.assertContains(
             response,
-            ('<li class="course-detail__content__organizations__item '
-             'course-detail__content__organizations__item--main">{:s}</li>').format(
-                organization1.extended_object.get_title()
-            ),
+            (
+                '<li class="course-detail__content__organizations__item--main">{:s}</li>'
+            ).format(organizations[0].extended_object.get_title()),
             html=True,
         )
         # organization 2 is the only "common" org in listing since
         self.assertContains(
             response,
             '<li class="course-detail__content__organizations__item">{:s}</li>'.format(
-                organization2.extended_object.get_title()
+                organizations[1].extended_object.get_title()
             ),
             html=True,
         )
         # Draft organization should not be in response content
-        # TODO: This is wrong, we show draft but marked with a class modifier,
-        # this may work because of unused html attribute ?
-        self.assertNotContains(response, organization3.extended_object.get_title())
+        for organization in organizations[-2:]:
+            self.assertNotContains(response, organization.extended_object.get_title())
 
     def test_course_cms_draft_content(self):
         """
@@ -106,23 +112,30 @@ class CourseCMSTestCase(TestCase):
         user = UserFactory(is_staff=True, is_superuser=True)
         self.client.login(username=user.username, password="password")
 
-        subject1, subject2, subject3 = SubjectFactory.create_batch(3)
-        organization1, organization2, organization3 = OrganizationFactory.create_batch(
-            3
-        )
+        subjects = SubjectFactory.create_batch(4)
+        organizations = OrganizationFactory.create_batch(4)
+
         course = CourseFactory(
-            organization_main=organization1,
+            organization_main=organizations[0],
             title="Very interesting course",
-            with_organizations=[organization1, organization2, organization3],
-            with_subjects=[subject1, subject2, subject3],
+            with_organizations=organizations,
+            with_subjects=subjects,
         )
         page = course.extended_object
 
-        # Publish only 2 out of 3 subjects and 2 out of 3 organizations
-        subject1.extended_object.publish("en")
-        subject2.extended_object.publish("en")
-        organization1.extended_object.publish("en")
-        organization2.extended_object.publish("en")
+        # Publish only 2 out of 4 subjects and 2 out of 4 organizations
+        subjects[0].extended_object.publish("en")
+        subjects[1].extended_object.publish("en")
+        organizations[0].extended_object.publish("en")
+        organizations[1].extended_object.publish("en")
+
+        # The unpublished objects may have been published and unpublished which puts them in a
+        # status different from objects that have never been published.
+        # We want to test both cases.
+        subjects[2].extended_object.publish("en")
+        subjects[2].extended_object.unpublish("en")
+        organizations[2].extended_object.publish("en")
+        organizations[2].extended_object.unpublish("en")
 
         # The page should be visible as draft to the staff user
         url = page.get_absolute_url()
@@ -146,24 +159,41 @@ class CourseCMSTestCase(TestCase):
             html=True,
         )
 
-        # organization2 is not marked as a draft since it has been published
-        self.assertNotContains(
-            response,
-            '<li class="course-detail__content__organizations__item--draft">{:s}</li>'.format(
-                organization2.extended_object.get_title()
-            ),
-        )
-        # Draft organization should be present on the page with an annotation for styling
+        # organization 1 is marked as main and not duplicated
         self.assertContains(
             response,
-            '<li class="course-detail__content__organizations__item--draft">{:s}</li>'.format(
-                organization3.extended_object.get_title()
+            (
+                '<li class="course-detail__content__organizations__item--main">{:s}</li>'
+            ).format(organizations[0].extended_object.get_title()),
+            html=True,
+        )
+        self.assertNotContains(
+            response,
+            (
+                '<li class="course-detail__content__organizations__item">{:s}</li>'
+            ).format(organizations[0].extended_object.get_title()),
+            html=True,
+        )
+        # organization 2 is not marked as a draft since it has been published
+        self.assertContains(
+            response,
+            '<li class="course-detail__content__organizations__item">{:s}</li>'.format(
+                organizations[1].extended_object.get_title()
             ),
             html=True,
         )
+        # Draft organizations should be present on the page with an annotation for styling
+        for organization in organizations[:2]:
+            self.assertNotContains(
+                response,
+                (
+                    '<li class="course-detail__content__organizations__item--draft">{:s}</li>'
+                ).format(organization.extended_object.get_title()),
+                html=True,
+            )
 
-        # Draft subjects should be present on the page with an annotation for styling
-        for subject in [subject1, subject2]:
+        # The published subjects should be present on the page
+        for subject in subjects[:2]:
             self.assertContains(
                 response,
                 '<li class="course-detail__content__subjects__item">{:s}</li>'.format(
@@ -171,11 +201,44 @@ class CourseCMSTestCase(TestCase):
                 ),
                 html=True,
             )
+        # Draft subjects should also be present on the page with an annotation for styling
+        for subject in subjects[-2:]:
+            self.assertContains(
+                response,
+                '<li class="course-detail__content__subjects__item--draft">{:s}</li>'.format(
+                    subject.extended_object.get_title()
+                ),
+                html=True,
+            )
+
+    def test_course_cms_draft_content_draft_organization_main(self):
+        """
+        A draft main organization displayed on a draft page should be marked as both
+        "main" and "draft"
+        """
+        user = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=user.username, password="password")
+
+        course = CourseFactory(title="Very interesting course")
+        page = course.extended_object
+
+        url = page.get_absolute_url()
+        response = self.client.get(url)
+
+        # The main organization is only listed separately and also marked as draft
         self.assertContains(
             response,
-            '<li class="course-detail__content__subjects__item--draft">{:s}</li>'.format(
-                subject3.extended_object.get_title()
-            ),
+            (
+                '<li class="course-detail__content__organizations__item--draft '
+                'course-detail__content__organizations__item--main">{:s}</li>'
+            ).format(course.organization_main.extended_object.get_title()),
+            html=True,
+        )
+        self.assertNotContains(
+            response,
+            (
+                '<li class="course-detail__content__organizations__item--draft">{:s}</li>'
+            ).format(course.organization_main.extended_object.get_title()),
             html=True,
         )
 

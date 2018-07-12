@@ -58,7 +58,7 @@
           {% for subject in course.subjects.drafts %}
             {# If the current page is a draft, show draft subjects with a class annotation for styling #}
             {% if current_page.publisher_is_draft %}
-              {% if subject.public_extension %}
+              {% if subject.check_publication is True %}
                 <li class="course-detail__content__subjects__item">
                   {{ subject.public_extension.extended_object.get_title }}
                 </li>
@@ -68,7 +68,7 @@
                 </li>
               {% endif %}
             {# If the current course page is the published version, show only the subjects that are published #}
-            {% elif subject.public_extension %}
+            {% elif subject.check_publication is True %}
               <li class="course-detail__content__subjects__item">
                 {{ subject.public_extension.extended_object.get_title }}
               </li>
@@ -85,29 +85,12 @@
         <h2>{% trans 'Organizations' %}</h2>
         <ul class="course-detail__content__organizations__list">
           {% if course.organization_main %}
-          <li class="course-detail__content__organizations__item course-detail__content__organizations__item--main">
-            {{ course.organization_main.extended_object.get_title }}
-          </li>
+            {% include "courses/cms/organization_fragment.html" with organization=course.organization_main is_main=True %}
           {% endif %}
           {% for organization in course.organizations.drafts %}
             {# If the current page is a draft, show draft organizations with a class annotation for styling #}
             {% if organization.id != course.organization_main.id %}
-              {% if current_page.publisher_is_draft %}
-                {% if organization.public_extension %}
-                  <li class="course-detail__content__organizations__item">
-                    {{ organization.public_extension.extended_object.get_title }}
-                  </li>
-                {% else %}
-                  <li class="course-detail__content__organizations__item--draft">
-                    {{ organization.extended_object.get_title }}
-                  </li>
-                {% endif %}
-              {# If the current page is the published version, show only the organizations that are published #}
-              {% elif organization.public_extension %}
-                <li class="course-detail__content__organizations__item">
-                  {{ organization.public_extension.extended_object.get_title }}
-                </li>
-              {% endif %}
+              {% include "courses/cms/organization_fragment.html" %}
             {% endif %}
           {% endfor %}
         </ul>

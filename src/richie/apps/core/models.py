@@ -1,5 +1,6 @@
 """Define a custom manager for page extensions"""
 from django.db import models
+from django.utils import translation
 
 from cms.extensions import PageExtension
 
@@ -62,3 +63,21 @@ class BasePageExtension(PageExtension):
 
     class Meta:
         abstract = True
+
+    def check_publication(self, language=None):
+        """
+        Allow checking if a page extension is published without passing any language (unlike the
+        "is_published" method on the page object): if not explicitly passed as argument, the
+        language is retrieved from the context.
+
+        The actual check is subcontracted to the "is_published" method on the related Django CMS
+        Page object.
+
+        Note: We choose not to name our method "is_published" like Django CMS, because it is a
+        bad practice. Indeed, someone may think it is a property and use it without invocating it
+        and the returned value (a bound method) will always be truthy... This issue happened a lot
+        with the "is_authenticated" method on Django's User model before they converted it to a
+        property.
+        """
+        language = language or translation.get_language()
+        return self.extended_object.is_published(language)
