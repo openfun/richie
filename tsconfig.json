@@ -16,8 +16,7 @@
     "moduleResolution": "node",
     "strict": true,
     "sourceMap": true,
-    "target": "es6",
-    "resolveJsonModule": true
+    "target": "es6"
   },
   "include": ["./**/*"]
 }
