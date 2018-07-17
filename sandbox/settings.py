@@ -10,6 +10,8 @@ import raven
 from configurations import Configuration, values
 from elasticsearch import Elasticsearch
 
+from richie.apps.search.utils.es_indices import IndicesList
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join("/", "data")
 
@@ -61,11 +63,11 @@ class ElasticSearchMixin(object):
         [values.Value("localhost", environ_name="ES_CLIENT", environ_prefix=None)]
     )
     ES_CHUNK_SIZE = 500
-    ES_INDEXES = [
-        "richie.apps.search.indexers.courses.CoursesIndexer",
-        "richie.apps.search.indexers.organizations.OrganizationsIndexer",
-        "richie.apps.search.indexers.subjects.SubjectsIndexer",
-    ]
+    ES_INDICES = IndicesList(
+        courses="richie.apps.search.indexers.courses.CoursesIndexer",
+        organizations="richie.apps.search.indexers.organizations.OrganizationsIndexer",
+        subjects="richie.apps.search.indexers.subjects.SubjectsIndexer",
+    )
 
     ES_DEFAULT_PAGE_SIZE = 10
 

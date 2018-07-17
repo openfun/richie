@@ -17,6 +17,7 @@ from richie.apps.search.index_manager import (
     perform_create_index,
     regenerate_indexes,
 )
+from richie.apps.search.utils.es_indices import IndicesList
 
 
 class IndexManagerTestCase(TestCase):
@@ -155,7 +156,13 @@ class IndexManagerTestCase(TestCase):
         mock_logger.info.assert_called()
 
     # pylint: disable=no-member,unused-argument
-    @override_settings(ES_INDEXES=["example.ExOneIndexable", "example.ExTwoIndexable"])
+    @override_settings(
+        ES_INDICES=IndicesList(
+            "example.ExOneIndexable",
+            "example.ExTwoIndexable",
+            "example.ExThreeIndexable",
+        )
+    )
     @mock.patch(
         "richie.apps.search.index_manager.get_indexable_from_string",
         lambda name: ExOneIndexable
@@ -204,6 +211,12 @@ class IndexManagerTestCase(TestCase):
                         }
                     },
                     {
+                        "add": {
+                            "index": "richie_stub_created_index",
+                            "alias": "richie_stub",
+                        }
+                    },
+                    {
                         "remove": {
                             "index": "richie_example_forgotten",
                             "alias": "richie_example",
@@ -227,6 +240,18 @@ class IndexManagerTestCase(TestCase):
                             "alias": "richie_stub",
                         }
                     },
+                    {
+                        "remove": {
+                            "index": "richie_stub_forgotten",
+                            "alias": "richie_stub",
+                        }
+                    },
+                    {
+                        "remove": {
+                            "index": "richie_stub_previous",
+                            "alias": "richie_stub",
+                        }
+                    },
                 ]
             }
         )
@@ -234,7 +259,13 @@ class IndexManagerTestCase(TestCase):
             ignore=[400, 404], index="richie_orphan"
         )
 
-    @override_settings(ES_INDEXES=["example.ExOneIndexable", "example.ExTwoIndexable"])
+    @override_settings(
+        ES_INDICES=IndicesList(
+            "example.ExOneIndexable",
+            "example.ExTwoIndexable",
+            "example.ExThreeIndexable",
+        )
+    )
     @mock.patch(
         "richie.apps.search.index_manager.get_indexable_from_string",
         lambda name: ExOneIndexable
@@ -266,6 +297,12 @@ class IndexManagerTestCase(TestCase):
                         "add": {
                             "index": "richie_example_created_index",
                             "alias": "richie_example",
+                        }
+                    },
+                    {
+                        "add": {
+                            "index": "richie_stub_created_index",
+                            "alias": "richie_stub",
                         }
                     },
                     {

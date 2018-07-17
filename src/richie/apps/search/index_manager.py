@@ -75,7 +75,7 @@ def regenerate_indexes(logger):
         existing_indexes = []
 
     # Dynamically import the modules from the config mixin strings
-    indexables = list(map(get_indexable_from_string, settings.ES_INDEXES))
+    indexables = list(map(get_indexable_from_string, settings.ES_INDICES))
 
     # Create a new index for each of those modules
     # NB: we're mapping perform_create_index which produces side-effects
