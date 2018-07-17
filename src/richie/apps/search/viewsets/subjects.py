@@ -2,6 +2,7 @@
 API endpoints to access subjects through ElasticSearch
 """
 from django.conf import settings
+from django.utils.module_loading import import_string
 from django.utils.translation import get_language_from_request
 
 from elasticsearch.exceptions import NotFoundError
@@ -9,7 +10,6 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
 from ..exceptions import QueryFormatException
-from ..indexers.subjects import SubjectsIndexer
 
 
 class SubjectsViewSet(ViewSet):
@@ -18,6 +18,9 @@ class SubjectsViewSet(ViewSet):
     See API Blueprint for details on consumer use.
     """
 
+    # Get the subjects indexer from the settings
+    indexer = import_string(settings.ES_INDICES.subjects)
+
     # pylint: disable=no-self-use,unused-argument
     def list(self, request, version):
         """
@@ -25,14 +28,14 @@ class SubjectsViewSet(ViewSet):
         and returns a list of matching items
         """
         try:
-            limit, offset, query = SubjectsIndexer.build_es_query(request)
+            limit, offset, query = self.indexer.build_es_query(request)
         except QueryFormatException as exc:
             # Return a 400 with error information if the query params are not as expected
             return Response(status=400, data={"errors": exc.args[0]})
 
         query_response = settings.ES_CLIENT.search(
-            index=SubjectsIndexer.index_name,
-            doc_type=SubjectsIndexer.document_type,
+            index=self.indexer.index_name,
+            doc_type=self.indexer.document_type,
             body=query,
             # Directly pass meta-params through as arguments to the ES client
             from_=offset,
@@ -49,7 +52,7 @@ class SubjectsViewSet(ViewSet):
                 "total_count": query_response["hits"]["total"],
             },
             "objects": [
-                SubjectsIndexer.format_es_subject_for_api(
+                self.indexer.format_es_subject_for_api(
                     subject,
                     # Get the best language we can return multilingual fields in
                     get_language_from_request(request),
@@ -69,8 +72,8 @@ class SubjectsViewSet(ViewSet):
         # raise and end up in a 500 error otherwise
         try:
             query_response = settings.ES_CLIENT.get(
-                index=SubjectsIndexer.index_name,
-                doc_type=SubjectsIndexer.document_type,
+                index=self.indexer.index_name,
+                doc_type=self.indexer.document_type,
                 id=pk,
             )
         except NotFoundError:
@@ -78,7 +81,7 @@ class SubjectsViewSet(ViewSet):
 
         # Format a clean subject object as a response
         return Response(
-            SubjectsIndexer.format_es_subject_for_api(
+            self.indexer.format_es_subject_for_api(
                 query_response,
                 # Get the best language we can return multilingual fields in
                 get_language_from_request(request),

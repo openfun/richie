@@ -2,6 +2,7 @@
 API endpoints to access organizations through ElasticSearch
 """
 from django.conf import settings
+from django.utils.module_loading import import_string
 from django.utils.translation import get_language_from_request
 
 from elasticsearch.exceptions import NotFoundError
@@ -9,7 +10,6 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
 from ..exceptions import QueryFormatException
-from ..indexers.organizations import OrganizationsIndexer
 
 
 class OrganizationsViewSet(ViewSet):
@@ -18,6 +18,9 @@ class OrganizationsViewSet(ViewSet):
     See API Blueprint for details on consumer use.
     """
 
+    # Get the organizations indexer from the settings
+    indexer = import_string(settings.ES_INDICES.organizations)
+
     # pylint: disable=no-self-use,unused-argument
     def list(self, request, version):
         """
@@ -25,14 +28,14 @@ class OrganizationsViewSet(ViewSet):
         organizations and returns a list of matching items
         """
         try:
-            limit, offset, query = OrganizationsIndexer.build_es_query(request)
+            limit, offset, query = self.indexer.build_es_query(request)
         except QueryFormatException as exc:
             # Return a 400 with error information if the query params are not as expected
             return Response(status=400, data={"errors": exc.args[0]})
 
         search_query_response = settings.ES_CLIENT.search(
-            index=OrganizationsIndexer.index_name,
-            doc_type=OrganizationsIndexer.document_type,
+            index=self.indexer.index_name,
+            doc_type=self.indexer.document_type,
             body=query,
             # Directly pass meta-params through as arguments to the ES client
             from_=offset,
@@ -49,7 +52,7 @@ class OrganizationsViewSet(ViewSet):
                 "total_count": search_query_response["hits"]["total"],
             },
             "objects": [
-                OrganizationsIndexer.format_es_organization_for_api(
+                self.indexer.format_es_organization_for_api(
                     organization,
                     # Get the best language to return multilingual fields
                     get_language_from_request(request),
@@ -69,8 +72,8 @@ class OrganizationsViewSet(ViewSet):
         # raise and end up in a 500 error otherwise
         try:
             query_response = settings.ES_CLIENT.get(
-                index=OrganizationsIndexer.index_name,
-                doc_type=OrganizationsIndexer.document_type,
+                index=self.indexer.index_name,
+                doc_type=self.indexer.document_type,
                 id=pk,
             )
         except NotFoundError:
@@ -78,7 +81,7 @@ class OrganizationsViewSet(ViewSet):
 
         # Format a clean organization object as a response
         return Response(
-            OrganizationsIndexer.format_es_organization_for_api(
+            self.indexer.format_es_organization_for_api(
                 query_response,
                 # Get the best language we can return multilingual fields in
                 get_language_from_request(request),
