@@ -2,6 +2,7 @@
 create_demo_site management command
 """
 import logging
+import random
 
 from django.conf import settings
 from django.contrib.sites.models import Site
@@ -10,7 +11,11 @@ from django.utils import translation
 
 from cms import models as cms_models
 
-from richie.apps.courses.factories import OrganizationFactory, SubjectFactory
+from richie.apps.courses.factories import (
+    CourseFactory,
+    OrganizationFactory,
+    SubjectFactory,
+)
 from richie.apps.courses.models import Course, Organization, Subject
 from richie.apps.persons.factories import PersonFactory
 from richie.apps.persons.models import Person
@@ -19,9 +24,13 @@ from ...helpers import create_i18n_page
 
 logger = logging.getLogger("richie.commands.core.create_demo_site")
 
+NB_COURSES = 3
+NB_COURSES_ORGANIZATION_RELATIONS = 3
+NB_COURSES_SUBJECT_RELATIONS = 4
+NB_COURSES_PERSONS_PLUGINS = 3
 NB_ORGANIZATIONS = 8
-NB_SUBJECTS = 8
 NB_PERSONS = 10
+NB_SUBJECTS = 8
 PAGE_INFOS = {
     "home": {
         "content": {"en": "Home", "fr": "Accueil"},
@@ -111,13 +120,13 @@ def create_demo_site():
         )
         pages_created[name] = page
 
-    # Create organizations under the `organizations` page
-    OrganizationFactory.create_batch(
+    # Create organizations under the `Organizations` page
+    organizations = OrganizationFactory.create_batch(
         NB_ORGANIZATIONS, parent=pages_created["organizations"], with_content=True
     )
 
-    # Create subjects under the `subjects` page
-    SubjectFactory.create_batch(
+    # Create subjects under the `Subjects` page
+    subjects = SubjectFactory.create_batch(
         NB_SUBJECTS,
         parent=pages_created["subjects"],
         fill_banner=True,
@@ -130,9 +139,32 @@ def create_demo_site():
     translation.activate(settings.LANGUAGE_CODE)
 
     # Create persons under the `persons` page
-    PersonFactory.create_batch(
+    persons = PersonFactory.create_batch(
         NB_PERSONS, parent=pages_created["persons"], with_content=True
     )
+
+    # Create courses under the `Course` page with subjects and organizations
+    # relations
+    for _ in range(NB_COURSES):
+        course_organizations = random.sample(
+            organizations, NB_COURSES_ORGANIZATION_RELATIONS
+        )
+        CourseFactory(
+            parent=pages_created["courses"],
+            organization_main=random.choice(course_organizations),
+            fill_teaser=True,
+            fill_texts=[
+                "course_syllabus",
+                "course_format",
+                "course_prerequisites",
+                "course_plan",
+                "course_license_content",
+                "course_license_participation",
+            ],
+            fill_team=random.sample(persons, NB_COURSES_PERSONS_PLUGINS),
+            with_organizations=course_organizations,
+            with_subjects=random.sample(subjects, NB_COURSES_SUBJECT_RELATIONS),
+        )
 
 
 class Command(BaseCommand):

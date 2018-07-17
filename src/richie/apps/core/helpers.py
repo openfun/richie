@@ -1,9 +1,13 @@
 """
 Helpers that can be useful throughout the whole project
 """
+import random
+
+from django.conf import settings
 from django.utils.text import slugify
 
-from cms.api import create_page, create_title
+import factory
+from cms.api import add_plugin, create_page, create_title
 
 
 def create_i18n_page(content, is_homepage=False, **kwargs):
@@ -51,3 +55,58 @@ def create_i18n_page(content, is_homepage=False, **kwargs):
             page.publish(language)
 
     return page
+
+
+# pylint: disable=too-many-arguments
+def create_text_plugin(
+    page,
+    slot,
+    language=None,
+    is_html=True,
+    max_nb_chars=None,
+    nb_paragraphs=None,
+    plugin_type="CKEditorPlugin",
+):
+    """
+    A common function to create and add a text plugin of any type instance to
+    a placeholder filled with some random text using Faker.
+
+    Arguments:
+        page (Page model instance): Instance of a Page used to search for
+            given slot (aka a placeholder name).
+        slot (string): A placeholder name available from page template.
+
+    Keyword Arguments:
+        language (string): Language code to use. If ``None`` (default) it will
+            use default language from settings.
+        is_html (boolean): If True, every paragraph will be surrounded with an
+            HTML paragraph markup. Default is True.
+        max_nb_chars (integer): Number of characters limit to create each
+            paragraph. Default is None so a random number between 200 and 400
+            will be used at each paragraph.
+        nb_paragraphs (integer): Number of paragraphs to create in content.
+            Default is None so a random number between 2 and 4 will be used.
+        plugin_type (string or object): Type of plugin. Default use CKEditorPlugin
+            but you can use any other similar plugin that has a body attribute.
+
+    Returns:
+        object: Created plugin instance.
+    """
+    language = language or settings.LANGUAGE_CODE
+    container = "<p>{:s}</p>" if is_html else "{:s}"
+    nb_paragraphs = nb_paragraphs or random.randint(2, 4)
+
+    placeholder = page.placeholders.get(slot=slot)
+
+    paragraphs = []
+    for _ in range(nb_paragraphs):
+        max_nb_chars = max_nb_chars or random.randint(200, 400)
+        paragraphs.append(factory.Faker("text", max_nb_chars=max_nb_chars).generate({}))
+    body = [container.format(p) for p in paragraphs]
+
+    return add_plugin(
+        language=language,
+        placeholder=placeholder,
+        plugin_type=plugin_type,
+        body="".join(body),
+    )

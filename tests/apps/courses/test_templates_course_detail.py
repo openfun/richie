@@ -196,7 +196,7 @@ class CourseCMSTestCase(CMSTestCase):
             self.assertNotContains(
                 response,
                 '<li class="{element:s} {element:s}--draft">{title:s}</li>'.format(
-                    element="course - detail__content__organizations__item",
+                    element="course-detail__content__organizations__item",
                     title=organization.extended_object.get_title(),
                 ),
                 html=True,
