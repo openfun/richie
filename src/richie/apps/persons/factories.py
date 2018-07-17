@@ -72,6 +72,7 @@ class PersonFactory(factory.django.DjangoModelFactory):
             portrait_placeholder = self.extended_object.placeholders.get(
                 slot="portrait"
             )
+
             resume_placeholder = self.extended_object.placeholders.get(slot="resume")
 
             # Add a portrait with a random image

@@ -12,8 +12,21 @@ import factory
 from cms.api import add_plugin, create_page
 from filer.models.imagemodels import Image
 
+from ..core.helpers import create_text_plugin
 from ..core.tests.utils import file_getter
 from .models import Course, Organization, Subject
+
+VIDEO_SAMPLE_LINKS = (
+    (
+        "Anant Agarwal: Why massively open online courses (still) matter",
+        "//www.youtube.com/embed/rYwTA5RA9eU",
+    ),
+    ("Installing Open edX", "//www.youtube.com/embed/YDm6bAPxeg0"),
+    (
+        "Open edX Conference 2018 Opening and Welcome remarks",
+        "//www.youtube.com/embed/zzx6MgBAbCc",
+    ),
+)
 
 
 class OrganizationFactory(factory.django.DjangoModelFactory):
@@ -84,20 +97,8 @@ class OrganizationFactory(factory.django.DjangoModelFactory):
             )
 
             # Add a text plugin with a long random description
-            placeholder = self.extended_object.placeholders.get(slot="description")
-            nb_paragraphs = random.randint(2, 4)
-            paragraphs = [
-                factory.Faker("text", max_nb_chars=random.randint(200, 1000)).generate(
-                    {}
-                )
-                for i in range(nb_paragraphs)
-            ]
-            body = ["<p>{:s}</p>".format(p) for p in paragraphs]
-            add_plugin(
-                language=language,
-                placeholder=placeholder,
-                plugin_type="CKEditorPlugin",
-                body="".join(body),
+            create_text_plugin(
+                self.extended_object, "description", nb_paragraphs=random.randint(2, 4)
             )
 
 
@@ -116,8 +117,9 @@ class CourseFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Course
-        exclude = ["number", "session", "title", "version"]
+        exclude = ["number", "parent", "session", "title", "version"]
 
+    parent = None
     title = factory.Faker("catch_phrase")
 
     version = factory.Sequence(lambda n: "version-v{version}".format(version=n + 1))
@@ -141,17 +143,74 @@ class CourseFactory(factory.django.DjangoModelFactory):
         """
         Automatically create a related page with the random title
         """
-        return create_page(self.title, Course.TEMPLATE_DETAIL, settings.LANGUAGE_CODE)
+        return create_page(
+            self.title,
+            Course.TEMPLATE_DETAIL,
+            settings.LANGUAGE_CODE,
+            parent=self.parent,
+        )
 
     @factory.post_generation
-    # pylint: disable=unused-argument, attribute-defined-outside-init, no-member
+    # pylint: disable=unused-argument
+    def fill_teaser(self, create, extracted, **kwargs):
+        """
+        Add a video plugin for teaser with a random url
+        """
+        if create and extracted:
+            language = settings.LANGUAGE_CODE
+
+            placeholder = self.extended_object.placeholders.get(slot="course_teaser")
+
+            label, url = random.choice(VIDEO_SAMPLE_LINKS)
+
+            add_plugin(
+                language=language,
+                placeholder=placeholder,
+                plugin_type="VideoPlayerPlugin",
+                label=label,
+                embed_link=url,
+            )
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def fill_team(self, create, extracted, **kwargs):
+        """
+        Add person plugin for course team from given person instance list
+        """
+        if create and extracted:
+            language = settings.LANGUAGE_CODE
+            placeholder = self.extended_object.placeholders.get(slot="course_team")
+
+            for person in extracted:
+                add_plugin(
+                    language=language,
+                    placeholder=placeholder,
+                    plugin_type="PersonPlugin",
+                    **{"person": person},
+                )
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def fill_texts(self, create, extracted, **kwargs):
+        """
+        A shortand to fill some placeholder content with a text plugin.
+
+        Placeholder slot names to fill are given from ``extracted`` argument
+        in a list of slot names.
+        """
+        if create and extracted:
+            for slot in extracted:
+                create_text_plugin(self.extended_object, slot, nb_paragraphs=1)
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
     def with_subjects(self, create, extracted, **kwargs):
         """Add subjects to ManyToMany relation."""
         if create and extracted:
             self.subjects.set(extracted)
 
     @factory.post_generation
-    # pylint: disable=unused-argument, attribute-defined-outside-init
+    # pylint: disable=unused-argument
     def with_organizations(self, create, extracted, **kwargs):
         """Add organizations to ManyToMany relation."""
         if create and extracted:
@@ -189,20 +248,21 @@ class SubjectFactory(factory.django.DjangoModelFactory):
         """
         Add a banner with a random image
         """
-        language = settings.LANGUAGE_CODE
-        banner_placeholder = self.extended_object.placeholders.get(slot="banner")
+        if create and extracted:
+            language = settings.LANGUAGE_CODE
+            banner_placeholder = self.extended_object.placeholders.get(slot="banner")
 
-        banner_file = file_getter(os.path.dirname(__file__), "banner")()
-        wrapped_banner = File(banner_file, banner_file.name)
-        banner = Image.objects.create(file=wrapped_banner)
+            banner_file = file_getter(os.path.dirname(__file__), "banner")()
+            wrapped_banner = File(banner_file, banner_file.name)
+            banner = Image.objects.create(file=wrapped_banner)
 
-        add_plugin(
-            language=language,
-            placeholder=banner_placeholder,
-            plugin_type="PicturePlugin",
-            picture=banner,
-            attributes={"alt": "banner image"},
-        )
+            add_plugin(
+                language=language,
+                placeholder=banner_placeholder,
+                plugin_type="PicturePlugin",
+                picture=banner,
+                attributes={"alt": "banner image"},
+            )
 
     @factory.post_generation
     # pylint: disable=unused-argument
@@ -210,19 +270,20 @@ class SubjectFactory(factory.django.DjangoModelFactory):
         """
         Add a logo with a random image
         """
-        language = settings.LANGUAGE_CODE
-        logo_placeholder = self.extended_object.placeholders.get(slot="logo")
+        if create and extracted:
+            language = settings.LANGUAGE_CODE
+            logo_placeholder = self.extended_object.placeholders.get(slot="logo")
 
-        logo_file = file_getter(os.path.dirname(__file__), "logo")()
-        wrapped_logo = File(logo_file, logo_file.name)
-        logo = Image.objects.create(file=wrapped_logo)
-        add_plugin(
-            language=language,
-            placeholder=logo_placeholder,
-            plugin_type="PicturePlugin",
-            picture=logo,
-            attributes={"alt": "logo image"},
-        )
+            logo_file = file_getter(os.path.dirname(__file__), "logo")()
+            wrapped_logo = File(logo_file, logo_file.name)
+            logo = Image.objects.create(file=wrapped_logo)
+            add_plugin(
+                language=language,
+                placeholder=logo_placeholder,
+                plugin_type="PicturePlugin",
+                picture=logo,
+                attributes={"alt": "logo image"},
+            )
 
     @factory.post_generation
     # pylint: disable=unused-argument
@@ -230,24 +291,10 @@ class SubjectFactory(factory.django.DjangoModelFactory):
         """
         Add a text plugin for description with a long random text
         """
-        language = settings.LANGUAGE_CODE
-        description_placeholder = self.extended_object.placeholders.get(
-            slot="description"
-        )
-
-        nb_paragraphs = random.randint(2, 4)
-        paragraphs = [
-            factory.Faker("text", max_nb_chars=random.randint(200, 1000)).generate({})
-            for i in range(nb_paragraphs)
-        ]
-        body = ["<p>{:s}</p>".format(p) for p in paragraphs]
-
-        add_plugin(
-            language=language,
-            placeholder=description_placeholder,
-            plugin_type="CKEditorPlugin",
-            body="".join(body),
-        )
+        if create and extracted:
+            create_text_plugin(
+                self.extended_object, "description", nb_paragraphs=random.randint(2, 4)
+            )
 
     @factory.post_generation
     # pylint: disable=unused-argument, attribute-defined-outside-init, no-member

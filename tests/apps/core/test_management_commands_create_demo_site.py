@@ -14,13 +14,18 @@ from cms.models import Page
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.management.commands.create_demo_site import (
+    NB_COURSES,
     NB_ORGANIZATIONS,
     NB_PERSONS,
     NB_SUBJECTS,
     PAGE_INFOS,
     create_demo_site,
 )
-from richie.apps.courses.factories import OrganizationFactory, SubjectFactory
+from richie.apps.courses.factories import (
+    CourseFactory,
+    OrganizationFactory,
+    SubjectFactory,
+)
 from richie.apps.persons.factories import PersonFactory
 
 
@@ -45,6 +50,11 @@ class CreateCmsDataTests(CMSTestCase):
         """
         The command should delete and recreate the sample site when DEBUG is True
         The result should be posted to an info logger
+
+        Note:
+            This test confirms that the factories for each type of page are called
+            as expected. It does not guarantee that the actual "create_demo_site"
+            command will work if the factories themselves are not well tested.
         """
         self.assertTrue(settings.DEBUG)
         call_command("create_demo_site")
@@ -52,18 +62,25 @@ class CreateCmsDataTests(CMSTestCase):
         mock_create.assert_called_once_with()
         mock_logger.assert_called_once_with("done")
 
-    @mock.patch.object(OrganizationFactory, "create")
-    @mock.patch.object(PersonFactory, "create")
     @mock.patch.object(SubjectFactory, "create")
+    @mock.patch.object(PersonFactory, "create")
+    @mock.patch.object(OrganizationFactory, "create")
+    @mock.patch.object(CourseFactory, "create")
     @mock.patch(
         "richie.apps.core.management.commands.create_demo_site.create_i18n_page"
     )
     def test_command_create_demo_site(
-        self, mock_page, mock_organization, mock_person, mock_subject
-    ):
+        self, mock_page, mock_course, mock_organization, mock_person, mock_subject
+    ):  # pylint: disable=too-many-arguments
         """
         Calling the `create_demo_site` function should trigger creating root
         i18n pages and organizations below the related page
+
+        Warning:
+            @mock.patch decorators are defined in a reverse order than function
+            arguments, such as first mock is for last argument and last mock
+            is for first argument. Order does matter, if not respected you will
+            encounter several issues with mockups.
         """
         root_pages_length = len(PAGE_INFOS)
 
@@ -75,6 +92,7 @@ class CreateCmsDataTests(CMSTestCase):
 
         # Check that the number of pages created is as expected
         self.assertEqual(mock_page.call_count, root_pages_length)
+        self.assertEqual(mock_course.call_count, NB_COURSES)
         self.assertEqual(mock_organization.call_count, NB_ORGANIZATIONS)
         self.assertEqual(mock_subject.call_count, NB_SUBJECTS)
         self.assertEqual(mock_person.call_count, NB_PERSONS)
@@ -173,6 +191,7 @@ class CreateCmsDataTests(CMSTestCase):
 
         # Check that the calls to create organizations and persons were triggered as
         # expected
+        self.assertEqual(mock_course.call_count, NB_COURSES)
         self.assertEqual(mock_organization.call_count, NB_ORGANIZATIONS)
         self.assertEqual(mock_subject.call_count, NB_SUBJECTS)
         self.assertEqual(mock_person.call_count, NB_PERSONS)
