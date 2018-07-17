@@ -341,6 +341,22 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
             "plugins": ["TextPlugin"],
             "limits": {"TextPlugin": 1},
         },
+        # Subject detail
+        "courses/cms/subject_detail.html banner": {
+            "name": _("Banner"),
+            "plugins": ["PicturePlugin"],
+            "limits": {"PicturePlugin": 1},
+        },
+        "courses/cms/subject_detail.html logo": {
+            "name": _("Logo"),
+            "plugins": ["PicturePlugin"],
+            "limits": {"PicturePlugin": 1},
+        },
+        "courses/cms/subject_detail.html description": {
+            "name": _("Description"),
+            "plugins": ["TextPlugin"],
+            "limits": {"TextPlugin": 1},
+        },
         # Person detail
         "persons/cms/person_detail.html portrait": {
             "name": _("Portrait"),

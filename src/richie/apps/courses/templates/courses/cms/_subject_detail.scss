@@ -42,7 +42,6 @@ $subject-detail-view-banner-logo-sizing-xl: 25rem !default;
   &__logo {
     position: relative;
     overflow: hidden;
-    border: 1px solid darken($light, 20%);
 
     width: $banner-logo-sizing * 0.75;
     height: $banner-logo-sizing * 0.75;
@@ -70,6 +69,7 @@ $subject-detail-view-banner-logo-sizing-xl: 25rem !default;
       width: 100%;
       min-height: 100%;
       margin: auto;
+      border: 1px solid darken($light, 20%);
     }
   }
 
