@@ -40,7 +40,8 @@ class CoursesIndexer:
         },
     }
 
-    def get_data_for_es(self, index, action):
+    @classmethod
+    def get_data_for_es(cls, index, action):
         """
         Load all the courses from the API and format them for the ElasticSearch index
         """
@@ -53,7 +54,7 @@ class CoursesIndexer:
                         "_id": course["id"],
                         "_index": index,
                         "_op_type": action,
-                        "_type": self.document_type,
+                        "_type": cls.document_type,
                         "end_date": course["end_date"],
                         "enrollment_end_date": course["enrollment_end_date"],
                         "enrollment_start_date": course["enrollment_start_date"],

@@ -26,7 +26,8 @@ class OrganizationsIndexer:
         },
     }
 
-    def get_data_for_es(self, index, action):
+    @classmethod
+    def get_data_for_es(cls, index, action):
         """
         Load all the organizations from the API and format them for the ElasticSearch index
         """
@@ -39,7 +40,7 @@ class OrganizationsIndexer:
                         "_id": organization["id"],
                         "_index": index,
                         "_op_type": action,
-                        "_type": self.document_type,
+                        "_type": cls.document_type,
                         "banner": organization["banner"],
                         "code": organization["code"],
                         "logo": organization["logo"],

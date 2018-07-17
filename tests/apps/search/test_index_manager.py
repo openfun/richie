@@ -158,9 +158,9 @@ class IndexManagerTestCase(TestCase):
     @override_settings(ES_INDEXES=["example.ExOneIndexable", "example.ExTwoIndexable"])
     @mock.patch(
         "richie.apps.search.index_manager.get_indexable_from_string",
-        lambda name: ExOneIndexable()
+        lambda name: ExOneIndexable
         if name == "example.ExOneIndexable"
-        else ExTwoIndexable(),
+        else ExTwoIndexable,
     )
     @mock.patch(
         "richie.apps.search.index_manager.get_indexes_by_alias",
@@ -237,9 +237,9 @@ class IndexManagerTestCase(TestCase):
     @override_settings(ES_INDEXES=["example.ExOneIndexable", "example.ExTwoIndexable"])
     @mock.patch(
         "richie.apps.search.index_manager.get_indexable_from_string",
-        lambda name: ExOneIndexable()
+        lambda name: ExOneIndexable
         if name == "example.ExOneIndexable"
-        else ExTwoIndexable(),
+        else ExTwoIndexable,
     )
     @mock.patch(
         "richie.apps.search.index_manager.get_indexes_by_alias",

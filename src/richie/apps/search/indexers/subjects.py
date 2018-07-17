@@ -22,7 +22,8 @@ class SubjectsIndexer:
         "properties": {"image": {"type": "text", "index": False}},
     }
 
-    def get_data_for_es(self, index, action):
+    @classmethod
+    def get_data_for_es(cls, index, action):
         """
         Load all the subjects from the API and format them for the ElasticSearch index
         """
@@ -35,7 +36,7 @@ class SubjectsIndexer:
                         "_id": subject["id"],
                         "_index": index,
                         "_op_type": action,
-                        "_type": self.document_type,
+                        "_type": cls.document_type,
                         "image": subject["image"],
                         "name": {"fr": subject["name"]},
                     }

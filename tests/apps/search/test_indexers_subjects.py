@@ -49,11 +49,13 @@ class SubjectsIndexerTestCase(TestCase):
             },
         )
 
-        indexer = SubjectsIndexer()
-
         # The results were properly formatted and passed to the consumer
         self.assertEqual(
-            list(indexer.get_data_for_es(index="some_index", action="some_action")),
+            list(
+                SubjectsIndexer.get_data_for_es(
+                    index="some_index", action="some_action"
+                )
+            ),
             [
                 {
                     "_id": 62,
@@ -95,10 +97,12 @@ class SubjectsIndexerTestCase(TestCase):
             },
         )
 
-        indexer = SubjectsIndexer()
-
         with self.assertRaises(IndexerDataException):
-            list(indexer.get_data_for_es(index="some_index", action="some_action"))
+            list(
+                SubjectsIndexer.get_data_for_es(
+                    index="some_index", action="some_action"
+                )
+            )
 
     def test_format_es_subject_for_api(self):
         """

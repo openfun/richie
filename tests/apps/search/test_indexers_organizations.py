@@ -57,11 +57,13 @@ class OrganizationsIndexerTestCase(TestCase):
             },
         )
 
-        indexer = OrganizationsIndexer()
-
         # The results were properly formatted and passed to the consumer
         self.assertEqual(
-            list(indexer.get_data_for_es(index="some_index", action="some_action")),
+            list(
+                OrganizationsIndexer.get_data_for_es(
+                    index="some_index", action="some_action"
+                )
+            ),
             [
                 {
                     "_id": 1,
@@ -109,10 +111,12 @@ class OrganizationsIndexerTestCase(TestCase):
             },
         )
 
-        indexer = OrganizationsIndexer()
-
         with self.assertRaises(IndexerDataException):
-            list(indexer.get_data_for_es(index="some_index", action="some_action"))
+            list(
+                OrganizationsIndexer.get_data_for_es(
+                    index="some_index", action="some_action"
+                )
+            )
 
     def test_format_es_organization_for_api(self):
         """

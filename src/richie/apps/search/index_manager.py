@@ -15,9 +15,9 @@ from elasticsearch.helpers import bulk
 def get_indexable_from_string(indexable_module_string):
     """
     Load the indexable from the module.Class path in settings
+    NB: we need this level of indirection to enable testing.
     """
-    klass = import_string(indexable_module_string)
-    return klass()
+    return import_string(indexable_module_string)
 
 
 def get_indexes_by_alias(existing_indexes, alias):
