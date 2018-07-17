@@ -8,7 +8,7 @@ from elasticsearch.exceptions import NotFoundError
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
-from ..forms import OrganizationListForm
+from ..exceptions import QueryFormatException
 from ..indexers.organizations import OrganizationsIndexer
 
 
@@ -24,49 +24,29 @@ class OrganizationsViewSet(ViewSet):
         Organization search endpoint: pass query params to ElasticSearch so it filters
         organizations and returns a list of matching items
         """
-        # Instantiate a form with our query_params to check & sanitize them
-        query_params_form = OrganizationListForm(request.query_params)
+        try:
+            limit, offset, query = OrganizationsIndexer.build_es_query(request)
+        except QueryFormatException as exc:
+            # Return a 400 with error information if the query params are not as expected
+            return Response(status=400, data={"errors": exc.args[0]})
 
-        # Return a 400 with error information if the query params are not as expected
-        if not query_params_form.is_valid():
-            return Response(status=400, data={"errors": query_params_form.errors})
-
-        # Build a query that matches on the organization name field if it was passed by the client
-        # Note: test_elasticsearch_feature.py needs to be updated whenever the search call
-        # is updated and makes use new features.
-        if query_params_form.cleaned_data.get("query"):
-            search_payload = {
-                "query": {
-                    "match": {
-                        "name.fr": {
-                            "query": query_params_form.cleaned_data.get("query"),
-                            "analyzer": "french",
-                        }
-                    }
-                }
-            }
-        # Build a match_all query by default
-        else:
-            search_payload = {"query": {"match_all": {}}}
-
-        query_response = settings.ES_CLIENT.search(
+        search_query_response = settings.ES_CLIENT.search(
             index=OrganizationsIndexer.index_name,
             doc_type=OrganizationsIndexer.document_type,
-            body=search_payload,
+            body=query,
             # Directly pass meta-params through as arguments to the ES client
-            from_=query_params_form.cleaned_data.get("offset") or 0,
-            size=query_params_form.cleaned_data.get("limit")
-            or settings.ES_DEFAULT_PAGE_SIZE,
+            from_=offset,
+            size=limit or settings.ES_DEFAULT_PAGE_SIZE,
         )
 
         # Format the response in a consumer-friendly way
-        # NB: if there are 0 hits the query_response is formatted the exact same way, only the
+        # NB: if there are 0 hits the query response is formatted the exact same way, only the
         # .hits.hits array is empty.
         response_object = {
             "meta": {
-                "count": len(query_response["hits"]["hits"]),
-                "offset": query_params_form.cleaned_data.get("offset") or 0,
-                "total_count": query_response["hits"]["total"],
+                "count": len(search_query_response["hits"]["hits"]),
+                "offset": offset,
+                "total_count": search_query_response["hits"]["total"],
             },
             "objects": [
                 OrganizationsIndexer.format_es_organization_for_api(
@@ -74,7 +54,7 @@ class OrganizationsViewSet(ViewSet):
                     # Get the best language to return multilingual fields
                     get_language_from_request(request),
                 )
-                for organization in query_response["hits"]["hits"]
+                for organization in search_query_response["hits"]["hits"]
             ],
         }
 

@@ -9,6 +9,7 @@ from django.test import TestCase
 from elasticsearch.exceptions import NotFoundError
 from rest_framework.test import APIRequestFactory
 
+from richie.apps.search.exceptions import QueryFormatException
 from richie.apps.search.viewsets.subjects import SubjectsViewSet
 
 
@@ -63,69 +64,12 @@ class SubjectsViewsetTestCase(TestCase):
         # The client received a standard NotFound response
         self.assertEqual(response.status_code, 404)
 
+    @mock.patch(
+        "richie.apps.search.indexers.subjects.SubjectsIndexer.build_es_query",
+        lambda x: (2, 0, {"query": "example"}),
+    )
     @mock.patch.object(settings.ES_CLIENT, "search")
-    def test_search_all_subjects(self, mock_search):
-        """
-        Happy path: the subject is not filtering the subjects for anything
-        """
-        factory = APIRequestFactory()
-        request = factory.get("/api/v1.0/subject?limit=2&offset=10")
-
-        mock_search.return_value = {
-            "hits": {
-                "hits": [
-                    {
-                        "_id": 42,
-                        "_source": {
-                            "image": "example.com/image.png",
-                            "name": {"fr": "Subject Forty-Two"},
-                        },
-                    },
-                    {
-                        "_id": 44,
-                        "_source": {
-                            "image": "example.com/image.png",
-                            "name": {"fr": "Subject Forty-Four"},
-                        },
-                    },
-                ],
-                "total": 90,
-            }
-        }
-
-        response = SubjectsViewSet.as_view({"get": "list"})(request, version="1.0")
-
-        # The client received a properly formatted response
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            response.data,
-            {
-                "meta": {"count": 2, "offset": 10, "total_count": 90},
-                "objects": [
-                    {
-                        "id": 42,
-                        "image": "example.com/image.png",
-                        "name": "Subject Forty-Two",
-                    },
-                    {
-                        "id": 44,
-                        "image": "example.com/image.png",
-                        "name": "Subject Forty-Four",
-                    },
-                ],
-            },
-        )
-        # The ES connector was called with appropriate arguments for the client's request
-        mock_search.assert_called_with(
-            body={"query": {"match_all": {}}},
-            doc_type="subject",
-            from_=10,
-            index="richie_subjects",
-            size=2,
-        )
-
-    @mock.patch.object(settings.ES_CLIENT, "search")
-    def test_search_subjects_by_name(self, mock_search):
+    def test_search_subjects(self, mock_search):
         """
         Happy path: the subject is filtering the subjects by name
         """
@@ -178,18 +122,18 @@ class SubjectsViewsetTestCase(TestCase):
         )
         # The ES connector was called with a query that matches the client's request
         mock_search.assert_called_with(
-            body={
-                "query": {
-                    "match": {"name.fr": {"query": "Science", "analyzer": "french"}}
-                }
-            },
+            body={"query": "example"},
             doc_type="subject",
             from_=0,
             index="richie_subjects",
             size=2,
         )
 
-    def test_search_subjects_with_invalid_params(self):
+    @mock.patch(
+        "richie.apps.search.indexers.subjects.SubjectsIndexer.build_es_query",
+        side_effect=QueryFormatException({"limit": "incorrect value"})
+    )
+    def test_search_subjects_with_invalid_params(self, *args):
         """
         Error case: the client used an incorrectly formatted request
         """

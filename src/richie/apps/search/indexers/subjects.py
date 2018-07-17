@@ -3,7 +3,8 @@ ElasticSearch subject document management utilities
 """
 from django.conf import settings
 
-from ..exceptions import IndexerDataException
+from ..exceptions import IndexerDataException, QueryFormatException
+from ..forms import SubjectListForm
 from ..partial_mappings import MULTILINGUAL_TEXT
 from ..utils.api_consumption import walk_api_json_list
 from ..utils.i18n import get_best_field_language
@@ -56,3 +57,40 @@ class SubjectsIndexer:
                 es_subject["_source"]["name"], best_language
             ),
         }
+
+    @staticmethod
+    def build_es_query(request):
+        """
+        Build an ElasticSearch query and its related aggregations, to be consumed by the ES client
+        in the Subjects ViewSet
+        """
+        # Instantiate a form with our query_params to check & sanitize them
+        params_form = SubjectListForm(request.query_params)
+
+        # Raise an exception with error information if the query params are not valid
+        if not params_form.is_valid():
+            raise QueryFormatException(params_form.errors)
+
+        # Build a query that matches on the name field if it was handed by the client
+        # Note: test_elasticsearch_feature.py needs to be updated whenever the search call
+        # is updated and makes use new features.
+        if params_form.cleaned_data.get("query"):
+            query = {
+                "query": {
+                    "match": {
+                        "name.fr": {
+                            "query": params_form.cleaned_data.get("query"),
+                            "analyzer": "french",
+                        }
+                    }
+                }
+            }
+        # Build a match_all query by default
+        else:
+            query = {"query": {"match_all": {}}}
+
+        return (
+            params_form.cleaned_data.get("limit"),
+            params_form.cleaned_data.get("offset") or 0,
+            query,
+        )

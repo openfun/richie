@@ -1,12 +1,14 @@
 """
 Tests for the organization indexer
 """
+from types import SimpleNamespace
+
 from django.conf import settings
 from django.test import TestCase
 
 import responses
 
-from richie.apps.search.exceptions import IndexerDataException
+from richie.apps.search.exceptions import IndexerDataException, QueryFormatException
 from richie.apps.search.indexers.organizations import OrganizationsIndexer
 
 
@@ -141,3 +143,47 @@ class OrganizationsIndexerTestCase(TestCase):
                 "name": "University of Paris XIII",
             },
         )
+
+    def test_build_es_query_search_all_organizations(self):
+        """
+        Happy path: the expected ES query object is returned
+        """
+        request = SimpleNamespace(query_params={"limit": 11, "offset": 4})
+        self.assertEqual(
+            OrganizationsIndexer.build_es_query(request),
+            (11, 4, {"query": {"match_all": {}}}),
+        )
+
+    def test_build_es_query_search_by_name(self):
+        """
+        Happy path: the expected ES query object is returned
+        """
+        request = SimpleNamespace(
+            query_params={"limit": 12, "offset": 3, "query": "user entered some text"}
+        )
+        self.assertEqual(
+            OrganizationsIndexer.build_es_query(request),
+            (
+                12,
+                3,
+                {
+                    "query": {
+                        "match": {
+                            "name.fr": {
+                                "query": "user entered some text",
+                                "analyzer": "french",
+                            }
+                        }
+                    }
+                },
+            ),
+        )
+
+    def test_build_es_query_with_invalid_params(self):
+        """
+        Error case: the request contained invalid parameters
+        """
+        with self.assertRaises(QueryFormatException):
+            OrganizationsIndexer.build_es_query(
+                SimpleNamespace(query_params={"limit": "invalid input"})
+            )

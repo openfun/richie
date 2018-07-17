@@ -8,7 +8,7 @@ from elasticsearch.exceptions import NotFoundError
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
-from ..forms import SubjectListForm
+from ..exceptions import QueryFormatException
 from ..indexers.subjects import SubjectsIndexer
 
 
@@ -24,38 +24,19 @@ class SubjectsViewSet(ViewSet):
         Subject search endpoint: pass query params to ElasticSearch so it filters subjects
         and returns a list of matching items
         """
-        # Instantiate a form with our query_params to check & sanitize them
-        params_form = SubjectListForm(request.query_params)
-
-        # Return a 400 with error information if the query params are not as expected
-        if not params_form.is_valid():
-            return Response(status=400, data={"errors": params_form.errors})
-
-        # Build a query that matches on the name field if it was handed by the client
-        # Note: test_elasticsearch_feature.py needs to be updated whenever the search call
-        # is updated and makes use new features.
-        if params_form.cleaned_data.get("query"):
-            search_body = {
-                "query": {
-                    "match": {
-                        "name.fr": {
-                            "query": params_form.cleaned_data.get("query"),
-                            "analyzer": "french",
-                        }
-                    }
-                }
-            }
-        # Build a match_all query by default
-        else:
-            search_body = {"query": {"match_all": {}}}
+        try:
+            limit, offset, query = SubjectsIndexer.build_es_query(request)
+        except QueryFormatException as exc:
+            # Return a 400 with error information if the query params are not as expected
+            return Response(status=400, data={"errors": exc.args[0]})
 
         query_response = settings.ES_CLIENT.search(
             index=SubjectsIndexer.index_name,
             doc_type=SubjectsIndexer.document_type,
-            body=search_body,
+            body=query,
             # Directly pass meta-params through as arguments to the ES client
-            from_=params_form.cleaned_data.get("offset") or 0,
-            size=params_form.cleaned_data.get("limit") or settings.ES_DEFAULT_PAGE_SIZE,
+            from_=offset,
+            size=limit or settings.ES_DEFAULT_PAGE_SIZE,
         )
 
         # Format the response in a consumer-friendly way
@@ -64,7 +45,7 @@ class SubjectsViewSet(ViewSet):
         response_object = {
             "meta": {
                 "count": len(query_response["hits"]["hits"]),
-                "offset": params_form.cleaned_data.get("offset") or 0,
+                "offset": offset,
                 "total_count": query_response["hits"]["total"],
             },
             "objects": [

@@ -9,6 +9,7 @@ from django.test import TestCase
 from elasticsearch.exceptions import NotFoundError
 from rest_framework.test import APIRequestFactory
 
+from richie.apps.search.exceptions import QueryFormatException
 from richie.apps.search.viewsets.organizations import OrganizationsViewSet
 
 
@@ -71,77 +72,12 @@ class OrganizationsViewsetTestCase(TestCase):
         # The client received a standard NotFound response
         self.assertEqual(response.status_code, 404)
 
+    @mock.patch(
+        "richie.apps.search.indexers.organizations.OrganizationsIndexer.build_es_query",
+        lambda x: (2, 0, {"query": "something"})
+    )
     @mock.patch.object(settings.ES_CLIENT, "search")
-    def test_search_all_organizations(self, mock_search):
-        """
-        Happy path: the consumer is not filtering the organizations for anything
-        """
-        factory = APIRequestFactory()
-        request = factory.get("/api/v1.0/organizations?limit=2&offset=10")
-
-        mock_search.return_value = {
-            "hits": {
-                "hits": [
-                    {
-                        "_id": 42,
-                        "_source": {
-                            "banner": "example.com/banner_42.png",
-                            "code": "org-42",
-                            "logo": "example.com/logo_42.png",
-                            "name": {"fr": "Organization Forty-Two"},
-                        },
-                    },
-                    {
-                        "_id": 44,
-                        "_source": {
-                            "banner": "example.com/banner_44.png",
-                            "code": "org-44",
-                            "logo": "example.com/logo_44.png",
-                            "name": {"fr": "Organization Forty-Four"},
-                        },
-                    },
-                ],
-                "total": 90,
-            }
-        }
-
-        response = OrganizationsViewSet.as_view({"get": "list"})(request, version="1.0")
-
-        # The client received a properly formatted response
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(
-            response.data,
-            {
-                "meta": {"count": 2, "offset": 10, "total_count": 90},
-                "objects": [
-                    {
-                        "banner": "example.com/banner_42.png",
-                        "code": "org-42",
-                        "id": 42,
-                        "logo": "example.com/logo_42.png",
-                        "name": "Organization Forty-Two",
-                    },
-                    {
-                        "banner": "example.com/banner_44.png",
-                        "code": "org-44",
-                        "id": 44,
-                        "logo": "example.com/logo_44.png",
-                        "name": "Organization Forty-Four",
-                    },
-                ],
-            },
-        )
-        # The ES connector was called with appropriate arguments for the client's request
-        mock_search.assert_called_with(
-            body={"query": {"match_all": {}}},
-            doc_type="organization",
-            from_=10,
-            index="richie_organizations",
-            size=2,
-        )
-
-    @mock.patch.object(settings.ES_CLIENT, "search")
-    def test_search_organizations_by_name(self, mock_search):
+    def test_search_organizations(self, mock_search):
         """
         Happy path: the consumer is filtering the organizations by name
         """
@@ -202,18 +138,18 @@ class OrganizationsViewsetTestCase(TestCase):
         )
         # The ES connector was called with a query that matches the client's request
         mock_search.assert_called_with(
-            body={
-                "query": {
-                    "match": {"name.fr": {"query": "Université", "analyzer": "french"}}
-                }
-            },
+            body={"query": "something"},
             doc_type="organization",
             from_=0,
             index="richie_organizations",
             size=2,
         )
 
-    def test_search_organizations_with_invalid_params(self):
+    @mock.patch(
+        "richie.apps.search.indexers.organizations.OrganizationsIndexer.build_es_query",
+        side_effect=QueryFormatException({"limit": "incorrect value"})
+    )
+    def test_search_organizations_with_invalid_params(self, *args):
         """
         Error case: the client used an incorrectly formatted request
         """
