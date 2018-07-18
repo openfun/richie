@@ -87,9 +87,10 @@ class CourseCMSTestCase(CMSTestCase):
         # organization 1 is marked as main organization
         self.assertContains(
             response,
-            (
-                '<li class="course-detail__content__organizations__item--main">{:s}</li>'
-            ).format(organizations[0].extended_object.get_title()),
+            '<li class="{element:s} {element:s}--main">{title:s}</li>'.format(
+                element="course-detail__content__organizations__item",
+                title=organizations[0].extended_object.get_title(),
+            ),
             html=True,
         )
         # organization 2 is the only "common" org in listing since
@@ -162,9 +163,10 @@ class CourseCMSTestCase(CMSTestCase):
         # organization 1 is marked as main and not duplicated
         self.assertContains(
             response,
-            (
-                '<li class="course-detail__content__organizations__item--main">{:s}</li>'
-            ).format(organizations[0].extended_object.get_title()),
+            '<li class="{element:s} {element:s}--main">{title:s}</li>'.format(
+                element="course-detail__content__organizations__item",
+                title=organizations[0].extended_object.get_title(),
+            ),
             html=True,
         )
         self.assertNotContains(
@@ -186,9 +188,10 @@ class CourseCMSTestCase(CMSTestCase):
         for organization in organizations[:2]:
             self.assertNotContains(
                 response,
-                (
-                    '<li class="course-detail__content__organizations__item--draft">{:s}</li>'
-                ).format(organization.extended_object.get_title()),
+                '<li class="{element:s} {element:s}--draft">{title:s}</li>'.format(
+                    element="course - detail__content__organizations__item",
+                    title=organization.extended_object.get_title(),
+                ),
                 html=True,
             )
 
@@ -205,8 +208,9 @@ class CourseCMSTestCase(CMSTestCase):
         for subject in subjects[-2:]:
             self.assertContains(
                 response,
-                '<li class="course-detail__content__subjects__item--draft">{:s}</li>'.format(
-                    subject.extended_object.get_title()
+                '<li class="{element:s} {element:s}--draft">{title:s}</li>'.format(
+                    element="course-detail__content__subjects__item",
+                    title=subject.extended_object.get_title(),
                 ),
                 html=True,
             )
@@ -228,17 +232,18 @@ class CourseCMSTestCase(CMSTestCase):
         # The main organization is only listed separately and also marked as draft
         self.assertContains(
             response,
-            (
-                '<li class="course-detail__content__organizations__item--draft '
-                'course-detail__content__organizations__item--main">{:s}</li>'
-            ).format(course.organization_main.extended_object.get_title()),
+            '<li class="{element:s} {element:s}--draft {element:s}--main">{title:s}</li>'.format(
+                element="course-detail__content__organizations__item",
+                title=course.organization_main.extended_object.get_title(),
+            ),
             html=True,
         )
         self.assertNotContains(
             response,
-            (
-                '<li class="course-detail__content__organizations__item--draft">{:s}</li>'
-            ).format(course.organization_main.extended_object.get_title()),
+            '<li class="{element:s} {element:s}--draft">{title:s}</li>'.format(
+                element="course-detail__content__organizations__item",
+                title=course.organization_main.extended_object.get_title(),
+            ),
             html=True,
         )
 
