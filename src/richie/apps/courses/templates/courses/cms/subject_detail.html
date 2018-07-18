@@ -31,7 +31,7 @@
               {{ course.public_extension.extended_object.get_title }}
             </li>
           {% else %}
-            <li class="subject-detail__courses__item--draft">
+            <li class="subject-detail__courses__item subject-detail__courses__item--draft">
               {{ course.extended_object.get_title }}
             </li>
           {% endif %}
@@ -42,7 +42,7 @@
           </li>
         {% endif %}
       {% empty %}
-        <li class="subject-detail__courses--empty">
+        <li class="subject-detail__courses subject-detail__courses--empty">
           {% trans "No associated courses" %}
         </li>
       {% endfor %}

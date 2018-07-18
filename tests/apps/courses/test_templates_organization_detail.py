@@ -116,8 +116,9 @@ class OrganizationCMSTestCase(TestCase):
         for course in courses[-2:]:
             self.assertContains(
                 response,
-                '<li class="organization-detail__content__courses__item--draft">{:s}</li>'.format(
-                    course.extended_object.get_title()
+                '<li class="{element:s} {element:s}--draft">{title:s}</li>'.format(
+                    element="organization-detail__content__courses__item",
+                    title=course.extended_object.get_title(),
                 ),
                 html=True,
             )
