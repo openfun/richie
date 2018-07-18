@@ -28,6 +28,8 @@ class PersonPluginTestCase(TestCase):
         """
 
         class PersonPluginModelForm(forms.ModelForm):
+            """A form for testing the choices in the select box"""
+
             class Meta:
                 model = PersonPluginModel
                 exclude = ()
