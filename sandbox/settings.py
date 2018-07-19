@@ -238,6 +238,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         "richie.apps.search",
         "richie.plugins.large_banner",
         "richie.plugins.section",
+        "richie.plugins.simple_text_ckeditor",
         # Third party apps
         "raven.contrib.django.raven_compat",
         "parler",
@@ -369,6 +370,54 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
             "limits": {"PlaintextPlugin": 1},
         },
     }
+
+    # CKEditor available settings
+    CKEDITOR_SETTINGS = {
+        "language": "{{ language }}",
+        "skin": "moono-lisa",
+        "toolbarCanCollapse": False,
+        "contentsCss": "/static/css/ckeditor.css",
+        # Enabled showblocks as default behavior
+        "startupOutlineBlocks": True,
+        # Enable some plugins
+        # 'extraPlugins': 'codemirror',
+        # Disable element filter to enable full HTML5, also this will let
+        # append any code, even bad syntax and malicious code, so be careful
+        "removePlugins": "stylesheetparser",
+        "allowedContent": True,
+        # Image plugin options
+        "image_prefillDimensions": False,
+        # Justify text using shortand class names
+        "justifyClasses": ["text-left", "text-center", "text-right"],
+        # Default toolbar configurations for djangocms_text_ckeditor
+        "toolbar": "CMS",
+        "toolbar_CMS": [
+            ["Undo", "Redo"],
+            ["ShowBlocks"],
+            ["Format", "Styles"],
+            ["RemoveFormat"],
+            ["Maximize"],
+            "/",
+            ["Bold", "Italic", "Underline", "-", "Subscript", "Superscript"],
+            ["JustifyLeft", "JustifyCenter", "JustifyRight"],
+            ["Link", "Unlink"],
+            [
+                "Image",
+                "-",
+                "NumberedList",
+                "BulletedList",
+                "-",
+                "Table",
+                "-",
+                "CreateDiv",
+                "HorizontalRule",
+            ],
+            ["Source"],
+        ],
+    }
+    # Share the same config for djangocms_text_ckeditor field and derived
+    # CKEditor widgets/fields
+    CKEDITOR_SETTINGS["toolbar_HTMLField"] = CKEDITOR_SETTINGS["toolbar_CMS"]
 
     # Thumbnails settings
     THUMBNAIL_PROCESSORS = (
