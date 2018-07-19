@@ -3,56 +3,58 @@
 
 {% block content %}
 <div class="organization-detail">
+  {% spaceless %}
 
-  {% with organization=current_page.organization header_level=2 %}
+    {% with organization=current_page.organization header_level=2 %}
 
-    <div class="organization-detail__banner">
-      {% placeholder "banner" %}
-    </div>
-
-    {% if organization.logo %}
-      <div class="organization-detail__logo">
-        <img
-          src="{{ organization.logo.url }}"
-          alt="{% blocktrans with title=current_page.get_title|capfirst %}{{ title }} logo{% endblocktrans %}">
-      </div>
-    {% endif %}
-
-    <h1 class="organization-detail__title">{{ current_page.get_title }}</h1>
-
-    <div class="organization-detail__content">
-
-      <div class="organization-detail__content__description">
-        {% placeholder "description" %}
+      <div class="organization-detail__banner">
+        {% placeholder "banner" %}
       </div>
 
-      <ul class="organization-detail__content__courses">
-        {% for course in organization.courses.drafts %}
-          {# If the current page is a draft, show draft courses with a class annotation for styling #}
-          {% if current_page.publisher_is_draft %}
-            {% if course.check_publication is True %}
+      {% if organization.logo %}
+        <div class="organization-detail__logo">
+          <img
+            src="{{ organization.logo.url }}"
+            alt="{% blocktrans with title=current_page.get_title|capfirst %}{{ title }} logo{% endblocktrans %}">
+        </div>
+      {% endif %}
+
+      <h1 class="organization-detail__title">{{ current_page.get_title }}</h1>
+
+      <div class="organization-detail__content">
+
+        <div class="organization-detail__content__description">
+          {% placeholder "description" %}
+        </div>
+
+        <ul class="organization-detail__content__courses">
+          {% for course in organization.courses.drafts %}
+            {# If the current page is a draft, show draft courses with a class annotation for styling #}
+            {% if current_page.publisher_is_draft %}
+              {% if course.check_publication is True %}
+                <li class="organization-detail__content__courses__item">
+                  {{ course.public_extension.extended_object.get_title }}
+                </li>
+              {% else %}
+                <li class="organization-detail__content__courses__item organization-detail__content__courses__item--draft">
+                  {{ course.extended_object.get_title }}
+                </li>
+              {% endif %}
+            {# If the current course page is the published version, show only the courses that are published #}
+            {% elif course.check_publication is True %}
               <li class="organization-detail__content__courses__item">
                 {{ course.public_extension.extended_object.get_title }}
               </li>
-            {% else %}
-              <li class="organization-detail__content__courses__item organization-detail__content__courses__item--draft">
-                {{ course.extended_object.get_title }}
-              </li>
             {% endif %}
-          {# If the current course page is the published version, show only the courses that are published #}
-          {% elif course.check_publication is True %}
-            <li class="organization-detail__content__courses__item">
-              {{ course.public_extension.extended_object.get_title }}
+          {% empty %}
+            <li class="organization-detail__content__courses organization-detail__content__courses--empty">
+              {% trans "No associated courses" %}
             </li>
-          {% endif %}
-        {% empty %}
-          <li class="organization-detail__content__courses organization-detail__content__courses--empty">
-            {% trans "No associated courses" %}
-          </li>
-        {% endfor %}
-      </ul>
-    </div>
-  {% endwith %}
+          {% endfor %}
+        </ul>
+      </div>
+    {% endwith %}
 
+  {% endspaceless %}
 </div>
 {% endblock content %}
