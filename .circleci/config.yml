@@ -512,6 +512,8 @@ jobs:
               -f docker/compose/ci/docker-compose.yml \
               --project-directory . \
               run --rm --no-deps \
+                --user="$(id -u)" \
+                --volume="$PWD:/app" \
                 -e TWINE_USERNAME \
                 -e TWINE_PASSWORD \
                 app \
