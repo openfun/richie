@@ -74,7 +74,7 @@ class OrganizationsViewsetTestCase(TestCase):
 
     @mock.patch(
         "richie.apps.search.indexers.organizations.OrganizationsIndexer.build_es_query",
-        lambda x: (2, 0, {"query": "something"})
+        lambda x: (2, 0, {"query": "something"}),
     )
     @mock.patch.object(settings.ES_CLIENT, "search")
     def test_search_organizations(self, mock_search):
@@ -147,9 +147,9 @@ class OrganizationsViewsetTestCase(TestCase):
 
     @mock.patch(
         "richie.apps.search.indexers.organizations.OrganizationsIndexer.build_es_query",
-        side_effect=QueryFormatException({"limit": "incorrect value"})
+        side_effect=QueryFormatException({"limit": "incorrect value"}),
     )
-    def test_search_organizations_with_invalid_params(self, *args):
+    def test_search_organizations_with_invalid_params(self, _):
         """
         Error case: the client used an incorrectly formatted request
         """

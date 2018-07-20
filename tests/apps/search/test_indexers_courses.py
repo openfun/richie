@@ -150,7 +150,9 @@ class CoursesIndexerTestCase(TestCase):
         )
 
         with self.assertRaises(IndexerDataException):
-            list(CoursesIndexer.get_data_for_es(index="some_index", action="some_action"))
+            list(
+                CoursesIndexer.get_data_for_es(index="some_index", action="some_action")
+            )
 
     def test_format_es_course_for_api(self):
         """

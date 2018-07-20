@@ -139,11 +139,7 @@ class SubjectsIndexerTestCase(TestCase):
         self.assertEqual(
             SubjectsIndexer.build_es_query(
                 SimpleNamespace(
-                    query_params={
-                        "limit": 12,
-                        "offset": 4,
-                        "query": "user search",
-                    }
+                    query_params={"limit": 12, "offset": 4, "query": "user search"}
                 )
             ),
             (
@@ -152,10 +148,7 @@ class SubjectsIndexerTestCase(TestCase):
                 {
                     "query": {
                         "match": {
-                            "name.fr": {
-                                "query": "user search",
-                                "analyzer": "french",
-                            }
+                            "name.fr": {"query": "user search", "analyzer": "french"}
                         }
                     }
                 },
