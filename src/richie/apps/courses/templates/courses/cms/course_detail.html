@@ -21,7 +21,7 @@
         <h2>{% trans 'About the course' %}</h2>
         {% with header_level=3 %}
           {% placeholder "course_syllabus" or %}
-          <p>{% trans 'Enter here a short description of your course.' %}</p>
+            <p>{% trans 'Enter here a short description of your course.' %}</p>
           {% endplaceholder %}
         {% endwith %}
       </div>
@@ -29,14 +29,14 @@
       <div class="course-detail__content__format">
         <h2>{% trans 'Format' %}</h2>
         {% placeholder "course_format" or %}
-        <p>{% trans 'How is the course structured?' %}</p>
+          <p>{% trans 'How is the course structured?' %}</p>
         {% endplaceholder %}
       </div>
 
       <div class="course-detail__content__prerequisites">
         <h2>{% trans 'Prerequisites' %}</h2>
         {% placeholder "course_prerequisites" or %}
-        <p>{% trans 'What are the prerequisites to follow this course?' %}</p>
+          <p>{% trans 'What are the prerequisites to follow this course?' %}</p>
         {% endplaceholder %}
       </div>
 
@@ -54,49 +54,49 @@
         {% endplaceholder %}
       </div>
 
-        <div class="course-detail__content__subjects">
-          <h2>{% trans 'Subjects' %}</h2>
-          <ul class="course-detail__content__subjects__list">
-            {% for subject in course.subjects.drafts %}
-              {# If the current page is a draft, show draft subjects with a class annotation for styling #}
-              {% if current_page.publisher_is_draft %}
-                {% if subject.check_publication is True %}
-                  <li class="course-detail__content__subjects__item">
-                    {{ subject.public_extension.extended_object.get_title }}
-                  </li>
-                {% else %}
-                  <li class="course-detail__content__subjects__item course-detail__content__subjects__item--draft">
-                    {{ subject.extended_object.get_title }}
-                  </li>
-                {% endif %}
-              {# If the current course page is the published version, show only the subjects that are published #}
-              {% elif subject.check_publication is True %}
+      <div class="course-detail__content__subjects">
+        <h2>{% trans 'Subjects' %}</h2>
+        <ul class="course-detail__content__subjects__list">
+          {% for subject in course.subjects.drafts %}
+            {# If the current page is a draft, show draft subjects with a class annotation for styling #}
+            {% if current_page.publisher_is_draft %}
+              {% if subject.check_publication is True %}
                 <li class="course-detail__content__subjects__item">
                   {{ subject.public_extension.extended_object.get_title }}
                 </li>
+              {% else %}
+                <li class="course-detail__content__subjects__item course-detail__content__subjects__item--draft">
+                  {{ subject.extended_object.get_title }}
+                </li>
               {% endif %}
-            {% empty %}
-              <li class="course-detail__content__subjects course-detail__content__subjects--empty">
-                {% trans "No associated subjects" %}
+            {# If the current course page is the published version, show only the subjects that are published #}
+            {% elif subject.check_publication is True %}
+              <li class="course-detail__content__subjects__item">
+                {{ subject.public_extension.extended_object.get_title }}
               </li>
-            {% endfor %}
-          </ul>
-        </div>
-
-        <div class="course-detail__content__organizations">
-          <h2>{% trans 'Organizations' %}</h2>
-          <ul class="course-detail__content__organizations__list">
-            {% if course.organization_main %}
-              {% include "courses/cms/organization_fragment.html" with organization=course.organization_main is_main=True %}
             {% endif %}
-            {% for organization in course.organizations.drafts %}
-              {# If the current page is a draft, show draft organizations with a class annotation for styling #}
-              {% if organization.id != course.organization_main.id %}
-                {% include "courses/cms/organization_fragment.html" %}
-              {% endif %}
-            {% endfor %}
-          </ul>
-        </div>
+          {% empty %}
+            <li class="course-detail__content__subjects course-detail__content__subjects--empty">
+              {% trans "No associated subjects" %}
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="course-detail__content__organizations">
+        <h2>{% trans 'Organizations' %}</h2>
+        <ul class="course-detail__content__organizations__list">
+          {% if course.organization_main %}
+            {% include "courses/cms/organization_fragment.html" with organization=course.organization_main is_main=True %}
+          {% endif %}
+          {% for organization in course.organizations.drafts %}
+            {# If the current page is a draft, show draft organizations with a class annotation for styling #}
+            {% if organization.id != course.organization_main.id %}
+              {% include "courses/cms/organization_fragment.html" %}
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
 
       <div class="course-detail__content__information">
         {% placeholder "course_information" %}
