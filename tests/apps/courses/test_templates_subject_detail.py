@@ -17,8 +17,7 @@ class SubjectCMSTestCase(TestCase):
         Validate that the important elements are displayed on a published subject page
         """
         courses = CourseFactory.create_batch(4)
-        subject = SubjectFactory(
-            title="Very interesting subject", with_courses=courses)
+        subject = SubjectFactory(title="Very interesting subject", with_courses=courses)
         page = subject.extended_object
 
         # Publish only 2 out of 3 courses
@@ -60,8 +59,7 @@ class SubjectCMSTestCase(TestCase):
                 html=True,
             )
         for course in courses[-2:]:
-            self.assertNotContains(
-                response, course.extended_object.get_title())
+            self.assertNotContains(response, course.extended_object.get_title())
 
     def test_subject_cms_draft_content(self):
         """
@@ -71,8 +69,7 @@ class SubjectCMSTestCase(TestCase):
         self.client.login(username=user.username, password="password")
 
         courses = CourseFactory.create_batch(4)
-        subject = SubjectFactory(
-            title="Very interesting subject", with_courses=courses)
+        subject = SubjectFactory(title="Very interesting subject", with_courses=courses)
         page = subject.extended_object
 
         # Publish only 2 out of 4 courses

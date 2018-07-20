@@ -131,9 +131,9 @@ class SubjectsViewsetTestCase(TestCase):
 
     @mock.patch(
         "richie.apps.search.indexers.subjects.SubjectsIndexer.build_es_query",
-        side_effect=QueryFormatException({"limit": "incorrect value"})
+        side_effect=QueryFormatException({"limit": "incorrect value"}),
     )
-    def test_search_subjects_with_invalid_params(self, *args):
+    def test_search_subjects_with_invalid_params(self, _):
         """
         Error case: the client used an incorrectly formatted request
         """
