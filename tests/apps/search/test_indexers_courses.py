@@ -1,12 +1,17 @@
 """
 Tests for the course indexer
 """
+import json
+from types import SimpleNamespace
+
 from django.conf import settings
+from django.http.request import QueryDict
 from django.test import TestCase
 
+import arrow
 import responses
 
-from richie.apps.search.exceptions import IndexerDataException
+from richie.apps.search.exceptions import IndexerDataException, QueryFormatException
 from richie.apps.search.indexers.courses import CoursesIndexer
 
 
@@ -15,6 +20,8 @@ class CoursesIndexerTestCase(TestCase):
     Test the get_data_for_es() function on the course indexer, as well as our mapping,
     and especially dynamic mapping shape in ES
     """
+
+    facets = ["organizations", "subjects"]
 
     @responses.activate
     def test_get_data_for_es(self):
@@ -195,3 +202,349 @@ class CoursesIndexerTestCase(TestCase):
                 "title": "Duis eu arcu erat",
             },
         )
+
+    def test_build_es_query_search_all_courses(self):
+        """
+        Happy path: build a query that does not filter the courses at all
+        """
+        # Build a request stub
+        request = SimpleNamespace(
+            query_params=QueryDict(query_string="limit=2&offset=10")
+        )
+        self.assertEqual(
+            CoursesIndexer.build_es_query(request, self.facets),
+            (
+                2,
+                10,
+                {"match_all": {}},
+                {
+                    "all_courses": {
+                        "global": {},
+                        "aggregations": {
+                            "organizations": {
+                                "filter": {"bool": {"must": []}},
+                                "aggregations": {
+                                    "organizations": {
+                                        "terms": {"field": "organizations"}
+                                    }
+                                },
+                            },
+                            "subjects": {
+                                "filter": {"bool": {"must": []}},
+                                "aggregations": {
+                                    "subjects": {"terms": {"field": "subjects"}}
+                                },
+                            },
+                        },
+                    }
+                },
+            ),
+        )
+
+    def test_build_es_query_search_by_match_text(self):
+        """
+        Happy path: build a query that filters courses by matching text
+        """
+        # Build a request stub
+        request = SimpleNamespace(
+            query_params=QueryDict(
+                query_string="query=some%20phrase%20terms&limit=2&offset=20"
+            )
+        )
+        multi_match = {
+            "multi_match": {
+                "fields": ["short_description.*", "title.*"],
+                "query": "some phrase terms",
+                "type": "cross_fields",
+            }
+        }
+        self.assertEqual(
+            CoursesIndexer.build_es_query(request, self.facets),
+            (
+                2,
+                20,
+                {
+                    "bool": {
+                        "must": [
+                            {
+                                "multi_match": {
+                                    "fields": ["short_description.*", "title.*"],
+                                    "query": "some phrase terms",
+                                    "type": "cross_fields",
+                                }
+                            }
+                        ]
+                    }
+                },
+                {
+                    "all_courses": {
+                        "global": {},
+                        "aggregations": {
+                            "organizations": {
+                                "filter": {"bool": {"must": [multi_match]}},
+                                "aggregations": {
+                                    "organizations": {
+                                        "terms": {"field": "organizations"}
+                                    }
+                                },
+                            },
+                            "subjects": {
+                                "filter": {"bool": {"must": [multi_match]}},
+                                "aggregations": {
+                                    "subjects": {"terms": {"field": "subjects"}}
+                                },
+                            },
+                        },
+                    }
+                },
+            ),
+        )
+
+    def test_build_es_query_search_by_terms_organizations(self):
+        """
+        Happy path: build a query that filters courses by more than 1 related organizations
+        """
+        # Build a request stub
+        request = SimpleNamespace(
+            query_params=QueryDict(
+                query_string="organizations=13&organizations=15&limit=2"
+            )
+        )
+        terms_organizations = {"terms": {"organizations": [13, 15]}}
+        self.assertEqual(
+            CoursesIndexer.build_es_query(request, self.facets),
+            (
+                2,
+                0,
+                {"bool": {"must": [terms_organizations]}},
+                {
+                    "all_courses": {
+                        "global": {},
+                        "aggregations": {
+                            "organizations": {
+                                "filter": {"bool": {"must": []}},
+                                "aggregations": {
+                                    "organizations": {
+                                        "terms": {"field": "organizations"}
+                                    }
+                                },
+                            },
+                            "subjects": {
+                                "filter": {"bool": {"must": [terms_organizations]}},
+                                "aggregations": {
+                                    "subjects": {"terms": {"field": "subjects"}}
+                                },
+                            },
+                        },
+                    }
+                },
+            ),
+        )
+
+    def test_build_es_query_search_by_single_term_organizations(self):
+        """
+        Happy path: build a query that filters courses by exactly 1 related organization
+        """
+        # Build a request stub
+        request = SimpleNamespace(
+            query_params=QueryDict(query_string="organizations=345&limit=2")
+        )
+        term_organization = {"terms": {"organizations": [345]}}
+        self.assertEqual(
+            CoursesIndexer.build_es_query(request, self.facets),
+            (
+                2,
+                0,
+                {"bool": {"must": [term_organization]}},
+                {
+                    "all_courses": {
+                        "global": {},
+                        "aggregations": {
+                            "organizations": {
+                                "filter": {"bool": {"must": []}},
+                                "aggregations": {
+                                    "organizations": {
+                                        "terms": {"field": "organizations"}
+                                    }
+                                },
+                            },
+                            "subjects": {
+                                "filter": {"bool": {"must": [term_organization]}},
+                                "aggregations": {
+                                    "subjects": {"terms": {"field": "subjects"}}
+                                },
+                            },
+                        },
+                    }
+                },
+            ),
+        )
+
+    def test_build_es_query_search_by_range_datetimes(self):
+        """
+        Happy path: build a query that filters courses by start & end date datetime ranges
+        """
+        # Build a request stub
+        start_date = json.dumps(["2018-01-01T06:00:00Z", None])
+        end_date = json.dumps(["2018-04-30T06:00:00Z", "2018-06-30T06:00:00Z"])
+        request = SimpleNamespace(
+            query_params=QueryDict(
+                query_string="start_date={start_date}&end_date={end_date}".format(
+                    start_date=start_date, end_date=end_date
+                )
+            )
+        )
+        range_end_date = {
+            "range": {
+                "end_date": {
+                    "gte": arrow.get("2018-04-30T06:00:00Z").datetime,
+                    "lte": arrow.get("2018-06-30T06:00:00Z").datetime,
+                }
+            }
+        }
+        range_start_date = {
+            "range": {
+                "start_date": {
+                    "gte": arrow.get("2018-01-01T06:00:00Z").datetime,
+                    "lte": None,
+                }
+            }
+        }
+        self.assertEqual(
+            CoursesIndexer.build_es_query(request, self.facets),
+            (
+                None,
+                0,
+                {"bool": {"must": [range_end_date, range_start_date]}},
+                {
+                    "all_courses": {
+                        "global": {},
+                        "aggregations": {
+                            "organizations": {
+                                "filter": {
+                                    "bool": {"must": [range_end_date, range_start_date]}
+                                },
+                                "aggregations": {
+                                    "organizations": {
+                                        "terms": {"field": "organizations"}
+                                    }
+                                },
+                            },
+                            "subjects": {
+                                "filter": {
+                                    "bool": {"must": [range_end_date, range_start_date]}
+                                },
+                                "aggregations": {
+                                    "subjects": {"terms": {"field": "subjects"}}
+                                },
+                            },
+                        },
+                    }
+                },
+            ),
+        )
+
+    def test_build_es_query_combined_search(self):
+        """
+        Happy path: build a query that filters courses by multiple filters
+        """
+        # Build a request stub
+        start_date = json.dumps(["2018-01-01T06:00:00Z", None])
+        end_date = json.dumps(["2018-04-30T06:00:00Z", "2018-06-30T06:00:00Z"])
+        request = SimpleNamespace(
+            query_params=QueryDict(
+                query_string="subjects=42&subjects=84&query=these%20phrase%20terms&limit=2&"
+                + "start_date={start_date}&end_date={end_date}".format(
+                    start_date=start_date, end_date=end_date
+                )
+            )
+        )
+        range_end_date = {
+            "range": {
+                "end_date": {
+                    "gte": arrow.get("2018-04-30T06:00:00Z").datetime,
+                    "lte": arrow.get("2018-06-30T06:00:00Z").datetime,
+                }
+            }
+        }
+        multi_match = {
+            "multi_match": {
+                "fields": ["short_description.*", "title.*"],
+                "query": "these phrase terms",
+                "type": "cross_fields",
+            }
+        }
+        range_start_date = {
+            "range": {
+                "start_date": {
+                    "gte": arrow.get("2018-01-01T06:00:00Z").datetime,
+                    "lte": None,
+                }
+            }
+        }
+        terms_subjects = {"terms": {"subjects": [42, 84]}}
+        self.assertEqual(
+            CoursesIndexer.build_es_query(request, self.facets),
+            (
+                2,
+                0,
+                {
+                    "bool": {
+                        "must": [
+                            range_end_date,
+                            multi_match,
+                            range_start_date,
+                            terms_subjects,
+                        ]
+                    }
+                },
+                {
+                    "all_courses": {
+                        "global": {},
+                        "aggregations": {
+                            "organizations": {
+                                "filter": {
+                                    "bool": {
+                                        "must": [
+                                            range_end_date,
+                                            multi_match,
+                                            range_start_date,
+                                            terms_subjects,
+                                        ]
+                                    }
+                                },
+                                "aggregations": {
+                                    "organizations": {
+                                        "terms": {"field": "organizations"}
+                                    }
+                                },
+                            },
+                            "subjects": {
+                                "filter": {
+                                    "bool": {
+                                        "must": [
+                                            range_end_date,
+                                            multi_match,
+                                            range_start_date,
+                                        ]
+                                    }
+                                },
+                                "aggregations": {
+                                    "subjects": {"terms": {"field": "subjects"}}
+                                },
+                            },
+                        },
+                    }
+                },
+            ),
+        )
+
+    def test_build_es_query_search_with_invalid_params(self):
+        """
+        Error case: the request contained invalid parameters
+        """
+        with self.assertRaises(QueryFormatException):
+            CoursesIndexer.build_es_query(
+                SimpleNamespace(query_params=QueryDict(query_string="limit=-2")),
+                self.facets,
+            )
