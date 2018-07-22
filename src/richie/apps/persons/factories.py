@@ -98,6 +98,6 @@ class PersonFactory(factory.django.DjangoModelFactory):
             add_plugin(
                 language=language,
                 placeholder=resume_placeholder,
-                plugin_type="TextPlugin",
+                plugin_type="CKEditorPlugin",
                 body="".join(body),
             )

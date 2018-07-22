@@ -95,7 +95,7 @@ class SectionTests(CMSPluginTestCase):
         nested_content = "<p>Lorem ipsum</p>"
         add_plugin(
             placeholder,
-            plugin_type="TextPlugin",
+            plugin_type="CKEditorPlugin",
             language="en",
             target=base_plugin_instance,
             body="<p>Lorem ipsum</p>",

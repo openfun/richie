@@ -34,5 +34,7 @@ class PersonFactoryTestCase(TestCase):
 
         # The resume plugin should contain paragraphs
         resume_placeholder = person.extended_object.placeholders.get(slot="resume")
-        resume_plugin = resume_placeholder.cmsplugin_set.get(plugin_type="TextPlugin")
-        self.assertIn("<p>", resume_plugin.djangocms_text_ckeditor_text.body)
+        resume_plugin = resume_placeholder.cmsplugin_set.get(
+            plugin_type="CKEditorPlugin"
+        )
+        self.assertIn("<p>", resume_plugin.simple_text_ckeditor_simpletext.body)

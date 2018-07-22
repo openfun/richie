@@ -58,5 +58,5 @@ class SubjectFactoryTestCase(TestCase):
         self.assertEqual(description.cmsplugin_set.count(), 1)
 
         # The description plugin should contain paragraphs
-        description_plugin = description.cmsplugin_set.get(plugin_type="TextPlugin")
-        self.assertIn("<p>", description_plugin.djangocms_text_ckeditor_text.body)
+        description_plugin = description.cmsplugin_set.get(plugin_type="CKEditorPlugin")
+        self.assertIn("<p>", description_plugin.simple_text_ckeditor_simpletext.body)

@@ -96,7 +96,7 @@ class OrganizationFactory(factory.django.DjangoModelFactory):
             add_plugin(
                 language=language,
                 placeholder=placeholder,
-                plugin_type="TextPlugin",
+                plugin_type="CKEditorPlugin",
                 body="".join(body),
             )
 
@@ -245,7 +245,7 @@ class SubjectFactory(factory.django.DjangoModelFactory):
         add_plugin(
             language=language,
             placeholder=description_placeholder,
-            plugin_type="TextPlugin",
+            plugin_type="CKEditorPlugin",
             body="".join(body),
         )
 

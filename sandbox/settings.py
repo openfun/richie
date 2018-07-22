@@ -306,15 +306,15 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         },
         "courses/cms/course_detail.html course_syllabus": {
             "name": _("Course Syllabus"),
-            "plugins": ["TextPlugin"],
+            "plugins": ["CKEditorPlugin"],
         },
         "courses/cms/course_detail.html course_format": {
             "name": _("Format"),
-            "plugins": ["TextPlugin"],
+            "plugins": ["CKEditorPlugin"],
         },
         "courses/cms/course_detail.html course_prerequisites": {
             "name": _("Prerequisites"),
-            "plugins": ["TextPlugin"],
+            "plugins": ["CKEditorPlugin"],
         },
         "courses/cms/course_detail.html course_team": {
             "name": _("Course team"),
@@ -339,8 +339,8 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         },
         "courses/cms/organization_detail.html description": {
             "name": _("Description"),
-            "plugins": ["TextPlugin"],
-            "limits": {"TextPlugin": 1},
+            "plugins": ["CKEditorPlugin"],
+            "limits": {"CKEditorPlugin": 1},
         },
         # Subject detail
         "courses/cms/subject_detail.html banner": {
@@ -355,8 +355,8 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         },
         "courses/cms/subject_detail.html description": {
             "name": _("Description"),
-            "plugins": ["TextPlugin"],
-            "limits": {"TextPlugin": 1},
+            "plugins": ["CKEditorPlugin"],
+            "limits": {"CKEditorPlugin": 1},
         },
         # Person detail
         "persons/cms/person_detail.html portrait": {
@@ -366,8 +366,8 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         },
         "persons/cms/person_detail.html resume": {
             "name": _("Resume"),
-            "plugins": ["PlaintextPlugin"],
-            "limits": {"PlaintextPlugin": 1},
+            "plugins": ["CKEditorPlugin"],
+            "limits": {"CKEditorPlugin": 1},
         },
     }
 
