@@ -21,8 +21,6 @@ class CoursesIndexerTestCase(TestCase):
     and especially dynamic mapping shape in ES
     """
 
-    facets = ["organizations", "subjects"]
-
     @responses.activate
     def test_get_data_for_es(self):
         """
@@ -212,7 +210,7 @@ class CoursesIndexerTestCase(TestCase):
             query_params=QueryDict(query_string="limit=2&offset=10")
         )
         self.assertEqual(
-            CoursesIndexer.build_es_query(request, self.facets),
+            CoursesIndexer.build_es_query(request),
             (
                 2,
                 10,
@@ -259,7 +257,7 @@ class CoursesIndexerTestCase(TestCase):
             }
         }
         self.assertEqual(
-            CoursesIndexer.build_es_query(request, self.facets),
+            CoursesIndexer.build_es_query(request),
             (
                 2,
                 20,
@@ -312,7 +310,7 @@ class CoursesIndexerTestCase(TestCase):
         )
         terms_organizations = {"terms": {"organizations": [13, 15]}}
         self.assertEqual(
-            CoursesIndexer.build_es_query(request, self.facets),
+            CoursesIndexer.build_es_query(request),
             (
                 2,
                 0,
@@ -351,7 +349,7 @@ class CoursesIndexerTestCase(TestCase):
         )
         term_organization = {"terms": {"organizations": [345]}}
         self.assertEqual(
-            CoursesIndexer.build_es_query(request, self.facets),
+            CoursesIndexer.build_es_query(request),
             (
                 2,
                 0,
@@ -411,7 +409,7 @@ class CoursesIndexerTestCase(TestCase):
             }
         }
         self.assertEqual(
-            CoursesIndexer.build_es_query(request, self.facets),
+            CoursesIndexer.build_es_query(request),
             (
                 None,
                 0,
@@ -484,7 +482,7 @@ class CoursesIndexerTestCase(TestCase):
         }
         terms_subjects = {"terms": {"subjects": [42, 84]}}
         self.assertEqual(
-            CoursesIndexer.build_es_query(request, self.facets),
+            CoursesIndexer.build_es_query(request),
             (
                 2,
                 0,
@@ -545,6 +543,5 @@ class CoursesIndexerTestCase(TestCase):
         """
         with self.assertRaises(QueryFormatException):
             CoursesIndexer.build_es_query(
-                SimpleNamespace(query_params=QueryDict(query_string="limit=-2")),
-                self.facets,
+                SimpleNamespace(query_params=QueryDict(query_string="limit=-2"))
             )

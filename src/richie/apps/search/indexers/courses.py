@@ -3,6 +3,7 @@ ElasticSearch course document management utilities
 """
 from django.conf import settings
 
+from ..defaults import RESOURCE_FACETS
 from ..exceptions import IndexerDataException, QueryFormatException
 from ..forms import CourseListForm
 from ..partial_mappings import MULTILINGUAL_TEXT
@@ -101,7 +102,7 @@ class CoursesIndexer:
         }
 
     @staticmethod
-    def build_es_query(request, facets):
+    def build_es_query(request):
         """
         Build an ElasticSearch query and its related aggregations, to be consumed by the ES client
         in the Courses ViewSet
@@ -198,7 +199,7 @@ class CoursesIndexer:
                         },
                         "aggregations": {facet: {"terms": {"field": facet}}},
                     }
-                    for facet in facets
+                    for facet in RESOURCE_FACETS
                 },
             }
         }

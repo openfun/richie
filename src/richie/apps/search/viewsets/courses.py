@@ -9,6 +9,7 @@ from elasticsearch.exceptions import NotFoundError
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
+from ..defaults import RESOURCE_FACETS
 from ..exceptions import QueryFormatException
 
 
@@ -28,12 +29,8 @@ class CoursesViewSet(ViewSet):
         it searches its index and returns a list of matching courses
         """
 
-        # Define our aggregations names, for our ES query, which will match with the field
-        # names on the objects & the facets we return on the API response
-        facets = ["organizations", "subjects"]
-
         try:
-            limit, offset, query, aggs = self.indexer.build_es_query(request, facets)
+            limit, offset, query, aggs = self.indexer.build_es_query(request)
         except QueryFormatException as exc:
             # Return a 400 with error information if the query params are not as expected
             return Response(status=400, data={"errors": exc.args[0]})
@@ -71,7 +68,8 @@ class CoursesViewSet(ViewSet):
                 for field, value in course_query_response["aggregations"][
                     "all_courses"
                 ].items()
-                if field in facets
+                # Only build facet counts for relevant resource facets
+                if field in RESOURCE_FACETS
             },
         }
 
