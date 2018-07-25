@@ -20,3 +20,7 @@ class PersonPlugin(CMSPluginBase):
     module = _("Persons")
     render_template = "persons/plugins/person.html"
     cache = True
+
+    def render(self, context, instance, placeholder):
+        context.update({"instance": instance, "placeholder": placeholder})
+        return context

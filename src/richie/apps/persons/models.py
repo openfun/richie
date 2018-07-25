@@ -4,7 +4,6 @@ Declare and configure the model for the person application
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from cms.api import Page
 from cms.extensions import PageExtension
 from cms.models.pluginmodel import CMSPlugin
 from parler.models import TranslatableModel, TranslatedFields
@@ -86,7 +85,7 @@ class PersonPluginModel(CMSPlugin):
     to their Person instance
     """
 
-    page = models.ForeignKey(Page, limit_choices_to={"person__isnull": False})
+    person = models.ForeignKey(Person)
 
     class Meta:
         verbose_name = _("person plugin model")
