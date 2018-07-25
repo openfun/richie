@@ -1,20 +1,20 @@
-{% load thumbnail i18n %}
+{% load cms_tags i18n thumbnail %}
 
 <div class="person-plugin">
-  <a class="person-plugin__avatar" href="{{ page.get_absolute_url }}"
-     title="{{ page.get_title }} {% trans "avatar" %}">
-    {% with related_plugins.portrait.0 as picture_plugin %}
-    {% thumbnail picture_plugin.picture 200x200 crop=picture_plugin.use_crop upscale=picture_plugin.use_upscale as thumbnail %}
-      <img src="{{ thumbnail.url }}" {{ picture_plugin.attributes_str }}
-           alt="{{ page.get_title }} {% trans "avatar" %}">
+  <a class="person-plugin__avatar" href="{{ instance.page.get_absolute_url }}"
+     title="{{ instance.page.get_title }} {% trans "avatar" %}">
+    {% with width=200 height=200 %}
+      {% show_placeholder "portrait" instance.page %}
     {% endwith %}
   </a>
   <div class="person-plugin__body">
-    <a href="{{ page.get_absolute_url }}" title="{{ page.get_title }}">
+    <a href="{{ instance.page.get_absolute_url }}" title="{{ instance.page.get_title }}">
       <h{{ header_level|default:2 }} class="person-plugin__body__title">
-        {{ page.person.get_full_name }}
+        {{ instance.page.person.get_full_name }}
       </h{{ header_level|default:2 }}>
     </a>
-    <p class="person-plugin__body__text">{{ related_plugins.resume.0.body|safe }}</p>
+    <div class="person-plugin__body__text">
+      {% show_placeholder "resume" instance.page %}
+    </div>
   </div>
 </div>

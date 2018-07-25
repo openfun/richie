@@ -73,13 +73,13 @@ class PersonPluginTestCase(TestCase):
             resume_placeholder,
             PlaintextPlugin,
             "en",
-            **{"body": "<p>A short resume</p>"}
+            **{"body": "A short resume"}
         )
         add_plugin(
             resume_placeholder,
             PlaintextPlugin,
             "fr",
-            **{"body": "<p>un résumé court</p>"}
+            **{"body": "Un résumé court"}
         )
 
         # Create a page to add the plugin to
@@ -108,8 +108,10 @@ class PersonPluginTestCase(TestCase):
         # pylint: disable=no-member
         self.assertContains(response, image.file.name)
         # Short resume should be present
-        self.assertInHTML(
-            "<p>A short resume</p>", str(response.content, encoding="utf8")
+        self.assertContains(
+            response,
+            "<div class=\"person-plugin__body__text\">A short resume</div>",
+            html=True
         )
         # The person's full name should be wrapped in a h2
         self.assertContains(
@@ -132,6 +134,8 @@ class PersonPluginTestCase(TestCase):
         )
         # pylint: disable=no-member
         self.assertContains(response, image.file.name)
-        self.assertInHTML(
-            "<p>un résumé court</p>", str(response.content, encoding="utf8")
+        self.assertContains(
+            response,
+            "<div class=\"person-plugin__body__text\">Un résumé court</div>",
+            html=True
         )
