@@ -70,23 +70,17 @@ class PersonPluginTestCase(TestCase):
         # A resume to related placeholder
         resume_placeholder = person_page.placeholders.get(slot="resume")
         add_plugin(
-            resume_placeholder,
-            PlaintextPlugin,
-            "en",
-            **{"body": "A short resume"}
+            resume_placeholder, PlaintextPlugin, "en", **{"body": "A short resume"}
         )
         add_plugin(
-            resume_placeholder,
-            PlaintextPlugin,
-            "fr",
-            **{"body": "Un résumé court"}
+            resume_placeholder, PlaintextPlugin, "fr", **{"body": "Un résumé court"}
         )
 
         # Create a page to add the plugin to
         page = create_i18n_page({"en": "A page", "fr": "Une page"})
         placeholder = page.placeholders.get(slot="maincontent")
-        add_plugin(placeholder, PersonPlugin, "en", **{"page": person_page})
-        add_plugin(placeholder, PersonPlugin, "fr", **{"page": person_page})
+        add_plugin(placeholder, PersonPlugin, "en", **{"person": person})
+        add_plugin(placeholder, PersonPlugin, "fr", **{"person": person})
 
         page.publish("en")
         page.publish("fr")
@@ -110,8 +104,8 @@ class PersonPluginTestCase(TestCase):
         # Short resume should be present
         self.assertContains(
             response,
-            "<div class=\"person-plugin__body__text\">A short resume</div>",
-            html=True
+            '<div class="person-plugin__body__text">A short resume</div>',
+            html=True,
         )
         # The person's full name should be wrapped in a h2
         self.assertContains(
@@ -136,6 +130,6 @@ class PersonPluginTestCase(TestCase):
         self.assertContains(response, image.file.name)
         self.assertContains(
             response,
-            "<div class=\"person-plugin__body__text\">Un résumé court</div>",
-            html=True
+            '<div class="person-plugin__body__text">Un résumé court</div>',
+            html=True,
         )
