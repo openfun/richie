@@ -1,7 +1,12 @@
 # The base image we inherit from is richie:latest, but you can override this by
-# passing a build argument to your build command, e.g.:
+# passing the BASE_TAG build argument to your build command. You can also
+# override the default container running user ID (e.g. 1000) thanks to the UID
+# build argument (we recommend using yours). An example follows:
 #
-# docker build --build-arg BASE_TAG=${CIRCLE_SHA1} .
+# docker build \
+#   --build-arg BASE_TAG=${CIRCLE_SHA1}\
+#   --build-arg UID=$(id -u) \
+#   .
 #
 ARG BASE_TAG=latest
 
@@ -29,4 +34,5 @@ RUN curl -sL \
     rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
 
 # Restore the un-privileged user running the application
-USER 10000
+ARG UID=1000
+USER ${UID}

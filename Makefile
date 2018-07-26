@@ -44,7 +44,7 @@ bootstrap:  ## install development dependencies
 	@echo 'Preparing data directory...';
 	@mkdir -p data/media data/static
 	@$(COMPOSE) build base;
-	@$(COMPOSE) build app;
+	@$(COMPOSE) build --build-arg UID=$(UID) app;
 	${MAKE} build-front;
 	@echo 'Waiting until database is up…';
 	$(COMPOSE_RUN_APP) dockerize -wait tcp://db:5432 -timeout 60s
