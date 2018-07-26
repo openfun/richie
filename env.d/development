@@ -11,3 +11,6 @@ POSTGRES_PASSWORD=pass
 
 # Elastic search
 ES_CLIENT=elasticsearch
+
+# Python
+PYTHONUNBUFFERED=1
