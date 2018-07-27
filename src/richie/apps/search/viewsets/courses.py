@@ -1,6 +1,8 @@
 """
 API endpoints to access courses through ElasticSearch
 """
+from functools import reduce
+
 from django.conf import settings
 from django.utils.module_loading import import_string
 from django.utils.translation import get_language_from_request
@@ -9,7 +11,7 @@ from elasticsearch.exceptions import NotFoundError
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
-from ..defaults import RESOURCE_FACETS
+from ..defaults import FILTERS_HARDCODED, RESOURCE_FACETS
 from ..exceptions import QueryFormatException
 
 
@@ -61,15 +63,66 @@ class CoursesViewSet(ViewSet):
             # Transform facets (terms aggregations) into an easier-to-consume form: drop the meta
             # data and return objects with terms as keys and counts as values
             "facets": {
-                field: {
-                    term_value["key"]: term_value["doc_count"]
-                    for term_value in value[field]["buckets"]
-                }
-                for field, value in course_query_response["aggregations"][
-                    "all_courses"
-                ].items()
-                # Only build facet counts for relevant resource facets
-                if field in RESOURCE_FACETS
+                # Resource (terms) facets are structured in the same way
+                **{
+                    field: {
+                        term_value["key"]: term_value["doc_count"]
+                        for term_value in value[field]["buckets"]
+                    }
+                    for field, value in course_query_response["aggregations"][
+                        "all_courses"
+                    ].items()
+                    # Remove default fields inserted by elasticsearch
+                    if field in RESOURCE_FACETS
+                },
+                # Custom (filter-based) facets are structured in another, common way
+                **reduce(
+                    # kv_pair is a tuple with (key, value) for our aggregations, eg. an item in
+                    # [ (language@en, { doc_count: 42 }), (language@fr, { doc_count: 84 }) ]
+                    # we want to output something way easier to consume and less redundant:
+                    # { language: { en: 42, fr: 84 } }
+                    lambda agg, kv_pair: {
+                        # spread the existing aggregator to keep the already set aggs
+                        **agg,
+                        # Add or extend the object for one filter (eg. language, availability)
+                        **dict(
+                            [
+                                (
+                                    # Use the filter name as a key (eg. language, availability)
+                                    kv_pair[0][: kv_pair[0].find("@")],
+                                    {
+                                        # Keep the key/value pairs already on the aggregator
+                                        **agg.get(
+                                            kv_pair[0][: kv_pair[0].find("@")], {}
+                                        ),
+                                        # Add our incoming key/value pair (eg. en: 84)
+                                        **dict(
+                                            [
+                                                (
+                                                    # Use the filter value as a key (eg. fr, open)
+                                                    kv_pair[0][
+                                                        kv_pair[0].find("@")
+                                                        + 1 :  # noqa: E203
+                                                    ],
+                                                    # The actual interesting value is the count
+                                                    kv_pair[1]["doc_count"],
+                                                )
+                                            ]
+                                        ),
+                                    },
+                                )
+                            ]
+                        ),
+                    },
+                    # Select only the aggregations coming from hardcoded filters
+                    # kv_pair is a tuple with (key, value) for our aggregations (see above)
+                    filter(
+                        lambda kv_pair: kv_pair[0][: kv_pair[0].find("@")]
+                        in FILTERS_HARDCODED,
+                        course_query_response["aggregations"]["all_courses"].items(),
+                    ),
+                    {},
+                ),
             },
         }
 
