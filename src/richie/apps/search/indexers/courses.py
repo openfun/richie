@@ -2,8 +2,9 @@
 ElasticSearch course document management utilities
 """
 from django.conf import settings
+from django.forms import ChoiceField, MultipleChoiceField
 
-from ..defaults import RESOURCE_FACETS
+from ..defaults import FILTERS_HARDCODED, RESOURCE_FACETS
 from ..exceptions import IndexerDataException, QueryFormatException
 from ..forms import CourseListForm
 from ..partial_mappings import MULTILINGUAL_TEXT
@@ -118,6 +119,10 @@ class CoursesIndexer:
             "organizations"
         )
         params_form_values["subjects"] = request.query_params.getlist("subjects")
+        for param_key in FILTERS_HARDCODED:
+            field = FILTERS_HARDCODED[param_key]["field"]
+            if field is ChoiceField or MultipleChoiceField:
+                params_form_values[param_key] = request.query_params.getlist(param_key)
         # Instantiate the form to allow validation/cleaning
         params_form = CourseListForm(params_form_values)
 

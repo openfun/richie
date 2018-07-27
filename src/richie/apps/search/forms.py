@@ -3,6 +3,7 @@ Validate and clean request parameters for our endpoints using Django forms
 """
 from django import forms
 
+from .defaults import FILTERS_HARDCODED
 from .fields.array import ArrayField
 from .fields.datetimerange import DatetimeRangeField
 
@@ -11,6 +12,17 @@ class CourseListForm(forms.Form):
     """
     Validate the query string params in the course list request
     """
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Add in the fields for the custom filters from defaults/settings
+        for filter_key in FILTERS_HARDCODED:
+            self.fields[filter_key] = FILTERS_HARDCODED[filter_key]["field"](
+                choices=[
+                    (value, value) for value in FILTERS_HARDCODED[filter_key]["choices"]
+                ],
+                required=False,
+            )
 
     end_date = DatetimeRangeField(required=False)
     enrollment_end_date = DatetimeRangeField(required=False)
