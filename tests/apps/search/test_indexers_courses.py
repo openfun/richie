@@ -3,8 +3,10 @@ Tests for the course indexer
 """
 import json
 from types import SimpleNamespace
+from unittest.mock import patch
 
 from django.conf import settings
+from django.forms import ChoiceField, MultipleChoiceField
 from django.http.request import QueryDict
 from django.test import TestCase
 
@@ -201,6 +203,17 @@ class CoursesIndexerTestCase(TestCase):
             },
         )
 
+    @patch(
+        "richie.apps.search.indexers.courses.FILTERS_HARDCODED",
+        new={
+            "language": {
+                "choices": {
+                    lang: [{"term": {"language": lang}}] for lang in ["en", "fr"]
+                },
+                "field": MultipleChoiceField,
+            }
+        },
+    )
     def test_build_es_query_search_all_courses(self):
         """
         Happy path: build a query that does not filter the courses at all
@@ -219,6 +232,16 @@ class CoursesIndexerTestCase(TestCase):
                     "all_courses": {
                         "global": {},
                         "aggregations": {
+                            "language@en": {
+                                "filter": {
+                                    "bool": {"must": [{"term": {"language": "en"}}]}
+                                }
+                            },
+                            "language@fr": {
+                                "filter": {
+                                    "bool": {"must": [{"term": {"language": "fr"}}]}
+                                }
+                            },
                             "organizations": {
                                 "filter": {"bool": {"must": []}},
                                 "aggregations": {
@@ -239,6 +262,17 @@ class CoursesIndexerTestCase(TestCase):
             ),
         )
 
+    @patch(
+        "richie.apps.search.indexers.courses.FILTERS_HARDCODED",
+        new={
+            "language": {
+                "choices": {
+                    lang: [{"term": {"language": lang}}] for lang in ["en", "fr"]
+                },
+                "field": ChoiceField,
+            }
+        },
+    )
     def test_build_es_query_search_by_match_text(self):
         """
         Happy path: build a query that filters courses by matching text
@@ -278,6 +312,26 @@ class CoursesIndexerTestCase(TestCase):
                     "all_courses": {
                         "global": {},
                         "aggregations": {
+                            "language@en": {
+                                "filter": {
+                                    "bool": {
+                                        "must": [
+                                            {"term": {"language": "en"}},
+                                            multi_match,
+                                        ]
+                                    }
+                                }
+                            },
+                            "language@fr": {
+                                "filter": {
+                                    "bool": {
+                                        "must": [
+                                            {"term": {"language": "fr"}},
+                                            multi_match,
+                                        ]
+                                    }
+                                }
+                            },
                             "organizations": {
                                 "filter": {"bool": {"must": [multi_match]}},
                                 "aggregations": {
@@ -298,6 +352,17 @@ class CoursesIndexerTestCase(TestCase):
             ),
         )
 
+    @patch(
+        "richie.apps.search.indexers.courses.FILTERS_HARDCODED",
+        new={
+            "language": {
+                "choices": {
+                    lang: [{"term": {"language": lang}}] for lang in ["en", "fr"]
+                },
+                "field": MultipleChoiceField,
+            }
+        },
+    )
     def test_build_es_query_search_by_terms_organizations(self):
         """
         Happy path: build a query that filters courses by more than 1 related organizations
@@ -319,6 +384,26 @@ class CoursesIndexerTestCase(TestCase):
                     "all_courses": {
                         "global": {},
                         "aggregations": {
+                            "language@en": {
+                                "filter": {
+                                    "bool": {
+                                        "must": [
+                                            {"term": {"language": "en"}},
+                                            terms_organizations,
+                                        ]
+                                    }
+                                }
+                            },
+                            "language@fr": {
+                                "filter": {
+                                    "bool": {
+                                        "must": [
+                                            {"term": {"language": "fr"}},
+                                            terms_organizations,
+                                        ]
+                                    }
+                                }
+                            },
                             "organizations": {
                                 "filter": {"bool": {"must": []}},
                                 "aggregations": {
@@ -339,6 +424,17 @@ class CoursesIndexerTestCase(TestCase):
             ),
         )
 
+    @patch(
+        "richie.apps.search.indexers.courses.FILTERS_HARDCODED",
+        new={
+            "language": {
+                "choices": {
+                    lang: [{"term": {"language": lang}}] for lang in ["en", "fr"]
+                },
+                "field": ChoiceField,
+            }
+        },
+    )
     def test_build_es_query_search_by_single_term_organizations(self):
         """
         Happy path: build a query that filters courses by exactly 1 related organization
@@ -358,6 +454,26 @@ class CoursesIndexerTestCase(TestCase):
                     "all_courses": {
                         "global": {},
                         "aggregations": {
+                            "language@en": {
+                                "filter": {
+                                    "bool": {
+                                        "must": [
+                                            {"term": {"language": "en"}},
+                                            term_organization,
+                                        ]
+                                    }
+                                }
+                            },
+                            "language@fr": {
+                                "filter": {
+                                    "bool": {
+                                        "must": [
+                                            {"term": {"language": "fr"}},
+                                            term_organization,
+                                        ]
+                                    }
+                                }
+                            },
                             "organizations": {
                                 "filter": {"bool": {"must": []}},
                                 "aggregations": {
@@ -378,6 +494,17 @@ class CoursesIndexerTestCase(TestCase):
             ),
         )
 
+    @patch(
+        "richie.apps.search.indexers.courses.FILTERS_HARDCODED",
+        new={
+            "language": {
+                "choices": {
+                    lang: [{"term": {"language": lang}}] for lang in ["en", "fr"]
+                },
+                "field": MultipleChoiceField,
+            }
+        },
+    )
     def test_build_es_query_search_by_range_datetimes(self):
         """
         Happy path: build a query that filters courses by start & end date datetime ranges
@@ -418,6 +545,28 @@ class CoursesIndexerTestCase(TestCase):
                     "all_courses": {
                         "global": {},
                         "aggregations": {
+                            "language@en": {
+                                "filter": {
+                                    "bool": {
+                                        "must": [
+                                            {"term": {"language": "en"}},
+                                            range_end_date,
+                                            range_start_date,
+                                        ]
+                                    }
+                                }
+                            },
+                            "language@fr": {
+                                "filter": {
+                                    "bool": {
+                                        "must": [
+                                            {"term": {"language": "fr"}},
+                                            range_end_date,
+                                            range_start_date,
+                                        ]
+                                    }
+                                }
+                            },
                             "organizations": {
                                 "filter": {
                                     "bool": {"must": [range_end_date, range_start_date]}
@@ -442,9 +591,103 @@ class CoursesIndexerTestCase(TestCase):
             ),
         )
 
+    @patch(
+        "richie.apps.search.indexers.courses.FILTERS_HARDCODED",
+        new={
+            "language": {
+                "choices": {
+                    lang: [{"term": {"language": lang}}] for lang in ["en", "fr"]
+                },
+                "field": ChoiceField,
+            },
+            "new": {
+                "choices": {"new": [{"term": {"session_number": 1}}]},
+                "field": MultipleChoiceField,
+            },
+        },
+    )
+    def test_build_es_query_search_by_custom_filter(self):
+        """
+        Happy path: build a query using custom filters
+        Note: we're keeping fields from defaults.py instead of mocking for simplicity
+        """
+        # Build a request stub
+        request = SimpleNamespace(
+            query_params=QueryDict(query_string="limit=2&offset=10&language=fr")
+        )
+        self.assertEqual(
+            CoursesIndexer.build_es_query(request),
+            (
+                2,
+                10,
+                {"bool": {"must": [{"term": {"language": "fr"}}]}},
+                {
+                    "all_courses": {
+                        "global": {},
+                        "aggregations": {
+                            "language@en": {
+                                "filter": {
+                                    "bool": {"must": [{"term": {"language": "en"}}]}
+                                }
+                            },
+                            "language@fr": {
+                                "filter": {
+                                    "bool": {"must": [{"term": {"language": "fr"}}]}
+                                }
+                            },
+                            "new@new": {
+                                "filter": {
+                                    "bool": {
+                                        "must": [
+                                            {"term": {"session_number": 1}},
+                                            {"term": {"language": "fr"}},
+                                        ]
+                                    }
+                                }
+                            },
+                            "organizations": {
+                                "filter": {
+                                    "bool": {"must": [{"term": {"language": "fr"}}]}
+                                },
+                                "aggregations": {
+                                    "organizations": {
+                                        "terms": {"field": "organizations"}
+                                    }
+                                },
+                            },
+                            "subjects": {
+                                "filter": {
+                                    "bool": {"must": [{"term": {"language": "fr"}}]}
+                                },
+                                "aggregations": {
+                                    "subjects": {"terms": {"field": "subjects"}}
+                                },
+                            },
+                        },
+                    }
+                },
+            ),
+        )
+
+    @patch(
+        "richie.apps.search.indexers.courses.FILTERS_HARDCODED",
+        new={
+            "language": {
+                "choices": {
+                    lang: [{"term": {"language": lang}}] for lang in ["en", "fr"]
+                },
+                "field": MultipleChoiceField,
+            },
+            "new": {
+                "choices": {"new": [{"term": {"session_number": 1}}]},
+                "field": ChoiceField,
+            },
+        },
+    )
     def test_build_es_query_combined_search(self):
         """
-        Happy path: build a query that filters courses by multiple filters
+        Happy path: build a query that filters courses by multiple filters, including a custom
+        filter; make all aggs using all of those along with another custom filter
         """
         # Build a request stub
         start_date = json.dumps(["2018-01-01T06:00:00Z", None])
@@ -452,6 +695,7 @@ class CoursesIndexerTestCase(TestCase):
         request = SimpleNamespace(
             query_params=QueryDict(
                 query_string="subjects=42&subjects=84&query=these%20phrase%20terms&limit=2&"
+                + "language=fr&"
                 + "start_date={start_date}&end_date={end_date}".format(
                     start_date=start_date, end_date=end_date
                 )
@@ -481,6 +725,7 @@ class CoursesIndexerTestCase(TestCase):
             }
         }
         terms_subjects = {"terms": {"subjects": [42, 84]}}
+        term_language_fr = {"term": {"language": "fr"}}
         self.assertEqual(
             CoursesIndexer.build_es_query(request),
             (
@@ -493,6 +738,7 @@ class CoursesIndexerTestCase(TestCase):
                             multi_match,
                             range_start_date,
                             terms_subjects,
+                            term_language_fr,
                         ]
                     }
                 },
@@ -500,6 +746,46 @@ class CoursesIndexerTestCase(TestCase):
                     "all_courses": {
                         "global": {},
                         "aggregations": {
+                            "language@en": {
+                                "filter": {
+                                    "bool": {
+                                        "must": [
+                                            {"term": {"language": "en"}},
+                                            range_end_date,
+                                            multi_match,
+                                            range_start_date,
+                                            terms_subjects,
+                                        ]
+                                    }
+                                }
+                            },
+                            "language@fr": {
+                                "filter": {
+                                    "bool": {
+                                        "must": [
+                                            term_language_fr,
+                                            range_end_date,
+                                            multi_match,
+                                            range_start_date,
+                                            terms_subjects,
+                                        ]
+                                    }
+                                }
+                            },
+                            "new@new": {
+                                "filter": {
+                                    "bool": {
+                                        "must": [
+                                            {"term": {"session_number": 1}},
+                                            range_end_date,
+                                            multi_match,
+                                            range_start_date,
+                                            terms_subjects,
+                                            term_language_fr,
+                                        ]
+                                    }
+                                }
+                            },
                             "organizations": {
                                 "filter": {
                                     "bool": {
@@ -508,6 +794,7 @@ class CoursesIndexerTestCase(TestCase):
                                             multi_match,
                                             range_start_date,
                                             terms_subjects,
+                                            term_language_fr,
                                         ]
                                     }
                                 },
@@ -524,9 +811,49 @@ class CoursesIndexerTestCase(TestCase):
                                             range_end_date,
                                             multi_match,
                                             range_start_date,
+                                            term_language_fr,
                                         ]
                                     }
                                 },
+                                "aggregations": {
+                                    "subjects": {"terms": {"field": "subjects"}}
+                                },
+                            },
+                        },
+                    }
+                },
+            ),
+        )
+
+    @patch("richie.apps.search.indexers.courses.FILTERS_HARDCODED", new={})
+    def test_build_es_query_search_with_empty_filters(self):
+        """
+        Edge case: custom filters have been removed entirely through settings
+        """
+        # Build a request stub
+        request = SimpleNamespace(
+            query_params=QueryDict(query_string="limit=20&offset=40")
+        )
+        self.assertEqual(
+            CoursesIndexer.build_es_query(request),
+            (
+                20,
+                40,
+                {"match_all": {}},
+                {
+                    "all_courses": {
+                        "global": {},
+                        "aggregations": {
+                            "organizations": {
+                                "filter": {"bool": {"must": []}},
+                                "aggregations": {
+                                    "organizations": {
+                                        "terms": {"field": "organizations"}
+                                    }
+                                },
+                            },
+                            "subjects": {
+                                "filter": {"bool": {"must": []}},
                                 "aggregations": {
                                     "subjects": {"terms": {"field": "subjects"}}
                                 },
