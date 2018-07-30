@@ -7,6 +7,7 @@ from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 
 from cms.extensions.extension_pool import extension_pool
+from cms.models.pluginmodel import CMSPlugin
 
 from ..core.models import BasePageExtension
 
@@ -222,6 +223,24 @@ class Subject(BasePageExtension):
         to the "published" instance.
         """
         self.courses.set(oldinstance.courses.drafts())
+
+
+class OrganizationPluginModel(CMSPlugin):
+    """
+    Organization plugin model handles the relation from OrganizationPlugin
+    to their Organization instance
+    """
+
+    organization = models.ForeignKey(Organization)
+
+    class Meta:
+        verbose_name = _("organization plugin model")
+
+    def __str__(self):
+        """Human representation of a organization plugin"""
+        return "{model:s}: {id:d}".format(
+            model=self._meta.verbose_name.title(), id=self.id
+        )
 
 
 extension_pool.register(Course)
