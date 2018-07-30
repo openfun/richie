@@ -45,7 +45,7 @@ class OrganizationPluginTestCase(TestCase):
         Test that a OrganizationPlugin correctly renders organization's page specific information
         """
         # Create a Organization
-        organization = OrganizationFactory(title="Sorbonne", logo="my_logo.jpg")
+        organization = OrganizationFactory(title="La Sorbonne", logo="my_logo.jpg")
         organization_page = organization.extended_object
 
         # Create a page to add the plugin to
@@ -79,7 +79,8 @@ class OrganizationPluginTestCase(TestCase):
         # pylint: disable=no-member
         self.assertContains(
             response,
-            '<img class=organization-plugin__logo src="/media/my_logo.jpg" alt="Sorbonne logo">',
+            '<img class=organization-plugin__logo src="/media/my_logo.jpg" \
+                alt="La Sorbonne logo">',
             html=True,
         )
         # The organization's full name should be wrapped in a h2
@@ -101,4 +102,19 @@ class OrganizationPluginTestCase(TestCase):
                 page_title=organization_page.get_title(),
             ),
             status_code=200,
+        )
+        # pylint: disable=no-member
+        self.assertContains(
+            response,
+            '<img class=organization-plugin__logo src="/media/my_logo.jpg" \
+                alt="La Sorbonne logo">',
+            html=True,
+        )
+        # The organization's full name should be wrapped in a h2
+        self.assertContains(
+            response,
+            '<h2 class="organization-plugin__body__title">{:s}</h2>'.format(
+                organization_page.get_title()
+            ),
+            html=True,
         )
