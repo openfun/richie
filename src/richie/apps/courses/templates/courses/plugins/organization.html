@@ -1,0 +1,18 @@
+{% load cms_tags i18n thumbnail %}
+{% spaceless %}
+<div class="organization-plugin">
+  {% if instance.organization.logo %}
+    <img
+      class="organization-plugin__logo"
+      src="{{ instance.organization.logo.url }}"
+      alt="{% blocktrans with title=instance.organization.extended_object.get_title|capfirst %}{{ title }} logo{% endblocktrans %}">
+  {% endif %}
+  <div class="organization-plugin__body">
+    <a href="{{ instance.organization.extended_object.get_absolute_url }}" title="{{ instance.organization.extended_object.get_title }}">
+      <h{{ header_level|default:2 }} class="organization-plugin__body__title">
+        {{ instance.organization.extended_object.get_title }}
+      </h{{ header_level|default:2 }}>
+    </a>
+  </div>
+</div>
+{% endspaceless %}
