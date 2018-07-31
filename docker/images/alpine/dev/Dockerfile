@@ -16,6 +16,8 @@ RUN mkdir -p /data/{media,static}
 # Install curl
 RUN apk --no-cache add --update \
         curl \
+        gcc \
+        musl-dev \
         vim
 
 # Install development dependencies
