@@ -4,7 +4,7 @@ import { Action, Dispatch } from 'redux';
 import { ResourceListStateParams } from '../../data/genericReducers/resourceList/resourceList';
 import { RootState } from '../../data/rootReducer';
 import { API_LIST_DEFAULT_PARAMS } from '../../settings';
-import { resourceBasedFilterGroupName } from '../../types/filters';
+import { filterGroupName } from '../../types/filters';
 import { updateFilter } from '../../utils/filters/updateFilter';
 import { SearchSuggestField } from '../SearchSuggestField/SearchSuggestField';
 
@@ -28,10 +28,7 @@ export const mergeProps = (
   { dispatch }: { dispatch: Dispatch<Action> },
 ) => {
   return {
-    addFilter: (
-      modelName: resourceBasedFilterGroupName,
-      filterValue: string,
-    ) => {
+    addFilter: (modelName: filterGroupName, filterValue: string) => {
       updateFilter(
         dispatch,
         currentParams,

@@ -8,6 +8,7 @@ import {
   injectIntl,
 } from 'react-intl';
 
+import { filterGroupName } from '../../types/filters';
 import {
   SearchSuggestion,
   SearchSuggestionSection,
@@ -34,7 +35,7 @@ const messages = defineMessages({
 });
 
 export interface SearchSuggestFieldProps {
-  addFilter: (filterName: string, filterValue: string) => void;
+  addFilter: (filterName: filterGroupName, filterValue: string) => void;
 }
 
 export const renderSuggestion = (suggestion: SearchSuggestion) => (
