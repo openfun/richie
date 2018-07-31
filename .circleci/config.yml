@@ -651,7 +651,7 @@ jobs:
           - v3-front-dependencies-{{ checksum "package.json" }}
       - run:
           name: Lint code with prettier
-          command: yarn prettier --list-different "richie/js/**/*.+(ts|tsx|json|js|jsx)" "*.+(ts|tsx|json|js|jsx)"
+          command: yarn prettier --list-different "src/richie-front/js/**/*.+(ts|tsx|json|js|jsx)" "*.+(ts|tsx|json|js|jsx)"
 
   test-front:
     docker:

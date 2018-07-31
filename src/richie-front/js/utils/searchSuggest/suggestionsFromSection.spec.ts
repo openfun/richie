@@ -29,7 +29,10 @@ describe('utils/searchSuggest/suggestionsFromSection', () => {
   it('turns an organization suggestion section into a list of individual organization suggestions', () => {
     expect(
       suggestionsFromSection({
-        message: { defaultMessage: 'Organizations', id: 'organizationsHumanName' },
+        message: {
+          defaultMessage: 'Organizations',
+          id: 'organizationsHumanName',
+        },
         model: 'organizations',
         values: [
           { name: 'Example organization #1' } as Organization,

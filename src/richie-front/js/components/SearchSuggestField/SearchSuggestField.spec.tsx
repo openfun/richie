@@ -27,7 +27,9 @@ describe('components/SearchSuggestField', () => {
     const wrapper = shallow(
       <SearchSuggestFieldBase
         addFilter={addFilter}
-        intl={{ formatMessage: (message: any) => message.defaultMessage } as any}
+        intl={
+          { formatMessage: (message: any) => message.defaultMessage } as any
+        }
       />,
     );
     expect(wrapper.html()).toContain(
