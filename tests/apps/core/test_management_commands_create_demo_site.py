@@ -185,30 +185,10 @@ class CreateCmsDataTests(CMSTestCase):
                 },
             ),
         ]
-        self.assertEqual(
-            mock_page.call_args_list[:root_pages_length], expected_calls_for_root_pages
-        )
+        self.assertEqual(mock_page.call_args_list, expected_calls_for_root_pages)
 
-        # Check that the calls to create organizations and persons were triggered as
-        # expected
+        # Check that the calls to create each object were triggered as expected
         self.assertEqual(mock_course.call_count, NB_COURSES)
         self.assertEqual(mock_organization.call_count, NB_ORGANIZATIONS)
         self.assertEqual(mock_subject.call_count, NB_SUBJECTS)
         self.assertEqual(mock_person.call_count, NB_PERSONS)
-
-        for i, actual_call in enumerate(mock_page.call_args_list[root_pages_length:]):
-            expected_call = (
-                (
-                    {
-                        "en": "Organization #{:d}".format(i),
-                        "fr": "Organisation #{:d}".format(i),
-                    },
-                ),
-                {
-                    "parent": 4,
-                    "published": True,
-                    "site": site,
-                    "template": "courses/cms/organization_detail.html",
-                },
-            )
-            self.assertEqual(actual_call, expected_call)
