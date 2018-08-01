@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from cms.extensions.extension_pool import extension_pool
 from cms.models.pluginmodel import CMSPlugin
+from filer.fields.image import FilerImageField
 
 from ..core.models import BasePageExtension
 
@@ -219,6 +220,28 @@ class Subject(BasePageExtension):
         self.courses.set(oldinstance.courses.drafts())
 
 
+class Licence(models.Model):
+    """
+    Licence model.
+
+    Instances of this models should only be created by administrators.
+    """
+
+    name = models.CharField(_("name"), max_length=200)
+    logo = FilerImageField(verbose_name=_("logo"), related_name="licence")
+    url = models.CharField(_("url"), blank=True, max_length=255)
+    content = models.TextField(_("content"), blank=False, default="")
+
+    class Meta:
+        verbose_name = _("licence")
+
+    def __str__(self):
+        """Human representation of a person title"""
+        return "{model}: {name}".format(
+            model=self._meta.verbose_name.title(), name=self.name
+        )
+
+
 class OrganizationPluginModel(CMSPlugin):
     """
     Organization plugin model handles the relation from OrganizationPlugin
@@ -234,6 +257,21 @@ class OrganizationPluginModel(CMSPlugin):
         """Human representation of a organization plugin"""
         return "{model:s}: {id:d}".format(
             model=self._meta.verbose_name.title(), id=self.id
+        )
+
+
+class LicencePluginModel(CMSPlugin):
+    """
+    Licence plugin model.
+    """
+
+    licence = models.ForeignKey(Licence)
+    description = models.TextField(_("description"), blank=True, default="")
+
+    def __str__(self):
+        """Human representation of a person plugin"""
+        return "{model:s}: {name:s}".format(
+            model=self._meta.verbose_name.title(), name=self.licence.name
         )
 
 

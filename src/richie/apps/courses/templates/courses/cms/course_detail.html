@@ -105,14 +105,18 @@
         <h2>{% trans 'License' %}</h2>
 
         <h3>{% trans 'License for the course content' %}</h3>
-        {% placeholder "course_license_content" or %}
-          <p>{% trans 'What is the license for the course content?' %}</p>
-        {% endplaceholder %}
+        {% with header_level=4 %}
+            {% placeholder "course_license_content" or %}
+            <p>{% trans 'What is the license for the course content?' %}</p>
+            {% endplaceholder %}
+        {% endwith %}
 
         <h3>{% trans 'License for the content created by course participants' %}</h3>
-        {% placeholder "course_license_participation" or %}
-          <p>{% trans 'What is the license for the content created by course participants?' %}</p>
-        {% endplaceholder %}
+        {% with header_level=4 %}
+          {% placeholder "course_license_participation" or %}
+            <p>{% trans 'What is the license for the content created by course participants?' %}</p>
+          {% endplaceholder %}
+        {% endwith %}
       </div>
     </div>
 
