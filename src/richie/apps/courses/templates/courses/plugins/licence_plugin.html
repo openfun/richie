@@ -1,0 +1,18 @@
+{% load thumbnail %}{% spaceless %}
+<div class="licence-plugin">
+  <h{{ header_level|default:2 }} class="licence-plugin__title">
+    {% if instance.licence.url %}<a href="{{ instance.licence.url }}">{% endif %}
+    {{ instance.licence.name }}
+    {% if instance.licence.url %}</a>{% endif %}
+  </h{{ header_level|default:2 }}>
+  <p class="licence-plugin__logo">
+    <img src="{% thumbnail instance.licence.logo 100x50 crop='smart' %}" alt="">
+  </p>
+  <div class="licence-plugin__content">
+    {{ instance.licence.content|safe }}
+  </div>
+  <div class="licence-plugin__description">
+    {{ instance.description|safe }}
+  </div>
+</div>
+{% endspaceless %}

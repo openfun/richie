@@ -5,7 +5,8 @@ from django.contrib import admin
 
 from cms.extensions import PageExtensionAdmin
 
-from .models import Course, Organization
+from .forms import LicenceFormAdmin
+from .models import Course, Licence, Organization
 
 
 class CourseAdmin(PageExtensionAdmin):
@@ -48,5 +49,15 @@ class OrganizationAdmin(PageExtensionAdmin):
         return obj.extended_object.get_title()
 
 
+class LicenceAdmin(admin.ModelAdmin):
+    """
+    Admin class for the Licence model
+    """
+
+    list_display = ["name"]
+    form = LicenceFormAdmin
+
+
 admin.site.register(Course, CourseAdmin)
 admin.site.register(Organization, OrganizationAdmin)
+admin.site.register(Licence, LicenceAdmin)
