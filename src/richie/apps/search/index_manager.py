@@ -124,3 +124,15 @@ def regenerate_indexes(logger):
         #
         # pylint: disable=unexpected-keyword-arg
         indices_client.delete(index=useless_index, ignore=[400, 404])
+
+
+def store_es_scripts(logger):
+    """
+    Iterate over the indexers listed in the settings, import them, and store the scripts
+    they define on their "scripts" key in ElasticSearch
+    """
+    for indexer in map(get_indexable_from_string, settings.ES_INDICES):
+        for script_id, script_body in indexer.scripts.items():
+            if logger:
+                logger.info('Storing script "{:s}"...'.format(script_id))
+            settings.ES_CLIENT.put_script(id=script_id, body=script_body)

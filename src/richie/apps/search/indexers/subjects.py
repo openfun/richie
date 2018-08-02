@@ -22,6 +22,7 @@ class SubjectsIndexer:
         "dynamic_templates": MULTILINGUAL_TEXT,
         "properties": {"image": {"type": "text", "index": False}},
     }
+    scripts = {}
 
     @classmethod
     def get_data_for_es(cls, index, action):

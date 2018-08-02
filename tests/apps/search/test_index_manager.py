@@ -16,6 +16,7 @@ from richie.apps.search.index_manager import (
     get_indexes_by_alias,
     perform_create_index,
     regenerate_indexes,
+    store_es_scripts,
 )
 from richie.apps.search.utils.es_indices import IndicesList
 
@@ -315,6 +316,29 @@ class IndexManagerTestCase(TestCase):
             }
         )
         self.indices_client.delete.assert_not_called()
+
+    @mock.patch(
+        "richie.apps.search.indexers.courses.CoursesIndexer.scripts",
+        new={"script_id_A": "script body A", "script_id_B": "script body B"},
+    )
+    @mock.patch(
+        "richie.apps.search.indexers.organizations.OrganizationsIndexer.scripts", new={}
+    )
+    @mock.patch(
+        "richie.apps.search.indexers.subjects.SubjectsIndexer.scripts",
+        new={"script_id_C": "script body C"},
+    )
+    @mock.patch("settings.ES_CLIENT.put_script")
+    def test_store_es_scripts(self, mock_put_script, *args):
+        """
+        Make sure store_es_scripts iterates over all indexers to store their scripts and
+        does not choke when there are (0 | 1 | 2+) scripts on an indexer.
+        """
+        store_es_scripts(None)
+        mock_put_script.assert_any_call(body="script body A", id="script_id_A")
+        mock_put_script.assert_any_call(body="script body B", id="script_id_B")
+        mock_put_script.assert_any_call(body="script body C", id="script_id_C")
+        self.assertEqual(mock_put_script.call_count, 3)
 
 
 class ExOneIndexable:

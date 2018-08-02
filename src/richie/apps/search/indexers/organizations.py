@@ -26,6 +26,7 @@ class OrganizationsIndexer:
             "logo": {"type": "text", "index": False},
         },
     }
+    scripts = {}
 
     @classmethod
     def get_data_for_es(cls, index, action):
