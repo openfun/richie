@@ -27,6 +27,14 @@ jobs:
     steps:
       - checkout
 
+      # Make sure the changes don't add a "print" statement to the code base.
+      # We should exclude the ".circleci" folder from the search as the very command that checks
+      # the absence of "print" is including a "print(" itself.
+      - run:
+          name: enforce absence of print statements in code
+          command: |
+            ! git diff origin/master..HEAD -- . ':(exclude).circleci' | grep "print("
+
       - run:
           name: Check absence of fixup commits
           command: |
