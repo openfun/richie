@@ -8,9 +8,10 @@ from django.conf import settings
 from django.core.files import File
 
 import factory
-from cms.api import add_plugin, create_page
+from cms.api import add_plugin
 from filer.models.imagemodels import Image
 
+from ..core.factories import PageExtensionDjangoModelFactory
 from ..core.tests.utils import file_getter
 from .models import Person, PersonTitle
 
@@ -27,35 +28,33 @@ class PersonTitleFactory(factory.django.DjangoModelFactory):
     abbreviation = factory.LazyAttribute(lambda o: o.title)
 
 
-class PersonFactory(factory.django.DjangoModelFactory):
+class PersonFactory(PageExtensionDjangoModelFactory):
     """
     Person factory to generate random yet realistic person's name and title
     """
 
     class Meta:
         model = Person
-        exclude = ["parent"]
+        exclude = ["languages", "parent", "template", "title"]
 
-    parent = None
+    template = Person.TEMPLATE_DETAIL
+
     first_name = factory.Faker("first_name")
     last_name = factory.Faker("last_name")
     person_title = factory.SubFactory(PersonTitleFactory)
 
     @factory.lazy_attribute
-    def extended_object(self):
+    def title(self):
         """
-        Automatically create a related page with the person's name as title
+        Build the page title from the person's title and names
         """
-        return create_page(
-            "{title} {first_name} {last_name}".format(
-                title=self.person_title.title,
-                first_name=self.first_name,
-                last_name=self.last_name,
-            ),
-            Person.TEMPLATE_DETAIL,
-            settings.LANGUAGE_CODE,
-            parent=self.parent,
-        )
+        names = [
+            self.person_title.title if self.person_title else None,
+            self.first_name,
+            self.last_name,
+        ]
+        # Join the names that are null into a string
+        return " ".join([n for n in names if n is not None])
 
     @factory.post_generation
     # pylint: disable=unused-argument

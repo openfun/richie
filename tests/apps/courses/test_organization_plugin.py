@@ -42,10 +42,14 @@ class OrganizationPluginTestCase(TestCase):
 
     def test_organization_plugin_render(self):
         """
-        Test that a OrganizationPlugin correctly renders organization's page specific information
+        Test that an OrganizationPlugin correctly renders organization's page specific information
         """
-        # Create a Organization
-        organization = OrganizationFactory(title="La Sorbonne", logo="my_logo.jpg")
+        # Create an Organization with a page in both english and french
+        organization = OrganizationFactory(
+            title="Sorbonne",
+            languages=["en", "fr"],
+            with_content=True,
+        )
         organization_page = organization.extended_object
 
         # Create a page to add the plugin to
@@ -64,31 +68,22 @@ class OrganizationPluginTestCase(TestCase):
         # Check the page content in English
         url = page.get_absolute_url(language="en")
         response = self.client.get(url)
-        # Organization's name should be present as a link to the cms page
+
+        # The organization's name should be present as a link to the cms page
         # And CMS page title should be in title attribute of the link
         self.assertContains(
             response,
             '<a href="{url}" title="{page_title}">'.format(
-                url=organization_page.get_absolute_url(),
-                page_title=organization_page.get_title(),
+                url=organization_page.get_absolute_url(), page_title="Sorbonne en"
             ),
             status_code=200,
         )
-        self.assertContains(response, organization_page.get_title(), html=True)
-        # Organization's logo and its properties should be present
-        # pylint: disable=no-member
-        self.assertContains(
-            response,
-            '<img class=organization-plugin__logo src="/media/my_logo.jpg" \
-                alt="La Sorbonne logo">',
-            html=True,
-        )
+        self.assertContains(response, "Sorbonne en", html=True)
+
         # The organization's full name should be wrapped in a h2
         self.assertContains(
             response,
-            '<h2 class="organization-plugin__body__title">{:s}</h2>'.format(
-                organization_page.get_title()
-            ),
+            '<h2 class="organization-plugin__body__title">Sorbonne en</h2>',
             html=True,
         )
 
@@ -98,23 +93,14 @@ class OrganizationPluginTestCase(TestCase):
         self.assertContains(
             response,
             '<a href="{url}" title="{page_title}">'.format(
-                url=organization_page.get_absolute_url(),
-                page_title=organization_page.get_title(),
+                url=organization_page.get_absolute_url(), page_title="Sorbonne fr"
             ),
             status_code=200,
         )
-        # pylint: disable=no-member
-        self.assertContains(
-            response,
-            '<img class=organization-plugin__logo src="/media/my_logo.jpg" \
-                alt="La Sorbonne logo">',
-            html=True,
-        )
+        self.assertContains(response, "Sorbonne fr", html=True)
         # The organization's full name should be wrapped in a h2
         self.assertContains(
             response,
-            '<h2 class="organization-plugin__body__title">{:s}</h2>'.format(
-                organization_page.get_title()
-            ),
+            '<h2 class="organization-plugin__body__title">Sorbonne fr</h2>',
             html=True,
         )
