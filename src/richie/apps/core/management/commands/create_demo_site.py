@@ -122,16 +122,22 @@ def create_demo_site():
 
     # Create organizations under the `Organizations` page
     organizations = OrganizationFactory.create_batch(
-        NB_ORGANIZATIONS, parent=pages_created["organizations"], with_content=True
+        NB_ORGANIZATIONS,
+        languages=[l[0] for l in settings.LANGUAGES],
+        parent=pages_created["organizations"],
+        with_content=True,
+        should_publish=True,
     )
 
     # Create subjects under the `Subjects` page
     subjects = SubjectFactory.create_batch(
         NB_SUBJECTS,
+        languages=[l[0] for l in settings.LANGUAGES],
         parent=pages_created["subjects"],
         fill_banner=True,
         fill_description=True,
         fill_logo=True,
+        should_publish=True,
     )
 
     # Django parler require a language to be manually set when working out of
@@ -140,7 +146,11 @@ def create_demo_site():
 
     # Create persons under the `persons` page
     persons = PersonFactory.create_batch(
-        NB_PERSONS, parent=pages_created["persons"], with_content=True
+        NB_PERSONS,
+        languages=[l[0] for l in settings.LANGUAGES],
+        parent=pages_created["persons"],
+        with_content=True,
+        should_publish=True,
     )
 
     # Create courses under the `Course` page with subjects and organizations
@@ -150,6 +160,7 @@ def create_demo_site():
             organizations, NB_COURSES_ORGANIZATION_RELATIONS
         )
         CourseFactory(
+            languages=[l[0] for l in settings.LANGUAGES],
             parent=pages_created["courses"],
             organization_main=random.choice(course_organizations),
             fill_teaser=True,
@@ -164,6 +175,7 @@ def create_demo_site():
             fill_team=random.sample(persons, NB_COURSES_PERSONS_PLUGINS),
             with_organizations=course_organizations,
             with_subjects=random.sample(subjects, NB_COURSES_SUBJECT_RELATIONS),
+            should_publish=True,
         )
 
 

@@ -13,7 +13,7 @@ from .models import OrganizationPluginModel
 @plugin_pool.register_plugin
 class OrganizationPlugin(CMSPluginBase):
     """
-    Organization plugin displays a organization's information on other pages
+    Organization plugin displays an organization's information on other pages
     """
 
     model = OrganizationPluginModel

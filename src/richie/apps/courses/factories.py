@@ -4,14 +4,13 @@ Courses factories
 import os
 import random
 
-from django.conf import settings
 from django.core.files import File
-from django.utils.text import slugify
 
 import factory
-from cms.api import add_plugin, create_page
+from cms.api import add_plugin
 from filer.models.imagemodels import Image
 
+from ..core.factories import PageExtensionDjangoModelFactory
 from ..core.helpers import create_text_plugin
 from ..core.tests.utils import file_getter
 from .models import Course, Organization, Subject
@@ -29,7 +28,7 @@ VIDEO_SAMPLE_LINKS = (
 )
 
 
-class OrganizationFactory(factory.django.DjangoModelFactory):
+class OrganizationFactory(PageExtensionDjangoModelFactory):
     """
     A factory to automatically generate random yet meaningful organization page extensions
     in our tests.
@@ -37,25 +36,12 @@ class OrganizationFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Organization
-        exclude = ["parent", "title"]
+        exclude = ["languages", "parent", "template", "title"]
 
-    parent = None
     logo = factory.django.ImageField(
         width=180, height=100, from_func=file_getter(os.path.dirname(__file__), "logo")
     )
-    title = factory.Faker("company")
-
-    @factory.lazy_attribute
-    def extended_object(self):
-        """
-        Automatically create a related page with the random title
-        """
-        return create_page(
-            self.title,
-            "courses/cms/organization_detail.html",
-            settings.LANGUAGE_CODE,
-            parent=self.parent,
-        )
+    template = Organization.TEMPLATE_DETAIL
 
     @factory.lazy_attribute
     def code(self):
@@ -63,7 +49,7 @@ class OrganizationFactory(factory.django.DjangoModelFactory):
         Since `name` is required, let's just slugify it to get a meaningful code (and keep it
         below 100 characters)
         """
-        return slugify(self.title)[:100]
+        return self.extended_object.get_slug()[:100]
 
     @factory.post_generation
     # pylint: disable=unused-argument, attribute-defined-outside-init, no-member
@@ -102,7 +88,7 @@ class OrganizationFactory(factory.django.DjangoModelFactory):
             )
 
 
-class CourseFactory(factory.django.DjangoModelFactory):
+class CourseFactory(PageExtensionDjangoModelFactory):
     """
     A factory to automatically generate random yet meaningful course page extensions
     and their related page in our tests.
@@ -117,11 +103,17 @@ class CourseFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Course
-        exclude = ["number", "parent", "session", "title", "version"]
+        exclude = [
+            "languages",
+            "number",
+            "parent",
+            "session",
+            "template",
+            "title",
+            "version",
+        ]
 
-    parent = None
-    title = factory.Faker("catch_phrase")
-
+    template = Course.TEMPLATE_DETAIL
     version = factory.Sequence(lambda n: "version-v{version}".format(version=n + 1))
     number = factory.Faker("numerify", text="#####")
     session = factory.Sequence(lambda n: "session{session:02d}".format(session=n + 1))
@@ -138,38 +130,29 @@ class CourseFactory(factory.django.DjangoModelFactory):
     )
     organization_main = factory.SubFactory(OrganizationFactory)
 
-    @factory.lazy_attribute
-    def extended_object(self):
-        """
-        Automatically create a related page with the random title
-        """
-        return create_page(
-            self.title,
-            Course.TEMPLATE_DETAIL,
-            settings.LANGUAGE_CODE,
-            parent=self.parent,
-        )
-
     @factory.post_generation
     # pylint: disable=unused-argument
     def fill_teaser(self, create, extracted, **kwargs):
         """
         Add a video plugin for teaser with a random url
         """
+
         if create and extracted:
-            language = settings.LANGUAGE_CODE
+            for language in self.extended_object.get_languages():
 
-            placeholder = self.extended_object.placeholders.get(slot="course_teaser")
+                placeholder = self.extended_object.placeholders.get(
+                    slot="course_teaser"
+                )
 
-            label, url = random.choice(VIDEO_SAMPLE_LINKS)
+                label, url = random.choice(VIDEO_SAMPLE_LINKS)
 
-            add_plugin(
-                language=language,
-                placeholder=placeholder,
-                plugin_type="VideoPlayerPlugin",
-                label=label,
-                embed_link=url,
-            )
+                add_plugin(
+                    language=language,
+                    placeholder=placeholder,
+                    plugin_type="VideoPlayerPlugin",
+                    label=label,
+                    embed_link=url,
+                )
 
     @factory.post_generation
     # pylint: disable=unused-argument
@@ -177,17 +160,18 @@ class CourseFactory(factory.django.DjangoModelFactory):
         """
         Add person plugin for course team from given person instance list
         """
-        if create and extracted:
-            language = settings.LANGUAGE_CODE
-            placeholder = self.extended_object.placeholders.get(slot="course_team")
 
-            for person in extracted:
-                add_plugin(
-                    language=language,
-                    placeholder=placeholder,
-                    plugin_type="PersonPlugin",
-                    **{"person": person},
-                )
+        if create and extracted:
+            for language in self.extended_object.get_languages():
+                placeholder = self.extended_object.placeholders.get(slot="course_team")
+
+                for person in extracted:
+                    add_plugin(
+                        language=language,
+                        placeholder=placeholder,
+                        plugin_type="PersonPlugin",
+                        **{"person": person},
+                    )
 
     @factory.post_generation
     # pylint: disable=unused-argument
@@ -200,7 +184,12 @@ class CourseFactory(factory.django.DjangoModelFactory):
         """
         if create and extracted:
             for slot in extracted:
-                create_text_plugin(self.extended_object, slot, nb_paragraphs=1)
+                create_text_plugin(
+                    self.extended_object,
+                    slot,
+                    nb_paragraphs=1,
+                    languages=self.extended_object.get_languages(),
+                )
 
     @factory.post_generation
     # pylint: disable=unused-argument
@@ -217,7 +206,7 @@ class CourseFactory(factory.django.DjangoModelFactory):
             self.organizations.set(extracted)
 
 
-class SubjectFactory(factory.django.DjangoModelFactory):
+class SubjectFactory(PageExtensionDjangoModelFactory):
     """
     A factory to automatically generate random yet meaningful subject page extensions
     and their related page in our tests.
@@ -225,22 +214,9 @@ class SubjectFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = Subject
-        exclude = ["title", "parent"]
+        exclude = ["languages", "template", "title", "parent"]
 
-    parent = None
-    title = factory.Faker("catch_phrase")
-
-    @factory.lazy_attribute
-    def extended_object(self):
-        """
-        Automatically create a related page with the random title
-        """
-        return create_page(
-            self.title,
-            Subject.TEMPLATE_DETAIL,
-            settings.LANGUAGE_CODE,
-            parent=self.parent,
-        )
+    template = Subject.TEMPLATE_DETAIL
 
     @factory.post_generation
     # pylint: disable=unused-argument
