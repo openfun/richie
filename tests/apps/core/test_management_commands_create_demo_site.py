@@ -139,7 +139,7 @@ class CreateCmsDataTests(CMSTestCase):
                     "published": True,
                     "site": site,
                     "reverse_id": "subjects",
-                    "template": "richie/fullwidth.html",
+                    "template": "richie/child_pages_list.html",
                 },
             ),
             (
@@ -150,7 +150,7 @@ class CreateCmsDataTests(CMSTestCase):
                     "published": True,
                     "site": site,
                     "reverse_id": "organizations",
-                    "template": "richie/fullwidth.html",
+                    "template": "richie/child_pages_list.html",
                 },
             ),
             (
@@ -161,7 +161,7 @@ class CreateCmsDataTests(CMSTestCase):
                     "published": True,
                     "site": site,
                     "reverse_id": "persons",
-                    "template": "richie/fullwidth.html",
+                    "template": "richie/child_pages_list.html",
                 },
             ),
             (
