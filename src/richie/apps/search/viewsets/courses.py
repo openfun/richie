@@ -40,7 +40,11 @@ class CoursesViewSet(ViewSet):
         course_query_response = settings.ES_CLIENT.search(
             index=self.indexer.index_name,
             doc_type=self.indexer.document_type,
-            body={"aggs": aggs, "query": query},
+            body={
+                "aggs": aggs,
+                "query": query,
+                "sort": self.indexer.get_courses_list_sorting_script(),
+            },
             # Directly pass meta-params through as arguments to the ES client
             from_=offset,
             size=limit or settings.ES_DEFAULT_PAGE_SIZE,

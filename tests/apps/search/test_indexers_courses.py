@@ -1,7 +1,9 @@
 """
 Tests for the course indexer
 """
+# pylint: disable=too-many-lines
 import json
+import uuid
 from types import SimpleNamespace
 from unittest.mock import patch
 
@@ -12,6 +14,8 @@ from django.test import TestCase
 
 import arrow
 import responses
+from elasticsearch.client import IndicesClient
+from elasticsearch.helpers import bulk
 
 from richie.apps.search.exceptions import IndexerDataException, QueryFormatException
 from richie.apps.search.indexers.courses import CoursesIndexer
@@ -872,3 +876,145 @@ class CoursesIndexerTestCase(TestCase):
             CoursesIndexer.build_es_query(
                 SimpleNamespace(query_params=QueryDict(query_string="limit=-2"))
             )
+
+    def test_list_sorting_script(self):
+        """
+        Make sure our courses list sorting script (Lucene expression) is working as intended
+        """
+        # Set up the index we'll use to run our test
+        indices_client = IndicesClient(client=settings.ES_CLIENT)
+        # Delete any existing indexes so we get a clean slate
+        indices_client.delete(index="_all")
+        # Create an index we'll use to test the ES features
+        indices_client.create(index="test_courses_list_sorting_index")
+        # Use the default courses mapping from the Indexer for briefness' sake
+        indices_client.put_mapping(
+            body=CoursesIndexer.mapping,
+            doc_type="courses",
+            index="test_courses_list_sorting_index",
+        )
+
+        settings.ES_CLIENT.put_script(
+            id="sort_courses_list", body=CoursesIndexer.scripts["sort_courses_list"]
+        )
+
+        # Add our sample of courses to the test index we just created
+        # NB: we need to add 8 courses because we're splitting them into 4 buckets and
+        # then using a specific ordering within each of these
+        bulk(
+            # NB: courses order & IDs have been voluntarily shuffled to ensure we don't
+            # accidentally end up with the correct ordering if our sorting does not occur at all.
+            actions=[
+                {
+                    # N. 3: not started yet, first upcoming course to start
+                    "_id": uuid.uuid4(),
+                    "_index": "test_courses_list_sorting_index",
+                    "_op_type": "create",
+                    "_type": "courses",
+                    "control_id": "4",
+                    "end_date": arrow.utcnow().shift(days=+150).isoformat(),
+                    "enrollment_end_date": arrow.utcnow().shift(days=+30).isoformat(),
+                    "start_date": arrow.utcnow().shift(days=+15).isoformat(),
+                },
+                {
+                    # N. 1: ongoing course, next open course to end enrollment
+                    "_id": uuid.uuid4(),
+                    "_index": "test_courses_list_sorting_index",
+                    "_op_type": "create",
+                    "_type": "courses",
+                    "control_id": "3",
+                    "end_date": arrow.utcnow().shift(days=+120).isoformat(),
+                    "enrollment_end_date": arrow.utcnow().shift(days=+5).isoformat(),
+                    "start_date": arrow.utcnow().shift(days=-5).isoformat(),
+                },
+                {
+                    # N. 7: the other already finished course; it finished more recently than N. 8
+                    "_id": uuid.uuid4(),
+                    "_index": "test_courses_list_sorting_index",
+                    "_op_type": "create",
+                    "_type": "courses",
+                    "control_id": "1",
+                    "end_date": arrow.utcnow().shift(days=-15).isoformat(),
+                    "enrollment_end_date": arrow.utcnow().shift(days=-60).isoformat(),
+                    "start_date": arrow.utcnow().shift(days=-80).isoformat(),
+                },
+                {
+                    # N. 6: ongoing course, enrollment has been over for the longest
+                    "_id": uuid.uuid4(),
+                    "_index": "test_courses_list_sorting_index",
+                    "_op_type": "create",
+                    "_type": "courses",
+                    "control_id": "7",
+                    "end_date": arrow.utcnow().shift(days=+30).isoformat(),
+                    "enrollment_end_date": arrow.utcnow().shift(days=-45).isoformat(),
+                    "start_date": arrow.utcnow().shift(days=-75).isoformat(),
+                },
+                {
+                    # N. 8: the course that has been over for the longest
+                    "_id": uuid.uuid4(),
+                    "_index": "test_courses_list_sorting_index",
+                    "_op_type": "create",
+                    "_type": "courses",
+                    "control_id": "5",
+                    "end_date": arrow.utcnow().shift(days=-30).isoformat(),
+                    "enrollment_end_date": arrow.utcnow().shift(days=-90).isoformat(),
+                    "start_date": arrow.utcnow().shift(days=-120).isoformat(),
+                },
+                {
+                    # N. 4: not started yet, will start after the other upcoming course
+                    "_id": uuid.uuid4(),
+                    "_index": "test_courses_list_sorting_index",
+                    "_op_type": "create",
+                    "_type": "courses",
+                    "control_id": "8",
+                    "end_date": arrow.utcnow().shift(days=+120).isoformat(),
+                    "enrollment_end_date": arrow.utcnow().shift(days=+60).isoformat(),
+                    "start_date": arrow.utcnow().shift(days=+45).isoformat(),
+                },
+                {
+                    # N. 2: ongoing course, can still be enrolled in for longer than N. 1
+                    "_id": uuid.uuid4(),
+                    "_index": "test_courses_list_sorting_index",
+                    "_op_type": "create",
+                    "_type": "courses",
+                    "control_id": "6",
+                    "end_date": arrow.utcnow().shift(days=+105).isoformat(),
+                    "enrollment_end_date": arrow.utcnow().shift(days=+15).isoformat(),
+                    "start_date": arrow.utcnow().shift(days=-15).isoformat(),
+                },
+                {
+                    # N. 5: ongoing course, most recent to end enrollment
+                    "_id": uuid.uuid4(),
+                    "_index": "test_courses_list_sorting_index",
+                    "_op_type": "create",
+                    "_type": "courses",
+                    "control_id": "2",
+                    "end_date": arrow.utcnow().shift(days=+15).isoformat(),
+                    "enrollment_end_date": arrow.utcnow().shift(days=-30).isoformat(),
+                    "start_date": arrow.utcnow().shift(days=-90).isoformat(),
+                },
+            ],
+            chunk_size=settings.ES_CHUNK_SIZE,
+            client=settings.ES_CLIENT,
+        )
+
+        indices_client.refresh()
+
+        # Comparing lists of ids is enough to ensure proper ordering, as list comprehensions
+        # explicitly preserve order
+        self.assertEqual(
+            [
+                es_course["_source"]["control_id"]
+                for es_course in settings.ES_CLIENT.search(
+                    index="test_courses_list_sorting_index",
+                    doc_type="courses",
+                    body={
+                        "query": {"match_all": {}},
+                        "sort": CoursesIndexer.get_courses_list_sorting_script(),
+                    },
+                    from_=0,
+                    size=10,
+                )["hits"]["hits"]
+            ],
+            ["3", "6", "4", "8", "2", "7", "1", "5"],
+        )

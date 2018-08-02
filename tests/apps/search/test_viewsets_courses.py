@@ -72,6 +72,10 @@ class CoursesViewsetTestCase(TestCase):
         "richie.apps.search.indexers.courses.CoursesIndexer.build_es_query",
         lambda *args: (2, 77, {"some": "query"}, {"some": "aggs"}),
     )
+    @mock.patch(
+        "richie.apps.search.indexers.courses.CoursesIndexer.get_courses_list_sorting_script",
+        lambda *args: {"some": "sorting"},
+    )
     @mock.patch.object(settings.ES_CLIENT, "search")
     def test_search_courses(self, mock_search, *_):
         """
@@ -121,7 +125,11 @@ class CoursesViewsetTestCase(TestCase):
         )
         # The ES connector was called with appropriate arguments for the client's request
         mock_search.assert_called_with(
-            body={"aggs": {"some": "aggs"}, "query": {"some": "query"}},
+            body={
+                "aggs": {"some": "aggs"},
+                "query": {"some": "query"},
+                "sort": {"some": "sorting"},
+            },
             doc_type="course",
             from_=77,
             index="richie_courses",
