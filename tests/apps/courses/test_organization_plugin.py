@@ -8,7 +8,6 @@ from django.test import TestCase
 
 from cms.api import add_plugin, create_page
 
-from richie.apps.core.factories import FilerImageFactory, UserFactory
 from richie.apps.core.helpers import create_i18n_page
 from richie.apps.courses.cms_plugins import OrganizationPlugin
 from richie.apps.courses.factories import OrganizationFactory
@@ -48,7 +47,9 @@ class OrganizationPluginTestCase(TestCase):
         organization = OrganizationFactory(
             title="Sorbonne",
             languages=["en", "fr"],
-            with_content=True,
+            fill_banner=True,
+            fill_logo=True,
+            fill_description=True,
         )
         organization_page = organization.extended_object
 
@@ -80,6 +81,8 @@ class OrganizationPluginTestCase(TestCase):
         )
         self.assertContains(response, "Sorbonne en", html=True)
 
+        # The organization's logo should be present with the expected resizing
+        self.assertContains(response, ".png__216.0x120.0_q85_subsampling-2.png")
         # The organization's full name should be wrapped in a h2
         self.assertContains(
             response,
@@ -98,6 +101,7 @@ class OrganizationPluginTestCase(TestCase):
             status_code=200,
         )
         self.assertContains(response, "Sorbonne fr", html=True)
+        self.assertContains(response, ".png__216.0x120.0_q85_subsampling-2.png")
         # The organization's full name should be wrapped in a h2
         self.assertContains(
             response,

@@ -125,7 +125,9 @@ def create_demo_site():
         NB_ORGANIZATIONS,
         languages=[l[0] for l in settings.LANGUAGES],
         parent=pages_created["organizations"],
-        with_content=True,
+        fill_banner=True,
+        fill_description=True,
+        fill_logo=True,
         should_publish=True,
     )
 

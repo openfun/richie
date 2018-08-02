@@ -1,13 +1,12 @@
-{% load cms_tags i18n thumbnail %}
+{% load cms_tags i18n %}
 {% spaceless %}
 <div class="organization-plugin">
-  {% if instance.organization.logo %}
-    {% thumbnail instance.organization.logo "200x200" as im%}
-      <img
-      class="organization-plugin__logo"
-      src="{{ im.url }}"
-      alt="{% blocktrans with title=instance.organization.extended_object.get_title|capfirst %}{{ title }} logo{% endblocktrans %}">
-  {% endif %}
+  <a class="organization-plugin__logo" href="{{ instance.organization.extended_object.get_absolute_url }}"
+     title="{{ instance.organization.extended_object.get_title }} {% trans "logo" %}">
+    {% with width=216 height=120 %}
+      {% show_placeholder "logo" instance.organization.extended_object %}
+    {% endwith %}
+  </a>
   <div class="organization-plugin__body">
     <a href="{{ instance.organization.extended_object.get_absolute_url }}" title="{{ instance.organization.extended_object.get_title }}">
       <h{{ header_level|default:2 }} class="organization-plugin__body__title">

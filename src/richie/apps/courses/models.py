@@ -25,12 +25,6 @@ class Organization(BasePageExtension):
     code = models.CharField(
         _("code"), db_index=True, max_length=100, null=True, blank=True
     )
-    logo = models.ImageField(
-        upload_to="organizations/logo/",
-        verbose_name=_("organization logo"),
-        help_text=_("Recommended size: 180x100"),
-        blank=True,
-    )
 
     ROOT_REVERSE_ID = "organizations"
     TEMPLATE_DETAIL = "courses/cms/organization_detail.html"

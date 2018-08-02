@@ -11,13 +11,11 @@
         {% placeholder "banner" %}
       </div>
 
-      {% if organization.logo %}
         <div class="organization-detail__logo">
-          <img
-            src="{{ organization.logo.url }}"
-            alt="{% blocktrans with title=current_page.get_title|capfirst %}{{ title }} logo{% endblocktrans %}">
+          {% with width=216 height=120 %}
+            {% placeholder "logo" %}
+          {% endwith %}
         </div>
-      {% endif %}
 
       <h1 class="organization-detail__title">{{ current_page.get_title }}</h1>
 

@@ -28,7 +28,71 @@ VIDEO_SAMPLE_LINKS = (
 )
 
 
-class OrganizationFactory(PageExtensionDjangoModelFactory):
+class BLDPageExtensionDjangoModelFactory(PageExtensionDjangoModelFactory):
+    """
+    This mixin mutualizes filling placeholders for banner, logo and description fields because
+    several models share these 3 placeholders.
+    """
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def fill_banner(self, create, extracted, **kwargs):
+        """
+        Add a banner with a random image
+        """
+        if create and extracted:
+            banner_placeholder = self.extended_object.placeholders.get(slot="banner")
+
+            banner_file = file_getter(os.path.dirname(__file__), "banner")()
+            wrapped_banner = File(banner_file, banner_file.name)
+            banner = Image.objects.create(file=wrapped_banner)
+
+            for language in self.extended_object.get_languages():
+                add_plugin(
+                    language=language,
+                    placeholder=banner_placeholder,
+                    plugin_type="PicturePlugin",
+                    picture=banner,
+                    attributes={"alt": "banner image"},
+                )
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def fill_logo(self, create, extracted, **kwargs):
+        """
+        Add a logo with a random image
+        """
+        if create and extracted:
+            logo_placeholder = self.extended_object.placeholders.get(slot="logo")
+
+            logo_file = file_getter(os.path.dirname(__file__), "logo")()
+            wrapped_logo = File(logo_file, logo_file.name)
+            logo = Image.objects.create(file=wrapped_logo)
+            for language in self.extended_object.get_languages():
+                add_plugin(
+                    language=language,
+                    placeholder=logo_placeholder,
+                    plugin_type="PicturePlugin",
+                    picture=logo,
+                    attributes={"alt": "logo image"},
+                )
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def fill_description(self, create, extracted, **kwargs):
+        """
+        Add a text plugin for description with a long random text
+        """
+        if create and extracted:
+            create_text_plugin(
+                self.extended_object,
+                "description",
+                nb_paragraphs=random.randint(2, 4),
+                languages=self.extended_object.get_languages(),
+            )
+
+
+class OrganizationFactory(BLDPageExtensionDjangoModelFactory):
     """
     A factory to automatically generate random yet meaningful organization page extensions
     in our tests.
@@ -38,9 +102,6 @@ class OrganizationFactory(PageExtensionDjangoModelFactory):
         model = Organization
         exclude = ["languages", "parent", "template", "title"]
 
-    logo = factory.django.ImageField(
-        width=180, height=100, from_func=file_getter(os.path.dirname(__file__), "logo")
-    )
     template = Organization.TEMPLATE_DETAIL
 
     @factory.lazy_attribute
@@ -57,35 +118,6 @@ class OrganizationFactory(PageExtensionDjangoModelFactory):
         """Add courses to ManyToMany relation."""
         if create and extracted:
             self.courses.set(extracted)
-
-    @factory.post_generation
-    # pylint: disable=unused-argument
-    def with_content(self, create, extracted, **kwargs):
-        """
-        Add content plugins displayed in the "maincontent" placeholder of the organization page:
-        - Picture plugin featuring a random banner image,
-        - Text plugin featuring a long random description.
-        """
-        if create and extracted:
-            language = settings.LANGUAGE_CODE
-
-            # Add a banner with a random image
-            placeholder = self.extended_object.placeholders.get(slot="banner")
-            banner_file = file_getter(os.path.dirname(__file__), "banner")()
-            wrapped_banner = File(banner_file, banner_file.name)
-            banner = Image.objects.create(file=wrapped_banner)
-            add_plugin(
-                language=language,
-                placeholder=placeholder,
-                plugin_type="PicturePlugin",
-                picture=banner,
-                attributes={"alt": "banner image"},
-            )
-
-            # Add a text plugin with a long random description
-            create_text_plugin(
-                self.extended_object, "description", nb_paragraphs=random.randint(2, 4)
-            )
 
 
 class CourseFactory(PageExtensionDjangoModelFactory):
@@ -206,7 +238,7 @@ class CourseFactory(PageExtensionDjangoModelFactory):
             self.organizations.set(extracted)
 
 
-class SubjectFactory(PageExtensionDjangoModelFactory):
+class SubjectFactory(BLDPageExtensionDjangoModelFactory):
     """
     A factory to automatically generate random yet meaningful subject page extensions
     and their related page in our tests.
@@ -217,60 +249,6 @@ class SubjectFactory(PageExtensionDjangoModelFactory):
         exclude = ["languages", "template", "title", "parent"]
 
     template = Subject.TEMPLATE_DETAIL
-
-    @factory.post_generation
-    # pylint: disable=unused-argument
-    def fill_banner(self, create, extracted, **kwargs):
-        """
-        Add a banner with a random image
-        """
-        if create and extracted:
-            language = settings.LANGUAGE_CODE
-            banner_placeholder = self.extended_object.placeholders.get(slot="banner")
-
-            banner_file = file_getter(os.path.dirname(__file__), "banner")()
-            wrapped_banner = File(banner_file, banner_file.name)
-            banner = Image.objects.create(file=wrapped_banner)
-
-            add_plugin(
-                language=language,
-                placeholder=banner_placeholder,
-                plugin_type="PicturePlugin",
-                picture=banner,
-                attributes={"alt": "banner image"},
-            )
-
-    @factory.post_generation
-    # pylint: disable=unused-argument
-    def fill_logo(self, create, extracted, **kwargs):
-        """
-        Add a logo with a random image
-        """
-        if create and extracted:
-            language = settings.LANGUAGE_CODE
-            logo_placeholder = self.extended_object.placeholders.get(slot="logo")
-
-            logo_file = file_getter(os.path.dirname(__file__), "logo")()
-            wrapped_logo = File(logo_file, logo_file.name)
-            logo = Image.objects.create(file=wrapped_logo)
-            add_plugin(
-                language=language,
-                placeholder=logo_placeholder,
-                plugin_type="PicturePlugin",
-                picture=logo,
-                attributes={"alt": "logo image"},
-            )
-
-    @factory.post_generation
-    # pylint: disable=unused-argument
-    def fill_description(self, create, extracted, **kwargs):
-        """
-        Add a text plugin for description with a long random text
-        """
-        if create and extracted:
-            create_text_plugin(
-                self.extended_object, "description", nb_paragraphs=random.randint(2, 4)
-            )
 
     @factory.post_generation
     # pylint: disable=unused-argument, attribute-defined-outside-init, no-member
