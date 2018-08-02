@@ -17,9 +17,7 @@ class OrganizationCMSTestCase(TestCase):
         Validate that the important elements are displayed on a published organization page
         """
         courses = CourseFactory.create_batch(4)
-        organization = OrganizationFactory(
-            title="La Sorbonne", logo="my_logo.jpg", with_courses=courses
-        )
+        organization = OrganizationFactory(title="La Sorbonne", with_courses=courses)
         page = organization.extended_object
 
         # Publish only 2 out of 4 courses
@@ -70,9 +68,7 @@ class OrganizationCMSTestCase(TestCase):
         self.client.login(username=user.username, password="password")
 
         courses = CourseFactory.create_batch(4)
-        organization = OrganizationFactory(
-            title="La Sorbonne", logo="my_logo.jpg", with_courses=courses
-        )
+        organization = OrganizationFactory(title="La Sorbonne", with_courses=courses)
         page = organization.extended_object
 
         # Publish only 2 out of 4 courses

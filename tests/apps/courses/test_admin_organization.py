@@ -49,8 +49,7 @@ class OrganizationAdminTestCase(CMSTestCase):
         response = self.client.get(url, follow=True)
 
         # Check that the page includes all our fields
-        for field in ["code", "logo"]:
-            self.assertContains(response, "id_{:s}".format(field))
+        self.assertContains(response, "id_code")
 
     def test_organization_change_view_get(self):
         """

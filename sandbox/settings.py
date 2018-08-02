@@ -337,6 +337,11 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
             "plugins": ["PicturePlugin"],
             "limits": {"PicturePlugin": 1},
         },
+        "courses/cms/organization_detail.html logo": {
+            "name": _("Logo"),
+            "plugins": ["PicturePlugin"],
+            "limits": {"PicturePlugin": 1},
+        },
         "courses/cms/organization_detail.html description": {
             "name": _("Description"),
             "plugins": ["CKEditorPlugin"],

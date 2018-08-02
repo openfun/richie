@@ -13,30 +13,70 @@ class OrganizationFactoryTestCase(TestCase):
     Unit test suite to validate the behavior of the Organization factory
     """
 
-    def test_organization_factory(self):
+    def test_organization_factory_logo(self):
         """
-        OrganizationFactory should be able to generate plugins with realistic fake data: logo,
-        banner picture and description.
+        OrganizationFactory should be able to generate plugins with a realistic logo for several
+        languages.
         """
-        organization = OrganizationFactory(with_content=True)
+        organization = OrganizationFactory(fill_logo=True, languages=["fr", "en"])
 
-        # Check that the banner and description plugins were created as expected
+        # Check that the logo plugins were created as expected
+        logo = organization.extended_object.placeholders.get(slot="logo")
+        self.assertEqual(logo.cmsplugin_set.count(), 2)
+
+        # The logo plugins should point to one of our fixtures images
+        for language in ["fr", "en"]:
+            logo_plugin = logo.cmsplugin_set.get(
+                plugin_type="PicturePlugin", language=language
+            )
+            self.assertIn(
+                "logo",
+                os.path.basename(
+                    logo_plugin.djangocms_picture_picture.picture.file.name
+                ),
+            )
+
+    def test_organization_factory_banner(self):
+        """
+        OrganizationFactory should be able to generate plugins with a realistic banner for several
+        languages.
+        """
+        organization = OrganizationFactory(fill_banner=True, languages=["fr", "en"])
+
+        # Check that the banner plugins were created as expected
         banner = organization.extended_object.placeholders.get(slot="banner")
-        self.assertEqual(banner.cmsplugin_set.count(), 1)
-        description = organization.extended_object.placeholders.get(slot="description")
-        self.assertEqual(description.cmsplugin_set.count(), 1)
+        self.assertEqual(banner.cmsplugin_set.count(), 2)
 
-        # The logo should point to one of our fixtures logos
-        # pylint: disable=no-member
-        self.assertIn("logo", organization.logo.file.name)
+        # The banner plugins should point to one of our fixtures images
+        for language in ["fr", "en"]:
+            banner_plugin = banner.cmsplugin_set.get(
+                plugin_type="PicturePlugin", language=language
+            )
+            self.assertIn(
+                "banner",
+                os.path.basename(
+                    banner_plugin.djangocms_picture_picture.picture.file.name
+                ),
+            )
 
-        # The banner plugin should point to one of our fixtures images
-        banner_plugin = banner.cmsplugin_set.get(plugin_type="PicturePlugin")
-        self.assertIn(
-            "banner",
-            os.path.basename(banner_plugin.djangocms_picture_picture.picture.file.name),
+    def test_organization_factory_description(self):
+        """
+        OrganizationFactory should be able to generate plugins with a realistic description for
+        several languages.
+        """
+        organization = OrganizationFactory(
+            fill_description=True, languages=["fr", "en"]
         )
 
-        # The description plugin should contain paragraphs
-        description_plugin = description.cmsplugin_set.get(plugin_type="CKEditorPlugin")
-        self.assertIn("<p>", description_plugin.simple_text_ckeditor_simpletext.body)
+        # Check that the description plugins were created as expected
+        description = organization.extended_object.placeholders.get(slot="description")
+        self.assertEqual(description.cmsplugin_set.count(), 2)
+
+        # The description plugins should contain paragraphs
+        for language in ["fr", "en"]:
+            description_plugin = description.cmsplugin_set.get(
+                plugin_type="CKEditorPlugin", language=language
+            )
+            self.assertIn(
+                "<p>", description_plugin.simple_text_ckeditor_simpletext.body
+            )

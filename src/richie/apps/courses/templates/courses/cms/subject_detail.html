@@ -12,7 +12,9 @@
       </div>
 
       <div class="subject-detail__logo">
-        {% placeholder "logo" %}
+        {% with width=216 height=120 %}
+          {% placeholder "logo" %}
+        {% endwith %}
       </div>
 
       <h1 class="subject-detail__title">{{ current_page.get_title }}</h1>

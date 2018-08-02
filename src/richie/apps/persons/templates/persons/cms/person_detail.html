@@ -4,11 +4,15 @@
     <h1 class="person-detail__title">{{ current_page.get_title }}</h1>
 
     {% with header_level=2 %}
-      {% placeholder "portrait" %}
+
+      {% with width=216 height=120 %}
+        {% placeholder "portrait" %}
+      {% endwith %}
 
       {% placeholder "resume" %}
 
       {% placeholder "maincontent" %}
+
     {% endwith %}
 
 </div>

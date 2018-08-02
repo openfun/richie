@@ -61,14 +61,6 @@ class OrganizationTestCase(TestCase):
             "Ensure this value has at most 100 characters (it has 101).",
         )
 
-    def test_organization_fields_logo_not_required(self):
-        """
-        The `logo` is not required on the model
-        """
-        organization = OrganizationFactory(logo=None)
-        self.assertIsNotNone(organization.pk)
-        self.assertFalse(bool(organization.logo))
-
     def test_organization_str(self):
         """
         The str representation should be built with the page title and code field only.
