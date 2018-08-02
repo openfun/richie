@@ -51,21 +51,21 @@ PAGE_INFOS = {
         "content": {"en": "Subjects", "fr": "Sujets"},
         "kwargs": {
             "reverse_id": Subject.ROOT_REVERSE_ID,
-            "template": "richie/fullwidth.html",
+            "template": "richie/child_pages_list.html",
         },
     },
     "organizations": {
         "content": {"en": "Organizations", "fr": "Etablissements"},
         "kwargs": {
             "reverse_id": Organization.ROOT_REVERSE_ID,
-            "template": "richie/fullwidth.html",
+            "template": "richie/child_pages_list.html",
         },
     },
     "persons": {
         "content": {"en": "Persons", "fr": "Personnes"},
         "kwargs": {
             "reverse_id": Person.ROOT_REVERSE_ID,
-            "template": "richie/fullwidth.html",
+            "template": "richie/child_pages_list.html",
         },
     },
     "dashboard": {
