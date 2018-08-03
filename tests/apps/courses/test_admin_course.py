@@ -141,6 +141,8 @@ class CourseAdminTestCase(CMSTestCase):
             "organization_main": organization2.id,
             "organizations": [organization3.id],
             "subjects": [subject2.id],
+            "course_runs-TOTAL_FORMS": 0,
+            "course_runs-INITIAL_FORMS": 0,
         }
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 302)
