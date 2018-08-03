@@ -190,6 +190,46 @@ class Course(BasePageExtension):
             self.organizations.add(self.organization_main)
 
 
+class CourseRun(models.Model):
+    """
+    The course run represents and records the occurence of a course between a start
+    and an end date.
+    """
+
+    course = models.ForeignKey(
+        Course,
+        verbose_name=_("course"),
+        related_name="course_runs",
+        limit_choices_to={"extended_object__publisher_is_draft": True},
+        on_delete=models.CASCADE,
+    )
+    resource_link = models.URLField(_("Resource link"), blank=True, null=True)
+    start = models.DateTimeField(_("course start"), blank=True, null=True)
+    end = models.DateTimeField(_("course end"), blank=True, null=True)
+    enrollment_start = models.DateTimeField(
+        _("enrollment start"), blank=True, null=True
+    )
+    enrollment_end = models.DateTimeField(_("enrollment end"), blank=True, null=True)
+
+    class Meta:
+        verbose_name = _("course run")
+
+    def __str__(self):
+        """Human representation of a course run."""
+        start = "{:%y/%m/%d %H:%M} - ".format(self.start) if self.start else ""
+        return "{start:s}{course:s}".format(
+            course=self.course.extended_object.get_title(), start=start
+        )
+
+    # pylint: disable=arguments-differ
+    def save(self, *args, **kwargs):
+        """
+        Enforce validation each time an instance is saved.
+        """
+        self.full_clean()
+        super().save(*args, **kwargs)
+
+
 class Subject(BasePageExtension):
     """
     The subject page extension represents and records a thematic in the catalog.
