@@ -13,28 +13,43 @@ class PersonFactoryTestCase(TestCase):
     Unit test suite to validate the behavior of the Person factory
     """
 
-    def test_person_factory(self):
+    def test_person_factory_portrait(self):
         """
-        PersonFactoryTestCase should be able to generate plugins with realistic fake
-        data: portrait and resume.
+        PersonFactory should be able to generate plugins with a realistic portrait for several
+        languages.
         """
-        person = PersonFactory(with_content=True)
+        person = PersonFactory(fill_portrait=True, languages=["fr", "en"])
 
-        # The portrait plugin should point to one of our fixtures images
-        portrait_placeholder = person.extended_object.placeholders.get(slot="portrait")
-        portrait_plugin = portrait_placeholder.cmsplugin_set.get(
-            plugin_type="PicturePlugin"
-        )
-        self.assertIn(
-            "portrait",
-            os.path.basename(
-                portrait_plugin.djangocms_picture_picture.picture.file.name
-            ),
-        )
+        # Check that the portrait plugins were created as expected
+        portrait = person.extended_object.placeholders.get(slot="portrait")
+        self.assertEqual(portrait.cmsplugin_set.count(), 2)
 
-        # The resume plugin should contain paragraphs
-        resume_placeholder = person.extended_object.placeholders.get(slot="resume")
-        resume_plugin = resume_placeholder.cmsplugin_set.get(
-            plugin_type="CKEditorPlugin"
-        )
-        self.assertIn("<p>", resume_plugin.simple_text_ckeditor_simpletext.body)
+        # The portrait plugins should point to one of our fixtures images
+        for language in ["fr", "en"]:
+            portrait_plugin = portrait.cmsplugin_set.get(
+                plugin_type="PicturePlugin", language=language
+            )
+            self.assertIn(
+                "portrait",
+                os.path.basename(
+                    portrait_plugin.djangocms_picture_picture.picture.file.name
+                ),
+            )
+
+    def test_person_factory_resume(self):
+        """
+        PersonFactory should be able to generate plugins with a realistic resume for
+        several languages.
+        """
+        person = PersonFactory(fill_resume=True, languages=["fr", "en"])
+
+        # Check that the resume plugins were created as expected
+        resume = person.extended_object.placeholders.get(slot="resume")
+        self.assertEqual(resume.cmsplugin_set.count(), 2)
+
+        # The resume plugins should contain paragraphs
+        for language in ["fr", "en"]:
+            resume_plugin = resume.cmsplugin_set.get(
+                plugin_type="CKEditorPlugin", language=language
+            )
+            self.assertIn("<p>", resume_plugin.simple_text_ckeditor_simpletext.body)

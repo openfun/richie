@@ -2,9 +2,7 @@
 Persons factories
 """
 import os
-import random
 
-from django.conf import settings
 from django.core.files import File
 
 import factory
@@ -12,6 +10,7 @@ from cms.api import add_plugin
 from filer.models.imagemodels import Image
 
 from ..core.factories import PageExtensionDjangoModelFactory
+from ..core.helpers import create_text_plugin
 from ..core.tests.utils import file_getter
 from .models import Person, PersonTitle
 
@@ -58,46 +57,37 @@ class PersonFactory(PageExtensionDjangoModelFactory):
 
     @factory.post_generation
     # pylint: disable=unused-argument
-    def with_content(self, create, extracted, **kwargs):
+    def fill_portrait(self, create, extracted, **kwargs):
         """
-        Add content plugins displayed in the "portrait" and "resume" placeholder
-        of the person page:
-
-        - Picture plugin featuring a random portrait image,
-        - Text plugin featuring the person resume with a random long text.
+        Add a portrait with a random image
         """
         if create and extracted:
-            language = settings.LANGUAGE_CODE
             portrait_placeholder = self.extended_object.placeholders.get(
                 slot="portrait"
             )
 
-            resume_placeholder = self.extended_object.placeholders.get(slot="resume")
-
-            # Add a portrait with a random image
             portrait_file = file_getter(os.path.dirname(__file__), "portrait")()
             wrapped_portrait = File(portrait_file, portrait_file.name)
             portrait = Image.objects.create(file=wrapped_portrait)
-            add_plugin(
-                language=language,
-                placeholder=portrait_placeholder,
-                plugin_type="PicturePlugin",
-                picture=portrait,
-                attributes={"alt": "portrait image"},
-            )
-
-            # Add a text plugin for resume with a long random text
-            nb_paragraphs = random.randint(2, 4)
-            paragraphs = [
-                factory.Faker("text", max_nb_chars=random.randint(200, 1000)).generate(
-                    {}
+            for language in self.extended_object.get_languages():
+                add_plugin(
+                    language=language,
+                    placeholder=portrait_placeholder,
+                    plugin_type="PicturePlugin",
+                    picture=portrait,
+                    attributes={"alt": "portrait image"},
                 )
-                for i in range(nb_paragraphs)
-            ]
-            body = ["<p>{:s}</p>".format(p) for p in paragraphs]
-            add_plugin(
-                language=language,
-                placeholder=resume_placeholder,
-                plugin_type="CKEditorPlugin",
-                body="".join(body),
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def fill_resume(self, create, extracted, **kwargs):
+        """
+        Add a text plugin for resume with a long random text
+        """
+        if create and extracted:
+            create_text_plugin(
+                self.extended_object,
+                "resume",
+                nb_paragraphs=1,
+                languages=self.extended_object.get_languages(),
             )
