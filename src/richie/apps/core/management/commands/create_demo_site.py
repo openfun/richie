@@ -151,7 +151,8 @@ def create_demo_site():
         NB_PERSONS,
         languages=[l[0] for l in settings.LANGUAGES],
         parent=pages_created["persons"],
-        with_content=True,
+        fill_portrait=True,
+        fill_resume=True,
         should_publish=True,
     )
 
