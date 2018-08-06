@@ -6,7 +6,7 @@
   "scripts": {
     "build": "webpack",
     "generate-l10n-template": "rip json2pot 'src/richie-front/i18n/src/**/*.json' -o src/richie-front/i18n/richie-front.pot",
-    "lint": "tslint -c tslint.json 'src/richie-front/js/**/*.ts'",
+    "lint": "tslint -c tslint.json 'src/richie-front/js/**/*.ts?(x)'",
     "sass": "node-sass src/richie-front/scss/_main.scss src/richie/static/richie/css/main.css",
     "test": "karma start ./karma.conf.js",
     "watch-sass": "nodemon -e scss -x 'yarn sass'"
