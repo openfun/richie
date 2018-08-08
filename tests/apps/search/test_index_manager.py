@@ -34,7 +34,7 @@ class IndexManagerTestCase(TestCase):
         self.indices_client = IndicesClient(client=settings.ES_CLIENT)
         self.indices_client.delete(index="_all")
 
-    def test_get_indexes_by_alias(self):
+    def test_index_manager_get_indexes_by_alias(self):
         """
         Receive a generator that contains the n-1 index for an alias.
         """
@@ -53,7 +53,7 @@ class IndexManagerTestCase(TestCase):
             [("richie_courses_2015-05-04-03h12m33.123456s", "richie_courses")],
         )
 
-    def test_get_indexes_by_alias_with_duplicate(self):
+    def test_index_manager_get_indexes_by_alias_with_duplicate(self):
         """
         Clean up the aliases when starting from a broken state: duplicate indexes for an alias.
         """
@@ -78,7 +78,7 @@ class IndexManagerTestCase(TestCase):
             ],
         )
 
-    def test_get_indexes_by_alias_empty(self):
+    def test_index_manager_get_indexes_by_alias_empty(self):
         """
         Don't wrongly push values when there is nothing to return.
         """
@@ -93,7 +93,7 @@ class IndexManagerTestCase(TestCase):
 
     # Make sure indexing still works when the number of records is higher than chunk size
     @override_settings(ES_CHUNK_SIZE=2)
-    def test_perform_create_index(self):
+    def test_index_manager_perform_create_index(self):
         """
         Perform all side-effects through the ES client and return the index name (incl. timestamp)
         """
@@ -187,7 +187,7 @@ class IndexManagerTestCase(TestCase):
         return_value=dict({"richie_orphan": {}}),
     )
     @mock.patch("elasticsearch.client.IndicesClient.update_aliases")
-    def test_regenerate_indexes(self, *args):
+    def test_index_manager_regenerate_indexes(self, *args):
         """
         Now test the general index regeneration behavior. We don't need to test the side-effects
         again as those have mostly been tested through perform_create_index.
@@ -284,7 +284,7 @@ class IndexManagerTestCase(TestCase):
     @mock.patch("elasticsearch.client.IndicesClient.delete")
     @mock.patch("elasticsearch.client.IndicesClient.get_alias", return_value=dict({}))
     @mock.patch("elasticsearch.client.IndicesClient.update_aliases")
-    def test_regenerate_indexes_with_empty_index(self, *args):
+    def test_index_manager_regenerate_indexes_with_empty_index(self, *args):
         """
         Make sure `regenerate_indexes` still works when there are no existing indexes. This
         test case was added to reproduce a bug.
@@ -329,7 +329,7 @@ class IndexManagerTestCase(TestCase):
         new={"script_id_C": "script body C"},
     )
     @mock.patch("settings.ES_CLIENT.put_script")
-    def test_store_es_scripts(self, mock_put_script, *args):
+    def test_index_manager_store_es_scripts(self, mock_put_script, *args):
         """
         Make sure store_es_scripts iterates over all indexers to store their scripts and
         does not choke when there are (0 | 1 | 2+) scripts on an indexer.

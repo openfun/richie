@@ -11,12 +11,12 @@ from cms.test_utils.testcases import CMSTestCase
 from richie.apps.core.helpers import create_i18n_page
 
 
-class CreateI18nPageTestCase(CMSTestCase):
+class CreateI18nPageHelpersTestCase(CMSTestCase):
     """Test suite for the `create_i18n_page` helper"""
 
     @mock.patch("richie.apps.core.helpers.create_title")
     @mock.patch("richie.apps.core.helpers.create_page")
-    def test_utils_create_i18n_page_no_arguments(self, mock_page, mock_title):
+    def test_helpers_create_i18n_page_no_arguments(self, mock_page, mock_title):
         """
         It should be possible to create a multilingual page without any arguments. A page is
         created with a random title in the default language from settings and with the default
@@ -31,7 +31,7 @@ class CreateI18nPageTestCase(CMSTestCase):
 
     @mock.patch("richie.apps.core.helpers.create_title")
     @mock.patch("richie.apps.core.helpers.create_page")
-    def test_utils_create_i18n_page_from_invalid_title(self, mock_page, mock_title):
+    def test_helpers_create_i18n_page_from_invalid_title(self, mock_page, mock_title):
         """
         Trying to create a multilingual page from an invalid title format should fail.
         to differentiate each language
@@ -47,7 +47,7 @@ class CreateI18nPageTestCase(CMSTestCase):
     @override_settings(LANGUAGES=(("en", "en"), ("fr", "fr")))
     @mock.patch("richie.apps.core.helpers.create_title")
     @mock.patch("richie.apps.core.helpers.create_page")
-    def test_utils_create_i18n_page_from_string(self, mock_page, mock_title):
+    def test_helpers_create_i18n_page_from_string(self, mock_page, mock_title):
         """
         It should be possible to create a multilingual page from a string. The string is marked
         to differentiate each language
@@ -71,7 +71,7 @@ class CreateI18nPageTestCase(CMSTestCase):
     # pylint: disable=no-self-use
     @mock.patch("richie.apps.core.helpers.create_title")
     @mock.patch("richie.apps.core.helpers.create_page")
-    def test_utils_create_i18n_page_from_dict(self, mock_page, mock_title):
+    def test_helpers_create_i18n_page_from_dict(self, mock_page, mock_title):
         """
         It should be possible to create a multilingual page from a dictionary of titles.
         The page creation is delegated to the DjangoCMS "create_page" helper.
@@ -96,7 +96,7 @@ class CreateI18nPageTestCase(CMSTestCase):
     @override_settings(LANGUAGES=(("en", "en"), ("fr", "fr"), ("de", "de")))
     @mock.patch("richie.apps.core.helpers.create_title")
     @mock.patch("richie.apps.core.helpers.create_page")
-    def test_utils_create_i18n_page_from_dict_languages_invalid(
+    def test_helpers_create_i18n_page_from_dict_languages_invalid(
         self, mock_page, mock_title
     ):
         """
@@ -119,7 +119,7 @@ class CreateI18nPageTestCase(CMSTestCase):
     @override_settings(LANGUAGES=(("en", "en"), ("fr", "fr")))
     @mock.patch("richie.apps.core.helpers.create_title")
     @mock.patch("richie.apps.core.helpers.create_page")
-    def test_utils_create_i18n_page_from_dict_languages_limit(
+    def test_helpers_create_i18n_page_from_dict_languages_limit(
         self, mock_page, mock_title
     ):
         """
@@ -135,7 +135,7 @@ class CreateI18nPageTestCase(CMSTestCase):
     @override_settings(LANGUAGES=(("en", "en"), ("fr", "fr")))
     @mock.patch("richie.apps.core.helpers.create_title")
     @mock.patch("richie.apps.core.helpers.create_page")
-    def test_utils_create_i18n_page_from_languages(self, mock_page, mock_title):
+    def test_helpers_create_i18n_page_from_languages(self, mock_page, mock_title):
         """
         It should be possible to create a multilingual page from a list of existing languages.
         The title is generated with Faker in each language.
@@ -150,7 +150,9 @@ class CreateI18nPageTestCase(CMSTestCase):
     @override_settings(LANGUAGES=(("en", "en"), ("fr", "fr")))
     @mock.patch("richie.apps.core.helpers.create_title")
     @mock.patch("richie.apps.core.helpers.create_page")
-    def test_utils_create_i18n_page_from_languages_invalid(self, mock_page, mock_title):
+    def test_helpers_create_i18n_page_from_languages_invalid(
+        self, mock_page, mock_title
+    ):
         """
         Trying to create a multilingual page for languages that don't exist should fail.
         """
@@ -161,7 +163,7 @@ class CreateI18nPageTestCase(CMSTestCase):
         self.assertFalse(mock_title.called)
 
     @mock.patch.object(Page, "set_as_homepage")
-    def test_utils_create_i18n_page_homepage_not(self, mock_homepage):
+    def test_helpers_create_i18n_page_homepage_not(self, mock_homepage):
         """
         Check that `create_i18n_page` does not set the created page as homepage if it is not
         requested.
@@ -171,7 +173,7 @@ class CreateI18nPageTestCase(CMSTestCase):
         self.assertFalse(mock_homepage.called)
 
     @mock.patch.object(Page, "set_as_homepage")
-    def test_utils_create_i18n_page_homepage(self, mock_homepage):
+    def test_helpers_create_i18n_page_homepage(self, mock_homepage):
         """
         Check that `create_i18n_page` can set the created page as homepage
         Don't mock `create_page` so we can easily check the call to set it as homepage
@@ -180,7 +182,7 @@ class CreateI18nPageTestCase(CMSTestCase):
         self.assertTrue(mock_homepage.called)
 
     @mock.patch.object(Page, "publish")
-    def test_utils_create_i18n_page_published_not(self, mock_publish):
+    def test_helpers_create_i18n_page_published_not(self, mock_publish):
         """
         Check that `create_i18n_page` does not publish the created page if it is not requested.
         Don't mock `create_page` so we can easily check the call to publish.
@@ -190,7 +192,7 @@ class CreateI18nPageTestCase(CMSTestCase):
 
     @override_settings(LANGUAGES=(("en", "en"), ("fr", "fr")))
     @mock.patch.object(Page, "publish")
-    def test_utils_create_i18n_page_published(self, mock_publish):
+    def test_helpers_create_i18n_page_published(self, mock_publish):
         """
         Check that `create_i18n_page` publishes the created page in all languages when requested.
         Don't mock `create_page` so we can easily check the call to publish.

@@ -29,11 +29,11 @@ from richie.apps.courses.factories import (
 from richie.apps.persons.factories import PersonFactory
 
 
-class CreateCmsDataTests(CMSTestCase):
-    """Create CMS data base test case"""
+class CreateDemoSiteCommandsTestCase(CMSTestCase):
+    """Test the command that creates a demo site from factories with realistic fake data."""
 
     @override_settings(DEBUG=False)
-    def test_command_force(self):
+    def test_commands_create_demo_site_force(self):
         """
         The command should not run whitout the --force option if DEBUG is False
         """
@@ -46,7 +46,9 @@ class CreateCmsDataTests(CMSTestCase):
     @mock.patch(
         "richie.apps.core.management.commands.create_demo_site.create_demo_site"
     )
-    def test_command_success(self, mock_create, mock_clear, mock_logger):
+    def test_commands_create_demo_site_success(
+        self, mock_create, mock_clear, mock_logger
+    ):
         """
         The command should delete and recreate the sample site when DEBUG is True
         The result should be posted to an info logger
@@ -69,7 +71,7 @@ class CreateCmsDataTests(CMSTestCase):
     @mock.patch(
         "richie.apps.core.management.commands.create_demo_site.create_i18n_page"
     )
-    def test_command_create_demo_site(
+    def test_commands_create_demo_site_function_success(
         self, mock_page, mock_course, mock_organization, mock_person, mock_subject
     ):  # pylint: disable=too-many-arguments
         """

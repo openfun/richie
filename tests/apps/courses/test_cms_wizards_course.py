@@ -16,7 +16,7 @@ from richie.apps.courses.models import Course
 class CourseCMSWizardTestCase(CMSTestCase):
     """Testing the wizard that is used to create new course pages from the CMS"""
 
-    def test_course_create_wizards_list(self):
+    def test_cms_wizards_course_create_wizards_list(self):
         """
         The wizard to create a new Course page should be present on the wizards list page
         """
@@ -36,7 +36,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
         )
         self.assertContains(response, "<strong>New course page</strong>", html=True)
 
-    def test_course_wizard_submit_form(self):
+    def test_cms_wizards_course_submit_form(self):
         """
         Submitting a valid CourseWizardForm should create a course and its
         related page.
@@ -71,7 +71,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
         self.assertEqual(course.organization_main, organization)
         self.assertEqual(course.active_session, "course-key")
 
-    def test_course_wizard_submit_form_max_lengths(self):
+    def test_cms_wizards_course_submit_form_max_lengths(self):
         """
         Check that the form correctly raises an error when the slug is too long. The path built
         by combining the slug of the page with the slug of its parent page, should not exceed
@@ -103,7 +103,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
             ),
         )
 
-    def test_course_wizard_submit_form_slugify_long_title(self):
+    def test_cms_wizards_course_submit_form_slugify_long_title(self):
         """
         When generating the slug from the title, we should respect the slug's "max_length"
         """
@@ -121,7 +121,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
         # Check that the slug has been truncated
         self.assertEqual(page.get_slug(), "t" * 200)
 
-    def test_course_wizard_submit_form_title_too_long(self):
+    def test_cms_wizards_course_submit_form_title_too_long(self):
         """
         Trying to set a title that is too long should make the form invalid
         """
@@ -145,7 +145,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
             ["Ensure this value has at most 255 characters (it has 256)."],
         )
 
-    def test_course_wizard_submit_form_slug_too_long(self):
+    def test_cms_wizards_course_submit_form_slug_too_long(self):
         """
         Trying to set a slug that is too long should make the form invalid
         """
@@ -169,7 +169,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
             ["Ensure this value has at most 200 characters (it has 201)."],
         )
 
-    def test_course_wizard_parent_page_should_exist(self):
+    def test_cms_wizards_course_parent_page_should_exist(self):
         """
         We should not be able to create a course page if the parent page does not exist
         """
@@ -188,7 +188,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
             },
         )
 
-    def test_course_wizard_submit_form_active_session_too_long(self):
+    def test_cms_wizards_course_submit_form_active_session_too_long(self):
         """
         Trying to set an active session key that is too long should make the form invalid
         """
@@ -212,7 +212,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
             ["Ensure this value has at most 200 characters (it has 201)."],
         )
 
-    def test_course_wizard_submit_form_no_active_session(self):
+    def test_cms_wizards_course_submit_form_no_active_session(self):
         """
         We should be able to create several courses with `active_session` left blank
         """
@@ -234,7 +234,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
         # We should have 2 courses with no `active_session`
         self.assertEqual(Course.objects.filter(active_session__isnull=True).count(), 2)
 
-    def test_course_wizard_already_existing_course_key(self):
+    def test_cms_wizards_course_already_existing_course_key(self):
         """
         We should not be able to create a course page with a session key that is already set
         on an existing course.

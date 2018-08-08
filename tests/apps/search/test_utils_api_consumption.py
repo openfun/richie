@@ -9,14 +9,14 @@ from richie.apps.search.exceptions import ApiConsumingException
 from richie.apps.search.utils.api_consumption import walk_api_json_list
 
 
-class ApiConsumptionTestCase(TestCase):
+class WalkApiJsonListUtilsTestCase(TestCase):
     """
     Test our walk_api_json_list function that enables us to easily consume a list API
     endpoint without having to worry about walking all its pages
     """
 
     @responses.activate
-    def test_walk_api_json_list(self):
+    def test_utils_walk_api_json_list(self):
         """
         Happy path: the API responds as intended and we get to yield the successive pages
         """
@@ -47,7 +47,7 @@ class ApiConsumptionTestCase(TestCase):
         self.assertEqual(content_pages, [response_page_1, response_page_2])
 
     @responses.activate
-    def test_walk_api_json_list_with_error_status(self):
+    def test_utils_walk_api_json_list_with_error_status(self):
         """
         Error case: the API responds with an HTTP error code
         """
@@ -58,7 +58,7 @@ class ApiConsumptionTestCase(TestCase):
             list(walk_api_json_list("https://example.com/api/stub"))
 
     @responses.activate
-    def test_walk_api_json_list_with_invalid_json(self):
+    def test_utils_walk_api_json_list_with_invalid_json(self):
         """
         Error case: the API did not return valid JSON
         """
@@ -73,7 +73,7 @@ class ApiConsumptionTestCase(TestCase):
             list(walk_api_json_list("https://example.com/api/stub"))
 
     @responses.activate
-    def test_walk_api_json_list_with_incorrect_count_path(self):
+    def test_utils_walk_api_json_list_with_incorrect_count_path(self):
         """
         Error case: our count argument is not where we expected to find it
         """

@@ -10,12 +10,12 @@ from richie.apps.persons.factories import PersonFactory, PersonTitleFactory
 from richie.apps.persons.models import Person
 
 
-class PersonTestCase(TestCase):
+class PersonModelsTestCase(TestCase):
     """
     Unit test suite to validate the behavior of the Person model
     """
 
-    def test_person_fields_first_name_required(self):
+    def test_models_person_fields_first_name_required(self):
         """
         The `first_name` field should be required
         """
@@ -23,7 +23,7 @@ class PersonTestCase(TestCase):
             PersonFactory(first_name=None)
         self.assertEqual(context.exception.messages[0], "This field cannot be null.")
 
-    def test_person_fields_last_name_required(self):
+    def test_models_person_fields_last_name_required(self):
         """
         The `last_name` field should be required
         """
@@ -31,7 +31,7 @@ class PersonTestCase(TestCase):
             PersonFactory(last_name=None)
         self.assertEqual(context.exception.messages[0], "This field cannot be null.")
 
-    def test_person_fields_person_title_required(self):
+    def test_models_person_fields_person_title_required(self):
         """
         The `person_title` field should be required
         """
@@ -42,7 +42,7 @@ class PersonTestCase(TestCase):
             PersonFactory(person_title=None, extended_object=page)
         self.assertEqual(context.exception.messages[0], "This field cannot be null.")
 
-    def test_person_str(self):
+    def test_models_person_str(self):
         """
         The string representation should be built with the page `title`
         and all person fields. Only 1 query to the associated page should be generated.
@@ -62,7 +62,7 @@ class PersonTestCase(TestCase):
                 str(person), "Person: Page of Lady Louise Dupont (Madam Louise Dupont)"
             )
 
-    def test_person_get_full_name(self):
+    def test_models_person_get_full_name(self):
         """
         The get_full_name method should return title, first name and last name separated by space.
         No SQL query should be generated.

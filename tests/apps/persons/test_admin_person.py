@@ -14,7 +14,7 @@ class PersonAdminTestCase(CMSTestCase):
     Integration test suite to validate the behavior of admin pages for the Person model
     """
 
-    def test_person_list_view(self):
+    def test_admin_person_list_view(self):
         """
         The admin list view of persons should display page title, person's title
         first_name and last_name
@@ -37,7 +37,7 @@ class PersonAdminTestCase(CMSTestCase):
         self.assertContains(response, person.last_name)
         self.assertContains(response, person.person_title)
 
-    def test_person_add_view(self):
+    def test_admin_person_add_view(self):
         """
         The admin add view should work for person
         """
@@ -52,7 +52,7 @@ class PersonAdminTestCase(CMSTestCase):
         for field in ["person_title", "first_name", "last_name"]:
             self.assertContains(response, "id_{:s}".format(field))
 
-    def test_person_change_view_get(self):
+    def test_admin_person_change_view_get(self):
         """
         The admin change view should include the editable and readonly fields as expected.
         """
@@ -71,7 +71,7 @@ class PersonAdminTestCase(CMSTestCase):
         self.assertContains(response, person.first_name)
         self.assertContains(response, person.last_name)
 
-    def test_person_change_view_post(self):
+    def test_admin_person_change_view_post(self):
         """
         Validate that the person can be updated via the admin.
         """

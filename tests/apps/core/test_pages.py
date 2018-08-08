@@ -7,8 +7,8 @@ from cms.test_utils.testcases import CMSTestCase
 from richie.apps.core.helpers import create_i18n_page
 
 
-class CreateCmsDataTests(CMSTestCase):
-    """Create CMS data base test case"""
+class PagesTests(CMSTestCase):
+    """Integration tests that actually render pages"""
 
     def test_pages_i18n(self):
         """

@@ -16,7 +16,7 @@ class OrganizationAdminTestCase(CMSTestCase):
     model
     """
 
-    def test_organization_list_view(self):
+    def test_admin_organization_list_view(self):
         """
         The organizations admin list view should display their code and the title of the
         related page
@@ -37,7 +37,7 @@ class OrganizationAdminTestCase(CMSTestCase):
         )
         self.assertContains(response, organization.code)
 
-    def test_organization_add_view(self):
+    def test_admin_organization_add_view(self):
         """
         The admin add view should work for organizations
         """
@@ -51,7 +51,7 @@ class OrganizationAdminTestCase(CMSTestCase):
         # Check that the page includes all our fields
         self.assertContains(response, "id_code")
 
-    def test_organization_change_view_get(self):
+    def test_admin_organization_change_view_get(self):
         """
         The admin change view should work for organizations
         """
@@ -70,7 +70,7 @@ class OrganizationAdminTestCase(CMSTestCase):
         self.assertContains(response, "My title", status_code=200)
         self.assertContains(response, organization.code)
 
-    def test_organization_change_view_post(self):
+    def test_admin_organization_change_view_post(self):
         """
         Validate that the organization can be updated via the admin.
         """

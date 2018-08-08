@@ -17,7 +17,7 @@ class PersonCMSToolbarTestCase(CheckToolbarMixin, CMSTestCase):
     """Testing the integration of person page extensions in the toolbar"""
 
     @override_settings(CMS_PERMISSION=False)
-    def test_toolbar_person_has_page_extension_settings_item(self):
+    def test_cms_toolbars_person_has_page_extension_settings_item(self):
         """
         Validate that a new item to edit the person is available only when visiting the page
         in edit mode and for users with permission to edit the page.
@@ -26,7 +26,7 @@ class PersonCMSToolbarTestCase(CheckToolbarMixin, CMSTestCase):
         self.check_toolbar_item(person, "Person settings...")
 
     @override_settings(CMS_PERMISSION=False)
-    def test_toolbar_no_page_extension(self):
+    def test_cms_toolbars_no_page_extension(self):
         """
         The toolbar should not include any item to edit a page extension on a page not related
         to any page extension.

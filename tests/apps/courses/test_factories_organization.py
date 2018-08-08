@@ -13,7 +13,7 @@ class OrganizationFactoryTestCase(TestCase):
     Unit test suite to validate the behavior of the Organization factory
     """
 
-    def test_organization_factory_logo(self):
+    def test_factories_organization_logo(self):
         """
         OrganizationFactory should be able to generate plugins with a realistic logo for several
         languages.
@@ -36,7 +36,7 @@ class OrganizationFactoryTestCase(TestCase):
                 ),
             )
 
-    def test_organization_factory_banner(self):
+    def test_factories_organization_banner(self):
         """
         OrganizationFactory should be able to generate plugins with a realistic banner for several
         languages.
@@ -59,7 +59,7 @@ class OrganizationFactoryTestCase(TestCase):
                 ),
             )
 
-    def test_organization_factory_description(self):
+    def test_factories_organization_description(self):
         """
         OrganizationFactory should be able to generate plugins with a realistic description for
         several languages.

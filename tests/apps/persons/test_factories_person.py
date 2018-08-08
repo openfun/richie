@@ -13,10 +13,10 @@ class PersonFactoryTestCase(TestCase):
     Unit test suite to validate the behavior of the Person factory
     """
 
-    def test_person_factory_portrait(self):
+    def test_factories_person_portrait(self):
         """
-        PersonFactory should be able to generate plugins with a realistic portrait for several
-        languages.
+        PersonFactory should be able to generate plugins with a realistic portrait
+        for several languages.
         """
         person = PersonFactory(fill_portrait=True, languages=["fr", "en"])
 
@@ -36,7 +36,7 @@ class PersonFactoryTestCase(TestCase):
                 ),
             )
 
-    def test_person_factory_resume(self):
+    def test_factories_person_resume(self):
         """
         PersonFactory should be able to generate plugins with a realistic resume for
         several languages.

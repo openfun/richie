@@ -19,7 +19,7 @@ class OrganizationPluginTestCase(TestCase):
     Test that OrganizationPlugin correctly displays a Organization's page placeholders content
     """
 
-    def test_organization_plugin_form_page_choices(self):
+    def test_cms_plugins_organization_form_page_choices(self):
         """
         The form to create a organization plugin should only list organization pages
         in the select box.
@@ -39,7 +39,7 @@ class OrganizationPluginTestCase(TestCase):
         self.assertIn(organization.extended_object.get_title(), plugin_form.as_table())
         self.assertNotIn(other_page_title, plugin_form.as_table())
 
-    def test_organization_plugin_render(self):
+    def test_cms_plugins_organization_render(self):
         """
         Test that an OrganizationPlugin correctly renders organization's page specific information
         """

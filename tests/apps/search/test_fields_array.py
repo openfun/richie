@@ -9,7 +9,7 @@ from django.utils import translation
 from richie.apps.search.fields.array import ArrayField
 
 
-class ArrayFieldTestCase(TestCase):
+class ArrayFieldsTestCase(TestCase):
     """
     Test whether our custom form field returns the proper value when it is valid and
     properly reports it when it is invalid
@@ -22,7 +22,7 @@ class ArrayFieldTestCase(TestCase):
         """
         translation.activate("en")
 
-    def test_array_of_valid_int(self):
+    def test_fields_array_valid_int(self):
         """
         Happy path: the value is an array and all its items are valid as per the base_type
         """
@@ -33,7 +33,7 @@ class ArrayFieldTestCase(TestCase):
         # The field is valid and returns cleaned data
         self.assertEqual(array_of_int.clean([1, 2, 3, 5, 7]), [1, 2, 3, 5, 7])
 
-    def test_array_of_invalid_string(self):
+    def test_fields_array_invalid_string(self):
         """
         Invalid input: the value is an array but at least 1 item is invalid
         """
@@ -49,7 +49,7 @@ class ArrayFieldTestCase(TestCase):
             "Ensure this value has at most 4 characters (it has 8).",
         )
 
-    def test_missing_required_array(self):
+    def test_fields_array_missing_required_array(self):
         """
         Invalid input: the value is required but missing
         """
@@ -62,7 +62,7 @@ class ArrayFieldTestCase(TestCase):
             array_of_string.clean(None)
         self.assertEqual(context.exception.message, "Missing required value.")
 
-    def test_optional_array_not_provided(self):
+    def test_fields_array_optional_value_not_provided(self):
         """
         Happy path: the value is optional and was not provided
         """
@@ -73,7 +73,7 @@ class ArrayFieldTestCase(TestCase):
         # None is valid input and the field returns an empty array
         self.assertEqual(array_of_string.clean(None), [])
 
-    def test_single_value(self):
+    def test_fields_array_single_value(self):
         """
         Invalid input: ArrayField expects an iterable type
         """

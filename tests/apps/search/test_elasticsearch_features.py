@@ -8,7 +8,7 @@ from elasticsearch.client import IndicesClient
 from elasticsearch.helpers import bulk
 
 
-class ESFeaturesTestCase(TestCase):
+class ElasticsearchFeaturesTestCase(TestCase):
     """
     Run some tests on the ES Client itself to ensure all the features we need are supported
     by the version currently made available by the environment.
@@ -38,7 +38,7 @@ class ESFeaturesTestCase(TestCase):
             index="test_index",
         )
 
-    def test_search_match_all(self):
+    def test_elasticsearch_features_match_all(self):
         """
         Make sure the match all query works as we expect
         """
@@ -110,7 +110,7 @@ class ESFeaturesTestCase(TestCase):
             },
         )
 
-    def test_search_multimatch_text(self):
+    def test_elasticsearch_features_multimatch_text(self):
         """
         Make sure multi match text queries works as we expect
         """
@@ -183,7 +183,7 @@ class ESFeaturesTestCase(TestCase):
             },
         )
 
-    def test_search_date_ranges(self):
+    def test_elasticsearch_features_date_ranges(self):
         """
         Make sure date range queries work as we expect
         """
@@ -247,7 +247,7 @@ class ESFeaturesTestCase(TestCase):
             },
         )
 
-    def test_search_terms(self):
+    def test_elasticsearch_features_terms(self):
         """
         Make sure terms queries works as we expect
         """
@@ -312,7 +312,7 @@ class ESFeaturesTestCase(TestCase):
             },
         )
 
-    def test_search_with_terms_aggregation(self):
+    def test_elasticsearch_features_with_terms_aggregation(self):
         """
         Make sure the terms aggregation works as we expect
         """

@@ -22,7 +22,7 @@ class PartialMappingsTestCase(TestCase):
         self.indices_client = IndicesClient(client=settings.ES_CLIENT)
         self.indices_client.delete(index="_all")
 
-    def test_multilingual_text(self):
+    def test_partial_mappings_multilingual_text(self):
         """
         Make sure our multilingual_text dynamic mapping results in the proper mappings being
         generated when objects with the expected format are indexed

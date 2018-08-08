@@ -20,7 +20,7 @@ class CourseCMSTestCase(CMSTestCase):
     hidden from published page so common users can not see them.
     """
 
-    def test_course_cms_published_content(self):
+    def test_templates_course_detail_cms_published_content(self):
         """
         Validate that the important elements are displayed on a published course page
         """
@@ -112,7 +112,7 @@ class CourseCMSTestCase(CMSTestCase):
                 response, organization.extended_object.get_title(), html=True
             )
 
-    def test_course_cms_draft_content(self):
+    def test_templates_course_detail_cms_draft_content(self):
         """
         A staff user should see a draft course including its draft elements with
         an annotation
@@ -222,7 +222,7 @@ class CourseCMSTestCase(CMSTestCase):
                 html=True,
             )
 
-    def test_course_cms_draft_content_draft_organization_main(self):
+    def test_templates_course_detail_cms_draft_content_draft_organization_main(self):
         """
         A draft main organization displayed on a draft page should be marked as both
         "main" and "draft"
@@ -254,7 +254,7 @@ class CourseCMSTestCase(CMSTestCase):
             html=True,
         )
 
-    def test_course_cms_published_no_active_sesssion(self):
+    def test_templates_course_detail_cms_published_no_active_sesssion(self):
         """
         Validate detail page is correct when no active session exists
         """

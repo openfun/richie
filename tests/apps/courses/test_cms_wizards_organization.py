@@ -17,7 +17,7 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
     Unit test suite to validate the behavior of the Wizard to create organization pages
     """
 
-    def test_organization_create_wizards_list(self):
+    def test_cms_wizards_organization_create_wizards_list(self):
         """
         The wizard to create a new Organization page should be present on the wizards list page
         """
@@ -39,7 +39,7 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
             response, "<strong>New Organization page</strong>", html=True
         )
 
-    def test_organization_wizard_submit_form(self):
+    def test_cms_wizards_organization_submit_form(self):
         """
         Submitting a valid OrganizationWizardForm should create a page and its
         related extension.
@@ -64,7 +64,7 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         # The code is left blank in this case
         self.assertIsNone(organization.code)
 
-    def test_organization_wizard_submit_form_max_lengths(self):
+    def test_cms_wizards_organization_submit_form_max_lengths(self):
         """
         Check that max lengths on each form field are compatible with max lengths on the
         Page and Organization models. Notably the "path" field on the Page model includes
@@ -86,7 +86,7 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         self.assertEqual(len(organizations), 1)
         self.assertIsNone(organizations[0].code)
 
-    def test_organization_wizard_submit_form_slugify_long_title(self):
+    def test_cms_wizards_organization_submit_form_slugify_long_title(self):
         """
         When generating the slug from the title, we should respect the slug's "max_length"
         """
@@ -103,7 +103,7 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         # Check that the slug has been truncated
         self.assertEqual(page.get_slug(), "t" * 200)
 
-    def test_organization_wizard_submit_form_title_too_long(self):
+    def test_cms_wizards_organization_submit_form_title_too_long(self):
         """
         Trying to set a title that is too long should make the form invalid
         """
@@ -118,7 +118,7 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
             ["Ensure this value has at most 255 characters (it has 256)."],
         )
 
-    def test_organization_wizard_submit_form_slug_too_long(self):
+    def test_cms_wizards_organization_submit_form_slug_too_long(self):
         """
         Trying to set a slug that is too long should make the form invalid
         """
@@ -133,7 +133,7 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
             ["Ensure this value has at most 200 characters (it has 201)."],
         )
 
-    def test_organization_wizard_parent_page_should_exist(self):
+    def test_cms_wizards_organization_parent_page_should_exist(self):
         """
         We should not be able to create a CMS Organization Page if the
         parent page to list organizations was not created

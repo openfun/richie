@@ -14,7 +14,7 @@ class I18nUtilsTestCase(TestCase):
     """
 
     @override_settings(LANGUAGES=(("en", None), ("fr", None)))
-    def test_get_best_field_language(self):
+    def test_utils_i18n_get_best_field_language(self):
         """
         Use the best language as requested by the consumer, if available
         """
@@ -22,7 +22,7 @@ class I18nUtilsTestCase(TestCase):
         self.assertEqual(get_best_field_language(field, "es"), "el contenido")
 
     @override_settings(LANGUAGES=(("en", None), ("fr", None)))
-    def test_get_best_field_language_default_1(self):
+    def test_utils_i18n_get_best_field_language_default_1(self):
         """
         Defaults to settings.LANGUAGES in order if the best language is not available
         """
@@ -30,7 +30,7 @@ class I18nUtilsTestCase(TestCase):
         self.assertEqual(get_best_field_language(field, "es"), "the content")
 
     @override_settings(LANGUAGES=(("en", None), ("fr", None)))
-    def test_get_best_field_language_default_2(self):
+    def test_utils_i18n_get_best_field_language_default_2(self):
         """
         Defaults to settings.LANGUAGES in order if the best language is not available
         """

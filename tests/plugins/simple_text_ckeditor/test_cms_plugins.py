@@ -12,10 +12,10 @@ from richie.plugins.simple_text_ckeditor.cms_plugins import CKEditorPlugin
 from richie.plugins.simple_text_ckeditor.factories import SimpleTextFactory
 
 
-class CKEditorPluginTests(TestCase):
+class CKEditorCMSPluginsTestCase(TestCase):
     """Plugin tests case"""
 
-    def test_simpletext_context_and_html(self):
+    def test_cms_plugins_simpletext_context_and_html(self):
         """
         Instanciating this plugin with an instance should populate the context
         and render in the template.

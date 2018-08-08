@@ -17,7 +17,7 @@ class OrganizationCMSToolbarTestCase(CheckToolbarMixin, CMSTestCase):
     """Testing the integration of organization page extensions in the toolbar"""
 
     @override_settings(CMS_PERMISSION=False)
-    def test_toolbar_course_has_page_extension_settings_item(self):
+    def test_cms_toolbars_course_has_page_extension_settings_item(self):
         """
         Validate that a new item to edit the course is available only when visiting the page
         in edit mode and for users with permission to edit the page.
@@ -26,7 +26,7 @@ class OrganizationCMSToolbarTestCase(CheckToolbarMixin, CMSTestCase):
         self.check_toolbar_item(course, "Course settings...")
 
     @override_settings(CMS_PERMISSION=False)
-    def test_toolbar_organization_has_page_extension_settings_item(self):
+    def test_cms_toolbars_organization_has_page_extension_settings_item(self):
         """
         Validate that a new item to edit the organization is available only when visiting the page
         in edit mode and for users with permission to edit the page.
@@ -35,7 +35,7 @@ class OrganizationCMSToolbarTestCase(CheckToolbarMixin, CMSTestCase):
         self.check_toolbar_item(organization, "Organization settings...")
 
     @override_settings(CMS_PERMISSION=False)
-    def test_toolbar_no_page_extension(self):
+    def test_cms_toolbars_no_page_extension(self):
         """
         The toolbar should not include any item to edit a page extension on a page not related
         to any page extension.

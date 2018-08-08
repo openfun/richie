@@ -14,12 +14,12 @@ from richie.apps.courses.factories import (
 from richie.apps.courses.models import Course
 
 
-class CourseTestCase(TestCase):
+class CourseModelsTestCase(TestCase):
     """
     Unit test suite to validate the behavior of the Course model
     """
 
-    def test_course_fields_organization_main_required(self):
+    def test_models_course_fields_organization_main_required(self):
         """
         The `organization_main` field should be required
         """
@@ -27,14 +27,14 @@ class CourseTestCase(TestCase):
             CourseFactory(organization_main=None)
         self.assertEqual(context.exception.messages[0], "This field cannot be null.")
 
-    def test_course_fields_active_session_required(self):
+    def test_models_course_fields_active_session_required(self):
         """
         The `active_session` field should not be required
         """
         course = CourseFactory(active_session=None)
         self.assertIsNone(course.active_session)
 
-    def test_course_fields_active_session_max_length(self):
+    def test_models_course_fields_active_session_max_length(self):
         """
         The `active_session` field should be limited to 200 characters
         """
@@ -46,7 +46,7 @@ class CourseTestCase(TestCase):
             "Ensure this value has at most 200 characters (it has 201).",
         )
 
-    def test_course_fields_active_session_unique(self):
+    def test_models_course_fields_active_session_unique(self):
         """
         The `active_session` field should be unique
         """
@@ -68,7 +68,7 @@ class CourseTestCase(TestCase):
             Course.objects.filter(active_session="the-unique-key").count(), 2
         )
 
-    def test_course_organization_main_always_included_in_organizations(self):
+    def test_models_course_organization_main_always_included_in_organizations(self):
         """
         The main organization should always be in the organizations linked via many-to-many
         """
@@ -92,7 +92,7 @@ class CourseTestCase(TestCase):
             list(course.organizations.all()), [organization1, organization2]
         )
 
-    def test_course_str(self):
+    def test_models_course_str(self):
         """
         The string representation should be built with the page `title` and `active_session`
         fields. Only 1 query to the associated page should be generated.
@@ -102,7 +102,7 @@ class CourseTestCase(TestCase):
         with self.assertNumQueries(1):
             self.assertEqual(str(course), "Course: Nano particles (course-key)")
 
-    def test_course_str_no_active_session(self):
+    def test_models_course_str_no_active_session(self):
         """
         The string representation of a course with no active session should display
         "no active session".
@@ -112,7 +112,7 @@ class CourseTestCase(TestCase):
         with self.assertNumQueries(1):
             self.assertEqual(str(course), "Course: Nano particles (no active session)")
 
-    def test_course_organizations_copied_when_publishing(self):
+    def test_models_course_organizations_copied_when_publishing(self):
         """
         When publishing a course, the links to draft organizations on the draft version of the
         course should be copied (clear then add) to the published version.
@@ -165,7 +165,7 @@ class CourseTestCase(TestCase):
             {organization1, draft_course.organization_main},
         )
 
-    def test_course_subjects_copied_when_publishing(self):
+    def test_models_course_subjects_copied_when_publishing(self):
         """
         When publishing a course, the links to draft subjects on the draft version of the
         course should be copied (clear then add) to the published version.

@@ -15,10 +15,10 @@ from richie.plugins.large_banner.cms_plugins import LargeBannerPlugin
 from richie.plugins.large_banner.factories import LargeBannerFactory
 
 
-class LargeBannerTests(TestCase):
+class LargeBannerCMSPluginsTestCase(TestCase):
     """Large banner plugin tests case"""
 
-    def test_large_banner_title_required(self):
+    def test_cms_plugins_large_banner_title_required(self):
         """
         A "title" is required when instantiating a large banner.
         """
@@ -29,7 +29,7 @@ class LargeBannerTests(TestCase):
             str(cm.exception),
         )
 
-    def test_large_banner_logo_required(self):
+    def test_cms_plugins_large_banner_logo_required(self):
         """
         A "logo" is required when instantiating a large banner.
         """
@@ -39,7 +39,7 @@ class LargeBannerTests(TestCase):
             'null value in column "logo_id" violates not-null', str(cm.exception)
         )
 
-    def test_large_banner_logo_alt_text_required(self):
+    def test_cms_plugins_large_banner_logo_alt_text_required(self):
         """
         A "logo_alt_text" is required when instantiating a large banner.
         """
@@ -52,7 +52,7 @@ class LargeBannerTests(TestCase):
     # pylint: disable=deprecated-method,no-member
     # Due to a conflict between Django 1.11 and pylint with the assertRegex method that is
     # *not* deprecated but is marked so by pylint
-    def test_large_banner_context_and_html(self):
+    def test_cms_plugins_large_banner_context_and_html(self):
         """
         Instanciating this plugin with an instance should populate the context
         and render in the template.
@@ -121,7 +121,7 @@ class LargeBannerTests(TestCase):
         self.assertIn("{:s}__200x100_q85_crop".format(logo_base), html)
         self.assertIn('alt="{:s}"'.format(large_banner.logo_alt_text), html)
 
-    def test_large_banner_no_background_image(self):
+    def test_cms_plugins_large_banner_no_background_image(self):
         """
         Instanciating this plugin with an instance but no background image should render
         a default image in the html.
