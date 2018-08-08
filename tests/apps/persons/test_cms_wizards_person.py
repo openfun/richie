@@ -16,7 +16,7 @@ from richie.apps.persons.models import Person
 class PersonCMSWizardTestCase(CMSTestCase):
     """Testing the wizard that is used to create new person pages from the CMS"""
 
-    def test_person_create_wizards_list(self):
+    def test_cms_wizards_person_create_wizards_list(self):
         """
         The wizard to create a new person page should be present on the wizards list page
         """
@@ -36,7 +36,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
         )
         self.assertContains(response, "<strong>New person page</strong>", html=True)
 
-    def test_person_wizard_submit_form(self):
+    def test_cms_wizards_person_submit_form(self):
         """
         Submitting a valid PersonWizardForm should create a Person page extension and its
         related page.
@@ -67,7 +67,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
         # The slug should have been automatically set
         self.assertEqual(page.get_slug(), "a-person")
 
-    def test_person_wizard_submit_form_max_lengths(self):
+    def test_cms_wizards_person_submit_form_max_lengths(self):
         """
         Check that the form correctly raises an error when the slug is too long. The path built
         by combining the slug of the page with the slug of its parent page, should not exceed
@@ -103,7 +103,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
             ),
         )
 
-    def test_person_wizard_submit_form_slugify_long_title(self):
+    def test_cms_wizards_person_submit_form_slugify_long_title(self):
         """
         When generating the slug from the title, we should respect the slug's "max_length"
         """
@@ -126,7 +126,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
         # Check that the slug has been truncated
         self.assertEqual(page.get_slug(), "t" * 200)
 
-    def test_person_wizard_submit_form_title_too_long(self):
+    def test_cms_wizards_person_submit_form_title_too_long(self):
         """
         Trying to set a title that is too long should make the form invalid
         """
@@ -153,7 +153,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
             ["Ensure this value has at most 255 characters (it has 256)."],
         )
 
-    def test_person_wizard_submit_form_slug_too_long(self):
+    def test_cms_wizards_person_submit_form_slug_too_long(self):
         """
         Trying to set a slug that is too long should make the form invalid
         """
@@ -180,7 +180,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
             ["Ensure this value has at most 200 characters (it has 201)."],
         )
 
-    def test_person_wizard_submit_form_first_name_required(self):
+    def test_cms_wizards_person_submit_form_first_name_required(self):
         """
         The `first_name` field should be required
         """
@@ -201,7 +201,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
         # Check that missing first_name field is a cause for the invalid form
         self.assertEqual(form.errors["first_name"], ["This field is required."])
 
-    def test_person_wizard_submit_form_last_name_required(self):
+    def test_cms_wizards_person_submit_form_last_name_required(self):
         """
         The `last_name` field should be required
         """
@@ -222,7 +222,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
         # Check that missing last_name field is a cause for the invalid form
         self.assertEqual(form.errors["last_name"], ["This field is required."])
 
-    def test_person_wizard_submit_form_person_title_required(self):
+    def test_cms_wizards_person_submit_form_person_title_required(self):
         """
         The `person_title` field should be required
         """
@@ -242,7 +242,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
         # Check that missing last_name field is a cause for the invalid form
         self.assertEqual(form.errors["person_title"], ["This field is required."])
 
-    def test_person_wizard_parent_page_should_exist(self):
+    def test_cms_wizards_person_parent_page_should_exist(self):
         """
         We should not be able to create a person page if the parent page does not exist
         """

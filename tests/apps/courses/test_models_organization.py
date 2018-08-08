@@ -10,12 +10,12 @@ from richie.apps.courses.factories import CourseFactory, OrganizationFactory
 from richie.apps.courses.models import Organization
 
 
-class OrganizationTestCase(TestCase):
+class OrganizationModelsTestCase(TestCase):
     """
     Unit test suite to validate the behavior of the Organization model
     """
 
-    def test_organization_fields_code_normalization(self):
+    def test_models_organization_fields_code_normalization(self):
         """
         The `code` field should be normalized to improve its uniqueness
         Test with a chinese character, an emoji and a french ç...
@@ -23,14 +23,14 @@ class OrganizationTestCase(TestCase):
         organization = OrganizationFactory(code=" r5G yç👷学pm 44 ")
         self.assertEqual(organization.code, "R5G-YÇ学PM-44")
 
-    def test_organization_fields_code_required(self):
+    def test_models_organization_fields_code_required(self):
         """
         The `code` field should not be required
         """
         organization = OrganizationFactory(code=None)
         self.assertIsNone(organization.code)
 
-    def test_organization_fields_code_unique(self):
+    def test_models_organization_fields_code_unique(self):
         """
         The `code` field should be unique
         """
@@ -49,7 +49,7 @@ class OrganizationTestCase(TestCase):
         organization.extended_object.publish("en")
         self.assertEqual(Organization.objects.filter(code="THE-UNIQUE-CODE").count(), 2)
 
-    def test_organization_fields_code_max_length(self):
+    def test_models_organization_fields_code_max_length(self):
         """
         The `code` field should be limited to 100 characters
         """
@@ -61,7 +61,7 @@ class OrganizationTestCase(TestCase):
             "Ensure this value has at most 100 characters (it has 101).",
         )
 
-    def test_organization_str(self):
+    def test_models_organization_str(self):
         """
         The str representation should be built with the page title and code field only.
         A query to the associated page should be generated.
@@ -71,7 +71,7 @@ class OrganizationTestCase(TestCase):
         with self.assertNumQueries(1):
             self.assertEqual(str(organization), "Organization: La Sorbonne (SOR)")
 
-    def test_organization_courses_copied_when_publishing(self):
+    def test_models_organization_courses_copied_when_publishing(self):
         """
         When publishing a organization, the links to draft courses on the draft version of the
         organization should be copied (clear then add) to the published version.

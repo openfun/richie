@@ -22,7 +22,7 @@ class PersonPluginTestCase(TestCase):
     Test that PersonPlugin correctly displays a Person's page placeholders content
     """
 
-    def test_person_plugin_form_page_choices(self):
+    def test_cms_plugins_person_form_page_choices(self):
         """
         The form to create a person plugin should only list person pages in the select box.
         """
@@ -41,7 +41,7 @@ class PersonPluginTestCase(TestCase):
         self.assertIn(person.get_full_name(), plugin_form.as_table())
         self.assertNotIn(other_page_title, plugin_form.as_table())
 
-    def test_person_plugin_render(self):
+    def test_cms_plugins_person_render(self):
         """
         Test that a PersonPlugin correctly renders person's page specific information
         """

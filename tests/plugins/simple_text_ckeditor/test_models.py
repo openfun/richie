@@ -6,10 +6,10 @@ from django.test import TestCase
 from richie.plugins.simple_text_ckeditor.models import SimpleText
 
 
-class SimpleTextTests(TestCase):
+class SimpleTextModelsTestCase(TestCase):
     """Model tests case"""
 
-    def test_html5_cleaner_unclosed_tag(self):
+    def test_models_simpletext_html5_cleaner_unclosed_tag(self):
         """
         HTML5lib Cleaner fix unclosed element.
         """
@@ -29,7 +29,7 @@ class SimpleTextTests(TestCase):
 
         self.assertEqual(instance.body, attempted)
 
-    def test_html5_sanitize_tag(self):
+    def test_models_simpletext_html5_sanitize_tag(self):
         """
         HTML5lib Cleaner escape potential malicious tag like iframe.
 
@@ -50,7 +50,7 @@ class SimpleTextTests(TestCase):
 
         self.assertEqual(instance.body, attempted)
 
-    def test_html5_sanitize_attribute(self):
+    def test_models_simpletext_html5_sanitize_attribute(self):
         """
         HTML5lib Cleaner remove uncommon tag attribute.
 

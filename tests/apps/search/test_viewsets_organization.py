@@ -13,12 +13,12 @@ from richie.apps.search.exceptions import QueryFormatException
 from richie.apps.search.viewsets.organizations import OrganizationsViewSet
 
 
-class OrganizationsViewsetTestCase(TestCase):
+class OrganizationViewsetsTestCase(TestCase):
     """
     Test the API endpoints for organizations (list and details)
     """
 
-    def test_retrieve_organization(self):
+    def test_viewsets_organization_retrieve(self):
         """
         Happy path: the client requests an existing organization, gets it back
         """
@@ -56,7 +56,7 @@ class OrganizationsViewsetTestCase(TestCase):
             },
         )
 
-    def test_retrieve_unknown_organization(self):
+    def test_viewsets_organization_retrieve_unknown(self):
         """
         Error case: the client is asking for an organization that does not exist
         """
@@ -77,7 +77,7 @@ class OrganizationsViewsetTestCase(TestCase):
         lambda x: (2, 0, {"query": "something"}),
     )
     @mock.patch.object(settings.ES_CLIENT, "search")
-    def test_search_organizations(self, mock_search):
+    def test_viewsets_organization_search(self, mock_search):
         """
         Happy path: the consumer is filtering the organizations by name
         """
@@ -149,7 +149,7 @@ class OrganizationsViewsetTestCase(TestCase):
         "richie.apps.search.indexers.organizations.OrganizationsIndexer.build_es_query",
         side_effect=QueryFormatException({"limit": "incorrect value"}),
     )
-    def test_search_organizations_with_invalid_params(self, _):
+    def test_viewsets_organization_search_with_invalid_params(self, _):
         """
         Error case: the client used an incorrectly formatted request
         """

@@ -15,7 +15,7 @@ from richie.apps.courses.models import Subject
 class SubjectCMSWizardTestCase(CMSTestCase):
     """Testing the wizard that is used to create new subject pages from the CMS"""
 
-    def test_subject_create_wizards_list(self):
+    def test_cms_wizards_subject_create_wizards_list(self):
         """
         The wizard to create a new subject page should be present on the wizards list page
         """
@@ -35,7 +35,7 @@ class SubjectCMSWizardTestCase(CMSTestCase):
         )
         self.assertContains(response, "<strong>New subject page</strong>", html=True)
 
-    def test_subject_wizard_submit_form(self):
+    def test_cms_wizards_subject_submit_form(self):
         """
         Submitting a valid SubjectWizardForm should create a Subject page extension and its
         related page.
@@ -60,7 +60,7 @@ class SubjectCMSWizardTestCase(CMSTestCase):
         # The slug should have been automatically set
         self.assertEqual(page.get_slug(), "my-title")
 
-    def test_subject_wizard_submit_form_max_lengths(self):
+    def test_cms_wizards_subject_submit_form_max_lengths(self):
         """
         Check that the form correctly raises an error when the slug is too long. The path built
         by combining the slug of the page with the slug of its parent page, should not exceed
@@ -87,7 +87,7 @@ class SubjectCMSWizardTestCase(CMSTestCase):
             ),
         )
 
-    def test_subject_wizard_submit_form_slugify_long_title(self):
+    def test_cms_wizards_subject_submit_form_slugify_long_title(self):
         """
         When generating the slug from the title, we should respect the slug's "max_length"
         """
@@ -108,7 +108,7 @@ class SubjectCMSWizardTestCase(CMSTestCase):
         # Check that the slug has been truncated
         self.assertEqual(page.get_slug(), "t" * 200)
 
-    def test_subject_wizard_submit_form_title_too_long(self):
+    def test_cms_wizards_subject_submit_form_title_too_long(self):
         """
         Trying to set a title that is too long should make the form invalid
         """
@@ -131,7 +131,7 @@ class SubjectCMSWizardTestCase(CMSTestCase):
             ["Ensure this value has at most 255 characters (it has 256)."],
         )
 
-    def test_subject_wizard_submit_form_slug_too_long(self):
+    def test_cms_wizards_subject_submit_form_slug_too_long(self):
         """
         Trying to set a slug that is too long should make the form invalid
         """
@@ -151,7 +151,7 @@ class SubjectCMSWizardTestCase(CMSTestCase):
             ["Ensure this value has at most 200 characters (it has 201)."],
         )
 
-    def test_subject_wizard_parent_page_should_exist(self):
+    def test_cms_wizards_subject_parent_page_should_exist(self):
         """
         We should not be able to create a subject page if the parent page does not exist
         """

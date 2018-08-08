@@ -9,12 +9,12 @@ from richie.apps.courses.factories import CourseFactory, SubjectFactory
 from richie.apps.courses.models import Subject
 
 
-class SubjectTestCase(TestCase):
+class SubjectModelsTestCase(TestCase):
     """
     Unit test suite to validate the behavior of the Subject model
     """
 
-    def test_subject_str(self):
+    def test_models_subject_str(self):
         """
         The string representation should be built with the title of the related page.
         Only 1 query to the associated page should be generated.
@@ -24,7 +24,7 @@ class SubjectTestCase(TestCase):
         with self.assertNumQueries(1):
             self.assertEqual(str(subject), "Subject: Art")
 
-    def test_subject_courses_copied_when_publishing(self):
+    def test_models_subject_courses_copied_when_publishing(self):
         """
         When publishing a subject, the links to draft courses on the draft version of the
         subject should be copied (clear then add) to the published version.

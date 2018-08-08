@@ -12,11 +12,11 @@ from richie.plugins.section.factories import SectionFactory
 
 
 # pylint: disable=too-many-ancestors
-class SectionTests(CMSPluginTestCase):
+class SectionCMSPluginsTestCase(CMSPluginTestCase):
     """Section plugin tests case"""
 
     @transaction.atomic
-    def test_section_title_required(self):
+    def test_cms_plugins_section_title_required(self):
         """
         A "title" is required when instantiating a section.
 
@@ -30,14 +30,14 @@ class SectionTests(CMSPluginTestCase):
             str(cm.exception),
         )
 
-    def test_section_create_success(self):
+    def test_cms_plugins_section_create_success(self):
         """
         Section plugin creation success
         """
         section = SectionFactory(title="Foo")
         self.assertEqual("Foo", section.title)
 
-    def test_section_context_and_html(self):
+    def test_cms_plugins_section_context_and_html(self):
         """
         Instanciating this plugin with an instance should populate the context
         and render in the template.
@@ -69,7 +69,7 @@ class SectionTests(CMSPluginTestCase):
         # Check rendered title
         self.assertIn(section.title, html)
 
-    def test_section_render(self):
+    def test_cms_plugins_section_render(self):
         """
         Full rendering for a Section with default title level and nested
         plugin content
@@ -112,7 +112,7 @@ class SectionTests(CMSPluginTestCase):
         self.assertInHTML(expected_title, html)
         self.assertInHTML(nested_content, html)
 
-    def test_section_header_level(self):
+    def test_cms_plugins_section_header_level(self):
         """
         Header level can be changed from context variable 'header_level'.
         """

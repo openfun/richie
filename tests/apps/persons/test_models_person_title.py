@@ -7,14 +7,14 @@ from django.test import TestCase
 from richie.apps.persons.factories import PersonTitleFactory
 
 
-class PersonTitleTestCase(TestCase):
+class PersonTitleModelsTestCase(TestCase):
     """
     Unit test suite to validate the behavior of the PersonTitle model
 
     Because of Django-parler we can not test model validation from Django model layer
     """
 
-    def test_person_title_fields_title_required(self):
+    def test_models_person_title_fields_title_required(self):
         """
         The `title` field should be required
         """
@@ -26,7 +26,7 @@ class PersonTitleTestCase(TestCase):
             )
         )
 
-    def test_person_title_fields_abbreviation_required(self):
+    def test_models_person_title_fields_abbreviation_required(self):
         """
         The `abbreviation` field should be required
         """
@@ -38,7 +38,7 @@ class PersonTitleTestCase(TestCase):
             )
         )
 
-    def test_person_title_fields_abbreviation_length(self):
+    def test_models_person_title_fields_abbreviation_length(self):
         """
         The `abbreviation` field should be limited to 10 characters
         """
@@ -51,7 +51,7 @@ class PersonTitleTestCase(TestCase):
             )
         )
 
-    def test_person_str(self):
+    def test_models_person_title_str(self):
         """
         The string representation should be built with models name,
         `title` and `abbreviation` fields

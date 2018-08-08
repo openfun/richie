@@ -12,7 +12,7 @@ class SubjectCMSTestCase(TestCase):
     End-to-end test suite to validate the content and Ux of the subject detail view
     """
 
-    def test_subject_cms_published_content(self):
+    def test_templates_subject_detail_cms_published_content(self):
         """
         Validate that the important elements are displayed on a published subject page
         """
@@ -61,7 +61,7 @@ class SubjectCMSTestCase(TestCase):
         for course in courses[-2:]:
             self.assertNotContains(response, course.extended_object.get_title())
 
-    def test_subject_cms_draft_content(self):
+    def test_templates_subject_detail_cms_draft_content(self):
         """
         A staff user should see a draft subject including its draft elements with an annotation
         """

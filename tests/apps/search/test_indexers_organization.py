@@ -12,14 +12,14 @@ from richie.apps.search.exceptions import IndexerDataException, QueryFormatExcep
 from richie.apps.search.indexers.organizations import OrganizationsIndexer
 
 
-class OrganizationsIndexerTestCase(TestCase):
+class OrganizationsIndexersTestCase(TestCase):
     """
     Test the get_data_for_es() function on the organization indexer, as well as our mapping,
     and especially dynamic mapping shape in ES
     """
 
     @responses.activate
-    def test_get_data_for_es(self):
+    def test_indexers_organization_get_data_for_es(self):
         """
         Happy path: organization data is fetched from the API properly formatted
         """
@@ -91,7 +91,7 @@ class OrganizationsIndexerTestCase(TestCase):
         )
 
     @responses.activate
-    def test_get_data_for_es_with_unexpected_organization_shape(self):
+    def test_indexers_organization_get_data_for_es_with_invalid_organization(self):
         """
         Error case: the API returned an object that is not shaped like an expected organization
         """
@@ -120,7 +120,7 @@ class OrganizationsIndexerTestCase(TestCase):
                 )
             )
 
-    def test_format_es_organization_for_api(self):
+    def test_indexers_organization_format_es_organization_for_api(self):
         """
         Make sure format_es_organization_for_api returns a properly formatted organization
         """
@@ -144,7 +144,7 @@ class OrganizationsIndexerTestCase(TestCase):
             },
         )
 
-    def test_build_es_query_search_all_organizations(self):
+    def test_indexers_organization_build_es_query_search_all_organizations(self):
         """
         Happy path: the expected ES query object is returned
         """
@@ -154,7 +154,7 @@ class OrganizationsIndexerTestCase(TestCase):
             (11, 4, {"query": {"match_all": {}}}),
         )
 
-    def test_build_es_query_search_by_name(self):
+    def test_indexers_organization_build_es_query_search_by_name(self):
         """
         Happy path: the expected ES query object is returned
         """
@@ -179,7 +179,7 @@ class OrganizationsIndexerTestCase(TestCase):
             ),
         )
 
-    def test_build_es_query_with_invalid_params(self):
+    def test_indexers_organization_build_es_query_with_invalid_params(self):
         """
         Error case: the request contained invalid parameters
         """

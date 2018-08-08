@@ -6,10 +6,10 @@ from django.test import TestCase
 from richie.plugins.simple_text_ckeditor.factories import SimpleTextFactory
 
 
-class SimpleTextFactoryTests(TestCase):
-    """Factory tests case"""
+class SimpleTextFactoriesTestCase(TestCase):
+    """Tests for the SimpleText factory"""
 
-    def test_simpletext_create_success(self):
+    def test_factories_simpletext_create_success(self):
         """
         Factory creation success
         """

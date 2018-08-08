@@ -8,12 +8,12 @@ from django.test import TestCase
 from richie.apps.courses.factories import SubjectFactory
 
 
-class SubjectFactoryTestCase(TestCase):
+class SubjectFactoriesTestCase(TestCase):
     """
     Unit test suite to validate the behavior of the Subject factory
     """
 
-    def test_subject_factory_logo(self):
+    def test_factories_subject_logo(self):
         """
         The SubjectFactory should be able to generate a plugin with a realistic fake logo.
         """
@@ -30,7 +30,7 @@ class SubjectFactoryTestCase(TestCase):
             os.path.basename(logo_plugin.djangocms_picture_picture.picture.file.name),
         )
 
-    def test_subject_factory_banner(self):
+    def test_factories_subject_banner(self):
         """
         The SubjectFactory should be able to generate a plugin with a realistic fake banner.
         """
@@ -47,7 +47,7 @@ class SubjectFactoryTestCase(TestCase):
             os.path.basename(banner_plugin.djangocms_picture_picture.picture.file.name),
         )
 
-    def test_subject_factory_description(self):
+    def test_factories_subject_description(self):
         """
         The SubjectFactory should be able to generate a plugin with a realistic fake description.
         """

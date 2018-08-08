@@ -12,7 +12,7 @@ import arrow
 from richie.apps.search.fields.datetimerange import DatetimeRangeField
 
 
-class DatetimeRangeFieldTestCase(TestCase):
+class DatetimeRangeFieldsTestCase(TestCase):
     """
     Test whether our DatetimeRangeField returns the proper value when it is valid and properly
     reports any errors when it is invalid
@@ -25,7 +25,7 @@ class DatetimeRangeFieldTestCase(TestCase):
         """
         timezone.activate("UTC")
 
-    def test_no_input_optional(self):
+    def test_fields_datetime_range_no_input_optional(self):
         """
         Happy path: the value is optional and was not provided
         """
@@ -34,7 +34,7 @@ class DatetimeRangeFieldTestCase(TestCase):
         # None is valid input as the field is not required
         self.assertEqual(daterange.clean(None), None)
 
-    def test_no_input_required(self):
+    def test_fields_datetime_range_no_input_required(self):
         """
         Invalid input: the value is required but missing
         """
@@ -45,7 +45,7 @@ class DatetimeRangeFieldTestCase(TestCase):
             daterange.clean(None)
         self.assertEqual(context.exception.message, "Missing required field")
 
-    def test_empty_array_input(self):
+    def test_fields_datetime_range_empty_array_input(self):
         """
         Invalid input: an empty array does not satisfy the "required" condition
         """
@@ -56,7 +56,7 @@ class DatetimeRangeFieldTestCase(TestCase):
             daterange.clean("[]")
         self.assertEqual(context.exception.message, "Empty datetimerange is invalid")
 
-    def test_broken_input_python_list(self):
+    def test_fields_datetime_range_broken_input_python_list(self):
         """
         Invalid input: a python list is not proper JSON
         """
@@ -68,7 +68,7 @@ class DatetimeRangeFieldTestCase(TestCase):
             daterange.clean([])
         self.assertEqual(context.exception.message, "Missing required field")
 
-    def test_broken_input_not_json(self):
+    def test_fields_datetime_range_broken_input_not_json(self):
         """
         Invalid input: an eval-able tuple as a string is not proper JSON
         """
@@ -79,7 +79,7 @@ class DatetimeRangeFieldTestCase(TestCase):
             daterange.clean('("2018-01-01T06:00:00Z", null)')
         self.assertEqual(context.exception.message, "Invalid JSON formatting")
 
-    def test_array_of_null_input(self):
+    def test_fields_datetime_range_array_of_null_input(self):
         """
         Invalid input: [null, null] is no use at all as a daterange and probably a client-side
         error, we should not accept it as correct input
@@ -93,7 +93,7 @@ class DatetimeRangeFieldTestCase(TestCase):
             context.exception.message, "A valid datetimerange needs at least 1 datetime"
         )
 
-    def test_start_and_null_input(self):
+    def test_fields_datetime_range_start_and_null_input(self):
         """
         Happy path: only a start is provided for the daterange
         """
@@ -105,7 +105,7 @@ class DatetimeRangeFieldTestCase(TestCase):
             (arrow.get(datetime(2018, 1, 1, 6, 0), "UTC"), None),
         )
 
-    def test_null_and_end_input(self):
+    def test_fields_datetime_range_null_and_end_input(self):
         """
         Happy path: only an end is provided for the daterange
         """
@@ -117,7 +117,7 @@ class DatetimeRangeFieldTestCase(TestCase):
             (None, arrow.get(datetime(2018, 1, 31, 6, 0), "UTC")),
         )
 
-    def test_start_and_end_input(self):
+    def test_fields_datetime_range_start_and_end_input(self):
         """
         Happy path: we got 2 datetimes, a start & an end for our daterange
         """
@@ -133,7 +133,7 @@ class DatetimeRangeFieldTestCase(TestCase):
             ),
         )
 
-    def test_start_and_end_with_timezones_input(self):
+    def test_fields_datetime_range_start_and_end_with_timezones_input(self):
         """
         Happy path: the consumer provides ISO datetimes with timezones, which are valid input
         for our form field.
@@ -157,7 +157,7 @@ class DatetimeRangeFieldTestCase(TestCase):
             ),
         )
 
-    def test_invalid_date_format_input(self):
+    def test_fields_datetime_range_invalid_date_format_input(self):
         """
         Invalid input: the date format is not ISO and therefore not recognized by arrow and
         our own form field.

@@ -15,7 +15,7 @@ class PersonTitleAdminTestCase(CMSTestCase):
     Integration test suite to validate the behavior of admin pages for the PersonTitle model
     """
 
-    def test_person_title_list_view(self):
+    def test_admin_person_title_list_view(self):
         """
         The admin list view of person titles should display title and abbreviation
         """
@@ -33,7 +33,7 @@ class PersonTitleAdminTestCase(CMSTestCase):
         self.assertContains(response, person_title.title, status_code=200)
         self.assertContains(response, person_title.abbreviation)
 
-    def test_person_title_add_view(self):
+    def test_admin_person_title_add_view(self):
         """
         The admin add view should work for person title
         """
@@ -48,7 +48,7 @@ class PersonTitleAdminTestCase(CMSTestCase):
         for field in ["title", "abbreviation"]:
             self.assertContains(response, "id_{:s}".format(field))
 
-    def test_person_title_change_view_get(self):
+    def test_admin_person_title_change_view_get(self):
         """
         The admin change view should include the editable and readonly fields as expected.
         """
@@ -66,7 +66,7 @@ class PersonTitleAdminTestCase(CMSTestCase):
         self.assertContains(response, person_title.title)
         self.assertContains(response, person_title.abbreviation)
 
-    def test_person_change_view_post(self):
+    def test_admin_person_title_change_view_post(self):
         """
         Validate that the person title can be updated via the admin.
         """

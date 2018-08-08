@@ -18,7 +18,7 @@ class CourseAdminTestCase(CMSTestCase):
     Integration test suite to validate the behavior of admin pages for the Course model
     """
 
-    def test_course_list_view(self):
+    def test_admin_course_list_view(self):
         """
         The admin list view of courses should display their active session, their
         organization_main and the title of the related page
@@ -42,7 +42,7 @@ class CourseAdminTestCase(CMSTestCase):
         )
         self.assertContains(response, course.active_session)
 
-    def test_course_add_view(self):
+    def test_admin_course_add_view(self):
         """
         The admin add view should work for courses
         """
@@ -57,7 +57,7 @@ class CourseAdminTestCase(CMSTestCase):
         for field in ["active_session", "organization_main"]:
             self.assertContains(response, "id_{:s}".format(field))
 
-    def test_course_change_view_get(self):
+    def test_admin_course_change_view_get(self):
         """
         The admin change view should include the editable and readonly fields as expected.
         In particular, the relation fields should only include options for related objects in
@@ -111,7 +111,7 @@ class CourseAdminTestCase(CMSTestCase):
             ),
         )
 
-    def test_course_change_view_post(self):
+    def test_admin_course_change_view_post(self):
         """
         Validate that the course can be updated via the admin.
         In particular, make sure that when a course is updated from the admin, the main
