@@ -9,7 +9,7 @@ from cms.wizards.wizard_pool import wizard_pool
 
 from richie.apps.persons.cms_wizards import BaseWizardForm
 
-from .models import Course, Organization, Subject
+from .models import Course, CourseRun, Organization, Subject
 
 
 class CourseWizardForm(BaseWizardForm):
@@ -22,7 +22,7 @@ class CourseWizardForm(BaseWizardForm):
         required=True,
         queryset=Organization.objects.filter(extended_object__publisher_is_draft=True),
         label=_("Organization"),
-        help_text=_("The organization in charge of this course"),
+        help_text=_("The main organization in charge of this course"),
     )
     active_session = forms.CharField(
         max_length=200,
@@ -79,6 +79,50 @@ wizard_pool.register(
         description=_("Create a new course page"),
         model=Course,
         form=CourseWizardForm,
+        weight=200,
+    )
+)
+
+
+class CourseRunWizardForm(BaseWizardForm):
+    """
+    This form is used by the wizard that creates a new course run page.
+    A related Course run model is created for each course run page.
+    """
+
+    course = forms.ModelChoiceField(
+        required=True,
+        queryset=Course.objects.filter(extended_object__publisher_is_draft=True),
+        label=_("Course"),
+        help_text=_("The course associated with this course run"),
+    )
+
+    model = CourseRun
+
+    def save(self):
+        """
+        The parent form created the page.
+        This method creates the associated course run page extension.
+        """
+        page = super().save()
+        CourseRun.objects.create(
+            extended_object=page, course=self.cleaned_data["course"]
+        )
+        return page
+
+
+class CourseRunWizard(Wizard):
+    """Inherit from Wizard because each wizard must have its own Python class."""
+
+    pass
+
+
+wizard_pool.register(
+    CourseRunWizard(
+        title=_("New course run page"),
+        description=_("Create a new course run page"),
+        model=CourseRun,
+        form=CourseRunWizardForm,
         weight=200,
     )
 )

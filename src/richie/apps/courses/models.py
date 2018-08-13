@@ -190,6 +190,52 @@ class Course(BasePageExtension):
             self.organizations.add(self.organization_main)
 
 
+class CourseRun(BasePageExtension):
+    """
+    The course run represents and records the occurence of a course between a start
+    and an end date.
+    """
+
+    course = models.ForeignKey(
+        "Course",
+        related_name="courserun",
+        limit_choices_to={"extended_object__publisher_is_draft": True},
+    )
+    enroll_link = models.URLField(_("Enrollment link"), blank=True, null=True)
+    start = models.DateTimeField(_("course start"), blank=True, null=True)
+    end = models.DateTimeField(_("course end"), blank=True, null=True)
+    enroll_start = models.DateTimeField(_("enrollment start"), blank=True, null=True)
+    enroll_end = models.DateTimeField(_("enrollment end"), blank=True, null=True)
+
+    ROOT_REVERSE_ID = "courserun"
+    TEMPLATE_DETAIL = "courses/cms/course_run.html"
+
+    class Meta:
+        verbose_name = _("course_run")
+
+    def __str__(self):
+        """Human representation of a course run."""
+        start = "{:%y/%m/%d %H:%M} - ".format(self.start) if self.start else ""
+        return "{start:s}{course:s}".format(
+            course=self.course.extended_object.get_title(), start=start
+        )
+
+    def copy_relations(self, oldinstance, language):
+        """
+        We must manually copy the many-to-many relations from the "draft" instance
+        to the "published" instance.
+        """
+        # pylint: disable=no-member
+        self.course.set(oldinstance.course.drafts())
+
+    def save(self, *args, **kwargs):
+        """
+        Enforce validation on each instance save
+        """
+        self.full_clean()
+        super().save(*args, **kwargs)
+
+
 class Subject(BasePageExtension):
     """
     The subject page extension represents and records a thematic in the catalog.
@@ -276,5 +322,6 @@ class LicencePluginModel(CMSPlugin):
 
 
 extension_pool.register(Course)
+extension_pool.register(CourseRun)
 extension_pool.register(Organization)
 extension_pool.register(Subject)

@@ -6,7 +6,20 @@ from django.contrib import admin
 from cms.extensions import PageExtensionAdmin
 
 from .forms import LicenceFormAdmin
-from .models import Course, Licence, Organization
+from .models import Course, CourseRun, Licence, Organization
+
+
+class CourseRunAdmin(PageExtensionAdmin):
+    """Admin class for the CourseRun model."""
+
+    list_display = ["title", "course", "enroll_link"]
+
+    # pylint: disable=no-self-use
+    def title(self, obj):
+        """
+        Display the course run title as a read-only field from the related page
+        """
+        return obj.extended_object.get_title()
 
 
 class CourseAdmin(PageExtensionAdmin):
@@ -59,5 +72,6 @@ class LicenceAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Course, CourseAdmin)
+admin.site.register(CourseRun, CourseRunAdmin)
 admin.site.register(Organization, OrganizationAdmin)
 admin.site.register(Licence, LicenceAdmin)

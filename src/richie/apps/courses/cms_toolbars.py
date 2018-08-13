@@ -9,7 +9,7 @@ from cms.toolbar_pool import toolbar_pool
 from cms.utils.page_permissions import user_can_change_page
 
 from .defaults import PAGE_EXTENSION_TOOLBAR_ITEM_POSITION
-from .models import Course, Organization
+from .models import Course, CourseRun, Organization
 
 
 class BaseExtensionToolbar(ExtensionToolbar):
@@ -57,6 +57,15 @@ class CourseExtensionToolbar(BaseExtensionToolbar):
     """
 
     model = Course
+
+
+@toolbar_pool.register
+class CourseRunExtensionToolbar(BaseExtensionToolbar):
+    """
+    This extension class customizes the toolbar for the course page extension
+    """
+
+    model = CourseRun
 
 
 @toolbar_pool.register
