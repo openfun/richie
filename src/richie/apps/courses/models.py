@@ -112,6 +112,11 @@ class Course(BasePageExtension):
         related_name="main_courses",
         limit_choices_to={"extended_object__publisher_is_draft": True},
     )
+    course_run = models.ManyToManyField(
+        "CourseRun",
+        related_name="course_run",
+        limit_choices_to={"extended_object__publisher_is_draft": True},
+    )
     organizations = models.ManyToManyField(
         "Organization",
         related_name="courses",
