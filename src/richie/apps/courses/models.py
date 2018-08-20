@@ -112,9 +112,9 @@ class Course(BasePageExtension):
         related_name="main_courses",
         limit_choices_to={"extended_object__publisher_is_draft": True},
     )
-    course_run = models.ManyToManyField(
+    course_runs_main = models.ManyToManyField(
         "CourseRun",
-        related_name="course_run",
+        related_name="courses",
         limit_choices_to={"extended_object__publisher_is_draft": True},
     )
     organizations = models.ManyToManyField(
@@ -203,7 +203,7 @@ class CourseRun(BasePageExtension):
 
     course = models.ForeignKey(
         "Course",
-        related_name="courserun",
+        related_name="course_runs",
         limit_choices_to={"extended_object__publisher_is_draft": True},
     )
     enroll_link = models.URLField(_("Enrollment link"), blank=True, null=True)
@@ -213,7 +213,7 @@ class CourseRun(BasePageExtension):
     enroll_end = models.DateTimeField(_("enrollment end"), blank=True, null=True)
 
     ROOT_REVERSE_ID = "courserun"
-    TEMPLATE_DETAIL = "courses/cms/course_run.html"
+    TEMPLATE_DETAIL = "courses/cms/course_run_detail.html"
 
     class Meta:
         verbose_name = _("course_run")

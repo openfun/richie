@@ -3,7 +3,7 @@
 
     <h1 class="course-run__title">{{ current_page.get_title }}</h1>
 
-    {% with run=current_page.courserun header_level=2 %}
+    {% with run=current_page.course_run header_level=2 %}
 
     <div class="course-run__content">
       <a class="course-run__content__link" href="{{ run.enroll_link }}">{% trans "Subscribe" %}</a>
