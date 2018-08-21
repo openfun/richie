@@ -325,11 +325,15 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
             "name": _("Complementary information"),
             "plugins": ["SectionPlugin"],
         },
-        "courses/cms/course_detail.html license_course_content": {
-            "name": _("License for the course content")
+        "courses/cms/course_detail.html course_license_content": {
+            "name": _("License for the course content"),
+            "plugins": ["LicencePlugin"],
+            "limits": {"LicencePlugin": 1},
         },
-        "courses/cms/course_detail.html license_course_participation": {
-            "name": _("License for the content created by course participants")
+        "courses/cms/course_detail.html course_license_participation": {
+            "name": _("License for the content created by course participants"),
+            "plugins": ["LicencePlugin"],
+            "limits": {"LicencePlugin": 1},
         },
         # Organization detail
         "courses/cms/organization_detail.html banner": {

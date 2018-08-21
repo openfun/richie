@@ -11,8 +11,8 @@
   <div class="licence-plugin__content">
     {{ instance.licence.content|safe }}
   </div>
-  <div class="licence-plugin__description">
+  {% if instance.description %}<div class="licence-plugin__description">
     {{ instance.description|safe }}
-  </div>
+  </div>{% endif %}
 </div>
 {% endspaceless %}

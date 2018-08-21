@@ -13,6 +13,7 @@ from cms import models as cms_models
 
 from richie.apps.courses.factories import (
     CourseFactory,
+    LicenceFactory,
     OrganizationFactory,
     SubjectFactory,
 )
@@ -29,6 +30,7 @@ NB_COURSES_ORGANIZATION_RELATIONS = 3
 NB_COURSES_SUBJECT_RELATIONS = 4
 NB_COURSES_PERSONS_PLUGINS = 3
 NB_ORGANIZATIONS = 8
+NB_LICENCES = 5
 NB_PERSONS = 10
 NB_SUBJECTS = 8
 PAGE_INFOS = {
@@ -120,6 +122,9 @@ def create_demo_site():
         )
         pages_created[name] = page
 
+    # Create some licences
+    licences = LicenceFactory.create_batch(NB_LICENCES)
+
     # Create organizations under the `Organizations` page
     organizations = OrganizationFactory.create_batch(
         NB_ORGANIZATIONS,
@@ -166,16 +171,20 @@ def create_demo_site():
             languages=[l[0] for l in settings.LANGUAGES],
             parent=pages_created["courses"],
             organization_main=random.choice(course_organizations),
+            fill_licences=[
+                ("course_license_content", random.choice(licences)),
+                ("course_license_participation", random.choice(licences)),
+            ],
+            fill_team=random.sample(persons, NB_COURSES_PERSONS_PLUGINS),
             fill_teaser=True,
             fill_texts=[
                 "course_syllabus",
                 "course_format",
                 "course_prerequisites",
                 "course_plan",
-                "course_license_content",
-                "course_license_participation",
+                # "course_license_content",
+                # "course_license_participation",
             ],
-            fill_team=random.sample(persons, NB_COURSES_PERSONS_PLUGINS),
             with_organizations=course_organizations,
             with_subjects=random.sample(subjects, NB_COURSES_SUBJECT_RELATIONS),
             should_publish=True,
