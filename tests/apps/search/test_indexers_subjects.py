@@ -12,14 +12,14 @@ from richie.apps.search.exceptions import IndexerDataException, QueryFormatExcep
 from richie.apps.search.indexers.subjects import SubjectsIndexer
 
 
-class SubjectIndexersTestCase(TestCase):
+class SubjectsIndexersTestCase(TestCase):
     """
     Test the get_data_for_es() function on the subject indexer, as well as our mapping,
     and especially dynamic mapping shape in ES
     """
 
     @responses.activate
-    def test_indexers_subject_get_data_for_es(self):
+    def test_indexers_subjects_get_data_for_es(self):
         """
         Happy path: the data is fetched from the API properly formatted
         """
@@ -79,7 +79,7 @@ class SubjectIndexersTestCase(TestCase):
         )
 
     @responses.activate
-    def test_indexers_subject_get_data_for_es_with_unexpected_subject_shape(self):
+    def test_indexers_subjects_get_data_for_es_with_unexpected_subjects_shape(self):
         """
         Error case: the API returned an object that is not shaped like an expected subject
         """
@@ -106,7 +106,7 @@ class SubjectIndexersTestCase(TestCase):
                 )
             )
 
-    def test_indexers_subject_format_es_subject_for_api(self):
+    def test_indexers_subjects_format_es_subject_for_api(self):
         """
         Make sure format_es_subject_for_api returns a properly formatted subject
         """
@@ -122,7 +122,7 @@ class SubjectIndexersTestCase(TestCase):
             {"id": 89, "image": "example.com/image.png", "name": "Computer science"},
         )
 
-    def test_indexers_subject_build_es_query_search_all_subjects(self):
+    def test_indexers_subjects_build_es_query_search_all_subjects(self):
         """
         Happy path: the expected ES query object is returned
         """
@@ -132,7 +132,7 @@ class SubjectIndexersTestCase(TestCase):
             (13, 1, {"query": {"match_all": {}}}),
         )
 
-    def test_indexers_subject_build_es_query_search_by_name(self):
+    def test_indexers_subjects_build_es_query_search_by_name(self):
         """
         Happy path: the expected ES query object is returned
         """
@@ -155,7 +155,7 @@ class SubjectIndexersTestCase(TestCase):
             ),
         )
 
-    def test_indexers_subject_build_es_query_with_invalid_params(self):
+    def test_indexers_subjects_build_es_query_with_invalid_params(self):
         """
         Error case: the request contained invalid parameters
         """

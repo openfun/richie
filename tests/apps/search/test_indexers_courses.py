@@ -21,14 +21,14 @@ from richie.apps.search.exceptions import IndexerDataException, QueryFormatExcep
 from richie.apps.search.indexers.courses import CoursesIndexer
 
 
-class CourseIndexersTestCase(TestCase):
+class CoursesIndexersTestCase(TestCase):
     """
     Test the get_data_for_es() function on the course indexer, as well as our mapping,
     and especially dynamic mapping shape in ES
     """
 
     @responses.activate
-    def test_indexers_course_get_data_for_es(self):
+    def test_indexers_courses_get_data_for_es(self):
         """
         Happy path: the data is fetched from the API properly formatted
         """
@@ -130,7 +130,7 @@ class CourseIndexersTestCase(TestCase):
         )
 
     @responses.activate
-    def test_indexers_course_get_data_for_es_with_unexpected_data_shape(self):
+    def test_indexers_courses_get_data_for_es_with_unexpected_data_shape(self):
         """
         Error case: the API returned an object that is not shape like an expected course
         """
@@ -165,7 +165,7 @@ class CourseIndexersTestCase(TestCase):
                 CoursesIndexer.get_data_for_es(index="some_index", action="some_action")
             )
 
-    def test_indexers_course_format_es_course_for_api(self):
+    def test_indexers_courses_format_es_course_for_api(self):
         """
         Make sure format_es_course_for_api returns a properly formatted course
         """
@@ -218,7 +218,7 @@ class CourseIndexersTestCase(TestCase):
             }
         },
     )
-    def test_indexers_course_build_es_query_search_all_courses(self):
+    def test_indexers_courses_build_es_query_search_all_courses(self):
         """
         Happy path: build a query that does not filter the courses at all
         """
@@ -277,7 +277,7 @@ class CourseIndexersTestCase(TestCase):
             }
         },
     )
-    def test_indexers_course_build_es_query_search_by_match_text(self):
+    def test_indexers_courses_build_es_query_search_by_match_text(self):
         """
         Happy path: build a query that filters courses by matching text
         """
@@ -367,7 +367,7 @@ class CourseIndexersTestCase(TestCase):
             }
         },
     )
-    def test_indexers_course_build_es_query_search_by_terms_organizations(self):
+    def test_indexers_courses_build_es_query_search_by_terms_organizations(self):
         """
         Happy path: build a query that filters courses by more than 1 related organizations
         """
@@ -439,7 +439,7 @@ class CourseIndexersTestCase(TestCase):
             }
         },
     )
-    def test_indexers_course_build_es_query_search_by_single_term_organizations(self):
+    def test_indexers_courses_build_es_query_search_by_single_term_organizations(self):
         """
         Happy path: build a query that filters courses by exactly 1 related organization
         """
@@ -509,7 +509,7 @@ class CourseIndexersTestCase(TestCase):
             }
         },
     )
-    def test_indexers_course_build_es_query_search_by_range_datetimes(self):
+    def test_indexers_courses_build_es_query_search_by_range_datetimes(self):
         """
         Happy path: build a query that filters courses by start & end date datetime ranges
         """
@@ -610,7 +610,7 @@ class CourseIndexersTestCase(TestCase):
             },
         },
     )
-    def test_indexers_course_build_es_query_search_by_custom_filter(self):
+    def test_indexers_courses_build_es_query_search_by_custom_filter(self):
         """
         Happy path: build a query using custom filters
         Note: we're keeping fields from defaults.py instead of mocking for simplicity
@@ -688,7 +688,7 @@ class CourseIndexersTestCase(TestCase):
             },
         },
     )
-    def test_indexers_course_build_es_query_combined_search(self):
+    def test_indexers_courses_build_es_query_combined_search(self):
         """
         Happy path: build a query that filters courses by multiple filters, including a custom
         filter; make all aggs using all of those along with another custom filter
@@ -830,7 +830,7 @@ class CourseIndexersTestCase(TestCase):
         )
 
     @patch("richie.apps.search.indexers.courses.FILTERS_HARDCODED", new={})
-    def test_indexers_course_build_es_query_search_with_empty_filters(self):
+    def test_indexers_courses_build_es_query_search_with_empty_filters(self):
         """
         Edge case: custom filters have been removed entirely through settings
         """
@@ -868,7 +868,7 @@ class CourseIndexersTestCase(TestCase):
             ),
         )
 
-    def test_indexers_course_build_es_query_search_with_invalid_params(self):
+    def test_indexers_courses_build_es_query_search_with_invalid_params(self):
         """
         Error case: the request contained invalid parameters
         """
@@ -877,7 +877,7 @@ class CourseIndexersTestCase(TestCase):
                 SimpleNamespace(query_params=QueryDict(query_string="limit=-2"))
             )
 
-    def test_indexers_course_list_sorting_script(self):
+    def test_indexers_courses_list_sorting_script(self):
         """
         Make sure our courses list sorting script (Lucene expression) is working as intended
         """

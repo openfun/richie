@@ -23,7 +23,7 @@ from richie.apps.search.viewsets.courses import CoursesViewSet
     "format_es_course_for_api",
     side_effect=lambda es_course, _: "Course #{:n}".format(es_course["_id"]),
 )
-class CourseViewsetsTestCase(TestCase):
+class CoursesViewsetsTestCase(TestCase):
     """
     Test the API endpoints for courses (list and details)
     """
@@ -35,7 +35,7 @@ class CourseViewsetsTestCase(TestCase):
         """
         timezone.activate(pytz.utc)
 
-    def test_viewsets_course_retrieve(self, *_):
+    def test_viewsets_courses_retrieve(self, *_):
         """
         Happy path: the client requests an existing course, gets it back
         """
@@ -52,7 +52,7 @@ class CourseViewsetsTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, "Course #42")
 
-    def test_viewsets_course_retrieve_unknown(self, *_):
+    def test_viewsets_courses_retrieve_unknown(self, *_):
         """
         Error case: the client is asking for a course that does not exist
         """
@@ -77,7 +77,7 @@ class CourseViewsetsTestCase(TestCase):
         lambda *args: {"some": "sorting"},
     )
     @mock.patch.object(settings.ES_CLIENT, "search")
-    def test_viewsets_course_search(self, mock_search, *_):
+    def test_viewsets_courses_search(self, mock_search, *_):
         """
         Happy path: the consumer is filtering courses by matching text
         """
@@ -140,7 +140,7 @@ class CourseViewsetsTestCase(TestCase):
         "richie.apps.search.indexers.courses.CoursesIndexer.build_es_query",
         side_effect=QueryFormatException({"limit": "incorrect value"}),
     )
-    def test_viewsets_course_search_with_invalid_params(self, *_):
+    def test_viewsets_courses_search_with_invalid_params(self, *_):
         """
         Error case: the query string params are not properly formatted
         """

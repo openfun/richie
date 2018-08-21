@@ -13,12 +13,12 @@ from richie.apps.search.exceptions import QueryFormatException
 from richie.apps.search.viewsets.subjects import SubjectsViewSet
 
 
-class SubjectViewsetsTestCase(TestCase):
+class SubjectsViewsetsTestCase(TestCase):
     """
     Test the API endpoints for subjects (list and details)
     """
 
-    def test_viewsets_subject_retrieve(self):
+    def test_viewsets_subjects_retrieve(self):
         """
         Happy path: the client requests an existing subject, gets it back
         """
@@ -48,7 +48,7 @@ class SubjectViewsetsTestCase(TestCase):
             {"id": 42, "image": "example.com/image.png", "name": "Some Subject"},
         )
 
-    def test_viewsets_subject_retrieve_unknown(self):
+    def test_viewsets_subjects_retrieve_unknown(self):
         """
         Error case: the client is asking for a subject that does not exist
         """
@@ -69,7 +69,7 @@ class SubjectViewsetsTestCase(TestCase):
         lambda x: (2, 0, {"query": "example"}),
     )
     @mock.patch.object(settings.ES_CLIENT, "search")
-    def test_viewsets_subject_search(self, mock_search):
+    def test_viewsets_subjects_search(self, mock_search):
         """
         Happy path: the subject is filtering the subjects by name
         """
@@ -133,7 +133,7 @@ class SubjectViewsetsTestCase(TestCase):
         "richie.apps.search.indexers.subjects.SubjectsIndexer.build_es_query",
         side_effect=QueryFormatException({"limit": "incorrect value"}),
     )
-    def test_viewsets_subject_search_with_invalid_params(self, _):
+    def test_viewsets_subjects_search_with_invalid_params(self, _):
         """
         Error case: the client used an incorrectly formatted request
         """
