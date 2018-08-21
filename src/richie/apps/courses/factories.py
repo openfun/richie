@@ -10,10 +10,10 @@ import factory
 from cms.api import add_plugin
 from filer.models.imagemodels import Image
 
-from ..core.factories import PageExtensionDjangoModelFactory
+from ..core.factories import FilerImageFactory, PageExtensionDjangoModelFactory
 from ..core.helpers import create_text_plugin
 from ..core.tests.utils import file_getter
-from .models import Course, Organization, Subject
+from .models import Course, Licence, Organization, Subject
 
 VIDEO_SAMPLE_LINKS = (
     (
@@ -207,6 +207,24 @@ class CourseFactory(PageExtensionDjangoModelFactory):
 
     @factory.post_generation
     # pylint: disable=unused-argument
+    def fill_licences(self, create, extracted, **kwargs):
+        """
+        Add licence plugin for course licence placeholders from given licence
+        instance list
+        """
+        if create and extracted:
+            for language in self.extended_object.get_languages():
+                for slot, licence in extracted:
+                    placeholder = self.extended_object.placeholders.get(slot=slot)
+                    add_plugin(
+                        language=language,
+                        placeholder=placeholder,
+                        plugin_type="LicencePlugin",
+                        **{"licence": licence},
+                    )
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
     def fill_texts(self, create, extracted, **kwargs):
         """
         A shortand to fill some placeholder content with a text plugin.
@@ -256,3 +274,17 @@ class SubjectFactory(BLDPageExtensionDjangoModelFactory):
         """Add courses to ManyToMany relation."""
         if create and extracted:
             self.courses.set(extracted)
+
+
+class LicenceFactory(factory.django.DjangoModelFactory):
+    """
+    A factory to automatically generate random yet meaningful licences.
+    """
+
+    class Meta:
+        model = Licence
+
+    name = factory.Faker("sentence", nb_words=3)
+    logo = factory.SubFactory(FilerImageFactory)
+    url = factory.Faker("uri")
+    content = factory.Faker("text", max_nb_chars=300)
