@@ -1,0 +1,272 @@
+///
+/// Main body header
+///
+
+$richie-topbar-breakpoint: null !default;
+
+$richie-topbar-shadow: null !default;
+$richie-topbar-background: null !default;
+
+$richie-topbar-hamburger-paddding: null !default;
+$richie-topbar-hamburger-fontsize: null !default;
+$richie-topbar-hamburger-fontcolor: null !default;
+$richie-topbar-hamburger-fontcolor-hover: null !default;
+
+$richie-topbar-brand-height: null !default;
+$richie-topbar-brand-paddding: null !default;
+
+$richie-topbar-menu-list-margin: null !default;
+$richie-topbar-menu-list-padding: null !default;
+
+$richie-topbar-menu-list-fontcolor: null !default;
+$richie-topbar-menu-list-fontcolor-lg: null !default;
+$richie-topbar-menu-list-background: null !default;
+$richie-topbar-menu-list-background-lg: null !default;
+
+$richie-topbar-menu-item-margin: null !default;
+$richie-topbar-menu-item-padding: null !default;
+$richie-topbar-menu-item-fontcolor: null !default;
+
+$richie-topbar-menu-link-padding: null !default;
+$richie-topbar-menu-link-fontsize: null !default;
+$richie-topbar-menu-link-fontcolor: null !default;
+
+$richie-topbar-menu-link-padding-md: null !default;
+$richie-topbar-menu-link-fontsize-md: null !default;
+$richie-topbar-menu-link-fontcolor-md: null !default;
+
+$richie-topbar-menu-link-padding-lg: null !default;
+$richie-topbar-menu-link-fontsize-lg: null !default;
+$richie-topbar-menu-link-fontcolor-lg: null !default;
+
+$richie-topbar-menu-link-fontcolor-hover: null !default;
+$richie-topbar-menu-link-background-hover: null !default;
+
+$richie-topbar-menu-item-active-fontweight: null !default;
+$richie-topbar-menu-item-active-border: null !default;
+$richie-topbar-menu-item-active-fontweight-lg: null !default;
+$richie-topbar-menu-item-active-border-height-lg: null !default;
+$richie-topbar-menu-item-active-border-color-lg: null !default;
+
+$richie-topbar-menu-cta-fontcolor: null !default;
+$richie-topbar-menu-cta-fontweight: null !default;
+$richie-topbar-menu-cta-background: null !default;
+
+$richie-topbar-menu-cta-hollow-fontcolor: null !default;
+$richie-topbar-menu-cta-hollow-fontweight: null !default;
+$richie-topbar-menu-cta-hollow-background: null !default;
+
+$richie-topbar-menu-divider-border: null !default;
+$richie-topbar-menu-divider-border-lg: null !default;
+
+$richie-topbar-menu-item-divider-border: null !default;
+$richie-topbar-menu-item-divider-border-lg: null !default;
+
+.topbar{
+    $topbar-selector: &;
+    display: flex;
+    flex-direction: column;
+    box-shadow: $richie-topbar-shadow;
+    position: relative;
+    z-index: 200;
+
+    @include media-breakpoint-up($richie-topbar-breakpoint) {
+        flex-direction: row;
+        background-color: $richie-topbar-background;
+    }
+
+
+    // Will show only on mobile breakpoints
+    &__hamburger{
+        @include sv-flex(0, 0, auto);
+        padding: $richie-topbar-hamburger-paddding;
+        border: 0;
+        font-size: $richie-topbar-hamburger-fontsize;
+        line-height: 1;
+        color: $richie-topbar-hamburger-fontcolor;
+        background: inherit;
+        cursor: pointer;
+        order: 2;
+
+        @include media-breakpoint-up($richie-topbar-breakpoint) {
+            display: none;
+        }
+
+        &:hover{
+            color: $richie-topbar-hamburger-fontcolor-hover;
+        }
+    }
+
+
+    // Brand part with hamburger and clickable logo
+    &__brand{
+        @include sv-flex(1, 0, auto);
+        display: flex;
+        height: $richie-topbar-brand-height;
+        flex-direction: row;
+        align-items: stretch;
+        background: $richie-topbar-background;
+        box-shadow: $richie-topbar-shadow;
+
+        @include media-breakpoint-up($richie-topbar-breakpoint) {
+            @include sv-flex(0, 0, auto);
+            box-shadow: none;
+        }
+
+        // Clickable logo
+        &__link{
+            @include sv-flex(1, 0, auto);
+            padding: $richie-topbar-brand-paddding;
+            order: 1;
+
+            @include media-breakpoint-up($richie-topbar-breakpoint) {
+                @include sv-flex(0, 0, auto);
+            }
+        }
+
+        &__logo{
+            display: block;
+        }
+    }
+
+
+    // Main menu for pages
+    &__menu{
+        @include sv-flex(1, 0, auto);
+        display: none;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        @include media-breakpoint-up($richie-topbar-breakpoint) {
+            display: flex;
+            flex-wrap: nowrap;
+        }
+
+        &__list{
+            $list-selector: &;
+
+            @include sv-flex(1, 0, 100%);
+            display: flex;
+            margin: $richie-topbar-menu-list-margin;
+            padding: $richie-topbar-menu-list-padding;
+            flex-direction: column;
+            list-style-type: none;
+            color: $richie-topbar-menu-list-fontcolor;
+            background: $richie-topbar-menu-list-background;
+
+            @include media-breakpoint-up($richie-topbar-breakpoint) {
+                @include sv-flex(1, 0, auto);
+                display: flex;
+                flex-direction: row;
+                color: $richie-topbar-menu-list-fontcolor-lg;
+                background: $richie-topbar-menu-list-background-lg;
+            }
+
+            // Menu item container
+            &__item{
+                $item-selector: &;
+
+                @include sv-flex(1, 0, auto);
+                display: flex;
+                margin: $richie-topbar-menu-item-margin;
+                padding: $richie-topbar-menu-item-padding;
+                color: $richie-topbar-menu-item-fontcolor;
+
+                @include media-breakpoint-up($richie-topbar-breakpoint) {
+                    @include sv-flex(0, 0, auto);
+                }
+
+                // Item link where every spacing is done
+                &__link{
+                    @include sv-flex(1, 0, 100%);
+                    display: block;
+                    flex-direction: row;
+                    padding: $richie-topbar-menu-link-padding;
+                    font-size: $richie-topbar-menu-link-fontsize;
+                    color: $richie-topbar-menu-link-fontcolor;
+
+                    @include media-breakpoint-up($richie-topbar-breakpoint) {
+                        padding: $richie-topbar-menu-link-padding-lg;
+                        font-size: $richie-topbar-menu-link-fontsize-lg;
+                        color: $richie-topbar-menu-link-fontcolor-lg;
+                    }
+
+                    &:hover{
+                        color: $richie-topbar-menu-link-fontcolor-hover;
+                        text-decoration: none;
+                        background: $richie-topbar-menu-link-background-hover;
+                    }
+                }
+
+                // Current page item or current ancestor
+                &--selected,
+                &--ancestor{
+                    #{$item-selector}__link{
+                        font-weight: $richie-topbar-menu-item-active-fontweight;
+                        border-left: $richie-topbar-menu-item-active-border;
+
+                        @include media-breakpoint-up($richie-topbar-breakpoint) {
+                            position: relative;
+                            font-weight: $richie-topbar-menu-item-active-fontweight-lg;
+                            border-left: 0;
+                            &::after{
+                                content: "";
+                                position: absolute;
+                                bottom: 0;
+                                left: 0;
+                                right: 0;
+                                height: $richie-topbar-menu-item-active-border-height-lg;
+                                background-color: $richie-topbar-menu-item-active-border-color-lg;
+                            }
+                        }
+                    }
+                }
+
+                // Specicif displays for some special button
+                &--cta{
+                    color: $richie-topbar-menu-cta-fontcolor;
+                    font-weight: $richie-topbar-menu-cta-fontweight;
+                    background-color: $richie-topbar-menu-cta-background;
+                }
+                &--cta-hollow{
+                    color: $richie-topbar-menu-cta-hollow-fontcolor;
+                    font-weight: $richie-topbar-menu-cta-hollow-fontweight;
+                    background-color: $richie-topbar-menu-cta-hollow-background;
+                }
+
+                // Item divider
+                & + #{$item-selector}{
+                    border-top: $richie-topbar-menu-item-divider-border;
+                    @include media-breakpoint-up($richie-topbar-breakpoint) {
+                        border-top: 0;
+                        border-left: $richie-topbar-menu-item-divider-border-lg;
+                    }
+                }
+            }
+
+            &--aside{
+                @include sv-flex(0, 0, 100%);
+
+                @include media-breakpoint-up($richie-topbar-breakpoint) {
+                    @include sv-flex(0, 0, auto);
+                }
+            }
+
+            // Menu divider
+            & + #{$list-selector}{
+                border-top: $richie-topbar-menu-divider-border;
+                @include media-breakpoint-up($richie-topbar-breakpoint) {
+                    border-top: $richie-topbar-menu-divider-border-lg;
+                }
+            }
+        }
+    }
+
+
+    // Opened state for mobile mode
+    &.is-open{
+        #{$topbar-selector}__menu{
+            display: flex;
+        }
+    }
+}

@@ -1,0 +1,21 @@
+{% load cms_tags %}{% spaceless %}
+
+{% for child in children %}
+    {% with children_slug=child.get_menu_title|slugify %}
+        <li class="topbar__menu__list__item
+            {% if child.selected %} topbar__menu__list__item--selected{% endif %}
+            {% if child.ancestor %} topbar__menu__list__item--ancestor{% endif %}
+            {% if child.sibling %} topbar__menu__list__item--sibling{% endif %}
+            {% if child.descendant %} topbar__menu__list__item--descendant{% endif %}">
+            <a class="topbar__menu__list__item__link" href="{{ child.attr.redirect_url|default:child.get_absolute_url }}">{{ child.get_menu_title }}</a>
+            {% comment %}Dropdown menu are not yet implemented since there is no need about it for now{% endcomment %}
+            {% comment %}{% if child.children %}
+            <ul>
+                {% show_menu from_level to_level extra_inactive extra_active template "" "" child %}
+            </ul>
+            {% endif %}{% endcomment %}
+        </li>
+    {% endwith %}
+{% endfor %}
+
+{% endspaceless %}

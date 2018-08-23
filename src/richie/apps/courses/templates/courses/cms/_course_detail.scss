@@ -3,7 +3,9 @@
   @include make-container-max-widths();
   @include make-row();
   margin: 0 auto;
-  background: $container-bg;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  background: $richie-content-container-bg;
 
   &__teaser {
     width: calc(100% + #{$grid-gutter-width});
