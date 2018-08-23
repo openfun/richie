@@ -1,8 +1,8 @@
-{% load cms_tags menu_tags sekizai_tags staticfiles %}
+{% load i18n cms_tags menu_tags static sekizai_tags staticfiles %}
 <!doctype html>
 <html>
     <head>
-        <title>{% block title %}This is my new project home page{% endblock title %}</title>
+        <title>{% block title %}Richie demonstration{% endblock title %}</title>
         <meta name="viewport" content="width=device-width,initial-scale=1">
 
         {% render_block "css" %}
@@ -12,12 +12,81 @@
     </head>
     <body>
         {% cms_toolbar %}
-        <div>
-            {% show_menu 0 100 100 100 %}
-            {% block content %}
+        {% block body_header %}
+        <nav class="topbar" id="main-menu">
+            <div class="topbar__brand">
+                <button class="topbar__hamburger"
+                        data-target="main-menu" aria-label="menu" aria-expanded="false">&#8801;</button>
+                <a href="/" class="topbar__brand__link">
+                    <img src="{% static "images/logo.png" %}" class="topbar__brand__logo" alt="Richie demonstration">
+                </a>
+            </div>
+            <div class="topbar__menu">
+                <ul class="topbar__menu__list">
+                    {% show_menu 0 100 0 0 "menu/header_menu.html" %}
+                </ul>
+                <ul class="topbar__menu__list topbar__menu__list--aside">
+                    <li class="topbar__menu__list__item topbar__menu__list__item--cta-hollow">
+                        <a class="topbar__menu__list__item__link" href="#">Sign up</a>
+                    </li>
+                    <li class="topbar__menu__list__item topbar__menu__list__item--cta">
+                        <a class="topbar__menu__list__item__link" href="#">Login</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        {% endblock body_header %}
 
-            {% endblock content %}
+        <div class="body-content">
+        {% block content %}{% endblock content %}
         </div>
+
+        {% block body_footer %}
+        <div class="body-footer">
+            <div class="body-footer__menu">
+                <ul class="body-footer__menu__list">
+                    {% show_menu_below_id "annex" 0 100 100 100 "menu/footer_menu.html" %}
+                </ul>
+            </div>
+            <div class="body-footer__brand">
+                <a href="/" class="body-footer__brand__link">
+                    <img src="{% static "images/logo.png" %}" class="body-footer__brand__logo" alt="">
+                </a>
+            </div>
+            <div class="body-footer__mentions">
+                <p>{% now "Y" %} &copy; Acme {% blocktrans %}All Rights Reserved.{% endblocktrans %}</p>
+            </div>
+            <div class="body-footer__poweredby">
+                <a href="https://github.com/openfun/richie" class="body-footer__poweredby__link">
+                    <small>Powered by</small>
+                    <strong>Richie</strong>
+                </a>
+            </div>
+        </div>
+        {% endblock body_footer %}
+
         {% render_block "js" %}
+        <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get all topbar burger elements
+            const $topbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.topbar__hamburger'), 0);
+
+            // Check if there are any navbar burgers
+            if ($topbarBurgers.length > 0) {
+                // Add a click event on each of them
+                $topbarBurgers.forEach( el => {
+                    el.addEventListener('click', () => {
+                        // Get the target from the "data-target" attribute
+                        const target = el.dataset.target;
+                        const $target = document.getElementById(target);
+
+                        // Toggle the "is-active" class on both the burger and container
+                        el.classList.toggle('is-active');
+                        $target.classList.toggle('is-open');
+                    });
+                });
+            }
+        });
+        </script>
     </body>
 </html>

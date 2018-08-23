@@ -51,14 +51,14 @@ bootstrap:  ## install development dependencies
 	${MAKE} migrate;
 .PHONY: bootstrap
 
-build-saas: ## build Sass files to CSS
+build-sass: ## build Sass files to CSS
 	@$(YARN) sass
-.PHONY: build-saas
+.PHONY: build-sass
 
 build-front: ## build front-end application
 	@$(YARN) install;
 	${MAKE} build-ts;
-	${MAKE} build-saas;
+	${MAKE} build-sass;
 .PHONY: build-front
 
 build-ts: ## build TypeScript application

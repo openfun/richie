@@ -1,16 +1,13 @@
 // Overridable & namespaced global variables
-$organization-detail-view-banner-logo-sizing: 15rem !default;
-$organization-detail-view-banner-logo-sizing-md: 20rem !default;
-$organization-detail-view-banner-logo-sizing-xl: 25rem !default;
+$richie-org-detail-banner-logo-height: 15rem !default;
+$richie-org-detail-banner-logo-height-md: 20rem !default;
+$richie-org-detail-banner-logo-height-xl: 25rem !default;
 
 .organization-detail {
-  $banner-logo-sizing: $organization-detail-view-banner-logo-sizing;
-  $banner-logo-sizing-md: $organization-detail-view-banner-logo-sizing-md;
-  $banner-logo-sizing-xl: $organization-detail-view-banner-logo-sizing-xl;
-
   @include make-container();
   @include make-container-max-widths();
-  background: $container-bg;
+  padding-bottom: 1rem;
+  background: $richie-content-container-bg;
 
   &__banner {
     @include make-row();
@@ -18,15 +15,15 @@ $organization-detail-view-banner-logo-sizing-xl: 25rem !default;
     // position & overflow are part of the img hack below
     position: relative;
     width: calc(100% + #{$grid-gutter-width});
-    height: $banner-logo-sizing;
+    height: $richie-org-detail-banner-logo-height;
     overflow: hidden;
 
     @include media-breakpoint-up(md) {
-      height: $banner-logo-sizing-md;
+      height: $richie-org-detail-banner-logo-height-md;
     }
 
     @include media-breakpoint-up(xl) {
-      height: $banner-logo-sizing-xl;
+      height: $richie-org-detail-banner-logo-height-xl;
     }
 
     img {
@@ -44,21 +41,21 @@ $organization-detail-view-banner-logo-sizing-xl: 25rem !default;
     overflow: hidden;
     border: 1px solid darken($light, 20%);
 
-    width: $banner-logo-sizing * 0.75;
-    height: $banner-logo-sizing * 0.75;
-    margin: (-$banner-logo-sizing * 0.75 / 2) auto $grid-gutter-width;
+    width: $richie-org-detail-banner-logo-height * 0.75;
+    height: $richie-org-detail-banner-logo-height * 0.75;
+    margin: (-$richie-org-detail-banner-logo-height * 0.75 / 2) auto $grid-gutter-width;
 
     @include media-breakpoint-up(md) {
       float: right;
-      width: $banner-logo-sizing-md * 0.75;
-      height: $banner-logo-sizing-md * 0.75;
-      margin: (-$banner-logo-sizing-md / 2) 3rem $grid-gutter-width;
+      width: $richie-org-detail-banner-logo-height-md * 0.75;
+      height: $richie-org-detail-banner-logo-height-md * 0.75;
+      margin: (-$richie-org-detail-banner-logo-height-md / 2) 3rem $grid-gutter-width;
     }
 
     @include media-breakpoint-up(xl) {
-      width: $banner-logo-sizing-xl * 0.75;
-      height: $banner-logo-sizing-xl * 0.75;
-      margin: (-$banner-logo-sizing-xl / 2) 8rem $grid-gutter-width;
+      width: $richie-org-detail-banner-logo-height-xl * 0.75;
+      height: $richie-org-detail-banner-logo-height-xl * 0.75;
+      margin: (-$richie-org-detail-banner-logo-height-xl / 2) 8rem $grid-gutter-width;
     }
 
     img {
@@ -76,13 +73,13 @@ $organization-detail-view-banner-logo-sizing-xl: 25rem !default;
   &__title {
     $h1-calculated-height: $h1-font-size * $headings-line-height;
     @include media-breakpoint-up(md) {
-      $logo-height: $banner-logo-sizing-md * 0.75;
+      $logo-height: $richie-org-detail-banner-logo-height-md * 0.75;
       $logo-overflow-height: $logo-height / 3;
       margin: ($logo-overflow-height - $h1-calculated-height) / 2 $grid-gutter-width;
     }
 
     @include media-breakpoint-up(xl) {
-      $logo-height: $banner-logo-sizing-xl * 0.75;
+      $logo-height: $richie-org-detail-banner-logo-height-xl * 0.75;
       $logo-overflow-height: $logo-height / 3;
       margin: ($logo-overflow-height - $h1-calculated-height) / 2 $grid-gutter-width;
     }

@@ -1,0 +1,15 @@
+
+.person-detail {
+  @include make-container();
+  @include make-container-max-widths();
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  background: $richie-content-container-bg;
+
+  &__content {
+    clear: both;
+    @include make-row();
+    padding-left: $grid-gutter-width;
+    padding-right: $grid-gutter-width;
+  }
+}

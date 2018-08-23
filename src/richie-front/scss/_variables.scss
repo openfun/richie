@@ -1,9 +1,110 @@
 @import "../../../node_modules/bootstrap/scss/functions";
 @import "../../../node_modules/bootstrap/scss/variables";
 
+// Design color palette
+@import 'colors';
+
 // Smaller gutters in grid to increase information density in search results
 $grid-gutter-width: 20px;
 
 // Light gray default background for the body so containers can be enhanced as page structuring elements
-$body-bg: $light;
-/* local */$container-bg: white;
+$body-bg: $dodgerblue1;
+
+
+/// Header topbar
+/// -----
+$richie-topbar-breakpoint: lg;
+
+$richie-topbar-shadow: 0 0 rem-calc(3px) rem-calc(3px) rgba($gray40, 0.2);
+$richie-topbar-background: $white;
+
+$richie-topbar-hamburger-paddding: 0 1rem;
+$richie-topbar-hamburger-fontsize: 2rem;
+$richie-topbar-hamburger-fontcolor: $dodgerblue7;
+$richie-topbar-hamburger-fontcolor-hover: $dodgerblue7;
+
+$richie-topbar-brand-height: rem-calc(60px);
+$richie-topbar-brand-paddding: 0 0.4rem;
+
+$richie-topbar-menu-list-margin: 0;
+$richie-topbar-menu-list-padding: 0;
+
+$richie-topbar-menu-list-fontcolor: $white;
+$richie-topbar-menu-list-fontcolor-lg: $dodgerblue7;
+$richie-topbar-menu-list-background: $dodgerblue7;
+$richie-topbar-menu-list-background-lg: transparent;
+
+$richie-topbar-menu-item-margin: 0;
+$richie-topbar-menu-item-padding: 0;
+$richie-topbar-menu-item-fontcolor: inherit;
+
+$richie-topbar-menu-link-padding: 0.8rem 1rem;
+$richie-topbar-menu-link-fontsize: 1rem;
+$richie-topbar-menu-link-fontcolor: inherit;
+
+$richie-topbar-menu-link-padding-md: 1rem 0.7rem;
+$richie-topbar-menu-link-fontsize-md: 0.9rem;
+$richie-topbar-menu-link-fontcolor-md: inherit;
+
+$richie-topbar-menu-link-padding-lg: 1rem;
+$richie-topbar-menu-link-fontsize-lg: 1rem;
+$richie-topbar-menu-link-fontcolor-lg: inherit;
+
+$richie-topbar-menu-link-fontcolor-hover: $white;
+$richie-topbar-menu-link-background-hover: lighten($dodgerblue7, 2%);
+
+$richie-topbar-menu-item-active-fontweight: bold;
+$richie-topbar-menu-item-active-border: rem-calc(4px) solid lighten($dodgerblue7, 8%);
+$richie-topbar-menu-item-active-fontweight-lg: bold;
+$richie-topbar-menu-item-active-border-height-lg: rem-calc(3px);
+$richie-topbar-menu-item-active-border-color-lg: $dodgerblue7;
+
+$richie-topbar-menu-cta-fontcolor: $white;
+$richie-topbar-menu-cta-fontweight: bold;
+$richie-topbar-menu-cta-background: $firebrick6;
+
+$richie-topbar-menu-cta-hollow-fontcolor: $firebrick6;
+$richie-topbar-menu-cta-hollow-fontweight: bold;
+$richie-topbar-menu-cta-hollow-background: $white;
+
+$richie-topbar-menu-divider-border: 1px solid $dodgerblue5;
+$richie-topbar-menu-divider-border-lg: 0;
+
+$richie-topbar-menu-item-divider-border: 1px solid $dodgerblue5;
+$richie-topbar-menu-item-divider-border-lg: 1px solid $white;
+
+
+/// Page footer
+/// -----
+
+$richie-footer-padding: 0 1rem;
+$richie-footer-fontcolor: $white;
+$richie-footer-background: $dodgerblue1;
+
+$richie-footer-menu-border: 1px solid lighten($dodgerblue1, 10%);
+
+$richie-footer-menu-item-margin: 0;
+$richie-footer-menu-item-padding: 0;
+$richie-footer-menu-item-margin-lg: 0;
+$richie-footer-menu-item-padding-lg: 0;
+
+$richie-footer-menu-link-padding: 1rem 0.8rem;
+$richie-footer-menu-link-fontweight: bold;
+$richie-footer-menu-link-fontcolor: $white;
+$richie-footer-menu-link-fontcolor-hover: $dodgerblue7;
+
+$richie-footer-brand-padding: 1rem 0;
+$richie-footer-mentions-padding: 1rem 0;
+
+$richie-footer-mentions-fontsize: 0.9rem;
+$richie-footer-mentions-texttransform: uppercase;
+
+$richie-footer-poweredby-padding: 1rem 0;
+$richie-footer-poweredby-link-fontcolor: $white;
+
+
+///
+/// Content component objects
+/// -----
+///
+$richie-content-container-bg: $white;

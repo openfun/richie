@@ -1,0 +1,126 @@
+////
+/// @group flexbox
+////
+
+
+///
+/// Shortand to define flex sizing behavior.
+///
+/// Since CSS 'flex' property shortand can cause issues with IE11 and calc,
+/// this helper ease to write 'flex' without to define each property.
+/// https://github.com/philipwalton/flexbugs#flexbug-8
+///
+/// @arg {Number} $grow [1]
+///   flex-grow value.
+///
+/// @arg {Number} $shrink [0]
+///   flex-shrink value.
+///
+/// @arg {Number} $width [auto]
+///   flex-basis value. Note that if you want to use calc() on this value, you
+///   need to force evaluation on non static value, see sample '.cell-marged'.
+///
+/// @arg {Boolean} $max [true]
+///   Enable max-width definition.
+///
+/// @example scss
+///   .cell-auto{
+///       @include sv-flex();
+///   }
+///   .cell-25{
+///       @include sv-flex(0, 1, 25%);
+///   }
+///   .cell-50{
+///       @include sv-flex($width: 50%);
+///   }
+///   .cell-50-relaxed{
+///       @include sv-flex($width: 50%, $max: false);
+///   }
+///   $foo: 15px;
+///   .cell-marged{
+///       @include sv-flex($width: calc(25% - #{$foo}));
+///   }
+///
+///   // Output
+///   .cell-auto{
+///       flex-grow: 1;
+///       flex-shrink: 0;
+///       flex-basis: auto;
+///   }
+///   .cell-25{
+///       flex-grow: 0;
+///       flex-shrink: 1;
+///       flex-basis: 25%;
+///       max-width: 25%;
+///   }
+///   .cell-50{
+///       flex-grow: 1;
+///       flex-shrink: 0;
+///       flex-basis: 50%;
+///       max-width: 50%;
+///   }
+///   .cell-50-relaxed{
+///       flex-grow: 1;
+///       flex-shrink: 0;
+///       flex-basis: 50%;
+///   }
+///   .cell-marged{
+///       flex-grow: 1;
+///       flex-shrink: 0;
+///       flex-basis: calc(25% - 15px);
+///       max-width: calc(25% - 15px);
+///   }
+///
+///
+@mixin sv-flex($grow: 1, $shrink: 0, $width: auto, $max: true) {
+    flex-grow: $grow;
+    flex-shrink: $shrink;
+    flex-basis: $width;
+    @if $max and $width != auto {
+        max-width: $width;
+    }
+}
+
+
+///
+/// Create flex cell properties.
+///
+/// A flex cell always have 'grow' property set to '1' and 'shrink' to '0' so
+/// they allways take given width space, not less or much.
+///
+/// @arg {Number} $width [null]
+///   Width for flex basis and max width.
+///
+/// @arg {Number} $less [null]
+///   If not null, width will be a `calc()` function where `$less` is
+///   substracted to `$width`.
+///
+/// @example scss
+///   div{
+///       @include sv-flex-cell-width(25%);
+///   }
+///
+///   // Output
+///   div{
+///       flex: 1 0 25%;
+///       max-width: 25%;
+///   }
+///
+/// @example scss
+///   div{
+///       @include sv-flex-cell-width(25%, $less: 10px);
+///   }
+///
+///   // Output CSS
+///   div{
+///       flex: 1 0 calc(25% - 10px);
+///       max-width: calc(25% - 10px);
+///   }
+///
+@mixin sv-flex-cell-width($width, $less: null) {
+    @if $less == null {
+        @include sv-flex(1, 0, $width);
+    } @else {
+        @include sv-flex(1, 0, calc(#{$width} - #{$less}));
+    }
+}

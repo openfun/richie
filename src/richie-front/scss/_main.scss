@@ -1,5 +1,10 @@
-// Our variables must bu imported before Bootstrap code so they can override it
-@import './_variables';
+// Basic function must be loaded before settings to be able to use them from
+// settings and objects
+@import './functions/generic';
+
+// Our variables must be imported before Bootstrap code so they can override it
+@import './variables';
+@import './mixins/flexbox';
 
 // TWITTER BOOTSTRAP V4
 // Required
@@ -31,9 +36,13 @@
 @import "../js/components/SearchFiltersPane/_SearchFiltersPane";
 
 // Template specific styles
+@import "./components/header";
+@import "./components/footer";
+@import "./components/content";
+@import "../../../sandbox/templates/menu/_menu";
 @import "../../richie/apps/courses/templates/courses/cms/organization_detail";
 @import "../../richie/apps/courses/templates/courses/cms/subject_detail";
-@import "../../../src/richie/apps/courses/templates/courses/cms/course_detail";
+@import "../../richie/apps/courses/templates/courses/cms/course_detail";
+@import "../../richie/apps/persons/templates/persons/cms/person_detail";
 @import "../../richie/apps/search/templates/search/search";
 @import "../../richie/plugins/large_banner/templates/large_banner";
-@import "../../../sandbox/templates/menu/_menu";
