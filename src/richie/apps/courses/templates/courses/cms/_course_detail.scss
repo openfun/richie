@@ -53,5 +53,11 @@
   &__aside {
     @include make-col-ready();
     @include make-col(4);
+
+    &__run{
+      &__item{
+        border: 1px solid darken($light, 20%);
+      }
+    }
   }
 }

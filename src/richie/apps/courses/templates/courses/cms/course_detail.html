@@ -128,6 +128,30 @@
           {% trans "No active session" %}
         {% endif %}
       </div>
+      <div class="course-detail__aside__run">
+        <h2>{% trans 'Course runs' %}</h2>
+        {% for run in course.course_runs.all %}
+          <ul class="course-detail__aside__run__item">
+            <li class="course-detail__aside__run__link">
+              <a class="course-run__aside__link" href="{{ run.resource_link }}">{% trans "To Subscribe" %}</a>
+            </li>
+            <li class="course-run__aside__run__time">
+              {% trans "Enrollment Start" %}: {{ run.enrollment_start }}
+            </li>
+            <li class="course-run__aside__run__time">
+              {% trans "Course Start" %}: {{ run.start }}
+            </li>
+            <li class="course-run__aside__run__time">
+              {% trans "Enrollment End" %}: {{ run.enrollment_end }}
+            </li>
+            <li class="course-run__aside__run__time">
+              {% trans "Course End" %}: {{ run.end }}
+            </li>
+          </ul>
+        {% empty %}
+            {% trans "No associated course runs" %}
+        {% endfor %}
+      </div>
     </div>
 
     {% endwith %}
