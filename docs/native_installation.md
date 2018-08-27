@@ -74,9 +74,9 @@ proceeding:
 
     $ sudo apt-get install apt-transport-https
 
-Save the repository definition to /etc/apt/sources.list.d/elastic-6.3.0.list:
+Save the repository definition to /etc/apt/sources.list.d/elastic-6.3.1.list:
 
-    $ echo "deb https://artifacts.elastic.co/packages/6.3.0/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-6.3.0.list
+    $ echo "deb https://artifacts.elastic.co/packages/6.3.1/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-6.3.1.list
 
 Update repository and install
 
