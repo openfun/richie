@@ -1,0 +1,34 @@
+{% extends "richie/fullwidth.html" %} {% load cms_tags i18n %} {% block content %}
+<div class="course-run">
+
+    <h1 class="course-run__title">{{ current_page.get_title }}</h1>
+
+    {% with run=current_page.course_run header_level=2 %}
+
+    <div class="course-run__content">
+      <a class="course-run__content__link" href="{{ run.enroll_link }}">{% trans "Subscribe" %}</a>
+      <ul class="course-run__content__detail">
+        
+        <li class="course-run__content__detail__course">
+          {{ run.course }}
+        </li>
+        <li class="course-run__content__detail__time">
+          {% trans "Course Start" %}: {{ run.start }}
+        </li>
+        <li class="course-run__content__detail__time">
+          {% trans "Course End" %}: {{ run.end }}
+        </li>
+        <li class="course-run__content__detail__time">
+          {% trans "Enrollment Start" %}: {{ run.enroll_start }}
+        </li>
+        <li class="course-run__content__detail__time">
+          {% trans "Enrollment End" %}: {{ run.enroll_end }}
+        </li>
+        
+      </ul>
+    </div>
+
+    {% endwith %}
+
+</div>
+{% endblock content %}
