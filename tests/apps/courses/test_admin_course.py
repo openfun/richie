@@ -40,7 +40,6 @@ class CourseAdminTestCase(CMSTestCase):
         self.assertContains(
             response, course.organization_main.extended_object.get_title()
         )
-        self.assertContains(response, course.active_session)
 
     def test_admin_course_add_view(self):
         """
@@ -53,9 +52,8 @@ class CourseAdminTestCase(CMSTestCase):
         url = reverse("admin:courses_course_add")
         response = self.client.get(url, follow=True)
 
-        # Check that the page includes all our editable fields
-        for field in ["active_session", "organization_main"]:
-            self.assertContains(response, "id_{:s}".format(field))
+        # Check that the page includes the field to edit the main organization
+        self.assertContains(response, "id_organization_main")
 
     def test_admin_course_change_view_get(self):
         """
@@ -87,7 +85,6 @@ class CourseAdminTestCase(CMSTestCase):
         self.assertContains(
             response, course.extended_object.get_title(), status_code=200
         )
-        self.assertContains(response, course.active_session)
         self.assertContains(
             response, course.organization_main.extended_object.get_title()
         )
@@ -137,7 +134,6 @@ class CourseAdminTestCase(CMSTestCase):
         # Get the admin change view
         url = reverse("admin:courses_course_change", args=[course.id])
         data = {
-            "active_session": "xyz",
             "organization_main": organization2.id,
             "organizations": [organization3.id],
             "subjects": [subject2.id],
@@ -149,7 +145,6 @@ class CourseAdminTestCase(CMSTestCase):
 
         # Check that the course was updated as expected
         course.refresh_from_db()
-        self.assertEqual(course.active_session, "xyz")
         self.assertEqual(course.organization_main, organization2)
         self.assertEqual(set(course.subjects.all()), {subject2})
         # Check that the main organization was added and the old organization cleared

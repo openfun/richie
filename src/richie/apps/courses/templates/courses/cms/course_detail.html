@@ -121,13 +121,6 @@
     </div>
 
     <div class="course-detail__aside">
-      <div class="course-detail__aside__active-session">
-        {% if course.active_session %}
-          {{ course.active_session }}
-        {% else %}
-          {% trans "No active session" %}
-        {% endif %}
-      </div>
       <div class="course-detail__aside__run">
         <h2>{% trans 'Course runs' %}</h2>
         {% for run in course.course_runs %}

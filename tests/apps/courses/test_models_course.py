@@ -27,47 +27,6 @@ class CourseModelsTestCase(TestCase):
             CourseFactory(organization_main=None)
         self.assertEqual(context.exception.messages[0], "This field cannot be null.")
 
-    def test_models_course_fields_active_session_required(self):
-        """
-        The `active_session` field should not be required
-        """
-        course = CourseFactory(active_session=None)
-        self.assertIsNone(course.active_session)
-
-    def test_models_course_fields_active_session_max_length(self):
-        """
-        The `active_session` field should be limited to 200 characters
-        """
-        CourseFactory(active_session="a" * 200)
-        with self.assertRaises(ValidationError) as context:
-            CourseFactory(active_session="a" * 201)
-        self.assertEqual(
-            context.exception.messages[0],
-            "Ensure this value has at most 200 characters (it has 201).",
-        )
-
-    def test_models_course_fields_active_session_unique(self):
-        """
-        The `active_session` field should be unique
-        """
-        course = CourseFactory(active_session="the-unique-key")
-        # Creating a second organization with the same active session should raise an error...
-        with self.assertRaises(ValidationError) as context:
-            CourseFactory(active_session="the-unique-key")
-        self.assertEqual(
-            context.exception.messages[0],
-            "A course already exists with this active session.",
-        )
-        self.assertEqual(
-            Course.objects.filter(active_session="the-unique-key").count(), 1
-        )
-
-        # ... but the page extension can exist in draft and published versions
-        course.extended_object.publish("en")
-        self.assertEqual(
-            Course.objects.filter(active_session="the-unique-key").count(), 2
-        )
-
     def test_models_course_organization_main_always_included_in_organizations(self):
         """
         The main organization should always be in the organizations linked via many-to-many
@@ -94,23 +53,13 @@ class CourseModelsTestCase(TestCase):
 
     def test_models_course_str(self):
         """
-        The string representation should be built with the page `title` and `active_session`
+        The string representation should be built with the page `title`
         fields. Only 1 query to the associated page should be generated.
         """
         page = create_page("Nano particles", "courses/cms/course_detail.html", "en")
-        course = CourseFactory(active_session="course-key", extended_object=page)
+        course = CourseFactory(extended_object=page)
         with self.assertNumQueries(1):
-            self.assertEqual(str(course), "Course: Nano particles (course-key)")
-
-    def test_models_course_str_no_active_session(self):
-        """
-        The string representation of a course with no active session should display
-        "no active session".
-        """
-        page = create_page("Nano particles", "courses/cms/course_detail.html", "en")
-        course = CourseFactory(active_session=None, extended_object=page)
-        with self.assertNumQueries(1):
-            self.assertEqual(str(course), "Course: Nano particles (no active session)")
+            self.assertEqual(str(course), "Course: Nano particles")
 
     def test_models_course_organizations_copied_when_publishing(self):
         """

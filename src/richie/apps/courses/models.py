@@ -96,17 +96,8 @@ class Course(BasePageExtension):
     This model should be used to record structured data about the course whereas the
     associated page object is where we record the less structured information to display on the
     page that presents the course.
-
-    The `active_session` field is the edX course_key of the current session.
     """
 
-    active_session = models.CharField(
-        max_length=200,
-        verbose_name=_("Course key of active course session"),
-        blank=True,
-        null=True,
-        db_index=True,
-    )
     organization_main = models.ForeignKey(
         "Organization",
         related_name="main_courses",
@@ -132,11 +123,9 @@ class Course(BasePageExtension):
 
     def __str__(self):
         """Human representation of a course."""
-        session = self.active_session or "no active session"
-        return "{model}: {title} ({session})".format(
+        return "{model}: {title}".format(
             model=self._meta.verbose_name.title(),
             title=self.extended_object.get_title(),
-            session=session,
         )
 
     def copy_relations(self, oldinstance, language):
@@ -147,35 +136,6 @@ class Course(BasePageExtension):
         # pylint: disable=no-member
         self.organizations.set(oldinstance.organizations.drafts())
         self.subjects.set(oldinstance.subjects.drafts())
-
-    def validate_unique(self, exclude=None):
-        """
-        We can't rely on a database constraint for uniqueness because pages
-        exist in two versions: draft and published.
-        """
-        if self.active_session:
-            # Check uniqueness for the version being saved (draft or published)
-            is_draft = self.extended_object.publisher_is_draft
-            uniqueness_query = self.__class__.objects.filter(
-                active_session=self.active_session,
-                extended_object__publisher_is_draft=is_draft,
-            )
-
-            # If the page is being updated, we should exclude it while looking for duplicates
-            if self.pk:
-                # pylint: disable=no-member
-                uniqueness_query = uniqueness_query.exclude(pk=self.pk)
-
-            # Raise a ValidationError if the active session already exists
-            if uniqueness_query.exists():
-                raise ValidationError(
-                    {
-                        "active_session": [
-                            "A course already exists with this active session."
-                        ]
-                    }
-                )
-        return super().validate_unique(exclude=exclude)
 
     @property
     def course_runs(self):

@@ -69,13 +69,6 @@ class CourseCMSTestCase(CMSTestCase):
             '<h1 class="course-detail__title">Very interesting course en</h1>',
             html=True,
         )
-        self.assertContains(
-            response,
-            '<div class="course-detail__aside__active-session">{:s}</div>'.format(
-                course.active_session
-            ),
-            html=True,
-        )
 
         # Only published subjects should be present on the page
         for subject in subjects[:2]:
@@ -169,13 +162,6 @@ class CourseCMSTestCase(CMSTestCase):
         self.assertContains(
             response,
             '<h1 class="course-detail__title">Very interesting course en</h1>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<div class="course-detail__aside__active-session">{:s}</div>'.format(
-                course.active_session
-            ),
             html=True,
         )
 
@@ -272,31 +258,5 @@ class CourseCMSTestCase(CMSTestCase):
                 element="course-detail__content__organizations__item",
                 title=course.organization_main.extended_object.get_title(),
             ),
-            html=True,
-        )
-
-    def test_templates_course_detail_cms_published_no_active_sesssion(self):
-        """
-        Validate detail page is correct when no active session exists
-        """
-        course = CourseFactory(title="Inactive course", active_session=None)
-        page = course.extended_object
-
-        # Publish and ensure content is correct
-        page.publish("en")
-        url = page.get_absolute_url()
-        response = self.client.get(url)
-
-        self.assertEqual(response.status_code, 200)
-
-        self.assertContains(response, "<title>Inactive course en</title>", html=True)
-        self.assertContains(
-            response,
-            '<h1 class="course-detail__title">Inactive course en</h1>',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<div class="course-detail__aside__active-session">No active session</div>',
             html=True,
         )

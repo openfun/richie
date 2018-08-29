@@ -127,42 +127,14 @@ class CourseFactory(PageExtensionDjangoModelFactory):
     """
     A factory to automatically generate random yet meaningful course page extensions
     and their related page in our tests.
-
-    The `active_session` field is set to a realistic Splitmongo course key in Open edX which
-    matches the following pattern:
-
-        {version}:{organization_code}+{number}+{session}
-
-        e.g. "course-v1:CNAM+01032+session01"
     """
 
     class Meta:
         model = Course
-        exclude = [
-            "languages",
-            "number",
-            "parent",
-            "session",
-            "template",
-            "title",
-            "version",
-        ]
+        exclude = ["languages", "parent", "template", "title"]
 
     template = Course.TEMPLATE_DETAIL
-    version = factory.Sequence(lambda n: "version-v{version}".format(version=n + 1))
-    number = factory.Faker("numerify", text="#####")
-    session = factory.Sequence(lambda n: "session{session:02d}".format(session=n + 1))
 
-    active_session = factory.LazyAttribute(
-        lambda o: "{version}:{organization_code}+{number}+{session}".format(
-            version=o.version,
-            organization_code=o.organization_main.code
-            if o.organization_main
-            else "xyz",
-            number=o.number,
-            session=o.session,
-        )
-    )
     organization_main = factory.SubFactory(OrganizationFactory)
 
     @factory.post_generation

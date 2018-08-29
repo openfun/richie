@@ -9,7 +9,7 @@ from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
 from richie.apps.courses.cms_wizards import CourseWizardForm
-from richie.apps.courses.factories import CourseFactory, OrganizationFactory
+from richie.apps.courses.factories import OrganizationFactory
 from richie.apps.courses.models import Course
 
 
@@ -49,11 +49,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
 
         # We can submit a form omitting the slug
         form = CourseWizardForm(
-            data={
-                "title": "My title",
-                "active_session": "course-key",
-                "organization": organization.id,
-            }
+            data={"title": "My title", "organization": organization.id}
         )
         self.assertTrue(form.is_valid())
         page = form.save()
@@ -67,9 +63,8 @@ class CourseCMSWizardTestCase(CMSTestCase):
         # The slug should have been automatically set
         self.assertEqual(page.get_slug(), "my-title")
 
-        # The "active_session" and "organization_main" fields should be set
+        # The "organization_main" field should be set
         self.assertEqual(course.organization_main, organization)
-        self.assertEqual(course.active_session, "course-key")
 
     def test_cms_wizards_course_submit_form_max_lengths(self):
         """
@@ -186,76 +181,4 @@ class CourseCMSWizardTestCase(CMSTestCase):
                     "You must first create a parent page and set its `reverse_id` to `courses`."
                 ]
             },
-        )
-
-    def test_cms_wizards_course_submit_form_active_session_too_long(self):
-        """
-        Trying to set an active session key that is too long should make the form invalid
-        """
-        # An organization and a parent page should pre-exist
-        organization = OrganizationFactory()
-        create_page(
-            "Courses", "richie/fullwidth.html", "en", reverse_id=Course.ROOT_REVERSE_ID
-        )
-        # Submit a slug that is too long and a title that is ok
-        invalid_data = {
-            "title": "t" * 255,
-            "active_session": "k" * 201,
-            "organization": organization.id,
-        }
-
-        form = CourseWizardForm(data=invalid_data)
-        self.assertFalse(form.is_valid())
-        # Check that the slug being too long is a cause for the invalid form
-        self.assertEqual(
-            form.errors["active_session"],
-            ["Ensure this value has at most 200 characters (it has 201)."],
-        )
-
-    def test_cms_wizards_course_submit_form_no_active_session(self):
-        """
-        We should be able to create several courses with `active_session` left blank
-        """
-        # An organization and a parent page should pre-exist
-        organization = OrganizationFactory()
-        create_page(
-            "Courses", "richie/fullwidth.html", "en", reverse_id=Course.ROOT_REVERSE_ID
-        )
-        data = {"title": "Title1", "organization": organization.id}
-        form = CourseWizardForm(data=data)
-        self.assertTrue(form.is_valid())
-        form.save()
-
-        data = {"title": "Title2", "organization": organization.id}
-        form = CourseWizardForm(data=data)
-        self.assertTrue(form.is_valid())
-        form.save()
-
-        # We should have 2 courses with no `active_session`
-        self.assertEqual(Course.objects.filter(active_session__isnull=True).count(), 2)
-
-    def test_cms_wizards_course_already_existing_course_key(self):
-        """
-        We should not be able to create a course page with a session key that is already set
-        on an existing course.
-        """
-        # An organization and a parent page should pre-exist
-        organization = OrganizationFactory()
-        create_page(
-            "Courses", "richie/fullwidth.html", "en", reverse_id=Course.ROOT_REVERSE_ID
-        )
-        # Create a pre-existing course page
-        CourseFactory(active_session="course-key")
-
-        form = CourseWizardForm(
-            data={
-                "title": "My title",
-                "active_session": "course-key",
-                "organization": organization.id,
-            }
-        )
-        self.assertFalse(form.is_valid())
-        self.assertEqual(
-            form.errors["active_session"],
-            ["A course with this active session already exists"],
         )
