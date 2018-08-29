@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 from richie.apps.courses.factories import CourseFactory, CourseRunFactory
+from richie.apps.courses.models import CourseRun
 
 
 class CourseRunModelsTestCase(TestCase):
@@ -19,6 +20,14 @@ class CourseRunModelsTestCase(TestCase):
         with self.assertRaises(ValidationError) as context:
             CourseRunFactory(course=None)
         self.assertEqual(context.exception.messages[0], "This field cannot be null.")
+
+    def test_models_course_run_fields_course_cascade(self):
+        """
+        A course run should be deleted if its related course is deleted.
+        """
+        course_run = CourseRunFactory()
+        course_run.course.delete()
+        self.assertFalse(CourseRun.objects.filter(id=course_run.id).exists())
 
     def test_models_course_run_fields_course_runs(self):
         """

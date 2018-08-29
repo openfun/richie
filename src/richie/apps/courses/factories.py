@@ -3,17 +3,20 @@ Courses factories
 """
 import os
 import random
+from datetime import datetime, timedelta
 
 from django.core.files import File
+from django.utils import timezone
 
 import factory
+import pytz
 from cms.api import add_plugin
 from filer.models.imagemodels import Image
 
 from ..core.factories import FilerImageFactory, PageExtensionDjangoModelFactory
 from ..core.helpers import create_text_plugin
 from ..core.tests.utils import file_getter
-from .models import Course, Licence, Organization, Subject
+from .models import Course, CourseRun, Licence, Organization, Subject
 
 VIDEO_SAMPLE_LINKS = (
     (
@@ -254,6 +257,91 @@ class CourseFactory(PageExtensionDjangoModelFactory):
         """Add organizations to ManyToMany relation."""
         if create and extracted:
             self.organizations.set(extracted)
+
+
+class CourseRunFactory(factory.django.DjangoModelFactory):
+    """
+    A factory to automatically generate random yet meaningful course runs in our tests.
+
+    Random dates are proposed realistically so that:
+        - now <= start
+        - enrollment_start <= start <= end
+        - enrollment_start <= enrollment_end <= end
+    """
+
+    class Meta:
+        model = CourseRun
+
+    course = factory.SubFactory(CourseFactory)
+    resource_link = factory.Faker("uri")
+
+    # pylint: disable=no-self-use
+    @factory.lazy_attribute
+    def start(self):
+        """
+        A start datetime for the course run is chosen randomly in the future (it can
+        of course be forced if we want something else), then the other significant dates
+        for the course run are chosen randomly in periods that make sense with this start date.
+        """
+        now = timezone.now()
+        period = timedelta(days=1000)
+        return pytz.timezone("UTC").localize(
+            datetime.fromordinal(
+                random.randrange(now.toordinal(), (now + period).toordinal())
+            )
+        )
+
+    @factory.lazy_attribute
+    def end(self):
+        """
+        The end datetime is at a random duration after the start datetme (we pick within 90 days).
+        """
+        if not self.start:
+            return None
+        period = timedelta(days=90)
+        return pytz.timezone("UTC").localize(
+            datetime.fromordinal(
+                random.randrange(
+                    self.start.toordinal(), (self.start + period).toordinal()
+                )
+            )
+        )
+
+    @factory.lazy_attribute
+    def enrollment_start(self):
+        """
+        The start of enrollment is a random datetime before the start datetime.
+        """
+        if not self.start:
+            return None
+        period = timedelta(days=90)
+        return pytz.timezone("UTC").localize(
+            datetime.fromordinal(
+                random.randrange(
+                    (self.start - period).toordinal(), self.start.toordinal()
+                )
+            )
+        )
+
+    @factory.lazy_attribute
+    def enrollment_end(self):
+        """
+        The end of enrollment is a random datetime between the start of enrollment
+        and the end of the course.
+        If the enrollment start and end datetimes have been forced to incoherent dates,
+        then just don't set any end of enrollment...
+        """
+        if not self.start:
+            return None
+        end = self.end or self.start + timedelta(days=random.randint(1, 90))
+        enrollment_start = self.enrollment_start or self.start - timedelta(
+            days=random.randint(1, 90)
+        )
+        return pytz.timezone("UTC").localize(
+            datetime.fromordinal(
+                random.randrange(enrollment_start.toordinal(), end.toordinal())
+            )
+        )
 
 
 class SubjectFactory(BLDPageExtensionDjangoModelFactory):

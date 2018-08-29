@@ -6,6 +6,7 @@ from cms.test_utils.testcases import CMSTestCase
 from richie.apps.core.factories import UserFactory
 from richie.apps.courses.factories import (
     CourseFactory,
+    CourseRunFactory,
     OrganizationFactory,
     SubjectFactory,
 )
@@ -34,6 +35,7 @@ class CourseCMSTestCase(CMSTestCase):
             with_subjects=subjects,
         )
         page = course.extended_object
+        course_runs = CourseRunFactory.create_batch(2, course=course)
 
         # Publish only 2 out of 4 subjects and 2 out of 4 organizations
         subjects[0].extended_object.publish("en")
@@ -112,6 +114,15 @@ class CourseCMSTestCase(CMSTestCase):
                 response, organization.extended_object.get_title(), html=True
             )
 
+        # Course runs should be in the page
+        for course_run in course_runs:
+            self.assertContains(
+                response,
+                '<a class="course-run__aside__link" href="{:s}">'.format(
+                    course_run.resource_link
+                ),
+            )
+
     def test_templates_course_detail_cms_draft_content(self):
         """
         A staff user should see a draft course including its draft elements with
@@ -130,6 +141,7 @@ class CourseCMSTestCase(CMSTestCase):
             with_subjects=subjects,
         )
         page = course.extended_object
+        course_runs = CourseRunFactory.create_batch(2, course=course)
 
         # Publish only 2 out of 4 subjects and 2 out of 4 organizations
         subjects[0].extended_object.publish("en")
@@ -220,6 +232,15 @@ class CourseCMSTestCase(CMSTestCase):
                     title=subject.extended_object.get_title(),
                 ),
                 html=True,
+            )
+
+        # Course runs should be in the page
+        for course_run in course_runs:
+            self.assertContains(
+                response,
+                '<a class="course-run__aside__link" href="{:s}">'.format(
+                    course_run.resource_link
+                ),
             )
 
     def test_templates_course_detail_cms_draft_content_draft_organization_main(self):
