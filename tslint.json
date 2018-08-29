@@ -8,6 +8,8 @@
     "member-access": [true, "no-public"],
     "no-console": [true, "log", "error"],
     "no-empty": false,
+    "object-literal-key-quotes": [true, "as-needed"],
+    "one-line": false,
     "quotemark": [true, "single", "avoid-escape", "jsx-double"]
   },
   "rulesDirectory": []
