@@ -34,7 +34,7 @@ class CourseRunInline(admin.StackedInline):
 class CourseAdmin(PageExtensionAdmin):
     """Admin class for the Course model"""
 
-    list_display = ["title", "organization_main", "active_session"]
+    list_display = ["title", "organization_main"]
     inlines = [CourseRunInline]
 
     # pylint: disable=no-self-use

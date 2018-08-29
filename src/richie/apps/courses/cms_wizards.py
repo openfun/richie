@@ -24,34 +24,8 @@ class CourseWizardForm(BaseWizardForm):
         label=_("Organization"),
         help_text=_("The organization in charge of this course"),
     )
-    active_session = forms.CharField(
-        max_length=200,
-        empty_value=None,
-        required=False,
-        widget=forms.TextInput(),
-        label=_("Course key"),
-        help_text=_("Course key of the active session"),
-    )
 
     model = Course
-
-    def clean_active_session(self):
-        """
-        Ensure that a course does not already exist with this active session key.
-        """
-
-        if (
-            self.cleaned_data.get("active_session")
-            # pylint: disable=no-member
-            and Course.objects.filter(
-                active_session=self.cleaned_data["active_session"]
-            ).exists()
-        ):
-            raise forms.ValidationError(
-                _("A course with this active session already exists")
-            )
-
-        return self.cleaned_data["active_session"]
 
     def save(self):
         """
@@ -60,9 +34,7 @@ class CourseWizardForm(BaseWizardForm):
         """
         page = super().save()
         Course.objects.create(
-            extended_object=page,
-            organization_main=self.cleaned_data["organization"],
-            active_session=self.cleaned_data["active_session"],
+            extended_object=page, organization_main=self.cleaned_data["organization"]
         )
         return page
 
