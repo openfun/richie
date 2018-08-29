@@ -177,6 +177,17 @@ class Course(BasePageExtension):
                 )
         return super().validate_unique(exclude=exclude)
 
+    @property
+    def course_runs(self):
+        """
+        This property replaces the backward relation to course runs so that we always return
+        the course runs related to the draft version of a course.
+        """
+        try:
+            return self.draft_extension.courserun_set.all()
+        except Course.DoesNotExist:
+            return self.courserun_set.all()
+
     def save(self, *args, **kwargs):
         """
         Enforce validation each time an instance is saved
@@ -199,7 +210,7 @@ class CourseRun(models.Model):
     course = models.ForeignKey(
         Course,
         verbose_name=_("course"),
-        related_name="course_runs",
+        related_name=None,
         limit_choices_to={"extended_object__publisher_is_draft": True},
         on_delete=models.CASCADE,
     )
