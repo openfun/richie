@@ -13,6 +13,7 @@ from cms import models as cms_models
 
 from richie.apps.courses.factories import (
     CourseFactory,
+    CourseRunFactory,
     LicenceFactory,
     OrganizationFactory,
     SubjectFactory,
@@ -82,11 +83,21 @@ PAGE_INFOS = {
 }
 
 
+def get_number_of_course_runs():
+    """
+    Returns a random integer between 0 and 5. We make it a convenience method so that it can
+    be mocked in tests.
+    """
+    return random.randint(0, 5)
+
+
 # pylint: disable=no-member
 #
 # Looks like pylint is not relevant at guessing object types when cascading
 # methods over querysets: Instance of 'list' has no 'delete' member (no-member).
 # We choose to ignore this false positive warning.
+
+
 def clear_cms_data():
     """Clear all CMS data (CMS models + apps models)"""
 
@@ -94,7 +105,7 @@ def clear_cms_data():
     cms_models.Title.objects.all().delete()
     cms_models.CMSPlugin.objects.all().delete()
     cms_models.Placeholder.objects.all().delete()
-    Course.objects.all().delete()
+    Course.objects.all().delete()  # Deletes the associated course runs as well by cascading
     Organization.objects.all().delete()
     Subject.objects.all().delete()
     Person.objects.all().delete()
@@ -167,7 +178,7 @@ def create_demo_site():
         course_organizations = random.sample(
             organizations, NB_COURSES_ORGANIZATION_RELATIONS
         )
-        CourseFactory(
+        course = CourseFactory(
             languages=[l[0] for l in settings.LANGUAGES],
             parent=pages_created["courses"],
             organization_main=random.choice(course_organizations),
@@ -189,6 +200,10 @@ def create_demo_site():
             with_subjects=random.sample(subjects, NB_COURSES_SUBJECT_RELATIONS),
             should_publish=True,
         )
+        # Add a random number of course runs to the course
+        nb_course_runs = get_number_of_course_runs()
+        if nb_course_runs > 0:
+            CourseRunFactory.create_batch(nb_course_runs, course=course)
 
 
 class Command(BaseCommand):
