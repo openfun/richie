@@ -23,6 +23,7 @@ from richie.apps.core.management.commands.create_demo_site import (
 )
 from richie.apps.courses.factories import (
     CourseFactory,
+    CourseRunFactory,
     OrganizationFactory,
     SubjectFactory,
 )
@@ -67,12 +68,24 @@ class CreateDemoSiteCommandsTestCase(CMSTestCase):
     @mock.patch.object(SubjectFactory, "create")
     @mock.patch.object(PersonFactory, "create")
     @mock.patch.object(OrganizationFactory, "create")
+    @mock.patch.object(CourseRunFactory, "create")
     @mock.patch.object(CourseFactory, "create")
+    @mock.patch(
+        "richie.apps.core.management.commands.create_demo_site.get_number_of_course_runs",
+        return_value=3,
+    )
     @mock.patch(
         "richie.apps.core.management.commands.create_demo_site.create_i18n_page"
     )
     def test_commands_create_demo_site_function_success(
-        self, mock_page, mock_course, mock_organization, mock_person, mock_subject
+        self,
+        mock_page,
+        mock_nb_course_runs,
+        mock_course,
+        mock_course_runs,
+        mock_organization,
+        mock_person,
+        mock_subject,
     ):  # pylint: disable=too-many-arguments
         """
         Calling the `create_demo_site` function should trigger creating root
@@ -95,6 +108,8 @@ class CreateDemoSiteCommandsTestCase(CMSTestCase):
         # Check that the number of pages created is as expected
         self.assertEqual(mock_page.call_count, root_pages_length)
         self.assertEqual(mock_course.call_count, NB_COURSES)
+        self.assertEqual(mock_course_runs.call_count, NB_COURSES * 3)
+        self.assertEqual(mock_nb_course_runs.call_count, NB_COURSES)
         self.assertEqual(mock_organization.call_count, NB_ORGANIZATIONS)
         self.assertEqual(mock_subject.call_count, NB_SUBJECTS)
         self.assertEqual(mock_person.call_count, NB_PERSONS)
@@ -188,9 +203,3 @@ class CreateDemoSiteCommandsTestCase(CMSTestCase):
             ),
         ]
         self.assertEqual(mock_page.call_args_list, expected_calls_for_root_pages)
-
-        # Check that the calls to create each object were triggered as expected
-        self.assertEqual(mock_course.call_count, NB_COURSES)
-        self.assertEqual(mock_organization.call_count, NB_ORGANIZATIONS)
-        self.assertEqual(mock_subject.call_count, NB_SUBJECTS)
-        self.assertEqual(mock_person.call_count, NB_PERSONS)
