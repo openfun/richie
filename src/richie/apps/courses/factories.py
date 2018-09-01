@@ -103,7 +103,7 @@ class OrganizationFactory(BLDPageExtensionDjangoModelFactory):
 
     class Meta:
         model = Organization
-        exclude = ["languages", "parent", "template", "title"]
+        exclude = ["languages", "parent", "template", "in_navigation", "title"]
 
     template = Organization.TEMPLATE_DETAIL
 
@@ -131,7 +131,7 @@ class CourseFactory(PageExtensionDjangoModelFactory):
 
     class Meta:
         model = Course
-        exclude = ["languages", "parent", "template", "title"]
+        exclude = ["languages", "parent", "template", "in_navigation", "title"]
 
     template = Course.TEMPLATE_DETAIL
 
@@ -324,7 +324,7 @@ class SubjectFactory(BLDPageExtensionDjangoModelFactory):
 
     class Meta:
         model = Subject
-        exclude = ["languages", "template", "title", "parent"]
+        exclude = ["languages", "template", "in_navigation", "title", "parent"]
 
     template = Subject.TEMPLATE_DETAIL
 
