@@ -34,7 +34,7 @@ class PersonFactory(PageExtensionDjangoModelFactory):
 
     class Meta:
         model = Person
-        exclude = ["languages", "parent", "template", "title"]
+        exclude = ["languages", "parent", "template", "in_navigation", "title"]
 
     template = Person.TEMPLATE_DETAIL
 

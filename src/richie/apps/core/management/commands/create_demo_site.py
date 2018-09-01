@@ -22,10 +22,11 @@ from richie.apps.courses.models import Course, Organization, Subject
 from richie.apps.persons.factories import PersonFactory
 from richie.apps.persons.models import Person
 
-from ...helpers import create_i18n_page
+from ...helpers import recursive_page_creation
 
 logger = logging.getLogger("richie.commands.core.create_demo_site")
 
+DEMO_ANNEX_PAGE_ID = "annex"
 NB_COURSES = 3
 NB_COURSES_ORGANIZATION_RELATIONS = 3
 NB_COURSES_SUBJECT_RELATIONS = 4
@@ -37,14 +38,17 @@ NB_SUBJECTS = 8
 PAGE_INFOS = {
     "home": {
         "content": {"en": "Home", "fr": "Accueil"},
+        "in_navigation": False,
         "kwargs": {"template": "richie/fullwidth.html"},
     },
     "news": {
         "content": {"en": "News", "fr": "Actualités"},
+        "in_navigation": True,
         "kwargs": {"template": "richie/fullwidth.html"},
     },
     "courses": {
         "content": {"en": "Courses", "fr": "Cours"},
+        "in_navigation": True,
         "kwargs": {
             "reverse_id": Course.ROOT_REVERSE_ID,
             "template": "search/search.html",
@@ -52,6 +56,7 @@ PAGE_INFOS = {
     },
     "subjects": {
         "content": {"en": "Subjects", "fr": "Sujets"},
+        "in_navigation": False,
         "kwargs": {
             "reverse_id": Subject.ROOT_REVERSE_ID,
             "template": "richie/child_pages_list.html",
@@ -59,6 +64,7 @@ PAGE_INFOS = {
     },
     "organizations": {
         "content": {"en": "Organizations", "fr": "Etablissements"},
+        "in_navigation": True,
         "kwargs": {
             "reverse_id": Organization.ROOT_REVERSE_ID,
             "template": "richie/child_pages_list.html",
@@ -66,6 +72,7 @@ PAGE_INFOS = {
     },
     "persons": {
         "content": {"en": "Persons", "fr": "Personnes"},
+        "in_navigation": False,
         "kwargs": {
             "reverse_id": Person.ROOT_REVERSE_ID,
             "template": "richie/child_pages_list.html",
@@ -73,12 +80,24 @@ PAGE_INFOS = {
     },
     "dashboard": {
         "content": {"en": "Dashboard", "fr": "Tableau de bord"},
+        "in_navigation": False,
         "cms": False,
         "kwargs": {"template": "richie/fullwidth.html"},
     },
-    "about": {
-        "content": {"en": "About", "fr": "A propos"},
-        "kwargs": {"template": "richie/fullwidth.html"},
+    "annex": {
+        "content": {"en": "Annex", "fr": "Annexe"},
+        "in_navigation": False,
+        "kwargs": {
+            "template": "richie/fullwidth.html",
+            "reverse_id": DEMO_ANNEX_PAGE_ID,
+        },
+        "children": {
+            "about": {
+                "content": {"en": "About", "fr": "A propos"},
+                "in_navigation": True,
+                "kwargs": {"template": "richie/fullwidth.html"},
+            }
+        },
     },
 }
 
@@ -121,17 +140,7 @@ def create_demo_site():
     site = Site.objects.get(id=1)
 
     # Create pages as described in PAGES_INFOS
-    pages_created = {}
-    for name, info in PAGE_INFOS.items():
-        page = create_i18n_page(
-            info["content"],
-            is_homepage=(name == "home"),
-            in_navigation=True,
-            published=True,
-            site=site,
-            **info["kwargs"]
-        )
-        pages_created[name] = page
+    pages_created = recursive_page_creation(site, PAGE_INFOS)
 
     # Create some licences
     licences = LicenceFactory.create_batch(NB_LICENCES)
@@ -145,6 +154,7 @@ def create_demo_site():
         fill_description=True,
         fill_logo=True,
         should_publish=True,
+        in_navigation=True,
     )
 
     # Create subjects under the `Subjects` page
@@ -156,6 +166,7 @@ def create_demo_site():
         fill_description=True,
         fill_logo=True,
         should_publish=True,
+        in_navigation=True,
     )
 
     # Django parler require a language to be manually set when working out of
@@ -170,6 +181,7 @@ def create_demo_site():
         fill_portrait=True,
         fill_resume=True,
         should_publish=True,
+        in_navigation=True,
     )
 
     # Create courses under the `Course` page with subjects and organizations
@@ -199,6 +211,7 @@ def create_demo_site():
             with_organizations=course_organizations,
             with_subjects=random.sample(subjects, NB_COURSES_SUBJECT_RELATIONS),
             should_publish=True,
+            in_navigation=True,
         )
         # Add a random number of course runs to the course
         nb_course_runs = get_number_of_course_runs()

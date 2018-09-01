@@ -105,7 +105,7 @@ def create_text_plugin(
     a placeholder filled with some random text using Faker.
 
     Arguments:
-        page (Page model instance): Instance of a Page used to search for
+        page (cms.models.pagemodel.Page): Instance of a Page used to search for
             given slot (aka a placeholder name).
         slot (string): A placeholder name available from page template.
 
@@ -148,3 +148,45 @@ def create_text_plugin(
             plugin_type=plugin_type,
             body="".join(body),
         )
+
+
+def recursive_page_creation(site, pages, parent=None):
+    """
+    Recursively create page following tree structure with parent/children.
+
+    Arguments:
+        site (django.contrib.sites.models.Site): Site object which page will
+            be linked to.
+        pages (dict): Page items to create recursively such as 'children' key
+            value can be a dict to create child pages. The current page is
+            given to children for parent relation.
+
+    Keyword Arguments:
+        parent (cms.models.pagemodel.Page): Page used as a parent to create
+            page item from `pages` argument.
+
+    Returns:
+        dict: Created page items.
+    """
+    pages_created = {}
+
+    for name, info in pages.items():
+        page = create_i18n_page(
+            info["content"],
+            is_homepage=(name == "home"),
+            in_navigation=info["in_navigation"],
+            published=True,
+            site=site,
+            parent=parent,
+            **info["kwargs"]
+        )
+
+        pages_created[name] = page
+
+        # Create children
+        if info.get("children", None):
+            pages_created[name].created_children = recursive_page_creation(
+                site, info["children"], parent=page
+            )
+
+    return pages_created

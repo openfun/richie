@@ -51,6 +51,7 @@ class PageExtensionDjangoModelFactory(factory.django.DjangoModelFactory):
     parent = None
     template = None
     title = None
+    in_navigation = False
 
     @factory.lazy_attribute
     def extended_object(self):
@@ -62,6 +63,7 @@ class PageExtensionDjangoModelFactory(factory.django.DjangoModelFactory):
             title=self.title,
             languages=self.languages,
             template=self.template,
+            in_navigation=self.in_navigation,
             parent=self.parent,
         )
 
