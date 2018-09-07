@@ -1,0 +1,18 @@
+{% if current_page.publisher_is_draft %}
+  {% if organization.id != course.organization_main.id %}
+    {% if organization.check_publication is True %}
+      <li class="course-detail__content__organizations__item">
+        {{ organization.public_extension.extended_object.get_title }}
+      </li>
+    {% else %}
+      <li class="course-detail__content__organizations__item course-detail__content__organizations__item--draft">
+        {{ organization.extended_object.get_title }}
+      </li>
+    {% endif %}
+  {% endif %}
+{# If the current page is the published version, show only the organizations that are published #}
+{% elif organization.check_publication is True and organization.id != course.organization_main.public_extension.id %}
+    <li class="course-detail__content__organizations__item">
+      {{ organization.extended_object.get_title }}
+    </li>
+{% endif %}

@@ -80,6 +80,7 @@ class PageExtensionDjangoModelFactory(factory.django.DjangoModelFactory):
         if results.get("should_publish", False):
             for language in instance.extended_object.get_languages():
                 instance.extended_object.publish(language)
+        instance.refresh_from_db()
 
     @factory.post_generation
     # pylint: disable=no-self-use,unused-argument

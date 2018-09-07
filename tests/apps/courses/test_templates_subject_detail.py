@@ -35,7 +35,7 @@ class SubjectCMSTestCase(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
 
-        # Publish and ensure content is correct
+        # Publish the subject and ensure the content is correct
         page.publish("en")
         response = self.client.get(url)
         self.assertContains(
@@ -49,6 +49,7 @@ class SubjectCMSTestCase(TestCase):
             '<h1 class="subject-detail__title">Very interesting subject en</h1>',
             html=True,
         )
+
         # Only published courses should be present on the page
         for course in courses[:2]:
             self.assertContains(

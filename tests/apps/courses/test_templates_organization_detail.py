@@ -35,7 +35,7 @@ class OrganizationCMSTestCase(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
 
-        # Publish and ensure content is correct
+        # Publish the organization and ensure the content is correct
         page.publish("en")
         response = self.client.get(url)
         self.assertContains(

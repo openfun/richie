@@ -40,13 +40,6 @@ class Organization(BasePageExtension):
             model=self._meta.verbose_name.title(),
         )
 
-    def copy_relations(self, oldinstance, language):
-        """
-        We must manually copy the many-to-many relations from the "draft" instance of
-        to the "published" instance.
-        """
-        self.courses.set(oldinstance.courses.drafts())
-
     def clean(self):
         """
         We normalize the code with slugify for better uniqueness
@@ -79,6 +72,18 @@ class Organization(BasePageExtension):
                     {"code": ["An Organization already exists with this code."]}
                 )
         return super().validate_unique(exclude=exclude)
+
+    def copy_relations(self, oldinstance, language):
+        """
+        We must manually copy the many-to-many relations so that the relations between the
+        published instances are realigned with draft instances.
+        """
+        # pylint: disable=no-member
+        self.courses.set(
+            self.courses.model.objects.filter(
+                draft_extension__organizations=oldinstance
+            )
+        )
 
     def save(self, *args, **kwargs):
         """

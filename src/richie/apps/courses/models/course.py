@@ -52,12 +52,18 @@ class Course(BasePageExtension):
 
     def copy_relations(self, oldinstance, language):
         """
-        We must manually copy the many-to-many relations from the "draft" instance
-        to the "published" instance.
+        We must manually copy the many-to-many relations so that the relations between the
+        published instances are realigned with draft instances.
         """
         # pylint: disable=no-member
-        self.organizations.set(oldinstance.organizations.drafts())
-        self.subjects.set(oldinstance.subjects.drafts())
+        self.organizations.set(
+            self.organizations.model.objects.filter(
+                draft_extension__courses=oldinstance
+            )
+        )
+        self.subjects.set(
+            self.subjects.model.objects.filter(draft_extension__courses=oldinstance)
+        )
 
     @property
     def course_runs(self):
@@ -78,7 +84,7 @@ class Course(BasePageExtension):
         self.full_clean()
         super().save(*args, **kwargs)
 
-        if self.pk:
+        if self.pk and self.extended_object.publisher_is_draft:
             # pylint: disable=no-member
             self.organizations.add(self.organization_main)
 
