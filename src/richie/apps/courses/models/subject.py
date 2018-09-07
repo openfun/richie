@@ -32,10 +32,13 @@ class Subject(BasePageExtension):
 
     def copy_relations(self, oldinstance, language):
         """
-        We must manually copy the many-to-many relations from the "draft" instance
-        to the "published" instance.
+        We must manually copy the many-to-many relations so that the relations between the
+        published instances are realigned with draft instances.
         """
-        self.courses.set(oldinstance.courses.drafts())
+        # pylint: disable=no-member
+        self.courses.set(
+            self.courses.model.objects.filter(draft_extension__subjects=oldinstance)
+        )
 
 
 extension_pool.register(Subject)

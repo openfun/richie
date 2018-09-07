@@ -57,7 +57,7 @@
       <div class="course-detail__content__subjects">
         <h2>{% trans 'Subjects' %}</h2>
         <ul class="course-detail__content__subjects__list">
-          {% for subject in course.subjects.drafts %}
+          {% for subject in course.subjects.all %}
             {# If the current page is a draft, show draft subjects with a class annotation for styling #}
             {% if current_page.publisher_is_draft %}
               {% if subject.check_publication is True %}
@@ -72,7 +72,7 @@
             {# If the current course page is the published version, show only the subjects that are published #}
             {% elif subject.check_publication is True %}
               <li class="course-detail__content__subjects__item">
-                {{ subject.public_extension.extended_object.get_title }}
+                {{ subject.extended_object.get_title }}
               </li>
             {% endif %}
           {% empty %}
@@ -87,12 +87,10 @@
         <h2>{% trans 'Organizations' %}</h2>
         <ul class="course-detail__content__organizations__list">
           {% if course.organization_main %}
-            {% include "courses/cms/organization_fragment.html" with organization=course.organization_main is_main=True %}
+            {% include "courses/cms/fragment_course_organization_main.html" with organization=course.organization_main %}
           {% endif %}
-          {% for organization in course.organizations.drafts %}
-            {% if organization.id != course.organization_main.id %}
-              {% include "courses/cms/organization_fragment.html" %}
-            {% endif %}
+          {% for organization in course.organizations.all %}
+            {% include "courses/cms/fragment_course_organizations.html" %}
           {% endfor %}
         </ul>
       </div>

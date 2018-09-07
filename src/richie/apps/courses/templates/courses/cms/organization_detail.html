@@ -26,7 +26,7 @@
         </div>
 
         <ul class="organization-detail__content__courses">
-          {% for course in organization.courses.drafts %}
+          {% for course in organization.courses.all %}
             {# If the current page is a draft, show draft courses with a class annotation for styling #}
             {% if current_page.publisher_is_draft %}
               {% if course.check_publication is True %}
@@ -41,7 +41,7 @@
             {# If the current course page is the published version, show only the courses that are published #}
             {% elif course.check_publication is True %}
               <li class="organization-detail__content__courses__item">
-                {{ course.public_extension.extended_object.get_title }}
+                {{ course.extended_object.get_title }}
               </li>
             {% endif %}
           {% empty %}
