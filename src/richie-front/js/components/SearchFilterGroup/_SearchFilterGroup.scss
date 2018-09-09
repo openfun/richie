@@ -1,12 +1,26 @@
+$richie-search-filters-group-margin: null !default;
+$richie-search-filters-group-padding: null !default;
+
+$richie-search-filters-group-title-margin: null !default;
+$richie-search-filters-group-title-padding: null !default;
+$richie-search-filters-group-title-fontsize: null !default;
+$richie-search-filters-group-title-fontweight: null !default;
+$richie-search-filters-group-title-fontcolor: null !default;
+
+
 .search-filter-group {
-  margin: 2rem;
+  margin: $richie-search-filters-group-margin;
+  padding: $richie-search-filters-group-padding;
 
   &__title {
-    padding: 0 $list-group-item-padding-x;
+    margin: $richie-search-filters-group-title-margin;
+    padding: $richie-search-filters-group-title-padding;
+    font-size: $richie-search-filters-group-title-fontsize;
+    font-weight: $richie-search-filters-group-title-fontweight;
+    color: $richie-search-filters-group-title-fontcolor;
   }
 
   &__list {
-    @extend .list-group;
-    @extend .list-group-flush;
+    @include m-o-list-group__container;
   }
 }

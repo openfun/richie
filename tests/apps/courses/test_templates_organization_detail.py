@@ -51,7 +51,7 @@ class OrganizationCMSTestCase(TestCase):
         for course in courses[:2]:
             self.assertContains(
                 response,
-                '<li class="organization-detail__content__courses__item">{:s}</li>'.format(
+                '<p class="course-glimpse__content__title">{:s}</p>'.format(
                     course.extended_object.get_title()
                 ),
                 html=True,
@@ -94,10 +94,11 @@ class OrganizationCMSTestCase(TestCase):
         )
 
         # The published courses should be present on the page
+        # pylint: disable=duplicate-code
         for course in courses[:2]:
             self.assertContains(
                 response,
-                '<li class="organization-detail__content__courses__item">{:s}</li>'.format(
+                '<p class="course-glimpse__content__title">{:s}</p>'.format(
                     course.extended_object.get_title()
                 ),
                 html=True,
@@ -106,9 +107,18 @@ class OrganizationCMSTestCase(TestCase):
         for course in courses[-2:]:
             self.assertContains(
                 response,
-                '<li class="{element:s} {element:s}--draft">{title:s}</li>'.format(
-                    element="organization-detail__content__courses__item",
-                    title=course.extended_object.get_title(),
+                (
+                    '<a class="{name:s} {name:s}--link {name:s}--draft" '
+                    'href="{link:s}">'
+                ).format(
+                    name="course-glimpse",
+                    link=course.extended_object.get_absolute_url(),
+                ),
+            )
+            self.assertContains(
+                response,
+                '<p class="course-glimpse__content__title">{title:s}</p>'.format(
+                    title=course.extended_object.get_title()
                 ),
                 html=True,
             )

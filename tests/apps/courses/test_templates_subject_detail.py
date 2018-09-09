@@ -54,7 +54,7 @@ class SubjectCMSTestCase(TestCase):
         for course in courses[:2]:
             self.assertContains(
                 response,
-                '<li class="subject-detail__content__courses__item">{:s}</li>'.format(
+                '<p class="course-glimpse__content__title">{:s}</p>'.format(
                     course.extended_object.get_title()
                 ),
                 html=True,
@@ -98,10 +98,11 @@ class SubjectCMSTestCase(TestCase):
             html=True,
         )
         # The published courses should be present on the page
+        # pylint: disable=duplicate-code
         for course in courses[:2]:
             self.assertContains(
                 response,
-                '<li class="subject-detail__content__courses__item">{:s}</li>'.format(
+                '<p class="course-glimpse__content__title">{:s}</p>'.format(
                     course.extended_object.get_title()
                 ),
                 html=True,
@@ -110,8 +111,18 @@ class SubjectCMSTestCase(TestCase):
         for course in courses[-2:]:
             self.assertContains(
                 response,
-                '<li class="{element:s} {element:s}--draft">{title:s}</li>'.format(
-                    element="subject-detail__content__courses__item",
+                (
+                    '<a class="{element:s} {element:s}--link {element:s}--draft" '
+                    'href="{link:s}">'
+                ).format(
+                    element="course-glimpse",
+                    link=course.extended_object.get_absolute_url(),
+                ),
+            )
+            self.assertContains(
+                response,
+                '<p class="{element:s}">{title:s}</p>'.format(
+                    element="course-glimpse__content__title",
                     title=course.extended_object.get_title(),
                 ),
                 html=True,
