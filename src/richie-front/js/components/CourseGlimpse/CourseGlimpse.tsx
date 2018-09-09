@@ -35,22 +35,23 @@ export const CourseGlimpse = injectIntl(
     const { course, intl, organizationMain } = props;
 
     return (
-      <div className="course-glimpse-container">
-        <div className="course-glimpse">
+      <a className="course-glimpse course-glimpse--link" href="#">
+        <div className="course-glimpse__media">
           <img
-            className="course-glimpse__image"
             src={'https://www.fun-mooc.fr' + course.thumbnails.small}
             alt={intl.formatMessage(messages.altText, {
               courseTitle: course.title,
             })}
           />
-          <div className="course-glimpse__body">
-            <div className="course-glimpse__body__title">{course.title}</div>
-            <div className="course-glimpse__body__org">
-              {(organizationMain && organizationMain.name) || ''}
-            </div>
+        </div>
+        <div className="course-glimpse__content">
+          <div className="course-glimpse__content__wrapper">
+            <p className="course-glimpse__content__title">{course.title}</p>
+            <p>{(organizationMain && organizationMain.name) || ''}</p>
           </div>
-          <div className="course-glimpse__date">
+        </div>
+        <div className="course-glimpse__footer">
+          <p className="course-glimpse__footer__date">
             <FormattedMessage
               {...messages.date}
               values={{
@@ -64,9 +65,9 @@ export const CourseGlimpse = injectIntl(
                 ),
               }}
             />
-          </div>
+          </p>
         </div>
-      </div>
+      </a>
     );
   },
 );

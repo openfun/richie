@@ -1,0 +1,24 @@
+{% load i18n cms_tags %}
+{% comment %}Obviously, context template variable "page" and "course" are required and must be a CMS page instance{% endcomment %}
+{% with glimpse_info=course.glimpse_info %}
+<div class="course-glimpse__media">
+    {% show_placeholder "course_teaser" page %}
+</div>
+<div class="course-glimpse__content">
+    <div class="course-glimpse__content__wrapper">
+        <p class="course-glimpse__content__title">{{ page.get_title }}</p>
+        <p>{{ course.organization_main.extended_object.get_title }}</p>
+    </div>
+    <div class="course-glimpse__footer">
+        <p class="course-glimpse__footer__date">
+            {{ glimpse_info.text|title }}<br>
+            {{ glimpse_info.datetime|date:"DATE_FORMAT" }}
+        </p>
+        {% if glimpse_info.cta %}
+        <div class="course-glimpse__footer__cta">
+            <button class="button">{{ glimpse_info.cta|title }}</button>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endwith %}

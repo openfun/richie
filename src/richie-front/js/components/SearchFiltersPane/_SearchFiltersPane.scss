@@ -1,12 +1,23 @@
+$richie-search-filters-pane-background: null !default;
+
+$richie-search-filters-pane-title-margin: null !default;
+$richie-search-filters-pane-title-padding: null !default;
+$richie-search-filters-pane-title-fontsize: null !default;
+$richie-search-filters-pane-title-fontweight: null !default;
+$richie-search-filters-pane-title-fontcolor: null !default;
+$richie-search-filters-pane-title-textalign: null !default;
+
+
 .search-filters-pane {
-  width: 100%;
-  height: 100%;
-  background: $dark;
-  color: white;
+  background: $richie-search-filters-pane-background;
   overflow: hidden; // Prevent margin-collapsing as .search-filters-pane has a background
 
   &__title {
-    padding: 2rem 0;
-    text-align: center;
+    margin: $richie-search-filters-pane-title-margin;
+    padding: $richie-search-filters-pane-title-padding;
+    font-size: $richie-search-filters-pane-title-fontsize;
+    font-weight: $richie-search-filters-pane-title-fontweight;
+    color: $richie-search-filters-pane-title-fontcolor;
+    text-align: $richie-search-filters-pane-title-textalign;
   }
 }

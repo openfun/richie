@@ -4,11 +4,20 @@
 // Design color palette
 @import 'colors';
 
-// Smaller gutters in grid to increase information density in search results
+
+/// Bootstrap settings
+/// -----
+// More space between columns
 $grid-gutter-width: 20px;
 
-// Light gray default background for the body so containers can be enhanced as page structuring elements
+// Use the footer bg color it seems to continue to the bottom end even with
+// page is empty, body-content bg will make the real base color for contents
 $body-bg: $dodgerblue1;
+
+
+/// Content base
+/// -----
+$richie-body-content-background: $gray97;
 
 
 /// Header topbar
@@ -108,3 +117,130 @@ $richie-footer-poweredby-link-fontcolor: $white;
 /// -----
 ///
 $richie-content-container-bg: $white;
+
+
+///
+/// Course glimpse object
+/// -----
+///
+$richie-course-glimpse-list-maxwidth-constraint: true;
+$richie-course-glimpse-list-margin: 0 auto;
+$richie-course-glimpse-list-padding: 1rem 0;
+
+$richie-course-glimpse-container-width-sm: null;
+$richie-course-glimpse-container-width-md: 50%;
+$richie-course-glimpse-container-width-lg: 33.3333%;
+$richie-course-glimpse-container-width-xl: 25%;
+$richie-course-glimpse-container-gutter: 0.5rem;
+$richie-course-glimpse-container-background: $white;
+$richie-course-glimpse-container-border: 1px solid transparent;
+$richie-course-glimpse-container-border-hover: 1px solid $firebrick6;
+
+$richie-course-glimpse-media-margin: 0 0 1rem 0;
+
+$richie-course-glimpse-caption-width: 60%;
+$richie-course-glimpse-caption-margin: 0;
+$richie-course-glimpse-caption-padding: 0.6rem 0.5rem;
+$richie-course-glimpse-caption-fontsize: 0.9rem;
+$richie-course-glimpse-caption-fontweight: bold;
+$richie-course-glimpse-caption-lineheight: 1.1;
+$richie-course-glimpse-caption-textalign: center;
+$richie-course-glimpse-caption-texttransform: uppercase;
+$richie-course-glimpse-caption-background: $gray80;
+
+$richie-course-glimpse-content-fontsize: 0.9rem;
+$richie-course-glimpse-content-fontcolor: $gray40;
+$richie-course-glimpse-content-textalign: center;
+
+$richie-course-glimpse-title-fontsize: 1rem;
+$richie-course-glimpse-title-fontweight: bold;
+$richie-course-glimpse-title-fontcolor: $dodgerblue3;
+
+$richie-course-glimpse-wrapper-padding: 0.6rem;
+
+$richie-course-glimpse-foot-divider: null;
+
+$richie-course-glimpse-foot-border: 1px solid $gray80;
+
+$richie-course-glimpse-foot-date-width: 55%;
+$richie-course-glimpse-foot-date-padding: 0.3rem 0.5rem;
+$richie-course-glimpse-foot-date-fontsize: 0.9rem;
+$richie-course-glimpse-foot-date-fontcolor: $gray40;
+$richie-course-glimpse-foot-date-textalign: center;
+$richie-course-glimpse-foot-date-background: null;
+
+$richie-course-glimpse-foot-cta-width: 45%;
+$richie-course-glimpse-foot-cta-padding: 0.3rem 0.5rem;
+$richie-course-glimpse-foot-cta-fontsize: 0.9rem;
+$richie-course-glimpse-foot-cta-fontweight: bold;
+$richie-course-glimpse-foot-cta-fontcolor: $white;
+$richie-course-glimpse-foot-cta-textalign: center;
+$richie-course-glimpse-foot-cta-background: $dodgerblue5;
+$richie-course-glimpse-foot-cta-background-hover: $firebrick6;
+
+
+///
+/// Search objects
+/// -----
+///
+$richie-search-breakpoint: lg;
+$richie-search-margin: 0;
+$richie-search-padding: 0;
+
+$richie-search-filters-width: 20.5rem;
+$richie-search-filters-background: $dodgerblue1;
+
+$richie-search-results-padding: 0 1rem 0 2rem;
+
+$richie-search-filters-pane-background: inherit;
+
+$richie-search-filters-pane-title-margin: 0 2.5rem;
+$richie-search-filters-pane-title-padding: 2rem 0 1rem;
+$richie-search-filters-pane-title-fontsize: null;
+$richie-search-filters-pane-title-fontweight: null;
+$richie-search-filters-pane-title-fontcolor: $dodgerblue5;
+$richie-search-filters-pane-title-textalign: null;
+
+$richie-search-filters-group-margin: 2rem 2.5rem;
+$richie-search-filters-group-padding: null;
+
+$richie-search-filters-group-title-margin: 0;
+$richie-search-filters-group-title-padding: 0.4rem 0.5rem;
+$richie-search-filters-group-title-fontsize: 1.4rem;
+$richie-search-filters-group-title-fontweight: null;
+$richie-search-filters-group-title-fontcolor: $white;
+
+$richie-search-filters-item-width: 100%;
+$richie-search-filters-item-margin: null;
+$richie-search-filters-item-padding: 0.4rem 0.5rem;
+$richie-search-filters-item-fontsize: 0.9rem;
+$richie-search-filters-item-fontcolor: rgba($white, 0.85);
+$richie-search-filters-item-fontcolor-hover: $white;
+$richie-search-filters-item-fontweight: normal;
+$richie-search-filters-item-fontweight-hover: normal;
+$richie-search-filters-item-textalign: inherit;
+$richie-search-filters-item-background: inherit;
+$richie-search-filters-item-background-hover: inherit;
+$richie-search-filters-item-divider-border: 1px solid $gray80;
+
+$richie-search-filters-disabled-fontcolor: rgba($white, 0.6);
+$richie-search-filters-disabled-background: null;
+
+$richie-search-filters-active-fontcolor: $white;
+$richie-search-filters-active-fontweight: bold;
+$richie-search-filters-active-background: inherit;
+$richie-search-filters-active-divider-border: 1px solid $white;
+
+
+
+///
+/// Search page template
+/// -----
+///
+$richie-template-search-margin: null;
+$richie-template-search-padding: 1rem 0 0;
+
+$richie-template-search-title-margin: null;
+$richie-template-search-title-padding: null;
+$richie-template-search-title-textalign: center;
+

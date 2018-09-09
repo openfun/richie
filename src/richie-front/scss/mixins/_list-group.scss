@@ -1,0 +1,112 @@
+////
+/// List group
+////
+
+
+///
+/// List group container
+///
+@mixin m-o-list-group__container() {
+  display: flex;
+  flex-direction: column;
+
+  // Reset list default spacing
+  padding-left: 0;
+  margin-bottom: 0;
+}
+
+
+///
+/// List group item
+///
+@mixin m-o-list-group__item(
+  $width: null,
+  $margin: null,
+  $padding: null,
+  $fontsize: null,
+  $fontweight: null,
+  $fontcolor: null,
+  $textalign: null,
+  $background: null,
+  $divider-border: null,
+  $fontweight-hover: null,
+  $fontcolor-hover: null,
+  $background-hover: null,
+  $disabled-fontcolor: null,
+  $disabled-background: null,
+  $active-fontweight: null,
+  $active-fontcolor: null,
+  $active-background: null,
+  $active-divider-border: null,
+) {
+  width: $width;
+  position: relative;
+  display: flex;
+  margin: $margin;
+  padding: $padding;
+  align-items: center;
+  justify-content: space-between;
+  color: $fontcolor;
+  font-size: $fontsize;
+  font-weight: $fontweight;
+  text-align: $textalign;
+  background: $background;
+  border-top: $divider-border;
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 0;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &:hover,
+  &:focus{
+    z-index: 1; // Place hover/active items above their siblings for proper border styling
+    font-weight: $fontweight-hover;
+    color: $fontcolor-hover;
+    text-decoration: none;
+    background: $background-hover;
+  }
+
+  &.disabled,
+  &:disabled {
+    color: $disabled-fontcolor;
+    background-color: $disabled-background;
+  }
+
+  // Include both here for `<a>`s and `<button>`s
+  &.active {
+    z-index: 2; // Place active items above their siblings for proper border styling
+    font-weight: $active-fontweight;
+    color: $active-fontcolor;
+    background: $active-background;
+    border-top: $active-divider-border;
+  }
+}
+
+
+/// Interactive list items
+@mixin m-o-list-group__item--interactive(
+  $fontcolor: null,
+  $fontcolor-hover: null,
+  $background-hover: null,
+  $active-fontcolor: null,
+  $active-background: null,
+) {
+  width: 100%;
+  color: $fontcolor;
+  text-align: inherit;
+
+  &:hover,
+  &:focus{
+    color: $fontcolor-hover;
+    text-decoration: none;
+    background: $background-hover;
+  }
+
+  &:active {
+    color: $active-fontcolor;
+    background: $active-background;
+  }
+}

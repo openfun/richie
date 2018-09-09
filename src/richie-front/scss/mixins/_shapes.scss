@@ -1,0 +1,87 @@
+/*
+ *
+ * Pure CSS shapes
+ *
+ */
+
+///
+/// CSS triangle. To be used in a pseudo element `before` or `after`.
+///
+/// @arg {Number} $triangle-size [null]
+///   Border side size so given a size of 1rem, the triangle will be 2rem
+///   width.
+///
+/// @arg {Color} $triangle-color [null]
+///   Border color that makes the final triangle color.
+///
+/// @arg {Keyword} $triangle-direction [null]
+///   Triangle peak direction. Can be `up`, `right`, `down`, or `left`.
+///
+/// @arg {Boolean} $absolute [true]
+///   If enabled, properties will be made to absolutely positionnate
+///   triangle. Position is determined from peak direction such as "up"
+///   direction means positionnate triangle at bottom, "left" means triangle
+///   at right, etc..
+///
+@mixin m-o-triangle(
+  $triangle-size,
+  $triangle-color,
+  $triangle-direction,
+  $absolute
+) {
+    display: block;
+    width: 0;
+    height: 0;
+
+    border: inset $triangle-size;
+
+    content: '';
+
+    // Peak direction done with border styles
+    @if ($triangle-direction == down) {
+        border-bottom-width: 0;
+        border-top-style: solid;
+        border-color: $triangle-color transparent transparent;
+    }
+    @if ($triangle-direction == up) {
+        border-top-width: 0;
+        border-bottom-style: solid;
+        border-color: transparent transparent $triangle-color;
+    }
+    @if ($triangle-direction == right) {
+        border-right-width: 0;
+        border-left-style: solid;
+        border-color: transparent transparent transparent $triangle-color;
+    }
+    @if ($triangle-direction == left) {
+        border-left-width: 0;
+        border-right-style: solid;
+        border-color: transparent $triangle-color transparent transparent;
+    }
+
+    // Absolute position
+    @if $absolute {
+        position: absolute;
+        @if $triangle-direction == "up" {
+            top: -$triangle-size;
+            bottom: auto;
+            left: calc(50% - #{$triangle-size});
+            right: auto;
+        } @else if $triangle-direction == "down" {
+            bottom: $triangle-size;
+            top: auto;
+            left: calc(50% - #{$triangle-size});
+            right: auto;
+        } @else if $triangle-direction == "left" {
+            top: calc(50% - #{$triangle-size});
+            bottom: auto;
+            left: -$triangle-size;
+            right: auto;
+        } @else if $triangle-direction == "right" {
+            top: calc(50% - #{$triangle-size});
+            bottom: auto;
+            right: $triangle-size;
+            left: auto;
+        }
+    }
+}

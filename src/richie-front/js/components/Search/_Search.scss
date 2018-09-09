@@ -1,13 +1,35 @@
-.search {
-  @include make-row();
+$richie-search-breakpoint: null !default;
+$richie-search-margin: null !default;
+$richie-search-padding: null !default;
+
+$richie-search-filters-width: null !default;
+$richie-search-filters-background: null !default;
+
+$richie-search-results-padding: null !default;
+
+
+.search{
+  display: flex;
+  margin: $richie-search-margin;
+  padding: $richie-search-padding;
+  flex-direction: row;
+  flex-wrap: wrap;
 
   &__filters {
-    @include make-col-ready();
-    @include make-col(3);
+    @include sv-flex(1, 0, 100%);
+    background: $richie-search-filters-background;
+
+    @include media-breakpoint-up(lg) {
+        @include sv-flex(1, 0, $richie-search-filters-width);
+    }
   }
 
   &__results {
-    @include make-col-ready();
-    @include make-col(9);
+    @include sv-flex(1, 0, 100%);
+
+    @include media-breakpoint-up(lg) {
+        @include sv-flex(1, 0, calc(100% - #{$richie-search-filters-width}));
+        padding: $richie-search-results-padding;
+    }
   }
 }
