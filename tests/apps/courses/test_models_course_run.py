@@ -39,9 +39,9 @@ class CourseRunModelsTestCase(TestCase):
         course_runs = set(CourseRunFactory.create_batch(2, course=course))
 
         # The course runs should be accessible from the course
-        self.assertEqual(set(course.course_runs), course_runs)
+        self.assertEqual(set(course.course_runs.all()), course_runs)
 
         # The published course should point to the same course runs
         course.extended_object.publish("en")
         course.refresh_from_db()
-        self.assertEqual(set(course.public_extension.course_runs), course_runs)
+        self.assertEqual(set(course.public_extension.course_runs.all()), course_runs)

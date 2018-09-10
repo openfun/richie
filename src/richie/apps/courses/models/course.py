@@ -2,6 +2,8 @@
 Declare and configure the models for the courses application
 """
 from django.db import models
+from django.db.models import BooleanField, Case, Value, When
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from cms.extensions.extension_pool import extension_pool
@@ -9,6 +11,16 @@ from cms.models.pluginmodel import CMSPlugin
 from filer.fields.image import FilerImageField
 
 from ...core.models import BasePageExtension
+
+GLIMPSE_CTA = [_("enroll now")] * 2 + [None] * 4
+GLIMPSE_TEXT = [
+    _("closing on"),
+    _("starting on"),
+    _("starting on"),
+    _("on-going"),
+    _("archived"),
+    _("coming soon"),
+]
 
 
 class Course(BasePageExtension):
@@ -66,15 +78,83 @@ class Course(BasePageExtension):
         )
 
     @property
+    def draft_self(self):
+        """
+        The draft version of self ie either itself if it is draft, or the related draft if it
+        is public.
+        """
+        try:
+            return self.draft_extension
+        except Course.DoesNotExist:
+            return self
+
+    @property
     def course_runs(self):
         """
         This property replaces the backward relation to course runs so that we always return
         the course runs related to the draft version of a course.
         """
-        try:
-            return self.draft_extension.courserun_set.all()
-        except Course.DoesNotExist:
-            return self.courserun_set.all()
+        return self.draft_self.courserun_set
+
+    @property
+    def glimpse_info(self):
+        """
+        The date to display on a course glimpse. It is the "date of best interest" depending on
+        the situation of a course.
+
+        The game is to find, in the correct order, the first of the following conditions that is
+        verified for this course:
+          0: a run is on-going and open for enrollment > "closing on": {enrollment_end}
+          1: a run is future and open for enrollment > "starting on": {start}
+          2: a run is future and not yet or no more open for enrollment >
+            "starting on": {start}
+          3: a run is on-going but closed for enrollment > "on going": {None}
+          4: there's a finished run in the past > "archived": {None}
+          5: there are no runs at all > "coming soon": {None}
+        """
+        now = timezone.now()
+        best_run = 5
+        interesting_datetime = None
+
+        for course_run in self.course_runs.annotate(
+            is_future=Case(
+                When(start__gt=now, then=Value(True)),
+                default=Value(False),
+                output_field=BooleanField(),
+            ),
+            is_ongoing=Case(
+                When(start__lt=now, end__gt=now, then=Value(True)),
+                default=Value(False),
+                output_field=BooleanField(),
+            ),
+            is_open=Case(
+                When(
+                    enrollment_start__lt=now, enrollment_end__gt=now, then=Value(True)
+                ),
+                default=Value(False),
+                output_field=BooleanField(),
+            ),
+        ).values("is_future", "is_ongoing", "is_open", "start", "enrollment_end"):
+            if course_run["is_ongoing"] and course_run["is_open"]:
+                best_run = 0
+                interesting_datetime = course_run["enrollment_end"]
+                break
+            elif course_run["is_future"] and course_run["is_open"]:
+                best_run = 1
+                interesting_datetime = course_run["start"]
+            elif course_run["is_future"]:
+                best_run = min(2, best_run)
+                interesting_datetime = course_run["start"]
+            elif course_run["is_ongoing"]:
+                best_run = min(3, best_run)
+            else:
+                best_run = min(4, best_run)
+
+        return {
+            "cta": GLIMPSE_CTA[best_run],
+            "text": GLIMPSE_TEXT[best_run],
+            "datetime": interesting_datetime,
+        }
 
     def save(self, *args, **kwargs):
         """

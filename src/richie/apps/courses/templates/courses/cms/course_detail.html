@@ -121,7 +121,7 @@
     <div class="course-detail__aside">
       <div class="course-detail__aside__run">
         <h2>{% trans 'Course runs' %}</h2>
-        {% for run in course.course_runs %}
+        {% for run in course.course_runs.all %}
           <ul class="course-detail__aside__run__item">
             <li class="course-detail__aside__run__link">
               <a class="course-run__aside__link" href="{{ run.resource_link }}">{% trans "To Subscribe" %}</a>
