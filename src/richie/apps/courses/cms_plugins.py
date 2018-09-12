@@ -20,7 +20,7 @@ class OrganizationPlugin(CMSPluginBase):
 
     model = OrganizationPluginModel
     module = _("Courses")
-    render_template = "courses/plugins/organization.html"
+    render_template = "courses/plugins/organization_plugin.html"
     cache = True
     module = settings.FUN_PLUGINS_GROUP
 

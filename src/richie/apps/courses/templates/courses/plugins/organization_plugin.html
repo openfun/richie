@@ -1,0 +1,16 @@
+{% load cms_tags i18n %}
+{% spaceless %}
+<div class="organization-plugin-container">
+  <div class="organization-plugin">
+    <a class="organization-plugin__body" href="{{ instance.organization.extended_object.get_absolute_url }}"
+      title="{{ instance.organization.extended_object.get_title }} {% trans "logo" %}">
+      {% with width=216 height=120 %}
+        {% show_placeholder "logo" instance.organization.extended_object %}
+      {% endwith %}
+      <div class="organization-plugin__title">
+          {{ instance.organization.extended_object.get_title }}
+      </div>
+    </a>
+  </div>
+</div>
+{% endspaceless %}

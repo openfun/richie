@@ -1,0 +1,57 @@
+.organization-plugin-container {
+  @include make-col-ready();
+
+  @include media-breakpoint-up(sm) {
+    @include make-col(6);
+  }
+  @include media-breakpoint-up(md) {
+    @include make-col(4);
+  }
+  @include media-breakpoint-up(lg) {
+    @include make-col(3);
+  }
+  display: inline-block;
+}
+
+  .organization-plugin {
+    @extend .card;
+    margin-bottom: $grid-gutter-width; // Use margin bottom to match side spacing
+
+    &:hover {
+      border-color: $primary;
+      cursor: pointer;
+
+      .organization-plugin__body__title {
+        color: $primary;
+      }
+    }
+
+    &__image {
+      @extend .card-img-top;
+    }
+
+    &__body {
+      @extend .card-body;
+      @extend .text-center;
+
+      &__title {
+        @extend .card-title;
+        // Set a standard height that caps titles at 3 lines
+        height: 3 * $headings-line-height * $h5-font-size;
+        overflow: hidden;
+        font-size: .9em;
+      }
+
+      &__org {
+        color: $secondary;
+        // Set a standard height that caps org names at 2 lines
+        height: 2 * $line-height-base * $font-size-base;
+        overflow: hidden;
+      }
+    }
+
+    &__date {
+      @extend .card-footer;
+      @extend .text-center;
+    }
+  }
