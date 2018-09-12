@@ -99,9 +99,18 @@ lint-back-pylint: ## lint back-end python sources with pylint
 	@$(COMPOSE_TEST_RUN_APP) pylint src/richie/apps src/richie/plugins sandbox tests;
 .PHONY: lint-back-pylint
 
-lint-front: ## lint TypeScript sources
-	@$(YARN) lint
+lint-front: ## run both front-end "linters" prettier & tslint
+	${MAKE} lint-front-tslint;
+	${MAKE} lint-front-prettier;
 .PHONY: lint-front
+
+lint-front-tslint: ## lint TypeScript sources
+	@$(YARN) lint
+.PHONY: lint-front-tslint
+
+lint-front-prettier: ## run prettier over js/jsx/json/ts/tsx files -- beware! overwrites files
+	@$(YARN) prettier
+.PHONY: lint-front-prettier
 
 logs: ## get development logs
 	@$(COMPOSE) logs -f
