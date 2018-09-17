@@ -1,16 +1,46 @@
 {% load cms_tags i18n %}
 {% spaceless %}
-<div class="organization-plugin-container">
-  <div class="organization-plugin">
-    <a class="organization-plugin__body" href="{{ instance.organization.extended_object.get_absolute_url }}"
-      title="{{ instance.organization.extended_object.get_title }} {% trans "logo" %}">
-      {% with width=216 height=120 %}
-        {% show_placeholder "logo" instance.organization.extended_object %}
-      {% endwith %}
-      <div class="organization-plugin__title">
-          {{ instance.organization.extended_object.get_title }}
+{% if current_page.publisher_is_draft %}
+  {% if instance.organization.check_publication is True %}
+    <div class="organization-plugin-container">
+      <div class="organization-plugin">
+        <a class="organization-plugin__body" href="{{ instance.organization.public_extension.extended_object.get_absolute_url }}" title="{{ instance.organization.public_extension.extended_object.get_title }}" alt="{{ instance.organization.public_extension.extended_object.get_title }} {% trans 'logo' %}">
+          {% with width=216 height=120 %}
+            {% show_placeholder "logo" instance.organization.public_extension.extended_object %}
+          {% endwith %}
+          <div class="organization-plugin__title">
+              {{ instance.organization.public_extension.extended_object.get_title }}
+          </div>
+        </a>
       </div>
-    </a>
+    </div>
+  {% else %}
+    <div class="organization-plugin-container">
+      <div class="organization-plugin">
+        <a class="organization-plugin__body" href="{{ instance.organization.extended_object.get_absolute_url }}" title="{{ instance.organization.extended_object.get_title }}" alt="{{ instance.organization.extended_object.get_title }} {% trans 'logo' %}">
+          {% with width=216 height=120 %}
+            {% show_placeholder "logo" instance.organization.extended_object %}
+          {% endwith %}
+          <div class="organization-plugin__title">
+              {{ instance.organization.extended_object.get_title }}
+          </div>
+        </a>
+      </div>
+    </div>
+  {% endif %}
+{# If the current page is the published version, show only the organizations that are published #}
+{% elif instance.organization.check_publication is True %}
+  <div class="organization-plugin-container">
+    <div class="organization-plugin">
+      <a class="organization-plugin__body" href="{{ instance.organization.public_extension.extended_object.get_absolute_url }}" title="{{ instance.organization.public_extension.extended_object.get_title }}" alt="{{ instance.organization.public_extension.extended_object.get_title }} {% trans 'logo' %}">
+        {% with width=216 height=120 %}
+          {% show_placeholder "logo" instance.organization.public_extension.extended_object %}
+        {% endwith %}
+        <div class="organization-plugin__title">
+            {{ instance.organization.public_extension.extended_object.get_title }}
+        </div>
+      </a>
+    </div>
   </div>
-</div>
+{% endif %}
 {% endspaceless %}

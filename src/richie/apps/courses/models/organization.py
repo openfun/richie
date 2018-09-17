@@ -98,12 +98,13 @@ class OrganizationPluginModel(CMSPlugin):
     Organization plugin model handles the relation from OrganizationPlugin
     to their Organization instance
     """
+
     organization = models.ForeignKey(
-            "Organization",
-            related_name="organization",
-            limit_choices_to={"extended_object__publisher_is_draft": True},
-        )
-    
+        "Organization",
+        related_name="plugin_model",
+        limit_choices_to={"extended_object__publisher_is_draft": True},
+    )
+
     class Meta:
         verbose_name = _("organization plugin model")
 

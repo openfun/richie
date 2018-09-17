@@ -41,17 +41,5 @@
         overflow: hidden;
         font-size: .9em;
       }
-
-      &__org {
-        color: $secondary;
-        // Set a standard height that caps org names at 2 lines
-        height: 2 * $line-height-base * $font-size-base;
-        overflow: hidden;
-      }
-    }
-
-    &__date {
-      @extend .card-footer;
-      @extend .text-center;
     }
   }
