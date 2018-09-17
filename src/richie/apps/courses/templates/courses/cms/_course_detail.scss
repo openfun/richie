@@ -1,15 +1,40 @@
 .course-detail {
-  @include make-container();
   @include make-container-max-widths();
-  @include make-row();
+  display: flex;
   margin: 0 auto;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  background: $richie-content-container-bg;
+  padding: 1rem 0 0;
+  flex-direction: column;
+  flex-wrap: wrap;
+
+  @include media-breakpoint-up(lg) {
+    flex-direction: row;
+  }
+
+  &__title{
+    @include sv-flex-cell-width(100%);
+    position: relative;
+    margin: 0 0 1rem 0;
+    padding: 1rem 0;
+    font-size: 3rem;
+    font-weight: normal;
+    line-height: 1.1;
+    text-align: center;
+
+    &::after{
+      $divider-width: 10rem;
+      content: "";
+      position: absolute;
+      width: $divider-width;
+      left: calc(50% - #{$divider-width / 2});
+      bottom: 0;
+      border-bottom: 1px solid $gray40;
+    }
+  }
 
   &__teaser {
-    width: calc(100% + #{$grid-gutter-width});
-    margin-bottom: 1rem;
+    @include sv-flex-cell-width(100%);
+    margin: 0;
+    padding: 0;
     /**
      * Code below replicate .reponsive-embed from Bootstrap with forced 16/9
      * cause we cannot use object-fit since it is not compatible under IE
@@ -41,24 +66,67 @@
   }
 
   &__content {
-    @include make-col-ready();
-    @include make-col(8);
+    @include sv-flex-cell-width(100%);
+    margin: 0;
+    padding: 0;
+    background: $richie-content-container-bg;
+
+    @include media-breakpoint-up(lg) {
+      @include sv-flex-cell-width(70%);
+    }
+
+    &__row{
+      $row-selector: &;
+      margin: 0;
+      padding: 1.5rem 1rem;
+
+      &__title{
+          text-transform: uppercase;
+      }
+
+      p, li{
+        font-size: 0.95rem;
+      }
+    }
 
     /**
      * Just to add some visual mark on even content during integration
      */
-    & > :nth-child(2n+1) {
-      background: #f0f0f0;
+    & > :nth-child(2n+0) {
+      color: $white;
+      background: $dodgerblue7;
     }
   }
 
   &__aside {
-    @include make-col-ready();
-    @include make-col(4);
+    @include sv-flex-cell-width(100%);
+    margin: 0;
+    padding: 0;
+
+    @include media-breakpoint-up(lg) {
+      @include sv-flex-cell-width(30%);
+    }
+
+    &__cover{
+      img{
+        display: block;
+        width: 100%;
+        max-width: 100%;
+      }
+    }
 
     &__run{
+      margin: 0;
+      padding: 1rem;
+      color: $white;
+      background: $dodgerblue1;
+
       &__item{
-        border: 1px solid darken($light, 20%);
+        $item-selector: &;
+
+        & + #{$item-selector}{
+          border-top: 1px solid darken($light, 20%);
+        }
       }
     }
   }

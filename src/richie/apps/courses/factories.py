@@ -3,6 +3,7 @@ Courses factories
 """
 import os
 import random
+from collections import namedtuple
 from datetime import datetime, timedelta
 
 from django.core.files import File
@@ -18,14 +19,22 @@ from ..core.helpers import create_text_plugin
 from ..core.tests.utils import file_getter
 from .models import Course, CourseRun, Licence, Organization, Subject
 
+VideoSample = namedtuple("VideoSample", ["label", "image", "url"])
+
 VIDEO_SAMPLE_LINKS = (
-    (
+    VideoSample(
         "Anant Agarwal: Why massively open online courses (still) matter",
+        "anant_aggarwal.jpg",
         "//www.youtube.com/embed/rYwTA5RA9eU",
     ),
-    ("Installing Open edX", "//www.youtube.com/embed/YDm6bAPxeg0"),
-    (
+    VideoSample(
+        "Installing Open edX",
+        "installing_openedx.jpg",
+        "//www.youtube.com/embed/YDm6bAPxeg0",
+    ),
+    VideoSample(
         "Open edX Conference 2018 Opening and Welcome remarks",
+        "openedx_2018.jpg",
         "//www.youtube.com/embed/zzx6MgBAbCc",
     ),
 )
@@ -46,7 +55,8 @@ class BLDPageExtensionDjangoModelFactory(PageExtensionDjangoModelFactory):
         if create and extracted:
             banner_placeholder = self.extended_object.placeholders.get(slot="banner")
 
-            banner_file = file_getter(os.path.dirname(__file__), "banner")()
+            banner_path = extracted if isinstance(extracted, str) else None
+            banner_file = file_getter(os.path.dirname(__file__), "banner")(banner_path)
             wrapped_banner = File(banner_file, banner_file.name)
             banner = Image.objects.create(file=wrapped_banner)
 
@@ -68,7 +78,8 @@ class BLDPageExtensionDjangoModelFactory(PageExtensionDjangoModelFactory):
         if create and extracted:
             logo_placeholder = self.extended_object.placeholders.get(slot="logo")
 
-            logo_file = file_getter(os.path.dirname(__file__), "logo")()
+            logo_path = extracted if isinstance(extracted, str) else None
+            logo_file = file_getter(os.path.dirname(__file__), "logo")(logo_path)
             wrapped_logo = File(logo_file, logo_file.name)
             logo = Image.objects.create(file=wrapped_logo)
             for language in self.extended_object.get_languages():
@@ -151,14 +162,42 @@ class CourseFactory(PageExtensionDjangoModelFactory):
                     slot="course_teaser"
                 )
 
-                label, url = random.choice(VIDEO_SAMPLE_LINKS)
+                video_sample = (
+                    extracted
+                    if isinstance(extracted, VideoSample)
+                    else random.choice(VIDEO_SAMPLE_LINKS)
+                )
 
                 add_plugin(
                     language=language,
                     placeholder=placeholder,
                     plugin_type="VideoPlayerPlugin",
-                    label=label,
-                    embed_link=url,
+                    label=video_sample.label,
+                    embed_link=video_sample.url,
+                )
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def fill_cover(self, create, extracted, **kwargs):
+        """
+        Add a picture plugin for course cover with a random image
+        """
+        if create and extracted:
+            cover_placeholder = self.extended_object.placeholders.get(
+                slot="course_cover"
+            )
+
+            cover_path = extracted if isinstance(extracted, str) else None
+            cover_file = file_getter(os.path.dirname(__file__), "cover")(cover_path)
+            wrapped_cover = File(cover_file, cover_file.name)
+            cover = Image.objects.create(file=wrapped_cover)
+            for language in self.extended_object.get_languages():
+                add_plugin(
+                    language=language,
+                    placeholder=cover_placeholder,
+                    plugin_type="PicturePlugin",
+                    picture=cover,
+                    attributes={"alt": "cover image"},
                 )
 
     @factory.post_generation

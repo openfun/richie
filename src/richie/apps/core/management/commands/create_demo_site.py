@@ -12,6 +12,7 @@ from django.utils import translation
 from cms import models as cms_models
 
 from richie.apps.courses.factories import (
+    VIDEO_SAMPLE_LINKS,
     CourseFactory,
     CourseRunFactory,
     LicenceFactory,
@@ -190,6 +191,8 @@ def create_demo_site():
         course_organizations = random.sample(
             organizations, NB_COURSES_ORGANIZATION_RELATIONS
         )
+        video_sample = random.choice(VIDEO_SAMPLE_LINKS)
+
         course = CourseFactory(
             languages=[l[0] for l in settings.LANGUAGES],
             parent=pages_created["courses"],
@@ -199,7 +202,8 @@ def create_demo_site():
                 ("course_license_participation", random.choice(licences)),
             ],
             fill_team=random.sample(persons, NB_COURSES_PERSONS_PLUGINS),
-            fill_teaser=True,
+            fill_teaser=video_sample,
+            fill_cover=video_sample.image,
             fill_texts=[
                 "course_syllabus",
                 "course_format",

@@ -299,6 +299,11 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
 
     CMS_PLACEHOLDER_CONF = {
         # Course detail
+        "courses/cms/course_detail.html course_cover": {
+            "name": _("Course cover"),
+            "plugins": ["PicturePlugin"],
+            "limits": {"PicturePlugin": 1},
+        },
         "courses/cms/course_detail.html course_teaser": {
             "name": _("Course teaser"),
             "plugins": ["VideoPlayerPlugin"],

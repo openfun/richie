@@ -17,8 +17,8 @@
 
     <div class="course-detail__content">
 
-      <div class="course-detail__content__syllabus">
-        <h2>{% trans 'About the course' %}</h2>
+      <div class="course-detail__content__row course-detail__content__syllabus">
+        <h2 class="course-detail__content__row__title">{% trans 'About the course' %}</h2>
         {% with header_level=3 %}
           {% placeholder "course_syllabus" or %}
             <p>{% trans 'Enter here a short description of your course.' %}</p>
@@ -26,36 +26,38 @@
         {% endwith %}
       </div>
 
-      <div class="course-detail__content__format">
-        <h2>{% trans 'Format' %}</h2>
+      <div class="course-detail__content__row course-detail__content__format">
+        <h2 class="course-detail__content__row__title">{% trans 'Format' %}</h2>
         {% placeholder "course_format" or %}
           <p>{% trans 'How is the course structured?' %}</p>
         {% endplaceholder %}
       </div>
 
-      <div class="course-detail__content__prerequisites">
-        <h2>{% trans 'Prerequisites' %}</h2>
+      <div class="course-detail__content__row course-detail__content__prerequisites">
+        <h2 class="course-detail__content__row__title">{% trans 'Prerequisites' %}</h2>
         {% placeholder "course_prerequisites" or %}
           <p>{% trans 'What are the prerequisites to follow this course?' %}</p>
         {% endplaceholder %}
       </div>
 
-      <div class="course-detail__content__team">
-        <h2>{% trans 'Course team' %}</h2>
-        {% placeholder "course_team" or %}
-        <p>{% trans 'Who are the teachers in the course team?' %}</p>
-        {% endplaceholder %}
-      </div>
-
-      <div class="course-detail__content__plan">
-        <h2>{% trans 'Course plan' %}</h2>
+      <div class="course-detail__content__row course-detail__content__plan">
+        <h2 class="course-detail__content__row__title">{% trans 'Course plan' %}</h2>
         {% placeholder "course_plan" or %}
         <p>{% trans 'Enter here the detailed course plan' %}</p>
         {% endplaceholder %}
       </div>
 
-      <div class="course-detail__content__subjects">
-        <h2>{% trans 'Subjects' %}</h2>
+      <div class="course-detail__content__row course-detail__content__team">
+        <h2 class="course-detail__content__row__title">{% trans 'Course team' %}</h2>
+        {% with header_level=3 %}
+            {% placeholder "course_team" or %}
+            <p>{% trans 'Who are the teachers in the course team?' %}</p>
+            {% endplaceholder %}
+        {% endwith %}
+      </div>
+
+      <div class="course-detail__content__row course-detail__content__subjects">
+        <h2 class="course-detail__content__row__title">{% trans 'Subjects' %}</h2>
         <ul class="course-detail__content__subjects__list">
           {% for subject in course.subjects.all %}
             {# If the current page is a draft, show draft subjects with a class annotation for styling #}
@@ -83,8 +85,8 @@
         </ul>
       </div>
 
-      <div class="course-detail__content__organizations">
-        <h2>{% trans 'Organizations' %}</h2>
+      <div class="course-detail__content__row course-detail__content__organizations">
+        <h2 class="course-detail__content__row__title">{% trans 'Organizations' %}</h2>
         <ul class="course-detail__content__organizations__list">
           {% if course.organization_main %}
             {% include "courses/cms/fragment_course_organization_main.html" with organization=course.organization_main %}
@@ -95,12 +97,12 @@
         </ul>
       </div>
 
-      <div class="course-detail__content__information">
+      <div class="course-detail__content__row course-detail__content__information">
         {% placeholder "course_information" %}
       </div>
 
-      <div class="course-detail__content__license">
-        <h2>{% trans 'License' %}</h2>
+      <div class="course-detail__content__row course-detail__content__license">
+        <h2 class="course-detail__content__row__title">{% trans 'License' %}</h2>
 
         <h3>{% trans 'License for the course content' %}</h3>
         {% with header_level=4 %}
@@ -119,6 +121,15 @@
     </div>
 
     <div class="course-detail__aside">
+
+      <div class="course-detail__aside__cover">
+        {% if current_page.publisher_is_draft %}
+          {% placeholder "course_cover" or %}
+          <p>{% trans 'Add an image for course cover on its glimpse.' %}</p>
+          {% endplaceholder %}
+        {% endif %}
+      </div>
+
       <div class="course-detail__aside__run">
         <h2>{% trans 'Course runs' %}</h2>
         {% for run in course.course_runs.all %}
