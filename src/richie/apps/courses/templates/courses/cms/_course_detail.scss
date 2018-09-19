@@ -107,6 +107,19 @@
       @include sv-flex-cell-width(30%);
     }
 
+    &__main-org-logo{
+      margin: 0;
+      padding: 1rem;
+      background: $white;
+
+      img{
+        display: block;
+        width: auto;
+        max-width: 100%;
+        margin: auto;
+      }
+    }
+
     &__cover{
       img{
         display: block;
