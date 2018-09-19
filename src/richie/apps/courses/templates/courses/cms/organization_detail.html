@@ -1,5 +1,5 @@
 {% extends "richie/fullwidth.html" %}
-{% load cms_tags i18n %}
+{% load cms_tags i18n static %}
 
 {% block content %}{% spaceless %}
 {% with organization=current_page.organization header_level=2 %}
@@ -10,7 +10,9 @@
 
   <div class="organization-detail__logo">
     {% with width=216 height=120 %}
-      {% placeholder "logo" %}
+      {% placeholder "logo" or %}
+        <img src="{% static "images/samples/main-organization.png" %}" alt="">
+      {% endplaceholder %}
     {% endwith %}
   </div>
 
