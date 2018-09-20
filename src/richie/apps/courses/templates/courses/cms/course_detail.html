@@ -135,9 +135,6 @@
       <div class="course-detail__aside__run">
         <h2 class="course-detail__aside__run__title">{% trans 'Course runs' %}</h2>
         {% for run in course.course_runs.all %}
-          {% comment %}Mockup the futur CourseRun attribute which will indicate the run statut.
-          Use 'cycle' to have a full set of possibilites when course have enough run{% endcomment %}
-          {% cycle 'is_open' 'is_ongoing' 'is_future' 'anythingelse' as run_infos silent %}
           <ul class="course-detail__aside__run__item">
             <li class="course-detail__aside__run__item__row">
               <p class="course-detail__aside__run__item__row__title">{% trans "Enrollment" %}</p>
@@ -152,15 +149,14 @@
               {% endblocktrans %}</p>
             </li>
             <li class="course-detail__aside__run__item__row">
-              {% comment %}Use mocked up futur CourseRun attribute, variable to change when it will done{% endcomment %}
-              {% if run_infos == 'is_open' %}
-              <a class="course-detail__aside__run__item__row__cta" href="{{ run.resource_link }}">{% trans "Enroll now" %}</a>
-              {% elif run_infos == 'is_ongoing' %}
-              <a class="course-detail__aside__run__item__row__cta" href="{{ run.resource_link }}">{% trans "On going" %}</a>
-              {% elif run_infos == 'is_future' %}
+              {% if run.state == 'is_open' %}
+              <a class="course-detail__aside__run__item__row__cta" href="#">{% trans "Enroll now" %}</a>
+              {% elif run.state == 'is_ongoing' or run.state == 'is_closed' %}
+              <button class="course-detail__aside__run__item__row__cta course-detail__aside__run__item__row__cta--projected">{% trans "Enrollment closed" %}</button>
+              {% elif run.state == 'is_archived' %}
+              <button class="course-detail__aside__run__item__row__cta course-detail__aside__run__item__row__cta--projected">{% trans "Archived" %}</button>
+              {% elif run.state == 'is_coming' %}
               <button class="course-detail__aside__run__item__row__cta course-detail__aside__run__item__row__cta--projected">{% trans "Coming soon" %}</button>
-              {% else %}
-              <button class="course-detail__aside__run__item__row__cta course-detail__aside__run__item__row__cta--archived">{% trans "Archived" %}</button>
               {% endif %}
             </li>
           </ul>
