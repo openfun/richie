@@ -1,6 +1,8 @@
 """
 End-to-end tests for the course detail view
 """
+from unittest import mock
+
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
@@ -10,6 +12,7 @@ from richie.apps.courses.factories import (
     OrganizationFactory,
     SubjectFactory,
 )
+from richie.apps.courses.models import CourseRun
 
 
 class CourseCMSTestCase(CMSTestCase):
@@ -21,7 +24,10 @@ class CourseCMSTestCase(CMSTestCase):
     hidden from published page so common users can not see them.
     """
 
-    def test_templates_course_detail_cms_published_content(self):
+    @mock.patch.object(
+        CourseRun, "state", new_callable=mock.PropertyMock, return_value="is_open"
+    )
+    def test_templates_course_detail_cms_published_content(self, _):
         """
         Validate that the important elements are displayed on a published course page
         """
@@ -35,7 +41,7 @@ class CourseCMSTestCase(CMSTestCase):
             with_subjects=subjects,
         )
         page = course.extended_object
-        course_runs = CourseRunFactory.create_batch(2, course=course)
+        CourseRunFactory.create_batch(2, course=course)
 
         # Publish only 2 out of 4 subjects and 2 out of 4 organizations
         subjects[0].extended_object.publish("en")
@@ -108,15 +114,12 @@ class CourseCMSTestCase(CMSTestCase):
             )
 
         # Course runs should be in the page
-        for course_run in course_runs:
-            self.assertContains(
-                response,
-                '<a class="course-detail__aside__run__item__row__cta" href="{:s}">'.format(
-                    course_run.resource_link
-                ),
-            )
+        self.assertContains(response, "Enroll now", count=2)
 
-    def test_templates_course_detail_cms_draft_content(self):
+    @mock.patch.object(
+        CourseRun, "state", new_callable=mock.PropertyMock, return_value="is_open"
+    )
+    def test_templates_course_detail_cms_draft_content(self, _):
         """
         A staff user should see a draft course including its draft elements with
         an annotation
@@ -134,7 +137,7 @@ class CourseCMSTestCase(CMSTestCase):
             with_subjects=subjects,
         )
         page = course.extended_object
-        course_runs = CourseRunFactory.create_batch(2, course=course)
+        CourseRunFactory.create_batch(2, course=course)
 
         # Publish only 2 out of 4 subjects and 2 out of 4 organizations
         subjects[0].extended_object.publish("en")
@@ -219,15 +222,8 @@ class CourseCMSTestCase(CMSTestCase):
                 ),
                 html=True,
             )
-
         # Course runs should be in the page
-        for course_run in course_runs:
-            self.assertContains(
-                response,
-                '<a class="course-detail__aside__run__item__row__cta" href="{:s}">'.format(
-                    course_run.resource_link
-                ),
-            )
+        self.assertContains(response, "Enroll now", count=2)
 
     def test_templates_course_detail_cms_draft_content_draft_organization_main(self):
         """
