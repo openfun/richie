@@ -133,23 +133,35 @@
       </div>
 
       <div class="course-detail__aside__run">
-        <h2>{% trans 'Course runs' %}</h2>
+        <h2 class="course-detail__aside__run__title">{% trans 'Course runs' %}</h2>
         {% for run in course.course_runs.all %}
+          {% comment %}Mockup the futur CourseRun attribute which will indicate the run statut.
+          Use 'cycle' to have a full set of possibilites when course have enough run{% endcomment %}
+          {% cycle 'is_open' 'is_ongoing' 'is_future' 'anythingelse' as run_infos silent %}
           <ul class="course-detail__aside__run__item">
-            <li class="course-detail__aside__run__link">
-              <a class="course-run__aside__link" href="{{ run.resource_link }}">{% trans "To Subscribe" %}</a>
+            <li class="course-detail__aside__run__item__row">
+              <p class="course-detail__aside__run__item__row__title">{% trans "Enrollment" %}</p>
+              <p class="course-detail__aside__run__item__row__date">{% blocktrans with start=run.enrollment_start|date:"SHORT_DATE_FORMAT" end=run.enrollment_end|date:"SHORT_DATE_FORMAT" %}
+              From {{ start }} to {{ end }}
+              {% endblocktrans %}</p>
             </li>
-            <li class="course-run__aside__run__time">
-              {% trans "Enrollment Start" %}: {{ run.enrollment_start }}
+            <li class="course-detail__aside__run__item__row">
+              <p class="course-detail__aside__run__item__row__title">{% trans "Course" %}</p>
+              <p class="course-detail__aside__run__item__row__date">{% blocktrans with start=run.start|date:"SHORT_DATE_FORMAT" end=run.end|date:"SHORT_DATE_FORMAT" %}
+              From {{ start }} to {{ end }}
+              {% endblocktrans %}</p>
             </li>
-            <li class="course-run__aside__run__time">
-              {% trans "Course Start" %}: {{ run.start }}
-            </li>
-            <li class="course-run__aside__run__time">
-              {% trans "Enrollment End" %}: {{ run.enrollment_end }}
-            </li>
-            <li class="course-run__aside__run__time">
-              {% trans "Course End" %}: {{ run.end }}
+            <li class="course-detail__aside__run__item__row">
+              {% comment %}Use mocked up futur CourseRun attribute, variable to change when it will done{% endcomment %}
+              {% if run_infos == 'is_open' %}
+              <a class="course-detail__aside__run__item__row__cta" href="{{ run.resource_link }}">{% trans "Enroll now" %}</a>
+              {% elif run_infos == 'is_ongoing' %}
+              <a class="course-detail__aside__run__item__row__cta" href="{{ run.resource_link }}">{% trans "On going" %}</a>
+              {% elif run_infos == 'is_future' %}
+              <button class="course-detail__aside__run__item__row__cta course-detail__aside__run__item__row__cta--projected">{% trans "Coming soon" %}</button>
+              {% else %}
+              <button class="course-detail__aside__run__item__row__cta course-detail__aside__run__item__row__cta--archived">{% trans "Archived" %}</button>
+              {% endif %}
             </li>
           </ul>
         {% empty %}
