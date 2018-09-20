@@ -81,7 +81,7 @@
       padding: 1.5rem 1rem;
 
       &__title{
-          text-transform: uppercase;
+        text-transform: uppercase;
       }
 
       p, li{
@@ -90,7 +90,7 @@
     }
 
     /**
-     * Just to add some visual mark on even content during integration
+     * Automatically alternate bg color on odd/even items
      */
     & > :nth-child(2n+0) {
       color: $white;
@@ -134,10 +134,78 @@
       color: $white;
       background: $dodgerblue1;
 
+      &__title{
+        margin: 0;
+        padding: 0.5rem 0.1rem 0;
+        font-size: 1.8rem;
+        color: $dodgerblue5;
+        line-height: 1.1;
+        text-align: center;
+      }
+
       &__item{
         $item-selector: &;
+        position: relative;
+        margin: 0 1rem;
+        padding: 2rem 0;
+        font-size: 0.9rem;
+        list-style-type: none;
 
-        & + #{$item-selector}{
+        &__row{
+            $row-selector: &;
+            margin: 0;
+            padding: 0;
+
+            &__title{
+              margin: 0 0 0.1rem 0;
+              font-weight: bold;
+              text-transform: uppercase;
+            }
+
+            &__date{
+              margin: 0;
+            }
+
+            &__cta{
+              display: block;
+              width: 100%;
+              padding: 0.3rem;
+              color: $white;
+              text-align: center;
+              text-transform: uppercase;
+              background: $dodgerblue5;
+              border: 0;
+
+              &:hover{
+                color: $white;
+                text-decoration: none;
+                background: lighten($dodgerblue5, 5%);
+              }
+
+              &--archived,
+              &--projected{
+                color: $gray40;
+                background: $gray80;
+
+                &:hover{
+                  color: $gray40;
+                  background: $gray80;
+                }
+              }
+            }
+
+            & + #{$row-selector}{
+              margin-top: 0.8rem;
+            }
+        }
+
+        & + #{$item-selector}::before{
+          content: "";
+          display: block;
+          width: 50%;
+          position: absolute;
+          top: 0;
+          left: 25%;
           border-top: 1px solid darken($light, 20%);
         }
       }

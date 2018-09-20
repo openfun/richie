@@ -111,7 +111,7 @@ class CourseCMSTestCase(CMSTestCase):
         for course_run in course_runs:
             self.assertContains(
                 response,
-                '<a class="course-run__aside__link" href="{:s}">'.format(
+                '<a class="course-detail__aside__run__item__row__cta" href="{:s}">'.format(
                     course_run.resource_link
                 ),
             )
@@ -224,7 +224,7 @@ class CourseCMSTestCase(CMSTestCase):
         for course_run in course_runs:
             self.assertContains(
                 response,
-                '<a class="course-run__aside__link" href="{:s}">'.format(
+                '<a class="course-detail__aside__run__item__row__cta" href="{:s}">'.format(
                     course_run.resource_link
                 ),
             )
