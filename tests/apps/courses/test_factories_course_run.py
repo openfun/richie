@@ -1,6 +1,7 @@
 """
 Unit tests for the CourseRun factory
 """
+from datetime import timedelta
 from unittest import mock
 
 from django.test import TestCase
@@ -22,7 +23,9 @@ class CourseRunFactoriesTestCase(TestCase):
         with mock.patch.object(timezone, "now", return_value=now):
             course_run = CourseRunFactory()
 
-        self.assertTrue(now <= course_run.start)
+        self.assertTrue(
+            now - timedelta(days=500) < course_run.start < now + timedelta(days=500)
+        )
         self.assertTrue(
             course_run.enrollment_start <= course_run.start <= course_run.end
         )

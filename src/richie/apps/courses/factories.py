@@ -295,10 +295,10 @@ class CourseRunFactory(factory.django.DjangoModelFactory):
         for the course run are chosen randomly in periods that make sense with this start date.
         """
         now = timezone.now()
-        period = timedelta(days=1000)
+        period = timedelta(days=200)
         return pytz.timezone("UTC").localize(
             datetime.fromordinal(
-                random.randrange(now.toordinal(), (now + period).toordinal())
+                random.randrange((now - period).toordinal(), (now + period).toordinal())
             )
         )
 

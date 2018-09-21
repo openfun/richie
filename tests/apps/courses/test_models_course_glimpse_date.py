@@ -44,21 +44,25 @@ class CourseRunModelsTestCase(TestCase):
     def create_run_future_not_yet_open(self, course):
         """Create a course run in the future and not yet open for enrollment."""
         return CourseRunFactory(
-            course=course, enrollment_start=self.now + timedelta(hours=1)
+            course=course,
+            start=self.now + timedelta(hours=2),
+            enrollment_start=self.now + timedelta(hours=1),
         )
 
     def create_run_future_closed(self, course):
         """Create a course run in the future and already closed for enrollment."""
         return CourseRunFactory(
             course=course,
-            enrollment_start=self.now + timedelta(hours=2),
-            enrollment_end=self.now + timedelta(hours=1),
+            start=self.now + timedelta(hours=1),
+            enrollment_start=self.now - timedelta(hours=2),
+            enrollment_end=self.now - timedelta(hours=1),
         )
 
     def create_run_future_open(self, course):
         """Create a course run in the future and open for enrollment."""
         return CourseRunFactory(
             course=course,
+            start=self.now + timedelta(hours=1),
             enrollment_start=self.now - timedelta(hours=1),
             enrollment_end=self.now + timedelta(hours=1),
         )
