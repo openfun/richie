@@ -1,9 +1,11 @@
 .person-plugin{
+    $richie-person-plugin-media-width: 100px;
+
+    // Basic structure starts on vertical mode
     @include m-o-card(
         $border: $richie-course-glimpse-container-border,
         $background: $richie-course-glimpse-container-background,
         $media-margin: 0,
-        $media-width: 100px,
         $caption-width: $richie-course-glimpse-caption-width,
         $caption-margin: $richie-course-glimpse-caption-margin,
         $caption-padding: $richie-course-glimpse-caption-padding,
@@ -15,8 +17,27 @@
         $methodology: "bem"
     );
 
+    // Switch to horizontal mode on breakpoint
+    @include media-breakpoint-up(lg) {
+      @include m-o-card(
+        $media-width: $richie-person-plugin-media-width,
+        $methodology: "bem"
+      );
+    }
+
+    &__content{
+        &__title{
+            text-align: center;
+            @include media-breakpoint-up(lg) {
+                text-align: left;
+            }
+        }
+    }
+
     &__media{
         img{
+            margin: 0 auto;
+            max-width: $richie-person-plugin-media-width;
             border-radius: 100%;
         }
     }
