@@ -1,15 +1,37 @@
 
 .person-detail {
-  @include make-container();
   @include make-container-max-widths();
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  margin: 0 auto;
+  padding: 1rem $grid-gutter-width;
   background: $richie-content-container-bg;
 
-  &__content {
-    clear: both;
-    @include make-row();
-    padding-left: $grid-gutter-width;
-    padding-right: $grid-gutter-width;
+  &__card{
+    @include m-o-card(
+      $padding: 1rem 0,
+      $border: $richie-course-glimpse-container-border,
+      $background: $richie-course-glimpse-container-background,
+      $media-margin: 0,
+      $media-width: 120px,
+      $caption-width: $richie-course-glimpse-caption-width,
+      $caption-margin: $richie-course-glimpse-caption-margin,
+      $caption-padding: $richie-course-glimpse-caption-padding,
+      $caption-fontsize: $richie-course-glimpse-caption-fontsize,
+      $caption-background: $richie-course-glimpse-caption-background,
+      $content-flex-justify: flex-start,
+      $wrapper-padding: $richie-course-glimpse-wrapper-padding,
+      $foot-divider: $richie-course-glimpse-foot-divider,
+      $methodology: "bem"
+    );
+    max-width: 100%;
+
+    @include media-breakpoint-up(lg) {
+      max-width: 50%;
+    }
+
+    &__media{
+      img{
+        border-radius: 100%;
+      }
+    }
   }
 }

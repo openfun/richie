@@ -1,19 +1,24 @@
 {% extends "richie/fullwidth.html" %} {% load cms_tags i18n %} {% block content %}
 <div class="person-detail">
+  <h1 class="person-detail__title">{{ current_page.get_title }}</h1>
 
-    <h1 class="person-detail__title">{{ current_page.get_title }}</h1>
-
+  <div class="person-detail__card">
     {% with header_level=2 %}
+      <div class="person-detail__card__media">
+        {% with width=216 height=120 %}
+          {% placeholder "portrait" %}
+        {% endwith %}
+      </div>
 
-      {% with width=216 height=120 %}
-        {% placeholder "portrait" %}
-      {% endwith %}
-
-      {% placeholder "resume" %}
-
-      {% placeholder "maincontent" %}
+      <div class="person-detail__card__content">
+        <div class="person-detail__card__content__wrapper">
+        {% placeholder "resume" %}
+        {% placeholder "maincontent" %}
+        </div>
+      </div>
 
     {% endwith %}
+  </div>
 
 </div>
 {% endblock content %}

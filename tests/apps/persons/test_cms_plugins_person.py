@@ -104,13 +104,13 @@ class PersonPluginTestCase(TestCase):
         # Short resume should be present
         self.assertContains(
             response,
-            '<div class="person-plugin__body__text">A short resume</div>',
+            '<div class="person-plugin__content__text">A short resume</div>',
             html=True,
         )
         # The person's full name should be wrapped in a h2
         self.assertContains(
             response,
-            '<h2 class="person-plugin__body__title">{:s}</h2>'.format(
+            '<h2 class="person-plugin__content__title">{:s}</h2>'.format(
                 person.get_full_name()
             ),
             html=True,
@@ -130,6 +130,6 @@ class PersonPluginTestCase(TestCase):
         self.assertContains(response, image.file.name)
         self.assertContains(
             response,
-            '<div class="person-plugin__body__text">Un résumé court</div>',
+            '<div class="person-plugin__content__text">Un résumé court</div>',
             html=True,
         )
