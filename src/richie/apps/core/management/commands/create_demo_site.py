@@ -3,11 +3,12 @@ create_demo_site management command
 """
 import logging
 import random
+from datetime import timedelta
 
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.management.base import BaseCommand, CommandError
-from django.utils import translation
+from django.utils import timezone, translation
 
 from cms import models as cms_models
 
@@ -105,10 +106,10 @@ PAGE_INFOS = {
 
 def get_number_of_course_runs():
     """
-    Returns a random integer between 0 and 5. We make it a convenience method so that it can
+    Returns a random integer between 1 and 5. We make it a convenience method so that it can
     be mocked in tests.
     """
-    return random.randint(0, 5)
+    return random.randint(1, 5)
 
 
 # pylint: disable=no-member
@@ -218,6 +219,15 @@ def create_demo_site():
             in_navigation=True,
         )
         # Add a random number of course runs to the course
+        # 1) Make sure we have one open for enrollment
+        now = timezone.now()
+        CourseRunFactory(
+            course=course,
+            start=now + timedelta(days=1),
+            enrollment_start=now - timedelta(days=5),
+            enrollment_end=now + timedelta(days=5),
+        )
+        # 2) Add more random course runs
         nb_course_runs = get_number_of_course_runs()
         if nb_course_runs > 0:
             CourseRunFactory.create_batch(nb_course_runs, course=course)
