@@ -81,20 +81,49 @@
       padding: 1.5rem 1rem;
 
       &__title{
-        text-transform: uppercase;
+        color: $dodgerblue3;
       }
 
       p, li{
         font-size: 0.95rem;
       }
+
+      // Automatically alternate bg color on odd/even items
+      &:nth-child(2n+0) {
+        color: $white;
+        background: $dodgerblue7;
+
+        #{$row-selector}__title{
+          color: inherit;
+        }
+      }
     }
 
-    /**
-     * Automatically alternate bg color on odd/even items
-     */
-    & > :nth-child(2n+0) {
-      color: $white;
-      background: $dodgerblue7;
+    &__team{
+      $richie-course-detail-team-gutter: 0.5rem;
+
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+
+      &__title{
+        @include sv-flex(1, 0, 100%);
+      }
+
+      .person-plugin{
+        @include sv-flex(1, 0, calc(100% - #{$richie-course-detail-team-gutter * 2}));
+        margin: $richie-course-detail-team-gutter;
+
+        @include media-breakpoint-up(lg) {
+          @include sv-flex(1, 0, calc(50% - #{$richie-course-detail-team-gutter * 2}));
+        }
+
+        &__content__title{
+          font-size: 1.4rem;
+          color: $dodgerblue5;
+          text-transform: uppercase;
+        }
+      }
     }
   }
 

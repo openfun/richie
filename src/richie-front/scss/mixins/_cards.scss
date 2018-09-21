@@ -161,6 +161,31 @@
 /// Best usage is in a flexbox grid so every cards on the same row have equal
 /// height and their content is correctly aligned.
 ///
+/// Following is the required structure sample for a card. Note that this
+/// mixin doesn't create the card container selector, you have to include mixin
+/// inside your own selector. For inside elements, their selectors are created
+/// following methodology given as argument.
+///
+/// @example html
+///   <card-container>
+///
+///     <media>
+///         <img_or_iframe>
+///         <optional_caption>
+///     </media>
+///
+///     <content-container>
+///         <wrapper>
+///             <contents*>
+///         </wrapper>
+///
+///         <footer>
+///             <contents*>
+///         </footer>
+///     </content-container>
+///
+///   </card-container>
+///
 /// @arg {Number} $media-width [null]
 ///   If not null and more than zero, trigger horizontal flow behavior.
 ///
@@ -198,6 +223,7 @@
     $caption-background: null,
     $content-margin: null,
     $content-padding: null,
+    $content-flex-justify: space-between,
     $content-background: null,
     $content-border: null,
     $wrapper-margin: null,
@@ -262,7 +288,7 @@
         position: relative;
         @include sv-flex(1, 1, 0%, $max: false);
         flex-direction: column;
-        justify-content: space-between;
+        justify-content: $content-flex-justify;
         margin: $content-margin;
         padding: $content-padding;
         background: $content-background;
