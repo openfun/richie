@@ -5,17 +5,19 @@
 <div class="course-detail">
   {% spaceless %}
 
-    <h1 class="course-detail__title">{{ current_page.get_title }}</h1>
-
     {% with course=current_page.course header_level=2 %}
 
-    <div class="course-detail__teaser">
-      {% placeholder "course_teaser" or %}
-      <p>{% trans 'Add a video teaser.' %}</p>
-      {% endplaceholder %}
-    </div>
-
     <div class="course-detail__content">
+
+      <div class="course-detail__content__row">
+        <h1 class="course-detail__title">{{ current_page.get_title }}</h1>
+      </div>
+
+      <div class="course-detail__aside__teaser">
+        {% placeholder "course_teaser" or %}
+        <p>{% trans 'Add a video teaser.' %}</p>
+        {% endplaceholder %}
+      </div>
 
       <div class="course-detail__content__row course-detail__content__syllabus">
         <h2 class="course-detail__content__row__title">{% trans 'About the course' %}</h2>
@@ -47,15 +49,6 @@
         {% endplaceholder %}
       </div>
 
-      <div class="course-detail__content__row course-detail__content__team">
-        <h2 class="course-detail__content__row__title course-detail__content__team__title">{% trans 'Course team' %}</h2>
-        {% with header_level=3 %}
-            {% placeholder "course_team" or %}
-            <p>{% trans 'Who are the teachers in the course team?' %}</p>
-            {% endplaceholder %}
-        {% endwith %}
-      </div>
-
       <div class="course-detail__content__row course-detail__content__subjects">
         <h2 class="course-detail__content__row__title">{% trans 'Subjects' %}</h2>
         <ul class="course-detail__content__subjects__list">
@@ -85,6 +78,19 @@
         </ul>
       </div>
 
+      <div class="course-detail__content__row course-detail__content__information">
+        {% placeholder "course_information" %}
+      </div>
+
+      <div class="course-detail__content__row course-detail__content__team">
+        <h2 class="course-detail__content__row__title course-detail__content__team__title">{% trans 'Course team' %}</h2>
+        {% with header_level=3 %}
+            {% placeholder "course_team" or %}
+            <p>{% trans 'Who are the teachers in the course team?' %}</p>
+            {% endplaceholder %}
+        {% endwith %}
+      </div>
+
       <div class="course-detail__content__row course-detail__content__organizations">
         <h2 class="course-detail__content__row__title">{% trans 'Organizations' %}</h2>
         <ul class="course-detail__content__organizations__list">
@@ -93,10 +99,6 @@
             {% include "courses/cms/fragment_course_organizations.html" %}
           {% endfor %}
         </ul>
-      </div>
-
-      <div class="course-detail__content__row course-detail__content__information">
-        {% placeholder "course_information" %}
       </div>
 
       <div class="course-detail__content__row course-detail__content__license">
@@ -120,16 +122,16 @@
 
     <div class="course-detail__aside">
 
-      <div class="course-detail__aside__main-org-logo">
-        {% include "courses/cms/fragment_organization_main_logo.html" with organization=course.organization_main %}
-      </div>
-
       <div class="course-detail__aside__cover">
         {% if current_page.publisher_is_draft %}
           {% placeholder "course_cover" or %}
           <p>{% trans 'Add an image for course cover on its glimpse.' %}</p>
           {% endplaceholder %}
         {% endif %}
+      </div>
+
+      <div class="course-detail__aside__main-org-logo">
+        {% include "courses/cms/fragment_organization_main_logo.html" with organization=course.organization_main %}
       </div>
 
       <div class="course-detail__aside__run">
