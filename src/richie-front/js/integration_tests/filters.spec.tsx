@@ -3,7 +3,6 @@ import '../testSetup';
 import { mount, ReactWrapper } from 'enzyme';
 import fetchMock from 'fetch-mock';
 import * as React from 'react';
-import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
 
@@ -93,11 +92,9 @@ describe('Integration tests - filters', () => {
     // Mount our whole filters pane whhenever we need it.
     makeSearchFilterPane = () =>
       mount(
-        <IntlProvider>
-          <Provider store={store}>
-            <SearchFiltersPane />
-          </Provider>
-        </IntlProvider>,
+        <Provider store={store}>
+          <SearchFiltersPane />
+        </Provider>,
       );
   });
 
@@ -109,7 +106,8 @@ describe('Integration tests - filters', () => {
     const filterGroupNew = makeSearchFilterPane()
       .find(SearchFilterGroupContainer)
       .filterWhere(wrapper => wrapper.prop('machineName') === 'new');
-    expect(filterGroupNew.html()).toContain('search-filter', 'First session');
+    expect(filterGroupNew.html()).toContain('search-filter');
+    expect(filterGroupNew.html()).toContain('First session');
   });
 
   it('shows the values for the resource-based filters in their groups, ordered by facet count', () => {
@@ -117,18 +115,12 @@ describe('Integration tests - filters', () => {
       .find(SearchFilterGroupContainer)
       .filterWhere(wrapper => wrapper.prop('machineName') === 'organizations')
       .find(SearchFilter);
-    expect(filtersOrganizations.at(0).html()).toContain(
-      'Organization Four',
-      '87',
-    );
-    expect(filtersOrganizations.at(1).html()).toContain(
-      'Organization Five',
-      '56',
-    );
-    expect(filtersOrganizations.at(2).html()).toContain(
-      'Organization Three',
-      '12',
-    );
+    expect(filtersOrganizations.at(0).html()).toContain('Organization Four');
+    expect(filtersOrganizations.at(0).html()).toContain('87');
+    expect(filtersOrganizations.at(1).html()).toContain('Organization Five');
+    expect(filtersOrganizations.at(1).html()).toContain('56');
+    expect(filtersOrganizations.at(2).html()).toContain('Organization Three');
+    expect(filtersOrganizations.at(2).html()).toContain('12');
   });
 
   it('adds the value to the relevant filter when the user clicks on a filter value', async () => {

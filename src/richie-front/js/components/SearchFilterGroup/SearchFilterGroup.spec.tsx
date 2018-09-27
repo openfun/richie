@@ -1,8 +1,7 @@
 import '../../testSetup';
 
-import { mount, ReactWrapper } from 'enzyme';
+import { mount } from 'enzyme';
 import * as React from 'react';
-import { IntlProvider } from 'react-intl';
 
 import { FilterDefinitionWithValues } from '../../types/filters';
 import { SearchFilter } from '../SearchFilter/SearchFilter';
@@ -11,13 +10,6 @@ import { SearchFilterGroup } from './SearchFilterGroup';
 describe('components/SearchFilterGroup', () => {
   const addFilter = jasmine.createSpy('addFilter');
   const removeFilter = jasmine.createSpy('removeFilter');
-  let makeSearchFilterGroup: (element: JSX.Element) => ReactWrapper;
-
-  beforeEach(() => {
-    // Mount our whole filters group whenever we need it.
-    makeSearchFilterGroup = element =>
-      mount(<IntlProvider>{element}</IntlProvider>);
-  });
 
   it('renders the name of the filter', () => {
     const filter = {
@@ -34,7 +26,7 @@ describe('components/SearchFilterGroup', () => {
       />
     );
 
-    expect(makeSearchFilterGroup(element).text()).toContain('Organizations');
+    expect(mount(element).text()).toContain('Organizations');
   });
 
   it('renders the list of filter values into a list of SearchFilters', () => {
@@ -60,7 +52,7 @@ describe('components/SearchFilterGroup', () => {
       />
     );
 
-    expect(makeSearchFilterGroup(element).find(SearchFilter).length).toEqual(2);
+    expect(mount(element).find(SearchFilter).length).toEqual(2);
   });
 
   it('renders any active filter values at the top of the list', () => {
@@ -93,21 +85,21 @@ describe('components/SearchFilterGroup', () => {
     );
 
     expect(
-      makeSearchFilterGroup(element)
+      mount(element)
         .find(SearchFilter)
         .at(0)
         .render()
         .text(),
     ).toContain('Value Two');
     expect(
-      makeSearchFilterGroup(element)
+      mount(element)
         .find(SearchFilter)
         .at(1)
         .render()
         .text(),
     ).toContain('Value One');
     expect(
-      makeSearchFilterGroup(element)
+      mount(element)
         .find(SearchFilter)
         .at(2)
         .render()
@@ -140,32 +132,30 @@ describe('components/SearchFilterGroup', () => {
       ],
     } as FilterDefinitionWithValues;
     const element = (
-      <IntlProvider>
-        <SearchFilterGroup
-          activeFilterValues={activeFilterValues}
-          addFilter={addFilter}
-          filter={filter}
-          removeFilter={removeFilter}
-        />
-      </IntlProvider>
+      <SearchFilterGroup
+        activeFilterValues={activeFilterValues}
+        addFilter={addFilter}
+        filter={filter}
+        removeFilter={removeFilter}
+      />
     );
 
     expect(
-      makeSearchFilterGroup(element)
+      mount(element)
         .find(SearchFilter)
         .at(0)
         .render()
         .text(),
     ).toContain('Value Two');
     expect(
-      makeSearchFilterGroup(element)
+      mount(element)
         .find(SearchFilter)
         .at(1)
         .render()
         .text(),
     ).toContain('Value Three');
     expect(
-      makeSearchFilterGroup(element)
+      mount(element)
         .find(SearchFilter)
         .at(2)
         .render()

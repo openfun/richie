@@ -8,7 +8,7 @@ export const SearchFiltersPane = (props: {}) => {
     <div className="search-filters-pane">
       <h2 className="search-filters-pane__title">Filter results</h2>
       {FILTERS_ACTIVE.map(filterName => (
-        <SearchFilterGroupContainer machineName={filterName} />
+        <SearchFilterGroupContainer machineName={filterName} key={filterName} />
       ))}
     </div>
   );

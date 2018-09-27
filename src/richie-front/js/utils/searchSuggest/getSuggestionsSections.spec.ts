@@ -69,10 +69,7 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
   });
 
   it('reports the error when it receives broken json', async () => {
-    fetchMock.get(
-      '/api/v1.0/courses/?query=some%20search',
-      new Response('not json'),
-    );
+    fetchMock.get('/api/v1.0/courses/?query=some%20search', 'not json');
     await getSuggestionsSection(
       'courses',
       { defaultMessage: 'Courses', id: 'coursesHumanName' },
@@ -80,7 +77,8 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
     );
     expect(errors.handle).toHaveBeenCalledWith(
       new Error(
-        'Failed to decode JSON in getSuggestionSection SyntaxError: Unexpected token o in JSON at position 1',
+        'Failed to decode JSON in getSuggestionSection FetchError: invalid json response body at ' +
+          '/api/v1.0/courses/?query=some%20search reason: Unexpected token o in JSON at position 1',
       ),
     );
   });

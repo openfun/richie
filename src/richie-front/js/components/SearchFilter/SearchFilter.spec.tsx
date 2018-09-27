@@ -2,7 +2,6 @@ import '../../testSetup';
 
 import { render, shallow } from 'enzyme';
 import * as React from 'react';
-import { IntlProvider } from 'react-intl';
 
 import { SearchFilter } from './SearchFilter';
 
@@ -17,17 +16,15 @@ describe('components/SearchFilter', () => {
 
   it('renders the name of the filter (passed as a message)', () => {
     const wrapper = render(
-      <IntlProvider>
-        <SearchFilter
-          addFilter={addFilter}
-          filter={{
-            humanName: { defaultMessage: 'Human name', id: 'humanName' },
-            primaryKey: '42',
-          }}
-          isActive={false}
-          removeFilter={removeFilter}
-        />
-      </IntlProvider>,
+      <SearchFilter
+        addFilter={addFilter}
+        filter={{
+          humanName: { defaultMessage: 'Human name', id: 'humanName' },
+          primaryKey: '42',
+        }}
+        isActive={false}
+        removeFilter={removeFilter}
+      />,
     );
 
     expect(wrapper.text()).toContain('Human name');
@@ -35,17 +32,15 @@ describe('components/SearchFilter', () => {
 
   it('renders the name of the filter (passed as a string)', () => {
     const wrapper = render(
-      <IntlProvider>
-        <SearchFilter
-          addFilter={addFilter}
-          filter={{
-            humanName: 'Hooman name',
-            primaryKey: '42',
-          }}
-          isActive={false}
-          removeFilter={removeFilter}
-        />
-      </IntlProvider>,
+      <SearchFilter
+        addFilter={addFilter}
+        filter={{
+          humanName: 'Hooman name',
+          primaryKey: '42',
+        }}
+        isActive={false}
+        removeFilter={removeFilter}
+      />,
     );
 
     expect(wrapper.text()).toContain('Hooman name');
