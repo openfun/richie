@@ -1,4 +1,4 @@
-import '../../testSetup.spec';
+import '../../testSetup';
 
 import { mount, ReactWrapper } from 'enzyme';
 import * as React from 'react';

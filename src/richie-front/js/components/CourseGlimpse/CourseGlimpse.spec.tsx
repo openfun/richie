@@ -1,4 +1,4 @@
-import '../../testSetup.spec';
+import '../../testSetup';
 
 import { render } from 'enzyme';
 import * as React from 'react';
