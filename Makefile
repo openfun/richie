@@ -144,7 +144,7 @@ test-back: ## run back-end tests
 .PHONY: test-back
 
 test-front: ## run front-end tests
-	@$(YARN) test
+	@$(YARN) test --runInBand
 .PHONY: test-front
 
 watch-sass: ## watch changes in Sass files

@@ -672,7 +672,9 @@ jobs:
           - v3-front-dependencies-{{ checksum "package.json" }}
       - run:
           name: Run tests
-          command: yarn test --single-run
+          # Circle CI needs the tests to be ran sequentially, otherwise it hangs. See Jest docs below:
+          # (https://jestjs.io/docs/en/troubleshooting#tests-are-extremely-slow-on-docker-and-or-continuous-integration-ci-server)
+          command: yarn test --runInBand
 
 workflows:
   version: 2
