@@ -9,7 +9,12 @@ from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 
 from .forms import LicencePluginForm
-from .models import LicencePluginModel, OrganizationPluginModel, SubjectPluginModel
+from .models import (
+    CoursePluginModel,
+    LicencePluginModel,
+    OrganizationPluginModel,
+    SubjectPluginModel,
+)
 
 
 @plugin_pool.register_plugin
@@ -44,6 +49,29 @@ class SubjectPlugin(CMSPluginBase):
     model = SubjectPluginModel
     module = _("Courses")
     render_template = "courses/plugins/subject_plugin.html"
+    cache = True
+    module = settings.FUN_PLUGINS_GROUP
+
+    def render(self, context, instance, placeholder):
+        context.update(
+            {
+                "instance": instance,
+                "relevant_page": instance.relevant_page,
+                "placeholder": placeholder,
+            }
+        )
+        return context
+
+
+@plugin_pool.register_plugin
+class CoursePlugin(CMSPluginBase):
+    """
+    Course plugin displays a course's information on other pages
+    """
+
+    model = CoursePluginModel
+    module = _("Courses")
+    render_template = "courses/plugins/course_plugin.html"
     cache = True
     module = settings.FUN_PLUGINS_GROUP
 
