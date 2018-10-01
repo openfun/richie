@@ -375,6 +375,25 @@ class SubjectFactory(BLDPageExtensionDjangoModelFactory):
             self.courses.set(extracted)
 
 
+class LicenceLogoImageFactory(FilerImageFactory):
+    """
+    Image field factory for Licence.
+
+    Randomly get an image from fixtures.
+    """
+
+    # pylint: disable=no-self-use
+    @factory.lazy_attribute
+    def file(self):
+        """
+        Fill image file field with random image.
+        """
+        logo_file = file_getter(os.path.dirname(__file__), "licence")()
+        wrapped_logo = File(logo_file, logo_file.name)
+
+        return wrapped_logo
+
+
 class LicenceFactory(factory.django.DjangoModelFactory):
     """
     A factory to automatically generate random yet meaningful licences.
@@ -384,6 +403,6 @@ class LicenceFactory(factory.django.DjangoModelFactory):
         model = Licence
 
     name = factory.Faker("sentence", nb_words=3)
-    logo = factory.SubFactory(FilerImageFactory)
+    logo = factory.SubFactory(LicenceLogoImageFactory)
     url = factory.Faker("uri")
     content = factory.Faker("text", max_nb_chars=300)

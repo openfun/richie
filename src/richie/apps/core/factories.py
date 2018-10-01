@@ -1,9 +1,11 @@
 """
 Core factories
 """
+import io
 
 from django.conf import settings
 from django.contrib.auth.hashers import make_password
+from django.core.files import File
 
 import factory
 from filer.models.imagemodels import Image
@@ -33,8 +35,32 @@ class FilerImageFactory(factory.django.DjangoModelFactory):
         model = Image
 
     owner = factory.SubFactory(UserFactory)
-    file = factory.django.ImageField()
     original_filename = factory.Faker("file_name", category="image")
+
+    # pylint: disable=no-self-use
+    @factory.lazy_attribute
+    def file(self):
+        """
+        Fill file field with generated image on the fly by PIL.
+
+        Generated image is just a dummy blank image of 100x100 with plain blue
+        color.
+
+        Returns:
+            django.core.files.File: File object.
+        """
+        # ImageField (both django's and factory_boy's) require PIL.
+        # Try to import it along one of its known installation paths.
+        try:
+            from PIL import Image as PILimage
+        except ImportError:
+            import Image as PILimage
+
+        thumb = PILimage.new("RGB", (100, 100), "blue")
+        thumb_io = io.BytesIO()
+        thumb.save(thumb_io, format="JPEG")
+
+        return File(thumb_io, name=self.original_filename)
 
 
 class PageExtensionDjangoModelFactory(factory.django.DjangoModelFactory):

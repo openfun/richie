@@ -20,7 +20,7 @@ from richie.apps.courses.factories import (
     OrganizationFactory,
     SubjectFactory,
 )
-from richie.apps.courses.models import Course, Organization, Subject
+from richie.apps.courses.models import Course, Licence, Organization, Subject
 from richie.apps.persons.factories import PersonFactory
 from richie.apps.persons.models import Person
 
@@ -130,6 +130,7 @@ def clear_cms_data():
     Organization.objects.all().delete()
     Subject.objects.all().delete()
     Person.objects.all().delete()
+    Licence.objects.all().delete()
 
 
 def create_demo_site():
