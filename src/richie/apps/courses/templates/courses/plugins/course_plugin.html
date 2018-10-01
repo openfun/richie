@@ -1,0 +1,10 @@
+{% load cms_tags i18n %}
+{% spaceless %}
+{% if current_page.publisher_is_draft or instance.check_publication is True %}
+  <div class="course-plugin-container {% if relevant_page.publisher_is_draft %} course-plugin-container--draft{% endif %}">
+    <a class="course-plugin" href="{{ relevant_page.get_absolute_url }}" title="{{ relevant_page.get_title }}" alt="{{ relevant_page.get_title }} {% trans 'logo' %}">
+      {% include "courses/cms/fragment_course_glimpse.html" with course=relevant_page.course %}
+    </a>
+  </div>
+{% endif %}
+{% endspaceless %}

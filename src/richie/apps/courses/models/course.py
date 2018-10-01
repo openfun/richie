@@ -6,11 +6,12 @@ from django.db.models import BooleanField, Case, Value, When
 from django.utils import timezone, translation
 from django.utils.translation import ugettext_lazy as _
 
+from cms.api import Page
 from cms.extensions.extension_pool import extension_pool
 from cms.models.pluginmodel import CMSPlugin
 from filer.fields.image import FilerImageField
 
-from ...core.models import BasePageExtension
+from ...core.models import BasePageExtension, PagePluginMixin
 from .organization import Organization
 
 GLIMPSE_CTA = [_("enroll now")] * 2 + [None] * 4
@@ -211,6 +212,28 @@ class CourseRun(BasePageExtension):
         if self.enrollment_end > now:
             return "is_open"
         return "is_closed"
+
+
+class CoursePluginModel(PagePluginMixin, CMSPlugin):
+    """
+    Course plugin model handles the relation from CoursePlugin
+    to their Course instance
+    """
+
+    page = models.ForeignKey(
+        Page,
+        related_name="course_plugins",
+        limit_choices_to={"publisher_is_draft": True, "course__isnull": False},
+    )
+
+    class Meta:
+        verbose_name = _("course plugin model")
+
+    def __str__(self):
+        """Human representation of a page plugin"""
+        return "{model:s}: {id:d}".format(
+            model=self._meta.verbose_name.title(), id=self.id
+        )
 
 
 class Licence(models.Model):
