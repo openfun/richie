@@ -70,6 +70,47 @@ $richie-course-detail-row-fontsize: 0.95rem;
       }
     }
 
+    &__subjects{
+      display: flex;
+      padding-top: 0;
+      padding-bottom: 0;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+
+      &__item{
+        $item-selector: &;
+
+        @include sv-flex(0, 0, auto);
+        margin-bottom: 0.3rem;
+        padding: 0.25rem 0.4rem;
+        color: $white;
+        font-size: 0.7rem;
+        background: $gray7;
+        text-decoration: none;
+
+        &:hover{
+          color: $white;
+        }
+
+        &--empty{
+          @include sv-flex(1, 0, 100%);
+          font-style: italic;
+          color: $gray40;
+          text-align: center;
+          background: transparent;
+
+          &:hover{
+            color: $gray40;
+          }
+        }
+
+        & + #{$item-selector}{
+          margin-left: 0.3rem;
+        }
+      }
+    }
+
     &__teaser {
       @include sv-flex-cell-width(100%);
       margin: 0;

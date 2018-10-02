@@ -13,6 +13,32 @@
         <h1 class="course-detail__title">{{ current_page.get_title }}</h1>
       </div>
 
+      <div class="course-detail__content__row course-detail__content__subjects">
+        {% for subject in course.subjects.all %}
+          {# If the current page is a draft, show draft subjects with a class annotation for styling #}
+          {% if current_page.publisher_is_draft %}
+            {% if subject.check_publication is True %}
+              <a class="course-detail__content__subjects__item" href="{{ subject.public_extension.extended_object.get_absolute_url }}">
+                {{ subject.public_extension.extended_object.get_title }}
+              </a>
+            {% else %}
+              <a class="course-detail__content__subjects__item course-detail__content__subjects__item--draft" href="{{ subject.extended_object.get_absolute_url }}">
+                {{ subject.extended_object.get_title }}
+              </a>
+            {% endif %}
+          {# If the current course page is the published version, show only the subjects that are published #}
+          {% elif subject.check_publication is True %}
+            <a class="course-detail__content__subjects__item" href="{{ subject.extended_object.get_absolute_url }}">
+              {{ subject.extended_object.get_title }}
+            </a>
+          {% endif %}
+        {% empty %}
+          <p class="course-detail__content__subjects__item course-detail__content__subjects__item--empty">
+            {% trans "No associated subjects" %}
+          </p>
+        {% endfor %}
+      </div>
+
       <div class="course-detail__content__row course-detail__content__teaser">
         {% placeholder "course_teaser" or %}
         <p>{% trans 'Add a video teaser.' %}</p>
@@ -47,35 +73,6 @@
         {% placeholder "course_plan" or %}
         <p>{% trans 'Enter here the detailed course plan' %}</p>
         {% endplaceholder %}
-      </div>
-
-      <div class="course-detail__content__row course-detail__content__subjects">
-        <h2 class="course-detail__content__row__title">{% trans 'Subjects' %}</h2>
-        <ul class="course-detail__content__subjects__list">
-          {% for subject in course.subjects.all %}
-            {# If the current page is a draft, show draft subjects with a class annotation for styling #}
-            {% if current_page.publisher_is_draft %}
-              {% if subject.check_publication is True %}
-                <li class="course-detail__content__subjects__item">
-                  {{ subject.public_extension.extended_object.get_title }}
-                </li>
-              {% else %}
-                <li class="course-detail__content__subjects__item course-detail__content__subjects__item--draft">
-                  {{ subject.extended_object.get_title }}
-                </li>
-              {% endif %}
-            {# If the current course page is the published version, show only the subjects that are published #}
-            {% elif subject.check_publication is True %}
-              <li class="course-detail__content__subjects__item">
-                {{ subject.extended_object.get_title }}
-              </li>
-            {% endif %}
-          {% empty %}
-            <li class="course-detail__content__subjects course-detail__content__subjects--empty">
-              {% trans "No associated subjects" %}
-            </li>
-          {% endfor %}
-        </ul>
       </div>
 
       <div class="course-detail__content__row course-detail__content__information">
