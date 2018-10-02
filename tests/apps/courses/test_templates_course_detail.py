@@ -80,8 +80,9 @@ class CourseCMSTestCase(CMSTestCase):
         for subject in subjects[:2]:
             self.assertContains(
                 response,
-                '<li class="course-detail__content__subjects__item">{:s}</li>'.format(
-                    subject.extended_object.get_title()
+                '<a class="course-detail__content__subjects__item" href="{:s}">{:s}</a>'.format(
+                    subject.extended_object.get_absolute_url(),
+                    subject.extended_object.get_title(),
                 ),
                 html=True,
             )
@@ -207,8 +208,9 @@ class CourseCMSTestCase(CMSTestCase):
         for subject in subjects[:2]:
             self.assertContains(
                 response,
-                '<li class="course-detail__content__subjects__item">{:s}</li>'.format(
-                    subject.extended_object.get_title()
+                '<a class="course-detail__content__subjects__item" href="{:s}">{:s}</a>'.format(
+                    subject.extended_object.get_absolute_url(),
+                    subject.extended_object.get_title(),
                 ),
                 html=True,
             )
@@ -216,7 +218,8 @@ class CourseCMSTestCase(CMSTestCase):
         for subject in subjects[-2:]:
             self.assertContains(
                 response,
-                '<li class="{element:s} {element:s}--draft">{title:s}</li>'.format(
+                '<a class="{element:s} {element:s}--draft" href="{url:s}">{title:s}</a>'.format(
+                    url=subject.extended_object.get_absolute_url(),
                     element="course-detail__content__subjects__item",
                     title=subject.extended_object.get_title(),
                 ),
