@@ -1,0 +1,46 @@
+$richie-licence-plugin-breakpoint: sm !default;
+$richie-licence-plugin-logo-width: 100px !default;
+$richie-licence-plugin-title-fontsize: null !default;
+$richie-licence-plugin-title-fontcolor: null !default;
+$richie-licence-plugin-description-fontcolor: null !default;
+
+.licence-plugin{
+    @include media-breakpoint-up($richie-licence-plugin-breakpoint) {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+
+    &__logo{
+        text-align: center;
+
+        @include media-breakpoint-up($richie-licence-plugin-breakpoint) {
+            @include sv-flex(1, 0, #{$richie-licence-plugin-logo-width});
+        }
+    }
+
+    &__wrapper{
+        @include media-breakpoint-up($richie-licence-plugin-breakpoint) {
+            @include sv-flex(1, 0, calc(100% - #{$richie-licence-plugin-logo-width}));
+        }
+
+        &__title{
+            font-size: $richie-licence-plugin-title-fontsize;
+            color: $richie-licence-plugin-title-fontcolor;
+            text-align: center;
+
+            @include media-breakpoint-up($richie-licence-plugin-breakpoint) {
+                text-align: left;
+            }
+
+            a{
+                color: inherit;
+                text-decoration: none;
+            }
+        }
+
+        &__description{
+            color: $richie-licence-plugin-description-fontcolor;
+        }
+    }
+}

@@ -13,7 +13,7 @@
         <h1 class="course-detail__title">{{ current_page.get_title }}</h1>
       </div>
 
-      <div class="course-detail__aside__teaser">
+      <div class="course-detail__content__row course-detail__content__teaser">
         {% placeholder "course_teaser" or %}
         <p>{% trans 'Add a video teaser.' %}</p>
         {% endplaceholder %}
@@ -102,21 +102,25 @@
       </div>
 
       <div class="course-detail__content__row course-detail__content__license">
-        <h2 class="course-detail__content__row__title">{% trans 'License' %}</h2>
+        <h2 class="course-detail__content__row__title course-detail__content__license__title">{% trans 'License' %}</h2>
 
-        <h3>{% trans 'License for the course content' %}</h3>
-        {% with header_level=4 %}
-            {% placeholder "course_license_content" or %}
-            <p>{% trans 'What is the license for the course content?' %}</p>
+        <div class="course-detail__content__license__item">
+          <h3 class="course-detail__content__license__item__title">{% trans 'License for the course content' %}</h3>
+          {% with header_level=4 %}
+              {% placeholder "course_license_content" or %}
+              <p>{% trans 'What is the license for the course content?' %}</p>
+              {% endplaceholder %}
+          {% endwith %}
+        </div>
+
+        <div class="course-detail__content__license__item">
+          <h3 class="course-detail__content__license__item__title">{% trans 'License for the content created by course participants' %}</h3>
+          {% with header_level=4 %}
+            {% placeholder "course_license_participation" or %}
+              <p>{% trans 'What is the license for the content created by course participants?' %}</p>
             {% endplaceholder %}
-        {% endwith %}
-
-        <h3>{% trans 'License for the content created by course participants' %}</h3>
-        {% with header_level=4 %}
-          {% placeholder "course_license_participation" or %}
-            <p>{% trans 'What is the license for the content created by course participants?' %}</p>
-          {% endplaceholder %}
-        {% endwith %}
+          {% endwith %}
+        </div>
       </div>
     </div>
 

@@ -1,3 +1,5 @@
+$richie-course-detail-row-fontsize: 0.95rem;
+
 .course-detail {
   @include make-container-max-widths();
   margin: 0 auto;
@@ -54,7 +56,7 @@
       }
 
       p, li{
-        font-size: 0.95rem;
+        font-size: $richie-course-detail-row-fontsize;
       }
 
       // Automatically alternate bg color on odd/even items
@@ -65,6 +67,41 @@
         #{$row-selector}__title{
           color: inherit;
         }
+      }
+    }
+
+    &__teaser {
+      @include sv-flex-cell-width(100%);
+      margin: 0;
+      padding: 0;
+      /**
+      * Code below replicate .reponsive-embed from Bootstrap with forced 16/9
+      * cause we cannot use object-fit since it is not compatible under IE
+      * Edge 16. For not forced ratio we may use something like flex-video
+      * (which involve some JS)
+      */
+      position: relative;
+      display: block;
+      overflow: hidden;
+
+      &::before {
+        display: block;
+        content: "";
+        padding-top: percentage(9 / 16);
+      }
+
+      iframe,
+      embed,
+      object,
+      video {
+        position: absolute;
+        top: 1.5rem;
+        bottom: 1.5rem;
+        left: 1rem;
+        right: 1rem;
+        width: calc(100% - 2rem);
+        height: calc(100% - 3rem);
+        border: 0;
       }
     }
 
@@ -94,6 +131,18 @@
         }
       }
     }
+
+    &__license{
+      &__item{
+        margin-top: 1rem;
+        font-size: $richie-course-detail-row-fontsize;
+
+        &__title{
+          margin-bottom: 0.75rem;
+          color: $dodgerblue3;
+        }
+      }
+    }
   }
 
   &__aside {
@@ -103,40 +152,6 @@
 
     @include media-breakpoint-up(lg) {
       @include sv-flex-cell-width(30%);
-    }
-
-    &__teaser {
-      @include sv-flex-cell-width(100%);
-      margin: 0;
-      padding: 0;
-      /**
-      * Code below replicate .reponsive-embed from Bootstrap with forced 16/9
-      * cause we cannot use object-fit since it is not compatible under IE
-      * Edge 16. For not forced ratio we may use something like flex-video
-      * (which involve some JS)
-      */
-      position: relative;
-      display: block;
-      overflow: hidden;
-
-      &::before {
-        display: block;
-        content: "";
-        padding-top: percentage(9 / 16);
-      }
-
-      iframe,
-      embed,
-      object,
-      video {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border: 0;
-      }
     }
 
     &__main-org-logo{
