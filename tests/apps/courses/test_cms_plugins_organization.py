@@ -50,8 +50,17 @@ class OrganizationPluginTestCase(TestCase):
             fill_banner=True,
             fill_logo=True,
             fill_description=True,
+            should_publish=True,
+        )
+        organization_draft = OrganizationFactory(
+            title="Pasteur",
+            languages=["en", "fr"],
+            fill_banner=True,
+            fill_logo=True,
+            fill_description=True,
         )
         organization_page = organization.extended_object
+        organization_draft_page = organization_draft.extended_object
 
         # Create a page to add the plugin to
         page = create_i18n_page({"en": "A page", "fr": "Une page"})
@@ -62,6 +71,18 @@ class OrganizationPluginTestCase(TestCase):
         add_plugin(
             placeholder, OrganizationPlugin, "fr", **{"organization": organization}
         )
+        add_plugin(
+            placeholder,
+            OrganizationPlugin,
+            "fr",
+            **{"organization": organization_draft}
+        )
+        add_plugin(
+            placeholder,
+            OrganizationPlugin,
+            "en",
+            **{"organization": organization_draft}
+        )
 
         page.publish("en")
         page.publish("fr")
@@ -71,23 +92,40 @@ class OrganizationPluginTestCase(TestCase):
         response = self.client.get(url)
 
         # The organization's name should be present as a link to the cms page
-        # And CMS page title should be in title attribute of the link
         self.assertContains(
             response,
-            '<a href="{url}" title="{page_title}">'.format(
-                url=organization_page.get_absolute_url(), page_title="Sorbonne en"
+            'href="{url}" title="{title}" alt="{title} logo">'.format(
+                url=organization_page.get_absolute_url(),
+                title=organization_page.get_title(),
             ),
             status_code=200,
         )
+        self.assertContains(
+            response,
+            '<a class="organization-plugin__body" href="{url}"'.format(
+                url=organization_page.get_absolute_url()
+            ),
+            status_code=200,
+        )
+        self.assertNotIn(
+            '<a class="organization-plugin__body" href="{url}"'.format(
+                url=organization_draft_page.get_absolute_url()
+            ),
+            response,
+        )
         self.assertContains(response, "Sorbonne en", html=True)
+        self.assertNotIn("Pasteur en", response)
 
         # The organization's logo should be present with the expected resizing
         self.assertContains(response, ".png__216.0x120.0_q85_subsampling-2.png")
-        # The organization's full name should be wrapped in a h2
+
         self.assertContains(
             response,
-            '<h2 class="organization-plugin__body__title">Sorbonne en</h2>',
+            '<div class="organization-plugin__title">Sorbonne en</div>',
             html=True,
+        )
+        self.assertNotIn(
+            '<div class="organization-plugin__title">Pasteur en</div>', response
         )
 
         # Same checks in French
@@ -95,16 +133,33 @@ class OrganizationPluginTestCase(TestCase):
         response = self.client.get(url)
         self.assertContains(
             response,
-            '<a href="{url}" title="{page_title}">'.format(
-                url=organization_page.get_absolute_url(), page_title="Sorbonne fr"
+            'href="{url}" title="{title}" alt="{title} logo">'.format(
+                url=organization_page.get_absolute_url(),
+                title=organization_page.get_title(),
             ),
             status_code=200,
         )
-        self.assertContains(response, "Sorbonne fr", html=True)
-        self.assertContains(response, ".png__216.0x120.0_q85_subsampling-2.png")
-        # The organization's full name should be wrapped in a h2
         self.assertContains(
             response,
-            '<h2 class="organization-plugin__body__title">Sorbonne fr</h2>',
+            '<a class="organization-plugin__body" href="{url}"'.format(
+                url=organization_page.get_absolute_url()
+            ),
+            status_code=200,
+        )
+        self.assertNotIn(
+            '<a class="organization-plugin__body" href="{url}"'.format(
+                url=organization_draft_page.get_absolute_url()
+            ),
+            response,
+        )
+        self.assertContains(response, "Sorbonne fr", html=True)
+        self.assertNotIn("Pasteur fr", response)
+        self.assertContains(response, ".png__216.0x120.0_q85_subsampling-2.png")
+        self.assertContains(
+            response,
+            '<div class="organization-plugin__title">Sorbonne fr</div>',
             html=True,
+        )
+        self.assertNotIn(
+            '<div class="organization-plugin__title">Pasteur fr</div>', response
         )

@@ -99,7 +99,11 @@ class OrganizationPluginModel(CMSPlugin):
     to their Organization instance
     """
 
-    organization = models.ForeignKey(Organization)
+    organization = models.ForeignKey(
+        "Organization",
+        related_name="plugin_model",
+        limit_choices_to={"extended_object__publisher_is_draft": True},
+    )
 
     class Meta:
         verbose_name = _("organization plugin model")
