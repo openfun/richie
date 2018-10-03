@@ -1,11 +1,64 @@
+$richie-course-detail-breakpoint: lg;
+// TODO: Change every value below to 'null !default' after copying it to settings
+$richie-course-detail-title-margin: 0 0 1rem 0;
+$richie-course-detail-title-padding: 1rem 0;
+$richie-course-detail-title-fontsize: 2.6rem;
+$richie-course-detail-title-fontsize-large: 3rem;
+$richie-course-detail-title-fontweight: normal;
+$richie-course-detail-title-lineheight: 1.1;
+$richie-course-detail-title-textalign: center;
+$richie-course-detail-title-underline-width: 10rem;
+$richie-course-detail-title-underline-border: 1px solid $gray40;
+
+$richie-course-detail-content-width-large: 70%;
+$richie-course-detail-content-margin: 0;
+$richie-course-detail-content-padding: 0;
+
+$richie-course-detail-row-margin: 0;
+$richie-course-detail-row-padding: 1.5rem 1rem;
 $richie-course-detail-row-fontsize: 0.95rem;
+$richie-course-detail-row-even-fontcolor: $white;
+$richie-course-detail-row-even-background: $dodgerblue7;
+$richie-course-detail-row-title-fontcolor: $dodgerblue3;
+
+$richie-course-detail-subjects-justify: center;
+$richie-course-detail-subjects-margin: 0 0 0.3rem 0;
+$richie-course-detail-subjects-padding: 0.25rem 0.4rem;
+$richie-course-detail-subjects-fontsize: 0.7rem;
+$richie-course-detail-subjects-fontcolor: $white;
+$richie-course-detail-subjects-background: $gray7;
+$richie-course-detail-subjects-empty-fontcolor: $gray40;
+$richie-course-detail-subjects-empty-textalign: center;
+$richie-course-detail-subjects-divider-margin: 0.3rem;
+
+$richie-course-detail-teaser-margin: 0;
+$richie-course-detail-teaser-padding: 0;
+$richie-course-detail-teaser-object-padding-vertical: 1.5rem;
+$richie-course-detail-teaser-object-padding-horizontal: 1rem;
+
+$richie-course-detail-team-gutter: 0.5rem;
+$richie-course-detail-team-width-large: 50%;
+$richie-course-detail-team-title-fontsize: 1.4rem;
+$richie-course-detail-team-title-fontcolor: $dodgerblue5;
+
+$richie-course-detail-license-margin: 1rem 0 0 0;
+$richie-course-detail-license-title-margin: 0 0 0.75rem 0;
+$richie-course-detail-license-title-fontcolor: $dodgerblue3;
+
+$richie-course-detail-aside-with-large: 30%;
+$richie-course-detail-aside-margin: 0;
+$richie-course-detail-aside-padding: 0;
+
+$richie-course-detail-aside-main-org-margin: 0;
+$richie-course-detail-aside-main-org-padding: 1rem;
+$richie-course-detail-aside-main-org-background: $white;
 
 .course-detail {
   @include make-container-max-widths();
   margin: 0 auto;
   padding: 0;
 
-  @include media-breakpoint-up(lg) {
+  @include media-breakpoint-up($richie-course-detail-breakpoint) {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
@@ -14,45 +67,45 @@ $richie-course-detail-row-fontsize: 0.95rem;
   &__title{
     @include sv-flex-cell-width(100%);
     position: relative;
-    margin: 0 0 1rem 0;
-    padding: 1rem 0;
-    font-size: 2.6rem;
-    font-weight: normal;
-    line-height: 1.1;
-    text-align: center;
+    margin: $richie-course-detail-title-margin;
+    padding: $richie-course-detail-title-padding;
+    font-size: $richie-course-detail-title-fontsize;
+    font-weight: $richie-course-detail-title-fontweight;
+    line-height: $richie-course-detail-title-lineheight;
+    text-align: $richie-course-detail-title-textalign;
 
-    @include media-breakpoint-up(lg) {
-      font-size: 3rem;
+    @include media-breakpoint-up($richie-course-detail-breakpoint) {
+      font-size: $richie-course-detail-title-fontsize-large;
     }
 
     &::after{
       $divider-width: 10rem;
       content: "";
       position: absolute;
-      width: $divider-width;
-      left: calc(50% - #{$divider-width / 2});
+      width: $richie-course-detail-title-underline-width;
+      left: calc(50% - #{$richie-course-detail-title-underline-width / 2});
       bottom: 0;
-      border-bottom: 1px solid $gray40;
+      border-bottom: $richie-course-detail-title-underline-border;
     }
   }
 
   &__content {
     @include sv-flex-cell-width(100%);
-    margin: 0;
-    padding: 0;
+    margin: $richie-course-detail-content-margin;
+    padding: $richie-course-detail-content-padding;
     background: $richie-content-container-bg;
 
-    @include media-breakpoint-up(lg) {
-      @include sv-flex-cell-width(70%);
+    @include media-breakpoint-up($richie-course-detail-breakpoint) {
+      @include sv-flex-cell-width($richie-course-detail-content-width-large);
     }
 
     &__row{
       $row-selector: &;
-      margin: 0;
-      padding: 1.5rem 1rem;
+      margin: $richie-course-detail-row-margin;
+      padding: $richie-course-detail-row-padding;
 
       &__title{
-        color: $dodgerblue3;
+        color: $richie-course-detail-row-title-fontcolor;
       }
 
       p, li{
@@ -61,8 +114,8 @@ $richie-course-detail-row-fontsize: 0.95rem;
 
       // Automatically alternate bg color on odd/even items
       &--even{
-        color: $white;
-        background: $dodgerblue7;
+        color: $richie-course-detail-row-even-fontcolor;
+        background: $richie-course-detail-row-even-background;
 
         #{$row-selector}__title{
           color: inherit;
@@ -76,45 +129,45 @@ $richie-course-detail-row-fontsize: 0.95rem;
       padding-bottom: 0;
       flex-direction: row;
       flex-wrap: wrap;
-      justify-content: center;
+      justify-content: $richie-course-detail-subjects-justify;
 
       &__item{
         $item-selector: &;
 
         @include sv-flex(0, 0, auto);
-        margin-bottom: 0.3rem;
-        padding: 0.25rem 0.4rem;
-        color: $white;
-        font-size: 0.7rem;
-        background: $gray7;
+        margin: $richie-course-detail-subjects-margin;
+        padding: $richie-course-detail-subjects-padding;
+        font-size: $richie-course-detail-subjects-fontsize;
+        color: $richie-course-detail-subjects-fontcolor;
+        background: $richie-course-detail-subjects-background;
         text-decoration: none;
 
         &:hover{
-          color: $white;
+          color: $richie-course-detail-subjects-fontcolor;
         }
 
         &--empty{
           @include sv-flex(1, 0, 100%);
           font-style: italic;
-          color: $gray40;
-          text-align: center;
+          color: $richie-course-detail-subjects-empty-fontcolor;
+          text-align: $richie-course-detail-subjects-empty-textalign;
           background: transparent;
 
           &:hover{
-            color: $gray40;
+            color: $richie-course-detail-subjects-empty-fontcolor;
           }
         }
 
         & + #{$item-selector}{
-          margin-left: 0.3rem;
+          margin-left: $richie-course-detail-subjects-divider-margin;
         }
       }
     }
 
     &__teaser {
       @include sv-flex-cell-width(100%);
-      margin: 0;
-      padding: 0;
+      margin: $richie-course-detail-teaser-margin;
+      padding: $richie-course-detail-teaser-padding;
       /**
       * Code below replicate .reponsive-embed from Bootstrap with forced 16/9
       * cause we cannot use object-fit since it is not compatible under IE
@@ -136,18 +189,17 @@ $richie-course-detail-row-fontsize: 0.95rem;
       object,
       video {
         position: absolute;
-        top: 1.5rem;
-        bottom: 1.5rem;
-        left: 1rem;
-        right: 1rem;
-        width: calc(100% - 2rem);
-        height: calc(100% - 3rem);
+        top: $richie-course-detail-teaser-object-padding-vertical;
+        bottom: $richie-course-detail-teaser-object-padding-vertical;
+        left: $richie-course-detail-teaser-object-padding-horizontal;
+        right: $richie-course-detail-teaser-object-padding-horizontal;
+        width: calc(100% - #{$richie-course-detail-teaser-object-padding-horizontal * 2});
+        height: calc(100% - #{$richie-course-detail-teaser-object-padding-vertical * 2});
         border: 0;
       }
     }
 
     &__team{
-      $richie-course-detail-team-gutter: 0.5rem;
 
       display: flex;
       flex-direction: row;
@@ -161,13 +213,13 @@ $richie-course-detail-row-fontsize: 0.95rem;
         @include sv-flex(1, 0, calc(100% - #{$richie-course-detail-team-gutter * 2}));
         margin: $richie-course-detail-team-gutter;
 
-        @include media-breakpoint-up(lg) {
-          @include sv-flex(1, 0, calc(50% - #{$richie-course-detail-team-gutter * 2}));
+        @include media-breakpoint-up($richie-course-detail-breakpoint) {
+          @include sv-flex(1, 0, calc(#{$richie-course-detail-team-width-large} - #{$richie-course-detail-team-gutter * 2}));
         }
 
         &__content__title{
-          font-size: 1.4rem;
-          color: $dodgerblue5;
+          font-size: $richie-course-detail-team-title-fontsize;
+          color: $richie-course-detail-team-title-fontcolor;
           text-transform: uppercase;
         }
       }
@@ -175,12 +227,12 @@ $richie-course-detail-row-fontsize: 0.95rem;
 
     &__license{
       &__item{
-        margin-top: 1rem;
+        margin: $richie-course-detail-license-margin;
         font-size: $richie-course-detail-row-fontsize;
 
         &__title{
-          margin-bottom: 0.75rem;
-          color: $dodgerblue3;
+          margin: $richie-course-detail-license-title-margin;
+          color: $richie-course-detail-license-title-fontcolor;
         }
       }
     }
@@ -188,17 +240,17 @@ $richie-course-detail-row-fontsize: 0.95rem;
 
   &__aside {
     @include sv-flex-cell-width(100%);
-    margin: 0;
-    padding: 0;
+    margin: $richie-course-detail-aside-margin;
+    padding: $richie-course-detail-aside-padding;
 
-    @include media-breakpoint-up(lg) {
-      @include sv-flex-cell-width(30%);
+    @include media-breakpoint-up($richie-course-detail-breakpoint) {
+      @include sv-flex-cell-width(#{$richie-course-detail-aside-with-large});
     }
 
     &__main-org-logo{
-      margin: 0;
-      padding: 1rem;
-      background: $white;
+      margin: $richie-course-detail-aside-main-org-margin;
+      padding: $richie-course-detail-aside-main-org-padding;
+      background: $richie-course-detail-aside-main-org-background;
 
       img{
         display: block;
