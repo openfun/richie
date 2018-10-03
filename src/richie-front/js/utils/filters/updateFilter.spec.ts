@@ -1,17 +1,20 @@
 import { stringify } from 'query-string';
 
 import { FilterDefinition } from '../../types/filters';
-import * as filterComputer from './computeNewFilterValue';
+import { computeNewFilterValue } from './computeNewFilterValue';
 import { updateFilter } from './updateFilter';
+
+const mockComputeNewFilterValue: jest.Mock<
+  typeof computeNewFilterValue
+> = computeNewFilterValue as any;
+jest.mock('./computeNewFilterValue');
 
 describe('utils/filters/updateFilter', () => {
   let dispatch: jasmine.Spy;
 
   beforeEach(() => {
     dispatch = jasmine.createSpy('dispatch');
-    spyOn(filterComputer, 'computeNewFilterValue').and.returnValue(
-      'some filter value',
-    );
+    mockComputeNewFilterValue.mockReturnValue('some filter value');
   });
 
   it('dispatches relevant actions with the updated params', () => {

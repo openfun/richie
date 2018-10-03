@@ -17,9 +17,10 @@ import { RootState } from '../data/rootReducer';
 describe('Integration tests - filters', () => {
   let store: Store<RootState>;
   let makeSearchFilterPane: () => ReactWrapper;
+  const mockHistoryPushState = jest.spyOn(window.history, 'pushState');
 
   beforeEach(() => {
-    spyOn(window.history, 'pushState');
+    mockHistoryPushState.mockReset();
 
     // Create the store with the same initial state as in-app
     store = bootstrapStore();

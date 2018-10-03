@@ -1,12 +1,11 @@
 import { FilterDefinitionState } from '../../data/filterDefinitions/reducer';
-import * as filterUpdater from '../../utils/filters/updateFilter';
+import { updateFilter } from '../../utils/filters/updateFilter';
 import { mapStateToProps, mergeProps } from './SearchSuggestFieldContainer';
 
-describe('components/SearchSuggestFieldContainer/mergeProps', () => {
-  beforeEach(() => {
-    spyOn(filterUpdater, 'updateFilter');
-  });
+const mockUpdateFilter: jest.Mock<typeof updateFilter> = updateFilter as any;
+jest.mock('../../utils/filters/updateFilter');
 
+describe('components/SearchSuggestFieldContainer/mergeProps', () => {
   it('builds props with an addFilter function that calls updateFilter', () => {
     const dispatch = jasmine.createSpy('dispatch');
     const state = {
@@ -32,7 +31,7 @@ describe('components/SearchSuggestFieldContainer/mergeProps', () => {
 
     addFilter('organizations', '84');
 
-    expect(filterUpdater.updateFilter).toHaveBeenCalledWith(
+    expect(mockUpdateFilter).toHaveBeenCalledWith(
       dispatch,
       { limit: 20, offset: 0 },
       'add',

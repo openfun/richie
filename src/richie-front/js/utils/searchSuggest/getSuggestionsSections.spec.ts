@@ -1,14 +1,13 @@
 import fetchMock from 'fetch-mock';
 
 import { Course } from '../../types/Course';
-import * as errors from '../../utils/errors/handle';
+import { handle } from '../../utils/errors/handle';
 import { getSuggestionsSection } from './getSuggestionsSection';
 
-describe('utils/searchSuggest/getSuggestionsSection', () => {
-  beforeEach(() => {
-    spyOn(errors, 'handle');
-  });
+const mockHandle: jest.Mock<typeof handle> = handle as any;
+jest.mock('../../utils/errors/handle');
 
+describe('utils/searchSuggest/getSuggestionsSection', () => {
   afterEach(() => {
     fetchMock.restore();
   });
@@ -48,7 +47,7 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
       { defaultMessage: 'Courses', id: 'coursesHumanName' },
       'some search',
     );
-    expect(errors.handle).toHaveBeenCalledWith(
+    expect(mockHandle).toHaveBeenCalledWith(
       new Error('Failed to send API request'),
     );
   });
@@ -63,7 +62,7 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
       { defaultMessage: 'Courses', id: 'coursesHumanName' },
       'some search',
     );
-    expect(errors.handle).toHaveBeenCalledWith(
+    expect(mockHandle).toHaveBeenCalledWith(
       new Error('Failed to get list from /api/v1.0/courses/ : 403'),
     );
   });
@@ -75,7 +74,7 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
       { defaultMessage: 'Courses', id: 'coursesHumanName' },
       'some search',
     );
-    expect(errors.handle).toHaveBeenCalledWith(
+    expect(mockHandle).toHaveBeenCalledWith(
       new Error(
         'Failed to decode JSON in getSuggestionSection FetchError: invalid json response body at ' +
           '/api/v1.0/courses/?query=some%20search reason: Unexpected token o in JSON at position 1',

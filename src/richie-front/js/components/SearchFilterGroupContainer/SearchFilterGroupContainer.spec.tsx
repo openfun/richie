@@ -2,9 +2,17 @@ import { FilterDefinitionState } from '../../data/filterDefinitions/reducer';
 import { ResourceListState } from '../../data/genericReducers/resourceList/resourceList';
 import { RootState } from '../../data/rootReducer';
 import { Course } from '../../types/Course';
-import * as filterFromStateGetter from '../../utils/filters/getFilterFromState';
-import * as filterUpdater from '../../utils/filters/updateFilter';
+import { getFilterFromState } from '../../utils/filters/getFilterFromState';
+import { updateFilter } from '../../utils/filters/updateFilter';
 import { mapStateToProps, mergeProps } from './SearchFilterGroupContainer';
+
+const mockGetFilterFromState: jest.Mock<
+  typeof getFilterFromState
+> = getFilterFromState as any;
+jest.mock('../../utils/filters/getFilterFromState');
+
+const mockUpdateFilter: jest.Mock<typeof updateFilter> = updateFilter as any;
+jest.mock('../../utils/filters/updateFilter');
 
 describe('components/SearchFilterGroupContainer/mergeProps', () => {
   const exampleFilter = {
@@ -25,12 +33,8 @@ describe('components/SearchFilterGroupContainer/mergeProps', () => {
   };
 
   beforeEach(() => {
-    spyOn(filterUpdater, 'updateFilter').and.callFake(
-      (...params: any[]) => params,
-    );
-    spyOn(filterFromStateGetter, 'getFilterFromState').and.returnValue(
-      exampleFilter,
-    );
+    mockUpdateFilter.mockImplementation((...params: any[]) => params);
+    mockGetFilterFromState.mockReturnValue(exampleFilter);
   });
 
   it('returns the relevant filter, its current value & partially applied update helpers', () => {
