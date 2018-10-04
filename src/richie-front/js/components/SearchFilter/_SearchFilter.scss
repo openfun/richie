@@ -19,6 +19,7 @@ $richie-search-filters-active-fontweight: null !default;
 $richie-search-filters-active-background: null !default;
 $richie-search-filters-active-divider-border: null !default;
 
+$richie-search-filters-icon-font-size: $font-size-base * 2 !default;
 
 .search-filter {
   @include m-o-list-group__item(
@@ -49,5 +50,12 @@ $richie-search-filters-active-divider-border: null !default;
 
     color: $white;
     background: $firebrick6;
+  }
+
+  &__close {
+
+    color: $white;
+    font-size: $richie-search-filters-icon-font-size;
+    font-weight: $font-weight-bold;
   }
 }
