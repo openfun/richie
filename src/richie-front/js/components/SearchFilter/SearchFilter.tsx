@@ -21,6 +21,7 @@ export const SearchFilter = (props: SearchFilterProps) => {
           ? removeFilter(filter.primaryKey)
           : addFilter(filter.primaryKey)
       }
+      aria-label={isActive ? 'Close' : ''}
     >
       {typeof filter.humanName === 'string' ? (
         <span>{filter.humanName}</span>
@@ -29,6 +30,13 @@ export const SearchFilter = (props: SearchFilterProps) => {
       )}
       {filter.count || filter.count === 0 ? (
         <span className="search-filter__count">{filter.count}</span>
+      ) : (
+        ''
+      )}
+      {isActive ? (
+        <span className="search-filter__close" aria-hidden="true">
+          &times;
+        </span>
       ) : (
         ''
       )}
