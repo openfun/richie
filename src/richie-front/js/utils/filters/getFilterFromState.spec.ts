@@ -8,7 +8,7 @@ import { Organization } from '../../types/Organization';
 import { getFilterFromState } from './getFilterFromState';
 
 describe('utils/filters/getFilterFromState', () => {
-  it('returns a FilterDefinition for a hardcoded filter group', () => {
+  it('returns a FilterDefinition for a hardcoded filter group with facets', () => {
     const state = {
       filterDefinitions: {
         availability: {} as FilterDefinitionWithValues,
@@ -21,7 +21,49 @@ describe('utils/filters/getFilterFromState', () => {
         organizations: {} as FilterDefinition,
         subjects: {} as FilterDefinition,
       },
-      resources: {},
+      resources: {
+        courses: {
+          byId: {},
+          currentQuery: {
+            facets: { new: { new: 3 } },
+            items: {},
+            params: { limit: 20, offset: 0 },
+            total_count: 3,
+          },
+        },
+      },
+    } as RootState;
+    expect(getFilterFromState(state, 'new')).toEqual({
+      humanName: { defaultMessage: 'New courses', id: 'newCourses' },
+      machineName: 'new',
+      values: [{ primaryKey: 'new', humanName: 'First session', count: 3 }],
+    });
+  });
+
+  it('returns a FilterDefinition for a hardcoded filter group without facet', () => {
+    const state = {
+      filterDefinitions: {
+        availability: {} as FilterDefinitionWithValues,
+        language: {} as FilterDefinitionWithValues,
+        new: {
+          humanName: { defaultMessage: 'New courses', id: 'newCourses' },
+          machineName: 'new' as 'new',
+          values: [{ primaryKey: 'new', humanName: 'First session' }],
+        },
+        organizations: {} as FilterDefinition,
+        subjects: {} as FilterDefinition,
+      },
+      resources: {
+        courses: {
+          byId: {},
+          currentQuery: {
+            facets: {},
+            items: {},
+            params: { limit: 20, offset: 0 },
+            total_count: 0,
+          },
+        },
+      },
     } as RootState;
     expect(getFilterFromState(state, 'new')).toEqual({
       humanName: { defaultMessage: 'New courses', id: 'newCourses' },
