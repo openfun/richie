@@ -50,4 +50,29 @@ describe('utils/filters/getActiveFilterValues', () => {
       }),
     );
   });
+
+  it('returns an array of FilterValues from harcoded filter list', () => {
+    const state = {
+      filterDefinitions: {
+        new: {
+          humanName: { defaultMessage: 'New courses', id: 'newCourses' },
+          machineName: 'new' as 'new',
+          values: [{ primaryKey: 'new', humanName: 'First session' }],
+        },
+      },
+    } as any;
+
+    expect(
+      getActiveFilterValues(state, 'new', {
+        limit: 20,
+        new: 'new',
+        offset: 0,
+      }),
+    ).toEqual([
+      {
+        humanName: 'First session',
+        primaryKey: 'new',
+      },
+    ]);
+  });
 });

@@ -1,6 +1,11 @@
 import { ResourceListStateParams } from '../../data/genericReducers/resourceList/resourceList';
 import { RootState } from '../../data/rootReducer';
-import { filterGroupName, FilterValue } from '../../types/filters';
+import {
+  filterGroupName,
+  FilterValue,
+  hardcodedFilterGroupName,
+  resourceBasedFilterGroupName,
+} from '../../types/filters';
 
 // Return the list of *currenly active* filter values for a dimension built from the state & current params
 export const getActiveFilterValues = (
@@ -10,22 +15,18 @@ export const getActiveFilterValues = (
 ): FilterValue[] => {
   let currentValues = currentParams[machineName];
 
+  if (!currentValues) {
+    return [];
+  }
+
+  // Wrap base typed values in arrays to make manipulating them easier
+  if (typeof currentValues === 'string' || typeof currentValues === 'number') {
+    currentValues = [currentValues];
+  }
+
   switch (machineName) {
     case 'organizations':
     case 'subjects':
-      // There are no active values to return
-      if (!currentValues) {
-        return [];
-      }
-
-      // Wrap base typed values in arrays to make manipulating them easier
-      if (
-        typeof currentValues === 'string' ||
-        typeof currentValues === 'number'
-      ) {
-        currentValues = [currentValues];
-      }
-
       return (
         currentValues
           // Get the value for each our the keys we received
@@ -43,8 +44,17 @@ export const getActiveFilterValues = (
             primaryKey: String(value!.id),
           }))
       );
-
     default:
-      return [];
+      return currentValues
+        .map(key => {
+          return state.filterDefinitions[machineName].values.find(
+            value => value.primaryKey === key,
+          );
+        })
+        .filter(value => !!value)
+        .map(value => ({
+          humanName: value!.humanName,
+          primaryKey: value!.primaryKey,
+        }));
   }
 };
