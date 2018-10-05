@@ -4,6 +4,7 @@ import { RootState } from '../../data/rootReducer';
 import {
   FilterDefinitionWithValues,
   filterGroupName,
+  hardcodedFilterGroupName,
   resourceBasedFilterGroupName,
 } from '../../types/filters';
 
@@ -32,10 +33,31 @@ export function getFilterFromState(
 
     // Values from state are usable as-is for hardcoded filters
     default:
-      return state.filterDefinitions[machineName];
+      return {
+        ...state.filterDefinitions[machineName],
+        values: getHarcodedFilterFacetedValues(facets, machineName),
+      };
   }
 
   /* tslint:disable:variable-name */
+  function getHarcodedFilterFacetedValues(
+    facets_: typeof facets,
+    resourceName: hardcodedFilterGroupName,
+  ) {
+    if (!state.filterDefinitions[resourceName]) {
+      return [];
+    }
+
+    if (!facets_[resourceName] || !Object.keys(facets_[resourceName]).length) {
+      return state.filterDefinitions[resourceName].values;
+    }
+
+    return state.filterDefinitions[resourceName].values.map(value => ({
+      ...value,
+      count: facets_[resourceName][value.primaryKey],
+    }));
+  }
+
   function getFacetedValues(
     state_: typeof state,
     facets_: typeof facets,
