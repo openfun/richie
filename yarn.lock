@@ -552,9 +552,9 @@
   version "6.0.4"
   resolved "https://registry.yarnpkg.com/@types/fetch-mock/-/fetch-mock-6.0.4.tgz#fbe20ab0cc151fe67b2e1b71e7ef29a986a90f1f"
 
-"@types/jest@23.3.2":
-  version "23.3.2"
-  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-23.3.2.tgz#07b90f6adf75d42c34230c026a2529e56c249dbb"
+"@types/jest@23.3.3":
+  version "23.3.3"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-23.3.3.tgz#246ebcc52771d2327bb8e37aa971b412d9dc4237"
 
 "@types/lodash-es@4.17.1":
   version "4.17.1"
@@ -580,9 +580,9 @@
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/@types/query-string/-/query-string-6.1.0.tgz#5f721f9503bdf517d474c66cf4423da5dd2d5698"
 
-"@types/react-autosuggest@9.3.5":
-  version "9.3.5"
-  resolved "https://registry.yarnpkg.com/@types/react-autosuggest/-/react-autosuggest-9.3.5.tgz#5b32df11dbc44444c40b4d7d53d71d6376e3828a"
+"@types/react-autosuggest@9.3.6":
+  version "9.3.6"
+  resolved "https://registry.yarnpkg.com/@types/react-autosuggest/-/react-autosuggest-9.3.6.tgz#d12d7b555fc79266889098412585b3183fe95533"
   dependencies:
     "@types/react" "*"
 
@@ -604,9 +604,16 @@
     "@types/react" "*"
     redux "^4.0.0"
 
-"@types/react@*", "@types/react@16.4.14":
+"@types/react@*":
   version "16.4.14"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.4.14.tgz#47c604c8e46ed674bbdf4aabf82b34b9041c6a04"
+  dependencies:
+    "@types/prop-types" "*"
+    csstype "^2.2.0"
+
+"@types/react@16.4.16":
+  version "16.4.16"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.4.16.tgz#99f91b1200ae8c2062030402006d3b3c3a177043"
   dependencies:
     "@types/prop-types" "*"
     csstype "^2.2.0"
@@ -2043,16 +2050,16 @@ entities@^1.1.1, entities@~1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/entities/-/entities-1.1.1.tgz#6e5c2d0a5621b5dadaecef80b90edfb5cd7772f0"
 
-enzyme-adapter-react-16@1.5.0:
-  version "1.5.0"
-  resolved "https://registry.yarnpkg.com/enzyme-adapter-react-16/-/enzyme-adapter-react-16-1.5.0.tgz#50af8d76a45fe0915de932bd95d34cdca75c0be3"
+enzyme-adapter-react-16@1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/enzyme-adapter-react-16/-/enzyme-adapter-react-16-1.6.0.tgz#3fca28d3c32f3ff427495380fe2dd51494689073"
   dependencies:
     enzyme-adapter-utils "^1.8.0"
     function.prototype.name "^1.1.0"
     object.assign "^4.1.0"
     object.values "^1.0.4"
     prop-types "^15.6.2"
-    react-is "^16.4.2"
+    react-is "^16.5.2"
     react-test-renderer "^16.0.0-0"
 
 enzyme-adapter-utils@^1.8.0:
@@ -2063,9 +2070,9 @@ enzyme-adapter-utils@^1.8.0:
     object.assign "^4.1.0"
     prop-types "^15.6.2"
 
-enzyme@3.6.0:
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/enzyme/-/enzyme-3.6.0.tgz#d213f280a258f61e901bc663d4cc2d6fd9a9dec8"
+enzyme@3.7.0:
+  version "3.7.0"
+  resolved "https://registry.yarnpkg.com/enzyme/-/enzyme-3.7.0.tgz#9b499e8ca155df44fef64d9f1558961ba1385a46"
   dependencies:
     array.prototype.flat "^1.2.1"
     cheerio "^1.0.0-rc.2"
@@ -2320,9 +2327,9 @@ fb-watchman@^2.0.0:
   dependencies:
     bser "^2.0.0"
 
-fetch-mock@7.0.6:
-  version "7.0.6"
-  resolved "https://registry.yarnpkg.com/fetch-mock/-/fetch-mock-7.0.6.tgz#da4389a8a8d6170f9abae22725bbd0c6ff009137"
+fetch-mock@7.0.7:
+  version "7.0.7"
+  resolved "https://registry.yarnpkg.com/fetch-mock/-/fetch-mock-7.0.7.tgz#f9795dd56cc1b2314c4961a7bf012982438c2c5c"
   dependencies:
     babel-polyfill "^6.26.0"
     glob-to-regexp "^0.4.0"
@@ -4878,9 +4885,9 @@ react-intl-po@2.2.2:
     po2json "^0.4.5"
     ramda "^0.25.0"
 
-react-intl@2.7.0:
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/react-intl/-/react-intl-2.7.0.tgz#be1244769ce51f71476afb9556485a46090db5fa"
+react-intl@2.7.1:
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/react-intl/-/react-intl-2.7.1.tgz#1223e3cc632d75ce33cc8acb44df0fff1818bf51"
   dependencies:
     hoist-non-react-statics "^2.5.5"
     intl-format-cache "^2.0.5"
@@ -4888,7 +4895,7 @@ react-intl@2.7.0:
     intl-relativeformat "^2.1.0"
     invariant "^2.1.1"
 
-react-is@^16.4.2, react-is@^16.5.2:
+react-is@^16.5.2:
   version "16.5.2"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.5.2.tgz#e2a7b7c3f5d48062eb769fcb123505eb928722e3"
 
@@ -4975,9 +4982,9 @@ redent@^1.0.0:
     indent-string "^2.1.0"
     strip-indent "^1.0.1"
 
-redux-saga@0.16.0:
-  version "0.16.0"
-  resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-0.16.0.tgz#0a231db0a1489301dd980f6f2f88d8ced418f724"
+redux-saga@0.16.1:
+  version "0.16.1"
+  resolved "https://registry.yarnpkg.com/redux-saga/-/redux-saga-0.16.1.tgz#aa43d2ac029dab57f7f522b143f7db179a9e1324"
 
 redux@4.0.0, redux@^4.0.0:
   version "4.0.0"
@@ -5799,9 +5806,9 @@ trim-right@^1.0.1:
   dependencies:
     glob "^7.1.2"
 
-ts-jest@23.10.3:
-  version "23.10.3"
-  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-23.10.3.tgz#f42de669888dfd2795b1491016b1813230d553fa"
+ts-jest@23.10.4:
+  version "23.10.4"
+  resolved "https://registry.yarnpkg.com/ts-jest/-/ts-jest-23.10.4.tgz#a7a953f55c9165bcaa90ff91014a178e87fe0df8"
   dependencies:
     bs-logger "0.x"
     buffer-from "1.x"
