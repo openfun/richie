@@ -1,0 +1,11 @@
+.icon-close {
+  width: 1rem;
+  height: 1rem;
+  stroke: white;
+  stroke-width: 0.6rem;
+}
+
+*:hover > .icon-close,
+*:focus > .icon-close {
+  stroke-width: 1rem;
+}

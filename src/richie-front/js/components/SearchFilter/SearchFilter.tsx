@@ -2,6 +2,7 @@ import * as React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { FilterValue } from '../../types/filters';
+import { CloseIcon } from '../icons/CloseIcon';
 
 export interface SearchFilterProps {
   addFilter: (filterValue: string) => void;
@@ -21,7 +22,7 @@ export const SearchFilter = (props: SearchFilterProps) => {
           ? removeFilter(filter.primaryKey)
           : addFilter(filter.primaryKey)
       }
-      aria-label={isActive ? 'Close' : ''}
+      aria-pressed={isActive}
     >
       {typeof filter.humanName === 'string' ? (
         <span>{filter.humanName}</span>
@@ -33,13 +34,7 @@ export const SearchFilter = (props: SearchFilterProps) => {
       ) : (
         ''
       )}
-      {isActive ? (
-        <span className="search-filter__close" aria-hidden="true">
-          &times;
-        </span>
-      ) : (
-        ''
-      )}
+      {isActive ? <CloseIcon /> : ''}
     </button>
   );
 };

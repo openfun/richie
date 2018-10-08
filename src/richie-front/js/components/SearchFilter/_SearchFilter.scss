@@ -19,8 +19,6 @@ $richie-search-filters-active-fontweight: null !default;
 $richie-search-filters-active-background: null !default;
 $richie-search-filters-active-divider-border: null !default;
 
-$richie-search-filters-icon-font-size: $font-size-base * 2 !default;
-
 .search-filter {
   @include m-o-list-group__item(
     $width: $richie-search-filters-item-width,
@@ -40,7 +38,7 @@ $richie-search-filters-icon-font-size: $font-size-base * 2 !default;
     $active-fontcolor: $richie-search-filters-active-fontcolor,
     $active-fontweight: $richie-search-filters-active-fontweight,
     $active-background: $richie-search-filters-active-background,
-    $active-divider-border: $richie-search-filters-active-divider-border,
+    $active-divider-border: $richie-search-filters-active-divider-border
   );
   cursor: pointer;
 
@@ -50,12 +48,5 @@ $richie-search-filters-icon-font-size: $font-size-base * 2 !default;
 
     color: $white;
     background: $firebrick6;
-  }
-
-  &__close {
-
-    color: $white;
-    font-size: $richie-search-filters-icon-font-size;
-    font-weight: $font-weight-bold;
   }
 }
