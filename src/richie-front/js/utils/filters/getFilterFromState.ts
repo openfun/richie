@@ -7,6 +7,7 @@ import {
   hardcodedFilterGroupName,
   resourceBasedFilterGroupName,
 } from '../../types/filters';
+import { isResourceBasedFilterGroupName } from './isResourceBasedFilterGroupName';
 
 // Get (or build) a complete filter definition for `machineName` from the state, using:
 // - filterDefinitions for hardcoded filters and hardcoded props of resource based filters
@@ -22,22 +23,12 @@ export function getFilterFromState(
       state.resources.courses.currentQuery.facets) ||
     {};
 
-  switch (machineName) {
-    // Use the facets to build the values for resource based filters
-    case 'organizations':
-    case 'subjects':
-      return {
-        ...state.filterDefinitions[machineName],
-        values: getFacetedValues(state, facets, machineName),
-      };
-
-    // Values from state are usable as-is for hardcoded filters
-    default:
-      return {
-        ...state.filterDefinitions[machineName],
-        values: getHarcodedFilterFacetedValues(facets, machineName),
-      };
-  }
+  return {
+    ...state.filterDefinitions[machineName],
+    values: isResourceBasedFilterGroupName(machineName)
+      ? getFacetedValues(state, facets, machineName)
+      : getHarcodedFilterFacetedValues(facets, machineName),
+  };
 
   /* tslint:disable:variable-name */
   function getHarcodedFilterFacetedValues(
