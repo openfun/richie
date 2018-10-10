@@ -1,23 +1,25 @@
 {% load cms_tags i18n %}
 {% spaceless %}
+{% if current_page.publisher_is_draft or instance.check_publication is True %}
 <div class="person-plugin">
-  <a class="person-plugin__media" href="{{ instance.person.extended_object.get_absolute_url }}"
-     title="{{ instance.person.extended_object.get_title }} {% trans "avatar" %}">
+  <a class="person-plugin__media" href="{{ relevant_page.get_absolute_url }}"
+      title="{{ relevant_page.person.get_full_name }} {% trans "avatar" %}">
     {% with width=200 height=200 %}
-      {% show_placeholder "portrait" instance.person.extended_object %}
+    {% show_placeholder "portrait" relevant_page %}
     {% endwith %}
   </a>
   <div class="person-plugin__content">
     <div class="person-plugin__content__wrapper">
-        <a href="{{ instance.person.extended_object.get_absolute_url }}" title="{{ instance.person.extended_object.get_title }}">
+      <a href="{{ relevant_page.get_absolute_url }}" title="{{ relevant_page.person.get_full_name }}">
         <h{{ header_level|default:2 }} class="person-plugin__content__title">
-            {{ instance.person.get_full_name }}
+          {{ relevant_page.person.get_full_name }}
         </h{{ header_level|default:2 }}>
-        </a>
-        <div class="person-plugin__content__text">
-        {% show_placeholder "resume" instance.person.extended_object %}
-        </div>
+      </a>
+      <div class="person-plugin__content__text">
+        {% show_placeholder "resume" relevant_page %}
+      </div>
     </div>
   </div>
 </div>
+{% endif %}
 {% endspaceless %}
