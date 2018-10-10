@@ -4,9 +4,11 @@ Declare and configure the model for the person application
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from cms.extensions import PageExtension
+from cms.extensions.extension_pool import extension_pool
 from cms.models.pluginmodel import CMSPlugin
 from parler.models import TranslatableModel, TranslatedFields
+
+from ..core.models import BasePageExtension
 
 
 class PersonTitle(TranslatableModel):
@@ -32,7 +34,7 @@ class PersonTitle(TranslatableModel):
         )
 
 
-class Person(PageExtension):
+class Person(BasePageExtension):
     """
     The person page extension represents and records people information.
     It could be a course or news article author.
@@ -95,3 +97,6 @@ class PersonPluginModel(CMSPlugin):
         return "{model:s}: {id:d}".format(
             model=self._meta.verbose_name.title(), id=self.id
         )
+
+
+extension_pool.register(Person)
