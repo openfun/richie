@@ -22,5 +22,11 @@ class PersonPlugin(CMSPluginBase):
     cache = True
 
     def render(self, context, instance, placeholder):
-        context.update({"instance": instance, "placeholder": placeholder})
+        context.update(
+            {
+                "instance": instance,
+                "relevant_page": instance.relevant_page,
+                "placeholder": placeholder,
+            }
+        )
         return context

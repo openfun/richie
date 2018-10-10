@@ -4,9 +4,9 @@ Unit tests for the Person plugin and its model
 """
 from django import forms
 from django.conf import settings
-from django.test import TestCase
 
 from cms.api import add_plugin, create_page
+from cms.test_utils.testcases import CMSTestCase
 from cmsplugin_plain_text.cms_plugins import PlaintextPlugin
 from djangocms_picture.cms_plugins import PicturePlugin
 
@@ -17,7 +17,7 @@ from richie.apps.persons.factories import PersonFactory
 from richie.apps.persons.models import PersonPluginModel
 
 
-class PersonPluginTestCase(TestCase):
+class PersonPluginTestCase(CMSTestCase):
     """
     Test that PersonPlugin correctly displays a Person's page placeholders content
     """
@@ -41,16 +41,17 @@ class PersonPluginTestCase(TestCase):
         self.assertIn(person.get_full_name(), plugin_form.as_table())
         self.assertNotIn(other_page_title, plugin_form.as_table())
 
-    def test_cms_plugins_person_render(self):
+    def test_cms_plugins_person_render_on_public_page(self):
         """
-        Test that a PersonPlugin correctly renders person's page specific information
+        The person plugin should render as expected on a public page.
         """
         # Create a filer fake image
-        staff = UserFactory(is_staff=True, is_superuser=True)
-        image = FilerImageFactory(owner=staff)
+        image = FilerImageFactory()
 
         # Create a Person
-        person = PersonFactory()
+        person = PersonFactory(
+            first_name="Meimei", title={"en": "person title", "fr": "titre personne"}
+        )
         person_page = person.extended_object
 
         # Add portrait to related placeholder
@@ -67,62 +68,90 @@ class PersonPluginTestCase(TestCase):
             "fr",
             **{"picture": image, "attributes": {"alt": "description du portrait"}}
         )
-        # A resume to related placeholder
+        # Add resume to related placeholder
         resume_placeholder = person_page.placeholders.get(slot="resume")
-        add_plugin(
-            resume_placeholder, PlaintextPlugin, "en", **{"body": "A short resume"}
+        resume_en = add_plugin(
+            resume_placeholder, PlaintextPlugin, "en", **{"body": "public resume"}
         )
         add_plugin(
-            resume_placeholder, PlaintextPlugin, "fr", **{"body": "Un résumé court"}
+            resume_placeholder, PlaintextPlugin, "fr", **{"body": "résumé public"}
         )
 
         # Create a page to add the plugin to
         page = create_i18n_page({"en": "A page", "fr": "Une page"})
         placeholder = page.placeholders.get(slot="maincontent")
-        add_plugin(placeholder, PersonPlugin, "en", **{"person": person})
-        add_plugin(placeholder, PersonPlugin, "fr", **{"person": person})
+        add_plugin(placeholder, PersonPlugin, "en", **{"page": person.extended_object})
+        add_plugin(placeholder, PersonPlugin, "fr", **{"page": person.extended_object})
+
+        person_page.publish("en")
+        person_page.publish("fr")
+        person.refresh_from_db()
 
         page.publish("en")
         page.publish("fr")
 
-        # Check the page content in English
         url = page.get_absolute_url(language="en")
+
+        # The person plugin should not be visible on the public page before it is published
+        person_page.unpublish("en")
+        response = self.client.get(url)
+        self.assertNotContains(response, "Meimei")
+
+        # Republishing the plugin should not make it public
+        person_page.publish("en")
+        response = self.client.get(url)
+        self.assertNotContains(response, "Meimei")
+
+        # Now modify the person to have a draft different from the public version
+        person.first_name = "Jiji"
+        person.save()
+        resume_en.body = "draft resume"
+        resume_en.save()
+
+        # Publishing the page again should make the plugin public
+        page.publish("en")
+
+        # Check the page content in English
         response = self.client.get(url)
         # Person's name should be present as a link to the cms page
         # And CMS page title should be in title attribute of the link
         self.assertContains(
             response,
-            '<a href="{url}" title="{page_title}">'.format(
-                url=person_page.get_absolute_url(), page_title=person_page.get_title()
+            '<a href="/en/person-title/" title="{name:s}">'.format(
+                name=person.public_extension.get_full_name()
             ),
             status_code=200,
-        )
-        self.assertContains(response, person.get_full_name(), html=True)
-        # Person's portrait and its properties should be present
-        # pylint: disable=no-member
-        self.assertContains(response, image.file.name)
-        # Short resume should be present
-        self.assertContains(
-            response,
-            '<div class="person-plugin__content__text">A short resume</div>',
-            html=True,
         )
         # The person's full name should be wrapped in a h2
         self.assertContains(
             response,
             '<h2 class="person-plugin__content__title">{:s}</h2>'.format(
-                person.get_full_name()
+                person.public_extension.get_full_name()
             ),
             html=True,
         )
+        self.assertContains(response, "Meimei")
+        self.assertNotContains(response, "Jiji")
+
+        # Person's portrait and its properties should be present
+        # pylint: disable=no-member
+        self.assertContains(response, image.file.name)
+
+        # Short resume should be present
+        self.assertContains(
+            response,
+            '<div class="person-plugin__content__text">public resume</div>',
+            html=True,
+        )
+        self.assertNotContains(response, "draft resume")
 
         # Same checks in French
         url = page.get_absolute_url(language="fr")
         response = self.client.get(url)
         self.assertContains(
             response,
-            '<a href="{url}" title="{page_title}">'.format(
-                url=person_page.get_absolute_url(), page_title=person_page.get_title()
+            '<a href="/fr/titre-personne/" title="{name:s}">'.format(
+                name=person.public_extension.get_full_name()
             ),
             status_code=200,
         )
@@ -130,6 +159,53 @@ class PersonPluginTestCase(TestCase):
         self.assertContains(response, image.file.name)
         self.assertContains(
             response,
-            '<div class="person-plugin__content__text">Un résumé court</div>',
+            '<div class="person-plugin__content__text">résumé public</div>',
             html=True,
         )
+
+    def test_cms_plugins_person_render_on_draft_page(self):
+        """
+        The person plugin should render as expected on a draft page.
+        """
+        staff = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=staff.username, password="password")
+
+        # Create a Person
+        person = PersonFactory(first_name="Meimei")
+        person_page = person.extended_object
+
+        # Add resume to related placeholder
+        resume_placeholder = person_page.placeholders.get(slot="resume")
+        resume_en = add_plugin(
+            resume_placeholder, PlaintextPlugin, "en", **{"body": "public resume"}
+        )
+
+        # Create a page to add the plugin to
+        page = create_i18n_page("A page")
+        placeholder = page.placeholders.get(slot="maincontent")
+        add_plugin(placeholder, PersonPlugin, "en", **{"page": person.extended_object})
+
+        person_page.publish("en")
+        person_page.unpublish("en")
+
+        url = "{:s}?edit".format(page.get_absolute_url(language="en"))
+
+        # The public version of the person plugin should be visible on the draft page
+        response = self.client.get(url)
+        self.assertContains(response, "Meimei")
+        self.assertContains(response, "public resume")
+        self.assertNotContains(response, "Jiji")
+        self.assertNotContains(response, "draft resume")
+
+        # Now modify the person to have a draft different from the public version
+        person.first_name = "Jiji"
+        person.save()
+        resume_en.body = "draft resume"
+        resume_en.save()
+
+        # The draft version of the person plugin should now be visible
+        response = self.client.get(url)
+        self.assertContains(response, "Jiji")
+        self.assertContains(response, "draft resume")
+        self.assertNotContains(response, "Meimei")
+        self.assertNotContains(response, "public resume")
