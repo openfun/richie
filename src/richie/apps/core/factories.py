@@ -73,12 +73,6 @@ class PageExtensionDjangoModelFactory(factory.django.DjangoModelFactory):
     All this is mutualized by inheriting from the present class.
     """
 
-    languages = [settings.LANGUAGE_CODE]
-    parent = None
-    template = None
-    title = None
-    in_navigation = False
-
     @factory.lazy_attribute
     def extended_object(self):
         """
@@ -86,11 +80,11 @@ class PageExtensionDjangoModelFactory(factory.django.DjangoModelFactory):
         requested languages
         """
         return create_i18n_page(
-            title=self.title,
-            languages=self.languages,
-            template=self.template,
-            in_navigation=self.in_navigation,
-            parent=self.parent,
+            title=getattr(self, "title", None),
+            languages=getattr(self, "languages", None),
+            template=getattr(self, "template", None),
+            in_navigation=getattr(self, "in_navigation", False),
+            parent=getattr(self, "parent", None),
         )
 
     @classmethod
