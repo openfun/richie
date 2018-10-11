@@ -6,11 +6,7 @@ from django.test import TestCase
 
 from cms.api import create_page
 
-from richie.apps.courses.factories import (
-    CourseFactory,
-    OrganizationFactory,
-    SubjectFactory,
-)
+from richie.apps.courses.factories import CourseFactory, OrganizationFactory
 from richie.apps.courses.models import Course
 
 
@@ -115,45 +111,3 @@ class CourseModelsTestCase(TestCase):
         )
         # The published organization that was removed should not see the published course any more
         self.assertIsNone(organization1.public_extension.courses.first())
-
-    def test_models_course_subjects_copied_when_publishing(self):
-        """
-        When publishing a course, the links to draft subjects on the draft version of the
-        course should be copied (clear then add) to set equivalent links between the corresponding
-        published course and published subjects.
-        """
-        # Create subjects: 2 published and 1 draft
-        subject1, subject2 = SubjectFactory.create_batch(2, should_publish=True)
-        subject3 = SubjectFactory()
-
-        # Create a draft course
-        draft_course = CourseFactory(with_subjects=[subject1, subject2, subject3])
-
-        # The draft course should see all subjects
-        self.assertEqual(
-            set(draft_course.subjects.all()), {subject1, subject2, subject3}
-        )
-
-        # Publish the course and check that the subjects are copied
-        draft_course.extended_object.publish("en")
-        published_course = Course.objects.get(extended_object__publisher_is_draft=False)
-        self.assertEqual(
-            set(published_course.subjects.all()),
-            {subject1.public_extension, subject2.public_extension},
-        )
-        # A published subject should see the published course
-        self.assertEqual(subject1.public_extension.courses.first(), published_course)
-
-        # The subjects that are removed from the draft course should only be cleared from the
-        # published course upon publishing
-        draft_course.subjects.remove(subject1)
-        self.assertEqual(
-            set(published_course.subjects.all()),
-            {subject1.public_extension, subject2.public_extension},
-        )
-        draft_course.extended_object.publish("en")
-        self.assertEqual(
-            set(published_course.subjects.all()), {subject2.public_extension}
-        )
-        # The published subject that was removed should not see the published course any more
-        self.assertIsNone(subject1.public_extension.courses.first())

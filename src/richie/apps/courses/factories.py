@@ -221,6 +221,27 @@ class CourseFactory(PageExtensionDjangoModelFactory):
 
     @factory.post_generation
     # pylint: disable=unused-argument
+    def fill_subjects(self, create, extracted, **kwargs):
+        """
+        Add subjects plugin to course from a given list of subject instances.
+        """
+
+        if create and extracted:
+            for language in self.extended_object.get_languages():
+                placeholder = self.extended_object.placeholders.get(
+                    slot="course_subjects"
+                )
+
+                for subject in extracted:
+                    add_plugin(
+                        language=language,
+                        placeholder=placeholder,
+                        plugin_type="SubjectPlugin",
+                        **{"page": subject.extended_object},
+                    )
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
     def fill_licences(self, create, extracted, **kwargs):
         """
         Add licence plugin for course licence placeholders from given licence
@@ -254,13 +275,6 @@ class CourseFactory(PageExtensionDjangoModelFactory):
                     nb_paragraphs=1,
                     languages=self.extended_object.get_languages(),
                 )
-
-    @factory.post_generation
-    # pylint: disable=unused-argument
-    def with_subjects(self, create, extracted, **kwargs):
-        """Add subjects to ManyToMany relation."""
-        if create and extracted:
-            self.subjects.set(extracted)
 
     @factory.post_generation
     # pylint: disable=unused-argument
@@ -366,13 +380,6 @@ class SubjectFactory(BLDPageExtensionDjangoModelFactory):
         exclude = ["languages", "template", "in_navigation", "title", "parent"]
 
     template = Subject.TEMPLATE_DETAIL
-
-    @factory.post_generation
-    # pylint: disable=unused-argument, attribute-defined-outside-init, no-member
-    def with_courses(self, create, extracted, **kwargs):
-        """Add courses to ManyToMany relation."""
-        if create and extracted:
-            self.courses.set(extracted)
 
 
 class LicenceLogoImageFactory(FilerImageFactory):

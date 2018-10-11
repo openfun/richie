@@ -42,12 +42,6 @@ class Course(BasePageExtension):
         related_name="courses",
         limit_choices_to={"extended_object__publisher_is_draft": True},
     )
-    subjects = models.ManyToManyField(
-        "Subject",
-        related_name="courses",
-        blank=True,
-        limit_choices_to={"extended_object__publisher_is_draft": True},
-    )
 
     ROOT_REVERSE_ID = "courses"
     TEMPLATE_DETAIL = "courses/cms/course_detail.html"
@@ -72,9 +66,6 @@ class Course(BasePageExtension):
             self.organizations.model.objects.filter(
                 draft_extension__courses=oldinstance
             )
-        )
-        self.subjects.set(
-            self.subjects.model.objects.filter(draft_extension__courses=oldinstance)
         )
 
     @property

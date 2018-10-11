@@ -38,7 +38,7 @@ class CourseCMSTestCase(CMSTestCase):
             organization_main=organizations[0],
             title="Very interesting course",
             with_organizations=organizations,
-            with_subjects=subjects,
+            fill_subjects=subjects,
         )
         page = course.extended_object
         CourseRunFactory.create_batch(2, course=course)
@@ -80,7 +80,7 @@ class CourseCMSTestCase(CMSTestCase):
         for subject in subjects[:2]:
             self.assertContains(
                 response,
-                '<a class="course-detail__content__subjects__item" href="{:s}">{:s}</a>'.format(
+                '<a class="subject-plugin-tag" href="{:s}">{:s}</a>'.format(
                     subject.extended_object.get_absolute_url(),
                     subject.extended_object.get_title(),
                 ),
@@ -135,7 +135,7 @@ class CourseCMSTestCase(CMSTestCase):
             organization_main=organizations[0],
             title="Very interesting course",
             with_organizations=organizations,
-            with_subjects=subjects,
+            fill_subjects=subjects,
         )
         page = course.extended_object
         CourseRunFactory.create_batch(2, course=course)
@@ -208,7 +208,7 @@ class CourseCMSTestCase(CMSTestCase):
         for subject in subjects[:2]:
             self.assertContains(
                 response,
-                '<a class="course-detail__content__subjects__item" href="{:s}">{:s}</a>'.format(
+                '<a class="subject-plugin-tag" href="{:s}">{:s}</a>'.format(
                     subject.extended_object.get_absolute_url(),
                     subject.extended_object.get_title(),
                 ),
@@ -220,7 +220,7 @@ class CourseCMSTestCase(CMSTestCase):
                 response,
                 '<a class="{element:s} {element:s}--draft" href="{url:s}">{title:s}</a>'.format(
                     url=subject.extended_object.get_absolute_url(),
-                    element="course-detail__content__subjects__item",
+                    element="subject-plugin-tag",
                     title=subject.extended_object.get_title(),
                 ),
                 html=True,

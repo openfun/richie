@@ -14,29 +14,13 @@
       </div>
 
       <div class="course-detail__content__row course-detail__content__subjects">
-        {% for subject in course.subjects.all %}
-          {# If the current page is a draft, show draft subjects with a class annotation for styling #}
-          {% if current_page.publisher_is_draft %}
-            {% if subject.check_publication is True %}
-              <a class="course-detail__content__subjects__item" href="{{ subject.public_extension.extended_object.get_absolute_url }}">
-                {{ subject.public_extension.extended_object.get_title }}
-              </a>
-            {% else %}
-              <a class="course-detail__content__subjects__item course-detail__content__subjects__item--draft" href="{{ subject.extended_object.get_absolute_url }}">
-                {{ subject.extended_object.get_title }}
-              </a>
-            {% endif %}
-          {# If the current course page is the published version, show only the subjects that are published #}
-          {% elif subject.check_publication is True %}
-            <a class="course-detail__content__subjects__item" href="{{ subject.extended_object.get_absolute_url }}">
-              {{ subject.extended_object.get_title }}
-            </a>
-          {% endif %}
-        {% empty %}
-          <p class="course-detail__content__subjects__item course-detail__content__subjects__item--empty">
-            {% trans "No associated subjects" %}
-          </p>
-        {% endfor %}
+        {% with form_factor="tag" %}
+          {% placeholder "course_subjects" or %}
+            <p class="course-detail__content__subjects__placeholder">
+              {% trans "No associated subjects" %}
+            </p>
+          {% endplaceholder %}
+        {% endwith %}
       </div>
 
       <div class="course-detail__content__row course-detail__content__teaser">
