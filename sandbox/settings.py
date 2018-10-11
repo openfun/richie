@@ -306,8 +306,8 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         },
         "courses/cms/course_detail.html course_teaser": {
             "name": _("Course teaser"),
-            "plugins": ["VideoPlayerPlugin"],
-            "limits": {"VideoPlayerPlugin": 1},
+            "plugins": ["VideoPlayerPlugin", "PicturePlugin"],
+            "limits": {"VideoPlayerPlugin": 1, "PicturePlugin": 1},
         },
         "courses/cms/course_detail.html course_syllabus": {
             "name": _("Course Syllabus"),
