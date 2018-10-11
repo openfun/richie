@@ -1,11 +1,14 @@
 """
 Declare and configure the models for the courses application
 """
+from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
+from cms.api import Page
 from cms.extensions.extension_pool import extension_pool
+from cms.models.pluginmodel import CMSPlugin
 
-from ...core.models import BasePageExtension
+from ...core.models import BasePageExtension, PagePluginMixin
 
 
 class Subject(BasePageExtension):
@@ -30,14 +33,26 @@ class Subject(BasePageExtension):
             title=self.extended_object.get_title(),
         )
 
-    def copy_relations(self, oldinstance, language):
-        """
-        We must manually copy the many-to-many relations so that the relations between the
-        published instances are realigned with draft instances.
-        """
-        # pylint: disable=no-member
-        self.courses.set(
-            self.courses.model.objects.filter(draft_extension__subjects=oldinstance)
+
+class SubjectPluginModel(PagePluginMixin, CMSPlugin):
+    """
+    Subject plugin model handles the relation between SubjectPlugin
+    and their Subject instance
+    """
+
+    page = models.ForeignKey(
+        Page,
+        related_name="subject_plugins",
+        limit_choices_to={"publisher_is_draft": True, "subject__isnull": False},
+    )
+
+    class Meta:
+        verbose_name = _("subject plugin model")
+
+    def __str__(self):
+        """Human representation of a page plugin"""
+        return "{model:s}: {id:d}".format(
+            model=self._meta.verbose_name.title(), id=self.id
         )
 
 

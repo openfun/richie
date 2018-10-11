@@ -81,3 +81,40 @@ class BasePageExtension(PageExtension):
         """
         language = language or translation.get_language()
         return self.extended_object.is_published(language)
+
+
+class PagePluginMixin:
+    """
+    A base plugin model to build all our plugins that are used to publish a glimpse of a page on
+    another page.
+    """
+
+    @property
+    def relevant_page(self):
+        """
+        the plugin should show the published page whenever it exists or the draft page otherwise.
+
+        On a public content, the draft page should not be shown at all but this is left to the
+        caller.
+        """
+        if self.page.is_published(translation.get_language()):
+            return self.page.get_public_object()
+        return self.page
+
+    def check_publication(self, language=None):
+        """
+        Allow checking if the page is published without passing any language (unlike the
+        "is_published" method on the page object): if not explicitly passed as argument, the
+        language is retrieved from the context.
+
+        The actual check is subcontracted to the "is_published" method on the related Django CMS
+        Page object.
+
+        Note: We choose not to name our method "is_published" like Django CMS, because it is a
+        bad practice. Indeed, someone may think it is a property and use it without invocating it
+        and the returned value (a bound method) will always be truthy... This issue happened a lot
+        with the "is_authenticated" method on Django's User model before they converted it to a
+        property.
+        """
+        language = language or translation.get_language()
+        return self.page.is_published(language)
