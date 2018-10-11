@@ -206,6 +206,7 @@ def create_demo_site():
             fill_team=random.sample(persons, NB_COURSES_PERSONS_PLUGINS),
             fill_teaser=video_sample,
             fill_cover=video_sample.image,
+            fill_subjects=random.sample(subjects, NB_COURSES_SUBJECT_RELATIONS),
             fill_texts=[
                 "course_syllabus",
                 "course_format",
@@ -215,7 +216,6 @@ def create_demo_site():
                 # "course_license_participation",
             ],
             with_organizations=course_organizations,
-            with_subjects=random.sample(subjects, NB_COURSES_SUBJECT_RELATIONS),
             should_publish=True,
             in_navigation=True,
         )

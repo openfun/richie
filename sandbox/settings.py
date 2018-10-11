@@ -340,6 +340,10 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
             "plugins": ["LicencePlugin"],
             "limits": {"LicencePlugin": 1},
         },
+        "courses/cms/course_detail.html course_subjects": {
+            "name": _("Course subjects"),
+            "plugins": ["SubjectPlugin"],
+        },
         # Organization detail
         "courses/cms/organization_detail.html banner": {
             "name": _("Banner"),

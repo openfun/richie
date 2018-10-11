@@ -88,16 +88,7 @@ class CourseAdminTestCase(CMSTestCase):
         self.assertContains(
             response, course.organization_main.extended_object.get_title()
         )
-        # Only the draft organization and subject should be proposed as options in select boxes
-        self.assertContains(
-            response, '<option value="{:d}">{!s}'.format(subject.id, subject)
-        )
-        self.assertNotContains(
-            response,
-            '<option value="{:d}">{!s}'.format(
-                subject.public_extension.id, subject.public_extension
-            ),
-        )
+        # Only the draft organization should be proposed as options in select boxes
         self.assertContains(
             response, '<option value="{:d}">{!s}'.format(organization.id, organization)
         )
@@ -122,21 +113,16 @@ class CourseAdminTestCase(CMSTestCase):
         organization1, organization2, organization3 = OrganizationFactory.create_batch(
             3
         )
-        subject1, subject2 = SubjectFactory.create_batch(2)
-        course = CourseFactory(
-            with_organizations=[organization1], with_subjects=[subject1]
-        )
+        course = CourseFactory(with_organizations=[organization1])
         self.assertEqual(
             set(course.organizations.all()), {organization1, course.organization_main}
         )
-        self.assertEqual(set(course.subjects.all()), {subject1})
 
         # Get the admin change view
         url = reverse("admin:courses_course_change", args=[course.id])
         data = {
             "organization_main": organization2.id,
             "organizations": [organization3.id],
-            "subjects": [subject2.id],
             "courserun_set-TOTAL_FORMS": 0,
             "courserun_set-INITIAL_FORMS": 0,
         }
@@ -146,7 +132,6 @@ class CourseAdminTestCase(CMSTestCase):
         # Check that the course was updated as expected
         course.refresh_from_db()
         self.assertEqual(course.organization_main, organization2)
-        self.assertEqual(set(course.subjects.all()), {subject2})
         # Check that the main organization was added and the old organization cleared
         self.assertEqual(
             set(course.organizations.all()), {organization2, organization3}

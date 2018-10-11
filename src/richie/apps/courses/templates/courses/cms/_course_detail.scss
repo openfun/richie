@@ -22,14 +22,8 @@ $richie-course-detail-row-even-background: $dodgerblue7;
 $richie-course-detail-row-title-fontcolor: $dodgerblue3;
 
 $richie-course-detail-subjects-justify: center;
-$richie-course-detail-subjects-margin: 0 0 0.3rem 0;
-$richie-course-detail-subjects-padding: 0.25rem 0.4rem;
-$richie-course-detail-subjects-fontsize: 0.7rem;
-$richie-course-detail-subjects-fontcolor: $white;
-$richie-course-detail-subjects-background: $gray7;
 $richie-course-detail-subjects-empty-fontcolor: $gray40;
 $richie-course-detail-subjects-empty-textalign: center;
-$richie-course-detail-subjects-divider-margin: 0.3rem;
 
 $richie-course-detail-teaser-margin: 0;
 $richie-course-detail-teaser-padding: 0;
@@ -131,35 +125,15 @@ $richie-course-detail-aside-main-org-background: $white;
       flex-wrap: wrap;
       justify-content: $richie-course-detail-subjects-justify;
 
-      &__item{
-        $item-selector: &;
+      &__placeholder {
+        @include sv-flex(1, 0, 100%);
+        font-style: italic;
+        color: $richie-course-detail-subjects-empty-fontcolor;
+        text-align: $richie-course-detail-subjects-empty-textalign;
+        background: transparent;
 
-        @include sv-flex(0, 0, auto);
-        margin: $richie-course-detail-subjects-margin;
-        padding: $richie-course-detail-subjects-padding;
-        font-size: $richie-course-detail-subjects-fontsize;
-        color: $richie-course-detail-subjects-fontcolor;
-        background: $richie-course-detail-subjects-background;
-        text-decoration: none;
-
-        &:hover{
-          color: $richie-course-detail-subjects-fontcolor;
-        }
-
-        &--empty{
-          @include sv-flex(1, 0, 100%);
-          font-style: italic;
+        &:hover {
           color: $richie-course-detail-subjects-empty-fontcolor;
-          text-align: $richie-course-detail-subjects-empty-textalign;
-          background: transparent;
-
-          &:hover{
-            color: $richie-course-detail-subjects-empty-fontcolor;
-          }
-        }
-
-        & + #{$item-selector}{
-          margin-left: $richie-course-detail-subjects-divider-margin;
         }
       }
     }
