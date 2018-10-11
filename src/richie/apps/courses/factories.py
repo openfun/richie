@@ -364,7 +364,10 @@ class CourseRunFactory(factory.django.DjangoModelFactory):
         )
         return pytz.timezone("UTC").localize(
             datetime.fromordinal(
-                random.randrange(enrollment_start.toordinal(), end.toordinal())
+                random.randrange(
+                    (enrollment_start + timedelta(hours=1)).toordinal(),
+                    (end - timedelta(hours=1)).toordinal(),
+                )
             )
         )
 
