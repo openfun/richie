@@ -190,12 +190,10 @@ class PersonPluginTestCase(CMSTestCase):
 
         url = "{:s}?edit".format(page.get_absolute_url(language="en"))
 
-        # The public version of the person plugin should be visible on the draft page
+        # The person plugin should still be visible on the draft page
         response = self.client.get(url)
         self.assertContains(response, "Meimei")
         self.assertContains(response, "public resume")
-        self.assertNotContains(response, "Jiji")
-        self.assertNotContains(response, "draft resume")
 
         # Now modify the person to have a draft different from the public version
         person.first_name = "Jiji"
