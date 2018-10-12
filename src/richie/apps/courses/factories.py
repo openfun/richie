@@ -216,7 +216,7 @@ class CourseFactory(PageExtensionDjangoModelFactory):
                         language=language,
                         placeholder=placeholder,
                         plugin_type="PersonPlugin",
-                        **{"person": person},
+                        **{"page": person.extended_object},
                     )
 
     @factory.post_generation
