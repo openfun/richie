@@ -300,17 +300,17 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
     CMS_PLACEHOLDER_CONF = {
         # Course detail
         "courses/cms/course_detail.html course_cover": {
-            "name": _("Course cover"),
+            "name": _("Cover"),
             "plugins": ["PicturePlugin"],
             "limits": {"PicturePlugin": 1},
         },
         "courses/cms/course_detail.html course_teaser": {
-            "name": _("Course teaser"),
+            "name": _("Teaser"),
             "plugins": ["VideoPlayerPlugin", "PicturePlugin"],
             "limits": {"VideoPlayerPlugin": 1, "PicturePlugin": 1},
         },
         "courses/cms/course_detail.html course_syllabus": {
-            "name": _("Course Syllabus"),
+            "name": _("About the course"),
             "plugins": ["CKEditorPlugin"],
         },
         "courses/cms/course_detail.html course_format": {
@@ -322,10 +322,13 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
             "plugins": ["CKEditorPlugin"],
         },
         "courses/cms/course_detail.html course_team": {
-            "name": _("Course team"),
+            "name": _("Team"),
             "plugins": ["PersonPlugin"],
         },
-        "courses/cms/course_detail.html course_plan": {"name": _("Course plan")},
+        "courses/cms/course_detail.html course_plan": {
+            "name": _("Plan"),
+            "plugins": ["CKEditorPlugin"],
+        },
         "courses/cms/course_detail.html course_information": {
             "name": _("Complementary information"),
             "plugins": ["SectionPlugin"],
@@ -341,7 +344,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
             "limits": {"LicencePlugin": 1},
         },
         "courses/cms/course_detail.html course_subjects": {
-            "name": _("Course subjects"),
+            "name": _("Subjects"),
             "plugins": ["SubjectPlugin"],
         },
         # Organization detail
