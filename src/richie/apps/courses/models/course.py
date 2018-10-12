@@ -225,6 +225,28 @@ class CourseRun(models.Model):
         return "is_closed"
 
 
+class CoursePluginModel(CMSPlugin):
+    """
+    Course plugin model handles the relation from CoursePlugin
+    to their Course instance
+    """
+
+    course = models.ForeignKey(
+        "Course",
+        related_name="course",
+        limit_choices_to={"extended_object__publisher_is_draft": True},
+    )
+
+    class Meta:
+        verbose_name = _("course plugin model")
+
+    def __str__(self):
+        """Human representation of a course plugin"""
+        return "{model:s}: {id:d}".format(
+            model=self._meta.verbose_name.title(), id=self.id
+        )
+
+
 class Licence(models.Model):
     """
     Licence model.
