@@ -49,7 +49,7 @@ def get_release():
     return "NA"
 
 
-class ElasticSearchMixin(object):
+class ElasticSearchMixin:
     """
     Elastic Search configuration mixin
 
@@ -76,7 +76,7 @@ class ElasticSearchMixin(object):
     SUBJECT_API_ENDPOINT = "https://www.fun-mooc.fr/fun/api/course_subjects"
 
 
-class DRFMixin(object):
+class DRFMixin:
     """
     Django Rest Framework configuration mixin.
     NB: DRF picks its settings from the REST_FRAMEWORK namespace on the settings, hence

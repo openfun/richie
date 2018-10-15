@@ -32,7 +32,7 @@ class PersonPluginTestCase(CMSTestCase):
 
             class Meta:
                 model = PersonPluginModel
-                exclude = ()
+                fields = ["page"]
 
         person = PersonFactory()
         other_page_title = "other page"

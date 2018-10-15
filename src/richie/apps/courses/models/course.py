@@ -203,9 +203,9 @@ class CourseRun(models.Model):
                     return "is_open"
                 return "is_ongoing"
             return "is_archived"
-        elif self.enrollment_start > now:
+        if self.enrollment_start > now:
             return "is_coming"
-        elif self.enrollment_end > now:
+        if self.enrollment_end > now:
             return "is_open"
         return "is_closed"
 
