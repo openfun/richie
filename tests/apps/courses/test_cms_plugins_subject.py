@@ -31,7 +31,7 @@ class SubjectPluginTestCase(CMSTestCase):
 
             class Meta:
                 model = SubjectPluginModel
-                exclude = ()
+                fields = ["page"]
 
         subject = SubjectFactory()
         other_page_title = "other page"

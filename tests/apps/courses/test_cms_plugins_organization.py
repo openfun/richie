@@ -32,7 +32,7 @@ class OrganizationPluginTestCase(CMSTestCase):
 
             class Meta:
                 model = OrganizationPluginModel
-                exclude = ()
+                fields = ["page"]
 
         organization = OrganizationFactory()
         other_page_title = "other page"

@@ -68,7 +68,6 @@ class Organization(BasePageExtension):
 
             # If the page is being updated, we should exclude it while looking for duplicates
             if self.pk:
-                # pylint: disable=no-member
                 uniqueness_query = uniqueness_query.exclude(pk=self.pk)
 
             # Raise a ValidationError if the code already exists
