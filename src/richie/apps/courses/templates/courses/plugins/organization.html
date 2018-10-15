@@ -1,18 +1,17 @@
 {% load cms_tags i18n %}
 {% spaceless %}
-<div class="organization-plugin">
-  <a class="organization-plugin__logo" href="{{ instance.organization.extended_object.get_absolute_url }}"
-     title="{{ instance.organization.extended_object.get_title }} {% trans "logo" %}">
-    {% with width=216 height=120 %}
-      {% show_placeholder "logo" instance.organization.extended_object %}
-    {% endwith %}
-  </a>
-  <div class="organization-plugin__body">
-    <a href="{{ instance.organization.extended_object.get_absolute_url }}" title="{{ instance.organization.extended_object.get_title }}">
-      <h{{ header_level|default:2 }} class="organization-plugin__body__title">
-        {{ instance.organization.extended_object.get_title }}
-      </h{{ header_level|default:2 }}>
-    </a>
+{% if current_page.publisher_is_draft or instance.check_publication is True %}
+  <div class="organization-plugin-container">
+    <div class="organization-plugin">
+      <a class="organization-plugin__body" href="{{ relevant_page.get_absolute_url }}" title="{{ relevant_page.get_title }}" alt="{{ relevant_page.get_title }} {% trans 'logo' %}">
+        {% with width=216 height=120 %}
+          {% show_placeholder "logo" relevant_page %}
+        {% endwith %}
+        <div class="organization-plugin__title">
+          {{ relevant_page.get_title }}
+        </div>
+      </a>
+    </div>
   </div>
-</div>
+{% endif %}
 {% endspaceless %}
