@@ -6,10 +6,11 @@ from django.db import models
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 
+from cms.api import Page
 from cms.extensions.extension_pool import extension_pool
 from cms.models.pluginmodel import CMSPlugin
 
-from ...core.models import BasePageExtension
+from ...core.models import BasePageExtension, PagePluginMixin
 
 
 class Organization(BasePageExtension):
@@ -93,13 +94,17 @@ class Organization(BasePageExtension):
         super().save(*args, **kwargs)
 
 
-class OrganizationPluginModel(CMSPlugin):
+class OrganizationPluginModel(PagePluginMixin, CMSPlugin):
     """
     Organization plugin model handles the relation from OrganizationPlugin
     to their Organization instance
     """
 
-    organization = models.ForeignKey(Organization)
+    page = models.ForeignKey(
+        Page,
+        related_name="organization_plugins",
+        limit_choices_to={"publisher_is_draft": True, "organization__isnull": False},
+    )
 
     class Meta:
         verbose_name = _("organization plugin model")
