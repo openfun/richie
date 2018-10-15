@@ -86,10 +86,8 @@ class SubjectPluginTestCase(CMSTestCase):
         response = self.client.get(url)
         self.assertNotContains(response, "public title")
 
-        # Republishing the plugin should not make it public
+        # Republish the plugin
         subject_page.publish("en")
-        response = self.client.get(url)
-        self.assertNotContains(response, "public title")
 
         # Now modify the subject to have a draft different from the public version
         title_obj = subject_page.get_title_obj(language="en")
@@ -145,7 +143,7 @@ class SubjectPluginTestCase(CMSTestCase):
         self.client.login(username=staff.username, password="password")
 
         # Create a Subject
-        subject = SubjectFactory(title={"en": "public title", "fr": "titre publique"})
+        subject = SubjectFactory(title="public title")
         subject_page = subject.extended_object
 
         # Create a page to add the plugin to
