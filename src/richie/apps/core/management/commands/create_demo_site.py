@@ -190,15 +190,11 @@ def create_demo_site():
     # Create courses under the `Course` page with subjects and organizations
     # relations
     for _ in range(NB_COURSES):
-        course_organizations = random.sample(
-            organizations, NB_COURSES_ORGANIZATION_RELATIONS
-        )
         video_sample = random.choice(VIDEO_SAMPLE_LINKS)
 
         course = CourseFactory(
             languages=[l[0] for l in settings.LANGUAGES],
             parent=pages_created["courses"],
-            organization_main=random.choice(course_organizations),
             fill_licences=[
                 ("course_license_content", random.choice(licences)),
                 ("course_license_participation", random.choice(licences)),
@@ -207,6 +203,9 @@ def create_demo_site():
             fill_teaser=video_sample,
             fill_cover=video_sample.image,
             fill_subjects=random.sample(subjects, NB_COURSES_SUBJECT_RELATIONS),
+            fill_organizations=random.sample(
+                organizations, NB_COURSES_ORGANIZATION_RELATIONS
+            ),
             fill_texts=[
                 "course_syllabus",
                 "course_format",
@@ -215,7 +214,6 @@ def create_demo_site():
                 # "course_license_content",
                 # "course_license_participation",
             ],
-            with_organizations=course_organizations,
             should_publish=True,
             in_navigation=True,
         )

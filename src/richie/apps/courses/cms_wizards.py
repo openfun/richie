@@ -2,8 +2,10 @@
 CMS Wizard to add a course page
 """
 from django import forms
+from django.utils import translation
 from django.utils.translation import ugettext_lazy as _
 
+from cms.api import add_plugin
 from cms.wizards.wizard_base import Wizard
 from cms.wizards.wizard_pool import wizard_pool
 
@@ -33,9 +35,19 @@ class CourseWizardForm(BaseWizardForm):
         This method creates the associated course page extension.
         """
         page = super().save()
-        Course.objects.create(
-            extended_object=page, organization_main=self.cleaned_data["organization"]
+        course = Course.objects.create(extended_object=page)
+        # Add a plugin for the organization
+
+        placeholder = course.extended_object.placeholders.get(
+            slot="course_organizations"
         )
+        add_plugin(
+            language=translation.get_language(),
+            placeholder=placeholder,
+            plugin_type="OrganizationPlugin",
+            **{"page": self.cleaned_data["organization"].extended_object},
+        )
+
         return page
 
 

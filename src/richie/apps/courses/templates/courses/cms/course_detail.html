@@ -73,13 +73,11 @@
       </div>
 
       <div class="course-detail__content__row course-detail__content__organizations">
-        <h2 class="course-detail__content__row__title">{% trans 'Organizations' %}</h2>
-        <ul class="course-detail__content__organizations__list">
-          {% include "courses/cms/fragment_course_organization_main.html" with organization=course.organization_main %}
-          {% for organization in course.organizations.all %}
-            {% include "courses/cms/fragment_course_organizations.html" %}
-          {% endfor %}
-        </ul>
+        {% placeholder "course_organizations" or %}
+          <p class="course-detail__content__organizations__placeholder">
+            {% trans "No associated organizations" %}
+          </p>
+        {% endplaceholder %}
       </div>
 
       <div class="course-detail__content__row course-detail__content__license">
@@ -116,7 +114,7 @@
       </div>
 
       <div class="course-detail__aside__main-org-logo">
-        {% include "courses/cms/fragment_organization_main_logo.html" with organization=course.organization_main %}
+        {% include "courses/cms/fragment_organization_main_logo.html" with organization=course.get_main_organization %}
       </div>
 
       <div class="course-detail__aside__run">

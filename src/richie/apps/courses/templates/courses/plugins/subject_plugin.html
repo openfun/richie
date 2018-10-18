@@ -6,7 +6,7 @@
       {{ relevant_page.get_title }}
     </a>
   {% else %}
-    <div class="subject-plugin-container">
+    <div class="subject-plugin-container{% if relevant_page.publisher_is_draft %} subject-plugin-container--draft{% endif %}">
       <div class="subject-plugin">
         <a class="subject-plugin__body" href="{{ relevant_page.get_absolute_url }}" title="{{ relevant_page.get_title }}" alt="{{ relevant_page.get_title }} {% trans 'logo' %}">
           {% with width=216 height=120 %}

@@ -10,7 +10,7 @@ from cms.test_utils.testcases import CMSTestCase
 from richie.apps.core.factories import UserFactory
 from richie.apps.courses.cms_wizards import CourseWizardForm
 from richie.apps.courses.factories import OrganizationFactory
-from richie.apps.courses.models import Course
+from richie.apps.courses.models import Course, OrganizationPluginModel
 
 
 class CourseCMSWizardTestCase(CMSTestCase):
@@ -63,8 +63,10 @@ class CourseCMSWizardTestCase(CMSTestCase):
         # The slug should have been automatically set
         self.assertEqual(page.get_slug(), "my-title")
 
-        # The "organization_main" field should be set
-        self.assertEqual(course.organization_main, organization)
+        # The course should have a plugin with the organization
+        self.assertEqual(OrganizationPluginModel.objects.count(), 1)
+        plugin = OrganizationPluginModel.objects.first()
+        self.assertEqual(plugin.page_id, organization.extended_object_id)
 
     def test_cms_wizards_course_submit_form_max_lengths(self):
         """

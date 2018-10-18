@@ -1,12 +1,12 @@
 {% load i18n cms_tags %}
-{% comment %}Obviously, context template variable "page" and "course" are required and must be a CMS page instance{% endcomment %}
+{% comment %}Obviously, the context template variable "course" is required and must be a Course page extension{% endcomment %}
 {% with glimpse_info=course.glimpse_info %}
 <div class="course-glimpse__media">
-    {% show_placeholder "course_cover" page %}
+    {% show_placeholder "course_cover" course.extended_object %}
 </div>
 <div class="course-glimpse__content">
     <div class="course-glimpse__content__wrapper">
-        <p class="course-glimpse__content__title">{{ page.get_title }}</p>
+        <p class="course-glimpse__content__title">{{ course.extended_object.get_title }}</p>
         <p>{{ course.organization_main.extended_object.get_title }}</p>
     </div>
     <div class="course-glimpse__footer">
