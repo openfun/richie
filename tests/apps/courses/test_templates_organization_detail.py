@@ -94,7 +94,6 @@ class OrganizationCMSTestCase(TestCase):
         )
 
         # The published courses should be present on the page
-        # pylint: disable=duplicate-code
         for course in courses[:2]:
             self.assertContains(
                 response,
