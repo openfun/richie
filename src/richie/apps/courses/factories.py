@@ -410,6 +410,27 @@ class SubjectFactory(BLDPageExtensionDjangoModelFactory):
 
     template = Subject.TEMPLATE_DETAIL
 
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def fill_courses(self, create, extracted, **kwargs):
+        """
+        Add plugins for this subject to each course in the given list of course instances.
+        """
+
+        if create and extracted:
+            for course in extracted:
+                placeholder = course.extended_object.placeholders.get(
+                    slot="course_subjects"
+                )
+                for language in self.extended_object.get_languages():
+
+                    add_plugin(
+                        language=language,
+                        placeholder=placeholder,
+                        plugin_type="SubjectPlugin",
+                        **{"page": self.extended_object},
+                    )
+
 
 class LicenceLogoImageFactory(FilerImageFactory):
     """
