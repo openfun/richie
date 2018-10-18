@@ -7,7 +7,7 @@ from django.test import TestCase
 from cms.api import create_page
 
 from richie.apps.courses.factories import CourseFactory, OrganizationFactory
-from richie.apps.courses.models import Organization
+from richie.apps.courses.models import Course, Organization
 
 
 class OrganizationModelsTestCase(TestCase):
@@ -71,30 +71,35 @@ class OrganizationModelsTestCase(TestCase):
         with self.assertNumQueries(1):
             self.assertEqual(str(organization), "Organization: La Sorbonne (SOR)")
 
-    def test_models_organization_courses_copied_when_publishing(self):
+    def test_models_organization_get_courses(self):
         """
-        When publishing an organization, the linked courses on the draft version of the
-        organization should be copied.
+        It should be possible to retrieve the list of related courses on the organization instance.
+        The number of queries should be minimal.
         """
-        # Create draft courses
-        course1, course2 = CourseFactory.create_batch(2)
-
-        # Create a draft organization
-        draft_organization = OrganizationFactory(with_courses=[course1, course2])
-
-        # Publish course1
-        course1.extended_object.publish("en")
-        course1.refresh_from_db()
-
-        # The draft organization should see all courses
-        self.assertEqual(set(draft_organization.courses.all()), {course1, course2})
-        self.assertEqual(set(draft_organization.courses.drafts()), {course1, course2})
-
-        # Publish the organization and check that the courses are copied
-        draft_organization.extended_object.publish("en")
-        published_organization = Organization.objects.get(
-            extended_object__publisher_is_draft=False
+        organization = OrganizationFactory(should_publish=True)
+        courses = CourseFactory.create_batch(
+            3, fill_organizations=[organization], title="my title", should_publish=True
         )
-        self.assertEqual(
-            set(published_organization.courses.all()), {course1.public_extension}
+        retrieved_courses = organization.get_courses()
+
+        with self.assertNumQueries(2):
+            self.assertEqual(set(retrieved_courses), set(courses))
+
+        with self.assertNumQueries(0):
+            for course in retrieved_courses:
+                self.assertEqual(
+                    course.extended_object.prefetched_titles[0].title, "my title en"
+                )
+
+    def test_models_organization_get_courses_several_languages(self):
+        """
+        The courses should not be duplicated if they exist in several languages.
+        """
+        organization = OrganizationFactory(should_publish=True)
+        CourseFactory(
+            title={"en": "my title", "fr": "mon titre"},
+            fill_organizations=[organization],
+            should_publish=True,
         )
+        self.assertEqual(Course.objects.count(), 2)
+        self.assertEqual(organization.get_courses().count(), 1)

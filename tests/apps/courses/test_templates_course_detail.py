@@ -35,9 +35,8 @@ class CourseCMSTestCase(CMSTestCase):
         organizations = OrganizationFactory.create_batch(4)
 
         course = CourseFactory(
-            organization_main=organizations[0],
             title="Very interesting course",
-            with_organizations=organizations,
+            fill_organizations=organizations,
             fill_subjects=subjects,
         )
         page = course.extended_object
@@ -89,26 +88,17 @@ class CourseCMSTestCase(CMSTestCase):
         for subject in subjects[-2:]:
             self.assertNotContains(response, subject.extended_object.get_title())
 
-        # organization 1 is marked as main organization
-        self.assertContains(
-            response,
-            '<li class="{element:s} {element:s}--main">{title:s}</li>'.format(
-                element="course-detail__content__organizations__item",
-                title=organizations[0].extended_object.get_title(),
-            ),
-            html=True,
-        )
+        # Public organizations is marked as main organization
+        for organization in organizations[:2]:
+            self.assertContains(
+                response,
+                '<div class="organization-plugin__title">{title:s}</div>'.format(
+                    title=organization.extended_object.get_title()
+                ),
+                html=True,
+            )
 
-        # organization 2 is the only "common" org in listing
-        self.assertContains(
-            response,
-            '<li class="course-detail__content__organizations__item">{:s}</li>'.format(
-                organizations[1].extended_object.get_title()
-            ),
-            html=True,
-        )
-
-        # Draft organization should not be in response content
+        # Draft organizations should not be in response content
         for organization in organizations[-2:]:
             self.assertNotContains(
                 response, organization.extended_object.get_title(), html=True
@@ -132,9 +122,8 @@ class CourseCMSTestCase(CMSTestCase):
         organizations = OrganizationFactory.create_batch(4)
 
         course = CourseFactory(
-            organization_main=organizations[0],
             title="Very interesting course",
-            with_organizations=organizations,
+            fill_organizations=organizations,
             fill_subjects=subjects,
         )
         page = course.extended_object
@@ -169,40 +158,18 @@ class CourseCMSTestCase(CMSTestCase):
             html=True,
         )
 
-        # organization 1 is marked as main and not duplicated
-        self.assertContains(
-            response,
-            '<li class="{element:s} {element:s}--main">{title:s}</li>'.format(
-                element="course-detail__content__organizations__item",
-                title=organizations[0].extended_object.get_title(),
-            ),
-            html=True,
-        )
-        self.assertNotContains(
-            response,
-            (
-                '<li class="course-detail__content__organizations__item">{:s}</li>'
-            ).format(organizations[0].extended_object.get_title()),
-            html=True,
-        )
-        # organization 2 is not marked as a draft since it has been published
-        self.assertContains(
-            response,
-            '<li class="course-detail__content__organizations__item">{:s}</li>'.format(
-                organizations[1].extended_object.get_title()
-            ),
-            html=True,
-        )
-        # Draft organizations should be present on the page with an annotation for styling
-        for organization in organizations[:2]:
-            self.assertNotContains(
+        # Draft and public organizations should all be present on the page
+        for organization in organizations:
+            self.assertContains(
                 response,
-                '<li class="{element:s} {element:s}--draft">{title:s}</li>'.format(
-                    element="course-detail__content__organizations__item",
-                    title=organization.extended_object.get_title(),
+                '<div class="organization-plugin__title">{title:s}</div>'.format(
+                    title=organization.extended_object.get_title()
                 ),
                 html=True,
             )
+
+        # Draft organizations should be annotated for styling
+        self.assertContains(response, "organization-plugin-container--draft", count=2)
 
         # The published subjects should be present on the page
         for subject in subjects[:2]:
@@ -227,35 +194,3 @@ class CourseCMSTestCase(CMSTestCase):
             )
         # Course runs should be in the page
         self.assertContains(response, "Enroll now", count=2)
-
-    def test_templates_course_detail_cms_draft_content_draft_organization_main(self):
-        """
-        A draft main organization displayed on a draft page should be marked as both
-        "main" and "draft"
-        """
-        user = UserFactory(is_staff=True, is_superuser=True)
-        self.client.login(username=user.username, password="password")
-
-        course = CourseFactory(title="Very interesting course")
-        page = course.extended_object
-
-        url = page.get_absolute_url()
-        response = self.client.get(url)
-
-        # The main organization is only listed separately and also marked as draft
-        self.assertContains(
-            response,
-            '<li class="{element:s} {element:s}--draft {element:s}--main">{title:s}</li>'.format(
-                element="course-detail__content__organizations__item",
-                title=course.organization_main.extended_object.get_title(),
-            ),
-            html=True,
-        )
-        self.assertNotContains(
-            response,
-            '<li class="{element:s} {element:s}--draft">{title:s}</li>'.format(
-                element="course-detail__content__organizations__item",
-                title=course.organization_main.extended_object.get_title(),
-            ),
-            html=True,
-        )

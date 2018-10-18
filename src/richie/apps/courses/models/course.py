@@ -11,6 +11,7 @@ from cms.models.pluginmodel import CMSPlugin
 from filer.fields.image import FilerImageField
 
 from ...core.models import BasePageExtension
+from .organization import Organization
 
 GLIMPSE_CTA = [_("enroll now")] * 2 + [None] * 4
 GLIMPSE_TEXT = [
@@ -32,17 +33,6 @@ class Course(BasePageExtension):
     page that presents the course.
     """
 
-    organization_main = models.ForeignKey(
-        "Organization",
-        related_name="main_courses",
-        limit_choices_to={"extended_object__publisher_is_draft": True},
-    )
-    organizations = models.ManyToManyField(
-        "Organization",
-        related_name="courses",
-        limit_choices_to={"extended_object__publisher_is_draft": True},
-    )
-
     ROOT_REVERSE_ID = "courses"
     TEMPLATE_DETAIL = "courses/cms/course_detail.html"
 
@@ -56,16 +46,24 @@ class Course(BasePageExtension):
             title=self.extended_object.get_title(),
         )
 
-    def copy_relations(self, oldinstance, language):
+    def get_main_organization(self):
         """
-        We must manually copy the many-to-many relations so that the relations between the
-        published instances are realigned with draft instances.
+        Return the main organization linked to the course via an organization plugin in the
+        placeholder "course_organizations" on the course detail page.
+
+        Plugins are sortable by drag-and-drop in the plugin bar so we use this "position"
+        information to determine which one of the organizations linked by plugin is the main
+        organization.
         """
+        placeholder = self.extended_object.placeholders.get(slot="course_organizations")
         # pylint: disable=no-member
-        self.organizations.set(
-            self.organizations.model.objects.filter(
-                draft_extension__courses=oldinstance
+        return (
+            Organization.objects.filter(
+                extended_object__organization_plugins__cmsplugin_ptr__placeholder=placeholder
             )
+            .select_related("extended_object")
+            .order_by("extended_object__organization_plugins__cmsplugin_ptr__position")
+            .first()
         )
 
     @property
@@ -154,10 +152,6 @@ class Course(BasePageExtension):
         """
         self.full_clean()
         super().save(*args, **kwargs)
-
-        if self.pk and self.extended_object.publisher_is_draft:
-            # pylint: disable=no-member
-            self.organizations.add(self.organization_main)
 
 
 class CourseRun(models.Model):

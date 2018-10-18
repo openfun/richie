@@ -127,11 +127,25 @@ class OrganizationFactory(BLDPageExtensionDjangoModelFactory):
         return self.extended_object.get_slug()[:100]
 
     @factory.post_generation
-    # pylint: disable=unused-argument, attribute-defined-outside-init, no-member
-    def with_courses(self, create, extracted, **kwargs):
-        """Add courses to ManyToMany relation."""
+    # pylint: disable=unused-argument
+    def fill_courses(self, create, extracted, **kwargs):
+        """
+        Add plugins for this organization to each course in the given list of course instances.
+        """
+
         if create and extracted:
-            self.courses.set(extracted)
+            for course in extracted:
+                placeholder = course.extended_object.placeholders.get(
+                    slot="course_organizations"
+                )
+                for language in self.extended_object.get_languages():
+
+                    add_plugin(
+                        language=language,
+                        placeholder=placeholder,
+                        plugin_type="OrganizationPlugin",
+                        **{"page": self.extended_object},
+                    )
 
 
 class CourseFactory(PageExtensionDjangoModelFactory):
@@ -145,8 +159,6 @@ class CourseFactory(PageExtensionDjangoModelFactory):
         exclude = ["languages", "parent", "template", "in_navigation", "title"]
 
     template = Course.TEMPLATE_DETAIL
-
-    organization_main = factory.SubFactory(OrganizationFactory)
 
     @factory.post_generation
     # pylint: disable=unused-argument
@@ -242,6 +254,27 @@ class CourseFactory(PageExtensionDjangoModelFactory):
 
     @factory.post_generation
     # pylint: disable=unused-argument
+    def fill_organizations(self, create, extracted, **kwargs):
+        """
+        Add organizations plugin to course from a given list of organization instances.
+        """
+
+        if create and extracted:
+            for language in self.extended_object.get_languages():
+                placeholder = self.extended_object.placeholders.get(
+                    slot="course_organizations"
+                )
+
+                for organization in extracted:
+                    add_plugin(
+                        language=language,
+                        placeholder=placeholder,
+                        plugin_type="OrganizationPlugin",
+                        **{"page": organization.extended_object},
+                    )
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
     def fill_licences(self, create, extracted, **kwargs):
         """
         Add licence plugin for course licence placeholders from given licence
@@ -275,13 +308,6 @@ class CourseFactory(PageExtensionDjangoModelFactory):
                     nb_paragraphs=1,
                     languages=self.extended_object.get_languages(),
                 )
-
-    @factory.post_generation
-    # pylint: disable=unused-argument
-    def with_organizations(self, create, extracted, **kwargs):
-        """Add organizations to ManyToMany relation."""
-        if create and extracted:
-            self.organizations.set(extracted)
 
 
 class CourseRunFactory(factory.django.DjangoModelFactory):

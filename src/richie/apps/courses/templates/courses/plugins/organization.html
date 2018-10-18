@@ -1,7 +1,7 @@
 {% load cms_tags i18n %}
 {% spaceless %}
 {% if current_page.publisher_is_draft or instance.check_publication is True %}
-  <div class="organization-plugin-container">
+  <div class="organization-plugin-container{% if instance.check_publication is False %} organization-plugin-container--draft{% endif %}">
     <div class="organization-plugin">
       <a class="organization-plugin__body" href="{{ relevant_page.get_absolute_url }}" title="{{ relevant_page.get_title }}" alt="{{ relevant_page.get_title }} {% trans 'logo' %}">
         {% with width=216 height=120 %}
