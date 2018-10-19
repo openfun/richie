@@ -347,6 +347,10 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
             "name": _("Subjects"),
             "plugins": ["SubjectPlugin"],
         },
+        "courses/cms/course_detail.html course_organizations": {
+            "name": _("Organizations"),
+            "plugins": ["OrganizationPlugin"],
+        },
         # Organization detail
         "courses/cms/organization_detail.html banner": {
             "name": _("Banner"),
