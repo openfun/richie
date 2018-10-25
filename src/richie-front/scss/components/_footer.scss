@@ -1,30 +1,30 @@
 ///
 /// Main body footer
 ///
-$richie-footer-padding: null !default;
-$richie-footer-fontcolor: null !default;
-$richie-footer-background: null !default;
+$richie-footer-padding: 0 1rem !default;
+$richie-footer-fontcolor: $white !default;
+$richie-footer-background: $dodgerblue1 !default;
 
-$richie-footer-menu-border: null !default;
+$richie-footer-menu-border: 1px solid lighten($dodgerblue1, 10%) !default;
 
-$richie-footer-menu-item-margin: null !default;
-$richie-footer-menu-item-padding: null !default;
-$richie-footer-menu-item-margin-lg: null !default;
-$richie-footer-menu-item-padding-lg: null !default;
+$richie-footer-menu-item-margin: 0 !default;
+$richie-footer-menu-item-padding: 0 !default;
+$richie-footer-menu-item-margin-lg: 0 !default;
+$richie-footer-menu-item-padding-lg: 0 !default;
 
-$richie-footer-menu-link-padding: null !default;
-$richie-footer-menu-link-fontweight: null !default;
-$richie-footer-menu-link-fontcolor: null !default;
-$richie-footer-menu-link-fontcolor-hover: null !default;
+$richie-footer-menu-link-padding: 1rem 0.8rem !default;
+$richie-footer-menu-link-fontweight: bold !default;
+$richie-footer-menu-link-fontcolor: $white !default;
+$richie-footer-menu-link-fontcolor-hover: $dodgerblue7 !default;
 
-$richie-footer-brand-padding: null !default;
-$richie-footer-mentions-padding: null !default;
+$richie-footer-brand-padding: 1rem 0 !default;
+$richie-footer-mentions-padding: 1rem 0 !default;
 
-$richie-footer-mentions-fontsize: null !default;
-$richie-footer-mentions-texttransform: null !default;
+$richie-footer-mentions-fontsize: 0.9rem !default;
+$richie-footer-mentions-texttransform: uppercase !default;
 
-$richie-footer-poweredby-padding: null !default;
-$richie-footer-poweredby-link-fontcolor: null !default;
+$richie-footer-poweredby-padding: 1rem 0 !default;
+$richie-footer-poweredby-link-fontcolor: $white !default;
 
 
 .body-footer{

@@ -5,61 +5,60 @@
 ///
 
 // Available object settings
-$richie-course-glimpse-list-maxwidth-constraint: null !default;
-$richie-course-glimpse-list-margin: null !default;
-$richie-course-glimpse-list-padding: null !default;
+$richie-course-glimpse-list-maxwidth-constraint: true !default;
+$richie-course-glimpse-list-margin: 0 auto !default;
+$richie-course-glimpse-list-padding: 1rem 0 !default;
 
 $richie-course-glimpse-container-width-sm: null !default;
-$richie-course-glimpse-container-width-md: null !default;
-$richie-course-glimpse-container-width-lg: null !default;
-$richie-course-glimpse-container-width-xl: null !default;
-$richie-course-glimpse-container-gutter: null !default;
-$richie-course-glimpse-container-background: null !default;
-$richie-course-glimpse-container-border: null !default;
-$richie-course-glimpse-container-border-hover: null !default;
+$richie-course-glimpse-container-width-md: 50% !default;
+$richie-course-glimpse-container-width-lg: 33.3333% !default;
+$richie-course-glimpse-container-width-xl: 25% !default;
+$richie-course-glimpse-container-gutter: 0.5rem !default;
+$richie-course-glimpse-container-background: $white !default;
+$richie-course-glimpse-container-border: 1px solid transparent !default;
+$richie-course-glimpse-container-border-hover: 1px solid $firebrick6 !default;
 
-$richie-course-glimpse-media-margin: null !default;
+$richie-course-glimpse-media-margin: 0 0 1rem 0 !default;
 
-$richie-course-glimpse-caption-width: null !default;
-$richie-course-glimpse-caption-margin: null !default;
-$richie-course-glimpse-caption-padding: null !default;
-$richie-course-glimpse-caption-fontsize: null !default;
-$richie-course-glimpse-caption-fontweight: null !default;
-$richie-course-glimpse-caption-lineheight: null !default;
-$richie-course-glimpse-caption-textalign: null !default;
-$richie-course-glimpse-caption-texttransform: null !default;
-$richie-course-glimpse-caption-background: null !default;
+$richie-course-glimpse-caption-width: 60% !default;
+$richie-course-glimpse-caption-margin: 0 !default;
+$richie-course-glimpse-caption-padding: 0.6rem 0.5rem !default;
+$richie-course-glimpse-caption-fontsize: 0.9rem !default;
+$richie-course-glimpse-caption-fontweight: bold !default;
+$richie-course-glimpse-caption-lineheight: 1.1 !default;
+$richie-course-glimpse-caption-textalign: center !default;
+$richie-course-glimpse-caption-texttransform: uppercase !default;
+$richie-course-glimpse-caption-background: $gray80 !default;
 
-$richie-course-glimpse-content-fontsize: null !default;
-$richie-course-glimpse-content-fontcolor: null !default;
-$richie-course-glimpse-content-textalign: null !default;
+$richie-course-glimpse-content-fontsize: 0.9rem !default;
+$richie-course-glimpse-content-fontcolor: $gray40 !default;
+$richie-course-glimpse-content-textalign: center !default;
 
-$richie-course-glimpse-title-fontsize: null !default;
-$richie-course-glimpse-title-fontweight: null !default;
-$richie-course-glimpse-title-fontcolor: null !default;
+$richie-course-glimpse-title-fontsize: 1rem !default;
+$richie-course-glimpse-title-fontweight: bold !default;
+$richie-course-glimpse-title-fontcolor: $dodgerblue3 !default;
 
-$richie-course-glimpse-wrapper-padding: null !default;
+$richie-course-glimpse-wrapper-padding: 0.6rem !default;
 
 $richie-course-glimpse-foot-divider: null !default;
 
-$richie-course-glimpse-foot-border: null !default;
+$richie-course-glimpse-foot-border: 1px solid $gray80 !default;
 
-$richie-course-glimpse-foot-date-width: null !default;
-$richie-course-glimpse-foot-date-padding: null !default;
-$richie-course-glimpse-foot-date-fontsize: null !default;
-$richie-course-glimpse-foot-date-fontcolor: null !default;
-$richie-course-glimpse-foot-date-textalign: null !default;
+$richie-course-glimpse-foot-date-width: 55% !default;
+$richie-course-glimpse-foot-date-padding: 0.3rem 0.5rem !default;
+$richie-course-glimpse-foot-date-fontsize: 0.9rem !default;
+$richie-course-glimpse-foot-date-fontcolor: $gray40 !default;
+$richie-course-glimpse-foot-date-textalign: center !default;
 $richie-course-glimpse-foot-date-background: null !default;
 
-$richie-course-glimpse-foot-cta-width: null !default;
-$richie-course-glimpse-foot-cta-padding: null !default;
-$richie-course-glimpse-foot-cta-fontsize: null !default;
-$richie-course-glimpse-foot-cta-fontweight: null !default;
-$richie-course-glimpse-foot-cta-fontcolor: null !default;
-$richie-course-glimpse-foot-cta-textalign: null !default;
-$richie-course-glimpse-foot-cta-background: null !default;
-$richie-course-glimpse-foot-cta-background-hover: null !default;
-
+$richie-course-glimpse-foot-cta-width: 45% !default;
+$richie-course-glimpse-foot-cta-padding: 0.3rem 0.5rem !default;
+$richie-course-glimpse-foot-cta-fontsize: 0.9rem !default;
+$richie-course-glimpse-foot-cta-fontweight: bold !default;
+$richie-course-glimpse-foot-cta-fontcolor: $white !default;
+$richie-course-glimpse-foot-cta-textalign: center !default;
+$richie-course-glimpse-foot-cta-background: $dodgerblue5 !default;
+$richie-course-glimpse-foot-cta-background-hover: $firebrick6 !default;
 
 .course-glimpse-list{
     @if $richie-course-glimpse-list-maxwidth-constraint{

@@ -1,8 +1,8 @@
 $richie-licence-plugin-breakpoint: sm !default;
 $richie-licence-plugin-logo-width: 100px !default;
-$richie-licence-plugin-title-fontsize: null !default;
-$richie-licence-plugin-title-fontcolor: null !default;
-$richie-licence-plugin-description-fontcolor: null !default;
+$richie-licence-plugin-title-fontsize: 1.4rem !default;
+$richie-licence-plugin-title-fontcolor: $dodgerblue5 !default;
+$richie-licence-plugin-description-fontcolor: $gray40 !default;
 
 .licence-plugin{
     @include media-breakpoint-up($richie-licence-plugin-breakpoint) {

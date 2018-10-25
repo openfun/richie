@@ -1,11 +1,11 @@
-$richie-search-breakpoint: null !default;
-$richie-search-margin: null !default;
-$richie-search-padding: null !default;
+$richie-search-breakpoint: lg !default;
+$richie-search-margin: 0 !default;
+$richie-search-padding: 0 !default;
 
-$richie-search-filters-width: null !default;
-$richie-search-filters-background: null !default;
+$richie-search-filters-width: 20.5rem !default;
+$richie-search-filters-background: $dodgerblue1 !default;
 
-$richie-search-results-padding: null !default;
+$richie-search-results-padding: 0 1rem 0 2rem !default;
 
 
 .search{

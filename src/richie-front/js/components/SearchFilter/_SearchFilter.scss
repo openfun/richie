@@ -1,23 +1,23 @@
-$richie-search-filters-item-width: null !default;
+$richie-search-filters-item-width: 100% !default;
 $richie-search-filters-item-margin: null !default;
-$richie-search-filters-item-padding: null !default;
-$richie-search-filters-item-fontsize: null !default;
-$richie-search-filters-item-fontcolor: null !default;
-$richie-search-filters-item-fontcolor-hover: null !default;
-$richie-search-filters-item-fontweight: null !default;
-$richie-search-filters-item-fontweight-hover: null !default;
-$richie-search-filters-item-textalign: null !default;
-$richie-search-filters-item-background: null !default;
-$richie-search-filters-item-background-hover: null !default;
-$richie-search-filters-item-divider-border: null !default;
+$richie-search-filters-item-padding: 0.4rem 0.5rem !default;
+$richie-search-filters-item-fontsize: 0.9rem !default;
+$richie-search-filters-item-fontcolor: rgba($white, 0.85) !default;
+$richie-search-filters-item-fontcolor-hover: $white !default;
+$richie-search-filters-item-fontweight: normal !default;
+$richie-search-filters-item-fontweight-hover: normal !default;
+$richie-search-filters-item-textalign: inherit !default;
+$richie-search-filters-item-background: inherit !default;
+$richie-search-filters-item-background-hover: inherit !default;
+$richie-search-filters-item-divider-border: 1px solid $gray80 !default;
 
-$richie-search-filters-disabled-fontcolor: null !default;
+$richie-search-filters-disabled-fontcolor: rgba($white, 0.6) !default;
 $richie-search-filters-disabled-background: null !default;
 
-$richie-search-filters-active-fontcolor: null !default;
-$richie-search-filters-active-fontweight: null !default;
-$richie-search-filters-active-background: null !default;
-$richie-search-filters-active-divider-border: null !default;
+$richie-search-filters-active-fontcolor: $white !default;
+$richie-search-filters-active-fontweight: bold !default;
+$richie-search-filters-active-background: inherit !default;
+$richie-search-filters-active-divider-border: 1px solid $white !default;
 
 .search-filter {
   @include m-o-list-group__item(

@@ -2,65 +2,65 @@
 /// Main body header
 ///
 
-$richie-topbar-breakpoint: null !default;
+$richie-topbar-breakpoint: lg !default;
 
-$richie-topbar-shadow: null !default;
-$richie-topbar-background: null !default;
+$richie-topbar-shadow: 0 0 rem-calc(3px) rem-calc(3px) rgba($gray40, 0.2) !default;
+$richie-topbar-background: $white !default;
 
-$richie-topbar-hamburger-paddding: null !default;
-$richie-topbar-hamburger-fontsize: null !default;
-$richie-topbar-hamburger-fontcolor: null !default;
-$richie-topbar-hamburger-fontcolor-hover: null !default;
+$richie-topbar-hamburger-paddding: 0 1rem !default;
+$richie-topbar-hamburger-fontsize: 2rem !default;
+$richie-topbar-hamburger-fontcolor: $dodgerblue7 !default;
+$richie-topbar-hamburger-fontcolor-hover: $dodgerblue7 !default;
 
-$richie-topbar-brand-height: null !default;
-$richie-topbar-brand-paddding: null !default;
+$richie-topbar-brand-height: rem-calc(60px) !default;
+$richie-topbar-brand-paddding: 0 0.4rem !default;
 
-$richie-topbar-menu-list-margin: null !default;
-$richie-topbar-menu-list-padding: null !default;
+$richie-topbar-menu-list-margin: 0 !default;
+$richie-topbar-menu-list-padding: 0 !default;
 
-$richie-topbar-menu-list-fontcolor: null !default;
-$richie-topbar-menu-list-fontcolor-lg: null !default;
-$richie-topbar-menu-list-background: null !default;
-$richie-topbar-menu-list-background-lg: null !default;
+$richie-topbar-menu-list-fontcolor: $white !default;
+$richie-topbar-menu-list-fontcolor-lg: $dodgerblue7 !default;
+$richie-topbar-menu-list-background: $dodgerblue7 !default;
+$richie-topbar-menu-list-background-lg: transparent !default;
 
-$richie-topbar-menu-item-margin: null !default;
-$richie-topbar-menu-item-padding: null !default;
-$richie-topbar-menu-item-fontcolor: null !default;
+$richie-topbar-menu-item-margin: 0 !default;
+$richie-topbar-menu-item-padding: 0 !default;
+$richie-topbar-menu-item-fontcolor: inherit !default;
 
-$richie-topbar-menu-link-padding: null !default;
-$richie-topbar-menu-link-fontsize: null !default;
-$richie-topbar-menu-link-fontcolor: null !default;
+$richie-topbar-menu-link-padding: 0.8rem 1rem !default;
+$richie-topbar-menu-link-fontsize: 1rem !default;
+$richie-topbar-menu-link-fontcolor: inherit !default;
 
-$richie-topbar-menu-link-padding-md: null !default;
-$richie-topbar-menu-link-fontsize-md: null !default;
-$richie-topbar-menu-link-fontcolor-md: null !default;
+$richie-topbar-menu-link-padding-md: 1rem 0.7rem !default;
+$richie-topbar-menu-link-fontsize-md: 0.9rem !default;
+$richie-topbar-menu-link-fontcolor-md: inherit !default;
 
-$richie-topbar-menu-link-padding-lg: null !default;
-$richie-topbar-menu-link-fontsize-lg: null !default;
-$richie-topbar-menu-link-fontcolor-lg: null !default;
+$richie-topbar-menu-link-padding-lg: 1rem !default;
+$richie-topbar-menu-link-fontsize-lg: 1rem !default;
+$richie-topbar-menu-link-fontcolor-lg: inherit !default;
 
-$richie-topbar-menu-link-fontcolor-hover: null !default;
-$richie-topbar-menu-link-background-hover: null !default;
+$richie-topbar-menu-link-fontcolor-hover: $white !default;
+$richie-topbar-menu-link-background-hover: lighten($dodgerblue7, 2%) !default;
 
-$richie-topbar-menu-item-active-fontweight: null !default;
-$richie-topbar-menu-item-active-border: null !default;
-$richie-topbar-menu-item-active-fontweight-lg: null !default;
-$richie-topbar-menu-item-active-border-height-lg: null !default;
-$richie-topbar-menu-item-active-border-color-lg: null !default;
+$richie-topbar-menu-item-active-fontweight: bold !default;
+$richie-topbar-menu-item-active-border: rem-calc(4px) solid lighten($dodgerblue7, 8%) !default;
+$richie-topbar-menu-item-active-fontweight-lg: bold !default;
+$richie-topbar-menu-item-active-border-height-lg: rem-calc(3px) !default;
+$richie-topbar-menu-item-active-border-color-lg: $dodgerblue7 !default;
 
-$richie-topbar-menu-cta-fontcolor: null !default;
-$richie-topbar-menu-cta-fontweight: null !default;
-$richie-topbar-menu-cta-background: null !default;
+$richie-topbar-menu-cta-fontcolor: $white !default;
+$richie-topbar-menu-cta-fontweight: bold !default;
+$richie-topbar-menu-cta-background: $firebrick6 !default;
 
-$richie-topbar-menu-cta-hollow-fontcolor: null !default;
-$richie-topbar-menu-cta-hollow-fontweight: null !default;
-$richie-topbar-menu-cta-hollow-background: null !default;
+$richie-topbar-menu-cta-hollow-fontcolor: $firebrick6 !default;
+$richie-topbar-menu-cta-hollow-fontweight: bold !default;
+$richie-topbar-menu-cta-hollow-background: $white !default;
 
-$richie-topbar-menu-divider-border: null !default;
-$richie-topbar-menu-divider-border-lg: null !default;
+$richie-topbar-menu-divider-border: 1px solid $dodgerblue5 !default;
+$richie-topbar-menu-divider-border-lg: 0 !default;
 
-$richie-topbar-menu-item-divider-border: null !default;
-$richie-topbar-menu-item-divider-border-lg: null !default;
+$richie-topbar-menu-item-divider-border: 1px solid $dodgerblue5 !default;
+$richie-topbar-menu-item-divider-border-lg: 1px solid $white !default;
 
 .topbar{
     $topbar-selector: &;
