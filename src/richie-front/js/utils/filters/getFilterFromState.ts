@@ -1,3 +1,4 @@
+import sampleSize from 'lodash-es/sampleSize';
 import values from 'lodash-es/values';
 
 import { RootState } from '../../data/rootReducer';
@@ -61,7 +62,9 @@ export function getFilterFromState(
     // We don't have the facets yet or something broke upstream: provide some filtering
     // capabilities anyway (without counts, as we can't generate those)
     if (!facets_[resourceName] || !Object.keys(facets_[resourceName]).length) {
-      return values(state.resources[resourceName]!.byId)
+      // Return a maximum of 10 values so the page does not seem bugged when missing the facet
+      // counts, and the display is always consistent (as our facet counts cap at the top 10)
+      return sampleSize(values(state.resources[resourceName]!.byId), 10)
         .filter(organization => !!organization)
         .map(organization => ({
           humanName: organization!.name,
