@@ -48,5 +48,16 @@ $richie-search-filters-active-divider-border: 1px solid $white !default;
 
     color: $white;
     background: $firebrick6;
+    margin-left: 0.375rem;
+  }
+
+  &__count,
+  .icon-close {
+    margin-left: 0.375rem;
+  }
+
+  .icon-close {
+    // Ensure the icon is not shrinked down when the filter name spans 2 lines
+    flex-shrink: 0;
   }
 }
