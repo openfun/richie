@@ -7,8 +7,7 @@ $richie-search-filters-background: $dodgerblue1 !default;
 
 $richie-search-results-padding: 0 1rem 0 2rem !default;
 
-
-.search{
+.search {
   display: flex;
   margin: $richie-search-margin;
   padding: $richie-search-padding;
@@ -20,7 +19,7 @@ $richie-search-results-padding: 0 1rem 0 2rem !default;
     background: $richie-search-filters-background;
 
     @include media-breakpoint-up(lg) {
-        @include sv-flex(1, 0, $richie-search-filters-width);
+      @include sv-flex(1, 0, $richie-search-filters-width);
     }
   }
 
@@ -28,8 +27,8 @@ $richie-search-results-padding: 0 1rem 0 2rem !default;
     @include sv-flex(1, 0, 100%);
 
     @include media-breakpoint-up(lg) {
-        @include sv-flex(1, 0, calc(100% - #{$richie-search-filters-width}));
-        padding: $richie-search-results-padding;
+      @include sv-flex(1, 0, calc(100% - #{$richie-search-filters-width}));
+      padding: $richie-search-results-padding;
     }
   }
 }

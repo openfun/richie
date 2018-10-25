@@ -1,14 +1,11 @@
-///
-/// Default base document font size
-/// Value stand on Bootstrap assertion of 16px default value from browsers
-/// But this is not a threat since rem will finally adapt relatively to any
-/// default value. However for sanity we use a variable.
+// Default base document font size
+// Value stand on Bootstrap assertion of 16px default value from browsers
+// But this is not a threat since rem will finally adapt relatively to any
+// default value. However for sanity we use a variable.
 $rem-calc-base-font-size: 16px !default;
 
-///
-/// Helper to convert pixel value to rem value
-///
+// Helper to convert pixel value to rem value
 @function rem-calc($size) {
-    $remSize: $size / $rem-calc-base-font-size;
-    @return #{$remSize}rem;
+  $remSize: $size / $rem-calc-base-font-size;
+  @return #{$remSize}rem;
 }

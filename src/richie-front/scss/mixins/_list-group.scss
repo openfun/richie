@@ -1,11 +1,6 @@
-////
-/// List group
-////
+// List group
 
-
-///
-/// List group container
-///
+// List group container
 @mixin m-o-list-group__container() {
   display: flex;
   flex-direction: column;
@@ -15,10 +10,7 @@
   margin-bottom: 0;
 }
 
-
-///
-/// List group item
-///
+// List group item
 @mixin m-o-list-group__item(
   $width: null,
   $margin: null,
@@ -37,7 +29,7 @@
   $active-fontweight: null,
   $active-fontcolor: null,
   $active-background: null,
-  $active-divider-border: null,
+  $active-divider-border: null
 ) {
   width: $width;
   position: relative;
@@ -61,7 +53,7 @@
   }
 
   &:hover,
-  &:focus{
+  &:focus {
     z-index: 1; // Place hover/active items above their siblings for proper border styling
     font-weight: $fontweight-hover;
     color: $fontcolor-hover;
@@ -85,21 +77,20 @@
   }
 }
 
-
-/// Interactive list items
+// Interactive list items
 @mixin m-o-list-group__item--interactive(
   $fontcolor: null,
   $fontcolor-hover: null,
   $background-hover: null,
   $active-fontcolor: null,
-  $active-background: null,
+  $active-background: null
 ) {
   width: 100%;
   color: $fontcolor;
   text-align: inherit;
 
   &:hover,
-  &:focus{
+  &:focus {
     color: $fontcolor-hover;
     text-decoration: none;
     background: $background-hover;

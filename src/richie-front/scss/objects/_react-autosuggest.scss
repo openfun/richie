@@ -3,14 +3,17 @@
     position: relative;
     margin-bottom: 20px;
 
-    &--open {}
+    &--open {
+    }
   }
 
   &__input {
     @extend .form-control;
 
-    &--open {}
-    &--focused {}
+    &--open {
+    }
+    &--focused {
+    }
   }
 
   &__suggestions-container {
@@ -33,14 +36,16 @@
       cursor: pointer;
     }
 
-    &--first {}
+    &--first {
+    }
     &--highlighted {
       @extend .active;
     }
   }
 
   &__section-container {
-    &--first {}
+    &--first {
+    }
   }
 
   &__section-title {

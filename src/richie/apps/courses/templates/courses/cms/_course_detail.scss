@@ -58,7 +58,7 @@ $richie-course-detail-aside-main-org-background: $white;
     flex-direction: row;
   }
 
-  &__title{
+  &__title {
     @include sv-flex-cell-width(100%);
     position: relative;
     margin: $richie-course-detail-title-margin;
@@ -72,9 +72,9 @@ $richie-course-detail-aside-main-org-background: $white;
       font-size: $richie-course-detail-title-fontsize-large;
     }
 
-    &::after{
+    &::after {
       $divider-width: 10rem;
-      content: "";
+      content: '';
       position: absolute;
       width: $richie-course-detail-title-underline-width;
       left: calc(50% - #{$richie-course-detail-title-underline-width / 2});
@@ -93,31 +93,32 @@ $richie-course-detail-aside-main-org-background: $white;
       @include sv-flex-cell-width($richie-course-detail-content-width-large);
     }
 
-    &__row{
+    &__row {
       $row-selector: &;
       margin: $richie-course-detail-row-margin;
       padding: $richie-course-detail-row-padding;
 
-      &__title{
+      &__title {
         color: $richie-course-detail-row-title-fontcolor;
       }
 
-      p, li{
+      p,
+      li {
         font-size: $richie-course-detail-row-fontsize;
       }
 
       // Automatically alternate bg color on odd/even items
-      &--even{
+      &--even {
         color: $richie-course-detail-row-even-fontcolor;
         background: $richie-course-detail-row-even-background;
 
-        #{$row-selector}__title{
+        #{$row-selector}__title {
           color: inherit;
         }
       }
     }
 
-    &__subjects{
+    &__subjects {
       display: flex;
       padding-top: 0;
       padding-bottom: 0;
@@ -154,7 +155,7 @@ $richie-course-detail-aside-main-org-background: $white;
 
       &::before {
         display: block;
-        content: "";
+        content: '';
         padding-top: percentage(9 / 16);
       }
 
@@ -168,31 +169,45 @@ $richie-course-detail-aside-main-org-background: $white;
         bottom: $richie-course-detail-teaser-object-padding-vertical;
         left: $richie-course-detail-teaser-object-padding-horizontal;
         right: $richie-course-detail-teaser-object-padding-horizontal;
-        width: calc(100% - #{$richie-course-detail-teaser-object-padding-horizontal * 2});
-        height: calc(100% - #{$richie-course-detail-teaser-object-padding-vertical * 2});
+        width: calc(
+          100% - #{$richie-course-detail-teaser-object-padding-horizontal * 2}
+        );
+        height: calc(
+          100% - #{$richie-course-detail-teaser-object-padding-vertical * 2}
+        );
         border: 0;
       }
     }
 
-    &__team{
-
+    &__team {
       display: flex;
       flex-direction: row;
       flex-wrap: wrap;
 
-      &__title{
+      &__title {
         @include sv-flex(1, 0, 100%);
       }
 
-      .person-plugin{
-        @include sv-flex(1, 0, calc(100% - #{$richie-course-detail-team-gutter * 2}));
+      .person-plugin {
+        @include sv-flex(
+          1,
+          0,
+          calc(100% - #{$richie-course-detail-team-gutter * 2})
+        );
         margin: $richie-course-detail-team-gutter;
 
         @include media-breakpoint-up($richie-course-detail-breakpoint) {
-          @include sv-flex(1, 0, calc(#{$richie-course-detail-team-width-large} - #{$richie-course-detail-team-gutter * 2}));
+          @include sv-flex(
+            1,
+            0,
+            calc(
+              #{$richie-course-detail-team-width-large} - #{$richie-course-detail-team-gutter *
+                2}
+            )
+          );
         }
 
-        &__content__title{
+        &__content__title {
           font-size: $richie-course-detail-team-title-fontsize;
           color: $richie-course-detail-team-title-fontcolor;
           text-transform: uppercase;
@@ -200,12 +215,12 @@ $richie-course-detail-aside-main-org-background: $white;
       }
     }
 
-    &__license{
-      &__item{
+    &__license {
+      &__item {
         margin: $richie-course-detail-license-margin;
         font-size: $richie-course-detail-row-fontsize;
 
-        &__title{
+        &__title {
           margin: $richie-course-detail-license-title-margin;
           color: $richie-course-detail-license-title-fontcolor;
         }
@@ -222,12 +237,12 @@ $richie-course-detail-aside-main-org-background: $white;
       @include sv-flex-cell-width(#{$richie-course-detail-aside-with-large});
     }
 
-    &__main-org-logo{
+    &__main-org-logo {
       margin: $richie-course-detail-aside-main-org-margin;
       padding: $richie-course-detail-aside-main-org-padding;
       background: $richie-course-detail-aside-main-org-background;
 
-      img{
+      img {
         display: block;
         width: auto;
         max-width: 100%;
@@ -235,21 +250,21 @@ $richie-course-detail-aside-main-org-background: $white;
       }
     }
 
-    &__cover{
-      img{
+    &__cover {
+      img {
         display: block;
         width: 100%;
         max-width: 100%;
       }
     }
 
-    &__run{
+    &__run {
       margin: 0;
       padding: 1rem;
       color: $white;
       background: $dodgerblue1;
 
-      &__title{
+      &__title {
         margin: 0;
         padding: 0.5rem 0.1rem 0;
         font-size: 1.8rem;
@@ -258,7 +273,7 @@ $richie-course-detail-aside-main-org-background: $white;
         text-align: center;
       }
 
-      &__item{
+      &__item {
         $item-selector: &;
         position: relative;
         margin: 0 1rem;
@@ -266,56 +281,56 @@ $richie-course-detail-aside-main-org-background: $white;
         font-size: 0.9rem;
         list-style-type: none;
 
-        &__row{
-            $row-selector: &;
+        &__row {
+          $row-selector: &;
+          margin: 0;
+          padding: 0;
+
+          &__title {
+            margin: 0 0 0.1rem 0;
+            font-weight: bold;
+            text-transform: uppercase;
+          }
+
+          &__date {
             margin: 0;
-            padding: 0;
+          }
 
-            &__title{
-              margin: 0 0 0.1rem 0;
-              font-weight: bold;
-              text-transform: uppercase;
-            }
+          &__cta {
+            display: block;
+            width: 100%;
+            padding: 0.3rem;
+            color: $white;
+            text-align: center;
+            text-transform: uppercase;
+            background: $dodgerblue5;
+            border: 0;
 
-            &__date{
-              margin: 0;
-            }
-
-            &__cta{
-              display: block;
-              width: 100%;
-              padding: 0.3rem;
+            &:hover {
               color: $white;
-              text-align: center;
-              text-transform: uppercase;
-              background: $dodgerblue5;
-              border: 0;
+              text-decoration: none;
+              background: lighten($dodgerblue5, 5%);
+            }
 
-              &:hover{
-                color: $white;
-                text-decoration: none;
-                background: lighten($dodgerblue5, 5%);
-              }
+            &--archived,
+            &--projected {
+              color: $gray40;
+              background: $gray80;
 
-              &--archived,
-              &--projected{
+              &:hover {
                 color: $gray40;
                 background: $gray80;
-
-                &:hover{
-                  color: $gray40;
-                  background: $gray80;
-                }
               }
             }
+          }
 
-            & + #{$row-selector}{
-              margin-top: 0.8rem;
-            }
+          & + #{$row-selector} {
+            margin-top: 0.8rem;
+          }
         }
 
-        & + #{$item-selector}::before{
-          content: "";
+        & + #{$item-selector}::before {
+          content: '';
           display: block;
           width: 50%;
           position: absolute;

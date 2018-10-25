@@ -1,6 +1,5 @@
-///
-/// Main body footer
-///
+// Main body footer
+
 $richie-footer-padding: 0 1rem !default;
 $richie-footer-fontcolor: $white !default;
 $richie-footer-background: $dodgerblue1 !default;
@@ -26,122 +25,121 @@ $richie-footer-mentions-texttransform: uppercase !default;
 $richie-footer-poweredby-padding: 1rem 0 !default;
 $richie-footer-poweredby-link-fontcolor: $white !default;
 
+.body-footer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  padding: $richie-footer-padding;
+  color: $richie-footer-fontcolor;
+  background: $richie-footer-background;
 
-.body-footer{
+  &__menu {
+    @include sv-flex(1, 0, 100%);
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    padding: $richie-footer-padding;
-    color: $richie-footer-fontcolor;
-    background: $richie-footer-background;
+    border-bottom: $richie-footer-menu-border;
 
-    &__menu{
+    &__list {
+      width: 100%;
+      max-width: map-get($container-max-widths, 'xl');
+      margin: 0 auto;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: center;
+
+      &__item {
         @include sv-flex(1, 0, 100%);
         display: flex;
-        border-bottom: $richie-footer-menu-border;
-
-        &__list{
-            width: 100%;
-            max-width: map-get($container-max-widths, "xl");
-            margin: 0 auto;
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            justify-content: center;
-
-            &__item{
-                @include sv-flex(1, 0, 100%);
-                display: flex;
-                margin: $richie-footer-menu-item-margin;
-                padding: $richie-footer-menu-item-padding;
-                color: inherit;
-
-                @include media-breakpoint-up(lg) {
-                    @include sv-flex(0, 0, auto);
-                    margin: $richie-footer-menu-item-margin-lg;
-                    padding: $richie-footer-menu-item-padding-lg;
-                }
-
-                &__link{
-                    @include sv-flex(1, 0, 100%);
-                    display: block;
-                    padding: $richie-footer-menu-link-padding;
-                    font-weight: $richie-footer-menu-link-fontweight;
-                    color: $richie-footer-menu-link-fontcolor;
-
-                    &:hover{
-                        color: $richie-footer-menu-link-fontcolor-hover;
-                        text-decoration: none;
-                    }
-                }
-            }
-        }
-    }
-
-    &__brand{
-        @include sv-flex(0, 0, auto);
-        display: flex;
-        padding: $richie-footer-brand-padding;
-        order: 1;
-
-        &__link{
-            @include sv-flex(1, 0, 100%);
-            display: block;
-        }
-    }
-
-    &__mentions{
-        @include sv-flex(1, 0, 100%);
-        display: flex;
-        padding: $richie-footer-mentions-padding;
-        align-content: center;
-        order: 3;
+        margin: $richie-footer-menu-item-margin;
+        padding: $richie-footer-menu-item-padding;
+        color: inherit;
 
         @include media-breakpoint-up(lg) {
-            @include sv-flex(0, 0, auto);
-            order: 2;
+          @include sv-flex(0, 0, auto);
+          margin: $richie-footer-menu-item-margin-lg;
+          padding: $richie-footer-menu-item-padding-lg;
         }
 
-        p{
-            @include sv-flex(1, 0, 100%);
-            margin: 0;
-            display: flex;
-            align-items: center;
-            font-size: $richie-footer-mentions-fontsize;
-            text-transform: $richie-footer-mentions-texttransform;
-            justify-content: center;
+        &__link {
+          @include sv-flex(1, 0, 100%);
+          display: block;
+          padding: $richie-footer-menu-link-padding;
+          font-weight: $richie-footer-menu-link-fontweight;
+          color: $richie-footer-menu-link-fontcolor;
+
+          &:hover {
+            color: $richie-footer-menu-link-fontcolor-hover;
+            text-decoration: none;
+          }
         }
+      }
+    }
+  }
+
+  &__brand {
+    @include sv-flex(0, 0, auto);
+    display: flex;
+    padding: $richie-footer-brand-padding;
+    order: 1;
+
+    &__link {
+      @include sv-flex(1, 0, 100%);
+      display: block;
+    }
+  }
+
+  &__mentions {
+    @include sv-flex(1, 0, 100%);
+    display: flex;
+    padding: $richie-footer-mentions-padding;
+    align-content: center;
+    order: 3;
+
+    @include media-breakpoint-up(lg) {
+      @include sv-flex(0, 0, auto);
+      order: 2;
     }
 
-    &__poweredby{
+    p {
+      @include sv-flex(1, 0, 100%);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      font-size: $richie-footer-mentions-fontsize;
+      text-transform: $richie-footer-mentions-texttransform;
+      justify-content: center;
+    }
+  }
+
+  &__poweredby {
+    @include sv-flex(0, 0, auto);
+    display: flex;
+    padding: $richie-footer-poweredby-padding;
+    order: 2;
+
+    @include media-breakpoint-up(lg) {
+      order: 3;
+    }
+
+    &__link {
+      @include sv-flex(1, 0, 100%);
+      display: flex;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      justify-content: center;
+      color: $richie-footer-poweredby-link-fontcolor;
+
+      small {
         @include sv-flex(0, 0, auto);
-        display: flex;
-        padding: $richie-footer-poweredby-padding;
-        order: 2;
+        line-height: 1.1;
+      }
 
-        @include media-breakpoint-up(lg) {
-            order: 3;
-        }
-
-        &__link{
-            @include sv-flex(1, 0, 100%);
-            display: flex;
-            flex-direction: column;
-            flex-wrap: nowrap;
-            justify-content: center;
-            color: $richie-footer-poweredby-link-fontcolor;
-
-            small{
-                @include sv-flex(0, 0, auto);
-                line-height: 1.1;
-            }
-
-            strong{
-                @include sv-flex(0, 0, auto);
-                font-size: 1.4em;
-                line-height: 1.1;
-            }
-        }
+      strong {
+        @include sv-flex(0, 0, auto);
+        font-size: 1.4em;
+        line-height: 1.1;
+      }
     }
+  }
 }

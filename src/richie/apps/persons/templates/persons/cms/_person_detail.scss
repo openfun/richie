@@ -6,14 +6,14 @@ $richie-person-detail-media-width: 120px;
   padding: 1rem $grid-gutter-width;
   background: $richie-content-container-bg;
 
-  &__title{
-      text-align: center;
-      @include media-breakpoint-up(lg) {
-          text-align: left;
-      }
+  &__title {
+    text-align: center;
+    @include media-breakpoint-up(lg) {
+      text-align: left;
+    }
   }
 
-  &__card{
+  &__card {
     @include m-o-card(
       $padding: 1rem 0,
       $border: $richie-course-glimpse-container-border,
@@ -27,20 +27,20 @@ $richie-person-detail-media-width: 120px;
       $content-flex-justify: flex-start,
       $wrapper-padding: $richie-course-glimpse-wrapper-padding,
       $foot-divider: $richie-course-glimpse-foot-divider,
-      $methodology: "bem"
+      $methodology: 'bem'
     );
     max-width: 100%;
 
     @include media-breakpoint-up(lg) {
       @include m-o-card(
         $media-width: $richie-person-detail-media-width,
-        $methodology: "bem"
+        $methodology: 'bem'
       );
       max-width: 50%;
     }
 
-    &__media{
-      img{
+    &__media {
+      img {
         margin: 0 auto;
         max-width: $richie-person-detail-media-width;
         border-radius: 100%;

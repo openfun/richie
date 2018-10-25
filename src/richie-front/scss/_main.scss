@@ -11,47 +11,47 @@
 
 // TWITTER BOOTSTRAP V4
 // Required
-@import "../../../node_modules/bootstrap/scss/bootstrap-reboot.scss";
+@import '../../../node_modules/bootstrap/scss/bootstrap-reboot.scss';
 
 // Only what we use
-@import "../../../node_modules/bootstrap/scss/badge";
-@import "../../../node_modules/bootstrap/scss/card";
-@import "../../../node_modules/bootstrap/scss/dropdown";
-@import "../../../node_modules/bootstrap/scss/forms";
-@import "../../../node_modules/bootstrap/scss/list-group";
-@import "../../../node_modules/bootstrap/scss/nav";
-@import "../../../node_modules/bootstrap/scss/navbar";
-@import "../../../node_modules/bootstrap/scss/type";
-@import "../../../node_modules/bootstrap/scss/utilities/display";
-@import "../../../node_modules/bootstrap/scss/utilities/flex";
-@import "../../../node_modules/bootstrap/scss/utilities/text";
+@import '../../../node_modules/bootstrap/scss/badge';
+@import '../../../node_modules/bootstrap/scss/card';
+@import '../../../node_modules/bootstrap/scss/dropdown';
+@import '../../../node_modules/bootstrap/scss/forms';
+@import '../../../node_modules/bootstrap/scss/list-group';
+@import '../../../node_modules/bootstrap/scss/nav';
+@import '../../../node_modules/bootstrap/scss/navbar';
+@import '../../../node_modules/bootstrap/scss/type';
+@import '../../../node_modules/bootstrap/scss/utilities/display';
+@import '../../../node_modules/bootstrap/scss/utilities/flex';
+@import '../../../node_modules/bootstrap/scss/utilities/text';
 
 // PORTAL STYLES
 // Objects from Partials (eg. styles for templates produced by dependencies)
-@import "./objects/react-autosuggest";
+@import './objects/react-autosuggest';
 
 // Frontend components objects styles
-@import "../js/components/CourseGlimpse/_CourseGlimpse";
-@import "../js/components/icons/CloseIcon";
-@import "../js/components/Search/_Search";
-@import "../js/components/SearchFilter/_SearchFilter";
-@import "../js/components/SearchFilterGroup/_SearchFilterGroup";
-@import "../js/components/SearchFiltersPane/_SearchFiltersPane";
+@import '../js/components/CourseGlimpse/_CourseGlimpse';
+@import '../js/components/icons/CloseIcon';
+@import '../js/components/Search/_Search';
+@import '../js/components/SearchFilter/_SearchFilter';
+@import '../js/components/SearchFilterGroup/_SearchFilterGroup';
+@import '../js/components/SearchFiltersPane/_SearchFiltersPane';
 
 // Shared object styles
-@import "../../../sandbox/templates/menu/_menu";
-@import "./objects/course_glimpses";
-@import "../../richie/apps/courses/templates/courses/plugins/subject_plugin";
-@import "../../richie/apps/persons/templates/persons/plugins/person_plugin";
-@import "../../richie/apps/courses/templates/courses/plugins/licence_plugin";
-@import "../../richie/apps/courses/templates/courses/cms/organization_detail";
-@import "../../richie/apps/courses/templates/courses/cms/subject_detail";
-@import "../../richie/apps/courses/templates/courses/cms/course_detail";
-@import "../../richie/apps/persons/templates/persons/cms/person_detail";
-@import "../../richie/apps/search/templates/search/search";
-@import "../../richie/plugins/large_banner/templates/large_banner";
+@import '../../../sandbox/templates/menu/_menu';
+@import './objects/course_glimpses';
+@import '../../richie/apps/courses/templates/courses/plugins/subject_plugin';
+@import '../../richie/apps/persons/templates/persons/plugins/person_plugin';
+@import '../../richie/apps/courses/templates/courses/plugins/licence_plugin';
+@import '../../richie/apps/courses/templates/courses/cms/organization_detail';
+@import '../../richie/apps/courses/templates/courses/cms/subject_detail';
+@import '../../richie/apps/courses/templates/courses/cms/course_detail';
+@import '../../richie/apps/persons/templates/persons/cms/person_detail';
+@import '../../richie/apps/search/templates/search/search';
+@import '../../richie/plugins/large_banner/templates/large_banner';
 
 // Page component styles
-@import "./components/header";
-@import "./components/footer";
-@import "./components/content";
+@import './components/header';
+@import './components/footer';
+@import './components/content';
