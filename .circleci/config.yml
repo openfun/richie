@@ -648,7 +648,7 @@ jobs:
           name: Lint code with tslint
           command: yarn lint
 
-  lint-front-prettier:
+  lint-prettier:
     docker:
       - image: circleci/node:9-browsers
     working_directory: ~/richie
@@ -658,8 +658,8 @@ jobs:
           keys:
           - v3-front-dependencies-{{ checksum "package.json" }}
       - run:
-          name: Lint code with prettier
-          command: yarn prettier --list-different "src/richie-front/js/**/*.+(ts|tsx|json|js|jsx)" "*.+(ts|tsx|json|js|jsx)"
+          name: Lint JS/TS/JSON and CSS/SCSS code with prettier
+          command: yarn prettier --list-different "src/richie-front/js/**/*.+(ts|tsx|json|js|jsx)" "*.+(ts|tsx|json|js|jsx)" "src/**/*.+(css|scss)"
 
   test-front:
     docker:
@@ -694,7 +694,7 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - lint-front-prettier:
+      - lint-prettier:
           requires:
             - build-front
           filters:

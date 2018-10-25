@@ -109,7 +109,7 @@ lint-front-tslint: ## lint TypeScript sources
 .PHONY: lint-front-tslint
 
 lint-front-prettier: ## run prettier over js/jsx/json/ts/tsx files -- beware! overwrites files
-	@$(YARN) prettier
+	@$(YARN) prettier-write
 .PHONY: lint-front-prettier
 
 logs: ## get development logs
