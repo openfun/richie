@@ -10,6 +10,7 @@ import {
 
 import { filterGroupName } from '../../types/filters';
 import {
+  ResourceSuggestionSection,
   SearchSuggestion,
   SearchSuggestionSection,
 } from '../../types/searchSuggest';
@@ -20,12 +21,13 @@ import { getSuggestionsSection } from '../../utils/searchSuggest/getSuggestionsS
 import { suggestionHumanName } from '../../utils/searchSuggest/suggestionHumanName';
 import { suggestionsFromSection } from '../../utils/searchSuggest/suggestionsFromSection';
 
-interface SearchSuggestFieldState {
-  suggestions: SearchSuggestionSection[];
-  value: string;
-}
-
 const messages = defineMessages({
+  searchFieldDefaultSearch: {
+    defaultMessage: 'Search for {query} in courses...',
+    description: `Default query in the main search field. Lets users run a full text search
+      with whatever they have typed in.`,
+    id: 'components.SearchSuggestField.searchFieldDefaultSearch',
+  },
   searchFieldPlaceholder: {
     defaultMessage: 'Search for courses, organizations, subjects',
     description:
@@ -34,19 +36,51 @@ const messages = defineMessages({
   },
 });
 
-export interface SearchSuggestFieldProps {
-  addFilter: (filterName: filterGroupName, filterValue: string) => void;
-}
+/**
+ * `react-autosuggest` callback to get a human string value from a Suggestion object.
+ * @param suggestion The relevant suggestion object.
+ */
+export const getSuggestionValue = (suggestion: SearchSuggestion) =>
+  suggestion.model ? suggestionHumanName(suggestion) : suggestion.data;
 
-export const renderSuggestion = (suggestion: SearchSuggestion) => (
-  <span>{suggestionHumanName(suggestion)}</span>
-);
+/**
+ * `react-autosuggest` callback to render one suggestion.
+ * @param suggestion Either a resource suggestion with a model name & a machine name, or the default
+ * suggestion with some text to render.
+ */
+export const renderSuggestion = (suggestion: SearchSuggestion) => {
+  // Default suggestion is just packing a message in its data field
+  if (!suggestion.model) {
+    return (
+      <FormattedMessage
+        {...messages.searchFieldDefaultSearch}
+        values={{ query: <b>{suggestion.data}</b> }}
+      />
+    );
+  }
+  // Resource suggestions need the machine name => human name translation
+  return <span>{suggestionHumanName(suggestion)}</span>;
+};
 
+/**
+ * `react-autosuggest` callback to render one suggestion section.
+ * @param intl The injected Intl object from react-intl's injectIntl HOC.
+ * @param section A suggestion section based on a resource. renderSectionTitle() is never called with
+ * the default section as that section has no title.
+ */
 export const renderSectionTitle = (
   intl: InjectedIntl,
   section: SearchSuggestionSection,
-) => <span>{intl.formatMessage(section.message)}</span>;
+) =>
+  section.model ? <span>{intl.formatMessage(section.message)}</span> : null;
 
+/**
+ * `react-autosuggest` callback triggered on every used input.
+ * @param this Mandatory binding to SearchSuggestFieldBase to access state.
+ * @param event Unused: change event.
+ * @param params Incoming parameters related to the change event. Includes `newValue` as key
+ * with the search suggest form field value.
+ */
 export function onChange(
   this: SearchSuggestFieldBase,
   event: React.FormEvent<any>,
@@ -59,12 +93,22 @@ export function onChange(
   }
 }
 
+/**
+ * `react-autosuggest` callback to handle clearing of all active suggestions
+ * @param this Mandatory binding to SearchSuggestFieldBase to access state.
+ */
 export function onSuggestionsClearRequested(this: SearchSuggestFieldBase) {
   this.setState({
     suggestions: [],
   });
 }
 
+/**
+ * `react-autosuggest` callback to build up the list of suggestions and sections whenever user
+ * interaction requires us to create or update that list.
+ * @param this Mandatory binding to SearchSuggestFieldBase to access state.
+ * @param value `value` as key to an anonymous object: the current value of the search suggest form field.
+ */
 export async function onSuggestionsFetchRequested(
   this: SearchSuggestFieldBase,
   { value }: { value: string },
@@ -73,33 +117,52 @@ export async function onSuggestionsFetchRequested(
     return this.setState({ suggestions: [] });
   }
 
-  // List the sections we'll display and the models they're related to
+  // List the resource-based sections we'll display and the models they're related to
   const sectionParams: Array<
-    [SearchSuggestionSection['model'], FormattedMessage.MessageDescriptor]
+    [ResourceSuggestionSection['model'], FormattedMessage.MessageDescriptor]
   > = [
     ['courses', commonMessages.coursesHumanName],
     ['organizations', commonMessages.organizationsHumanName],
     ['subjects', commonMessages.subjectsHumanName],
   ];
 
-  // Fetch the suggestions for each section to build out the sections
-  let sections: SearchSuggestionSection[];
+  // Fetch the suggestions for each resource-based section to build out the sections
+  let sections: ResourceSuggestionSection[];
   try {
     sections = (await Promise.all(
       sectionParams.map(([model, message]) =>
         getSuggestionsSection(model, message, value),
       ),
-    )) as SearchSuggestionSection[]; // We can assert this because of the catch below
+    )) as ResourceSuggestionSection[]; // We can assert this because of the catch below
   } catch (error) {
     return handle(error);
   }
 
-  // Drop sections with no results as there's no use displaying them
   this.setState({
-    suggestions: sections.filter(section => !!section!.values.length),
+    suggestions: [
+      // Add the default section on top of the list
+      {
+        message: null,
+        model: null,
+        value,
+      },
+      // Drop sections with no results as there's no use displaying them
+      ...sections.filter(section => !!section!.values.length),
+    ],
   });
 }
 
+/**
+ * `react-autosuggest` callback triggered when the user picks a suggestion, to handle the interaction.
+ *
+ * Different interactions have different expected outcomes:
+ * - picking a course directs to the course detailed page (as this is a course search);
+ * - picking another resource suggestion adds that resource as a filter;
+ * - the default suggestion runs a full-text search on the content of the search suggest form field.
+ * @param this Mandatory binding to SearchSuggestFieldBase to access state.
+ * @param event Unused: selection event.
+ * @param suggestion `suggestion` as key to an anonymous object: the suggestion the user picked.
+ */
 export function onSuggestionSelected(
   this: SearchSuggestFieldBase,
   event: Event,
@@ -123,6 +186,22 @@ export function onSuggestionSelected(
   }
 }
 
+interface SearchSuggestFieldState {
+  suggestions: SearchSuggestionSection[];
+  value: string;
+}
+
+/**
+ * Props shape for the SearchSuggestField component.
+ */
+export interface SearchSuggestFieldProps {
+  addFilter: (filterName: filterGroupName, filterValue: string) => void;
+  fullTextSearch: (query: string) => void;
+}
+
+/**
+ * Non-wrapped component. Exported for testing purposes only. See SearchSuggestField.
+ */
 export class SearchSuggestFieldBase extends React.Component<
   SearchSuggestFieldProps & InjectedIntlProps,
   SearchSuggestFieldState
@@ -146,13 +225,14 @@ export class SearchSuggestFieldBase extends React.Component<
       // would be correct if we did not use sections, but is incorrect as it is.
       <Autosuggest
         suggestions={suggestions as any}
-        getSuggestionValue={suggestionHumanName}
+        getSuggestionValue={getSuggestionValue}
+        highlightFirstSuggestion={true}
         onSuggestionsClearRequested={onSuggestionsClearRequested.bind(this)}
         onSuggestionsFetchRequested={onSuggestionsFetchRequested.bind(this)}
         onSuggestionSelected={onSuggestionSelected.bind(this)}
         renderSuggestion={renderSuggestion}
         multiSection={true}
-        getSectionSuggestions={suggestionsFromSection}
+        getSectionSuggestions={suggestionsFromSection as any}
         renderSectionTitle={renderSectionTitle.bind(null, intl)}
         inputProps={inputProps}
       />
@@ -160,4 +240,8 @@ export class SearchSuggestFieldBase extends React.Component<
   }
 }
 
+/**
+ * Component. Displays the main search field alon with any suggestions organized in relevant sections.
+ * @param addFilter Store helper to add a new active value for a filter.
+ */
 export const SearchSuggestField = injectIntl(SearchSuggestFieldBase);

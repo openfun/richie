@@ -1,6 +1,6 @@
-import { SearchSuggestion } from '../../types/searchSuggest';
+import { ResourceSuggestion } from '../../types/searchSuggest';
 
-export const suggestionHumanName = (suggestion: SearchSuggestion) => {
+export const suggestionHumanName = (suggestion: ResourceSuggestion) => {
   switch (suggestion.model) {
     case 'courses':
       const course = suggestion.data;

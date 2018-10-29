@@ -4,11 +4,16 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 
 import { Course } from '../../types/Course';
-import { SearchSuggestionSection } from '../../types/searchSuggest';
+import {
+  DefaultSuggestionSection,
+  ResourceSuggestionSection,
+} from '../../types/searchSuggest';
 import { handle } from '../../utils/errors/handle';
 import { location } from '../../utils/indirection/location';
 import { getSuggestionsSection } from '../../utils/searchSuggest/getSuggestionsSection';
+import { suggestionHumanName } from '../../utils/searchSuggest/suggestionHumanName';
 import {
+  getSuggestionValue,
   onChange,
   onSuggestionsClearRequested,
   onSuggestionSelected,
@@ -25,6 +30,11 @@ const mockGetSuggestionsSection: jest.Mock<
   typeof getSuggestionsSection
 > = getSuggestionsSection as any;
 jest.mock('../../utils/searchSuggest/getSuggestionsSection');
+
+const mockSuggestionHumanName: jest.Mock<
+  typeof suggestionHumanName
+> = suggestionHumanName as any;
+jest.mock('../../utils/searchSuggest/suggestionHumanName');
 
 describe('components/SearchSuggestField', () => {
   let addFilter: jasmine.Spy;
@@ -51,8 +61,26 @@ describe('components/SearchSuggestField', () => {
     );
   });
 
+  describe('getSuggestionValue()', () => {
+    beforeEach(mockSuggestionHumanName.mockClear);
+
+    it('returns the human name for a resource-based suggestion', () => {
+      const suggestion = { data: '3', model: 'organizations' } as any;
+      mockSuggestionHumanName.mockReturnValue('Some Human Name');
+      expect(getSuggestionValue(suggestion)).toEqual('Some Human Name');
+      expect(mockSuggestionHumanName).toHaveBeenCalledWith(suggestion);
+    });
+
+    it('returns the suggestion data directly for the default suggestion', () => {
+      const suggestion = { data: 'Search for something', model: null } as any;
+      expect(getSuggestionValue(suggestion)).toEqual('Search for something');
+      expect(mockSuggestionHumanName).not.toHaveBeenCalled();
+    });
+  });
+
   describe('renderSuggestion()', () => {
     it('renders a single suggestion', () => {
+      mockSuggestionHumanName.mockReturnValue('Some course title');
       expect(
         renderSuggestion({
           data: { title: 'Some course title' } as Course,
@@ -63,7 +91,7 @@ describe('components/SearchSuggestField', () => {
   });
 
   describe('renderSectionTitle()', () => {
-    it('renders a section title', () => {
+    it('renders a section title for a resource suggestion section', () => {
       expect(
         renderSectionTitle(
           { formatMessage: ({ defaultMessage }: any) => defaultMessage } as any,
@@ -72,9 +100,22 @@ describe('components/SearchSuggestField', () => {
               defaultMessage: 'Some section title',
               id: 'someMessage',
             },
-          } as SearchSuggestionSection,
+            model: 'organizations',
+          } as ResourceSuggestionSection,
         ),
       ).toEqual(<span>Some section title</span>);
+    });
+
+    it('returns null for the default suggestion section', () => {
+      expect(
+        renderSectionTitle(
+          { formatMessage: ({ defaultMessage }: any) => defaultMessage } as any,
+          {
+            message: null,
+            model: null,
+          } as DefaultSuggestionSection,
+        ),
+      );
     });
   });
 
@@ -107,23 +148,23 @@ describe('components/SearchSuggestField', () => {
 
     it('uses getSuggestionsSection to get and build a SearchhSuggestionsSection', async () => {
       mockGetSuggestionsSection.mockImplementation(
-        async (model: SearchSuggestionSection['model']) => {
+        async (model: ResourceSuggestionSection['model']) => {
           switch (model) {
             case 'courses':
               return {
+                message: 'Courses',
                 model: 'courses',
-                title: 'Courses',
                 values: [
                   { title: 'Course #1' } as Course,
                   { title: 'Course #2' } as Course,
                 ],
               };
             case 'subjects':
-              return { model: 'subjects', title: 'Subjects', values: [] };
+              return { message: 'Subjects', model: 'subjects', values: [] };
             case 'organizations':
               return {
+                message: 'Organizations',
                 model: 'organizations',
-                title: 'Organizations',
                 values: [],
               };
           }
@@ -137,8 +178,13 @@ describe('components/SearchSuggestField', () => {
       expect(that.setState).toHaveBeenCalledWith({
         suggestions: [
           {
+            message: null,
+            model: null,
+            value: 'some search',
+          },
+          {
+            message: 'Courses',
             model: 'courses',
-            title: 'Courses',
             values: [{ title: 'Course #1' }, { title: 'Course #2' }],
           },
         ],

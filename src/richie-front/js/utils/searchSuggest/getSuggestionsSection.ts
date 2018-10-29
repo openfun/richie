@@ -4,13 +4,13 @@ import { FormattedMessage } from 'react-intl';
 
 import { API_ENDPOINTS } from '../../settings';
 import { Resource } from '../../types/Resource';
-import { SearchSuggestionSection } from '../../types/searchSuggest';
+import { ResourceSuggestionSection } from '../../types/searchSuggest';
 import { handle } from '../../utils/errors/handle';
 
 // Build a suggestion section from a model name and a title, requesting the relevant
 // values to populate it from the API
 export const getSuggestionsSection = async (
-  sectionModel: SearchSuggestionSection['model'],
+  sectionModel: ResourceSuggestionSection['model'],
   sectionTitleMessage: FormattedMessage.MessageDescriptor,
   query: string,
 ) => {
@@ -53,5 +53,5 @@ export const getSuggestionsSection = async (
     message: sectionTitleMessage,
     model: sectionModel,
     values: take(data.objects, 3),
-  } as SearchSuggestionSection;
+  };
 };

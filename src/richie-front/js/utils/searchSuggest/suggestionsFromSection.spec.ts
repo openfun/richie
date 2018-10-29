@@ -72,4 +72,14 @@ describe('utils/searchSuggest/suggestionsFromSection', () => {
       },
     ]);
   });
+
+  it('accepts the default suggestion section and returns the default suggestion', () => {
+    expect(
+      suggestionsFromSection({
+        message: null,
+        model: null,
+        value: 'example message',
+      }),
+    ).toEqual([{ data: 'example message', model: null }]);
+  });
 });
