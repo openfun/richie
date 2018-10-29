@@ -37,20 +37,32 @@ const mockSuggestionHumanName: jest.Mock<
 jest.mock('../../utils/searchSuggest/suggestionHumanName');
 
 describe('components/SearchSuggestField', () => {
-  let addFilter: jasmine.Spy;
-  let that: { props: { addFilter: jasmine.Spy }; setState: jasmine.Spy };
+  let addFilter: jest.SpyInstance;
+  let fullTextSearch: jest.SpyInstance;
+  let that: {
+    props: {
+      addFilter: typeof addFilter;
+      fullTextSearch: typeof fullTextSearch;
+    };
+    setState: jasmine.Spy;
+  };
 
   beforeEach(() => {
-    // addFilter is the method passed through the props
-    addFilter = jasmine.createSpy('addFilter');
+    // addFilter & fullTextSearch are used to update the current search query
+    addFilter = jest.fn();
+    fullTextSearch = jest.fn();
     // Stub the parts of the component instance we need to access
-    that = { props: { addFilter }, setState: jasmine.createSpy('setState') };
+    that = {
+      props: { addFilter, fullTextSearch },
+      setState: jasmine.createSpy('setState'),
+    };
   });
 
   it('renders', () => {
     const wrapper = shallow(
       <SearchSuggestFieldBase
-        addFilter={addFilter}
+        addFilter={addFilter as any}
+        fullTextSearch={fullTextSearch as any}
         intl={
           { formatMessage: (message: any) => message.defaultMessage } as any
         }
@@ -221,7 +233,7 @@ describe('components/SearchSuggestField', () => {
       expect(location.setHref).toHaveBeenCalledWith('https://42');
     });
 
-    it('updates the filer and resets the suggestion state when it is called with an org or a subject', () => {
+    it('updates the filter and resets the suggestion state when it is called with a resource suggestion', () => {
       onSuggestionSelected.bind(that)(
         {},
         { suggestion: { model: 'subjects', data: { id: 43 } } },
@@ -234,6 +246,15 @@ describe('components/SearchSuggestField', () => {
         { suggestion: { model: 'organizations', data: { id: 44 } } },
       );
       expect(addFilter).toHaveBeenCalledWith('organizations', '44');
+      expect(location.setHref).not.toHaveBeenCalled();
+    });
+
+    it('updates the full text search when it is called with the default suggestion', () => {
+      onSuggestionSelected.bind(that)(
+        {},
+        { suggestion: { model: null, data: 'my search' } },
+      );
+      expect(fullTextSearch).toHaveBeenCalledWith('my search');
       expect(location.setHref).not.toHaveBeenCalled();
     });
   });

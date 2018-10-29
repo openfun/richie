@@ -183,6 +183,12 @@ export function onSuggestionSelected(
         suggestions: [],
         value: '',
       });
+      break;
+
+    default:
+      // Update the current query with the default suggestion data (the contents of the search query)
+      this.props.fullTextSearch(suggestion.data);
+      break;
   }
 }
 
