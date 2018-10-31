@@ -1,0 +1,83 @@
+{% extends "richie/fullwidth.html" %}
+{% load cms_tags i18n extra_tags %}
+
+{% block title %}{% spaceless %}
+  {% page_attribute "page_title" as course_run_title %}
+  {% page_attribute "page_title" current_page.parent_page as course_title %}
+  {{ course_run_title|capfirst }} - {{ course_title|capfirst }}
+{% endspaceless %}{% endblock title %}
+
+{% block content %}{% spaceless %}
+<div class="course-detail">
+
+  {% with course_run=current_page.courserun header_level=2 %}
+
+  <div class="course-detail__content course-detail__content--one">
+    <h1 class="course-detail__content__title">
+      {% render_model request.current_page.parent_page "titles" %}
+      <br>
+      {% render_model request.current_page "titles" %}
+    </h1>
+
+    <div class="course-detail__content__row course-detail__content__subjects">
+      {% with form_factor="tag" %}
+        {% page_placeholder "course_subjects" current_page.parent_page or %}
+          <p class="course-detail__content__subjects__placeholder">
+            {% trans "No associated subjects" %}
+          </p>
+        {% endpage_placeholder %}
+      {% endwith %}
+    </div>
+    
+    <div class="course-detail__content__run">
+      <h2 class="course-detail__content__run__title">{% trans 'Details' %}</h2>
+      <dl class="course-detail__content__run__block">
+        <dt>{% trans "Enrollment starts" %}</dt>
+        <dd>{% render_model course_run "enrollment_start" "enrollment_start,enrollment_end" "" "date:'DATE_FORMAT'|default:'...'" %}</dd>
+        <dt>{% trans "Enrollment ends" %}</dt>
+        <dd>{% render_model course_run "enrollment_end" "enrollment_start,enrollment_end" "" "date:'DATE_FORMAT'|default:'...'" %}</dd>
+      </dl>
+      <dl class="course-detail__content__run__block">
+        <dt>{% trans "Course starts" %}</dt>
+        <dd>{% render_model course_run "start" "start,end" "" "date:'DATE_FORMAT'|default:'...'" %}</dd>
+        <dt>{% trans "Course ends" %}</dt>
+        <dd>{% render_model course_run "end" "start,end" "" "date:'DATE_FORMAT'|default:'...'" %}</dd>
+      </dl>
+      <div class="course-detail__content__run__block">
+        {% if course_run.state == 'is_open' %}
+          <a class="course-detail__content__run__block__cta" href="{{ course_run.resource_link }}">
+            {% trans "Enroll now" %}
+          </a>
+        {% elif course_run.state == 'is_ongoing' or course_run.state == 'is_closed' %}
+          <button class="course-detail__content__run__block__cta course-detail__content__run__block__cta--projected">
+            {% trans "Enrollment closed" %}
+          </button>
+        {% elif course_run.state == 'is_archived' %}
+          <button class="course-detail__content__run__block__cta course-detail__content__run__block__cta--projected">
+            {% trans "Archived" %}
+          </button>
+        {% elif course_run.state == 'is_coming' %}
+          <button class="course-detail__content__run__block__cta course-detail__content__run__block__cta--projected">
+            {% trans "Coming soon" %}
+          </button>
+        {% endif %}
+      </div>
+      {% if current_page.publisher_is_draft %}
+      <dl class="course-detail__content__run__block course-detail__content__run__block--full">
+        <dt>{% trans "Resource link" %}</dt>
+        <dd>
+          <a href="{{ course_run.resource_link }}">
+            {% render_model course_run "resource_link" "resource_link" "" "default:'...'" %}
+          </a> 
+        </dd>
+      </dl>
+      {% endif %}
+    </div>
+    
+    {% include "courses/cms/fragment_course_content.html" with page=current_page.parent_page %}
+
+  </div>
+  {% endwith %}
+
+</div>
+{% endspaceless %}{% endblock content %}

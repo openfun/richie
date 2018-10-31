@@ -1,5 +1,5 @@
 {% extends "richie/fullwidth.html" %}
-{% load cms_tags i18n %}
+{% load cms_tags i18n extra_tags %}
 
 {% block content %}{% spaceless %}
 <div class="course-detail">
@@ -7,100 +7,20 @@
 
     {% with course=current_page.course header_level=2 %}
 
-    <div class="course-detail__content">
-
-      <div class="course-detail__content__row">
-        <h1 class="course-detail__title">{{ current_page.get_title }}</h1>
-      </div>
+    <div class="course-detail__content course-detail__content--two">
+      <h1 class="course-detail__content__title">{% render_model request.current_page "titles" %}</h1>
 
       <div class="course-detail__content__row course-detail__content__subjects">
-        {% with form_factor="tag" %}
-          {% placeholder "course_subjects" or %}
-            <p class="course-detail__content__subjects__placeholder">
-              {% trans "No associated subjects" %}
-            </p>
-          {% endplaceholder %}
-        {% endwith %}
-      </div>
-
-      <div class="course-detail__content__row course-detail__content__teaser">
-        {% placeholder "course_teaser" or %}
-        <p>{% trans 'Add a video teaser.' %}</p>
-        {% endplaceholder %}
-      </div>
-
-      <div class="course-detail__content__row course-detail__content__syllabus">
-        <h2 class="course-detail__content__row__title">{% trans 'About the course' %}</h2>
-        {% with header_level=3 %}
-          {% placeholder "course_syllabus" or %}
-            <p>{% trans 'Enter here a short description of your course.' %}</p>
-          {% endplaceholder %}
-        {% endwith %}
-      </div>
-
-      <div class="course-detail__content__row course-detail__content__format">
-        <h2 class="course-detail__content__row__title">{% trans 'Format' %}</h2>
-        {% placeholder "course_format" or %}
-          <p>{% trans 'How is the course structured?' %}</p>
-        {% endplaceholder %}
-      </div>
-
-      <div class="course-detail__content__row course-detail__content__prerequisites">
-        <h2 class="course-detail__content__row__title">{% trans 'Prerequisites' %}</h2>
-        {% placeholder "course_prerequisites" or %}
-          <p>{% trans 'What are the prerequisites to follow this course?' %}</p>
-        {% endplaceholder %}
-      </div>
-
-      <div class="course-detail__content__row course-detail__content__plan">
-        <h2 class="course-detail__content__row__title">{% trans 'Course plan' %}</h2>
-        {% placeholder "course_plan" or %}
-        <p>{% trans 'Enter here the detailed course plan' %}</p>
-        {% endplaceholder %}
-      </div>
-
-      <div class="course-detail__content__row course-detail__content__information">
-        {% placeholder "course_information" %}
-      </div>
-
-      <div class="course-detail__content__row course-detail__content__team">
-        <h2 class="course-detail__content__row__title course-detail__content__team__title">{% trans 'Course team' %}</h2>
-        {% with header_level=3 %}
-            {% placeholder "course_team" or %}
-            <p>{% trans 'Who are the teachers in the course team?' %}</p>
-            {% endplaceholder %}
-        {% endwith %}
-      </div>
-
-      <div class="course-detail__content__row course-detail__content__organizations">
-        {% placeholder "course_organizations" or %}
-          <p class="course-detail__content__organizations__placeholder">
-            {% trans "No associated organizations" %}
-          </p>
-        {% endplaceholder %}
-      </div>
-
-      <div class="course-detail__content__row course-detail__content__license">
-        <h2 class="course-detail__content__row__title course-detail__content__license__title">{% trans 'License' %}</h2>
-
-        <div class="course-detail__content__license__item">
-          <h3 class="course-detail__content__license__item__title">{% trans 'License for the course content' %}</h3>
-          {% with header_level=4 %}
-              {% placeholder "course_license_content" or %}
-              <p>{% trans 'What is the license for the course content?' %}</p>
-              {% endplaceholder %}
+          {% with form_factor="tag" %}
+            {% page_placeholder "course_subjects" current_page or %}
+              <p class="course-detail__content__subjects__placeholder">
+                {% trans "No associated subjects" %}
+              </p>
+            {% endpage_placeholder %}
           {% endwith %}
-        </div>
-
-        <div class="course-detail__content__license__item">
-          <h3 class="course-detail__content__license__item__title">{% trans 'License for the content created by course participants' %}</h3>
-          {% with header_level=4 %}
-            {% placeholder "course_license_participation" or %}
-              <p>{% trans 'What is the license for the content created by course participants?' %}</p>
-            {% endplaceholder %}
-          {% endwith %}
-        </div>
       </div>
+
+      {% include "courses/cms/fragment_course_content.html" with page=current_page %}
     </div>
 
     <div class="course-detail__aside">
@@ -119,34 +39,48 @@
 
       <div class="course-detail__aside__run">
         <h2 class="course-detail__aside__run__title">{% trans 'Course runs' %}</h2>
-        {% for run in course.course_runs.all %}
-          <ul class="course-detail__aside__run__item">
-            <li class="course-detail__aside__run__item__row">
-              <p class="course-detail__aside__run__item__row__title">{% trans "Enrollment" %}</p>
-              <p class="course-detail__aside__run__item__row__date">{% blocktrans with start=run.enrollment_start|date:"SHORT_DATE_FORMAT" end=run.enrollment_end|date:"SHORT_DATE_FORMAT" %}
-              From {{ start }} to {{ end }}
-              {% endblocktrans %}</p>
-            </li>
-            <li class="course-detail__aside__run__item__row">
-              <p class="course-detail__aside__run__item__row__title">{% trans "Course" %}</p>
-              <p class="course-detail__aside__run__item__row__date">{% blocktrans with start=run.start|date:"SHORT_DATE_FORMAT" end=run.end|date:"SHORT_DATE_FORMAT" %}
-              From {{ start }} to {{ end }}
-              {% endblocktrans %}</p>
-            </li>
-            <li class="course-detail__aside__run__item__row">
-              {% if run.state == 'is_open' %}
-              <a class="course-detail__aside__run__item__row__cta" href="#">{% trans "Enroll now" %}</a>
-              {% elif run.state == 'is_ongoing' or run.state == 'is_closed' %}
-              <button class="course-detail__aside__run__item__row__cta course-detail__aside__run__item__row__cta--projected">{% trans "Enrollment closed" %}</button>
-              {% elif run.state == 'is_archived' %}
-              <button class="course-detail__aside__run__item__row__cta course-detail__aside__run__item__row__cta--projected">{% trans "Archived" %}</button>
-              {% elif run.state == 'is_coming' %}
-              <button class="course-detail__aside__run__item__row__cta course-detail__aside__run__item__row__cta--projected">{% trans "Coming soon" %}</button>
-              {% endif %}
-            </li>
-          </ul>
+        {% for run in course.course_runs %}
+        <div class="course-detail__aside__run__block">
+          <dl>
+            <dt>{% trans "Enrollment" %}</dt>
+            <dd>
+              {% render_model run "enrollment_start" "enrollment_start,enrollment_end" "" "date:'SHORT_DATE_FORMAT'|default:'...'" as start %}
+              {% render_model run "enrollment_end" "enrollment_start,enrollment_end" "" "date:'SHORT_DATE_FORMAT'|default:'...'" as end %}
+              {% trans "From" %} {{ start|safe }} {% trans "to" %} {{ end|safe }}
+            </dd>
+            <dt>{% trans "Course" %}</dt>
+            <dd>
+              {% render_model run "start" "start,end" "" "date:'SHORT_DATE_FORMAT'|default:'...'" as start %}
+              {% render_model run "end" "start,end" "" "date:'SHORT_DATE_FORMAT'|default:'...'" as end %}
+              {% trans "From" %} {{ start|safe }} {% trans "to" %} {{ end|safe }}
+            </dd>
+            {% if current_page.publisher_is_draft %}
+            <dt>{% trans "Resource link" %}</dt>
+            <dd>
+              <a href="{{ run.resource_link }}">
+                {% render_model run "resource_link" "resource_link" %}
+              </a>
+            </dd>
+            {% endif %}
+          </dl>
+          {% if run.state == 'is_open' %}
+          <a class="course-detail__aside__run__block__cta" href="{{ run.resource_link }}">{% trans "Enroll now" %}</a>
+          {% elif run.state == 'is_ongoing' or run.state == 'is_closed' %}
+          <a class="course-detail__aside__run__block__cta course-detail__aside__run__block__cta--projected" href="{{ run.extended_object.get_absolute_url }}">
+            {% trans "Enrollment closed" %}
+          </a>
+          {% elif run.state == 'is_archived' %}
+          <a class="course-detail__aside__run__block__cta course-detail__aside__run__block__cta--projected" href="{{ run.extended_object.get_absolute_url }}">
+            {% trans "Archived" %}
+          </a>
+          {% elif run.state == 'is_coming' %}
+          <a class="course-detail__aside__run__block__cta course-detail__aside__run__block__cta--projected" href="{{ run.extended_object.get_absolute_url }}">
+            {% trans "Coming soon" %}
+          </a>
+          {% endif %}
+        </div>
         {% empty %}
-            {% trans "No associated course runs" %}
+          {% trans "No associated course runs" %}
         {% endfor %}
       </div>
     </div>

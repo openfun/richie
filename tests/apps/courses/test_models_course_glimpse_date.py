@@ -29,7 +29,7 @@ class CourseRunModelsTestCase(TestCase):
     def create_run_ongoing_closed(self, course):
         """Create an on-going course run that is closed for enrollment."""
         return CourseRunFactory(
-            course=course,
+            parent=course.extended_object,
             start=self.now - timedelta(hours=1),
             end=self.now + timedelta(hours=1),
             enrollment_end=self.now - timedelta(hours=1),
@@ -38,13 +38,15 @@ class CourseRunModelsTestCase(TestCase):
     def create_run_archived(self, course):
         """Create an archived course run."""
         return CourseRunFactory(
-            course=course, start=self.now - timedelta(hours=1), end=self.now
+            parent=course.extended_object,
+            start=self.now - timedelta(hours=1),
+            end=self.now,
         )
 
     def create_run_future_not_yet_open(self, course):
         """Create a course run in the future and not yet open for enrollment."""
         return CourseRunFactory(
-            course=course,
+            parent=course.extended_object,
             start=self.now + timedelta(hours=2),
             enrollment_start=self.now + timedelta(hours=1),
         )
@@ -52,7 +54,7 @@ class CourseRunModelsTestCase(TestCase):
     def create_run_future_closed(self, course):
         """Create a course run in the future and already closed for enrollment."""
         return CourseRunFactory(
-            course=course,
+            parent=course.extended_object,
             start=self.now + timedelta(hours=1),
             enrollment_start=self.now - timedelta(hours=2),
             enrollment_end=self.now - timedelta(hours=1),
@@ -61,7 +63,7 @@ class CourseRunModelsTestCase(TestCase):
     def create_run_future_open(self, course):
         """Create a course run in the future and open for enrollment."""
         return CourseRunFactory(
-            course=course,
+            parent=course.extended_object,
             start=self.now + timedelta(hours=1),
             enrollment_start=self.now - timedelta(hours=1),
             enrollment_end=self.now + timedelta(hours=1),
@@ -72,7 +74,7 @@ class CourseRunModelsTestCase(TestCase):
         Confirm glimpse datetime result when there is no course runs at all.
         """
         course = CourseFactory()
-        with self.assertNumQueries(2):
+        with self.assertNumQueries(1):
             glimpse_info = course.glimpse_info
         self.assertEqual(
             glimpse_info, {"cta": None, "datetime": None, "text": "coming soon"}
@@ -121,7 +123,7 @@ class CourseRunModelsTestCase(TestCase):
 
         # Adding an on-going but closed course run should not change the result
         self.create_run_ongoing_closed(course)
-        with self.assertNumQueries(1):
+        with self.assertNumQueries(2):
             glimpse_info = course.glimpse_info
         self.assertEqual(glimpse_info, expected_glimpse)
 
@@ -143,7 +145,7 @@ class CourseRunModelsTestCase(TestCase):
 
         # Adding an on-going but closed course run should not change the result
         self.create_run_ongoing_closed(course)
-        with self.assertNumQueries(1):
+        with self.assertNumQueries(2):
             glimpse_info = course.glimpse_info
         self.assertEqual(glimpse_info, expected_glimpse)
 
@@ -165,7 +167,7 @@ class CourseRunModelsTestCase(TestCase):
         # Adding courses in less priorietary states should not change the result
         self.create_run_ongoing_closed(course)
         self.create_run_future_closed(course)
-        with self.assertNumQueries(1):
+        with self.assertNumQueries(2):
             glimpse_info = course.glimpse_info
         self.assertEqual(glimpse_info, expected_glimpse)
 
@@ -175,7 +177,7 @@ class CourseRunModelsTestCase(TestCase):
         """
         course = CourseFactory()
         course_run = CourseRunFactory(
-            course=course,
+            parent=course.extended_object,
             start=self.now - timedelta(hours=1),
             end=self.now + timedelta(hours=2),
             enrollment_end=self.now + timedelta(hours=1),
@@ -193,6 +195,6 @@ class CourseRunModelsTestCase(TestCase):
         self.create_run_ongoing_closed(course)
         self.create_run_future_closed(course)
         self.create_run_future_open(course)
-        with self.assertNumQueries(1):
+        with self.assertNumQueries(2):
             glimpse_info = course.glimpse_info
         self.assertEqual(glimpse_info, expected_glimpse)

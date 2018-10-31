@@ -1,6 +1,7 @@
 """
-End-to-end tests for the course detail view
+End-to-end tests for the course run detail view
 """
+from datetime import datetime
 from unittest import mock
 
 from cms.test_utils.testcases import CMSTestCase
@@ -15,9 +16,9 @@ from richie.apps.courses.factories import (
 from richie.apps.courses.models import CourseRun
 
 
-class CourseCMSTestCase(CMSTestCase):
+class CourseRunCMSTestCase(CMSTestCase):
     """
-    End-to-end test suite to validate the content and Ux of the course detail view
+    End-to-end test suite to validate the content and Ux of the course run detail view
 
     It's worth to notice related draft items (Person, Organization) are only
     displayed on a draft course page so admin can preview them. But draft items are
@@ -27,9 +28,9 @@ class CourseCMSTestCase(CMSTestCase):
     @mock.patch.object(
         CourseRun, "state", new_callable=mock.PropertyMock, return_value="is_open"
     )
-    def test_templates_course_detail_cms_published_content(self, _):
+    def test_templates_course_run_detail_cms_published_content(self, _):
         """
-        Validate that the important elements are displayed on a published course page
+        Validate that the important elements are displayed on a published course run page
         """
         subjects = SubjectFactory.create_batch(4)
         organizations = OrganizationFactory.create_batch(4)
@@ -38,12 +39,18 @@ class CourseCMSTestCase(CMSTestCase):
             title="Very interesting course",
             fill_organizations=organizations,
             fill_subjects=subjects,
+            should_publish=True,
         )
-        page = course.extended_object
-        course_run1, _course_run2 = CourseRunFactory.create_batch(
-            2, parent=course.extended_object
+        course_run = CourseRunFactory(
+            title="first session",
+            parent=course.extended_object,
+            resource_link="https://www.example.com/enroll",
+            enrollment_start=datetime(2018, 10, 21),
+            enrollment_end=datetime(2019, 1, 18),
+            start=datetime(2018, 12, 10),
+            end=datetime(2019, 2, 14),
         )
-        self.assertFalse(course_run1.extended_object.publish("en"))
+        page = course_run.extended_object
 
         # Publish only 2 out of 4 subjects and 2 out of 4 organizations
         subjects[0].extended_object.publish("en")
@@ -64,22 +71,20 @@ class CourseCMSTestCase(CMSTestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
 
-        # Publish and ensure content is correct
+        # Now publish the page and check its content
         page.publish("en")
-
-        # Now we can publish children course runs: publish only 1 of the 2
-        course_run1.extended_object.parent_page.refresh_from_db()
-        self.assertTrue(course_run1.extended_object.publish("en"))
-
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
         self.assertContains(
-            response, "<title>Very interesting course</title>", html=True
+            response,
+            "<title>First session - Very interesting course</title>",
+            html=True,
         )
         self.assertContains(
             response,
-            '<h1 class="course-detail__content__title">Very interesting course</h1>',
+            '<h1 class="course-detail__content__title">'
+            "Very interesting course<br>first session</h1>",
             html=True,
         )
 
@@ -112,15 +117,26 @@ class CourseCMSTestCase(CMSTestCase):
                 response, organization.extended_object.get_title(), html=True
             )
 
-        # Only the published course run should be in reponse content
-        self.assertContains(response, "Enroll now", count=1)
+        # The course run details should be on the page
+        self.assertContains(
+            response, "<dt>Enrollment starts</dt><dd>Oct. 21, 2018</dd>"
+        )
+        self.assertContains(response, "<dt>Enrollment ends</dt><dd>Jan. 18, 2019</dd>")
+        self.assertContains(response, "<dt>Course starts</dt><dd>Dec. 10, 2018</dd>")
+        self.assertContains(response, "<dt>Course ends</dt><dd>Feb. 14, 2019</dd>")
+        self.assertContains(
+            response,
+            '<a class="course-detail__content__run__block__cta" '
+            'href="https://www.example.com/enroll">Enroll now</a>',
+            html=True,
+        )
 
     @mock.patch.object(
         CourseRun, "state", new_callable=mock.PropertyMock, return_value="is_open"
     )
-    def test_templates_course_detail_cms_draft_content(self, _):
+    def test_templates_course_run_detail_cms_draft_content(self, _):
         """
-        A staff user should see a draft course including its draft elements with
+        A staff user should see a draft course run including its draft elements with
         an annotation
         """
         user = UserFactory(is_staff=True, is_superuser=True)
@@ -133,14 +149,18 @@ class CourseCMSTestCase(CMSTestCase):
             title="Very interesting course",
             fill_organizations=organizations,
             fill_subjects=subjects,
+            should_publish=True,
         )
-        page = course.extended_object
-        course_run1, _course_run2 = CourseRunFactory.create_batch(
-            2, parent=course.extended_object
+        course_run = CourseRunFactory(
+            title="first session",
+            parent=course.extended_object,
+            resource_link="https://www.example.com/enroll",
+            enrollment_start=datetime(2018, 10, 21),
+            enrollment_end=datetime(2019, 1, 18),
+            start=datetime(2018, 12, 10),
+            end=datetime(2019, 2, 14),
         )
-
-        # Publish only 1 of the course runs
-        course_run1.extended_object.publish("en")
+        page = course_run.extended_object
 
         # Publish only 2 out of 4 subjects and 2 out of 4 organizations
         subjects[0].extended_object.publish("en")
@@ -159,15 +179,17 @@ class CourseCMSTestCase(CMSTestCase):
         # The page should be visible as draft to the staff user
         url = page.get_absolute_url()
         response = self.client.get(url)
-
         self.assertEqual(response.status_code, 200)
 
         self.assertContains(
-            response, "<title>Very interesting course</title>", html=True
+            response,
+            "<title>First session - Very interesting course</title>",
+            html=True,
         )
         self.assertContains(
             response,
-            '<h1 class="course-detail__content__title">Very interesting course</h1>',
+            '<h1 class="course-detail__content__title">'
+            "Very interesting course<br>first session</h1>",
             html=True,
         )
 
@@ -205,5 +227,17 @@ class CourseCMSTestCase(CMSTestCase):
                 ),
                 html=True,
             )
-        # The draft and the published course runs should both be in the page
-        self.assertContains(response, "Enroll now", count=2)
+
+        # The course run details should be on the page
+        self.assertContains(
+            response, "<dt>Enrollment starts</dt><dd>Oct. 21, 2018</dd>"
+        )
+        self.assertContains(response, "<dt>Enrollment ends</dt><dd>Jan. 18, 2019</dd>")
+        self.assertContains(response, "<dt>Course starts</dt><dd>Dec. 10, 2018</dd>")
+        self.assertContains(response, "<dt>Course ends</dt><dd>Feb. 14, 2019</dd>")
+        self.assertContains(
+            response,
+            '<a class="course-detail__content__run__block__cta" '
+            'href="https://www.example.com/enroll">Enroll now</a>',
+            html=True,
+        )

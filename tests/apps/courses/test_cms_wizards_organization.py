@@ -122,6 +122,10 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         """
         Trying to set a slug that is too long should make the form invalid
         """
+        # A parent page to list organizations should pre-exist
+        create_page(
+            "Organizations", "richie/fullwidth.html", "en", reverse_id="organizations"
+        )
         # Submit a slug that is too long and a title that is ok
         invalid_data = {"title": "t" * 255, "slug": "s" * 201}
 
