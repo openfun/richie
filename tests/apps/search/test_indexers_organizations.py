@@ -120,9 +120,9 @@ class OrganizationsIndexersTestCase(TestCase):
                 )
             )
 
-    def test_indexers_organizations_format_es_organization_for_api(self):
+    def test_indexers_organizations_format_es_object_for_api(self):
         """
-        Make sure format_es_organization_for_api returns a properly formatted organization
+        Make sure format_es_object_for_api returns a properly formatted organization
         """
         es_organization = {
             "_id": 217,
@@ -134,7 +134,7 @@ class OrganizationsIndexersTestCase(TestCase):
             },
         }
         self.assertEqual(
-            OrganizationsIndexer.format_es_organization_for_api(es_organization, "en"),
+            OrganizationsIndexer.format_es_object_for_api(es_organization, "en"),
             {
                 "banner": "example.com/banner.png",
                 "code": "univ-paris-13",

@@ -165,9 +165,9 @@ class CoursesIndexersTestCase(TestCase):
                 CoursesIndexer.get_data_for_es(index="some_index", action="some_action")
             )
 
-    def test_indexers_courses_format_es_course_for_api(self):
+    def test_indexers_courses_format_es_object_for_api(self):
         """
-        Make sure format_es_course_for_api returns a properly formatted course
+        Make sure format_es_object_for_api returns a properly formatted course
         """
         es_course = {
             "_id": 93,
@@ -189,7 +189,7 @@ class CoursesIndexersTestCase(TestCase):
             },
         }
         self.assertEqual(
-            CoursesIndexer.format_es_course_for_api(es_course, "en"),
+            CoursesIndexer.format_es_object_for_api(es_course, "en"),
             {
                 "end_date": "2018-02-28T06:00:00Z",
                 "enrollment_end_date": "2018-01-31T06:00:00Z",
@@ -895,7 +895,7 @@ class CoursesIndexersTestCase(TestCase):
         )
 
         settings.ES_CLIENT.put_script(
-            id="sort_courses_list", body=CoursesIndexer.scripts["sort_courses_list"]
+            id="sort_list", body=CoursesIndexer.scripts["sort_list"]
         )
 
         # Add our sample of courses to the test index we just created
@@ -1010,7 +1010,7 @@ class CoursesIndexersTestCase(TestCase):
                     doc_type="courses",
                     body={
                         "query": {"match_all": {}},
-                        "sort": CoursesIndexer.get_courses_list_sorting_script(),
+                        "sort": CoursesIndexer.get_list_sorting_script(),
                     },
                     from_=0,
                     size=10,

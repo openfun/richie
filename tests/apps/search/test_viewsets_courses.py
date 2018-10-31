@@ -20,7 +20,7 @@ from richie.apps.search.viewsets.courses import CoursesViewSet
 # and avoid the distraction of passing around full-featured records.
 @mock.patch.object(
     CoursesIndexer,
-    "format_es_course_for_api",
+    "format_es_object_for_api",
     side_effect=lambda es_course, _: "Course #{:n}".format(es_course["_id"]),
 )
 class CoursesViewsetsTestCase(TestCase):
@@ -73,7 +73,7 @@ class CoursesViewsetsTestCase(TestCase):
         lambda *args: (2, 77, {"some": "query"}, {"some": "aggs"}),
     )
     @mock.patch(
-        "richie.apps.search.indexers.courses.CoursesIndexer.get_courses_list_sorting_script",
+        "richie.apps.search.indexers.courses.CoursesIndexer.get_list_sorting_script",
         lambda *args: {"some": "sorting"},
     )
     @mock.patch.object(settings.ES_CLIENT, "search")

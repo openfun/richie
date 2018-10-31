@@ -106,9 +106,9 @@ class SubjectsIndexersTestCase(TestCase):
                 )
             )
 
-    def test_indexers_subjects_format_es_subject_for_api(self):
+    def test_indexers_subjects_format_es_object_for_api(self):
         """
-        Make sure format_es_subject_for_api returns a properly formatted subject
+        Make sure format_es_object_for_api returns a properly formatted subject
         """
         es_subject = {
             "_id": 89,
@@ -118,7 +118,7 @@ class SubjectsIndexersTestCase(TestCase):
             },
         }
         self.assertEqual(
-            SubjectsIndexer.format_es_subject_for_api(es_subject, "en"),
+            SubjectsIndexer.format_es_object_for_api(es_subject, "en"),
             {"id": 89, "image": "example.com/image.png", "name": "Computer science"},
         )
 

@@ -83,7 +83,7 @@ class CoursesIndexer:
         # This means there can be no overlap between the various buckets, but we can still
         # sort courses inside each bucket as we see fit by simply adding timestamps (ascending
         # order) or substracting them (descending order).
-        "sort_courses_list": {
+        "sort_list": {
             "script": {
                 "lang": "expression",
                 "source": (
@@ -144,7 +144,7 @@ class CoursesIndexer:
                 raise IndexerDataException("Unexpected data shape in courses to index")
 
     @staticmethod
-    def format_es_course_for_api(es_course, best_language):
+    def format_es_object_for_api(es_course, best_language):
         """
         Format a course stored in ES into a consistent and easy-to-consume record for
         API consumers
@@ -350,7 +350,7 @@ class CoursesIndexer:
         )
 
     @staticmethod
-    def get_courses_list_sorting_script():
+    def get_list_sorting_script():
         """
         Call the relevant sorting script for courses lists, regenerating the parameters on each
         call. This will allow the ms_since_epoch value to stay relevant even if the ES instance
@@ -363,7 +363,7 @@ class CoursesIndexer:
             "_script": {
                 "order": "asc",
                 "script": {
-                    "id": "sort_courses_list",
+                    "id": "sort_list",
                     "params": {
                         "max_date": arrow.get(MAXYEAR, 12, 31).timestamp * 1000,
                         "ms_since_epoch": arrow.utcnow().timestamp * 1000,

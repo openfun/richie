@@ -54,7 +54,7 @@ class OrganizationsIndexer:
                 )
 
     @staticmethod
-    def format_es_organization_for_api(es_organization, best_language):
+    def format_es_object_for_api(es_organization, best_language):
         """
         Format an organization stored in ES into a consistent and easy-to-consume record for
         API consumers

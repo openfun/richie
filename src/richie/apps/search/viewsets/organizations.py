@@ -52,7 +52,7 @@ class OrganizationsViewSet(ViewSet):
                 "total_count": search_query_response["hits"]["total"],
             },
             "objects": [
-                ORGANIZATION_INDEXER.format_es_organization_for_api(
+                ORGANIZATION_INDEXER.format_es_object_for_api(
                     organization,
                     # Get the best language to return multilingual fields
                     get_language_from_request(request),
@@ -81,7 +81,7 @@ class OrganizationsViewSet(ViewSet):
 
         # Format a clean organization object as a response
         return Response(
-            ORGANIZATION_INDEXER.format_es_organization_for_api(
+            ORGANIZATION_INDEXER.format_es_object_for_api(
                 query_response,
                 # Get the best language we can return multilingual fields in
                 get_language_from_request(request),

@@ -43,7 +43,7 @@ class CoursesViewSet(ViewSet):
             body={
                 "aggs": aggs,
                 "query": query,
-                "sort": COURSE_INDEXER.get_courses_list_sorting_script(),
+                "sort": COURSE_INDEXER.get_list_sorting_script(),
             },
             # Directly pass meta-params through as arguments to the ES client
             from_=offset,
@@ -57,7 +57,7 @@ class CoursesViewSet(ViewSet):
                 "total_count": course_query_response["hits"]["total"],
             },
             "objects": [
-                COURSE_INDEXER.format_es_course_for_api(
+                COURSE_INDEXER.format_es_object_for_api(
                     es_course,
                     # Get the best language we can return multilingual fields in
                     get_language_from_request(request),
@@ -151,7 +151,7 @@ class CoursesViewSet(ViewSet):
 
         # Format a clean course object as a response
         return Response(
-            COURSE_INDEXER.format_es_course_for_api(
+            COURSE_INDEXER.format_es_object_for_api(
                 query_response,
                 # Get the best language we can return multilingual fields in
                 get_language_from_request(request),

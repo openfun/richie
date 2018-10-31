@@ -52,7 +52,7 @@ class SubjectsViewSet(ViewSet):
                 "total_count": query_response["hits"]["total"],
             },
             "objects": [
-                SUBJECT_INDEXER.format_es_subject_for_api(
+                SUBJECT_INDEXER.format_es_object_for_api(
                     subject,
                     # Get the best language we can return multilingual fields in
                     get_language_from_request(request),
@@ -81,7 +81,7 @@ class SubjectsViewSet(ViewSet):
 
         # Format a clean subject object as a response
         return Response(
-            SUBJECT_INDEXER.format_es_subject_for_api(
+            SUBJECT_INDEXER.format_es_object_for_api(
                 query_response,
                 # Get the best language we can return multilingual fields in
                 get_language_from_request(request),
