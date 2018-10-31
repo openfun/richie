@@ -49,23 +49,22 @@ class CreateI18nPageHelpersTestCase(CMSTestCase):
     @mock.patch("richie.apps.core.helpers.create_page")
     def test_helpers_create_i18n_page_from_string(self, mock_page, mock_title):
         """
-        It should be possible to create a multilingual page from a string. The string is marked
-        to differentiate each language
+        It should be possible to create a multilingual page from a string.
         """
         page = create_i18n_page("lorem ipsum", languages=["fr", "en"])
         mock_page.assert_called_once_with(
             language="fr",
-            menu_title="lorem ipsum fr",
-            slug="lorem-ipsum-fr",
+            menu_title="lorem ipsum",
+            slug="lorem-ipsum",
             template="richie/fullwidth.html",
-            title="lorem ipsum fr",
+            title="lorem ipsum",
         )
         mock_title.assert_called_once_with(
             language="en",
-            menu_title="lorem ipsum en",
+            menu_title="lorem ipsum",
             page=page,
-            slug="lorem-ipsum-en",
-            title="lorem ipsum en",
+            slug="lorem-ipsum",
+            title="lorem ipsum",
         )
 
     # pylint: disable=no-self-use

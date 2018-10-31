@@ -88,7 +88,7 @@ class OrganizationModelsTestCase(TestCase):
         with self.assertNumQueries(0):
             for course in retrieved_courses:
                 self.assertEqual(
-                    course.extended_object.prefetched_titles[0].title, "my title en"
+                    course.extended_object.prefetched_titles[0].title, "my title"
                 )
 
     def test_models_organization_get_courses_several_languages(self):

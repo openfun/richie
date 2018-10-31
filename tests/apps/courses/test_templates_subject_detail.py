@@ -40,13 +40,13 @@ class SubjectCMSTestCase(TestCase):
         response = self.client.get(url)
         self.assertContains(
             response,
-            "<title>Very interesting subject en</title>",
+            "<title>Very interesting subject</title>",
             status_code=200,
             html=True,
         )
         self.assertContains(
             response,
-            '<h1 class="subject-detail__title">Very interesting subject en</h1>',
+            '<h1 class="subject-detail__title">Very interesting subject</h1>',
             html=True,
         )
 
@@ -88,13 +88,13 @@ class SubjectCMSTestCase(TestCase):
         response = self.client.get(url)
         self.assertContains(
             response,
-            "<title>Very interesting subject en</title>",
+            "<title>Very interesting subject</title>",
             status_code=200,
             html=True,
         )
         self.assertContains(
             response,
-            '<h1 class="subject-detail__title">Very interesting subject en</h1>',
+            '<h1 class="subject-detail__title">Very interesting subject</h1>',
             html=True,
         )
 
