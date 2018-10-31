@@ -2,7 +2,8 @@
 CMS Wizard to add a course page
 """
 from django import forms
-from django.utils import translation
+from django.utils.functional import cached_property
+from django.utils.translation import get_language
 from django.utils.translation import ugettext_lazy as _
 
 from cms.api import add_plugin
@@ -11,7 +12,7 @@ from cms.wizards.wizard_pool import wizard_pool
 
 from richie.apps.persons.cms_wizards import BaseWizardForm
 
-from .models import Course, Organization, Subject
+from .models import Course, CourseRun, Organization, Subject
 
 
 class CourseWizardForm(BaseWizardForm):
@@ -42,7 +43,7 @@ class CourseWizardForm(BaseWizardForm):
             slot="course_organizations"
         )
         add_plugin(
-            language=translation.get_language(),
+            language=get_language(),
             placeholder=placeholder,
             plugin_type="OrganizationPlugin",
             **{"page": self.cleaned_data["organization"].extended_object},
@@ -63,6 +64,63 @@ wizard_pool.register(
         description=_("Create a new course page"),
         model=Course,
         form=CourseWizardForm,
+        weight=200,
+    )
+)
+
+
+class CourseRunWizardForm(BaseWizardForm):
+    """
+    This form is used by the wizard that creates a new course run page.
+    A related CourseRun model is created for each course run page.
+    """
+
+    course = forms.ModelChoiceField(
+        required=True,
+        queryset=Course.objects.filter(
+            extended_object__publisher_is_draft=True,
+            # Only list the top level courses (not the snapshots)
+            extended_object__node__parent__cms_pages__course__isnull=True,
+        ).distinct(),
+        label=_("Course"),
+        help_text=_("The course that this course run describes."),
+    )
+    resource_link = forms.URLField(label=_("Resource link"), required=False)
+
+    model = CourseRun
+
+    @cached_property
+    def parent_page(self):
+        """
+        The parent page of a course run is the related course.
+        """
+        course = self.cleaned_data.get("course")
+        return course.extended_object if course else None
+
+    def save(self):
+        """
+        The parent form created the page.
+        This method creates the associated course run page extension.
+        """
+        page = super().save()
+        CourseRun.objects.create(
+            extended_object=page, resource_link=self.cleaned_data["resource_link"]
+        )
+        return page
+
+
+class CourseRunWizard(Wizard):
+    """Inherit from Wizard because each wizard must have its own Python class."""
+
+    pass
+
+
+wizard_pool.register(
+    CourseRunWizard(
+        title=_("New course run page"),
+        description=_("Create a new course run page"),
+        model=CourseRun,
+        form=CourseRunWizardForm,
         weight=200,
     )
 )
