@@ -44,10 +44,7 @@ def create_i18n_page(title=None, languages=None, is_homepage=False, **kwargs):
     elif isinstance(title, str):
         # Add a marker at the end of the string to differentiate each language
         languages = languages or [settings.LANGUAGE_CODE]
-        i18n_titles = {
-            language: "{title:s} {language:s}".format(title=title, language=language)
-            for language in languages
-        }
+        i18n_titles = {language: title for language in languages}
 
     else:
         raise ValueError(

@@ -39,11 +39,11 @@ class OrganizationCMSTestCase(TestCase):
         page.publish("en")
         response = self.client.get(url)
         self.assertContains(
-            response, "<title>La Sorbonne en</title>", html=True, status_code=200
+            response, "<title>La Sorbonne</title>", html=True, status_code=200
         )
         self.assertContains(
             response,
-            '<h1 class="organization-detail__title">La Sorbonne en</h1>',
+            '<h1 class="organization-detail__title">La Sorbonne</h1>',
             html=True,
         )
 
@@ -85,11 +85,11 @@ class OrganizationCMSTestCase(TestCase):
         url = page.get_absolute_url()
         response = self.client.get(url)
         self.assertContains(
-            response, "<title>La Sorbonne en</title>", html=True, status_code=200
+            response, "<title>La Sorbonne</title>", html=True, status_code=200
         )
         self.assertContains(
             response,
-            '<h1 class="organization-detail__title">La Sorbonne en</h1>',
+            '<h1 class="organization-detail__title">La Sorbonne</h1>',
             html=True,
         )
 

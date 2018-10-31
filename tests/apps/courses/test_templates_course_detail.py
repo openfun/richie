@@ -67,11 +67,11 @@ class CourseCMSTestCase(CMSTestCase):
         self.assertEqual(response.status_code, 200)
 
         self.assertContains(
-            response, "<title>Very interesting course en</title>", html=True
+            response, "<title>Very interesting course</title>", html=True
         )
         self.assertContains(
             response,
-            '<h1 class="course-detail__title">Very interesting course en</h1>',
+            '<h1 class="course-detail__content__title">Very interesting course</h1>',
             html=True,
         )
 
@@ -150,11 +150,11 @@ class CourseCMSTestCase(CMSTestCase):
         self.assertEqual(response.status_code, 200)
 
         self.assertContains(
-            response, "<title>Very interesting course en</title>", html=True
+            response, "<title>Very interesting course</title>", html=True
         )
         self.assertContains(
             response,
-            '<h1 class="course-detail__title">Very interesting course en</h1>',
+            '<h1 class="course-detail__content__title">Very interesting course</h1>',
             html=True,
         )
 
