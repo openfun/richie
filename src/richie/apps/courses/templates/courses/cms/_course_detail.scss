@@ -1,7 +1,7 @@
 $richie-course-detail-breakpoint: lg;
 // TODO: Change every value below to 'null !default' after copying it to settings
 $richie-course-detail-title-margin: 0 0 1rem 0;
-$richie-course-detail-title-padding: 1rem 0;
+$richie-course-detail-title-padding: 1rem;
 $richie-course-detail-title-fontsize: 2.6rem;
 $richie-course-detail-title-fontsize-large: 3rem;
 $richie-course-detail-title-fontweight: normal;
@@ -17,8 +17,6 @@ $richie-course-detail-content-padding: 0;
 $richie-course-detail-row-margin: 0;
 $richie-course-detail-row-padding: 1.5rem 1rem;
 $richie-course-detail-row-fontsize: 0.95rem;
-$richie-course-detail-row-even-fontcolor: $white;
-$richie-course-detail-row-even-background: $dodgerblue7;
 $richie-course-detail-row-title-fontcolor: $dodgerblue3;
 
 $richie-course-detail-subjects-justify: center;
@@ -30,8 +28,12 @@ $richie-course-detail-teaser-padding: 0;
 $richie-course-detail-teaser-object-padding-vertical: 1.5rem;
 $richie-course-detail-teaser-object-padding-horizontal: 1rem;
 
+$richie-course-detail-run-background: $dodgerblue1;
+$richie-course-detail-run-gutter: 0.5rem;
+$richie-course-detail-run-width-large: 33.33%;
+
 $richie-course-detail-team-gutter: 0.5rem;
-$richie-course-detail-team-width-large: 50%;
+$richie-course-detail-team-width-large: 100%;
 $richie-course-detail-team-title-fontsize: 1.4rem;
 $richie-course-detail-team-title-fontcolor: $dodgerblue5;
 
@@ -58,39 +60,41 @@ $richie-course-detail-aside-main-org-background: $white;
     flex-direction: row;
   }
 
-  &__title {
-    @include sv-flex-cell-width(100%);
-    position: relative;
-    margin: $richie-course-detail-title-margin;
-    padding: $richie-course-detail-title-padding;
-    font-size: $richie-course-detail-title-fontsize;
-    font-weight: $richie-course-detail-title-fontweight;
-    line-height: $richie-course-detail-title-lineheight;
-    text-align: $richie-course-detail-title-textalign;
-
-    @include media-breakpoint-up($richie-course-detail-breakpoint) {
-      font-size: $richie-course-detail-title-fontsize-large;
-    }
-
-    &::after {
-      $divider-width: 10rem;
-      content: '';
-      position: absolute;
-      width: $richie-course-detail-title-underline-width;
-      left: calc(50% - #{$richie-course-detail-title-underline-width / 2});
-      bottom: 0;
-      border-bottom: $richie-course-detail-title-underline-border;
-    }
-  }
-
   &__content {
     @include sv-flex-cell-width(100%);
     margin: $richie-course-detail-content-margin;
     padding: $richie-course-detail-content-padding;
     background: $richie-content-container-bg;
 
-    @include media-breakpoint-up($richie-course-detail-breakpoint) {
-      @include sv-flex-cell-width($richie-course-detail-content-width-large);
+    &--two {
+      @include media-breakpoint-up($richie-course-detail-breakpoint) {
+        @include sv-flex-cell-width($richie-course-detail-content-width-large);
+      }
+    }
+
+    &__title {
+      @include sv-flex-cell-width(100%);
+      position: relative;
+      margin: $richie-course-detail-title-margin;
+      padding: $richie-course-detail-title-padding;
+      font-size: $richie-course-detail-title-fontsize;
+      font-weight: $richie-course-detail-title-fontweight;
+      line-height: $richie-course-detail-title-lineheight;
+      text-align: $richie-course-detail-title-textalign;
+
+      @include media-breakpoint-up($richie-course-detail-breakpoint) {
+        font-size: $richie-course-detail-title-fontsize-large;
+      }
+
+      &::after {
+        $divider-width: 10rem;
+        content: '';
+        position: absolute;
+        width: $richie-course-detail-title-underline-width;
+        left: calc(50% - #{$richie-course-detail-title-underline-width / 2});
+        bottom: 0;
+        border-bottom: $richie-course-detail-title-underline-border;
+      }
     }
 
     &__row {
@@ -98,22 +102,104 @@ $richie-course-detail-aside-main-org-background: $white;
       margin: $richie-course-detail-row-margin;
       padding: $richie-course-detail-row-padding;
 
-      &__title {
-        color: $richie-course-detail-row-title-fontcolor;
-      }
-
       p,
       li {
         font-size: $richie-course-detail-row-fontsize;
       }
+    }
 
-      // Automatically alternate bg color on odd/even items
-      &--even {
-        color: $richie-course-detail-row-even-fontcolor;
-        background: $richie-course-detail-row-even-background;
+    &__run {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      margin: 1rem;
+      padding: 1rem;
+      color: $white;
+      background: $richie-course-detail-run-background;
 
-        #{$row-selector}__title {
-          color: inherit;
+      &__title {
+        width: 100%;
+        margin: 0;
+        padding: 0.5rem 0.1rem 0;
+        font-size: 1.8rem;
+        color: $dodgerblue5;
+        line-height: 1.1;
+        text-align: center;
+      }
+
+      &__block {
+        padding: 1rem 0;
+        margin: $richie-course-detail-run-gutter;
+
+        @include sv-flex(
+          1,
+          0,
+          calc(100% - #{$richie-course-detail-run-gutter * 2})
+        );
+
+        @include media-breakpoint-up($richie-course-detail-breakpoint) {
+          @include sv-flex(
+            1,
+            0,
+            calc(
+              #{$richie-course-detail-run-width-large} - #{$richie-course-detail-run-gutter *
+                2}
+            )
+          );
+        }
+
+        &--full {
+          @include sv-flex(
+            1,
+            0,
+            calc(100% - #{$richie-course-detail-run-gutter * 2})
+          );
+        }
+
+        a {
+          color: white;
+        }
+
+        dt {
+          font-weight: bold;
+          text-transform: uppercase;
+
+          &:not(:first-child) {
+            margin-top: 0.8rem;
+          }
+        }
+
+        dd {
+          margin-bottom: 0;
+        }
+
+        &__cta {
+          display: block;
+          width: 100%;
+          margin-bottom: 1.4rem;
+          padding: 0.3rem;
+          color: $white;
+          text-align: center;
+          text-transform: uppercase;
+          background: $dodgerblue5;
+          border: 0;
+
+          &:hover {
+            color: $white;
+            text-decoration: none;
+            background: lighten($dodgerblue5, 5%);
+          }
+
+          &--archived,
+          &--projected {
+            color: $gray40;
+            background: $gray80;
+
+            &:hover {
+              color: $gray40;
+              background: $gray80;
+            }
+          }
         }
       }
     }
@@ -121,7 +207,6 @@ $richie-course-detail-aside-main-org-background: $white;
     &__subjects {
       display: flex;
       padding-top: 0;
-      padding-bottom: 0;
       flex-direction: row;
       flex-wrap: wrap;
       justify-content: $richie-course-detail-subjects-justify;
@@ -251,6 +336,8 @@ $richie-course-detail-aside-main-org-background: $white;
     }
 
     &__cover {
+      margin-top: 1.4rem;
+
       img {
         display: block;
         width: 100%;
@@ -262,7 +349,7 @@ $richie-course-detail-aside-main-org-background: $white;
       margin: 0;
       padding: 1rem;
       color: $white;
-      background: $dodgerblue1;
+      background: $richie-course-detail-run-background;
 
       &__title {
         margin: 0;
@@ -273,63 +360,59 @@ $richie-course-detail-aside-main-org-background: $white;
         text-align: center;
       }
 
-      &__item {
-        $item-selector: &;
+      &__block {
+        $block-selector: &;
+
         position: relative;
         margin: 0 1rem;
         padding: 2rem 0;
-        font-size: 0.9rem;
-        list-style-type: none;
 
-        &__row {
-          $row-selector: &;
-          margin: 0;
-          padding: 0;
+        a {
+          color: white;
+        }
 
-          &__title {
-            margin: 0 0 0.1rem 0;
-            font-weight: bold;
-            text-transform: uppercase;
-          }
+        dt {
+          font-weight: bold;
+          text-transform: uppercase;
 
-          &__date {
-            margin: 0;
-          }
-
-          &__cta {
-            display: block;
-            width: 100%;
-            padding: 0.3rem;
-            color: $white;
-            text-align: center;
-            text-transform: uppercase;
-            background: $dodgerblue5;
-            border: 0;
-
-            &:hover {
-              color: $white;
-              text-decoration: none;
-              background: lighten($dodgerblue5, 5%);
-            }
-
-            &--archived,
-            &--projected {
-              color: $gray40;
-              background: $gray80;
-
-              &:hover {
-                color: $gray40;
-                background: $gray80;
-              }
-            }
-          }
-
-          & + #{$row-selector} {
+          &:not(:first-child) {
             margin-top: 0.8rem;
           }
         }
 
-        & + #{$item-selector}::before {
+        dd {
+          margin-bottom: 0;
+        }
+
+        &__cta {
+          display: block;
+          width: 100%;
+          padding: 0.3rem;
+          color: $white;
+          text-align: center;
+          text-transform: uppercase;
+          background: $dodgerblue5;
+          border: 0;
+
+          &:hover {
+            color: $white;
+            text-decoration: none;
+            background: lighten($dodgerblue5, 5%);
+          }
+
+          &--archived,
+          &--projected {
+            color: $gray40;
+            background: $gray80;
+
+            &:hover {
+              color: $gray40;
+              background: $gray80;
+            }
+          }
+        }
+
+        & + #{$block-selector}::before {
           content: '';
           display: block;
           width: 50%;
