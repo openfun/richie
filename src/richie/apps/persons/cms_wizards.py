@@ -3,6 +3,7 @@ CMS Wizard to add a person page
 """
 from django import forms
 from django.template.defaultfilters import slugify
+from django.utils.functional import cached_property
 from django.utils.translation import get_language
 from django.utils.translation import ugettext_lazy as _
 
@@ -41,56 +42,61 @@ class BaseWizardForm(forms.Form):
         Ensure that the slug field is set or derive it from the title
         """
         cleaned_data = super().clean()
+
         # If the slug is not explicitly set, generate it from the title
         if cleaned_data.get("title") and not cleaned_data.get("slug"):
             cleaned_data["slug"] = slugify(cleaned_data["title"])[:200]
 
+        # Check that the length of the slug is compatible with its parent page:
+        #  a page `path` is limited to 255 chars, therefore the course page slug should
+        # always be shorter than (255 - length of parent page path - 1 character for the "/")
+        if self.parent_page:
+            length = len(self.parent_page.get_path()) + 1 + len(cleaned_data["slug"])
+            if length > 255:
+                raise forms.ValidationError(
+                    {
+                        "slug": [
+                            _(
+                                "This slug is too long. The length of the path built by "
+                                "prepending the slug of the parent page would be {:d} characters "
+                                "long and it should be less than 255".format(length)
+                            )
+                        ]
+                    }
+                )
+
         return cleaned_data
 
-    def clean_slug(self):
+    @cached_property
+    def parent_page(self):
         """
-        First check that a parent page exists under which we can create the new page,
-        then check that the length of the slug is compatible with this parent page:
-        a page `path` is limited to 255 chars, therefore the course page slug should
-        always be shorter than (255 - length of parent page path - 1 character for the "/")
+        The parent page for each type of page is defined on its page extension model.
         """
-        # pylint: disable=no-member
-        parent_page = Page.objects.filter(
-            reverse_id=self.model.ROOT_REVERSE_ID, publisher_is_draft=True
-        ).first()
-        if not parent_page:
-            raise forms.ValidationError(
-                _(
-                    "You must first create a parent page and set its `reverse_id` to "
-                    "`{reverse}`.".format(reverse=self.model.ROOT_REVERSE_ID)
-                )
+        try:
+            return Page.objects.get(
+                reverse_id=self.model.ROOT_REVERSE_ID, publisher_is_draft=True
             )
-        total_size = len(parent_page.get_slug()) + 1 + len(self.cleaned_data["slug"])
-        if total_size > 255:
+        except Page.DoesNotExist:
             raise forms.ValidationError(
-                _(
-                    "This slug is too long. The length of the path built by prepending the slug "
-                    "of the parent page would be {:d} characters long and it should be less "
-                    "than 255".format(total_size)
-                )
+                {
+                    "slug": [
+                        _(
+                            "You must first create a parent page and set its `reverse_id` to "
+                            "`{reverse}`.".format(reverse=self.model.ROOT_REVERSE_ID)
+                        )
+                    ]
+                }
             )
-        return self.cleaned_data["slug"]
 
     def save(self):
         """
         Create the page with "title" and "slug"
         """
-        # We checked in the "clean" method that the parent page exists. Let's retrieve it:
-        parent = Page.objects.get(
-            reverse_id=self.model.ROOT_REVERSE_ID, publisher_is_draft=True
-        )
-
-        # Create the CMS page for the person
         return create_page(
             title=self.cleaned_data["title"],
             slug=self.cleaned_data["slug"],
             language=get_language(),
-            parent=parent,
+            parent=self.parent_page,
             template=self.model.TEMPLATE_DETAIL,
             published=False,  # The creation wizard should not publish the page
         )

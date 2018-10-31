@@ -310,7 +310,7 @@ class CourseFactory(PageExtensionDjangoModelFactory):
                 )
 
 
-class CourseRunFactory(factory.django.DjangoModelFactory):
+class CourseRunFactory(PageExtensionDjangoModelFactory):
     """
     A factory to automatically generate random yet meaningful course runs in our tests.
 
@@ -322,9 +322,18 @@ class CourseRunFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = CourseRun
+        exclude = ["languages", "parent", "template", "in_navigation", "title"]
 
-    course = factory.SubFactory(CourseFactory)
+    template = CourseRun.TEMPLATE_DETAIL
+    title = factory.Sequence("session {:d}".format)
     resource_link = factory.Faker("uri")
+
+    @factory.lazy_attribute
+    def languages(self):
+        """
+        Try getting the list of languages from the parent page and default to None.
+        """
+        return self.parent.get_languages() if getattr(self, "parent", None) else None
 
     # pylint: disable=no-self-use
     @factory.lazy_attribute

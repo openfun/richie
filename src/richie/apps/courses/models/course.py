@@ -3,7 +3,7 @@ Declare and configure the models for the courses application
 """
 from django.db import models
 from django.db.models import BooleanField, Case, Value, When
-from django.utils import timezone
+from django.utils import timezone, translation
 from django.utils.translation import ugettext_lazy as _
 
 from cms.extensions.extension_pool import extension_pool
@@ -67,23 +67,31 @@ class Course(BasePageExtension):
         )
 
     @property
-    def draft_self(self):
-        """
-        The draft version of self ie either itself if it is draft, or the related draft if it
-        is public.
-        """
-        try:
-            return self.draft_extension
-        except Course.DoesNotExist:
-            return self
-
-    @property
     def course_runs(self):
         """
-        This property replaces the backward relation to course runs so that we always return
-        the course runs related to the draft version of a course.
+        Returns a query yielding the course runs related to the course. They may be direct
+        children of the course or children of a snapshot of the course.
         """
-        return self.draft_self.courserun_set
+        node = self.extended_object.node
+        is_draft = self.extended_object.publisher_is_draft
+        filter_dict = {
+            "extended_object__publisher_is_draft": is_draft,
+            "extended_object__node__path__startswith": node.path,
+            "extended_object__node__depth__gt": node.depth,
+        }
+        # For a public course, we must filter out course runs that are not published for
+        # the active language
+        if is_draft is False:
+            filter_dict.update(
+                {
+                    "extended_object__title_set__language": translation.get_language(),
+                    "extended_object__title_set__published": True,
+                }
+            )
+
+        return CourseRun.objects.filter(**filter_dict).order_by(
+            "extended_object__node__path"
+        )
 
     @property
     def glimpse_info(self):
@@ -154,19 +162,12 @@ class Course(BasePageExtension):
         super().save(*args, **kwargs)
 
 
-class CourseRun(models.Model):
+class CourseRun(BasePageExtension):
     """
     The course run represents and records the occurence of a course between a start
     and an end date.
     """
 
-    course = models.ForeignKey(
-        Course,
-        verbose_name=_("course"),
-        related_name=None,
-        limit_choices_to={"extended_object__publisher_is_draft": True},
-        on_delete=models.CASCADE,
-    )
     resource_link = models.URLField(_("Resource link"), blank=True, null=True)
     start = models.DateTimeField(_("course start"), blank=True, null=True)
     end = models.DateTimeField(_("course end"), blank=True, null=True)
@@ -175,6 +176,8 @@ class CourseRun(models.Model):
     )
     enrollment_end = models.DateTimeField(_("enrollment end"), blank=True, null=True)
 
+    TEMPLATE_DETAIL = "courses/cms/course_run_detail.html"
+
     class Meta:
         verbose_name = _("course run")
 
@@ -182,7 +185,7 @@ class CourseRun(models.Model):
         """Human representation of a course run."""
         start = "{:%y/%m/%d %H:%M} - ".format(self.start) if self.start else ""
         return "{start:s}{course:s}".format(
-            course=self.course.extended_object.get_title(), start=start
+            course=self.extended_object.get_title(), start=start
         )
 
     # pylint: disable=arguments-differ
@@ -248,3 +251,4 @@ class LicencePluginModel(CMSPlugin):
 
 
 extension_pool.register(Course)
+extension_pool.register(CourseRun)

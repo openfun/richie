@@ -1,0 +1,83 @@
+{% load cms_tags i18n extra_tags %}
+
+<div class="course-detail__content__row course-detail__content__teaser">
+  {% page_placeholder "course_teaser" page or %}
+    <p>{% trans 'Add a video or teaser.' %}</p>
+  {% endpage_placeholder %}
+</div>
+
+<div class="course-detail__content__row course-detail__content__syllabus">
+  <h2 class="course-detail__content__row__title">{% trans 'About the course' %}</h2>
+  {% with header_level=3 %}
+    {% page_placeholder "course_syllabus" page or %}
+      <p>{% trans 'Enter here a short description of your course.' %}</p>
+    {% endpage_placeholder %}
+  {% endwith %}
+</div>
+
+<div class="course-detail__content__row course-detail__content__format">
+  <h2 class="course-detail__content__row__title">{% trans 'Format' %}</h2>
+  {% page_placeholder "course_format" page or %}
+    <p>{% trans 'How is the course structured?' %}</p>
+  {% endpage_placeholder %}
+</div>
+
+<div class="course-detail__content__row course-detail__content__prerequisites">
+  <h2 class="course-detail__content__row__title">{% trans 'Prerequisites' %}</h2>
+  {% page_placeholder "course_prerequisites" page or %}
+    <p>{% trans 'What are the prerequisites to follow this course?' %}</p>
+  {% endpage_placeholder %}
+</div>
+
+<div class="course-detail__content__row course-detail__content__plan">
+  <h2 class="course-detail__content__row__title">{% trans 'Course plan' %}</h2>
+  {% page_placeholder "course_plan" page or %}
+  <p>{% trans 'Enter here the detailed course plan' %}</p>
+  {% endpage_placeholder %}
+</div>
+
+{% page_placeholder "course_information" page as course_information %}
+{% if course_information or page.publisher_is_draft %}
+<div class="course-detail__content__row course-detail__content__information">
+  {{ course_information }}
+</div>
+{% endif %}
+
+<div class="course-detail__content__row course-detail__content__team">
+  <h2 class="course-detail__content__row__title course-detail__content__team__title">{% trans 'Course team' %}</h2>
+  {% with header_level=3 %}
+      {% page_placeholder "course_team" page or %}
+      <p>{% trans 'Who are the teachers in the course team?' %}</p>
+      {% endpage_placeholder %}
+  {% endwith %}
+</div>
+
+<div class="course-detail__content__row course-detail__content__organizations">
+  {% page_placeholder "course_organizations" page or %}
+    <p class="course-detail__content__organizations__placeholder">
+      {% trans "No associated organizations" %}
+    </p>
+  {% endpage_placeholder %}
+</div>
+
+<div class="course-detail__content__row course-detail__content__license">
+  <h2 class="course-detail__content__row__title course-detail__content__license__title">{% trans 'License' %}</h2>
+
+  <div class="course-detail__content__license__item">
+    <h3 class="course-detail__content__license__item__title">{% trans 'License for the course content' %}</h3>
+    {% with header_level=4 %}
+        {% page_placeholder "course_license_content" page or %}
+        <p>{% trans 'What is the license for the course content?' %}</p>
+        {% endpage_placeholder %}
+    {% endwith %}
+  </div>
+
+  <div class="course-detail__content__license__item">
+    <h3 class="course-detail__content__license__item__title">{% trans 'License for the content created by course participants' %}</h3>
+    {% with header_level=4 %}
+      {% page_placeholder "course_license_participation" page or %}
+        <p>{% trans 'What is the license for the content created by course participants?' %}</p>
+      {% endpage_placeholder %}
+    {% endwith %}
+  </div>
+</div>

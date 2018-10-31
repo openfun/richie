@@ -6,11 +6,7 @@ from django.core.urlresolvers import reverse
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
-from richie.apps.courses.factories import (
-    CourseFactory,
-    OrganizationFactory,
-    SubjectFactory,
-)
+from richie.apps.courses.factories import CourseFactory
 
 
 class CourseAdminTestCase(CMSTestCase):
@@ -59,16 +55,6 @@ class CourseAdminTestCase(CMSTestCase):
 
         # Create a course
         course = CourseFactory()
-
-        # Create an organization and publish it
-        organization = OrganizationFactory()
-        organization.extended_object.publish("en")
-        organization.refresh_from_db()
-
-        # Create a subject and publish it
-        subject = SubjectFactory()
-        subject.extended_object.publish("en")
-        subject.refresh_from_db()
 
         # Get the admin change view
         url = reverse("admin:courses_course_change", args=[course.id])

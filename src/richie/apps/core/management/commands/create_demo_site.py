@@ -217,19 +217,31 @@ def create_demo_site():
             should_publish=True,
             in_navigation=True,
         )
+
         # Add a random number of course runs to the course
-        # 1) Make sure we have one open for enrollment
+        nb_course_runs = get_number_of_course_runs()
+
+        # 1) Make sure we have one course run open for enrollment
         now = timezone.now()
         CourseRunFactory(
-            course=course,
+            __sequence=nb_course_runs,
+            parent=course.extended_object,
             start=now + timedelta(days=1),
             enrollment_start=now - timedelta(days=5),
             enrollment_end=now + timedelta(days=5),
+            should_publish=True,
+            in_navigation=False,
         )
+
         # 2) Add more random course runs
-        nb_course_runs = get_number_of_course_runs()
-        if nb_course_runs > 0:
-            CourseRunFactory.create_batch(nb_course_runs, course=course)
+        for i in range(nb_course_runs - 1, 0, -1):
+            CourseRunFactory(
+                __sequence=i,
+                languages=[l[0] for l in settings.LANGUAGES],
+                parent=course.extended_object,
+                should_publish=True,
+                in_navigation=False,
+            )
 
 
 class Command(BaseCommand):
