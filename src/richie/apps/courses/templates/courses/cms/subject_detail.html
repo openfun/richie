@@ -14,7 +14,7 @@
     {% endwith %}
   </div>
 
-  <h1 class="subject-detail__title">{{ current_page.get_title }}</h1>
+  <h1 class="subject-detail__title">{% render_model request.current_page "titles" %}</h1>
 
   <div class="subject-detail__content">
     <div class="subject-detail__content__description">
