@@ -95,6 +95,22 @@ class CoursesIndexersTestCase(TestCase):
                     "_index": "some_index",
                     "_op_type": "some_action",
                     "_type": "course",
+                    "complete": {
+                        "en": [
+                            "A course in filler text",
+                            "course in filler text",
+                            "in filler text",
+                            "filler text",
+                            "text",
+                        ],
+                        "fr": [
+                            "A course in filler text",
+                            "course in filler text",
+                            "in filler text",
+                            "filler text",
+                            "text",
+                        ],
+                    },
                     "end_date": "2018-02-28T06:00:00Z",
                     "enrollment_end_date": "2018-01-31T06:00:00Z",
                     "enrollment_start_date": "2018-01-01T06:00:00Z",
@@ -113,6 +129,10 @@ class CoursesIndexersTestCase(TestCase):
                     "_index": "some_index",
                     "_op_type": "some_action",
                     "_type": "course",
+                    "complete": {
+                        "en": ["Filler text 102", "text 102", "102"],
+                        "fr": ["Filler text 102", "text 102", "102"],
+                    },
                     "end_date": "2019-02-28T06:00:00Z",
                     "enrollment_end_date": "2019-01-31T06:00:00Z",
                     "enrollment_start_date": "2019-01-01T06:00:00Z",

@@ -10,7 +10,7 @@ import raven
 from configurations import Configuration, values
 from elasticsearch import Elasticsearch
 
-from richie.apps.search.utils.es_indices import IndicesList
+from richie.apps.search.utils.indexers import IndicesList
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join("/", "data")

@@ -14,6 +14,7 @@ from ..forms import CourseListForm
 from ..partial_mappings import MULTILINGUAL_TEXT
 from ..utils.api_consumption import walk_api_json_list
 from ..utils.i18n import get_best_field_language
+from ..utils.indexers import slice_string_for_completion
 
 KeyFragmentPair = namedtuple("KeyFragmentPair", ["key", "fragment"])
 
@@ -45,6 +46,10 @@ class CoursesIndexer:
                     "small": {"type": "text", "index": False},
                 },
                 "type": "object",
+            },
+            **{
+                "complete.{:s}".format(lang): {"type": "completion"}
+                for lang, _ in settings.LANGUAGES
             },
         },
     }
@@ -139,6 +144,12 @@ class CoursesIndexer:
                         "subjects": [subject["id"] for subject in course["subjects"]],
                         "thumbnails": course["thumbnails"],
                         "title": {course["language"]: course["title"]},
+                        "complete": {
+                            "{:s}".format(lang): slice_string_for_completion(
+                                course["title"]
+                            )
+                            for lang, _ in settings.LANGUAGES
+                        },
                     }
             except KeyError:
                 raise IndexerDataException("Unexpected data shape in courses to index")

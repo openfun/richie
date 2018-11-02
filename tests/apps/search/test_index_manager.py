@@ -18,7 +18,7 @@ from richie.apps.search.index_manager import (
     regenerate_indexes,
     store_es_scripts,
 )
-from richie.apps.search.utils.es_indices import IndicesList
+from richie.apps.search.utils.indexers import IndicesList
 
 
 class IndexManagerTestCase(TestCase):

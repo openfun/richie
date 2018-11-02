@@ -8,6 +8,7 @@ from ..forms import SubjectListForm
 from ..partial_mappings import MULTILINGUAL_TEXT
 from ..utils.api_consumption import walk_api_json_list
 from ..utils.i18n import get_best_field_language
+from ..utils.indexers import slice_string_for_completion
 
 
 class SubjectsIndexer:
@@ -20,7 +21,13 @@ class SubjectsIndexer:
     index_name = "richie_subjects"
     mapping = {
         "dynamic_templates": MULTILINGUAL_TEXT,
-        "properties": {"image": {"type": "text", "index": False}},
+        "properties": {
+            "image": {"type": "text", "index": False},
+            **{
+                "complete.{:s}".format(lang): {"type": "completion"}
+                for lang, _ in settings.LANGUAGES
+            },
+        },
     }
     scripts = {}
 
@@ -41,6 +48,12 @@ class SubjectsIndexer:
                         "_type": cls.document_type,
                         "image": subject["image"],
                         "name": {"fr": subject["name"]},
+                        "complete": {
+                            "{:s}".format(lang): slice_string_for_completion(
+                                subject["name"]
+                            )
+                            for lang, _ in settings.LANGUAGES
+                        },
                     }
             except KeyError:
                 raise IndexerDataException("Unexpected data shape in subjects to index")

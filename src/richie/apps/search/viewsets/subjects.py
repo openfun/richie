@@ -10,10 +10,10 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
 from ..exceptions import QueryFormatException
-from ..utils.viewsets import ViewSetMetadata
+from ..utils.viewsets import AutocompleteMixin, ViewSetMetadata
 
 
-class SubjectsViewSet(ViewSet):
+class SubjectsViewSet(AutocompleteMixin, ViewSet):
     """
     A simple viewset with GET endpoints to fetch subjects
     See API Blueprint for details on consumer use.

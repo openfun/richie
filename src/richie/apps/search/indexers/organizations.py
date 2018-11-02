@@ -8,6 +8,7 @@ from ..forms import OrganizationListForm
 from ..partial_mappings import MULTILINGUAL_TEXT
 from ..utils.api_consumption import walk_api_json_list
 from ..utils.i18n import get_best_field_language
+from ..utils.indexers import slice_string_for_completion
 
 
 class OrganizationsIndexer:
@@ -24,6 +25,10 @@ class OrganizationsIndexer:
             "banner": {"type": "text", "index": False},
             "code": {"type": "keyword"},
             "logo": {"type": "text", "index": False},
+            **{
+                "complete.{:s}".format(lang): {"type": "completion"}
+                for lang, _ in settings.LANGUAGES
+            },
         },
     }
     scripts = {}
@@ -47,6 +52,12 @@ class OrganizationsIndexer:
                         "code": organization["code"],
                         "logo": organization["logo"],
                         "name": {"fr": organization["name"]},
+                        "complete": {
+                            "{:s}".format(lang): slice_string_for_completion(
+                                organization["name"]
+                            )
+                            for lang, _ in settings.LANGUAGES
+                        },
                     }
             except KeyError:
                 raise IndexerDataException(

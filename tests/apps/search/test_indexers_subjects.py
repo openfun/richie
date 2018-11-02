@@ -64,6 +64,10 @@ class SubjectsIndexersTestCase(TestCase):
                     "_index": "some_index",
                     "_op_type": "some_action",
                     "_type": "subject",
+                    "complete": {
+                        "en": ["Computer Science", "Science"],
+                        "fr": ["Computer Science", "Science"],
+                    },
                     "image": "example_cs.png",
                     "name": {"fr": "Computer Science"},
                 },
@@ -72,6 +76,10 @@ class SubjectsIndexersTestCase(TestCase):
                     "_index": "some_index",
                     "_op_type": "some_action",
                     "_type": "subject",
+                    "complete": {
+                        "en": ["Software Engineering", "Engineering"],
+                        "fr": ["Software Engineering", "Engineering"],
+                    },
                     "image": "example_se.png",
                     "name": {"fr": "Software Engineering"},
                 },

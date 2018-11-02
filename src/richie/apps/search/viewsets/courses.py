@@ -13,10 +13,10 @@ from rest_framework.viewsets import ViewSet
 
 from ..defaults import FILTERS_HARDCODED, RESOURCE_FACETS
 from ..exceptions import QueryFormatException
-from ..utils.viewsets import ViewSetMetadata
+from ..utils.viewsets import AutocompleteMixin, ViewSetMetadata
 
 
-class CoursesViewSet(ViewSet):
+class CoursesViewSet(AutocompleteMixin, ViewSet):
     """
     A simple viewset with GET endpoints to fetch courses
     See API Blueprint for details on consumer use

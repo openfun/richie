@@ -74,6 +74,10 @@ class OrganizationsIndexersTestCase(TestCase):
                     "_type": "organization",
                     "banner": "example.com/banner_1.png",
                     "code": "org-1",
+                    "complete": {
+                        "en": ["Organization N°1", "N°1"],
+                        "fr": ["Organization N°1", "N°1"],
+                    },
                     "logo": "example.com/logo_1.png",
                     "name": {"fr": "Organization N°1"},
                 },
@@ -84,6 +88,10 @@ class OrganizationsIndexersTestCase(TestCase):
                     "_type": "organization",
                     "banner": "example.com/banner_80.png",
                     "code": "org-80",
+                    "complete": {
+                        "en": ["Organization N°80", "N°80"],
+                        "fr": ["Organization N°80", "N°80"],
+                    },
                     "logo": "example.com/logo_80.png",
                     "name": {"fr": "Organization N°80"},
                 },
