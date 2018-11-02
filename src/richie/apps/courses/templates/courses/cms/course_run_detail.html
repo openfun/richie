@@ -7,6 +7,9 @@
   {{ course_run_title|capfirst }} - {{ course_title|capfirst }}
 {% endspaceless %}{% endblock title %}
 
+{# Make sure the course run pages are not indexed by search engines #}
+{% block meta %}<meta name="robots" content="noindex">{% endblock meta %}
+
 {% block content %}{% spaceless %}
 <div class="course-detail">
 
