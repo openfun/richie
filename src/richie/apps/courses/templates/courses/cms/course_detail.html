@@ -1,6 +1,11 @@
 {% extends "richie/fullwidth.html" %}
 {% load cms_tags i18n extra_tags %}
 
+{% block meta %}
+{# Make sure course snapshot pages are not indexed by search engines #}
+{% if current_page.parent_page.course %}<meta name="robots" content="noindex">{% endif %}
+{% endblock meta %}
+
 {% block content %}{% spaceless %}
 <div class="course-detail">
   {% spaceless %}

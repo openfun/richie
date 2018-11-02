@@ -241,3 +241,17 @@ class CourseRunCMSTestCase(CMSTestCase):
             'href="https://www.example.com/enroll">Enroll now</a>',
             html=True,
         )
+
+    def test_templates_course_run_detail_no_index(self):
+        """
+        A course run page should not be indexable by search engine robots.
+        """
+        course = CourseFactory(should_publish=True)
+        course_run = CourseRunFactory(
+            parent=course.extended_object, should_publish=True
+        )
+
+        url = course_run.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, '<meta name="robots" content="noindex">')

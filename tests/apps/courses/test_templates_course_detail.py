@@ -207,3 +207,19 @@ class CourseCMSTestCase(CMSTestCase):
             )
         # The draft and the published course runs should both be in the page
         self.assertContains(response, "Enroll now", count=2)
+
+    def test_templates_course_detail_no_index(self):
+        """
+        A course snapshot page should not be indexable by search engine robots.
+        """
+        course = CourseFactory(should_publish=True)
+        url = course.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, '<meta name="robots" content="noindex">')
+
+        snapshot = CourseFactory(parent=course.extended_object, should_publish=True)
+        url = snapshot.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, '<meta name="robots" content="noindex">')
