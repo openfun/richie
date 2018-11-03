@@ -43,7 +43,7 @@ jobs:
       - run:
           name: Install gitlint
           command: |
-            pip install gitlint
+            pip install requests gitlint
 
       - run:
           name: lint commit messages added to master
