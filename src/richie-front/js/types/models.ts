@@ -1,1 +1,5 @@
-export type modelNameList = 'courses' | 'organizations' | 'subjects';
+export enum modelName {
+  COURSES = 'courses',
+  ORGANIZATIONS = 'organizations',
+  SUBJECTS = 'subjects',
+}

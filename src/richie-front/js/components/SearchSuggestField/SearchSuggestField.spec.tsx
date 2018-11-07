@@ -4,6 +4,7 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 
 import { Course } from '../../types/Course';
+import { modelName } from '../../types/models';
 import {
   DefaultSuggestionSection,
   ResourceSuggestionSection,
@@ -77,7 +78,7 @@ describe('components/SearchSuggestField', () => {
     beforeEach(mockSuggestionHumanName.mockClear);
 
     it('returns the human name for a resource-based suggestion', () => {
-      const suggestion = { data: '3', model: 'organizations' } as any;
+      const suggestion = { data: '3', model: modelName.ORGANIZATIONS } as any;
       mockSuggestionHumanName.mockReturnValue('Some Human Name');
       expect(getSuggestionValue(suggestion)).toEqual('Some Human Name');
       expect(mockSuggestionHumanName).toHaveBeenCalledWith(suggestion);
@@ -96,7 +97,7 @@ describe('components/SearchSuggestField', () => {
       expect(
         renderSuggestion({
           data: { title: 'Some course title' } as Course,
-          model: 'courses',
+          model: modelName.COURSES,
         }),
       ).toEqual(<span>Some course title</span>);
     });
@@ -112,7 +113,7 @@ describe('components/SearchSuggestField', () => {
               defaultMessage: 'Some section title',
               id: 'someMessage',
             },
-            model: 'organizations',
+            model: modelName.ORGANIZATIONS,
           } as ResourceSuggestionSection,
         ),
       ).toEqual(<span>Some section title</span>);
@@ -162,21 +163,25 @@ describe('components/SearchSuggestField', () => {
       mockGetSuggestionsSection.mockImplementation(
         async (model: ResourceSuggestionSection['model']) => {
           switch (model) {
-            case 'courses':
+            case modelName.COURSES:
               return {
                 message: 'Courses',
-                model: 'courses',
+                model: modelName.COURSES,
                 values: [
                   { title: 'Course #1' } as Course,
                   { title: 'Course #2' } as Course,
                 ],
               };
-            case 'subjects':
-              return { message: 'Subjects', model: 'subjects', values: [] };
-            case 'organizations':
+            case modelName.SUBJECTS:
+              return {
+                message: 'Subjects',
+                model: modelName.SUBJECTS,
+                values: [],
+              };
+            case modelName.ORGANIZATIONS:
               return {
                 message: 'Organizations',
-                model: 'organizations',
+                model: modelName.ORGANIZATIONS,
                 values: [],
               };
           }
@@ -196,7 +201,7 @@ describe('components/SearchSuggestField', () => {
           },
           {
             message: 'Courses',
-            model: 'courses',
+            model: modelName.COURSES,
             values: [{ title: 'Course #1' }, { title: 'Course #2' }],
           },
         ],
@@ -228,7 +233,9 @@ describe('components/SearchSuggestField', () => {
     it('moves to the courses page when it is called with a course', () => {
       onSuggestionSelected.bind(that)(
         {},
-        { suggestion: { model: 'courses', data: { id: 42 } as Course } },
+        {
+          suggestion: { model: modelName.COURSES, data: { id: 42 } as Course },
+        },
       );
       expect(location.setHref).toHaveBeenCalledWith('https://42');
     });
@@ -236,16 +243,16 @@ describe('components/SearchSuggestField', () => {
     it('updates the filter and resets the suggestion state when it is called with a resource suggestion', () => {
       onSuggestionSelected.bind(that)(
         {},
-        { suggestion: { model: 'subjects', data: { id: 43 } } },
+        { suggestion: { model: modelName.SUBJECTS, data: { id: 43 } } },
       );
-      expect(addFilter).toHaveBeenCalledWith('subjects', '43');
+      expect(addFilter).toHaveBeenCalledWith(modelName.SUBJECTS, '43');
       expect(location.setHref).not.toHaveBeenCalled();
 
       onSuggestionSelected.bind(that)(
         {},
-        { suggestion: { model: 'organizations', data: { id: 44 } } },
+        { suggestion: { model: modelName.ORGANIZATIONS, data: { id: 44 } } },
       );
-      expect(addFilter).toHaveBeenCalledWith('organizations', '44');
+      expect(addFilter).toHaveBeenCalledWith(modelName.ORGANIZATIONS, '44');
       expect(location.setHref).not.toHaveBeenCalled();
     });
 

@@ -3,6 +3,7 @@ import get from 'lodash-es/get';
 import partialRight from 'lodash-es/partialRight';
 import { Reducer } from 'redux';
 
+import { modelName } from '../../types/models';
 import { Subject } from '../../types/Subject';
 import { Maybe } from '../../utils/types';
 import { ResourceAdd } from '../genericReducers/resourceById/actions';
@@ -37,7 +38,7 @@ export const subjects: Reducer<SubjectsState> = (
   // Discriminate resource related actions by resource name
   if (
     get(action, 'resourceName') &&
-    get(action, 'resourceName') !== 'subjects'
+    get(action, 'resourceName') !== modelName.SUBJECTS
   ) {
     return state;
   }

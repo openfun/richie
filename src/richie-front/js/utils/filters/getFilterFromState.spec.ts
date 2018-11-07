@@ -6,6 +6,7 @@ import {
   FilterDefinition,
   FilterDefinitionWithValues,
 } from '../../types/filters';
+import { modelName } from '../../types/models';
 import { Organization } from '../../types/Organization';
 import { getFilterFromState } from './getFilterFromState';
 
@@ -82,7 +83,7 @@ describe('utils/filters/getFilterFromState', () => {
         new: {} as FilterDefinitionWithValues,
         organizations: {
           humanName: { defaultMessage: 'Organizations', id: 'organizations' },
-          machineName: 'organizations',
+          machineName: modelName.ORGANIZATIONS,
           values: [],
         },
         subjects: {} as FilterDefinition,
@@ -107,9 +108,11 @@ describe('utils/filters/getFilterFromState', () => {
       },
     };
 
-    expect(getFilterFromState(state as RootState, 'organizations')).toEqual({
+    expect(
+      getFilterFromState(state as RootState, modelName.ORGANIZATIONS),
+    ).toEqual({
       humanName: { defaultMessage: 'Organizations', id: 'organizations' },
-      machineName: 'organizations',
+      machineName: modelName.ORGANIZATIONS,
       values: [
         { count: 15, humanName: 'Organization #Fourty-Two', primaryKey: '42' },
         { count: 7, humanName: 'Organization #Eighty-Four', primaryKey: '84' },
@@ -126,7 +129,7 @@ describe('utils/filters/getFilterFromState', () => {
         new: {} as FilterDefinitionWithValues,
         organizations: {
           humanName: { defaultMessage: 'Organizations', id: 'organizations' },
-          machineName: 'organizations',
+          machineName: modelName.ORGANIZATIONS,
           values: [],
         },
         subjects: {} as FilterDefinition,
@@ -142,10 +145,13 @@ describe('utils/filters/getFilterFromState', () => {
       },
     };
 
-    const filter = getFilterFromState(state as RootState, 'organizations');
+    const filter = getFilterFromState(
+      state as RootState,
+      modelName.ORGANIZATIONS,
+    );
     expect(filter).toEqual({
       humanName: { defaultMessage: 'Organizations', id: 'organizations' },
-      machineName: 'organizations',
+      machineName: modelName.ORGANIZATIONS,
       // Values might be mis-ordered as we're sampling them instead of just reusing the array
       values: expect.arrayContaining([
         { humanName: 'Organization #Twenty-One', primaryKey: '21' },
@@ -166,7 +172,7 @@ describe('utils/filters/getFilterFromState', () => {
         new: {} as FilterDefinitionWithValues,
         organizations: {
           humanName: { defaultMessage: 'Organizations', id: 'organizations' },
-          machineName: 'organizations',
+          machineName: modelName.ORGANIZATIONS,
           values: [],
         },
         subjects: {} as FilterDefinition,
@@ -192,7 +198,10 @@ describe('utils/filters/getFilterFromState', () => {
       },
     };
 
-    const filter = getFilterFromState(state as RootState, 'organizations');
+    const filter = getFilterFromState(
+      state as RootState,
+      modelName.ORGANIZATIONS,
+    );
     expect(filter.values.length).toEqual(10);
     // Count included unique organizations
     const uniqueOrgCount = Object.keys(

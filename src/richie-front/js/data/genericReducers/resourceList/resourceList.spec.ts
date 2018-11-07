@@ -1,3 +1,4 @@
+import { modelName } from '../../../types/models';
 import { currentQuery } from './resourceList';
 
 describe('data/genericReducers/resourceList reducer', () => {
@@ -52,7 +53,7 @@ describe('data/genericReducers/resourceList reducer', () => {
             objects: [course43, course44],
           },
           params: { limit: 12, offset: 2 },
-          resourceName: 'courses',
+          resourceName: modelName.COURSES,
           type: 'RESOURCE_LIST_GET_SUCCESS',
         }),
       )
@@ -84,7 +85,7 @@ describe('data/genericReducers/resourceList reducer', () => {
             objects: [course44, course43],
           },
           params: { limit: 2, match: 'some query', offset: 0 },
-          resourceName: 'courses',
+          resourceName: modelName.COURSES,
           type: 'RESOURCE_LIST_GET_SUCCESS',
         }),
       ).toEqual({

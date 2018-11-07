@@ -1,6 +1,7 @@
 import fetchMock from 'fetch-mock';
 
 import { Course } from '../../types/Course';
+import { modelName } from '../../types/models';
 import { handle } from '../../utils/errors/handle';
 import { getSuggestionsSection } from './getSuggestionsSection';
 
@@ -20,7 +21,7 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
     let suggestionsSection;
     try {
       suggestionsSection = await getSuggestionsSection(
-        'courses',
+        modelName.COURSES,
         { defaultMessage: 'Courses', id: 'coursesHumanName' },
         'some search',
       );
@@ -30,7 +31,7 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
 
     expect(suggestionsSection).toEqual({
       message: { defaultMessage: 'Courses', id: 'coursesHumanName' },
-      model: 'courses',
+      model: modelName.COURSES,
       values: [
         { title: 'Course #1' } as Course,
         { title: 'Course #2' } as Course,
@@ -43,7 +44,7 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
       throws: 'Failed to send API request',
     });
     await getSuggestionsSection(
-      'courses',
+      modelName.COURSES,
       { defaultMessage: 'Courses', id: 'coursesHumanName' },
       'some search',
     );
@@ -58,7 +59,7 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
       status: 403,
     });
     await getSuggestionsSection(
-      'courses',
+      modelName.COURSES,
       { defaultMessage: 'Courses', id: 'coursesHumanName' },
       'some search',
     );
@@ -70,7 +71,7 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
   it('reports the error when it receives broken json', async () => {
     fetchMock.get('/api/v1.0/courses/?query=some%20search', 'not json');
     await getSuggestionsSection(
-      'courses',
+      modelName.COURSES,
       { defaultMessage: 'Courses', id: 'coursesHumanName' },
       'some search',
     );

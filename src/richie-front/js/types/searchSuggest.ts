@@ -1,7 +1,7 @@
 import { FormattedMessage } from 'react-intl';
 
 import { Course } from './Course';
-import { modelNameList } from './models';
+import { modelName } from './models';
 import { Organization } from './Organization';
 import { Resource } from './Resource';
 import { Subject } from './Subject';
@@ -13,20 +13,20 @@ import { Subject } from './Subject';
  * @data The model instance for this suggestion.
  */
 interface ResourceSuggestionBase {
-  model: modelNameList;
+  model: modelName;
   data: Resource;
 }
 
 export interface CourseSuggestion extends ResourceSuggestionBase {
-  model: 'courses';
+  model: modelName.COURSES;
   data: Course;
 }
 export interface OrganizationSuggestion extends ResourceSuggestionBase {
-  model: 'organizations';
+  model: modelName.ORGANIZATIONS;
   data: Organization;
 }
 export interface SubjectSuggestion extends ResourceSuggestionBase {
-  model: 'subjects';
+  model: modelName.SUBJECTS;
   data: Subject;
 }
 
@@ -62,22 +62,22 @@ export type SearchSuggestion = ResourceSuggestion | DefaultSuggestion;
  */
 interface ResourceSuggestionSectionBase {
   message: FormattedMessage.MessageDescriptor;
-  model: modelNameList;
+  model: modelName;
   values: Resource[];
 }
 
 export interface CourseSuggestionSection extends ResourceSuggestionSectionBase {
-  model: 'courses';
+  model: modelName.COURSES;
   values: Course[];
 }
 export interface OrganizationSuggestionSection
   extends ResourceSuggestionSectionBase {
-  model: 'organizations';
+  model: modelName.ORGANIZATIONS;
   values: Organization[];
 }
 export interface SubjectSuggestionSection
   extends ResourceSuggestionSectionBase {
-  model: 'subjects';
+  model: modelName.SUBJECTS;
   values: Subject[];
 }
 

@@ -1,4 +1,5 @@
 import { FilterDefinitionState } from '../../data/filterDefinitions/reducer';
+import { modelName } from '../../types/models';
 import { updateFilter } from '../../utils/filters/updateFilter';
 import { mapStateToProps, mergeProps } from './SearchSuggestFieldContainer';
 
@@ -11,7 +12,7 @@ describe('components/SearchSuggestFieldContainer/mergeProps', () => {
     filterDefinitions: {
       organizations: {
         humanName: { defaultMessage: 'Organizations', id: 'organizations' },
-        machineName: 'organizations',
+        machineName: modelName.ORGANIZATIONS,
       },
     } as FilterDefinitionState,
     resources: {
@@ -31,7 +32,7 @@ describe('components/SearchSuggestFieldContainer/mergeProps', () => {
 
   it('builds props with an addFilter function that calls updateFilter', () => {
     const { addFilter } = mergeProps(mapStateToProps(state), { dispatch });
-    addFilter('organizations', '84');
+    addFilter(modelName.ORGANIZATIONS, '84');
 
     expect(mockUpdateFilter).toHaveBeenCalledWith(
       dispatch,
@@ -39,7 +40,7 @@ describe('components/SearchSuggestFieldContainer/mergeProps', () => {
       'add',
       {
         humanName: { defaultMessage: 'Organizations', id: 'organizations' },
-        machineName: 'organizations',
+        machineName: modelName.ORGANIZATIONS,
       },
       '84',
     );
@@ -51,7 +52,7 @@ describe('components/SearchSuggestFieldContainer/mergeProps', () => {
 
     expect(dispatch).toHaveBeenCalledWith({
       params: { limit: 20, offset: 0, query: 'some query' },
-      resourceName: 'courses',
+      resourceName: modelName.COURSES,
       type: 'RESOURCE_LIST_GET',
     });
   });

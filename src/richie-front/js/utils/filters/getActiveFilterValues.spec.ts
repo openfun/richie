@@ -1,10 +1,11 @@
 import { RootState } from '../../data/rootReducer';
+import { modelName } from '../../types/models';
 import { getActiveFilterValues } from './getActiveFilterValues';
 
 describe('utils/filters/getActiveFilterValues', () => {
   it('returns an empty array if there are no currently active values', () => {
     expect(
-      getActiveFilterValues({} as RootState, 'organizations', {
+      getActiveFilterValues({} as RootState, modelName.ORGANIZATIONS, {
         limit: 20,
         offset: 0,
         organizations: undefined,
@@ -23,7 +24,7 @@ describe('utils/filters/getActiveFilterValues', () => {
       },
     };
     expect(
-      getActiveFilterValues(state as any, 'organizations', {
+      getActiveFilterValues(state as any, modelName.ORGANIZATIONS, {
         limit: 20,
         offset: 0,
         organizations: 42,
@@ -43,7 +44,7 @@ describe('utils/filters/getActiveFilterValues', () => {
       },
     };
     expect(
-      getActiveFilterValues(state as any, 'subjects', {
+      getActiveFilterValues(state as any, modelName.SUBJECTS, {
         limit: 20,
         offset: 0,
         subjects: [21, 22],

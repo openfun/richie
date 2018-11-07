@@ -1,8 +1,11 @@
 import { FormattedMessage } from 'react-intl';
+import { modelName } from './models';
 
 export type hardcodedFilterGroupName = 'availability' | 'language' | 'new';
 
-export type resourceBasedFilterGroupName = 'organizations' | 'subjects';
+export type resourceBasedFilterGroupName =
+  | modelName.ORGANIZATIONS
+  | modelName.SUBJECTS;
 
 export type filterGroupName =
   | resourceBasedFilterGroupName

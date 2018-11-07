@@ -1,3 +1,4 @@
+import { modelName } from '../../types/models';
 import { organizations } from './reducer';
 
 describe('data/organizations reducer', () => {
@@ -26,7 +27,7 @@ describe('data/organizations reducer', () => {
       expect(
         organizations(previousState, {
           resource: org44,
-          resourceName: 'subjects',
+          resourceName: modelName.SUBJECTS,
           type: 'RESOURCE_ADD',
         }),
       ).toEqual(previousState);
@@ -38,7 +39,7 @@ describe('data/organizations reducer', () => {
       expect(
         organizations(previousState, {
           resource: org44,
-          resourceName: 'organizations',
+          resourceName: modelName.ORGANIZATIONS,
           type: 'RESOURCE_ADD',
         }),
       ).toEqual({ byId: { 43: org43, 44: org44 } });

@@ -1,3 +1,4 @@
+import { modelName } from '../../types/models';
 import {
   DefaultSuggestionSection,
   ResourceSuggestion,
@@ -40,18 +41,18 @@ function suggestionsFromResourceSection(
   // This leads us to this switch which solves both issues as neither the model name nor the values
   // are union types anymore.
   switch (section.model) {
-    case 'courses':
+    case modelName.COURSES:
       return section.values.map(value => ({
         data: value,
         model: section.model,
       }));
-    case 'organizations':
+    case modelName.ORGANIZATIONS:
       return section.values.map(value => ({
         data: value,
         model: section.model,
       }));
 
-    case 'subjects':
+    case modelName.SUBJECTS:
       return section.values.map(value => ({
         data: value,
         model: section.model,

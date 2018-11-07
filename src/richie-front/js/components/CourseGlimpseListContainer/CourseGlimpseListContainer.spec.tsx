@@ -1,4 +1,5 @@
 import { FilterDefinitionState } from '../../data/filterDefinitions/reducer';
+import { modelName } from '../../types/models';
 import { mapStateToProps, mergeProps } from './CourseGlimpseListContainer';
 
 describe('components/CourseGlimpseListContainer', () => {
@@ -81,7 +82,7 @@ describe('components/CourseGlimpseListContainer', () => {
 
       expect(dispatch).toHaveBeenCalledWith({
         params: { limit: 999, offset: 0, subjects: 42 },
-        resourceName: 'courses',
+        resourceName: modelName.COURSES,
         type: 'RESOURCE_LIST_GET',
       });
     });

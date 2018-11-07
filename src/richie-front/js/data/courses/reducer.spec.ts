@@ -1,3 +1,4 @@
+import { modelName } from '../../types/models';
 import { courses } from './reducer';
 
 describe('data/courses reducer', () => {
@@ -62,7 +63,7 @@ describe('data/courses reducer', () => {
       expect(
         courses(previousState, {
           resource: course44,
-          resourceName: 'subjects',
+          resourceName: modelName.SUBJECTS,
           type: 'RESOURCE_ADD',
         }),
       ).toEqual(previousState);
@@ -74,7 +75,7 @@ describe('data/courses reducer', () => {
       expect(
         courses(previousState, {
           resource: course44,
-          resourceName: 'courses',
+          resourceName: modelName.COURSES,
           type: 'RESOURCE_ADD',
         }),
       ).toEqual({ byId: { 43: course43, 44: course44 } });

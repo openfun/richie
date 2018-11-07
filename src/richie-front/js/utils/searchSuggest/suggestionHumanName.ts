@@ -1,16 +1,17 @@
+import { modelName } from '../../types/models';
 import { ResourceSuggestion } from '../../types/searchSuggest';
 
 export const suggestionHumanName = (suggestion: ResourceSuggestion) => {
   switch (suggestion.model) {
-    case 'courses':
+    case modelName.COURSES:
       const course = suggestion.data;
       return course.title;
 
-    case 'organizations':
+    case modelName.ORGANIZATIONS:
       const organization = suggestion.data;
       return organization.name;
 
-    case 'subjects':
+    case modelName.SUBJECTS:
       const subject = suggestion.data;
       return subject.name;
   }

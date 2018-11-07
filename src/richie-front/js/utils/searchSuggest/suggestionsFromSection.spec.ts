@@ -1,4 +1,5 @@
 import { Course } from '../../types/Course';
+import { modelName } from '../../types/models';
 import { Organization } from '../../types/Organization';
 import { Subject } from '../../types/Subject';
 import { suggestionsFromSection } from './suggestionsFromSection';
@@ -8,7 +9,7 @@ describe('utils/searchSuggest/suggestionsFromSection', () => {
     expect(
       suggestionsFromSection({
         message: { defaultMessage: 'Courses', id: 'coursesHumanName' },
-        model: 'courses',
+        model: modelName.COURSES,
         values: [
           { title: 'Example course #1' } as Course,
           { title: 'Example course #2' } as Course,
@@ -17,11 +18,11 @@ describe('utils/searchSuggest/suggestionsFromSection', () => {
     ).toEqual([
       {
         data: { title: 'Example course #1' } as Course,
-        model: 'courses',
+        model: modelName.COURSES,
       },
       {
         data: { title: 'Example course #2' } as Course,
-        model: 'courses',
+        model: modelName.COURSES,
       },
     ]);
   });
@@ -33,7 +34,7 @@ describe('utils/searchSuggest/suggestionsFromSection', () => {
           defaultMessage: 'Organizations',
           id: 'organizationsHumanName',
         },
-        model: 'organizations',
+        model: modelName.ORGANIZATIONS,
         values: [
           { name: 'Example organization #1' } as Organization,
           { name: 'Example organization #2' } as Organization,
@@ -42,11 +43,11 @@ describe('utils/searchSuggest/suggestionsFromSection', () => {
     ).toEqual([
       {
         data: { name: 'Example organization #1' } as Organization,
-        model: 'organizations',
+        model: modelName.ORGANIZATIONS,
       },
       {
         data: { name: 'Example organization #2' } as Organization,
-        model: 'organizations',
+        model: modelName.ORGANIZATIONS,
       },
     ]);
   });
@@ -55,7 +56,7 @@ describe('utils/searchSuggest/suggestionsFromSection', () => {
     expect(
       suggestionsFromSection({
         message: { defaultMessage: 'Subjects', id: 'subjectsHumanName' },
-        model: 'subjects',
+        model: modelName.SUBJECTS,
         values: [
           { name: 'Example subject #1' } as Subject,
           { name: 'Example subject #2' } as Subject,
@@ -64,11 +65,11 @@ describe('utils/searchSuggest/suggestionsFromSection', () => {
     ).toEqual([
       {
         data: { name: 'Example subject #1' } as Subject,
-        model: 'subjects',
+        model: modelName.SUBJECTS,
       },
       {
         data: { name: 'Example subject #2' } as Subject,
-        model: 'subjects',
+        model: modelName.SUBJECTS,
       },
     ]);
   });

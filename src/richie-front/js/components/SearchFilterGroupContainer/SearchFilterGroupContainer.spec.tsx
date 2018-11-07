@@ -2,6 +2,7 @@ import { FilterDefinitionState } from '../../data/filterDefinitions/reducer';
 import { ResourceListState } from '../../data/genericReducers/resourceList/resourceList';
 import { RootState } from '../../data/rootReducer';
 import { Course } from '../../types/Course';
+import { modelName } from '../../types/models';
 import { getFilterFromState } from '../../utils/filters/getFilterFromState';
 import { updateFilter } from '../../utils/filters/updateFilter';
 import { mapStateToProps, mergeProps } from './SearchFilterGroupContainer';
@@ -17,7 +18,7 @@ jest.mock('../../utils/filters/updateFilter');
 describe('components/SearchFilterGroupContainer/mergeProps', () => {
   const exampleFilter = {
     humanName: { defaultMessage: 'Organizations', id: 'organizations' },
-    machineName: 'organizations' as 'organizations',
+    machineName: modelName.ORGANIZATIONS,
     values: [
       {
         count: 3,
@@ -39,7 +40,9 @@ describe('components/SearchFilterGroupContainer/mergeProps', () => {
 
   it('returns the relevant filter, its current value & partially applied update helpers', () => {
     const dispatch: any = () => undefined;
-    const props = { machineName: 'organizations' as 'organizations' };
+    const props = {
+      machineName: modelName.ORGANIZATIONS as modelName.ORGANIZATIONS,
+    };
     const state = {
       filterDefinitions: {} as FilterDefinitionState,
       resources: {

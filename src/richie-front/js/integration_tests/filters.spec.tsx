@@ -13,6 +13,7 @@ import { SearchFiltersPane } from '../components/SearchFiltersPane/SearchFilters
 import { addMultipleResources } from '../data/genericReducers/resourceById/actions';
 import { didGetResourceList } from '../data/genericSideEffects/getResourceList/actions';
 import { RootState } from '../data/rootReducer';
+import { modelName } from '../types/models';
 
 describe('Integration tests - filters', () => {
   let store: Store<RootState>;
@@ -49,10 +50,10 @@ describe('Integration tests - filters', () => {
         name: 'Organization Five',
       },
     ];
-    store.dispatch(addMultipleResources('organizations', orgs));
+    store.dispatch(addMultipleResources(modelName.ORGANIZATIONS, orgs));
     store.dispatch(
       didGetResourceList(
-        'organizations',
+        modelName.ORGANIZATIONS,
         {
           meta: { limit: 3, offset: 0, total_count: 3 },
           objects: orgs,
@@ -65,10 +66,10 @@ describe('Integration tests - filters', () => {
       { id: 41, image: null, name: 'Subject Forty-One' },
       { id: 51, image: null, name: 'Subject Fifty-One' },
     ];
-    store.dispatch(addMultipleResources('subjects', subjects));
+    store.dispatch(addMultipleResources(modelName.SUBJECTS, subjects));
     store.dispatch(
       didGetResourceList(
-        'subjects',
+        modelName.SUBJECTS,
         {
           meta: { limit: 3, offset: 0, total_count: 3 },
           objects: subjects,
@@ -78,7 +79,7 @@ describe('Integration tests - filters', () => {
     );
     store.dispatch(
       didGetResourceList(
-        'courses',
+        modelName.COURSES,
         {
           facets: {
             organizations: { 3: 12, 4: 87, 5: 56 },
@@ -114,7 +115,9 @@ describe('Integration tests - filters', () => {
   it('shows the values for the resource-based filters in their groups, ordered by facet count', () => {
     const filtersOrganizations = makeSearchFilterPane()
       .find(SearchFilterGroupContainer)
-      .filterWhere(wrapper => wrapper.prop('machineName') === 'organizations')
+      .filterWhere(
+        wrapper => wrapper.prop('machineName') === modelName.ORGANIZATIONS,
+      )
       .find(SearchFilter);
     expect(filtersOrganizations.at(0).html()).toContain('Organization Four');
     expect(filtersOrganizations.at(0).html()).toContain('87');
@@ -149,7 +152,9 @@ describe('Integration tests - filters', () => {
     // Our newly active filter should be at the top
     const topOrgsFilter = makeSearchFilterPane()
       .find(SearchFilterGroupContainer)
-      .filterWhere(wrapper => wrapper.prop('machineName') === 'organizations')
+      .filterWhere(
+        wrapper => wrapper.prop('machineName') === modelName.ORGANIZATIONS,
+      )
       .find(SearchFilter)
       .first();
 
@@ -180,7 +185,7 @@ describe('Integration tests - filters', () => {
     // Set the subjects filter to '41'
     store.dispatch(
       didGetResourceList(
-        'courses',
+        modelName.COURSES,
         {
           facets: {
             organizations: { 3: 12, 4: 87, 5: 56 },
@@ -216,7 +221,9 @@ describe('Integration tests - filters', () => {
     expect(
       makeSearchFilterPane()
         .find(SearchFilterGroupContainer)
-        .filterWhere(wrapper => wrapper.prop('machineName') === 'subjects')
+        .filterWhere(
+          wrapper => wrapper.prop('machineName') === modelName.SUBJECTS,
+        )
         .find(SearchFilter)
         .first()
         .html(),

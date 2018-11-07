@@ -1,6 +1,7 @@
 import { stringify } from 'query-string';
 
 import { FilterDefinition } from '../../types/filters';
+import { modelName } from '../../types/models';
 import { computeNewFilterValue } from './computeNewFilterValue';
 import { updateFilter } from './updateFilter';
 
@@ -37,7 +38,7 @@ describe('utils/filters/updateFilter', () => {
         offset: 3,
         organizations: [42, 84],
       },
-      resourceName: 'courses',
+      resourceName: modelName.COURSES,
       type: 'RESOURCE_LIST_GET',
     });
     expect(dispatch).toHaveBeenCalledWith({

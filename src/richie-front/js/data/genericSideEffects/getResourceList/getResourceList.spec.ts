@@ -1,5 +1,6 @@
 import { call, put } from 'redux-saga/effects';
 
+import { modelName } from '../../../types/models';
 import { addMultipleResources } from '../../genericReducers/resourceById/actions';
 import { didGetResourceList, failedToGetResourceList } from './actions';
 import { fetchList, getList } from './getResourceList';
@@ -70,7 +71,7 @@ describe('data/genericSideEffects/getResourceList saga', () => {
         }),
       );
 
-      fetchList('courses', { limit: 2, offset: 43 }).then(response => {
+      fetchList(modelName.COURSES, { limit: 2, offset: 43 }).then(response => {
         // The correct request given parameters is performed
         expect(mockFetch).toHaveBeenCalledWith(
           '/api/v1.0/courses/?limit=2&offset=43',
@@ -91,7 +92,7 @@ describe('data/genericSideEffects/getResourceList saga', () => {
       );
 
       // Don't check params again as it was done in the first test
-      fetchList('courses', { limit: 2, offset: 43 }).then(response => {
+      fetchList(modelName.COURSES, { limit: 2, offset: 43 }).then(response => {
         // Our polymorphic response object is properly shaped - with an error this time
         expect(response.objects).not.toBeDefined();
         expect(response.error).toEqual(jasmine.any(Error));
@@ -103,7 +104,7 @@ describe('data/genericSideEffects/getResourceList saga', () => {
       mockFetch.and.returnValue(Promise.resolve({ ok: false, status: 404 }));
 
       // Don't check params again as it was done in the first test
-      fetchList('courses', { limit: 2, offset: 43 }).then(response => {
+      fetchList(modelName.COURSES, { limit: 2, offset: 43 }).then(response => {
         // Our polymorphic response object is properly shaped - with an error this time
         expect(response.objects).not.toBeDefined();
         expect(response.error).toEqual(jasmine.any(Error));
@@ -115,7 +116,7 @@ describe('data/genericSideEffects/getResourceList saga', () => {
   describe('getList', () => {
     const action = {
       params: { limit: 10, name: 'python', offset: 0 },
-      resourceName: 'courses' as 'courses',
+      resourceName: modelName.COURSES,
       type: 'RESOURCE_LIST_GET' as 'RESOURCE_LIST_GET',
     };
 
@@ -130,15 +131,15 @@ describe('data/genericSideEffects/getResourceList saga', () => {
 
       // The call to fetch (the actual side-effect) is triggered
       expect(gen.next().value).toEqual(
-        call(fetchList, 'courses', action.params),
+        call(fetchList, modelName.COURSES, action.params),
       );
       // Both courses are added to the state
       expect(gen.next(response).value).toEqual(
-        put(addMultipleResources('courses', response.objects)),
+        put(addMultipleResources(modelName.COURSES, response.objects)),
       );
       // The success action is dispatched
       expect(gen.next().value).toEqual(
-        put(didGetResourceList('courses', response, action.params)),
+        put(didGetResourceList(modelName.COURSES, response, action.params)),
       );
     });
 
@@ -151,11 +152,11 @@ describe('data/genericSideEffects/getResourceList saga', () => {
 
       // The call to fetch is triggered, but fails for some reason
       expect(gen.next().value).toEqual(
-        call(fetchList, 'courses', action.params),
+        call(fetchList, modelName.COURSES, action.params),
       );
       // The failure action is dispatched
       expect(gen.next(response).value).toEqual(
-        put(failedToGetResourceList('courses', response.error)),
+        put(failedToGetResourceList(modelName.COURSES, response.error)),
       );
     });
   });

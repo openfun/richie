@@ -6,6 +6,7 @@ import { getResourceList } from '../../data/genericSideEffects/getResourceList/a
 import { RootState } from '../../data/rootReducer';
 import { API_LIST_DEFAULT_PARAMS } from '../../settings';
 import { filterGroupName } from '../../types/filters';
+import { modelName } from '../../types/models';
 import { updateFilter } from '../../utils/filters/updateFilter';
 import { SearchSuggestField } from '../SearchSuggestField/SearchSuggestField';
 
@@ -30,18 +31,18 @@ export const mergeProps = (
 ) => {
   return {
     // Add a single filter from a suggestion to the current search.
-    addFilter: (modelName: filterGroupName, filterValue: string) => {
+    addFilter: (filterName: filterGroupName, filterValue: string) => {
       updateFilter(
         dispatch,
         currentParams,
         'add',
-        filterDefinitions[modelName],
+        filterDefinitions[filterName],
         filterValue,
       );
     },
     // Update the full text search with the current value of the search field (default suggestion).
     fullTextSearch: (query: string) => {
-      dispatch(getResourceList('courses', { ...currentParams, query }));
+      dispatch(getResourceList(modelName.COURSES, { ...currentParams, query }));
     },
   };
 };

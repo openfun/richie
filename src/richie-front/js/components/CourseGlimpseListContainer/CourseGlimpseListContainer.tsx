@@ -5,6 +5,7 @@ import { ResourceListStateParams } from '../../data/genericReducers/resourceList
 import { getResourceList } from '../../data/genericSideEffects/getResourceList/actions';
 import { RootState } from '../../data/rootReducer';
 import { Course } from '../../types/Course';
+import { modelName } from '../../types/models';
 import { Maybe } from '../../utils/types';
 import { CourseGlimpseList } from '../CourseGlimpseList/CourseGlimpseList';
 
@@ -55,7 +56,7 @@ export const mergeProps = (
   courses,
   requestCourses: () =>
     dispatch(
-      getResourceList('courses', {
+      getResourceList(modelName.COURSES, {
         ...(currentParams || {}),
         limit: 999,
       }),

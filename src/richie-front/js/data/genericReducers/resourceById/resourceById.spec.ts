@@ -1,3 +1,4 @@
+import { modelName } from '../../../types/models';
 import { byId } from './resourceById';
 
 describe('data/genericReducers/resourceById reducer', () => {
@@ -40,7 +41,7 @@ describe('data/genericReducers/resourceById reducer', () => {
       expect(
         byId(previousState, {
           resource: subj44,
-          resourceName: 'subjects',
+          resourceName: modelName.SUBJECTS,
           type: 'RESOURCE_ADD',
         }),
       ).toEqual({ byId: { 43: subj43, 44: subj44 } });
@@ -54,7 +55,7 @@ describe('data/genericReducers/resourceById reducer', () => {
       };
       expect(
         byId(previousState, {
-          resourceName: 'subjects',
+          resourceName: modelName.SUBJECTS,
           resources: [subj44, subj45],
           type: 'RESOURCE_MULTIPLE_ADD',
         }),

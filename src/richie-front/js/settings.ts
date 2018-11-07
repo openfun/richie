@@ -7,12 +7,13 @@ import {
   hardcodedFilterGroupName,
   resourceBasedFilterGroupName,
 } from './types/filters';
+import { modelName } from './types/models';
 import { commonMessages } from './utils/commonMessages';
 
 export const API_ENDPOINTS = {
-  courses: '/api/v1.0/courses/',
-  organizations: '/api/v1.0/organizations/',
-  subjects: '/api/v1.0/subjects/',
+  [modelName.COURSES]: '/api/v1.0/courses/',
+  [modelName.ORGANIZATIONS]: '/api/v1.0/organizations/',
+  [modelName.SUBJECTS]: '/api/v1.0/subjects/',
 };
 
 export const API_LIST_DEFAULT_PARAMS = {
@@ -23,8 +24,8 @@ export const API_LIST_DEFAULT_PARAMS = {
 export const FILTERS_ACTIVE: filterGroupName[] = [
   'new',
   'availability',
-  'subjects',
-  'organizations',
+  modelName.SUBJECTS,
+  modelName.ORGANIZATIONS,
   'language',
 ];
 
@@ -140,11 +141,11 @@ export const FILTERS_RESOURCES: {
 } = {
   organizations: {
     humanName: commonMessages.organizationsHumanName,
-    machineName: 'organizations',
+    machineName: modelName.ORGANIZATIONS,
   },
   subjects: {
     humanName: commonMessages.subjectsHumanName,
-    machineName: 'subjects',
+    machineName: modelName.SUBJECTS,
   },
 };
 

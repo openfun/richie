@@ -4,6 +4,7 @@ import { ResourceListStateParams } from '../../data/genericReducers/resourceList
 import { getResourceList } from '../../data/genericSideEffects/getResourceList/actions';
 import { pushQueryStringToHistory } from '../../data/genericSideEffects/pushHistoryState/actions';
 import { FilterDefinition } from '../../types/filters';
+import { modelName } from '../../types/models';
 import { computeNewFilterValue } from './computeNewFilterValue';
 
 // Update a search filter for our main Search view/state
@@ -31,6 +32,6 @@ export const updateFilter = (
     ),
   };
   // Make sure we update both the query/results and the URL query string
-  dispatch(getResourceList('courses', newParams));
+  dispatch(getResourceList(modelName.COURSES, newParams));
   dispatch(pushQueryStringToHistory(newParams));
 };

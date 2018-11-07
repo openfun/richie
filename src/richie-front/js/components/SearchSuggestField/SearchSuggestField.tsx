@@ -9,6 +9,7 @@ import {
 } from 'react-intl';
 
 import { filterGroupName } from '../../types/filters';
+import { modelName } from '../../types/models';
 import {
   ResourceSuggestionSection,
   SearchSuggestion,
@@ -121,9 +122,9 @@ export async function onSuggestionsFetchRequested(
   const sectionParams: Array<
     [ResourceSuggestionSection['model'], FormattedMessage.MessageDescriptor]
   > = [
-    ['courses', commonMessages.coursesHumanName],
-    ['organizations', commonMessages.organizationsHumanName],
-    ['subjects', commonMessages.subjectsHumanName],
+    [modelName.COURSES, commonMessages.coursesHumanName],
+    [modelName.ORGANIZATIONS, commonMessages.organizationsHumanName],
+    [modelName.SUBJECTS, commonMessages.subjectsHumanName],
   ];
 
   // Fetch the suggestions for each resource-based section to build out the sections
@@ -169,13 +170,13 @@ export function onSuggestionSelected(
   { suggestion }: { suggestion: SearchSuggestion },
 ) {
   switch (suggestion.model) {
-    case 'courses':
+    case modelName.COURSES:
       // TODO: pick a real URL on the course object when it is available on the API
       const url = 'https://' + suggestion.data.id;
       return location.setHref(url);
 
-    case 'organizations':
-    case 'subjects':
+    case modelName.ORGANIZATIONS:
+    case modelName.SUBJECTS:
       // Update the search with the newly selected filter
       this.props.addFilter(suggestion.model, String(suggestion.data.id));
       // Reset the search field state: the task has been completed

@@ -4,6 +4,7 @@ import { mount } from 'enzyme';
 import * as React from 'react';
 
 import { FilterDefinitionWithValues } from '../../types/filters';
+import { modelName } from '../../types/models';
 import { SearchFilter } from '../SearchFilter/SearchFilter';
 import { SearchFilterGroup } from './SearchFilterGroup';
 
@@ -14,7 +15,7 @@ describe('components/SearchFilterGroup', () => {
   it('renders the name of the filter', () => {
     const filter = {
       humanName: { defaultMessage: 'Organizations', id: 'organizations' },
-      machineName: 'organizations',
+      machineName: modelName.ORGANIZATIONS,
       values: [],
     } as FilterDefinitionWithValues;
     const element = (
