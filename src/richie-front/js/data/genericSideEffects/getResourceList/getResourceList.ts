@@ -30,7 +30,7 @@ export function fetchList(
   resourceName: keyof RootState['resources'],
   params: ResourceListGet['params'] = API_LIST_DEFAULT_PARAMS,
 ): Promise<Response> {
-  const endpoint = API_ENDPOINTS[resourceName];
+  const endpoint = API_ENDPOINTS.search[resourceName];
 
   return fetch(`${endpoint}?${stringify(params)}`, {
     headers: {

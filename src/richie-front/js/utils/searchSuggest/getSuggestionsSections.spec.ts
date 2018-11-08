@@ -14,9 +14,10 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
   });
 
   it('runs the search and builds a SearchSuggestionSection with the results', async () => {
-    fetchMock.get('/api/v1.0/courses/?query=some%20search', {
-      objects: [{ title: 'Course #1' }, { title: 'Course #2' }],
-    });
+    fetchMock.get('/api/v1.0/courses/autocomplete/?query=some%20search', [
+      { title: 'Course #1' },
+      { title: 'Course #2' },
+    ]);
 
     let suggestionsSection;
     try {
@@ -40,7 +41,7 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
   });
 
   it('reports the error when the request fails', async () => {
-    fetchMock.get('/api/v1.0/courses/?query=some%20search', {
+    fetchMock.get('/api/v1.0/courses/autocomplete/?query=some%20search', {
       throws: 'Failed to send API request',
     });
     await getSuggestionsSection(
@@ -54,7 +55,7 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
   });
 
   it('reports the error when the server returns an error code', async () => {
-    fetchMock.get('/api/v1.0/courses/?query=some%20search', {
+    fetchMock.get('/api/v1.0/courses/autocomplete/?query=some%20search', {
       body: {},
       status: 403,
     });
@@ -64,12 +65,17 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
       'some search',
     );
     expect(mockHandle).toHaveBeenCalledWith(
-      new Error('Failed to get list from /api/v1.0/courses/ : 403'),
+      new Error(
+        'Failed to get list from /api/v1.0/courses/autocomplete/ : 403',
+      ),
     );
   });
 
   it('reports the error when it receives broken json', async () => {
-    fetchMock.get('/api/v1.0/courses/?query=some%20search', 'not json');
+    fetchMock.get(
+      '/api/v1.0/courses/autocomplete/?query=some%20search',
+      'not json',
+    );
     await getSuggestionsSection(
       modelName.COURSES,
       { defaultMessage: 'Courses', id: 'coursesHumanName' },
@@ -78,7 +84,7 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
     expect(mockHandle).toHaveBeenCalledWith(
       new Error(
         'Failed to decode JSON in getSuggestionSection FetchError: invalid json response body at ' +
-          '/api/v1.0/courses/?query=some%20search reason: Unexpected token o in JSON at position 1',
+          '/api/v1.0/courses/autocomplete/?query=some%20search reason: Unexpected token o in JSON at position 1',
       ),
     );
   });

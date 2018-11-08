@@ -18,7 +18,7 @@ export const getSuggestionsSection = async (
   let response: Response;
   try {
     response = await fetch(
-      `${API_ENDPOINTS[sectionModel]}?${stringify({ query })}`,
+      `${API_ENDPOINTS.autocomplete[sectionModel]}?${stringify({ query })}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -34,12 +34,14 @@ export const getSuggestionsSection = async (
   if (!response.ok) {
     return handle(
       new Error(
-        `Failed to get list from ${API_ENDPOINTS.courses} : ${response.status}`,
+        `Failed to get list from ${
+          API_ENDPOINTS.autocomplete[sectionModel]
+        } : ${response.status}`,
       ),
     );
   }
 
-  let data: { objects: Resource[] };
+  let data: Resource[];
   try {
     data = await response.json();
   } catch (error) {
@@ -52,6 +54,6 @@ export const getSuggestionsSection = async (
   return {
     message: sectionTitleMessage,
     model: sectionModel,
-    values: take(data.objects, 3),
+    values: take(data, 3),
   };
 };

@@ -1,5 +1,6 @@
 import { Reducer } from 'redux';
 
+import { modelName } from '../types/models';
 import { courses, CoursesState } from './courses/reducer';
 import {
   filterDefinitions,
@@ -11,9 +12,9 @@ import { subjects, SubjectsState } from './subjects/reducer';
 export interface RootState {
   filterDefinitions: FilterDefinitionState;
   resources: {
-    courses?: CoursesState;
-    organizations?: OrganizationsState;
-    subjects?: SubjectsState;
+    [modelName.COURSES]?: CoursesState;
+    [modelName.ORGANIZATIONS]?: OrganizationsState;
+    [modelName.SUBJECTS]?: SubjectsState;
   };
 }
 
@@ -24,12 +25,15 @@ export const rootReducer: Reducer<RootState> = (state, action) => {
       action,
     ),
     resources: {
-      courses: courses((state && state.resources.courses) || undefined, action),
-      organizations: organizations(
+      [modelName.COURSES]: courses(
+        (state && state.resources.courses) || undefined,
+        action,
+      ),
+      [modelName.ORGANIZATIONS]: organizations(
         (state && state.resources.organizations) || undefined,
         action,
       ),
-      subjects: subjects(
+      [modelName.SUBJECTS]: subjects(
         (state && state.resources.subjects) || undefined,
         action,
       ),
