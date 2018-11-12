@@ -3,6 +3,9 @@ module.exports = {
     'ts-jest': {
       babelConfig: require('./babel.config.js'),
     },
+    config: {
+      enableDevTools: false,
+    },
   },
   moduleFileExtensions: ['css', 'js', 'ts', 'tsx'],
   moduleNameMapper: {

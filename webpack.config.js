@@ -23,7 +23,7 @@ module.exports = {
     extensions: ['.ts', '.tsx', '.js', '.json'],
   },
 
-  plugins: [new configWebpackPlugin()],
+  plugins: [new configWebpackPlugin('config')],
 
   module: {
     rules: [

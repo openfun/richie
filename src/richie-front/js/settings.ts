@@ -1,4 +1,5 @@
 import { defineMessages } from 'react-intl';
+import { Config } from './types/config';
 
 import {
   FilterDefinition,
@@ -157,3 +158,10 @@ export const FILTERS_RESOURCES: {
 };
 
 export const SUPPORTED_LANGUAGES = ['de', 'en', 'fr'];
+
+// Declare global CONFIG as a Config object: it was injected this way by
+// the `configWebpackPlugin` during the build.
+declare const config: Config;
+
+// Export a usable object we'll be able to cleanly import everywhere else.
+export const CONFIG = config;
