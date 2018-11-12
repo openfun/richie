@@ -1,4 +1,5 @@
 const webpack = require('webpack');
+const configWebpackPlugin = require('config-webpack');
 
 module.exports = {
   // Disable production-specific optimizations by default
@@ -21,6 +22,8 @@ module.exports = {
     // Add '.ts' and '.tsx' as resolvable extensions.
     extensions: ['.ts', '.tsx', '.js', '.json'],
   },
+
+  plugins: [new configWebpackPlugin()],
 
   module: {
     rules: [
