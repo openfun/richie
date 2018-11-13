@@ -97,6 +97,7 @@ class Organization(BasePageExtension):
         language = language or translation.get_language()
         bfs = "extended_object__placeholders__cmsplugin__courses_organizationpluginmodel__page"
         filter_dict = {
+            "extended_object__node__parent__cms_pages__course__isnull": True,
             "extended_object__publisher_is_draft": True,
             "extended_object__placeholders__slot": "course_organizations",
             "extended_object__placeholders__cmsplugin__language": language,
@@ -115,6 +116,7 @@ class Organization(BasePageExtension):
                     queryset=Title.objects.filter(language=language),
                 )
             )
+            .distinct()
         )
 
 
