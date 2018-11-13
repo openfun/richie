@@ -118,13 +118,13 @@ class OrganizationFactory(BLDPageExtensionDjangoModelFactory):
 
     template = Organization.TEMPLATE_DETAIL
 
-    @factory.lazy_attribute
-    def code(self):
+    @factory.lazy_attribute_sequence
+    def code(self, sequence):
         """
         Since `name` is required, let's just slugify it to get a meaningful code (and keep it
         below 100 characters)
         """
-        return self.extended_object.get_slug()[:100]
+        return "{:s}-{:d}".format(self.extended_object.get_slug()[:90], sequence)
 
     @factory.post_generation
     # pylint: disable=unused-argument
