@@ -52,6 +52,7 @@ class Subject(BasePageExtension):
             "extended_object__placeholders__cmsplugin__courses_subjectpluginmodel__page"
         )
         filter_dict = {
+            "extended_object__node__parent__cms_pages__course__isnull": True,
             "extended_object__publisher_is_draft": True,
             "extended_object__placeholders__slot": "course_subjects",
             "extended_object__placeholders__cmsplugin__language": language,
@@ -70,6 +71,7 @@ class Subject(BasePageExtension):
                     queryset=Title.objects.filter(language=language),
                 )
             )
+            .distinct()
         )
 
 

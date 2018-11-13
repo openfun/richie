@@ -6,6 +6,7 @@ from django.test import TestCase
 
 from cms.api import create_page
 
+from richie.apps.core.helpers import create_i18n_page
 from richie.apps.courses.factories import CourseFactory, OrganizationFactory
 from richie.apps.courses.models import Course, Organization
 
@@ -103,3 +104,31 @@ class OrganizationModelsTestCase(TestCase):
         )
         self.assertEqual(Course.objects.count(), 2)
         self.assertEqual(organization.get_courses().count(), 1)
+
+    def test_models_organization_get_courses_snapshots(self):
+        """
+        Snapshot courses should be excluded from the list of courses returned.
+        The new filter query we added to exclude snapshots should not create duplicates.
+        Indeed, we had to add a "distinct" clause to the query so this test enforces it.
+        """
+        # We create a root page because it was responsible for duplicate results when the
+        # distinct clause is not applied.
+        # This is because of the clause "extended_object__node__parent__cms_pages__..."
+        # which is there to exclude snapshots but also acts on the main course page and
+        # checks its parent (so the root page) and the duplicate comes from the fact that
+        # the parent has a draft and a public page... so "cms_pages" has a cardinality of 2
+        root_page = create_i18n_page(published=True)
+
+        organization = OrganizationFactory(should_publish=True)
+        course = CourseFactory(
+            parent=root_page, fill_organizations=[organization], should_publish=True
+        )
+        CourseFactory(
+            parent=course.extended_object,
+            fill_organizations=[organization],
+            should_publish=True,
+        )
+
+        self.assertEqual(Course.objects.count(), 4)
+        self.assertEqual(organization.get_courses().count(), 1)
+        self.assertEqual(organization.public_extension.get_courses().count(), 1)
