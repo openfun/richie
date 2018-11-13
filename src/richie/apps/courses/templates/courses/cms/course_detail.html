@@ -13,7 +13,25 @@
     {% with course=current_page.course header_level=2 %}
 
     <div class="course-detail__content course-detail__content--two">
-      <h1 class="course-detail__content__title">{% render_model request.current_page "titles" %}</h1>
+
+      {% if request.current_page.parent_page.course %}
+      <div class="course-detail__content__snapshot">
+        <div class="course-detail__content__snapshot__date">
+          {% blocktrans with creation_date=request.current_page.creation_date|date:"SHORT_DATE_FORMAT" %}
+          Archived on {{ creation_date }}
+          {% endblocktrans %}
+        </div>
+        <a href="{{ request.current_page.parent_page.get_absolute_url }}">{% trans "Go to current version" %}</a>
+      </div>
+      {% endif %}
+
+      <h1 class="course-detail__content__title">
+        {% if request.current_page.parent_page.course %}
+          {{ request.current_page.parent_page.get_title }}
+        {% else %}
+          {% render_model request.current_page "titles" %}
+        {% endif %}
+      </h1>
 
       <div class="course-detail__content__row course-detail__content__subjects">
           {% with form_factor="tag" %}

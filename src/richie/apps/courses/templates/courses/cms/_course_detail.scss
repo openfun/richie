@@ -72,6 +72,15 @@ $richie-course-detail-aside-main-org-background: $white;
       }
     }
 
+    &__snapshot {
+      padding: 1rem 0 0;
+      text-align: center;
+
+      &__date {
+        color: $firebrick6;
+      }
+    }
+
     &__title {
       @include sv-flex-cell-width(100%);
       position: relative;

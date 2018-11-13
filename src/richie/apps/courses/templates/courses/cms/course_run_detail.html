@@ -17,8 +17,12 @@
 
   <div class="course-detail__content course-detail__content--one">
     <h1 class="course-detail__content__title">
-      {% render_model request.current_page.parent_page "titles" %}
-      <br>
+      {% if request.current_page.parent_page.parent_page.course %}
+        {% render_model request.current_page.parent_page.parent_page "titles" %}
+      {% else %}
+        {% render_model request.current_page.parent_page "titles" %}
+      {% endif %}
+      <br />
       {% render_model request.current_page "titles" %}
     </h1>
 
