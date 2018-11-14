@@ -27,7 +27,7 @@ class CoursePluginTestCase(TestCase):
     def test_cms_plugins_course_form_page_choices(self):
         """
         The form to create a course plugin should only list course pages
-        in the select box.
+        in the select box and no snapshot.
         """
 
         class CoursePluginModelForm(forms.ModelForm):
@@ -37,12 +37,17 @@ class CoursePluginTestCase(TestCase):
                 model = CoursePluginModel
                 fields = ["page"]
 
-        course = CourseFactory()
+        page = create_i18n_page("A page")
+        course = CourseFactory(parent=page)
         other_page_title = "other page"
         create_page(other_page_title, "richie/fullwidth.html", settings.LANGUAGE_CODE)
         plugin_form = CoursePluginModelForm()
         self.assertIn(course.extended_object.get_title(), plugin_form.as_table())
         self.assertNotIn(other_page_title, plugin_form.as_table())
+
+        # Create a fake course snapshot and make sure it's not available to select
+        snapshot = CourseFactory(parent=course.extended_object, should_publish=True)
+        self.assertNotIn(snapshot.extended_object.get_title(), plugin_form.as_table())
 
     def test_cms_plugins_course_render_on_public_page(self):
         """

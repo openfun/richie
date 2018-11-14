@@ -223,7 +223,18 @@ class CoursePluginModel(PagePluginMixin, CMSPlugin):
     page = models.ForeignKey(
         Page,
         related_name="course_plugins",
-        limit_choices_to={"publisher_is_draft": True, "course__isnull": False},
+        limit_choices_to={
+            # There's a draft and a public course attached to the draft and
+            # the public parent. Without the first condition, 4 options are
+            # availables for each course. The second condition makes sure the
+            # parent is not a course. The third option filters out public
+            # course. The fourth option makes sure only courses show up.
+            # If there's is no parent, the course is filtered out.
+            "node__parent__cms_pages__publisher_is_draft": True,
+            "node__parent__cms_pages__course__isnull": True,
+            "publisher_is_draft": True,
+            "course__isnull": False,
+        },
     )
 
     class Meta:
