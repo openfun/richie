@@ -34,16 +34,23 @@ class PersonFactory(PageExtensionDjangoModelFactory):
 
     class Meta:
         model = Person
-        exclude = ["languages", "parent", "template", "in_navigation", "title"]
+        exclude = [
+            "page_in_navigation",
+            "page_languages",
+            "page_parent",
+            "page_template",
+            "page_title",
+        ]
 
-    template = Person.TEMPLATE_DETAIL
+    # fields concerning the related page
+    page_template = Person.TEMPLATE_DETAIL
 
     first_name = factory.Faker("first_name")
     last_name = factory.Faker("last_name")
     person_title = factory.SubFactory(PersonTitleFactory)
 
     @factory.lazy_attribute
-    def title(self):
+    def page_title(self):
         """
         Build the page title from the person's title and names
         """

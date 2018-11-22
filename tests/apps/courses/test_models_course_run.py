@@ -122,7 +122,8 @@ class CourseRunModelsTestCase(TestCase):
 
     def test_models_course_run_get_languages_display_request(self):
         """
-        When used in the `render_model` template tag, it should not break when passed a request argument.
+        When used in the `render_model` template tag, it should not break when passed a
+        request argument.
         """
         course_run = CourseRunFactory(languages=["fr"])
         request = RequestFactory().get("/")

@@ -29,7 +29,7 @@ class CourseRunModelsTestCase(TestCase):
     def create_run_ongoing_closed(self, course):
         """Create an on-going course run that is closed for enrollment."""
         return CourseRunFactory(
-            parent=course.extended_object,
+            page_parent=course.extended_object,
             start=self.now - timedelta(hours=1),
             end=self.now + timedelta(hours=1),
             enrollment_end=self.now - timedelta(hours=1),
@@ -38,7 +38,7 @@ class CourseRunModelsTestCase(TestCase):
     def create_run_archived(self, course):
         """Create an archived course run."""
         return CourseRunFactory(
-            parent=course.extended_object,
+            page_parent=course.extended_object,
             start=self.now - timedelta(hours=1),
             end=self.now,
         )
@@ -46,7 +46,7 @@ class CourseRunModelsTestCase(TestCase):
     def create_run_future_not_yet_open(self, course):
         """Create a course run in the future and not yet open for enrollment."""
         return CourseRunFactory(
-            parent=course.extended_object,
+            page_parent=course.extended_object,
             start=self.now + timedelta(hours=2),
             enrollment_start=self.now + timedelta(hours=1),
         )
@@ -54,7 +54,7 @@ class CourseRunModelsTestCase(TestCase):
     def create_run_future_closed(self, course):
         """Create a course run in the future and already closed for enrollment."""
         return CourseRunFactory(
-            parent=course.extended_object,
+            page_parent=course.extended_object,
             start=self.now + timedelta(hours=1),
             enrollment_start=self.now - timedelta(hours=2),
             enrollment_end=self.now - timedelta(hours=1),
@@ -63,7 +63,7 @@ class CourseRunModelsTestCase(TestCase):
     def create_run_future_open(self, course):
         """Create a course run in the future and open for enrollment."""
         return CourseRunFactory(
-            parent=course.extended_object,
+            page_parent=course.extended_object,
             start=self.now + timedelta(hours=1),
             enrollment_start=self.now - timedelta(hours=1),
             enrollment_end=self.now + timedelta(hours=1),
@@ -177,7 +177,7 @@ class CourseRunModelsTestCase(TestCase):
         """
         course = CourseFactory()
         course_run = CourseRunFactory(
-            parent=course.extended_object,
+            page_parent=course.extended_object,
             start=self.now - timedelta(hours=1),
             end=self.now + timedelta(hours=2),
             enrollment_end=self.now + timedelta(hours=1),

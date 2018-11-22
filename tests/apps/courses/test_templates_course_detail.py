@@ -35,13 +35,13 @@ class CourseCMSTestCase(CMSTestCase):
         organizations = OrganizationFactory.create_batch(4)
 
         course = CourseFactory(
-            title="Very interesting course",
+            page_title="Very interesting course",
             fill_organizations=organizations,
             fill_subjects=subjects,
         )
         page = course.extended_object
         course_run1, _course_run2 = CourseRunFactory.create_batch(
-            2, parent=course.extended_object, languages=["en", "fr"]
+            2, page_parent=course.extended_object, languages=["en", "fr"]
         )
         self.assertFalse(course_run1.extended_object.publish("en"))
 
@@ -131,13 +131,13 @@ class CourseCMSTestCase(CMSTestCase):
         organizations = OrganizationFactory.create_batch(4)
 
         course = CourseFactory(
-            title="Very interesting course",
+            page_title="Very interesting course",
             fill_organizations=organizations,
             fill_subjects=subjects,
         )
         page = course.extended_object
         course_run1, _course_run2 = CourseRunFactory.create_batch(
-            2, parent=course.extended_object, languages=["en", "fr"]
+            2, page_parent=course.extended_object, languages=["en", "fr"]
         )
 
         # Publish only 1 of the course runs
@@ -220,7 +220,9 @@ class CourseCMSTestCase(CMSTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertNotContains(response, '<meta name="robots" content="noindex">')
 
-        snapshot = CourseFactory(parent=course.extended_object, should_publish=True)
+        snapshot = CourseFactory(
+            page_parent=course.extended_object, should_publish=True
+        )
         url = snapshot.extended_object.get_absolute_url()
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)

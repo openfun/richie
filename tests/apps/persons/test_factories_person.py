@@ -18,7 +18,7 @@ class PersonFactoryTestCase(TestCase):
         PersonFactory should be able to generate plugins with a realistic portrait
         for several languages.
         """
-        person = PersonFactory(fill_portrait=True, languages=["fr", "en"])
+        person = PersonFactory(page_languages=["fr", "en"], fill_portrait=True)
 
         # Check that the portrait plugins were created as expected
         portrait = person.extended_object.placeholders.get(slot="portrait")
@@ -41,7 +41,7 @@ class PersonFactoryTestCase(TestCase):
         PersonFactory should be able to generate plugins with a realistic resume for
         several languages.
         """
-        person = PersonFactory(fill_resume=True, languages=["fr", "en"])
+        person = PersonFactory(page_languages=["fr", "en"], fill_resume=True)
 
         # Check that the resume plugins were created as expected
         resume = person.extended_object.placeholders.get(slot="resume")

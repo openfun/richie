@@ -141,7 +141,7 @@ class CoursesCMSToolbarTestCase(CheckToolbarMixin, CMSTestCase):
         Make sure that the item to snapshot a course is not available on the page of a snapshot.
         """
         course = CourseFactory()
-        snapshot = CourseFactory(parent=course.extended_object)
+        snapshot = CourseFactory(page_parent=course.extended_object)
 
         superuser = UserFactory(is_staff=True, is_superuser=True)
         cases = [

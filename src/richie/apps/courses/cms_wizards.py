@@ -89,7 +89,7 @@ class CourseRunWizardForm(BaseWizardForm):
     languages = forms.MultipleChoiceField(
         required=True,
         label=_("Languages"),
-        choices=settings.LANGUAGES,
+        choices=settings.ALL_LANGUAGES,
         help_text=_(
             "Select all the languages in which the course content is available."
         ),

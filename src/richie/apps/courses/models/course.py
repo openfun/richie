@@ -201,9 +201,10 @@ class CourseRun(BasePageExtension):
     enrollment_end = models.DateTimeField(_("enrollment end"), blank=True, null=True)
     languages = ChoiceArrayField(
         # Language choices are made lazy so that we can override them in our tests.
-        # When set directly, they are evaluated too early and can't be changed with the "override_settings" utility.
+        # When set directly, they are evaluated too early and can't be changed with the
+        # "override_settings" utility.
         models.CharField(
-            max_length=2, choices=lazy(lambda: settings.LANGUAGES, tuple)()
+            max_length=10, choices=lazy(lambda: settings.ALL_LANGUAGES, tuple)()
         ),
         help_text=_("The languages in which the course content is available."),
     )
@@ -220,6 +221,7 @@ class CourseRun(BasePageExtension):
             course=self.extended_object.get_title(), start=start
         )
 
+    # pylint: disable=unused-argument
     def get_languages_display(self, *args):
         """
         We are using the "languages" ArrayField with a field that has choices. In order to display
@@ -237,12 +239,13 @@ class CourseRun(BasePageExtension):
         string: comma separated list of human readable languages.
         """
         result = ""
-        choices = dict(settings.LANGUAGES)
         for i, language in enumerate(self.languages):
             if i == 0:
-                result = str(choices[language])
+                result = str(settings.ALL_LANGUAGES_DICT[language])
             else:
-                result = "{:s}, {!s}".format(result, choices[language])
+                result = "{:s}, {!s}".format(
+                    result, settings.ALL_LANGUAGES_DICT[language]
+                )
         return result
 
     # pylint: disable=arguments-differ

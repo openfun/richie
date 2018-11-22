@@ -17,7 +17,9 @@ class SubjectCMSTestCase(TestCase):
         Validate that the important elements are displayed on a published subject page
         """
         courses = CourseFactory.create_batch(4)
-        subject = SubjectFactory(title="Very interesting subject", fill_courses=courses)
+        subject = SubjectFactory(
+            page_title="Very interesting subject", fill_courses=courses
+        )
         page = subject.extended_object
 
         # Publish only 2 out of 4 courses
@@ -70,7 +72,9 @@ class SubjectCMSTestCase(TestCase):
         self.client.login(username=user.username, password="password")
 
         courses = CourseFactory.create_batch(4)
-        subject = SubjectFactory(title="Very interesting subject", fill_courses=courses)
+        subject = SubjectFactory(
+            page_title="Very interesting subject", fill_courses=courses
+        )
         page = subject.extended_object
 
         # Publish only 2 out of 4 courses

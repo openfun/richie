@@ -48,7 +48,9 @@ class SubjectPluginTestCase(CMSTestCase):
         image = FilerImageFactory()
 
         # Create a Subject
-        subject = SubjectFactory(title={"en": "public title", "fr": "titre publique"})
+        subject = SubjectFactory(
+            page_title={"en": "public title", "fr": "titre publique"}
+        )
         subject_page = subject.extended_object
 
         # Add logo to related placeholder
@@ -143,7 +145,7 @@ class SubjectPluginTestCase(CMSTestCase):
         self.client.login(username=staff.username, password="password")
 
         # Create a Subject
-        subject = SubjectFactory(title="public title")
+        subject = SubjectFactory(page_title="public title")
         subject_page = subject.extended_object
 
         # Create a page to add the plugin to

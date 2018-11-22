@@ -37,16 +37,20 @@ class CourseModelsTestCase(TestCase):
         # - a draft course run
         # - a published course run
         # - a course run that was published and unpublished
-        course_runs = CourseRunFactory.create_batch(3, parent=course.extended_object)
+        course_runs = CourseRunFactory.create_batch(
+            3, page_parent=course.extended_object
+        )
         course_runs[0].extended_object.publish("en")
         course_runs[1].extended_object.publish("en")
         course_runs[1].extended_object.unpublish("en")
 
         # Create a child course with draft and published course runs (what results from
         # snapshotting a course)
-        child_course = CourseFactory(parent=course.extended_object, should_publish=True)
+        child_course = CourseFactory(
+            page_parent=course.extended_object, should_publish=True
+        )
         child_course_runs = CourseRunFactory.create_batch(
-            3, parent=child_course.extended_object
+            3, page_parent=child_course.extended_object
         )
         child_course_runs[0].extended_object.publish("en")
         child_course_runs[1].extended_object.publish("en")
@@ -55,7 +59,7 @@ class CourseModelsTestCase(TestCase):
         # Create another course, not related to the first one, with draft and published course runs
         other_course = CourseFactory(should_publish=True)
         other_course_runs = CourseRunFactory.create_batch(
-            3, parent=other_course.extended_object
+            3, page_parent=other_course.extended_object
         )
         other_course_runs[0].extended_object.publish("en")
         other_course_runs[1].extended_object.publish("en")

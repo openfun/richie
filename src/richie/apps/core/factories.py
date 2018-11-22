@@ -80,11 +80,11 @@ class PageExtensionDjangoModelFactory(factory.django.DjangoModelFactory):
         requested languages
         """
         return create_i18n_page(
-            title=getattr(self, "title", None),
-            languages=getattr(self, "languages", None),
-            template=getattr(self, "template", None),
-            in_navigation=getattr(self, "in_navigation", False),
-            parent=getattr(self, "parent", None),
+            in_navigation=getattr(self, "page_in_navigation", False),
+            languages=getattr(self, "page_languages", None),
+            parent=getattr(self, "page_parent", None),
+            template=getattr(self, "page_template", None),
+            title=getattr(self, "page_title", None),
         )
 
     @classmethod

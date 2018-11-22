@@ -151,25 +151,25 @@ def create_demo_site():
     # Create organizations under the `Organizations` page
     organizations = OrganizationFactory.create_batch(
         NB_ORGANIZATIONS,
-        languages=[l[0] for l in settings.LANGUAGES],
-        parent=pages_created["organizations"],
+        page_in_navigation=True,
+        page_languages=[l[0] for l in settings.LANGUAGES],
+        page_parent=pages_created["organizations"],
         fill_banner=True,
         fill_description=True,
         fill_logo=True,
         should_publish=True,
-        in_navigation=True,
     )
 
     # Create subjects under the `Subjects` page
     subjects = SubjectFactory.create_batch(
         NB_SUBJECTS,
-        languages=[l[0] for l in settings.LANGUAGES],
-        parent=pages_created["subjects"],
+        page_in_navigation=True,
+        page_languages=[l[0] for l in settings.LANGUAGES],
+        page_parent=pages_created["subjects"],
         fill_banner=True,
         fill_description=True,
         fill_logo=True,
         should_publish=True,
-        in_navigation=True,
     )
 
     # Django parler require a language to be manually set when working out of
@@ -179,12 +179,12 @@ def create_demo_site():
     # Create persons under the `persons` page
     persons = PersonFactory.create_batch(
         NB_PERSONS,
-        languages=[l[0] for l in settings.LANGUAGES],
-        parent=pages_created["persons"],
+        page_in_navigation=True,
+        page_languages=[l[0] for l in settings.LANGUAGES],
+        page_parent=pages_created["persons"],
         fill_portrait=True,
         fill_resume=True,
         should_publish=True,
-        in_navigation=True,
     )
 
     # Create courses under the `Course` page with subjects and organizations
@@ -193,8 +193,9 @@ def create_demo_site():
         video_sample = random.choice(VIDEO_SAMPLE_LINKS)
 
         course = CourseFactory(
-            languages=[l[0] for l in settings.LANGUAGES],
-            parent=pages_created["courses"],
+            page_in_navigation=True,
+            page_languages=[l[0] for l in settings.LANGUAGES],
+            page_parent=pages_created["courses"],
             fill_licences=[
                 ("course_license_content", random.choice(licences)),
                 ("course_license_participation", random.choice(licences)),
@@ -215,7 +216,6 @@ def create_demo_site():
                 # "course_license_participation",
             ],
             should_publish=True,
-            in_navigation=True,
         )
 
         # Add a random number of course runs to the course
@@ -225,22 +225,22 @@ def create_demo_site():
         now = timezone.now()
         CourseRunFactory(
             __sequence=nb_course_runs,
-            parent=course.extended_object,
+            page_in_navigation=False,
+            page_parent=course.extended_object,
             start=now + timedelta(days=1),
             enrollment_start=now - timedelta(days=5),
             enrollment_end=now + timedelta(days=5),
             should_publish=True,
-            in_navigation=False,
         )
 
         # 2) Add more random course runs
         for i in range(nb_course_runs - 1, 0, -1):
             CourseRunFactory(
                 __sequence=i,
-                languages=[l[0] for l in settings.LANGUAGES],
-                parent=course.extended_object,
+                page_in_navigation=False,
+                page_languages=[l[0] for l in settings.LANGUAGES],
+                page_parent=course.extended_object,
                 should_publish=True,
-                in_navigation=False,
             )
 
 

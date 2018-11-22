@@ -79,7 +79,7 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         root_page = create_page(
             "p" * 100, "richie/fullwidth.html", "en", reverse_id=Course.ROOT_REVERSE_ID
         )
-        course = CourseFactory(title="c" * 100, parent=root_page)
+        course = CourseFactory(page_title="c" * 100, page_parent=root_page)
 
         # A course run with a slug at the limit length should work
         form = CourseRunWizardForm(

@@ -79,7 +79,10 @@ class OrganizationModelsTestCase(TestCase):
         """
         organization = OrganizationFactory(should_publish=True)
         courses = CourseFactory.create_batch(
-            3, fill_organizations=[organization], title="my title", should_publish=True
+            3,
+            page_title="my title",
+            fill_organizations=[organization],
+            should_publish=True,
         )
         retrieved_courses = organization.get_courses()
 
@@ -98,7 +101,7 @@ class OrganizationModelsTestCase(TestCase):
         """
         organization = OrganizationFactory(should_publish=True)
         CourseFactory(
-            title={"en": "my title", "fr": "mon titre"},
+            page_title={"en": "my title", "fr": "mon titre"},
             fill_organizations=[organization],
             should_publish=True,
         )
@@ -121,10 +124,12 @@ class OrganizationModelsTestCase(TestCase):
 
         organization = OrganizationFactory(should_publish=True)
         course = CourseFactory(
-            parent=root_page, fill_organizations=[organization], should_publish=True
+            page_parent=root_page,
+            fill_organizations=[organization],
+            should_publish=True,
         )
         CourseFactory(
-            parent=course.extended_object,
+            page_parent=course.extended_object,
             fill_organizations=[organization],
             should_publish=True,
         )

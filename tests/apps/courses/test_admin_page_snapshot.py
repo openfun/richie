@@ -34,20 +34,20 @@ class SnapshotPageAdminTestCase(CMSTestCase):
 
         # Create a course page (not published in german)
         course = CourseFactory(
-            title={"en": "a course", "fr": "un cours", "de": "ein Kurs"}
+            page_title={"en": "a course", "fr": "un cours", "de": "ein Kurs"}
         )
         course.extended_object.publish("en")
         course.extended_object.publish("fr")
 
         # Create a course run published only in English
-        course_run1 = CourseRunFactory(parent=course.extended_object)
+        course_run1 = CourseRunFactory(page_parent=course.extended_object)
         course_run1.extended_object.publish("en")
         self.assertTrue(course_run1.check_publication("en"))
         self.assertFalse(course_run1.check_publication("fr"))
         self.assertFalse(course_run1.check_publication("de"))
 
         # Create a course run published only in French
-        course_run2 = CourseRunFactory(parent=course.extended_object)
+        course_run2 = CourseRunFactory(page_parent=course.extended_object)
         course_run2.extended_object.publish("fr")
         self.assertFalse(course_run2.check_publication("en"))
         self.assertTrue(course_run2.check_publication("fr"))
@@ -278,7 +278,7 @@ class SnapshotPageAdminTestCase(CMSTestCase):
         self.client.login(username=user.username, password="password")
 
         course = CourseFactory()
-        snapshot = CourseFactory(parent=course.extended_object)
+        snapshot = CourseFactory(page_parent=course.extended_object)
 
         # Add the necessary permissions (global and per page)
         self.add_permission(user, "add_page")
