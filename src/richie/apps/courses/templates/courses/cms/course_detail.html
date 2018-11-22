@@ -77,6 +77,7 @@
               {% render_model run "end" "start,end" "" "date:'SHORT_DATE_FORMAT'|default:'...'" as end %}
               {% trans "From" %} {{ start|safe }} {% trans "to" %} {{ end|safe }}
             </dd>
+            <dt>{% trans "Languages" %}</dt><dd>{% render_model run "get_languages_display" "languages" %}</dd>
             {% if current_page.publisher_is_draft %}
             <dt>{% trans "Resource link" %}</dt>
             <dd>

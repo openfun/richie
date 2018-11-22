@@ -41,7 +41,7 @@ class CourseCMSTestCase(CMSTestCase):
         )
         page = course.extended_object
         course_run1, _course_run2 = CourseRunFactory.create_batch(
-            2, parent=course.extended_object
+            2, parent=course.extended_object, languages=["en", "fr"]
         )
         self.assertFalse(course_run1.extended_object.publish("en"))
 
@@ -112,8 +112,9 @@ class CourseCMSTestCase(CMSTestCase):
                 response, organization.extended_object.get_title(), html=True
             )
 
-        # Only the published course run should be in reponse content
+        # Only the published course run should be in response content
         self.assertContains(response, "Enroll now", count=1)
+        self.assertContains(response, "<dd>English, French</dd>", html=True, count=1)
 
     @mock.patch.object(
         CourseRun, "state", new_callable=mock.PropertyMock, return_value="is_open"
@@ -136,7 +137,7 @@ class CourseCMSTestCase(CMSTestCase):
         )
         page = course.extended_object
         course_run1, _course_run2 = CourseRunFactory.create_batch(
-            2, parent=course.extended_object
+            2, parent=course.extended_object, languages=["en", "fr"]
         )
 
         # Publish only 1 of the course runs
@@ -207,6 +208,7 @@ class CourseCMSTestCase(CMSTestCase):
             )
         # The draft and the published course runs should both be in the page
         self.assertContains(response, "Enroll now", count=2)
+        self.assertContains(response, "<dd>English, French</dd>", html=True, count=2)
 
     def test_templates_course_detail_no_index(self):
         """

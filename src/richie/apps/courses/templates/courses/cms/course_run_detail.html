@@ -38,19 +38,27 @@
     
     <div class="course-detail__content__run">
       <h2 class="course-detail__content__run__title">{% trans 'Details' %}</h2>
-      <dl class="course-detail__content__run__block">
-        <dt>{% trans "Enrollment starts" %}</dt>
-        <dd>{% render_model course_run "enrollment_start" "enrollment_start,enrollment_end" "" "date:'DATE_FORMAT'|default:'...'" %}</dd>
-        <dt>{% trans "Enrollment ends" %}</dt>
-        <dd>{% render_model course_run "enrollment_end" "enrollment_start,enrollment_end" "" "date:'DATE_FORMAT'|default:'...'" %}</dd>
-      </dl>
-      <dl class="course-detail__content__run__block">
-        <dt>{% trans "Course starts" %}</dt>
-        <dd>{% render_model course_run "start" "start,end" "" "date:'DATE_FORMAT'|default:'...'" %}</dd>
-        <dt>{% trans "Course ends" %}</dt>
-        <dd>{% render_model course_run "end" "start,end" "" "date:'DATE_FORMAT'|default:'...'" %}</dd>
-      </dl>
       <div class="course-detail__content__run__block">
+        <dl>
+          <dt>{% trans "Enrollment starts" %}</dt>
+          <dd>{% render_model course_run "enrollment_start" "enrollment_start,enrollment_end" "" "date:'DATE_FORMAT'|default:'...'" %}</dd>
+          <dt>{% trans "Enrollment ends" %}</dt>
+          <dd>{% render_model course_run "enrollment_end" "enrollment_start,enrollment_end" "" "date:'DATE_FORMAT'|default:'...'" %}</dd>
+        </dl>
+      </div>
+      <div class="course-detail__content__run__block">
+        <dl>
+          <dt>{% trans "Course starts" %}</dt>
+          <dd>{% render_model course_run "start" "start,end" "" "date:'DATE_FORMAT'|default:'...'" %}</dd>
+          <dt>{% trans "Course ends" %}</dt>
+          <dd>{% render_model course_run "end" "start,end" "" "date:'DATE_FORMAT'|default:'...'" %}</dd>
+        </dl>
+      </div>
+      <div class="course-detail__content__run__block">
+        <dl>
+          <dt>{% trans "Languages" %}</dt>
+          <dd>{% render_model course_run "get_languages_display" "languages" %}</dd>
+        </dl>
         {% if course_run.state == 'is_open' %}
           <a class="course-detail__content__run__block__cta" href="{{ course_run.resource_link }}">
             {% trans "Enroll now" %}

@@ -96,6 +96,7 @@ class CourseRunAdminTestCase(CMSTestCase):
         # Get the admin change view
         url = reverse("admin:courses_courserun_change", args=[course_run.id])
         data = {
+            "languages": ["fr", "en"],
             "resource_link": "https://example.com/my-resource-link",
             "start_0": "2015-01-15",
             "start_1": "07:06:15",
@@ -112,6 +113,7 @@ class CourseRunAdminTestCase(CMSTestCase):
 
         # Check that the course run was updated as expected
         course_run.refresh_from_db()
+        self.assertEqual(course_run.languages, ["fr", "en"])
         self.assertEqual(
             course_run.resource_link, "https://example.com/my-resource-link"
         )

@@ -3,7 +3,9 @@ Unit tests for the Course model
 """
 from datetime import timedelta
 
+from django.core.exceptions import ValidationError
 from django.test import TestCase
+from django.test.client import RequestFactory
 from django.utils import timezone
 
 from richie.apps.courses.factories import CourseRunFactory
@@ -87,3 +89,41 @@ class CourseRunModelsTestCase(TestCase):
             end=self.now + timedelta(hours=2),
         )
         self.assertEqual(course_run.state, "is_closed")
+
+    def test_models_course_run_field_languages_null(self):
+        """
+        The languages field should not be null.
+        """
+        with self.assertRaises(ValidationError) as context:
+            CourseRunFactory(languages=None)
+        self.assertEqual(context.exception.messages[0], "This field cannot be null.")
+
+    def test_models_course_run_field_languages_blank(self):
+        """
+        The languages field should not be blank.
+        """
+        with self.assertRaises(ValidationError) as context:
+            CourseRunFactory(languages=[])
+        self.assertEqual(context.exception.messages[0], "This field cannot be blank.")
+
+    def test_models_course_run_get_languages_display_several_languages(self):
+        """
+        With several languages, it should return a comma separated list of their readable version.
+        """
+        course_run = CourseRunFactory(languages=["en", "fr"])
+        self.assertEqual(course_run.get_languages_display(), "English, French")
+
+    def test_models_course_run_get_languages_display_one_language(self):
+        """
+        With one language, it should return its readable version without any comma.
+        """
+        course_run = CourseRunFactory(languages=["fr"])
+        self.assertEqual(course_run.get_languages_display(), "French")
+
+    def test_models_course_run_get_languages_display_request(self):
+        """
+        When used in the `render_model` template tag, it should not break when passed a request argument.
+        """
+        course_run = CourseRunFactory(languages=["fr"])
+        request = RequestFactory().get("/")
+        self.assertEqual(course_run.get_languages_display(request), "French")

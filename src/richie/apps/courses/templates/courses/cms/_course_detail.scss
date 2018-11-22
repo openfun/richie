@@ -169,23 +169,26 @@ $richie-course-detail-aside-main-org-background: $white;
           color: white;
         }
 
-        dt {
-          font-weight: bold;
-          text-transform: uppercase;
-
-          &:not(:first-child) {
-            margin-top: 0.8rem;
-          }
-        }
-
-        dd {
+        dl {
           margin-bottom: 0;
+          dt {
+            font-weight: bold;
+            text-transform: uppercase;
+
+            &:not(:first-child) {
+              margin-top: 0.8rem;
+            }
+          }
+
+          dd {
+            margin-bottom: 0;
+          }
         }
 
         &__cta {
           display: block;
           width: 100%;
-          margin-bottom: 1.4rem;
+          margin-top: 1.5rem;
           padding: 0.3rem;
           color: $white;
           text-align: center;

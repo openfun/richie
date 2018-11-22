@@ -1,9 +1,13 @@
 """
 Declare and configure the models for the courses application
 """
+from django import forms
+from django.conf import settings
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.db.models import BooleanField, Case, Value, When
 from django.utils import timezone, translation
+from django.utils.functional import lazy
 from django.utils.translation import ugettext_lazy as _
 
 from cms.api import Page
@@ -23,6 +27,25 @@ GLIMPSE_TEXT = [
     _("archived"),
     _("coming soon"),
 ]
+
+
+class ChoiceArrayField(ArrayField):
+    """
+    A field that allows us to store an array of choices.
+    Uses Django's Postgres ArrayField
+    and a MultipleChoiceField for its formfield.
+    """
+
+    def formfield(self, **kwargs):
+        defaults = {
+            "form_class": forms.MultipleChoiceField,
+            "choices": self.base_field.choices,
+        }
+        defaults.update(kwargs)
+        # Skip our parent's formfield implementation completely as we don't
+        # care for it.
+        # pylint:disable=bad-super-call
+        return super(ArrayField, self).formfield(**defaults)
 
 
 class Course(BasePageExtension):
@@ -176,6 +199,14 @@ class CourseRun(BasePageExtension):
         _("enrollment start"), blank=True, null=True
     )
     enrollment_end = models.DateTimeField(_("enrollment end"), blank=True, null=True)
+    languages = ChoiceArrayField(
+        # Language choices are made lazy so that we can override them in our tests.
+        # When set directly, they are evaluated too early and can't be changed with the "override_settings" utility.
+        models.CharField(
+            max_length=2, choices=lazy(lambda: settings.LANGUAGES, tuple)()
+        ),
+        help_text=_("The languages in which the course content is available."),
+    )
 
     TEMPLATE_DETAIL = "courses/cms/course_run_detail.html"
 
@@ -188,6 +219,31 @@ class CourseRun(BasePageExtension):
         return "{start:s}{course:s}".format(
             course=self.extended_object.get_title(), start=start
         )
+
+    def get_languages_display(self, *args):
+        """
+        We are using the "languages" ArrayField with a field that has choices. In order to display
+        human readable value of these multiple choices, we need to write our own method because
+        the ArrayField does not support it yet.
+
+        Parameters:
+        -----------
+        args: we add this because we use this method in a "render_model" template tag and it
+            passes a "request" argument when calling the method. For more information, see:
+            http://docs.django-cms.org/en/latest/how_to/frontend_models.html#special-attributes
+
+        Returns:
+        --------
+        string: comma separated list of human readable languages.
+        """
+        result = ""
+        choices = dict(settings.LANGUAGES)
+        for i, language in enumerate(self.languages):
+            if i == 0:
+                result = str(choices[language])
+            else:
+                result = "{:s}, {!s}".format(result, choices[language])
+        return result
 
     # pylint: disable=arguments-differ
     def save(self, *args, **kwargs):

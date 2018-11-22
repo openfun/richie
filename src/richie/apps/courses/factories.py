@@ -6,6 +6,7 @@ import random
 from collections import namedtuple
 from datetime import datetime, timedelta
 
+from django.conf import settings
 from django.core.files import File
 from django.utils import timezone
 
@@ -322,7 +323,7 @@ class CourseRunFactory(PageExtensionDjangoModelFactory):
 
     class Meta:
         model = CourseRun
-        exclude = ["languages", "parent", "template", "in_navigation", "title"]
+        exclude = ["parent", "template", "in_navigation", "title"]
 
     template = CourseRun.TEMPLATE_DETAIL
     title = factory.Sequence("session {:d}".format)
@@ -333,7 +334,16 @@ class CourseRunFactory(PageExtensionDjangoModelFactory):
         """
         Try getting the list of languages from the parent page and default to None.
         """
-        return self.parent.get_languages() if getattr(self, "parent", None) else None
+        return (
+            self.parent.get_languages()
+            if getattr(self, "parent", None)
+            else [
+                l[0]
+                for l in random.sample(
+                    settings.LANGUAGES, random.randint(1, len(settings.LANGUAGES))
+                )
+            ]
+        )
 
     # pylint: disable=no-self-use
     @factory.lazy_attribute

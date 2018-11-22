@@ -1,6 +1,8 @@
 """
 Test suite for the wizard creating a new Course page
 """
+import random
+
 from django.core.urlresolvers import reverse
 
 from cms.api import create_page
@@ -45,7 +47,10 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         course = CourseFactory()
 
         # Submit a valid form
-        form = CourseRunWizardForm(data={"title": "My title", "course": course.id})
+        languages = [random.choice(["en", "fr"])]
+        form = CourseRunWizardForm(
+            data={"title": "My title", "course": course.id, "languages": languages}
+        )
         self.assertTrue(form.is_valid())
         page = form.save()
         course_run = page.courserun
@@ -61,6 +66,9 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         # The course run should be a child of the course page
         self.assertEqual(course_run.extended_object.parent_page, course.extended_object)
 
+        # The languages field should have been set
+        self.assertEqual(course_run.languages, languages)
+
     def test_cms_wizards_course_run_submit_form_max_lengths(self):
         """
         Check that the form correctly raises an error when the slug is too long. The path built
@@ -74,7 +82,9 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         course = CourseFactory(title="c" * 100, parent=root_page)
 
         # A course run with a slug at the limit length should work
-        form = CourseRunWizardForm(data={"title": "t" * 53, "course": course.id})
+        form = CourseRunWizardForm(
+            data={"title": "t" * 53, "course": course.id, "languages": ["en"]}
+        )
         self.assertTrue(form.is_valid())
         form.save()
 
@@ -97,7 +107,7 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         course = CourseFactory()
 
         # Submit a title at max length
-        data = {"title": "t" * 255, "course": course.id}
+        data = {"title": "t" * 255, "course": course.id, "languages": ["en"]}
         form = CourseRunWizardForm(data=data)
         self.assertTrue(form.is_valid())
         page = form.save()
@@ -112,7 +122,7 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         course = CourseFactory()
 
         # Submit a title that is too long
-        invalid_data = {"title": "t" * 256, "course": course.id}
+        invalid_data = {"title": "t" * 256, "course": course.id, "languages": ["en"]}
 
         form = CourseRunWizardForm(data=invalid_data)
         self.assertFalse(form.is_valid())
@@ -127,7 +137,20 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         We should not be able to create a course run page without a parent course.
         """
         # Submit a valid form without the course field
-        form = CourseRunWizardForm(data={"title": "My title"})
+        form = CourseRunWizardForm(data={"title": "My title", "languages": ["en"]})
 
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors, {"course": ["This field is required."]})
+
+    def test_cms_wizards_course_run_languages_required(self):
+        """
+        Setting languages should be required.
+        """
+        # A course should pre-exist
+        course = CourseFactory()
+
+        # Submit a form without the languages field
+        form = CourseRunWizardForm(data={"title": "My title", "course": course.id})
+
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors, {"languages": ["This field is required."]})
