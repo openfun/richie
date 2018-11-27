@@ -180,7 +180,6 @@ class Course(BasePageExtension):
     def save(self, *args, **kwargs):
         """
         Enforce validation each time an instance is saved
-        Make sure the main organization is also included in `organizations` as a m2m relation
         """
         self.full_clean()
         super().save(*args, **kwargs)
