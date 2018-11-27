@@ -40,7 +40,7 @@
     "@types/jest": "23.3.9",
     "@types/lodash-es": "4.17.1",
     "@types/query-string": "6.1.1",
-    "@types/react": "16.7.6",
+    "@types/react": "16.7.7",
     "@types/react-autosuggest": "9.3.6",
     "@types/react-dom": "16.0.9",
     "@types/react-intl": "2.3.13",
@@ -82,6 +82,7 @@
     "redux-saga": "0.16.2"
   },
   "resolutions": {
+    "@types/react": "16.7.7",
     "babel-core": "7.0.0-bridge.0"
   }
 }
