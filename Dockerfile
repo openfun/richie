@@ -35,7 +35,7 @@ WORKDIR /app
 
 COPY . /app/
 
-RUN yarn install && \
+RUN yarn install --frozen-lockfile && \
     yarn build && \
     yarn sass
 
