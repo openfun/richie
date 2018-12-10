@@ -56,8 +56,6 @@ class CourseWizardForm(BaseWizardForm):
 class CourseWizard(Wizard):
     """Inherit from Wizard because each wizard must have its own Python class."""
 
-    pass
-
 
 wizard_pool.register(
     CourseWizard(
@@ -123,8 +121,6 @@ class CourseRunWizardForm(BaseWizardForm):
 class CourseRunWizard(Wizard):
     """Inherit from Wizard because each wizard must have its own Python class."""
 
-    pass
-
 
 wizard_pool.register(
     CourseRunWizard(
@@ -158,8 +154,6 @@ class OrganizationWizardForm(BaseWizardForm):
 class OrganizationWizard(Wizard):
     """Inherit from Wizard because each wizard must have its own Python class."""
 
-    pass
-
 
 wizard_pool.register(
     OrganizationWizard(
@@ -192,8 +186,6 @@ class SubjectWizardForm(BaseWizardForm):
 
 class SubjectWizard(Wizard):
     """Inherit from Wizard because each wizard must have its own Python class."""
-
-    pass
 
 
 wizard_pool.register(
