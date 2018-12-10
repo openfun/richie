@@ -141,8 +141,6 @@ class PersonWizardForm(BaseWizardForm):
 class PersonWizard(Wizard):
     """Inherit from Wizard because each wizard must have its own Python class."""
 
-    pass
-
 
 wizard_pool.register(
     PersonWizard(
