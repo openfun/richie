@@ -65,6 +65,9 @@ build-ts: ## build TypeScript application
 	@$(YARN) build
 .PHONY: build-ts
 
+clean: ## restore repository state as it was freshly cloned
+	git clean -idx
+
 compilemessages: ## compile the gettext files
 	@$(COMPOSE_RUN) -w /app/src/richie app python /app/sandbox/manage.py compilemessages
 
