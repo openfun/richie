@@ -166,7 +166,7 @@ export async function onSuggestionsFetchRequested(
  */
 export function onSuggestionSelected(
   this: SearchSuggestFieldBase,
-  event: Event,
+  event: React.FormEvent,
   { suggestion }: { suggestion: SearchSuggestion },
 ) {
   switch (suggestion.model) {
