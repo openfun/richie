@@ -5,10 +5,12 @@ import * as React from 'react';
 
 import { Course } from '../../types/Course';
 import { modelName } from '../../types/models';
+import { Organization } from '../../types/Organization';
 import {
   DefaultSuggestionSection,
   ResourceSuggestionSection,
 } from '../../types/searchSuggest';
+import { Subject } from '../../types/Subject';
 import { handle } from '../../utils/errors/handle';
 import { location } from '../../utils/indirection/location';
 import { getSuggestionsSection } from '../../utils/searchSuggest/getSuggestionsSection';
@@ -40,13 +42,7 @@ jest.mock('../../utils/searchSuggest/suggestionHumanName');
 describe('components/SearchSuggestField', () => {
   let addFilter: jest.SpyInstance;
   let fullTextSearch: jest.SpyInstance;
-  let that: {
-    props: {
-      addFilter: typeof addFilter;
-      fullTextSearch: typeof fullTextSearch;
-    };
-    setState: jasmine.Spy;
-  };
+  let that: SearchSuggestFieldBase;
 
   beforeEach(() => {
     // addFilter & fullTextSearch are used to update the current search query
@@ -56,7 +52,7 @@ describe('components/SearchSuggestField', () => {
     that = {
       props: { addFilter, fullTextSearch },
       setState: jasmine.createSpy('setState'),
-    };
+    } as any;
   });
 
   it('renders', () => {
@@ -133,13 +129,15 @@ describe('components/SearchSuggestField', () => {
   });
 
   describe('onChange', () => {
+    const formEvent = {} as any;
+
     it('updates the value in state', () => {
-      onChange.bind(that)({}, { newValue: 'the new value' });
+      onChange.bind(that)(formEvent, { newValue: 'the new value' });
       expect(that.setState).toHaveBeenCalledWith({ value: 'the new value' });
     });
 
     it('does not update the state when it is handed no params', () => {
-      onChange.bind(that)({});
+      onChange.bind(that)(formEvent);
       expect(that.setState).not.toHaveBeenCalled();
     });
   });
@@ -226,41 +224,39 @@ describe('components/SearchSuggestField', () => {
   });
 
   describe('onSuggestionSelected', () => {
+    const formEvent = {} as any;
     const mockSetHref = jest.spyOn(location, 'setHref');
 
     beforeEach(() => mockSetHref.mockReset());
 
     it('moves to the courses page when it is called with a course', () => {
-      onSuggestionSelected.bind(that)(
-        {},
-        {
-          suggestion: { model: modelName.COURSES, data: { id: 42 } as Course },
-        },
-      );
+      onSuggestionSelected.bind(that)(formEvent, {
+        suggestion: { model: modelName.COURSES, data: { id: 42 } as Course },
+      });
       expect(location.setHref).toHaveBeenCalledWith('https://42');
     });
 
     it('updates the filter and resets the suggestion state when it is called with a resource suggestion', () => {
-      onSuggestionSelected.bind(that)(
-        {},
-        { suggestion: { model: modelName.SUBJECTS, data: { id: 43 } } },
-      );
+      onSuggestionSelected.bind(that)(formEvent, {
+        suggestion: { model: modelName.SUBJECTS, data: { id: 43 } as Subject },
+      });
       expect(addFilter).toHaveBeenCalledWith(modelName.SUBJECTS, '43');
       expect(location.setHref).not.toHaveBeenCalled();
 
-      onSuggestionSelected.bind(that)(
-        {},
-        { suggestion: { model: modelName.ORGANIZATIONS, data: { id: 44 } } },
-      );
+      onSuggestionSelected.bind(that)(formEvent, {
+        suggestion: {
+          data: { id: 44 } as Organization,
+          model: modelName.ORGANIZATIONS,
+        },
+      });
       expect(addFilter).toHaveBeenCalledWith(modelName.ORGANIZATIONS, '44');
       expect(location.setHref).not.toHaveBeenCalled();
     });
 
     it('updates the full text search when it is called with the default suggestion', () => {
-      onSuggestionSelected.bind(that)(
-        {},
-        { suggestion: { model: null, data: 'my search' } },
-      );
+      onSuggestionSelected.bind(that)(formEvent, {
+        suggestion: { model: null, data: 'my search' },
+      });
       expect(fullTextSearch).toHaveBeenCalledWith('my search');
       expect(location.setHref).not.toHaveBeenCalled();
     });
