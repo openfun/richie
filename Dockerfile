@@ -29,7 +29,7 @@ RUN mkdir /install && \
     pip install --prefix=/install .
 
 # ---- front-end builder image ----
-FROM node:9 as front-builder
+FROM node:10 as front-builder
 
 WORKDIR /app
 
