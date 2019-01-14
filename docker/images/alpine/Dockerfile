@@ -51,7 +51,7 @@ RUN mkdir /install && \
     pip install --prefix=/install .
 
 # ---- front-end builder image ----
-FROM node:9-alpine as front-builder
+FROM node:10-alpine as front-builder
 
 WORKDIR /app
 
