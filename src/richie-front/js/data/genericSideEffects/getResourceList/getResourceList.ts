@@ -26,29 +26,30 @@ export interface GetListSagaSpecifics {
 
 // Wrap fetch to handle params, headers, parsing & sane response handling
 // NB: some of this logic should be move in a separate module when we reuse it elsewhere
-export function fetchList(
+export async function fetchList(
   resourceName: keyof RootState['resources'],
   params: ResourceListGet['params'] = API_LIST_DEFAULT_PARAMS,
 ): Promise<Response> {
   const endpoint = API_ENDPOINTS.search[resourceName];
 
-  return fetch(`${endpoint}?${stringify(params)}`, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  })
-    .then(response => {
-      // Fetch treats remote errors (400, 404, 503...) as successes. The ok flag is the way to discriminate.
-      if (response.ok) {
-        return response;
-      }
+  try {
+    const response = await fetch(`${endpoint}?${stringify(params)}`, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
       // Push remote errors to the error channel for consistency
       throw new Error(
-        'Failed to get list from ' + endpoint + ' : ' + response.status,
+        `Failed to get list from ${endpoint} : ${response.status}.`,
       );
-    })
-    .then(response => response.json())
-    .catch(error => ({ error }));
+    }
+
+    return await response.json();
+  } catch (error) {
+    return { error };
+  }
 }
 
 export function* getList(action: ResourceListGet) {

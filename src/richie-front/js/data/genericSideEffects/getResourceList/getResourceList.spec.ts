@@ -1,3 +1,4 @@
+import fetchMock from 'fetch-mock';
 import { call, put } from 'redux-saga/effects';
 
 import { modelName } from '../../../types/models';
@@ -5,7 +6,7 @@ import { addMultipleResources } from '../../genericReducers/resourceById/actions
 import { didGetResourceList, failedToGetResourceList } from './actions';
 import { fetchList, getList } from './getResourceList';
 
-// We'll be testing with the a course-lik Resource as the saga needs some specifics to operate: we want
+// We'll be testing with a course-like Resource as the saga needs some specifics to operate: we want
 // something simple but we don't want to rely on the specific implementation of a resource
 describe('data/genericSideEffects/getResourceList saga', () => {
   const course43 = {
@@ -50,66 +51,51 @@ describe('data/genericSideEffects/getResourceList saga', () => {
   };
 
   describe('fetchList', () => {
-    let realFetch: GlobalFetch['fetch'];
-    let mockFetch: jasmine.Spy;
+    afterEach(fetchMock.restore);
 
-    beforeEach(() => {
-      realFetch = window.fetch;
-      mockFetch = jasmine.createSpy('fetch');
-      window.fetch = mockFetch;
-    });
-
-    afterEach(() => {
-      window.fetch = realFetch;
-    });
-
-    it('requests the resource list, parses the JSON response and resolves with the results', done => {
-      mockFetch.and.returnValue(
-        Promise.resolve({
-          json: () => Promise.resolve({ objects: [course43, course44] }),
-          ok: true,
-        }),
+    it('requests the resource list, parses the JSON response and resolves with the results', async () => {
+      fetchMock.mock(
+        '/api/v1.0/courses/?limit=2&offset=43',
+        JSON.stringify({ objects: [course43, course44] }),
       );
 
-      fetchList(modelName.COURSES, { limit: 2, offset: 43 }).then(response => {
-        // The correct request given parameters is performed
-        expect(mockFetch).toHaveBeenCalledWith(
-          '/api/v1.0/courses/?limit=2&offset=43',
-          {
-            headers: { 'Content-Type': 'application/json' },
-          },
-        );
-        // Our polymorphic response object is properly shaped
-        expect(response.error).not.toBeTruthy();
-        expect(response.objects).toEqual([course43, course44]);
-        done();
+      const response = await fetchList(modelName.COURSES, {
+        limit: 2,
+        offset: 43,
       });
+
+      // Our polymorphic response object is properly shaped
+      expect(response.error).not.toBeTruthy();
+      expect(response.objects).toEqual([course43, course44]);
     });
 
-    it('returns an { error } object when it fails to get the resource list (local)', done => {
-      mockFetch.and.returnValue(
-        Promise.reject(new Error('Could not perform fetch.')),
+    it('returns an { error } object when it fails to get the resource list (local)', async () => {
+      fetchMock.mock(
+        '/api/v1.0/courses/?limit=2&offset=43',
+        Promise.reject(new Error('Failed to perform the request')),
       );
 
-      // Don't check params again as it was done in the first test
-      fetchList(modelName.COURSES, { limit: 2, offset: 43 }).then(response => {
-        // Our polymorphic response object is properly shaped - with an error this time
-        expect(response.objects).not.toBeDefined();
-        expect(response.error).toEqual(jasmine.any(Error));
-        done();
+      const response = await fetchList(modelName.COURSES, {
+        limit: 2,
+        offset: 43,
       });
+
+      // Our polymorphic response object is properly shaped - with an error this time
+      expect(response.objects).not.toBeDefined();
+      expect(response.error).toEqual(jasmine.any(Error));
     });
 
-    it('returns an { error } object when it fails to get the resource list (network)', done => {
-      mockFetch.and.returnValue(Promise.resolve({ ok: false, status: 404 }));
+    it('returns an { error } object when it fails to get the resource list (network)', async () => {
+      fetchMock.mock('/api/v1.0/courses/?limit=2&offset=43', 404);
 
-      // Don't check params again as it was done in the first test
-      fetchList(modelName.COURSES, { limit: 2, offset: 43 }).then(response => {
-        // Our polymorphic response object is properly shaped - with an error this time
-        expect(response.objects).not.toBeDefined();
-        expect(response.error).toEqual(jasmine.any(Error));
-        done();
+      const response = await fetchList(modelName.COURSES, {
+        limit: 2,
+        offset: 43,
       });
+
+      // Our polymorphic response object is properly shaped - with an error this time
+      expect(response.objects).not.toBeDefined();
+      expect(response.error).toEqual(jasmine.any(Error));
     });
   });
 
