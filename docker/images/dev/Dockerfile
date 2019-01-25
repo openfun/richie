@@ -21,6 +21,9 @@ RUN apt-get update && \
     vim && \
     rm -rf /var/lib/apt/lists/*
 
+# Upgrade pip to its latest release to speed up dependencies installation
+RUN pip install --upgrade pip
+
 # Install development dependencies
 RUN pip install -e .[dev]
 

@@ -47,6 +47,9 @@ WORKDIR /builder
 COPY setup.py setup.cfg MANIFEST.in /builder/
 COPY ./src /builder/src/
 
+# Upgrade pip to its latest release to speed up dependencies installation
+RUN pip install --upgrade pip
+
 RUN mkdir /install && \
     pip install --prefix=/install .
 
