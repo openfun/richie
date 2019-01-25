@@ -73,8 +73,9 @@ RUN chmod g=u /etc/passwd
 # ID.
 ENTRYPOINT [ "/app/bin/entrypoint" ]
 
-# The default command runs gunicorn WSGI server
-CMD gunicorn -c /usr/local/etc/gunicorn/richie.py richie.wsgi:application
+# The default command runs gunicorn WSGI server in the sandbox
+CMD cd sandbox && \
+    gunicorn -c /usr/local/etc/gunicorn/richie.py wsgi:application
 
 # Un-privileged user running the application
 USER 10000
