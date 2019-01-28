@@ -76,10 +76,10 @@ export const FILTERS_HARDCODED: {
       {
         humanName: defineMessages({
           message: {
-            defaultMessage: 'Current session',
+            defaultMessage: 'Open for enrollment',
             description:
               'Possible value for the "Availability" filter for courses',
-            id: 'settings.filters.availability.values.current',
+            id: 'settings.filters.availability.values.open',
           },
         }).message,
         primaryKey: 'open',
