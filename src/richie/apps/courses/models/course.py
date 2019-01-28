@@ -128,11 +128,21 @@ class Course(BasePageExtension):
             .distinct()
         )
 
-    @property
-    def course_runs(self):
+    def get_course_runs(self):
         """
         Returns a query yielding the course runs related to the course. They may be direct
         children of the course or children of a snapshot of the course.
+
+        For a draft course instance, the related draft course runs are retrieved.
+        For a public course instance, the related public course runs are retrieved, but only
+        those that are currently published in at least one language*.
+
+        (*) The catch here is that a course run could have been published and then unpublished
+            for all languages. The public instance is created the first time a draft page is
+            published. Of course, this public instance will still exist if the object is then
+            unpublished for all languages...
+            Said differently, a page can have a public version of itself in database but not be
+            currently published in any language.
         """
         node = self.extended_object.node
         is_draft = self.extended_object.publisher_is_draft
@@ -141,19 +151,39 @@ class Course(BasePageExtension):
             "extended_object__node__path__startswith": node.path,
             "extended_object__node__depth__gt": node.depth,
         }
-        # For a public course, we must filter out course runs that are not published for
-        # the active language
+        # For a public course, we must filter out course runs that are not published in
+        # any language
         if is_draft is False:
-            filter_dict.update(
-                {
-                    "extended_object__title_set__language": translation.get_language(),
-                    "extended_object__title_set__published": True,
-                }
+            filter_dict["extended_object__title_set__published"] = True
+
+        return (
+            CourseRun.objects.filter(**filter_dict)
+            .order_by("extended_object__node__path")
+            .distinct()
+        )
+
+    def get_course_runs_for_language(self, language=None):
+        """
+        Returns a query yielding the course runs related to the course for the current
+        language (or the language passed in arguments). They may be direct children of
+        the course or children of a snapshot of the course.
+        """
+        language = language or translation.get_language()
+        course_runs = self.get_course_runs()
+
+        # For a public course, we must filter out course runs that are not published in
+        # the language
+        if self.extended_object.publisher_is_draft is False:
+            course_runs = course_runs.filter(
+                extended_object__title_set__language=language,
+                extended_object__title_set__published=True,
+            )
+        else:
+            course_runs = course_runs.filter(
+                extended_object__title_set__language=language
             )
 
-        return CourseRun.objects.filter(**filter_dict).order_by(
-            "extended_object__node__path"
-        )
+        return course_runs
 
     @property
     def glimpse_info(self):
@@ -175,25 +205,31 @@ class Course(BasePageExtension):
         best_run = 5
         interesting_datetime = None
 
-        for course_run in self.course_runs.annotate(
-            is_future=Case(
-                When(start__gt=now, then=Value(True)),
-                default=Value(False),
-                output_field=BooleanField(),
-            ),
-            is_ongoing=Case(
-                When(start__lt=now, end__gt=now, then=Value(True)),
-                default=Value(False),
-                output_field=BooleanField(),
-            ),
-            is_open=Case(
-                When(
-                    enrollment_start__lt=now, enrollment_end__gt=now, then=Value(True)
+        for course_run in (
+            self.get_course_runs_for_language()
+            .annotate(
+                is_future=Case(
+                    When(start__gt=now, then=Value(True)),
+                    default=Value(False),
+                    output_field=BooleanField(),
                 ),
-                default=Value(False),
-                output_field=BooleanField(),
-            ),
-        ).values("is_future", "is_ongoing", "is_open", "start", "enrollment_end"):
+                is_ongoing=Case(
+                    When(start__lt=now, end__gt=now, then=Value(True)),
+                    default=Value(False),
+                    output_field=BooleanField(),
+                ),
+                is_open=Case(
+                    When(
+                        enrollment_start__lt=now,
+                        enrollment_end__gt=now,
+                        then=Value(True),
+                    ),
+                    default=Value(False),
+                    output_field=BooleanField(),
+                ),
+            )
+            .values("is_future", "is_ongoing", "is_open", "start", "enrollment_end")
+        ):
             if course_run["is_ongoing"] and course_run["is_open"]:
                 best_run = 0
                 interesting_datetime = course_run["enrollment_end"]

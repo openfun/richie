@@ -62,7 +62,7 @@
 
       <div class="course-detail__aside__run">
         <h2 class="course-detail__aside__run__title">{% trans 'Course runs' %}</h2>
-        {% for run in course.course_runs %}
+        {% for run in course.get_course_runs_for_language %}
         <div class="course-detail__aside__run__block">
           <dl>
             <dt>{% trans "Enrollment" %}</dt>
