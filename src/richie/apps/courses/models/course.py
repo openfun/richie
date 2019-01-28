@@ -17,6 +17,7 @@ from filer.fields.image import FilerImageField
 
 from ...core.models import BasePageExtension, PagePluginMixin
 from .organization import Organization
+from .subject import Subject
 
 GLIMPSE_CTA = [_("enroll now")] * 2 + [None] * 4
 GLIMPSE_TEXT = [
@@ -103,6 +104,29 @@ class Course(BasePageExtension):
         information to return the first one as the main organization.
         """
         return self.get_organizations().first()
+
+    def get_subjects(self):
+        """
+        Return the subjects linked to the course via a subject plugin in the placeholder
+        `course_subjects` on the course detail page, ranked by their `position`.
+        """
+        selector = "extended_object__subject_plugins__cmsplugin_ptr__placeholder"
+        # pylint: disable=no-member
+        filter_dict = {
+            "{:s}__page".format(selector): self.extended_object,
+            "{:s}__slot".format(selector): "course_subjects",
+        }
+        # For a public course, we must filter out subjects that are not published in
+        # any language
+        if self.extended_object.publisher_is_draft is False:
+            filter_dict["extended_object__title_set__published"] = True
+
+        return (
+            Subject.objects.filter(**filter_dict)
+            .select_related("extended_object")
+            .order_by("extended_object__subject_plugins__cmsplugin_ptr__position")
+            .distinct()
+        )
 
     @property
     def course_runs(self):
