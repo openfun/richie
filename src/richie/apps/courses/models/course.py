@@ -70,25 +70,39 @@ class Course(BasePageExtension):
             title=self.extended_object.get_title(),
         )
 
+    def get_organizations(self):
+        """
+        Return the organizations linked to the course via an organization plugin in the
+        placeholder `course_organizations` on the course detail page, ranked by their
+        `position`.
+        """
+        selector = "extended_object__organization_plugins__cmsplugin_ptr__placeholder"
+        # pylint: disable=no-member
+        filter_dict = {
+            "{:s}__page".format(selector): self.extended_object,
+            "{:s}__slot".format(selector): "course_organizations",
+        }
+        # For a public course, we must filter out organizations that are not published in
+        # any language
+        if self.extended_object.publisher_is_draft is False:
+            filter_dict["extended_object__title_set__published"] = True
+
+        return (
+            Organization.objects.filter(**filter_dict)
+            .select_related("extended_object")
+            .order_by("extended_object__organization_plugins__cmsplugin_ptr__position")
+            .distinct()
+        )
+
     def get_main_organization(self):
         """
         Return the main organization linked to the course via an organization plugin in the
-        placeholder "course_organizations" on the course detail page.
+        placeholder `course_organizations` on the course detail page.
 
         Plugins are sortable by drag-and-drop in the plugin bar so we use this "position"
-        information to determine which one of the organizations linked by plugin is the main
-        organization.
+        information to return the first one as the main organization.
         """
-        placeholder = self.extended_object.placeholders.get(slot="course_organizations")
-        # pylint: disable=no-member
-        return (
-            Organization.objects.filter(
-                extended_object__organization_plugins__cmsplugin_ptr__placeholder=placeholder
-            )
-            .select_related("extended_object")
-            .order_by("extended_object__organization_plugins__cmsplugin_ptr__position")
-            .first()
-        )
+        return self.get_organizations().first()
 
     @property
     def course_runs(self):
