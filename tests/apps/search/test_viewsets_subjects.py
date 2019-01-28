@@ -31,8 +31,8 @@ class SubjectsViewsetsTestCase(TestCase):
             return_value={
                 "_id": 42,
                 "_source": {
-                    "image": "example.com/image.png",
-                    "name": {"fr": "Some Subject"},
+                    "logo": {"fr": "/image42.png"},
+                    "title": {"fr": "Some Subject"},
                 },
             },
         ):
@@ -44,8 +44,7 @@ class SubjectsViewsetsTestCase(TestCase):
         # The client received a proper response with the relevant subject
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            response.data,
-            {"id": 42, "image": "example.com/image.png", "name": "Some Subject"},
+            response.data, {"id": 42, "logo": "/image42.png", "title": "Some Subject"}
         )
 
     def test_viewsets_subjects_retrieve_unknown(self):
@@ -82,15 +81,15 @@ class SubjectsViewsetsTestCase(TestCase):
                     {
                         "_id": 21,
                         "_source": {
-                            "image": "example.com/image.png",
-                            "name": {"fr": "Computer Science"},
+                            "logo": {"fr": "/image21.png"},
+                            "title": {"fr": "Computer Science"},
                         },
                     },
                     {
                         "_id": 61,
                         "_source": {
-                            "image": "example.com/image.png",
-                            "name": {"fr": "Engineering Sciences"},
+                            "logo": {"fr": "/image61.png"},
+                            "title": {"fr": "Engineering Sciences"},
                         },
                     },
                 ],
@@ -107,21 +106,14 @@ class SubjectsViewsetsTestCase(TestCase):
             {
                 "meta": {"count": 2, "offset": 0, "total_count": 32},
                 "objects": [
-                    {
-                        "id": 21,
-                        "image": "example.com/image.png",
-                        "name": "Computer Science",
-                    },
-                    {
-                        "id": 61,
-                        "image": "example.com/image.png",
-                        "name": "Engineering Sciences",
-                    },
+                    {"id": 21, "logo": "/image21.png", "title": "Computer Science"},
+                    {"id": 61, "logo": "/image61.png", "title": "Engineering Sciences"},
                 ],
             },
         )
         # The ES connector was called with a query that matches the client's request
         mock_search.assert_called_with(
+            _source=["absolute_url", "logo", "title.*"],
             body={"query": "example"},
             doc_type="subject",
             from_=0,
