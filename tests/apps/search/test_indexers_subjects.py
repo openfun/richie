@@ -2,13 +2,15 @@
 Tests for the subject indexer
 """
 from types import SimpleNamespace
+from unittest import mock
 
-from django.conf import settings
 from django.test import TestCase
 
-import responses
+from cms.api import add_plugin
+from djangocms_picture.models import Picture
 
-from richie.apps.search.exceptions import IndexerDataException, QueryFormatException
+from richie.apps.courses.factories import SubjectFactory
+from richie.apps.search.exceptions import QueryFormatException
 from richie.apps.search.indexers.subjects import SubjectsIndexer
 
 
@@ -18,38 +20,32 @@ class SubjectsIndexersTestCase(TestCase):
     and especially dynamic mapping shape in ES
     """
 
-    @responses.activate
-    def test_indexers_subjects_get_data_for_es(self):
+    @mock.patch.object(
+        Picture, "img_src", new_callable=mock.PropertyMock, return_value="123.jpg"
+    )
+    def test_indexers_subjects_get_data_for_es(self, _mock_picture):
         """
-        Happy path: the data is fetched from the API properly formatted
+        Happy path: the data is fetched from the models properly formatted
         """
-        responses.add(
-            method="GET",
-            url=settings.SUBJECT_API_ENDPOINT + "?page=1&rpp=50",
-            match_querystring=True,
-            json={
-                "count": 51,
-                "results": [
-                    {"id": 62, "image": "example_cs.png", "name": "Computer Science"}
-                ],
-            },
+        subject1 = SubjectFactory(
+            page_title={"en": "my first subject", "fr": "ma première thématique"},
+            fill_logo=True,
+            should_publish=True,
+        )
+        subject2 = SubjectFactory(
+            page_title={"en": "my second subject", "fr": "ma deuxième thématique"},
+            should_publish=True,
         )
 
-        responses.add(
-            method="GET",
-            url=settings.SUBJECT_API_ENDPOINT + "?page=2&rpp=50",
-            match_querystring=True,
-            json={
-                "count": 51,
-                "results": [
-                    {
-                        "id": 64,
-                        "image": "example_se.png",
-                        "name": "Software Engineering",
-                    }
-                ],
-            },
+        # Add a description in several languages to the first subject
+        placeholder = subject1.public_extension.extended_object.placeholders.get(
+            slot="description"
         )
+        plugin_params = {"placeholder": placeholder, "plugin_type": "CKEditorPlugin"}
+        add_plugin(body="english description line 1.", language="en", **plugin_params)
+        add_plugin(body="english description line 2.", language="en", **plugin_params)
+        add_plugin(body="description français ligne 1.", language="fr", **plugin_params)
+        add_plugin(body="description français ligne 2.", language="fr", **plugin_params)
 
         # The results were properly formatted and passed to the consumer
         self.assertEqual(
@@ -60,59 +56,55 @@ class SubjectsIndexersTestCase(TestCase):
             ),
             [
                 {
-                    "_id": 62,
+                    "_id": str(subject2.public_extension.pk),
                     "_index": "some_index",
                     "_op_type": "some_action",
                     "_type": "subject",
-                    "complete": {
-                        "en": ["Computer Science", "Science"],
-                        "fr": ["Computer Science", "Science"],
+                    "absolute_url": {
+                        "en": "/en/my-second-subject/",
+                        "fr": "/fr/ma-deuxieme-thematique/",
                     },
-                    "image": "example_cs.png",
-                    "name": {"fr": "Computer Science"},
+                    "complete": {
+                        "en": ["my second subject", "second subject", "subject"],
+                        "fr": [
+                            "ma deuxième thématique",
+                            "deuxième thématique",
+                            "thématique",
+                        ],
+                    },
+                    "description": {},
+                    "logo": {},
+                    "title": {
+                        "en": "my second subject",
+                        "fr": "ma deuxième thématique",
+                    },
                 },
                 {
-                    "_id": 64,
+                    "_id": str(subject1.public_extension.pk),
                     "_index": "some_index",
                     "_op_type": "some_action",
                     "_type": "subject",
-                    "complete": {
-                        "en": ["Software Engineering", "Engineering"],
-                        "fr": ["Software Engineering", "Engineering"],
+                    "absolute_url": {
+                        "en": "/en/my-first-subject/",
+                        "fr": "/fr/ma-premiere-thematique/",
                     },
-                    "image": "example_se.png",
-                    "name": {"fr": "Software Engineering"},
+                    "complete": {
+                        "en": ["my first subject", "first subject", "subject"],
+                        "fr": [
+                            "ma première thématique",
+                            "première thématique",
+                            "thématique",
+                        ],
+                    },
+                    "description": {
+                        "en": "english description line 1. english description line 2.",
+                        "fr": "description français ligne 1. description français ligne 2.",
+                    },
+                    "logo": {"en": "123.jpg", "fr": "123.jpg"},
+                    "title": {"en": "my first subject", "fr": "ma première thématique"},
                 },
             ],
         )
-
-    @responses.activate
-    def test_indexers_subjects_get_data_for_es_with_unexpected_subjects_shape(self):
-        """
-        Error case: the API returned an object that is not shaped like an expected subject
-        """
-        responses.add(
-            method="GET",
-            url=settings.SUBJECT_API_ENDPOINT,
-            status=200,
-            json={
-                "count": 1,
-                "results": [
-                    {
-                        "id": 62,
-                        # 'name': 'Lambda Calculus', missing name key will trigger the KeyError
-                        "image": "example_lc.png",
-                    }
-                ],
-            },
-        )
-
-        with self.assertRaises(IndexerDataException):
-            list(
-                SubjectsIndexer.get_data_for_es(
-                    index="some_index", action="some_action"
-                )
-            )
 
     def test_indexers_subjects_format_es_object_for_api(self):
         """
@@ -121,13 +113,13 @@ class SubjectsIndexersTestCase(TestCase):
         es_subject = {
             "_id": 89,
             "_source": {
-                "image": "example.com/image.png",
-                "name": {"en": "Computer science", "fr": "Informatique"},
+                "logo": {"en": "/image_en.png", "fr": "/image_fr.png"},
+                "title": {"en": "Computer science", "fr": "Informatique"},
             },
         }
         self.assertEqual(
             SubjectsIndexer.format_es_object_for_api(es_subject, "en"),
-            {"id": 89, "image": "example.com/image.png", "name": "Computer science"},
+            {"id": 89, "logo": "/image_en.png", "title": "Computer science"},
         )
 
     def test_indexers_subjects_build_es_query_search_all_subjects(self):
@@ -156,7 +148,7 @@ class SubjectsIndexersTestCase(TestCase):
                 {
                     "query": {
                         "match": {
-                            "name.fr": {"query": "user search", "analyzer": "french"}
+                            "title.fr": {"query": "user search", "analyzer": "french"}
                         }
                     }
                 },

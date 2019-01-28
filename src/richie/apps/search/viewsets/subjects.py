@@ -35,6 +35,7 @@ class SubjectsViewSet(AutocompleteMixin, ViewSet):
             return Response(status=400, data={"errors": exc.args[0]})
 
         query_response = settings.ES_CLIENT.search(
+            _source=getattr(self._meta.indexer, "display_fields", "*"),
             index=self._meta.indexer.index_name,
             doc_type=self._meta.indexer.document_type,
             body=query,

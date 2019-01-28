@@ -29,6 +29,7 @@ class Subject(BasePageExtension):
 
     class Meta:
         verbose_name = _("subject")
+        ordering = ["-pk"]
 
     def __str__(self):
         """Human representation of a subject"""
