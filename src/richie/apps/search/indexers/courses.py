@@ -1,18 +1,28 @@
 """
 ElasticSearch course document management utilities
 """
-from collections import namedtuple
+from collections import defaultdict, namedtuple
 from datetime import MAXYEAR
 
 from django.conf import settings
+from django.db.models import Prefetch
 
 import arrow
+from cms.models import Title
+from djangocms_picture.models import Picture
 
-from ..defaults import FILTERS_HARDCODED, RESOURCE_FACETS
-from ..exceptions import IndexerDataException, QueryFormatException
+from richie.plugins.simple_text_ckeditor.models import SimpleText
+
+from ...courses.models import Course
+from ..defaults import (
+    COURSES_COVER_IMAGE_HEIGHT,
+    COURSES_COVER_IMAGE_WIDTH,
+    FILTERS_HARDCODED,
+    RESOURCE_FACETS,
+)
+from ..exceptions import QueryFormatException
 from ..forms import CourseListForm
 from ..partial_mappings import MULTILINGUAL_TEXT
-from ..utils.api_consumption import walk_api_json_list
 from ..utils.i18n import get_best_field_language
 from ..utils.indexers import slice_string_for_completion
 
@@ -30,29 +40,40 @@ class CoursesIndexer:
     mapping = {
         "dynamic_templates": MULTILINGUAL_TEXT,
         "properties": {
-            "end_date": {"type": "date"},
-            "enrollment_end_date": {"type": "date"},
-            "enrollment_start_date": {"type": "date"},
-            "language": {"type": "keyword"},
+            # Dates
+            "start": {"type": "date"},
+            "end": {"type": "date"},
+            "enrollment_start": {"type": "date"},
+            "enrollment_end": {"type": "date"},
+            # Keywords
+            "languages": {"type": "keyword"},
             "organizations": {"type": "keyword"},
-            "session_number": {"type": "integer"},
-            "start_date": {"type": "date"},
             "subjects": {"type": "keyword"},
-            "thumbnails": {
-                "properties": {
-                    "about": {"type": "text", "index": False},
-                    "big": {"type": "text", "index": False},
-                    "facebook": {"type": "text", "index": False},
-                    "small": {"type": "text", "index": False},
-                },
-                "type": "object",
-            },
+            # Searchable
             **{
                 "complete.{:s}".format(lang): {"type": "completion"}
                 for lang, _ in settings.LANGUAGES
             },
+            "description": {"type": "object"},
+            "is_new": {"type": "boolean"},
+            "title": {"type": "object"},
+            # Not searchable
+            "absolute_url": {"type": "object", "enabled": False},
+            "cover_image": {"type": "object", "enabled": False},
         },
     }
+    display_fields = [
+        "start",
+        "end",
+        "enrollment_start",
+        "enrollment_end",
+        "absolute_url",
+        "cover_image",
+        "languages",
+        "organizations",
+        "subjects",
+        "title.*",
+    ]
 
     scripts = {
         # The ordering process first splits the courses into four groups, with further ordering
@@ -93,23 +114,23 @@ class CoursesIndexer:
                 "lang": "expression",
                 "source": (
                     # 4- Courses that have ended.
-                    # Ordered by descending end date. The course that has finished last
+                    # Ordered by descending end datetime. The course that has finished last
                     # is displayed first.
-                    "doc['end_date'].value < ms_since_epoch ? "
-                    "3 * max_date - doc['end_date'].value : "
+                    "doc['end'].value < ms_since_epoch ? "
+                    "3 * max_date - doc['end'].value : "
                     # 3- Courses that have not ended but can no longer be enrolled in.
-                    # Ordered by descending end of enrollment date. The course for which
+                    # Ordered by descending end of enrollment datetime. The course for which
                     # enrollment has ended last is displayed first.
-                    "doc['enrollment_end_date'].value < ms_since_epoch ? "
-                    "2 * max_date - doc['enrollment_end_date'].value : "
+                    "doc['enrollment_end'].value < ms_since_epoch ? "
+                    "2 * max_date - doc['enrollment_end'].value : "
                     # 2- Courses that have not started yet.
-                    # Ordered by starting date. The next course to start is displayed first.
-                    "ms_since_epoch < doc['start_date'].value ? "
-                    "max_date + doc['start_date'].value : "
+                    # Ordered by starting datetime. The next course to start is displayed first.
+                    "ms_since_epoch < doc['start'].value ? "
+                    "max_date + doc['start'].value : "
                     # 1- Courses that are currently open and can be enrolled in.
-                    # Ordered by ascending end of enrollment date. The next course to end
+                    # Ordered by ascending end of enrollment datetime. The next course to end
                     # enrollment is displayed first.
-                    "doc['enrollment_end_date'].value"
+                    "doc['enrollment_end'].value"
                 ),
             }
         }
@@ -118,41 +139,91 @@ class CoursesIndexer:
     @classmethod
     def get_data_for_es(cls, index, action):
         """
-        Load all the courses from the API and format them for the ElasticSearch index
+        Load all the course runs from the Course model and format them for the ElasticSearch index
         """
-        content_pages = walk_api_json_list(settings.COURSE_API_ENDPOINT)
+        for course in (
+            Course.objects.filter(
+                extended_object__publisher_is_draft=False,
+                extended_object__title_set__published=True,
+            )
+            .prefetch_related(
+                Prefetch(
+                    "extended_object__title_set",
+                    to_attr="published_titles",
+                    queryset=Title.objects.filter(published=True),
+                )
+            )
+            .distinct()
+        ):
+            # Prepare published titles
+            titles = {
+                t.language: t.title for t in course.extended_object.published_titles
+            }
 
-        for content_page in content_pages:
-            try:
-                for course in content_page["results"]:
-                    yield {
-                        "_id": course["id"],
-                        "_index": index,
-                        "_op_type": action,
-                        "_type": cls.document_type,
-                        "end_date": course["end_date"],
-                        "enrollment_end_date": course["enrollment_end_date"],
-                        "enrollment_start_date": course["enrollment_start_date"],
-                        "language": course["language"],
-                        "organization_main": course["main_university"]["id"],
-                        "organizations": [org["id"] for org in course["universities"]],
-                        "session_number": course["session_number"],
-                        "short_description": {
-                            course["language"]: course["short_description"]
-                        },
-                        "start_date": course["start_date"],
-                        "subjects": [subject["id"] for subject in course["subjects"]],
-                        "thumbnails": course["thumbnails"],
-                        "title": {course["language"]: course["title"]},
-                        "complete": {
-                            "{:s}".format(lang): slice_string_for_completion(
-                                course["title"]
-                            )
-                            for lang, _ in settings.LANGUAGES
-                        },
-                    }
-            except KeyError:
-                raise IndexerDataException("Unexpected data shape in courses to index")
+            # Prepare cover images
+            cover_images = {}
+            for cover_image in Picture.objects.filter(
+                cmsplugin_ptr__placeholder__page=course.extended_object,
+                cmsplugin_ptr__placeholder__slot="course_cover",
+            ):
+                # Force the image format before computing it
+                cover_image.use_no_cropping = False
+                cover_image.width = COURSES_COVER_IMAGE_WIDTH
+                cover_image.height = COURSES_COVER_IMAGE_HEIGHT
+                cover_images[cover_image.cmsplugin_ptr.language] = cover_image.img_src
+
+            # Prepare syllabus texts
+            syllabus_texts = defaultdict(list)
+            for simple_text in SimpleText.objects.filter(
+                cmsplugin_ptr__placeholder__page=course.extended_object,
+                cmsplugin_ptr__placeholder__slot="course_syllabus",
+            ):
+                syllabus_texts[simple_text.cmsplugin_ptr.language].append(
+                    simple_text.body
+                )
+
+            course_runs = course.get_course_runs()
+            for course_run in course_runs:
+
+                yield {
+                    "_id": str(course_run.pk),
+                    "_index": index,
+                    "_op_type": action,
+                    "_type": cls.document_type,
+                    "start": course_run.start,
+                    "end": course_run.end,
+                    "enrollment_start": course_run.enrollment_start,
+                    "enrollment_end": course_run.enrollment_end,
+                    "absolute_url": {
+                        language: course_run.extended_object.get_absolute_url(language)
+                        for language in titles.keys()
+                    },
+                    "complete": {
+                        language: slice_string_for_completion(title)
+                        for language, title in titles.items()
+                    },
+                    "cover_image": cover_images,
+                    "description": {
+                        l: " ".join(st) for l, st in syllabus_texts.items()
+                    },
+                    "is_new": len(course_runs) == 1,
+                    "languages": course_run.languages,
+                    "organizations": [
+                        str(id)
+                        for id in course.get_organizations().values_list(
+                            "public_extension", flat=True
+                        )
+                        if id is not None
+                    ],
+                    "subjects": [
+                        str(id)
+                        for id in course.get_subjects().values_list(
+                            "public_extension", flat=True
+                        )
+                        if id is not None
+                    ],
+                    "title": titles,
+                }
 
     @staticmethod
     def format_es_object_for_api(es_course, best_language):
@@ -161,20 +232,20 @@ class CoursesIndexer:
         API consumers
         """
         return {
-            "end_date": es_course["_source"]["end_date"],
-            "enrollment_end_date": es_course["_source"]["enrollment_end_date"],
-            "enrollment_start_date": es_course["_source"]["enrollment_start_date"],
             "id": es_course["_id"],
-            "language": es_course["_source"]["language"],
-            "organization_main": es_course["_source"]["organization_main"],
-            "organizations": es_course["_source"]["organizations"],
-            "session_number": es_course["_source"]["session_number"],
-            "short_description": get_best_field_language(
-                es_course["_source"]["short_description"], best_language
+            "start": es_course["_source"]["start"],
+            "end": es_course["_source"]["end"],
+            "enrollment_start": es_course["_source"]["enrollment_start"],
+            "enrollment_end": es_course["_source"]["enrollment_end"],
+            "absolute_url": get_best_field_language(
+                es_course["_source"]["absolute_url"], best_language
             ),
-            "start_date": es_course["_source"]["start_date"],
+            "cover_image": get_best_field_language(
+                es_course["_source"]["cover_image"], best_language
+            ),
+            "languages": es_course["_source"]["languages"],
+            "organizations": es_course["_source"]["organizations"],
             "subjects": es_course["_source"]["subjects"],
-            "thumbnails": es_course["_source"]["thumbnails"],
             "title": get_best_field_language(
                 es_course["_source"]["title"], best_language
             ),
@@ -220,12 +291,7 @@ class CoursesIndexer:
                 continue
 
             # The datetimerange fields are all translated to the ES query DSL the same way
-            if param in [
-                "end_date",
-                "enrollment_end_date",
-                "enrollment_start_date",
-                "start_date",
-            ]:
+            if param in ["end", "enrollment_end", "enrollment_start", "start"]:
                 # Add the relevant range criteria to the queries
                 start, end = value
                 queries = [
@@ -262,7 +328,7 @@ class CoursesIndexer:
                         [
                             {
                                 "multi_match": {
-                                    "fields": ["short_description.*", "title.*"],
+                                    "fields": ["description.*", "title.*"],
                                     "query": value,
                                     "type": "cross_fields",
                                 }

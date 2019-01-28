@@ -3,23 +3,16 @@ import { mapStateToProps, mergeProps } from './CourseGlimpseContainer';
 
 describe('components/CourseGlimpseContainer', () => {
   const course43 = {
-    end_date: '2018-05-31T06:00:00.000Z',
-    enrollment_end_date: '2018-03-15T06:00:00.000Z',
-    enrollment_start_date: '2018-02-01T06:00:00.000Z',
+    absolute_url: '/course-path-43',
+    cover_image: '/about_43.png',
+    end: '2018-05-31T06:00:00.000Z',
+    enrollment_end: '2018-03-15T06:00:00.000Z',
+    enrollment_start: '2018-02-01T06:00:00.000Z',
     id: 43,
-    language: 'fr',
-    organization_main: 23,
+    languages: ['fr', 'pt'],
     organizations: [23, 31],
-    session_number: 1,
-    short_description: 'Lorem ipsum dolor sit amet consectetur adipiscim elit.',
-    start_date: '2018-03-01T06:00:00.000Z',
+    start: '2018-03-01T06:00:00.000Z',
     subjects: [45],
-    thumbnails: {
-      about: 'https://example.com/about_43.png',
-      big: 'https://example.com/big_43.png',
-      facebook: 'https://example.com/facebook_43.png',
-      small: 'https://example.com/small_43.png',
-    },
     title: 'Python for data science',
   };
 

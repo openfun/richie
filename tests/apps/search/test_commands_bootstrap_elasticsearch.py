@@ -9,7 +9,7 @@ from django.test import TestCase
 
 from richie.apps.search import index_manager
 
-logger = logging.getLogger("richie.core.bootstrap_elasticsearch")
+logger = logging.getLogger("richie.search.bootstrap_elasticsearch")
 
 
 class BootstrapElasticsearchCommandsTestCase(TestCase):

@@ -13,10 +13,10 @@ class CourseRunModelsTestCase(TestCase):
     """
     Unit test suite for computing a date to display on the course glimpse depending on the state
     of its related course runs:
-        0: a run is on-going and open for enrollment > "closing on": {enrollment_end_date}
-        1: a run is future and open for enrollment > "starting on": {start_date}
+        0: a run is on-going and open for enrollment > "closing on": {enrollment_end}
+        1: a run is future and open for enrollment > "starting on": {start}
         2: a run is future and not yet open or already closed for enrollment >
-        "starting on": {start_date}
+        "starting on": {start}
         3: a run is on-going but closed for enrollment > "on going": {None}
         4: there's a finished run in the past > "archived": {None}
         5: there are no runs at all > "coming soon": {None}

@@ -6,6 +6,9 @@ from django.forms import MultipleChoiceField
 
 import arrow
 
+COURSES_COVER_IMAGE_WIDTH = getattr(settings, "COURSES_COVER_IMAGE_WIDTH", 216)
+COURSES_COVER_IMAGE_HEIGHT = getattr(settings, "COURSES_COVER_IMAGE_HEIGHT", 216)
+
 ORGANIZATIONS_LOGO_IMAGE_WIDTH = getattr(
     settings, "ORGANIZATIONS_LOGO_IMAGE_WIDTH", 216
 )
@@ -29,7 +32,7 @@ FILTERS_HARDCODED_DEFAULT = {
             "coming_soon": [
                 {
                     "range": {
-                        "start_date": {
+                        "start": {
                             "gte": arrow.utcnow().datetime,
                             "lte": arrow.utcnow().shift(weeks=+12).datetime,
                         }
@@ -37,24 +40,24 @@ FILTERS_HARDCODED_DEFAULT = {
                 }
             ],
             "current": [
-                {"range": {"start_date": {"lte": arrow.utcnow().datetime}}},
-                {"range": {"end_date": {"gte": arrow.utcnow().datetime}}},
-                {"range": {"enrollment_start_date": {"lte": arrow.utcnow().datetime}}},
-                {"range": {"enrollment_end_date": {"gte": arrow.utcnow().datetime}}},
+                {"range": {"start": {"lte": arrow.utcnow().datetime}}},
+                {"range": {"end": {"gte": arrow.utcnow().datetime}}},
+                {"range": {"enrollment_start": {"lte": arrow.utcnow().datetime}}},
+                {"range": {"enrollment_end": {"gte": arrow.utcnow().datetime}}},
             ],
             "open": [
-                {"range": {"start_date": {"lte": arrow.utcnow().datetime}}},
-                {"range": {"end_date": {"gte": arrow.utcnow().datetime}}},
+                {"range": {"start": {"lte": arrow.utcnow().datetime}}},
+                {"range": {"end": {"gte": arrow.utcnow().datetime}}},
             ],
         },
     },
     "language": {
         "field": MultipleChoiceField,
-        "choices": {lang: [{"term": {"language": lang}}] for lang in ["en", "fr"]},
+        "choices": {lang: [{"term": {"languages": lang}}] for lang in ["en", "fr"]},
     },
     "new": {
         "field": MultipleChoiceField,
-        "choices": {"new": [{"term": {"session_number": 1}}]},
+        "choices": {"new": [{"term": {"is_new": True}}]},
     },
 }
 

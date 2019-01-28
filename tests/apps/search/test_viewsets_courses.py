@@ -125,6 +125,18 @@ class CoursesViewsetsTestCase(TestCase):
         )
         # The ES connector was called with appropriate arguments for the client's request
         mock_search.assert_called_with(
+            _source=[
+                "start",
+                "end",
+                "enrollment_start",
+                "enrollment_end",
+                "absolute_url",
+                "cover_image",
+                "languages",
+                "organizations",
+                "subjects",
+                "title.*",
+            ],
             body={
                 "aggs": {"some": "aggs"},
                 "query": {"some": "query"},

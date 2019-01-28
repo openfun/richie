@@ -7,7 +7,7 @@ from django.core.management.base import BaseCommand
 
 from ...index_manager import regenerate_indexes, store_es_scripts
 
-logger = logging.getLogger("richie.core.bootstrap_elasticsearch")
+logger = logging.getLogger("richie.search.bootstrap_elasticsearch")
 
 
 class Command(BaseCommand):
