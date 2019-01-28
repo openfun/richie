@@ -6,6 +6,13 @@ from django.forms import MultipleChoiceField
 
 import arrow
 
+ORGANIZATIONS_LOGO_IMAGE_WIDTH = getattr(
+    settings, "ORGANIZATIONS_LOGO_IMAGE_WIDTH", 216
+)
+ORGANIZATIONS_LOGO_IMAGE_HEIGHT = getattr(
+    settings, "ORGANIZATIONS_LOGO_IMAGE_HEIGHT", 216
+)
+
 # Define our aggregations names, for our ES query, which will match with the field
 # names on the objects & the facets we return on the API response
 RESOURCE_FACETS = getattr(

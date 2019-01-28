@@ -36,6 +36,7 @@ class Organization(BasePageExtension):
 
     class Meta:
         verbose_name = _("organization")
+        ordering = ["-pk"]
 
     def __str__(self):
         """Human representation of an organization"""
