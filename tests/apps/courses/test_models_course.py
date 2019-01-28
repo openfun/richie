@@ -124,59 +124,118 @@ class CourseModelsTestCase(TestCase):
             course.public_extension.get_main_organization(), public_organizations[0]
         )
 
-    def test_models_course_attribute_course_runs(self):
+    def test_models_course_get_course_runs_empty(self):
         """
-        The "course_runs" property should return all descendants ranked by path, not only children
-        and should respect publication status for the active language.
+        For a course without course runs the methods `get_course_runs` and
+        `get_course_runs_for_language` should return an empty query.
         """
-        # Create a course with draft and published course runs
         course = CourseFactory(should_publish=True)
+        self.assertFalse(course.get_course_runs().exists())
+        self.assertFalse(course.get_course_runs_for_language().exists())
+        self.assertFalse(course.public_extension.get_course_runs().exists())
+        self.assertFalse(
+            course.public_extension.get_course_runs_for_language().exists()
+        )
+
+    def test_models_course_get_course_runs(self):
+        """
+        The `get_course_runs` and `get_course_runs_for_language` methods should return all
+        descendants ranked by path, not only children and should respect publication status.
+        """
+        course = CourseFactory(page_languages=["en", "fr"], should_publish=True)
 
         # Create draft and published course runs for this course
-        # We want to test 3 situations:
+        # We want to test 4 situations:
         # - a draft course run
-        # - a published course run
-        # - a course run that was published and unpublished
+        # - a course run published in the current language
+        # - a course run published in another language
+        # - a course run published in the current language that xas then unpublished
         course_runs = CourseRunFactory.create_batch(
-            3, page_parent=course.extended_object
+            3, page_parent=course.extended_object, page_languages=["en"]
         )
-        course_runs[0].extended_object.publish("en")
-        course_runs[1].extended_object.publish("en")
-        course_runs[1].extended_object.unpublish("en")
+        self.assertTrue(course_runs[0].extended_object.publish("en"))
+        self.assertTrue(course_runs[1].extended_object.publish("en"))
+        self.assertTrue(course_runs[1].extended_object.unpublish("en"))
+
+        course_run_fr = CourseRunFactory(
+            page_parent=course.extended_object,
+            page_languages=["fr"],
+            should_publish=True,
+        )
 
         # Create a child course with draft and published course runs (what results from
         # snapshotting a course)
         child_course = CourseFactory(
-            page_parent=course.extended_object, should_publish=True
+            page_languages=["en", "fr"],
+            page_parent=course.extended_object,
+            should_publish=True,
         )
         child_course_runs = CourseRunFactory.create_batch(
-            3, page_parent=child_course.extended_object
+            3, page_parent=child_course.extended_object, page_languages=["en"]
         )
-        child_course_runs[0].extended_object.publish("en")
-        child_course_runs[1].extended_object.publish("en")
-        child_course_runs[1].extended_object.unpublish("en")
+        self.assertTrue(child_course_runs[0].extended_object.publish("en"))
+        self.assertTrue(child_course_runs[1].extended_object.publish("en"))
+        self.assertTrue(child_course_runs[1].extended_object.unpublish("en"))
+
+        child_course_run_fr = CourseRunFactory(
+            page_parent=child_course.extended_object,
+            page_languages=["fr"],
+            should_publish=True,
+        )
 
         # Create another course, not related to the first one, with draft and published course runs
-        other_course = CourseFactory(should_publish=True)
+        other_course = CourseFactory(page_languages=["en", "fr"], should_publish=True)
         other_course_runs = CourseRunFactory.create_batch(
-            3, page_parent=other_course.extended_object
+            3, page_parent=other_course.extended_object, page_languages=["en"]
         )
-        other_course_runs[0].extended_object.publish("en")
-        other_course_runs[1].extended_object.publish("en")
-        other_course_runs[1].extended_object.unpublish("en")
+        self.assertTrue(other_course_runs[0].extended_object.publish("en"))
+        self.assertTrue(other_course_runs[1].extended_object.publish("en"))
+        self.assertTrue(other_course_runs[1].extended_object.unpublish("en"))
+
+        CourseRunFactory(
+            page_parent=other_course.extended_object,
+            page_languages=["fr"],
+            should_publish=True,
+        )
 
         # Check that the draft course retrieves all its descendant course runs
         # 3 draft course runs and 2 published course runs per course
-        self.assertEqual(CourseRun.objects.count(), 3 * (3 + 2))
+        self.assertEqual(CourseRun.objects.count(), 3 * (4 + 3))
+
         with self.assertNumQueries(2):
-            self.assertEqual(list(course.course_runs), course_runs + child_course_runs)
+            self.assertEqual(
+                list(course.get_course_runs()),
+                course_runs
+                + [course_run_fr]
+                + child_course_runs
+                + [child_course_run_fr],
+            )
+
+        with self.assertNumQueries(1):
+            self.assertEqual(
+                list(course.get_course_runs_for_language(language="en")),
+                course_runs + child_course_runs,
+            )
 
         # Check that the published course retrieves only the published descendant course runs
         course_runs[0].refresh_from_db()
         child_course_runs[0].refresh_from_db()
         public_course = course.public_extension
+
         with self.assertNumQueries(3):
-            result = list(public_course.course_runs)
+            result = list(public_course.get_course_runs())
+        self.assertEqual(
+            result,
+            [
+                course_runs[0].public_extension,
+                course_run_fr.public_extension,
+                child_course_runs[0].public_extension,
+                child_course_run_fr.public_extension,
+            ],
+        )
+
+        with self.assertNumQueries(1):
+            result = list(public_course.get_course_runs_for_language(language="en"))
         self.assertEqual(
             result,
             [course_runs[0].public_extension, child_course_runs[0].public_extension],
