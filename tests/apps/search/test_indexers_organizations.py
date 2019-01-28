@@ -2,13 +2,15 @@
 Tests for the organization indexer
 """
 from types import SimpleNamespace
+from unittest import mock
 
-from django.conf import settings
 from django.test import TestCase
 
-import responses
+from cms.api import add_plugin
+from djangocms_picture.models import Picture
 
-from richie.apps.search.exceptions import IndexerDataException, QueryFormatException
+from richie.apps.courses.factories import OrganizationFactory
+from richie.apps.search.exceptions import QueryFormatException
 from richie.apps.search.indexers.organizations import OrganizationsIndexer
 
 
@@ -18,46 +20,38 @@ class OrganizationsIndexersTestCase(TestCase):
     and especially dynamic mapping shape in ES
     """
 
-    @responses.activate
-    def test_indexers_organizations_get_data_for_es(self):
+    @mock.patch.object(
+        Picture, "img_src", new_callable=mock.PropertyMock, return_value="123.jpg"
+    )
+    def test_indexers_organizations_get_data_for_es(self, _mock_picture):
         """
-        Happy path: organization data is fetched from the API properly formatted
+        Happy path: organization data is fetched from the models properly formatted
         """
-        responses.add(
-            method="GET",
-            url=settings.ORGANIZATION_API_ENDPOINT + "?page=1&rpp=50",
-            match_querystring=True,
-            json={
-                "count": 51,
-                "results": [
-                    {
-                        "id": 1,
-                        "banner": "example.com/banner_1.png",
-                        "code": "org-1",
-                        "logo": "example.com/logo_1.png",
-                        "name": "Organization N°1",
-                    }
-                ],
+        organization1 = OrganizationFactory(
+            page_title={
+                "en": "my first organization",
+                "fr": "ma première organisation",
             },
+            fill_logo=True,
+            should_publish=True,
+        )
+        organization2 = OrganizationFactory(
+            page_title={
+                "en": "my second organization",
+                "fr": "ma deuxième organisation",
+            },
+            should_publish=True,
         )
 
-        responses.add(
-            method="GET",
-            url=settings.ORGANIZATION_API_ENDPOINT + "?page=2&rpp=50",
-            match_querystring=True,
-            json={
-                "count": 51,
-                "results": [
-                    {
-                        "id": 80,
-                        "banner": "example.com/banner_80.png",
-                        "code": "org-80",
-                        "logo": "example.com/logo_80.png",
-                        "name": "Organization N°80",
-                    }
-                ],
-            },
+        # Add a description in several languages to the first organization
+        placeholder = organization1.public_extension.extended_object.placeholders.get(
+            slot="description"
         )
+        plugin_params = {"placeholder": placeholder, "plugin_type": "CKEditorPlugin"}
+        add_plugin(body="english description line 1.", language="en", **plugin_params)
+        add_plugin(body="english description line 2.", language="en", **plugin_params)
+        add_plugin(body="description français ligne 1.", language="fr", **plugin_params)
+        add_plugin(body="description français ligne 2.", language="fr", **plugin_params)
 
         # The results were properly formatted and passed to the consumer
         self.assertEqual(
@@ -68,65 +62,66 @@ class OrganizationsIndexersTestCase(TestCase):
             ),
             [
                 {
-                    "_id": 1,
+                    "_id": str(organization2.public_extension.pk),
                     "_index": "some_index",
                     "_op_type": "some_action",
                     "_type": "organization",
-                    "banner": "example.com/banner_1.png",
-                    "code": "org-1",
-                    "complete": {
-                        "en": ["Organization N°1", "N°1"],
-                        "fr": ["Organization N°1", "N°1"],
+                    "absolute_url": {
+                        "en": "/en/my-second-organization/",
+                        "fr": "/fr/ma-deuxieme-organisation/",
                     },
-                    "logo": "example.com/logo_1.png",
-                    "name": {"fr": "Organization N°1"},
+                    "complete": {
+                        "en": [
+                            "my second organization",
+                            "second organization",
+                            "organization",
+                        ],
+                        "fr": [
+                            "ma deuxième organisation",
+                            "deuxième organisation",
+                            "organisation",
+                        ],
+                    },
+                    "description": {},
+                    "logo": {},
+                    "title": {
+                        "en": "my second organization",
+                        "fr": "ma deuxième organisation",
+                    },
                 },
                 {
-                    "_id": 80,
+                    "_id": str(organization1.public_extension.pk),
                     "_index": "some_index",
                     "_op_type": "some_action",
                     "_type": "organization",
-                    "banner": "example.com/banner_80.png",
-                    "code": "org-80",
-                    "complete": {
-                        "en": ["Organization N°80", "N°80"],
-                        "fr": ["Organization N°80", "N°80"],
+                    "absolute_url": {
+                        "en": "/en/my-first-organization/",
+                        "fr": "/fr/ma-premiere-organisation/",
                     },
-                    "logo": "example.com/logo_80.png",
-                    "name": {"fr": "Organization N°80"},
+                    "complete": {
+                        "en": [
+                            "my first organization",
+                            "first organization",
+                            "organization",
+                        ],
+                        "fr": [
+                            "ma première organisation",
+                            "première organisation",
+                            "organisation",
+                        ],
+                    },
+                    "description": {
+                        "en": "english description line 1. english description line 2.",
+                        "fr": "description français ligne 1. description français ligne 2.",
+                    },
+                    "logo": {"en": "123.jpg", "fr": "123.jpg"},
+                    "title": {
+                        "en": "my first organization",
+                        "fr": "ma première organisation",
+                    },
                 },
             ],
         )
-
-    @responses.activate
-    def test_indexers_organizations_get_data_for_es_with_invalid_organization(self):
-        """
-        Error case: the API returned an object that is not shaped like an expected organization
-        """
-        responses.add(
-            method="GET",
-            url=settings.ORGANIZATION_API_ENDPOINT,
-            status=200,
-            json={
-                "count": 1,
-                "results": [
-                    {
-                        "id": 62,
-                        "banner": "example.com/banner_62.png",
-                        # 'code': 'org-62', missing code key will trigger the KeyError
-                        "logo": "example.com/logo_62.png",
-                        "name": {"fr": "Organization N°62"},
-                    }
-                ],
-            },
-        )
-
-        with self.assertRaises(IndexerDataException):
-            list(
-                OrganizationsIndexer.get_data_for_es(
-                    index="some_index", action="some_action"
-                )
-            )
 
     def test_indexers_organizations_format_es_object_for_api(self):
         """
@@ -135,21 +130,16 @@ class OrganizationsIndexersTestCase(TestCase):
         es_organization = {
             "_id": 217,
             "_source": {
-                "banner": "example.com/banner.png",
-                "code": "univ-paris-13",
-                "logo": "example.com/logo.png",
-                "name": {"en": "University of Paris XIII", "fr": "Université Paris 13"},
+                "logo": {"en": "/my_logo.png", "fr": "/mon_logo.png"},
+                "title": {
+                    "en": "University of Paris XIII",
+                    "fr": "Université Paris 13",
+                },
             },
         }
         self.assertEqual(
             OrganizationsIndexer.format_es_object_for_api(es_organization, "en"),
-            {
-                "banner": "example.com/banner.png",
-                "code": "univ-paris-13",
-                "id": 217,
-                "logo": "example.com/logo.png",
-                "name": "University of Paris XIII",
-            },
+            {"id": 217, "logo": "/my_logo.png", "title": "University of Paris XIII"},
         )
 
     def test_indexers_organizations_build_es_query_search_all_organizations(self):
@@ -177,7 +167,7 @@ class OrganizationsIndexersTestCase(TestCase):
                 {
                     "query": {
                         "match": {
-                            "name.fr": {
+                            "title.fr": {
                                 "query": "user entered some text",
                                 "analyzer": "french",
                             }

@@ -28,10 +28,8 @@ A single course as saved in our ElasticSearch index. Includes all fields useful 
 A single organization as saved in our ElasticSearch index. Includes only the fields necessary for indexing and displaying them on the consumer side.
 
 + id: 42 (number, required) - SQL database ID, reused in ElasticSearch
-+ banner: https://example.com/banner.png (string) - URL to an image appropriate to use as a banner for the organization (larger)
-+ code: univ-paris-13 (string, required) - slug, machine name for the organization
 + logo: https://example.com/logo.png (string) - URL to and image containing the logo for the organization (smaller)
-+ name: Université Paris 13 (string, required) - full text name of the organization; may be translated
++ title: Université Paris 13 (string, required) - full text title of the organization; may be translated
 
 ## Subject
 A single subject as saved in our ElasticSearch index. Includes a small subset of the fields and data in the the SQL database model, in order to be as small and consumer-friendly as possible.

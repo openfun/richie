@@ -31,10 +31,8 @@ class OrganizationsViewsetsTestCase(TestCase):
             return_value={
                 "_id": 42,
                 "_source": {
-                    "banner": "example.com/banner.png",
-                    "code": "univ-paris-42",
-                    "logo": "example.com/logo.png",
-                    "name": {"fr": "Université Paris 42"},
+                    "logo": {"fr": "/logo.png"},
+                    "title": {"fr": "Université Paris 42"},
                 },
             },
         ):
@@ -47,13 +45,7 @@ class OrganizationsViewsetsTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             response.data,
-            {
-                "banner": "example.com/banner.png",
-                "code": "univ-paris-42",
-                "id": 42,
-                "logo": "example.com/logo.png",
-                "name": "Université Paris 42",
-            },
+            {"id": 42, "logo": "/logo.png", "title": "Université Paris 42"},
         )
 
     def test_viewsets_organizations_retrieve_unknown(self):
@@ -79,7 +71,7 @@ class OrganizationsViewsetsTestCase(TestCase):
     @mock.patch.object(settings.ES_CLIENT, "search")
     def test_viewsets_organizations_search(self, mock_search):
         """
-        Happy path: the consumer is filtering the organizations by name
+        Happy path: the consumer is filtering the organizations by title
         """
         factory = APIRequestFactory()
         request = factory.get("/api/v1.0/organizations?query=Université&limit=2")
@@ -90,19 +82,15 @@ class OrganizationsViewsetsTestCase(TestCase):
                     {
                         "_id": 21,
                         "_source": {
-                            "banner": "example.com/banner_21.png",
-                            "code": "univ-paris-13",
-                            "logo": "example.com/logo_21.png",
-                            "name": {"fr": "Université Paris 13"},
+                            "logo": {"fr": "/logo_21.png"},
+                            "title": {"fr": "Université Paris 13"},
                         },
                     },
                     {
                         "_id": 61,
                         "_source": {
-                            "banner": "example.com/banner_61.png",
-                            "code": "univ-paris-8",
-                            "logo": "example.com/logo_61.png",
-                            "name": {"fr": "Université Paris 8"},
+                            "logo": {"fr": "/logo_61.png"},
+                            "title": {"fr": "Université Paris 8"},
                         },
                     },
                 ],
@@ -119,25 +107,14 @@ class OrganizationsViewsetsTestCase(TestCase):
             {
                 "meta": {"count": 2, "offset": 0, "total_count": 32},
                 "objects": [
-                    {
-                        "banner": "example.com/banner_21.png",
-                        "code": "univ-paris-13",
-                        "id": 21,
-                        "logo": "example.com/logo_21.png",
-                        "name": "Université Paris 13",
-                    },
-                    {
-                        "banner": "example.com/banner_61.png",
-                        "code": "univ-paris-8",
-                        "id": 61,
-                        "logo": "example.com/logo_61.png",
-                        "name": "Université Paris 8",
-                    },
+                    {"id": 21, "logo": "/logo_21.png", "title": "Université Paris 13"},
+                    {"id": 61, "logo": "/logo_61.png", "title": "Université Paris 8"},
                 ],
             },
         )
         # The ES connector was called with a query that matches the client's request
         mock_search.assert_called_with(
+            _source=["absolute_url", "logo", "title.*"],
             body={"query": "something"},
             doc_type="organization",
             from_=0,
@@ -155,7 +132,7 @@ class OrganizationsViewsetsTestCase(TestCase):
         """
         factory = APIRequestFactory()
         # The request contains incorrect params: limit should be a positive integer
-        request = factory.get("/api/v1.0/organizations?name=&limit=-2")
+        request = factory.get("/api/v1.0/organizations?title=&limit=-2")
 
         response = OrganizationsViewSet.as_view({"get": "list"})(request, version="1.0")
 
