@@ -29,25 +29,19 @@ describe('Integration tests - filters', () => {
     // use them to test the filters
     const orgs = [
       {
-        banner: null,
-        code: 'org-3',
         id: 3,
         logo: null,
-        name: 'Organization Three',
+        title: 'Organization Three',
       },
       {
-        banner: null,
-        code: 'org-4',
         id: 4,
         logo: null,
-        name: 'Organization Four',
+        title: 'Organization Four',
       },
       {
-        banner: null,
-        code: 'org-5',
         id: 5,
         logo: null,
-        name: 'Organization Five',
+        title: 'Organization Five',
       },
     ];
     store.dispatch(addMultipleResources(modelName.ORGANIZATIONS, orgs));
@@ -62,9 +56,9 @@ describe('Integration tests - filters', () => {
       ),
     );
     const subjects = [
-      { id: 31, image: null, name: 'Subject Thirty-One' },
-      { id: 41, image: null, name: 'Subject Forty-One' },
-      { id: 51, image: null, name: 'Subject Fifty-One' },
+      { id: 31, image: null, title: 'Subject Thirty-One' },
+      { id: 41, image: null, title: 'Subject Forty-One' },
+      { id: 51, image: null, title: 'Subject Fifty-One' },
     ];
     store.dispatch(addMultipleResources(modelName.SUBJECTS, subjects));
     store.dispatch(

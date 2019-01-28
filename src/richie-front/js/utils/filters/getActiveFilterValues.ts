@@ -34,7 +34,7 @@ export const getActiveFilterValues = (
         .filter(value => !!value)
         // Build filter values from the Resource instances
         .map(value => ({
-          humanName: value!.name,
+          humanName: value!.title,
           primaryKey: String(value!.id),
         }))
     );

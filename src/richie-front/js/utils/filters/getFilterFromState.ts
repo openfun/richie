@@ -67,7 +67,7 @@ export function getFilterFromState(
       return sampleSize(values(state.resources[resourceName]!.byId), 10)
         .filter(organization => !!organization)
         .map(organization => ({
-          humanName: organization!.name,
+          humanName: organization!.title,
           primaryKey: String(organization!.id),
         }));
     }
@@ -80,7 +80,7 @@ export function getFilterFromState(
           // Get the resource name from the state
           humanName:
             (state.resources[resourceName]!.byId[resourceId] &&
-              state.resources[resourceName]!.byId[resourceId]!.name) ||
+              state.resources[resourceName]!.byId[resourceId]!.title) ||
             '',
           // resourceId is already a string as it was a key on the facets.organization object
           primaryKey: resourceId,

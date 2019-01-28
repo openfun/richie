@@ -15,7 +15,7 @@ describe('components/CourseGlimpse', () => {
       title: 'Course 42',
     } as Course;
     const organization = {
-      name: 'Some Organization',
+      title: 'Some Organization',
     } as Organization;
     const wrapper = render(
       <CourseGlimpse course={course} organizationMain={organization} />,

@@ -13,7 +13,7 @@ describe('utils/searchSuggest/suggestionHumanName', () => {
   });
 
   it('returns the correct human name for an organization', () => {
-    const organization = { name: 'Some organization name' } as Organization;
+    const organization = { title: 'Some organization name' } as Organization;
     expect(
       suggestionHumanName({
         data: organization,
@@ -23,7 +23,7 @@ describe('utils/searchSuggest/suggestionHumanName', () => {
   });
 
   it('returns the correct human name for a subject', () => {
-    const subject = { name: 'Some subject matter' } as Subject;
+    const subject = { title: 'Some subject matter' } as Subject;
     expect(
       suggestionHumanName({ model: modelName.SUBJECTS, data: subject }),
     ).toEqual('Some subject matter');

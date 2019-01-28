@@ -100,9 +100,9 @@ describe('utils/filters/getFilterFromState', () => {
         } as CoursesState,
         organizations: {
           byId: {
-            21: { id: 21, name: 'Organization #Twenty-One' } as Organization,
-            42: { id: 42, name: 'Organization #Fourty-Two' } as Organization,
-            84: { id: 84, name: 'Organization #Eighty-Four' } as Organization,
+            21: { id: 21, title: 'Organization #Twenty-One' } as Organization,
+            42: { id: 42, title: 'Organization #Fourty-Two' } as Organization,
+            84: { id: 84, title: 'Organization #Eighty-Four' } as Organization,
           },
         },
       },
@@ -137,9 +137,9 @@ describe('utils/filters/getFilterFromState', () => {
       resources: {
         organizations: {
           byId: {
-            21: { id: 21, name: 'Organization #Twenty-One' } as Organization,
-            42: { id: 42, name: 'Organization #Fourty-Two' } as Organization,
-            84: { id: 84, name: 'Organization #Eighty-Four' } as Organization,
+            21: { id: 21, title: 'Organization #Twenty-One' } as Organization,
+            42: { id: 42, title: 'Organization #Fourty-Two' } as Organization,
+            84: { id: 84, title: 'Organization #Eighty-Four' } as Organization,
           },
         },
       },
@@ -181,18 +181,18 @@ describe('utils/filters/getFilterFromState', () => {
         organizations: {
           byId: {
             // Note we have 12 organizations here
-            21: { id: 21, name: 'Organization #Twenty-One' } as Organization,
-            22: { id: 22, name: 'Organization #Twenty-Two' } as Organization,
-            23: { id: 23, name: 'Organization #Twenty-Three' } as Organization,
-            24: { id: 24, name: 'Organization #Twenty-Four' } as Organization,
-            42: { id: 42, name: 'Organization #Fourty-Two' } as Organization,
-            43: { id: 43, name: 'Organization #Fourty-Three' } as Organization,
-            44: { id: 44, name: 'Organization #Fourty-Four' } as Organization,
-            45: { id: 45, name: 'Organization #Fourty-Five' } as Organization,
-            84: { id: 84, name: 'Organization #Eighty-Four' } as Organization,
-            85: { id: 85, name: 'Organization #Eighty-Five' } as Organization,
-            86: { id: 86, name: 'Organization #Eighty-Six' } as Organization,
-            87: { id: 87, name: 'Organization #Eighty-Seven' } as Organization,
+            21: { id: 21, title: 'Organization #Twenty-One' } as Organization,
+            22: { id: 22, title: 'Organization #Twenty-Two' } as Organization,
+            23: { id: 23, title: 'Organization #Twenty-Three' } as Organization,
+            24: { id: 24, title: 'Organization #Twenty-Four' } as Organization,
+            42: { id: 42, title: 'Organization #Fourty-Two' } as Organization,
+            43: { id: 43, title: 'Organization #Fourty-Three' } as Organization,
+            44: { id: 44, title: 'Organization #Fourty-Four' } as Organization,
+            45: { id: 45, title: 'Organization #Fourty-Five' } as Organization,
+            84: { id: 84, title: 'Organization #Eighty-Four' } as Organization,
+            85: { id: 85, title: 'Organization #Eighty-Five' } as Organization,
+            86: { id: 86, title: 'Organization #Eighty-Six' } as Organization,
+            87: { id: 87, title: 'Organization #Eighty-Seven' } as Organization,
           },
         },
       },
