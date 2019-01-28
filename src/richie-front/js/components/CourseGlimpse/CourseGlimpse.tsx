@@ -38,7 +38,7 @@ export const CourseGlimpse = injectIntl(
       <a className="course-glimpse course-glimpse--link" href="#">
         <div className="course-glimpse__media">
           <img
-            src={'https://www.fun-mooc.fr' + course.thumbnails.small}
+            src={course.cover_image}
             alt={intl.formatMessage(messages.altText, {
               courseTitle: course.title,
             })}
@@ -57,7 +57,7 @@ export const CourseGlimpse = injectIntl(
               values={{
                 date: (
                   <FormattedDate
-                    value={new Date(course.start_date)}
+                    value={new Date(course.start)}
                     year="numeric"
                     month="short"
                     day="numeric"

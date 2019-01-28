@@ -18,9 +18,7 @@ export const mapStateToProps = (
   return {
     organizationMain:
       (state.resources.organizations &&
-        state.resources.organizations.byId[
-          ownProps.course.organization_main
-        ]) ||
+        state.resources.organizations.byId[ownProps.course.organizations[0]]) ||
       null,
   };
 };

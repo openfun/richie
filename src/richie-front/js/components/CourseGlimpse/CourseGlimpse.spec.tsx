@@ -10,8 +10,8 @@ import { CourseGlimpse } from './CourseGlimpse';
 describe('components/CourseGlimpse', () => {
   it('renders a course glimpse with its data', () => {
     const course = {
-      start_date: '2018-03-12T08:00:00Z',
-      thumbnails: { small: '/thumbs/small.png' },
+      cover_image: '/thumbs/small.png',
+      start: '2018-03-12T08:00:00Z',
       title: 'Course 42',
     } as Course;
     const organization = {
@@ -22,7 +22,7 @@ describe('components/CourseGlimpse', () => {
     );
 
     expect(wrapper.html()).toContain('Course 42');
-    expect(wrapper.find('img').attr('src')).toContain('/thumbs/small.png');
+    expect(wrapper.find('img').attr('src')).toEqual('/thumbs/small.png');
     expect(wrapper.html()).toContain('Starts on {date}');
     expect(wrapper.html()).toContain('Some Organization');
   });

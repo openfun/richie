@@ -7,21 +7,15 @@ FORMAT: 1A
 ## Course
 A single course as saved in our ElasticSearch index. Includes all fields useful for indexing it and displaying it in the client side. Foreign keys as richie knows them (eg. Subjects & Organizations) are referenced by their IDs.
 
-+ end_date: `2018-02-28T06:00:00Z` (string, required) - ISO 8601 date, when this session of the course ends
-+ enrollment_end_date: `2018-01-31T06:00:00Z` (string, required) - ISO 8601 date, when enrollment for the latest session of the course ends
-+ enrollment_start_date: `2018-01-01T06:00:00Z` (string, required) - ISO 8601 date, when enrollment for the latest session of the course starts
++ cover_image: `/about.png` (string) - URL to an image, a size of the thumbnail
++ end: `2018-02-28T06:00:00Z` (string, required) - ISO 8601 date, when this session of the course ends
++ enrollment_end: `2018-01-31T06:00:00Z` (string, required) - ISO 8601 date, when enrollment for the latest session of the course ends
++ enrollment_start: `2018-01-01T06:00:00Z` (string, required) - ISO 8601 date, when enrollment for the latest session of the course starts
 + id: 42 (number, required) - SQL database ID, reused in ElasticSearch
-+ language: fr (string, required) - ISO 639-1 code (2 letters) for the course's main language
++ languages: ['fr', 'en'] (array[string], required) - ISO 639-1 code (2 letters) for the course's languages
 + organizations: [17, 83] (array[number], required) - IDs of the organizations linked to this course
-+ session_number: 3 (number, required) - Ordinal number for the session count, starting at 1
-+ short_description: In this course you'll learn to use Python to accomplish tasks and automate some of your workflows... (string, required) - Brief summary of the course, going into more detail than the title, but smaller than the whole syllabus
-+ start_date: `2018-02-01T06:00:00Z` (string, required) - ISO 8601 date, when this session of the course starts
++ start: `2018-02-01T06:00:00Z` (string, required) - ISO 8601 date, when this session of the course starts
 + subjects: [42, 44] (array[number], required) - IDs of the subjects this course has been tagged with
-+ thumbnails:
-    + about https://example.com/about.png (string) - URL to an image, a size of the thumbnail
-    + big https://example.com/big.png (string) - URL to an image, a size of the thumbnail
-    + facebook https://example.com/facebook.png (string) - URL to an image, a size of the thumbnail
-    + small https://example.com/small.png (string) - URL to an image, a size of the thumbnail
 + title: Python for Data Scientists (string, required) - Title for the course
 
 ## Organization
@@ -61,14 +55,14 @@ Collection of all courses indexed in ElasticSearch. Can be filtered and selected
 
 + Request
     + Parameters
-        + end_date: ["2018-04-30T06:00:00Z", "2018-06-30T06:00:00Z"] (string, optional) - JSON array containing two datetimes (or 1 datetime and null); filter courses which have a start_date between those two datetimes (or before/after one date if array contains null)
-        + enrollment_end_date: ["2018-04-30T06:00:00Z", "2018-06-30T06:00:00Z"] (string, optional) - cf. end_date
-        + enrollment_start_date: ["2018-04-30T06:00:00Z", "2018-06-30T06:00:00Z"] (string, optional) - cf. end_date
+        + end: ["2018-04-30T06:00:00Z", "2018-06-30T06:00:00Z"] (string, optional) - JSON array containing two datetimes (or 1 datetime and null); filter courses which have a start between those two datetimes (or before/after one date if array contains null)
+        + enrollment_end: ["2018-04-30T06:00:00Z", "2018-06-30T06:00:00Z"] (string, optional) - cf. end
+        + enrollment_start: ["2018-04-30T06:00:00Z", "2018-06-30T06:00:00Z"] (string, optional) - cf. end
         + organizations: [13, 42] (array[number], optional) - return courses that have one of those organizations as a foreign key. NB: can be one number for one organization
         + match: python mathematics (string, optional) - search for courses that include (at least some of) those words in their title or short_description
         + limit: 10 (number, optional) - return {limit} courses
         + offset: 0 (number, optional) - skip the first {offset} results; used for pagination
-        + start_date: ["2018-04-30T06:00:00Z", "2018-06-30T06:00:00Z"] (string, optional) - cf. end_date
+        + start: ["2018-04-30T06:00:00Z", "2018-06-30T06:00:00Z"] (string, optional) - cf. end
         + subjects: [13, 42] (array[number], optional) - return courses that have one of those subjects as a foreign key. NB: can be one number for one subject
     + Headers
 

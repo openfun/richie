@@ -5,6 +5,7 @@ Tests for the course indexer
 import json
 import uuid
 from types import SimpleNamespace
+from unittest import mock
 from unittest.mock import patch
 
 from django.conf import settings
@@ -13,12 +14,21 @@ from django.http.request import QueryDict
 from django.test import TestCase
 
 import arrow
-import responses
+from cms.api import add_plugin
+from djangocms_picture.models import Picture
 from elasticsearch.client import IndicesClient
 from elasticsearch.helpers import bulk
 
-from richie.apps.search.exceptions import IndexerDataException, QueryFormatException
+from richie.apps.courses.factories import (
+    CourseFactory,
+    CourseRunFactory,
+    OrganizationFactory,
+    SubjectFactory,
+)
+from richie.apps.search.exceptions import QueryFormatException
 from richie.apps.search.indexers.courses import CoursesIndexer
+from richie.apps.search.indexers.organizations import OrganizationsIndexer
+from richie.apps.search.indexers.subjects import SubjectsIndexer
 
 
 class CoursesIndexersTestCase(TestCase):
@@ -27,163 +37,184 @@ class CoursesIndexersTestCase(TestCase):
     and especially dynamic mapping shape in ES
     """
 
-    @responses.activate
-    def test_indexers_courses_get_data_for_es(self):
+    def test_indexers_courses_related_objects_consistency(self):
         """
-        Happy path: the data is fetched from the API properly formatted
+        The organization and subject ids in the Elasticsearch course document should be
+        the same as the ids with which the corresponding organization and subject objects
+        are indexed.
         """
-        responses.add(
-            method="GET",
-            url=settings.COURSE_API_ENDPOINT + "?page=1&rpp=50",
-            match_querystring=True,
-            json={
-                "count": 51,
-                "results": [
-                    {
-                        "end_date": "2018-02-28T06:00:00Z",
-                        "enrollment_end_date": "2018-01-31T06:00:00Z",
-                        "enrollment_start_date": "2018-01-01T06:00:00Z",
-                        "id": 42,
-                        "language": "fr",
-                        "main_university": {"id": 21},
-                        "session_number": 6,
-                        "short_description": "Lorem ipsum dolor sit amet",
-                        "start_date": "2018-02-01T06:00:00Z",
-                        "subjects": [{"id": 168}, {"id": 336}],
-                        "thumbnails": {"big": "whatever.png"},
-                        "title": "A course in filler text",
-                        "universities": [{"id": 21}, {"id": 84}],
-                    }
-                ],
-            },
+        # Create a course with a page in both english and french
+        organization = OrganizationFactory(should_publish=True)
+        subject = SubjectFactory(should_publish=True)
+        course = CourseFactory(
+            fill_organizations=[organization],
+            fill_subjects=[subject],
+            should_publish=True,
+        )
+        CourseRunFactory(page_parent=course.extended_object, should_publish=True)
+
+        course_document = list(
+            CoursesIndexer.get_data_for_es(index="some_index", action="some_action")
+        )[0]
+        self.assertEqual(
+            course_document["organizations"],
+            [
+                next(
+                    OrganizationsIndexer.get_data_for_es(
+                        index="some_index", action="some_action"
+                    )
+                )["_id"]
+            ],
+        )
+        self.assertEqual(
+            course_document["subjects"],
+            [
+                next(
+                    SubjectsIndexer.get_data_for_es(
+                        index="some_index", action="some_action"
+                    )
+                )["_id"]
+            ],
         )
 
-        responses.add(
-            method="GET",
-            url=settings.COURSE_API_ENDPOINT + "?page=2&rpp=50",
-            match_querystring=True,
-            json={
-                "count": 51,
-                "results": [
-                    {
-                        "end_date": "2019-02-28T06:00:00Z",
-                        "enrollment_end_date": "2019-01-31T06:00:00Z",
-                        "enrollment_start_date": "2019-01-01T06:00:00Z",
-                        "id": 44,
-                        "language": "en",
-                        "main_university": {"id": 22},
-                        "session_number": 1,
-                        "short_description": "Consectetur adipiscim elit",
-                        "start_date": "2019-02-01T06:00:00Z",
-                        "subjects": [{"id": 176}, {"id": 352}],
-                        "thumbnails": {"big": "whatever_else.png"},
-                        "title": "Filler text 102",
-                        "universities": [{"id": 22}, {"id": 88}],
-                    }
-                ],
-            },
+    def test_indexers_courses_get_data_for_es_no_course_run(self):
+        """
+        A course with no course run should not be indexed.
+        """
+        course = CourseFactory(should_publish=True)
+        self.assertEqual(
+            list(
+                CoursesIndexer.get_data_for_es(index="some_index", action="some_action")
+            ),
+            [],
         )
+
+        CourseRunFactory(page_parent=course.extended_object, should_publish=True)
+        self.assertNotEqual(
+            list(
+                CoursesIndexer.get_data_for_es(index="some_index", action="some_action")
+            ),
+            [],
+        )
+
+    @mock.patch.object(
+        Picture, "img_src", new_callable=mock.PropertyMock, return_value="123.jpg"
+    )
+    def test_indexers_courses_get_data_for_es(self, _mock_picture):
+        """
+        Happy path: the data is retrieved from the models properly formatted
+        """
+        # Create a course with a page in both english and french
+        public_subjects = SubjectFactory.create_batch(2, should_publish=True)
+        draft_subject = SubjectFactory()
+
+        main_organization = OrganizationFactory(
+            page_title={
+                "en": "english main organization title",
+                "fr": "titre organisation principale français",
+            },
+            should_publish=True,
+        )
+        other_draft_organization = OrganizationFactory(
+            page_title={
+                "en": "english other organization title",
+                "fr": "titre autre organisation français",
+            }
+        )
+        other_public_organization = OrganizationFactory(
+            page_title={
+                "en": "english other organization title",
+                "fr": "titre autre organisation français",
+            },
+            should_publish=True,
+        )
+        course = CourseFactory(
+            page_title={
+                "en": "an english course title",
+                "fr": "un titre cours français",
+            },
+            fill_organizations=[
+                main_organization,
+                other_draft_organization,
+                other_public_organization,
+            ],
+            fill_subjects=public_subjects + [draft_subject],
+            fill_cover=True,
+            should_publish=True,
+        )
+        course_runs = CourseRunFactory.create_batch(
+            2, page_parent=course.extended_object, should_publish=True
+        )
+
+        # Add a syllabus in several languages
+        placeholder = course.public_extension.extended_object.placeholders.get(
+            slot="course_syllabus"
+        )
+        plugin_params = {"placeholder": placeholder, "plugin_type": "CKEditorPlugin"}
+        add_plugin(body="english syllabus line 1.", language="en", **plugin_params)
+        add_plugin(body="english syllabus line 2.", language="en", **plugin_params)
+        add_plugin(body="syllabus français ligne 1.", language="fr", **plugin_params)
+        add_plugin(body="syllabus français ligne 2.", language="fr", **plugin_params)
 
         # The results were properly formatted and passed to the consumer
+        expected_course = {
+            "complete": {
+                "en": [
+                    "an english course title",
+                    "english course title",
+                    "course title",
+                    "title",
+                ],
+                "fr": [
+                    "un titre cours français",
+                    "titre cours français",
+                    "cours français",
+                    "français",
+                ],
+            },
+            "cover_image": {"en": "123.jpg", "fr": "123.jpg"},
+            "description": {
+                "en": "english syllabus line 1. english syllabus line 2.",
+                "fr": "syllabus français ligne 1. syllabus français ligne 2.",
+            },
+            "organizations": [
+                str(main_organization.public_extension.id),
+                str(other_public_organization.public_extension.id),
+            ],
+            "subjects": [str(s.public_extension.id) for s in public_subjects],
+            "title": {"fr": "un titre cours français", "en": "an english course title"},
+        }
         self.assertEqual(
             list(
                 CoursesIndexer.get_data_for_es(index="some_index", action="some_action")
             ),
             [
                 {
-                    "_id": 42,
-                    "_index": "some_index",
-                    "_op_type": "some_action",
-                    "_type": "course",
-                    "complete": {
-                        "en": [
-                            "A course in filler text",
-                            "course in filler text",
-                            "in filler text",
-                            "filler text",
-                            "text",
-                        ],
-                        "fr": [
-                            "A course in filler text",
-                            "course in filler text",
-                            "in filler text",
-                            "filler text",
-                            "text",
-                        ],
+                    **{
+                        "_id": str(cr.public_extension.id),
+                        "_index": "some_index",
+                        "_op_type": "some_action",
+                        "_type": "course",
+                        "start": cr.public_extension.start,
+                        "end": cr.public_extension.end,
+                        "enrollment_start": cr.public_extension.enrollment_start,
+                        "enrollment_end": cr.public_extension.enrollment_end,
+                        "is_new": False,
+                        "languages": cr.public_extension.languages,
+                        "absolute_url": {
+                            "en": "/en/an-english-course-title/{:s}/".format(
+                                cr.extended_object.get_slug("en")
+                            ),
+                            "fr": "/fr/un-titre-cours-francais/{:s}/".format(
+                                cr.extended_object.get_slug("fr")
+                            ),
+                        },
                     },
-                    "end_date": "2018-02-28T06:00:00Z",
-                    "enrollment_end_date": "2018-01-31T06:00:00Z",
-                    "enrollment_start_date": "2018-01-01T06:00:00Z",
-                    "language": "fr",
-                    "organization_main": 21,
-                    "organizations": [21, 84],
-                    "session_number": 6,
-                    "short_description": {"fr": "Lorem ipsum dolor sit amet"},
-                    "start_date": "2018-02-01T06:00:00Z",
-                    "subjects": [168, 336],
-                    "thumbnails": {"big": "whatever.png"},
-                    "title": {"fr": "A course in filler text"},
-                },
-                {
-                    "_id": 44,
-                    "_index": "some_index",
-                    "_op_type": "some_action",
-                    "_type": "course",
-                    "complete": {
-                        "en": ["Filler text 102", "text 102", "102"],
-                        "fr": ["Filler text 102", "text 102", "102"],
-                    },
-                    "end_date": "2019-02-28T06:00:00Z",
-                    "enrollment_end_date": "2019-01-31T06:00:00Z",
-                    "enrollment_start_date": "2019-01-01T06:00:00Z",
-                    "language": "en",
-                    "organization_main": 22,
-                    "organizations": [22, 88],
-                    "session_number": 1,
-                    "short_description": {"en": "Consectetur adipiscim elit"},
-                    "start_date": "2019-02-01T06:00:00Z",
-                    "subjects": [176, 352],
-                    "thumbnails": {"big": "whatever_else.png"},
-                    "title": {"en": "Filler text 102"},
-                },
+                    **expected_course,
+                }
+                for cr in course_runs
             ],
         )
-
-    @responses.activate
-    def test_indexers_courses_get_data_for_es_with_unexpected_data_shape(self):
-        """
-        Error case: the API returned an object that is not shape like an expected course
-        """
-        responses.add(
-            method="GET",
-            url=settings.COURSE_API_ENDPOINT,
-            status=200,
-            json={
-                "count": 1,
-                "results": [
-                    {
-                        "end_date": "2018-02-28T06:00:00Z",
-                        "enrollment_end_date": "2018-01-31T06:00:00Z",
-                        "enrollment_start_date": "2018-01-01T06:00:00Z",
-                        "id": 42,
-                        # 'language': 'fr', missing language key will trigger the KeyError
-                        "main_university": {"id": 21},
-                        "session_number": 6,
-                        "short_description": "Lorem ipsum dolor sit amet",
-                        "start_date": "2018-02-01T06:00:00Z",
-                        "subjects": [{"id": 168}, {"id": 336}],
-                        "thumbnails": {"big": "whatever.png"},
-                        "title": "A course in filler text",
-                        "universities": [{"id": 21}, {"id": 84}],
-                    }
-                ],
-            },
-        )
-
-        with self.assertRaises(IndexerDataException):
-            list(
-                CoursesIndexer.get_data_for_es(index="some_index", action="some_action")
-            )
 
     def test_indexers_courses_format_es_object_for_api(self):
         """
@@ -192,37 +223,33 @@ class CoursesIndexersTestCase(TestCase):
         es_course = {
             "_id": 93,
             "_source": {
-                "end_date": "2018-02-28T06:00:00Z",
-                "enrollment_end_date": "2018-01-31T06:00:00Z",
-                "enrollment_start_date": "2018-01-01T06:00:00Z",
-                "language": "en",
-                "organization_main": 42,
+                "absolute_url": {"en": "campo-qui-format-do"},
+                "end": "2018-02-28T06:00:00Z",
+                "enrollment_end": "2018-01-31T06:00:00Z",
+                "enrollment_start": "2018-01-01T06:00:00Z",
+                "languages": ["en", "es"],
+                "cover_image": {"en": "image.jpg"},
+                "organization_title": {"en": "campo qui format do"},
                 "organizations": [42, 84],
-                "session_number": 1,
-                "short_description": {
-                    "en": "Nam aliquet, arcu at sagittis sollicitudin."
-                },
-                "start_date": "2018-02-01T06:00:00Z",
+                "description": {"en": "Nam aliquet, arcu at sagittis sollicitudin."},
+                "start": "2018-02-01T06:00:00Z",
                 "subjects": [43, 86],
-                "thumbnails": {"big": "whatever_else.png"},
                 "title": {"en": "Duis eu arcu erat"},
             },
         }
         self.assertEqual(
             CoursesIndexer.format_es_object_for_api(es_course, "en"),
             {
-                "end_date": "2018-02-28T06:00:00Z",
-                "enrollment_end_date": "2018-01-31T06:00:00Z",
-                "enrollment_start_date": "2018-01-01T06:00:00Z",
                 "id": 93,
-                "language": "en",
-                "organization_main": 42,
+                "start": "2018-02-01T06:00:00Z",
+                "end": "2018-02-28T06:00:00Z",
+                "enrollment_end": "2018-01-31T06:00:00Z",
+                "enrollment_start": "2018-01-01T06:00:00Z",
+                "absolute_url": "campo-qui-format-do",
+                "cover_image": "image.jpg",
+                "languages": ["en", "es"],
                 "organizations": [42, 84],
-                "session_number": 1,
-                "short_description": "Nam aliquet, arcu at sagittis sollicitudin.",
-                "start_date": "2018-02-01T06:00:00Z",
                 "subjects": [43, 86],
-                "thumbnails": {"big": "whatever_else.png"},
                 "title": "Duis eu arcu erat",
             },
         )
@@ -291,7 +318,7 @@ class CoursesIndexersTestCase(TestCase):
         new={
             "language": {
                 "choices": {
-                    lang: [{"term": {"language": lang}}] for lang in ["en", "fr"]
+                    lang: [{"term": {"languages": lang}}] for lang in ["en", "fr"]
                 },
                 "field": ChoiceField,
             }
@@ -309,11 +336,12 @@ class CoursesIndexersTestCase(TestCase):
         )
         multi_match = {
             "multi_match": {
-                "fields": ["short_description.*", "title.*"],
+                "fields": ["description.*", "title.*"],
                 "query": "some phrase terms",
                 "type": "cross_fields",
             }
         }
+
         self.assertEqual(
             CoursesIndexer.build_es_query(request),
             (
@@ -324,7 +352,7 @@ class CoursesIndexersTestCase(TestCase):
                         "must": [
                             {
                                 "multi_match": {
-                                    "fields": ["short_description.*", "title.*"],
+                                    "fields": ["description.*", "title.*"],
                                     "query": "some phrase terms",
                                     "type": "cross_fields",
                                 }
@@ -340,7 +368,7 @@ class CoursesIndexersTestCase(TestCase):
                                 "filter": {
                                     "bool": {
                                         "must": [
-                                            {"term": {"language": "en"}},
+                                            {"term": {"languages": "en"}},
                                             multi_match,
                                         ]
                                     }
@@ -350,7 +378,7 @@ class CoursesIndexersTestCase(TestCase):
                                 "filter": {
                                     "bool": {
                                         "must": [
-                                            {"term": {"language": "fr"}},
+                                            {"term": {"languages": "fr"}},
                                             multi_match,
                                         ]
                                     }
@@ -534,26 +562,24 @@ class CoursesIndexersTestCase(TestCase):
         Happy path: build a query that filters courses by start & end date datetime ranges
         """
         # Build a request stub
-        start_date = json.dumps(["2018-01-01T06:00:00Z", None])
-        end_date = json.dumps(["2018-04-30T06:00:00Z", "2018-06-30T06:00:00Z"])
+        start = json.dumps(["2018-01-01T06:00:00Z", None])
+        end = json.dumps(["2018-04-30T06:00:00Z", "2018-06-30T06:00:00Z"])
         request = SimpleNamespace(
             query_params=QueryDict(
-                query_string="start_date={start_date}&end_date={end_date}".format(
-                    start_date=start_date, end_date=end_date
-                )
+                query_string="start={start}&end={end}".format(start=start, end=end)
             )
         )
-        range_end_date = {
+        range_end = {
             "range": {
-                "end_date": {
+                "end": {
                     "gte": arrow.get("2018-04-30T06:00:00Z").datetime,
                     "lte": arrow.get("2018-06-30T06:00:00Z").datetime,
                 }
             }
         }
-        range_start_date = {
+        range_start = {
             "range": {
-                "start_date": {
+                "start": {
                     "gte": arrow.get("2018-01-01T06:00:00Z").datetime,
                     "lte": None,
                 }
@@ -564,7 +590,7 @@ class CoursesIndexersTestCase(TestCase):
             (
                 None,
                 0,
-                {"bool": {"must": [range_end_date, range_start_date]}},
+                {"bool": {"must": [range_end, range_start]}},
                 {
                     "all_courses": {
                         "global": {},
@@ -574,8 +600,8 @@ class CoursesIndexersTestCase(TestCase):
                                     "bool": {
                                         "must": [
                                             {"term": {"language": "en"}},
-                                            range_end_date,
-                                            range_start_date,
+                                            range_end,
+                                            range_start,
                                         ]
                                     }
                                 }
@@ -585,16 +611,14 @@ class CoursesIndexersTestCase(TestCase):
                                     "bool": {
                                         "must": [
                                             {"term": {"language": "fr"}},
-                                            range_end_date,
-                                            range_start_date,
+                                            range_end,
+                                            range_start,
                                         ]
                                     }
                                 }
                             },
                             "organizations": {
-                                "filter": {
-                                    "bool": {"must": [range_end_date, range_start_date]}
-                                },
+                                "filter": {"bool": {"must": [range_end, range_start]}},
                                 "aggregations": {
                                     "organizations": {
                                         "terms": {"field": "organizations"}
@@ -602,9 +626,7 @@ class CoursesIndexersTestCase(TestCase):
                                 },
                             },
                             "subjects": {
-                                "filter": {
-                                    "bool": {"must": [range_end_date, range_start_date]}
-                                },
+                                "filter": {"bool": {"must": [range_end, range_start]}},
                                 "aggregations": {
                                     "subjects": {"terms": {"field": "subjects"}}
                                 },
@@ -698,12 +720,12 @@ class CoursesIndexersTestCase(TestCase):
         new={
             "language": {
                 "choices": {
-                    lang: [{"term": {"language": lang}}] for lang in ["en", "fr"]
+                    lang: [{"term": {"languages": lang}}] for lang in ["en", "fr"]
                 },
                 "field": MultipleChoiceField,
             },
             "new": {
-                "choices": {"new": [{"term": {"session_number": 1}}]},
+                "choices": {"new": [{"term": {"is_new": True}}]},
                 "field": ChoiceField,
             },
         },
@@ -714,20 +736,18 @@ class CoursesIndexersTestCase(TestCase):
         filter; make all aggs using all of those along with another custom filter
         """
         # Build a request stub
-        start_date = json.dumps(["2018-01-01T06:00:00Z", None])
-        end_date = json.dumps(["2018-04-30T06:00:00Z", "2018-06-30T06:00:00Z"])
+        start = json.dumps(["2018-01-01T06:00:00Z", None])
+        end = json.dumps(["2018-04-30T06:00:00Z", "2018-06-30T06:00:00Z"])
         request = SimpleNamespace(
             query_params=QueryDict(
                 query_string="subjects=42&subjects=84&query=these%20phrase%20terms&limit=2&"
                 + "language=fr&"
-                + "start_date={start_date}&end_date={end_date}".format(
-                    start_date=start_date, end_date=end_date
-                )
+                + "start={start}&end={end}".format(start=start, end=end)
             )
         )
-        range_end_date = {
+        range_end = {
             "range": {
-                "end_date": {
+                "end": {
                     "gte": arrow.get("2018-04-30T06:00:00Z").datetime,
                     "lte": arrow.get("2018-06-30T06:00:00Z").datetime,
                 }
@@ -735,21 +755,21 @@ class CoursesIndexersTestCase(TestCase):
         }
         multi_match = {
             "multi_match": {
-                "fields": ["short_description.*", "title.*"],
+                "fields": ["description.*", "title.*"],
                 "query": "these phrase terms",
                 "type": "cross_fields",
             }
         }
-        range_start_date = {
+        range_start = {
             "range": {
-                "start_date": {
+                "start": {
                     "gte": arrow.get("2018-01-01T06:00:00Z").datetime,
                     "lte": None,
                 }
             }
         }
         terms_subjects = {"terms": {"subjects": [42, 84]}}
-        term_language_fr = {"term": {"language": "fr"}}
+        term_language_fr = {"term": {"languages": "fr"}}
         self.assertEqual(
             CoursesIndexer.build_es_query(request),
             (
@@ -758,9 +778,9 @@ class CoursesIndexersTestCase(TestCase):
                 {
                     "bool": {
                         "must": [
-                            range_end_date,
+                            range_end,
                             multi_match,
-                            range_start_date,
+                            range_start,
                             terms_subjects,
                             term_language_fr,
                         ]
@@ -774,10 +794,10 @@ class CoursesIndexersTestCase(TestCase):
                                 "filter": {
                                     "bool": {
                                         "must": [
-                                            {"term": {"language": "en"}},
-                                            range_end_date,
+                                            {"term": {"languages": "en"}},
+                                            range_end,
                                             multi_match,
-                                            range_start_date,
+                                            range_start,
                                             terms_subjects,
                                         ]
                                     }
@@ -788,9 +808,9 @@ class CoursesIndexersTestCase(TestCase):
                                     "bool": {
                                         "must": [
                                             term_language_fr,
-                                            range_end_date,
+                                            range_end,
                                             multi_match,
-                                            range_start_date,
+                                            range_start,
                                             terms_subjects,
                                         ]
                                     }
@@ -800,10 +820,10 @@ class CoursesIndexersTestCase(TestCase):
                                 "filter": {
                                     "bool": {
                                         "must": [
-                                            {"term": {"session_number": 1}},
-                                            range_end_date,
+                                            {"term": {"is_new": True}},
+                                            range_end,
                                             multi_match,
-                                            range_start_date,
+                                            range_start,
                                             terms_subjects,
                                             term_language_fr,
                                         ]
@@ -814,9 +834,9 @@ class CoursesIndexersTestCase(TestCase):
                                 "filter": {
                                     "bool": {
                                         "must": [
-                                            range_end_date,
+                                            range_end,
                                             multi_match,
-                                            range_start_date,
+                                            range_start,
                                             terms_subjects,
                                             term_language_fr,
                                         ]
@@ -832,9 +852,9 @@ class CoursesIndexersTestCase(TestCase):
                                 "filter": {
                                     "bool": {
                                         "must": [
-                                            range_end_date,
+                                            range_end,
                                             multi_match,
-                                            range_start_date,
+                                            range_start,
                                             term_language_fr,
                                         ]
                                     }
@@ -932,9 +952,9 @@ class CoursesIndexersTestCase(TestCase):
                     "_op_type": "create",
                     "_type": "courses",
                     "control_id": "4",
-                    "end_date": arrow.utcnow().shift(days=+150).isoformat(),
-                    "enrollment_end_date": arrow.utcnow().shift(days=+30).isoformat(),
-                    "start_date": arrow.utcnow().shift(days=+15).isoformat(),
+                    "end": arrow.utcnow().shift(days=+150).isoformat(),
+                    "enrollment_end": arrow.utcnow().shift(days=+30).isoformat(),
+                    "start": arrow.utcnow().shift(days=+15).isoformat(),
                 },
                 {
                     # N. 1: ongoing course, next open course to end enrollment
@@ -943,9 +963,9 @@ class CoursesIndexersTestCase(TestCase):
                     "_op_type": "create",
                     "_type": "courses",
                     "control_id": "3",
-                    "end_date": arrow.utcnow().shift(days=+120).isoformat(),
-                    "enrollment_end_date": arrow.utcnow().shift(days=+5).isoformat(),
-                    "start_date": arrow.utcnow().shift(days=-5).isoformat(),
+                    "end": arrow.utcnow().shift(days=+120).isoformat(),
+                    "enrollment_end": arrow.utcnow().shift(days=+5).isoformat(),
+                    "start": arrow.utcnow().shift(days=-5).isoformat(),
                 },
                 {
                     # N. 7: the other already finished course; it finished more recently than N. 8
@@ -954,9 +974,9 @@ class CoursesIndexersTestCase(TestCase):
                     "_op_type": "create",
                     "_type": "courses",
                     "control_id": "1",
-                    "end_date": arrow.utcnow().shift(days=-15).isoformat(),
-                    "enrollment_end_date": arrow.utcnow().shift(days=-60).isoformat(),
-                    "start_date": arrow.utcnow().shift(days=-80).isoformat(),
+                    "end": arrow.utcnow().shift(days=-15).isoformat(),
+                    "enrollment_end": arrow.utcnow().shift(days=-60).isoformat(),
+                    "start": arrow.utcnow().shift(days=-80).isoformat(),
                 },
                 {
                     # N. 6: ongoing course, enrollment has been over for the longest
@@ -965,9 +985,9 @@ class CoursesIndexersTestCase(TestCase):
                     "_op_type": "create",
                     "_type": "courses",
                     "control_id": "7",
-                    "end_date": arrow.utcnow().shift(days=+30).isoformat(),
-                    "enrollment_end_date": arrow.utcnow().shift(days=-45).isoformat(),
-                    "start_date": arrow.utcnow().shift(days=-75).isoformat(),
+                    "end": arrow.utcnow().shift(days=+30).isoformat(),
+                    "enrollment_end": arrow.utcnow().shift(days=-45).isoformat(),
+                    "start": arrow.utcnow().shift(days=-75).isoformat(),
                 },
                 {
                     # N. 8: the course that has been over for the longest
@@ -976,9 +996,9 @@ class CoursesIndexersTestCase(TestCase):
                     "_op_type": "create",
                     "_type": "courses",
                     "control_id": "5",
-                    "end_date": arrow.utcnow().shift(days=-30).isoformat(),
-                    "enrollment_end_date": arrow.utcnow().shift(days=-90).isoformat(),
-                    "start_date": arrow.utcnow().shift(days=-120).isoformat(),
+                    "end": arrow.utcnow().shift(days=-30).isoformat(),
+                    "enrollment_end": arrow.utcnow().shift(days=-90).isoformat(),
+                    "start": arrow.utcnow().shift(days=-120).isoformat(),
                 },
                 {
                     # N. 4: not started yet, will start after the other upcoming course
@@ -987,9 +1007,9 @@ class CoursesIndexersTestCase(TestCase):
                     "_op_type": "create",
                     "_type": "courses",
                     "control_id": "8",
-                    "end_date": arrow.utcnow().shift(days=+120).isoformat(),
-                    "enrollment_end_date": arrow.utcnow().shift(days=+60).isoformat(),
-                    "start_date": arrow.utcnow().shift(days=+45).isoformat(),
+                    "end": arrow.utcnow().shift(days=+120).isoformat(),
+                    "enrollment_end": arrow.utcnow().shift(days=+60).isoformat(),
+                    "start": arrow.utcnow().shift(days=+45).isoformat(),
                 },
                 {
                     # N. 2: ongoing course, can still be enrolled in for longer than N. 1
@@ -998,9 +1018,9 @@ class CoursesIndexersTestCase(TestCase):
                     "_op_type": "create",
                     "_type": "courses",
                     "control_id": "6",
-                    "end_date": arrow.utcnow().shift(days=+105).isoformat(),
-                    "enrollment_end_date": arrow.utcnow().shift(days=+15).isoformat(),
-                    "start_date": arrow.utcnow().shift(days=-15).isoformat(),
+                    "end": arrow.utcnow().shift(days=+105).isoformat(),
+                    "enrollment_end": arrow.utcnow().shift(days=+15).isoformat(),
+                    "start": arrow.utcnow().shift(days=-15).isoformat(),
                 },
                 {
                     # N. 5: ongoing course, most recent to end enrollment
@@ -1009,9 +1029,9 @@ class CoursesIndexersTestCase(TestCase):
                     "_op_type": "create",
                     "_type": "courses",
                     "control_id": "2",
-                    "end_date": arrow.utcnow().shift(days=+15).isoformat(),
-                    "enrollment_end_date": arrow.utcnow().shift(days=-30).isoformat(),
-                    "start_date": arrow.utcnow().shift(days=-90).isoformat(),
+                    "end": arrow.utcnow().shift(days=+15).isoformat(),
+                    "enrollment_end": arrow.utcnow().shift(days=-30).isoformat(),
+                    "start": arrow.utcnow().shift(days=-90).isoformat(),
                 },
             ],
             chunk_size=settings.ES_CHUNK_SIZE,

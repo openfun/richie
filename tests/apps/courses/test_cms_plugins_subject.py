@@ -93,7 +93,7 @@ class SubjectPluginTestCase(CMSTestCase):
 
         # Now modify the subject to have a draft different from the public version
         title_obj = subject_page.get_title_obj(language="en")
-        title_obj.tile = "draft title"
+        title_obj.title = "draft title"
         title_obj.save()
 
         # Publishing the page again should make the plugin public
