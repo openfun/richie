@@ -4,14 +4,14 @@ import { subjects } from './reducer';
 describe('data/subjects reducer', () => {
   const subj43 = {
     id: 43,
-    image: 'https://example.com/subject_43.png',
-    name: 'Subject 43',
+    logo: '/subject_43.png',
+    title: 'Subject 43',
   };
 
   const subj44 = {
     id: 44,
-    image: 'https://example.com/subject_44.png',
-    name: 'Subject 44',
+    logo: '/subject_44.png',
+    title: 'Subject 44',
   };
 
   describe('resourceById', () => {

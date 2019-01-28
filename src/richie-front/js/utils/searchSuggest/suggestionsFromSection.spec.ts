@@ -36,17 +36,17 @@ describe('utils/searchSuggest/suggestionsFromSection', () => {
         },
         model: modelName.ORGANIZATIONS,
         values: [
-          { name: 'Example organization #1' } as Organization,
-          { name: 'Example organization #2' } as Organization,
+          { title: 'Example organization #1' } as Organization,
+          { title: 'Example organization #2' } as Organization,
         ],
       }),
     ).toEqual([
       {
-        data: { name: 'Example organization #1' } as Organization,
+        data: { title: 'Example organization #1' } as Organization,
         model: modelName.ORGANIZATIONS,
       },
       {
-        data: { name: 'Example organization #2' } as Organization,
+        data: { title: 'Example organization #2' } as Organization,
         model: modelName.ORGANIZATIONS,
       },
     ]);
@@ -58,17 +58,17 @@ describe('utils/searchSuggest/suggestionsFromSection', () => {
         message: { defaultMessage: 'Subjects', id: 'subjectsHumanName' },
         model: modelName.SUBJECTS,
         values: [
-          { name: 'Example subject #1' } as Subject,
-          { name: 'Example subject #2' } as Subject,
+          { title: 'Example subject #1' } as Subject,
+          { title: 'Example subject #2' } as Subject,
         ],
       }),
     ).toEqual([
       {
-        data: { name: 'Example subject #1' } as Subject,
+        data: { title: 'Example subject #1' } as Subject,
         model: modelName.SUBJECTS,
       },
       {
-        data: { name: 'Example subject #2' } as Subject,
+        data: { title: 'Example subject #2' } as Subject,
         model: modelName.SUBJECTS,
       },
     ]);

@@ -47,7 +47,7 @@ export const CourseGlimpse = injectIntl(
         <div className="course-glimpse__content">
           <div className="course-glimpse__content__wrapper">
             <p className="course-glimpse__content__title">{course.title}</p>
-            <p>{(organizationMain && organizationMain.name) || ''}</p>
+            <p>{(organizationMain && organizationMain.title) || ''}</p>
           </div>
         </div>
         <div className="course-glimpse__footer">

@@ -17,12 +17,10 @@ describe('components/CourseGlimpseContainer', () => {
   };
 
   const org23 = {
-    banner: 'https://example.com/banner23.png',
-    code: 'org-23',
     detail_page_enabled: false,
     id: 23,
     logo: 'https://example.com/logo23.png',
-    name: 'Org 23',
+    title: 'Org 23',
   };
 
   it('mapStateToProps picks in state the organization relevant to the current course', () => {
