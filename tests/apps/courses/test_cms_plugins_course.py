@@ -11,11 +11,7 @@ from cms.api import add_plugin, create_page
 from richie.apps.core.factories import UserFactory
 from richie.apps.core.helpers import create_i18n_page
 from richie.apps.courses.cms_plugins import CoursePlugin
-from richie.apps.courses.factories import (
-    CourseFactory,
-    OrganizationFactory,
-    SubjectFactory,
-)
+from richie.apps.courses.factories import CourseFactory, OrganizationFactory
 from richie.apps.courses.models import CoursePluginModel
 
 
@@ -55,14 +51,14 @@ class CoursePluginTestCase(TestCase):
         """
         Test that an CoursePlugin correctly renders course's page specific information
         """
-        # Create an Course with a page in both english and french
-        subjects = SubjectFactory.create_batch(4)
-        organization = OrganizationFactory(page_title="public title")
+        # Create a course with a page in both english and french
+        organization = OrganizationFactory(
+            page_title="public title", should_publish=True
+        )
 
         course = CourseFactory(
             page_title={"en": "public title", "fr": "titre public"},
             fill_organizations=[organization],
-            fill_subjects=subjects,
         )
         course_page = course.extended_object
 

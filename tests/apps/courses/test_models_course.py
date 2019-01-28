@@ -5,7 +5,11 @@ from django.test import TestCase
 
 from cms.api import create_page
 
-from richie.apps.courses.factories import CourseFactory, CourseRunFactory
+from richie.apps.courses.factories import (
+    CourseFactory,
+    CourseRunFactory,
+    OrganizationFactory,
+)
 from richie.apps.courses.models import CourseRun
 
 
@@ -23,6 +27,72 @@ class CourseModelsTestCase(TestCase):
         course = CourseFactory(extended_object=page)
         with self.assertNumQueries(1):
             self.assertEqual(str(course), "Course: Nano particles")
+
+    def test_models_course_get_organizations_empty(self):
+        """
+        For a course not linked to any organzation the method `get_organizations` should
+        return an empty query.
+        """
+        course = CourseFactory(should_publish=True)
+        self.assertFalse(course.get_organizations().exists())
+        self.assertFalse(course.public_extension.get_organizations().exists())
+
+    def test_models_course_get_organizations(self):
+        """
+        The `get_organizations` method should return all organizations linked to a course and
+        should respect publication status.
+        """
+        # The 2 first organizations are grouped in one variable name and will be linked to the
+        # course in the following, the third subject will not be linked so we can check that
+        # only the organizations linked to the course are retrieved (its name starts with `_`
+        # because it is not used and only here for unpacking purposes)
+        *draft_organizations, _other_draft = OrganizationFactory.create_batch(3)
+        *public_organizations, _other_public = OrganizationFactory.create_batch(
+            3, should_publish=True
+        )
+        course = CourseFactory(
+            fill_organizations=draft_organizations + public_organizations,
+            should_publish=True,
+        )
+
+        self.assertEqual(
+            list(course.get_organizations()), draft_organizations + public_organizations
+        )
+        self.assertEqual(
+            list(course.public_extension.get_organizations()), public_organizations
+        )
+
+    def test_models_course_get_main_organization_empty(self):
+        """
+        For a course not linked to any organzation the method `get_main_organization` should
+        return `None`.
+        """
+        course = CourseFactory(should_publish=True)
+        self.assertIsNone(course.get_main_organization())
+        self.assertIsNone(course.public_extension.get_main_organization())
+
+    def test_models_course_get_main_organization(self):
+        """
+        The `get_main_organization` method should return the first organization linked to a
+        course via plugins, respecting publication status.
+        """
+        # The 2 first organizations are grouped in one variable name and will be linked to the
+        # course in the following, the third subject will not be linked so we can check that
+        # only the organizations linked to the course are retrieved (its name starts with `_`
+        # because it is not used and only here for unpacking purposes)
+        *draft_organizations, _other_draft = OrganizationFactory.create_batch(3)
+        *public_organizations, _other_public = OrganizationFactory.create_batch(
+            3, should_publish=True
+        )
+        course = CourseFactory(
+            fill_organizations=draft_organizations + public_organizations,
+            should_publish=True,
+        )
+
+        self.assertEqual(course.get_main_organization(), draft_organizations[0])
+        self.assertEqual(
+            course.public_extension.get_main_organization(), public_organizations[0]
+        )
 
     def test_models_course_attribute_course_runs(self):
         """
