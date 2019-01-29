@@ -127,7 +127,7 @@ migrate:  ## perform database migrations
 .PHONY: migrate
 
 rebuild: ## rebuild the app container
-	@$(COMPOSE) build app
+	@$(COMPOSE) build base app
 .PHONY: rebuild
 
 run: ## start the development server
