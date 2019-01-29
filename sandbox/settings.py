@@ -197,6 +197,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         "django.middleware.locale.LocaleMiddleware",
         "django.middleware.common.CommonMiddleware",
         "django.middleware.clickjacking.XFrameOptionsMiddleware",
+        "dockerflow.django.middleware.DockerflowMiddleware",
         "cms.middleware.user.CurrentUserMiddleware",
         "cms.middleware.page.CurrentPageMiddleware",
         "cms.middleware.toolbar.ToolbarMiddleware",
@@ -240,8 +241,9 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         "richie.plugins.section",
         "richie.plugins.simple_text_ckeditor",
         # Third party apps
-        "raven.contrib.django.raven_compat",
+        "dockerflow.django",
         "parler",
+        "raven.contrib.django.raven_compat",
     )
 
     # Group to add plugin to placeholder "Content"

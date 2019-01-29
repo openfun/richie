@@ -10,16 +10,13 @@ generate-version-file: &generate-version-file
         "$CIRCLE_TAG" \
         "$CIRCLE_PROJECT_USERNAME" \
         "$CIRCLE_PROJECT_REPONAME" \
-        "$CIRCLE_BUILD_URL" > version.json
-
+        "$CIRCLE_BUILD_URL" > sandbox/version.json
 
 version: 2
 jobs:
-
   # Git jobs
   # Check that the git history is clean and complies with our expectations
   lint-git:
-
     machine: true
 
     working_directory: ~/fun
@@ -54,7 +51,6 @@ jobs:
   # Build job
   # Build the Docker image ready for production
   build:
-
     # We use the machine executor, i.e. a VM, not a container
     machine:
       # Cache docker layers so that we strongly speed up this job execution
@@ -102,7 +98,6 @@ jobs:
   # Build dev job
   # Build the Docker image ready for development
   build-dev:
-
     machine:
       docker_layer_caching: true
 
@@ -169,7 +164,6 @@ jobs:
             - django.pot
 
   lint-back-isort:
-
     machine: true
 
     working_directory: ~/fun
@@ -197,7 +191,6 @@ jobs:
                 isort --recursive --check-only .
 
   lint-back-flake8:
-
     machine: true
 
     working_directory: ~/fun
@@ -225,7 +218,6 @@ jobs:
                 flake8
 
   lint-back-pylint:
-
     machine: true
 
     working_directory: ~/fun
@@ -253,7 +245,6 @@ jobs:
                 pylint src/richie/apps src/richie/plugins sandbox tests
 
   lint-back-black:
-
     machine: true
 
     working_directory: ~/fun
@@ -290,7 +281,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v3-front-dependencies-{{ checksum "package.json" }}
+            - v3-front-dependencies-{{ checksum "package.json" }}
       - attach_workspace:
           at: ~/fun/src/richie/locale
       - run:
@@ -303,7 +294,6 @@ jobs:
           command: node i18n/scripts/upload.js 'richie-front.pot' '/../../src/richie-front/i18n/richie-front.pot'
 
   test-back:
-
     machine: true
 
     working_directory: ~/fun
@@ -357,7 +347,6 @@ jobs:
 
   # ---- Alpine jobs ----
   build-alpine:
-
     machine:
       docker_layer_caching: true
 
@@ -404,7 +393,6 @@ jobs:
           key: docker-alpine-images-dev-{{ .Revision }}
 
   test-alpine:
-
     machine: true
 
     working_directory: ~/fun
@@ -444,7 +432,6 @@ jobs:
 
   # ---- Packaging jobs ----
   package-back:
-
     machine: true
 
     working_directory: ~/fun
@@ -487,7 +474,6 @@ jobs:
   #   * you have define both the TWINE_USERNAME & TWINE_PASSWORD secret
   #     environment variables in CircleCI UI (with your PyPI credentials)
   pypi:
-
     machine: true
 
     working_directory: ~/fun
@@ -529,7 +515,6 @@ jobs:
 
   # ---- DockerHub publication job ----
   hub:
-
     machine: true
 
     working_directory: ~/fun
@@ -607,8 +592,8 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v3-front-dependencies-{{ checksum "package.json" }}
-          - v3-front-dependencies-
+            - v3-front-dependencies-{{ checksum "package.json" }}
+            - v3-front-dependencies-
       # If the yarn.lock file is not up-to-date with the package.json file,
       # using the --frozen-lockfile should fail.
       - run:
@@ -643,7 +628,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v3-front-dependencies-{{ checksum "package.json" }}
+            - v3-front-dependencies-{{ checksum "package.json" }}
       - run:
           name: Lint code with tslint
           command: yarn lint
@@ -656,7 +641,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v3-front-dependencies-{{ checksum "package.json" }}
+            - v3-front-dependencies-{{ checksum "package.json" }}
       - run:
           name: Lint JS/TS/JSON and CSS/SCSS code with prettier
           command: yarn prettier --list-different "src/richie-front/js/**/*.+(ts|tsx|json|js|jsx)" "*.+(ts|tsx|json|js|jsx)" "src/**/*.+(css|scss)"
@@ -669,7 +654,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v3-front-dependencies-{{ checksum "package.json" }}
+            - v3-front-dependencies-{{ checksum "package.json" }}
       - run:
           name: Run tests
           # Circle CI needs the tests to be ran sequentially, otherwise it hangs. See Jest docs below:
