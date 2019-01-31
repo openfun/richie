@@ -171,9 +171,8 @@ export function onSuggestionSelected(
 ) {
   switch (suggestion.model) {
     case modelName.COURSES:
-      // TODO: pick a real URL on the course object when it is available on the API
-      const url = 'https://' + suggestion.data.id;
-      return location.setHref(url);
+      // Behave like a link to the course run's page
+      return location.setHref(suggestion.data.absolute_url);
 
     case modelName.ORGANIZATIONS:
     case modelName.SUBJECTS:

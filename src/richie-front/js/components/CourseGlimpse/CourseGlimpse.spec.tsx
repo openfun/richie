@@ -1,6 +1,6 @@
 import '../../testSetup';
 
-import { render } from 'enzyme';
+import { shallow } from 'enzyme';
 import * as React from 'react';
 
 import { Course } from '../../types/Course';
@@ -17,13 +17,16 @@ describe('components/CourseGlimpse', () => {
     const organization = {
       title: 'Some Organization',
     } as Organization;
-    const wrapper = render(
+    const wrapper = shallow(
       <CourseGlimpse course={course} organizationMain={organization} />,
     );
 
     expect(wrapper.html()).toContain('Course 42');
-    expect(wrapper.find('img').attr('src')).toEqual('/thumbs/small.png');
+    expect(wrapper.html()).toContain('Details page for {courseTitle}');
     expect(wrapper.html()).toContain('Starts on {date}');
     expect(wrapper.html()).toContain('Some Organization');
+    const img = wrapper.dive().find('img');
+    expect(img.prop('src')).toEqual('/thumbs/small.png');
+    expect(img.prop('alt')).toEqual('Logo for {courseTitle}');
   });
 });

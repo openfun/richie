@@ -231,9 +231,17 @@ describe('components/SearchSuggestField', () => {
 
     it('moves to the courses page when it is called with a course', () => {
       onSuggestionSelected.bind(that)(formEvent, {
-        suggestion: { model: modelName.COURSES, data: { id: 42 } as Course },
+        suggestion: {
+          data: {
+            absolute_url: 'https://example.com/courses/42',
+            id: 42,
+          } as Course,
+          model: modelName.COURSES,
+        },
       });
-      expect(location.setHref).toHaveBeenCalledWith('https://42');
+      expect(location.setHref).toHaveBeenCalledWith(
+        'https://example.com/courses/42',
+      );
     });
 
     it('updates the filter and resets the suggestion state when it is called with a resource suggestion', () => {

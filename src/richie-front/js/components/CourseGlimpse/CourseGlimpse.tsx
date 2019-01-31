@@ -18,7 +18,7 @@ export interface CourseGlimpseProps {
 
 const messages = defineMessages({
   altText: {
-    defaultMessage: 'Logo for {courseTitle} course.',
+    defaultMessage: 'Logo for {courseTitle}',
     description: 'Alternate text for the course logo in a course glimpse.',
     id: 'components.CourseGlimpse.logoAltText',
   },
@@ -28,6 +28,11 @@ const messages = defineMessages({
       "Shows the start date for a course in a course glimpse in a short format such as Sep 4, '1986'",
     id: 'components.CourseGlimpse.startsOn',
   },
+  linkText: {
+    defaultMessage: 'Details page for {courseTitle}.',
+    description: 'Accessibility title for links on course glimpses.',
+    id: 'components.CourseGlimpse.linkText',
+  },
 });
 
 export const CourseGlimpse = injectIntl(
@@ -35,7 +40,13 @@ export const CourseGlimpse = injectIntl(
     const { course, intl, organizationMain } = props;
 
     return (
-      <a className="course-glimpse course-glimpse--link" href="#">
+      <a
+        className="course-glimpse course-glimpse--link"
+        href={course.absolute_url}
+        title={intl.formatMessage(messages.linkText, {
+          courseTitle: course.title,
+        })}
+      >
         <div className="course-glimpse__media">
           <img
             src={course.cover_image}
