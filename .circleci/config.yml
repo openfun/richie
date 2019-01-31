@@ -18,12 +18,9 @@ jobs:
   # Check that the git history is clean and complies with our expectations
   lint-git:
     machine: true
-
     working_directory: ~/fun
-
     steps:
       - checkout
-
       # Make sure the changes don't add a "print" statement to the code base.
       # We should exclude the ".circleci" folder from the search as the very command that checks
       # the absence of "print" is including a "print(" itself.
@@ -31,17 +28,14 @@ jobs:
           name: enforce absence of print statements in code
           command: |
             ! git diff origin/master..HEAD -- . ':(exclude).circleci' | grep "print("
-
       - run:
           name: Check absence of fixup commits
           command: |
             ! git log | grep 'fixup!'
-
       - run:
           name: Install gitlint
           command: |
             pip install requests gitlint
-
       - run:
           name: lint commit messages added to master
           command: |
@@ -55,16 +49,12 @@ jobs:
     machine:
       # Cache docker layers so that we strongly speed up this job execution
       docker_layer_caching: true
-
     working_directory: ~/fun
-
     steps:
       # Checkout repository sources
       - checkout
-
       # Generate a version.json file describing app release
       - <<: *generate-version-file
-
       # Each image is tagged with the current git commit sha1 to avoid
       # collisions in parallel builds.
       - run:
@@ -73,11 +63,9 @@ jobs:
             docker build \
               -t richie:${CIRCLE_SHA1} \
               .
-
       - run:
           name: Check built image availability
           command: docker images "richie:${CIRCLE_SHA1}*"
-
       # Since we cannot rely on CircleCI's Docker layers cache (for obscure
       # reasons some subsequent jobs will benefit from a previous job cache and
       # some others won't), we choose to save built docker images in cached
@@ -89,7 +77,6 @@ jobs:
             docker save \
               -o docker/images/richie.tar \
               richie:${CIRCLE_SHA1}
-
       - save_cache:
           paths:
             - ~/fun/docker/images/
@@ -100,28 +87,21 @@ jobs:
   build-dev:
     machine:
       docker_layer_caching: true
-
     working_directory: ~/fun
-
     steps:
       - checkout
-
       - restore_cache:
           keys:
             - docker-debian-images-{{ .Revision }}
-
       - run:
           name: Load images to docker engine
           command: |
             docker load < docker/images/richie.tar
-
       - run:
           name: List available images
           command: docker images "richie:${CIRCLE_SHA1}*"
-
       # Generate a version.json file describing app release
       - <<: *generate-version-file
-
       # Development image build, it uses the dev Dockerfile file
       - run:
           name: Build development image
@@ -131,11 +111,9 @@ jobs:
               -f docker/images/dev/Dockerfile \
               --build-arg BASE_TAG=${CIRCLE_SHA1} \
               .
-
       - run:
           name: Check built image availability
           command: docker images "richie:${CIRCLE_SHA1}*"
-
       - run:
           name: Store docker image in cache
           command: |
@@ -143,7 +121,6 @@ jobs:
               -o docker/images/dev/richie.tar \
               richie:${CIRCLE_SHA1} \
               richie:${CIRCLE_SHA1}-dev
-
       - save_cache:
           paths:
             - ~/fun/docker/images/dev/
@@ -165,21 +142,16 @@ jobs:
 
   lint-back-isort:
     machine: true
-
     working_directory: ~/fun
-
     steps:
       - checkout
-
       - restore_cache:
           keys:
             - docker-debian-images-dev-{{ .Revision }}
-
       - run:
           name: Load images to docker engine
           command: |
             docker load < docker/images/dev/richie.tar
-
       - run:
           name: Lint code with isort
           command: |
@@ -192,21 +164,16 @@ jobs:
 
   lint-back-flake8:
     machine: true
-
     working_directory: ~/fun
-
     steps:
       - checkout
-
       - restore_cache:
           keys:
             - docker-debian-images-dev-{{ .Revision }}
-
       - run:
           name: Load images to docker engine
           command: |
             docker load < docker/images/dev/richie.tar
-
       - run:
           name: Lint code with flake8
           command: |
@@ -219,21 +186,16 @@ jobs:
 
   lint-back-pylint:
     machine: true
-
     working_directory: ~/fun
-
     steps:
       - checkout
-
       - restore_cache:
           keys:
             - docker-debian-images-dev-{{ .Revision }}
-
       - run:
           name: Load images to docker engine
           command: |
             docker load < docker/images/dev/richie.tar
-
       - run:
           name: Lint code with pylint
           command: |
@@ -246,21 +208,16 @@ jobs:
 
   lint-back-black:
     machine: true
-
     working_directory: ~/fun
-
     steps:
       - checkout
-
       - restore_cache:
           keys:
             - docker-debian-images-dev-{{ .Revision }}
-
       - run:
           name: Load images to docker engine
           command: |
             docker load < docker/images/dev/richie.tar
-
       - run:
           name: Lint code with black
           command: |
@@ -295,21 +252,16 @@ jobs:
 
   test-back:
     machine: true
-
     working_directory: ~/fun
-
     steps:
       - checkout
-
       - restore_cache:
           keys:
             - docker-debian-images-dev-{{ .Revision }}
-
       - run:
           name: Load images to docker engine
           command: |
             docker load < docker/images/dev/richie.tar
-
       # ElasticSearch configuration
       #
       # We need to increase the VM max memory size, or else, ElasticSearch (ES)
@@ -322,7 +274,6 @@ jobs:
           command: |
             sudo sysctl -w vm.max_map_count=262144
             sudo sysctl vm.max_map_count
-
       # Run back-end (Django) test suite
       #
       # Nota bene: to run the django test suite, we need to ensure that both
@@ -349,15 +300,11 @@ jobs:
   build-alpine:
     machine:
       docker_layer_caching: true
-
     working_directory: ~/fun
-
     steps:
       - checkout
-
       # Generate a version.json file describing app release
       - <<: *generate-version-file
-
       - run:
           name: Build alpine production image
           command: |
@@ -365,7 +312,6 @@ jobs:
               -t richie:${CIRCLE_SHA1}-alpine \
               -f docker/images/alpine/Dockerfile \
               .
-
       - run:
           name: Build alpine development image
           command: |
@@ -374,11 +320,9 @@ jobs:
               -f docker/images/alpine/dev/Dockerfile \
               --build-arg BASE_TAG=${CIRCLE_SHA1}-alpine \
               .
-
       - run:
           name: List available images
           command: docker images richie
-
       - run:
           name: Store docker image in cache
           command: |
@@ -386,7 +330,6 @@ jobs:
               -o docker/images/alpine/richie.tar \
               richie:${CIRCLE_SHA1}-alpine \
               richie:${CIRCLE_SHA1}-alpine-dev
-
       - save_cache:
           paths:
             - ~/fun/docker/images/
@@ -394,27 +337,21 @@ jobs:
 
   test-alpine:
     machine: true
-
     working_directory: ~/fun
-
     steps:
       - checkout
-
       - restore_cache:
           keys:
             - docker-alpine-images-dev-{{ .Revision }}
-
       - run:
           name: Load images to docker engine
           command: |
             docker load < docker/images/alpine/richie.tar
-
       - run:
           name: Increase VM max memory size
           command: |
             sudo sysctl -w vm.max_map_count=262144
             sudo sysctl vm.max_map_count
-
       - run:
           name: Run tests
           command: |
@@ -433,21 +370,16 @@ jobs:
   # ---- Packaging jobs ----
   package-back:
     machine: true
-
     working_directory: ~/fun
-
     steps:
       - checkout
-
       - restore_cache:
           keys:
             - docker-debian-images-dev-{{ .Revision }}
-
       - run:
           name: Load images to docker engine
           command: |
             docker load < docker/images/dev/richie.tar
-
       # Run commands using CircleCI's user and mount the app volume to have
       # write permission on it, and thus, being able to create the package.
       - run:
@@ -458,13 +390,11 @@ jobs:
               --volume "$PWD:/app" \
               "richie:${CIRCLE_SHA1}-dev" \
               python setup.py sdist bdist_wheel
-
       # Persist build packages to the workspace
       - persist_to_workspace:
           root: ~/fun
           paths:
             - dist
-
       # Store packages as artifacts
       - store_artifacts:
           path: ~/fun/dist
@@ -475,29 +405,22 @@ jobs:
   #     environment variables in CircleCI UI (with your PyPI credentials)
   pypi:
     machine: true
-
     working_directory: ~/fun
-
     steps:
       - checkout
-
       - restore_cache:
           keys:
             - docker-debian-images-dev-{{ .Revision }}
-
       - run:
           name: Load images to docker engine
           command: |
             docker load < docker/images/dev/richie.tar
-
       # Restore built python packages
       - attach_workspace:
           at: ~/fun
-
       - run:
           name: List built packages
           command: ls dist/*
-
       - run:
           name: Upload built packages to PyPI
           command: |
@@ -516,27 +439,21 @@ jobs:
   # ---- DockerHub publication job ----
   hub:
     machine: true
-
     working_directory: ~/fun
-
     steps:
       - checkout
-
       - restore_cache:
           keys:
             - docker-debian-images-dev-{{ .Revision }}
-
       - restore_cache:
           keys:
             - docker-alpine-images-dev-{{ .Revision }}
-
       # Load all built images in all flavors
       - run:
           name: Load images to docker engine
           command: |
             docker load < docker/images/dev/richie.tar
             docker load < docker/images/alpine/richie.tar
-
       # Login to DockerHub to Publish new images
       #
       # Nota bene: you'll need to define the following secrets environment vars
@@ -547,7 +464,6 @@ jobs:
       - run:
           name: Login to DockerHub
           command: echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-
       # Tag docker images with the same pattern used in Git (Semantic Versioning)
       #
       # Git tag: v1.0.1
@@ -565,7 +481,6 @@ jobs:
             docker tag richie:${CIRCLE_SHA1}-alpine fundocker/richie:${DOCKER_TAG}-alpine
             docker tag richie:${CIRCLE_SHA1}-alpine-dev fundocker/richie:${DOCKER_TAG}-alpine-dev
             docker images "fundocker/richie:${DOCKER_TAG}*"
-
       # Publish images to DockerHub
       #
       # Nota bene: logged user (see "Login to DockerHub" step) must have write
