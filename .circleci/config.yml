@@ -232,7 +232,7 @@ jobs:
   # translation management tool
   upload-i18n-strings:
     docker:
-      - image: circleci/node:9-browsers
+      - image: circleci/node:10
     working_directory: ~/richie
     steps:
       - checkout
@@ -501,7 +501,7 @@ jobs:
   # ---- Front-end jobs ----
   build-front:
     docker:
-      - image: circleci/node:9-browsers
+      - image: circleci/node:10
     working_directory: ~/richie
     steps:
       - checkout
@@ -537,7 +537,7 @@ jobs:
 
   lint-front-tslint:
     docker:
-      - image: circleci/node:9-browsers
+      - image: circleci/node:10
     working_directory: ~/richie
     steps:
       - checkout
@@ -550,7 +550,7 @@ jobs:
 
   lint-prettier:
     docker:
-      - image: circleci/node:9-browsers
+      - image: circleci/node:10
     working_directory: ~/richie
     steps:
       - checkout
@@ -563,7 +563,7 @@ jobs:
 
   test-front:
     docker:
-      - image: circleci/node:9-browsers
+      - image: circleci/node:10
     working_directory: ~/richie
     steps:
       - checkout

@@ -43,7 +43,7 @@ services:
       - "elasticsearch"
 
   node:
-    image: circleci/node:9-browsers
+    image: circleci/node:10
     working_dir: /app
     volumes:
       - .:/app
