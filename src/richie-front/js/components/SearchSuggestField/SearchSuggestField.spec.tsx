@@ -12,6 +12,7 @@ import {
 } from '../../types/searchSuggest';
 import { Subject } from '../../types/Subject';
 import { handle } from '../../utils/errors/handle';
+import { getSearchParam } from '../../utils/indirection/getSearchParam';
 import { location } from '../../utils/indirection/location';
 import { getSuggestionsSection } from '../../utils/searchSuggest/getSuggestionsSection';
 import { suggestionHumanName } from '../../utils/searchSuggest/suggestionHumanName';
@@ -28,6 +29,11 @@ import {
 
 const mockHandle: jest.Mock<typeof handle> = handle as any;
 jest.mock('../../utils/errors/handle');
+
+const mockGetSearchParam: jest.Mock<
+  typeof getSearchParam
+> = getSearchParam as any;
+jest.mock('../../utils/indirection/getSearchParam');
 
 const mockGetSuggestionsSection: jest.Mock<
   typeof getSuggestionsSection
@@ -68,6 +74,20 @@ describe('components/SearchSuggestField', () => {
     expect(wrapper.html()).toContain(
       'Search for courses, organizations, subjects',
     );
+  });
+
+  it('picks the query from the URL if there is one', () => {
+    mockGetSearchParam.mockReturnValue('machine learning');
+    const wrapper = shallow(
+      <SearchSuggestFieldBase
+        addFilter={addFilter as any}
+        fullTextSearch={fullTextSearch as any}
+        intl={
+          { formatMessage: (message: any) => message.defaultMessage } as any
+        }
+      />,
+    );
+    expect(wrapper.html()).toContain('machine learning');
   });
 
   describe('getSuggestionValue()', () => {

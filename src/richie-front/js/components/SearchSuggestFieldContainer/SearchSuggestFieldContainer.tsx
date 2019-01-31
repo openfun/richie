@@ -3,6 +3,7 @@ import { Action, Dispatch } from 'redux';
 
 import { ResourceListStateParams } from '../../data/genericReducers/resourceList/resourceList';
 import { getResourceList } from '../../data/genericSideEffects/getResourceList/actions';
+import { pushQueryStringToHistory } from '../../data/genericSideEffects/pushHistoryState/actions';
 import { RootState } from '../../data/rootReducer';
 import { API_LIST_DEFAULT_PARAMS } from '../../settings';
 import { filterGroupName } from '../../types/filters';
@@ -42,7 +43,10 @@ export const mergeProps = (
     },
     // Update the full text search with the current value of the search field (default suggestion).
     fullTextSearch: (query: string) => {
-      dispatch(getResourceList(modelName.COURSES, { ...currentParams, query }));
+      const newParams = { ...currentParams, query };
+      // Make sure we update both the query/results and the URL query string
+      dispatch(getResourceList(modelName.COURSES, newParams));
+      dispatch(pushQueryStringToHistory(newParams));
     },
   };
 };

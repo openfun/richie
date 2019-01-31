@@ -55,5 +55,11 @@ describe('components/SearchSuggestFieldContainer/mergeProps', () => {
       resourceName: modelName.COURSES,
       type: 'RESOURCE_LIST_GET',
     });
+    expect(dispatch).toHaveBeenCalledWith({
+      state: null,
+      title: '',
+      type: 'HISTORY_PUSH_STATE',
+      url: '?limit=20&offset=0&query=some%20query',
+    });
   });
 });

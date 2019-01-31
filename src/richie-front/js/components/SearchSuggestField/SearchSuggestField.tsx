@@ -17,6 +17,7 @@ import {
 } from '../../types/searchSuggest';
 import { commonMessages } from '../../utils/commonMessages';
 import { handle } from '../../utils/errors/handle';
+import { getSearchParam } from '../../utils/indirection/getSearchParam';
 import { location } from '../../utils/indirection/location';
 import { getSuggestionsSection } from '../../utils/searchSuggest/getSuggestionsSection';
 import { suggestionHumanName } from '../../utils/searchSuggest/suggestionHumanName';
@@ -214,7 +215,14 @@ export class SearchSuggestFieldBase extends React.Component<
 > {
   constructor(props: SearchSuggestFieldProps & InjectedIntlProps) {
     super(props);
-    this.state = { suggestions: [], value: '' };
+    let valueFromUrl: string;
+    try {
+      valueFromUrl = getSearchParam('query') || '';
+    } catch (e) {
+      // Do not break, default to empty
+      valueFromUrl = '';
+    }
+    this.state = { suggestions: [], value: valueFromUrl };
   }
 
   render() {
