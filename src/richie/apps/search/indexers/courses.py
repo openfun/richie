@@ -8,12 +8,13 @@ from django.conf import settings
 from django.db.models import Prefetch
 
 import arrow
+import dateutil.parser
 from cms.models import Title
 from djangocms_picture.models import Picture
 
 from richie.plugins.simple_text_ckeditor.models import SimpleText
 
-from ...courses.models import Course
+from ...courses.models import Course, CourseRun
 from ..defaults import (
     COURSES_COVER_IMAGE_HEIGHT,
     COURSES_COVER_IMAGE_WIDTH,
@@ -231,24 +232,29 @@ class CoursesIndexer:
         Format a course stored in ES into a consistent and easy-to-consume record for
         API consumers
         """
+        source = es_course["_source"]
         return {
             "id": es_course["_id"],
-            "start": es_course["_source"]["start"],
-            "end": es_course["_source"]["end"],
-            "enrollment_start": es_course["_source"]["enrollment_start"],
-            "enrollment_end": es_course["_source"]["enrollment_end"],
+            "start": source["start"],
+            "end": source["end"],
+            "enrollment_start": source["enrollment_start"],
+            "enrollment_end": source["enrollment_end"],
             "absolute_url": get_best_field_language(
-                es_course["_source"]["absolute_url"], best_language
+                source["absolute_url"], best_language
             ),
             "cover_image": get_best_field_language(
-                es_course["_source"]["cover_image"], best_language
+                source["cover_image"], best_language
             ),
-            "languages": es_course["_source"]["languages"],
-            "organizations": es_course["_source"]["organizations"],
-            "subjects": es_course["_source"]["subjects"],
-            "title": get_best_field_language(
-                es_course["_source"]["title"], best_language
-            ),
+            "languages": source["languages"],
+            "organizations": source["organizations"],
+            "state": CourseRun.compute_state(
+                dateutil.parser.parse(source["start"]),
+                dateutil.parser.parse(source["end"]),
+                dateutil.parser.parse(source["enrollment_start"]),
+                dateutil.parser.parse(source["enrollment_end"]),
+            )._asdict(),
+            "subjects": source["subjects"],
+            "title": get_best_field_language(source["title"], best_language),
         }
 
     @staticmethod

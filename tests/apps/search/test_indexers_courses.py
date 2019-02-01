@@ -249,6 +249,12 @@ class CoursesIndexersTestCase(TestCase):
                 "cover_image": "image.jpg",
                 "languages": ["en", "es"],
                 "organizations": [42, 84],
+                "state": {
+                    "priority": 5,
+                    "cta": None,
+                    "text": "archived",
+                    "datetime": None,
+                },
                 "subjects": [43, 86],
                 "title": "Duis eu arcu erat",
             },
