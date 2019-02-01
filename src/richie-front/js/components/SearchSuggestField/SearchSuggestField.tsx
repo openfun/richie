@@ -230,6 +230,11 @@ export class SearchSuggestFieldBase extends React.Component<
     const { intl } = this.props;
     const inputProps = {
       onChange: onChange.bind(this),
+      onKeyDown: (event: React.KeyboardEvent) => {
+        if (event.keyCode === 13 /* enter */ && !value) {
+          this.props.fullTextSearch('');
+        }
+      },
       placeholder: intl.formatMessage(messages.searchFieldPlaceholder),
       value,
     };
@@ -238,17 +243,18 @@ export class SearchSuggestFieldBase extends React.Component<
       // TypeScript incorrectly infers the type of the Autosuggest suggestions prop as SearchSuggestion, which
       // would be correct if we did not use sections, but is incorrect as it is.
       <Autosuggest
-        suggestions={suggestions as any}
+        getSectionSuggestions={suggestionsFromSection as any}
         getSuggestionValue={getSuggestionValue}
-        highlightFirstSuggestion={true}
+        highlightFirstSuggestion={value.length > 2}
+        inputProps={inputProps}
+        multiSection={true}
         onSuggestionsClearRequested={onSuggestionsClearRequested.bind(this)}
         onSuggestionsFetchRequested={onSuggestionsFetchRequested.bind(this)}
         onSuggestionSelected={onSuggestionSelected.bind(this)}
-        renderSuggestion={renderSuggestion}
-        multiSection={true}
-        getSectionSuggestions={suggestionsFromSection as any}
         renderSectionTitle={renderSectionTitle.bind(null, intl)}
-        inputProps={inputProps}
+        renderSuggestion={renderSuggestion}
+        shouldRenderSuggestions={val => val.length > 2}
+        suggestions={suggestions as any}
       />
     );
   }
