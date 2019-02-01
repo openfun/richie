@@ -1,6 +1,8 @@
 """
 End-to-end tests for the course detail view
 """
+import random
+from datetime import datetime
 from unittest import mock
 
 from cms.test_utils.testcases import CMSTestCase
@@ -12,7 +14,7 @@ from richie.apps.courses.factories import (
     OrganizationFactory,
     SubjectFactory,
 )
-from richie.apps.courses.models import CourseRun
+from richie.apps.courses.models import CourseRun, CourseState
 
 
 class CourseCMSTestCase(CMSTestCase):
@@ -24,10 +26,7 @@ class CourseCMSTestCase(CMSTestCase):
     hidden from published page so common users can not see them.
     """
 
-    @mock.patch.object(
-        CourseRun, "state", new_callable=mock.PropertyMock, return_value="is_open"
-    )
-    def test_templates_course_detail_cms_published_content(self, _):
+    def test_templates_course_detail_cms_published_content(self):
         """
         Validate that the important elements are displayed on a published course page
         """
@@ -113,13 +112,9 @@ class CourseCMSTestCase(CMSTestCase):
             )
 
         # Only the published course run should be in response content
-        self.assertContains(response, "Enroll now", count=1)
         self.assertContains(response, "<dd>English, French</dd>", html=True, count=1)
 
-    @mock.patch.object(
-        CourseRun, "state", new_callable=mock.PropertyMock, return_value="is_open"
-    )
-    def test_templates_course_detail_cms_draft_content(self, _):
+    def test_templates_course_detail_cms_draft_content(self):
         """
         A staff user should see a draft course including its draft elements with
         an annotation
@@ -207,7 +202,6 @@ class CourseCMSTestCase(CMSTestCase):
                 html=True,
             )
         # The draft and the published course runs should both be in the page
-        self.assertContains(response, "Enroll now", count=2)
         self.assertContains(response, "<dd>English, French</dd>", html=True, count=2)
 
     def test_templates_course_detail_no_index(self):
@@ -227,3 +221,59 @@ class CourseCMSTestCase(CMSTestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, '<meta name="robots" content="noindex">')
+
+    def prepare_to_test_state(self, state):
+        """
+        Not a test.
+        Create objects and mock to help testing the impact of the state on template rendering.
+        """
+        course = CourseFactory(page_title="my course", should_publish=True)
+        CourseRunFactory(
+            page_parent=course.extended_object,
+            page_title="my course run",
+            should_publish=True,
+        )
+
+        url = course.extended_object.get_absolute_url()
+        with mock.patch.object(
+            CourseRun, "state", new_callable=mock.PropertyMock, return_value=state
+        ):
+            response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        return response
+
+    def test_templates_course_detail_state_with_cta(self):
+        """A course run in a state with a call to action should include a link and the CTA."""
+        response = self.prepare_to_test_state(
+            CourseState(
+                random.randint(0, 6),
+                "state cta",
+                random.choice(["state text", None]),
+                random.choice([datetime.now(), None]),
+            )
+        )
+        self.assertContains(
+            response,
+            '<a class="course-detail__aside__run__block__cta" '
+            'href="/en/my-course/my-course-run/">State cta</a>',
+            html=True,
+        )
+
+    def test_templates_course_detail_state_without_cta(self):
+        """A course run in a state without a call to action should include a state button."""
+        response = self.prepare_to_test_state(
+            CourseState(
+                random.randint(0, 6),
+                None,
+                "state text",
+                random.choice([datetime.now(), None]),
+            )
+        )
+        self.assertContains(
+            response,
+            '<a class="course-detail__aside__run__block__cta '
+            'course-detail__aside__run__block__cta--projected" '
+            'href="/en/my-course/my-course-run/">State text</a>',
+            html=True,
+        )

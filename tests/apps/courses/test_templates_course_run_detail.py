@@ -1,6 +1,7 @@
 """
 End-to-end tests for the course run detail view
 """
+import random
 from datetime import datetime
 from unittest import mock
 
@@ -13,7 +14,7 @@ from richie.apps.courses.factories import (
     OrganizationFactory,
     SubjectFactory,
 )
-from richie.apps.courses.models import CourseRun
+from richie.apps.courses.models import CourseRun, CourseState
 
 
 class CourseRunCMSTestCase(CMSTestCase):
@@ -25,10 +26,7 @@ class CourseRunCMSTestCase(CMSTestCase):
     hidden from published page so common users can not see them.
     """
 
-    @mock.patch.object(
-        CourseRun, "state", new_callable=mock.PropertyMock, return_value="is_open"
-    )
-    def test_templates_course_run_detail_cms_published_content(self, _):
+    def test_templates_course_run_detail_cms_published_content(self):
         """
         Validate that the important elements are displayed on a published course run page
         """
@@ -125,18 +123,9 @@ class CourseRunCMSTestCase(CMSTestCase):
         self.assertContains(response, "<dt>Enrollment ends</dt><dd>Jan. 18, 2019</dd>")
         self.assertContains(response, "<dt>Course starts</dt><dd>Dec. 10, 2018</dd>")
         self.assertContains(response, "<dt>Course ends</dt><dd>Feb. 14, 2019</dd>")
-        self.assertContains(
-            response,
-            '<a class="course-detail__content__run__block__cta" '
-            'href="https://www.example.com/enroll">Enroll now</a>',
-            html=True,
-        )
         self.assertContains(response, "<dt>Languages</dt><dd>English, French</dd>")
 
-    @mock.patch.object(
-        CourseRun, "state", new_callable=mock.PropertyMock, return_value="is_open"
-    )
-    def test_templates_course_run_detail_cms_draft_content(self, _):
+    def test_templates_course_run_detail_cms_draft_content(self):
         """
         A staff user should see a draft course run including its draft elements with
         an annotation
@@ -238,12 +227,6 @@ class CourseRunCMSTestCase(CMSTestCase):
         self.assertContains(response, "<dt>Enrollment ends</dt><dd>Jan. 18, 2019</dd>")
         self.assertContains(response, "<dt>Course starts</dt><dd>Dec. 10, 2018</dd>")
         self.assertContains(response, "<dt>Course ends</dt><dd>Feb. 14, 2019</dd>")
-        self.assertContains(
-            response,
-            '<a class="course-detail__content__run__block__cta" '
-            'href="https://www.example.com/enroll">Enroll now</a>',
-            html=True,
-        )
         self.assertContains(response, "<dt>Languages</dt><dd>English, French</dd>")
 
     def test_templates_course_run_detail_no_index(self):
@@ -259,3 +242,58 @@ class CourseRunCMSTestCase(CMSTestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, '<meta name="robots" content="noindex">')
+
+    def prepare_to_test_state(self, state):
+        """
+        Not a test.
+        Create objects and mock to help testing the impact of the state on template rendering.
+        """
+        course = CourseFactory(should_publish=True)
+        course_run = CourseRunFactory(
+            page_parent=course.extended_object,
+            resource_link="https://www.example.com/enroll",
+            should_publish=True,
+        )
+
+        url = course_run.extended_object.get_absolute_url()
+        with mock.patch.object(
+            CourseRun, "state", new_callable=mock.PropertyMock, return_value=state
+        ):
+            response = self.client.get(url)
+
+        self.assertEqual(response.status_code, 200)
+        return response
+
+    def test_templates_course_run_detail_state_with_cta(self):
+        """A course run in a state with a call to action should include a link and the CTA."""
+        response = self.prepare_to_test_state(
+            CourseState(
+                random.randint(0, 6),
+                "state cta",
+                random.choice(["state text", None]),
+                random.choice([datetime.now(), None]),
+            )
+        )
+        self.assertContains(
+            response,
+            '<a class="course-detail__content__run__block__cta" '
+            'href="https://www.example.com/enroll">State cta</a>',
+            html=True,
+        )
+
+    def test_templates_course_run_detail_state_without_cta(self):
+        """A course run in a state without a call to action should include a state button."""
+        response = self.prepare_to_test_state(
+            CourseState(
+                random.randint(0, 6),
+                None,
+                "state text",
+                random.choice([datetime.now(), None]),
+            )
+        )
+        self.assertContains(
+            response,
+            '<button class="course-detail__content__run__block__cta '
+            'course-detail__content__run__block__cta--projected">State text</button>',
+            html=True,
+        )

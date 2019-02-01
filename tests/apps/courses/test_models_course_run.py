@@ -9,6 +9,7 @@ from django.test.client import RequestFactory
 from django.utils import timezone
 
 from richie.apps.courses.factories import CourseRunFactory
+from richie.apps.courses.models import CourseState
 
 
 class CourseRunModelsTestCase(TestCase):
@@ -21,15 +22,16 @@ class CourseRunModelsTestCase(TestCase):
         self.now = timezone.now()
 
     def test_models_course_run_state_archived(self):
-        """A course run that is passed should return a state "is_archived"."""
+        """A course run that is passed should return a state with "archived" as text."""
         course_run = CourseRunFactory(
             start=self.now - timedelta(hours=2), end=self.now - timedelta(hours=1)
         )
-        self.assertEqual(course_run.state, "is_archived")
+        self.assertEqual(course_run.state, CourseState(5, None, "archived", None))
 
     def test_models_course_run_state_ongoing_open(self):
         """
-        A course run that is on-going and open for enrollment should return a state `is_open`.
+        A course run that is on-going and open for enrollment should return a state with a CTA
+        to enroll and the date of the end of enrollment.
         """
         course_run = CourseRunFactory(
             enrollment_start=self.now - timedelta(hours=3),
@@ -37,11 +39,15 @@ class CourseRunModelsTestCase(TestCase):
             enrollment_end=self.now + timedelta(hours=1),
             end=self.now + timedelta(hours=2),
         )
-        self.assertEqual(course_run.state, "is_open")
+        self.assertEqual(
+            course_run.state,
+            CourseState(0, "enroll now", "closing on", course_run.enrollment_end),
+        )
 
     def test_models_course_run_state_ongoing_closed(self):
         """
-        A course run that is on-going but closed for enrollment should return a state `is_ongoing`.
+        A course run that is on-going but closed for enrollment should return a state with
+        "on-going" as text and no CTA.
         """
         course_run = CourseRunFactory(
             enrollment_start=self.now - timedelta(hours=3),
@@ -49,12 +55,12 @@ class CourseRunModelsTestCase(TestCase):
             enrollment_end=self.now - timedelta(hours=1),
             end=self.now + timedelta(hours=1),
         )
-        self.assertEqual(course_run.state, "is_ongoing")
+        self.assertEqual(course_run.state, CourseState(4, None, "on-going", None))
 
     def test_models_course_run_state_coming(self):
         """
         A course run that is future and not yet open for enrollment should return a state
-        `is_coming`.
+        with a CTA to see details with the start date.
         """
         course_run = CourseRunFactory(
             enrollment_start=self.now + timedelta(hours=1),
@@ -62,12 +68,15 @@ class CourseRunModelsTestCase(TestCase):
             start=self.now + timedelta(hours=3),
             end=self.now + timedelta(hours=4),
         )
-        self.assertEqual(course_run.state, "is_coming")
+        self.assertEqual(
+            course_run.state,
+            CourseState(2, "see details", "starting on", course_run.start),
+        )
 
     def test_models_course_run_state_future_open(self):
         """
-        A course run that is future and not yet open for enrollment should return a state
-        `is_coming`.
+        A course run that is future and open for enrollment should return a state with a CTA
+        to enroll and the start date.
         """
         course_run = CourseRunFactory(
             enrollment_start=self.now - timedelta(hours=1),
@@ -75,12 +84,15 @@ class CourseRunModelsTestCase(TestCase):
             start=self.now + timedelta(hours=2),
             end=self.now + timedelta(hours=3),
         )
-        self.assertEqual(course_run.state, "is_open")
+        self.assertEqual(
+            course_run.state,
+            CourseState(1, "enroll now", "starting on", course_run.start),
+        )
 
     def test_models_course_run_state_future_closed(self):
         """
         A course run that is future and already closed for enrollment should return a state
-        `is_closed`.
+        with "enrollment closed" as text and no CTA.
         """
         course_run = CourseRunFactory(
             enrollment_start=self.now - timedelta(hours=2),
@@ -88,7 +100,9 @@ class CourseRunModelsTestCase(TestCase):
             start=self.now + timedelta(hours=1),
             end=self.now + timedelta(hours=2),
         )
-        self.assertEqual(course_run.state, "is_closed")
+        self.assertEqual(
+            course_run.state, CourseState(3, None, "enrollment closed", None)
+        )
 
     def test_models_course_run_field_languages_null(self):
         """
