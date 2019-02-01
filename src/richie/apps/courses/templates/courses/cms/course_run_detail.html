@@ -26,11 +26,11 @@
       {% render_model request.current_page "titles" %}
     </h1>
 
-    <div class="course-detail__content__row course-detail__content__subjects">
+    <div class="course-detail__content__row course-detail__content__categories">
       {% with form_factor="tag" %}
-        {% page_placeholder "course_subjects" current_page.parent_page or %}
-          <p class="course-detail__content__subjects__placeholder">
-            {% trans "No associated subjects" %}
+        {% page_placeholder "course_categories" current_page.parent_page or %}
+          <p class="course-detail__content__categories__placeholder">
+            {% trans "No associated categories" %}
           </p>
         {% endpage_placeholder %}
       {% endwith %}

@@ -52,7 +52,7 @@ function suggestionsFromResourceSection(
         model: section.model,
       }));
 
-    case modelName.SUBJECTS:
+    case modelName.CATEGORIES:
       return section.values.map(value => ({
         data: value,
         model: section.model,

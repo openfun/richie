@@ -3,9 +3,9 @@ API Routes exposed by our Search app
 """
 from rest_framework import routers
 
+from .viewsets.categories import CategoriesViewSet
 from .viewsets.courses import CoursesViewSet
 from .viewsets.organizations import OrganizationsViewSet
-from .viewsets.subjects import SubjectsViewSet
 
 # For now, we use URLPathVersioning to be consistent with fonzie. Fonzie uses it
 # because DRF OpenAPI only supports URLPathVersioning for now.
@@ -18,7 +18,7 @@ ROUTER = routers.SimpleRouter()
 # Define our app's routes with the router
 ROUTER.register(r"courses", CoursesViewSet, "courses")
 ROUTER.register(r"organizations", OrganizationsViewSet, "organizations")
-ROUTER.register(r"subjects", SubjectsViewSet, "subjects")
+ROUTER.register(r"categories", CategoriesViewSet, "categories")
 
 # Use the standard name for our urlpatterns so urls.py can import it effortlessly
 urlpatterns = ROUTER.urls

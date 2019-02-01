@@ -34,7 +34,7 @@ class CourseListForm(forms.Form):
     query = forms.CharField(required=False, min_length=3, max_length=200)
     offset = forms.IntegerField(required=False, min_value=0, initial=0)
     start = DatetimeRangeField(required=False)
-    subjects = ArrayField(required=False, base_type=forms.IntegerField(min_value=0))
+    categories = ArrayField(required=False, base_type=forms.IntegerField(min_value=0))
 
 
 class OrganizationListForm(forms.Form):
@@ -47,9 +47,9 @@ class OrganizationListForm(forms.Form):
     offset = forms.IntegerField(required=False, min_value=0, initial=0)
 
 
-class SubjectListForm(forms.Form):
+class CategoryListForm(forms.Form):
     """
-    Validate the query string params in the subject list request
+    Validate the query string params in the category list request
     """
 
     limit = forms.IntegerField(required=False, min_value=1, initial=10)

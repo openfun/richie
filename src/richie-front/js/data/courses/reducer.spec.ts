@@ -4,6 +4,7 @@ import { courses } from './reducer';
 describe('data/courses reducer', () => {
   const course43 = {
     absolute_url: '/course-slug-43',
+    categories: [45],
     cover_image: '/about_43.png',
     end: '2018-05-31T06:00:00.000Z',
     enrollment_end: '2018-03-15T06:00:00.000Z',
@@ -12,12 +13,12 @@ describe('data/courses reducer', () => {
     languages: ['fr', 'en'],
     organizations: [23, 31],
     start: '2018-03-01T06:00:00.000Z',
-    subjects: [45],
     title: 'Python for data science',
   };
 
   const course44 = {
     absolute_url: '/course-slug-44',
+    categories: [7, 128],
     cover_image: '/about_44.png',
     end: '2018-04-30T06:00:00.000Z',
     enrollment_end: '2018-02-28T06:00:00.000Z',
@@ -26,7 +27,6 @@ describe('data/courses reducer', () => {
     languages: ['fr', 'de'],
     organizations: [11],
     start: '2018-03-01T06:00:00.000Z',
-    subjects: [7, 128],
     title: 'Programming 101 in Python',
   };
 
@@ -48,7 +48,7 @@ describe('data/courses reducer', () => {
       expect(
         courses(previousState, {
           resource: course44,
-          resourceName: modelName.SUBJECTS,
+          resourceName: modelName.CATEGORIES,
           type: 'RESOURCE_ADD',
         }),
       ).toEqual(previousState);

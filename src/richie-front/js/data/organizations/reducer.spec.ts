@@ -23,7 +23,7 @@ describe('data/organizations reducer', () => {
       expect(
         organizations(previousState, {
           resource: org44,
-          resourceName: modelName.SUBJECTS,
+          resourceName: modelName.CATEGORIES,
           type: 'RESOURCE_ADD',
         }),
       ).toEqual(previousState);

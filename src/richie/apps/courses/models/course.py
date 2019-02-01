@@ -17,8 +17,8 @@ from cms.models.pluginmodel import CMSPlugin
 from filer.fields.image import FilerImageField
 
 from ...core.models import BasePageExtension, PagePluginMixin
+from .category import Category
 from .organization import Organization
-from .subject import Subject
 
 CourseState = namedtuple("CourseState", ["priority", "cta", "text", "datetime"])
 
@@ -98,26 +98,26 @@ class Course(BasePageExtension):
         """
         return self.get_organizations().first()
 
-    def get_subjects(self):
+    def get_categories(self):
         """
-        Return the subjects linked to the course via a subject plugin in the placeholder
-        `course_subjects` on the course detail page, ranked by their `position`.
+        Return the categories linked to the course via a category plugin in the placeholder
+        `course_categories` on the course detail page, ranked by their `position`.
         """
-        selector = "extended_object__subject_plugins__cmsplugin_ptr__placeholder"
+        selector = "extended_object__category_plugins__cmsplugin_ptr__placeholder"
         # pylint: disable=no-member
         filter_dict = {
             "{:s}__page".format(selector): self.extended_object,
-            "{:s}__slot".format(selector): "course_subjects",
+            "{:s}__slot".format(selector): "course_categories",
         }
-        # For a public course, we must filter out subjects that are not published in
+        # For a public course, we must filter out categories that are not published in
         # any language
         if self.extended_object.publisher_is_draft is False:
             filter_dict["extended_object__title_set__published"] = True
 
         return (
-            Subject.objects.filter(**filter_dict)
+            Category.objects.filter(**filter_dict)
             .select_related("extended_object")
-            .order_by("extended_object__subject_plugins__cmsplugin_ptr__position")
+            .order_by("extended_object__category_plugins__cmsplugin_ptr__position")
             .distinct()
         )
 

@@ -1,10 +1,10 @@
 import { FormattedMessage } from 'react-intl';
 
+import { Category } from './Category';
 import { Course } from './Course';
 import { modelName } from './models';
 import { Organization } from './Organization';
 import { Resource } from './Resource';
-import { Subject } from './Subject';
 
 /**
  * The base shape of a search suggestion. Used by our `react-autosuggest` callbacks
@@ -25,18 +25,18 @@ export interface OrganizationSuggestion extends ResourceSuggestionBase {
   model: modelName.ORGANIZATIONS;
   data: Organization;
 }
-export interface SubjectSuggestion extends ResourceSuggestionBase {
-  model: modelName.SUBJECTS;
-  data: Subject;
+export interface CategorySuggestion extends ResourceSuggestionBase {
+  model: modelName.CATEGORIES;
+  data: Category;
 }
 
 /**
- * Any search suggestion based on a resource eg. course, organization, subject.
+ * Any search suggestion based on a resource eg. course, organization, category.
  */
 export type ResourceSuggestion =
   | CourseSuggestion
   | OrganizationSuggestion
-  | SubjectSuggestion;
+  | CategorySuggestion;
 
 /**
  * The default search suggestion, eg. "Search for foo" based on the full text.
@@ -75,19 +75,19 @@ export interface OrganizationSuggestionSection
   model: modelName.ORGANIZATIONS;
   values: Organization[];
 }
-export interface SubjectSuggestionSection
+export interface CategorySuggestionSection
   extends ResourceSuggestionSectionBase {
-  model: modelName.SUBJECTS;
-  values: Subject[];
+  model: modelName.CATEGORIES;
+  values: Category[];
 }
 
 /**
- * Any search suggestion section based on a resource eg. course, organization, subject.
+ * Any search suggestion section based on a resource eg. course, organization, category.
  */
 export type ResourceSuggestionSection =
   | CourseSuggestionSection
   | OrganizationSuggestionSection
-  | SubjectSuggestionSection;
+  | CategorySuggestionSection;
 
 /**
  * The default search suggestion section. The only reason this is a section is we cannot put sections and

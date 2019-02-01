@@ -13,7 +13,7 @@ logger = logging.getLogger("richie.search.bootstrap_elasticsearch")
 class Command(BaseCommand):
     """
     Bootstrap tasks include:
-    - create indices for courses, organizations, subjects,
+    - create indices for courses, organizations, categories,
     - index all records in their respective indices,
     - store necessary scripts.
     """

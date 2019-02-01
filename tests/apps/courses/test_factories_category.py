@@ -1,26 +1,26 @@
 """
-Unit tests for the Subject factory
+Unit tests for the Category factory
 """
 import os
 
 from django.test import TestCase
 
-from richie.apps.courses.factories import SubjectFactory
+from richie.apps.courses.factories import CategoryFactory
 
 
-class SubjectFactoriesTestCase(TestCase):
+class CategoryFactoriesTestCase(TestCase):
     """
-    Unit test suite to validate the behavior of the Subject factory
+    Unit test suite to validate the behavior of the Category factory
     """
 
-    def test_factories_subject_logo(self):
+    def test_factories_category_logo(self):
         """
-        The SubjectFactory should be able to generate a plugin with a realistic fake logo.
+        The CategoryFactory should be able to generate a plugin with a realistic fake logo.
         """
-        subject = SubjectFactory(fill_logo=True)
+        category = CategoryFactory(fill_logo=True)
 
         # Check that the logo plugin was created as expected
-        logo = subject.extended_object.placeholders.get(slot="logo")
+        logo = category.extended_object.placeholders.get(slot="logo")
         self.assertEqual(logo.cmsplugin_set.count(), 1)
 
         # The logo plugin should point to one of our fixtures images
@@ -30,14 +30,14 @@ class SubjectFactoriesTestCase(TestCase):
             os.path.basename(logo_plugin.djangocms_picture_picture.picture.file.name),
         )
 
-    def test_factories_subject_banner(self):
+    def test_factories_category_banner(self):
         """
-        The SubjectFactory should be able to generate a plugin with a realistic fake banner.
+        The CategoryFactory should be able to generate a plugin with a realistic fake banner.
         """
-        subject = SubjectFactory(fill_banner=True)
+        category = CategoryFactory(fill_banner=True)
 
         # Check that the logo plugin was created as expected
-        banner = subject.extended_object.placeholders.get(slot="banner")
+        banner = category.extended_object.placeholders.get(slot="banner")
         self.assertEqual(banner.cmsplugin_set.count(), 1)
 
         # The banner plugin should point to one of our fixtures images
@@ -47,14 +47,14 @@ class SubjectFactoriesTestCase(TestCase):
             os.path.basename(banner_plugin.djangocms_picture_picture.picture.file.name),
         )
 
-    def test_factories_subject_description(self):
+    def test_factories_category_description(self):
         """
-        The SubjectFactory should be able to generate a plugin with a realistic fake description.
+        The CategoryFactory should be able to generate a plugin with a realistic fake description.
         """
-        subject = SubjectFactory(fill_description=True)
+        category = CategoryFactory(fill_description=True)
 
         # Check that the description plugin was created as expected
-        description = subject.extended_object.placeholders.get(slot="description")
+        description = category.extended_object.placeholders.get(slot="description")
         self.assertEqual(description.cmsplugin_set.count(), 1)
 
         # The description plugin should contain paragraphs

@@ -10,10 +10,10 @@ from cms.plugin_pool import plugin_pool
 
 from .forms import LicencePluginForm
 from .models import (
+    CategoryPluginModel,
     CoursePluginModel,
     LicencePluginModel,
     OrganizationPluginModel,
-    SubjectPluginModel,
 )
 
 
@@ -41,14 +41,14 @@ class OrganizationPlugin(CMSPluginBase):
 
 
 @plugin_pool.register_plugin
-class SubjectPlugin(CMSPluginBase):
+class CategoryPlugin(CMSPluginBase):
     """
-    Subject plugin displays a subject's information on other pages
+    Category plugin displays a category's information on other pages
     """
 
-    model = SubjectPluginModel
+    model = CategoryPluginModel
     module = _("Courses")
-    render_template = "courses/plugins/subject_plugin.html"
+    render_template = "courses/plugins/category_plugin.html"
     cache = True
     module = settings.FUN_PLUGINS_GROUP
 

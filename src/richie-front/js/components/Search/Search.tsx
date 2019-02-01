@@ -8,7 +8,7 @@ import { SearchSuggestFieldContainer } from '../SearchSuggestFieldContainer/Sear
 
 export interface SearchProps {
   requestOrganizations: () => ResourceListGet;
-  requestSubjects: () => ResourceListGet;
+  requestCategories: () => ResourceListGet;
 }
 
 interface SearchState {
@@ -18,7 +18,7 @@ interface SearchState {
 export class Search extends React.Component<SearchProps, SearchState> {
   componentWillMount() {
     this.props.requestOrganizations();
-    this.props.requestSubjects();
+    this.props.requestCategories();
   }
 
   render() {

@@ -2,29 +2,29 @@
 {% load cms_tags i18n %}
 
 {% block content %}{% spaceless %}
-{% with subject=current_page.subject header_level=2 %}
-<div class="subject-detail">
-  <div class="subject-detail__banner">
+{% with category=current_page.category header_level=2 %}
+<div class="category-detail">
+  <div class="category-detail__banner">
     {% placeholder "banner" %}
   </div>
 
-  <div class="subject-detail__logo">
+  <div class="category-detail__logo">
     {% with width=216 height=120 %}
       {% placeholder "logo" %}
     {% endwith %}
   </div>
 
-  <h1 class="subject-detail__title">{% render_model request.current_page "titles" %}</h1>
+  <h1 class="category-detail__title">{% render_model request.current_page "titles" %}</h1>
 
-  <div class="subject-detail__content">
-    <div class="subject-detail__content__description">
+  <div class="category-detail__content">
+    <div class="category-detail__content__description">
       {% placeholder "description" %}
     </div>
   </div>
 </div>
 
 <div class="course-glimpse-list">
-  {% for course in subject.get_courses %}
+  {% for course in category.get_courses %}
     {# If the current page is a draft, show draft courses with a class annotation for styling #}
     {% if current_page.publisher_is_draft %}
       {% if course.check_publication is True %}

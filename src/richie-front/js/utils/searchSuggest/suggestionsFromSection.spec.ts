@@ -1,7 +1,7 @@
+import { Category } from '../../types/Category';
 import { Course } from '../../types/Course';
 import { modelName } from '../../types/models';
 import { Organization } from '../../types/Organization';
-import { Subject } from '../../types/Subject';
 import { suggestionsFromSection } from './suggestionsFromSection';
 
 describe('utils/searchSuggest/suggestionsFromSection', () => {
@@ -52,24 +52,24 @@ describe('utils/searchSuggest/suggestionsFromSection', () => {
     ]);
   });
 
-  it('turns a subject suggestion section into a list of individual subject suggestions', () => {
+  it('turns a category suggestion section into a list of individual category suggestions', () => {
     expect(
       suggestionsFromSection({
-        message: { defaultMessage: 'Subjects', id: 'subjectsHumanName' },
-        model: modelName.SUBJECTS,
+        message: { defaultMessage: 'Categories', id: 'categoriesHumanName' },
+        model: modelName.CATEGORIES,
         values: [
-          { title: 'Example subject #1' } as Subject,
-          { title: 'Example subject #2' } as Subject,
+          { title: 'Example category #1' } as Category,
+          { title: 'Example category #2' } as Category,
         ],
       }),
     ).toEqual([
       {
-        data: { title: 'Example subject #1' } as Subject,
-        model: modelName.SUBJECTS,
+        data: { title: 'Example category #1' } as Category,
+        model: modelName.CATEGORIES,
       },
       {
-        data: { title: 'Example subject #2' } as Subject,
-        model: modelName.SUBJECTS,
+        data: { title: 'Example category #2' } as Category,
+        model: modelName.CATEGORIES,
       },
     ]);
   });

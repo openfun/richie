@@ -1,40 +1,40 @@
 """
-Unit tests for the Subject model
+Unit tests for the Category model
 """
 from django.test import TestCase
 
 from cms.api import create_page
 
 from richie.apps.core.helpers import create_i18n_page
-from richie.apps.courses.factories import CourseFactory, SubjectFactory
+from richie.apps.courses.factories import CategoryFactory, CourseFactory
 from richie.apps.courses.models import Course
 
 
-class SubjectModelsTestCase(TestCase):
+class CategoryModelsTestCase(TestCase):
     """
-    Unit test suite to validate the behavior of the Subject model
+    Unit test suite to validate the behavior of the Category model
     """
 
-    def test_models_subject_str(self):
+    def test_models_category_str(self):
         """
         The string representation should be built with the title of the related page.
         Only 1 query to the associated page should be generated.
         """
-        page = create_page("Art", "courses/cms/subject_detail.html", "en")
-        subject = SubjectFactory(extended_object=page)
+        page = create_page("Art", "courses/cms/category_detail.html", "en")
+        category = CategoryFactory(extended_object=page)
         with self.assertNumQueries(1):
-            self.assertEqual(str(subject), "Subject: Art")
+            self.assertEqual(str(category), "Category: Art")
 
-    def test_models_subject_get_courses(self):
+    def test_models_category_get_courses(self):
         """
-        It should be possible to retrieve the list of related courses on the subject instance.
+        It should be possible to retrieve the list of related courses on the category instance.
         The number of queries should be minimal.
         """
-        subject = SubjectFactory(should_publish=True)
+        category = CategoryFactory(should_publish=True)
         courses = CourseFactory.create_batch(
-            3, page_title="my title", fill_subjects=[subject], should_publish=True
+            3, page_title="my title", fill_categories=[category], should_publish=True
         )
-        retrieved_courses = subject.get_courses()
+        retrieved_courses = category.get_courses()
 
         with self.assertNumQueries(2):
             self.assertEqual(set(retrieved_courses), set(courses))
@@ -45,20 +45,20 @@ class SubjectModelsTestCase(TestCase):
                     course.extended_object.prefetched_titles[0].title, "my title"
                 )
 
-    def test_models_subject_get_courses_several_languages(self):
+    def test_models_category_get_courses_several_languages(self):
         """
         The courses should not be duplicated if they exist in several languages.
         """
-        subject = SubjectFactory(should_publish=True)
+        category = CategoryFactory(should_publish=True)
         CourseFactory(
             page_title={"en": "my title", "fr": "mon titre"},
-            fill_subjects=[subject],
+            fill_categories=[category],
             should_publish=True,
         )
         self.assertEqual(Course.objects.count(), 2)
-        self.assertEqual(subject.get_courses().count(), 1)
+        self.assertEqual(category.get_courses().count(), 1)
 
-    def test_models_subject_get_courses_snapshots(self):
+    def test_models_category_get_courses_snapshots(self):
         """
         Snapshot courses should be excluded from the list of courses returned.
         The new filter query we added to exclude snapshots should not create duplicates.
@@ -72,16 +72,16 @@ class SubjectModelsTestCase(TestCase):
         # the parent has a draft and a public page... so "cms_pages" has a cardinality of 2
         root_page = create_i18n_page(published=True)
 
-        subject = SubjectFactory(should_publish=True)
+        category = CategoryFactory(should_publish=True)
         course = CourseFactory(
-            page_parent=root_page, fill_subjects=[subject], should_publish=True
+            page_parent=root_page, fill_categories=[category], should_publish=True
         )
         CourseFactory(
             page_parent=course.extended_object,
-            fill_subjects=[subject],
+            fill_categories=[category],
             should_publish=True,
         )
 
         self.assertEqual(Course.objects.count(), 4)
-        self.assertEqual(subject.get_courses().count(), 1)
-        self.assertEqual(subject.public_extension.get_courses().count(), 1)
+        self.assertEqual(category.get_courses().count(), 1)
+        self.assertEqual(category.public_extension.get_courses().count(), 1)

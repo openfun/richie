@@ -9,6 +9,6 @@ export interface Course extends Resource {
   languages: string[];
   organizations: number[];
   start: string;
-  subjects: number[];
+  categories: number[];
   title: string;
 }

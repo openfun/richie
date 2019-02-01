@@ -25,7 +25,7 @@ describe('Integration tests - filters', () => {
 
     // Create the store with the same initial state as in-app
     store = bootstrapStore();
-    // Create some organizations, subjects and courses facets and put them in our store so we can
+    // Create some organizations, categories and courses facets and put them in our store so we can
     // use them to test the filters
     const orgs = [
       {
@@ -55,18 +55,18 @@ describe('Integration tests - filters', () => {
         { limit: 0, offset: 3 },
       ),
     );
-    const subjects = [
-      { id: 31, image: null, title: 'Subject Thirty-One' },
-      { id: 41, image: null, title: 'Subject Forty-One' },
-      { id: 51, image: null, title: 'Subject Fifty-One' },
+    const categories = [
+      { id: 31, image: null, title: 'Category Thirty-One' },
+      { id: 41, image: null, title: 'Category Forty-One' },
+      { id: 51, image: null, title: 'Category Fifty-One' },
     ];
-    store.dispatch(addMultipleResources(modelName.SUBJECTS, subjects));
+    store.dispatch(addMultipleResources(modelName.CATEGORIES, categories));
     store.dispatch(
       didGetResourceList(
-        modelName.SUBJECTS,
+        modelName.CATEGORIES,
         {
           meta: { limit: 3, offset: 0, total_count: 3 },
-          objects: subjects,
+          objects: categories,
         },
         { limit: 0, offset: 3 },
       ),
@@ -76,8 +76,8 @@ describe('Integration tests - filters', () => {
         modelName.COURSES,
         {
           facets: {
+            categories: { 31: 1, 41: 3, 51: 9 },
             organizations: { 3: 12, 4: 87, 5: 56 },
-            subjects: { 31: 1, 41: 3, 51: 9 },
           },
           meta: { limit: 0, offset: 0, total_count: 400 },
           objects: [],
@@ -125,8 +125,8 @@ describe('Integration tests - filters', () => {
     // Return the same thing as what's already in state, we don't intend to modify the state
     fetchMock.get('/api/v1.0/courses/?limit=0&offset=0&organizations=5', {
       facets: {
+        categories: { 31: 1, 41: 3, 51: 9 },
         organizations: { 3: 12, 4: 87, 5: 56 },
-        subjects: { 31: 1, 41: 3, 51: 9 },
       },
       meta: { limit: 0, offset: 0, total_count: 400 },
       objects: [],
@@ -168,27 +168,27 @@ describe('Integration tests - filters', () => {
     // Return the same thing as what's already in state, we don't intend to modify the state
     fetchMock.get('/api/v1.0/courses/?limit=0&offset=0', {
       facets: {
+        categories: { 31: 1, 41: 3, 51: 9 },
         organizations: { 3: 12, 4: 87, 5: 56 },
-        subjects: { 31: 1, 41: 3, 51: 9 },
       },
       meta: { limit: 0, offset: 0, total_count: 400 },
       objects: [],
-      params: { limit: 0, offset: 0, subjects: '41' },
+      params: { limit: 0, offset: 0, categories: '41' },
     });
 
-    // Set the subjects filter to '41'
+    // Set the categories filter to '41'
     store.dispatch(
       didGetResourceList(
         modelName.COURSES,
         {
           facets: {
+            categories: { 31: 1, 41: 3, 51: 9 },
             organizations: { 3: 12, 4: 87, 5: 56 },
-            subjects: { 31: 1, 41: 3, 51: 9 },
           },
           meta: { limit: 0, offset: 0, total_count: 400 },
           objects: [],
         },
-        { limit: 0, offset: 0, subjects: '41' },
+        { limit: 0, offset: 0, categories: '41' },
       ),
     );
 
@@ -198,13 +198,13 @@ describe('Integration tests - filters', () => {
         .find(SearchFilter)
         .filterWhere(wrapper => wrapper.find('button').hasClass('active'))
         .html(),
-    ).toContain('Subject Forty-One');
+    ).toContain('Category Forty-One');
 
     // Simulate a click on the filter we want to disable
     makeSearchFilterPane()
       .find(SearchFilter)
       .filterWhere(
-        wrapper => wrapper.html().indexOf('Subject Forty-One') !== -1,
+        wrapper => wrapper.html().indexOf('Category Forty-One') !== -1,
       )
       .simulate('click');
 
@@ -216,19 +216,19 @@ describe('Integration tests - filters', () => {
       makeSearchFilterPane()
         .find(SearchFilterGroupContainer)
         .filterWhere(
-          wrapper => wrapper.prop('machineName') === modelName.SUBJECTS,
+          wrapper => wrapper.prop('machineName') === modelName.CATEGORIES,
         )
         .find(SearchFilter)
         .first()
         .html(),
-    ).toContain('Subject Fifty-One');
+    ).toContain('Category Fifty-One');
 
     // Our previously active filter is not marked as active any more
     expect(
       makeSearchFilterPane()
         .find(SearchFilter)
         .filterWhere(
-          wrapper => wrapper.html().indexOf('Subject Forty-One') !== -1,
+          wrapper => wrapper.html().indexOf('Category Forty-One') !== -1,
         )
         .find('button')
         .hasClass('active'),

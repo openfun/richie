@@ -1,6 +1,11 @@
 import { defineMessages } from 'react-intl';
 
 export const commonMessages = defineMessages({
+  categoriesHumanName: {
+    defaultMessage: 'Categories',
+    description: 'Title/name to use when we display a list of categories',
+    id: 'common.categoriesHumanName',
+  },
   coursesHumanName: {
     defaultMessage: 'Courses',
     description: 'Title/name to use when we display a list of courses',
@@ -10,10 +15,5 @@ export const commonMessages = defineMessages({
     defaultMessage: 'Organizations',
     description: 'Title/name to use when we display a list of organizations',
     id: 'common.organizationsHumanName',
-  },
-  subjectsHumanName: {
-    defaultMessage: 'Subjects',
-    description: 'Title/name to use when we display a list of subjects',
-    id: 'common.subjectsHumanName',
   },
 });

@@ -66,7 +66,7 @@ class ElasticSearchMixin:
     ES_INDICES = IndicesList(
         courses="richie.apps.search.indexers.courses.CoursesIndexer",
         organizations="richie.apps.search.indexers.organizations.OrganizationsIndexer",
-        subjects="richie.apps.search.indexers.subjects.SubjectsIndexer",
+        categories="richie.apps.search.indexers.categories.CategoriesIndexer",
     )
 
     ES_DEFAULT_PAGE_SIZE = 10
@@ -298,7 +298,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         ("courses/cms/course_detail.html", _("Course page")),
         ("courses/cms/course_run_detail.html", _("Course run page")),
         ("courses/cms/organization_detail.html", _("Organization page")),
-        ("courses/cms/subject_detail.html", _("Subject page")),
+        ("courses/cms/category_detail.html", _("Category page")),
         ("persons/cms/person_detail.html", _("Person page")),
         ("search/search.html", _("Search")),
         ("richie/fullwidth.html", "Fullwidth"),
@@ -352,9 +352,9 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
             "plugins": ["LicencePlugin"],
             "limits": {"LicencePlugin": 1},
         },
-        "courses/cms/course_detail.html course_subjects": {
-            "name": _("Subjects"),
-            "plugins": ["SubjectPlugin"],
+        "courses/cms/course_detail.html course_categories": {
+            "name": _("Categories"),
+            "plugins": ["CategoryPlugin"],
         },
         "courses/cms/course_detail.html course_organizations": {
             "name": _("Organizations"),
@@ -376,18 +376,18 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
             "plugins": ["CKEditorPlugin"],
             "limits": {"CKEditorPlugin": 1},
         },
-        # Subject detail
-        "courses/cms/subject_detail.html banner": {
+        # Category detail
+        "courses/cms/category_detail.html banner": {
             "name": _("Banner"),
             "plugins": ["PicturePlugin"],
             "limits": {"PicturePlugin": 1},
         },
-        "courses/cms/subject_detail.html logo": {
+        "courses/cms/category_detail.html logo": {
             "name": _("Logo"),
             "plugins": ["PicturePlugin"],
             "limits": {"PicturePlugin": 1},
         },
-        "courses/cms/subject_detail.html description": {
+        "courses/cms/category_detail.html description": {
             "name": _("Description"),
             "plugins": ["CKEditorPlugin"],
             "limits": {"CKEditorPlugin": 1},

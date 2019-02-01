@@ -18,7 +18,7 @@ from filer.models.imagemodels import Image
 from ..core.factories import FilerImageFactory, PageExtensionDjangoModelFactory
 from ..core.helpers import create_text_plugin
 from ..core.tests.utils import file_getter
-from .models import Course, CourseRun, Licence, Organization, Subject
+from .models import Category, Course, CourseRun, Licence, Organization
 
 VideoSample = namedtuple("VideoSample", ["label", "image", "url"])
 
@@ -248,23 +248,23 @@ class CourseFactory(PageExtensionDjangoModelFactory):
 
     @factory.post_generation
     # pylint: disable=unused-argument
-    def fill_subjects(self, create, extracted, **kwargs):
+    def fill_categories(self, create, extracted, **kwargs):
         """
-        Add subjects plugin to course from a given list of subject instances.
+        Add categories plugin to course from a given list of category instances.
         """
 
         if create and extracted:
             for language in self.extended_object.get_languages():
                 placeholder = self.extended_object.placeholders.get(
-                    slot="course_subjects"
+                    slot="course_categories"
                 )
 
-                for subject in extracted:
+                for category in extracted:
                     add_plugin(
                         language=language,
                         placeholder=placeholder,
-                        plugin_type="SubjectPlugin",
-                        **{"page": subject.extended_object},
+                        plugin_type="CategoryPlugin",
+                        **{"page": category.extended_object},
                     )
 
     @factory.post_generation
@@ -449,14 +449,14 @@ class CourseRunFactory(PageExtensionDjangoModelFactory):
         )
 
 
-class SubjectFactory(BLDPageExtensionDjangoModelFactory):
+class CategoryFactory(BLDPageExtensionDjangoModelFactory):
     """
-    A factory to automatically generate random yet meaningful subject page extensions
+    A factory to automatically generate random yet meaningful category page extensions
     and their related page in our tests.
     """
 
     class Meta:
-        model = Subject
+        model = Category
         exclude = [
             "page_in_navigation",
             "page_languages",
@@ -466,26 +466,26 @@ class SubjectFactory(BLDPageExtensionDjangoModelFactory):
         ]
 
     # fields concerning the related page
-    page_template = Subject.TEMPLATE_DETAIL
+    page_template = Category.TEMPLATE_DETAIL
 
     @factory.post_generation
     # pylint: disable=unused-argument
     def fill_courses(self, create, extracted, **kwargs):
         """
-        Add plugins for this subject to each course in the given list of course instances.
+        Add plugins for this category to each course in the given list of course instances.
         """
 
         if create and extracted:
             for course in extracted:
                 placeholder = course.extended_object.placeholders.get(
-                    slot="course_subjects"
+                    slot="course_categories"
                 )
                 for language in self.extended_object.get_languages():
 
                     add_plugin(
                         language=language,
                         placeholder=placeholder,
-                        plugin_type="SubjectPlugin",
+                        plugin_type="CategoryPlugin",
                         **{"page": self.extended_object},
                     )
 

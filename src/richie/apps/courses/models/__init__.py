@@ -3,4 +3,4 @@
 # pylint: disable=wildcard-import
 from .course import *
 from .organization import *
-from .subject import *
+from .category import *

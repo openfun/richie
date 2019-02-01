@@ -1,5 +1,5 @@
 """
-ElasticSearch subject document management utilities
+ElasticSearch category document management utilities
 """
 from collections import defaultdict
 
@@ -12,22 +12,22 @@ from djangocms_picture.models import Picture
 from richie.plugins.simple_text_ckeditor.models import SimpleText
 
 from .. import defaults
-from ...courses.models import Subject
+from ...courses.models import Category
 from ..exceptions import QueryFormatException
-from ..forms import SubjectListForm
+from ..forms import CategoryListForm
 from ..partial_mappings import MULTILINGUAL_TEXT
 from ..utils.i18n import get_best_field_language
 from ..utils.indexers import slice_string_for_completion
 
 
-class SubjectsIndexer:
+class CategoriesIndexer:
     """
     Makes available the parameters the indexer requires as well as functions to shape
     objects getting into and out of ElasticSearch
     """
 
-    document_type = "subject"
-    index_name = "richie_subjects"
+    document_type = "category"
+    index_name = "richie_categories"
     mapping = {
         "dynamic_templates": MULTILINGUAL_TEXT,
         "properties": {
@@ -49,11 +49,11 @@ class SubjectsIndexer:
     @classmethod
     def get_data_for_es(cls, index, action):
         """
-        Load all the subjects from the Subject model and format them for the
+        Load all the categories from the Category model and format them for the
         ElasticSearch index.
         """
-        for subject in (
-            Subject.objects.filter(
+        for category in (
+            Category.objects.filter(
                 extended_object__publisher_is_draft=False,
                 extended_object__title_set__published=True,
             )
@@ -68,36 +68,36 @@ class SubjectsIndexer:
         ):
             # Get published titles
             titles = {
-                t.language: t.title for t in subject.extended_object.published_titles
+                t.language: t.title for t in category.extended_object.published_titles
             }
 
             # Get logo images
             logo_images = {}
             for logo_image in Picture.objects.filter(
-                cmsplugin_ptr__placeholder__page=subject.extended_object,
+                cmsplugin_ptr__placeholder__page=category.extended_object,
                 cmsplugin_ptr__placeholder__slot="logo",
             ):
                 # Force the image format before computing it
                 logo_image.use_no_cropping = False
-                logo_image.width = defaults.SUBJECTS_LOGO_IMAGE_WIDTH
-                logo_image.height = defaults.SUBJECTS_LOGO_IMAGE_HEIGHT
+                logo_image.width = defaults.CATEGORIES_LOGO_IMAGE_WIDTH
+                logo_image.height = defaults.CATEGORIES_LOGO_IMAGE_HEIGHT
                 logo_images[logo_image.cmsplugin_ptr.language] = logo_image.img_src
 
             # Get description texts
             description = defaultdict(list)
             for simple_text in SimpleText.objects.filter(
-                cmsplugin_ptr__placeholder__page=subject.extended_object,
+                cmsplugin_ptr__placeholder__page=category.extended_object,
                 cmsplugin_ptr__placeholder__slot="description",
             ):
                 description[simple_text.cmsplugin_ptr.language].append(simple_text.body)
 
             yield {
-                "_id": str(subject.pk),
+                "_id": str(category.pk),
                 "_index": index,
                 "_op_type": action,
                 "_type": cls.document_type,
                 "absolute_url": {
-                    language: subject.extended_object.get_absolute_url(language)
+                    language: category.extended_object.get_absolute_url(language)
                     for language in titles.keys()
                 },
                 "complete": {
@@ -110,18 +110,18 @@ class SubjectsIndexer:
             }
 
     @staticmethod
-    def format_es_object_for_api(es_subject, best_language):
+    def format_es_object_for_api(es_category, best_language):
         """
-        Format an subject stored in ES into a consistent and easy-to-consume record for
+        Format an category stored in ES into a consistent and easy-to-consume record for
         API consumers
         """
         return {
-            "id": es_subject["_id"],
+            "id": es_category["_id"],
             "logo": get_best_field_language(
-                es_subject["_source"]["logo"], best_language
+                es_category["_source"]["logo"], best_language
             ),
             "title": get_best_field_language(
-                es_subject["_source"]["title"], best_language
+                es_category["_source"]["title"], best_language
             ),
         }
 
@@ -129,10 +129,10 @@ class SubjectsIndexer:
     def build_es_query(request):
         """
         Build an ElasticSearch query and its related aggregations, to be consumed by the ES client
-        in the Subjects ViewSet
+        in the Categories ViewSet
         """
         # Instantiate a form with our query_params to check & sanitize them
-        params_form = SubjectListForm(request.query_params)
+        params_form = CategoryListForm(request.query_params)
 
         # Raise an exception with error information if the query params are not valid
         if not params_form.is_valid():

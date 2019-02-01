@@ -325,7 +325,7 @@ class IndexManagerTestCase(TestCase):
         "richie.apps.search.indexers.organizations.OrganizationsIndexer.scripts", new={}
     )
     @mock.patch(
-        "richie.apps.search.indexers.subjects.SubjectsIndexer.scripts",
+        "richie.apps.search.indexers.categories.CategoriesIndexer.scripts",
         new={"script_id_C": "script body C"},
     )
     @mock.patch("settings.ES_CLIENT.put_script")

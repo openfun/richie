@@ -14,13 +14,13 @@ from cms import models as cms_models
 
 from richie.apps.courses.factories import (
     VIDEO_SAMPLE_LINKS,
+    CategoryFactory,
     CourseFactory,
     CourseRunFactory,
     LicenceFactory,
     OrganizationFactory,
-    SubjectFactory,
 )
-from richie.apps.courses.models import Course, Licence, Organization, Subject
+from richie.apps.courses.models import Category, Course, Licence, Organization
 from richie.apps.persons.factories import PersonFactory
 from richie.apps.persons.models import Person
 
@@ -31,12 +31,12 @@ logger = logging.getLogger("richie.commands.core.create_demo_site")
 DEMO_ANNEX_PAGE_ID = "annex"
 NB_COURSES = 3
 NB_COURSES_ORGANIZATION_RELATIONS = 3
-NB_COURSES_SUBJECT_RELATIONS = 4
+NB_COURSES_CATEGORY_RELATIONS = 4
 NB_COURSES_PERSONS_PLUGINS = 3
 NB_ORGANIZATIONS = 8
 NB_LICENCES = 5
 NB_PERSONS = 10
-NB_SUBJECTS = 8
+NB_CATEGORIES = 8
 PAGE_INFOS = {
     "home": {
         "content": {"en": "Home", "fr": "Accueil"},
@@ -56,11 +56,11 @@ PAGE_INFOS = {
             "template": "search/search.html",
         },
     },
-    "subjects": {
-        "content": {"en": "Subjects", "fr": "Sujets"},
+    "categories": {
+        "content": {"en": "Categories", "fr": "Catégories"},
         "in_navigation": False,
         "kwargs": {
-            "reverse_id": Subject.ROOT_REVERSE_ID,
+            "reverse_id": Category.ROOT_REVERSE_ID,
             "template": "richie/child_pages_list.html",
         },
     },
@@ -128,7 +128,7 @@ def clear_cms_data():
     cms_models.Placeholder.objects.all().delete()
     Course.objects.all().delete()  # Deletes the associated course runs as well by cascading
     Organization.objects.all().delete()
-    Subject.objects.all().delete()
+    Category.objects.all().delete()
     Person.objects.all().delete()
     Licence.objects.all().delete()
 
@@ -160,12 +160,12 @@ def create_demo_site():
         should_publish=True,
     )
 
-    # Create subjects under the `Subjects` page
-    subjects = SubjectFactory.create_batch(
-        NB_SUBJECTS,
+    # Create categories under the `Categories` page
+    categories = CategoryFactory.create_batch(
+        NB_CATEGORIES,
         page_in_navigation=True,
         page_languages=[l[0] for l in settings.LANGUAGES],
-        page_parent=pages_created["subjects"],
+        page_parent=pages_created["categories"],
         fill_banner=True,
         fill_description=True,
         fill_logo=True,
@@ -187,7 +187,7 @@ def create_demo_site():
         should_publish=True,
     )
 
-    # Create courses under the `Course` page with subjects and organizations
+    # Create courses under the `Course` page with categories and organizations
     # relations
     for _ in range(NB_COURSES):
         video_sample = random.choice(VIDEO_SAMPLE_LINKS)
@@ -203,7 +203,7 @@ def create_demo_site():
             fill_team=random.sample(persons, NB_COURSES_PERSONS_PLUGINS),
             fill_teaser=video_sample,
             fill_cover=video_sample.image,
-            fill_subjects=random.sample(subjects, NB_COURSES_SUBJECT_RELATIONS),
+            fill_categories=random.sample(categories, NB_COURSES_CATEGORY_RELATIONS),
             fill_organizations=random.sample(
                 organizations, NB_COURSES_ORGANIZATION_RELATIONS
             ),

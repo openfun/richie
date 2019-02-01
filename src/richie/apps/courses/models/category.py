@@ -15,24 +15,24 @@ from cms.models.pluginmodel import CMSPlugin
 from ...core.models import BasePageExtension, PagePluginMixin
 
 
-class Subject(BasePageExtension):
+class Category(BasePageExtension):
     """
-    The subject page extension represents and records a thematic in the catalog.
+    The category page extension represents and records a thematic in the catalog.
 
     This model should be used to record structured data about the thematic whereas the
     associated page object is where we record the less structured information to display on the
     page that presents the thematic.
     """
 
-    ROOT_REVERSE_ID = "subjects"
-    TEMPLATE_DETAIL = "courses/cms/subject_detail.html"
+    ROOT_REVERSE_ID = "categories"
+    TEMPLATE_DETAIL = "courses/cms/category_detail.html"
 
     class Meta:
-        verbose_name = _("subject")
+        verbose_name = _("category")
         ordering = ["-pk"]
 
     def __str__(self):
-        """Human representation of a subject"""
+        """Human representation of a category"""
         return "{model}: {title}".format(
             model=self._meta.verbose_name.title(),
             title=self.extended_object.get_title(),
@@ -40,8 +40,8 @@ class Subject(BasePageExtension):
 
     def get_courses(self, language=None):
         """
-        Return a query to get the courses related to this subject ie for which a plugin for
-        this subject is linked to the course page on the "course_subjects" placeholder.
+        Return a query to get the courses related to this category ie for which a plugin for
+        this category is linked to the course page on the "course_categories" placeholder.
         """
         page = (
             self.extended_object
@@ -49,13 +49,11 @@ class Subject(BasePageExtension):
             else self.draft_extension.extended_object
         )
         language = language or translation.get_language()
-        bfs = (
-            "extended_object__placeholders__cmsplugin__courses_subjectpluginmodel__page"
-        )
+        bfs = "extended_object__placeholders__cmsplugin__courses_categorypluginmodel__page"
         filter_dict = {
             "extended_object__node__parent__cms_pages__course__isnull": True,
             "extended_object__publisher_is_draft": True,
-            "extended_object__placeholders__slot": "course_subjects",
+            "extended_object__placeholders__slot": "course_categories",
             "extended_object__placeholders__cmsplugin__language": language,
             bfs: page,
             "{:s}__publisher_is_draft".format(bfs): True,
@@ -76,20 +74,20 @@ class Subject(BasePageExtension):
         )
 
 
-class SubjectPluginModel(PagePluginMixin, CMSPlugin):
+class CategoryPluginModel(PagePluginMixin, CMSPlugin):
     """
-    Subject plugin model handles the relation between SubjectPlugin
-    and their Subject instance
+    Category plugin model handles the relation between CategoryPlugin
+    and their Category instance
     """
 
     page = models.ForeignKey(
         Page,
-        related_name="subject_plugins",
-        limit_choices_to={"publisher_is_draft": True, "subject__isnull": False},
+        related_name="category_plugins",
+        limit_choices_to={"publisher_is_draft": True, "category__isnull": False},
     )
 
     class Meta:
-        verbose_name = _("subject plugin model")
+        verbose_name = _("category plugin model")
 
     def __str__(self):
         """Human representation of a page plugin"""
@@ -98,4 +96,4 @@ class SubjectPluginModel(PagePluginMixin, CMSPlugin):
         )
 
 
-extension_pool.register(Subject)
+extension_pool.register(Category)

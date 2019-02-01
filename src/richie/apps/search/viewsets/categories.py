@@ -1,5 +1,5 @@
 """
-API endpoints to access subjects through ElasticSearch
+API endpoints to access categories through ElasticSearch
 """
 from django.conf import settings
 from django.utils.module_loading import import_string
@@ -13,19 +13,19 @@ from ..exceptions import QueryFormatException
 from ..utils.viewsets import AutocompleteMixin, ViewSetMetadata
 
 
-class SubjectsViewSet(AutocompleteMixin, ViewSet):
+class CategoriesViewSet(AutocompleteMixin, ViewSet):
     """
-    A simple viewset with GET endpoints to fetch subjects
+    A simple viewset with GET endpoints to fetch categories
     See API Blueprint for details on consumer use.
     """
 
-    # Get the subjects indexer from the settings
-    _meta = ViewSetMetadata(indexer=import_string(settings.ES_INDICES.subjects))
+    # Get the categories indexer from the settings
+    _meta = ViewSetMetadata(indexer=import_string(settings.ES_INDICES.categories))
 
     # pylint: disable=no-self-use,unused-argument
     def list(self, request, version):
         """
-        Subject search endpoint: pass query params to ElasticSearch so it filters subjects
+        Category search endpoint: pass query params to ElasticSearch so it filters categories
         and returns a list of matching items
         """
         try:
@@ -55,11 +55,11 @@ class SubjectsViewSet(AutocompleteMixin, ViewSet):
             },
             "objects": [
                 self._meta.indexer.format_es_object_for_api(
-                    subject,
+                    category,
                     # Get the best language we can return multilingual fields in
                     get_language_from_request(request),
                 )
-                for subject in query_response["hits"]["hits"]
+                for category in query_response["hits"]["hits"]
             ],
         }
 
@@ -81,7 +81,7 @@ class SubjectsViewSet(AutocompleteMixin, ViewSet):
         except NotFoundError:
             return Response(status=404)
 
-        # Format a clean subject object as a response
+        # Format a clean category object as a response
         return Response(
             self._meta.indexer.format_es_object_for_api(
                 query_response,

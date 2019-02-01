@@ -4,6 +4,7 @@ import { mapStateToProps, mergeProps } from './CourseGlimpseContainer';
 describe('components/CourseGlimpseContainer', () => {
   const course43 = {
     absolute_url: '/course-path-43',
+    categories: [45],
     cover_image: '/about_43.png',
     end: '2018-05-31T06:00:00.000Z',
     enrollment_end: '2018-03-15T06:00:00.000Z',
@@ -12,7 +13,6 @@ describe('components/CourseGlimpseContainer', () => {
     languages: ['fr', 'pt'],
     organizations: [23, 31],
     start: '2018-03-01T06:00:00.000Z',
-    subjects: [45],
     title: 'Python for data science',
   };
 

@@ -6,10 +6,10 @@ from django.test import TestCase
 from cms.api import create_page
 
 from richie.apps.courses.factories import (
+    CategoryFactory,
     CourseFactory,
     CourseRunFactory,
     OrganizationFactory,
-    SubjectFactory,
 )
 from richie.apps.courses.models import CourseRun
 
@@ -29,34 +29,38 @@ class CourseModelsTestCase(TestCase):
         with self.assertNumQueries(1):
             self.assertEqual(str(course), "Course: Nano particles")
 
-    def test_models_course_get_subjects_empty(self):
+    def test_models_course_get_categories_empty(self):
         """
-        For a course not linked to any subject the method `get_subjects` should
+        For a course not linked to any category the method `get_categories` should
         return an empty query.
         """
         course = CourseFactory(should_publish=True)
-        self.assertFalse(course.get_subjects().exists())
-        self.assertFalse(course.public_extension.get_subjects().exists())
+        self.assertFalse(course.get_categories().exists())
+        self.assertFalse(course.public_extension.get_categories().exists())
 
-    def test_models_course_get_subjects(self):
+    def test_models_course_get_categories(self):
         """
-        The `get_subjects` method should return all subjects linked to a course and
+        The `get_categories` method should return all categories linked to a course and
         should respect publication status.
         """
-        # The 2 first subjects are grouped in one variable name and will be linked to the
-        # course in the following, the third subject will not be linked so we can check that
-        # only the subjects linked to the course are retrieved (its name starts with `_`
+        # The 2 first categories are grouped in one variable name and will be linked to the
+        # course in the following, the third category will not be linked so we can check that
+        # only the categories linked to the course are retrieved (its name starts with `_`
         # because it is not used and only here for unpacking purposes)
-        *draft_subjects, _other_draft = SubjectFactory.create_batch(3)
-        *public_subjects, _other_public = SubjectFactory.create_batch(
+        *draft_categories, _other_draft = CategoryFactory.create_batch(3)
+        *public_categories, _other_public = CategoryFactory.create_batch(
             3, should_publish=True
         )
         course = CourseFactory(
-            fill_subjects=draft_subjects + public_subjects, should_publish=True
+            fill_categories=draft_categories + public_categories, should_publish=True
         )
 
-        self.assertEqual(list(course.get_subjects()), draft_subjects + public_subjects)
-        self.assertEqual(list(course.public_extension.get_subjects()), public_subjects)
+        self.assertEqual(
+            list(course.get_categories()), draft_categories + public_categories
+        )
+        self.assertEqual(
+            list(course.public_extension.get_categories()), public_categories
+        )
 
     def test_models_course_get_organizations_empty(self):
         """
@@ -73,7 +77,7 @@ class CourseModelsTestCase(TestCase):
         should respect publication status.
         """
         # The 2 first organizations are grouped in one variable name and will be linked to the
-        # course in the following, the third subject will not be linked so we can check that
+        # course in the following, the third category will not be linked so we can check that
         # only the organizations linked to the course are retrieved (its name starts with `_`
         # because it is not used and only here for unpacking purposes)
         *draft_organizations, _other_draft = OrganizationFactory.create_batch(3)
@@ -107,7 +111,7 @@ class CourseModelsTestCase(TestCase):
         course via plugins, respecting publication status.
         """
         # The 2 first organizations are grouped in one variable name and will be linked to the
-        # course in the following, the third subject will not be linked so we can check that
+        # course in the following, the third category will not be linked so we can check that
         # only the organizations linked to the course are retrieved (its name starts with `_`
         # because it is not used and only here for unpacking purposes)
         *draft_organizations, _other_draft = OrganizationFactory.create_batch(3)
