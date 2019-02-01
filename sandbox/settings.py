@@ -71,10 +71,6 @@ class ElasticSearchMixin:
 
     ES_DEFAULT_PAGE_SIZE = 10
 
-    COURSE_API_ENDPOINT = "https://www.fun-mooc.fr/fun/api/courses"
-    ORGANIZATION_API_ENDPOINT = "https://www.fun-mooc.fr/fun/api/universities"
-    SUBJECT_API_ENDPOINT = "https://www.fun-mooc.fr/fun/api/course_subjects"
-
 
 class DRFMixin:
     """
