@@ -7,6 +7,7 @@ from django.test import TestCase
 from django.utils import timezone
 
 from richie.apps.courses.factories import CourseFactory, CourseRunFactory
+from richie.apps.courses.models import CourseState
 
 
 class CourseRunModelsTestCase(TestCase):
@@ -69,111 +70,93 @@ class CourseRunModelsTestCase(TestCase):
             enrollment_end=self.now + timedelta(hours=1),
         )
 
-    def test_models_course_glimpse_info_coming_soon(self):
+    def test_models_course_state_coming_soon(self):
         """
-        Confirm glimpse datetime result when there is no course runs at all.
+        Confirm course state result when there is no course runs at all.
         """
         course = CourseFactory()
         with self.assertNumQueries(1):
-            glimpse_info = course.glimpse_info
-        self.assertEqual(
-            glimpse_info, {"cta": None, "datetime": None, "text": "coming soon"}
-        )
+            state = course.state
+        self.assertEqual(state, CourseState(6, None, "coming soon", None))
 
-    def test_models_course_glimpse_date_archived(self):
+    def test_models_course_state_archived(self):
         """
-        Confirm glimpse datetime result when there is a course run only in the past.
+        Confirm course state when there is a course run only in the past.
         """
         course = CourseFactory()
         self.create_run_archived(course)
         with self.assertNumQueries(2):
-            glimpse_info = course.glimpse_info
-        self.assertEqual(
-            glimpse_info, {"cta": None, "datetime": None, "text": "archived"}
-        )
+            state = course.state
+        self.assertEqual(state, CourseState(5, None, "archived", None))
 
-    def test_models_course_glimpse_date_ongoing_enrollment_closed(self):
+    def test_models_course_state_ongoing_enrollment_closed(self):
         """
-        Confirm glimpse datetime result when there is an on-going course run but closed for
+        Confirm course state when there is an on-going course run but closed for
         enrollment.
         """
         course = CourseFactory()
         self.create_run_ongoing_closed(course)
         with self.assertNumQueries(2):
-            glimpse_info = course.glimpse_info
-        self.assertEqual(
-            glimpse_info, {"cta": None, "datetime": None, "text": "on-going"}
-        )
+            state = course.state
+        self.assertEqual(state, CourseState(4, None, "on-going", None))
 
-    def test_models_course_glimpse_date_future_enrollment_not_yet_open(self):
+    def test_models_course_state_future_enrollment_not_yet_open(self):
         """
-        Confirm glimpse datetime result when there is a future course run but not yet open for
+        Confirm course state when there is a future course run but not yet open for
         enrollment.
         """
         course = CourseFactory()
         course_run = self.create_run_future_not_yet_open(course)
         with self.assertNumQueries(2):
-            glimpse_info = course.glimpse_info
-        expected_glimpse = {
-            "cta": None,
-            "datetime": course_run.start,
-            "text": "starting on",
-        }
-        self.assertEqual(glimpse_info, expected_glimpse)
+            state = course.state
+        expected_state = CourseState(2, "see details", "starting on", course_run.start)
+        self.assertEqual(state, expected_state)
 
         # Adding an on-going but closed course run should not change the result
         self.create_run_ongoing_closed(course)
         with self.assertNumQueries(2):
-            glimpse_info = course.glimpse_info
-        self.assertEqual(glimpse_info, expected_glimpse)
+            state = course.state
+        self.assertEqual(state, expected_state)
 
-    def test_models_course_glimpse_date_future_enrollment_closed(self):
+    def test_models_course_state_future_enrollment_closed(self):
         """
-        Confirm glimpse datetime result when there is a future course run but closed for
+        Confirm course state when there is a future course run but closed for
         enrollment.
         """
         course = CourseFactory()
-        course_run = self.create_run_future_closed(course)
+        self.create_run_future_closed(course)
         with self.assertNumQueries(2):
-            glimpse_info = course.glimpse_info
-        expected_glimpse = {
-            "cta": None,
-            "datetime": course_run.start,
-            "text": "starting on",
-        }
-        self.assertEqual(glimpse_info, expected_glimpse)
+            state = course.state
+        expected_state = CourseState(3, None, "enrollment closed", None)
+        self.assertEqual(state, expected_state)
 
         # Adding an on-going but closed course run should not change the result
         self.create_run_ongoing_closed(course)
         with self.assertNumQueries(2):
-            glimpse_info = course.glimpse_info
-        self.assertEqual(glimpse_info, expected_glimpse)
+            state = course.state
+        self.assertEqual(state, expected_state)
 
-    def test_models_course_glimpse_date_future_enrollment_open(self):
+    def test_models_course_state_future_enrollment_open(self):
         """
-        Confirm glimpse datetime result when there is a future course run open for enrollment.
+        Confirm course state when there is a future course run open for enrollment.
         """
         course = CourseFactory()
         course_run = self.create_run_future_open(course)
         with self.assertNumQueries(2):
-            glimpse_info = course.glimpse_info
-        expected_glimpse = {
-            "cta": "enroll now",
-            "datetime": course_run.start,
-            "text": "starting on",
-        }
-        self.assertEqual(glimpse_info, expected_glimpse)
+            state = course.state
+        expected_state = CourseState(1, "enroll now", "starting on", course_run.start)
+        self.assertEqual(state, expected_state)
 
         # Adding courses in less priorietary states should not change the result
         self.create_run_ongoing_closed(course)
         self.create_run_future_closed(course)
         with self.assertNumQueries(2):
-            glimpse_info = course.glimpse_info
-        self.assertEqual(glimpse_info, expected_glimpse)
+            state = course.state
+        self.assertEqual(state, expected_state)
 
-    def test_models_course_glimpse_date_ongoing_open(self):
+    def test_models_course_state_ongoing_open(self):
         """
-        Confirm glimpse datetime result when there is an on-going course run open for enrollment.
+        Confirm course state when there is an on-going course run open for enrollment.
         """
         course = CourseFactory()
         course_run = CourseRunFactory(
@@ -183,18 +166,16 @@ class CourseRunModelsTestCase(TestCase):
             enrollment_end=self.now + timedelta(hours=1),
         )
         with self.assertNumQueries(2):
-            glimpse_info = course.glimpse_info
-        expected_glimpse = {
-            "cta": "enroll now",
-            "datetime": course_run.enrollment_end,
-            "text": "closing on",
-        }
-        self.assertEqual(glimpse_info, expected_glimpse)
+            state = course.state
+        expected_state = CourseState(
+            0, "enroll now", "closing on", course_run.enrollment_end
+        )
+        self.assertEqual(state, expected_state)
 
         # Adding courses in less priorietary states should not change the result
         self.create_run_ongoing_closed(course)
         self.create_run_future_closed(course)
         self.create_run_future_open(course)
         with self.assertNumQueries(2):
-            glimpse_info = course.glimpse_info
-        self.assertEqual(glimpse_info, expected_glimpse)
+            state = course.state
+        self.assertEqual(state, expected_state)

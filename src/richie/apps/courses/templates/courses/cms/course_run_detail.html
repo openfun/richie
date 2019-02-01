@@ -59,22 +59,14 @@
           <dt>{% trans "Languages" %}</dt>
           <dd>{% render_model course_run "get_languages_display" "languages" %}</dd>
         </dl>
-        {% if course_run.state == 'is_open' %}
-          <a class="course-detail__content__run__block__cta" href="{{ course_run.resource_link }}">
-            {% trans "Enroll now" %}
-          </a>
-        {% elif course_run.state == 'is_ongoing' or course_run.state == 'is_closed' %}
-          <button class="course-detail__content__run__block__cta course-detail__content__run__block__cta--projected">
-            {% trans "Enrollment closed" %}
-          </button>
-        {% elif course_run.state == 'is_archived' %}
-          <button class="course-detail__content__run__block__cta course-detail__content__run__block__cta--projected">
-            {% trans "Archived" %}
-          </button>
-        {% elif course_run.state == 'is_coming' %}
-          <button class="course-detail__content__run__block__cta course-detail__content__run__block__cta--projected">
-            {% trans "Coming soon" %}
-          </button>
+        {% if course_run.state.cta %}
+        <a class="course-detail__content__run__block__cta" href="{{ course_run.resource_link }}">
+          {{ course_run.state.cta|capfirst }}
+        </a>
+        {% else %}
+        <button class="course-detail__content__run__block__cta course-detail__content__run__block__cta--projected">
+          {{ course_run.state.text|capfirst }}
+        </button>
         {% endif %}
       </div>
       {% if current_page.publisher_is_draft %}

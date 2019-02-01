@@ -1,11 +1,12 @@
 """
 Declare and configure the models for the courses application
 """
+from collections import namedtuple
+
 from django import forms
 from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
-from django.db.models import BooleanField, Case, Value, When
 from django.utils import timezone, translation
 from django.utils.functional import lazy
 from django.utils.translation import ugettext_lazy as _
@@ -19,15 +20,7 @@ from ...core.models import BasePageExtension, PagePluginMixin
 from .organization import Organization
 from .subject import Subject
 
-GLIMPSE_CTA = [_("enroll now")] * 2 + [None] * 4
-GLIMPSE_TEXT = [
-    _("closing on"),
-    _("starting on"),
-    _("starting on"),
-    _("on-going"),
-    _("archived"),
-    _("coming soon"),
-]
+CourseState = namedtuple("CourseState", ["priority", "cta", "text", "datetime"])
 
 
 class ChoiceArrayField(ArrayField):
@@ -186,70 +179,34 @@ class Course(BasePageExtension):
         return course_runs
 
     @property
-    def glimpse_info(self):
+    def state(self):
         """
-        The date to display on a course glimpse. It is the "date of best interest" depending on
-        the situation of a course.
+        The state of the course carrying information on what to display on a course glimpse.
 
         The game is to find, in the correct order, the first of the following conditions that is
         verified for this course:
           0: a run is on-going and open for enrollment > "closing on": {enrollment_end}
           1: a run is future and open for enrollment > "starting on": {start}
-          2: a run is future and not yet or no more open for enrollment >
-            "starting on": {start}
-          3: a run is on-going but closed for enrollment > "on going": {None}
-          4: there's a finished run in the past > "archived": {None}
-          5: there are no runs at all > "coming soon": {None}
+          2: a run is future and not yet open for enrollment > "starting on": {start}
+          3: a run is future and no more open for enrollment > "closed": {None}
+          4: a run is on-going but closed for enrollment > "on going": {None}
+          5: there's a finished run in the past > "archived": {None}
+          6: there are no runs at all > "coming soon": {None}
         """
-        now = timezone.now()
-        best_run = 5
-        interesting_datetime = None
+        # The default state is for a course that has no course runs
+        best_state = CourseState(6, None, _("coming soon"), None)
 
-        for course_run in (
-            self.get_course_runs_for_language()
-            .annotate(
-                is_future=Case(
-                    When(start__gt=now, then=Value(True)),
-                    default=Value(False),
-                    output_field=BooleanField(),
-                ),
-                is_ongoing=Case(
-                    When(start__lt=now, end__gt=now, then=Value(True)),
-                    default=Value(False),
-                    output_field=BooleanField(),
-                ),
-                is_open=Case(
-                    When(
-                        enrollment_start__lt=now,
-                        enrollment_end__gt=now,
-                        then=Value(True),
-                    ),
-                    default=Value(False),
-                    output_field=BooleanField(),
-                ),
-            )
-            .values("is_future", "is_ongoing", "is_open", "start", "enrollment_end")
+        for course_run in self.get_course_runs_for_language().only(
+            "start", "end", "enrollment_start", "enrollment_end"
         ):
-            if course_run["is_ongoing"] and course_run["is_open"]:
-                best_run = 0
-                interesting_datetime = course_run["enrollment_end"]
+            state = course_run.state
+            if state.priority < best_state.priority:
+                best_state = state
+            if state.priority == 0:
+                # We found the best state, don't waste more time
                 break
-            elif course_run["is_future"] and course_run["is_open"]:
-                best_run = 1
-                interesting_datetime = course_run["start"]
-            elif course_run["is_future"]:
-                best_run = min(2, best_run)
-                interesting_datetime = course_run["start"]
-            elif course_run["is_ongoing"]:
-                best_run = min(3, best_run)
-            else:
-                best_run = min(4, best_run)
 
-        return {
-            "cta": GLIMPSE_CTA[best_run],
-            "text": GLIMPSE_TEXT[best_run],
-            "datetime": interesting_datetime,
-        }
+        return best_state
 
     def save(self, *args, **kwargs):
         """
@@ -329,21 +286,52 @@ class CourseRun(BasePageExtension):
         self.full_clean()
         super().save(*args, **kwargs)
 
+    @staticmethod
+    def compute_state(start, end, enrollment_start, enrollment_end):
+        """
+        Compute at the current time the state of a course run that would have the dates
+        passed in argument.
+
+        A static method not using the instance allows to call it with an Elasticsearch result.
+
+        Several states are possible for a course run each of which is given a priority. The
+        lower the priority, the more interesting the course run is (a course run open for
+        enrollment is more interesting than an archived course run):
+          0: a run is on-going and open for enrollment > "closing on": {enrollment_end}
+          1: a run is future and open for enrollment > "starting on": {start}
+          2: a run is future and not yet open for enrollment > "starting on": {start}
+          3: a run is future and no more open for enrollment > "closed": {None}
+          4: a run is on-going but closed for enrollment > "on going": {None}
+          5: there's a finished run in the past > "archived": {None}
+          6: there are no runs at all > "coming soon": {None}
+        """
+        now = timezone.now()
+        if start < now:
+            if end > now:
+                if enrollment_end > now:
+                    # ongoing open
+                    return CourseState(
+                        0, _("enroll now"), _("closing on"), enrollment_end
+                    )
+                # ongoing closed
+                return CourseState(4, None, _("on-going"), None)
+            # archived
+            return CourseState(5, None, _("archived"), None)
+        if enrollment_start > now:
+            # future not yet open
+            return CourseState(2, _("see details"), _("starting on"), start)
+        if enrollment_end > now:
+            # future open
+            return CourseState(1, _("enroll now"), _("starting on"), start)
+        # future already closed
+        return CourseState(3, None, _("enrollment closed"), None)
+
     @property
     def state(self):
         """Return the state of the course run at the current time."""
-        now = timezone.now()
-        if self.start < now:
-            if self.end > now:
-                if self.enrollment_end > now:
-                    return "is_open"
-                return "is_ongoing"
-            return "is_archived"
-        if self.enrollment_start > now:
-            return "is_coming"
-        if self.enrollment_end > now:
-            return "is_open"
-        return "is_closed"
+        return self.compute_state(
+            self.start, self.end, self.enrollment_start, self.enrollment_end
+        )
 
 
 class CoursePluginModel(PagePluginMixin, CMSPlugin):
