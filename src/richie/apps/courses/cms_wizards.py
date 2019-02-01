@@ -13,7 +13,7 @@ from cms.wizards.wizard_pool import wizard_pool
 
 from richie.apps.persons.cms_wizards import BaseWizardForm
 
-from .models import Course, CourseRun, Organization, Subject
+from .models import Category, Course, CourseRun, Organization
 
 
 class CourseWizardForm(BaseWizardForm):
@@ -166,34 +166,34 @@ wizard_pool.register(
 )
 
 
-class SubjectWizardForm(BaseWizardForm):
+class CategoryWizardForm(BaseWizardForm):
     """
-    This form is used by the wizard that creates a new subject page.
-    A related Subject model is created for each subject page.
+    This form is used by the wizard that creates a new category page.
+    A related Category model is created for each category page.
     """
 
-    model = Subject
+    model = Category
 
     def save(self):
         """
         The parent form created the page.
-        This method creates the associated subject page extension.
+        This method creates the associated category page extension.
         """
         page = super().save()
-        Subject.objects.create(extended_object=page)
+        Category.objects.create(extended_object=page)
         return page
 
 
-class SubjectWizard(Wizard):
+class CategoryWizard(Wizard):
     """Inherit from Wizard because each wizard must have its own Python class."""
 
 
 wizard_pool.register(
-    SubjectWizard(
-        title=_("New subject page"),
-        description=_("Create a new subject page"),
-        model=Subject,
-        form=SubjectWizardForm,
+    CategoryWizard(
+        title=_("New category page"),
+        description=_("Create a new category page"),
+        model=Category,
+        form=CategoryWizardForm,
         weight=200,
     )
 )

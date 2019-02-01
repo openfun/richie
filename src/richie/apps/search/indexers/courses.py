@@ -49,7 +49,7 @@ class CoursesIndexer:
             # Keywords
             "languages": {"type": "keyword"},
             "organizations": {"type": "keyword"},
-            "subjects": {"type": "keyword"},
+            "categories": {"type": "keyword"},
             # Searchable
             **{
                 "complete.{:s}".format(lang): {"type": "completion"}
@@ -72,7 +72,7 @@ class CoursesIndexer:
         "cover_image",
         "languages",
         "organizations",
-        "subjects",
+        "categories",
         "title.*",
     ]
 
@@ -216,9 +216,9 @@ class CoursesIndexer:
                         )
                         if id is not None
                     ],
-                    "subjects": [
+                    "categories": [
                         str(id)
-                        for id in course.get_subjects().values_list(
+                        for id in course.get_categories().values_list(
                             "public_extension", flat=True
                         )
                         if id is not None
@@ -242,6 +242,7 @@ class CoursesIndexer:
             "absolute_url": get_best_field_language(
                 source["absolute_url"], best_language
             ),
+            "categories": source["categories"],
             "cover_image": get_best_field_language(
                 source["cover_image"], best_language
             ),
@@ -253,7 +254,6 @@ class CoursesIndexer:
                 dateutil.parser.parse(source["enrollment_start"]),
                 dateutil.parser.parse(source["enrollment_end"]),
             )._asdict(),
-            "subjects": source["subjects"],
             "title": get_best_field_language(source["title"], best_language),
         }
 
@@ -274,7 +274,7 @@ class CoursesIndexer:
         params_form_values["organizations"] = request.query_params.getlist(
             "organizations"
         )
-        params_form_values["subjects"] = request.query_params.getlist("subjects")
+        params_form_values["categories"] = request.query_params.getlist("categories")
         for param_key in FILTERS_HARDCODED:
             if hasattr(FILTERS_HARDCODED[param_key]["field"], "choices"):
                 params_form_values[param_key] = request.query_params.getlist(param_key)
@@ -317,8 +317,8 @@ class CoursesIndexer:
                     ),
                 ]
 
-            # organizations & subjects are both array of related element IDs
-            elif param in ["organizations", "subjects"]:
+            # organizations & categories are both array of related element IDs
+            elif param in ["organizations", "categories"]:
                 # Add the relevant term search to our queries
                 queries = [
                     *queries,
@@ -393,7 +393,7 @@ class CoursesIndexer:
                     }
                 }
 
-        # Concatenate our hardcoded filters query fragments with organizations and subjects terms
+        # Concatenate our hardcoded filters query fragments with organizations and categories terms
         # aggregations build on-the-fly
         aggs = {
             "all_courses": {

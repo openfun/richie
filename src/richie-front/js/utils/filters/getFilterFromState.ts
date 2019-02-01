@@ -12,7 +12,7 @@ import { isResourceBasedFilterGroupName } from './isResourceBasedFilterGroupName
 
 // Get (or build) a complete filter definition for `machineName` from the state, using:
 // - filterDefinitions for hardcoded filters and hardcoded props of resource based filters
-// - organizations & subjects for resource based filters
+// - organizations & categories for resource based filters
 export function getFilterFromState(
   state: RootState,
   machineName: filterGroupName,

@@ -6,7 +6,7 @@ from collections import namedtuple
 
 # Define a named tuple type that will enforce the necessary keys for our ES_INDICES setting
 # (and also make iteration, both with and without keys, trivial)
-IndicesList = namedtuple("IndicesList", ["courses", "organizations", "subjects"])
+IndicesList = namedtuple("IndicesList", ["courses", "organizations", "categories"])
 
 
 def slice_string_for_completion(string):

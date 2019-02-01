@@ -19,9 +19,9 @@ $richie-course-detail-row-padding: 1.5rem 1rem;
 $richie-course-detail-row-fontsize: 0.95rem;
 $richie-course-detail-row-title-fontcolor: $dodgerblue3;
 
-$richie-course-detail-subjects-justify: center;
-$richie-course-detail-subjects-empty-fontcolor: $gray40;
-$richie-course-detail-subjects-empty-textalign: center;
+$richie-course-detail-categories-justify: center;
+$richie-course-detail-categories-empty-fontcolor: $gray40;
+$richie-course-detail-categories-empty-textalign: center;
 
 $richie-course-detail-teaser-margin: 0;
 $richie-course-detail-teaser-padding: 0;
@@ -216,22 +216,22 @@ $richie-course-detail-aside-main-org-background: $white;
       }
     }
 
-    &__subjects {
+    &__categories {
       display: flex;
       padding-top: 0;
       flex-direction: row;
       flex-wrap: wrap;
-      justify-content: $richie-course-detail-subjects-justify;
+      justify-content: $richie-course-detail-categories-justify;
 
       &__placeholder {
         @include sv-flex(1, 0, 100%);
         font-style: italic;
-        color: $richie-course-detail-subjects-empty-fontcolor;
-        text-align: $richie-course-detail-subjects-empty-textalign;
+        color: $richie-course-detail-categories-empty-fontcolor;
+        text-align: $richie-course-detail-categories-empty-textalign;
         background: transparent;
 
         &:hover {
-          color: $richie-course-detail-subjects-empty-fontcolor;
+          color: $richie-course-detail-categories-empty-fontcolor;
         }
       }
     }

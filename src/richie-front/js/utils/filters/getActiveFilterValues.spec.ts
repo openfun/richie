@@ -35,7 +35,7 @@ describe('utils/filters/getActiveFilterValues', () => {
   it('returns an array of FilterValues givent an array of keys', () => {
     const state = {
       resources: {
-        subjects: {
+        categories: {
           byId: {
             21: { id: 21, name: 'Organization #21' },
             22: { id: 22, name: 'Organization #21' },
@@ -44,10 +44,10 @@ describe('utils/filters/getActiveFilterValues', () => {
       },
     };
     expect(
-      getActiveFilterValues(state as any, modelName.SUBJECTS, {
+      getActiveFilterValues(state as any, modelName.CATEGORIES, {
+        categories: [21, 22],
         limit: 20,
         offset: 0,
-        subjects: [21, 22],
       }),
     );
   });

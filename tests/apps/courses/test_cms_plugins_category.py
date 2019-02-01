@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Unit tests for the subject plugin and its model
+Unit tests for the category plugin and its model
 """
 from django import forms
 from django.conf import settings
@@ -11,50 +11,50 @@ from djangocms_picture.cms_plugins import PicturePlugin
 
 from richie.apps.core.factories import FilerImageFactory, UserFactory
 from richie.apps.core.helpers import create_i18n_page
-from richie.apps.courses.cms_plugins import SubjectPlugin
-from richie.apps.courses.factories import SubjectFactory
-from richie.apps.courses.models import SubjectPluginModel
+from richie.apps.courses.cms_plugins import CategoryPlugin
+from richie.apps.courses.factories import CategoryFactory
+from richie.apps.courses.models import CategoryPluginModel
 
 
-class SubjectPluginTestCase(CMSTestCase):
+class CategoryPluginTestCase(CMSTestCase):
     """
-    Test that SubjectPlugin correctly displays a Subject's page placeholders content
+    Test that CategoryPlugin correctly displays a Category's page placeholders content
     """
 
-    def test_cms_plugins_subject_form_page_choices(self):
+    def test_cms_plugins_category_form_page_choices(self):
         """
-        The form to create a subject plugin should only list subject pages in the select box.
+        The form to create a category plugin should only list category pages in the select box.
         """
 
-        class SubjectPluginModelForm(forms.ModelForm):
+        class CategoryPluginModelForm(forms.ModelForm):
             """A form for testing the choices in the select box"""
 
             class Meta:
-                model = SubjectPluginModel
+                model = CategoryPluginModel
                 fields = ["page"]
 
-        subject = SubjectFactory()
+        category = CategoryFactory()
         other_page_title = "other page"
         create_page(other_page_title, "richie/fullwidth.html", settings.LANGUAGE_CODE)
-        plugin_form = SubjectPluginModelForm()
-        self.assertIn(subject.extended_object.get_title(), plugin_form.as_table())
+        plugin_form = CategoryPluginModelForm()
+        self.assertIn(category.extended_object.get_title(), plugin_form.as_table())
         self.assertNotIn(other_page_title, plugin_form.as_table())
 
-    def test_cms_plugins_subject_render_on_public_page(self):
+    def test_cms_plugins_category_render_on_public_page(self):
         """
-        The subject plugin should render as expected on a public page.
+        The category plugin should render as expected on a public page.
         """
         # Create a filer fake image
         image = FilerImageFactory()
 
-        # Create a Subject
-        subject = SubjectFactory(
+        # Create a Category
+        category = CategoryFactory(
             page_title={"en": "public title", "fr": "titre publique"}
         )
-        subject_page = subject.extended_object
+        category_page = category.extended_object
 
         # Add logo to related placeholder
-        logo_placeholder = subject_page.placeholders.get(slot="logo")
+        logo_placeholder = category_page.placeholders.get(slot="logo")
         add_plugin(
             logo_placeholder,
             PicturePlugin,
@@ -71,28 +71,28 @@ class SubjectPluginTestCase(CMSTestCase):
         # Create a page to add the plugin to
         page = create_i18n_page({"en": "A page", "fr": "Une page"})
         placeholder = page.placeholders.get(slot="maincontent")
-        add_plugin(placeholder, SubjectPlugin, "en", **{"page": subject_page})
-        add_plugin(placeholder, SubjectPlugin, "fr", **{"page": subject_page})
+        add_plugin(placeholder, CategoryPlugin, "en", **{"page": category_page})
+        add_plugin(placeholder, CategoryPlugin, "fr", **{"page": category_page})
 
-        subject_page.publish("en")
-        subject_page.publish("fr")
-        subject.refresh_from_db()
+        category_page.publish("en")
+        category_page.publish("fr")
+        category.refresh_from_db()
 
         page.publish("en")
         page.publish("fr")
 
         url = page.get_absolute_url(language="en")
 
-        # The subject plugin should not be visible on the public page before it is published
-        subject_page.unpublish("en")
+        # The category plugin should not be visible on the public page before it is published
+        category_page.unpublish("en")
         response = self.client.get(url)
         self.assertNotContains(response, "public title")
 
         # Republish the plugin
-        subject_page.publish("en")
+        category_page.publish("en")
 
-        # Now modify the subject to have a draft different from the public version
-        title_obj = subject_page.get_title_obj(language="en")
+        # Now modify the category to have a draft different from the public version
+        title_obj = category_page.get_title_obj(language="en")
         title_obj.title = "draft title"
         title_obj.save()
 
@@ -101,26 +101,26 @@ class SubjectPluginTestCase(CMSTestCase):
 
         # Check the page content in English
         response = self.client.get(url)
-        # Subject's title should be present as a link to the cms page
+        # Category's title should be present as a link to the cms page
         # And CMS page title should be in title attribute of the link
         self.assertContains(
             response,
-            '<a class="subject-plugin__body" href="/en/public-title/" title="{title:s}"'.format(
-                title=subject.public_extension.extended_object.get_title()
+            '<a class="category-plugin__body" href="/en/public-title/" title="{title:s}"'.format(
+                title=category.public_extension.extended_object.get_title()
             ),
             status_code=200,
         )
-        # The subject's title should be wrapped in a div
+        # The category's title should be wrapped in a div
         self.assertContains(
             response,
-            '<div class="subject-plugin__title">{:s}</div>'.format(
-                subject.public_extension.extended_object.get_title()
+            '<div class="category-plugin__title">{:s}</div>'.format(
+                category.public_extension.extended_object.get_title()
             ),
             html=True,
         )
         self.assertNotContains(response, "draft title")
 
-        # Subject's logo should be present
+        # Category's logo should be present
         # pylint: disable=no-member
         self.assertContains(response, image.file.name)
 
@@ -129,45 +129,45 @@ class SubjectPluginTestCase(CMSTestCase):
         response = self.client.get(url)
         self.assertContains(
             response,
-            '<a class="subject-plugin__body" href="/fr/titre-publique/" title="{title:s}"'.format(
-                title=subject.public_extension.extended_object.get_title()
+            '<a class="category-plugin__body" href="/fr/titre-publique/" title="{title:s}"'.format(
+                title=category.public_extension.extended_object.get_title()
             ),
             status_code=200,
         )
         # pylint: disable=no-member
         self.assertContains(response, image.file.name)
 
-    def test_cms_plugins_subject_render_on_draft_page(self):
+    def test_cms_plugins_category_render_on_draft_page(self):
         """
-        The subject plugin should render as expected on a draft page.
+        The category plugin should render as expected on a draft page.
         """
         staff = UserFactory(is_staff=True, is_superuser=True)
         self.client.login(username=staff.username, password="password")
 
-        # Create a Subject
-        subject = SubjectFactory(page_title="public title")
-        subject_page = subject.extended_object
+        # Create a Category
+        category = CategoryFactory(page_title="public title")
+        category_page = category.extended_object
 
         # Create a page to add the plugin to
         page = create_i18n_page("A page")
         placeholder = page.placeholders.get(slot="maincontent")
-        add_plugin(placeholder, SubjectPlugin, "en", **{"page": subject_page})
+        add_plugin(placeholder, CategoryPlugin, "en", **{"page": category_page})
 
-        subject_page.publish("en")
-        subject_page.unpublish("en")
+        category_page.publish("en")
+        category_page.unpublish("en")
 
         url = "{:s}?edit".format(page.get_absolute_url(language="en"))
 
-        # The subject plugin should still be visible on the draft page
+        # The category plugin should still be visible on the draft page
         response = self.client.get(url)
         self.assertContains(response, "public title")
 
-        # Now modify the subject to have a draft different from the public version
-        title_obj = subject_page.get_title_obj(language="en")
+        # Now modify the category to have a draft different from the public version
+        title_obj = category_page.get_title_obj(language="en")
         title_obj.title = "draft title"
         title_obj.save()
 
-        # The draft version of the subject plugin should now be visible
+        # The draft version of the category plugin should now be visible
         response = self.client.get(url)
         self.assertContains(response, "draft title")
         self.assertNotContains(response, "public title")

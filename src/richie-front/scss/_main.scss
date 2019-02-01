@@ -41,13 +41,13 @@
 // Shared object styles
 @import '../../../sandbox/templates/menu/_menu';
 @import './objects/course_glimpses';
-@import '../../richie/apps/courses/templates/courses/plugins/subject_plugin';
+@import '../../richie/apps/courses/templates/courses/plugins/category_plugin';
 @import '../../richie/apps/persons/templates/persons/plugins/person_plugin';
 @import '../../richie/apps/courses/templates/courses/plugins/course_plugin';
 @import '../../richie/apps/courses/templates/courses/plugins/licence_plugin';
 @import '../../richie/apps/courses/templates/courses/plugins/organization_plugin';
 @import '../../richie/apps/courses/templates/courses/cms/organization_detail';
-@import '../../richie/apps/courses/templates/courses/cms/subject_detail';
+@import '../../richie/apps/courses/templates/courses/cms/category_detail';
 @import '../../richie/apps/courses/templates/courses/cms/course_detail';
 @import '../../richie/apps/persons/templates/persons/cms/person_detail';
 @import '../../richie/apps/search/templates/search/search';

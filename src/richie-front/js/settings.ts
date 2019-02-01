@@ -14,12 +14,12 @@ export const API_ENDPOINTS = {
   autocomplete: {
     [modelName.COURSES]: '/api/v1.0/courses/autocomplete/',
     [modelName.ORGANIZATIONS]: '/api/v1.0/organizations/autocomplete/',
-    [modelName.SUBJECTS]: '/api/v1.0/subjects/autocomplete/',
+    [modelName.CATEGORIES]: '/api/v1.0/categories/autocomplete/',
   },
   search: {
     [modelName.COURSES]: '/api/v1.0/courses/',
     [modelName.ORGANIZATIONS]: '/api/v1.0/organizations/',
-    [modelName.SUBJECTS]: '/api/v1.0/subjects/',
+    [modelName.CATEGORIES]: '/api/v1.0/categories/',
   },
 };
 
@@ -31,7 +31,7 @@ export const API_LIST_DEFAULT_PARAMS = {
 export const FILTERS_ACTIVE: filterGroupName[] = [
   'new',
   'availability',
-  modelName.SUBJECTS,
+  modelName.CATEGORIES,
   modelName.ORGANIZATIONS,
   'language',
 ];
@@ -146,13 +146,13 @@ export const FILTERS_HARDCODED: {
 export const FILTERS_RESOURCES: {
   [key in resourceBasedFilterGroupName]: FilterDefinition
 } = {
+  categories: {
+    humanName: commonMessages.categoriesHumanName,
+    machineName: modelName.CATEGORIES,
+  },
   organizations: {
     humanName: commonMessages.organizationsHumanName,
     machineName: modelName.ORGANIZATIONS,
-  },
-  subjects: {
-    humanName: commonMessages.subjectsHumanName,
-    machineName: modelName.SUBJECTS,
   },
 };
 

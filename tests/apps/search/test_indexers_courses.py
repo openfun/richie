@@ -20,15 +20,15 @@ from elasticsearch.client import IndicesClient
 from elasticsearch.helpers import bulk
 
 from richie.apps.courses.factories import (
+    CategoryFactory,
     CourseFactory,
     CourseRunFactory,
     OrganizationFactory,
-    SubjectFactory,
 )
 from richie.apps.search.exceptions import QueryFormatException
+from richie.apps.search.indexers.categories import CategoriesIndexer
 from richie.apps.search.indexers.courses import CoursesIndexer
 from richie.apps.search.indexers.organizations import OrganizationsIndexer
-from richie.apps.search.indexers.subjects import SubjectsIndexer
 
 
 class CoursesIndexersTestCase(TestCase):
@@ -39,16 +39,16 @@ class CoursesIndexersTestCase(TestCase):
 
     def test_indexers_courses_related_objects_consistency(self):
         """
-        The organization and subject ids in the Elasticsearch course document should be
-        the same as the ids with which the corresponding organization and subject objects
+        The organization and category ids in the Elasticsearch course document should be
+        the same as the ids with which the corresponding organization and category objects
         are indexed.
         """
         # Create a course with a page in both english and french
         organization = OrganizationFactory(should_publish=True)
-        subject = SubjectFactory(should_publish=True)
+        category = CategoryFactory(should_publish=True)
         course = CourseFactory(
             fill_organizations=[organization],
-            fill_subjects=[subject],
+            fill_categories=[category],
             should_publish=True,
         )
         CourseRunFactory(page_parent=course.extended_object, should_publish=True)
@@ -67,10 +67,10 @@ class CoursesIndexersTestCase(TestCase):
             ],
         )
         self.assertEqual(
-            course_document["subjects"],
+            course_document["categories"],
             [
                 next(
-                    SubjectsIndexer.get_data_for_es(
+                    CategoriesIndexer.get_data_for_es(
                         index="some_index", action="some_action"
                     )
                 )["_id"]
@@ -105,8 +105,8 @@ class CoursesIndexersTestCase(TestCase):
         Happy path: the data is retrieved from the models properly formatted
         """
         # Create a course with a page in both english and french
-        public_subjects = SubjectFactory.create_batch(2, should_publish=True)
-        draft_subject = SubjectFactory()
+        public_categories = CategoryFactory.create_batch(2, should_publish=True)
+        draft_category = CategoryFactory()
 
         main_organization = OrganizationFactory(
             page_title={
@@ -138,7 +138,7 @@ class CoursesIndexersTestCase(TestCase):
                 other_draft_organization,
                 other_public_organization,
             ],
-            fill_subjects=public_subjects + [draft_subject],
+            fill_categories=public_categories + [draft_category],
             fill_cover=True,
             should_publish=True,
         )
@@ -181,7 +181,7 @@ class CoursesIndexersTestCase(TestCase):
                 str(main_organization.public_extension.id),
                 str(other_public_organization.public_extension.id),
             ],
-            "subjects": [str(s.public_extension.id) for s in public_subjects],
+            "categories": [str(s.public_extension.id) for s in public_categories],
             "title": {"fr": "un titre cours français", "en": "an english course title"},
         }
         self.assertEqual(
@@ -233,7 +233,7 @@ class CoursesIndexersTestCase(TestCase):
                 "organizations": [42, 84],
                 "description": {"en": "Nam aliquet, arcu at sagittis sollicitudin."},
                 "start": "2018-02-01T06:00:00Z",
-                "subjects": [43, 86],
+                "categories": [43, 86],
                 "title": {"en": "Duis eu arcu erat"},
             },
         }
@@ -255,7 +255,7 @@ class CoursesIndexersTestCase(TestCase):
                     "text": "archived",
                     "datetime": None,
                 },
-                "subjects": [43, 86],
+                "categories": [43, 86],
                 "title": "Duis eu arcu erat",
             },
         )
@@ -307,10 +307,10 @@ class CoursesIndexersTestCase(TestCase):
                                     }
                                 },
                             },
-                            "subjects": {
+                            "categories": {
                                 "filter": {"bool": {"must": []}},
                                 "aggregations": {
-                                    "subjects": {"terms": {"field": "subjects"}}
+                                    "categories": {"terms": {"field": "categories"}}
                                 },
                             },
                         },
@@ -398,10 +398,10 @@ class CoursesIndexersTestCase(TestCase):
                                     }
                                 },
                             },
-                            "subjects": {
+                            "categories": {
                                 "filter": {"bool": {"must": [multi_match]}},
                                 "aggregations": {
-                                    "subjects": {"terms": {"field": "subjects"}}
+                                    "categories": {"terms": {"field": "categories"}}
                                 },
                             },
                         },
@@ -470,10 +470,10 @@ class CoursesIndexersTestCase(TestCase):
                                     }
                                 },
                             },
-                            "subjects": {
+                            "categories": {
                                 "filter": {"bool": {"must": [terms_organizations]}},
                                 "aggregations": {
-                                    "subjects": {"terms": {"field": "subjects"}}
+                                    "categories": {"terms": {"field": "categories"}}
                                 },
                             },
                         },
@@ -540,10 +540,10 @@ class CoursesIndexersTestCase(TestCase):
                                     }
                                 },
                             },
-                            "subjects": {
+                            "categories": {
                                 "filter": {"bool": {"must": [term_organization]}},
                                 "aggregations": {
-                                    "subjects": {"terms": {"field": "subjects"}}
+                                    "categories": {"terms": {"field": "categories"}}
                                 },
                             },
                         },
@@ -631,10 +631,10 @@ class CoursesIndexersTestCase(TestCase):
                                     }
                                 },
                             },
-                            "subjects": {
+                            "categories": {
                                 "filter": {"bool": {"must": [range_end, range_start]}},
                                 "aggregations": {
-                                    "subjects": {"terms": {"field": "subjects"}}
+                                    "categories": {"terms": {"field": "categories"}}
                                 },
                             },
                         },
@@ -707,12 +707,12 @@ class CoursesIndexersTestCase(TestCase):
                                     }
                                 },
                             },
-                            "subjects": {
+                            "categories": {
                                 "filter": {
                                     "bool": {"must": [{"term": {"language": "fr"}}]}
                                 },
                                 "aggregations": {
-                                    "subjects": {"terms": {"field": "subjects"}}
+                                    "categories": {"terms": {"field": "categories"}}
                                 },
                             },
                         },
@@ -746,7 +746,7 @@ class CoursesIndexersTestCase(TestCase):
         end = json.dumps(["2018-04-30T06:00:00Z", "2018-06-30T06:00:00Z"])
         request = SimpleNamespace(
             query_params=QueryDict(
-                query_string="subjects=42&subjects=84&query=these%20phrase%20terms&limit=2&"
+                query_string="categories=42&categories=84&query=these%20phrase%20terms&limit=2&"
                 + "language=fr&"
                 + "start={start}&end={end}".format(start=start, end=end)
             )
@@ -774,7 +774,7 @@ class CoursesIndexersTestCase(TestCase):
                 }
             }
         }
-        terms_subjects = {"terms": {"subjects": [42, 84]}}
+        terms_categories = {"terms": {"categories": [42, 84]}}
         term_language_fr = {"term": {"languages": "fr"}}
         self.assertEqual(
             CoursesIndexer.build_es_query(request),
@@ -787,7 +787,7 @@ class CoursesIndexersTestCase(TestCase):
                             range_end,
                             multi_match,
                             range_start,
-                            terms_subjects,
+                            terms_categories,
                             term_language_fr,
                         ]
                     }
@@ -804,7 +804,7 @@ class CoursesIndexersTestCase(TestCase):
                                             range_end,
                                             multi_match,
                                             range_start,
-                                            terms_subjects,
+                                            terms_categories,
                                         ]
                                     }
                                 }
@@ -817,7 +817,7 @@ class CoursesIndexersTestCase(TestCase):
                                             range_end,
                                             multi_match,
                                             range_start,
-                                            terms_subjects,
+                                            terms_categories,
                                         ]
                                     }
                                 }
@@ -830,7 +830,7 @@ class CoursesIndexersTestCase(TestCase):
                                             range_end,
                                             multi_match,
                                             range_start,
-                                            terms_subjects,
+                                            terms_categories,
                                             term_language_fr,
                                         ]
                                     }
@@ -843,7 +843,7 @@ class CoursesIndexersTestCase(TestCase):
                                             range_end,
                                             multi_match,
                                             range_start,
-                                            terms_subjects,
+                                            terms_categories,
                                             term_language_fr,
                                         ]
                                     }
@@ -854,7 +854,7 @@ class CoursesIndexersTestCase(TestCase):
                                     }
                                 },
                             },
-                            "subjects": {
+                            "categories": {
                                 "filter": {
                                     "bool": {
                                         "must": [
@@ -866,7 +866,7 @@ class CoursesIndexersTestCase(TestCase):
                                     }
                                 },
                                 "aggregations": {
-                                    "subjects": {"terms": {"field": "subjects"}}
+                                    "categories": {"terms": {"field": "categories"}}
                                 },
                             },
                         },
@@ -902,10 +902,10 @@ class CoursesIndexersTestCase(TestCase):
                                     }
                                 },
                             },
-                            "subjects": {
+                            "categories": {
                                 "filter": {"bool": {"must": []}},
                                 "aggregations": {
-                                    "subjects": {"terms": {"field": "subjects"}}
+                                    "categories": {"terms": {"field": "categories"}}
                                 },
                             },
                         },

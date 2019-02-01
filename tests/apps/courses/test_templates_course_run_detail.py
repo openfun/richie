@@ -9,10 +9,10 @@ from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
 from richie.apps.courses.factories import (
+    CategoryFactory,
     CourseFactory,
     CourseRunFactory,
     OrganizationFactory,
-    SubjectFactory,
 )
 from richie.apps.courses.models import CourseRun, CourseState
 
@@ -30,13 +30,13 @@ class CourseRunCMSTestCase(CMSTestCase):
         """
         Validate that the important elements are displayed on a published course run page
         """
-        subjects = SubjectFactory.create_batch(4)
+        categories = CategoryFactory.create_batch(4)
         organizations = OrganizationFactory.create_batch(4)
 
         course = CourseFactory(
             page_title="Very interesting course",
             fill_organizations=organizations,
-            fill_subjects=subjects,
+            fill_categories=categories,
             should_publish=True,
         )
         course_run = CourseRunFactory(
@@ -51,17 +51,17 @@ class CourseRunCMSTestCase(CMSTestCase):
         )
         page = course_run.extended_object
 
-        # Publish only 2 out of 4 subjects and 2 out of 4 organizations
-        subjects[0].extended_object.publish("en")
-        subjects[1].extended_object.publish("en")
+        # Publish only 2 out of 4 categories and 2 out of 4 organizations
+        categories[0].extended_object.publish("en")
+        categories[1].extended_object.publish("en")
         organizations[0].extended_object.publish("en")
         organizations[1].extended_object.publish("en")
 
         # The unpublished objects may have been published and unpublished which puts them in a
         # status different from objects that have never been published.
         # We want to test both cases.
-        subjects[2].extended_object.publish("en")
-        subjects[2].extended_object.unpublish("en")
+        categories[2].extended_object.publish("en")
+        categories[2].extended_object.unpublish("en")
         organizations[2].extended_object.publish("en")
         organizations[2].extended_object.unpublish("en")
 
@@ -87,18 +87,18 @@ class CourseRunCMSTestCase(CMSTestCase):
             html=True,
         )
 
-        # Only published subjects should be present on the page
-        for subject in subjects[:2]:
+        # Only published categories should be present on the page
+        for category in categories[:2]:
             self.assertContains(
                 response,
-                '<a class="subject-plugin-tag" href="{:s}">{:s}</a>'.format(
-                    subject.extended_object.get_absolute_url(),
-                    subject.extended_object.get_title(),
+                '<a class="category-plugin-tag" href="{:s}">{:s}</a>'.format(
+                    category.extended_object.get_absolute_url(),
+                    category.extended_object.get_title(),
                 ),
                 html=True,
             )
-        for subject in subjects[-2:]:
-            self.assertNotContains(response, subject.extended_object.get_title())
+        for category in categories[-2:]:
+            self.assertNotContains(response, category.extended_object.get_title())
 
         # Public organizations should be in response content
         for organization in organizations[:2]:
@@ -133,13 +133,13 @@ class CourseRunCMSTestCase(CMSTestCase):
         user = UserFactory(is_staff=True, is_superuser=True)
         self.client.login(username=user.username, password="password")
 
-        subjects = SubjectFactory.create_batch(4)
+        categories = CategoryFactory.create_batch(4)
         organizations = OrganizationFactory.create_batch(4)
 
         course = CourseFactory(
             page_title="Very interesting course",
             fill_organizations=organizations,
-            fill_subjects=subjects,
+            fill_categories=categories,
             should_publish=True,
         )
         course_run = CourseRunFactory(
@@ -154,17 +154,17 @@ class CourseRunCMSTestCase(CMSTestCase):
         )
         page = course_run.extended_object
 
-        # Publish only 2 out of 4 subjects and 2 out of 4 organizations
-        subjects[0].extended_object.publish("en")
-        subjects[1].extended_object.publish("en")
+        # Publish only 2 out of 4 categories and 2 out of 4 organizations
+        categories[0].extended_object.publish("en")
+        categories[1].extended_object.publish("en")
         organizations[0].extended_object.publish("en")
         organizations[1].extended_object.publish("en")
 
         # The unpublished objects may have been published and unpublished which puts them in a
         # status different from objects that have never been published.
         # We want to test both cases.
-        subjects[2].extended_object.publish("en")
-        subjects[2].extended_object.unpublish("en")
+        categories[2].extended_object.publish("en")
+        categories[2].extended_object.unpublish("en")
         organizations[2].extended_object.publish("en")
         organizations[2].extended_object.unpublish("en")
 
@@ -198,24 +198,24 @@ class CourseRunCMSTestCase(CMSTestCase):
         # Draft organizations should be annotated for styling
         self.assertContains(response, "organization-plugin-container--draft", count=2)
 
-        # The published subjects should be present on the page
-        for subject in subjects[:2]:
+        # The published categories should be present on the page
+        for category in categories[:2]:
             self.assertContains(
                 response,
-                '<a class="subject-plugin-tag" href="{:s}">{:s}</a>'.format(
-                    subject.extended_object.get_absolute_url(),
-                    subject.extended_object.get_title(),
+                '<a class="category-plugin-tag" href="{:s}">{:s}</a>'.format(
+                    category.extended_object.get_absolute_url(),
+                    category.extended_object.get_title(),
                 ),
                 html=True,
             )
-        # Draft subjects should also be present on the page with an annotation for styling
-        for subject in subjects[-2:]:
+        # Draft categories should also be present on the page with an annotation for styling
+        for category in categories[-2:]:
             self.assertContains(
                 response,
                 '<a class="{element:s} {element:s}--draft" href="{url:s}">{title:s}</a>'.format(
-                    url=subject.extended_object.get_absolute_url(),
-                    element="subject-plugin-tag",
-                    title=subject.extended_object.get_title(),
+                    url=category.extended_object.get_absolute_url(),
+                    element="category-plugin-tag",
+                    title=category.extended_object.get_title(),
                 ),
                 html=True,
             )

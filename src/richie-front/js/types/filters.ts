@@ -5,7 +5,7 @@ export type hardcodedFilterGroupName = 'availability' | 'language' | 'new';
 
 export type resourceBasedFilterGroupName =
   | modelName.ORGANIZATIONS
-  | modelName.SUBJECTS;
+  | modelName.CATEGORIES;
 
 export type filterGroupName =
   | resourceBasedFilterGroupName

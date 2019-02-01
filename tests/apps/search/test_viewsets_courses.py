@@ -95,8 +95,8 @@ class CoursesViewsetsTestCase(TestCase):
                     "availability@open": {"doc_count": 59},
                     "language@en": {"doc_count": 81},
                     "language@fr": {"doc_count": 23},
-                    "subjects": {
-                        "subjects": {
+                    "categories": {
+                        "categories": {
                             "buckets": [
                                 {"key": "11", "doc_count": 17},
                                 {"key": "21", "doc_count": 19},
@@ -119,7 +119,7 @@ class CoursesViewsetsTestCase(TestCase):
                 "facets": {
                     "availability": {"coming_soon": 8, "current": 42, "open": 59},
                     "language": {"en": 81, "fr": 23},
-                    "subjects": {"11": 17, "21": 19},
+                    "categories": {"11": 17, "21": 19},
                 },
             },
         )
@@ -134,7 +134,7 @@ class CoursesViewsetsTestCase(TestCase):
                 "cover_image",
                 "languages",
                 "organizations",
-                "subjects",
+                "categories",
                 "title.*",
             ],
             body={

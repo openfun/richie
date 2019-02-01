@@ -15,6 +15,7 @@ describe('utils/filters/getFilterFromState', () => {
     const state = {
       filterDefinitions: {
         availability: {} as FilterDefinitionWithValues,
+        categories: {} as FilterDefinition,
         language: {} as FilterDefinitionWithValues,
         new: {
           humanName: { defaultMessage: 'New courses', id: 'newCourses' },
@@ -22,7 +23,6 @@ describe('utils/filters/getFilterFromState', () => {
           values: [{ primaryKey: 'new', humanName: 'First session' }],
         },
         organizations: {} as FilterDefinition,
-        subjects: {} as FilterDefinition,
       },
       resources: {
         courses: {
@@ -47,6 +47,7 @@ describe('utils/filters/getFilterFromState', () => {
     const state = {
       filterDefinitions: {
         availability: {} as FilterDefinitionWithValues,
+        categories: {} as FilterDefinition,
         language: {} as FilterDefinitionWithValues,
         new: {
           humanName: { defaultMessage: 'New courses', id: 'newCourses' },
@@ -54,7 +55,6 @@ describe('utils/filters/getFilterFromState', () => {
           values: [{ primaryKey: 'new', humanName: 'First session' }],
         },
         organizations: {} as FilterDefinition,
-        subjects: {} as FilterDefinition,
       },
       resources: {
         courses: {
@@ -79,6 +79,7 @@ describe('utils/filters/getFilterFromState', () => {
     const state = {
       filterDefinitions: {
         availability: {} as FilterDefinitionWithValues,
+        categories: {} as FilterDefinition,
         language: {} as FilterDefinitionWithValues,
         new: {} as FilterDefinitionWithValues,
         organizations: {
@@ -86,7 +87,6 @@ describe('utils/filters/getFilterFromState', () => {
           machineName: modelName.ORGANIZATIONS,
           values: [],
         },
-        subjects: {} as FilterDefinition,
       },
       resources: {
         courses: {
@@ -125,6 +125,7 @@ describe('utils/filters/getFilterFromState', () => {
     const state = {
       filterDefinitions: {
         availability: {} as FilterDefinitionWithValues,
+        categories: {} as FilterDefinition,
         language: {} as FilterDefinitionWithValues,
         new: {} as FilterDefinitionWithValues,
         organizations: {
@@ -132,7 +133,6 @@ describe('utils/filters/getFilterFromState', () => {
           machineName: modelName.ORGANIZATIONS,
           values: [],
         },
-        subjects: {} as FilterDefinition,
       },
       resources: {
         organizations: {
@@ -168,6 +168,7 @@ describe('utils/filters/getFilterFromState', () => {
     const state = {
       filterDefinitions: {
         availability: {} as FilterDefinitionWithValues,
+        categories: {} as FilterDefinition,
         language: {} as FilterDefinitionWithValues,
         new: {} as FilterDefinitionWithValues,
         organizations: {
@@ -175,7 +176,6 @@ describe('utils/filters/getFilterFromState', () => {
           machineName: modelName.ORGANIZATIONS,
           values: [],
         },
-        subjects: {} as FilterDefinition,
       },
       resources: {
         organizations: {

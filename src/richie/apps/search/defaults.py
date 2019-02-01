@@ -16,13 +16,13 @@ ORGANIZATIONS_LOGO_IMAGE_HEIGHT = getattr(
     settings, "ORGANIZATIONS_LOGO_IMAGE_HEIGHT", 216
 )
 
-SUBJECTS_LOGO_IMAGE_WIDTH = getattr(settings, "SUBJECTS_LOGO_IMAGE_WIDTH", 216)
-SUBJECTS_LOGO_IMAGE_HEIGHT = getattr(settings, "SUBJECTS_LOGO_IMAGE_HEIGHT", 216)
+CATEGORIES_LOGO_IMAGE_WIDTH = getattr(settings, "CATEGORIES_LOGO_IMAGE_WIDTH", 216)
+CATEGORIES_LOGO_IMAGE_HEIGHT = getattr(settings, "CATEGORIES_LOGO_IMAGE_HEIGHT", 216)
 
 # Define our aggregations names, for our ES query, which will match with the field
 # names on the objects & the facets we return on the API response
 RESOURCE_FACETS = getattr(
-    settings, "RICHIE_SEARCH_RESOURCE_FACETS", ["organizations", "subjects"]
+    settings, "RICHIE_SEARCH_RESOURCE_FACETS", ["organizations", "categories"]
 )
 
 FILTERS_HARDCODED_DEFAULT = {

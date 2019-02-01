@@ -3,8 +3,8 @@ import get from 'lodash-es/get';
 import partialRight from 'lodash-es/partialRight';
 import { Reducer } from 'redux';
 
+import { Category } from '../../types/Category';
 import { modelName } from '../../types/models';
-import { Subject } from '../../types/Subject';
 import { Maybe } from '../../utils/types';
 import { ResourceAdd } from '../genericReducers/resourceById/actions';
 import {
@@ -20,15 +20,15 @@ import { ResourceListGetSuccess } from '../genericSideEffects/getResourceList/ac
 
 const initialState = { ...resourceByIdInit };
 
-export type SubjectsState = Maybe<
-  ResourceByIdState<Subject> & ResourceListState<Subject>
+export type CategoriesState = Maybe<
+  ResourceByIdState<Category> & ResourceListState<Category>
 >;
 
-export const subjects: Reducer<SubjectsState> = (
+export const categories: Reducer<CategoriesState> = (
   state = initialState,
   action?:
-    | ResourceAdd<Subject>
-    | ResourceListGetSuccess<Subject>
+    | ResourceAdd<Category>
+    | ResourceListGetSuccess<Category>
     | { type: '' },
 ) => {
   if (!action) {
@@ -38,7 +38,7 @@ export const subjects: Reducer<SubjectsState> = (
   // Discriminate resource related actions by resource name
   if (
     get(action, 'resourceName') &&
-    get(action, 'resourceName') !== modelName.SUBJECTS
+    get(action, 'resourceName') !== modelName.CATEGORIES
   ) {
     return state;
   }

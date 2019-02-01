@@ -10,6 +10,7 @@ import { fetchList, getList } from './getResourceList';
 // something simple but we don't want to rely on the specific implementation of a resource
 describe('data/genericSideEffects/getResourceList saga', () => {
   const course43 = {
+    categories: [45],
     cover_image: '/about_43.png',
     end: '2018-05-31T06:00:00.000Z',
     enrollment_end: '2018-03-15T06:00:00.000Z',
@@ -20,11 +21,11 @@ describe('data/genericSideEffects/getResourceList saga', () => {
     session_number: 1,
     short_description: 'Lorem ipsum dolor sit amet consectetur adipiscim elit.',
     start: '2018-03-01T06:00:00.000Z',
-    subjects: [45],
     title: 'Python for data science',
   };
 
   const course44 = {
+    categories: [7, 128],
     cover_image: '/about_44.png',
     end: '2018-04-30T06:00:00.000Z',
     enrollment_end: '2018-02-28T06:00:00.000Z',
@@ -36,7 +37,6 @@ describe('data/genericSideEffects/getResourceList saga', () => {
     short_description:
       'Phasellus hendrerit tortor nulla, ut tristique ante aliquam sed.',
     start: '2018-03-01T06:00:00.000Z',
-    subjects: [7, 128],
     title: 'Programming 101 in Python',
   };
 

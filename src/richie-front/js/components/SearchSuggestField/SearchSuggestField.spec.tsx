@@ -3,6 +3,7 @@ import '../../testSetup';
 import { shallow } from 'enzyme';
 import * as React from 'react';
 
+import { Category } from '../../types/Category';
 import { Course } from '../../types/Course';
 import { modelName } from '../../types/models';
 import { Organization } from '../../types/Organization';
@@ -10,7 +11,6 @@ import {
   DefaultSuggestionSection,
   ResourceSuggestionSection,
 } from '../../types/searchSuggest';
-import { Subject } from '../../types/Subject';
 import { handle } from '../../utils/errors/handle';
 import { getSearchParam } from '../../utils/indirection/getSearchParam';
 import { location } from '../../utils/indirection/location';
@@ -72,7 +72,7 @@ describe('components/SearchSuggestField', () => {
       />,
     );
     expect(wrapper.html()).toContain(
-      'Search for courses, organizations, subjects',
+      'Search for courses, organizations, categories',
     );
   });
 
@@ -190,10 +190,10 @@ describe('components/SearchSuggestField', () => {
                   { title: 'Course #2' } as Course,
                 ],
               };
-            case modelName.SUBJECTS:
+            case modelName.CATEGORIES:
               return {
-                message: 'Subjects',
-                model: modelName.SUBJECTS,
+                message: 'Categories',
+                model: modelName.CATEGORIES,
                 values: [],
               };
             case modelName.ORGANIZATIONS:
@@ -266,9 +266,12 @@ describe('components/SearchSuggestField', () => {
 
     it('updates the filter and resets the suggestion state when it is called with a resource suggestion', () => {
       onSuggestionSelected.bind(that)(formEvent, {
-        suggestion: { model: modelName.SUBJECTS, data: { id: 43 } as Subject },
+        suggestion: {
+          data: { id: 43 } as Category,
+          model: modelName.CATEGORIES,
+        },
       });
-      expect(addFilter).toHaveBeenCalledWith(modelName.SUBJECTS, '43');
+      expect(addFilter).toHaveBeenCalledWith(modelName.CATEGORIES, '43');
       expect(location.setHref).not.toHaveBeenCalled();
 
       onSuggestionSelected.bind(that)(formEvent, {

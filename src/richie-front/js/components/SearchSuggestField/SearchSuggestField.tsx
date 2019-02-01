@@ -31,7 +31,7 @@ const messages = defineMessages({
     id: 'components.SearchSuggestField.searchFieldDefaultSearch',
   },
   searchFieldPlaceholder: {
-    defaultMessage: 'Search for courses, organizations, subjects',
+    defaultMessage: 'Search for courses, organizations, categories',
     description:
       'Placeholder text displayed in the search field when it is empty.',
     id: 'components.SearchSuggestField.searchFieldPlaceholder',
@@ -125,7 +125,7 @@ export async function onSuggestionsFetchRequested(
   > = [
     [modelName.COURSES, commonMessages.coursesHumanName],
     [modelName.ORGANIZATIONS, commonMessages.organizationsHumanName],
-    [modelName.SUBJECTS, commonMessages.subjectsHumanName],
+    [modelName.CATEGORIES, commonMessages.categoriesHumanName],
   ];
 
   // Fetch the suggestions for each resource-based section to build out the sections
@@ -176,7 +176,7 @@ export function onSuggestionSelected(
       return location.setHref(suggestion.data.absolute_url);
 
     case modelName.ORGANIZATIONS:
-    case modelName.SUBJECTS:
+    case modelName.CATEGORIES:
       // Update the search with the newly selected filter
       this.props.addFilter(suggestion.model, String(suggestion.data.id));
       // Reset the search field state: the task has been completed

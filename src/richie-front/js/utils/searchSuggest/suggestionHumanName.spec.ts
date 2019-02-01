@@ -1,7 +1,7 @@
+import { Category } from '../../types/Category';
 import { Course } from '../../types/Course';
 import { modelName } from '../../types/models';
 import { Organization } from '../../types/Organization';
-import { Subject } from '../../types/Subject';
 import { suggestionHumanName } from './suggestionHumanName';
 
 describe('utils/searchSuggest/suggestionHumanName', () => {
@@ -22,10 +22,10 @@ describe('utils/searchSuggest/suggestionHumanName', () => {
     ).toEqual('Some organization name');
   });
 
-  it('returns the correct human name for a subject', () => {
-    const subject = { title: 'Some subject matter' } as Subject;
+  it('returns the correct human name for a category', () => {
+    const category = { title: 'Some category matter' } as Category;
     expect(
-      suggestionHumanName({ model: modelName.SUBJECTS, data: subject }),
-    ).toEqual('Some subject matter');
+      suggestionHumanName({ model: modelName.CATEGORIES, data: category }),
+    ).toEqual('Some category matter');
   });
 });

@@ -1,6 +1,6 @@
 import { Resource } from './Resource';
 
-export interface Subject extends Resource {
+export interface Category extends Resource {
   logo: string | null;
   title: string;
 }

@@ -1,26 +1,26 @@
 """
-End-to-end tests for the subject detail view
+End-to-end tests for the category detail view
 """
 from django.test import TestCase
 
 from richie.apps.core.factories import UserFactory
-from richie.apps.courses.factories import CourseFactory, SubjectFactory
+from richie.apps.courses.factories import CategoryFactory, CourseFactory
 
 
-class SubjectCMSTestCase(TestCase):
+class CategoryCMSTestCase(TestCase):
     """
-    End-to-end test suite to validate the content and Ux of the subject detail view
+    End-to-end test suite to validate the content and Ux of the category detail view
     """
 
-    def test_templates_subject_detail_cms_published_content(self):
+    def test_templates_category_detail_cms_published_content(self):
         """
-        Validate that the important elements are displayed on a published subject page
+        Validate that the important elements are displayed on a published category page
         """
         courses = CourseFactory.create_batch(4)
-        subject = SubjectFactory(
-            page_title="Very interesting subject", fill_courses=courses
+        category = CategoryFactory(
+            page_title="Very interesting category", fill_courses=courses
         )
-        page = subject.extended_object
+        page = category.extended_object
 
         # Publish only 2 out of 4 courses
         courses[0].extended_object.publish("en")
@@ -37,18 +37,18 @@ class SubjectCMSTestCase(TestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
 
-        # Publish the subject and ensure the content is correct
+        # Publish the category and ensure the content is correct
         page.publish("en")
         response = self.client.get(url)
         self.assertContains(
             response,
-            "<title>Very interesting subject</title>",
+            "<title>Very interesting category</title>",
             status_code=200,
             html=True,
         )
         self.assertContains(
             response,
-            '<h1 class="subject-detail__title">Very interesting subject</h1>',
+            '<h1 class="category-detail__title">Very interesting category</h1>',
             html=True,
         )
 
@@ -64,18 +64,18 @@ class SubjectCMSTestCase(TestCase):
         for course in courses[-2:]:
             self.assertNotContains(response, course.extended_object.get_title())
 
-    def test_templates_subject_detail_cms_draft_content(self):
+    def test_templates_category_detail_cms_draft_content(self):
         """
-        A staff user should see a draft subject including its draft elements with an annotation
+        A staff user should see a draft category including its draft elements with an annotation
         """
         user = UserFactory(is_staff=True, is_superuser=True)
         self.client.login(username=user.username, password="password")
 
         courses = CourseFactory.create_batch(4)
-        subject = SubjectFactory(
-            page_title="Very interesting subject", fill_courses=courses
+        category = CategoryFactory(
+            page_title="Very interesting category", fill_courses=courses
         )
-        page = subject.extended_object
+        page = category.extended_object
 
         # Publish only 2 out of 4 courses
         courses[0].extended_object.publish("en")
@@ -92,13 +92,13 @@ class SubjectCMSTestCase(TestCase):
         response = self.client.get(url)
         self.assertContains(
             response,
-            "<title>Very interesting subject</title>",
+            "<title>Very interesting category</title>",
             status_code=200,
             html=True,
         )
         self.assertContains(
             response,
-            '<h1 class="subject-detail__title">Very interesting subject</h1>',
+            '<h1 class="category-detail__title">Very interesting category</h1>',
             html=True,
         )
 
