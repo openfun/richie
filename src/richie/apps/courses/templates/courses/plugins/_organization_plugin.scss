@@ -30,12 +30,12 @@ $richie-organization-plugin-title-height: 1.1 * $headings-line-height *
     border: $richie-organization-plugin-border-hover;
     cursor: pointer;
   }
-  &__image {
-    @extend .card-img-top;
-  }
   &__body {
     @extend .card-body;
     @extend .text-center;
+    & > img {
+      max-width: 100%;
+    }
   }
   &__title {
     @extend .card-title;
