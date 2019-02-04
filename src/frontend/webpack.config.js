@@ -8,10 +8,10 @@ module.exports = {
 
   // Include whatwg fetch as an entry point (and not an import) as it's replacing (when necessary)
   // a globally available browser-provided function
-  entry: ['./src/richie-front/js/index.tsx'],
+  entry: ['./js/index.tsx'],
   output: {
     filename: 'index.js',
-    path: __dirname + '/src/richie/static/richie/js',
+    path: __dirname + '/../richie/static/richie/js',
   },
 
   // Enable sourcemaps for debugging webpack's output.

@@ -238,17 +238,17 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v3-front-dependencies-{{ checksum "yarn.lock" }}
+            - v4-front-dependencies-{{ checksum "yarn.lock" }}
       - attach_workspace:
           at: ~/fun/src/richie/locale
       - run:
           name: Use our node script to upload i18n backend strings file
           command: node i18n/scripts/upload.js 'richie-back.pot' '/../../../fun/src/richie/locale/django.pot'
       - attach_workspace:
-          at: ~/richie/src/richie-front/i18n
+          at: ~/richie/src/frontend/i18n
       - run:
           name: Use our node script to upload i18n frontend strings file
-          command: node i18n/scripts/upload.js 'richie-front.pot' '/../../src/richie-front/i18n/richie-front.pot'
+          command: node i18n/scripts/upload.js 'frontend.pot' '/../../src/frontend/i18n/frontend.pot'
 
   test-back:
     machine: true
@@ -513,13 +513,14 @@ jobs:
   build-front:
     docker:
       - image: circleci/node:10
-    working_directory: ~/richie
+    working_directory: ~/richie/src/frontend
     steps:
-      - checkout
+      - checkout:
+          path: ~/richie
       - restore_cache:
           keys:
-            - v3-front-dependencies-{{ checksum "package.json" }}
-            - v3-front-dependencies-
+            - v4-front-dependencies-{{ checksum "yarn.lock" }}
+            - v4-front-dependencies-
       # If the yarn.lock file is not up-to-date with the package.json file,
       # using the --frozen-lockfile should fail.
       - run:
@@ -532,29 +533,30 @@ jobs:
           name: Build application styles
           command: yarn sass
       - run:
-          name: Use react-intl-po to generate our richie-front.pot file
+          name: Use react-intl-po to generate our frontend.pot file
           command: yarn generate-l10n-template
       - persist_to_workspace:
-          root: ~/richie/src/richie-front/i18n
+          root: ~/richie/src/frontend/i18n
           paths:
-            - richie-front.pot
+            - frontend.pot
       - store_artifacts:
-          path: src/richie-front/i18n/richie-front.pot
-          destination: richie-front.pot
+          path: i18n/frontend.pot
+          destination: frontend.pot
       - save_cache:
           paths:
             - ./node_modules
-          key: v3-front-dependencies-{{ checksum "yarn.lock" }}
+          key: v4-front-dependencies-{{ checksum "yarn.lock" }}
 
   lint-front-tslint:
     docker:
       - image: circleci/node:10
-    working_directory: ~/richie
+    working_directory: ~/richie/src/frontend
     steps:
-      - checkout
+      - checkout:
+          path: ~/richie
       - restore_cache:
           keys:
-            - v3-front-dependencies-{{ checksum "yarn.lock" }}
+            - v4-front-dependencies-{{ checksum "yarn.lock" }}
       - run:
           name: Lint code with tslint
           command: yarn lint
@@ -562,25 +564,27 @@ jobs:
   lint-prettier:
     docker:
       - image: circleci/node:10
-    working_directory: ~/richie
+    working_directory: ~/richie/src/frontend
     steps:
-      - checkout
+      - checkout:
+          path: ~/richie
       - restore_cache:
           keys:
-            - v3-front-dependencies-{{ checksum "yarn.lock" }}
+            - v4-front-dependencies-{{ checksum "yarn.lock" }}
       - run:
           name: Lint JS/TS/JSON and CSS/SCSS code with prettier
-          command: yarn prettier --list-different "src/richie-front/js/**/*.+(ts|tsx|json|js|jsx)" "*.+(ts|tsx|json|js|jsx)" "src/**/*.+(css|scss)"
+          command: yarn prettier --list-different "js/**/*.+(ts|tsx|json|js|jsx)" "*.+(ts|tsx|json|js|jsx)" "**/*.+(css|scss)"
 
   test-front:
     docker:
       - image: circleci/node:10
-    working_directory: ~/richie
+    working_directory: ~/richie/src/frontend
     steps:
-      - checkout
+      - checkout:
+          path: ~/richie
       - restore_cache:
           keys:
-            - v3-front-dependencies-{{ checksum "yarn.lock" }}
+            - v4-front-dependencies-{{ checksum "yarn.lock" }}
       - run:
           name: Run tests
           # Circle CI needs the tests to be ran sequentially, otherwise it hangs. See Jest docs below:

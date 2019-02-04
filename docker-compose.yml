@@ -44,6 +44,6 @@ services:
 
   node:
     image: circleci/node:10
-    working_dir: /app
+    working_dir: /app/src/frontend
     volumes:
       - .:/app

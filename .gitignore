@@ -80,5 +80,5 @@ node_modules
 yarn-error.log
 
 # Exported strings & generated translation templates
-src/richie-front/i18n/src
+src/frontend/i18n/js
 *.pot

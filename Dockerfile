@@ -34,9 +34,9 @@ RUN mkdir /install && \
 # ---- front-end builder image ----
 FROM node:10 as front-builder
 
-WORKDIR /app
-
 COPY . /app/
+
+WORKDIR /app/src/frontend
 
 RUN yarn install --frozen-lockfile && \
     yarn build && \
