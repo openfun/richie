@@ -238,7 +238,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v3-front-dependencies-{{ checksum "package.json" }}
+            - v3-front-dependencies-{{ checksum "yarn.lock" }}
       - attach_workspace:
           at: ~/fun/src/richie/locale
       - run:
@@ -533,7 +533,7 @@ jobs:
       - save_cache:
           paths:
             - ./node_modules
-          key: v3-front-dependencies-{{ checksum "package.json" }}
+          key: v3-front-dependencies-{{ checksum "yarn.lock" }}
 
   lint-front-tslint:
     docker:
@@ -543,7 +543,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v3-front-dependencies-{{ checksum "package.json" }}
+            - v3-front-dependencies-{{ checksum "yarn.lock" }}
       - run:
           name: Lint code with tslint
           command: yarn lint
@@ -556,7 +556,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v3-front-dependencies-{{ checksum "package.json" }}
+            - v3-front-dependencies-{{ checksum "yarn.lock" }}
       - run:
           name: Lint JS/TS/JSON and CSS/SCSS code with prettier
           command: yarn prettier --list-different "src/richie-front/js/**/*.+(ts|tsx|json|js|jsx)" "*.+(ts|tsx|json|js|jsx)" "src/**/*.+(css|scss)"
@@ -569,7 +569,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - v3-front-dependencies-{{ checksum "package.json" }}
+            - v3-front-dependencies-{{ checksum "yarn.lock" }}
       - run:
           name: Run tests
           # Circle CI needs the tests to be ran sequentially, otherwise it hangs. See Jest docs below:
