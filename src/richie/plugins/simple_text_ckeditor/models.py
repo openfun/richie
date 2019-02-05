@@ -29,6 +29,7 @@ class SimpleText(CMSPlugin):
         super(SimpleText, self).__init__(*args, **kwargs)
         self.body = force_text(self.body)
 
+    # pylint: disable=arguments-differ
     def save(self, *args, **kwargs):
         # Clean HTML from potential XSS content
         self.body = clean_html(self.body, full=False)
