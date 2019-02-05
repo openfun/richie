@@ -472,13 +472,21 @@ jobs:
           name: Tag images
           command: |
             docker images fundocker/richie
-            DOCKER_TAG=$(echo ${CIRCLE_TAG} | sed 's/^v//')
-            echo "DOCKER_TAG: ${DOCKER_TAG} (from Git tag: ${CIRCLE_TAG})"
-            docker tag richie:${CIRCLE_SHA1} fundocker/richie:latest
+            DOCKER_TAG=$([[ -z "$CIRCLE_TAG" ]] && echo $CIRCLE_BRANCH || echo ${CIRCLE_TAG} | sed 's/^v//')
+            RELEASE_TYPE=$([[ -z "$CIRCLE_TAG" ]] && echo "branch" || echo "tag ")
+            # Display either:
+            # - DOCKER_TAG: master (Git branch)
+            # or
+            # - DOCKER_TAG: 1.1.2 (Git tag v1.1.2)
+            echo "DOCKER_TAG: ${DOCKER_TAG} (Git ${RELEASE_TYPE}${CIRCLE_TAG})"
             docker tag richie:${CIRCLE_SHA1} fundocker/richie:${DOCKER_TAG}
-            docker tag richie:${CIRCLE_SHA1}-alpine fundocker/richie:alpine
             docker tag richie:${CIRCLE_SHA1}-alpine fundocker/richie:${DOCKER_TAG}-alpine
-            docker images "fundocker/richie:${DOCKER_TAG}*"
+            if [[ -n "$CIRCLE_TAG" ]]; then
+                docker tag richie:${CIRCLE_SHA1} fundocker/richie:latest
+                docker tag richie:${CIRCLE_SHA1}-alpine fundocker/richie:alpine
+            fi
+            docker images | grep -E "^fundocker/richie\s*(${DOCKER_TAG}.*|latest|alpine|master|master-alpine)"
+
       # Publish images to DockerHub
       #
       # Nota bene: logged user (see "Login to DockerHub" step) must have write
@@ -487,12 +495,19 @@ jobs:
       - run:
           name: Publish images
           command: |
-            DOCKER_TAG=$(echo ${CIRCLE_TAG} | sed 's/^v//')
-            echo "DOCKER_TAG: ${DOCKER_TAG} (from Git tag: ${CIRCLE_TAG})"
-            docker push fundocker/richie:latest
+            DOCKER_TAG=$([[ -z "$CIRCLE_TAG" ]] && echo $CIRCLE_BRANCH || echo ${CIRCLE_TAG} | sed 's/^v//')
+            RELEASE_TYPE=$([[ -z "$CIRCLE_TAG" ]] && echo "branch" || echo "tag ")
+            # Display either:
+            # - DOCKER_TAG: master (Git branch)
+            # or
+            # - DOCKER_TAG: 1.1.2 (Git tag v1.1.2)
+            echo "DOCKER_TAG: ${DOCKER_TAG} (Git ${RELEASE_TYPE}${CIRCLE_TAG})"
             docker push fundocker/richie:${DOCKER_TAG}
-            docker push fundocker/richie:alpine
             docker push fundocker/richie:${DOCKER_TAG}-alpine
+            if [[ -n "$CIRCLE_TAG" ]]; then
+              docker push fundocker/richie:latest
+              docker push fundocker/richie:alpine
+            fi
 
   # ---- Front-end jobs ----
   build-front:
@@ -704,7 +719,7 @@ workflows:
             - test-alpine
           filters:
             branches:
-              ignore: /.*/
+              only: master
             tags:
               only: /^v.*/
 
