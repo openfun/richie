@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- The simple_text_ckeditor plugin was not discovered as a python module and thus
+  not distributed with Richie's python package.
+
 ## [1.0.0-beta.0] - 2019-02-04
 
 This release indicates our intention to release richie 1.0. It also marks the beginning of this changelog.
