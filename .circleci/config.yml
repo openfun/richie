@@ -476,10 +476,8 @@ jobs:
             echo "DOCKER_TAG: ${DOCKER_TAG} (from Git tag: ${CIRCLE_TAG})"
             docker tag richie:${CIRCLE_SHA1} fundocker/richie:latest
             docker tag richie:${CIRCLE_SHA1} fundocker/richie:${DOCKER_TAG}
-            docker tag richie:${CIRCLE_SHA1}-dev fundocker/richie:${DOCKER_TAG}-dev
             docker tag richie:${CIRCLE_SHA1}-alpine fundocker/richie:alpine
             docker tag richie:${CIRCLE_SHA1}-alpine fundocker/richie:${DOCKER_TAG}-alpine
-            docker tag richie:${CIRCLE_SHA1}-alpine-dev fundocker/richie:${DOCKER_TAG}-alpine-dev
             docker images "fundocker/richie:${DOCKER_TAG}*"
       # Publish images to DockerHub
       #
@@ -493,10 +491,8 @@ jobs:
             echo "DOCKER_TAG: ${DOCKER_TAG} (from Git tag: ${CIRCLE_TAG})"
             docker push fundocker/richie:latest
             docker push fundocker/richie:${DOCKER_TAG}
-            docker push fundocker/richie:${DOCKER_TAG}-dev
             docker push fundocker/richie:alpine
             docker push fundocker/richie:${DOCKER_TAG}-alpine
-            docker push fundocker/richie:${DOCKER_TAG}-alpine-dev
 
   # ---- Front-end jobs ----
   build-front:
