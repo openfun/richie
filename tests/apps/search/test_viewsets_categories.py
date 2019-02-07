@@ -31,7 +31,10 @@ class CategoriesViewsetsTestCase(TestCase):
             return_value={
                 "_id": 42,
                 "_source": {
+                    "is_meta": True,
                     "logo": {"fr": "/image42.png"},
+                    "nb_children": 1,
+                    "path": "0001",
                     "title": {"fr": "Some Category"},
                 },
             },
@@ -44,7 +47,15 @@ class CategoriesViewsetsTestCase(TestCase):
         # The client received a proper response with the relevant category
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            response.data, {"id": 42, "logo": "/image42.png", "title": "Some Category"}
+            response.data,
+            {
+                "id": 42,
+                "is_meta": True,
+                "logo": "/image42.png",
+                "nb_children": 1,
+                "path": "0001",
+                "title": "Some Category",
+            },
         )
 
     def test_viewsets_categories_retrieve_unknown(self):
@@ -81,14 +92,20 @@ class CategoriesViewsetsTestCase(TestCase):
                     {
                         "_id": 21,
                         "_source": {
+                            "is_meta": True,
                             "logo": {"fr": "/image21.png"},
+                            "nb_children": 1,
+                            "path": "0002",
                             "title": {"fr": "Computer Science"},
                         },
                     },
                     {
                         "_id": 61,
                         "_source": {
+                            "is_meta": False,
                             "logo": {"fr": "/image61.png"},
+                            "nb_children": 0,
+                            "path": "00020001",
                             "title": {"fr": "Engineering Sciences"},
                         },
                     },
@@ -106,14 +123,35 @@ class CategoriesViewsetsTestCase(TestCase):
             {
                 "meta": {"count": 2, "offset": 0, "total_count": 32},
                 "objects": [
-                    {"id": 21, "logo": "/image21.png", "title": "Computer Science"},
-                    {"id": 61, "logo": "/image61.png", "title": "Engineering Sciences"},
+                    {
+                        "id": 21,
+                        "is_meta": True,
+                        "logo": "/image21.png",
+                        "nb_children": 1,
+                        "path": "0002",
+                        "title": "Computer Science",
+                    },
+                    {
+                        "id": 61,
+                        "is_meta": False,
+                        "logo": "/image61.png",
+                        "nb_children": 0,
+                        "path": "00020001",
+                        "title": "Engineering Sciences",
+                    },
                 ],
             },
         )
         # The ES connector was called with a query that matches the client's request
         mock_search.assert_called_with(
-            _source=["absolute_url", "logo", "title.*"],
+            _source=[
+                "absolute_url",
+                "is_meta",
+                "logo",
+                "nb_children",
+                "path",
+                "title.*",
+            ],
             body={"query": "example"},
             doc_type="category",
             from_=0,
