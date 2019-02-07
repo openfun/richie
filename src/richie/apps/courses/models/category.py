@@ -2,6 +2,7 @@
 Declare and configure the models for the courses application
 """
 from django.apps import apps
+from django.conf import settings
 from django.db import models
 from django.db.models import Prefetch
 from django.utils import translation
@@ -79,16 +80,36 @@ class Category(BasePageExtension):
         )
 
 
+def get_category_limit_choices_to():
+    """Return a query limiting the categories proposed when creating a CategoryPlugin."""
+    limit_choices_to = {
+        "publisher_is_draft": True,  # plugins work with draft instances
+        "category__isnull": False,  # limit to pages linked to a category object
+        "node__parent__cms_pages__category__isnull": False,  # exclude meta categories
+    }
+    # Limit to leaf categories only if active in settings (False by default)
+    if getattr(settings, "LIMIT_PLUGIN_CATEGORIES_TO_LEAF", False):
+        limit_choices_to["node__numchild"] = 0
+
+    return limit_choices_to
+
+
 class CategoryPluginModel(PagePluginMixin, CMSPlugin):
     """
     Category plugin model handles the relation between CategoryPlugin
     and their Category instance
+
+    We only propose to link category objects:
+    - are not at the root of the category tree (this position defines a meta category which
+      is used to define a filter bank on the search page e.g. Subjects, Levels).
+    - that are a leaf in the category tree (can be deactivated with setting
+      `LIMIT_PLUGIN_CATEGORIES_TO_LEAF`),
     """
 
     page = models.ForeignKey(
         Page,
         related_name="category_plugins",
-        limit_choices_to={"publisher_is_draft": True, "category__isnull": False},
+        limit_choices_to=get_category_limit_choices_to,
     )
 
     class Meta:

@@ -4,6 +4,7 @@ Unit tests for the category plugin and its model
 """
 from django import forms
 from django.conf import settings
+from django.test.utils import override_settings
 
 from cms.api import add_plugin, create_page
 from cms.test_utils.testcases import CMSTestCase
@@ -21,9 +22,11 @@ class CategoryPluginTestCase(CMSTestCase):
     Test that CategoryPlugin correctly displays a Category's page placeholders content
     """
 
-    def test_cms_plugins_category_form_page_choices(self):
+    @override_settings(LIMIT_PLUGIN_CATEGORIES_TO_LEAF=True)
+    def test_cms_plugins_category_form_page_choices_leaf_only(self):
         """
-        The form to create a category plugin should only list category pages in the select box.
+        The form to create a category plugin should only list leaf category pages in the
+        select box when the setting is activated.
         """
 
         class CategoryPluginModelForm(forms.ModelForm):
@@ -33,12 +36,45 @@ class CategoryPluginTestCase(CMSTestCase):
                 model = CategoryPluginModel
                 fields = ["page"]
 
-        category = CategoryFactory()
+        meta_category = CategoryFactory()
+        parent_category = CategoryFactory(page_parent=meta_category.extended_object)
+        leaf_category = CategoryFactory(page_parent=parent_category.extended_object)
+
         other_page_title = "other page"
         create_page(other_page_title, "richie/fullwidth.html", settings.LANGUAGE_CODE)
+
         plugin_form = CategoryPluginModelForm()
-        self.assertIn(category.extended_object.get_title(), plugin_form.as_table())
-        self.assertNotIn(other_page_title, plugin_form.as_table())
+        rendered_form = plugin_form.as_table()
+
+        self.assertIn(leaf_category.extended_object.get_title(), rendered_form)
+        self.assertNotIn(parent_category.extended_object.get_title(), rendered_form)
+        self.assertNotIn(meta_category.extended_object.get_title(), rendered_form)
+        self.assertNotIn(other_page_title, rendered_form)
+
+    def test_cms_plugins_category_form_page_choices_all_categories(self):
+        """By default, all categories can be linked via a plugin excluding meta categories."""
+
+        class CategoryPluginModelForm(forms.ModelForm):
+            """A form for testing the choices in the select box"""
+
+            class Meta:
+                model = CategoryPluginModel
+                fields = ["page"]
+
+        meta_category = CategoryFactory()
+        parent_category = CategoryFactory(page_parent=meta_category.extended_object)
+        leaf_category = CategoryFactory(page_parent=parent_category.extended_object)
+
+        other_page_title = "other page"
+        create_page(other_page_title, "richie/fullwidth.html", settings.LANGUAGE_CODE)
+
+        plugin_form = CategoryPluginModelForm()
+        rendered_form = plugin_form.as_table()
+
+        self.assertIn(leaf_category.extended_object.get_title(), rendered_form)
+        self.assertIn(parent_category.extended_object.get_title(), rendered_form)
+        self.assertNotIn(meta_category.extended_object.get_title(), rendered_form)
+        self.assertNotIn(other_page_title, rendered_form)
 
     def test_cms_plugins_category_render_on_public_page(self):
         """
