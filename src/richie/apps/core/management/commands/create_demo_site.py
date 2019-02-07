@@ -39,17 +39,17 @@ NB_PERSONS = 10
 NB_CATEGORIES = 8
 PAGE_INFOS = {
     "home": {
-        "content": {"en": "Home", "fr": "Accueil"},
+        "title": {"en": "Home", "fr": "Accueil"},
         "in_navigation": False,
         "kwargs": {"template": "richie/fullwidth.html"},
     },
     "news": {
-        "content": {"en": "News", "fr": "Actualités"},
+        "title": {"en": "News", "fr": "Actualités"},
         "in_navigation": True,
         "kwargs": {"template": "richie/fullwidth.html"},
     },
     "courses": {
-        "content": {"en": "Courses", "fr": "Cours"},
+        "title": {"en": "Courses", "fr": "Cours"},
         "in_navigation": True,
         "kwargs": {
             "reverse_id": Course.ROOT_REVERSE_ID,
@@ -57,7 +57,7 @@ PAGE_INFOS = {
         },
     },
     "categories": {
-        "content": {"en": "Categories", "fr": "Catégories"},
+        "title": {"en": "Categories", "fr": "Catégories"},
         "in_navigation": False,
         "kwargs": {
             "reverse_id": Category.ROOT_REVERSE_ID,
@@ -65,7 +65,7 @@ PAGE_INFOS = {
         },
     },
     "organizations": {
-        "content": {"en": "Organizations", "fr": "Etablissements"},
+        "title": {"en": "Organizations", "fr": "Etablissements"},
         "in_navigation": True,
         "kwargs": {
             "reverse_id": Organization.ROOT_REVERSE_ID,
@@ -73,7 +73,7 @@ PAGE_INFOS = {
         },
     },
     "persons": {
-        "content": {"en": "Persons", "fr": "Personnes"},
+        "title": {"en": "Persons", "fr": "Personnes"},
         "in_navigation": False,
         "kwargs": {
             "reverse_id": Person.ROOT_REVERSE_ID,
@@ -81,21 +81,21 @@ PAGE_INFOS = {
         },
     },
     "dashboard": {
-        "content": {"en": "Dashboard", "fr": "Tableau de bord"},
+        "title": {"en": "Dashboard", "fr": "Tableau de bord"},
         "in_navigation": False,
         "cms": False,
         "kwargs": {"template": "richie/fullwidth.html"},
     },
     "annex": {
-        "content": {"en": "Annex", "fr": "Annexe"},
+        "title": {"en": "Annex", "fr": "Annexe"},
         "in_navigation": False,
         "kwargs": {
             "template": "richie/fullwidth.html",
             "reverse_id": DEMO_ANNEX_PAGE_ID,
         },
         "children": {
-            "about": {
-                "content": {"en": "About", "fr": "A propos"},
+            "annex__about": {
+                "title": {"en": "About", "fr": "A propos"},
                 "in_navigation": True,
                 "kwargs": {"template": "richie/fullwidth.html"},
             }
