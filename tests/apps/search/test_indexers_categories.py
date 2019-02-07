@@ -33,10 +33,10 @@ class CategoriesIndexersTestCase(TestCase):
             should_publish=True,
         )
         category2 = CategoryFactory(
+            page_parent=category1.extended_object,
             page_title={"en": "my second category", "fr": "ma deuxième thématique"},
             should_publish=True,
         )
-
         # Add a description in several languages to the first category
         placeholder = category1.public_extension.extended_object.placeholders.get(
             slot="description"
@@ -61,8 +61,8 @@ class CategoriesIndexersTestCase(TestCase):
                     "_op_type": "some_action",
                     "_type": "category",
                     "absolute_url": {
-                        "en": "/en/my-second-category/",
-                        "fr": "/fr/ma-deuxieme-thematique/",
+                        "en": "/en/my-first-category/my-second-category/",
+                        "fr": "/fr/ma-premiere-thematique/ma-deuxieme-thematique/",
                     },
                     "complete": {
                         "en": ["my second category", "second category", "category"],
@@ -73,7 +73,10 @@ class CategoriesIndexersTestCase(TestCase):
                         ],
                     },
                     "description": {},
+                    "is_meta": False,
                     "logo": {},
+                    "nb_children": 0,
+                    "path": "00010001",
                     "title": {
                         "en": "my second category",
                         "fr": "ma deuxième thématique",
@@ -100,7 +103,10 @@ class CategoriesIndexersTestCase(TestCase):
                         "en": "english description line 1. english description line 2.",
                         "fr": "description français ligne 1. description français ligne 2.",
                     },
+                    "is_meta": True,
                     "logo": {"en": "123.jpg", "fr": "123.jpg"},
+                    "nb_children": 1,
+                    "path": "0001",
                     "title": {
                         "en": "my first category",
                         "fr": "ma première thématique",
@@ -116,13 +122,23 @@ class CategoriesIndexersTestCase(TestCase):
         es_category = {
             "_id": 89,
             "_source": {
+                "is_meta": True,
                 "logo": {"en": "/image_en.png", "fr": "/image_fr.png"},
+                "nb_children": 3,
+                "path": "00010001",
                 "title": {"en": "Computer science", "fr": "Informatique"},
             },
         }
         self.assertEqual(
             CategoriesIndexer.format_es_object_for_api(es_category, "en"),
-            {"id": 89, "logo": "/image_en.png", "title": "Computer science"},
+            {
+                "id": 89,
+                "is_meta": True,
+                "logo": "/image_en.png",
+                "nb_children": 3,
+                "path": "00010001",
+                "title": "Computer science",
+            },
         )
 
     def test_indexers_categories_build_es_query_search_all_categories(self):

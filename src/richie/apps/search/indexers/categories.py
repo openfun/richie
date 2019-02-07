@@ -37,6 +37,9 @@ class CategoriesIndexer:
                 for lang, _ in settings.LANGUAGES
             },
             "description": {"type": "object"},
+            "is_meta": {"type": "boolean"},
+            "nb_children": {"type": "integer"},
+            "path": {"type": "keyword"},
             "title": {"type": "object"},
             # Not searchable
             "absolute_url": {"type": "object", "enabled": False},
@@ -44,7 +47,14 @@ class CategoriesIndexer:
         },
     }
     scripts = {}
-    display_fields = ["absolute_url", "logo", "title.*"]
+    display_fields = [
+        "absolute_url",
+        "is_meta",
+        "logo",
+        "nb_children",
+        "path",
+        "title.*",
+    ]
 
     @classmethod
     def get_data_for_es(cls, index, action):
@@ -66,12 +76,12 @@ class CategoriesIndexer:
             )
             .distinct()
         ):
-            # Get published titles
+            # Prepare published titles
             titles = {
                 t.language: t.title for t in category.extended_object.published_titles
             }
 
-            # Get logo images
+            # Prepare logo images
             logo_images = {}
             for logo_image in Picture.objects.filter(
                 cmsplugin_ptr__placeholder__page=category.extended_object,
@@ -83,13 +93,16 @@ class CategoriesIndexer:
                 logo_image.height = defaults.CATEGORIES_LOGO_IMAGE_HEIGHT
                 logo_images[logo_image.cmsplugin_ptr.language] = logo_image.img_src
 
-            # Get description texts
+            # Prepare description texts
             description = defaultdict(list)
             for simple_text in SimpleText.objects.filter(
                 cmsplugin_ptr__placeholder__page=category.extended_object,
                 cmsplugin_ptr__placeholder__slot="description",
             ):
                 description[simple_text.cmsplugin_ptr.language].append(simple_text.body)
+
+            # Shorcut to the category's page node
+            node = category.extended_object.node
 
             yield {
                 "_id": str(category.extended_object_id),
@@ -104,8 +117,14 @@ class CategoriesIndexer:
                     language: slice_string_for_completion(title)
                     for language, title in titles.items()
                 },
-                "logo": logo_images,
                 "description": {l: " ".join(st) for l, st in description.items()},
+                "is_meta": bool(
+                    node.parent is None
+                    or node.parent.cms_pages.filter(category__isnull=True).exists()
+                ),
+                "logo": logo_images,
+                "nb_children": node.numchild,
+                "path": node.path,
                 "title": titles,
             }
 
@@ -115,14 +134,14 @@ class CategoriesIndexer:
         Format an category stored in ES into a consistent and easy-to-consume record for
         API consumers
         """
+        source = es_category["_source"]
         return {
             "id": es_category["_id"],
-            "logo": get_best_field_language(
-                es_category["_source"]["logo"], best_language
-            ),
-            "title": get_best_field_language(
-                es_category["_source"]["title"], best_language
-            ),
+            "is_meta": source["is_meta"],
+            "logo": get_best_field_language(source["logo"], best_language),
+            "nb_children": source["nb_children"],
+            "path": source["path"],
+            "title": get_best_field_language(source["title"], best_language),
         }
 
     @staticmethod
