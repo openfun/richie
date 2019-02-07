@@ -48,18 +48,18 @@ class CourseModelsTestCase(TestCase):
         # only the categories linked to the course are retrieved (its name starts with `_`
         # because it is not used and only here for unpacking purposes)
         *draft_categories, _other_draft = CategoryFactory.create_batch(3)
-        *public_categories, _other_public = CategoryFactory.create_batch(
+        *published_categories, _other_public = CategoryFactory.create_batch(
             3, should_publish=True
         )
         course = CourseFactory(
-            fill_categories=draft_categories + public_categories, should_publish=True
+            fill_categories=draft_categories + published_categories, should_publish=True
         )
 
         self.assertEqual(
-            list(course.get_categories()), draft_categories + public_categories
+            list(course.get_categories()), draft_categories + published_categories
         )
         self.assertEqual(
-            list(course.public_extension.get_categories()), public_categories
+            list(course.public_extension.get_categories()), published_categories
         )
 
     def test_models_course_get_organizations_empty(self):
@@ -81,19 +81,20 @@ class CourseModelsTestCase(TestCase):
         # only the organizations linked to the course are retrieved (its name starts with `_`
         # because it is not used and only here for unpacking purposes)
         *draft_organizations, _other_draft = OrganizationFactory.create_batch(3)
-        *public_organizations, _other_public = OrganizationFactory.create_batch(
+        *published_organizations, _other_public = OrganizationFactory.create_batch(
             3, should_publish=True
         )
         course = CourseFactory(
-            fill_organizations=draft_organizations + public_organizations,
+            fill_organizations=draft_organizations + published_organizations,
             should_publish=True,
         )
 
         self.assertEqual(
-            list(course.get_organizations()), draft_organizations + public_organizations
+            list(course.get_organizations()),
+            draft_organizations + published_organizations,
         )
         self.assertEqual(
-            list(course.public_extension.get_organizations()), public_organizations
+            list(course.public_extension.get_organizations()), published_organizations
         )
 
     def test_models_course_get_main_organization_empty(self):
@@ -115,17 +116,17 @@ class CourseModelsTestCase(TestCase):
         # only the organizations linked to the course are retrieved (its name starts with `_`
         # because it is not used and only here for unpacking purposes)
         *draft_organizations, _other_draft = OrganizationFactory.create_batch(3)
-        *public_organizations, _other_public = OrganizationFactory.create_batch(
+        *published_organizations, _other_public = OrganizationFactory.create_batch(
             3, should_publish=True
         )
         course = CourseFactory(
-            fill_organizations=draft_organizations + public_organizations,
+            fill_organizations=draft_organizations + published_organizations,
             should_publish=True,
         )
 
         self.assertEqual(course.get_main_organization(), draft_organizations[0])
         self.assertEqual(
-            course.public_extension.get_main_organization(), public_organizations[0]
+            course.public_extension.get_main_organization(), published_organizations[0]
         )
 
     def test_models_course_get_course_runs_empty(self):

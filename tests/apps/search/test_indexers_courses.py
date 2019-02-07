@@ -105,7 +105,7 @@ class CoursesIndexersTestCase(TestCase):
         Happy path: the data is retrieved from the models properly formatted
         """
         # Create a course with a page in both english and french
-        public_categories = CategoryFactory.create_batch(2, should_publish=True)
+        published_categories = CategoryFactory.create_batch(2, should_publish=True)
         draft_category = CategoryFactory()
 
         main_organization = OrganizationFactory(
@@ -121,7 +121,7 @@ class CoursesIndexersTestCase(TestCase):
                 "fr": "titre autre organisation français",
             }
         )
-        other_public_organization = OrganizationFactory(
+        other_published_organization = OrganizationFactory(
             page_title={
                 "en": "english other organization title",
                 "fr": "titre autre organisation français",
@@ -136,9 +136,9 @@ class CoursesIndexersTestCase(TestCase):
             fill_organizations=[
                 main_organization,
                 other_draft_organization,
-                other_public_organization,
+                other_published_organization,
             ],
-            fill_categories=public_categories + [draft_category],
+            fill_categories=published_categories + [draft_category],
             fill_cover=True,
             should_publish=True,
         )
