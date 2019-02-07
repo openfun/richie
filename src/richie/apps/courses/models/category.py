@@ -33,8 +33,13 @@ class Category(BasePageExtension):
 
     def __str__(self):
         """Human representation of a category"""
-        return "{model}: {title}".format(
-            model=self._meta.verbose_name.title(),
+        ancestors = self.extended_object.get_ancestor_pages().filter(
+            category__isnull=False
+        )
+        return "{ancestors:s}{title:s}".format(
+            ancestors="{:s} / ".format(" / ".join([a.get_title() for a in ancestors]))
+            if ancestors
+            else "",
             title=self.extended_object.get_title(),
         )
 

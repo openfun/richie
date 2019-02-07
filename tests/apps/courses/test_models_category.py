@@ -17,13 +17,34 @@ class CategoryModelsTestCase(TestCase):
 
     def test_models_category_str(self):
         """
-        The string representation should be built with the title of the related page.
-        Only 1 query to the associated page should be generated.
+        The string representation should be built with the title of the related page
+        and its ancestors as long as they are category page.
         """
-        page = create_page("Art", "courses/cms/category_detail.html", "en")
+        not_a_category_page = create_page("Categories", "richie/fullwidth.html", "en")
+
+        # Art
+        page = create_page(
+            "Art", "courses/cms/category_detail.html", "en", parent=not_a_category_page
+        )
         category = CategoryFactory(extended_object=page)
-        with self.assertNumQueries(1):
-            self.assertEqual(str(category), "Category: Art")
+        with self.assertNumQueries(2):
+            self.assertEqual(str(category), "Art")
+
+        # Art / Literature
+        child_page = create_page(
+            "Literature", "courses/cms/category_detail.html", "en", parent=page
+        )
+        child_category = CategoryFactory(extended_object=child_page)
+        with self.assertNumQueries(3):
+            self.assertEqual(str(child_category), "Art / Literature")
+
+        # Art / Literature / Novels
+        leaf_page = create_page(
+            "Novels", "courses/cms/category_detail.html", "en", parent=child_page
+        )
+        leaf_category = CategoryFactory(extended_object=leaf_page)
+        with self.assertNumQueries(4):
+            self.assertEqual(str(leaf_category), "Art / Literature / Novels")
 
     def test_models_category_get_courses(self):
         """
