@@ -73,7 +73,12 @@ compilemessages: ## compile the gettext files
 
 demo-site:  ## create a demo site
 	@$(MANAGE) create_demo_site
+	${MAKE} search-index;
 .PHONY: demo-site
+
+search-index:  ## (re)generate the Elasticsearch index
+	@$(MANAGE) bootstrap_elasticsearch
+.PHONY: search-index
 
 lint-back: ## lint back-end python sources
 	${MAKE} lint-back-isort;
