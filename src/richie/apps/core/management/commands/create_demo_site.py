@@ -14,12 +14,12 @@ from cms import models as cms_models
 
 from richie.apps.courses.factories import (
     VIDEO_SAMPLE_LINKS,
-    CategoryFactory,
     CourseFactory,
     CourseRunFactory,
     LicenceFactory,
     OrganizationFactory,
 )
+from richie.apps.courses.helpers import create_categories
 from richie.apps.courses.models import Category, Course, Licence, Organization
 from richie.apps.persons.factories import PersonFactory
 from richie.apps.persons.models import Person
@@ -29,14 +29,13 @@ from ...helpers import recursive_page_creation
 logger = logging.getLogger("richie.commands.core.create_demo_site")
 
 DEMO_ANNEX_PAGE_ID = "annex"
-NB_COURSES = 20
+NB_COURSES = 30
 NB_COURSES_ORGANIZATION_RELATIONS = 3
-NB_COURSES_CATEGORY_RELATIONS = 3
 NB_COURSES_PERSONS_PLUGINS = 3
+NB_COURSES_SUBJECT_RELATIONS = 2
 NB_ORGANIZATIONS = 5
 NB_LICENCES = 5
 NB_PERSONS = 10
-NB_CATEGORIES = 8
 PAGE_INFOS = {
     "home": {
         "title": {"en": "Home", "fr": "Accueil"},
@@ -102,6 +101,132 @@ PAGE_INFOS = {
         },
     },
 }
+LEVELS_INFO = {
+    "title": {"en": "Level", "fr": "Niveau"},
+    "children": [
+        {"title": {"en": "Beginner", "fr": "Débutant"}},
+        {"title": {"en": "Advanced", "fr": "Avancé"}},
+        {"title": {"en": "Expert", "fr": "Expert"}},
+    ],
+}
+SUBJECTS_INFO = {
+    "title": {"en": "Subject", "fr": "Subjet"},
+    "children": [
+        {
+            "title": {"en": "Science", "fr": "Sciences"},
+            "children": [
+                {
+                    "title": {
+                        "en": "Agronomy and Agriculture",
+                        "fr": "Agronomie et Agriculture",
+                    }
+                },
+                {"title": {"en": "Chemistry", "fr": "Chimie"}},
+                {
+                    "title": {
+                        "en": "Discovery of the Universe",
+                        "fr": "Découverte de l'Univers",
+                    }
+                },
+                {"title": {"en": "Environment", "fr": "Environnement"}},
+                {
+                    "title": {
+                        "en": "Mathematics and Statistics",
+                        "fr": "Mathématiques et Statistiques",
+                    }
+                },
+                {
+                    "title": {
+                        "en": "Tools for Research",
+                        "fr": "Outils pour la Recherche",
+                    }
+                },
+                {"title": {"en": "Physics", "fr": "Physique"}},
+                {"title": {"en": "Cognitive science", "fr": "Sciences cognitives"}},
+                {
+                    "title": {
+                        "en": "Earth science and science of the Universe",
+                        "fr": "Sciences de la Terre et de l'Univers",
+                    }
+                },
+                {"title": {"en": "Life science", "fr": "Sciences de la vie"}},
+                {
+                    "title": {
+                        "en": "Engineering science",
+                        "fr": "Sciences pour l'ingénieur",
+                    }
+                },
+            ],
+        },
+        {
+            "title": {
+                "en": "Human and social sciences",
+                "fr": "Sciences humaines et social",
+            },
+            "children": [
+                {"title": {"en": "Communication", "fr": "Communication"}},
+                {
+                    "title": {
+                        "en": "Creation, Arts and Design",
+                        "fr": "Création, Arts et Design",
+                    }
+                },
+                {
+                    "title": {
+                        "en": "Culture and Civilization",
+                        "fr": "Cultures et Civilisations",
+                    }
+                },
+                {
+                    "title": {
+                        "en": "Social Issues and Social Policy",
+                        "fr": "Enjeux de société",
+                    }
+                },
+                {"title": {"en": "Geography", "fr": "Géographie"}},
+                {"title": {"en": "History", "fr": "Histoire"}},
+                {"title": {"en": "Innovation", "fr": "Innovation"}},
+                {"title": {"en": "Literature", "fr": "Lettres"}},
+                {"title": {"en": "Media", "fr": "Médias"}},
+                {"title": {"en": "Philosophy", "fr": "Philosophie"}},
+                {"title": {"en": "Political science", "fr": "Sciences politiques"}},
+                {
+                    "title": {
+                        "en": "International relations",
+                        "fr": "Relations internationales",
+                    }
+                },
+                {"title": {"en": "Sports", "fr": "Sport"}},
+            ],
+        },
+        {"title": {"en": "Law", "fr": "Droit et juridique"}},
+        {"title": {"en": "Economy and Finance", "fr": "Economie et Finance"}},
+        {"title": {"en": "Education and Training", "fr": "Education et formation"}},
+        {"title": {"en": "Management", "fr": "Management"}},
+        {"title": {"en": "Entrepreneurship", "fr": "Entreprenariat"}},
+        {
+            "title": {"en": "Computer science", "fr": "Informatique"},
+            "children": [
+                {
+                    "title": {
+                        "en": "Digital and Technology",
+                        "fr": "Numérique et Technologie",
+                    }
+                },
+                {
+                    "title": {
+                        "en": "Telecommunication and Networks",
+                        "fr": "Télécommunications et Réseaux",
+                    }
+                },
+                {"title": {"en": "Coding", "fr": "Programmation"}},
+            ],
+        },
+        {"title": {"en": "Languages", "fr": "Langues"}},
+        {"title": {"en": "Education and career guidance", "fr": "Orientation"}},
+        {"title": {"en": "Health", "fr": "Santé"}},
+    ],
+}
 
 
 def get_number_of_course_runs():
@@ -160,17 +285,9 @@ def create_demo_site():
         should_publish=True,
     )
 
-    # Create categories under the `Categories` page
-    categories = CategoryFactory.create_batch(
-        NB_CATEGORIES,
-        page_in_navigation=True,
-        page_languages=[l[0] for l in settings.LANGUAGES],
-        page_parent=pages_created["categories"],
-        fill_banner=True,
-        fill_description=True,
-        fill_logo=True,
-        should_publish=True,
-    )
+    # Generate each category tree and return a list of the leaf categories
+    levels = list(create_categories(LEVELS_INFO, pages_created["categories"]))
+    subjects = list(create_categories(SUBJECTS_INFO, pages_created["categories"]))
 
     # Django parler require a language to be manually set when working out of
     # request/response flow and PersonTitle use 'parler'
@@ -203,7 +320,12 @@ def create_demo_site():
             fill_team=random.sample(persons, NB_COURSES_PERSONS_PLUGINS),
             fill_teaser=video_sample,
             fill_cover=video_sample.image,
-            fill_categories=random.sample(categories, NB_COURSES_CATEGORY_RELATIONS),
+            fill_categories=[
+                *random.sample(
+                    subjects, random.randint(1, NB_COURSES_SUBJECT_RELATIONS)
+                ),
+                random.choice(levels),
+            ],
             fill_organizations=random.sample(
                 organizations, NB_COURSES_ORGANIZATION_RELATIONS
             ),
