@@ -187,7 +187,7 @@ class CoursesIndexer:
             for course_run in course_runs:
 
                 yield {
-                    "_id": str(course_run.pk),
+                    "_id": str(course_run.extended_object_id),
                     "_index": index,
                     "_op_type": action,
                     "_type": cls.document_type,
@@ -212,14 +212,14 @@ class CoursesIndexer:
                     "organizations": [
                         str(id)
                         for id in course.get_organizations().values_list(
-                            "public_extension", flat=True
+                            "public_extension__extended_object", flat=True
                         )
                         if id is not None
                     ],
                     "categories": [
                         str(id)
                         for id in course.get_categories().values_list(
-                            "public_extension", flat=True
+                            "public_extension__extended_object", flat=True
                         )
                         if id is not None
                     ],

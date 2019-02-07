@@ -62,7 +62,7 @@ class OrganizationsIndexersTestCase(TestCase):
             ),
             [
                 {
-                    "_id": str(organization2.public_extension.pk),
+                    "_id": str(organization2.public_extension.extended_object_id),
                     "_index": "some_index",
                     "_op_type": "some_action",
                     "_type": "organization",
@@ -90,7 +90,7 @@ class OrganizationsIndexersTestCase(TestCase):
                     },
                 },
                 {
-                    "_id": str(organization1.public_extension.pk),
+                    "_id": str(organization1.public_extension.extended_object_id),
                     "_index": "some_index",
                     "_op_type": "some_action",
                     "_type": "organization",

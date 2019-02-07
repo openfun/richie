@@ -92,7 +92,7 @@ class CategoriesIndexer:
                 description[simple_text.cmsplugin_ptr.language].append(simple_text.body)
 
             yield {
-                "_id": str(category.pk),
+                "_id": str(category.extended_object_id),
                 "_index": index,
                 "_op_type": action,
                 "_type": cls.document_type,

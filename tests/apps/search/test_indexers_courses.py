@@ -178,10 +178,12 @@ class CoursesIndexersTestCase(TestCase):
                 "fr": "syllabus français ligne 1. syllabus français ligne 2.",
             },
             "organizations": [
-                str(main_organization.public_extension.id),
-                str(other_public_organization.public_extension.id),
+                str(main_organization.public_extension.extended_object_id),
+                str(other_published_organization.public_extension.extended_object_id),
             ],
-            "categories": [str(s.public_extension.id) for s in public_categories],
+            "categories": [
+                str(s.public_extension.extended_object_id) for s in published_categories
+            ],
             "title": {"fr": "un titre cours français", "en": "an english course title"},
         }
         self.assertEqual(
@@ -191,7 +193,7 @@ class CoursesIndexersTestCase(TestCase):
             [
                 {
                     **{
-                        "_id": str(cr.public_extension.id),
+                        "_id": str(cr.public_extension.extended_object_id),
                         "_index": "some_index",
                         "_op_type": "some_action",
                         "_type": "course",
