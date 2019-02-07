@@ -245,3 +245,75 @@ class CourseModelsTestCase(TestCase):
             result,
             [course_runs[0].public_extension, child_course_runs[0].public_extension],
         )
+
+    def test_models_course_get_root_to_leaf_category_pages_leaf(self):
+        """
+        A course linked to a leaf category, in a nested category tree, should be associated
+        with all the category's ancestors.
+        """
+        # Create nested categories
+        create_page("Categories", "richie/fullwidth.html", "en")
+        meta_category = CategoryFactory(should_publish=True)
+        parent_category = CategoryFactory(
+            page_parent=meta_category.extended_object, should_publish=True
+        )
+        leaf_category = CategoryFactory(
+            page_parent=parent_category.extended_object, should_publish=True
+        )
+
+        course = CourseFactory(fill_categories=[leaf_category], should_publish=True)
+
+        expected_pages = [
+            parent_category.public_extension.extended_object,
+            leaf_category.public_extension.extended_object,
+        ]
+        self.assertEqual(expected_pages, list(course.get_root_to_leaf_category_pages()))
+
+    def test_models_course_get_root_to_leaf_category_pages_parent(self):
+        """
+        A course linked to a parent category, in a nested category tree, should be associated
+        with all the category's ancestors, but not we the child.
+        """
+        # Create nested categories
+        create_page("Categories", "richie/fullwidth.html", "en")
+        meta_category = CategoryFactory(should_publish=True)
+        parent_category = CategoryFactory(
+            page_parent=meta_category.extended_object, should_publish=True
+        )
+        CategoryFactory(
+            page_parent=parent_category.extended_object, should_publish=True
+        )
+
+        course = CourseFactory(fill_categories=[parent_category], should_publish=True)
+
+        expected_pages = [parent_category.public_extension.extended_object]
+        self.assertEqual(expected_pages, list(course.get_root_to_leaf_category_pages()))
+
+    def test_models_course_get_root_to_leaf_category_pages_duplicate(self):
+        """
+        If the course is linked to several categories, the ancestor categories should not get
+        duplicated.
+        """
+        # Create nested categories
+        create_page("Categories", "richie/fullwidth.html", "en")
+        meta_category = CategoryFactory(should_publish=True)
+        parent_category = CategoryFactory(
+            page_parent=meta_category.extended_object, should_publish=True
+        )
+        leaf_category1 = CategoryFactory(
+            page_parent=parent_category.extended_object, should_publish=True
+        )
+        leaf_category2 = CategoryFactory(
+            page_parent=parent_category.extended_object, should_publish=True
+        )
+
+        course = CourseFactory(
+            fill_categories=[leaf_category1, leaf_category2], should_publish=True
+        )
+
+        expected_pages = [
+            parent_category.public_extension.extended_object,
+            leaf_category1.public_extension.extended_object,
+            leaf_category2.public_extension.extended_object,
+        ]
+        self.assertEqual(expected_pages, list(course.get_root_to_leaf_category_pages()))

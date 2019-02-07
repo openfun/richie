@@ -121,6 +121,33 @@ class Course(BasePageExtension):
             .distinct()
         )
 
+    def get_root_to_leaf_category_pages(self):
+        """
+        Build a query retrieving all pages linked to the category or one of its ancestors,
+        excluding the meta category itself.
+
+        This is useful to build the course Elasticsearch index. When category is linked to a
+        course, we associate all its ancestors (excluding the meta category) to the course so
+        that a search for courses in an ancestor category also returns the course.
+        """
+        category_query = self.get_categories()
+
+        # 1. We want the pages directly related to a category of the course
+        page_query = Page.objects.filter(publisher_draft__category__in=category_query)
+        # 2. We want the pages related to one of the ancestors of the categories of the course
+        for category in category_query.select_related(
+            "public_extension__extended_object"
+        ):
+            ancestor_query = (
+                category.public_extension.extended_object.get_ancestor_pages()
+            )
+            # Don't include the meta category as it materializes a "filter bank" and not a
+            # search option
+            page_query = page_query | ancestor_query.filter(
+                node__parent__cms_pages__category__isnull=False
+            )
+        return page_query.distinct()
+
     def get_course_runs(self):
         """
         Returns a query yielding the course runs related to the course. They may be direct

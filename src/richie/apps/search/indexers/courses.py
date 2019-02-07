@@ -217,11 +217,10 @@ class CoursesIndexer:
                         if id is not None
                     ],
                     "categories": [
-                        str(id)
-                        for id in course.get_categories().values_list(
-                            "public_extension__extended_object", flat=True
+                        str(pk)
+                        for pk in course.get_root_to_leaf_category_pages().values_list(
+                            "pk", flat=True
                         )
-                        if id is not None
                     ],
                     "title": titles,
                 }
