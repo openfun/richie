@@ -4,6 +4,7 @@ Helpers that can be useful throughout the whole project
 import random
 
 from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 from django.utils.text import slugify
 
 import factory
@@ -147,7 +148,7 @@ def create_text_plugin(
         )
 
 
-def recursive_page_creation(site, pages, parent=None):
+def recursive_page_creation(site, pages_info, parent=None):
     """
     Recursively create page following tree structure with parent/children.
 
@@ -163,27 +164,33 @@ def recursive_page_creation(site, pages, parent=None):
             page item from `pages` argument.
 
     Returns:
-        dict: Created page items.
+        dict: mapping of the page names passed in argument and the created page instances.
     """
-    pages_created = {}
+    pages = {}
 
-    for name, info in pages.items():
+    for name, info in pages_info.items():
         page = create_i18n_page(
-            info["content"],
+            info["title"],
             is_homepage=(name == "home"),
-            in_navigation=info["in_navigation"],
+            in_navigation=info.get("in_navigation", True),
             published=True,
             site=site,
             parent=parent,
             **info["kwargs"]
         )
 
-        pages_created[name] = page
+        pages[name] = page
 
         # Create children
         if info.get("children", None):
-            pages_created[name].created_children = recursive_page_creation(
+            children_pages = recursive_page_creation(
                 site, info["children"], parent=page
             )
+            for child_name in children_pages:
+                if child_name in pages:
+                    raise ImproperlyConfigured(
+                        "Page names should be unique: {:s}".format(child_name)
+                    )
+            pages.update(children_pages)
 
-    return pages_created
+    return pages
