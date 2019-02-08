@@ -59,8 +59,6 @@
     "nodemon": "1.18.9",
     "prettier": "1.16.4",
     "react-intl-po": "2.2.2",
-    "request": "2.88.0",
-    "request-promise": "4.2.2",
     "source-map-loader": "0.2.4",
     "tslint": "5.12.1",
     "typescript": "3.3.1",
