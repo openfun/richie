@@ -18,8 +18,8 @@ from ...courses.models import Course, CourseRun
 from ..defaults import (
     COURSES_COVER_IMAGE_HEIGHT,
     COURSES_COVER_IMAGE_WIDTH,
+    FILTERS_DYNAMIC,
     FILTERS_HARDCODED,
-    RESOURCE_FACETS,
 )
 from ..exceptions import QueryFormatException
 from ..forms import CourseListForm
@@ -269,12 +269,13 @@ class CoursesIndexer:
         params_form_values = {
             k: v[0] if len(v) == 1 else v for k, v in request.query_params.lists()
         }
-        # Use QueryDict/MultiValueDict as a shortcut to make sure we get arrays for these two
+        # Use QueryDict/MultiValueDict as a shortcut to make sure we get arrays for these three
         # fields, which should be arrays even if their length is one
+        params_form_values["categories"] = request.query_params.getlist("categories")
+        params_form_values["languages"] = request.query_params.getlist("languages")
         params_form_values["organizations"] = request.query_params.getlist(
             "organizations"
         )
-        params_form_values["categories"] = request.query_params.getlist("categories")
         for param_key in FILTERS_HARDCODED:
             if hasattr(FILTERS_HARDCODED[param_key]["field"], "choices"):
                 params_form_values[param_key] = request.query_params.getlist(param_key)
@@ -317,8 +318,8 @@ class CoursesIndexer:
                     ),
                 ]
 
-            # organizations & categories are both array of related element IDs
-            elif param in ["organizations", "categories"]:
+            # Dynamic filters are keyword lists that do not require special treatment
+            elif param in FILTERS_DYNAMIC:
                 # Add the relevant term search to our queries
                 queries = [
                     *queries,
@@ -419,7 +420,7 @@ class CoursesIndexer:
                             },
                             "aggregations": {facet: {"terms": {"field": facet}}},
                         }
-                        for facet in RESOURCE_FACETS
+                        for facet in FILTERS_DYNAMIC
                     },
                 },
             }

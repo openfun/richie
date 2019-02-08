@@ -263,11 +263,12 @@ class CoursesIndexersTestCase(TestCase):
     @patch(
         "richie.apps.search.indexers.courses.FILTERS_HARDCODED",
         new={
-            "language": {
+            "availability": {
                 "choices": {
-                    lang: [{"term": {"language": lang}}] for lang in ["en", "fr"]
+                    choice: [{"term": {"availability": choice}}]
+                    for choice in ["coming_soon", "current"]
                 },
-                "field": MultipleChoiceField,
+                "field": ChoiceField,
             }
         },
     )
@@ -289,15 +290,33 @@ class CoursesIndexersTestCase(TestCase):
                     "all_courses": {
                         "global": {},
                         "aggregations": {
-                            "language@en": {
+                            "availability@coming_soon": {
                                 "filter": {
-                                    "bool": {"must": [{"term": {"language": "en"}}]}
+                                    "bool": {
+                                        "must": [
+                                            {"term": {"availability": "coming_soon"}}
+                                        ]
+                                    }
                                 }
                             },
-                            "language@fr": {
+                            "availability@current": {
                                 "filter": {
-                                    "bool": {"must": [{"term": {"language": "fr"}}]}
+                                    "bool": {
+                                        "must": [{"term": {"availability": "current"}}]
+                                    }
                                 }
+                            },
+                            "categories": {
+                                "filter": {"bool": {"must": []}},
+                                "aggregations": {
+                                    "categories": {"terms": {"field": "categories"}}
+                                },
+                            },
+                            "languages": {
+                                "filter": {"bool": {"must": []}},
+                                "aggregations": {
+                                    "languages": {"terms": {"field": "languages"}}
+                                },
                             },
                             "organizations": {
                                 "filter": {"bool": {"must": []}},
@@ -305,12 +324,6 @@ class CoursesIndexersTestCase(TestCase):
                                     "organizations": {
                                         "terms": {"field": "organizations"}
                                     }
-                                },
-                            },
-                            "categories": {
-                                "filter": {"bool": {"must": []}},
-                                "aggregations": {
-                                    "categories": {"terms": {"field": "categories"}}
                                 },
                             },
                         },
@@ -322,9 +335,10 @@ class CoursesIndexersTestCase(TestCase):
     @patch(
         "richie.apps.search.indexers.courses.FILTERS_HARDCODED",
         new={
-            "language": {
+            "availability": {
                 "choices": {
-                    lang: [{"term": {"languages": lang}}] for lang in ["en", "fr"]
+                    choice: [{"term": {"availability": choice}}]
+                    for choice in ["coming_soon", "current"]
                 },
                 "field": ChoiceField,
             }
@@ -370,25 +384,37 @@ class CoursesIndexersTestCase(TestCase):
                     "all_courses": {
                         "global": {},
                         "aggregations": {
-                            "language@en": {
+                            "availability@coming_soon": {
                                 "filter": {
                                     "bool": {
                                         "must": [
-                                            {"term": {"languages": "en"}},
+                                            {"term": {"availability": "coming_soon"}},
                                             multi_match,
                                         ]
                                     }
                                 }
                             },
-                            "language@fr": {
+                            "availability@current": {
                                 "filter": {
                                     "bool": {
                                         "must": [
-                                            {"term": {"languages": "fr"}},
+                                            {"term": {"availability": "current"}},
                                             multi_match,
                                         ]
                                     }
                                 }
+                            },
+                            "categories": {
+                                "filter": {"bool": {"must": [multi_match]}},
+                                "aggregations": {
+                                    "categories": {"terms": {"field": "categories"}}
+                                },
+                            },
+                            "languages": {
+                                "filter": {"bool": {"must": [multi_match]}},
+                                "aggregations": {
+                                    "languages": {"terms": {"field": "languages"}}
+                                },
                             },
                             "organizations": {
                                 "filter": {"bool": {"must": [multi_match]}},
@@ -396,12 +422,6 @@ class CoursesIndexersTestCase(TestCase):
                                     "organizations": {
                                         "terms": {"field": "organizations"}
                                     }
-                                },
-                            },
-                            "categories": {
-                                "filter": {"bool": {"must": [multi_match]}},
-                                "aggregations": {
-                                    "categories": {"terms": {"field": "categories"}}
                                 },
                             },
                         },
@@ -413,11 +433,12 @@ class CoursesIndexersTestCase(TestCase):
     @patch(
         "richie.apps.search.indexers.courses.FILTERS_HARDCODED",
         new={
-            "language": {
+            "availability": {
                 "choices": {
-                    lang: [{"term": {"language": lang}}] for lang in ["en", "fr"]
+                    choice: [{"term": {"availability": choice}}]
+                    for choice in ["coming_soon", "current"]
                 },
-                "field": MultipleChoiceField,
+                "field": ChoiceField,
             }
         },
     )
@@ -442,25 +463,41 @@ class CoursesIndexersTestCase(TestCase):
                     "all_courses": {
                         "global": {},
                         "aggregations": {
-                            "language@en": {
+                            "availability@coming_soon": {
                                 "filter": {
                                     "bool": {
                                         "must": [
-                                            {"term": {"language": "en"}},
+                                            {"term": {"availability": "coming_soon"}},
                                             terms_organizations,
                                         ]
                                     }
                                 }
                             },
-                            "language@fr": {
+                            "availability@current": {
                                 "filter": {
                                     "bool": {
                                         "must": [
-                                            {"term": {"language": "fr"}},
+                                            {"term": {"availability": "current"}},
                                             terms_organizations,
                                         ]
                                     }
                                 }
+                            },
+                            "categories": {
+                                "filter": {"bool": {"must": [terms_organizations]}},
+                                "aggregations": {
+                                    "categories": {"terms": {"field": "categories"}}
+                                },
+                            },
+                            "languages": {
+                                "filter": {
+                                    "bool": {
+                                        "must": [{"terms": {"organizations": [13, 15]}}]
+                                    }
+                                },
+                                "aggregations": {
+                                    "languages": {"terms": {"field": "languages"}}
+                                },
                             },
                             "organizations": {
                                 "filter": {"bool": {"must": []}},
@@ -468,12 +505,6 @@ class CoursesIndexersTestCase(TestCase):
                                     "organizations": {
                                         "terms": {"field": "organizations"}
                                     }
-                                },
-                            },
-                            "categories": {
-                                "filter": {"bool": {"must": [terms_organizations]}},
-                                "aggregations": {
-                                    "categories": {"terms": {"field": "categories"}}
                                 },
                             },
                         },
@@ -485,9 +516,10 @@ class CoursesIndexersTestCase(TestCase):
     @patch(
         "richie.apps.search.indexers.courses.FILTERS_HARDCODED",
         new={
-            "language": {
+            "availability": {
                 "choices": {
-                    lang: [{"term": {"language": lang}}] for lang in ["en", "fr"]
+                    choice: [{"term": {"availability": choice}}]
+                    for choice in ["coming_soon", "current"]
                 },
                 "field": ChoiceField,
             }
@@ -512,25 +544,41 @@ class CoursesIndexersTestCase(TestCase):
                     "all_courses": {
                         "global": {},
                         "aggregations": {
-                            "language@en": {
+                            "availability@coming_soon": {
                                 "filter": {
                                     "bool": {
                                         "must": [
-                                            {"term": {"language": "en"}},
+                                            {"term": {"availability": "coming_soon"}},
                                             term_organization,
                                         ]
                                     }
                                 }
                             },
-                            "language@fr": {
+                            "availability@current": {
                                 "filter": {
                                     "bool": {
                                         "must": [
-                                            {"term": {"language": "fr"}},
+                                            {"term": {"availability": "current"}},
                                             term_organization,
                                         ]
                                     }
                                 }
+                            },
+                            "categories": {
+                                "filter": {"bool": {"must": [term_organization]}},
+                                "aggregations": {
+                                    "categories": {"terms": {"field": "categories"}}
+                                },
+                            },
+                            "languages": {
+                                "filter": {
+                                    "bool": {
+                                        "must": [{"terms": {"organizations": [345]}}]
+                                    }
+                                },
+                                "aggregations": {
+                                    "languages": {"terms": {"field": "languages"}}
+                                },
                             },
                             "organizations": {
                                 "filter": {"bool": {"must": []}},
@@ -538,12 +586,6 @@ class CoursesIndexersTestCase(TestCase):
                                     "organizations": {
                                         "terms": {"field": "organizations"}
                                     }
-                                },
-                            },
-                            "categories": {
-                                "filter": {"bool": {"must": [term_organization]}},
-                                "aggregations": {
-                                    "categories": {"terms": {"field": "categories"}}
                                 },
                             },
                         },
@@ -555,11 +597,12 @@ class CoursesIndexersTestCase(TestCase):
     @patch(
         "richie.apps.search.indexers.courses.FILTERS_HARDCODED",
         new={
-            "language": {
+            "availability": {
                 "choices": {
-                    lang: [{"term": {"language": lang}}] for lang in ["en", "fr"]
+                    choice: [{"term": {"availability": choice}}]
+                    for choice in ["coming_soon", "current"]
                 },
-                "field": MultipleChoiceField,
+                "field": ChoiceField,
             }
         },
     )
@@ -601,27 +644,39 @@ class CoursesIndexersTestCase(TestCase):
                     "all_courses": {
                         "global": {},
                         "aggregations": {
-                            "language@en": {
+                            "availability@coming_soon": {
                                 "filter": {
                                     "bool": {
                                         "must": [
-                                            {"term": {"language": "en"}},
+                                            {"term": {"availability": "coming_soon"}},
                                             range_end,
                                             range_start,
                                         ]
                                     }
                                 }
                             },
-                            "language@fr": {
+                            "availability@current": {
                                 "filter": {
                                     "bool": {
                                         "must": [
-                                            {"term": {"language": "fr"}},
+                                            {"term": {"availability": "current"}},
                                             range_end,
                                             range_start,
                                         ]
                                     }
                                 }
+                            },
+                            "categories": {
+                                "filter": {"bool": {"must": [range_end, range_start]}},
+                                "aggregations": {
+                                    "categories": {"terms": {"field": "categories"}}
+                                },
+                            },
+                            "languages": {
+                                "filter": {"bool": {"must": [range_end, range_start]}},
+                                "aggregations": {
+                                    "languages": {"terms": {"field": "languages"}}
+                                },
                             },
                             "organizations": {
                                 "filter": {"bool": {"must": [range_end, range_start]}},
@@ -629,12 +684,6 @@ class CoursesIndexersTestCase(TestCase):
                                     "organizations": {
                                         "terms": {"field": "organizations"}
                                     }
-                                },
-                            },
-                            "categories": {
-                                "filter": {"bool": {"must": [range_end, range_start]}},
-                                "aggregations": {
-                                    "categories": {"terms": {"field": "categories"}}
                                 },
                             },
                         },
@@ -646,9 +695,10 @@ class CoursesIndexersTestCase(TestCase):
     @patch(
         "richie.apps.search.indexers.courses.FILTERS_HARDCODED",
         new={
-            "language": {
+            "availability": {
                 "choices": {
-                    lang: [{"term": {"language": lang}}] for lang in ["en", "fr"]
+                    choice: [{"term": {"availability": choice}}]
+                    for choice in ["coming_soon", "current"]
                 },
                 "field": ChoiceField,
             },
@@ -661,30 +711,37 @@ class CoursesIndexersTestCase(TestCase):
     def test_indexers_courses_build_es_query_search_by_custom_filter(self):
         """
         Happy path: build a query using custom filters
-        Note: we're keeping fields from defaults.py instead of mocking for simplicity
         """
         # Build a request stub
         request = SimpleNamespace(
-            query_params=QueryDict(query_string="limit=2&offset=10&language=fr")
+            query_params=QueryDict(
+                query_string="limit=2&offset=10&availability=coming_soon"
+            )
         )
         self.assertEqual(
             CoursesIndexer.build_es_query(request),
             (
                 2,
                 10,
-                {"bool": {"must": [{"term": {"language": "fr"}}]}},
+                {"bool": {"must": [{"term": {"availability": "coming_soon"}}]}},
                 {
                     "all_courses": {
                         "global": {},
                         "aggregations": {
-                            "language@en": {
+                            "availability@coming_soon": {
                                 "filter": {
-                                    "bool": {"must": [{"term": {"language": "en"}}]}
+                                    "bool": {
+                                        "must": [
+                                            {"term": {"availability": "coming_soon"}}
+                                        ]
+                                    }
                                 }
                             },
-                            "language@fr": {
+                            "availability@current": {
                                 "filter": {
-                                    "bool": {"must": [{"term": {"language": "fr"}}]}
+                                    "bool": {
+                                        "must": [{"term": {"availability": "current"}}]
+                                    }
                                 }
                             },
                             "new@new": {
@@ -692,27 +749,47 @@ class CoursesIndexersTestCase(TestCase):
                                     "bool": {
                                         "must": [
                                             {"term": {"session_number": 1}},
-                                            {"term": {"language": "fr"}},
+                                            {"term": {"availability": "coming_soon"}},
                                         ]
                                     }
                                 }
                             },
+                            "categories": {
+                                "filter": {
+                                    "bool": {
+                                        "must": [
+                                            {"term": {"availability": "coming_soon"}}
+                                        ]
+                                    }
+                                },
+                                "aggregations": {
+                                    "categories": {"terms": {"field": "categories"}}
+                                },
+                            },
+                            "languages": {
+                                "filter": {
+                                    "bool": {
+                                        "must": [
+                                            {"term": {"availability": "coming_soon"}}
+                                        ]
+                                    }
+                                },
+                                "aggregations": {
+                                    "languages": {"terms": {"field": "languages"}}
+                                },
+                            },
                             "organizations": {
                                 "filter": {
-                                    "bool": {"must": [{"term": {"language": "fr"}}]}
+                                    "bool": {
+                                        "must": [
+                                            {"term": {"availability": "coming_soon"}}
+                                        ]
+                                    }
                                 },
                                 "aggregations": {
                                     "organizations": {
                                         "terms": {"field": "organizations"}
                                     }
-                                },
-                            },
-                            "categories": {
-                                "filter": {
-                                    "bool": {"must": [{"term": {"language": "fr"}}]}
-                                },
-                                "aggregations": {
-                                    "categories": {"terms": {"field": "categories"}}
                                 },
                             },
                         },
@@ -724,15 +801,16 @@ class CoursesIndexersTestCase(TestCase):
     @patch(
         "richie.apps.search.indexers.courses.FILTERS_HARDCODED",
         new={
-            "language": {
+            "availability": {
                 "choices": {
-                    lang: [{"term": {"languages": lang}}] for lang in ["en", "fr"]
+                    choice: [{"term": {"availability": choice}}]
+                    for choice in ["coming_soon", "current"]
                 },
-                "field": MultipleChoiceField,
+                "field": ChoiceField,
             },
             "new": {
                 "choices": {"new": [{"term": {"is_new": True}}]},
-                "field": ChoiceField,
+                "field": MultipleChoiceField,
             },
         },
     )
@@ -747,23 +825,26 @@ class CoursesIndexersTestCase(TestCase):
         request = SimpleNamespace(
             query_params=QueryDict(
                 query_string="categories=42&categories=84&query=these%20phrase%20terms&limit=2&"
-                + "language=fr&"
+                + "languages=fr&availability=current&"
                 + "start={start}&end={end}".format(start=start, end=end)
             )
         )
+
+        # Search fragments that are repeated in the query
+        availability = {"term": {"availability": "current"}}
+        multi_match = {
+            "multi_match": {
+                "fields": ["description.*", "title.*"],
+                "query": "these phrase terms",
+                "type": "cross_fields",
+            }
+        }
         range_end = {
             "range": {
                 "end": {
                     "gte": arrow.get("2018-04-30T06:00:00Z").datetime,
                     "lte": arrow.get("2018-06-30T06:00:00Z").datetime,
                 }
-            }
-        }
-        multi_match = {
-            "multi_match": {
-                "fields": ["description.*", "title.*"],
-                "query": "these phrase terms",
-                "type": "cross_fields",
             }
         }
         range_start = {
@@ -775,7 +856,8 @@ class CoursesIndexersTestCase(TestCase):
             }
         }
         terms_categories = {"terms": {"categories": [42, 84]}}
-        term_language_fr = {"term": {"languages": "fr"}}
+        terms_languages = {"terms": {"languages": ["fr"]}}
+
         self.assertEqual(
             CoursesIndexer.build_es_query(request),
             (
@@ -785,10 +867,11 @@ class CoursesIndexersTestCase(TestCase):
                     "bool": {
                         "must": [
                             range_end,
+                            terms_languages,
                             multi_match,
                             range_start,
                             terms_categories,
-                            term_language_fr,
+                            availability,
                         ]
                     }
                 },
@@ -796,12 +879,13 @@ class CoursesIndexersTestCase(TestCase):
                     "all_courses": {
                         "global": {},
                         "aggregations": {
-                            "language@en": {
+                            "availability@coming_soon": {
                                 "filter": {
                                     "bool": {
                                         "must": [
-                                            {"term": {"languages": "en"}},
+                                            {"term": {"availability": "coming_soon"}},
                                             range_end,
+                                            terms_languages,
                                             multi_match,
                                             range_start,
                                             terms_categories,
@@ -809,12 +893,13 @@ class CoursesIndexersTestCase(TestCase):
                                     }
                                 }
                             },
-                            "language@fr": {
+                            "availability@current": {
                                 "filter": {
                                     "bool": {
                                         "must": [
-                                            term_language_fr,
+                                            availability,
                                             range_end,
+                                            terms_languages,
                                             multi_match,
                                             range_start,
                                             terms_categories,
@@ -828,15 +913,32 @@ class CoursesIndexersTestCase(TestCase):
                                         "must": [
                                             {"term": {"is_new": True}},
                                             range_end,
+                                            terms_languages,
                                             multi_match,
                                             range_start,
                                             terms_categories,
-                                            term_language_fr,
+                                            availability,
                                         ]
                                     }
                                 }
                             },
-                            "organizations": {
+                            "categories": {
+                                "filter": {
+                                    "bool": {
+                                        "must": [
+                                            range_end,
+                                            terms_languages,
+                                            multi_match,
+                                            range_start,
+                                            availability,
+                                        ]
+                                    }
+                                },
+                                "aggregations": {
+                                    "categories": {"terms": {"field": "categories"}}
+                                },
+                            },
+                            "languages": {
                                 "filter": {
                                     "bool": {
                                         "must": [
@@ -844,7 +946,24 @@ class CoursesIndexersTestCase(TestCase):
                                             multi_match,
                                             range_start,
                                             terms_categories,
-                                            term_language_fr,
+                                            availability,
+                                        ]
+                                    }
+                                },
+                                "aggregations": {
+                                    "languages": {"terms": {"field": "languages"}}
+                                },
+                            },
+                            "organizations": {
+                                "filter": {
+                                    "bool": {
+                                        "must": [
+                                            range_end,
+                                            terms_languages,
+                                            multi_match,
+                                            range_start,
+                                            terms_categories,
+                                            availability,
                                         ]
                                     }
                                 },
@@ -854,28 +973,24 @@ class CoursesIndexersTestCase(TestCase):
                                     }
                                 },
                             },
-                            "categories": {
-                                "filter": {
-                                    "bool": {
-                                        "must": [
-                                            range_end,
-                                            multi_match,
-                                            range_start,
-                                            term_language_fr,
-                                        ]
-                                    }
-                                },
-                                "aggregations": {
-                                    "categories": {"terms": {"field": "categories"}}
-                                },
-                            },
                         },
                     }
                 },
             ),
         )
 
-    @patch("richie.apps.search.indexers.courses.FILTERS_HARDCODED", new={})
+    @patch(
+        "richie.apps.search.indexers.courses.FILTERS_HARDCODED",
+        new={
+            "availability": {
+                "choices": {
+                    choice: [{"term": {"availability": choice}}]
+                    for choice in ["coming_soon", "current"]
+                },
+                "field": ChoiceField,
+            }
+        },
+    )
     def test_indexers_courses_build_es_query_search_with_empty_filters(self):
         """
         Edge case: custom filters have been removed entirely through settings
@@ -884,6 +999,7 @@ class CoursesIndexersTestCase(TestCase):
         request = SimpleNamespace(
             query_params=QueryDict(query_string="limit=20&offset=40")
         )
+
         self.assertEqual(
             CoursesIndexer.build_es_query(request),
             (
@@ -894,18 +1010,40 @@ class CoursesIndexersTestCase(TestCase):
                     "all_courses": {
                         "global": {},
                         "aggregations": {
+                            "availability@coming_soon": {
+                                "filter": {
+                                    "bool": {
+                                        "must": [
+                                            {"term": {"availability": "coming_soon"}}
+                                        ]
+                                    }
+                                }
+                            },
+                            "availability@current": {
+                                "filter": {
+                                    "bool": {
+                                        "must": [{"term": {"availability": "current"}}]
+                                    }
+                                }
+                            },
+                            "categories": {
+                                "filter": {"bool": {"must": []}},
+                                "aggregations": {
+                                    "categories": {"terms": {"field": "categories"}}
+                                },
+                            },
+                            "languages": {
+                                "filter": {"bool": {"must": []}},
+                                "aggregations": {
+                                    "languages": {"terms": {"field": "languages"}}
+                                },
+                            },
                             "organizations": {
                                 "filter": {"bool": {"must": []}},
                                 "aggregations": {
                                     "organizations": {
                                         "terms": {"field": "organizations"}
                                     }
-                                },
-                            },
-                            "categories": {
-                                "filter": {"bool": {"must": []}},
-                                "aggregations": {
-                                    "categories": {"terms": {"field": "categories"}}
                                 },
                             },
                         },

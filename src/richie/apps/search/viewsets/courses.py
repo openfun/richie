@@ -11,7 +11,7 @@ from elasticsearch.exceptions import NotFoundError
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
-from ..defaults import FILTERS_HARDCODED, RESOURCE_FACETS
+from ..defaults import FILTERS_DYNAMIC, FILTERS_HARDCODED
 from ..exceptions import QueryFormatException
 from ..utils.viewsets import AutocompleteMixin, ViewSetMetadata
 
@@ -79,7 +79,7 @@ class CoursesViewSet(AutocompleteMixin, ViewSet):
                         "all_courses"
                     ].items()
                     # Remove default fields inserted by elasticsearch
-                    if field in RESOURCE_FACETS
+                    if field in FILTERS_DYNAMIC
                 },
                 # Custom (filter-based) facets are structured in another, common way
                 **reduce(

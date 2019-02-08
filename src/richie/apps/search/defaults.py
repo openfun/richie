@@ -21,8 +21,10 @@ CATEGORIES_LOGO_IMAGE_HEIGHT = getattr(settings, "CATEGORIES_LOGO_IMAGE_HEIGHT",
 
 # Define our aggregations names, for our ES query, which will match with the field
 # names on the objects & the facets we return on the API response
-RESOURCE_FACETS = getattr(
-    settings, "RICHIE_SEARCH_RESOURCE_FACETS", ["organizations", "categories"]
+FILTERS_DYNAMIC = getattr(
+    settings,
+    "RICHIE_SEARCH_FILTERS_DYNAMIC",
+    ["categories", "languages", "organizations"],
 )
 
 FILTERS_HARDCODED_DEFAULT = {
@@ -50,10 +52,6 @@ FILTERS_HARDCODED_DEFAULT = {
                 {"range": {"end": {"gte": arrow.utcnow().datetime}}},
             ],
         },
-    },
-    "language": {
-        "field": MultipleChoiceField,
-        "choices": {lang: [{"term": {"languages": lang}}] for lang in ["en", "fr"]},
     },
     "new": {
         "field": MultipleChoiceField,

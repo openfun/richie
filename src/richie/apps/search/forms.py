@@ -2,6 +2,7 @@
 Validate and clean request parameters for our endpoints using Django forms
 """
 from django import forms
+from django.conf import settings
 
 from .defaults import FILTERS_HARDCODED
 from .fields.array import ArrayField
@@ -27,6 +28,9 @@ class CourseListForm(forms.Form):
     end = DatetimeRangeField(required=False)
     enrollment_end = DatetimeRangeField(required=False)
     enrollment_start = DatetimeRangeField(required=False)
+    languages = ArrayField(
+        required=False, base_type=forms.ChoiceField(choices=settings.ALL_LANGUAGES)
+    )
     limit = forms.IntegerField(required=False, min_value=1, initial=10)
     organizations = ArrayField(
         required=False, base_type=forms.IntegerField(min_value=0)
