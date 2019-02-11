@@ -33,7 +33,7 @@ class CourseRunModelsTestCase(TestCase):
             page_parent=course.extended_object,
             start=self.now - timedelta(hours=1),
             end=self.now + timedelta(hours=1),
-            enrollment_end=self.now - timedelta(hours=1),
+            enrollment_end=self.now,
         )
 
     def create_run_archived(self, course):
