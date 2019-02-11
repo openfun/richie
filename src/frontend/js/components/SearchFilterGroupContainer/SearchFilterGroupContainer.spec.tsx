@@ -5,20 +5,21 @@ import { Course } from '../../types/Course';
 import { modelName } from '../../types/models';
 import { getFilterFromState } from '../../utils/filters/getFilterFromState';
 import { updateFilter } from '../../utils/filters/updateFilter';
+import { jestMockOf } from '../../utils/types';
 import { mapStateToProps, mergeProps } from './SearchFilterGroupContainer';
 
-const mockGetFilterFromState: jest.Mock<
+const mockGetFilterFromState: jestMockOf<
   typeof getFilterFromState
 > = getFilterFromState as any;
 jest.mock('../../utils/filters/getFilterFromState');
 
-const mockUpdateFilter: jest.Mock<typeof updateFilter> = updateFilter as any;
+const mockUpdateFilter: jestMockOf<typeof updateFilter> = updateFilter as any;
 jest.mock('../../utils/filters/updateFilter');
 
 describe('components/SearchFilterGroupContainer/mergeProps', () => {
   const exampleFilter = {
     humanName: { defaultMessage: 'Organizations', id: 'organizations' },
-    machineName: modelName.ORGANIZATIONS,
+    machineName: modelName.ORGANIZATIONS as modelName.ORGANIZATIONS,
     values: [
       {
         count: 3,

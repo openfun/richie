@@ -16,6 +16,7 @@ import { getSearchParam } from '../../utils/indirection/getSearchParam';
 import { location } from '../../utils/indirection/location';
 import { getSuggestionsSection } from '../../utils/searchSuggest/getSuggestionsSection';
 import { suggestionHumanName } from '../../utils/searchSuggest/suggestionHumanName';
+import { jestMockOf } from '../../utils/types';
 import {
   getSuggestionValue,
   onChange,
@@ -27,20 +28,20 @@ import {
   SearchSuggestFieldBase,
 } from './SearchSuggestField';
 
-const mockHandle: jest.Mock<typeof handle> = handle as any;
+const mockHandle: jestMockOf<typeof handle> = handle as any;
 jest.mock('../../utils/errors/handle');
 
-const mockGetSearchParam: jest.Mock<
+const mockGetSearchParam: jestMockOf<
   typeof getSearchParam
 > = getSearchParam as any;
 jest.mock('../../utils/indirection/getSearchParam');
 
-const mockGetSuggestionsSection: jest.Mock<
+const mockGetSuggestionsSection: jestMockOf<
   typeof getSuggestionsSection
 > = getSuggestionsSection as any;
 jest.mock('../../utils/searchSuggest/getSuggestionsSection');
 
-const mockSuggestionHumanName: jest.Mock<
+const mockSuggestionHumanName: jestMockOf<
   typeof suggestionHumanName
 > = suggestionHumanName as any;
 jest.mock('../../utils/searchSuggest/suggestionHumanName');
@@ -183,7 +184,7 @@ describe('components/SearchSuggestField', () => {
           switch (model) {
             case modelName.COURSES:
               return {
-                message: 'Courses',
+                message: { defaultMessage: 'Courses', id: 'courses' },
                 model: modelName.COURSES,
                 values: [
                   { title: 'Course #1' } as Course,
@@ -192,13 +193,16 @@ describe('components/SearchSuggestField', () => {
               };
             case modelName.CATEGORIES:
               return {
-                message: 'Categories',
+                message: { defaultMessage: 'Categories', id: 'categories' },
                 model: modelName.CATEGORIES,
                 values: [],
               };
             case modelName.ORGANIZATIONS:
               return {
-                message: 'Organizations',
+                message: {
+                  defaultMessage: 'Organizations',
+                  id: 'organizations',
+                },
                 model: modelName.ORGANIZATIONS,
                 values: [],
               };
@@ -218,7 +222,7 @@ describe('components/SearchSuggestField', () => {
             value: 'some search',
           },
           {
-            message: 'Courses',
+            message: { defaultMessage: 'Courses', id: 'courses' },
             model: modelName.COURSES,
             values: [{ title: 'Course #1' }, { title: 'Course #2' }],
           },
