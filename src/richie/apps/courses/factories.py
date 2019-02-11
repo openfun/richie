@@ -388,8 +388,10 @@ class CourseRunFactory(PageExtensionDjangoModelFactory):
         now = timezone.now()
         period = timedelta(days=200)
         return pytz.timezone("UTC").localize(
-            datetime.fromordinal(
-                random.randrange((now - period).toordinal(), (now + period).toordinal())
+            datetime.fromtimestamp(
+                random.randrange(
+                    int((now - period).timestamp()), int((now + period).timestamp())
+                )
             )
         )
 
@@ -402,9 +404,9 @@ class CourseRunFactory(PageExtensionDjangoModelFactory):
             return None
         period = timedelta(days=90)
         return pytz.timezone("UTC").localize(
-            datetime.fromordinal(
+            datetime.fromtimestamp(
                 random.randrange(
-                    self.start.toordinal(), (self.start + period).toordinal()
+                    int(self.start.timestamp()), int((self.start + period).timestamp())
                 )
             )
         )
@@ -418,9 +420,9 @@ class CourseRunFactory(PageExtensionDjangoModelFactory):
             return None
         period = timedelta(days=90)
         return pytz.timezone("UTC").localize(
-            datetime.fromordinal(
+            datetime.fromtimestamp(
                 random.randrange(
-                    (self.start - period).toordinal(), self.start.toordinal()
+                    int((self.start - period).timestamp()), int(self.start.timestamp())
                 )
             )
         )
@@ -435,15 +437,20 @@ class CourseRunFactory(PageExtensionDjangoModelFactory):
         """
         if not self.start:
             return None
-        end = self.end or self.start + timedelta(days=random.randint(1, 90))
         enrollment_start = self.enrollment_start or self.start - timedelta(
             days=random.randint(1, 90)
         )
+        max_enrollment_end = self.end or self.start + timedelta(
+            days=random.randint(1, 90)
+        )
+        max_enrollment_end = max(
+            enrollment_start + timedelta(hours=1), max_enrollment_end
+        )
         return pytz.timezone("UTC").localize(
-            datetime.fromordinal(
+            datetime.fromtimestamp(
                 random.randrange(
-                    (enrollment_start + timedelta(hours=1)).toordinal(),
-                    (end - timedelta(hours=1)).toordinal(),
+                    int(enrollment_start.timestamp()),
+                    int(max_enrollment_end.timestamp()),
                 )
             )
         )
