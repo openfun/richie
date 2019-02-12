@@ -105,7 +105,16 @@ class CoursesIndexersTestCase(TestCase):
         Happy path: the data is retrieved from the models properly formatted
         """
         # Create a course with a page in both english and french
-        published_categories = CategoryFactory.create_batch(2, should_publish=True)
+        published_categories = [
+            CategoryFactory(
+                page_title={"en": "Open-architected radical application"},
+                should_publish=True,
+            ),
+            CategoryFactory(
+                page_title={"en": "Public-key transitional solution"},
+                should_publish=True,
+            ),
+        ]
         draft_category = CategoryFactory()
 
         main_organization = OrganizationFactory(
@@ -158,6 +167,15 @@ class CoursesIndexersTestCase(TestCase):
 
         # The results were properly formatted and passed to the consumer
         expected_course = {
+            "categories": [
+                str(s.public_extension.extended_object_id) for s in published_categories
+            ],
+            "categories_names": {
+                "en": [
+                    "Open-architected radical application",
+                    "Public-key transitional solution",
+                ]
+            },
             "complete": {
                 "en": [
                     "an english course title",
@@ -181,9 +199,16 @@ class CoursesIndexersTestCase(TestCase):
                 str(main_organization.public_extension.extended_object_id),
                 str(other_published_organization.public_extension.extended_object_id),
             ],
-            "categories": [
-                str(s.public_extension.extended_object_id) for s in published_categories
-            ],
+            "organizations_names": {
+                "en": [
+                    "english main organization title",
+                    "english other organization title",
+                ],
+                "fr": [
+                    "titre organisation principale français",
+                    "titre autre organisation français",
+                ],
+            },
             "title": {"fr": "un titre cours français", "en": "an english course title"},
         }
         self.assertEqual(

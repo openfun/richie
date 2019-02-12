@@ -3,6 +3,7 @@ ElasticSearch course document management utilities
 """
 from collections import defaultdict, namedtuple
 from datetime import MAXYEAR
+from functools import reduce
 
 from django.conf import settings
 from django.db.models import Prefetch
@@ -47,9 +48,9 @@ class CoursesIndexer:
             "enrollment_start": {"type": "date"},
             "enrollment_end": {"type": "date"},
             # Keywords
+            "categories": {"type": "keyword"},
             "languages": {"type": "keyword"},
             "organizations": {"type": "keyword"},
-            "categories": {"type": "keyword"},
             # Searchable
             **{
                 "complete.{:s}".format(lang): {"type": "completion"}
@@ -183,9 +184,35 @@ class CoursesIndexer:
                     simple_text.body
                 )
 
+            # Make sure we get title information for categories in the same request
+            category_pages = (
+                course.get_root_to_leaf_category_pages()
+                .prefetch_related(
+                    Prefetch(
+                        "title_set",
+                        to_attr="published_titles",
+                        queryset=Title.objects.filter(published=True),
+                    )
+                )
+                .only("pk")
+            )
+
+            # Make sure we get title information for organizations in the same request
+            organizations = (
+                course.get_organizations()
+                .prefetch_related(
+                    Prefetch(
+                        "extended_object__title_set",
+                        to_attr="published_titles",
+                        queryset=Title.objects.filter(published=True),
+                    )
+                )
+                .only("extended_object")
+                .distinct()
+            )
+
             course_runs = course.get_course_runs()
             for course_run in course_runs:
-
                 yield {
                     "_id": str(course_run.extended_object_id),
                     "_index": index,
@@ -199,6 +226,22 @@ class CoursesIndexer:
                         language: course_run.extended_object.get_absolute_url(language)
                         for language in titles.keys()
                     },
+                    "categories": [str(page.pk) for page in category_pages],
+                    # Index the names of categories to surface them in full text searches
+                    "categories_names": reduce(
+                        lambda acc, title: {
+                            **acc,
+                            title.language: acc[title.language] + [title.title]
+                            if acc.get(title.language)
+                            else [title.title],
+                        },
+                        [
+                            title
+                            for page in category_pages
+                            for title in page.published_titles
+                        ],
+                        {},
+                    ),
                     "complete": {
                         language: slice_string_for_completion(title)
                         for language, title in titles.items()
@@ -216,12 +259,21 @@ class CoursesIndexer:
                         )
                         if id is not None
                     ],
-                    "categories": [
-                        str(pk)
-                        for pk in course.get_root_to_leaf_category_pages().values_list(
-                            "pk", flat=True
-                        )
-                    ],
+                    # Index the names of organizations to surface them in full text searches
+                    "organizations_names": reduce(
+                        lambda acc, title: {
+                            **acc,
+                            title.language: acc[title.language] + [title.title]
+                            if acc.get(title.language)
+                            else [title.title],
+                        },
+                        [
+                            title
+                            for organization in organizations
+                            for title in organization.extended_object.published_titles
+                        ],
+                        {},
+                    ),
                     "title": titles,
                 }
 
