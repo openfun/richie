@@ -77,6 +77,14 @@ class CoursesIndexer:
         "title.*",
     ]
 
+    # Define the scoring boost (in ElasticSearch) related value names receive when using
+    # full-text search.
+    # For example, when a user searches for "Science" in full-text, it should match any
+    # course whose category contains "Science" or a related word, albeit with a lower
+    # score than courses that include it in their title or description.
+    # This lower score factor is the boost value we get or set here.
+    fulltext_search_filter_matching_boost = 0.05
+
     scripts = {
         # The ordering process first splits the courses into four groups, with further ordering
         # inside each one of those groups.
@@ -308,9 +316,9 @@ class CoursesIndexer:
             "title": get_best_field_language(source["title"], best_language),
         }
 
-    @staticmethod
+    @classmethod
     # pylint: disable=R0912, R0914
-    def build_es_query(request):
+    def build_es_query(cls, request):
         """
         Build an ElasticSearch query and its related aggregations, to be consumed by the ES client
         in the Courses ViewSet
@@ -385,10 +393,27 @@ class CoursesIndexer:
                         param,
                         [
                             {
-                                "multi_match": {
-                                    "fields": ["description.*", "title.*"],
-                                    "query": value,
-                                    "type": "cross_fields",
+                                "bool": {
+                                    "should": [
+                                        {
+                                            "multi_match": {
+                                                "fields": ["description.*", "title.*"],
+                                                "query": value,
+                                                "type": "cross_fields",
+                                            }
+                                        },
+                                        {
+                                            "multi_match": {
+                                                "boost": cls.fulltext_search_filter_matching_boost,
+                                                "fields": [
+                                                    "categories_names.*",
+                                                    "organizations_names.*",
+                                                ],
+                                                "query": value,
+                                                "type": "cross_fields",
+                                            }
+                                        },
+                                    ]
                                 }
                             }
                         ],

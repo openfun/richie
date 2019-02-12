@@ -382,10 +382,24 @@ class CoursesIndexersTestCase(TestCase):
             )
         )
         multi_match = {
-            "multi_match": {
-                "fields": ["description.*", "title.*"],
-                "query": "some phrase terms",
-                "type": "cross_fields",
+            "bool": {
+                "should": [
+                    {
+                        "multi_match": {
+                            "fields": ["description.*", "title.*"],
+                            "query": "some phrase terms",
+                            "type": "cross_fields",
+                        }
+                    },
+                    {
+                        "multi_match": {
+                            "boost": 0.05,
+                            "fields": ["categories_names.*", "organizations_names.*"],
+                            "query": "some phrase terms",
+                            "type": "cross_fields",
+                        }
+                    },
+                ]
             }
         }
 
@@ -394,19 +408,7 @@ class CoursesIndexersTestCase(TestCase):
             (
                 2,
                 20,
-                {
-                    "bool": {
-                        "must": [
-                            {
-                                "multi_match": {
-                                    "fields": ["description.*", "title.*"],
-                                    "query": "some phrase terms",
-                                    "type": "cross_fields",
-                                }
-                            }
-                        ]
-                    }
-                },
+                {"bool": {"must": [multi_match]}},
                 {
                     "all_courses": {
                         "global": {},
@@ -860,10 +862,24 @@ class CoursesIndexersTestCase(TestCase):
         # Search fragments that are repeated in the query
         availability = {"term": {"availability": "current"}}
         multi_match = {
-            "multi_match": {
-                "fields": ["description.*", "title.*"],
-                "query": "these phrase terms",
-                "type": "cross_fields",
+            "bool": {
+                "should": [
+                    {
+                        "multi_match": {
+                            "fields": ["description.*", "title.*"],
+                            "query": "these phrase terms",
+                            "type": "cross_fields",
+                        }
+                    },
+                    {
+                        "multi_match": {
+                            "boost": 0.05,
+                            "fields": ["categories_names.*", "organizations_names.*"],
+                            "query": "these phrase terms",
+                            "type": "cross_fields",
+                        }
+                    },
+                ]
             }
         }
         range_end = {
