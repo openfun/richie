@@ -3,6 +3,7 @@ Unit tests for the Course model
 """
 from datetime import timedelta
 
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.test.client import RequestFactory
@@ -120,12 +121,56 @@ class CourseRunModelsTestCase(TestCase):
             CourseRunFactory(languages=[])
         self.assertEqual(context.exception.messages[0], "This field cannot be blank.")
 
-    def test_models_course_run_get_languages_display_several_languages(self):
+    def test_models_course_run_field_languages_max_choices(self):
         """
-        With several languages, it should return a comma separated list of their readable version.
+        The languages field should not accept more than 50 choices.
         """
-        course_run = CourseRunFactory(languages=["en", "fr"])
-        self.assertEqual(course_run.get_languages_display(), "English, French")
+        languages = [l[0] for l in settings.ALL_LANGUAGES[:51]]
+
+        # 50 languages should be fine
+        CourseRunFactory(languages=languages[:-1])
+
+        # 51 languages should fail
+        with self.assertRaises(ValidationError) as context:
+            CourseRunFactory(languages=languages)
+        self.assertEqual(
+            context.exception.messages[0], "You can only select up to 50 choices."
+        )
+
+    def test_models_course_run_field_languages_one_invalid(self):
+        """
+        When used in the `render_model` template tag, it should not break when passed a
+        request argument.
+        """
+        with self.assertRaises(ValidationError) as context:
+            CourseRunFactory(languages=["fr", "zzzzz"])
+        self.assertEqual(
+            context.exception.messages[0], "Value zzzzz is not a valid choice."
+        )
+
+    def test_models_course_run_field_languages_two_invalid(self):
+        """
+        When used in the `render_model` template tag, it should not break when passed a
+        request argument.
+        """
+        with self.assertRaises(ValidationError) as context:
+            CourseRunFactory(languages=["fr", "zzzzz", "de", "yyyyy"])
+        self.assertEqual(
+            context.exception.messages[0],
+            "Values zzzzz and yyyyy are not valid choices.",
+        )
+
+    def test_models_course_run_field_languages_three_invalid(self):
+        """
+        When used in the `render_model` template tag, it should not break when passed a
+        request argument.
+        """
+        with self.assertRaises(ValidationError) as context:
+            CourseRunFactory(languages=["fr", "zzzzz", "yyyyy", "xxxxx"])
+        self.assertEqual(
+            context.exception.messages[0],
+            "Values zzzzz, yyyyy and xxxxx are not valid choices.",
+        )
 
     def test_models_course_run_get_languages_display_one_language(self):
         """
@@ -134,10 +179,27 @@ class CourseRunModelsTestCase(TestCase):
         course_run = CourseRunFactory(languages=["fr"])
         self.assertEqual(course_run.get_languages_display(), "French")
 
+    def test_models_course_run_get_languages_display_two_languages(self):
+        """
+        With 2 languages, it should return them joined with "them".
+        """
+        course_run = CourseRunFactory(languages=["fr", "en"])
+        self.assertEqual(course_run.get_languages_display(), "French and english")
+
+    def test_models_course_run_get_languages_display_three_languages(self):
+        """
+        With several languages, it should return a comma separated list of their readable
+        version with "and" for the last one.
+        """
+        course_run = CourseRunFactory(languages=["fr", "en", "de"])
+        self.assertEqual(
+            course_run.get_languages_display(), "French, english and german"
+        )
+
     def test_models_course_run_get_languages_display_request(self):
         """
         When used in the `render_model` template tag, it should not break when passed a
-        request argument.
+        request argument (the DjangoCMS frontend editing does it).
         """
         course_run = CourseRunFactory(languages=["fr"])
         request = RequestFactory().get("/")

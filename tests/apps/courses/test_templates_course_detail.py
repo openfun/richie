@@ -112,7 +112,7 @@ class CourseCMSTestCase(CMSTestCase):
             )
 
         # Only the published course run should be in response content
-        self.assertContains(response, "<dd>English, French</dd>", html=True, count=1)
+        self.assertContains(response, "<dd>English and french</dd>", html=True, count=1)
 
     def test_templates_course_detail_cms_draft_content(self):
         """
@@ -202,7 +202,7 @@ class CourseCMSTestCase(CMSTestCase):
                 html=True,
             )
         # The draft and the published course runs should both be in the page
-        self.assertContains(response, "<dd>English, French</dd>", html=True, count=2)
+        self.assertContains(response, "<dd>English and french</dd>", html=True, count=2)
 
     def test_templates_course_detail_no_index(self):
         """
