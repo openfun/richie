@@ -124,7 +124,7 @@ class CourseRunCMSTestCase(CMSTestCase):
         self.assertContains(response, "<dt>Enrollment ends</dt><dd>Jan. 18, 2019</dd>")
         self.assertContains(response, "<dt>Course starts</dt><dd>Dec. 10, 2018</dd>")
         self.assertContains(response, "<dt>Course ends</dt><dd>Feb. 14, 2019</dd>")
-        self.assertContains(response, "<dt>Languages</dt><dd>English, French</dd>")
+        self.assertContains(response, "<dt>Languages</dt><dd>English and french</dd>")
 
     def test_templates_course_run_detail_cms_draft_content(self):
         """
@@ -228,7 +228,7 @@ class CourseRunCMSTestCase(CMSTestCase):
         self.assertContains(response, "<dt>Enrollment ends</dt><dd>Jan. 18, 2019</dd>")
         self.assertContains(response, "<dt>Course starts</dt><dd>Dec. 10, 2018</dd>")
         self.assertContains(response, "<dt>Course ends</dt><dd>Feb. 14, 2019</dd>")
-        self.assertContains(response, "<dt>Languages</dt><dd>English, French</dd>")
+        self.assertContains(response, "<dt>Languages</dt><dd>English and french</dd>")
 
     def test_templates_course_run_detail_no_index(self):
         """

@@ -16,6 +16,7 @@ from cms.extensions.extension_pool import extension_pool
 from cms.models.pluginmodel import CMSPlugin
 from filer.fields.image import FilerImageField
 
+from ...core.fields.multiselect import MultiSelectField
 from ...core.models import BasePageExtension, PagePluginMixin
 from .category import Category
 from .organization import Organization
@@ -256,14 +257,14 @@ class CourseRun(BasePageExtension):
         _("enrollment start"), blank=True, null=True
     )
     enrollment_end = models.DateTimeField(_("enrollment end"), blank=True, null=True)
-    languages = ChoiceArrayField(
+    languages = MultiSelectField(
+        max_choices=50,
+        max_length=255,  # MySQL does not allow max_length > 255
         # Language choices are made lazy so that we can override them in our tests.
         # When set directly, they are evaluated too early and can't be changed with the
         # "override_settings" utility.
-        models.CharField(
-            max_length=10, choices=lazy(lambda: settings.ALL_LANGUAGES, tuple)()
-        ),
-        help_text=_("The languages in which the course content is available."),
+        choices=lazy(lambda: settings.ALL_LANGUAGES, tuple)(),
+        help_text=_("The list of languages in which the course content is available."),
     )
 
     TEMPLATE_DETAIL = "courses/cms/course_run_detail.html"
@@ -277,33 +278,6 @@ class CourseRun(BasePageExtension):
         return "{start:s}{course:s}".format(
             course=self.extended_object.get_title(), start=start
         )
-
-    # pylint: disable=unused-argument
-    def get_languages_display(self, *args):
-        """
-        We are using the "languages" ArrayField with a field that has choices. In order to display
-        human readable value of these multiple choices, we need to write our own method because
-        the ArrayField does not support it yet.
-
-        Parameters:
-        -----------
-        args: we add this because we use this method in a "render_model" template tag and it
-            passes a "request" argument when calling the method. For more information, see:
-            http://docs.django-cms.org/en/latest/how_to/frontend_models.html#special-attributes
-
-        Returns:
-        --------
-        string: comma separated list of human readable languages.
-        """
-        result = ""
-        for i, language in enumerate(self.languages):
-            if i == 0:
-                result = str(settings.ALL_LANGUAGES_DICT[language])
-            else:
-                result = "{:s}, {!s}".format(
-                    result, settings.ALL_LANGUAGES_DICT[language]
-                )
-        return result
 
     # pylint: disable=arguments-differ
     def save(self, *args, **kwargs):
