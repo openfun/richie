@@ -21,8 +21,12 @@ from richie.apps.courses.factories import (
 )
 from richie.apps.courses.helpers import create_categories
 from richie.apps.courses.models import Category, Course, Licence, Organization
-from richie.apps.persons.factories import PersonFactory
-from richie.apps.persons.models import Person
+from richie.apps.persons.factories import (
+    PersonFactory,
+    PersonTitleFactory,
+    PersonTitleTranslationFactory,
+)
+from richie.apps.persons.models import Person, PersonTitle, PersonTitleTranslation
 
 from ...helpers import recursive_page_creation
 
@@ -255,6 +259,8 @@ def clear_cms_data():
     Organization.objects.all().delete()
     Category.objects.all().delete()
     Person.objects.all().delete()
+    PersonTitle.objects.all().delete()
+    PersonTitleTranslation.objects.all().delete()
     Licence.objects.all().delete()
 
 
@@ -292,6 +298,13 @@ def create_demo_site():
     # Django parler require a language to be manually set when working out of
     # request/response flow and PersonTitle use 'parler'
     translation.activate(settings.LANGUAGE_CODE)
+    title = PersonTitleFactory(translation=None)
+    PersonTitleTranslationFactory(
+        master=title, language_code="en", title="Doctor", abbreviation="Dr."
+    )
+    PersonTitleTranslationFactory(
+        master=title, language_code="fr", title="Docteur", abbreviation="Dr."
+    )
 
     # Create persons under the `persons` page
     persons = PersonFactory.create_batch(
@@ -299,6 +312,7 @@ def create_demo_site():
         page_in_navigation=True,
         page_languages=[l[0] for l in settings.LANGUAGES],
         page_parent=pages_created["persons"],
+        person_title=random.choice([title, None]),
         fill_portrait=True,
         fill_resume=True,
         should_publish=True,
