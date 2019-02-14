@@ -7,7 +7,7 @@ from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
 from richie.apps.persons.factories import PersonTitleFactory
-from richie.apps.persons.models import PersonTitle
+from richie.apps.persons.models import PersonTitle, PersonTitleTranslation
 
 
 class PersonTitleAdminTestCase(CMSTestCase):
@@ -74,7 +74,10 @@ class PersonTitleAdminTestCase(CMSTestCase):
         self.client.login(username=user.username, password="password")
 
         # Create a person, title will automaticaly be created
-        person_title = PersonTitleFactory(title="Mister", abbreviation="Mr.")
+        person_title = PersonTitleFactory(
+            translation__title="Mister", translation__abbreviation="Mr."
+        )
+        self.assertEqual(PersonTitleTranslation.objects.count(), 1)
 
         # Get the admin change view
         url = reverse("admin:persons_persontitle_change", args=[person_title.id])

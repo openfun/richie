@@ -1,7 +1,7 @@
 """
 Unit tests for the Person model
 """
-from django.db.utils import DataError, IntegrityError
+from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 from richie.apps.persons.factories import PersonTitleFactory
@@ -18,37 +18,38 @@ class PersonTitleModelsTestCase(TestCase):
         """
         The `title` field should be required
         """
-        with self.assertRaises(IntegrityError) as context:
-            PersonTitleFactory(title=None)
-        self.assertTrue(
-            context.exception.args[0].startswith(
-                'null value in column "title" violates not-null constraint'
-            )
+        with self.assertRaises(ValidationError) as context:
+            PersonTitleFactory(translation__title=None, translation__abbreviation="M")
+        self.assertEqual(
+            context.exception.message_dict, {"title": ["This field cannot be null."]}
         )
 
     def test_models_person_title_fields_abbreviation_required(self):
         """
         The `abbreviation` field should be required
         """
-        with self.assertRaises(IntegrityError) as context:
-            PersonTitleFactory(abbreviation=None)
-        self.assertTrue(
-            context.exception.args[0].startswith(
-                'null value in column "abbreviation" violates not-null constraint'
-            )
+        with self.assertRaises(ValidationError) as context:
+            PersonTitleFactory(translation__abbreviation=None)
+        self.assertEqual(
+            context.exception.message_dict,
+            {"abbreviation": ["This field cannot be null."]},
         )
 
     def test_models_person_title_fields_abbreviation_length(self):
         """
         The `abbreviation` field should be limited to 10 characters
         """
-        PersonTitleFactory(abbreviation="a" * 10)
-        with self.assertRaises(DataError) as context:
-            PersonTitleFactory(abbreviation="b" * 11)
-        self.assertTrue(
-            context.exception.args[0].startswith(
-                "value too long for type character varying(10)\n"
-            )
+        PersonTitleFactory(translation__abbreviation="a" * 10)
+
+        with self.assertRaises(ValidationError) as context:
+            PersonTitleFactory(translation__abbreviation="b" * 11)
+        self.assertEqual(
+            context.exception.message_dict,
+            {
+                "abbreviation": [
+                    "Ensure this value has at most 10 characters (it has 11)."
+                ]
+            },
         )
 
     def test_models_person_title_str(self):
@@ -56,5 +57,7 @@ class PersonTitleModelsTestCase(TestCase):
         The string representation should be built with models name,
         `title` and `abbreviation` fields
         """
-        person_title = PersonTitleFactory(title="Madam", abbreviation="Mme")
+        person_title = PersonTitleFactory(
+            translation__title="Madam", translation__abbreviation="Mme"
+        )
         self.assertEqual(str(person_title), "Person Title: Madam (Mme)")
