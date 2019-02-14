@@ -26,7 +26,7 @@ class CourseModelsTestCase(TestCase):
         """
         page = create_page("Nano particles", "courses/cms/course_detail.html", "en")
         course = CourseFactory(extended_object=page)
-        with self.assertNumQueries(1):
+        with self.assertNumQueries(2):
             self.assertEqual(str(course), "Course: Nano particles")
 
     def test_models_course_get_categories_empty(self):

@@ -1,7 +1,7 @@
 """
 Test suite for the wizard creating a new Person page
 """
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from cms.api import create_page
 from cms.models import Page

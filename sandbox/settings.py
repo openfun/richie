@@ -169,13 +169,12 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
                 "loaders": [
                     "django.template.loaders.filesystem.Loader",
                     "django.template.loaders.app_directories.Loader",
-                    "django.template.loaders.eggs.Loader",
                 ],
             },
         }
     ]
 
-    MIDDLEWARE_CLASSES = (
+    MIDDLEWARE = (
         "cms.middleware.utils.ApphookReloadMiddleware",
         "django.contrib.sessions.middleware.SessionMiddleware",
         "django.middleware.csrf.CsrfViewMiddleware",

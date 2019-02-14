@@ -27,7 +27,7 @@ class CategoryModelsTestCase(TestCase):
             "Art", "courses/cms/category_detail.html", "en", parent=not_a_category_page
         )
         category = CategoryFactory(extended_object=page)
-        with self.assertNumQueries(2):
+        with self.assertNumQueries(4):
             self.assertEqual(str(category), "Art")
 
         # Art / Literature
@@ -35,7 +35,7 @@ class CategoryModelsTestCase(TestCase):
             "Literature", "courses/cms/category_detail.html", "en", parent=page
         )
         child_category = CategoryFactory(extended_object=child_page)
-        with self.assertNumQueries(3):
+        with self.assertNumQueries(5):
             self.assertEqual(str(child_category), "Art / Literature")
 
         # Art / Literature / Novels
@@ -43,7 +43,7 @@ class CategoryModelsTestCase(TestCase):
             "Novels", "courses/cms/category_detail.html", "en", parent=child_page
         )
         leaf_category = CategoryFactory(extended_object=leaf_page)
-        with self.assertNumQueries(4):
+        with self.assertNumQueries(6):
             self.assertEqual(str(leaf_category), "Art / Literature / Novels")
 
     def test_models_category_get_courses(self):
