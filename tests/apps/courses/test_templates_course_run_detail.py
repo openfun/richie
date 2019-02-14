@@ -5,6 +5,7 @@ import random
 from datetime import datetime
 from unittest import mock
 
+import pytz
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
@@ -43,10 +44,10 @@ class CourseRunCMSTestCase(CMSTestCase):
             page_title="first session",
             page_parent=course.extended_object,
             resource_link="https://www.example.com/enroll",
-            enrollment_start=datetime(2018, 10, 21),
-            enrollment_end=datetime(2019, 1, 18),
-            start=datetime(2018, 12, 10),
-            end=datetime(2019, 2, 14),
+            enrollment_start=datetime(2018, 10, 21, tzinfo=pytz.utc),
+            enrollment_end=datetime(2019, 1, 18, tzinfo=pytz.utc),
+            start=datetime(2018, 12, 10, tzinfo=pytz.utc),
+            end=datetime(2019, 2, 14, tzinfo=pytz.utc),
             languages=["en", "fr"],
         )
         page = course_run.extended_object
@@ -146,10 +147,10 @@ class CourseRunCMSTestCase(CMSTestCase):
             page_title="first session",
             page_parent=course.extended_object,
             resource_link="https://www.example.com/enroll",
-            enrollment_start=datetime(2018, 10, 21),
-            enrollment_end=datetime(2019, 1, 18),
-            start=datetime(2018, 12, 10),
-            end=datetime(2019, 2, 14),
+            enrollment_start=datetime(2018, 10, 21, tzinfo=pytz.utc),
+            enrollment_end=datetime(2019, 1, 18, tzinfo=pytz.utc),
+            start=datetime(2018, 12, 10, tzinfo=pytz.utc),
+            end=datetime(2019, 2, 14, tzinfo=pytz.utc),
             languages=["en", "fr"],
         )
         page = course_run.extended_object
