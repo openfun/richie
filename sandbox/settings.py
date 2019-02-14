@@ -112,24 +112,18 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         "default": {
             "ENGINE": values.Value(
                 "django.db.backends.postgresql_psycopg2",
-                environ_name="DATABASE_ENGINE",
+                environ_name="DB_ENGINE",
                 environ_prefix=None,
             ),
-            "NAME": values.Value(
-                "richie", environ_name="POSTGRES_DB", environ_prefix=None
-            ),
-            "USER": values.Value(
-                "fun", environ_name="POSTGRES_USER", environ_prefix=None
-            ),
+            "NAME": values.Value("richie", environ_name="DB_NAME", environ_prefix=None),
+            "USER": values.Value("fun", environ_name="DB_USER", environ_prefix=None),
             "PASSWORD": values.Value(
-                "pass", environ_name="POSTGRES_PASSWORD", environ_prefix=None
+                "pass", environ_name="DB_PASSWORD", environ_prefix=None
             ),
             "HOST": values.Value(
-                "localhost", environ_name="POSTGRES_HOST", environ_prefix=None
+                "localhost", environ_name="DB_HOST", environ_prefix=None
             ),
-            "PORT": values.Value(
-                5432, environ_name="POSTGRES_PORT", environ_prefix=None
-            ),
+            "PORT": values.Value(5432, environ_name="DB_PORT", environ_prefix=None),
         }
     }
     MIGRATION_MODULES = {}

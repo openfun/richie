@@ -4,12 +4,6 @@ DJANGO_CONFIGURATION=Test
 DJANGO_SECRET_KEY=ThisIsAnExampleKeyForTestPurposeOnly
 PYTHONPATH=/app/sandbox
 
-# Database
-POSTGRES_HOST=db
-POSTGRES_DB=richie
-POSTGRES_USER=fun
-POSTGRES_PASSWORD=pass
-
 # Elastic search
 ES_CLIENT=elasticsearch
 bootstrap.memory_lock=true

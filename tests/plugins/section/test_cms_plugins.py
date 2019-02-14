@@ -25,9 +25,10 @@ class SectionCMSPluginsTestCase(CMSPluginTestCase):
         """
         with self.assertRaises(IntegrityError) as cm:
             SectionFactory(title=None)
-        self.assertIn(
-            'null value in column "title" violates not-null constraint',
-            str(cm.exception),
+        self.assertTrue(
+            'null value in column "title" violates not-null constraint'
+            in str(cm.exception)
+            or "Column 'title' cannot be null" in str(cm.exception)
         )
 
     def test_cms_plugins_section_create_success(self):
