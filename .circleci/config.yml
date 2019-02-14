@@ -251,7 +251,54 @@ jobs:
           name: Use our node script to upload i18n frontend strings file
           command: node i18n/upload.js 'frontend.pot' '/../../src/frontend/i18n/frontend.pot'
 
-  test-back:
+  test-back-mysql:
+    machine: true
+    working_directory: ~/fun
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - docker-debian-images-dev-{{ .Revision }}
+      - run:
+          name: Load images to docker engine
+          command: |
+            docker load < docker/images/dev/richie.tar
+      # ElasticSearch configuration
+      #
+      # We need to increase the VM max memory size, or else, ElasticSearch (ES)
+      # service won't bootstrap.
+      #
+      # Source:
+      # https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-cli-run-prod-mode
+      - run:
+          name: Increase VM max memory size for ES
+          command: |
+            sudo sysctl -w vm.max_map_count=262144
+            sudo sysctl vm.max_map_count
+      # Run back-end (Django) test suite
+      #
+      # Nota bene: to run the django test suite, we need to ensure that both
+      # MySQL and ElasticSearch services are up and ready. To achieve this,
+      # we wrap the pytest command execution with dockerize, a tiny tool
+      # installed in the development image. In our case, dockerize will wait
+      # up to one minute that both the database and elastisearch containers
+      # opened their expected tcp port (3306 and 9200 resp.).
+      - run:
+          name: Run tests
+          command: |
+            docker-compose \
+              -p richie-test \
+              -f docker/compose/ci/mysql/docker-compose.yml \
+              --project-directory . \
+              run --rm app \
+                dockerize \
+                  -wait tcp://db:3306 \
+                  -wait tcp://elasticsearch:9200 \
+                  -timeout 60s \
+                    pytest
+            docker-compose -p richie-test ps db | grep "mysql"
+
+  test-back-postgresql:
     machine: true
     working_directory: ~/fun
     steps:
@@ -296,6 +343,7 @@ jobs:
                   -wait tcp://elasticsearch:9200 \
                   -timeout 60s \
                     pytest
+            docker-compose -p richie-test ps db | grep "postgres"
 
   # ---- Alpine jobs ----
   build-alpine:
@@ -669,7 +717,13 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - test-back:
+      - test-back-mysql:
+          requires:
+            - build-dev
+          filters:
+            tags:
+              only: /.*/
+      - test-back-postgresql:
           requires:
             - build-dev
           filters:
@@ -707,7 +761,8 @@ workflows:
       - package-back:
           requires:
             - test-front
-            - test-back
+            - test-back-mysql
+            - test-back-postgresql
             - test-alpine
           filters:
             tags:
@@ -720,7 +775,8 @@ workflows:
       - hub:
           requires:
             - test-front
-            - test-back
+            - test-back-mysql
+            - test-back-postgresql
             - test-alpine
           filters:
             branches:
