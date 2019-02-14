@@ -369,6 +369,7 @@ class CoursePluginModel(PagePluginMixin, CMSPlugin):
 
     page = models.ForeignKey(
         Page,
+        on_delete=models.CASCADE,
         related_name="course_plugins",
         limit_choices_to={
             # There's a draft and a public course attached to the draft and
@@ -402,7 +403,9 @@ class Licence(models.Model):
     """
 
     name = models.CharField(_("name"), max_length=200)
-    logo = FilerImageField(verbose_name=_("logo"), related_name="licence")
+    logo = FilerImageField(
+        verbose_name=_("logo"), on_delete=models.PROTECT, related_name="licence"
+    )
     url = models.CharField(_("url"), blank=True, max_length=255)
     content = models.TextField(_("content"), blank=False, default="")
 
@@ -421,7 +424,7 @@ class LicencePluginModel(CMSPlugin):
     Licence plugin model.
     """
 
-    licence = models.ForeignKey(Licence)
+    licence = models.ForeignKey(Licence, on_delete=models.CASCADE)
     description = models.TextField(_("description"), blank=True, default="")
 
     def __str__(self):

@@ -129,6 +129,7 @@ class OrganizationPluginModel(PagePluginMixin, CMSPlugin):
 
     page = models.ForeignKey(
         Page,
+        on_delete=models.CASCADE,
         related_name="organization_plugins",
         limit_choices_to={"publisher_is_draft": True, "organization__isnull": False},
     )
