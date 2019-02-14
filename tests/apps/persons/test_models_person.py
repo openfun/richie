@@ -6,8 +6,7 @@ from django.test import TestCase
 
 from cms.api import create_page
 
-from richie.apps.persons.factories import PersonFactory, PersonTitleFactory
-from richie.apps.persons.models import Person
+from richie.apps.persons.factories import PersonFactory
 
 
 class PersonModelsTestCase(TestCase):
@@ -31,16 +30,12 @@ class PersonModelsTestCase(TestCase):
             PersonFactory(last_name=None)
         self.assertEqual(context.exception.messages[0], "This field cannot be null.")
 
-    def test_models_person_fields_person_title_required(self):
+    def test_models_person_fields_person_title_not_required(self):
         """
-        The `person_title` field should be required
+        The `person_title` field should not be required
         """
-        # Create a page and pass it to the factory, because it can't create a CMS page
-        # without a valid person_title
-        page = create_page("A page", Person.TEMPLATE_DETAIL, "en")
-        with self.assertRaises(ValidationError) as context:
-            PersonFactory(person_title=None, extended_object=page)
-        self.assertEqual(context.exception.messages[0], "This field cannot be null.")
+        person = PersonFactory(person_title=None)
+        self.assertIsNone(person.person_title)
 
     def test_models_person_str(self):
         """
@@ -50,12 +45,12 @@ class PersonModelsTestCase(TestCase):
         page = create_page(
             "Page of Lady Louise Dupont", "persons/cms/person_detail.html", "en"
         )
-        person_title = PersonTitleFactory(title="Madam", abbreviation="Mme")
         person = PersonFactory(
+            extended_object=page,
             first_name="Louise",
             last_name="Dupont",
-            person_title=person_title,
-            extended_object=page,
+            person_title__translation__title="Madam",
+            person_title__translation__abbreviation="Mme",
         )
         with self.assertNumQueries(3):
             self.assertEqual(
@@ -67,9 +62,11 @@ class PersonModelsTestCase(TestCase):
         The get_full_name method should return title, first name and last name separated by space.
         No SQL query should be generated.
         """
-        person_title = PersonTitleFactory(title="Madam", abbreviation="Mme")
         person = PersonFactory(
-            first_name="Louise", last_name="Dupont", person_title=person_title
+            first_name="Louise",
+            last_name="Dupont",
+            person_title__translation__title="Madam",
+            person_title__translation__abbreviation="Mme",
         )
         with self.assertNumQueries(1):
             self.assertEqual(person.get_full_name(), "Madam Louise Dupont")

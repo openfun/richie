@@ -4,6 +4,7 @@ Persons factories
 import os
 
 from django.core.files import File
+from django.utils.translation import get_language
 
 import factory
 from cms.api import add_plugin
@@ -12,19 +13,34 @@ from filer.models.imagemodels import Image
 from ..core.factories import PageExtensionDjangoModelFactory
 from ..core.helpers import create_text_plugin
 from ..core.tests.utils import file_getter
-from .models import Person, PersonTitle
+from .models import Person, PersonTitle, PersonTitleTranslation
 
 
 class PersonTitleFactory(factory.django.DjangoModelFactory):
     """
-    PersonTitle factory to generate random yet realistic person's title
+    Factory to generate random yet realistic PersonTitle objects with one default translation.
     """
+
+    translation = factory.RelatedFactory(
+        "richie.apps.persons.factories.PersonTitleTranslationFactory", "master"
+    )
 
     class Meta:
         model = PersonTitle
 
+
+class PersonTitleTranslationFactory(factory.django.DjangoModelFactory):
+    """
+    Factory to generate random yet realistic translation instances for the PersonTitle model.
+    """
+
+    class Meta:
+        model = PersonTitleTranslation
+
+    master = None
+    language_code = factory.LazyAttribute(lambda o: get_language())
     title = factory.Faker("prefix")
-    abbreviation = factory.LazyAttribute(lambda o: o.title)
+    abbreviation = factory.LazyAttribute(lambda o: o.title[0])
 
 
 class PersonFactory(PageExtensionDjangoModelFactory):

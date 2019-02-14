@@ -7,21 +7,20 @@ from django.utils.translation import ugettext_lazy as _
 from cms.api import Page
 from cms.extensions.extension_pool import extension_pool
 from cms.models.pluginmodel import CMSPlugin
-from parler.models import TranslatableModel, TranslatedFields
+from parler.fields import TranslatedField
+from parler.models import TranslatableModel, TranslatedFieldsModel
 
 from ..core.models import BasePageExtension, PagePluginMixin
 
 
 class PersonTitle(TranslatableModel):
     """
-    PersonTitle define i18ned list of people titles and there abbreviations
+    PersonTitle define i18n enabled people titles and their abbreviations
     Instances of this models should only be created by CMS administrators
     """
 
-    translations = TranslatedFields(
-        title=models.CharField(_("Title"), max_length=200),
-        abbreviation=models.CharField(_("Title abbreviation"), max_length=10),
-    )
+    title = TranslatedField()
+    abbreviation = TranslatedField()
 
     class Meta:
         verbose_name = _("person title")
@@ -33,6 +32,36 @@ class PersonTitle(TranslatableModel):
             title=self.title,
             abbreviation=self.abbreviation,
         )
+
+
+class PersonTitleTranslation(TranslatedFieldsModel):
+    """
+    This model stores translations for the above PersonTitle model.
+    """
+
+    master = models.ForeignKey(
+        PersonTitle, related_name="translations", on_delete=models.CASCADE
+    )
+    title = models.CharField(_("Title"), max_length=200)
+    abbreviation = models.CharField(_("Title abbreviation"), max_length=10)
+
+    class Meta:
+        unique_together = ("language_code", "master")
+        verbose_name = _("person title translation")
+
+    def __str__(self):
+        """Human representation of a person title translation."""
+        return "{title} ({abbreviation}) [{language}]".format(
+            title=self.title,
+            abbreviation=self.abbreviation,
+            language=self.language_code,
+        )
+
+    # pylint: disable=arguments-differ
+    def save(self, *args, **kwargs):
+        """Enforce validation of each instance when it is saved."""
+        self.full_clean()
+        super().save(*args, **kwargs)
 
 
 class Person(BasePageExtension):
@@ -49,7 +78,11 @@ class Person(BasePageExtension):
     last_name = models.CharField(max_length=200, verbose_name=_("Last name"))
 
     person_title = models.ForeignKey(
-        "PersonTitle", related_name="persons", on_delete=models.PROTECT
+        "PersonTitle",
+        related_name="persons",
+        on_delete=models.PROTECT,
+        blank=True,
+        null=True,
     )
 
     ROOT_REVERSE_ID = "persons"
