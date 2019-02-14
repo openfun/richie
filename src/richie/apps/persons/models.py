@@ -48,7 +48,9 @@ class Person(BasePageExtension):
     first_name = models.CharField(max_length=200, verbose_name=_("First name"))
     last_name = models.CharField(max_length=200, verbose_name=_("Last name"))
 
-    person_title = models.ForeignKey("PersonTitle", related_name="persons")
+    person_title = models.ForeignKey(
+        "PersonTitle", related_name="persons", on_delete=models.PROTECT
+    )
 
     ROOT_REVERSE_ID = "persons"
     TEMPLATE_DETAIL = "persons/cms/person_detail.html"
@@ -89,7 +91,9 @@ class PersonPluginModel(PagePluginMixin, CMSPlugin):
     """
 
     page = models.ForeignKey(
-        Page, limit_choices_to={"publisher_is_draft": True, "person__isnull": False}
+        Page,
+        on_delete=models.CASCADE,
+        limit_choices_to={"publisher_is_draft": True, "person__isnull": False},
     )
 
     class Meta:

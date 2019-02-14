@@ -110,6 +110,7 @@ class CategoryPluginModel(PagePluginMixin, CMSPlugin):
         Page,
         related_name="category_plugins",
         limit_choices_to=get_category_limit_choices_to,
+        on_delete=models.CASCADE,
     )
 
     class Meta:
