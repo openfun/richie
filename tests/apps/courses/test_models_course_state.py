@@ -75,7 +75,7 @@ class CourseRunModelsTestCase(TestCase):
         Confirm course state result when there is no course runs at all.
         """
         course = CourseFactory()
-        with self.assertNumQueries(1):
+        with self.assertNumQueries(3):
             state = course.state
         self.assertEqual(state, CourseState(6, None, "coming soon", None))
 

@@ -3,7 +3,7 @@ Test suite defining the admin pages for the Course model
 """
 from datetime import datetime
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils import timezone
 
 import pytz

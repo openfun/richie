@@ -11,8 +11,12 @@ from django.views.static import serve
 
 from cms.sitemaps import CMSSitemap
 
-from richie.apps.search.routes import API_PREFIX
-from richie.apps.search.routes import urlpatterns as search_urlpatterns
+from richie.apps.search.urls import urlpatterns as search_urlpatterns
+
+# For now, we use URLPathVersioning to be consistent with fonzie. Fonzie uses it
+# because DRF OpenAPI only supports URLPathVersioning for now.
+# See fonzie API_PREFIX config for more information.
+API_PREFIX = r"v(?P<version>[0-9]+\.[0-9]+)"
 
 admin.autodiscover()
 
@@ -21,7 +25,7 @@ urlpatterns = [url(r"^sitemap\.xml$", sitemap, {"sitemaps": {"cmspages": CMSSite
 urlpatterns += [url(r"^api/{}/".format(API_PREFIX), include(search_urlpatterns))]
 
 urlpatterns += i18n_patterns(
-    url(r"^admin/", include(admin.site.urls)), url(r"^", include("cms.urls"))  # NOQA
+    url(r"^admin/", admin.site.urls), url(r"^", include("cms.urls"))  # NOQA
 )
 
 # This is only needed when using runserver.

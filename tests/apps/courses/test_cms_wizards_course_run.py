@@ -3,7 +3,7 @@ Test suite for the wizard creating a new Course page
 """
 import random
 
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from cms.api import create_page
 from cms.models import Page

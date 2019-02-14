@@ -1,7 +1,7 @@
 """
 Test suite for Organization admin
 """
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from cms.api import create_page
 from cms.test_utils.testcases import CMSTestCase

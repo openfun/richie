@@ -57,7 +57,7 @@ class PersonModelsTestCase(TestCase):
             person_title=person_title,
             extended_object=page,
         )
-        with self.assertNumQueries(1):
+        with self.assertNumQueries(3):
             self.assertEqual(
                 str(person), "Person: Page of Lady Louise Dupont (Madam Louise Dupont)"
             )
@@ -71,5 +71,5 @@ class PersonModelsTestCase(TestCase):
         person = PersonFactory(
             first_name="Louise", last_name="Dupont", person_title=person_title
         )
-        with self.assertNumQueries(0):
+        with self.assertNumQueries(1):
             self.assertEqual(person.get_full_name(), "Madam Louise Dupont")
