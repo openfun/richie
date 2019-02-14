@@ -7,7 +7,6 @@ from django.conf import settings
 
 from cms.api import add_plugin, create_page
 from cms.test_utils.testcases import CMSTestCase
-from cmsplugin_plain_text.cms_plugins import PlaintextPlugin
 from djangocms_picture.cms_plugins import PicturePlugin
 
 from richie.apps.core.factories import FilerImageFactory, UserFactory
@@ -15,6 +14,7 @@ from richie.apps.core.helpers import create_i18n_page
 from richie.apps.persons.cms_plugins import PersonPlugin
 from richie.apps.persons.factories import PersonFactory
 from richie.apps.persons.models import PersonPluginModel
+from richie.plugins.plain_text.cms_plugins import PlainTextPlugin
 
 
 class PersonPluginTestCase(CMSTestCase):
@@ -72,10 +72,10 @@ class PersonPluginTestCase(CMSTestCase):
         # Add resume to related placeholder
         resume_placeholder = person_page.placeholders.get(slot="resume")
         resume_en = add_plugin(
-            resume_placeholder, PlaintextPlugin, "en", **{"body": "public resume"}
+            resume_placeholder, PlainTextPlugin, "en", **{"body": "public resume"}
         )
         add_plugin(
-            resume_placeholder, PlaintextPlugin, "fr", **{"body": "résumé public"}
+            resume_placeholder, PlainTextPlugin, "fr", **{"body": "résumé public"}
         )
 
         # Create a page to add the plugin to
@@ -178,7 +178,7 @@ class PersonPluginTestCase(CMSTestCase):
         # Add resume to related placeholder
         resume_placeholder = person_page.placeholders.get(slot="resume")
         resume_en = add_plugin(
-            resume_placeholder, PlaintextPlugin, "en", **{"body": "public resume"}
+            resume_placeholder, PlainTextPlugin, "en", **{"body": "public resume"}
         )
 
         # Create a page to add the plugin to
