@@ -18,9 +18,11 @@ class LicenceTestCase(TestCase):
         """
         with self.assertRaises(IntegrityError) as cm:
             LicenceFactory(name=None)
-
-        self.assertIn(
-            'null value in column "name" violates not-null', str(cm.exception)
+        self.assertTrue(
+            # Postgresql
+            'null value in column "name" violates not-null' in str(cm.exception)
+            # Mysql
+            or "Column 'name' cannot be null" in str(cm.exception)
         )
 
     def test_models_license_fields_logo_required(self):
@@ -30,8 +32,11 @@ class LicenceTestCase(TestCase):
         with self.assertRaises(IntegrityError) as cm:
             LicenceFactory(logo=None)
 
-        self.assertIn(
-            'null value in column "logo_id" violates not-null', str(cm.exception)
+        self.assertTrue(
+            # Postgresql
+            'null value in column "logo_id" violates not-null' in str(cm.exception)
+            # Mysql
+            or "Column 'logo_id' cannot be null" in str(cm.exception)
         )
 
     def test_models_license_fields_content_required(self):
@@ -41,6 +46,9 @@ class LicenceTestCase(TestCase):
         with self.assertRaises(IntegrityError) as cm:
             LicenceFactory(content=None)
 
-        self.assertIn(
-            'null value in column "content" violates not-null', str(cm.exception)
+        self.assertTrue(
+            # Postgresql
+            'null value in column "content" violates not-null' in str(cm.exception)
+            # Mysql
+            or "Column 'content' cannot be null" in str(cm.exception)
         )

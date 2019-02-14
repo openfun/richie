@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+  
+  db:
+    image: postgres:9.6
+    env_file:
+      - env.d/ci/postgresql
+
+  # As mentionned in ElasticSearch's documentation [1], "it is important to ensure
+  # increased ulimits for nofile and nproc are available for the Elasticsearch
+  # containers [...]  if needed, adjust them in the Daemon, or override them per
+  # container".
+  #
+  # [1] https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#_notes_for_production_use_and_defaults
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.3.1
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
+  app:
+    image: "richie:${CIRCLE_SHA1}${IMAGE_SUFFIX}-dev"
+    env_file:
+      - env.d/ci/common
+      - env.d/ci/postgresql
+    depends_on:
+      - "db"
+      - "elasticsearch"
+    tmpfs: /data

@@ -1,9 +1,13 @@
 version: "3"
 
 services:
+
   db:
-    image: postgres:9.6
-    env_file: env.d/ci
+    image: mysql:5.6
+    env_file:
+      - env.d/ci/mysql
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
+
 
   # As mentionned in ElasticSearch's documentation [1], "it is important to ensure
   # increased ulimits for nofile and nproc are available for the Elasticsearch
@@ -20,7 +24,9 @@ services:
 
   app:
     image: "richie:${CIRCLE_SHA1}${IMAGE_SUFFIX}-dev"
-    env_file: env.d/ci
+    env_file:
+      - env.d/ci/common
+      - env.d/ci/mysql
     depends_on:
       - "db"
       - "elasticsearch"

@@ -24,9 +24,10 @@ class LargeBannerCMSPluginsTestCase(TestCase):
         """
         with self.assertRaises(IntegrityError) as cm:
             LargeBannerFactory(title=None)
-        self.assertIn(
-            'null value in column "title" violates not-null constraint',
-            str(cm.exception),
+        self.assertTrue(
+            'null value in column "title" violates not-null constraint'
+            in str(cm.exception)
+            or "Column 'title' cannot be null" in str(cm.exception)
         )
 
     def test_cms_plugins_large_banner_logo_required(self):
@@ -35,8 +36,9 @@ class LargeBannerCMSPluginsTestCase(TestCase):
         """
         with self.assertRaises(IntegrityError) as cm:
             LargeBannerFactory(logo=None)
-        self.assertIn(
-            'null value in column "logo_id" violates not-null', str(cm.exception)
+        self.assertTrue(
+            'null value in column "logo_id" violates not-null' in str(cm.exception)
+            or "Column 'logo_id' cannot be null" in str(cm.exception)
         )
 
     def test_cms_plugins_large_banner_logo_alt_text_required(self):
@@ -45,8 +47,10 @@ class LargeBannerCMSPluginsTestCase(TestCase):
         """
         with self.assertRaises(IntegrityError) as cm:
             LargeBannerFactory(logo_alt_text=None)
-        self.assertIn(
-            'null value in column "logo_alt_text" violates not-null', str(cm.exception)
+        self.assertTrue(
+            'null value in column "logo_alt_text" violates not-null'
+            in str(cm.exception)
+            or "Column 'logo_alt_text' cannot be null" in str(cm.exception)
         )
 
     # pylint: disable=deprecated-method,no-member

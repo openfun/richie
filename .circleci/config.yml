@@ -157,7 +157,7 @@ jobs:
           command: |
             docker-compose \
               -p richie-test \
-              -f docker/compose/ci/docker-compose.yml \
+              -f docker/compose/ci/postgresql/docker-compose.yml \
               --project-directory . \
               run --rm --no-deps app \
                 isort --recursive --check-only .
@@ -179,7 +179,7 @@ jobs:
           command: |
             docker-compose \
               -p richie-test \
-              -f docker/compose/ci/docker-compose.yml \
+              -f docker/compose/ci/postgresql/docker-compose.yml \
               --project-directory . \
               run --rm --no-deps app \
                 flake8
@@ -201,7 +201,7 @@ jobs:
           command: |
             docker-compose \
               -p richie-test \
-              -f docker/compose/ci/docker-compose.yml \
+              -f docker/compose/ci/postgresql/docker-compose.yml \
               --project-directory . \
               run --rm --no-deps app \
                 pylint src/richie/apps src/richie/plugins sandbox tests
@@ -223,7 +223,7 @@ jobs:
           command: |
             docker-compose \
               -p richie-test \
-              -f docker/compose/ci/docker-compose.yml \
+              -f docker/compose/ci/postgresql/docker-compose.yml \
               --project-directory . \
               run --rm --no-deps app \
                 black src/richie/apps src/richie/plugins sandbox tests --check
@@ -288,7 +288,7 @@ jobs:
           command: |
             docker-compose \
               -p richie-test \
-              -f docker/compose/ci/docker-compose.yml \
+              -f docker/compose/ci/postgresql/docker-compose.yml \
               --project-directory . \
               run --rm app \
                 dockerize \
@@ -359,7 +359,7 @@ jobs:
             IMAGE_SUFFIX="-alpine" \
             docker-compose \
               -p richie-test \
-              -f docker/compose/ci/docker-compose.yml \
+              -f docker/compose/ci/postgresql/docker-compose.yml \
               --project-directory . \
               run --rm app \
                 dockerize \
@@ -427,7 +427,7 @@ jobs:
           command: |
             docker-compose \
               -p richie-test \
-              -f docker/compose/ci/docker-compose.yml \
+              -f docker/compose/ci/postgresql/docker-compose.yml \
               --project-directory . \
               run --rm --no-deps \
                 --user="$(id -u)" \

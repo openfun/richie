@@ -3,11 +3,12 @@ version: "3"
 services:
 
   db:
-    image: postgres:9.6
+    image: mysql:5.6
     env_file:
-        - env.d/development/postgresql
+      - env.d/development/mysql
     ports:
-        - "5440:5432"
+      - "3316:3306"
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.3.1
@@ -28,15 +29,15 @@ services:
       dockerfile: ./docker/images/dev/Dockerfile
     image: richie:dev
     env_file:
-        - env.d/development/common
-        - env.d/development/postgresql
+      - env.d/development/common
+      - env.d/development/mysql
     # Override production container command that runs gunicorn in favor to the
     # django development server (wrapped by dockerize to ensure the db is ready
     # to accept connections before running the development server)
     command: >
-      dockerize -wait tcp://db:5432 -timeout 60s python sandbox/manage.py runserver 0.0.0.0:8000
+      dockerize -wait tcp://db:3306 -timeout 60s python sandbox/manage.py runserver 0.0.0.0:8000
     ports:
-        - "8070:8000"
+      - "8070:8000"
     volumes:
       - .:/app
       - ./data/static:/data/static

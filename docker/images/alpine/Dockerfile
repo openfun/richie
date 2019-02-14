@@ -39,7 +39,9 @@ RUN apk --no-cache add --update \
     tk-dev \
     zlib-dev \
     # psycopg2 dependencies
-    postgresql-dev && \
+    postgresql-dev \
+    # MySQL dependencies
+    mariadb-connector-c-dev && \
     rm -rf /var/cache/apk/*
 
 WORKDIR /builder
@@ -88,7 +90,9 @@ RUN apk --no-cache add --update \
     tk \
     zlib \
     # psycopg2 dependencies
-    postgresql && \
+    postgresql \
+    # MySQL dependencies
+    mariadb-connector-c && \
     rm -rf /var/cache/apk/*
 
 # Copy richie application (see .dockerignore)

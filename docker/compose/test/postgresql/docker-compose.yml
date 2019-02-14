@@ -1,16 +1,20 @@
 version: "3"
 
 services:
+
   db:
     image: postgres:9.6
-    env_file: env.d/test
-
+    env_file:
+      - env.d/test/postgresql
+ 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.3.1
 
   app:
     image: richie:dev
-    env_file: env.d/test
+    env_file:
+      - env.d/test/common
+      - env.d/test/postgresql
     volumes:
       - .:/app
     depends_on:
