@@ -204,7 +204,6 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         "django.contrib.messages",
         # Django-cms
         "cms",
-        "cmsplugin_plain_text",
         "menus",
         "sekizai",
         "treebeard",
@@ -225,6 +224,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         "richie.apps.persons",
         "richie.apps.search",
         "richie.plugins.large_banner",
+        "richie.plugins.plain_text",
         "richie.plugins.section",
         "richie.plugins.simple_text_ckeditor",
         # Third party apps
