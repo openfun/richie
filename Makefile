@@ -12,14 +12,22 @@
 # -- Docker
 
 # Get the current user ID to use for docker run and docker exec commands
+ifeq ($(DB_ENGINE), mysql)
+  COMPOSE            = docker-compose -f docker/compose/development/mysql/docker-compose.yml --project-directory .
+  COMPOSE_TEST       = docker-compose -p richie-test -f docker/compose/test/mysql/docker-compose.yml --project-directory .
+  DB_PORT            = 3306
+else
+  COMPOSE            = docker-compose
+  COMPOSE_TEST       = docker-compose -p richie-test -f docker/compose/test/postgresql/docker-compose.yml --project-directory .
+  DB_PORT            = 5432
+endif
+
 UID                  = $(shell id -u)
-COMPOSE              = docker-compose
 COMPOSE_RUN          = $(COMPOSE) run --rm --user=$(UID)
 COMPOSE_EXEC         = $(COMPOSE) exec --user=$(UID)
 COMPOSE_EXEC_APP     = $(COMPOSE_EXEC) app
 COMPOSE_EXEC_NODE    = $(COMPOSE_EXEC) node
 COMPOSE_RUN_APP      = $(COMPOSE_RUN) app
-COMPOSE_TEST         = $(COMPOSE) -p richie-test -f docker/compose/test/docker-compose.yml --project-directory .
 COMPOSE_TEST_RUN     = $(COMPOSE_TEST) run --rm --user=$(UID)
 COMPOSE_TEST_RUN_APP = $(COMPOSE_TEST_RUN) app
 
@@ -34,7 +42,7 @@ YARN                 = $(COMPOSE_RUN_NODE) yarn
 
 # -- Django
 
-MANAGE               = $(COMPOSE_RUN_APP) python sandbox/manage.py
+MANAGE               = $(COMPOSE_RUN_APP) dockerize -wait tcp://db:$(DB_PORT) -timeout 60s python sandbox/manage.py
 
 # -- Rules
 
@@ -46,8 +54,6 @@ bootstrap:  ## install development dependencies
 	@$(COMPOSE) build base;
 	@$(COMPOSE) build --build-arg UID=$(UID) app;
 	${MAKE} build-front;
-	@echo 'Waiting until database is up…';
-	$(COMPOSE_RUN_APP) dockerize -wait tcp://db:5432 -timeout 60s
 	${MAKE} migrate;
 .PHONY: bootstrap
 
@@ -73,7 +79,7 @@ compilemessages: ## compile the gettext files
 
 demo-site:  ## create a demo site
 	@$(MANAGE) create_demo_site
-	${MAKE} search-index;
+	@${MAKE} search-index;
 .PHONY: demo-site
 
 search-index:  ## (re)generate the Elasticsearch index
@@ -148,7 +154,7 @@ superuser: ## create a DjangoCMS superuser
 .PHONY: superuser
 
 test-back: ## run back-end tests
-	@$(COMPOSE_TEST_RUN_APP) pytest
+	@bin/pytest
 .PHONY: test-back
 
 test-front: ## run front-end tests
