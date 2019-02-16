@@ -1,7 +1,7 @@
 """
 ElasticSearch course document management utilities
 """
-from collections import defaultdict, namedtuple
+from collections import defaultdict
 from datetime import MAXYEAR
 from functools import reduce
 
@@ -27,8 +27,6 @@ from ..forms import CourseListForm
 from ..partial_mappings import MULTILINGUAL_TEXT
 from ..utils.i18n import get_best_field_language
 from ..utils.indexers import slice_string_for_completion
-
-KeyFragmentPair = namedtuple("KeyFragmentPair", ["key", "fragment"])
 
 
 class CoursesIndexer:
@@ -362,9 +360,9 @@ class CoursesIndexer:
                 start, end = value
                 queries = [
                     *queries,
-                    KeyFragmentPair(
-                        param,
-                        [
+                    {
+                        "key": param,
+                        "fragment": [
                             {
                                 "range": {
                                     param: {
@@ -374,7 +372,7 @@ class CoursesIndexer:
                                 }
                             }
                         ],
-                    ),
+                    },
                 ]
 
             # Dynamic filters are keyword lists that do not require special treatment
@@ -382,16 +380,16 @@ class CoursesIndexer:
                 # Add the relevant term search to our queries
                 queries = [
                     *queries,
-                    KeyFragmentPair(param, [{"terms": {param: value}}]),
+                    {"key": param, "fragment": [{"terms": {param: value}}]},
                 ]
 
             # Search is a regular (multilingual) match query
             elif param == "query":
                 queries = [
                     *queries,
-                    KeyFragmentPair(
-                        param,
-                        [
+                    {
+                        "key": param,
+                        "fragment": [
                             {
                                 "bool": {
                                     "should": [
@@ -417,7 +415,7 @@ class CoursesIndexer:
                                 }
                             }
                         ],
-                    ),
+                    },
                 ]
 
             elif param in FILTERS_HARDCODED:
@@ -428,9 +426,10 @@ class CoursesIndexer:
                 for choice in value:
                     queries = [
                         *queries,
-                        KeyFragmentPair(
-                            param, FILTERS_HARDCODED[param]["choices"][choice]
-                        ),
+                        {
+                            "key": param,
+                            "fragment": FILTERS_HARDCODED[param]["choices"][choice],
+                        },
                     ]
 
         # Default to a match_all query
@@ -442,7 +441,7 @@ class CoursesIndexer:
                 "bool": {
                     "must":
                     # queries => map(pluck("fragment")) => flatten()
-                    [clause for kf_pair in queries for clause in kf_pair.fragment]
+                    [clause for kf_pair in queries for clause in kf_pair["fragment"]]
                 }
             }
 
@@ -463,8 +462,8 @@ class CoursesIndexer:
                                 # => map(pluck("fragment")) => flatten()
                                 clause
                                 for kf_pair in queries
-                                for clause in kf_pair.fragment
-                                if kf_pair.key is not filter_key
+                                for clause in kf_pair["fragment"]
+                                if kf_pair["key"] is not filter_key
                             ]
                         }
                     }
@@ -489,8 +488,8 @@ class CoursesIndexer:
                                         # => map(pluck("fragment")) => flatten()
                                         clause
                                         for kf_pair in queries
-                                        for clause in kf_pair.fragment
-                                        if kf_pair.key is not facet
+                                        for clause in kf_pair["fragment"]
+                                        if kf_pair["key"] is not facet
                                     ]
                                 }
                             },
