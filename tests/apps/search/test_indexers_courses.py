@@ -29,6 +29,7 @@ from richie.apps.search.indexers.courses import CoursesIndexer
 from richie.apps.search.indexers.organizations import OrganizationsIndexer
 from richie.apps.search.utils.filter_definitions import (
     FilterDefinitionCustom,
+    FilterDefinitionLanguages,
     FilterDefinitionTerms,
 )
 
@@ -44,7 +45,7 @@ DEFAULT_FILTERS = {
         ],
     ),
     "categories": FilterDefinitionTerms(name="categories", human_name="categories"),
-    "languages": FilterDefinitionTerms(name="languages", human_name="languages"),
+    "languages": FilterDefinitionLanguages(name="languages", human_name="languages"),
     "organizations": FilterDefinitionTerms(
         name="organizations", human_name="organizations"
     ),

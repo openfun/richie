@@ -141,6 +141,13 @@ class CoursesViewSet(AutocompleteMixin, ViewSet):
                     {},
                 ),
             },
+            "filters": {
+                filter.name: filter.get_faceted_definition(
+                    course_query_response["aggregations"]["all_courses"],
+                    get_language_from_request(request),
+                )
+                for filter in filters.values()
+            },
         }
 
         # Will be formatting a response_object for consumption

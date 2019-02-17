@@ -77,6 +77,27 @@ class CoursesViewsetsTestCase(TestCase):
         lambda *args: {"some": "sorting"},
     )
     @mock.patch.object(settings.ES_CLIENT, "search")
+    @mock.patch(
+        "richie.apps.search.viewsets.courses.FILTERS",
+        new=[
+            (
+                "richie.apps.search.utils.filter_definitions.FilterDefinitionCustom",
+                {
+                    "name": "availability",
+                    "human_name": "Availability",
+                    "choices": [
+                        ("coming_soon", "Coming soon", [{"is_coming_soon": True}]),
+                        ("current", "Current session", [{"is_current": True}]),
+                        ("open", "Open for enrollment", [{"is_open": True}]),
+                    ],
+                },
+            ),
+            (
+                "richie.apps.search.utils.filter_definitions.FilterDefinitionTerms",
+                {"name": "organizations", "human_name": "Organizations"},
+            ),
+        ],
+    )
     def test_viewsets_courses_search(self, mock_search, *_):
         """
         Happy path: the consumer is filtering courses by matching text
@@ -86,32 +107,46 @@ class CoursesViewsetsTestCase(TestCase):
             "/api/v1.0/courses?query=some%20phrase%20terms&limit=2&offset=20"
         )
 
-        mock_search.return_value = {
-            "hits": {"hits": [{"_id": 523}, {"_id": 861}], "total": 35},
-            "aggregations": {
-                "all_courses": {
-                    "availability@coming_soon": {"doc_count": 8},
-                    "availability@current": {"doc_count": 42},
-                    "availability@open": {"doc_count": 59},
-                    "categories": {
-                        "categories": {
-                            "buckets": [
-                                {"key": "11", "doc_count": 17},
-                                {"key": "21", "doc_count": 19},
-                            ]
-                        }
-                    },
-                    "languages": {
-                        "languages": {
-                            "buckets": [
-                                {"key": "en", "doc_count": 81},
-                                {"key": "fr", "doc_count": 23},
-                            ]
+        # We use a mock implementation instead of return_value as a pragmatic way to get results
+        # from the whole filters pipeline without having to mock too many things.
+        # pylint: disable=inconsistent-return-statements
+        def mock_search_implementation(index, **_):
+            if index == "richie_courses":
+                return {
+                    "hits": {"hits": [{"_id": 523}, {"_id": 861}], "total": 35},
+                    "aggregations": {
+                        "all_courses": {
+                            "availability@coming_soon": {"doc_count": 8},
+                            "availability@current": {"doc_count": 42},
+                            "availability@open": {"doc_count": 59},
+                            "organizations": {
+                                "organizations": {
+                                    "buckets": [
+                                        {"key": "11", "doc_count": 17},
+                                        {"key": "21", "doc_count": 19},
+                                    ]
+                                }
+                            },
                         }
                     },
                 }
-            },
-        }
+            if index == "richie_organizations":
+                return {
+                    "hits": {
+                        "hits": [
+                            {
+                                "_id": "11",
+                                "_source": {"title": {"en": "Organization 11"}},
+                            },
+                            {
+                                "_id": "21",
+                                "_source": {"title": {"en": "Organization 21"}},
+                            },
+                        ]
+                    }
+                }
+
+        mock_search.side_effect = mock_search_implementation
 
         response = CoursesViewSet.as_view({"get": "list"})(request, version="1.0")
 
@@ -124,13 +159,45 @@ class CoursesViewsetsTestCase(TestCase):
                 "objects": ["Course #523", "Course #861"],
                 "facets": {
                     "availability": {"coming_soon": 8, "current": 42, "open": 59},
-                    "languages": {"en": 81, "fr": 23},
-                    "categories": {"11": 17, "21": 19},
+                    "organizations": {"11": 17, "21": 19},
+                },
+                "filters": {
+                    "availability": {
+                        "human_name": "Availability",
+                        "is_drilldown": False,
+                        "name": "availability",
+                        "values": [
+                            {
+                                "count": 8,
+                                "human_name": "Coming soon",
+                                "key": "coming_soon",
+                            },
+                            {
+                                "count": 42,
+                                "human_name": "Current session",
+                                "key": "current",
+                            },
+                            {
+                                "count": 59,
+                                "human_name": "Open for enrollment",
+                                "key": "open",
+                            },
+                        ],
+                    },
+                    "organizations": {
+                        "human_name": "Organizations",
+                        "is_drilldown": False,
+                        "name": "organizations",
+                        "values": [
+                            {"count": 17, "human_name": "Organization 11", "key": "11"},
+                            {"count": 19, "human_name": "Organization 21", "key": "21"},
+                        ],
+                    },
                 },
             },
         )
         # The ES connector was called with appropriate arguments for the client's request
-        mock_search.assert_called_with(
+        mock_search.assert_any_call(
             _source=[
                 "start",
                 "end",

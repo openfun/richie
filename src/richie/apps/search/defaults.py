@@ -83,7 +83,7 @@ FILTERS_DEFAULT = [
         {"name": "organizations", "human_name": _("Organizations")},
     ),
     (
-        "richie.apps.search.utils.filter_definitions.FilterDefinitionTerms",
+        "richie.apps.search.utils.filter_definitions.FilterDefinitionLanguages",
         {"name": "languages", "human_name": _("Languages")},
     ),
 ]
