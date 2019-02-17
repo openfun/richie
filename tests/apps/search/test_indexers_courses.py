@@ -6,10 +6,8 @@ import json
 import uuid
 from types import SimpleNamespace
 from unittest import mock
-from unittest.mock import patch
 
 from django.conf import settings
-from django.forms import ChoiceField, MultipleChoiceField
 from django.http.request import QueryDict
 from django.test import TestCase
 
@@ -29,6 +27,36 @@ from richie.apps.search.exceptions import QueryFormatException
 from richie.apps.search.indexers.categories import CategoriesIndexer
 from richie.apps.search.indexers.courses import CoursesIndexer
 from richie.apps.search.indexers.organizations import OrganizationsIndexer
+from richie.apps.search.utils.filter_definitions import (
+    FilterDefinitionCustom,
+    FilterDefinitionTerms,
+)
+
+# Emulate the default filters that `CoursesViewSet.list` would instantiate to
+# pass to `build_es_query`.
+DEFAULT_FILTERS = {
+    "availability": FilterDefinitionCustom(
+        name="availability",
+        human_name="availability",
+        choices=[
+            (choice, choice, [{"term": {"availability": choice}}])
+            for choice in ["coming_soon", "current"]
+        ],
+    ),
+    "categories": FilterDefinitionTerms(name="categories", human_name="categories"),
+    "languages": FilterDefinitionTerms(name="languages", human_name="languages"),
+    "organizations": FilterDefinitionTerms(
+        name="organizations", human_name="organizations"
+    ),
+}
+
+SIMPLE_NEW_FILTER = {
+    "new": FilterDefinitionCustom(
+        name="new",
+        human_name="new",
+        choices=[("new", "new", [{"term": {"is_new": True}}])],
+    )
+}
 
 
 class CoursesIndexersTestCase(TestCase):
@@ -287,18 +315,6 @@ class CoursesIndexersTestCase(TestCase):
             },
         )
 
-    @patch(
-        "richie.apps.search.indexers.courses.FILTERS_HARDCODED",
-        new={
-            "availability": {
-                "choices": {
-                    choice: [{"term": {"availability": choice}}]
-                    for choice in ["coming_soon", "current"]
-                },
-                "field": ChoiceField,
-            }
-        },
-    )
     def test_indexers_courses_build_es_query_search_all_courses(self):
         """
         Happy path: build a query that does not filter the courses at all
@@ -308,7 +324,7 @@ class CoursesIndexersTestCase(TestCase):
             query_params=QueryDict(query_string="limit=2&offset=10")
         )
         self.assertEqual(
-            CoursesIndexer.build_es_query(request),
+            CoursesIndexer.build_es_query(request, DEFAULT_FILTERS),
             (
                 2,
                 10,
@@ -359,18 +375,6 @@ class CoursesIndexersTestCase(TestCase):
             ),
         )
 
-    @patch(
-        "richie.apps.search.indexers.courses.FILTERS_HARDCODED",
-        new={
-            "availability": {
-                "choices": {
-                    choice: [{"term": {"availability": choice}}]
-                    for choice in ["coming_soon", "current"]
-                },
-                "field": ChoiceField,
-            }
-        },
-    )
     def test_indexers_courses_build_es_query_search_by_match_text(self):
         """
         Happy path: build a query that filters courses by matching text
@@ -404,7 +408,7 @@ class CoursesIndexersTestCase(TestCase):
         }
 
         self.assertEqual(
-            CoursesIndexer.build_es_query(request),
+            CoursesIndexer.build_es_query(request, DEFAULT_FILTERS),
             (
                 2,
                 20,
@@ -459,18 +463,6 @@ class CoursesIndexersTestCase(TestCase):
             ),
         )
 
-    @patch(
-        "richie.apps.search.indexers.courses.FILTERS_HARDCODED",
-        new={
-            "availability": {
-                "choices": {
-                    choice: [{"term": {"availability": choice}}]
-                    for choice in ["coming_soon", "current"]
-                },
-                "field": ChoiceField,
-            }
-        },
-    )
     def test_indexers_courses_build_es_query_search_by_terms_organizations(self):
         """
         Happy path: build a query that filters courses by more than 1 related organizations
@@ -483,7 +475,7 @@ class CoursesIndexersTestCase(TestCase):
         )
         terms_organizations = {"terms": {"organizations": [13, 15]}}
         self.assertEqual(
-            CoursesIndexer.build_es_query(request),
+            CoursesIndexer.build_es_query(request, DEFAULT_FILTERS),
             (
                 2,
                 0,
@@ -542,18 +534,6 @@ class CoursesIndexersTestCase(TestCase):
             ),
         )
 
-    @patch(
-        "richie.apps.search.indexers.courses.FILTERS_HARDCODED",
-        new={
-            "availability": {
-                "choices": {
-                    choice: [{"term": {"availability": choice}}]
-                    for choice in ["coming_soon", "current"]
-                },
-                "field": ChoiceField,
-            }
-        },
-    )
     def test_indexers_courses_build_es_query_search_by_single_term_organizations(self):
         """
         Happy path: build a query that filters courses by exactly 1 related organization
@@ -564,7 +544,7 @@ class CoursesIndexersTestCase(TestCase):
         )
         term_organization = {"terms": {"organizations": [345]}}
         self.assertEqual(
-            CoursesIndexer.build_es_query(request),
+            CoursesIndexer.build_es_query(request, DEFAULT_FILTERS),
             (
                 2,
                 0,
@@ -623,18 +603,6 @@ class CoursesIndexersTestCase(TestCase):
             ),
         )
 
-    @patch(
-        "richie.apps.search.indexers.courses.FILTERS_HARDCODED",
-        new={
-            "availability": {
-                "choices": {
-                    choice: [{"term": {"availability": choice}}]
-                    for choice in ["coming_soon", "current"]
-                },
-                "field": ChoiceField,
-            }
-        },
-    )
     def test_indexers_courses_build_es_query_search_by_range_datetimes(self):
         """
         Happy path: build a query that filters courses by start & end date datetime ranges
@@ -664,7 +632,7 @@ class CoursesIndexersTestCase(TestCase):
             }
         }
         self.assertEqual(
-            CoursesIndexer.build_es_query(request),
+            CoursesIndexer.build_es_query(request, DEFAULT_FILTERS),
             (
                 None,
                 0,
@@ -721,22 +689,6 @@ class CoursesIndexersTestCase(TestCase):
             ),
         )
 
-    @patch(
-        "richie.apps.search.indexers.courses.FILTERS_HARDCODED",
-        new={
-            "availability": {
-                "choices": {
-                    choice: [{"term": {"availability": choice}}]
-                    for choice in ["coming_soon", "current"]
-                },
-                "field": ChoiceField,
-            },
-            "new": {
-                "choices": {"new": [{"term": {"session_number": 1}}]},
-                "field": MultipleChoiceField,
-            },
-        },
-    )
     def test_indexers_courses_build_es_query_search_by_custom_filter(self):
         """
         Happy path: build a query using custom filters
@@ -748,7 +700,9 @@ class CoursesIndexersTestCase(TestCase):
             )
         )
         self.assertEqual(
-            CoursesIndexer.build_es_query(request),
+            CoursesIndexer.build_es_query(
+                request, {**DEFAULT_FILTERS, **SIMPLE_NEW_FILTER}
+            ),
             (
                 2,
                 10,
@@ -777,7 +731,7 @@ class CoursesIndexersTestCase(TestCase):
                                 "filter": {
                                     "bool": {
                                         "must": [
-                                            {"term": {"session_number": 1}},
+                                            {"term": {"is_new": True}},
                                             {"term": {"availability": "coming_soon"}},
                                         ]
                                     }
@@ -827,22 +781,6 @@ class CoursesIndexersTestCase(TestCase):
             ),
         )
 
-    @patch(
-        "richie.apps.search.indexers.courses.FILTERS_HARDCODED",
-        new={
-            "availability": {
-                "choices": {
-                    choice: [{"term": {"availability": choice}}]
-                    for choice in ["coming_soon", "current"]
-                },
-                "field": ChoiceField,
-            },
-            "new": {
-                "choices": {"new": [{"term": {"is_new": True}}]},
-                "field": MultipleChoiceField,
-            },
-        },
-    )
     def test_indexers_courses_build_es_query_combined_search(self):
         """
         Happy path: build a query that filters courses by multiple filters, including a custom
@@ -902,7 +840,9 @@ class CoursesIndexersTestCase(TestCase):
         terms_languages = {"terms": {"languages": ["fr"]}}
 
         self.assertEqual(
-            CoursesIndexer.build_es_query(request),
+            CoursesIndexer.build_es_query(
+                request, {**DEFAULT_FILTERS, **SIMPLE_NEW_FILTER}
+            ),
             (
                 2,
                 0,
@@ -1022,18 +962,6 @@ class CoursesIndexersTestCase(TestCase):
             ),
         )
 
-    @patch(
-        "richie.apps.search.indexers.courses.FILTERS_HARDCODED",
-        new={
-            "availability": {
-                "choices": {
-                    choice: [{"term": {"availability": choice}}]
-                    for choice in ["coming_soon", "current"]
-                },
-                "field": ChoiceField,
-            }
-        },
-    )
     def test_indexers_courses_build_es_query_search_with_empty_filters(self):
         """
         Edge case: custom filters have been removed entirely through settings
@@ -1044,7 +972,7 @@ class CoursesIndexersTestCase(TestCase):
         )
 
         self.assertEqual(
-            CoursesIndexer.build_es_query(request),
+            CoursesIndexer.build_es_query(request, DEFAULT_FILTERS),
             (
                 20,
                 40,
@@ -1101,7 +1029,8 @@ class CoursesIndexersTestCase(TestCase):
         """
         with self.assertRaises(QueryFormatException):
             CoursesIndexer.build_es_query(
-                SimpleNamespace(query_params=QueryDict(query_string="limit=-2"))
+                SimpleNamespace(query_params=QueryDict(query_string="limit=-2")),
+                DEFAULT_FILTERS,
             )
 
     def test_indexers_courses_list_sorting_script(self):

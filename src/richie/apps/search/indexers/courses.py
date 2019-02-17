@@ -16,12 +16,7 @@ from djangocms_picture.models import Picture
 from richie.plugins.simple_text_ckeditor.models import SimpleText
 
 from ...courses.models import Course, CourseRun
-from ..defaults import (
-    COURSES_COVER_IMAGE_HEIGHT,
-    COURSES_COVER_IMAGE_WIDTH,
-    FILTERS_DYNAMIC,
-    FILTERS_HARDCODED,
-)
+from ..defaults import COURSES_COVER_IMAGE_HEIGHT, COURSES_COVER_IMAGE_WIDTH
 from ..exceptions import QueryFormatException
 from ..forms import CourseListForm
 from ..partial_mappings import MULTILINGUAL_TEXT
@@ -316,7 +311,7 @@ class CoursesIndexer:
 
     @classmethod
     # pylint: disable=R0912, R0914
-    def build_es_query(cls, request):
+    def build_es_query(cls, request, filters):
         """
         Build an ElasticSearch query and its related aggregations, to be consumed by the ES client
         in the Courses ViewSet
@@ -326,16 +321,10 @@ class CoursesIndexer:
         params_form_values = {
             k: v[0] if len(v) == 1 else v for k, v in request.query_params.lists()
         }
-        # Use QueryDict/MultiValueDict as a shortcut to make sure we get arrays for these three
-        # fields, which should be arrays even if their length is one
-        params_form_values["categories"] = request.query_params.getlist("categories")
-        params_form_values["languages"] = request.query_params.getlist("languages")
-        params_form_values["organizations"] = request.query_params.getlist(
-            "organizations"
-        )
-        for param_key in FILTERS_HARDCODED:
-            if hasattr(FILTERS_HARDCODED[param_key]["field"], "choices"):
-                params_form_values[param_key] = request.query_params.getlist(param_key)
+        # Use QueryDict/MultiValueDict as a shortcut to make sure we get arrays for our filters,
+        # which should be arrays even if their length is one
+        for filter_name in filters:
+            params_form_values[filter_name] = request.query_params.getlist(filter_name)
         # Instantiate the form to allow validation/cleaning
         params_form = CourseListForm(params_form_values)
 
@@ -375,13 +364,9 @@ class CoursesIndexer:
                     },
                 ]
 
-            # Dynamic filters are keyword lists that do not require special treatment
-            elif param in FILTERS_DYNAMIC:
-                # Add the relevant term search to our queries
-                queries = [
-                    *queries,
-                    {"key": param, "fragment": [{"terms": {param: value}}]},
-                ]
+            elif param in filters:
+                # Add the query fragments to the query
+                queries = queries + filters[param].get_query_fragment(value)
 
             # Search is a regular (multilingual) match query
             elif param == "query":
@@ -418,20 +403,6 @@ class CoursesIndexer:
                     },
                 ]
 
-            elif param in FILTERS_HARDCODED:
-                # Normalize all custom params to lists so we can factorize query building logic
-                if not isinstance(value, list):
-                    value = [value]
-                # Add the query fragments to the query
-                for choice in value:
-                    queries = [
-                        *queries,
-                        {
-                            "key": param,
-                            "fragment": FILTERS_HARDCODED[param]["choices"][choice],
-                        },
-                    ]
-
         # Default to a match_all query
         if not queries:
             query = {"match_all": {}}
@@ -445,59 +416,18 @@ class CoursesIndexer:
                 }
             }
 
-        # Prepare the filters from the settings to be used in our aggregations
-        filters_facets = {}
-        # Iterate over all filter keys & their possible choices
-        for filter_key in FILTERS_HARDCODED:
-            for choice in FILTERS_HARDCODED[filter_key]["choices"]:
-                # Create an aggregation for each filter/choice pair
-                filters_facets["{:s}@{:s}".format(filter_key, choice)] = {
-                    "filter": {
-                        "bool": {
-                            # Concatenate all the lists of active query filters with
-                            # the relevant choice filter
-                            "must": FILTERS_HARDCODED[filter_key]["choices"][choice]
-                            + [
-                                # queries => filter(kv_pair.fragment != filter_key)
-                                # => map(pluck("fragment")) => flatten()
-                                clause
-                                for kf_pair in queries
-                                for clause in kf_pair["fragment"]
-                                if kf_pair["key"] is not filter_key
-                            ]
-                        }
-                    }
-                }
-
         # Concatenate our hardcoded filters query fragments with organizations and categories terms
         # aggregations build on-the-fly
         aggs = {
             "all_courses": {
                 "global": {},
-                "aggregations": {
-                    **filters_facets,
-                    **{
-                        facet: {
-                            "filter": {
-                                "bool": {
-                                    # Concatenate all the lists of active query filters
-                                    # We don't use our own filter here as it's taken care of
-                                    # by the terms aggregation from ElasticSearch
-                                    "must": [
-                                        # queries => filter(kv_pair.fragment != filter_key)
-                                        # => map(pluck("fragment")) => flatten()
-                                        clause
-                                        for kf_pair in queries
-                                        for clause in kf_pair["fragment"]
-                                        if kf_pair["key"] is not facet
-                                    ]
-                                }
-                            },
-                            "aggregations": {facet: {"terms": {"field": facet}}},
-                        }
-                        for facet in FILTERS_DYNAMIC
-                    },
-                },
+                "aggregations": reduce(
+                    # Merge all the partial aggregations dicts together
+                    lambda acc, aggs_fragment: {**acc, **aggs_fragment},
+                    # Generate a partial aggregations dict (an aggs_fragment) for each filter
+                    [filter.get_aggs_fragment(queries) for filter in filters.values()],
+                    {},
+                ),
             }
         }
 

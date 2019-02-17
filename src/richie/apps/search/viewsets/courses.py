@@ -11,7 +11,7 @@ from elasticsearch.exceptions import NotFoundError
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
-from ..defaults import FILTERS_DYNAMIC, FILTERS_HARDCODED
+from ..defaults import FILTERS, FILTERS_DYNAMIC, FILTERS_HARDCODED
 from ..exceptions import QueryFormatException
 from ..utils.viewsets import AutocompleteMixin, ViewSetMetadata
 
@@ -32,8 +32,19 @@ class CoursesViewSet(AutocompleteMixin, ViewSet):
         it searches its index and returns a list of matching courses
         """
 
+        # Build the filters dict by instantiating all the active filters.
+        # We do this once for every request to avoid instantiating them at every use site. Also,
+        # it is not a good idea to build this during application bootstrap as category
+        # filter definitions will need to be dynamically generated just in time.
+        filters = {
+            class_params["name"]: import_string(class_path)(**class_params)
+            for class_path, class_params in FILTERS
+        }
+
         try:
-            limit, offset, query, aggs = self._meta.indexer.build_es_query(request)
+            limit, offset, query, aggs = self._meta.indexer.build_es_query(
+                request, filters
+            )
         except QueryFormatException as exc:
             # Return a 400 with error information if the query params are not as expected
             return Response(status=400, data={"errors": exc.args[0]})
