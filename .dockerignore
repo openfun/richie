@@ -30,4 +30,4 @@ sandbox/build
 sandbox/static/css
 
 # Font-end
-node_modules
+**/node_modules
