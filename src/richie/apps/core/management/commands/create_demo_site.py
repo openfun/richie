@@ -72,7 +72,7 @@ PAGE_INFOS = {
         "in_navigation": True,
         "kwargs": {
             "reverse_id": Organization.ROOT_REVERSE_ID,
-            "template": "richie/child_pages_list.html",
+            "template": "courses/cms/organization_list.html",
         },
     },
     "persons": {

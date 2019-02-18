@@ -1,0 +1,93 @@
+// Overridable & namespaced global variables
+$richie-org-list-title-margin: 0 !default;
+$richie-org-list-title-padding: 1rem !default;
+$richie-org-list-title-textalign: center !default;
+
+$richie-org-list-content-margin: 0 auto !default;
+$richie-org-list-content-padding: 1rem 0 !default;
+
+$richie-org-list-item-gutter: 0.625rem !default;
+$richie-org-list-item-border-hover: 1px solid $firebrick6 !default;
+
+$richie-org-list-item-title-fontsize: 0.81rem !default;
+$richie-org-list-item-title-fontcolor: $black !default;
+$richie-org-list-item-title-textalign: center !default;
+
+$richie-org-list-item-empty-fontcolor: $gray40;
+$richie-org-list-item-empty-textalign: center;
+
+
+.organization-list {
+  @include make-container();
+  @include make-container-max-widths();
+  padding-bottom: 1rem;
+  background: $richie-content-container-bg;
+
+  &__title {
+    margin: $richie-org-list-title-margin;
+    padding: $richie-org-list-title-padding;
+    text-align: $richie-org-list-title-textalign;
+  }
+
+  &__content {
+    display: flex;
+    margin: $richie-org-list-content-margin;
+    padding: $richie-org-list-content-padding;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    &__item{
+      $list-item-selector: &;
+      @include sv-flex(1, 0, calc(50% - #{$richie-org-list-item-gutter * 2}));
+      display: flex;
+      margin: $richie-org-list-item-gutter;
+      padding: 1.25rem;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-content: stretch;
+      border: 1px solid rgba($black, 0.125);
+      border-radius: 0.25rem;
+      @include media-breakpoint-up(md) {
+        @include sv-flex(1, 0, calc(25% - #{$richie-org-list-item-gutter * 2}));
+      }
+
+      &__logo{
+        @include sv-flex(1, 0, 100%);
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+
+        img{
+          @include sv-flex(0, 0, auto);
+          max-width: 100%;
+        }
+      }
+
+      &__title{
+        @include sv-flex(1, 0, 100%);
+        display: flex;
+        justify-content: center;
+        font-size: $richie-org-list-item-title-fontsize;
+        color: $richie-org-list-item-title-fontcolor;
+        text-align: $richie-org-list-item-title-textalign;
+      }
+
+      &:hover,
+      &:focus {
+        border: $richie-org-list-item-border-hover;
+        color: $richie-org-list-item-title-fontcolor;
+        cursor: pointer;
+      }
+
+      &--empty{
+        @include sv-flex(1, 0, 100%);
+        font-style: italic;
+        color: $richie-org-list-item-empty-fontcolor;
+        text-align: $richie-org-list-item-empty-textalign;
+        background: transparent;
+      }
+    }
+  }
+}
