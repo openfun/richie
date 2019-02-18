@@ -280,6 +280,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
     CMS_TEMPLATES = (
         ("courses/cms/course_detail.html", _("Course page")),
         ("courses/cms/course_run_detail.html", _("Course run page")),
+        ("courses/cms/organization_list.html", _("Organization list")),
         ("courses/cms/organization_detail.html", _("Organization page")),
         ("courses/cms/category_detail.html", _("Category page")),
         ("persons/cms/person_detail.html", _("Person page")),

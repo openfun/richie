@@ -1,0 +1,23 @@
+{% extends "richie/fullwidth.html" %}
+{% load cms_tags i18n %}
+
+{% block content %}
+<div class="organization-list">
+    <h1 class="organization-list__title">{{ current_page.get_title }}</h1>
+
+    <div class="organization-list__content">
+    {% for page in current_page.get_child_pages %}
+        <a class="organization-list__content__item" href="{{ page.get_absolute_url }}" title="{{ page.get_title }}" alt="{{ page.get_title }} {% trans 'logo' %}">
+            <div class="organization-list__content__item__logo">
+                {% with width=216 height=120 %}{% show_placeholder "logo" page %}{% endwith %}
+            </div>
+            <div class="organization-list__content__item__title">
+                {{ page.get_title }}
+            </div>
+        </a>
+    {% empty %}
+        <p class="organization-list__content__item--empty">{% trans "No organization yet" %}</p>
+    {% endfor %}
+    </div>
+</div>
+{% endblock content %}
