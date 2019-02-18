@@ -62,11 +62,15 @@ class PersonModelsTestCase(TestCase):
         The get_full_name method should return title, first name and last name separated by space.
         No SQL query should be generated.
         """
-        person = PersonFactory(
+        person1 = PersonFactory(
             first_name="Louise",
             last_name="Dupont",
             person_title__translation__title="Madam",
             person_title__translation__abbreviation="Mme",
         )
+        person2 = PersonFactory(
+            first_name="Jacques", last_name="Martin", person_title=None
+        )
         with self.assertNumQueries(1):
-            self.assertEqual(person.get_full_name(), "Madam Louise Dupont")
+            self.assertEqual(person1.get_full_name(), "Madam Louise Dupont")
+            self.assertEqual(person2.get_full_name(), "Jacques Martin")
