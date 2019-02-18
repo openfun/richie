@@ -110,8 +110,12 @@ class Person(BasePageExtension):
         """
         Return person's full name
         """
-        return "{person_title} {first_name} {last_name}".format(
-            person_title=self.person_title.title,
+        person_title = (
+            "{:s} ".format(self.person_title.title) if self.person_title else ""
+        )
+
+        return "{person_title}{first_name} {last_name}".format(
+            person_title=person_title,
             first_name=self.first_name,
             last_name=self.last_name,
         )
