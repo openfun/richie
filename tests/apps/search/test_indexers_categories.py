@@ -16,14 +16,14 @@ from richie.apps.search.indexers.categories import CategoriesIndexer
 
 class CategoriesIndexersTestCase(TestCase):
     """
-    Test the get_data_for_es() function on the category indexer, as well as our mapping,
+    Test the get_es_documents() function on the category indexer, as well as our mapping,
     and especially dynamic mapping shape in ES
     """
 
     @mock.patch.object(
         Picture, "img_src", new_callable=mock.PropertyMock, return_value="123.jpg"
     )
-    def test_indexers_categories_get_data_for_es(self, _mock_picture):
+    def test_indexers_categories_get_es_documents(self, _mock_picture):
         """
         Happy path: the data is fetched from the models properly formatted
         """
@@ -50,7 +50,7 @@ class CategoriesIndexersTestCase(TestCase):
         # The results were properly formatted and passed to the consumer
         self.assertEqual(
             list(
-                CategoriesIndexer.get_data_for_es(
+                CategoriesIndexer.get_es_documents(
                     index="some_index", action="some_action"
                 )
             ),

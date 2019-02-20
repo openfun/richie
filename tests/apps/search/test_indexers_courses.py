@@ -3,19 +3,15 @@ Tests for the course indexer
 """
 # pylint: disable=too-many-lines
 import json
-import uuid
 from types import SimpleNamespace
 from unittest import mock
 
-from django.conf import settings
 from django.http.request import QueryDict
 from django.test import TestCase
 
 import arrow
 from cms.api import add_plugin
 from djangocms_picture.models import Picture
-from elasticsearch.client import IndicesClient
-from elasticsearch.helpers import bulk
 
 from richie.apps.courses.factories import (
     CategoryFactory,
@@ -62,7 +58,7 @@ SIMPLE_NEW_FILTER = {
 
 class CoursesIndexersTestCase(TestCase):
     """
-    Test the get_data_for_es() function on the course indexer, as well as our mapping,
+    Test the get_es_documents() function on the course indexer, as well as our mapping,
     and especially dynamic mapping shape in ES
     """
 
@@ -83,13 +79,13 @@ class CoursesIndexersTestCase(TestCase):
         CourseRunFactory(page_parent=course.extended_object, should_publish=True)
 
         course_document = list(
-            CoursesIndexer.get_data_for_es(index="some_index", action="some_action")
+            CoursesIndexer.get_es_documents(index="some_index", action="some_action")
         )[0]
         self.assertEqual(
             course_document["organizations"],
             [
                 next(
-                    OrganizationsIndexer.get_data_for_es(
+                    OrganizationsIndexer.get_es_documents(
                         index="some_index", action="some_action"
                     )
                 )["_id"]
@@ -99,37 +95,28 @@ class CoursesIndexersTestCase(TestCase):
             course_document["categories"],
             [
                 next(
-                    CategoriesIndexer.get_data_for_es(
+                    CategoriesIndexer.get_es_documents(
                         index="some_index", action="some_action"
                     )
                 )["_id"]
             ],
         )
 
-    def test_indexers_courses_get_data_for_es_no_course_run(self):
+    def test_indexers_courses_get_es_documents_no_course_run(self):
         """
-        A course with no course run should not be indexed.
+        A course with no course run should still be indexed.
         """
-        course = CourseFactory(should_publish=True)
-        self.assertEqual(
-            list(
-                CoursesIndexer.get_data_for_es(index="some_index", action="some_action")
-            ),
-            [],
+        CourseFactory(should_publish=True)
+        indexed_courses = list(
+            CoursesIndexer.get_es_documents(index="some_index", action="some_action")
         )
-
-        CourseRunFactory(page_parent=course.extended_object, should_publish=True)
-        self.assertNotEqual(
-            list(
-                CoursesIndexer.get_data_for_es(index="some_index", action="some_action")
-            ),
-            [],
-        )
+        self.assertEqual(len(indexed_courses), 1)
+        self.assertEqual(indexed_courses[0]["course_runs"], [])
 
     @mock.patch.object(
         Picture, "img_src", new_callable=mock.PropertyMock, return_value="123.jpg"
     )
-    def test_indexers_courses_get_data_for_es(self, _mock_picture):
+    def test_indexers_courses_get_es_documents(self, _mock_picture):
         """
         Happy path: the data is retrieved from the models properly formatted
         """
@@ -180,7 +167,7 @@ class CoursesIndexersTestCase(TestCase):
             fill_cover=True,
             should_publish=True,
         )
-        course_runs = CourseRunFactory.create_batch(
+        CourseRunFactory.create_batch(
             2, page_parent=course.extended_object, should_publish=True
         )
 
@@ -196,6 +183,14 @@ class CoursesIndexersTestCase(TestCase):
 
         # The results were properly formatted and passed to the consumer
         expected_course = {
+            "_id": str(course.public_extension.extended_object_id),
+            "_index": "some_index",
+            "_op_type": "some_action",
+            "_type": "course",
+            "absolute_url": {
+                "en": "/en/an-english-course-title/",
+                "fr": "/fr/un-titre-cours-francais/",
+            },
             "categories": [
                 str(s.public_extension.extended_object_id) for s in published_categories
             ],
@@ -219,11 +214,22 @@ class CoursesIndexersTestCase(TestCase):
                     "français",
                 ],
             },
+            "course_runs": [
+                {
+                    "start": course_run.public_extension.start,
+                    "end": course_run.public_extension.end,
+                    "enrollment_start": course_run.public_extension.enrollment_start,
+                    "enrollment_end": course_run.public_extension.enrollment_end,
+                    "languages": course_run.public_extension.languages,
+                }
+                for course_run in course.get_course_runs()
+            ],
             "cover_image": {"en": "123.jpg", "fr": "123.jpg"},
             "description": {
                 "en": "english syllabus line 1. english syllabus line 2.",
                 "fr": "syllabus français ligne 1. syllabus français ligne 2.",
             },
+            "is_new": False,
             "organizations": [
                 str(main_organization.public_extension.extended_object_id),
                 str(other_published_organization.public_extension.extended_object_id),
@@ -240,37 +246,11 @@ class CoursesIndexersTestCase(TestCase):
             },
             "title": {"fr": "un titre cours français", "en": "an english course title"},
         }
-        self.assertEqual(
-            list(
-                CoursesIndexer.get_data_for_es(index="some_index", action="some_action")
-            ),
-            [
-                {
-                    **{
-                        "_id": str(cr.public_extension.extended_object_id),
-                        "_index": "some_index",
-                        "_op_type": "some_action",
-                        "_type": "course",
-                        "start": cr.public_extension.start,
-                        "end": cr.public_extension.end,
-                        "enrollment_start": cr.public_extension.enrollment_start,
-                        "enrollment_end": cr.public_extension.enrollment_end,
-                        "is_new": False,
-                        "languages": cr.public_extension.languages,
-                        "absolute_url": {
-                            "en": "/en/an-english-course-title/{:s}/".format(
-                                cr.extended_object.get_slug("en")
-                            ),
-                            "fr": "/fr/un-titre-cours-francais/{:s}/".format(
-                                cr.extended_object.get_slug("fr")
-                            ),
-                        },
-                    },
-                    **expected_course,
-                }
-                for cr in course_runs
-            ],
+        indexed_courses = list(
+            CoursesIndexer.get_es_documents(index="some_index", action="some_action")
         )
+        self.assertEqual(len(indexed_courses), 1)
+        self.assertEqual(indexed_courses[0], expected_course)
 
     def test_indexers_courses_format_es_object_for_api(self):
         """
@@ -280,15 +260,19 @@ class CoursesIndexersTestCase(TestCase):
             "_id": 93,
             "_source": {
                 "absolute_url": {"en": "campo-qui-format-do"},
-                "end": "2018-02-28T06:00:00Z",
-                "enrollment_end": "2018-01-31T06:00:00Z",
-                "enrollment_start": "2018-01-01T06:00:00Z",
-                "languages": ["en", "es"],
+                "course_runs": [
+                    {
+                        "end": "2018-02-28T06:00:00Z",
+                        "enrollment_end": "2018-01-31T06:00:00Z",
+                        "enrollment_start": "2018-01-01T06:00:00Z",
+                        "start": "2018-02-01T06:00:00Z",
+                        "languages": ["en", "es"],
+                    }
+                ],
                 "cover_image": {"en": "image.jpg"},
                 "organization_title": {"en": "campo qui format do"},
                 "organizations": [42, 84],
                 "description": {"en": "Nam aliquet, arcu at sagittis sollicitudin."},
-                "start": "2018-02-01T06:00:00Z",
                 "categories": [43, 86],
                 "title": {"en": "Duis eu arcu erat"},
             },
@@ -297,20 +281,9 @@ class CoursesIndexersTestCase(TestCase):
             CoursesIndexer.format_es_object_for_api(es_course, "en"),
             {
                 "id": 93,
-                "start": "2018-02-01T06:00:00Z",
-                "end": "2018-02-28T06:00:00Z",
-                "enrollment_end": "2018-01-31T06:00:00Z",
-                "enrollment_start": "2018-01-01T06:00:00Z",
                 "absolute_url": "campo-qui-format-do",
                 "cover_image": "image.jpg",
-                "languages": ["en", "es"],
                 "organizations": [42, 84],
-                "state": {
-                    "priority": 5,
-                    "cta": None,
-                    "text": "archived",
-                    "datetime": None,
-                },
                 "categories": [43, 86],
                 "title": "Duis eu arcu erat",
             },
@@ -1033,145 +1006,3 @@ class CoursesIndexersTestCase(TestCase):
                 SimpleNamespace(query_params=QueryDict(query_string="limit=-2")),
                 DEFAULT_FILTERS,
             )
-
-    def test_indexers_courses_list_sorting_script(self):
-        """
-        Make sure our courses list sorting script (Lucene expression) is working as intended
-        """
-        # Set up the index we'll use to run our test
-        indices_client = IndicesClient(client=settings.ES_CLIENT)
-        # Delete any existing indexes so we get a clean slate
-        indices_client.delete(index="_all")
-        # Create an index we'll use to test the ES features
-        indices_client.create(index="test_courses_list_sorting_index")
-        # Use the default courses mapping from the Indexer for briefness' sake
-        indices_client.put_mapping(
-            body=CoursesIndexer.mapping,
-            doc_type="courses",
-            index="test_courses_list_sorting_index",
-        )
-
-        settings.ES_CLIENT.put_script(
-            id="sort_list", body=CoursesIndexer.scripts["sort_list"]
-        )
-
-        # Add our sample of courses to the test index we just created
-        # NB: we need to add 8 courses because we're splitting them into 4 buckets and
-        # then using a specific ordering within each of these
-        bulk(
-            # NB: courses order & IDs have been voluntarily shuffled to ensure we don't
-            # accidentally end up with the correct ordering if our sorting does not occur at all.
-            actions=[
-                {
-                    # N. 3: not started yet, first upcoming course to start
-                    "_id": uuid.uuid4(),
-                    "_index": "test_courses_list_sorting_index",
-                    "_op_type": "create",
-                    "_type": "courses",
-                    "control_id": "4",
-                    "end": arrow.utcnow().shift(days=+150).isoformat(),
-                    "enrollment_end": arrow.utcnow().shift(days=+30).isoformat(),
-                    "start": arrow.utcnow().shift(days=+15).isoformat(),
-                },
-                {
-                    # N. 1: ongoing course, next open course to end enrollment
-                    "_id": uuid.uuid4(),
-                    "_index": "test_courses_list_sorting_index",
-                    "_op_type": "create",
-                    "_type": "courses",
-                    "control_id": "3",
-                    "end": arrow.utcnow().shift(days=+120).isoformat(),
-                    "enrollment_end": arrow.utcnow().shift(days=+5).isoformat(),
-                    "start": arrow.utcnow().shift(days=-5).isoformat(),
-                },
-                {
-                    # N. 7: the other already finished course; it finished more recently than N. 8
-                    "_id": uuid.uuid4(),
-                    "_index": "test_courses_list_sorting_index",
-                    "_op_type": "create",
-                    "_type": "courses",
-                    "control_id": "1",
-                    "end": arrow.utcnow().shift(days=-15).isoformat(),
-                    "enrollment_end": arrow.utcnow().shift(days=-60).isoformat(),
-                    "start": arrow.utcnow().shift(days=-80).isoformat(),
-                },
-                {
-                    # N. 6: ongoing course, enrollment has been over for the longest
-                    "_id": uuid.uuid4(),
-                    "_index": "test_courses_list_sorting_index",
-                    "_op_type": "create",
-                    "_type": "courses",
-                    "control_id": "7",
-                    "end": arrow.utcnow().shift(days=+30).isoformat(),
-                    "enrollment_end": arrow.utcnow().shift(days=-45).isoformat(),
-                    "start": arrow.utcnow().shift(days=-75).isoformat(),
-                },
-                {
-                    # N. 8: the course that has been over for the longest
-                    "_id": uuid.uuid4(),
-                    "_index": "test_courses_list_sorting_index",
-                    "_op_type": "create",
-                    "_type": "courses",
-                    "control_id": "5",
-                    "end": arrow.utcnow().shift(days=-30).isoformat(),
-                    "enrollment_end": arrow.utcnow().shift(days=-90).isoformat(),
-                    "start": arrow.utcnow().shift(days=-120).isoformat(),
-                },
-                {
-                    # N. 4: not started yet, will start after the other upcoming course
-                    "_id": uuid.uuid4(),
-                    "_index": "test_courses_list_sorting_index",
-                    "_op_type": "create",
-                    "_type": "courses",
-                    "control_id": "8",
-                    "end": arrow.utcnow().shift(days=+120).isoformat(),
-                    "enrollment_end": arrow.utcnow().shift(days=+60).isoformat(),
-                    "start": arrow.utcnow().shift(days=+45).isoformat(),
-                },
-                {
-                    # N. 2: ongoing course, can still be enrolled in for longer than N. 1
-                    "_id": uuid.uuid4(),
-                    "_index": "test_courses_list_sorting_index",
-                    "_op_type": "create",
-                    "_type": "courses",
-                    "control_id": "6",
-                    "end": arrow.utcnow().shift(days=+105).isoformat(),
-                    "enrollment_end": arrow.utcnow().shift(days=+15).isoformat(),
-                    "start": arrow.utcnow().shift(days=-15).isoformat(),
-                },
-                {
-                    # N. 5: ongoing course, most recent to end enrollment
-                    "_id": uuid.uuid4(),
-                    "_index": "test_courses_list_sorting_index",
-                    "_op_type": "create",
-                    "_type": "courses",
-                    "control_id": "2",
-                    "end": arrow.utcnow().shift(days=+15).isoformat(),
-                    "enrollment_end": arrow.utcnow().shift(days=-30).isoformat(),
-                    "start": arrow.utcnow().shift(days=-90).isoformat(),
-                },
-            ],
-            chunk_size=settings.ES_CHUNK_SIZE,
-            client=settings.ES_CLIENT,
-        )
-
-        indices_client.refresh()
-
-        # Comparing lists of ids is enough to ensure proper ordering, as list comprehensions
-        # explicitly preserve order
-        self.assertEqual(
-            [
-                es_course["_source"]["control_id"]
-                for es_course in settings.ES_CLIENT.search(
-                    index="test_courses_list_sorting_index",
-                    doc_type="courses",
-                    body={
-                        "query": {"match_all": {}},
-                        "sort": CoursesIndexer.get_list_sorting_script(),
-                    },
-                    from_=0,
-                    size=10,
-                )["hits"]["hits"]
-            ],
-            ["3", "6", "4", "8", "2", "7", "1", "5"],
-        )

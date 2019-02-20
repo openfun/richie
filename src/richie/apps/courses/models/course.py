@@ -304,7 +304,6 @@ class CourseRun(BasePageExtension):
           3: a run is future and no more open for enrollment > "closed": {None}
           4: a run is on-going but closed for enrollment > "on going": {None}
           5: there's a finished run in the past > "archived": {None}
-          6: there are no runs at all > "coming soon": {None}
         """
         now = timezone.now()
         if start < now:

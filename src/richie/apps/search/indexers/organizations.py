@@ -47,7 +47,7 @@ class OrganizationsIndexer:
     display_fields = ["absolute_url", "logo", "title.*"]
 
     @classmethod
-    def get_data_for_es(cls, index, action):
+    def get_es_documents(cls, index, action):
         """
         Load all the organizations from the Organization model and format them for the
         ElasticSearch index.

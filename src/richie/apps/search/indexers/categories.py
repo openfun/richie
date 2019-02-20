@@ -57,7 +57,7 @@ class CategoriesIndexer:
     ]
 
     @classmethod
-    def get_data_for_es(cls, index, action):
+    def get_es_documents(cls, index, action):
         """
         Load all the categories from the Category model and format them for the
         ElasticSearch index.

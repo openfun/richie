@@ -16,14 +16,14 @@ from richie.apps.search.indexers.organizations import OrganizationsIndexer
 
 class OrganizationsIndexersTestCase(TestCase):
     """
-    Test the get_data_for_es() function on the organization indexer, as well as our mapping,
+    Test the get_es_documents() function on the organization indexer, as well as our mapping,
     and especially dynamic mapping shape in ES
     """
 
     @mock.patch.object(
         Picture, "img_src", new_callable=mock.PropertyMock, return_value="123.jpg"
     )
-    def test_indexers_organizations_get_data_for_es(self, _mock_picture):
+    def test_indexers_organizations_get_es_documents(self, _mock_picture):
         """
         Happy path: organization data is fetched from the models properly formatted
         """
@@ -56,7 +56,7 @@ class OrganizationsIndexersTestCase(TestCase):
         # The results were properly formatted and passed to the consumer
         self.assertEqual(
             list(
-                OrganizationsIndexer.get_data_for_es(
+                OrganizationsIndexer.get_es_documents(
                     index="some_index", action="some_action"
                 )
             ),
