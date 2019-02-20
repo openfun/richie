@@ -78,7 +78,7 @@ class FilterDefinitionTestCase(TestCase):
             human_name="Disponibilité",
             choices=[
                 ("coming_soon", "Coming soon", [{"is_coming_soon": True}]),
-                ("current", "Current", [{"is_current": True}]),
+                ("current", "Current", [{"is_ongoing": True}]),
                 ("open", "Open for enrollment", [{"is_open": True}]),
             ],
         )
@@ -90,7 +90,7 @@ class FilterDefinitionTestCase(TestCase):
                     "filter": {"bool": {"must": [{"is_coming_soon": True}]}}
                 },
                 "availability@current": {
-                    "filter": {"bool": {"must": [{"is_current": True}]}}
+                    "filter": {"bool": {"must": [{"is_ongoing": True}]}}
                 },
                 "availability@open": {
                     "filter": {"bool": {"must": [{"is_open": True}]}}
@@ -125,7 +125,7 @@ class FilterDefinitionTestCase(TestCase):
                     "filter": {
                         "bool": {
                             "must": [
-                                {"is_current": True},
+                                {"is_ongoing": True},
                                 {"terms": {"categories": [42, 84]}},
                                 {"is_new": True},
                             ]
@@ -154,7 +154,7 @@ class FilterDefinitionTestCase(TestCase):
                         "fragment": [{"terms": {"categories": [42, 84]}}],
                     },
                     {"key": "new", "fragment": [{"is_new": True}]},
-                    {"key": "availability", "fragment": [{"is_current": True}]},
+                    {"key": "availability", "fragment": [{"is_ongoing": True}]},
                 ]
             ),
             {
@@ -173,7 +173,7 @@ class FilterDefinitionTestCase(TestCase):
                     "filter": {
                         "bool": {
                             "must": [
-                                {"is_current": True},
+                                {"is_ongoing": True},
                                 {"terms": {"categories": [42, 84]}},
                                 {"is_new": True},
                             ]
@@ -204,7 +204,7 @@ class FilterDefinitionTestCase(TestCase):
             human_name="Disponibilité",
             choices=[
                 ("coming_soon", "Coming soon", [{"is_coming_soon": True}]),
-                ("current", "Current", [{"is_current": True}]),
+                ("current", "Current", [{"is_ongoing": True}]),
                 ("open", "Open for enrollment", [{"is_open": True}]),
             ],
         )

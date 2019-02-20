@@ -41,7 +41,7 @@ DEFAULT_FILTERS = {
         human_name="availability",
         choices=[
             (choice, choice, [{"term": {"availability": choice}}])
-            for choice in ["coming_soon", "current"]
+            for choice in ["coming_soon", "ongoing"]
         ],
     ),
     "categories": FilterDefinitionTerms(name="categories", human_name="categories"),
@@ -343,10 +343,10 @@ class CoursesIndexersTestCase(TestCase):
                                     }
                                 }
                             },
-                            "availability@current": {
+                            "availability@ongoing": {
                                 "filter": {
                                     "bool": {
-                                        "must": [{"term": {"availability": "current"}}]
+                                        "must": [{"term": {"availability": "ongoing"}}]
                                     }
                                 }
                             },
@@ -428,11 +428,11 @@ class CoursesIndexersTestCase(TestCase):
                                     }
                                 }
                             },
-                            "availability@current": {
+                            "availability@ongoing": {
                                 "filter": {
                                     "bool": {
                                         "must": [
-                                            {"term": {"availability": "current"}},
+                                            {"term": {"availability": "ongoing"}},
                                             multi_match,
                                         ]
                                     }
@@ -495,11 +495,11 @@ class CoursesIndexersTestCase(TestCase):
                                     }
                                 }
                             },
-                            "availability@current": {
+                            "availability@ongoing": {
                                 "filter": {
                                     "bool": {
                                         "must": [
-                                            {"term": {"availability": "current"}},
+                                            {"term": {"availability": "ongoing"}},
                                             terms_organizations,
                                         ]
                                     }
@@ -564,11 +564,11 @@ class CoursesIndexersTestCase(TestCase):
                                     }
                                 }
                             },
-                            "availability@current": {
+                            "availability@ongoing": {
                                 "filter": {
                                     "bool": {
                                         "must": [
-                                            {"term": {"availability": "current"}},
+                                            {"term": {"availability": "ongoing"}},
                                             term_organization,
                                         ]
                                     }
@@ -653,11 +653,11 @@ class CoursesIndexersTestCase(TestCase):
                                     }
                                 }
                             },
-                            "availability@current": {
+                            "availability@ongoing": {
                                 "filter": {
                                     "bool": {
                                         "must": [
-                                            {"term": {"availability": "current"}},
+                                            {"term": {"availability": "ongoing"}},
                                             range_end,
                                             range_start,
                                         ]
@@ -721,10 +721,10 @@ class CoursesIndexersTestCase(TestCase):
                                     }
                                 }
                             },
-                            "availability@current": {
+                            "availability@ongoing": {
                                 "filter": {
                                     "bool": {
-                                        "must": [{"term": {"availability": "current"}}]
+                                        "must": [{"term": {"availability": "ongoing"}}]
                                     }
                                 }
                             },
@@ -793,13 +793,13 @@ class CoursesIndexersTestCase(TestCase):
         request = SimpleNamespace(
             query_params=QueryDict(
                 query_string="categories=42&categories=84&query=these%20phrase%20terms&limit=2&"
-                + "languages=fr&availability=current&"
+                + "languages=fr&availability=ongoing&"
                 + "start={start}&end={end}".format(start=start, end=end)
             )
         )
 
         # Search fragments that are repeated in the query
-        availability = {"term": {"availability": "current"}}
+        availability = {"term": {"availability": "ongoing"}}
         multi_match = {
             "bool": {
                 "should": [
@@ -877,7 +877,7 @@ class CoursesIndexersTestCase(TestCase):
                                     }
                                 }
                             },
-                            "availability@current": {
+                            "availability@ongoing": {
                                 "filter": {
                                     "bool": {
                                         "must": [
@@ -991,10 +991,10 @@ class CoursesIndexersTestCase(TestCase):
                                     }
                                 }
                             },
-                            "availability@current": {
+                            "availability@ongoing": {
                                 "filter": {
                                     "bool": {
-                                        "must": [{"term": {"availability": "current"}}]
+                                        "must": [{"term": {"availability": "ongoing"}}]
                                     }
                                 }
                             },
