@@ -50,8 +50,8 @@ FILTERS_DEFAULT = [
                     ],
                 ),
                 (
-                    "current",
-                    _("Current session"),
+                    "ongoing",
+                    _("On-going session"),
                     [
                         {"range": {"start": {"lte": arrow.utcnow().datetime}}},
                         {"range": {"end": {"gte": arrow.utcnow().datetime}}},

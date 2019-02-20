@@ -87,7 +87,7 @@ class CoursesViewsetsTestCase(TestCase):
                     "human_name": "Availability",
                     "choices": [
                         ("coming_soon", "Coming soon", [{"is_coming_soon": True}]),
-                        ("current", "Current session", [{"is_current": True}]),
+                        ("ongoing", "On-going", [{"is_ongoing": True}]),
                         ("open", "Open for enrollment", [{"is_open": True}]),
                     ],
                 },
@@ -117,7 +117,7 @@ class CoursesViewsetsTestCase(TestCase):
                     "aggregations": {
                         "all_courses": {
                             "availability@coming_soon": {"doc_count": 8},
-                            "availability@current": {"doc_count": 42},
+                            "availability@ongoing": {"doc_count": 42},
                             "availability@open": {"doc_count": 59},
                             "organizations": {
                                 "organizations": {
@@ -158,7 +158,11 @@ class CoursesViewsetsTestCase(TestCase):
                 "meta": {"count": 2, "offset": 77, "total_count": 35},
                 "objects": ["Course #523", "Course #861"],
                 "facets": {
-                    "availability": {"coming_soon": 8, "current": 42, "open": 59},
+                    "availability": {
+                        "coming_soon": 8,
+                        "ongoing": 42,
+                        "open": 59,
+                    },
                     "organizations": {"11": 17, "21": 19},
                 },
                 "filters": {
@@ -172,11 +176,7 @@ class CoursesViewsetsTestCase(TestCase):
                                 "human_name": "Coming soon",
                                 "key": "coming_soon",
                             },
-                            {
-                                "count": 42,
-                                "human_name": "Current session",
-                                "key": "current",
-                            },
+                            {"count": 42, "human_name": "On-going", "key": "ongoing"},
                             {
                                 "count": 59,
                                 "human_name": "Open for enrollment",
