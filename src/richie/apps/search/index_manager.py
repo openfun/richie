@@ -49,7 +49,7 @@ def perform_create_index(indexable, logger):
 
     # Populate the new index with data provided from our indexable class
     bulk(
-        actions=indexable.get_data_for_es(new_index, "create"),
+        actions=indexable.get_es_documents(new_index, "create"),
         chunk_size=settings.ES_CHUNK_SIZE,
         client=settings.ES_CLIENT,
         stats_only=True,

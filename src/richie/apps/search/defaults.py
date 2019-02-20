@@ -3,9 +3,8 @@ Import custom settings and set up defaults for values the Search app needs
 """
 from django.conf import settings
 from django.forms import MultipleChoiceField
+from django.utils import timezone
 from django.utils.translation import gettext as _
-
-import arrow
 
 COURSES_COVER_IMAGE_WIDTH = getattr(settings, "COURSES_COVER_IMAGE_WIDTH", 216)
 COURSES_COVER_IMAGE_HEIGHT = getattr(settings, "COURSES_COVER_IMAGE_HEIGHT", 216)
@@ -40,11 +39,21 @@ FILTERS_DEFAULT = [
                     _("Coming soon"),
                     [
                         {
-                            "range": {
-                                "start": {
-                                    "gte": arrow.utcnow().datetime,
-                                    "lte": arrow.utcnow().shift(weeks=+12).datetime,
-                                }
+                            "nested": {
+                                "path": "course_runs",
+                                "query": {
+                                    "bool": {
+                                        "must": [
+                                            {
+                                                "range": {
+                                                    "course_runs.start": {
+                                                        "gte": timezone.now()
+                                                    }
+                                                }
+                                            }
+                                        ]
+                                    }
+                                },
                             }
                         }
                     ],
@@ -53,22 +62,78 @@ FILTERS_DEFAULT = [
                     "ongoing",
                     _("On-going session"),
                     [
-                        {"range": {"start": {"lte": arrow.utcnow().datetime}}},
-                        {"range": {"end": {"gte": arrow.utcnow().datetime}}},
                         {
-                            "range": {
-                                "enrollment_start": {"lte": arrow.utcnow().datetime}
+                            "nested": {
+                                "path": "course_runs",
+                                "query": {
+                                    "bool": {
+                                        "must": [
+                                            {
+                                                "range": {
+                                                    "course_runs.start": {
+                                                        "lte": timezone.now()
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "range": {
+                                                    "course_runs.end": {
+                                                        "gte": timezone.now()
+                                                    }
+                                                }
+                                            },
+                                        ]
+                                    }
+                                },
                             }
-                        },
-                        {"range": {"enrollment_end": {"gte": arrow.utcnow().datetime}}},
+                        }
                     ],
                 ),
                 (
                     "open",
                     _("Open for enrollment"),
                     [
-                        {"range": {"start": {"lte": arrow.utcnow().datetime}}},
-                        {"range": {"end": {"gte": arrow.utcnow().datetime}}},
+                        {
+                            "nested": {
+                                "path": "course_runs",
+                                "query": {
+                                    "bool": {
+                                        "must": [
+                                            {
+                                                "range": {
+                                                    "course_runs.enrollment_start": {
+                                                        "lte": timezone.now()
+                                                    }
+                                                }
+                                            },
+                                            {
+                                                "range": {
+                                                    "course_runs.enrollment_end": {
+                                                        "gte": timezone.now()
+                                                    }
+                                                }
+                                            },
+                                        ]
+                                    }
+                                },
+                            }
+                        }
+                    ],
+                ),
+                (
+                    "archived",
+                    _("Archived"),
+                    [
+                        {
+                            "nested": {
+                                "path": "course_runs",
+                                "query": {
+                                    "range": {
+                                        "course_runs.end": {"lte": timezone.now()}
+                                    }
+                                },
+                            }
+                        }
                     ],
                 ),
             ],

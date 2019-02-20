@@ -9,13 +9,12 @@ from django.conf import settings
 from django.db.models import Prefetch
 
 import arrow
-import dateutil.parser
 from cms.models import Title
 from djangocms_picture.models import Picture
 
 from richie.plugins.simple_text_ckeditor.models import SimpleText
 
-from ...courses.models import Course, CourseRun
+from ...courses.models import Course
 from ..defaults import COURSES_COVER_IMAGE_HEIGHT, COURSES_COVER_IMAGE_WIDTH
 from ..exceptions import QueryFormatException
 from ..forms import CourseListForm
@@ -35,14 +34,19 @@ class CoursesIndexer:
     mapping = {
         "dynamic_templates": MULTILINGUAL_TEXT,
         "properties": {
-            # Dates
-            "start": {"type": "date"},
-            "end": {"type": "date"},
-            "enrollment_start": {"type": "date"},
-            "enrollment_end": {"type": "date"},
+            "course_runs": {
+                "type": "nested",
+                "properties": {
+                    "id": {"type": "keyword"},
+                    "start": {"type": "date"},
+                    "end": {"type": "date"},
+                    "enrollment_start": {"type": "date"},
+                    "enrollment_end": {"type": "date"},
+                    "languages": {"type": "keyword"},
+                },
+            },
             # Keywords
             "categories": {"type": "keyword"},
-            "languages": {"type": "keyword"},
             "organizations": {"type": "keyword"},
             # Searchable
             **{
@@ -58,15 +62,10 @@ class CoursesIndexer:
         },
     }
     display_fields = [
-        "start",
-        "end",
-        "enrollment_start",
-        "enrollment_end",
         "absolute_url",
-        "cover_image",
-        "languages",
-        "organizations",
         "categories",
+        "cover_image",
+        "organizations",
         "title.*",
     ]
 
@@ -79,33 +78,49 @@ class CoursesIndexer:
     fulltext_search_filter_matching_boost = 0.05
 
     scripts = {
-        # The ordering process first splits the courses into four groups, with further ordering
-        # inside each one of those groups.
+        # The ordering process first splits the courses into 7 buckets (Bucket 0 to Bucket 6),
+        # with further ordering inside each one of those buckets.
         #
         # Here's a schematic representation that shows the ordering factor for each
         # course (to be used in ascending order later on) :
         #
-        #          TOP OF THE LIST
-        #          ———————————————
-        # ----- NOW (current timestamp) -----
-        #         Courses in bucket 1
+        #                   TOP OF THE LIST
+        #                   ———————————————
+        # -------------- NOW (current timestamp) --------------
+        #     Bucket 0: Courses that are ongoing and open
+        #      sorted by ascending end of enrollment date
+        #         < 1 x datetime.MAXYEAR distance >
         #
-        #  < ~1 x datetime.MAXYEAR distance >
+        # --------------   1 x datetime.MAXYEAR  --------------
+        #      Bucket 1: Courses that are future and open
+        #          sorted by ascending start date
+        #         < 2 x datetime.MAXYEAR distance >
         #
-        # ------ ~1 x datetime.MAXYEAR ------
-        #         Courses in bucket 2
+        # --------------   2 x datetime.MAXYEAR  --------------
+        #  Bucket 2: Courses that are future but not yet open
+        #          sorted by ascending start date
+        #         < 3 x datetime.MAXYEAR distance >
         #
-        #  < ~1 x datetime.MAXYEAR distance >
+        # --------------   3 x datetime.MAXYEAR  --------------
+        # Bucket 3: Courses that are future but already closed
+        #      sorted by descending end of enrollment date
+        #         < 4 x datetime.MAXYEAR distance >
         #
-        #         Courses in bucket 3
-        # ------ ~2 x datetime.MAXYEAR ------
+        # --------------   4 x datetime.MAXYEAR  --------------
+        #     Bucket 4: Courses that are ongoing by closed
+        #      sorted by descending end of enrollment date
+        #         < 5 x datetime.MAXYEAR distance >
         #
-        #  < ~1 x datetime.MAXYEAR distance >
+        # --------------   5 x datetime.MAXYEAR  --------------
+        #     Bucket 5: Courses that are ongoing and open
+        #           sorted by descending end date
+        #         < 6 x datetime.MAXYEAR distance >
         #
-        #         Courses in bucket 4
-        # ------ ~3 x datetime.MAXYEAR ------
-        #          ———————————————
-        #          END OF THE LIST
+        # --------------   6 x datetime.MAXYEAR  --------------
+        #     Bucket 6: Courses that have no course runs
+        #                No specific ordering
+        #                   ———————————————
+        #                   END OF THE LIST
         #
         # For reference MAXYEAR's timestamp is more than 2 orders of magnitude larger than
         # this year's timestamp (2018).
@@ -114,41 +129,186 @@ class CoursesIndexer:
         # order) or substracting them (descending order).
         "sort_list": {
             "script": {
-                "lang": "expression",
-                "source": (
-                    # 4- Courses that have ended.
-                    # Ordered by descending end datetime. The course that has finished last
-                    # is displayed first.
-                    "doc['end'].value < ms_since_epoch ? "
-                    "3 * max_date - doc['end'].value : "
-                    # 3- Courses that have not ended but can no longer be enrolled in.
-                    # Ordered by descending end of enrollment datetime. The course for which
-                    # enrollment has ended last is displayed first.
-                    "doc['enrollment_end'].value < ms_since_epoch ? "
-                    "2 * max_date - doc['enrollment_end'].value : "
-                    # 2- Courses that have not started yet.
-                    # Ordered by starting datetime. The next course to start is displayed first.
-                    "ms_since_epoch < doc['start'].value ? "
-                    "max_date + doc['start'].value : "
-                    # 1- Courses that are currently open and can be enrolled in.
-                    # Ordered by ascending end of enrollment datetime. The next course to end
-                    # enrollment is displayed first.
-                    "doc['enrollment_end'].value"
-                ),
+                "lang": "painless",
+                "source": """
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
+                        "yyyy-MM-dd'T'HH:mm:ss[.SSSSSS]XXXXX"
+                    );
+                    int best_state = 6;
+                    int best_index = 0;
+                    long start, end, enrollment_start, enrollment_end;
+
+                    for (int i = 0; i < params._source.course_runs.length; ++i) {
+                        start = ZonedDateTime.parse(
+                            params._source.course_runs[i]['start'], formatter
+                        ).toInstant().toEpochMilli();
+                        end = ZonedDateTime.parse(
+                            params._source.course_runs[i]['end'], formatter
+                        ).toInstant().toEpochMilli();
+                        enrollment_start = ZonedDateTime.parse(
+                            params._source.course_runs[i]['enrollment_start'], formatter
+                        ).toInstant().toEpochMilli();
+                        enrollment_end = ZonedDateTime.parse(
+                            params._source.course_runs[i]['enrollment_end'], formatter
+                        ).toInstant().toEpochMilli();
+
+                        if (start <  params.ms_since_epoch) {
+                            if (end >  params.ms_since_epoch && params.states.contains(0)) {
+                                if (enrollment_end >  params.ms_since_epoch) {
+                                    // ongoing open
+                                    best_state = 0;
+                                    best_index = i;
+                                    // We already found the best... let's break to save iterations
+                                    break;
+                                }
+                                else {
+                                    // ongoing closed
+                                    if (best_state > 4 && params.states.contains(4)) {
+                                        best_state = 4;
+                                        best_index = i;
+                                    }
+                                }
+                            }
+                            else {
+                                // archived
+                                if (best_state > 5 && params.states.contains(5)) {
+                                    best_state = 5;
+                                    best_index = i;
+                                    // Course runs are ordered by `end` date so we know all
+                                    // remaining course runs will also be archived.
+                                    // Let's break to save iterations:
+                                    break;
+                                }
+                            }
+                        }
+                        else if (enrollment_start >  params.ms_since_epoch) {
+                            // future not yet open
+                            if (best_state > 2 && params.states.contains(2)) {
+                                best_state = 2;
+                                best_index = i;
+                            }
+                        }
+                        else if (enrollment_end > params.ms_since_epoch) {
+                            // future open
+                            if (best_state > 1 && params.states.contains(1)) {
+                                best_state = 1;
+                                best_index = i;
+                            }
+                        }
+                        else {
+                            // future already closed
+                            if (best_state > 3 && params.states.contains(3)) {
+                                best_state = 3;
+                                best_index = i;
+                            }
+                        }
+                    }
+
+                    if (best_state == 0) {
+                        // The course is ongoing and open
+                        // Ordered by ascending end of enrollment datetime. The next course to
+                        // end enrollment is displayed first.
+                        return ZonedDateTime.parse(
+                            params._source.course_runs[best_index]['enrollment_end'], formatter
+                        ).toInstant().toEpochMilli();
+                    }
+                    else if (best_state == 1) {
+                        // The course is future and open
+                        // Ordered by starting datetime. The next course to start is displayed
+                        // first.
+                        return params.max_date + ZonedDateTime.parse(
+                            params._source.course_runs[best_index]['start'], formatter
+                        ).toInstant().toEpochMilli();
+                    }
+                    else if (best_state == 2) {
+                        // The course is future but not yet open for enrollment
+                        // Ordered by starting datetime. The next course to start is displayed
+                        // first.
+                        return 2 * params.max_date + ZonedDateTime.parse(
+                            params._source.course_runs[best_index]['start'], formatter
+                        ).toInstant().toEpochMilli();
+                    }
+                    else if (best_state == 3) {
+                        // The course is future but already closed for enrollment
+                        // Ordered by starting datetime. The next course to start is displayed
+                        // first.
+                        return 3 * params.max_date - ZonedDateTime.parse(
+                            params._source.course_runs[best_index]['enrollment_end'], formatter
+                        ).toInstant().toEpochMilli();
+                    }
+                    else if (best_state == 4) {
+                        // The course is ongoing and closed for enrollment
+                        // Ordered by descending end of enrollment datetime. The course for which
+                        // enrollment has ended last is displayed first.
+                        return 4 * params.max_date - ZonedDateTime.parse(
+                            params._source.course_runs[best_index]['enrollment_end'], formatter
+                        ).toInstant().toEpochMilli();
+                    }
+                    else if (best_state == 5) {
+                        // The course is archived
+                        // Ordered by descending end datetime. The course that has finished last
+                        // is displayed first.
+                        return 5 * params.max_date - ZonedDateTime.parse(
+                            params._source.course_runs[best_index]['end'], formatter
+                        ).toInstant().toEpochMilli();
+                    }
+                    // The course has no course runs
+                    return 6 * params.max_date;
+                """,
             }
         }
     }
 
     @classmethod
-    def get_data_for_es(cls, index, action):
+    def get_es_document_for_course(cls, course, index, action):
         """
-        Load all the course runs from the Course model and format them for the ElasticSearch index
+        Build an Elasticsearch document from the course instance.
         """
-        for course in (
-            Course.objects.filter(
-                extended_object__publisher_is_draft=False,
-                extended_object__title_set__published=True,
+        # Prepare published titles
+        titles = {
+            t.language: t.title
+            for t in Title.objects.filter(page=course.extended_object, published=True)
+        }
+
+        # Prepare cover images
+        cover_images = {}
+        for cover_image in Picture.objects.filter(
+            cmsplugin_ptr__placeholder__page=course.extended_object,
+            cmsplugin_ptr__placeholder__slot="course_cover",
+        ):
+            # Force the image format before computing it
+            cover_image.use_no_cropping = False
+            cover_image.width = COURSES_COVER_IMAGE_WIDTH
+            cover_image.height = COURSES_COVER_IMAGE_HEIGHT
+            cover_images[cover_image.cmsplugin_ptr.language] = cover_image.img_src
+
+        # Prepare syllabus texts
+        syllabus_texts = defaultdict(list)
+        for simple_text in SimpleText.objects.filter(
+            cmsplugin_ptr__placeholder__page=course.extended_object,
+            cmsplugin_ptr__placeholder__slot="course_syllabus",
+        ):
+            syllabus_texts[simple_text.cmsplugin_ptr.language].append(simple_text.body)
+
+        # Prepare categories, making sure we get title information for categories
+        # in the same request
+        category_pages = (
+            course.get_root_to_leaf_category_pages()
+            .prefetch_related(
+                Prefetch(
+                    "title_set",
+                    to_attr="published_titles",
+                    queryset=Title.objects.filter(published=True),
+                )
             )
+            .only("pk")
+            .distinct()
+        )
+
+        # Prepare organizations, making sure we get title information for organizations
+        # in the same request
+        organizations = (
+            course.get_organizations()
             .prefetch_related(
                 Prefetch(
                     "extended_object__title_set",
@@ -156,127 +316,83 @@ class CoursesIndexer:
                     queryset=Title.objects.filter(published=True),
                 )
             )
+            .only("extended_object")
             .distinct()
-        ):
-            # Prepare published titles
-            titles = {
-                t.language: t.title for t in course.extended_object.published_titles
-            }
+        )
 
-            # Prepare cover images
-            cover_images = {}
-            for cover_image in Picture.objects.filter(
-                cmsplugin_ptr__placeholder__page=course.extended_object,
-                cmsplugin_ptr__placeholder__slot="course_cover",
-            ):
-                # Force the image format before computing it
-                cover_image.use_no_cropping = False
-                cover_image.width = COURSES_COVER_IMAGE_WIDTH
-                cover_image.height = COURSES_COVER_IMAGE_HEIGHT
-                cover_images[cover_image.cmsplugin_ptr.language] = cover_image.img_src
+        # Prepare course runs
+        # Ordering them by their `end` date is important to optimize sorting and other
+        # computations that require looping on the course runs
+        course_runs = list(
+            course.get_course_runs()
+            .order_by("-end")
+            .values("start", "end", "enrollment_start", "enrollment_end", "languages")
+        )
 
-            # Prepare syllabus texts
-            syllabus_texts = defaultdict(list)
-            for simple_text in SimpleText.objects.filter(
-                cmsplugin_ptr__placeholder__page=course.extended_object,
-                cmsplugin_ptr__placeholder__slot="course_syllabus",
-            ):
-                syllabus_texts[simple_text.cmsplugin_ptr.language].append(
-                    simple_text.body
+        return {
+            "_id": str(course.extended_object_id),
+            "_index": index,
+            "_op_type": action,
+            "_type": cls.document_type,
+            "absolute_url": {
+                language: course.extended_object.get_absolute_url(language)
+                for language in titles.keys()
+            },
+            "categories": [str(page.pk) for page in category_pages],
+            # Index the names of categories to surface them in full text searches
+            "categories_names": reduce(
+                lambda acc, title: {
+                    **acc,
+                    title.language: acc[title.language] + [title.title]
+                    if acc.get(title.language)
+                    else [title.title],
+                },
+                [title for page in category_pages for title in page.published_titles],
+                {},
+            ),
+            "complete": {
+                language: slice_string_for_completion(title)
+                for language, title in titles.items()
+            },
+            "course_runs": course_runs,
+            "cover_image": cover_images,
+            "description": {l: " ".join(st) for l, st in syllabus_texts.items()},
+            "is_new": len(course_runs) == 1,
+            "organizations": [
+                str(id)
+                for id in course.get_organizations().values_list(
+                    "public_extension__extended_object", flat=True
                 )
+                if id is not None
+            ],
+            # Index the names of organizations to surface them in full text searches
+            "organizations_names": reduce(
+                lambda acc, title: {
+                    **acc,
+                    title.language: acc[title.language] + [title.title]
+                    if acc.get(title.language)
+                    else [title.title],
+                },
+                [
+                    title
+                    for organization in organizations
+                    for title in organization.extended_object.published_titles
+                ],
+                {},
+            ),
+            "title": titles,
+        }
 
-            # Make sure we get title information for categories in the same request
-            category_pages = (
-                course.get_root_to_leaf_category_pages()
-                .prefetch_related(
-                    Prefetch(
-                        "title_set",
-                        to_attr="published_titles",
-                        queryset=Title.objects.filter(published=True),
-                    )
-                )
-                .only("pk")
-            )
-
-            # Make sure we get title information for organizations in the same request
-            organizations = (
-                course.get_organizations()
-                .prefetch_related(
-                    Prefetch(
-                        "extended_object__title_set",
-                        to_attr="published_titles",
-                        queryset=Title.objects.filter(published=True),
-                    )
-                )
-                .only("extended_object")
-                .distinct()
-            )
-
-            course_runs = course.get_course_runs()
-            for course_run in course_runs:
-                yield {
-                    "_id": str(course_run.extended_object_id),
-                    "_index": index,
-                    "_op_type": action,
-                    "_type": cls.document_type,
-                    "start": course_run.start,
-                    "end": course_run.end,
-                    "enrollment_start": course_run.enrollment_start,
-                    "enrollment_end": course_run.enrollment_end,
-                    "absolute_url": {
-                        language: course_run.extended_object.get_absolute_url(language)
-                        for language in titles.keys()
-                    },
-                    "categories": [str(page.pk) for page in category_pages],
-                    # Index the names of categories to surface them in full text searches
-                    "categories_names": reduce(
-                        lambda acc, title: {
-                            **acc,
-                            title.language: acc[title.language] + [title.title]
-                            if acc.get(title.language)
-                            else [title.title],
-                        },
-                        [
-                            title
-                            for page in category_pages
-                            for title in page.published_titles
-                        ],
-                        {},
-                    ),
-                    "complete": {
-                        language: slice_string_for_completion(title)
-                        for language, title in titles.items()
-                    },
-                    "cover_image": cover_images,
-                    "description": {
-                        l: " ".join(st) for l, st in syllabus_texts.items()
-                    },
-                    "is_new": len(course_runs) == 1,
-                    "languages": course_run.languages,
-                    "organizations": [
-                        str(id)
-                        for id in course.get_organizations().values_list(
-                            "public_extension__extended_object", flat=True
-                        )
-                        if id is not None
-                    ],
-                    # Index the names of organizations to surface them in full text searches
-                    "organizations_names": reduce(
-                        lambda acc, title: {
-                            **acc,
-                            title.language: acc[title.language] + [title.title]
-                            if acc.get(title.language)
-                            else [title.title],
-                        },
-                        [
-                            title
-                            for organization in organizations
-                            for title in organization.extended_object.published_titles
-                        ],
-                        {},
-                    ),
-                    "title": titles,
-                }
+    @classmethod
+    def get_es_documents(cls, index, action):
+        """
+        Loop on all the courses in database and format them for the ElasticSearch index
+        """
+        for course in Course.objects.filter(
+            extended_object__publisher_is_draft=False,
+            extended_object__title_set__published=True,
+        ).distinct():
+            yield cls.get_es_document_for_course(course, index, action)
 
     @staticmethod
     def format_es_object_for_api(es_course, best_language):
@@ -287,10 +403,6 @@ class CoursesIndexer:
         source = es_course["_source"]
         return {
             "id": es_course["_id"],
-            "start": source["start"],
-            "end": source["end"],
-            "enrollment_start": source["enrollment_start"],
-            "enrollment_end": source["enrollment_end"],
             "absolute_url": get_best_field_language(
                 source["absolute_url"], best_language
             ),
@@ -298,14 +410,7 @@ class CoursesIndexer:
             "cover_image": get_best_field_language(
                 source["cover_image"], best_language
             ),
-            "languages": source["languages"],
             "organizations": source["organizations"],
-            "state": CourseRun.compute_state(
-                dateutil.parser.parse(source["start"]),
-                dateutil.parser.parse(source["end"]),
-                dateutil.parser.parse(source["enrollment_start"]),
-                dateutil.parser.parse(source["enrollment_end"]),
-            )._asdict(),
             "title": get_best_field_language(source["title"], best_language),
         }
 
@@ -439,7 +544,7 @@ class CoursesIndexer:
         )
 
     @staticmethod
-    def get_list_sorting_script():
+    def get_list_sorting_script(states=None):
         """
         Call the relevant sorting script for courses lists, regenerating the parameters on each
         call. This will allow the ms_since_epoch value to stay relevant even if the ES instance
@@ -454,6 +559,7 @@ class CoursesIndexer:
                 "script": {
                     "id": "sort_list",
                     "params": {
+                        "states": states or [],
                         "max_date": arrow.get(MAXYEAR, 12, 31).timestamp * 1000,
                         "ms_since_epoch": arrow.utcnow().timestamp * 1000,
                     },

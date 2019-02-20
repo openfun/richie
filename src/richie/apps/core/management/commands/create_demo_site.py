@@ -3,13 +3,11 @@ create_demo_site management command
 """
 import logging
 import random
-from datetime import timedelta
 
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.files import File
 from django.core.management.base import BaseCommand, CommandError
-from django.utils import timezone
 
 from cms import models as cms_models
 from cms.api import add_plugin
@@ -386,21 +384,7 @@ def create_demo_site():
 
         # Add a random number of course runs to the course
         nb_course_runs = get_number_of_course_runs()
-
-        # 1) Make sure we have one course run open for enrollment
-        now = timezone.now()
-        CourseRunFactory(
-            __sequence=nb_course_runs,
-            page_in_navigation=False,
-            page_parent=course.extended_object,
-            start=now + timedelta(days=1),
-            enrollment_start=now - timedelta(days=5),
-            enrollment_end=now + timedelta(days=5),
-            should_publish=True,
-        )
-
-        # 2) Add more random course runs
-        for i in range(nb_course_runs - 1, 0, -1):
+        for i in range(nb_course_runs):
             CourseRunFactory(
                 __sequence=i,
                 page_in_navigation=False,

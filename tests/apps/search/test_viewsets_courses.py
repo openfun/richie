@@ -88,6 +88,7 @@ class CoursesViewsetsTestCase(TestCase):
                     "choices": [
                         ("coming_soon", "Coming soon", [{"is_coming_soon": True}]),
                         ("ongoing", "On-going", [{"is_ongoing": True}]),
+                        ("archived", "Archived", [{"is_ongoing": True}]),
                         ("open", "Open for enrollment", [{"is_open": True}]),
                     ],
                 },
@@ -116,6 +117,7 @@ class CoursesViewsetsTestCase(TestCase):
                     "hits": {"hits": [{"_id": 523}, {"_id": 861}], "total": 35},
                     "aggregations": {
                         "all_courses": {
+                            "availability@archived": {"doc_count": 11},
                             "availability@coming_soon": {"doc_count": 8},
                             "availability@ongoing": {"doc_count": 42},
                             "availability@open": {"doc_count": 59},
@@ -160,6 +162,7 @@ class CoursesViewsetsTestCase(TestCase):
                 "facets": {
                     "availability": {
                         "coming_soon": 8,
+                        "archived": 11,
                         "ongoing": 42,
                         "open": 59,
                     },
@@ -171,6 +174,7 @@ class CoursesViewsetsTestCase(TestCase):
                         "is_drilldown": False,
                         "name": "availability",
                         "values": [
+                            {"count": 11, "human_name": "Archived", "key": "archived"},
                             {
                                 "count": 8,
                                 "human_name": "Coming soon",
@@ -199,15 +203,10 @@ class CoursesViewsetsTestCase(TestCase):
         # The ES connector was called with appropriate arguments for the client's request
         mock_search.assert_any_call(
             _source=[
-                "start",
-                "end",
-                "enrollment_start",
-                "enrollment_end",
                 "absolute_url",
-                "cover_image",
-                "languages",
-                "organizations",
                 "categories",
+                "cover_image",
+                "organizations",
                 "title.*",
             ],
             body={
