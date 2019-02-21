@@ -10,6 +10,13 @@
                     {% thumbnail instance.background_image 768x450 crop=',0' %} 768w"
             alt="banner"/>
     {% endif %}
-    <h1 class="large-banner__title">{{ instance.title }}</h1>
-    <img src="{% thumbnail instance.logo 200x100 crop='smart' %}" class="large-banner__logo" alt="{{ instance.logo_alt_text }}"/>
+    <div class="large-banner__body">
+        <h1 class="large-banner__title">{{ instance.title }}</h1>
+        {% if instance.logo %}
+            <img src="{% thumbnail instance.logo 200x100 crop='smart' %}" class="large-banner__logo" alt="{{ instance.logo_alt_text }}"/>
+        {% endif %}
+        {% if instance.content %}
+            <div class="large-banner__content">{{ instance.content|safe }}</div>
+        {% endif %}
+    </div>
 </div>

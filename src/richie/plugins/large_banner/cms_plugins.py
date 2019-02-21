@@ -7,6 +7,8 @@ from django.utils.translation import ugettext_lazy as _
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 
+from .defaults import LARGEBANNER_TEMPLATES
+from .forms import LargeBannerForm
 from .models import LargeBanner
 
 
@@ -16,16 +18,22 @@ class LargeBannerPlugin(CMSPluginBase):
     CMSPlugin to customize a home page header.
     """
 
-    model = LargeBanner
-    name = _("Large Banner")
-    render_template = "large_banner.html"
-    cache = True
     module = settings.FUN_PLUGINS_GROUP
+    name = _("Large Banner")
+    model = LargeBanner
+    form = LargeBannerForm
+    cache = True
+    # Required from CMSPluginBase signature but not used since we override it
+    # from render()
+    render_template = LARGEBANNER_TEMPLATES[0][0]
 
     fieldsets = (
-        (None, {"fields": ["title", "background_image", "logo", "logo_alt_text"]}),
+        (None, {"fields": ["title", "template"]}),
+        (None, {"fields": ["content"]}),
+        (_("Medias"), {"fields": ["background_image", "logo", "logo_alt_text"]}),
     )
 
     def render(self, context, instance, placeholder):
         context.update({"instance": instance, "placeholder": placeholder})
+        self.render_template = instance.template
         return context

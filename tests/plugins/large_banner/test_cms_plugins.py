@@ -30,29 +30,6 @@ class LargeBannerCMSPluginsTestCase(TestCase):
             or "Column 'title' cannot be null" in str(cm.exception)
         )
 
-    def test_cms_plugins_large_banner_logo_required(self):
-        """
-        A "logo" is required when instantiating a large banner.
-        """
-        with self.assertRaises(IntegrityError) as cm:
-            LargeBannerFactory(logo=None)
-        self.assertTrue(
-            'null value in column "logo_id" violates not-null' in str(cm.exception)
-            or "Column 'logo_id' cannot be null" in str(cm.exception)
-        )
-
-    def test_cms_plugins_large_banner_logo_alt_text_required(self):
-        """
-        A "logo_alt_text" is required when instantiating a large banner.
-        """
-        with self.assertRaises(IntegrityError) as cm:
-            LargeBannerFactory(logo_alt_text=None)
-        self.assertTrue(
-            'null value in column "logo_alt_text" violates not-null'
-            in str(cm.exception)
-            or "Column 'logo_alt_text' cannot be null" in str(cm.exception)
-        )
-
     # pylint: disable=deprecated-method,no-member
     # Due to a conflict between Django 1.11 and pylint with the assertRegex method that is
     # *not* deprecated but is marked so by pylint
@@ -62,13 +39,21 @@ class LargeBannerCMSPluginsTestCase(TestCase):
         and render in the template.
 
         In particular, images should be cropped and big images should be included in
-        4 sizes for responsiveness using the srcset attribute.
+        4 sizes for responsiveness using the srcset attribute. 'content' and 'template'
+        are just basically filled from factory.
         """
         placeholder = Placeholder.objects.create(slot="test")
 
         # Create random values for parameters with a factory
         large_banner = LargeBannerFactory()
-        fields_list = ["title", "background_image", "logo", "logo_alt_text"]
+        fields_list = [
+            "title",
+            "background_image",
+            "logo",
+            "logo_alt_text",
+            "template",
+            "content",
+        ]
 
         model_instance = add_plugin(
             placeholder,
@@ -89,6 +74,8 @@ class LargeBannerCMSPluginsTestCase(TestCase):
         )
         self.assertEqual(context["instance"].logo, large_banner.logo)
         self.assertEqual(context["instance"].logo_alt_text, large_banner.logo_alt_text)
+        self.assertEqual(context["instance"].template, large_banner.template)
+        self.assertEqual(context["instance"].content, large_banner.content)
 
         # Get the generated html
         renderer = ContentRenderer(request=RequestFactory())
@@ -135,7 +122,14 @@ class LargeBannerCMSPluginsTestCase(TestCase):
 
         # Create random values for parameters with a factory
         large_banner = LargeBannerFactory(background_image=None)
-        fields_list = ["title", "background_image", "logo", "logo_alt_text"]
+        fields_list = [
+            "title",
+            "background_image",
+            "logo",
+            "logo_alt_text",
+            "template",
+            "content",
+        ]
 
         model_instance = add_plugin(
             placeholder,
@@ -151,3 +145,4 @@ class LargeBannerCMSPluginsTestCase(TestCase):
         # Check that all expected elements are in the html
         self.assertIn('class="large-banner"', html)
         self.assertFalse('class="large-banner__background"' in html)
+        self.assertIn('class="large-banner__content"', html)

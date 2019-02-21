@@ -395,7 +395,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         },
     }
 
-    # CKEditor available settings
+    # Main CKEditor configuration
     CKEDITOR_SETTINGS = {
         "language": "{{ language }}",
         "skin": "moono-lisa",
@@ -439,9 +439,24 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
             ["Source"],
         ],
     }
-    # Share the same config for djangocms_text_ckeditor field and derived
+    # Share the same configuration for djangocms_text_ckeditor field and derived
     # CKEditor widgets/fields
     CKEDITOR_SETTINGS["toolbar_HTMLField"] = CKEDITOR_SETTINGS["toolbar_CMS"]
+
+    # Basic CKEditor configuration for restricted inline markup only
+    CKEDITOR_BASIC_SETTINGS = {
+        "language": "{{ language }}",
+        "skin": "moono-lisa",
+        "toolbarCanCollapse": False,
+        "contentsCss": "/static/css/ckeditor.css",
+        # Only enable following tag definitions
+        "allowedContent": ["p", "b", "i", "a[href]"],
+        # Enabled showblocks as default behavior
+        "startupOutlineBlocks": True,
+        # Default toolbar configurations for djangocms_text_ckeditor
+        "toolbar": "HTMLField",
+        "toolbar_HTMLField": [["Undo", "Redo"], ["Bold", "Italic"], ["Link", "Unlink"]],
+    }
 
     # Thumbnails settings
     THUMBNAIL_PROCESSORS = (

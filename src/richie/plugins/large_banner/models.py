@@ -2,10 +2,13 @@
 Large banner plugin models
 """
 from django.db import models
+from django.utils.text import Truncator
 from django.utils.translation import ugettext_lazy as _
 
 from cms.models.pluginmodel import CMSPlugin
 from filer.fields.image import FilerImageField
+
+from .defaults import LARGEBANNER_TEMPLATES
 
 
 # pylint: disable=model-no-explicit-unicode,line-too-long
@@ -31,6 +34,22 @@ class LargeBanner(CMSPlugin):
         blank=True,
     )
     logo = FilerImageField(
-        related_name="logo", verbose_name=_("logo"), on_delete=models.PROTECT
+        related_name="logo",
+        verbose_name=_("logo"),
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
     )
-    logo_alt_text = models.CharField(max_length=255)
+    logo_alt_text = models.CharField(max_length=255, blank=True)
+    template = models.CharField(
+        _("Template"),
+        max_length=150,
+        choices=LARGEBANNER_TEMPLATES,
+        default=LARGEBANNER_TEMPLATES[0][0],
+        blank=False,
+        help_text=_("Choose template to render plugin."),
+    )
+    content = models.TextField(_("Content"), blank=True, default="")
+
+    def __str__(self):
+        return Truncator(self.title).words(6, truncate="...")
