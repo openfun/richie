@@ -287,10 +287,16 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         ("search/search.html", _("Search")),
         ("richie/fullwidth.html", "Fullwidth"),
         ("richie/child_pages_list.html", _("List of child pages")),
+        ("richie/homepage.html", _("Homepage")),
     )
     CMS_PERMISSION = True
 
     CMS_PLACEHOLDER_CONF = {
+        # Homepage
+        "richie/homepage.html maincontent": {
+            "name": _("Main content"),
+            "plugins": ["SectionPlugin"],
+        },
         # Course detail
         "courses/cms/course_detail.html course_cover": {
             "name": _("Cover"),
