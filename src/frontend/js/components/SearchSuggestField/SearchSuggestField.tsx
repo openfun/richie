@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useContext, useState } from 'react';
 import Autosuggest from 'react-autosuggest';
 import {
   defineMessages,
@@ -8,7 +8,8 @@ import {
   injectIntl,
 } from 'react-intl';
 
-import { filterGroupName } from '../../types/filters';
+import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
+import { APICourseSearchResponse } from '../../types/api';
 import { modelName } from '../../types/models';
 import {
   ResourceSuggestionSection,
@@ -17,8 +18,7 @@ import {
 } from '../../types/searchSuggest';
 import { commonMessages } from '../../utils/commonMessages';
 import { handle } from '../../utils/errors/handle';
-import { getSearchParam } from '../../utils/indirection/getSearchParam';
-import { location } from '../../utils/indirection/location';
+import { location } from '../../utils/indirection/window';
 import { getSuggestionsSection } from '../../utils/searchSuggest/getSuggestionsSection';
 import { suggestionHumanName } from '../../utils/searchSuggest/suggestionHumanName';
 import { suggestionsFromSection } from '../../utils/searchSuggest/suggestionsFromSection';
@@ -78,45 +78,27 @@ export const renderSectionTitle = (
 
 /**
  * `react-autosuggest` callback triggered on every used input.
- * @param this Mandatory binding to SearchSuggestFieldBase to access state.
+ * @param setValue [curried] `useState` setter for the `value` on component state.
  * @param event Unused: change event.
  * @param params Incoming parameters related to the change event. Includes `newValue` as key
  * with the search suggest form field value.
  */
-export function onChange(
-  this: SearchSuggestFieldBase,
+export const onChange = (setValue: valueSetter) => (
   event: React.FormEvent<any>,
   params?: { newValue: string },
-) {
-  if (params) {
-    this.setState({
-      value: params.newValue,
-    });
-  }
-}
-
-/**
- * `react-autosuggest` callback to handle clearing of all active suggestions
- * @param this Mandatory binding to SearchSuggestFieldBase to access state.
- */
-export function onSuggestionsClearRequested(this: SearchSuggestFieldBase) {
-  this.setState({
-    suggestions: [],
-  });
-}
+) => (params ? setValue(params.newValue) : null);
 
 /**
  * `react-autosuggest` callback to build up the list of suggestions and sections whenever user
  * interaction requires us to create or update that list.
- * @param this Mandatory binding to SearchSuggestFieldBase to access state.
+ * @param setSuggestions [curried] `useState` setter for the `suggestions` on component state
  * @param value `value` as key to an anonymous object: the current value of the search suggest form field.
  */
-export async function onSuggestionsFetchRequested(
-  this: SearchSuggestFieldBase,
-  { value }: { value: string },
-) {
+export const onSuggestionsFetchRequested = (
+  setSuggestions: suggestionsSetter,
+) => async ({ value }: { value: string }) => {
   if (value.length < 3) {
-    return this.setState({ suggestions: [] });
+    return setSuggestions([]);
   }
 
   // List the resource-based sections we'll display and the models they're related to
@@ -140,125 +122,158 @@ export async function onSuggestionsFetchRequested(
     return handle(error);
   }
 
-  this.setState({
-    suggestions: [
-      // Add the default section on top of the list
-      {
-        message: null,
-        model: null,
-        value,
-      },
-      // Drop sections with no results as there's no use displaying them
-      ...sections.filter(section => !!section!.values.length),
-    ],
-  });
-}
+  setSuggestions([
+    // Add the default section on top of the list
+    {
+      message: null,
+      model: null,
+      value,
+    },
+    // Drop sections with no results as there's no use displaying them
+    ...sections.filter(section => !!section!.values.length),
+  ]);
+};
 
 /**
  * `react-autosuggest` callback triggered when the user picks a suggestion, to handle the interaction.
- *
  * Different interactions have different expected outcomes:
  * - picking a course directs to the course detailed page (as this is a course search);
  * - picking another resource suggestion adds that resource as a filter;
  * - the default suggestion runs a full-text search on the content of the search suggest form field.
- * @param this Mandatory binding to SearchSuggestFieldBase to access state.
+ * @param setValue [curried] `useState` setter for the `value` on component state.
+ * @param setSuggestions [curried] `useState` setter for the `suggestions` on component state
+ * @param addFilter [curried] Function that adds a filter to the `CourseSearchParams` context.
+ * @param updateFullTextSearch [curried] Function that updates the query in the `CourseSearchParams` context.
  * @param event Unused: selection event.
  * @param suggestion `suggestion` as key to an anonymous object: the suggestion the user picked.
  */
-export function onSuggestionSelected(
-  this: SearchSuggestFieldBase,
+export const onSuggestionSelected = (
+  setValue: valueSetter,
+  setSuggestions: suggestionsSetter,
+  addFilter: (
+    filterName: modelName.CATEGORIES | modelName.ORGANIZATIONS,
+    payload: string,
+  ) => void,
+  updateFullTextSearch: (query: string) => void,
+) => (
   event: React.FormEvent,
   { suggestion }: { suggestion: SearchSuggestion },
-) {
+) => {
   switch (suggestion.model) {
     case modelName.COURSES:
       // Behave like a link to the course run's page
-      return location.setHref(suggestion.data.absolute_url);
+      return (location.href = suggestion.data.absolute_url);
 
     case modelName.ORGANIZATIONS:
     case modelName.CATEGORIES:
       // Update the search with the newly selected filter
-      this.props.addFilter(suggestion.model, String(suggestion.data.id));
+      addFilter(suggestion.model, String(suggestion.data.id));
       // Reset the search field state: the task has been completed
-      this.setState({
-        suggestions: [],
-        value: '',
-      });
+      setValue('');
+      setSuggestions([]);
       break;
 
     default:
       // Update the current query with the default suggestion data (the contents of the search query)
-      this.props.fullTextSearch(suggestion.data);
+      updateFullTextSearch(suggestion.data);
       break;
   }
-}
+};
 
 interface SearchSuggestFieldState {
   suggestions: SearchSuggestionSection[];
   value: string;
 }
 
+type valueSetter = React.Dispatch<
+  React.SetStateAction<SearchSuggestFieldState['value']>
+>;
+
+type suggestionsSetter = React.Dispatch<
+  React.SetStateAction<SearchSuggestFieldState['suggestions']>
+>;
+
 /**
  * Props shape for the SearchSuggestField component.
  */
 export interface SearchSuggestFieldProps {
-  addFilter: (filterName: filterGroupName, filterValue: string) => void;
-  fullTextSearch: (query: string) => void;
+  filters: APICourseSearchResponse['filters'];
 }
 
 /**
  * Non-wrapped component. Exported for testing purposes only. See SearchSuggestField.
  */
-export class SearchSuggestFieldBase extends React.Component<
-  SearchSuggestFieldProps & InjectedIntlProps,
-  SearchSuggestFieldState
-> {
-  constructor(props: SearchSuggestFieldProps & InjectedIntlProps) {
-    super(props);
-    let valueFromUrl: string;
-    try {
-      valueFromUrl = getSearchParam('query') || '';
-    } catch (e) {
-      // Do not break, default to empty
-      valueFromUrl = '';
-    }
-    this.state = { suggestions: [], value: valueFromUrl };
-  }
+export const SearchSuggestFieldBase = ({
+  filters,
+  intl,
+}: SearchSuggestFieldProps & InjectedIntlProps) => {
+  // Setup our filters updates (for full-text-search and specific filters) directly through the
+  // search parameters hook.
+  const [courseSearchParams, dispatchCourseSearchParamsUpdate] = useContext(
+    CourseSearchParamsContext,
+  );
+  // When the user types some text, the default suggestion is to use it as a full text query
+  const updateFullTextSearch = (query: string) =>
+    dispatchCourseSearchParamsUpdate({
+      query,
+      type: 'QUERY_UPDATE',
+    });
+  // When the user selects a filter from one of our autocomplete APIs, we add a filter to the
+  // current search and query string parameters
+  const addFilter = (
+    filterName: modelName.CATEGORIES | modelName.ORGANIZATIONS,
+    payload: string,
+  ) => {
+    dispatchCourseSearchParamsUpdate({
+      filter: filters[filterName],
+      payload,
+      type: 'FILTER_ADD',
+    });
+  };
 
-  render() {
-    const { suggestions, value } = this.state;
-    const { intl } = this.props;
-    const inputProps = {
-      onChange: onChange.bind(this),
-      onKeyDown: (event: React.KeyboardEvent) => {
-        if (event.keyCode === 13 /* enter */ && !value) {
-          this.props.fullTextSearch('');
-        }
-      },
-      placeholder: intl.formatMessage(messages.searchFieldPlaceholder),
-      value,
-    };
+  // Initialize hooks for the two pieces of state the controlled <Autosuggest> component needs to interact with:
+  // the current list of suggestions and the input value.
+  // Note: the input value is initialized from the courseSearchParams, ie. the `query` query string parameter
+  const [value, setValue] = useState(courseSearchParams.query || '');
+  const [suggestions, setSuggestions] = useState<
+    SearchSuggestFieldState['suggestions']
+  >([]);
 
-    return (
-      // TypeScript incorrectly infers the type of the Autosuggest suggestions prop as SearchSuggestion, which
-      // would be correct if we did not use sections, but is incorrect as it is.
-      <Autosuggest
-        getSectionSuggestions={suggestionsFromSection as any}
-        getSuggestionValue={getSuggestionValue}
-        highlightFirstSuggestion={value.length > 2}
-        inputProps={inputProps}
-        multiSection={true}
-        onSuggestionsClearRequested={onSuggestionsClearRequested.bind(this)}
-        onSuggestionsFetchRequested={onSuggestionsFetchRequested.bind(this)}
-        onSuggestionSelected={onSuggestionSelected.bind(this)}
-        renderSectionTitle={renderSectionTitle.bind(null, intl)}
-        renderSuggestion={renderSuggestion}
-        shouldRenderSuggestions={val => val.length > 2}
-        suggestions={suggestions as any}
-      />
-    );
-  }
-}
+  const inputProps = {
+    onChange: onChange(setValue),
+    onKeyDown: (event: React.KeyboardEvent) => {
+      if (event.keyCode === 13 /* enter */ && !value) {
+        updateFullTextSearch('');
+      }
+    },
+    placeholder: intl.formatMessage(messages.searchFieldPlaceholder),
+    value,
+  };
+
+  return (
+    // TypeScript incorrectly infers the type of the Autosuggest suggestions prop as SearchSuggestion, which
+    // would be correct if we did not use sections, but is incorrect as it is.
+    <Autosuggest
+      getSectionSuggestions={suggestionsFromSection as any}
+      getSuggestionValue={getSuggestionValue}
+      highlightFirstSuggestion={value.length > 2}
+      inputProps={inputProps}
+      multiSection={true}
+      onSuggestionsClearRequested={() => setSuggestions([])}
+      onSuggestionsFetchRequested={onSuggestionsFetchRequested(setSuggestions)}
+      onSuggestionSelected={onSuggestionSelected(
+        setValue,
+        setSuggestions,
+        addFilter,
+        updateFullTextSearch,
+      )}
+      renderSectionTitle={renderSectionTitle.bind(null, intl)}
+      renderSuggestion={renderSuggestion}
+      shouldRenderSuggestions={val => val.length > 2}
+      suggestions={suggestions as any}
+    />
+  );
+};
 
 /**
  * Component. Displays the main search field alon with any suggestions organized in relevant sections.

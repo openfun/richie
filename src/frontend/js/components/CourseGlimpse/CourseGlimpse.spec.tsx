@@ -1,13 +1,15 @@
 import '../../testSetup';
 
-import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
+import { cleanup, render } from 'react-testing-library';
 
 import { Course } from '../../types/Course';
 import { Organization } from '../../types/Organization';
 import { CourseGlimpse } from './CourseGlimpse';
 
 describe('components/CourseGlimpse', () => {
+  afterEach(cleanup);
+
   it('renders a course glimpse with its data', () => {
     const course = {
       cover_image: '/thumbs/small.png',
@@ -17,16 +19,20 @@ describe('components/CourseGlimpse', () => {
     const organization = {
       title: 'Some Organization',
     } as Organization;
-    const wrapper = shallow(
+    const { getByAltText, getByText, getByTitle } = render(
       <CourseGlimpse course={course} organizationMain={organization} />,
     );
 
-    expect(wrapper.html()).toContain('Course 42');
-    expect(wrapper.html()).toContain('Details page for {courseTitle}');
-    expect(wrapper.html()).toContain('Starts on {date}');
-    expect(wrapper.html()).toContain('Some Organization');
-    const img = wrapper.dive().find('img');
-    expect(img.prop('src')).toEqual('/thumbs/small.png');
-    expect(img.prop('alt')).toEqual('Logo for {courseTitle}');
+    // The link that wraps the course glimpse has its title
+    getByTitle('Details page for {courseTitle}.');
+    // The course glimpse shows the relevant information
+    getByText('Course 42');
+    getByText('Some Organization');
+    getByText('Starts on {date}');
+    // The logo is rendered along with alternate text
+    expect(getByAltText('Logo for {courseTitle}')).toHaveAttribute(
+      'src',
+      '/thumbs/small.png',
+    );
   });
 });

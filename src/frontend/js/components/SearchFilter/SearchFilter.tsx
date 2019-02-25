@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { FormattedMessage } from 'react-intl';
+import React from 'react';
 
 import { FilterValue } from '../../types/filters';
 import { CloseIcon } from '../icons/CloseIcon';
@@ -11,30 +10,25 @@ export interface SearchFilterProps {
   removeFilter: (filterValue: string) => void;
 }
 
-export const SearchFilter = (props: SearchFilterProps) => {
-  const { addFilter, filter, isActive, removeFilter } = props;
-
-  return (
-    <button
-      className={`search-filter ${isActive ? 'active' : ''}`}
-      onClick={() =>
-        isActive
-          ? removeFilter(filter.primaryKey)
-          : addFilter(filter.primaryKey)
-      }
-      aria-pressed={isActive}
-    >
-      {typeof filter.humanName === 'string' ? (
-        <span>{filter.humanName}</span>
-      ) : (
-        <FormattedMessage {...filter.humanName} />
-      )}
-      {filter.count || filter.count === 0 ? (
-        <span className="search-filter__count">{filter.count}</span>
-      ) : (
-        ''
-      )}
-      {isActive ? <CloseIcon /> : ''}
-    </button>
-  );
-};
+export const SearchFilter = ({
+  addFilter,
+  filter,
+  isActive,
+  removeFilter,
+}: SearchFilterProps) => (
+  <button
+    className={`search-filter ${isActive ? 'active' : ''}`}
+    onClick={() =>
+      isActive ? removeFilter(filter.key) : addFilter(filter.key)
+    }
+    aria-pressed={isActive}
+  >
+    <span>{filter.human_name}</span>
+    {!isActive && (filter.count || filter.count === 0) ? (
+      <span className="search-filter__count">{filter.count}</span>
+    ) : (
+      ''
+    )}
+    {isActive ? <CloseIcon /> : ''}
+  </button>
+);

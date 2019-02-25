@@ -3,11 +3,11 @@ import { Maybe } from '../../utils/types';
 // Compute a new value for a filter to apply to course search, reacting to a user interaction by
 // either adding a new filter or removing one
 export function computeNewFilterValue(
-  existingValue: Maybe<string | number | Array<string | number>>,
+  existingValue: Maybe<string | string[]>,
   update: {
     action: 'add' | 'remove';
     isDrilldown: boolean;
-    payload: string | number;
+    payload: string;
   },
 ) {
   if (update.isDrilldown) {
@@ -36,10 +36,13 @@ export function computeNewFilterValue(
   }
 
   // The existing value for this filter is a single primitive type value
-  if (typeof existingValue === 'string' || typeof existingValue === 'number') {
+  if (typeof existingValue === 'string') {
     return {
       // ADD: Make an array with the existing value and the new one
-      add: () => [existingValue, update.payload],
+      add: () =>
+        existingValue === update.payload
+          ? [existingValue]
+          : [existingValue, update.payload],
       // REMOVE:
       // - Return nothing if we had to drop the existing value we had
       // - Keep the existing value if it's not the one we needed to drop
@@ -51,17 +54,16 @@ export function computeNewFilterValue(
   // The existing value is an array of strings or numbers (see function signature)
   return {
     // ADD: Just push the new value into our existing array of values
-    add: () => [...(existingValue as Array<string | number>), update.payload],
+    add: () =>
+      existingValue.includes(update.payload)
+        ? existingValue
+        : [...existingValue, update.payload],
     // REMOVE: Return the existing array of values without the one we needed to remove
     remove: () =>
-      dropEmptyArray(
-        (existingValue as Array<string | number>).filter(
-          v => v !== update.payload,
-        ),
-      ),
+      dropEmptyArray(existingValue.filter(v => v !== update.payload)),
   }[update.action]();
 
-  function dropEmptyArray(array: Array<string | number>) {
+  function dropEmptyArray(array: string[]) {
     return array.length === 0 ? undefined : array;
   }
 }

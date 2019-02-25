@@ -1,166 +1,101 @@
 import '../../testSetup';
 
-import { mount } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
+import { cleanup, render } from 'react-testing-library';
 
-import { FilterDefinitionWithValues } from '../../types/filters';
-import { modelName } from '../../types/models';
-import { SearchFilter } from '../SearchFilter/SearchFilter';
+import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
 import { SearchFilterGroup } from './SearchFilterGroup';
 
+jest.mock('../SearchFilter/SearchFilter', () => ({
+  SearchFilter: ({ filter, isActive }: any) => (
+    <span data-testid="search-filter">{`Received: ${
+      isActive ? 'active' : 'non-active'
+    } filter - ${filter.human_name}`}</span>
+  ),
+}));
+
 describe('components/SearchFilterGroup', () => {
-  const addFilter = jasmine.createSpy('addFilter');
-  const removeFilter = jasmine.createSpy('removeFilter');
+  beforeEach(jest.resetAllMocks);
+  afterEach(cleanup);
 
-  it('renders the name of the filter', () => {
-    const filter = {
-      humanName: { defaultMessage: 'Organizations', id: 'organizations' },
-      machineName: modelName.ORGANIZATIONS,
-      values: [],
-    } as FilterDefinitionWithValues;
-    const element = (
-      <SearchFilterGroup
-        activeFilterValues={[]}
-        addFilter={addFilter}
-        filter={filter}
-        removeFilter={removeFilter}
-      />
+  it('renders the name of the filter with the values as SearchFilters', () => {
+    const { getByText } = render(
+      <CourseSearchParamsContext.Provider
+        value={[{ limit: '999', offset: '0' }, jest.fn()]}
+      >
+        <SearchFilterGroup
+          filter={{
+            human_name: 'Organizations',
+            name: 'organizations',
+            values: [
+              {
+                count: 4,
+                human_name: 'Value One',
+                key: 'value-1',
+              },
+              {
+                count: 7,
+                human_name: 'Value Two',
+                key: 'value-2',
+              },
+            ],
+          }}
+        />
+      </CourseSearchParamsContext.Provider>,
     );
 
-    expect(mount(element).text()).toContain('Organizations');
-  });
-
-  it('renders the list of filter values into a list of SearchFilters', () => {
-    const filter = {
-      humanName: { defaultMessage: 'Example filter', id: 'exampleFilter' },
-      values: [
-        {
-          humanName: { defaultMessage: 'Value One', id: 'valueOne' },
-          primaryKey: 'value-1',
-        },
-        {
-          humanName: { defaultMessage: 'Value Two', id: 'valueTwo' },
-          primaryKey: 'value-2',
-        },
-      ],
-    } as FilterDefinitionWithValues;
-    const element = (
-      <SearchFilterGroup
-        activeFilterValues={[]}
-        addFilter={addFilter}
-        filter={filter}
-        removeFilter={removeFilter}
-      />
-    );
-
-    expect(mount(element).find(SearchFilter).length).toEqual(2);
+    // The filter group title and all filters are shown
+    getByText('Organizations');
+    getByText('Received: non-active filter - Value One');
+    getByText('Received: non-active filter - Value Two');
   });
 
   it('renders any active filter values at the top of the list', () => {
-    const activeFilterValues = [
-      {
-        humanName: { defaultMessage: 'Value Two', id: 'valueTwo' },
-        primaryKey: 'value-2',
-      },
-    ];
-    const filter = {
-      humanName: { defaultMessage: 'Example filter', id: 'exampleFilter' },
-      values: [
-        {
-          humanName: { defaultMessage: 'Value One', id: 'valueOne' },
-          primaryKey: 'value-1',
-        },
-        {
-          humanName: { defaultMessage: 'Value Three', id: 'valueThree' },
-          primaryKey: 'value-3',
-        },
-      ],
-    } as FilterDefinitionWithValues;
-    const element = (
-      <SearchFilterGroup
-        activeFilterValues={activeFilterValues}
-        addFilter={addFilter}
-        filter={filter}
-        removeFilter={removeFilter}
-      />
+    const { getAllByTestId, getByText } = render(
+      <CourseSearchParamsContext.Provider
+        value={[
+          { example_filter: 'value-2', limit: '999', offset: '0' },
+          jest.fn(),
+        ]}
+      >
+        <SearchFilterGroup
+          filter={{
+            human_name: 'Example filter',
+            name: 'example_filter',
+            values: [
+              {
+                count: 4,
+                human_name: 'Value One',
+                key: 'value-1',
+              },
+              {
+                count: 6,
+                human_name: 'Value Two',
+                key: 'value-2',
+              },
+              {
+                count: 5,
+                human_name: 'Value Three',
+                key: 'value-3',
+              },
+            ],
+          }}
+        />
+      </CourseSearchParamsContext.Provider>,
     );
 
-    expect(
-      mount(element)
-        .find(SearchFilter)
-        .at(0)
-        .render()
-        .text(),
-    ).toContain('Value Two');
-    expect(
-      mount(element)
-        .find(SearchFilter)
-        .at(1)
-        .render()
-        .text(),
-    ).toContain('Value One');
-    expect(
-      mount(element)
-        .find(SearchFilter)
-        .at(2)
-        .render()
-        .text(),
-    ).toContain('Value Three');
-  });
-
-  it('deduplicates keys between the filter and the active filter values', () => {
-    const activeFilterValues = [
-      {
-        humanName: { defaultMessage: 'Value Two', id: 'valueTwo' },
-        primaryKey: 'value-2',
-      },
-      {
-        humanName: { defaultMessage: 'Value Three', id: 'valueThree' },
-        primaryKey: 'value-3',
-      },
-    ];
-    const filter = {
-      humanName: { defaultMessage: 'Example filter', id: 'exampleFilter' },
-      values: [
-        {
-          humanName: { defaultMessage: 'Value One', id: 'valueOne' },
-          primaryKey: 'value-1',
-        },
-        {
-          humanName: { defaultMessage: 'Value Three', id: 'valueThree' },
-          primaryKey: 'value-3',
-        },
-      ],
-    } as FilterDefinitionWithValues;
-    const element = (
-      <SearchFilterGroup
-        activeFilterValues={activeFilterValues}
-        addFilter={addFilter}
-        filter={filter}
-        removeFilter={removeFilter}
-      />
+    const searchFilters = getAllByTestId('search-filter');
+    // All the passed in filters are shown
+    expect(searchFilters.length).toEqual(3);
+    // The active filter is first in the list
+    expect(searchFilters[0]).toHaveTextContent(
+      'Received: active filter - Value Two',
     );
-
-    expect(
-      mount(element)
-        .find(SearchFilter)
-        .at(0)
-        .render()
-        .text(),
-    ).toContain('Value Two');
-    expect(
-      mount(element)
-        .find(SearchFilter)
-        .at(1)
-        .render()
-        .text(),
-    ).toContain('Value Three');
-    expect(
-      mount(element)
-        .find(SearchFilter)
-        .at(2)
-        .render()
-        .text(),
-    ).toContain('Value One');
+    expect(searchFilters[1]).toHaveTextContent(
+      'Received: non-active filter - Value One',
+    );
+    expect(searchFilters[2]).toHaveTextContent(
+      'Received: non-active filter - Value Three',
+    );
   });
 });

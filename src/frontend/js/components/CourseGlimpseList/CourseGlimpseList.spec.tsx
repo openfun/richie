@@ -1,29 +1,23 @@
 import '../../testSetup';
 
-import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
+import { cleanup, render } from 'react-testing-library';
 
 import { Course } from '../../types/Course';
-import { CourseGlimpseContainer } from '../CourseGlimpseContainer/CourseGlimpseContainer';
 import { CourseGlimpseList } from './CourseGlimpseList';
 
 describe('components/CourseGlimpseList', () => {
+  afterEach(cleanup);
+
   it('renders a list of Courses into a list of CourseGlimpses', () => {
     const courses = [
-      { id: 42, title: 'course-42' },
-      { id: 42, title: 'course-43' },
+      { id: 44, title: 'Course 44' },
+      { id: 45, title: 'Course 45' },
     ] as Course[];
-    const requestCourses = jasmine.createSpy('requestCourses');
-    const wrapper = shallow(
-      <CourseGlimpseList courses={courses} requestCourses={requestCourses} />,
-    );
+    const { getByText } = render(<CourseGlimpseList courses={courses} />);
 
-    const [course42, course43] = courses;
-    expect(
-      wrapper.childAt(0).equals(<CourseGlimpseContainer course={course42} />),
-    ).toBeTruthy();
-    expect(
-      wrapper.childAt(1).equals(<CourseGlimpseContainer course={course43} />),
-    ).toBeTruthy();
+    // Both courses' titles are shown
+    getByText('Course 44');
+    getByText('Course 45');
   });
 });

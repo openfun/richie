@@ -1,8 +1,9 @@
 import '../../testSetup';
 
-import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
+import { cleanup, render } from 'react-testing-library';
 
+import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
 import { Category } from '../../types/Category';
 import { Course } from '../../types/Course';
 import { modelName } from '../../types/models';
@@ -11,16 +12,14 @@ import {
   DefaultSuggestionSection,
   ResourceSuggestionSection,
 } from '../../types/searchSuggest';
-import { handle } from '../../utils/errors/handle';
-import { getSearchParam } from '../../utils/indirection/getSearchParam';
-import { location } from '../../utils/indirection/location';
+import { handle as mockHandle } from '../../utils/errors/handle';
+import { location as mockLocation } from '../../utils/indirection/window';
 import { getSuggestionsSection } from '../../utils/searchSuggest/getSuggestionsSection';
 import { suggestionHumanName } from '../../utils/searchSuggest/suggestionHumanName';
 import { jestMockOf } from '../../utils/types';
 import {
   getSuggestionValue,
   onChange,
-  onSuggestionsClearRequested,
   onSuggestionSelected,
   onSuggestionsFetchRequested,
   renderSectionTitle,
@@ -28,13 +27,8 @@ import {
   SearchSuggestFieldBase,
 } from './SearchSuggestField';
 
-const mockHandle: jestMockOf<typeof handle> = handle as any;
 jest.mock('../../utils/errors/handle');
-
-const mockGetSearchParam: jestMockOf<
-  typeof getSearchParam
-> = getSearchParam as any;
-jest.mock('../../utils/indirection/getSearchParam');
+jest.mock('../../utils/indirection/window', () => ({ location: {} }));
 
 const mockGetSuggestionsSection: jestMockOf<
   typeof getSuggestionsSection
@@ -47,48 +41,46 @@ const mockSuggestionHumanName: jestMockOf<
 jest.mock('../../utils/searchSuggest/suggestionHumanName');
 
 describe('components/SearchSuggestField', () => {
-  let addFilter: jest.SpyInstance;
-  let fullTextSearch: jest.SpyInstance;
-  let that: SearchSuggestFieldBase;
-
-  beforeEach(() => {
-    // addFilter & fullTextSearch are used to update the current search query
-    addFilter = jest.fn();
-    fullTextSearch = jest.fn();
-    // Stub the parts of the component instance we need to access
-    that = {
-      props: { addFilter, fullTextSearch },
-      setState: jasmine.createSpy('setState'),
-    } as any;
-  });
+  beforeEach(jest.resetAllMocks);
+  afterEach(cleanup);
 
   it('renders', () => {
-    const wrapper = shallow(
-      <SearchSuggestFieldBase
-        addFilter={addFilter as any}
-        fullTextSearch={fullTextSearch as any}
-        intl={
-          { formatMessage: (message: any) => message.defaultMessage } as any
-        }
-      />,
+    const { getByPlaceholderText } = render(
+      <CourseSearchParamsContext.Provider
+        value={[{ limit: '999', offset: '0' }, jest.fn()]}
+      >
+        <SearchSuggestFieldBase
+          filters={{}}
+          intl={
+            { formatMessage: (message: any) => message.defaultMessage } as any
+          }
+        />
+      </CourseSearchParamsContext.Provider>,
     );
-    expect(wrapper.html()).toContain(
-      'Search for courses, organizations, categories',
-    );
+
+    // The placeholder text is shown in the input
+    getByPlaceholderText('Search for courses, organizations, categories');
   });
 
   it('picks the query from the URL if there is one', () => {
-    mockGetSearchParam.mockReturnValue('machine learning');
-    const wrapper = shallow(
-      <SearchSuggestFieldBase
-        addFilter={addFilter as any}
-        fullTextSearch={fullTextSearch as any}
-        intl={
-          { formatMessage: (message: any) => message.defaultMessage } as any
-        }
-      />,
+    const { getByDisplayValue } = render(
+      <CourseSearchParamsContext.Provider
+        value={[
+          { limit: '999', offset: '0', query: 'machine learning' },
+          jest.fn(),
+        ]}
+      >
+        <SearchSuggestFieldBase
+          filters={{}}
+          intl={
+            { formatMessage: (message: any) => message.defaultMessage } as any
+          }
+        />
+      </CourseSearchParamsContext.Provider>,
     );
-    expect(wrapper.html()).toContain('machine learning');
+
+    // The existing query is shown in the input
+    getByDisplayValue('machine learning');
   });
 
   describe('getSuggestionValue()', () => {
@@ -145,35 +137,30 @@ describe('components/SearchSuggestField', () => {
             model: null,
           } as DefaultSuggestionSection,
         ),
-      );
+      ).toEqual(null);
     });
   });
 
   describe('onChange', () => {
-    const formEvent = {} as any;
+    const mockSetValue = jest.fn();
 
     it('updates the value in state', () => {
-      onChange.bind(that)(formEvent, { newValue: 'the new value' });
-      expect(that.setState).toHaveBeenCalledWith({ value: 'the new value' });
+      onChange(mockSetValue)(undefined as any, { newValue: 'the new value' });
+      expect(mockSetValue).toHaveBeenCalledWith('the new value');
     });
 
-    it('does not update the state when it is handed no params', () => {
-      onChange.bind(that)(formEvent);
-      expect(that.setState).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('onSuggestionsClearRequested()', () => {
-    it('cleans up the suggestions in state', () => {
-      onSuggestionsClearRequested.bind(that)();
-      expect(that.setState).toHaveBeenCalledWith({ suggestions: [] });
+    it('does not update the value when it is handed no params', () => {
+      onChange(mockSetValue)(undefined as any);
+      expect(mockSetValue).not.toHaveBeenCalled();
     });
   });
 
   describe('onSuggestionsFetchRequested', () => {
+    const mockSetSuggestions = jest.fn();
+
     it('just resets the suggestions when the value is less than 3 characters long', () => {
-      onSuggestionsFetchRequested.bind(that)({ value: 'c' });
-      expect(that.setState).toHaveBeenCalledWith({ suggestions: [] });
+      onSuggestionsFetchRequested(mockSetSuggestions)({ value: 'c' });
+      expect(mockSetSuggestions).toHaveBeenCalledWith([]);
       expect(mockGetSuggestionsSection).not.toHaveBeenCalled();
       expect(mockHandle).not.toHaveBeenCalled();
     });
@@ -210,24 +197,22 @@ describe('components/SearchSuggestField', () => {
         },
       );
 
-      await onSuggestionsFetchRequested.bind(that)({
+      await onSuggestionsFetchRequested(mockSetSuggestions)({
         value: 'some search',
       });
 
-      expect(that.setState).toHaveBeenCalledWith({
-        suggestions: [
-          {
-            message: null,
-            model: null,
-            value: 'some search',
-          },
-          {
-            message: { defaultMessage: 'Courses', id: 'courses' },
-            model: modelName.COURSES,
-            values: [{ title: 'Course #1' }, { title: 'Course #2' }],
-          },
-        ],
-      });
+      expect(mockSetSuggestions).toHaveBeenCalledWith([
+        {
+          message: null,
+          model: null,
+          value: 'some search',
+        },
+        {
+          message: { defaultMessage: 'Courses', id: 'courses' },
+          model: modelName.COURSES,
+          values: [{ title: 'Course #1' }, { title: 'Course #2' }],
+        },
+      ]);
     });
 
     it('reports the error when getSuggestionsSection fails', async () => {
@@ -237,7 +222,7 @@ describe('components/SearchSuggestField', () => {
         ),
       );
 
-      await onSuggestionsFetchRequested.bind(that)({
+      await onSuggestionsFetchRequested(mockSetSuggestions)({
         value: 'some search',
       });
 
@@ -248,13 +233,27 @@ describe('components/SearchSuggestField', () => {
   });
 
   describe('onSuggestionSelected', () => {
-    const formEvent = {} as any;
-    const mockSetHref = jest.spyOn(location, 'setHref');
+    const [
+      mockSetValue,
+      mockSetSuggestions,
+      mockAddFilter,
+      mockUpdateFullTextSearch,
+    ] = [jest.fn(), jest.fn(), jest.fn(), jest.fn()];
+    const curriedOnSuggestionSelected = onSuggestionSelected(
+      mockSetValue,
+      mockSetSuggestions,
+      mockAddFilter,
+      mockUpdateFullTextSearch,
+    );
 
-    beforeEach(() => mockSetHref.mockReset());
+    beforeEach(() => {
+      Object.keys(mockLocation).forEach(
+        key => delete (mockLocation as any)[key],
+      );
+    });
 
     it('moves to the courses page when it is called with a course', () => {
-      onSuggestionSelected.bind(that)(formEvent, {
+      curriedOnSuggestionSelected({} as any, {
         suggestion: {
           data: {
             absolute_url: 'https://example.com/courses/42',
@@ -263,37 +262,44 @@ describe('components/SearchSuggestField', () => {
           model: modelName.COURSES,
         },
       });
-      expect(location.setHref).toHaveBeenCalledWith(
-        'https://example.com/courses/42',
-      );
+
+      expect(mockLocation.href).toEqual('https://example.com/courses/42');
     });
 
     it('updates the filter and resets the suggestion state when it is called with a resource suggestion', () => {
-      onSuggestionSelected.bind(that)(formEvent, {
+      curriedOnSuggestionSelected({} as any, {
         suggestion: {
           data: { id: 43 } as Category,
           model: modelName.CATEGORIES,
         },
       });
-      expect(addFilter).toHaveBeenCalledWith(modelName.CATEGORIES, '43');
-      expect(location.setHref).not.toHaveBeenCalled();
 
-      onSuggestionSelected.bind(that)(formEvent, {
+      expect(mockAddFilter).toHaveBeenCalledWith(modelName.CATEGORIES, '43');
+      expect(mockSetValue).toHaveBeenCalledWith('');
+      expect(mockSetSuggestions).toHaveBeenCalledWith([]);
+      expect(mockLocation.href).not.toBeDefined();
+
+      jest.resetAllMocks();
+      curriedOnSuggestionSelected({} as any, {
         suggestion: {
           data: { id: 44 } as Organization,
           model: modelName.ORGANIZATIONS,
         },
       });
-      expect(addFilter).toHaveBeenCalledWith(modelName.ORGANIZATIONS, '44');
-      expect(location.setHref).not.toHaveBeenCalled();
+
+      expect(mockAddFilter).toHaveBeenCalledWith(modelName.ORGANIZATIONS, '44');
+      expect(mockSetValue).toHaveBeenCalledWith('');
+      expect(mockSetSuggestions).toHaveBeenCalledWith([]);
+      expect(mockLocation.href).not.toBeDefined();
     });
 
     it('updates the full text search when it is called with the default suggestion', () => {
-      onSuggestionSelected.bind(that)(formEvent, {
+      curriedOnSuggestionSelected({} as any, {
         suggestion: { model: null, data: 'my search' },
       });
-      expect(fullTextSearch).toHaveBeenCalledWith('my search');
-      expect(location.setHref).not.toHaveBeenCalled();
+
+      expect(mockUpdateFullTextSearch).toHaveBeenCalledWith('my search');
+      expect(mockLocation.href).not.toBeDefined();
     });
   });
 });

@@ -1,7 +1,7 @@
 import '../../testSetup';
 
-import { render, shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
+import { cleanup, fireEvent, render } from 'react-testing-library';
 
 import { SearchFilter } from './SearchFilter';
 
@@ -14,70 +14,85 @@ describe('components/SearchFilter', () => {
     removeFilter = jasmine.createSpy('removeFilter');
   });
 
-  it('renders the name of the filter (passed as a message)', () => {
-    const wrapper = render(
+  afterEach(cleanup);
+
+  it('renders the name of the filter', () => {
+    const { getByText } = render(
       <SearchFilter
         addFilter={addFilter}
         filter={{
-          humanName: { defaultMessage: 'Human name', id: 'humanName' },
-          primaryKey: '42',
+          count: 217,
+          human_name: 'Human name',
+          key: '42',
         }}
         isActive={false}
         removeFilter={removeFilter}
       />,
     );
 
-    expect(wrapper.text()).toContain('Human name');
+    // The filter value is displayed with its facet count
+    const button = getByText('Human name').parentElement;
+    expect(button).toHaveTextContent('217');
+    // The filter is not currently active
+    expect(button).not.toHaveClass('active');
+    expect(button).toHaveAttribute('aria-pressed', 'false');
   });
 
-  it('renders the name of the filter (passed as a string)', () => {
-    const wrapper = render(
+  it('shows the filter as active when `isActive` is true', () => {
+    const { getByText } = render(
       <SearchFilter
         addFilter={addFilter}
         filter={{
-          humanName: 'Hooman name',
-          primaryKey: '42',
-        }}
-        isActive={false}
-        removeFilter={removeFilter}
-      />,
-    );
-
-    expect(wrapper.text()).toContain('Hooman name');
-  });
-  it('calls addFilter on button click if it was not active', () => {
-    const wrapper = shallow(
-      <SearchFilter
-        addFilter={addFilter!}
-        filter={{
-          humanName: { defaultMessage: 'Human name', id: 'humanName' },
-          primaryKey: '42',
-        }}
-        isActive={false}
-        removeFilter={removeFilter}
-      />,
-    );
-    wrapper.find('button').simulate('click');
-
-    expect(addFilter).toHaveBeenCalledWith('42');
-    expect(removeFilter).not.toHaveBeenCalled();
-  });
-
-  it('calls removeFilter on button click if it was active', () => {
-    const wrapper = shallow(
-      <SearchFilter
-        addFilter={addFilter!}
-        filter={{
-          humanName: { defaultMessage: 'Human name', id: 'humanName' },
-          primaryKey: '43',
+          count: 217,
+          human_name: 'Human name',
+          key: '42',
         }}
         isActive={true}
         removeFilter={removeFilter}
       />,
     );
-    wrapper.find('button').simulate('click');
 
-    expect(removeFilter).toHaveBeenCalledWith('43');
+    // The button shows its active state
+    const button = getByText('Human name').parentElement;
+    expect(button).toHaveClass('active');
+    expect(button).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  it('calls addFilter on button click if it was not active', () => {
+    const { getByText } = render(
+      <SearchFilter
+        addFilter={addFilter!}
+        filter={{
+          count: 217,
+          human_name: 'Human name',
+          key: '43',
+        }}
+        isActive={false}
+        removeFilter={removeFilter}
+      />,
+    );
+
+    fireEvent.click(getByText('Human name'));
+    expect(addFilter).toHaveBeenCalledWith('43');
+    expect(removeFilter).not.toHaveBeenCalled();
+  });
+
+  it('calls removeFilter on button click if it was active', () => {
+    const { getByText } = render(
+      <SearchFilter
+        addFilter={addFilter!}
+        filter={{
+          count: 217,
+          human_name: 'Human name',
+          key: '44',
+        }}
+        isActive={true}
+        removeFilter={removeFilter}
+      />,
+    );
+
+    fireEvent.click(getByText('Human name'));
+    expect(removeFilter).toHaveBeenCalledWith('44');
     expect(addFilter).not.toHaveBeenCalled();
   });
 });

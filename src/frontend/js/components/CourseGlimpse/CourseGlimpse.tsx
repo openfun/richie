@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import {
   defineMessages,
   FormattedDate,
@@ -36,49 +36,49 @@ const messages = defineMessages({
 });
 
 export const CourseGlimpse = injectIntl(
-  (props: CourseGlimpseProps & InjectedIntlProps) => {
-    const { course, intl, organizationMain } = props;
-
-    return (
-      <a
-        className="course-glimpse course-glimpse--link"
-        href={course.absolute_url}
-        title={intl.formatMessage(messages.linkText, {
-          courseTitle: course.title,
-        })}
-      >
-        <div className="course-glimpse__media">
-          <img
-            src={course.cover_image}
-            alt={intl.formatMessage(messages.altText, {
-              courseTitle: course.title,
-            })}
+  ({
+    course,
+    intl,
+    organizationMain,
+  }: CourseGlimpseProps & InjectedIntlProps) => (
+    <a
+      className="course-glimpse course-glimpse--link"
+      href={course.absolute_url}
+      title={intl.formatMessage(messages.linkText, {
+        courseTitle: course.title,
+      })}
+    >
+      <div className="course-glimpse__media">
+        <img
+          src={course.cover_image}
+          alt={intl.formatMessage(messages.altText, {
+            courseTitle: course.title,
+          })}
+        />
+      </div>
+      <div className="course-glimpse__content">
+        <div className="course-glimpse__content__wrapper">
+          <p className="course-glimpse__content__title">{course.title}</p>
+          <p>{(organizationMain && organizationMain.title) || ''}</p>
+        </div>
+      </div>
+      <div className="course-glimpse__footer">
+        <p className="course-glimpse__footer__date">
+          <FormattedMessage
+            {...messages.date}
+            values={{
+              date: (
+                <FormattedDate
+                  value={new Date(course.start)}
+                  year="numeric"
+                  month="short"
+                  day="numeric"
+                />
+              ),
+            }}
           />
-        </div>
-        <div className="course-glimpse__content">
-          <div className="course-glimpse__content__wrapper">
-            <p className="course-glimpse__content__title">{course.title}</p>
-            <p>{(organizationMain && organizationMain.title) || ''}</p>
-          </div>
-        </div>
-        <div className="course-glimpse__footer">
-          <p className="course-glimpse__footer__date">
-            <FormattedMessage
-              {...messages.date}
-              values={{
-                date: (
-                  <FormattedDate
-                    value={new Date(course.start)}
-                    year="numeric"
-                    month="short"
-                    day="numeric"
-                  />
-                ),
-              }}
-            />
-          </p>
-        </div>
-      </a>
-    );
-  },
+        </p>
+      </div>
+    </a>
+  ),
 );

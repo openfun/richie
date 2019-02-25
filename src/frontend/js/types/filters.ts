@@ -1,26 +1,13 @@
-import { FormattedMessage } from 'react-intl';
-import { modelName } from './models';
-
-export type hardcodedFilterGroupName = 'availability' | 'language' | 'new';
-
-export type resourceBasedFilterGroupName =
-  | modelName.ORGANIZATIONS
-  | modelName.CATEGORIES;
-
-export type filterGroupName =
-  | resourceBasedFilterGroupName
-  | hardcodedFilterGroupName;
-
 export interface FilterValue {
-  primaryKey: string; // Either a machine name or a stringified ID
-  humanName: FormattedMessage.MessageDescriptor | string;
-  count?: number; // TODO: Replace Maybe<number> with number when all the facets are available
+  count: number;
+  human_name: string;
+  key: string; // Either a machine name or a stringified ID
 }
 
 export interface FilterDefinition {
-  humanName: FormattedMessage.MessageDescriptor;
-  machineName: filterGroupName;
-  isDrilldown?: boolean;
+  human_name: string;
+  is_drilldown?: boolean;
+  name: string;
 }
 
 export interface FilterDefinitionWithValues extends FilterDefinition {

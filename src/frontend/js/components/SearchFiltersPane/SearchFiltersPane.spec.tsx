@@ -1,16 +1,45 @@
 import '../../testSetup';
 
-import { shallow } from 'enzyme';
-import * as React from 'react';
+import React from 'react';
+import { cleanup, render } from 'react-testing-library';
 
-import { SearchFilterGroupContainer } from '../SearchFilterGroupContainer/SearchFilterGroupContainer';
 import { SearchFiltersPane } from './SearchFiltersPane';
 
-describe('components/SearchFiltersPane', () => {
-  it('renders all our search filter group containers', () => {
-    const wrapper = shallow(<SearchFiltersPane />);
+jest.mock('../SearchFilterGroup/SearchFilterGroup', () => ({
+  SearchFilterGroup: ({ filter }: any) => (
+    <span>{`Received filter title: ${filter.human_name}`}</span>
+  ),
+}));
 
-    expect(wrapper.text()).toContain('Filter results');
-    expect(wrapper.find(SearchFilterGroupContainer).length).toEqual(5);
+describe('components/SearchFiltersPane', () => {
+  afterEach(cleanup);
+
+  it('renders all our search filter group containers', () => {
+    const { getByText } = render(
+      <SearchFiltersPane
+        filters={{
+          categories: {
+            human_name: 'Categories',
+            name: 'categories',
+            values: [],
+          },
+          organizations: {
+            human_name: 'Organizations',
+            name: 'organizations',
+            values: [],
+          },
+        }}
+      />,
+    );
+
+    // The pane's title is shown along with the filter groups
+    getByText('Filter courses');
+    getByText('Received filter title: Categories');
+    getByText('Received filter title: Organizations');
+  });
+
+  it('still renders with its title when it is not passed anything', () => {
+    const { getByText } = render(<SearchFiltersPane filters={null} />);
+    getByText('Filter courses');
   });
 });
