@@ -46,7 +46,9 @@ class BaseExtensionToolbar(ExtensionToolbar):
                 page_menu = self.toolbar.get_or_create_menu("page")
                 # Create the new menu item as a modal
                 page_menu.add_modal_item(
-                    _("{!s} settings").format(capfirst(self.model._meta.verbose_name)),
+                    _("{!s} settings").format(
+                        capfirst(str(self.model._meta.verbose_name))
+                    ),
                     url=admin_url,
                     disabled=edit_mode_inactive,
                     position=PAGE_EXTENSION_TOOLBAR_ITEM_POSITION,
