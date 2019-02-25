@@ -15,10 +15,10 @@ import pytz
 from cms.api import add_plugin
 from filer.models.imagemodels import Image
 
+from .models import Category, Course, CourseRun, Licence, Organization
 from ..core.factories import FilerImageFactory, PageExtensionDjangoModelFactory
 from ..core.helpers import create_text_plugin
 from ..core.tests.utils import file_getter
-from .models import Category, Course, CourseRun, Licence, Organization
 
 VideoSample = namedtuple("VideoSample", ["label", "image", "url"])
 

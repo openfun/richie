@@ -16,10 +16,10 @@ from cms.extensions.extension_pool import extension_pool
 from cms.models.pluginmodel import CMSPlugin
 from filer.fields.image import FilerImageField
 
-from ...core.fields.multiselect import MultiSelectField
-from ...core.models import BasePageExtension, PagePluginMixin
 from .category import Category
 from .organization import Organization
+from ...core.fields.multiselect import MultiSelectField
+from ...core.models import BasePageExtension, PagePluginMixin
 
 CourseState = namedtuple("CourseState", ["priority", "cta", "text", "datetime"])
 
