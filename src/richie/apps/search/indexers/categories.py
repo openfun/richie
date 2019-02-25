@@ -12,12 +12,12 @@ from djangocms_picture.models import Picture
 from richie.plugins.simple_text_ckeditor.models import SimpleText
 
 from .. import defaults
-from ...courses.models import Category
 from ..exceptions import QueryFormatException
 from ..forms import CategoryListForm
 from ..partial_mappings import MULTILINGUAL_TEXT
 from ..utils.i18n import get_best_field_language
 from ..utils.indexers import slice_string_for_completion
+from ...courses.models import Category
 
 
 class CategoriesIndexer:

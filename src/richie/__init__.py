@@ -4,9 +4,9 @@ Richie: a FUN portal for Open edX
 from __future__ import absolute_import, unicode_literals
 
 import os
-from setuptools.config import read_configuration
 
 import pkg_resources
+from setuptools.config import read_configuration
 
 PROJECT_DIR = os.path.join(os.path.dirname(__file__), "../..")
 
