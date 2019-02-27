@@ -8,6 +8,7 @@ import {
 import { requestStatus } from '../../types/api';
 import { CourseGlimpseList } from '../CourseGlimpseList/CourseGlimpseList';
 import { SearchFiltersPane } from '../SearchFiltersPane/SearchFiltersPane';
+import { SearchLoader } from '../SearchLoader/SearchLoader';
 import { SearchSuggestField } from '../SearchSuggestField/SearchSuggestField';
 
 export const Search = () => {
@@ -37,7 +38,9 @@ export const Search = () => {
             />
             <CourseGlimpseList courses={courseSearchResponse.content.objects} />{' '}
           </div>
-        ) : null}
+        ) : (
+          <SearchLoader />
+        )}
       </CourseSearchParamsContext.Provider>
     </div>
   );

@@ -38,7 +38,7 @@
         </nav>
         {% endblock body_header %}
 
-        <div class="body-content">
+        <div class="body-content {% block bodycontent_classes %}{% endblock bodycontent_classes %}">
         {% block content %}{% endblock content %}
         </div>
 

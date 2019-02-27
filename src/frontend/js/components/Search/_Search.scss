@@ -18,6 +18,11 @@ $richie-search-results-padding: 0 1rem 0 2rem !default;
     @include sv-flex(1, 0, 100%);
     background: $richie-search-filters-background;
 
+    // Force the filters sidebar to take up the whole height even when it's empty.
+    // This should help avoid a glitch where we see the footer at the top of the page and the UI jumps
+    // around as the filters appear.
+    min-height: 100vh;
+
     @include media-breakpoint-up(lg) {
       @include sv-flex(1, 0, $richie-search-filters-width);
     }

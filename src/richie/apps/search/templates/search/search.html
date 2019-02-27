@@ -3,6 +3,9 @@
 
 {% block title %}{% page_attribute "page_title" %}{% endblock title %}
 
+{# Enable flex on the `.body-content` so children can grow to occupy the available vertical space #}
+{% block bodycontent_classes %}body-content--flex-mode{% endblock bodycontent_classes %}
+
 {% block content %}
   <div class="search-template">
     <h1 class="search-template__title">{% page_attribute "page_title" %}</h1>

@@ -1,11 +1,11 @@
 $richie-search-filters-pane-background: inherit !default;
 
-$richie-search-filters-pane-title-margin: 0 2.5rem default;
-$richie-search-filters-pane-title-padding: 2rem 0 1rem default;
-$richie-search-filters-pane-title-fontsize: null default;
-$richie-search-filters-pane-title-fontweight: null default;
-$richie-search-filters-pane-title-fontcolor: $dodgerblue5 default;
-$richie-search-filters-pane-title-textalign: null default;
+$richie-search-filters-pane-title-margin: 0 2.5rem !default;
+$richie-search-filters-pane-title-padding: 2rem 0 1rem !default;
+$richie-search-filters-pane-title-fontsize: null !default;
+$richie-search-filters-pane-title-fontweight: null !default;
+$richie-search-filters-pane-title-fontcolor: $dodgerblue5 !default;
+$richie-search-filters-pane-title-textalign: null !default;
 
 .search-filters-pane {
   background: $richie-search-filters-pane-background;
