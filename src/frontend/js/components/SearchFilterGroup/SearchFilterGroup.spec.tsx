@@ -7,10 +7,10 @@ import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useC
 import { SearchFilterGroup } from './SearchFilterGroup';
 
 jest.mock('../SearchFilter/SearchFilter', () => ({
-  SearchFilter: ({ filter, isActive }: any) => (
+  SearchFilter: ({ filterValue, isActive }: any) => (
     <span data-testid="search-filter">{`Received: ${
       isActive ? 'active' : 'non-active'
-    } filter - ${filter.human_name}`}</span>
+    } filter - ${filterValue.human_name}`}</span>
   ),
 }));
 

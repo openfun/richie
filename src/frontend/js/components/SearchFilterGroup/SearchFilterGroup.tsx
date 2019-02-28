@@ -31,7 +31,7 @@ export const SearchFilterGroup = ({ filter }: SearchFilterGroupProps) => {
         {filter.values.map(value => (
           <SearchFilter
             addFilter={updateFilter('FILTER_ADD')}
-            filter={value}
+            filterValue={value}
             isActive={(courseSearchParams[filter.name] || []).includes(
               value.key,
             )}

@@ -16,11 +16,11 @@ describe('components/SearchFilter', () => {
 
   afterEach(cleanup);
 
-  it('renders the name of the filter', () => {
+  it('renders the name of the filter value', () => {
     const { getByText } = render(
       <SearchFilter
         addFilter={addFilter}
-        filter={{
+        filterValue={{
           count: 217,
           human_name: 'Human name',
           key: '42',
@@ -38,11 +38,11 @@ describe('components/SearchFilter', () => {
     expect(button).toHaveAttribute('aria-pressed', 'false');
   });
 
-  it('shows the filter as active when `isActive` is true', () => {
+  it('shows the filter value as active when `isActive` is true', () => {
     const { getByText } = render(
       <SearchFilter
         addFilter={addFilter}
-        filter={{
+        filterValue={{
           count: 217,
           human_name: 'Human name',
           key: '42',
@@ -62,7 +62,7 @@ describe('components/SearchFilter', () => {
     const { getByText } = render(
       <SearchFilter
         addFilter={addFilter!}
-        filter={{
+        filterValue={{
           count: 217,
           human_name: 'Human name',
           key: '43',
@@ -81,7 +81,7 @@ describe('components/SearchFilter', () => {
     const { getByText } = render(
       <SearchFilter
         addFilter={addFilter!}
-        filter={{
+        filterValue={{
           count: 217,
           human_name: 'Human name',
           key: '44',
