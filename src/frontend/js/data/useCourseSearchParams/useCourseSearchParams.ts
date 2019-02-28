@@ -2,12 +2,12 @@ import { parse, stringify } from 'query-string';
 import { createContext, useEffect, useReducer } from 'react';
 
 import { APIListRequestParams } from '../../types/api';
-import { FilterDefinitionWithValues } from '../../types/filters';
+import { FilterDefinition } from '../../types/filters';
 import { computeNewFilterValue } from '../../utils/filters/computeNewFilterValue';
 import { history, location } from '../../utils/indirection/window';
 
 interface FilterAction {
-  filter: FilterDefinitionWithValues;
+  filter: FilterDefinition;
   payload: string;
   type: 'FILTER_ADD' | 'FILTER_REMOVE';
 }

@@ -8,8 +8,5 @@ export interface FilterDefinition {
   human_name: string;
   is_drilldown?: boolean;
   name: string;
-}
-
-export interface FilterDefinitionWithValues extends FilterDefinition {
   values: FilterValue[];
 }

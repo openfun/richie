@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 
 import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
-import { FilterDefinitionWithValues } from '../../types/filters';
+import { FilterDefinition } from '../../types/filters';
 import { SearchFilter } from '../SearchFilter/SearchFilter';
 
 export interface SearchFilterGroupProps {
-  filter: FilterDefinitionWithValues;
+  filter: FilterDefinition;
 }
 
 export const SearchFilterGroup = ({ filter }: SearchFilterGroupProps) => {

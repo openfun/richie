@@ -1,6 +1,6 @@
 import { Maybe } from '../utils/types';
 import { Course } from './Course';
-import { FilterDefinitionWithValues } from './filters';
+import { FilterDefinition } from './filters';
 
 export enum requestStatus {
   FAILURE = 'failure',
@@ -29,7 +29,7 @@ export interface APIListRequestParams {
 
 export interface APICourseSearchResponse {
   filters: {
-    [filterName: string]: FilterDefinitionWithValues;
+    [filterName: string]: FilterDefinition;
   };
   meta: APIResponseListMeta;
   objects: Course[];
