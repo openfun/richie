@@ -22,6 +22,14 @@ class CourseRunModelsTestCase(TestCase):
         super().setUp()
         self.now = timezone.now()
 
+    def test_models_course_run_state_coming_soon(self):
+        """
+        A course run that has no start date should return a state with
+        "coming soon" as text.
+        """
+        course_run = CourseRunFactory(start=None)
+        self.assertEqual(course_run.state, CourseState(6, None, "coming soon", None))
+
     def test_models_course_run_state_archived(self):
         """A course run that is passed should return a state with "archived" as text."""
         course_run = CourseRunFactory(

@@ -307,25 +307,39 @@ class CourseRun(BasePageExtension):
           6: there are no runs at all > "coming soon": {None}
         """
         now = timezone.now()
-        if start < now:
-            if end > now:
-                if enrollment_end > now:
-                    # ongoing open
-                    return CourseState(
-                        0, _("enroll now"), _("closing on"), enrollment_end
-                    )
-                # ongoing closed
-                return CourseState(4, None, _("on-going"), None)
-            # archived
-            return CourseState(5, None, _("archived"), None)
-        if enrollment_start > now:
-            # future not yet open
-            return CourseState(2, _("see details"), _("starting on"), start)
-        if enrollment_end > now:
-            # future open
-            return CourseState(1, _("enroll now"), _("starting on"), start)
-        # future already closed
-        return CourseState(3, None, _("enrollment closed"), None)
+        # start is empty hence default value
+        state = CourseState(6, None, _("coming soon"), None)
+        if start:
+            if start < now:
+                if end:
+                    if end > now:
+                        if enrollment_end:
+                            if enrollment_end > now:
+                                # ongoing open
+                                state = CourseState(
+                                    0, _("enroll now"), _("closing on"), enrollment_end
+                                )
+                            else:
+                                # ongoing closed
+                                state = CourseState(4, None, _("on-going"), None)
+                        return state
+                    else:
+                        # archived
+                        state = CourseState(5, None, _("archived"), None)
+                    return state
+                return state
+            if enrollment_start:
+                if enrollment_start > now:
+                    # future not yet open
+                    state = CourseState(2, _("see details"), _("starting on"), start)
+                elif enrollment_end > now:
+                    # future open
+                    state = CourseState(1, _("enroll now"), _("starting on"), start)
+                # future already closed
+                elif start > now:
+                    state = CourseState(3, None, _("enrollment closed"), None)
+            return state
+        return state
 
     @property
     def state(self):
