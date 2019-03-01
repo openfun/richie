@@ -124,6 +124,7 @@ def get_category_limit_choices_to():
         "publisher_is_draft": True,  # plugins work with draft instances
         "category__isnull": False,  # limit to pages linked to a category object
         "node__parent__cms_pages__category__isnull": False,  # exclude meta categories
+        "node__parent__cms_pages__publisher_is_draft": True,  # exclude published categories
     }
     # Limit to leaf categories only if active in settings (False by default)
     if getattr(settings, "LIMIT_PLUGIN_CATEGORIES_TO_LEAF", False):

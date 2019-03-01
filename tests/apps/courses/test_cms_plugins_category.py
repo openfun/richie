@@ -22,6 +22,33 @@ class CategoryPluginTestCase(CMSTestCase):
     Test that CategoryPlugin correctly displays a Category's page placeholders content
     """
 
+    @staticmethod
+    def test_cms_plugins_category_unique():
+        """
+        The form to create a category plugin should only list draft category pages in the
+        select box.
+        """
+
+        class CategoryPluginModelForm(forms.ModelForm):
+            """A form for testing the choices in the select box"""
+
+            class Meta:
+                model = CategoryPluginModel
+                fields = ["page"]
+
+        meta_category = CategoryFactory()
+        meta_category.extended_object.publish("en")
+        parent_category = CategoryFactory(page_parent=meta_category.extended_object)
+        parent_category.extended_object.publish("en")
+
+        other_page_title = "other page"
+        create_page(other_page_title, "richie/fullwidth.html", settings.LANGUAGE_CODE)
+
+        plugin_form = CategoryPluginModelForm()
+        rendered_form = plugin_form.as_table()
+
+        assert rendered_form.count(parent_category.extended_object.get_title()) == 1
+
     @override_settings(LIMIT_PLUGIN_CATEGORIES_TO_LEAF=True)
     def test_cms_plugins_category_form_page_choices_leaf_only(self):
         """
