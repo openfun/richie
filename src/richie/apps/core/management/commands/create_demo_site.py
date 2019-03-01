@@ -7,10 +7,13 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.contrib.sites.models import Site
+from django.core.files import File
 from django.core.management.base import BaseCommand, CommandError
-from django.utils import timezone, translation
+from django.utils import timezone
 
 from cms import models as cms_models
+from cms.api import add_plugin
+from filer.models.imagemodels import Image
 
 from richie.apps.courses.factories import (
     VIDEO_SAMPLE_LINKS,
@@ -29,6 +32,7 @@ from richie.apps.persons.factories import (
 from richie.apps.persons.models import Person, PersonTitle, PersonTitleTranslation
 
 from ...helpers import recursive_page_creation
+from ...utils import file_getter
 
 logger = logging.getLogger("richie.commands.core.create_demo_site")
 
@@ -40,11 +44,14 @@ NB_COURSES_SUBJECT_RELATIONS = 2
 NB_ORGANIZATIONS = 5
 NB_LICENCES = 5
 NB_PERSONS = 10
+NB_HOME_HIGHLIGHTED_COURSES = 8
+NB_HOME_HIGHLIGHTED_ORGANIZATIONS = 4
+NB_HOME_HIGHLIGHTED_SUBJECTS = 6
 PAGE_INFOS = {
     "home": {
         "title": {"en": "Home", "fr": "Accueil"},
         "in_navigation": False,
-        "kwargs": {"template": "richie/fullwidth.html"},
+        "kwargs": {"template": "richie/homepage.html"},
     },
     "news": {
         "title": {"en": "News", "fr": "Actualités"},
@@ -231,6 +238,22 @@ SUBJECTS_INFO = {
         {"title": {"en": "Health", "fr": "Santé"}},
     ],
 }
+HOMEPAGE_CONTENT = {
+    "en": {
+        "banner_title": "Welcome to Richie",
+        "banner_content": "It works! This is the default homepage for the Richie CMS.",
+        "courses_title": "Popular courses",
+        "organizations_title": "Universities",
+        "subjects_title": "Subjects",
+    },
+    "fr": {
+        "banner_title": "Bienvenue sur Richie",
+        "banner_content": "Ça marche ! Ceci est la page d'accueil par défaut du CMS Richie.",
+        "courses_title": "Cours à la une",
+        "organizations_title": "Universités",
+        "subjects_title": "Thématiques",
+    },
+}
 
 
 def get_number_of_course_runs():
@@ -264,6 +287,7 @@ def clear_cms_data():
     Licence.objects.all().delete()
 
 
+# pylint: disable=too-many-locals
 def create_demo_site():
     """
     Create a simple site tree structure for developpers to work in realistic environment.
@@ -283,7 +307,7 @@ def create_demo_site():
     organizations = OrganizationFactory.create_batch(
         NB_ORGANIZATIONS,
         page_in_navigation=True,
-        page_languages=[l[0] for l in settings.LANGUAGES],
+        page_languages=["en", "fr"],
         page_parent=pages_created["organizations"],
         fill_banner=True,
         fill_description=True,
@@ -295,9 +319,6 @@ def create_demo_site():
     levels = list(create_categories(LEVELS_INFO, pages_created["categories"]))
     subjects = list(create_categories(SUBJECTS_INFO, pages_created["categories"]))
 
-    # Django parler require a language to be manually set when working out of
-    # request/response flow and PersonTitle use 'parler'
-    translation.activate(settings.LANGUAGE_CODE)
     title = PersonTitleFactory(translation=None)
     PersonTitleTranslationFactory(
         master=title, language_code="en", title="Doctor", abbreviation="Dr."
@@ -310,7 +331,7 @@ def create_demo_site():
     persons = PersonFactory.create_batch(
         NB_PERSONS,
         page_in_navigation=True,
-        page_languages=[l[0] for l in settings.LANGUAGES],
+        page_languages=["en", "fr"],
         page_parent=pages_created["persons"],
         person_title=random.choice([title, None]),
         fill_portrait=True,
@@ -320,12 +341,13 @@ def create_demo_site():
 
     # Create courses under the `Course` page with categories and organizations
     # relations
+    courses = []
     for _ in range(NB_COURSES):
         video_sample = random.choice(VIDEO_SAMPLE_LINKS)
 
         course = CourseFactory(
             page_in_navigation=True,
-            page_languages=[l[0] for l in settings.LANGUAGES],
+            page_languages=["en", "fr"],
             page_parent=pages_created["courses"],
             fill_licences=[
                 ("course_license_content", random.choice(licences)),
@@ -353,6 +375,7 @@ def create_demo_site():
             ],
             should_publish=True,
         )
+        courses.append(course)
 
         # Add a random number of course runs to the course
         nb_course_runs = get_number_of_course_runs()
@@ -374,9 +397,85 @@ def create_demo_site():
             CourseRunFactory(
                 __sequence=i,
                 page_in_navigation=False,
-                page_languages=[l[0] for l in settings.LANGUAGES],
+                page_languages=["en", "fr"],
                 page_parent=course.extended_object,
                 should_publish=True,
+            )
+
+    # Once everything has been created, use some content to create a homepage
+    placeholder = pages_created["home"].placeholders.get(slot="maincontent")
+
+    # - Get a banner image
+    banner_file = file_getter("banner")()
+    wrapped_banner = File(banner_file, banner_file.name)
+    banner = Image.objects.create(file=wrapped_banner)
+
+    # - Get a logo image
+    logo_file = file_getter("logo")()
+    wrapped_logo = File(logo_file, logo_file.name)
+    logo = Image.objects.create(file=wrapped_logo)
+
+    # - Create the home page in each language
+    for language, content in HOMEPAGE_CONTENT.items():
+        # Add a banner
+        add_plugin(
+            language=language,
+            placeholder=placeholder,
+            plugin_type="LargeBannerPlugin",
+            title=content["banner_title"],
+            background_image=banner,
+            logo=logo,
+            logo_alt_text="logo",
+            content=content["banner_content"],
+        )
+        # Add highlighted courses
+        courses_section = add_plugin(
+            language=language,
+            placeholder=placeholder,
+            plugin_type="SectionPlugin",
+            title=content["courses_title"],
+        )
+        for course in random.sample(courses, NB_HOME_HIGHLIGHTED_COURSES):
+            add_plugin(
+                language=language,
+                placeholder=placeholder,
+                plugin_type="CoursePlugin",
+                target=courses_section,
+                page=course.extended_object,
+            )
+
+        # Add highlighted organizations
+        organizations_section = add_plugin(
+            language=language,
+            placeholder=placeholder,
+            plugin_type="SectionPlugin",
+            title=content["organizations_title"],
+        )
+        for organization in random.sample(
+            organizations, NB_HOME_HIGHLIGHTED_ORGANIZATIONS
+        ):
+            add_plugin(
+                language=language,
+                placeholder=placeholder,
+                plugin_type="OrganizationPlugin",
+                target=organizations_section,
+                page=organization.extended_object,
+            )
+
+        # Add highlighted subjects
+        subjects_section = add_plugin(
+            language=language,
+            placeholder=placeholder,
+            plugin_type="SectionPlugin",
+            title=content["subjects_title"],
+        )
+        for subject in random.sample(subjects, NB_HOME_HIGHLIGHTED_SUBJECTS):
+            add_plugin(
+                language=language,
+                placeholder=placeholder,
+                plugin_type="CategoryPlugin",
+                target=subjects_section,
+                page=subject.extended_object,
             )
 
 

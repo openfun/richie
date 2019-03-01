@@ -1,7 +1,6 @@
 """
 Courses factories
 """
-import os
 import random
 from collections import namedtuple
 from datetime import datetime, timedelta
@@ -18,7 +17,7 @@ from filer.models.imagemodels import Image
 from .models import Category, Course, CourseRun, Licence, Organization
 from ..core.factories import FilerImageFactory, PageExtensionDjangoModelFactory
 from ..core.helpers import create_text_plugin
-from ..core.tests.utils import file_getter
+from ..core.utils import file_getter
 
 VideoSample = namedtuple("VideoSample", ["label", "image", "url"])
 
@@ -57,7 +56,7 @@ class BLDPageExtensionDjangoModelFactory(PageExtensionDjangoModelFactory):
             banner_placeholder = self.extended_object.placeholders.get(slot="banner")
 
             banner_path = extracted if isinstance(extracted, str) else None
-            banner_file = file_getter(os.path.dirname(__file__), "banner")(banner_path)
+            banner_file = file_getter("banner")(banner_path)
             wrapped_banner = File(banner_file, banner_file.name)
             banner = Image.objects.create(file=wrapped_banner)
 
@@ -80,7 +79,7 @@ class BLDPageExtensionDjangoModelFactory(PageExtensionDjangoModelFactory):
             logo_placeholder = self.extended_object.placeholders.get(slot="logo")
 
             logo_path = extracted if isinstance(extracted, str) else None
-            logo_file = file_getter(os.path.dirname(__file__), "logo")(logo_path)
+            logo_file = file_getter("logo")(logo_path)
             wrapped_logo = File(logo_file, logo_file.name)
             logo = Image.objects.create(file=wrapped_logo)
             for language in self.extended_object.get_languages():
@@ -215,7 +214,7 @@ class CourseFactory(PageExtensionDjangoModelFactory):
             )
 
             cover_path = extracted if isinstance(extracted, str) else None
-            cover_file = file_getter(os.path.dirname(__file__), "cover")(cover_path)
+            cover_file = file_getter("cover")(cover_path)
             wrapped_cover = File(cover_file, cover_file.name)
             cover = Image.objects.create(file=wrapped_cover)
             for language in self.extended_object.get_languages():
@@ -510,7 +509,7 @@ class LicenceLogoImageFactory(FilerImageFactory):
         """
         Fill image file field with random image.
         """
-        logo_file = file_getter(os.path.dirname(__file__), "licence")()
+        logo_file = file_getter("licence")()
         wrapped_logo = File(logo_file, logo_file.name)
 
         return wrapped_logo
