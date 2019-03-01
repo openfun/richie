@@ -1,8 +1,6 @@
 """
 Persons factories
 """
-import os
-
 from django.core.files import File
 from django.utils.translation import get_language
 
@@ -13,7 +11,7 @@ from filer.models.imagemodels import Image
 from .models import Person, PersonTitle, PersonTitleTranslation
 from ..core.factories import PageExtensionDjangoModelFactory
 from ..core.helpers import create_text_plugin
-from ..core.tests.utils import file_getter
+from ..core.utils import file_getter
 
 
 class PersonTitleFactory(factory.django.DjangoModelFactory):
@@ -89,7 +87,7 @@ class PersonFactory(PageExtensionDjangoModelFactory):
                 slot="portrait"
             )
 
-            portrait_file = file_getter(os.path.dirname(__file__), "portrait")()
+            portrait_file = file_getter("portrait")()
             wrapped_portrait = File(portrait_file, portrait_file.name)
             portrait = Image.objects.create(file=wrapped_portrait)
             for language in self.extended_object.get_languages():

@@ -295,7 +295,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         # Homepage
         "richie/homepage.html maincontent": {
             "name": _("Main content"),
-            "plugins": ["SectionPlugin"],
+            "plugins": ["LargeBannerPlugin", "SectionPlugin"],
         },
         # Course detail
         "courses/cms/course_detail.html course_cover": {

@@ -66,7 +66,7 @@ def create_i18n_page(title=None, languages=None, is_homepage=False, **kwargs):
         title=i18n_titles[first_language],
         slug=slug,
         template=template,
-        **kwargs
+        **kwargs,
     )
 
     if is_homepage is True:
@@ -176,7 +176,7 @@ def recursive_page_creation(site, pages_info, parent=None):
             published=True,
             site=site,
             parent=parent,
-            **info["kwargs"]
+            **info["kwargs"],
         )
 
         pages[name] = page
