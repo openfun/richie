@@ -8,6 +8,16 @@
 // Bootstrap settings
 //
 
+// Add a new breakpoint "xxl" for more granular downgrading
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1900px,
+);
+
 // More space between columns
 $grid-gutter-width: 20px;
 

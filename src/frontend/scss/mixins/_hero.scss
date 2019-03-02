@@ -1,0 +1,143 @@
+// Structural rules for Hero types
+
+// Function to return every Hero element selectors depending on methodology
+// and possibly parent.
+//
+// @arg {String} $methodology [null]
+//   If value is "bem", object element selectors will be created with BEM
+//   methodology and starting from given `$parent`. Any other value is trigger
+//   natural methodology (default behavior).
+//
+// @arg {Selector} $parent [&]
+//   Parent selector used only with BEM methodology to define element
+//   selectors. Default is parent reference `&`. Usually you don't have to
+//   change this unless your are working inside a modifier or a sub child
+//   element.
+//
+@function f-o-hero-selectors($methodology, $parent: '&') {
+  @return (
+    'body': if($methodology== 'bem', '#{$parent}__body', '.body'),
+    'title': if($methodology== 'bem', '#{$parent}__body__title', '.title'),
+    'logo': if($methodology== 'bem', '#{$parent}__body__logo', '.logo'),
+    'content': if($methodology== 'bem', '#{$parent}__body__content', '.content')
+  );
+}
+
+// Main container properties
+@mixin m-o-hero_container(
+  $margin: null,
+  $padding: null,
+  $base-height: null,
+  $responsive-heights: null,
+  $justify-content: null,
+  $align-items: null,
+  $background-repeat: null,
+  $background-position: null,
+  $background-size: null
+) {
+  display: flex;
+  flex-direction: row;
+  margin: $margin;
+  padding: $padding;
+
+  // Inner content axis alignments
+  justify-content: $justify-content;
+  align-items: $align-items;
+
+  min-height: $base-height;
+  @each $breakpoint, $value in $responsive-heights {
+    @include media-breakpoint-up($breakpoint) {
+      min-height: $value;
+    }
+  }
+
+  background-repeat: $background-repeat;
+  background-position: $background-position;
+  background-size: $background-size;
+}
+
+// Body element properties
+@mixin m-o-hero__body($margin: null, $padding: null) {
+  position: relative;
+  margin: $margin;
+  padding: $padding;
+}
+
+// Full hero structure including every available elements.
+@mixin m-o-hero(
+  $margin: null,
+  $padding: null,
+  $base-height: null,
+  $responsive-heights: null,
+  $justify-content: center,
+  $align-items: center,
+  $background-repeat: no-repeat,
+  $background-position: center,
+  $background-size: cover,
+  $body-margin: null,
+  $body-padding: null,
+  $title-margin: null,
+  $title-padding: null,
+  $title-fontsize: null,
+  $title-responsive-fontsizes: null,
+  $title-textalign: null,
+  $content-margin: null,
+  $content-padding: null,
+  $logo-margin: null,
+  $logo-padding: null,
+  $methodology: 'standard',
+  $parent: '&'
+) {
+  // Get element selectors depending methodology
+  $selectors: f-o-hero-selectors($methodology, $parent);
+  $selector-body: map-get($selectors, 'body');
+  $selector-title: map-get($selectors, 'title');
+  $selector-logo: map-get($selectors, 'logo');
+  $selector-content: map-get($selectors, 'content');
+
+  // Flow direction depending media width value
+  @include m-o-hero_container(
+    $margin: $margin,
+    $padding: $padding,
+    $base-height: $base-height,
+    $responsive-heights: $responsive-heights,
+    $justify-content: $justify-content,
+    $align-items: $align-items,
+    $background-repeat: $background-repeat,
+    $background-position: $background-position,
+    $background-size: $background-size
+  );
+
+  // Body element
+  #{$selector-body} {
+    @include m-o-hero__body($margin: $body-margin, $padding: $body-padding);
+  }
+
+  // Title element
+  #{$selector-title} {
+    margin: $title-margin;
+    padding: $title-padding;
+
+    // Adjust text size for smaller screens
+    font-size: $title-fontsize;
+    @each $breakpoint, $value in $title-responsive-fontsizes {
+      @include media-breakpoint-up($breakpoint) {
+        font-size: $value;
+      }
+    }
+
+    text-align: $title-textalign;
+  }
+
+  // Content element
+  #{$selector-content} {
+    margin: $content-margin;
+    padding: $content-padding;
+  }
+
+  // Logo element
+  #{$selector-logo} {
+    margin: $logo-margin;
+    padding: $logo-padding;
+  }
+}
