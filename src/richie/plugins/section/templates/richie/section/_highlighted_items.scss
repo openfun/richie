@@ -1,0 +1,104 @@
+$richie-section-highlights-padding-top: 3rem !default;
+$richie-section-highlights-padding: $richie-section-highlights-padding-top 1rem !default;
+$richie-section-highlights-background-even: $white !default;
+$richie-section-highlights-background-odd: $gray98 !default;
+$richie-section-highlights-title-color: $gray17 !default;
+$richie-section-highlights-title-margin: 0 auto 1rem !default;
+$richie-section-highlights-title-padding: 1rem !default;
+$richie-section-highlights-title-textalign: center !default;
+$richie-section-highlights-item-gutter: 0.625rem !default;
+
+
+.section{
+    &--highlights{
+        padding: $richie-section-highlights-padding;
+        background: $richie-section-highlights-background-even;
+
+        &:nth-child(odd){
+            background: $richie-section-highlights-background-odd;
+        }
+    }
+
+    &__title {
+        .section--highlights & {
+            margin: $richie-section-highlights-title-margin;
+            padding: $richie-section-highlights-title-padding;
+            color: $richie-section-highlights-title-color;
+            text-align: $richie-section-highlights-title-textalign;
+            @include media-breakpoint-up(md) {
+                @include make-container();
+                @include make-container-max-widths();
+            }
+        }
+    }
+
+    &__items {
+        .section--highlights & {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            @include media-breakpoint-up(md) {
+                @include make-container();
+                @include make-container-max-widths();
+            }
+
+            .course-plugin-container{
+                @include sv-flex(1, 0, calc(100% - #{$richie-section-highlights-item-gutter * 2}));
+                display: flex;
+                min-width: auto;
+                margin: $richie-section-highlights-item-gutter;
+                padding: 0;
+                @include media-breakpoint-up(sm) {
+                    @include sv-flex(1, 0, calc(50% - #{$richie-section-highlights-item-gutter * 2}));
+                }
+                @include media-breakpoint-up(md) {
+                    @include sv-flex(1, 0, calc(25% - #{$richie-section-highlights-item-gutter * 2}));
+                }
+
+                .course-plugin{
+                    @include sv-flex(1, 0, 100%);
+                    margin: 0;
+                }
+            }
+
+            .organization-plugin-container{
+                @include sv-flex(1, 0, calc(100% - #{$richie-section-highlights-item-gutter * 2}));
+                display: flex;
+                min-width: auto;
+                margin: $richie-section-highlights-item-gutter;
+                padding: 0;
+                @include media-breakpoint-up(sm) {
+                    @include sv-flex(1, 0, calc(50% - #{$richie-section-highlights-item-gutter * 2}));
+                }
+                @include media-breakpoint-up(md) {
+                    @include sv-flex(1, 0, calc(25% - #{$richie-section-highlights-item-gutter * 2}));
+                }
+
+                .organization-plugin{
+                    @include sv-flex(1, 0, 100%);
+                    margin: 0;
+                }
+            }
+
+            .category-plugin-container{
+                @include sv-flex(1, 0, auto);
+                display: flex;
+                min-width: auto;
+                margin: $richie-section-highlights-item-gutter;
+                padding: 0;
+
+                .category-plugin{
+                    @include sv-flex(1, 0, 100%);
+                    margin: 0;
+                }
+            }
+        }
+    }
+}
+
+
+// Section highlight below introduction Hero have a bonus padding to correctly
+// include logo which is partially over it
+.hero-intro--with-logo + .section--highlights{
+    padding-top: $richie-section-highlights-padding-top + 2rem;
+}
