@@ -32,7 +32,7 @@ class DatetimeRangeField(forms.Field):
         if not value and self.required:
             raise ValidationError("Missing required field")
         # Or the null value is optional: return None and exit
-        elif not value:
+        if not value:
             return None
 
         # Decode our incoming JSON array and unpack it all at once

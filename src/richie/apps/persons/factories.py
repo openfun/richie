@@ -8,10 +8,10 @@ import factory
 from cms.api import add_plugin
 from filer.models.imagemodels import Image
 
-from .models import Person, PersonTitle, PersonTitleTranslation
 from ..core.factories import PageExtensionDjangoModelFactory
 from ..core.helpers import create_text_plugin
 from ..core.utils import file_getter
+from .models import Person, PersonTitle, PersonTitleTranslation
 
 
 class PersonTitleFactory(factory.django.DjangoModelFactory):
