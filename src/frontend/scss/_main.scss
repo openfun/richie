@@ -36,7 +36,6 @@
 @import '../js/components/CourseGlimpse/_CourseGlimpse';
 @import '../js/components/icons/CloseIcon';
 @import '../js/components/Search/_Search';
-@import '../js/components/SearchFilter/_SearchFilter';
 @import '../js/components/SearchFilterGroup/_SearchFilterGroup';
 @import '../js/components/SearchFiltersPane/_SearchFiltersPane';
 @import '../js/components/SearchLoader/_SearchLoader';
@@ -45,6 +44,7 @@
 @import '../../richie/apps/core/templates/menu/_menu';
 @import '../../richie/apps/core/templates/richie/single-column';
 @import './objects/course_glimpses';
+@import './objects/search-filter-value';
 @import '../../richie/apps/courses/templates/courses/plugins/category_plugin';
 @import '../../richie/apps/persons/templates/persons/plugins/person_plugin';
 @import '../../richie/apps/courses/templates/courses/plugins/course_plugin';

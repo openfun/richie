@@ -1,0 +1,103 @@
+$richie-search-filter-value-padding: 0.4rem 0.5rem !default;
+$richie-search-filter-value-fontsize: 0.9rem !default;
+$richie-search-filter-value-fontcolor: rgba($white, 0.85) !default;
+$richie-search-filter-value-fontcolor-hover: $white !default;
+$richie-search-filter-value-divider-border: 1px solid $gray80 !default;
+
+$richie-search-filter-value-active-fontcolor: $white !default;
+$richie-search-filter-value-active-fontweight: bold !default;
+$richie-search-filter-value-active-divider-border: 1px solid $white !default;
+
+.search-filter-value-leaf,
+.search-filter-value-parent__self__btn {
+  align-items: center;
+  border: none;
+  background: inherit;
+  color: $richie-search-filter-value-fontcolor;
+  font-size: $richie-search-filter-value-fontsize;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    z-index: 1; // Place hover/active items above their siblings for proper border styling
+    color: $richie-search-filter-value-fontcolor-hover;
+  }
+
+  // Include both here for `<a>`s and `<button>`s
+  &.active {
+    z-index: 2; // Place active items above their siblings for proper border styling
+    font-weight: $richie-search-filter-value-active-fontweight;
+    color: $richie-search-filter-value-active-fontcolor;
+    border-top: $richie-search-filter-value-active-divider-border;
+  }
+
+  &__name {
+    flex-grow: 1;
+    text-align: start;
+  }
+
+  &__count {
+    @extend .badge;
+    @extend .badge-pill;
+
+    color: $white;
+    background: $firebrick6;
+    margin-left: 0.375rem;
+  }
+
+  &__count,
+  .icon-close {
+    margin-left: 0.375rem;
+  }
+
+  .icon-close {
+    // Ensure the icon is not shrinked down when the filter name spans 2 lines
+    flex-shrink: 0;
+  }
+}
+
+.search-filter-value-leaf,
+.search-filter-value-parent__self {
+  display: flex;
+  border-top: $richie-search-filter-value-divider-border;
+  padding: $richie-search-filter-value-padding;
+}
+
+.search-filter-value-parent {
+  display: flex;
+  flex-direction: column;
+  padding: 0; // Padding is applied by __self & leaves, not parent
+
+  &__self {
+    padding-left: 0; // Make room for the chevron
+
+    &__btn {
+      display: flex;
+      flex-grow: 1;
+      padding: 0;
+      text-align: start;
+    }
+
+    &__unfold {
+      border: 0;
+      margin-right: 0.4rem;
+      padding: 0 0.15rem;
+      background: inherit;
+      color: white;
+      transition: 0.2s ease-in-out;
+      line-height: 1.5rem;
+      font-size: 1.3rem;
+      font-weight: 200;
+
+      &--open {
+        transform: rotate(90deg);
+      }
+    }
+  }
+
+  &__children {
+    display: flex;
+    flex-direction: column;
+    margin-left: 1.5rem;
+  }
+}

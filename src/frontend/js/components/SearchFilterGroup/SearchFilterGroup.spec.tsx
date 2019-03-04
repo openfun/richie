@@ -6,11 +6,11 @@ import { cleanup, render } from 'react-testing-library';
 import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
 import { SearchFilterGroup } from './SearchFilterGroup';
 
-jest.mock('../SearchFilter/SearchFilter', () => ({
-  SearchFilter: ({ filterValue, isActive }: any) => (
-    <span data-testid="search-filter">{`Received: ${
-      isActive ? 'active' : 'non-active'
-    } filter - ${filterValue.human_name}`}</span>
+jest.mock('../SearchFilterValueLeaf/SearchFilterValueLeaf', () => ({
+  SearchFilterValueLeaf: ({ value }: any) => (
+    <span data-testid="search-filter">{`Received: filter - ${
+      value.human_name
+    }`}</span>
   ),
 }));
 
@@ -46,7 +46,7 @@ describe('components/SearchFilterGroup', () => {
 
     // The filter group title and all filters are shown
     getByText('Organizations');
-    getByText('Received: non-active filter - Value One');
-    getByText('Received: non-active filter - Value Two');
+    getByText('Received: filter - Value One');
+    getByText('Received: filter - Value Two');
   });
 });
