@@ -132,7 +132,7 @@ class MultiSelectField(models.CharField):
         res = [*super().check(**kwargs), *self._check_max_choices_attribute(**kwargs)]
         return res
 
-    def from_db_value(self, value, expression, connection, context):
+    def from_db_value(self, value, expression, connection):
         """Convert a database value to a list value."""
         if not value:
             return None if value is None else []
