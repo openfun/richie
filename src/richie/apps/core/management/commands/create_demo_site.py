@@ -242,6 +242,8 @@ HOMEPAGE_CONTENT = {
     "en": {
         "banner_title": "Welcome to Richie",
         "banner_content": "It works! This is the default homepage for the Richie CMS.",
+        "banner_template": "richie/large_banner/hero-intro.html",
+        "section_template": "richie/section/highlighted_items.html",
         "courses_title": "Popular courses",
         "organizations_title": "Universities",
         "subjects_title": "Subjects",
@@ -249,6 +251,8 @@ HOMEPAGE_CONTENT = {
     "fr": {
         "banner_title": "Bienvenue sur Richie",
         "banner_content": "Ça marche ! Ceci est la page d'accueil par défaut du CMS Richie.",
+        "banner_template": "richie/large_banner/hero-intro.html",
+        "section_template": "richie/section/highlighted_items.html",
         "courses_title": "Cours à la une",
         "organizations_title": "Universités",
         "subjects_title": "Thématiques",
@@ -427,6 +431,7 @@ def create_demo_site():
             logo=logo,
             logo_alt_text="logo",
             content=content["banner_content"],
+            template=content["banner_template"],
         )
         # Add highlighted courses
         courses_section = add_plugin(
@@ -434,6 +439,7 @@ def create_demo_site():
             placeholder=placeholder,
             plugin_type="SectionPlugin",
             title=content["courses_title"],
+            template=content["section_template"],
         )
         for course in random.sample(courses, NB_HOME_HIGHLIGHTED_COURSES):
             add_plugin(
@@ -450,6 +456,7 @@ def create_demo_site():
             placeholder=placeholder,
             plugin_type="SectionPlugin",
             title=content["organizations_title"],
+            template=content["section_template"],
         )
         for organization in random.sample(
             organizations, NB_HOME_HIGHLIGHTED_ORGANIZATIONS
@@ -468,6 +475,7 @@ def create_demo_site():
             placeholder=placeholder,
             plugin_type="SectionPlugin",
             title=content["subjects_title"],
+            template=content["section_template"],
         )
         for subject in random.sample(subjects, NB_HOME_HIGHLIGHTED_SUBJECTS):
             add_plugin(

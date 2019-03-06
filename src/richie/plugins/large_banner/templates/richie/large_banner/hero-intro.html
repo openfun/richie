@@ -1,0 +1,14 @@
+{% load thumbnail %}
+<div class="hero-intro{% if instance.logo %} hero-intro--with-logo{% endif %}"
+    {% if instance.background_image.url %} style="background-image: url('{% thumbnail instance.background_image 1900x450 crop=',0' %}');"{% endif %}
+    >
+    <div class="hero-intro__body">
+        <h1 class="hero-intro__body__title">{{ instance.title }}</h1>
+        {% if instance.content %}
+            <div class="hero-intro__body__content">{{ instance.content|safe }}</div>
+        {% endif %}
+        {% if instance.logo %}
+            <img src="{% thumbnail instance.logo 500x180 %}" class="hero-intro__body__logo" alt="{{ instance.logo_alt_text }}"/>
+        {% endif %}
+    </div>
+</div>
