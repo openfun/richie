@@ -93,6 +93,26 @@ $richie-section-highlights-item-gutter: 0.625rem !default;
                 }
             }
 
+            .person-plugin{
+                @include sv-flex(1, 0, calc(100% - #{$richie-section-highlights-item-gutter * 2}));
+                margin: $richie-section-highlights-item-gutter;
+                padding: 1rem;
+                border: 1px solid $gray97;
+                border-radius: 0.2rem;
+
+                &__content{
+                    &__wrapper{
+                        padding: 0 0 0 1rem;
+                    }
+                    &__title{
+                        font-size: 1rem;
+                    }
+                    &__text{
+                        font-size: 0.9rem;
+                    }
+                }
+            }
+
             // Make a caesura in flex flow so button row allway takes full width
             .button-caesura{
                 @include sv-flex(1, 0, 100%);

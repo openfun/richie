@@ -47,6 +47,7 @@ NB_PERSONS = 10
 NB_HOME_HIGHLIGHTED_COURSES = 8
 NB_HOME_HIGHLIGHTED_ORGANIZATIONS = 4
 NB_HOME_HIGHLIGHTED_SUBJECTS = 6
+NB_HOME_HIGHLIGHTED_PERSONS = 3
 PAGE_INFOS = {
     "home": {
         "title": {"en": "Home", "fr": "Accueil"},
@@ -246,6 +247,7 @@ HOMEPAGE_CONTENT = {
         "section_template": "richie/section/highlighted_items.html",
         "courses_title": "Popular courses",
         "organizations_title": "Universities",
+        "persons_title": "Persons",
         "subjects_title": "Subjects",
     },
     "fr": {
@@ -256,6 +258,7 @@ HOMEPAGE_CONTENT = {
         "courses_title": "Cours à la une",
         "organizations_title": "Universités",
         "subjects_title": "Thématiques",
+        "persons_title": "Personnes",
     },
 }
 
@@ -485,6 +488,28 @@ def create_demo_site():
                 target=subjects_section,
                 page=subject.extended_object,
             )
+
+        # Add highlighted persons
+        persons_section = add_plugin(
+            language=language,
+            placeholder=placeholder,
+            plugin_type="SectionPlugin",
+            title=content["persons_title"],
+            template=content["section_template"],
+        )
+        for person in random.sample(persons, NB_HOME_HIGHLIGHTED_PERSONS):
+            add_plugin(
+                language=language,
+                placeholder=placeholder,
+                plugin_type="PersonPlugin",
+                target=persons_section,
+                page=person.extended_object,
+            )
+
+        # Once content has been added we must publish again homepage in every
+        # edited Languages
+        pages_created["home"].publish("en")
+        pages_created["home"].publish("fr")
 
 
 class Command(BaseCommand):
