@@ -1,0 +1,6 @@
+.single-column {
+  @include make-container();
+  @include make-container-max-widths();
+  padding: 1rem;
+  background: $richie-content-container-bg;
+}

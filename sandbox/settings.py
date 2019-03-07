@@ -288,6 +288,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         ("richie/fullwidth.html", "Fullwidth"),
         ("richie/child_pages_list.html", _("List of child pages")),
         ("richie/homepage.html", _("Homepage")),
+        ("richie/single-column.html", _("Single column")),
     )
     CMS_PERMISSION = True
 
