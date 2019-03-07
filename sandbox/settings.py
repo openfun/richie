@@ -302,6 +302,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
                     "CoursePlugin",
                     "OrganizationPlugin",
                     "CategoryPlugin",
+                    "PersonPlugin",
                     "LinkPlugin",
                 ]
             },

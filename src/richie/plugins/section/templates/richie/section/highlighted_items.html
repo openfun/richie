@@ -4,7 +4,9 @@
     <h{{ header_level|default:1 }} class="section__title">{{ instance.title }}</h{{ header_level|default:1 }}>
     <div class="section__items">
         {% for plugin in instance.child_plugin_instances %}
-            {% render_plugin plugin %}
+            {% with header_level=3 %}
+                {% render_plugin plugin %}
+            {% endwith %}
         {% endfor %}
     </div>
 </div>
