@@ -296,6 +296,14 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         "richie/homepage.html maincontent": {
             "name": _("Main content"),
             "plugins": ["LargeBannerPlugin", "SectionPlugin"],
+            "child_classes": {
+                "SectionPlugin": [
+                    "CoursePlugin",
+                    "OrganizationPlugin",
+                    "CategoryPlugin",
+                    "LinkPlugin",
+                ]
+            },
         },
         # Course detail
         "courses/cms/course_detail.html course_cover": {
@@ -457,6 +465,11 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         "toolbar": "HTMLField",
         "toolbar_HTMLField": [["Undo", "Redo"], ["Bold", "Italic"], ["Link", "Unlink"]],
     }
+
+    # Additional LinkPlugin templates. Note how choice value is just a keyword
+    # instead of full template path. Value is used inside a path formatting
+    # such as "templates/djangocms_link/VALUE/link.html"
+    DJANGOCMS_LINK_TEMPLATES = [("button-caesura", _("Button caesura"))]
 
     # Thumbnails settings
     THUMBNAIL_PROCESSORS = (
