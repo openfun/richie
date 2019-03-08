@@ -2,11 +2,36 @@
 Common utilities related to our indexers. For use in our indexers and related settings,
 or as helpers for users of the project.
 """
-from collections import namedtuple
+from django.utils.module_loading import import_string
 
-# Define a named tuple type that will enforce the necessary keys for our ES_INDICES setting
-# (and also make iteration, both with and without keys, trivial)
-IndicesList = namedtuple("IndicesList", ["courses", "organizations", "categories"])
+
+class IndicesList:
+    """
+    This utility class allow configuring indexers from the settings and still benefit from
+    an easy access and handling of the instantiated indexers. For example:
+
+        >>> indices = IndicesList(
+        ...     "courses": "richie.apps.search.indexers.courses.CoursesIndexer",
+        ...     "categories": "richie.apps.search.indexers.categories.CategoriesIndexer",
+        ... )
+        >>> courses_indexer = indices.courses
+        >>> for indexer in indexers:
+        ...     form = indexer.form()....
+    """
+
+    def __init__(self, **kwargs):
+        """Record any dotted path to indices to allow access by property or iteration."""
+        self.index_map = kwargs
+
+    def __getattr__(self, item):
+        """Allow accessing indices via properties (e.g. indices.courses)."""
+        return import_string(self.index_map[item])
+
+    def __iter__(self):
+        """Allow iterating through indices (e.g. for index in indices)."""
+        return iter(
+            [import_string(dotted_path) for dotted_path in self.index_map.values()]
+        )
 
 
 def slice_string_for_completion(string):

@@ -18,7 +18,6 @@ from richie.apps.search.index_manager import (
     regenerate_indexes,
     store_es_scripts,
 )
-from richie.apps.search.utils.indexers import IndicesList
 
 
 class IndexManagerTestCase(TestCase):
@@ -157,19 +156,6 @@ class IndexManagerTestCase(TestCase):
         mock_logger.info.assert_called()
 
     # pylint: disable=no-member,unused-argument
-    @override_settings(
-        ES_INDICES=IndicesList(
-            "example.ExOneIndexable",
-            "example.ExTwoIndexable",
-            "example.ExThreeIndexable",
-        )
-    )
-    @mock.patch(
-        "richie.apps.search.index_manager.get_indexable_from_string",
-        lambda name: ExOneIndexable
-        if name == "example.ExOneIndexable"
-        else ExTwoIndexable,
-    )
     @mock.patch(
         "richie.apps.search.index_manager.get_indexes_by_alias",
         side_effect=lambda existing_indexes, alias: [
@@ -201,56 +187,56 @@ class IndexManagerTestCase(TestCase):
                 "actions": [
                     {
                         "add": {
-                            "index": "richie_example_created_index",
-                            "alias": "richie_example",
+                            "index": "richie_courses_created_index",
+                            "alias": "richie_courses",
                         }
                     },
                     {
                         "add": {
-                            "index": "richie_stub_created_index",
-                            "alias": "richie_stub",
+                            "index": "richie_organizations_created_index",
+                            "alias": "richie_organizations",
                         }
                     },
                     {
                         "add": {
-                            "index": "richie_stub_created_index",
-                            "alias": "richie_stub",
+                            "index": "richie_categories_created_index",
+                            "alias": "richie_categories",
                         }
                     },
                     {
                         "remove": {
-                            "index": "richie_example_forgotten",
-                            "alias": "richie_example",
+                            "index": "richie_courses_forgotten",
+                            "alias": "richie_courses",
                         }
                     },
                     {
                         "remove": {
-                            "index": "richie_example_previous",
-                            "alias": "richie_example",
+                            "index": "richie_courses_previous",
+                            "alias": "richie_courses",
                         }
                     },
                     {
                         "remove": {
-                            "index": "richie_stub_forgotten",
-                            "alias": "richie_stub",
+                            "index": "richie_organizations_forgotten",
+                            "alias": "richie_organizations",
                         }
                     },
                     {
                         "remove": {
-                            "index": "richie_stub_previous",
-                            "alias": "richie_stub",
+                            "index": "richie_organizations_previous",
+                            "alias": "richie_organizations",
                         }
                     },
                     {
                         "remove": {
-                            "index": "richie_stub_forgotten",
-                            "alias": "richie_stub",
+                            "index": "richie_categories_forgotten",
+                            "alias": "richie_categories",
                         }
                     },
                     {
                         "remove": {
-                            "index": "richie_stub_previous",
-                            "alias": "richie_stub",
+                            "index": "richie_categories_previous",
+                            "alias": "richie_categories",
                         }
                     },
                 ]
@@ -260,19 +246,6 @@ class IndexManagerTestCase(TestCase):
             ignore=[400, 404], index="richie_orphan"
         )
 
-    @override_settings(
-        ES_INDICES=IndicesList(
-            "example.ExOneIndexable",
-            "example.ExTwoIndexable",
-            "example.ExThreeIndexable",
-        )
-    )
-    @mock.patch(
-        "richie.apps.search.index_manager.get_indexable_from_string",
-        lambda name: ExOneIndexable
-        if name == "example.ExOneIndexable"
-        else ExTwoIndexable,
-    )
     @mock.patch(
         "richie.apps.search.index_manager.get_indexes_by_alias",
         side_effect=lambda existing_indexes, alias: [],
@@ -296,20 +269,20 @@ class IndexManagerTestCase(TestCase):
                 "actions": [
                     {
                         "add": {
-                            "index": "richie_example_created_index",
-                            "alias": "richie_example",
+                            "index": "richie_courses_created_index",
+                            "alias": "richie_courses",
                         }
                     },
                     {
                         "add": {
-                            "index": "richie_stub_created_index",
-                            "alias": "richie_stub",
+                            "index": "richie_organizations_created_index",
+                            "alias": "richie_organizations",
                         }
                     },
                     {
                         "add": {
-                            "index": "richie_stub_created_index",
-                            "alias": "richie_stub",
+                            "index": "richie_categories_created_index",
+                            "alias": "richie_categories",
                         }
                     },
                 ]
