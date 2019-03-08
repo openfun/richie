@@ -2,13 +2,12 @@
 ElasticSearch course document management utilities
 """
 from collections import defaultdict
-from datetime import MAXYEAR
 from functools import reduce
 
 from django.conf import settings
 from django.db.models import Prefetch
+from django.utils import translation
 
-import arrow
 from cms.models import Title
 from djangocms_picture.models import Picture
 
@@ -16,8 +15,7 @@ from richie.plugins.simple_text_ckeditor.models import SimpleText
 
 from ...courses.models import Course
 from ..defaults import COURSES_COVER_IMAGE_HEIGHT, COURSES_COVER_IMAGE_WIDTH
-from ..exceptions import QueryFormatException
-from ..forms import CourseListForm
+from ..forms import CourseSearchForm
 from ..partial_mappings import MULTILINGUAL_TEXT
 from ..utils.i18n import get_best_field_language
 from ..utils.indexers import slice_string_for_completion
@@ -68,14 +66,7 @@ class CoursesIndexer:
         "organizations",
         "title.*",
     ]
-
-    # Define the scoring boost (in ElasticSearch) related value names receive when using
-    # full-text search.
-    # For example, when a user searches for "Science" in full-text, it should match any
-    # course whose category contains "Science" or a related word, albeit with a lower
-    # score than courses that include it in their title or description.
-    # This lower score factor is the boost value we get or set here.
-    fulltext_search_filter_matching_boost = 0.05
+    form = CourseSearchForm
 
     scripts = {
         # The ordering process first splits the courses into 7 buckets (Bucket 0 to Bucket 6),
@@ -107,12 +98,12 @@ class CoursesIndexer:
         #         < 4 x datetime.MAXYEAR distance >
         #
         # --------------   4 x datetime.MAXYEAR  --------------
-        #     Bucket 4: Courses that are ongoing by closed
+        #     Bucket 4: Courses that are ongoing but closed
         #      sorted by descending end of enrollment date
         #         < 5 x datetime.MAXYEAR distance >
         #
         # --------------   5 x datetime.MAXYEAR  --------------
-        #     Bucket 5: Courses that are ongoing and open
+        #        Bucket 5: Courses that are archived
         #           sorted by descending end date
         #         < 6 x datetime.MAXYEAR distance >
         #
@@ -137,6 +128,7 @@ class CoursesIndexer:
                     int best_state = 6;
                     int best_index = 0;
                     long start, end, enrollment_start, enrollment_end;
+                    Set intersection;
 
                     for (int i = 0; i < params._source.course_runs.length; ++i) {
                         start = ZonedDateTime.parse(
@@ -152,54 +144,90 @@ class CoursesIndexer:
                             params._source.course_runs[i]['enrollment_end'], formatter
                         ).toInstant().toEpochMilli();
 
-                        if (start <  params.ms_since_epoch) {
-                            if (end >  params.ms_since_epoch && params.states.contains(0)) {
-                                if (enrollment_end >  params.ms_since_epoch) {
-                                    // ongoing open
-                                    best_state = 0;
-                                    best_index = i;
-                                    // We already found the best... let's break to save iterations
-                                    break;
+                        // Use language sets to check their intersection
+                        intersection = new HashSet(params._source.course_runs[i]['languages']);
+                        if (params.languages != null) {
+                            intersection.retainAll(new HashSet(params.languages))
+                        }
+
+                        // Only consider this course run if it is in a desired language
+                        if (params.languages == null || !intersection.isEmpty()) {
+                            if (start < params.ms_since_epoch) {
+                                if (end > params.ms_since_epoch) {
+                                    if (enrollment_end > params.ms_since_epoch) {
+                                        // ongoing open
+                                        if (params.states == null || params.states.contains(0)) {
+                                            best_state = 0;
+                                            best_index = i;
+                                            // We already found the best... let's save iterations
+                                            break;
+                                        }
+                                    }
+                                    else {
+                                        // ongoing closed
+                                        if (
+                                            best_state > 4 && (
+                                                params.states == null ||
+                                                params.states.contains(4)
+                                            )
+                                        ) {
+                                            best_state = 4;
+                                            best_index = i;
+                                        }
+                                    }
                                 }
                                 else {
-                                    // ongoing closed
-                                    if (best_state > 4 && params.states.contains(4)) {
-                                        best_state = 4;
+                                    // archived
+                                    if (
+                                        best_state > 5 && (
+                                            params.states == null ||
+                                            params.states.contains(5)
+                                        )
+                                    ) {
+                                        best_state = 5;
                                         best_index = i;
+                                        // Course runs are ordered by `end` date so we know all
+                                        // remaining course runs will also be archived.
+                                        // Let's break to save iterations:
+                                        break;
                                     }
                                 }
                             }
-                            else {
-                                // archived
-                                if (best_state > 5 && params.states.contains(5)) {
-                                    best_state = 5;
+                            else if (enrollment_start > params.ms_since_epoch) {
+                                // future not yet open
+                                if (
+                                    best_state > 2 && (
+                                        params.states == null ||
+                                        params.states.contains(2)
+                                    )
+                                ) {
+                                    best_state = 2;
                                     best_index = i;
-                                    // Course runs are ordered by `end` date so we know all
-                                    // remaining course runs will also be archived.
-                                    // Let's break to save iterations:
-                                    break;
                                 }
                             }
-                        }
-                        else if (enrollment_start >  params.ms_since_epoch) {
-                            // future not yet open
-                            if (best_state > 2 && params.states.contains(2)) {
-                                best_state = 2;
-                                best_index = i;
+                            else if (enrollment_end > params.ms_since_epoch) {
+                                // future open
+                                if (
+                                    best_state > 1 && (
+                                        params.states == null ||
+                                        params.states.contains(1)
+                                    )
+                                ) {
+                                    best_state = 1;
+                                    best_index = i;
+                                }
                             }
-                        }
-                        else if (enrollment_end > params.ms_since_epoch) {
-                            // future open
-                            if (best_state > 1 && params.states.contains(1)) {
-                                best_state = 1;
-                                best_index = i;
-                            }
-                        }
-                        else {
-                            // future already closed
-                            if (best_state > 3 && params.states.contains(3)) {
-                                best_state = 3;
-                                best_index = i;
+                            else {
+                                // future already closed
+                                if (
+                                    best_state > 3 && (
+                                        params.states == null ||
+                                        params.states.contains(3)
+                                    )
+                                ) {
+                                    best_state = 3;
+                                    best_index = i;
+                                }
                             }
                         }
                     }
@@ -291,7 +319,7 @@ class CoursesIndexer:
             syllabus_texts[simple_text.cmsplugin_ptr.language].append(simple_text.body)
 
         # Prepare categories, making sure we get title information for categories
-        # in the same request
+        # in the same query
         category_pages = (
             course.get_root_to_leaf_category_pages()
             .prefetch_related(
@@ -306,7 +334,7 @@ class CoursesIndexer:
         )
 
         # Prepare organizations, making sure we get title information for organizations
-        # in the same request
+        # in the same query
         organizations = (
             course.get_organizations()
             .prefetch_related(
@@ -395,175 +423,18 @@ class CoursesIndexer:
             yield cls.get_es_document_for_course(course, index, action)
 
     @staticmethod
-    def format_es_object_for_api(es_course, best_language):
+    def format_es_object_for_api(es_course, language=None):
         """
         Format a course stored in ES into a consistent and easy-to-consume record for
         API consumers
         """
+        language = language or translation.get_language()
         source = es_course["_source"]
         return {
             "id": es_course["_id"],
-            "absolute_url": get_best_field_language(
-                source["absolute_url"], best_language
-            ),
+            "absolute_url": get_best_field_language(source["absolute_url"], language),
             "categories": source["categories"],
-            "cover_image": get_best_field_language(
-                source["cover_image"], best_language
-            ),
+            "cover_image": get_best_field_language(source["cover_image"], language),
             "organizations": source["organizations"],
-            "title": get_best_field_language(source["title"], best_language),
-        }
-
-    @classmethod
-    # pylint: disable=R0912, R0914
-    def build_es_query(cls, request, filters):
-        """
-        Build an ElasticSearch query and its related aggregations, to be consumed by the ES client
-        in the Courses ViewSet
-        """
-        # QueryDict/MultiValueDict breaks lists: we need to normalize them
-        # Unpacking does not trigger the broken accessor so we get the proper value
-        params_form_values = {
-            k: v[0] if len(v) == 1 else v for k, v in request.query_params.lists()
-        }
-        # Use QueryDict/MultiValueDict as a shortcut to make sure we get arrays for our filters,
-        # which should be arrays even if their length is one
-        for filter_name in filters:
-            params_form_values[filter_name] = request.query_params.getlist(filter_name)
-        # Instantiate the form to allow validation/cleaning
-        params_form = CourseListForm(params_form_values)
-
-        # Raise an exception with error information if the query params are not valid
-        if not params_form.is_valid():
-            raise QueryFormatException(params_form.errors)
-
-        # Note: test_elasticsearch_feature.py needs to be updated whenever the search call
-        # is updated and makes use new features.
-        # queries is an array of individual queries that will be combined through "bool" before
-        # we pass them to ES. See the docs en bool queries.
-        # https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-bool-query.html
-        queries = []
-        for param, value in params_form.cleaned_data.items():
-            # Skip falsy values as we're not using them in our query
-            if not value:
-                continue
-
-            # The datetimerange fields are all translated to the ES query DSL the same way
-            if param in ["end", "enrollment_end", "enrollment_start", "start"]:
-                # Add the relevant range criteria to the queries
-                start, end = value
-                queries = [
-                    *queries,
-                    {
-                        "key": param,
-                        "fragment": [
-                            {
-                                "range": {
-                                    param: {
-                                        "gte": start.datetime if start else None,
-                                        "lte": end.datetime if end else None,
-                                    }
-                                }
-                            }
-                        ],
-                    },
-                ]
-
-            elif param in filters:
-                # Add the query fragments to the query
-                queries = queries + filters[param].get_query_fragment(value)
-
-            # Search is a regular (multilingual) match query
-            elif param == "query":
-                queries = [
-                    *queries,
-                    {
-                        "key": param,
-                        "fragment": [
-                            {
-                                "bool": {
-                                    "should": [
-                                        {
-                                            "multi_match": {
-                                                "fields": ["description.*", "title.*"],
-                                                "query": value,
-                                                "type": "cross_fields",
-                                            }
-                                        },
-                                        {
-                                            "multi_match": {
-                                                "boost": cls.fulltext_search_filter_matching_boost,
-                                                "fields": [
-                                                    "categories_names.*",
-                                                    "organizations_names.*",
-                                                ],
-                                                "query": value,
-                                                "type": "cross_fields",
-                                            }
-                                        },
-                                    ]
-                                }
-                            }
-                        ],
-                    },
-                ]
-
-        # Default to a match_all query
-        if not queries:
-            query = {"match_all": {}}
-        else:
-            # Concatenate all the sub-queries lists together to form the queries list
-            query = {
-                "bool": {
-                    "must":
-                    # queries => map(pluck("fragment")) => flatten()
-                    [clause for kf_pair in queries for clause in kf_pair["fragment"]]
-                }
-            }
-
-        # Concatenate our hardcoded filters query fragments with organizations and categories terms
-        # aggregations build on-the-fly
-        aggs = {
-            "all_courses": {
-                "global": {},
-                "aggregations": reduce(
-                    # Merge all the partial aggregations dicts together
-                    lambda acc, aggs_fragment: {**acc, **aggs_fragment},
-                    # Generate a partial aggregations dict (an aggs_fragment) for each filter
-                    [filter.get_aggs_fragment(queries) for filter in filters.values()],
-                    {},
-                ),
-            }
-        }
-
-        return (
-            params_form.cleaned_data.get("limit"),
-            params_form.cleaned_data.get("offset") or 0,
-            query,
-            aggs,
-        )
-
-    @staticmethod
-    def get_list_sorting_script(states=None):
-        """
-        Call the relevant sorting script for courses lists, regenerating the parameters on each
-        call. This will allow the ms_since_epoch value to stay relevant even if the ES instance
-        and/or the Django server are long running.
-
-        Note: we use script storage to save time on the script compilation, which is an expensive
-        operation. We'll only do it once at bootstrap time.
-        """
-        return {
-            "_script": {
-                "order": "asc",
-                "script": {
-                    "id": "sort_list",
-                    "params": {
-                        "states": states or [],
-                        "max_date": arrow.get(MAXYEAR, 12, 31).timestamp * 1000,
-                        "ms_since_epoch": arrow.utcnow().timestamp * 1000,
-                    },
-                },
-                "type": "number",
-            }
+            "title": get_best_field_language(source["title"], language),
         }

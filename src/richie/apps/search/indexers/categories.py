@@ -14,7 +14,7 @@ from richie.plugins.simple_text_ckeditor.models import SimpleText
 from ...courses.models import Category
 from .. import defaults
 from ..exceptions import QueryFormatException
-from ..forms import CategoryListForm
+from ..forms import SearchForm
 from ..partial_mappings import MULTILINGUAL_TEXT
 from ..utils.i18n import get_best_field_language
 from ..utils.indexers import slice_string_for_completion
@@ -151,7 +151,7 @@ class CategoriesIndexer:
         in the Categories ViewSet
         """
         # Instantiate a form with our query_params to check & sanitize them
-        params_form = CategoryListForm(request.query_params)
+        params_form = SearchForm(request.query_params)
 
         # Raise an exception with error information if the query params are not valid
         if not params_form.is_valid():
