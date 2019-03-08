@@ -4,7 +4,6 @@ API endpoints to access courses through ElasticSearch
 from functools import reduce
 
 from django.conf import settings
-from django.utils.module_loading import import_string
 from django.utils.translation import get_language_from_request
 
 from elasticsearch.exceptions import NotFoundError
@@ -13,6 +12,7 @@ from rest_framework.viewsets import ViewSet
 
 from ..defaults import FILTERS, FILTERS_DYNAMIC, FILTERS_HARDCODED
 from ..exceptions import QueryFormatException
+from ..indexers import ES_INDICES
 from ..utils.viewsets import AutocompleteMixin, ViewSetMetadata
 
 
@@ -22,8 +22,7 @@ class CoursesViewSet(AutocompleteMixin, ViewSet):
     See API Blueprint for details on consumer use
     """
 
-    # Get the courses indexer from the settings
-    _meta = ViewSetMetadata(indexer=import_string(settings.ES_INDICES.courses))
+    _meta = ViewSetMetadata(indexer=ES_INDICES.courses)
 
     # pylint: disable=no-self-use,unused-argument,too-many-locals
     def list(self, request, version):

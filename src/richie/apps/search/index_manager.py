@@ -5,19 +5,12 @@ from functools import reduce
 
 from django.conf import settings
 from django.utils import timezone
-from django.utils.module_loading import import_string
 
 from elasticsearch.client import IndicesClient
 from elasticsearch.exceptions import NotFoundError
 from elasticsearch.helpers import bulk
 
-
-def get_indexable_from_string(indexable_module_string):
-    """
-    Load the indexable from the module.Class path in settings
-    NB: we need this level of indirection to enable testing.
-    """
-    return import_string(indexable_module_string)
+from .indexers import ES_INDICES
 
 
 def get_indexes_by_alias(existing_indexes, alias):
@@ -74,13 +67,10 @@ def regenerate_indexes(logger):
         # Provide a fallback empty list so we don't have to check for its existence later on
         existing_indexes = []
 
-    # Dynamically import the modules from the config mixin strings
-    indexables = list(map(get_indexable_from_string, settings.ES_INDICES))
-
     # Create a new index for each of those modules
     # NB: we're mapping perform_create_index which produces side-effects
     indexes_to_create = zip(
-        list(map(lambda ix: perform_create_index(ix, logger), indexables)), indexables
+        list(map(lambda ix: perform_create_index(ix, logger), ES_INDICES)), ES_INDICES
     )
 
     # Prepare to alias them so they can be swapped-in for the previous versions
@@ -93,7 +83,7 @@ def regenerate_indexes(logger):
     indexes_to_unalias = reduce(
         lambda acc, ix: acc
         + list(get_indexes_by_alias(existing_indexes, ix.index_name)),
-        indexables,
+        ES_INDICES,
         [],
     )
 
@@ -131,7 +121,7 @@ def store_es_scripts(logger):
     Iterate over the indexers listed in the settings, import them, and store the scripts
     they define on their "scripts" key in ElasticSearch
     """
-    for indexer in map(get_indexable_from_string, settings.ES_INDICES):
+    for indexer in ES_INDICES:
         for script_id, script_body in indexer.scripts.items():
             if logger:
                 logger.info('Storing script "{:s}"...'.format(script_id))

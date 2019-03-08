@@ -12,8 +12,6 @@ from configurations import Configuration, values
 from elasticsearch import Elasticsearch
 from sentry_sdk.integrations.django import DjangoIntegration
 
-from richie.apps.search.utils.indexers import IndicesList
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join("/", "data")
 
@@ -54,12 +52,6 @@ class ElasticSearchMixin:
         [values.Value("localhost", environ_name="ES_CLIENT", environ_prefix=None)]
     )
     ES_CHUNK_SIZE = 500
-    ES_INDICES = IndicesList(
-        courses="richie.apps.search.indexers.courses.CoursesIndexer",
-        organizations="richie.apps.search.indexers.organizations.OrganizationsIndexer",
-        categories="richie.apps.search.indexers.categories.CategoriesIndexer",
-    )
-
     ES_DEFAULT_PAGE_SIZE = 10
 
 

@@ -3,6 +3,9 @@ Tests for the indexer helpers.
 """
 from django.test import TestCase
 
+from richie.apps.search.indexers import IndicesList
+from richie.apps.search.indexers.courses import CoursesIndexer
+from richie.apps.search.indexers.organizations import OrganizationsIndexer
 from richie.apps.search.utils.indexers import slice_string_for_completion
 
 
@@ -10,6 +13,15 @@ class UtilsIndexersTestCase(TestCase):
     """
     Test any functions we're exposing for use in our indexers.
     """
+
+    def test_indices_list(self):
+        """The IndicesList instance gives access to indices via properties or iteration."""
+        indices = IndicesList(
+            courses="richie.apps.search.indexers.courses.CoursesIndexer",
+            organizations="richie.apps.search.indexers.organizations.OrganizationsIndexer",
+        )
+        self.assertEqual(indices.courses, CoursesIndexer)
+        self.assertEqual([i for i in indices], [CoursesIndexer, OrganizationsIndexer])
 
     def test_slice_string_for_completion(self):
         """

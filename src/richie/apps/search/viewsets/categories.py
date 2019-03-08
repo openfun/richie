@@ -2,7 +2,6 @@
 API endpoints to access categories through ElasticSearch
 """
 from django.conf import settings
-from django.utils.module_loading import import_string
 from django.utils.translation import get_language_from_request
 
 from elasticsearch.exceptions import NotFoundError
@@ -10,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
 from ..exceptions import QueryFormatException
+from ..indexers import ES_INDICES
 from ..utils.viewsets import AutocompleteMixin, ViewSetMetadata
 
 
@@ -19,8 +19,7 @@ class CategoriesViewSet(AutocompleteMixin, ViewSet):
     See API Blueprint for details on consumer use.
     """
 
-    # Get the categories indexer from the settings
-    _meta = ViewSetMetadata(indexer=import_string(settings.ES_INDICES.categories))
+    _meta = ViewSetMetadata(indexer=ES_INDICES.categories)
 
     # pylint: disable=no-self-use,unused-argument
     def list(self, request, version):
@@ -28,6 +27,7 @@ class CategoriesViewSet(AutocompleteMixin, ViewSet):
         Category search endpoint: pass query params to ElasticSearch so it filters categories
         and returns a list of matching items
         """
+
         try:
             limit, offset, query = self._meta.indexer.build_es_query(request)
         except QueryFormatException as exc:
