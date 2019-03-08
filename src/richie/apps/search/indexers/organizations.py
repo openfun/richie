@@ -14,7 +14,7 @@ from richie.plugins.simple_text_ckeditor.models import SimpleText
 from ...courses.models import Organization
 from .. import defaults
 from ..exceptions import QueryFormatException
-from ..forms import OrganizationListForm
+from ..forms import SearchForm
 from ..partial_mappings import MULTILINGUAL_TEXT
 from ..utils.i18n import get_best_field_language
 from ..utils.indexers import slice_string_for_completion
@@ -133,7 +133,7 @@ class OrganizationsIndexer:
         in the Organizations ViewSet
         """
         # Instantiate a form with the request's query_params to check & sanitize them
-        query_params_form = OrganizationListForm(request.query_params)
+        query_params_form = SearchForm(request.query_params)
 
         # Raise an exception with error information if the query params are not valid
         if not query_params_form.is_valid():

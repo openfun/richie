@@ -2,8 +2,7 @@
 Import custom settings and set up defaults for values the Search app needs
 """
 from django.conf import settings
-from django.forms import MultipleChoiceField
-from django.utils import timezone
+from django.utils.module_loading import import_string
 from django.utils.translation import gettext as _
 
 COURSES_COVER_IMAGE_WIDTH = getattr(settings, "COURSES_COVER_IMAGE_WIDTH", 216)
@@ -19,162 +18,67 @@ ORGANIZATIONS_LOGO_IMAGE_HEIGHT = getattr(
 CATEGORIES_LOGO_IMAGE_WIDTH = getattr(settings, "CATEGORIES_LOGO_IMAGE_WIDTH", 216)
 CATEGORIES_LOGO_IMAGE_HEIGHT = getattr(settings, "CATEGORIES_LOGO_IMAGE_HEIGHT", 216)
 
+
+# Define the scoring boost (in ElasticSearch) related value names receive when using
+# full-text search.
+# For example, when a user searches for "Science" in full-text, it should match any
+# course whose category contains "Science" or a related word, albeit with a lower
+# score than courses that include it in their title or description.
+# This lower score factor is the boost value we get or set here.
+RELATED_CONTENT_MATCHING_BOOST = getattr(
+    settings, "RELATED_CONTENT_MATCHING_BOOST", 0.05
+)
+
+# Facet sorting mode
+SEARCH_SORTING_DEFAULT = getattr(settings, "RICHIE_SEARCH_SORTING", "conf")
+
 FILTERS_DEFAULT = [
     (
-        "richie.apps.search.utils.filter_definitions.FilterDefinitionCustom",
+        "richie.apps.search.filter_definitions.StaticChoicesFilterDefinition",
         {
             "name": "new",
             "human_name": _("New courses"),
-            "choices": [("new", _("First session"), [{"term": {"is_new": True}}])],
+            "position": 0,
+            "fragment_map": {"new": [{"term": {"is_new": True}}]},
+            "values": {"new": _("First session")},
         },
     ),
     (
-        "richie.apps.search.utils.filter_definitions.FilterDefinitionCustom",
+        "richie.apps.search.filter_definitions.NestingWrapper",
         {
-            "name": "availability",
-            "human_name": _("Availability"),
-            "choices": [
+            "name": "course_runs",
+            "filters": [
                 (
-                    "coming_soon",
-                    _("Coming soon"),
-                    [
-                        {
-                            "nested": {
-                                "path": "course_runs",
-                                "query": {
-                                    "bool": {
-                                        "must": [
-                                            {
-                                                "range": {
-                                                    "course_runs.start": {
-                                                        "gte": timezone.now()
-                                                    }
-                                                }
-                                            }
-                                        ]
-                                    }
-                                },
-                            }
-                        }
-                    ],
+                    "richie.apps.search.filter_definitions.AvailabilityFilterDefinition",
+                    {
+                        "name": "availability",
+                        "human_name": _("Availability"),
+                        "position": 1,
+                    },
                 ),
                 (
-                    "ongoing",
-                    _("On-going session"),
-                    [
-                        {
-                            "nested": {
-                                "path": "course_runs",
-                                "query": {
-                                    "bool": {
-                                        "must": [
-                                            {
-                                                "range": {
-                                                    "course_runs.start": {
-                                                        "lte": timezone.now()
-                                                    }
-                                                }
-                                            },
-                                            {
-                                                "range": {
-                                                    "course_runs.end": {
-                                                        "gte": timezone.now()
-                                                    }
-                                                }
-                                            },
-                                        ]
-                                    }
-                                },
-                            }
-                        }
-                    ],
-                ),
-                (
-                    "open",
-                    _("Open for enrollment"),
-                    [
-                        {
-                            "nested": {
-                                "path": "course_runs",
-                                "query": {
-                                    "bool": {
-                                        "must": [
-                                            {
-                                                "range": {
-                                                    "course_runs.enrollment_start": {
-                                                        "lte": timezone.now()
-                                                    }
-                                                }
-                                            },
-                                            {
-                                                "range": {
-                                                    "course_runs.enrollment_end": {
-                                                        "gte": timezone.now()
-                                                    }
-                                                }
-                                            },
-                                        ]
-                                    }
-                                },
-                            }
-                        }
-                    ],
-                ),
-                (
-                    "archived",
-                    _("Archived"),
-                    [
-                        {
-                            "nested": {
-                                "path": "course_runs",
-                                "query": {
-                                    "range": {
-                                        "course_runs.end": {"lte": timezone.now()}
-                                    }
-                                },
-                            }
-                        }
-                    ],
+                    "richie.apps.search.filter_definitions.LanguagesFilterDefinition",
+                    {
+                        "name": "languages",
+                        "human_name": _("Languages"),
+                        "position": 4,
+                        "sorting": "count",
+                    },
                 ),
             ],
         },
     ),
     (
-        "richie.apps.search.utils.filter_definitions.FilterDefinitionTerms",
-        {"name": "categories", "human_name": _("Categories")},
+        "richie.apps.search.filter_definitions.IndexableFilterDefinition",
+        {"name": "categories", "human_name": _("Categories"), "position": 2},
     ),
     (
-        "richie.apps.search.utils.filter_definitions.FilterDefinitionTerms",
-        {"name": "organizations", "human_name": _("Organizations")},
-    ),
-    (
-        "richie.apps.search.utils.filter_definitions.FilterDefinitionLanguages",
-        {"name": "languages", "human_name": _("Languages")},
+        "richie.apps.search.filter_definitions.IndexableFilterDefinition",
+        {"name": "organizations", "human_name": _("Organizations"), "position": 3},
     ),
 ]
-FILTERS = getattr(settings, "RICHIE_SEARCH_FILTERS", FILTERS_DEFAULT)
 
-
-# Define our aggregations names, for our ES query, which will match with the field
-# names on the objects & the facets we return on the API response
-FILTERS_DYNAMIC = getattr(
-    settings,
-    "RICHIE_SEARCH_FILTERS_DYNAMIC",
-    ["categories", "languages", "organizations"],
-)
-
-FILTERS_HARDCODED_DEFAULT = {
-    filterParams["name"]: {
-        "field": MultipleChoiceField,
-        "choices": {
-            choice_name: choice_fragment
-            for choice_name, _, choice_fragment in filterParams["choices"]
-        },
-    }
-    for className, filterParams in FILTERS_DEFAULT
-    if "choices" in filterParams
+FILTERS = {
+    params["name"]: import_string(path)(**params)
+    for path, params in getattr(settings, "RICHIE_SEARCH_FILTERS", FILTERS_DEFAULT)
 }
-
-FILTERS_HARDCODED = getattr(
-    settings, "RICHIE_SEARCH_FILTERS_HARDCODED", FILTERS_HARDCODED_DEFAULT
-)

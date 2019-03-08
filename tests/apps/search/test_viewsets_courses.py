@@ -21,7 +21,7 @@ from richie.apps.search.viewsets.courses import CoursesViewSet
 @mock.patch.object(
     CoursesIndexer,
     "format_es_object_for_api",
-    side_effect=lambda es_course, _: "Course #{:n}".format(es_course["_id"]),
+    side_effect=lambda es_course: "Course #{:n}".format(es_course["_id"]),
 )
 class CoursesViewsetsTestCase(TestCase):
     """
@@ -69,36 +69,14 @@ class CoursesViewsetsTestCase(TestCase):
         self.assertEqual(response.status_code, 404)
 
     @mock.patch(
-        "richie.apps.search.indexers.courses.CoursesIndexer.build_es_query",
+        "richie.apps.search.forms.CourseSearchForm.build_es_query",
         lambda *args: (2, 77, {"some": "query"}, {"some": "aggs"}),
     )
     @mock.patch(
-        "richie.apps.search.indexers.courses.CoursesIndexer.get_list_sorting_script",
+        "richie.apps.search.forms.CourseSearchForm.get_list_sorting_script",
         lambda *args: {"some": "sorting"},
     )
     @mock.patch.object(settings.ES_CLIENT, "search")
-    @mock.patch(
-        "richie.apps.search.viewsets.courses.FILTERS",
-        new=[
-            (
-                "richie.apps.search.utils.filter_definitions.FilterDefinitionCustom",
-                {
-                    "name": "availability",
-                    "human_name": "Availability",
-                    "choices": [
-                        ("coming_soon", "Coming soon", [{"is_coming_soon": True}]),
-                        ("ongoing", "On-going", [{"is_ongoing": True}]),
-                        ("archived", "Archived", [{"is_ongoing": True}]),
-                        ("open", "Open for enrollment", [{"is_open": True}]),
-                    ],
-                },
-            ),
-            (
-                "richie.apps.search.utils.filter_definitions.FilterDefinitionTerms",
-                {"name": "organizations", "human_name": "Organizations"},
-            ),
-        ],
-    )
     def test_viewsets_courses_search(self, mock_search, *_):
         """
         Happy path: the consumer is filtering courses by matching text
@@ -121,16 +99,36 @@ class CoursesViewsetsTestCase(TestCase):
                             "availability@coming_soon": {"doc_count": 8},
                             "availability@ongoing": {"doc_count": 42},
                             "availability@open": {"doc_count": 59},
+                            "languages@en": {"doc_count": 33},
+                            "languages@fr": {"doc_count": 55},
+                            "new@new": {"doc_count": 66},
+                            "categories": {
+                                "categories": {
+                                    "buckets": [
+                                        {"key": "2", "doc_count": 15},
+                                        {"key": "1", "doc_count": 13},
+                                    ]
+                                }
+                            },
                             "organizations": {
                                 "organizations": {
                                     "buckets": [
+                                        {"key": "12", "doc_count": 19},
                                         {"key": "11", "doc_count": 17},
-                                        {"key": "21", "doc_count": 19},
                                     ]
                                 }
                             },
                         }
                     },
+                }
+            if index == "richie_categories":
+                return {
+                    "hits": {
+                        "hits": [
+                            {"_id": "1", "_source": {"title": {"en": "Category 1"}}},
+                            {"_id": "2", "_source": {"title": {"en": "Category 2"}}},
+                        ]
+                    }
                 }
             if index == "richie_organizations":
                 return {
@@ -141,8 +139,8 @@ class CoursesViewsetsTestCase(TestCase):
                                 "_source": {"title": {"en": "Organization 11"}},
                             },
                             {
-                                "_id": "21",
-                                "_source": {"title": {"en": "Organization 21"}},
+                                "_id": "12",
+                                "_source": {"title": {"en": "Organization 12"}},
                             },
                         ]
                     }
@@ -159,42 +157,72 @@ class CoursesViewsetsTestCase(TestCase):
             {
                 "meta": {"count": 2, "offset": 77, "total_count": 35},
                 "objects": ["Course #523", "Course #861"],
-                "facets": {
-                    "availability": {
-                        "coming_soon": 8,
-                        "archived": 11,
-                        "ongoing": 42,
-                        "open": 59,
-                    },
-                    "organizations": {"11": 17, "21": 19},
-                },
                 "filters": {
                     "availability": {
                         "human_name": "Availability",
                         "is_drilldown": False,
                         "name": "availability",
+                        "position": 1,
                         "values": [
-                            {"count": 11, "human_name": "Archived", "key": "archived"},
-                            {
-                                "count": 8,
-                                "human_name": "Coming soon",
-                                "key": "coming_soon",
-                            },
-                            {"count": 42, "human_name": "On-going", "key": "ongoing"},
                             {
                                 "count": 59,
                                 "human_name": "Open for enrollment",
-                                "key": "open",
+                                "name": "open",
                             },
+                            {
+                                "count": 8,
+                                "human_name": "Coming soon",
+                                "name": "coming_soon",
+                            },
+                            {"count": 42, "human_name": "On-going", "name": "ongoing"},
+                            {"count": 11, "human_name": "Archived", "name": "archived"},
+                        ],
+                    },
+                    "new": {
+                        "human_name": "New courses",
+                        "is_drilldown": False,
+                        "name": "new",
+                        "position": 0,
+                        "values": [
+                            {"count": 66, "human_name": "First session", "name": "new"}
+                        ],
+                    },
+                    "categories": {
+                        "human_name": "Categories",
+                        "is_drilldown": False,
+                        "name": "categories",
+                        "position": 2,
+                        "values": [
+                            {"count": 15, "human_name": "Category 2", "name": "2"},
+                            {"count": 13, "human_name": "Category 1", "name": "1"},
                         ],
                     },
                     "organizations": {
                         "human_name": "Organizations",
                         "is_drilldown": False,
                         "name": "organizations",
+                        "position": 3,
                         "values": [
-                            {"count": 17, "human_name": "Organization 11", "key": "11"},
-                            {"count": 19, "human_name": "Organization 21", "key": "21"},
+                            {
+                                "count": 19,
+                                "human_name": "Organization 12",
+                                "name": "12",
+                            },
+                            {
+                                "count": 17,
+                                "human_name": "Organization 11",
+                                "name": "11",
+                            },
+                        ],
+                    },
+                    "languages": {
+                        "human_name": "Languages",
+                        "is_drilldown": False,
+                        "name": "languages",
+                        "position": 4,
+                        "values": [
+                            {"count": 55, "human_name": "French", "name": "fr"},
+                            {"count": 33, "human_name": "English", "name": "en"},
                         ],
                     },
                 },
@@ -221,7 +249,7 @@ class CoursesViewsetsTestCase(TestCase):
         )
 
     @mock.patch(
-        "richie.apps.search.indexers.courses.CoursesIndexer.build_es_query",
+        "richie.apps.search.forms.CourseSearchForm.build_es_query",
         side_effect=QueryFormatException({"limit": "incorrect value"}),
     )
     def test_viewsets_courses_search_with_invalid_params(self, *_):
