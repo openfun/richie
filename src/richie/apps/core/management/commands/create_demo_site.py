@@ -384,9 +384,17 @@ def create_demo_site():
 
         # Add a random number of course runs to the course
         nb_course_runs = get_number_of_course_runs()
+        # pick a subset of languages for this course (otherwise all courses will have more or
+        # less all the languages across their course runs!)
+        languages_subset = random.sample(
+            ["de", "en", "es", "fr", "it", "nl"], random.randint(1, 4)
+        )
         for i in range(nb_course_runs):
             CourseRunFactory(
                 __sequence=i,
+                languages=random.sample(
+                    languages_subset, random.randint(1, len(languages_subset))
+                ),
                 page_in_navigation=False,
                 page_languages=["en", "fr"],
                 page_parent=course.extended_object,
