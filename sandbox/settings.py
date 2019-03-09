@@ -304,6 +304,26 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
                 ]
             },
         },
+        # Single column page
+        "richie/single-column.html maincontent": {
+            "name": _("Main content"),
+            "excluded_plugins": ["CKEditorPlugin", "GoogleMapPlugin"],
+            "parent_classes": {
+                "CoursePlugin": ["SectionPlugin"],
+                "OrganizationPlugin": ["SectionPlugin"],
+                "CategoryPlugin": ["SectionPlugin"],
+                "PersonPlugin": ["SectionPlugin"],
+            },
+            "child_classes": {
+                "SectionPlugin": [
+                    "CoursePlugin",
+                    "OrganizationPlugin",
+                    "CategoryPlugin",
+                    "PersonPlugin",
+                    "LinkPlugin",
+                ]
+            },
+        },
         # Course detail
         "courses/cms/course_detail.html course_cover": {
             "name": _("Cover"),
@@ -424,7 +444,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         "toolbar": "CMS",
         "toolbar_CMS": [
             ["Undo", "Redo"],
-            ["ShowBlocks"],
+            ["cmsplugins", "-", "ShowBlocks"],
             ["Format", "Styles"],
             ["RemoveFormat"],
             ["Maximize"],
