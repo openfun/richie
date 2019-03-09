@@ -1,6 +1,6 @@
 {% load cms_tags %}{% spaceless %}
 
 {# this needs to be in one line for rendering purpose #}
-{% endspaceless %}<p class="button-caesura"><a href="{{ link }}"{% if instance.target %} target="{{ instance.target }}"{% endif %}{% if instance.attributes %} {{ instance.attributes_str }}{% endif %}>{% for plugin in instance.child_plugin_instances %}{% render_plugin plugin %}{% empty %}{{ instance.name }}{% endfor %}</a></p>{% spaceless %}
+{% endspaceless %}<div class="button-caesura"><a href="{{ link }}"{% if instance.target %} target="{{ instance.target }}"{% endif %}{% if instance.attributes %} {{ instance.attributes_str }}{% endif %}>{% for plugin in instance.child_plugin_instances %}{% render_plugin plugin %}{% empty %}{{ instance.name }}{% endfor %}</a></div>{% spaceless %}
 
 {% endspaceless %}

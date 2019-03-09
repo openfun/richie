@@ -490,6 +490,8 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
     # such as "templates/djangocms_link/VALUE/link.html"
     DJANGOCMS_LINK_TEMPLATES = [("button-caesura", _("Button caesura"))]
 
+    DJANGOCMS_VIDEO_TEMPLATES = [("full-width", _("Full width"))]
+
     # Thumbnails settings
     THUMBNAIL_PROCESSORS = (
         "easy_thumbnails.processors.colorspace",

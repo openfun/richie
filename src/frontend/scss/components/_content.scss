@@ -1,7 +1,39 @@
 // Main body content container
-
 $richie-body-content-background: $gray98 !default;
+
+$richie-caesura-padding: 1rem 2.5rem !default;
+$richie-caesura-button-fontcolor: $dodgerblue7 !default;
+$richie-caesura-button-background: $white !default;
+$richie-caesura-button-border: 1px solid $dodgerblue5 !default;
+
+$richie-caesura-button-fontcolor-hover: $firebrick3 !default;
+$richie-caesura-button-background-hover: $white !default;
+$richie-caesura-button-border-hover: 1px solid $firebrick3 !default;
 
 .body-content {
   background: $richie-body-content-background;
+}
+
+// Caesura block for single centered button on its own row
+.button-caesura {
+  display: flex;
+  justify-content: center;
+
+  // Enforce an "hollow" display
+  a {
+    @include sv-flex(0, 0, auto);
+    display: block;
+    padding: $richie-caesura-padding;
+    color: $richie-caesura-button-fontcolor;
+    background: $richie-caesura-button-background;
+    border: $richie-caesura-button-border;
+
+    &:hover,
+    &:focus {
+      color: $richie-caesura-button-fontcolor-hover;
+      background: $richie-caesura-button-background-hover;
+      border: $richie-caesura-button-border-hover;
+      text-decoration: none;
+    }
+  }
 }
