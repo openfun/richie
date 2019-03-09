@@ -8,7 +8,9 @@
 {% block content %}
 <div class="single-column">
     {% block column %}
-        {% placeholder "maincontent" %}
+        {% with header_level=2 %}
+            {% placeholder "maincontent" %}
+        {% endwith %}
     {% endblock column %}
 </div>
 {% endblock content %}

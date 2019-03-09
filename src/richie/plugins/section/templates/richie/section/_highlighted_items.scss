@@ -113,29 +113,11 @@ $richie-section-highlights-item-gutter: 0.625rem !default;
                 }
             }
 
-            // Make a caesura in flex flow so button row allway takes full width
+            // Ensure caesura always takes full width with some space around
+            // within flex grid
             .button-caesura{
                 @include sv-flex(1, 0, 100%);
                 margin: 2rem 0.5rem 0;
-                display: flex;
-                justify-content: center;
-
-                a{
-                  @include sv-flex(0, 0, auto);
-                  display: block;
-                  padding: 1rem 2.5rem;
-                  color: $dodgerblue7;
-                  background: $white;
-                  border: 1px solid $dodgerblue5;
-
-                  &:hover,
-                  &:focus{
-                      color: $firebrick3;
-                      background: $white;
-                      border: 1px solid $firebrick3;
-                      text-decoration: none;
-                  }
-                }
             }
         }
     }
