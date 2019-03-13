@@ -172,6 +172,13 @@ $richie-topbar-menu-item-divider-border-lg: 1px solid $white !default;
           @include sv-flex(0, 0, auto);
         }
 
+        &--language {
+          text-transform: uppercase;
+        }
+        &--active {
+          font-weight: bold;
+        }
+
         // Item link where every spacing is done
         &__link {
           @include sv-flex(1, 0, 100%);
