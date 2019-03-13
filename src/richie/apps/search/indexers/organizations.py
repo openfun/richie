@@ -13,8 +13,7 @@ from richie.plugins.simple_text_ckeditor.models import SimpleText
 
 from ...courses.models import Organization
 from .. import defaults
-from ..exceptions import QueryFormatException
-from ..forms import SearchForm
+from ..forms import ItemSearchForm
 from ..partial_mappings import MULTILINGUAL_TEXT
 from ..utils.i18n import get_best_field_language
 from ..utils.indexers import slice_string_for_completion
@@ -28,6 +27,7 @@ class OrganizationsIndexer:
 
     document_type = "organization"
     index_name = "richie_organizations"
+    form = ItemSearchForm
     mapping = {
         "dynamic_templates": MULTILINGUAL_TEXT,
         "properties": {
@@ -125,41 +125,3 @@ class OrganizationsIndexer:
                 es_organization["_source"]["title"], best_language
             ),
         }
-
-    @staticmethod
-    def build_es_query(request):
-        """
-        Build an ElasticSearch query and its related aggregations, to be consumed by the ES client
-        in the Organizations ViewSet
-        """
-        # Instantiate a form with the request's query_params to check & sanitize them
-        query_params_form = SearchForm(request.query_params)
-
-        # Raise an exception with error information if the query params are not valid
-        if not query_params_form.is_valid():
-            raise QueryFormatException(query_params_form.errors)
-
-        # Build a query that matches on the organization `title` field if it was passed by
-        # the client
-        # Note: test_elasticsearch_feature.py needs to be updated whenever the search call
-        # is updated and makes use of new features.
-        if query_params_form.cleaned_data.get("query"):
-            query = {
-                "query": {
-                    "match": {
-                        "title.fr": {
-                            "query": query_params_form.cleaned_data.get("query"),
-                            "analyzer": "french",
-                        }
-                    }
-                }
-            }
-        # Build a match_all query by default
-        else:
-            query = {"query": {"match_all": {}}}
-
-        return (
-            query_params_form.cleaned_data.get("limit"),
-            query_params_form.cleaned_data.get("offset") or 0,
-            query,
-        )

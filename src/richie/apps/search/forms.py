@@ -41,9 +41,14 @@ class CourseSearchForm(SearchForm):
         - Define the `states` property as it is used by several methods.
         """
         # QueryDict/MultiValueDict breaks lists: we need to fix it
-        data_fixed = {
-            k: data.getlist(k) if k in FILTER_FIELDS else v[0] for k, v in data.lists()
-        }
+        data_fixed = (
+            {
+                k: data.getlist(k) if k in FILTER_FIELDS else v[0]
+                for k, v in data.lists()
+            }
+            if data
+            else {}
+        )
 
         super().__init__(data=data_fixed, *args, **kwargs)
         self.fields.update(FILTER_FIELDS)
@@ -253,4 +258,45 @@ class CourseSearchForm(SearchForm):
             self.cleaned_data.get("offset") or 0,
             query,
             aggs,
+        )
+
+
+class ItemSearchForm(SearchForm):
+    """Generate Elasticsearch queries for the category/organization indices."""
+
+    def __init__(self, *args, data=None, **kwargs):
+        """Fix the QueryDict value getter to properly handle multi-value parameters."""
+        # QueryDict/MultiValueDict breaks lists: we need to fix it
+        data_fixed = {k: v[0] for k, v in data.lists()} if data else {}
+        super().__init__(data=data_fixed, *args, **kwargs)
+
+    def build_es_query(self):
+        """
+        Build the actual Elasticsearch search query for category/organization indices.
+
+        Returns:
+        --------
+            Tuple:
+            - limit (int): the maximum number of results to be returned by Elasticsearch,
+            - offset (int): the offset from which results are returned (for pagination),
+            - query (Dict): the raw Elasticsearch query as per:
+              https://elastic.co/guide/en/elasticsearch/reference/current/search.html
+
+        """
+        # Build a query that matches on the name field if it was handed by the client
+        full_text = self.cleaned_data.get("query")
+        if full_text:
+            query = {
+                "query": {
+                    "match": {"title.fr": {"query": full_text, "analyzer": "french"}}
+                }
+            }
+        # Build a match_all query by default
+        else:
+            query = {"query": {"match_all": {}}}
+
+        return (
+            self.cleaned_data.get("limit"),
+            self.cleaned_data.get("offset") or 0,
+            query,
         )

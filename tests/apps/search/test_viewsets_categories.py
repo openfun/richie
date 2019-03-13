@@ -9,7 +9,6 @@ from django.test import TestCase
 from elasticsearch.exceptions import NotFoundError
 from rest_framework.test import APIRequestFactory
 
-from richie.apps.search.exceptions import QueryFormatException
 from richie.apps.search.viewsets.categories import CategoriesViewSet
 
 
@@ -75,7 +74,7 @@ class CategoriesViewsetsTestCase(TestCase):
         self.assertEqual(response.status_code, 404)
 
     @mock.patch(
-        "richie.apps.search.indexers.categories.CategoriesIndexer.build_es_query",
+        "richie.apps.search.forms.ItemSearchForm.build_es_query",
         lambda x: (2, 0, {"query": "example"}),
     )
     @mock.patch.object(settings.ES_CLIENT, "search")
@@ -159,11 +158,7 @@ class CategoriesViewsetsTestCase(TestCase):
             size=2,
         )
 
-    @mock.patch(
-        "richie.apps.search.indexers.categories.CategoriesIndexer.build_es_query",
-        side_effect=QueryFormatException({"limit": "incorrect value"}),
-    )
-    def test_viewsets_categories_search_with_invalid_params(self, _):
+    def test_viewsets_categories_search_with_invalid_params(self):
         """
         Error case: the client used an incorrectly formatted request
         """
