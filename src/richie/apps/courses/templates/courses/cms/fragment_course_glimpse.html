@@ -14,9 +14,9 @@
             {{ course_state.text|title }}<br>
             {{ course_state.datetime|date:"DATE_FORMAT" }}
         </p>
-        {% if course_state.cta %}
+        {% if course_state.call_to_action %}
         <div class="course-glimpse__footer__cta">
-            <button class="button">{{ course_state.cta|title }}</button>
+            <button class="button">{{ course_state.call_to_action|title }}</button>
         </div>
         {% endif %}
     </div>

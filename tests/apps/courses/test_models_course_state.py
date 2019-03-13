@@ -77,7 +77,7 @@ class CourseRunModelsTestCase(TestCase):
         course = CourseFactory()
         with self.assertNumQueries(3):
             state = course.state
-        self.assertEqual(state, CourseState(6, None, "coming soon", None))
+        self.assertEqual(state, CourseState(6))
 
     def test_models_course_state_archived(self):
         """
@@ -87,7 +87,7 @@ class CourseRunModelsTestCase(TestCase):
         self.create_run_archived(course)
         with self.assertNumQueries(2):
             state = course.state
-        self.assertEqual(state, CourseState(5, None, "archived", None))
+        self.assertEqual(state, CourseState(5))
 
     def test_models_course_state_ongoing_enrollment_closed(self):
         """
@@ -98,7 +98,7 @@ class CourseRunModelsTestCase(TestCase):
         self.create_run_ongoing_closed(course)
         with self.assertNumQueries(2):
             state = course.state
-        self.assertEqual(state, CourseState(4, None, "on-going", None))
+        self.assertEqual(state, CourseState(4))
 
     def test_models_course_state_future_enrollment_not_yet_open(self):
         """
@@ -109,7 +109,7 @@ class CourseRunModelsTestCase(TestCase):
         course_run = self.create_run_future_not_yet_open(course)
         with self.assertNumQueries(2):
             state = course.state
-        expected_state = CourseState(2, "see details", "starting on", course_run.start)
+        expected_state = CourseState(2, course_run.start)
         self.assertEqual(state, expected_state)
 
         # Adding an on-going but closed course run should not change the result
@@ -127,7 +127,7 @@ class CourseRunModelsTestCase(TestCase):
         self.create_run_future_closed(course)
         with self.assertNumQueries(2):
             state = course.state
-        expected_state = CourseState(3, None, "enrollment closed", None)
+        expected_state = CourseState(3)
         self.assertEqual(state, expected_state)
 
         # Adding an on-going but closed course run should not change the result
@@ -144,7 +144,7 @@ class CourseRunModelsTestCase(TestCase):
         course_run = self.create_run_future_open(course)
         with self.assertNumQueries(2):
             state = course.state
-        expected_state = CourseState(1, "enroll now", "starting on", course_run.start)
+        expected_state = CourseState(1, course_run.start)
         self.assertEqual(state, expected_state)
 
         # Adding courses in less priorietary states should not change the result
@@ -167,9 +167,7 @@ class CourseRunModelsTestCase(TestCase):
         )
         with self.assertNumQueries(2):
             state = course.state
-        expected_state = CourseState(
-            0, "enroll now", "closing on", course_run.enrollment_end
-        )
+        expected_state = CourseState(0, course_run.enrollment_end)
         self.assertEqual(state, expected_state)
 
         # Adding courses in less priorietary states should not change the result

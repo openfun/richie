@@ -1,7 +1,6 @@
 """
 Declare and configure the models for the courses application
 """
-from collections import namedtuple
 from collections.abc import Mapping
 
 from django import forms
@@ -22,7 +21,68 @@ from ...core.models import BasePageExtension, PagePluginMixin
 from .category import Category
 from .organization import Organization
 
-CourseState = namedtuple("CourseState", ["priority", "cta", "text", "datetime"])
+
+class CourseState(Mapping):
+    """An immutable object to describe a course (resp. course run) state."""
+
+    STATE_CALLS_TO_ACTION = (
+        _("enroll now"),
+        _("enroll now"),
+        _("see details"),
+        None,
+        None,
+        None,
+        None,
+    )
+
+    STATE_TEXTS = (
+        _("closing on"),
+        _("starting on"),
+        _("starting on"),
+        _("enrollment closed"),
+        _("on-going"),
+        _("archived"),
+        _("to be scheduled"),
+    )
+
+    def __init__(self, priority, datetime=None):
+        """
+        Initialize a course state with a priority and optionally a datetime.
+
+        Several states are possible for a course run each of which is given a priority. The
+        lower the priority, the more interesting the course run is (a course run open for
+        enrollment is more interesting than an archived course run):
+          0: a run is on-going and open for enrollment > "closing on": {enrollment_end}
+          1: a run is future and open for enrollment > "starting on": {start}
+          2: a run is future and not yet open for enrollment > "starting on": {start}
+          3: a run is future and no more open for enrollment > "closed": {None}
+          4: a run is on-going but closed for enrollment > "on going": {None}
+          5: there's a finished run in the past > "archived": {None}
+          6: theres's no run with a start date or no run at all > "to be scheduled": {None}
+        """
+        kwargs = {
+            "priority": priority,
+            "datetime": datetime,
+            "call_to_action": self.STATE_CALLS_TO_ACTION[priority],
+            "text": self.STATE_TEXTS[priority],
+        }
+        self._d = dict(**kwargs)
+
+    def __iter__(self):
+        """Iterate on the inner dictionary."""
+        return iter(self._d)
+
+    def __len__(self):
+        """Return length of the inner dictionary."""
+        return len(self._d)
+
+    def __getitem__(self, key):
+        """Access the inner dictionary."""
+        return self._d[key]
+
+    def __lt__(self, other):
+        """Make it easy to compare two course states."""
+        return self._d["priority"] < other["priority"]
 
 
 class ChoiceArrayField(ArrayField):
@@ -212,26 +272,18 @@ class Course(BasePageExtension):
         """
         The state of the course carrying information on what to display on a course glimpse.
 
-        The game is to find, in the correct order, the first of the following conditions that is
-        verified for this course:
-          0: a run is on-going and open for enrollment > "closing on": {enrollment_end}
-          1: a run is future and open for enrollment > "starting on": {start}
-          2: a run is future and not yet open for enrollment > "starting on": {start}
-          3: a run is future and no more open for enrollment > "closed": {None}
-          4: a run is on-going but closed for enrollment > "on going": {None}
-          5: there's a finished run in the past > "archived": {None}
-          6: there are no runs at all > "coming soon": {None}
+        The game is to find the highest priority state for this course among its course runs.
         """
         # The default state is for a course that has no course runs
-        best_state = CourseState(6, None, _("coming soon"), None)
+        best_state = CourseState(6)
 
         for course_run in self.get_course_runs_for_language().only(
             "start", "end", "enrollment_start", "enrollment_end"
         ):
             state = course_run.state
-            if state.priority < best_state.priority:
+            if state < best_state:
                 best_state = state
-            if state.priority == 0:
+            if state == 0:
                 # We found the best state, don't waste more time
                 break
 
@@ -288,6 +340,7 @@ class CourseRun(BasePageExtension):
         self.full_clean()
         super().save(*args, **kwargs)
 
+    # pylint: disable=too-many-return-statements
     @staticmethod
     def compute_state(start, end, enrollment_start, enrollment_end):
         """
@@ -295,37 +348,29 @@ class CourseRun(BasePageExtension):
         passed in argument.
 
         A static method not using the instance allows to call it with an Elasticsearch result.
-
-        Several states are possible for a course run each of which is given a priority. The
-        lower the priority, the more interesting the course run is (a course run open for
-        enrollment is more interesting than an archived course run):
-          0: a run is on-going and open for enrollment > "closing on": {enrollment_end}
-          1: a run is future and open for enrollment > "starting on": {start}
-          2: a run is future and not yet open for enrollment > "starting on": {start}
-          3: a run is future and no more open for enrollment > "closed": {None}
-          4: a run is on-going but closed for enrollment > "on going": {None}
-          5: there's a finished run in the past > "archived": {None}
         """
+        if start is None:
+            # not scheduled yet
+            return CourseState(6)
+
         now = timezone.now()
         if start < now:
             if end > now:
                 if enrollment_end > now:
                     # ongoing open
-                    return CourseState(
-                        0, _("enroll now"), _("closing on"), enrollment_end
-                    )
+                    return CourseState(0, enrollment_end)
                 # ongoing closed
-                return CourseState(4, None, _("on-going"), None)
+                return CourseState(4)
             # archived
-            return CourseState(5, None, _("archived"), None)
+            return CourseState(5)
         if enrollment_start > now:
             # future not yet open
-            return CourseState(2, _("see details"), _("starting on"), start)
+            return CourseState(2, start)
         if enrollment_end > now:
             # future open
-            return CourseState(1, _("enroll now"), _("starting on"), start)
+            return CourseState(1, start)
         # future already closed
-        return CourseState(3, None, _("enrollment closed"), None)
+        return CourseState(3)
 
     @property
     def state(self):

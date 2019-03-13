@@ -10,7 +10,6 @@ from django.test.client import RequestFactory
 from django.utils import timezone
 
 from richie.apps.courses.factories import CourseRunFactory
-from richie.apps.courses.models import CourseState
 
 
 class CourseRunModelsTestCase(TestCase):
@@ -22,12 +21,39 @@ class CourseRunModelsTestCase(TestCase):
         super().setUp()
         self.now = timezone.now()
 
+    def test_models_course_run_state_to_be_scheduled(self):
+        """
+        A course run that has no start date should return a state with priority 6 and
+        "to be scheduled" as text.
+        """
+        course_run = CourseRunFactory(start=None)
+        self.assertEqual(
+            dict(course_run.state),
+            {
+                "priority": 6,
+                "text": "to be scheduled",
+                "call_to_action": None,
+                "datetime": None,
+            },
+        )
+
     def test_models_course_run_state_archived(self):
-        """A course run that is passed should return a state with "archived" as text."""
+        """
+        A course run that is passed should return a state with priority 5 and "archived"
+        as text.
+        """
         course_run = CourseRunFactory(
             start=self.now - timedelta(hours=2), end=self.now - timedelta(hours=1)
         )
-        self.assertEqual(course_run.state, CourseState(5, None, "archived", None))
+        self.assertEqual(
+            dict(course_run.state),
+            {
+                "priority": 5,
+                "text": "archived",
+                "call_to_action": None,
+                "datetime": None,
+            },
+        )
 
     def test_models_course_run_state_ongoing_open(self):
         """
@@ -41,8 +67,13 @@ class CourseRunModelsTestCase(TestCase):
             end=self.now + timedelta(hours=2),
         )
         self.assertEqual(
-            course_run.state,
-            CourseState(0, "enroll now", "closing on", course_run.enrollment_end),
+            dict(course_run.state),
+            {
+                "priority": 0,
+                "text": "closing on",
+                "call_to_action": "enroll now",
+                "datetime": self.now + timedelta(hours=1),
+            },
         )
 
     def test_models_course_run_state_ongoing_closed(self):
@@ -56,7 +87,15 @@ class CourseRunModelsTestCase(TestCase):
             enrollment_end=self.now - timedelta(hours=1),
             end=self.now + timedelta(hours=1),
         )
-        self.assertEqual(course_run.state, CourseState(4, None, "on-going", None))
+        self.assertEqual(
+            dict(course_run.state),
+            {
+                "priority": 4,
+                "text": "on-going",
+                "call_to_action": None,
+                "datetime": None,
+            },
+        )
 
     def test_models_course_run_state_coming(self):
         """
@@ -70,8 +109,13 @@ class CourseRunModelsTestCase(TestCase):
             end=self.now + timedelta(hours=4),
         )
         self.assertEqual(
-            course_run.state,
-            CourseState(2, "see details", "starting on", course_run.start),
+            dict(course_run.state),
+            {
+                "priority": 2,
+                "text": "starting on",
+                "call_to_action": "see details",
+                "datetime": self.now + timedelta(hours=3),
+            },
         )
 
     def test_models_course_run_state_future_open(self):
@@ -86,8 +130,13 @@ class CourseRunModelsTestCase(TestCase):
             end=self.now + timedelta(hours=3),
         )
         self.assertEqual(
-            course_run.state,
-            CourseState(1, "enroll now", "starting on", course_run.start),
+            dict(course_run.state),
+            {
+                "priority": 1,
+                "text": "starting on",
+                "call_to_action": "enroll now",
+                "datetime": self.now + timedelta(hours=2),
+            },
         )
 
     def test_models_course_run_state_future_closed(self):
@@ -102,7 +151,13 @@ class CourseRunModelsTestCase(TestCase):
             end=self.now + timedelta(hours=2),
         )
         self.assertEqual(
-            course_run.state, CourseState(3, None, "enrollment closed", None)
+            dict(course_run.state),
+            {
+                "priority": 3,
+                "text": "enrollment closed",
+                "call_to_action": None,
+                "datetime": None,
+            },
         )
 
     def test_models_course_run_field_languages_null(self):
