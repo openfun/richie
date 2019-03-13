@@ -11,7 +11,6 @@ import pytz
 from elasticsearch.exceptions import NotFoundError
 from rest_framework.test import APIRequestFactory
 
-from richie.apps.search.exceptions import QueryFormatException
 from richie.apps.search.indexers.courses import CoursesIndexer
 from richie.apps.search.viewsets.courses import CoursesViewSet
 
@@ -245,10 +244,6 @@ class CoursesViewsetsTestCase(TestCase):
             size=2,
         )
 
-    @mock.patch(
-        "richie.apps.search.forms.CourseSearchForm.build_es_query",
-        side_effect=QueryFormatException({"limit": "incorrect value"}),
-    )
     def test_viewsets_courses_search_with_invalid_params(self, *_):
         """
         Error case: the query string params are not properly formatted

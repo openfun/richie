@@ -1,7 +1,6 @@
 """
 Tests for the category indexer
 """
-from types import SimpleNamespace
 from unittest import mock
 
 from django.test import TestCase
@@ -10,7 +9,6 @@ from cms.api import add_plugin
 from djangocms_picture.models import Picture
 
 from richie.apps.courses.factories import CategoryFactory
-from richie.apps.search.exceptions import QueryFormatException
 from richie.apps.search.indexers.categories import CategoriesIndexer
 
 
@@ -140,45 +138,3 @@ class CategoriesIndexersTestCase(TestCase):
                 "title": "Computer science",
             },
         )
-
-    def test_indexers_categories_build_es_query_search_all_categories(self):
-        """
-        Happy path: the expected ES query object is returned
-        """
-        request = SimpleNamespace(query_params={"limit": 13, "offset": 1})
-        self.assertEqual(
-            CategoriesIndexer.build_es_query(request),
-            (13, 1, {"query": {"match_all": {}}}),
-        )
-
-    def test_indexers_categories_build_es_query_search_by_name(self):
-        """
-        Happy path: the expected ES query object is returned
-        """
-        self.assertEqual(
-            CategoriesIndexer.build_es_query(
-                SimpleNamespace(
-                    query_params={"limit": 12, "offset": 4, "query": "user search"}
-                )
-            ),
-            (
-                12,
-                4,
-                {
-                    "query": {
-                        "match": {
-                            "title.fr": {"query": "user search", "analyzer": "french"}
-                        }
-                    }
-                },
-            ),
-        )
-
-    def test_indexers_categories_build_es_query_with_invalid_params(self):
-        """
-        Error case: the request contained invalid parameters
-        """
-        with self.assertRaises(QueryFormatException):
-            CategoriesIndexer.build_es_query(
-                SimpleNamespace(query_params={"offset": "invalid input"})
-            )

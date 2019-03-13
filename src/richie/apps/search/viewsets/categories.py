@@ -8,7 +8,6 @@ from elasticsearch.exceptions import NotFoundError
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
-from ..exceptions import QueryFormatException
 from ..indexers import ES_INDICES
 from ..utils.viewsets import AutocompleteMixin, ViewSetMetadata
 
@@ -27,12 +26,14 @@ class CategoriesViewSet(AutocompleteMixin, ViewSet):
         Category search endpoint: pass query params to ElasticSearch so it filters categories
         and returns a list of matching items
         """
+        # Instantiate the form to allow validation/cleaning
+        params_form = self._meta.indexer.form(data=request.query_params)
 
-        try:
-            limit, offset, query = self._meta.indexer.build_es_query(request)
-        except QueryFormatException as exc:
-            # Return a 400 with error information if the query params are not as expected
-            return Response(status=400, data={"errors": exc.args[0]})
+        # Return a 400 with error information if the query params are not valid
+        if not params_form.is_valid():
+            return Response(status=400, data={"errors": params_form.errors})
+
+        limit, offset, query = params_form.build_es_query()
 
         query_response = settings.ES_CLIENT.search(
             _source=getattr(self._meta.indexer, "display_fields", "*"),

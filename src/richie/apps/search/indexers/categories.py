@@ -13,8 +13,7 @@ from richie.plugins.simple_text_ckeditor.models import SimpleText
 
 from ...courses.models import Category
 from .. import defaults
-from ..exceptions import QueryFormatException
-from ..forms import SearchForm
+from ..forms import ItemSearchForm
 from ..partial_mappings import MULTILINGUAL_TEXT
 from ..utils.i18n import get_best_field_language
 from ..utils.indexers import slice_string_for_completion
@@ -28,6 +27,7 @@ class CategoriesIndexer:
 
     document_type = "category"
     index_name = "richie_categories"
+    form = ItemSearchForm
     mapping = {
         "dynamic_templates": MULTILINGUAL_TEXT,
         "properties": {
@@ -143,40 +143,3 @@ class CategoriesIndexer:
             "path": source["path"],
             "title": get_best_field_language(source["title"], best_language),
         }
-
-    @staticmethod
-    def build_es_query(request):
-        """
-        Build an ElasticSearch query and its related aggregations, to be consumed by the ES client
-        in the Categories ViewSet
-        """
-        # Instantiate a form with our query_params to check & sanitize them
-        params_form = SearchForm(request.query_params)
-
-        # Raise an exception with error information if the query params are not valid
-        if not params_form.is_valid():
-            raise QueryFormatException(params_form.errors)
-
-        # Build a query that matches on the name field if it was handed by the client
-        # Note: test_elasticsearch_feature.py needs to be updated whenever the search call
-        # is updated and makes use new features.
-        if params_form.cleaned_data.get("query"):
-            query = {
-                "query": {
-                    "match": {
-                        "title.fr": {
-                            "query": params_form.cleaned_data.get("query"),
-                            "analyzer": "french",
-                        }
-                    }
-                }
-            }
-        # Build a match_all query by default
-        else:
-            query = {"query": {"match_all": {}}}
-
-        return (
-            params_form.cleaned_data.get("limit"),
-            params_form.cleaned_data.get("offset") or 0,
-            query,
-        )
