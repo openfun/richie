@@ -1,8 +1,6 @@
 """
 End-to-end tests for the course detail view
 """
-import random
-from datetime import datetime
 from unittest import mock
 
 from cms.test_utils.testcases import CMSTestCase
@@ -245,35 +243,21 @@ class CourseCMSTestCase(CMSTestCase):
 
     def test_templates_course_detail_state_with_cta(self):
         """A course run in a state with a call to action should include a link and the CTA."""
-        response = self.prepare_to_test_state(
-            CourseState(
-                random.randint(0, 6),
-                "state cta",
-                random.choice(["state text", None]),
-                random.choice([datetime.now(), None]),
-            )
-        )
+        response = self.prepare_to_test_state(CourseState(0))
         self.assertContains(
             response,
             '<a class="course-detail__aside__run__block__cta" '
-            'href="/en/my-course/my-course-run/">State cta</a>',
+            'href="/en/my-course/my-course-run/">Enroll now</a>',
             html=True,
         )
 
     def test_templates_course_detail_state_without_cta(self):
         """A course run in a state without a call to action should include a state button."""
-        response = self.prepare_to_test_state(
-            CourseState(
-                random.randint(0, 6),
-                None,
-                "state text",
-                random.choice([datetime.now(), None]),
-            )
-        )
+        response = self.prepare_to_test_state(CourseState(6))
         self.assertContains(
             response,
             '<a class="course-detail__aside__run__block__cta '
             'course-detail__aside__run__block__cta--projected" '
-            'href="/en/my-course/my-course-run/">State text</a>',
+            'href="/en/my-course/my-course-run/">To be scheduled</a>',
             html=True,
         )

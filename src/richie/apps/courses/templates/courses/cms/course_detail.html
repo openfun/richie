@@ -87,9 +87,9 @@
             </dd>
             {% endif %}
           </dl>
-          {% if run.state.cta %}
+          {% if run.state.call_to_action %}
           <a class="course-detail__aside__run__block__cta" href="{{ run.extended_object.get_absolute_url }}">
-            {{ run.state.cta|capfirst }}
+            {{ run.state.call_to_action|capfirst }}
           </a>
           {% else %}
           <a class="course-detail__aside__run__block__cta course-detail__aside__run__block__cta--projected" href="{{ run.extended_object.get_absolute_url }}">

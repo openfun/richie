@@ -59,9 +59,9 @@
           <dt>{% trans "Languages" %}</dt>
           <dd>{% render_model course_run "get_languages_display" "languages" %}</dd>
         </dl>
-        {% if course_run.state.cta %}
+        {% if course_run.state.call_to_action %}
         <a class="course-detail__content__run__block__cta" href="{{ course_run.resource_link }}">
-          {{ course_run.state.cta|capfirst }}
+          {{ course_run.state.call_to_action|capfirst }}
         </a>
         {% else %}
         <button class="course-detail__content__run__block__cta course-detail__content__run__block__cta--projected">
