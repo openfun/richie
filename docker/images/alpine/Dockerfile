@@ -15,7 +15,7 @@
 #
 
 # ---- base image to inherit from ----
-FROM python:3.6-alpine as base
+FROM python:3.7-alpine as base
 
 # ---- front-end builder image ----
 FROM node:10-alpine as front-builder

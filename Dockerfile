@@ -15,7 +15,7 @@
 #
 
 # ---- base image to inherit from ----
-FROM python:3.6-stretch as base
+FROM python:3.7-stretch as base
 
 # ---- front-end builder image ----
 FROM node:10 as front-builder

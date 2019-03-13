@@ -2,6 +2,7 @@
 Declare and configure the models for the courses application
 """
 from collections import namedtuple
+from collections.abc import Mapping
 
 from django import forms
 from django.conf import settings
