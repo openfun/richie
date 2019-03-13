@@ -2,7 +2,6 @@
 Import custom settings and set up defaults for values the Search app needs
 """
 from django.conf import settings
-from django.utils.module_loading import import_string
 from django.utils.translation import gettext as _
 
 COURSES_COVER_IMAGE_WIDTH = getattr(settings, "COURSES_COVER_IMAGE_WIDTH", 216)
@@ -77,8 +76,3 @@ FILTERS_DEFAULT = [
         {"name": "organizations", "human_name": _("Organizations"), "position": 3},
     ),
 ]
-
-FILTERS = {
-    params["name"]: import_string(path)(**params)
-    for path, params in getattr(settings, "RICHIE_SEARCH_FILTERS", FILTERS_DEFAULT)
-}

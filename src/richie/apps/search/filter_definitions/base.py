@@ -61,6 +61,7 @@ class BaseFilterDefinition:
                 values selected for each filter. Typically the `cleaned_data` output of
                 a valid filter form:
                 e.g. {"availability": ["open"], "languages": ["en", "fr"]}
+
         Returns:
         --------
             List[Dict]: a list of dictionaries each mapping the name of a filter with a query
@@ -83,23 +84,32 @@ class BaseFilterDefinition:
 
         Arguments:
         ----------
-            data (Dict): a dictionary mapping the name of filters with the list of
-                values selected for each filter. Typically the `cleaned_data` output of
-                a valid filter form:
-                e.g. {"availability": ["open"], "languages": ["en", "fr"]}
-            queries (List[])
+            queries (List[Dict]): a list of all the query fragments composing the global
+                Elasticsearch query and which were collected by calling the `get_query_fragment`
+                method of each filter definitions. Each item in the list is a dictionary mapping
+                the name of a filter with a query fragment (see above for an example).
 
         Returns:
         --------
-            List[Dict]: a list of dictionaries each mapping the name of a filter with a query
-                fragment that will be added to the global Elasticsearch query to apply this
-                filter. For example:
-                [
-                    {
-                        "key": "new",
-                        "fragment": [{'term': {'is_new': True}}]
+            Dict: a dictionary mapping the name of an aggregation bucket with an aggregation
+                fragment that will be added to the global Elasticsearch aggregation query to get
+                facet counts related to this filter. For example:
+                {
+                    # A term aggregation query
+                    "categories": {
+                        "aggregations": {
+                            "categories": {"terms": {"field": "categories"}}
+                        },
+                    },
+                    # A filter aggregation query
+                    "new@new": {
+                        "filter": {
+                            "bool": {
+                                "must": [{"term": {"is_new": True}}]
+                            }
+                        }
                     }
-                ]
+                }
 
         To be implemented in each actual FilterDefintion class.
         """
@@ -110,6 +120,12 @@ class BaseFilterDefinition:
         Build the filter definition from a filter's common attributes and its Elasticsearch
         facet results. The frontend uses these definitions to display the filters on the
         user interface (see search page left side bar).
+
+        Arguments:
+        ----------
+            Dict: a dictionary mapping each aggregation name (one for each aggregation bucket
+                defined by the `get_aggs_fragment` method) with its documents counts as returned
+                by Elasticsearch in the "aggregations" part of the response.
 
         Returns:
         --------
@@ -178,7 +194,7 @@ class BaseChoicesFilterDefinition(BaseFilterDefinition):
     def get_faceted_definitions(self, facets, *args, **kwargs):
         """
         Add the counts to the values from the initial definition to make them complete
-        as the frontend expects them.
+        and sorted as the frontend expects them.
         """
         # Get filter values to derive human names
         values = self.get_values()
@@ -191,6 +207,8 @@ class BaseChoicesFilterDefinition(BaseFilterDefinition):
             if "{:s}@".format(self.name) in key  # 6 times faster than startswith
             and facet["doc_count"] > self.min_doc_count
         }
+
+        # Sort facets as requested
         if self.sorting == self.SORTING_NAME:
             # Alphabetical ascending sorting
             facet_counts = sorted(facet_counts_dict.items(), key=itemgetter(0))
@@ -229,18 +247,32 @@ class BaseChoicesFilterDefinition(BaseFilterDefinition):
 class NestingWrapper(BaseFilterDefinition):
     """
     A filter definition to aggregate children filter definitions under a nested query.
+
+    This is necessary to use filters and aggregations on values that live in nested fields.
+    Such as any information that is linked not directly to courses but to course runs (a nested
+    field of courses).
     """
 
     def __init__(self, name, filters, path=None):
         """
-        The nesting wrapper is instanciated with the list of children filters and the path of
-        the nested field under which it will query.
-        It instanciates all the children filter definitions and records them as an attribute
+        Instanciate all the children filter definitions and record them as an attribute
         in order to wrap calls to all the common methods:
             - get_form_fields,
             - get_query_fragment,
             - get_aggs_fragment,
             - get_faceted_definitions.
+
+        Arguments:
+        ----------
+            name (string): the name of the nesting wrapper (not really a filter definition as it
+                just collects queries/aggs from  its children.
+            filters (List[Tuple]): list of children filters to be instantiated, each defined by
+                a tuple of 2 elements:
+                - class: dotted path pointing to the filter definition class to be instiated,
+                - kwargs: dictionary of the keyword arguments to instantiate the children filter
+                    definitions.
+            path (string): the name of the nested field under which children filters will query.
+                optional as it defaults to the value passed for the `name` argument.
         """
         super().__init__(name)
         self.path = path or name
@@ -262,7 +294,6 @@ class NestingWrapper(BaseFilterDefinition):
                 and normal filters.
 
                 As a result, filtering on a nested field is transparent in the querystring.
-
         """
         return reduce(
             lambda key_field_map, filter_definition: {
@@ -277,23 +308,31 @@ class NestingWrapper(BaseFilterDefinition):
         """
         Aggregate query fragments from the nested children in a list of mappings.
 
+        Arguments:
+        ----------
+            data (Dict): a dictionary mapping the name of filters with the list of
+                values selected for each filter. Typically the `cleaned_data` output of
+                a valid filter form:
+                e.g. {"availability": ["open"], "languages": ["en", "fr"]}
+
         Returns:
+        --------
             List[Dict]: a list of one dictionary mapping the name of the nesting wrapper with a
                 nested query cumulating all the active filters among the nested children.
 
         For example, if the children return query fragments as follows:
-            - availability:
+            - availability (archived):
                 {
                     'key': 'availability',
                     'fragment': [
                         {
                             'bool': {
-                                'must': [{'range': {'course_runs.end': {'lte': '2019-03-08}}}]
+                                'must': [{'range': {'course_runs.end': {'lte': '2019-03-08'}}}]
                             }
                         }
                     ]
                 }
-            - languages:
+            - languages (french or english):
                 {
                     'key': 'languages',
                     'fragment': [
@@ -305,7 +344,7 @@ class NestingWrapper(BaseFilterDefinition):
                     ]
                 }
 
-        Then the nesting wrapper will return the following list with one aggregated nested query:
+        Then the nesting wrapper should return a list with one aggregated nested query:
         [
             {
                 'key': 'course_runs',
@@ -354,7 +393,96 @@ class NestingWrapper(BaseFilterDefinition):
 
     # pylint: disable=arguments-differ
     def get_aggs_fragment(self, queries, data, *args, **kwargs):
+        """
+        Collect aggregations fragments from the nested children in a mapping.
 
+        Arguments:
+        ----------
+            queries (List[Dict]): a list of all the query fragments composing the global
+                Elasticsearch query and which were collected by calling the `get_query_fragment`
+                method of each filter definitions. Each item in the list is a dictionary mapping
+                the name of a filter with a query fragment (see above for an example).
+            data (Dict): a dictionary mapping the name of filters with the list of
+                values selected for each filter. Typically the `cleaned_data` output of
+                a valid filter form:
+                e.g. {"availability": ["open"], "languages": ["en", "fr"]}
+
+        Returns:
+        --------
+            List[Dict]:a dictionary mapping the name of aggregation buckets for all the children
+                the nesting wrapper, with an aggregation fragment that will be added to the
+                global Elasticsearch aggregation query to get facet counts related to this value.
+
+                We can't use term query to face on nested fields because what want to count is the
+                number of courses that are not excluded by the applied filters, not the number of
+                occurence of a value on a nested field that may be repeated under a given course!
+                We can only use "filter" aggregations based on a nested query that excludes the
+                current value on which we are facetting.
+
+                For example, when filering on archived courses in french or english, the nested
+                query is:
+                [
+                    {
+                        'key': 'course_runs',
+                        'fragment': [
+                            {
+                                'nested': {
+                                    'path': 'course_runs',
+                                    'query': {
+                                        'bool': {
+                                            'must': [
+                                                {'range': {
+                                                    'course_runs.end': {'lte': '2019-03-08'}}
+                                                },
+                                                {'terms': {'course_runs.languages': ['en', 'fr']}},
+                                            ]
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                ]
+
+                The aggregations buckets on values of the nested fields should look as follows.
+
+                - To count on-going courses respecting this query:
+                'availability@ongoing': {
+                    'filter': {'bool': {'must': [
+                        {'nested': {
+                            'path': 'course_runs',
+                            'query': {'bool': {'must': [
+                                {'range': {'course_runs.start': {'lte': '2019-03-08'}}},
+                                {'range': {'course_runs.end': {'gte': '2019-03-08}}},
+                                {'terms': {'course_runs.languages': ['en']}},
+                            ]}},
+                        }},
+                    ]}},
+                }
+
+                - To count french courses respecting this query:
+                'languages@de': {
+                    'filter': {'bool': {'must': [
+                        {'nested': {
+                            'path': 'course_runs',
+                            'query': {'bool': {'must': [
+                                {'range': {'course_runs.end': {'lte': '2019-03-08'}}},
+                                {'terms': {'course_runs.languages': ['fr']}},
+                            ]}},
+                        }},
+                    ]}},
+                }
+
+                These queries seem very difficult to build but luckily, the nesting wrapper
+                (parent) knows how to build this nested queries via its `get_query_fragment`
+                method. So we start by removing the nested query (as calculated with active
+                filters) from the list of active queries and pass the parent as argument to
+                each children so the children can rebuild the query for each of the value,
+                excluding values one-by-one.
+        """
+        # Remove the query fragment built by this nesting wrapper. The children will call the
+        # parent's `get_query_fragment` with specific data to build aggregation queryies one-
+        # by-one.
         stripped_queries = list(
             filter(lambda query_fragment: query_fragment["key"] != self.name, queries)
         )
@@ -370,8 +498,7 @@ class NestingWrapper(BaseFilterDefinition):
 
     def get_faceted_definitions(self, facets, *args, **kwargs):
         """
-        Simply add the counts to the values from the initial definition to make them complete
-        as the frontend expects them.
+        Collect facet definitions from the children filter definitions in a dictionary.
         """
         return {
             name: facet_definition

@@ -7,7 +7,7 @@ from elasticsearch.exceptions import NotFoundError
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
-from ..defaults import FILTERS
+from ..filter_definitions import FILTERS
 from ..indexers import ES_INDICES
 from ..utils.viewsets import AutocompleteMixin, ViewSetMetadata
 
@@ -42,7 +42,8 @@ class CoursesViewSet(AutocompleteMixin, ViewSet):
             body={
                 "aggs": aggs,
                 "query": query,
-                "sort": params_form.get_list_sorting_script(),
+                "script_fields": params_form.get_script_fields(),
+                "sort": params_form.get_sorting_script(),
             },
             # Directly pass meta-params through as arguments to the ES client
             from_=offset,
