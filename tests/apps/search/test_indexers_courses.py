@@ -1,11 +1,12 @@
 """
 Tests for the course indexer
 """
-# pylint: disable=too-many-lines
+from datetime import datetime
 from unittest import mock
 
 from django.test import TestCase
 
+import pytz
 from cms.api import add_plugin
 from djangocms_picture.models import Picture
 
@@ -15,6 +16,7 @@ from richie.apps.courses.factories import (
     CourseRunFactory,
     OrganizationFactory,
 )
+from richie.apps.courses.models import CourseState
 from richie.apps.search.indexers.categories import CategoriesIndexer
 from richie.apps.search.indexers.courses import CoursesIndexer
 from richie.apps.search.indexers.organizations import OrganizationsIndexer
@@ -224,21 +226,15 @@ class CoursesIndexersTestCase(TestCase):
             "_id": 93,
             "_source": {
                 "absolute_url": {"en": "campo-qui-format-do"},
-                "course_runs": [
-                    {
-                        "end": "2018-02-28T06:00:00Z",
-                        "enrollment_end": "2018-01-31T06:00:00Z",
-                        "enrollment_start": "2018-01-01T06:00:00Z",
-                        "start": "2018-02-01T06:00:00Z",
-                        "languages": ["en", "es"],
-                    }
-                ],
                 "cover_image": {"en": "image.jpg"},
-                "organization_title": {"en": "campo qui format do"},
                 "organizations": [42, 84],
-                "description": {"en": "Nam aliquet, arcu at sagittis sollicitudin."},
                 "categories": [43, 86],
                 "title": {"en": "Duis eu arcu erat"},
+            },
+            "fields": {
+                "state": [
+                    {"priority": 0, "datetime": "2019-03-17T21:25:52.179667+00:00"}
+                ]
             },
         }
         self.assertEqual(
@@ -250,5 +246,8 @@ class CoursesIndexersTestCase(TestCase):
                 "organizations": [42, 84],
                 "categories": [43, 86],
                 "title": "Duis eu arcu erat",
+                "state": CourseState(
+                    0, datetime(2019, 3, 17, 21, 25, 52, 179667, pytz.utc)
+                ),
             },
         )

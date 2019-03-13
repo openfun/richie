@@ -8,8 +8,8 @@ from django import forms
 
 import arrow
 
-from .defaults import FILTERS, RELATED_CONTENT_MATCHING_BOOST
-from .filter_definitions import AvailabilityFilterDefinition
+from .defaults import RELATED_CONTENT_MATCHING_BOOST
+from .filter_definitions import FILTERS, AvailabilityFilterDefinition
 
 # Instanciate filter fields for each filter defined in settings
 FILTER_FIELDS = {
@@ -37,7 +37,8 @@ class CourseSearchForm(SearchForm):
         """
         Adapt the search form to handle filters:
         - Fix the QueryDict value getter to properly handle multi-value parameters,
-        - Add a field instance to the form for each filter.
+        - Add a field instance to the form for each filter,
+        - Define the `states` property as it is used by several methods.
         """
         # QueryDict/MultiValueDict breaks lists: we need to fix it
         data_fixed = {
@@ -46,42 +47,89 @@ class CourseSearchForm(SearchForm):
 
         super().__init__(data=data_fixed, *args, **kwargs)
         self.fields.update(FILTER_FIELDS)
+        self.states = None
 
-    def get_list_sorting_script(self):
+    def clean_availability(self):
         """
+        Calculate and set the list of states relevant with the current availability filter.
+        e.g. if we filter on OPEN courses, only the course runs in state 0 (ongoing open) or
+        1 (future open) should be considered for sorting and computation of the course's state.
+        """
+        availabilities = self.cleaned_data.get("availability", [])
+        if AvailabilityFilterDefinition.OPEN in availabilities:
+            self.states = [0, 1]
+        elif AvailabilityFilterDefinition.ONGOING in availabilities:
+            self.states = [0, 4]
+        elif AvailabilityFilterDefinition.COMING_SOON in availabilities:
+            self.states = [1, 2, 3]
+        elif AvailabilityFilterDefinition.ARCHIVED in availabilities:
+            self.states = [5]
+
+        return availabilities
+
+    def get_script_fields(self):
+        """
+        Build the part of the Elasticseach query that defines script fields ie fields that can not
+        be indexed because they are dynamic and shoud be calculated at query time:
+        - ms_since_epoch: evolves with time to stay relevant on course dates even if the ES
+          instance and/or the Django server are long running.
+        - languages and states: depend on the filters applied by the user so that we only take into
+          consideration course runs that are interesting for this search.
+        - use_case: the script is used both for sorting and field computations because most of the
+          code is common and their is no other way to share code.
+
+        Note: we use script storage to save time on the script compilation, which is an expensive
+        operation. We'll only do it once at bootstrap time.
+        """
+        return {
+            "state": {
+                "script": {
+                    "id": "state",
+                    "params": {
+                        "languages": self.cleaned_data.get("languages") or None,
+                        "ms_since_epoch": arrow.utcnow().timestamp * 1000,
+                        "states": self.states,
+                        "use_case": "field",
+                    },
+                }
+            }
+        }
+
+    def get_sorting_script(self):
+        """
+        Build the part of the Elasticseach query that defines sorting. We use a script for sorting
+        because we sort courses based on the complex and dynamic status of their course runs which
+        are under a nested field. The parameters passed to the script are up-to-date at query time:
+        - ms_since_epoch: evolves with time to stay relevant on course dates even if the ES
+          instance and/or the Django server are long running,
+        - languages and states: depend on the filters applied by the user so that we only take into
+          consideration course runs that are interesting for this search,
+        - max_date: passed as parameter to optimize script compilation,
+        - use_case: the script is used both for sorting and field computations because most of the
+          code is common and their is no other way to share code.
+
+
         Call the relevant sorting script for courses lists, regenerating the parameters on each
         call. This will allow the ms_since_epoch value to stay relevant even if the ES instance
         and/or the Django server are long running.
 
-        The list of languages and states are passed to the script because the context fo the
+        The list of languages and states are passed to the script because the context of the
         search defines which course runs are relevant or not for sorting.
 
         Note: we use script storage to save time on the script compilation, which is an expensive
         operation. We'll only do it once at bootstrap time.
         """
-        # Determine the states relevant with this level of filtering on availabilities
-        availabilities = self.cleaned_data.get("availability", [])
-        if AvailabilityFilterDefinition.OPEN in availabilities:
-            states = [0, 1]
-        elif AvailabilityFilterDefinition.ONGOING in availabilities:
-            states = [0, 4]
-        elif AvailabilityFilterDefinition.COMING_SOON in availabilities:
-            states = [1, 2, 3]
-        elif AvailabilityFilterDefinition.ARCHIVED in availabilities:
-            states = [5]
-        else:
-            states = None
-
         return {
             "_script": {
                 "order": "asc",
                 "script": {
-                    "id": "sort_list",
+                    "id": "state",
                     "params": {
                         "languages": self.cleaned_data.get("languages") or None,
-                        "states": states,
                         "max_date": arrow.get(MAXYEAR, 12, 31).timestamp * 1000,
                         "ms_since_epoch": arrow.utcnow().timestamp * 1000,
+                        "states": self.states,
+                        "use_case": "sorting",
                     },
                 },
                 "type": "number",

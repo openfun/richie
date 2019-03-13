@@ -73,8 +73,12 @@ class CoursesViewsetsTestCase(TestCase):
         lambda *args: (2, 77, {"some": "query"}, {"some": "aggs"}),
     )
     @mock.patch(
-        "richie.apps.search.forms.CourseSearchForm.get_list_sorting_script",
+        "richie.apps.search.forms.CourseSearchForm.get_sorting_script",
         lambda *args: {"some": "sorting"},
+    )
+    @mock.patch(
+        "richie.apps.search.forms.CourseSearchForm.get_script_fields",
+        lambda *args: {"some": "fields"},
     )
     @mock.patch.object(settings.ES_CLIENT, "search")
     def test_viewsets_courses_search(self, mock_search, *_):
@@ -203,16 +207,8 @@ class CoursesViewsetsTestCase(TestCase):
                         "name": "organizations",
                         "position": 3,
                         "values": [
-                            {
-                                "count": 19,
-                                "human_name": "Organization 12",
-                                "name": "12",
-                            },
-                            {
-                                "count": 17,
-                                "human_name": "Organization 11",
-                                "name": "11",
-                            },
+                            {"count": 19, "human_name": "Organization 12", "key": "12"},
+                            {"count": 17, "human_name": "Organization 11", "key": "11"},
                         ],
                     },
                     "languages": {
@@ -240,6 +236,7 @@ class CoursesViewsetsTestCase(TestCase):
             body={
                 "aggs": {"some": "aggs"},
                 "query": {"some": "query"},
+                "script_fields": {"some": "fields"},
                 "sort": {"some": "sorting"},
             },
             doc_type="course",

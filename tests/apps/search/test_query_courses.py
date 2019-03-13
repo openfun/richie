@@ -13,7 +13,7 @@ import arrow
 from elasticsearch.client import IndicesClient
 from elasticsearch.helpers import bulk
 
-from richie.apps.search.filter_definitions.courses import IndexableFilterDefinition
+from richie.apps.search.filter_definitions import IndexableFilterDefinition
 from richie.apps.search.indexers.courses import CoursesIndexer
 
 COURSES = [
@@ -171,9 +171,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             body=CoursesIndexer.mapping, doc_type="course", index="test_courses"
         )
         # Add the sorting script
-        settings.ES_CLIENT.put_script(
-            id="sort_list", body=CoursesIndexer.scripts["sort_list"]
-        )
+        settings.ES_CLIENT.put_script(id="state", body=CoursesIndexer.scripts["state"])
         # Actually insert our courses in the index
         now = arrow.utcnow()
         actions = [
@@ -231,6 +229,14 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "categories": [1, 3, 5],
                         "cover_image": "image",
                         "organizations": [11, 13, 15],
+                        "state": {
+                            "priority": 0,
+                            "call_to_action": "enroll now",
+                            "datetime": COURSE_RUNS["A"]["enrollment_end"]
+                            .isoformat()
+                            .replace("+00:00", "Z"),
+                            "text": "closing on",
+                        },
                         "title": "title",
                     },
                     {
@@ -239,6 +245,14 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "categories": [1, 4, 5],
                         "cover_image": "image",
                         "organizations": [11, 14, 15],
+                        "state": {
+                            "priority": 0,
+                            "datetime": COURSE_RUNS["B"]["enrollment_end"]
+                            .isoformat()
+                            .replace("+00:00", "Z"),
+                            "call_to_action": "enroll now",
+                            "text": "closing on",
+                        },
                         "title": "title",
                     },
                     {
@@ -247,6 +261,14 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "categories": [2, 4],
                         "cover_image": "image",
                         "organizations": [12, 14],
+                        "state": {
+                            "priority": 1,
+                            "datetime": COURSE_RUNS["C"]["start"]
+                            .isoformat()
+                            .replace("+00:00", "Z"),
+                            "call_to_action": "enroll now",
+                            "text": "starting on",
+                        },
                         "title": "title",
                     },
                     {
@@ -255,6 +277,12 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "categories": [2, 3],
                         "cover_image": "image",
                         "organizations": [12, 13],
+                        "state": {
+                            "priority": 4,
+                            "datetime": None,
+                            "call_to_action": None,
+                            "text": "on-going",
+                        },
                         "title": "title",
                     },
                 ],
@@ -339,6 +367,41 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         """
         _, content = self.execute_query(suite=["A", "B", "G", "C", "D", "H", "F", "E"])
         self.assertEqual(
+            list([o["state"] for o in content["objects"]]),
+            [
+                {
+                    "call_to_action": "enroll now",
+                    "datetime": COURSE_RUNS["A"]["enrollment_end"]
+                    .isoformat()
+                    .replace("+00:00", "Z"),
+                    "priority": 0,
+                    "text": "closing on",
+                },
+                {
+                    "call_to_action": "enroll now",
+                    "datetime": COURSE_RUNS["C"]["start"]
+                    .isoformat()
+                    .replace("+00:00", "Z"),
+                    "priority": 1,
+                    "text": "starting on",
+                },
+                {
+                    "call_to_action": "see details",
+                    "datetime": COURSE_RUNS["D"]["start"]
+                    .isoformat()
+                    .replace("+00:00", "Z"),
+                    "priority": 2,
+                    "text": "starting on",
+                },
+                {
+                    "call_to_action": None,
+                    "datetime": None,
+                    "priority": 4,
+                    "text": "on-going",
+                },
+            ],
+        )
+        self.assertEqual(
             content["filters"]["languages"]["values"],
             [
                 {"count": 4, "human_name": "#en", "name": "en"},
@@ -376,6 +439,27 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         """
         _, content = self.execute_query(
             "availability=open", suite=["A", "B", "G", "C", "D", "H", "F", "E"]
+        )
+        self.assertEqual(
+            list([o["state"] for o in content["objects"]]),
+            [
+                {
+                    "call_to_action": "enroll now",
+                    "datetime": COURSE_RUNS["A"]["enrollment_end"]
+                    .isoformat()
+                    .replace("+00:00", "Z"),
+                    "priority": 0,
+                    "text": "closing on",
+                },
+                {
+                    "call_to_action": "enroll now",
+                    "datetime": COURSE_RUNS["C"]["start"]
+                    .isoformat()
+                    .replace("+00:00", "Z"),
+                    "priority": 1,
+                    "text": "starting on",
+                },
+            ],
         )
         self.assertEqual(
             content["filters"]["languages"]["values"],
@@ -455,6 +539,33 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             "languages=fr", suite=["A", "B", "G", "C", "D", "H", "F", "E"]
         )
         self.assertEqual(
+            list([o["state"] for o in content["objects"]]),
+            [
+                {
+                    "call_to_action": "enroll now",
+                    "datetime": COURSE_RUNS["A"]["enrollment_end"]
+                    .isoformat()
+                    .replace("+00:00", "Z"),
+                    "priority": 0,
+                    "text": "closing on",
+                },
+                {
+                    "call_to_action": "see details",
+                    "datetime": COURSE_RUNS["D"]["start"]
+                    .isoformat()
+                    .replace("+00:00", "Z"),
+                    "priority": 2,
+                    "text": "starting on",
+                },
+                {
+                    "call_to_action": None,
+                    "datetime": None,
+                    "priority": 4,
+                    "text": "on-going",
+                },
+            ],
+        )
+        self.assertEqual(
             content["filters"]["languages"]["values"],
             [
                 {"count": 4, "human_name": "#en", "name": "en"},
@@ -514,6 +625,25 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         _, content = self.execute_query(
             "availability=ongoing&languages=en",
             suite=["A", "B", "G", "C", "D", "H", "F", "E"],
+        )
+        self.assertEqual(
+            list([o["state"] for o in content["objects"]]),
+            [
+                {
+                    "call_to_action": "enroll now",
+                    "datetime": COURSE_RUNS["B"]["enrollment_end"]
+                    .isoformat()
+                    .replace("+00:00", "Z"),
+                    "priority": 0,
+                    "text": "closing on",
+                },
+                {
+                    "call_to_action": None,
+                    "datetime": None,
+                    "priority": 4,
+                    "text": "on-going",
+                },
+            ],
         )
         self.assertEqual(
             content["filters"]["languages"]["values"],
