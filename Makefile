@@ -54,6 +54,7 @@ bootstrap:  ## install development dependencies
 	@$(COMPOSE) build base;
 	@$(COMPOSE) build --build-arg UID=$(UID) app;
 	${MAKE} build-front;
+	${MAKE} run;
 	${MAKE} migrate;
 .PHONY: bootstrap
 
@@ -138,7 +139,8 @@ migrate:  ## perform database migrations
 .PHONY: migrate
 
 rebuild: ## rebuild the app container
-	@$(COMPOSE) build base app
+	@$(COMPOSE) build base
+	@$(COMPOSE) build --build-arg UID=$(UID) app
 .PHONY: rebuild
 
 run: ## start the development server
