@@ -8,6 +8,20 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Improved Docker image: now it does not ship with the project sources but only
+  with runtime-required requirements (_i.e._ the sandbox and richie's package
+  installed globally).
+
+### Fixed
+
+- The CI now effectively tests packaging issues.
+- The `apps.core.fields` module is no longer missing from Richie's package.
+- Fixed the `bin/pylint` script to work with the default database engine
+  (PostgreSQL)
+- Fixed `rebuild` & `bootstrap` Makefile rules
+
 ## [1.0.0-beta.2] - 2019-03-13
 
 ### Added
