@@ -6,8 +6,12 @@ from django.test import TestCase
 from cms.api import create_page
 
 from richie.apps.core.helpers import create_i18n_page
-from richie.apps.courses.factories import CategoryFactory, CourseFactory
-from richie.apps.courses.models import Course
+from richie.apps.courses.factories import (
+    BlogPostFactory,
+    CategoryFactory,
+    CourseFactory,
+)
+from richie.apps.courses.models import BlogPost, Course
 
 
 class CategoryModelsTestCase(TestCase):
@@ -106,3 +110,36 @@ class CategoryModelsTestCase(TestCase):
         self.assertEqual(Course.objects.count(), 4)
         self.assertEqual(category.get_courses().count(), 1)
         self.assertEqual(category.public_extension.get_courses().count(), 1)
+
+    def test_models_category_get_blogposts(self):
+        """
+        It should be possible to retrieve the list of related blogposts on the category
+        instance. The number of queries should be minimal.
+        """
+        category = CategoryFactory(should_publish=True)
+        blogposts = BlogPostFactory.create_batch(
+            2, page_title="my title", fill_categories=[category], should_publish=True
+        )
+        retrieved_blogposts = category.get_blogposts()
+
+        with self.assertNumQueries(2):
+            self.assertEqual(set(retrieved_blogposts), set(blogposts))
+
+        with self.assertNumQueries(0):
+            for blogpost in retrieved_blogposts:
+                self.assertEqual(
+                    blogpost.extended_object.prefetched_titles[0].title, "my title"
+                )
+
+    def test_models_category_get_blogposts_several_languages(self):
+        """
+        The blogposts should not be duplicated if they exist in several languages.
+        """
+        category = CategoryFactory(should_publish=True)
+        BlogPostFactory(
+            page_title={"en": "my title", "fr": "mon titre"},
+            fill_categories=[category],
+            should_publish=True,
+        )
+        self.assertEqual(BlogPost.objects.count(), 2)
+        self.assertEqual(category.get_blogposts().count(), 1)

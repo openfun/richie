@@ -2,6 +2,7 @@
 # flake8: noqa
 # pylint: disable=wildcard-import
 
+from .blog import *
 from .category import *
 from .course import *
 from .organization import *

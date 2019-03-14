@@ -1,0 +1,74 @@
+// Overridable & namespaced global variables
+$richie-blogpost-detail-title-margin: 0 !default;
+$richie-blogpost-detail-title-padding: 1rem !default;
+$richie-blogpost-detail-title-textalign: center !default;
+
+
+.blogpost-detail {
+  @include make-container();
+  @include make-container-max-widths();
+  padding-bottom: 1rem;
+  background: $richie-content-container-bg;
+
+  &__title {
+    margin: $richie-blogpost-detail-title-margin;
+    padding: $richie-blogpost-detail-title-padding;
+    text-align: $richie-blogpost-detail-title-textalign;
+  }
+
+  &__subhead{
+    display: flex;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    &__date{
+      @include sv-flex(0, 0, auto);
+      margin: 0;
+    }
+
+    &__author{
+      @include sv-flex(0, 0, auto);
+      margin: 0;
+
+      &::before{
+        content: "—";
+        margin: 0 0.4rem;
+      }
+    }
+  }
+
+  &__categories{
+    @include sv-flex(1, 0, 50rem);
+    display: flex;
+    margin: 0 auto 2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    .category-plugin-tag{
+      @include sv-flex(0, 0, auto);
+    }
+  }
+
+  &__cover{
+    margin-bottom: 2rem;
+
+    img{
+      display: block;
+      margin: 0 auto;
+      max-width: 100%;
+    }
+  }
+
+  &__excerpt{
+    margin-bottom: 2rem;
+    padding-left: $grid-gutter-width;
+    padding-right: $grid-gutter-width;
+    font-size: 1.4rem;
+  }
+
+  &__body{
+    padding-left: $grid-gutter-width;
+    padding-right: $grid-gutter-width;
+  }
+}

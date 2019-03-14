@@ -1,0 +1,10 @@
+{% load cms_tags i18n %}
+{% spaceless %}
+{% if current_page.publisher_is_draft or instance.check_publication is True %}
+  <div class="blogpost-plugin-container{% if relevant_page.check_publication is False %} blogpost-plugin-container--draft{% endif %}">
+      <a class="blogpost-plugin" href="{{ relevant_page.get_absolute_url }}" title="{{ relevant_page.get_title }}">
+        {% include "courses/cms/fragment_blogpost_glimpse.html" with blogpost=relevant_page %}
+      </a>
+  </div>
+{% endif %}
+{% endspaceless %}
