@@ -17,30 +17,36 @@
 # ---- base image to inherit from ----
 FROM python:3.6-stretch as base
 
-# ---- back-end builder image ----
-FROM base as back-builder
-
-WORKDIR /builder
-
-COPY setup.py setup.cfg MANIFEST.in /builder/
-COPY ./src /builder/src/
-
-# Upgrade pip to its latest release to speed up dependencies installation
-RUN pip install --upgrade pip
-
-RUN mkdir /install && \
-    pip install --prefix=/install .
-
 # ---- front-end builder image ----
 FROM node:10 as front-builder
 
-COPY . /app/
+# FIXME: we should only copy src/frontend, but for now compiling scss files
+# requires files from the backend sources
+COPY ./src /app/src/
 
 WORKDIR /app/src/frontend
 
 RUN yarn install --frozen-lockfile && \
     yarn build && \
     yarn sass
+
+# ---- back-end builder image ----
+FROM base as back-builder
+
+WORKDIR /builder
+
+# Copy distributed application's statics
+COPY --from=front-builder /app/src/richie/static/richie /builder/src/richie/static/richie
+
+# Copy required python dependencies
+COPY setup.py setup.cfg MANIFEST.in /builder/
+COPY ./src/richie /builder/src/richie/
+
+# Upgrade pip to its latest release to speed up dependencies installation
+RUN pip install --upgrade pip
+
+RUN mkdir /install && \
+    pip install --prefix=/install .
 
 # ---- final application image ----
 FROM base
@@ -54,11 +60,9 @@ RUN apt-get update && \
 # Copy installed python dependencies
 COPY --from=back-builder /install /usr/local
 
-# Copy richie application (see .dockerignore)
-COPY . /app/
-
-# Copy front-end dependencies
-COPY --from=front-builder /app/src/richie/static/richie /app/src/richie/static/richie
+# Copy runtime-required files
+COPY ./sandbox /app/sandbox/
+COPY ./bin/entrypoint /app/bin/entrypoint
 
 WORKDIR /app
 
