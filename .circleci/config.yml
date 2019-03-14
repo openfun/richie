@@ -82,9 +82,9 @@ jobs:
             - ~/fun/docker/images/
           key: docker-debian-images-{{ .Revision }}
 
-  # Build dev job
-  # Build the Docker image ready for development
-  build-dev:
+  # Build CI job
+  # Build the Docker image ready for the CI
+  build-ci:
     machine:
       docker_layer_caching: true
     working_directory: ~/fun
@@ -102,13 +102,13 @@ jobs:
           command: docker images "richie:${CIRCLE_SHA1}*"
       # Generate a version.json file describing app release
       - <<: *generate-version-file
-      # Development image build, it uses the dev Dockerfile file
+      # CI image build, it uses the dev Dockerfile file
       - run:
-          name: Build development image
+          name: Build CI image
           command: |
             docker build \
-              -t richie:${CIRCLE_SHA1}-dev \
-              -f docker/images/dev/Dockerfile \
+              -t richie:${CIRCLE_SHA1}-ci \
+              -f docker/images/ci/Dockerfile \
               --build-arg BASE_TAG=${CIRCLE_SHA1} \
               .
       - run:
@@ -120,11 +120,11 @@ jobs:
             docker save \
               -o docker/images/dev/richie.tar \
               richie:${CIRCLE_SHA1} \
-              richie:${CIRCLE_SHA1}-dev
+              richie:${CIRCLE_SHA1}-ci
       - save_cache:
           paths:
             - ~/fun/docker/images/dev/
-          key: docker-debian-images-dev-{{ .Revision }}
+          key: docker-debian-images-ci-{{ .Revision }}
       # Generate and persist the translations base file
       - run:
           name: Generate a POT file from strings extracted from the project
@@ -133,7 +133,7 @@ jobs:
               --user="$(id -u)" \
               --volume "$PWD:/app" \
               --workdir /app/src/richie \
-              "richie:${CIRCLE_SHA1}-dev" \
+              "richie:${CIRCLE_SHA1}-ci" \
                   python /app/sandbox/manage.py makemessages --keep-pot
       - persist_to_workspace:
           root: ~/fun/src/richie/locale
@@ -147,7 +147,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - docker-debian-images-dev-{{ .Revision }}
+            - docker-debian-images-ci-{{ .Revision }}
       - run:
           name: Load images to docker engine
           command: |
@@ -156,7 +156,7 @@ jobs:
           name: Lint code with isort
           command: |
             docker-compose \
-              -p richie-test \
+              -p richie-ci \
               -f docker/compose/ci/postgresql/docker-compose.yml \
               --project-directory . \
               run --rm --no-deps app \
@@ -169,7 +169,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - docker-debian-images-dev-{{ .Revision }}
+            - docker-debian-images-ci-{{ .Revision }}
       - run:
           name: Load images to docker engine
           command: |
@@ -178,7 +178,7 @@ jobs:
           name: Lint code with flake8
           command: |
             docker-compose \
-              -p richie-test \
+              -p richie-ci \
               -f docker/compose/ci/postgresql/docker-compose.yml \
               --project-directory . \
               run --rm --no-deps app \
@@ -191,7 +191,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - docker-debian-images-dev-{{ .Revision }}
+            - docker-debian-images-ci-{{ .Revision }}
       - run:
           name: Load images to docker engine
           command: |
@@ -200,7 +200,7 @@ jobs:
           name: Lint code with pylint
           command: |
             docker-compose \
-              -p richie-test \
+              -p richie-ci \
               -f docker/compose/ci/postgresql/docker-compose.yml \
               --project-directory . \
               run --rm --no-deps app \
@@ -213,7 +213,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - docker-debian-images-dev-{{ .Revision }}
+            - docker-debian-images-ci-{{ .Revision }}
       - run:
           name: Load images to docker engine
           command: |
@@ -222,7 +222,7 @@ jobs:
           name: Lint code with black
           command: |
             docker-compose \
-              -p richie-test \
+              -p richie-ci \
               -f docker/compose/ci/postgresql/docker-compose.yml \
               --project-directory . \
               run --rm --no-deps app \
@@ -258,7 +258,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - docker-debian-images-dev-{{ .Revision }}
+            - docker-debian-images-ci-{{ .Revision }}
       - run:
           name: Load images to docker engine
           command: |
@@ -278,16 +278,16 @@ jobs:
       # Run back-end (Django) test suite
       #
       # Nota bene: to run the django test suite, we need to ensure that both
-      # MySQL and ElasticSearch services are up and ready. To achieve this,
-      # we wrap the pytest command execution with dockerize, a tiny tool
-      # installed in the development image. In our case, dockerize will wait
-      # up to one minute that both the database and elastisearch containers
-      # opened their expected tcp port (3306 and 9200 resp.).
+      # MySQL and ElasticSearch services are up and ready. To achieve this, we
+      # wrap the pytest command execution with dockerize, a tiny tool installed
+      # in the CI image. In our case, dockerize will wait up to one minute that
+      # both the database and elastisearch containers opened their expected tcp
+      # port (3306 and 9200 resp.).
       - run:
           name: Run tests
           command: |
             docker-compose \
-              -p richie-test \
+              -p richie-ci \
               -f docker/compose/ci/mysql/docker-compose.yml \
               --project-directory . \
               run --rm app \
@@ -296,7 +296,7 @@ jobs:
                   -wait tcp://elasticsearch:9200 \
                   -timeout 60s \
                     pytest
-            docker-compose -p richie-test ps db | grep "mysql"
+            docker-compose -p richie-ci ps db | grep "mysql"
 
   test-back-postgresql:
     machine: true
@@ -305,7 +305,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - docker-debian-images-dev-{{ .Revision }}
+            - docker-debian-images-ci-{{ .Revision }}
       - run:
           name: Load images to docker engine
           command: |
@@ -327,14 +327,14 @@ jobs:
       # Nota bene: to run the django test suite, we need to ensure that both
       # PostgreSQL and ElasticSearch services are up and ready. To achieve this,
       # we wrap the pytest command execution with dockerize, a tiny tool
-      # installed in the development image. In our case, dockerize will wait
-      # up to one minute that both the database and elastisearch containers
-      # opened their expected tcp port (5432 and 9200 resp.).
+      # installed in the CI image. In our case, dockerize will wait up to one
+      # minute that both the database and elastisearch containers opened their
+      # expected tcp port (5432 and 9200 resp.).
       - run:
           name: Run tests
           command: |
             docker-compose \
-              -p richie-test \
+              -p richie-ci \
               -f docker/compose/ci/postgresql/docker-compose.yml \
               --project-directory . \
               run --rm app \
@@ -343,7 +343,7 @@ jobs:
                   -wait tcp://elasticsearch:9200 \
                   -timeout 60s \
                     pytest
-            docker-compose -p richie-test ps db | grep "postgres"
+            docker-compose -p richie-ci ps db | grep "postgres"
 
   # ---- Alpine jobs ----
   build-alpine:
@@ -362,11 +362,11 @@ jobs:
               -f docker/images/alpine/Dockerfile \
               .
       - run:
-          name: Build alpine development image
+          name: Build alpine CI image
           command: |
             docker build \
-              -t richie:${CIRCLE_SHA1}-alpine-dev \
-              -f docker/images/alpine/dev/Dockerfile \
+              -t richie:${CIRCLE_SHA1}-alpine-ci \
+              -f docker/images/alpine/ci/Dockerfile \
               --build-arg BASE_TAG=${CIRCLE_SHA1}-alpine \
               .
       - run:
@@ -378,11 +378,11 @@ jobs:
             docker save \
               -o docker/images/alpine/richie.tar \
               richie:${CIRCLE_SHA1}-alpine \
-              richie:${CIRCLE_SHA1}-alpine-dev
+              richie:${CIRCLE_SHA1}-alpine-ci
       - save_cache:
           paths:
             - ~/fun/docker/images/
-          key: docker-alpine-images-dev-{{ .Revision }}
+          key: docker-alpine-images-ci-{{ .Revision }}
 
   test-alpine:
     machine: true
@@ -391,7 +391,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - docker-alpine-images-dev-{{ .Revision }}
+            - docker-alpine-images-ci-{{ .Revision }}
       - run:
           name: Load images to docker engine
           command: |
@@ -406,7 +406,7 @@ jobs:
           command: |
             IMAGE_SUFFIX="-alpine" \
             docker-compose \
-              -p richie-test \
+              -p richie-alpine-ci \
               -f docker/compose/ci/postgresql/docker-compose.yml \
               --project-directory . \
               run --rm app \
@@ -424,7 +424,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - docker-debian-images-dev-{{ .Revision }}
+            - docker-debian-images-ci-{{ .Revision }}
       - run:
           name: Load images to docker engine
           command: |
@@ -437,7 +437,7 @@ jobs:
             docker run --rm \
               --user="$(id -u)" \
               --volume "$PWD:/app" \
-              "richie:${CIRCLE_SHA1}-dev" \
+              "richie:${CIRCLE_SHA1}-ci" \
               python setup.py sdist bdist_wheel
       # Persist build packages to the workspace
       - persist_to_workspace:
@@ -459,7 +459,7 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - docker-debian-images-dev-{{ .Revision }}
+            - docker-debian-images-ci-{{ .Revision }}
       - run:
           name: Load images to docker engine
           command: |
@@ -474,7 +474,7 @@ jobs:
           name: Upload built packages to PyPI
           command: |
             docker-compose \
-              -p richie-test \
+              -p richie-ci \
               -f docker/compose/ci/postgresql/docker-compose.yml \
               --project-directory . \
               run --rm --no-deps \
@@ -493,10 +493,10 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - docker-debian-images-dev-{{ .Revision }}
+            - docker-debian-images-ci-{{ .Revision }}
       - restore_cache:
           keys:
-            - docker-alpine-images-dev-{{ .Revision }}
+            - docker-alpine-images-ci-{{ .Revision }}
       # Load all built images in all flavors
       - run:
           name: Load images to docker engine
@@ -516,7 +516,7 @@ jobs:
       # Tag docker images with the same pattern used in Git (Semantic Versioning)
       #
       # Git tag: v1.0.1
-      # Docker tag: 1.0.1(-alpine)(-dev)
+      # Docker tag: 1.0.1(-alpine)(-ci)
       - run:
           name: Tag images
           command: |
@@ -687,7 +687,7 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - build-dev:
+      - build-ci:
           requires:
             - build
           filters:
@@ -695,37 +695,37 @@ workflows:
               only: /.*/
       - lint-back-black:
           requires:
-            - build-dev
+            - build-ci
           filters:
             tags:
               only: /.*/
       - lint-back-isort:
           requires:
-            - build-dev
+            - build-ci
           filters:
             tags:
               only: /.*/
       - lint-back-flake8:
           requires:
-            - build-dev
+            - build-ci
           filters:
             tags:
               only: /.*/
       - lint-back-pylint:
           requires:
-            - build-dev
+            - build-ci
           filters:
             tags:
               only: /.*/
       - test-back-mysql:
           requires:
-            - build-dev
+            - build-ci
           filters:
             tags:
               only: /.*/
       - test-back-postgresql:
           requires:
-            - build-dev
+            - build-ci
           filters:
             tags:
               only: /.*/
@@ -736,7 +736,7 @@ workflows:
       - upload-i18n-strings:
           requires:
             - build-front
-            - build-dev
+            - build-ci
           filters:
             branches:
               only: master
