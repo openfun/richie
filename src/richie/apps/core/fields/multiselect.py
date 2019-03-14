@@ -1,3 +1,4 @@
+"""A multi select field where the array of values is stored as a comma separated string."""
 from django.core import checks, exceptions, validators
 from django.db import models
 from django.forms import MultipleChoiceField, widgets
@@ -36,12 +37,16 @@ class MaxChoicesValidator(validators.MaxLengthValidator):
 
 
 class MultiSelectFormField(MultipleChoiceField):
+    """
+    The Formfield for our multiselect field is based on the SelectMultiple widget and
+    should validate its `max_choices` parameter.
+    """
 
     widget = widgets.SelectMultiple
 
     def __init__(self, *args, **kwargs):
         """
-        Set validators for the field's max length
+        Set validators for the field's maximum number of choices.
         """
         self.max_choices = kwargs.pop("max_choices", None)
         super(MultiSelectFormField, self).__init__(*args, **kwargs)
@@ -52,6 +57,9 @@ class MultiSelectFormField(MultipleChoiceField):
 
 class MultiSelectField(models.CharField):
     """
+    A custom database field to store a list of string values.
+    This is an alternative to Django's ArrayField that is compatible with Mysql.
+    The array of values is stored in a comma separated string.
     """
 
     description = _("Multi select field (up to %(max_choices)s choices)")
@@ -91,7 +99,7 @@ class MultiSelectField(models.CharField):
             ]
         return super()._check_choices()
 
-    def _check_max_choices_attribute(self, **kwargs):
+    def _check_max_choices_attribute(self):
         """Check that max_choices if well configured."""
         if self.max_choices is None:
             return [
@@ -129,10 +137,11 @@ class MultiSelectField(models.CharField):
 
     def check(self, **kwargs):
         """Add checks on max_choices to the field's checks."""
-        res = [*super().check(**kwargs), *self._check_max_choices_attribute(**kwargs)]
+        res = [*super().check(**kwargs), *self._check_max_choices_attribute()]
         return res
 
-    def from_db_value(self, value, expression, connection):
+    @staticmethod
+    def from_db_value(value, *_args):
         """Convert a database value to a list value."""
         if not value:
             return None if value is None else []
@@ -172,7 +181,7 @@ class MultiSelectField(models.CharField):
         value = self.value_from_object(obj)
         return self.get_prep_value(value)
 
-    def validate(self, values, model_instance):
+    def validate(self, value, model_instance):
         """
         Validate each value in values and raise a ValidationError if something is wrong.
         """
@@ -180,20 +189,20 @@ class MultiSelectField(models.CharField):
             # Skip validation for non-editable fields.
             return
 
-        if self.choices and values:
+        if self.choices and value:
             # Build a set of possible choices
             choices = set()
             for option_key, option_value in self.choices:
                 if isinstance(option_value, (list, tuple)):
                     # This is an optgroup, so look inside the group for
                     # options.
-                    for optgroup_key, optgroup_value in option_value:
+                    for optgroup_key, _optgroup_value in option_value:
                         choices.add(optgroup_key)
                 else:
                     choices.add(option_key)
 
             # Search each value in this set
-            invalid_choices = [v for v in values if v not in choices]
+            invalid_choices = [v for v in value if v not in choices]
             if invalid_choices:
                 raise exceptions.ValidationError(
                     self.error_message,
@@ -204,10 +213,10 @@ class MultiSelectField(models.CharField):
                     },
                 )
 
-        if values is None and not self.null:
+        if value is None and not self.null:
             raise exceptions.ValidationError(self.error_messages["null"], code="null")
 
-        if not self.blank and not values:
+        if not self.blank and not value:
             raise exceptions.ValidationError(self.error_messages["blank"], code="blank")
 
     def formfield(self, **kwargs):
@@ -225,18 +234,20 @@ class MultiSelectField(models.CharField):
         defaults.update(kwargs)
         return MultiSelectFormField(**defaults)
 
-    def contribute_to_class(self, cls, name):
+    def contribute_to_class(self, cls, name, private_only=False):
         """
         Add a method to the model using this field to enable the common `get_FIELD_display`
         pattern to display the human readable version of a field based on choices.
 
         We choose to display a sentence of the form: "French, English and German".
         """
-        super(MultiSelectField, self).contribute_to_class(cls, name)
+        super(MultiSelectField, self).contribute_to_class(
+            cls, name, private_only=private_only
+        )
         if self.choices:
             choicedict = dict(self.choices)
 
-            def func(self, *args):
+            def func(self, *_args):
                 """
                 we add `*args` because this method is used in a "render_model" template tag
                 and it passes a "request" argument when calling the method.
