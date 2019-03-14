@@ -139,8 +139,8 @@ class BaseFilterDefinition:
                         "is_drilldown": False,
                         "name": "languages",
                         "values": [
-                            {"name": "en", "human_name": "English", "count": 3},
-                            {"name": "fr", "human_name": "French", "count": 2},
+                            {"key": "en", "human_name": "English", "count": 3},
+                            {"key": "fr", "human_name": "French", "count": 2},
                         ],
                     }
                 }
@@ -237,7 +237,7 @@ class BaseChoicesFilterDefinition(BaseFilterDefinition):
                 "name": self.name,
                 "position": self.position,
                 "values": [
-                    {"count": count, "human_name": values[name], "name": name}
+                    {"count": count, "human_name": values[name], "key": name}
                     for name, count in facet_counts
                 ],
             }
