@@ -257,7 +257,7 @@ describe('components/SearchSuggestField', () => {
         suggestion: {
           data: {
             absolute_url: 'https://example.com/courses/42',
-            id: 42,
+            id: '42',
           } as Course,
           model: modelName.COURSES,
         },
@@ -269,7 +269,7 @@ describe('components/SearchSuggestField', () => {
     it('updates the filter and resets the suggestion state when it is called with a resource suggestion', () => {
       curriedOnSuggestionSelected({} as any, {
         suggestion: {
-          data: { id: 43 } as Category,
+          data: { id: '43' } as Category,
           model: modelName.CATEGORIES,
         },
       });
@@ -282,7 +282,7 @@ describe('components/SearchSuggestField', () => {
       jest.resetAllMocks();
       curriedOnSuggestionSelected({} as any, {
         suggestion: {
-          data: { id: 44 } as Organization,
+          data: { id: '44' } as Organization,
           model: modelName.ORGANIZATIONS,
         },
       });

@@ -13,7 +13,10 @@ describe('components/CourseGlimpse', () => {
   it('renders a course glimpse with its data', () => {
     const course = {
       cover_image: '/thumbs/small.png',
-      start: '2018-03-12T08:00:00Z',
+      state: {
+        datetime: '2019-03-14T10:35:47.823Z',
+        text: 'starts on',
+      },
       title: 'Course 42',
     } as Course;
     const organization = {
@@ -28,7 +31,7 @@ describe('components/CourseGlimpse', () => {
     // The course glimpse shows the relevant information
     getByText('Course 42');
     getByText('Some Organization');
-    getByText('Starts on {date}');
+    getByText('Starts on Thu, 14 Mar 2019 10:35:47 GMT');
     // The logo is rendered along with alternate text
     expect(getByAltText('Logo for {courseTitle}')).toHaveAttribute(
       'src',

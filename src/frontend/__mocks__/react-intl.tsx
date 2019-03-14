@@ -35,4 +35,6 @@ export const FormattedMessage = jest
 // FormattedDate returns the value as-is
 export const FormattedDate = jest
   .fn()
-  .mockImplementation((props: RealFormattedDate.Props) => props.value);
+  .mockImplementation((props: RealFormattedDate.Props) =>
+    new Date(props.value).toUTCString(),
+  );

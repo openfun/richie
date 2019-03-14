@@ -64,18 +64,14 @@ export const CourseGlimpse = injectIntl(
       </div>
       <div className="course-glimpse__footer">
         <p className="course-glimpse__footer__date">
-          <FormattedMessage
-            {...messages.date}
-            values={{
-              date: (
-                <FormattedDate
-                  value={new Date(course.start)}
-                  year="numeric"
-                  month="short"
-                  day="numeric"
-                />
-              ),
-            }}
+          {course.state.text.charAt(0).toUpperCase() +
+            course.state.text.substr(1)}
+          &nbsp;
+          <FormattedDate
+            value={new Date(course.state.datetime)}
+            year="numeric"
+            month="short"
+            day="numeric"
           />
         </p>
       </div>
