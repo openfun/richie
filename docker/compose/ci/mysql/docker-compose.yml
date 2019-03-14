@@ -23,11 +23,11 @@ services:
         hard: -1
 
   app:
-    image: "richie:${CIRCLE_SHA1}${IMAGE_SUFFIX}-dev"
+    image: "richie:${CIRCLE_SHA1}${IMAGE_SUFFIX}-ci"
     env_file:
       - env.d/ci/common
       - env.d/ci/mysql
     depends_on:
       - "db"
       - "elasticsearch"
-    tmpfs: /data
+    tmpfs: /data:uid=1000
