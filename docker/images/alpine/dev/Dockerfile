@@ -10,9 +10,6 @@ FROM richie:${BASE_TAG}
 # Switch back to the root user to install development dependencies
 USER root:root
 
-# Create statics and media folders as defined in Development settings
-RUN mkdir -p /data/{media,static}
-
 # Install curl
 RUN apk --no-cache add --update \
         curl \
@@ -24,7 +21,12 @@ RUN apk --no-cache add --update \
 # Upgrade pip to its latest release to speed up dependencies installation
 RUN pip install --upgrade pip
 
-# Install development dependencies
+# Copy all sources, not only runtime-required files
+COPY . /app/
+
+# Uninstall richie and re-install it in editable mode along with development
+# dependencies
+RUN pip uninstall -y richie
 RUN pip install -e .[dev]
 
 # Install dockerize. It is used to ensure that the database service is accepting
@@ -32,6 +34,10 @@ RUN pip install -e .[dev]
 ENV DOCKERIZE_VERSION v0.6.1
 RUN curl -sL \
         --output dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-        https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && \
+        https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-alpine-linux-amd64-$DOCKERIZE_VERSION.tar.gz && \
         tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && \
         rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+
+# Restore the un-privileged user running the application
+ARG UID=1000
+USER ${UID}

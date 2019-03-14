@@ -17,6 +17,17 @@
 # ---- base image to inherit from ----
 FROM python:3.6-alpine as base
 
+# ---- front-end builder image ----
+FROM node:10-alpine as front-builder
+
+COPY ./src /app/src/
+
+WORKDIR /app/src/frontend
+
+RUN yarn install --frozen-lockfile && \
+    yarn build && \
+    yarn sass
+
 # ---- builder image ----
 FROM base as back-builder
 
@@ -46,25 +57,18 @@ RUN apk --no-cache add --update \
 
 WORKDIR /builder
 
+# Copy distributed application's statics
+COPY --from=front-builder /app/src/richie/static/richie /builder/src/richie/static/richie
+
+# Copy required python dependencies
 COPY setup.py setup.cfg MANIFEST.in /builder/
-COPY ./src /builder/src/
+COPY ./src/richie /builder/src/richie/
 
 # Upgrade pip to its latest release to speed up dependencies installation
 RUN pip install --upgrade pip
 
 RUN mkdir /install && \
     pip install --prefix=/install .
-
-# ---- front-end builder image ----
-FROM node:10-alpine as front-builder
-
-COPY . /app/
-
-WORKDIR /app/src/frontend
-
-RUN yarn install --frozen-lockfile && \
-    yarn build && \
-    yarn sass
 
 # ---- final application image ----
 FROM base
@@ -75,6 +79,7 @@ COPY --from=back-builder /install /usr/local
 # Install only (linked) libraries required for compiled python dependencies
 # (lxml, Pillow and psycopg2)
 RUN apk --no-cache add --update \
+    gettext \
     # lxml dependencies
     libxml2 \
     libxslt \
@@ -95,11 +100,12 @@ RUN apk --no-cache add --update \
     mariadb-connector-c && \
     rm -rf /var/cache/apk/*
 
-# Copy richie application (see .dockerignore)
-COPY . /app/
+# Copy installed python dependencies
+COPY --from=back-builder /install /usr/local
 
-# Copy front-end dependencies
-COPY --from=front-builder /app/src/richie/static/richie /app/src/richie/static/richie
+# Copy runtime-required files
+COPY ./sandbox /app/sandbox/
+COPY ./bin/entrypoint /app/bin/entrypoint
 
 WORKDIR /app
 
