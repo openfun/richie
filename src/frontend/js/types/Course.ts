@@ -2,13 +2,14 @@ import { Resource } from './Resource';
 
 export interface Course extends Resource {
   absolute_url: string;
+  categories: string[];
   cover_image: string;
-  end: string;
-  enrollment_end: string;
-  enrollment_start: string;
-  languages: string[];
-  organizations: number[];
-  start: string;
-  categories: number[];
+  organizations: string[];
+  state: {
+    call_to_action: string;
+    datetime: string;
+    priority: number;
+    text: string;
+  };
   title: string;
 }
