@@ -24,7 +24,12 @@ RUN apt-get update && \
 # Upgrade pip to its latest release to speed up dependencies installation
 RUN pip install --upgrade pip
 
-# Install development dependencies
+# Copy all sources, not only runtime-required files
+COPY . /app/
+
+# Uninstall richie and re-install it in editable mode along with development
+# dependencies
+RUN pip uninstall -y richie
 RUN pip install -e .[dev]
 
 # Install dockerize. It is used to ensure that the database service is accepting
