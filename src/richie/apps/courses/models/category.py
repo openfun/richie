@@ -121,10 +121,16 @@ class Category(BasePageExtension):
 def get_category_limit_choices_to():
     """Return a query limiting the categories proposed when creating a CategoryPlugin."""
     limit_choices_to = {
+        # Joining on `cms_pages` generate duplicates for categories that are under a parent page
+        # when this page exists both in draft and public versions. We need to exclude the
+        # parent public page to avoid this duplication with the first condition.
+        # The second condition makes sure the parent is a category.
+        # The third condition filters out public category.
+        # The fourth condition makes sure only categories show up.
+        "node__parent__cms_pages__publisher_is_draft": True,  # exclude category published parent
+        "node__parent__cms_pages__category__isnull": False,  # exclude meta categories
         "publisher_is_draft": True,  # plugins work with draft instances
         "category__isnull": False,  # limit to pages linked to a category object
-        "node__parent__cms_pages__category__isnull": False,  # exclude meta categories
-        "node__parent__cms_pages__publisher_is_draft": True,  # exclude published categories
     }
     # Limit to leaf categories only if active in settings (False by default)
     if getattr(settings, "LIMIT_PLUGIN_CATEGORIES_TO_LEAF", False):

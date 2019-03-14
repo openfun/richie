@@ -132,7 +132,10 @@ class OrganizationPluginModel(PagePluginMixin, CMSPlugin):
         Page,
         on_delete=models.CASCADE,
         related_name="organization_plugins",
-        limit_choices_to={"publisher_is_draft": True, "organization__isnull": False},
+        limit_choices_to={
+            "publisher_is_draft": True,  # plugins work with draft instances
+            "organization__isnull": False,  # limit to pages linked to a course object
+        },
     )
 
     class Meta:

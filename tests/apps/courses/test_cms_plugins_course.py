@@ -23,7 +23,8 @@ class CoursePluginTestCase(TestCase):
     def test_cms_plugins_course_form_page_choices(self):
         """
         The form to create a course plugin should only list course pages
-        in the select box and no snapshot.
+        in the select box and no snapshot. There shouldn't be any duplicate because
+        of published status.
         """
 
         class CoursePluginModelForm(forms.ModelForm):
@@ -34,11 +35,13 @@ class CoursePluginTestCase(TestCase):
                 fields = ["page"]
 
         page = create_i18n_page("A page")
-        course = CourseFactory(page_parent=page)
+        page.publish("en")
+        course = CourseFactory(page_parent=page, should_publish=True)
         other_page_title = "other page"
         create_page(other_page_title, "richie/fullwidth.html", settings.LANGUAGE_CODE)
         plugin_form = CoursePluginModelForm()
-        self.assertIn(course.extended_object.get_title(), plugin_form.as_table())
+        rendered_form = plugin_form.as_table()
+        self.assertEqual(rendered_form.count(course.extended_object.get_title()), 1)
         self.assertNotIn(other_page_title, plugin_form.as_table())
 
         # Create a fake course snapshot and make sure it's not available to select
