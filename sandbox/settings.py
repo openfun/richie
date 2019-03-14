@@ -271,6 +271,8 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         ("courses/cms/organization_list.html", _("Organization list")),
         ("courses/cms/organization_detail.html", _("Organization page")),
         ("courses/cms/category_detail.html", _("Category page")),
+        ("courses/cms/blogpost_list.html", _("Blog post list")),
+        ("courses/cms/blogpost_detail.html", _("Blog post page")),
         ("persons/cms/person_detail.html", _("Person page")),
         ("search/search.html", _("Search")),
         ("richie/fullwidth.html", "Fullwidth"),
@@ -300,18 +302,20 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
             "name": _("Main content"),
             "excluded_plugins": ["CKEditorPlugin", "GoogleMapPlugin"],
             "parent_classes": {
+                "BlogPostPlugin": ["SectionPlugin"],
+                "CategoryPlugin": ["SectionPlugin"],
                 "CoursePlugin": ["SectionPlugin"],
                 "OrganizationPlugin": ["SectionPlugin"],
-                "CategoryPlugin": ["SectionPlugin"],
                 "PersonPlugin": ["SectionPlugin"],
             },
             "child_classes": {
                 "SectionPlugin": [
-                    "CoursePlugin",
-                    "OrganizationPlugin",
+                    "BlogPostPlugin",
                     "CategoryPlugin",
-                    "PersonPlugin",
+                    "CoursePlugin",
                     "LinkPlugin",
+                    "OrganizationPlugin",
+                    "PersonPlugin",
                 ]
             },
         },
@@ -410,6 +414,30 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
             "name": _("Resume"),
             "plugins": ["CKEditorPlugin"],
             "limits": {"CKEditorPlugin": 1},
+        },
+        # Blog page detail
+        "courses/cms/blogpost_detail.html author": {
+            "name": _("Author"),
+            "plugins": ["PersonPlugin"],
+            "limits": {"PersonPlugin": 1},
+        },
+        "courses/cms/blogpost_detail.html categories": {
+            "name": _("Categories"),
+            "plugins": ["CategoryPlugin"],
+        },
+        "courses/cms/blogpost_detail.html cover": {
+            "name": _("Cover"),
+            "plugins": ["PicturePlugin"],
+            "limits": {"PicturePlugin": 1},
+        },
+        "courses/cms/blogpost_detail.html excerpt": {
+            "name": _("Excerpt"),
+            "plugins": ["PlainTextPlugin"],
+            "limits": {"PlainTextPlugin": 1},
+        },
+        "courses/cms/blogpost_detail.html body": {
+            "name": _("Body"),
+            "excluded_plugins": ["CKEditorPlugin", "GoogleMapPlugin"],
         },
     }
 

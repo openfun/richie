@@ -10,6 +10,7 @@ from cms.plugin_pool import plugin_pool
 
 from .forms import LicencePluginForm
 from .models import (
+    BlogPostPluginModel,
     CategoryPluginModel,
     CoursePluginModel,
     LicencePluginModel,
@@ -105,4 +106,27 @@ class LicencePlugin(CMSPluginBase):
 
     def render(self, context, instance, placeholder):
         context.update({"instance": instance, "placeholder": placeholder})
+        return context
+
+
+@plugin_pool.register_plugin
+class BlogPostPlugin(CMSPluginBase):
+    """
+    BlogPost plugin displays a Blog post overview on other pages
+    """
+
+    model = BlogPostPluginModel
+    module = _("Courses")
+    render_template = "courses/plugins/blogpost.html"
+    cache = True
+    module = settings.FUN_PLUGINS_GROUP
+
+    def render(self, context, instance, placeholder):
+        context.update(
+            {
+                "instance": instance,
+                "relevant_page": instance.relevant_page,
+                "placeholder": placeholder,
+            }
+        )
         return context

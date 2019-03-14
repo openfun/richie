@@ -23,7 +23,36 @@
   </div>
 </div>
 
+
+<div class="blogpost-glimpse-list">
+  <h2 class="blogpost-glimpse-list__title">{% trans "Related news" %}</h2>
+  {% for blogpost in category.get_blogposts %}
+    {# If the current page is a draft, show draft courses with a class annotation for styling #}
+    {% if current_page.publisher_is_draft %}
+      {% if blogpost.check_publication is True %}
+      <a class="blogpost-glimpse blogpost-glimpse--link" href="{{ blogpost.public_extension.extended_object.get_absolute_url }}">
+        {% include "courses/cms/fragment_blogpost_glimpse.html" with blogpost=blogpost.public_extension.extended_object %}
+      </a>
+      {% else %}
+      <a class="blogpost-glimpse blogpost-glimpse--link blogpost-glimpse--draft" href="{{ blogpost.extended_object.get_absolute_url }}">
+        {% include "courses/cms/fragment_blogpost_glimpse.html" with blogpost=blogpost.extended_object %}
+      </a>
+      {% endif %}
+    {# If the current blogpost page is the published version, show only the blogposts that are published #}
+    {% elif blogpost.check_publication is True %}
+      <a class="blogpost-glimpse blogpost-glimpse--link" href="{{ blogpost.extended_object.get_absolute_url }}">
+        {% include "courses/cms/fragment_blogpost_glimpse.html" with blogpost=blogpost.public_extension.extended_object %}
+      </a>
+    {% endif %}
+  {% empty %}
+    <p class="blogpost-glimpse blogpost-glimpse--empty">
+      {% trans "No associated blogposts" %}
+    </p>
+  {% endfor %}
+</div>
+
 <div class="course-glimpse-list">
+  <h2 class="course-glimpse-list__title">{% trans "Related courses" %}</h2>
   {% for course in category.get_courses %}
     {# If the current page is a draft, show draft courses with a class annotation for styling #}
     {% if current_page.publisher_is_draft %}

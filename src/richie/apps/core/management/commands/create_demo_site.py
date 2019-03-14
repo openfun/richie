@@ -16,13 +16,14 @@ from filer.models.imagemodels import Image
 
 from richie.apps.courses.factories import (
     VIDEO_SAMPLE_LINKS,
+    BlogPostFactory,
     CourseFactory,
     CourseRunFactory,
     LicenceFactory,
     OrganizationFactory,
 )
 from richie.apps.courses.helpers import create_categories
-from richie.apps.courses.models import Category, Course, Licence, Organization
+from richie.apps.courses.models import BlogPost, Category, Course, Licence, Organization
 from richie.apps.persons.factories import (
     PersonFactory,
     PersonTitleFactory,
@@ -43,6 +44,8 @@ NB_COURSES_SUBJECT_RELATIONS = 2
 NB_ORGANIZATIONS = 5
 NB_LICENCES = 5
 NB_PERSONS = 10
+NB_BLOGPOSTS = 6
+NB_BLOGPOSTS_CATEGORIES_RELATIONS = 3
 NB_HOME_HIGHLIGHTED_COURSES = 8
 NB_HOME_HIGHLIGHTED_ORGANIZATIONS = 4
 NB_HOME_HIGHLIGHTED_SUBJECTS = 6
@@ -56,7 +59,10 @@ PAGE_INFOS = {
     "news": {
         "title": {"en": "News", "fr": "Actualités"},
         "in_navigation": True,
-        "kwargs": {"template": "richie/fullwidth.html"},
+        "kwargs": {
+            "reverse_id": BlogPost.ROOT_REVERSE_ID,
+            "template": "courses/cms/blogpost_list.html",
+        },
     },
     "courses": {
         "title": {"en": "Courses", "fr": "Cours"},
@@ -291,6 +297,7 @@ def clear_cms_data():
     PersonTitle.objects.all().delete()
     PersonTitleTranslation.objects.all().delete()
     Licence.objects.all().delete()
+    BlogPost.objects.all().delete()
 
 
 # pylint: disable=too-many-locals
@@ -402,6 +409,23 @@ def create_demo_site():
                 page_parent=course.extended_object,
                 should_publish=True,
             )
+
+    # Create blog posts under the `News` page
+    for _ in range(NB_BLOGPOSTS):
+        BlogPostFactory.create(
+            page_in_navigation=True,
+            page_languages=["en", "fr"],
+            page_parent=pages_created["news"],
+            fill_cover=True,
+            fill_excerpt=True,
+            fill_body=True,
+            fill_categories=[
+                *random.sample(subjects, NB_BLOGPOSTS_CATEGORIES_RELATIONS),
+                random.choice(levels),
+            ],
+            fill_author=random.sample(persons, 1),
+            should_publish=True,
+        )
 
     # Once everything has been created, use some content to create a homepage
     placeholder = pages_created["home"].placeholders.get(slot="maincontent")

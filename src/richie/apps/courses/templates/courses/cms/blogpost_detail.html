@@ -1,0 +1,60 @@
+{% extends "richie/fullwidth.html" %}
+{% load cms_tags i18n %}
+{% block content %}
+{% spaceless %}
+<div class="blogpost-detail">
+  <h1 class="blogpost-detail__title">{{ current_page.get_title }}</h1>
+
+  <div class="blogpost-detail__subhead">
+    <p class="blogpost-detail__subhead__date">
+      {{ current_page.creation_date|date:"SHORT_DATE_FORMAT" }}
+    </p>
+
+    <p class="blogpost-detail__subhead__author">
+      {% with form_factor="tag" %}
+        {% placeholder "author" or %}
+          <span class="blogpost-detail__author__empty">
+            {% trans "No associated author" %}
+          </span>
+        {% endplaceholder %}
+      {% endwith %}
+    </p>
+  </div>
+
+  <div class="blogpost-detail__categories">
+    {% with form_factor="tag" %}
+      {% placeholder "categories" or %}
+        <p class="blogpost-detail__categories__empty">
+          {% trans "No associated categories" %}
+        </p>
+      {% endplaceholder %}
+    {% endwith %}
+  </div>
+
+  <div class="blogpost-detail__cover">
+    {% placeholder "cover" or %}
+      <p class="blogpost-detail__cover__empty">
+        {% trans "No cover" %}
+      </p>
+    {% endplaceholder %}
+  </div>
+
+  <div class="blogpost-detail__excerpt">
+    {% placeholder "excerpt" or %}
+      <p class="blogpost-detail__excerpt__empty">
+        {% trans "No excerpt content" %}
+      </p>
+    {% endplaceholder %}
+  </div>
+
+  <div class="blogpost-detail__body">
+    {% placeholder "body" or %}
+      <p class="blogpost-detail__body__empty">
+        {% trans "No body content" %}
+      </p>
+    {% endplaceholder %}
+  </div>
+
+</div>
+{% endspaceless %}
+{% endblock content %}

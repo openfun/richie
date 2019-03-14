@@ -1,0 +1,23 @@
+.blogpost-plugin-container {
+  @include make-col-ready();
+
+  @include media-breakpoint-up(sm) {
+    @include make-col(6);
+  }
+  @include media-breakpoint-up(md) {
+    @include make-col(4);
+  }
+  @include media-breakpoint-up(lg) {
+    @include make-col(3);
+  }
+
+  display: inline-block;
+  min-width: 250px;
+  margin: auto;
+}
+
+.blogpost-plugin {
+  @extend .blogpost-glimpse;
+  @extend .blogpost-glimpse--link;
+  max-width: 100%;
+}

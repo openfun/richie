@@ -13,7 +13,7 @@ from cms.wizards.wizard_pool import wizard_pool
 
 from richie.apps.persons.cms_wizards import BaseWizardForm
 
-from .models import Category, Course, CourseRun, Organization
+from .models import BlogPost, Category, Course, CourseRun, Organization
 
 
 class CourseWizardForm(BaseWizardForm):
@@ -214,6 +214,39 @@ wizard_pool.register(
         description=_("Create a new category page"),
         model=Category,
         form=CategoryWizardForm,
+        weight=200,
+    )
+)
+
+
+class BlogPostWizardForm(BaseWizardForm):
+    """
+    This form is used by the wizard that creates a new blog post
+    A related blogpost model is created for each blog post
+    """
+
+    model = BlogPost
+
+    def save(self):
+        """
+        The parent form created the page.
+        This method creates the associated blogpost.
+        """
+        page = super().save()
+        BlogPost.objects.create(extended_object=page)
+        return page
+
+
+class BlogPostWizard(Wizard):
+    """Inherit from Wizard because each wizard must have its own Python class."""
+
+
+wizard_pool.register(
+    BlogPostWizard(
+        title=_("New blog post"),
+        description=_("Create a new blog post"),
+        model=BlogPost,
+        form=BlogPostWizardForm,
         weight=200,
     )
 )

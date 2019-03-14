@@ -6,6 +6,8 @@
 $richie-course-glimpse-list-maxwidth-constraint: true !default;
 $richie-course-glimpse-list-margin: 0 auto !default;
 $richie-course-glimpse-list-padding: 1rem 0 !default;
+$richie-course-glimpse-list-title-margin: null !default;
+$richie-course-glimpse-list-title-padding: 0.5rem !default;
 
 $richie-course-glimpse-container-width-sm: null !default;
 $richie-course-glimpse-container-width-md: 50% !default;
@@ -67,6 +69,12 @@ $richie-course-glimpse-foot-cta-background-hover: $firebrick6 !default;
   padding: $richie-course-glimpse-list-padding;
   flex-direction: row;
   flex-wrap: wrap;
+
+  &__title {
+    @include sv-flex(1, 0, 100%);
+    margin: $richie-course-glimpse-list-title-margin;
+    padding: $richie-course-glimpse-list-title-padding;
+  }
 }
 
 .course-glimpse {

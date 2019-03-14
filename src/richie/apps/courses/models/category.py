@@ -79,6 +79,43 @@ class Category(BasePageExtension):
             .distinct()
         )
 
+    def get_blogposts(self, language=None):
+        """
+        Return a query to get the blogposts related to this category ie for which a
+        plugin for this category is linked to the blogpost page on the "categories"
+        placeholder.
+        """
+        page = (
+            self.extended_object
+            if self.extended_object.publisher_is_draft
+            else self.draft_extension.extended_object
+        )
+        language = language or translation.get_language()
+        bfs = "extended_object__placeholders__cmsplugin__courses_categorypluginmodel__page"
+        filter_dict = {
+            "extended_object__node__parent__cms_pages__course__isnull": True,
+            "extended_object__publisher_is_draft": True,
+            "extended_object__placeholders__slot": "categories",
+            "extended_object__placeholders__cmsplugin__language": language,
+            bfs: page,
+            f"{bfs:s}__publisher_is_draft": True,
+        }
+
+        blogpost_model = apps.get_model(app_label="courses", model_name="blogpost")
+        # pylint: disable=no-member
+        return (
+            blogpost_model.objects.filter(**filter_dict)
+            .select_related("extended_object")
+            .prefetch_related(
+                Prefetch(
+                    "extended_object__title_set",
+                    to_attr="prefetched_titles",
+                    queryset=Title.objects.filter(language=language),
+                )
+            )
+            .distinct()
+        )
+
 
 def get_category_limit_choices_to():
     """Return a query limiting the categories proposed when creating a CategoryPlugin."""

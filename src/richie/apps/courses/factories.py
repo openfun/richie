@@ -17,7 +17,7 @@ from filer.models.imagemodels import Image
 from ..core.factories import FilerImageFactory, PageExtensionDjangoModelFactory
 from ..core.helpers import create_text_plugin
 from ..core.utils import file_getter
-from .models import Category, Course, CourseRun, Licence, Organization
+from .models import BlogPost, Category, Course, CourseRun, Licence, Organization
 
 VideoSample = namedtuple("VideoSample", ["label", "image", "url"])
 
@@ -516,3 +516,119 @@ class LicenceFactory(factory.django.DjangoModelFactory):
     logo = factory.SubFactory(LicenceLogoImageFactory)
     url = factory.Faker("uri")
     content = factory.Faker("text", max_nb_chars=300)
+
+
+class BlogPostFactory(PageExtensionDjangoModelFactory):
+    """
+    A factory to automatically generate random yet meaningful blogpost extensions
+    in our tests.
+    """
+
+    class Meta:
+        model = BlogPost
+        exclude = [
+            "page_in_navigation",
+            "page_languages",
+            "page_parent",
+            "page_template",
+            "page_title",
+        ]
+
+    # fields concerning the related page
+    page_template = BlogPost.TEMPLATE_DETAIL
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def fill_author(self, create, extracted, **kwargs):
+        """
+        Add person plugin for blog post author from given person instance list
+        """
+
+        if create and extracted:
+            for language in self.extended_object.get_languages():
+                placeholder = self.extended_object.placeholders.get(slot="author")
+
+                for person in extracted:
+                    add_plugin(
+                        language=language,
+                        placeholder=placeholder,
+                        plugin_type="PersonPlugin",
+                        **{"page": person.extended_object},
+                    )
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def fill_body(self, create, extracted, **kwargs):
+        """
+        Add a text plugin for body with a long random text
+        """
+        if create and extracted:
+            create_text_plugin(
+                self.extended_object,
+                "body",
+                nb_paragraphs=random.randint(4, 6),
+                languages=self.extended_object.get_languages(),
+                plugin_type="TextPlugin",
+            )
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def fill_categories(self, create, extracted, **kwargs):
+        """
+        Add categories plugin to blog post from a given list of category
+        instances.
+        """
+
+        if create and extracted:
+            for language in self.extended_object.get_languages():
+                placeholder = self.extended_object.placeholders.get(slot="categories")
+
+                for category in extracted:
+                    add_plugin(
+                        language=language,
+                        placeholder=placeholder,
+                        plugin_type="CategoryPlugin",
+                        **{"page": category.extended_object},
+                    )
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def fill_cover(self, create, extracted, **kwargs):
+        """
+        Add a picture plugin for blog post cover with a random image
+        """
+        if create and extracted:
+            cover_placeholder = self.extended_object.placeholders.get(slot="cover")
+
+            cover_path = extracted if isinstance(extracted, str) else None
+            cover_file = file_getter("cover")(cover_path)
+            wrapped_cover = File(cover_file, cover_file.name)
+            cover = Image.objects.create(file=wrapped_cover)
+            for language in self.extended_object.get_languages():
+                add_plugin(
+                    language=language,
+                    placeholder=cover_placeholder,
+                    plugin_type="PicturePlugin",
+                    picture=cover,
+                    attributes={"alt": "cover image"},
+                )
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def fill_excerpt(self, create, extracted, **kwargs):
+        """
+        Add a plain text plugin for excerpt with a short random text
+        """
+        if create and extracted:
+            placeholder = self.extended_object.placeholders.get(slot="excerpt")
+
+            for language in self.extended_object.get_languages():
+                text = factory.Faker(
+                    "text", max_nb_chars=random.randint(50, 100), locale=language
+                ).generate({})
+                add_plugin(
+                    language=language,
+                    placeholder=placeholder,
+                    plugin_type="PlainTextPlugin",
+                    body=text,
+                )
