@@ -22,38 +22,12 @@ class CategoryPluginTestCase(CMSTestCase):
     Test that CategoryPlugin correctly displays a Category's page placeholders content
     """
 
-    @staticmethod
-    def test_cms_plugins_category_unique():
-        """
-        The form to create a category plugin should only list draft category pages in the
-        select box.
-        """
-
-        class CategoryPluginModelForm(forms.ModelForm):
-            """A form for testing the choices in the select box"""
-
-            class Meta:
-                model = CategoryPluginModel
-                fields = ["page"]
-
-        meta_category = CategoryFactory()
-        meta_category.extended_object.publish("en")
-        parent_category = CategoryFactory(page_parent=meta_category.extended_object)
-        parent_category.extended_object.publish("en")
-
-        other_page_title = "other page"
-        create_page(other_page_title, "richie/fullwidth.html", settings.LANGUAGE_CODE)
-
-        plugin_form = CategoryPluginModelForm()
-        rendered_form = plugin_form.as_table()
-
-        assert rendered_form.count(parent_category.extended_object.get_title()) == 1
-
     @override_settings(LIMIT_PLUGIN_CATEGORIES_TO_LEAF=True)
     def test_cms_plugins_category_form_page_choices_leaf_only(self):
         """
         The form to create a category plugin should only list leaf category pages in the
-        select box when the setting is activated.
+        select box when the setting is activated. There shouldn't be any duplicate because
+        of published status.
         """
 
         class CategoryPluginModelForm(forms.ModelForm):
@@ -63,9 +37,13 @@ class CategoryPluginTestCase(CMSTestCase):
                 model = CategoryPluginModel
                 fields = ["page"]
 
-        meta_category = CategoryFactory()
-        parent_category = CategoryFactory(page_parent=meta_category.extended_object)
-        leaf_category = CategoryFactory(page_parent=parent_category.extended_object)
+        meta_category = CategoryFactory(should_publish=True)
+        parent_category = CategoryFactory(
+            page_parent=meta_category.extended_object, should_publish=True
+        )
+        leaf_category = CategoryFactory(
+            page_parent=parent_category.extended_object, should_publish=True
+        )
 
         other_page_title = "other page"
         create_page(other_page_title, "richie/fullwidth.html", settings.LANGUAGE_CODE)
@@ -73,13 +51,18 @@ class CategoryPluginTestCase(CMSTestCase):
         plugin_form = CategoryPluginModelForm()
         rendered_form = plugin_form.as_table()
 
-        self.assertIn(leaf_category.extended_object.get_title(), rendered_form)
+        self.assertEqual(
+            rendered_form.count(leaf_category.extended_object.get_title()), 1
+        )
         self.assertNotIn(parent_category.extended_object.get_title(), rendered_form)
         self.assertNotIn(meta_category.extended_object.get_title(), rendered_form)
         self.assertNotIn(other_page_title, rendered_form)
 
     def test_cms_plugins_category_form_page_choices_all_categories(self):
-        """By default, all categories can be linked via a plugin excluding meta categories."""
+        """
+        By default, all categories can be linked via a plugin excluding meta categories.
+        There shouldn't be any duplicate because of published status.
+        """
 
         class CategoryPluginModelForm(forms.ModelForm):
             """A form for testing the choices in the select box"""
@@ -88,9 +71,13 @@ class CategoryPluginTestCase(CMSTestCase):
                 model = CategoryPluginModel
                 fields = ["page"]
 
-        meta_category = CategoryFactory()
-        parent_category = CategoryFactory(page_parent=meta_category.extended_object)
-        leaf_category = CategoryFactory(page_parent=parent_category.extended_object)
+        meta_category = CategoryFactory(should_publish=True)
+        parent_category = CategoryFactory(
+            page_parent=meta_category.extended_object, should_publish=True
+        )
+        leaf_category = CategoryFactory(
+            page_parent=parent_category.extended_object, should_publish=True
+        )
 
         other_page_title = "other page"
         create_page(other_page_title, "richie/fullwidth.html", settings.LANGUAGE_CODE)
@@ -98,8 +85,12 @@ class CategoryPluginTestCase(CMSTestCase):
         plugin_form = CategoryPluginModelForm()
         rendered_form = plugin_form.as_table()
 
-        self.assertIn(leaf_category.extended_object.get_title(), rendered_form)
-        self.assertIn(parent_category.extended_object.get_title(), rendered_form)
+        self.assertEqual(
+            rendered_form.count(leaf_category.extended_object.get_title()), 1
+        )
+        self.assertEqual(
+            rendered_form.count(parent_category.extended_object.get_title()), 1
+        )
         self.assertNotIn(meta_category.extended_object.get_title(), rendered_form)
         self.assertNotIn(other_page_title, rendered_form)
 

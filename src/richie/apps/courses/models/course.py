@@ -433,16 +433,16 @@ class CoursePluginModel(PagePluginMixin, CMSPlugin):
         on_delete=models.CASCADE,
         related_name="course_plugins",
         limit_choices_to={
-            # There's a draft and a public course attached to the draft and
-            # the public parent. Without the first condition, 4 options are
-            # availables for each course. The second condition makes sure the
-            # parent is not a course. The third option filters out public
-            # course. The fourth option makes sure only courses show up.
-            # If there's is no parent, the course is filtered out.
-            "node__parent__cms_pages__publisher_is_draft": True,
-            "node__parent__cms_pages__course__isnull": True,
-            "publisher_is_draft": True,
-            "course__isnull": False,
+            # Joining on `cms_pages` generate duplicates for courses that are under a parent page
+            # when this page exists both in draft and public versions. We need to exclude the
+            # parent public page to avoid this duplication with the first condition.
+            # The second condition makes sure the parent is not a course to exclude snapshots.
+            # The third condition filters out public course.
+            # The fourth condition makes sure only courses show up.
+            "node__parent__cms_pages__publisher_is_draft": True,  # exclude course published parent
+            "node__parent__cms_pages__course__isnull": True,  # limit to course - no snapshot
+            "publisher_is_draft": True,  # plugins work with draft instances
+            "course__isnull": False,  # limit to pages linked to a course object
         },
     )
 

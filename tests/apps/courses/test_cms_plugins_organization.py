@@ -24,7 +24,7 @@ class OrganizationPluginTestCase(CMSTestCase):
     def test_cms_plugins_organization_form_page_choices(self):
         """
         The form to create a organization plugin should only list organization pages
-        in the select box.
+        in the select box. There shouldn't be any duplicate because of published status.
         """
 
         class OrganizationPluginModelForm(forms.ModelForm):
@@ -34,11 +34,14 @@ class OrganizationPluginTestCase(CMSTestCase):
                 model = OrganizationPluginModel
                 fields = ["page"]
 
-        organization = OrganizationFactory()
+        organization = OrganizationFactory(should_publish=True)
         other_page_title = "other page"
         create_page(other_page_title, "richie/fullwidth.html", settings.LANGUAGE_CODE)
         plugin_form = OrganizationPluginModelForm()
-        self.assertIn(organization.extended_object.get_title(), plugin_form.as_table())
+        rendered_form = plugin_form.as_table()
+        self.assertEqual(
+            rendered_form.count(organization.extended_object.get_title()), 1
+        )
         self.assertNotIn(other_page_title, plugin_form.as_table())
 
     def test_cms_plugins_organization_render_on_public_page(self):
