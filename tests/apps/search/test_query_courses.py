@@ -293,7 +293,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "name": "new",
                         "position": 0,
                         "values": [
-                            {"count": 2, "human_name": "First session", "name": "new"}
+                            {"count": 2, "human_name": "First session", "key": "new"}
                         ],
                     },
                     "availability": {
@@ -305,15 +305,15 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             {
                                 "count": 3,
                                 "human_name": "Open for enrollment",
-                                "name": "open",
+                                "key": "open",
                             },
                             {
                                 "count": 2,
                                 "human_name": "Coming soon",
-                                "name": "coming_soon",
+                                "key": "coming_soon",
                             },
-                            {"count": 4, "human_name": "On-going", "name": "ongoing"},
-                            {"count": 2, "human_name": "Archived", "name": "archived"},
+                            {"count": 4, "human_name": "On-going", "key": "ongoing"},
+                            {"count": 2, "human_name": "Archived", "key": "archived"},
                         ],
                     },
                     "languages": {
@@ -322,9 +322,9 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "name": "languages",
                         "position": 4,
                         "values": [
-                            {"count": 3, "human_name": "#en", "name": "en"},
-                            {"count": 2, "human_name": "#de", "name": "de"},
-                            {"count": 2, "human_name": "#fr", "name": "fr"},
+                            {"count": 3, "human_name": "#en", "key": "en"},
+                            {"count": 2, "human_name": "#de", "key": "de"},
+                            {"count": 2, "human_name": "#fr", "key": "fr"},
                         ],
                     },
                     "categories": {
@@ -333,11 +333,11 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "name": "categories",
                         "position": 2,
                         "values": [
-                            {"count": 2, "human_name": "#1", "name": "1"},
-                            {"count": 2, "human_name": "#2", "name": "2"},
-                            {"count": 2, "human_name": "#3", "name": "3"},
-                            {"count": 2, "human_name": "#4", "name": "4"},
-                            {"count": 2, "human_name": "#5", "name": "5"},
+                            {"count": 2, "human_name": "#1", "key": "1"},
+                            {"count": 2, "human_name": "#2", "key": "2"},
+                            {"count": 2, "human_name": "#3", "key": "3"},
+                            {"count": 2, "human_name": "#4", "key": "4"},
+                            {"count": 2, "human_name": "#5", "key": "5"},
                         ],
                     },
                     "organizations": {
@@ -346,11 +346,11 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "name": "organizations",
                         "position": 3,
                         "values": [
-                            {"count": 2, "human_name": "#11", "name": "11"},
-                            {"count": 2, "human_name": "#12", "name": "12"},
-                            {"count": 2, "human_name": "#13", "name": "13"},
-                            {"count": 2, "human_name": "#14", "name": "14"},
-                            {"count": 2, "human_name": "#15", "name": "15"},
+                            {"count": 2, "human_name": "#11", "key": "11"},
+                            {"count": 2, "human_name": "#12", "key": "12"},
+                            {"count": 2, "human_name": "#13", "key": "13"},
+                            {"count": 2, "human_name": "#14", "key": "14"},
+                            {"count": 2, "human_name": "#15", "key": "15"},
                         ],
                     },
                 },
@@ -404,18 +404,18 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         self.assertEqual(
             content["filters"]["languages"]["values"],
             [
-                {"count": 4, "human_name": "#en", "name": "en"},
-                {"count": 3, "human_name": "#fr", "name": "fr"},
-                {"count": 1, "human_name": "#de", "name": "de"},
+                {"count": 4, "human_name": "#en", "key": "en"},
+                {"count": 3, "human_name": "#fr", "key": "fr"},
+                {"count": 1, "human_name": "#de", "key": "de"},
             ],
         )
         self.assertEqual(
             content["filters"]["availability"]["values"],
             [
-                {"count": 2, "human_name": "Open for enrollment", "name": "open"},
-                {"count": 2, "human_name": "Coming soon", "name": "coming_soon"},
-                {"count": 2, "human_name": "On-going", "name": "ongoing"},
-                {"count": 2, "human_name": "Archived", "name": "archived"},
+                {"count": 2, "human_name": "Open for enrollment", "key": "open"},
+                {"count": 2, "human_name": "Coming soon", "key": "coming_soon"},
+                {"count": 2, "human_name": "On-going", "key": "ongoing"},
+                {"count": 2, "human_name": "Archived", "key": "archived"},
             ],
         )
 
@@ -464,26 +464,26 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         self.assertEqual(
             content["filters"]["languages"]["values"],
             [
-                {"count": 2, "human_name": "#en", "name": "en"},
-                {"count": 1, "human_name": "#fr", "name": "fr"},
+                {"count": 2, "human_name": "#en", "key": "en"},
+                {"count": 1, "human_name": "#fr", "key": "fr"},
             ],
         )
         self.assertEqual(
             content["filters"]["availability"]["values"],
             [
-                {"count": 2, "human_name": "Open for enrollment", "name": "open"},
-                {"count": 2, "human_name": "Coming soon", "name": "coming_soon"},
-                {"count": 2, "human_name": "On-going", "name": "ongoing"},
-                {"count": 2, "human_name": "Archived", "name": "archived"},
+                {"count": 2, "human_name": "Open for enrollment", "key": "open"},
+                {"count": 2, "human_name": "Coming soon", "key": "coming_soon"},
+                {"count": 2, "human_name": "On-going", "key": "ongoing"},
+                {"count": 2, "human_name": "Archived", "key": "archived"},
             ],
         )
         self.assertEqual(
             content["filters"]["categories"]["values"],
             [
-                {"count": 2, "human_name": "#3", "name": "3"},
-                {"count": 1, "human_name": "#1", "name": "1"},
-                {"count": 1, "human_name": "#2", "name": "2"},
-                {"count": 1, "human_name": "#5", "name": "5"},
+                {"count": 2, "human_name": "#3", "key": "3"},
+                {"count": 1, "human_name": "#1", "key": "1"},
+                {"count": 1, "human_name": "#2", "key": "2"},
+                {"count": 1, "human_name": "#5", "key": "5"},
             ],
         )
 
@@ -568,27 +568,27 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         self.assertEqual(
             content["filters"]["languages"]["values"],
             [
-                {"count": 4, "human_name": "#en", "name": "en"},
-                {"count": 3, "human_name": "#fr", "name": "fr"},
-                {"count": 1, "human_name": "#de", "name": "de"},
+                {"count": 4, "human_name": "#en", "key": "en"},
+                {"count": 3, "human_name": "#fr", "key": "fr"},
+                {"count": 1, "human_name": "#de", "key": "de"},
             ],
         )
         self.assertEqual(
             content["filters"]["availability"]["values"],
             [
-                {"count": 1, "human_name": "Open for enrollment", "name": "open"},
-                {"count": 1, "human_name": "Coming soon", "name": "coming_soon"},
-                {"count": 2, "human_name": "On-going", "name": "ongoing"},
+                {"count": 1, "human_name": "Open for enrollment", "key": "open"},
+                {"count": 1, "human_name": "Coming soon", "key": "coming_soon"},
+                {"count": 2, "human_name": "On-going", "key": "ongoing"},
             ],
         )
         self.assertEqual(
             content["filters"]["categories"]["values"],
             [
-                {"count": 2, "human_name": "#1", "name": "1"},
-                {"count": 2, "human_name": "#4", "name": "4"},
-                {"count": 2, "human_name": "#5", "name": "5"},
-                {"count": 1, "human_name": "#2", "name": "2"},
-                {"count": 1, "human_name": "#3", "name": "3"},
+                {"count": 2, "human_name": "#1", "key": "1"},
+                {"count": 2, "human_name": "#4", "key": "4"},
+                {"count": 2, "human_name": "#5", "key": "5"},
+                {"count": 1, "human_name": "#2", "key": "2"},
+                {"count": 1, "human_name": "#3", "key": "3"},
             ],
         )
 
@@ -648,17 +648,17 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         self.assertEqual(
             content["filters"]["languages"]["values"],
             [
-                {"count": 2, "human_name": "#en", "name": "en"},
-                {"count": 2, "human_name": "#fr", "name": "fr"},
+                {"count": 2, "human_name": "#en", "key": "en"},
+                {"count": 2, "human_name": "#fr", "key": "fr"},
             ],
         )
         self.assertEqual(
             content["filters"]["availability"]["values"],
             [
-                {"count": 2, "human_name": "Open for enrollment", "name": "open"},
-                {"count": 1, "human_name": "Coming soon", "name": "coming_soon"},
-                {"count": 2, "human_name": "On-going", "name": "ongoing"},
-                {"count": 2, "human_name": "Archived", "name": "archived"},
+                {"count": 2, "human_name": "Open for enrollment", "key": "open"},
+                {"count": 1, "human_name": "Coming soon", "key": "coming_soon"},
+                {"count": 2, "human_name": "On-going", "key": "ongoing"},
+                {"count": 2, "human_name": "Archived", "key": "archived"},
             ],
         )
         # Only the B and E course runs are on-going and in English
@@ -666,11 +666,11 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         self.assertEqual(
             content["filters"]["categories"]["values"],
             [
-                {"count": 1, "human_name": "#1", "name": "1"},
-                {"count": 1, "human_name": "#2", "name": "2"},
-                {"count": 1, "human_name": "#3", "name": "3"},
-                {"count": 1, "human_name": "#4", "name": "4"},
-                {"count": 1, "human_name": "#5", "name": "5"},
+                {"count": 1, "human_name": "#1", "key": "1"},
+                {"count": 1, "human_name": "#2", "key": "2"},
+                {"count": 1, "human_name": "#3", "key": "3"},
+                {"count": 1, "human_name": "#4", "key": "4"},
+                {"count": 1, "human_name": "#5", "key": "5"},
             ],
         )
 

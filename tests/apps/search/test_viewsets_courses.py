@@ -170,15 +170,15 @@ class CoursesViewsetsTestCase(TestCase):
                             {
                                 "count": 59,
                                 "human_name": "Open for enrollment",
-                                "name": "open",
+                                "key": "open",
                             },
                             {
                                 "count": 8,
                                 "human_name": "Coming soon",
-                                "name": "coming_soon",
+                                "key": "coming_soon",
                             },
-                            {"count": 42, "human_name": "On-going", "name": "ongoing"},
-                            {"count": 11, "human_name": "Archived", "name": "archived"},
+                            {"count": 42, "human_name": "On-going", "key": "ongoing"},
+                            {"count": 11, "human_name": "Archived", "key": "archived"},
                         ],
                     },
                     "new": {
@@ -187,7 +187,7 @@ class CoursesViewsetsTestCase(TestCase):
                         "name": "new",
                         "position": 0,
                         "values": [
-                            {"count": 66, "human_name": "First session", "name": "new"}
+                            {"count": 66, "human_name": "First session", "key": "new"}
                         ],
                     },
                     "categories": {
@@ -196,8 +196,8 @@ class CoursesViewsetsTestCase(TestCase):
                         "name": "categories",
                         "position": 2,
                         "values": [
-                            {"count": 15, "human_name": "Category 2", "name": "2"},
-                            {"count": 13, "human_name": "Category 1", "name": "1"},
+                            {"count": 15, "human_name": "Category 2", "key": "2"},
+                            {"count": 13, "human_name": "Category 1", "key": "1"},
                         ],
                     },
                     "organizations": {
@@ -216,8 +216,8 @@ class CoursesViewsetsTestCase(TestCase):
                         "name": "languages",
                         "position": 4,
                         "values": [
-                            {"count": 55, "human_name": "French", "name": "fr"},
-                            {"count": 33, "human_name": "English", "name": "en"},
+                            {"count": 55, "human_name": "French", "key": "fr"},
+                            {"count": 33, "human_name": "English", "key": "en"},
                         ],
                     },
                 },

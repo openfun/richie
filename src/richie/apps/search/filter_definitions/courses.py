@@ -112,7 +112,7 @@ class IndexableFilterDefinition(TermsAggsMixin, TermsQueryMixin, BaseFilterDefin
                 "position": self.position,
                 "values": [
                     # Aggregate the information from right above to build the values
-                    {"count": count, "human_name": key_i18n_name_map[key], "name": key}
+                    {"count": count, "human_name": key_i18n_name_map[key], "key": key}
                     for key, count in key_count_map.items()
                 ],
             }
