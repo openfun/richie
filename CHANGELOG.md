@@ -8,18 +8,19 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.0-beta.3] - 2019-03-15
+
 ### Changed
 
-- Improved Docker image: now it does not ship with the project sources but only
-  with runtime-required requirements (_i.e._ the sandbox and richie's package
-  installed globally).
+- Improved Docker image: now it does not ship with the project sources but only with runtime-required requirements (_i.e._ the sandbox and richie's package installed globally).
 
 ### Fixed
 
+- Richie templates now live in core instead of sandbox.
+- Reorganize the search frontend to support nested filters.
 - The CI now effectively tests packaging issues.
 - The `apps.core.fields` module is no longer missing from Richie's package.
-- Fixed the `bin/pylint` script to work with the default database engine
-  (PostgreSQL)
+- Fixed the `bin/pylint` script to work with the default database engine (PostgreSQL)
 - Fixed `rebuild` & `bootstrap` Makefile rules
 
 ## [1.0.0-beta.2] - 2019-03-13
@@ -72,7 +73,8 @@ As we prepare to release, here are some improvements and fixes still ahead of us
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v1.0.0-beta.2...master
+[unreleased]: https://github.com/openfun/richie/compare/v1.0.0-beta.3...master
+[1.0.0-beta.3]: https://github.com/openfun/richie/compare/v1.0.0-beta.2...v1.0.0-beta.3
 [1.0.0-beta.2]: https://github.com/openfun/richie/compare/v1.0.0-beta.1...v1.0.0-beta.2
 [1.0.0-beta.1]: https://github.com/openfun/richie/compare/v1.0.0-beta.0...v1.0.0-beta.1
 [1.0.0-beta.0]: https://github.com/openfun/richie/compare/11ec5d911b9a9097535adbbf4f62957a7ab05356...v1.0.0-beta.0

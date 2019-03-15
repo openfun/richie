@@ -1,6 +1,6 @@
 {
   "name": "richie",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0-beta.3",
   "description": "A Django-CMS based portal for Open edX courses discovery",
   "main": "sandbox/manage.py",
   "scripts": {
