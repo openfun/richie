@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix the `collectstatic` management command execution (bad `STATICFILES_DIRS` definition)
+
 ## [1.0.0-beta.3] - 2019-03-15
 
 ### Changed
