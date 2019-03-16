@@ -24,17 +24,15 @@ VideoSample = namedtuple("VideoSample", ["label", "image", "url"])
 VIDEO_SAMPLE_LINKS = (
     VideoSample(
         "Anant Agarwal: Why massively open online courses (still) matter",
-        "anant_aggarwal.jpg",
+        "cover1.jpg",
         "//www.youtube.com/embed/rYwTA5RA9eU",
     ),
     VideoSample(
-        "Installing Open edX",
-        "installing_openedx.jpg",
-        "//www.youtube.com/embed/YDm6bAPxeg0",
+        "Installing Open edX", "cover2.jpg", "//www.youtube.com/embed/YDm6bAPxeg0"
     ),
     VideoSample(
         "Open edX Conference 2018 Opening and Welcome remarks",
-        "openedx_2018.jpg",
+        "cover3.jpg",
         "//www.youtube.com/embed/zzx6MgBAbCc",
     ),
 )
