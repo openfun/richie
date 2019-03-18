@@ -3,6 +3,8 @@ End-to-end tests for the course detail view
 """
 from unittest import mock
 
+from django.utils import timezone
+
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
@@ -243,7 +245,7 @@ class CourseCMSTestCase(CMSTestCase):
 
     def test_templates_course_detail_state_with_cta(self):
         """A course run in a state with a call to action should include a link and the CTA."""
-        response = self.prepare_to_test_state(CourseState(0))
+        response = self.prepare_to_test_state(CourseState(0, timezone.now()))
         self.assertContains(
             response,
             '<a class="course-detail__aside__run__block__cta" '

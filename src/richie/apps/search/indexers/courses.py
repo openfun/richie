@@ -14,7 +14,7 @@ from djangocms_picture.models import Picture
 
 from richie.plugins.simple_text_ckeditor.models import SimpleText
 
-from ...courses.models import Course, CourseState
+from ...courses.models import MAX_DATE, Course, CourseState
 from ..defaults import COURSES_COVER_IMAGE_HEIGHT, COURSES_COVER_IMAGE_WIDTH
 from ..forms import CourseSearchForm
 from ..partial_mappings import MULTILINGUAL_TEXT
@@ -298,7 +298,7 @@ class CoursesIndexer:
                             // Return the date of end of enrollment
                             return [
                                 'priority': 0,
-                                'datetime': params._source.course_runs[best_index][
+                                'date_time': params._source.course_runs[best_index][
                                     'enrollment_end']
                             ];
                         }
@@ -307,7 +307,7 @@ class CoursesIndexer:
                             // Return the start date
                             return [
                                 'priority': 1,
-                                'datetime': params._source.course_runs[best_index]['start']
+                                'date_time': params._source.course_runs[best_index]['start']
                             ];
                         }
                         else if (best_state == 2) {
@@ -315,7 +315,7 @@ class CoursesIndexer:
                             // Return the start date
                             return [
                                 'priority': 2,
-                                'datetime': params._source.course_runs[best_index]['start']
+                                'date_time': params._source.course_runs[best_index]['start']
                             ];
                         }
                         else if (best_state == 3) {
@@ -404,11 +404,21 @@ class CoursesIndexer:
         # Prepare course runs
         # Ordering them by their `end` date is important to optimize sorting and other
         # computations that require looping on the course runs
-        course_runs = list(
-            course.get_course_runs()
+        # Course runs with no start date or no start of enrollment date are ignored as
+        # they are still to be scheduled.
+        course_runs = [
+            {
+                "start": cr["start"],
+                "end": cr["end"] or MAX_DATE,
+                "enrollment_start": cr["enrollment_start"],
+                "enrollment_end": cr["enrollment_end"] or cr["end"] or MAX_DATE,
+                "languages": cr["languages"],
+            }
+            for cr in course.get_course_runs()
+            .filter(start__isnull=False, enrollment_start__isnull=False)
             .order_by("-end")
             .values("start", "end", "enrollment_start", "enrollment_end", "languages")
-        )
+        ]
 
         return {
             "_id": str(course.extended_object_id),
@@ -487,9 +497,9 @@ class CoursesIndexer:
         # Prepare the state
         state = es_course["fields"]["state"][0]
         try:
-            state["datetime"] = datetime.fromisoformat(state["datetime"])
+            state["date_time"] = datetime.fromisoformat(state["date_time"])
         except KeyError:
-            state["datetime"] = None
+            state["date_time"] = None
 
         return {
             "id": es_course["_id"],

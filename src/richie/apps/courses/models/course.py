@@ -2,15 +2,18 @@
 Declare and configure the models for the courses application
 """
 from collections.abc import Mapping
+from datetime import MAXYEAR, datetime
 
 from django import forms
 from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone, translation
 from django.utils.functional import lazy
 from django.utils.translation import ugettext_lazy as _
 
+import pytz
 from cms.api import Page
 from cms.extensions.extension_pool import extension_pool
 from cms.models.pluginmodel import CMSPlugin
@@ -20,6 +23,8 @@ from ...core.fields.multiselect import MultiSelectField
 from ...core.models import BasePageExtension, PagePluginMixin
 from .category import Category
 from .organization import Organization
+
+MAX_DATE = datetime(MAXYEAR, 12, 31, tzinfo=pytz.utc)
 
 
 class CourseState(Mapping):
@@ -45,7 +50,7 @@ class CourseState(Mapping):
         _("to be scheduled"),
     )
 
-    def __init__(self, priority, datetime=None):
+    def __init__(self, priority, date_time=None):
         """
         Initialize a course state with a priority and optionally a datetime.
 
@@ -60,11 +65,22 @@ class CourseState(Mapping):
           5: there's a finished run in the past > "archived": {None}
           6: theres's no run with a start date or no run at all > "to be scheduled": {None}
         """
+        # Check that `date_time` is set when it should be
+        if date_time is None and priority in [0, 1, 2]:
+            raise ValidationError(
+                "date_time should not be null for a {:d} course state.".format(priority)
+            )
+
+        # A special case of being open is when enrollment never ends
+        text = self.STATE_TEXTS[priority]
+        if priority == 0 and date_time.year == MAXYEAR:
+            text = _("forever open")
+            date_time = None
         kwargs = {
             "priority": priority,
-            "datetime": datetime,
+            "datetime": date_time,
             "call_to_action": self.STATE_CALLS_TO_ACTION[priority],
-            "text": self.STATE_TEXTS[priority],
+            "text": text,
         }
         self._d = dict(**kwargs)
 
@@ -349,9 +365,13 @@ class CourseRun(BasePageExtension):
 
         A static method not using the instance allows to call it with an Elasticsearch result.
         """
-        if start is None:
-            # not scheduled yet
+        if not start or not enrollment_start:
             return CourseState(6)
+
+        # course run end dates are not required and should default to forever
+        # e.g. a course run with no end date is presumed to be always on-going
+        end = end or MAX_DATE
+        enrollment_end = enrollment_end or end
 
         now = timezone.now()
         if start < now:

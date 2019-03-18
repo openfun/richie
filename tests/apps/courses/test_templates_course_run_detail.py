@@ -4,6 +4,8 @@ End-to-end tests for the course run detail view
 from datetime import datetime
 from unittest import mock
 
+from django.utils import timezone
+
 import pytz
 from cms.test_utils.testcases import CMSTestCase
 
@@ -266,7 +268,7 @@ class CourseRunCMSTestCase(CMSTestCase):
 
     def test_templates_course_run_detail_state_with_cta(self):
         """A course run in a state with a call to action should include a link and the CTA."""
-        response = self.prepare_to_test_state(CourseState(0))
+        response = self.prepare_to_test_state(CourseState(0, timezone.now()))
         self.assertContains(
             response,
             '<a class="course-detail__content__run__block__cta" '
