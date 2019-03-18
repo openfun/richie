@@ -23,10 +23,12 @@ def to_sentence(elements):
 
     """
     if len(elements) > 2:
-        return _("{:s} and {:s}").format(
-            ", ".join(map(str.lower, elements[:-1])), str.lower(elements[-1])
-        )
-    return _(" and ").join(map(str.lower, elements))
+        return (
+            _("{:s} and {:s}").format(
+                ", ".join(map(str, elements[:-1])), str(elements[-1])
+            )
+        ).lower()
+    return (_(" and ").join(map(str, elements))).lower()
 
 
 class MaxChoicesValidator(validators.MaxLengthValidator):
