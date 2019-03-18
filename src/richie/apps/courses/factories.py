@@ -384,13 +384,11 @@ class CourseRunFactory(PageExtensionDjangoModelFactory):
         """
         now = timezone.now()
         period = timedelta(days=200)
-        return pytz.timezone("UTC").localize(
-            datetime.fromtimestamp(
-                random.randrange(
-                    int((now - period).timestamp()), int((now + period).timestamp())
-                )
+        return datetime.utcfromtimestamp(
+            random.randrange(
+                int((now - period).timestamp()), int((now + period).timestamp())
             )
-        )
+        ).replace(tzinfo=pytz.utc)
 
     @factory.lazy_attribute
     def end(self):
@@ -400,13 +398,11 @@ class CourseRunFactory(PageExtensionDjangoModelFactory):
         if not self.start:
             return None
         period = timedelta(days=90)
-        return pytz.timezone("UTC").localize(
-            datetime.fromtimestamp(
-                random.randrange(
-                    int(self.start.timestamp()), int((self.start + period).timestamp())
-                )
+        return datetime.utcfromtimestamp(
+            random.randrange(
+                int(self.start.timestamp()), int((self.start + period).timestamp())
             )
-        )
+        ).replace(tzinfo=pytz.utc)
 
     @factory.lazy_attribute
     def enrollment_start(self):
@@ -416,13 +412,11 @@ class CourseRunFactory(PageExtensionDjangoModelFactory):
         if not self.start:
             return None
         period = timedelta(days=90)
-        return pytz.timezone("UTC").localize(
-            datetime.fromtimestamp(
-                random.randrange(
-                    int((self.start - period).timestamp()), int(self.start.timestamp())
-                )
+        return datetime.utcfromtimestamp(
+            random.randrange(
+                int((self.start - period).timestamp()), int(self.start.timestamp())
             )
-        )
+        ).replace(tzinfo=pytz.utc)
 
     @factory.lazy_attribute
     def enrollment_end(self):
@@ -443,14 +437,11 @@ class CourseRunFactory(PageExtensionDjangoModelFactory):
         max_enrollment_end = max(
             enrollment_start + timedelta(hours=1), max_enrollment_end
         )
-        return pytz.timezone("UTC").localize(
-            datetime.fromtimestamp(
-                random.randrange(
-                    int(enrollment_start.timestamp()),
-                    int(max_enrollment_end.timestamp()),
-                )
+        return datetime.utcfromtimestamp(
+            random.randrange(
+                int(enrollment_start.timestamp()), int(max_enrollment_end.timestamp())
             )
-        )
+        ).replace(tzinfo=pytz.utc)
 
 
 class CategoryFactory(BLDPageExtensionDjangoModelFactory):

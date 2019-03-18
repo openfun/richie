@@ -218,6 +218,95 @@ class CoursesIndexersTestCase(TestCase):
         self.assertEqual(len(indexed_courses), 1)
         self.assertEqual(indexed_courses[0], expected_course)
 
+    def test_indexers_courses_get_es_documents_no_start(self):
+        """
+        Course runs with no start date should not get indexed.
+        """
+        course = CourseFactory(should_publish=True)
+        CourseRunFactory(
+            page_parent=course.extended_object, start=None, should_publish=True
+        )
+
+        indexed_courses = list(
+            CoursesIndexer.get_es_documents(index="some_index", action="some_action")
+        )
+        self.assertEqual(len(indexed_courses), 1)
+        self.assertEqual(indexed_courses[0]["course_runs"], [])
+
+    def test_indexers_courses_get_es_documents_no_enrollment_start(self):
+        """
+        Course runs with no start of enrollment date should not get indexed.
+        """
+        course = CourseFactory(should_publish=True)
+        CourseRunFactory(
+            page_parent=course.extended_object,
+            enrollment_start=None,
+            should_publish=True,
+        )
+
+        indexed_courses = list(
+            CoursesIndexer.get_es_documents(index="some_index", action="some_action")
+        )
+        self.assertEqual(len(indexed_courses), 1)
+        self.assertEqual(indexed_courses[0]["course_runs"], [])
+
+    def test_indexers_courses_get_es_documents_no_enrollment_end(self):
+        """
+        Course runs with no end of enrollment date should get their end date as date of end
+        of enrollment.
+        """
+        course = CourseFactory(should_publish=True)
+        course_run = CourseRunFactory(
+            page_parent=course.extended_object, enrollment_end=None, should_publish=True
+        )
+
+        indexed_courses = list(
+            CoursesIndexer.get_es_documents(index="some_index", action="some_action")
+        )
+        self.assertEqual(len(indexed_courses), 1)
+        self.assertEqual(len(indexed_courses[0]["course_runs"]), 1)
+        self.assertEqual(
+            indexed_courses[0]["course_runs"][0]["enrollment_end"], course_run.end
+        )
+
+    def test_indexers_courses_get_es_documents_no_end(self):
+        """
+        Course runs with no end date should be on-going for ever.
+        """
+        course = CourseFactory(should_publish=True)
+        CourseRunFactory(
+            page_parent=course.extended_object, end=None, should_publish=True
+        )
+
+        indexed_courses = list(
+            CoursesIndexer.get_es_documents(index="some_index", action="some_action")
+        )
+        self.assertEqual(len(indexed_courses), 1)
+        self.assertEqual(len(indexed_courses[0]["course_runs"]), 1)
+        self.assertEqual(indexed_courses[0]["course_runs"][0]["end"].year, 9999)
+
+    def test_indexers_courses_get_es_documents_no_end_no_enrollment_end(self):
+        """
+        Course runs with no end date and no date of end of enrollment should be open for ever.
+        """
+        course = CourseFactory(should_publish=True)
+        CourseRunFactory(
+            page_parent=course.extended_object,
+            end=None,
+            enrollment_end=None,
+            should_publish=True,
+        )
+
+        indexed_courses = list(
+            CoursesIndexer.get_es_documents(index="some_index", action="some_action")
+        )
+        self.assertEqual(len(indexed_courses), 1)
+        self.assertEqual(len(indexed_courses[0]["course_runs"]), 1)
+        self.assertEqual(indexed_courses[0]["course_runs"][0]["end"].year, 9999)
+        self.assertEqual(
+            indexed_courses[0]["course_runs"][0]["enrollment_end"].year, 9999
+        )
+
     def test_indexers_courses_format_es_object_for_api(self):
         """
         Make sure format_es_object_for_api returns a properly formatted course
@@ -233,7 +322,7 @@ class CoursesIndexersTestCase(TestCase):
             },
             "fields": {
                 "state": [
-                    {"priority": 0, "datetime": "2019-03-17T21:25:52.179667+00:00"}
+                    {"priority": 0, "date_time": "2019-03-17T21:25:52.179667+00:00"}
                 ]
             },
         }
