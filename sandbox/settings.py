@@ -224,7 +224,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
     # for example for the choice of languages on the course run which should not be limited to
     # the few languages active in the CMS.
     # pylint: disable=no-member
-    ALL_LANGUAGES = Configuration.LANGUAGES
+    ALL_LANGUAGES = [(language, _(name)) for language, name in Configuration.LANGUAGES]
     ALL_LANGUAGES_DICT = dict(ALL_LANGUAGES)
 
     # Careful! Languages should be ordered by priority, as this tuple is used to get
