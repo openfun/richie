@@ -53,6 +53,7 @@ FILTERS_DEFAULT = [
                         "name": "availability",
                         "human_name": _("Availability"),
                         "position": 1,
+                        "is_drilldown": True,
                     },
                 ),
                 (
