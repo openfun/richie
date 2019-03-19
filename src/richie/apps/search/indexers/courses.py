@@ -480,8 +480,9 @@ class CoursesIndexer:
         Loop on all the courses in database and format them for the ElasticSearch index
         """
         for course in Course.objects.filter(
-            extended_object__publisher_is_draft=False,
-            extended_object__title_set__published=True,
+            extended_object__publisher_is_draft=False,  # index the public object
+            extended_object__title_set__published=True,  # only index published courses
+            extended_object__node__parent__cms_pages__course__isnull=True,  # exclude snapshots
         ).distinct():
             yield cls.get_es_document_for_course(course, index, action)
 
