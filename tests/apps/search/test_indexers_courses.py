@@ -79,6 +79,21 @@ class CoursesIndexersTestCase(TestCase):
         self.assertEqual(len(indexed_courses), 1)
         self.assertEqual(indexed_courses[0]["course_runs"], [])
 
+    def test_indexers_courses_get_es_documents_snapshots(self):
+        """
+        Course snapshots should not get indexed.
+        """
+        course = CourseFactory(should_publish=True)
+        CourseFactory(page_parent=course.extended_object, should_publish=True)
+
+        indexed_courses = list(
+            CoursesIndexer.get_es_documents(index="some_index", action="some_action")
+        )
+        self.assertEqual(len(indexed_courses), 1)
+        self.assertEqual(
+            indexed_courses[0]["_id"], str(course.public_extension.extended_object_id)
+        )
+
     @mock.patch.object(
         Picture, "img_src", new_callable=mock.PropertyMock, return_value="123.jpg"
     )
