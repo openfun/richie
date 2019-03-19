@@ -298,7 +298,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                     },
                     "availability": {
                         "human_name": "Availability",
-                        "is_drilldown": False,
+                        "is_drilldown": True,
                         "name": "availability",
                         "position": 1,
                         "values": [
