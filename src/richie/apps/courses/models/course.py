@@ -399,6 +399,15 @@ class CourseRun(BasePageExtension):
             self.start, self.end, self.enrollment_start, self.enrollment_end
         )
 
+    def get_course(self):
+        """Get the course for this course run."""
+        nodes = self.extended_object.node.get_ancestors()
+        return Course.objects.get(
+            extended_object__node__in=nodes,
+            extended_object__publisher_is_draft=self.extended_object.publisher_is_draft,
+            extended_object__node__parent__cms_pages__course__isnull=True,  # exclude snapshots
+        )
+
 
 class CoursePluginModel(PagePluginMixin, CMSPlugin):
     """
