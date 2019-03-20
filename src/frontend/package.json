@@ -10,7 +10,7 @@
     "prettier-write": "prettier --write 'js/**/*.+(ts|tsx|json|js|jsx)' '*.+(ts|tsx|json|js|jsx)' '**/*.+(css|scss)'",
     "sass": "node-sass scss/_main.scss ../richie/static/richie/css/main.css",
     "test": "jest",
-    "watch-sass": "nodemon -e scss -x 'yarn sass'"
+    "watch-sass": "nodemon --watch scss --watch ../richie/apps -e scss -x 'yarn sass'"
   },
   "repository": {
     "type": "git",
