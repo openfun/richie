@@ -8,6 +8,7 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.files import File
 from django.core.management.base import BaseCommand, CommandError
+from django.test.utils import override_settings
 
 from cms import models as cms_models
 from cms.api import add_plugin
@@ -293,6 +294,7 @@ def clear_cms_data():
 
 
 # pylint: disable=too-many-locals
+@override_settings(RICHIE_KEEP_SEARCH_UPDATED=False)
 def create_demo_site():
     """
     Create a simple site tree structure for developpers to work in realistic environment.
