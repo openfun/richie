@@ -4,7 +4,6 @@ ElasticSearch organization document management utilities
 from collections import defaultdict
 
 from django.conf import settings
-from django.db.models import Prefetch
 
 from cms.models import Title
 from djangocms_picture.models import Picture
@@ -47,68 +46,70 @@ class OrganizationsIndexer:
     display_fields = ["absolute_url", "logo", "title.*"]
 
     @classmethod
-    def get_es_documents(cls, index, action):
-        """
-        Load all the organizations from the Organization model and format them for the
-        ElasticSearch index.
-        """
-        for organization in (
-            Organization.objects.filter(
-                extended_object__publisher_is_draft=False,
-                extended_object__title_set__published=True,
+    def get_es_document_for_organization(cls, organization, index=None, action="index"):
+        """Build an Elasticsearch document from the category instance."""
+        index = index or cls.index_name
+
+        # Get published titles
+        titles = {
+            t.language: t.title
+            for t in Title.objects.filter(
+                page=organization.extended_object, published=True
             )
-            .prefetch_related(
-                Prefetch(
-                    "extended_object__title_set",
-                    to_attr="published_titles",
-                    queryset=Title.objects.filter(published=True),
-                )
-            )
-            .distinct()
+        }
+
+        # Get logo images
+        logo_images = {}
+        for logo_image in Picture.objects.filter(
+            cmsplugin_ptr__placeholder__page=organization.extended_object,
+            cmsplugin_ptr__placeholder__slot="logo",
         ):
-            # Get published titles
-            titles = {
-                t.language: t.title
-                for t in organization.extended_object.published_titles
-            }
+            # Force the image format before computing it
+            logo_image.use_no_cropping = False
+            logo_image.width = defaults.ORGANIZATIONS_LOGO_IMAGE_WIDTH
+            logo_image.height = defaults.ORGANIZATIONS_LOGO_IMAGE_HEIGHT
+            logo_images[logo_image.cmsplugin_ptr.language] = logo_image.img_src
 
-            # Get logo images
-            logo_images = {}
-            for logo_image in Picture.objects.filter(
-                cmsplugin_ptr__placeholder__page=organization.extended_object,
-                cmsplugin_ptr__placeholder__slot="logo",
-            ):
-                # Force the image format before computing it
-                logo_image.use_no_cropping = False
-                logo_image.width = defaults.ORGANIZATIONS_LOGO_IMAGE_WIDTH
-                logo_image.height = defaults.ORGANIZATIONS_LOGO_IMAGE_HEIGHT
-                logo_images[logo_image.cmsplugin_ptr.language] = logo_image.img_src
+        # Get syllabus texts
+        description = defaultdict(list)
+        for simple_text in SimpleText.objects.filter(
+            cmsplugin_ptr__placeholder__page=organization.extended_object,
+            cmsplugin_ptr__placeholder__slot="description",
+        ):
+            description[simple_text.cmsplugin_ptr.language].append(simple_text.body)
 
-            # Get syllabus texts
-            description = defaultdict(list)
-            for simple_text in SimpleText.objects.filter(
-                cmsplugin_ptr__placeholder__page=organization.extended_object,
-                cmsplugin_ptr__placeholder__slot="description",
-            ):
-                description[simple_text.cmsplugin_ptr.language].append(simple_text.body)
+        return {
+            "_id": str(organization.extended_object_id),
+            "_index": index,
+            "_op_type": action,
+            "_type": cls.document_type,
+            "absolute_url": {
+                language: organization.extended_object.get_absolute_url(language)
+                for language in titles.keys()
+            },
+            "complete": {
+                language: slice_string_for_completion(title)
+                for language, title in titles.items()
+            },
+            "logo": logo_images,
+            "description": {l: " ".join(st) for l, st in description.items()},
+            "title": titles,
+        }
 
-            yield {
-                "_id": str(organization.extended_object_id),
-                "_index": index,
-                "_op_type": action,
-                "_type": cls.document_type,
-                "absolute_url": {
-                    language: organization.extended_object.get_absolute_url(language)
-                    for language in titles.keys()
-                },
-                "complete": {
-                    language: slice_string_for_completion(title)
-                    for language, title in titles.items()
-                },
-                "logo": logo_images,
-                "description": {l: " ".join(st) for l, st in description.items()},
-                "title": titles,
-            }
+    @classmethod
+    def get_es_documents(cls, index=None, action="index"):
+        """
+        Loop on all the organizations in database and format them for the ElasticSearch index
+        """
+        index = index or cls.index_name
+
+        for organization in Organization.objects.filter(
+            extended_object__publisher_is_draft=False,
+            extended_object__title_set__published=True,
+        ).distinct():
+            yield cls.get_es_document_for_organization(
+                organization, index=index, action=action
+            )
 
     @staticmethod
     def format_es_object_for_api(es_organization, best_language):
