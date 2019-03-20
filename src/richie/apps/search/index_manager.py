@@ -13,6 +13,16 @@ from elasticsearch.helpers import bulk
 from .indexers import ES_INDICES
 
 
+def richie_bulk(actions):
+    """Wrap bulk helper to set default parameters."""
+    return bulk(
+        actions=actions,
+        chunk_size=settings.ES_CHUNK_SIZE,
+        client=settings.ES_CLIENT,
+        stats_only=True,
+    )
+
+
 def get_indexes_by_alias(existing_indexes, alias):
     """
     Get existing index(es) for an alias. Support multiple existing aliases so the command
@@ -41,12 +51,7 @@ def perform_create_index(indexable, logger):
     )
 
     # Populate the new index with data provided from our indexable class
-    bulk(
-        actions=indexable.get_es_documents(new_index, "create"),
-        chunk_size=settings.ES_CHUNK_SIZE,
-        client=settings.ES_CLIENT,
-        stats_only=True,
-    )
+    richie_bulk(indexable.get_es_documents(new_index))
 
     # Return the name of the index we just created in ElasticSearch
     return new_index
