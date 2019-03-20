@@ -30,7 +30,7 @@ class CategoriesIndexersTestCase(TestCase):
             fill_logo=True,
             should_publish=True,
         )
-        category2 = CategoryFactory(
+        CategoryFactory(
             page_parent=category1.extended_object,
             page_title={"en": "my second category", "fr": "ma deuxième thématique"},
             should_publish=True,
@@ -54,7 +54,7 @@ class CategoriesIndexersTestCase(TestCase):
             ),
             [
                 {
-                    "_id": str(category2.public_extension.extended_object_id),
+                    "_id": "L-00010001",
                     "_index": "some_index",
                     "_op_type": "some_action",
                     "_type": "category",
@@ -81,7 +81,7 @@ class CategoriesIndexersTestCase(TestCase):
                     },
                 },
                 {
-                    "_id": str(category1.public_extension.extended_object_id),
+                    "_id": "P-0001",
                     "_index": "some_index",
                     "_op_type": "some_action",
                     "_type": "category",
