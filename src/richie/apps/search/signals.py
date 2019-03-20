@@ -1,4 +1,5 @@
 """Update Elasticsearch indexes each time a page is modified."""
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 
@@ -104,4 +105,5 @@ def on_page_publish(sender, instance, language, **kwargs):
     Trigger update of the Elasticsearch indices impacted by the modification of the instance
     only once the database transaction is successful.
     """
-    transaction.on_commit(lambda: update_page_extension(instance, language))
+    if getattr(settings, "RICHIE_KEEP_SEARCH_UPDATED", True):
+        transaction.on_commit(lambda: update_page_extension(instance, language))
