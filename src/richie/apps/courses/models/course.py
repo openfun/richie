@@ -9,6 +9,7 @@ from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Q
 from django.utils import timezone, translation
 from django.utils.functional import lazy
 from django.utils.translation import ugettext_lazy as _
@@ -403,9 +404,19 @@ class CourseRun(BasePageExtension):
         """Get the course for this course run."""
         nodes = self.extended_object.node.get_ancestors()
         return Course.objects.get(
+            # Joining on `cms_pages` generate duplicates for courses that are under a parent page
+            # when this page exists both in draft and public versions. We need to exclude the
+            # parent public page to avoid this duplication
+            Q(
+                extended_object__node__parent__cms_pages__publisher_is_draft=True
+            )  # course has a parent
+            | Q(extended_object__node__parent__isnull=True),  # course has no parent
+            # Target courses that are ancestors of the course run
             extended_object__node__in=nodes,
-            extended_object__publisher_is_draft=self.extended_object.publisher_is_draft,
+            # Exclude snapshots
             extended_object__node__parent__cms_pages__course__isnull=True,  # exclude snapshots
+            # Get the course in the same version as the course run
+            extended_object__publisher_is_draft=self.extended_object.publisher_is_draft,
         )
 
 
