@@ -13,7 +13,7 @@ from django.utils import timezone
 
 import pytz
 
-from richie.apps.courses.factories import CourseRunFactory
+from richie.apps.courses.factories import CourseFactory, CourseRunFactory
 
 
 # pylint: disable=too-many-public-methods
@@ -25,6 +25,44 @@ class CourseRunModelsTestCase(TestCase):
     def setUp(self):
         super().setUp()
         self.now = timezone.now()
+
+    def test_models_course_run_get_course_direct_child(self):
+        """
+        We should be able to retrieve the course from a course run that is its direct child.
+        """
+        course = CourseFactory(should_publish=True)
+        course_run = CourseRunFactory(
+            page_parent=course.extended_object, should_publish=True
+        )
+        # Add a sibling course to make sure it is not returned
+        CourseFactory(should_publish=True)
+        # Add a snapshot to make sure it does not interfere
+        CourseFactory(page_parent=course.extended_object, should_publish=True)
+
+        self.assertEqual(course_run.get_course(), course)
+        self.assertEqual(
+            course_run.public_extension.get_course(), course.public_extension
+        )
+
+    def test_models_course_run_get_course_child_of_snapshot(self):
+        """
+        We should be able to retrieve the course from a course run that is a child of one of
+        its snapshots.
+        """
+        course = CourseFactory(should_publish=True)
+        snapshot = CourseFactory(
+            page_parent=course.extended_object, should_publish=True
+        )
+        course_run = CourseRunFactory(
+            page_parent=snapshot.extended_object, should_publish=True
+        )
+        # Add a sibling course to make sure it is not returned
+        CourseFactory(should_publish=True)
+
+        self.assertEqual(course_run.get_course(), course)
+        self.assertEqual(
+            course_run.public_extension.get_course(), course.public_extension
+        )
 
     def test_models_course_run_state_start_to_be_scheduled(self):
         """
