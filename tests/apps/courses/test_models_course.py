@@ -154,7 +154,7 @@ class CourseModelsTestCase(TestCase):
         # - a draft course run
         # - a course run published in the current language
         # - a course run published in another language
-        # - a course run published in the current language that xas then unpublished
+        # - a course run published in the current language that was then unpublished
         course_runs = CourseRunFactory.create_batch(
             3, page_parent=course.extended_object, page_languages=["en"]
         )
