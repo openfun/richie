@@ -341,10 +341,12 @@ class CoursesIndexer:
     }
 
     @classmethod
-    def get_es_document_for_course(cls, course, index, action):
+    def get_es_document_for_course(cls, course, index=None, action="index"):
         """
         Build an Elasticsearch document from the course instance.
         """
+        index = index or cls.index_name
+
         # Prepare published titles
         titles = {
             t.language: t.title
@@ -475,16 +477,18 @@ class CoursesIndexer:
         }
 
     @classmethod
-    def get_es_documents(cls, index, action):
+    def get_es_documents(cls, index=None, action="index"):
         """
         Loop on all the courses in database and format them for the ElasticSearch index
         """
+        index = index or cls.index_name
+
         for course in Course.objects.filter(
             extended_object__publisher_is_draft=False,  # index the public object
             extended_object__title_set__published=True,  # only index published courses
             extended_object__node__parent__cms_pages__course__isnull=True,  # exclude snapshots
         ).distinct():
-            yield cls.get_es_document_for_course(course, index, action)
+            yield cls.get_es_document_for_course(course, index=index, action=action)
 
     @staticmethod
     def format_es_object_for_api(es_course, language=None):

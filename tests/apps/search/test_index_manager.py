@@ -109,7 +109,7 @@ class IndexManagerTestCase(TestCase):
             }
 
             # pylint: disable=no-self-use
-            def get_es_documents(self, index, action):
+            def get_es_documents(self, index, action="index"):
                 """Stub method"""
 
                 for i in range(0, 10):
