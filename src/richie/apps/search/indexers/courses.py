@@ -20,6 +20,7 @@ from ..forms import CourseSearchForm
 from ..partial_mappings import MULTILINGUAL_TEXT
 from ..utils.i18n import get_best_field_language
 from ..utils.indexers import slice_string_for_completion
+from . import ES_INDICES
 
 
 class CoursesIndexer:
@@ -377,6 +378,7 @@ class CoursesIndexer:
         # in the same query
         category_pages = (
             course.get_root_to_leaf_category_pages()
+            .select_related("node")
             .prefetch_related(
                 Prefetch(
                     "title_set",
@@ -384,7 +386,7 @@ class CoursesIndexer:
                     queryset=Title.objects.filter(published=True),
                 )
             )
-            .only("pk")
+            .only("node", "pk")
             .distinct()
         )
 
@@ -431,7 +433,9 @@ class CoursesIndexer:
                 language: course.extended_object.get_absolute_url(language)
                 for language in titles.keys()
             },
-            "categories": [str(page.pk) for page in category_pages],
+            "categories": [
+                ES_INDICES.categories.get_es_id(page) for page in category_pages
+            ],
             # Index the names of categories to surface them in full text searches
             "categories_names": reduce(
                 lambda acc, title: {

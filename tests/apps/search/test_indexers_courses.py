@@ -103,16 +103,16 @@ class CoursesIndexersTestCase(TestCase):
         """
         # Create a course with a page in both english and french
         published_categories = [
-            CategoryFactory(
+            CategoryFactory(  # L-0001
                 page_title={"en": "Open-architected radical application"},
                 should_publish=True,
             ),
-            CategoryFactory(
+            CategoryFactory(  # L-0002
                 page_title={"en": "Public-key transitional solution"},
                 should_publish=True,
             ),
         ]
-        draft_category = CategoryFactory()
+        draft_category = CategoryFactory()  # L-0003
 
         main_organization = OrganizationFactory(
             page_title={
@@ -172,9 +172,7 @@ class CoursesIndexersTestCase(TestCase):
                 "en": "/en/an-english-course-title/",
                 "fr": "/fr/un-titre-cours-francais/",
             },
-            "categories": [
-                str(s.public_extension.extended_object_id) for s in published_categories
-            ],
+            "categories": ["L-0001", "L-0002"],
             "categories_names": {
                 "en": [
                     "Open-architected radical application",
