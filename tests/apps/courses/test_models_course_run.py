@@ -13,6 +13,7 @@ from django.utils import timezone
 
 import pytz
 
+from richie.apps.core.helpers import create_i18n_page
 from richie.apps.courses.factories import CourseFactory, CourseRunFactory
 
 
@@ -25,6 +26,27 @@ class CourseRunModelsTestCase(TestCase):
     def setUp(self):
         super().setUp()
         self.now = timezone.now()
+
+    def test_models_course_run_get_course_direct_child_with_parent(self):
+        """
+        We should be able to retrieve the course from a course run that is its direct child
+        when the course is below a root page (this is creating a difficulty because the
+        query we build in `get_course` can create duplicates if we don't add the right clauses).
+        """
+        page = create_i18n_page("A page", published=True)
+        course = CourseFactory(page_parent=page, should_publish=True)
+        course_run = CourseRunFactory(
+            page_parent=course.extended_object, should_publish=True
+        )
+        # Add a sibling course to make sure it is not returned
+        CourseFactory(should_publish=True)
+        # Add a snapshot to make sure it does not interfere
+        CourseFactory(page_parent=course.extended_object, should_publish=True)
+
+        self.assertEqual(course_run.get_course(), course)
+        self.assertEqual(
+            course_run.public_extension.get_course(), course.public_extension
+        )
 
     def test_models_course_run_get_course_direct_child(self):
         """
