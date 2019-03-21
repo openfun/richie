@@ -18,24 +18,63 @@ from richie.apps.search.indexers.courses import CoursesIndexer
 
 COURSES = [
     {
-        "is_new": True,
         "categories": ["P-00010001", "P-00010002", "L-000100010001", "L-00020001"],
-        "organizations": ["P-00030001", "P-00030004", "L-000300010001"],
-    },
-    {
+        "categories_names": {"en": ["Artificial intelligence", "Autumn", "Wilderness"]},
+        "description": {
+            "en": (
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec egestas "
+                "lectus. Cras eget lobortis eros. Suspendisse hendrerit dictum ex, eget pharetra. "
+                "Pellentesque habitant morbi tristique senectus et netus et malesuada fames "
+                "ac turpis egestas. Integer ut eleifend massa."
+            )
+        },
         "is_new": True,
+        "organizations": ["P-00030001", "P-00030004", "L-000300010001"],
+        "title": {"en": "Artificial intelligence for mushroom picking"},
+    },
+    {
         "categories": ["P-00010001", "P-00010003", "L-000100010002", "L-00020003"],
+        "categories_names": {"en": ["Martial arts?", "Autumn"]},
+        "description": {
+            "en": (
+                "Artisanally-sourced clicks neque. erat volutpat. Nulla at laoreet. "
+                "Finibus viverra tortor et pulvinar. In placerat interdum arcu, ac ullamcorper "
+                "augue. Nam sed semper velit. Praesent orci nulla, malesuada nec commodo at, "
+                "lobortis eget justo."
+            )
+        },
+        "is_new": True,
         "organizations": ["P-00030001", "P-00030003", "L-000300010002"],
+        "title": {"en": "Click-farms: managing the autumn harvest"},
     },
     {
-        "is_new": False,
         "categories": ["P-00010002", "P-00010003", "L-000100020001", "L-00020001"],
+        "categories_names": {"en": ["Artificial intelligence", "Water", "Wilderness"]},
+        "description": {
+            "en": (
+                "Cursus honorum finite que non luctus ante. Etiam accumsan vulputate magna non "
+                "sollicitudin. Aliquam molestie est finibus elit scelerisque laoreet. Maecenas "
+                "porttitor cursus cursus. Nam pellentesque eget neque quis tincidunt. Fusce sem "
+                "ipsum, dignissim at augue."
+            )
+        },
+        "is_new": False,
         "organizations": ["P-00030002", "P-00030003", "L-000300020001"],
+        "title": {"en": "Building a data lake out of mountain springs"},
     },
     {
-        "is_new": False,
         "categories": ["P-00010002", "P-00010004", "L-000100020002", "L-00020002"],
+        "categories_names": {"en": ["Martial arts?", "Water"]},
+        "description": {
+            "en": (
+                "Nullam ornare finibus sollicitudin. Aliquam nisl leo, vestibulum a turpis quis, "
+                "convallis tincidunt sem. Aliquam eleifend tellus vitae neque sagittis rutrum. "
+                "Artificial vulputate neque placerat, commodo quam gravida, maximus lectus."
+            )
+        },
+        "is_new": False,
         "organizations": ["P-00030002", "P-00030004", "L-000300020002"],
+        "title": {"en": "Kung-fu moves for cloud infrastructure security"},
     },
 ]
 INDEXABLE_IDS = {
@@ -292,7 +331,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             .replace("+00:00", "Z"),
                             "text": "closing on",
                         },
-                        "title": "title",
+                        "title": "Artificial intelligence for mushroom picking",
                     },
                     {
                         "id": "2",
@@ -313,7 +352,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             "call_to_action": "enroll now",
                             "text": "closing on",
                         },
-                        "title": "title",
+                        "title": "Building a data lake out of mountain springs",
                     },
                     {
                         "id": "3",
@@ -334,7 +373,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             "call_to_action": "enroll now",
                             "text": "starting on",
                         },
-                        "title": "title",
+                        "title": "Kung-fu moves for cloud infrastructure security",
                     },
                     {
                         "id": "1",
@@ -353,7 +392,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             "call_to_action": None,
                             "text": "on-going",
                         },
-                        "title": "title",
+                        "title": "Click-farms: managing the autumn harvest",
                     },
                 ],
                 "filters": {
@@ -1013,3 +1052,31 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         self.assertEqual(content["filters"]["subjects"]["values"], [])
         self.assertEqual(content["filters"]["levels"]["values"], [])
         self.assertEqual(content["filters"]["organizations"]["values"], [])
+
+    def test_query_courses_text_language_analyzer(self, *_):
+        """
+        Full-text search appropriately returns the list of courses that match a given
+        word through a language analyzer.
+        """
+        courses_definition, content = self.execute_query("query=artificial")
+        # Keep only the courses that contain the word "artificial"
+        courses_definition = filter(lambda c: c[0] in [2, 0, 3], courses_definition)
+        self.assertEqual(
+            list([int(c["id"]) for c in content["objects"]]),
+            self.get_expected_courses(courses_definition, list(COURSE_RUNS)),
+        )
+
+    def test_query_courses_text_language_analyzer_with_filter_category(self, *_):
+        """
+        Full-text search through the language analyzer combines with another filter.
+        """
+        courses_definition, content = self.execute_query(
+            "query=artificial&subjects=P-00010001"
+        )
+        # Keep only the courses that are linked to category one and contain the word "artificial"
+        courses_definition = filter(lambda c: c[0] in [0], courses_definition)
+
+        self.assertEqual(
+            list([int(c["id"]) for c in content["objects"]]),
+            self.get_expected_courses(courses_definition, list(COURSE_RUNS)),
+        )
