@@ -11,7 +11,7 @@ services:
     command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.3.1
+    image: fundocker/openshift-elasticsearch:6.6.2
 
   # We use our production image as a basis for the development image, hence, we
   # define a "base" service upon which the "app" service depends to force
