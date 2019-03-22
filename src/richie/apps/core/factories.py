@@ -83,6 +83,7 @@ class PageExtensionDjangoModelFactory(factory.django.DjangoModelFactory):
             in_navigation=getattr(self, "page_in_navigation", False),
             languages=getattr(self, "page_languages", None),
             parent=getattr(self, "page_parent", None),
+            reverse_id=getattr(self, "page_reverse_id", None),
             template=getattr(self, "page_template", None),
             title=getattr(self, "page_title", None),
         )

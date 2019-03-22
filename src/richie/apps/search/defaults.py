@@ -61,7 +61,7 @@ FILTERS_DEFAULT = [
                     {
                         "name": "languages",
                         "human_name": _("Languages"),
-                        "position": 4,
+                        "position": 5,
                         "sorting": "count",
                     },
                 ),
@@ -70,10 +70,31 @@ FILTERS_DEFAULT = [
     ),
     (
         "richie.apps.search.filter_definitions.IndexableFilterDefinition",
-        {"name": "categories", "human_name": _("Categories"), "position": 2},
+        {
+            "name": "subjects",
+            "human_name": _("Subjects"),
+            "position": 2,
+            "reverse_id": "subjects",
+            "term": "categories",
+        },
     ),
     (
         "richie.apps.search.filter_definitions.IndexableFilterDefinition",
-        {"name": "organizations", "human_name": _("Organizations"), "position": 3},
+        {
+            "name": "levels",
+            "human_name": _("Levels"),
+            "position": 3,
+            "reverse_id": "levels",
+            "term": "categories",
+        },
+    ),
+    (
+        "richie.apps.search.filter_definitions.IndexableFilterDefinition",
+        {
+            "name": "organizations",
+            "human_name": _("Organizations"),
+            "position": 4,
+            "reverse_id": "organizations",
+        },
     ),
 ]

@@ -13,16 +13,37 @@ import arrow
 from elasticsearch.client import IndicesClient
 from elasticsearch.helpers import bulk
 
-from richie.apps.search.filter_definitions import IndexableFilterDefinition
+from richie.apps.courses.factories import CategoryFactory
+from richie.apps.search.filter_definitions import FILTERS, IndexableFilterDefinition
 from richie.apps.search.indexers.courses import CoursesIndexer
 
 COURSES = [
-    {"is_new": True, "categories": [1, 3, 5], "organizations": [11, 13, 15]},
-    {"is_new": True, "categories": [2, 3], "organizations": [12, 13]},
-    {"is_new": False, "categories": [1, 4, 5], "organizations": [11, 14, 15]},
-    {"is_new": False, "categories": [2, 4], "organizations": [12, 14]},
+    {
+        "is_new": True,
+        "categories": ["P-00010001", "P-00010002", "L-000100010001", "L-00020001"],
+        "organizations": ["P-00030001", "P-00030004", "L-000300010001"],
+    },
+    {
+        "is_new": True,
+        "categories": ["P-00010001", "P-00010003", "L-000100010002", "L-00020003"],
+        "organizations": ["P-00030001", "P-00030003", "L-000300010002"],
+    },
+    {
+        "is_new": False,
+        "categories": ["P-00010002", "P-00010003", "L-000100020001", "L-00020001"],
+        "organizations": ["P-00030002", "P-00030003", "L-000300020001"],
+    },
+    {
+        "is_new": False,
+        "categories": ["P-00010002", "P-00010004", "L-000100020002", "L-00020002"],
+        "organizations": ["P-00030002", "P-00030004", "L-000300020002"],
+    },
 ]
-
+INDEXABLE_IDS = {
+    id: f"#{id:s}"
+    for course in COURSES
+    for id in course["categories"] + course["organizations"]
+}
 COURSE_RUNS = {
     "A": {
         # A) ongoing course, next open course to end enrollment
@@ -91,15 +112,14 @@ COURSE_RUNS = {
 }
 
 
+# pylint: disable=too-many-public-methods
 @override_settings(  # Reduce the number of languages
     ALL_LANGUAGES_DICT={
         l: "#{:s}".format(l) for cr in COURSE_RUNS.values() for l in cr["languages"]
     }
 )
 @mock.patch.object(  # Avoid having to build the categories and organizations indices
-    IndexableFilterDefinition,
-    "get_i18n_names",
-    return_value={str(id): "#{:d}".format(id) for id in range(20)},
+    IndexableFilterDefinition, "get_i18n_names", return_value=INDEXABLE_IDS
 )
 @mock.patch.object(  # Avoid messing up the development Elasticsearch index
     CoursesIndexer,
@@ -112,6 +132,37 @@ class CourseRunsCoursesQueryTestCase(TestCase):
     Test edge case search queries on underlying course runs to make sure filtering and sorting
     works as we expect.
     """
+
+    def setUp(self):
+        """Reset indexable filters cache before each test so the context is as expected."""
+        super().setUp()
+        self.reset_filter_definitions_cache()
+
+    def tearDown(self):
+        """Reset indexable filters cache after each test to avoid impacting subsequent tests."""
+        super().tearDown()
+        self.reset_filter_definitions_cache()
+
+    @staticmethod
+    def reset_filter_definitions_cache():
+        """Reset indexable filters cache on the `aggs_include` field."""
+        for filter_name in ["levels", "subjects", "organizations"]:
+            try:
+                del FILTERS[filter_name].aggs_include
+            except AttributeError:
+                pass
+
+    @staticmethod
+    def create_filter_pages():
+        """
+        Create pages for each filter based on an indexable. We must create them in the same order
+        as they are instantiated in order to match the node paths we expect:
+            - subjects page path: 0001
+            - levels page path: 0002
+            - organizations page path: 0003
+        """
+        for filter_name in ["subjects", "levels", "organizations"]:
+            CategoryFactory(page_reverse_id=filter_name, should_publish=True)
 
     @staticmethod
     def get_expected_courses(courses_definition, course_run_ids):
@@ -217,6 +268,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         the two course runs in german end-up on the same course (in this case the facet count
         should be 1. See next test).
         """
+        self.create_filter_pages()
         _, content = self.execute_query(suite=["A", "D", "G", "F", "B", "H", "C", "E"])
         self.assertEqual(
             content,
@@ -226,9 +278,14 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                     {
                         "id": "0",
                         "absolute_url": "url",
-                        "categories": [1, 3, 5],
+                        "categories": [
+                            "P-00010001",
+                            "P-00010002",
+                            "L-000100010001",
+                            "L-00020001",
+                        ],
                         "cover_image": "image",
-                        "organizations": [11, 13, 15],
+                        "organizations": ["P-00030001", "P-00030004", "L-000300010001"],
                         "state": {
                             "priority": 0,
                             "call_to_action": "enroll now",
@@ -242,9 +299,14 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                     {
                         "id": "2",
                         "absolute_url": "url",
-                        "categories": [1, 4, 5],
+                        "categories": [
+                            "P-00010002",
+                            "P-00010003",
+                            "L-000100020001",
+                            "L-00020001",
+                        ],
                         "cover_image": "image",
-                        "organizations": [11, 14, 15],
+                        "organizations": ["P-00030002", "P-00030003", "L-000300020001"],
                         "state": {
                             "priority": 0,
                             "datetime": COURSE_RUNS["B"]["enrollment_end"]
@@ -258,9 +320,14 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                     {
                         "id": "3",
                         "absolute_url": "url",
-                        "categories": [2, 4],
+                        "categories": [
+                            "P-00010002",
+                            "P-00010004",
+                            "L-000100020002",
+                            "L-00020002",
+                        ],
                         "cover_image": "image",
-                        "organizations": [12, 14],
+                        "organizations": ["P-00030002", "P-00030004", "L-000300020002"],
                         "state": {
                             "priority": 1,
                             "datetime": COURSE_RUNS["C"]["start"]
@@ -274,9 +341,14 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                     {
                         "id": "1",
                         "absolute_url": "url",
-                        "categories": [2, 3],
+                        "categories": [
+                            "P-00010001",
+                            "P-00010003",
+                            "L-000100010002",
+                            "L-00020003",
+                        ],
                         "cover_image": "image",
-                        "organizations": [12, 13],
+                        "organizations": ["P-00030001", "P-00030003", "L-000300010002"],
                         "state": {
                             "priority": 4,
                             "datetime": None,
@@ -316,41 +388,94 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             {"count": 2, "human_name": "Archived", "key": "archived"},
                         ],
                     },
-                    "languages": {
-                        "human_name": "Languages",
+                    "subjects": {
+                        "human_name": "Subjects",
                         "is_drilldown": False,
-                        "name": "languages",
-                        "position": 4,
-                        "values": [
-                            {"count": 3, "human_name": "#en", "key": "en"},
-                            {"count": 2, "human_name": "#de", "key": "de"},
-                            {"count": 2, "human_name": "#fr", "key": "fr"},
-                        ],
-                    },
-                    "categories": {
-                        "human_name": "Categories",
-                        "is_drilldown": False,
-                        "name": "categories",
+                        "name": "subjects",
                         "position": 2,
                         "values": [
-                            {"count": 2, "human_name": "#1", "key": "1"},
-                            {"count": 2, "human_name": "#2", "key": "2"},
-                            {"count": 2, "human_name": "#3", "key": "3"},
-                            {"count": 2, "human_name": "#4", "key": "4"},
-                            {"count": 2, "human_name": "#5", "key": "5"},
+                            {
+                                "count": 3,
+                                "human_name": "#P-00010002",
+                                "key": "P-00010002",
+                            },
+                            {
+                                "count": 2,
+                                "human_name": "#P-00010001",
+                                "key": "P-00010001",
+                            },
+                            {
+                                "count": 2,
+                                "human_name": "#P-00010003",
+                                "key": "P-00010003",
+                            },
+                            {
+                                "count": 1,
+                                "human_name": "#P-00010004",
+                                "key": "P-00010004",
+                            },
+                        ],
+                    },
+                    "levels": {
+                        "human_name": "Levels",
+                        "is_drilldown": False,
+                        "name": "levels",
+                        "position": 3,
+                        "values": [
+                            {
+                                "count": 2,
+                                "human_name": "#L-00020001",
+                                "key": "L-00020001",
+                            },
+                            {
+                                "count": 1,
+                                "human_name": "#L-00020002",
+                                "key": "L-00020002",
+                            },
+                            {
+                                "count": 1,
+                                "human_name": "#L-00020003",
+                                "key": "L-00020003",
+                            },
                         ],
                     },
                     "organizations": {
                         "human_name": "Organizations",
                         "is_drilldown": False,
                         "name": "organizations",
-                        "position": 3,
+                        "position": 4,
                         "values": [
-                            {"count": 2, "human_name": "#11", "key": "11"},
-                            {"count": 2, "human_name": "#12", "key": "12"},
-                            {"count": 2, "human_name": "#13", "key": "13"},
-                            {"count": 2, "human_name": "#14", "key": "14"},
-                            {"count": 2, "human_name": "#15", "key": "15"},
+                            {
+                                "count": 2,
+                                "human_name": "#P-00030001",
+                                "key": "P-00030001",
+                            },
+                            {
+                                "count": 2,
+                                "human_name": "#P-00030002",
+                                "key": "P-00030002",
+                            },
+                            {
+                                "count": 2,
+                                "human_name": "#P-00030003",
+                                "key": "P-00030003",
+                            },
+                            {
+                                "count": 2,
+                                "human_name": "#P-00030004",
+                                "key": "P-00030004",
+                            },
+                        ],
+                    },
+                    "languages": {
+                        "human_name": "Languages",
+                        "is_drilldown": False,
+                        "name": "languages",
+                        "position": 5,
+                        "values": [
+                            {"count": 3, "human_name": "#en", "key": "en"},
+                            {"count": 2, "human_name": "#de", "key": "de"},
+                            {"count": 2, "human_name": "#fr", "key": "fr"},
                         ],
                     },
                 },
@@ -437,6 +562,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         runs with the same language (resp. availability) get grouped under the same
         course.
         """
+        self.create_filter_pages()
         _, content = self.execute_query(
             "availability=open", suite=["A", "B", "G", "C", "D", "H", "F", "E"]
         )
@@ -478,12 +604,18 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             ],
         )
         self.assertEqual(
-            content["filters"]["categories"]["values"],
+            content["filters"]["subjects"]["values"],
             [
-                {"count": 2, "human_name": "#3", "key": "3"},
-                {"count": 1, "human_name": "#1", "key": "1"},
-                {"count": 1, "human_name": "#2", "key": "2"},
-                {"count": 1, "human_name": "#5", "key": "5"},
+                {"count": 2, "human_name": "#P-00010001", "key": "P-00010001"},
+                {"count": 1, "human_name": "#P-00010002", "key": "P-00010002"},
+                {"count": 1, "human_name": "#P-00010003", "key": "P-00010003"},
+            ],
+        )
+        self.assertEqual(
+            content["filters"]["levels"]["values"],
+            [
+                {"count": 1, "human_name": "#L-00020001", "key": "L-00020001"},
+                {"count": 1, "human_name": "#L-00020003", "key": "L-00020003"},
             ],
         )
 
@@ -535,6 +667,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         runs with the same language (resp. availability) get grouped under the same
         course.
         """
+        self.create_filter_pages()
         _, content = self.execute_query(
             "languages=fr", suite=["A", "B", "G", "C", "D", "H", "F", "E"]
         )
@@ -582,13 +715,19 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             ],
         )
         self.assertEqual(
-            content["filters"]["categories"]["values"],
+            content["filters"]["subjects"]["values"],
             [
-                {"count": 2, "human_name": "#1", "key": "1"},
-                {"count": 2, "human_name": "#4", "key": "4"},
-                {"count": 2, "human_name": "#5", "key": "5"},
-                {"count": 1, "human_name": "#2", "key": "2"},
-                {"count": 1, "human_name": "#3", "key": "3"},
+                {"count": 3, "human_name": "#P-00010002", "key": "P-00010002"},
+                {"count": 1, "human_name": "#P-00010001", "key": "P-00010001"},
+                {"count": 1, "human_name": "#P-00010003", "key": "P-00010003"},
+                {"count": 1, "human_name": "#P-00010004", "key": "P-00010004"},
+            ],
+        )
+        self.assertEqual(
+            content["filters"]["levels"]["values"],
+            [
+                {"count": 2, "human_name": "#L-00020001", "key": "L-00020001"},
+                {"count": 1, "human_name": "#L-00020002", "key": "L-00020002"},
             ],
         )
 
@@ -622,6 +761,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         runs with the same language (resp. availability) get grouped under the same
         course.
         """
+        self.create_filter_pages()
         _, content = self.execute_query(
             "availability=ongoing&languages=en",
             suite=["A", "B", "G", "C", "D", "H", "F", "E"],
@@ -664,13 +804,18 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         # Only the B and E course runs are on-going and in English
         # So only courses 0 and 3 are selected
         self.assertEqual(
-            content["filters"]["categories"]["values"],
+            content["filters"]["subjects"]["values"],
             [
-                {"count": 1, "human_name": "#1", "key": "1"},
-                {"count": 1, "human_name": "#2", "key": "2"},
-                {"count": 1, "human_name": "#3", "key": "3"},
-                {"count": 1, "human_name": "#4", "key": "4"},
-                {"count": 1, "human_name": "#5", "key": "5"},
+                {"count": 2, "human_name": "#P-00010002", "key": "P-00010002"},
+                {"count": 1, "human_name": "#P-00010001", "key": "P-00010001"},
+                {"count": 1, "human_name": "#P-00010004", "key": "P-00010004"},
+            ],
+        )
+        self.assertEqual(
+            content["filters"]["levels"]["values"],
+            [
+                {"count": 1, "human_name": "#L-00020001", "key": "L-00020001"},
+                {"count": 1, "human_name": "#L-00020002", "key": "L-00020002"},
             ],
         )
 
@@ -691,9 +836,9 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         """
         Battle test filtering by an organization.
         """
-        courses_definition, content = self.execute_query("organizations=12")
-        # Keep only the courses that are linked to organization 12:
-        courses_definition = filter(lambda c: c[0] in [1, 3], courses_definition)
+        courses_definition, content = self.execute_query("organizations=P-00030002")
+        # Keep only the courses that are linked to organization 00030002:
+        courses_definition = filter(lambda c: c[0] in [2, 3], courses_definition)
 
         self.assertEqual(
             list([int(c["id"]) for c in content["objects"]]),
@@ -705,9 +850,9 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         Battle test filtering by multiple organizations.
         """
         courses_definition, content = self.execute_query(
-            "organizations=11&organizations=14"
+            "organizations=P-00030002&organizations=L-000300010001"
         )
-        # Keep only the courses that are linked to organizations 11 or 14:
+        # Keep only the courses that are linked to organizations 00030002 or 000300010001:
         courses_definition = filter(lambda c: c[0] in [0, 2, 3], courses_definition)
 
         self.assertEqual(
@@ -715,28 +860,69 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             self.get_expected_courses(courses_definition, list(COURSE_RUNS)),
         )
 
-    def test_query_courses_filter_category(self, *_):
+    def test_query_courses_filter_subject(self, *_):
         """
-        Battle test filtering by an category.
+        Battle test filtering by a subject.
         """
-        courses_definition, content = self.execute_query("categories=2")
-        # Keep only the courses that are linked to category 2:
-        courses_definition = filter(lambda c: c[0] in [1, 3], courses_definition)
+        courses_definition, content = self.execute_query("subjects=P-00010001")
+        # Keep only the courses that are linked to subject 2:
+        courses_definition = filter(lambda c: c[0] in [0, 1], courses_definition)
 
         self.assertEqual(
             list([int(c["id"]) for c in content["objects"]]),
             self.get_expected_courses(courses_definition, list(COURSE_RUNS)),
         )
 
-    def test_query_courses_filter_multiple_categories(self, *_):
+    def test_query_courses_filter_multiple_subjects(self, *_):
         """
-        Battle test filtering by multiple categories.
+        Battle test filtering by multiple subjects.
         """
-        courses_definition, content = self.execute_query("categories=1&categories=4")
-        # Keep only the courses that are linked to category 1 or 4:
+        courses_definition, content = self.execute_query(
+            "subjects=P-00010001&subjects=P-00010004"
+        )
+        # Keep only the courses that are linked to subjects 1 or 4:
+        courses_definition = filter(lambda c: c[0] in [0, 1, 3], courses_definition)
+
+        self.assertEqual(
+            list([int(c["id"]) for c in content["objects"]]),
+            self.get_expected_courses(courses_definition, list(COURSE_RUNS)),
+        )
+
+    def test_query_courses_filter_level(self, *_):
+        """
+        Battle test filtering by a level.
+        """
+        courses_definition, content = self.execute_query("levels=L-00020001")
+        # Keep only the courses that are linked to level L-00020001:
+        courses_definition = filter(lambda c: c[0] in [0, 2], courses_definition)
+
+        self.assertEqual(
+            list([int(c["id"]) for c in content["objects"]]),
+            self.get_expected_courses(courses_definition, list(COURSE_RUNS)),
+        )
+
+    def test_query_courses_filter_multiple_levels(self, *_):
+        """
+        Battle test filtering by multiple levels.
+        """
+        courses_definition, content = self.execute_query(
+            "levels=L-00020001&levels=L-00020002"
+        )
+        # Keep only the courses that are linked to levels L-00020001 or L-00020002:
         courses_definition = filter(lambda c: c[0] in [0, 2, 3], courses_definition)
 
         self.assertEqual(
             list([int(c["id"]) for c in content["objects"]]),
             self.get_expected_courses(courses_definition, list(COURSE_RUNS)),
         )
+
+    def test_query_courses_match_all_no_filter_pages(self, *_):
+        """
+        Running a query when indexable filter pages are absent should result in empty facets.
+        This behavior is because "include" defaults to the "^$" regex matching no values of the
+        term when a `reverse_id` is set but no corresponding page is found.
+        """
+        _, content = self.execute_query()
+        self.assertEqual(content["filters"]["subjects"]["values"], [])
+        self.assertEqual(content["filters"]["levels"]["values"], [])
+        self.assertEqual(content["filters"]["organizations"]["values"], [])

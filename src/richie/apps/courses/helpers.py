@@ -4,7 +4,7 @@ Helpers that can be useful throughout Richie's courses app
 from .factories import CategoryFactory
 
 
-def create_categories(info, parent, should_publish=True):
+def create_categories(info, parent, reverse_id=None, should_publish=True):
     """
     Create the category tree from the SUBJECTS dictionary.
 
@@ -35,6 +35,7 @@ def create_categories(info, parent, should_publish=True):
     """
     category = CategoryFactory(
         page_title=info["title"],
+        page_reverse_id=reverse_id,
         page_in_navigation=info.get("in_navigation", True),
         page_parent=parent,
         should_publish=should_publish,
