@@ -1,4 +1,5 @@
 """Tests for environment ElasticSearch support."""
+# pylint: disable=too-many-lines
 import json
 import random
 from unittest import mock
@@ -551,6 +552,22 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             list([int(c["id"]) for c in content["objects"]]),
             self.get_expected_courses(courses_definition, ["A", "B", "C"]),
         )
+
+    def test_query_courses_match_all_scope_objects(self, *_):
+        """
+        The scope can be limited to objects via the querystring.
+        """
+        _courses_definition, content = self.execute_query("scope=objects")
+        self.assertEqual(len(content["objects"]), 4)
+        self.assertFalse("filters" in content)
+
+    def test_query_courses_match_all_scope_filters(self, *_):
+        """
+        The scope can be limited to filters via the querystring.
+        """
+        _courses_definition, content = self.execute_query("scope=filters")
+        self.assertEqual(len(content["filters"]), 6)
+        self.assertFalse("objects" in content)
 
     def test_query_courses_course_runs_filter_availability_facets(self, *_):
         """

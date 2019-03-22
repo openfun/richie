@@ -37,6 +37,7 @@ class CourseSearchFormTestCase(TestCase):
                 "organizations": [],
                 "organizations_include": "",
                 "query": "",
+                "scope": "",
                 "subjects": [],
                 "subjects_include": "",
             },
@@ -113,7 +114,7 @@ class CourseSearchFormTestCase(TestCase):
                 query_string=(
                     "availability=coming_soon&levels=1&levels_include=.*&languages=fr&limit=9&"
                     "offset=3&organizations=10&organizations_include=.*&query=maths&new=new&"
-                    "subjects=1&subjects_include=.*"
+                    "scope=objects&subjects=1&subjects_include=.*"
                 )
             )
         )
@@ -131,6 +132,7 @@ class CourseSearchFormTestCase(TestCase):
                 "organizations": ["10"],
                 "organizations_include": ".*",
                 "query": "maths",
+                "scope": "objects",
                 "subjects": ["1"],
                 "subjects_include": ".*",
             },
@@ -147,7 +149,7 @@ class CourseSearchFormTestCase(TestCase):
                     "availability=coming_soon&availability=ongoing&levels=1&levels=2&"
                     "languages=fr&languages=en&limit=9&limit=11&offset=3&offset=17&"
                     "organizations=10&organizations=11&query=maths&query=physics&new=new&"
-                    "subjects=1&subjects=2"
+                    "scope=objects&scope=filters&subjects=1&subjects=2"
                 )
             )
         )
@@ -166,6 +168,7 @@ class CourseSearchFormTestCase(TestCase):
                 "organizations": ["10", "11"],
                 "organizations_include": "",
                 "query": "maths",
+                "scope": "objects",
                 "subjects": ["1", "2"],
                 "subjects_include": "",
             },

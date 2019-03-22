@@ -27,7 +27,8 @@ class CoursesViewSet(AutocompleteMixin, ViewSet):
         it searches its index and returns a list of matching courses
         """
         # Instantiate the form to allow validation/cleaning
-        params_form = self._meta.indexer.form(data=request.query_params)
+        form_class = self._meta.indexer.form
+        params_form = form_class(data=request.query_params)
 
         # Return a 400 with error information if the query params are not valid
         if not params_form.is_valid():
@@ -35,41 +36,53 @@ class CoursesViewSet(AutocompleteMixin, ViewSet):
 
         limit, offset, query, aggs = params_form.build_es_query()
 
+        body = {
+            "script_fields": params_form.get_script_fields(),
+            "sort": params_form.get_sorting_script(),
+        }
+
+        # The querystring may request only the query or only the aggregations
+        scope = params_form.cleaned_data["scope"]
+        if form_class.OBJECTS in scope or not scope:
+            body["query"] = query
+
+        if form_class.FILTERS in scope or not scope:
+            body["aggs"] = aggs
+
         course_query_response = settings.ES_CLIENT.search(
             _source=getattr(self._meta.indexer, "display_fields", "*"),
             index=self._meta.indexer.index_name,
             doc_type=self._meta.indexer.document_type,
-            body={
-                "aggs": aggs,
-                "query": query,
-                "script_fields": params_form.get_script_fields(),
-                "sort": params_form.get_sorting_script(),
-            },
+            body=body,
             # Directly pass meta-params through as arguments to the ES client
             from_=offset,
             size=limit or settings.ES_DEFAULT_PAGE_SIZE,
         )
-
-        filters = {
-            name: faceted_definition
-            for filter in FILTERS.values()
-            for name, faceted_definition in filter.get_faceted_definitions(
-                course_query_response["aggregations"]["all_courses"]
-            ).items()
-        }
 
         response_object = {
             "meta": {
                 "count": len(course_query_response["hits"]["hits"]),
                 "offset": offset,
                 "total_count": course_query_response["hits"]["total"],
-            },
-            "objects": [
+            }
+        }
+        if form_class.OBJECTS in scope or not scope:
+            response_object["objects"] = [
                 self._meta.indexer.format_es_object_for_api(es_course)
                 for es_course in course_query_response["hits"]["hits"]
-            ],
-            "filters": dict(sorted(filters.items(), key=lambda f: f[1]["position"])),
-        }
+            ]
+
+        if form_class.FILTERS in scope or not scope:
+            filters = {
+                name: faceted_definition
+                for filter in FILTERS.values()
+                for name, faceted_definition in filter.get_faceted_definitions(
+                    course_query_response["aggregations"]["all_courses"]
+                ).items()
+            }
+            response_object["filters"] = dict(
+                sorted(filters.items(), key=lambda f: f[1]["position"])
+            )
 
         # Will be formatting a response_object for consumption
         return Response(response_object)

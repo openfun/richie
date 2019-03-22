@@ -24,7 +24,7 @@ class ItemSearchFormTestCase(TestCase):
         form = ItemSearchForm(data=QueryDict())
         self.assertTrue(form.is_valid())
         self.assertEqual(
-            form.cleaned_data, {"limit": None, "offset": None, "query": ""}
+            form.cleaned_data, {"limit": None, "offset": None, "query": "", "scope": ""}
         )
 
     def test_forms_courses_limit_greater_than_1(self):
@@ -97,7 +97,9 @@ class ItemSearchFormTestCase(TestCase):
             data=QueryDict(query_string=("limit=9&offset=3&query=maths"))
         )
         self.assertTrue(form.is_valid())
-        self.assertEqual(form.cleaned_data, {"limit": 9, "offset": 3, "query": "maths"})
+        self.assertEqual(
+            form.cleaned_data, {"limit": 9, "offset": 3, "query": "maths", "scope": ""}
+        )
 
     def test_forms_items_build_es_query_search_by_match_text(self):
         """
