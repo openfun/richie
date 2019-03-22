@@ -28,18 +28,20 @@ class TermsAggsMixin:
         return ".*"
 
     # pylint: disable=unused-argument
-    def get_aggs_fragment(self, queries, *args, **kwargs):
+    def get_aggs_fragment(self, queries, data, *args, **kwargs):
         """
         Build the aggregations as a term query that counts all the different values assigned
         to the field.
         """
+        # Look for an include parameter in the form data and default to the regex returned
+        # by the `aggs_include` property:
+        include = data[f"{self.name:s}_include"] or self.aggs_include
+
         return {
             self.name: {
                 # Rely on the built-in "terms" aggregation to get everything we need
                 "aggregations": {
-                    self.name: {
-                        "terms": {"field": self.term, "include": self.aggs_include}
-                    }
+                    self.name: {"terms": {"field": self.term, "include": include}}
                 },
                 "filter": {
                     "bool": {

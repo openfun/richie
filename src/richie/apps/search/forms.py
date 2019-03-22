@@ -11,7 +11,24 @@ import arrow
 from .defaults import RELATED_CONTENT_MATCHING_BOOST
 from .filter_definitions import FILTERS, AvailabilityFilterDefinition
 
-# Instanciate filter fields for each filter defined in settings
+# Instantiate filter fields for each filter defined in settings
+# It is of the form:
+#     {
+#         subjects: (
+#             ArrayField(required=False, base_type=forms.CharField(max_length=50)),
+#             True,
+#         ),
+#         subjects_include: (
+#             CharField(required=False, max_length=20),
+#             False,
+#         ),
+#         languages: (
+#             MultipleChoiceField(required=False, choices=LANGUAGES),
+#             True,
+#         ),
+#     }
+# Where the first item is an instance of the form field and the second is a boolean
+# indicating whether this formfield expects a list or a single value.
 FILTER_FIELDS = {
     key: value
     for filter_definition in FILTERS.values()
@@ -43,7 +60,9 @@ class CourseSearchForm(SearchForm):
         # QueryDict/MultiValueDict breaks lists: we need to fix it
         data_fixed = (
             {
-                k: data.getlist(k) if k in FILTER_FIELDS else v[0]
+                k: data.getlist(k)
+                # Form fields are marked to expect lists as input or not as explained above
+                if (k in FILTER_FIELDS and FILTER_FIELDS[k][1] is True) else v[0]
                 for k, v in data.lists()
             }
             if data
@@ -51,7 +70,7 @@ class CourseSearchForm(SearchForm):
         )
 
         super().__init__(data=data_fixed, *args, **kwargs)
-        self.fields.update(FILTER_FIELDS)
+        self.fields.update({k: v[0] for k, v in FILTER_FIELDS.items()})
         self.states = None
 
     def clean_availability(self):
