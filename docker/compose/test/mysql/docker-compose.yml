@@ -9,7 +9,7 @@ services:
     command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.3.1
+    image: fundocker/openshift-elasticsearch:6.6.2
 
   app:
     image: richie:dev
