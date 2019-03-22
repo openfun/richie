@@ -39,9 +39,14 @@ FILTER_FIELDS = {
 class SearchForm(forms.Form):
     """Validate the query string params in a search request."""
 
+    OBJECTS, FILTERS = "objects", "filters"
+
+    SCOPE_CHOICES = ((OBJECTS, "Objects"), (FILTERS, "Filters"))
+
     limit = forms.IntegerField(required=False, min_value=1, initial=10)
     query = forms.CharField(required=False, min_length=3, max_length=100)
     offset = forms.IntegerField(required=False, min_value=0, initial=0)
+    scope = forms.ChoiceField(required=False, choices=SCOPE_CHOICES)
 
 
 class CourseSearchForm(SearchForm):
