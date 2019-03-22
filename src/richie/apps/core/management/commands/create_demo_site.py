@@ -330,8 +330,14 @@ def create_demo_site():
     )
 
     # Generate each category tree and return a list of the leaf categories
-    levels = list(create_categories(LEVELS_INFO, pages_created["categories"]))
-    subjects = list(create_categories(SUBJECTS_INFO, pages_created["categories"]))
+    levels = list(
+        create_categories(LEVELS_INFO, pages_created["categories"], reverse_id="levels")
+    )
+    subjects = list(
+        create_categories(
+            SUBJECTS_INFO, pages_created["categories"], reverse_id="subjects"
+        )
+    )
 
     title = PersonTitleFactory(translation=None)
     PersonTitleTranslationFactory(

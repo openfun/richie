@@ -19,6 +19,14 @@ class TermsQueryMixin:
 class TermsAggsMixin:
     """A mixin for filter definitions that need to apply aggregations as term queries."""
 
+    @property
+    def aggs_include(self):
+        """
+        Return a regex to limit the terms on which the field will be faceted. We return ".*" by
+        default (no limitation) but it can be overriden in children classes.
+        """
+        return ".*"
+
     # pylint: disable=unused-argument
     def get_aggs_fragment(self, queries, *args, **kwargs):
         """
@@ -28,7 +36,11 @@ class TermsAggsMixin:
         return {
             self.name: {
                 # Rely on the built-in "terms" aggregation to get everything we need
-                "aggregations": {self.name: {"terms": {"field": self.term}}},
+                "aggregations": {
+                    self.name: {
+                        "terms": {"field": self.term, "include": self.aggs_include}
+                    }
+                },
                 "filter": {
                     "bool": {
                         # Use all the query fragments from the queries *but* the one(s) that

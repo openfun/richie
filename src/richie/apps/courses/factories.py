@@ -116,6 +116,7 @@ class OrganizationFactory(BLDPageExtensionDjangoModelFactory):
             "page_in_navigation",
             "page_languages",
             "page_parent",
+            "page_reverse_id",
             "page_template",
             "page_title",
         ]
@@ -456,6 +457,7 @@ class CategoryFactory(BLDPageExtensionDjangoModelFactory):
             "page_in_navigation",
             "page_languages",
             "page_parent",
+            "page_reverse_id",
             "page_template",
             "page_title",
         ]

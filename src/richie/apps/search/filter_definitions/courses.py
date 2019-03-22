@@ -4,7 +4,10 @@ from functools import reduce
 from django import forms
 from django.conf import settings
 from django.utils import timezone, translation
+from django.utils.functional import cached_property
 from django.utils.translation import gettext as _
+
+from cms.api import Page
 
 from ..fields.array import ArrayField
 from ..indexers import ES_INDICES
@@ -26,6 +29,42 @@ class IndexableFilterDefinition(TermsAggsMixin, TermsQueryMixin, BaseFilterDefin
     number of choices.
     """
 
+    def __init__(self, name, reverse_id=None, **kwargs):
+        self.reverse_id = reverse_id
+        super().__init__(name, **kwargs)
+
+    @cached_property
+    def aggs_include(self):
+        """
+        Return a regex that limits what facets are computed on the field.
+
+        The property is cached the first time it is requested and remains in cache as long
+        as the application is running.
+
+        Returns:
+        --------
+            string: a regex depending on filters configuration in settings and pages in the CMS:
+                - "^$" if the `reverse_id` does not correspond to any published page which will
+                    will not match any value and return an empty list of facets,
+                - ".*-0001.{4}" if the `reverse_id` points to a published page with path "0001"
+                    this will match ids of the children of this page that will be of the form
+                    P-00010001 if they have children or L-00010001 if they are leafs,
+                ' ".*" if no `reverse_id` is set (delegated to super) which will match all values.
+        """
+        if self.reverse_id:
+            try:
+                page = Page.objects.select_related("node").get(
+                    publisher_is_draft=False, reverse_id=self.reverse_id
+                )
+            except Page.DoesNotExist:
+                return "^$"
+            else:
+                return ".*-{path:s}.{{{steplen:d}}}".format(
+                    path=page.node.path, steplen=page.node.steplen
+                )
+
+        return super().aggs_include
+
     def get_form_fields(self):
         """Indexables are filtered via a list of their Elasticsearch ids i.e strings."""
         return {
@@ -42,7 +81,7 @@ class IndexableFilterDefinition(TermsAggsMixin, TermsQueryMixin, BaseFilterDefin
         like organizations or categories.
         """
         language = translation.get_language()
-        indexer = getattr(ES_INDICES, self.name)
+        indexer = getattr(ES_INDICES, self.term)
 
         # Get just the documents we need from ElasticSearch
         search_query_response = settings.ES_CLIENT.search(

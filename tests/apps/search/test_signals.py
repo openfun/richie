@@ -131,9 +131,7 @@ class CoursesSignalsTestCase(TestCase):
             actions[0]["_id"], str(published_course.public_extension.extended_object_id)
         )
         self.assertEqual(actions[0]["_type"], "course")
-        self.assertEqual(
-            actions[1]["_id"], str(organization.public_extension.extended_object_id)
-        )
+        self.assertEqual(actions[1]["_id"], "L-0001")
         self.assertEqual(actions[1]["_type"], "organization")
 
     def test_signals_categories(self, mock_bulk, *_):

@@ -27,13 +27,14 @@ class CourseSearchFormTestCase(TestCase):
             form.cleaned_data,
             {
                 "availability": [],
-                "categories": [],
                 "languages": [],
+                "levels": [],
                 "limit": None,
                 "new": [],
                 "offset": None,
                 "organizations": [],
                 "query": "",
+                "subjects": [],
             },
         )
 
@@ -106,7 +107,7 @@ class CourseSearchFormTestCase(TestCase):
         form = CourseSearchForm(
             data=QueryDict(
                 query_string=(
-                    "availability=coming_soon&categories=1&languages=fr&limit=9&"
+                    "availability=coming_soon&levels=1&subjects=1&languages=fr&limit=9&"
                     "offset=3&organizations=10&query=maths&new=new"
                 )
             )
@@ -116,13 +117,14 @@ class CourseSearchFormTestCase(TestCase):
             form.cleaned_data,
             {
                 "availability": ["coming_soon"],
-                "categories": ["1"],
                 "languages": ["fr"],
+                "levels": ["1"],
                 "limit": 9,
                 "new": ["new"],
                 "offset": 3,
                 "organizations": ["10"],
                 "query": "maths",
+                "subjects": ["1"],
             },
         )
 
@@ -134,9 +136,10 @@ class CourseSearchFormTestCase(TestCase):
         form = CourseSearchForm(
             data=QueryDict(
                 query_string=(
-                    "availability=coming_soon&availability=ongoing&categories=1&categories=2&"
+                    "availability=coming_soon&availability=ongoing&levels=1&levels=2&"
                     "languages=fr&languages=en&limit=9&limit=11&offset=3&offset=17&"
-                    "organizations=10&organizations=11&query=maths&query=physics&new=new"
+                    "organizations=10&organizations=11&query=maths&query=physics&new=new&"
+                    "subjects=1&subjects=2"
                 )
             )
         )
@@ -146,13 +149,14 @@ class CourseSearchFormTestCase(TestCase):
             form.cleaned_data,
             {
                 "availability": ["coming_soon", "ongoing"],
-                "categories": ["1", "2"],
                 "languages": ["fr", "en"],
+                "levels": ["1", "2"],
                 "limit": 9,
                 "new": ["new"],
                 "offset": 3,
                 "organizations": ["10", "11"],
                 "query": "maths",
+                "subjects": ["1", "2"],
             },
         )
 

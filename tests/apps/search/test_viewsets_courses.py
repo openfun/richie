@@ -105,8 +105,8 @@ class CoursesViewsetsTestCase(TestCase):
                             "languages@en": {"doc_count": 33},
                             "languages@fr": {"doc_count": 55},
                             "new@new": {"doc_count": 66},
-                            "categories": {
-                                "categories": {
+                            "levels": {
+                                "levels": {
                                     "buckets": [
                                         {"key": "2", "doc_count": 15},
                                         {"key": "1", "doc_count": 13},
@@ -121,6 +121,14 @@ class CoursesViewsetsTestCase(TestCase):
                                     ]
                                 }
                             },
+                            "subjects": {
+                                "subjects": {
+                                    "buckets": [
+                                        {"key": "22", "doc_count": 23},
+                                        {"key": "21", "doc_count": 21},
+                                    ]
+                                }
+                            },
                         }
                     },
                 }
@@ -128,8 +136,10 @@ class CoursesViewsetsTestCase(TestCase):
                 return {
                     "hits": {
                         "hits": [
-                            {"_id": "1", "_source": {"title": {"en": "Category 1"}}},
-                            {"_id": "2", "_source": {"title": {"en": "Category 2"}}},
+                            {"_id": "1", "_source": {"title": {"en": "Level 1"}}},
+                            {"_id": "2", "_source": {"title": {"en": "Level 2"}}},
+                            {"_id": "21", "_source": {"title": {"en": "Subject 1"}}},
+                            {"_id": "22", "_source": {"title": {"en": "Subject 2"}}},
                         ]
                     }
                 }
@@ -190,21 +200,31 @@ class CoursesViewsetsTestCase(TestCase):
                             {"count": 66, "human_name": "First session", "key": "new"}
                         ],
                     },
-                    "categories": {
-                        "human_name": "Categories",
+                    "subjects": {
+                        "human_name": "Subjects",
                         "is_drilldown": False,
-                        "name": "categories",
+                        "name": "subjects",
                         "position": 2,
                         "values": [
-                            {"count": 15, "human_name": "Category 2", "key": "2"},
-                            {"count": 13, "human_name": "Category 1", "key": "1"},
+                            {"count": 23, "human_name": "Subject 2", "key": "22"},
+                            {"count": 21, "human_name": "Subject 1", "key": "21"},
+                        ],
+                    },
+                    "levels": {
+                        "human_name": "Levels",
+                        "is_drilldown": False,
+                        "name": "levels",
+                        "position": 3,
+                        "values": [
+                            {"count": 15, "human_name": "Level 2", "key": "2"},
+                            {"count": 13, "human_name": "Level 1", "key": "1"},
                         ],
                     },
                     "organizations": {
                         "human_name": "Organizations",
                         "is_drilldown": False,
                         "name": "organizations",
-                        "position": 3,
+                        "position": 4,
                         "values": [
                             {"count": 19, "human_name": "Organization 12", "key": "12"},
                             {"count": 17, "human_name": "Organization 11", "key": "11"},
@@ -214,7 +234,7 @@ class CoursesViewsetsTestCase(TestCase):
                         "human_name": "Languages",
                         "is_drilldown": False,
                         "name": "languages",
-                        "position": 4,
+                        "position": 5,
                         "values": [
                             {"count": 55, "human_name": "French", "key": "fr"},
                             {"count": 33, "human_name": "English", "key": "en"},
