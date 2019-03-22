@@ -186,8 +186,11 @@ class BaseChoicesFilterDefinition(BaseFilterDefinition):
     def get_form_fields(self):
         """Choice filters are validated with a MultipleChoiceField."""
         return {
-            self.name: forms.MultipleChoiceField(
-                required=False, choices=self.get_values().items()
+            self.name: (
+                forms.MultipleChoiceField(
+                    required=False, choices=self.get_values().items()
+                ),
+                True,  # a MultipleChoiceField expects list values
             )
         }
 

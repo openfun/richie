@@ -66,11 +66,20 @@ class IndexableFilterDefinition(TermsAggsMixin, TermsQueryMixin, BaseFilterDefin
         return super().aggs_include
 
     def get_form_fields(self):
-        """Indexables are filtered via a list of their Elasticsearch ids i.e strings."""
+        """
+        Indexables are filtered via:
+        - a list of their Elasticsearch ids i.e strings,
+        - a regex to eventually limit which terms are facetted.
+        """
         return {
-            self.name: ArrayField(
-                required=False, base_type=forms.CharField(max_length=50)
-            )
+            self.name: (
+                ArrayField(required=False, base_type=forms.CharField(max_length=50)),
+                True,  # an ArrayField expects list values
+            ),
+            f"{self.name:s}_include": (
+                forms.CharField(max_length=20, required=False),
+                False,  # a CharField expects string values
+            ),
         }
 
     def get_i18n_names(self, keys):

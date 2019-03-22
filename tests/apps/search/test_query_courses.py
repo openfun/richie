@@ -1,6 +1,4 @@
-"""
-Tests for environment ElasticSearch support
-"""
+"""Tests for environment ElasticSearch support."""
 import json
 import random
 from unittest import mock
@@ -618,6 +616,14 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 {"count": 1, "human_name": "#L-00020003", "key": "L-00020003"},
             ],
         )
+        self.assertEqual(
+            content["filters"]["organizations"]["values"],
+            [
+                {"count": 2, "human_name": "#P-00030001", "key": "P-00030001"},
+                {"count": 1, "human_name": "#P-00030003", "key": "P-00030003"},
+                {"count": 1, "human_name": "#P-00030004", "key": "P-00030004"},
+            ],
+        )
 
     def test_query_courses_course_runs_filter_ongoing_courses(self, *_):
         """
@@ -714,6 +720,8 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 {"count": 2, "human_name": "On-going", "key": "ongoing"},
             ],
         )
+        # A, D and F course runs are in French
+        # So only courses 0, 2 and 3 are selected
         self.assertEqual(
             content["filters"]["subjects"]["values"],
             [
@@ -728,6 +736,15 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             [
                 {"count": 2, "human_name": "#L-00020001", "key": "L-00020001"},
                 {"count": 1, "human_name": "#L-00020002", "key": "L-00020002"},
+            ],
+        )
+        self.assertEqual(
+            content["filters"]["organizations"]["values"],
+            [
+                {"count": 2, "human_name": "#P-00030002", "key": "P-00030002"},
+                {"count": 2, "human_name": "#P-00030004", "key": "P-00030004"},
+                {"count": 1, "human_name": "#P-00030001", "key": "P-00030001"},
+                {"count": 1, "human_name": "#P-00030003", "key": "P-00030003"},
             ],
         )
 
@@ -818,6 +835,14 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 {"count": 1, "human_name": "#L-00020002", "key": "L-00020002"},
             ],
         )
+        self.assertEqual(
+            content["filters"]["organizations"]["values"],
+            [
+                {"count": 2, "human_name": "#P-00030004", "key": "P-00030004"},
+                {"count": 1, "human_name": "#P-00030001", "key": "P-00030001"},
+                {"count": 1, "human_name": "#P-00030002", "key": "P-00030002"},
+            ],
+        )
 
     def test_query_courses_filter_new(self, *_):
         """
@@ -836,6 +861,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         """
         Battle test filtering by an organization.
         """
+        self.create_filter_pages()
         courses_definition, content = self.execute_query("organizations=P-00030002")
         # Keep only the courses that are linked to organization 00030002:
         courses_definition = filter(lambda c: c[0] in [2, 3], courses_definition)
@@ -843,6 +869,15 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         self.assertEqual(
             list([int(c["id"]) for c in content["objects"]]),
             self.get_expected_courses(courses_definition, list(COURSE_RUNS)),
+        )
+        self.assertEqual(
+            content["filters"]["organizations"]["values"],
+            [
+                {"count": 2, "human_name": "#P-00030001", "key": "P-00030001"},
+                {"count": 2, "human_name": "#P-00030002", "key": "P-00030002"},
+                {"count": 2, "human_name": "#P-00030003", "key": "P-00030003"},
+                {"count": 2, "human_name": "#P-00030004", "key": "P-00030004"},
+            ],
         )
 
     def test_query_courses_filter_multiple_organizations(self, *_):
@@ -858,6 +893,24 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         self.assertEqual(
             list([int(c["id"]) for c in content["objects"]]),
             self.get_expected_courses(courses_definition, list(COURSE_RUNS)),
+        )
+
+    def test_query_courses_filter_organization_include(self, *_):
+        """
+        It should be possible to limit faceting on an organization to specific values by
+        passing a regex in the querystring.
+        """
+        self.create_filter_pages()
+        _courses_definition, content = self.execute_query(
+            "organizations_include=.*-00030001.{4}"
+        )
+
+        self.assertEqual(
+            content["filters"]["organizations"]["values"],
+            [
+                {"count": 1, "human_name": "#L-000300010001", "key": "L-000300010001"},
+                {"count": 1, "human_name": "#L-000300010002", "key": "L-000300010002"},
+            ],
         )
 
     def test_query_courses_filter_subject(self, *_):
@@ -886,6 +939,24 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         self.assertEqual(
             list([int(c["id"]) for c in content["objects"]]),
             self.get_expected_courses(courses_definition, list(COURSE_RUNS)),
+        )
+
+    def test_query_courses_filter_subject_include(self, *_):
+        """
+        It should be possible to limit faceting on a subject to specific values by
+        passing a regex in the querystring.
+        """
+        self.create_filter_pages()
+        _courses_definition, content = self.execute_query(
+            "subjects_include=.*-00010001.{4}"
+        )
+
+        self.assertEqual(
+            content["filters"]["subjects"]["values"],
+            [
+                {"count": 1, "human_name": "#L-000100010001", "key": "L-000100010001"},
+                {"count": 1, "human_name": "#L-000100010002", "key": "L-000100010002"},
+            ],
         )
 
     def test_query_courses_filter_level(self, *_):

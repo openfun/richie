@@ -23,18 +23,22 @@ class CourseSearchFormTestCase(TestCase):
         """The empty query string should be a valid search form."""
         form = CourseSearchForm(data=QueryDict())
         self.assertTrue(form.is_valid())
+
         self.assertEqual(
             form.cleaned_data,
             {
                 "availability": [],
                 "languages": [],
                 "levels": [],
+                "levels_include": "",
                 "limit": None,
                 "new": [],
                 "offset": None,
                 "organizations": [],
+                "organizations_include": "",
                 "query": "",
                 "subjects": [],
+                "subjects_include": "",
             },
         )
 
@@ -107,8 +111,9 @@ class CourseSearchFormTestCase(TestCase):
         form = CourseSearchForm(
             data=QueryDict(
                 query_string=(
-                    "availability=coming_soon&levels=1&subjects=1&languages=fr&limit=9&"
-                    "offset=3&organizations=10&query=maths&new=new"
+                    "availability=coming_soon&levels=1&levels_include=.*&languages=fr&limit=9&"
+                    "offset=3&organizations=10&organizations_include=.*&query=maths&new=new&"
+                    "subjects=1&subjects_include=.*"
                 )
             )
         )
@@ -119,18 +124,21 @@ class CourseSearchFormTestCase(TestCase):
                 "availability": ["coming_soon"],
                 "languages": ["fr"],
                 "levels": ["1"],
+                "levels_include": ".*",
                 "limit": 9,
                 "new": ["new"],
                 "offset": 3,
                 "organizations": ["10"],
+                "organizations_include": ".*",
                 "query": "maths",
                 "subjects": ["1"],
+                "subjects_include": ".*",
             },
         )
 
     def test_forms_courses_multi_values_in_querystring(self):
         """
-        The fields from filter defintions should allow multiple values. The fields defined
+        The fields from filter definitions should allow multiple values. The fields defined
         on the form should ignore repeated values (limit, offset and query).
         """
         form = CourseSearchForm(
@@ -151,12 +159,15 @@ class CourseSearchFormTestCase(TestCase):
                 "availability": ["coming_soon", "ongoing"],
                 "languages": ["fr", "en"],
                 "levels": ["1", "2"],
+                "levels_include": "",
                 "limit": 9,
                 "new": ["new"],
                 "offset": 3,
                 "organizations": ["10", "11"],
+                "organizations_include": "",
                 "query": "maths",
                 "subjects": ["1", "2"],
+                "subjects_include": "",
             },
         )
 
