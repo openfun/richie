@@ -114,20 +114,20 @@ class CoursesIndexersTestCase(TestCase):
         ]
         draft_category = CategoryFactory()  # L-0003
 
-        main_organization = OrganizationFactory(
+        main_organization = OrganizationFactory(  # L-0004
             page_title={
                 "en": "english main organization title",
                 "fr": "titre organisation principale français",
             },
             should_publish=True,
         )
-        other_draft_organization = OrganizationFactory(
+        other_draft_organization = OrganizationFactory(  # L-0005
             page_title={
                 "en": "english other organization title",
                 "fr": "titre autre organisation français",
             }
         )
-        other_published_organization = OrganizationFactory(
+        other_published_organization = OrganizationFactory(  # L-0006
             page_title={
                 "en": "english other organization title",
                 "fr": "titre autre organisation français",
@@ -209,10 +209,7 @@ class CoursesIndexersTestCase(TestCase):
                 "fr": "syllabus français ligne 1. syllabus français ligne 2.",
             },
             "is_new": False,
-            "organizations": [
-                str(main_organization.public_extension.extended_object_id),
-                str(other_published_organization.public_extension.extended_object_id),
-            ],
+            "organizations": ["L-0004", "L-0006"],
             "organizations_names": {
                 "en": [
                     "english main organization title",

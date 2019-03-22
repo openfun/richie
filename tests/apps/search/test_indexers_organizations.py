@@ -33,7 +33,7 @@ class OrganizationsIndexersTestCase(TestCase):
             fill_logo=True,
             should_publish=True,
         )
-        organization2 = OrganizationFactory(
+        OrganizationFactory(
             page_title={
                 "en": "my second organization",
                 "fr": "ma deuxième organisation",
@@ -60,7 +60,7 @@ class OrganizationsIndexersTestCase(TestCase):
             ),
             [
                 {
-                    "_id": str(organization2.public_extension.extended_object_id),
+                    "_id": "L-0002",
                     "_index": "some_index",
                     "_op_type": "some_action",
                     "_type": "organization",
@@ -88,7 +88,7 @@ class OrganizationsIndexersTestCase(TestCase):
                     },
                 },
                 {
-                    "_id": str(organization1.public_extension.extended_object_id),
+                    "_id": "L-0001",
                     "_index": "some_index",
                     "_op_type": "some_action",
                     "_type": "organization",

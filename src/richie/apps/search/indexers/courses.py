@@ -401,7 +401,7 @@ class CoursesIndexer:
                     queryset=Title.objects.filter(published=True),
                 )
             )
-            .only("extended_object")
+            .only("extended_object__node")
             .distinct()
         )
 
@@ -456,11 +456,8 @@ class CoursesIndexer:
             "description": {l: " ".join(st) for l, st in syllabus_texts.items()},
             "is_new": len(course_runs) == 1,
             "organizations": [
-                str(id)
-                for id in course.get_organizations().values_list(
-                    "public_extension__extended_object", flat=True
-                )
-                if id is not None
+                ES_INDICES.organizations.get_es_id(o.extended_object)
+                for o in organizations
             ],
             # Index the names of organizations to surface them in full text searches
             "organizations_names": reduce(
