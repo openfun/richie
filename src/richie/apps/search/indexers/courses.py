@@ -515,3 +515,19 @@ class CoursesIndexer:
             "state": CourseState(**state),
             "title": get_best_field_language(source["title"], language),
         }
+
+    @staticmethod
+    def format_es_document_for_autocomplete(es_document, language=None):
+        """
+        Format a document stored in ES into an easy-to-consume record for autocomplete consumers.
+        This method differs from the regular one as objects retrieved from query VS complete
+        queries can be formatted differently; and consumers of autocomplete do not need
+        full objects.
+        """
+        return {
+            "absolute_url": get_best_field_language(
+                es_document["_source"]["absolute_url"], language
+            ),
+            "id": es_document["_id"],
+            "title": get_best_field_language(es_document["_source"]["title"], language),
+        }

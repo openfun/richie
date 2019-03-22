@@ -1,9 +1,9 @@
 import { FormattedMessage } from 'react-intl';
 
-import { Category } from './Category';
-import { Course } from './Course';
+import { CategoryForSuggestion } from './Category';
+import { CourseForSuggestion } from './Course';
 import { modelName } from './models';
-import { Organization } from './Organization';
+import { OrganizationForSuggestion } from './Organization';
 import { Resource } from './Resource';
 
 /**
@@ -19,15 +19,15 @@ interface ResourceSuggestionBase {
 
 export interface CourseSuggestion extends ResourceSuggestionBase {
   model: modelName.COURSES;
-  data: Course;
+  data: CourseForSuggestion;
 }
 export interface OrganizationSuggestion extends ResourceSuggestionBase {
   model: modelName.ORGANIZATIONS;
-  data: Organization;
+  data: OrganizationForSuggestion;
 }
 export interface CategorySuggestion extends ResourceSuggestionBase {
   model: modelName.CATEGORIES;
-  data: Category;
+  data: CategoryForSuggestion;
 }
 
 /**
@@ -68,17 +68,17 @@ interface ResourceSuggestionSectionBase {
 
 export interface CourseSuggestionSection extends ResourceSuggestionSectionBase {
   model: modelName.COURSES;
-  values: Course[];
+  values: CourseForSuggestion[];
 }
 export interface OrganizationSuggestionSection
   extends ResourceSuggestionSectionBase {
   model: modelName.ORGANIZATIONS;
-  values: Organization[];
+  values: OrganizationForSuggestion[];
 }
 export interface CategorySuggestionSection
   extends ResourceSuggestionSectionBase {
   model: modelName.CATEGORIES;
-  values: Category[];
+  values: CategoryForSuggestion[];
 }
 
 /**

@@ -13,3 +13,5 @@ export interface Course extends Resource {
   };
   title: string;
 }
+
+export type CourseForSuggestion = Pick<Course, 'absolute_url' | 'id' | 'title'>;

@@ -126,3 +126,16 @@ class OrganizationsIndexer:
                 es_organization["_source"]["title"], best_language
             ),
         }
+
+    @staticmethod
+    def format_es_document_for_autocomplete(es_document, language=None):
+        """
+        Format a document stored in ES into an easy-to-consume record for autocomplete consumers.
+        This method differs from the regular one as objects retrieved from query VS complete
+        queries can be formatted differently; and consumers of autocomplete do not need
+        full objects.
+        """
+        return {
+            "id": es_document["_id"],
+            "title": get_best_field_language(es_document["_source"]["title"], language),
+        }
