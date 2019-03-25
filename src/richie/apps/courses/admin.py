@@ -17,10 +17,11 @@ from cms.api import Page, create_title
 from cms.extensions import PageExtensionAdmin
 from cms.utils import page_permissions
 from cms.utils.admin import jsonify_request
+from parler.admin import TranslatableAdmin
 
 from .fields import CourseRunSplitDateTimeField
 from .forms import LicenceFormAdmin
-from .models import Course, CourseRun, Licence, Organization
+from .models import Course, CourseRun, Licence, Organization, Person, PersonTitle
 from .widgets import CourseRunSplitDateTimeWidget
 
 REQUIRE_POST = method_decorator(require_POST)
@@ -178,6 +179,25 @@ class OrganizationAdmin(PageExtensionAdmin):
         return obj.extended_object.get_title()
 
 
+class PersonAdmin(PageExtensionAdmin):
+    """Admin class for the Person model"""
+
+    list_display = ["title", "person_title", "first_name", "last_name"]
+
+    # pylint: disable=no-self-use
+    def title(self, obj):
+        """
+        Display the person page title as a read-only field from the related page
+        """
+        return obj.extended_object.get_title()
+
+
+class PersonTitleAdmin(TranslatableAdmin):
+    """Admin class for the PersonTitle model"""
+
+    list_display = ["title", "abbreviation"]
+
+
 class LicenceAdmin(admin.ModelAdmin):
     """
     Admin class for the Licence model
@@ -189,5 +209,7 @@ class LicenceAdmin(admin.ModelAdmin):
 
 admin.site.register(Course, CourseAdmin)
 admin.site.register(CourseRun, CourseRunAdmin)
-admin.site.register(Organization, OrganizationAdmin)
 admin.site.register(Licence, LicenceAdmin)
+admin.site.register(Organization, OrganizationAdmin)
+admin.site.register(Person, PersonAdmin)
+admin.site.register(PersonTitle, PersonTitleAdmin)

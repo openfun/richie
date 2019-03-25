@@ -6,8 +6,8 @@ from django.urls import reverse
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
-from richie.apps.persons.factories import PersonTitleFactory
-from richie.apps.persons.models import PersonTitle, PersonTitleTranslation
+from richie.apps.courses.factories import PersonTitleFactory
+from richie.apps.courses.models import PersonTitle, PersonTitleTranslation
 
 
 class PersonTitleAdminTestCase(CMSTestCase):
@@ -26,7 +26,7 @@ class PersonTitleAdminTestCase(CMSTestCase):
         person_title = PersonTitleFactory()
 
         # Get the admin list view
-        url = reverse("admin:persons_persontitle_changelist")
+        url = reverse("admin:courses_persontitle_changelist")
         response = self.client.get(url)
 
         # Check that the page includes all our fields
@@ -41,7 +41,7 @@ class PersonTitleAdminTestCase(CMSTestCase):
         self.client.login(username=user.username, password="password")
 
         # Get the admin change view
-        url = reverse("admin:persons_persontitle_add")
+        url = reverse("admin:courses_persontitle_add")
         response = self.client.get(url)
 
         # Check that the page includes all our editable fields
@@ -59,7 +59,7 @@ class PersonTitleAdminTestCase(CMSTestCase):
         person_title = PersonTitleFactory()
 
         # Get the admin change view
-        url = reverse("admin:persons_persontitle_change", args=[person_title.id])
+        url = reverse("admin:courses_persontitle_change", args=[person_title.id])
         response = self.client.get(url)
 
         # Check that the page includes all our fields
@@ -80,7 +80,7 @@ class PersonTitleAdminTestCase(CMSTestCase):
         self.assertEqual(PersonTitleTranslation.objects.count(), 1)
 
         # Get the admin change view
-        url = reverse("admin:persons_persontitle_change", args=[person_title.id])
+        url = reverse("admin:courses_persontitle_change", args=[person_title.id])
         data = {"title": "Madam", "abbreviation": "Mm."}
         response = self.client.post(url, data)
         self.assertEqual(response.status_code, 302)

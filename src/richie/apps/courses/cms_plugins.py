@@ -15,6 +15,7 @@ from .models import (
     CoursePluginModel,
     LicencePluginModel,
     OrganizationPluginModel,
+    PersonPluginModel,
 )
 
 
@@ -75,6 +76,28 @@ class CoursePlugin(CMSPluginBase):
     render_template = "courses/plugins/course_plugin.html"
     cache = True
     module = settings.FUN_PLUGINS_GROUP
+
+    def render(self, context, instance, placeholder):
+        context.update(
+            {
+                "instance": instance,
+                "relevant_page": instance.relevant_page,
+                "placeholder": placeholder,
+            }
+        )
+        return context
+
+
+@plugin_pool.register_plugin
+class PersonPlugin(CMSPluginBase):
+    """
+    Person plugin displays a person's information on other pages
+    """
+
+    model = PersonPluginModel
+    module = _("Persons")
+    render_template = "courses/plugins/person.html"
+    cache = True
 
     def render(self, context, instance, placeholder):
         context.update(

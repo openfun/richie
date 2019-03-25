@@ -6,7 +6,7 @@ from django.test import TestCase
 
 from cms.api import create_page
 
-from richie.apps.persons.factories import PersonFactory
+from richie.apps.courses.factories import PersonFactory
 
 
 class PersonModelsTestCase(TestCase):
@@ -43,7 +43,7 @@ class PersonModelsTestCase(TestCase):
         and all person fields. Only 1 query to the associated page should be generated.
         """
         page = create_page(
-            "Page of Lady Louise Dupont", "persons/cms/person_detail.html", "en"
+            "Page of Lady Louise Dupont", "courses/cms/person_detail.html", "en"
         )
         person = PersonFactory(
             extended_object=page,

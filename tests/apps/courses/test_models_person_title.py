@@ -4,7 +4,7 @@ Unit tests for the Person model
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
-from richie.apps.persons.factories import PersonTitleFactory
+from richie.apps.courses.factories import PersonTitleFactory
 
 
 class PersonTitleModelsTestCase(TestCase):

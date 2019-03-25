@@ -6,7 +6,7 @@ from django.urls import reverse
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
-from richie.apps.persons.factories import PersonFactory, PersonTitleFactory
+from richie.apps.courses.factories import PersonFactory, PersonTitleFactory
 
 
 class PersonAdminTestCase(CMSTestCase):
@@ -26,7 +26,7 @@ class PersonAdminTestCase(CMSTestCase):
         person = PersonFactory()
 
         # Get the admin list view
-        url = reverse("admin:persons_person_changelist")
+        url = reverse("admin:courses_person_changelist")
         response = self.client.get(url)
 
         # Check that the page includes all our fields
@@ -45,7 +45,7 @@ class PersonAdminTestCase(CMSTestCase):
         self.client.login(username=user.username, password="password")
 
         # Get the admin change view
-        url = reverse("admin:persons_person_add")
+        url = reverse("admin:courses_person_add")
         response = self.client.get(url)
 
         # Check that the page includes all our editable fields
@@ -63,7 +63,7 @@ class PersonAdminTestCase(CMSTestCase):
         person = PersonFactory()
 
         # Get the admin change view
-        url = reverse("admin:persons_person_change", args=[person.id])
+        url = reverse("admin:courses_person_change", args=[person.id])
         response = self.client.get(url)
 
         # Check that the page includes all our fields
@@ -84,7 +84,7 @@ class PersonAdminTestCase(CMSTestCase):
         # create a new title
         new_title = PersonTitleFactory()
         # Get the admin change view
-        url = reverse("admin:persons_person_change", args=[person.id])
+        url = reverse("admin:courses_person_change", args=[person.id])
         data = {
             "person_title": new_title.id,
             "first_name": "New First Name",
