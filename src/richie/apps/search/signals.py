@@ -36,7 +36,8 @@ def update_course_run(instance, _language):
 def update_organization(instance, language):
     """
     Update Elasticsearch indexes when an organization was modified and published:
-    - update the organization document in the Elasticsearch organizations index,
+    - update the organization document in the Elasticsearch organizations index for the
+      organization and its direct parent (because the parent ID may change from Parent to Leaf),
     - update the course documents in the Elasticsearch courses index for all courses linked to
       this organization.
 
@@ -44,22 +45,34 @@ def update_organization(instance, language):
     Raises ObjectDoesNotExist if the page instance is not related to an organization.
     """
     organization = Organization.objects.get(draft_extension__extended_object=instance)
-    course_actions = [
+    actions = [
         ES_INDICES.courses.get_es_document_for_course(course.public_extension)
         # get_courses always returns the draft course instance
         for course in organization.get_courses(language)
         if course.public_extension
     ]
-    richie_bulk(
-        course_actions
-        + [ES_INDICES.organizations.get_es_document_for_organization(organization)]
+    actions.append(
+        ES_INDICES.organizations.get_es_document_for_organization(organization)
     )
+
+    # Update the organization's parent only if it exists
+    try:
+        parent = organization.extended_object.get_parent_page().organization
+    except AttributeError:
+        pass
+    else:
+        actions.append(
+            ES_INDICES.organizations.get_es_document_for_organization(parent)
+        )
+
+    richie_bulk(actions)
 
 
 def update_category(instance, language):
     """
     Update Elasticsearch indexes when a category was modified and published:
-    - update the category document in the Elasticsearch categories index,
+    - update the category document in the Elasticsearch categories index for the category
+      and its direct parent (because the parent ID may change from Parent to Leaf),
     - update the course documents in the Elasticsearch courses index for all courses linked to
       this category.
 
@@ -67,15 +80,23 @@ def update_category(instance, language):
     Raises ObjectDoesNotExist if the page instance is not related to a category.
     """
     category = Category.objects.get(draft_extension__extended_object=instance)
-    course_actions = [
+    actions = [
         ES_INDICES.courses.get_es_document_for_course(course.public_extension)
         # get_courses always returns the draft course instance
         for course in category.get_courses(language)
         if course.public_extension
     ]
-    richie_bulk(
-        course_actions + [ES_INDICES.categories.get_es_document_for_category(category)]
-    )
+    actions.append(ES_INDICES.categories.get_es_document_for_category(category))
+
+    # Update the category's parent only if it exists
+    try:
+        parent = category.extended_object.get_parent_page().category
+    except AttributeError:
+        pass
+    else:
+        actions.append(ES_INDICES.categories.get_es_document_for_category(parent))
+
+    richie_bulk(actions)
 
 
 def update_page_extension(instance, language):
