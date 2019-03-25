@@ -20,8 +20,9 @@ class BlogPost(BasePageExtension):
     TEMPLATE_DETAIL = "courses/cms/blogpost_detail.html"
 
     class Meta:
-        verbose_name = _("blog posts")
+        db_table = "richie_blog_post"
         ordering = ["-pk"]
+        verbose_name = _("blog post")
 
     def __str__(self):
         """Human representation of a blogpost"""
@@ -44,7 +45,8 @@ class BlogPostPluginModel(PagePluginMixin, CMSPlugin):
     )
 
     class Meta:
-        verbose_name = _("blog post plugin model")
+        db_table = "richie_blog_post_plugin"
+        verbose_name = _("blog post plugin")
 
     def __str__(self):
         """Human representation of a blogpost plugin"""

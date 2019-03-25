@@ -21,4 +21,4 @@ class BlogPostModelsTestCase(TestCase):
         page = create_page("My first article", "courses/cms/blogpost_detail.html", "en")
         blogpost = BlogPost(extended_object=page)
         with self.assertNumQueries(1):
-            self.assertEqual(str(blogpost), "Blog Posts: My first article")
+            self.assertEqual(str(blogpost), "Blog Post: My first article")

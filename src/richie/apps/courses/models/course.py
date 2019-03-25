@@ -134,6 +134,7 @@ class Course(BasePageExtension):
     TEMPLATE_DETAIL = "courses/cms/course_detail.html"
 
     class Meta:
+        db_table = "richie_course"
         verbose_name = _("course")
 
     def __str__(self):
@@ -340,6 +341,7 @@ class CourseRun(BasePageExtension):
     TEMPLATE_DETAIL = "courses/cms/course_run_detail.html"
 
     class Meta:
+        db_table = "richie_course_run"
         verbose_name = _("course run")
 
     def __str__(self):
@@ -445,7 +447,8 @@ class CoursePluginModel(PagePluginMixin, CMSPlugin):
     )
 
     class Meta:
-        verbose_name = _("course plugin model")
+        db_table = "richie_course_plugin"
+        verbose_name = _("course plugin")
 
     def __str__(self):
         """Human representation of a page plugin"""
@@ -469,6 +472,7 @@ class Licence(models.Model):
     content = models.TextField(_("content"), blank=False, default="")
 
     class Meta:
+        db_table = "richie_licence"
         verbose_name = _("licence")
 
     def __str__(self):
@@ -485,6 +489,10 @@ class LicencePluginModel(CMSPlugin):
 
     licence = models.ForeignKey(Licence, on_delete=models.CASCADE)
     description = models.TextField(_("description"), blank=True, default="")
+
+    class Meta:
+        db_table = "richie_licence_plugin"
+        verbose_name = _("licence plugin")
 
     def __str__(self):
         """Human representation of a person plugin"""

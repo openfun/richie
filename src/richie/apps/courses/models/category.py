@@ -29,8 +29,9 @@ class Category(BasePageExtension):
     TEMPLATE_DETAIL = "courses/cms/category_detail.html"
 
     class Meta:
-        verbose_name = _("category")
+        db_table = "richie_category"
         ordering = ["-pk"]
+        verbose_name = _("category")
 
     def __str__(self):
         """Human representation of a category"""
@@ -151,7 +152,8 @@ class CategoryPluginModel(PagePluginMixin, CMSPlugin):
     )
 
     class Meta:
-        verbose_name = _("category plugin model")
+        db_table = "richie_category_plugin"
+        verbose_name = _("category plugin")
 
     def __str__(self):
         """Human representation of a page plugin"""
