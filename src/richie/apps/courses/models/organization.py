@@ -35,6 +35,7 @@ class Organization(BasePageExtension):
     TEMPLATE_DETAIL = "courses/cms/organization_detail.html"
 
     class Meta:
+        db_table = "richie_organization"
         verbose_name = _("organization")
         ordering = ["-pk"]
 
@@ -135,7 +136,8 @@ class OrganizationPluginModel(PagePluginMixin, CMSPlugin):
     )
 
     class Meta:
-        verbose_name = _("organization plugin model")
+        db_table = "richie_organization_plugin"
+        verbose_name = _("organization plugin")
 
     def __str__(self):
         """Human representation of a organization plugin"""

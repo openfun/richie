@@ -23,6 +23,7 @@ class PersonTitle(TranslatableModel):
     abbreviation = TranslatedField()
 
     class Meta:
+        db_table = "richie_person_title"
         verbose_name = _("person title")
 
     def __str__(self):
@@ -46,6 +47,7 @@ class PersonTitleTranslation(TranslatedFieldsModel):
     abbreviation = models.CharField(_("Title abbreviation"), max_length=10)
 
     class Meta:
+        db_table = "richie_person_title_translation"
         unique_together = ("language_code", "master")
         verbose_name = _("person title translation")
 
@@ -89,6 +91,7 @@ class Person(BasePageExtension):
     TEMPLATE_DETAIL = "courses/cms/person_detail.html"
 
     class Meta:
+        db_table = "richie_person"
         verbose_name = _("person")
 
     def __str__(self):
@@ -134,7 +137,8 @@ class PersonPluginModel(PagePluginMixin, CMSPlugin):
     )
 
     class Meta:
-        verbose_name = _("person plugin model")
+        db_table = "richie_person_plugin"
+        verbose_name = _("person plugin")
 
     def __str__(self):
         """Human representation of a person plugin"""
