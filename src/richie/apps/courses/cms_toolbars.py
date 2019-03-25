@@ -11,7 +11,7 @@ from cms.utils.page_permissions import user_can_add_subpage, user_can_change_pag
 from cms.utils.urlutils import admin_reverse
 
 from .defaults import PAGE_EXTENSION_TOOLBAR_ITEM_POSITION
-from .models import Course, Organization
+from .models import Course, Organization, Person
 
 
 class BaseExtensionToolbar(ExtensionToolbar):
@@ -113,3 +113,12 @@ class OrganizationExtensionToolbar(BaseExtensionToolbar):
     """
 
     model = Organization
+
+
+@toolbar_pool.register
+class PersonExtensionToolbar(BaseExtensionToolbar):
+    """
+    This extension class customizes the toolbar for the person page extension
+    """
+
+    model = Person

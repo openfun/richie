@@ -5,7 +5,7 @@ import os
 
 from django.test import TestCase
 
-from richie.apps.persons.factories import PersonFactory
+from richie.apps.courses.factories import PersonFactory
 
 
 class PersonFactoryTestCase(TestCase):

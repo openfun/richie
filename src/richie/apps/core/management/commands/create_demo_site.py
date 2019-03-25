@@ -21,15 +21,21 @@ from richie.apps.courses.factories import (
     CourseRunFactory,
     LicenceFactory,
     OrganizationFactory,
-)
-from richie.apps.courses.helpers import create_categories
-from richie.apps.courses.models import BlogPost, Category, Course, Licence, Organization
-from richie.apps.persons.factories import (
     PersonFactory,
     PersonTitleFactory,
     PersonTitleTranslationFactory,
 )
-from richie.apps.persons.models import Person, PersonTitle, PersonTitleTranslation
+from richie.apps.courses.helpers import create_categories
+from richie.apps.courses.models import (
+    BlogPost,
+    Category,
+    Course,
+    Licence,
+    Organization,
+    Person,
+    PersonTitle,
+    PersonTitleTranslation,
+)
 
 from ...helpers import recursive_page_creation
 from ...utils import file_getter

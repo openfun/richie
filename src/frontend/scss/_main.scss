@@ -47,7 +47,7 @@
 @import './objects/blogpost_glimpses';
 @import './objects/search-filter-value';
 @import '../../richie/apps/courses/templates/courses/plugins/category_plugin';
-@import '../../richie/apps/persons/templates/persons/plugins/person_plugin';
+@import '../../richie/apps/courses/templates/courses/plugins/person_plugin';
 @import '../../richie/apps/courses/templates/courses/plugins/course_plugin';
 @import '../../richie/apps/courses/templates/courses/plugins/licence_plugin';
 @import '../../richie/apps/courses/templates/courses/plugins/organization_plugin';
@@ -56,7 +56,7 @@
 @import '../../richie/apps/courses/templates/courses/cms/organization_list';
 @import '../../richie/apps/courses/templates/courses/cms/category_detail';
 @import '../../richie/apps/courses/templates/courses/cms/course_detail';
-@import '../../richie/apps/persons/templates/persons/cms/person_detail';
+@import '../../richie/apps/courses/templates/courses/cms/person_detail';
 @import '../../richie/apps/courses/templates/courses/cms/blogpost_detail';
 @import '../../richie/apps/search/templates/search/search';
 @import '../../richie/plugins/large_banner/templates/richie/large_banner/large_banner';

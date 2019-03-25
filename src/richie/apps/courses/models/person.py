@@ -10,7 +10,7 @@ from cms.models.pluginmodel import CMSPlugin
 from parler.fields import TranslatedField
 from parler.models import TranslatableModel, TranslatedFieldsModel
 
-from ..core.models import BasePageExtension, PagePluginMixin
+from ...core.models import BasePageExtension, PagePluginMixin
 
 
 class PersonTitle(TranslatableModel):
@@ -86,7 +86,7 @@ class Person(BasePageExtension):
     )
 
     ROOT_REVERSE_ID = "persons"
-    TEMPLATE_DETAIL = "persons/cms/person_detail.html"
+    TEMPLATE_DETAIL = "courses/cms/person_detail.html"
 
     class Meta:
         verbose_name = _("person")

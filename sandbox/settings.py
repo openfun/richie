@@ -202,7 +202,6 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         "richie",
         "richie.apps.core",
         "richie.apps.courses",
-        "richie.apps.persons",
         "richie.apps.search",
         "richie.plugins.large_banner",
         "richie.plugins.plain_text",
@@ -273,7 +272,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         ("courses/cms/category_detail.html", _("Category page")),
         ("courses/cms/blogpost_list.html", _("Blog post list")),
         ("courses/cms/blogpost_detail.html", _("Blog post page")),
-        ("persons/cms/person_detail.html", _("Person page")),
+        ("courses/cms/person_detail.html", _("Person page")),
         ("search/search.html", _("Search")),
         ("richie/fullwidth.html", "Fullwidth"),
         ("richie/child_pages_list.html", _("List of child pages")),
@@ -405,12 +404,12 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
             "limits": {"CKEditorPlugin": 1},
         },
         # Person detail
-        "persons/cms/person_detail.html portrait": {
+        "courses/cms/person_detail.html portrait": {
             "name": _("Portrait"),
             "plugins": ["PicturePlugin"],
             "limits": {"PicturePlugin": 1},
         },
-        "persons/cms/person_detail.html resume": {
+        "courses/cms/person_detail.html resume": {
             "name": _("Resume"),
             "plugins": ["CKEditorPlugin"],
             "limits": {"CKEditorPlugin": 1},

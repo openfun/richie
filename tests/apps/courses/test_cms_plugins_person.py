@@ -11,9 +11,9 @@ from djangocms_picture.cms_plugins import PicturePlugin
 
 from richie.apps.core.factories import FilerImageFactory, UserFactory
 from richie.apps.core.helpers import create_i18n_page
-from richie.apps.persons.cms_plugins import PersonPlugin
-from richie.apps.persons.factories import PersonFactory
-from richie.apps.persons.models import PersonPluginModel
+from richie.apps.courses.cms_plugins import PersonPlugin
+from richie.apps.courses.factories import PersonFactory
+from richie.apps.courses.models import PersonPluginModel
 from richie.plugins.plain_text.cms_plugins import PlainTextPlugin
 
 

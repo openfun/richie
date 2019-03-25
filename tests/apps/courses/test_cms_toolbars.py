@@ -11,8 +11,13 @@ from cms.test_utils.testcases import CMSTestCase
 from cms.toolbar.items import AjaxItem, Menu, ModalItem
 
 from richie.apps.core.factories import UserFactory
-from richie.apps.courses.factories import CourseFactory, OrganizationFactory
-from richie.apps.persons.tests.utils import CheckToolbarMixin
+from richie.apps.courses.factories import (
+    CourseFactory,
+    OrganizationFactory,
+    PersonFactory,
+)
+
+from .utils import CheckToolbarMixin
 
 
 # pylint: disable=too-many-ancestors
@@ -198,3 +203,59 @@ class CoursesCMSToolbarTestCase(CheckToolbarMixin, CMSTestCase):
             # Check that the organization item is absent
             results = page_menu.find_items(ModalItem, name="Organization settings...")
             self.assertEqual(results, [])
+
+            # Check that the person item is absent
+            results = page_menu.find_items(ModalItem, name="Person settings...")
+            self.assertEqual(results, [])
+
+    @override_settings(CMS_PERMISSION=False)
+    # pylint: disable=too-many-locals
+    def test_cms_toolbars_person_has_page_extension_settings_item(self):
+        """
+        Validate that a new item to edit the person is available only when visiting the page
+        in edit mode and for users with permission to edit the page.
+        """
+        person = PersonFactory()
+
+        # Create different users for each possible level of access
+        # pylint: disable=too-many-locals
+        superuser = UserFactory(is_staff=True, is_superuser=True)
+        staff_with_permission = UserFactory(is_staff=True)
+        user_with_permission = UserFactory()
+        staff = UserFactory(is_staff=True)
+        user = UserFactory()
+        anonymous = AnonymousUser()
+
+        # Add global permission to change page for users concerned
+        can_change_page = Permission.objects.get(codename="change_page")
+        staff_with_permission.user_permissions.add(can_change_page)
+        user_with_permission.user_permissions.add(can_change_page)
+
+        cases = [
+            ([superuser, False, False], self.check_disabled),
+            ([superuser, True, False], self.check_active),
+            ([superuser, False, True], self.check_disabled),
+            ([staff_with_permission, False, False], self.check_disabled),
+            ([staff_with_permission, True, False], self.check_active),
+            ([staff_with_permission, False, True], self.check_disabled),
+            ([staff, False, False], self.check_missing),
+            ([staff, True, False], self.check_missing),
+            ([staff, False, True], self.check_missing),
+            ([user_with_permission, False, False], self.check_absent),
+            ([user_with_permission, True, False], self.check_absent),
+            ([user_with_permission, False, True], self.check_absent),
+            ([user, False, False], self.check_absent),
+            ([user, True, False], self.check_absent),
+            ([user, False, True], self.check_absent),
+            ([anonymous, False, False], self.check_absent),
+            ([anonymous, True, False], self.check_absent),
+            ([anonymous, False, True], self.check_absent),
+        ]
+
+        url = "/en/admin/courses/person/{id:d}/change/".format(id=person.id)
+
+        for args, method in cases:
+            toolbar = self.get_toolbar_for_page(person.extended_object, *args)
+            item = method(toolbar, "Person settings...")
+            if item:
+                self.assertEqual(item.url, url)

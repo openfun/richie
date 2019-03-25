@@ -8,9 +8,9 @@ from cms.models import Page
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
-from richie.apps.persons.cms_wizards import PersonWizardForm
-from richie.apps.persons.factories import PersonTitleFactory
-from richie.apps.persons.models import Person
+from richie.apps.courses.cms_wizards import PersonWizardForm
+from richie.apps.courses.factories import PersonTitleFactory
+from richie.apps.courses.models import Person
 
 
 class PersonCMSWizardTestCase(CMSTestCase):
