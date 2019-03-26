@@ -22,11 +22,9 @@ class FilterDefintionsTestCase(TestCase):
             with self.assertNumQueries(1):
                 self.assertEqual(FILTERS[filter_name].aggs_include, "^$")
 
-            with self.assertNumQueries(0):
+            # The result is not set in cache when a page was not found
+            with self.assertNumQueries(1):
                 self.assertEqual(FILTERS[filter_name].aggs_include, "^$")
-
-            # Reset cache for subsequent tests...
-            del FILTERS[filter_name].aggs_include
 
     def test_filter_definitions_indexable_filter_aggs_include_draft_page(self):
         """
@@ -39,11 +37,9 @@ class FilterDefintionsTestCase(TestCase):
             with self.assertNumQueries(1):
                 self.assertEqual(FILTERS[filter_name].aggs_include, "^$")
 
-            with self.assertNumQueries(0):
+            # The result is not set in cache when a published page was not found
+            with self.assertNumQueries(1):
                 self.assertEqual(FILTERS[filter_name].aggs_include, "^$")
-
-            # Reset cache for subsequent tests...
-            del FILTERS[filter_name].aggs_include
 
     def test_filter_definitions_indexable_filter_aggs_include_published_page(self):
         """
@@ -64,7 +60,22 @@ class FilterDefintionsTestCase(TestCase):
                 )
 
             # Reset cache for subsequent tests...
-            del FILTERS[filter_name].aggs_include
+            # pylint: disable=protected-access
+            FILTERS[filter_name]._aggs_include = None
+
+            with self.assertNumQueries(1):
+                self.assertEqual(
+                    FILTERS[filter_name].aggs_include, f".*-000{index+1:d}.{{4}}"
+                )
+
+            with self.assertNumQueries(0):
+                self.assertEqual(
+                    FILTERS[filter_name].aggs_include, f".*-000{index+1:d}.{{4}}"
+                )
+
+            # Reset cache for subsequent tests...
+            # pylint: disable=protected-access
+            FILTERS[filter_name]._aggs_include = None
 
     def test_filter_definitions_indexable_filter_aggs_include_no_reverse_id(self):
         """

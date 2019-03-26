@@ -146,10 +146,8 @@ class CourseRunsCoursesQueryTestCase(TestCase):
     def reset_filter_definitions_cache():
         """Reset indexable filters cache on the `aggs_include` field."""
         for filter_name in ["levels", "subjects", "organizations"]:
-            try:
-                del FILTERS[filter_name].aggs_include
-            except AttributeError:
-                pass
+            # pylint: disable=protected-access
+            FILTERS[filter_name]._aggs_include = None
 
     @staticmethod
     def create_filter_pages():
