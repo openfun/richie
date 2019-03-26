@@ -4,7 +4,6 @@ from functools import reduce
 from django import forms
 from django.conf import settings
 from django.utils import timezone, translation
-from django.utils.functional import cached_property
 from django.utils.translation import gettext as _
 
 from cms.api import Page
@@ -31,9 +30,10 @@ class IndexableFilterDefinition(TermsAggsMixin, TermsQueryMixin, BaseFilterDefin
 
     def __init__(self, name, reverse_id=None, **kwargs):
         self.reverse_id = reverse_id
+        self._aggs_include = None
         super().__init__(name, **kwargs)
 
-    @cached_property
+    @property
     def aggs_include(self):
         """
         Return a regex that limits what facets are computed on the field.
@@ -52,16 +52,18 @@ class IndexableFilterDefinition(TermsAggsMixin, TermsQueryMixin, BaseFilterDefin
                 ' ".*" if no `reverse_id` is set (delegated to super) which will match all values.
         """
         if self.reverse_id:
-            try:
-                page = Page.objects.select_related("node").get(
-                    publisher_is_draft=False, reverse_id=self.reverse_id
-                )
-            except Page.DoesNotExist:
-                return "^$"
-            else:
-                return ".*-{path:s}.{{{steplen:d}}}".format(
-                    path=page.node.path, steplen=page.node.steplen
-                )
+            if self._aggs_include is None:
+                try:
+                    page = Page.objects.select_related("node").get(
+                        publisher_is_draft=False, reverse_id=self.reverse_id
+                    )
+                except Page.DoesNotExist:
+                    return "^$"
+                else:
+                    self._aggs_include = ".*-{path:s}.{{{steplen:d}}}".format(
+                        path=page.node.path, steplen=page.node.steplen
+                    )
+            return self._aggs_include
 
         return super().aggs_include
 
