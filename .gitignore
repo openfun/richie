@@ -1,5 +1,6 @@
 # env
 .env
+env.d/development/crowdin
 
 # virtualenv
 .venv
@@ -82,3 +83,4 @@ yarn-error.log
 # Exported strings & generated translation templates
 src/frontend/i18n/js
 *.pot
+

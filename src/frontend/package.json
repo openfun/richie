@@ -6,6 +6,7 @@
   "scripts": {
     "build": "tsc --noEmit && webpack",
     "generate-l10n-template": "rip json2pot 'i18n/js/**/*.json' -o i18n/frontend.pot",
+    "generate-translations": "rip po2json './js/translations/*.po' -o './js/translations' -m './i18n/**/*.json'",
     "lint": "tslint -c tslint.json 'js/**/*.ts?(x)'",
     "prettier-write": "prettier --write 'js/**/*.+(ts|tsx|json|js|jsx)' '*.+(ts|tsx|json|js|jsx)' '**/*.+(css|scss)'",
     "sass": "node-sass --include-path node_modules scss/_main.scss ../richie/static/richie/css/main.css",

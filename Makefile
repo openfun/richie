@@ -28,6 +28,7 @@ COMPOSE_EXEC         = $(COMPOSE) exec --user=$(UID)
 COMPOSE_EXEC_APP     = $(COMPOSE_EXEC) app
 COMPOSE_EXEC_NODE    = $(COMPOSE_EXEC) node
 COMPOSE_RUN_APP      = $(COMPOSE_RUN) app
+COMPOSE_RUN_CROWDIN  = $(COMPOSE_RUN) crowdin -c crowdin/config.yml
 COMPOSE_TEST_RUN     = $(COMPOSE_TEST) run --rm --user=$(UID)
 COMPOSE_TEST_RUN_APP = $(COMPOSE_TEST_RUN) app
 
@@ -48,7 +49,10 @@ MANAGE               = $(COMPOSE_RUN_APP) dockerize -wait tcp://db:$(DB_PORT) -t
 
 default: help
 
-bootstrap:  ## install development dependencies
+env.d/development/crowdin:
+	cp env.d/development/crowdin.dist env.d/development/crowdin
+
+bootstrap: env.d/development/crowdin ## install development dependencies
 	@echo 'Preparing data directory...';
 	@mkdir -p data/media data/static
 	@$(COMPOSE) build base;
@@ -174,3 +178,51 @@ watch-ts: ## watch changes in TypeScript files
 help:
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 .PHONY: help
+
+###########################################
+# Translations tasks
+
+.PHONY: i18n-generate
+i18n-generate: ## Generate source translations files for all applications
+	${MAKE} i18n-generate-back;
+	${MAKE} i18n-generate-front;
+
+.PHONY: i18n-compile
+i18n-compile: ## Compile translated messages to be used by all applications
+	${MAKE} i18n-compile-back
+	${MAKE} i18n-compile-front
+
+.PHONY: i18n-generate-front
+i18n-generate-front:
+	@$(YARN) build
+	@$(YARN) generate-l10n-template
+
+.PHONY: i18n-compile-front
+i18n-compile-front:
+	@$(YARN) generate-translations
+
+.PHONY: i18n-generate-back
+i18n-generate-back:
+	@$(COMPOSE_RUN) -w /app/src/richie app python /app/sandbox/manage.py makemessages --ignore "venv/**/*" --keep-pot
+
+.PHONY: i18n-compile-back
+i18n-compile-back:
+	@$(COMPOSE_RUN) -w /app/src/richie app python /app/sandbox/manage.py compilemessages
+
+.PHONY: crowdin-upload
+crowdin-upload: ## Upload source translations to Crowdin
+	@$(COMPOSE_RUN_CROWDIN) upload sources
+
+.PHONY: crowdin-download
+crowdin-download: ## Download translated message from Crowdin
+	@$(COMPOSE_RUN_CROWDIN) download translations
+
+.PHONY: i18n-generate-and-upload
+i18n-generate-and-upload: ## Generate source translations for all applications and upload then to crowdin
+	${MAKE} i18n-generate
+	${MAKE} crowdin-upload
+
+.PHONY: i18n-download-and-compile
+i18n-download-and-compile: ## Download all translated messages and compile them to be used by all applications
+	${MAKE} crowdin-download
+	${MAKE} i18n-compile
