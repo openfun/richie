@@ -44,12 +44,13 @@ class IndexableFilterDefinition(TermsAggsMixin, TermsQueryMixin, BaseFilterDefin
         Returns:
         --------
             string: a regex depending on filters configuration in settings and pages in the CMS:
-                - "^$" if the `reverse_id` does not correspond to any published page which will
-                    will not match any value and return an empty list of facets,
-                - ".*-0001.{4}" if the `reverse_id` points to a published page with path "0001"
-                    this will match ids of the children of this page that will be of the form
-                    P-00010001 if they have children or L-00010001 if they are leafs,
-                ' ".*" if no `reverse_id` is set (delegated to super) which will match all values.
+            - "": the empty string, if the `reverse_id` does not correspond to any published
+                page which will not match any value and return an empty list of facets,
+            - ".*-0001.{4}": if the `reverse_id` points to a published page with path "0001"
+                this will match ids of the children of this page that will be of the form
+                P-00010001 if they have children or L-00010001 if they are leafs,
+            ' ".*": if no `reverse_id` is set (delegated to super) which will
+                match all values.
         """
         if self.reverse_id:
             if self._aggs_include is None:
@@ -58,7 +59,7 @@ class IndexableFilterDefinition(TermsAggsMixin, TermsQueryMixin, BaseFilterDefin
                         publisher_is_draft=False, reverse_id=self.reverse_id
                     )
                 except Page.DoesNotExist:
-                    return "^$"
+                    return ""
                 else:
                     self._aggs_include = ".*-{path:s}.{{{steplen:d}}}".format(
                         path=page.node.path, steplen=page.node.steplen
@@ -124,7 +125,12 @@ class IndexableFilterDefinition(TermsAggsMixin, TermsQueryMixin, BaseFilterDefin
         """
         Build the filter definition's values from base definition and the faceted keys in the
         current language.
-        Those provide us with the keys and counts that we just have to consume.
+        Those provide us with the keys and counts that we just have to consume. They come from:
+        - a bucket with the top facets in decreasing order of counts,
+        - specific facets for values that were select in the querystring (we must force them
+          because they may not be in the n top facet counts but we must make sure we keep it
+          so that it remains available as an option so the user sees it and can unselect it)
+
         We resort to the `get_i18n_names` method to get the internationalized human names.
         """
         # Convert the keys & counts from ElasticSearch facets to a more readily consumable format
@@ -148,6 +154,16 @@ class IndexableFilterDefinition(TermsAggsMixin, TermsQueryMixin, BaseFilterDefin
             },
             facets[self.name][self.name]["buckets"],
             {},
+        )
+
+        # Add the facets that were forced because their value was selected in querystring
+        # Their result is of the form: {'organizations@P-0001': {'doc_count': 12}}
+        key_count_map.update(
+            {
+                key.split("@")[1]: facet["doc_count"]
+                for key, facet in facets.items()
+                if "{:s}@".format(self.name) in key  # 6 times faster than startswith
+            }
         )
 
         # Get internationalized names for all our keys
