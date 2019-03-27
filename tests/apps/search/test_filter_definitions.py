@@ -20,11 +20,11 @@ class FilterDefintionsTestCase(TestCase):
         """
         for filter_name in ["levels", "subjects", "organizations"]:
             with self.assertNumQueries(1):
-                self.assertEqual(FILTERS[filter_name].aggs_include, "^$")
+                self.assertEqual(FILTERS[filter_name].aggs_include, "")
 
             # The result is not set in cache when a page was not found
             with self.assertNumQueries(1):
-                self.assertEqual(FILTERS[filter_name].aggs_include, "^$")
+                self.assertEqual(FILTERS[filter_name].aggs_include, "")
 
     def test_filter_definitions_indexable_filter_aggs_include_draft_page(self):
         """
@@ -35,11 +35,11 @@ class FilterDefintionsTestCase(TestCase):
             CategoryFactory(page_reverse_id=filter_name)
 
             with self.assertNumQueries(1):
-                self.assertEqual(FILTERS[filter_name].aggs_include, "^$")
+                self.assertEqual(FILTERS[filter_name].aggs_include, "")
 
             # The result is not set in cache when a published page was not found
             with self.assertNumQueries(1):
-                self.assertEqual(FILTERS[filter_name].aggs_include, "^$")
+                self.assertEqual(FILTERS[filter_name].aggs_include, "")
 
     def test_filter_definitions_indexable_filter_aggs_include_published_page(self):
         """

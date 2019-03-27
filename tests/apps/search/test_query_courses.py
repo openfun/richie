@@ -12,7 +12,7 @@ import arrow
 from elasticsearch.client import IndicesClient
 from elasticsearch.helpers import bulk
 
-from richie.apps.courses.factories import CategoryFactory
+from richie.apps.courses.factories import CategoryFactory, OrganizationFactory
 from richie.apps.search.filter_definitions import FILTERS, IndexableFilterDefinition
 from richie.apps.search.indexers.courses import CoursesIndexer
 
@@ -128,8 +128,8 @@ COURSE_RUNS = {
 )
 class CourseRunsCoursesQueryTestCase(TestCase):
     """
-    Test edge case search queries on underlying course runs to make sure filtering and sorting
-    works as we expect.
+    Test search queries on courses and underlying course runs to make sure filtering and sorting
+    works as expected.
     """
 
     def setUp(self):
@@ -158,8 +158,9 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             - levels page path: 0002
             - organizations page path: 0003
         """
-        for filter_name in ["subjects", "levels", "organizations"]:
-            CategoryFactory(page_reverse_id=filter_name, should_publish=True)
+        CategoryFactory(page_reverse_id="subjects", should_publish=True)
+        CategoryFactory(page_reverse_id="levels", should_publish=True)
+        OrganizationFactory(page_reverse_id="organizations", should_publish=True)
 
     @staticmethod
     def get_expected_courses(courses_definition, course_run_ids):
