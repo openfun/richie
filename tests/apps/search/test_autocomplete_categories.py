@@ -11,14 +11,17 @@ from elasticsearch.client import IndicesClient
 from elasticsearch.helpers import bulk
 
 from richie.apps.search.indexers.categories import CategoriesIndexer
+from richie.apps.search.text_indexing import ANALYSIS_SETTINGS
 from richie.apps.search.utils.indexers import slice_string_for_completion
+
+CATEGORIES_INDEX = "test_categories"
 
 
 @mock.patch.object(  # Plug the test index we're filling on the indexer itself
     CategoriesIndexer,
     "index_name",
     new_callable=mock.PropertyMock,
-    return_value="test_categories",
+    return_value=CATEGORIES_INDEX,
 )
 class AutocompleteCategoriesTestCase(TestCase):
     """
@@ -60,16 +63,21 @@ class AutocompleteCategoriesTestCase(TestCase):
         # Delete any existing indexes so we get a clean slate
         indices_client.delete(index="_all")
         # Create an index we'll use to test the ES features
-        indices_client.create(index="test_categories")
+        indices_client.create(index=CATEGORIES_INDEX)
         # Use the default categories mapping from the Indexer
         indices_client.put_mapping(
-            body=CategoriesIndexer.mapping, doc_type="category", index="test_categories"
+            body=CategoriesIndexer.mapping, doc_type="category", index=CATEGORIES_INDEX
         )
+        # The index needs to be closed before we set an analyzer
+        indices_client.close(index=CATEGORIES_INDEX)
+        indices_client.put_settings(body=ANALYSIS_SETTINGS, index=CATEGORIES_INDEX)
+        indices_client.open(index=CATEGORIES_INDEX)
+
         # Actually insert our categories in the index
         actions = [
             {
                 "_id": category["id"],
-                "_index": "test_categories",
+                "_index": CATEGORIES_INDEX,
                 "_op_type": "create",
                 "_type": "category",
                 "absolute_url": {"en": "url"},

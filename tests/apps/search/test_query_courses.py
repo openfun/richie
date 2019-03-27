@@ -15,6 +15,7 @@ from elasticsearch.helpers import bulk
 from richie.apps.courses.factories import CategoryFactory, OrganizationFactory
 from richie.apps.search.filter_definitions import FILTERS, IndexableFilterDefinition
 from richie.apps.search.indexers.courses import CoursesIndexer
+from richie.apps.search.text_indexing import ANALYSIS_SETTINGS
 
 COURSES = [
     {
@@ -254,6 +255,10 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         indices_client.delete(index="_all")
         # Create an index we'll use to test the ES features
         indices_client.create(index="test_courses")
+        indices_client.close(index="test_courses")
+        indices_client.put_settings(body=ANALYSIS_SETTINGS, index="test_courses")
+        indices_client.open(index="test_courses")
+
         # Use the default courses mapping from the Indexer
         indices_client.put_mapping(
             body=CoursesIndexer.mapping, doc_type="course", index="test_courses"
