@@ -13,14 +13,16 @@ export const SearchFilterGroup = ({ filter }: SearchFilterGroupProps) => (
     <h3 className="search-filter-group__title">{filter.human_name}</h3>
     <div className="search-filter-group__list">
       {filter.values.map(value =>
-        value.children && value.children.length ? (
+        value.key.startsWith(
+          'P-',
+        ) /* Values with children have a key that starts with `P-` by convention */ ? (
           <SearchFilterValueParent
             filter={filter}
             value={value}
             key={value.key}
           />
         ) : (
-          <SearchFilterValueLeaf
+          /* Other values' keys start with `L-` */ <SearchFilterValueLeaf
             filter={filter}
             value={value}
             key={value.key}

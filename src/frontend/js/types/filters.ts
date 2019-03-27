@@ -1,8 +1,7 @@
 export interface FilterValue {
   count: number;
-  children?: FilterValue[];
   human_name: string;
-  key: string; // Either a machine name or a stringified ID
+  key: string;
 }
 
 export interface FilterDefinition {

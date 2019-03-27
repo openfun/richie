@@ -8,9 +8,13 @@ import { SearchFilterGroup } from './SearchFilterGroup';
 
 jest.mock('../SearchFilterValueLeaf/SearchFilterValueLeaf', () => ({
   SearchFilterValueLeaf: ({ value }: any) => (
-    <span data-testid="search-filter">{`Received: filter - ${
-      value.human_name
-    }`}</span>
+    <span>{`Received leaf: filter - ${value.human_name}`}</span>
+  ),
+}));
+
+jest.mock('../SearchFilterValueParent/SearchFilterValueParent', () => ({
+  SearchFilterValueParent: ({ value }: any) => (
+    <span>{`Received parent: filter - ${value.human_name}`}</span>
   ),
 }));
 
@@ -31,22 +35,21 @@ describe('components/SearchFilterGroup', () => {
               {
                 count: 4,
                 human_name: 'Value One',
-                key: 'value-1',
+                key: 'P-value-1',
               },
               {
                 count: 7,
                 human_name: 'Value Two',
-                key: 'value-2',
+                key: 'L-value-2',
               },
             ],
           }}
         />
       </CourseSearchParamsContext.Provider>,
     );
-
     // The filter group title and all filters are shown
     getByText('Organizations');
-    getByText('Received: filter - Value One');
-    getByText('Received: filter - Value Two');
+    getByText('Received parent: filter - Value One');
+    getByText('Received leaf: filter - Value Two');
   });
 });

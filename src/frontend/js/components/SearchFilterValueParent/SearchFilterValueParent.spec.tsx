@@ -1,13 +1,24 @@
 import '../../testSetup';
 
 import React from 'react';
-import { cleanup, fireEvent, render } from 'react-testing-library';
+import { cleanup, fireEvent, render, wait } from 'react-testing-library';
 
+jest.mock('../../data/getResourceList/getResourceList', () => ({
+  fetchList: jest.fn(),
+}));
+
+import { fetchList } from '../../data/getResourceList/getResourceList';
 import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
+import { jestMockOf } from '../../utils/types';
 import { SearchFilterValueParent } from './SearchFilterValueParent';
 
+const mockFetchList: jestMockOf<typeof fetchList> = fetchList as any;
+
 describe('<SearchFilterValueParent />', () => {
-  afterEach(cleanup);
+  afterEach(() => {
+    cleanup();
+    jest.resetAllMocks();
+  });
 
   it('renders the parent filter value and a button to show the children', () => {
     const { getByText, getByLabelText, queryByText } = render(
@@ -21,13 +32,9 @@ describe('<SearchFilterValueParent />', () => {
             values: [],
           }}
           value={{
-            children: [
-              { count: 3, human_name: 'Classical Literature', key: '46' },
-              { count: 9, human_name: 'Modern Literature', key: '47' },
-            ],
             count: 12,
             human_name: 'Literature',
-            key: '45',
+            key: 'P-00040005',
           }}
         />
       </CourseSearchParamsContext.Provider>,
@@ -42,10 +49,34 @@ describe('<SearchFilterValueParent />', () => {
     expect(queryByText('Modern Literature')).toEqual(null);
   });
 
-  it('renders the children on load when one of them is active', () => {
+  it('renders the children on load when one of them is active', async () => {
+    mockFetchList.mockResolvedValue({
+      content: {
+        filters: {
+          subjects: {
+            values: [
+              {
+                count: 3,
+                human_name: 'Classical Literature',
+                key: 'L-000400050003',
+              },
+              {
+                count: 9,
+                human_name: 'Modern Literature',
+                key: 'L-000400050004',
+              },
+            ],
+          },
+        },
+      },
+    } as any);
+
     const { getByText, getByLabelText } = render(
       <CourseSearchParamsContext.Provider
-        value={[{ limit: '999', offset: '0', subjects: ['47'] }, jest.fn()]}
+        value={[
+          { limit: '999', offset: '0', subjects: ['L-000400050004'] },
+          jest.fn(),
+        ]}
       >
         <SearchFilterValueParent
           filter={{
@@ -54,31 +85,51 @@ describe('<SearchFilterValueParent />', () => {
             values: [],
           }}
           value={{
-            children: [
-              { count: 3, human_name: 'Classical Literature', key: '46' },
-              { count: 9, human_name: 'Modern Literature', key: '47' },
-            ],
             count: 12,
             human_name: 'Literature',
-            key: '45',
+            key: 'P-00040005',
           }}
         />
       </CourseSearchParamsContext.Provider>,
     );
 
     getByText('Literature');
-    expect(getByLabelText('Hide child filters')).toHaveAttribute(
-      'aria-pressed',
-      'true',
-    );
+    const button = getByLabelText('Hide child filters');
+    expect(button).toHaveAttribute('aria-pressed', 'true');
+
+    await wait();
     getByText('Classical Literature');
     getByText('Modern Literature');
   });
 
-  it('hides/show the children when the user clicks on the toggle button', () => {
+  it('hides/show the children when the user clicks on the toggle button', async () => {
+    mockFetchList.mockResolvedValue({
+      content: {
+        filters: {
+          subjects: {
+            values: [
+              {
+                count: 3,
+                human_name: 'Classical Literature',
+                key: 'L-000400050003',
+              },
+              {
+                count: 9,
+                human_name: 'Modern Literature',
+                key: 'L-000400050004',
+              },
+            ],
+          },
+        },
+      },
+    } as any);
+
     const { getByText, getByLabelText, queryByText } = render(
       <CourseSearchParamsContext.Provider
-        value={[{ limit: '999', offset: '0', subjects: ['47'] }, jest.fn()]}
+        value={[
+          { limit: '999', offset: '0', subjects: ['L-000400050004'] },
+          jest.fn(),
+        ]}
       >
         <SearchFilterValueParent
           filter={{
@@ -87,25 +138,25 @@ describe('<SearchFilterValueParent />', () => {
             values: [],
           }}
           value={{
-            children: [
-              { count: 3, human_name: 'Classical Literature', key: '46' },
-              { count: 9, human_name: 'Modern Literature', key: '47' },
-            ],
             count: 12,
             human_name: 'Literature',
-            key: '45',
+            key: 'P-00040005',
           }}
         />
       </CourseSearchParamsContext.Provider>,
     );
 
     getByText('Literature');
+    getByLabelText('Hide child filters');
     expect(getByLabelText('Hide child filters')).toHaveAttribute(
       'aria-pressed',
       'true',
     );
+    await wait();
     getByText('Classical Literature');
     getByText('Modern Literature');
+
+    expect(mockFetchList).toHaveBeenCalledTimes(1);
 
     fireEvent.click(getByLabelText('Hide child filters'));
 
@@ -117,13 +168,17 @@ describe('<SearchFilterValueParent />', () => {
     expect(queryByText('Classical Literature')).toEqual(null);
     expect(queryByText('Modern Literature')).toEqual(null);
 
+    expect(mockFetchList).toHaveBeenCalledTimes(1);
+
     fireEvent.click(getByLabelText('Show child filters'));
 
-    getByText('Literature');
+    getByLabelText('Hide child filters');
+    expect(mockFetchList).toHaveBeenCalledTimes(2);
     expect(getByLabelText('Hide child filters')).toHaveAttribute(
       'aria-pressed',
       'true',
     );
+    await wait();
     getByText('Classical Literature');
     getByText('Modern Literature');
   });
@@ -140,10 +195,9 @@ describe('<SearchFilterValueParent />', () => {
             values: [],
           }}
           value={{
-            children: [],
             count: 217,
             human_name: 'Human name',
-            key: '42',
+            key: 'P-00040005',
           }}
         />
       </CourseSearchParamsContext.Provider>,
@@ -160,7 +214,10 @@ describe('<SearchFilterValueParent />', () => {
   it('shows the parent filter value itself as active when it is in the search params', () => {
     const { getByText } = render(
       <CourseSearchParamsContext.Provider
-        value={[{ filter_name: '42', limit: '999', offset: '0' }, jest.fn()]}
+        value={[
+          { filter_name: 'P-00040005', limit: '999', offset: '0' },
+          jest.fn(),
+        ]}
       >
         <SearchFilterValueParent
           filter={{
@@ -169,10 +226,9 @@ describe('<SearchFilterValueParent />', () => {
             values: [],
           }}
           value={{
-            children: [],
             count: 217,
             human_name: 'Human name',
-            key: '42',
+            key: 'P-00040005',
           }}
         />
       </CourseSearchParamsContext.Provider>,
@@ -200,10 +256,9 @@ describe('<SearchFilterValueParent />', () => {
             values: [],
           }}
           value={{
-            children: [],
             count: 217,
             human_name: 'Human name',
-            key: '43',
+            key: 'P-00040005',
           }}
         />
       </CourseSearchParamsContext.Provider>,
@@ -212,7 +267,7 @@ describe('<SearchFilterValueParent />', () => {
     fireEvent.click(getByText('Human name'));
     expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
       filter: { human_name: 'Filter name', name: 'filter_name', values: [] },
-      payload: '43',
+      payload: 'P-00040005',
       type: 'FILTER_ADD',
     });
   });
@@ -222,7 +277,7 @@ describe('<SearchFilterValueParent />', () => {
     const { getByText } = render(
       <CourseSearchParamsContext.Provider
         value={[
-          { filter_name: '44', limit: '999', offset: '0' },
+          { filter_name: 'P-00040005', limit: '999', offset: '0' },
           dispatchCourseSearchParamsUpdate,
         ]}
       >
@@ -233,10 +288,9 @@ describe('<SearchFilterValueParent />', () => {
             values: [],
           }}
           value={{
-            children: [],
             count: 217,
             human_name: 'Human name',
-            key: '44',
+            key: 'P-00040005',
           }}
         />
       </CourseSearchParamsContext.Provider>,
@@ -245,7 +299,7 @@ describe('<SearchFilterValueParent />', () => {
     fireEvent.click(getByText('Human name'));
     expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
       filter: { human_name: 'Filter name', name: 'filter_name', values: [] },
-      payload: '44',
+      payload: 'P-00040005',
       type: 'FILTER_REMOVE',
     });
   });
