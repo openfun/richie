@@ -529,6 +529,106 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         ("richie/large_banner/hero-intro.html", _("Hero introduction")),
     ]
 
+    # Available social networks badges with parameters
+    SOCIAL_NETWORKS_BADGES = [
+        {
+            "name": "facebook-page",
+            "template": "social-networks/facebook.html",
+            "context": {
+                "title": {
+                    "fr": "Page Facebook",
+                    "en": "Facebook page",
+                },
+                "url": {
+                    "en": "https://www.facebook.com/france.universite.numerique",
+                },
+            },
+        },
+        {
+            "name": "facebook-share",
+            "template": "social-networks/facebook.html",
+            "context": {
+                "title": {
+                    "fr": "Partager sur Facebook",
+                    "en": "Share on Facebook",
+                },
+                "url": {
+                    "en": "http://www.facebook.com/share.php?u={{page_url}}",
+                },
+            },
+        },
+        {
+            "name": "mailto-course",
+            "template": "social-networks/mailto.html",
+            "context": {
+                "title": {
+                    "fr": "Partager par courriel",
+                    "en": "Share with email",
+                },
+                "subject": {
+                    "fr": "Suivez un cours en ligne avec FUN",
+                },
+                "body": {
+                    "fr": "Je viens de m'inscrire pour {{page_title}} via FUN {{page_url}}",
+                },
+                "url": {
+                    "en": "mailto:?subject={{subject}}&body={{body}}",
+                },
+            },
+        },
+        {
+            "name": "mailto-blogpost",
+            "template": "social-networks/mailto.html",
+            "context": {
+                "title": {
+                    "fr": "Partager par courriel",
+                    "en": "Share with email",
+                },
+                "subject": {
+                    "fr": "Actualité FUN: {{page_title}}",
+                },
+                "body": {
+                    "fr": "{{page_url}}",
+                },
+                "url": {
+                    "en": "mailto:?subject={{subject}}&body={{body}}",
+                },
+            },
+        },
+        {
+            "name": "twitter-blogpost",
+            "template": "social-networks/twitter.html",
+            "context": {
+                "title": {
+                    "fr": "Partager sur Twitter",
+                    "en": "Share on Twitter",
+                },
+                "body": {
+                    "fr": "{{page_url}}",
+                },
+                "url": {
+                    "en": "https://twitter.com/intent/tweet?text={{body}}",
+                },
+            },
+        },
+        {
+            "name": "twitter-course",
+            "template": "social-networks/twitter.html",
+            "context": {
+                "title": {
+                    "fr": "Partager sur Twitter",
+                    "en": "Share on Twitter",
+                },
+                "body": {
+                    "fr": "Je viens de m'inscrire pour {{page_title}} via FUN {{page_url}}",
+                },
+                "url": {
+                    "en": "https://twitter.com/intent/tweet?text={{body}}",
+                },
+            },
+        },
+    ]
+
     LOGGING = {
         "version": 1,
         "disable_existing_loggers": True,
