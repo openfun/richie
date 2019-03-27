@@ -4,16 +4,13 @@
 
 ## Overview
 
-`Open edX` is a great tool for authoring (**Studio**), hosting and playing (**LMS**) interactive
-online courses and MOOCs.
+`Learning Management Systems` are great tools for hosting and playing interactive online courses
+and MOOCs.
 
 However, if you need to build a complete website with flexible content to aggregate your courses,
 in several languages and from different sources, **you will soon need a CMS**.
 
-For example, the [edx.org](https://www.edx.org) website is built on `Drupal` for content pages and
-on [edX course discovery](https://github.com/edx/course-discovery) for the catalog.
-
-At "France Université Numérique", we wanted to build a similar portal but with `Python` and
+At "France Université Numérique", we wanted to build an OpenSource portal with `Python` and
 `Django`. That's why we built `Richie` on top of [DjangoCMS](https://www.django-cms.org), one of
 the best CMS on the market, as a toolbox to easily create full fledged websites with a catalog of
 online courses.
@@ -22,11 +19,20 @@ Among the features that `Richie` offers out of the box:
 
 - multi-site and multi-lingual by default,
 - advanced access rights and moderation,
-- catalog of courses synchronized with one or more `Open edX` instances,
+- catalog of courses synchronized with one or more `LMS` instances,
 - search engine based on `Elasticsearch` and pre-configured to offer full-text queries,
   multi-facetting, auto-complete,...
-- flexible custom pages for courses, organizations, categories, teachers (and their inter-relations),
+- flexible custom pages for courses, organizations, categories, teachers, blog posts (and their
+  inter-relations),
 - Extensible with any third-party `DjangoCMS` plugin or any third-party `Django` application.
+
+## Demo
+
+You can test Richie on our [demo site](https://richie.education).
+
+login/password: admin/admin
+
+The database, is regularly flushed.
 
 ## Architecture
 
@@ -42,9 +48,8 @@ consists of 4 services:
 - **node**: used for front-end related tasks, _i.e._ transpiling `TypeScript` sources, bundling
   them into a JS package, and building the CSS files from Sass sources.
 
-We provide alternative `Docker Compose` configurations for test, CI and production, but the
-application can also be run with your favorite orchestrator. At "France Université Numérique", we
-deploy our applications on `OpenShift` using [`Arnold`](https://github.com/openfun/arnold).
+At "France Université Numérique", we deploy our applications on `OpenShift`/`Kubernetes` using
+[`Arnold`](https://github.com/openfun/arnold).
 
 ## Getting started
 
