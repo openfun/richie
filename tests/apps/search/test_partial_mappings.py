@@ -6,7 +6,7 @@ from django.test import TestCase
 
 from elasticsearch.client import IndicesClient
 
-from richie.apps.search.partial_mappings import MULTILINGUAL_TEXT
+from richie.apps.search.text_indexing import ANALYSIS_SETTINGS, MULTILINGUAL_TEXT
 
 
 class PartialMappingsTestCase(TestCase):
@@ -36,6 +36,10 @@ class PartialMappingsTestCase(TestCase):
         self.indices_client.put_mapping(
             index=index_name, doc_type=document_type, body=mapping
         )
+        # The index needs to be closed before we set an analyzer
+        self.indices_client.close(index=index_name)
+        self.indices_client.put_settings(body=ANALYSIS_SETTINGS, index=index_name)
+        self.indices_client.open(index=index_name)
 
         # The stub mapping only contains our dynamic template
         mapping = self.indices_client.get_mapping(
@@ -63,7 +67,19 @@ class PartialMappingsTestCase(TestCase):
                 "dynamic_templates": MULTILINGUAL_TEXT,
                 "properties": {
                     "title": {
-                        "properties": {"fr": {"type": "text", "analyzer": "french"}}
+                        "properties": {
+                            "fr": {
+                                "type": "text",
+                                "fields": {
+                                    "language": {"type": "text", "analyzer": "french"},
+                                    "trigram": {
+                                        "type": "text",
+                                        "analyzer": "french_trigram",
+                                        "search_analyzer": "french",
+                                    },
+                                },
+                            }
+                        }
                     }
                 },
             },
@@ -87,8 +103,28 @@ class PartialMappingsTestCase(TestCase):
                 "properties": {
                     "title": {
                         "properties": {
-                            "en": {"type": "text", "analyzer": "english"},
-                            "fr": {"type": "text", "analyzer": "french"},
+                            "en": {
+                                "type": "text",
+                                "fields": {
+                                    "language": {"type": "text", "analyzer": "english"},
+                                    "trigram": {
+                                        "type": "text",
+                                        "analyzer": "english_trigram",
+                                        "search_analyzer": "english",
+                                    },
+                                },
+                            },
+                            "fr": {
+                                "type": "text",
+                                "fields": {
+                                    "language": {"type": "text", "analyzer": "french"},
+                                    "trigram": {
+                                        "type": "text",
+                                        "analyzer": "french_trigram",
+                                        "search_analyzer": "french",
+                                    },
+                                },
+                            },
                         }
                     }
                 },

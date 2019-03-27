@@ -17,7 +17,7 @@ from richie.plugins.simple_text_ckeditor.models import SimpleText
 from ...courses.models import MAX_DATE, Course, CourseState
 from ..defaults import COURSES_COVER_IMAGE_HEIGHT, COURSES_COVER_IMAGE_WIDTH
 from ..forms import CourseSearchForm
-from ..partial_mappings import MULTILINGUAL_TEXT
+from ..text_indexing import MULTILINGUAL_TEXT
 from ..utils.i18n import get_best_field_language
 from ..utils.indexers import slice_string_for_completion
 from . import ES_INDICES
