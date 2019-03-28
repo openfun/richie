@@ -35,6 +35,42 @@ $richie-blogpost-detail-title-textalign: center !default;
         margin: 0 0.4rem;
       }
     }
+
+    .social-network-badges {
+      @include sv-flex(1, 0, 100%);
+      margin: 0.5rem 0;
+      justify-content: center;
+
+      @include media-breakpoint-up(md) {
+        @include sv-flex(1, 0, 8rem);
+        margin: 0;
+        justify-content: flex-start;
+      }
+
+      &__item {
+        @include sv-flex(1, 0, 1.5rem);
+        height: 1.5rem;
+        font-size: 0.8rem;
+        background: $dodgerblue1;
+
+        &:hover {
+          color: $white;
+          background: $dodgerblue3;
+          text-decoration: none;
+        }
+
+        & + .social-network-badges__item {
+          margin-left: 0.5rem;
+        }
+      }
+
+      @include media-breakpoint-up(md) {
+        &::before {
+          content: '—';
+          margin: 0 0.4rem;
+        }
+      }
+    }
   }
 
   &__categories {

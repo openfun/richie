@@ -84,8 +84,21 @@ $richie-footer-poweredby-link-fontcolor: $white !default;
     order: 1;
 
     &__link {
-      @include sv-flex(1, 0, 100%);
+      @include sv-flex(1, 0, auto);
       display: block;
+    }
+
+    &__badge {
+      @include sv-flex(1, 0, auto);
+      display: block;
+      margin-left: 1rem;
+      font-size: 2.4rem;
+      color: $gray40;
+
+      &:hover {
+        color: $white;
+        text-decoration: none;
+      }
     }
   }
 

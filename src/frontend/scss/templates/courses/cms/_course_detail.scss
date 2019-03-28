@@ -35,6 +35,11 @@ $richie-course-detail-run-margin: 0 !default;
 $richie-course-detail-run-padding: 1rem !default;
 $richie-course-detail-run-fontcolor: $white !default;
 
+$richie-course-detail-socialnetworks-background: $dodgerblue1;
+$richie-course-detail-socialnetworks-margin: 0 !default;
+$richie-course-detail-socialnetworks-padding: 1rem !default;
+$richie-course-detail-socialnetworks-fontcolor: $white !default;
+
 $richie-course-detail-team-gutter: 0.5rem;
 $richie-course-detail-team-width-large: 100%;
 $richie-course-detail-team-title-fontsize: 1.4rem;
@@ -358,6 +363,13 @@ $richie-course-detail-aside-main-org-background: $white;
         width: 100%;
         max-width: 100%;
       }
+    }
+
+    &__social-networks {
+      margin: $richie-course-detail-socialnetworks-margin;
+      padding: $richie-course-detail-socialnetworks-padding;
+      color: $richie-course-detail-socialnetworks-fontcolor;
+      background: $richie-course-detail-socialnetworks-background;
     }
 
     &__run {
