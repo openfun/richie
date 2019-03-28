@@ -7,7 +7,7 @@
 
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { IntlProvider } from 'react-intl';
+import { addLocaleData, IntlProvider } from 'react-intl';
 
 // Import submodules so we don't get the whole of lodash in the bundle
 import get from 'lodash-es/get';
@@ -47,11 +47,26 @@ document.addEventListener('DOMContentLoaded', event => {
         .join('');
       // Sanity check: only attempt to access and render components for which we do have a valid name
       if (isComponentName(componentName)) {
+        const locale = element.getAttribute('data-locale') || 'en';
+        let localeCode = locale;
+        if (localeCode.match(/^.*_.*$/)) {
+          localeCode = locale.split('_')[0];
+        }
+
+        try {
+          addLocaleData(require(`react-intl/locale-data/${localeCode}`));
+        } catch (e) {}
+
+        let translatedMessages = null;
+        try {
+          translatedMessages = require(`./translations/${locale}.json`);
+        } catch (e) {}
+
         // Do get the component dynamically. We know this WILL produce a valid component thanks to the type guard
         const Component = componentLibrary[componentName];
         // Render the component inside an `IntlProvider` to be able to access translated strings
         ReactDOM.render(
-          <IntlProvider>
+          <IntlProvider locale={localeCode} messages={translatedMessages}>
             <Component />
           </IntlProvider>,
           element,

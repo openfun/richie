@@ -1,5 +1,6 @@
 {% extends "richie/base.html" %}
-{% load cms_tags %}
+{% load cms_tags i18n %}
+{% get_current_language as LANGUAGE_CODE %}
 
 {% block title %}{% page_attribute "page_title" %}{% endblock title %}
 
@@ -13,7 +14,7 @@
       {% with header_level=2 %}
         {% placeholder "content" %}
       {% endwith %}
-      <div class="fun-react fun-react--search"></div>
+      <div class="fun-react fun-react--search" data-locale="{{ LANGUAGE_CODE }}"></div>
     </div>
   </div>
 {% endblock content %}
