@@ -1,0 +1,28 @@
+.social-network-badges {
+  $badges-selector: &;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  &__item {
+    @include sv-flex(1, 0, 2rem);
+    display: flex;
+    height: 2rem;
+    flex-direction: column;
+    justify-content: center;
+    color: $white;
+    background: $firebrick6;
+    border-radius: 100%;
+    text-align: center;
+
+    &:hover {
+      color: $firebrick6;
+      background: $white;
+      text-decoration: none;
+    }
+
+    & + #{$badges-selector}__item {
+      margin-left: 1rem;
+    }
+  }
+}

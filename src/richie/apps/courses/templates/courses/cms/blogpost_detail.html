@@ -19,6 +19,8 @@
         {% endplaceholder %}
       {% endwith %}
     </p>
+
+    {% include "social-networks/blogpost-badges.html" with page_title=request.current_page.get_title page_url=request.current_page.get_absolute_url %}
   </div>
 
   <div class="blogpost-detail__categories">

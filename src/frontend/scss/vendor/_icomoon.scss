@@ -1,0 +1,55 @@
+// Icomoon font stylesheet built from https://icomoon.io with FontAwesome set
+
+$icomoon-font-family: 'icomoon' !default;
+$icomoon-font-path: '../../fonts/icomoon' !default;
+
+$icon-email: '\f003';
+$icon-twitter: '\f099';
+$icon-facebook: '\f09a';
+
+@font-face {
+  font-family: '#{$icomoon-font-family}';
+  src: url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?j8cpue');
+  src: url('#{$icomoon-font-path}/#{$icomoon-font-family}.eot?j8cpue#iefix')
+      format('embedded-opentype'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.ttf?j8cpue')
+      format('truetype'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.woff?j8cpue')
+      format('woff'),
+    url('#{$icomoon-font-path}/#{$icomoon-font-family}.svg?j8cpue##{$icomoon-font-family}')
+      format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^='icon-'],
+[class*=' icon-'] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: '#{$icomoon-font-family}' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-email {
+  &:before {
+    content: $icon-email;
+  }
+}
+.icon-twitter {
+  &:before {
+    content: $icon-twitter;
+  }
+}
+.icon-facebook {
+  &:before {
+    content: $icon-facebook;
+  }
+}
