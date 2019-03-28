@@ -1,0 +1,165 @@
+msgid ""
+msgstr ""
+"POT-Creation-Date: 2019-03-28T19:59:53.710Z\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"MIME-Version: 1.0\n"
+"X-Generator: crowdin.com\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Crowdin-Project: richie\n"
+"X-Crowdin-Language: fr\n"
+"X-Crowdin-File: frontend.pot\n"
+"Project-Id-Version: richie\n"
+"Last-Translator: sampaccoud <samuel@sampaccoud.com>\n"
+"Language-Team: French\n"
+"Language: fr_FR\n"
+"PO-Revision-Date: 2019-03-29 16:38\n"
+
+#. [settings.filters.availability.title] - Title for the "Availability" section of course filters (eg. Coming soon / Current session etc.)
+#. defaultMessage is:
+#. Availability
+#: i18n/js/settings.json
+msgid "Availability"
+msgstr ""
+
+#. [common.categoriesHumanName] - Title/name to use when we display a list of categories
+#. defaultMessage is:
+#. Categories
+#: i18n/js/utils/commonMessages.json
+msgid "Categories"
+msgstr "Catégories"
+
+#. [components.CloseIcon.closeLabel] - Accessibility label for the "x" disable icon on an active filer
+#. defaultMessage is:
+#. Close
+#: i18n/js/components/icons/CloseIcon.json
+msgid "Close"
+msgstr "Fermer"
+
+#. [settings.filters.availability.values.coming_soon] - Possible value for the "Availability" filter for courses
+#. defaultMessage is:
+#. Coming soon
+#: i18n/js/settings.json
+msgid "Coming soon"
+msgstr ""
+
+#. [common.coursesHumanName] - Title/name to use when we display a list of courses
+#. defaultMessage is:
+#. Courses
+#: i18n/js/utils/commonMessages.json
+msgid "Courses"
+msgstr "Cours"
+
+#. [settings.filters.availability.values.current] - Possible value for the "Availability" filter for courses
+#. defaultMessage is:
+#. Current session
+#: i18n/js/settings.json
+msgid "Current session"
+msgstr ""
+
+#. [components.CourseGlimpse.linkText] - Accessibility title for links on course glimpses.
+#. defaultMessage is:
+#. Details page for {courseTitle}.
+#: i18n/js/components/CourseGlimpse/CourseGlimpse.json
+msgid "Details page for {courseTitle}."
+msgstr "Page de détails pour {courseTitle}."
+
+#. [settings.filters.language.en] - Language
+#. defaultMessage is:
+#. English
+#: i18n/js/settings.json
+msgid "English"
+msgstr ""
+
+#. [components.SearchFiltersPane.title] - Title for the search filters pane in course search.
+#. defaultMessage is:
+#. Filter courses
+#: i18n/js/components/SearchFiltersPane/SearchFiltersPane.json
+msgid "Filter courses"
+msgstr ""
+
+#. [settings.filters.new.new] - Possible balue for the "New" filter for courses
+#. defaultMessage is:
+#. First session
+#: i18n/js/settings.json
+msgid "First session"
+msgstr ""
+
+#. [settings.filters.language.fr] - Language
+#. defaultMessage is:
+#. French
+#: i18n/js/settings.json
+msgid "French"
+msgstr ""
+
+#. [components.SearchFilterValueParent.ariaHideChildren] - Accessibility message for the button to hide children of the current filter
+#. defaultMessage is:
+#. Hide child filters
+#: i18n/js/components/SearchFilterValueParent/SearchFilterValueParent.json
+msgid "Hide child filters"
+msgstr ""
+
+#. [settings.filters.language.title] - Title for the "Language" section of course filters (eg. FR / EN etc.)
+#. defaultMessage is:
+#. Language
+#: i18n/js/settings.json
+msgid "Language"
+msgstr ""
+
+#. [components.CourseGlimpse.logoAltText] - Alternate text for the course logo in a course glimpse.
+#. defaultMessage is:
+#. Logo for {courseTitle}
+#: i18n/js/components/CourseGlimpse/CourseGlimpse.json
+msgid "Logo for {courseTitle}"
+msgstr "Logo du cours {courseTitle}"
+
+#. [settings.filters.new.title] - Title for the "New" section of course filters
+#. defaultMessage is:
+#. New courses
+#: i18n/js/settings.json
+msgid "New courses"
+msgstr ""
+
+#. [settings.filters.availability.values.open] - Possible value for the "Availability" filter for courses
+#. defaultMessage is:
+#. Open for enrollment
+#: i18n/js/settings.json
+msgid "Open for enrollment"
+msgstr ""
+
+#. [common.organizationsHumanName] - Title/name to use when we display a list of organizations
+#. defaultMessage is:
+#. Organizations
+#: i18n/js/utils/commonMessages.json
+msgid "Organizations"
+msgstr "Établissements"
+
+#. [components.SearchSuggestField.searchFieldPlaceholder] - Placeholder text displayed in the search field when it is empty.
+#. defaultMessage is:
+#. Search for courses, organizations, categories
+#: i18n/js/components/SearchSuggestField/SearchSuggestField.json
+msgid "Search for courses, organizations, categories"
+msgstr "Recherche des cours, des organisations, des catégories"
+
+#. [components.SearchSuggestField.searchFieldDefaultSearch] - Default query in the main search field. Lets users run a full text search
+#.       with whatever they have typed in.
+#. defaultMessage is:
+#. Search for {query} in courses...
+#: i18n/js/components/SearchSuggestField/SearchSuggestField.json
+msgid "Search for {query} in courses..."
+msgstr "Recherche de {query} dans les cours..."
+
+#. [components.SearchFilterValueParent.ariaShowChildren] - Accessibility message for the button to show children of the current filter
+#. defaultMessage is:
+#. Show child filters
+#: i18n/js/components/SearchFilterValueParent/SearchFilterValueParent.json
+msgid "Show child filters"
+msgstr ""
+
+#. [components.CourseGlimpse.startsOn] - Shows the start date for a course in a course glimpse in a short format such as Sep 4, '1986'
+#. defaultMessage is:
+#. Starts on {date}
+#: i18n/js/components/CourseGlimpse/CourseGlimpse.json
+msgid "Starts on {date}"
+msgstr "Débute le {date}"
+
