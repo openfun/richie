@@ -21,5 +21,7 @@ $richie-search-filters-group-title-fontcolor: $white !default;
 
   &__list {
     @include m-o-list-group__container;
+    height: 7rem;
+    overflow-y: scroll;
   }
 }
