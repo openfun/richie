@@ -10,34 +10,34 @@
   .section--highlights,
   .licence-plugin,
   .button-caesura,
-  .rich-text-container{
+  .rich-text-container {
     margin: 1rem 0;
 
-    &:first-child{
+    &:first-child {
       margin-top: 0;
     }
 
-    &:last-child{
+    &:last-child {
       margin-bottom: 0;
     }
   }
 
   // Adjust section highlights
-  .section--highlights{
+  .section--highlights {
     padding: 1rem 0;
     background: $richie-content-container-bg;
 
-    &:nth-child(odd){
+    &:nth-child(odd) {
       background: $richie-content-container-bg;
     }
 
     // Remove useless spacing for item grid
-    .section__items{
+    .section__items {
       padding-right: 0;
       padding-left: 0;
 
       // Remove useless spacing from caesura inside a section
-      .button-caesura{
+      .button-caesura {
         margin-left: 0;
         margin-right: 0;
       }

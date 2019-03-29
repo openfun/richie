@@ -31,9 +31,8 @@
     min-height: 100%;
   }
 
-  &__body{
+  &__body {
     position: relative; // Needed to support img-as-a-background-image
-
 
     &__title {
       margin: 0 0.5rem 0 0; // Leave some margin between title & logo
