@@ -8,7 +8,7 @@
     "generate-l10n-template": "rip json2pot 'i18n/js/**/*.json' -o i18n/frontend.pot",
     "lint": "tslint -c tslint.json 'js/**/*.ts?(x)'",
     "prettier-write": "prettier --write 'js/**/*.+(ts|tsx|json|js|jsx)' '*.+(ts|tsx|json|js|jsx)' '**/*.+(css|scss)'",
-    "sass": "node-sass scss/_main.scss ../richie/static/richie/css/main.css",
+    "sass": "node-sass --include-path node_modules scss/_main.scss ../richie/static/richie/css/main.css",
     "test": "jest",
     "watch-sass": "nodemon -e scss -x 'yarn sass'"
   },
