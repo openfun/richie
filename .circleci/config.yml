@@ -640,6 +640,27 @@ jobs:
           # (https://jestjs.io/docs/en/troubleshooting#tests-are-extremely-slow-on-docker-and-or-continuous-integration-ci-server)
           command: yarn test --runInBand
 
+  # Publishing to npm requires that:
+  #   * you already registered to pypi.org
+  #   * you have define the NPM_TOKEN secret environment variables in CircleCI
+  #     UI (with your PyPI credentials)
+  npm:
+    docker:
+      - image: circleci/node:10
+    working_directory: ~/richie
+    steps:
+      - checkout:
+          path: ~/richie
+      - restore_cache:
+          keys:
+            - v4-front-dependencies-{{ checksum "yarn.lock" }}
+      - run:
+          name: Authenticate with registry
+          command: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/richie/.npmrc
+      - run:
+          name: Publish package
+          command: npm publish src/frontend
+
 workflows:
   version: 2
 
@@ -791,6 +812,21 @@ workflows:
       - pypi:
           requires:
             - package-back
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
+
+      # NPM publication.
+      #
+      # Publish frontend package to NPM only if all build, lint and test jobs
+      # succeed and it has been tagged with a tag starting with the letter v
+      - npm:
+          requires:
+            - lint-front-tslint
+            - lint-prettier
+            - test-front
           filters:
             branches:
               ignore: /.*/
