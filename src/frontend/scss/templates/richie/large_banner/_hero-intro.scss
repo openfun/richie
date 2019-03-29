@@ -49,13 +49,13 @@ $richie-hero-intro-background-size: cover !default;
     $content-padding: $richie-hero-intro-content-padding,
     $logo-margin: $richie-hero-intro-logo-margin,
     $logo-padding: $richie-hero-intro-logo-padding,
-    $methodology: 'bem',
+    $methodology: 'bem'
   );
 
   color: white;
   text-shadow: 0 0 3px $dark;
 
-  &__body{
+  &__body {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -64,12 +64,12 @@ $richie-hero-intro-background-size: cover !default;
     align-content: center;
 
     &__title,
-    &__content{
+    &__content {
       @include sv-flex(1, 0, 100%);
       text-align: center;
     }
 
-    &__logo{
+    &__logo {
       @include sv-flex(0, 0, auto);
       position: absolute;
       bottom: -3rem;

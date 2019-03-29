@@ -3,7 +3,6 @@ $richie-blogpost-detail-title-margin: 0 !default;
 $richie-blogpost-detail-title-padding: 1rem !default;
 $richie-blogpost-detail-title-textalign: center !default;
 
-
 .blogpost-detail {
   @include make-container();
   @include make-container-max-widths();
@@ -16,58 +15,58 @@ $richie-blogpost-detail-title-textalign: center !default;
     text-align: $richie-blogpost-detail-title-textalign;
   }
 
-  &__subhead{
+  &__subhead {
     display: flex;
     margin-bottom: 0.5rem;
     flex-wrap: wrap;
     justify-content: center;
 
-    &__date{
+    &__date {
       @include sv-flex(0, 0, auto);
       margin: 0;
     }
 
-    &__author{
+    &__author {
       @include sv-flex(0, 0, auto);
       margin: 0;
 
-      &::before{
-        content: "—";
+      &::before {
+        content: '—';
         margin: 0 0.4rem;
       }
     }
   }
 
-  &__categories{
+  &__categories {
     @include sv-flex(1, 0, 50rem);
     display: flex;
     margin: 0 auto 2rem;
     flex-wrap: wrap;
     justify-content: center;
 
-    .category-plugin-tag{
+    .category-plugin-tag {
       @include sv-flex(0, 0, auto);
     }
   }
 
-  &__cover{
+  &__cover {
     margin-bottom: 2rem;
 
-    img{
+    img {
       display: block;
       margin: 0 auto;
       max-width: 100%;
     }
   }
 
-  &__excerpt{
+  &__excerpt {
     margin-bottom: 2rem;
     padding-left: $grid-gutter-width;
     padding-right: $grid-gutter-width;
     font-size: 1.4rem;
   }
 
-  &__body{
+  &__body {
     padding-left: $grid-gutter-width;
     padding-right: $grid-gutter-width;
   }

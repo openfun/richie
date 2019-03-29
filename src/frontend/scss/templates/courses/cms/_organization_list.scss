@@ -16,7 +16,6 @@ $richie-org-list-item-title-textalign: center !default;
 $richie-org-list-item-empty-fontcolor: $gray40;
 $richie-org-list-item-empty-textalign: center;
 
-
 .organization-list {
   @include make-container();
   @include make-container-max-widths();
@@ -36,7 +35,7 @@ $richie-org-list-item-empty-textalign: center;
     flex-direction: row;
     flex-wrap: wrap;
 
-    &__item{
+    &__item {
       $list-item-selector: &;
       @include sv-flex(1, 0, calc(50% - #{$richie-org-list-item-gutter * 2}));
       display: flex;
@@ -51,7 +50,7 @@ $richie-org-list-item-empty-textalign: center;
         @include sv-flex(1, 0, calc(25% - #{$richie-org-list-item-gutter * 2}));
       }
 
-      &__logo{
+      &__logo {
         @include sv-flex(1, 0, 100%);
         display: flex;
         flex-direction: row;
@@ -59,13 +58,13 @@ $richie-org-list-item-empty-textalign: center;
         align-content: center;
         align-items: center;
 
-        img{
+        img {
           @include sv-flex(0, 0, auto);
           max-width: 100%;
         }
       }
 
-      &__title{
+      &__title {
         @include sv-flex(1, 0, 100%);
         display: flex;
         justify-content: center;
@@ -81,7 +80,7 @@ $richie-org-list-item-empty-textalign: center;
         cursor: pointer;
       }
 
-      &--empty{
+      &--empty {
         @include sv-flex(1, 0, 100%);
         font-style: italic;
         color: $richie-org-list-item-empty-fontcolor;
