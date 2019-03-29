@@ -2,7 +2,7 @@
 <!doctype html>
 <html>
     <head>
-        <title>{% block title %}Richie demonstration{% endblock title %}</title>
+        <title>{% block title %}{{ SITE.name }}{% endblock title %}</title>
         <meta name="viewport" content="width=device-width,initial-scale=1">
         {% block meta %}{% endblock meta %}
 
@@ -19,7 +19,7 @@
                 <button class="topbar__hamburger"
                         data-target="main-menu" aria-label="menu" aria-expanded="false">&#8801;</button>
                 <a href="/" class="topbar__brand__link">
-                    <img src="{% static "images/logo.png" %}" class="topbar__brand__logo" alt="Richie demonstration">
+                    <img src="{% static "images/logo.png" %}" class="topbar__brand__logo" alt="{{ SITE.name }}">
                 </a>
             </div>
             <div class="topbar__menu">
