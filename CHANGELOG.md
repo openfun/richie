@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- We now package and distribute the front-end application _via_ NPM (see
+  [richie.education](https://www.npmjs.com/package/richie-education)).
+
 ### Changed
 
 - Front-end styles are now all in the same place, _i.e._ in `src/frontend/scss`

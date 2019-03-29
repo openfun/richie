@@ -1,7 +1,7 @@
 {
-  "name": "richie",
+  "name": "richie-education",
   "version": "1.0.0-beta.3",
-  "description": "A Django-CMS based portal for Open edX courses discovery",
+  "description": "A CMS for Open Education",
   "main": "sandbox/manage.py",
   "scripts": {
     "build": "tsc --noEmit && webpack",
