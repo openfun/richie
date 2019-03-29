@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Front-end styles are now all in the same place, _i.e._ in `src/frontend/scss`
+
 ### Fixed
 
 - Fix the `collectstatic` management command execution (bad `STATICFILES_DIRS` definition)
