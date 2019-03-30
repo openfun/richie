@@ -24,7 +24,7 @@ def create_i18n_page(title=None, languages=None, is_homepage=False, **kwargs):
         }
 
     """
-    template = kwargs.pop("template", None) or "richie/fullwidth.html"
+    template = kwargs.pop("template", None) or "richie/single_column.html"
 
     if title is None:
         # Create realistic titles in each language with faker
@@ -62,7 +62,6 @@ def create_i18n_page(title=None, languages=None, is_homepage=False, **kwargs):
     slug = slugify(i18n_titles[first_language])
     page = create_page(
         language=first_language,
-        menu_title=i18n_titles[first_language],
         title=i18n_titles[first_language],
         slug=slug,
         template=template,
@@ -76,7 +75,6 @@ def create_i18n_page(title=None, languages=None, is_homepage=False, **kwargs):
     for language in languages:
         create_title(
             language=language,
-            menu_title=i18n_titles[language],
             title=i18n_titles[language],
             slug=slugify(i18n_titles[language]),
             page=page,

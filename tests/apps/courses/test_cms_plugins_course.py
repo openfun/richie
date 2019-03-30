@@ -38,7 +38,9 @@ class CoursePluginTestCase(TestCase):
         page.publish("en")
         course = CourseFactory(page_parent=page, should_publish=True)
         other_page_title = "other page"
-        create_page(other_page_title, "richie/fullwidth.html", settings.LANGUAGE_CODE)
+        create_page(
+            other_page_title, "richie/single_column.html", settings.LANGUAGE_CODE
+        )
         plugin_form = CoursePluginModelForm()
         rendered_form = plugin_form.as_table()
         self.assertEqual(rendered_form.count(course.extended_object.get_title()), 1)

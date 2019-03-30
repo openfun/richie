@@ -10,6 +10,7 @@ from django.core.files import File
 from django.core.management.base import BaseCommand, CommandError
 from django.test.utils import override_settings
 
+import factory
 from cms import models as cms_models
 from cms.api import add_plugin
 from filer.models.imagemodels import Image
@@ -37,7 +38,7 @@ from richie.apps.courses.models import (
     PersonTitleTranslation,
 )
 
-from ...helpers import recursive_page_creation
+from ...helpers import create_text_plugin, recursive_page_creation
 from ...utils import file_getter
 
 logger = logging.getLogger("richie.commands.core.create_demo_site")
@@ -52,6 +53,7 @@ NB_LICENCES = 5
 NB_PERSONS = 10
 NB_BLOGPOSTS = 6
 NB_BLOGPOSTS_CATEGORIES_RELATIONS = 3
+NB_HOME_HIGHLIGHTED_BLOGPOSTS = 4
 NB_HOME_HIGHLIGHTED_COURSES = 8
 NB_HOME_HIGHLIGHTED_ORGANIZATIONS = 4
 NB_HOME_HIGHLIGHTED_SUBJECTS = 6
@@ -106,20 +108,20 @@ PAGE_INFOS = {
         "title": {"en": "Dashboard", "fr": "Tableau de bord"},
         "in_navigation": False,
         "cms": False,
-        "kwargs": {"template": "richie/fullwidth.html"},
+        "kwargs": {"template": "richie/single_column.html"},
     },
     "annex": {
         "title": {"en": "Annex", "fr": "Annexe"},
         "in_navigation": False,
         "kwargs": {
-            "template": "richie/fullwidth.html",
+            "template": "richie/single_column.html",
             "reverse_id": DEMO_ANNEX_PAGE_ID,
         },
         "children": {
             "annex__about": {
                 "title": {"en": "About", "fr": "A propos"},
                 "in_navigation": True,
-                "kwargs": {"template": "richie/fullwidth.html"},
+                "kwargs": {"template": "richie/single_column.html"},
             }
         },
     },
@@ -255,21 +257,55 @@ HOMEPAGE_CONTENT = {
         "banner_title": "Welcome to Richie",
         "banner_content": "It works! This is the default homepage for the Richie CMS.",
         "banner_template": "richie/large_banner/hero-intro.html",
+        "button_template_name": "button-caesura",
         "section_template": "richie/section/highlighted_items.html",
+        "blogposts_title": "Last news",
+        "blogposts_button_title": "More news",
         "courses_title": "Popular courses",
+        "courses_button_title": "More courses",
         "organizations_title": "Universities",
+        "organizations_button_title": "More universities",
         "persons_title": "Persons",
+        "persons_button_title": "More persons",
         "subjects_title": "Subjects",
+        "subjects_button_title": "More subjects",
     },
     "fr": {
         "banner_title": "Bienvenue sur Richie",
         "banner_content": "Ça marche ! Ceci est la page d'accueil par défaut du CMS Richie.",
         "banner_template": "richie/large_banner/hero-intro.html",
+        "button_template_name": "button-caesura",
         "section_template": "richie/section/highlighted_items.html",
+        "blogposts_title": "Actualités récentes",
+        "blogposts_button_title": "Plus d'actualités",
         "courses_title": "Cours à la une",
+        "courses_button_title": "Plus de cours",
         "organizations_title": "Universités",
+        "organizations_button_title": "Plus d'universités",
         "subjects_title": "Thématiques",
+        "subjects_button_title": "Plus de thématiques",
         "persons_title": "Personnes",
+        "persons_button_title": "Plus de personnes",
+    },
+}
+SINGLECOLUMN_CONTENT = {
+    "en": {
+        "banner_title": "Single column template sample",
+        "banner_content": "It works! This is a single column page.",
+        "banner_template": "richie/large_banner/hero-intro.html",
+        "button_template_name": "button-caesura",
+        "section_sample_title": "A sample section",
+        "section_sample_button_title": "More!",
+        "section_sample_template": "richie/section/highlighted_items.html",
+    },
+    "fr": {
+        "banner_title": "Exemple de template avec une colonne unique",
+        "banner_content": "Ça marche ! Ceci est une page d'une colonne.",
+        "banner_template": "richie/large_banner/hero-intro.html",
+        "button_template_name": "button-caesura",
+        "section_sample_title": "Une section d'exemple",
+        "section_sample_button_title": "Plus !",
+        "section_sample_template": "richie/section/highlighted_items.html",
     },
 }
 
@@ -306,7 +342,7 @@ def clear_cms_data():
     BlogPost.objects.all().delete()
 
 
-# pylint: disable=too-many-locals
+# pylint: disable=too-many-locals,too-many-statements
 @override_settings(RICHIE_KEEP_SEARCH_UPDATED=False)
 def create_demo_site():
     """
@@ -423,8 +459,9 @@ def create_demo_site():
             )
 
     # Create blog posts under the `News` page
+    blogposts = []
     for _ in range(NB_BLOGPOSTS):
-        BlogPostFactory.create(
+        post = BlogPostFactory.create(
             page_in_navigation=True,
             page_languages=["en", "fr"],
             page_parent=pages_created["news"],
@@ -438,6 +475,7 @@ def create_demo_site():
             fill_author=random.sample(persons, 1),
             should_publish=True,
         )
+        blogposts.append(post)
 
     # Once everything has been created, use some content to create a homepage
     placeholder = pages_created["home"].placeholders.get(slot="maincontent")
@@ -466,7 +504,7 @@ def create_demo_site():
             content=content["banner_content"],
             template=content["banner_template"],
         )
-        # Add highlighted courses
+        # Add highlighted courses with a button
         courses_section = add_plugin(
             language=language,
             placeholder=placeholder,
@@ -482,6 +520,41 @@ def create_demo_site():
                 target=courses_section,
                 page=course.extended_object,
             )
+        add_plugin(
+            language=language,
+            placeholder=placeholder,
+            plugin_type="LinkPlugin",
+            target=courses_section,
+            name=content["courses_button_title"],
+            template=content["button_template_name"],
+            internal_link=pages_created["courses"],
+        )
+
+        # Add highlighted blogposts
+        blogposts_section = add_plugin(
+            language=language,
+            placeholder=placeholder,
+            plugin_type="SectionPlugin",
+            title=content["blogposts_title"],
+            template=content["section_template"],
+        )
+        for blogpost in random.sample(blogposts, NB_HOME_HIGHLIGHTED_BLOGPOSTS):
+            add_plugin(
+                language=language,
+                placeholder=placeholder,
+                plugin_type="BlogPostPlugin",
+                target=blogposts_section,
+                page=blogpost.extended_object,
+            )
+        add_plugin(
+            language=language,
+            placeholder=placeholder,
+            plugin_type="LinkPlugin",
+            target=blogposts_section,
+            name=content["blogposts_button_title"],
+            template=content["button_template_name"],
+            internal_link=pages_created["news"],
+        )
 
         # Add highlighted organizations
         organizations_section = add_plugin(
@@ -501,6 +574,15 @@ def create_demo_site():
                 target=organizations_section,
                 page=organization.extended_object,
             )
+        add_plugin(
+            language=language,
+            placeholder=placeholder,
+            plugin_type="LinkPlugin",
+            target=organizations_section,
+            name=content["organizations_button_title"],
+            template=content["button_template_name"],
+            internal_link=pages_created["organizations"],
+        )
 
         # Add highlighted subjects
         subjects_section = add_plugin(
@@ -518,6 +600,15 @@ def create_demo_site():
                 target=subjects_section,
                 page=subject.extended_object,
             )
+        add_plugin(
+            language=language,
+            placeholder=placeholder,
+            plugin_type="LinkPlugin",
+            target=subjects_section,
+            name=content["subjects_button_title"],
+            template=content["button_template_name"],
+            internal_link=pages_created["categories"],
+        )
 
         # Add highlighted persons
         persons_section = add_plugin(
@@ -535,11 +626,138 @@ def create_demo_site():
                 target=persons_section,
                 page=person.extended_object,
             )
+        add_plugin(
+            language=language,
+            placeholder=placeholder,
+            plugin_type="LinkPlugin",
+            target=persons_section,
+            name=content["persons_button_title"],
+            template=content["button_template_name"],
+            internal_link=pages_created["persons"],
+        )
 
-        # Once content has been added we must publish again homepage in every
-        # edited Languages
-        pages_created["home"].publish("en")
-        pages_created["home"].publish("fr")
+        # Once content has been added we must publish again homepage
+        pages_created["home"].publish(language)
+
+    # Fill the single column sample page
+    placeholder = pages_created["annex__about"].placeholders.get(slot="maincontent")
+
+    # - Get a banner image
+    banner_file = file_getter("banner")()
+    wrapped_banner = File(banner_file, banner_file.name)
+    banner = Image.objects.create(file=wrapped_banner)
+
+    # - Get a logo image
+    logo_file = file_getter("logo")()
+    wrapped_logo = File(logo_file, logo_file.name)
+    logo = Image.objects.create(file=wrapped_logo)
+
+    # - Get a video
+    video_sample = random.choice(VIDEO_SAMPLE_LINKS)
+
+    # - Create sample page in each language
+    for language, content in SINGLECOLUMN_CONTENT.items():
+        # Add a banner
+        add_plugin(
+            language=language,
+            placeholder=placeholder,
+            plugin_type="LargeBannerPlugin",
+            title=content["banner_title"],
+            background_image=banner,
+            content=content["banner_content"],
+            template=content["banner_template"],
+        )
+        # HTML paragraphs
+        create_text_plugin(
+            pages_created["annex__about"],
+            placeholder,
+            nb_paragraphs=random.randint(3, 4),
+            languages=[language],
+            plugin_type="TextPlugin",
+        )
+        # A large video sample
+        add_plugin(
+            language=language,
+            placeholder=placeholder,
+            plugin_type="VideoPlayerPlugin",
+            label=video_sample.label,
+            embed_link=video_sample.url,
+            template="full-width",
+        )
+        # Section with some various plugins
+        sample_section = add_plugin(
+            language=language,
+            placeholder=placeholder,
+            plugin_type="SectionPlugin",
+            title=content["section_sample_title"],
+            template=content["section_sample_template"],
+        )
+        add_plugin(
+            language=language,
+            placeholder=placeholder,
+            plugin_type="OrganizationPlugin",
+            target=sample_section,
+            page=random.choice(organizations).extended_object,
+        )
+        add_plugin(
+            language=language,
+            placeholder=placeholder,
+            plugin_type="CoursePlugin",
+            target=sample_section,
+            page=random.choice(courses).extended_object,
+        )
+        add_plugin(
+            language=language,
+            placeholder=placeholder,
+            plugin_type="OrganizationPlugin",
+            target=sample_section,
+            page=random.choice(organizations).extended_object,
+        )
+        add_plugin(
+            language=language,
+            placeholder=placeholder,
+            plugin_type="BlogPostPlugin",
+            target=sample_section,
+            page=random.choice(blogposts).extended_object,
+        )
+        add_plugin(
+            language=language,
+            placeholder=placeholder,
+            plugin_type="LinkPlugin",
+            target=sample_section,
+            name=content["section_sample_button_title"],
+            template=content["button_template_name"],
+            internal_link=pages_created["home"],
+        )
+        # Add a licence
+        add_plugin(
+            language=language,
+            placeholder=placeholder,
+            plugin_type="LicencePlugin",
+            licence=random.choice(licences),
+        )
+        # Add a simple picture entry
+        add_plugin(
+            language=language,
+            placeholder=placeholder,
+            plugin_type="PicturePlugin",
+            picture=logo,
+            attributes={"alt": "sample logo"},
+            alignment="center",
+        )
+        # Add a plain text
+        text = factory.Faker(
+            "text", max_nb_chars=random.randint(150, 250), locale=language
+        ).generate({})
+        add_plugin(
+            language=language,
+            placeholder=placeholder,
+            plugin_type="PlainTextPlugin",
+            body=text,
+        )
+
+        # Once content has been added we must publish again homepage
+        pages_created["annex__about"].publish(language)
 
 
 class Command(BaseCommand):

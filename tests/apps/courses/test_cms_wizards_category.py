@@ -43,7 +43,7 @@ class CategoryCMSWizardTestCase(CMSTestCase):
         # A parent page should pre-exist
         create_page(
             "Categories",
-            "richie/fullwidth.html",
+            "richie/single_column.html",
             "en",
             reverse_id=Category.ROOT_REVERSE_ID,
         )
@@ -69,7 +69,7 @@ class CategoryCMSWizardTestCase(CMSTestCase):
         # A parent page with a very long slug
         create_page(
             "y" * 200,
-            "richie/fullwidth.html",
+            "richie/single_column.html",
             "en",
             reverse_id=Category.ROOT_REVERSE_ID,
         )
@@ -97,7 +97,7 @@ class CategoryCMSWizardTestCase(CMSTestCase):
         # A parent page should pre-exist
         create_page(
             "Categories",
-            "richie/fullwidth.html",
+            "richie/single_column.html",
             "en",
             reverse_id=Category.ROOT_REVERSE_ID,
         )
@@ -118,7 +118,7 @@ class CategoryCMSWizardTestCase(CMSTestCase):
         # A parent page should pre-exist
         create_page(
             "Categories",
-            "richie/fullwidth.html",
+            "richie/single_column.html",
             "en",
             reverse_id=Category.ROOT_REVERSE_ID,
         )
@@ -141,7 +141,7 @@ class CategoryCMSWizardTestCase(CMSTestCase):
         # A parent page should pre-exist
         create_page(
             "Sujects",
-            "richie/fullwidth.html",
+            "richie/single_column.html",
             "en",
             reverse_id=Category.ROOT_REVERSE_ID,
         )

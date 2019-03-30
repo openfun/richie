@@ -36,7 +36,9 @@ class OrganizationPluginTestCase(CMSTestCase):
 
         organization = OrganizationFactory(should_publish=True)
         other_page_title = "other page"
-        create_page(other_page_title, "richie/fullwidth.html", settings.LANGUAGE_CODE)
+        create_page(
+            other_page_title, "richie/single_column.html", settings.LANGUAGE_CODE
+        )
         plugin_form = OrganizationPluginModelForm()
         rendered_form = plugin_form.as_table()
         self.assertEqual(

@@ -42,7 +42,10 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
         """
         # A parent page should pre-exist
         create_page(
-            "News", "richie/fullwidth.html", "en", reverse_id=BlogPost.ROOT_REVERSE_ID
+            "News",
+            "richie/single_column.html",
+            "en",
+            reverse_id=BlogPost.ROOT_REVERSE_ID,
         )
         # We can submit a form with just the title set
         form = BlogPostWizardForm(data={"title": "My title"})
@@ -66,7 +69,7 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
         # A parent page with a very long slug
         create_page(
             "y" * 200,
-            "richie/fullwidth.html",
+            "richie/single_column.html",
             "en",
             reverse_id=BlogPost.ROOT_REVERSE_ID,
         )
@@ -93,7 +96,10 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
         """
         # A parent page should pre-exist
         create_page(
-            "News", "richie/fullwidth.html", "en", reverse_id=BlogPost.ROOT_REVERSE_ID
+            "News",
+            "richie/single_column.html",
+            "en",
+            reverse_id=BlogPost.ROOT_REVERSE_ID,
         )
 
         # Submit a title at max length
@@ -111,7 +117,10 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
         """
         # A parent page should pre-exist
         create_page(
-            "News", "richie/fullwidth.html", "en", reverse_id=BlogPost.ROOT_REVERSE_ID
+            "News",
+            "richie/single_column.html",
+            "en",
+            reverse_id=BlogPost.ROOT_REVERSE_ID,
         )
 
         # Submit a title that is too long and a slug that is ok
@@ -131,7 +140,10 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
         """
         # A parent page should pre-exist
         create_page(
-            "News", "richie/fullwidth.html", "en", reverse_id=BlogPost.ROOT_REVERSE_ID
+            "News",
+            "richie/single_column.html",
+            "en",
+            reverse_id=BlogPost.ROOT_REVERSE_ID,
         )
 
         # Submit a slug that is too long and a title that is ok

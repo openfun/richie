@@ -16,7 +16,10 @@ class PagesTests(CMSTestCase):
         """
         content = {"fr": "Tableau de bord", "en": "Dashboard"}
         create_i18n_page(
-            content, is_homepage=True, published=True, template="richie/fullwidth.html"
+            content,
+            is_homepage=True,
+            published=True,
+            template="richie/single_column.html",
         )
         # Get the root page in french...
         root = Page.objects.get_home()

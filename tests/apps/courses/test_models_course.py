@@ -252,7 +252,7 @@ class CourseModelsTestCase(TestCase):
         with all the category's ancestors.
         """
         # Create nested categories
-        create_page("Categories", "richie/fullwidth.html", "en")
+        create_page("Categories", "richie/single_column.html", "en")
         meta_category = CategoryFactory(should_publish=True)
         parent_category = CategoryFactory(
             page_parent=meta_category.extended_object, should_publish=True
@@ -275,7 +275,7 @@ class CourseModelsTestCase(TestCase):
         with all the category's ancestors, but not we the child.
         """
         # Create nested categories
-        create_page("Categories", "richie/fullwidth.html", "en")
+        create_page("Categories", "richie/single_column.html", "en")
         meta_category = CategoryFactory(should_publish=True)
         parent_category = CategoryFactory(
             page_parent=meta_category.extended_object, should_publish=True
@@ -295,7 +295,7 @@ class CourseModelsTestCase(TestCase):
         duplicated.
         """
         # Create nested categories
-        create_page("Categories", "richie/fullwidth.html", "en")
+        create_page("Categories", "richie/single_column.html", "en")
         meta_category = CategoryFactory(should_publish=True)
         parent_category = CategoryFactory(
             page_parent=meta_category.extended_object, should_publish=True

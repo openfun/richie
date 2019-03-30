@@ -4,7 +4,16 @@ Helpers that can be useful throughout Richie's courses app
 from .factories import CategoryFactory
 
 
-def create_categories(info, parent, reverse_id=None, should_publish=True):
+# pylint: disable=too-many-arguments
+def create_categories(
+    info,
+    parent,
+    reverse_id=None,
+    should_publish=True,
+    fill_banner=True,
+    fill_description=True,
+    fill_logo=True,
+):
     """
     Create the category tree from the SUBJECTS dictionary.
 
@@ -39,6 +48,9 @@ def create_categories(info, parent, reverse_id=None, should_publish=True):
         page_in_navigation=info.get("in_navigation", True),
         page_parent=parent,
         should_publish=should_publish,
+        fill_banner=fill_banner,
+        fill_description=fill_description,
+        fill_logo=fill_logo,
     )
 
     if info.get("children", None):

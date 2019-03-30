@@ -37,7 +37,9 @@ class BlogPostPluginTestCase(CMSTestCase):
         blog_page = create_i18n_page(published=True)
         blogpost = BlogPostFactory(page_parent=blog_page)
         other_page_title = "other page"
-        create_page(other_page_title, "richie/fullwidth.html", settings.LANGUAGE_CODE)
+        create_page(
+            other_page_title, "richie/single_column.html", settings.LANGUAGE_CODE
+        )
         plugin_form = BlogPostPluginModelForm()
         rendered_form = plugin_form.as_table()
         self.assertEqual(rendered_form.count(blogpost.extended_object.get_title()), 1)

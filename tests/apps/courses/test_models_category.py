@@ -24,7 +24,9 @@ class CategoryModelsTestCase(TestCase):
         The string representation should be built with the title of the related page
         and its ancestors as long as they are category page.
         """
-        not_a_category_page = create_page("Categories", "richie/fullwidth.html", "en")
+        not_a_category_page = create_page(
+            "Categories", "richie/single_column.html", "en"
+        )
 
         # Art
         page = create_page(
