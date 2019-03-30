@@ -29,7 +29,7 @@
         {% if request.current_page.parent_page.course %}
           {{ request.current_page.parent_page.get_title }}
         {% else %}
-          {% render_model request.current_page "titles" %}
+          {% render_model request.current_page "title" %}
         {% endif %}
       </h1>
 
