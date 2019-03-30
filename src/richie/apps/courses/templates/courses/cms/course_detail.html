@@ -60,6 +60,10 @@
         {% include "courses/cms/fragment_organization_main_logo.html" with organization=course.get_main_organization %}
       </div>
 
+      <div class="course-detail__aside__social-networks">
+        {% include "social-networks/course-badges.html" with page_title=request.current_page.get_title page_url=request.current_page.get_absolute_url %}
+      </div>
+
       <div class="course-detail__aside__run">
         <h2 class="course-detail__aside__run__title">{% trans 'Course runs' %}</h2>
         {% for run in course.get_course_runs_for_language %}

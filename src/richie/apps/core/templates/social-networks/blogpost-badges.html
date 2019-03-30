@@ -1,0 +1,17 @@
+{% load i18n %}{% spaceless %}
+{% with full_page_url=SITE.web_url|add:page_url %}
+    {% blocktrans with title=page_title asvar mailto_subject %}Richie news: {{ title }}{% endblocktrans %}
+    {% blocktrans with title=page_title|safe url=full_page_url asvar shared_sentence %}Richie news: {{ title }} {{ url }}{% endblocktrans %}
+    <div class="social-network-badges">
+        <a href="https://www.facebook.com/share.php?u={{ full_page_url }}" target="_blank" class="social-network-badges__item social-network-badges__item--facebook" title="{% trans "Share on Facebook" %}">
+            <span class="icon-facebook"></span>
+        </a>
+        <a href="https://twitter.com/intent/tweet?text={{ shared_sentence|urlencode }}" class="social-network-badges__item social-network-badges__item--twitter" target="_blank" title="{% trans "Share on Twitter" %}">
+            <span class="icon-twitter"></span>
+        </a>
+        <a href="mailto:?subject={{ mailto_subject }}&amp;body={{ full_page_url }}" class="social-network-badges__item social-network-badges__item--email" target="_blank" title="{% trans "Share by Email" %}">
+            <span class="icon-email"></span>
+        </a>
+    </div>
+{% endwith %}
+{% endspaceless %}

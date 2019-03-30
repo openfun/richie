@@ -14,6 +14,13 @@
 // Required
 @import 'bootstrap/scss/bootstrap-reboot.scss';
 
+// TWITTER BOOTSTRAP V4
+// Required
+@import '../node_modules/bootstrap/scss/bootstrap-reboot.scss';
+
+// Icomoon font
+@import './vendor/icomoon';
+
 // Only what we use
 @import 'bootstrap/scss/badge';
 @import 'bootstrap/scss/card';
@@ -46,6 +53,7 @@
 @import './objects/course_glimpses';
 @import './objects/blogpost_glimpses';
 @import './objects/search-filter-value';
+@import './templates/core/social-networks/social-networks';
 @import './templates/courses/plugins/category_plugin';
 @import './templates/courses/plugins/person_plugin';
 @import './templates/courses/plugins/course_plugin';

@@ -54,6 +54,7 @@
                 <a href="/" class="body-footer__brand__link">
                     <img src="{% static "images/logo.png" %}" class="body-footer__brand__logo" alt="">
                 </a>
+                {% include "social-networks/footer-badges.html" %}
             </div>
             <div class="body-footer__mentions">
                 <p>{% now "Y" %} &copy; Acme {% blocktrans %}All Rights Reserved.{% endblocktrans %}</p>
