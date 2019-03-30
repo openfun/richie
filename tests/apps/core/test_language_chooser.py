@@ -21,7 +21,7 @@ class LanguageChooserTests(CMSTestCase):
             menu_title="Language menu test",
             title="Language menu test",
             slug="language-test-page",
-            template="richie/fullwidth.html",
+            template="richie/single_column.html",
             published=True,
         )
 
@@ -39,7 +39,7 @@ class LanguageChooserTests(CMSTestCase):
         """
         content = {"en": "Language menu test", "fr": "Test du menu de langues"}
         page = create_i18n_page(
-            content, published=True, template="richie/fullwidth.html"
+            content, published=True, template="richie/single_column.html"
         )
         url = page.get_absolute_url(language="fr")
         response = self.client.get(url)

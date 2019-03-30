@@ -184,7 +184,9 @@ class CoursesCMSToolbarTestCase(CheckToolbarMixin, CMSTestCase):
         superuser = UserFactory(is_staff=True, is_superuser=True)
 
         # Create a page not related to any page extension
-        page = create_page("A page", template="richie/fullwidth.html", language="en")
+        page = create_page(
+            "A page", template="richie/single_column.html", language="en"
+        )
 
         cases = [[False, False], [False, True], [True, False]]
 

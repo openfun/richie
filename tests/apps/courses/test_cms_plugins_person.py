@@ -36,7 +36,9 @@ class PersonPluginTestCase(CMSTestCase):
 
         person = PersonFactory()
         other_page_title = "other page"
-        create_page(other_page_title, "richie/fullwidth.html", settings.LANGUAGE_CODE)
+        create_page(
+            other_page_title, "richie/single_column.html", settings.LANGUAGE_CODE
+        )
         plugin_form = PersonPluginModelForm()
         self.assertIn(person.get_full_name(), plugin_form.as_table())
         self.assertNotIn(other_page_title, plugin_form.as_table())

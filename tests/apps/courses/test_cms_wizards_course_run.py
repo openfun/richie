@@ -77,7 +77,10 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         """
         # A parent page with a very long slug
         root_page = create_page(
-            "p" * 100, "richie/fullwidth.html", "en", reverse_id=Course.ROOT_REVERSE_ID
+            "p" * 100,
+            "richie/single_column.html",
+            "en",
+            reverse_id=Course.ROOT_REVERSE_ID,
         )
         course = CourseFactory(page_title="c" * 100, page_parent=root_page)
 

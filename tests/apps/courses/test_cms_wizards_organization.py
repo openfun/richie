@@ -46,7 +46,10 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         """
         # A parent page to list organizations should pre-exist
         create_page(
-            "Organizations", "richie/fullwidth.html", "en", reverse_id="organizations"
+            "Organizations",
+            "richie/single_column.html",
+            "en",
+            reverse_id="organizations",
         )
 
         # We can submit a form with just the title set
@@ -72,7 +75,10 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         """
         # A parent page to list organizations should pre-exist
         create_page(
-            "Organizations", "richie/fullwidth.html", "en", reverse_id="organizations"
+            "Organizations",
+            "richie/single_column.html",
+            "en",
+            reverse_id="organizations",
         )
 
         # Submit values at max length on all fields
@@ -92,7 +98,10 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         """
         # A parent page to list organizations should pre-exist
         create_page(
-            "Organizations", "richie/fullwidth.html", "en", reverse_id="organizations"
+            "Organizations",
+            "richie/single_column.html",
+            "en",
+            reverse_id="organizations",
         )
 
         # Submit a title at max length
@@ -124,7 +133,10 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         """
         # A parent page to list organizations should pre-exist
         create_page(
-            "Organizations", "richie/fullwidth.html", "en", reverse_id="organizations"
+            "Organizations",
+            "richie/single_column.html",
+            "en",
+            reverse_id="organizations",
         )
         # Submit a slug that is too long and a title that is ok
         invalid_data = {"title": "t" * 255, "slug": "s" * 201}

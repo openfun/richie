@@ -24,7 +24,7 @@ class PagePlaceholderTemplateTagsTestCase(CMSTestCase):
         the "page" passed as argument is the current page and edit mode is on.
         """
         user = UserFactory(is_staff=True, is_superuser=True)
-        page = create_page("Test", "richie/fullwidth.html", "en", published=True)
+        page = create_page("Test", "richie/single_column.html", "en", published=True)
         placeholder = page.placeholders.all()[0]
         plugin = add_plugin(placeholder, CKEditorPlugin, "en", body="<b>Test</b>")
 
@@ -56,7 +56,7 @@ class PagePlaceholderTemplateTagsTestCase(CMSTestCase):
         the "page" passed as argument is the current page and edit mode is off.
         """
         user = UserFactory(is_staff=True, is_superuser=True)
-        page = create_page("Test", "richie/fullwidth.html", "en", published=True)
+        page = create_page("Test", "richie/single_column.html", "en", published=True)
         placeholder = page.placeholders.all()[0]
         add_plugin(placeholder, CKEditorPlugin, "en", body="<b>Test</b>")
 
@@ -83,10 +83,10 @@ class PagePlaceholderTemplateTagsTestCase(CMSTestCase):
         """
         user = UserFactory(is_staff=True, is_superuser=True)
         current_page = create_page(
-            "Current", "richie/fullwidth.html", "en", published=True
+            "Current", "richie/single_column.html", "en", published=True
         )
 
-        page = create_page("Test", "richie/fullwidth.html", "en", published=True)
+        page = create_page("Test", "richie/single_column.html", "en", published=True)
         placeholder = page.placeholders.all()[0]
         add_plugin(placeholder, CKEditorPlugin, "en", body="<b>Test</b>")
 
@@ -111,7 +111,7 @@ class PagePlaceholderTemplateTagsTestCase(CMSTestCase):
         of being returned directly in the template.
         """
         user = UserFactory(is_staff=True, is_superuser=True)
-        page = create_page("Test", "richie/fullwidth.html", "en", published=True)
+        page = create_page("Test", "richie/single_column.html", "en", published=True)
         placeholder = page.placeholders.all()[0]
         add_plugin(placeholder, CKEditorPlugin, "en", body="<b>Test</b>")
 
@@ -137,8 +137,10 @@ class PagePlaceholderTemplateTagsTestCase(CMSTestCase):
         template tag.
         """
         user = UserFactory(is_staff=True, is_superuser=True)
-        empty_page = create_page("Test", "richie/fullwidth.html", "en", published=True)
-        page = create_page("Test", "richie/fullwidth.html", "en", published=True)
+        empty_page = create_page(
+            "Test", "richie/single_column.html", "en", published=True
+        )
+        page = create_page("Test", "richie/single_column.html", "en", published=True)
         placeholder = page.placeholders.all()[0]
         add_plugin(placeholder, CKEditorPlugin, "en", body="<b>Test</b>")
 

@@ -44,7 +44,10 @@ class CourseCMSWizardTestCase(CMSTestCase):
         # An organization and a parent page should pre-exist
         organization = OrganizationFactory()
         create_page(
-            "Courses", "richie/fullwidth.html", "en", reverse_id=Course.ROOT_REVERSE_ID
+            "Courses",
+            "richie/single_column.html",
+            "en",
+            reverse_id=Course.ROOT_REVERSE_ID,
         )
 
         # We can submit a form omitting the slug
@@ -76,7 +79,10 @@ class CourseCMSWizardTestCase(CMSTestCase):
         """
         # A parent page with a very long slug
         create_page(
-            "y" * 200, "richie/fullwidth.html", "en", reverse_id=Course.ROOT_REVERSE_ID
+            "y" * 200,
+            "richie/single_column.html",
+            "en",
+            reverse_id=Course.ROOT_REVERSE_ID,
         )
 
         # A course with a slug at the limit length should work
@@ -107,7 +113,10 @@ class CourseCMSWizardTestCase(CMSTestCase):
         # An organization and a parent page should pre-exist
         organization = OrganizationFactory()
         create_page(
-            "Courses", "richie/fullwidth.html", "en", reverse_id=Course.ROOT_REVERSE_ID
+            "Courses",
+            "richie/single_column.html",
+            "en",
+            reverse_id=Course.ROOT_REVERSE_ID,
         )
 
         # Submit a title at max length
@@ -125,7 +134,10 @@ class CourseCMSWizardTestCase(CMSTestCase):
         # An organization and a parent page should pre-exist
         organization = OrganizationFactory()
         create_page(
-            "Courses", "richie/fullwidth.html", "en", reverse_id=Course.ROOT_REVERSE_ID
+            "Courses",
+            "richie/single_column.html",
+            "en",
+            reverse_id=Course.ROOT_REVERSE_ID,
         )
         # Submit a title that is too long and a slug that is ok
         invalid_data = {
@@ -149,7 +161,10 @@ class CourseCMSWizardTestCase(CMSTestCase):
         # An organization and a parent page should pre-exist
         organization = OrganizationFactory()
         create_page(
-            "Courses", "richie/fullwidth.html", "en", reverse_id=Course.ROOT_REVERSE_ID
+            "Courses",
+            "richie/single_column.html",
+            "en",
+            reverse_id=Course.ROOT_REVERSE_ID,
         )
         # Submit a slug that is too long and a title that is ok
         invalid_data = {

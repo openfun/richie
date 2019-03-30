@@ -59,7 +59,7 @@ class OrganizationAdminTestCase(CMSTestCase):
         self.client.login(username=user.username, password="password")
 
         # Create an organization linked to a page
-        page = create_page("My title", "richie/fullwidth.html", "en")
+        page = create_page("My title", "richie/single_column.html", "en")
         organization = OrganizationFactory(extended_object=page)
 
         # Get the admin change view

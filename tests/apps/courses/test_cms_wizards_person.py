@@ -43,7 +43,10 @@ class PersonCMSWizardTestCase(CMSTestCase):
         """
         # A parent page should pre-exist
         create_page(
-            "Persons", "richie/fullwidth.html", "en", reverse_id=Person.ROOT_REVERSE_ID
+            "Persons",
+            "richie/single_column.html",
+            "en",
+            reverse_id=Person.ROOT_REVERSE_ID,
         )
         # create a PersonTitle object
         person_title = PersonTitleFactory()
@@ -75,7 +78,10 @@ class PersonCMSWizardTestCase(CMSTestCase):
         """
         # A parent page with a very long slug
         create_page(
-            "y" * 200, "richie/fullwidth.html", "en", reverse_id=Person.ROOT_REVERSE_ID
+            "y" * 200,
+            "richie/single_column.html",
+            "en",
+            reverse_id=Person.ROOT_REVERSE_ID,
         )
         person_title = PersonTitleFactory()
 
@@ -109,7 +115,10 @@ class PersonCMSWizardTestCase(CMSTestCase):
         """
         # A parent page should pre-exist
         create_page(
-            "Persons", "richie/fullwidth.html", "en", reverse_id=Person.ROOT_REVERSE_ID
+            "Persons",
+            "richie/single_column.html",
+            "en",
+            reverse_id=Person.ROOT_REVERSE_ID,
         )
         person_title = PersonTitleFactory()
 
@@ -132,7 +141,10 @@ class PersonCMSWizardTestCase(CMSTestCase):
         """
         # A parent page should pre-exist
         create_page(
-            "Persons", "richie/fullwidth.html", "en", reverse_id=Person.ROOT_REVERSE_ID
+            "Persons",
+            "richie/single_column.html",
+            "en",
+            reverse_id=Person.ROOT_REVERSE_ID,
         )
         person_title = PersonTitleFactory()
 
@@ -159,7 +171,10 @@ class PersonCMSWizardTestCase(CMSTestCase):
         """
         # A parent page should pre-exist
         create_page(
-            "Persons", "richie/fullwidth.html", "en", reverse_id=Person.ROOT_REVERSE_ID
+            "Persons",
+            "richie/single_column.html",
+            "en",
+            reverse_id=Person.ROOT_REVERSE_ID,
         )
         person_title = PersonTitleFactory()
 
@@ -186,7 +201,10 @@ class PersonCMSWizardTestCase(CMSTestCase):
         """
         # A parent page should pre-exist
         create_page(
-            "Persons", "richie/fullwidth.html", "en", reverse_id=Person.ROOT_REVERSE_ID
+            "Persons",
+            "richie/single_column.html",
+            "en",
+            reverse_id=Person.ROOT_REVERSE_ID,
         )
         person_title = PersonTitleFactory()
 
@@ -207,7 +225,10 @@ class PersonCMSWizardTestCase(CMSTestCase):
         """
         # A parent page should pre-exist
         create_page(
-            "Persons", "richie/fullwidth.html", "en", reverse_id=Person.ROOT_REVERSE_ID
+            "Persons",
+            "richie/single_column.html",
+            "en",
+            reverse_id=Person.ROOT_REVERSE_ID,
         )
         person_title = PersonTitleFactory()
 
@@ -228,7 +249,10 @@ class PersonCMSWizardTestCase(CMSTestCase):
         """
         # A parent page should pre-exist
         create_page(
-            "Persons", "richie/fullwidth.html", "en", reverse_id=Person.ROOT_REVERSE_ID
+            "Persons",
+            "richie/single_column.html",
+            "en",
+            reverse_id=Person.ROOT_REVERSE_ID,
         )
 
         invalid_data = {

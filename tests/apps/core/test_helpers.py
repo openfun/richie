@@ -27,7 +27,9 @@ class CreateI18nPageHelpersTestCase(CMSTestCase):
         self.assertEqual(mock_page.call_count, 1)
         self.assertFalse(mock_title.called)
         self.assertEqual(mock_page.call_args[1]["language"], "en")
-        self.assertEqual(mock_page.call_args[1]["template"], "richie/fullwidth.html")
+        self.assertEqual(
+            mock_page.call_args[1]["template"], "richie/single_column.html"
+        )
 
     @mock.patch("richie.apps.core.helpers.create_title")
     @mock.patch("richie.apps.core.helpers.create_page")
@@ -54,17 +56,12 @@ class CreateI18nPageHelpersTestCase(CMSTestCase):
         page = create_i18n_page("lorem ipsum", languages=["fr", "en"])
         mock_page.assert_called_once_with(
             language="fr",
-            menu_title="lorem ipsum",
             slug="lorem-ipsum",
-            template="richie/fullwidth.html",
+            template="richie/single_column.html",
             title="lorem ipsum",
         )
         mock_title.assert_called_once_with(
-            language="en",
-            menu_title="lorem ipsum",
-            page=page,
-            slug="lorem-ipsum",
-            title="lorem ipsum",
+            language="en", page=page, slug="lorem-ipsum", title="lorem ipsum"
         )
 
     # pylint: disable=no-self-use
@@ -79,17 +76,12 @@ class CreateI18nPageHelpersTestCase(CMSTestCase):
         page = create_i18n_page(i18n_titles)
         mock_page.assert_called_once_with(
             language="fr",
-            menu_title="Titre français",
             slug="titre-francais",
-            template="richie/fullwidth.html",
+            template="richie/single_column.html",
             title="Titre français",
         )
         mock_title.assert_called_once_with(
-            language="en",
-            menu_title="English title",
-            page=page,
-            slug="english-title",
-            title="English title",
+            language="en", page=page, slug="english-title", title="English title"
         )
 
     @override_settings(LANGUAGES=(("en", "en"), ("fr", "fr"), ("de", "de")))
