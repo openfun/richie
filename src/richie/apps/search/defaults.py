@@ -2,7 +2,26 @@
 Import custom settings and set up defaults for values the Search app needs
 """
 from django.conf import settings
+from django.utils.functional import lazy
 from django.utils.translation import gettext as _
+
+# The React i18n library only works with ISO15897 locales (e.g. fr_FR)
+# Django also supports ISO639-1 language codes without a region (e.g. fr) which is sufficient
+# if you don't need to differentiate several regional versions of the same language.
+#
+# You need to make sure a locale corresponding to your language exists in the locales
+# supported by the React frontend.
+#
+# The order matters, because the first matching locale will be used if your LANGUAGES setting
+# declares languages without regions.
+REACT_LOCALES = lazy(
+    lambda: getattr(settings, "REACT_LOCALES", ["en_US", "es_ES", "fr_FR", "fr_CA"]),
+    list,
+)()
+
+
+CATEGORIES_LOGO_IMAGE_WIDTH = getattr(settings, "CATEGORIES_LOGO_IMAGE_WIDTH", 216)
+CATEGORIES_LOGO_IMAGE_HEIGHT = getattr(settings, "CATEGORIES_LOGO_IMAGE_HEIGHT", 216)
 
 COURSES_COVER_IMAGE_WIDTH = getattr(settings, "COURSES_COVER_IMAGE_WIDTH", 216)
 COURSES_COVER_IMAGE_HEIGHT = getattr(settings, "COURSES_COVER_IMAGE_HEIGHT", 216)
@@ -13,10 +32,6 @@ ORGANIZATIONS_LOGO_IMAGE_WIDTH = getattr(
 ORGANIZATIONS_LOGO_IMAGE_HEIGHT = getattr(
     settings, "ORGANIZATIONS_LOGO_IMAGE_HEIGHT", 216
 )
-
-CATEGORIES_LOGO_IMAGE_WIDTH = getattr(settings, "CATEGORIES_LOGO_IMAGE_WIDTH", 216)
-CATEGORIES_LOGO_IMAGE_HEIGHT = getattr(settings, "CATEGORIES_LOGO_IMAGE_HEIGHT", 216)
-
 
 # Define the scoring boost (in ElasticSearch) related value names receive when using
 # full-text search.
