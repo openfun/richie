@@ -51,3 +51,11 @@ services:
     working_dir: /app/src/frontend
     volumes:
       - .:/app
+
+  crowdin:
+    image: fundocker/crowdin:2.0.27
+    volumes:
+      - ".:/app"
+    env_file:
+      - env.d/development/crowdin
+    working_dir: /app

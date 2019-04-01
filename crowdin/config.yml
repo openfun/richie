@@ -1,0 +1,28 @@
+#
+# Your Crowdin's credentials
+#
+api_key_env: CROWDIN_API_KEY
+project_identifier_env: CROWDIN_PROJECT_IDENTIFIER
+base_path_env: CROWDIN_BASE_PATH
+
+#
+# Choose file structure in crowdin
+# e.g. true or false
+#
+preserve_hierarchy: false
+
+#
+# Files configuration
+#
+files: [
+ {
+  source : "/richie/locale/django.pot",
+  dest: "/backend.pot",
+  translation : "/richie/locale/%locale_with_underscore%/LC_MESSAGES/django.po",
+ },
+ {
+  source : "/frontend/i18n/frontend.pot",
+  dest: "/frontend.pot",
+  translation : "/frontend/js/translations/%locale_with_underscore%.po",
+ }
+]
