@@ -289,11 +289,12 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
             "plugins": ["LargeBannerPlugin", "SectionPlugin"],
             "child_classes": {
                 "SectionPlugin": [
+                    "BlogPostPlugin",
                     "CoursePlugin",
-                    "OrganizationPlugin",
                     "CategoryPlugin",
-                    "PersonPlugin",
                     "LinkPlugin",
+                    "OrganizationPlugin",
+                    "PersonPlugin",
                 ]
             },
         },
