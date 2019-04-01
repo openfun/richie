@@ -18,12 +18,12 @@
   <div class="course-detail__content course-detail__content--one">
     <h1 class="course-detail__content__title">
       {% if request.current_page.parent_page.parent_page.course %}
-        {% render_model request.current_page.parent_page.parent_page "titles" %}
+        {% render_model request.current_page.parent_page.parent_page "title" %}
       {% else %}
-        {% render_model request.current_page.parent_page "titles" %}
+        {% render_model request.current_page.parent_page "title" %}
       {% endif %}
       <br />
-      {% render_model request.current_page "titles" %}
+      {% render_model request.current_page "title" %}
     </h1>
 
     <div class="course-detail__content__row course-detail__content__categories">
