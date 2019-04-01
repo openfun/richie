@@ -22,7 +22,7 @@ class CKEditorPlugin(CMSPluginBase):
     name = _("Simple text")
     render_template = "richie/simple_text_ckeditor/simple_text.html"
     cache = True
-    module = settings.FUN_PLUGINS_GROUP
+    module = settings.RICHIE_PLUGINS_GROUP
     allow_children = False
     disable_child_plugins = True
 

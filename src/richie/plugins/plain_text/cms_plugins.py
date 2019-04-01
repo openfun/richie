@@ -21,7 +21,7 @@ class PlainTextPlugin(CMSPluginBase):
     disable_child_plugins = True
     fieldsets = ((None, {"fields": ["body"]}),)
     model = PlainText
-    module = settings.FUN_PLUGINS_GROUP
+    module = settings.RICHIE_PLUGINS_GROUP
     name = _("Plain text")
     render_template = "richie/plain_text/plain_text.html"
 
