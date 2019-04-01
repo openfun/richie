@@ -17,7 +17,7 @@ class SectionPlugin(CMSPluginBase):
     CMSPlugin to add a content section with a distinct title from content.
     """
 
-    module = settings.FUN_PLUGINS_GROUP
+    module = settings.RICHIE_PLUGINS_GROUP
     name = _("Section")
     model = Section
     # Required from CMSPluginBase signature but not used since we override it

@@ -29,7 +29,7 @@ class OrganizationPlugin(CMSPluginBase):
     module = _("Courses")
     render_template = "courses/plugins/organization.html"
     cache = True
-    module = settings.FUN_PLUGINS_GROUP
+    module = settings.RICHIE_PLUGINS_GROUP
 
     def render(self, context, instance, placeholder):
         context.update(
@@ -52,7 +52,7 @@ class CategoryPlugin(CMSPluginBase):
     module = _("Courses")
     render_template = "courses/plugins/category_plugin.html"
     cache = True
-    module = settings.FUN_PLUGINS_GROUP
+    module = settings.RICHIE_PLUGINS_GROUP
 
     def render(self, context, instance, placeholder):
         context.update(
@@ -75,7 +75,7 @@ class CoursePlugin(CMSPluginBase):
     module = _("Courses")
     render_template = "courses/plugins/course_plugin.html"
     cache = True
-    module = settings.FUN_PLUGINS_GROUP
+    module = settings.RICHIE_PLUGINS_GROUP
 
     def render(self, context, instance, placeholder):
         context.update(
@@ -122,7 +122,7 @@ class LicencePlugin(CMSPluginBase):
     name = _("Licence")
     render_template = "courses/plugins/licence_plugin.html"
     cache = True
-    module = settings.FUN_PLUGINS_GROUP
+    module = settings.RICHIE_PLUGINS_GROUP
     allow_children = False
 
     fieldsets = ((None, {"fields": ["licence", "description"]}),)
@@ -142,7 +142,7 @@ class BlogPostPlugin(CMSPluginBase):
     module = _("Courses")
     render_template = "courses/plugins/blogpost.html"
     cache = True
-    module = settings.FUN_PLUGINS_GROUP
+    module = settings.RICHIE_PLUGINS_GROUP
 
     def render(self, context, instance, placeholder):
         context.update(

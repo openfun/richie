@@ -215,7 +215,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
     )
 
     # Group to add plugin to placeholder "Content"
-    FUN_PLUGINS_GROUP = "Fun Plugins"
+    RICHIE_PLUGINS_GROUP = "Richie Plugins"
 
     LANGUAGE_CODE = "en"
 
