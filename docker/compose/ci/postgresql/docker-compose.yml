@@ -29,3 +29,13 @@ services:
       - "db"
       - "elasticsearch"
     tmpfs: /data:uid=1000
+
+  crowdin:
+    image: fundocker/crowdin:2.0.27
+    volumes:
+      - ".:/app"
+    environment:
+      - CROWDIN_API_KEY
+      - CROWDIN_PROJECT_IDENTIFIER
+      - CROWDIN_BASE_PATH
+    working_dir: /app
