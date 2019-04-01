@@ -91,12 +91,8 @@ search-index:  ## (re)generate the Elasticsearch index
 	@$(MANAGE) bootstrap_elasticsearch
 .PHONY: search-index
 
-lint-back: ## lint back-end python sources
-	${MAKE} lint-back-isort;
-	${MAKE} lint-back-black;  # black should come after isort just in case they don't agree...
-	${MAKE} lint-back-flake8;
-	${MAKE} lint-back-pylint;
-.PHONY: lint-back
+lint-back: lint-back-isort  lint-back-black int-back-flake8 lint-back-pylint ## lint back-end python sources
+.PHONY: lint-back # black should come after isort just in case they don't agree...
 
 lint-back-black: ## lint back-end python sources with black
 	@echo 'lint:black started…';
@@ -118,9 +114,7 @@ lint-back-pylint: ## lint back-end python sources with pylint
 	@$(COMPOSE_TEST_RUN_APP) pylint src/richie/apps src/richie/plugins sandbox tests;
 .PHONY: lint-back-pylint
 
-lint-front: ## run both front-end "linters" prettier & tslint
-	${MAKE} lint-front-tslint;
-	${MAKE} lint-front-prettier;
+lint-front: lint-front-tslint lint-front-prettier ## run both front-end "linters" prettier & tslint
 .PHONY: lint-front
 
 lint-front-tslint: ## lint TypeScript sources
@@ -183,14 +177,10 @@ help:
 # Translations tasks
 
 .PHONY: i18n-generate
-i18n-generate: ## Generate source translations files for all applications
-	${MAKE} i18n-generate-back;
-	${MAKE} i18n-generate-front;
+i18n-generate: i18n-generate-back i18n-generate-front ## Generate source translations files for all applications
 
 .PHONY: i18n-compile
-i18n-compile: ## Compile translated messages to be used by all applications
-	${MAKE} i18n-compile-back
-	${MAKE} i18n-compile-front
+i18n-compile: i18n-compile-back i18n-compile-front ## Compile translated messages to be used by all applications
 
 .PHONY: i18n-generate-front
 i18n-generate-front:
@@ -218,11 +208,7 @@ crowdin-download: ## Download translated message from Crowdin
 	@$(COMPOSE_RUN_CROWDIN) download translations
 
 .PHONY: i18n-generate-and-upload
-i18n-generate-and-upload: ## Generate source translations for all applications and upload then to crowdin
-	${MAKE} i18n-generate
-	${MAKE} crowdin-upload
+i18n-generate-and-upload: i18n-generate crowdin-upload ## Generate source translations for all applications and upload then to crowdin
 
 .PHONY: i18n-download-and-compile
-i18n-download-and-compile: ## Download all translated messages and compile them to be used by all applications
-	${MAKE} crowdin-download
-	${MAKE} i18n-compile
+i18n-download-and-compile: crowdin-download i18n-compile ## Download all translated messages and compile them to be used by all applications
