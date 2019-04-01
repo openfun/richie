@@ -5,13 +5,15 @@
 {% with organization=current_page.organization header_level=2 %}
 <div class="organization-detail">
   <div class="organization-detail__banner">
-    {% placeholder "banner" %}
+    {% placeholder "banner" or %}
+      <div class="organization-detail__banner__empty"></div>
+    {% endplaceholder %}
   </div>
 
   <div class="organization-detail__logo">
     {% with width=216 height=120 %}
       {% placeholder "logo" or %}
-        <img src="{% static "images/samples/main-organization.png" %}" alt="">
+        <div class="organization-detail__logo__empty"></div>
       {% endplaceholder %}
     {% endwith %}
   </div>

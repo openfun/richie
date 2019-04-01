@@ -37,6 +37,16 @@ $richie-org-detail-banner-logo-height-xl: 25rem !default;
       min-height: 100%;
       margin: auto;
     }
+
+    &__empty {
+      width: 100%;
+      background: $gray97;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
   }
 
   &__logo {
@@ -76,6 +86,16 @@ $richie-org-detail-banner-logo-height-xl: 25rem !default;
       width: 100%;
       min-height: 100%;
       margin: auto;
+    }
+
+    &__empty {
+      width: 100%;
+      background: $white;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
     }
   }
 
