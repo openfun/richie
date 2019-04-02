@@ -25,13 +25,10 @@ class CreateDemoSiteCommandsTestCase(CMSTestCase):
 
     @override_settings(DEBUG=True)
     @mock.patch.object(Logger, "info")
-    @mock.patch("richie.apps.core.management.commands.create_demo_site.clear_cms_data")
     @mock.patch(
         "richie.apps.core.management.commands.create_demo_site.create_demo_site"
     )
-    def test_commands_create_demo_site_success(
-        self, mock_create, mock_clear, mock_logger
-    ):
+    def test_commands_create_demo_site_success(self, mock_create, mock_logger):
         """
         The command should delete and recreate the sample site when DEBUG is True
         The result should be posted to an info logger
@@ -43,6 +40,5 @@ class CreateDemoSiteCommandsTestCase(CMSTestCase):
         """
         self.assertTrue(settings.DEBUG)
         call_command("create_demo_site")
-        mock_clear.assert_called_once_with()
         mock_create.assert_called_once_with()
         mock_logger.assert_called_once_with("done")

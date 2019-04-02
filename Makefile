@@ -83,6 +83,7 @@ compilemessages: ## compile the gettext files
 	@$(COMPOSE_RUN) -w /app/src/richie app python /app/sandbox/manage.py compilemessages
 
 demo-site:  ## create a demo site
+	@$(MANAGE) flush
 	@$(MANAGE) create_demo_site
 	@${MAKE} search-index;
 .PHONY: demo-site
