@@ -11,14 +11,17 @@ from elasticsearch.client import IndicesClient
 from elasticsearch.helpers import bulk
 
 from richie.apps.search.indexers.courses import CoursesIndexer
+from richie.apps.search.text_indexing import ANALYSIS_SETTINGS
 from richie.apps.search.utils.indexers import slice_string_for_completion
+
+COURSES_INDEX = "test_courses"
 
 
 @mock.patch.object(  # Plug the test index we're filling on the indexer itself
     CoursesIndexer,
     "index_name",
     new_callable=mock.PropertyMock,
-    return_value="test_courses",
+    return_value=COURSES_INDEX,
 )
 class AutocompleteCoursesTestCase(TestCase):
     """
@@ -71,18 +74,22 @@ class AutocompleteCoursesTestCase(TestCase):
         # Delete any existing indexes so we get a clean slate
         indices_client.delete(index="_all")
         # Create an index we'll use to test the ES features
-        indices_client.create(index="test_courses")
+        indices_client.create(index=COURSES_INDEX)
         # Use the default courses mapping from the Indexer
         indices_client.put_mapping(
-            body=CoursesIndexer.mapping, doc_type="course", index="test_courses"
+            body=CoursesIndexer.mapping, doc_type="course", index=COURSES_INDEX
         )
+        # The index needs to be closed before we set an analyzer
+        indices_client.close(index=COURSES_INDEX)
+        indices_client.put_settings(body=ANALYSIS_SETTINGS, index=COURSES_INDEX)
+        indices_client.open(index=COURSES_INDEX)
         # Add the sorting script
         settings.ES_CLIENT.put_script(id="state", body=CoursesIndexer.scripts["state"])
         # Actually insert our courses in the index
         actions = [
             {
                 "_id": course["id"],
-                "_index": "test_courses",
+                "_index": COURSES_INDEX,
                 "_op_type": "create",
                 "_type": "course",
                 "absolute_url": {"en": "url"},
