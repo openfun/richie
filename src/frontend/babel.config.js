@@ -6,6 +6,7 @@ module.exports = {
         messagesDir: './i18n',
       },
     ],
+    ['@babel/plugin-syntax-dynamic-import'],
   ],
   presets: [
     [

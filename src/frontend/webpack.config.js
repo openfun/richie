@@ -6,9 +6,14 @@ module.exports = {
   // webpack config for production.
   mode: 'development',
 
-  // Include whatwg fetch as an entry point (and not an import) as it's replacing (when necessary)
-  // a globally available browser-provided function
-  entry: ['./js/index.tsx'],
+  // Currently, @babel/preset-env is unaware that using import() with Webpack relies on Promise internally.
+  // Environments which do not have builtin support for Promise, like Internet Explorer, will require both
+  // the promise and iterator polyfills be added manually.
+  entry: [
+    'core-js/modules/es.promise',
+    'core-js/modules/es.array.iterator',
+    './js/index.tsx',
+  ],
   output: {
     filename: 'index.js',
     path: __dirname + '/../richie/static/richie/js',
