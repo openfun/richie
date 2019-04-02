@@ -595,10 +595,10 @@ jobs:
   lint-front-tslint:
     docker:
       - image: circleci/node:10
-    working_directory: ~/richie/src/frontend
+    working_directory: ~/fun/src/frontend
     steps:
       - checkout:
-          path: ~/richie
+          path: ~/fun
       - restore_cache:
           keys:
             - v4-front-dependencies-{{ checksum "yarn.lock" }}
@@ -609,10 +609,10 @@ jobs:
   lint-prettier:
     docker:
       - image: circleci/node:10
-    working_directory: ~/richie/src/frontend
+    working_directory: ~/fun/src/frontend
     steps:
       - checkout:
-          path: ~/richie
+          path: ~/fun
       - restore_cache:
           keys:
             - v4-front-dependencies-{{ checksum "yarn.lock" }}
@@ -623,10 +623,10 @@ jobs:
   test-front:
     docker:
       - image: circleci/node:10
-    working_directory: ~/richie/src/frontend
+    working_directory: ~/fun/src/frontend
     steps:
       - checkout:
-          path: ~/richie
+          path: ~/fun
       - restore_cache:
           keys:
             - v4-front-dependencies-{{ checksum "yarn.lock" }}
@@ -643,16 +643,16 @@ jobs:
   npm:
     docker:
       - image: circleci/node:10
-    working_directory: ~/richie
+    working_directory: ~/fun
     steps:
       - checkout:
-          path: ~/richie
+          path: ~/fun
       - restore_cache:
           keys:
             - v4-front-dependencies-{{ checksum "yarn.lock" }}
       - run:
           name: Authenticate with registry
-          command: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/richie/.npmrc
+          command: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/fun/.npmrc
       - run:
           name: Publish package
           command: npm publish src/frontend
