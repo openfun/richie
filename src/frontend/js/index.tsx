@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', event => {
   // Find all the elements that need React to render a component
   Array.prototype.forEach.call(
     document.querySelectorAll('.fun-react'),
-    (element: Element) => {
+    async (element: Element) => {
       // Generate a component name. It should be a key of the componentLibrary object / ComponentLibrary interface
       const componentName = startCase(
         get(element.className.match(/fun-react--([a-zA-Z-]*)/), '[1]') || '',
@@ -54,12 +54,12 @@ document.addEventListener('DOMContentLoaded', event => {
         }
 
         try {
-          addLocaleData(require(`react-intl/locale-data/${localeCode}`));
+          addLocaleData(await import(`react-intl/locale-data/${localeCode}`));
         } catch (e) {}
 
         let translatedMessages = null;
         try {
-          translatedMessages = require(`./translations/${locale}.json`);
+          translatedMessages = await import(`./translations/${locale}.json`);
         } catch (e) {}
 
         // Do get the component dynamically. We know this WILL produce a valid component thanks to the type guard

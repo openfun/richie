@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Translations are loaded dynamically in frontend application.
+
 ## [1.0.0-beta.4] - 2019-04-08
 
 ### Added
