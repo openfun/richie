@@ -91,7 +91,7 @@ search-index:  ## (re)generate the Elasticsearch index
 	@$(MANAGE) bootstrap_elasticsearch
 .PHONY: search-index
 
-lint-back: lint-back-isort  lint-back-black int-back-flake8 lint-back-pylint ## lint back-end python sources
+lint-back: lint-back-isort  lint-back-black lint-back-flake8 lint-back-pylint ## lint back-end python sources
 .PHONY: lint-back # black should come after isort just in case they don't agree...
 
 lint-back-black: ## lint back-end python sources with black
