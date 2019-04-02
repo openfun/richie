@@ -11,7 +11,6 @@ from django.core.management.base import BaseCommand, CommandError
 from django.test.utils import override_settings
 
 import factory
-from cms import models as cms_models
 from cms.api import add_plugin
 from filer.models.imagemodels import Image
 
@@ -27,16 +26,7 @@ from richie.apps.courses.factories import (
     PersonTitleTranslationFactory,
 )
 from richie.apps.courses.helpers import create_categories
-from richie.apps.courses.models import (
-    BlogPost,
-    Category,
-    Course,
-    Licence,
-    Organization,
-    Person,
-    PersonTitle,
-    PersonTitleTranslation,
-)
+from richie.apps.courses.models import BlogPost, Category, Course, Organization, Person
 
 from ...helpers import create_text_plugin, recursive_page_creation
 from ...utils import file_getter
@@ -323,24 +313,6 @@ def get_number_of_course_runs():
 # Looks like pylint is not relevant at guessing object types when cascading
 # methods over querysets: Instance of 'list' has no 'delete' member (no-member).
 # We choose to ignore this false positive warning.
-
-
-def clear_cms_data():
-    """Clear all CMS data (CMS models + apps models)"""
-
-    cms_models.Page.objects.all().delete()
-    cms_models.Title.objects.all().delete()
-    cms_models.CMSPlugin.objects.all().delete()
-    cms_models.Placeholder.objects.all().delete()
-    Course.objects.all().delete()  # Deletes the associated course runs as well by cascading
-    Organization.objects.all().delete()
-    Category.objects.all().delete()
-    Person.objects.all().delete()
-    PersonTitle.objects.all().delete()
-    PersonTitleTranslation.objects.all().delete()
-    Licence.objects.all().delete()
-    BlogPost.objects.all().delete()
-
 
 # pylint: disable=too-many-locals,too-many-statements
 @override_settings(RICHIE_KEEP_SEARCH_UPDATED=False)
@@ -785,7 +757,6 @@ class Command(BaseCommand):
                 )
             )
 
-        clear_cms_data()
         create_demo_site()
 
         logger.info("done")
