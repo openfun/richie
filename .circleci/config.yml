@@ -567,8 +567,8 @@ jobs:
           path: ~/fun
       - restore_cache:
           keys:
-            - v4-front-dependencies-{{ checksum "yarn.lock" }}
-            - v4-front-dependencies-
+            - v5-front-dependencies-{{ checksum "yarn.lock" }}
+            - v5-front-dependencies-
       # If the yarn.lock file is not up-to-date with the package.json file,
       # using the --frozen-lockfile should fail.
       - run:
@@ -590,7 +590,7 @@ jobs:
       - save_cache:
           paths:
             - ./node_modules
-          key: v4-front-dependencies-{{ checksum "yarn.lock" }}
+          key: v5-front-dependencies-{{ checksum "yarn.lock" }}
 
   lint-front-tslint:
     docker:
@@ -601,7 +601,7 @@ jobs:
           path: ~/fun
       - restore_cache:
           keys:
-            - v4-front-dependencies-{{ checksum "yarn.lock" }}
+            - v5-front-dependencies-{{ checksum "yarn.lock" }}
       - run:
           name: Lint code with tslint
           command: yarn lint
@@ -615,7 +615,7 @@ jobs:
           path: ~/fun
       - restore_cache:
           keys:
-            - v4-front-dependencies-{{ checksum "yarn.lock" }}
+            - v5-front-dependencies-{{ checksum "yarn.lock" }}
       - run:
           name: Lint JS/TS/JSON and CSS/SCSS code with prettier
           command: yarn prettier --list-different "js/**/*.+(ts|tsx|json|js|jsx)" "*.+(ts|tsx|json|js|jsx)" "**/*.+(css|scss)"
@@ -629,7 +629,7 @@ jobs:
           path: ~/fun
       - restore_cache:
           keys:
-            - v4-front-dependencies-{{ checksum "yarn.lock" }}
+            - v5-front-dependencies-{{ checksum "yarn.lock" }}
       - run:
           name: Run tests
           # Circle CI needs the tests to be ran sequentially, otherwise it hangs. See Jest docs below:
@@ -649,7 +649,7 @@ jobs:
           path: ~/fun
       - restore_cache:
           keys:
-            - v4-front-dependencies-{{ checksum "yarn.lock" }}
+            - v5-front-dependencies-{{ checksum "yarn.lock" }}
       - run:
           name: Authenticate with registry
           command: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/fun/.npmrc
