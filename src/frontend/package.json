@@ -68,6 +68,7 @@
   },
   "dependencies": {
     "bootstrap": "4.3.1",
+    "core-js": "3",
     "lodash-es": "4.17.11",
     "query-string": "6.4.0",
     "react": "16.8.5",
