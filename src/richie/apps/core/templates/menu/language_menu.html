@@ -6,7 +6,7 @@
     {% get_language_info for code as lang %}
     <li class="topbar__menu__list__item topbar__menu__list__item--language topbar__menu__list__item--{{ code }}{% if code == LANGUAGE_CODE %} topbar__menu__list__item--active{% endif %}">
         <a class="topbar__menu__list__item__link" href="{% page_language_url code %}"
-        title="{% trans "Change to language:" %} {{ lang.code|slice:":2" }}">
+        title="{% blocktrans %}Switch to {{ lang.name_translated }}{% endblocktrans %}">
             {{ lang.code|slice:":2" }}
         </a>
     </li>
