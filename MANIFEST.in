@@ -1,3 +1,4 @@
 include LICENSE
 include README.md
-recursive-include src/richie *.html *.png *.gif *.js *.css *.jpg *.jpeg *.po *.mo
+recursive-include src/richie *.html *.png *.gif *.js *.css *.jpg *.jpeg *.po *.mo *.eot *.svg *.ttf *.woff
+include src/richie/apps/core/static/fonts/icomoon/selection.json
