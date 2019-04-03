@@ -446,7 +446,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         "language": "{{ language }}",
         "skin": "moono-lisa",
         "toolbarCanCollapse": False,
-        "contentsCss": "/static/css/ckeditor.css",
+        "contentsCss": "/static/richie/css/ckeditor.css",
         # Enabled showblocks as default behavior
         "startupOutlineBlocks": True,
         # Enable some plugins
@@ -471,17 +471,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
             ["Bold", "Italic", "Underline", "-", "Subscript", "Superscript"],
             ["JustifyLeft", "JustifyCenter", "JustifyRight"],
             ["Link", "Unlink"],
-            [
-                "Image",
-                "-",
-                "NumberedList",
-                "BulletedList",
-                "-",
-                "Table",
-                "-",
-                "CreateDiv",
-                "HorizontalRule",
-            ],
+            ["NumberedList", "BulletedList", "-", "HorizontalRule"],
             ["Source"],
         ],
     }

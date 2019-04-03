@@ -1,0 +1,54 @@
+// Common basic rules on image elements
+
+img {
+  // Image should NEVER go beyond its container
+  max-width: 100%;
+
+  // Horizontal alignments
+  &.align-center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    float: none;
+    clear: both;
+  }
+  &.align-left {
+    float: left;
+    @include media-breakpoint-down(md) {
+      margin-left: auto;
+      margin-right: auto;
+      float: none;
+    }
+  }
+  &.align-right {
+    float: right;
+    @include media-breakpoint-down(md) {
+      margin-left: auto;
+      margin-right: auto;
+      float: none;
+    }
+  }
+}
+
+figure {
+  // Float clearfix is included inside figure
+  @include clearfix();
+
+  img {
+    &.align-center + figcaption {
+      text-align: center;
+    }
+    &.align-left + figcaption {
+      text-align: left;
+      @include media-breakpoint-down(md) {
+        text-align: center;
+      }
+    }
+    &.align-right + figcaption {
+      text-align: right;
+      @include media-breakpoint-down(md) {
+        text-align: center;
+      }
+    }
+  }
+}

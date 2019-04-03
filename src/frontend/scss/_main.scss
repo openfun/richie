@@ -35,6 +35,9 @@
 @import 'bootstrap/scss/utilities/text';
 @import 'bootstrap/scss/utilities/embed';
 
+// Some basic element styling
+@import './elements/images';
+
 // PORTAL STYLES
 // Objects from Partials (eg. styles for templates produced by dependencies)
 @import './objects/react-autosuggest';
@@ -69,7 +72,7 @@
 @import './templates/search/search';
 @import './templates/richie/large_banner/large_banner';
 @import './templates/richie/large_banner/hero-intro';
-@import './templates/richie/section/highlighted_items';
+@import './templates/richie/section/section';
 
 // Page component styles
 @import './components/header';

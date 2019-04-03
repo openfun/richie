@@ -1,0 +1,18 @@
+/*
+CSS for CKEditor content
+*/
+
+/*
+ * Add alignment classes required for alignment buttons to work right according
+ * to CKEditor configuration option "justifyClasses" */
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-center {
+  text-align: center;
+}
