@@ -9,6 +9,9 @@ $richie-section-highlights-title-textalign: center !default;
 $richie-section-highlights-item-gutter: 0.625rem !default;
 
 .section {
+  // Include clearfix since section is a hard fullwidth block
+  @include clearfix();
+
   &--highlights {
     padding: $richie-section-highlights-padding;
     background: $richie-section-highlights-background-even;
@@ -39,6 +42,12 @@ $richie-section-highlights-item-gutter: 0.625rem !default;
       @include media-breakpoint-up(md) {
         @include make-container();
         @include make-container-max-widths();
+      }
+
+      // Some have to take 100% on default behavior
+      & > p,
+      & > figure {
+        @include sv-flex(1, 0, 100%);
       }
 
       .course-plugin-container {
