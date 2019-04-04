@@ -636,6 +636,25 @@ jobs:
           # (https://jestjs.io/docs/en/troubleshooting#tests-are-extremely-slow-on-docker-and-or-continuous-integration-ci-server)
           command: yarn test --runInBand
 
+  test-front-package:
+    docker:
+      - image: circleci/node:10
+    working_directory: ~/wrk
+    steps:
+      - checkout:
+          path: ~/fun
+      - run:
+          name: Check SCSS library
+          command: |
+            # Install the sass library/compiler
+            yarn add node-sass
+            # Install the package locally
+            yarn add file:/home/circleci/fun/src/frontend
+            # Create a scss file to compile that imports the package main entry
+            echo -e "@import 'richie-education/scss/main';\n" > main.scss
+            # Compile it!
+            yarn node-sass --include-path node_modules main.scss main.css
+
   # Publishing to npm requires that:
   #   * you already registered to pypi.org
   #   * you have define the NPM_TOKEN secret environment variables in CircleCI
@@ -684,6 +703,10 @@ workflows:
       - test-front:
           requires:
             - build-front
+          filters:
+            tags:
+              only: /.*/
+      - test-front-package:
           filters:
             tags:
               only: /.*/
@@ -823,6 +846,7 @@ workflows:
             - lint-front-tslint
             - lint-prettier
             - test-front
+            - test-front-package
           filters:
             branches:
               ignore: /.*/
