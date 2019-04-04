@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2019-03-28T19:59:53.710Z\n"
+"POT-Creation-Date: 2019-03-29T17:03:36.640Z\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "MIME-Version: 1.0\n"
@@ -13,14 +13,7 @@ msgstr ""
 "Last-Translator: sampaccoud <samuel@sampaccoud.com>\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2019-03-29 16:38\n"
-
-#. [settings.filters.availability.title] - Title for the "Availability" section of course filters (eg. Coming soon / Current session etc.)
-#. defaultMessage is:
-#. Availability
-#: i18n/js/settings.json
-msgid "Availability"
-msgstr ""
+"PO-Revision-Date: 2019-04-03 21:15\n"
 
 #. [common.categoriesHumanName] - Title/name to use when we display a list of categories
 #. defaultMessage is:
@@ -36,26 +29,12 @@ msgstr "Catégories"
 msgid "Close"
 msgstr "Fermer"
 
-#. [settings.filters.availability.values.coming_soon] - Possible value for the "Availability" filter for courses
-#. defaultMessage is:
-#. Coming soon
-#: i18n/js/settings.json
-msgid "Coming soon"
-msgstr ""
-
 #. [common.coursesHumanName] - Title/name to use when we display a list of courses
 #. defaultMessage is:
 #. Courses
 #: i18n/js/utils/commonMessages.json
 msgid "Courses"
 msgstr "Cours"
-
-#. [settings.filters.availability.values.current] - Possible value for the "Availability" filter for courses
-#. defaultMessage is:
-#. Current session
-#: i18n/js/settings.json
-msgid "Current session"
-msgstr ""
 
 #. [components.CourseGlimpse.linkText] - Accessibility title for links on course glimpses.
 #. defaultMessage is:
@@ -64,47 +43,19 @@ msgstr ""
 msgid "Details page for {courseTitle}."
 msgstr "Page de détails pour {courseTitle}."
 
-#. [settings.filters.language.en] - Language
-#. defaultMessage is:
-#. English
-#: i18n/js/settings.json
-msgid "English"
-msgstr ""
-
 #. [components.SearchFiltersPane.title] - Title for the search filters pane in course search.
 #. defaultMessage is:
 #. Filter courses
 #: i18n/js/components/SearchFiltersPane/SearchFiltersPane.json
 msgid "Filter courses"
-msgstr ""
-
-#. [settings.filters.new.new] - Possible balue for the "New" filter for courses
-#. defaultMessage is:
-#. First session
-#: i18n/js/settings.json
-msgid "First session"
-msgstr ""
-
-#. [settings.filters.language.fr] - Language
-#. defaultMessage is:
-#. French
-#: i18n/js/settings.json
-msgid "French"
-msgstr ""
+msgstr "Filtrer les cours"
 
 #. [components.SearchFilterValueParent.ariaHideChildren] - Accessibility message for the button to hide children of the current filter
 #. defaultMessage is:
 #. Hide child filters
 #: i18n/js/components/SearchFilterValueParent/SearchFilterValueParent.json
 msgid "Hide child filters"
-msgstr ""
-
-#. [settings.filters.language.title] - Title for the "Language" section of course filters (eg. FR / EN etc.)
-#. defaultMessage is:
-#. Language
-#: i18n/js/settings.json
-msgid "Language"
-msgstr ""
+msgstr "Cacher les filtres enfants"
 
 #. [components.CourseGlimpse.logoAltText] - Alternate text for the course logo in a course glimpse.
 #. defaultMessage is:
@@ -112,20 +63,6 @@ msgstr ""
 #: i18n/js/components/CourseGlimpse/CourseGlimpse.json
 msgid "Logo for {courseTitle}"
 msgstr "Logo du cours {courseTitle}"
-
-#. [settings.filters.new.title] - Title for the "New" section of course filters
-#. defaultMessage is:
-#. New courses
-#: i18n/js/settings.json
-msgid "New courses"
-msgstr ""
-
-#. [settings.filters.availability.values.open] - Possible value for the "Availability" filter for courses
-#. defaultMessage is:
-#. Open for enrollment
-#: i18n/js/settings.json
-msgid "Open for enrollment"
-msgstr ""
 
 #. [common.organizationsHumanName] - Title/name to use when we display a list of organizations
 #. defaultMessage is:
@@ -154,7 +91,7 @@ msgstr "Recherche de {query} dans les cours..."
 #. Show child filters
 #: i18n/js/components/SearchFilterValueParent/SearchFilterValueParent.json
 msgid "Show child filters"
-msgstr ""
+msgstr "Afficher les filtres enfants"
 
 #. [components.CourseGlimpse.startsOn] - Shows the start date for a course in a course glimpse in a short format such as Sep 4, '1986'
 #. defaultMessage is:
