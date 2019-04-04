@@ -46,7 +46,7 @@ COPY ./src/richie /builder/src/richie/
 RUN pip install --upgrade pip
 
 RUN mkdir /install && \
-    pip install --prefix=/install .
+    pip install --prefix=/install .[sandbox]
 
 # ---- final application image ----
 FROM base
