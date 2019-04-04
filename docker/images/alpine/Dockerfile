@@ -50,9 +50,7 @@ RUN apk --no-cache add --update \
     tk-dev \
     zlib-dev \
     # psycopg2 dependencies
-    postgresql-dev \
-    # MySQL dependencies
-    mariadb-connector-c-dev && \
+    postgresql-dev && \
     rm -rf /var/cache/apk/*
 
 WORKDIR /builder
@@ -68,7 +66,7 @@ COPY ./src/richie /builder/src/richie/
 RUN pip install --upgrade pip
 
 RUN mkdir /install && \
-    pip install --prefix=/install .
+    pip install --prefix=/install .[sandbox]
 
 # ---- final application image ----
 FROM base

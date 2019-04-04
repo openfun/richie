@@ -16,7 +16,9 @@ RUN apk --no-cache add --update \
         gcc \
         libffi-dev \
         musl-dev \
-        vim
+        vim \
+        # MySQL dependencies
+        mariadb-connector-c-dev
 
 # Upgrade pip to its latest release to speed up dependencies installation
 RUN pip install --upgrade pip
