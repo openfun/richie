@@ -27,8 +27,8 @@ COPY ./src /app/src/
 WORKDIR /app/src/frontend
 
 RUN yarn install --frozen-lockfile && \
-    yarn build && \
-    yarn sass
+    yarn build-production && \
+    yarn sass-production
 
 # ---- back-end builder image ----
 FROM base as back-builder
