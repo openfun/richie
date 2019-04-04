@@ -1,7 +1,7 @@
 """Tests for environment ElasticSearch support."""
-# pylint: disable=too-many-lines
 import json
 import random
+from http.cookies import SimpleCookie
 from unittest import mock
 
 from django.conf import settings
@@ -103,6 +103,28 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
             client=settings.ES_CLIENT,
         )
         indices_client.refresh()
+
+    def test_query_courses_filter_box_titles_french(self, *_):
+        """
+        Filter box titles should be in french when the language cookie is set.
+        """
+
+        self.prepare_index([])
+        self.client.cookies = SimpleCookie({"django_language": "fr"})
+        response = self.client.get(f"/api/v1.0/courses/")
+        self.assertEqual(response.status_code, 200)
+        content = json.loads(response.content)
+        self.assertEqual(
+            [v["human_name"] for v in content["filters"].values()],
+            [
+                "Nouveaux cours",
+                "Disponibilité",
+                "Sujets",
+                "Niveaux",
+                "Établissements",
+                "Langues",
+            ],
+        )
 
     def test_query_courses_rare_facet_force(self, *_):
         """

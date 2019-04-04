@@ -3,7 +3,7 @@ Import custom settings and set up defaults for values the Search app needs
 """
 from django.conf import settings
 from django.utils.functional import lazy
-from django.utils.translation import gettext as _
+from django.utils.translation import ugettext_lazy as _
 
 # The React i18n library only works with ISO15897 locales (e.g. fr_FR)
 # Django also supports ISO639-1 language codes without a region (e.g. fr) which is sufficient
