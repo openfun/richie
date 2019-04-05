@@ -4,9 +4,18 @@
   <div class="organization-plugin-container{% if instance.check_publication is False %} organization-plugin-container--draft{% endif %}">
     <div class="organization-plugin">
       <a class="organization-plugin__body" href="{{ relevant_page.get_absolute_url }}" title="{{ relevant_page.get_title }}" alt="{{ relevant_page.get_title }} {% trans 'logo' %}">
+        <div class="organization-plugin__logo">
         {% with width=216 height=120 %}
-          {% show_placeholder "logo" relevant_page %}
+          {% show_placeholder "logo" relevant_page as logo %}
+          {% if logo %}
+              {{ logo }}
+          {% else %}
+              <div class="organization-plugin__logo__empty">
+              {% trans "Logo" %}
+              </div>
+          {% endif %}
         {% endwith %}
+        </div>
         <div class="organization-plugin__title">
           {{ relevant_page.get_title }}
         </div>

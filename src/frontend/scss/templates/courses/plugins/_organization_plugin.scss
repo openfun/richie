@@ -3,47 +3,65 @@ $richie-organization-plugin-border-hover: 1px solid $firebrick6 !default;
 $richie-organization-plugin-title-fontsize: small !default;
 $richie-organization-plugin-title-fontcolor: $black !default;
 $richie-organization-plugin-title-textalign: center !default;
-// Set a standard height that caps titles at 1 lines
-$richie-organization-plugin-title-height: 1.1 * $headings-line-height *
-  $h5-font-size !default;
 
 .organization-plugin-container {
-  @include make-col-ready();
+  @include sv-flex(1, 0, 100%);
+
   @include media-breakpoint-up(sm) {
-    @include make-col(6);
+    @include sv-flex(1, 0, 50%);
   }
   @include media-breakpoint-up(md) {
-    @include make-col(4);
+    @include sv-flex(1, 0, 33.3333%);
   }
   @include media-breakpoint-up(lg) {
-    @include make-col(3);
+    @include sv-flex(1, 0, 25%);
   }
-  display: inline-block;
-  min-height: 100%;
+  display: flex;
 }
+
 .organization-plugin {
-  @extend .card;
-  // Use margin bottom to match side spacing
-  margin-bottom: $richie-organization-plugin-margin-bottom;
-  &:hover,
-  &:focus {
-    border: $richie-organization-plugin-border-hover;
-    cursor: pointer;
-  }
+  @include sv-flex(1, 0, 100%);
+  display: flex;
+  padding: 1.25rem;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-content: space-between;
+  border: 1px solid rgba($black, 0.125);
+  border-radius: 0.25rem;
+
   &__body {
-    @extend .card-body;
-    @extend .text-center;
-    & > img {
-      max-width: 100%;
+    @include sv-flex(1, 0, 100%);
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    color: $richie-organization-plugin-title-fontcolor;
+    font-size: $richie-organization-plugin-title-fontsize;
+  }
+
+  &__logo {
+    @include sv-flex(1, 0, auto);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    @include m-o-media_empty(
+      $width: 100%,
+      $background: $gray97,
+      $absolute: false
+    );
+
+    &__empty {
+      @include sv-flex(1, 0, auto);
+    }
+
+    img {
+      @include sv-flex(0, 0, auto);
     }
   }
+
   &__title {
-    @extend .card-title;
-    // Set a standard height that caps titles at x lines
-    font-size: $richie-organization-plugin-title-fontsize;
-    color: $richie-organization-plugin-title-fontcolor;
+    @include sv-flex(0, 0, auto);
     text-align: $richie-organization-plugin-title-textalign;
-    height: $richie-organization-plugin-title-height;
-    overflow: visible;
   }
 }

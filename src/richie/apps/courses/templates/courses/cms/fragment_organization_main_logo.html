@@ -1,19 +1,20 @@
-{% load cms_tags static %}{% spaceless %}
+{% load i18n cms_tags %}{% spaceless %}
+<div class="course-detail__aside__main-org-logo">
 {% if organization %}
-    {% if current_page.publisher_is_draft %}
-        {% if organization.check_publication is True %}
-            {% show_placeholder "logo" organization.public_extension.extended_object as logo %}
+    <a href="{{ organization.get_absolute_url }}" title="{{ organization.get_title }}">
+        {% show_placeholder "logo" organization as logo %}
+        {% if logo %}
+            {{ logo }}
         {% else %}
-            {% show_placeholder "logo" organization.extended_object as logo %}
+            <div class="course-detail__aside__main-org-logo__empty">
+            {% trans "Main organization" %}
+            </div>
         {% endif %}
-    {# If the current page is the published version, show only the organizations that are published #}
-    {% elif organization.check_publication is True %}
-        {% show_placeholder "logo" organization.public_extension.extended_object as logo %}
-    {% endif %}
-    {% if logo %}
-        {{ logo }}
-    {% else %}
-        <img src="{% static "images/samples/main-organization.png" %}" alt="">
-    {% endif %}
+    </a>
+{% else %}
+    <div class="course-detail__aside__main-org-logo__empty">
+    {% trans "Main organization" %}
+    </div>
 {% endif %}
+</div>
 {% endspaceless %}

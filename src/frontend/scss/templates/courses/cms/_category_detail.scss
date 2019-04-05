@@ -34,14 +34,17 @@ $richie-category-detail-banner-logo-sizing-xl: 25rem !default;
       bottom: -1000%;
       left: -1000%;
       min-width: 100%;
-      min-height: 100%;
       margin: auto;
     }
+
+    @include m-o-media_empty($background: $gray97);
   }
 
   &__logo {
     position: relative;
     overflow: hidden;
+    background: $white;
+    border: 1px solid darken($light, 20%);
 
     width: $richie-category-detail-banner-logo-sizing * 0.75;
     height: $richie-category-detail-banner-logo-sizing * 0.75;
@@ -75,8 +78,9 @@ $richie-category-detail-banner-logo-sizing-xl: 25rem !default;
       width: 100%;
       min-height: 100%;
       margin: auto;
-      border: 1px solid darken($light, 20%);
     }
+
+    @include m-o-media_empty();
   }
 
   &__title {

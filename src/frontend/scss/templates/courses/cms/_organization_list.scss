@@ -41,9 +41,9 @@ $richie-org-list-item-empty-textalign: center;
       display: flex;
       margin: $richie-org-list-item-gutter;
       padding: 1.25rem;
-      flex-direction: row;
-      flex-wrap: wrap;
-      align-content: stretch;
+      flex-direction: column;
+      flex-wrap: nowrap;
+      align-content: space-between;
       border: 1px solid rgba($black, 0.125);
       border-radius: 0.25rem;
       @include media-breakpoint-up(md) {
@@ -51,8 +51,9 @@ $richie-org-list-item-empty-textalign: center;
       }
 
       &__logo {
-        @include sv-flex(1, 0, 100%);
+        @include sv-flex(1, 0, auto);
         display: flex;
+        position: relative;
         flex-direction: row;
         justify-content: center;
         align-content: center;
@@ -62,10 +63,12 @@ $richie-org-list-item-empty-textalign: center;
           @include sv-flex(0, 0, auto);
           max-width: 100%;
         }
+
+        @include m-o-media_empty($background: $gray97);
       }
 
       &__title {
-        @include sv-flex(1, 0, 100%);
+        @include sv-flex(0, 0, auto);
         display: flex;
         justify-content: center;
         font-size: $richie-org-list-item-title-fontsize;

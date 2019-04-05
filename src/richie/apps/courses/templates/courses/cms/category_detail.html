@@ -2,15 +2,19 @@
 {% load cms_tags i18n %}
 
 {% block content %}{% spaceless %}
-{% with category=current_page.category header_level=2 %}
+{% with category=current_page.category header_level=2 blogposts=current_page.category.get_blogposts courses=current_page.category.get_courses %}
 <div class="category-detail">
   <div class="category-detail__banner">
-    {% placeholder "banner" %}
+    {% placeholder "banner" or %}
+      <div class="category-detail__banner__empty">{% trans "Banner" %}</div>
+    {% endplaceholder %}
   </div>
 
   <div class="category-detail__logo">
     {% with width=216 height=120 %}
-      {% placeholder "logo" %}
+      {% placeholder "logo" or %}
+        <div class="category-detail__logo__empty">{% trans "Logo" %}</div>
+      {% endplaceholder %}
     {% endwith %}
   </div>
 
@@ -23,10 +27,10 @@
   </div>
 </div>
 
-
+{% if blogposts %}
 <div class="blogpost-glimpse-list">
   <h2 class="blogpost-glimpse-list__title">{% trans "Related news" %}</h2>
-  {% for blogpost in category.get_blogposts %}
+  {% for blogpost in blogposts %}
     {# If the current page is a draft, show draft courses with a class annotation for styling #}
     {% if current_page.publisher_is_draft %}
       {% if blogpost.check_publication is True %}
@@ -45,15 +49,17 @@
       </a>
     {% endif %}
   {% empty %}
-    <p class="blogpost-glimpse blogpost-glimpse--empty">
+    <div class="blogpost-glimpse blogpost-glimpse--empty">
       {% trans "No associated blogposts" %}
-    </p>
+    </div>
   {% endfor %}
 </div>
+{% endif %}
 
+{% if courses %}
 <div class="course-glimpse-list">
   <h2 class="course-glimpse-list__title">{% trans "Related courses" %}</h2>
-  {% for course in category.get_courses %}
+  {% for course in courses %}
     {# If the current page is a draft, show draft courses with a class annotation for styling #}
     {% if current_page.publisher_is_draft %}
       {% if course.check_publication is True %}
@@ -72,11 +78,12 @@
       </a>
     {% endif %}
   {% empty %}
-    <p class="course-glimpse course-glimpse--empty">
+    <div class="course-glimpse course-glimpse--empty">
       {% trans "No associated courses" %}
-    </p>
+    </div>
   {% endfor %}
 </div>
+{% endif %}
 
 {% endwith %}
 {% endspaceless %}{% endblock content %}

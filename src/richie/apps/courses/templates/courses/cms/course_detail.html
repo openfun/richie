@@ -51,14 +51,27 @@
       <div class="course-detail__aside__cover">
         {% if current_page.publisher_is_draft %}
           {% placeholder "course_cover" or %}
-          <p>{% trans 'Add an image for course cover on its glimpse.' %}</p>
+          <p class="course-detail__aside__cover__empty">{% trans 'Add an image for course cover on its glimpse.' %}</p>
           {% endplaceholder %}
         {% endif %}
       </div>
 
-      <div class="course-detail__aside__main-org-logo">
-        {% include "courses/cms/fragment_organization_main_logo.html" with organization=course.get_main_organization %}
-      </div>
+      {% with main_organization=course.get_main_organization %}
+        {% if main_organization %}
+          {% if current_page.publisher_is_draft %}
+              {% if main_organization.check_publication is True %}
+                  {% include "courses/cms/fragment_organization_main_logo.html" with organization=main_organization.public_extension.extended_object %}
+              {% else %}
+                  {% include "courses/cms/fragment_organization_main_logo.html" with organization=main_organization.extended_object %}
+              {% endif %}
+          {# If the current page is the published version, show only the organizations that are published #}
+          {% elif main_organization.check_publication is True %}
+              {% include "courses/cms/fragment_organization_main_logo.html" with organization=main_organization.public_extension.extended_object %}
+          {% endif %}
+        {% else %}
+          {% include "courses/cms/fragment_organization_main_logo.html" with organization=None %}
+        {% endif %}
+      {% endwith %}
 
       <div class="course-detail__aside__social-networks">
         {% include "social-networks/course-badges.html" with page_title=request.current_page.get_title page_url=request.current_page.get_absolute_url %}
@@ -102,7 +115,7 @@
           {% endif %}
         </div>
         {% empty %}
-          {% trans "No associated course runs" %}
+          <div class="course-detail__aside__run__empty">{% trans "No associated course runs" %}</div>
         {% endfor %}
       </div>
     </div>

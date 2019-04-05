@@ -1,5 +1,5 @@
 {% extends "richie/fullwidth.html" %}
-{% load cms_tags i18n %}
+{% load cms_tags i18n extra_tags %}
 {% block content %}
 {% spaceless %}
 <div class="blogpost-detail">
@@ -10,34 +10,30 @@
       {{ current_page.creation_date|date:"SHORT_DATE_FORMAT" }}
     </p>
 
-    <p class="blogpost-detail__subhead__author">
-      {% with form_factor="tag" %}
-        {% placeholder "author" or %}
-          <span class="blogpost-detail__author__empty">
-            {% trans "No associated author" %}
-          </span>
-        {% endplaceholder %}
-      {% endwith %}
-    </p>
+    {% with form_factor="tag" %}
+      {% page_placeholder "author" current_page as blogpost_author_content %}
+      {% if blogpost_author_content %}
+      <div class="blogpost-detail__subhead__author">
+        {{ blogpost_author_content }}
+      </div>
+      {% endif %}
+    {% endwith %}
 
     {% include "social-networks/blogpost-badges.html" with page_title=request.current_page.get_title page_url=request.current_page.get_absolute_url %}
   </div>
 
-  <div class="blogpost-detail__categories">
-    {% with form_factor="tag" %}
-      {% placeholder "categories" or %}
-        <p class="blogpost-detail__categories__empty">
-          {% trans "No associated categories" %}
-        </p>
-      {% endplaceholder %}
-    {% endwith %}
-  </div>
+  {% with form_factor="tag" %}
+    {% page_placeholder "categories" current_page as blogpost_categories_content %}
+    {% if blogpost_categories_content %}
+    <div class="blogpost-detail__categories">
+      {{ blogpost_categories_content }}
+    </div>
+    {% endif %}
+  {% endwith %}
 
   <div class="blogpost-detail__cover">
     {% placeholder "cover" or %}
-      <p class="blogpost-detail__cover__empty">
-        {% trans "No cover" %}
-      </p>
+      <p class="blogpost-detail__cover__empty">{% trans "Cover" %}</p>
     {% endplaceholder %}
   </div>
 

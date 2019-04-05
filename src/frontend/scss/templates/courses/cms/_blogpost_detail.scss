@@ -17,7 +17,7 @@ $richie-blogpost-detail-title-textalign: center !default;
 
   &__subhead {
     display: flex;
-    margin-bottom: 0.5rem;
+    margin-bottom: 2rem;
     flex-wrap: wrap;
     justify-content: center;
 
@@ -93,6 +93,13 @@ $richie-blogpost-detail-title-textalign: center !default;
       margin: 0 auto;
       max-width: 100%;
     }
+
+    @include m-o-media_empty(
+      $width: 100%,
+      $height: 30vh,
+      $background: $gray97,
+      $absolute: false
+    );
   }
 
   &__excerpt {

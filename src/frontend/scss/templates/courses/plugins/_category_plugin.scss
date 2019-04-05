@@ -1,24 +1,89 @@
-$richie-category-plugin-categories-margin: 0 0 0.3rem 0;
-$richie-category-plugin-categories-padding: 0.25rem 0.4rem;
-$richie-category-plugin-categories-fontsize: 0.7rem;
-$richie-category-plugin-categories-fontcolor: $white;
-$richie-category-plugin-categories-background: $gray7;
-$richie-category-plugin-categories-divider-margin: 0.3rem;
+$richie-category-plugin-tag-margin: 0 0 0.3rem 0;
+$richie-category-plugin-tag-padding: 0.25rem 0.4rem;
+$richie-category-plugin-tag-fontsize: 0.7rem;
+$richie-category-plugin-tag-fontcolor: $white;
+$richie-category-plugin-tag-background: $gray7;
+$richie-category-plugin-tag-divider-margin: 0.3rem;
+
+$richie-category-plugin-title-fontsize: small !default;
+$richie-category-plugin-title-fontcolor: $black !default;
+$richie-category-plugin-title-textalign: center !default;
 
 .category-plugin-tag {
   @include sv-flex(0, 0, auto);
-  margin: $richie-category-plugin-categories-margin;
-  padding: $richie-category-plugin-categories-padding;
-  font-size: $richie-category-plugin-categories-fontsize;
-  color: $richie-category-plugin-categories-fontcolor;
-  background: $richie-category-plugin-categories-background;
+  margin: $richie-category-plugin-tag-margin;
+  padding: $richie-category-plugin-tag-padding;
+  font-size: $richie-category-plugin-tag-fontsize;
+  color: $richie-category-plugin-tag-fontcolor;
+  background: $richie-category-plugin-tag-background;
   text-decoration: none;
 
   &:hover {
-    color: $richie-category-plugin-categories-fontcolor;
+    color: $richie-category-plugin-tag-fontcolor;
   }
 
   & + & {
-    margin-left: $richie-category-plugin-categories-divider-margin;
+    margin-left: $richie-category-plugin-tag-divider-margin;
+  }
+}
+
+.category-plugin-container {
+  @include make-col-ready();
+  @include media-breakpoint-up(sm) {
+    @include make-col(6);
+  }
+  @include media-breakpoint-up(md) {
+    @include make-col(4);
+  }
+  @include media-breakpoint-up(lg) {
+    @include make-col(2);
+  }
+  display: flex;
+}
+
+.category-plugin {
+  display: flex;
+  padding: 1.25rem;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-content: space-between;
+  border: 1px solid rgba($black, 0.125);
+  border-radius: 0.25rem;
+
+  &__body {
+    @include sv-flex(1, 0, 100%);
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    color: $richie-category-plugin-title-fontcolor;
+    font-size: $richie-category-plugin-title-fontsize;
+  }
+
+  &__logo {
+    @include sv-flex(1, 0, auto);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    @include m-o-media_empty(
+      $width: 100%,
+      $background: $gray97,
+      $absolute: false
+    );
+
+    &__empty {
+      @include sv-flex(1, 0, auto);
+    }
+
+    img {
+      @include sv-flex(0, 0, auto);
+    }
+  }
+
+  &__title {
+    @include sv-flex(0, 0, auto);
+    word-wrap: break-word;
+    text-align: $richie-category-plugin-title-textalign;
   }
 }
