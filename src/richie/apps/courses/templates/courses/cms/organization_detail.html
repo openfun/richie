@@ -6,14 +6,14 @@
 <div class="organization-detail">
   <div class="organization-detail__banner">
     {% placeholder "banner" or %}
-      <div class="organization-detail__banner__empty"></div>
+      <div class="organization-detail__banner__empty">{% trans "Banner" %}</div>
     {% endplaceholder %}
   </div>
 
   <div class="organization-detail__logo">
     {% with width=216 height=120 %}
       {% placeholder "logo" or %}
-        <div class="organization-detail__logo__empty"></div>
+        <div class="organization-detail__logo__empty">{% trans "Logo" %}</div>
       {% endplaceholder %}
     {% endwith %}
   </div>
@@ -27,31 +27,37 @@
   </div>
 </div>
 
-<div class="course-glimpse-list">
-  {% for course in organization.get_courses %}
+{% with courses=organization.get_courses %}
+  {% if courses %}
+  <div class="course-glimpse-list">
+    <h2 class="course-glimpse-list__title">{% trans "Related courses" %}</h2>
+    {% for course in courses %}
 
-    {# If the current page is a draft, show draft courses with a class annotation for styling #}
-    {% if current_page.publisher_is_draft %}
-      {% if course.check_publication is True %}
-      <a class="course-glimpse course-glimpse--link" href="{{ course.public_extension.extended_object.get_absolute_url }}">
-        {% include "courses/cms/fragment_course_glimpse.html" with course=course.public_extension %}
-      </a>
-      {% else %}
-      <a class="course-glimpse course-glimpse--link course-glimpse--draft" href="{{ course.extended_object.get_absolute_url }}">
-        {% include "courses/cms/fragment_course_glimpse.html" with course=course %}
-      </a>
+      {# If the current page is a draft, show draft courses with a class annotation for styling #}
+      {% if current_page.publisher_is_draft %}
+        {% if course.check_publication is True %}
+        <a class="course-glimpse course-glimpse--link" href="{{ course.public_extension.extended_object.get_absolute_url }}">
+          {% include "courses/cms/fragment_course_glimpse.html" with course=course.public_extension %}
+        </a>
+        {% else %}
+        <a class="course-glimpse course-glimpse--link course-glimpse--draft" href="{{ course.extended_object.get_absolute_url }}">
+          {% include "courses/cms/fragment_course_glimpse.html" with course=course %}
+        </a>
+        {% endif %}
+      {# If the current course page is the published version, show only the courses that are published #}
+      {% elif course.check_publication is True %}
+        <a class="course-glimpse course-glimpse--link" href="{{ course.extended_object.get_absolute_url }}">
+          {% include "courses/cms/fragment_course_glimpse.html" with course=course.public_extension %}
+        </a>
       {% endif %}
-    {# If the current course page is the published version, show only the courses that are published #}
-    {% elif course.check_publication is True %}
-      <a class="course-glimpse course-glimpse--link" href="{{ course.extended_object.get_absolute_url }}">
-        {% include "courses/cms/fragment_course_glimpse.html" with course=course.public_extension %}
-      </a>
-    {% endif %}
-  {% empty %}
-    <p class="course-glimpse course-glimpse--empty">
-      {% trans "No associated courses" %}
-    </p>
-  {% endfor %}
-</div>
+    {% empty %}
+      <p class="course-glimpse course-glimpse--empty">
+        {% trans "No associated courses" %}
+      </p>
+    {% endfor %}
+  </div>
+  {% endif %}
+{% endwith %}
+
 {% endwith %}
 {% endspaceless %}{% endblock content %}

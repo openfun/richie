@@ -113,11 +113,36 @@ $richie-section-highlights-item-gutter: 0.625rem !default;
       }
 
       .category-plugin-container {
-        @include sv-flex(1, 0, auto);
+        @include sv-flex(
+          1,
+          0,
+          calc(50% - #{$richie-section-highlights-item-gutter * 2})
+        );
         display: flex;
         min-width: auto;
         margin: $richie-section-highlights-item-gutter;
         padding: 0;
+        @include media-breakpoint-up(sm) {
+          @include sv-flex(
+            1,
+            0,
+            calc(33.3333% - #{$richie-section-highlights-item-gutter * 2})
+          );
+        }
+        @include media-breakpoint-up(md) {
+          @include sv-flex(
+            1,
+            0,
+            calc(25% - #{$richie-section-highlights-item-gutter * 2})
+          );
+        }
+        @include media-breakpoint-up(lg) {
+          @include sv-flex(
+            1,
+            0,
+            calc(16.6667% - #{$richie-section-highlights-item-gutter * 2})
+          );
+        }
 
         .category-plugin {
           @include sv-flex(1, 0, 100%);

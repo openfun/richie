@@ -10,14 +10,19 @@
     {% with header_level=2 %}
       <div class="person-detail__card__media">
         {% with width=216 height=120 %}
-          {% placeholder "portrait" %}
+          {% placeholder "portrait" or %}
+            <div class="person-detail__card__media__empty">{% trans "Portrait" %}</div>
+          {% endplaceholder %}
         {% endwith %}
       </div>
 
       <div class="person-detail__card__content">
         <div class="person-detail__card__content__wrapper">
-        {% placeholder "resume" %}
-        {% placeholder "maincontent" %}
+          {% placeholder "resume" or %}
+            <p class="person-detail__card__content__wrapper__empty">{% trans "Enter your bio here..." %}</p>
+          {% endplaceholder %}
+
+          {% placeholder "maincontent" %}
         </div>
       </div>
 

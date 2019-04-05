@@ -45,6 +45,17 @@ $richie-person-detail-media-width: 120px;
         max-width: $richie-person-detail-media-width;
         border-radius: 100%;
       }
+
+      @include m-o-media_empty(
+        $width: 100%,
+        $height: 13vh,
+        $background: $gray97,
+        $absolute: false
+      );
+    }
+
+    &__content__wrapper {
+      @include m-o-media_empty($width: 100%, $height: 13vh, $absolute: false);
     }
   }
 }
