@@ -41,6 +41,17 @@ jobs:
           command: |
             gitlint --commits origin/master..HEAD
 
+  # Check that the CHANGELOG has been updated in the current branch
+  check-changelog:
+    machine: true
+    working_directory: ~/fun
+    steps:
+      - checkout
+      - run:
+          name: Check that the CHANGELOG has been modified in the current branch
+          command: |
+            git whatchanged --name-only --pretty="" origin..HEAD | grep CHANGELOG
+
   # Docker/back-end jobs
   # Build job
   # Build the Docker image ready for production
@@ -716,6 +727,13 @@ workflows:
       # Check validity of git history
       - lint-git:
           filters:
+            tags:
+              only: /.*/
+      # Check CHANGELOG update
+      - check-changelog:
+          filters:
+            branches:
+              ignore: master
             tags:
               only: /.*/
 
