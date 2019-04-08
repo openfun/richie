@@ -139,7 +139,7 @@ class SnapshotPageAdminTestCase(CMSTestCase):
             content,
             {
                 "status": 403,
-                "content": "Error! You don't have permissions to snapshot this page.",
+                "content": "You don't have sufficient permissions to snapshot this page.",
             },
         )
         # No additional courses should have been created
@@ -170,7 +170,7 @@ class SnapshotPageAdminTestCase(CMSTestCase):
             content,
             {
                 "status": 403,
-                "content": "Error! You don't have permissions to snapshot this page.",
+                "content": "You don't have sufficient permissions to snapshot this page.",
             },
         )
         # No additional courses should have been created
@@ -235,7 +235,7 @@ class SnapshotPageAdminTestCase(CMSTestCase):
             content,
             {
                 "status": 403,
-                "content": "Error! You don't have permissions to snapshot this page.",
+                "content": "You don't have sufficient permissions to snapshot this page.",
             },
         )
         # No additional courses should have been created
@@ -294,7 +294,7 @@ class SnapshotPageAdminTestCase(CMSTestCase):
         self.assertEqual(response.status_code, 200)
         content = json.loads(response.content)
         self.assertEqual(
-            content, {"status": 403, "content": "Error! You can't snapshot a snapshot."}
+            content, {"status": 403, "content": "You can't snapshot a snapshot."}
         )
 
     @override_settings(CMS_PERMISSION=False)
@@ -316,5 +316,5 @@ class SnapshotPageAdminTestCase(CMSTestCase):
         self.assertEqual(response.status_code, 200)
         content = json.loads(response.content)
         self.assertEqual(
-            content, {"status": 400, "content": "Error! Course could not be found."}
+            content, {"status": 400, "content": "Course could not be found."}
         )

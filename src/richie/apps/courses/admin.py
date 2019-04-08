@@ -1,10 +1,9 @@
 """
 Courses application admin
 """
-import time
-
 from django.conf.urls import url
 from django.contrib import admin
+from django.core.exceptions import PermissionDenied
 from django.db import models, transaction
 from django.http import HttpResponseBadRequest, HttpResponseForbidden, JsonResponse
 from django.utils.decorators import method_decorator
@@ -13,14 +12,14 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_POST
 
 from cms.admin.placeholderadmin import FrontendEditableAdminMixin
-from cms.api import Page, create_title
+from cms.api import Page
 from cms.extensions import PageExtensionAdmin
-from cms.utils import page_permissions
 from cms.utils.admin import jsonify_request
 from parler.admin import TranslatableAdmin
 
 from .fields import CourseRunSplitDateTimeField
 from .forms import LicenceFormAdmin
+from .helpers import snapshot_course
 from .models import Course, CourseRun, Licence, Organization, Person, PersonTitle
 from .widgets import CourseRunSplitDateTimeWidget
 
@@ -67,72 +66,13 @@ class CourseAdmin(PageExtensionAdmin):
             )
         except Page.DoesNotExist:
             return jsonify_request(
-                HttpResponseBadRequest(
-                    force_text(_("Error! Course could not be found."))
-                )
+                HttpResponseBadRequest(force_text(_("Course could not be found.")))
             )
 
-        # If the page has a parent that is a course page, it is a snapshot and should therefore
-        # not be allowed to be itself snapshotted.
-        if page.parent_page:
-            try:
-                page.parent_page.course
-            except Course.DoesNotExist:
-                pass
-            else:
-                return jsonify_request(
-                    HttpResponseForbidden(
-                        force_text(_("Error! You can't snapshot a snapshot."))
-                    )
-                )
-
-        site = page.node.site
-
-        # User can only snapshot pages he can see
-        can_snapshot = page_permissions.user_can_change_page(request.user, page, site)
-
-        if can_snapshot:
-            # User can only snapshot a page if he has the permission to add a page under it.
-            can_snapshot = page_permissions.user_can_add_subpage(
-                request.user, page, site
-            )
-
-        if not can_snapshot:
-            return jsonify_request(
-                HttpResponseForbidden(
-                    force_text(
-                        _("Error! You don't have permissions to snapshot this page.")
-                    )
-                )
-            )
-
-        # Copy the page as its own child with its extension.
-        # Titles are set to a timestamp in each language of the original page
-        new_page = page.copy(
-            site, parent_node=page.node, translations=False, extensions=True
-        )
-
-        # The snapshot title and slug is set to a timestamp of the time of snapshot. It is
-        # published only in languages for which the original course page was published.
-        for language in page.get_languages():
-            base = page.get_path(language)
-            timestamp = str(int(time.time()))
-            snapshot_title = _("Snapshot of {:s}").format(page.get_title(language))
-            create_title(
-                language=language,
-                menu_title=timestamp,
-                title="{:s} - {:s}".format(timestamp, snapshot_title),
-                slug=timestamp,
-                path="{:s}/{:s}".format(base, timestamp) if base else timestamp,
-                page=new_page,
-            )
-            if page.is_published(language) is True:
-                new_page.publish(language)
-
-        # Move the existing course run subpages as children of the snapshot
-        # Their publication status will be respected
-        for subpage in page.get_child_pages().filter(courserun__isnull=False):
-            subpage.move_page(new_page.node, position="last-child")
+        try:
+            new_page = snapshot_course(page, request.user, simulate_only=False)
+        except PermissionDenied as context:
+            return jsonify_request(HttpResponseForbidden(force_text(context)))
 
         return JsonResponse({"id": new_page.course.id})
 
