@@ -9,6 +9,7 @@ from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
 from richie.apps.courses.cms_wizards import BlogPostWizardForm
+from richie.apps.courses.factories import BlogPostFactory
 from richie.apps.courses.models import BlogPost
 
 
@@ -174,6 +175,28 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
             form.errors["slug"],
             ["Ensure this value has at most 200 characters (it has 201)."],
         )
+
+    def test_cms_wizards_blogpost_submit_form_slug_duplicate(self):
+        """
+        Trying to create a blog post with a slug that would lead to a duplicate path should
+        raise a validation error.
+        """
+        # A parent page should pre-exist
+        parent_page = create_page(
+            "News",
+            "richie/single_column.html",
+            "en",
+            reverse_id=BlogPost.ROOT_REVERSE_ID,
+        )
+        # Create an existing page with a known slug
+        BlogPostFactory(page_parent=parent_page, page_title="My title")
+
+        # Submit a title that will lead to the same slug
+        data = {"title": "my title"}
+
+        form = BlogPostWizardForm(data=data)
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors, {"slug": ["This slug is already in use"]})
 
     def test_cms_wizards_blogpost_parent_page_should_exist(self):
         """

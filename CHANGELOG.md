@@ -16,6 +16,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Simplify the page creation wizard by reducing possibilities and automating object relations
   based on the navigation context:
+  * ensure we are not creating duplicate slugs when creating a page,
   * reduce number of fields on form to create a new course run (remove languages and
     resource_link) and add a checkbox to easily snapshot the course when creating the course run,
   * automatically link courses with an organization when created from this organization's page,
