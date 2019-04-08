@@ -170,33 +170,33 @@ class CourseWizardForm(BaseWizardForm):
     A related Course model is created for each course page.
     """
 
-    organization = forms.ModelChoiceField(
-        required=True,
-        queryset=Organization.objects.filter(extended_object__publisher_is_draft=True),
-        label=_("Organization"),
-        help_text=_("The organization in charge of this course"),
-    )
-
     model = Course
 
     def save(self):
         """
         The parent form created the page.
         This method creates the associated course page extension.
+        If the current page is an organization, the new course should get attached to it via a
+        plugin.
         """
         page = super().save()
         course = Course.objects.create(extended_object=page)
-        # Add a plugin for the organization
 
-        placeholder = course.extended_object.placeholders.get(
-            slot="course_organizations"
-        )
-        add_plugin(
-            language=get_language(),
-            placeholder=placeholder,
-            plugin_type="OrganizationPlugin",
-            **{"page": self.cleaned_data["organization"].extended_object},
-        )
+        try:
+            self.page.organization
+        except Organization.DoesNotExist:
+            pass
+        else:
+            # Add a plugin for the organization
+            placeholder = course.extended_object.placeholders.get(
+                slot="course_organizations"
+            )
+            add_plugin(
+                language=get_language(),
+                placeholder=placeholder,
+                plugin_type="OrganizationPlugin",
+                **{"page": self.page},
+            )
 
         return page
 

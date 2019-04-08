@@ -54,7 +54,39 @@ class CourseCMSWizardTestCase(CMSTestCase):
         # Check that our wizard to create courses is not on this page
         self.assertNotContains(response, "new course page", status_code=200, html=True)
 
-    def test_cms_wizards_course_submit_form(self):
+    def test_cms_wizards_course_submit_form_any_page(self):
+        """
+        Submitting a valid CourseWizardForm when visiting any page, should create a course
+        and its related page.
+        """
+        # An organization and a parent page should pre-exist
+        create_page(
+            "Courses",
+            "richie/single_column.html",
+            "en",
+            reverse_id=Course.ROOT_REVERSE_ID,
+        )
+
+        any_page = create_page("Any page", "richie/single_column.html", "en")
+
+        # We can submit a form omitting the slug
+        form = CourseWizardForm(data={"title": "My title"})
+        form.page = any_page
+        self.assertTrue(form.is_valid())
+        page = form.save()
+
+        # The course and its related page should have been created as draft
+        Page.objects.drafts().get(id=page.id)
+        Course.objects.get(extended_object=page)
+
+        self.assertEqual(page.get_title(), "My title")
+        # The slug should have been automatically set
+        self.assertEqual(page.get_slug(), "my-title")
+
+        # The course should not have any plugin
+        self.assertFalse(OrganizationPluginModel.objects.exists())
+
+    def test_cms_wizards_course_submit_form_organization(self):
         """
         Submitting a valid CourseWizardForm should create a course and its
         related page.
@@ -69,9 +101,8 @@ class CourseCMSWizardTestCase(CMSTestCase):
         )
 
         # We can submit a form omitting the slug
-        form = CourseWizardForm(
-            data={"title": "My title", "organization": organization.id}
-        )
+        form = CourseWizardForm(data={"title": "My title"})
+        form.page = organization.extended_object
         self.assertTrue(form.is_valid())
         page = form.save()
         course = page.course
