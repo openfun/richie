@@ -8,24 +8,42 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.0-beta.4] - 2019-04-08
+
 ### Added
 
-- We now package and distribute the front-end application _via_ NPM (see
-  [richie.education](https://www.npmjs.com/package/richie-education)).
+- Add i18n tooling to export strings to Crowdin, retrieve and compile translations, for the
+  frontend and the backend. All translations are committed inside the project,
+- Add links to switch language from the menu,
+- Add social network badges in the footer, on course pages and on blog posts,
+- Make categories configurable via the CMS, multi-dimensional and nested,
+- Add blog post pages in a section called `News`,
+- Update Elasticsearch indexes each time a page is modified and published,
+- Improve fulltext search to match partial words,
+- Add end-to-end tests for the search functionality to secure behavior.
 
 ### Changed
 
-- Front-end styles are now all in the same place, _i.e._ in `src/frontend/scss`
-
-### Fixed
-
-- Fix the `collectstatic` management command execution (bad `STATICFILES_DIRS` definition)
+- Make site look generic and deploy it to richie.education,
+- Build frontend in production mode,
+- Upgrade to Python 3.7,
+- Switch to indexing courses instead of course runs,
+- Allow course run dates to be null. If a start date is null, the course run is
+  `to be programmed`, if an end date is null, the course run (or its enrollment) is deemed to
+  last forever,
+- Use our own Elasticsearch image to allow running it with a non-root user,
+- Move persons to the courses app,
+- Rename database tables to `richie_*` to regain control of their name,
+- Improve structure and packaging to allow using Richie as a third party application in another
+  DjangoCMS project,
+- Many cosmetic and UI fixes and improvements following first user feedbacks.
 
 ## [1.0.0-beta.3] - 2019-03-15
 
 ### Changed
 
-- Improved Docker image: now it does not ship with the project sources but only with runtime-required requirements (_i.e._ the sandbox and richie's package installed globally).
+- Improved Docker image: now it does not ship with the project sources but only with
+  runtime-required requirements (_i.e._ the sandbox and richie's package installed globally).
 
 ### Fixed
 
@@ -86,7 +104,8 @@ As we prepare to release, here are some improvements and fixes still ahead of us
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v1.0.0-beta.3...master
+[unreleased]: https://github.com/openfun/richie/compare/v1.0.0-beta.4...master
+[1.0.0-beta.4]: https://github.com/openfun/richie/compare/v1.0.0-beta.3...v1.0.0-beta.4
 [1.0.0-beta.3]: https://github.com/openfun/richie/compare/v1.0.0-beta.2...v1.0.0-beta.3
 [1.0.0-beta.2]: https://github.com/openfun/richie/compare/v1.0.0-beta.1...v1.0.0-beta.2
 [1.0.0-beta.1]: https://github.com/openfun/richie/compare/v1.0.0-beta.0...v1.0.0-beta.1
