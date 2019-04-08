@@ -222,16 +222,6 @@ class CourseRunWizardForm(BaseWizardForm):
     A related CourseRun model is created for each course run page.
     """
 
-    course = forms.ModelChoiceField(
-        required=True,
-        queryset=Course.objects.filter(
-            extended_object__publisher_is_draft=True,
-            # Only list the top level courses (not the snapshots)
-            extended_object__node__parent__cms_pages__course__isnull=True,
-        ).distinct(),
-        label=_("Course"),
-        help_text=_("The course that this course run describes."),
-    )
     languages = forms.MultipleChoiceField(
         required=True,
         label=_("Languages"),
@@ -244,13 +234,26 @@ class CourseRunWizardForm(BaseWizardForm):
 
     model = CourseRun
 
-    @cached_property
+    @property
     def parent_page(self):
         """
-        The parent page of a course run is the related course.
+        The parent page of a course run is the course page from which it is being created.
         """
-        course = self.cleaned_data.get("course")
-        return course.extended_object if course else None
+        return self.page
+
+    def clean(self):
+        """
+        Permission to add a course run was already checked when we displayed the list of wizard
+        entries, gut we need to prevent form hacking.
+        """
+        try:
+            self.page.course
+        except Course.DoesNotExist:
+            raise forms.ValidationError(
+                "Course runs can only be created from a course page."
+            )
+
+        return super().clean()
 
     def save(self):
         """
@@ -268,6 +271,26 @@ class CourseRunWizardForm(BaseWizardForm):
 
 class CourseRunWizard(Wizard):
     """Inherit from Wizard because each wizard must have its own Python class."""
+
+    def user_has_add_permission(self, user, **kwargs):
+        try:
+            course = kwargs["page"].course
+        except Course.DoesNotExist:
+            return False
+        else:
+            # If the course has a parent that is a course page, it is a snapshot and should
+            # therefore not be allowed to received a new course run (it can still be done
+            # by moving the course run after it's created, so we don't want to make it a main
+            # feature as it can lead to mistakes with occasional users).
+            if course.extended_object.parent_page:
+                try:
+                    course.extended_object.parent_page.course
+                except Course.DoesNotExist:
+                    pass
+                else:
+                    return False
+
+        return super().user_has_add_permission(user, **kwargs)
 
 
 wizard_pool.register(

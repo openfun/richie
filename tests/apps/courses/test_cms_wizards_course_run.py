@@ -18,17 +18,19 @@ from richie.apps.courses.models import Course, CourseRun
 class CourseRunCMSWizardTestCase(CMSTestCase):
     """Testing the wizard that is used to create new course run pages from the CMS"""
 
-    def test_cms_wizards_course_run_create_wizards_list_superuser(self):
+    def test_cms_wizards_course_run_create_wizards_list_superuser_course(self):
         """
         The wizard to create a new course run page should be present on the wizards list page
-        for a superuser.
+        for a superuser visiting a course page.
         """
-        page = create_page("page", "richie/single_column.html", "en")
+        course = CourseFactory()
         user = UserFactory(is_staff=True, is_superuser=True)
         self.client.login(username=user.username, password="password")
 
         # Let the authorized user get the page with all wizards listed
-        url = "{:s}?page={:d}".format(reverse("cms_wizard_create"), page.id)
+        url = "{:s}?page={:d}".format(
+            reverse("cms_wizard_create"), course.extended_object.id
+        )
         response = self.client.get(url)
 
         # Check that our wizard to create course runs is on this page
@@ -40,6 +42,40 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         )
         self.assertContains(response, "<strong>New course run page</strong>", html=True)
 
+    def test_cms_wizards_course_run_create_wizards_list_superuser_snapshot(self):
+        """
+        The wizard to create a new course run page should not be present on the wizards list
+        page for a superuser visiting a course snapshot page.
+        """
+        snapshot = CourseFactory()
+        CourseFactory(page_parent=snapshot.extended_object)
+        user = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=user.username, password="password")
+
+        # Let the authorized user get the page with all wizards listed
+        url = "{:s}?page={:d}".format(
+            reverse("cms_wizard_create"), snapshot.extended_object.id
+        )
+        response = self.client.get(url)
+
+        # Check that our wizard to create course runs is not on this page
+        self.assertNotContains(response, "new course run", status_code=200, html=True)
+
+    def test_cms_wizards_course_run_create_wizards_list_superuser_not_a_course(self):
+        """
+        The wizard to create a new course run page should not be present on the wizards list
+        page for a superuser visiting a page that is not a course.
+        """
+        page = create_page("page", "richie/single_column.html", "en")
+        user = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=user.username, password="password")
+
+        # Let the authorized user get the page with all wizards listed
+        url = "{:s}?page={:d}".format(reverse("cms_wizard_create"), page.id)
+        response = self.client.get(url)
+
+        # Check that our wizard to create course runs is not on this page
+        self.assertNotContains(response, "new course run", status_code=200, html=True)
 
     def test_cms_wizards_course_run_create_wizards_list_staff(self):
         """
@@ -55,11 +91,23 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         response = self.client.get(url)
 
         # Check that our wizard to create course runs is not on this page
-        self.assertNotContains(
-            response,
-            'new course run',
-            status_code=200,
-            html=True,
+        self.assertNotContains(response, "new course run", status_code=200, html=True)
+
+    def test_cms_wizards_course_run_submit_form_not_a_course(self):
+        """
+        Submitting a valid CourseRunWizardForm on a page that is not a course should raise
+        a validation error.
+        """
+        page = create_page("page", "richie/single_column.html", "en")
+
+        # Submit a valid form
+        languages = [random.choice(["en", "fr"])]
+        form = CourseRunWizardForm(data={"title": "My title", "languages": languages})
+        form.page = page
+        self.assertFalse(form.is_valid())
+        self.assertEqual(
+            form.errors,
+            {"__all__": ["Course runs can only be created from a course page."]},
         )
 
     def test_cms_wizards_course_run_submit_form_success(self):
@@ -67,15 +115,12 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         Submitting a valid CourseRunWizardForm should create a course run and its
         related page.
         """
-        page = create_page("page", "richie/single_column.html", "en")
-        # A course should pre-exist
         course = CourseFactory()
 
         # Submit a valid form
         languages = [random.choice(["en", "fr"])]
-        form = CourseRunWizardForm(
-            data={"title": "My title", "course": course.id, "languages": languages}
-        )
+        form = CourseRunWizardForm(data={"title": "My title", "languages": languages})
+        form.page = course.extended_object
         self.assertTrue(form.is_valid())
         page = form.save()
         course_run = page.courserun
@@ -110,14 +155,13 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         course = CourseFactory(page_title="c" * 100, page_parent=root_page)
 
         # A course run with a slug at the limit length should work
-        form = CourseRunWizardForm(
-            data={"title": "t" * 53, "course": course.id, "languages": ["en"]}
-        )
+        form = CourseRunWizardForm(data={"title": "t" * 53, "languages": ["en"]})
+        form.page = course.extended_object
         self.assertTrue(form.is_valid())
         form.save()
 
         # A course run with a slug too long with regards to the parent's one should raise an error
-        form = CourseRunWizardForm(data={"title": "t" * 54, "course": course.id})
+        form = CourseRunWizardForm(data={"title": "t" * 54})
         form.page = course.extended_object
         self.assertFalse(form.is_valid())
         self.assertEqual(
@@ -136,7 +180,7 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         course = CourseFactory()
 
         # Submit a title at max length
-        data = {"title": "t" * 255, "course": course.id, "languages": ["en"]}
+        data = {"title": "t" * 255, "languages": ["en"]}
         form = CourseRunWizardForm(data=data)
         form.page = course.extended_object
         self.assertTrue(form.is_valid())
@@ -152,7 +196,7 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         course = CourseFactory()
 
         # Submit a title that is too long
-        invalid_data = {"title": "t" * 256, "course": course.id, "languages": ["en"]}
+        invalid_data = {"title": "t" * 256, "languages": ["en"]}
 
         form = CourseRunWizardForm(data=invalid_data)
         form.page = course.extended_object
@@ -163,16 +207,6 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
             ["Ensure this value has at most 255 characters (it has 256)."],
         )
 
-    def test_cms_wizards_course_run_parent_page_should_exist(self):
-        """
-        We should not be able to create a course run page without a parent course.
-        """
-        # Submit a valid form without the course field
-        form = CourseRunWizardForm(data={"title": "My title", "languages": ["en"]})
-
-        self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors, {"course": ["This field is required."]})
-
     def test_cms_wizards_course_run_languages_required(self):
         """
         Setting languages should be required.
@@ -181,7 +215,7 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         course = CourseFactory()
 
         # Submit a form without the languages field
-        form = CourseRunWizardForm(data={"title": "My title", "course": course.id})
+        form = CourseRunWizardForm(data={"title": "My title"})
         form.page = course.extended_object
 
         self.assertFalse(form.is_valid())
