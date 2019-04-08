@@ -2,6 +2,7 @@
 CMS Wizard to add a course page
 """
 from django import forms
+from django.core.exceptions import PermissionDenied
 from django.template.defaultfilters import slugify
 from django.utils.functional import cached_property
 from django.utils.translation import get_language
@@ -19,6 +20,7 @@ from cms.models import Page
 from cms.wizards.wizard_base import Wizard
 from cms.wizards.wizard_pool import wizard_pool
 
+from .helpers import snapshot_course
 from .models import (
     ROOT_REVERSE_IDS,
     BlogPost,
@@ -221,6 +223,14 @@ class CourseRunWizardForm(BaseWizardForm):
     A related CourseRun model is created for each course run page.
     """
 
+    should_snapshot_course = forms.BooleanField(
+        label=_("Snapshot the course"),
+        help_text=_(
+            "Tick this box if you want to snapshot the current version of the course and link "
+            "the new course run to a new version of the course."
+        ),
+        required=False,
+    )
 
     model = CourseRun
 
@@ -237,11 +247,27 @@ class CourseRunWizardForm(BaseWizardForm):
         entries, gut we need to prevent form hacking.
         """
         try:
-            self.page.course
+            course = self.page.course
         except Course.DoesNotExist:
             raise forms.ValidationError(
                 "Course runs can only be created from a course page."
             )
+        else:
+            if course.extended_object.parent_page:
+                try:
+                    course.extended_object.parent_page.course
+                except Course.DoesNotExist:
+                    pass
+                else:
+                    raise forms.ValidationError(
+                        "Course runs can not be created from a course snapshot page."
+                    )
+
+        if self.cleaned_data["should_snapshot_course"]:
+            try:
+                snapshot_course(self.page, self.user, simulate_only=True)
+            except PermissionDenied as context:
+                raise forms.ValidationError(context)
 
         return super().clean()
 
@@ -250,6 +276,10 @@ class CourseRunWizardForm(BaseWizardForm):
         The parent form created the page.
         This method creates the associated course run page extension.
         """
+        # Start by snapshotting the course if it is requested
+        if self.cleaned_data["should_snapshot_course"]:
+            snapshot_course(self.page, self.user)
+
         page = super().save()
         CourseRun.objects.create(extended_object=page, languages=[get_language()])
         return page

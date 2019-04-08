@@ -1,6 +1,9 @@
 """
 Test suite for the wizard creating a new Course page
 """
+from unittest import mock
+
+from django.core.exceptions import PermissionDenied
 from django.urls import reverse
 from django.utils import translation
 
@@ -14,10 +17,11 @@ from richie.apps.courses.factories import CourseFactory
 from richie.apps.courses.models import Course, CourseRun
 
 
+@mock.patch("richie.apps.courses.cms_wizards.snapshot_course")
 class CourseRunCMSWizardTestCase(CMSTestCase):
     """Testing the wizard that is used to create new course run pages from the CMS"""
 
-    def test_cms_wizards_course_run_create_wizards_list_superuser_course(self):
+    def test_cms_wizards_course_run_create_wizards_list_superuser_course(self, *_):
         """
         The wizard to create a new course run page should be present on the wizards list page
         for a superuser visiting a course page.
@@ -41,7 +45,7 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         )
         self.assertContains(response, "<strong>New course run page</strong>", html=True)
 
-    def test_cms_wizards_course_run_create_wizards_list_superuser_snapshot(self):
+    def test_cms_wizards_course_run_create_wizards_list_superuser_snapshot(self, *_):
         """
         The wizard to create a new course run page should not be present on the wizards list
         page for a superuser visiting a course snapshot page.
@@ -60,7 +64,9 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         # Check that our wizard to create course runs is not on this page
         self.assertNotContains(response, "new course run", status_code=200, html=True)
 
-    def test_cms_wizards_course_run_create_wizards_list_superuser_not_a_course(self):
+    def test_cms_wizards_course_run_create_wizards_list_superuser_not_a_course(
+        self, *_
+    ):
         """
         The wizard to create a new course run page should not be present on the wizards list
         page for a superuser visiting a page that is not a course.
@@ -76,7 +82,7 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         # Check that our wizard to create course runs is not on this page
         self.assertNotContains(response, "new course run", status_code=200, html=True)
 
-    def test_cms_wizards_course_run_create_wizards_list_staff(self):
+    def test_cms_wizards_course_run_create_wizards_list_staff(self, *_):
         """
         The wizard to create a new course run page should not be present on the wizards list
         page for a simple staff user.
@@ -92,7 +98,7 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         # Check that our wizard to create course runs is not on this page
         self.assertNotContains(response, "new course run", status_code=200, html=True)
 
-    def test_cms_wizards_course_run_submit_form_not_a_course(self):
+    def test_cms_wizards_course_run_submit_form_not_a_course(self, mock_snapshot):
         """
         Submitting a valid CourseRunWizardForm on a page that is not a course should raise
         a validation error.
@@ -107,8 +113,9 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
             form.errors,
             {"__all__": ["Course runs can only be created from a course page."]},
         )
+        self.assertFalse(mock_snapshot.called)
 
-    def test_cms_wizards_course_run_submit_form_success(self):
+    def test_cms_wizards_course_run_submit_form_success(self, mock_snapshot):
         """
         Submitting a valid CourseRunWizardForm should create a course run and its
         related page.
@@ -136,7 +143,10 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         # The languages field should have been set
         self.assertEqual(course_run.languages, ["en"])
 
-    def test_cms_wizards_course_run_submit_form_max_lengths(self):
+        # Snapshot was not request and should not have been triggered
+        self.assertFalse(mock_snapshot.called)
+
+    def test_cms_wizards_course_run_submit_form_max_lengths(self, mock_snapshot):
         """
         Check that the form correctly raises an error when the slug is too long. The path built
         by combining the slug of the page with the slug of its parent page, should not exceed
@@ -169,7 +179,10 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
             ),
         )
 
-    def test_cms_wizards_course_run_submit_form_slugify_long_title(self):
+        # Snapshot was not request and should not have been triggered
+        self.assertFalse(mock_snapshot.called)
+
+    def test_cms_wizards_course_run_submit_form_slugify_long_title(self, mock_snapshot):
         """
         When generating the slug from the title, we should respect the slug's "max_length"
         """
@@ -185,7 +198,10 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         # Check that the slug has been truncated
         self.assertEqual(page.get_slug(), "t" * 200)
 
-    def test_cms_wizards_course_run_submit_form_title_too_long(self):
+        # Snapshot was not request and should not have been triggered
+        self.assertFalse(mock_snapshot.called)
+
+    def test_cms_wizards_course_run_submit_form_title_too_long(self, mock_snapshot):
         """
         Trying to set a title that is too long should make the form invalid
         """
@@ -204,7 +220,10 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
             ["Ensure this value has at most 255 characters (it has 256)."],
         )
 
-    def test_cms_wizards_course_run_language_active(self):
+        # Snapshot was not request and should not have been triggered
+        self.assertFalse(mock_snapshot.called)
+
+    def test_cms_wizards_course_run_language_active(self, *_):
         """
         The language should be set to the active language.
         """
@@ -219,3 +238,57 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
 
         # The language field should have been set to the active language
         self.assertEqual(page.courserun.languages, ["fr"])
+
+    def test_cms_wizards_course_run_snapshot(self, mock_snapshot):
+        """
+        Requesting a snapshot from the form to create a new course run should call the
+        help function twice: once for validation and once to actually create the snapshot.
+        """
+        course = CourseFactory()
+        user = UserFactory()
+
+        # Submit a valid form with the snapshot flag enabled
+        form = CourseRunWizardForm(
+            data={"title": "My title", "should_snapshot_course": True}
+        )
+        form.page = course.extended_object
+        form.user = user
+
+        self.assertTrue(form.is_valid())
+        self.assertEqual(mock_snapshot.call_count, 1)
+
+        form.save()
+        self.assertEqual(
+            mock_snapshot.call_args_list,
+            [
+                mock.call(course.extended_object, user, simulate_only=True),
+                mock.call(course.extended_object, user),
+            ],
+        )
+
+    def test_cms_wizards_course_run_snapshot_permission_denied(self, mock_snapshot):
+        """
+        Requesting a snapshot when the permission is denied should call the helper function
+        only once for validation and return the error message.
+        """
+        course = CourseFactory()
+        user = UserFactory()
+
+        # Generate a permission error on form submission
+        def raise_permission_denied(*args, **kwargs):
+            raise PermissionDenied("can't do that")
+
+        mock_snapshot.side_effect = raise_permission_denied
+
+        # Submit a valid form with the snapshot flag enabled
+        form = CourseRunWizardForm(
+            data={"title": "My title", "should_snapshot_course": True}
+        )
+        form.page = course.extended_object
+        form.user = user
+
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors, {"__all__": ["can't do that"]})
+        mock_snapshot.assert_called_once_with(
+            course.extended_object, user, simulate_only=True
+        )
