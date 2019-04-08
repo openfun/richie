@@ -343,27 +343,21 @@ class CategoryWizardForm(BaseWizardForm):
     A related Category model is created for each category page.
     """
 
-    parent_category = forms.ModelChoiceField(
-        required=False,
-        queryset=Category.objects.filter(
-            extended_object__publisher_is_draft=True
-        ).order_by("extended_object__node__path"),
-        label=_("Parent category"),
-        help_text=_("Choose a parent if you are building a category tree."),
-    )
-
     model = Category
 
     @cached_property
     def parent_page(self):
         """
-        The parent page may be defined in the form but defaults to the categories root page
-        defined by the `ROOT_REVERSE_ID` property of the Category model.
+        If the current page is a category, the new category should be created as a child.
+        Otherwise, it defaults to the categories root page defined by the `ROOT_REVERSE_ID`
+        property of the Category model.
         """
-        parent_category = self.cleaned_data.get("parent_category")
-        return (
-            parent_category.extended_object if parent_category else super().parent_page
-        )
+        try:
+            self.page.category
+        except Category.DoesNotExist:
+            return super().parent_page
+        else:
+            return self.page
 
     def save(self):
         """
