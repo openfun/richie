@@ -1,0 +1,18 @@
+{% extends "richie/fullwidth.html" %}
+{% load cms_tags i18n %}
+
+{% block content %}
+<div class="category-glimpse-list">
+  <h1 class="category-glimpse-list__title">{{ current_page.get_title }}</h1>
+
+  {% for page in current_page.get_child_pages %}
+    {% if page.category %}
+      {% include "courses/cms/fragment_category_glimpse.html" with category=page.category %}
+    {% endif %}
+  {% empty %}
+    <p class="category-glimpse category-glimpse--empty">
+    {% trans "No categories" %}
+    </p>
+  {% endfor %}
+</div>
+{% endblock content %}

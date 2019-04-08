@@ -5,8 +5,8 @@ $richie-category-plugin-tag-fontcolor: $white;
 $richie-category-plugin-tag-background: $gray7;
 $richie-category-plugin-tag-divider-margin: 0.3rem;
 
-$richie-category-plugin-title-fontsize: small !default;
-$richie-category-plugin-title-fontcolor: $black !default;
+$richie-category-plugin-body-fontsize: small !default;
+$richie-category-plugin-body-fontcolor: $black !default;
 $richie-category-plugin-title-textalign: center !default;
 
 .category-plugin-tag {
@@ -39,52 +39,4 @@ $richie-category-plugin-title-textalign: center !default;
     @include make-col(2);
   }
   display: flex;
-}
-
-.category-plugin {
-  display: flex;
-  padding: 1.25rem;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  align-content: space-between;
-  border: 1px solid rgba($black, 0.125);
-  border-radius: 0.25rem;
-  background-color: white;
-
-  &__body {
-    @include sv-flex(1, 0, 100%);
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    align-items: stretch;
-    color: $richie-category-plugin-title-fontcolor;
-    font-size: $richie-category-plugin-title-fontsize;
-  }
-
-  &__logo {
-    @include sv-flex(1, 0, auto);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-    @include m-o-media_empty(
-      $width: 100%,
-      $background: $gray97,
-      $absolute: false
-    );
-
-    &__empty {
-      @include sv-flex(1, 0, auto);
-    }
-
-    img {
-      @include sv-flex(0, 0, auto);
-    }
-  }
-
-  &__title {
-    @include sv-flex(0, 0, auto);
-    word-wrap: break-word;
-    text-align: $richie-category-plugin-title-textalign;
-  }
 }

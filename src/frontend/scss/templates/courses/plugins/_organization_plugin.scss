@@ -44,6 +44,7 @@ $richie-organization-plugin-title-textalign: center !default;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
 
     @include m-o-media_empty(
       $width: 100%,

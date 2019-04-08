@@ -253,3 +253,23 @@ class CategoryModelsTestCase(TestCase):
         )
         self.assertEqual(Person.objects.count(), 2)
         self.assertEqual(category.get_persons().count(), 1)
+
+    def test_models_category_get_children_categories(self):
+        """
+        It should be possible to retrieve the list of direct children page which
+        are Category extensions and not any other type.
+        """
+        empty_category = CategoryFactory(should_publish=True)
+
+        parent_category = CategoryFactory(should_publish=True)
+        child_categories = CategoryFactory.create_batch(
+            2, page_parent=parent_category.extended_object, should_publish=True
+        )
+
+        with self.assertNumQueries(2):
+            self.assertFalse(empty_category.get_children_categories().exists())
+
+        with self.assertNumQueries(2):
+            self.assertEqual(
+                set(parent_category.get_children_categories()), set(child_categories)
+            )
