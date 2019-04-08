@@ -7,3 +7,8 @@ from .category import *
 from .course import *
 from .organization import *
 from .person import *
+
+ROOT_REVERSE_IDS = [
+    model.ROOT_REVERSE_ID
+    for model in [BlogPost, Category, Course, Organization, Person]
+]

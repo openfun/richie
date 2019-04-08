@@ -17,15 +17,17 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
     Unit test suite to validate the behavior of the Wizard to create organization pages
     """
 
-    def test_cms_wizards_organization_create_wizards_list(self):
+    def test_cms_wizards_organization_create_wizards_list_superuser(self):
         """
         The wizard to create a new Organization page should be present on the wizards list page
+        for a superuser.
         """
+        page = create_page("page", "richie/single_column.html", "en")
         user = UserFactory(is_staff=True, is_superuser=True)
         self.client.login(username=user.username, password="password")
 
         # Let the authorized user get the page with all wizards listed
-        url = reverse("cms_wizard_create")
+        url = "{:s}?page={:d}".format(reverse("cms_wizard_create"), page.id)
         response = self.client.get(url)
 
         # Check that our wizard to create organizations is on this page
@@ -38,6 +40,22 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         self.assertContains(
             response, "<strong>New Organization page</strong>", html=True
         )
+
+    def test_cms_wizards_organization_create_wizards_list_staff(self):
+        """
+        The wizard to create a new Organization page should be present on the wizards list page
+        for a simple staff.
+        """
+        page = create_page("page", "richie/single_column.html", "en")
+        user = UserFactory(is_staff=True)
+        self.client.login(username=user.username, password="password")
+
+        # Let the authorized user get the page with all wizards listed
+        url = "{:s}?page={:d}".format(reverse("cms_wizard_create"), page.id)
+        response = self.client.get(url)
+
+        # Check that our wizard to create organizations is on this page
+        self.assertNotContains(response, "new Organization", status_code=200, html=True)
 
     def test_cms_wizards_organization_submit_form(self):
         """

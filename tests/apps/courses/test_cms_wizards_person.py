@@ -16,15 +16,17 @@ from richie.apps.courses.models import Person
 class PersonCMSWizardTestCase(CMSTestCase):
     """Testing the wizard that is used to create new person pages from the CMS"""
 
-    def test_cms_wizards_person_create_wizards_list(self):
+    def test_cms_wizards_person_create_wizards_list_superuser(self):
         """
         The wizard to create a new person page should be present on the wizards list page
+        for a superuser.
         """
+        page = create_page("page", "richie/single_column.html", "en")
         user = UserFactory(is_staff=True, is_superuser=True)
         self.client.login(username=user.username, password="password")
 
         # Let the authorized user get the page with all wizards listed
-        url = reverse("cms_wizard_create")
+        url = "{:s}?page={:d}".format(reverse("cms_wizard_create"), page.id)
         response = self.client.get(url)
 
         # Check that our wizard to create persons is on this page
@@ -35,6 +37,22 @@ class PersonCMSWizardTestCase(CMSTestCase):
             html=True,
         )
         self.assertContains(response, "<strong>New person page</strong>", html=True)
+
+    def test_cms_wizards_person_create_wizards_list_staff(self):
+        """
+        The wizard to create a new person page should be present on the wizards list page
+        for a simple staff user.
+        """
+        page = create_page("page", "richie/single_column.html", "en")
+        user = UserFactory(is_staff=True)
+        self.client.login(username=user.username, password="password")
+
+        # Let the authorized user get the page with all wizards listed
+        url = "{:s}?page={:d}".format(reverse("cms_wizard_create"), page.id)
+        response = self.client.get(url)
+
+        # Check that our wizard to create persons is not on this page
+        self.assertNotContains(response, "new person page", status_code=200, html=True)
 
     def test_cms_wizards_person_submit_form(self):
         """
