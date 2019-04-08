@@ -1,6 +1,6 @@
-// Course glimpses
+// Blogpost glimpses
 //
-// A flex grid of course cards
+// A flex grid of blogpost entries
 
 // Available object settings
 $richie-blogpost-glimpse-list-maxwidth-constraint: true !default;
@@ -8,6 +8,7 @@ $richie-blogpost-glimpse-list-margin: 0 auto !default;
 $richie-blogpost-glimpse-list-padding: 1rem 0 !default;
 $richie-blogpost-glimpse-list-title-margin: null !default;
 $richie-blogpost-glimpse-list-title-padding: 0.5rem !default;
+$richie-blogpost-glimpse-list-title-textalign: left !default;
 
 $richie-blogpost-glimpse-container-width-sm: null !default;
 $richie-blogpost-glimpse-container-width-md: 50% !default;
@@ -76,6 +77,7 @@ $richie-blogpost-glimpse-foot-cta-background-hover: $firebrick6 !default;
     @include sv-flex(1, 0, 100%);
     margin: $richie-blogpost-glimpse-list-title-margin;
     padding: $richie-blogpost-glimpse-list-title-padding;
+    text-align: $richie-blogpost-glimpse-list-title-textalign;
   }
 }
 

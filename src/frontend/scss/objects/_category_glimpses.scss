@@ -1,0 +1,162 @@
+// Category glimpses
+//
+// A flex grid of category entries
+
+// Available object settings
+$richie-category-glimpse-list-maxwidth-constraint: true !default;
+$richie-category-glimpse-list-margin: 0 auto !default;
+$richie-category-glimpse-list-padding: 1rem 0 !default;
+$richie-category-glimpse-list-title-margin: null !default;
+$richie-category-glimpse-list-title-padding: 0.5rem !default;
+$richie-blogpost-glimpse-list-title-textalign: left !default;
+
+$richie-category-glimpse-container-width-sm: 50% !default;
+$richie-category-glimpse-container-width-md: 33.3333% !default;
+$richie-category-glimpse-container-width-lg: 25% !default;
+$richie-category-glimpse-container-width-xl: 16.6667% !default;
+$richie-category-glimpse-container-gutter: 0.5rem !default;
+$richie-category-glimpse-container-background: $white !default;
+$richie-category-glimpse-container-border: 1px solid rgba($black, 0.125) !default;
+$richie-category-glimpse-container-border-hover: 1px solid $firebrick6 !default;
+$richie-category-glimpse-container-border-radius: 0.25rem !default;
+
+$richie-category-glimpse-content-fontsize: 0.9rem !default;
+$richie-category-glimpse-content-fontcolor: $gray40 !default;
+$richie-category-glimpse-content-textalign: center !default;
+
+$richie-category-glimpse-title-padding: 0.3rem !default;
+$richie-category-glimpse-title-fontsize: inherit !default;
+$richie-category-glimpse-title-fontweight: inherit !default;
+$richie-category-glimpse-title-fontcolor: inherit !default;
+$richie-category-glimpse-title-textalign: center !default;
+
+$richie-category-glimpse-body-fontsize: small !default;
+$richie-category-glimpse-body-fontcolor: $black !default;
+
+.category-glimpse-list {
+  @if $richie-category-glimpse-list-maxwidth-constraint {
+    @include make-container-max-widths();
+  }
+  display: flex;
+  margin: $richie-category-glimpse-list-margin;
+  padding: $richie-category-glimpse-list-padding;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  &__title {
+    @include sv-flex(1, 0, 100%);
+    margin: $richie-category-glimpse-list-title-margin;
+    padding: $richie-category-glimpse-list-title-padding;
+    text-align: $richie-blogpost-glimpse-list-title-textalign;
+  }
+}
+
+.category-glimpse {
+  $glimpse-item-selector: &;
+  // Cell base width for lowest breakpoint
+  @include sv-flex(
+    1,
+    0,
+    calc(
+      #{$richie-category-glimpse-container-width-sm} - #{$richie-category-glimpse-container-gutter *
+        2}
+    )
+  );
+
+  display: flex;
+  margin: $richie-category-glimpse-container-gutter;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-content: space-between;
+  border: $richie-category-glimpse-container-border;
+  border-radius: $richie-category-glimpse-container-border-radius;
+  background: $white;
+
+  &__body {
+    @include sv-flex(1, 0, 100%);
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    color: $richie-category-glimpse-body-fontcolor;
+    font-size: $richie-category-glimpse-body-fontsize;
+  }
+
+  &__logo {
+    @include sv-flex(1, 0, auto);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    @include m-o-media_empty(
+      $width: 100%,
+      $height: 15vh,
+      $background: $gray97,
+      $absolute: false
+    );
+
+    &__empty {
+      @include sv-flex(1, 0, auto);
+      border-radius: $richie-category-glimpse-container-border-radius;
+    }
+
+    img {
+      @include sv-flex(0, 0, auto);
+      border-radius: $richie-category-glimpse-container-border-radius;
+    }
+  }
+
+  &__title {
+    @include sv-flex(0, 0, auto);
+    padding: $richie-category-glimpse-title-padding;
+    word-wrap: break-word;
+    font-size: $richie-category-glimpse-title-fontsize;
+    font-weight: $richie-category-glimpse-title-fontweight;
+    color: $richie-category-glimpse-title-fontcolor;
+    text-align: $richie-category-glimpse-title-textalign;
+  }
+
+  &:hover,
+  &:focus {
+    border: $richie-category-glimpse-container-border-hover;
+  }
+
+  // Responsive adjustments
+  @if $richie-category-glimpse-container-width-md {
+    @include media-breakpoint-up(md) {
+      @include sv-flex(
+        1,
+        0,
+        calc(
+          #{$richie-category-glimpse-container-width-md} - #{$richie-category-glimpse-container-gutter *
+            2}
+        )
+      );
+    }
+  }
+  @if $richie-category-glimpse-container-width-lg {
+    @include media-breakpoint-up(lg) {
+      @include sv-flex(
+        1,
+        0,
+        calc(
+          #{$richie-category-glimpse-container-width-lg} - #{$richie-category-glimpse-container-gutter *
+            2}
+        )
+      );
+    }
+  }
+  @if $richie-category-glimpse-container-width-xl {
+    @include media-breakpoint-up(xl) {
+      @include sv-flex(
+        1,
+        0,
+        calc(
+          #{$richie-category-glimpse-container-width-xl} - #{$richie-category-glimpse-container-gutter *
+            2}
+        )
+      );
+    }
+  }
+}

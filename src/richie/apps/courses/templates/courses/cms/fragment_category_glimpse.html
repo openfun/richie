@@ -1,0 +1,21 @@
+{% load i18n cms_tags %}
+{% comment %}Obviously, the context template variable "category" is required and must be a Category page extension{% endcomment %}
+{% with category_page=category.extended_object %}
+<a class="category-glimpse category-glimpse--link" href="{{ category_page.get_absolute_url }}" title="{{ category_page.get_title }}">
+  <div class="category-glimpse__body">
+    <div class="category-glimpse__logo">
+      {% show_placeholder "logo" category_page as logo %}
+      {% if logo %}
+        {{ logo }}
+      {% else %}
+        <div class="category-glimpse__logo__empty">
+          {% trans "Logo" %}
+        </div>
+      {% endif %}
+    </div>
+    <h{{ header_level|default:2 }} class="category-glimpse__title">
+      {{ category_page.get_title }}
+    </h{{ header_level|default:2 }}>
+  </div>
+</a>
+{% endwith %}

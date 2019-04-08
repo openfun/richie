@@ -46,6 +46,17 @@
   {% endif %}
 {% endwith %}
 
+{% with children_categories=category.get_children_categories %}
+  {% if children_categories %}
+  <div class="category-glimpse-list">
+    <h2 class="category-glimpse-list__title">{% trans "Sub categories" %}</h2>
+    {% for child_category in children_categories %}
+      {% include "courses/cms/fragment_category_glimpse.html" with category=child_category %}
+    {% endfor %}
+  </div>
+  {% endif %}
+{% endwith %}
+
 {% with blogposts=category.get_blogposts %}
   {% if blogposts %}
   <div class="blogpost-glimpse-list">

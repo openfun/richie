@@ -13,8 +13,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Allow tagging persons with categories
 - A "Clear x active filters" button in the search filters pane lets the user
   remove all active filters with one click
+- Add template and styling for persons list page,
+- Add template and styling for categories list page,
+- Add sub categories in category detail page.
 
-### Changed
+## Changed
 
 - Harmonize how cards look on the site (grey border and white background),
 - Move all the code demo site related to the demo site to its own application,
@@ -22,7 +25,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   removes this active relative. This makes the experience of adding those
   relative filters more intuitive,
 - Simplify Richie settings and provide defaults for those unlikely to be
-  customized (search, languages, plugins, general).
+  customized (search, languages, plugins, general),
+- Change layout global background to darker grey,
+- Improve 'categories' page layout.
 
 ### Fixed
 

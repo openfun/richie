@@ -143,6 +143,17 @@ class Category(BasePageExtension):
             .distinct()
         )
 
+    def get_children_categories(self):
+        """
+        Return a query to get only the children pages that are Category
+        objects related to this category. A convenient method since
+        ``page.get_child_pages`` return every direct child page, no matter
+        it's a Category or not.
+        """
+        return Category.objects.filter(
+            extended_object__in=self.extended_object.get_child_pages()
+        ).select_related("extended_object")
+
 
 def get_category_limit_choices_to():
     """Return a query limiting the categories proposed when creating a CategoryPlugin."""

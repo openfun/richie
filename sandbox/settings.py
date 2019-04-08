@@ -240,6 +240,7 @@ class Base(DRFMixin, Configuration):
         ("courses/cms/course_run_detail.html", _("Course run page")),
         ("courses/cms/organization_list.html", _("Organization list")),
         ("courses/cms/organization_detail.html", _("Organization page")),
+        ("courses/cms/category_list.html", _("Category list")),
         ("courses/cms/category_detail.html", _("Category page")),
         ("courses/cms/blogpost_list.html", _("Blog post list")),
         ("courses/cms/blogpost_detail.html", _("Blog post page")),
