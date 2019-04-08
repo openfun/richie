@@ -110,10 +110,10 @@ class BaseWizardForm(forms.Form):
         if cleaned_data.get("title") and not cleaned_data.get("slug"):
             cleaned_data["slug"] = slugify(cleaned_data["title"])[:200]
 
-        # Check that the length of the slug is compatible with its parent page:
-        #  a page `path` is limited to 255 chars, therefore the course page slug should
-        # always be shorter than (255 - length of parent page path - 1 character for the "/")
         if self.parent_page:
+            # Check that the length of the slug is compatible with its parent page:
+            #  a page `path` is limited to 255 chars, therefore the course page slug should
+            # always be shorter than (255 - length of parent page path - 1 character for the "/")
             length = len(self.parent_page.get_path()) + 1 + len(cleaned_data["slug"])
             if length > 255:
                 raise forms.ValidationError(
@@ -126,6 +126,15 @@ class BaseWizardForm(forms.Form):
                             )
                         ]
                     }
+                )
+
+            if (
+                self.parent_page.get_child_pages()
+                .filter(title_set__slug=cleaned_data["slug"])
+                .exists()
+            ):
+                raise forms.ValidationError(
+                    {"slug": [_("This slug is already in use")]}
                 )
 
         return cleaned_data

@@ -216,6 +216,29 @@ class CategoryCMSWizardTestCase(CMSTestCase):
             ["Ensure this value has at most 200 characters (it has 201)."],
         )
 
+    def test_cms_wizards_category_submit_form_slug_duplicate(self):
+        """
+        Trying to create a category with a slug that would lead to a duplicate path should
+        raise a validation error.
+        """
+        # A parent page should pre-exist
+        parent_page = create_page(
+            "Categories",
+            "richie/single_column.html",
+            "en",
+            reverse_id=Category.ROOT_REVERSE_ID,
+        )
+        # Create an existing page with a known slug
+        CategoryFactory(page_parent=parent_page, page_title="My title")
+
+        # Submit a title that will lead to the same slug
+        data = {"title": "my title"}
+
+        form = CategoryWizardForm(data=data)
+        form.page = parent_page
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors, {"slug": ["This slug is already in use"]})
+
     def test_cms_wizards_category_root_page_should_exist(self):
         """
         We should not be able to create a category page if the root page does not exist

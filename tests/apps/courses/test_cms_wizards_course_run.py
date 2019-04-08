@@ -13,7 +13,7 @@ from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
 from richie.apps.courses.cms_wizards import CourseRunWizardForm
-from richie.apps.courses.factories import CourseFactory
+from richie.apps.courses.factories import CourseFactory, CourseRunFactory
 from richie.apps.courses.models import Course, CourseRun
 
 
@@ -219,6 +219,50 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
             form.errors["title"],
             ["Ensure this value has at most 255 characters (it has 256)."],
         )
+
+        # Snapshot was not request and should not have been triggered
+        self.assertFalse(mock_snapshot.called)
+
+    def test_cms_wizards_course_run_submit_form_slug_too_long(self, mock_snapshot):
+        """
+        Trying to set a slug that is too long should make the form invalid
+        """
+        # A course should pre-exist
+        course = CourseFactory()
+
+        # Submit a slug that is too long and a title that is ok
+        invalid_data = {"title": "t" * 255, "slug": "s" * 201}
+
+        form = CourseRunWizardForm(data=invalid_data)
+        form.page = course.extended_object
+
+        self.assertFalse(form.is_valid())
+        # Check that the slug being too long is a cause for the invalid form
+        self.assertEqual(
+            form.errors["slug"],
+            ["Ensure this value has at most 200 characters (it has 201)."],
+        )
+
+        # Snapshot was not request and should not have been triggered
+        self.assertFalse(mock_snapshot.called)
+
+    def test_cms_wizards_course_run_submit_form_slug_duplicate(self, mock_snapshot):
+        """
+        Trying to create a course_run with a slug that would lead to a duplicate path should
+        raise a validation error.
+        """
+        # A course should pre-exist
+        course = CourseFactory()
+        # Create an existing page with a known slug
+        CourseRunFactory(page_parent=course.extended_object, page_title="My title")
+
+        # Submit a title that will lead to the same slug
+        data = {"title": "my title"}
+
+        form = CourseRunWizardForm(data=data)
+        form.page = course.extended_object
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors, {"slug": ["This slug is already in use"]})
 
         # Snapshot was not request and should not have been triggered
         self.assertFalse(mock_snapshot.called)
