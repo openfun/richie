@@ -16,9 +16,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Simplify the page creation wizard by reducing possibilities and automating object relations
   based on the navigation context:
+  * Create nested categories automatically when visiting the parent category page,
   * Show button to create course runs only when visiting a course page and automatically link
     the course run to the current course,
-  * Hide button to create normal pages/subpages from wizard in sections governed by Richie,
+  * Hide button to create normal pages/subpages from wizard in sections governed by Richie.
 - Translations are loaded dynamically in frontend application,
 - Optimized frontend build in our official Docker image.
 
