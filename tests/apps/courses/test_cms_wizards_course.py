@@ -16,15 +16,17 @@ from richie.apps.courses.models import Course, OrganizationPluginModel
 class CourseCMSWizardTestCase(CMSTestCase):
     """Testing the wizard that is used to create new course pages from the CMS"""
 
-    def test_cms_wizards_course_create_wizards_list(self):
+    def test_cms_wizards_course_create_wizards_list_superuser(self):
         """
         The wizard to create a new Course page should be present on the wizards list page
+        for a superuser.
         """
+        page = create_page("page", "richie/single_column.html", "en")
         user = UserFactory(is_staff=True, is_superuser=True)
         self.client.login(username=user.username, password="password")
 
         # Let the authorized user get the page with all wizards listed
-        url = reverse("cms_wizard_create")
+        url = "{:s}?page={:d}".format(reverse("cms_wizard_create"), page.id)
         response = self.client.get(url)
 
         # Check that our wizard to create courses is on this page
@@ -35,6 +37,22 @@ class CourseCMSWizardTestCase(CMSTestCase):
             html=True,
         )
         self.assertContains(response, "<strong>New course page</strong>", html=True)
+
+    def test_cms_wizards_course_create_wizards_list_staff(self):
+        """
+        The wizard to create a new Course page should not be present on the wizards list page
+        for a simple staff user.
+        """
+        page = create_page("page", "richie/single_column.html", "en")
+        user = UserFactory(is_staff=True)
+        self.client.login(username=user.username, password="password")
+
+        # Let the authorized user get the page with all wizards listed
+        url = "{:s}?page={:d}".format(reverse("cms_wizard_create"), page.id)
+        response = self.client.get(url)
+
+        # Check that our wizard to create courses is not on this page
+        self.assertNotContains(response, "new course page", status_code=200, html=True)
 
     def test_cms_wizards_course_submit_form(self):
         """
@@ -78,25 +96,28 @@ class CourseCMSWizardTestCase(CMSTestCase):
         255 characters in length.
         """
         # A parent page with a very long slug
-        create_page(
+        page = create_page(
             "y" * 200,
             "richie/single_column.html",
             "en",
             reverse_id=Course.ROOT_REVERSE_ID,
         )
 
-        # A course with a slug at the limit length should work
+        # An organization with a slug at the limit length should work
         organization = OrganizationFactory()
         form = CourseWizardForm(
             data={"title": "t" * 255, "slug": "s" * 54, "organization": organization.id}
         )
+        form.page = page
         self.assertTrue(form.is_valid())
         form.save()
 
-        # A course with a slug too long with regards to the parent's one should raise an error
+        # An organization with a slug too long with regards to the parent's one should raise an
+        # error
         form = CourseWizardForm(
             data={"title": "t" * 255, "slug": "s" * 55, "organization": organization.id}
         )
+        form.page = page
         self.assertFalse(form.is_valid())
         self.assertEqual(
             form.errors["slug"][0],
@@ -112,7 +133,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
         """
         # An organization and a parent page should pre-exist
         organization = OrganizationFactory()
-        create_page(
+        page = create_page(
             "Courses",
             "richie/single_column.html",
             "en",
@@ -122,6 +143,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
         # Submit a title at max length
         data = {"title": "t" * 255, "organization": organization.id}
         form = CourseWizardForm(data=data)
+        form.page = page
         self.assertTrue(form.is_valid())
         page = form.save()
         # Check that the slug has been truncated
@@ -133,7 +155,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
         """
         # An organization and a parent page should pre-exist
         organization = OrganizationFactory()
-        create_page(
+        page = create_page(
             "Courses",
             "richie/single_column.html",
             "en",
@@ -147,6 +169,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
         }
 
         form = CourseWizardForm(data=invalid_data)
+        form.page = page
         self.assertFalse(form.is_valid())
         # Check that the title being too long is a cause for the invalid form
         self.assertEqual(
@@ -160,7 +183,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
         """
         # An organization and a parent page should pre-exist
         organization = OrganizationFactory()
-        create_page(
+        page = create_page(
             "Courses",
             "richie/single_column.html",
             "en",
@@ -174,6 +197,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
         }
 
         form = CourseWizardForm(data=invalid_data)
+        form.page = page
         self.assertFalse(form.is_valid())
         # Check that the slug being too long is a cause for the invalid form
         self.assertEqual(
@@ -183,13 +207,16 @@ class CourseCMSWizardTestCase(CMSTestCase):
 
     def test_cms_wizards_course_parent_page_should_exist(self):
         """
-        We should not be able to create a course page if the parent page does not exist
+        We should not be able to create a course page if the courses root page does not exist.
         """
         organization = OrganizationFactory()
+        page = create_page(
+            " Not the root courses page", "richie/single_column.html", "en"
+        )
         form = CourseWizardForm(
             data={"title": "My title", "organization": organization.id}
         )
-
+        form.page = page
         self.assertFalse(form.is_valid())
         self.assertEqual(
             form.errors,

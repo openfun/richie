@@ -9,12 +9,19 @@ from django.utils.translation import get_language
 from django.utils.translation import ugettext_lazy as _
 
 from cms.api import add_plugin, create_page
-from cms.forms.wizards import SlugWidget
+from cms.cms_wizards import (
+    CMSPageWizard,
+    CMSSubPageWizard,
+    cms_page_wizard,
+    cms_subpage_wizard,
+)
+from cms.forms.wizards import CreateCMSPageForm, CreateCMSSubPageForm, SlugWidget
 from cms.models import Page
 from cms.wizards.wizard_base import Wizard
 from cms.wizards.wizard_pool import wizard_pool
 
 from .models import (
+    ROOT_REVERSE_IDS,
     BlogPost,
     Category,
     Course,
@@ -22,6 +29,52 @@ from .models import (
     Organization,
     Person,
     PersonTitle,
+)
+
+
+class ExcludeRootReverseIDMixin:
+    """A mixin for wizards to disable it on portion of sites that are managed by Richie."""
+
+    def user_has_add_permission(self, user, page):
+        """Check that the page or any of its ancestors is not a special Richie page."""
+        if (
+            page.reverse_id in ROOT_REVERSE_IDS
+            or page.get_ancestor_pages()
+            .filter(reverse_id__in=ROOT_REVERSE_IDS)
+            .exists()
+        ):
+            return False
+        return super().user_has_add_permission(user, page)
+
+
+class RichieCMSPageWizard(ExcludeRootReverseIDMixin, CMSPageWizard):
+    """A page wizard that can not be created below our Richie extended pages."""
+
+
+class RichieCMSSubPageWizard(ExcludeRootReverseIDMixin, CMSSubPageWizard):
+    """A subpage wizard that can not be created below our Richie extended pages."""
+
+
+wizard_pool.unregister(cms_page_wizard)
+wizard_pool.register(
+    RichieCMSPageWizard(
+        title=_("New page"),
+        weight=100,
+        form=CreateCMSPageForm,
+        model=Page,
+        description=_("Create a new page next to the current page."),
+    )
+)
+
+wizard_pool.unregister(cms_subpage_wizard)
+wizard_pool.register(
+    RichieCMSSubPageWizard(
+        title=_("New sub page"),
+        weight=110,
+        form=CreateCMSSubPageForm,
+        model=Page,
+        description=_("Create a page below the current page."),
+    )
 )
 
 
