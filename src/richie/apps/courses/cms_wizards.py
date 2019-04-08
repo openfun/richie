@@ -2,7 +2,6 @@
 CMS Wizard to add a course page
 """
 from django import forms
-from django.conf import settings
 from django.template.defaultfilters import slugify
 from django.utils.functional import cached_property
 from django.utils.translation import get_language
@@ -222,15 +221,6 @@ class CourseRunWizardForm(BaseWizardForm):
     A related CourseRun model is created for each course run page.
     """
 
-    languages = forms.MultipleChoiceField(
-        required=True,
-        label=_("Languages"),
-        choices=settings.ALL_LANGUAGES,
-        help_text=_(
-            "Select all the languages in which the course content is available."
-        ),
-    )
-    resource_link = forms.URLField(label=_("Resource link"), required=False)
 
     model = CourseRun
 
@@ -261,11 +251,7 @@ class CourseRunWizardForm(BaseWizardForm):
         This method creates the associated course run page extension.
         """
         page = super().save()
-        CourseRun.objects.create(
-            extended_object=page,
-            resource_link=self.cleaned_data["resource_link"],
-            languages=self.cleaned_data["languages"],
-        )
+        CourseRun.objects.create(extended_object=page, languages=[get_language()])
         return page
 
 

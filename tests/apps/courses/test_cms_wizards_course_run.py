@@ -1,9 +1,8 @@
 """
 Test suite for the wizard creating a new Course page
 """
-import random
-
 from django.urls import reverse
+from django.utils import translation
 
 from cms.api import create_page
 from cms.models import Page
@@ -101,8 +100,7 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         page = create_page("page", "richie/single_column.html", "en")
 
         # Submit a valid form
-        languages = [random.choice(["en", "fr"])]
-        form = CourseRunWizardForm(data={"title": "My title", "languages": languages})
+        form = CourseRunWizardForm(data={"title": "My title"})
         form.page = page
         self.assertFalse(form.is_valid())
         self.assertEqual(
@@ -118,8 +116,7 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         course = CourseFactory()
 
         # Submit a valid form
-        languages = [random.choice(["en", "fr"])]
-        form = CourseRunWizardForm(data={"title": "My title", "languages": languages})
+        form = CourseRunWizardForm(data={"title": "My title"})
         form.page = course.extended_object
         self.assertTrue(form.is_valid())
         page = form.save()
@@ -137,7 +134,7 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         self.assertEqual(course_run.extended_object.parent_page, course.extended_object)
 
         # The languages field should have been set
-        self.assertEqual(course_run.languages, languages)
+        self.assertEqual(course_run.languages, ["en"])
 
     def test_cms_wizards_course_run_submit_form_max_lengths(self):
         """
@@ -155,7 +152,7 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         course = CourseFactory(page_title="c" * 100, page_parent=root_page)
 
         # A course run with a slug at the limit length should work
-        form = CourseRunWizardForm(data={"title": "t" * 53, "languages": ["en"]})
+        form = CourseRunWizardForm(data={"title": "t" * 53})
         form.page = course.extended_object
         self.assertTrue(form.is_valid())
         form.save()
@@ -180,7 +177,7 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         course = CourseFactory()
 
         # Submit a title at max length
-        data = {"title": "t" * 255, "languages": ["en"]}
+        data = {"title": "t" * 255}
         form = CourseRunWizardForm(data=data)
         form.page = course.extended_object
         self.assertTrue(form.is_valid())
@@ -196,7 +193,7 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         course = CourseFactory()
 
         # Submit a title that is too long
-        invalid_data = {"title": "t" * 256, "languages": ["en"]}
+        invalid_data = {"title": "t" * 256}
 
         form = CourseRunWizardForm(data=invalid_data)
         form.page = course.extended_object
@@ -207,16 +204,18 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
             ["Ensure this value has at most 255 characters (it has 256)."],
         )
 
-    def test_cms_wizards_course_run_languages_required(self):
+    def test_cms_wizards_course_run_language_active(self):
         """
-        Setting languages should be required.
+        The language should be set to the active language.
         """
-        # A course should pre-exist
         course = CourseFactory()
 
-        # Submit a form without the languages field
+        # Submit a valid form
         form = CourseRunWizardForm(data={"title": "My title"})
         form.page = course.extended_object
+        self.assertTrue(form.is_valid())
+        with translation.override("fr"):
+            page = form.save()
 
-        self.assertFalse(form.is_valid())
-        self.assertEqual(form.errors, {"languages": ["This field is required."]})
+        # The language field should have been set to the active language
+        self.assertEqual(page.courserun.languages, ["fr"])
