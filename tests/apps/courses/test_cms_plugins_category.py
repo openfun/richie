@@ -163,15 +163,16 @@ class CategoryPluginTestCase(CMSTestCase):
         # And CMS page title should be in title attribute of the link
         self.assertContains(
             response,
-            '<a class="category-plugin__body" href="/en/public-title/" title="{title:s}"'.format(
-                title=category.public_extension.extended_object.get_title()
-            ),
+            (
+                '<a class="category-glimpse category-glimpse--link" '
+                'href="/en/public-title/" title="{title:s}"'
+            ).format(title=category.public_extension.extended_object.get_title()),
             status_code=200,
         )
         # The category's title should be wrapped in a div
         self.assertContains(
             response,
-            '<div class="category-plugin__title">{:s}</div>'.format(
+            '<h2 class="category-glimpse__title">{:s}</h2>'.format(
                 category.public_extension.extended_object.get_title()
             ),
             html=True,
@@ -187,9 +188,10 @@ class CategoryPluginTestCase(CMSTestCase):
         response = self.client.get(url)
         self.assertContains(
             response,
-            '<a class="category-plugin__body" href="/fr/titre-publique/" title="{title:s}"'.format(
-                title=category.public_extension.extended_object.get_title()
-            ),
+            (
+                '<a class="category-glimpse category-glimpse--link" '
+                'href="/fr/titre-publique/" title="{title:s}"'
+            ).format(title=category.public_extension.extended_object.get_title()),
             status_code=200,
         )
         # pylint: disable=no-member

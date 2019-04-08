@@ -11,10 +11,11 @@
     </p>
 
     {% with form_factor="tag" %}
-      {% page_placeholder "author" current_page as blogpost_author_content %}
-      {% if blogpost_author_content %}
+      {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"author" %}
       <div class="blogpost-detail__subhead__author">
-        {{ blogpost_author_content }}
+        {% page_placeholder "author" current_page or %}
+          <span class="blogpost-detail__subhead__author__empty">{% trans 'No author yet.' %}</span>
+        {% endpage_placeholder %}
       </div>
       {% endif %}
     {% endwith %}
@@ -23,10 +24,11 @@
   </div>
 
   {% with form_factor="tag" %}
-    {% page_placeholder "categories" current_page as blogpost_categories_content %}
-    {% if blogpost_categories_content %}
+    {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"categories" %}
     <div class="blogpost-detail__categories">
-      {{ blogpost_categories_content }}
+      {% page_placeholder "categories" current_page or %}
+        <span class="blogpost-detail__categories__empty">{% trans 'No categories yet.' %}</span>
+      {% endpage_placeholder %}
     </div>
     {% endif %}
   {% endwith %}

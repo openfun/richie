@@ -117,6 +117,24 @@ class Category(BasePageExtension):
             .distinct()
         )
 
+    def get_children_categories(self, language=None):
+        """
+        Return a query to get only the children pages that are Category
+        objects related to this category. A convenient method since
+        ``page.get_child_pages`` return every direct child page, no matter
+        it's a Category or not.
+        """
+        page = (
+            self.extended_object
+            if self.extended_object.publisher_is_draft
+            else self.draft_extension.extended_object
+        )
+        language = language or translation.get_language()
+
+        filter_dict = {"category__isnull": False}
+
+        return page.get_child_pages().filter(**filter_dict)
+
 
 def get_category_limit_choices_to():
     """Return a query limiting the categories proposed when creating a CategoryPlugin."""

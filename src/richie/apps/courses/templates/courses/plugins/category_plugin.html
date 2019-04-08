@@ -6,18 +6,9 @@
       {{ relevant_page.get_title }}
     </a>
   {% else %}
-    <div class="category-plugin-container{% if relevant_page.publisher_is_draft %} category-plugin-container--draft{% endif %}">
-      <div class="category-plugin">
-        <a class="category-plugin__body" href="{{ relevant_page.get_absolute_url }}" title="{{ relevant_page.get_title }}" alt="{{ relevant_page.get_title }} {% trans 'logo' %}">
-          {% with width=216 height=120 %}
-            {% show_placeholder "logo" relevant_page %}
-          {% endwith %}
-          <div class="category-plugin__title">
-              {{ relevant_page.get_title }}
-          </div>
-        </a>
-      </div>
-    </div>
+    {% with width=216 height=120 %}
+        {% include "courses/cms/fragment_category_glimpse.html" with category=relevant_page %}
+    {% endwith %}
   {% endif %}
 {% endif %}
 {% endspaceless %}

@@ -30,6 +30,11 @@ $richie-blogpost-detail-title-textalign: center !default;
       @include sv-flex(0, 0, auto);
       margin: 0;
 
+      // Fix issue with cms hidden placeholder element which trouble alignment
+      .cms-placeholder {
+        display: none;
+      }
+
       &::before {
         content: '—';
         margin: 0 0.4rem;

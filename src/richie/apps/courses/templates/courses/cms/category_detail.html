@@ -2,7 +2,7 @@
 {% load cms_tags i18n %}
 
 {% block content %}{% spaceless %}
-{% with category=current_page.category header_level=2 blogposts=current_page.category.get_blogposts courses=current_page.category.get_courses %}
+{% with category=current_page.category header_level=2 blogposts=current_page.category.get_blogposts courses=current_page.category.get_courses children_categories=current_page.category.get_children_categories %}
 <div class="category-detail">
   <div class="category-detail__banner">
     {% placeholder "banner" or %}
@@ -27,11 +27,20 @@
   </div>
 </div>
 
+{% if children_categories %}
+<div class="category-glimpse-list">
+  <h2 class="category-glimpse-list__title">{% trans "Sub categories" %}</h2>
+  {% for category in children_categories %}
+    {% include "courses/cms/fragment_category_glimpse.html" with category=category %}
+  {% endfor %}
+</div>
+{% endif %}
+
 {% if blogposts %}
 <div class="blogpost-glimpse-list">
   <h2 class="blogpost-glimpse-list__title">{% trans "Related news" %}</h2>
   {% for blogpost in blogposts %}
-    {# If the current page is a draft, show draft courses with a class annotation for styling #}
+    {# If the current page is a draft, show draft blogpost with a class annotation for styling #}
     {% if current_page.publisher_is_draft %}
       {% if blogpost.check_publication is True %}
       <a class="blogpost-glimpse blogpost-glimpse--link" href="{{ blogpost.public_extension.extended_object.get_absolute_url }}">
@@ -48,10 +57,6 @@
         {% include "courses/cms/fragment_blogpost_glimpse.html" with blogpost=blogpost.public_extension.extended_object %}
       </a>
     {% endif %}
-  {% empty %}
-    <div class="blogpost-glimpse blogpost-glimpse--empty">
-      {% trans "No associated blogposts" %}
-    </div>
   {% endfor %}
 </div>
 {% endif %}
