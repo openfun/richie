@@ -201,6 +201,7 @@ class CoursesViewsetsTestCase(TestCase):
                         ],
                     },
                     "subjects": {
+                        "base_path": None,
                         "human_name": "Subjects",
                         "is_drilldown": False,
                         "name": "subjects",
@@ -211,6 +212,7 @@ class CoursesViewsetsTestCase(TestCase):
                         ],
                     },
                     "levels": {
+                        "base_path": None,
                         "human_name": "Levels",
                         "is_drilldown": False,
                         "name": "levels",
@@ -221,6 +223,7 @@ class CoursesViewsetsTestCase(TestCase):
                         ],
                     },
                     "organizations": {
+                        "base_path": None,
                         "human_name": "Organizations",
                         "is_drilldown": False,
                         "name": "organizations",

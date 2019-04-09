@@ -61,7 +61,7 @@ class FilterDefintionsTestCase(TestCase):
 
             # Reset cache for subsequent tests...
             # pylint: disable=protected-access
-            FILTERS[filter_name]._aggs_include = None
+            FILTERS[filter_name]._base_page = None
 
             with self.assertNumQueries(1):
                 self.assertEqual(
@@ -75,7 +75,7 @@ class FilterDefintionsTestCase(TestCase):
 
             # Reset cache for subsequent tests...
             # pylint: disable=protected-access
-            FILTERS[filter_name]._aggs_include = None
+            FILTERS[filter_name]._base_page = None
 
     def test_filter_definitions_indexable_filter_aggs_include_no_reverse_id(self):
         """

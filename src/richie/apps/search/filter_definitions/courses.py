@@ -30,16 +30,37 @@ class IndexableFilterDefinition(TermsAggsMixin, TermsQueryMixin, BaseFilterDefin
 
     def __init__(self, name, reverse_id=None, **kwargs):
         self.reverse_id = reverse_id
-        self._aggs_include = None
+        self._base_page = None
         super().__init__(name, **kwargs)
+
+    @property
+    def base_page(self):
+        """
+        Returns the base page under which the indexable pages target by this filter are placed
+        in the CMS.
+
+        The page is cached the first time it is requested and remains in cache as long as the
+        application is running.
+        """
+        if self.reverse_id:
+            if self._base_page is None:
+                try:
+                    page = Page.objects.select_related("node").get(
+                        publisher_is_draft=False, reverse_id=self.reverse_id
+                    )
+                except Page.DoesNotExist:
+                    return None
+                else:
+                    self._base_page = page
+
+            return self._base_page
+
+        return None
 
     @property
     def aggs_include(self):
         """
         Return a regex that limits what facets are computed on the field.
-
-        The property is cached the first time it is requested and remains in cache as long
-        as the application is running.
 
         Returns:
         --------
@@ -53,18 +74,10 @@ class IndexableFilterDefinition(TermsAggsMixin, TermsQueryMixin, BaseFilterDefin
                 match all values.
         """
         if self.reverse_id:
-            if self._aggs_include is None:
-                try:
-                    page = Page.objects.select_related("node").get(
-                        publisher_is_draft=False, reverse_id=self.reverse_id
-                    )
-                except Page.DoesNotExist:
-                    return ""
-                else:
-                    self._aggs_include = ".*-{path:s}.{{{steplen:d}}}".format(
-                        path=page.node.path, steplen=page.node.steplen
-                    )
-            return self._aggs_include
+            if self.base_page:
+                node = self.base_page.node
+                return f".*-{node.path:s}.{{{node.steplen:d}}}"
+            return ""
 
         return super().aggs_include
 
@@ -175,6 +188,7 @@ class IndexableFilterDefinition(TermsAggsMixin, TermsQueryMixin, BaseFilterDefin
                 "human_name": self.human_name,
                 "is_drilldown": self.is_drilldown,
                 "name": self.name,
+                "base_path": self.base_page.node.path if self.base_page else None,
                 "position": self.position,
                 "values": [
                     # Aggregate the information from right above to build the values

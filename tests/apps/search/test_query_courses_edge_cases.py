@@ -44,10 +44,10 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
 
     @staticmethod
     def reset_filter_definitions_cache():
-        """Reset indexable filters cache on the `aggs_include` field."""
+        """Reset indexable filters cache on the `base_page` field."""
         for filter_name in ["levels", "subjects", "organizations"]:
             # pylint: disable=protected-access
-            FILTERS[filter_name]._aggs_include = None
+            FILTERS[filter_name]._base_page = None
 
     @staticmethod
     def create_filter_pages():
