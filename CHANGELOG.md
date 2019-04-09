@@ -11,10 +11,12 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Enable parent/children filters in the filters pane in Search,
+- Add a template filter to check if a placeholder is empty,
 - Add a new "Assessment" section in the course page.
 
 ### Changed
 
+- Hide empty placeholders from the course public page,
 - Simplify the page creation wizard by reducing possibilities and automating object relations
   based on the navigation context:
   * ensure we are not creating duplicate slugs when creating a page,
