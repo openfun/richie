@@ -77,10 +77,6 @@
         {% include "courses/cms/fragment_course_glimpse.html" with course=course.public_extension %}
       </a>
     {% endif %}
-  {% empty %}
-    <div class="course-glimpse course-glimpse--empty">
-      {% trans "No associated courses" %}
-    </div>
   {% endfor %}
 </div>
 {% endif %}
