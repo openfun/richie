@@ -400,7 +400,7 @@ def create_demo_site():
                 organizations, NB_COURSES_ORGANIZATION_RELATIONS
             ),
             fill_texts=[
-                "course_syllabus",
+                "course_description",
                 "course_format",
                 "course_prerequisites",
                 "course_plan",

@@ -6,10 +6,10 @@
   {% endpage_placeholder %}
 </div>
 
-<div class="course-detail__content__row course-detail__content__syllabus">
-  <h2 class="course-detail__content__row__title">{% trans 'About the course' %}</h2>
+<div class="course-detail__content__row course-detail__content__description">
+  <h2 class="course-detail__content__row__title">{% trans 'About the course...' %}</h2>
   {% with header_level=3 %}
-    {% page_placeholder "course_syllabus" page or %}
+    {% page_placeholder "course_description" page or %}
       <p>{% trans 'Enter here a short description of your course.' %}</p>
     {% endpage_placeholder %}
   {% endwith %}
