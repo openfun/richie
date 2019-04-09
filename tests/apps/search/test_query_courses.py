@@ -184,10 +184,10 @@ class CourseRunsCoursesQueryTestCase(TestCase):
 
     @staticmethod
     def reset_filter_definitions_cache():
-        """Reset indexable filters cache on the `aggs_include` field."""
+        """Reset indexable filters cache on the `base_page` field."""
         for filter_name in ["levels", "subjects", "organizations"]:
             # pylint: disable=protected-access
-            FILTERS[filter_name]._aggs_include = None
+            FILTERS[filter_name]._base_page = None
 
     @staticmethod
     def create_filter_pages():
@@ -431,6 +431,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         ],
                     },
                     "subjects": {
+                        "base_path": "0001",
                         "human_name": "Subjects",
                         "is_drilldown": False,
                         "name": "subjects",
@@ -459,6 +460,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         ],
                     },
                     "levels": {
+                        "base_path": "0002",
                         "human_name": "Levels",
                         "is_drilldown": False,
                         "name": "levels",
@@ -482,6 +484,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         ],
                     },
                     "organizations": {
+                        "base_path": "0003",
                         "human_name": "Organizations",
                         "is_drilldown": False,
                         "name": "organizations",
