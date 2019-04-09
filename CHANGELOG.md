@@ -10,7 +10,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- Enable parent/children filters in the filters pane in Search.
+- Enable parent/children filters in the filters pane in Search,
+- Add a new "Assessment" section in the course page.
 
 ### Changed
 

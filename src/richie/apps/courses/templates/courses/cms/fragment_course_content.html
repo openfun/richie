@@ -60,6 +60,17 @@
   {% endpage_placeholder %}
 </div>
 
+{% if page.publisher_is_draft or not page|is_empty_placeholder:"course_assessment" %}
+<div class="course-detail__content__row course-detail__content__assessment">
+  <h2 class="course-detail__content__row__title">{% trans 'Assessment and certification' %}</h2>
+  {% page_placeholder "course_assessment" page or %}
+    <p class="course-detail__content__assessment__placeholder">
+      {% trans "How is progress evaluated and/or certified?" %}
+    </p>
+  {% endpage_placeholder %}
+</div>
+{% endif %}
+
 <div class="course-detail__content__row course-detail__content__license">
   <h2 class="course-detail__content__row__title course-detail__content__license__title">{% trans 'License' %}</h2>
 
