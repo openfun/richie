@@ -16,6 +16,7 @@ from cms.utils.placeholder import validate_placeholder_name
 register = template.Library()
 
 
+@register.tag("page_placeholder")
 class PagePlaceholder(Placeholder):
     """
     This template node is used to output page content and
@@ -94,4 +95,12 @@ class PagePlaceholder(Placeholder):
         return content
 
 
-register.tag("page_placeholder", PagePlaceholder)
+@register.filter("is_empty_placeholder")
+def is_empty_placeholder(page, slot):
+    """A template filter to determine if a placeholder is empty.
+
+    This is useful when we don't want to include any wrapper markup in our template unless
+    the placeholder unless it actually contains plugins.
+    """
+    placeholder = page.placeholders.get(slot=slot)
+    return not placeholder.cmsplugin_set.exists()

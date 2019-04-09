@@ -372,6 +372,10 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
             "name": _("Organizations"),
             "plugins": ["OrganizationPlugin"],
         },
+        "courses/cms/course_detail.html course_assessment": {
+            "name": _("Assessment and Certification"),
+            "plugins": ["CKEditorPlugin"],
+        },
         # Organization detail
         "courses/cms/organization_detail.html banner": {
             "name": _("Banner"),
