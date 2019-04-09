@@ -27,6 +27,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Translations are loaded dynamically in frontend application,
 - Optimized frontend build in our official Docker image.
 
+## Fixed
+
+- Remove possibility to edit course title from the course run page as it breaks publishing.
+
 ## [1.0.0-beta.4] - 2019-04-08
 
 ### Added
