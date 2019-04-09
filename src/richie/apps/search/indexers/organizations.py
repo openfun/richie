@@ -84,7 +84,7 @@ class OrganizationsIndexer:
             logo_image.height = defaults.ORGANIZATIONS_LOGO_IMAGE_HEIGHT
             logo_images[logo_image.cmsplugin_ptr.language] = logo_image.img_src
 
-        # Get syllabus texts
+        # Get description texts
         description = defaultdict(list)
         for simple_text in SimpleText.objects.filter(
             cmsplugin_ptr__placeholder__page=organization.extended_object,

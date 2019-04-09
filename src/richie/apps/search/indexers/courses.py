@@ -366,13 +366,13 @@ class CoursesIndexer:
             cover_image.height = COURSES_COVER_IMAGE_HEIGHT
             cover_images[cover_image.cmsplugin_ptr.language] = cover_image.img_src
 
-        # Prepare syllabus texts
-        syllabus_texts = defaultdict(list)
+        # Prepare description texts
+        descriptions = defaultdict(list)
         for simple_text in SimpleText.objects.filter(
             cmsplugin_ptr__placeholder__page=course.extended_object,
-            cmsplugin_ptr__placeholder__slot="course_syllabus",
+            cmsplugin_ptr__placeholder__slot="course_description",
         ):
-            syllabus_texts[simple_text.cmsplugin_ptr.language].append(simple_text.body)
+            descriptions[simple_text.cmsplugin_ptr.language].append(simple_text.body)
 
         # Prepare categories, making sure we get title information for categories
         # in the same query
@@ -453,7 +453,7 @@ class CoursesIndexer:
             },
             "course_runs": course_runs,
             "cover_image": cover_images,
-            "description": {l: " ".join(st) for l, st in syllabus_texts.items()},
+            "description": {l: " ".join(st) for l, st in descriptions.items()},
             "is_new": len(course_runs) == 1,
             "organizations": [
                 ES_INDICES.organizations.get_es_id(o.extended_object)

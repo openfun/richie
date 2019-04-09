@@ -152,15 +152,15 @@ class CoursesIndexersTestCase(TestCase):
             2, page_parent=course.extended_object, should_publish=True
         )
 
-        # Add a syllabus in several languages
+        # Add a description in several languages
         placeholder = course.public_extension.extended_object.placeholders.get(
-            slot="course_syllabus"
+            slot="course_description"
         )
         plugin_params = {"placeholder": placeholder, "plugin_type": "CKEditorPlugin"}
-        add_plugin(body="english syllabus line 1.", language="en", **plugin_params)
-        add_plugin(body="english syllabus line 2.", language="en", **plugin_params)
-        add_plugin(body="syllabus français ligne 1.", language="fr", **plugin_params)
-        add_plugin(body="syllabus français ligne 2.", language="fr", **plugin_params)
+        add_plugin(body="english description line 1.", language="en", **plugin_params)
+        add_plugin(body="english description line 2.", language="en", **plugin_params)
+        add_plugin(body="a propos français ligne 1.", language="fr", **plugin_params)
+        add_plugin(body="a propos français ligne 2.", language="fr", **plugin_params)
 
         # The results were properly formatted and passed to the consumer
         expected_course = {
@@ -205,8 +205,8 @@ class CoursesIndexersTestCase(TestCase):
             ],
             "cover_image": {"en": "123.jpg", "fr": "123.jpg"},
             "description": {
-                "en": "english syllabus line 1. english syllabus line 2.",
-                "fr": "syllabus français ligne 1. syllabus français ligne 2.",
+                "en": "english description line 1. english description line 2.",
+                "fr": "a propos français ligne 1. a propos français ligne 2.",
             },
             "is_new": False,
             "organizations": ["L-0004", "L-0006"],

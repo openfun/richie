@@ -330,7 +330,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
             "plugins": ["VideoPlayerPlugin", "PicturePlugin"],
             "limits": {"VideoPlayerPlugin": 1, "PicturePlugin": 1},
         },
-        "courses/cms/course_detail.html course_syllabus": {
+        "courses/cms/course_detail.html course_description": {
             "name": _("About the course"),
             "plugins": ["CKEditorPlugin"],
         },
