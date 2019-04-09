@@ -20,11 +20,10 @@ FROM python:3.7-stretch as base
 # ---- front-end builder image ----
 FROM node:10 as front-builder
 
-# FIXME: we should only copy src/frontend, but for now compiling scss files
-# requires files from the backend sources
-COPY ./src /app/src/
+# Copy frontend app sources
+COPY ./src/frontend /builder/src/frontend
 
-WORKDIR /app/src/frontend
+WORKDIR /builder/src/frontend
 
 RUN yarn install --frozen-lockfile && \
     yarn build-production && \
@@ -36,7 +35,7 @@ FROM base as back-builder
 WORKDIR /builder
 
 # Copy distributed application's statics
-COPY --from=front-builder /app/src/richie/static/richie /builder/src/richie/static/richie
+COPY --from=front-builder /builder/src/richie/static/richie /builder/src/richie/static/richie
 
 # Copy required python dependencies
 COPY setup.py setup.cfg MANIFEST.in /builder/

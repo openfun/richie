@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Translations are loaded dynamically in frontend application.
+- Optimized frontend build in our official Docker image
 
 ## [1.0.0-beta.4] - 2019-04-08
 
