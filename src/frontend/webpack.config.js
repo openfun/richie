@@ -16,6 +16,7 @@ module.exports = {
   ],
   output: {
     filename: 'index.js',
+    publicPath: '/static/richie/js/',
     path: __dirname + '/../richie/static/richie/js',
   },
 
