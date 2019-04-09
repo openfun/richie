@@ -150,10 +150,7 @@ export const onSuggestionsFetchRequested = (
 export const onSuggestionSelected = (
   setValue: valueSetter,
   setSuggestions: suggestionsSetter,
-  addFilter: (
-    filterName: modelName.CATEGORIES | modelName.ORGANIZATIONS,
-    payload: string,
-  ) => void,
+  addFilter: (payload: string) => void,
   updateFullTextSearch: (query: string) => void,
 ) => (
   event: React.FormEvent,
@@ -167,7 +164,7 @@ export const onSuggestionSelected = (
     case modelName.ORGANIZATIONS:
     case modelName.CATEGORIES:
       // Update the search with the newly selected filter
-      addFilter(suggestion.model, String(suggestion.data.id));
+      addFilter(String(suggestion.data.id));
       // Reset the search field state: the task has been completed
       setValue('');
       setSuggestions([]);
@@ -218,14 +215,18 @@ export const SearchSuggestFieldBase = ({
       query,
       type: 'QUERY_UPDATE',
     });
-  // When the user selects a filter from one of our autocomplete APIs, we add a filter to the
-  // current search and query string parameters
-  const addFilter = (
-    filterName: modelName.CATEGORIES | modelName.ORGANIZATIONS,
-    payload: string,
-  ) => {
+
+  // Helper to add a filter to the current search and query string parameters when the user selects a
+  // filter value from one of our autocomplete APIs.
+  const addFilter = (payload: string) => {
+    // Pick the filter to update based on the payload's path: it contains the relevant filter's page path
+    // (for eg. a meta-category or the "organizations" root page)
+    const filter = Object.values(filters).find(
+      fltr => !!fltr.base_path && payload.substr(2).startsWith(fltr.base_path),
+    )!;
+
     dispatchCourseSearchParamsUpdate({
-      filter: filters[filterName],
+      filter,
       payload,
       type: 'FILTER_ADD',
     });
@@ -277,6 +278,6 @@ export const SearchSuggestFieldBase = ({
 
 /**
  * Component. Displays the main search field alon with any suggestions organized in relevant sections.
- * @param addFilter Store helper to add a new active value for a filter.
+ * @param filters Filter definitions for all the potential suggestable filters.
  */
 export const SearchSuggestField = injectIntl(SearchSuggestFieldBase);

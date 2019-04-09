@@ -29,18 +29,19 @@ describe('components/SearchFilterGroup', () => {
       >
         <SearchFilterGroup
           filter={{
+            base_path: '0001',
             human_name: 'Organizations',
             name: 'organizations',
             values: [
               {
                 count: 4,
                 human_name: 'Value One',
-                key: 'P-value-1',
+                key: 'P-00010001',
               },
               {
                 count: 7,
                 human_name: 'Value Two',
-                key: 'L-value-2',
+                key: 'L-00010002',
               },
             ],
           }}

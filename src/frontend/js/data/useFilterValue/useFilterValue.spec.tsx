@@ -36,6 +36,7 @@ describe('data/useFilterValue', () => {
       >
         <TestComponent
           filter={{
+            base_path: '0003',
             human_name: 'Organizations',
             name: 'organizations',
             values: [],
@@ -53,6 +54,7 @@ describe('data/useFilterValue', () => {
     toggle();
     expect(mockDispatchCourseSearchParamsAction).toHaveBeenCalledWith({
       filter: {
+        base_path: '0003',
         human_name: 'Organizations',
         name: 'organizations',
         values: [],
@@ -73,6 +75,7 @@ describe('data/useFilterValue', () => {
       >
         <TestComponent
           filter={{
+            base_path: '0003',
             human_name: 'Organizations',
             name: 'organizations',
             values: [],
@@ -90,6 +93,7 @@ describe('data/useFilterValue', () => {
     toggle();
     expect(mockDispatchCourseSearchParamsAction).toHaveBeenCalledWith({
       filter: {
+        base_path: '0003',
         human_name: 'Organizations',
         name: 'organizations',
         values: [],

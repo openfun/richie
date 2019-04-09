@@ -27,6 +27,7 @@ describe('<SearchFilterValueParent />', () => {
       >
         <SearchFilterValueParent
           filter={{
+            base_path: '00010002',
             human_name: 'Subjects',
             name: 'subjects',
             values: [],
@@ -80,6 +81,7 @@ describe('<SearchFilterValueParent />', () => {
       >
         <SearchFilterValueParent
           filter={{
+            base_path: '00010002',
             human_name: 'Subjects',
             name: 'subjects',
             values: [],
@@ -133,6 +135,7 @@ describe('<SearchFilterValueParent />', () => {
       >
         <SearchFilterValueParent
           filter={{
+            base_path: '00010002',
             human_name: 'Subjects',
             name: 'subjects',
             values: [],
@@ -190,6 +193,7 @@ describe('<SearchFilterValueParent />', () => {
       >
         <SearchFilterValueParent
           filter={{
+            base_path: '0009',
             human_name: 'Filter name',
             name: 'filter_name',
             values: [],
@@ -221,6 +225,7 @@ describe('<SearchFilterValueParent />', () => {
       >
         <SearchFilterValueParent
           filter={{
+            base_path: '0009',
             human_name: 'Filter name',
             name: 'filter_name',
             values: [],
@@ -251,6 +256,7 @@ describe('<SearchFilterValueParent />', () => {
       >
         <SearchFilterValueParent
           filter={{
+            base_path: '0009',
             human_name: 'Filter name',
             name: 'filter_name',
             values: [],
@@ -266,7 +272,12 @@ describe('<SearchFilterValueParent />', () => {
 
     fireEvent.click(getByText('Human name'));
     expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
-      filter: { human_name: 'Filter name', name: 'filter_name', values: [] },
+      filter: {
+        base_path: '0009',
+        human_name: 'Filter name',
+        name: 'filter_name',
+        values: [],
+      },
       payload: 'P-00040005',
       type: 'FILTER_ADD',
     });
@@ -283,6 +294,7 @@ describe('<SearchFilterValueParent />', () => {
       >
         <SearchFilterValueParent
           filter={{
+            base_path: '0009',
             human_name: 'Filter name',
             name: 'filter_name',
             values: [],
@@ -298,7 +310,12 @@ describe('<SearchFilterValueParent />', () => {
 
     fireEvent.click(getByText('Human name'));
     expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
-      filter: { human_name: 'Filter name', name: 'filter_name', values: [] },
+      filter: {
+        base_path: '0009',
+        human_name: 'Filter name',
+        name: 'filter_name',
+        values: [],
+      },
       payload: 'P-00040005',
       type: 'FILTER_REMOVE',
     });

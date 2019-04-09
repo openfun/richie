@@ -19,11 +19,13 @@ describe('components/SearchFiltersPane', () => {
       <SearchFiltersPane
         filters={{
           categories: {
+            base_path: '0001',
             human_name: 'Categories',
             name: 'categories',
             values: [],
           },
           organizations: {
+            base_path: '0002',
             human_name: 'Organizations',
             name: 'organizations',
             values: [],

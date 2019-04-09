@@ -16,6 +16,7 @@ describe('components/SearchFilterValueLeaf', () => {
       >
         <SearchFilterValueLeaf
           filter={{
+            base_path: null,
             human_name: 'Filter name',
             name: 'filter_name',
             values: [],
@@ -44,6 +45,7 @@ describe('components/SearchFilterValueLeaf', () => {
       >
         <SearchFilterValueLeaf
           filter={{
+            base_path: null,
             human_name: 'Filter name',
             name: 'filter_name',
             values: [],
@@ -74,6 +76,7 @@ describe('components/SearchFilterValueLeaf', () => {
       >
         <SearchFilterValueLeaf
           filter={{
+            base_path: null,
             human_name: 'Filter name',
             name: 'filter_name',
             values: [],
@@ -89,7 +92,12 @@ describe('components/SearchFilterValueLeaf', () => {
 
     fireEvent.click(getByText('Human name'));
     expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
-      filter: { human_name: 'Filter name', name: 'filter_name', values: [] },
+      filter: {
+        base_path: null,
+        human_name: 'Filter name',
+        name: 'filter_name',
+        values: [],
+      },
       payload: '43',
       type: 'FILTER_ADD',
     });
@@ -106,6 +114,7 @@ describe('components/SearchFilterValueLeaf', () => {
       >
         <SearchFilterValueLeaf
           filter={{
+            base_path: null,
             human_name: 'Filter name',
             name: 'filter_name',
             values: [],
@@ -121,7 +130,12 @@ describe('components/SearchFilterValueLeaf', () => {
 
     fireEvent.click(getByText('Human name'));
     expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
-      filter: { human_name: 'Filter name', name: 'filter_name', values: [] },
+      filter: {
+        base_path: null,
+        human_name: 'Filter name',
+        name: 'filter_name',
+        values: [],
+      },
       payload: '44',
       type: 'FILTER_REMOVE',
     });

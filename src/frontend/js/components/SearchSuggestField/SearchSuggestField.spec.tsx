@@ -274,7 +274,7 @@ describe('components/SearchSuggestField', () => {
         },
       });
 
-      expect(mockAddFilter).toHaveBeenCalledWith(modelName.CATEGORIES, '43');
+      expect(mockAddFilter).toHaveBeenCalledWith('43');
       expect(mockSetValue).toHaveBeenCalledWith('');
       expect(mockSetSuggestions).toHaveBeenCalledWith([]);
       expect(mockLocation.href).not.toBeDefined();
@@ -287,7 +287,7 @@ describe('components/SearchSuggestField', () => {
         },
       });
 
-      expect(mockAddFilter).toHaveBeenCalledWith(modelName.ORGANIZATIONS, '44');
+      expect(mockAddFilter).toHaveBeenCalledWith('44');
       expect(mockSetValue).toHaveBeenCalledWith('');
       expect(mockSetSuggestions).toHaveBeenCalledWith([]);
       expect(mockLocation.href).not.toBeDefined();

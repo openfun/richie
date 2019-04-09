@@ -30,9 +30,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Translations are loaded dynamically in frontend application,
 - Optimized frontend build in our official Docker image.
 
-## Fixed
+### Fixed
 
 - Remove possibility to edit course title from the course run page as it breaks publishing.
+- Fix an issue that crashed the app when a category was selected in search autocomplete.
 
 ## [1.0.0-beta.4] - 2019-04-08
 
