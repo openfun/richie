@@ -432,6 +432,8 @@ jobs:
     working_directory: ~/fun
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/fun
       - restore_cache:
           keys:
             - docker-debian-images-ci-{{ .Revision }}
@@ -603,6 +605,36 @@ jobs:
             - ./node_modules
           key: v5-front-dependencies-{{ checksum "yarn.lock" }}
 
+  build-front-production:
+    docker:
+      - image: circleci/node:10
+    working_directory: ~/fun/src/frontend
+    steps:
+      - checkout:
+          path: ~/fun
+      - restore_cache:
+          keys:
+            - v5-front-dependencies-{{ checksum "yarn.lock" }}
+            - v5-front-dependencies-
+      - run:
+          name: Build front-end application in production mode
+          command: yarn build-production
+      - run:
+          name: Build application styles in production mode
+          command: yarn sass-production
+      - run:
+          name: List builds
+          command: |
+            echo "== Javascript =="
+            ls ../richie/static/richie/js/*.js
+            echo "== CSS =="
+            ls ../richie/static/richie/css/*.css
+      - persist_to_workspace:
+          root: ~/fun
+          paths:
+            - src/richie/static/richie/js/*.js
+            - src/richie/static/richie/css/*.css
+
   lint-front-tslint:
     docker:
       - image: circleci/node:10
@@ -696,6 +728,12 @@ workflows:
       #
       # Build, lint and test the front-end apps
       - build-front:
+          filters:
+            tags:
+              only: /.*/
+      - build-front-production:
+          requires:
+            - build-front
           filters:
             tags:
               only: /.*/
@@ -822,6 +860,7 @@ workflows:
             - test-back-mysql
             - test-back-postgresql
             - test-alpine
+            - build-front-production
           filters:
             tags:
               only: /.*/
