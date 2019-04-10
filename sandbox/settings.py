@@ -274,6 +274,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         ("courses/cms/blogpost_list.html", _("Blog post list")),
         ("courses/cms/blogpost_detail.html", _("Blog post page")),
         ("courses/cms/person_detail.html", _("Person page")),
+        ("courses/cms/person_list.html", _("Person list")),
         ("search/search.html", _("Search")),
         ("richie/child_pages_list.html", _("List of child pages")),
         ("richie/homepage.html", _("Homepage")),

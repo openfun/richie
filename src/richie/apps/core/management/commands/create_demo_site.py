@@ -72,7 +72,7 @@ PAGE_INFOS = {
     },
     "categories": {
         "title": {"en": "Categories", "fr": "Catégories"},
-        "in_navigation": False,
+        "in_navigation": True,
         "kwargs": {
             "reverse_id": Category.ROOT_REVERSE_ID,
             "template": "richie/child_pages_list.html",
@@ -88,10 +88,10 @@ PAGE_INFOS = {
     },
     "persons": {
         "title": {"en": "Persons", "fr": "Personnes"},
-        "in_navigation": False,
+        "in_navigation": True,
         "kwargs": {
             "reverse_id": Person.ROOT_REVERSE_ID,
-            "template": "richie/child_pages_list.html",
+            "template": "courses/cms/person_list.html",
         },
     },
     "dashboard": {

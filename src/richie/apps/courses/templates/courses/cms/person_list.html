@@ -1,0 +1,16 @@
+{% extends "richie/fullwidth.html" %}
+{% load cms_tags i18n %}
+
+{% block content %}
+<div class="person-glimpse-list">
+  <h1 class="person-glimpse-list__title">{{ current_page.get_title }}</h1>
+
+  {% for page in current_page.get_child_pages %}
+      {% include "courses/cms/fragment_person_glimpse.html" with person=page %}
+  {% empty %}
+    <p class="person-glimpse person-glimpse--empty">
+    {% trans "No persons" %}
+    </p>
+  {% endfor %}
+</div>
+{% endblock content %}

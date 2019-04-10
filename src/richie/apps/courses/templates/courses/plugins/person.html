@@ -7,26 +7,7 @@
       {{ relevant_page.person.get_full_name }}
     </a>
   {% else %}
-    <div class="person-plugin">
-      <a class="person-plugin__media" href="{{ relevant_page.get_absolute_url }}"
-          title="{{ relevant_page.person.get_full_name }} {% trans "avatar" %}">
-        {% with width=200 height=200 %}
-        {% show_placeholder "portrait" relevant_page %}
-        {% endwith %}
-      </a>
-      <div class="person-plugin__content">
-        <div class="person-plugin__content__wrapper">
-          <a href="{{ relevant_page.get_absolute_url }}" title="{{ relevant_page.person.get_full_name }}">
-            <h{{ header_level|default:2 }} class="person-plugin__content__title">
-              {{ relevant_page.person.get_full_name }}
-            </h{{ header_level|default:2 }}>
-          </a>
-          <div class="person-plugin__content__text">
-            {% show_placeholder "resume" relevant_page %}
-          </div>
-        </div>
-      </div>
-    </div>
+    {% include "courses/cms/fragment_person_glimpse.html" with person=relevant_page %}
   {% endif %}
 {% endif %}
 {% endspaceless %}
