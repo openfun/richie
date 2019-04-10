@@ -29,6 +29,7 @@ data
 sandbox/build
 sandbox/static/css
 src/richie/static/richie/css
+!src/richie/static/richie/css/ckeditor.css
 src/richie/static/richie/js
 
 # Font-end
