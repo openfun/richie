@@ -123,6 +123,13 @@ $richie-course-glimpse-foot-cta-background-hover: $firebrick6 !default;
       line-height: $richie-course-glimpse-caption-lineheight;
       text-align: $richie-course-glimpse-caption-textalign;
     }
+
+    @include m-o-media_empty(
+      $width: 100%,
+      $height: 16vh,
+      $background: $gray97,
+      $absolute: false
+    );
   }
 
   // A little specific makeup onto footer elements

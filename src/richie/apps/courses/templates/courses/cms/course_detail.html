@@ -48,13 +48,13 @@
 
     <div class="course-detail__aside">
 
+      {% if current_page.publisher_is_draft %}
       <div class="course-detail__aside__cover">
-        {% if current_page.publisher_is_draft %}
           {% placeholder "course_cover" or %}
           <p class="course-detail__aside__cover__empty">{% trans 'Add an image for course cover on its glimpse.' %}</p>
           {% endplaceholder %}
-        {% endif %}
       </div>
+      {% endif %}
 
       {% with main_organization=course.get_main_organization %}
         {% if main_organization %}
