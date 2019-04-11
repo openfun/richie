@@ -10,6 +10,7 @@ from elasticsearch.client import IndicesClient
 from elasticsearch.exceptions import NotFoundError
 from elasticsearch.helpers import bulk
 
+from .defaults import ES_CHUNK_SIZE
 from .indexers import ES_INDICES
 from .text_indexing import ANALYSIS_SETTINGS
 
@@ -18,7 +19,7 @@ def richie_bulk(actions):
     """Wrap bulk helper to set default parameters."""
     return bulk(
         actions=actions,
-        chunk_size=settings.ES_CHUNK_SIZE,
+        chunk_size=getattr(settings, "RICHIE_ES_CHUNK_SIZE", ES_CHUNK_SIZE),
         client=settings.ES_CLIENT,
         stats_only=True,
     )

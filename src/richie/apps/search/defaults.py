@@ -33,20 +33,21 @@ ORGANIZATIONS_LOGO_IMAGE_HEIGHT = getattr(
     settings, "ORGANIZATIONS_LOGO_IMAGE_HEIGHT", 216
 )
 
+# Elasticsearch
+ES_CHUNK_SIZE = 500
+ES_PAGE_SIZE = 10
+
 # Define the scoring boost (in ElasticSearch) related value names receive when using
 # full-text search.
 # For example, when a user searches for "Science" in full-text, it should match any
 # course whose category contains "Science" or a related word, albeit with a lower
 # score than courses that include it in their title or description.
 # This lower score factor is the boost value we get or set here.
-RELATED_CONTENT_MATCHING_BOOST = getattr(
-    settings, "RELATED_CONTENT_MATCHING_BOOST", 0.05
-)
+RELATED_CONTENT_BOOST = 0.05
 
-# Facet sorting mode
-SEARCH_SORTING_DEFAULT = getattr(settings, "RICHIE_SEARCH_SORTING", "conf")
+FACET_SORTING_DEFAULT = "conf"
 
-FILTERS_DEFAULT = [
+FILTERS_CONFIGURATION = [
     (
         "richie.apps.search.filter_definitions.StaticChoicesFilterDefinition",
         {

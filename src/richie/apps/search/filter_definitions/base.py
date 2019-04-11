@@ -10,7 +10,7 @@ from django import forms
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.module_loading import import_string
 
-from ..defaults import SEARCH_SORTING_DEFAULT
+from ..defaults import FACET_SORTING_DEFAULT
 
 
 class BaseFilterDefinition:
@@ -29,7 +29,7 @@ class BaseFilterDefinition:
         is_drilldown=False,
         min_doc_count=0,
         position=0,
-        sorting=SEARCH_SORTING_DEFAULT,
+        sorting=FACET_SORTING_DEFAULT,
     ):
         """Set common attributes with sensible defaults (only name is required)."""
         self.name = name
