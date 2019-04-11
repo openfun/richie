@@ -4,5 +4,3 @@ DJANGO_CONFIGURATION=Test
 DJANGO_SECRET_KEY=ThisIsAnExampleKeyForTestPurposeOnly
 PYTHONPATH=/app/sandbox
 
-# Elastic search
-ES_CLIENT=elasticsearch

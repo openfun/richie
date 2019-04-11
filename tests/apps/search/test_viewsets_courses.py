@@ -3,7 +3,6 @@ Tests for the course viewset
 """
 from unittest import mock
 
-from django.conf import settings
 from django.test import TestCase
 from django.utils import timezone
 
@@ -11,6 +10,7 @@ import pytz
 from elasticsearch.exceptions import NotFoundError
 from rest_framework.test import APIRequestFactory
 
+from richie.apps.search import ES_CLIENT
 from richie.apps.search.indexers.courses import CoursesIndexer
 from richie.apps.search.viewsets.courses import CoursesViewSet
 
@@ -41,7 +41,7 @@ class CoursesViewsetsTestCase(TestCase):
         factory = APIRequestFactory()
         request = factory.get("/api/v1.0/courses/42")
 
-        with mock.patch.object(settings.ES_CLIENT, "get", return_value={"_id": 42}):
+        with mock.patch.object(ES_CLIENT, "get", return_value={"_id": 42}):
             # Note: we need to use a separate argument for the ID as that is what the ViewSet uses
             response = CoursesViewSet.as_view({"get": "retrieve"})(
                 request, 42, version="1.0"
@@ -59,7 +59,7 @@ class CoursesViewsetsTestCase(TestCase):
         request = factory.get("/api/v1.0/courses/43")
 
         # Act like the ES client would when we attempt to get a non-existent document
-        with mock.patch.object(settings.ES_CLIENT, "get", side_effect=NotFoundError):
+        with mock.patch.object(ES_CLIENT, "get", side_effect=NotFoundError):
             response = CoursesViewSet.as_view({"get": "retrieve"})(
                 request, 43, version="1.0"
             )
@@ -79,7 +79,7 @@ class CoursesViewsetsTestCase(TestCase):
         "richie.apps.search.forms.CourseSearchForm.get_script_fields",
         lambda *args: {"some": "fields"},
     )
-    @mock.patch.object(settings.ES_CLIENT, "search")
+    @mock.patch.object(ES_CLIENT, "search")
     def test_viewsets_courses_search(self, mock_search, *_):
         """
         Happy path: the consumer is filtering courses by matching text

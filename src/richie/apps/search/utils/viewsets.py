@@ -1,11 +1,12 @@
 """
 Helpers to enable reuse for needs that are shared between viewsets.
 """
-from django.conf import settings
 from django.utils.translation import get_language_from_request
 
 from rest_framework.decorators import action
 from rest_framework.response import Response
+
+from .. import ES_CLIENT
 
 
 class ViewSetMetadata:
@@ -40,7 +41,7 @@ class AutocompleteMixin:
         indexer = self._meta.indexer
 
         # Query our specific ES completion field
-        autocomplete_query_response = settings.ES_CLIENT.search(
+        autocomplete_query_response = ES_CLIENT.search(
             index=indexer.index_name,
             doc_type=indexer.document_type,
             body={

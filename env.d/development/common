@@ -3,8 +3,5 @@ DJANGO_SETTINGS_MODULE=settings
 DJANGO_CONFIGURATION=Development
 DJANGO_SECRET_KEY=ThisIsAnExampleKeyForDevPurposeOnly
 
-# Elastic search
-ES_CLIENT=elasticsearch
-
 # Python
 PYTHONUNBUFFERED=1

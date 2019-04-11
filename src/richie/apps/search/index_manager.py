@@ -10,6 +10,7 @@ from elasticsearch.client import IndicesClient
 from elasticsearch.exceptions import NotFoundError
 from elasticsearch.helpers import bulk
 
+from . import ES_CLIENT
 from .defaults import ES_CHUNK_SIZE
 from .indexers import ES_INDICES
 from .text_indexing import ANALYSIS_SETTINGS
@@ -20,7 +21,7 @@ def richie_bulk(actions):
     return bulk(
         actions=actions,
         chunk_size=getattr(settings, "RICHIE_ES_CHUNK_SIZE", ES_CHUNK_SIZE),
-        client=settings.ES_CLIENT,
+        client=ES_CLIENT,
         stats_only=True,
     )
 
@@ -39,7 +40,7 @@ def perform_create_index(indexable, logger):
     """
     Create a new index in ElasticSearch from an indexable instance
     """
-    indices_client = IndicesClient(client=settings.ES_CLIENT)
+    indices_client = IndicesClient(client=ES_CLIENT)
     # Create a new index name, suffixing its name with a timestamp
     new_index = "{:s}_{:s}".format(
         indexable.index_name, timezone.now().strftime("%Y-%m-%d-%Hh%Mm%S.%fs")
@@ -70,7 +71,7 @@ def regenerate_indexes(logger):
     a new one only once it has successfully built it.
     """
     # Prepare the client we'll be using to handle indexes
-    indices_client = IndicesClient(client=settings.ES_CLIENT)
+    indices_client = IndicesClient(client=ES_CLIENT)
 
     # Get all existing indexes once; we'll look up into this list many times
     try:
@@ -137,4 +138,4 @@ def store_es_scripts(logger):
         for script_id, script_body in indexer.scripts.items():
             if logger:
                 logger.info('Storing script "{:s}"...'.format(script_id))
-            settings.ES_CLIENT.put_script(id=script_id, body=script_body)
+            ES_CLIENT.put_script(id=script_id, body=script_body)

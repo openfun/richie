@@ -4,13 +4,13 @@ import random
 from http.cookies import SimpleCookie
 from unittest import mock
 
-from django.conf import settings
 from django.test import TestCase
 
 from elasticsearch.client import IndicesClient
 from elasticsearch.helpers import bulk
 
 from richie.apps.courses.factories import CategoryFactory, OrganizationFactory
+from richie.apps.search import ES_CLIENT
 from richie.apps.search.filter_definitions import FILTERS, IndexableFilterDefinition
 from richie.apps.search.indexers.courses import CoursesIndexer
 from richie.apps.search.text_indexing import ANALYSIS_SETTINGS
@@ -71,7 +71,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
         """
         self.create_filter_pages()
         # Index these 4 courses in Elasticsearch
-        indices_client = IndicesClient(client=settings.ES_CLIENT)
+        indices_client = IndicesClient(client=ES_CLIENT)
         # Delete any existing indexes so we get a clean slate
         indices_client.delete(index="_all")
         # Create an index we'll use to test the ES features
@@ -85,7 +85,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
             body=CoursesIndexer.mapping, doc_type="course", index="test_courses"
         )
         # Add the sorting script
-        settings.ES_CLIENT.put_script(id="state", body=CoursesIndexer.scripts["state"])
+        ES_CLIENT.put_script(id="state", body=CoursesIndexer.scripts["state"])
         # Actually insert our courses in the index
         actions = [
             {
@@ -97,7 +97,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
             }
             for course in courses
         ]
-        bulk(actions=actions, chunk_size=500, client=settings.ES_CLIENT)
+        bulk(actions=actions, chunk_size=500, client=ES_CLIENT)
         indices_client.refresh()
 
     def test_query_courses_filter_box_titles_french(self, *_):

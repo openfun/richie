@@ -9,7 +9,6 @@ from django.utils.translation import ugettext_lazy as _
 # pylint: disable=ungrouped-imports
 import sentry_sdk
 from configurations import Configuration, values
-from elasticsearch import Elasticsearch
 from sentry_sdk.integrations.django import DjangoIntegration
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -38,21 +37,6 @@ def get_release():
     return "NA"
 
 
-class ElasticSearchMixin:
-    """
-    Elastic Search configuration mixin
-
-    You may want to override default configuration by setting the following environment
-    variable:
-
-    * ES_CLIENT
-    """
-
-    ES_CLIENT = Elasticsearch(
-        [values.Value("localhost", environ_name="ES_CLIENT", environ_prefix=None)]
-    )
-
-
 class DRFMixin:
     """
     Django Rest Framework configuration mixin.
@@ -67,7 +51,7 @@ class DRFMixin:
     }
 
 
-class Base(DRFMixin, ElasticSearchMixin, Configuration):
+class Base(DRFMixin, Configuration):
     """
     This is the base configuration every configuration (aka environnement) should inherit from. It
     is recommended to configure third-party applications by creating a configuration mixins in
@@ -81,7 +65,7 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
     variables:
 
     * DJANGO_SENTRY_DSN
-    * ES_CLIENT
+    * RICHIE_ES_HOST
     * DB_NAME
     * DB_HOST
     * DB_PASSWORD
