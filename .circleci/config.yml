@@ -454,17 +454,11 @@ jobs:
   #   * you have define both the TWINE_USERNAME & TWINE_PASSWORD secret
   #     environment variables in CircleCI UI (with your PyPI credentials)
   pypi:
-    machine: true
+    docker:
+      - image: circleci/python:3.7-stretch
     working_directory: ~/fun
     steps:
       - checkout
-      - restore_cache:
-          keys:
-            - docker-debian-images-ci-{{ .Revision }}
-      - run:
-          name: Load images to docker engine
-          command: |
-            docker load < docker/images/dev/richie.tar
       # Restore built python packages
       - attach_workspace:
           at: ~/fun
@@ -472,19 +466,11 @@ jobs:
           name: List built packages
           command: ls dist/*
       - run:
+          name: Install base requirements (twine)
+          command: pip install .[ci]
+      - run:
           name: Upload built packages to PyPI
-          command: |
-            docker-compose \
-              -p richie-ci \
-              -f docker/compose/ci/postgresql/docker-compose.yml \
-              --project-directory . \
-              run --rm --no-deps \
-                --user="$(id -u)" \
-                --volume="$PWD:/app" \
-                -e TWINE_USERNAME \
-                -e TWINE_PASSWORD \
-                app \
-                twine upload dist/*
+          command: twine upload dist/*
 
   # ---- DockerHub publication job ----
   hub:
