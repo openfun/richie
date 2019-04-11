@@ -5,7 +5,6 @@ from collections.abc import Mapping
 from datetime import MAXYEAR, datetime
 
 from django import forms
-from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -20,6 +19,7 @@ from cms.extensions.extension_pool import extension_pool
 from cms.models.pluginmodel import CMSPlugin
 from filer.fields.image import FilerImageField
 
+from ...core.defaults import ALL_LANGUAGES
 from ...core.fields.multiselect import MultiSelectField
 from ...core.models import BasePageExtension, PagePluginMixin
 from .category import Category
@@ -334,7 +334,7 @@ class CourseRun(BasePageExtension):
         # Language choices are made lazy so that we can override them in our tests.
         # When set directly, they are evaluated too early and can't be changed with the
         # "override_settings" utility.
-        choices=lazy(lambda: settings.ALL_LANGUAGES, tuple)(),
+        choices=lazy(lambda: ALL_LANGUAGES, tuple)(),
         help_text=_("The list of languages in which the course content is available."),
     )
 

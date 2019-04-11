@@ -5,7 +5,6 @@ import random
 from collections import namedtuple
 from datetime import datetime, timedelta
 
-from django.conf import settings
 from django.core.files import File
 from django.utils import timezone
 from django.utils.translation import get_language
@@ -15,6 +14,7 @@ import pytz
 from cms.api import add_plugin
 from filer.models.imagemodels import Image
 
+from ..core.defaults import ALL_LANGUAGES
 from ..core.factories import FilerImageFactory, PageExtensionDjangoModelFactory
 from ..core.helpers import create_text_plugin
 from ..core.utils import file_getter
@@ -380,10 +380,7 @@ class CourseRunFactory(PageExtensionDjangoModelFactory):
         return (
             self.parent.get_languages()
             if getattr(self, "parent", None)
-            else [
-                l[0]
-                for l in random.sample(settings.ALL_LANGUAGES, random.randint(1, 5))
-            ]
+            else [l[0] for l in random.sample(ALL_LANGUAGES, random.randint(1, 5))]
         )
 
     # pylint: disable=no-self-use
