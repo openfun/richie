@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- A "Clear x active filters" button in the search filters pane lets the user
+  remove all active filters with one click
+
 ### Changed
 
 - Activating a filter that is a parent or child of a current active filter

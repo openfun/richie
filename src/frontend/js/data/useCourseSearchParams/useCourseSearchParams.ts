@@ -6,10 +6,14 @@ import { FilterDefinition } from '../../types/filters';
 import { history, location } from '../../utils/indirection/window';
 import { computeNewFilterValue } from './computeNewFilterValue';
 
-interface FilterAction {
+interface FilterSingleAction {
   filter: FilterDefinition;
   payload: string;
   type: 'FILTER_ADD' | 'FILTER_REMOVE';
+}
+
+interface FilterResetAction {
+  type: 'FILTER_RESET';
 }
 
 interface QueryAction {
@@ -17,7 +21,10 @@ interface QueryAction {
   type: 'QUERY_UPDATE';
 }
 
-export type CourseSearchParamsReducerAction = FilterAction | QueryAction;
+export type CourseSearchParamsReducerAction =
+  | FilterResetAction
+  | FilterSingleAction
+  | QueryAction;
 
 type CourseSearchParamsState = [
   APIListRequestParams,
@@ -27,6 +34,11 @@ type CourseSearchParamsState = [
 export const CourseSearchParamsContext = createContext<CourseSearchParamsState>(
   [] as any,
 );
+
+export const defaultPagination = {
+  limit: '999',
+  offset: '0',
+};
 
 const courseSearchParamsReducer = (
   courseSearchParams: APIListRequestParams,
@@ -54,13 +66,19 @@ const courseSearchParamsReducer = (
           },
         ),
       };
+
+    case 'FILTER_RESET':
+      // Remove all parameters and reset pagination
+      return {
+        ...defaultPagination,
+        limit: courseSearchParams.limit,
+      };
   }
 };
 
 export const useCourseSearchParams = (): CourseSearchParamsState => {
   const bootstrapParams = {
-    limit: '999',
-    offset: '0',
+    ...defaultPagination,
     ...(parse(location.search) as APIListRequestParams),
   };
 

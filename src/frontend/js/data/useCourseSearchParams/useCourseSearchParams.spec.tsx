@@ -934,4 +934,33 @@ describe('data/useCourseSearchParams', () => {
       }
     });
   });
+
+  describe('FILTER_RESET', () => {
+    it('resets all the query parameters except limit', () => {
+      mockWindow.location.search =
+        '?organizations=L-00010004&subjects=P-00030004&subjects=P-00030007&limit=27&offset=54&query=some%20query';
+      render(<TestComponent />);
+      {
+        const [courseSearchParams, dispatch] = getLatestHookValues();
+        expect(courseSearchParams).toEqual({
+          limit: '27',
+          offset: '54',
+          organizations: 'L-00010004',
+          query: 'some query',
+          subjects: ['P-00030004', 'P-00030007'],
+        });
+
+        act(() => dispatch({ type: 'FILTER_RESET' }));
+      }
+      {
+        const [courseSearchParams] = getLatestHookValues();
+        expect(courseSearchParams).toEqual({ limit: '27', offset: '0' });
+        expect(mockWindow.history.pushState).toHaveBeenCalledWith(
+          null,
+          '',
+          '?limit=27&offset=0',
+        );
+      }
+    });
+  });
 });

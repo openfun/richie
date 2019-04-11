@@ -7,6 +7,10 @@ $richie-search-filters-pane-title-fontweight: null !default;
 $richie-search-filters-pane-title-fontcolor: $white !default;
 $richie-search-filters-pane-title-textalign: null !default;
 
+$richie-search-filters-pane-clear-color: white !default;
+$richie-search-filters-pane-clear-margin: 1rem 2.5rem !default;
+$richie-search-filters-pane-clear-padding: 0rem 0.5rem 0 !default;
+
 .search-filters-pane {
   background: $richie-search-filters-pane-background;
   overflow: hidden; // Prevent margin-collapsing as .search-filters-pane has a background
@@ -18,5 +22,18 @@ $richie-search-filters-pane-title-textalign: null !default;
     font-weight: $richie-search-filters-pane-title-fontweight;
     color: $richie-search-filters-pane-title-fontcolor;
     text-align: $richie-search-filters-pane-title-textalign;
+  }
+
+  &__clear {
+    display: block;
+    cursor: pointer;
+    margin: $richie-search-filters-pane-clear-margin;
+    padding: $richie-search-filters-pane-clear-padding;
+
+    &,
+    &:hover,
+    &:active {
+      color: $richie-search-filters-pane-clear-color;
+    }
   }
 }
