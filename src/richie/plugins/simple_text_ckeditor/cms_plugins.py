@@ -1,11 +1,12 @@
 """
 Simple text CMS plugin
 """
-from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
+
+from richie.apps.core.defaults import PLUGINS_GROUP
 
 from .forms import CKEditorPluginForm
 from .models import SimpleText
@@ -17,14 +18,14 @@ class CKEditorPlugin(CMSPluginBase):
     A plugin to add text with CKEditor widget.
     """
 
-    model = SimpleText
+    allow_children = False
+    cache = True
+    disable_child_plugins = True
     form = CKEditorPluginForm
+    model = SimpleText
+    module = PLUGINS_GROUP
     name = _("Simple text")
     render_template = "richie/simple_text_ckeditor/simple_text.html"
-    cache = True
-    module = settings.RICHIE_PLUGINS_GROUP
-    allow_children = False
-    disable_child_plugins = True
 
     fieldsets = ((None, {"fields": ["body"]}),)
 
