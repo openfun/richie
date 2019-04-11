@@ -1,6 +1,7 @@
 import '../../testSetup';
 
 import React from 'react';
+import { IntlProvider } from 'react-intl';
 import { cleanup, fireEvent, render } from 'react-testing-library';
 
 import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
@@ -11,23 +12,25 @@ describe('components/SearchFilterValueLeaf', () => {
 
   it('renders the name of the filter value', () => {
     const { getByText } = render(
-      <CourseSearchParamsContext.Provider
-        value={[{ limit: '999', offset: '0' }, jest.fn()]}
-      >
-        <SearchFilterValueLeaf
-          filter={{
-            base_path: null,
-            human_name: 'Filter name',
-            name: 'filter_name',
-            values: [],
-          }}
-          value={{
-            count: 217,
-            human_name: 'Human name',
-            key: '42',
-          }}
-        />
-      </CourseSearchParamsContext.Provider>,
+      <IntlProvider locale="en">
+        <CourseSearchParamsContext.Provider
+          value={[{ limit: '999', offset: '0' }, jest.fn()]}
+        >
+          <SearchFilterValueLeaf
+            filter={{
+              base_path: null,
+              human_name: 'Filter name',
+              name: 'filter_name',
+              values: [],
+            }}
+            value={{
+              count: 217,
+              human_name: 'Human name',
+              key: '42',
+            }}
+          />
+        </CourseSearchParamsContext.Provider>
+      </IntlProvider>,
     );
 
     // The filter value is displayed with its facet count
@@ -40,23 +43,25 @@ describe('components/SearchFilterValueLeaf', () => {
 
   it('shows the filter value as active when it is in the search params', () => {
     const { getByText } = render(
-      <CourseSearchParamsContext.Provider
-        value={[{ filter_name: '42', limit: '999', offset: '0' }, jest.fn()]}
-      >
-        <SearchFilterValueLeaf
-          filter={{
-            base_path: null,
-            human_name: 'Filter name',
-            name: 'filter_name',
-            values: [],
-          }}
-          value={{
-            count: 217,
-            human_name: 'Human name',
-            key: '42',
-          }}
-        />
-      </CourseSearchParamsContext.Provider>,
+      <IntlProvider locale="en">
+        <CourseSearchParamsContext.Provider
+          value={[{ filter_name: '42', limit: '999', offset: '0' }, jest.fn()]}
+        >
+          <SearchFilterValueLeaf
+            filter={{
+              base_path: null,
+              human_name: 'Filter name',
+              name: 'filter_name',
+              values: [],
+            }}
+            value={{
+              count: 217,
+              human_name: 'Human name',
+              key: '42',
+            }}
+          />
+        </CourseSearchParamsContext.Provider>
+      </IntlProvider>,
     );
 
     // The button shows its active state
@@ -68,26 +73,28 @@ describe('components/SearchFilterValueLeaf', () => {
   it('dispatches a FILTER_ADD action on button click if it was not active', () => {
     const dispatchCourseSearchParamsUpdate = jest.fn();
     const { getByText } = render(
-      <CourseSearchParamsContext.Provider
-        value={[
-          { limit: '999', offset: '0' },
-          dispatchCourseSearchParamsUpdate,
-        ]}
-      >
-        <SearchFilterValueLeaf
-          filter={{
-            base_path: null,
-            human_name: 'Filter name',
-            name: 'filter_name',
-            values: [],
-          }}
-          value={{
-            count: 217,
-            human_name: 'Human name',
-            key: '43',
-          }}
-        />
-      </CourseSearchParamsContext.Provider>,
+      <IntlProvider locale="en">
+        <CourseSearchParamsContext.Provider
+          value={[
+            { limit: '999', offset: '0' },
+            dispatchCourseSearchParamsUpdate,
+          ]}
+        >
+          <SearchFilterValueLeaf
+            filter={{
+              base_path: null,
+              human_name: 'Filter name',
+              name: 'filter_name',
+              values: [],
+            }}
+            value={{
+              count: 217,
+              human_name: 'Human name',
+              key: '43',
+            }}
+          />
+        </CourseSearchParamsContext.Provider>
+      </IntlProvider>,
     );
 
     fireEvent.click(getByText('Human name'));
@@ -106,26 +113,28 @@ describe('components/SearchFilterValueLeaf', () => {
   it('dispatches a FILTER_REMOVE action on button click if it was active', () => {
     const dispatchCourseSearchParamsUpdate = jest.fn();
     const { getByText } = render(
-      <CourseSearchParamsContext.Provider
-        value={[
-          { filter_name: '44', limit: '999', offset: '0' },
-          dispatchCourseSearchParamsUpdate,
-        ]}
-      >
-        <SearchFilterValueLeaf
-          filter={{
-            base_path: null,
-            human_name: 'Filter name',
-            name: 'filter_name',
-            values: [],
-          }}
-          value={{
-            count: 217,
-            human_name: 'Human name',
-            key: '44',
-          }}
-        />
-      </CourseSearchParamsContext.Provider>,
+      <IntlProvider locale="en">
+        <CourseSearchParamsContext.Provider
+          value={[
+            { filter_name: '44', limit: '999', offset: '0' },
+            dispatchCourseSearchParamsUpdate,
+          ]}
+        >
+          <SearchFilterValueLeaf
+            filter={{
+              base_path: null,
+              human_name: 'Filter name',
+              name: 'filter_name',
+              values: [],
+            }}
+            value={{
+              count: 217,
+              human_name: 'Human name',
+              key: '44',
+            }}
+          />
+        </CourseSearchParamsContext.Provider>
+      </IntlProvider>,
     );
 
     fireEvent.click(getByText('Human name'));
