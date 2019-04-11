@@ -52,6 +52,18 @@ jobs:
           command: |
             git whatchanged --name-only --pretty="" origin..HEAD | grep CHANGELOG
 
+  # Check that the CHANGELOG max line length does not exceed 80 characters
+  lint-changelog:
+    machine: true
+    working_directory: ~/fun
+    steps:
+      - checkout
+      - run:
+          name: Check CHANGELOG max line length
+          command: |
+            # Get the longuest line width (ignoring release links)
+            test $(cat CHANGELOG.md | grep -Ev "^\[.*\]: https://github.com/openfun" | wc -L) -le 80
+
   # Docker/back-end jobs
   # Build job
   # Build the Docker image ready for production
@@ -744,6 +756,13 @@ workflows:
               only: /.*/
       # Check CHANGELOG update
       - check-changelog:
+          filters:
+            branches:
+              ignore: master
+            tags:
+              only: /.*/
+
+      - lint-changelog:
           filters:
             branches:
               ignore: master
