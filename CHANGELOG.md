@@ -11,7 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ## Changed
 
 - Simplify Richie settings and provide defaults for those unlikely to be
-  customized.
+  customized (search, languages, plugins, general).
 
 ## [1.0.0-beta.5] - 2019-04-11
 
