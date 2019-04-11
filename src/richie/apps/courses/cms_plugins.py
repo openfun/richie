@@ -2,11 +2,12 @@
 Courses CMS plugins
 """
 
-from django.conf import settings
 from django.utils.translation import ugettext_lazy as _
 
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
+
+from richie.apps.core.defaults import PLUGINS_GROUP
 
 from .forms import LicencePluginForm
 from .models import (
@@ -25,11 +26,10 @@ class OrganizationPlugin(CMSPluginBase):
     Organization plugin displays an organization's information on other pages
     """
 
-    model = OrganizationPluginModel
-    module = _("Courses")
-    render_template = "courses/plugins/organization.html"
     cache = True
-    module = settings.RICHIE_PLUGINS_GROUP
+    model = OrganizationPluginModel
+    module = PLUGINS_GROUP
+    render_template = "courses/plugins/organization.html"
 
     def render(self, context, instance, placeholder):
         context.update(
@@ -48,11 +48,10 @@ class CategoryPlugin(CMSPluginBase):
     Category plugin displays a category's information on other pages
     """
 
-    model = CategoryPluginModel
-    module = _("Courses")
-    render_template = "courses/plugins/category_plugin.html"
     cache = True
-    module = settings.RICHIE_PLUGINS_GROUP
+    model = CategoryPluginModel
+    module = PLUGINS_GROUP
+    render_template = "courses/plugins/category_plugin.html"
 
     def render(self, context, instance, placeholder):
         context.update(
@@ -71,11 +70,10 @@ class CoursePlugin(CMSPluginBase):
     Course plugin displays a course's information on other pages
     """
 
-    model = CoursePluginModel
-    module = _("Courses")
-    render_template = "courses/plugins/course_plugin.html"
     cache = True
-    module = settings.RICHIE_PLUGINS_GROUP
+    model = CoursePluginModel
+    module = PLUGINS_GROUP
+    render_template = "courses/plugins/course_plugin.html"
 
     def render(self, context, instance, placeholder):
         context.update(
@@ -94,10 +92,10 @@ class PersonPlugin(CMSPluginBase):
     Person plugin displays a person's information on other pages
     """
 
-    model = PersonPluginModel
-    module = _("Persons")
-    render_template = "courses/plugins/person.html"
     cache = True
+    model = PersonPluginModel
+    module = PLUGINS_GROUP
+    render_template = "courses/plugins/person.html"
 
     def render(self, context, instance, placeholder):
         context.update(
@@ -117,15 +115,14 @@ class LicencePlugin(CMSPluginBase):
     with an additional free text.
     """
 
-    model = LicencePluginModel
+    allow_children = False
+    cache = True
+    fieldsets = ((None, {"fields": ["licence", "description"]}),)
     form = LicencePluginForm
+    model = LicencePluginModel
+    module = PLUGINS_GROUP
     name = _("Licence")
     render_template = "courses/plugins/licence_plugin.html"
-    cache = True
-    module = settings.RICHIE_PLUGINS_GROUP
-    allow_children = False
-
-    fieldsets = ((None, {"fields": ["licence", "description"]}),)
 
     def render(self, context, instance, placeholder):
         context.update({"instance": instance, "placeholder": placeholder})
@@ -138,11 +135,10 @@ class BlogPostPlugin(CMSPluginBase):
     BlogPost plugin displays a Blog post overview on other pages
     """
 
-    model = BlogPostPluginModel
-    module = _("Courses")
-    render_template = "courses/plugins/blogpost.html"
     cache = True
-    module = settings.RICHIE_PLUGINS_GROUP
+    model = BlogPostPluginModel
+    module = PLUGINS_GROUP
+    render_template = "courses/plugins/blogpost.html"
 
     def render(self, context, instance, placeholder):
         context.update(

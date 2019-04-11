@@ -212,9 +212,6 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
         "rest_framework",
     )
 
-    # Group to add plugin to placeholder "Content"
-    RICHIE_PLUGINS_GROUP = "Richie Plugins"
-
     LANGUAGE_CODE = "en"
 
     # Django sets `LANGUAGES` by default with all supported languages. Let's save it to a
