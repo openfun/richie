@@ -5,7 +5,6 @@ import random
 from unittest import mock
 
 from django.test import TestCase
-from django.test.utils import override_settings
 
 import arrow
 from elasticsearch.client import IndicesClient
@@ -14,6 +13,7 @@ from elasticsearch.helpers import bulk
 from richie.apps.courses.factories import CategoryFactory, OrganizationFactory
 from richie.apps.search import ES_CLIENT
 from richie.apps.search.filter_definitions import FILTERS, IndexableFilterDefinition
+from richie.apps.search.filter_definitions.courses import ALL_LANGUAGES_DICT
 from richie.apps.search.indexers.courses import CoursesIndexer
 from richie.apps.search.text_indexing import ANALYSIS_SETTINGS
 
@@ -152,10 +152,10 @@ COURSE_RUNS = {
 
 
 # pylint: disable=too-many-public-methods
-@override_settings(  # Reduce the number of languages
-    ALL_LANGUAGES_DICT={
-        l: "#{:s}".format(l) for cr in COURSE_RUNS.values() for l in cr["languages"]
-    }
+@mock.patch.dict(  # Reduce the number of languages
+    ALL_LANGUAGES_DICT,
+    {l: "#{:s}".format(l) for cr in COURSE_RUNS.values() for l in cr["languages"]},
+    clear=True,
 )
 @mock.patch.object(  # Avoid having to build the categories and organizations indices
     IndexableFilterDefinition, "get_i18n_names", return_value=INDEXABLE_IDS

@@ -5,7 +5,6 @@ import random
 from datetime import datetime, timedelta
 from unittest import mock
 
-from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.test.client import RequestFactory
@@ -13,6 +12,7 @@ from django.utils import timezone
 
 import pytz
 
+from richie.apps.core.defaults import ALL_LANGUAGES
 from richie.apps.core.helpers import create_i18n_page
 from richie.apps.courses.factories import CourseFactory, CourseRunFactory
 
@@ -418,7 +418,7 @@ class CourseRunModelsTestCase(TestCase):
         """
         The languages field should not accept more than 50 choices.
         """
-        languages = [l[0] for l in settings.ALL_LANGUAGES[:51]]
+        languages = [l[0] for l in ALL_LANGUAGES[:51]]
 
         # 50 languages should be fine
         CourseRunFactory(languages=languages[:-1])

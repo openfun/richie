@@ -10,7 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Changed
 
-- Simplify search settings and provide defaults for those unlikely to be
+- Simplify Richie settings and provide defaults for those unlikely to be
   customized.
 
 ## [1.0.0-beta.5] - 2019-04-11

@@ -198,20 +198,11 @@ class Base(DRFMixin, Configuration):
 
     LANGUAGE_CODE = "en"
 
-    # Django sets `LANGUAGES` by default with all supported languages. Let's save it to a
-    # different setting before overriding it with the languages active in the CMS. We can use it
-    # for example for the choice of languages on the course run which should not be limited to
-    # the few languages active in the CMS.
-    # pylint: disable=no-member
-    ALL_LANGUAGES = [(language, _(name)) for language, name in Configuration.LANGUAGES]
-    ALL_LANGUAGES_DICT = dict(ALL_LANGUAGES)
-
     # Careful! Languages should be ordered by priority, as this tuple is used to get
     # fallback/default languages throughout the app.
     # Use "en" as default as it is the language that is most likely to be spoken by any visitor
     # when their preferred language, whatever it is, is unavailable
     LANGUAGES = (("en", _("English")), ("fr", _("French")))
-    LANGUAGES_DICT = dict(LANGUAGES)
 
     # Django CMS settings
     CMS_LANGUAGES = {

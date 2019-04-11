@@ -2,11 +2,12 @@
 from functools import reduce
 
 from django import forms
-from django.conf import settings
 from django.utils import timezone, translation
 from django.utils.translation import gettext as _
 
 from cms.api import Page
+
+from richie.apps.core.defaults import ALL_LANGUAGES_DICT
 
 from .. import ES_CLIENT
 from ..fields.array import ArrayField
@@ -271,11 +272,11 @@ class LanguagesFilterDefinition(
 
     def get_values(self):
         """Return the language values defined in the project's settings."""
-        return settings.ALL_LANGUAGES_DICT
+        return ALL_LANGUAGES_DICT
 
     def get_fragment_map(self):
         """Compute query fragments for each language defined in the project's settings."""
         return {
             language: [{"term": {"course_runs.languages": language}}]
-            for language in settings.ALL_LANGUAGES_DICT
+            for language in ALL_LANGUAGES_DICT
         }
