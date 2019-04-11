@@ -428,35 +428,24 @@ jobs:
 
   # ---- Packaging jobs ----
   package-back:
-    machine: true
+    docker:
+      - image: circleci/python:3.7-stretch
     working_directory: ~/fun
     steps:
       - checkout
+      # Ensure we restore frontend production builds in Richie's static
+      # directory
       - attach_workspace:
           at: ~/fun
-      - restore_cache:
-          keys:
-            - docker-debian-images-ci-{{ .Revision }}
-      - run:
-          name: Load images to docker engine
-          command: |
-            docker load < docker/images/dev/richie.tar
-      # Run commands using CircleCI's user and mount the app volume to have
-      # write permission on it, and thus, being able to create the package.
       - run:
           name: Build python package
-          command: |
-            docker run --rm \
-              --user="$(id -u)" \
-              --volume "$PWD:/app" \
-              "richie:${CIRCLE_SHA1}-ci" \
-              python setup.py sdist bdist_wheel
+          command: python setup.py sdist bdist_wheel
       # Persist build packages to the workspace
       - persist_to_workspace:
           root: ~/fun
           paths:
             - dist
-      # Store packages as artifacts
+      # Store packages as artifacts to download/test them
       - store_artifacts:
           path: ~/fun/dist
 
