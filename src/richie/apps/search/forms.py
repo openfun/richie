@@ -5,10 +5,11 @@ from datetime import MAXYEAR
 from functools import reduce
 
 from django import forms
+from django.conf import settings
 
 import arrow
 
-from .defaults import RELATED_CONTENT_MATCHING_BOOST
+from .defaults import RELATED_CONTENT_BOOST
 from .filter_definitions import FILTERS, AvailabilityFilterDefinition
 
 # Instantiate filter fields for each filter defined in settings
@@ -207,7 +208,11 @@ class CourseSearchForm(SearchForm):
                                     },
                                     {
                                         "multi_match": {
-                                            "boost": RELATED_CONTENT_MATCHING_BOOST,
+                                            "boost": getattr(
+                                                settings,
+                                                "RICHIE_RELATED_CONTENT_BOOST",
+                                                RELATED_CONTENT_BOOST,
+                                            ),
                                             "fields": [
                                                 "categories_names.*",
                                                 "organizations_names.*",

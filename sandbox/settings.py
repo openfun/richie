@@ -51,8 +51,6 @@ class ElasticSearchMixin:
     ES_CLIENT = Elasticsearch(
         [values.Value("localhost", environ_name="ES_CLIENT", environ_prefix=None)]
     )
-    ES_CHUNK_SIZE = 500
-    ES_DEFAULT_PAGE_SIZE = 10
 
 
 class DRFMixin:

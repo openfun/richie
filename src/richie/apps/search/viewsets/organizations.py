@@ -8,6 +8,7 @@ from elasticsearch.exceptions import NotFoundError
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
+from ..defaults import ES_PAGE_SIZE
 from ..indexers import ES_INDICES
 from ..utils.viewsets import AutocompleteMixin, ViewSetMetadata
 
@@ -42,7 +43,7 @@ class OrganizationsViewSet(AutocompleteMixin, ViewSet):
             body=query,
             # Directly pass meta-params through as arguments to the ES client
             from_=offset,
-            size=limit or settings.ES_DEFAULT_PAGE_SIZE,
+            size=limit or getattr(settings, "RICHIE_ES_PAGE_SIZE", ES_PAGE_SIZE),
         )
 
         # Format the response in a consumer-friendly way

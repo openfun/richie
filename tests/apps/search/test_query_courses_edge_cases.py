@@ -97,11 +97,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
             }
             for course in courses
         ]
-        bulk(
-            actions=actions,
-            chunk_size=settings.ES_CHUNK_SIZE,
-            client=settings.ES_CLIENT,
-        )
+        bulk(actions=actions, chunk_size=500, client=settings.ES_CLIENT)
         indices_client.refresh()
 
     def test_query_courses_filter_box_titles_french(self, *_):

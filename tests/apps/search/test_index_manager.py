@@ -91,7 +91,7 @@ class IndexManagerTestCase(TestCase):
         self.assertEqual(list(get_indexes_by_alias(existing_indexes, alias)), [])
 
     # Make sure indexing still works when the number of records is higher than chunk size
-    @override_settings(ES_CHUNK_SIZE=2)
+    @override_settings(RICHIE_ES_CHUNK_SIZE=2)
     def test_index_manager_perform_create_index(self):
         """
         Perform all side-effects through the ES client and return the index name (incl. timestamp)
