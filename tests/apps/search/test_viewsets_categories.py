@@ -3,12 +3,12 @@ Tests for the category viewset
 """
 from unittest import mock
 
-from django.conf import settings
 from django.test import TestCase
 
 from elasticsearch.exceptions import NotFoundError
 from rest_framework.test import APIRequestFactory
 
+from richie.apps.search import ES_CLIENT
 from richie.apps.search.viewsets.categories import CategoriesViewSet
 
 
@@ -25,7 +25,7 @@ class CategoriesViewsetsTestCase(TestCase):
         request = factory.get("/api/v1.0/categories/42")
 
         with mock.patch.object(
-            settings.ES_CLIENT,
+            ES_CLIENT,
             "get",
             return_value={
                 "_id": 42,
@@ -65,7 +65,7 @@ class CategoriesViewsetsTestCase(TestCase):
         request = factory.get("/api/v1.0/categories/43")
 
         # Act like the ES client would when we attempt to get a non-existent document
-        with mock.patch.object(settings.ES_CLIENT, "get", side_effect=NotFoundError):
+        with mock.patch.object(ES_CLIENT, "get", side_effect=NotFoundError):
             response = CategoriesViewSet.as_view({"get": "retrieve"})(
                 request, 43, version="1.0"
             )
@@ -77,7 +77,7 @@ class CategoriesViewsetsTestCase(TestCase):
         "richie.apps.search.forms.ItemSearchForm.build_es_query",
         lambda x: (2, 0, {"query": "example"}),
     )
-    @mock.patch.object(settings.ES_CLIENT, "search")
+    @mock.patch.object(ES_CLIENT, "search")
     def test_viewsets_categories_search(self, mock_search):
         """
         Happy path: the category is filtering the categories by name

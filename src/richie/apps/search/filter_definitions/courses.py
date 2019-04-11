@@ -8,6 +8,7 @@ from django.utils.translation import gettext as _
 
 from cms.api import Page
 
+from .. import ES_CLIENT
 from ..fields.array import ArrayField
 from ..indexers import ES_INDICES
 from ..utils.i18n import get_best_field_language
@@ -109,7 +110,8 @@ class IndexableFilterDefinition(TermsAggsMixin, TermsQueryMixin, BaseFilterDefin
         indexer = getattr(ES_INDICES, self.term)
 
         # Get just the documents we need from ElasticSearch
-        search_query_response = settings.ES_CLIENT.search(
+        # pylint: disable=unexpected-keyword-arg
+        search_query_response = ES_CLIENT.search(
             # We only need the titles to get the i18n names
             _source=["title.*"],
             index=indexer.index_name,

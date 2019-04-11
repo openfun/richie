@@ -4,7 +4,6 @@ Tests for the index_manager utilities
 from datetime import datetime
 from unittest import mock
 
-from django.conf import settings
 from django.test import TestCase
 from django.test.utils import override_settings
 from django.utils import timezone
@@ -12,6 +11,7 @@ from django.utils import timezone
 import pytz
 from elasticsearch.client import IndicesClient
 
+from richie.apps.search import ES_CLIENT
 from richie.apps.search.index_manager import (
     get_indexes_by_alias,
     perform_create_index,
@@ -30,7 +30,7 @@ class IndexManagerTestCase(TestCase):
         Make sure all indexes are deleted before each new test is run.
         """
         super().setUp()
-        self.indices_client = IndicesClient(client=settings.ES_CLIENT)
+        self.indices_client = IndicesClient(client=ES_CLIENT)
         self.indices_client.delete(index="_all")
 
     def test_index_manager_get_indexes_by_alias(self):
@@ -137,7 +137,7 @@ class IndexManagerTestCase(TestCase):
         self.indices_client.refresh()
 
         self.assertEqual(new_index, "richie_courses_2016-05-04-03h12m33.123456s")
-        self.assertEqual(settings.ES_CLIENT.count()["count"], 10)
+        self.assertEqual(ES_CLIENT.count()["count"], 10)
         self.assertEqual(
             self.indices_client.get_mapping(),
             {
@@ -301,7 +301,7 @@ class IndexManagerTestCase(TestCase):
         "richie.apps.search.indexers.categories.CategoriesIndexer.scripts",
         new={"script_id_C": "script body C"},
     )
-    @mock.patch("settings.ES_CLIENT.put_script")
+    @mock.patch.object(ES_CLIENT, "put_script")
     def test_index_manager_store_es_scripts(self, mock_put_script, *args):
         """
         Make sure store_es_scripts iterates over all indexers to store their scripts and

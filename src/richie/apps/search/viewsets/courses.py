@@ -7,6 +7,7 @@ from elasticsearch.exceptions import NotFoundError
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
+from .. import ES_CLIENT
 from ..defaults import ES_PAGE_SIZE
 from ..filter_definitions import FILTERS
 from ..indexers import ES_INDICES
@@ -50,7 +51,8 @@ class CoursesViewSet(AutocompleteMixin, ViewSet):
         if form_class.FILTERS in scope or not scope:
             body["aggs"] = aggs
 
-        course_query_response = settings.ES_CLIENT.search(
+        # pylint: disable=unexpected-keyword-arg
+        course_query_response = ES_CLIENT.search(
             _source=getattr(self._meta.indexer, "display_fields", "*"),
             index=self._meta.indexer.index_name,
             doc_type=self._meta.indexer.document_type,
@@ -96,7 +98,7 @@ class CoursesViewSet(AutocompleteMixin, ViewSet):
         # Wrap the ES get in a try/catch to we control the exception we emit — it would
         # raise and end up in a 500 error otherwise
         try:
-            query_response = settings.ES_CLIENT.get(
+            query_response = ES_CLIENT.get(
                 index=self._meta.indexer.index_name,
                 doc_type=self._meta.indexer.document_type,
                 id=pk,

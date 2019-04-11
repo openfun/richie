@@ -4,12 +4,12 @@ Tests for category autocomplete
 import json
 from unittest import mock
 
-from django.conf import settings
 from django.test import TestCase
 
 from elasticsearch.client import IndicesClient
 from elasticsearch.helpers import bulk
 
+from richie.apps.search import ES_CLIENT
 from richie.apps.search.indexers.categories import CategoriesIndexer
 from richie.apps.search.text_indexing import ANALYSIS_SETTINGS
 from richie.apps.search.utils.indexers import slice_string_for_completion
@@ -59,7 +59,7 @@ class AutocompleteCategoriesTestCase(TestCase):
             },
         ]
 
-        indices_client = IndicesClient(client=settings.ES_CLIENT)
+        indices_client = IndicesClient(client=ES_CLIENT)
         # Delete any existing indexes so we get a clean slate
         indices_client.delete(index="_all")
         # Create an index we'll use to test the ES features
@@ -89,7 +89,7 @@ class AutocompleteCategoriesTestCase(TestCase):
             }
             for category in categories
         ]
-        bulk(actions=actions, chunk_size=500, client=settings.ES_CLIENT)
+        bulk(actions=actions, chunk_size=500, client=ES_CLIENT)
         indices_client.refresh()
 
         response = self.client.get(

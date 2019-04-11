@@ -1,11 +1,11 @@
 """
 Test for our partial mappings
 """
-from django.conf import settings
 from django.test import TestCase
 
 from elasticsearch.client import IndicesClient
 
+from richie.apps.search import ES_CLIENT
 from richie.apps.search.text_indexing import ANALYSIS_SETTINGS, MULTILINGUAL_TEXT
 
 
@@ -19,7 +19,7 @@ class PartialMappingsTestCase(TestCase):
         Instantiate our ES client and make sure all indexes are deleted before each test
         """
         super().setUp()
-        self.indices_client = IndicesClient(client=settings.ES_CLIENT)
+        self.indices_client = IndicesClient(client=ES_CLIENT)
         self.indices_client.delete(index="_all")
 
     def test_partial_mappings_multilingual_text(self):
@@ -51,7 +51,7 @@ class PartialMappingsTestCase(TestCase):
         )
 
         # Index an object that should trigger a match for our dynamic template
-        settings.ES_CLIENT.index(
+        ES_CLIENT.index(
             index=index_name,
             doc_type=document_type,
             body={"title": {"fr": "Un titre en français à titre d'exemple"}},
@@ -86,7 +86,7 @@ class PartialMappingsTestCase(TestCase):
         )
 
         # Index an object that should trigger a different match for our dynamic template
-        settings.ES_CLIENT.index(
+        ES_CLIENT.index(
             index=index_name,
             doc_type=document_type,
             body={"title": {"en": "An English title as an example"}},
