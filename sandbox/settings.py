@@ -484,16 +484,6 @@ class Base(DRFMixin, Configuration):
         "easy_thumbnails.processors.background",
     )
 
-    RICHIE_SECTION_TEMPLATES = [
-        ("richie/section/section.html", _("Default")),
-        ("richie/section/highlighted_items.html", _("Highlighted items")),
-    ]
-
-    RICHIE_LARGEBANNER_TEMPLATES = [
-        ("richie/large_banner/large_banner.html", _("Default")),
-        ("richie/large_banner/hero-intro.html", _("Hero introduction")),
-    ]
-
     LOGGING = {
         "version": 1,
         "disable_existing_loggers": True,
