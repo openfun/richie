@@ -1,6 +1,7 @@
 import '../../testSetup';
 
 import React from 'react';
+import { IntlProvider } from 'react-intl';
 import { cleanup, render } from 'react-testing-library';
 
 import { Course } from '../../types/Course';
@@ -23,17 +24,24 @@ describe('components/CourseGlimpse', () => {
       title: 'Some Organization',
     } as Organization;
     const { getByAltText, getByText, getByTitle } = render(
-      <CourseGlimpse course={course} organizationMain={organization} />,
+      <IntlProvider locale="en">
+        <CourseGlimpse course={course} organizationMain={organization} />
+      </IntlProvider>,
     );
 
     // The link that wraps the course glimpse has its title
-    getByTitle('Details page for {courseTitle}.');
+    getByTitle('Details page for Course 42.');
     // The course glimpse shows the relevant information
     getByText('Course 42');
     getByText('Some Organization');
-    getByText('Starts on Thu, 14 Mar 2019 10:35:47 GMT');
+    // Matches on 'Starts on Mar 14, 2019', date is wrapped with intl <span>
+    getByText(
+      (_, element) =>
+        element.innerHTML.startsWith('Starts on') &&
+        element.innerHTML.includes('Mar 14, 2019'),
+    );
     // The logo is rendered along with alternate text
-    expect(getByAltText('Logo for {courseTitle}')).toHaveAttribute(
+    expect(getByAltText('Logo for Course 42')).toHaveAttribute(
       'src',
       '/thumbs/small.png',
     );

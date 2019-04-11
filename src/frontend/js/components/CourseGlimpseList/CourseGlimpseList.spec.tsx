@@ -1,6 +1,7 @@
 import '../../testSetup';
 
 import React from 'react';
+import { IntlProvider } from 'react-intl';
 import { cleanup, render } from 'react-testing-library';
 
 import { Course } from '../../types/Course';
@@ -22,7 +23,11 @@ describe('components/CourseGlimpseList', () => {
         title: 'Course 45',
       },
     ] as Course[];
-    const { getByText } = render(<CourseGlimpseList courses={courses} />);
+    const { getByText } = render(
+      <IntlProvider locale="en">
+        <CourseGlimpseList courses={courses} />
+      </IntlProvider>,
+    );
 
     // Both courses' titles are shown
     getByText('Course 44');

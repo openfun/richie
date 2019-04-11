@@ -1,6 +1,7 @@
 import '../../testSetup';
 
 import React from 'react';
+import { IntlProvider } from 'react-intl';
 import { cleanup, fireEvent, render, wait } from 'react-testing-library';
 
 jest.mock('../../data/getResourceList/getResourceList', () => ({
@@ -22,23 +23,25 @@ describe('<SearchFilterValueParent />', () => {
 
   it('renders the parent filter value and a button to show the children', () => {
     const { getByText, getByLabelText, queryByText } = render(
-      <CourseSearchParamsContext.Provider
-        value={[{ limit: '999', offset: '0' }, jest.fn()]}
-      >
-        <SearchFilterValueParent
-          filter={{
-            base_path: '00010002',
-            human_name: 'Subjects',
-            name: 'subjects',
-            values: [],
-          }}
-          value={{
-            count: 12,
-            human_name: 'Literature',
-            key: 'P-00040005',
-          }}
-        />
-      </CourseSearchParamsContext.Provider>,
+      <IntlProvider locale="en">
+        <CourseSearchParamsContext.Provider
+          value={[{ limit: '999', offset: '0' }, jest.fn()]}
+        >
+          <SearchFilterValueParent
+            filter={{
+              base_path: '00010002',
+              human_name: 'Subjects',
+              name: 'subjects',
+              values: [],
+            }}
+            value={{
+              count: 12,
+              human_name: 'Literature',
+              key: 'P-00040005',
+            }}
+          />
+        </CourseSearchParamsContext.Provider>
+      </IntlProvider>,
     );
 
     getByText('Literature');
@@ -73,26 +76,28 @@ describe('<SearchFilterValueParent />', () => {
     } as any);
 
     const { getByText, getByLabelText } = render(
-      <CourseSearchParamsContext.Provider
-        value={[
-          { limit: '999', offset: '0', subjects: ['L-000400050004'] },
-          jest.fn(),
-        ]}
-      >
-        <SearchFilterValueParent
-          filter={{
-            base_path: '00010002',
-            human_name: 'Subjects',
-            name: 'subjects',
-            values: [],
-          }}
-          value={{
-            count: 12,
-            human_name: 'Literature',
-            key: 'P-00040005',
-          }}
-        />
-      </CourseSearchParamsContext.Provider>,
+      <IntlProvider locale="en">
+        <CourseSearchParamsContext.Provider
+          value={[
+            { limit: '999', offset: '0', subjects: ['L-000400050004'] },
+            jest.fn(),
+          ]}
+        >
+          <SearchFilterValueParent
+            filter={{
+              base_path: '00010002',
+              human_name: 'Subjects',
+              name: 'subjects',
+              values: [],
+            }}
+            value={{
+              count: 12,
+              human_name: 'Literature',
+              key: 'P-00040005',
+            }}
+          />
+        </CourseSearchParamsContext.Provider>
+      </IntlProvider>,
     );
 
     getByText('Literature');
@@ -127,26 +132,28 @@ describe('<SearchFilterValueParent />', () => {
     } as any);
 
     const { getByText, getByLabelText, queryByText } = render(
-      <CourseSearchParamsContext.Provider
-        value={[
-          { limit: '999', offset: '0', subjects: ['L-000400050004'] },
-          jest.fn(),
-        ]}
-      >
-        <SearchFilterValueParent
-          filter={{
-            base_path: '00010002',
-            human_name: 'Subjects',
-            name: 'subjects',
-            values: [],
-          }}
-          value={{
-            count: 12,
-            human_name: 'Literature',
-            key: 'P-00040005',
-          }}
-        />
-      </CourseSearchParamsContext.Provider>,
+      <IntlProvider locale="en">
+        <CourseSearchParamsContext.Provider
+          value={[
+            { limit: '999', offset: '0', subjects: ['L-000400050004'] },
+            jest.fn(),
+          ]}
+        >
+          <SearchFilterValueParent
+            filter={{
+              base_path: '00010002',
+              human_name: 'Subjects',
+              name: 'subjects',
+              values: [],
+            }}
+            value={{
+              count: 12,
+              human_name: 'Literature',
+              key: 'P-00040005',
+            }}
+          />
+        </CourseSearchParamsContext.Provider>
+      </IntlProvider>,
     );
 
     getByText('Literature');
@@ -188,23 +195,25 @@ describe('<SearchFilterValueParent />', () => {
 
   it('shows the parent filter value itself as inactive when it is not in the search params', () => {
     const { getByText } = render(
-      <CourseSearchParamsContext.Provider
-        value={[{ limit: '999', offset: '0' }, jest.fn()]}
-      >
-        <SearchFilterValueParent
-          filter={{
-            base_path: '0009',
-            human_name: 'Filter name',
-            name: 'filter_name',
-            values: [],
-          }}
-          value={{
-            count: 217,
-            human_name: 'Human name',
-            key: 'P-00040005',
-          }}
-        />
-      </CourseSearchParamsContext.Provider>,
+      <IntlProvider locale="en">
+        <CourseSearchParamsContext.Provider
+          value={[{ limit: '999', offset: '0' }, jest.fn()]}
+        >
+          <SearchFilterValueParent
+            filter={{
+              base_path: '0009',
+              human_name: 'Filter name',
+              name: 'filter_name',
+              values: [],
+            }}
+            value={{
+              count: 217,
+              human_name: 'Human name',
+              key: 'P-00040005',
+            }}
+          />
+        </CourseSearchParamsContext.Provider>
+      </IntlProvider>,
     );
 
     // The filter value is displayed with its facet count
@@ -217,26 +226,28 @@ describe('<SearchFilterValueParent />', () => {
 
   it('shows the parent filter value itself as active when it is in the search params', () => {
     const { getByText } = render(
-      <CourseSearchParamsContext.Provider
-        value={[
-          { filter_name: 'P-00040005', limit: '999', offset: '0' },
-          jest.fn(),
-        ]}
-      >
-        <SearchFilterValueParent
-          filter={{
-            base_path: '0009',
-            human_name: 'Filter name',
-            name: 'filter_name',
-            values: [],
-          }}
-          value={{
-            count: 217,
-            human_name: 'Human name',
-            key: 'P-00040005',
-          }}
-        />
-      </CourseSearchParamsContext.Provider>,
+      <IntlProvider locale="en">
+        <CourseSearchParamsContext.Provider
+          value={[
+            { filter_name: 'P-00040005', limit: '999', offset: '0' },
+            jest.fn(),
+          ]}
+        >
+          <SearchFilterValueParent
+            filter={{
+              base_path: '0009',
+              human_name: 'Filter name',
+              name: 'filter_name',
+              values: [],
+            }}
+            value={{
+              count: 217,
+              human_name: 'Human name',
+              key: 'P-00040005',
+            }}
+          />
+        </CourseSearchParamsContext.Provider>
+      </IntlProvider>,
     );
 
     // The button shows its active state
@@ -248,26 +259,28 @@ describe('<SearchFilterValueParent />', () => {
   it('dispatches a FILTER_ADD action on button click if it was not active', () => {
     const dispatchCourseSearchParamsUpdate = jest.fn();
     const { getByText } = render(
-      <CourseSearchParamsContext.Provider
-        value={[
-          { limit: '999', offset: '0' },
-          dispatchCourseSearchParamsUpdate,
-        ]}
-      >
-        <SearchFilterValueParent
-          filter={{
-            base_path: '0009',
-            human_name: 'Filter name',
-            name: 'filter_name',
-            values: [],
-          }}
-          value={{
-            count: 217,
-            human_name: 'Human name',
-            key: 'P-00040005',
-          }}
-        />
-      </CourseSearchParamsContext.Provider>,
+      <IntlProvider locale="en">
+        <CourseSearchParamsContext.Provider
+          value={[
+            { limit: '999', offset: '0' },
+            dispatchCourseSearchParamsUpdate,
+          ]}
+        >
+          <SearchFilterValueParent
+            filter={{
+              base_path: '0009',
+              human_name: 'Filter name',
+              name: 'filter_name',
+              values: [],
+            }}
+            value={{
+              count: 217,
+              human_name: 'Human name',
+              key: 'P-00040005',
+            }}
+          />
+        </CourseSearchParamsContext.Provider>
+      </IntlProvider>,
     );
 
     fireEvent.click(getByText('Human name'));
@@ -286,26 +299,28 @@ describe('<SearchFilterValueParent />', () => {
   it('dispatches a FILTER_REMOVE action on button click if it was active', () => {
     const dispatchCourseSearchParamsUpdate = jest.fn();
     const { getByText } = render(
-      <CourseSearchParamsContext.Provider
-        value={[
-          { filter_name: 'P-00040005', limit: '999', offset: '0' },
-          dispatchCourseSearchParamsUpdate,
-        ]}
-      >
-        <SearchFilterValueParent
-          filter={{
-            base_path: '0009',
-            human_name: 'Filter name',
-            name: 'filter_name',
-            values: [],
-          }}
-          value={{
-            count: 217,
-            human_name: 'Human name',
-            key: 'P-00040005',
-          }}
-        />
-      </CourseSearchParamsContext.Provider>,
+      <IntlProvider locale="en">
+        <CourseSearchParamsContext.Provider
+          value={[
+            { filter_name: 'P-00040005', limit: '999', offset: '0' },
+            dispatchCourseSearchParamsUpdate,
+          ]}
+        >
+          <SearchFilterValueParent
+            filter={{
+              base_path: '0009',
+              human_name: 'Filter name',
+              name: 'filter_name',
+              values: [],
+            }}
+            value={{
+              count: 217,
+              human_name: 'Human name',
+              key: 'P-00040005',
+            }}
+          />
+        </CourseSearchParamsContext.Provider>
+      </IntlProvider>,
     );
 
     fireEvent.click(getByText('Human name'));
