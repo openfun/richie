@@ -479,10 +479,10 @@ jobs:
           command: ls dist/*
       - run:
           name: Install base requirements (twine)
-          command: pip install .[ci]
+          command: pip install --user .[ci]
       - run:
           name: Upload built packages to PyPI
-          command: twine upload dist/*
+          command: ~/.local/bin/twine upload dist/*
 
   # ---- DockerHub publication job ----
   hub:
