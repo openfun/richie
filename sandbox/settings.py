@@ -82,10 +82,10 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
 
     * DJANGO_SENTRY_DSN
     * ES_CLIENT
-    * POSTGRES_DB
-    * POSTGRES_HOST
-    * POSTGRES_PASSWORD
-    * POSTGRES_USER
+    * DB_NAME
+    * DB_HOST
+    * DB_PASSWORD
+    * DB_USER
     """
 
     SECRET_KEY = values.Value(None)
@@ -231,7 +231,6 @@ class Base(DRFMixin, ElasticSearchMixin, Configuration):
     # when their preferred language, whatever it is, is unavailable
     LANGUAGES = (("en", _("English")), ("fr", _("French")))
     LANGUAGES_DICT = dict(LANGUAGES)
-    LANGUAGE_NAME = LANGUAGES_DICT[LANGUAGE_CODE]
 
     # Django CMS settings
     CMS_LANGUAGES = {
