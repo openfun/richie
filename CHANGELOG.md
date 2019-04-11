@@ -19,23 +19,29 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Hide empty placeholders from the course public page,
-- Simplify the page creation wizard by reducing possibilities and automating object relations
-  based on the navigation context:
-  * ensure we are not creating duplicate slugs when creating a page,
-  * reduce number of fields on form to create a new course run (remove languages and
-    resource_link) and add a checkbox to easily snapshot the course when creating the course run,
-  * automatically link courses with an organization when created from this organization's page,
-  * create nested categories automatically when visiting the parent category page,
-  * show button to create course runs only when visiting a course page and automatically link
-    the course run to the current course,
-  * hide button to create normal pages/subpages from wizard in sections governed by Richie.
+- Simplify the page creation wizard by reducing possibilities and automating
+  object relations based on the navigation context:
+  - ensure we are not creating duplicate slugs when creating a page,
+  - reduce number of fields on form to create a new course run (remove languages
+    and resource_link) and add a checkbox to easily snapshot the course when
+    creating the course run,
+  - automatically link courses with an organization when created from this
+    organization's page,
+  - create nested categories automatically when visiting the parent category
+    page,
+  - show button to create course runs only when visiting a course page and
+    automatically link the course run to the current course,
+  - hide button to create normal pages/subpages from wizard in sections governed
+    by Richie.
 - Translations are loaded dynamically in frontend application,
 - Optimized frontend build in our official Docker image.
 
 ### Fixed
 
-- Remove possibility to edit course title from the course run page as it breaks publishing.
-- Fix an issue that crashed the app when a category was selected in search autocomplete.
+- Remove possibility to edit course title from the course run page as it breaks
+  publishing.
+- Fix an issue that crashed the app when a category was selected in search
+  autocomplete.
 - Committed CSS files are now included in the Docker image
 - The python package now includes statics build in production mode
 
@@ -43,8 +49,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- Add i18n tooling to export strings to Crowdin, retrieve and compile translations, for the
-  frontend and the backend. All translations are committed inside the project,
+- Add i18n tooling to export strings to Crowdin, retrieve and compile
+  translations, for the frontend and the backend. All translations are committed
+  inside the project,
 - Add links to switch language from the menu,
 - Add social network badges in the footer, on course pages and on blog posts,
 - Make categories configurable via the CMS, multi-dimensional and nested,
@@ -60,21 +67,22 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Upgrade to Python 3.7,
 - Switch to indexing courses instead of course runs,
 - Allow course run dates to be null. If a start date is null, the course run is
-  `to be programmed`, if an end date is null, the course run (or its enrollment) is deemed to
-  last forever,
+  `to be programmed`, if an end date is null, the course run (or its enrollment)
+  is deemed to last forever,
 - Use our own Elasticsearch image to allow running it with a non-root user,
 - Move persons to the courses app,
 - Rename database tables to `richie_*` to regain control of their name,
-- Improve structure and packaging to allow using Richie as a third party application in another
-  DjangoCMS project,
+- Improve structure and packaging to allow using Richie as a third party
+  application in another DjangoCMS project,
 - Many cosmetic and UI fixes and improvements following first user feedbacks.
 
 ## [1.0.0-beta.3] - 2019-03-15
 
 ### Changed
 
-- Improved Docker image: now it does not ship with the project sources but only with
-  runtime-required requirements (_i.e._ the sandbox and richie's package installed globally).
+- Improved Docker image: now it does not ship with the project sources but only
+  with runtime-required requirements (_i.e._ the sandbox and richie's package
+  installed globally).
 
 ### Fixed
 
@@ -82,25 +90,34 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Reorganize the search frontend to support nested filters.
 - The CI now effectively tests packaging issues.
 - The `apps.core.fields` module is no longer missing from Richie's package.
-- Fixed the `bin/pylint` script to work with the default database engine (PostgreSQL)
+- Fixed the `bin/pylint` script to work with the default database engine
+  (PostgreSQL)
 - Fixed `rebuild` & `bootstrap` Makefile rules
 
 ## [1.0.0-beta.2] - 2019-03-13
 
 ### Added
 
-- Users can create a custom taxonomy of categories in the CMS (eg. Subjects with Computer Science (incl. Algorithms & Data Structures), History, etc., and Levels with Beginner, Intermediate, etc.).
-- Filters are dynamically generated by the backend to support custom meta categories (level 1 nodes in the category taxonomy) and fix structual issues with dates.
+- Users can create a custom taxonomy of categories in the CMS (eg. Subjects with
+  Computer Science (incl. Algorithms & Data Structures), History, etc., and
+  Levels with Beginner, Intermediate, etc.).
+- Filters are dynamically generated by the backend to support custom meta
+  categories (level 1 nodes in the category taxonomy) and fix structual issues
+  with dates.
 - Integrate the homepage and fill it with content in the demo-site.
 - Integrate a design for the list of organizations page.
 
 ### Fixed
 
-- Richie is compatible with MySQL, with database switching utilities and dedicated tests.
-- Full-text searches also search in linked object names, such as categories & organizations.
-- Make improvements to the demo site to make it more representative of real-world use.
+- Richie is compatible with MySQL, with database switching utilities and
+  dedicated tests.
+- Full-text searches also search in linked object names, such as categories &
+  organizations.
+- Make improvements to the demo site to make it more representative of
+  real-world use.
 - Don't break course pages if there is no linked organization.
-- Fix i18n issues that broke the backend when using other languages than the default english.
+- Fix i18n issues that broke the backend when using other languages than the
+  default english.
 - Prevent display glitches during loading of the courses search page.
 
 ## [1.0.0-beta.1] - 2019-02-06
@@ -119,19 +136,25 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.0.0-beta.0] - 2019-02-04
 
-This release indicates our intention to release richie 1.0. It also marks the beginning of this changelog.
+This release indicates our intention to release richie 1.0. It also marks the
+beginning of this changelog.
 
 Here are the core features that enabled us to reach this milestone:
 
-- index the courses, organizations & subjects (now categories) in ElasticSearch from the DjangoCMS models;
-- create course snapshots to keep a history of the versions of a course Page throughout its various course runs;
+- index the courses, organizations & subjects (now categories) in ElasticSearch
+  from the DjangoCMS models;
+- create course snapshots to keep a history of the versions of a course Page
+  throughout its various course runs;
 - add full text search queries to the course Search;
 - handle facet counts for all our filters in course Search;
-- develop plugins for all essential parts: courses, organizations, categories, people, licences...
+- develop plugins for all essential parts: courses, organizations, categories,
+  people, licences...
 
-As we prepare to release, here are some improvements and fixes still ahead of us:
+As we prepare to release, here are some improvements and fixes still ahead of
+us:
 
-- allow nesting of categories, to let users customize "meta" categories and build their own subtrees;
+- allow nesting of categories, to let users customize "meta" categories and
+  build their own subtrees;
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
