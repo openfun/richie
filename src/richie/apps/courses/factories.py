@@ -5,19 +5,20 @@ import random
 from collections import namedtuple
 from datetime import datetime, timedelta
 
-from django.core.files import File
 from django.utils import timezone
 from django.utils.translation import get_language
 
 import factory
 import pytz
 from cms.api import add_plugin
-from filer.models.imagemodels import Image
 
 from ..core.defaults import ALL_LANGUAGES
-from ..core.factories import FilerImageFactory, PageExtensionDjangoModelFactory
+from ..core.factories import (
+    FilerImageFactory,
+    PageExtensionDjangoModelFactory,
+    image_getter,
+)
 from ..core.helpers import create_text_plugin
-from ..core.utils import file_getter
 from .models import (
     BlogPost,
     Category,
@@ -64,10 +65,12 @@ class BLDPageExtensionDjangoModelFactory(PageExtensionDjangoModelFactory):
         if create and extracted:
             banner_placeholder = self.extended_object.placeholders.get(slot="banner")
 
-            banner_path = extracted if isinstance(extracted, str) else None
-            banner_file = file_getter("banner")(banner_path)
-            wrapped_banner = File(banner_file, banner_file.name)
-            banner = Image.objects.create(file=wrapped_banner)
+            if isinstance(extracted, str):
+                banner = image_getter(extracted)
+            elif callable(extracted):
+                banner = image_getter(extracted())
+            else:
+                banner = FilerImageFactory(original_filename="banner.jpg")
 
             for language in self.extended_object.get_languages():
                 add_plugin(
@@ -87,10 +90,13 @@ class BLDPageExtensionDjangoModelFactory(PageExtensionDjangoModelFactory):
         if create and extracted:
             logo_placeholder = self.extended_object.placeholders.get(slot="logo")
 
-            logo_path = extracted if isinstance(extracted, str) else None
-            logo_file = file_getter("logo")(logo_path)
-            wrapped_logo = File(logo_file, logo_file.name)
-            logo = Image.objects.create(file=wrapped_logo)
+            if isinstance(extracted, str):
+                logo = image_getter(extracted)
+            elif callable(extracted):
+                logo = image_getter(extracted())
+            else:
+                logo = FilerImageFactory(original_filename="logo.jpg")
+
             for language in self.extended_object.get_languages():
                 add_plugin(
                     language=language,
@@ -223,10 +229,13 @@ class CourseFactory(PageExtensionDjangoModelFactory):
                 slot="course_cover"
             )
 
-            cover_path = extracted if isinstance(extracted, str) else None
-            cover_file = file_getter("cover")(cover_path)
-            wrapped_cover = File(cover_file, cover_file.name)
-            cover = Image.objects.create(file=wrapped_cover)
+            if isinstance(extracted, str):
+                cover = image_getter(extracted)
+            elif callable(extracted):
+                cover = image_getter(extracted())
+            else:
+                cover = FilerImageFactory(original_filename="cover.jpg")
+
             for language in self.extended_object.get_languages():
                 add_plugin(
                     language=language,
@@ -496,22 +505,9 @@ class CategoryFactory(BLDPageExtensionDjangoModelFactory):
 
 
 class LicenceLogoImageFactory(FilerImageFactory):
-    """
-    Image field factory for Licence.
+    """Image field factory for Licence."""
 
-    Randomly get an image from fixtures.
-    """
-
-    # pylint: disable=no-self-use
-    @factory.lazy_attribute
-    def file(self):
-        """
-        Fill image file field with random image.
-        """
-        logo_file = file_getter("licence")()
-        wrapped_logo = File(logo_file, logo_file.name)
-
-        return wrapped_logo
+    file = factory.django.ImageField()
 
 
 class LicenceFactory(factory.django.DjangoModelFactory):
@@ -610,10 +606,13 @@ class BlogPostFactory(PageExtensionDjangoModelFactory):
         if create and extracted:
             cover_placeholder = self.extended_object.placeholders.get(slot="cover")
 
-            cover_path = extracted if isinstance(extracted, str) else None
-            cover_file = file_getter("cover")(cover_path)
-            wrapped_cover = File(cover_file, cover_file.name)
-            cover = Image.objects.create(file=wrapped_cover)
+            if isinstance(extracted, str):
+                cover = image_getter(extracted)
+            elif callable(extracted):
+                cover = image_getter(extracted())
+            else:
+                cover = FilerImageFactory(original_filename="cover.jpg")
+
             for language in self.extended_object.get_languages():
                 add_plugin(
                     language=language,
@@ -733,9 +732,13 @@ class PersonFactory(PageExtensionDjangoModelFactory):
                 slot="portrait"
             )
 
-            portrait_file = file_getter("portrait")()
-            wrapped_portrait = File(portrait_file, portrait_file.name)
-            portrait = Image.objects.create(file=wrapped_portrait)
+            if isinstance(extracted, str):
+                portrait = image_getter(extracted)
+            elif callable(extracted):
+                portrait = image_getter(extracted())
+            else:
+                portrait = FilerImageFactory(original_filename="portrait.jpg")
+
             for language in self.extended_object.get_languages():
                 add_plugin(
                     language=language,

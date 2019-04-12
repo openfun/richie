@@ -4,8 +4,8 @@ Test suite for all helpers in the `courses` application
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.helpers import create_i18n_page
-from richie.apps.courses.helpers import create_categories
 from richie.apps.courses.models import Category
+from richie.apps.demo.helpers import create_categories
 
 
 class CoursesHelpersTestCase(CMSTestCase):

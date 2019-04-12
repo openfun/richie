@@ -2,6 +2,7 @@
 Core factories
 """
 import io
+import os
 
 from django.conf import settings
 from django.contrib.auth.hashers import make_password
@@ -61,6 +62,21 @@ class FilerImageFactory(factory.django.DjangoModelFactory):
         thumb.save(thumb_io, format="JPEG")
 
         return File(thumb_io, name=self.original_filename)
+
+
+def image_getter(path):
+    """
+    Create and return an instance of Image linked to the file passed in argument.
+    """
+    # Factory boy's "from_func" param is expecting a file but does not seem to close it
+    # properly. Let's load the content of the file in memory and pass it as a BytesIO to
+    # factory boy so that the file is nicely closed
+    with open(path, "rb") as image_file:
+        in_memory_file = io.BytesIO(image_file.read())
+
+    filename = os.path.basename(path)
+    wrapped_file = File(in_memory_file, filename)
+    return Image.objects.create(file=wrapped_file)
 
 
 class PageExtensionDjangoModelFactory(factory.django.DjangoModelFactory):

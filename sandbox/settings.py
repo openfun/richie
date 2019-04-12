@@ -185,6 +185,7 @@ class Base(DRFMixin, Configuration):
         "richie",
         "richie.apps.core",
         "richie.apps.courses",
+        "richie.apps.demo",
         "richie.apps.search",
         "richie.plugins.large_banner",
         "richie.plugins.plain_text",

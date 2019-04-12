@@ -26,7 +26,7 @@ class CreateDemoSiteCommandsTestCase(CMSTestCase):
     @override_settings(DEBUG=True)
     @mock.patch.object(Logger, "info")
     @mock.patch(
-        "richie.apps.core.management.commands.create_demo_site.create_demo_site"
+        "richie.apps.demo.management.commands.create_demo_site.create_demo_site"
     )
     def test_commands_create_demo_site_success(self, mock_create, mock_logger):
         """
