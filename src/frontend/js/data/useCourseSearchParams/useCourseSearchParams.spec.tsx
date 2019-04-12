@@ -31,13 +31,13 @@ describe('data/useCourseSearchParams', () => {
 
   it('initializes with the URL query string', () => {
     mockWindow.location.search =
-      '?organizations=42&organizations=43&query=some%20query&limit=8&offset=3';
+      '?organizations=L-00010003&organizations=L-00010009&query=some%20query&limit=8&offset=3';
     render(<TestComponent />);
     const [courseSearchParams] = getLatestHookValues();
     expect(courseSearchParams).toEqual({
       limit: '8',
       offset: '3',
-      organizations: ['42', '43'],
+      organizations: ['L-00010003', 'L-00010009'],
       query: 'some query',
     });
     // There is nothing to update as we're just using the existing query parameters
@@ -154,14 +154,14 @@ describe('data/useCourseSearchParams', () => {
   describe('FILTER_ADD [non drilldown]', () => {
     it('adds the value to the existing list for this filter & updates history', () => {
       mockWindow.location.search =
-        '?organizations=42&organizations=43&offset=999&limit=0';
+        '?organizations=L-00010003&organizations=L-00010009&offset=999&limit=0';
       render(<TestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '0',
           offset: '999',
-          organizations: ['42', '43'],
+          organizations: ['L-00010003', 'L-00010009'],
         });
 
         act(() =>
@@ -170,7 +170,7 @@ describe('data/useCourseSearchParams', () => {
               is_drilldown: false,
               name: 'organizations',
             },
-            payload: '84',
+            payload: 'L-00010017',
             type: 'FILTER_ADD',
           }),
         );
@@ -180,26 +180,27 @@ describe('data/useCourseSearchParams', () => {
         expect(courseSearchParams).toEqual({
           limit: '0',
           offset: '999',
-          organizations: ['42', '43', '84'],
+          organizations: ['L-00010003', 'L-00010009', 'L-00010017'],
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
           null,
           '',
-          '?limit=0&offset=999&organizations=42&organizations=43&organizations=84',
+          '?limit=0&offset=999&organizations=L-00010003&organizations=L-00010009&organizations=L-00010017',
         );
       }
     });
 
     it('creates a list with the existing single value and the new value & updates history', () => {
-      mockWindow.location.search = '?organizations=42&offset=999&limit=0';
+      mockWindow.location.search =
+        '?organizations=L-00010003&offset=999&limit=0';
       render(<TestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '0',
           offset: '999',
-          organizations: '42',
+          organizations: 'L-00010003',
         });
 
         act(() =>
@@ -208,7 +209,7 @@ describe('data/useCourseSearchParams', () => {
               is_drilldown: false,
               name: 'organizations',
             },
-            payload: '84',
+            payload: 'L-00010017',
             type: 'FILTER_ADD',
           }),
         );
@@ -218,13 +219,13 @@ describe('data/useCourseSearchParams', () => {
         expect(courseSearchParams).toEqual({
           limit: '0',
           offset: '999',
-          organizations: ['42', '84'],
+          organizations: ['L-00010003', 'L-00010017'],
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
           null,
           '',
-          '?limit=0&offset=999&organizations=42&organizations=84',
+          '?limit=0&offset=999&organizations=L-00010003&organizations=L-00010017',
         );
       }
     });
@@ -246,7 +247,7 @@ describe('data/useCourseSearchParams', () => {
               is_drilldown: false,
               name: 'organizations',
             },
-            payload: '83',
+            payload: 'L-00010014',
             type: 'FILTER_ADD',
           }),
         );
@@ -256,28 +257,28 @@ describe('data/useCourseSearchParams', () => {
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
-          organizations: ['83'],
+          organizations: ['L-00010014'],
           query: 'some query',
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
           null,
           '',
-          '?limit=999&offset=0&organizations=83&query=some%20query',
+          '?limit=999&offset=0&organizations=L-00010014&query=some%20query',
         );
       }
     });
 
     it('does nothing if the value is already in the list for this filter', () => {
       mockWindow.location.search =
-        '?limit=999&offset=0&query=some%20query&organizations=43';
+        '?limit=999&offset=0&query=some%20query&organizations=L-00010009';
       render(<TestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
-          organizations: '43',
+          organizations: 'L-00010009',
           query: 'some query',
         });
 
@@ -287,7 +288,7 @@ describe('data/useCourseSearchParams', () => {
               is_drilldown: false,
               name: 'organizations',
             },
-            payload: '43',
+            payload: 'L-00010009',
             type: 'FILTER_ADD',
           }),
         );
@@ -297,7 +298,7 @@ describe('data/useCourseSearchParams', () => {
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
-          organizations: ['43'],
+          organizations: ['L-00010009'],
           query: 'some query',
         });
         expect(mockWindow.history.pushState).not.toHaveBeenCalled();
@@ -323,7 +324,7 @@ describe('data/useCourseSearchParams', () => {
               is_drilldown: true,
               name: 'level',
             },
-            payload: 'advanced',
+            payload: 'L-000200010003',
             type: 'FILTER_ADD',
           }),
         );
@@ -331,7 +332,7 @@ describe('data/useCourseSearchParams', () => {
       {
         const [courseSearchParams] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
-          level: 'advanced',
+          level: 'L-000200010003',
           limit: '999',
           offset: '0',
         });
@@ -339,7 +340,7 @@ describe('data/useCourseSearchParams', () => {
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
           null,
           '',
-          '?level=advanced&limit=999&offset=0',
+          '?level=L-000200010003&limit=999&offset=0',
         );
       }
       {
@@ -352,7 +353,7 @@ describe('data/useCourseSearchParams', () => {
               is_drilldown: true,
               name: 'level',
             },
-            payload: 'intermediate',
+            payload: 'L-000200010002',
             type: 'FILTER_ADD',
           }),
         );
@@ -360,7 +361,7 @@ describe('data/useCourseSearchParams', () => {
       {
         const [courseSearchParams] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
-          level: 'intermediate',
+          level: 'L-000200010002',
           limit: '999',
           offset: '0',
         });
@@ -368,18 +369,18 @@ describe('data/useCourseSearchParams', () => {
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
           null,
           '',
-          '?level=intermediate&limit=999&offset=0',
+          '?level=L-000200010002&limit=999&offset=0',
         );
       }
     });
 
     it('does nothing if the value was already on the filter', () => {
-      mockWindow.location.search = '?level=beginner&limit=999&offset=0';
+      mockWindow.location.search = '?level=L-000200010001&limit=999&offset=0';
       render(<TestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
-          level: 'beginner',
+          level: 'L-000200010001',
           limit: '999',
           offset: '0',
         });
@@ -390,7 +391,7 @@ describe('data/useCourseSearchParams', () => {
               is_drilldown: true,
               name: 'level',
             },
-            payload: 'beginner',
+            payload: 'L-000200010001',
             type: 'FILTER_ADD',
           }),
         );
@@ -398,7 +399,7 @@ describe('data/useCourseSearchParams', () => {
       {
         const [courseSearchParams] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
-          level: 'beginner',
+          level: 'L-000200010001',
           limit: '999',
           offset: '0',
         });
@@ -410,7 +411,7 @@ describe('data/useCourseSearchParams', () => {
   describe('FILTER_REMOVE [non drilldown]', () => {
     it('removes the value from the existing list for this filter & updates history', () => {
       mockWindow.location.search =
-        '?limit=999&offset=0&query=some%20query&organizations=43&organizations=47';
+        '?limit=999&offset=0&query=some%20query&organizations=L-00010009&organizations=L00010011';
       render(<TestComponent />);
       {
         // Remove from a list of more than one value
@@ -418,7 +419,7 @@ describe('data/useCourseSearchParams', () => {
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
-          organizations: ['43', '47'],
+          organizations: ['L-00010009', 'L00010011'],
           query: 'some query',
         });
 
@@ -428,7 +429,7 @@ describe('data/useCourseSearchParams', () => {
               is_drilldown: false,
               name: 'organizations',
             },
-            payload: '43',
+            payload: 'L-00010009',
             type: 'FILTER_REMOVE',
           }),
         );
@@ -438,14 +439,14 @@ describe('data/useCourseSearchParams', () => {
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
-          organizations: ['47'],
+          organizations: ['L00010011'],
           query: 'some query',
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
           null,
           '',
-          '?limit=999&offset=0&organizations=47&query=some%20query',
+          '?limit=999&offset=0&organizations=L00010011&query=some%20query',
         );
       }
       {
@@ -456,7 +457,7 @@ describe('data/useCourseSearchParams', () => {
         act(() =>
           dispatch({
             filter: { is_drilldown: false, name: 'organizations' },
-            payload: '47',
+            payload: 'L00010011',
             type: 'FILTER_REMOVE',
           }),
         );
@@ -481,14 +482,14 @@ describe('data/useCourseSearchParams', () => {
       // This is a special case when there is a single value not wrapper in an array after it was
       // just parsed and not interacted with yet.
       mockWindow.location.search =
-        '?limit=999&offset=0&query=some%20query&organizations=49';
+        '?limit=999&offset=0&query=some%20query&organizations=L-00010013';
       render(<TestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
-          organizations: '49',
+          organizations: 'L-00010013',
           query: 'some query',
         });
 
@@ -498,7 +499,7 @@ describe('data/useCourseSearchParams', () => {
               is_drilldown: false,
               name: 'organizations',
             },
-            payload: '49',
+            payload: 'L-00010013',
             type: 'FILTER_REMOVE',
           }),
         );
@@ -534,9 +535,9 @@ describe('data/useCourseSearchParams', () => {
           dispatch({
             filter: {
               is_drilldown: false,
-              name: 'categories',
+              name: 'subjects',
             },
-            payload: '123',
+            payload: 'L-00010076',
             type: 'FILTER_REMOVE',
           }),
         );
@@ -554,14 +555,14 @@ describe('data/useCourseSearchParams', () => {
 
     it('does nothing if the value was not in the list for this filter', () => {
       mockWindow.location.search =
-        '?limit=999&offset=0&organizations=42&organizations=43';
+        '?limit=999&offset=0&organizations=L-00010003&organizations=L-00010009';
       render(<TestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
-          organizations: ['42', '43'],
+          organizations: ['L-00010003', 'L-00010009'],
         });
 
         act(() =>
@@ -580,7 +581,7 @@ describe('data/useCourseSearchParams', () => {
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
-          organizations: ['42', '43'],
+          organizations: ['L-00010003', 'L-00010009'],
         });
         expect(mockWindow.history.pushState).not.toHaveBeenCalled();
       }
@@ -589,14 +590,14 @@ describe('data/useCourseSearchParams', () => {
     it('does nothing if the existing single value does not match the payload', () => {
       // This is a special case when there is a single value not wrapper in an array after it was
       // just parsed and not interacted with yet.
-      mockWindow.location.search = '?limit=999&offset=0&organizations=44';
+      mockWindow.location.search = '?limit=999&offset=0&organizations=L-00010011';
       render(<TestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
-          organizations: '44',
+          organizations: 'L-00010011',
         });
 
         act(() =>
@@ -615,7 +616,7 @@ describe('data/useCourseSearchParams', () => {
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
-          organizations: '44',
+          organizations: 'L-00010011',
         });
         expect(mockWindow.history.pushState).not.toHaveBeenCalled();
       }
@@ -625,12 +626,12 @@ describe('data/useCourseSearchParams', () => {
   describe('FILTER_REMOVE [drilldown]', () => {
     it('removes the value from the filter', () => {
       mockWindow.location.search =
-        '?level=beginner&limit=999&offset=0&query=some%20query';
+        '?level=L-000200010001&limit=999&offset=0&query=some%20query';
       render(<TestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
-          level: 'beginner',
+          level: 'L-000200010001',
           limit: '999',
           offset: '0',
           query: 'some query',
@@ -642,7 +643,7 @@ describe('data/useCourseSearchParams', () => {
               is_drilldown: true,
               name: 'level',
             },
-            payload: 'beginner',
+            payload: 'L-000200010001',
             type: 'FILTER_REMOVE',
           }),
         );
@@ -665,12 +666,12 @@ describe('data/useCourseSearchParams', () => {
 
     it('does nothing if the value to remove was not the existing value', () => {
       mockWindow.location.search =
-        '?level=beginner&limit=999&offset=0&query=some%20query';
+        '?level=L-000200010001&limit=999&offset=0&query=some%20query';
       render(<TestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
-          level: 'beginner',
+          level: 'L-000200010001',
           limit: '999',
           offset: '0',
           query: 'some query',
@@ -682,7 +683,7 @@ describe('data/useCourseSearchParams', () => {
               is_drilldown: true,
               name: 'level',
             },
-            payload: 'advanced',
+            payload: 'L-000200010003',
             type: 'FILTER_REMOVE',
           }),
         );
@@ -690,7 +691,7 @@ describe('data/useCourseSearchParams', () => {
       {
         const [courseSearchParams] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
-          level: 'beginner',
+          level: 'L-000200010001',
           limit: '999',
           offset: '0',
           query: 'some query',
@@ -701,14 +702,14 @@ describe('data/useCourseSearchParams', () => {
 
     it('does nothing if there was already no value for this filter', () => {
       mockWindow.location.search =
-        '?organizations=43&limit=999&offset=0&query=some%20query';
+        '?organizations=L-00010009&limit=999&offset=0&query=some%20query';
       render(<TestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
-          organizations: '43',
+          organizations: 'L-00010009',
           query: 'some query',
         });
 
@@ -718,7 +719,7 @@ describe('data/useCourseSearchParams', () => {
               is_drilldown: true,
               name: 'level',
             },
-            payload: 'intermediate',
+            payload: 'L-000200010002',
             type: 'FILTER_REMOVE',
           }),
         );
@@ -728,7 +729,7 @@ describe('data/useCourseSearchParams', () => {
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
-          organizations: '43',
+          organizations: 'L-00010009',
           query: 'some query',
         });
         expect(mockWindow.history.pushState).not.toHaveBeenCalled();
