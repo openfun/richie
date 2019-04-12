@@ -8,8 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-## Changed
+### Changed
 
+- Activating a filter that is a parent or child of a current active filter
+  removes this active relative. This makes the experience of adding those
+  relative filters more intuitive.
 - Simplify Richie settings and provide defaults for those unlikely to be
   customized (search, languages, plugins, general).
 

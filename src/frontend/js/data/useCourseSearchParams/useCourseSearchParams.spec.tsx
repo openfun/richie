@@ -304,6 +304,203 @@ describe('data/useCourseSearchParams', () => {
         expect(mockWindow.history.pushState).not.toHaveBeenCalled();
       }
     });
+
+    it('removes any active children of it when it adds a new parent filter', () => {
+      mockWindow.location.search =
+        '?limit=999&offset=0&query=a%20query' +
+        // children of the incoming filter
+        '&subjects=L-0002000300050001&subjects=L-0002000300050004' +
+        // some other category from the same meta-category (subject)
+        '&subjects=P-000200030012' +
+        // some unrelated category from another meta-category
+        '&levels=L-000200020005';
+      render(<TestComponent />);
+      {
+        const [courseSearchParams, dispatch] = getLatestHookValues();
+        expect(courseSearchParams).toEqual({
+          levels: 'L-000200020005',
+          limit: '999',
+          offset: '0',
+          query: 'a query',
+          subjects: [
+            'L-0002000300050001',
+            'L-0002000300050004',
+            'P-000200030012',
+          ],
+        });
+
+        act(() =>
+          dispatch({
+            filter: {
+              is_drilldown: false,
+              name: 'subjects',
+            },
+            payload: 'L-000200030005',
+            type: 'FILTER_ADD',
+          }),
+        );
+      }
+      {
+        const [courseSearchParams] = getLatestHookValues();
+        expect(courseSearchParams).toEqual({
+          levels: 'L-000200020005',
+          limit: '999',
+          offset: '0',
+          query: 'a query',
+          subjects: ['P-000200030012', 'L-000200030005'],
+        });
+        expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
+        expect(mockWindow.history.pushState).toHaveBeenCalledWith(
+          null,
+          '',
+          '?levels=L-000200020005&limit=999&offset=0&query=a%20query&subjects=P-000200030012&subjects=L-000200030005',
+        );
+      }
+    });
+
+    it('replaces the existing single value when it adds its parent', () => {
+      mockWindow.location.search =
+        '?limit=999&offset=0&query=some%20query' +
+        // child of the incoming filter
+        '&subjects=L-0002000300050001' +
+        // some unrelated category from another meta-category
+        '&levels=L-000200020005';
+      render(<TestComponent />);
+      {
+        const [courseSearchParams, dispatch] = getLatestHookValues();
+        expect(courseSearchParams).toEqual({
+          levels: 'L-000200020005',
+          limit: '999',
+          offset: '0',
+          query: 'some query',
+          subjects: 'L-0002000300050001',
+        });
+
+        act(() =>
+          dispatch({
+            filter: {
+              is_drilldown: false,
+              name: 'subjects',
+            },
+            payload: 'L-000200030005',
+            type: 'FILTER_ADD',
+          }),
+        );
+      }
+      {
+        const [courseSearchParams] = getLatestHookValues();
+        expect(courseSearchParams).toEqual({
+          levels: 'L-000200020005',
+          limit: '999',
+          offset: '0',
+          query: 'some query',
+          subjects: ['L-000200030005'],
+        });
+        expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
+        expect(mockWindow.history.pushState).toHaveBeenCalledWith(
+          null,
+          '',
+          '?levels=L-000200020005&limit=999&offset=0&query=some%20query&subjects=L-000200030005',
+        );
+      }
+    });
+
+    it('removes the active parent when it adds one of its children', () => {
+      mockWindow.location.search =
+        '?limit=999&offset=0&query=some%20query' +
+        // parent of the incoming filter
+        '&subjects=P-000200030005' +
+        // some other category from the same meta-category (subject)
+        '&subjects=P-000200030012' +
+        // some unrelated category from another meta-category
+        '&levels=L-000200020005';
+      render(<TestComponent />);
+      {
+        const [courseSearchParams, dispatch] = getLatestHookValues();
+        expect(courseSearchParams).toEqual({
+          levels: 'L-000200020005',
+          limit: '999',
+          offset: '0',
+          query: 'some query',
+          subjects: ['P-000200030005', 'P-000200030012'],
+        });
+
+        act(() =>
+          dispatch({
+            filter: {
+              is_drilldown: false,
+              name: 'subjects',
+            },
+            payload: 'L-0002000300050013',
+            type: 'FILTER_ADD',
+          }),
+        );
+      }
+      {
+        const [courseSearchParams] = getLatestHookValues();
+        expect(courseSearchParams).toEqual({
+          levels: 'L-000200020005',
+          limit: '999',
+          offset: '0',
+          query: 'some query',
+          subjects: ['P-000200030012', 'L-0002000300050013'],
+        });
+        expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
+        expect(mockWindow.history.pushState).toHaveBeenCalledWith(
+          null,
+          '',
+          '?levels=L-000200020005&limit=999&offset=0&query=some%20query' +
+            '&subjects=P-000200030012&subjects=L-0002000300050013',
+        );
+      }
+    });
+
+    it('replaces the existing single value when it adds its child', () => {
+      mockWindow.location.search =
+        '?limit=999&offset=0&query=some%20query' +
+        // parent of the incoming filter
+        '&subjects=P-000200030005' +
+        // some unrelated category from another meta-category
+        '&levels=L-000200020005';
+      render(<TestComponent />);
+      {
+        const [courseSearchParams, dispatch] = getLatestHookValues();
+        expect(courseSearchParams).toEqual({
+          levels: 'L-000200020005',
+          limit: '999',
+          offset: '0',
+          query: 'some query',
+          subjects: 'P-000200030005',
+        });
+
+        act(() =>
+          dispatch({
+            filter: {
+              is_drilldown: false,
+              name: 'subjects',
+            },
+            payload: 'L-0002000300050013',
+            type: 'FILTER_ADD',
+          }),
+        );
+      }
+      {
+        const [courseSearchParams] = getLatestHookValues();
+        expect(courseSearchParams).toEqual({
+          levels: 'L-000200020005',
+          limit: '999',
+          offset: '0',
+          query: 'some query',
+          subjects: ['L-0002000300050013'],
+        });
+        expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
+        expect(mockWindow.history.pushState).toHaveBeenCalledWith(
+          null,
+          '',
+          '?levels=L-000200020005&limit=999&offset=0&query=some%20query&subjects=L-0002000300050013',
+        );
+      }
+    });
   });
 
   describe('FILTER_ADD [drilldown]', () => {
@@ -590,7 +787,8 @@ describe('data/useCourseSearchParams', () => {
     it('does nothing if the existing single value does not match the payload', () => {
       // This is a special case when there is a single value not wrapper in an array after it was
       // just parsed and not interacted with yet.
-      mockWindow.location.search = '?limit=999&offset=0&organizations=L-00010011';
+      mockWindow.location.search =
+        '?limit=999&offset=0&organizations=L-00010011';
       render(<TestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
