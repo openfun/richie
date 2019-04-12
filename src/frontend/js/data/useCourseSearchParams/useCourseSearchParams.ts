@@ -3,8 +3,8 @@ import { createContext, useEffect, useReducer } from 'react';
 
 import { APIListRequestParams } from '../../types/api';
 import { FilterDefinition } from '../../types/filters';
-import { computeNewFilterValue } from '../../utils/filters/computeNewFilterValue';
 import { history, location } from '../../utils/indirection/window';
+import { computeNewFilterValue } from './computeNewFilterValue';
 
 interface FilterAction {
   filter: FilterDefinition;
@@ -48,7 +48,7 @@ const courseSearchParamsReducer = (
         [action.filter.name]: computeNewFilterValue(
           courseSearchParams[action.filter.name],
           {
-            action: (action.type === 'FILTER_ADD' && 'add') || 'remove',
+            action: action.type,
             isDrilldown: !!action.filter.is_drilldown,
             payload: action.payload,
           },

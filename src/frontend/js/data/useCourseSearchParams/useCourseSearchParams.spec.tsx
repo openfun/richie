@@ -191,6 +191,44 @@ describe('data/useCourseSearchParams', () => {
       }
     });
 
+    it('creates a list with the existing single value and the new value & updates history', () => {
+      mockWindow.location.search = '?organizations=42&offset=999&limit=0';
+      render(<TestComponent />);
+      {
+        const [courseSearchParams, dispatch] = getLatestHookValues();
+        expect(courseSearchParams).toEqual({
+          limit: '0',
+          offset: '999',
+          organizations: '42',
+        });
+
+        act(() =>
+          dispatch({
+            filter: {
+              is_drilldown: false,
+              name: 'organizations',
+            },
+            payload: '84',
+            type: 'FILTER_ADD',
+          }),
+        );
+      }
+      {
+        const [courseSearchParams] = getLatestHookValues();
+        expect(courseSearchParams).toEqual({
+          limit: '0',
+          offset: '999',
+          organizations: ['42', '84'],
+        });
+        expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
+        expect(mockWindow.history.pushState).toHaveBeenCalledWith(
+          null,
+          '',
+          '?limit=0&offset=999&organizations=42&organizations=84',
+        );
+      }
+    });
+
     it('creates a new list with the value & updates history', () => {
       mockWindow.location.search = '?limit=999&offset=0&query=some%20query';
       render(<TestComponent />);
@@ -375,6 +413,7 @@ describe('data/useCourseSearchParams', () => {
         '?limit=999&offset=0&query=some%20query&organizations=43&organizations=47';
       render(<TestComponent />);
       {
+        // Remove from a list of more than one value
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
@@ -409,9 +448,78 @@ describe('data/useCourseSearchParams', () => {
           '?limit=999&offset=0&organizations=47&query=some%20query',
         );
       }
+      {
+        // Remove from a list of just one value
+        jest.resetAllMocks();
+        const [, dispatch] = getLatestHookValues();
+
+        act(() =>
+          dispatch({
+            filter: { is_drilldown: false, name: 'organizations' },
+            payload: '47',
+            type: 'FILTER_REMOVE',
+          }),
+        );
+      }
+      {
+        const [courseSearchParams] = getLatestHookValues();
+        expect(courseSearchParams).toEqual({
+          limit: '999',
+          offset: '0',
+          query: 'some query',
+        });
+        expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
+        expect(mockWindow.history.pushState).toHaveBeenCalledWith(
+          null,
+          '',
+          '?limit=999&offset=0&query=some%20query',
+        );
+      }
     });
 
-    it('does nothing if there was no list for this filter', () => {
+    it('removes the existing single value if it matches the payload', () => {
+      // This is a special case when there is a single value not wrapper in an array after it was
+      // just parsed and not interacted with yet.
+      mockWindow.location.search =
+        '?limit=999&offset=0&query=some%20query&organizations=49';
+      render(<TestComponent />);
+      {
+        const [courseSearchParams, dispatch] = getLatestHookValues();
+        expect(courseSearchParams).toEqual({
+          limit: '999',
+          offset: '0',
+          organizations: '49',
+          query: 'some query',
+        });
+
+        act(() =>
+          dispatch({
+            filter: {
+              is_drilldown: false,
+              name: 'organizations',
+            },
+            payload: '49',
+            type: 'FILTER_REMOVE',
+          }),
+        );
+      }
+      {
+        const [courseSearchParams] = getLatestHookValues();
+        expect(courseSearchParams).toEqual({
+          limit: '999',
+          offset: '0',
+          query: 'some query',
+        });
+        expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
+        expect(mockWindow.history.pushState).toHaveBeenCalledWith(
+          null,
+          '',
+          '?limit=999&offset=0&query=some%20query',
+        );
+      }
+    });
+
+    it('does nothing if there was no value for this filter', () => {
       mockWindow.location.search = '?limit=999&offset=0&query=some%20query';
       render(<TestComponent />);
       {
@@ -473,6 +581,41 @@ describe('data/useCourseSearchParams', () => {
           limit: '999',
           offset: '0',
           organizations: ['42', '43'],
+        });
+        expect(mockWindow.history.pushState).not.toHaveBeenCalled();
+      }
+    });
+
+    it('does nothing if the existing single value does not match the payload', () => {
+      // This is a special case when there is a single value not wrapper in an array after it was
+      // just parsed and not interacted with yet.
+      mockWindow.location.search = '?limit=999&offset=0&organizations=44';
+      render(<TestComponent />);
+      {
+        const [courseSearchParams, dispatch] = getLatestHookValues();
+        expect(courseSearchParams).toEqual({
+          limit: '999',
+          offset: '0',
+          organizations: '44',
+        });
+
+        act(() =>
+          dispatch({
+            filter: {
+              is_drilldown: false,
+              name: 'organizations',
+            },
+            payload: '121',
+            type: 'FILTER_REMOVE',
+          }),
+        );
+      }
+      {
+        const [courseSearchParams] = getLatestHookValues();
+        expect(courseSearchParams).toEqual({
+          limit: '999',
+          offset: '0',
+          organizations: '44',
         });
         expect(mockWindow.history.pushState).not.toHaveBeenCalled();
       }

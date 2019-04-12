@@ -5,7 +5,7 @@ import { Maybe } from '../../utils/types';
 export function computeNewFilterValue(
   existingValue: Maybe<string | string[]>,
   update: {
-    action: 'add' | 'remove';
+    action: 'FILTER_ADD' | 'FILTER_REMOVE';
     isDrilldown: boolean;
     payload: string;
   },
@@ -13,11 +13,11 @@ export function computeNewFilterValue(
   if (update.isDrilldown) {
     return {
       // ADD: Drilldown filters only support one value at a time
-      add: () => update.payload,
+      FILTER_ADD: () => update.payload,
       // REMOVE:
       // - Drop the existing value if it matches the payload
       // - Keep it otherwise
-      remove: () =>
+      FILTER_REMOVE: () =>
         // Drilldown filters only support one value at a time
         existingValue === update.payload
           ? undefined
@@ -29,9 +29,9 @@ export function computeNewFilterValue(
   if (!existingValue) {
     return {
       // ADD: Make an array with the existing value
-      add: () => [update.payload],
+      FILTER_ADD: () => [update.payload],
       // REMOVE: There's nothing that could possibly removed, return undefined
-      remove: () => undefined,
+      FILTER_REMOVE: () => undefined,
     }[update.action]();
   }
 
@@ -39,14 +39,14 @@ export function computeNewFilterValue(
   if (typeof existingValue === 'string') {
     return {
       // ADD: Make an array with the existing value and the new one
-      add: () =>
+      FILTER_ADD: () =>
         existingValue === update.payload
           ? [existingValue]
           : [existingValue, update.payload],
       // REMOVE:
       // - Return nothing if we had to drop the existing value we had
       // - Keep the existing value if it's not the one we needed to drop
-      remove: () =>
+      FILTER_REMOVE: () =>
         existingValue === update.payload ? undefined : existingValue,
     }[update.action]();
   }
@@ -54,12 +54,12 @@ export function computeNewFilterValue(
   // The existing value is an array of strings or numbers (see function signature)
   return {
     // ADD: Just push the new value into our existing array of values
-    add: () =>
+    FILTER_ADD: () =>
       existingValue.includes(update.payload)
         ? existingValue
         : [...existingValue, update.payload],
     // REMOVE: Return the existing array of values without the one we needed to remove
-    remove: () =>
+    FILTER_REMOVE: () =>
       dropEmptyArray(existingValue.filter(v => v !== update.payload)),
   }[update.action]();
 
