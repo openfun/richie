@@ -169,6 +169,9 @@ class Base(DRFMixin, Configuration):
         "django.contrib.sitemaps",
         "django.contrib.staticfiles",
         "django.contrib.messages",
+        # Try to load richie core before cms sphere so we can override default
+        # templates from plugins
+        "richie.apps.core",
         # Django-cms
         "cms",
         "menus",
@@ -183,7 +186,6 @@ class Base(DRFMixin, Configuration):
         "djangocms_picture",
         # Richie stuff
         "richie",
-        "richie.apps.core",
         "richie.apps.courses",
         "richie.apps.search",
         "richie.plugins.large_banner",
@@ -475,6 +477,8 @@ class Base(DRFMixin, Configuration):
     DJANGOCMS_LINK_TEMPLATES = [("button-caesura", _("Button caesura"))]
 
     DJANGOCMS_VIDEO_TEMPLATES = [("full-width", _("Full width"))]
+
+    DJANGOCMS_PICTURE_TEMPLATES = [("debug", _("Debug"))]
 
     # Thumbnails settings
     THUMBNAIL_PROCESSORS = (
