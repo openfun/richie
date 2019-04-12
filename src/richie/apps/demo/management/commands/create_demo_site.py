@@ -1,19 +1,17 @@
-"""
-create_demo_site management command
-"""
+"""Create_demo_site management command."""
 import logging
 import random
 
 from django.conf import settings
 from django.contrib.sites.models import Site
-from django.core.files import File
 from django.core.management.base import BaseCommand, CommandError
 from django.test.utils import override_settings
 
 import factory
 from cms.api import add_plugin
-from filer.models.imagemodels import Image
 
+from richie.apps.core.factories import image_getter
+from richie.apps.core.helpers import create_text_plugin
 from richie.apps.courses.factories import (
     VIDEO_SAMPLE_LINKS,
     BlogPostFactory,
@@ -25,11 +23,10 @@ from richie.apps.courses.factories import (
     PersonTitleFactory,
     PersonTitleTranslationFactory,
 )
-from richie.apps.courses.helpers import create_categories
 from richie.apps.courses.models import BlogPost, Category, Course, Organization, Person
 
-from ...helpers import create_text_plugin, recursive_page_creation
-from ...utils import file_getter
+from ...helpers import create_categories, recursive_page_creation
+from ...utils import pick_image
 
 logger = logging.getLogger("richie.commands.core.create_demo_site")
 
@@ -329,7 +326,9 @@ def create_demo_site():
     pages_created = recursive_page_creation(site, PAGE_INFOS)
 
     # Create some licences
-    licences = LicenceFactory.create_batch(NB_LICENCES)
+    licences = LicenceFactory.create_batch(
+        NB_OBJECTS["licences"], logo__file__from_path=pick_image("licence")()
+    )
 
     # Create organizations under the `Organizations` page
     organizations = OrganizationFactory.create_batch(
@@ -337,19 +336,29 @@ def create_demo_site():
         page_in_navigation=True,
         page_languages=["en", "fr"],
         page_parent=pages_created["organizations"],
-        fill_banner=True,
+        fill_banner=pick_image("banner"),
         fill_description=True,
-        fill_logo=True,
+        fill_logo=pick_image("logo"),
         should_publish=True,
     )
 
     # Generate each category tree and return a list of the leaf categories
     levels = list(
-        create_categories(LEVELS_INFO, pages_created["categories"], reverse_id="levels")
+        create_categories(
+            LEVELS_INFO,
+            pages_created["categories"],
+            reverse_id="levels",
+            fill_banner=pick_image("banner"),
+            fill_logo=pick_image("logo"),
+        )
     )
     subjects = list(
         create_categories(
-            SUBJECTS_INFO, pages_created["categories"], reverse_id="subjects"
+            SUBJECTS_INFO,
+            pages_created["categories"],
+            reverse_id="subjects",
+            fill_banner=pick_image("banner"),
+            fill_logo=pick_image("logo"),
         )
     )
 
@@ -368,7 +377,7 @@ def create_demo_site():
         page_languages=["en", "fr"],
         page_parent=pages_created["persons"],
         person_title=random.choice([title, None]),
-        fill_portrait=True,
+        fill_portrait=pick_image("portrait"),
         fill_resume=True,
         should_publish=True,
     )
@@ -389,7 +398,7 @@ def create_demo_site():
             ],
             fill_team=random.sample(persons, NB_COURSES_PERSONS_PLUGINS),
             fill_teaser=video_sample,
-            fill_cover=video_sample.image,
+            fill_cover=pick_image("cover")(video_sample.image),
             fill_categories=[
                 *random.sample(
                     subjects, random.randint(1, NB_COURSES_SUBJECT_RELATIONS)
@@ -437,7 +446,7 @@ def create_demo_site():
             page_in_navigation=True,
             page_languages=["en", "fr"],
             page_parent=pages_created["news"],
-            fill_cover=True,
+            fill_cover=pick_image("cover"),
             fill_excerpt=True,
             fill_body=True,
             fill_categories=[
@@ -453,14 +462,10 @@ def create_demo_site():
     placeholder = pages_created["home"].placeholders.get(slot="maincontent")
 
     # - Get a banner image
-    banner_file = file_getter("banner")()
-    wrapped_banner = File(banner_file, banner_file.name)
-    banner = Image.objects.create(file=wrapped_banner)
+    banner = image_getter(pick_image("banner")())
 
     # - Get a logo image
-    logo_file = file_getter("logo")()
-    wrapped_logo = File(logo_file, logo_file.name)
-    logo = Image.objects.create(file=wrapped_logo)
+    logo = image_getter(pick_image("logo")())
 
     # - Create the home page in each language
     for language, content in HOMEPAGE_CONTENT.items():
@@ -615,14 +620,10 @@ def create_demo_site():
     placeholder = pages_created["annex__about"].placeholders.get(slot="maincontent")
 
     # - Get a banner image
-    banner_file = file_getter("banner")()
-    wrapped_banner = File(banner_file, banner_file.name)
-    banner = Image.objects.create(file=wrapped_banner)
+    banner = image_getter(pick_image("banner")())
 
     # - Get a logo image
-    logo_file = file_getter("logo")()
-    wrapped_logo = File(logo_file, logo_file.name)
-    logo = Image.objects.create(file=wrapped_logo)
+    logo = image_getter(pick_image("logo")())
 
     # - Get a video
     video_sample = random.choice(VIDEO_SAMPLE_LINKS)
