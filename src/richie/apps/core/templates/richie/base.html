@@ -1,10 +1,29 @@
 {% load i18n cms_tags menu_tags static sekizai_tags %}
 <!doctype html>
-<html>
+<html lang="{{ LANGUAGE_CODE }}">
     <head>
+        {% spaceless %}
         <title>{% block title %}{{ SITE.name }}{% endblock title %}</title>
         <meta name="viewport" content="width=device-width,initial-scale=1">
-        {% block meta %}{% endblock meta %}
+        {% block meta %}
+            {% block meta_index_rules %}
+                <meta name="robots" content="index,follow,all">
+            {% endblock meta_index_rules %}
+
+            {% block meta_html %}
+                {% page_attribute "meta_description" as meta_description %}
+                <meta name="description" content="{% block meta-description %}{% if meta_description and meta_description != "None" %}{{ meta_description }}{% endif %}{% endblock %}">
+                <meta name="keywords" content="{% block meta-keywords %}{% endblock %}">
+            {% endblock meta_html %}
+
+            {% block meta_opengraph %}
+                <meta property="og:title" content="{{ SITE.name }}">
+                <meta property="og:url" content="{{ SITE.web_url }}">
+                <meta property="og:image" content="{{ SITE.web_url }}{% static "images/logo.png" %}">
+                <meta property="og:type" content="website">
+            {% endblock meta_opengraph %}
+        {% endblock meta %}
+        {% endspaceless %}
 
         {% render_block "css" %}
 

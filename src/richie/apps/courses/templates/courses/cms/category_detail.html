@@ -1,6 +1,18 @@
 {% extends "richie/fullwidth.html" %}
 {% load cms_tags extra_tags i18n thumbnail %}
 
+{% comment %}{% block meta-keywords %}{{ request.current_page.get_title|lower }} + comma separated list of children{% endblock %}{% endcomment %}
+
+{% block meta_opengraph %}
+    <meta property="og:title" content="{{ request.current_page.get_title|truncatechars:65 }}">
+    <meta property="og:url" content="{{ SITE.web_url }}{{ request.current_page.get_absolute_url }}">
+    <meta property="og:locale" content="{{ LANGUAGE_CODE }}">
+    <meta property="og:site_name" content="{{ SITE.name }}">
+    {% comment %}<meta property="og:type" content="???">{% endcomment %}
+    {% comment %}<meta property="og:image" content="Should be filled from logo url">{% endcomment %}
+    {% comment %}<meta property="og:description" content="Should be filled from description, limited to 300char and HTML stripped">{% endcomment %}
+{% endblock meta_opengraph %}
+
 {% block content %}{% spaceless %}
 {% with category=current_page.category header_level=2 %}
 <div class="category-detail">
