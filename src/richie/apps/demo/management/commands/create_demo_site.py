@@ -23,278 +23,19 @@ from richie.apps.courses.factories import (
     PersonTitleFactory,
     PersonTitleTranslationFactory,
 )
-from richie.apps.courses.models import BlogPost, Category, Course, Organization, Person
 
+from ...defaults import (
+    HOMEPAGE_CONTENT,
+    LEVELS_INFO,
+    NB_OBJECTS,
+    PAGES_INFO,
+    SINGLECOLUMN_CONTENT,
+    SUBJECTS_INFO,
+)
 from ...helpers import create_categories, recursive_page_creation
 from ...utils import pick_image
 
 logger = logging.getLogger("richie.commands.core.create_demo_site")
-
-DEMO_ANNEX_PAGE_ID = "annex"
-NB_COURSES = 30
-NB_COURSES_ORGANIZATION_RELATIONS = 3
-NB_COURSES_PERSONS_PLUGINS = 3
-NB_COURSES_SUBJECT_RELATIONS = 2
-NB_ORGANIZATIONS = 5
-NB_LICENCES = 5
-NB_PERSONS = 10
-NB_BLOGPOSTS = 6
-NB_BLOGPOSTS_CATEGORIES_RELATIONS = 3
-NB_HOME_HIGHLIGHTED_BLOGPOSTS = 4
-NB_HOME_HIGHLIGHTED_COURSES = 8
-NB_HOME_HIGHLIGHTED_ORGANIZATIONS = 4
-NB_HOME_HIGHLIGHTED_SUBJECTS = 6
-NB_HOME_HIGHLIGHTED_PERSONS = 3
-PAGE_INFOS = {
-    "home": {
-        "title": {"en": "Home", "fr": "Accueil"},
-        "in_navigation": False,
-        "kwargs": {"template": "richie/homepage.html"},
-    },
-    "news": {
-        "title": {"en": "News", "fr": "Actualités"},
-        "in_navigation": True,
-        "kwargs": {
-            "reverse_id": BlogPost.ROOT_REVERSE_ID,
-            "template": "courses/cms/blogpost_list.html",
-        },
-    },
-    "courses": {
-        "title": {"en": "Courses", "fr": "Cours"},
-        "in_navigation": True,
-        "kwargs": {
-            "reverse_id": Course.ROOT_REVERSE_ID,
-            "template": "search/search.html",
-        },
-    },
-    "categories": {
-        "title": {"en": "Categories", "fr": "Catégories"},
-        "in_navigation": True,
-        "kwargs": {
-            "reverse_id": Category.ROOT_REVERSE_ID,
-            "template": "richie/child_pages_list.html",
-        },
-    },
-    "organizations": {
-        "title": {"en": "Organizations", "fr": "Etablissements"},
-        "in_navigation": True,
-        "kwargs": {
-            "reverse_id": Organization.ROOT_REVERSE_ID,
-            "template": "courses/cms/organization_list.html",
-        },
-    },
-    "persons": {
-        "title": {"en": "Persons", "fr": "Personnes"},
-        "in_navigation": True,
-        "kwargs": {
-            "reverse_id": Person.ROOT_REVERSE_ID,
-            "template": "courses/cms/person_list.html",
-        },
-    },
-    "dashboard": {
-        "title": {"en": "Dashboard", "fr": "Tableau de bord"},
-        "in_navigation": False,
-        "cms": False,
-        "kwargs": {"template": "richie/single_column.html"},
-    },
-    "annex": {
-        "title": {"en": "Annex", "fr": "Annexe"},
-        "in_navigation": False,
-        "kwargs": {
-            "template": "richie/single_column.html",
-            "reverse_id": DEMO_ANNEX_PAGE_ID,
-        },
-        "children": {
-            "annex__about": {
-                "title": {"en": "About", "fr": "A propos"},
-                "in_navigation": True,
-                "kwargs": {"template": "richie/single_column.html"},
-            }
-        },
-    },
-}
-LEVELS_INFO = {
-    "title": {"en": "Level", "fr": "Niveau"},
-    "children": [
-        {"title": {"en": "Beginner", "fr": "Débutant"}},
-        {"title": {"en": "Advanced", "fr": "Avancé"}},
-        {"title": {"en": "Expert", "fr": "Expert"}},
-    ],
-}
-SUBJECTS_INFO = {
-    "title": {"en": "Subject", "fr": "Subjet"},
-    "children": [
-        {
-            "title": {"en": "Science", "fr": "Sciences"},
-            "children": [
-                {
-                    "title": {
-                        "en": "Agronomy and Agriculture",
-                        "fr": "Agronomie et Agriculture",
-                    }
-                },
-                {"title": {"en": "Chemistry", "fr": "Chimie"}},
-                {
-                    "title": {
-                        "en": "Discovery of the Universe",
-                        "fr": "Découverte de l'Univers",
-                    }
-                },
-                {"title": {"en": "Environment", "fr": "Environnement"}},
-                {
-                    "title": {
-                        "en": "Mathematics and Statistics",
-                        "fr": "Mathématiques et Statistiques",
-                    }
-                },
-                {
-                    "title": {
-                        "en": "Tools for Research",
-                        "fr": "Outils pour la Recherche",
-                    }
-                },
-                {"title": {"en": "Physics", "fr": "Physique"}},
-                {"title": {"en": "Cognitive science", "fr": "Sciences cognitives"}},
-                {
-                    "title": {
-                        "en": "Earth science and science of the Universe",
-                        "fr": "Sciences de la Terre et de l'Univers",
-                    }
-                },
-                {"title": {"en": "Life science", "fr": "Sciences de la vie"}},
-                {
-                    "title": {
-                        "en": "Engineering science",
-                        "fr": "Sciences pour l'ingénieur",
-                    }
-                },
-            ],
-        },
-        {
-            "title": {
-                "en": "Human and social sciences",
-                "fr": "Sciences humaines et social",
-            },
-            "children": [
-                {"title": {"en": "Communication", "fr": "Communication"}},
-                {
-                    "title": {
-                        "en": "Creation, Arts and Design",
-                        "fr": "Création, Arts et Design",
-                    }
-                },
-                {
-                    "title": {
-                        "en": "Culture and Civilization",
-                        "fr": "Cultures et Civilisations",
-                    }
-                },
-                {
-                    "title": {
-                        "en": "Social Issues and Social Policy",
-                        "fr": "Enjeux de société",
-                    }
-                },
-                {"title": {"en": "Geography", "fr": "Géographie"}},
-                {"title": {"en": "History", "fr": "Histoire"}},
-                {"title": {"en": "Innovation", "fr": "Innovation"}},
-                {"title": {"en": "Literature", "fr": "Lettres"}},
-                {"title": {"en": "Media", "fr": "Médias"}},
-                {"title": {"en": "Philosophy", "fr": "Philosophie"}},
-                {"title": {"en": "Political science", "fr": "Sciences politiques"}},
-                {
-                    "title": {
-                        "en": "International relations",
-                        "fr": "Relations internationales",
-                    }
-                },
-                {"title": {"en": "Sports", "fr": "Sport"}},
-            ],
-        },
-        {"title": {"en": "Law", "fr": "Droit et juridique"}},
-        {"title": {"en": "Economy and Finance", "fr": "Economie et Finance"}},
-        {"title": {"en": "Education and Training", "fr": "Education et formation"}},
-        {"title": {"en": "Management", "fr": "Management"}},
-        {"title": {"en": "Entrepreneurship", "fr": "Entreprenariat"}},
-        {
-            "title": {"en": "Computer science", "fr": "Informatique"},
-            "children": [
-                {
-                    "title": {
-                        "en": "Digital and Technology",
-                        "fr": "Numérique et Technologie",
-                    }
-                },
-                {
-                    "title": {
-                        "en": "Telecommunication and Networks",
-                        "fr": "Télécommunications et Réseaux",
-                    }
-                },
-                {"title": {"en": "Coding", "fr": "Programmation"}},
-            ],
-        },
-        {"title": {"en": "Languages", "fr": "Langues"}},
-        {"title": {"en": "Education and career guidance", "fr": "Orientation"}},
-        {"title": {"en": "Health", "fr": "Santé"}},
-    ],
-}
-HOMEPAGE_CONTENT = {
-    "en": {
-        "banner_title": "Welcome to Richie",
-        "banner_content": "It works! This is the default homepage for the Richie CMS.",
-        "banner_template": "richie/large_banner/hero-intro.html",
-        "button_template_name": "button-caesura",
-        "section_template": "richie/section/highlighted_items.html",
-        "blogposts_title": "Last news",
-        "blogposts_button_title": "More news",
-        "courses_title": "Popular courses",
-        "courses_button_title": "More courses",
-        "organizations_title": "Universities",
-        "organizations_button_title": "More universities",
-        "persons_title": "Persons",
-        "persons_button_title": "More persons",
-        "subjects_title": "Subjects",
-        "subjects_button_title": "More subjects",
-    },
-    "fr": {
-        "banner_title": "Bienvenue sur Richie",
-        "banner_content": "Ça marche ! Ceci est la page d'accueil par défaut du CMS Richie.",
-        "banner_template": "richie/large_banner/hero-intro.html",
-        "button_template_name": "button-caesura",
-        "section_template": "richie/section/highlighted_items.html",
-        "blogposts_title": "Actualités récentes",
-        "blogposts_button_title": "Plus d'actualités",
-        "courses_title": "Cours à la une",
-        "courses_button_title": "Plus de cours",
-        "organizations_title": "Universités",
-        "organizations_button_title": "Plus d'universités",
-        "subjects_title": "Thématiques",
-        "subjects_button_title": "Plus de thématiques",
-        "persons_title": "Personnes",
-        "persons_button_title": "Plus de personnes",
-    },
-}
-SINGLECOLUMN_CONTENT = {
-    "en": {
-        "banner_title": "Single column template sample",
-        "banner_content": "It works! This is a single column page.",
-        "banner_template": "richie/large_banner/hero-intro.html",
-        "button_template_name": "button-caesura",
-        "section_sample_title": "A sample section",
-        "section_sample_button_title": "More!",
-        "section_sample_template": "richie/section/highlighted_items.html",
-    },
-    "fr": {
-        "banner_title": "Exemple de template avec une colonne unique",
-        "banner_content": "Ça marche ! Ceci est une page d'une colonne.",
-        "banner_template": "richie/large_banner/hero-intro.html",
-        "button_template_name": "button-caesura",
-        "section_sample_title": "Une section d'exemple",
-        "section_sample_button_title": "Plus !",
-        "section_sample_template": "richie/section/highlighted_items.html",
-    },
-}
 
 
 def get_number_of_course_runs():
@@ -323,7 +64,7 @@ def create_demo_site():
     site = Site.objects.get(id=1)
 
     # Create pages as described in PAGES_INFOS
-    pages_created = recursive_page_creation(site, PAGE_INFOS)
+    pages_created = recursive_page_creation(site, PAGES_INFO)
 
     # Create some licences
     licences = LicenceFactory.create_batch(
@@ -332,7 +73,7 @@ def create_demo_site():
 
     # Create organizations under the `Organizations` page
     organizations = OrganizationFactory.create_batch(
-        NB_ORGANIZATIONS,
+        NB_OBJECTS["organizations"],
         page_in_navigation=True,
         page_languages=["en", "fr"],
         page_parent=pages_created["organizations"],
@@ -372,7 +113,7 @@ def create_demo_site():
 
     # Create persons under the `persons` page
     persons = PersonFactory.create_batch(
-        NB_PERSONS,
+        NB_OBJECTS["persons"],
         page_in_navigation=True,
         page_languages=["en", "fr"],
         page_parent=pages_created["persons"],
@@ -385,7 +126,7 @@ def create_demo_site():
     # Create courses under the `Course` page with categories and organizations
     # relations
     courses = []
-    for _ in range(NB_COURSES):
+    for _ in range(NB_OBJECTS["courses"]):
         video_sample = random.choice(VIDEO_SAMPLE_LINKS)
 
         course = CourseFactory(
@@ -396,17 +137,17 @@ def create_demo_site():
                 ("course_license_content", random.choice(licences)),
                 ("course_license_participation", random.choice(licences)),
             ],
-            fill_team=random.sample(persons, NB_COURSES_PERSONS_PLUGINS),
+            fill_team=random.sample(persons, NB_OBJECTS["course_persons"]),
             fill_teaser=video_sample,
             fill_cover=pick_image("cover")(video_sample.image),
             fill_categories=[
                 *random.sample(
-                    subjects, random.randint(1, NB_COURSES_SUBJECT_RELATIONS)
+                    subjects, random.randint(1, NB_OBJECTS["course_subjects"])
                 ),
                 random.choice(levels),
             ],
             fill_organizations=random.sample(
-                organizations, NB_COURSES_ORGANIZATION_RELATIONS
+                organizations, NB_OBJECTS["course_organizations"]
             ),
             fill_texts=[
                 "course_description",
@@ -441,7 +182,7 @@ def create_demo_site():
 
     # Create blog posts under the `News` page
     blogposts = []
-    for _ in range(NB_BLOGPOSTS):
+    for _ in range(NB_OBJECTS["blogposts"]):
         post = BlogPostFactory.create(
             page_in_navigation=True,
             page_languages=["en", "fr"],
@@ -450,7 +191,7 @@ def create_demo_site():
             fill_excerpt=True,
             fill_body=True,
             fill_categories=[
-                *random.sample(subjects, NB_BLOGPOSTS_CATEGORIES_RELATIONS),
+                *random.sample(subjects, NB_OBJECTS["blogpost_categories"]),
                 random.choice(levels),
             ],
             fill_author=random.sample(persons, 1),
@@ -489,7 +230,7 @@ def create_demo_site():
             title=content["courses_title"],
             template=content["section_template"],
         )
-        for course in random.sample(courses, NB_HOME_HIGHLIGHTED_COURSES):
+        for course in random.sample(courses, NB_OBJECTS["home_courses"]):
             add_plugin(
                 language=language,
                 placeholder=placeholder,
@@ -515,7 +256,7 @@ def create_demo_site():
             title=content["blogposts_title"],
             template=content["section_template"],
         )
-        for blogpost in random.sample(blogposts, NB_HOME_HIGHLIGHTED_BLOGPOSTS):
+        for blogpost in random.sample(blogposts, NB_OBJECTS["home_blogposts"]):
             add_plugin(
                 language=language,
                 placeholder=placeholder,
@@ -542,7 +283,7 @@ def create_demo_site():
             template=content["section_template"],
         )
         for organization in random.sample(
-            organizations, NB_HOME_HIGHLIGHTED_ORGANIZATIONS
+            organizations, NB_OBJECTS["home_organizations"]
         ):
             add_plugin(
                 language=language,
@@ -569,7 +310,7 @@ def create_demo_site():
             title=content["subjects_title"],
             template=content["section_template"],
         )
-        for subject in random.sample(subjects, NB_HOME_HIGHLIGHTED_SUBJECTS):
+        for subject in random.sample(subjects, NB_OBJECTS["home_subjects"]):
             add_plugin(
                 language=language,
                 placeholder=placeholder,
@@ -595,7 +336,7 @@ def create_demo_site():
             title=content["persons_title"],
             template=content["section_template"],
         )
-        for person in random.sample(persons, NB_HOME_HIGHLIGHTED_PERSONS):
+        for person in random.sample(persons, NB_OBJECTS["home_persons"]):
             add_plugin(
                 language=language,
                 placeholder=placeholder,
