@@ -1,5 +1,16 @@
 {% extends "richie/fullwidth.html" %}
 {% load cms_tags extra_tags i18n thumbnail %}
+
+{% block meta_opengraph %}
+    <meta property="og:title" content="{{ request.current_page.get_title|truncatechars:65 }}">
+    <meta property="og:url" content="{{ SITE.web_url }}{{ request.current_page.get_absolute_url }}">
+    <meta property="og:locale" content="{{ LANGUAGE_CODE }}">
+    <meta property="og:site_name" content="{{ SITE.name }}">
+    <meta property="og:type" content="article, article:published_time, article:author, article:tag">
+    {% comment %}<meta property="og:image" content="Should be filled from cover url">{% endcomment %}
+    {% comment %}<meta property="og:description" content="Should be filled from excerpt, limited to 300char and HTML stripped">{% endcomment %}
+{% endblock meta_opengraph %}
+
 {% block content %}
 {% spaceless %}
 <div class="blogpost-detail">

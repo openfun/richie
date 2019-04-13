@@ -8,7 +8,7 @@
 {% endspaceless %}{% endblock title %}
 
 {# Make sure the course run pages are not indexed by search engines #}
-{% block meta %}<meta name="robots" content="noindex">{% endblock meta %}
+{% block meta_index_rules %}<meta name="robots" content="noindex">{% endblock meta_index_rules %}
 
 {% block content %}{% spaceless %}
 <div class="course-detail">
@@ -35,7 +35,7 @@
         {% endpage_placeholder %}
       {% endwith %}
     </div>
-    
+
     <div class="course-detail__content__run">
       <h2 class="course-detail__content__run__title">{% trans 'Details' %}</h2>
       <div class="course-detail__content__run__block">
@@ -75,12 +75,12 @@
         <dd>
           <a href="{{ course_run.resource_link }}">
             {% render_model course_run "resource_link" "resource_link" "" "default:'...'" %}
-          </a> 
+          </a>
         </dd>
       </dl>
       {% endif %}
     </div>
-    
+
     {% include "courses/cms/fragment_course_content.html" with page=current_page.parent_page %}
 
   </div>
