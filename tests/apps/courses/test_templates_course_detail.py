@@ -100,7 +100,7 @@ class CourseCMSTestCase(CMSTestCase):
         for organization in organizations[:2]:
             self.assertContains(
                 response,
-                '<div class="organization-plugin__title">{title:s}</div>'.format(
+                '<div class="organization-glimpse__title">{title:s}</div>'.format(
                     title=organization.extended_object.get_title()
                 ),
                 html=True,
@@ -172,14 +172,14 @@ class CourseCMSTestCase(CMSTestCase):
         for organization in organizations:
             self.assertContains(
                 response,
-                '<div class="organization-plugin__title">{title:s}</div>'.format(
+                '<div class="organization-glimpse__title">{title:s}</div>'.format(
                     title=organization.extended_object.get_title()
                 ),
                 html=True,
             )
 
         # Draft organizations should be annotated for styling
-        self.assertContains(response, "organization-plugin-container--draft", count=2)
+        self.assertContains(response, "organization-glimpse--draft", count=2)
 
         # The published categories should be present on the page
         for category in categories[:2]:

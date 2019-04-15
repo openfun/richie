@@ -1,0 +1,17 @@
+{% load i18n cms_tags %}
+{% comment %}Obviously, the context template variable "organization" is required and must be an Organization page extension{% endcomment %}
+{% with organization_page=organization.extended_object %}
+<a class="organization-glimpse organization-glimpse--link{% if organization_page.publisher_is_draft is True %} organization-glimpse--draft{% endif %}" href="{{ organization_page.get_absolute_url }}" title="{{ organization_page.get_title }}" alt="{{ organization_page.get_title }} {% trans 'logo' %}">
+  <div class="organization-glimpse__logo">
+    {% show_placeholder "logo" organization_page as logo %}
+      {% if logo %}
+        {% with width=216 height=120 %}{{ logo }}{% endwith %}
+      {% else %}
+        <div class="organization-glimpse__logo__empty">{% trans "Logo" %}</div>
+      {% endif %}
+  </div>
+  <div class="organization-glimpse__title">
+    {{ organization_page.get_title }}
+  </div>
+</a>
+{% endwith %}

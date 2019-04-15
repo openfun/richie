@@ -1,0 +1,102 @@
+// Overridable & namespaced global variables
+$richie-org-glimpse-title-margin: 0 !default;
+$richie-org-glimpse-title-padding: 1rem !default;
+$richie-org-glimpse-title-textalign: center !default;
+
+$richie-org-glimpse-content-margin: 0 auto !default;
+$richie-org-glimpse-content-padding: 1rem 0 !default;
+
+$richie-org-glimpse-item-gutter: 0.625rem !default;
+$richie-org-glimpse-item-padding: 1.25rem !default;
+$richie-org-glimpse-item-background: $white !default;
+$richie-org-glimpse-item-border: 1px solid $gray80 !default;
+$richie-org-glimpse-item-border-hover: 1px solid $firebrick6 !default;
+$richie-org-glimpse-item-border-radius: 0.25rem !default;
+
+$richie-org-glimpse-item-title-fontsize: 0.81rem !default;
+$richie-org-glimpse-item-title-fontcolor: $black !default;
+$richie-org-glimpse-item-title-textalign: center !default;
+
+$richie-org-glimpse-item-empty-fontcolor: $gray40 !default;
+$richie-org-glimpse-item-empty-textalign: center !default;
+
+.organization-glimpse-list {
+  @include make-container();
+  @include make-container-max-widths();
+  padding-bottom: 1rem;
+  background: $richie-content-container-bg;
+
+  &__title {
+    margin: $richie-org-glimpse-title-margin;
+    padding: $richie-org-glimpse-title-padding;
+    text-align: $richie-org-glimpse-title-textalign;
+  }
+
+  &__content {
+    &__item {
+      display: flex;
+      margin: $richie-org-glimpse-content-margin;
+      padding: $richie-org-glimpse-content-padding;
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
+}
+
+.organization-glimpse {
+  $list-item-selector: &;
+  @include sv-flex(1, 0, calc(50% - #{$richie-org-glimpse-item-gutter * 2}));
+  display: flex;
+  margin: $richie-org-glimpse-item-gutter;
+  padding: $richie-org-glimpse-item-padding;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-content: space-between;
+  background: $richie-org-glimpse-item-background;
+  border: $richie-org-glimpse-item-border;
+  border-radius: $richie-org-glimpse-item-border-radius;
+  @include media-breakpoint-up(md) {
+    @include sv-flex(1, 0, calc(25% - #{$richie-org-glimpse-item-gutter * 2}));
+  }
+
+  &__logo {
+    @include sv-flex(1, 0, auto);
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+
+    img {
+      @include sv-flex(0, 0, auto);
+      max-width: 100%;
+    }
+
+    @include m-o-media_empty($background: $gray97);
+  }
+
+  &__title {
+    @include sv-flex(0, 0, auto);
+    display: flex;
+    justify-content: center;
+    font-size: $richie-org-glimpse-item-title-fontsize;
+    color: $richie-org-glimpse-item-title-fontcolor;
+    text-align: $richie-org-glimpse-item-title-textalign;
+  }
+
+  &:hover,
+  &:focus {
+    border: $richie-org-glimpse-item-border-hover;
+    color: $richie-org-glimpse-item-title-fontcolor;
+    cursor: pointer;
+  }
+
+  &--empty {
+    @include sv-flex(1, 0, 100%);
+    font-style: italic;
+    color: $richie-org-glimpse-item-empty-fontcolor;
+    text-align: $richie-org-glimpse-item-empty-textalign;
+    background: transparent;
+  }
+}
