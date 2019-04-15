@@ -1,3 +1,4 @@
+import { Nullable } from '../utils/types';
 import { Resource } from './Resource';
 
 export interface Course extends Resource {
@@ -7,8 +8,8 @@ export interface Course extends Resource {
   organization_highlighted: string;
   organizations: string[];
   state: {
-    call_to_action: string;
-    datetime: string;
+    call_to_action: Nullable<string>;
+    datetime: Nullable<string>;
     priority: number;
     text: string;
   };

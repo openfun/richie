@@ -139,7 +139,6 @@ $richie-course-glimpse-foot-cta-background-hover: $firebrick6 !default;
 
     &__date {
       @include sv-flex-cell-width(auto);
-      display: flex;
       margin: 0;
       padding: $richie-course-glimpse-foot-date-padding;
       font-size: $richie-course-glimpse-foot-date-fontsize;

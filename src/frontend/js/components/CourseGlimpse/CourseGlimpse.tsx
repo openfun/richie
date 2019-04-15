@@ -60,14 +60,26 @@ export const CourseGlimpse = injectIntl(
         <p className="course-glimpse__footer__date">
           {course.state.text.charAt(0).toUpperCase() +
             course.state.text.substr(1)}
-          &nbsp;
-          <FormattedDate
-            value={new Date(course.state.datetime)}
-            year="numeric"
-            month="short"
-            day="numeric"
-          />
+          {course.state.datetime ? (
+            <React.Fragment>
+              <br />
+              <FormattedDate
+                value={new Date(course.state.datetime)}
+                year="numeric"
+                month="short"
+                day="numeric"
+              />
+            </React.Fragment>
+          ) : null}
         </p>
+        {course.state.call_to_action ? (
+          <div className="course-glimpse__footer__cta">
+            <button className="button">
+              {course.state.call_to_action.charAt(0).toUpperCase() +
+                course.state.call_to_action.substr(1)}
+            </button>
+          </div>
+        ) : null}
       </div>
     </a>
   ),

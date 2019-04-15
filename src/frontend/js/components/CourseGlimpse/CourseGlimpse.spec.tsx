@@ -15,6 +15,7 @@ describe('components/CourseGlimpse', () => {
       cover_image: '/thumbs/small.png',
       organization_highlighted: 'Some Organization',
       state: {
+        call_to_action: 'Enroll now',
         datetime: '2019-03-14T10:35:47.823Z',
         text: 'starts on',
       },
@@ -37,10 +38,33 @@ describe('components/CourseGlimpse', () => {
         element.innerHTML.startsWith('Starts on') &&
         element.innerHTML.includes('Mar 14, 2019'),
     );
+    getByText('Enroll now');
     // The logo is rendered along with alternate text
     expect(getByAltText('Logo for Course 42')).toHaveAttribute(
       'src',
       '/thumbs/small.png',
     );
+  });
+
+  it('works when there is no call to action or datetime on the state (eg. an archived course)', () => {
+    const course = {
+      cover_image: '/thumbs/small.png',
+      organization_highlighted: 'Some Organization',
+      state: {
+        call_to_action: null,
+        datetime: null,
+        text: 'archived',
+      },
+      title: 'Course 42',
+    } as Course;
+    const { getByAltText, getByText, getByTitle } = render(
+      <IntlProvider locale="en">
+        <CourseGlimpse course={course} />
+      </IntlProvider>,
+    );
+
+    // Make sure the component renders and shows the state
+    getByTitle('Details page for Course 42.');
+    getByText('Archived');
   });
 });
