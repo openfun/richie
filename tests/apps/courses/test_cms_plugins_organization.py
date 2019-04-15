@@ -112,15 +112,16 @@ class OrganizationPluginTestCase(CMSTestCase):
         # And CMS page title should be in title attribute of the link
         self.assertContains(
             response,
-            '<a class="organization-plugin__body" href="/en/public-title/" title="{:s}"'.format(
-                organization.public_extension.extended_object.get_title()
-            ),
+            (
+                '<a class="organization-glimpse organization-glimpse--link" '
+                'href="/en/public-title/" title="{:s}"'
+            ).format(organization.public_extension.extended_object.get_title()),
             status_code=200,
         )
         # The organization's title should be wrapped in a div
         self.assertContains(
             response,
-            '<div class="organization-plugin__title">{:s}</div>'.format(
+            '<div class="organization-glimpse__title">{:s}</div>'.format(
                 organization.public_extension.extended_object.get_title()
             ),
             html=True,
@@ -136,9 +137,10 @@ class OrganizationPluginTestCase(CMSTestCase):
         response = self.client.get(url)
         self.assertContains(
             response,
-            '<a class="organization-plugin__body" href="/fr/titre-publique/" title="{:s}"'.format(
-                organization.public_extension.extended_object.get_title()
-            ),
+            (
+                '<a class="organization-glimpse organization-glimpse--link" '
+                'href="/fr/titre-publique/" title="{:s}"'
+            ).format(organization.public_extension.extended_object.get_title()),
             status_code=200,
         )
         # pylint: disable=no-member

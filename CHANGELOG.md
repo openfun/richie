@@ -10,7 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- Allow tagging persons with categories
+- Allow tagging persons with categories,
 - A "Clear x active filters" button in the search filters pane lets the user
   remove all active filters with one click
 - Add template and styling for persons list page,
@@ -29,7 +29,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Simplify Richie settings and provide defaults for those unlikely to be
   customized (search, languages, plugins, general),
 - Change layout global background to darker grey,
-- Improve 'categories' page layout.
+- Improve 'categories' page layout,
+- Every organization in a list is not displayed with an organization glimpse.
 
 ### Fixed
 
