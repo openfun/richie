@@ -74,6 +74,30 @@ class CategoryModelsTestCase(TestCase):
                     course.extended_object.prefetched_titles[0].title, "my title"
                 )
 
+    def test_models_category_get_courses_public_category_page(self):
+        """
+        When a category is added on a draft course, the course should not be visible on
+        the public category page until the course is published.
+        """
+        category = CategoryFactory(should_publish=True)
+        category_page = category.extended_object
+        course = CourseFactory(page_title="my title", should_publish=True)
+        course_page = course.extended_object
+
+        # Add a category to the course but don't publish the modification
+        placeholder = course_page.placeholders.get(slot="course_categories")
+        add_plugin(placeholder, CategoryPlugin, "en", page=category_page)
+
+        self.assertEqual(list(category.get_courses()), [course])
+        self.assertEqual(list(category.public_extension.get_courses()), [])
+
+        # Now publish the modification and check that the course is displayed
+        # on the public category page
+        course.extended_object.publish("en")
+        self.assertEqual(
+            list(category.public_extension.get_courses()), [course.public_extension]
+        )
+
     def test_models_category_get_courses_several_languages(self):
         """
         The courses should not be duplicated if they exist in several languages.
@@ -134,6 +158,31 @@ class CategoryModelsTestCase(TestCase):
                 self.assertEqual(
                     blogpost.extended_object.prefetched_titles[0].title, "my title"
                 )
+
+    def test_models_category_get_blogposts_public_category_page(self):
+        """
+        When a category is added on a draft blog post, the blog post should not be visible on
+        the public category page until the blog post is published.
+        """
+        category = CategoryFactory(should_publish=True)
+        category_page = category.extended_object
+        blog_post = BlogPostFactory(page_title="my title", should_publish=True)
+        blog_post_page = blog_post.extended_object
+
+        # Add a category to the blog post but don't publish the modification
+        placeholder = blog_post_page.placeholders.get(slot="categories")
+        add_plugin(placeholder, CategoryPlugin, "en", page=category_page)
+
+        self.assertEqual(list(category.get_blogposts()), [blog_post])
+        self.assertEqual(list(category.public_extension.get_blogposts()), [])
+
+        # Now publish the modification and check that the blog post is displayed
+        # on the public category page
+        blog_post.extended_object.publish("en")
+        self.assertEqual(
+            list(category.public_extension.get_blogposts()),
+            [blog_post.public_extension],
+        )
 
     def test_models_category_get_blogposts_several_languages(self):
         """

@@ -4,9 +4,10 @@ Unit tests for the Organization model
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 
-from cms.api import create_page
+from cms.api import add_plugin, create_page
 
 from richie.apps.core.helpers import create_i18n_page
+from richie.apps.courses.cms_plugins import OrganizationPlugin
 from richie.apps.courses.factories import CourseFactory, OrganizationFactory
 from richie.apps.courses.models import Course, Organization
 
@@ -94,6 +95,30 @@ class OrganizationModelsTestCase(TestCase):
                 self.assertEqual(
                     course.extended_object.prefetched_titles[0].title, "my title"
                 )
+
+    def test_models_organization_get_courses_public_organization_page(self):
+        """
+        When a organization is added on a draft course, the course should not be visible on
+        the public organization page until the course is published.
+        """
+        organization = OrganizationFactory(should_publish=True)
+        organization_page = organization.extended_object
+        course = CourseFactory(page_title="my title", should_publish=True)
+        course_page = course.extended_object
+
+        # Add a organization to the course but don't publish the modification
+        placeholder = course_page.placeholders.get(slot="course_organizations")
+        add_plugin(placeholder, OrganizationPlugin, "en", page=organization_page)
+
+        self.assertEqual(list(organization.get_courses()), [course])
+        self.assertEqual(list(organization.public_extension.get_courses()), [])
+
+        # Now publish the modification and check that the course is displayed
+        # on the public organization page
+        course.extended_object.publish("en")
+        self.assertEqual(
+            list(organization.public_extension.get_courses()), [course.public_extension]
+        )
 
     def test_models_organization_get_courses_several_languages(self):
         """

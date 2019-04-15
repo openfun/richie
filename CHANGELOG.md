@@ -23,6 +23,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Simplify Richie settings and provide defaults for those unlikely to be
   customized (search, languages, plugins, general).
 
+### Fixed
+
+- Fix links between objects managed via plugins (e.g. categories on a course)
+  that allowed draft links to display objects on public pages.
+
 ## [1.0.0-beta.5] - 2019-04-11
 
 ### Added

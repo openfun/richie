@@ -1,8 +1,8 @@
 {% load i18n cms_tags %}
 {% comment %}Obviously, the context template variable "course" is required and must be a Course page extension{% endcomment %}
-{% with course_state=course.state main_org_title=course.get_main_organization.extended_object.get_title %}
+{% with course_page=course.extended_object course_state=course.state main_org_title=course.get_main_organization.extended_object.get_title %}
 <div class="course-glimpse__media">
-    {% show_placeholder "course_cover" course.extended_object as cover %}
+    {% show_placeholder "course_cover" course_page as cover %}
     {% if cover %}
         {{ cover }}
     {% else %}
@@ -13,7 +13,7 @@
 </div>
 <div class="course-glimpse__content">
     <div class="course-glimpse__content__wrapper">
-        <p class="course-glimpse__content__title">{{ course.extended_object.get_title }}</p>
+        <p class="course-glimpse__content__title">{{ course_page.get_title }}</p>
         {% if main_org_title %}
         <p>{{ main_org_title }}</p>
         {% endif %}

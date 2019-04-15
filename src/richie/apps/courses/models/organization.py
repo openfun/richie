@@ -91,21 +91,19 @@ class Organization(BasePageExtension):
         Return a query to get the courses related to this organization ie for which a plugin for
         this organization is linked to the course page on the "course_organizations" placeholder.
         """
-        page = (
-            self.extended_object
-            if self.extended_object.publisher_is_draft
-            else self.draft_extension.extended_object
-        )
+        is_draft = self.extended_object.publisher_is_draft
+        organization = self if is_draft else self.draft_extension
         language = language or translation.get_language()
+
         bfs = "extended_object__placeholders__cmsplugin__courses_organizationpluginmodel__page"
         filter_dict = {
             "extended_object__node__parent__cms_pages__course__isnull": True,
-            "extended_object__publisher_is_draft": True,
+            "extended_object__publisher_is_draft": is_draft,
             "extended_object__placeholders__slot": "course_organizations",
             "extended_object__placeholders__cmsplugin__language": language,
-            bfs: page,
-            "{:s}__publisher_is_draft".format(bfs): True,
+            bfs: organization.extended_object,
         }
+
         course_model = apps.get_model(app_label="courses", model_name="course")
         # pylint: disable=no-member
         return (

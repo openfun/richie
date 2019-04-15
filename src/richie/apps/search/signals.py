@@ -46,10 +46,8 @@ def update_organization(instance, language):
     """
     organization = Organization.objects.get(draft_extension__extended_object=instance)
     actions = [
-        ES_INDICES.courses.get_es_document_for_course(course.public_extension)
-        # get_courses always returns the draft course instance
+        ES_INDICES.courses.get_es_document_for_course(course)
         for course in organization.get_courses(language)
-        if course.public_extension
     ]
     actions.append(
         ES_INDICES.organizations.get_es_document_for_organization(organization)
@@ -81,10 +79,8 @@ def update_category(instance, language):
     """
     category = Category.objects.get(draft_extension__extended_object=instance)
     actions = [
-        ES_INDICES.courses.get_es_document_for_course(course.public_extension)
-        # get_courses always returns the draft course instance
+        ES_INDICES.courses.get_es_document_for_course(course)
         for course in category.get_courses(language)
-        if course.public_extension
     ]
     actions.append(ES_INDICES.categories.get_es_document_for_category(category))
 

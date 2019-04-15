@@ -1,18 +1,20 @@
 {% load i18n cms_tags %}
 {% comment %}Obviously, the context template variable "blogpost" is required and must be a BlogPost page extension{% endcomment %}
+{% with blogpost_page=blogpost.extended_object %}
 <div class="blogpost-glimpse__media">
-    {% show_placeholder "cover" blogpost %}
+    {% show_placeholder "cover" blogpost_page %}
 </div>
 <div class="blogpost-glimpse__content">
     <div class="blogpost-glimpse__content__wrapper">
-        <p class="blogpost-glimpse__content__title">{{ blogpost.get_title }}</p>
+        <p class="blogpost-glimpse__content__title">{{ blogpost_page.get_title }}</p>
         <p>
-            {% show_placeholder "excerpt" blogpost %}
+            {% show_placeholder "excerpt" blogpost_page %}
         </p>
     </div>
     <div class="blogpost-glimpse__footer">
         <p class="blogpost-glimpse__footer__date">
-            {{ blogpost.creation_date|date:"DATE_FORMAT" }}
+            {{ blogpost_page.creation_date|date:"DATE_FORMAT" }}
         </p>
     </div>
 </div>
+{% endwith %}

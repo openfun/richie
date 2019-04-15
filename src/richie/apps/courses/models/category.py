@@ -50,21 +50,19 @@ class Category(BasePageExtension):
         Return a query to get the courses related to this category ie for which a plugin for
         this category is linked to the course page on the "course_categories" placeholder.
         """
-        page = (
-            self.extended_object
-            if self.extended_object.publisher_is_draft
-            else self.draft_extension.extended_object
-        )
+        is_draft = self.extended_object.publisher_is_draft
+        category = self if is_draft else self.draft_extension
         language = language or translation.get_language()
+
         bfs = "extended_object__placeholders__cmsplugin__courses_categorypluginmodel__page"
         filter_dict = {
             "extended_object__node__parent__cms_pages__course__isnull": True,
-            "extended_object__publisher_is_draft": True,
+            "extended_object__publisher_is_draft": is_draft,
             "extended_object__placeholders__slot": "course_categories",
             "extended_object__placeholders__cmsplugin__language": language,
-            bfs: page,
-            "{:s}__publisher_is_draft".format(bfs): True,
+            bfs: category.extended_object,
         }
+
         course_model = apps.get_model(app_label="courses", model_name="course")
         # pylint: disable=no-member
         return (
@@ -86,20 +84,16 @@ class Category(BasePageExtension):
         plugin for this category is linked to the blogpost page on the "categories"
         placeholder.
         """
-        page = (
-            self.extended_object
-            if self.extended_object.publisher_is_draft
-            else self.draft_extension.extended_object
-        )
+        is_draft = self.extended_object.publisher_is_draft
+        blog_post = self if is_draft else self.draft_extension
         language = language or translation.get_language()
+
         bfs = "extended_object__placeholders__cmsplugin__courses_categorypluginmodel__page"
         filter_dict = {
-            "extended_object__node__parent__cms_pages__course__isnull": True,
-            "extended_object__publisher_is_draft": True,
+            "extended_object__publisher_is_draft": is_draft,
             "extended_object__placeholders__slot": "categories",
             "extended_object__placeholders__cmsplugin__language": language,
-            bfs: page,
-            f"{bfs:s}__publisher_is_draft": True,
+            bfs: blog_post.extended_object,
         }
 
         blogpost_model = apps.get_model(app_label="courses", model_name="blogpost")
