@@ -3,15 +3,17 @@ Unit tests for the Category model
 """
 from django.test import TestCase
 
-from cms.api import create_page
+from cms.api import add_plugin, create_page
 
 from richie.apps.core.helpers import create_i18n_page
+from richie.apps.courses.cms_plugins import CategoryPlugin
 from richie.apps.courses.factories import (
     BlogPostFactory,
     CategoryFactory,
     CourseFactory,
+    PersonFactory,
 )
-from richie.apps.courses.models import BlogPost, Course
+from richie.apps.courses.models import BlogPost, Course, Person
 
 
 class CategoryModelsTestCase(TestCase):
@@ -145,3 +147,60 @@ class CategoryModelsTestCase(TestCase):
         )
         self.assertEqual(BlogPost.objects.count(), 2)
         self.assertEqual(category.get_blogposts().count(), 1)
+
+    def test_models_category_get_persons(self):
+        """
+        It should be possible to retrieve the list of related persons on the category
+        instance. The number of queries should be minimal.
+        """
+        category = CategoryFactory(should_publish=True)
+        persons = PersonFactory.create_batch(
+            2, page_title="my title", fill_categories=[category], should_publish=True
+        )
+        retrieved_persons = category.get_persons()
+
+        with self.assertNumQueries(2):
+            self.assertEqual(set(retrieved_persons), set(persons))
+
+        with self.assertNumQueries(0):
+            for person in retrieved_persons:
+                self.assertEqual(
+                    person.extended_object.prefetched_titles[0].title, "my title"
+                )
+
+    def test_models_category_get_persons_public_category_page(self):
+        """
+        When a category is added on a draft person, the person should not be visible on
+        the public category page until the person is published.
+        """
+        category = CategoryFactory(should_publish=True)
+        category_page = category.extended_object
+        person = PersonFactory(page_title="my title", should_publish=True)
+        person_page = person.extended_object
+
+        # Add a category to the person but don't publish the modification
+        placeholder = person_page.placeholders.get(slot="categories")
+        add_plugin(placeholder, CategoryPlugin, "en", page=category_page)
+
+        self.assertEqual(list(category.get_persons()), [person])
+        self.assertEqual(list(category.public_extension.get_persons()), [])
+
+        # Now publish the modification and check that the person is displayed
+        # on the public category page
+        person.extended_object.publish("en")
+        self.assertEqual(
+            list(category.public_extension.get_persons()), [person.public_extension]
+        )
+
+    def test_models_category_get_persons_several_languages(self):
+        """
+        The persons should not be duplicated if they exist in several languages.
+        """
+        category = CategoryFactory(should_publish=True)
+        PersonFactory(
+            page_title={"en": "my title", "fr": "mon titre"},
+            fill_categories=[category],
+            should_publish=True,
+        )
+        self.assertEqual(Person.objects.count(), 2)
+        self.assertEqual(category.get_persons().count(), 1)

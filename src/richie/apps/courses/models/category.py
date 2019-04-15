@@ -117,6 +117,38 @@ class Category(BasePageExtension):
             .distinct()
         )
 
+    def get_persons(self, language=None):
+        """
+        Return a query to get the persons related to this category ie for which a plugin for
+        this category is linked to the person page on the "categories" placeholder.
+        """
+        is_draft = self.extended_object.publisher_is_draft
+        category = self if is_draft else self.draft_extension
+        language = language or translation.get_language()
+
+        bfs = "extended_object__placeholders__cmsplugin__courses_categorypluginmodel__page"
+        filter_dict = {
+            "extended_object__publisher_is_draft": is_draft,
+            "extended_object__placeholders__slot": "categories",
+            "extended_object__placeholders__cmsplugin__language": language,
+            bfs: category.extended_object,
+        }
+
+        person_model = apps.get_model(app_label="courses", model_name="person")
+        # pylint: disable=no-member
+        return (
+            person_model.objects.filter(**filter_dict)
+            .select_related("extended_object")
+            .prefetch_related(
+                Prefetch(
+                    "extended_object__title_set",
+                    to_attr="prefetched_titles",
+                    queryset=Title.objects.filter(language=language),
+                )
+            )
+            .distinct()
+        )
+
 
 def get_category_limit_choices_to():
     """Return a query limiting the categories proposed when creating a CategoryPlugin."""

@@ -1,10 +1,11 @@
-{% load i18n cms_tags %}
-{% comment %}Obviously, the context template variable "person" is required and must be a Person page{% endcomment %}
+{% load i18n cms_tags extra_tags %}
+{% comment %}Obviously, the context template variable "person" is required and must be a Person page extension{% endcomment %}
+{% with person_page=person.extended_object %}
 <div class="person-glimpse">
-  <a class="person-glimpse__media" href="{{ person.get_absolute_url }}"
-      title="{{ person.person.get_full_name }} {% trans "avatar" %}">
+  <a class="person-glimpse__media" href="{{ person_page.get_absolute_url }}"
+      title="{{ person.get_full_name }} {% trans "avatar" %}">
     {% with width=200 height=200 %}
-      {% show_placeholder "portrait" person as portrait %}
+      {% page_placeholder "portrait" person_page as portrait %}
       {% if portrait %}
           {{ portrait }}
       {% else %}
@@ -16,14 +17,20 @@
   </a>
   <div class="person-glimpse__content">
     <div class="person-glimpse__content__wrapper">
-      <a href="{{ person.get_absolute_url }}" title="{{ person.person.get_full_name }}">
-        <h{{ header_level|default:2 }} class="person-glimpse__content__title">
-          {{ person.person.get_full_name }}
+      <a href="{{ person_page.get_absolute_url }}" title="{{ person.get_full_name }}">
+        <h{{ header_level|default:2 }} class="person-glimpse__content__wrapper__title">
+          {{ person.get_full_name }}
         </h{{ header_level|default:2 }}>
       </a>
-      <div class="person-glimpse__content__text">
-        {% show_placeholder "resume" person %}
+      <div class="person-glimpse__content__wrapper__categories">
+        {% with form_factor="tag" %}
+          {% page_placeholder "categories" person_page %}
+        {% endwith %}
+      </div>
+      <div class="person-glimpse__content__wrapper__resume">
+        {% page_placeholder "resume" person_page %}
       </div>
     </div>
   </div>
 </div>
+{% endwith %}
