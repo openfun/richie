@@ -136,14 +136,15 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
         self.prepare_index(
             [
                 {
-                    "id": index,
-                    "organizations": [id],
-                    "categories": [],
-                    "is_new": False,
                     "absolute_url": {"en": "url"},
-                    "cover_image": {"en": "image"},
-                    "title": {"en": "title"},
+                    "categories": [],
                     "course_runs": [],
+                    "cover_image": {"en": "image"},
+                    "id": index,
+                    "is_new": False,
+                    "organizations": [id],
+                    "organizations_names": {"en": ["Org #{:s}".format(id)]},
+                    "title": {"en": "title"},
                 }
                 for index, id in enumerate(organizations)
             ]
@@ -211,16 +212,17 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
         self.prepare_index(
             [
                 {
+                    "absolute_url": {"en": "url"},
+                    "categories": [],
+                    "course_runs": [],
+                    "cover_image": {"en": "image"},
                     "id": index,
+                    "is_new": False,
                     "organizations": random.sample(
                         organizations, random.randint(1, len(organizations))
                     ),
-                    "categories": [],
-                    "is_new": False,
-                    "absolute_url": {"en": "url"},
-                    "cover_image": {"en": "image"},
+                    "organizations_names": {"en": ["Org #{:s}".format(id)]},
                     "title": {"en": "title"},
-                    "course_runs": [],
                 }
                 for index, id in enumerate(organizations)
             ]

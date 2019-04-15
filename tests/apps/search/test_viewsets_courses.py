@@ -253,6 +253,7 @@ class CoursesViewsetsTestCase(TestCase):
                 "categories",
                 "cover_image",
                 "organizations",
+                "organizations_names",
                 "title.*",
             ],
             body={

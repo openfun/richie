@@ -325,9 +325,10 @@ class CoursesIndexersTestCase(TestCase):
             "_id": 93,
             "_source": {
                 "absolute_url": {"en": "campo-qui-format-do"},
+                "categories": [43, 86],
                 "cover_image": {"en": "image.jpg"},
                 "organizations": [42, 84],
-                "categories": [43, 86],
+                "organizations_names": {"en": ["Org 42", "Org 84"]},
                 "title": {"en": "Duis eu arcu erat"},
             },
             "fields": {
@@ -341,9 +342,10 @@ class CoursesIndexersTestCase(TestCase):
             {
                 "id": 93,
                 "absolute_url": "campo-qui-format-do",
-                "cover_image": "image.jpg",
-                "organizations": [42, 84],
                 "categories": [43, 86],
+                "cover_image": "image.jpg",
+                "organization_highlighted": "Org 42",
+                "organizations": [42, 84],
                 "title": "Duis eu arcu erat",
                 "state": CourseState(
                     0, datetime(2019, 3, 17, 21, 25, 52, 179667, pytz.utc)

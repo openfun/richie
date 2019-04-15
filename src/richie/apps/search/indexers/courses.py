@@ -66,6 +66,7 @@ class CoursesIndexer:
         "categories",
         "cover_image",
         "organizations",
+        "organizations_names",
         "title.*",
     ]
     form = CourseSearchForm
@@ -512,6 +513,9 @@ class CoursesIndexer:
             "absolute_url": get_best_field_language(source["absolute_url"], language),
             "categories": source["categories"],
             "cover_image": get_best_field_language(source["cover_image"], language),
+            "organization_highlighted": get_best_field_language(
+                source["organizations_names"], language
+            )[0],
             "organizations": source["organizations"],
             "state": CourseState(**state),
             "title": get_best_field_language(source["title"], language),

@@ -31,6 +31,7 @@ COURSES = [
         },
         "is_new": True,
         "organizations": ["P-00030001", "P-00030004", "L-000300010001"],
+        "organizations_names": {"en": ["Org 31", "Org 34", "Org 311"]},
         "title": {"en": "Artificial intelligence for mushroom picking"},
     },
     {
@@ -46,6 +47,7 @@ COURSES = [
         },
         "is_new": True,
         "organizations": ["P-00030001", "P-00030003", "L-000300010002"],
+        "organizations_names": {"en": ["Org 31", "Org 33", "Org 312"]},
         "title": {"en": "Click-farms: managing the autumn harvest"},
     },
     {
@@ -61,6 +63,7 @@ COURSES = [
         },
         "is_new": False,
         "organizations": ["P-00030002", "P-00030003", "L-000300020001"],
+        "organizations_names": {"en": ["Org 32", "Org 33", "Org 321"]},
         "title": {"en": "Building a data lake out of mountain springs"},
     },
     {
@@ -75,6 +78,7 @@ COURSES = [
         },
         "is_new": False,
         "organizations": ["P-00030002", "P-00030004", "L-000300020002"],
+        "organizations_names": {"en": ["Org 32", "Org 34", "Org 322"]},
         "title": {"en": "Kung-fu moves for cloud infrastructure security"},
     },
 ]
@@ -323,6 +327,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             "L-00020001",
                         ],
                         "cover_image": "image",
+                        "organization_highlighted": "Org 31",
                         "organizations": ["P-00030001", "P-00030004", "L-000300010001"],
                         "state": {
                             "priority": 0,
@@ -344,6 +349,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             "L-00020001",
                         ],
                         "cover_image": "image",
+                        "organization_highlighted": "Org 32",
                         "organizations": ["P-00030002", "P-00030003", "L-000300020001"],
                         "state": {
                             "priority": 0,
@@ -365,6 +371,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             "L-00020002",
                         ],
                         "cover_image": "image",
+                        "organization_highlighted": "Org 32",
                         "organizations": ["P-00030002", "P-00030004", "L-000300020002"],
                         "state": {
                             "priority": 1,
@@ -386,6 +393,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             "L-00020003",
                         ],
                         "cover_image": "image",
+                        "organization_highlighted": "Org 31",
                         "organizations": ["P-00030001", "P-00030003", "L-000300010002"],
                         "state": {
                             "priority": 4,
