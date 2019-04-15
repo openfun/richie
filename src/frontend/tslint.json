@@ -10,7 +10,8 @@
     "no-empty": false,
     "object-literal-key-quotes": [true, "as-needed"],
     "one-line": false,
-    "quotemark": [true, "single", "avoid-escape", "jsx-double"]
+    "quotemark": [true, "single", "avoid-escape", "jsx-double"],
+    "trailing-comma": {}
   },
   "rulesDirectory": []
 }
