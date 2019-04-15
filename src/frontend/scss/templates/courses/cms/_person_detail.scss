@@ -16,7 +16,6 @@ $richie-person-detail-media-width: 120px;
   &__card {
     @include m-o-card(
       $padding: 1rem 0,
-      $border: $richie-course-glimpse-container-border,
       $background: $richie-course-glimpse-container-background,
       $media-margin: 0,
       $caption-width: $richie-course-glimpse-caption-width,
@@ -25,7 +24,7 @@ $richie-person-detail-media-width: 120px;
       $caption-fontsize: $richie-course-glimpse-caption-fontsize,
       $caption-background: $richie-course-glimpse-caption-background,
       $content-flex-justify: flex-start,
-      $wrapper-padding: $richie-course-glimpse-wrapper-padding,
+      $wrapper-padding: 0 0 0 1rem,
       $foot-divider: $richie-course-glimpse-foot-divider,
       $methodology: 'bem'
     );

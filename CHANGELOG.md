@@ -16,6 +16,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Harmonize how cards look on the site (grey border and white background),
 - Activating a filter that is a parent or child of a current active filter
   removes this active relative. This makes the experience of adding those
   relative filters more intuitive.

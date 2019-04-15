@@ -49,6 +49,7 @@ $richie-category-plugin-title-textalign: center !default;
   align-content: space-between;
   border: 1px solid rgba($black, 0.125);
   border-radius: 0.25rem;
+  background-color: white;
 
   &__body {
     @include sv-flex(1, 0, 100%);
