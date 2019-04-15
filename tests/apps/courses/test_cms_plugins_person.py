@@ -128,7 +128,7 @@ class PersonPluginTestCase(CMSTestCase):
         # The person's full name should be wrapped in a h2
         self.assertContains(
             response,
-            '<h2 class="person-glimpse__content__title">{:s}</h2>'.format(
+            '<h2 class="person-glimpse__content__wrapper__title">{:s}</h2>'.format(
                 person.public_extension.get_full_name()
             ),
             html=True,
@@ -139,11 +139,10 @@ class PersonPluginTestCase(CMSTestCase):
         # Person's portrait and its properties should be present
         # pylint: disable=no-member
         self.assertContains(response, image.file.name)
-
         # Short resume should be present
         self.assertContains(
             response,
-            '<div class="person-glimpse__content__text">public resume</div>',
+            '<div class="person-glimpse__content__wrapper__resume">public resume</div>',
             html=True,
         )
         self.assertNotContains(response, "draft resume")
@@ -162,7 +161,7 @@ class PersonPluginTestCase(CMSTestCase):
         self.assertContains(response, image.file.name)
         self.assertContains(
             response,
-            '<div class="person-glimpse__content__text">résumé public</div>',
+            '<div class="person-glimpse__content__wrapper__resume">résumé public</div>',
             html=True,
         )
 

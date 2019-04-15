@@ -379,6 +379,10 @@ class Base(DRFMixin, Configuration):
             "limits": {"CKEditorPlugin": 1},
         },
         # Person detail
+        "courses/cms/person_detail.html categories": {
+            "name": _("Categories"),
+            "plugins": ["CategoryPlugin"],
+        },
         "courses/cms/person_detail.html portrait": {
             "name": _("Portrait"),
             "plugins": ["PicturePlugin"],

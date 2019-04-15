@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Allow tagging persons with categories
 - A "Clear x active filters" button in the search filters pane lets the user
   remove all active filters with one click
 

@@ -87,7 +87,7 @@ $richie-person-glimpse-caption-background: $gray80 !default;
     );
   }
 
-  &__content__title {
+  &__content__wrapper__title {
     color: $richie-person-glimpse-content-title-fontcolor;
     text-align: $richie-person-glimpse-content-title-textalign;
     @include media-breakpoint-up(lg) {
@@ -95,7 +95,15 @@ $richie-person-glimpse-caption-background: $gray80 !default;
     }
   }
 
-  &__content__text {
+  &__content__wrapper__categories {
+    margin-bottom: 0.6rem;
+    text-align: $richie-person-glimpse-content-title-textalign;
+    @include media-breakpoint-up(lg) {
+      text-align: $richie-person-glimpse-content-title-textalign-lg;
+    }
+  }
+
+  &__content__wrapper__resume {
     @include m-o-media_empty($width: 100%, $height: 13vh, $absolute: false);
   }
 

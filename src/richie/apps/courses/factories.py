@@ -708,6 +708,22 @@ class PersonFactory(PageExtensionDjangoModelFactory):
 
     @factory.post_generation
     # pylint: disable=unused-argument
+    def fill_categories(self, create, extracted, **kwargs):
+        """Add categories plugin to person from a given list of category instances."""
+        if create and extracted:
+            for language in self.extended_object.get_languages():
+                placeholder = self.extended_object.placeholders.get(slot="categories")
+
+                for category in extracted:
+                    add_plugin(
+                        language=language,
+                        placeholder=placeholder,
+                        plugin_type="CategoryPlugin",
+                        **{"page": category.extended_object},
+                    )
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
     def fill_portrait(self, create, extracted, **kwargs):
         """
         Add a portrait with a random image
