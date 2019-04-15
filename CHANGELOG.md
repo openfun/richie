@@ -16,6 +16,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add template and styling for persons list page,
 - Add template and styling for categories list page,
 - Add sub categories in category detail page.
+  remove all active filters with one click.
+- Show CTAs to Enroll on course glimpses in Search.
 
 ## Changed
 
@@ -33,6 +35,12 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Fix links between objects managed via plugins (e.g. categories on a course)
   that allowed draft links to display objects on public pages.
+
+### Fixed
+
+- Show the highlighted organization on course glimpses in Search.
+- Show a placeholder image on course glimpses in Search when the
+  cover for the course is missing.
 
 ## [1.0.0-beta.5] - 2019-04-11
 

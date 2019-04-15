@@ -4,7 +4,7 @@ import { Resource } from './Resource';
 export interface Course extends Resource {
   absolute_url: string;
   categories: string[];
-  cover_image: string;
+  cover_image: Nullable<string>;
   organization_highlighted: string;
   organizations: string[];
   state: {

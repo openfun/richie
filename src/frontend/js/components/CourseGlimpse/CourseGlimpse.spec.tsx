@@ -57,7 +57,7 @@ describe('components/CourseGlimpse', () => {
       },
       title: 'Course 42',
     } as Course;
-    const { getByAltText, getByText, getByTitle } = render(
+    const { getByText, getByTitle } = render(
       <IntlProvider locale="en">
         <CourseGlimpse course={course} />
       </IntlProvider>,
@@ -66,5 +66,26 @@ describe('components/CourseGlimpse', () => {
     // Make sure the component renders and shows the state
     getByTitle('Details page for Course 42.');
     getByText('Archived');
+  });
+
+  it('shows the "Cover" placeholder div when the course is missing a cover image', () => {
+    const course = {
+      cover_image: null,
+      organization_highlighted: 'Some Organization',
+      state: {
+        call_to_action: 'Enroll now',
+        datetime: '2019-03-14T10:35:47.823Z',
+        text: 'starts on',
+      },
+      title: 'Course 42',
+    } as Course;
+    const { getByText, getByTitle } = render(
+      <IntlProvider locale="en">
+        <CourseGlimpse course={course} />
+      </IntlProvider>,
+    );
+
+    getByTitle('Details page for Course 42.');
+    getByText('Cover');
   });
 });

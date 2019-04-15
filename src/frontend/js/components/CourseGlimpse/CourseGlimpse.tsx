@@ -2,13 +2,12 @@ import React from 'react';
 import {
   defineMessages,
   FormattedDate,
+  FormattedMessage,
   InjectedIntlProps,
   injectIntl,
 } from 'react-intl';
 
 import { Course } from '../../types/Course';
-import { Organization } from '../../types/Organization';
-import { Nullable } from '../../utils/types';
 
 export interface CourseGlimpseProps {
   course: Course;
@@ -19,6 +18,12 @@ const messages = defineMessages({
     defaultMessage: 'Logo for {courseTitle}',
     description: 'Alternate text for the course logo in a course glimpse.',
     id: 'components.CourseGlimpse.logoAltText',
+  },
+  cover: {
+    defaultMessage: 'Cover',
+    description:
+      'Placeholder text when the course we are glimpsing at is missing a cover image',
+    id: 'components.CourseGlimpse.cover',
   },
   date: {
     defaultMessage: 'Starts on {date}',
@@ -43,12 +48,18 @@ export const CourseGlimpse = injectIntl(
       })}
     >
       <div className="course-glimpse__media">
-        <img
-          src={course.cover_image}
-          alt={intl.formatMessage(messages.altText, {
-            courseTitle: course.title,
-          })}
-        />
+        {course.cover_image ? (
+          <img
+            src={course.cover_image}
+            alt={intl.formatMessage(messages.altText, {
+              courseTitle: course.title,
+            })}
+          />
+        ) : (
+          <div className="course-glimpse__media__empty">
+            <FormattedMessage {...messages.cover} />
+          </div>
+        )}
       </div>
       <div className="course-glimpse__content">
         <div className="course-glimpse__content__wrapper">
