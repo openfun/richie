@@ -54,7 +54,9 @@ document.addEventListener('DOMContentLoaded', event => {
         }
 
         try {
-          const localeData = await import(`react-intl/locale-data/${localeCode}`);
+          const localeData = await import(
+            `react-intl/locale-data/${localeCode}`
+          );
           // async import returns an object of getters containing the value we want. We have to fetch them
           // by calling Object.values
           addLocaleData(Object.values(localeData));
