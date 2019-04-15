@@ -11,14 +11,7 @@ export const CourseGlimpseList = ({ courses }: CourseGlimpseListProps) => {
   return (
     <div className="course-glimpse-list">
       {courses.map(
-        course =>
-          course && (
-            <CourseGlimpse
-              course={course}
-              key={course.id}
-              organizationMain={null}
-            />
-          ),
+        course => course && <CourseGlimpse course={course} key={course.id} />,
       )}
     </div>
   );

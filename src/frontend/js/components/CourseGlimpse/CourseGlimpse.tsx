@@ -2,7 +2,6 @@ import React from 'react';
 import {
   defineMessages,
   FormattedDate,
-  FormattedMessage,
   InjectedIntlProps,
   injectIntl,
 } from 'react-intl';
@@ -13,7 +12,6 @@ import { Nullable } from '../../utils/types';
 
 export interface CourseGlimpseProps {
   course: Course;
-  organizationMain: Nullable<Organization>;
 }
 
 const messages = defineMessages({
@@ -36,11 +34,7 @@ const messages = defineMessages({
 });
 
 export const CourseGlimpse = injectIntl(
-  ({
-    course,
-    intl,
-    organizationMain,
-  }: CourseGlimpseProps & InjectedIntlProps) => (
+  ({ course, intl }: CourseGlimpseProps & InjectedIntlProps) => (
     <a
       className="course-glimpse course-glimpse--link"
       href={course.absolute_url}
@@ -59,7 +53,7 @@ export const CourseGlimpse = injectIntl(
       <div className="course-glimpse__content">
         <div className="course-glimpse__content__wrapper">
           <p className="course-glimpse__content__title">{course.title}</p>
-          <p>{(organizationMain && organizationMain.title) || ''}</p>
+          <p>{course.organization_highlighted}</p>
         </div>
       </div>
       <div className="course-glimpse__footer">

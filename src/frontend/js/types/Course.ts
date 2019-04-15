@@ -4,6 +4,7 @@ export interface Course extends Resource {
   absolute_url: string;
   categories: string[];
   cover_image: string;
+  organization_highlighted: string;
   organizations: string[];
   state: {
     call_to_action: string;

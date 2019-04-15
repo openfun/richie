@@ -5,7 +5,6 @@ import { IntlProvider } from 'react-intl';
 import { cleanup, render } from 'react-testing-library';
 
 import { Course } from '../../types/Course';
-import { Organization } from '../../types/Organization';
 import { CourseGlimpse } from './CourseGlimpse';
 
 describe('components/CourseGlimpse', () => {
@@ -14,18 +13,16 @@ describe('components/CourseGlimpse', () => {
   it('renders a course glimpse with its data', () => {
     const course = {
       cover_image: '/thumbs/small.png',
+      organization_highlighted: 'Some Organization',
       state: {
         datetime: '2019-03-14T10:35:47.823Z',
         text: 'starts on',
       },
       title: 'Course 42',
     } as Course;
-    const organization = {
-      title: 'Some Organization',
-    } as Organization;
     const { getByAltText, getByText, getByTitle } = render(
       <IntlProvider locale="en">
-        <CourseGlimpse course={course} organizationMain={organization} />
+        <CourseGlimpse course={course} />
       </IntlProvider>,
     );
 
