@@ -2,7 +2,7 @@
 {% load cms_tags i18n %}
 
 {% block content %}{% spaceless %}
-{% with category=current_page.category header_level=2 blogposts=current_page.category.get_blogposts courses=current_page.category.get_courses %}
+{% with category=current_page.category header_level=2 %}
 <div class="category-detail">
   <div class="category-detail__banner">
     {% placeholder "banner" or %}
@@ -27,59 +27,43 @@
   </div>
 </div>
 
-{% if blogposts %}
-<div class="blogpost-glimpse-list">
-  <h2 class="blogpost-glimpse-list__title">{% trans "Related news" %}</h2>
-  {% for blogpost in blogposts %}
-    {# If the current page is a draft, show draft courses with a class annotation for styling #}
-    {% if current_page.publisher_is_draft %}
-      {% if blogpost.check_publication is True %}
-      <a class="blogpost-glimpse blogpost-glimpse--link" href="{{ blogpost.public_extension.extended_object.get_absolute_url }}">
-        {% include "courses/cms/fragment_blogpost_glimpse.html" with blogpost=blogpost.public_extension.extended_object %}
-      </a>
-      {% else %}
-      <a class="blogpost-glimpse blogpost-glimpse--link blogpost-glimpse--draft" href="{{ blogpost.extended_object.get_absolute_url }}">
-        {% include "courses/cms/fragment_blogpost_glimpse.html" with blogpost=blogpost.extended_object %}
-      </a>
+{% with courses=category.get_courses %}
+  {% if courses %}
+  <div class="course-glimpse-list">
+    <h2 class="course-glimpse-list__title">{% trans "Related courses" %}</h2>
+    {% for course in courses %}
+      {% if course.extended_object.publisher_is_draft %}
+        <a class="course-glimpse course-glimpse--link course-glimpse--draft" href="{{ course.extended_object.get_absolute_url }}">
+          {% include "courses/cms/fragment_course_glimpse.html" %}
+        </a>
+      {% elif course.check_publication %}
+        <a class="course-glimpse course-glimpse--link" href="{{ course.extended_object.get_absolute_url }}">
+          {% include "courses/cms/fragment_course_glimpse.html" %}
+        </a>
       {% endif %}
-    {# If the current blogpost page is the published version, show only the blogposts that are published #}
-    {% elif blogpost.check_publication is True %}
-      <a class="blogpost-glimpse blogpost-glimpse--link" href="{{ blogpost.extended_object.get_absolute_url }}">
-        {% include "courses/cms/fragment_blogpost_glimpse.html" with blogpost=blogpost.public_extension.extended_object %}
-      </a>
-    {% endif %}
-  {% empty %}
-    <div class="blogpost-glimpse blogpost-glimpse--empty">
-      {% trans "No associated blogposts" %}
+    {% endfor %}
     </div>
-  {% endfor %}
-</div>
-{% endif %}
+  {% endif %}
+{% endwith %}
 
-{% if courses %}
-<div class="course-glimpse-list">
-  <h2 class="course-glimpse-list__title">{% trans "Related courses" %}</h2>
-  {% for course in courses %}
-    {# If the current page is a draft, show draft courses with a class annotation for styling #}
-    {% if current_page.publisher_is_draft %}
-      {% if course.check_publication is True %}
-      <a class="course-glimpse course-glimpse--link" href="{{ course.public_extension.extended_object.get_absolute_url }}">
-        {% include "courses/cms/fragment_course_glimpse.html" with course=course.public_extension %}
-      </a>
-      {% else %}
-      <a class="course-glimpse course-glimpse--link course-glimpse--draft" href="{{ course.extended_object.get_absolute_url }}">
-        {% include "courses/cms/fragment_course_glimpse.html" with course=course %}
-      </a>
+{% with blogposts=category.get_blogposts %}
+  {% if blogposts %}
+  <div class="blogpost-glimpse-list">
+    <h2 class="blogpost-glimpse-list__title">{% trans "Related blogposts" %}</h2>
+    {% for blogpost in blogposts %}
+      {% if blogpost.extended_object.publisher_is_draft %}
+        <a class="blogpost-glimpse blogpost-glimpse--link blogpost-glimpse--draft" href="{{ blogpost.extended_object.get_absolute_url }}">
+          {% include "courses/cms/fragment_blogpost_glimpse.html" %}
+        </a>
+      {% elif blogpost.check_publication %}
+        <a class="blogpost-glimpse blogpost-glimpse--link" href="{{ blogpost.extended_object.get_absolute_url }}">
+          {% include "courses/cms/fragment_blogpost_glimpse.html" %}
+        </a>
       {% endif %}
-    {# If the current course page is the published version, show only the courses that are published #}
-    {% elif course.check_publication is True %}
-      <a class="course-glimpse course-glimpse--link" href="{{ course.extended_object.get_absolute_url }}">
-        {% include "courses/cms/fragment_course_glimpse.html" with course=course.public_extension %}
-      </a>
-    {% endif %}
-  {% endfor %}
-</div>
-{% endif %}
+    {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
 
 {% with persons=category.get_persons %}
   {% if persons %}
