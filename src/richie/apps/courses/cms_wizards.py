@@ -449,7 +449,7 @@ class PersonWizardForm(BaseWizardForm):
     """
 
     person_title = forms.ModelChoiceField(
-        required=True,
+        required=False,
         queryset=PersonTitle.objects.all(),
         label=_("Title"),
         help_text=_("Choose this person's title among existing ones"),
