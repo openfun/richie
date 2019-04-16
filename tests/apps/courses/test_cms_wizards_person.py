@@ -289,9 +289,9 @@ class PersonCMSWizardTestCase(CMSTestCase):
         # Check that missing last_name field is a cause for the invalid form
         self.assertEqual(form.errors["last_name"], ["This field is required."])
 
-    def test_cms_wizards_person_submit_form_person_title_required(self):
+    def test_cms_wizards_person_submit_form_person_title_not_required(self):
         """
-        The `person_title` field should be required
+        The `person_title` field should not be required
         """
         # A parent page should pre-exist
         create_page(
@@ -301,16 +301,14 @@ class PersonCMSWizardTestCase(CMSTestCase):
             reverse_id=Person.ROOT_REVERSE_ID,
         )
 
-        invalid_data = {
+        no_title_data = {
             "title": "A person",
             "first_name": "First name",
             "last_name": "Last name",
         }
 
-        form = PersonWizardForm(data=invalid_data)
-        self.assertFalse(form.is_valid())
-        # Check that missing last_name field is a cause for the invalid form
-        self.assertEqual(form.errors["person_title"], ["This field is required."])
+        form = PersonWizardForm(data=no_title_data)
+        self.assertTrue(form.is_valid())
 
     def test_cms_wizards_person_parent_page_should_exist(self):
         """
