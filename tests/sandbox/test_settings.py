@@ -6,7 +6,7 @@ from unittest import mock
 from django.test import TestCase
 
 # sandbox
-from settings import get_release
+from sandbox.settings import get_release
 
 
 # pylint: disable=unused-argument
