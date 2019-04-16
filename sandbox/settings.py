@@ -515,6 +515,11 @@ class Base(DRFMixin, Configuration):
         },
     }
 
+    # Elasticsearch
+    RICHIE_ES_HOST = values.Value(
+        "elasticsearch", environ_name="RICHIE_ES_HOST", environ_prefix=None
+    )
+
     @classmethod
     def post_setup(cls):
         """Post setup configuration.

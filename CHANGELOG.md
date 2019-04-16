@@ -18,6 +18,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add sub categories in category detail page.
   remove all active filters with one click.
 - Show CTAs to Enroll on course glimpses in Search.
+- Make the `RICHIE_ES_HOST` configurable in the sandbox
 
 ## Changed
 
