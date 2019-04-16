@@ -156,7 +156,7 @@ jobs:
           paths:
             - src/richie/locale/django.pot
 
-  lint-back-isort:
+  lint-back:
     docker:
       - image: circleci/python:3.7-stretch
     working_directory: ~/fun
@@ -166,47 +166,17 @@ jobs:
           keys:
             - v2-back-dependencies-{{ .Revision }}
       - run:
-          name: Lint code with isort
-          command: ~/.local/bin/isort --recursive --check-only .
-
-  lint-back-flake8:
-    docker:
-      - image: circleci/python:3.7-stretch
-    working_directory: ~/fun
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - v2-back-dependencies-{{ checksum "setup.cfg" }}
-      - run:
           name: Lint code with flake8
           command: ~/.local/bin/flake8
-
-  lint-back-pylint:
-    docker:
-      - image: circleci/python:3.7-stretch
-    working_directory: ~/fun
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - v2-back-dependencies-{{ checksum "setup.cfg" }}
       - run:
-          name: Lint code with pylint
-          command: ~/.local/bin/pylint src/richie/apps src/richie/plugins sandbox tests
-
-  lint-back-black:
-    docker:
-      - image: circleci/python:3.7-stretch
-    working_directory: ~/fun
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - v2-back-dependencies-{{ checksum "setup.cfg" }}
+          name: Lint code with isort
+          command: ~/.local/bin/isort --recursive --check-only .
       - run:
           name: Lint code with black
           command: ~/.local/bin/black src/richie/apps src/richie/plugins sandbox tests --check
+      - run:
+          name: Lint code with pylint
+          command: ~/.local/bin/pylint src/richie/apps src/richie/plugins sandbox tests
 
   # Restore front & back POT files containing strings to translate and upload them to our
   # translation management tool
@@ -525,7 +495,7 @@ jobs:
             - src/richie/static/richie/js/*.js
             - src/richie/static/richie/css/*.css
 
-  lint-front-tslint:
+  lint-front:
     docker:
       - image: circleci/node:10
     working_directory: ~/fun/src/frontend
@@ -538,17 +508,6 @@ jobs:
       - run:
           name: Lint code with tslint
           command: yarn lint
-
-  lint-prettier:
-    docker:
-      - image: circleci/node:10
-    working_directory: ~/fun/src/frontend
-    steps:
-      - checkout:
-          path: ~/fun
-      - restore_cache:
-          keys:
-            - v5-front-dependencies-{{ checksum "yarn.lock" }}
       - run:
           name: Lint JS/TS/JSON and CSS/SCSS code with prettier
           command: yarn prettier --list-different "js/**/*.+(ts|tsx|json|js|jsx)" "*.+(ts|tsx|json|js|jsx)" "**/*.+(css|scss)"
@@ -627,13 +586,7 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - lint-front-tslint:
-          requires:
-            - build-front
-          filters:
-            tags:
-              only: /.*/
-      - lint-prettier:
+      - lint-front:
           requires:
             - build-front
           filters:
@@ -641,15 +594,13 @@ workflows:
               only: /.*/
       - test-front:
           requires:
-            - lint-front-tslint
-            - lint-prettier
+            - lint-front
           filters:
             tags:
               only: /.*/
       - test-front-package:
           requires:
-            - lint-front-tslint
-            - lint-prettier
+            - lint-front
           filters:
             tags:
               only: /.*/
@@ -696,25 +647,7 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - lint-back-black:
-          requires:
-            - build-back
-          filters:
-            tags:
-              only: /.*/
-      - lint-back-isort:
-          requires:
-            - build-back
-          filters:
-            tags:
-              only: /.*/
-      - lint-back-flake8:
-          requires:
-            - build-back
-          filters:
-            tags:
-              only: /.*/
-      - lint-back-pylint:
+      - lint-back:
           requires:
             - build-back
           filters:
@@ -722,20 +655,14 @@ workflows:
               only: /.*/
       - test-back-mysql:
           requires:
-            - lint-back-black
-            - lint-back-isort
-            - lint-back-flake8
-            - lint-back-pylint
+            - lint-back
             - build-front-production
           filters:
             tags:
               only: /.*/
       - test-back-postgresql:
           requires:
-            - lint-back-black
-            - lint-back-isort
-            - lint-back-flake8
-            - lint-back-pylint
+            - lint-back
             - build-front-production
           filters:
             tags:
@@ -805,8 +732,7 @@ workflows:
       # succeed and it has been tagged with a tag starting with the letter v
       - npm:
           requires:
-            - lint-front-tslint
-            - lint-prettier
+            - lint-front
             - test-front
             - test-front-package
           filters:
