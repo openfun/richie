@@ -112,16 +112,22 @@ def create_demo_site():
     )
 
     # Create persons under the `persons` page
-    persons = PersonFactory.create_batch(
-        NB_OBJECTS["persons"],
-        page_in_navigation=True,
-        page_languages=["en", "fr"],
-        page_parent=pages_created["persons"],
-        person_title=random.choice([title, None]),
-        fill_portrait=pick_image("portrait"),
-        fill_resume=True,
-        should_publish=True,
-    )
+    persons = []
+    for _ in range(NB_OBJECTS["persons"]):
+        persons.append(
+            PersonFactory(
+                page_in_navigation=True,
+                page_languages=["en", "fr"],
+                page_parent=pages_created["persons"],
+                person_title=random.choice([title, None]),
+                fill_categories=random.sample(
+                    subjects, random.randint(1, NB_OBJECTS["person_subjects"])
+                ),
+                fill_portrait=pick_image("portrait"),
+                fill_resume=True,
+                should_publish=True,
+            )
+        )
 
     # Create courses under the `Course` page with categories and organizations
     # relations
