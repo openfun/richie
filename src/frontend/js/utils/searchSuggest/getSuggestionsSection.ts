@@ -7,8 +7,14 @@ import { Resource } from '../../types/Resource';
 import { ResourceSuggestionSection } from '../../types/searchSuggest';
 import { handle } from '../../utils/errors/handle';
 
-// Build a suggestion section from a model name and a title, requesting the relevant
-// values to populate it from the API
+/**
+ * Build a suggestion section from a model name and a title, requesting the relevant
+ * values to populate it from the API
+ * @param sectionModel The model we're issuing the completion request on. Determines the API
+ * endpoint we're sending the request to.
+ * @param sectionTitleMessage MessageDescriptor for the title of the section that displays the suggestions.
+ * @param query The actual payload to run the completion search with.
+ */
 export const getSuggestionsSection = async (
   sectionModel: ResourceSuggestionSection['model'],
   sectionTitleMessage: FormattedMessage.MessageDescriptor,

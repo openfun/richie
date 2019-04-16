@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Improve autosuggest tests to increase reliability
+
 ## [1.0.0-beta.7] - 2019-04-17
 
 ### Changed
@@ -32,7 +36,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Show CTAs to Enroll on course glimpses in Search.
 - Make the `RICHIE_ES_HOST` configurable in the sandbox
 
-## Changed
+### Changed
 
 - Harmonize how cards look on the site (grey border and white background),
 - Move all the code related to the demo site to its own application,

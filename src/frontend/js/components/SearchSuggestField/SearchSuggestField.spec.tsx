@@ -1,305 +1,330 @@
 import '../../testSetup';
 
+import fetchMock from 'fetch-mock';
 import React from 'react';
-import { cleanup, render } from 'react-testing-library';
+import { IntlProvider } from 'react-intl';
+import { cleanup, fireEvent, render, wait } from 'react-testing-library';
 
 import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
-import { Category } from '../../types/Category';
-import { Course } from '../../types/Course';
-import { modelName } from '../../types/models';
-import { Organization } from '../../types/Organization';
-import {
-  DefaultSuggestionSection,
-  ResourceSuggestionSection,
-} from '../../types/searchSuggest';
-import { handle as mockHandle } from '../../utils/errors/handle';
 import { location as mockLocation } from '../../utils/indirection/window';
-import { getSuggestionsSection } from '../../utils/searchSuggest/getSuggestionsSection';
-import { suggestionHumanName } from '../../utils/searchSuggest/suggestionHumanName';
-import { jestMockOf } from '../../utils/types';
-import {
-  getSuggestionValue,
-  onChange,
-  onSuggestionSelected,
-  onSuggestionsFetchRequested,
-  renderSectionTitle,
-  renderSuggestion,
-  SearchSuggestFieldBase,
-} from './SearchSuggestField';
+import { SearchSuggestField } from './SearchSuggestField';
 
-jest.mock('../../utils/errors/handle');
 jest.mock('../../utils/indirection/window', () => ({ location: {} }));
 
-const mockGetSuggestionsSection: jestMockOf<
-  typeof getSuggestionsSection
-> = getSuggestionsSection as any;
-jest.mock('../../utils/searchSuggest/getSuggestionsSection');
-
-const mockSuggestionHumanName: jestMockOf<
-  typeof suggestionHumanName
-> = suggestionHumanName as any;
-jest.mock('../../utils/searchSuggest/suggestionHumanName');
-
 describe('components/SearchSuggestField', () => {
+  // Make some filters we can reuse through our tests in <SearchSuggestField /> props
+  const organizations = {
+    base_path: '0002',
+    human_name: 'Organizations',
+    name: 'organizations',
+    values: [],
+  };
+
+  const subjects = {
+    base_path: '00030001',
+    human_name: 'Subjects',
+    name: 'subjects',
+    values: [],
+  };
+
+  /**
+   * Helper to find the text query suggestion in the DOM through testing-library's tools.
+   * This is helpful because the default query is painful to find due to the embedded <b>
+   */
+  const getDefaultSuggestionHelper = (value: string) => (
+    _: any,
+    element: HTMLElement,
+  ) =>
+    element.innerHTML.startsWith('Search for') &&
+    !!element.querySelector('b') &&
+    element.querySelector('b')!.innerHTML.includes(value) &&
+    element.innerHTML.includes('in courses...');
+
   beforeEach(jest.resetAllMocks);
+
+  // Disable useless async act warnings
+  // TODO: remove this spy as soon as async act is available
+  beforeAll(() => {
+    jest.spyOn(console, 'error');
+  });
+
   afterEach(cleanup);
+  afterEach(fetchMock.restore);
 
   it('renders', () => {
     const { getByPlaceholderText } = render(
-      <CourseSearchParamsContext.Provider
-        value={[{ limit: '999', offset: '0' }, jest.fn()]}
-      >
-        <SearchSuggestFieldBase
-          filters={{}}
-          intl={
-            { formatMessage: (message: any) => message.defaultMessage } as any
-          }
-        />
-      </CourseSearchParamsContext.Provider>,
+      <IntlProvider locale="en">
+        <CourseSearchParamsContext.Provider
+          value={[{ limit: '999', offset: '0' }, jest.fn()]}
+        >
+          <SearchSuggestField filters={{}} />
+        </CourseSearchParamsContext.Provider>
+      </IntlProvider>,
     );
 
     // The placeholder text is shown in the input
     getByPlaceholderText('Search for courses, organizations, categories');
   });
 
-  it('picks the query from the URL if there is one', () => {
+  it('picks the query from the URL if there is one', async () => {
     const { getByDisplayValue } = render(
-      <CourseSearchParamsContext.Provider
-        value={[
-          { limit: '999', offset: '0', query: 'machine learning' },
-          jest.fn(),
-        ]}
-      >
-        <SearchSuggestFieldBase
-          filters={{}}
-          intl={
-            { formatMessage: (message: any) => message.defaultMessage } as any
-          }
-        />
-      </CourseSearchParamsContext.Provider>,
+      <IntlProvider locale="en">
+        <CourseSearchParamsContext.Provider
+          value={[
+            { limit: '999', offset: '0', query: 'machine learning' },
+            jest.fn(),
+          ]}
+        >
+          <SearchSuggestField filters={{}} />
+        </CourseSearchParamsContext.Provider>
+      </IntlProvider>,
     );
 
     // The existing query is shown in the input
     getByDisplayValue('machine learning');
   });
 
-  describe('getSuggestionValue()', () => {
-    beforeEach(mockSuggestionHumanName.mockClear);
+  it('gets suggestions from the API when the user types something in the field', async () => {
+    fetchMock.get('/api/v1.0/categories/autocomplete/?query=aut', []);
+    fetchMock.get('/api/v1.0/courses/autocomplete/?query=aut', [
+      {
+        absolute_url: 'https://example.com/courses/1',
+        id: '1',
+        title: 'Course #1',
+      },
+    ]);
+    fetchMock.get('/api/v1.0/organizations/autocomplete/?query=aut', []);
 
-    it('returns the human name for a resource-based suggestion', () => {
-      const suggestion = { data: '3', model: modelName.ORGANIZATIONS } as any;
-      mockSuggestionHumanName.mockReturnValue('Some Human Name');
-      expect(getSuggestionValue(suggestion)).toEqual('Some Human Name');
-      expect(mockSuggestionHumanName).toHaveBeenCalledWith(suggestion);
-    });
-
-    it('returns the suggestion data directly for the default suggestion', () => {
-      const suggestion = { data: 'Search for something', model: null } as any;
-      expect(getSuggestionValue(suggestion)).toEqual('Search for something');
-      expect(mockSuggestionHumanName).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('renderSuggestion()', () => {
-    it('renders a single suggestion', () => {
-      mockSuggestionHumanName.mockReturnValue('Some course title');
-      expect(
-        renderSuggestion({
-          data: { title: 'Some course title' } as Course,
-          model: modelName.COURSES,
-        }),
-      ).toEqual(<span>Some course title</span>);
-    });
-  });
-
-  describe('renderSectionTitle()', () => {
-    it('renders a section title for a resource suggestion section', () => {
-      expect(
-        renderSectionTitle(
-          { formatMessage: ({ defaultMessage }: any) => defaultMessage } as any,
-          {
-            message: {
-              defaultMessage: 'Some section title',
-              id: 'someMessage',
-            },
-            model: modelName.ORGANIZATIONS,
-          } as ResourceSuggestionSection,
-        ),
-      ).toEqual(<span>Some section title</span>);
-    });
-
-    it('returns null for the default suggestion section', () => {
-      expect(
-        renderSectionTitle(
-          { formatMessage: ({ defaultMessage }: any) => defaultMessage } as any,
-          {
-            message: null,
-            model: null,
-          } as DefaultSuggestionSection,
-        ),
-      ).toEqual(null);
-    });
-  });
-
-  describe('onChange', () => {
-    const mockSetValue = jest.fn();
-
-    it('updates the value in state', () => {
-      onChange(mockSetValue)(undefined as any, { newValue: 'the new value' });
-      expect(mockSetValue).toHaveBeenCalledWith('the new value');
-    });
-
-    it('does not update the value when it is handed no params', () => {
-      onChange(mockSetValue)(undefined as any);
-      expect(mockSetValue).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('onSuggestionsFetchRequested', () => {
-    const mockSetSuggestions = jest.fn();
-
-    it('just resets the suggestions when the value is less than 3 characters long', () => {
-      onSuggestionsFetchRequested(mockSetSuggestions)({ value: 'c' });
-      expect(mockSetSuggestions).toHaveBeenCalledWith([]);
-      expect(mockGetSuggestionsSection).not.toHaveBeenCalled();
-      expect(mockHandle).not.toHaveBeenCalled();
-    });
-
-    it('uses getSuggestionsSection to get and build a SearchhSuggestionsSection', async () => {
-      mockGetSuggestionsSection.mockImplementation(
-        async (model: ResourceSuggestionSection['model']) => {
-          switch (model) {
-            case modelName.COURSES:
-              return {
-                message: { defaultMessage: 'Courses', id: 'courses' },
-                model: modelName.COURSES,
-                values: [
-                  { title: 'Course #1' } as Course,
-                  { title: 'Course #2' } as Course,
-                ],
-              };
-            case modelName.CATEGORIES:
-              return {
-                message: { defaultMessage: 'Categories', id: 'categories' },
-                model: modelName.CATEGORIES,
-                values: [],
-              };
-            case modelName.ORGANIZATIONS:
-              return {
-                message: {
-                  defaultMessage: 'Organizations',
-                  id: 'organizations',
-                },
-                model: modelName.ORGANIZATIONS,
-                values: [],
-              };
-          }
-        },
-      );
-
-      await onSuggestionsFetchRequested(mockSetSuggestions)({
-        value: 'some search',
-      });
-
-      expect(mockSetSuggestions).toHaveBeenCalledWith([
-        {
-          message: null,
-          model: null,
-          value: 'some search',
-        },
-        {
-          message: { defaultMessage: 'Courses', id: 'courses' },
-          model: modelName.COURSES,
-          values: [{ title: 'Course #1' }, { title: 'Course #2' }],
-        },
-      ]);
-    });
-
-    it('reports the error when getSuggestionsSection fails', async () => {
-      mockGetSuggestionsSection.mockReturnValue(
-        new Promise((resolve, reject) =>
-          reject(new Error('Failed to get Suggestions Section!')),
-        ),
-      );
-
-      await onSuggestionsFetchRequested(mockSetSuggestions)({
-        value: 'some search',
-      });
-
-      expect(mockHandle).toHaveBeenCalledWith(
-        new Error('Failed to get Suggestions Section!'),
-      );
-    });
-  });
-
-  describe('onSuggestionSelected', () => {
-    const [
-      mockSetValue,
-      mockSetSuggestions,
-      mockAddFilter,
-      mockUpdateFullTextSearch,
-    ] = [jest.fn(), jest.fn(), jest.fn(), jest.fn()];
-    const curriedOnSuggestionSelected = onSuggestionSelected(
-      mockSetValue,
-      mockSetSuggestions,
-      mockAddFilter,
-      mockUpdateFullTextSearch,
+    const { getByPlaceholderText, getByText, queryByText } = render(
+      <IntlProvider locale="en">
+        <CourseSearchParamsContext.Provider
+          value={[{ limit: '999', offset: '0' }, jest.fn()]}
+        >
+          <SearchSuggestField filters={{ organizations, subjects }} />
+        </CourseSearchParamsContext.Provider>
+      </IntlProvider>,
     );
 
-    beforeEach(() => {
-      Object.keys(mockLocation).forEach(
-        key => delete (mockLocation as any)[key],
-      );
+    const field = getByPlaceholderText(
+      'Search for courses, organizations, categories',
+    );
+
+    // Simulate the user entering some text in the autocomplete field
+    fireEvent.focus(field);
+    fireEvent.change(field, { target: { value: 'aut' } });
+    await wait();
+
+    getByText('Courses');
+    getByText('Course #1');
+    getByText(getDefaultSuggestionHelper('aut')); // Default suggestion is always shown
+
+    expect(queryByText('Categories')).toEqual(null);
+    expect(queryByText('Organizations')).toEqual(null);
+  });
+
+  it('does not attempt to get or show any suggestions before the user types 3 characters', async () => {
+    fetchMock.get('/api/v1.0/categories/autocomplete/?query=xyz', []);
+    fetchMock.get('/api/v1.0/courses/autocomplete/?query=xyz', []);
+    fetchMock.get('/api/v1.0/organizations/autocomplete/?query=xyz', []);
+
+    const { getByPlaceholderText, getByText, queryByText } = render(
+      <IntlProvider locale="en">
+        <CourseSearchParamsContext.Provider
+          value={[{ limit: '999', offset: '0' }, jest.fn()]}
+        >
+          <SearchSuggestField filters={{ organizations, subjects }} />
+        </CourseSearchParamsContext.Provider>
+      </IntlProvider>,
+    );
+
+    const field = getByPlaceholderText(
+      'Search for courses, organizations, categories',
+    );
+
+    // Simulate the user entering some text in the autocomplete field
+    fireEvent.focus(field);
+    fireEvent.change(field, { target: { value: 'x' } });
+    await wait();
+
+    expect(fetchMock.calls().length).toEqual(0);
+    expect(queryByText(getDefaultSuggestionHelper('x'))).toEqual(null);
+
+    fireEvent.change(field, { target: { value: 'xyz' } });
+    await wait();
+
+    expect(fetchMock.calls().length).toEqual(3);
+    getByText(getDefaultSuggestionHelper('xyz')); // Default suggestion is now shown
+  });
+
+  it('updates the search params when the user selects a filter suggestion', async () => {
+    fetchMock.get('/api/v1.0/categories/autocomplete/?query=orga', []);
+    fetchMock.get('/api/v1.0/courses/autocomplete/?query=orga', []);
+    fetchMock.get('/api/v1.0/organizations/autocomplete/?query=orga', [
+      {
+        id: 'L-00020007',
+        title: 'Organization #27',
+      },
+    ]);
+
+    const dispatchCourseSearchParamsUpdate = jest.fn();
+    const { getByPlaceholderText, getByText, queryByText } = render(
+      <IntlProvider locale="en">
+        <CourseSearchParamsContext.Provider
+          value={[
+            { limit: '999', offset: '0' },
+            dispatchCourseSearchParamsUpdate,
+          ]}
+        >
+          <SearchSuggestField filters={{ organizations, subjects }} />
+        </CourseSearchParamsContext.Provider>
+      </IntlProvider>,
+    );
+
+    const field = getByPlaceholderText(
+      'Search for courses, organizations, categories',
+    );
+
+    // Simulate the user entering some text in the autocomplete field
+    fireEvent.focus(field);
+    fireEvent.change(field, { target: { value: 'orga' } });
+    await wait();
+
+    getByText('Organizations');
+    getByText('Organization #27');
+    getByText(getDefaultSuggestionHelper('orga')); // Default suggestion is always shown
+
+    expect(queryByText('Categories')).toEqual(null);
+    expect(queryByText('Courses')).toEqual(null);
+
+    fireEvent.click(getByText('Organization #27'));
+    expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
+      filter: {
+        base_path: '0002',
+        human_name: 'Organizations',
+        name: 'organizations',
+        values: [],
+      },
+      payload: 'L-00020007',
+      type: 'FILTER_ADD',
     });
+  });
 
-    it('moves to the courses page when it is called with a course', () => {
-      curriedOnSuggestionSelected({} as any, {
-        suggestion: {
-          data: {
-            absolute_url: 'https://example.com/courses/42',
-            id: '42',
-          } as Course,
-          model: modelName.COURSES,
-        },
-      });
+  it('updates the search params when the user selects the text query', async () => {
+    fetchMock.get('/api/v1.0/categories/autocomplete/?query=def', []);
+    fetchMock.get('/api/v1.0/courses/autocomplete/?query=def', []);
+    fetchMock.get('/api/v1.0/organizations/autocomplete/?query=def', []);
 
-      expect(mockLocation.href).toEqual('https://example.com/courses/42');
+    const dispatchCourseSearchParamsUpdate = jest.fn();
+    const { getByPlaceholderText, getByText, queryByText } = render(
+      <IntlProvider locale="en">
+        <CourseSearchParamsContext.Provider
+          value={[
+            { limit: '999', offset: '0' },
+            dispatchCourseSearchParamsUpdate,
+          ]}
+        >
+          <SearchSuggestField filters={{ organizations, subjects }} />
+        </CourseSearchParamsContext.Provider>
+      </IntlProvider>,
+    );
+
+    const field = getByPlaceholderText(
+      'Search for courses, organizations, categories',
+    );
+
+    // Simulate the user entering some text in the autocomplete field
+    fireEvent.focus(field);
+    fireEvent.change(field, { target: { value: 'def' } });
+    await wait();
+
+    const defaultSuggestion = getByText(getDefaultSuggestionHelper('def')); // Default suggestion is always shown
+
+    expect(queryByText('Categories')).toEqual(null);
+    expect(queryByText('Courses')).toEqual(null);
+    expect(queryByText('Organizations')).toEqual(null);
+
+    fireEvent.click(defaultSuggestion);
+    expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
+      query: 'def',
+      type: 'QUERY_UPDATE',
     });
+  });
 
-    it('updates the filter and resets the suggestion state when it is called with a resource suggestion', () => {
-      curriedOnSuggestionSelected({} as any, {
-        suggestion: {
-          data: { id: '43' } as Category,
-          model: modelName.CATEGORIES,
-        },
-      });
+  it('redirects the user to the course page when they select a course suggestion', async () => {
+    fetchMock.get('/api/v1.0/categories/autocomplete/?query=cour', []);
+    fetchMock.get('/api/v1.0/courses/autocomplete/?query=cour', [
+      {
+        absolute_url: 'https://example.com/courses/65',
+        id: '65',
+        title: 'Course #65',
+      },
+    ]);
+    fetchMock.get('/api/v1.0/organizations/autocomplete/?query=cour', []);
 
-      expect(mockAddFilter).toHaveBeenCalledWith('43');
-      expect(mockSetValue).toHaveBeenCalledWith('');
-      expect(mockSetSuggestions).toHaveBeenCalledWith([]);
-      expect(mockLocation.href).not.toBeDefined();
+    const { getByPlaceholderText, getByText, queryByText } = render(
+      <IntlProvider locale="en">
+        <CourseSearchParamsContext.Provider
+          value={[{ limit: '999', offset: '0' }, jest.fn()]}
+        >
+          <SearchSuggestField filters={{ organizations, subjects }} />
+        </CourseSearchParamsContext.Provider>
+      </IntlProvider>,
+    );
 
-      jest.resetAllMocks();
-      curriedOnSuggestionSelected({} as any, {
-        suggestion: {
-          data: { id: '44' } as Organization,
-          model: modelName.ORGANIZATIONS,
-        },
-      });
+    const field = getByPlaceholderText(
+      'Search for courses, organizations, categories',
+    );
 
-      expect(mockAddFilter).toHaveBeenCalledWith('44');
-      expect(mockSetValue).toHaveBeenCalledWith('');
-      expect(mockSetSuggestions).toHaveBeenCalledWith([]);
-      expect(mockLocation.href).not.toBeDefined();
-    });
+    // Simulate the user entering some text in the autocomplete field
+    fireEvent.focus(field);
+    fireEvent.change(field, { target: { value: 'cour' } });
+    await wait();
 
-    it('updates the full text search when it is called with the default suggestion', () => {
-      curriedOnSuggestionSelected({} as any, {
-        suggestion: { model: null, data: 'my search' },
-      });
+    const courseSuggestion = getByText('Course #65');
+    getByText('Courses');
+    getByText(getDefaultSuggestionHelper('cour')); // Default suggestion is always shown
 
-      expect(mockUpdateFullTextSearch).toHaveBeenCalledWith('my search');
-      expect(mockLocation.href).not.toBeDefined();
+    expect(queryByText('Categories')).toEqual(null);
+    expect(queryByText('Organizations')).toEqual(null);
+
+    fireEvent.click(courseSuggestion);
+    expect(mockLocation.href).toEqual('https://example.com/courses/65');
+  });
+
+  it('removes the search query when the user presses ENTER on an empty field', () => {
+    fetchMock.get('/api/v1.0/categories/autocomplete/?query=some%20query', []);
+    fetchMock.get('/api/v1.0/courses/autocomplete/?query=some%20query', []);
+    fetchMock.get(
+      '/api/v1.0/organizations/autocomplete/?query=some%20query',
+      [],
+    );
+
+    const dispatchCourseSearchParamsUpdate = jest.fn();
+    const { getByPlaceholderText, getByText, queryByText } = render(
+      <IntlProvider locale="en">
+        <CourseSearchParamsContext.Provider
+          value={[
+            { limit: '999', offset: '0', query: 'some query' },
+            dispatchCourseSearchParamsUpdate,
+          ]}
+        >
+          <SearchSuggestField filters={{ organizations, subjects }} />
+        </CourseSearchParamsContext.Provider>
+      </IntlProvider>,
+    );
+
+    const field = getByPlaceholderText(
+      'Search for courses, organizations, categories',
+    );
+
+    // Simulate the user deleting the text in the autocomplete field
+    fireEvent.focus(field);
+    fireEvent.change(field, { target: { value: '' } });
+    fireEvent.keyDown(field, { keyCode: 13 });
+
+    expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
+      query: '',
+      type: 'QUERY_UPDATE',
     });
   });
 });
