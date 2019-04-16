@@ -1,6 +1,7 @@
 """
 End-to-end tests for the course detail view
 """
+import re
 from unittest import mock
 
 from django.utils import timezone
@@ -263,3 +264,26 @@ class CourseCMSTestCase(CMSTestCase):
             'href="/en/my-course/my-course-run/">To be scheduled</a>',
             html=True,
         )
+
+    def test_templates_course_detail_organization_main_logo(self):
+        """The main organization logo should be present on the page with a link."""
+        user = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=user.username, password="password")
+
+        organizations = OrganizationFactory.create_batch(
+            2, fill_logo=True, should_publish=True
+        )
+        course = CourseFactory(fill_organizations=organizations)
+
+        response = self.client.get(course.extended_object.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+
+        pattern = (
+            r'<div class="course-detail__aside__main-org-logo">'
+            r'<a href="{url:s}" title="{title:s}">'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*logo\.jpg__100x100'
+        ).format(
+            url=organizations[0].extended_object.get_absolute_url(),
+            title=organizations[0].extended_object.get_title(),
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
