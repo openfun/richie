@@ -17,7 +17,8 @@ jobs:
   # Git jobs
   # Check that the git history is clean and complies with our expectations
   lint-git:
-    machine: true
+    docker:
+      - image: circleci/python:3.7-stretch
     working_directory: ~/fun
     steps:
       - checkout
@@ -35,15 +36,16 @@ jobs:
       - run:
           name: Install gitlint
           command: |
-            pip install requests gitlint
+            pip install --user gitlint
       - run:
           name: lint commit messages added to master
           command: |
-            gitlint --commits origin/master..HEAD
+            ~/.local/bin/gitlint --commits origin/master..HEAD
 
   # Check that the CHANGELOG has been updated in the current branch
   check-changelog:
-    machine: true
+    docker:
+      - image: circleci/buildpack-deps:stretch-scm
     working_directory: ~/fun
     steps:
       - checkout
@@ -54,7 +56,8 @@ jobs:
 
   # Check that the CHANGELOG max line length does not exceed 80 characters
   lint-changelog:
-    machine: true
+    docker:
+      - image: debian:stretch
     working_directory: ~/fun
     steps:
       - checkout
@@ -64,318 +67,41 @@ jobs:
             # Get the longuest line width (ignoring release links)
             test $(cat CHANGELOG.md | grep -Ev "^\[.*\]: https://github.com/openfun" | wc -L) -le 80
 
-  # Docker/back-end jobs
-  # Build job
+  # ---- Docker jobs ----
   # Build the Docker image ready for production
-  build:
-    # We use the machine executor, i.e. a VM, not a container
-    machine:
-      # Cache docker layers so that we strongly speed up this job execution
-      docker_layer_caching: true
+  build-docker:
+    docker:
+      - image: circleci/buildpack-deps:stretch
     working_directory: ~/fun
     steps:
       # Checkout repository sources
       - checkout
       # Generate a version.json file describing app release
       - <<: *generate-version-file
+      # Activate docker-in-docker
+      - setup_remote_docker:
+          docker_layer_caching: true
       # Each image is tagged with the current git commit sha1 to avoid
       # collisions in parallel builds.
       - run:
           name: Build production image
-          command: |
-            docker build \
-              -t richie:${CIRCLE_SHA1} \
-              .
+          command: docker build -t richie:${CIRCLE_SHA1} .
       - run:
           name: Check built image availability
           command: docker images "richie:${CIRCLE_SHA1}*"
-      # Since we cannot rely on CircleCI's Docker layers cache (for obscure
-      # reasons some subsequent jobs will benefit from a previous job cache and
-      # some others won't), we choose to save built docker images in cached
-      # directories. This ensures that we will be able to load built docker
-      # images in subsequent jobs.
-      - run:
-          name: Store docker image in cache
-          command: |
-            docker save \
-              -o docker/images/richie.tar \
-              richie:${CIRCLE_SHA1}
-      - save_cache:
-          paths:
-            - ~/fun/docker/images/
-          key: docker-debian-images-{{ .Revision }}
 
-  # Build CI job
-  # Build the Docker image ready for the CI
-  build-ci:
-    machine:
-      docker_layer_caching: true
-    working_directory: ~/fun
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - docker-debian-images-{{ .Revision }}
-      - run:
-          name: Load images to docker engine
-          command: |
-            docker load < docker/images/richie.tar
-      - run:
-          name: List available images
-          command: docker images "richie:${CIRCLE_SHA1}*"
-      # Generate a version.json file describing app release
-      - <<: *generate-version-file
-      # CI image build, it uses the dev Dockerfile file
-      - run:
-          name: Build CI image
-          command: |
-            docker build \
-              -t richie:${CIRCLE_SHA1}-ci \
-              -f docker/images/ci/Dockerfile \
-              --build-arg BASE_TAG=${CIRCLE_SHA1} \
-              .
-      - run:
-          name: Check built image availability
-          command: docker images "richie:${CIRCLE_SHA1}*"
-      - run:
-          name: Store docker image in cache
-          command: |
-            docker save \
-              -o docker/images/dev/richie.tar \
-              richie:${CIRCLE_SHA1} \
-              richie:${CIRCLE_SHA1}-ci
-      - save_cache:
-          paths:
-            - ~/fun/docker/images/dev/
-          key: docker-debian-images-ci-{{ .Revision }}
-      # Generate and persist the translations base file
-      - run:
-          name: Generate a POT file from strings extracted from the project
-          command: |
-            docker run --rm \
-              --user="$(id -u)" \
-              --volume "$PWD:/app" \
-              --workdir /app/src/richie \
-              "richie:${CIRCLE_SHA1}-ci" \
-                  python /app/sandbox/manage.py makemessages --keep-pot
-      - persist_to_workspace:
-          root: ~/fun
-          paths:
-            - src/richie/locale/django.pot
-
-  lint-back-isort:
-    machine: true
-    working_directory: ~/fun
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - docker-debian-images-ci-{{ .Revision }}
-      - run:
-          name: Load images to docker engine
-          command: |
-            docker load < docker/images/dev/richie.tar
-      - run:
-          name: Lint code with isort
-          command: |
-            docker-compose \
-              -p richie-ci \
-              -f docker/compose/ci/postgresql/docker-compose.yml \
-              --project-directory . \
-              run --rm --no-deps app \
-                isort --recursive --check-only .
-
-  lint-back-flake8:
-    machine: true
-    working_directory: ~/fun
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - docker-debian-images-ci-{{ .Revision }}
-      - run:
-          name: Load images to docker engine
-          command: |
-            docker load < docker/images/dev/richie.tar
-      - run:
-          name: Lint code with flake8
-          command: |
-            docker-compose \
-              -p richie-ci \
-              -f docker/compose/ci/postgresql/docker-compose.yml \
-              --project-directory . \
-              run --rm --no-deps app \
-                flake8
-
-  lint-back-pylint:
-    machine: true
-    working_directory: ~/fun
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - docker-debian-images-ci-{{ .Revision }}
-      - run:
-          name: Load images to docker engine
-          command: |
-            docker load < docker/images/dev/richie.tar
-      - run:
-          name: Lint code with pylint
-          command: |
-            docker-compose \
-              -p richie-ci \
-              -f docker/compose/ci/postgresql/docker-compose.yml \
-              --project-directory . \
-              run --rm --no-deps app \
-                pylint src/richie/apps src/richie/plugins sandbox tests
-
-  lint-back-black:
-    machine: true
-    working_directory: ~/fun
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - docker-debian-images-ci-{{ .Revision }}
-      - run:
-          name: Load images to docker engine
-          command: |
-            docker load < docker/images/dev/richie.tar
-      - run:
-          name: Lint code with black
-          command: |
-            docker-compose \
-              -p richie-ci \
-              -f docker/compose/ci/postgresql/docker-compose.yml \
-              --project-directory . \
-              run --rm --no-deps app \
-                black src/richie/apps src/richie/plugins sandbox tests --check
-
-  # Restore front & back POT files containing strings to translate and upload them to our
-  # translation management tool
-  upload-i18n-strings:
-    machine:
-      docker_layer_caching: true
-    working_directory: ~/fun
-    steps:
-      - checkout
-      - attach_workspace:
-          at: ~/fun
-      - run:
-          name: upload files to crowdin
-          command: |
-            docker-compose \
-              -p richie-test \
-              -f docker/compose/ci/postgresql/docker-compose.yml \
-              --project-directory . \
-              run --rm --no-deps crowdin \
-                -c crowdin/config.yml upload sources
-
-  test-back-mysql:
-    machine: true
-    working_directory: ~/fun
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - docker-debian-images-ci-{{ .Revision }}
-      - run:
-          name: Load images to docker engine
-          command: |
-            docker load < docker/images/dev/richie.tar
-      # ElasticSearch configuration
-      #
-      # We need to increase the VM max memory size, or else, ElasticSearch (ES)
-      # service won't bootstrap.
-      #
-      # Source:
-      # https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-cli-run-prod-mode
-      - run:
-          name: Increase VM max memory size for ES
-          command: |
-            sudo sysctl -w vm.max_map_count=262144
-            sudo sysctl vm.max_map_count
-      # Run back-end (Django) test suite
-      #
-      # Nota bene: to run the django test suite, we need to ensure that both
-      # MySQL and ElasticSearch services are up and ready. To achieve this, we
-      # wrap the pytest command execution with dockerize, a tiny tool installed
-      # in the CI image. In our case, dockerize will wait up to one minute that
-      # both the database and elastisearch containers opened their expected tcp
-      # port (3306 and 9200 resp.).
-      - run:
-          name: Run tests
-          command: |
-            touch env.d/development/crowdin && \
-            docker-compose \
-              -p richie-ci \
-              -f docker/compose/ci/mysql/docker-compose.yml \
-              --project-directory . \
-              run --rm app \
-                dockerize \
-                  -wait tcp://db:3306 \
-                  -wait tcp://elasticsearch:9200 \
-                  -timeout 60s \
-                    pytest
-            docker-compose -p richie-ci ps db | grep "mysql"
-
-  test-back-postgresql:
-    machine: true
-    working_directory: ~/fun
-    steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - docker-debian-images-ci-{{ .Revision }}
-      - run:
-          name: Load images to docker engine
-          command: |
-            docker load < docker/images/dev/richie.tar
-      # ElasticSearch configuration
-      #
-      # We need to increase the VM max memory size, or else, ElasticSearch (ES)
-      # service won't bootstrap.
-      #
-      # Source:
-      # https://www.elastic.co/guide/en/elasticsearch/reference/current/docker.html#docker-cli-run-prod-mode
-      - run:
-          name: Increase VM max memory size for ES
-          command: |
-            sudo sysctl -w vm.max_map_count=262144
-            sudo sysctl vm.max_map_count
-      # Run back-end (Django) test suite
-      #
-      # Nota bene: to run the django test suite, we need to ensure that both
-      # PostgreSQL and ElasticSearch services are up and ready. To achieve this,
-      # we wrap the pytest command execution with dockerize, a tiny tool
-      # installed in the CI image. In our case, dockerize will wait up to one
-      # minute that both the database and elastisearch containers opened their
-      # expected tcp port (5432 and 9200 resp.).
-      - run:
-          name: Run tests
-          command: |
-            touch env.d/development/crowdin && \
-            docker-compose \
-              -p richie-ci \
-              -f docker/compose/ci/postgresql/docker-compose.yml \
-              --project-directory . \
-              run --rm app \
-                dockerize \
-                  -wait tcp://db:5432 \
-                  -wait tcp://elasticsearch:9200 \
-                  -timeout 60s \
-                    pytest
-            docker-compose -p richie-ci ps db | grep "postgres"
-
-  # ---- Alpine jobs ----
-  build-alpine:
-    machine:
-      docker_layer_caching: true
+  # Build alpine image
+  build-docker-alpine:
+    docker:
+      - image: circleci/buildpack-deps:stretch
     working_directory: ~/fun
     steps:
       - checkout
       # Generate a version.json file describing app release
       - <<: *generate-version-file
+      # Activate docker-in-docker
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
           name: Build alpine production image
           command: |
@@ -384,59 +110,242 @@ jobs:
               -f docker/images/alpine/Dockerfile \
               .
       - run:
-          name: Build alpine CI image
-          command: |
-            docker build \
-              -t richie:${CIRCLE_SHA1}-alpine-ci \
-              -f docker/images/alpine/ci/Dockerfile \
-              --build-arg BASE_TAG=${CIRCLE_SHA1}-alpine \
-              .
-      - run:
-          name: List available images
-          command: docker images richie
-      - run:
-          name: Store docker image in cache
-          command: |
-            docker save \
-              -o docker/images/alpine/richie.tar \
-              richie:${CIRCLE_SHA1}-alpine \
-              richie:${CIRCLE_SHA1}-alpine-ci
-      - save_cache:
-          paths:
-            - ~/fun/docker/images/
-          key: docker-alpine-images-ci-{{ .Revision }}
+          name: Check built image availability
+          command: docker images "richie:${CIRCLE_SHA1}*"
 
-  test-alpine:
-    machine: true
+  # ---- Backend jobs ----
+  # Build backend development environment
+  build-back:
+    docker:
+      - image: circleci/python:3.7-stretch
     working_directory: ~/fun
     steps:
       - checkout
       - restore_cache:
           keys:
-            - docker-alpine-images-ci-{{ .Revision }}
+            - v2-back-dependencies-{{ .Revision }}
+            - v2-back-dependencies
       - run:
-          name: Load images to docker engine
-          command: |
-            docker load < docker/images/alpine/richie.tar
+          name: Install development dependencies
+          command: pip install --user .[dev,sandbox]
+      - save_cache:
+          paths:
+            - ~/.local
+          key: v2-back-dependencies-{{ .Revision }}
+
+  # Build backend translations
+  build-back-i18n:
+    docker:
+      - image: circleci/python:3.7-stretch
+    working_directory: ~/fun/src/richie
+    steps:
+      - checkout:
+          path: ~/fun
+      - restore_cache:
+          keys:
+            - v2-back-dependencies-{{ .Revision }}
       - run:
-          name: Increase VM max memory size
+          name: Install gettext (required to make messages)
+          command: sudo apt-get install -y gettext
+      # Generate and persist the translations base file
+      - run:
+          name: Generate a POT file from strings extracted from the project
+          command: ~/.local/bin/django-admin makemessages --keep-pot
+      - persist_to_workspace:
+          root: ~/fun
+          paths:
+            - src/richie/locale/django.pot
+
+  lint-back-isort:
+    docker:
+      - image: circleci/python:3.7-stretch
+    working_directory: ~/fun
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v2-back-dependencies-{{ .Revision }}
+      - run:
+          name: Lint code with isort
+          command: ~/.local/bin/isort --recursive --check-only .
+
+  lint-back-flake8:
+    docker:
+      - image: circleci/python:3.7-stretch
+    working_directory: ~/fun
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v2-back-dependencies-{{ checksum "setup.cfg" }}
+      - run:
+          name: Lint code with flake8
+          command: ~/.local/bin/flake8
+
+  lint-back-pylint:
+    docker:
+      - image: circleci/python:3.7-stretch
+    working_directory: ~/fun
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v2-back-dependencies-{{ checksum "setup.cfg" }}
+      - run:
+          name: Lint code with pylint
+          command: ~/.local/bin/pylint src/richie/apps src/richie/plugins sandbox tests
+
+  lint-back-black:
+    docker:
+      - image: circleci/python:3.7-stretch
+    working_directory: ~/fun
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v2-back-dependencies-{{ checksum "setup.cfg" }}
+      - run:
+          name: Lint code with black
+          command: ~/.local/bin/black src/richie/apps src/richie/plugins sandbox tests --check
+
+  # Restore front & back POT files containing strings to translate and upload them to our
+  # translation management tool
+  upload-i18n-strings:
+    docker:
+      - image: fundocker/crowdin:2.0.27
+    working_directory: ~/fun
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/fun
+      - run:
+          name: upload files to crowdin
+          command: crowdin -c crowdin/config.yml upload sources
+
+  test-back-mysql:
+    docker:
+      - image: circleci/python:3.7-stretch
+        environment:
+          DJANGO_SETTINGS_MODULE: settings
+          DJANGO_CONFIGURATION: Test
+          DJANGO_SECRET_KEY: ThisIsAnExampleKeyForTestPurposeOnly
+          PYTHONPATH: /home/circleci/fun/sandbox
+          RICHIE_ES_HOST: localhost
+          DB_ENGINE: django.db.backends.mysql
+          # The DB_HOST should match the host name and cannot be set from here
+          # where it will be escaped. See the test command instead:
+          # DB_HOST=${HOSTNAME}
+          DB_HOST:
+          DB_NAME: richie
+          DB_USER: fun
+          DB_PASSWORD: pass
+          DB_PORT: 3306
+      # services
+      - image: circleci/mysql:5.6-ram
+        environment:
+          MYSQL_ROOT_PASSWORD:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_DATABASE: richie
+          MYSQL_USER: fun
+          MYSQL_PASSWORD: pass
+        command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
+      - image: fundocker/openshift-elasticsearch:6.6.2
+        environment:
+          discovery.type: single-node
+    working_directory: ~/fun
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v2-back-dependencies-{{ .Revision }}
+      # Attach the frontend production build
+      - attach_workspace:
+          at: ~/fun
+      # While running tests, we need to make the /data directory writable for
+      # the circleci user
+      - run:
+          name: Create writable /data
           command: |
-            sudo sysctl -w vm.max_map_count=262144
-            sudo sysctl vm.max_map_count
+            sudo mkdir /data && \
+            sudo chown circleci:circleci /data
+      # Run back-end (Django) test suite
+      #
+      # Nota bene:
+      #
+      # 1. to run the django test suite, we need to ensure that both MySQL and
+      #    ElasticSearch services are up and ready. To achieve this, we wrap the
+      #    pytest command execution with dockerize, a tiny tool installed in the
+      #    CircleCI image. In our case, dockerize will wait up to one minute
+      #    that both the database and elastisearch containers opened their
+      #    expected tcp port (3306 and 9200 resp.).
+      # 2. We should avoid using localhost for the DB_HOST with MySQL as the
+      #    client will try to use a local socket (_e.g._
+      #    `/var/run/mysqld/mysqld.sock`) instead of the database host and port
+      #    ¯\_(ツ)_/¯.
       - run:
           name: Run tests
           command: |
-            IMAGE_SUFFIX="-alpine" \
-            docker-compose \
-              -p richie-alpine-ci \
-              -f docker/compose/ci/postgresql/docker-compose.yml \
-              --project-directory . \
-              run --rm app \
-                dockerize \
-                  -wait tcp://db:5432 \
-                  -wait tcp://elasticsearch:9200 \
-                  -timeout 60s \
-                    pytest
+            DB_HOST=${HOSTNAME} dockerize \
+              -wait tcp://${HOSTNAME}:3306 \
+              -wait tcp://${HOSTNAME}:9200 \
+              -timeout 60s \
+                ~/.local/bin/pytest
+
+  test-back-postgresql:
+    docker:
+      - image: circleci/python:3.7-stretch
+        environment:
+          DJANGO_SETTINGS_MODULE: settings
+          DJANGO_CONFIGURATION: Test
+          DJANGO_SECRET_KEY: ThisIsAnExampleKeyForTestPurposeOnly
+          PYTHONPATH: /home/circleci/fun/sandbox
+          RICHIE_ES_HOST: localhost
+          DB_HOST: localhost
+          DB_NAME: richie
+          DB_USER: fun
+          DB_PASSWORD: pass
+          DB_PORT: 5432
+      # services
+      - image: circleci/postgres:9.6-ram
+        environment:
+          POSTGRES_DB: richie
+          POSTGRES_USER: fun
+          POSTGRES_PASSWORD: pass
+      - image: fundocker/openshift-elasticsearch:6.6.2
+        environment:
+          discovery.type: single-node
+    working_directory: ~/fun
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - v2-back-dependencies-{{ .Revision }}
+      # Attach the frontend production build
+      - attach_workspace:
+          at: ~/fun
+      # While running tests, we need to make the /data directory writable for
+      # the circleci user
+      - run:
+          name: Create writable /data
+          command: |
+            sudo mkdir /data && \
+            sudo chown circleci:circleci /data
+      # Run back-end (Django) test suite
+      #
+      # Nota bene: to run the django test suite, we need to ensure that both
+      # MySQL and ElasticSearch services are up and ready. To achieve this, we
+      # wrap the pytest command execution with dockerize, a tiny tool installed
+      # in the CircleCI image. In our case, dockerize will wait up to one minute
+      # that both the database and elastisearch containers opened their expected
+      # tcp port (3306 and 9200 resp.).
+      - run:
+          name: Run tests
+          command: |
+            dockerize \
+              -wait tcp://localhost:5432 \
+              -wait tcp://localhost:9200 \
+              -timeout 60s \
+                ~/.local/bin/pytest
 
   # ---- Packaging jobs ----
   package-back:
@@ -486,22 +395,16 @@ jobs:
 
   # ---- DockerHub publication job ----
   hub:
-    machine: true
+    docker:
+      - image: circleci/buildpack-deps:stretch
     working_directory: ~/fun
     steps:
-      - checkout
-      - restore_cache:
-          keys:
-            - docker-debian-images-ci-{{ .Revision }}
-      - restore_cache:
-          keys:
-            - docker-alpine-images-ci-{{ .Revision }}
-      # Load all built images in all flavors
+      # Activate docker-in-docker
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run:
-          name: Load images to docker engine
-          command: |
-            docker load < docker/images/dev/richie.tar
-            docker load < docker/images/alpine/richie.tar
+          name: Check built images availability
+          command: docker images "richie:${CIRCLE_SHA1}*"
       # Login to DockerHub to Publish new images
       #
       # Nota bene: you'll need to define the following secrets environment vars
@@ -738,11 +641,15 @@ workflows:
               only: /.*/
       - test-front:
           requires:
-            - build-front
+            - lint-front-tslint
+            - lint-prettier
           filters:
             tags:
               only: /.*/
       - test-front-package:
+          requires:
+            - lint-front-tslint
+            - lint-prettier
           filters:
             tags:
               only: /.*/
@@ -771,51 +678,65 @@ workflows:
 
       # Docker jobs
       #
-      # Build, lint and test production and development Docker images
-      # (debian-based)
-      - build:
+      # Build images
+      - build-docker:
           filters:
             tags:
               only: /.*/
-      - build-ci:
-          requires:
-            - build
+      - build-docker-alpine:
+          filters:
+            tags:
+              only: /.*/
+
+      # Backend jobs
+      #
+      # Build, lint and test production and development Docker images
+      # (debian-based)
+      - build-back:
           filters:
             tags:
               only: /.*/
       - lint-back-black:
           requires:
-            - build-ci
+            - build-back
           filters:
             tags:
               only: /.*/
       - lint-back-isort:
           requires:
-            - build-ci
+            - build-back
           filters:
             tags:
               only: /.*/
       - lint-back-flake8:
           requires:
-            - build-ci
+            - build-back
           filters:
             tags:
               only: /.*/
       - lint-back-pylint:
           requires:
-            - build-ci
+            - build-back
           filters:
             tags:
               only: /.*/
       - test-back-mysql:
           requires:
-            - build-ci
+            - lint-back-black
+            - lint-back-isort
+            - lint-back-flake8
+            - lint-back-pylint
+            - build-front-production
           filters:
             tags:
               only: /.*/
       - test-back-postgresql:
           requires:
-            - build-ci
+            - lint-back-black
+            - lint-back-isort
+            - lint-back-flake8
+            - lint-back-pylint
+            - build-front-production
           filters:
             tags:
               only: /.*/
@@ -823,27 +744,19 @@ workflows:
       # i18n jobs
       #
       # Extract strings and upload them to our translation management SaaS
+      - build-back-i18n:
+          requires:
+            - build-back
+          filters:
+            tags:
+              only: /.*/
       - upload-i18n-strings:
           requires:
             - build-front
-            - build-ci
+            - build-back-i18n
           filters:
             branches:
               only: master
-
-      # Docker alpine jobs
-      #
-      # Build and run tests in alpine based images
-      - build-alpine:
-          filters:
-            tags:
-              only: /.*/
-      - test-alpine:
-          requires:
-            - build-alpine
-          filters:
-            tags:
-              only: /.*/
 
       # Packaging: python
       #
@@ -853,7 +766,6 @@ workflows:
             - test-front
             - test-back-mysql
             - test-back-postgresql
-            - test-alpine
             - build-front-production
           filters:
             tags:
@@ -868,7 +780,6 @@ workflows:
             - test-front
             - test-back-mysql
             - test-back-postgresql
-            - test-alpine
           filters:
             branches:
               only: master
