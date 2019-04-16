@@ -1,22 +1,22 @@
 {% load i18n cms_tags %}{% spaceless %}
 <div class="course-detail__aside__main-org-logo">
-{% if organization %}
+  {% if organization %}
     {% with organization_page=organization.extended_object %}
-    <a href="{{ organization.get_absolute_url }}" title="{{ organization_page.get_title }}">
+      <a href="{{ organization_page.get_absolute_url }}" title="{{ organization_page.get_title }}">
         {% show_placeholder "logo" organization_page as logo %}
         {% if logo %}
-            {{ logo }}
+          {{ logo }}
         {% else %}
-            <div class="course-detail__aside__main-org-logo__empty">
+          <div class="course-detail__aside__main-org-logo__empty">
             {% trans "Main organization" %}
-            </div>
+          </div>
         {% endif %}
-    </a>
+      </a>
     {% endwith %}
-{% else %}
+  {% else %}
     <div class="course-detail__aside__main-org-logo__empty">
-    {% trans "Main organization" %}
+      {% trans "Main organization" %}
     </div>
-{% endif %}
+  {% endif %}
 </div>
 {% endspaceless %}
