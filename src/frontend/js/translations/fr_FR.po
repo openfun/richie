@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2019-03-29T17:03:36.640Z\n"
+"POT-Creation-Date: 2019-04-16T08:58:52.187Z\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "MIME-Version: 1.0\n"
@@ -10,10 +10,10 @@ msgstr ""
 "X-Crowdin-Language: fr\n"
 "X-Crowdin-File: frontend.pot\n"
 "Project-Id-Version: richie\n"
-"Last-Translator: sampaccoud <samuel@sampaccoud.com>\n"
+"Last-Translator: Samuel Paccoud (sampaccoud)\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2019-04-03 21:15\n"
+"PO-Revision-Date: 2019-04-17 07:34\n"
 
 #. [common.categoriesHumanName] - Title/name to use when we display a list of categories
 #. defaultMessage is:
@@ -21,6 +21,13 @@ msgstr ""
 #: i18n/js/utils/commonMessages.json
 msgid "Categories"
 msgstr "Catégories"
+
+#. [components.SearchFiltersPane.clearFilters] - Helper button in search filters pane in search page to remove all active filters
+#. defaultMessage is:
+#. Clear {activeFilterCount, number} active {activeFilterCount, plural, one {filter} other {filters}}
+#: i18n/js/components/SearchFiltersPane/SearchFiltersPane.json
+msgid "Clear {activeFilterCount, number} active {activeFilterCount, plural, one {filter} other {filters}}"
+msgstr "Remettre à zéro {activeFilterCount, number} {activeFilterCount, plural, one {filtre} other {filtres}} actifs"
 
 #. [components.CloseIcon.closeLabel] - Accessibility label for the "x" disable icon on an active filer
 #. defaultMessage is:
@@ -35,6 +42,13 @@ msgstr "Fermer"
 #: i18n/js/utils/commonMessages.json
 msgid "Courses"
 msgstr "Cours"
+
+#. [components.CourseGlimpse.cover] - Placeholder text when the course we are glimpsing at is missing a cover image
+#. defaultMessage is:
+#. Cover
+#: i18n/js/components/CourseGlimpse/CourseGlimpse.json
+msgid "Cover"
+msgstr "Couverture"
 
 #. [components.CourseGlimpse.linkText] - Accessibility title for links on course glimpses.
 #. defaultMessage is:
