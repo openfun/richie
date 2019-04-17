@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.0-beta.6] - 2019-04-17
+
 ### Added
 
 - Allow tagging persons with categories,
@@ -16,14 +18,13 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add template and styling for persons list page,
 - Add template and styling for categories list page,
 - Add sub categories in category detail page.
-  remove all active filters with one click.
 - Show CTAs to Enroll on course glimpses in Search.
 - Make the `RICHIE_ES_HOST` configurable in the sandbox
 
 ## Changed
 
 - Harmonize how cards look on the site (grey border and white background),
-- Move all the code demo site related to the demo site to its own application,
+- Move all the code related to the demo site to its own application,
 - Activating a filter that is a parent or child of a current active filter
   removes this active relative. This makes the experience of adding those
   relative filters more intuitive,
@@ -31,15 +32,12 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   customized (search, languages, plugins, general),
 - Change layout global background to darker grey,
 - Improve 'categories' page layout,
-- Every organization in a list is not displayed with an organization glimpse.
+- Every organization in a list is now displayed with an organization glimpse.
 
 ### Fixed
 
 - Fix links between objects managed via plugins (e.g. categories on a course)
   that allowed draft links to display objects on public pages.
-
-### Fixed
-
 - Show the highlighted organization on course glimpses in Search.
 - Show a placeholder image on course glimpses in Search when the
   cover for the course is missing.
@@ -194,7 +192,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v1.0.0-beta.5...master
+[unreleased]: https://github.com/openfun/richie/compare/v1.0.0-beta.6...master
+[1.0.0-beta.6]: https://github.com/openfun/richie/compare/v1.0.0-beta.5...v1.0.0-beta.6
 [1.0.0-beta.5]: https://github.com/openfun/richie/compare/v1.0.0-beta.4...v1.0.0-beta.5
 [1.0.0-beta.4]: https://github.com/openfun/richie/compare/v1.0.0-beta.3...v1.0.0-beta.4
 [1.0.0-beta.3]: https://github.com/openfun/richie/compare/v1.0.0-beta.2...v1.0.0-beta.3
