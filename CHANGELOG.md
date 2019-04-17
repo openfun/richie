@@ -8,9 +8,16 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.0-beta.7] - 2019-04-17
+
+### Changed
+
+- Update French and Canadian French `.po` files with the latest translations.
+
 ### Fixed
 
-- Fix a display glitch with parent filters when active
+- Fix broken `hub` job in CI publishing the Docker image,
+- Fix a display glitch with parent filters when active.
 
 ## [1.0.0-beta.6] - 2019-04-17
 
@@ -196,7 +203,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v1.0.0-beta.6...master
+[unreleased]: https://github.com/openfun/richie/compare/v1.0.0-beta.7...master
+[1.0.0-beta.7]: https://github.com/openfun/richie/compare/v1.0.0-beta.6...v1.0.0-beta.7
 [1.0.0-beta.6]: https://github.com/openfun/richie/compare/v1.0.0-beta.5...v1.0.0-beta.6
 [1.0.0-beta.5]: https://github.com/openfun/richie/compare/v1.0.0-beta.4...v1.0.0-beta.5
 [1.0.0-beta.4]: https://github.com/openfun/richie/compare/v1.0.0-beta.3...v1.0.0-beta.4
