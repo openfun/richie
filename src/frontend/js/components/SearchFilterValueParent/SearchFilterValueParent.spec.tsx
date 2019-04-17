@@ -252,7 +252,7 @@ describe('<SearchFilterValueParent />', () => {
 
     // The button shows its active state
     const button = getByText('Human name').parentElement;
-    expect(button).toHaveClass('active');
+    expect(button!.parentElement).toHaveClass('active');
     expect(button).toHaveAttribute('aria-pressed', 'true');
   });
 

@@ -23,14 +23,6 @@ $richie-search-filter-value-active-divider-border: 1px solid $white !default;
     color: $richie-search-filter-value-fontcolor-hover;
   }
 
-  // Include both here for `<a>`s and `<button>`s
-  &.active {
-    z-index: 2; // Place active items above their siblings for proper border styling
-    font-weight: $richie-search-filter-value-active-fontweight;
-    color: $richie-search-filter-value-active-fontcolor;
-    border-top: $richie-search-filter-value-active-divider-border;
-  }
-
   &__name {
     flex-grow: 1;
     text-align: start;
@@ -56,11 +48,26 @@ $richie-search-filter-value-active-divider-border: 1px solid $white !default;
   }
 }
 
+// Most active styles are done on the filter button itself (which is the component itself for leaves
+// and an inner part for parents)
+.search-filter-value-leaf.active,
+.search-filter-value-parent__self.active
+  > .search-filter-value-parent__self__btn {
+  z-index: 2; // Place active items above their siblings for proper border styling
+  font-weight: $richie-search-filter-value-active-fontweight;
+  color: $richie-search-filter-value-active-fontcolor;
+}
+
+// Border styling needs to be done on an outer component for parents, incl. active styling
 .search-filter-value-leaf,
 .search-filter-value-parent__self {
   display: flex;
   border-top: $richie-search-filter-value-divider-border;
   padding: $richie-search-filter-value-padding;
+
+  &.active {
+    border-top: $richie-search-filter-value-active-divider-border;
+  }
 }
 
 .search-filter-value-parent {

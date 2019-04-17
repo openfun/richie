@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix a display glitch with parent filters when active
+
 ## [1.0.0-beta.6] - 2019-04-17
 
 ### Added

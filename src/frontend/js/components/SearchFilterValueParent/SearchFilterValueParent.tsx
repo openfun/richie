@@ -89,7 +89,11 @@ export const SearchFilterValueParent = injectIntl(
     const [isActive, toggle] = useFilterValue(filter, value);
     return (
       <div className="search-filter-value-parent">
-        <div className="search-filter-value-parent__self">
+        <div
+          className={`search-filter-value-parent__self ${
+            isActive ? 'active' : ''
+          }`}
+        >
           <button
             aria-label={intl.formatMessage(
               showChildren
@@ -104,9 +108,7 @@ export const SearchFilterValueParent = injectIntl(
             &gt;
           </button>
           <button
-            className={`search-filter-value-parent__self__btn ${
-              isActive ? 'active' : ''
-            }`}
+            className={`search-filter-value-parent__self__btn`}
             onClick={toggle}
             aria-pressed={isActive}
           >
