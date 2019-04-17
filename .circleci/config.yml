@@ -78,7 +78,7 @@ jobs:
       - checkout
       # Generate a version.json file describing app release
       - <<: *generate-version-file
-      # Activate docker-in-docker
+      # Activate docker-in-docker (with layers caching enabled)
       - setup_remote_docker:
           docker_layer_caching: true
       # Each image is tagged with the current git commit sha1 to avoid
@@ -99,7 +99,7 @@ jobs:
       - checkout
       # Generate a version.json file describing app release
       - <<: *generate-version-file
-      # Activate docker-in-docker
+      # Activate docker-in-docker (with layers caching enabled)
       - setup_remote_docker:
           docker_layer_caching: true
       - run:
@@ -369,9 +369,23 @@ jobs:
       - image: circleci/buildpack-deps:stretch
     working_directory: ~/fun
     steps:
-      # Activate docker-in-docker
+      # Checkout repository sources
+      - checkout
+      # Generate a version.json file describing app release
+      - <<: *generate-version-file
+      # Activate docker-in-docker (with layers caching enabled)
       - setup_remote_docker:
           docker_layer_caching: true
+      - run:
+          name: Build production image (using cached layers)
+          command: docker build -t richie:${CIRCLE_SHA1} .
+      - run:
+          name: Build alpine production image (using cached layers)
+          command: |
+            docker build \
+              -t richie:${CIRCLE_SHA1}-alpine \
+              -f docker/images/alpine/Dockerfile \
+              .
       - run:
           name: Check built images availability
           command: docker images "richie:${CIRCLE_SHA1}*"
@@ -703,6 +717,8 @@ workflows:
       # it has been tagged with a tag starting with the letter v
       - hub:
           requires:
+            - build-docker
+            - build-docker-alpine
             - test-front
             - test-back-mysql
             - test-back-postgresql
