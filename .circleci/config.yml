@@ -618,8 +618,7 @@ workflows:
             branches:
               ignore: master
             tags:
-              only: /.*/
-
+              only: /(?!^v).*/
       - lint-changelog:
           filters:
             branches:
