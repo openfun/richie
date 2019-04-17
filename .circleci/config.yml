@@ -561,10 +561,8 @@ jobs:
             # Compile it!
             yarn node-sass --include-path node_modules main.scss main.css
 
-  # Publishing to npm requires that:
-  #   * you already registered to pypi.org
-  #   * you have define the NPM_TOKEN secret environment variables in CircleCI
-  #     UI (with your PyPI credentials)
+  # Publishing to npm requires that you have define the NPM_TOKEN secret
+  # environment variables in CircleCI UI (with your PyPI credentials)
   npm:
     docker:
       - image: circleci/node:10
@@ -572,9 +570,6 @@ jobs:
     steps:
       - checkout:
           path: ~/fun
-      - restore_cache:
-          keys:
-            - v5-front-dependencies-{{ checksum "yarn.lock" }}
       - run:
           name: Authenticate with registry
           command: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/fun/.npmrc
