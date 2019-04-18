@@ -8,7 +8,6 @@ import { requestStatus } from '../../types/api';
 import { FilterDefinition, FilterValue } from '../../types/filters';
 import { modelName } from '../../types/models';
 import { useAsyncEffect } from '../../utils/useAsyncEffect';
-import { CloseIcon } from '../icons/CloseIcon';
 import { SearchFilterValueLeaf } from '../SearchFilterValueLeaf/SearchFilterValueLeaf';
 
 const messages = defineMessages({
@@ -94,6 +93,18 @@ export const SearchFilterValueParent = injectIntl(
             isActive ? 'active' : ''
           }`}
         >
+          <label className={`search-filter-value-parent__self__label`}>
+            <input
+              checked={isActive}
+              className="search-filter-value-parent__self__label__checkbox"
+              onChange={toggle}
+              type="checkbox"
+            />
+            <div className="search-filter-value-parent__self__label__content">
+              {value.human_name}&nbsp;
+              {value.count || value.count === 0 ? `(${value.count})` : ''}
+            </div>
+          </label>
           <button
             aria-label={intl.formatMessage(
               showChildren
@@ -105,24 +116,7 @@ export const SearchFilterValueParent = injectIntl(
               'search-filter-value-parent__self__unfold--open'}`}
             onClick={() => setShowChildren(!showChildren)}
           >
-            &gt;
-          </button>
-          <button
-            className={`search-filter-value-parent__self__btn`}
-            onClick={toggle}
-            aria-pressed={isActive}
-          >
-            <span className="search-filter-value-parent__self__btn__name">
-              {value.human_name}
-            </span>
-            {!isActive && (value.count || value.count === 0) ? (
-              <span className="search-filter-value-parent__self__btn__count">
-                {value.count}
-              </span>
-            ) : (
-              ''
-            )}
-            {isActive ? <CloseIcon /> : ''}
+            {showChildren ? '-' : '+'}
           </button>
         </div>
         {showChildren && (

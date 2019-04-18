@@ -11,7 +11,7 @@ describe('components/SearchFilterValueLeaf', () => {
   afterEach(cleanup);
 
   it('renders the name of the filter value', () => {
-    const { getByText } = render(
+    const { getByLabelText } = render(
       <IntlProvider locale="en">
         <CourseSearchParamsContext.Provider
           value={[{ limit: '999', offset: '0' }, jest.fn()]}
@@ -34,15 +34,17 @@ describe('components/SearchFilterValueLeaf', () => {
     );
 
     // The filter value is displayed with its facet count
-    const button = getByText('Human name').parentElement;
-    expect(button).toHaveTextContent('217');
+    const checkbox = getByLabelText((content, _) =>
+      content.includes('Human name'),
+    );
+    expect(checkbox.parentElement).toHaveTextContent('(217)');
     // The filter is not currently active
-    expect(button).not.toHaveClass('active');
-    expect(button).toHaveAttribute('aria-pressed', 'false');
+    expect(checkbox).not.toHaveAttribute('checked');
+    expect(checkbox.parentElement).not.toHaveClass('active');
   });
 
   it('shows the filter value as active when it is in the search params', () => {
-    const { getByText } = render(
+    const { getByLabelText } = render(
       <IntlProvider locale="en">
         <CourseSearchParamsContext.Provider
           value={[{ filter_name: '42', limit: '999', offset: '0' }, jest.fn()]}
@@ -64,15 +66,17 @@ describe('components/SearchFilterValueLeaf', () => {
       </IntlProvider>,
     );
 
-    // The button shows its active state
-    const button = getByText('Human name').parentElement;
-    expect(button).toHaveClass('active');
-    expect(button).toHaveAttribute('aria-pressed', 'true');
+    // The filter shows its active state
+    const checkbox = getByLabelText((content, _) =>
+      content.includes('Human name'),
+    );
+    expect(checkbox).toHaveAttribute('checked');
+    expect(checkbox.parentElement).toHaveClass('active'); // label that contains checkbox
   });
 
-  it('dispatches a FILTER_ADD action on button click if it was not active', () => {
+  it('dispatches a FILTER_ADD action on filter click if it was not active', () => {
     const dispatchCourseSearchParamsUpdate = jest.fn();
-    const { getByText } = render(
+    const { getByLabelText } = render(
       <IntlProvider locale="en">
         <CourseSearchParamsContext.Provider
           value={[
@@ -97,7 +101,9 @@ describe('components/SearchFilterValueLeaf', () => {
       </IntlProvider>,
     );
 
-    fireEvent.click(getByText('Human name'));
+    fireEvent.click(
+      getByLabelText((content, _) => content.includes('Human name')),
+    );
     expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
       filter: {
         base_path: null,
@@ -110,9 +116,9 @@ describe('components/SearchFilterValueLeaf', () => {
     });
   });
 
-  it('dispatches a FILTER_REMOVE action on button click if it was active', () => {
+  it('dispatches a FILTER_REMOVE action on filter click if it was active', () => {
     const dispatchCourseSearchParamsUpdate = jest.fn();
-    const { getByText } = render(
+    const { getByLabelText } = render(
       <IntlProvider locale="en">
         <CourseSearchParamsContext.Provider
           value={[
@@ -137,7 +143,9 @@ describe('components/SearchFilterValueLeaf', () => {
       </IntlProvider>,
     );
 
-    fireEvent.click(getByText('Human name'));
+    fireEvent.click(
+      getByLabelText((content, _) => content.includes('Human name')),
+    );
     expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
       filter: {
         base_path: null,
