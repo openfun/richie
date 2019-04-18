@@ -9,8 +9,8 @@ export interface SearchFilterGroupProps {
 }
 
 export const SearchFilterGroup = ({ filter }: SearchFilterGroupProps) => (
-  <div className="search-filter-group">
-    <h3 className="search-filter-group__title">{filter.human_name}</h3>
+  <fieldset className="search-filter-group">
+    <legend className="search-filter-group__title">{filter.human_name}</legend>
     <div className="search-filter-group__list">
       {filter.values.map(value =>
         value.key.startsWith(
@@ -30,5 +30,5 @@ export const SearchFilterGroup = ({ filter }: SearchFilterGroupProps) => (
         ),
       )}
     </div>
-  </div>
+  </fieldset>
 );

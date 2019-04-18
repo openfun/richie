@@ -10,7 +10,12 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-- Improve autosuggest tests to increase reliability
+- Use checkboxes to enable/disable filters in search page.
+- Improve autosuggest tests to increase reliability.
+
+### Fixed
+
+- Use proper HTML elements for accessibility of search filter groups.
 
 ## [1.0.0-beta.7] - 2019-04-17
 
