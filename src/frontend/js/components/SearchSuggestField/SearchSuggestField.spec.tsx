@@ -6,7 +6,6 @@ import { IntlProvider } from 'react-intl';
 import { cleanup, fireEvent, render, wait } from 'react-testing-library';
 
 import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
-import { location as mockLocation } from '../../utils/indirection/window';
 import { SearchSuggestField } from './SearchSuggestField';
 
 jest.mock('../../utils/indirection/window', () => ({ location: {} }));
@@ -85,12 +84,10 @@ describe('components/SearchSuggestField', () => {
   });
 
   it('gets suggestions from the API when the user types something in the field', async () => {
-    fetchMock.get('/api/v1.0/categories/autocomplete/?query=aut', []);
-    fetchMock.get('/api/v1.0/courses/autocomplete/?query=aut', [
+    fetchMock.get('/api/v1.0/categories/autocomplete/?query=aut', [
       {
-        absolute_url: 'https://example.com/courses/1',
-        id: '1',
-        title: 'Course #1',
+        id: 'L-000300010001',
+        title: 'Subject #311',
       },
     ]);
     fetchMock.get('/api/v1.0/organizations/autocomplete/?query=aut', []);
@@ -114,17 +111,14 @@ describe('components/SearchSuggestField', () => {
     fireEvent.change(field, { target: { value: 'aut' } });
     await wait();
 
-    getByText('Courses');
-    getByText('Course #1');
+    getByText('Categories');
+    getByText('Subject #311');
     getByText(getDefaultSuggestionHelper('aut')); // Default suggestion is always shown
-
-    expect(queryByText('Categories')).toEqual(null);
     expect(queryByText('Organizations')).toEqual(null);
   });
 
   it('does not attempt to get or show any suggestions before the user types 3 characters', async () => {
     fetchMock.get('/api/v1.0/categories/autocomplete/?query=xyz', []);
-    fetchMock.get('/api/v1.0/courses/autocomplete/?query=xyz', []);
     fetchMock.get('/api/v1.0/organizations/autocomplete/?query=xyz', []);
 
     const { getByPlaceholderText, getByText, queryByText } = render(
@@ -152,13 +146,12 @@ describe('components/SearchSuggestField', () => {
     fireEvent.change(field, { target: { value: 'xyz' } });
     await wait();
 
-    expect(fetchMock.calls().length).toEqual(3);
+    expect(fetchMock.calls().length).toEqual(2);
     getByText(getDefaultSuggestionHelper('xyz')); // Default suggestion is now shown
   });
 
   it('updates the search params when the user selects a filter suggestion', async () => {
     fetchMock.get('/api/v1.0/categories/autocomplete/?query=orga', []);
-    fetchMock.get('/api/v1.0/courses/autocomplete/?query=orga', []);
     fetchMock.get('/api/v1.0/organizations/autocomplete/?query=orga', [
       {
         id: 'L-00020007',
@@ -211,7 +204,6 @@ describe('components/SearchSuggestField', () => {
 
   it('updates the search params when the user selects the text query', async () => {
     fetchMock.get('/api/v1.0/categories/autocomplete/?query=def', []);
-    fetchMock.get('/api/v1.0/courses/autocomplete/?query=def', []);
     fetchMock.get('/api/v1.0/organizations/autocomplete/?query=def', []);
 
     const dispatchCourseSearchParamsUpdate = jest.fn();
@@ -250,50 +242,8 @@ describe('components/SearchSuggestField', () => {
     });
   });
 
-  it('redirects the user to the course page when they select a course suggestion', async () => {
-    fetchMock.get('/api/v1.0/categories/autocomplete/?query=cour', []);
-    fetchMock.get('/api/v1.0/courses/autocomplete/?query=cour', [
-      {
-        absolute_url: 'https://example.com/courses/65',
-        id: '65',
-        title: 'Course #65',
-      },
-    ]);
-    fetchMock.get('/api/v1.0/organizations/autocomplete/?query=cour', []);
-
-    const { getByPlaceholderText, getByText, queryByText } = render(
-      <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[{ limit: '999', offset: '0' }, jest.fn()]}
-        >
-          <SearchSuggestField filters={{ organizations, subjects }} />
-        </CourseSearchParamsContext.Provider>
-      </IntlProvider>,
-    );
-
-    const field = getByPlaceholderText(
-      'Search for courses, organizations, categories',
-    );
-
-    // Simulate the user entering some text in the autocomplete field
-    fireEvent.focus(field);
-    fireEvent.change(field, { target: { value: 'cour' } });
-    await wait();
-
-    const courseSuggestion = getByText('Course #65');
-    getByText('Courses');
-    getByText(getDefaultSuggestionHelper('cour')); // Default suggestion is always shown
-
-    expect(queryByText('Categories')).toEqual(null);
-    expect(queryByText('Organizations')).toEqual(null);
-
-    fireEvent.click(courseSuggestion);
-    expect(mockLocation.href).toEqual('https://example.com/courses/65');
-  });
-
   it('removes the search query when the user presses ENTER on an empty field', () => {
     fetchMock.get('/api/v1.0/categories/autocomplete/?query=some%20query', []);
-    fetchMock.get('/api/v1.0/courses/autocomplete/?query=some%20query', []);
     fetchMock.get(
       '/api/v1.0/organizations/autocomplete/?query=some%20query',
       [],

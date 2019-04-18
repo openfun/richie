@@ -3,7 +3,10 @@ import { stringify } from 'query-string';
 import { FormattedMessage } from 'react-intl';
 
 import { API_ENDPOINTS } from '../../settings';
-import { Resource } from '../../types/Resource';
+import { CategoryForSuggestion } from '../../types/Category';
+import { CourseForSuggestion } from '../../types/Course';
+import { modelName } from '../../types/models';
+import { OrganizationForSuggestion } from '../../types/Organization';
 import { ResourceSuggestionSection } from '../../types/searchSuggest';
 import { handle } from '../../utils/errors/handle';
 
@@ -47,7 +50,15 @@ export const getSuggestionsSection = async (
     );
   }
 
-  let data: Resource[];
+  let data: Array<
+    typeof sectionModel extends modelName.CATEGORIES
+      ? CategoryForSuggestion
+      : typeof sectionModel extends modelName.COURSES
+      ? CourseForSuggestion
+      : typeof sectionModel extends modelName.ORGANIZATIONS
+      ? OrganizationForSuggestion
+      : unknown
+  >;
   try {
     data = await response.json();
   } catch (error) {

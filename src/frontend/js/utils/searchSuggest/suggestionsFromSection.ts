@@ -3,14 +3,13 @@ import {
   DefaultSuggestionSection,
   ResourceSuggestion,
   ResourceSuggestionSection,
-  SearchSuggestionSection,
 } from '../../types/searchSuggest';
 
 /**
  *  Type guard. Determines the kind of section to pick the correct suggestions extractor.
  */
 function isResourceSection(
-  section: SearchSuggestionSection,
+  section: ResourceSuggestionSection | DefaultSuggestionSection,
 ): section is ResourceSuggestionSection {
   return !!section.model;
 }
@@ -66,7 +65,9 @@ function suggestionsFromResourceSection(
  * @param section The search suggestion section we need to extract the suggestions from.
  * @returns An array containing the suggestions themselves.
  */
-export function suggestionsFromSection(section: SearchSuggestionSection) {
+export function suggestionsFromSection(
+  section: ResourceSuggestionSection | DefaultSuggestionSection,
+) {
   if (isResourceSection(section)) {
     return suggestionsFromResourceSection(section);
   }

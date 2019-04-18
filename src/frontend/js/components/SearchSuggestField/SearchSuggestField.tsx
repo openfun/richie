@@ -11,14 +11,12 @@ import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useC
 import { APICourseSearchResponse } from '../../types/api';
 import { modelName } from '../../types/models';
 import {
-  ResourceSuggestion,
-  ResourceSuggestionSection,
+  DefaultSuggestionSection,
   SearchSuggestion,
   SearchSuggestionSection,
 } from '../../types/searchSuggest';
 import { commonMessages } from '../../utils/commonMessages';
 import { handle } from '../../utils/errors/handle';
-import { location } from '../../utils/indirection/window';
 import { getSuggestionsSection } from '../../utils/searchSuggest/getSuggestionsSection';
 import { suggestionsFromSection } from '../../utils/searchSuggest/suggestionsFromSection';
 
@@ -129,10 +127,6 @@ export const SearchSuggestField = injectIntl(
       { suggestion }: { suggestion: SearchSuggestion },
     ) => {
       switch (suggestion.model) {
-        case modelName.COURSES:
-          // Behave like a link to the course run's page
-          return (location.href = suggestion.data.absolute_url);
-
         case modelName.ORGANIZATIONS:
         case modelName.CATEGORIES:
           // Update the search with the newly selected filter
@@ -180,23 +174,26 @@ export const SearchSuggestField = injectIntl(
         return setSuggestions([]);
       }
 
-      // List the resource-based sections we'll display and the models they're related to
-      const sectionParams: Array<
-        [ResourceSuggestionSection['model'], FormattedMessage.MessageDescriptor]
-      > = [
-        [modelName.COURSES, commonMessages.coursesHumanName],
-        [modelName.ORGANIZATIONS, commonMessages.organizationsHumanName],
-        [modelName.CATEGORIES, commonMessages.categoriesHumanName],
-      ];
-
       // Fetch the suggestions for each resource-based section to build out the sections
-      let sections: ResourceSuggestionSection[];
+      let sections: Array<
+        Exclude<SearchSuggestionSection, DefaultSuggestionSection>
+      >;
       try {
         sections = (await Promise.all(
-          sectionParams.map(([model, message]) =>
-            getSuggestionsSection(model, message, incomingValue),
-          ),
-        )) as ResourceSuggestionSection[]; // We can assert this because of the catch below
+          [
+            getSuggestionsSection(
+              modelName.ORGANIZATIONS,
+              commonMessages.organizationsHumanName,
+              incomingValue,
+            ),
+            getSuggestionsSection(
+              modelName.CATEGORIES,
+              commonMessages.categoriesHumanName,
+              incomingValue,
+            ),
+          ],
+          // We can assert this because of the catch below
+        )) as Array<Exclude<SearchSuggestionSection, DefaultSuggestionSection>>;
       } catch (error) {
         return handle(error);
       }

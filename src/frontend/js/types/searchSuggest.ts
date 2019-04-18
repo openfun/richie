@@ -51,7 +51,10 @@ export interface DefaultSuggestion {
 /**
  * Any search suggestion, whether resource based or the default one.
  */
-export type SearchSuggestion = ResourceSuggestion | DefaultSuggestion;
+export type SearchSuggestion =
+  | OrganizationSuggestion
+  | CategorySuggestion
+  | DefaultSuggestion;
 
 /**
  * The base shape of a search suggestion section. Contains a bunch of suggestions and a title.
@@ -107,5 +110,6 @@ export interface DefaultSuggestionSection {
  * Any search suggestion section, whether resource based or the default one.
  */
 export type SearchSuggestionSection =
-  | ResourceSuggestionSection
+  | OrganizationSuggestionSection
+  | CategorySuggestionSection
   | DefaultSuggestionSection;
