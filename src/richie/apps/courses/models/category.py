@@ -85,7 +85,7 @@ class Category(BasePageExtension):
         placeholder.
         """
         is_draft = self.extended_object.publisher_is_draft
-        blog_post = self if is_draft else self.draft_extension
+        category = self if is_draft else self.draft_extension
         language = language or translation.get_language()
 
         bfs = "extended_object__placeholders__cmsplugin__courses_categorypluginmodel__page"
@@ -93,7 +93,7 @@ class Category(BasePageExtension):
             "extended_object__publisher_is_draft": is_draft,
             "extended_object__placeholders__slot": "categories",
             "extended_object__placeholders__cmsplugin__language": language,
-            bfs: blog_post.extended_object,
+            bfs: category.extended_object,
         }
 
         blogpost_model = apps.get_model(app_label="courses", model_name="blogpost")
