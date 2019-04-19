@@ -1,6 +1,7 @@
 """Create_demo_site management command."""
 import logging
 import random
+from collections import defaultdict
 
 from django.conf import settings
 from django.contrib.sites.models import Site
@@ -129,11 +130,28 @@ def create_demo_site():
             )
         )
 
+    # Assign each person randomly to an organization so that our course are tagged realistically
+    # If organizations and persons are tagged randomly on courses, each organizations will
+    # in the end be related to most persons... not what we want.
+    po_mapping = defaultdict(list)
+    for person in persons:
+        # For each person, an organization is picked randomly
+        po_mapping[random.choice(organizations).id].append(person)
+
     # Create courses under the `Course` page with categories and organizations
     # relations
     courses = []
     for _ in range(NB_OBJECTS["courses"]):
         video_sample = random.choice(VIDEO_SAMPLE_LINKS)
+
+        course_organizations = random.sample(
+            organizations, NB_OBJECTS["course_organizations"]
+        )
+
+        # Build the list of all persons within all these organizations
+        persons_in_course_organizations = [
+            person for o in course_organizations for person in po_mapping[o.id]
+        ]
 
         course = CourseFactory(
             page_in_navigation=True,
@@ -143,7 +161,13 @@ def create_demo_site():
                 ("course_license_content", random.choice(licences)),
                 ("course_license_participation", random.choice(licences)),
             ],
-            fill_team=random.sample(persons, NB_OBJECTS["course_persons"]),
+            fill_team=random.sample(
+                persons_in_course_organizations,
+                min(
+                    random.randint(1, NB_OBJECTS["course_persons"]),
+                    len(persons_in_course_organizations),
+                ),
+            ),
             fill_teaser=video_sample,
             fill_cover=pick_image("cover")(video_sample.image),
             fill_categories=[
@@ -152,9 +176,7 @@ def create_demo_site():
                 ),
                 random.choice(levels),
             ],
-            fill_organizations=random.sample(
-                organizations, NB_OBJECTS["course_organizations"]
-            ),
+            fill_organizations=course_organizations,
             fill_texts=[
                 "course_description",
                 "course_format",
