@@ -1,8 +1,9 @@
 {% extends "richie/fullwidth.html" %} {% load cms_tags extra_tags i18n %} {% block content %}
+{% with header_level=2 person=current_page.person %}
 <div class="person-detail">
   <h1 class="person-detail__title">
-    {% render_model_block current_page.person %}
-      {{ instance.person_title.title }} {{ instance.first_name }} {{ instance.last_name }}
+    {% render_model_block person %}
+      {{ person.person_title.title }} {{ person.first_name }} {{ person.last_name }}
     {% endrender_model_block %}
   </h1>
 
@@ -19,27 +20,44 @@
   {% endif %}
 
   <div class="person-detail__card">
-    {% with header_level=2 %}
-      <div class="person-detail__card__media">
-        {% with width=216 height=120 %}
-          {% placeholder "portrait" or %}
-            <div class="person-detail__card__media__empty">{% trans "Portrait" %}</div>
-          {% endplaceholder %}
-        {% endwith %}
+    <div class="person-detail__card__media">
+      {% with width=216 height=120 %}
+        {% placeholder "portrait" or %}
+          <div class="person-detail__card__media__empty">{% trans "Portrait" %}</div>
+        {% endplaceholder %}
+      {% endwith %}
+    </div>
+
+    <div class="person-detail__card__content">
+      <div class="person-detail__card__content__wrapper">
+        {% placeholder "resume" or %}
+          <p class="person-detail__card__content__wrapper__empty">{% trans "Enter your bio here..." %}</p>
+        {% endplaceholder %}
+
+        {% placeholder "maincontent" %}
       </div>
-
-      <div class="person-detail__card__content">
-        <div class="person-detail__card__content__wrapper">
-          {% placeholder "resume" or %}
-            <p class="person-detail__card__content__wrapper__empty">{% trans "Enter your bio here..." %}</p>
-          {% endplaceholder %}
-
-          {% placeholder "maincontent" %}
-        </div>
-      </div>
-
-    {% endwith %}
+    </div>
   </div>
 
+  {% with courses=person.get_courses %}
+    {% if courses %}
+      <div class="course-glimpse-list">
+        <h2 class="course-glimpse-list__title">{% trans "Courses" %}</h2>
+        {% for course in courses %}
+          {% if course.extended_object.publisher_is_draft %}
+            <a class="course-glimpse course-glimpse--link course-glimpse--draft" href="{{ course.extended_object.get_absolute_url }}">
+              {% include "courses/cms/fragment_course_glimpse.html" %}
+            </a>
+          {% elif course.check_publication %}
+            <a class="course-glimpse course-glimpse--link" href="{{ course.extended_object.get_absolute_url }}">
+              {% include "courses/cms/fragment_course_glimpse.html" %}
+            </a>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
 </div>
+{% endwith %}
 {% endblock content %}

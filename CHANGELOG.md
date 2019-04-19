@@ -11,7 +11,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Show related persons on the organization detail page (a person is related to
-  an organization if it is part of the team of a course of this organization).
+  an organization if s.he is in the team of a course of this organization),
+- On a person detail page, show courses to which s.he participated.
 
 ### Changed
 

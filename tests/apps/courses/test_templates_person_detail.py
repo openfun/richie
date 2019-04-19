@@ -6,7 +6,11 @@ from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
 from richie.apps.courses.cms_plugins import CategoryPlugin
-from richie.apps.courses.factories import CategoryFactory, PersonFactory
+from richie.apps.courses.factories import (
+    CategoryFactory,
+    CourseFactory,
+    PersonFactory,
+)
 
 
 class PersonCMSTestCase(CMSTestCase):
@@ -140,3 +144,26 @@ class PersonCMSTestCase(CMSTestCase):
         )
         # The modified draft version of the published category should not be visible
         self.assertNotContains(response, "modified title")
+
+    def test_templates_person_detail_related_courses(self):
+        """
+        The courses to which a person has participated should appear on this person's detail page.
+        """
+        user = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=user.username, password="password")
+
+        person = PersonFactory()
+        course = CourseFactory(fill_team=[person])
+
+        url = person.extended_object.get_absolute_url()
+        response = self.client.get(url)
+
+        # The course should be present on the page
+        self.assertContains(
+            response,
+            '<p class="course-glimpse__content__title">{:s}</p>'.format(
+                course.extended_object.get_title()
+            ),
+            html=True,
+        )
+
