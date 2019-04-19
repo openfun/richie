@@ -1,11 +1,15 @@
 """
 Declare and configure the model for the person application
 """
+from django.apps import apps
 from django.db import models
+from django.db.models import Prefetch
+from django.utils import translation
 from django.utils.translation import ugettext_lazy as _
 
 from cms.api import Page
 from cms.extensions.extension_pool import extension_pool
+from cms.models import Title
 from cms.models.pluginmodel import CMSPlugin
 from parler.fields import TranslatedField
 from parler.models import TranslatableModel, TranslatedFieldsModel
@@ -121,6 +125,41 @@ class Person(BasePageExtension):
             person_title=person_title,
             first_name=self.first_name,
             last_name=self.last_name,
+        )
+
+    def get_courses(self, language=None):
+        """
+        Return a query to get the courses related to this person ie for which a plugin for
+        this person is linked to the course page on the "course_team" placeholder.
+        """
+        is_draft = self.extended_object.publisher_is_draft
+        person = self if is_draft else self.draft_extension
+        language = language or translation.get_language()
+
+        bfs = (
+            "extended_object__placeholders__cmsplugin__courses_personpluginmodel__page"
+        )
+        filter_dict = {
+            "extended_object__node__parent__cms_pages__course__isnull": True,  # exclude snapshots
+            "extended_object__publisher_is_draft": is_draft,
+            "extended_object__placeholders__slot": "course_team",
+            "extended_object__placeholders__cmsplugin__language": language,
+            bfs: person.extended_object,
+        }
+
+        course_model = apps.get_model(app_label="courses", model_name="course")
+        # pylint: disable=no-member
+        return (
+            course_model.objects.filter(**filter_dict)
+            .select_related("extended_object")
+            .prefetch_related(
+                Prefetch(
+                    "extended_object__title_set",
+                    to_attr="prefetched_titles",
+                    queryset=Title.objects.filter(language=language),
+                )
+            )
+            .distinct()
         )
 
 
