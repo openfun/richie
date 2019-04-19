@@ -58,6 +58,25 @@
     {% endif %}
   {% endwith %}
 
+  {% with blogposts=person.get_blogposts %}
+    {% if blogposts %}
+      <div class="blogpost-glimpse-list">
+        <h2 class="blogpost-glimpse-list__title">{% trans "Blogposts" %}</h2>
+        {% for blogpost in blogposts %}
+          {% if blogpost.extended_object.publisher_is_draft %}
+            <a class="blogpost-glimpse blogpost-glimpse--link blogpost-glimpse--draft" href="{{ blogpost.extended_object.get_absolute_url }}">
+              {% include "courses/cms/fragment_blogpost_glimpse.html" %}
+            </a>
+          {% elif blogpost.check_publication %}
+            <a class="blogpost-glimpse blogpost-glimpse--link" href="{{ blogpost.extended_object.get_absolute_url }}">
+              {% include "courses/cms/fragment_blogpost_glimpse.html" %}
+            </a>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
 </div>
 {% endwith %}
 {% endblock content %}

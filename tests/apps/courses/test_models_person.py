@@ -8,8 +8,8 @@ from cms.api import add_plugin, create_page
 
 from richie.apps.core.helpers import create_i18n_page
 from richie.apps.courses.cms_plugins import PersonPlugin
-from richie.apps.courses.factories import CourseFactory, PersonFactory
-from richie.apps.courses.models import Course
+from richie.apps.courses.factories import BlogPostFactory, CourseFactory, PersonFactory
+from richie.apps.courses.models import BlogPost, Course
 
 
 class PersonModelsTestCase(TestCase):
@@ -161,3 +161,59 @@ class PersonModelsTestCase(TestCase):
         self.assertEqual(person.get_courses().count(), 1)
         self.assertEqual(person.public_extension.get_courses().count(), 1)
 
+    def test_models_person_get_blogposts(self):
+        """
+        It should be possible to retrieve the list of related blogposts on the person
+        instance. The number of queries should be minimal.
+        """
+        person = PersonFactory(should_publish=True)
+        blogposts = BlogPostFactory.create_batch(
+            2, page_title="my title", fill_author=[person], should_publish=True
+        )
+        retrieved_blogposts = person.get_blogposts()
+
+        with self.assertNumQueries(2):
+            self.assertEqual(set(retrieved_blogposts), set(blogposts))
+
+        with self.assertNumQueries(0):
+            for blogpost in retrieved_blogposts:
+                self.assertEqual(
+                    blogpost.extended_object.prefetched_titles[0].title, "my title"
+                )
+
+    def test_models_person_get_blogposts_public_person_page(self):
+        """
+        When a person is added on a draft blog post, the blog post should not be visible on
+        the public person page until the blog post is published.
+        """
+        person = PersonFactory(should_publish=True)
+        person_page = person.extended_object
+        blog_post = BlogPostFactory(page_title="my title", should_publish=True)
+        blog_post_page = blog_post.extended_object
+
+        # Add a person to the blog post but don't publish the modification
+        placeholder = blog_post_page.placeholders.get(slot="author")
+        add_plugin(placeholder, PersonPlugin, "en", page=person_page)
+
+        self.assertEqual(list(person.get_blogposts()), [blog_post])
+        self.assertEqual(list(person.public_extension.get_blogposts()), [])
+
+        # Now publish the modification and check that the blog post is displayed
+        # on the public person page
+        blog_post.extended_object.publish("en")
+        self.assertEqual(
+            list(person.public_extension.get_blogposts()), [blog_post.public_extension]
+        )
+
+    def test_models_person_get_blogposts_several_languages(self):
+        """
+        The blogposts should not be duplicated if they exist in several languages.
+        """
+        person = PersonFactory(should_publish=True)
+        BlogPostFactory(
+            page_title={"en": "my title", "fr": "mon titre"},
+            fill_author=[person],
+            should_publish=True,
+        )
+        self.assertEqual(BlogPost.objects.count(), 2)
+        self.assertEqual(person.get_blogposts().count(), 1)
