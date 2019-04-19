@@ -162,6 +162,41 @@ class Person(BasePageExtension):
             .distinct()
         )
 
+    def get_blogposts(self, language=None):
+        """
+        Return a query to get the blogposts this person wrote ie for which a
+        plugin for this person is linked to the blogpost page on the "author"
+        placeholder.
+        """
+        is_draft = self.extended_object.publisher_is_draft
+        person = self if is_draft else self.draft_extension
+        language = language or translation.get_language()
+
+        bfs = (
+            "extended_object__placeholders__cmsplugin__courses_personpluginmodel__page"
+        )
+        filter_dict = {
+            "extended_object__publisher_is_draft": is_draft,
+            "extended_object__placeholders__slot": "author",
+            "extended_object__placeholders__cmsplugin__language": language,
+            bfs: person.extended_object,
+        }
+
+        blogpost_model = apps.get_model(app_label="courses", model_name="blogpost")
+        # pylint: disable=no-member
+        return (
+            blogpost_model.objects.filter(**filter_dict)
+            .select_related("extended_object")
+            .prefetch_related(
+                Prefetch(
+                    "extended_object__title_set",
+                    to_attr="prefetched_titles",
+                    queryset=Title.objects.filter(language=language),
+                )
+            )
+            .distinct()
+        )
+
 
 class PersonPluginModel(PagePluginMixin, CMSPlugin):
     """

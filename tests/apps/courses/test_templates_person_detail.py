@@ -7,6 +7,7 @@ from cms.test_utils.testcases import CMSTestCase
 from richie.apps.core.factories import UserFactory
 from richie.apps.courses.cms_plugins import CategoryPlugin
 from richie.apps.courses.factories import (
+    BlogPostFactory,
     CategoryFactory,
     CourseFactory,
     PersonFactory,
@@ -167,3 +168,24 @@ class PersonCMSTestCase(CMSTestCase):
             html=True,
         )
 
+    def test_templates_person_detail_related_blog_posts(self):
+        """
+        The blog posts written by a person should appear on this person's detail page.
+        """
+        user = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=user.username, password="password")
+
+        person = PersonFactory()
+        blog_post = BlogPostFactory(fill_author=[person])
+
+        url = person.extended_object.get_absolute_url()
+        response = self.client.get(url)
+
+        # The blog post should be present on the page
+        self.assertContains(
+            response,
+            '<p class="blogpost-glimpse__content__title">{:s}</p>'.format(
+                blog_post.extended_object.get_title()
+            ),
+            html=True,
+        )
