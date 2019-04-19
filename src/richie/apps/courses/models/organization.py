@@ -119,6 +119,44 @@ class Organization(BasePageExtension):
             .distinct()
         )
 
+    def get_persons(self, language=None):
+        """
+        Return a query to get the persons related to this organization.
+        """
+        is_draft = self.extended_object.publisher_is_draft
+        organization = self if is_draft else self.draft_extension
+        language = language or translation.get_language()
+
+        sel = "" if is_draft else "draft_extension__"
+        bfs_person = (
+            f"{sel:s}extended_object__person_plugins__cmsplugin_ptr__placeholder__page"
+        )
+        bfs_organization = (
+            "placeholders__cmsplugin__courses_organizationpluginmodel__page"
+        )
+        filter_dict = {
+            "extended_object__publisher_is_draft": is_draft,
+            f"{bfs_person:s}__course__isnull": False,
+            f"{bfs_person:s}__publisher_is_draft": is_draft,
+            f"{bfs_person:s}__placeholders__slot": "course_organizations",
+            f"{bfs_person:s}__{bfs_organization:s}": organization.extended_object,
+        }
+
+        person_model = apps.get_model(app_label="courses", model_name="person")
+        # pylint: disable=no-member
+        return (
+            person_model.objects.filter(**filter_dict)
+            .select_related("extended_object")
+            .prefetch_related(
+                Prefetch(
+                    "extended_object__title_set",
+                    to_attr="prefetched_titles",
+                    queryset=Title.objects.filter(language=language),
+                )
+            )
+            .distinct()
+        )
+
 
 class OrganizationPluginModel(PagePluginMixin, CMSPlugin):
     """

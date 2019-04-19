@@ -1,13 +1,19 @@
 """
 End-to-end tests for the organization detail view
 """
-from django.test import TestCase
+import re
+
+from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
-from richie.apps.courses.factories import CourseFactory, OrganizationFactory
+from richie.apps.courses.factories import (
+    CourseFactory,
+    OrganizationFactory,
+    PersonFactory,
+)
 
 
-class OrganizationCMSTestCase(TestCase):
+class OrganizationCMSTestCase(CMSTestCase):
     """
     End-to-end test suite to validate the content and Ux of the organization detail view
     """
@@ -125,3 +131,29 @@ class OrganizationCMSTestCase(TestCase):
                 ),
                 html=True,
             )
+
+    def test_templates_organization_detail_related_persons(self):
+        """
+        Persons related to an organization via a course team should appear on the organization
+        detail page.
+        """
+        user = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=user.username, password="password")
+
+        organization = OrganizationFactory()
+        person = PersonFactory()
+        CourseFactory(fill_organizations=[organization], fill_team=[person])
+        page = organization.extended_object
+
+        url = page.get_absolute_url()
+        response = self.client.get(url)
+
+        # The person should be present on the page
+        pattern = (
+            r'<a href="{url:s}" title="{name:s}">'
+            r'<h2 class="person-glimpse__content__wrapper__title">'
+            r".*{name:s}.*</h2></a>"
+        ).format(
+            url=person.extended_object.get_absolute_url(), name=person.get_full_name()
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))

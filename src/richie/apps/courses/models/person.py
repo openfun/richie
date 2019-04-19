@@ -134,6 +134,7 @@ class PersonPluginModel(PagePluginMixin, CMSPlugin):
         Page,
         on_delete=models.CASCADE,
         limit_choices_to={"publisher_is_draft": True, "person__isnull": False},
+        related_name="person_plugins",
     )
 
     class Meta:

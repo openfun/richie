@@ -1,13 +1,13 @@
 """
 End-to-end tests for the category detail view
 """
-from django.test import TestCase
+from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
 from richie.apps.courses.factories import CategoryFactory, CourseFactory
 
 
-class CategoryCMSTestCase(TestCase):
+class CategoryCMSTestCase(CMSTestCase):
     """
     End-to-end test suite to validate the content and Ux of the category detail view
     """
