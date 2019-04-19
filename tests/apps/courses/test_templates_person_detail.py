@@ -1,16 +1,15 @@
 """
 End-to-end tests for the person detail view
 """
-from django.test import TestCase
-
 from cms.api import add_plugin
+from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
 from richie.apps.courses.cms_plugins import CategoryPlugin
 from richie.apps.courses.factories import CategoryFactory, PersonFactory
 
 
-class PersonCMSTestCase(TestCase):
+class PersonCMSTestCase(CMSTestCase):
     """
     End-to-end test suite to validate the content and Ux of the person detail view
     """

@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Show related persons on the organization detail page (a person is related to
+  an organization if it is part of the team of a course of this organization).
+
 ### Changed
 
 - Use checkboxes to enable/disable filters in search page.
