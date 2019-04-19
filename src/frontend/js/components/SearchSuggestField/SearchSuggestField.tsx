@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import Autosuggest from 'react-autosuggest';
+import Autosuggest, { AutosuggestProps } from 'react-autosuggest';
 import {
   defineMessages,
   FormattedMessage,
@@ -35,11 +35,13 @@ const messages = defineMessages({
   },
 });
 
+type SearchAutosuggestProps = AutosuggestProps<SearchSuggestion>;
+
 /**
  * `react-autosuggest` callback to get a human string value from a Suggestion object.
  * @param suggestion The relevant suggestion object.
  */
-const getSuggestionValue = (suggestion: SearchSuggestion) =>
+const getSuggestionValue: SearchAutosuggestProps['getSuggestionValue'] = suggestion =>
   suggestion.model ? suggestion.data.title : suggestion.data;
 
 /**
@@ -47,7 +49,7 @@ const getSuggestionValue = (suggestion: SearchSuggestion) =>
  * @param suggestion Either a resource suggestion with a model name & a machine name, or the default
  * suggestion with some text to render.
  */
-const renderSuggestion = (suggestion: SearchSuggestion) => {
+const renderSuggestion: SearchAutosuggestProps['renderSuggestion'] = suggestion => {
   // Default suggestion is just packing a message in its data field
   if (!suggestion.model) {
     return (
@@ -92,16 +94,15 @@ export const SearchSuggestField = injectIntl(
       SearchSuggestFieldState['suggestions']
     >([]);
 
-    const inputProps = {
+    const inputProps: SearchAutosuggestProps['inputProps'] = {
       /**
        * Callback triggered on every user input.
        * @param _ Unused: change event.
        * @param params Incoming parameters related to the change event. Includes `newValue` as key
        * with the search suggest form field value.
        */
-      onChange: (_: never, params?: { newValue: string }) =>
-        params ? setValue(params.newValue) : null,
-      onKeyDown: (event: React.KeyboardEvent) => {
+      onChange: (_, params) => (params ? setValue(params.newValue) : null),
+      onKeyDown: event => {
         if (event.keyCode === 13 /* enter */ && !value) {
           dispatchCourseSearchParamsUpdate({
             query: '',
@@ -122,9 +123,9 @@ export const SearchSuggestField = injectIntl(
      * @param _ Unused: selection event.
      * @param suggestion `suggestion` as key to an anonymous object: the suggestion the user picked.
      */
-    const onSuggestionSelected = (
-      _: React.FormEvent,
-      { suggestion }: { suggestion: SearchSuggestion },
+    const onSuggestionSelected: SearchAutosuggestProps['onSuggestionSelected'] = (
+      _,
+      { suggestion },
     ) => {
       switch (suggestion.model) {
         case modelName.ORGANIZATIONS:
@@ -165,10 +166,8 @@ export const SearchSuggestField = injectIntl(
      * interaction requires us to create or update that list.
      * @param value `value` as key to an anonymous object: the current value of the search suggest form field.
      */
-    const onSuggestionsFetchRequested = async ({
+    const onSuggestionsFetchRequested: SearchAutosuggestProps['onSuggestionsFetchRequested'] = async ({
       value: incomingValue,
-    }: {
-      value: string;
     }) => {
       if (incomingValue.length < 3) {
         return setSuggestions([]);
@@ -198,16 +197,10 @@ export const SearchSuggestField = injectIntl(
         return handle(error);
       }
 
-      setSuggestions([
-        // Add the default section on top of the list
-        {
-          message: null,
-          model: null,
-          value: incomingValue,
-        },
+      setSuggestions(
         // Drop sections with no results as there's no use displaying them
-        ...sections.filter(section => !!section!.values.length),
-      ]);
+        sections.filter(section => !!section!.values.length),
+      );
     };
 
     /**
@@ -215,14 +208,16 @@ export const SearchSuggestField = injectIntl(
      * @param section A suggestion section based on a resource. renderSectionTitle() is never called with
      * the default section as that section has no title.
      */
-    const renderSectionTitle = (section: SearchSuggestionSection) =>
+    const renderSectionTitle: SearchAutosuggestProps['renderSectionTitle'] = section =>
       section.model ? <span>{intl.formatMessage(section.message)}</span> : null;
 
     return (
       // TypeScript incorrectly infers the type of the Autosuggest suggestions prop as SearchSuggestion, which
       // would be correct if we did not use sections, but is incorrect as it is.
       <Autosuggest
-        getSectionSuggestions={suggestionsFromSection as any}
+        getSectionSuggestions={
+          suggestionsFromSection as SearchAutosuggestProps['getSectionSuggestions']
+        }
         getSuggestionValue={getSuggestionValue}
         highlightFirstSuggestion={value.length > 2}
         inputProps={inputProps}
