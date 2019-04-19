@@ -10,6 +10,12 @@ import { SearchSuggestField } from './SearchSuggestField';
 
 jest.mock('../../utils/indirection/window', () => ({ location: {} }));
 
+// Unexplained difficulties with fake timers were encountered in these tests.
+// We decided to mock the debounce function instead.
+jest.mock('lodash-es/debounce', () => (fn: any) => (...args: any[]) =>
+  fn(...args),
+);
+
 describe('components/SearchSuggestField', () => {
   // Make some filters we can reuse through our tests in <SearchSuggestField /> props
   const organizations = {
@@ -25,19 +31,6 @@ describe('components/SearchSuggestField', () => {
     name: 'subjects',
     values: [],
   };
-
-  /**
-   * Helper to find the text query suggestion in the DOM through testing-library's tools.
-   * This is helpful because the default query is painful to find due to the embedded <b>
-   */
-  const getDefaultSuggestionHelper = (value: string) => (
-    _: any,
-    element: HTMLElement,
-  ) =>
-    element.innerHTML.startsWith('Search for') &&
-    !!element.querySelector('b') &&
-    element.querySelector('b')!.innerHTML.includes(value) &&
-    element.innerHTML.includes('in courses...');
 
   beforeEach(jest.resetAllMocks);
 
@@ -113,7 +106,6 @@ describe('components/SearchSuggestField', () => {
 
     getByText('Categories');
     getByText('Subject #311');
-    getByText(getDefaultSuggestionHelper('aut')); // Default suggestion is always shown
     expect(queryByText('Organizations')).toEqual(null);
   });
 
@@ -139,15 +131,11 @@ describe('components/SearchSuggestField', () => {
     fireEvent.focus(field);
     fireEvent.change(field, { target: { value: 'x' } });
     await wait();
-
     expect(fetchMock.calls().length).toEqual(0);
-    expect(queryByText(getDefaultSuggestionHelper('x'))).toEqual(null);
 
     fireEvent.change(field, { target: { value: 'xyz' } });
     await wait();
-
     expect(fetchMock.calls().length).toEqual(2);
-    getByText(getDefaultSuggestionHelper('xyz')); // Default suggestion is now shown
   });
 
   it('updates the search params when the user selects a filter suggestion', async () => {
@@ -184,7 +172,6 @@ describe('components/SearchSuggestField', () => {
 
     getByText('Organizations');
     getByText('Organization #27');
-    getByText(getDefaultSuggestionHelper('orga')); // Default suggestion is always shown
 
     expect(queryByText('Categories')).toEqual(null);
     expect(queryByText('Courses')).toEqual(null);
@@ -202,47 +189,7 @@ describe('components/SearchSuggestField', () => {
     });
   });
 
-  it('updates the search params when the user selects the text query', async () => {
-    fetchMock.get('/api/v1.0/categories/autocomplete/?query=def', []);
-    fetchMock.get('/api/v1.0/organizations/autocomplete/?query=def', []);
-
-    const dispatchCourseSearchParamsUpdate = jest.fn();
-    const { getByPlaceholderText, getByText, queryByText } = render(
-      <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[
-            { limit: '999', offset: '0' },
-            dispatchCourseSearchParamsUpdate,
-          ]}
-        >
-          <SearchSuggestField filters={{ organizations, subjects }} />
-        </CourseSearchParamsContext.Provider>
-      </IntlProvider>,
-    );
-
-    const field = getByPlaceholderText(
-      'Search for courses, organizations, categories',
-    );
-
-    // Simulate the user entering some text in the autocomplete field
-    fireEvent.focus(field);
-    fireEvent.change(field, { target: { value: 'def' } });
-    await wait();
-
-    const defaultSuggestion = getByText(getDefaultSuggestionHelper('def')); // Default suggestion is always shown
-
-    expect(queryByText('Categories')).toEqual(null);
-    expect(queryByText('Courses')).toEqual(null);
-    expect(queryByText('Organizations')).toEqual(null);
-
-    fireEvent.click(defaultSuggestion);
-    expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
-      query: 'def',
-      type: 'QUERY_UPDATE',
-    });
-  });
-
-  it('removes the search query when the user presses ENTER on an empty field', () => {
+  it('removes the search query when the user presses ENTER on an empty field', async () => {
     fetchMock.get('/api/v1.0/categories/autocomplete/?query=some%20query', []);
     fetchMock.get(
       '/api/v1.0/organizations/autocomplete/?query=some%20query',
@@ -250,7 +197,7 @@ describe('components/SearchSuggestField', () => {
     );
 
     const dispatchCourseSearchParamsUpdate = jest.fn();
-    const { getByPlaceholderText, getByText, queryByText } = render(
+    const { getByPlaceholderText } = render(
       <IntlProvider locale="en">
         <CourseSearchParamsContext.Provider
           value={[
@@ -271,8 +218,56 @@ describe('components/SearchSuggestField', () => {
     fireEvent.focus(field);
     fireEvent.change(field, { target: { value: '' } });
     fireEvent.keyDown(field, { keyCode: 13 });
+    await wait();
 
     expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
+      query: '',
+      type: 'QUERY_UPDATE',
+    });
+  });
+
+  it('searches as the user types', () => {
+    fetchMock.get('begin:/api/v1.0/categories/autocomplete/?query=', []);
+    fetchMock.get('begin:/api/v1.0/organizations/autocomplete/?query=', []);
+
+    const dispatchCourseSearchParamsUpdate = jest.fn();
+    const { getByPlaceholderText } = render(
+      <IntlProvider locale="en">
+        <CourseSearchParamsContext.Provider
+          value={[
+            { limit: '999', offset: '0', query: 'some query' },
+            dispatchCourseSearchParamsUpdate,
+          ]}
+        >
+          <SearchSuggestField filters={{ organizations, subjects }} />
+        </CourseSearchParamsContext.Provider>
+      </IntlProvider>,
+    );
+
+    const field = getByPlaceholderText(
+      'Search for courses, organizations, categories',
+    );
+    fireEvent.focus(field);
+
+    // NB: the tests below rely on the very crude debounce mock for lodash-debounce.
+    // TODO: rewrite them when we use mocked timers to test our debouncing strategy.
+    fireEvent.change(field, { target: { value: 'ri' } });
+    expect(dispatchCourseSearchParamsUpdate).not.toHaveBeenCalled();
+
+    fireEvent.change(field, { target: { value: 'ric' } });
+    expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
+      query: 'ric',
+      type: 'QUERY_UPDATE',
+    });
+
+    fireEvent.change(field, { target: { value: 'rich data driven' } });
+    expect(dispatchCourseSearchParamsUpdate).toHaveBeenLastCalledWith({
+      query: 'rich data driven',
+      type: 'QUERY_UPDATE',
+    });
+
+    fireEvent.change(field, { target: { value: '' } });
+    expect(dispatchCourseSearchParamsUpdate).toHaveBeenLastCalledWith({
       query: '',
       type: 'QUERY_UPDATE',
     });

@@ -1,4 +1,5 @@
-import React, { useContext, useState } from 'react';
+import debounce from 'lodash-es/debounce';
+import React, { useContext, useRef, useState } from 'react';
 import Autosuggest, { AutosuggestProps } from 'react-autosuggest';
 import {
   defineMessages,
@@ -94,14 +95,46 @@ export const SearchSuggestField = injectIntl(
       SearchSuggestFieldState['suggestions']
     >([]);
 
+    /**
+     * Helper to update the course search params when the user types. We needed to take it out of
+     * the `onChange` handler to wrap it in a `debounce` (and therefore a `useRef` to make the
+     * debouncing effective).
+     * @param _ Unused: change event.
+     * @param params Incoming parameters related to the change event.
+     * - `method` is the way the value was updated.
+     * - `newValue` is the search suggest form field value.
+     */
+    const searchAsTheUserTypes: SearchAutosuggestProps['inputProps']['onChange'] = (
+      _,
+      { method, newValue },
+    ) => {
+      if (
+        method === 'type' &&
+        (newValue.length === 0 || newValue.length >= 3)
+      ) {
+        dispatchCourseSearchParamsUpdate({
+          query: newValue,
+          type: 'QUERY_UPDATE',
+        });
+      }
+    };
+    const updateCourseSearchParamsRef = useRef(
+      debounce(searchAsTheUserTypes, 500, { maxWait: 1100 }),
+    );
+
     const inputProps: SearchAutosuggestProps['inputProps'] = {
       /**
        * Callback triggered on every user input.
        * @param _ Unused: change event.
-       * @param params Incoming parameters related to the change event. Includes `newValue` as key
-       * with the search suggest form field value.
+       * @param params Incoming parameters related to the change event.
+       * - `method` is the way the value was updated.
+       * - `newValue` is the search suggest form field value.
        */
-      onChange: (_, params) => (params ? setValue(params.newValue) : null),
+      onChange: (_, { method, newValue }) => {
+        // Always update the state, delegate search-as-the-user-types to debounced function
+        setValue(newValue);
+        updateCourseSearchParamsRef.current(_, { method, newValue });
+      },
       onKeyDown: event => {
         if (event.keyCode === 13 /* enter */ && !value) {
           dispatchCourseSearchParamsUpdate({
@@ -219,7 +252,6 @@ export const SearchSuggestField = injectIntl(
           suggestionsFromSection as SearchAutosuggestProps['getSectionSuggestions']
         }
         getSuggestionValue={getSuggestionValue}
-        highlightFirstSuggestion={value.length > 2}
         inputProps={inputProps}
         multiSection={true}
         onSuggestionsClearRequested={() => setSuggestions([])}

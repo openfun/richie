@@ -17,6 +17,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Search as the user types in the course search field. This replaces
+  autosuggest in course names with a full index search.
 - Improve demo dataset by assigning each person to an organization,
 - Use checkboxes to enable/disable filters in search page,
 - Improve autosuggest tests to increase reliability.
