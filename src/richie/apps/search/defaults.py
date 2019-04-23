@@ -51,10 +51,11 @@ FILTERS_CONFIGURATION = [
     (
         "richie.apps.search.filter_definitions.StaticChoicesFilterDefinition",
         {
-            "name": "new",
-            "human_name": _("New courses"),
-            "position": 0,
             "fragment_map": {"new": [{"term": {"is_new": True}}]},
+            "human_name": _("New courses"),
+            "min_doc_count": 0,
+            "name": "new",
+            "position": 0,
             "values": {"new": _("First session")},
         },
     ),
@@ -66,17 +67,21 @@ FILTERS_CONFIGURATION = [
                 (
                     "richie.apps.search.filter_definitions.AvailabilityFilterDefinition",
                     {
-                        "name": "availability",
                         "human_name": _("Availability"),
-                        "position": 1,
                         "is_drilldown": True,
+                        "min_doc_count": 0,
+                        "name": "availability",
+                        "position": 1,
                     },
                 ),
                 (
                     "richie.apps.search.filter_definitions.LanguagesFilterDefinition",
                     {
-                        "name": "languages",
                         "human_name": _("Languages"),
+                        # There are too many available languages to show them all, all the time.
+                        # Eg. 200 languages, 190+ of which will have 0 matching courses.
+                        "min_doc_count": 1,
+                        "name": "languages",
                         "position": 5,
                         "sorting": "count",
                     },
@@ -87,8 +92,9 @@ FILTERS_CONFIGURATION = [
     (
         "richie.apps.search.filter_definitions.IndexableFilterDefinition",
         {
-            "name": "subjects",
             "human_name": _("Subjects"),
+            "min_doc_count": 0,
+            "name": "subjects",
             "position": 2,
             "reverse_id": "subjects",
             "term": "categories",
@@ -97,8 +103,9 @@ FILTERS_CONFIGURATION = [
     (
         "richie.apps.search.filter_definitions.IndexableFilterDefinition",
         {
-            "name": "levels",
             "human_name": _("Levels"),
+            "min_doc_count": 0,
+            "name": "levels",
             "position": 3,
             "reverse_id": "levels",
             "term": "categories",
@@ -107,8 +114,9 @@ FILTERS_CONFIGURATION = [
     (
         "richie.apps.search.filter_definitions.IndexableFilterDefinition",
         {
-            "name": "organizations",
             "human_name": _("Organizations"),
+            "min_doc_count": 0,
+            "name": "organizations",
             "position": 4,
             "reverse_id": "organizations",
         },
