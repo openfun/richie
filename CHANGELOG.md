@@ -10,8 +10,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- Show related persons on the organization detail page (a person is related to
-  an organization if s.he is in the team of a course of this organization),
+- Add organizations to a person via plugins on the person detail page,
+- Show related persons on the organization detail page,
 - On a person detail page, show courses to which s.he participated and
   blogposts s.he authored.
 

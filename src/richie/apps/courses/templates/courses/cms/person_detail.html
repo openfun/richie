@@ -39,6 +39,17 @@
     </div>
   </div>
 
+  {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"organizations" %}
+  <div class="organization-glimpse-list">
+    <h2 class="organization-glimpse-list__title">{% trans "Organizations" %}</h2>
+    {% placeholder "organizations" or %}
+      <p class="organization-glimpse-list__empty">
+        {% trans "No associated organizations" %}
+      </p>
+    {% endplaceholder %}
+  </div>
+  {% endif %}
+
   {% with courses=person.get_courses %}
     {% if courses %}
       <div class="course-glimpse-list">

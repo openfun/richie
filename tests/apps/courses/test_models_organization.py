@@ -7,13 +7,13 @@ from django.test import TestCase
 from cms.api import add_plugin, create_page
 
 from richie.apps.core.helpers import create_i18n_page
-from richie.apps.courses.cms_plugins import OrganizationPlugin, PersonPlugin
+from richie.apps.courses.cms_plugins import OrganizationPlugin
 from richie.apps.courses.factories import (
     CourseFactory,
     OrganizationFactory,
     PersonFactory,
 )
-from richie.apps.courses.models import Course, Organization
+from richie.apps.courses.models import Course, Organization, Person
 
 
 class OrganizationModelsTestCase(TestCase):
@@ -174,17 +174,10 @@ class OrganizationModelsTestCase(TestCase):
         """
         organization = OrganizationFactory(should_publish=True)
         persons = PersonFactory.create_batch(
-            2, page_title="my title", should_publish=True
-        )
-        CourseFactory(
-            fill_organizations=[organization],
-            fill_team=[persons[0]],
+            2,
+            page_title="my title",
             should_publish=True,
-        )
-        CourseFactory(
             fill_organizations=[organization],
-            fill_team=[persons[1]],
-            should_publish=True,
         )
         retrieved_persons = organization.get_persons()
 
@@ -197,54 +190,39 @@ class OrganizationModelsTestCase(TestCase):
                     person.extended_object.prefetched_titles[0].title, "my title"
                 )
 
-    def test_models_organization_get_persons_draft_person_plugin(self):
+    def test_models_organization_get_persons_public_organization_page(self):
         """
-        If a person is related to an organization via a course but that the modification adding
-        the person to the course team is not published, the person should not be retrieved by
-        the `get_person` method on the organization.
+        When a organization is added on a draft person, the person should not be visible on
+        the public organization page until the person is published.
         """
         organization = OrganizationFactory(should_publish=True)
-        person = PersonFactory(should_publish=True)
-        course = CourseFactory(fill_organizations=[organization], should_publish=True)
+        organization_page = organization.extended_object
+        person = PersonFactory(page_title="my title", should_publish=True)
+        person_page = person.extended_object
 
-        # Add a person to the course but don't publish the modification
-        placeholder = course.extended_object.placeholders.get(slot="course_team")
-        add_plugin(placeholder, PersonPlugin, "en", page=person.extended_object)
+        # Add a organization to the person but don't publish the modification
+        placeholder = person_page.placeholders.get(slot="organizations")
+        add_plugin(placeholder, OrganizationPlugin, "en", page=organization_page)
 
         self.assertEqual(list(organization.get_persons()), [person])
         self.assertEqual(list(organization.public_extension.get_persons()), [])
 
         # Now publish the modification and check that the person is displayed
         # on the public organization page
-        course.extended_object.publish("en")
+        person.extended_object.publish("en")
         self.assertEqual(
             list(organization.public_extension.get_persons()), [person.public_extension]
         )
 
-    def test_models_organization_get_persons_draft_organization_plugin(self):
+    def test_models_organization_get_persons_several_languages(self):
         """
-        If a person is related to an organization via a course but that the modification adding
-        the organization to the course is not published, the person should not be retrieved by
-        the `get_person` method on the organization.
+        The persons should not be duplicated if they exist in several languages.
         """
         organization = OrganizationFactory(should_publish=True)
-        person = PersonFactory(should_publish=True)
-        course = CourseFactory(fill_team=[person], should_publish=True)
-
-        # Add an organization to the course but don't publish the modification
-        placeholder = course.extended_object.placeholders.get(
-            slot="course_organizations"
+        PersonFactory(
+            page_title={"en": "my title", "fr": "mon titre"},
+            fill_organizations=[organization],
+            should_publish=True,
         )
-        add_plugin(
-            placeholder, OrganizationPlugin, "en", page=organization.extended_object
-        )
-
-        self.assertEqual(list(organization.get_persons()), [person])
-        self.assertEqual(list(organization.public_extension.get_persons()), [])
-
-        # Now publish the modification and check that the person is displayed
-        # on the public organization page
-        course.extended_object.publish("en")
-        self.assertEqual(
-            list(organization.public_extension.get_persons()), [person.public_extension]
-        )
+        self.assertEqual(Person.objects.count(), 2)
+        self.assertEqual(organization.get_persons().count(), 1)

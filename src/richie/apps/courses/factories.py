@@ -761,3 +761,24 @@ class PersonFactory(PageExtensionDjangoModelFactory):
                 nb_paragraphs=1,
                 languages=self.extended_object.get_languages(),
             )
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def fill_organizations(self, create, extracted, **kwargs):
+        """
+        Add organizations plugin to person from a given list of organization instances.
+        """
+
+        if create and extracted:
+            for language in self.extended_object.get_languages():
+                placeholder = self.extended_object.placeholders.get(
+                    slot="organizations"
+                )
+
+                for organization in extracted:
+                    add_plugin(
+                        language=language,
+                        placeholder=placeholder,
+                        plugin_type="OrganizationPlugin",
+                        **{"page": organization.extended_object},
+                    )

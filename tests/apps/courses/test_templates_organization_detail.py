@@ -134,15 +134,14 @@ class OrganizationCMSTestCase(CMSTestCase):
 
     def test_templates_organization_detail_related_persons(self):
         """
-        Persons related to an organization via a course team should appear on the organization
+        Persons related to an organization via a plugin should appear on the organization
         detail page.
         """
         user = UserFactory(is_staff=True, is_superuser=True)
         self.client.login(username=user.username, password="password")
 
         organization = OrganizationFactory()
-        person = PersonFactory()
-        CourseFactory(fill_organizations=[organization], fill_team=[person])
+        person = PersonFactory(fill_organizations=[organization])
         page = organization.extended_object
 
         url = page.get_absolute_url()
