@@ -35,5 +35,9 @@ $richie-search-filters-pane-clear-padding: 0rem 0.5rem 0 !default;
     &:active {
       color: $richie-search-filters-pane-clear-color;
     }
+
+    &--hidden {
+      visibility: hidden;
+    }
   }
 }

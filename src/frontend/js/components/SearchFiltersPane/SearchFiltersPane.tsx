@@ -53,20 +53,20 @@ export const SearchFiltersPane = ({ filters }: SearchFiltersPaneProps) => {
       <h2 className="search-filters-pane__title">
         <FormattedMessage {...messages.filter} />
       </h2>
-      {activeFilterCount ? (
-        <a
-          className="search-filters-pane__clear"
-          tabIndex={0}
-          onClick={() =>
-            dispatchCourseSearchParamsUpdate({ type: 'FILTER_RESET' })
-          }
-        >
-          <FormattedMessage
-            {...messages.clearFilters}
-            values={{ activeFilterCount }}
-          />
-        </a>
-      ) : null}
+      <a
+        className={`search-filters-pane__clear ${
+          !activeFilterCount ? 'search-filters-pane__clear--hidden' : ''
+        }`}
+        tabIndex={0}
+        onClick={() =>
+          dispatchCourseSearchParamsUpdate({ type: 'FILTER_RESET' })
+        }
+      >
+        <FormattedMessage
+          {...messages.clearFilters}
+          values={{ activeFilterCount }}
+        />
+      </a>
       {filterList &&
         filterList.map(filter => (
           <SearchFilterGroup filter={filter} key={filter.name} />

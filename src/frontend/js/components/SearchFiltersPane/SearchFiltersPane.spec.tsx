@@ -17,7 +17,7 @@ describe('components/SearchFiltersPane', () => {
   afterEach(cleanup);
 
   it('renders all our search filter groups', () => {
-    const { getByText, queryByText } = render(
+    const { getByText } = render(
       <IntlProvider locale="en">
         <CourseSearchParamsContext.Provider
           value={[{ limit: '999', offset: '0' }, jest.fn()]}
@@ -46,7 +46,9 @@ describe('components/SearchFiltersPane', () => {
     getByText('Filter courses');
     getByText('Received filter title: Categories');
     getByText('Received filter title: Organizations');
-    expect(queryByText('Clear 0 active filters')).toEqual(null);
+    expect(getByText('Clear 0 active filters').parentElement).toHaveClass(
+      'search-filters-pane__clear--hidden',
+    );
   });
 
   it('still renders with its title when it is not passed anything', () => {
@@ -98,6 +100,10 @@ describe('components/SearchFiltersPane', () => {
     );
 
     const clearButton = getByText('Clear 2 active filters');
+    expect(getByText('Clear 2 active filters').parentElement).not.toHaveClass(
+      'search-filters-pane__clear--hidden',
+    );
+
     fireEvent.click(clearButton);
     expect(mockDispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
       type: 'FILTER_RESET',
