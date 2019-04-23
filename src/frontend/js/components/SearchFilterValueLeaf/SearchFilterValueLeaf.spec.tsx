@@ -74,6 +74,40 @@ describe('components/SearchFilterValueLeaf', () => {
     expect(checkbox.parentElement).toHaveClass('active'); // label that contains checkbox
   });
 
+  it('disables the value when its count is 0', () => {
+    const { getByLabelText } = render(
+      <IntlProvider locale="en">
+        <CourseSearchParamsContext.Provider
+          value={[{ limit: '999', offset: '0' }, jest.fn()]}
+        >
+          <SearchFilterValueLeaf
+            filter={{
+              base_path: null,
+              human_name: 'Filter name',
+              name: 'filter_name',
+              values: [],
+            }}
+            value={{
+              count: 0,
+              human_name: 'Human name',
+              key: '42',
+            }}
+          />
+        </CourseSearchParamsContext.Provider>
+      </IntlProvider>,
+    );
+
+    // The filter shows its active state
+    const checkbox = getByLabelText((content, _) =>
+      content.includes('Human name'),
+    );
+    expect(checkbox).not.toHaveAttribute('checked');
+    expect(checkbox).toHaveAttribute('disabled');
+    expect(checkbox.parentElement).toHaveClass(
+      'search-filter-value-leaf--disabled',
+    );
+  });
+
   it('dispatches a FILTER_ADD action on filter click if it was not active', () => {
     const dispatchCourseSearchParamsUpdate = jest.fn();
     const { getByLabelText } = render(

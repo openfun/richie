@@ -93,10 +93,17 @@ export const SearchFilterValueParent = injectIntl(
             isActive ? 'active' : ''
           }`}
         >
-          <label className={`search-filter-value-parent__self__label`}>
+          <label
+            className={`search-filter-value-parent__self__label ${
+              value.count === 0
+                ? 'search-filter-value-parent__self__label--disabled'
+                : ''
+            }`}
+          >
             <input
               checked={isActive}
               className="search-filter-value-parent__self__label__checkbox"
+              disabled={value.count === 0}
               onChange={toggle}
               type="checkbox"
             />

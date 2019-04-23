@@ -15,10 +15,15 @@ export const SearchFilterValueLeaf = ({
   const [isActive, toggle] = useFilterValue(filter, value);
 
   return (
-    <label className={`search-filter-value-leaf ${isActive ? 'active' : ''}`}>
+    <label
+      className={`search-filter-value-leaf ${isActive ? 'active' : ''} ${
+        value.count === 0 ? 'search-filter-value-leaf--disabled' : ''
+      }`}
+    >
       <input
         checked={isActive}
         className="search-filter-value-leaf__checkbox"
+        disabled={value.count === 0}
         onChange={toggle}
         type="checkbox"
       />
