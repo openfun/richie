@@ -53,7 +53,13 @@ class TermsAggsMixin:
             self.name: {
                 # Rely on the built-in "terms" aggregation to get everything we need
                 "aggregations": {
-                    self.name: {"terms": {"field": self.term, "include": include}}
+                    self.name: {
+                        "terms": {
+                            "field": self.term,
+                            "include": include,
+                            "min_doc_count": self.min_doc_count,
+                        }
+                    }
                 },
                 # Use all the query fragments from the queries *but* the one(s) that
                 # filter on the current filter, as it is handled by ElasticSearch for us

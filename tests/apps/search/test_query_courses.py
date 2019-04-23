@@ -674,6 +674,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 {"count": 2, "human_name": "#P-00010001", "key": "P-00010001"},
                 {"count": 1, "human_name": "#P-00010002", "key": "P-00010002"},
                 {"count": 1, "human_name": "#P-00010003", "key": "P-00010003"},
+                {"count": 0, "human_name": "#P-00010004", "key": "P-00010004"},
             ],
         )
         self.assertEqual(
@@ -681,6 +682,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             [
                 {"count": 1, "human_name": "#L-00020001", "key": "L-00020001"},
                 {"count": 1, "human_name": "#L-00020003", "key": "L-00020003"},
+                {"count": 0, "human_name": "#L-00020002", "key": "L-00020002"},
             ],
         )
         self.assertEqual(
@@ -689,6 +691,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 {"count": 2, "human_name": "#P-00030001", "key": "P-00030001"},
                 {"count": 1, "human_name": "#P-00030003", "key": "P-00030003"},
                 {"count": 1, "human_name": "#P-00030004", "key": "P-00030004"},
+                {"count": 0, "human_name": "#P-00030002", "key": "P-00030002"},
             ],
         )
 
@@ -785,6 +788,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 {"count": 1, "human_name": "Open for enrollment", "key": "open"},
                 {"count": 1, "human_name": "Coming soon", "key": "coming_soon"},
                 {"count": 2, "human_name": "On-going", "key": "ongoing"},
+                {"count": 0, "human_name": "Archived", "key": "archived"},
             ],
         )
         # A, D and F course runs are in French
@@ -803,6 +807,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             [
                 {"count": 2, "human_name": "#L-00020001", "key": "L-00020001"},
                 {"count": 1, "human_name": "#L-00020002", "key": "L-00020002"},
+                {"count": 0, "human_name": "#L-00020003", "key": "L-00020003"},
             ],
         )
         self.assertEqual(
@@ -893,6 +898,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 {"count": 2, "human_name": "#P-00010002", "key": "P-00010002"},
                 {"count": 1, "human_name": "#P-00010001", "key": "P-00010001"},
                 {"count": 1, "human_name": "#P-00010004", "key": "P-00010004"},
+                {"count": 0, "human_name": "#P-00010003", "key": "P-00010003"},
             ],
         )
         self.assertEqual(
@@ -900,6 +906,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             [
                 {"count": 1, "human_name": "#L-00020001", "key": "L-00020001"},
                 {"count": 1, "human_name": "#L-00020002", "key": "L-00020002"},
+                {"count": 0, "human_name": "#L-00020003", "key": "L-00020003"},
             ],
         )
         self.assertEqual(
@@ -908,6 +915,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 {"count": 2, "human_name": "#P-00030004", "key": "P-00030004"},
                 {"count": 1, "human_name": "#P-00030001", "key": "P-00030001"},
                 {"count": 1, "human_name": "#P-00030002", "key": "P-00030002"},
+                {"count": 0, "human_name": "#P-00030003", "key": "P-00030003"},
             ],
         )
 
