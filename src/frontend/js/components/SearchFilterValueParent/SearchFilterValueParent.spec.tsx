@@ -244,6 +244,39 @@ describe('<SearchFilterValueParent />', () => {
     expect(checkbox!.parentElement!.parentElement).not.toHaveClass('active'); // parent self filter
   });
 
+  it('disables the parent value when its count is 0', () => {
+    const { getByLabelText } = render(
+      <IntlProvider locale="en">
+        <CourseSearchParamsContext.Provider
+          value={[{ limit: '999', offset: '0' }, jest.fn()]}
+        >
+          <SearchFilterValueParent
+            filter={{
+              base_path: '0009',
+              human_name: 'Filter name',
+              name: 'filter_name',
+              values: [],
+            }}
+            value={{
+              count: 0,
+              human_name: 'Human name',
+              key: 'P-00040005',
+            }}
+          />
+        </CourseSearchParamsContext.Provider>
+      </IntlProvider>,
+    );
+
+    // The filter shows its active state
+    const checkbox = getByLabelText((content, _) =>
+      content.includes('Human name'),
+    );
+    expect(checkbox).not.toHaveAttribute('checked');
+    expect(checkbox).toHaveAttribute('disabled');
+    expect(checkbox.parentElement).toHaveClass(
+      'search-filter-value-parent__self__label--disabled',
+    );
+  });
   it('shows the parent filter value itself as active when it is in the search params', () => {
     const { getByLabelText } = render(
       <IntlProvider locale="en">

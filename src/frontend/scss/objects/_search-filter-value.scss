@@ -23,6 +23,13 @@ $richie-search-filter-value-active-divider-border: 1px solid $white !default;
     color: $richie-search-filter-value-fontcolor-hover;
   }
 
+  &--disabled,
+  &--disabled:hover,
+  &--disabled:focus {
+    color: rgba(255, 255, 255, 0.6);
+    cursor: not-allowed;
+  }
+
   &__checkbox {
     align-self: start;
     margin-right: 0.5rem;
