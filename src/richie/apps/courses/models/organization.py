@@ -121,25 +121,19 @@ class Organization(BasePageExtension):
 
     def get_persons(self, language=None):
         """
-        Return a query to get the persons related to this organization.
+        Return a query to get the persons related to this organization ie for which a plugin for
+        this organization is linked to the person page on the "organizations" placeholder.
         """
         is_draft = self.extended_object.publisher_is_draft
         organization = self if is_draft else self.draft_extension
         language = language or translation.get_language()
 
-        sel = "" if is_draft else "draft_extension__"
-        bfs_person = (
-            f"{sel:s}extended_object__person_plugins__cmsplugin_ptr__placeholder__page"
-        )
-        bfs_organization = (
-            "placeholders__cmsplugin__courses_organizationpluginmodel__page"
-        )
+        bfs = "extended_object__placeholders__cmsplugin__courses_organizationpluginmodel__page"
         filter_dict = {
             "extended_object__publisher_is_draft": is_draft,
-            f"{bfs_person:s}__course__isnull": False,
-            f"{bfs_person:s}__publisher_is_draft": is_draft,
-            f"{bfs_person:s}__placeholders__slot": "course_organizations",
-            f"{bfs_person:s}__{bfs_organization:s}": organization.extended_object,
+            "extended_object__placeholders__slot": "organizations",
+            "extended_object__placeholders__cmsplugin__language": language,
+            bfs: organization.extended_object,
         }
 
         person_model = apps.get_model(app_label="courses", model_name="person")

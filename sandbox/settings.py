@@ -395,6 +395,10 @@ class Base(DRFMixin, Configuration):
             "plugins": ["CKEditorPlugin"],
             "limits": {"CKEditorPlugin": 1},
         },
+        "courses/cms/person_detail.html organizations": {
+            "name": _("Organizations"),
+            "plugins": ["OrganizationPlugin"],
+        },
         # Blog page detail
         "courses/cms/blogpost_detail.html author": {
             "name": _("Author"),
