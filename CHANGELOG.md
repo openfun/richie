@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Link persons to a random set of organizations in the demo site,
 - Add organizations to a person via plugins on the person detail page,
 - Show related persons on the organization detail page,
 - On a person detail page, show courses to which s.he participated and
