@@ -13,7 +13,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add organizations to a person via plugins on the person detail page,
 - Show related persons on the organization detail page,
 - On a person detail page, show courses to which s.he participated and
-  blogposts s.he authored.
+  blogposts s.he authored,
+- Show results count in the course search results list.
 
 ### Changed
 
