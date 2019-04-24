@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-17 06:30+0000\n"
-"PO-Revision-Date: 2019-04-17 07:49\n"
+"POT-Creation-Date: 2019-04-24 12:34+0000\n"
+"PO-Revision-Date: 2019-04-24 14:14\n"
 "Last-Translator: Samuel Paccoud (sampaccoud)\n"
 "Language-Team: French, Canada\n"
 "Language: fr_CA\n"
@@ -217,7 +217,7 @@ msgstr "Nouveau message de blog"
 msgid "Create a new blog post"
 msgstr "Créer un nouveau message de blog"
 
-#: apps/courses/cms_wizards.py:454 apps/courses/models/person.py:46
+#: apps/courses/cms_wizards.py:454 apps/courses/models/person.py:50
 msgid "Title"
 msgstr "Titre"
 
@@ -348,7 +348,6 @@ msgid "name"
 msgstr "nom"
 
 #: apps/courses/models/course.py:469
-#: apps/courses/templates/courses/cms/fragment_organization_glimpse.html:5
 #: apps/courses/templates/courses/plugins/course_plugin.html:5
 #: plugins/large_banner/models.py:38
 msgid "logo"
@@ -382,35 +381,35 @@ msgstr "code"
 msgid "organization"
 msgstr "organisation"
 
-#: apps/courses/models/organization.py:141
+#: apps/courses/models/organization.py:173
 msgid "organization plugin"
 msgstr "plugin d'organisation"
 
-#: apps/courses/models/person.py:27
+#: apps/courses/models/person.py:31
 msgid "person title"
 msgstr "titre de la personne"
 
-#: apps/courses/models/person.py:47
+#: apps/courses/models/person.py:51
 msgid "Title abbreviation"
 msgstr "Abréviation du titre"
 
-#: apps/courses/models/person.py:52
+#: apps/courses/models/person.py:56
 msgid "person title translation"
 msgstr "traduction du titre de la personne"
 
-#: apps/courses/models/person.py:79
+#: apps/courses/models/person.py:83
 msgid "First name"
 msgstr "Prénom"
 
-#: apps/courses/models/person.py:80
+#: apps/courses/models/person.py:84
 msgid "Last name"
 msgstr "Nom de famille"
 
-#: apps/courses/models/person.py:95
+#: apps/courses/models/person.py:99
 msgid "person"
 msgstr "personne"
 
-#: apps/courses/models/person.py:141
+#: apps/courses/models/person.py:216
 msgid "person plugin"
 msgstr "plugin de personne"
 
@@ -465,6 +464,7 @@ msgid "Related blogposts"
 msgstr "Billets de blog liés"
 
 #: apps/courses/templates/courses/cms/category_detail.html:82
+#: apps/courses/templates/courses/cms/organization_detail.html:52
 msgid "Related persons"
 msgstr "Personnes liées"
 
@@ -487,7 +487,7 @@ msgstr "Accédez à la version actuelle"
 
 #: apps/courses/templates/courses/cms/course_detail.html:40
 #: apps/courses/templates/courses/cms/course_run_detail.html:33
-#: apps/courses/templates/courses/cms/person_detail.html:14
+#: apps/courses/templates/courses/cms/person_detail.html:15
 msgid "No associated categories"
 msgstr "Aucune catégorie associée"
 
@@ -519,7 +519,7 @@ msgstr "Cours"
 
 #: apps/courses/templates/courses/cms/course_detail.html:97
 #: apps/courses/templates/courses/cms/course_run_detail.html:59
-#: apps/search/defaults.py:79
+#: apps/search/defaults.py:80
 msgid "Languages"
 msgstr "Langues"
 
@@ -645,6 +645,23 @@ msgstr "Pas encore d'organisation"
 msgid "Enter your bio here..."
 msgstr "Saisissez ici votre bio..."
 
+#: apps/courses/templates/courses/cms/person_detail.html:44
+#: apps/search/defaults.py:117
+msgid "Organizations"
+msgstr "Organisations"
+
+#: apps/courses/templates/courses/cms/person_detail.html:47
+msgid "No associated organizations"
+msgstr "Aucune organisation associée"
+
+#: apps/courses/templates/courses/cms/person_detail.html:56
+msgid "Courses"
+msgstr "Cours"
+
+#: apps/courses/templates/courses/cms/person_detail.html:75
+msgid "Blogposts"
+msgstr "Messages de blog"
+
 #: apps/courses/templates/courses/cms/person_list.html:14
 msgid "No persons"
 msgstr "Pas de personnes"
@@ -653,7 +670,7 @@ msgstr "Pas de personnes"
 msgid "New courses"
 msgstr "Nouveaux cours"
 
-#: apps/search/defaults.py:58
+#: apps/search/defaults.py:59
 msgid "First session"
 msgstr "Première session"
 
@@ -661,17 +678,13 @@ msgstr "Première session"
 msgid "Availability"
 msgstr "Disponibilité"
 
-#: apps/search/defaults.py:91
+#: apps/search/defaults.py:95
 msgid "Subjects"
 msgstr "Sujets"
 
-#: apps/search/defaults.py:101
+#: apps/search/defaults.py:106
 msgid "Levels"
 msgstr "Niveaux"
-
-#: apps/search/defaults.py:111
-msgid "Organizations"
-msgstr "Organisations"
 
 #: apps/search/filter_definitions/courses.py:240
 msgid "Open for enrollment"

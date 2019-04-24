@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2019-04-16T08:58:52.187Z\n"
+"POT-Creation-Date: 2019-04-24T14:07:00.016Z\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "MIME-Version: 1.0\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Last-Translator: Samuel Paccoud (sampaccoud)\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2019-04-17 07:34\n"
+"PO-Revision-Date: 2019-04-24 14:14\n"
 
 #. [common.categoriesHumanName] - Title/name to use when we display a list of categories
 #. defaultMessage is:
@@ -28,13 +28,6 @@ msgstr "Catégories"
 #: i18n/js/components/SearchFiltersPane/SearchFiltersPane.json
 msgid "Clear {activeFilterCount, number} active {activeFilterCount, plural, one {filter} other {filters}}"
 msgstr "Remettre à zéro {activeFilterCount, number} {activeFilterCount, plural, one {filtre} other {filtres}} actifs"
-
-#. [components.CloseIcon.closeLabel] - Accessibility label for the "x" disable icon on an active filer
-#. defaultMessage is:
-#. Close
-#: i18n/js/components/icons/CloseIcon.json
-msgid "Close"
-msgstr "Fermer"
 
 #. [common.coursesHumanName] - Title/name to use when we display a list of courses
 #. defaultMessage is:
@@ -106,6 +99,13 @@ msgstr "Recherche de {query} dans les cours..."
 #: i18n/js/components/SearchFilterValueParent/SearchFilterValueParent.json
 msgid "Show child filters"
 msgstr "Afficher les filtres enfants"
+
+#. [components.CourseGlimpseList.courseCount] - Result count for course search. Appears right above search results
+#. defaultMessage is:
+#. Showing {courseCount, number} {courseCount, plural, one {course} other {courses}} matching your search
+#: i18n/js/components/CourseGlimpseList/CourseGlimpseList.json
+msgid "Showing {courseCount, number} {courseCount, plural, one {course} other {courses}} matching your search"
+msgstr ""
 
 #. [components.CourseGlimpse.startsOn] - Shows the start date for a course in a course glimpse in a short format such as Sep 4, '1986'
 #. defaultMessage is:
