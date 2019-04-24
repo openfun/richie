@@ -114,29 +114,32 @@ def create_demo_site():
 
     # Create persons under the `persons` page
     persons = []
+    persons_for_organization = defaultdict(list)
     for _ in range(NB_OBJECTS["persons"]):
-        persons.append(
-            PersonFactory(
-                page_in_navigation=True,
-                page_languages=["en", "fr"],
-                page_parent=pages_created["persons"],
-                person_title=random.choice([title, None]),
-                fill_categories=random.sample(
-                    subjects, random.randint(1, NB_OBJECTS["person_subjects"])
-                ),
-                fill_portrait=pick_image("portrait"),
-                fill_resume=True,
-                should_publish=True,
-            )
+        # Randomly assign each person to a set of organizations
+        person_organizations = random.sample(
+            organizations, random.randint(1, NB_OBJECTS["person_organizations"])
         )
+        person = PersonFactory(
+            page_in_navigation=True,
+            page_languages=["en", "fr"],
+            page_parent=pages_created["persons"],
+            person_title=random.choice([title, None]),
+            fill_categories=random.sample(
+                subjects, random.randint(1, NB_OBJECTS["person_subjects"])
+            ),
+            fill_organizations=person_organizations,
+            fill_portrait=pick_image("portrait"),
+            fill_resume=True,
+            should_publish=True,
+        )
+        persons.append(person)
+        for organization in person_organizations:
+            persons_for_organization[organization.id].append(person)
 
     # Assign each person randomly to an organization so that our course are tagged realistically
     # If organizations and persons are tagged randomly on courses, each organizations will
     # in the end be related to most persons... not what we want.
-    po_mapping = defaultdict(list)
-    for person in persons:
-        # For each person, an organization is picked randomly
-        po_mapping[random.choice(organizations).id].append(person)
 
     # Create courses under the `Course` page with categories and organizations
     # relations
@@ -144,14 +147,18 @@ def create_demo_site():
     for _ in range(NB_OBJECTS["courses"]):
         video_sample = random.choice(VIDEO_SAMPLE_LINKS)
 
+        # Randomly assign each course to a set of organizations
         course_organizations = random.sample(
             organizations, NB_OBJECTS["course_organizations"]
         )
 
-        # Build the list of all persons within all these organizations
-        persons_in_course_organizations = [
-            person for o in course_organizations for person in po_mapping[o.id]
-        ]
+        # Only the persons members of these organizations are eligible to be part
+        # of the course team
+        eligible_persons = set(
+            person
+            for o in course_organizations
+            for person in persons_for_organization[o.id]
+        )
 
         course = CourseFactory(
             page_in_navigation=True,
@@ -162,10 +169,10 @@ def create_demo_site():
                 ("course_license_participation", random.choice(licences)),
             ],
             fill_team=random.sample(
-                persons_in_course_organizations,
+                eligible_persons,
                 min(
                     random.randint(1, NB_OBJECTS["course_persons"]),
-                    len(persons_in_course_organizations),
+                    len(eligible_persons),
                 ),
             ),
             fill_teaser=video_sample,
