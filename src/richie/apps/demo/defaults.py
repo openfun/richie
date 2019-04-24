@@ -8,6 +8,7 @@ NB_OBJECTS = {
     "course_organizations": 3,
     "course_persons": 6,
     "course_subjects": 2,
+    "person_organizations": 3,
     "person_subjects": 3,
     "organizations": 5,
     "licences": 5,
