@@ -5,7 +5,7 @@
 // Available object settings
 $richie-course-glimpse-list-maxwidth-constraint: true !default;
 $richie-course-glimpse-list-margin: 0 auto !default;
-$richie-course-glimpse-list-padding: 1rem 0 !default;
+$richie-course-glimpse-list-vertical-padding: 1rem !default;
 $richie-course-glimpse-list-title-margin: null !default;
 $richie-course-glimpse-list-title-padding: 0.5rem !default;
 
@@ -66,7 +66,8 @@ $richie-course-glimpse-foot-cta-background-hover: $firebrick6 !default;
   }
   display: flex;
   margin: $richie-course-glimpse-list-margin;
-  padding: $richie-course-glimpse-list-padding;
+  padding-top: $richie-course-glimpse-list-vertical-padding;
+  padding-bottom: $richie-course-glimpse-list-vertical-padding;
   flex-direction: row;
   flex-wrap: wrap;
 
@@ -74,6 +75,15 @@ $richie-course-glimpse-foot-cta-background-hover: $firebrick6 !default;
     @include sv-flex(1, 0, 100%);
     margin: $richie-course-glimpse-list-title-margin;
     padding: $richie-course-glimpse-list-title-padding;
+  }
+
+  &__count {
+    flex-basis: 100%; // Should not wrap with actual course glimpses
+    margin-left: $richie-course-glimpse-container-gutter;
+
+    &:first-child {
+      margin-top: -$richie-course-glimpse-list-vertical-padding; // Cancel out top padding
+    }
   }
 }
 

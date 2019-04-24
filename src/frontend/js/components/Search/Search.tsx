@@ -36,7 +36,10 @@ export const Search = () => {
             <SearchSuggestField
               filters={courseSearchResponse.content.filters}
             />
-            <CourseGlimpseList courses={courseSearchResponse.content.objects} />{' '}
+            <CourseGlimpseList
+              courses={courseSearchResponse.content.objects}
+              meta={courseSearchResponse.content.meta}
+            />{' '}
           </div>
         ) : (
           <SearchLoader />
