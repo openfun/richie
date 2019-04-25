@@ -10,6 +10,7 @@ jest.mock('../../data/getResourceList/getResourceList', () => ({
 
 import { fetchList } from '../../data/getResourceList/getResourceList';
 import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
+import { modelName } from '../../types/models';
 import { jestMockOf } from '../../utils/types';
 import { SearchFilterValueParent } from './SearchFilterValueParent';
 
@@ -179,6 +180,13 @@ describe('<SearchFilterValueParent />', () => {
     getByLabelText((content, _) => content.includes('Modern Literature'));
 
     expect(mockFetchList).toHaveBeenCalledTimes(1);
+    expect(mockFetchList).toHaveBeenLastCalledWith(modelName.COURSES, {
+      limit: '999',
+      offset: '0',
+      scope: 'filters',
+      subjects: ['L-000400050004'],
+      subjects_include: '.-00040005.{4,}',
+    });
 
     fireEvent.click(getByLabelText('Hide child filters'));
 
@@ -195,13 +203,19 @@ describe('<SearchFilterValueParent />', () => {
     expect(
       queryByLabelText((content, _) => content.includes('Modern Literature')),
     ).toEqual(null);
-
     expect(mockFetchList).toHaveBeenCalledTimes(1);
 
     fireEvent.click(getByLabelText('Show child filters'));
 
     getByLabelText('Hide child filters');
     expect(mockFetchList).toHaveBeenCalledTimes(2);
+    expect(mockFetchList).toHaveBeenLastCalledWith(modelName.COURSES, {
+      limit: '999',
+      offset: '0',
+      scope: 'filters',
+      subjects: ['L-000400050004'],
+      subjects_include: '.-00040005.{4,}',
+    });
     expect(getByLabelText('Hide child filters')).toHaveAttribute(
       'aria-pressed',
       'true',
