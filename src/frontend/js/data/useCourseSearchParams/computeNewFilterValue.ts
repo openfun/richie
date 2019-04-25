@@ -1,12 +1,5 @@
+import { isMPTTChildOf, isMPTTParentOf } from '../../utils/mptt';
 import { Maybe } from '../../utils/types';
-
-// Use the pages' MPTT paths to determine if one is a parent of the other
-const isParentOf = (parentMPTTPath: string, childMPTTPath: string) =>
-  childMPTTPath.substr(2).startsWith(parentMPTTPath.substr(2));
-
-// Just reverse the arguments to make a utility `isChildOf` from `isParentOf`
-const isChildOf = (childMPTTPath: string, parentMPTTPath: string) =>
-  isParentOf(parentMPTTPath, childMPTTPath);
 
 // Compute a new value for a filter to apply to course search, reacting to a user interaction by
 // either adding a new filter or removing one
@@ -53,8 +46,8 @@ export const computeNewFilterValue = (
       FILTER_ADD: () =>
         existingValue === update.payload
           ? [existingValue]
-          : isParentOf(existingValue, update.payload) ||
-            isChildOf(existingValue, update.payload)
+          : isMPTTParentOf(existingValue, update.payload) ||
+            isMPTTChildOf(existingValue, update.payload)
           ? [update.payload]
           : [existingValue, update.payload],
       // REMOVE:
@@ -72,8 +65,8 @@ export const computeNewFilterValue = (
       ...existingValue.filter(
         value =>
           value !== update.payload &&
-          !isParentOf(value, update.payload) &&
-          !isChildOf(value, update.payload),
+          !isMPTTParentOf(value, update.payload) &&
+          !isMPTTChildOf(value, update.payload),
       ),
       update.payload,
     ],

@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- The language filter, which is not a drilldown filter, no longer behaves
+  like one. Ditto for any future similar filters.
+
 ## [1.0.0-beta.8] - 2019-04-24
 
 ### Added

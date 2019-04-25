@@ -191,6 +191,45 @@ describe('data/useCourseSearchParams', () => {
       }
     });
 
+    it('adds to the existing list for non-MPTT-formatted filter value keys', () => {
+      mockWindow.location.search =
+        '?languages=en&languages=fr&offset=999&limit=0';
+      render(<TestComponent />);
+      {
+        const [courseSearchParams, dispatch] = getLatestHookValues();
+        expect(courseSearchParams).toEqual({
+          languages: ['en', 'fr'],
+          limit: '0',
+          offset: '999',
+        });
+
+        act(() =>
+          dispatch({
+            filter: {
+              is_drilldown: false,
+              name: 'languages',
+            },
+            payload: 'it',
+            type: 'FILTER_ADD',
+          }),
+        );
+      }
+      {
+        const [courseSearchParams] = getLatestHookValues();
+        expect(courseSearchParams).toEqual({
+          languages: ['en', 'fr', 'it'],
+          limit: '0',
+          offset: '999',
+        });
+        expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
+        expect(mockWindow.history.pushState).toHaveBeenCalledWith(
+          null,
+          '',
+          '?languages=en&languages=fr&languages=it&limit=0&offset=999',
+        );
+      }
+    });
+
     it('creates a list with the existing single value and the new value & updates history', () => {
       mockWindow.location.search =
         '?organizations=L-00010003&offset=999&limit=0';
@@ -226,6 +265,44 @@ describe('data/useCourseSearchParams', () => {
           null,
           '',
           '?limit=0&offset=999&organizations=L-00010003&organizations=L-00010017',
+        );
+      }
+    });
+
+    it('creates the new list for non-MPTT-formatted filter value keys', () => {
+      mockWindow.location.search = '?languages=de&offset=999&limit=0';
+      render(<TestComponent />);
+      {
+        const [courseSearchParams, dispatch] = getLatestHookValues();
+        expect(courseSearchParams).toEqual({
+          languages: 'de',
+          limit: '0',
+          offset: '999',
+        });
+
+        act(() =>
+          dispatch({
+            filter: {
+              is_drilldown: false,
+              name: 'languages',
+            },
+            payload: 'zh',
+            type: 'FILTER_ADD',
+          }),
+        );
+      }
+      {
+        const [courseSearchParams] = getLatestHookValues();
+        expect(courseSearchParams).toEqual({
+          languages: ['de', 'zh'],
+          limit: '0',
+          offset: '999',
+        });
+        expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
+        expect(mockWindow.history.pushState).toHaveBeenCalledWith(
+          null,
+          '',
+          '?languages=de&languages=zh&limit=0&offset=999',
         );
       }
     });
