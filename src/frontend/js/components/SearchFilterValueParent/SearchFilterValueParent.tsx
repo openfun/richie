@@ -7,6 +7,7 @@ import { useFilterValue } from '../../data/useFilterValue/useFilterValue';
 import { requestStatus } from '../../types/api';
 import { FilterDefinition, FilterValue } from '../../types/filters';
 import { modelName } from '../../types/models';
+import { getMPTTChildrenPathMatcher } from '../../utils/mptt';
 import { useAsyncEffect } from '../../utils/useAsyncEffect';
 import { SearchFilterValueLeaf } from '../SearchFilterValueLeaf/SearchFilterValueLeaf';
 
@@ -51,7 +52,7 @@ export const SearchFilterValueParent = injectIntl(
     // path key convention.
     // If this parent filter has a key (path) `P-00040005`, all of its children will have with a matching
     // path such as `P-000400050001` or `L-000400050003`.
-    const childrenPathMatch = `.-${value.key.substr(2)}[0-9]+`;
+    const childrenPathMatch = getMPTTChildrenPathMatcher(value.key);
     const childrenPathMatchRegexp = new RegExp(childrenPathMatch);
     // Hide children by default, unless at least one of them is currently active
     const [showChildren, setShowChildren] = useState(

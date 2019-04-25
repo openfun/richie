@@ -12,6 +12,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - The language filter, which is not a drilldown filter, no longer behaves
   like one. Ditto for any future similar filters.
+- All children are now shown when a parent filter value is "opened", instead
+  of just the top 5 by facet count.
 
 ## [1.0.0-beta.8] - 2019-04-24
 

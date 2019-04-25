@@ -25,3 +25,18 @@ export const isMPTTParentOf = (parentKey: string, childKey: string) =>
 export const isMPTTChildOf = (childKey: string, parentKey: string) =>
   // Just reverse the arguments to make a utility `isChildOf` from `isParentOf`
   isMPTTParentOf(parentKey, childKey);
+
+/**
+ * Build a regex-string that will match the MPTT paths of all children of the entity with the passed key.
+ * Throws when the passed key is not an MPTT path as this would be a programmer error.
+ * @param parentMPTTPath The parent entity's key.
+ */
+export const getMPTTChildrenPathMatcher = (parentMPTTPath: string) => {
+  if (!isMPTTPath(parentMPTTPath)) {
+    throw new Error(
+      `${parentMPTTPath} is not an MPTT path, cannot build a children path matcher.`,
+    );
+  }
+
+  return `.-${parentMPTTPath.substr(2)}.{4,}`;
+};
