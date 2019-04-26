@@ -11,8 +11,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from cms.api import Page
 from cms.extensions.extension_pool import extension_pool
-from cms.models import Title
-from cms.models.pluginmodel import CMSPlugin
+from cms.models import CMSPlugin, Title
 
 from ...core.models import BasePageExtension, PagePluginMixin
 from ..defaults import ORGANIZATIONS_PAGE
