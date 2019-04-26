@@ -164,7 +164,7 @@ class OrganizationPluginModel(PagePluginMixin, CMSPlugin):
         related_name="organization_plugins",
         limit_choices_to={
             "publisher_is_draft": True,  # plugins work with draft instances
-            "organization__isnull": False,  # limit to pages linked to a course object
+            "organization__isnull": False,  # limit to pages linked to an organization object
         },
     )
 

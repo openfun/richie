@@ -16,20 +16,12 @@ from ..core.defaults import ALL_LANGUAGES
 from ..core.factories import (
     FilerImageFactory,
     PageExtensionDjangoModelFactory,
+    PageFactory,
     image_getter,
 )
 from ..core.helpers import create_text_plugin
-from .models import (
-    BlogPost,
-    Category,
-    Course,
-    CourseRun,
-    Licence,
-    Organization,
-    Person,
-    PersonTitle,
-    PersonTitleTranslation,
-)
+from . import models
+from .defaults import ROLE_CHOICES
 
 VideoSample = namedtuple("VideoSample", ["label", "image", "url"])
 
@@ -128,7 +120,7 @@ class OrganizationFactory(BLDPageExtensionDjangoModelFactory):
     """
 
     class Meta:
-        model = Organization
+        model = models.Organization
         exclude = [
             "page_in_navigation",
             "page_languages",
@@ -139,7 +131,7 @@ class OrganizationFactory(BLDPageExtensionDjangoModelFactory):
         ]
 
     # fields concerning the related page
-    page_template = Organization.PAGE["template"]
+    page_template = models.Organization.PAGE["template"]
 
     @factory.lazy_attribute_sequence
     def code(self, sequence):
@@ -171,6 +163,16 @@ class OrganizationFactory(BLDPageExtensionDjangoModelFactory):
                     )
 
 
+class PageRoleFactory(factory.django.DjangoModelFactory):
+    """A factory to automatically generate random yet meaningful page roles."""
+
+    class Meta:
+        model = models.PageRole
+
+    page = factory.SubFactory(PageFactory)
+    role = factory.Iterator([d[0] for d in ROLE_CHOICES])
+
+
 class CourseFactory(PageExtensionDjangoModelFactory):
     """
     A factory to automatically generate random yet meaningful course page extensions
@@ -178,7 +180,7 @@ class CourseFactory(PageExtensionDjangoModelFactory):
     """
 
     class Meta:
-        model = Course
+        model = models.Course
         exclude = [
             "page_in_navigation",
             "page_languages",
@@ -188,7 +190,7 @@ class CourseFactory(PageExtensionDjangoModelFactory):
         ]
 
     # fields concerning the related page
-    page_template = Course.PAGE["template"]
+    page_template = models.Course.PAGE["template"]
 
     @factory.post_generation
     # pylint: disable=unused-argument
@@ -354,7 +356,7 @@ class CourseRunFactory(PageExtensionDjangoModelFactory):
     """
 
     class Meta:
-        model = CourseRun
+        model = models.CourseRun
         exclude = [
             "page_in_navigation",
             "page_languages",
@@ -364,7 +366,7 @@ class CourseRunFactory(PageExtensionDjangoModelFactory):
         ]
 
     # fields concerning the related page
-    page_template = CourseRun.PAGE["template"]
+    page_template = models.CourseRun.PAGE["template"]
     page_title = factory.Sequence("session {:d}".format)
 
     resource_link = factory.Faker("uri")
@@ -469,7 +471,7 @@ class CategoryFactory(BLDPageExtensionDjangoModelFactory):
     """
 
     class Meta:
-        model = Category
+        model = models.Category
         exclude = [
             "page_in_navigation",
             "page_languages",
@@ -480,7 +482,7 @@ class CategoryFactory(BLDPageExtensionDjangoModelFactory):
         ]
 
     # fields concerning the related page
-    page_template = Category.PAGE["template"]
+    page_template = models.Category.PAGE["template"]
 
     @factory.post_generation
     # pylint: disable=unused-argument
@@ -516,7 +518,7 @@ class LicenceFactory(factory.django.DjangoModelFactory):
     """
 
     class Meta:
-        model = Licence
+        model = models.Licence
 
     name = factory.Faker("sentence", nb_words=3)
     logo = factory.SubFactory(LicenceLogoImageFactory)
@@ -531,7 +533,7 @@ class BlogPostFactory(PageExtensionDjangoModelFactory):
     """
 
     class Meta:
-        model = BlogPost
+        model = models.BlogPost
         exclude = [
             "page_in_navigation",
             "page_languages",
@@ -541,7 +543,7 @@ class BlogPostFactory(PageExtensionDjangoModelFactory):
         ]
 
     # fields concerning the related page
-    page_template = BlogPost.PAGE["template"]
+    page_template = models.BlogPost.PAGE["template"]
 
     @factory.post_generation
     # pylint: disable=unused-argument
@@ -653,7 +655,7 @@ class PersonTitleFactory(factory.django.DjangoModelFactory):
     )
 
     class Meta:
-        model = PersonTitle
+        model = models.PersonTitle
 
 
 class PersonTitleTranslationFactory(factory.django.DjangoModelFactory):
@@ -662,7 +664,7 @@ class PersonTitleTranslationFactory(factory.django.DjangoModelFactory):
     """
 
     class Meta:
-        model = PersonTitleTranslation
+        model = models.PersonTitleTranslation
 
     master = None
     language_code = factory.LazyAttribute(lambda o: get_language())
@@ -676,7 +678,7 @@ class PersonFactory(PageExtensionDjangoModelFactory):
     """
 
     class Meta:
-        model = Person
+        model = models.Person
         exclude = [
             "page_in_navigation",
             "page_languages",
@@ -686,7 +688,7 @@ class PersonFactory(PageExtensionDjangoModelFactory):
         ]
 
     # fields concerning the related page
-    page_template = Person.PAGE["template"]
+    page_template = models.Person.PAGE["template"]
 
     first_name = factory.Faker("first_name")
     last_name = factory.Faker("last_name")

@@ -193,7 +193,7 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
         # Submit an invalid slug
         data = {"title": "my title", "slug": "invalid slug"}
 
-        form = BlogPostWizardForm(data=data)
+        form = BlogPostWizardForm(data=data, wizard_language="en")
         self.assertFalse(form.is_valid())
         self.assertEqual(
             form.errors["slug"][0],
