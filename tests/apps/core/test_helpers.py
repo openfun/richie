@@ -1,18 +1,55 @@
 """
 Test suite for all helpers in the `core` application
 """
+import random
 from unittest import mock
 
+from django.contrib.auth.models import Permission
+from django.test import TestCase
 from django.test.utils import override_settings
 
 from cms.api import Page
 from cms.test_utils.testcases import CMSTestCase
 
-from richie.apps.core.helpers import create_i18n_page
+from richie.apps.core.factories import PermissionFactory
+from richie.apps.core.helpers import create_i18n_page, get_permissions
+
+
+class GetPermissionsHelpersTestCase(TestCase):
+    """Test suite for the `get_permissions` helper."""
+
+    def test_helpers_get_permissions(self):
+        """
+        Given an iterable of permission names, it should return the list of corresponding
+        permission objects. This should be done in 1 query.
+        """
+        PermissionFactory.reset_sequence()
+        permissions = PermissionFactory.create_batch(5)
+        sample_permissions = random.sample(permissions, 3)
+        names = [
+            f"{permission.content_type.app_label:s}.{permission.codename:s}"
+            for permission in sample_permissions
+        ]
+        with self.assertNumQueries(1):
+            self.assertEqual(set(get_permissions(names)), set(sample_permissions))
+
+    def test_helpers_get_permissions_unknown(self):
+        """Trying to retrieve a permission that does not exist should raise an exception."""
+        with self.assertRaises(Permission.DoesNotExist) as context:
+            get_permissions(["unknown.unknown"])
+
+        self.assertEqual(
+            str(context.exception),
+            "Some permission names were not found: unknown.unknown",
+        )
+
+    def test_helpers_get_permissions_empty(self):
+        """Trying to retrieve an empty list of permissions should return an empty query."""
+        self.assertEqual(list(get_permissions([])), [])
 
 
 class CreateI18nPageHelpersTestCase(CMSTestCase):
-    """Test suite for the `create_i18n_page` helper"""
+    """Test suite for the `create_i18n_page` helper."""
 
     @mock.patch("richie.apps.core.helpers.create_title")
     @mock.patch("richie.apps.core.helpers.create_page")

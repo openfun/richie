@@ -2,14 +2,46 @@
 Helpers that can be useful throughout the whole project
 """
 import random
+from functools import reduce
+from operator import or_
 
 from django.conf import settings
+from django.contrib.auth.models import Permission
 from django.core.exceptions import ImproperlyConfigured
+from django.db.models import Q
 from django.utils.text import slugify
 
 import factory
 from cms.api import add_plugin, create_page, create_title
 from cms.models import Page
+
+
+def get_permissions(names):
+    """
+    Given an iterable of permission names of the form "app_label.codename",
+    return an iterable of the corresponding existing Permission objects.
+    """
+    names = set(names)  # Eliminate redundancies
+    split_names = (name.split(".", 1) for name in names)
+    query_elements = [
+        Q(content_type__app_label=app_label, codename=codename)
+        for app_label, codename in split_names
+    ]
+    permissions = (
+        Permission.objects.filter(reduce(or_, query_elements))
+        if query_elements
+        else Permission.objects.none()
+    )
+
+    if len(permissions) != len(names):
+        differences = names - {
+            f"{p.content_type.app_label:s}.{p.codename:s}" for p in permissions
+        }
+        raise Permission.DoesNotExist(
+            "Some permission names were not found: {:s}".format(", ".join(differences))
+        )
+
+    return permissions
 
 
 def create_i18n_page(title=None, languages=None, is_homepage=False, **kwargs):
