@@ -233,7 +233,7 @@ class CategoryCMSWizardTestCase(CMSTestCase):
         # Submit an invalid slug
         data = {"title": "my title", "slug": "invalid slug"}
 
-        form = CategoryWizardForm(data=data)
+        form = CategoryWizardForm(data=data, wizard_language="en")
         form.page = parent_page
         self.assertFalse(form.is_valid())
         self.assertEqual(

@@ -181,7 +181,7 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         # Submit an invalid slug
         data = {"title": "my title", "slug": "invalid slug"}
 
-        form = OrganizationWizardForm(data=data)
+        form = OrganizationWizardForm(data=data, wizard_language="en")
         self.assertFalse(form.is_valid())
         self.assertEqual(
             form.errors["slug"][0],

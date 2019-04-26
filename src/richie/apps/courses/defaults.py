@@ -1,7 +1,15 @@
 """
-Settings specific to the courses application
+Settings specific to the courses application.
 """
 from django.conf import settings
+from django.utils.translation import ugettext_lazy as _
+
+ADMIN = "ADMIN"
+
+ROLE_CHOICES = ((ADMIN, _("Admin")),)
+
+ORGANIZATION_ADMIN_ROLE = {"django_permissions": []}
+ORGANIZATION_ADMIN_ROLE.update(getattr(settings, "RICHIE_ORGANIZATION_ADMIN_ROLE", {}))
 
 PAGE_EXTENSION_TOOLBAR_ITEM_POSITION = getattr(
     settings, "RICHIE_PAGE_EXTENSION_TOOLBAR_ITEM_POSITION", 4

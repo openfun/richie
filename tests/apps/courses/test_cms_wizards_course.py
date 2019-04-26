@@ -259,7 +259,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
         # Submit an invalid slug
         data = {"title": "my title", "slug": "invalid slug"}
 
-        form = CourseWizardForm(data=data)
+        form = CourseWizardForm(data=data, wizard_language="en")
         self.assertFalse(form.is_valid())
         self.assertEqual(
             form.errors["slug"][0],

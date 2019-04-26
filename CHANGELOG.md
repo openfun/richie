@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add page roles to link a user group to a CMS page,
 - Add a persons index and viewset to enable text queries and autocomplete
   requests on person names from the API.
 - Index person names on courses to allow users to find courses when they
