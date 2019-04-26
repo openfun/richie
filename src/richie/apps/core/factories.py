@@ -6,6 +6,8 @@ import os
 
 from django.conf import settings
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.models import Permission
+from django.contrib.contenttypes.models import ContentType
 from django.core.files import File
 
 import factory
@@ -25,6 +27,19 @@ class UserFactory(factory.django.DjangoModelFactory):
     username = factory.Faker("user_name")
     email = factory.Faker("email")
     password = make_password("password")
+
+
+class PermissionFactory(factory.django.DjangoModelFactory):
+    """
+    Create random permissions for a user or group.
+    """
+
+    class Meta:
+        model = Permission
+
+    codename = factory.Sequence("permission_{:d}".format)
+    content_type = factory.Iterator(ContentType.objects.all())
+    name = factory.Sequence("permission #{:d}".format)
 
 
 class FilerImageFactory(factory.django.DjangoModelFactory):
