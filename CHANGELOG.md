@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add page roles to link a user group to a CMS page, searchable via the admin,
 - Add page roles to link a user group to a CMS page,
 - Add a persons index and viewset to enable text queries and autocomplete
   requests on person names from the API.

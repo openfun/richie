@@ -4,7 +4,8 @@ Courses application admin
 from django.conf.urls import url
 from django.contrib import admin
 from django.core.exceptions import PermissionDenied
-from django.db import models, transaction
+from django.db import models as django_models
+from django.db import transaction
 from django.http import HttpResponseBadRequest, HttpResponseForbidden, JsonResponse
 from django.utils.decorators import method_decorator
 from django.utils.encoding import force_text
@@ -17,10 +18,11 @@ from cms.extensions import PageExtensionAdmin
 from cms.utils.admin import jsonify_request
 from parler.admin import TranslatableAdmin
 
+from ..core.admin import link_field
+from . import models
 from .fields import CourseRunSplitDateTimeField
 from .forms import LicenceFormAdmin
 from .helpers import snapshot_course
-from .models import Course, CourseRun, Licence, Organization, Person, PersonTitle
 from .widgets import CourseRunSplitDateTimeWidget
 
 REQUIRE_POST = method_decorator(require_POST)
@@ -90,7 +92,7 @@ class CourseRunAdmin(FrontendEditableAdminMixin, PageExtensionAdmin):
         "enrollment_end",
     )
     formfield_overrides = {
-        models.DateTimeField: {
+        django_models.DateTimeField: {
             "form_class": CourseRunSplitDateTimeField,
             "widget": CourseRunSplitDateTimeWidget,
         }
@@ -117,6 +119,38 @@ class OrganizationAdmin(PageExtensionAdmin):
         Get the page title from the related page
         """
         return obj.extended_object.get_title()
+
+
+class PageRoleAdmin(admin.ModelAdmin):
+    """
+    Admin class for the PageRole model.
+    """
+
+    fields = [
+        "role",
+        link_field("page"),
+        link_field("group", anchor=_("See group permissions")),
+        link_field(
+            "page_permission",
+            view_name="admin:cms_page_permissions",
+            anchor=_("See page permissions"),
+        ),
+    ]
+    list_display = ["id", "role", "page"]
+    list_filter = ["role"]
+    search_fields = ("id", "page__title_set__title")
+
+    def get_fieldsets(self, request, obj=None):
+        fieldsets = super(PageRoleAdmin, self).get_fieldsets(request, obj)
+        if not obj:
+            fieldsets[0][1]["fields"] = ["role", "page"]
+        return fieldsets
+
+    def get_readonly_fields(self, request, obj=None):
+        """Don't allow modifying the object once created."""
+        if obj:
+            return self.fields
+        return []
 
 
 class PersonAdmin(PageExtensionAdmin):
@@ -147,9 +181,10 @@ class LicenceAdmin(admin.ModelAdmin):
     form = LicenceFormAdmin
 
 
-admin.site.register(Course, CourseAdmin)
-admin.site.register(CourseRun, CourseRunAdmin)
-admin.site.register(Licence, LicenceAdmin)
-admin.site.register(Organization, OrganizationAdmin)
-admin.site.register(Person, PersonAdmin)
-admin.site.register(PersonTitle, PersonTitleAdmin)
+admin.site.register(models.Course, CourseAdmin)
+admin.site.register(models.CourseRun, CourseRunAdmin)
+admin.site.register(models.Licence, LicenceAdmin)
+admin.site.register(models.Organization, OrganizationAdmin)
+admin.site.register(models.PageRole, PageRoleAdmin)
+admin.site.register(models.Person, PersonAdmin)
+admin.site.register(models.PersonTitle, PersonTitleAdmin)
