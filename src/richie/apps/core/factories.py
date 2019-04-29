@@ -9,8 +9,11 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import Permission
 from django.contrib.contenttypes.models import ContentType
 from django.core.files import File
+from django.utils.text import slugify
 
 import factory
+from cms import models as cms_models
+from cms.utils import get_current_site
 from filer.models.imagemodels import Image
 
 from ..core.helpers import create_i18n_page
@@ -40,6 +43,44 @@ class PermissionFactory(factory.django.DjangoModelFactory):
     codename = factory.Sequence("permission_{:d}".format)
     content_type = factory.Iterator(ContentType.objects.all())
     name = factory.Sequence("permission #{:d}".format)
+
+
+class TitleFactory(factory.django.DjangoModelFactory):
+    """Create random title objects for CMS pages."""
+
+    language = factory.Iterator([l[0] for l in settings.LANGUAGES])
+    page = None
+    slug = factory.LazyAttribute(lambda o: slugify(o.title))
+    title = factory.Faker("catch_phrase")
+
+    class Meta:
+        model = cms_models.Title
+
+
+class PageFactory(factory.django.DjangoModelFactory):
+    """Create random CMS pages."""
+
+    changed_by = factory.LazyAttribute(lambda o: slugify(o.user.username))
+    created_by = factory.LazyAttribute(lambda o: slugify(o.user.username))
+    title = factory.RelatedFactory(TitleFactory, "page")
+
+    # Utility fields
+    parent = None
+    user = factory.SubFactory(UserFactory)
+
+    class Meta:
+        model = cms_models.Page
+        exclude = ["parent", "user"]
+
+    @factory.lazy_attribute
+    def node(self):
+        """Create a node for the page (under its parent if applicable)."""
+        site = get_current_site()
+        new_node = cms_models.TreeNode(site=site)
+
+        if self.parent:
+            return self.parent.node.add_child(instance=new_node)
+        return cms_models.TreeNode.add_root(instance=new_node)
 
 
 class FilerImageFactory(factory.django.DjangoModelFactory):
