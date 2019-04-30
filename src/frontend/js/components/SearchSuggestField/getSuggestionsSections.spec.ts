@@ -1,6 +1,5 @@
 import fetchMock from 'fetch-mock';
 
-import { Course } from '../../types/Course';
 import { modelName } from '../../types/models';
 import { handle } from '../../utils/errors/handle';
 import { getSuggestionsSection } from './getSuggestionsSection';
@@ -31,11 +30,11 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
     }
 
     expect(suggestionsSection).toEqual({
+      kind: modelName.COURSES,
       message: { defaultMessage: 'Courses', id: 'coursesHumanName' },
-      model: modelName.COURSES,
       values: [
-        { title: 'Course #1' } as Course,
-        { title: 'Course #2' } as Course,
+        { data: { title: 'Course #1' }, kind: modelName.COURSES },
+        { data: { title: 'Course #2' }, kind: modelName.COURSES },
       ],
     });
   });

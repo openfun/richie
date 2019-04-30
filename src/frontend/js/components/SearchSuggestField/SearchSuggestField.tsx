@@ -1,25 +1,15 @@
 import debounce from 'lodash-es/debounce';
 import React, { useContext, useRef, useState } from 'react';
 import Autosuggest, { AutosuggestProps } from 'react-autosuggest';
-import {
-  defineMessages,
-  FormattedMessage,
-  InjectedIntlProps,
-  injectIntl,
-} from 'react-intl';
+import { defineMessages, InjectedIntlProps, injectIntl } from 'react-intl';
 
 import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
 import { APICourseSearchResponse } from '../../types/api';
 import { modelName } from '../../types/models';
-import {
-  DefaultSuggestionSection,
-  SearchSuggestion,
-  SearchSuggestionSection,
-} from '../../types/searchSuggest';
+import { Suggestion, SuggestionSection } from '../../types/Suggestion';
 import { commonMessages } from '../../utils/commonMessages';
 import { handle } from '../../utils/errors/handle';
-import { getSuggestionsSection } from '../../utils/searchSuggest/getSuggestionsSection';
-import { suggestionsFromSection } from '../../utils/searchSuggest/suggestionsFromSection';
+import { getSuggestionsSection } from './getSuggestionsSection';
 
 const messages = defineMessages({
   searchFieldDefaultSearch: {
@@ -36,6 +26,22 @@ const messages = defineMessages({
   },
 });
 
+/**
+ * Define the kind of suggestions our `<SearchSuggestField />` component supports.
+ */
+type SearchSuggestion = Suggestion<
+  modelName.CATEGORIES | modelName.ORGANIZATIONS
+>;
+
+/**
+ * Derive from `SearchSuggestion` the kind of suggestion sections our `<SearchSuggestField />` component supports.
+ */
+type SearchSuggestionSection = SuggestionSection<SearchSuggestion>;
+
+/**
+ * Helper to typecheck `react-autosuggest` expected props. Defines what is acceptable as a suggestion
+ * throughout our code related to this instance of `<Autosuggest />`.
+ */
 type SearchAutosuggestProps = AutosuggestProps<SearchSuggestion>;
 
 /**
@@ -43,26 +49,20 @@ type SearchAutosuggestProps = AutosuggestProps<SearchSuggestion>;
  * @param suggestion The relevant suggestion object.
  */
 const getSuggestionValue: SearchAutosuggestProps['getSuggestionValue'] = suggestion =>
-  suggestion.model ? suggestion.data.title : suggestion.data;
+  suggestion.data.title;
 
 /**
  * `react-autosuggest` callback to render one suggestion.
  * @param suggestion Either a resource suggestion with a model name & a machine name, or the default
  * suggestion with some text to render.
  */
-const renderSuggestion: SearchAutosuggestProps['renderSuggestion'] = suggestion => {
-  // Default suggestion is just packing a message in its data field
-  if (!suggestion.model) {
-    return (
-      <FormattedMessage
-        {...messages.searchFieldDefaultSearch}
-        values={{ query: <b>{suggestion.data}</b> }}
-      />
-    );
-  }
-  return <span>{suggestion.data.title}</span>;
-};
+const renderSuggestion: SearchAutosuggestProps['renderSuggestion'] = suggestion => (
+  <span>{suggestion.data.title}</span>
+);
 
+/**
+ * State shape for the SearchSuggestField component.
+ */
 interface SearchSuggestFieldState {
   suggestions: SearchSuggestionSection[];
   value: string;
@@ -160,38 +160,25 @@ export const SearchSuggestField = injectIntl(
       _,
       { suggestion },
     ) => {
-      switch (suggestion.model) {
-        case modelName.ORGANIZATIONS:
-        case modelName.CATEGORIES:
-          // Update the search with the newly selected filter
-          // Pick the filter to update based on the payload's path: it contains the relevant filter's page path
-          // (for eg. a meta-category or the "organizations" root page)
-          const filter = Object.values(filters).find(
-            fltr =>
-              !!fltr.base_path &&
-              String(suggestion.data.id)
-                .substr(2)
-                .startsWith(fltr.base_path),
-          )!;
-          // Dispatch the actual update on the relevant filter
-          dispatchCourseSearchParamsUpdate({
-            filter,
-            payload: String(suggestion.data.id),
-            type: 'FILTER_ADD',
-          });
-          // Reset the search field state: the task has been completed
-          setValue('');
-          setSuggestions([]);
-          break;
-
-        default:
-          // Update the current query with the default suggestion data (the contents of the search query)
-          dispatchCourseSearchParamsUpdate({
-            query: suggestion.data,
-            type: 'QUERY_UPDATE',
-          });
-          break;
-      }
+      // Update the search with the newly selected filter
+      // Pick the filter to update based on the payload's path: it contains the relevant filter's page path
+      // (for eg. a meta-category or the "organizations" root page)
+      const filter = Object.values(filters).find(
+        fltr =>
+          !!fltr.base_path &&
+          String(suggestion.data.id)
+            .substr(2)
+            .startsWith(fltr.base_path),
+      )!;
+      // Dispatch the actual update on the relevant filter
+      dispatchCourseSearchParamsUpdate({
+        filter,
+        payload: String(suggestion.data.id),
+        type: 'FILTER_ADD',
+      });
+      // Reset the search field state: the task has been completed
+      setValue('');
+      setSuggestions([]);
     };
 
     /**
@@ -207,9 +194,7 @@ export const SearchSuggestField = injectIntl(
       }
 
       // Fetch the suggestions for each resource-based section to build out the sections
-      let sections: Array<
-        Exclude<SearchSuggestionSection, DefaultSuggestionSection>
-      >;
+      let sections: SearchSuggestionSection[];
       try {
         sections = (await Promise.all(
           [
@@ -225,7 +210,7 @@ export const SearchSuggestField = injectIntl(
             ),
           ],
           // We can assert this because of the catch below
-        )) as Array<Exclude<SearchSuggestionSection, DefaultSuggestionSection>>;
+        )) as SearchSuggestionSection[];
       } catch (error) {
         return handle(error);
       }
@@ -242,15 +227,15 @@ export const SearchSuggestField = injectIntl(
      * the default section as that section has no title.
      */
     const renderSectionTitle: SearchAutosuggestProps['renderSectionTitle'] = section =>
-      section.model ? <span>{intl.formatMessage(section.message)}</span> : null;
+      [modelName.CATEGORIES, modelName.ORGANIZATIONS].includes(section.kind) ? (
+        <span>{intl.formatMessage(section.message)}</span>
+      ) : null;
 
     return (
       // TypeScript incorrectly infers the type of the Autosuggest suggestions prop as SearchSuggestion, which
       // would be correct if we did not use sections, but is incorrect as it is.
       <Autosuggest
-        getSectionSuggestions={
-          suggestionsFromSection as SearchAutosuggestProps['getSectionSuggestions']
-        }
+        getSectionSuggestions={section => section.values}
         getSuggestionValue={getSuggestionValue}
         inputProps={inputProps}
         multiSection={true}

@@ -3,23 +3,20 @@ import { stringify } from 'query-string';
 import { FormattedMessage } from 'react-intl';
 
 import { API_ENDPOINTS } from '../../settings';
-import { CategoryForSuggestion } from '../../types/Category';
-import { CourseForSuggestion } from '../../types/Course';
 import { modelName } from '../../types/models';
-import { OrganizationForSuggestion } from '../../types/Organization';
-import { ResourceSuggestionSection } from '../../types/searchSuggest';
+import { Suggestion } from '../../types/Suggestion';
 import { handle } from '../../utils/errors/handle';
 
 /**
  * Build a suggestion section from a model name and a title, requesting the relevant
  * values to populate it from the API
- * @param sectionModel The model we're issuing the completion request on. Determines the API
+ * @param kind The kind of suggestion we're issuing the completion request for. Determines the API
  * endpoint we're sending the request to.
  * @param sectionTitleMessage MessageDescriptor for the title of the section that displays the suggestions.
  * @param query The actual payload to run the completion search with.
  */
-export const getSuggestionsSection = async (
-  sectionModel: ResourceSuggestionSection['model'],
+export const getSuggestionsSection = async <Kind extends modelName>(
+  kind: Kind,
   sectionTitleMessage: FormattedMessage.MessageDescriptor,
   query: string,
 ) => {
@@ -27,7 +24,7 @@ export const getSuggestionsSection = async (
   let response: Response;
   try {
     response = await fetch(
-      `${API_ENDPOINTS.autocomplete[sectionModel]}?${stringify({ query })}`,
+      `${API_ENDPOINTS.autocomplete[kind]}?${stringify({ query })}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -43,34 +40,25 @@ export const getSuggestionsSection = async (
   if (!response.ok) {
     return handle(
       new Error(
-        `Failed to get list from ${
-          API_ENDPOINTS.autocomplete[sectionModel]
-        } : ${response.status}`,
+        `Failed to get list from ${API_ENDPOINTS.autocomplete[kind]} : ${
+          response.status
+        }`,
       ),
     );
   }
 
-  let data: Array<
-    typeof sectionModel extends modelName.CATEGORIES
-      ? CategoryForSuggestion
-      : typeof sectionModel extends modelName.COURSES
-      ? CourseForSuggestion
-      : typeof sectionModel extends modelName.ORGANIZATIONS
-      ? OrganizationForSuggestion
-      : unknown
-  >;
+  let responseData: Array<Suggestion<Kind>['data']>;
   try {
-    data = await response.json();
+    responseData = await response.json();
   } catch (error) {
     return handle(
       new Error('Failed to decode JSON in getSuggestionSection ' + error),
     );
   }
 
-  // Build out the section. Compiler needs help as it is unable to infer model name matches
   return {
+    kind,
     message: sectionTitleMessage,
-    model: sectionModel,
-    values: take(data, 3),
+    values: take(responseData, 3).map(data => ({ data, kind })),
   };
 };
