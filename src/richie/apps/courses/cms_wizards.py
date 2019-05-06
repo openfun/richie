@@ -18,6 +18,7 @@ from cms.cms_wizards import (
 )
 from cms.forms.wizards import CreateCMSPageForm, CreateCMSSubPageForm, SlugWidget
 from cms.models import Page
+from cms.wizards.forms import BaseFormMixin
 from cms.wizards.wizard_base import Wizard
 from cms.wizards.wizard_pool import wizard_pool
 
@@ -80,7 +81,7 @@ wizard_pool.register(
 )
 
 
-class BaseWizardForm(forms.Form):
+class BaseWizardForm(BaseFormMixin, forms.Form):
     """
     Factorize the part of the wizard form that handles the title and the slug as they are
     common to all our wizard forms.

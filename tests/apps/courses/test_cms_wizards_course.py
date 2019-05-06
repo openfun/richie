@@ -70,7 +70,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
         any_page = create_page("Any page", "richie/single_column.html", "en")
 
         # We can submit a form omitting the slug
-        form = CourseWizardForm(data={"title": "My title"})
+        form = CourseWizardForm(data={"title": "My title"}, wizard_language="en")
         form.page = any_page
         self.assertTrue(form.is_valid())
         page = form.save()
@@ -101,7 +101,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
         )
 
         # We can submit a form omitting the slug
-        form = CourseWizardForm(data={"title": "My title"})
+        form = CourseWizardForm(data={"title": "My title"}, wizard_language="en")
         form.page = organization.extended_object
         self.assertTrue(form.is_valid())
         page = form.save()
@@ -137,7 +137,12 @@ class CourseCMSWizardTestCase(CMSTestCase):
         # An organization with a slug at the limit length should work
         organization = OrganizationFactory()
         form = CourseWizardForm(
-            data={"title": "t" * 255, "slug": "s" * 54, "organization": organization.id}
+            data={
+                "title": "t" * 255,
+                "slug": "s" * 54,
+                "organization": organization.id,
+            },
+            wizard_language="en",
         )
         form.page = page
         self.assertTrue(form.is_valid())
@@ -146,7 +151,12 @@ class CourseCMSWizardTestCase(CMSTestCase):
         # An organization with a slug too long with regards to the parent's one should raise an
         # error
         form = CourseWizardForm(
-            data={"title": "t" * 255, "slug": "s" * 55, "organization": organization.id}
+            data={
+                "title": "t" * 255,
+                "slug": "s" * 55,
+                "organization": organization.id,
+            },
+            wizard_language="en",
         )
         form.page = page
         self.assertFalse(form.is_valid())
@@ -173,7 +183,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
 
         # Submit a title at max length
         data = {"title": "t" * 255, "organization": organization.id}
-        form = CourseWizardForm(data=data)
+        form = CourseWizardForm(data=data, wizard_language="en")
         form.page = page
         self.assertTrue(form.is_valid())
         page = form.save()
@@ -199,7 +209,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
             "organization": organization.id,
         }
 
-        form = CourseWizardForm(data=invalid_data)
+        form = CourseWizardForm(data=invalid_data, wizard_language="en")
         form.page = page
         self.assertFalse(form.is_valid())
         # Check that the title being too long is a cause for the invalid form
@@ -227,7 +237,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
             "organization": organization.id,
         }
 
-        form = CourseWizardForm(data=invalid_data)
+        form = CourseWizardForm(data=invalid_data, wizard_language="en")
         form.page = page
         self.assertFalse(form.is_valid())
         # Check that the slug being too long is a cause for the invalid form
@@ -274,7 +284,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
         # Submit a title that will lead to the same slug
         data = {"title": "my title"}
 
-        form = CourseWizardForm(data=data)
+        form = CourseWizardForm(data=data, wizard_language="en")
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors, {"slug": ["This slug is already in use"]})
 
@@ -287,7 +297,8 @@ class CourseCMSWizardTestCase(CMSTestCase):
             " Not the root courses page", "richie/single_column.html", "en"
         )
         form = CourseWizardForm(
-            data={"title": "My title", "organization": organization.id}
+            data={"title": "My title", "organization": organization.id},
+            wizard_language="en",
         )
         form.page = page
         self.assertFalse(form.is_valid())

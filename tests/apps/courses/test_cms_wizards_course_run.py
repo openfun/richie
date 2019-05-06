@@ -106,7 +106,7 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         page = create_page("page", "richie/single_column.html", "en")
 
         # Submit a valid form
-        form = CourseRunWizardForm(data={"title": "My title"})
+        form = CourseRunWizardForm(data={"title": "My title"}, wizard_language="en")
         form.page = page
         self.assertFalse(form.is_valid())
         self.assertEqual(
@@ -123,7 +123,7 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         course = CourseFactory()
 
         # Submit a valid form
-        form = CourseRunWizardForm(data={"title": "My title"})
+        form = CourseRunWizardForm(data={"title": "My title"}, wizard_language="en")
         form.page = course.extended_object
         self.assertTrue(form.is_valid())
         page = form.save()
@@ -162,13 +162,13 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         course = CourseFactory(page_title="c" * 100, page_parent=root_page)
 
         # A course run with a slug at the limit length should work
-        form = CourseRunWizardForm(data={"title": "t" * 53})
+        form = CourseRunWizardForm(data={"title": "t" * 53}, wizard_language="en")
         form.page = course.extended_object
         self.assertTrue(form.is_valid())
         form.save()
 
         # A course run with a slug too long with regards to the parent's one should raise an error
-        form = CourseRunWizardForm(data={"title": "t" * 54})
+        form = CourseRunWizardForm(data={"title": "t" * 54}, wizard_language="en")
         form.page = course.extended_object
         self.assertFalse(form.is_valid())
         self.assertEqual(
@@ -191,7 +191,7 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
 
         # Submit a title at max length
         data = {"title": "t" * 255}
-        form = CourseRunWizardForm(data=data)
+        form = CourseRunWizardForm(data=data, wizard_language="en")
         form.page = course.extended_object
         self.assertTrue(form.is_valid())
         page = form.save()
@@ -211,7 +211,7 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         # Submit a title that is too long
         invalid_data = {"title": "t" * 256}
 
-        form = CourseRunWizardForm(data=invalid_data)
+        form = CourseRunWizardForm(data=invalid_data, wizard_language="en")
         form.page = course.extended_object
         self.assertFalse(form.is_valid())
         # Check that the title being too long is a cause for the invalid form
@@ -233,7 +233,7 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         # Submit a slug that is too long and a title that is ok
         invalid_data = {"title": "t" * 255, "slug": "s" * 201}
 
-        form = CourseRunWizardForm(data=invalid_data)
+        form = CourseRunWizardForm(data=invalid_data, wizard_language="en")
         form.page = course.extended_object
 
         self.assertFalse(form.is_valid())
@@ -278,7 +278,7 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         # Submit a title that will lead to the same slug
         data = {"title": "my title"}
 
-        form = CourseRunWizardForm(data=data)
+        form = CourseRunWizardForm(data=data, wizard_language="en")
         form.page = course.extended_object
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors, {"slug": ["This slug is already in use"]})
@@ -293,7 +293,7 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         course = CourseFactory()
 
         # Submit a valid form
-        form = CourseRunWizardForm(data={"title": "My title"})
+        form = CourseRunWizardForm(data={"title": "My title"}, wizard_language="en")
         form.page = course.extended_object
         self.assertTrue(form.is_valid())
         with translation.override("fr"):
@@ -312,7 +312,8 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
 
         # Submit a valid form with the snapshot flag enabled
         form = CourseRunWizardForm(
-            data={"title": "My title", "should_snapshot_course": True}
+            data={"title": "My title", "should_snapshot_course": True},
+            wizard_language="en",
         )
         form.page = course.extended_object
         form.user = user
@@ -345,7 +346,8 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
 
         # Submit a valid form with the snapshot flag enabled
         form = CourseRunWizardForm(
-            data={"title": "My title", "should_snapshot_course": True}
+            data={"title": "My title", "should_snapshot_course": True},
+            wizard_language="en",
         )
         form.page = course.extended_object
         form.user = user

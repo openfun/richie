@@ -72,7 +72,7 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         )
 
         # We can submit a form with just the title set
-        form = OrganizationWizardForm(data={"title": "My title"})
+        form = OrganizationWizardForm(data={"title": "My title"}, wizard_language="en")
         self.assertTrue(form.is_valid())
         page = form.save()
         organization = page.organization
@@ -102,7 +102,7 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
 
         # Submit values at max length on all fields
         data = {"title": "t" * 255, "slug": "s" * 200}
-        form = OrganizationWizardForm(data=data)
+        form = OrganizationWizardForm(data=data, wizard_language="en")
 
         self.assertTrue(form.is_valid())
         form.save()
@@ -125,7 +125,7 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
 
         # Submit a title at max length
         data = {"title": "t" * 255}
-        form = OrganizationWizardForm(data=data)
+        form = OrganizationWizardForm(data=data, wizard_language="en")
         self.assertTrue(form.is_valid())
         page = form.save()
         # Check that the slug has been truncated
@@ -138,7 +138,7 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         # Submit a title that is too long and a slug that is ok
         invalid_data = {"title": "t" * 256, "slug": "s" * 200}
 
-        form = OrganizationWizardForm(data=invalid_data)
+        form = OrganizationWizardForm(data=invalid_data, wizard_language="en")
         self.assertFalse(form.is_valid())
         # Check that the title being too long is a cause for the invalid form
         self.assertEqual(
@@ -160,7 +160,7 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         # Submit a slug that is too long and a title that is ok
         invalid_data = {"title": "t" * 255, "slug": "s" * 201}
 
-        form = OrganizationWizardForm(data=invalid_data)
+        form = OrganizationWizardForm(data=invalid_data, wizard_language="en")
         self.assertFalse(form.is_valid())
         # Check that the slug being too long is a cause for the invalid form
         self.assertEqual(
@@ -206,7 +206,7 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         # Submit a title that will lead to the same slug
         data = {"title": "my title"}
 
-        form = OrganizationWizardForm(data=data)
+        form = OrganizationWizardForm(data=data, wizard_language="en")
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors, {"slug": ["This slug is already in use"]})
 
@@ -215,7 +215,7 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         We should not be able to create a CMS Organization Page if the
         parent page to list organizations was not created
         """
-        form = OrganizationWizardForm(data={"title": "My title"})
+        form = OrganizationWizardForm(data={"title": "My title"}, wizard_language="en")
         self.assertFalse(form.is_valid())
         self.assertEqual(
             form.errors,

@@ -75,7 +75,8 @@ class PersonCMSWizardTestCase(CMSTestCase):
                 "person_title": person_title.id,
                 "first_name": "First name",
                 "last_name": "Last name",
-            }
+            },
+            wizard_language="en",
         )
         self.assertTrue(form.is_valid())
         page = form.save()
@@ -111,13 +112,16 @@ class PersonCMSWizardTestCase(CMSTestCase):
                 "person_title": person_title.id,
                 "first_name": "First name",
                 "last_name": "Last name",
-            }
+            },
+            wizard_language="en",
         )
         self.assertTrue(form.is_valid())
         form.save()
 
         # A person with a slug too long with regards to the parent's one should raise an error
-        form = PersonWizardForm(data={"title": "t" * 255, "slug": "s" * 55})
+        form = PersonWizardForm(
+            data={"title": "t" * 255, "slug": "s" * 55}, wizard_language="en"
+        )
         self.assertFalse(form.is_valid())
         self.assertEqual(
             form.errors["slug"][0],
@@ -147,7 +151,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
             "first_name": "First name",
             "last_name": "Last name",
         }
-        form = PersonWizardForm(data=data)
+        form = PersonWizardForm(data=data, wizard_language="en")
         self.assertTrue(form.is_valid())
         page = form.save()
         # Check that the slug has been truncated
@@ -175,7 +179,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
             "last_name": "Last name",
         }
 
-        form = PersonWizardForm(data=invalid_data)
+        form = PersonWizardForm(data=invalid_data, wizard_language="en")
         self.assertFalse(form.is_valid())
         # Check that the title being too long is a cause for the invalid form
         self.assertEqual(
@@ -205,7 +209,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
             "last_name": "Last name",
         }
 
-        form = PersonWizardForm(data=invalid_data)
+        form = PersonWizardForm(data=invalid_data, wizard_language="en")
         self.assertFalse(form.is_valid())
         # Check that the slug being too long is a cause for the invalid form
         self.assertEqual(
@@ -257,7 +261,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
             "last_name": "Last name",
         }
 
-        form = PersonWizardForm(data=data)
+        form = PersonWizardForm(data=data, wizard_language="en")
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors, {"slug": ["This slug is already in use"]})
 
@@ -280,7 +284,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
             "last_name": "Last name",
         }
 
-        form = PersonWizardForm(data=invalid_data)
+        form = PersonWizardForm(data=invalid_data, wizard_language="en")
         self.assertFalse(form.is_valid())
         # Check that missing first_name field is a cause for the invalid form
         self.assertEqual(form.errors["first_name"], ["This field is required."])
@@ -304,7 +308,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
             "first_name": "First name",
         }
 
-        form = PersonWizardForm(data=invalid_data)
+        form = PersonWizardForm(data=invalid_data, wizard_language="en")
         self.assertFalse(form.is_valid())
         # Check that missing last_name field is a cause for the invalid form
         self.assertEqual(form.errors["last_name"], ["This field is required."])
@@ -327,7 +331,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
             "last_name": "Last name",
         }
 
-        form = PersonWizardForm(data=no_title_data)
+        form = PersonWizardForm(data=no_title_data, wizard_language="en")
         self.assertTrue(form.is_valid())
 
     def test_cms_wizards_person_parent_page_should_exist(self):
@@ -341,7 +345,8 @@ class PersonCMSWizardTestCase(CMSTestCase):
                 "person_title": person_title.id,
                 "first_name": "First name",
                 "last_name": "Last name",
-            }
+            },
+            wizard_language="en",
         )
         self.assertFalse(form.is_valid())
         self.assertEqual(
