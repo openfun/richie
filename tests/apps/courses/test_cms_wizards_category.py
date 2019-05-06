@@ -70,7 +70,7 @@ class CategoryCMSWizardTestCase(CMSTestCase):
         page = create_page("Any page", "richie/single_column.html", "en")
 
         # We can submit a form with just the title set
-        form = CategoryWizardForm(data={"title": "My title"})
+        form = CategoryWizardForm(data={"title": "My title"}, wizard_language="en")
         form.page = page
         self.assertTrue(form.is_valid())
         page = form.save()
@@ -100,7 +100,7 @@ class CategoryCMSWizardTestCase(CMSTestCase):
         parent_category = CategoryFactory()
 
         # We can submit a form with just the title set
-        form = CategoryWizardForm(data={"title": "My title"})
+        form = CategoryWizardForm(data={"title": "My title"}, wizard_language="en")
         form.page = parent_category.extended_object
         self.assertTrue(form.is_valid())
         page = form.save()
@@ -129,13 +129,17 @@ class CategoryCMSWizardTestCase(CMSTestCase):
         )
 
         # A category with a slug at the limit length should work
-        form = CategoryWizardForm(data={"title": "t" * 255, "slug": "s" * 54})
+        form = CategoryWizardForm(
+            data={"title": "t" * 255, "slug": "s" * 54}, wizard_language="en"
+        )
         form.page = page
         self.assertTrue(form.is_valid())
         form.save()
 
         # A category with a slug too long with regards to the parent's one should raise an error
-        form = CategoryWizardForm(data={"title": "t" * 255, "slug": "s" * 55})
+        form = CategoryWizardForm(
+            data={"title": "t" * 255, "slug": "s" * 55}, wizard_language="en"
+        )
         form.page = page
         self.assertFalse(form.is_valid())
         self.assertEqual(
@@ -161,7 +165,7 @@ class CategoryCMSWizardTestCase(CMSTestCase):
         # Submit a title at max length
         data = {"title": "t" * 255}
 
-        form = CategoryWizardForm(data=data)
+        form = CategoryWizardForm(data=data, wizard_language="en")
         form.page = page
         self.assertTrue(form.is_valid())
         page = form.save()
@@ -183,7 +187,7 @@ class CategoryCMSWizardTestCase(CMSTestCase):
         # Submit a title that is too long and a slug that is ok
         invalid_data = {"title": "t" * 256, "slug": "s" * 200}
 
-        form = CategoryWizardForm(data=invalid_data)
+        form = CategoryWizardForm(data=invalid_data, wizard_language="en")
         form.page = page
         self.assertFalse(form.is_valid())
         # Check that the title being too long is a cause for the invalid form
@@ -207,7 +211,7 @@ class CategoryCMSWizardTestCase(CMSTestCase):
         # Submit a slug that is too long and a title that is ok
         invalid_data = {"title": "t" * 255, "slug": "s" * 201}
 
-        form = CategoryWizardForm(data=invalid_data)
+        form = CategoryWizardForm(data=invalid_data, wizard_language="en")
         form.page = page
         self.assertFalse(form.is_valid())
         # Check that the slug being too long is a cause for the invalid form
@@ -255,7 +259,7 @@ class CategoryCMSWizardTestCase(CMSTestCase):
         # Submit a title that will lead to the same slug
         data = {"title": "my title"}
 
-        form = CategoryWizardForm(data=data)
+        form = CategoryWizardForm(data=data, wizard_language="en")
         form.page = parent_page
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors, {"slug": ["This slug is already in use"]})
@@ -265,7 +269,9 @@ class CategoryCMSWizardTestCase(CMSTestCase):
         We should not be able to create a category page if the root page does not exist
         """
         page = create_page("page", "richie/single_column.html", "en")
-        form = CategoryWizardForm(data={"title": "My title", "slug": "my-title"})
+        form = CategoryWizardForm(
+            data={"title": "My title", "slug": "my-title"}, wizard_language="en"
+        )
         form.page = page
         self.assertFalse(form.is_valid())
         self.assertEqual(

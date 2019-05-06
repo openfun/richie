@@ -67,7 +67,7 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
             reverse_id=BlogPost.PAGE["reverse_id"],
         )
         # We can submit a form with just the title set
-        form = BlogPostWizardForm(data={"title": "My title"})
+        form = BlogPostWizardForm(data={"title": "My title"}, wizard_language="en")
         self.assertTrue(form.is_valid())
         page = form.save()
 
@@ -94,12 +94,16 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
         )
 
         # A blogpost with a slug at the limit length should work
-        form = BlogPostWizardForm(data={"title": "t" * 255, "slug": "s" * 54})
+        form = BlogPostWizardForm(
+            data={"title": "t" * 255, "slug": "s" * 54}, wizard_language="en"
+        )
         self.assertTrue(form.is_valid())
         form.save()
 
         # A blogpost with a slug too long with regards to the parent's one should raise an error
-        form = BlogPostWizardForm(data={"title": "t" * 255, "slug": "s" * 55})
+        form = BlogPostWizardForm(
+            data={"title": "t" * 255, "slug": "s" * 55}, wizard_language="en"
+        )
         self.assertFalse(form.is_valid())
         self.assertEqual(
             form.errors["slug"][0],
@@ -124,7 +128,7 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
         # Submit a title at max length
         data = {"title": "t" * 255}
 
-        form = BlogPostWizardForm(data=data)
+        form = BlogPostWizardForm(data=data, wizard_language="en")
         self.assertTrue(form.is_valid())
         page = form.save()
         # Check that the slug has been truncated
@@ -145,7 +149,7 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
         # Submit a title that is too long and a slug that is ok
         invalid_data = {"title": "t" * 256, "slug": "s" * 200}
 
-        form = BlogPostWizardForm(data=invalid_data)
+        form = BlogPostWizardForm(data=invalid_data, wizard_language="en")
         self.assertFalse(form.is_valid())
         # Check that the title being too long is a cause for the invalid form
         self.assertEqual(
@@ -168,7 +172,7 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
         # Submit a slug that is too long and a title that is ok
         invalid_data = {"title": "t" * 255, "slug": "s" * 201}
 
-        form = BlogPostWizardForm(data=invalid_data)
+        form = BlogPostWizardForm(data=invalid_data, wizard_language="en")
         self.assertFalse(form.is_valid())
         # Check that the slug being too long is a cause for the invalid form
         self.assertEqual(
@@ -214,7 +218,7 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
         # Submit a title that will lead to the same slug
         data = {"title": "my title"}
 
-        form = BlogPostWizardForm(data=data)
+        form = BlogPostWizardForm(data=data, wizard_language="en")
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors, {"slug": ["This slug is already in use"]})
 
@@ -222,7 +226,9 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
         """
         We should not be able to create a blogpost page if the parent page does not exist
         """
-        form = BlogPostWizardForm(data={"title": "My title", "slug": "my-title"})
+        form = BlogPostWizardForm(
+            data={"title": "My title", "slug": "my-title"}, wizard_language="en"
+        )
         self.assertFalse(form.is_valid())
         self.assertEqual(
             form.errors,
