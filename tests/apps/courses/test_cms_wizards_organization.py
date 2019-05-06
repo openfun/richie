@@ -1,13 +1,17 @@
 """
 Test suite for the wizard creating a new Organization page
 """
+import random
+from unittest import mock
+
 from django.urls import reverse
 
 from cms.api import create_page
-from cms.models import Page
+from cms.models import Page, PagePermission
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
+from richie.apps.courses import defaults
 from richie.apps.courses.cms_wizards import OrganizationWizardForm
 from richie.apps.courses.factories import OrganizationFactory
 from richie.apps.courses.models import Organization
@@ -61,7 +65,7 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
     def test_cms_wizards_organization_submit_form(self):
         """
         Submitting a valid OrganizationWizardForm should create a page and its
-        related extension.
+        related extension. Admin permissions should be automatically assigned to a new group.
         """
         # A parent page to list organizations should pre-exist
         create_page(
@@ -74,7 +78,24 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         # We can submit a form with just the title set
         form = OrganizationWizardForm(data={"title": "My title"}, wizard_language="en")
         self.assertTrue(form.is_valid())
-        page = form.save()
+
+        role_dict = {
+            "django_permissions": ["cms.change_page"],
+            "organization_page_permissions": {
+                "can_change": random.choice([True, False]),
+                "can_add": random.choice([True, False]),
+                "can_delete": random.choice([True, False]),
+                "can_change_advanced_settings": random.choice([True, False]),
+                "can_publish": random.choice([True, False]),
+                "can_change_permissions": random.choice([True, False]),
+                "can_move_page": random.choice([True, False]),
+                "can_view": random.choice([True, False]),
+                "grant_on": random.randint(1, 5),
+            },
+        }
+        with mock.patch.dict(defaults.ORGANIZATION_ADMIN_ROLE, role_dict):
+            page = form.save()
+
         organization = page.organization
 
         # The page and its related extension have been created as draft
@@ -85,6 +106,19 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         self.assertEqual(page.get_slug(), "my-title")
         # The code is left blank in this case
         self.assertIsNone(organization.code)
+
+        # A page role should have been created
+        self.assertEqual(page.roles.count(), 1)
+        role = page.roles.get(role="ADMIN")
+        self.assertEqual(role.group.name, "Admin | My title")
+        self.assertEqual(role.group.permissions.count(), 1)
+
+        # The Django permissions and CMS page permissions should have been assigned to the group
+        self.assertEqual(role.group.permissions.first().codename, "change_page")
+        self.assertEqual(PagePermission.objects.count(), 1)
+        page_permission = PagePermission.objects.first()
+        for key, value in role_dict["organization_page_permissions"].items():
+            self.assertEqual(getattr(page_permission, key), value)
 
     def test_cms_wizards_organization_submit_form_max_lengths(self):
         """

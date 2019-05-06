@@ -17,11 +17,12 @@ from cms.cms_wizards import (
     cms_subpage_wizard,
 )
 from cms.forms.wizards import CreateCMSPageForm, CreateCMSSubPageForm, SlugWidget
-from cms.models import Page
+from cms.models import Page, PagePermission
 from cms.wizards.forms import BaseFormMixin
 from cms.wizards.wizard_base import Wizard
 from cms.wizards.wizard_pool import wizard_pool
 
+from ..core.helpers import get_permissions
 from . import defaults
 from .helpers import snapshot_course
 from .models import (
@@ -30,6 +31,7 @@ from .models import (
     Course,
     CourseRun,
     Organization,
+    PageRole,
     Person,
     PersonTitle,
 )
@@ -344,9 +346,29 @@ class OrganizationWizardForm(BaseWizardForm):
         """
         The parent form created the page.
         This method creates the associated organization.
+        It also creates a new role to handle permissions for admins of this organization.
         """
         page = super().save()
         Organization.objects.create(extended_object=page)
+
+        # Create a role for admins of this organization (which will create a new user group) and
+        # associate permissions as defined in settings:
+        page_role = PageRole.objects.create(page=page, role=defaults.ADMIN)
+
+        # - Create Django permissions
+        page_role.group.permissions.set(
+            get_permissions(
+                defaults.ORGANIZATION_ADMIN_ROLE.get("django_permissions", [])
+            )
+        )
+
+        # - Create DjangoCMS page permissions
+        PagePermission.objects.create(
+            group=page_role.group,
+            page=page,
+            **defaults.ORGANIZATION_ADMIN_ROLE.get("organization_page_permissions", {}),
+        )
+
         return page
 
 

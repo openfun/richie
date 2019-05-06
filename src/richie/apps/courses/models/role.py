@@ -62,7 +62,9 @@ class PageRole(models.Model):
 
         # Create the related group the first time the instance is saved
         if not self.group_id:
-            self.group = Group.objects.create(name=str(self))
+            self.group = Group.objects.create(
+                name=str(self)[: Group._meta.get_field("name").max_length]
+            )
 
         super().save(
             force_insert=force_insert,
