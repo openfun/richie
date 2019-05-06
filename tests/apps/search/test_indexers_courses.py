@@ -352,3 +352,40 @@ class CoursesIndexersTestCase(TestCase):
                 ),
             },
         )
+
+    def test_indexers_courses_format_es_object_for_api_no_organization(self):
+        """
+        A course that has no organization and was indexed should not raise 500 errors (although
+        this should not happen if courses are correctly moderated).
+        """
+        es_course = {
+            "_id": 93,
+            "_source": {
+                "absolute_url": {"en": "campo-qui-format-do"},
+                "categories": [43, 86],
+                "cover_image": {"en": "image.jpg"},
+                "organizations": [],
+                "organizations_names": {},
+                "title": {"en": "Duis eu arcu erat"},
+            },
+            "fields": {
+                "state": [
+                    {"priority": 0, "date_time": "2019-03-17T21:25:52.179667+00:00"}
+                ]
+            },
+        }
+        self.assertEqual(
+            CoursesIndexer.format_es_object_for_api(es_course, "en"),
+            {
+                "id": 93,
+                "absolute_url": "campo-qui-format-do",
+                "categories": [43, 86],
+                "cover_image": "image.jpg",
+                "organization_highlighted": None,
+                "organizations": [],
+                "title": "Duis eu arcu erat",
+                "state": CourseState(
+                    0, datetime(2019, 3, 17, 21, 25, 52, 179667, pytz.utc)
+                ),
+            },
+        )

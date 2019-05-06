@@ -508,14 +508,17 @@ class CoursesIndexer:
         except KeyError:
             state["date_time"] = None
 
+        organizations_names = get_best_field_language(
+            source["organizations_names"], language
+        )
         return {
             "id": es_course["_id"],
             "absolute_url": get_best_field_language(source["absolute_url"], language),
             "categories": source["categories"],
             "cover_image": get_best_field_language(source["cover_image"], language),
-            "organization_highlighted": get_best_field_language(
-                source["organizations_names"], language
-            )[0],
+            "organization_highlighted": organizations_names[0]
+            if organizations_names
+            else None,
             "organizations": source["organizations"],
             "state": CourseState(**state),
             "title": get_best_field_language(source["title"], language),

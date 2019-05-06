@@ -10,8 +10,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix serializer that was failing for a course indexed with no organization,
 - The language filter, which is not a drilldown filter, no longer behaves
-  like one. Ditto for any future similar filters.
+  like one. Ditto for any future similar filters,
 - All children are now shown when a parent filter value is "opened", instead
   of just the top 5 by facet count.
 
