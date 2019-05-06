@@ -49,13 +49,12 @@ class CoursesIndexer:
             "categories": {"type": "keyword"},
             "organizations": {"type": "keyword"},
             # Searchable
+            # description, title are handled my `MULTILINGUAL_TEXT`
             **{
                 "complete.{:s}".format(lang): {"type": "completion"}
                 for lang, _ in settings.LANGUAGES
             },
-            "description": {"type": "object"},
             "is_new": {"type": "boolean"},
-            "title": {"type": "object"},
             # Not searchable
             "absolute_url": {"type": "object", "enabled": False},
             "cover_image": {"type": "object", "enabled": False},

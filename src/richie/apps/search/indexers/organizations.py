@@ -31,12 +31,11 @@ class OrganizationsIndexer:
         "dynamic_templates": MULTILINGUAL_TEXT,
         "properties": {
             # Searchable
+            # description & title are handled by `MULTILINGUAL_TEXT`
             **{
                 "complete.{:s}".format(lang): {"type": "completion"}
                 for lang, _ in settings.LANGUAGES
             },
-            "description": {"type": "object"},
-            "title": {"type": "object"},
             # Not searchable
             "absolute_url": {"type": "object", "enabled": False},
             "logo": {"type": "object", "enabled": False},

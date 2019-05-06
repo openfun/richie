@@ -121,7 +121,7 @@ class ItemSearchFormTestCase(TestCase):
                         "match": {
                             "title.fr": {
                                 "query": "some phrase terms",
-                                "analyzer": "french",
+                                "analyzer": "simple",
                             }
                         }
                     }
