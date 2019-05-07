@@ -18,6 +18,7 @@ from cms.cms_wizards import (
 )
 from cms.forms.wizards import CreateCMSPageForm, CreateCMSSubPageForm, SlugWidget
 from cms.models import Page, PagePermission
+from cms.utils.page_permissions import user_can_add_page, user_can_add_subpage
 from cms.wizards.forms import BaseFormMixin
 from cms.wizards.wizard_base import Wizard
 from cms.wizards.wizard_pool import wizard_pool
@@ -142,6 +143,14 @@ class BaseWizardForm(BaseFormMixin, forms.Form):
                     {"slug": [_("This slug is already in use")]}
                 )
 
+            has_permission = user_can_add_subpage(self.user, target=self.page)
+
+        else:
+            has_permission = user_can_add_page(self.user)
+
+        if not has_permission:
+            raise PermissionDenied()
+
         return cleaned_data
 
     @cached_property
@@ -187,6 +196,17 @@ class CourseWizardForm(BaseWizardForm):
 
     model = Course
 
+    def clean(self):
+        """
+        Permission to add a course was already checked when we displayed the list of wizard
+        entries, but we need to prevent form hacking.
+        """
+        # The user should have permission to create a course object
+        if not (self.user.is_staff and self.user.has_perm("courses.add_course")):
+            raise PermissionDenied()
+
+        return super().clean()
+
     def save(self):
         """
         The parent form created the page.
@@ -218,6 +238,14 @@ class CourseWizardForm(BaseWizardForm):
 
 class CourseWizard(Wizard):
     """Inherit from Wizard because each wizard must have its own Python class."""
+
+    def user_has_add_permission(self, user, **kwargs):
+        """
+        Returns: True if the user has the permission to add course objects, False otherwise.
+        """
+        return user.has_perm("courses.add_course") and super().user_has_add_permission(
+            user, **kwargs
+        )
 
 
 wizard_pool.register(
@@ -258,7 +286,7 @@ class CourseRunWizardForm(BaseWizardForm):
     def clean(self):
         """
         Permission to add a course run was already checked when we displayed the list of wizard
-        entries, gut we need to prevent form hacking.
+        entries, but we need to prevent form hacking.
         """
         try:
             course = self.page.course
@@ -277,10 +305,16 @@ class CourseRunWizardForm(BaseWizardForm):
                         "Course runs can not be created from a course snapshot page."
                     )
 
+        # The user should have permission to create a course run object
+        if not (self.user.is_staff and self.user.has_perm("courses.add_courserun")):
+            raise PermissionDenied()
+
         if self.cleaned_data["should_snapshot_course"]:
             try:
                 snapshot_course(self.page, self.user, simulate_only=True)
             except PermissionDenied as context:
+                # In this case, where the attempt results from a ticked checkbox, we should
+                # raise the exception as a validation error so it is displayed on the form.
                 raise forms.ValidationError(context)
 
         return super().clean()
@@ -303,9 +337,16 @@ class CourseRunWizard(Wizard):
     """Inherit from Wizard because each wizard must have its own Python class."""
 
     def user_has_add_permission(self, user, **kwargs):
+        """
+        Returns: True if it is possible to add a course run, False otherwise:
+            - the user should have the permission to add course run objects,
+            - course runs can only be created from a course page,
+            - if should not be possible to add a course run below a course snapshot.
+        """
         try:
             course = kwargs["page"].course
         except Course.DoesNotExist:
+            # Course runs can only be created from a course page
             return False
         else:
             # If the course has a parent that is a course page, it is a snapshot and should
@@ -320,7 +361,10 @@ class CourseRunWizard(Wizard):
                 else:
                     return False
 
-        return super().user_has_add_permission(user, **kwargs)
+        # The user should have permission to create a course run object
+        return user.has_perm(
+            "courses.add_courserun"
+        ) and super().user_has_add_permission(user, **kwargs)
 
 
 wizard_pool.register(
@@ -341,6 +385,17 @@ class OrganizationWizardForm(BaseWizardForm):
     """
 
     model = Organization
+
+    def clean(self):
+        """
+        Permission to add an organization was already checked when we displayed the list of
+        wizard entries, but we need to prevent form hacking.
+        """
+        # The user should have permission to create an organization object
+        if not (self.user.is_staff and self.user.has_perm("courses.add_organization")):
+            raise PermissionDenied()
+
+        return super().clean()
 
     def save(self):
         """
@@ -375,6 +430,14 @@ class OrganizationWizardForm(BaseWizardForm):
 class OrganizationWizard(Wizard):
     """Inherit from Wizard because each wizard must have its own Python class."""
 
+    def user_has_add_permission(self, user, **kwargs):
+        """
+        Returns: True if the user has the permission to add organization objects, False otherwise.
+        """
+        return user.has_perm(
+            "courses.add_organization"
+        ) and super().user_has_add_permission(user, **kwargs)
+
 
 wizard_pool.register(
     OrganizationWizard(
@@ -394,6 +457,17 @@ class CategoryWizardForm(BaseWizardForm):
     """
 
     model = Category
+
+    def clean(self):
+        """
+        Permission to add an category was already checked when we displayed the list of
+        wizard entries, but we need to prevent form hacking.
+        """
+        # The user should have permission to create a category object
+        if not (self.user.is_staff and self.user.has_perm("courses.add_category")):
+            raise PermissionDenied()
+
+        return super().clean()
 
     @cached_property
     def parent_page(self):
@@ -422,6 +496,14 @@ class CategoryWizardForm(BaseWizardForm):
 class CategoryWizard(Wizard):
     """Inherit from Wizard because each wizard must have its own Python class."""
 
+    def user_has_add_permission(self, user, **kwargs):
+        """
+        Returns: True if the user has the permission to add category objects, False otherwise.
+        """
+        return user.has_perm(
+            "courses.add_category"
+        ) and super().user_has_add_permission(user, **kwargs)
+
 
 wizard_pool.register(
     CategoryWizard(
@@ -442,6 +524,17 @@ class BlogPostWizardForm(BaseWizardForm):
 
     model = BlogPost
 
+    def clean(self):
+        """
+        Permission to add an blog post was already checked when we displayed the list of
+        wizard entries, but we need to prevent form hacking.
+        """
+        # The user should have permission to create a blog post object
+        if not (self.user.is_staff and self.user.has_perm("courses.add_blogpost")):
+            raise PermissionDenied()
+
+        return super().clean()
+
     def save(self):
         """
         The parent form created the page.
@@ -454,6 +547,14 @@ class BlogPostWizardForm(BaseWizardForm):
 
 class BlogPostWizard(Wizard):
     """Inherit from Wizard because each wizard must have its own Python class."""
+
+    def user_has_add_permission(self, user, **kwargs):
+        """
+        Returns: True if the user has the permission to add blog post objects, False otherwise.
+        """
+        return user.has_perm(
+            "courses.add_blogpost"
+        ) and super().user_has_add_permission(user, **kwargs)
 
 
 wizard_pool.register(
@@ -488,6 +589,17 @@ class PersonWizardForm(BaseWizardForm):
 
     model = Person
 
+    def clean(self):
+        """
+        Permission to add an person was already checked when we displayed the list of
+        wizard entries, but we need to prevent form hacking.
+        """
+        # The user should have permission to create a person object
+        if not (self.user.is_staff and self.user.has_perm("courses.add_person")):
+            raise PermissionDenied()
+
+        return super().clean()
+
     def save(self):
         """
         The parent form created the page.
@@ -505,6 +617,14 @@ class PersonWizardForm(BaseWizardForm):
 
 class PersonWizard(Wizard):
     """Inherit from Wizard because each wizard must have its own Python class."""
+
+    def user_has_add_permission(self, user, **kwargs):
+        """
+        Returns: True if the user has the permission to add person objects, False otherwise.
+        """
+        return user.has_perm("courses.add_person") and super().user_has_add_permission(
+            user, **kwargs
+        )
 
 
 wizard_pool.register(

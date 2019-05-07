@@ -8,7 +8,7 @@ from django.urls import reverse
 from django.utils import translation
 
 from cms.api import create_page
-from cms.models import Page
+from cms.models import Page, PagePermission
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
@@ -106,8 +106,9 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         page = create_page("page", "richie/single_column.html", "en")
 
         # Submit a valid form
-        form = CourseRunWizardForm(data={"title": "My title"}, wizard_language="en")
-        form.page = page
+        form = CourseRunWizardForm(
+            data={"title": "My title"}, wizard_language="en", wizard_page=page
+        )
         self.assertFalse(form.is_valid())
         self.assertEqual(
             form.errors,
@@ -115,16 +116,94 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         )
         self.assertFalse(mock_snapshot.called)
 
-    def test_cms_wizards_course_run_submit_form_success(self, mock_snapshot):
+    def test_cms_wizards_course_run_submit_form_insufficient_permission(self, *_):
         """
-        Submitting a valid CourseRunWizardForm should create a course run and its
-        related page.
+        A user with insufficient permissions trying to submit a CourseRunWizardForm should trigger
+        a PermissionDenied exception.
+        We make loop to remove each time only one permission from the set of required permissions
+        and check that they are all required.
         """
         course = CourseFactory()
 
+        required_permissions = [
+            "courses.add_courserun",
+            "cms.add_page",
+            "cms.change_page",
+        ]
+        required_page_permissions = ["can_add", "can_change"]
+
+        for is_staff in [True, False]:
+            for permission_to_be_removed in required_permissions + [None]:
+                for page_permission_to_be_removed in required_page_permissions + [None]:
+                    if (
+                        is_staff is True
+                        and permission_to_be_removed is None
+                        and page_permission_to_be_removed is None
+                    ):
+                        # This is the case of sufficient permissions treated in the next test
+                        continue
+
+                    altered_permissions = required_permissions.copy()
+                    if permission_to_be_removed:
+                        altered_permissions.remove(permission_to_be_removed)
+
+                    altered_page_permissions = required_page_permissions.copy()
+                    if page_permission_to_be_removed:
+                        altered_page_permissions.remove(page_permission_to_be_removed)
+
+                    user = UserFactory(
+                        is_staff=is_staff, permissions=altered_permissions
+                    )
+                    PagePermission.objects.create(
+                        page=course.extended_object,
+                        user=user,
+                        can_add="can_add" in altered_page_permissions,
+                        can_change="can_change" in altered_page_permissions,
+                        can_delete=False,
+                        can_publish=False,
+                        can_move_page=False,
+                    )
+
+                    form = CourseRunWizardForm(
+                        data={"title": "My title"},
+                        wizard_language="en",
+                        wizard_user=user,
+                        wizard_page=course.extended_object,
+                    )
+
+                    with self.assertRaises(PermissionDenied):
+                        form.is_valid()
+
+    def test_cms_wizards_course_run_submit_form_success(self, mock_snapshot):
+        """
+        A user with the required permissions submitting a valid CourseRunWizardForm should be able
+        to create a course run and its related page.
+        """
+        course = CourseFactory()
+
+        # Create a user with just the required permissions
+        user = UserFactory(
+            is_staff=True,
+            permissions=["courses.add_courserun", "cms.add_page", "cms.change_page"],
+        )
+        PagePermission.objects.create(
+            page=course.extended_object,
+            user=user,
+            can_add=True,
+            can_change=True,
+            can_delete=False,
+            can_publish=False,
+            can_move_page=False,
+        )
+
         # Submit a valid form
-        form = CourseRunWizardForm(data={"title": "My title"}, wizard_language="en")
-        form.page = course.extended_object
+        form = CourseRunWizardForm(
+            data={"title": "My title"},
+            wizard_language="en",
+            wizard_user=user,
+            wizard_page=course.extended_object,
+        )
+
         self.assertTrue(form.is_valid())
         page = form.save()
         course_run = page.courserun
@@ -162,14 +241,24 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         course = CourseFactory(page_title="c" * 100, page_parent=root_page)
 
         # A course run with a slug at the limit length should work
-        form = CourseRunWizardForm(data={"title": "t" * 53}, wizard_language="en")
-        form.page = course.extended_object
+        user = UserFactory(is_staff=True, is_superuser=True)
+        form = CourseRunWizardForm(
+            data={"title": "t" * 53},
+            wizard_language="en",
+            wizard_user=user,
+            wizard_page=course.extended_object,
+        )
         self.assertTrue(form.is_valid())
         form.save()
 
         # A course run with a slug too long with regards to the parent's one should raise an error
-        form = CourseRunWizardForm(data={"title": "t" * 54}, wizard_language="en")
-        form.page = course.extended_object
+        form = CourseRunWizardForm(
+            data={"title": "t" * 54},
+            wizard_language="en",
+            wizard_user=user,
+            wizard_page=course.extended_object,
+        )
+
         self.assertFalse(form.is_valid())
         self.assertEqual(
             form.errors["slug"][0],
@@ -191,8 +280,14 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
 
         # Submit a title at max length
         data = {"title": "t" * 255}
-        form = CourseRunWizardForm(data=data, wizard_language="en")
-        form.page = course.extended_object
+        user = UserFactory(is_staff=True, is_superuser=True)
+        form = CourseRunWizardForm(
+            data=data,
+            wizard_language="en",
+            wizard_user=user,
+            wizard_page=course.extended_object,
+        )
+
         self.assertTrue(form.is_valid())
         page = form.save()
         # Check that the slug has been truncated
@@ -211,8 +306,14 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         # Submit a title that is too long
         invalid_data = {"title": "t" * 256}
 
-        form = CourseRunWizardForm(data=invalid_data, wizard_language="en")
-        form.page = course.extended_object
+        user = UserFactory(is_staff=True, is_superuser=True)
+        form = CourseRunWizardForm(
+            data=invalid_data,
+            wizard_language="en",
+            wizard_user=user,
+            wizard_page=course.extended_object,
+        )
+
         self.assertFalse(form.is_valid())
         # Check that the title being too long is a cause for the invalid form
         self.assertEqual(
@@ -233,8 +334,13 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         # Submit a slug that is too long and a title that is ok
         invalid_data = {"title": "t" * 255, "slug": "s" * 201}
 
-        form = CourseRunWizardForm(data=invalid_data, wizard_language="en")
-        form.page = course.extended_object
+        user = UserFactory(is_staff=True, is_superuser=True)
+        form = CourseRunWizardForm(
+            data=invalid_data,
+            wizard_language="en",
+            wizard_user=user,
+            wizard_page=course.extended_object,
+        )
 
         self.assertFalse(form.is_valid())
         # Check that the slug being too long is a cause for the invalid form
@@ -254,7 +360,8 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         # Submit an invalid slug
         data = {"title": "my title", "slug": "invalid slug"}
 
-        form = CourseRunWizardForm(data=data, wizard_language="en")
+        user = UserFactory(is_superuser=True, is_staff=True)
+        form = CourseRunWizardForm(data=data, wizard_language="en", wizard_user=user)
         form.page = course.extended_object
         self.assertFalse(form.is_valid())
         self.assertEqual(
@@ -278,8 +385,14 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         # Submit a title that will lead to the same slug
         data = {"title": "my title"}
 
-        form = CourseRunWizardForm(data=data, wizard_language="en")
-        form.page = course.extended_object
+        user = UserFactory(is_staff=True, is_superuser=True)
+        form = CourseRunWizardForm(
+            data=data,
+            wizard_language="en",
+            wizard_user=user,
+            wizard_page=course.extended_object,
+        )
+
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors, {"slug": ["This slug is already in use"]})
 
@@ -293,8 +406,14 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         course = CourseFactory()
 
         # Submit a valid form
-        form = CourseRunWizardForm(data={"title": "My title"}, wizard_language="en")
-        form.page = course.extended_object
+        user = UserFactory(is_staff=True, is_superuser=True)
+        form = CourseRunWizardForm(
+            data={"title": "My title"},
+            wizard_language="en",
+            wizard_user=user,
+            wizard_page=course.extended_object,
+        )
+
         self.assertTrue(form.is_valid())
         with translation.override("fr"):
             page = form.save()
@@ -311,12 +430,13 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         user = UserFactory()
 
         # Submit a valid form with the snapshot flag enabled
+        user = UserFactory(is_staff=True, is_superuser=True)
         form = CourseRunWizardForm(
             data={"title": "My title", "should_snapshot_course": True},
             wizard_language="en",
+            wizard_user=user,
+            wizard_page=course.extended_object,
         )
-        form.page = course.extended_object
-        form.user = user
 
         self.assertTrue(form.is_valid())
         self.assertEqual(mock_snapshot.call_count, 1)
@@ -345,12 +465,13 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         mock_snapshot.side_effect = raise_permission_denied
 
         # Submit a valid form with the snapshot flag enabled
+        user = UserFactory(is_staff=True, is_superuser=True)
         form = CourseRunWizardForm(
             data={"title": "My title", "should_snapshot_course": True},
             wizard_language="en",
+            wizard_user=user,
+            wizard_page=course.extended_object,
         )
-        form.page = course.extended_object
-        form.user = user
 
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors, {"__all__": ["can't do that"]})

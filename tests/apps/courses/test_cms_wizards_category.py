@@ -1,10 +1,11 @@
 """
 Test suite for the wizard creating a new Category page
 """
+from django.core.exceptions import PermissionDenied
 from django.urls import reverse
 
 from cms.api import create_page
-from cms.models import Page
+from cms.models import Page, PagePermission
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
@@ -54,37 +55,122 @@ class CategoryCMSWizardTestCase(CMSTestCase):
         # Check that our wizard to create categories is not on this page
         self.assertNotContains(response, "new category", status_code=200, html=True)
 
-    def test_cms_wizards_category_submit_form_any_page(self):
+    def test_cms_wizards_category_submit_form_insufficient_permission(self):
         """
-        Submitting a valid CategoryWizardForm from any page should create a category at the top
-        of the category tree and its related page.
+        A user with insufficient permissions trying to submit a CategoryWizardForm should trigger
+        a PermissionDenied exception.
+        We make loop to remove each time only one permission from the set of required permissions
+        and check that they are all required.
         """
+        # We want to create the category from an ordinary page
+        any_page = create_page("Any page", "richie/single_column.html", "en")
+
         # A parent page should pre-exist
-        root_page = create_page(
+        create_page(
             "Categories",
             "richie/single_column.html",
             "en",
             reverse_id=Category.PAGE["reverse_id"],
         )
+        required_permissions = [
+            "courses.add_category",
+            "cms.add_page",
+            "cms.change_page",
+        ]
+        required_page_permissions = ["can_add", "can_change"]
+
+        for is_staff in [True, False]:
+            for permission_to_be_removed in required_permissions + [None]:
+                for page_permission_to_be_removed in required_page_permissions + [None]:
+                    if (
+                        is_staff is True
+                        and permission_to_be_removed is None
+                        and page_permission_to_be_removed is None
+                    ):
+                        # This is the case of sufficient permissions treated in the next test
+                        continue
+
+                    altered_permissions = required_permissions.copy()
+                    if permission_to_be_removed:
+                        altered_permissions.remove(permission_to_be_removed)
+
+                    altered_page_permissions = required_page_permissions.copy()
+                    if page_permission_to_be_removed:
+                        altered_page_permissions.remove(page_permission_to_be_removed)
+
+                    user = UserFactory(
+                        is_staff=is_staff, permissions=altered_permissions
+                    )
+                    PagePermission.objects.create(
+                        page=any_page,
+                        user=user,
+                        can_add="can_add" in altered_page_permissions,
+                        can_change="can_change" in altered_page_permissions,
+                        can_delete=False,
+                        can_publish=False,
+                        can_move_page=False,
+                    )
+
+                    form = CategoryWizardForm(
+                        data={"title": "My title"},
+                        wizard_language="en",
+                        wizard_user=user,
+                        wizard_page=any_page,
+                    )
+
+                    with self.assertRaises(PermissionDenied):
+                        form.is_valid()
+
+    def test_cms_wizards_category_submit_form_from_any_page(self):
+        """
+        A user with the required permissions submitting a valid CategoryWizardForm from any page
+        should be able to create a category at the top of the category tree and its related page.
+        """
         # We want to create the category from an ordinary page
-        page = create_page("Any page", "richie/single_column.html", "en")
+        any_page = create_page("Any page", "richie/single_column.html", "en")
+
+        # A parent page should pre-exist
+        parent_page = create_page(
+            "Categories",
+            "richie/single_column.html",
+            "en",
+            reverse_id=Category.PAGE["reverse_id"],
+        )
+        # Create a user with just the required permissions
+        user = UserFactory(
+            is_staff=True,
+            permissions=["courses.add_category", "cms.add_page", "cms.change_page"],
+        )
+        PagePermission.objects.create(
+            page=any_page,
+            user=user,
+            can_add=True,
+            can_change=True,
+            can_delete=False,
+            can_publish=False,
+            can_move_page=False,
+        )
 
         # We can submit a form with just the title set
-        form = CategoryWizardForm(data={"title": "My title"}, wizard_language="en")
-        form.page = page
+        form = CategoryWizardForm(
+            data={"title": "My title"},
+            wizard_language="en",
+            wizard_user=user,
+            wizard_page=any_page,
+        )
         self.assertTrue(form.is_valid())
         page = form.save()
 
         # Related page should have been created as draft
         Page.objects.drafts().get(id=page.id)
         Category.objects.get(id=page.category.id, extended_object=page)
-        self.assertEqual(page.get_parent_page(), root_page)
+        self.assertEqual(page.get_parent_page(), parent_page)
 
         self.assertEqual(page.get_title(), "My title")
         # The slug should have been automatically set
         self.assertEqual(page.get_slug(), "my-title")
 
-    def test_cms_wizards_category_submit_form_category(self):
+    def test_cms_wizards_category_submit_form_from_category_page(self):
         """
         Submitting a valid CategoryWizardForm from a category should create a sub category of this
         category and its related page.
@@ -99,9 +185,28 @@ class CategoryCMSWizardTestCase(CMSTestCase):
         # Create a category when visiting an existing category
         parent_category = CategoryFactory()
 
+        # Create a user with just the required permissions
+        user = UserFactory(
+            is_staff=True,
+            permissions=["courses.add_category", "cms.add_page", "cms.change_page"],
+        )
+        PagePermission.objects.create(
+            page=parent_category.extended_object,
+            user=user,
+            can_add=True,
+            can_change=True,
+            can_delete=False,
+            can_publish=False,
+            can_move_page=False,
+        )
+
         # We can submit a form with just the title set
-        form = CategoryWizardForm(data={"title": "My title"}, wizard_language="en")
-        form.page = parent_category.extended_object
+        form = CategoryWizardForm(
+            data={"title": "My title"},
+            wizard_language="en",
+            wizard_user=user,
+            wizard_page=parent_category.extended_object,
+        )
         self.assertTrue(form.is_valid())
         page = form.save()
 
@@ -129,18 +234,23 @@ class CategoryCMSWizardTestCase(CMSTestCase):
         )
 
         # A category with a slug at the limit length should work
+        user = UserFactory(is_staff=True, is_superuser=True)
         form = CategoryWizardForm(
-            data={"title": "t" * 255, "slug": "s" * 54}, wizard_language="en"
+            data={"title": "t" * 255, "slug": "s" * 54},
+            wizard_language="en",
+            wizard_user=user,
+            wizard_page=page,
         )
-        form.page = page
         self.assertTrue(form.is_valid())
         form.save()
 
         # A category with a slug too long with regards to the parent's one should raise an error
         form = CategoryWizardForm(
-            data={"title": "t" * 255, "slug": "s" * 55}, wizard_language="en"
+            data={"title": "t" * 255, "slug": "s" * 55},
+            wizard_language="en",
+            wizard_user=user,
+            wizard_page=page,
         )
-        form.page = page
         self.assertFalse(form.is_valid())
         self.assertEqual(
             form.errors["slug"][0],
@@ -164,11 +274,13 @@ class CategoryCMSWizardTestCase(CMSTestCase):
 
         # Submit a title at max length
         data = {"title": "t" * 255}
-
-        form = CategoryWizardForm(data=data, wizard_language="en")
-        form.page = page
+        user = UserFactory(is_staff=True, is_superuser=True)
+        form = CategoryWizardForm(
+            data=data, wizard_language="en", wizard_user=user, wizard_page=page
+        )
         self.assertTrue(form.is_valid())
         page = form.save()
+
         # Check that the slug has been truncated
         self.assertEqual(page.get_slug(), "t" * 200)
 
@@ -186,9 +298,11 @@ class CategoryCMSWizardTestCase(CMSTestCase):
 
         # Submit a title that is too long and a slug that is ok
         invalid_data = {"title": "t" * 256, "slug": "s" * 200}
+        user = UserFactory(is_staff=True, is_superuser=True)
+        form = CategoryWizardForm(
+            data=invalid_data, wizard_language="en", wizard_user=user, wizard_page=page
+        )
 
-        form = CategoryWizardForm(data=invalid_data, wizard_language="en")
-        form.page = page
         self.assertFalse(form.is_valid())
         # Check that the title being too long is a cause for the invalid form
         self.assertEqual(
@@ -210,9 +324,11 @@ class CategoryCMSWizardTestCase(CMSTestCase):
 
         # Submit a slug that is too long and a title that is ok
         invalid_data = {"title": "t" * 255, "slug": "s" * 201}
+        user = UserFactory(is_staff=True, is_superuser=True)
+        form = CategoryWizardForm(
+            data=invalid_data, wizard_language="en", wizard_user=user, wizard_page=page
+        )
 
-        form = CategoryWizardForm(data=invalid_data, wizard_language="en")
-        form.page = page
         self.assertFalse(form.is_valid())
         # Check that the slug being too long is a cause for the invalid form
         self.assertEqual(
@@ -233,7 +349,8 @@ class CategoryCMSWizardTestCase(CMSTestCase):
         # Submit an invalid slug
         data = {"title": "my title", "slug": "invalid slug"}
 
-        form = CategoryWizardForm(data=data, wizard_language="en")
+        user = UserFactory(is_superuser=True, is_staff=True)
+        form = CategoryWizardForm(data=data, wizard_language="en", wizard_user=user)
         form.page = parent_page
         self.assertFalse(form.is_valid())
         self.assertEqual(
@@ -258,9 +375,11 @@ class CategoryCMSWizardTestCase(CMSTestCase):
 
         # Submit a title that will lead to the same slug
         data = {"title": "my title"}
+        user = UserFactory(is_staff=True, is_superuser=True)
+        form = CategoryWizardForm(
+            data=data, wizard_language="en", wizard_user=user, wizard_page=parent_page
+        )
 
-        form = CategoryWizardForm(data=data, wizard_language="en")
-        form.page = parent_page
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors, {"slug": ["This slug is already in use"]})
 
@@ -269,10 +388,14 @@ class CategoryCMSWizardTestCase(CMSTestCase):
         We should not be able to create a category page if the root page does not exist
         """
         page = create_page("page", "richie/single_column.html", "en")
+        user = UserFactory(is_staff=True, is_superuser=True)
         form = CategoryWizardForm(
-            data={"title": "My title", "slug": "my-title"}, wizard_language="en"
+            data={"title": "My title", "slug": "my-title"},
+            wizard_language="en",
+            wizard_user=user,
+            wizard_page=page,
         )
-        form.page = page
+
         self.assertFalse(form.is_valid())
         self.assertEqual(
             form.errors,

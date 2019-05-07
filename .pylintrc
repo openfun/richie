@@ -337,7 +337,7 @@ ignore-imports=yes
 
 # Minimum lines number of a similarity.
 # First implementations of CMS wizards have common fields we do not want to factorize for now
-min-similarity-lines=30
+min-similarity-lines=35
 
 
 [BASIC]

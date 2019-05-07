@@ -1,10 +1,11 @@
 """
 Test suite for the wizard creating a new Person page
 """
+from django.core.exceptions import PermissionDenied
 from django.urls import reverse
 
 from cms.api import create_page
-from cms.models import Page
+from cms.models import Page, PagePermission
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
@@ -40,7 +41,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
 
     def test_cms_wizards_person_create_wizards_list_staff(self):
         """
-        The wizard to create a new person page should be present on the wizards list page
+        The wizard to create a new person page should not be present on the wizards list page
         for a simple staff user.
         """
         page = create_page("page", "richie/single_column.html", "en")
@@ -54,11 +55,79 @@ class PersonCMSWizardTestCase(CMSTestCase):
         # Check that our wizard to create persons is not on this page
         self.assertNotContains(response, "new person page", status_code=200, html=True)
 
+    def test_cms_wizards_person_submit_form_insufficient_permission(self):
+        """
+        A user with insufficient permissions trying to submit a PersonWizardForm should trigger
+        a PermissionDenied exception.
+        We make loop to remove each time only one permission from the set of required permissions
+        and check that they are all required.
+        """
+        any_page = create_page("page", "richie/single_column.html", "en")
+
+        # A parent page should pre-exist
+        create_page(
+            "Persons",
+            "richie/single_column.html",
+            "en",
+            reverse_id=Person.PAGE["reverse_id"],
+        )
+
+        required_permissions = ["courses.add_person", "cms.add_page", "cms.change_page"]
+        required_page_permissions = ["can_add", "can_change"]
+
+        for is_staff in [True, False]:
+            for permission_to_be_removed in required_permissions + [None]:
+                for page_permission_to_be_removed in required_page_permissions + [None]:
+                    if (
+                        is_staff is True
+                        and permission_to_be_removed is None
+                        and page_permission_to_be_removed is None
+                    ):
+                        # This is the case of sufficient permissions treated in the next test
+                        continue
+
+                    altered_permissions = required_permissions.copy()
+                    if permission_to_be_removed:
+                        altered_permissions.remove(permission_to_be_removed)
+
+                    altered_page_permissions = required_page_permissions.copy()
+                    if page_permission_to_be_removed:
+                        altered_page_permissions.remove(page_permission_to_be_removed)
+
+                    user = UserFactory(
+                        is_staff=is_staff, permissions=altered_permissions
+                    )
+                    PagePermission.objects.create(
+                        page=any_page,
+                        user=user,
+                        can_add="can_add" in altered_page_permissions,
+                        can_change="can_change" in altered_page_permissions,
+                        can_delete=False,
+                        can_publish=False,
+                        can_move_page=False,
+                    )
+
+                    form = PersonWizardForm(
+                        data={
+                            "title": "A person",
+                            "first_name": "First name",
+                            "last_name": "Last name",
+                        },
+                        wizard_language="en",
+                        wizard_user=user,
+                        wizard_page=any_page,
+                    )
+
+                    with self.assertRaises(PermissionDenied):
+                        form.is_valid()
+
     def test_cms_wizards_person_submit_form(self):
         """
-        Submitting a valid PersonWizardForm should create a Person page extension and its
-        related page.
+        A user with the required permissions submitting a valid PersonWizardForm should be able
+        to create a Person page extension and its related page.
         """
+        any_page = create_page("page", "richie/single_column.html", "en")
+
         # A parent page should pre-exist
         create_page(
             "Persons",
@@ -69,6 +138,21 @@ class PersonCMSWizardTestCase(CMSTestCase):
         # create a PersonTitle object
         person_title = PersonTitleFactory()
 
+        # Create a user with just the required permissions
+        user = UserFactory(
+            is_staff=True,
+            permissions=["courses.add_person", "cms.add_page", "cms.change_page"],
+        )
+        PagePermission.objects.create(
+            page=any_page,
+            user=user,
+            can_add=True,
+            can_change=True,
+            can_delete=False,
+            can_publish=False,
+            can_move_page=False,
+        )
+
         form = PersonWizardForm(
             data={
                 "title": "A person",
@@ -77,6 +161,8 @@ class PersonCMSWizardTestCase(CMSTestCase):
                 "last_name": "Last name",
             },
             wizard_language="en",
+            wizard_user=user,
+            wizard_page=any_page,
         )
         self.assertTrue(form.is_valid())
         page = form.save()
@@ -105,6 +191,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
         person_title = PersonTitleFactory()
 
         # A person with a slug at the limit length should work
+        user = UserFactory(is_superuser=True, is_staff=True)
         form = PersonWizardForm(
             data={
                 "title": "t" * 255,
@@ -114,13 +201,16 @@ class PersonCMSWizardTestCase(CMSTestCase):
                 "last_name": "Last name",
             },
             wizard_language="en",
+            wizard_user=user,
         )
         self.assertTrue(form.is_valid())
         form.save()
 
         # A person with a slug too long with regards to the parent's one should raise an error
         form = PersonWizardForm(
-            data={"title": "t" * 255, "slug": "s" * 55}, wizard_language="en"
+            data={"title": "t" * 255, "slug": "s" * 55},
+            wizard_language="en",
+            wizard_user=user,
         )
         self.assertFalse(form.is_valid())
         self.assertEqual(
@@ -151,7 +241,8 @@ class PersonCMSWizardTestCase(CMSTestCase):
             "first_name": "First name",
             "last_name": "Last name",
         }
-        form = PersonWizardForm(data=data, wizard_language="en")
+        user = UserFactory(is_superuser=True, is_staff=True)
+        form = PersonWizardForm(data=data, wizard_language="en", wizard_user=user)
         self.assertTrue(form.is_valid())
         page = form.save()
         # Check that the slug has been truncated
@@ -179,7 +270,10 @@ class PersonCMSWizardTestCase(CMSTestCase):
             "last_name": "Last name",
         }
 
-        form = PersonWizardForm(data=invalid_data, wizard_language="en")
+        user = UserFactory(is_superuser=True, is_staff=True)
+        form = PersonWizardForm(
+            data=invalid_data, wizard_language="en", wizard_user=user
+        )
         self.assertFalse(form.is_valid())
         # Check that the title being too long is a cause for the invalid form
         self.assertEqual(
@@ -209,7 +303,10 @@ class PersonCMSWizardTestCase(CMSTestCase):
             "last_name": "Last name",
         }
 
-        form = PersonWizardForm(data=invalid_data, wizard_language="en")
+        user = UserFactory(is_superuser=True, is_staff=True)
+        form = PersonWizardForm(
+            data=invalid_data, wizard_language="en", wizard_user=user
+        )
         self.assertFalse(form.is_valid())
         # Check that the slug being too long is a cause for the invalid form
         self.assertEqual(
@@ -230,7 +327,8 @@ class PersonCMSWizardTestCase(CMSTestCase):
         # Submit an invalid slug
         data = {"title": "my title", "slug": "invalid slug"}
 
-        form = PersonWizardForm(data=data, wizard_language="en")
+        user = UserFactory(is_superuser=True, is_staff=True)
+        form = PersonWizardForm(data=data, wizard_language="en", wizard_user=user)
         self.assertFalse(form.is_valid())
         self.assertEqual(
             form.errors["slug"][0],
@@ -261,7 +359,8 @@ class PersonCMSWizardTestCase(CMSTestCase):
             "last_name": "Last name",
         }
 
-        form = PersonWizardForm(data=data, wizard_language="en")
+        user = UserFactory(is_superuser=True, is_staff=True)
+        form = PersonWizardForm(data=data, wizard_language="en", wizard_user=user)
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors, {"slug": ["This slug is already in use"]})
 
@@ -284,7 +383,10 @@ class PersonCMSWizardTestCase(CMSTestCase):
             "last_name": "Last name",
         }
 
-        form = PersonWizardForm(data=invalid_data, wizard_language="en")
+        user = UserFactory(is_superuser=True, is_staff=True)
+        form = PersonWizardForm(
+            data=invalid_data, wizard_language="en", wizard_user=user
+        )
         self.assertFalse(form.is_valid())
         # Check that missing first_name field is a cause for the invalid form
         self.assertEqual(form.errors["first_name"], ["This field is required."])
@@ -308,7 +410,10 @@ class PersonCMSWizardTestCase(CMSTestCase):
             "first_name": "First name",
         }
 
-        form = PersonWizardForm(data=invalid_data, wizard_language="en")
+        user = UserFactory(is_superuser=True, is_staff=True)
+        form = PersonWizardForm(
+            data=invalid_data, wizard_language="en", wizard_user=user
+        )
         self.assertFalse(form.is_valid())
         # Check that missing last_name field is a cause for the invalid form
         self.assertEqual(form.errors["last_name"], ["This field is required."])
@@ -331,7 +436,10 @@ class PersonCMSWizardTestCase(CMSTestCase):
             "last_name": "Last name",
         }
 
-        form = PersonWizardForm(data=no_title_data, wizard_language="en")
+        user = UserFactory(is_superuser=True, is_staff=True)
+        form = PersonWizardForm(
+            data=no_title_data, wizard_language="en", wizard_user=user
+        )
         self.assertTrue(form.is_valid())
 
     def test_cms_wizards_person_parent_page_should_exist(self):
@@ -339,6 +447,8 @@ class PersonCMSWizardTestCase(CMSTestCase):
         We should not be able to create a person page if the parent page does not exist
         """
         person_title = PersonTitleFactory()
+        user = UserFactory(is_superuser=True, is_staff=True)
+
         form = PersonWizardForm(
             data={
                 "title": "A person",
@@ -347,6 +457,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
                 "last_name": "Last name",
             },
             wizard_language="en",
+            wizard_user=user,
         )
         self.assertFalse(form.is_valid())
         self.assertEqual(
