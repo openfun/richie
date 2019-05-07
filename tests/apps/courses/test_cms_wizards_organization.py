@@ -4,6 +4,7 @@ Test suite for the wizard creating a new Organization page
 import random
 from unittest import mock
 
+from django.core.exceptions import PermissionDenied
 from django.urls import reverse
 
 from cms.api import create_page
@@ -62,11 +63,15 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         # Check that our wizard to create organizations is on this page
         self.assertNotContains(response, "new Organization", status_code=200, html=True)
 
-    def test_cms_wizards_organization_submit_form(self):
+    def test_cms_wizards_organization_submit_form_insufficient_permission(self):
         """
-        Submitting a valid OrganizationWizardForm should create a page and its
-        related extension. Admin permissions should be automatically assigned to a new group.
+        A user with insufficient permissions trying to submit an OrganizationWizardForm should
+        trigger a PermissionDenied exception.
+        We make loop to remove each time only one permission from the set of required permissions
+        and check that they are all required.
         """
+        any_page = create_page("page", "richie/single_column.html", "en")
+
         # A parent page to list organizations should pre-exist
         create_page(
             "Organizations",
@@ -75,8 +80,94 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
             reverse_id="organizations",
         )
 
+        required_permissions = [
+            "courses.add_organization",
+            "cms.add_page",
+            "cms.change_page",
+        ]
+        required_page_permissions = ["can_add", "can_change"]
+
+        for is_staff in [True, False]:
+            for permission_to_be_removed in required_permissions + [None]:
+                for page_permission_to_be_removed in required_page_permissions + [None]:
+                    if (
+                        is_staff is True
+                        and permission_to_be_removed is None
+                        and page_permission_to_be_removed is None
+                    ):
+                        # This is the case of sufficient permissions treated in the next test
+                        continue
+
+                    altered_permissions = required_permissions.copy()
+                    if permission_to_be_removed:
+                        altered_permissions.remove(permission_to_be_removed)
+
+                    altered_page_permissions = required_page_permissions.copy()
+                    if page_permission_to_be_removed:
+                        altered_page_permissions.remove(page_permission_to_be_removed)
+
+                    user = UserFactory(
+                        is_staff=is_staff, permissions=altered_permissions
+                    )
+                    PagePermission.objects.create(
+                        page=any_page,
+                        user=user,
+                        can_add="can_add" in altered_page_permissions,
+                        can_change="can_change" in altered_page_permissions,
+                        can_delete=False,
+                        can_publish=False,
+                        can_move_page=False,
+                    )
+
+                    form = OrganizationWizardForm(
+                        data={"title": "My title"},
+                        wizard_language="en",
+                        wizard_user=user,
+                        wizard_page=any_page,
+                    )
+
+                    with self.assertRaises(PermissionDenied):
+                        form.is_valid()
+
+    def test_cms_wizards_organization_submit_form(self, *_):
+        """
+        A user with the required permissions submitting a valid OrganizationWizardForm should be
+        able to create a page and its related extension. Admin permissions should be automatically
+        assigned to a new group.
+        """
+        any_page = create_page("page", "richie/single_column.html", "en")
+
+        # A parent page to list organizations should pre-exist
+        create_page(
+            "Organizations",
+            "richie/single_column.html",
+            "en",
+            reverse_id="organizations",
+        )
+
+        # Create a user with just the required permissions
+        user = UserFactory(
+            is_staff=True,
+            permissions=["courses.add_organization", "cms.add_page", "cms.change_page"],
+        )
+        PagePermission.objects.create(
+            page=any_page,
+            user=user,
+            can_add=True,
+            can_change=True,
+            can_delete=False,
+            can_publish=False,
+            can_move_page=False,
+        )
+
         # We can submit a form with just the title set
-        form = OrganizationWizardForm(data={"title": "My title"}, wizard_language="en")
+        form = OrganizationWizardForm(
+            data={"title": "My title"},
+            wizard_language="en",
+            wizard_user=user,
+            wizard_page=any_page,
+        )
+
         self.assertTrue(form.is_valid())
 
         role_dict = {
@@ -99,8 +190,8 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         organization = page.organization
 
         # The page and its related extension have been created as draft
-        self.assertEqual(Page.objects.count(), 2)
-        self.assertEqual(Page.objects.drafts().count(), 2)
+        self.assertEqual(Page.objects.count(), 3)
+        self.assertEqual(Page.objects.drafts().count(), 3)
         self.assertEqual(page.get_title(), "My title")
         # The slug should have been automatically set
         self.assertEqual(page.get_slug(), "my-title")
@@ -115,8 +206,8 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
 
         # The Django permissions and CMS page permissions should have been assigned to the group
         self.assertEqual(role.group.permissions.first().codename, "change_page")
-        self.assertEqual(PagePermission.objects.count(), 1)
-        page_permission = PagePermission.objects.first()
+        self.assertEqual(PagePermission.objects.filter(group=role.group).count(), 1)
+        page_permission = PagePermission.objects.get(group=role.group)
         for key, value in role_dict["organization_page_permissions"].items():
             self.assertEqual(getattr(page_permission, key), value)
 
@@ -136,7 +227,8 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
 
         # Submit values at max length on all fields
         data = {"title": "t" * 255, "slug": "s" * 200}
-        form = OrganizationWizardForm(data=data, wizard_language="en")
+        user = UserFactory(is_staff=True, is_superuser=True)
+        form = OrganizationWizardForm(data=data, wizard_language="en", wizard_user=user)
 
         self.assertTrue(form.is_valid())
         form.save()
@@ -159,9 +251,11 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
 
         # Submit a title at max length
         data = {"title": "t" * 255}
-        form = OrganizationWizardForm(data=data, wizard_language="en")
+        user = UserFactory(is_staff=True, is_superuser=True)
+        form = OrganizationWizardForm(data=data, wizard_language="en", wizard_user=user)
         self.assertTrue(form.is_valid())
         page = form.save()
+
         # Check that the slug has been truncated
         self.assertEqual(page.get_slug(), "t" * 200)
 
@@ -171,8 +265,11 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         """
         # Submit a title that is too long and a slug that is ok
         invalid_data = {"title": "t" * 256, "slug": "s" * 200}
+        user = UserFactory(is_staff=True, is_superuser=True)
+        form = OrganizationWizardForm(
+            data=invalid_data, wizard_language="en", wizard_user=user
+        )
 
-        form = OrganizationWizardForm(data=invalid_data, wizard_language="en")
         self.assertFalse(form.is_valid())
         # Check that the title being too long is a cause for the invalid form
         self.assertEqual(
@@ -193,8 +290,11 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         )
         # Submit a slug that is too long and a title that is ok
         invalid_data = {"title": "t" * 255, "slug": "s" * 201}
+        user = UserFactory(is_staff=True, is_superuser=True)
+        form = OrganizationWizardForm(
+            data=invalid_data, wizard_language="en", wizard_user=user
+        )
 
-        form = OrganizationWizardForm(data=invalid_data, wizard_language="en")
         self.assertFalse(form.is_valid())
         # Check that the slug being too long is a cause for the invalid form
         self.assertEqual(
@@ -215,7 +315,8 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         # Submit an invalid slug
         data = {"title": "my title", "slug": "invalid slug"}
 
-        form = OrganizationWizardForm(data=data, wizard_language="en")
+        user = UserFactory(is_superuser=True, is_staff=True)
+        form = OrganizationWizardForm(data=data, wizard_language="en", wizard_user=user)
         self.assertFalse(form.is_valid())
         self.assertEqual(
             form.errors["slug"][0],
@@ -239,8 +340,9 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
 
         # Submit a title that will lead to the same slug
         data = {"title": "my title"}
+        user = UserFactory(is_staff=True, is_superuser=True)
+        form = OrganizationWizardForm(data=data, wizard_language="en", wizard_user=user)
 
-        form = OrganizationWizardForm(data=data, wizard_language="en")
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors, {"slug": ["This slug is already in use"]})
 
@@ -249,7 +351,11 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         We should not be able to create a CMS Organization Page if the
         parent page to list organizations was not created
         """
-        form = OrganizationWizardForm(data={"title": "My title"}, wizard_language="en")
+        user = UserFactory(is_staff=True, is_superuser=True)
+        form = OrganizationWizardForm(
+            data={"title": "My title"}, wizard_language="en", wizard_user=user
+        )
+
         self.assertFalse(form.is_valid())
         self.assertEqual(
             form.errors,

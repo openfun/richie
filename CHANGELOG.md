@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Configure permission checks on page creations via the CMS wizard,
 - Automatically create a page role and associate admin permissions when a new
   organization page is created,
 - Add page roles to link a user group to a CMS page, searchable via the admin,

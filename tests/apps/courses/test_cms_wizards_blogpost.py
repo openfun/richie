@@ -1,10 +1,11 @@
 """
 Test suite for the wizard creating a new BlogPost page
 """
+from django.core.exceptions import PermissionDenied
 from django.urls import reverse
 
 from cms.api import create_page
-from cms.models import Page
+from cms.models import Page, PagePermission
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
@@ -54,11 +55,15 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
         # Check that our wizard to create blogposts is not on this page
         self.assertNotContains(response, "new blog post", status_code=200, html=True)
 
-    def test_cms_wizards_blogpost_submit_form(self):
+    def test_cms_wizards_blogpost_submit_form_insufficient_permission(self):
         """
-        Submitting a valid BlogPostWizardForm should create a BlogPost page extension and its
-        related page.
+        A user with insufficient permissions trying to submit a BlogPostWizardForm should trigger
+        a PermissionDenied exception.
+        We make loop to remove each time only one permission from the set of required permissions
+        and check that they are all required.
         """
+        any_page = create_page("Any page", "richie/single_column.html", "en")
+
         # A parent page should pre-exist
         create_page(
             "News",
@@ -66,18 +71,103 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
             "en",
             reverse_id=BlogPost.PAGE["reverse_id"],
         )
+
+        required_permissions = [
+            "courses.add_blogpost",
+            "cms.add_page",
+            "cms.change_page",
+        ]
+        required_page_permissions = ["can_add", "can_change"]
+
+        for is_staff in [True, False]:
+            for permission_to_be_removed in required_permissions + [None]:
+                for page_permission_to_be_removed in required_page_permissions + [None]:
+                    if (
+                        is_staff is True
+                        and permission_to_be_removed is None
+                        and page_permission_to_be_removed is None
+                    ):
+                        # This is the case of sufficient permissions treated in the next test
+                        continue
+
+                    altered_permissions = required_permissions.copy()
+                    if permission_to_be_removed:
+                        altered_permissions.remove(permission_to_be_removed)
+
+                    altered_page_permissions = required_page_permissions.copy()
+                    if page_permission_to_be_removed:
+                        altered_page_permissions.remove(page_permission_to_be_removed)
+
+                    user = UserFactory(
+                        is_staff=is_staff, permissions=altered_permissions
+                    )
+                    PagePermission.objects.create(
+                        page=any_page,
+                        user=user,
+                        can_add="can_add" in altered_page_permissions,
+                        can_change="can_change" in altered_page_permissions,
+                        can_delete=False,
+                        can_publish=False,
+                        can_move_page=False,
+                    )
+
+                    form = BlogPostWizardForm(
+                        data={"title": "My title"},
+                        wizard_language="en",
+                        wizard_user=user,
+                        wizard_page=any_page,
+                    )
+
+                    with self.assertRaises(PermissionDenied):
+                        form.is_valid()
+
+    def test_cms_wizards_blogpost_submit_form(self):
+        """
+        A user with the required permissions submitting a valid BlogPostWizardForm should be able
+        to create a BlogPost page extension and its related page.
+        """
+        any_page = create_page("Any page", "richie/single_column.html", "en")
+
+        # A parent page should pre-exist
+        create_page(
+            "News",
+            "richie/single_column.html",
+            "en",
+            reverse_id=BlogPost.PAGE["reverse_id"],
+        )
+
+        # Create a user with just the required permissions
+        user = UserFactory(
+            is_staff=True,
+            permissions=["courses.add_blogpost", "cms.add_page", "cms.change_page"],
+        )
+        PagePermission.objects.create(
+            page=any_page,
+            user=user,
+            can_add=True,
+            can_change=True,
+            can_delete=False,
+            can_publish=False,
+            can_move_page=False,
+        )
+
         # We can submit a form with just the title set
-        form = BlogPostWizardForm(data={"title": "My title"}, wizard_language="en")
+        form = BlogPostWizardForm(
+            data={"title": "My title"},
+            wizard_language="en",
+            wizard_user=user,
+            wizard_page=any_page,
+        )
         self.assertTrue(form.is_valid())
-        page = form.save()
+        blog_page = form.save()
 
         # Related page should have been created as draft
-        Page.objects.drafts().get(id=page.id)
-        BlogPost.objects.get(id=page.blogpost.id, extended_object=page)
+        Page.objects.drafts().get(id=blog_page.id)
+        BlogPost.objects.get(id=blog_page.blogpost.id, extended_object=blog_page)
 
-        self.assertEqual(page.get_title(), "My title")
+        self.assertEqual(blog_page.get_title(), "My title")
         # The slug should have been automatically set
-        self.assertEqual(page.get_slug(), "my-title")
+        self.assertEqual(blog_page.get_slug(), "my-title")
 
     def test_cms_wizards_blogpost_submit_form_max_lengths(self):
         """
@@ -94,15 +184,20 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
         )
 
         # A blogpost with a slug at the limit length should work
+        user = UserFactory(is_staff=True, is_superuser=True)
         form = BlogPostWizardForm(
-            data={"title": "t" * 255, "slug": "s" * 54}, wizard_language="en"
+            data={"title": "t" * 255, "slug": "s" * 54},
+            wizard_language="en",
+            wizard_user=user,
         )
         self.assertTrue(form.is_valid())
         form.save()
 
         # A blogpost with a slug too long with regards to the parent's one should raise an error
         form = BlogPostWizardForm(
-            data={"title": "t" * 255, "slug": "s" * 55}, wizard_language="en"
+            data={"title": "t" * 255, "slug": "s" * 55},
+            wizard_language="en",
+            wizard_user=user,
         )
         self.assertFalse(form.is_valid())
         self.assertEqual(
@@ -127,8 +222,9 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
 
         # Submit a title at max length
         data = {"title": "t" * 255}
+        user = UserFactory(is_staff=True, is_superuser=True)
+        form = BlogPostWizardForm(data=data, wizard_language="en", wizard_user=user)
 
-        form = BlogPostWizardForm(data=data, wizard_language="en")
         self.assertTrue(form.is_valid())
         page = form.save()
         # Check that the slug has been truncated
@@ -148,8 +244,11 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
 
         # Submit a title that is too long and a slug that is ok
         invalid_data = {"title": "t" * 256, "slug": "s" * 200}
+        user = UserFactory(is_staff=True, is_superuser=True)
+        form = BlogPostWizardForm(
+            data=invalid_data, wizard_language="en", wizard_user=user
+        )
 
-        form = BlogPostWizardForm(data=invalid_data, wizard_language="en")
         self.assertFalse(form.is_valid())
         # Check that the title being too long is a cause for the invalid form
         self.assertEqual(
@@ -171,8 +270,11 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
 
         # Submit a slug that is too long and a title that is ok
         invalid_data = {"title": "t" * 255, "slug": "s" * 201}
+        user = UserFactory(is_staff=True, is_superuser=True)
+        form = BlogPostWizardForm(
+            data=invalid_data, wizard_language="en", wizard_user=user
+        )
 
-        form = BlogPostWizardForm(data=invalid_data, wizard_language="en")
         self.assertFalse(form.is_valid())
         # Check that the slug being too long is a cause for the invalid form
         self.assertEqual(
@@ -193,7 +295,8 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
         # Submit an invalid slug
         data = {"title": "my title", "slug": "invalid slug"}
 
-        form = BlogPostWizardForm(data=data, wizard_language="en")
+        user = UserFactory(is_superuser=True, is_staff=True)
+        form = BlogPostWizardForm(data=data, wizard_language="en", wizard_user=user)
         self.assertFalse(form.is_valid())
         self.assertEqual(
             form.errors["slug"][0],
@@ -217,8 +320,9 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
 
         # Submit a title that will lead to the same slug
         data = {"title": "my title"}
+        user = UserFactory(is_staff=True, is_superuser=True)
+        form = BlogPostWizardForm(data=data, wizard_language="en", wizard_user=user)
 
-        form = BlogPostWizardForm(data=data, wizard_language="en")
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors, {"slug": ["This slug is already in use"]})
 
@@ -226,8 +330,11 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
         """
         We should not be able to create a blogpost page if the parent page does not exist
         """
+        user = UserFactory(is_staff=True, is_superuser=True)
         form = BlogPostWizardForm(
-            data={"title": "My title", "slug": "my-title"}, wizard_language="en"
+            data={"title": "My title", "slug": "my-title"},
+            wizard_language="en",
+            wizard_user=user,
         )
         self.assertFalse(form.is_valid())
         self.assertEqual(
