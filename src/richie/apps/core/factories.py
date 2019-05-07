@@ -16,7 +16,7 @@ from cms import models as cms_models
 from cms.utils import get_current_site
 from filer.models.imagemodels import Image
 
-from ..core.helpers import create_i18n_page
+from ..core.helpers import create_i18n_page, get_permissions
 
 
 class UserFactory(factory.django.DjangoModelFactory):
@@ -30,6 +30,14 @@ class UserFactory(factory.django.DjangoModelFactory):
     username = factory.Faker("user_name")
     email = factory.Faker("email")
     password = make_password("password")
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def permissions(self, create, extracted, **kwargs):
+        """Add permissions to the user from a list of permission full names."""
+        if create and extracted:
+            django_permissions = get_permissions(extracted)
+            self.user_permissions.set(django_permissions)
 
 
 class PermissionFactory(factory.django.DjangoModelFactory):
