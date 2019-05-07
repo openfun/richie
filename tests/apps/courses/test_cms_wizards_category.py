@@ -17,6 +17,8 @@ from richie.apps.courses.models import Category
 class CategoryCMSWizardTestCase(CMSTestCase):
     """Testing the wizard that is used to create new category pages from the CMS"""
 
+    # Wizards list
+
     def test_cms_wizards_category_create_wizards_list_superuser(self):
         """
         The wizard to create a new category page should be present on the wizards list page
@@ -39,21 +41,94 @@ class CategoryCMSWizardTestCase(CMSTestCase):
         )
         self.assertContains(response, "<strong>New category page</strong>", html=True)
 
-    def test_cms_wizards_category_create_wizards_list_staff(self):
+    def test_cms_wizards_category_create_wizards_list_insufficient_permissions(self):
         """
         The wizard to create a new category page should not be present on the wizards list page
-        for a simple staff user.
+        for a user with insufficient permissions.
+        """
+        any_page = create_page("page", "richie/single_column.html", "en")
+
+        required_permissions = [
+            "courses.add_category",
+            "cms.add_page",
+            "cms.change_page",
+        ]
+        required_page_permissions = ["can_add", "can_change"]
+
+        url = "{:s}?page={:d}".format(reverse("cms_wizard_create"), any_page.id)
+
+        for permission_to_be_removed in required_permissions + [None]:
+            for page_permission_to_be_removed in required_page_permissions + [None]:
+                if (
+                    permission_to_be_removed is None
+                    and page_permission_to_be_removed is None
+                ):
+                    # This is the case of sufficient permissions treated in the next test
+                    continue
+
+                altered_permissions = required_permissions.copy()
+                if permission_to_be_removed:
+                    altered_permissions.remove(permission_to_be_removed)
+
+                altered_page_permissions = required_page_permissions.copy()
+                if page_permission_to_be_removed:
+                    altered_page_permissions.remove(page_permission_to_be_removed)
+
+                user = UserFactory(is_staff=True, permissions=altered_permissions)
+                PagePermission.objects.create(
+                    page=any_page,
+                    user=user,
+                    can_add="can_add" in altered_page_permissions,
+                    can_change="can_change" in altered_page_permissions,
+                    can_delete=False,
+                    can_publish=False,
+                    can_move_page=False,
+                )
+                self.client.login(username=user.username, password="password")
+
+                # Let the authorized user get the page with all wizards listed
+                response = self.client.get(url)
+
+                # Check that our wizard to create categories is not on this page
+                self.assertNotContains(response, "category", status_code=200, html=True)
+
+    def test_cms_wizards_category_create_wizards_list_user_with_permissions(self):
+        """
+        The wizard to create a new category page should be present on the wizards list page
+        for a user with the required permissions.
         """
         page = create_page("page", "richie/single_column.html", "en")
-        user = UserFactory(is_staff=True, is_superuser=True)
+
+        # Login with a user with just the required permissions
+        user = UserFactory(
+            is_staff=True,
+            permissions=["courses.add_category", "cms.add_page", "cms.change_page"],
+        )
+        PagePermission.objects.create(
+            page=page,
+            user=user,
+            can_add=True,
+            can_change=True,
+            can_delete=False,
+            can_publish=False,
+            can_move_page=False,
+        )
         self.client.login(username=user.username, password="password")
 
         # Let the authorized user get the page with all wizards listed
         url = "{:s}?page={:d}".format(reverse("cms_wizard_create"), page.id)
         response = self.client.get(url)
 
-        # Check that our wizard to create categories is not on this page
-        self.assertNotContains(response, "new category", status_code=200, html=True)
+        # Check that our wizard to create categorys is on this page
+        self.assertContains(
+            response,
+            '<span class="info">Create a new category page</span>',
+            status_code=200,
+            html=True,
+        )
+        self.assertContains(response, "<strong>New category page</strong>", html=True)
+
+    # Form submission
 
     def test_cms_wizards_category_submit_form_insufficient_permission(self):
         """

@@ -21,6 +21,8 @@ from richie.apps.courses.models import Course, CourseRun
 class CourseRunCMSWizardTestCase(CMSTestCase):
     """Testing the wizard that is used to create new course run pages from the CMS"""
 
+    # Wizards list
+
     def test_cms_wizards_course_run_create_wizards_list_superuser_course(self, *_):
         """
         The wizard to create a new course run page should be present on the wizards list page
@@ -82,21 +84,102 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         # Check that our wizard to create course runs is not on this page
         self.assertNotContains(response, "new course run", status_code=200, html=True)
 
-    def test_cms_wizards_course_run_create_wizards_list_staff(self, *_):
+    def test_cms_wizards_course_run_create_wizards_list_insufficient_permissions(
+        self, *_
+    ):
         """
-        The wizard to create a new course run page should not be present on the wizards list
-        page for a simple staff user.
+        The wizard to create a new course run page should not be present on the wizards list page
+        for a user with insufficient permissions.
         """
-        page = create_page("page", "richie/single_column.html", "en")
-        user = UserFactory(is_staff=True)
+        course = CourseFactory()
+
+        required_permissions = [
+            "courses.add_courserun",
+            "cms.add_page",
+            "cms.change_page",
+        ]
+        required_page_permissions = ["can_add", "can_change"]
+
+        url = "{:s}?page={:d}".format(
+            reverse("cms_wizard_create"), course.extended_object.id
+        )
+
+        for permission_to_be_removed in required_permissions + [None]:
+            for page_permission_to_be_removed in required_page_permissions + [None]:
+                if (
+                    permission_to_be_removed is None
+                    and page_permission_to_be_removed is None
+                ):
+                    # This is the case of sufficient permissions treated in the next test
+                    continue
+
+                altered_permissions = required_permissions.copy()
+                if permission_to_be_removed:
+                    altered_permissions.remove(permission_to_be_removed)
+
+                altered_page_permissions = required_page_permissions.copy()
+                if page_permission_to_be_removed:
+                    altered_page_permissions.remove(page_permission_to_be_removed)
+
+                user = UserFactory(is_staff=True, permissions=altered_permissions)
+                PagePermission.objects.create(
+                    page=course.extended_object,
+                    user=user,
+                    can_add="can_add" in altered_page_permissions,
+                    can_change="can_change" in altered_page_permissions,
+                    can_delete=False,
+                    can_publish=False,
+                    can_move_page=False,
+                )
+                self.client.login(username=user.username, password="password")
+
+                # Let the authorized user get the page with all wizards listed
+                response = self.client.get(url)
+
+                # Check that our wizard to create course runs is not on this page
+                self.assertNotContains(
+                    response, "course run", status_code=200, html=True
+                )
+
+    def test_cms_wizards_course_run_create_wizards_list_user_with_permissions(self, *_):
+        """
+        The wizard to create a new course run page should be present on the wizards list page
+        for a user with the required permissions.
+        """
+        course = CourseFactory()
+
+        # Login with a user with just the required permissions
+        user = UserFactory(
+            is_staff=True,
+            permissions=["courses.add_courserun", "cms.add_page", "cms.change_page"],
+        )
+        PagePermission.objects.create(
+            page=course.extended_object,
+            user=user,
+            can_add=True,
+            can_change=True,
+            can_delete=False,
+            can_publish=False,
+            can_move_page=False,
+        )
         self.client.login(username=user.username, password="password")
 
         # Let the authorized user get the page with all wizards listed
-        url = "{:s}?page={:d}".format(reverse("cms_wizard_create"), page.id)
+        url = "{:s}?page={:d}".format(
+            reverse("cms_wizard_create"), course.extended_object.id
+        )
         response = self.client.get(url)
 
-        # Check that our wizard to create course runs is not on this page
-        self.assertNotContains(response, "new course run", status_code=200, html=True)
+        # Check that our wizard to create course runs is on this page
+        self.assertContains(
+            response,
+            '<span class="info">Create a new course run page</span>',
+            status_code=200,
+            html=True,
+        )
+        self.assertContains(response, "<strong>New course run page</strong>", html=True)
+
+    # Form submission
 
     def test_cms_wizards_course_run_submit_form_not_a_course(self, mock_snapshot):
         """
@@ -374,7 +457,7 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
 
     def test_cms_wizards_course_run_submit_form_slug_duplicate(self, mock_snapshot):
         """
-        Trying to create a course_run with a slug that would lead to a duplicate path should
+        Trying to create a course run with a slug that would lead to a duplicate path should
         raise a validation error.
         """
         # A course should pre-exist
