@@ -17,6 +17,8 @@ from richie.apps.courses.models import BlogPost
 class BlogPostCMSWizardTestCase(CMSTestCase):
     """Testing the wizard that is used to create new blogpost pages from the CMS"""
 
+    # Wizards list
+
     def test_cms_wizards_blogpost_create_wizards_list_superuser(self):
         """
         The wizard to create a new blogpost page should be present on the wizards list page
@@ -39,21 +41,96 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
         )
         self.assertContains(response, "<strong>New blog post</strong>", html=True)
 
-    def test_cms_wizards_blogpost_create_wizards_list_staff(self):
+    def test_cms_wizards_blogpost_create_wizards_list_insufficient_permissions(self):
         """
         The wizard to create a new blogpost page should not be present on the wizards list page
-        for a simple staff user.
+        for a user with insufficient permissions.
         """
-        page = create_page("page", "richie/single_column.html", "en")
-        user = UserFactory(is_staff=True)
+        any_page = create_page("page", "richie/single_column.html", "en")
+
+        required_permissions = [
+            "courses.add_blogpost",
+            "cms.add_page",
+            "cms.change_page",
+        ]
+        required_page_permissions = ["can_add", "can_change"]
+
+        url = "{:s}?page={:d}".format(reverse("cms_wizard_create"), any_page.id)
+
+        for permission_to_be_removed in required_permissions + [None]:
+            for page_permission_to_be_removed in required_page_permissions + [None]:
+                if (
+                    permission_to_be_removed is None
+                    and page_permission_to_be_removed is None
+                ):
+                    # This is the case of sufficient permissions treated in the next test
+                    continue
+
+                altered_permissions = required_permissions.copy()
+                if permission_to_be_removed:
+                    altered_permissions.remove(permission_to_be_removed)
+
+                altered_page_permissions = required_page_permissions.copy()
+                if page_permission_to_be_removed:
+                    altered_page_permissions.remove(page_permission_to_be_removed)
+
+                user = UserFactory(is_staff=True, permissions=altered_permissions)
+                PagePermission.objects.create(
+                    page=any_page,
+                    user=user,
+                    can_add="can_add" in altered_page_permissions,
+                    can_change="can_change" in altered_page_permissions,
+                    can_delete=False,
+                    can_publish=False,
+                    can_move_page=False,
+                )
+                self.client.login(username=user.username, password="password")
+
+                # Let the authorized user get the page with all wizards listed
+                response = self.client.get(url)
+
+                # Check that our wizard to create blogposts is not on this page
+                self.assertNotContains(
+                    response, "new blog post", status_code=200, html=True
+                )
+
+    def test_cms_wizards_blogpost_create_wizards_list_user_with_permissions(self):
+        """
+        The wizard to create a new blogpost page should be present on the wizards list page
+        for a user with the required permissions.
+        """
+        any_page = create_page("page", "richie/single_column.html", "en")
+
+        # Login with a user with just the required permissions
+        user = UserFactory(
+            is_staff=True,
+            permissions=["courses.add_blogpost", "cms.add_page", "cms.change_page"],
+        )
+        PagePermission.objects.create(
+            page=any_page,
+            user=user,
+            can_add=True,
+            can_change=True,
+            can_delete=False,
+            can_publish=False,
+            can_move_page=False,
+        )
         self.client.login(username=user.username, password="password")
 
         # Let the authorized user get the page with all wizards listed
-        url = "{:s}?page={:d}".format(reverse("cms_wizard_create"), page.id)
+        url = "{:s}?page={:d}".format(reverse("cms_wizard_create"), any_page.id)
         response = self.client.get(url)
 
-        # Check that our wizard to create blogposts is not on this page
-        self.assertNotContains(response, "new blog post", status_code=200, html=True)
+        # Check that our wizard to create blogposts is on this page
+        self.assertContains(
+            response,
+            '<span class="info">Create a new blog post</span>',
+            status_code=200,
+            html=True,
+        )
+        self.assertContains(response, "<strong>New blog post</strong>", html=True)
+
+    # Form submission
 
     def test_cms_wizards_blogpost_submit_form_insufficient_permission(self):
         """

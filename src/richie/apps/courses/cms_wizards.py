@@ -441,8 +441,8 @@ class OrganizationWizard(Wizard):
 
 wizard_pool.register(
     OrganizationWizard(
-        title=_("New Organization page"),
-        description=_("Create a new Organization page"),
+        title=_("New organization page"),
+        description=_("Create a new organization page"),
         model=Organization,
         form=OrganizationWizardForm,
         weight=200,
