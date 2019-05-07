@@ -670,8 +670,9 @@ workflows:
 
       # DockerHub publication.
       #
-      # Publish docker images only if all build, lint and test jobs succeed and
-      # it has been tagged with a tag starting with the letter v
+      # Publish docker images only if all build, lint and test jobs succeed
+      # and it has been tagged with a tag starting with the letter v or is on
+      # the master branch
       - hub:
           requires:
             - build-docker
