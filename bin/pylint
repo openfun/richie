@@ -2,7 +2,4 @@
 
 source "$(dirname "${BASH_SOURCE[0]}")/_config.sh"
 
-COMPOSE_FILE="$REPO_DIR/docker/compose/test/postgresql/docker-compose.yml"
-COMPOSE_PROJECT="richie-test"
-
 _dc_run --no-deps app pylint "$@"

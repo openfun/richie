@@ -14,11 +14,9 @@
 # Get the current user ID to use for docker run and docker exec commands
 ifeq ($(DB_ENGINE), mysql)
   _COMPOSE            = docker-compose -f docker/compose/development/mysql/docker-compose.yml --project-directory .
-  _COMPOSE_TEST       = docker-compose -p richie-test -f docker/compose/test/mysql/docker-compose.yml --project-directory .
   DB_PORT            = 3306
 else
   _COMPOSE            = docker-compose
-  _COMPOSE_TEST       = docker-compose -p richie-test -f docker/compose/test/postgresql/docker-compose.yml --project-directory .
   DB_PORT            = 5432
 endif
 
@@ -32,8 +30,7 @@ COMPOSE_EXEC_APP     = $(COMPOSE_EXEC) app
 COMPOSE_EXEC_NODE    = $(COMPOSE_EXEC) node
 COMPOSE_RUN_APP      = $(COMPOSE_RUN) app
 COMPOSE_RUN_CROWDIN  = $(COMPOSE_RUN) crowdin -c crowdin/config.yml
-COMPOSE_TEST         = DOCKER_USER=$(DOCKER_USER) $(_COMPOSE_TEST)
-COMPOSE_TEST_RUN     = $(COMPOSE_TEST) run --rm
+COMPOSE_TEST_RUN     = $(COMPOSE) run --rm -e DJANGO_CONFIGURATION=Test
 COMPOSE_TEST_RUN_APP = $(COMPOSE_TEST_RUN) app
 
 # -- Node
