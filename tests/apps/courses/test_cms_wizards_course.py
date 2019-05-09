@@ -1,6 +1,9 @@
 """
 Test suite for the wizard creating a new Course page
 """
+import random
+from unittest import mock
+
 from django.core.exceptions import PermissionDenied
 from django.urls import reverse
 
@@ -9,9 +12,10 @@ from cms.models import Page, PagePermission
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
+from richie.apps.courses import defaults
 from richie.apps.courses.cms_wizards import CourseWizardForm
 from richie.apps.courses.factories import CourseFactory, OrganizationFactory
-from richie.apps.courses.models import Course, OrganizationPluginModel
+from richie.apps.courses.models import Course, OrganizationPluginModel, PageRole
 
 
 class CourseCMSWizardTestCase(CMSTestCase):
@@ -241,6 +245,9 @@ class CourseCMSWizardTestCase(CMSTestCase):
         # The course should not have any plugin
         self.assertFalse(OrganizationPluginModel.objects.exists())
 
+        # No other permissions should have been created
+        self.assertEqual(PagePermission.objects.count(), 1)
+
     def test_cms_wizards_course_submit_form_from_organization_page(self):
         """
         A user with the required permissions submitting a valid CourseWizardForm when visiting
@@ -256,6 +263,9 @@ class CourseCMSWizardTestCase(CMSTestCase):
         )
 
         organization = OrganizationFactory()
+        page_role = PageRole.objects.create(
+            page_id=organization.extended_object_id, role="ADMIN"
+        )
 
         # Create a user with just the required permissions
         user = UserFactory(
@@ -280,6 +290,64 @@ class CourseCMSWizardTestCase(CMSTestCase):
             wizard_page=organization.extended_object,
         )
         self.assertTrue(form.is_valid())
+
+        role_dict = {
+            "courses_page_permissions": {
+                "can_change": random.choice([True, False]),
+                "can_add": random.choice([True, False]),
+                "can_delete": random.choice([True, False]),
+                "can_change_advanced_settings": random.choice([True, False]),
+                "can_publish": random.choice([True, False]),
+                "can_change_permissions": random.choice([True, False]),
+                "can_move_page": random.choice([True, False]),
+                "can_view": random.choice([True, False]),
+                "grant_on": random.randint(1, 5),
+            }
+        }
+        with mock.patch.dict(defaults.ORGANIZATION_ADMIN_ROLE, role_dict):
+            page = form.save()
+
+        # The course and its related page should have been created as draft
+        Page.objects.drafts().get(id=page.id, course__isnull=False)
+
+        self.assertEqual(page.get_title(), "My title")
+        # The slug should have been automatically set
+        self.assertEqual(page.get_slug(), "my-title")
+
+        # The course should have a plugin with the organization
+        self.assertEqual(OrganizationPluginModel.objects.count(), 1)
+        plugin = OrganizationPluginModel.objects.first()
+        self.assertEqual(plugin.page_id, organization.extended_object_id)
+
+        # A page permission should have been created for the course and its descendants
+        page_permission = PagePermission.objects.get(
+            group_id=page_role.group_id, page=page
+        )
+        for key, value in role_dict["courses_page_permissions"].items():
+            self.assertEqual(getattr(page_permission, key), value)
+
+    def test_cms_wizards_course_submit_form_from_organization_page_no_role(self):
+        """
+        Creating a course via the wizard should not fail if the organization has no associated
+        page role.
+        """
+        # A parent page should pre-exist
+        create_page(
+            "Courses",
+            "richie/single_column.html",
+            "en",
+            reverse_id=Course.PAGE["reverse_id"],
+        )
+
+        organization = OrganizationFactory()
+        user = UserFactory(is_staff=True, is_superuser=True)
+        form = CourseWizardForm(
+            data={"title": "My title"},
+            wizard_language="en",
+            wizard_user=user,
+            wizard_page=organization.extended_object,
+        )
+        self.assertTrue(form.is_valid())
         page = form.save()
         course = page.course
 
@@ -295,6 +363,11 @@ class CourseCMSWizardTestCase(CMSTestCase):
         self.assertEqual(OrganizationPluginModel.objects.count(), 1)
         plugin = OrganizationPluginModel.objects.first()
         self.assertEqual(plugin.page_id, organization.extended_object_id)
+
+        # No other permissions should have been created
+        self.assertFalse(
+            PagePermission.objects.filter(page=organization.extended_object).exists()
+        )
 
     def test_cms_wizards_course_submit_form_max_lengths(self):
         """
