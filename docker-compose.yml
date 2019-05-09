@@ -1,7 +1,6 @@
-version: "3"
+version: "3.4"
 
 services:
-
   db:
     image: postgres:9.6
     env_file:
@@ -12,29 +11,16 @@ services:
   elasticsearch:
     image: fundocker/openshift-elasticsearch:6.6.2
 
-  # We use our production image as a basis for the development image, hence, we
-  # define a "base" service upon which the "app" service depends to force
-  # richie:latest build.
-  base:
-    build: .
-    image: richie:latest
-    # Override the default command so that the container exists immediately when
-    # it is run (no server).
-    command: echo "I should exit now. Bye."
-
   app:
     build:
       context: .
-      dockerfile: ./docker/images/dev/Dockerfile
-    image: richie:dev
+      target: development
+      args:
+        DOCKER_USER: ${DOCKER_USER:-1000}
+    image: richie:development
     env_file:
         - env.d/development/common
         - env.d/development/postgresql
-    # Override production container command that runs gunicorn in favor to the
-    # django development server (wrapped by dockerize to ensure the db is ready
-    # to accept connections before running the development server)
-    command: >
-      dockerize -wait tcp://db:5432 -timeout 60s python sandbox/manage.py runserver 0.0.0.0:8000
     ports:
         - "8070:8000"
     volumes:
@@ -42,13 +28,13 @@ services:
       - ./data/static:/data/static
       - ./data/media:/data/media
     depends_on:
-      - "base"
       - "db"
       - "elasticsearch"
 
   node:
     image: circleci/node:10
     working_dir: /app/src/frontend
+    user: "${DOCKER_USER:-1000}"
     volumes:
       - .:/app
 
@@ -58,4 +44,5 @@ services:
       - ".:/app"
     env_file:
       - env.d/development/crowdin
+    user: "${DOCKER_USER:-1000}"
     working_dir: /app

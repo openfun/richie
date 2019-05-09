@@ -13,23 +13,27 @@
 
 # Get the current user ID to use for docker run and docker exec commands
 ifeq ($(DB_ENGINE), mysql)
-  COMPOSE            = docker-compose -f docker/compose/development/mysql/docker-compose.yml --project-directory .
-  COMPOSE_TEST       = docker-compose -p richie-test -f docker/compose/test/mysql/docker-compose.yml --project-directory .
+  _COMPOSE            = docker-compose -f docker/compose/development/mysql/docker-compose.yml --project-directory .
+  _COMPOSE_TEST       = docker-compose -p richie-test -f docker/compose/test/mysql/docker-compose.yml --project-directory .
   DB_PORT            = 3306
 else
-  COMPOSE            = docker-compose
-  COMPOSE_TEST       = docker-compose -p richie-test -f docker/compose/test/postgresql/docker-compose.yml --project-directory .
+  _COMPOSE            = docker-compose
+  _COMPOSE_TEST       = docker-compose -p richie-test -f docker/compose/test/postgresql/docker-compose.yml --project-directory .
   DB_PORT            = 5432
 endif
 
-UID                  = $(shell id -u)
-COMPOSE_RUN          = $(COMPOSE) run --rm --user=$(UID)
-COMPOSE_EXEC         = $(COMPOSE) exec --user=$(UID)
+DOCKER_UID           = $(shell id -u)
+DOCKER_GID           = $(shell id -g)
+DOCKER_USER          = $(DOCKER_UID):$(DOCKER_GID)
+COMPOSE              = DOCKER_USER=$(DOCKER_USER) $(_COMPOSE)
+COMPOSE_RUN          = $(COMPOSE) run --rm
+COMPOSE_EXEC         = $(COMPOSE) exec
 COMPOSE_EXEC_APP     = $(COMPOSE_EXEC) app
 COMPOSE_EXEC_NODE    = $(COMPOSE_EXEC) node
 COMPOSE_RUN_APP      = $(COMPOSE_RUN) app
 COMPOSE_RUN_CROWDIN  = $(COMPOSE_RUN) crowdin -c crowdin/config.yml
-COMPOSE_TEST_RUN     = $(COMPOSE_TEST) run --rm --user=$(UID)
+COMPOSE_TEST         = DOCKER_USER=$(DOCKER_USER) $(_COMPOSE_TEST)
+COMPOSE_TEST_RUN     = $(COMPOSE_TEST) run --rm
 COMPOSE_TEST_RUN_APP = $(COMPOSE_TEST_RUN) app
 
 # -- Node
@@ -52,14 +56,17 @@ default: help
 env.d/development/crowdin:
 	cp env.d/development/crowdin.dist env.d/development/crowdin
 
-bootstrap: env.d/development/crowdin ## install development dependencies
-	@echo 'Preparing data directory...';
-	@mkdir -p data/media data/static
-	@$(COMPOSE) build base;
-	@$(COMPOSE) build --build-arg UID=$(UID) app;
-	${MAKE} build-front;
-	${MAKE} run;
-	${MAKE} migrate;
+data/media/.keep:
+	@echo 'Preparing media volume...'
+	@mkdir -p data/media/
+	@touch data/media/.keep
+
+data/static/.keep:
+	@echo 'Preparing static volume...'
+	@mkdir -p data/static
+	@touch data/static/.keep
+
+bootstrap: env.d/development/crowdin data/media/.keep data/static/.keep build-front build run migrate ## install development dependencies
 .PHONY: bootstrap
 
 build-sass: ## build Sass files to CSS
@@ -137,10 +144,9 @@ migrate:  ## perform database migrations
 	@$(MANAGE) migrate
 .PHONY: migrate
 
-rebuild: ## rebuild the app container
-	@$(COMPOSE) build base
-	@$(COMPOSE) build --build-arg UID=$(UID) app
-.PHONY: rebuild
+build: ## build the app container
+	@$(COMPOSE) build app
+.PHONY: build
 
 run: ## start the development server
 	@$(COMPOSE) up -d
