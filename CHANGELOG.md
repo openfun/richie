@@ -10,9 +10,19 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- Allow to dynamically set webpack publicPath. This is useful if
-  a CDN is used to load statics. Define the settings `CDN_DOMAIN` and it
-  will be used as base domain to fetch js chunks.
+- Allow to dynamically set webpack publicPath. This is useful if a CDN is used
+  to load statics. Define the settings `CDN_DOMAIN` and it will be used as base
+  domain to fetch js chunks.
+
+### Changed
+
+- Simplify the Docker development stack to have a single `Dockerfile` and
+  docker-compose configuration for testing either with MySQL or PostgreSQL
+  database backend
+
+### Removed
+
+- Alpine images are no longer maintained and have been removed from the project
 
 ### Fixed
 

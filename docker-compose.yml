@@ -1,12 +1,20 @@
 version: "3.4"
 
 services:
-  db:
+  postgresql:
     image: postgres:9.6
     env_file:
         - env.d/development/postgresql
     ports:
         - "5440:5432"
+
+  mysql:
+    image: mysql:5.6
+    env_file:
+      - env.d/development/mysql
+    ports:
+      - "3316:3306"
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
 
   elasticsearch:
     image: fundocker/openshift-elasticsearch:6.6.2
@@ -20,7 +28,7 @@ services:
     image: richie:development
     env_file:
         - env.d/development/common
-        - env.d/development/postgresql
+        - env.d/development/${DB_HOST:-postgresql}
     ports:
         - "8070:8000"
     volumes:
@@ -28,7 +36,7 @@ services:
       - ./data/static:/data/static
       - ./data/media:/data/media
     depends_on:
-      - "db"
+      - "${DB_HOST:-postgresql}"
       - "elasticsearch"
 
   node:
