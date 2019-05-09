@@ -25,6 +25,9 @@ def get_site_metas(with_static=False, with_media=False, is_secure=False, extra=N
 
     Optionally it can also return ``STATIC_URL`` and ``MEDIA_URL`` if needed
     (like out of Django requests).
+
+    If `CDN_DOMAIN` settings is defined we add it in the context. It allows
+    to load statics js on a CDN like cloudfront.
     """
     site_current = Site.objects.get_current()
     metas = {
@@ -42,6 +45,9 @@ def get_site_metas(with_static=False, with_media=False, is_secure=False, extra=N
         metas["STATIC_URL"] = getattr(settings, "STATIC_URL", "")
     if extra:
         metas.update(extra)
+
+    if getattr(settings, "CDN_DOMAIN", False):
+        metas["CDN_DOMAIN"] = settings.CDN_DOMAIN
 
     return metas
 
