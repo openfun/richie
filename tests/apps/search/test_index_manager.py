@@ -187,6 +187,12 @@ class IndexManagerTestCase(TestCase):
                 "actions": [
                     {
                         "add": {
+                            "index": "richie_categories_created_index",
+                            "alias": "richie_categories",
+                        }
+                    },
+                    {
+                        "add": {
                             "index": "richie_courses_created_index",
                             "alias": "richie_courses",
                         }
@@ -199,7 +205,19 @@ class IndexManagerTestCase(TestCase):
                     },
                     {
                         "add": {
-                            "index": "richie_categories_created_index",
+                            "index": "richie_persons_created_index",
+                            "alias": "richie_persons",
+                        }
+                    },
+                    {
+                        "remove": {
+                            "index": "richie_categories_forgotten",
+                            "alias": "richie_categories",
+                        }
+                    },
+                    {
+                        "remove": {
+                            "index": "richie_categories_previous",
                             "alias": "richie_categories",
                         }
                     },
@@ -229,14 +247,14 @@ class IndexManagerTestCase(TestCase):
                     },
                     {
                         "remove": {
-                            "index": "richie_categories_forgotten",
-                            "alias": "richie_categories",
+                            "index": "richie_persons_forgotten",
+                            "alias": "richie_persons",
                         }
                     },
                     {
                         "remove": {
-                            "index": "richie_categories_previous",
-                            "alias": "richie_categories",
+                            "index": "richie_persons_previous",
+                            "alias": "richie_persons",
                         }
                     },
                 ]
@@ -269,6 +287,12 @@ class IndexManagerTestCase(TestCase):
                 "actions": [
                     {
                         "add": {
+                            "index": "richie_categories_created_index",
+                            "alias": "richie_categories",
+                        }
+                    },
+                    {
+                        "add": {
                             "index": "richie_courses_created_index",
                             "alias": "richie_courses",
                         }
@@ -281,8 +305,8 @@ class IndexManagerTestCase(TestCase):
                     },
                     {
                         "add": {
-                            "index": "richie_categories_created_index",
-                            "alias": "richie_categories",
+                            "index": "richie_persons_created_index",
+                            "alias": "richie_persons",
                         }
                     },
                 ]

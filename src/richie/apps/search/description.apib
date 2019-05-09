@@ -21,17 +21,62 @@ A single course as saved in our ElasticSearch index. Includes all fields useful 
 ## Organization
 A single organization as saved in our ElasticSearch index. Includes only the fields necessary for indexing and displaying them on the consumer side.
 
-+ id: 42 (number, required) - SQL database ID, reused in ElasticSearch
++ id: L-00040002 (string, required) - MPTT path used as ElasticSearch index
 + logo: https://example.com/logo.png (string) - URL to and image containing the logo for the organization (smaller)
 + title: Université Paris 13 (string, required) - full text title of the organization; may be translated
 
 ## Category
-A single category as saved in our ElasticSearch index. Includes a small subset of the fields and data in the the SQL database model, in order to be as small and consumer-friendly as possible.
+A single category as saved in our ElasticSearch index. Includes a small subset of the fields and data actually contained in the CMS, in order to be as small and consumer-friendly as possible.
 
-+ id: 42 (number, required) - SQL database ID, reused in ElasticSearch
++ id: L-00040002 (string, required) - MPTT path used as ElasticSearch index
 + logo: https://example.com/image.png (string) - a logo for the category, only the most prominent ones have it
 + title: Computer Science (string, required)
 
+## Person
+A single person as saved in our ElasticSearch index. Includes a small subset of the fields and data actually contained in the CMS, in order to be as small and consumer-friendly as possible.
+
++ id: 42 (number, required) - SQL database ID, reused in ElasticSearch
++ portrait: https://example.com/image.png (string) - a logo for the category, only the most prominent ones have it
++ title: Master Miyagi (string, required)
+
+
+# Group Category
+Category-related resources for the richie search API.
+
+## GET /categories/{category_id}
+A single category object. Access through this API is read-only (and thus GET only) as we're interacting with ElasticSearch and not the underlying model.
+
+See the Category data structure for more information.
+
++ Request
+    + Headers
+
+            Accept: application/json
+            Accept-Language: fr-FR; fr; q=0.9, en-US; en; q=0.7, *; q=0.5
+
++ Response 200 (application/json)
+    + Attributes (Category)
+
+## GET /categories?limit&offset&name
+Collection of all categories indexed in ElasticSearch. Can be filtered and selected through search query parameters.
+
++ Request
+    + Parameters
+        + limit: 10 (number, optional) - return {limit} categories
+        + offset: 0 (number, optional) - skip the first {offset} results; used for pagination
+        + name: science (string, optional) - match on the name field
+    + Headers
+
+            Accept: application/json
+            Accept-Language: fr-FR; fr; q=0.9, en-US; en; q=0.7, *; q=0.5
+
++ Response 200 (application/json)
+    + Attributes
+        + meta
+            + count: 10 (number, required) - number of categories effectively returned
+            + offset: 0 (number, required) - number of categories skipped
+            + total_count: 89 (number, required) - total number of hits for the search parameters
+        + objects: array[Category]
 
 # Group Course
 Course-related resources for the richie search API.
@@ -116,13 +161,14 @@ Collection of all organizations indexed in ElasticSearch. Can be filtered and se
             + total_count: 89 (number, required) - total number of hits for the search parameters
         + objects: array[Organization]
 
-# Group Category
-Category-related resources for the richie search API.
 
-## GET /categories/{category_id}
-A single category object. Access through this API is read-only (and thus GET only) as we're interacting with ElasticSearch and not the underlying model.
+# Group Persons
+Person-related resources for the richie search API.
 
-See the Category data structure for more information.
+## GET /persons/{person_id}
+A single person object. Access through this API is read-only (and thus GET only) as we're interacting with ElasticSearch and not the underlying model.
+
+See the Person data structure for more information.
 
 + Request
     + Headers
@@ -131,16 +177,16 @@ See the Category data structure for more information.
             Accept-Language: fr-FR; fr; q=0.9, en-US; en; q=0.7, *; q=0.5
 
 + Response 200 (application/json)
-    + Attributes (Category)
+    + Attributes (Person)
 
-## GET /categories?limit&offset&name
-Collection of all categories indexed in ElasticSearch. Can be filtered and selected through search query parameters.
+## GET /persons?limit&offset&name
+Collection of all persons indexed in ElasticSearch. Can be filtered and selected through search query parameters.
 
 + Request
     + Parameters
-        + limit: 10 (number, optional) - return {limit} categories
+        + limit: 10 (number, optional) - return {limit} persons
         + offset: 0 (number, optional) - skip the first {offset} results; used for pagination
-        + name: science (string, optional) - match on the name field
+        + query: science (string, optional) - match on the indexed text fields
     + Headers
 
             Accept: application/json
@@ -149,7 +195,7 @@ Collection of all categories indexed in ElasticSearch. Can be filtered and selec
 + Response 200 (application/json)
     + Attributes
         + meta
-            + count: 10 (number, required) - number of categories effectively returned
-            + offset: 0 (number, required) - number of categories skipped
+            + count: 10 (number, required) - number of persons effectively returned
+            + offset: 0 (number, required) - number of persons skipped
             + total_count: 89 (number, required) - total number of hits for the search parameters
-        + objects: array[Category]
+        + objects: array[Person]

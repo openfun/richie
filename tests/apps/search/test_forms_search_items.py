@@ -113,20 +113,7 @@ class ItemSearchFormTestCase(TestCase):
         self.assertTrue(form.is_valid())
         self.assertEqual(
             form.build_es_query(),
-            (
-                20,
-                2,
-                {
-                    "query": {
-                        "match": {
-                            "title.fr": {
-                                "query": "some phrase terms",
-                                "analyzer": "simple",
-                            }
-                        }
-                    }
-                },
-            ),
+            (20, 2, {"query": {"match": {"title.fr": {"query": "some phrase terms"}}}}),
         )
 
     def test_forms_items_build_es_query_search_all(self, *_):

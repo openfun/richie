@@ -315,11 +315,7 @@ class ItemSearchForm(SearchForm):
         # Build a query that matches on the name field if it was handed by the client
         full_text = self.cleaned_data.get("query")
         if full_text:
-            query = {
-                "query": {
-                    "match": {"title.fr": {"query": full_text, "analyzer": "french"}}
-                }
-            }
+            query = {"query": {"match": {"title.fr": {"query": full_text}}}}
         # Build a match_all query by default
         else:
             query = {"query": {"match_all": {}}}

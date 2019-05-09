@@ -10,6 +10,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add a persons index and viewset to enable text queries and autocomplete
+  requests on person names from the API.
 - Add a management command to create the required site structure,
 - Allow to dynamically set webpack publicPath. This is useful if a CDN is used
   to load statics. Define the settings `CDN_DOMAIN` and it will be used as base

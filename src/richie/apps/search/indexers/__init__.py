@@ -8,9 +8,10 @@ ES_INDICES = IndicesList(
         settings,
         "ES_INDICES",
         {
+            "categories": "richie.apps.search.indexers.categories.CategoriesIndexer",
             "courses": "richie.apps.search.indexers.courses.CoursesIndexer",
             "organizations": "richie.apps.search.indexers.organizations.OrganizationsIndexer",
-            "categories": "richie.apps.search.indexers.categories.CategoriesIndexer",
+            "persons": "richie.apps.search.indexers.persons.PersonsIndexer",
         },
     )
 )
