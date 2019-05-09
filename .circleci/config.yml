@@ -85,7 +85,7 @@ jobs:
       # collisions in parallel builds.
       - run:
           name: Build production image
-          command: docker build -t richie:${CIRCLE_SHA1} .
+          command: docker build -t richie:${CIRCLE_SHA1} --target production .
       - run:
           name: Check built image availability
           command: docker images "richie:${CIRCLE_SHA1}*"
@@ -378,7 +378,7 @@ jobs:
           docker_layer_caching: true
       - run:
           name: Build production image (using cached layers)
-          command: docker build -t richie:${CIRCLE_SHA1} .
+          command: docker build -t richie:${CIRCLE_SHA1} --target production .
       - run:
           name: Build alpine production image (using cached layers)
           command: |

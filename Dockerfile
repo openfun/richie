@@ -14,10 +14,10 @@
 #     python sandbox/manage.py collectstatic
 #
 
-# ---- base image to inherit from ----
+# ---- Base image to inherit from ----
 FROM python:3.7-stretch as base
 
-# ---- front-end builder image ----
+# ---- Front-end builder image ----
 FROM node:10 as front-builder
 
 # Copy frontend app sources
@@ -29,7 +29,7 @@ RUN yarn install --frozen-lockfile && \
     yarn build-production && \
     yarn sass-production
 
-# ---- back-end builder image ----
+# ---- Back-end builder image ----
 FROM base as back-builder
 
 WORKDIR /builder
@@ -52,8 +52,8 @@ RUN pip install --upgrade pip
 RUN mkdir /install && \
     pip install --prefix=/install .[sandbox]
 
-# ---- final application image ----
-FROM base
+# ---- Core application image ----
+FROM base as core
 
 # Install gettext
 RUN apt-get update && \
@@ -65,10 +65,8 @@ RUN apt-get update && \
 COPY --from=back-builder /install /usr/local
 
 # Copy runtime-required files
-COPY ./sandbox /app/sandbox/
-COPY ./bin/entrypoint /app/bin/entrypoint
-
-WORKDIR /app
+COPY ./sandbox /app/sandbox
+COPY ./docker/files/usr/local/bin/entrypoint /usr/local/bin/entrypoint
 
 # Gunicorn
 RUN mkdir -p /usr/local/etc/gunicorn
@@ -79,14 +77,57 @@ COPY docker/files/usr/local/etc/gunicorn/richie.py /usr/local/etc/gunicorn/richi
 # docker user (see entrypoint).
 RUN chmod g=u /etc/passwd
 
+# Un-privileged user running the application
+ARG DOCKER_USER
+USER ${DOCKER_USER}
+
 # We wrap commands run in this container by the following entrypoint that
 # creates a user on-the-fly with the container user ID (see USER) and root group
 # ID.
-ENTRYPOINT [ "/app/bin/entrypoint" ]
+ENTRYPOINT [ "/usr/local/bin/entrypoint" ]
+
+# ---- Development image ----
+FROM core as development
+
+# Switch back to the root user to install development dependencies
+USER root:root
+
+WORKDIR /app
+
+# Upgrade pip to its latest release to speed up dependencies installation
+RUN pip install --upgrade pip
+
+# Copy all sources, not only runtime-required files
+COPY . /app/
+
+# Uninstall richie and re-install it in editable mode along with development
+# dependencies
+RUN pip uninstall -y richie
+RUN pip install -e .[dev]
+
+# Install dockerize. It is used to ensure that the database service is accepting
+# connections before trying to access it from the main application.
+ENV DOCKERIZE_VERSION v0.6.1
+RUN curl -sL \
+    --output dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
+    https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && \
+    tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && \
+    rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
+
+# Restore the un-privileged user running the application
+ARG DOCKER_USER
+USER ${DOCKER_USER}
+
+# Run django development server (wrapped by dockerize to ensure the db is ready
+# to accept connections before running the development server)
+CMD cd sandbox && \
+    dockerize -wait tcp://db:5432 -timeout 60s \
+    python manage.py runserver 0.0.0.0:8000
+
+# ---- Production image ----
+FROM core as production
+
+WORKDIR /app/sandbox
 
 # The default command runs gunicorn WSGI server in the sandbox
-CMD cd sandbox && \
-    gunicorn -c /usr/local/etc/gunicorn/richie.py wsgi:application
-
-# Un-privileged user running the application
-USER 10000
+CMD gunicorn -c /usr/local/etc/gunicorn/richie.py wsgi:application
