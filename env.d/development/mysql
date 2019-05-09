@@ -7,7 +7,7 @@ MYSQL_PASSWORD=pass
 
 # App database configuration
 DB_ENGINE=django.db.backends.mysql
-DB_HOST=db
+DB_HOST=mysql
 DB_NAME=richie
 DB_USER=fun
 DB_PASSWORD=pass

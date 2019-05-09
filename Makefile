@@ -12,18 +12,17 @@
 # -- Docker
 
 # Get the current user ID to use for docker run and docker exec commands
-ifeq ($(DB_ENGINE), mysql)
-  _COMPOSE            = docker-compose -f docker/compose/development/mysql/docker-compose.yml --project-directory .
+ifeq ($(DB_HOST), mysql)
   DB_PORT            = 3306
 else
-  _COMPOSE            = docker-compose
+  DB_HOST            = postgresql
   DB_PORT            = 5432
 endif
 
 DOCKER_UID           = $(shell id -u)
 DOCKER_GID           = $(shell id -g)
 DOCKER_USER          = $(DOCKER_UID):$(DOCKER_GID)
-COMPOSE              = DOCKER_USER=$(DOCKER_USER) $(_COMPOSE)
+COMPOSE              = DOCKER_USER=$(DOCKER_USER) DB_HOST=$(DB_HOST) DB_PORT=$(DB_PORT) docker-compose
 COMPOSE_RUN          = $(COMPOSE) run --rm
 COMPOSE_EXEC         = $(COMPOSE) exec
 COMPOSE_EXEC_APP     = $(COMPOSE_EXEC) app
@@ -44,7 +43,7 @@ YARN                 = $(COMPOSE_RUN_NODE) yarn
 
 # -- Django
 
-MANAGE               = $(COMPOSE_RUN_APP) dockerize -wait tcp://db:$(DB_PORT) -timeout 60s python sandbox/manage.py
+MANAGE               = $(COMPOSE_RUN_APP) dockerize -wait tcp://$(DB_HOST):$(DB_PORT) -timeout 60s python sandbox/manage.py
 
 # -- Rules
 
@@ -146,7 +145,7 @@ build: ## build the app container
 .PHONY: build
 
 run: ## start the development server
-	@$(COMPOSE) up -d
+	@$(COMPOSE) up -d app
 .PHONY: run
 
 stop: ## stop the development server
@@ -158,7 +157,7 @@ superuser: ## create a DjangoCMS superuser
 .PHONY: superuser
 
 test-back: ## run back-end tests
-	@bin/pytest
+	@DB_PORT=$(DB_PORT) bin/pytest
 .PHONY: test-back
 
 test-front: ## run front-end tests

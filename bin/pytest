@@ -2,38 +2,9 @@
 
 source "$(dirname "${BASH_SOURCE[0]}")/_config.sh"
 
-# By default, tests are run on Postgresql.
-# They can be run on Mysql by setting an environment variable: `DB_ENGINE=mysql`
-#
-# The `db` container runs as a dependency of the `app` container, so it will not be switched
-# off and removed by Docker Compose after a run, even if the `--rm` option is passed...
-# Only the main container gets removed.
-# For this reason, we need to destroy the existing `db` container if it is not the right
-# database engine.
-if [[ "${DB_ENGINE}" == "mysql" ]]; then
-    COMPOSE_FILE="${REPO_DIR}/docker/compose/development/mysql/docker-compose.yml"
-    DB_PORT=3306
-
-    # Clear the database if postgresql is running
-    if docker-compose ps db | grep "postgres" ; then
-        docker-compose kill db
-        docker-compose rm -f db
-    fi
-
-else
-    DB_PORT=5432
-
-    # Clear the database if mysql is running
-    if docker-compose ps db | grep "mysql" ; then
-        docker-compose kill db
-        docker-compose rm -f db
-    fi
-
-fi
-
 _dc_run \
     -e DJANGO_CONFIGURATION=Test \
     -e PYTHONPATH=/app/sandbox \
     app \
-    dockerize -wait tcp://db:"${DB_PORT}" -timeout 60s \
+    dockerize -wait "tcp://${DB_HOST:-postgresql}:${DB_PORT:-5432}" -timeout 60s \
         pytest "$@"

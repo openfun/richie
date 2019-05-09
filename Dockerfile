@@ -118,10 +118,15 @@ RUN curl -sL \
 ARG DOCKER_USER
 USER ${DOCKER_USER}
 
+# Target database host (e.g. database engine following docker-compose services
+# name) & port
+ENV DB_HOST=postgresql \
+    DB_PORT=5432
+
 # Run django development server (wrapped by dockerize to ensure the db is ready
 # to accept connections before running the development server)
 CMD cd sandbox && \
-    dockerize -wait tcp://db:5432 -timeout 60s \
+    dockerize -wait tcp://${DB_HOST}:${DB_PORT} -timeout 60s \
     python manage.py runserver 0.0.0.0:8000
 
 # ---- Production image ----
