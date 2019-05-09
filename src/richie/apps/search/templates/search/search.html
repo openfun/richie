@@ -2,6 +2,12 @@
 {% load cms_tags i18n search_tags %}
 {% get_current_language as LANGUAGE_CODE %}
 
+{% block meta %}
+  {% if CDN_DOMAIN %}
+  <meta name="public-path" value="{{ CDN_DOMAIN }}" />
+  {% endif %}
+{% endblock meta %}
+
 {% block title %}{% page_attribute "page_title" %}{% endblock title %}
 
 {# Enable flex on the `.body-content` so children can grow to occupy the available vertical space #}

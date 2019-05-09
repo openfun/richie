@@ -8,6 +8,12 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Allow to dynamically set webpack publicPath. This is useful if
+  a CDN is used to load statics. Define the settings `CDN_DOMAIN` and it
+  will be used as base domain to fetch js chunks.
+
 ### Fixed
 
 - Fix serializer that was failing for a course indexed with no organization,
