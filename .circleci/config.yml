@@ -90,29 +90,6 @@ jobs:
           name: Check built image availability
           command: docker images "richie:${CIRCLE_SHA1}*"
 
-  # Build alpine image
-  build-docker-alpine:
-    docker:
-      - image: circleci/buildpack-deps:stretch
-    working_directory: ~/fun
-    steps:
-      - checkout
-      # Generate a version.json file describing app release
-      - <<: *generate-version-file
-      # Activate docker-in-docker (with layers caching enabled)
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - run:
-          name: Build alpine production image
-          command: |
-            docker build \
-              -t richie:${CIRCLE_SHA1}-alpine \
-              -f docker/images/alpine/Dockerfile \
-              .
-      - run:
-          name: Check built image availability
-          command: docker images "richie:${CIRCLE_SHA1}*"
-
   # ---- Backend jobs ----
   # Build backend development environment
   build-back:
@@ -380,13 +357,6 @@ jobs:
           name: Build production image (using cached layers)
           command: docker build -t richie:${CIRCLE_SHA1} --target production .
       - run:
-          name: Build alpine production image (using cached layers)
-          command: |
-            docker build \
-              -t richie:${CIRCLE_SHA1}-alpine \
-              -f docker/images/alpine/Dockerfile \
-              .
-      - run:
           name: Check built images availability
           command: docker images "richie:${CIRCLE_SHA1}*"
       # Login to DockerHub to Publish new images
@@ -402,7 +372,7 @@ jobs:
       # Tag docker images with the same pattern used in Git (Semantic Versioning)
       #
       # Git tag: v1.0.1
-      # Docker tag: 1.0.1(-alpine)(-ci)
+      # Docker tag: 1.0.1(-ci)
       - run:
           name: Tag images
           command: |
@@ -415,12 +385,10 @@ jobs:
             # - DOCKER_TAG: 1.1.2 (Git tag v1.1.2)
             echo "DOCKER_TAG: ${DOCKER_TAG} (Git ${RELEASE_TYPE}${CIRCLE_TAG})"
             docker tag richie:${CIRCLE_SHA1} fundocker/richie:${DOCKER_TAG}
-            docker tag richie:${CIRCLE_SHA1}-alpine fundocker/richie:${DOCKER_TAG}-alpine
             if [[ -n "$CIRCLE_TAG" ]]; then
                 docker tag richie:${CIRCLE_SHA1} fundocker/richie:latest
-                docker tag richie:${CIRCLE_SHA1}-alpine fundocker/richie:alpine
             fi
-            docker images | grep -E "^fundocker/richie\s*(${DOCKER_TAG}.*|latest|alpine|master|master-alpine)"
+            docker images | grep -E "^fundocker/richie\s*(${DOCKER_TAG}.*|latest|master)"
 
       # Publish images to DockerHub
       #
@@ -438,10 +406,8 @@ jobs:
             # - DOCKER_TAG: 1.1.2 (Git tag v1.1.2)
             echo "DOCKER_TAG: ${DOCKER_TAG} (Git ${RELEASE_TYPE}${CIRCLE_TAG})"
             docker push fundocker/richie:${DOCKER_TAG}
-            docker push fundocker/richie:${DOCKER_TAG}-alpine
             if [[ -n "$CIRCLE_TAG" ]]; then
               docker push fundocker/richie:latest
-              docker push fundocker/richie:alpine
             fi
 
   # ---- Front-end jobs ----
@@ -642,10 +608,6 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - build-docker-alpine:
-          filters:
-            tags:
-              only: /.*/
 
       # Backend jobs
       #
@@ -713,7 +675,6 @@ workflows:
       - hub:
           requires:
             - build-docker
-            - build-docker-alpine
             - test-front
             - test-back-mysql
             - test-back-postgresql
