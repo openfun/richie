@@ -233,6 +233,22 @@ class CourseWizardForm(BaseWizardForm):
                 **{"page": self.page},
             )
 
+            # Create page permissions on the course page for the admin group of the organization
+            try:
+                page_role = PageRole.objects.only("group").get(
+                    page=self.page, role=defaults.ADMIN
+                )
+            except PageRole.DoesNotExist:
+                pass
+            else:
+                PagePermission.objects.create(
+                    group_id=page_role.group_id,
+                    page_id=course.extended_object_id,
+                    **defaults.ORGANIZATION_ADMIN_ROLE.get(
+                        "courses_page_permissions", {}
+                    ),
+                )
+
         return page
 
 

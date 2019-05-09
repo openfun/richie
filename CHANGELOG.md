@@ -10,6 +10,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- When a new course is created for an organization, automatically associate
+  permissions to organization admins,
 - Configure permission checks on page creations via the CMS wizard,
 - Automatically create a page role and associate admin permissions when a new
   organization page is created,

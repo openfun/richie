@@ -21,6 +21,17 @@ ORGANIZATION_ADMIN_ROLE = {
         "can_view": True,
         "grant_on": 1,  # just the page
     },
+    "courses_page_permissions": {
+        "can_change": True,
+        "can_add": True,
+        "can_delete": False,
+        "can_change_advanced_settings": False,
+        "can_publish": False,
+        "can_change_permissions": True,
+        "can_move_page": True,
+        "can_view": True,
+        "grant_on": 5,  # page and descendants
+    },
 }
 ORGANIZATION_ADMIN_ROLE.update(getattr(settings, "RICHIE_ORGANIZATION_ADMIN_ROLE", {}))
 
