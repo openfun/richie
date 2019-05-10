@@ -16,6 +16,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Restrict course content to plain text in standard sections,
 - Change the order of placeholders on the course page following feedback from
   our support team,
 - Simplify the Docker development stack to have a single `Dockerfile` and
