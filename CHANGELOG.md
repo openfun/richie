@@ -50,6 +50,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Fail and return a meaningful error when an invalid slug is submitted in
   page creation wizards,
+- Fix person placeholders mistakenly showing on the organization page,
 - Fix serializer that was failing for a course indexed with no organization,
 - The language filter, which is not a drilldown filter, no longer behaves
   like one. Ditto for any future similar filters,
