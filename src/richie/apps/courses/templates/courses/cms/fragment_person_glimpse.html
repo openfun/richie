@@ -5,7 +5,7 @@
   <a class="person-glimpse__media" href="{{ person_page.get_absolute_url }}"
       title="{{ person.get_full_name }} {% trans "avatar" %}">
     {% with width=200 height=200 %}
-      {% page_placeholder "portrait" person_page as portrait %}
+      {% show_placeholder "portrait" person_page as portrait %}
       {% if portrait %}
           {{ portrait }}
       {% else %}
@@ -24,11 +24,11 @@
       </a>
       <div class="person-glimpse__content__wrapper__categories">
         {% with form_factor="tag" %}
-          {% page_placeholder "categories" person_page %}
+          {% show_placeholder "categories" person_page %}
         {% endwith %}
       </div>
       <div class="person-glimpse__content__wrapper__bio">
-        {% page_placeholder "bio" person_page %}
+        {% show_placeholder "bio" person_page %}
       </div>
     </div>
   </div>

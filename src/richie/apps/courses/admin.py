@@ -130,11 +130,6 @@ class PageRoleAdmin(admin.ModelAdmin):
         "role",
         link_field("page"),
         link_field("group", anchor=_("See group permissions")),
-        link_field(
-            "page_permission",
-            view_name="admin:cms_page_permissions",
-            anchor=_("See page permissions"),
-        ),
     ]
     list_display = ["id", "role", "page"]
     list_filter = ["role"]
