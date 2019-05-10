@@ -304,15 +304,15 @@ class Base(DRFMixin, Configuration):
         },
         "courses/cms/course_detail.html course_description": {
             "name": _("About the course"),
-            "plugins": ["CKEditorPlugin"],
+            "plugins": ["PlainTextPlugin"],
         },
         "courses/cms/course_detail.html course_format": {
             "name": _("Format"),
-            "plugins": ["CKEditorPlugin"],
+            "plugins": ["PlainTextPlugin"],
         },
         "courses/cms/course_detail.html course_prerequisites": {
             "name": _("Prerequisites"),
-            "plugins": ["CKEditorPlugin"],
+            "plugins": ["PlainTextPlugin"],
         },
         "courses/cms/course_detail.html course_team": {
             "name": _("Team"),
@@ -346,7 +346,7 @@ class Base(DRFMixin, Configuration):
         },
         "courses/cms/course_detail.html course_assessment": {
             "name": _("Assessment and Certification"),
-            "plugins": ["CKEditorPlugin"],
+            "plugins": ["PlainTextPlugin"],
         },
         # Organization detail
         "courses/cms/organization_detail.html banner": {
