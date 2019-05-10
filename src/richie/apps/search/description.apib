@@ -7,15 +7,16 @@ FORMAT: 1A
 ## Course
 A single course as saved in our ElasticSearch index. Includes all fields useful for indexing it and displaying it in the client side. Foreign keys as richie knows them (eg. Categories & Organizations) are referenced by their IDs.
 
++ categories: ['L00040002', 'L-00040004'] (array[string], required) - IDs of the categories with which this course has been tagged
 + cover_image: `/about.png` (string) - URL to an image, a size of the thumbnail
 + end: `2018-02-28T06:00:00Z` (string, required) - ISO 8601 date, when this session of the course ends
 + enrollment_end: `2018-01-31T06:00:00Z` (string, required) - ISO 8601 date, when enrollment for the latest session of the course ends
 + enrollment_start: `2018-01-01T06:00:00Z` (string, required) - ISO 8601 date, when enrollment for the latest session of the course starts
 + id: 42 (number, required) - SQL database ID, reused in ElasticSearch
 + languages: ['fr', 'en'] (array[string], required) - ISO 639-1 code (2 letters) for the course's languages
-+ organizations: [17, 83] (array[number], required) - IDs of the organizations linked to this course
++ organizations: ['L00010007', 'L-00010009'] (array[string], required) - IDs of the organizations linked to this course
++ persons: [42, 44] (array[number], required) - IDs of the persons with whom this course has been associated
 + start: `2018-02-01T06:00:00Z` (string, required) - ISO 8601 date, when this session of the course starts
-+ categories: [42, 44] (array[number], required) - IDs of the categories this course has been tagged with
 + title: Python for Data Scientists (string, required) - Title for the course
 
 ## Organization

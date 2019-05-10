@@ -15,6 +15,7 @@ from richie.apps.courses.factories import (
     CourseFactory,
     CourseRunFactory,
     OrganizationFactory,
+    PersonFactory,
 )
 from richie.apps.courses.models import CourseState
 from richie.apps.search.indexers.categories import CategoriesIndexer
@@ -134,18 +135,32 @@ class CoursesIndexersTestCase(TestCase):
             },
             should_publish=True,
         )
+
+        person1 = PersonFactory(
+            page_title={"en": "Eugène Delacroix", "fr": "Eugène Delacroix"},
+            should_publish=True,
+        )
+        person2 = PersonFactory(
+            page_title={"en": "Comte de Saint-Germain", "fr": "Earl of Saint-Germain"},
+            should_publish=True,
+        )
+        person_draft = PersonFactory(
+            page_title={"en": "Jules de Polignac", "fr": "Jules de Polignac"}
+        )
+
         course = CourseFactory(
-            page_title={
-                "en": "an english course title",
-                "fr": "un titre cours français",
-            },
+            fill_categories=published_categories + [draft_category],
+            fill_cover=True,
             fill_organizations=[
                 main_organization,
                 other_draft_organization,
                 other_published_organization,
             ],
-            fill_categories=published_categories + [draft_category],
-            fill_cover=True,
+            fill_team=[person1, person_draft, person2],
+            page_title={
+                "en": "an english course title",
+                "fr": "un titre cours français",
+            },
             should_publish=True,
         )
         CourseRunFactory.create_batch(
@@ -219,6 +234,14 @@ class CoursesIndexersTestCase(TestCase):
                     "titre organisation principale français",
                     "titre autre organisation français",
                 ],
+            },
+            "persons": [
+                str(person1.public_extension.extended_object_id),
+                str(person2.public_extension.extended_object_id),
+            ],
+            "persons_names": {
+                "en": ["Eugène Delacroix", "Comte de Saint-Germain"],
+                "fr": ["Eugène Delacroix", "Earl of Saint-Germain"],
             },
             "title": {"fr": "un titre cours français", "en": "an english course title"},
         }

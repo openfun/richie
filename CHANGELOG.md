@@ -12,6 +12,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Add a persons index and viewset to enable text queries and autocomplete
   requests on person names from the API.
+- Index person names on courses to allow users to find courses when they
+  type a related person's name in full text search.
 - Add a management command to create the required site structure,
 - Allow to dynamically set webpack publicPath. This is useful if a CDN is used
   to load statics. Define the settings `CDN_DOMAIN` and it will be used as base

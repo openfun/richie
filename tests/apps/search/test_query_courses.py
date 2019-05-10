@@ -32,6 +32,8 @@ COURSES = [
         "is_new": True,
         "organizations": ["P-00030001", "P-00030004", "L-000300010001"],
         "organizations_names": {"en": ["Org 31", "Org 34", "Org 311"]},
+        "persons": [2],
+        "persons_names": {"en": ["Mikhaïl Boulgakov"]},
         "title": {"en": "Artificial intelligence for mushroom picking"},
     },
     {
@@ -48,6 +50,8 @@ COURSES = [
         "is_new": True,
         "organizations": ["P-00030001", "P-00030003", "L-000300010002"],
         "organizations_names": {"en": ["Org 31", "Org 33", "Org 312"]},
+        "persons": [],
+        "persons_names": {},
         "title": {"en": "Click-farms: managing the autumn harvest"},
     },
     {
@@ -64,6 +68,8 @@ COURSES = [
         "is_new": False,
         "organizations": ["P-00030002", "P-00030003", "L-000300020001"],
         "organizations_names": {"en": ["Org 32", "Org 33", "Org 321"]},
+        "persons": [],
+        "persons_names": {},
         "title": {"en": "Building a data lake out of mountain springs"},
     },
     {
@@ -79,6 +85,8 @@ COURSES = [
         "is_new": False,
         "organizations": ["P-00030002", "P-00030004", "L-000300020002"],
         "organizations_names": {"en": ["Org 32", "Org 34", "Org 322"]},
+        "persons": [2],
+        "persons_names": {"en": ["Mikhaïl Boulgakov"]},
         "title": {"en": "Kung-fu moves for cloud infrastructure security"},
     },
 ]
@@ -1072,6 +1080,19 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         self.assertEqual(content["filters"]["subjects"]["values"], [])
         self.assertEqual(content["filters"]["levels"]["values"], [])
         self.assertEqual(content["filters"]["organizations"]["values"], [])
+
+    def test_query_courses_by_related_person(self, *_):
+        """
+        Full-text search appropriately returns the list of courses that match a given
+        related person name even through a text query.
+        """
+        courses_definition, content = self.execute_query("query=boulgakov")
+        # Keep only the courses that are linked to persons whose name contains "boulgakov"
+        courses_definition = filter(lambda c: c[0] in [0, 3], courses_definition)
+        self.assertEqual(
+            list([int(c["id"]) for c in content["objects"]]),
+            self.get_expected_courses(courses_definition, list(COURSE_RUNS)),
+        )
 
     def test_query_courses_text_language_analyzer(self, *_):
         """

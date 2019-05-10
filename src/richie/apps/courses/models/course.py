@@ -25,6 +25,7 @@ from ...core.models import BasePageExtension, PagePluginMixin
 from ..defaults import COURSERUNS_PAGE, COURSES_PAGE
 from .category import Category
 from .organization import Organization
+from .person import Person
 
 MAX_DATE = datetime(MAXYEAR, 12, 31, tzinfo=pytz.utc)
 
@@ -142,6 +143,29 @@ class Course(BasePageExtension):
         return "{model}: {title}".format(
             model=self._meta.verbose_name.title(),
             title=self.extended_object.get_title(),
+        )
+
+    def get_persons(self):
+        """
+        Return the persons linked to the course via a person plugin in the
+        placeholder `course_team` on the course detail page, ranked by their
+        `position`.
+        """
+        selector = "extended_object__person_plugins__cmsplugin_ptr__placeholder"
+        # pylint: disable=no-member
+        filter_dict = {
+            "{:s}__page".format(selector): self.extended_object,
+            "{:s}__slot".format(selector): "course_team",
+        }
+        # For a public course, we must filter out persons that are not published in
+        # any language
+        if self.extended_object.publisher_is_draft is False:
+            filter_dict["extended_object__title_set__published"] = True
+
+        return (
+            Person.objects.filter(**filter_dict)
+            .select_related("extended_object")
+            .distinct()
         )
 
     def get_organizations(self):

@@ -210,6 +210,14 @@ class CourseSearchFormTestCase(TestCase):
                                             "type": "cross_fields",
                                         }
                                     },
+                                    {
+                                        "multi_match": {
+                                            "boost": 0.05,
+                                            "fields": ["persons_names.*"],
+                                            "query": "some phrase " "terms",
+                                            "type": "cross_fields",
+                                        }
+                                    },
                                 ]
                             }
                         }

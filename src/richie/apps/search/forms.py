@@ -221,6 +221,18 @@ class CourseSearchForm(SearchForm):
                                             "type": "cross_fields",
                                         }
                                     },
+                                    {
+                                        "multi_match": {
+                                            "boost": getattr(
+                                                settings,
+                                                "RICHIE_RELATED_CONTENT_BOOST",
+                                                RELATED_CONTENT_BOOST,
+                                            ),
+                                            "fields": ["persons_names.*"],
+                                            "query": full_text,
+                                            "type": "cross_fields",
+                                        }
+                                    },
                                 ]
                             }
                         }

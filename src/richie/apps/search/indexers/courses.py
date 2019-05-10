@@ -48,10 +48,18 @@ class CoursesIndexer:
             # Keywords
             "categories": {"type": "keyword"},
             "organizations": {"type": "keyword"},
+            "persons": {"type": "keyword"},
             # Searchable
-            # description, title are handled my `MULTILINGUAL_TEXT`
+            # description, title, category names & organization names are handled
+            # by `MULTILINGUAL_TEXT`
             **{
                 "complete.{:s}".format(lang): {"type": "completion"}
+                for lang, _ in settings.LANGUAGES
+            },
+            # `persons_names` cannot be handled by `MULTILINGUAL_TEXT` because language
+            # analyzers fail on people's names.
+            **{
+                "persons_names.{lang}": {"type": "text", "analyzer": "simple"}
                 for lang, _ in settings.LANGUAGES
             },
             "is_new": {"type": "boolean"},
@@ -405,6 +413,20 @@ class CoursesIndexer:
             .distinct()
         )
 
+        # Prepare persons, making sure we get title information for persons
+        # in the same query
+        persons = (
+            course.get_persons()
+            .prefetch_related(
+                Prefetch(
+                    "extended_object__title_set",
+                    to_attr="published_titles",
+                    queryset=Title.objects.filter(published=True),
+                )
+            )
+            .distinct()
+        )
+
         # Prepare course runs
         # Ordering them by their `end` date is important to optimize sorting and other
         # computations that require looping on the course runs
@@ -471,6 +493,23 @@ class CoursesIndexer:
                     title
                     for organization in organizations
                     for title in organization.extended_object.published_titles
+                ],
+                {},
+            ),
+            "persons": [
+                str(person.public_extension.extended_object_id) for person in persons
+            ],
+            "persons_names": reduce(
+                lambda acc, title: {
+                    **acc,
+                    title.language: acc[title.language] + [title.title]
+                    if acc.get(title.language)
+                    else [title.title],
+                },
+                [
+                    title
+                    for person in persons
+                    for title in person.extended_object.published_titles
                 ],
                 {},
             ),

@@ -10,6 +10,7 @@ from richie.apps.courses.factories import (
     CourseFactory,
     CourseRunFactory,
     OrganizationFactory,
+    PersonFactory,
 )
 from richie.apps.courses.models import CourseRun
 
@@ -128,6 +129,35 @@ class CourseModelsTestCase(TestCase):
         self.assertEqual(
             course.public_extension.get_main_organization(), published_organizations[0]
         )
+
+    def test_models_course_get_persons_empty(self):
+        """
+        For a course not linked to any person the method `get_persons` should
+        return an empty query.
+        """
+        course = CourseFactory(should_publish=True)
+        self.assertFalse(course.get_persons().exists())
+        self.assertFalse(course.public_extension.get_persons().exists())
+
+    def test_models_course_get_persons(self):
+        """
+        The `get_persons` method should return all persons linked to a course and
+        should respect publication status.
+        """
+        # The 2 first persons are grouped in one variable name and will be linked to the
+        # course in the following, the third person will not be linked so we can check that
+        # only the persons linked to the course are retrieved (its name starts with `_`
+        # because it is not used and only here for unpacking purposes)
+        *draft_persons, _other_draft = PersonFactory.create_batch(3)
+        *published_persons, _other_public = PersonFactory.create_batch(
+            3, should_publish=True
+        )
+        course = CourseFactory(
+            fill_team=draft_persons + published_persons, should_publish=True
+        )
+
+        self.assertEqual(list(course.get_persons()), draft_persons + published_persons)
+        self.assertEqual(list(course.public_extension.get_persons()), published_persons)
 
     def test_models_course_get_course_runs_empty(self):
         """
