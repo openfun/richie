@@ -216,6 +216,27 @@ class CategoryCMSWizardTestCase(CMSTestCase):
             ["Ensure this value has at most 200 characters (it has 201)."],
         )
 
+    def test_cms_wizards_category_submit_form_invalid_slug(self):
+        """Trying to submit a slug that is not valid should raise a 400 exception."""
+        # A parent page should pre-exist
+        parent_page = create_page(
+            "Categories",
+            "richie/single_column.html",
+            "en",
+            reverse_id=Category.ROOT_REVERSE_ID,
+        )
+
+        # Submit an invalid slug
+        data = {"title": "my title", "slug": "invalid slug"}
+
+        form = CategoryWizardForm(data=data)
+        form.page = parent_page
+        self.assertFalse(form.is_valid())
+        self.assertEqual(
+            form.errors["slug"][0],
+            "Enter a valid 'slug' consisting of letters, numbers, underscores or hyphens.",
+        )
+
     def test_cms_wizards_category_submit_form_slug_duplicate(self):
         """
         Trying to create a category with a slug that would lead to a duplicate path should
