@@ -44,9 +44,27 @@
 </div>
 {% endif %}
 
-{% if page.publisher_is_draft or not page|is_empty_placeholder:"course_information" %}
-<div class="course-detail__content__row course-detail__content__information">
-  {% page_placeholder "course_information" page %}
+{% if page.publisher_is_draft or not page|is_empty_placeholder:"course_assessment" %}
+<div class="course-detail__content__row course-detail__content__assessment">
+  <h2 class="course-detail__content__row__title">{% trans 'Assessment and certification' %}</h2>
+  {% page_placeholder "course_assessment" page or %}
+    <p class="course-detail__content__assessment__placeholder">
+      {% trans "How is progress evaluated and/or certified?" %}
+    </p>
+  {% endpage_placeholder %}
+</div>
+{% endif %}
+
+{% if page.publisher_is_draft or not page|is_empty_placeholder:"course_organizations" %}
+<div class="course-detail__content__row course-detail__content__organizations">
+  <h2 class="course-detail__content__row__title course-detail__content__team__title">
+    {% trans 'Organizations' %}
+  </h2>
+  {% page_placeholder "course_organizations" page or %}
+    <p class="course-detail__content__organizations__placeholder">
+      {% trans "What are the organizations publishing this course?" %}
+    </p>
+  {% endpage_placeholder %}
 </div>
 {% endif %}
 
@@ -63,24 +81,9 @@
 </div>
 {% endif %}
 
-{% if page.publisher_is_draft or not page|is_empty_placeholder:"course_organizations" %}
-<div class="course-detail__content__row course-detail__content__organizations">
-  {% page_placeholder "course_organizations" page or %}
-    <p class="course-detail__content__organizations__placeholder">
-      {% trans "What are the organizations publishing this course?" %}
-    </p>
-  {% endpage_placeholder %}
-</div>
-{% endif %}
-
-{% if page.publisher_is_draft or not page|is_empty_placeholder:"course_assessment" %}
-<div class="course-detail__content__row course-detail__content__assessment">
-  <h2 class="course-detail__content__row__title">{% trans 'Assessment and certification' %}</h2>
-  {% page_placeholder "course_assessment" page or %}
-    <p class="course-detail__content__assessment__placeholder">
-      {% trans "How is progress evaluated and/or certified?" %}
-    </p>
-  {% endpage_placeholder %}
+{% if page.publisher_is_draft or not page|is_empty_placeholder:"course_information" %}
+<div class="course-detail__content__row course-detail__content__information">
+  {% page_placeholder "course_information" page %}
 </div>
 {% endif %}
 

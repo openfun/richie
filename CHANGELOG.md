@@ -16,6 +16,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Change the order of placeholders on the course page following feedback from
+  our support team,
 - Simplify the Docker development stack to have a single `Dockerfile` and
   docker-compose configuration for testing either with MySQL or PostgreSQL
   database backend
