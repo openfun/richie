@@ -2,6 +2,7 @@
 CMS Wizard to add a course page
 """
 from django import forms
+from django.core import validators
 from django.core.exceptions import PermissionDenied
 from django.template.defaultfilters import slugify
 from django.utils.functional import cached_property
@@ -96,6 +97,7 @@ class BaseWizardForm(forms.Form):
         max_length=200,  # Should be less than 255, the "max_length" of a Page's "path" field
         required=False,
         widget=SlugWidget(),
+        validators=[validators.validate_slug],
         label=_("Page slug"),
         help_text=_("Slug of the page in current language"),
     )

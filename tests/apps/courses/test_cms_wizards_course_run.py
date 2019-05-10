@@ -246,6 +246,25 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         # Snapshot was not request and should not have been triggered
         self.assertFalse(mock_snapshot.called)
 
+    def test_cms_wizards_course_run_submit_form_invalid_slug(self, mock_snapshot):
+        """Trying to submit a slug that is not valid should raise a 400 exception."""
+        # A course should pre-exist
+        course = CourseFactory()
+
+        # Submit an invalid slug
+        data = {"title": "my title", "slug": "invalid slug"}
+
+        form = CourseRunWizardForm(data=data)
+        form.page = course.extended_object
+        self.assertFalse(form.is_valid())
+        self.assertEqual(
+            form.errors["slug"][0],
+            "Enter a valid 'slug' consisting of letters, numbers, underscores or hyphens.",
+        )
+
+        # Snapshot was not request and should not have been triggered
+        self.assertFalse(mock_snapshot.called)
+
     def test_cms_wizards_course_run_submit_form_slug_duplicate(self, mock_snapshot):
         """
         Trying to create a course_run with a slug that would lead to a duplicate path should
