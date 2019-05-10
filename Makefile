@@ -8,10 +8,28 @@
 # PLEASE DO NOT USE IT FOR YOUR CI/PRODUCTION/WHATEVER...
 #
 # /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\ /!\
+#
+# Note to developpers:
+#
+# While editing this file, please respect the following statements:
+#
+# 1. Every variable should be defined in the ad hoc VARIABLES section with a
+#    relevant subsection
+# 2. Every new rule should be defined in the ad hoc RULES section with a
+#    relevant subsection depending on the targeted service
+# 3. Rules should be sorted alphabetically within their section
+# 4. When a rule has multiple dependencies, you should:
+#    - duplicate the rule name to add the help string (if required)
+#    - write one dependency per line to increase readability and diffs
+# 5. .PHONY rule statement should be written after the corresponding rule
 
-# -- Docker
+# ==============================================================================
+# VARIABLES
 
-# Get the current user ID to use for docker run and docker exec commands
+# -- Database
+# Database engine switch: if the DB_HOST=mysql environment variable is defined,
+# we'll use the mysql docker-compose service as a database backend instead of
+# postgresql (default).
 ifeq ($(DB_HOST), mysql)
   DB_PORT            = 3306
 else
@@ -19,6 +37,8 @@ else
   DB_PORT            = 5432
 endif
 
+# -- Docker
+# Get the current user ID to use for docker run and docker exec commands
 DOCKER_UID           = $(shell id -u)
 DOCKER_GID           = $(shell id -g)
 DOCKER_USER          = $(DOCKER_UID):$(DOCKER_GID)
@@ -33,21 +53,218 @@ COMPOSE_TEST_RUN     = $(COMPOSE) run --rm -e DJANGO_CONFIGURATION=Test
 COMPOSE_TEST_RUN_APP = $(COMPOSE_TEST_RUN) app
 
 # -- Node
-
-# We must run node with a /home because yarn tries to write to ~/.yarnrc. If the ID of our host
-# user (with which we run the container) does not exist in the container (e.g. 1000 exists but
-# 1009 does not exist by default), then yarn will try to write to "/.yarnrc" at the root of the
-# system and will fail with a permission error.
+# We must run node with a /home because yarn tries to write to ~/.yarnrc. If the
+# ID of our host user (with which we run the container) does not exist in the
+# container (e.g. 1000 exists but 1009 does not exist by default), then yarn
+# will try to write to "/.yarnrc" at the root of the system and will fail with a
+# permission error.
 COMPOSE_RUN_NODE     = $(COMPOSE_RUN) -e HOME="/tmp" node
 YARN                 = $(COMPOSE_RUN_NODE) yarn
 
 # -- Django
-
 MANAGE               = $(COMPOSE_RUN_APP) dockerize -wait tcp://$(DB_HOST):$(DB_PORT) -timeout 60s python sandbox/manage.py
 
-# -- Rules
+# ==============================================================================
+# RULES
 
 default: help
+
+# -- Project
+bootstrap: ## install development dependencies
+bootstrap: \
+  env.d/development/crowdin \
+  data/media/.keep \
+  data/static/.keep \
+  build-front \
+  build \
+  run \
+  migrate
+.PHONY: bootstrap
+
+# -- Docker/compose
+build: ## build the app container
+	@$(COMPOSE) build app
+.PHONY: build
+
+down: ## remove stack (warning: it removes the database container)
+	@$(COMPOSE) build app
+.PHONY: down
+
+logs: ## display app logs (follow mode)
+	@$(COMPOSE) logs -f app
+.PHONY: logs
+
+run: ## start the development server
+	@$(COMPOSE) up -d app
+.PHONY: run
+
+status: ## an alias for "docker-compose ps"
+	@$(COMPOSE) ps
+.PHONY: status
+
+stop: ## stop the development server
+	@$(COMPOSE) stop
+.PHONY: stop
+
+# -- Front-end
+build-front: ## build front-end application
+build-front: \
+  install-front \
+  build-ts \
+  build-sass
+.PHONY: build-front
+
+build-sass: ## build Sass files to CSS
+	@$(YARN) sass
+.PHONY: build-sass
+
+build-ts: ## build TypeScript application
+	@$(YARN) build
+.PHONY: build-ts
+
+install-front: ## install front-end dependencies
+	@$(YARN) install
+.PHONY: install-front
+
+lint-front: ## run all front-end "linters"
+lint-front: \
+  lint-front-tslint \
+  lint-front-prettier
+.PHONY: lint-front
+
+lint-front-prettier: ## run prettier over js/jsx/json/ts/tsx files -- beware! overwrites files
+	@$(YARN) prettier-write
+.PHONY: lint-front-prettier
+
+lint-front-tslint: ## lint TypeScript sources
+	@$(YARN) lint
+.PHONY: lint-front-tslint
+
+test-front: ## run front-end tests
+	@$(YARN) test --runInBand
+.PHONY: test-front
+
+watch-sass: ## watch changes in Sass files
+	@$(YARN) watch-sass
+.PHONY: watch-sass
+
+watch-ts: ## watch changes in TypeScript files
+	@$(YARN) build --watch
+.PHONY: watch-ts
+
+# -- Back-end
+compilemessages: ## compile the gettext files
+	@$(COMPOSE_RUN) -w /app/src/richie app python /app/sandbox/manage.py compilemessages
+.PHONY: compilemessages
+
+demo-site: ## create a demo site
+	@$(MANAGE) flush
+	@$(MANAGE) create_demo_site
+	@${MAKE} search-index
+.PHONY: demo-site
+
+# Nota bene: Black should come after isort just in case they don't agree...
+lint-back: ## lint back-end python sources
+lint-back: \
+  lint-back-isort \
+  lint-back-black \
+  lint-back-flake8 \
+  lint-back-pylint
+.PHONY: lint-back
+
+lint-back-black: ## lint back-end python sources with black
+	@echo 'lint:black started…'
+	@$(COMPOSE_TEST_RUN_APP) black src/richie/apps src/richie/plugins sandbox tests
+.PHONY: lint-back-black
+
+lint-back-flake8: ## lint back-end python sources with flake8
+	@echo 'lint:flake8 started…'
+	@$(COMPOSE_TEST_RUN_APP) flake8
+.PHONY: lint-back-flake8
+
+lint-back-isort: ## automatically re-arrange python imports in back-end code base
+	@echo 'lint:isort started…'
+	@$(COMPOSE_TEST_RUN_APP) isort --recursive --atomic .
+.PHONY: lint-back-isort
+
+lint-back-pylint: ## lint back-end python sources with pylint
+	@echo 'lint:pylint started…'
+	@$(COMPOSE_TEST_RUN_APP) pylint src/richie/apps src/richie/plugins sandbox tests
+.PHONY: lint-back-pylint
+
+messages: ## create the .po files used for i18n
+	@$(COMPOSE_RUN) -w /app/src/richie app python /app/sandbox/manage.py makemessages --keep-pot
+.PHONY: messages
+
+migrate: ## perform database migrations
+	@$(MANAGE) migrate
+.PHONY: migrate
+
+search-index: ## (re)generate the Elasticsearch index
+	@$(MANAGE) bootstrap_elasticsearch
+.PHONY: search-index
+
+superuser: ## create a DjangoCMS superuser
+	@$(MANAGE) createsuperuser
+.PHONY: superuser
+
+test-back: ## run back-end tests
+	@DB_PORT=$(DB_PORT) bin/pytest
+.PHONY: test-back
+
+# -- Internationalization
+crowdin-download: ## download translated message from Crowdin
+	@$(COMPOSE_RUN_CROWDIN) download translations
+.PHONY: crowdin-download
+
+crowdin-upload: ## upload source translations to Crowdin
+	@$(COMPOSE_RUN_CROWDIN) upload sources
+.PHONY: crowdin-upload
+
+i18n-compile: ## compile translated messages to be used by all applications
+i18n-compile: \
+  i18n-compile-back \
+  i18n-compile-front
+.PHONY: i18n-compile
+
+i18n-compile-back:
+	@$(COMPOSE_RUN) -w /app/src/richie app python /app/sandbox/manage.py compilemessages
+.PHONY: i18n-compile-back
+
+i18n-compile-front:
+	@$(YARN) generate-translations
+.PHONY: i18n-compile-front
+
+i18n-download-and-compile: ## download all translated messages and compile them to be used by all applications
+i18n-download-and-compile: \
+  crowdin-download \
+  i18n-compile
+.PHONY: i18n-download-and-compile
+
+i18n-generate: ## generate source translations files for all applications
+i18n-generate: \
+  i18n-generate-back \
+  i18n-generate-front ## generate source translations files for all applications
+.PHONY: i18n-generate
+
+i18n-generate-and-upload: ## generate source translations for all applications and upload then to crowdin
+i18n-generate-and-upload: \
+  i18n-generate \
+  crowdin-upload
+.PHONY: i18n-generate-and-upload
+
+i18n-generate-back:
+	@$(COMPOSE_RUN) -w /app/src/richie app python /app/sandbox/manage.py makemessages --ignore "venv/**/*" --keep-pot
+.PHONY: i18n-generate-back
+
+i18n-generate-front: build-ts
+	@$(YARN) generate-l10n-template
+.PHONY: i18n-generate-front
+
+# -- Misc
+clean: ## restore repository state as it was freshly cloned
+	git clean -idx
+.PHONY: clean
 
 env.d/development/crowdin:
 	cp env.d/development/crowdin.dist env.d/development/crowdin
@@ -62,156 +279,6 @@ data/static/.keep:
 	@mkdir -p data/static
 	@touch data/static/.keep
 
-bootstrap: env.d/development/crowdin data/media/.keep data/static/.keep build-front build run migrate ## install development dependencies
-.PHONY: bootstrap
-
-build-sass: ## build Sass files to CSS
-	@$(YARN) sass
-.PHONY: build-sass
-
-build-front: ## build front-end application
-	@$(YARN) install;
-	${MAKE} build-ts;
-	${MAKE} build-sass;
-.PHONY: build-front
-
-build-ts: ## build TypeScript application
-	@$(YARN) build
-.PHONY: build-ts
-
-clean: ## restore repository state as it was freshly cloned
-	git clean -idx
-
-compilemessages: ## compile the gettext files
-	@$(COMPOSE_RUN) -w /app/src/richie app python /app/sandbox/manage.py compilemessages
-
-demo-site:  ## create a demo site
-	@$(MANAGE) flush
-	@$(MANAGE) create_demo_site
-	@${MAKE} search-index;
-.PHONY: demo-site
-
-search-index:  ## (re)generate the Elasticsearch index
-	@$(MANAGE) bootstrap_elasticsearch
-.PHONY: search-index
-
-lint-back: lint-back-isort  lint-back-black lint-back-flake8 lint-back-pylint ## lint back-end python sources
-.PHONY: lint-back # black should come after isort just in case they don't agree...
-
-lint-back-black: ## lint back-end python sources with black
-	@echo 'lint:black started…';
-	@$(COMPOSE_TEST_RUN_APP) black src/richie/apps src/richie/plugins sandbox tests;
-.PHONY: lint-back-black
-
-lint-back-flake8: ## lint back-end python sources with flake8
-	@echo 'lint:flake8 started…';
-	@$(COMPOSE_TEST_RUN_APP) flake8;
-.PHONY: lint-back-flake8
-
-lint-back-isort: ## automatically re-arrange python imports in back-end code base
-	@echo 'lint:isort started…';
-	@$(COMPOSE_TEST_RUN_APP) isort --recursive --atomic .;
-.PHONY: lint-back-isort
-
-lint-back-pylint: ## lint back-end python sources with pylint
-	@echo 'lint:pylint started…';
-	@$(COMPOSE_TEST_RUN_APP) pylint src/richie/apps src/richie/plugins sandbox tests;
-.PHONY: lint-back-pylint
-
-lint-front: lint-front-tslint lint-front-prettier ## run both front-end "linters" prettier & tslint
-.PHONY: lint-front
-
-lint-front-tslint: ## lint TypeScript sources
-	@$(YARN) lint
-.PHONY: lint-front-tslint
-
-lint-front-prettier: ## run prettier over js/jsx/json/ts/tsx files -- beware! overwrites files
-	@$(YARN) prettier-write
-.PHONY: lint-front-prettier
-
-logs: ## get development logs
-	@$(COMPOSE) logs -f
-.PHONY: logs
-
-messages: ## create the .po files used for i18n
-	@$(COMPOSE_RUN) -w /app/src/richie app python /app/sandbox/manage.py makemessages --keep-pot
-
-migrate:  ## perform database migrations
-	@$(MANAGE) migrate
-.PHONY: migrate
-
-build: ## build the app container
-	@$(COMPOSE) build app
-.PHONY: build
-
-run: ## start the development server
-	@$(COMPOSE) up -d app
-.PHONY: run
-
-stop: ## stop the development server
-	@$(COMPOSE) stop
-.PHONY: stop
-
-superuser: ## create a DjangoCMS superuser
-	@$(MANAGE) createsuperuser
-.PHONY: superuser
-
-test-back: ## run back-end tests
-	@DB_PORT=$(DB_PORT) bin/pytest
-.PHONY: test-back
-
-test-front: ## run front-end tests
-	@$(YARN) test --runInBand
-.PHONY: test-front
-
-watch-sass: ## watch changes in Sass files
-	@$(YARN) watch-sass
-.PHONY: watch-sass
-
-watch-ts: ## watch changes in TypeScript files
-	@$(YARN) build --watch
-.PHONY: watch-ts
-
 help:
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 .PHONY: help
-
-###########################################
-# Translations tasks
-
-.PHONY: i18n-generate
-i18n-generate: i18n-generate-back i18n-generate-front ## Generate source translations files for all applications
-
-.PHONY: i18n-compile
-i18n-compile: i18n-compile-back i18n-compile-front ## Compile translated messages to be used by all applications
-
-.PHONY: i18n-generate-front
-i18n-generate-front:
-	@$(YARN) build
-	@$(YARN) generate-l10n-template
-
-.PHONY: i18n-compile-front
-i18n-compile-front:
-	@$(YARN) generate-translations
-
-.PHONY: i18n-generate-back
-i18n-generate-back:
-	@$(COMPOSE_RUN) -w /app/src/richie app python /app/sandbox/manage.py makemessages --ignore "venv/**/*" --keep-pot
-
-.PHONY: i18n-compile-back
-i18n-compile-back:
-	@$(COMPOSE_RUN) -w /app/src/richie app python /app/sandbox/manage.py compilemessages
-
-.PHONY: crowdin-upload
-crowdin-upload: ## Upload source translations to Crowdin
-	@$(COMPOSE_RUN_CROWDIN) upload sources
-
-.PHONY: crowdin-download
-crowdin-download: ## Download translated message from Crowdin
-	@$(COMPOSE_RUN_CROWDIN) download translations
-
-.PHONY: i18n-generate-and-upload
-i18n-generate-and-upload: i18n-generate crowdin-upload ## Generate source translations for all applications and upload then to crowdin
-
-.PHONY: i18n-download-and-compile
-i18n-download-and-compile: crowdin-download i18n-compile ## Download all translated messages and compile them to be used by all applications

@@ -19,6 +19,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Simplify the Docker development stack to have a single `Dockerfile` and
   docker-compose configuration for testing either with MySQL or PostgreSQL
   database backend
+- Standardize the project's `Makefile` to make it more easily maintainable by
+  our peers
 
 ### Removed
 
