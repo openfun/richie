@@ -130,7 +130,7 @@ def create_demo_site():
             ),
             fill_organizations=person_organizations,
             fill_portrait=pick_image("portrait"),
-            fill_resume=True,
+            fill_bio=True,
             should_publish=True,
         )
         persons.append(person)

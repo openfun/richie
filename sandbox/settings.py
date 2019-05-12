@@ -390,8 +390,8 @@ class Base(DRFMixin, Configuration):
             "plugins": ["PicturePlugin"],
             "limits": {"PicturePlugin": 1},
         },
-        "courses/cms/person_detail.html resume": {
-            "name": _("Resume"),
+        "courses/cms/person_detail.html bio": {
+            "name": _("Bio"),
             "plugins": ["CKEditorPlugin"],
             "limits": {"CKEditorPlugin": 1},
         },

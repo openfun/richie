@@ -71,14 +71,12 @@ class PersonPluginTestCase(CMSTestCase):
             "fr",
             **{"picture": image, "attributes": {"alt": "description du portrait"}}
         )
-        # Add resume to related placeholder
-        resume_placeholder = person_page.placeholders.get(slot="resume")
-        resume_en = add_plugin(
-            resume_placeholder, PlainTextPlugin, "en", **{"body": "public resume"}
+        # Add bio to related placeholder
+        bio_placeholder = person_page.placeholders.get(slot="bio")
+        bio_en = add_plugin(
+            bio_placeholder, PlainTextPlugin, "en", **{"body": "public bio"}
         )
-        add_plugin(
-            resume_placeholder, PlainTextPlugin, "fr", **{"body": "résumé public"}
-        )
+        add_plugin(bio_placeholder, PlainTextPlugin, "fr", **{"body": "résumé public"})
 
         # Create a page to add the plugin to
         page = create_i18n_page({"en": "A page", "fr": "Une page"})
@@ -108,8 +106,8 @@ class PersonPluginTestCase(CMSTestCase):
         # Now modify the person to have a draft different from the public version
         person.first_name = "Jiji"
         person.save()
-        resume_en.body = "draft resume"
-        resume_en.save()
+        bio_en.body = "draft bio"
+        bio_en.save()
 
         # Publishing the page again should make the plugin public
         page.publish("en")
@@ -139,13 +137,13 @@ class PersonPluginTestCase(CMSTestCase):
         # Person's portrait and its properties should be present
         # pylint: disable=no-member
         self.assertContains(response, image.file.name)
-        # Short resume should be present
+        # Short bio should be present
         self.assertContains(
             response,
-            '<div class="person-glimpse__content__wrapper__resume">public resume</div>',
+            '<div class="person-glimpse__content__wrapper__bio">public bio</div>',
             html=True,
         )
-        self.assertNotContains(response, "draft resume")
+        self.assertNotContains(response, "draft bio")
 
         # Same checks in French
         url = page.get_absolute_url(language="fr")
@@ -161,7 +159,7 @@ class PersonPluginTestCase(CMSTestCase):
         self.assertContains(response, image.file.name)
         self.assertContains(
             response,
-            '<div class="person-glimpse__content__wrapper__resume">résumé public</div>',
+            '<div class="person-glimpse__content__wrapper__bio">résumé public</div>',
             html=True,
         )
 
@@ -176,10 +174,10 @@ class PersonPluginTestCase(CMSTestCase):
         person = PersonFactory(first_name="Meimei")
         person_page = person.extended_object
 
-        # Add resume to related placeholder
-        resume_placeholder = person_page.placeholders.get(slot="resume")
-        resume_en = add_plugin(
-            resume_placeholder, PlainTextPlugin, "en", **{"body": "public resume"}
+        # Add bio to related placeholder
+        bio_placeholder = person_page.placeholders.get(slot="bio")
+        bio_en = add_plugin(
+            bio_placeholder, PlainTextPlugin, "en", **{"body": "public bio"}
         )
 
         # Create a page to add the plugin to
@@ -195,17 +193,17 @@ class PersonPluginTestCase(CMSTestCase):
         # The person plugin should still be visible on the draft page
         response = self.client.get(url)
         self.assertContains(response, "Meimei")
-        self.assertContains(response, "public resume")
+        self.assertContains(response, "public bio")
 
         # Now modify the person to have a draft different from the public version
         person.first_name = "Jiji"
         person.save()
-        resume_en.body = "draft resume"
-        resume_en.save()
+        bio_en.body = "draft bio"
+        bio_en.save()
 
         # The draft version of the person plugin should now be visible
         response = self.client.get(url)
         self.assertContains(response, "Jiji")
-        self.assertContains(response, "draft resume")
+        self.assertContains(response, "draft bio")
         self.assertNotContains(response, "Meimei")
-        self.assertNotContains(response, "public resume")
+        self.assertNotContains(response, "public bio")
