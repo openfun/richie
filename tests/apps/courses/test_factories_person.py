@@ -36,20 +36,20 @@ class PersonFactoryTestCase(TestCase):
                 ),
             )
 
-    def test_factories_person_resume(self):
+    def test_factories_person_bio(self):
         """
-        PersonFactory should be able to generate plugins with a realistic resume for
+        PersonFactory should be able to generate plugins with a realistic bio for
         several languages.
         """
-        person = PersonFactory(page_languages=["fr", "en"], fill_resume=True)
+        person = PersonFactory(page_languages=["fr", "en"], fill_bio=True)
 
-        # Check that the resume plugins were created as expected
-        resume = person.extended_object.placeholders.get(slot="resume")
-        self.assertEqual(resume.cmsplugin_set.count(), 2)
+        # Check that the bio plugins were created as expected
+        bio = person.extended_object.placeholders.get(slot="bio")
+        self.assertEqual(bio.cmsplugin_set.count(), 2)
 
-        # The resume plugins should contain paragraphs
+        # The bio plugins should contain paragraphs
         for language in ["fr", "en"]:
-            resume_plugin = resume.cmsplugin_set.get(
+            bio_plugin = bio.cmsplugin_set.get(
                 plugin_type="CKEditorPlugin", language=language
             )
-            self.assertIn("<p>", resume_plugin.simple_text_ckeditor_simpletext.body)
+            self.assertIn("<p>", bio_plugin.simple_text_ckeditor_simpletext.body)

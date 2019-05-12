@@ -750,14 +750,14 @@ class PersonFactory(PageExtensionDjangoModelFactory):
 
     @factory.post_generation
     # pylint: disable=unused-argument
-    def fill_resume(self, create, extracted, **kwargs):
+    def fill_bio(self, create, extracted, **kwargs):
         """
-        Add a text plugin for resume with a long random text
+        Add a text plugin for bio with a long random text
         """
         if create and extracted:
             create_text_plugin(
                 self.extended_object,
-                "resume",
+                "bio",
                 nb_paragraphs=1,
                 languages=self.extended_object.get_languages(),
             )

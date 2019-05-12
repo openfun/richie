@@ -49,7 +49,7 @@ class PersonCMSTestCase(CMSTestCase):
         person = PersonFactory(
             page_title="My page title",
             fill_portrait=True,
-            fill_resume=True,
+            fill_bio=True,
             fill_categories=[published_category, unpublished_category],
             fill_organizations=[published_organization, unpublished_organization],
         )
@@ -156,7 +156,7 @@ class PersonCMSTestCase(CMSTestCase):
         person = PersonFactory(
             page_title="My page title",
             fill_portrait=True,
-            fill_resume=True,
+            fill_bio=True,
             fill_categories=[published_category, unpublished_category],
             fill_organizations=[published_organization, unpublished_organization],
         )
