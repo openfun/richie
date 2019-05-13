@@ -22,6 +22,7 @@ from filer.fields.image import FilerImageField
 from ...core.defaults import ALL_LANGUAGES
 from ...core.fields.multiselect import MultiSelectField
 from ...core.models import BasePageExtension, PagePluginMixin
+from ..defaults import COURSERUNS_PAGE, COURSES_PAGE
 from .category import Category
 from .organization import Organization
 
@@ -130,8 +131,7 @@ class Course(BasePageExtension):
     page that presents the course.
     """
 
-    ROOT_REVERSE_ID = "courses"
-    TEMPLATE_DETAIL = "courses/cms/course_detail.html"
+    PAGE = COURSES_PAGE
 
     class Meta:
         db_table = "richie_course"
@@ -338,7 +338,7 @@ class CourseRun(BasePageExtension):
         help_text=_("The list of languages in which the course content is available."),
     )
 
-    TEMPLATE_DETAIL = "courses/cms/course_run_detail.html"
+    PAGE = COURSERUNS_PAGE
 
     class Meta:
         db_table = "richie_course_run"

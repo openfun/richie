@@ -157,7 +157,7 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
             "p" * 100,
             "richie/single_column.html",
             "en",
-            reverse_id=Course.ROOT_REVERSE_ID,
+            reverse_id=Course.PAGE["reverse_id"],
         )
         course = CourseFactory(page_title="c" * 100, page_parent=root_page)
 

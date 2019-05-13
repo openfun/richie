@@ -64,7 +64,7 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
             "News",
             "richie/single_column.html",
             "en",
-            reverse_id=BlogPost.ROOT_REVERSE_ID,
+            reverse_id=BlogPost.PAGE["reverse_id"],
         )
         # We can submit a form with just the title set
         form = BlogPostWizardForm(data={"title": "My title"})
@@ -90,7 +90,7 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
             "y" * 200,
             "richie/single_column.html",
             "en",
-            reverse_id=BlogPost.ROOT_REVERSE_ID,
+            reverse_id=BlogPost.PAGE["reverse_id"],
         )
 
         # A blogpost with a slug at the limit length should work
@@ -118,7 +118,7 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
             "News",
             "richie/single_column.html",
             "en",
-            reverse_id=BlogPost.ROOT_REVERSE_ID,
+            reverse_id=BlogPost.PAGE["reverse_id"],
         )
 
         # Submit a title at max length
@@ -139,7 +139,7 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
             "News",
             "richie/single_column.html",
             "en",
-            reverse_id=BlogPost.ROOT_REVERSE_ID,
+            reverse_id=BlogPost.PAGE["reverse_id"],
         )
 
         # Submit a title that is too long and a slug that is ok
@@ -162,7 +162,7 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
             "News",
             "richie/single_column.html",
             "en",
-            reverse_id=BlogPost.ROOT_REVERSE_ID,
+            reverse_id=BlogPost.PAGE["reverse_id"],
         )
 
         # Submit a slug that is too long and a title that is ok
@@ -183,7 +183,7 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
             "News",
             "richie/single_column.html",
             "en",
-            reverse_id=BlogPost.ROOT_REVERSE_ID,
+            reverse_id=BlogPost.PAGE["reverse_id"],
         )
 
         # Submit an invalid slug
@@ -206,7 +206,7 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
             "News",
             "richie/single_column.html",
             "en",
-            reverse_id=BlogPost.ROOT_REVERSE_ID,
+            reverse_id=BlogPost.PAGE["reverse_id"],
         )
         # Create an existing page with a known slug
         BlogPostFactory(page_parent=parent_page, page_title="My title")
@@ -228,7 +228,7 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
             form.errors,
             {
                 "slug": [
-                    "You must first create a parent page and set its `reverse_id` to `news`."
+                    "You must first create a parent page and set its `reverse_id` to `blogposts`."
                 ]
             },
         )

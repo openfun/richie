@@ -175,7 +175,7 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
             "Organizations",
             "richie/single_column.html",
             "en",
-            reverse_id=Organization.ROOT_REVERSE_ID,
+            reverse_id=Organization.PAGE["reverse_id"],
         )
 
         # Submit an invalid slug
@@ -198,7 +198,7 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
             "Organizations",
             "richie/single_column.html",
             "en",
-            reverse_id=Organization.ROOT_REVERSE_ID,
+            reverse_id=Organization.PAGE["reverse_id"],
         )
         # Create an existing page with a known slug
         OrganizationFactory(page_parent=parent_page, page_title="My title")
