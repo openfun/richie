@@ -1,6 +1,5 @@
 import fetchMock from 'fetch-mock';
 
-import { modelName } from '../../types/models';
 import { handle } from '../../utils/errors/handle';
 import { getSuggestionsSection } from './getSuggestionsSection';
 
@@ -21,7 +20,7 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
     let suggestionsSection;
     try {
       suggestionsSection = await getSuggestionsSection(
-        modelName.COURSES,
+        'courses',
         { defaultMessage: 'Courses', id: 'coursesHumanName' },
         'some search',
       );
@@ -30,11 +29,11 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
     }
 
     expect(suggestionsSection).toEqual({
-      kind: modelName.COURSES,
+      kind: 'courses',
       message: { defaultMessage: 'Courses', id: 'coursesHumanName' },
       values: [
-        { data: { title: 'Course #1' }, kind: modelName.COURSES },
-        { data: { title: 'Course #2' }, kind: modelName.COURSES },
+        { data: { title: 'Course #1' }, kind: 'courses' },
+        { data: { title: 'Course #2' }, kind: 'courses' },
       ],
     });
   });
@@ -44,7 +43,7 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
       throws: 'Failed to send API request',
     });
     await getSuggestionsSection(
-      modelName.COURSES,
+      'courses',
       { defaultMessage: 'Courses', id: 'coursesHumanName' },
       'some search',
     );
@@ -59,14 +58,12 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
       status: 403,
     });
     await getSuggestionsSection(
-      modelName.COURSES,
+      'courses',
       { defaultMessage: 'Courses', id: 'coursesHumanName' },
       'some search',
     );
     expect(mockHandle).toHaveBeenCalledWith(
-      new Error(
-        'Failed to get list from /api/v1.0/courses/autocomplete/ : 403',
-      ),
+      new Error('Failed to get list from courses autocomplete : 403'),
     );
   });
 
@@ -76,7 +73,7 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
       'not json',
     );
     await getSuggestionsSection(
-      modelName.COURSES,
+      'courses',
       { defaultMessage: 'Courses', id: 'coursesHumanName' },
       'some search',
     );

@@ -5,7 +5,6 @@ import { defineMessages, InjectedIntlProps, injectIntl } from 'react-intl';
 
 import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
 import { APICourseSearchResponse } from '../../types/api';
-import { modelName } from '../../types/models';
 import { Suggestion, SuggestionSection } from '../../types/Suggestion';
 import { commonMessages } from '../../utils/commonMessages';
 import { handle } from '../../utils/errors/handle';
@@ -29,9 +28,7 @@ const messages = defineMessages({
 /**
  * Define the kind of suggestions our `<SearchSuggestField />` component supports.
  */
-type SearchSuggestion = Suggestion<
-  modelName.CATEGORIES | modelName.ORGANIZATIONS
->;
+type SearchSuggestion = Suggestion<'categories' | 'organizations'>;
 
 /**
  * Derive from `SearchSuggestion` the kind of suggestion sections our `<SearchSuggestField />` component supports.
@@ -199,12 +196,12 @@ export const SearchSuggestField = injectIntl(
         sections = (await Promise.all(
           [
             getSuggestionsSection(
-              modelName.ORGANIZATIONS,
+              'organizations',
               commonMessages.organizationsHumanName,
               incomingValue,
             ),
             getSuggestionsSection(
-              modelName.CATEGORIES,
+              'categories',
               commonMessages.categoriesHumanName,
               incomingValue,
             ),
@@ -227,7 +224,7 @@ export const SearchSuggestField = injectIntl(
      * the default section as that section has no title.
      */
     const renderSectionTitle: SearchAutosuggestProps['renderSectionTitle'] = section =>
-      [modelName.CATEGORIES, modelName.ORGANIZATIONS].includes(section.kind) ? (
+      ['categories', 'organizations'].includes(section.kind) ? (
         <span>{intl.formatMessage(section.message)}</span>
       ) : null;
 

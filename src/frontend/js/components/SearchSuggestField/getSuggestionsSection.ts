@@ -2,8 +2,6 @@ import take from 'lodash-es/take';
 import { stringify } from 'query-string';
 import { FormattedMessage } from 'react-intl';
 
-import { API_ENDPOINTS } from '../../settings';
-import { modelName } from '../../types/models';
 import { Suggestion } from '../../types/Suggestion';
 import { handle } from '../../utils/errors/handle';
 
@@ -15,7 +13,7 @@ import { handle } from '../../utils/errors/handle';
  * @param sectionTitleMessage MessageDescriptor for the title of the section that displays the suggestions.
  * @param query The actual payload to run the completion search with.
  */
-export const getSuggestionsSection = async <Kind extends modelName>(
+export const getSuggestionsSection = async <Kind extends string>(
   kind: Kind,
   sectionTitleMessage: FormattedMessage.MessageDescriptor,
   query: string,
@@ -24,7 +22,7 @@ export const getSuggestionsSection = async <Kind extends modelName>(
   let response: Response;
   try {
     response = await fetch(
-      `${API_ENDPOINTS.autocomplete[kind]}?${stringify({ query })}`,
+      `/api/v1.0/${kind}/autocomplete/?${stringify({ query })}`,
       {
         headers: {
           'Content-Type': 'application/json',
@@ -40,9 +38,7 @@ export const getSuggestionsSection = async <Kind extends modelName>(
   if (!response.ok) {
     return handle(
       new Error(
-        `Failed to get list from ${API_ENDPOINTS.autocomplete[kind]} : ${
-          response.status
-        }`,
+        `Failed to get list from ${kind} autocomplete : ${response.status}`,
       ),
     );
   }

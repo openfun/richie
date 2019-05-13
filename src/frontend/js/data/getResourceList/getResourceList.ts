@@ -1,12 +1,11 @@
 import { stringify } from 'query-string';
 
-import { API_ENDPOINTS, API_LIST_DEFAULT_PARAMS } from '../../settings';
+import { API_LIST_DEFAULT_PARAMS } from '../../settings';
 import {
   APICourseSearchResponse,
   APIListRequestParams,
   requestStatus,
 } from '../../types/api';
-import { modelName } from '../../types/models';
 
 export interface GetListSagaSpecifics {
   endpoint: string;
@@ -18,13 +17,11 @@ export type fetchListResponse =
 
 // Wrap fetch to handle params, headers, parsing & sane response handling
 export async function fetchList(
-  resourceName: modelName,
+  kind: string,
   params: APIListRequestParams = API_LIST_DEFAULT_PARAMS,
 ): Promise<fetchListResponse> {
-  const endpoint = API_ENDPOINTS.search[resourceName];
-
   try {
-    const response = await fetch(`${endpoint}?${stringify(params)}`, {
+    const response = await fetch(`/api/v1.0/${kind}/?${stringify(params)}`, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -33,7 +30,7 @@ export async function fetchList(
     if (!response.ok) {
       // Push remote errors to the error channel for consistency
       throw new Error(
-        `Failed to get list from ${endpoint} : ${response.status}.`,
+        `Failed to get list from ${kind} search : ${response.status}.`,
       );
     }
 

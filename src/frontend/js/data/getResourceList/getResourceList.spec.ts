@@ -1,7 +1,6 @@
 import fetchMock from 'fetch-mock';
 
 import { requestStatus } from '../../types/api';
-import { modelName } from '../../types/models';
 import { fetchList } from './getResourceList';
 
 describe('data/getResourceList', () => {
@@ -45,7 +44,7 @@ describe('data/getResourceList', () => {
         JSON.stringify({ objects: [course43, course44] }),
       );
 
-      const response = (await fetchList(modelName.COURSES, {
+      const response = (await fetchList('courses', {
         limit: '2',
         offset: '43',
       })) as any;
@@ -60,7 +59,7 @@ describe('data/getResourceList', () => {
         Promise.reject(new Error('Failed to perform the request')),
       );
 
-      const response = (await fetchList(modelName.COURSES, {
+      const response = (await fetchList('courses', {
         limit: '2',
         offset: '43',
       })) as any;
@@ -72,7 +71,7 @@ describe('data/getResourceList', () => {
     it('rejects with a fetchListResponse containing an error when the API returns an error code', async () => {
       fetchMock.mock('/api/v1.0/courses/?limit=2&offset=43', 404);
 
-      const response = (await fetchList(modelName.COURSES, {
+      const response = (await fetchList('courses', {
         limit: '2',
         offset: '43',
       })) as any;

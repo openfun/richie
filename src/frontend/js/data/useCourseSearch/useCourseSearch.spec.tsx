@@ -2,7 +2,6 @@ import React from 'react';
 import { act, cleanup, render } from 'react-testing-library';
 
 import { APIListRequestParams } from '../../types/api';
-import { modelName } from '../../types/models';
 import { jestMockOf } from '../../utils/types';
 import { fetchList } from '../getResourceList/getResourceList';
 import { useCourseSearch } from './useCourseSearch';
@@ -44,7 +43,7 @@ describe('data/useCourseSearch', () => {
     // Initial pass gets us a null value but issues the call
     expect(getLatestHookValue()).toEqual(null);
     expect(mockFetchList).toHaveBeenCalledTimes(1);
-    expect(mockFetchList).toHaveBeenCalledWith(modelName.COURSES, {
+    expect(mockFetchList).toHaveBeenCalledWith('courses', {
       limit: '999',
       offset: '0',
     });
@@ -67,7 +66,7 @@ describe('data/useCourseSearch', () => {
     // A new request is issued (meanwhile we still return the existing response)
     expect(getLatestHookValue()).toEqual('the response');
     expect(mockFetchList).toHaveBeenCalledTimes(1);
-    expect(mockFetchList).toHaveBeenCalledWith(modelName.COURSES, {
+    expect(mockFetchList).toHaveBeenCalledWith('courses', {
       limit: '999',
       offset: '0',
       organizations: ['43'],
@@ -89,7 +88,7 @@ describe('data/useCourseSearch', () => {
     // Initial pass gets us a null value but issues the call
     expect(getLatestHookValue()).toEqual(null);
     expect(mockFetchList).toHaveBeenCalledTimes(1);
-    expect(mockFetchList).toHaveBeenCalledWith(modelName.COURSES, {
+    expect(mockFetchList).toHaveBeenCalledWith('courses', {
       limit: '999',
       offset: '0',
     });

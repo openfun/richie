@@ -6,7 +6,6 @@ import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useC
 import { useFilterValue } from '../../data/useFilterValue/useFilterValue';
 import { requestStatus } from '../../types/api';
 import { FilterDefinition, FilterValue } from '../../types/filters';
-import { modelName } from '../../types/models';
 import { getMPTTChildrenPathMatcher } from '../../utils/mptt';
 import { useAsyncEffect } from '../../utils/useAsyncEffect';
 import { SearchFilterValueLeaf } from '../SearchFilterValueLeaf/SearchFilterValueLeaf';
@@ -65,7 +64,7 @@ export const SearchFilterValueParent = injectIntl(
     useAsyncEffect(async () => {
       if (showChildren) {
         // Get only the filters & facet counts for the children of the current parent
-        const childrenResponse = await fetchList(modelName.COURSES, {
+        const childrenResponse = await fetchList('courses', {
           ...coursesSearchParams,
           [`${filter.name}_include`]: childrenPathMatch,
           scope: 'filters',

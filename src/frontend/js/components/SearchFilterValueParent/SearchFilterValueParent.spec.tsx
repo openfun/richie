@@ -10,7 +10,6 @@ jest.mock('../../data/getResourceList/getResourceList', () => ({
 
 import { fetchList } from '../../data/getResourceList/getResourceList';
 import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
-import { modelName } from '../../types/models';
 import { jestMockOf } from '../../utils/types';
 import { SearchFilterValueParent } from './SearchFilterValueParent';
 
@@ -180,7 +179,7 @@ describe('<SearchFilterValueParent />', () => {
     getByLabelText((content, _) => content.includes('Modern Literature'));
 
     expect(mockFetchList).toHaveBeenCalledTimes(1);
-    expect(mockFetchList).toHaveBeenLastCalledWith(modelName.COURSES, {
+    expect(mockFetchList).toHaveBeenLastCalledWith('courses', {
       limit: '999',
       offset: '0',
       scope: 'filters',
@@ -209,7 +208,7 @@ describe('<SearchFilterValueParent />', () => {
 
     getByLabelText('Hide child filters');
     expect(mockFetchList).toHaveBeenCalledTimes(2);
-    expect(mockFetchList).toHaveBeenLastCalledWith(modelName.COURSES, {
+    expect(mockFetchList).toHaveBeenLastCalledWith('courses', {
       limit: '999',
       offset: '0',
       scope: 'filters',

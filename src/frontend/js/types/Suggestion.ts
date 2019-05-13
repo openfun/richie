@@ -1,10 +1,5 @@
 import { FormattedMessage } from 'react-intl';
 
-import { CategoryForSuggestion } from './Category';
-import { CourseForSuggestion } from './Course';
-import { modelName } from './models';
-import { OrganizationForSuggestion } from './Organization';
-
 /**
  * A Default suggestion shape for cases where we need one.
  */
@@ -14,42 +9,30 @@ interface DefaultSuggestion {
 }
 
 /**
- * A suggestion shape for Category autocomplete.
+ * A generic suggestion shape for autocomplete. Can be used for categories, organizations, persons, etc.
  */
-interface CategorySuggestion {
-  kind: modelName.CATEGORIES;
-  data: CategoryForSuggestion;
+interface GenericSuggestion {
+  kind: string;
+  data: { id: string; title: string };
 }
 
 /**
  * A suggestion shape for Course autocomplete.
  */
 interface CourseSuggestion {
-  kind: modelName.COURSES;
-  data: CourseForSuggestion;
-}
-
-/**
- * A suggestion shape for Organization autocomplete.
- */
-interface OrganizationSuggestion {
-  kind: modelName.ORGANIZATIONS;
-  data: OrganizationForSuggestion;
+  kind: 'courses';
+  data: { absolute_url: string; id: string; title: string };
 }
 
 /**
  * Utility type that allows a consumer to easily define the kinds of suggestions it supports and
  * get proper typechecking around them.
  */
-export type Suggestion<Kind> = Kind extends modelName.CATEGORIES
-  ? CategorySuggestion
-  : Kind extends modelName.COURSES
+export type Suggestion<Kind extends string> = Kind extends 'courses'
   ? CourseSuggestion
-  : Kind extends modelName.ORGANIZATIONS
-  ? OrganizationSuggestion
   : Kind extends 'default'
   ? DefaultSuggestion
-  : never;
+  : GenericSuggestion;
 
 /**
  * The base shape of a resource suggestion section. Contains a bunch of suggestions and a title.
@@ -58,7 +41,7 @@ export type Suggestion<Kind> = Kind extends modelName.CATEGORIES
  * @message A `react-intl` MessageDescriptor for the title of the section.
  * @values An array that contains all the Suggestion instances for this section.
  */
-interface ResourceSuggestionSection<S extends Suggestion<modelName>> {
+interface ResourceSuggestionSection<S extends Suggestion<string>> {
   kind: S['kind'];
   message: FormattedMessage.MessageDescriptor;
   values: S[];
@@ -83,13 +66,9 @@ interface DefaultSuggestionSection {
  * get proper typechecking around them.
  */
 export type SuggestionSection<
-  S extends Suggestion<modelName | 'default'>
-> = S extends Suggestion<modelName.CATEGORIES>
-  ? ResourceSuggestionSection<Suggestion<modelName.CATEGORIES>>
-  : S extends Suggestion<modelName.COURSES>
-  ? ResourceSuggestionSection<Suggestion<modelName.COURSES>>
-  : S extends Suggestion<modelName.ORGANIZATIONS>
-  ? ResourceSuggestionSection<Suggestion<modelName.ORGANIZATIONS>>
+  S extends Suggestion<string>
+> = S extends Suggestion<'courses'>
+  ? ResourceSuggestionSection<Suggestion<'courses'>>
   : S extends DefaultSuggestion
   ? DefaultSuggestionSection
-  : never;
+  : ResourceSuggestionSection<GenericSuggestion>;

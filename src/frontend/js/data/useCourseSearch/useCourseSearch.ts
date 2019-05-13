@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
 import { APIListRequestParams } from '../../types/api';
-import { modelName } from '../../types/models';
 import { Nullable } from '../../utils/types';
 import { useAsyncEffect } from '../../utils/useAsyncEffect';
 import {
@@ -15,7 +14,7 @@ export const useCourseSearch = (searchParams: APIListRequestParams) => {
   >(null);
 
   useAsyncEffect(async () => {
-    const response = await fetchList(modelName.COURSES, searchParams);
+    const response = await fetchList('courses', searchParams);
     setCourseSearchResponse(response);
   }, [searchParams]);
 
