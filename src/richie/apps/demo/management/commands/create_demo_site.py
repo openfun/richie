@@ -12,7 +12,7 @@ import factory
 from cms.api import add_plugin
 
 from richie.apps.core.factories import image_getter
-from richie.apps.core.helpers import create_text_plugin
+from richie.apps.core.helpers import create_text_plugin, recursive_page_creation
 from richie.apps.courses.factories import (
     VIDEO_SAMPLE_LINKS,
     BlogPostFactory,
@@ -33,10 +33,10 @@ from ...defaults import (
     SINGLECOLUMN_CONTENT,
     SUBJECTS_INFO,
 )
-from ...helpers import create_categories, recursive_page_creation
+from ...helpers import create_categories
 from ...utils import pick_image
 
-logger = logging.getLogger("richie.commands.core.create_demo_site")
+logger = logging.getLogger("richie.commands.demo.create_demo_site")
 
 
 def get_number_of_course_runs():

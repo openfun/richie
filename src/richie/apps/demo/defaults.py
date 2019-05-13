@@ -1,8 +1,6 @@
 """Parameters that define how the demo site will be built."""
 from django.conf import settings
 
-from richie.apps.courses import models
-
 NB_OBJECTS = {
     "courses": 30,
     "course_organizations": 3,
@@ -27,68 +25,48 @@ PAGES_INFO = {
     "home": {
         "title": {"en": "Home", "fr": "Accueil"},
         "in_navigation": False,
-        "kwargs": {"template": "richie/homepage.html"},
+        "is_homepage": True,
+        "template": "richie/homepage.html",
     },
-    "news": {
+    "blogposts": {
         "title": {"en": "News", "fr": "Actualités"},
         "in_navigation": True,
-        "kwargs": {
-            "reverse_id": models.BlogPost.ROOT_REVERSE_ID,
-            "template": "courses/cms/blogpost_list.html",
-        },
+        "template": "courses/cms/blogpost_list.html",
     },
     "courses": {
         "title": {"en": "Courses", "fr": "Cours"},
         "in_navigation": True,
-        "kwargs": {
-            "reverse_id": models.Course.ROOT_REVERSE_ID,
-            "template": "search/search.html",
-        },
+        "template": "search/search.html",
     },
     "categories": {
         "title": {"en": "Categories", "fr": "Catégories"},
         "in_navigation": True,
-        "kwargs": {
-            "reverse_id": models.Category.ROOT_REVERSE_ID,
-            "template": "courses/cms/category_list.html",
-        },
+        "template": "courses/cms/category_list.html",
     },
     "organizations": {
         "title": {"en": "Organizations", "fr": "Etablissements"},
         "in_navigation": True,
-        "kwargs": {
-            "reverse_id": models.Organization.ROOT_REVERSE_ID,
-            "template": "courses/cms/organization_list.html",
-        },
+        "template": "courses/cms/organization_list.html",
     },
     "persons": {
         "title": {"en": "Persons", "fr": "Personnes"},
         "in_navigation": True,
-        "kwargs": {
-            "reverse_id": models.Person.ROOT_REVERSE_ID,
-            "template": "courses/cms/person_list.html",
-        },
-    },
-    "dashboard": {
-        "title": {"en": "Dashboard", "fr": "Tableau de bord"},
-        "in_navigation": False,
-        "cms": False,
-        "kwargs": {"template": "richie/single_column.html"},
+        "template": "courses/cms/person_list.html",
     },
     "annex": {
         "title": {"en": "Annex", "fr": "Annexe"},
         "in_navigation": False,
-        "kwargs": {"template": "richie/single_column.html", "reverse_id": "annex"},
+        "template": "richie/single_column.html",
         "children": {
             "annex__about": {
                 "title": {"en": "About", "fr": "A propos"},
                 "in_navigation": True,
-                "kwargs": {"template": "richie/single_column.html"},
+                "template": "richie/single_column.html",
             }
         },
     },
 }
-PAGES_INFO.update(getattr(settings, "RICHIE_DEMO_PAGES_INFO", {}))
+
 
 LEVELS_INFO = {
     "title": {"en": "Level", "fr": "Niveau"},

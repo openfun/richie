@@ -64,7 +64,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
             "Persons",
             "richie/single_column.html",
             "en",
-            reverse_id=Person.ROOT_REVERSE_ID,
+            reverse_id=Person.PAGE["reverse_id"],
         )
         # create a PersonTitle object
         person_title = PersonTitleFactory()
@@ -99,7 +99,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
             "y" * 200,
             "richie/single_column.html",
             "en",
-            reverse_id=Person.ROOT_REVERSE_ID,
+            reverse_id=Person.PAGE["reverse_id"],
         )
         person_title = PersonTitleFactory()
 
@@ -136,7 +136,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
             "Persons",
             "richie/single_column.html",
             "en",
-            reverse_id=Person.ROOT_REVERSE_ID,
+            reverse_id=Person.PAGE["reverse_id"],
         )
         person_title = PersonTitleFactory()
 
@@ -162,7 +162,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
             "Persons",
             "richie/single_column.html",
             "en",
-            reverse_id=Person.ROOT_REVERSE_ID,
+            reverse_id=Person.PAGE["reverse_id"],
         )
         person_title = PersonTitleFactory()
 
@@ -192,7 +192,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
             "Persons",
             "richie/single_column.html",
             "en",
-            reverse_id=Person.ROOT_REVERSE_ID,
+            reverse_id=Person.PAGE["reverse_id"],
         )
         person_title = PersonTitleFactory()
 
@@ -220,7 +220,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
             "Persons",
             "richie/single_column.html",
             "en",
-            reverse_id=Person.ROOT_REVERSE_ID,
+            reverse_id=Person.PAGE["reverse_id"],
         )
 
         # Submit an invalid slug
@@ -243,7 +243,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
             "Persons",
             "richie/single_column.html",
             "en",
-            reverse_id=Person.ROOT_REVERSE_ID,
+            reverse_id=Person.PAGE["reverse_id"],
         )
         person_title = PersonTitleFactory()
         # Create an existing page with a known slug
@@ -270,7 +270,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
             "Persons",
             "richie/single_column.html",
             "en",
-            reverse_id=Person.ROOT_REVERSE_ID,
+            reverse_id=Person.PAGE["reverse_id"],
         )
         person_title = PersonTitleFactory()
 
@@ -294,7 +294,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
             "Persons",
             "richie/single_column.html",
             "en",
-            reverse_id=Person.ROOT_REVERSE_ID,
+            reverse_id=Person.PAGE["reverse_id"],
         )
         person_title = PersonTitleFactory()
 
@@ -318,7 +318,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
             "Persons",
             "richie/single_column.html",
             "en",
-            reverse_id=Person.ROOT_REVERSE_ID,
+            reverse_id=Person.PAGE["reverse_id"],
         )
 
         no_title_data = {

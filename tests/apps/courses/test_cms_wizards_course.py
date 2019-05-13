@@ -64,7 +64,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
             "Courses",
             "richie/single_column.html",
             "en",
-            reverse_id=Course.ROOT_REVERSE_ID,
+            reverse_id=Course.PAGE["reverse_id"],
         )
 
         any_page = create_page("Any page", "richie/single_column.html", "en")
@@ -97,7 +97,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
             "Courses",
             "richie/single_column.html",
             "en",
-            reverse_id=Course.ROOT_REVERSE_ID,
+            reverse_id=Course.PAGE["reverse_id"],
         )
 
         # We can submit a form omitting the slug
@@ -131,7 +131,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
             "y" * 200,
             "richie/single_column.html",
             "en",
-            reverse_id=Course.ROOT_REVERSE_ID,
+            reverse_id=Course.PAGE["reverse_id"],
         )
 
         # An organization with a slug at the limit length should work
@@ -168,7 +168,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
             "Courses",
             "richie/single_column.html",
             "en",
-            reverse_id=Course.ROOT_REVERSE_ID,
+            reverse_id=Course.PAGE["reverse_id"],
         )
 
         # Submit a title at max length
@@ -190,7 +190,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
             "Courses",
             "richie/single_column.html",
             "en",
-            reverse_id=Course.ROOT_REVERSE_ID,
+            reverse_id=Course.PAGE["reverse_id"],
         )
         # Submit a title that is too long and a slug that is ok
         invalid_data = {
@@ -218,7 +218,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
             "Courses",
             "richie/single_column.html",
             "en",
-            reverse_id=Course.ROOT_REVERSE_ID,
+            reverse_id=Course.PAGE["reverse_id"],
         )
         # Submit a slug that is too long and a title that is ok
         invalid_data = {
@@ -243,7 +243,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
             "Courses",
             "richie/single_column.html",
             "en",
-            reverse_id=Course.ROOT_REVERSE_ID,
+            reverse_id=Course.PAGE["reverse_id"],
         )
 
         # Submit an invalid slug
@@ -266,7 +266,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
             "Courses",
             "richie/single_column.html",
             "en",
-            reverse_id=Course.ROOT_REVERSE_ID,
+            reverse_id=Course.PAGE["reverse_id"],
         )
         # Create an existing page with a known slug
         CourseFactory(page_parent=parent_page, page_title="My title")

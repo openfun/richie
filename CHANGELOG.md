@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add a management command to create the required site structure,
 - Allow to dynamically set webpack publicPath. This is useful if a CDN is used
   to load statics. Define the settings `CDN_DOMAIN` and it will be used as base
   domain to fetch js chunks.

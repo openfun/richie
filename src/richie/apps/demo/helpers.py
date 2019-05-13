@@ -1,56 +1,5 @@
 """Helpers for the demo app of the Richie project."""
-from django.core.exceptions import ImproperlyConfigured
-
-from richie.apps.core.helpers import create_i18n_page
 from richie.apps.courses.factories import CategoryFactory
-
-
-def recursive_page_creation(site, pages_info, parent=None):
-    """
-    Recursively create page following tree structure with parent/children.
-
-    Arguments:
-        site (django.contrib.sites.models.Site): Site object which page will
-            be linked to.
-        pages (dict): Page items to create recursively such as 'children' key
-            value can be a dict to create child pages. The current page is
-            given to children for parent relation.
-
-    Keyword Arguments:
-        parent (cms.models.pagemodel.Page): Page used as a parent to create
-            page item from `pages` argument.
-
-    Returns:
-        dict: mapping of the page names passed in argument and the created page instances.
-    """
-    pages = {}
-
-    for name, info in pages_info.items():
-        page = create_i18n_page(
-            info["title"],
-            is_homepage=(name == "home"),
-            in_navigation=info.get("in_navigation", True),
-            published=True,
-            site=site,
-            parent=parent,
-            **info["kwargs"],
-        )
-
-        pages[name] = page
-
-        # Create children
-        if info.get("children", None):
-            children_pages = recursive_page_creation(
-                site, info["children"], parent=page
-            )
-            for child_name in children_pages:
-                if child_name in pages:
-                    raise ImproperlyConfigured(
-                        "Page names should be unique: {:s}".format(child_name)
-                    )
-            pages.update(children_pages)
-
-    return pages
 
 
 # pylint: disable=too-many-arguments

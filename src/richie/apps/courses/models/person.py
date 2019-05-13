@@ -15,6 +15,7 @@ from parler.fields import TranslatedField
 from parler.models import TranslatableModel, TranslatedFieldsModel
 
 from ...core.models import BasePageExtension, PagePluginMixin
+from ..defaults import PERSONS_PAGE
 
 
 class PersonTitle(TranslatableModel):
@@ -91,8 +92,7 @@ class Person(BasePageExtension):
         null=True,
     )
 
-    ROOT_REVERSE_ID = "persons"
-    TEMPLATE_DETAIL = "courses/cms/person_detail.html"
+    PAGE = PERSONS_PAGE
 
     class Meta:
         db_table = "richie_person"

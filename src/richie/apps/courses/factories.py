@@ -139,7 +139,7 @@ class OrganizationFactory(BLDPageExtensionDjangoModelFactory):
         ]
 
     # fields concerning the related page
-    page_template = Organization.TEMPLATE_DETAIL
+    page_template = Organization.PAGE["template"]
 
     @factory.lazy_attribute_sequence
     def code(self, sequence):
@@ -188,7 +188,7 @@ class CourseFactory(PageExtensionDjangoModelFactory):
         ]
 
     # fields concerning the related page
-    page_template = Course.TEMPLATE_DETAIL
+    page_template = Course.PAGE["template"]
 
     @factory.post_generation
     # pylint: disable=unused-argument
@@ -364,7 +364,7 @@ class CourseRunFactory(PageExtensionDjangoModelFactory):
         ]
 
     # fields concerning the related page
-    page_template = CourseRun.TEMPLATE_DETAIL
+    page_template = CourseRun.PAGE["template"]
     page_title = factory.Sequence("session {:d}".format)
 
     resource_link = factory.Faker("uri")
@@ -480,7 +480,7 @@ class CategoryFactory(BLDPageExtensionDjangoModelFactory):
         ]
 
     # fields concerning the related page
-    page_template = Category.TEMPLATE_DETAIL
+    page_template = Category.PAGE["template"]
 
     @factory.post_generation
     # pylint: disable=unused-argument
@@ -541,7 +541,7 @@ class BlogPostFactory(PageExtensionDjangoModelFactory):
         ]
 
     # fields concerning the related page
-    page_template = BlogPost.TEMPLATE_DETAIL
+    page_template = BlogPost.PAGE["template"]
 
     @factory.post_generation
     # pylint: disable=unused-argument
@@ -686,7 +686,7 @@ class PersonFactory(PageExtensionDjangoModelFactory):
         ]
 
     # fields concerning the related page
-    page_template = Person.TEMPLATE_DETAIL
+    page_template = Person.PAGE["template"]
 
     first_name = factory.Faker("first_name")
     last_name = factory.Faker("last_name")

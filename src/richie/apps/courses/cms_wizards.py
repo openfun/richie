@@ -21,9 +21,9 @@ from cms.models import Page
 from cms.wizards.wizard_base import Wizard
 from cms.wizards.wizard_pool import wizard_pool
 
+from . import defaults
 from .helpers import snapshot_course
 from .models import (
-    ROOT_REVERSE_IDS,
     BlogPost,
     Category,
     Course,
@@ -40,9 +40,9 @@ class ExcludeRootReverseIDMixin:
     def user_has_add_permission(self, user, page):
         """Check that the page or any of its ancestors is not a special Richie page."""
         if (
-            page.reverse_id in ROOT_REVERSE_IDS
+            page.reverse_id in defaults.ROOT_REVERSE_IDS
             or page.get_ancestor_pages()
-            .filter(reverse_id__in=ROOT_REVERSE_IDS)
+            .filter(reverse_id__in=defaults.ROOT_REVERSE_IDS)
             .exists()
         ):
             return False
@@ -148,7 +148,7 @@ class BaseWizardForm(forms.Form):
         """
         try:
             return Page.objects.get(
-                reverse_id=self.model.ROOT_REVERSE_ID, publisher_is_draft=True
+                reverse_id=self.model.PAGE["reverse_id"], publisher_is_draft=True
             )
         except Page.DoesNotExist:
             raise forms.ValidationError(
@@ -156,7 +156,7 @@ class BaseWizardForm(forms.Form):
                     "slug": [
                         _(
                             "You must first create a parent page and set its `reverse_id` to "
-                            "`{reverse}`.".format(reverse=self.model.ROOT_REVERSE_ID)
+                            "`{reverse}`.".format(reverse=self.model.PAGE["reverse_id"])
                         )
                     ]
                 }
@@ -171,7 +171,7 @@ class BaseWizardForm(forms.Form):
             slug=self.cleaned_data["slug"],
             language=get_language(),
             parent=self.parent_page,
-            template=self.model.TEMPLATE_DETAIL,
+            template=self.model.PAGE["template"],
             published=False,  # The creation wizard should not publish the page
         )
 

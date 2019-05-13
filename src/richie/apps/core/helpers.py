@@ -4,10 +4,12 @@ Helpers that can be useful throughout the whole project
 import random
 
 from django.conf import settings
+from django.core.exceptions import ImproperlyConfigured
 from django.utils.text import slugify
 
 import factory
 from cms.api import add_plugin, create_page, create_title
+from cms.models import Page
 
 
 def create_i18n_page(title=None, languages=None, is_homepage=False, **kwargs):
@@ -23,7 +25,7 @@ def create_i18n_page(title=None, languages=None, is_homepage=False, **kwargs):
         }
 
     """
-    template = kwargs.pop("template", None) or "richie/single_column.html"
+    kwargs["template"] = kwargs.get("template", "richie/single_column.html")
 
     if title is None:
         # Create realistic titles in each language with faker
@@ -60,11 +62,7 @@ def create_i18n_page(title=None, languages=None, is_homepage=False, **kwargs):
 
     slug = slugify(i18n_titles[first_language])
     page = create_page(
-        language=first_language,
-        title=i18n_titles[first_language],
-        slug=slug,
-        template=template,
-        **kwargs,
+        language=first_language, title=i18n_titles[first_language], slug=slug, **kwargs
     )
 
     if is_homepage is True:
@@ -143,3 +141,48 @@ def create_text_plugin(
             plugin_type=plugin_type,
             body="".join(body),
         )
+
+
+def recursive_page_creation(site, pages_info, parent=None):
+    """
+    Recursively create page following tree structure with parent/children.
+
+    Arguments:
+        site (django.contrib.sites.models.Site): Site object which page will
+            be linked to.
+        pages_info (dict): Page items to create recursively such as 'children' key
+            value can be a dict to create child pages. The current page is
+            given to children for parent relation.
+
+    Keyword Arguments:
+        parent (cms.models.pagemodel.Page): Page used as a parent to create
+            page item from `pages` argument.
+
+    Returns:
+        dict: mapping of the page names passed in argument and the created page instances.
+    """
+    pages = {}
+
+    for name, kwargs in pages_info.items():
+        try:
+            page = Page.objects.get(reverse_id=name)
+        except Page.DoesNotExist():
+            page = create_i18n_page(
+                site=site, parent=parent, published=True, reverse_id=name, **kwargs
+            )
+
+        pages[name] = page
+
+        # Create children
+        if kwargs.get("children", None):
+            children_pages = recursive_page_creation(
+                site, kwargs["children"], parent=page
+            )
+            for child_name in children_pages:
+                if child_name in pages:
+                    raise ImproperlyConfigured(
+                        "Page names should be unique: {:s}".format(child_name)
+                    )
+            pages.update(children_pages)
+
+    return pages

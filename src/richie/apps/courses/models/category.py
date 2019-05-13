@@ -14,6 +14,7 @@ from cms.models import Title
 from cms.models.pluginmodel import CMSPlugin
 
 from ...core.models import BasePageExtension, PagePluginMixin
+from ..defaults import CATEGORIES_PAGE
 
 
 class Category(BasePageExtension):
@@ -25,8 +26,7 @@ class Category(BasePageExtension):
     page that presents the thematic.
     """
 
-    ROOT_REVERSE_ID = "categories"
-    TEMPLATE_DETAIL = "courses/cms/category_detail.html"
+    PAGE = CATEGORIES_PAGE
 
     class Meta:
         db_table = "richie_category"

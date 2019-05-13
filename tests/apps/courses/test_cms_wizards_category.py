@@ -64,7 +64,7 @@ class CategoryCMSWizardTestCase(CMSTestCase):
             "Categories",
             "richie/single_column.html",
             "en",
-            reverse_id=Category.ROOT_REVERSE_ID,
+            reverse_id=Category.PAGE["reverse_id"],
         )
         # We want to create the category from an ordinary page
         page = create_page("Any page", "richie/single_column.html", "en")
@@ -94,7 +94,7 @@ class CategoryCMSWizardTestCase(CMSTestCase):
             "Categories",
             "richie/single_column.html",
             "en",
-            reverse_id=Category.ROOT_REVERSE_ID,
+            reverse_id=Category.PAGE["reverse_id"],
         )
         # Create a category when visiting an existing category
         parent_category = CategoryFactory()
@@ -125,7 +125,7 @@ class CategoryCMSWizardTestCase(CMSTestCase):
             "y" * 200,
             "richie/single_column.html",
             "en",
-            reverse_id=Category.ROOT_REVERSE_ID,
+            reverse_id=Category.PAGE["reverse_id"],
         )
 
         # A category with a slug at the limit length should work
@@ -155,7 +155,7 @@ class CategoryCMSWizardTestCase(CMSTestCase):
             "Categories",
             "richie/single_column.html",
             "en",
-            reverse_id=Category.ROOT_REVERSE_ID,
+            reverse_id=Category.PAGE["reverse_id"],
         )
 
         # Submit a title at max length
@@ -177,7 +177,7 @@ class CategoryCMSWizardTestCase(CMSTestCase):
             "Categories",
             "richie/single_column.html",
             "en",
-            reverse_id=Category.ROOT_REVERSE_ID,
+            reverse_id=Category.PAGE["reverse_id"],
         )
 
         # Submit a title that is too long and a slug that is ok
@@ -201,7 +201,7 @@ class CategoryCMSWizardTestCase(CMSTestCase):
             "Sujects",
             "richie/single_column.html",
             "en",
-            reverse_id=Category.ROOT_REVERSE_ID,
+            reverse_id=Category.PAGE["reverse_id"],
         )
 
         # Submit a slug that is too long and a title that is ok
@@ -223,7 +223,7 @@ class CategoryCMSWizardTestCase(CMSTestCase):
             "Categories",
             "richie/single_column.html",
             "en",
-            reverse_id=Category.ROOT_REVERSE_ID,
+            reverse_id=Category.PAGE["reverse_id"],
         )
 
         # Submit an invalid slug
@@ -247,7 +247,7 @@ class CategoryCMSWizardTestCase(CMSTestCase):
             "Categories",
             "richie/single_column.html",
             "en",
-            reverse_id=Category.ROOT_REVERSE_ID,
+            reverse_id=Category.PAGE["reverse_id"],
         )
         # Create an existing page with a known slug
         CategoryFactory(page_parent=parent_page, page_title="My title")

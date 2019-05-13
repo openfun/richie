@@ -15,6 +15,7 @@ from cms.models import Title
 from cms.models.pluginmodel import CMSPlugin
 
 from ...core.models import BasePageExtension, PagePluginMixin
+from ..defaults import ORGANIZATIONS_PAGE
 
 
 class Organization(BasePageExtension):
@@ -31,8 +32,7 @@ class Organization(BasePageExtension):
         _("code"), db_index=True, max_length=100, null=True, blank=True
     )
 
-    ROOT_REVERSE_ID = "organizations"
-    TEMPLATE_DETAIL = "courses/cms/organization_detail.html"
+    PAGE = ORGANIZATIONS_PAGE
 
     class Meta:
         db_table = "richie_organization"

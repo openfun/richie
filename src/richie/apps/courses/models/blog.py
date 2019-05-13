@@ -9,6 +9,7 @@ from cms.extensions.extension_pool import extension_pool
 from cms.models.pluginmodel import CMSPlugin
 
 from ...core.models import BasePageExtension, PagePluginMixin
+from ..defaults import BLOGPOSTS_PAGE
 
 
 class BlogPost(BasePageExtension):
@@ -16,8 +17,7 @@ class BlogPost(BasePageExtension):
     The blogpost extension represents and records a blog article.
     """
 
-    ROOT_REVERSE_ID = "news"
-    TEMPLATE_DETAIL = "courses/cms/blogpost_detail.html"
+    PAGE = BLOGPOSTS_PAGE
 
     class Meta:
         db_table = "richie_blog_post"
