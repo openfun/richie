@@ -16,4 +16,9 @@ export const commonMessages = defineMessages({
     description: 'Title/name to use when we display a list of organizations',
     id: 'common.organizationsHumanName',
   },
+  personsHumanName: {
+    defaultMessage: 'Persons',
+    description: 'Title/name to use when we display a list of persons',
+    id: 'common.personsHumanName',
+  },
 });

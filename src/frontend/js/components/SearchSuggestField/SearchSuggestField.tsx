@@ -28,7 +28,7 @@ const messages = defineMessages({
 /**
  * Define the kind of suggestions our `<SearchSuggestField />` component supports.
  */
-type SearchSuggestion = Suggestion<'categories' | 'organizations'>;
+type SearchSuggestion = Suggestion<'categories' | 'organizations' | 'persons'>;
 
 /**
  * Derive from `SearchSuggestion` the kind of suggestion sections our `<SearchSuggestField />` component supports.
@@ -157,16 +157,26 @@ export const SearchSuggestField = injectIntl(
       _,
       { suggestion },
     ) => {
-      // Update the search with the newly selected filter
-      // Pick the filter to update based on the payload's path: it contains the relevant filter's page path
-      // (for eg. a meta-category or the "organizations" root page)
-      const filter = Object.values(filters).find(
-        fltr =>
-          !!fltr.base_path &&
-          String(suggestion.id)
-            .substr(2)
-            .startsWith(fltr.base_path),
+      // Update the search with the newly selected filter value, using the `kind` field on the suggestion to
+      // pick the relevant filter to update.
+      let filter = Object.values(filters).find(
+        fltr => fltr.name === suggestion.kind,
       )!;
+
+      // We need a special-case to handle categories until we refactor the API to separate endpoints between
+      // kinds of categories
+      if (!filter) {
+        // Pick the filter to update based on the payload's path: it contains the relevant filter's page path
+        // (for eg. a meta-category or the "organizations" root page)
+        filter = Object.values(filters).find(
+          fltr =>
+            !!fltr.base_path &&
+            String(suggestion.id)
+              .substr(2)
+              .startsWith(fltr.base_path),
+        )!;
+      }
+
       // Dispatch the actual update on the relevant filter
       dispatchCourseSearchParamsUpdate({
         filter,
@@ -196,13 +206,18 @@ export const SearchSuggestField = injectIntl(
         sections = (await Promise.all(
           [
             getSuggestionsSection(
+              'categories',
+              commonMessages.categoriesHumanName,
+              incomingValue,
+            ),
+            getSuggestionsSection(
               'organizations',
               commonMessages.organizationsHumanName,
               incomingValue,
             ),
             getSuggestionsSection(
-              'categories',
-              commonMessages.categoriesHumanName,
+              'persons',
+              commonMessages.personsHumanName,
               incomingValue,
             ),
           ],
@@ -224,7 +239,7 @@ export const SearchSuggestField = injectIntl(
      * the default section as that section has no title.
      */
     const renderSectionTitle: SearchAutosuggestProps['renderSectionTitle'] = section =>
-      ['categories', 'organizations'].includes(section.kind) ? (
+      ['categories', 'organizations', 'persons'].includes(section.kind) ? (
         <span>{intl.formatMessage(section.message)}</span>
       ) : null;
 
