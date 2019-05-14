@@ -46,7 +46,7 @@ type SearchAutosuggestProps = AutosuggestProps<SearchSuggestion>;
  * @param suggestion The relevant suggestion object.
  */
 const getSuggestionValue: SearchAutosuggestProps['getSuggestionValue'] = suggestion =>
-  suggestion.data.title;
+  suggestion.title;
 
 /**
  * `react-autosuggest` callback to render one suggestion.
@@ -54,7 +54,7 @@ const getSuggestionValue: SearchAutosuggestProps['getSuggestionValue'] = suggest
  * suggestion with some text to render.
  */
 const renderSuggestion: SearchAutosuggestProps['renderSuggestion'] = suggestion => (
-  <span>{suggestion.data.title}</span>
+  <span>{suggestion.title}</span>
 );
 
 /**
@@ -163,14 +163,14 @@ export const SearchSuggestField = injectIntl(
       const filter = Object.values(filters).find(
         fltr =>
           !!fltr.base_path &&
-          String(suggestion.data.id)
+          String(suggestion.id)
             .substr(2)
             .startsWith(fltr.base_path),
       )!;
       // Dispatch the actual update on the relevant filter
       dispatchCourseSearchParamsUpdate({
         filter,
-        payload: String(suggestion.data.id),
+        payload: String(suggestion.id),
         type: 'FILTER_ADD',
       });
       // Reset the search field state: the task has been completed

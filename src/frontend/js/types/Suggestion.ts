@@ -12,25 +12,16 @@ interface DefaultSuggestion {
  * A generic suggestion shape for autocomplete. Can be used for categories, organizations, persons, etc.
  */
 interface GenericSuggestion {
+  id: string;
   kind: string;
-  data: { id: string; title: string };
-}
-
-/**
- * A suggestion shape for Course autocomplete.
- */
-interface CourseSuggestion {
-  kind: 'courses';
-  data: { absolute_url: string; id: string; title: string };
+  title: string;
 }
 
 /**
  * Utility type that allows a consumer to easily define the kinds of suggestions it supports and
  * get proper typechecking around them.
  */
-export type Suggestion<Kind extends string> = Kind extends 'courses'
-  ? CourseSuggestion
-  : Kind extends 'default'
+export type Suggestion<Kind extends string> = Kind extends 'default'
   ? DefaultSuggestion
   : GenericSuggestion;
 
@@ -67,8 +58,6 @@ interface DefaultSuggestionSection {
  */
 export type SuggestionSection<
   S extends Suggestion<string>
-> = S extends Suggestion<'courses'>
-  ? ResourceSuggestionSection<Suggestion<'courses'>>
-  : S extends DefaultSuggestion
+> = S extends DefaultSuggestion
   ? DefaultSuggestionSection
   : ResourceSuggestionSection<GenericSuggestion>;

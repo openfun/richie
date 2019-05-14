@@ -13,8 +13,8 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
 
   it('runs the search and builds a SearchSuggestionSection with the results', async () => {
     fetchMock.get('/api/v1.0/courses/autocomplete/?query=some%20search', [
-      { title: 'Course #1' },
-      { title: 'Course #2' },
+      { id: '001', kind: 'courses', title: 'Course #1' },
+      { id: '002', kind: 'courses', title: 'Course #2' },
     ]);
 
     let suggestionsSection;
@@ -32,8 +32,8 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
       kind: 'courses',
       message: { defaultMessage: 'Courses', id: 'coursesHumanName' },
       values: [
-        { data: { title: 'Course #1' }, kind: 'courses' },
-        { data: { title: 'Course #2' }, kind: 'courses' },
+        { id: '001', kind: 'courses', title: 'Course #1' },
+        { id: '002', kind: 'courses', title: 'Course #2' },
       ],
     });
   });

@@ -13,8 +13,8 @@ import { handle } from '../../utils/errors/handle';
  * @param sectionTitleMessage MessageDescriptor for the title of the section that displays the suggestions.
  * @param query The actual payload to run the completion search with.
  */
-export const getSuggestionsSection = async <Kind extends string>(
-  kind: Kind,
+export const getSuggestionsSection = async (
+  kind: string,
   sectionTitleMessage: FormattedMessage.MessageDescriptor,
   query: string,
 ) => {
@@ -43,7 +43,7 @@ export const getSuggestionsSection = async <Kind extends string>(
     );
   }
 
-  let responseData: Array<Suggestion<Kind>['data']>;
+  let responseData: Array<Suggestion<string>>;
   try {
     responseData = await response.json();
   } catch (error) {
@@ -55,6 +55,6 @@ export const getSuggestionsSection = async <Kind extends string>(
   return {
     kind,
     message: sectionTitleMessage,
-    values: take(responseData, 3).map(data => ({ data, kind })),
+    values: take(responseData, 3),
   };
 };
