@@ -87,7 +87,7 @@ build: ## build the app container
 .PHONY: build
 
 down: ## remove stack (warning: it removes the database container)
-	@$(COMPOSE) build app
+	@$(COMPOSE) down
 .PHONY: down
 
 logs: ## display app logs (follow mode)
