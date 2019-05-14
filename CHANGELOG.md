@@ -25,6 +25,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   database backend
 - Standardize the project's `Makefile` to make it more easily maintainable by
   our peers
+- Database ports are no longer exposed in the development environment
 
 ### Removed
 
