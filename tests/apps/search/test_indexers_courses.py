@@ -412,3 +412,29 @@ class CoursesIndexersTestCase(TestCase):
                 ),
             },
         )
+
+    def test_indexers_courses_format_es_document_for_autocomplete(self):
+        """
+        Make sure format_es_document_for_autocomplete returns a properly
+        formatted course suggestion.
+        """
+        es_course = {
+            "_id": 93,
+            "_source": {
+                "absolute_url": {"en": "campo-qui-format-do"},
+                "categories": [43, 86],
+                "cover_image": {"en": "image.jpg"},
+                "organizations": [42, 84],
+                "organizations_names": {"en": ["Org 42", "Org 84"]},
+                "title": {"en": "Duis eu arcu erat"},
+            },
+            "fields": {
+                "state": [
+                    {"priority": 0, "date_time": "2019-03-17T21:25:52.179667+00:00"}
+                ]
+            },
+        }
+        self.assertEqual(
+            CoursesIndexer.format_es_document_for_autocomplete(es_course, "en"),
+            {"id": 93, "kind": "courses", "title": "Duis eu arcu erat"},
+        )

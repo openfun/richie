@@ -115,7 +115,7 @@ class CategoriesIndexersTestCase(TestCase):
 
     def test_indexers_categories_format_es_object_for_api(self):
         """
-        Make sure format_es_object_for_api returns a properly formatted category
+        Make sure format_es_object_for_api returns a properly formatted category.
         """
         es_category = {
             "_id": 89,
@@ -137,4 +137,24 @@ class CategoriesIndexersTestCase(TestCase):
                 "path": "00010001",
                 "title": "Computer science",
             },
+        )
+
+    def test_indexers_categories_format_es_document_for_autocomplete(self):
+        """
+        Make sure format_es_document_for_autocomplete returns a properly
+        formatted category suggestion.
+        """
+        es_category = {
+            "_id": 89,
+            "_source": {
+                "is_meta": True,
+                "logo": {"en": "/image_en.png", "fr": "/image_fr.png"},
+                "nb_children": 3,
+                "path": "00010001",
+                "title": {"en": "Computer science", "fr": "Informatique"},
+            },
+        }
+        self.assertEqual(
+            CategoriesIndexer.format_es_document_for_autocomplete(es_category, "en"),
+            {"id": 89, "kind": "categories", "title": "Computer science"},
         )

@@ -104,17 +104,27 @@ class PersonsIndexersTestCase(TestCase):
             "_id": 217,
             "_source": {
                 "portrait": {"en": "/my_portrait.png", "fr": "/mon_portrait.png"},
-                "title": {
-                    "en": "University of Paris XIII",
-                    "fr": "Université Paris 13",
-                },
+                "title": {"en": "Cade Sura", "fr": "Pas lui"},
             },
         }
         self.assertEqual(
             PersonsIndexer.format_es_object_for_api(es_person, "en"),
-            {
-                "id": 217,
-                "portrait": "/my_portrait.png",
-                "title": "University of Paris XIII",
+            {"id": 217, "portrait": "/my_portrait.png", "title": "Cade Sura"},
+        )
+
+    def test_indexers_persons_format_es_document_for_autocomplete(self):
+        """
+        Make sure format_es_document_for_autocomplete returns a properly
+        formatted person suggestion.
+        """
+        es_person = {
+            "_id": 217,
+            "_source": {
+                "portrait": {"en": "/my_portrait.png", "fr": "/mon_portrait.png"},
+                "title": {"en": "Cade Sura", "fr": "Pas lui"},
             },
+        }
+        self.assertEqual(
+            PersonsIndexer.format_es_document_for_autocomplete(es_person, "en"),
+            {"id": 217, "kind": "persons", "title": "Cade Sura"},
         )

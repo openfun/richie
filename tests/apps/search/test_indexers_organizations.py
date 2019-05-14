@@ -139,3 +139,25 @@ class OrganizationsIndexersTestCase(TestCase):
             OrganizationsIndexer.format_es_object_for_api(es_organization, "en"),
             {"id": 217, "logo": "/my_logo.png", "title": "University of Paris XIII"},
         )
+
+    def test_indexers_organizations_format_es_document_for_autocomplete(self):
+        """
+        Make sure format_es_document_for_autocomplete returns a properly
+        formatted organization suggestion.
+        """
+        es_organization = {
+            "_id": 217,
+            "_source": {
+                "logo": {"en": "/my_logo.png", "fr": "/mon_logo.png"},
+                "title": {
+                    "en": "University of Paris XIII",
+                    "fr": "Université Paris 13",
+                },
+            },
+        }
+        self.assertEqual(
+            OrganizationsIndexer.format_es_document_for_autocomplete(
+                es_organization, "en"
+            ),
+            {"id": 217, "kind": "organizations", "title": "University of Paris XIII"},
+        )
