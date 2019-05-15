@@ -44,7 +44,7 @@ def get_number_of_course_runs():
     Returns a random integer between 1 and 5. We make it a convenience method so that it can
     be mocked in tests.
     """
-    return random.randint(1, 5)
+    return random.randint(1, NB_OBJECTS["course_courseruns"])
 
 
 # pylint: disable=no-member
@@ -221,7 +221,7 @@ def create_demo_site():
         post = BlogPostFactory.create(
             page_in_navigation=True,
             page_languages=["en", "fr"],
-            page_parent=pages_created["news"],
+            page_parent=pages_created["blogposts"],
             fill_cover=pick_image("cover"),
             fill_excerpt=True,
             fill_body=True,
@@ -306,7 +306,7 @@ def create_demo_site():
             target=blogposts_section,
             name=content["blogposts_button_title"],
             template=content["button_template_name"],
-            internal_link=pages_created["news"],
+            internal_link=pages_created["blogposts"],
         )
 
         # Add highlighted organizations
