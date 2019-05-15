@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-24 12:34+0000\n"
-"PO-Revision-Date: 2019-04-24 14:14\n"
+"POT-Creation-Date: 2019-05-15 17:04+0200\n"
+"PO-Revision-Date: 2019-05-15 15:05\n"
 "Last-Translator: Samuel Paccoud (sampaccoud)\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -124,120 +124,120 @@ msgstr "Capture instantanée de cette page..."
 msgid "This will place a copy of this page as its child and move all its courseruns as children of its new copy."
 msgstr "Ceci copie la page vers une page enfant et les sessions de cours actuelles deviennent des enfants de cette copie."
 
-#: apps/courses/cms_wizards.py:62
+#: apps/courses/cms_wizards.py:63
 msgid "New page"
 msgstr "Nouvelle page"
 
-#: apps/courses/cms_wizards.py:66
+#: apps/courses/cms_wizards.py:67
 msgid "Create a new page next to the current page."
 msgstr "Créer une nouvelle page à côté de la page actuelle."
 
-#: apps/courses/cms_wizards.py:73
+#: apps/courses/cms_wizards.py:74
 msgid "New sub page"
 msgstr "Nouvelle sous-page"
 
-#: apps/courses/cms_wizards.py:77
+#: apps/courses/cms_wizards.py:78
 msgid "Create a page below the current page."
 msgstr "Créer une page sous la page actuelle."
 
-#: apps/courses/cms_wizards.py:92
+#: apps/courses/cms_wizards.py:93
 msgid "Page title"
 msgstr "Titre de la page"
 
-#: apps/courses/cms_wizards.py:93
+#: apps/courses/cms_wizards.py:94
 msgid "Title of the page in current language"
 msgstr "Titre de la page dans la langue actuelle"
 
-#: apps/courses/cms_wizards.py:99
+#: apps/courses/cms_wizards.py:101
 msgid "Page slug"
 msgstr "Chemin de la page"
 
-#: apps/courses/cms_wizards.py:100
+#: apps/courses/cms_wizards.py:102
 msgid "Slug of the page in current language"
 msgstr "Chemin de la page dans la langue actuelle"
 
-#: apps/courses/cms_wizards.py:123
+#: apps/courses/cms_wizards.py:125
 msgid "This slug is too long. The length of the path built by prepending the slug of the parent page would be {:d} characters long and it should be less than 255"
 msgstr "Ce chemin est trop long. Le lien construit en faisant précéder ce chemin par le lien de la page parente serait trop long de {:d} caractères et devrait être de moins de 255 caractères"
 
-#: apps/courses/cms_wizards.py:137
+#: apps/courses/cms_wizards.py:139
 msgid "This slug is already in use"
 msgstr "Ce chemin est déjà utilisé"
 
-#: apps/courses/cms_wizards.py:156
+#: apps/courses/cms_wizards.py:158
 #, python-brace-format
 msgid "You must first create a parent page and set its `reverse_id` to `{reverse}`."
 msgstr "Vous devez d’abord créer une page parente dont le 'reverse_id' est la valeur '{reverse} '."
 
-#: apps/courses/cms_wizards.py:220
+#: apps/courses/cms_wizards.py:222
 msgid "New course page"
 msgstr "Nouvelle page de cours"
 
-#: apps/courses/cms_wizards.py:221
+#: apps/courses/cms_wizards.py:223
 msgid "Create a new course page"
 msgstr "Créez une nouvelle page de cours"
 
-#: apps/courses/cms_wizards.py:236
+#: apps/courses/cms_wizards.py:238
 msgid "Snapshot the course"
 msgstr "Capture instantanée de ce cours"
 
-#: apps/courses/cms_wizards.py:238
+#: apps/courses/cms_wizards.py:240
 msgid "Tick this box if you want to snapshot the current version of the course and link the new course run to a new version of the course."
 msgstr "Cocher cette case si vous voulez faire une capture instantanée de la version actuelle du cours et attacher la nouvelle session de cours à une nouvelle version du cours."
 
-#: apps/courses/cms_wizards.py:323
+#: apps/courses/cms_wizards.py:325
 msgid "New course run page"
 msgstr "Nouvelle page de session de cours"
 
-#: apps/courses/cms_wizards.py:324
+#: apps/courses/cms_wizards.py:326
 msgid "Create a new course run page"
 msgstr "Créez une nouvelle page de session de cours"
 
-#: apps/courses/cms_wizards.py:356
+#: apps/courses/cms_wizards.py:358
 msgid "New Organization page"
 msgstr "Nouvelle page d'établissement"
 
-#: apps/courses/cms_wizards.py:357
+#: apps/courses/cms_wizards.py:359
 msgid "Create a new Organization page"
 msgstr "Créer une nouvelle page d'établissement"
 
-#: apps/courses/cms_wizards.py:403
+#: apps/courses/cms_wizards.py:405
 msgid "New category page"
 msgstr "Nouvelle page de catégorie"
 
-#: apps/courses/cms_wizards.py:404
+#: apps/courses/cms_wizards.py:406
 msgid "Create a new category page"
 msgstr "Créer une nouvelle page de catégorie"
 
-#: apps/courses/cms_wizards.py:436
+#: apps/courses/cms_wizards.py:438
 msgid "New blog post"
 msgstr "Nouveau billet de blog"
 
-#: apps/courses/cms_wizards.py:437
+#: apps/courses/cms_wizards.py:439
 msgid "Create a new blog post"
 msgstr "Créer un nouveau billet de blog"
 
-#: apps/courses/cms_wizards.py:454 apps/courses/models/person.py:50
+#: apps/courses/cms_wizards.py:456 apps/courses/models/person.py:51
 msgid "Title"
 msgstr "Titre"
 
-#: apps/courses/cms_wizards.py:455
+#: apps/courses/cms_wizards.py:457
 msgid "Choose this person's title among existing ones"
 msgstr "Choisissez le titre de cette personne parmi ceux qui existent déjà"
 
-#: apps/courses/cms_wizards.py:458
+#: apps/courses/cms_wizards.py:460
 msgid "First Name"
 msgstr "Prénom"
 
-#: apps/courses/cms_wizards.py:461
+#: apps/courses/cms_wizards.py:463
 msgid "Last Name"
 msgstr "Nom de famille"
 
-#: apps/courses/cms_wizards.py:487
+#: apps/courses/cms_wizards.py:489
 msgid "New person page"
 msgstr "Nouvelle page de personne"
 
-#: apps/courses/cms_wizards.py:488
+#: apps/courses/cms_wizards.py:490
 msgid "Create a new person page"
 msgstr "Créez une nouvelle page de personne"
 
@@ -269,111 +269,111 @@ msgstr "catégorie"
 msgid "category plugin"
 msgstr "plugin de catégorie"
 
-#: apps/courses/models/course.py:35 apps/courses/models/course.py:36
+#: apps/courses/models/course.py:37 apps/courses/models/course.py:38
 msgid "enroll now"
 msgstr "s’inscrire maintenant"
 
-#: apps/courses/models/course.py:37
+#: apps/courses/models/course.py:39
 msgid "see details"
 msgstr "voir les détails"
 
-#: apps/courses/models/course.py:45
+#: apps/courses/models/course.py:47
 msgid "closing on"
 msgstr "termine le"
 
-#: apps/courses/models/course.py:46 apps/courses/models/course.py:47
+#: apps/courses/models/course.py:48 apps/courses/models/course.py:49
 msgid "starting on"
 msgstr "débute le"
 
-#: apps/courses/models/course.py:48
+#: apps/courses/models/course.py:50
 msgid "enrollment closed"
 msgstr "inscription fermée"
 
-#: apps/courses/models/course.py:49
+#: apps/courses/models/course.py:51
 msgid "on-going"
 msgstr "en cours"
 
-#: apps/courses/models/course.py:50
+#: apps/courses/models/course.py:52
 msgid "archived"
 msgstr "archivé"
 
-#: apps/courses/models/course.py:51
+#: apps/courses/models/course.py:53
 msgid "to be scheduled"
 msgstr "à programmer"
 
-#: apps/courses/models/course.py:78
+#: apps/courses/models/course.py:80
 msgid "forever open"
 msgstr "toujours ouvert"
 
-#: apps/courses/models/course.py:138
+#: apps/courses/models/course.py:139
 msgid "course"
 msgstr "cours"
 
-#: apps/courses/models/course.py:324
+#: apps/courses/models/course.py:348
 #: apps/courses/templates/courses/cms/course_detail.html:99
 #: apps/courses/templates/courses/cms/course_run_detail.html:74
 msgid "Resource link"
 msgstr "Lien de la ressource"
 
-#: apps/courses/models/course.py:325
+#: apps/courses/models/course.py:349
 msgid "course start"
 msgstr "début du cours"
 
-#: apps/courses/models/course.py:326
+#: apps/courses/models/course.py:350
 msgid "course end"
 msgstr "fin du cours"
 
-#: apps/courses/models/course.py:328
+#: apps/courses/models/course.py:352
 msgid "enrollment start"
 msgstr "début des inscriptions"
 
-#: apps/courses/models/course.py:330
+#: apps/courses/models/course.py:354
 msgid "enrollment end"
 msgstr "fin des inscriptions"
 
-#: apps/courses/models/course.py:338
+#: apps/courses/models/course.py:362
 msgid "The list of languages in which the course content is available."
 msgstr "Les langues dans lesquelles le contenu du cours est disponible."
 
-#: apps/courses/models/course.py:345
+#: apps/courses/models/course.py:369
 msgid "course run"
 msgstr "session de cours"
 
-#: apps/courses/models/course.py:451
+#: apps/courses/models/course.py:475
 msgid "course plugin"
 msgstr "plugin de cours"
 
-#: apps/courses/models/course.py:467
+#: apps/courses/models/course.py:491
 msgid "name"
 msgstr "nom"
 
-#: apps/courses/models/course.py:469
+#: apps/courses/models/course.py:493
 #: apps/courses/templates/courses/plugins/course_plugin.html:5
 #: plugins/large_banner/models.py:38
 msgid "logo"
 msgstr "logo"
 
-#: apps/courses/models/course.py:471
+#: apps/courses/models/course.py:495
 msgid "url"
 msgstr "url"
 
-#: apps/courses/models/course.py:472
+#: apps/courses/models/course.py:496
 msgid "content"
 msgstr "contenu"
 
-#: apps/courses/models/course.py:476
+#: apps/courses/models/course.py:500
 msgid "licence"
 msgstr "license"
 
-#: apps/courses/models/course.py:491
+#: apps/courses/models/course.py:515
 msgid "description"
 msgstr "description"
 
-#: apps/courses/models/course.py:495
+#: apps/courses/models/course.py:519
 msgid "licence plugin"
 msgstr "plugin de licence"
 
-#: apps/courses/models/organization.py:31
+#: apps/courses/models/organization.py:32
 msgid "code"
 msgstr "code"
 
@@ -385,23 +385,23 @@ msgstr "établissement"
 msgid "organization plugin"
 msgstr "plugin d'établissement"
 
-#: apps/courses/models/person.py:31
+#: apps/courses/models/person.py:32
 msgid "person title"
 msgstr "titre de la personne"
 
-#: apps/courses/models/person.py:51
+#: apps/courses/models/person.py:52
 msgid "Title abbreviation"
 msgstr "Abréviation du titre"
 
-#: apps/courses/models/person.py:56
+#: apps/courses/models/person.py:57
 msgid "person title translation"
 msgstr "traduction du titre de la personne"
 
-#: apps/courses/models/person.py:83
+#: apps/courses/models/person.py:84
 msgid "First name"
 msgstr "Prénom"
 
-#: apps/courses/models/person.py:84
+#: apps/courses/models/person.py:85
 msgid "Last name"
 msgstr "Nom de famille"
 
@@ -583,43 +583,49 @@ msgstr "Plan de cours"
 msgid "Enter here the detailed course plan."
 msgstr "Détaillez ici le plan du cours."
 
-#: apps/courses/templates/courses/cms/fragment_course_content.html:56
-msgid "Course team"
-msgstr "Équipe pédagogique"
-
-#: apps/courses/templates/courses/cms/fragment_course_content.html:60
-msgid "Who are the teachers in the course team?"
-msgstr "Qui sont les enseignants de l’équipe pédagogique ?"
-
-#: apps/courses/templates/courses/cms/fragment_course_content.html:70
-msgid "What are the organizations publishing this course?"
-msgstr "Qui sont les établissements publiant ce cours ?"
-
-#: apps/courses/templates/courses/cms/fragment_course_content.html:78
+#: apps/courses/templates/courses/cms/fragment_course_content.html:49
 msgid "Assessment and certification"
 msgstr "Evaluation et Certification"
 
-#: apps/courses/templates/courses/cms/fragment_course_content.html:81
+#: apps/courses/templates/courses/cms/fragment_course_content.html:52
 msgid "How is progress evaluated and/or certified?"
 msgstr "Comment les étudiants sont ils évalués et/ou certifiés ?"
 
-#: apps/courses/templates/courses/cms/fragment_course_content.html:88
+#: apps/courses/templates/courses/cms/fragment_course_content.html:61
+#: apps/courses/templates/courses/cms/person_detail.html:44
+#: apps/search/defaults.py:117
+msgid "Organizations"
+msgstr "Établissements"
+
+#: apps/courses/templates/courses/cms/fragment_course_content.html:65
+msgid "What are the organizations publishing this course?"
+msgstr "Qui sont les établissements publiant ce cours ?"
+
+#: apps/courses/templates/courses/cms/fragment_course_content.html:74
+msgid "Course team"
+msgstr "Équipe pédagogique"
+
+#: apps/courses/templates/courses/cms/fragment_course_content.html:78
+msgid "Who are the teachers in the course team?"
+msgstr "Qui sont les enseignants de l’équipe pédagogique ?"
+
+#: apps/courses/templates/courses/cms/fragment_course_content.html:91
 msgid "License"
 msgstr "Licence"
 
-#: apps/courses/templates/courses/cms/fragment_course_content.html:91
+#: apps/courses/templates/courses/cms/fragment_course_content.html:94
 msgid "License for the course content"
 msgstr "Licence pour le contenu du cours"
 
-#: apps/courses/templates/courses/cms/fragment_course_content.html:94
+#: apps/courses/templates/courses/cms/fragment_course_content.html:97
 msgid "What is the license for the course content?"
 msgstr "Quelle est la licence pour le contenu du cours ?"
 
-#: apps/courses/templates/courses/cms/fragment_course_content.html:100
+#: apps/courses/templates/courses/cms/fragment_course_content.html:103
 msgid "License for the content created by course participants"
 msgstr "Licence pour le contenu créé par les participants du cours"
 
-#: apps/courses/templates/courses/cms/fragment_course_content.html:103
+#: apps/courses/templates/courses/cms/fragment_course_content.html:106
 msgid "What is the license for the content created by course participants?"
 msgstr "Quelle est la licence pour le contenu créé par les participants du cours ?"
 
@@ -644,11 +650,6 @@ msgstr "Pas d'établissement"
 #: apps/courses/templates/courses/cms/person_detail.html:34
 msgid "Enter your bio here..."
 msgstr "Saisissez ici votre bio..."
-
-#: apps/courses/templates/courses/cms/person_detail.html:44
-#: apps/search/defaults.py:117
-msgid "Organizations"
-msgstr "Établissements"
 
 #: apps/courses/templates/courses/cms/person_detail.html:47
 msgid "No associated organizations"
@@ -686,19 +687,23 @@ msgstr "Sujets"
 msgid "Levels"
 msgstr "Niveaux"
 
-#: apps/search/filter_definitions/courses.py:240
+#: apps/search/defaults.py:127
+msgid "Persons"
+msgstr "Personnes"
+
+#: apps/search/filter_definitions/courses.py:249
 msgid "Open for enrollment"
 msgstr "Ouvert pour inscription"
 
-#: apps/search/filter_definitions/courses.py:241
+#: apps/search/filter_definitions/courses.py:250
 msgid "Coming soon"
 msgstr "À venir"
 
-#: apps/search/filter_definitions/courses.py:242
+#: apps/search/filter_definitions/courses.py:251
 msgid "On-going"
 msgstr "En cours"
 
-#: apps/search/filter_definitions/courses.py:243
+#: apps/search/filter_definitions/courses.py:252
 msgid "Archived"
 msgstr "Archivé"
 
