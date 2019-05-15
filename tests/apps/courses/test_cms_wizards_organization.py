@@ -10,6 +10,7 @@ from django.urls import reverse
 from cms.api import create_page
 from cms.models import Page, PagePermission
 from cms.test_utils.testcases import CMSTestCase
+from filer.models import FolderPermission
 
 from richie.apps.core.factories import UserFactory
 from richie.apps.courses import defaults
@@ -277,6 +278,12 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
                 "can_view": random.choice([True, False]),
                 "grant_on": random.randint(1, 5),
             },
+            "organization_folder_permissions": {
+                "can_read": random.choice([True, False]),
+                "can_edit": random.choice([True, False]),
+                "can_add_children": random.choice([True, False]),
+                "type": random.randint(0, 2),
+            },
         }
         with mock.patch.dict(defaults.ORGANIZATION_ADMIN_ROLE, role_dict):
             page = form.save()
@@ -297,13 +304,23 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         role = page.roles.get(role="ADMIN")
         self.assertEqual(role.group.name, "Admin | My title")
         self.assertEqual(role.group.permissions.count(), 1)
+        self.assertEqual(role.folder.name, "Admin | My title")
 
-        # The Django permissions and CMS page permissions should have been assigned to the group
+        # All expected permissions should have been assigned to the group:
+        # - Django permissions
         self.assertEqual(role.group.permissions.first().codename, "change_page")
+        # - DjangoCMS page permissions
         self.assertEqual(PagePermission.objects.filter(group=role.group).count(), 1)
         page_permission = PagePermission.objects.get(group=role.group)
         for key, value in role_dict["organization_page_permissions"].items():
             self.assertEqual(getattr(page_permission, key), value)
+        # The Django Filer folder permissions
+        self.assertEqual(
+            FolderPermission.objects.filter(group_id=role.group_id).count(), 1
+        )
+        folder_permission = FolderPermission.objects.get(group_id=role.group_id)
+        for key, value in role_dict["organization_folder_permissions"].items():
+            self.assertEqual(getattr(folder_permission, key), value)
 
     def test_cms_wizards_organization_submit_form_max_lengths(self):
         """

@@ -8,6 +8,99 @@ ADMIN = "ADMIN"
 
 ROLE_CHOICES = ((ADMIN, _("Admin")),)
 
+COURSE_ADMIN_ROLE = {
+    "django_permissions": [
+        # Objects
+        "cms.add_page",
+        "cms.change_page",
+        "cms.add_title",
+        "cms.change_title",
+        "courses.add_courserun",
+        "courses.change_courserun",
+        "courses.add_person",
+        "courses.change_person",
+        "cms.use_structure",
+        # Filer
+        "filer.add_file",
+        "filer.change_file",
+        "filer.view_file",
+        "filer.add_image",
+        "filer.change_image",
+        "filer.view_image",
+        # Plugins
+        "djangocms_link.add_link",
+        "djangocms_link.change_link",
+        "djangocms_link.delete_link",
+        "djangocms_link.view_link",
+        "djangocms_picture.add_picture",
+        "djangocms_picture.change_picture",
+        "djangocms_picture.delete_picture",
+        "djangocms_picture.view_picture",
+        "djangocms_text_ckeditor.add_text",
+        "djangocms_text_ckeditor.change_text",
+        "djangocms_text_ckeditor.delete_text",
+        "djangocms_text_ckeditor.view_text",
+        "djangocms_video.add_videoplayer",
+        "djangocms_video.change_videoplayer",
+        "djangocms_video.delete_videoplayer",
+        "djangocms_video.view_videoplayer",
+        "djangocms_video.add_videosource",
+        "djangocms_video.change_videosource",
+        "djangocms_video.delete_videosource",
+        "djangocms_video.view_videosource",
+        "djangocms_video.add_videotrack",
+        "djangocms_video.change_videotrack",
+        "djangocms_video.delete_videotrack",
+        "djangocms_video.view_videotrack",
+        "plain_text.add_plaintext",
+        "plain_text.change_plaintext",
+        "plain_text.delete_plaintext",
+        "plain_text.view_plaintext",
+        "section.add_section",
+        "section.change_section",
+        "section.delete_section",
+        "section.view_section",
+        "simple_text_ckeditor.add_simpletext",
+        "simple_text_ckeditor.change_simpletext",
+        "simple_text_ckeditor.delete_simpletext",
+        "simple_text_ckeditor.view_simpletext",
+        "courses.add_organizationpluginmodel",
+        "courses.change_organizationpluginmodel",
+        "courses.delete_organizationpluginmodel",
+        "courses.view_organizationpluginmodel",
+        "courses.add_personpluginmodel",
+        "courses.change_personpluginmodel",
+        "courses.delete_personpluginmodel",
+        "courses.view_personpluginmodel",
+        "courses.add_categorypluginmodel",
+        "courses.change_categorypluginmodel",
+        "courses.delete_categorypluginmodel",
+        "courses.view_categorypluginmodel",
+        "courses.add_licencepluginmodel",
+        "courses.change_licencepluginmodel",
+        "courses.delete_licencepluginmodel",
+        "courses.view_licencepluginmodel",
+    ],
+    "course_page_permissions": {
+        "can_change": True,
+        "can_add": True,
+        "can_delete": False,
+        "can_change_advanced_settings": False,
+        "can_publish": False,
+        "can_change_permissions": False,
+        "can_move_page": True,
+        "can_view": True,
+        "grant_on": 5,  # page and descendants
+    },
+    "course_folder_permissions": {
+        "can_read": True,
+        "can_edit": False,
+        "can_add_children": True,
+        "type": 2,  # folder and children
+    },
+}
+COURSE_ADMIN_ROLE.update(getattr(settings, "RICHIE_COURSE_ADMIN_ROLE", {}))
+
 ORGANIZATION_ADMIN_ROLE = {
     "django_permissions": [
         # Objects
@@ -22,6 +115,13 @@ ORGANIZATION_ADMIN_ROLE = {
         "courses.add_person",
         "courses.change_person",
         "cms.use_structure",
+        # Filer
+        "filer.add_file",
+        "filer.change_file",
+        "filer.view_file",
+        "filer.add_image",
+        "filer.change_image",
+        "filer.view_image",
         # Plugins
         "djangocms_link.add_link",
         "djangocms_link.change_link",
@@ -87,6 +187,12 @@ ORGANIZATION_ADMIN_ROLE = {
         "can_view": True,
         "grant_on": 1,  # just the page
     },
+    "organization_folder_permissions": {
+        "can_read": True,
+        "can_edit": False,
+        "can_add_children": True,
+        "type": 2,  # folder and children
+    },
     "courses_page_permissions": {
         "can_change": True,
         "can_add": True,
@@ -97,6 +203,12 @@ ORGANIZATION_ADMIN_ROLE = {
         "can_move_page": True,
         "can_view": True,
         "grant_on": 5,  # page and descendants
+    },
+    "courses_folder_permissions": {
+        "can_read": True,
+        "can_edit": False,
+        "can_add_children": True,
+        "type": 2,  # folder and children
     },
 }
 ORGANIZATION_ADMIN_ROLE.update(getattr(settings, "RICHIE_ORGANIZATION_ADMIN_ROLE", {}))

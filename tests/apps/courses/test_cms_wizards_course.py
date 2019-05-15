@@ -10,6 +10,7 @@ from django.urls import reverse
 from cms.api import create_page
 from cms.models import Page, PagePermission
 from cms.test_utils.testcases import CMSTestCase
+from filer.models import FolderPermission
 
 from richie.apps.core.factories import UserFactory
 from richie.apps.courses import defaults
@@ -232,7 +233,29 @@ class CourseCMSWizardTestCase(CMSTestCase):
             wizard_page=any_page,
         )
         self.assertTrue(form.is_valid())
-        page = form.save()
+
+        course_role_dict = {
+            "django_permissions": ["cms.change_page"],
+            "course_page_permissions": {
+                "can_change": random.choice([True, False]),
+                "can_add": random.choice([True, False]),
+                "can_delete": random.choice([True, False]),
+                "can_change_advanced_settings": random.choice([True, False]),
+                "can_publish": random.choice([True, False]),
+                "can_change_permissions": random.choice([True, False]),
+                "can_move_page": random.choice([True, False]),
+                "can_view": random.choice([True, False]),
+                "grant_on": random.randint(1, 5),
+            },
+            "course_folder_permissions": {
+                "can_read": random.choice([True, False]),
+                "can_edit": random.choice([True, False]),
+                "can_add_children": random.choice([True, False]),
+                "type": random.randint(0, 2),
+            },
+        }
+        with mock.patch.dict(defaults.COURSE_ADMIN_ROLE, course_role_dict):
+            page = form.save()
 
         # The course and its related page should have been created as draft
         Page.objects.drafts().get(id=page.id)
@@ -245,8 +268,33 @@ class CourseCMSWizardTestCase(CMSTestCase):
         # The course should not have any plugin
         self.assertFalse(OrganizationPluginModel.objects.exists())
 
-        # No other permissions should have been created
-        self.assertEqual(PagePermission.objects.count(), 1)
+        # A page role should have been created for the course page
+        self.assertEqual(page.roles.count(), 1)
+        course_role = page.roles.get(role="ADMIN")
+        self.assertEqual(course_role.group.name, "Admin | My title")
+        self.assertEqual(course_role.group.permissions.count(), 1)
+        self.assertEqual(course_role.folder.name, "Admin | My title")
+
+        # All expected permissions should have been assigned to the group:
+        # - Django permissions
+        self.assertEqual(course_role.group.permissions.first().codename, "change_page")
+        # - DjangoCMS page permissions
+        self.assertEqual(
+            PagePermission.objects.filter(group_id=course_role.group_id).count(), 1
+        )
+        page_permission = PagePermission.objects.get(group_id=course_role.group_id)
+        for key, value in course_role_dict["course_page_permissions"].items():
+            self.assertEqual(getattr(page_permission, key), value)
+        # The Django Filer folder permissions
+        self.assertEqual(
+            FolderPermission.objects.filter(group_id=course_role.group_id).count(), 1
+        )
+        folder_permission = FolderPermission.objects.get(group_id=course_role.group_id)
+        for key, value in course_role_dict["course_folder_permissions"].items():
+            self.assertEqual(getattr(folder_permission, key), value)
+
+        # No other page permissions should have been created
+        self.assertEqual(PagePermission.objects.count(), 2)
 
     def test_cms_wizards_course_submit_form_from_organization_page(self):
         """
@@ -263,7 +311,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
         )
 
         organization = OrganizationFactory()
-        page_role = PageRole.objects.create(
+        organization_page_role = PageRole.objects.create(
             page_id=organization.extended_object_id, role="ADMIN"
         )
 
@@ -291,7 +339,27 @@ class CourseCMSWizardTestCase(CMSTestCase):
         )
         self.assertTrue(form.is_valid())
 
-        role_dict = {
+        course_role_dict = {
+            "django_permissions": ["cms.change_page"],
+            "course_page_permissions": {
+                "can_change": random.choice([True, False]),
+                "can_add": random.choice([True, False]),
+                "can_delete": random.choice([True, False]),
+                "can_change_advanced_settings": random.choice([True, False]),
+                "can_publish": random.choice([True, False]),
+                "can_change_permissions": random.choice([True, False]),
+                "can_move_page": random.choice([True, False]),
+                "can_view": random.choice([True, False]),
+                "grant_on": random.randint(1, 5),
+            },
+            "course_folder_permissions": {
+                "can_read": random.choice([True, False]),
+                "can_edit": random.choice([True, False]),
+                "can_add_children": random.choice([True, False]),
+                "type": random.randint(0, 2),
+            },
+        }
+        organization_role_dict = {
             "courses_page_permissions": {
                 "can_change": random.choice([True, False]),
                 "can_add": random.choice([True, False]),
@@ -302,10 +370,17 @@ class CourseCMSWizardTestCase(CMSTestCase):
                 "can_move_page": random.choice([True, False]),
                 "can_view": random.choice([True, False]),
                 "grant_on": random.randint(1, 5),
-            }
+            },
+            "courses_folder_permissions": {
+                "can_read": random.choice([True, False]),
+                "can_edit": random.choice([True, False]),
+                "can_add_children": random.choice([True, False]),
+                "type": random.randint(0, 2),
+            },
         }
-        with mock.patch.dict(defaults.ORGANIZATION_ADMIN_ROLE, role_dict):
-            page = form.save()
+        with mock.patch.dict(defaults.ORGANIZATION_ADMIN_ROLE, organization_role_dict):
+            with mock.patch.dict(defaults.COURSE_ADMIN_ROLE, course_role_dict):
+                page = form.save()
 
         # The course and its related page should have been created as draft
         Page.objects.drafts().get(id=page.id, course__isnull=False)
@@ -319,12 +394,44 @@ class CourseCMSWizardTestCase(CMSTestCase):
         plugin = OrganizationPluginModel.objects.first()
         self.assertEqual(plugin.page_id, organization.extended_object_id)
 
-        # A page permission should have been created for the course and its descendants
+        # A page permission should have been created for the organization admin role
         page_permission = PagePermission.objects.get(
-            group_id=page_role.group_id, page=page
+            group_id=organization_page_role.group_id, page=page
         )
-        for key, value in role_dict["courses_page_permissions"].items():
+        for key, value in organization_role_dict["courses_page_permissions"].items():
             self.assertEqual(getattr(page_permission, key), value)
+
+        # A Filer folder permission should have been created for the organization admin role
+        folder_permission = FolderPermission.objects.get(
+            group_id=organization_page_role.group_id
+        )
+        for key, value in organization_role_dict["courses_folder_permissions"].items():
+            self.assertEqual(getattr(folder_permission, key), value)
+
+        # A page role should have been created for the course page
+        self.assertEqual(page.roles.count(), 1)
+        course_role = page.roles.get(role="ADMIN")
+        self.assertEqual(course_role.group.name, "Admin | My title")
+        self.assertEqual(course_role.group.permissions.count(), 1)
+        self.assertEqual(course_role.folder.name, "Admin | My title")
+
+        # All expected permissions should have been assigned to the group:
+        # - Django permissions
+        self.assertEqual(course_role.group.permissions.first().codename, "change_page")
+        # - DjangoCMS page permissions
+        self.assertEqual(
+            PagePermission.objects.filter(group_id=course_role.group_id).count(), 1
+        )
+        page_permission = PagePermission.objects.get(group_id=course_role.group_id)
+        for key, value in course_role_dict["course_page_permissions"].items():
+            self.assertEqual(getattr(page_permission, key), value)
+        # The Django Filer folder permissions
+        self.assertEqual(
+            FolderPermission.objects.filter(group_id=course_role.group_id).count(), 1
+        )
+        folder_permission = FolderPermission.objects.get(group_id=course_role.group_id)
+        for key, value in course_role_dict["course_folder_permissions"].items():
+            self.assertEqual(getattr(folder_permission, key), value)
 
     def test_cms_wizards_course_submit_form_from_organization_page_no_role(self):
         """

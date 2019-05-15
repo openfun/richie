@@ -235,6 +235,11 @@ class Base(DRFMixin, Configuration):
 
     PARLER_LANGUAGES = CMS_LANGUAGES
 
+    # Django Filer
+    FILER_ENABLE_PERMISSIONS = True
+    FILER_IS_PUBLIC_DEFAULT = True
+
+    # DjangoCMS
     CMS_TEMPLATES = (
         ("courses/cms/course_detail.html", _("Course page")),
         ("courses/cms/course_run_detail.html", _("Course run page")),
