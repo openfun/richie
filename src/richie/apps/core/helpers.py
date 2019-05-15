@@ -164,9 +164,10 @@ def recursive_page_creation(site, pages_info, parent=None):
     pages = {}
 
     for name, kwargs in pages_info.items():
+        children = kwargs.pop("children", None)
         try:
             page = Page.objects.get(reverse_id=name)
-        except Page.DoesNotExist():
+        except Page.DoesNotExist:
             page = create_i18n_page(
                 site=site, parent=parent, published=True, reverse_id=name, **kwargs
             )
@@ -174,10 +175,8 @@ def recursive_page_creation(site, pages_info, parent=None):
         pages[name] = page
 
         # Create children
-        if kwargs.get("children", None):
-            children_pages = recursive_page_creation(
-                site, kwargs["children"], parent=page
-            )
+        if children:
+            children_pages = recursive_page_creation(site, children, parent=page)
             for child_name in children_pages:
                 if child_name in pages:
                     raise ImproperlyConfigured(

@@ -3,6 +3,7 @@ from django.conf import settings
 
 NB_OBJECTS = {
     "courses": 30,
+    "course_courseruns": 5,
     "course_organizations": 3,
     "course_persons": 6,
     "course_subjects": 2,
