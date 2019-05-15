@@ -99,7 +99,6 @@ class FilerImageFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Image
 
-    owner = factory.SubFactory(UserFactory)
     original_filename = factory.Faker("file_name", category="image")
 
     # pylint: disable=no-self-use
