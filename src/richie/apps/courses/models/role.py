@@ -6,6 +6,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from cms.api import Page
+from filer.models import Folder
 
 from ..defaults import ROLE_CHOICES
 
@@ -42,6 +43,15 @@ class PageRole(models.Model):
         blank=True,
         editable=False,
     )
+    folder = models.OneToOneField(
+        to=Folder,
+        related_name="role",
+        verbose_name=_("filer folder"),
+        help_text=_("Filer folder that this role controls."),
+        on_delete=models.PROTECT,
+        blank=True,
+        editable=False,
+    )
 
     class Meta:
         db_table = "richie_page_role"
@@ -64,6 +74,16 @@ class PageRole(models.Model):
         if not self.group_id:
             self.group = Group.objects.create(
                 name=str(self)[: Group._meta.get_field("name").max_length]
+            )
+
+        # Create the related filer folder the first time the instance is saved.
+        # Why create this folder at the root and not below a parent `organization` folder?
+        # - the only way to refer to an existing parent folder is by its name... but it could be
+        #   changed by a user via the interface and break the functionality,
+        # - the filer search functionality only finds folders at the root, not nested folders.
+        if not self.folder_id:
+            self.folder = Folder.objects.create(
+                name=str(self)[: Folder._meta.get_field("name").max_length]
             )
 
         super().save(

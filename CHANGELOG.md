@@ -10,6 +10,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Create a user group for each course and give it the permission to manage
+  pages below the course (snapshots and course runs),
+- Create a folder in Django Filer for each organization and for each course,
 - When a new course is created for an organization, automatically associate
   permissions to organization admins (as defined in settings or with sensible
   defaults),

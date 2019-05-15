@@ -5,6 +5,8 @@ from django.contrib.auth.models import Group
 from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
 
+from filer.models import Folder
+
 from richie.apps.courses.factories import PageFactory
 from richie.apps.courses.models import PageRole
 
@@ -32,8 +34,16 @@ class PageRoleModelsTestCase(TestCase):
         role = PageRole(page=page, role="ADMIN")
 
         with self.assertRaises(ObjectDoesNotExist):
-            self.assertEqual(role.group._meta.model, Group)
+            self.assertEqual(role.folder._meta.model, Folder)
 
-        # Now save the object and check that the group field was populated
+        with self.assertRaises(ObjectDoesNotExist):
+            self.assertEqual(role.folder._meta.model, Folder)
+
+        # Now save the object and check that the group and folder fields were populated
         role.save()
+
         self.assertEqual(role.group._meta.model, Group)
+        self.assertEqual(role.folder._meta.model, Folder)
+
+        self.assertEqual(role.group.name, "Admin | My page")
+        self.assertEqual(role.folder.name, "Admin | My page")

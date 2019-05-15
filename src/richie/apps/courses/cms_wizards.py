@@ -22,6 +22,7 @@ from cms.utils.page_permissions import user_can_add_page, user_can_add_subpage
 from cms.wizards.forms import BaseFormMixin
 from cms.wizards.wizard_base import Wizard
 from cms.wizards.wizard_pool import wizard_pool
+from filer.models import FolderPermission
 
 from ..core.helpers import get_permissions
 from . import defaults
@@ -217,6 +218,30 @@ class CourseWizardForm(BaseWizardForm):
         page = super().save()
         course = Course.objects.create(extended_object=page)
 
+        # Create a role for admins of this course (which will create a new user group and a new
+        # Filer folder)
+        page_role = PageRole.objects.create(page=page, role=defaults.ADMIN)
+
+        # Associate permissions as defined in settings:
+        # - Create Django permissions
+        page_role.group.permissions.set(
+            get_permissions(defaults.COURSE_ADMIN_ROLE.get("django_permissions", []))
+        )
+
+        # - Create DjangoCMS page permissions
+        PagePermission.objects.create(
+            group_id=page_role.group_id,
+            page=page,
+            **defaults.COURSE_ADMIN_ROLE.get("course_page_permissions", {}),
+        )
+
+        # - Create the Django Filer folder permissions
+        FolderPermission.objects.create(
+            folder_id=page_role.folder_id,
+            group_id=page_role.group_id,
+            **defaults.COURSE_ADMIN_ROLE.get("course_folder_permissions", {}),
+        )
+
         try:
             self.page.organization
         except Organization.DoesNotExist:
@@ -241,11 +266,21 @@ class CourseWizardForm(BaseWizardForm):
             except PageRole.DoesNotExist:
                 pass
             else:
+                # - Create DjangoCMS page permissions
                 PagePermission.objects.create(
                     group_id=page_role.group_id,
                     page_id=course.extended_object_id,
                     **defaults.ORGANIZATION_ADMIN_ROLE.get(
                         "courses_page_permissions", {}
+                    ),
+                )
+
+                # - Create the Django Filer folder permissions
+                FolderPermission.objects.create(
+                    folder_id=page_role.folder_id,
+                    group_id=page_role.group_id,
+                    **defaults.ORGANIZATION_ADMIN_ROLE.get(
+                        "courses_folder_permissions", {}
                     ),
                 )
 
@@ -417,15 +452,19 @@ class OrganizationWizardForm(BaseWizardForm):
         """
         The parent form created the page.
         This method creates the associated organization.
-        It also creates a new role to handle permissions for admins of this organization.
+        It also creates a new role with:
+          - a user group to handle permissions for admins of this organization,
+          - a folder in Django Filer to store images related to this organization,
+          - all necessary permissions.
         """
         page = super().save()
         Organization.objects.create(extended_object=page)
 
-        # Create a role for admins of this organization (which will create a new user group) and
-        # associate permissions as defined in settings:
+        # Create a role for admins of this organization (which will create a new user group and
+        # a new Filer folder)
         page_role = PageRole.objects.create(page=page, role=defaults.ADMIN)
 
+        # Associate permissions as defined in settings:
         # - Create Django permissions
         page_role.group.permissions.set(
             get_permissions(
@@ -435,9 +474,18 @@ class OrganizationWizardForm(BaseWizardForm):
 
         # - Create DjangoCMS page permissions
         PagePermission.objects.create(
-            group=page_role.group,
+            group_id=page_role.group_id,
             page=page,
             **defaults.ORGANIZATION_ADMIN_ROLE.get("organization_page_permissions", {}),
+        )
+
+        # - Create the Django Filer folder permissions
+        FolderPermission.objects.create(
+            folder_id=page_role.folder_id,
+            group_id=page_role.group_id,
+            **defaults.ORGANIZATION_ADMIN_ROLE.get(
+                "organization_folder_permissions", {}
+            ),
         )
 
         return page

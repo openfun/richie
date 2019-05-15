@@ -129,7 +129,8 @@ class PageRoleAdmin(admin.ModelAdmin):
     fields = [
         "role",
         link_field("page"),
-        link_field("group", anchor=_("See group permissions")),
+        link_field("group", anchor=_("See user group")),
+        link_field("folder", anchor=_("See filer folder")),
     ]
     list_display = ["id", "role", "page"]
     list_filter = ["role"]
