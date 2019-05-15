@@ -121,6 +121,15 @@ class CoursesViewsetsTestCase(TestCase):
                                     ]
                                 }
                             },
+                            "persons": {
+                                "persons": {
+                                    "buckets": [
+                                        {"key": "31", "doc_count": 11},
+                                        {"key": "32", "doc_count": 7},
+                                        {"key": "33", "doc_count": 3},
+                                    ]
+                                }
+                            },
                             "subjects": {
                                 "subjects": {
                                     "buckets": [
@@ -158,6 +167,16 @@ class CoursesViewsetsTestCase(TestCase):
                         ]
                     }
                 }
+            if index == "richie_persons":
+                return {
+                    "hits": {
+                        "hits": [
+                            {"_id": "31", "_source": {"title": {"en": "Person 31"}}},
+                            {"_id": "32", "_source": {"title": {"en": "Person 32"}}},
+                            {"_id": "33", "_source": {"title": {"en": "Person 33"}}},
+                        ]
+                    }
+                }
 
         mock_search.side_effect = mock_search_implementation
 
@@ -191,24 +210,14 @@ class CoursesViewsetsTestCase(TestCase):
                             {"count": 11, "human_name": "Archived", "key": "archived"},
                         ],
                     },
-                    "new": {
-                        "human_name": "New courses",
+                    "languages": {
+                        "human_name": "Languages",
                         "is_drilldown": False,
-                        "name": "new",
-                        "position": 0,
+                        "name": "languages",
+                        "position": 5,
                         "values": [
-                            {"count": 66, "human_name": "First session", "key": "new"}
-                        ],
-                    },
-                    "subjects": {
-                        "base_path": None,
-                        "human_name": "Subjects",
-                        "is_drilldown": False,
-                        "name": "subjects",
-                        "position": 2,
-                        "values": [
-                            {"count": 23, "human_name": "Subject 2", "key": "22"},
-                            {"count": 21, "human_name": "Subject 1", "key": "21"},
+                            {"count": 55, "human_name": "French", "key": "fr"},
+                            {"count": 33, "human_name": "English", "key": "en"},
                         ],
                     },
                     "levels": {
@@ -222,6 +231,15 @@ class CoursesViewsetsTestCase(TestCase):
                             {"count": 13, "human_name": "Level 1", "key": "1"},
                         ],
                     },
+                    "new": {
+                        "human_name": "New courses",
+                        "is_drilldown": False,
+                        "name": "new",
+                        "position": 0,
+                        "values": [
+                            {"count": 66, "human_name": "First session", "key": "new"}
+                        ],
+                    },
                     "organizations": {
                         "base_path": None,
                         "human_name": "Organizations",
@@ -233,14 +251,27 @@ class CoursesViewsetsTestCase(TestCase):
                             {"count": 17, "human_name": "Organization 11", "key": "11"},
                         ],
                     },
-                    "languages": {
-                        "human_name": "Languages",
+                    "persons": {
+                        "base_path": None,
+                        "human_name": "Persons",
                         "is_drilldown": False,
-                        "name": "languages",
+                        "name": "persons",
                         "position": 5,
                         "values": [
-                            {"count": 55, "human_name": "French", "key": "fr"},
-                            {"count": 33, "human_name": "English", "key": "en"},
+                            {"count": 11, "human_name": "Person 31", "key": "31"},
+                            {"count": 7, "human_name": "Person 32", "key": "32"},
+                            {"count": 3, "human_name": "Person 33", "key": "33"},
+                        ],
+                    },
+                    "subjects": {
+                        "base_path": None,
+                        "human_name": "Subjects",
+                        "is_drilldown": False,
+                        "name": "subjects",
+                        "position": 2,
+                        "values": [
+                            {"count": 23, "human_name": "Subject 2", "key": "22"},
+                            {"count": 21, "human_name": "Subject 1", "key": "21"},
                         ],
                     },
                 },

@@ -32,7 +32,7 @@ COURSES = [
         "is_new": True,
         "organizations": ["P-00030001", "P-00030004", "L-000300010001"],
         "organizations_names": {"en": ["Org 31", "Org 34", "Org 311"]},
-        "persons": [2],
+        "persons": ["2"],
         "persons_names": {"en": ["Mikhaïl Boulgakov"]},
         "title": {"en": "Artificial intelligence for mushroom picking"},
     },
@@ -85,7 +85,7 @@ COURSES = [
         "is_new": False,
         "organizations": ["P-00030002", "P-00030004", "L-000300020002"],
         "organizations_names": {"en": ["Org 32", "Org 34", "Org 322"]},
-        "persons": [2],
+        "persons": ["2"],
         "persons_names": {"en": ["Mikhaïl Boulgakov"]},
         "title": {"en": "Kung-fu moves for cloud infrastructure security"},
     },
@@ -93,7 +93,7 @@ COURSES = [
 INDEXABLE_IDS = {
     id: f"#{id:s}"
     for course in COURSES
-    for id in course["categories"] + course["organizations"]
+    for id in course["categories"] + course["organizations"] + course["persons"]
 }
 COURSE_RUNS = {
     "A": {
@@ -413,15 +413,6 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                     },
                 ],
                 "filters": {
-                    "new": {
-                        "human_name": "New courses",
-                        "is_drilldown": False,
-                        "name": "new",
-                        "position": 0,
-                        "values": [
-                            {"count": 2, "human_name": "First session", "key": "new"}
-                        ],
-                    },
                     "availability": {
                         "human_name": "Availability",
                         "is_drilldown": True,
@@ -442,33 +433,15 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             {"count": 2, "human_name": "Archived", "key": "archived"},
                         ],
                     },
-                    "subjects": {
-                        "base_path": "0001",
-                        "human_name": "Subjects",
+                    "languages": {
+                        "human_name": "Languages",
                         "is_drilldown": False,
-                        "name": "subjects",
-                        "position": 2,
+                        "name": "languages",
+                        "position": 5,
                         "values": [
-                            {
-                                "count": 3,
-                                "human_name": "#P-00010002",
-                                "key": "P-00010002",
-                            },
-                            {
-                                "count": 2,
-                                "human_name": "#P-00010001",
-                                "key": "P-00010001",
-                            },
-                            {
-                                "count": 2,
-                                "human_name": "#P-00010003",
-                                "key": "P-00010003",
-                            },
-                            {
-                                "count": 1,
-                                "human_name": "#P-00010004",
-                                "key": "P-00010004",
-                            },
+                            {"count": 3, "human_name": "#en", "key": "en"},
+                            {"count": 2, "human_name": "#de", "key": "de"},
+                            {"count": 2, "human_name": "#fr", "key": "fr"},
                         ],
                     },
                     "levels": {
@@ -493,6 +466,15 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                                 "human_name": "#L-00020003",
                                 "key": "L-00020003",
                             },
+                        ],
+                    },
+                    "new": {
+                        "human_name": "New courses",
+                        "is_drilldown": False,
+                        "name": "new",
+                        "position": 0,
+                        "values": [
+                            {"count": 2, "human_name": "First session", "key": "new"}
                         ],
                     },
                     "organizations": {
@@ -524,15 +506,41 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             },
                         ],
                     },
-                    "languages": {
-                        "human_name": "Languages",
+                    "persons": {
+                        "base_path": None,
+                        "human_name": "Persons",
                         "is_drilldown": False,
-                        "name": "languages",
+                        "name": "persons",
                         "position": 5,
+                        "values": [{"count": 2, "human_name": "#2", "key": "2"}],
+                    },
+                    "subjects": {
+                        "base_path": "0001",
+                        "human_name": "Subjects",
+                        "is_drilldown": False,
+                        "name": "subjects",
+                        "position": 2,
                         "values": [
-                            {"count": 3, "human_name": "#en", "key": "en"},
-                            {"count": 2, "human_name": "#de", "key": "de"},
-                            {"count": 2, "human_name": "#fr", "key": "fr"},
+                            {
+                                "count": 3,
+                                "human_name": "#P-00010002",
+                                "key": "P-00010002",
+                            },
+                            {
+                                "count": 2,
+                                "human_name": "#P-00010001",
+                                "key": "P-00010001",
+                            },
+                            {
+                                "count": 2,
+                                "human_name": "#P-00010003",
+                                "key": "P-00010003",
+                            },
+                            {
+                                "count": 1,
+                                "human_name": "#P-00010004",
+                                "key": "P-00010004",
+                            },
                         ],
                     },
                 },
@@ -624,7 +632,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         The scope can be limited to filters via the querystring.
         """
         _courses_definition, content = self.execute_query("scope=filters")
-        self.assertEqual(len(content["filters"]), 6)
+        self.assertEqual(len(content["filters"]), 7)
         self.assertFalse("objects" in content)
 
     def test_query_courses_course_runs_filter_availability_facets(self, *_):

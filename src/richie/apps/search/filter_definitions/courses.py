@@ -61,27 +61,8 @@ class IndexableFilterDefinition(TermsAggsMixin, TermsQueryMixin, BaseFilterDefin
 
     @property
     def aggs_include(self):
-        """
-        Return a regex that limits what facets are computed on the field.
-
-        Returns:
-        --------
-            string: a regex depending on filters configuration in settings and pages in the CMS:
-            - "": the empty string, if the `reverse_id` does not correspond to any published
-                page which will not match any value and return an empty list of facets,
-            - ".*-0001.{4}": if the `reverse_id` points to a published page with path "0001"
-                this will match ids of the children of this page that will be of the form
-                P-00010001 if they have children or L-00010001 if they are leafs,
-            ' ".*": if no `reverse_id` is set (delegated to super) which will
-                match all values.
-        """
-        if self.reverse_id:
-            if self.base_page:
-                node = self.base_page.node
-                return f".*-{node.path:s}.{{{node.steplen:d}}}"
-            return ""
-
-        return super().aggs_include
+        """Do not limit which facets are computed by default."""
+        return ".*"
 
     def get_form_fields(self):
         """
@@ -200,6 +181,37 @@ class IndexableFilterDefinition(TermsAggsMixin, TermsQueryMixin, BaseFilterDefin
                 ],
             }
         }
+
+
+class IndexableMPTTFilterDefinition(IndexableFilterDefinition):
+    """
+    Some of our filters are a special case of terms-based filter as they use MPTT paths
+    as IDs and enable limiting faceting by path.
+    """
+
+    @property
+    def aggs_include(self):
+        """
+        Return a regex that limits what facets are computed on the field.
+
+        Returns:
+        --------
+            string: a regex depending on filters configuration in settings and pages in the CMS:
+            - "": the empty string, if the `reverse_id` does not correspond to any published
+                page which will not match any value and return an empty list of facets,
+            - ".*-0001.{4}": if the `reverse_id` points to a published page with path "0001"
+                this will match ids of the children of this page that will be of the form
+                P-00010001 if they have children or L-00010001 if they are leafs,
+            ' ".*": if no `reverse_id` is set (delegated to super) which will
+                match all values.
+        """
+        if self.reverse_id:
+            if self.base_page:
+                node = self.base_page.node
+                return f".*-{node.path:s}.{{{node.steplen:d}}}"
+            return ""
+
+        return super().aggs_include
 
 
 class StaticChoicesFilterDefinition(

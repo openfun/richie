@@ -90,7 +90,7 @@ FILTERS_CONFIGURATION = [
         },
     ),
     (
-        "richie.apps.search.filter_definitions.IndexableFilterDefinition",
+        "richie.apps.search.filter_definitions.IndexableMPTTFilterDefinition",
         {
             "human_name": _("Subjects"),
             "min_doc_count": 0,
@@ -101,7 +101,7 @@ FILTERS_CONFIGURATION = [
         },
     ),
     (
-        "richie.apps.search.filter_definitions.IndexableFilterDefinition",
+        "richie.apps.search.filter_definitions.IndexableMPTTFilterDefinition",
         {
             "human_name": _("Levels"),
             "min_doc_count": 0,
@@ -112,13 +112,23 @@ FILTERS_CONFIGURATION = [
         },
     ),
     (
-        "richie.apps.search.filter_definitions.IndexableFilterDefinition",
+        "richie.apps.search.filter_definitions.IndexableMPTTFilterDefinition",
         {
             "human_name": _("Organizations"),
             "min_doc_count": 0,
             "name": "organizations",
             "position": 4,
             "reverse_id": "organizations",
+        },
+    ),
+    (
+        "richie.apps.search.filter_definitions.IndexableFilterDefinition",
+        {
+            "human_name": _("Persons"),
+            "min_doc_count": 0,
+            "name": "persons",
+            "position": 5,
+            "reverse_id": "persons",
         },
     ),
 ]

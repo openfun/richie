@@ -119,6 +119,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
                 "Niveaux",
                 "Établissements",
                 "Langues",
+                "Personnes",
             ],
         )
 

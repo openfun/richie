@@ -8,6 +8,7 @@ from .base import NestingWrapper  # noqa
 from .courses import (  # noqa
     AvailabilityFilterDefinition,
     IndexableFilterDefinition,
+    IndexableMPTTFilterDefinition,
     LanguagesFilterDefinition,
     StaticChoicesFilterDefinition,
 )
