@@ -3,6 +3,7 @@ Core factories
 """
 import io
 import os
+import random
 
 from django.conf import settings
 from django.contrib.auth.hashers import make_password
@@ -100,6 +101,15 @@ class FilerImageFactory(factory.django.DjangoModelFactory):
         model = Image
 
     original_filename = factory.Faker("file_name", category="image")
+
+    # pylint: disable=no-self-use
+    @factory.lazy_attribute
+    def subject_location(self):
+        """
+        Generate random coordinates within the image.
+        We assume its dimensions are 100x100 as is the case for below's random file.
+        """
+        return (random.randint(1, 100), random.randint(1, 100))
 
     # pylint: disable=no-self-use
     @factory.lazy_attribute
