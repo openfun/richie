@@ -49,12 +49,7 @@ export const CourseGlimpse = injectIntl(
     >
       <div className="course-glimpse__media">
         {course.cover_image ? (
-          <img
-            src={course.cover_image}
-            alt={intl.formatMessage(messages.altText, {
-              courseTitle: course.title,
-            })}
-          />
+          <img {...course.cover_image} />
         ) : (
           <div className="course-glimpse__media__empty">
             <FormattedMessage {...messages.cover} />
