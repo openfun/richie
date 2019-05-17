@@ -74,6 +74,7 @@ bootstrap: ## install development dependencies
 bootstrap: \
   env.d/development/crowdin \
   data/media/.keep \
+  data/smedia/.keep \
   data/static/.keep \
   build-front \
   build \
@@ -273,6 +274,11 @@ data/media/.keep:
 	@echo 'Preparing media volume...'
 	@mkdir -p data/media/
 	@touch data/media/.keep
+
+data/smedia/.keep:
+	@echo 'Preparing secure media volume...'
+	@mkdir -p data/smedia/
+	@touch data/smedia/.keep
 
 data/static/.keep:
 	@echo 'Preparing static volume...'
