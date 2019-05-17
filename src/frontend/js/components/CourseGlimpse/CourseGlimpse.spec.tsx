@@ -12,7 +12,10 @@ describe('components/CourseGlimpse', () => {
 
   it('renders a course glimpse with its data', () => {
     const course = {
-      cover_image: '/thumbs/small.png',
+      cover_image: {
+        alt: 'Alt text for course 42 cover image',
+        src: '/thumbs/small.png',
+      },
       organization_highlighted: 'Some Organization',
       state: {
         call_to_action: 'Enroll now',
@@ -40,7 +43,7 @@ describe('components/CourseGlimpse', () => {
     );
     getByText('Enroll now');
     // The logo is rendered along with alternate text
-    expect(getByAltText('Logo for Course 42')).toHaveAttribute(
+    expect(getByAltText('Alt text for course 42 cover image')).toHaveAttribute(
       'src',
       '/thumbs/small.png',
     );
@@ -48,7 +51,10 @@ describe('components/CourseGlimpse', () => {
 
   it('works when there is no call to action or datetime on the state (eg. an archived course)', () => {
     const course = {
-      cover_image: '/thumbs/small.png',
+      cover_image: {
+        alt: 'Alt text for course 42 cover image',
+        src: '/thumbs/small.png',
+      },
       organization_highlighted: 'Some Organization',
       state: {
         call_to_action: null,
