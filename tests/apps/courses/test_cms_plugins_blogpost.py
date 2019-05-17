@@ -2,14 +2,15 @@
 """
 Unit tests for the BlogPost plugin and its model
 """
+import re
+
 from django import forms
 from django.conf import settings
 
 from cms.api import add_plugin, create_page
 from cms.test_utils.testcases import CMSTestCase
-from djangocms_picture.cms_plugins import PicturePlugin
 
-from richie.apps.core.factories import FilerImageFactory, UserFactory
+from richie.apps.core.factories import UserFactory
 from richie.apps.core.helpers import create_i18n_page
 from richie.apps.courses.cms_plugins import BlogPostPlugin
 from richie.apps.courses.factories import BlogPostFactory
@@ -49,29 +50,11 @@ class BlogPostPluginTestCase(CMSTestCase):
         """
         The blogpost plugin should render as expected on a public page.
         """
-        # Create a filer fake image
-        image = FilerImageFactory()
-
         # Create an blogpost
         blogpost = BlogPostFactory(
-            page_title={"en": "public title", "fr": "titre publique"}
+            page_title={"en": "public title", "fr": "titre publique"}, fill_cover=True
         )
         blogpost_page = blogpost.extended_object
-
-        # Add cover to related placeholder
-        cover_placeholder = blogpost_page.placeholders.get(slot="cover")
-        add_plugin(
-            cover_placeholder,
-            PicturePlugin,
-            "en",
-            **{"picture": image, "attributes": {"alt": "cover description"}}
-        )
-        add_plugin(
-            cover_placeholder,
-            PicturePlugin,
-            "fr",
-            **{"picture": image, "attributes": {"alt": "description du cover"}}
-        )
 
         # Create a page to add the plugin to
         page = create_i18n_page({"en": "A page", "fr": "Une page"})
@@ -127,8 +110,11 @@ class BlogPostPluginTestCase(CMSTestCase):
         self.assertNotContains(response, "draft title")
 
         # Blogpost's cover should be present
-        # pylint: disable=no-member
-        self.assertContains(response, image.file.name)
+        pattern = (
+            r'<div class="blogpost-glimpse__media">'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x150'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
 
         # Same checks in French
         url = page.get_absolute_url(language="fr")
@@ -141,7 +127,11 @@ class BlogPostPluginTestCase(CMSTestCase):
             status_code=200,
         )
         # pylint: disable=no-member
-        self.assertContains(response, image.file.name)
+        pattern = (
+            r'<div class="blogpost-glimpse__media">'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x150'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
 
     def test_cms_plugins_blogpost_render_on_draft_page(self):
         """

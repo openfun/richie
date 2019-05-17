@@ -2,6 +2,8 @@
 """
 Unit tests for the Course plugin and its model
 """
+import re
+
 from django import forms
 from django.conf import settings
 from django.test import TestCase
@@ -64,6 +66,7 @@ class CoursePluginTestCase(TestCase):
         course = CourseFactory(
             page_title={"en": "public title", "fr": "titre public"},
             fill_organizations=[organization],
+            fill_cover=True,
         )
         course_page = course.extended_object
 
@@ -146,6 +149,13 @@ class CoursePluginTestCase(TestCase):
             "<p>{title}</p>".format(title=organization.extended_object.get_title()),
             status_code=200,
         )
+
+        # The course's cover should be present
+        pattern = (
+            r'<div class="course-glimpse__media">'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x150'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
 
         # The draft course plugin should not be present
         # Check if draft is shown after unpublish

@@ -6,9 +6,7 @@
       {{ relevant_page.get_title }}
     </a>
   {% else %}
-    {% with width=216 height=120 %}
-        {% include "courses/cms/fragment_category_glimpse.html" with category=relevant_page.category %}
-    {% endwith %}
+    {% include "courses/cms/fragment_category_glimpse.html" with category=relevant_page.category %}
   {% endif %}
 {% endif %}
 {% endspaceless %}

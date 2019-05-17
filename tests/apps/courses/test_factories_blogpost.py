@@ -27,7 +27,7 @@ class BlogPostFactoryTestCase(TestCase):
         # The cover plugins should point to one of our fixtures images
         for language in ["fr", "en"]:
             cover_plugin = cover.cmsplugin_set.get(
-                plugin_type="PicturePlugin", language=language
+                plugin_type="SimplePicturePlugin", language=language
             )
             self.assertIn(
                 "cover",

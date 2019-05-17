@@ -12,10 +12,10 @@ from django.utils import translation
 from cms.models import Title
 from djangocms_picture.models import Picture
 
+from richie.plugins.simple_picture.helpers import get_picture_info
 from richie.plugins.simple_text_ckeditor.models import SimpleText
 
 from ...courses.models import MAX_DATE, Course, CourseState
-from ..defaults import COURSES_COVER_IMAGE_HEIGHT, COURSES_COVER_IMAGE_WIDTH
 from ..forms import CourseSearchForm
 from ..text_indexing import MULTILINGUAL_TEXT
 from ..utils.i18n import get_best_field_language
@@ -364,15 +364,13 @@ class CoursesIndexer:
 
         # Prepare cover images
         cover_images = {}
-        for cover_image in Picture.objects.filter(
+        for cover in Picture.objects.filter(
             cmsplugin_ptr__placeholder__page=course.extended_object,
             cmsplugin_ptr__placeholder__slot="course_cover",
         ):
-            # Force the image format before computing it
-            cover_image.use_no_cropping = False
-            cover_image.width = COURSES_COVER_IMAGE_WIDTH
-            cover_image.height = COURSES_COVER_IMAGE_HEIGHT
-            cover_images[cover_image.cmsplugin_ptr.language] = cover_image.img_src
+            language = cover.cmsplugin_ptr.language
+            with translation.override(language):
+                cover_images[language] = get_picture_info(cover, "glimpse")
 
         # Prepare description texts
         descriptions = defaultdict(list)

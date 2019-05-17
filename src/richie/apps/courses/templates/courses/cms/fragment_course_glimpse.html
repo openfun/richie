@@ -1,15 +1,21 @@
-{% load i18n cms_tags %}
+{% load i18n cms_tags extra_tags thumbnail %}
 {% comment %}Obviously, the context template variable "course" is required and must be a Course page extension{% endcomment %}
 {% with course_page=course.extended_object course_state=course.state main_org_title=course.get_main_organization.extended_object.get_title %}
 <div class="course-glimpse__media">
-    {% show_placeholder "course_cover" course_page as cover %}
-    {% if cover %}
-        {{ cover }}
-    {% else %}
-        <div class="course-glimpse__media__empty">
-        {% trans "Cover" %}
-        </div>
-    {% endif %}
+  {% get_placeholder_plugins "course_cover" course_page as plugins or %}
+    <p class="course-glimpse__media__empty">{% trans "Cover" %}</p>
+  {% endget_placeholder_plugins %}
+  {% blockplugin plugins.0 %}
+    <img src="{% thumbnail instance.picture 300x150 crop upscale subject_location=instance.picture.subject_location %}"
+      srcset="
+        {% thumbnail instance.picture 300x150 crop upscale subject_location=instance.picture.subject_location %} 300w,
+        {% if instance.picture.width >= 600 %}{% thumbnail instance.picture 600x300 crop upscale subject_location=instance.picture.subject_location %} 600w,{% endif %}
+        {% if instance.picture.width >= 900 %}{% thumbnail instance.picture 900x450 crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}
+      "
+      sizes="300px"
+      alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'course cover image' %}{% endif %}"
+    />
+  {% endblockplugin %}
 </div>
 <div class="course-glimpse__content">
     <div class="course-glimpse__content__wrapper">

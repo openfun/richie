@@ -6,7 +6,6 @@ from unittest import mock
 from django.test import TestCase
 
 from cms.api import add_plugin
-from djangocms_picture.models import Picture
 
 from richie.apps.courses.factories import PersonFactory
 from richie.apps.search.indexers.persons import PersonsIndexer
@@ -18,8 +17,9 @@ class PersonsIndexersTestCase(TestCase):
     and especially dynamic mapping shape in ES
     """
 
-    @mock.patch.object(
-        Picture, "img_src", new_callable=mock.PropertyMock, return_value="123.jpg"
+    @mock.patch(
+        "richie.apps.search.indexers.persons.get_picture_info",
+        return_value="portrait info",
     )
     def test_indexers_persons_get_es_documents(self, _mock_picture):
         """
@@ -73,7 +73,7 @@ class PersonsIndexersTestCase(TestCase):
                         "en": ["my first person", "first person", "person"],
                         "fr": ["ma première personne", "première personne", "personne"],
                     },
-                    "portrait": {"en": "123.jpg", "fr": "123.jpg"},
+                    "portrait": {"en": "portrait info", "fr": "portrait info"},
                     "title": {"en": "my first person", "fr": "ma première personne"},
                 },
                 {

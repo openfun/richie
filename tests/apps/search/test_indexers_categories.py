@@ -6,7 +6,6 @@ from unittest import mock
 from django.test import TestCase
 
 from cms.api import add_plugin
-from djangocms_picture.models import Picture
 
 from richie.apps.courses.factories import CategoryFactory
 from richie.apps.search.indexers.categories import CategoriesIndexer
@@ -18,8 +17,9 @@ class CategoriesIndexersTestCase(TestCase):
     and especially dynamic mapping shape in ES
     """
 
-    @mock.patch.object(
-        Picture, "img_src", new_callable=mock.PropertyMock, return_value="123.jpg"
+    @mock.patch(
+        "richie.apps.search.indexers.categories.get_picture_info",
+        return_value="logo info",
     )
     def test_indexers_categories_get_es_documents(self, _mock_picture):
         """
@@ -102,7 +102,7 @@ class CategoriesIndexersTestCase(TestCase):
                         "fr": "description français ligne 1. description français ligne 2.",
                     },
                     "is_meta": True,
-                    "logo": {"en": "123.jpg", "fr": "123.jpg"},
+                    "logo": {"en": "logo info", "fr": "logo info"},
                     "nb_children": 1,
                     "path": "0001",
                     "title": {

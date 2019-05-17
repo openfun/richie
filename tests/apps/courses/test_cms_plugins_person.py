@@ -2,14 +2,15 @@
 """
 Unit tests for the Person plugin and its model
 """
+import re
+
 from django import forms
 from django.conf import settings
 
 from cms.api import add_plugin, create_page
 from cms.test_utils.testcases import CMSTestCase
-from djangocms_picture.cms_plugins import PicturePlugin
 
-from richie.apps.core.factories import FilerImageFactory, UserFactory
+from richie.apps.core.factories import UserFactory
 from richie.apps.core.helpers import create_i18n_page
 from richie.apps.courses.cms_plugins import PersonPlugin
 from richie.apps.courses.factories import PersonFactory
@@ -47,30 +48,14 @@ class PersonPluginTestCase(CMSTestCase):
         """
         The person plugin should render as expected on a public page.
         """
-        # Create a filer fake image
-        image = FilerImageFactory()
-
         # Create a Person
         person = PersonFactory(
             page_title={"en": "person title", "fr": "titre personne"},
             first_name="Meimei",
+            fill_portrait=True,
         )
         person_page = person.extended_object
 
-        # Add portrait to related placeholder
-        portrait_placeholder = person_page.placeholders.get(slot="portrait")
-        add_plugin(
-            portrait_placeholder,
-            PicturePlugin,
-            "en",
-            **{"picture": image, "attributes": {"alt": "portrait description"}}
-        )
-        add_plugin(
-            portrait_placeholder,
-            PicturePlugin,
-            "fr",
-            **{"picture": image, "attributes": {"alt": "description du portrait"}}
-        )
         # Add bio to related placeholder
         bio_placeholder = person_page.placeholders.get(slot="bio")
         bio_en = add_plugin(
@@ -134,9 +119,16 @@ class PersonPluginTestCase(CMSTestCase):
         self.assertContains(response, "Meimei")
         self.assertNotContains(response, "Jiji")
 
-        # Person's portrait and its properties should be present
-        # pylint: disable=no-member
-        self.assertContains(response, image.file.name)
+        # Person's portrait should be present
+        pattern = (
+            r'<a class="person-glimpse__media" href="{href:s}" title="{title:s} avatar">'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*portrait\.jpg__200x200'
+        ).format(
+            href=person_page.get_absolute_url(),
+            title=person.public_extension.get_full_name(),
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
+
         # Short bio should be present
         self.assertContains(
             response,
@@ -155,8 +147,15 @@ class PersonPluginTestCase(CMSTestCase):
             ),
             status_code=200,
         )
-        # pylint: disable=no-member
-        self.assertContains(response, image.file.name)
+        pattern = (
+            r'<a class="person-glimpse__media" href="{href:s}" title="{title:s} avatar">'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*portrait\.jpg__200x200'
+        ).format(
+            href=person_page.get_absolute_url(),
+            title=person.public_extension.get_full_name(),
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
+
         self.assertContains(
             response,
             '<div class="person-glimpse__content__wrapper__bio">résumé public</div>',

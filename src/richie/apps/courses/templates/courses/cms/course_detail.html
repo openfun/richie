@@ -1,5 +1,5 @@
 {% extends "richie/fullwidth.html" %}
-{% load cms_tags i18n extra_tags %}
+{% load cms_tags i18n extra_tags thumbnail %}
 
 {% block meta %}
 {# Make sure course snapshot pages are not indexed by search engines #}
@@ -50,9 +50,21 @@
 
       {% if current_page.publisher_is_draft %}
       <div class="course-detail__aside__cover">
-          {% placeholder "course_cover" or %}
+        {% get_placeholder_plugins "course_cover" as plugins or %}
           <p class="course-detail__aside__cover__empty">{% trans 'Add an image for course cover on its glimpse.' %}</p>
-          {% endplaceholder %}
+        {% endget_placeholder_plugins %}
+        {% blockplugin plugins.0 %}
+          <img
+            src="{% thumbnail instance.picture 300x150 crop upscale subject_location=instance.picture.subject_location %}"
+            srcset="
+              {% thumbnail instance.picture 300x150 crop upscale subject_location=instance.picture.subject_location %} 300w,
+              {% if instance.picture.width >= 600 %}{% thumbnail instance.picture 600x300 crop upscale subject_location=instance.picture.subject_location %} 600w,{% endif %}
+              {% if instance.picture.width >= 900 %}{% thumbnail instance.picture 900x450 crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}
+            "
+            sizes="300px"
+            alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'course cover image' %}{% endif %}"
+          />
+        {% endblockplugin %}
       </div>
       {% endif %}
 

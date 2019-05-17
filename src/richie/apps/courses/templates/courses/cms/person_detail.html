@@ -1,4 +1,7 @@
-{% extends "richie/fullwidth.html" %} {% load cms_tags extra_tags i18n %} {% block content %}
+{% extends "richie/fullwidth.html" %}
+{% load cms_tags extra_tags i18n thumbnail %}
+
+{% block content %}
 {% with header_level=2 person=current_page.person %}
 <div class="person-detail">
   <h1 class="person-detail__title">
@@ -21,11 +24,21 @@
 
   <div class="person-detail__card">
     <div class="person-detail__card__media">
-      {% with width=216 height=120 %}
-        {% placeholder "portrait" or %}
-          <div class="person-detail__card__media__empty">{% trans "Portrait" %}</div>
-        {% endplaceholder %}
-      {% endwith %}
+      {% get_placeholder_plugins "portrait" as plugins or %}
+        <div class="person-detail__card__media__empty">{% trans "Portrait" %}</div>
+      {% endget_placeholder_plugins %}
+      {% blockplugin plugins.0 %}
+        <img
+          src="{% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location %}"
+          srcset="
+            {% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location %} 200w,
+            {% if instance.picture.width >= 400 %}{% thumbnail instance.picture 400x400 crop upscale subject_location=instance.picture.subject_location %} 400w,{% endif %}
+            {% if instance.picture.width >= 600 %}{% thumbnail instance.picture 600x600 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+          "
+          sizes="200px"
+          alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% blocktrans with title=current_page.get_title asvar picture_alt %}{{ title }} avatar{% endblocktrans %}{% endif %}"
+        />
+      {% endblockplugin %}
     </div>
 
     <div class="person-detail__card__content">

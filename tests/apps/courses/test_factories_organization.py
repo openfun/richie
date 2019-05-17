@@ -27,7 +27,7 @@ class OrganizationFactoryTestCase(TestCase):
         # The logo plugins should point to one of our fixtures images
         for language in ["fr", "en"]:
             logo_plugin = logo.cmsplugin_set.get(
-                plugin_type="PicturePlugin", language=language
+                plugin_type="SimplePicturePlugin", language=language
             )
             self.assertIn(
                 "logo",
@@ -52,7 +52,7 @@ class OrganizationFactoryTestCase(TestCase):
         # The banner plugins should point to one of our fixtures images
         for language in ["fr", "en"]:
             banner_plugin = banner.cmsplugin_set.get(
-                plugin_type="PicturePlugin", language=language
+                plugin_type="SimplePicturePlugin", language=language
             )
             self.assertIn(
                 "banner",

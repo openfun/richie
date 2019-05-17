@@ -4,14 +4,15 @@ ElasticSearch organization document management utilities
 from collections import defaultdict
 
 from django.conf import settings
+from django.utils import translation
 
 from cms.models import Title
 from djangocms_picture.models import Picture
 
+from richie.plugins.simple_picture.helpers import get_picture_info
 from richie.plugins.simple_text_ckeditor.models import SimpleText
 
 from ...courses.models import Organization
-from .. import defaults
 from ..forms import ItemSearchForm
 from ..text_indexing import MULTILINGUAL_TEXT
 from ..utils.i18n import get_best_field_language
@@ -71,17 +72,15 @@ class OrganizationsIndexer:
             )
         }
 
-        # Get logo images
+        # Prepare logo images
         logo_images = {}
-        for logo_image in Picture.objects.filter(
+        for logo in Picture.objects.filter(
             cmsplugin_ptr__placeholder__page=organization.extended_object,
             cmsplugin_ptr__placeholder__slot="logo",
         ):
-            # Force the image format before computing it
-            logo_image.use_no_cropping = False
-            logo_image.width = defaults.ORGANIZATIONS_LOGO_IMAGE_WIDTH
-            logo_image.height = defaults.ORGANIZATIONS_LOGO_IMAGE_HEIGHT
-            logo_images[logo_image.cmsplugin_ptr.language] = logo_image.img_src
+            language = logo.cmsplugin_ptr.language
+            with translation.override(language):
+                logo_images[language] = get_picture_info(logo, "logo")
 
         # Get description texts
         description = defaultdict(list)
