@@ -31,6 +31,7 @@ services:
       - .:/app
       - ./data/static:/data/static
       - ./data/media:/data/media
+      - ./data/smedia:/data/smedia
     depends_on:
       - "${DB_HOST:-postgresql}"
       - "elasticsearch"
