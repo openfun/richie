@@ -190,6 +190,7 @@ class Base(DRFMixin, Configuration):
         "richie.plugins.large_banner",
         "richie.plugins.plain_text",
         "richie.plugins.section",
+        "richie.plugins.simple_picture",
         "richie.plugins.simple_text_ckeditor",
         # Third party apps
         "dockerflow.django",

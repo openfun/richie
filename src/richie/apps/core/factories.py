@@ -101,6 +101,8 @@ class FilerImageFactory(factory.django.DjangoModelFactory):
         model = Image
 
     original_filename = factory.Faker("file_name", category="image")
+    default_alt_text = factory.Faker("sentence", nb_words=3)
+    default_caption = factory.Faker("sentence", nb_words=3)
 
     # pylint: disable=no-self-use
     @factory.lazy_attribute
