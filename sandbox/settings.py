@@ -302,13 +302,13 @@ class Base(DRFMixin, RichieCoursesConfigurationMixin, Configuration):
         # Course detail
         "courses/cms/course_detail.html course_cover": {
             "name": _("Cover"),
-            "plugins": ["PicturePlugin"],
-            "limits": {"PicturePlugin": 1},
+            "plugins": ["SimplePicturePlugin"],
+            "limits": {"SimplePicturePlugin": 1},
         },
         "courses/cms/course_detail.html course_teaser": {
             "name": _("Teaser"),
-            "plugins": ["VideoPlayerPlugin", "PicturePlugin"],
-            "limits": {"VideoPlayerPlugin": 1, "PicturePlugin": 1},
+            "plugins": ["VideoPlayerPlugin", "SimplePicturePlugin"],
+            "limits": {"VideoPlayerPlugin": 1, "SimplePicturePlugin": 1},
         },
         "courses/cms/course_detail.html course_description": {
             "name": _("About the course"),
@@ -359,13 +359,13 @@ class Base(DRFMixin, RichieCoursesConfigurationMixin, Configuration):
         # Organization detail
         "courses/cms/organization_detail.html banner": {
             "name": _("Banner"),
-            "plugins": ["PicturePlugin"],
-            "limits": {"PicturePlugin": 1},
+            "plugins": ["SimplePicturePlugin"],
+            "limits": {"SimplePicturePlugin": 1},
         },
         "courses/cms/organization_detail.html logo": {
             "name": _("Logo"),
-            "plugins": ["PicturePlugin"],
-            "limits": {"PicturePlugin": 1},
+            "plugins": ["SimplePicturePlugin"],
+            "limits": {"SimplePicturePlugin": 1},
         },
         "courses/cms/organization_detail.html description": {
             "name": _("Description"),
@@ -375,13 +375,13 @@ class Base(DRFMixin, RichieCoursesConfigurationMixin, Configuration):
         # Category detail
         "courses/cms/category_detail.html banner": {
             "name": _("Banner"),
-            "plugins": ["PicturePlugin"],
-            "limits": {"PicturePlugin": 1},
+            "plugins": ["SimplePicturePlugin"],
+            "limits": {"SimplePicturePlugin": 1},
         },
         "courses/cms/category_detail.html logo": {
             "name": _("Logo"),
-            "plugins": ["PicturePlugin"],
-            "limits": {"PicturePlugin": 1},
+            "plugins": ["SimplePicturePlugin"],
+            "limits": {"SimplePicturePlugin": 1},
         },
         "courses/cms/category_detail.html description": {
             "name": _("Description"),
@@ -395,8 +395,8 @@ class Base(DRFMixin, RichieCoursesConfigurationMixin, Configuration):
         },
         "courses/cms/person_detail.html portrait": {
             "name": _("Portrait"),
-            "plugins": ["PicturePlugin"],
-            "limits": {"PicturePlugin": 1},
+            "plugins": ["SimplePicturePlugin"],
+            "limits": {"SimplePicturePlugin": 1},
         },
         "courses/cms/person_detail.html bio": {
             "name": _("Bio"),
@@ -419,8 +419,8 @@ class Base(DRFMixin, RichieCoursesConfigurationMixin, Configuration):
         },
         "courses/cms/blogpost_detail.html cover": {
             "name": _("Cover"),
-            "plugins": ["PicturePlugin"],
-            "limits": {"PicturePlugin": 1},
+            "plugins": ["SimplePicturePlugin"],
+            "limits": {"SimplePicturePlugin": 1},
         },
         "courses/cms/blogpost_detail.html excerpt": {
             "name": _("Excerpt"),

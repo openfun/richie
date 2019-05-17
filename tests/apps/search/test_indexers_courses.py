@@ -8,7 +8,6 @@ from django.test import TestCase
 
 import pytz
 from cms.api import add_plugin
-from djangocms_picture.models import Picture
 
 from richie.apps.courses.factories import (
     CategoryFactory,
@@ -95,8 +94,9 @@ class CoursesIndexersTestCase(TestCase):
             indexed_courses[0]["_id"], str(course.public_extension.extended_object_id)
         )
 
-    @mock.patch.object(
-        Picture, "img_src", new_callable=mock.PropertyMock, return_value="123.jpg"
+    @mock.patch(
+        "richie.apps.search.indexers.courses.get_picture_info",
+        return_value="cover info",
     )
     def test_indexers_courses_get_es_documents(self, _mock_picture):
         """
@@ -218,7 +218,7 @@ class CoursesIndexersTestCase(TestCase):
                 }
                 for course_run in course.get_course_runs().order_by("-end")
             ],
-            "cover_image": {"en": "123.jpg", "fr": "123.jpg"},
+            "cover_image": {"en": "cover info", "fr": "cover info"},
             "description": {
                 "en": "english description line 1. english description line 2.",
                 "fr": "a propos français ligne 1. a propos français ligne 2.",

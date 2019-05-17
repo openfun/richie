@@ -18,6 +18,7 @@ $richie-blogpost-glimpse-container-gutter: 0.5rem !default;
 $richie-blogpost-glimpse-container-background: $white !default;
 $richie-blogpost-glimpse-container-border: 1px solid $gray80 !default;
 $richie-blogpost-glimpse-container-border-hover: 1px solid $firebrick6 !default;
+$richie-blogpost-glimpse-container-border-radius: 0.25rem !default;
 
 $richie-blogpost-glimpse-media-width: null !default;
 $richie-blogpost-glimpse-media-margin: 0 !default;
@@ -129,6 +130,13 @@ $richie-blogpost-glimpse-foot-cta-background-hover: $firebrick6 !default;
       line-height: $richie-blogpost-glimpse-caption-lineheight;
       text-align: $richie-blogpost-glimpse-caption-textalign;
     }
+
+    @include m-o-media_empty(
+      $width: 100%,
+      $height: 14vh,
+      $background: $gray97,
+      $absolute: false
+    );
   }
 
   // A little specific makeup onto footer elements

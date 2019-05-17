@@ -1,8 +1,21 @@
-{% load i18n cms_tags %}
+{% load i18n cms_tags extra_tags thumbnail %}
 {% comment %}Obviously, the context template variable "blogpost" is required and must be a BlogPost page extension{% endcomment %}
 {% with blogpost_page=blogpost.extended_object %}
 <div class="blogpost-glimpse__media">
-    {% show_placeholder "cover" blogpost_page %}
+  {% get_placeholder_plugins "cover" blogpost_page as plugins or %}
+    <div class="blogpost-glimpse__media__empty">{% trans 'Cover' %}</div>
+  {% endget_placeholder_plugins %}
+  {% blockplugin plugins.0 %}
+  <img src="{% thumbnail instance.picture 300x150 crop upscale subject_location=instance.picture.subject_location %}"
+    srcset="
+      {% thumbnail instance.picture 300x150 crop upscale subject_location=instance.picture.subject_location %} 300w,
+      {% if instance.picture.width >= 600 %}{% thumbnail instance.picture 600x300 crop upscale subject_location=instance.picture.subject_location %} 600w,{% endif %}
+      {% if instance.picture.width >= 1200 %}{% thumbnail instance.picture 1200x600 crop upscale subject_location=instance.picture.subject_location %} 1200w{% endif %}
+    "
+    sizes="300px"
+    alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'blog post cover image' %}{% endif %}"
+  />
+  {% endblockplugin %}
 </div>
 <div class="blogpost-glimpse__content">
     <div class="blogpost-glimpse__content__wrapper">

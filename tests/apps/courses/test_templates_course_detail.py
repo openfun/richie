@@ -276,12 +276,12 @@ class CourseCMSTestCase(CMSTestCase):
         course = CourseFactory(fill_organizations=organizations)
 
         response = self.client.get(course.extended_object.get_absolute_url())
-        self.assertEqual(response.status_code, 200)
 
+        self.assertEqual(response.status_code, 200)
         pattern = (
             r'<div class="course-detail__aside__main-org-logo">'
             r'<a href="{url:s}" title="{title:s}">'
-            r'<img src="/media/filer_public_thumbnails/filer_public/.*logo\.jpg__100x100'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*logo\.jpg__500x500'
         ).format(
             url=organizations[0].extended_object.get_absolute_url(),
             title=organizations[0].extended_object.get_title(),

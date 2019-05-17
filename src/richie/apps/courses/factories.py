@@ -68,9 +68,8 @@ class BLDPageExtensionDjangoModelFactory(PageExtensionDjangoModelFactory):
                 add_plugin(
                     language=language,
                     placeholder=banner_placeholder,
-                    plugin_type="PicturePlugin",
+                    plugin_type="SimplePicturePlugin",
                     picture=banner,
-                    attributes={"alt": "banner image"},
                 )
 
     @factory.post_generation
@@ -93,9 +92,8 @@ class BLDPageExtensionDjangoModelFactory(PageExtensionDjangoModelFactory):
                 add_plugin(
                     language=language,
                     placeholder=logo_placeholder,
-                    plugin_type="PicturePlugin",
+                    plugin_type="SimplePicturePlugin",
                     picture=logo,
-                    attributes={"alt": "logo image"},
                 )
 
     @factory.post_generation
@@ -242,9 +240,8 @@ class CourseFactory(PageExtensionDjangoModelFactory):
                 add_plugin(
                     language=language,
                     placeholder=cover_placeholder,
-                    plugin_type="PicturePlugin",
+                    plugin_type="SimplePicturePlugin",
                     picture=cover,
-                    attributes={"alt": "cover image"},
                 )
 
     @factory.post_generation
@@ -619,9 +616,8 @@ class BlogPostFactory(PageExtensionDjangoModelFactory):
                 add_plugin(
                     language=language,
                     placeholder=cover_placeholder,
-                    plugin_type="PicturePlugin",
+                    plugin_type="SimplePicturePlugin",
                     picture=cover,
-                    attributes={"alt": "cover image"},
                 )
 
     @factory.post_generation
@@ -745,9 +741,8 @@ class PersonFactory(PageExtensionDjangoModelFactory):
                 add_plugin(
                     language=language,
                     placeholder=portrait_placeholder,
-                    plugin_type="PicturePlugin",
+                    plugin_type="SimplePicturePlugin",
                     picture=portrait,
-                    attributes={"alt": "portrait image"},
                 )
 
     @factory.post_generation

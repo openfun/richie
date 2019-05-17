@@ -24,7 +24,7 @@ class CategoryFactoriesTestCase(TestCase):
         self.assertEqual(logo.cmsplugin_set.count(), 1)
 
         # The logo plugin should point to one of our fixtures images
-        logo_plugin = logo.cmsplugin_set.get(plugin_type="PicturePlugin")
+        logo_plugin = logo.cmsplugin_set.get(plugin_type="SimplePicturePlugin")
         self.assertIn(
             "logo",
             os.path.basename(logo_plugin.djangocms_picture_picture.picture.file.name),
@@ -41,7 +41,7 @@ class CategoryFactoriesTestCase(TestCase):
         self.assertEqual(banner.cmsplugin_set.count(), 1)
 
         # The banner plugin should point to one of our fixtures images
-        banner_plugin = banner.cmsplugin_set.get(plugin_type="PicturePlugin")
+        banner_plugin = banner.cmsplugin_set.get(plugin_type="SimplePicturePlugin")
         self.assertIn(
             "banner",
             os.path.basename(banner_plugin.djangocms_picture_picture.picture.file.name),

@@ -4,14 +4,15 @@ ElasticSearch person document management utilities
 from collections import defaultdict
 
 from django.conf import settings
+from django.utils import translation
 
 from cms.models import Title
 from djangocms_picture.models import Picture
 
+from richie.plugins.simple_picture.helpers import get_picture_info
 from richie.plugins.simple_text_ckeditor.models import SimpleText
 
 from ...courses.models import Person
-from .. import defaults
 from ..forms import ItemSearchForm
 from ..text_indexing import MULTILINGUAL_TEXT
 from ..utils.i18n import get_best_field_language
@@ -59,19 +60,15 @@ class PersonsIndexer:
             for t in Title.objects.filter(page=person.extended_object, published=True)
         }
 
-        # Get portrait images
+        # Prepare portrait images
         portrait_images = {}
-        for portrait_image in Picture.objects.filter(
+        for portrait in Picture.objects.filter(
             cmsplugin_ptr__placeholder__page=person.extended_object,
             cmsplugin_ptr__placeholder__slot="portrait",
         ):
-            # Force the image format before computing it
-            portrait_image.use_no_cropping = False
-            portrait_image.width = defaults.ORGANIZATIONS_LOGO_IMAGE_WIDTH
-            portrait_image.height = defaults.ORGANIZATIONS_LOGO_IMAGE_HEIGHT
-            portrait_images[
-                portrait_image.cmsplugin_ptr.language
-            ] = portrait_image.img_src
+            language = portrait.cmsplugin_ptr.language
+            with translation.override(language):
+                portrait_images[language] = get_picture_info(portrait, "portrait")
 
         # Get bio texts
         bio = defaultdict(list)

@@ -10,6 +10,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Replace DjangoCMS picture plugin by our simple picture plugin: only one
+  field to upload the image, all attributes that control how the image is
+  resized, cropped and displayed are now in the code,
 - In the sandbox project, configure Django Filer to serve private files,
 - Create a user group for each course and give it the permission to manage
   pages below the course (snapshots and course runs),

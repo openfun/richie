@@ -2,15 +2,16 @@
 """
 Unit tests for the category plugin and its model
 """
+import re
+
 from django import forms
 from django.conf import settings
 from django.test.utils import override_settings
 
 from cms.api import add_plugin, create_page
 from cms.test_utils.testcases import CMSTestCase
-from djangocms_picture.cms_plugins import PicturePlugin
 
-from richie.apps.core.factories import FilerImageFactory, UserFactory
+from richie.apps.core.factories import UserFactory
 from richie.apps.core.helpers import create_i18n_page
 from richie.apps.courses.cms_plugins import CategoryPlugin
 from richie.apps.courses.factories import CategoryFactory
@@ -102,29 +103,11 @@ class CategoryPluginTestCase(CMSTestCase):
         """
         The category plugin should render as expected on a public page.
         """
-        # Create a filer fake image
-        image = FilerImageFactory()
-
         # Create a Category
         category = CategoryFactory(
-            page_title={"en": "public title", "fr": "titre publique"}
+            page_title={"en": "public title", "fr": "titre publique"}, fill_logo=True
         )
         category_page = category.extended_object
-
-        # Add logo to related placeholder
-        logo_placeholder = category_page.placeholders.get(slot="logo")
-        add_plugin(
-            logo_placeholder,
-            PicturePlugin,
-            "en",
-            **{"picture": image, "attributes": {"alt": "logo description"}}
-        )
-        add_plugin(
-            logo_placeholder,
-            PicturePlugin,
-            "fr",
-            **{"picture": image, "attributes": {"alt": "description du logo"}}
-        )
 
         # Create a page to add the plugin to
         page = create_i18n_page({"en": "A page", "fr": "Une page"})
@@ -180,8 +163,11 @@ class CategoryPluginTestCase(CMSTestCase):
         self.assertNotContains(response, "draft title")
 
         # Category's logo should be present
-        # pylint: disable=no-member
-        self.assertContains(response, image.file.name)
+        pattern = (
+            r'<div class="category-glimpse__logo">'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*logo\.jpg__200x200'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
 
         # Same checks in French
         url = page.get_absolute_url(language="fr")
@@ -194,8 +180,11 @@ class CategoryPluginTestCase(CMSTestCase):
             ).format(title=category.public_extension.extended_object.get_title()),
             status_code=200,
         )
-        # pylint: disable=no-member
-        self.assertContains(response, image.file.name)
+        pattern = (
+            r'<div class="category-glimpse__logo">'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*logo\.jpg__200x200'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
 
     def test_cms_plugins_category_render_on_draft_page(self):
         """

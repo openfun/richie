@@ -489,10 +489,8 @@ def create_demo_site():
         add_plugin(
             language=language,
             placeholder=placeholder,
-            plugin_type="PicturePlugin",
+            plugin_type="SimplePicturePlugin",
             picture=logo,
-            attributes={"alt": "sample logo"},
-            alignment="center",
         )
         # Add a plain text
         text = factory.Faker(

@@ -2,14 +2,15 @@
 """
 Unit tests for the Organization plugin and its model
 """
+import re
+
 from django import forms
 from django.conf import settings
 
 from cms.api import add_plugin, create_page
 from cms.test_utils.testcases import CMSTestCase
-from djangocms_picture.cms_plugins import PicturePlugin
 
-from richie.apps.core.factories import FilerImageFactory, UserFactory
+from richie.apps.core.factories import UserFactory
 from richie.apps.core.helpers import create_i18n_page
 from richie.apps.courses.cms_plugins import OrganizationPlugin
 from richie.apps.courses.factories import OrganizationFactory
@@ -50,29 +51,11 @@ class OrganizationPluginTestCase(CMSTestCase):
         """
         The organization plugin should render as expected on a public page.
         """
-        # Create a filer fake image
-        image = FilerImageFactory()
-
         # Create an organization
         organization = OrganizationFactory(
-            page_title={"en": "public title", "fr": "titre publique"}
+            page_title={"en": "public title", "fr": "titre publique"}, fill_logo=True
         )
         organization_page = organization.extended_object
-
-        # Add logo to related placeholder
-        logo_placeholder = organization_page.placeholders.get(slot="logo")
-        add_plugin(
-            logo_placeholder,
-            PicturePlugin,
-            "en",
-            **{"picture": image, "attributes": {"alt": "logo description"}}
-        )
-        add_plugin(
-            logo_placeholder,
-            PicturePlugin,
-            "fr",
-            **{"picture": image, "attributes": {"alt": "description du logo"}}
-        )
 
         # Create a page to add the plugin to
         page = create_i18n_page({"en": "A page", "fr": "Une page"})
@@ -129,8 +112,11 @@ class OrganizationPluginTestCase(CMSTestCase):
         self.assertNotContains(response, "draft title")
 
         # Organziation's logo should be present
-        # pylint: disable=no-member
-        self.assertContains(response, image.file.name)
+        pattern = (
+            r'<div class="organization-glimpse__logo">'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*logo\.jpg__300x300'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
 
         # Same checks in French
         url = page.get_absolute_url(language="fr")
@@ -143,8 +129,11 @@ class OrganizationPluginTestCase(CMSTestCase):
             ).format(organization.public_extension.extended_object.get_title()),
             status_code=200,
         )
-        # pylint: disable=no-member
-        self.assertContains(response, image.file.name)
+        pattern = (
+            r'<div class="organization-glimpse__logo">'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*logo\.jpg__300x300'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
 
     def test_cms_plugins_organization_render_on_draft_page(self):
         """

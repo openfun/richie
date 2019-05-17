@@ -1,19 +1,22 @@
-{% load i18n cms_tags extra_tags %}
+{% load i18n cms_tags extra_tags thumbnail %}
 {% comment %}Obviously, the context template variable "person" is required and must be a Person page extension{% endcomment %}
 {% with person_page=person.extended_object %}
 <div class="person-glimpse">
-  <a class="person-glimpse__media" href="{{ person_page.get_absolute_url }}"
-      title="{{ person.get_full_name }} {% trans "avatar" %}">
-    {% with width=200 height=200 %}
-      {% show_placeholder "portrait" person_page as portrait %}
-      {% if portrait %}
-          {{ portrait }}
-      {% else %}
-          <div class="person-glimpse__media__empty">
-          {% trans "Portrait" %}
-          </div>
-      {% endif %}
-    {% endwith %}
+  <a class="person-glimpse__media" href="{{ person_page.get_absolute_url }}" title="{{ person.get_full_name }} {% trans 'avatar' %}">
+    {% get_placeholder_plugins "portrait" person_page as plugins or %}
+      <p class="person-glimpse__media__empty">{% trans "Portrait" %}</p>
+    {% endget_placeholder_plugins %}
+    {% blockplugin plugins.0 %}
+      <img src="{% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location %}"
+        srcset="
+          {% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location %} 200w,
+          {% if instance.picture.width >= 400 %}{% thumbnail instance.picture 400x400 crop upscale subject_location=instance.picture.subject_location %} 400w,{% endif %}
+          {% if instance.picture.width >= 600 %}{% thumbnail instance.picture 600x600 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+        "
+        sizes="200px"
+        alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% blocktrans with title=person_page.get_title asvar picture_alt %}{{ title }} avatar{% endblocktrans %}{% endif %}"
+      />
+    {% endblockplugin %}
   </a>
   <div class="person-glimpse__content">
     <div class="person-glimpse__content__wrapper">
