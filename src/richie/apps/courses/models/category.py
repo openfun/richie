@@ -45,6 +45,26 @@ class Category(BasePageExtension):
             title=self.extended_object.get_title(),
         )
 
+    def get_meta_category(self):
+        """
+        Get the meta category the current category falls under. Meta-categories are a special kind
+        of categories that are not linked to courses but help us organize categories into
+        different kinds that are handled separately.
+        """
+        # Shorcut to the category's page node
+        node = self.extended_object.node
+
+        self_is_draft = self.extended_object.publisher_is_draft
+        return Category.objects.get(
+            extended_object__publisher_is_draft=self_is_draft,
+            extended_object__node__path__in=[
+                node.path[0:pos] for pos in range(0, len(node.path), node.steplen)[1:]
+            ],
+            extended_object__node__parent__cms_pages__category__isnull=True,
+            # Avoid duplicates from the join on cms_pages
+            extended_object__node__parent__cms_pages__publisher_is_draft=self_is_draft,
+        )
+
     def get_courses(self, language=None):
         """
         Return a query to get the courses related to this category ie for which a plugin for

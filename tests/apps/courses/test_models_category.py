@@ -13,7 +13,7 @@ from richie.apps.courses.factories import (
     CourseFactory,
     PersonFactory,
 )
-from richie.apps.courses.models import BlogPost, Course, Person
+from richie.apps.courses.models import BlogPost, Category, Course, Person
 
 
 class CategoryModelsTestCase(TestCase):
@@ -53,6 +53,63 @@ class CategoryModelsTestCase(TestCase):
         leaf_category = CategoryFactory(extended_object=leaf_page)
         with self.assertNumQueries(6):
             self.assertEqual(str(leaf_category), "Art / Literature / Novels")
+
+    def test_models_category_get_meta_category(self):
+        """
+        Categories provide a method to independently get their (public) meta category without
+        any additional information.
+        """
+        # A root page that's the parent for all our categories
+        not_a_category_page = create_page(
+            "Categories", "richie/single_column.html", "en", published=True
+        )
+
+        # Our meta category and its page
+        meta_category_page = create_page(
+            "Subjects",
+            "courses/cms/category_detail.html",
+            "en",
+            parent=not_a_category_page,
+            published=True,
+        )
+        meta_category = CategoryFactory(
+            extended_object=meta_category_page, should_publish=True
+        )
+        # Meta categories do not have a meta category themselves
+        with self.assertRaises(Category.DoesNotExist):
+            meta_category.get_meta_category()
+
+        # Create a category that falls under our meta category
+        category_page = create_page(
+            "Literature",
+            "courses/cms/category_detail.html",
+            "en",
+            parent=meta_category_page,
+            published=True,
+        )
+        category = CategoryFactory(extended_object=category_page, should_publish=True)
+        self.assertEqual(
+            category.public_extension.get_meta_category(),
+            meta_category.public_extension,
+        )
+        self.assertEqual(category.get_meta_category(), meta_category)
+
+        # We can still retrieve the meta category for a more deeply nested category
+        child_category_page = create_page(
+            "XVIIIth century Literature",
+            "courses/cms/category_detail.html",
+            "en",
+            parent=category_page,
+            published=True,
+        )
+        child_category = CategoryFactory(
+            extended_object=child_category_page, should_publish=True
+        )
+        self.assertEqual(
+            child_category.public_extension.get_meta_category(),
+            meta_category.public_extension,
+        )
+        self.assertEqual(child_category.get_meta_category(), meta_category)
 
     def test_models_category_get_courses(self):
         """
