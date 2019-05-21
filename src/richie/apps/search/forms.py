@@ -311,7 +311,7 @@ class ItemSearchForm(SearchForm):
         data_fixed = {k: v[0] for k, v in data.lists()} if data else {}
         super().__init__(data=data_fixed, *args, **kwargs)
 
-    def build_es_query(self):
+    def build_es_query(self, kind=None):
         """
         Build the actual Elasticsearch search query for category/organization indices.
 
@@ -324,10 +324,21 @@ class ItemSearchForm(SearchForm):
               https://elastic.co/guide/en/elasticsearch/reference/current/search.html
 
         """
-        # Build a query that matches on the name field if it was handed by the client
+        # Create an array to put the clauses of our bool/must query
+        clauses = []
+
+        # Add a term filter by kind for the objects that need it (eg. `kind="subjects"`)
+        if kind:
+            clauses.append({"term": {"kind": kind}})
+
+        # Add a match on the name field if it was handed by the client
         full_text = self.cleaned_data.get("query")
         if full_text:
-            query = {"query": {"match": {"title.fr": {"query": full_text}}}}
+            clauses.append({"match": {"title.*": {"query": full_text}}})
+
+        # Build the query around the clauses if there are any
+        if clauses:
+            query = {"query": {"bool": {"must": clauses}}}
         # Build a match_all query by default
         else:
             query = {"query": {"match_all": {}}}

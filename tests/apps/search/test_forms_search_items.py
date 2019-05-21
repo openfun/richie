@@ -29,7 +29,7 @@ class ItemSearchFormTestCase(TestCase):
             form.cleaned_data, {"limit": None, "offset": None, "query": "", "scope": ""}
         )
 
-    def test_forms_courses_limit_greater_than_1(self, *_):
+    def test_forms_items_limit_greater_than_1(self, *_):
         """The `limit` param should be greater than 1."""
         form = ItemSearchForm(data=QueryDict(query_string="limit=0"))
         self.assertFalse(form.is_valid())
@@ -37,7 +37,7 @@ class ItemSearchFormTestCase(TestCase):
             form.errors, {"limit": ["Ensure this value is greater than or equal to 1."]}
         )
 
-    def test_forms_courses_limit_integer(self, *_):
+    def test_forms_items_limit_integer(self, *_):
         """The `limit` param should be an integer."""
         form = ItemSearchForm(data=QueryDict(query_string="limit=a"))
         self.assertFalse(form.is_valid())
@@ -46,7 +46,7 @@ class ItemSearchFormTestCase(TestCase):
         form = ItemSearchForm(data=QueryDict(query_string="limit=1"))
         self.assertTrue(form.is_valid())
 
-    def test_forms_courses_offset_greater_than_0(self, *_):
+    def test_forms_items_offset_greater_than_0(self, *_):
         """The `offset` param should be greater than 0."""
         form = ItemSearchForm(data=QueryDict(query_string="offset=-1"))
         self.assertFalse(form.is_valid())
@@ -55,7 +55,7 @@ class ItemSearchFormTestCase(TestCase):
             {"offset": ["Ensure this value is greater than or equal to 0."]},
         )
 
-    def test_forms_courses_offset_integer(self, *_):
+    def test_forms_items_offset_integer(self, *_):
         """The `offset` param should be an integer."""
         form = ItemSearchForm(data=QueryDict(query_string="offset=a"))
         self.assertFalse(form.is_valid())
@@ -64,7 +64,7 @@ class ItemSearchFormTestCase(TestCase):
         form = ItemSearchForm(data=QueryDict(query_string="offset=1"))
         self.assertTrue(form.is_valid())
 
-    def test_forms_courses_query_between_3_and_100_characters_long(self, *_):
+    def test_forms_items_query_between_3_and_100_characters_long(self, *_):
         """The `query` param should be between 3 and 100 characters long."""
         form = ItemSearchForm(data=QueryDict(query_string="query=aa"))
         self.assertFalse(form.is_valid())
@@ -113,7 +113,54 @@ class ItemSearchFormTestCase(TestCase):
         self.assertTrue(form.is_valid())
         self.assertEqual(
             form.build_es_query(),
-            (20, 2, {"query": {"match": {"title.fr": {"query": "some phrase terms"}}}}),
+            (
+                20,
+                2,
+                {
+                    "query": {
+                        "bool": {
+                            "must": [
+                                {
+                                    "match": {
+                                        "title.*": {"query": "some phrase " "terms"}
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                },
+            ),
+        )
+
+    def test_forms_items_build_es_query_by_match_text_with_kind(self, *_):
+        """
+        Make sure the generated query filters the items by kind when one is provided
+        as argument.
+        """
+        form = ItemSearchForm(
+            data=QueryDict(query_string="query=some%20phrase%20terms&limit=20&offset=2")
+        )
+        self.assertTrue(form.is_valid())
+        self.assertEqual(
+            form.build_es_query(kind="subjects"),
+            (
+                20,
+                2,
+                {
+                    "query": {
+                        "bool": {
+                            "must": [
+                                {"term": {"kind": "subjects"}},
+                                {
+                                    "match": {
+                                        "title.*": {"query": "some phrase " "terms"}
+                                    }
+                                },
+                            ]
+                        }
+                    }
+                },
+            ),
         )
 
     def test_forms_items_build_es_query_search_all(self, *_):
