@@ -105,7 +105,8 @@ class CategoryPluginTestCase(CMSTestCase):
         """
         # Create a Category
         category = CategoryFactory(
-            page_title={"en": "public title", "fr": "titre publique"}, fill_logo=True
+            page_title={"en": "public title", "fr": "titre publique"},
+            fill_logo={"original_filename": "logo.jpg", "default_alt_text": "my logo"},
         )
         category_page = category.extended_object
 
@@ -166,6 +167,7 @@ class CategoryPluginTestCase(CMSTestCase):
         pattern = (
             r'<div class="category-glimpse__logo">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*logo\.jpg__200x200'
+            r'.*alt="my logo"'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
 
@@ -183,6 +185,7 @@ class CategoryPluginTestCase(CMSTestCase):
         pattern = (
             r'<div class="category-glimpse__logo">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*logo\.jpg__200x200'
+            r'.*alt="my logo"'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
 
@@ -220,3 +223,33 @@ class CategoryPluginTestCase(CMSTestCase):
         response = self.client.get(url)
         self.assertContains(response, "draft title")
         self.assertNotContains(response, "public title")
+
+    def test_cms_plugins_category_render_default_alt(self):
+        """
+        A default alt should be set on the portrait image if the user did not fill if on the
+        file image.
+        """
+        # Create an blogpost
+        category = CategoryFactory(
+            page_title="Maths",
+            fill_logo={"original_filename": "logo.jpg", "default_alt_text": None},
+            should_publish=True,
+        )
+        category_page = category.extended_object
+
+        # Create a page to add the plugin to
+        page = create_i18n_page("A page")
+        placeholder = page.placeholders.get(slot="maincontent")
+        add_plugin(placeholder, CategoryPlugin, "en", **{"page": category_page})
+        page.publish("en")
+
+        url = page.get_absolute_url(language="en")
+        response = self.client.get(url)
+
+        # Category logo should have our default alt
+        pattern = (
+            r'<div class="category-glimpse__logo">'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*logo\.jpg__200x200'
+            r'.*alt="Maths logo"'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
