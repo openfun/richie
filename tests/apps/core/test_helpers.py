@@ -51,21 +51,14 @@ class GetPermissionsHelpersTestCase(TestCase):
 class CreateI18nPageHelpersTestCase(CMSTestCase):
     """Test suite for the `create_i18n_page` helper."""
 
-    @mock.patch("richie.apps.core.helpers.create_title")
-    @mock.patch("richie.apps.core.helpers.create_page")
-    def test_helpers_create_i18n_page_no_arguments(self, mock_page, mock_title):
-        """
-        It should be possible to create a multilingual page without any arguments. A page is
-        created with a random title in the default language from settings and with the default
-        template.
-        The page creation is delegated to the DjangoCMS "create_page" helper.
-        """
-        create_i18n_page()
-        self.assertEqual(mock_page.call_count, 1)
-        self.assertFalse(mock_title.called)
-        self.assertEqual(mock_page.call_args[1]["language"], "en")
+    def test_helpers_create_i18n_page_no_arguments(self):
+        """The title argument is required to create i18n pages."""
+        with self.assertRaises(TypeError) as context:
+            # pylint: disable=no-value-for-parameter
+            create_i18n_page()
         self.assertEqual(
-            mock_page.call_args[1]["template"], "richie/single_column.html"
+            str(context.exception),
+            "create_i18n_page() missing 1 required positional argument: 'title'",
         )
 
     @mock.patch("richie.apps.core.helpers.create_title")
@@ -166,10 +159,9 @@ class CreateI18nPageHelpersTestCase(CMSTestCase):
     def test_helpers_create_i18n_page_from_languages(self, mock_page, mock_title):
         """
         It should be possible to create a multilingual page from a list of existing languages.
-        The title is generated with Faker in each language.
         The page creation is delegated to the DjangoCMS "create_page" helper.
         """
-        create_i18n_page(languages=["en", "fr"])
+        create_i18n_page("my title", languages=["en", "fr"])
         self.assertEqual(mock_page.call_count, 1)
         self.assertEqual(mock_title.call_count, 1)
         self.assertEqual(mock_page.call_args[1]["language"], "en")
@@ -185,7 +177,7 @@ class CreateI18nPageHelpersTestCase(CMSTestCase):
         Trying to create a multilingual page for languages that don't exist should fail.
         """
         with self.assertRaises(AssertionError):
-            create_i18n_page(languages=["en", "de"])
+            create_i18n_page("my title", languages=["en", "de"])
 
         self.assertFalse(mock_page.called)
         self.assertFalse(mock_title.called)
@@ -197,7 +189,7 @@ class CreateI18nPageHelpersTestCase(CMSTestCase):
         requested.
         Don't mock `create_page` so we can easily check the call to set it as homepage
         """
-        create_i18n_page()
+        create_i18n_page("my title")
         self.assertFalse(mock_homepage.called)
 
     @mock.patch.object(Page, "set_as_homepage")
@@ -206,7 +198,7 @@ class CreateI18nPageHelpersTestCase(CMSTestCase):
         Check that `create_i18n_page` can set the created page as homepage
         Don't mock `create_page` so we can easily check the call to set it as homepage
         """
-        create_i18n_page(is_homepage=True)
+        create_i18n_page("my title", is_homepage=True)
         self.assertTrue(mock_homepage.called)
 
     @mock.patch.object(Page, "publish")
@@ -215,7 +207,7 @@ class CreateI18nPageHelpersTestCase(CMSTestCase):
         Check that `create_i18n_page` does not publish the created page if it is not requested.
         Don't mock `create_page` so we can easily check the call to publish.
         """
-        create_i18n_page()
+        create_i18n_page("my title")
         self.assertFalse(mock_publish.called)
 
     @override_settings(LANGUAGES=(("en", "en"), ("fr", "fr")))
@@ -225,5 +217,5 @@ class CreateI18nPageHelpersTestCase(CMSTestCase):
         Check that `create_i18n_page` publishes the created page in all languages when requested.
         Don't mock `create_page` so we can easily check the call to publish.
         """
-        create_i18n_page(published=True, languages=["en", "fr"])
+        create_i18n_page("my title", published=True, languages=["en", "fr"])
         self.assertEqual([c[0][0] for c in mock_publish.call_args_list], ["en", "fr"])

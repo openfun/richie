@@ -35,7 +35,7 @@ class BlogPostPluginTestCase(CMSTestCase):
                 model = BlogPostPluginModel
                 fields = ["page"]
 
-        blog_page = create_i18n_page(published=True)
+        blog_page = create_i18n_page("my title", published=True)
         blogpost = BlogPostFactory(page_parent=blog_page)
         other_page_title = "other page"
         create_page(

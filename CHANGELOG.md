@@ -55,6 +55,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix production image by removing dependency to `factory` in production code,
 - Fail and return a meaningful error when an invalid slug is submitted in
   page creation wizards,
 - Fix person placeholders mistakenly showing on the organization page,

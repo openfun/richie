@@ -14,10 +14,71 @@ from django.utils.text import slugify
 
 import factory
 from cms import models as cms_models
+from cms.api import add_plugin
 from cms.utils import get_current_site
 from filer.models.imagemodels import Image
 
 from ..core.helpers import create_i18n_page, get_permissions
+
+
+# pylint: disable=too-many-arguments
+def create_text_plugin(
+    page,
+    slot,
+    languages=None,
+    is_html=True,
+    max_nb_chars=None,
+    nb_paragraphs=None,
+    plugin_type="CKEditorPlugin",
+):
+    """
+    A common function to create and add a text plugin of any type instance to
+    a placeholder filled with some random text using Faker.
+
+    Arguments:
+        page (cms.models.pagemodel.Page): Instance of a Page used to search for
+            given slot (aka a placeholder name).
+        slot (string): A placeholder name available from page template.
+
+    Keyword Arguments:
+        languages (iterable): An iterable yielding language codes for which a text plugin should
+            be created. If ``None`` (default) it uses the default language from settings.
+        is_html (boolean): If True, every paragraph will be surrounded with an
+            HTML paragraph markup. Default is True.
+        max_nb_chars (integer): Number of characters limit to create each
+            paragraph. Default is None so a random number between 200 and 400
+            will be used at each paragraph.
+        nb_paragraphs (integer): Number of paragraphs to create in content.
+            Default is None so a random number between 2 and 4 will be used.
+        plugin_type (string or object): Type of plugin. Default use CKEditorPlugin
+            but you can use any other similar plugin that has a body attribute.
+
+    Returns:
+        object: Created plugin instance.
+    """
+    languages = languages or [settings.LANGUAGE_CODE]
+    container = "<p>{:s}</p>" if is_html else "{:s}"
+    nb_paragraphs = nb_paragraphs or random.randint(2, 4)
+
+    placeholder = page.placeholders.get(slot=slot)
+
+    for language in languages:
+        paragraphs = []
+        for _ in range(nb_paragraphs):
+            max_nb_chars = max_nb_chars or random.randint(200, 400)
+            paragraphs.append(
+                factory.Faker(
+                    "text", max_nb_chars=max_nb_chars, locale=language
+                ).generate({})
+            )
+        body = [container.format(p) for p in paragraphs]
+
+        add_plugin(
+            language=language,
+            placeholder=placeholder,
+            plugin_type=plugin_type,
+            body="".join(body),
+        )
 
 
 class UserFactory(factory.django.DjangoModelFactory):
@@ -170,13 +231,23 @@ class PageExtensionDjangoModelFactory(factory.django.DjangoModelFactory):
         Automatically create a related page with the title (or random title if None) in all the
         requested languages
         """
+        title = getattr(self, "page_title", None)
+        languages = getattr(self, "page_languages", None)
+        if not title:
+            # Create realistic titles in each language with faker
+            languages = languages or [settings.LANGUAGE_CODE]
+            title = {
+                language: factory.Faker("catch_phrase", locale=language).generate({})
+                for language in languages
+            }
+
         return create_i18n_page(
+            title,
             in_navigation=getattr(self, "page_in_navigation", False),
-            languages=getattr(self, "page_languages", None),
+            languages=languages,
             parent=getattr(self, "page_parent", None),
             reverse_id=getattr(self, "page_reverse_id", None),
             template=getattr(self, "page_template", None),
-            title=getattr(self, "page_title", None),
         )
 
     @classmethod
