@@ -17,9 +17,9 @@ from ..core.factories import (
     FilerImageFactory,
     PageExtensionDjangoModelFactory,
     PageFactory,
+    create_text_plugin,
     image_getter,
 )
-from ..core.helpers import create_text_plugin
 from . import models
 from .defaults import ROLE_CHOICES
 

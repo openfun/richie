@@ -13,7 +13,7 @@ class CourseCMSTestCase(CMSTestCase):
     def test_templates_search_content(self):
         """Validate the content of a page using the search template."""
         page = create_i18n_page(
-            title={"fr": "recherche", "en": "search"}, template="search/search.html"
+            {"fr": "recherche", "en": "search"}, template="search/search.html"
         )
 
         # The page should not be visible before it is published

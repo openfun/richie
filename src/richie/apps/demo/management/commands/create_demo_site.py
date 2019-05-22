@@ -11,8 +11,8 @@ from django.test.utils import override_settings
 import factory
 from cms.api import add_plugin
 
-from richie.apps.core.factories import image_getter
-from richie.apps.core.helpers import create_text_plugin, recursive_page_creation
+from richie.apps.core.factories import create_text_plugin, image_getter
+from richie.apps.core.helpers import recursive_page_creation
 from richie.apps.courses.factories import (
     VIDEO_SAMPLE_LINKS,
     BlogPostFactory,

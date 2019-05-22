@@ -123,7 +123,7 @@ class CategoryModelsTestCase(TestCase):
         # which is there to exclude snapshots but also acts on the main course page and
         # checks its parent (so the root page) and the duplicate comes from the fact that
         # the parent has a draft and a public page... so "cms_pages" has a cardinality of 2
-        root_page = create_i18n_page(published=True)
+        root_page = create_i18n_page("my title", published=True)
 
         category = CategoryFactory(should_publish=True)
         course = CourseFactory(

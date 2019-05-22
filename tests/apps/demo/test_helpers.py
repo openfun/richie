@@ -16,7 +16,7 @@ class CoursesHelpersTestCase(CMSTestCase):
         The `create_categories` method should create the whole category tree and return
         only the leaf categories.
         """
-        page = create_i18n_page(title="Root page")
+        page = create_i18n_page("Root page")
         test_info = {
             "title": "Subject",
             "children": [
