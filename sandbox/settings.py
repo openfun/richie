@@ -11,6 +11,8 @@ import sentry_sdk
 from configurations import Configuration, values
 from sentry_sdk.integrations.django import DjangoIntegration
 
+from richie.apps.courses.settings.mixins import RichieCoursesConfigurationMixin
+
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join("/", "data")
 
@@ -51,7 +53,7 @@ class DRFMixin:
     }
 
 
-class Base(DRFMixin, Configuration):
+class Base(DRFMixin, RichieCoursesConfigurationMixin, Configuration):
     """
     This is the base configuration every configuration (aka environnement) should inherit from. It
     is recommended to configure third-party applications by creating a configuration mixins in
