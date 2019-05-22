@@ -15,7 +15,7 @@
             {% if instance.picture.width >= 600 %}{% thumbnail instance.picture 600x600 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
           "
           sizes="200px"
-          alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% blocktrans with title=current_page.get_title %}{{ title }} logo{% endblocktrans %}{% endif %}"
+          alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% blocktrans with title=category_page.get_title %}{{ title }} logo{% endblocktrans %}{% endif %}"
         />
       {% endblockplugin %}
     </div>

@@ -53,7 +53,8 @@ class OrganizationPluginTestCase(CMSTestCase):
         """
         # Create an organization
         organization = OrganizationFactory(
-            page_title={"en": "public title", "fr": "titre publique"}, fill_logo=True
+            page_title={"en": "public title", "fr": "titre publique"},
+            fill_logo={"original_filename": "logo.jpg", "default_alt_text": "my logo"},
         )
         organization_page = organization.extended_object
 
@@ -115,6 +116,7 @@ class OrganizationPluginTestCase(CMSTestCase):
         pattern = (
             r'<div class="organization-glimpse__logo">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*logo\.jpg__300x300'
+            r'.*alt="my logo"'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
 
@@ -132,6 +134,7 @@ class OrganizationPluginTestCase(CMSTestCase):
         pattern = (
             r'<div class="organization-glimpse__logo">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*logo\.jpg__300x300'
+            r'.*alt="my logo"'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
 
@@ -170,3 +173,32 @@ class OrganizationPluginTestCase(CMSTestCase):
         response = self.client.get(url)
         self.assertContains(response, "draft title")
         self.assertNotContains(response, "public title")
+
+    def test_cms_plugins_organization_render_default_alt(self):
+        """
+        A default alt should be set on the portrait image if the user did not fill if on the
+        file image.
+        """
+        # Create an blogpost
+        organization = OrganizationFactory(
+            fill_logo={"original_filename": "logo.jpg", "default_alt_text": None},
+            should_publish=True,
+        )
+        organization_page = organization.extended_object
+
+        # Create a page to add the plugin to
+        page = create_i18n_page("A page")
+        placeholder = page.placeholders.get(slot="maincontent")
+        add_plugin(placeholder, OrganizationPlugin, "en", **{"page": organization_page})
+        page.publish("en")
+
+        url = page.get_absolute_url(language="en")
+        response = self.client.get(url)
+
+        # organization logo should have our default alt
+        pattern = (
+            r'<div class="organization-glimpse__logo">'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*logo\.jpg__300x300'
+            r'.*alt="organization logo"'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))

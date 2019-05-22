@@ -85,6 +85,8 @@ class BLDPageExtensionDjangoModelFactory(PageExtensionDjangoModelFactory):
                 logo = image_getter(extracted)
             elif callable(extracted):
                 logo = image_getter(extracted())
+            elif isinstance(extracted, dict):
+                logo = FilerImageFactory(**extracted)
             else:
                 logo = FilerImageFactory(original_filename="logo.jpg")
 
@@ -233,6 +235,8 @@ class CourseFactory(PageExtensionDjangoModelFactory):
                 cover = image_getter(extracted)
             elif callable(extracted):
                 cover = image_getter(extracted())
+            elif isinstance(extracted, dict):
+                cover = FilerImageFactory(**extracted)
             else:
                 cover = FilerImageFactory(original_filename="cover.jpg")
 
@@ -609,6 +613,8 @@ class BlogPostFactory(PageExtensionDjangoModelFactory):
                 cover = image_getter(extracted)
             elif callable(extracted):
                 cover = image_getter(extracted())
+            elif isinstance(extracted, dict):
+                cover = FilerImageFactory(**extracted)
             else:
                 cover = FilerImageFactory(original_filename="cover.jpg")
 
@@ -734,6 +740,8 @@ class PersonFactory(PageExtensionDjangoModelFactory):
                 portrait = image_getter(extracted)
             elif callable(extracted):
                 portrait = image_getter(extracted())
+            elif isinstance(extracted, dict):
+                portrait = FilerImageFactory(**extracted)
             else:
                 portrait = FilerImageFactory(original_filename="portrait.jpg")
 

@@ -52,7 +52,10 @@ class PersonPluginTestCase(CMSTestCase):
         person = PersonFactory(
             page_title={"en": "person title", "fr": "titre personne"},
             first_name="Meimei",
-            fill_portrait=True,
+            fill_portrait={
+                "original_filename": "portrait.jpg",
+                "default_alt_text": "my portrait",
+            },
         )
         person_page = person.extended_object
 
@@ -123,6 +126,7 @@ class PersonPluginTestCase(CMSTestCase):
         pattern = (
             r'<a class="person-glimpse__media" href="{href:s}" title="{title:s} avatar">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*portrait\.jpg__200x200'
+            r'.*alt="my portrait"'
         ).format(
             href=person_page.get_absolute_url(),
             title=person.public_extension.get_full_name(),
@@ -150,6 +154,7 @@ class PersonPluginTestCase(CMSTestCase):
         pattern = (
             r'<a class="person-glimpse__media" href="{href:s}" title="{title:s} avatar">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*portrait\.jpg__200x200'
+            r'.*alt="my portrait"'
         ).format(
             href=person_page.get_absolute_url(),
             title=person.public_extension.get_full_name(),
@@ -206,3 +211,39 @@ class PersonPluginTestCase(CMSTestCase):
         self.assertContains(response, "draft bio")
         self.assertNotContains(response, "Meimei")
         self.assertNotContains(response, "public bio")
+
+    def test_cms_plugins_person_render_default_alt(self):
+        """
+        A default alt should be set on the portrait image if the user did not fill if on the
+        file image.
+        """
+        # Create a Person
+        person = PersonFactory(
+            page_title="Mei",
+            fill_portrait={
+                "original_filename": "portrait.jpg",
+                "default_alt_text": None,
+            },
+            should_publish=True,
+        )
+        person_page = person.extended_object
+
+        # Create a page to add the plugin to
+        page = create_i18n_page("A page")
+        placeholder = page.placeholders.get(slot="maincontent")
+        add_plugin(placeholder, PersonPlugin, "en", **{"page": person_page})
+        page.publish("en")
+
+        url = page.get_absolute_url(language="en")
+        response = self.client.get(url)
+
+        # Person's portrait should have our default alt
+        pattern = (
+            r'<a class="person-glimpse__media" href="{href:s}" title="{title:s} avatar">'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*portrait\.jpg__200x200'
+            r'.*alt="Mei avatar"'
+        ).format(
+            href=person_page.get_absolute_url(),
+            title=person.public_extension.get_full_name(),
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))

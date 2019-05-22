@@ -66,7 +66,10 @@ class CoursePluginTestCase(TestCase):
         course = CourseFactory(
             page_title={"en": "public title", "fr": "titre public"},
             fill_organizations=[organization],
-            fill_cover=True,
+            fill_cover={
+                "original_filename": "cover.jpg",
+                "default_alt_text": "my cover",
+            },
         )
         course_page = course.extended_object
 
@@ -154,6 +157,7 @@ class CoursePluginTestCase(TestCase):
         pattern = (
             r'<div class="course-glimpse__media">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x150'
+            r'.*alt="my cover"'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
 
@@ -199,3 +203,33 @@ class CoursePluginTestCase(TestCase):
         response = self.client.get(url)
         self.assertContains(response, "draft title")
         self.assertNotContains(response, "public title")
+
+    def test_cms_plugins_course_render_default_alt(self):
+        """
+        A default alt should be set on the portrait image if the user did not fill if on the
+        file image.
+        """
+        # Create an blogpost
+        course = CourseFactory(
+            page_title="my course",
+            fill_cover={"original_filename": "cover.jpg", "default_alt_text": None},
+            should_publish=True,
+        )
+        course_page = course.extended_object
+
+        # Create a page to add the plugin to
+        page = create_i18n_page("A page")
+        placeholder = page.placeholders.get(slot="maincontent")
+        add_plugin(placeholder, CoursePlugin, "en", **{"page": course_page})
+        page.publish("en")
+
+        url = page.get_absolute_url(language="en")
+        response = self.client.get(url)
+
+        # Course cover should have our default alt
+        pattern = (
+            r'<div class="course-glimpse__media">'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x150'
+            r'.*alt="course cover image"'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
