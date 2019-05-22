@@ -101,7 +101,6 @@ jobs:
       - restore_cache:
           keys:
             - v2-back-dependencies-{{ .Revision }}
-            - v2-back-dependencies
       - run:
           name: Install development dependencies
           command: pip install --user .[dev,sandbox]
