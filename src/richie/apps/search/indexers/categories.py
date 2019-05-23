@@ -34,7 +34,12 @@ class CategoriesIndexer:
             # Searchable
             # description & title are handled by `MULTILINGUAL_TEXT`
             **{
-                "complete.{:s}".format(lang): {"type": "completion"}
+                "complete.{:s}".format(lang): {
+                    "type": "completion",
+                    # Allow filtering autocomplete results with a kindkey to match the value of
+                    # the `kind` field of the object
+                    "contexts": [{"name": "kind", "type": "category", "path": "kind"}],
+                }
                 for lang, _ in settings.LANGUAGES
             },
             "is_meta": {"type": "boolean"},
@@ -101,6 +106,13 @@ class CategoriesIndexer:
         # Shorcut to the category's page node
         node = category.extended_object.node
 
+        # Find the meta category the current category falls under
+        try:
+            kind = category.get_meta_category().extended_object.reverse_id
+        except Category.DoesNotExist:
+            # Meta categories do not have a meta category themselves
+            kind = None
+
         return {
             "_id": cls.get_es_id(category.extended_object),
             "_index": index,
@@ -119,6 +131,7 @@ class CategoriesIndexer:
                 node.parent is None
                 or node.parent.cms_pages.filter(category__isnull=True).exists()
             ),
+            "kind": kind,
             "logo": logo_images,
             "nb_children": node.numchild,
             "path": node.path,

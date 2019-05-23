@@ -7,6 +7,7 @@ from django.test import TestCase
 
 from cms.api import add_plugin
 
+from richie.apps.core.helpers import create_i18n_page
 from richie.apps.courses.factories import CategoryFactory
 from richie.apps.search.indexers.categories import CategoriesIndexer
 
@@ -25,16 +26,29 @@ class CategoriesIndexersTestCase(TestCase):
         """
         Happy path: the data is fetched from the models properly formatted
         """
+        # Our meta category and its page
+        meta = CategoryFactory(
+            page_parent=create_i18n_page(
+                {"en": "Categories", "fr": "Catégories"},
+                published=True,
+            ),
+            page_reverse_id="subjects",
+            page_title={"en": "Subjects", "fr": "Sujets"},
+            fill_logo=True,
+            should_publish=True,
+        )
         category1 = CategoryFactory(
-            page_title={"en": "my first category", "fr": "ma première thématique"},
+            page_parent=meta.extended_object,
+            page_title={"en": "my first subject", "fr": "ma première thématique"},
             fill_logo=True,
             should_publish=True,
         )
         CategoryFactory(
             page_parent=category1.extended_object,
-            page_title={"en": "my second category", "fr": "ma deuxième thématique"},
+            page_title={"en": "my second subject", "fr": "ma deuxième thématic"},
             should_publish=True,
         )
+
         # Add a description in several languages to the first category
         placeholder = category1.public_extension.extended_object.placeholders.get(
             slot="description"
@@ -54,43 +68,44 @@ class CategoriesIndexersTestCase(TestCase):
             ),
             [
                 {
-                    "_id": "L-00010001",
+                    "_id": "L-0001000100010001",
                     "_index": "some_index",
                     "_op_type": "some_action",
                     "_type": "category",
                     "absolute_url": {
-                        "en": "/en/my-first-category/my-second-category/",
-                        "fr": "/fr/ma-premiere-thematique/ma-deuxieme-thematique/",
+                        "en": "/en/categories/subjects/my-first-subject/my-second-subject/",
+                        "fr": "/fr/categories/sujets/ma-premiere-thematique/ma-deuxieme-thematic/",
                     },
                     "complete": {
-                        "en": ["my second category", "second category", "category"],
+                        "en": ["my second subject", "second subject", "subject"],
                         "fr": [
-                            "ma deuxième thématique",
-                            "deuxième thématique",
-                            "thématique",
+                            "ma deuxième thématic",
+                            "deuxième thématic",
+                            "thématic",
                         ],
                     },
                     "description": {},
                     "is_meta": False,
+                    "kind": "subjects",
                     "logo": {},
                     "nb_children": 0,
-                    "path": "00010001",
+                    "path": "0001000100010001",
                     "title": {
-                        "en": "my second category",
-                        "fr": "ma deuxième thématique",
+                        "en": "my second subject",
+                        "fr": "ma deuxième thématic",
                     },
                 },
                 {
-                    "_id": "P-0001",
+                    "_id": "P-000100010001",
                     "_index": "some_index",
                     "_op_type": "some_action",
                     "_type": "category",
                     "absolute_url": {
-                        "en": "/en/my-first-category/",
-                        "fr": "/fr/ma-premiere-thematique/",
+                        "en": "/en/categories/subjects/my-first-subject/",
+                        "fr": "/fr/categories/sujets/ma-premiere-thematique/",
                     },
                     "complete": {
-                        "en": ["my first category", "first category", "category"],
+                        "en": ["my first subject", "first subject", "subject"],
                         "fr": [
                             "ma première thématique",
                             "première thématique",
@@ -101,14 +116,30 @@ class CategoriesIndexersTestCase(TestCase):
                         "en": "english description line 1. english description line 2.",
                         "fr": "description français ligne 1. description français ligne 2.",
                     },
-                    "is_meta": True,
+                    "is_meta": False,
+                    "kind": "subjects",
                     "logo": {"en": "logo info", "fr": "logo info"},
                     "nb_children": 1,
-                    "path": "0001",
-                    "title": {
-                        "en": "my first category",
-                        "fr": "ma première thématique",
+                    "path": "000100010001",
+                    "title": {"en": "my first subject", "fr": "ma première thématique"},
+                },
+                {
+                    "_id": "P-00010001",
+                    "_index": "some_index",
+                    "_op_type": "some_action",
+                    "_type": "category",
+                    "absolute_url": {
+                        "en": "/en/categories/subjects/",
+                        "fr": "/fr/categories/sujets/",
                     },
+                    "complete": {"en": ["Subjects"], "fr": ["Sujets"]},
+                    "description": {},
+                    "is_meta": True,
+                    "kind": None,
+                    "logo": {"en": "logo info", "fr": "logo info"},
+                    "nb_children": 1,
+                    "path": "00010001",
+                    "title": {"en": "Subjects", "fr": "Sujets"},
                 },
             ],
         )
