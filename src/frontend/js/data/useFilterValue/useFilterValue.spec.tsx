@@ -38,6 +38,7 @@ describe('data/useFilterValue', () => {
           filter={{
             base_path: '0003',
             human_name: 'Organizations',
+            is_autocompletable: false,
             name: 'organizations',
             values: [],
           }}
@@ -56,6 +57,7 @@ describe('data/useFilterValue', () => {
       filter: {
         base_path: '0003',
         human_name: 'Organizations',
+        is_autocompletable: false,
         name: 'organizations',
         values: [],
       },
@@ -77,6 +79,7 @@ describe('data/useFilterValue', () => {
           filter={{
             base_path: '0003',
             human_name: 'Organizations',
+            is_autocompletable: true,
             name: 'organizations',
             values: [],
           }}
@@ -95,6 +98,7 @@ describe('data/useFilterValue', () => {
       filter: {
         base_path: '0003',
         human_name: 'Organizations',
+        is_autocompletable: true,
         name: 'organizations',
         values: [],
       },

@@ -15,7 +15,7 @@ import { handle } from '../../utils/errors/handle';
  */
 export const getSuggestionsSection = async (
   kind: string,
-  sectionTitleMessage: FormattedMessage.MessageDescriptor,
+  title: string,
   query: string,
 ) => {
   // Run the search for the section on the API
@@ -54,7 +54,7 @@ export const getSuggestionsSection = async (
 
   return {
     kind,
-    message: sectionTitleMessage,
+    title,
     values: take(responseData, 3),
   };
 };

@@ -13,6 +13,7 @@ from django.utils.module_loading import import_string
 from ..defaults import FACET_SORTING_DEFAULT
 
 
+# pylint: disable=too-many-instance-attributes
 class BaseFilterDefinition:
     """
     Base filter definition shape: just a skeleton.
@@ -26,6 +27,7 @@ class BaseFilterDefinition:
         name,
         term=None,
         human_name=None,
+        is_autocompletable=False,
         is_drilldown=False,
         min_doc_count=0,
         position=0,
@@ -35,6 +37,7 @@ class BaseFilterDefinition:
         self.name = name
         self.term = term or name
         self.human_name = human_name or name
+        self.is_autocompletable = is_autocompletable
         self.is_drilldown = is_drilldown
         self.min_doc_count = min_doc_count
         self.position = position
@@ -236,6 +239,7 @@ class BaseChoicesFilterDefinition(BaseFilterDefinition):
             self.name: {
                 # We always need to pass the base definition to the frontend
                 "human_name": self.human_name,
+                "is_autocompletable": self.is_autocompletable,
                 "is_drilldown": self.is_drilldown,
                 "name": self.name,
                 "position": self.position,

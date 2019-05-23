@@ -20,6 +20,7 @@ describe('components/SearchFilterValueLeaf', () => {
             filter={{
               base_path: null,
               human_name: 'Filter name',
+              is_autocompletable: true,
               name: 'filter_name',
               values: [],
             }}
@@ -53,6 +54,7 @@ describe('components/SearchFilterValueLeaf', () => {
             filter={{
               base_path: null,
               human_name: 'Filter name',
+              is_autocompletable: true,
               name: 'filter_name',
               values: [],
             }}
@@ -84,6 +86,7 @@ describe('components/SearchFilterValueLeaf', () => {
             filter={{
               base_path: null,
               human_name: 'Filter name',
+              is_autocompletable: true,
               name: 'filter_name',
               values: [],
             }}
@@ -122,6 +125,7 @@ describe('components/SearchFilterValueLeaf', () => {
             filter={{
               base_path: null,
               human_name: 'Filter name',
+              is_autocompletable: true,
               name: 'filter_name',
               values: [],
             }}
@@ -142,6 +146,7 @@ describe('components/SearchFilterValueLeaf', () => {
       filter: {
         base_path: null,
         human_name: 'Filter name',
+        is_autocompletable: true,
         name: 'filter_name',
         values: [],
       },
@@ -164,6 +169,7 @@ describe('components/SearchFilterValueLeaf', () => {
             filter={{
               base_path: null,
               human_name: 'Filter name',
+              is_autocompletable: true,
               name: 'filter_name',
               values: [],
             }}
@@ -184,6 +190,7 @@ describe('components/SearchFilterValueLeaf', () => {
       filter: {
         base_path: null,
         human_name: 'Filter name',
+        is_autocompletable: true,
         name: 'filter_name',
         values: [],
       },

@@ -31,6 +31,7 @@ describe('components/SearchFilterGroup', () => {
           filter={{
             base_path: '0001',
             human_name: 'Organizations',
+            is_autocompletable: true,
             name: 'organizations',
             values: [
               {

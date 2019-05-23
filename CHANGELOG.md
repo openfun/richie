@@ -12,6 +12,12 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Add a home page to the site structure to avoid a 404 error on startup.
 
+### Changed
+
+- Make filter autosuggestions dynamic based on backend settings. Also runs
+  separate autocompletion requests for each meta category and shows them
+  under their separate titles.
+
 ### Fixed
 
 - Fix error when one of the site's languages was not found in ALL_LANGUAGES.

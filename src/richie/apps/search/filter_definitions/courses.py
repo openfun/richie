@@ -169,10 +169,11 @@ class IndexableFilterDefinition(TermsAggsMixin, TermsQueryMixin, BaseFilterDefin
         return {
             self.name: {
                 # We always need to pass the base definition to the frontend
+                "base_path": self.base_page.node.path if self.base_page else None,
                 "human_name": self.human_name,
+                "is_autocompletable": self.is_autocompletable,
                 "is_drilldown": self.is_drilldown,
                 "name": self.name,
-                "base_path": self.base_page.node.path if self.base_page else None,
                 "position": self.position,
                 "values": [
                     # Aggregate the information from right above to build the values

@@ -21,7 +21,7 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
     try {
       suggestionsSection = await getSuggestionsSection(
         'courses',
-        { defaultMessage: 'Courses', id: 'coursesHumanName' },
+        'Courses',
         'some search',
       );
     } catch (error) {
@@ -30,7 +30,7 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
 
     expect(suggestionsSection).toEqual({
       kind: 'courses',
-      message: { defaultMessage: 'Courses', id: 'coursesHumanName' },
+      title: 'Courses',
       values: [
         { id: '001', kind: 'courses', title: 'Course #1' },
         { id: '002', kind: 'courses', title: 'Course #2' },
@@ -42,11 +42,7 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
     fetchMock.get('/api/v1.0/courses/autocomplete/?query=some%20search', {
       throws: 'Failed to send API request',
     });
-    await getSuggestionsSection(
-      'courses',
-      { defaultMessage: 'Courses', id: 'coursesHumanName' },
-      'some search',
-    );
+    await getSuggestionsSection('courses', 'Courses', 'some search');
     expect(mockHandle).toHaveBeenCalledWith(
       new Error('Failed to send API request'),
     );
@@ -57,11 +53,7 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
       body: {},
       status: 403,
     });
-    await getSuggestionsSection(
-      'courses',
-      { defaultMessage: 'Courses', id: 'coursesHumanName' },
-      'some search',
-    );
+    await getSuggestionsSection('courses', 'Courses', 'some search');
     expect(mockHandle).toHaveBeenCalledWith(
       new Error('Failed to get list from courses autocomplete : 403'),
     );
@@ -72,11 +64,7 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
       '/api/v1.0/courses/autocomplete/?query=some%20search',
       'not json',
     );
-    await getSuggestionsSection(
-      'courses',
-      { defaultMessage: 'Courses', id: 'coursesHumanName' },
-      'some search',
-    );
+    await getSuggestionsSection('courses', 'Courses', 'some search');
     expect(mockHandle).toHaveBeenCalledWith(
       new Error(
         'Failed to decode JSON in getSuggestionSection FetchError: invalid json response body at ' +

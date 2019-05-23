@@ -18,9 +18,18 @@ jest.mock('lodash-es/debounce', () => (fn: any) => (...args: any[]) =>
 
 describe('components/SearchSuggestField', () => {
   // Make some filters we can reuse through our tests in <SearchSuggestField /> props
+  const levels = {
+    base_path: '00030002',
+    human_name: 'Levels',
+    is_autocompletable: false,
+    name: 'levels',
+    values: [],
+  };
+
   const organizations = {
     base_path: '0002',
     human_name: 'Organizations',
+    is_autocompletable: true,
     name: 'organizations',
     values: [],
   };
@@ -28,6 +37,7 @@ describe('components/SearchSuggestField', () => {
   const persons = {
     base_path: null,
     human_name: 'Persons',
+    is_autocompletable: true,
     name: 'persons',
     values: [],
   };
@@ -35,6 +45,7 @@ describe('components/SearchSuggestField', () => {
   const subjects = {
     base_path: '00030001',
     human_name: 'Subjects',
+    is_autocompletable: true,
     name: 'subjects',
     values: [],
   };
@@ -84,7 +95,7 @@ describe('components/SearchSuggestField', () => {
   });
 
   it('gets suggestions from the API when the user types something in the field', async () => {
-    fetchMock.get('/api/v1.0/categories/autocomplete/?query=aut', [
+    fetchMock.get('/api/v1.0/subjects/autocomplete/?query=aut', [
       {
         id: 'L-000300010001',
         title: 'Subject #311',
@@ -99,7 +110,9 @@ describe('components/SearchSuggestField', () => {
         <CourseSearchParamsContext.Provider
           value={[{ limit: '999', offset: '0' }, jest.fn()]}
         >
-          <SearchSuggestField filters={{ organizations, subjects }} />
+          <SearchSuggestField
+            filters={{ levels, organizations, persons, subjects }}
+          />
         </CourseSearchParamsContext.Provider>
       </IntlProvider>,
     );
@@ -113,13 +126,30 @@ describe('components/SearchSuggestField', () => {
     fireEvent.change(field, { target: { value: 'aut' } });
     await wait();
 
-    getByText('Categories');
-    getByText('Subject #311');
+    expect(
+      fetchMock.called('/api/v1.0/levels/autocomplete/?query=aut'),
+    ).toEqual(false);
+    expect(queryByText('Levels')).toEqual(null);
+
+    expect(
+      fetchMock.called('/api/v1.0/organizations/autocomplete/?query=aut'),
+    ).toEqual(true);
     expect(queryByText('Organizations')).toEqual(null);
+
+    expect(
+      fetchMock.called('/api/v1.0/persons/autocomplete/?query=aut'),
+    ).toEqual(true);
+    expect(queryByText('Persons')).toEqual(null);
+
+    expect(
+      fetchMock.called('/api/v1.0/subjects/autocomplete/?query=aut'),
+    ).toEqual(true);
+    getByText('Subjects');
+    getByText('Subject #311');
   });
 
   it('does not attempt to get or show any suggestions before the user types 3 characters', async () => {
-    ['categories', 'organizations', 'persons'].forEach(kind =>
+    ['organizations', 'persons', 'subjects'].forEach(kind =>
       fetchMock.get(`/api/v1.0/${kind}/autocomplete/?query=xyz`, []),
     );
 
@@ -128,7 +158,9 @@ describe('components/SearchSuggestField', () => {
         <CourseSearchParamsContext.Provider
           value={[{ limit: '999', offset: '0' }, jest.fn()]}
         >
-          <SearchSuggestField filters={{ organizations, subjects }} />
+          <SearchSuggestField
+            filters={{ levels, organizations, persons, subjects }}
+          />
         </CourseSearchParamsContext.Provider>
       </IntlProvider>,
     );
@@ -145,7 +177,18 @@ describe('components/SearchSuggestField', () => {
 
     fireEvent.change(field, { target: { value: 'xyz' } });
     await wait();
-    expect(fetchMock.calls().length).toEqual(3);
+    expect(
+      fetchMock.called('/api/v1.0/levels/autocomplete/?query=xyz'),
+    ).toEqual(false);
+    expect(
+      fetchMock.called('/api/v1.0/organizations/autocomplete/?query=xyz'),
+    ).toEqual(true);
+    expect(
+      fetchMock.called('/api/v1.0/persons/autocomplete/?query=xyz'),
+    ).toEqual(true);
+    expect(
+      fetchMock.called('/api/v1.0/subjects/autocomplete/?query=xyz'),
+    ).toEqual(true);
   });
 
   it('updates the search params when the user selects a filter suggestion', async () => {
@@ -156,7 +199,7 @@ describe('components/SearchSuggestField', () => {
         title: 'Organization #27',
       },
     ]);
-    ['categories', 'persons'].forEach(kind =>
+    ['persons', 'subjects'].forEach(kind =>
       fetchMock.get(`/api/v1.0/${kind}/autocomplete/?query=orga`, []),
     );
 
@@ -169,7 +212,9 @@ describe('components/SearchSuggestField', () => {
             dispatchCourseSearchParamsUpdate,
           ]}
         >
-          <SearchSuggestField filters={{ organizations, subjects }} />
+          <SearchSuggestField
+            filters={{ levels, organizations, persons, subjects }}
+          />
         </CourseSearchParamsContext.Provider>
       </IntlProvider>,
     );
@@ -183,17 +228,33 @@ describe('components/SearchSuggestField', () => {
     fireEvent.change(field, { target: { value: 'orga' } });
     await wait();
 
+    expect(
+      fetchMock.called('/api/v1.0/levels/autocomplete/?query=orga'),
+    ).toEqual(false);
+    expect(queryByText('Levels')).toEqual(null);
+
+    expect(
+      fetchMock.called('/api/v1.0/organizations/autocomplete/?query=orga'),
+    ).toEqual(true);
     getByText('Organizations');
     getByText('Organization #27');
 
-    expect(queryByText('Categories')).toEqual(null);
-    expect(queryByText('Courses')).toEqual(null);
+    expect(
+      fetchMock.called('/api/v1.0/persons/autocomplete/?query=orga'),
+    ).toEqual(true);
+    expect(queryByText('Persons')).toEqual(null);
+
+    expect(
+      fetchMock.called('/api/v1.0/subjects/autocomplete/?query=orga'),
+    ).toEqual(true);
+    expect(queryByText('Subjects')).toEqual(null);
 
     fireEvent.click(getByText('Organization #27'));
     expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
       filter: {
         base_path: '0002',
         human_name: 'Organizations',
+        is_autocompletable: true,
         name: 'organizations',
         values: [],
       },
@@ -210,7 +271,7 @@ describe('components/SearchSuggestField', () => {
         title: 'Doctor Doom',
       },
     ]);
-    ['categories', 'organizations'].forEach(kind =>
+    ['organizations', 'subjects'].forEach(kind =>
       fetchMock.get(`/api/v1.0/${kind}/autocomplete/?query=doct`, []),
     );
 
@@ -223,7 +284,9 @@ describe('components/SearchSuggestField', () => {
             dispatchCourseSearchParamsUpdate,
           ]}
         >
-          <SearchSuggestField filters={{ persons, subjects }} />
+          <SearchSuggestField
+            filters={{ levels, organizations, persons, subjects }}
+          />
         </CourseSearchParamsContext.Provider>
       </IntlProvider>,
     );
@@ -237,17 +300,33 @@ describe('components/SearchSuggestField', () => {
     fireEvent.change(field, { target: { value: 'doct' } });
     await wait();
 
+    expect(
+      fetchMock.called('/api/v1.0/levels/autocomplete/?query=doct'),
+    ).toEqual(false);
+    expect(queryByText('Levels')).toEqual(null);
+
+    expect(
+      fetchMock.called('/api/v1.0/organizations/autocomplete/?query=doct'),
+    ).toEqual(true);
+    expect(queryByText('Organizations')).toEqual(null);
+
+    expect(
+      fetchMock.called('/api/v1.0/persons/autocomplete/?query=doct'),
+    ).toEqual(true);
     getByText('Persons');
     getByText('Doctor Doom');
 
-    expect(queryByText('Categories')).toEqual(null);
-    expect(queryByText('Courses')).toEqual(null);
+    expect(
+      fetchMock.called('/api/v1.0/subjects/autocomplete/?query=doct'),
+    ).toEqual(true);
+    expect(queryByText('Subjects')).toEqual(null);
 
     fireEvent.click(getByText('Doctor Doom'));
     expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
       filter: {
         base_path: null,
         human_name: 'Persons',
+        is_autocompletable: true,
         name: 'persons',
         values: [],
       },
@@ -257,11 +336,7 @@ describe('components/SearchSuggestField', () => {
   });
 
   it('removes the search query when the user presses ENTER on an empty field', async () => {
-    fetchMock.get(
-      '/api/v1.0/organizations/autocomplete/?query=some%20query',
-      [],
-    );
-    ['categories', 'persons'].forEach(kind =>
+    ['organizations', 'persons', 'subjects'].forEach(kind =>
       fetchMock.get(`/api/v1.0/${kind}/autocomplete/?query=some%20query`, []),
     );
 
@@ -274,7 +349,9 @@ describe('components/SearchSuggestField', () => {
             dispatchCourseSearchParamsUpdate,
           ]}
         >
-          <SearchSuggestField filters={{ organizations, subjects }} />
+          <SearchSuggestField
+            filters={{ levels, organizations, persons, subjects }}
+          />
         </CourseSearchParamsContext.Provider>
       </IntlProvider>,
     );
@@ -296,7 +373,7 @@ describe('components/SearchSuggestField', () => {
   });
 
   it('searches as the user types', () => {
-    ['categories', 'organizations', 'persons'].forEach(kind =>
+    ['organizations', 'persons', 'subjects'].forEach(kind =>
       fetchMock.get(`begin:/api/v1.0/${kind}/autocomplete/?query=`, []),
     );
 
@@ -309,7 +386,9 @@ describe('components/SearchSuggestField', () => {
             dispatchCourseSearchParamsUpdate,
           ]}
         >
-          <SearchSuggestField filters={{ organizations, subjects }} />
+          <SearchSuggestField
+            filters={{ levels, organizations, persons, subjects }}
+          />
         </CourseSearchParamsContext.Provider>
       </IntlProvider>,
     );

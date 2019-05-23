@@ -29,12 +29,12 @@ export type Suggestion<Kind extends string> = Kind extends 'default'
  * The base shape of a resource suggestion section. Contains a bunch of suggestions and a title.
  * Used by our `react-autosuggest` callbacks to display, build & generally use our suggestions.
  * @kind A name such as a filter or model name for this kind of suggestion section.
- * @message A `react-intl` MessageDescriptor for the title of the section.
+ * @title A translated string for the title of the section.
  * @values An array that contains all the Suggestion instances for this section.
  */
 interface ResourceSuggestionSection<S extends Suggestion<string>> {
   kind: S['kind'];
-  message: FormattedMessage.MessageDescriptor;
+  title: string;
   values: S[];
 }
 
@@ -43,12 +43,12 @@ interface ResourceSuggestionSection<S extends Suggestion<string>> {
  * suggestions directly in the same autosuggest. We can instead make a section with only one suggestion and
  * no title to effectively get a suggestion.
  * @kind Always `'default'` for the default suggestion.
- * @message Always `null` for the default suggestion.
+ * @title Always `null` for the default suggestion.
  * @value The default suggestion.
  */
 interface DefaultSuggestionSection {
   kind: DefaultSuggestion['kind'];
-  message: null;
+  title: null;
   values: Array<Suggestion<'default'>>;
 }
 

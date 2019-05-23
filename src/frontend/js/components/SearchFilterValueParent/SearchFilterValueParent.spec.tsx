@@ -37,6 +37,7 @@ describe('<SearchFilterValueParent />', () => {
             filter={{
               base_path: '00010002',
               human_name: 'Subjects',
+              is_autocompletable: true,
               name: 'subjects',
               values: [],
             }}
@@ -99,6 +100,7 @@ describe('<SearchFilterValueParent />', () => {
             filter={{
               base_path: '00010002',
               human_name: 'Subjects',
+              is_autocompletable: true,
               name: 'subjects',
               values: [],
             }}
@@ -155,6 +157,7 @@ describe('<SearchFilterValueParent />', () => {
             filter={{
               base_path: '00010002',
               human_name: 'Subjects',
+              is_autocompletable: true,
               name: 'subjects',
               values: [],
             }}
@@ -234,6 +237,7 @@ describe('<SearchFilterValueParent />', () => {
             filter={{
               base_path: '0009',
               human_name: 'Filter name',
+              is_autocompletable: true,
               name: 'filter_name',
               values: [],
             }}
@@ -267,6 +271,7 @@ describe('<SearchFilterValueParent />', () => {
             filter={{
               base_path: '0009',
               human_name: 'Filter name',
+              is_autocompletable: true,
               name: 'filter_name',
               values: [],
             }}
@@ -303,6 +308,7 @@ describe('<SearchFilterValueParent />', () => {
             filter={{
               base_path: '0009',
               human_name: 'Filter name',
+              is_autocompletable: true,
               name: 'filter_name',
               values: [],
             }}
@@ -338,6 +344,7 @@ describe('<SearchFilterValueParent />', () => {
             filter={{
               base_path: '0009',
               human_name: 'Filter name',
+              is_autocompletable: true,
               name: 'filter_name',
               values: [],
             }}
@@ -358,6 +365,7 @@ describe('<SearchFilterValueParent />', () => {
       filter: {
         base_path: '0009',
         human_name: 'Filter name',
+        is_autocompletable: true,
         name: 'filter_name',
         values: [],
       },
@@ -380,6 +388,7 @@ describe('<SearchFilterValueParent />', () => {
             filter={{
               base_path: '0009',
               human_name: 'Filter name',
+              is_autocompletable: true,
               name: 'filter_name',
               values: [],
             }}
@@ -400,6 +409,7 @@ describe('<SearchFilterValueParent />', () => {
       filter: {
         base_path: '0009',
         human_name: 'Filter name',
+        is_autocompletable: true,
         name: 'filter_name',
         values: [],
       },

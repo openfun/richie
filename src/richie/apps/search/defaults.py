@@ -79,6 +79,7 @@ FILTERS_CONFIGURATION = [
         "richie.apps.search.filter_definitions.IndexableMPTTFilterDefinition",
         {
             "human_name": _("Subjects"),
+            "is_autocompletable": True,
             "min_doc_count": 0,
             "name": "subjects",
             "position": 2,
@@ -90,6 +91,7 @@ FILTERS_CONFIGURATION = [
         "richie.apps.search.filter_definitions.IndexableMPTTFilterDefinition",
         {
             "human_name": _("Levels"),
+            "is_autocompletable": True,
             "min_doc_count": 0,
             "name": "levels",
             "position": 3,
@@ -101,6 +103,7 @@ FILTERS_CONFIGURATION = [
         "richie.apps.search.filter_definitions.IndexableMPTTFilterDefinition",
         {
             "human_name": _("Organizations"),
+            "is_autocompletable": True,
             "min_doc_count": 0,
             "name": "organizations",
             "position": 4,
@@ -111,6 +114,7 @@ FILTERS_CONFIGURATION = [
         "richie.apps.search.filter_definitions.IndexableFilterDefinition",
         {
             "human_name": _("Persons"),
+            "is_autocompletable": True,
             "min_doc_count": 0,
             "name": "persons",
             "position": 5,

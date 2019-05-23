@@ -415,6 +415,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 "filters": {
                     "availability": {
                         "human_name": "Availability",
+                        "is_autocompletable": False,
                         "is_drilldown": True,
                         "name": "availability",
                         "position": 1,
@@ -435,6 +436,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                     },
                     "languages": {
                         "human_name": "Languages",
+                        "is_autocompletable": False,
                         "is_drilldown": False,
                         "name": "languages",
                         "position": 5,
@@ -447,6 +449,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                     "levels": {
                         "base_path": "0002",
                         "human_name": "Levels",
+                        "is_autocompletable": True,
                         "is_drilldown": False,
                         "name": "levels",
                         "position": 3,
@@ -470,6 +473,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                     },
                     "new": {
                         "human_name": "New courses",
+                        "is_autocompletable": False,
                         "is_drilldown": False,
                         "name": "new",
                         "position": 0,
@@ -480,6 +484,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                     "organizations": {
                         "base_path": "0003",
                         "human_name": "Organizations",
+                        "is_autocompletable": True,
                         "is_drilldown": False,
                         "name": "organizations",
                         "position": 4,
@@ -509,6 +514,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                     "persons": {
                         "base_path": None,
                         "human_name": "Persons",
+                        "is_autocompletable": True,
                         "is_drilldown": False,
                         "name": "persons",
                         "position": 5,
@@ -517,6 +523,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                     "subjects": {
                         "base_path": "0001",
                         "human_name": "Subjects",
+                        "is_autocompletable": True,
                         "is_drilldown": False,
                         "name": "subjects",
                         "position": 2,

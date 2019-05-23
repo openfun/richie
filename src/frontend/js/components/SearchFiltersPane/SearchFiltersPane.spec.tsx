@@ -27,12 +27,14 @@ describe('components/SearchFiltersPane', () => {
               categories: {
                 base_path: '0001',
                 human_name: 'Categories',
+                is_autocompletable: true,
                 name: 'categories',
                 values: [],
               },
               organizations: {
                 base_path: '0002',
                 human_name: 'Organizations',
+                is_autocompletable: true,
                 name: 'organizations',
                 values: [],
               },
@@ -84,12 +86,14 @@ describe('components/SearchFiltersPane', () => {
               categories: {
                 base_path: '0001',
                 human_name: 'Categories',
+                is_autocompletable: true,
                 name: 'categories',
                 values: [],
               },
               organizations: {
                 base_path: '0002',
                 human_name: 'Organizations',
+                is_autocompletable: true,
                 name: 'organizations',
                 values: [],
               },

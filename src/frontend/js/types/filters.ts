@@ -19,6 +19,7 @@ export interface FilterValue {
  * @property `base_path` — MPTT path of the CMS page that matches the filter. This is useful here because
  * it appears in the path the pages for all filter values that are under that filter in the taxonomy.
  * @property `human_name` — Internationalized human name for the filter.
+ * @property `is_autocompletable` — whether the filter has an associated API endpoint for autocompletion.
  * @property `is_drilldown` — Whether the filter is limited to one active value at a time.
  * @property `name` — Machine name for the filter (for use in API calls, query strings, etc.).
  * @property `values` — List of (faceted) available values for the filter.
@@ -26,6 +27,7 @@ export interface FilterValue {
 export interface FilterDefinition {
   base_path: Nullable<string>;
   human_name: string;
+  is_autocompletable: boolean;
   is_drilldown?: boolean;
   name: string;
   values: FilterValue[];

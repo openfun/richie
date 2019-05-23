@@ -6,7 +6,6 @@ import { defineMessages, InjectedIntlProps, injectIntl } from 'react-intl';
 import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
 import { APICourseSearchResponse } from '../../types/api';
 import { Suggestion, SuggestionSection } from '../../types/Suggestion';
-import { commonMessages } from '../../utils/commonMessages';
 import { handle } from '../../utils/errors/handle';
 import { getSuggestionsSection } from './getSuggestionsSection';
 
@@ -204,23 +203,15 @@ export const SearchSuggestField = injectIntl(
       let sections: SearchSuggestionSection[];
       try {
         sections = (await Promise.all(
-          [
-            getSuggestionsSection(
-              'categories',
-              commonMessages.categoriesHumanName,
-              incomingValue,
+          Object.values(filters)
+            .filter(filterdef => filterdef.is_autocompletable)
+            .map(filterdef =>
+              getSuggestionsSection(
+                filterdef.name,
+                filterdef.human_name,
+                incomingValue,
+              ),
             ),
-            getSuggestionsSection(
-              'organizations',
-              commonMessages.organizationsHumanName,
-              incomingValue,
-            ),
-            getSuggestionsSection(
-              'persons',
-              commonMessages.personsHumanName,
-              incomingValue,
-            ),
-          ],
           // We can assert this because of the catch below
         )) as SearchSuggestionSection[];
       } catch (error) {
@@ -233,16 +224,6 @@ export const SearchSuggestField = injectIntl(
       );
     };
 
-    /**
-     * `react-autosuggest` callback to render one suggestion section.
-     * @param section A suggestion section based on a resource. renderSectionTitle() is never called with
-     * the default section as that section has no title.
-     */
-    const renderSectionTitle: SearchAutosuggestProps['renderSectionTitle'] = section =>
-      ['categories', 'organizations', 'persons'].includes(section.kind) ? (
-        <span>{intl.formatMessage(section.message)}</span>
-      ) : null;
-
     return (
       // TypeScript incorrectly infers the type of the Autosuggest suggestions prop as SearchSuggestion, which
       // would be correct if we did not use sections, but is incorrect as it is.
@@ -254,7 +235,7 @@ export const SearchSuggestField = injectIntl(
         onSuggestionsClearRequested={() => setSuggestions([])}
         onSuggestionsFetchRequested={onSuggestionsFetchRequested}
         onSuggestionSelected={onSuggestionSelected}
-        renderSectionTitle={renderSectionTitle}
+        renderSectionTitle={section => section.title}
         renderSuggestion={renderSuggestion}
         shouldRenderSuggestions={val => val.length > 2}
         suggestions={suggestions as any}
