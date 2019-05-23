@@ -73,17 +73,13 @@ class CategoriesViewsetsTestCase(TestCase):
         # The client received a standard NotFound response
         self.assertEqual(response.status_code, 404)
 
-    @mock.patch(
-        "richie.apps.search.forms.ItemSearchForm.build_es_query",
-        lambda x: (2, 0, {"query": "example"}),
-    )
     @mock.patch.object(ES_CLIENT, "search")
     def test_viewsets_categories_search(self, mock_search):
         """
         Happy path: the category is filtering the categories by name
         """
         factory = APIRequestFactory()
-        request = factory.get("/api/v1.0/category?query=Science&limit=2")
+        request = factory.get("/api/v1.0/subjects/?query=Science&limit=2")
 
         mock_search.return_value = {
             "hits": {
@@ -113,7 +109,9 @@ class CategoriesViewsetsTestCase(TestCase):
             }
         }
 
-        response = CategoriesViewSet.as_view({"get": "list"})(request, version="1.0")
+        response = CategoriesViewSet.as_view({"get": "list"})(
+            request, version="1.0", kind="subjects"
+        )
 
         # The client received a properly formatted response
         self.assertEqual(response.status_code, 200)
@@ -151,7 +149,16 @@ class CategoriesViewsetsTestCase(TestCase):
                 "path",
                 "title.*",
             ],
-            body={"query": "example"},
+            body={
+                "query": {
+                    "bool": {
+                        "must": [
+                            {"term": {"kind": "subjects"}},
+                            {"match": {"title.*": {"query": "Science"}}},
+                        ]
+                    }
+                }
+            },
             doc_type="category",
             from_=0,
             index="richie_categories",
@@ -164,9 +171,11 @@ class CategoriesViewsetsTestCase(TestCase):
         """
         factory = APIRequestFactory()
         # The request contains incorrect params: limit should be a positive integer
-        request = factory.get("/api/v1.0/category?name=&limit=-2")
+        request = factory.get("/api/v1.0/subjects/?name=&limit=-2")
 
-        response = CategoriesViewSet.as_view({"get": "list"})(request, version="1.0")
+        response = CategoriesViewSet.as_view({"get": "list"})(
+            request, version="1.0", kind="subjects"
+        )
 
         # The client received a BadRequest response with the relevant data
         self.assertEqual(response.status_code, 400)

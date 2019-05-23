@@ -40,12 +40,14 @@ class AutocompleteCategoriesTestCase(TestCase):
                     "en": slice_string_for_completion("Electric Birdwatching")
                 },
                 "id": "24",
+                "kind": "subjects",
                 "path": "001000",
                 "title": {"en": "Electric Birdwatching"},
             },
             {
                 "complete": {"en": slice_string_for_completion("Ocean biking")},
                 "id": "33",
+                "kind": "subjects",
                 "path": "001001",
                 "title": {"en": "Ocean biking"},
             },
@@ -54,8 +56,16 @@ class AutocompleteCategoriesTestCase(TestCase):
                     "en": slice_string_for_completion("Eclectic bikeshedding")
                 },
                 "id": "51",
+                "kind": "subjects",
                 "path": "001002",
                 "title": {"en": "Eclectic bikeshedding"},
+            },
+            {
+                "complete": {"en": slice_string_for_completion("Electric Decoys")},
+                "id": "44",
+                "kind": "not_subjects",
+                "path": "001003",
+                "title": {"en": "Electric Decoys"},
             },
         ]
 
@@ -92,9 +102,7 @@ class AutocompleteCategoriesTestCase(TestCase):
         bulk(actions=actions, chunk_size=500, client=ES_CLIENT)
         indices_client.refresh()
 
-        response = self.client.get(
-            f"/api/v1.0/categories/autocomplete/?{querystring:s}"
-        )
+        response = self.client.get(f"/api/v1.0/subjects/autocomplete/?{querystring:s}")
         self.assertEqual(response.status_code, 200)
 
         return categories, json.loads(response.content)
@@ -104,6 +112,7 @@ class AutocompleteCategoriesTestCase(TestCase):
         Make sure autocomplete is operational and returns the expected categories.
         """
         all_categories, response = self.execute_query(querystring="query=Electric")
+        # Does not include the 4th, "not_subjects" element
         self.assertEqual(
             [all_categories[0]["id"]], [category["id"] for category in response]
         )

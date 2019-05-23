@@ -29,8 +29,7 @@ class CategoriesIndexersTestCase(TestCase):
         # Our meta category and its page
         meta = CategoryFactory(
             page_parent=create_i18n_page(
-                {"en": "Categories", "fr": "Catégories"},
-                published=True,
+                {"en": "Categories", "fr": "Catégories"}, published=True
             ),
             page_reverse_id="subjects",
             page_title={"en": "Subjects", "fr": "Sujets"},
@@ -78,11 +77,7 @@ class CategoriesIndexersTestCase(TestCase):
                     },
                     "complete": {
                         "en": ["my second subject", "second subject", "subject"],
-                        "fr": [
-                            "ma deuxième thématic",
-                            "deuxième thématic",
-                            "thématic",
-                        ],
+                        "fr": ["ma deuxième thématic", "deuxième thématic", "thématic"],
                     },
                     "description": {},
                     "is_meta": False,
@@ -90,10 +85,7 @@ class CategoriesIndexersTestCase(TestCase):
                     "logo": {},
                     "nb_children": 0,
                     "path": "0001000100010001",
-                    "title": {
-                        "en": "my second subject",
-                        "fr": "ma deuxième thématic",
-                    },
+                    "title": {"en": "my second subject", "fr": "ma deuxième thématic"},
                 },
                 {
                     "_id": "P-000100010001",

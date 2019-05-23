@@ -5,16 +5,17 @@ from django.conf import settings
 from django.utils.translation import get_language_from_request
 
 from elasticsearch.exceptions import NotFoundError
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
 from .. import ES_CLIENT
 from ..defaults import ES_PAGE_SIZE
 from ..indexers import ES_INDICES
-from ..utils.viewsets import AutocompleteMixin, ViewSetMetadata
+from ..utils.viewsets import ViewSetMetadata
 
 
-class CategoriesViewSet(AutocompleteMixin, ViewSet):
+class CategoriesViewSet(ViewSet):
     """
     A simple viewset with GET endpoints to fetch categories
     See API Blueprint for details on consumer use.
@@ -23,7 +24,7 @@ class CategoriesViewSet(AutocompleteMixin, ViewSet):
     _meta = ViewSetMetadata(indexer=ES_INDICES.categories)
 
     # pylint: disable=no-self-use,unused-argument
-    def list(self, request, version):
+    def list(self, request, version, kind):
         """
         Category search endpoint: pass query params to ElasticSearch so it filters categories
         and returns a list of matching items
@@ -35,7 +36,7 @@ class CategoriesViewSet(AutocompleteMixin, ViewSet):
         if not params_form.is_valid():
             return Response(status=400, data={"errors": params_form.errors})
 
-        limit, offset, query = params_form.build_es_query()
+        limit, offset, query = params_form.build_es_query(kind=kind)
 
         # pylint: disable=unexpected-keyword-arg
         query_response = ES_CLIENT.search(
@@ -92,4 +93,45 @@ class CategoriesViewSet(AutocompleteMixin, ViewSet):
                 # Get the best language we can return multilingual fields in
                 get_language_from_request(request),
             )
+        )
+
+    @action(detail=False)
+    def autocomplete(self, request, version, kind):
+        """
+        Use the "completion" field on the categories mapping & objects to provide autocomplete
+        functionality through an API endpoint.
+        We cannot reuse the `AutocompleteMixin` as it does not handle "kinds" as categories need.
+        """
+        # Get a hold of the relevant indexer
+        indexer = self._meta.indexer
+
+        # Query our specific ES completion field
+        autocomplete_query_response = ES_CLIENT.search(
+            index=indexer.index_name,
+            doc_type=indexer.document_type,
+            body={
+                "suggest": {
+                    "categories": {
+                        "prefix": request.query_params["query"],
+                        "completion": {
+                            "contexts": {"kind": [kind]},
+                            "field": "complete.{:s}".format(
+                                get_language_from_request(request)
+                            ),
+                        },
+                    }
+                }
+            },
+        )
+
+        # Build a response array from the list of completion options
+        return Response(
+            [
+                indexer.format_es_document_for_autocomplete(
+                    option, get_language_from_request(request)
+                )
+                for option in autocomplete_query_response["suggest"]["categories"][0][
+                    "options"
+                ]
+            ]
         )
