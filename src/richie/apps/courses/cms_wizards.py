@@ -24,6 +24,7 @@ from cms.wizards.wizard_base import Wizard
 from cms.wizards.wizard_pool import wizard_pool
 from filer.models import FolderPermission
 
+from ..core import defaults as core_defaults
 from ..core.helpers import get_permissions
 from . import defaults
 from .helpers import snapshot_course
@@ -380,7 +381,23 @@ class CourseRunWizardForm(BaseWizardForm):
             snapshot_course(self.page, self.user)
 
         page = super().save()
-        CourseRun.objects.create(extended_object=page, languages=[get_language()])
+
+        # Look for a language matching the active language in the list of ALL_LANGUAGES
+        # (it might happen that the project was configured in a way that the active language
+        # is not one of the possibilities in ALL_LANGUAGES)
+        languages = []
+        active_language = get_language()
+        if active_language in core_defaults.ALL_LANGUAGES_DICT:
+            languages.append(active_language)
+        else:
+            # if "fr-ca" was not found, look for the first language that starts with "fr-"
+            generic_language_code = active_language.split("-")[0]
+            for language_candidate in core_defaults.ALL_LANGUAGES_DICT:
+                if language_candidate.startswith(generic_language_code):
+                    languages.append(language_candidate)
+                    break
+
+        CourseRun.objects.create(extended_object=page, languages=languages)
         return page
 
 

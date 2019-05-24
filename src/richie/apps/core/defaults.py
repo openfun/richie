@@ -1,5 +1,6 @@
 """Default settings for the core app of Richie."""
 from django.conf import global_settings, settings
+from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import ugettext_lazy as _
 
 # Group to add plugin to placeholder "Content"
@@ -21,3 +22,14 @@ ALL_LANGUAGES_DICT = dict(ALL_LANGUAGES)
 # Use "en" as default as it is the language that is most likely to be spoken by any visitor
 # when their preferred language, whatever it is, is unavailable
 LANGUAGES_DICT = dict(settings.LANGUAGES)
+
+# check that all languages in LANGUAGES are matching one of the languages in ALL_LANGUAGES
+for site_language in LANGUAGES_DICT:
+    generic_language_code = site_language.split("-")[0]
+    for language in ALL_LANGUAGES_DICT:
+        if language.startswith(generic_language_code):
+            break
+    else:
+        raise ImproperlyConfigured(
+            f'"{site_language:s}" in LANGUAGES does not match any language in ALL_LANGUAGES'
+        )

@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix error when one of the site's languages was not found in ALL_LANGUAGES.
+
 ## [1.0.0-beta.9] - 2019-05-22
 
 ### Added

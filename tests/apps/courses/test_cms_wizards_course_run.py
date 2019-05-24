@@ -4,6 +4,7 @@ Test suite for the wizard creating a new Course page
 from unittest import mock
 
 from django.core.exceptions import PermissionDenied
+from django.test.utils import override_settings
 from django.urls import reverse
 from django.utils import translation
 
@@ -499,6 +500,37 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
 
         self.assertTrue(form.is_valid())
         with translation.override("fr"):
+            page = form.save()
+
+        # The language field should have been set to the active language
+        self.assertEqual(page.courserun.languages, ["fr"])
+
+    @override_settings(
+        ALL_LANGUAGES=[("en", "English"), ("fr", "Français"), ("de", "Allemand")]
+    )
+    @override_settings(LANGUAGE_CODE="fr-ca")
+    @override_settings(LANGUAGES=[("fr-ca", "Français Canadien")])
+    @override_settings(
+        CMS_LANGUAGES={1: [{"code": "fr-ca", "name": "Français Canadien"}]}
+    )
+    def test_cms_wizards_course_run_language_active_not_in_all_languages(self, *_):
+        """
+        If the ALL_LANGUAGES setting does not include the full active language, it should match
+        on the simple language prefix.
+        """
+        course = CourseFactory(page_title={"fr-ca": "my title"})
+
+        # Submit a valid form
+        user = UserFactory(is_staff=True, is_superuser=True)
+        form = CourseRunWizardForm(
+            data={"title": "My title"},
+            wizard_language="en",
+            wizard_user=user,
+            wizard_page=course.extended_object,
+        )
+
+        self.assertTrue(form.is_valid())
+        with translation.override("fr-ca"):
             page = form.save()
 
         # The language field should have been set to the active language
