@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Add a home page to the site structure to avoid a 404 error on startup.
+
 ### Fixed
 
 - Fix error when one of the site's languages was not found in ALL_LANGUAGES.

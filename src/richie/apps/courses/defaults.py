@@ -237,6 +237,12 @@ ORGANIZATIONS_PAGE = {
 PERSONS_PAGE = {"reverse_id": "persons", "template": "courses/cms/person_detail.html"}
 
 PAGES_INFO = {
+    "home": {
+        "title": "Home",
+        "in_navigation": False,
+        "is_homepage": True,
+        "template": "richie/homepage.html",
+    },
     BLOGPOSTS_PAGE["reverse_id"]: {
         "title": "News",
         "in_navigation": True,
