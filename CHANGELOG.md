@@ -23,6 +23,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Fix error when one of the site's languages was not found in ALL_LANGUAGES.
+- The `richie_init` job is now idempotent and can thus be run multiple times.
 
 ## [1.0.0-beta.9] - 2019-05-22
 

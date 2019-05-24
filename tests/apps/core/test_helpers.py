@@ -5,6 +5,7 @@ import random
 from unittest import mock
 
 from django.contrib.auth.models import Permission
+from django.contrib.sites.models import Site
 from django.test import TestCase
 from django.test.utils import override_settings
 
@@ -12,7 +13,12 @@ from cms.api import Page
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import PermissionFactory
-from richie.apps.core.helpers import create_i18n_page, get_permissions
+from richie.apps.core.helpers import (
+    create_i18n_page,
+    get_permissions,
+    recursive_page_creation,
+)
+from richie.apps.courses.defaults import PAGES_INFO
 
 
 class GetPermissionsHelpersTestCase(TestCase):
@@ -219,3 +225,114 @@ class CreateI18nPageHelpersTestCase(CMSTestCase):
         """
         create_i18n_page("my title", published=True, languages=["en", "fr"])
         self.assertEqual([c[0][0] for c in mock_publish.call_args_list], ["en", "fr"])
+
+
+class RecursivePageCreationHelpersTestCase(CMSTestCase):
+    """Test suite for the `recursive_page_creation` helper."""
+
+    def test_helpers_recursive_page_creation_no_arguments(self):
+        """site and pages_info arguments are required for recursive page creation."""
+        with self.assertRaises(TypeError) as context:
+            # pylint: disable=no-value-for-parameter
+            recursive_page_creation()
+        self.assertEqual(
+            str(context.exception),
+            (
+                "recursive_page_creation() missing 2 required positional "
+                "arguments: 'site' and 'pages_info'"
+            ),
+        )
+
+    def test_helpers_recursive_page_creation_missing_site_argument(self):
+        """The site argument is required for recursive page creation."""
+        with self.assertRaises(TypeError) as context:
+            # pylint: disable=no-value-for-parameter
+            recursive_page_creation(pages_info=PAGES_INFO)
+        self.assertEqual(
+            str(context.exception),
+            "recursive_page_creation() missing 1 required positional argument: 'site'",
+        )
+
+    def test_helpers_recursive_page_creation_missing_pages_info_argument(self):
+        """The pages_info argument is required for recursive page creation."""
+        site = Site.objects.get(id=1)
+        with self.assertRaises(TypeError) as context:
+            # pylint: disable=no-value-for-parameter
+            recursive_page_creation(site=site)
+        self.assertEqual(
+            str(context.exception),
+            "recursive_page_creation() missing 1 required positional argument: 'pages_info'",
+        )
+
+    def test_helpers_recursive_page_creation_with_defaults(self):
+        """Create defaults pages."""
+        site = Site.objects.get(id=1)
+        self.assertEqual(Page.objects.count(), 0)
+        recursive_page_creation(site=site, pages_info=PAGES_INFO)
+        self.assertEqual(Page.objects.filter(reverse_id="home").count(), 2)
+        self.assertEqual(Page.objects.filter(reverse_id="blogposts").count(), 2)
+        self.assertEqual(Page.objects.filter(reverse_id="categories").count(), 2)
+        self.assertEqual(Page.objects.filter(reverse_id="courses").count(), 2)
+        self.assertEqual(Page.objects.filter(reverse_id="organizations").count(), 2)
+        self.assertEqual(Page.objects.filter(reverse_id="persons").count(), 2)
+        self.assertEqual(Page.objects.count(), 12)
+
+    def test_helpers_recursive_page_creation_can_be_run_multiple_times(self):
+        """Ensure we can run the recursive_page_creation helper multiple times with the same
+        parameters without failing or creating new pages."""
+        site = Site.objects.get(id=1)
+        pages_info = {
+            "home": {
+                "title": "Home",
+                "in_navigation": False,
+                "is_homepage": True,
+                "template": "richie/homepage.html",
+            }
+        }
+        self.assertEqual(Page.objects.count(), 0)
+        recursive_page_creation(site=site, pages_info=pages_info)
+        self.assertEqual(Page.objects.filter(reverse_id="home").count(), 2)
+        recursive_page_creation(site=site, pages_info=pages_info)
+        self.assertEqual(Page.objects.filter(reverse_id="home").count(), 2)
+        self.assertEqual(Page.objects.count(), 2)
+
+    def test_helpers_recursive_page_creation_recursiveness(self):
+        """Test embedded pages creation."""
+        site = Site.objects.get(id=1)
+        pages_info = {
+            "organizations": {
+                "title": "Organizations",
+                "in_navigation": True,
+                "template": "courses/cms/organization_list.html",
+                "children": {
+                    "cern": {
+                        "title": "CERN",
+                        "in_navigation": False,
+                        "template": "courses/cms/organization_detail.html",
+                    },
+                    "paris-diderot-university": {
+                        "title": "Paris Diderot University",
+                        "in_navigation": False,
+                        "template": "courses/cms/organization_detail.html",
+                    },
+                },
+            }
+        }
+        self.assertEqual(Page.objects.count(), 0)
+        recursive_page_creation(site=site, pages_info=pages_info)
+        self.assertEqual(Page.objects.filter(reverse_id="organizations").count(), 2)
+        self.assertEqual(Page.objects.filter(reverse_id="cern").count(), 2)
+        self.assertEqual(
+            Page.objects.get(reverse_id="cern", publisher_is_draft=False).parent_page,
+            Page.objects.get(reverse_id="organizations", publisher_is_draft=False),
+        )
+        self.assertEqual(
+            Page.objects.filter(reverse_id="paris-diderot-university").count(), 2
+        )
+        self.assertEqual(
+            Page.objects.get(
+                reverse_id="paris-diderot-university", publisher_is_draft=False
+            ).parent_page,
+            Page.objects.get(reverse_id="organizations", publisher_is_draft=False),
+        )
+        self.assertEqual(Page.objects.count(), 6)
