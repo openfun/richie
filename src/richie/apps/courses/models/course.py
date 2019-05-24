@@ -144,6 +144,7 @@ class Course(BasePageExtension):
         return (
             Person.objects.filter(**filter_dict)
             .select_related("extended_object")
+            .order_by("extended_object__person_plugins__cmsplugin_ptr__position")
             .distinct()
         )
 
