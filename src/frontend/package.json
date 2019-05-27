@@ -34,36 +34,36 @@
     "not dead"
   ],
   "devDependencies": {
-    "@babel/core": "7.4.4",
+    "@babel/core": "7.4.5",
     "@babel/plugin-syntax-dynamic-import": "7.2.0",
     "@babel/polyfill": "7.4.4",
-    "@babel/preset-env": "7.4.4",
+    "@babel/preset-env": "7.4.5",
     "@babel/preset-typescript": "7.3.3",
-    "@types/fetch-mock": "7.2.5",
+    "@types/fetch-mock": "7.3.0",
     "@types/jest": "24.0.13",
     "@types/lodash-es": "4.17.3",
     "@types/query-string": "6.2.0",
-    "@types/react": "16.8.17",
+    "@types/react": "16.8.18",
     "@types/react-autosuggest": "9.3.8",
     "@types/react-dom": "16.8.4",
     "@types/react-intl": "2.3.17",
     "babel-jest": "24.8.0",
     "babel-loader": "8.0.6",
-    "babel-plugin-react-intl": "3.0.1",
+    "babel-plugin-react-intl": "3.0.2",
     "babel-preset-react": "7.0.0-beta.3",
     "fetch-mock": "7.3.3",
     "jest": "24.8.0",
-    "jest-dom": "3.2.2",
+    "jest-dom": "3.4.0",
     "node-fetch": "2.6.0",
     "node-sass": "4.12.0",
-    "nodemon": "1.19.0",
+    "nodemon": "1.19.1",
     "prettier": "1.17.1",
     "react-intl-po": "2.2.2",
     "react-testing-library": "7.0.1",
     "source-map-loader": "0.2.4",
     "tslint": "5.16.0",
     "typescript": "3.4.5",
-    "webpack": "4.31.0",
+    "webpack": "4.32.2",
     "webpack-cli": "3.3.2",
     "xhr-mock": "2.4.1"
   },
@@ -78,7 +78,7 @@
     "react-intl": "2.9.0"
   },
   "resolutions": {
-    "@types/react": "16.8.17",
+    "@types/react": "16.8.18",
     "babel-core": "7.0.0-bridge.0"
   }
 }
