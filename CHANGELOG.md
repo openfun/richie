@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add sensible defaults for third party settings that Richie requires,
 - Add a home page to the site structure to avoid a 404 error on startup.
 
 ### Changed
