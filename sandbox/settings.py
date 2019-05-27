@@ -74,10 +74,19 @@ class Base(DRFMixin, RichieCoursesConfigurationMixin, Configuration):
     * DB_USER
     """
 
-    SECRET_KEY = values.Value(None)
     DEBUG = False
-    ALLOWED_HOSTS = []
+
     SITE_ID = 1
+
+    # Security
+    ALLOWED_HOSTS = []
+    CSRF_COOKIE_SECURE = True
+    SECRET_KEY = values.Value(None)
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SESSION_COOKIE_SECURE = True
+    SILENCED_SYSTEM_CHECKS = values.ListValue([])
+    X_FRAME_OPTIONS = "DENY"
 
     # Application definition
     ROOT_URLCONF = "urls"
@@ -146,6 +155,7 @@ class Base(DRFMixin, RichieCoursesConfigurationMixin, Configuration):
 
     MIDDLEWARE = (
         "cms.middleware.utils.ApphookReloadMiddleware",
+        "django.middleware.security.SecurityMiddleware",
         "django.contrib.sessions.middleware.SessionMiddleware",
         "django.middleware.csrf.CsrfViewMiddleware",
         "django.contrib.auth.middleware.AuthenticationMiddleware",
