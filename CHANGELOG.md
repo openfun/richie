@@ -15,6 +15,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Configure Django settings to pass all heartbeat checks,
 - Make filter autosuggestions dynamic based on backend settings. Also runs
   separate autocompletion requests for each meta category and shows them
   under their separate titles.
