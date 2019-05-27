@@ -7,7 +7,7 @@ from .. import settings
 class RichieCoursesConfigurationMixin:
     """
     A Django Configuration mixin to set sensible defaults for the settings of Richie's
-    courses apps.
+    courses app.
     """
 
     def __new__(cls):
