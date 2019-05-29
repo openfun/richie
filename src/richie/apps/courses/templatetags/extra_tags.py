@@ -211,9 +211,9 @@ class BlockPlugin(Tag):
             return ""
 
         # Add the plugin and its rendered content to an internal context
-        internal_context = context.new(flatten_context(context))
+        internal_context = flatten_context(context)
         internal_context["instance"] = plugin
-        internal_context["content"] = nodelist.render(internal_context)
+        internal_context["content"] = nodelist.render(context.new(internal_context))
 
         # Add the edit script and markup to the content, only if the placeholder is editable
         # and the visited page is the one on which the plugin's placeholder is declared.
