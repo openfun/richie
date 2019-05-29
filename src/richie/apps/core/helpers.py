@@ -127,8 +127,16 @@ def recursive_page_creation(site, pages_info, parent=None):
 
     for name, kwargs in pages_info.items():
         children = kwargs.pop("children", None)
+
+        if kwargs.get("is_homepage"):
+            query_params = {"is_home": True}
+        else:
+            query_params = {"reverse_id": name}
+
         try:
-            page = Page.objects.get(reverse_id=name, publisher_is_draft=False)
+            page = Page.objects.get(
+                publisher_is_draft=True, node__site=site, **query_params
+            )
         except Page.DoesNotExist:
             page = create_i18n_page(
                 site=site, parent=parent, published=True, reverse_id=name, **kwargs

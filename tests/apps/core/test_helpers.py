@@ -296,6 +296,32 @@ class RecursivePageCreationHelpersTestCase(CMSTestCase):
         self.assertEqual(Page.objects.filter(reverse_id="home").count(), 2)
         self.assertEqual(Page.objects.count(), 2)
 
+    def test_helpers_recursive_page_creation_multiple_sites(self):
+        """
+        Ensure that running the `recursive_page_creation` helper multiple times with the same
+        page names but on different sites does not mixup sites.
+        """
+        site1 = Site.objects.get(id=1)
+        site2 = Site.objects.create()
+        pages_info = {
+            "home": {
+                "title": "Home",
+                "in_navigation": False,
+                "is_homepage": True,
+                "template": "richie/homepage.html",
+            }
+        }
+        self.assertEqual(Page.objects.count(), 0)
+
+        site1_page = recursive_page_creation(site=site1, pages_info=pages_info)["home"]
+        self.assertEqual(site1_page.node.site, site1)
+        self.assertEqual(Page.objects.filter(reverse_id="home").count(), 2)
+
+        site2_page = recursive_page_creation(site=site2, pages_info=pages_info)["home"]
+        self.assertEqual(site2_page.node.site, site2)
+        self.assertEqual(Page.objects.filter(reverse_id="home").count(), 4)
+        self.assertEqual(Page.objects.count(), 4)
+
     def test_helpers_recursive_page_creation_recursiveness(self):
         """Test embedded pages creation."""
         site = Site.objects.get(id=1)
@@ -336,3 +362,27 @@ class RecursivePageCreationHelpersTestCase(CMSTestCase):
             Page.objects.get(reverse_id="organizations", publisher_is_draft=False),
         )
         self.assertEqual(Page.objects.count(), 6)
+
+    def test_helpers_recursive_page_creation_existing_homepage(self):
+        """
+        Check that `recursive_page_creation` respects an existing home page
+        """
+        homepage = create_i18n_page("my title", is_homepage=True)
+        self.assertTrue(homepage.is_home)
+        self.assertEqual(Page.objects.count(), 1)
+
+        site = Site.objects.get(id=1)
+        pages_info = {
+            "home": {
+                "title": "Home",
+                "in_navigation": False,
+                "is_homepage": True,
+                "template": "richie/homepage.html",
+            }
+        }
+        pages = recursive_page_creation(site=site, pages_info=pages_info)
+
+        self.assertEqual(pages["home"], homepage)
+
+        homepage.refresh_from_db()
+        self.assertTrue(homepage.is_home)
