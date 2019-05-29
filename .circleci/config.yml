@@ -624,14 +624,14 @@ workflows:
               only: /.*/
       - test-back-mysql:
           requires:
-            - lint-back
+            - build-back
             - build-front-production
           filters:
             tags:
               only: /.*/
       - test-back-postgresql:
           requires:
-            - lint-back
+            - build-back
             - build-front-production
           filters:
             tags:
