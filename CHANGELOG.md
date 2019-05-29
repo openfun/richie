@@ -15,6 +15,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Make sure the `recursive_page_creation` helper respects an existing home
+  page and plays well with multiple sites,
 - Configure Django settings to pass all heartbeat checks,
 - Make filter autosuggestions dynamic based on backend settings. Also runs
   separate autocompletion requests for each meta category and shows them
