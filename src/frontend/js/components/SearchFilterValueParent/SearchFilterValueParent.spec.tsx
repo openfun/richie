@@ -1,8 +1,8 @@
 import '../../testSetup';
 
+import { cleanup, fireEvent, render, wait } from '@testing-library/react';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
-import { cleanup, fireEvent, render, wait } from 'react-testing-library';
 
 jest.mock('../../data/getResourceList/getResourceList', () => ({
   fetchList: jest.fn(),

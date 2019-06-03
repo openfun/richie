@@ -1,8 +1,8 @@
 import '../../testSetup';
 
+import { cleanup, render } from '@testing-library/react';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
-import { cleanup, render } from 'react-testing-library';
 
 import { Course } from '../../types/Course';
 import { CourseGlimpseList } from './CourseGlimpseList';

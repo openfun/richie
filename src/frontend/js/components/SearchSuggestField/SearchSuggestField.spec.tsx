@@ -1,9 +1,9 @@
 import '../../testSetup';
 
+import { cleanup, fireEvent, render, wait } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
-import { cleanup, fireEvent, render, wait } from 'react-testing-library';
 
 import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
 import { SearchSuggestField } from './SearchSuggestField';
