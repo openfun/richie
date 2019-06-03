@@ -1,8 +1,8 @@
 import '../../testSetup';
 
+import { cleanup, fireEvent, render } from '@testing-library/react';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
-import { cleanup, fireEvent, render } from 'react-testing-library';
 
 import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
 import { SearchFilterValueLeaf } from './SearchFilterValueLeaf';

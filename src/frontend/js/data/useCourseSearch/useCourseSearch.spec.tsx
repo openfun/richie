@@ -1,5 +1,5 @@
+import { act, cleanup, render } from '@testing-library/react';
 import React from 'react';
-import { act, cleanup, render } from 'react-testing-library';
 
 import { APIListRequestParams } from '../../types/api';
 import { jestMockOf } from '../../utils/types';

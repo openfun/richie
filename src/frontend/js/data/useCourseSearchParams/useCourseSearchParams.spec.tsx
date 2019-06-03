@@ -1,5 +1,5 @@
+import { act, cleanup, render } from '@testing-library/react';
 import React from 'react';
-import { act, cleanup, render } from 'react-testing-library';
 
 import * as mockWindow from '../../utils/indirection/window';
 import { useCourseSearchParams } from './useCourseSearchParams';
