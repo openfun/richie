@@ -40,7 +40,7 @@ describe('utils/searchSuggest/getSuggestionsSection', () => {
 
   it('reports the error when the request fails', async () => {
     fetchMock.get('/api/v1.0/courses/autocomplete/?query=some%20search', {
-      throws: 'Failed to send API request',
+      throws: new Error('Failed to send API request'),
     });
     await getSuggestionsSection('courses', 'Courses', 'some search');
     expect(mockHandle).toHaveBeenCalledWith(

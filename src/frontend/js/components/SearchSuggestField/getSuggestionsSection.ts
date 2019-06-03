@@ -30,7 +30,7 @@ export const getSuggestionsSection = async (
       },
     );
   } catch (error) {
-    return handle(new Error(error));
+    return handle(error);
   }
 
   // Fetch treats remote errors (400, 404, 503...) as successes
