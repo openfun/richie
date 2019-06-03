@@ -89,7 +89,7 @@ COURSE_ADMIN_ROLE = {
         "can_publish": False,
         "can_change_permissions": False,
         "can_move_page": True,
-        "can_view": True,
+        "can_view": False,  # beware: can_view = True makes it a view restriction...
         "grant_on": 5,  # page and descendants
     },
     "course_folder_permissions": {
@@ -184,7 +184,7 @@ ORGANIZATION_ADMIN_ROLE = {
         "can_publish": False,
         "can_change_permissions": False,
         "can_move_page": False,
-        "can_view": True,
+        "can_view": False,  # beware: can_view = True makes it a view restriction...
         "grant_on": 1,  # just the page
     },
     "organization_folder_permissions": {
@@ -201,7 +201,7 @@ ORGANIZATION_ADMIN_ROLE = {
         "can_publish": False,
         "can_change_permissions": False,
         "can_move_page": True,
-        "can_view": True,
+        "can_view": False,  # beware: can_view = True makes it a view restriction...
         "grant_on": 5,  # page and descendants
     },
     "courses_folder_permissions": {

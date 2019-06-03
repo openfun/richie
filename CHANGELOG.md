@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix page permissions that ended-up being considered as view restrictions
+  making all organization and course pages private.
+
 ## [1.0.0] - 2019-05-29 🎉
 
 ### Added

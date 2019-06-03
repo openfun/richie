@@ -206,6 +206,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
             "richie/single_column.html",
             "en",
             reverse_id=Course.PAGE["reverse_id"],
+            published=True,
         )
 
         any_page = create_page("Any page", "richie/single_column.html", "en")
@@ -244,7 +245,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
                 "can_publish": random.choice([True, False]),
                 "can_change_permissions": random.choice([True, False]),
                 "can_move_page": random.choice([True, False]),
-                "can_view": random.choice([True, False]),
+                "can_view": False,  # can_view = True would make it a view restriction...
                 "grant_on": random.randint(1, 5),
             },
             "course_folder_permissions": {
@@ -295,6 +296,11 @@ class CourseCMSWizardTestCase(CMSTestCase):
 
         # No other page permissions should have been created
         self.assertEqual(PagePermission.objects.count(), 2)
+
+        # The page should be public
+        page.publish("en")
+        response = self.client.get(page.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
 
     def test_cms_wizards_course_submit_form_from_organization_page(self):
         """

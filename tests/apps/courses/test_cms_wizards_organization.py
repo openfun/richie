@@ -238,6 +238,7 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
             "richie/single_column.html",
             "en",
             reverse_id="organizations",
+            published=True,
         )
 
         # Create a user with just the required permissions
@@ -275,7 +276,7 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
                 "can_publish": random.choice([True, False]),
                 "can_change_permissions": random.choice([True, False]),
                 "can_move_page": random.choice([True, False]),
-                "can_view": random.choice([True, False]),
+                "can_view": False,  # can_view = True would make it a view restriction...
                 "grant_on": random.randint(1, 5),
             },
             "organization_folder_permissions": {
@@ -291,7 +292,7 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         organization = page.organization
 
         # The page and its related extension have been created as draft
-        self.assertEqual(Page.objects.count(), 3)
+        self.assertEqual(Page.objects.count(), 4)
         self.assertEqual(Page.objects.drafts().count(), 3)
         self.assertEqual(page.get_title(), "My title")
         # The slug should have been automatically set
@@ -321,6 +322,11 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         folder_permission = FolderPermission.objects.get(group_id=role.group_id)
         for key, value in role_dict["organization_folder_permissions"].items():
             self.assertEqual(getattr(folder_permission, key), value)
+
+        # The page should be public
+        page.publish("en")
+        response = self.client.get(page.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
 
     def test_cms_wizards_organization_submit_form_max_lengths(self):
         """
