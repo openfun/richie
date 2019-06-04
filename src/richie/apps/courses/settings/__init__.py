@@ -117,6 +117,11 @@ CMS_PLACEHOLDER_CONF = {
     "courses/cms/course_detail.html course_information": {
         "name": _("Complementary information"),
         "plugins": ["SectionPlugin"],
+        "parent_classes": {
+            "CKEditorPlugin": ["SectionPlugin"],
+            "SimplePicturePlugin": ["SectionPlugin"],
+        },
+        "child_classes": {"SectionPlugin": ["CKEditorPlugin", "SimplePicturePlugin"]},
     },
     "courses/cms/course_detail.html course_license_content": {
         "name": _("License for the course content"),

@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Allow only formatted texts or images in course complementary information.
+
 ## [1.0.1] - 2019-06-05
 
 ### Fixed
