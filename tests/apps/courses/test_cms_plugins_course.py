@@ -156,7 +156,7 @@ class CoursePluginTestCase(TestCase):
         # The course's cover should be present
         pattern = (
             r'<div class="course-glimpse__media">'
-            r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x150'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x170'
             r'.*alt="my cover"'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
@@ -229,7 +229,7 @@ class CoursePluginTestCase(TestCase):
         # Course cover should have our default alt
         pattern = (
             r'<div class="course-glimpse__media">'
-            r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x150'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x170'
             r'.*alt="course cover image"'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))

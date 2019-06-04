@@ -116,7 +116,7 @@ class BlogPostPluginTestCase(CMSTestCase):
         # Blogpost's cover should be present
         pattern = (
             r'<div class="blogpost-glimpse__media">'
-            r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x150'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x170'
             r'.*alt="my cover"'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
@@ -134,7 +134,7 @@ class BlogPostPluginTestCase(CMSTestCase):
         # pylint: disable=no-member
         pattern = (
             r'<div class="blogpost-glimpse__media">'
-            r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x150'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x170'
             r'.*alt="my cover"'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
@@ -199,7 +199,7 @@ class BlogPostPluginTestCase(CMSTestCase):
         # Blogpost cover should have our default alt
         pattern = (
             r'<div class="blogpost-glimpse__media">'
-            r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x150'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x170'
             r'.*alt="blog post cover image"'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
