@@ -77,46 +77,26 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
             "cms.add_page",
             "cms.change_page",
         ]
-        required_page_permissions = ["can_add", "can_change"]
 
         url = "{:s}?page={:d}".format(reverse("cms_wizard_create"), page.id)
 
         for permission_to_be_removed in required_permissions + [None]:
-            for page_permission_to_be_removed in required_page_permissions + [None]:
-                if (
-                    permission_to_be_removed is None
-                    and page_permission_to_be_removed is None
-                ):
-                    # This is the case of sufficient permissions treated in the next test
-                    continue
+            if permission_to_be_removed is None:
+                # This is the case of sufficient permissions treated in the next test
+                continue
 
-                altered_permissions = required_permissions.copy()
-                if permission_to_be_removed:
-                    altered_permissions.remove(permission_to_be_removed)
+            altered_permissions = required_permissions.copy()
+            if permission_to_be_removed:
+                altered_permissions.remove(permission_to_be_removed)
 
-                altered_page_permissions = required_page_permissions.copy()
-                if page_permission_to_be_removed:
-                    altered_page_permissions.remove(page_permission_to_be_removed)
+            user = UserFactory(is_staff=True, permissions=altered_permissions)
+            self.client.login(username=user.username, password="password")
 
-                user = UserFactory(is_staff=True, permissions=altered_permissions)
-                PagePermission.objects.create(
-                    page=page,
-                    user=user,
-                    can_add="can_add" in altered_page_permissions,
-                    can_change="can_change" in altered_page_permissions,
-                    can_delete=False,
-                    can_publish=False,
-                    can_move_page=False,
-                )
-                self.client.login(username=user.username, password="password")
+            # Let the authorized user get the page with all wizards listed
+            response = self.client.get(url)
 
-                # Let the authorized user get the page with all wizards listed
-                response = self.client.get(url)
-
-                # Check that our wizard to create organizations is not on this page
-                self.assertNotContains(
-                    response, "organization", status_code=200, html=True
-                )
+            # Check that our wizard to create organizations is not on this page
+            self.assertNotContains(response, "organization", status_code=200, html=True)
 
     def test_cms_wizards_organization_create_wizards_list_user_with_permissions(self):
         """
@@ -129,15 +109,6 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         user = UserFactory(
             is_staff=True,
             permissions=["courses.add_organization", "cms.add_page", "cms.change_page"],
-        )
-        PagePermission.objects.create(
-            page=page,
-            user=user,
-            can_add=True,
-            can_change=True,
-            can_delete=False,
-            can_publish=False,
-            can_move_page=False,
         )
         self.client.login(username=user.username, password="password")
 
@@ -175,54 +146,29 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
             reverse_id="organizations",
         )
 
-        required_permissions = [
-            "courses.add_organization",
-            "cms.add_page",
-            "cms.change_page",
-        ]
-        required_page_permissions = ["can_add", "can_change"]
+        required_permissions = ["courses.add_organization"]
 
         for is_staff in [True, False]:
             for permission_to_be_removed in required_permissions + [None]:
-                for page_permission_to_be_removed in required_page_permissions + [None]:
-                    if (
-                        is_staff is True
-                        and permission_to_be_removed is None
-                        and page_permission_to_be_removed is None
-                    ):
-                        # This is the case of sufficient permissions treated in the next test
-                        continue
+                if is_staff is True and permission_to_be_removed is None:
+                    # This is the case of sufficient permissions treated in the next test
+                    continue
 
-                    altered_permissions = required_permissions.copy()
-                    if permission_to_be_removed:
-                        altered_permissions.remove(permission_to_be_removed)
+                altered_permissions = required_permissions.copy()
+                if permission_to_be_removed:
+                    altered_permissions.remove(permission_to_be_removed)
 
-                    altered_page_permissions = required_page_permissions.copy()
-                    if page_permission_to_be_removed:
-                        altered_page_permissions.remove(page_permission_to_be_removed)
+                user = UserFactory(is_staff=is_staff, permissions=altered_permissions)
 
-                    user = UserFactory(
-                        is_staff=is_staff, permissions=altered_permissions
-                    )
-                    PagePermission.objects.create(
-                        page=any_page,
-                        user=user,
-                        can_add="can_add" in altered_page_permissions,
-                        can_change="can_change" in altered_page_permissions,
-                        can_delete=False,
-                        can_publish=False,
-                        can_move_page=False,
-                    )
+                form = OrganizationWizardForm(
+                    data={"title": "My title"},
+                    wizard_language="en",
+                    wizard_user=user,
+                    wizard_page=any_page,
+                )
 
-                    form = OrganizationWizardForm(
-                        data={"title": "My title"},
-                        wizard_language="en",
-                        wizard_user=user,
-                        wizard_page=any_page,
-                    )
-
-                    with self.assertRaises(PermissionDenied):
-                        form.is_valid()
+                with self.assertRaises(PermissionDenied):
+                    form.is_valid()
 
     def test_cms_wizards_organization_submit_form(self, *_):
         """
@@ -245,15 +191,6 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         user = UserFactory(
             is_staff=True,
             permissions=["courses.add_organization", "cms.add_page", "cms.change_page"],
-        )
-        PagePermission.objects.create(
-            page=any_page,
-            user=user,
-            can_add=True,
-            can_change=True,
-            can_delete=False,
-            can_publish=False,
-            can_move_page=False,
         )
 
         # We can submit a form with just the title set

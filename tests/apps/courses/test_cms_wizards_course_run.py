@@ -8,8 +8,7 @@ from django.test.utils import override_settings
 from django.urls import reverse
 from django.utils import translation
 
-from cms.api import create_page
-from cms.models import Page, PagePermission
+from cms.api import Page, create_page
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
@@ -123,15 +122,6 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
                     altered_page_permissions.remove(page_permission_to_be_removed)
 
                 user = UserFactory(is_staff=True, permissions=altered_permissions)
-                PagePermission.objects.create(
-                    page=course.extended_object,
-                    user=user,
-                    can_add="can_add" in altered_page_permissions,
-                    can_change="can_change" in altered_page_permissions,
-                    can_delete=False,
-                    can_publish=False,
-                    can_move_page=False,
-                )
                 self.client.login(username=user.username, password="password")
 
                 # Let the authorized user get the page with all wizards listed
@@ -153,15 +143,6 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         user = UserFactory(
             is_staff=True,
             permissions=["courses.add_courserun", "cms.add_page", "cms.change_page"],
-        )
-        PagePermission.objects.create(
-            page=course.extended_object,
-            user=user,
-            can_add=True,
-            can_change=True,
-            can_delete=False,
-            can_publish=False,
-            can_move_page=False,
         )
         self.client.login(username=user.username, password="password")
 
@@ -209,54 +190,29 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         """
         course = CourseFactory()
 
-        required_permissions = [
-            "courses.add_courserun",
-            "cms.add_page",
-            "cms.change_page",
-        ]
-        required_page_permissions = ["can_add", "can_change"]
+        required_permissions = ["courses.add_courserun"]
 
         for is_staff in [True, False]:
             for permission_to_be_removed in required_permissions + [None]:
-                for page_permission_to_be_removed in required_page_permissions + [None]:
-                    if (
-                        is_staff is True
-                        and permission_to_be_removed is None
-                        and page_permission_to_be_removed is None
-                    ):
-                        # This is the case of sufficient permissions treated in the next test
-                        continue
+                if is_staff is True and permission_to_be_removed is None:
+                    # This is the case of sufficient permissions treated in the next test
+                    continue
 
-                    altered_permissions = required_permissions.copy()
-                    if permission_to_be_removed:
-                        altered_permissions.remove(permission_to_be_removed)
+                altered_permissions = required_permissions.copy()
+                if permission_to_be_removed:
+                    altered_permissions.remove(permission_to_be_removed)
 
-                    altered_page_permissions = required_page_permissions.copy()
-                    if page_permission_to_be_removed:
-                        altered_page_permissions.remove(page_permission_to_be_removed)
+                user = UserFactory(is_staff=is_staff, permissions=altered_permissions)
 
-                    user = UserFactory(
-                        is_staff=is_staff, permissions=altered_permissions
-                    )
-                    PagePermission.objects.create(
-                        page=course.extended_object,
-                        user=user,
-                        can_add="can_add" in altered_page_permissions,
-                        can_change="can_change" in altered_page_permissions,
-                        can_delete=False,
-                        can_publish=False,
-                        can_move_page=False,
-                    )
+                form = CourseRunWizardForm(
+                    data={"title": "My title"},
+                    wizard_language="en",
+                    wizard_user=user,
+                    wizard_page=course.extended_object,
+                )
 
-                    form = CourseRunWizardForm(
-                        data={"title": "My title"},
-                        wizard_language="en",
-                        wizard_user=user,
-                        wizard_page=course.extended_object,
-                    )
-
-                    with self.assertRaises(PermissionDenied):
-                        form.is_valid()
+                with self.assertRaises(PermissionDenied):
+                    form.is_valid()
 
     def test_cms_wizards_course_run_submit_form_success(self, mock_snapshot):
         """
@@ -269,15 +225,6 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         user = UserFactory(
             is_staff=True,
             permissions=["courses.add_courserun", "cms.add_page", "cms.change_page"],
-        )
-        PagePermission.objects.create(
-            page=course.extended_object,
-            user=user,
-            can_add=True,
-            can_change=True,
-            can_delete=False,
-            can_publish=False,
-            can_move_page=False,
         )
 
         # Submit a valid form

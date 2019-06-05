@@ -10,7 +10,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-- Allow only formatted texts or images in course complementary information.
+- Allow only formatted texts or images in course complementary information,
+- Simplify why permissions are required to create Richie extension pages.
 
 ## [1.0.1] - 2019-06-05
 
