@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix thumbnail definition for the image glimpse used on the search page.
+
 ## [1.1.0] - 2019-06-05
 
 ### Changed
