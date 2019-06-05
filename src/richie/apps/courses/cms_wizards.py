@@ -18,6 +18,7 @@ from cms.cms_wizards import (
 )
 from cms.forms.wizards import CreateCMSPageForm, CreateCMSSubPageForm, SlugWidget
 from cms.models import Page, PagePermission
+from cms.utils.page_permissions import user_can_change_page
 from cms.wizards.forms import BaseFormMixin
 from cms.wizards.wizard_base import Wizard
 from cms.wizards.wizard_pool import wizard_pool
@@ -191,6 +192,19 @@ class CourseWizardForm(BaseWizardForm):
         Permission to add a course was already checked when we displayed the list of wizard
         entries, but we need to prevent form hacking.
         """
+        # The current page should be an organization
+        if not self.page:
+            raise PermissionDenied()
+
+        try:
+            self.page.organization
+        except Organization.DoesNotExist:
+            raise PermissionDenied()
+
+        # The user should be allowed to modify this organization page
+        if not user_can_change_page(self.user, self.page):
+            raise PermissionDenied()
+
         # The user should have permission to create a course object
         if not (self.user.is_staff and self.user.has_perm("courses.add_course")):
             raise PermissionDenied()
@@ -282,9 +296,22 @@ class CourseWizard(Wizard):
     def user_has_add_permission(self, user, **kwargs):
         """
         Returns: True if the user has the permission to add course objects, False otherwise.
+
+        A course can only be created when visiting an organization page (that will become the
+        course's main organization) that the user has the right to update.
         """
-        return user.has_perm("courses.add_course") and super().user_has_add_permission(
-            user, **kwargs
+        if not kwargs.get("page"):
+            return False
+
+        try:
+            organization = kwargs["page"].organization
+        except Organization.DoesNotExist:
+            return False
+
+        return (
+            user.has_perm("courses.add_course")
+            and user_can_change_page(user, organization.extended_object)
+            and super().user_has_add_permission(user, **kwargs)
         )
 
 

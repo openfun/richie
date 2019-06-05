@@ -18,16 +18,18 @@ from richie.apps.courses.cms_wizards import CourseWizardForm
 from richie.apps.courses.factories import CourseFactory, OrganizationFactory
 from richie.apps.courses.models import Course, OrganizationPluginModel, PageRole
 
+# pylint: disable=too-many-locals
+
 
 class CourseCMSWizardTestCase(CMSTestCase):
     """Testing the wizard that is used to create new course pages from the CMS"""
 
     # Wizards list
 
-    def test_cms_wizards_course_create_wizards_list_superuser(self):
+    def test_cms_wizards_course_create_wizards_list_superuser_any_page(self):
         """
-        The wizard to create a new Course page should be present on the wizards list page
-        for a superuser.
+        The wizard to create a new Course page should not be present on the wizards list page
+        for a superuser visiting any page.
         """
         page = create_page("page", "richie/single_column.html", "en")
         user = UserFactory(is_staff=True, is_superuser=True)
@@ -35,6 +37,24 @@ class CourseCMSWizardTestCase(CMSTestCase):
 
         # Let the authorized user get the page with all wizards listed
         url = "{:s}?page={:d}".format(reverse("cms_wizard_create"), page.id)
+        response = self.client.get(url)
+
+        # Check that our wizard to create courses is not on this page
+        self.assertNotContains(response, "course", status_code=200, html=True)
+
+    def test_cms_wizards_course_create_wizards_list_superuser_organization_page(self):
+        """
+        The wizard to create a new Course page should be present on the wizards list page
+        for a superuser visiting an organization page.
+        """
+        organization = OrganizationFactory()
+        user = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=user.username, password="password")
+
+        # Let the authorized user get the page with all wizards listed
+        url = "{:s}?page={:d}".format(
+            reverse("cms_wizard_create"), organization.extended_object_id
+        )
         response = self.client.get(url)
 
         # Check that our wizard to create courses is on this page
@@ -51,12 +71,14 @@ class CourseCMSWizardTestCase(CMSTestCase):
         The wizard to create a new course page should not be present on the wizards list page
         for a user with insufficient permissions.
         """
-        page = create_page("page", "richie/single_column.html", "en")
+        organization = OrganizationFactory()
 
         required_permissions = ["courses.add_course", "cms.add_page", "cms.change_page"]
         required_page_permissions = ["can_add", "can_change"]
 
-        url = "{:s}?page={:d}".format(reverse("cms_wizard_create"), page.id)
+        url = "{:s}?page={:d}".format(
+            reverse("cms_wizard_create"), organization.extended_object_id
+        )
 
         for permission_to_be_removed in required_permissions + [None]:
             for page_permission_to_be_removed in required_page_permissions + [None]:
@@ -77,7 +99,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
 
                 user = UserFactory(is_staff=True, permissions=altered_permissions)
                 PagePermission.objects.create(
-                    page=page,
+                    page=organization.extended_object,
                     user=user,
                     can_add="can_add" in altered_page_permissions,
                     can_change="can_change" in altered_page_permissions,
@@ -96,9 +118,10 @@ class CourseCMSWizardTestCase(CMSTestCase):
     def test_cms_wizards_course_create_wizards_list_user_with_permissions(self, *_):
         """
         The wizard to create a new course page should be present on the wizards list page
-        for a user with the required permissions.
+        for a user with the required permissions visiting an organization page that he can
+        change.
         """
-        page = create_page("page", "richie/single_column.html", "en")
+        organization = OrganizationFactory()
 
         # Login with a user with just the required permissions
         user = UserFactory(
@@ -106,7 +129,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
             permissions=["courses.add_course", "cms.add_page", "cms.change_page"],
         )
         PagePermission.objects.create(
-            page=page,
+            page=organization.extended_object,
             user=user,
             can_add=True,
             can_change=True,
@@ -117,7 +140,9 @@ class CourseCMSWizardTestCase(CMSTestCase):
         self.client.login(username=user.username, password="password")
 
         # Let the authorized user get the page with all wizards listed
-        url = "{:s}?page={:d}".format(reverse("cms_wizard_create"), page.id)
+        url = "{:s}?page={:d}".format(
+            reverse("cms_wizard_create"), organization.extended_object_id
+        )
         response = self.client.get(url)
 
         # Check that our wizard to create courses is on this page
@@ -138,7 +163,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
         We make loop to remove each time only one permission from the set of required permissions
         and check that they are all required.
         """
-        any_page = create_page("Any page", "richie/single_column.html", "en")
+        organization = OrganizationFactory()
 
         # A parent page should pre-exist
         create_page(
@@ -149,38 +174,54 @@ class CourseCMSWizardTestCase(CMSTestCase):
         )
 
         required_permissions = ["courses.add_course"]
+        required_page_permissions = ["can_change"]
 
         for is_staff in [True, False]:
             for permission_to_be_removed in required_permissions + [None]:
-                if (
-                    is_staff is True
-                    and permission_to_be_removed is None
-                ):
-                    # This is the case of sufficient permissions treated in the next test
-                    continue
+                for page_permission_to_be_removed in required_page_permissions + [None]:
+                    if (
+                        is_staff is True
+                        and permission_to_be_removed is None
+                        and page_permission_to_be_removed is None
+                    ):
+                        # This is the case of sufficient permissions treated in the next test
+                        continue
 
-                altered_permissions = required_permissions.copy()
-                if permission_to_be_removed:
-                    altered_permissions.remove(permission_to_be_removed)
+                    altered_permissions = required_permissions.copy()
+                    if permission_to_be_removed:
+                        altered_permissions.remove(permission_to_be_removed)
 
-                user = UserFactory(
-                    is_staff=is_staff, permissions=altered_permissions
-                )
+                    altered_page_permissions = required_page_permissions.copy()
+                    if page_permission_to_be_removed:
+                        altered_page_permissions.remove(page_permission_to_be_removed)
 
-                form = CourseWizardForm(
-                    data={"title": "My title"},
-                    wizard_language="en",
-                    wizard_user=user,
-                    wizard_page=any_page,
-                )
+                    user = UserFactory(
+                        is_staff=is_staff, permissions=altered_permissions
+                    )
+                    PagePermission.objects.create(
+                        page=organization.extended_object,
+                        user=user,
+                        can_add="can_add" in altered_page_permissions,
+                        can_change="can_change" in altered_page_permissions,
+                        can_delete=False,
+                        can_publish=False,
+                        can_move_page=False,
+                    )
 
-                with self.assertRaises(PermissionDenied):
-                    form.is_valid()
+                    form = CourseWizardForm(
+                        data={"title": "My title"},
+                        wizard_language="en",
+                        wizard_user=user,
+                        wizard_page=organization.extended_object,
+                    )
+
+                    with self.assertRaises(PermissionDenied):
+                        form.is_valid()
 
     def test_cms_wizards_course_submit_form_from_any_page(self):
         """
         A user with the required permissions submitting a valid CourseWizardForm when visiting
-        any page, should be able to create a course and its related page.
+        any page, should not be allowed to create a course and its related page.
         """
         any_page = create_page("page", "richie/single_column.html", "en")
 
@@ -206,74 +247,9 @@ class CourseCMSWizardTestCase(CMSTestCase):
             wizard_user=user,
             wizard_page=any_page,
         )
-        self.assertTrue(form.is_valid())
 
-        course_role_dict = {
-            "django_permissions": ["cms.change_page"],
-            "course_page_permissions": {
-                "can_change": random.choice([True, False]),
-                "can_add": random.choice([True, False]),
-                "can_delete": random.choice([True, False]),
-                "can_change_advanced_settings": random.choice([True, False]),
-                "can_publish": random.choice([True, False]),
-                "can_change_permissions": random.choice([True, False]),
-                "can_move_page": random.choice([True, False]),
-                "can_view": False,  # can_view = True would make it a view restriction...
-                "grant_on": random.randint(1, 5),
-            },
-            "course_folder_permissions": {
-                "can_read": random.choice([True, False]),
-                "can_edit": random.choice([True, False]),
-                "can_add_children": random.choice([True, False]),
-                "type": random.randint(0, 2),
-            },
-        }
-        with mock.patch.dict(defaults.COURSE_ADMIN_ROLE, course_role_dict):
-            page = form.save()
-
-        # The course and its related page should have been created as draft
-        Page.objects.drafts().get(id=page.id)
-        Course.objects.get(extended_object=page)
-
-        self.assertEqual(page.get_title(), "My title")
-        # The slug should have been automatically set
-        self.assertEqual(page.get_slug(), "my-title")
-
-        # The course should not have any plugin
-        self.assertFalse(OrganizationPluginModel.objects.exists())
-
-        # A page role should have been created for the course page
-        self.assertEqual(page.roles.count(), 1)
-        course_role = page.roles.get(role="ADMIN")
-        self.assertEqual(course_role.group.name, "Admin | My title")
-        self.assertEqual(course_role.group.permissions.count(), 1)
-        self.assertEqual(course_role.folder.name, "Admin | My title")
-
-        # All expected permissions should have been assigned to the group:
-        # - Django permissions
-        self.assertEqual(course_role.group.permissions.first().codename, "change_page")
-        # - DjangoCMS page permissions
-        self.assertEqual(
-            PagePermission.objects.filter(group_id=course_role.group_id).count(), 1
-        )
-        page_permission = PagePermission.objects.get(group_id=course_role.group_id)
-        for key, value in course_role_dict["course_page_permissions"].items():
-            self.assertEqual(getattr(page_permission, key), value)
-        # The Django Filer folder permissions
-        self.assertEqual(
-            FolderPermission.objects.filter(group_id=course_role.group_id).count(), 1
-        )
-        folder_permission = FolderPermission.objects.get(group_id=course_role.group_id)
-        for key, value in course_role_dict["course_folder_permissions"].items():
-            self.assertEqual(getattr(folder_permission, key), value)
-
-        # No other page permissions should have been created
-        self.assertEqual(PagePermission.objects.count(), 1)
-
-        # The page should be public
-        page.publish("en")
-        response = self.client.get(page.get_absolute_url())
-        self.assertEqual(response.status_code, 200)
+        with self.assertRaises(PermissionDenied):
+            self.assertTrue(form.is_valid())
 
     def test_cms_wizards_course_submit_form_from_organization_page(self):
         """
@@ -287,6 +263,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
             "richie/single_column.html",
             "en",
             reverse_id=Course.PAGE["reverse_id"],
+            published=True,
         )
 
         organization = OrganizationFactory()
@@ -298,6 +275,15 @@ class CourseCMSWizardTestCase(CMSTestCase):
         user = UserFactory(
             is_staff=True,
             permissions=["courses.add_course", "cms.add_page", "cms.change_page"],
+        )
+        PagePermission.objects.create(
+            page=organization.extended_object,
+            user=user,
+            can_add=True,
+            can_change=True,
+            can_delete=False,
+            can_publish=False,
+            can_move_page=False,
         )
 
         # We can submit a form omitting the slug
@@ -403,6 +389,11 @@ class CourseCMSWizardTestCase(CMSTestCase):
         for key, value in course_role_dict["course_folder_permissions"].items():
             self.assertEqual(getattr(folder_permission, key), value)
 
+        # The page should be public
+        page.publish("en")
+        response = self.client.get(page.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+
     def test_cms_wizards_course_submit_form_from_organization_page_no_role(self):
         """
         Creating a course via the wizard should not fail if the organization has no associated
@@ -453,7 +444,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
         255 characters in length.
         """
         # A parent page with a very long slug
-        page = create_page(
+        create_page(
             "y" * 200,
             "richie/single_column.html",
             "en",
@@ -471,7 +462,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
             },
             wizard_language="en",
             wizard_user=user,
-            wizard_page=page,
+            wizard_page=organization.extended_object,
         )
 
         self.assertTrue(form.is_valid())
@@ -487,7 +478,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
             },
             wizard_language="en",
             wizard_user=user,
-            wizard_page=page,
+            wizard_page=organization.extended_object,
         )
 
         self.assertFalse(form.is_valid())
@@ -516,7 +507,10 @@ class CourseCMSWizardTestCase(CMSTestCase):
         data = {"title": "t" * 255, "organization": organization.id}
         user = UserFactory(is_staff=True, is_superuser=True)
         form = CourseWizardForm(
-            data=data, wizard_language="en", wizard_user=user, wizard_page=page
+            data=data,
+            wizard_language="en",
+            wizard_user=user,
+            wizard_page=organization.extended_object,
         )
 
         self.assertTrue(form.is_valid())
@@ -530,7 +524,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
         """
         # An organization and a parent page should pre-exist
         organization = OrganizationFactory()
-        page = create_page(
+        create_page(
             "Courses",
             "richie/single_column.html",
             "en",
@@ -545,7 +539,10 @@ class CourseCMSWizardTestCase(CMSTestCase):
 
         user = UserFactory(is_staff=True, is_superuser=True)
         form = CourseWizardForm(
-            data=invalid_data, wizard_language="en", wizard_user=user, wizard_page=page
+            data=invalid_data,
+            wizard_language="en",
+            wizard_user=user,
+            wizard_page=organization.extended_object,
         )
 
         self.assertFalse(form.is_valid())
@@ -561,7 +558,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
         """
         # An organization and a parent page should pre-exist
         organization = OrganizationFactory()
-        page = create_page(
+        create_page(
             "Courses",
             "richie/single_column.html",
             "en",
@@ -575,7 +572,10 @@ class CourseCMSWizardTestCase(CMSTestCase):
         }
         user = UserFactory(is_staff=True, is_superuser=True)
         form = CourseWizardForm(
-            data=invalid_data, wizard_language="en", wizard_user=user, wizard_page=page
+            data=invalid_data,
+            wizard_language="en",
+            wizard_user=user,
+            wizard_page=organization.extended_object,
         )
 
         self.assertFalse(form.is_valid())
@@ -587,7 +587,8 @@ class CourseCMSWizardTestCase(CMSTestCase):
 
     def test_cms_wizards_course_submit_form_invalid_slug(self):
         """Trying to submit a slug that is not valid should raise a 400 exception."""
-        # A parent page should pre-exist
+        # An organization and a parent page should pre-exist
+        organization = OrganizationFactory()
         create_page(
             "Courses",
             "richie/single_column.html",
@@ -599,7 +600,12 @@ class CourseCMSWizardTestCase(CMSTestCase):
         data = {"title": "my title", "slug": "invalid slug"}
 
         user = UserFactory(is_superuser=True, is_staff=True)
-        form = CourseWizardForm(data=data, wizard_language="en", wizard_user=user)
+        form = CourseWizardForm(
+            data=data,
+            wizard_language="en",
+            wizard_user=user,
+            wizard_page=organization.extended_object,
+        )
         self.assertFalse(form.is_valid())
         self.assertEqual(
             form.errors["slug"][0],
@@ -611,7 +617,8 @@ class CourseCMSWizardTestCase(CMSTestCase):
         Trying to create a course with a slug that would lead to a duplicate path should
         raise a validation error.
         """
-        # A parent page should pre-exist
+        # An organization and a parent page should pre-exist
+        organization = OrganizationFactory()
         parent_page = create_page(
             "Courses",
             "richie/single_column.html",
@@ -625,7 +632,12 @@ class CourseCMSWizardTestCase(CMSTestCase):
         data = {"title": "my title"}
 
         user = UserFactory(is_staff=True, is_superuser=True)
-        form = CourseWizardForm(data=data, wizard_language="en", wizard_user=user)
+        form = CourseWizardForm(
+            data=data,
+            wizard_language="en",
+            wizard_user=user,
+            wizard_page=organization.extended_object,
+        )
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors, {"slug": ["This slug is already in use"]})
 
@@ -634,15 +646,13 @@ class CourseCMSWizardTestCase(CMSTestCase):
         We should not be able to create a course page if the courses root page does not exist.
         """
         organization = OrganizationFactory()
-        page = create_page(
-            " Not the root courses page", "richie/single_column.html", "en"
-        )
+        create_page(" Not the root courses page", "richie/single_column.html", "en")
         user = UserFactory(is_staff=True, is_superuser=True)
         form = CourseWizardForm(
             data={"title": "My title", "organization": organization.id},
             wizard_language="en",
             wizard_user=user,
-            wizard_page=page,
+            wizard_page=organization.extended_object,
         )
 
         self.assertFalse(form.is_valid())
