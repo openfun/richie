@@ -148,50 +148,34 @@ class CourseCMSWizardTestCase(CMSTestCase):
             reverse_id=Course.PAGE["reverse_id"],
         )
 
-        required_permissions = ["courses.add_course", "cms.add_page", "cms.change_page"]
-        required_page_permissions = ["can_add", "can_change"]
+        required_permissions = ["courses.add_course"]
 
         for is_staff in [True, False]:
             for permission_to_be_removed in required_permissions + [None]:
-                for page_permission_to_be_removed in required_page_permissions + [None]:
-                    if (
-                        is_staff is True
-                        and permission_to_be_removed is None
-                        and page_permission_to_be_removed is None
-                    ):
-                        # This is the case of sufficient permissions treated in the next test
-                        continue
+                if (
+                    is_staff is True
+                    and permission_to_be_removed is None
+                ):
+                    # This is the case of sufficient permissions treated in the next test
+                    continue
 
-                    altered_permissions = required_permissions.copy()
-                    if permission_to_be_removed:
-                        altered_permissions.remove(permission_to_be_removed)
+                altered_permissions = required_permissions.copy()
+                if permission_to_be_removed:
+                    altered_permissions.remove(permission_to_be_removed)
 
-                    altered_page_permissions = required_page_permissions.copy()
-                    if page_permission_to_be_removed:
-                        altered_page_permissions.remove(page_permission_to_be_removed)
+                user = UserFactory(
+                    is_staff=is_staff, permissions=altered_permissions
+                )
 
-                    user = UserFactory(
-                        is_staff=is_staff, permissions=altered_permissions
-                    )
-                    PagePermission.objects.create(
-                        page=any_page,
-                        user=user,
-                        can_add="can_add" in altered_page_permissions,
-                        can_change="can_change" in altered_page_permissions,
-                        can_delete=False,
-                        can_publish=False,
-                        can_move_page=False,
-                    )
+                form = CourseWizardForm(
+                    data={"title": "My title"},
+                    wizard_language="en",
+                    wizard_user=user,
+                    wizard_page=any_page,
+                )
 
-                    form = CourseWizardForm(
-                        data={"title": "My title"},
-                        wizard_language="en",
-                        wizard_user=user,
-                        wizard_page=any_page,
-                    )
-
-                    with self.assertRaises(PermissionDenied):
-                        form.is_valid()
+                with self.assertRaises(PermissionDenied):
+                    form.is_valid()
 
     def test_cms_wizards_course_submit_form_from_any_page(self):
         """
@@ -209,21 +193,10 @@ class CourseCMSWizardTestCase(CMSTestCase):
             published=True,
         )
 
-        any_page = create_page("Any page", "richie/single_column.html", "en")
-
         # Create a user with just the required permissions
         user = UserFactory(
             is_staff=True,
             permissions=["courses.add_course", "cms.add_page", "cms.change_page"],
-        )
-        PagePermission.objects.create(
-            page=any_page,
-            user=user,
-            can_add=True,
-            can_change=True,
-            can_delete=False,
-            can_publish=False,
-            can_move_page=False,
         )
 
         # We can submit a form omitting the slug
@@ -295,7 +268,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
             self.assertEqual(getattr(folder_permission, key), value)
 
         # No other page permissions should have been created
-        self.assertEqual(PagePermission.objects.count(), 2)
+        self.assertEqual(PagePermission.objects.count(), 1)
 
         # The page should be public
         page.publish("en")
@@ -326,15 +299,6 @@ class CourseCMSWizardTestCase(CMSTestCase):
             is_staff=True,
             permissions=["courses.add_course", "cms.add_page", "cms.change_page"],
         )
-        PagePermission.objects.create(
-            page=organization.extended_object,
-            user=user,
-            can_add=True,
-            can_change=True,
-            can_delete=False,
-            can_publish=False,
-            can_move_page=False,
-        )
 
         # We can submit a form omitting the slug
         form = CourseWizardForm(
@@ -355,7 +319,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
                 "can_publish": random.choice([True, False]),
                 "can_change_permissions": random.choice([True, False]),
                 "can_move_page": random.choice([True, False]),
-                "can_view": random.choice([True, False]),
+                "can_view": False,  # can_view = True would make it a view restriction...
                 "grant_on": random.randint(1, 5),
             },
             "course_folder_permissions": {
@@ -374,7 +338,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
                 "can_publish": random.choice([True, False]),
                 "can_change_permissions": random.choice([True, False]),
                 "can_move_page": random.choice([True, False]),
-                "can_view": random.choice([True, False]),
+                "can_view": False,  # can_view = True would make it a view restriction...
                 "grant_on": random.randint(1, 5),
             },
             "courses_folder_permissions": {
