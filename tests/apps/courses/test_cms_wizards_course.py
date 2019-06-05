@@ -350,20 +350,6 @@ class CourseCMSWizardTestCase(CMSTestCase):
         plugin = OrganizationPluginModel.objects.first()
         self.assertEqual(plugin.page_id, organization.extended_object_id)
 
-        # A page permission should have been created for the organization admin role
-        page_permission = PagePermission.objects.get(
-            group_id=organization_page_role.group_id, page=page
-        )
-        for key, value in organization_role_dict["courses_page_permissions"].items():
-            self.assertEqual(getattr(page_permission, key), value)
-
-        # A Filer folder permission should have been created for the organization admin role
-        folder_permission = FolderPermission.objects.get(
-            group_id=organization_page_role.group_id
-        )
-        for key, value in organization_role_dict["courses_folder_permissions"].items():
-            self.assertEqual(getattr(folder_permission, key), value)
-
         # A page role should have been created for the course page
         self.assertEqual(page.roles.count(), 1)
         course_role = page.roles.get(role="ADMIN")
@@ -385,8 +371,36 @@ class CourseCMSWizardTestCase(CMSTestCase):
         self.assertEqual(
             FolderPermission.objects.filter(group_id=course_role.group_id).count(), 1
         )
-        folder_permission = FolderPermission.objects.get(group_id=course_role.group_id)
+        folder_permission = FolderPermission.objects.get(
+            group_id=course_role.group_id, folder_id=course_role.folder_id
+        )
         for key, value in course_role_dict["course_folder_permissions"].items():
+            self.assertEqual(getattr(folder_permission, key), value)
+
+        # A page permission should have been created for the organization admin role
+        self.assertEqual(
+            PagePermission.objects.filter(
+                group_id=organization_page_role.group_id
+            ).count(),
+            1,
+        )
+        page_permission = PagePermission.objects.get(
+            group_id=organization_page_role.group_id, page=page
+        )
+        for key, value in organization_role_dict["courses_page_permissions"].items():
+            self.assertEqual(getattr(page_permission, key), value)
+
+        # A Filer folder permission should have been created for the organization admin role
+        self.assertEqual(
+            FolderPermission.objects.filter(
+                group_id=organization_page_role.group_id
+            ).count(),
+            1,
+        )
+        folder_permission = FolderPermission.objects.get(
+            group_id=organization_page_role.group_id, folder_id=course_role.folder_id
+        )
+        for key, value in organization_role_dict["courses_folder_permissions"].items():
             self.assertEqual(getattr(folder_permission, key), value)
 
         # The page should be public
