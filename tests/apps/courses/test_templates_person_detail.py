@@ -227,6 +227,27 @@ class PersonCMSTestCase(CMSTestCase):
         # The modified draft version of the published organization should not be visible
         self.assertNotContains(response, "modified title")
 
+    def test_templates_person_detail_organizations_empty(self):
+        """
+        The "Organizations" section should not be displayed when empty.
+        """
+        person = PersonFactory(should_publish=True)
+
+        # The "organizations" section should not be present on the public page
+        url = person.public_extension.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertContains(response, person.extended_object.get_title())
+        self.assertNotContains(response, "organization")
+
+        # But it should be present on the draft page
+        user = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=user.username, password="password")
+
+        url = person.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertContains(response, person.extended_object.get_title())
+        self.assertContains(response, "organization-glimpse-list")
+
     def test_templates_person_detail_related_courses(self):
         """
         The courses to which a person has participated should appear on this person's detail page.
