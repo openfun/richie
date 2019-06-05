@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.0.1] - 2019-06-05
+
 ### Fixed
 
 - Fix page permissions that ended-up being considered as view restrictions
@@ -315,7 +317,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v1.0.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v1.0.1...master
+[1.0.1]: https://github.com/openfun/richie/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/openfun/richie/compare/v1.0.0-beta.9...v1.0.0
 [1.0.0-beta.9]: https://github.com/openfun/richie/compare/v1.0.0-beta.8...v1.0.0-beta.9
 [1.0.0-beta.8]: https://github.com/openfun/richie/compare/v1.0.0-beta.7...v1.0.0-beta.8
