@@ -223,25 +223,25 @@ class CourseWizardForm(BaseWizardForm):
 
         # Create a role for admins of this course (which will create a new user group and a new
         # Filer folder)
-        page_role = PageRole.objects.create(page=page, role=defaults.ADMIN)
+        course_page_role = PageRole.objects.create(page=page, role=defaults.ADMIN)
 
         # Associate permissions as defined in settings:
         # - Create Django permissions
-        page_role.group.permissions.set(
+        course_page_role.group.permissions.set(
             get_permissions(defaults.COURSE_ADMIN_ROLE.get("django_permissions", []))
         )
 
         # - Create DjangoCMS page permissions
         PagePermission.objects.create(
-            group_id=page_role.group_id,
+            group_id=course_page_role.group_id,
             page=page,
             **defaults.COURSE_ADMIN_ROLE.get("course_page_permissions", {}),
         )
 
         # - Create the Django Filer folder permissions
         FolderPermission.objects.create(
-            folder_id=page_role.folder_id,
-            group_id=page_role.group_id,
+            folder_id=course_page_role.folder_id,
+            group_id=course_page_role.group_id,
             **defaults.COURSE_ADMIN_ROLE.get("course_folder_permissions", {}),
         )
 
@@ -263,7 +263,7 @@ class CourseWizardForm(BaseWizardForm):
 
             # Create page permissions on the course page for the admin group of the organization
             try:
-                page_role = PageRole.objects.only("group").get(
+                organization_page_role = PageRole.objects.only("group").get(
                     page=self.page, role=defaults.ADMIN
                 )
             except PageRole.DoesNotExist:
@@ -271,7 +271,7 @@ class CourseWizardForm(BaseWizardForm):
             else:
                 # - Create DjangoCMS page permissions
                 PagePermission.objects.create(
-                    group_id=page_role.group_id,
+                    group_id=organization_page_role.group_id,
                     page_id=course.extended_object_id,
                     **defaults.ORGANIZATION_ADMIN_ROLE.get(
                         "courses_page_permissions", {}
@@ -280,8 +280,8 @@ class CourseWizardForm(BaseWizardForm):
 
                 # - Create the Django Filer folder permissions
                 FolderPermission.objects.create(
-                    folder_id=page_role.folder_id,
-                    group_id=page_role.group_id,
+                    folder_id=course_page_role.folder_id,
+                    group_id=organization_page_role.group_id,
                     **defaults.ORGANIZATION_ADMIN_ROLE.get(
                         "courses_folder_permissions", {}
                     ),
