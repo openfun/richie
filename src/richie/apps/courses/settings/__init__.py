@@ -286,19 +286,19 @@ DJANGOCMS_VIDEO_TEMPLATES = [("full-width", _("Full width"))]
 RICHIE_SIMPLEPICTURE_PRESETS = {
     # Formatting images for the courses search index
     "glimpse": {
-        "src": {"size": (300, 150), "crop": "smart"},
+        "src": {"size": (300, 170), "crop": "smart"},
         "srcset": [
             {
-                "options": {"size": (300, 150), "crop": "smart", "upscale": True},
+                "options": {"size": (300, 170), "crop": "smart", "upscale": True},
                 "descriptor": "300w",
             },
             {
-                "options": {"size": (600, 300), "crop": "smart", "upscale": True},
+                "options": {"size": (600, 340), "crop": "smart", "upscale": True},
                 "descriptor": "600w",
             },
             {
-                "options": {"size": (1200, 600), "crop": "smart", "upscale": True},
-                "descriptor": "1200w",
+                "options": {"size": (900, 560), "crop": "smart", "upscale": True},
+                "descriptor": "900w",
             },
         ],
         "sizes": "300px",
