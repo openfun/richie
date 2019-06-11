@@ -72,9 +72,7 @@ export const SearchFilterValueParent = injectIntl(
 
         if (childrenResponse.status === requestStatus.FAILURE) {
           throw new Error(
-            `Failed to get children filters for ${
-              filter.name
-            }/${childrenPathMatch}`,
+            `Failed to get children filters for ${filter.name}/${childrenPathMatch}`,
           );
         }
 
