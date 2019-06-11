@@ -28,7 +28,7 @@ export type CourseSearchParamsReducerAction =
 
 type CourseSearchParamsState = [
   APIListRequestParams,
-  React.Dispatch<CourseSearchParamsReducerAction>
+  React.Dispatch<CourseSearchParamsReducerAction>,
 ];
 
 export const CourseSearchParamsContext = createContext<CourseSearchParamsState>(
