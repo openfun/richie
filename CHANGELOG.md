@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Add field on course to record effort (e.g 5 hours/day) and duration
+  (e.g 4 weeks).
+
 ### Fixed
 
 - Fix thumbnail definition for the image glimpse used on the search page.

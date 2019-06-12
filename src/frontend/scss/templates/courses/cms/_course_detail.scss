@@ -34,12 +34,17 @@ $richie-course-detail-run-background: $dodgerblue1 !default;
 $richie-course-detail-run-gutter: 0.5rem !default;
 $richie-course-detail-run-width-large: 33.33% !default;
 $richie-course-detail-run-margin: 0 !default;
-$richie-course-detail-run-padding: 1rem !default;
+$richie-course-detail-run-padding: 1rem 2rem !default;
 $richie-course-detail-run-fontcolor: $white !default;
+
+$richie-course-detail-synopsis-background: $dodgerblue1 !default;
+$richie-course-detail-synopsis-margin: 0 !default;
+$richie-course-detail-synopsis-padding: 1rem 2rem !default;
+$richie-course-detail-synopsis-fontcolor: $white !default;
 
 $richie-course-detail-socialnetworks-background: $dodgerblue1 !default;
 $richie-course-detail-socialnetworks-margin: 0 !default;
-$richie-course-detail-socialnetworks-padding: 1rem !default;
+$richie-course-detail-socialnetworks-padding: 1rem 2rem !default;
 $richie-course-detail-socialnetworks-fontcolor: $white !default;
 
 $richie-course-detail-team-gutter: 0.5rem !default;
@@ -415,6 +420,33 @@ $richie-course-detail-aside-main-org-background: $white !default;
       );
     }
 
+    &__synopsis {
+      margin: $richie-course-detail-synopsis-margin;
+      padding: $richie-course-detail-synopsis-padding;
+      color: $richie-course-detail-synopsis-fontcolor;
+      background: $richie-course-detail-synopsis-background;
+
+      span[class^='icon-'] {
+        display: inline-block;
+        margin-right: 0.7rem;
+      }
+
+      dl {
+        float: left;
+        width: 100%;
+      }
+
+      dt {
+        float: left;
+        clear: left;
+        margin-right: 0.5rem;
+      }
+
+      dd {
+        float: left;
+      }
+    }
+
     &__social-networks {
       margin: $richie-course-detail-socialnetworks-margin;
       padding: $richie-course-detail-socialnetworks-padding;
@@ -430,7 +462,7 @@ $richie-course-detail-aside-main-org-background: $white !default;
 
       &__title {
         margin: 0;
-        padding: 0.5rem 0.1rem 0;
+        padding: 0 0.1rem 0;
         font-size: 1.8rem;
         line-height: 1.1;
         text-align: center;
@@ -448,7 +480,7 @@ $richie-course-detail-aside-main-org-background: $white !default;
         $block-selector: &;
 
         position: relative;
-        margin: 0 1rem;
+        margin: 0;
         padding: 2rem 0;
 
         a {
