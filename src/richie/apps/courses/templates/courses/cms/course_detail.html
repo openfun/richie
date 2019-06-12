@@ -89,6 +89,23 @@
         {% include "social-networks/course-badges.html" with page_title=request.current_page.get_title page_url=request.current_page.get_absolute_url %}
       </div>
 
+      {% if course.duration or course.effort or current_page.publisher_is_draft %}
+      <div class="course-detail__aside__synopsis">
+        <dl>
+          {% render_model_block course "duration,effort" %}
+            {% if instance.duration or current_page.publisher_is_draft %}
+            <dt><span class="icon-duration"></span>duration:</dt>
+            <dd>{{ instance.get_duration_display|default:"NA" }}</dd>
+            {% endif %}
+            {% if instance.effort or current_page.publisher_is_draft %}
+            <dt><span class="icon-effort"></span>Effort:</dt>
+            <dd>{{ instance.get_effort_display|default:"NA" }}</dd>
+            {% endif %}
+          {% endrender_model_block %}
+        </dl>
+      </div>
+      {% endif %}
+
       <div class="course-detail__aside__run">
         <h2 class="course-detail__aside__run__title">{% trans 'Course runs' %}</h2>
         {% for run in course.get_course_runs_for_language %}
