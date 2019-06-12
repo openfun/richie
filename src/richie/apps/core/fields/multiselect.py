@@ -102,7 +102,7 @@ class MultiSelectField(models.CharField):
         return super()._check_choices()
 
     def _check_max_choices_attribute(self):
-        """Check that max_choices if well configured."""
+        """Check that max_choices is well configured."""
         if self.max_choices is None:
             return [
                 checks.Error(
