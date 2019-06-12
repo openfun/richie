@@ -18,9 +18,11 @@ from cms.models.pluginmodel import CMSPlugin
 from filer.fields.image import FilerImageField
 
 from ...core.defaults import ALL_LANGUAGES
+from ...core.fields.duration import CompositeDurationField
+from ...core.fields.effort import EffortField
 from ...core.fields.multiselect import MultiSelectField
 from ...core.models import BasePageExtension, PagePluginMixin
-from ..defaults import COURSERUNS_PAGE, COURSES_PAGE
+from .. import defaults
 from .category import Category
 from .organization import Organization
 from .person import Person
@@ -111,7 +113,23 @@ class Course(BasePageExtension):
     page that presents the course.
     """
 
-    PAGE = COURSES_PAGE
+    effort = EffortField(
+        time_units=defaults.TIME_UNITS,
+        default_effort_unit=defaults.DEFAULT_EFFORT_UNIT,
+        default_reference_unit=defaults.DEFAULT_REFERENCE_UNIT,
+        max_length=80,
+        blank=True,
+        null=True,
+    )
+    duration = CompositeDurationField(
+        time_units=defaults.TIME_UNITS,
+        default_unit=defaults.DEFAULT_TIME_UNIT,
+        max_length=80,
+        blank=True,
+        null=True,
+    )
+
+    PAGE = defaults.COURSES_PAGE
 
     class Meta:
         db_table = "richie_course"
@@ -342,7 +360,7 @@ class CourseRun(BasePageExtension):
         help_text=_("The list of languages in which the course content is available."),
     )
 
-    PAGE = COURSERUNS_PAGE
+    PAGE = defaults.COURSERUNS_PAGE
 
     class Meta:
         db_table = "richie_course_run"

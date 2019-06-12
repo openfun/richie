@@ -1,7 +1,9 @@
 """
 Unit tests for the Course model
 """
+from django.core.exceptions import ValidationError
 from django.test import TestCase
+from django.test.client import RequestFactory
 
 from cms.api import create_page
 
@@ -13,6 +15,8 @@ from richie.apps.courses.factories import (
     PersonFactory,
 )
 from richie.apps.courses.models import CourseRun
+
+# pylint: disable=too-many-public-methods
 
 
 class CourseModelsTestCase(TestCase):
@@ -347,3 +351,155 @@ class CourseModelsTestCase(TestCase):
             leaf_category2.public_extension.extended_object,
         ]
         self.assertEqual(expected_pages, list(course.get_root_to_leaf_category_pages()))
+
+    # Fields: effort
+
+    def test_models_course_field_effort_null(self):
+        """The effort field can be null."""
+        course = CourseFactory(effort=None)
+        self.assertIsNone(course.effort)
+        self.assertEqual(course.get_effort_display(), "")
+
+    def test_models_course_field_effort_invalid(self):
+        """An effort should be a triplet: number, time unit and reference unit."""
+        with self.assertRaises(ValidationError) as context:
+            CourseFactory(effort=[5, "unit"])
+        self.assertEqual(
+            context.exception.messages[0],
+            "An effort should be a triplet: number, time unit and reference unit.",
+        )
+
+    def test_models_course_field_effort_integer(self):
+        """The first value of the effort triplet should be an integer."""
+        for value in ["a", "1.0"]:
+            with self.assertRaises(ValidationError) as context:
+                CourseFactory(effort=[value, "minute", "hour"])
+            self.assertEqual(
+                context.exception.messages[0],
+                "An effort should be a round number of time units.",
+            )
+
+    def test_models_course_field_effort_positive(self):
+        """The first value should be a positive integer."""
+        with self.assertRaises(ValidationError) as context:
+            CourseFactory(effort=[-1, "day", "month"])
+        self.assertEqual(context.exception.messages[0], "An effort should be positive.")
+
+    def test_models_course_field_effort_invalid_unit(self):
+        """The second value should be a valid time unit choice."""
+        with self.assertRaises(ValidationError) as context:
+            CourseFactory(effort=[1, "invalid", "month"])
+        self.assertEqual(
+            context.exception.messages[0],
+            "invalid is not a valid choice for a time unit.",
+        )
+
+    def test_models_course_field_effort_invalid_reference(self):
+        """The third value should be a valid time unit choice."""
+        with self.assertRaises(ValidationError) as context:
+            CourseFactory(effort=[1, "day", "invalid"])
+        self.assertEqual(
+            context.exception.messages[0],
+            "invalid is not a valid choice for a time unit.",
+        )
+
+    def test_models_course_field_effort_order(self):
+        """The effort unit should be shorter than the reference unit."""
+        with self.assertRaises(ValidationError) as context:
+            CourseFactory(effort=[1, "day", "day"])
+        self.assertEqual(
+            context.exception.messages[0],
+            "The effort time unit should be shorter than the reference unit.",
+        )
+
+    def test_models_course_field_effort_display_singular(self):
+        """Validate that a value of 1 time unit is displayed as expected."""
+        course = CourseFactory(effort=[1, "day", "week"])
+        self.assertEqual(course.get_effort_display(), "1 day/week")
+
+    def test_models_course_field_effort_display_plural(self):
+        """Validate that a plural number of time units is displayed as expected."""
+        course = CourseFactory(effort=[2, "day", "week"])
+        self.assertEqual(course.get_effort_display(), "2 days/week")
+
+    def test_models_course_field_effort_display_request(self):
+        """
+        When used in the `render_model` template tag, it should not break when passed a
+        request argument (the DjangoCMS frontend editing does it).
+        """
+        course = CourseFactory(effort=[1, "week", "month"])
+        request = RequestFactory().get("/")
+        self.assertEqual(course.get_effort_display(request), "1 week/month")
+
+    def test_models_course_field_effort_default(self):
+        """The effort field should default to None."""
+        course = CourseFactory()
+        self.assertIsNone(course.effort)
+
+    # Fields: duration
+
+    def test_models_course_field_duration_null(self):
+        """The duration field can be null."""
+        course = CourseFactory(duration=None)
+        self.assertIsNone(course.duration)
+        self.assertEqual(course.get_duration_display(), "")
+
+    def test_models_course_field_duration_invalid(self):
+        """The duration should be a pair: number and unit."""
+        with self.assertRaises(ValidationError) as context:
+            CourseFactory(duration=5)
+        self.assertEqual(
+            context.exception.messages[0],
+            "A composite duration should be a pair: number and time unit.",
+        )
+
+    def test_models_course_field_duration_integer(self):
+        """The first value of the duration pair should be an integer."""
+        for value in ["a", "1.0"]:
+            with self.assertRaises(ValidationError) as context:
+                CourseFactory(duration=[value, "minute"])
+            self.assertEqual(
+                context.exception.messages[0],
+                "A composite duration should be a round number of time units.",
+            )
+
+    def test_models_course_field_duration_positive(self):
+        """The first value should be a positive integer."""
+        with self.assertRaises(ValidationError) as context:
+            CourseFactory(duration=[-1, "day"])
+        self.assertEqual(
+            context.exception.messages[0], "A composite duration should be positive."
+        )
+
+    def test_models_course_field_duration_invalid_unit(self):
+        """The second value should be a valid time unit choice."""
+        with self.assertRaises(ValidationError) as context:
+            CourseFactory(duration=[1, "invalid"])
+        self.assertEqual(
+            context.exception.messages[0],
+            "invalid is not a valid choice for a time unit.",
+        )
+
+    def test_models_course_field_duration_display_singular(self):
+        """Validate that a value of 1 time unit is displayed as expected."""
+        course = CourseFactory(duration=[1, "day"])
+        self.assertEqual(course.get_duration_display(), "1 day")
+
+    def test_models_course_field_duration_display_plural(self):
+        """Validate that a plural number of time units is displayed as expected."""
+        course = CourseFactory(duration=[2, "day"])
+        self.assertEqual(course.get_duration_display(), "2 days")
+
+    def test_models_course_field_duration_display_request(self):
+        """
+        When used in the `render_model` template tag, it should not break when passed a
+        request argument (the DjangoCMS frontend editing does it).
+        """
+        course = CourseFactory(duration=[1, "week"])
+        request = RequestFactory().get("/")
+        self.assertEqual(course.get_duration_display(request), "1 week")
+
+    def test_models_course_field_duration_default(self):
+        """The duration field should default to None."""
+        course = CourseFactory()
+        self.assertIsNone(course.duration)

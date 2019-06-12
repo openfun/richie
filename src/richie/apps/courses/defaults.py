@@ -272,3 +272,17 @@ PAGES_INFO = {
 PAGES_INFO.update(getattr(settings, "PAGES_INFO", {}))
 
 ROOT_REVERSE_IDS = PAGES_INFO.keys()
+
+# Fields effort and duration
+MINUTE, HOUR, DAY, WEEK, MONTH = "minute", "hour", "day", "week", "month"
+DEFAULT_TIME_UNIT = HOUR
+DEFAULT_EFFORT_UNIT = WEEK
+DEFAULT_REFERENCE_UNIT = MONTH
+
+TIME_UNITS = {
+    MINUTE: (_("minute"), _("minutes")),
+    HOUR: (_("hour"), _("hours")),
+    DAY: (_("day"), _("days")),
+    WEEK: (_("week"), _("weeks")),
+    MONTH: (_("month"), _("months")),
+}
