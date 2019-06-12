@@ -28,10 +28,11 @@ from .widgets import CourseRunSplitDateTimeWidget
 REQUIRE_POST = method_decorator(require_POST)
 
 
-class CourseAdmin(PageExtensionAdmin):
+class CourseAdmin(FrontendEditableAdminMixin, PageExtensionAdmin):
     """Admin class for the Course model"""
 
     list_display = ["title"]
+    frontend_editable_fields = ("effort", "duration")
 
     # pylint: disable=no-self-use
     def title(self, obj):
