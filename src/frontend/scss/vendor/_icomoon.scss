@@ -3,9 +3,15 @@
 $icomoon-font-family: 'icomoon' !default;
 $icomoon-font-path: '../../fonts/icomoon' !default;
 
-$icon-email: '\f003';
-$icon-twitter: '\f099';
-$icon-facebook: '\f09a';
+$icon-language: "\e903";
+$icon-envelope-o: "\e900";
+$icon-stopwatch: "\e952";
+$icon-calendar: "\e953";
+$icon-clipboard: "\e9b8";
+$icon-new-tab: "\ea7e";
+$icon-facebook: "\ea90";
+$icon-twitter: "\ea96";
+$icon-clock: "\e94e";
 
 @font-face {
   font-family: '#{$icomoon-font-family}';
@@ -38,9 +44,39 @@ $icon-facebook: '\f09a';
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-reference {
+  &:before {
+    content: $icon-new-tab;
+  }
+}
+.icon-enrollment {
+  &:before {
+    content: $icon-clipboard;
+  }
+}
+.icon-calendar {
+  &:before {
+    content: $icon-calendar;
+  }
+}
+.icon-duration {
+  &:before {
+    content: $icon-clock;
+  }
+}
+.icon-i18n {
+  &:before {
+    content: $icon-language;
+  }
+}
+.icon-effort {
+  &:before {
+    content: $icon-stopwatch;
+  }
+}
 .icon-email {
   &:before {
-    content: $icon-email;
+    content: $icon-envelope-o;
   }
 }
 .icon-twitter {
