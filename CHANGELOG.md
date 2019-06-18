@@ -12,6 +12,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Add field on course to record effort (e.g 5 hours/day) and duration
   (e.g 4 weeks).
+- Add a new plugin to easily create HTML sitemaps.
 
 ### Fixed
 

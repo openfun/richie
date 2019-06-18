@@ -1,0 +1,7 @@
+{% if annotated_pages %}
+  {% for page, nb_open, nb_close, is_leaf in annotated_pages %}
+    {% for _ in ''|center:nb_open %}<ul>{% endfor %}
+    <li><a href="{{ page.get_absolute_url }}">{{ page.get_title }}</a>{% if is_leaf %}</li>{% endif %}
+    {% for _ in ''|center:nb_close %}</ul></li>{% endfor %}
+  {% endfor %}
+{% endif %}

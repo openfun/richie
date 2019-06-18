@@ -193,6 +193,7 @@ class Base(DRFMixin, RichieCoursesConfigurationMixin, Configuration):
         "richie.apps.courses",
         "richie.apps.demo",
         "richie.apps.search",
+        "richie.plugins.html_sitemap",
         "richie.plugins.large_banner",
         "richie.plugins.plain_text",
         "richie.plugins.section",

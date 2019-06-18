@@ -1,0 +1,13 @@
+{% load cms_tags %}
+
+<div class="sitemap">
+  {% if instance.child_plugin_instances %}
+    <ul>
+  {% endif %}
+  {% for plugin in instance.child_plugin_instances %}
+    {% render_plugin plugin %}
+  {% endfor %}
+  {% if instance.child_plugin_instances %}
+    </ul>
+  {% endif %}
+</div>
