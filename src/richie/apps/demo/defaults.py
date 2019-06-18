@@ -63,7 +63,12 @@ PAGES_INFO = {
                 "title": {"en": "About", "fr": "A propos"},
                 "in_navigation": True,
                 "template": "richie/single_column.html",
-            }
+            },
+            "annex__sitemap": {
+                "title": {"en": "Sitemap", "fr": "Plan de site"},
+                "in_navigation": True,
+                "template": "richie/single_column.html",
+            },
         },
     },
 }
@@ -258,3 +263,12 @@ SINGLECOLUMN_CONTENT = {
     },
 }
 SINGLECOLUMN_CONTENT.update(getattr(settings, "RICHIE_DEMO_SINGLECOLUMN_CONTENT", {}))
+
+SITEMAP_MAX_DEPTHS = {
+    "blogposts": 1,
+    "courses": 1,
+    "categories": None,
+    "organizations": 1,
+    "persons": 1,
+    "annex": None,
+}
