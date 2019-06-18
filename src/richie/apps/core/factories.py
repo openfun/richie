@@ -126,6 +126,16 @@ class TitleFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = cms_models.Title
 
+    @classmethod
+    def _after_postgeneration(cls, instance, create, results=None):
+        """Update the related page's languages (taken from DjangoCMS's create_page helper)."""
+        super()._after_postgeneration(instance, create, results=results)
+        page = instance.page
+        if page:
+            page_languages = page.get_languages()
+            if instance.language not in page_languages:
+                page.update_languages(page_languages + [instance.language])
+
 
 class PageFactory(factory.django.DjangoModelFactory):
     """Create random CMS pages."""
@@ -135,6 +145,8 @@ class PageFactory(factory.django.DjangoModelFactory):
     title = factory.RelatedFactory(TitleFactory, "page")
 
     # Utility fields
+    in_navigation = True
+    login_required = False
     parent = None
     user = factory.SubFactory(UserFactory)
 
@@ -151,6 +163,34 @@ class PageFactory(factory.django.DjangoModelFactory):
         if self.parent:
             return self.parent.node.add_child(instance=new_node)
         return cms_models.TreeNode.add_root(instance=new_node)
+
+    @classmethod
+    def _after_postgeneration(cls, instance, create, results=None):
+        """
+        This hook method is called last when generating an instance from a factory. The super
+        method saves the instance one last time after all the "post_generation" hooks have played.
+
+        This is the moment to finally publish the pages. If we published the pages before this
+        final "save", they would be set back to a pending state and would not be in a clean
+        published state.
+        """
+        super()._after_postgeneration(instance, create, results=results)
+        if results.get("should_publish", False):
+            for language in instance.get_languages():
+                instance.publish(language)
+
+        instance.refresh_from_db()
+
+    @factory.post_generation
+    # pylint: disable=no-self-use,unused-argument
+    def should_publish(self, create, extracted, **kwargs):
+        """
+        Mark the pages for publishing. The actual publishing is done by the
+        "_after_post_generation" hook method above.
+        """
+        if create and extracted:
+            return True
+        return False
 
 
 class FilerImageFactory(factory.django.DjangoModelFactory):
