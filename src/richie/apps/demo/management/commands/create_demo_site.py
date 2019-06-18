@@ -31,6 +31,7 @@ from ...defaults import (
     NB_OBJECTS,
     PAGES_INFO,
     SINGLECOLUMN_CONTENT,
+    SITEMAP_MAX_DEPTHS,
     SUBJECTS_INFO,
 )
 from ...helpers import create_categories
@@ -53,7 +54,7 @@ def get_number_of_course_runs():
 # methods over querysets: Instance of 'list' has no 'delete' member (no-member).
 # We choose to ignore this false positive warning.
 
-# pylint: disable=too-many-locals,too-many-statements
+# pylint: disable=too-many-locals,too-many-statements,too-many-branches
 @override_settings(RICHIE_KEEP_SEARCH_UPDATED=False)
 def create_demo_site():
     """
@@ -503,8 +504,28 @@ def create_demo_site():
             body=text,
         )
 
-        # Once content has been added we must publish again homepage
+        # Once content has been added we must publish again the about page
         pages_created["annex__about"].publish(language)
+
+    # Create a sitemap page
+    placeholder = pages_created["annex__sitemap"].placeholders.get(slot="maincontent")
+
+    for language in pages_created["annex__sitemap"].get_languages():
+        parent_instance = add_plugin(
+            language=language, placeholder=placeholder, plugin_type="HTMLSitemapPlugin"
+        )
+        for name, max_depth in SITEMAP_MAX_DEPTHS.items():
+            add_plugin(
+                language=language,
+                placeholder=placeholder,
+                plugin_type="HTMLSitemapPagePlugin",
+                target=parent_instance,
+                root_page=pages_created[name],
+                max_depth=max_depth,
+            )
+
+        # Once content has been added we must publish again the sitemap
+        pages_created["annex__sitemap"].publish(language)
 
 
 class Command(BaseCommand):
