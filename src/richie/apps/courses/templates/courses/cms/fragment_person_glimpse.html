@@ -2,7 +2,7 @@
 {% comment %}Obviously, the context template variable "person" is required and must be a Person page extension{% endcomment %}
 {% with person_page=person.extended_object %}
 <div class="person-glimpse">
-  <a class="person-glimpse__media" href="{{ person_page.get_absolute_url }}" title="{{ person.get_full_name }} {% trans 'avatar' %}">
+  <a class="person-glimpse__media" href="{{ person_page.get_absolute_url }}" title="{{ person.extended_object.get_title }} {% trans 'avatar' %}">
     {% get_placeholder_plugins "portrait" person_page as plugins or %}
       <p class="person-glimpse__media__empty">{% trans "Portrait" %}</p>
     {% endget_placeholder_plugins %}
@@ -20,9 +20,9 @@
   </a>
   <div class="person-glimpse__content">
     <div class="person-glimpse__content__wrapper">
-      <a href="{{ person_page.get_absolute_url }}" title="{{ person.get_full_name }}">
+      <a href="{{ person_page.get_absolute_url }}" title="{{ person.extended_object.get_title }}">
         <h{{ header_level|default:2 }} class="person-glimpse__content__wrapper__title">
-          {{ person.get_full_name }}
+          {{ person.extended_object.get_title }}
         </h{{ header_level|default:2 }}>
       </a>
       <div class="person-glimpse__content__wrapper__categories">

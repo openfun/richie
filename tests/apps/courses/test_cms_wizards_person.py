@@ -9,7 +9,7 @@ from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
 from richie.apps.courses.cms_wizards import PersonWizardForm
-from richie.apps.courses.factories import PersonFactory, PersonTitleFactory
+from richie.apps.courses.factories import PersonFactory
 from richie.apps.courses.models import Person
 
 
@@ -130,11 +130,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
                 user = UserFactory(is_staff=is_staff, permissions=altered_permissions)
 
                 form = PersonWizardForm(
-                    data={
-                        "title": "A person",
-                        "first_name": "First name",
-                        "last_name": "Last name",
-                    },
+                    data={"title": "A person"},
                     wizard_language="en",
                     wizard_user=user,
                     wizard_page=any_page,
@@ -157,8 +153,6 @@ class PersonCMSWizardTestCase(CMSTestCase):
             "en",
             reverse_id=Person.PAGE["reverse_id"],
         )
-        # create a PersonTitle object
-        person_title = PersonTitleFactory()
 
         # Create a user with just the required permissions
         user = UserFactory(
@@ -167,12 +161,7 @@ class PersonCMSWizardTestCase(CMSTestCase):
         )
 
         form = PersonWizardForm(
-            data={
-                "title": "A person",
-                "person_title": person_title.id,
-                "first_name": "First name",
-                "last_name": "Last name",
-            },
+            data={"title": "A person"},
             wizard_language="en",
             wizard_user=user,
             wizard_page=any_page,
@@ -201,18 +190,11 @@ class PersonCMSWizardTestCase(CMSTestCase):
             "en",
             reverse_id=Person.PAGE["reverse_id"],
         )
-        person_title = PersonTitleFactory()
 
         # A person with a slug at the limit length should work
         user = UserFactory(is_superuser=True, is_staff=True)
         form = PersonWizardForm(
-            data={
-                "title": "t" * 255,
-                "slug": "s" * 54,
-                "person_title": person_title.id,
-                "first_name": "First name",
-                "last_name": "Last name",
-            },
+            data={"title": "t" * 255, "slug": "s" * 54},
             wizard_language="en",
             wizard_user=user,
         )
@@ -245,15 +227,9 @@ class PersonCMSWizardTestCase(CMSTestCase):
             "en",
             reverse_id=Person.PAGE["reverse_id"],
         )
-        person_title = PersonTitleFactory()
 
         # Submit a title at max length
-        data = {
-            "title": "t" * 255,
-            "person_title": person_title.id,
-            "first_name": "First name",
-            "last_name": "Last name",
-        }
+        data = {"title": "t" * 255}
         user = UserFactory(is_superuser=True, is_staff=True)
         form = PersonWizardForm(data=data, wizard_language="en", wizard_user=user)
         self.assertTrue(form.is_valid())
@@ -272,16 +248,9 @@ class PersonCMSWizardTestCase(CMSTestCase):
             "en",
             reverse_id=Person.PAGE["reverse_id"],
         )
-        person_title = PersonTitleFactory()
 
         # Submit a title that is too long and a slug that is ok
-        invalid_data = {
-            "title": "t" * 256,
-            "slug": "s" * 200,
-            "person_title": person_title.id,
-            "first_name": "First name",
-            "last_name": "Last name",
-        }
+        invalid_data = {"title": "t" * 256, "slug": "s" * 200}
 
         user = UserFactory(is_superuser=True, is_staff=True)
         form = PersonWizardForm(
@@ -305,16 +274,9 @@ class PersonCMSWizardTestCase(CMSTestCase):
             "en",
             reverse_id=Person.PAGE["reverse_id"],
         )
-        person_title = PersonTitleFactory()
 
         # Submit a slug that is too long and a title that is ok
-        invalid_data = {
-            "title": "t" * 255,
-            "slug": "s" * 201,
-            "person_title": person_title.id,
-            "first_name": "First name",
-            "last_name": "Last name",
-        }
+        invalid_data = {"title": "t" * 255, "slug": "s" * 201}
 
         user = UserFactory(is_superuser=True, is_staff=True)
         form = PersonWizardForm(
@@ -360,117 +322,25 @@ class PersonCMSWizardTestCase(CMSTestCase):
             "en",
             reverse_id=Person.PAGE["reverse_id"],
         )
-        person_title = PersonTitleFactory()
         # Create an existing page with a known slug
         PersonFactory(page_parent=parent_page, page_title="My title")
 
         # Submit a title that will lead to the same slug
-        data = {
-            "title": "my title",
-            "person_title": person_title.id,
-            "first_name": "First name",
-            "last_name": "Last name",
-        }
+        data = {"title": "my title"}
 
         user = UserFactory(is_superuser=True, is_staff=True)
         form = PersonWizardForm(data=data, wizard_language="en", wizard_user=user)
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors, {"slug": ["This slug is already in use"]})
 
-    def test_cms_wizards_person_submit_form_first_name_required(self):
-        """
-        The `first_name` field should be required
-        """
-        # A parent page should pre-exist
-        create_page(
-            "Persons",
-            "richie/single_column.html",
-            "en",
-            reverse_id=Person.PAGE["reverse_id"],
-        )
-        person_title = PersonTitleFactory()
-
-        invalid_data = {
-            "title": "A person",
-            "person_title": person_title.id,
-            "last_name": "Last name",
-        }
-
-        user = UserFactory(is_superuser=True, is_staff=True)
-        form = PersonWizardForm(
-            data=invalid_data, wizard_language="en", wizard_user=user
-        )
-        self.assertFalse(form.is_valid())
-        # Check that missing first_name field is a cause for the invalid form
-        self.assertEqual(form.errors["first_name"], ["This field is required."])
-
-    def test_cms_wizards_person_submit_form_last_name_required(self):
-        """
-        The `last_name` field should be required
-        """
-        # A parent page should pre-exist
-        create_page(
-            "Persons",
-            "richie/single_column.html",
-            "en",
-            reverse_id=Person.PAGE["reverse_id"],
-        )
-        person_title = PersonTitleFactory()
-
-        invalid_data = {
-            "title": "A person",
-            "person_title": person_title.id,
-            "first_name": "First name",
-        }
-
-        user = UserFactory(is_superuser=True, is_staff=True)
-        form = PersonWizardForm(
-            data=invalid_data, wizard_language="en", wizard_user=user
-        )
-        self.assertFalse(form.is_valid())
-        # Check that missing last_name field is a cause for the invalid form
-        self.assertEqual(form.errors["last_name"], ["This field is required."])
-
-    def test_cms_wizards_person_submit_form_person_title_not_required(self):
-        """
-        The `person_title` field should not be required
-        """
-        # A parent page should pre-exist
-        create_page(
-            "Persons",
-            "richie/single_column.html",
-            "en",
-            reverse_id=Person.PAGE["reverse_id"],
-        )
-
-        no_title_data = {
-            "title": "A person",
-            "first_name": "First name",
-            "last_name": "Last name",
-        }
-
-        user = UserFactory(is_superuser=True, is_staff=True)
-        form = PersonWizardForm(
-            data=no_title_data, wizard_language="en", wizard_user=user
-        )
-        self.assertTrue(form.is_valid())
-
     def test_cms_wizards_person_parent_page_should_exist(self):
         """
         We should not be able to create a person page if the parent page does not exist
         """
-        person_title = PersonTitleFactory()
         user = UserFactory(is_superuser=True, is_staff=True)
 
         form = PersonWizardForm(
-            data={
-                "title": "A person",
-                "person_title": person_title.id,
-                "first_name": "First name",
-                "last_name": "Last name",
-            },
-            wizard_language="en",
-            wizard_user=user,
+            data={"title": "A person"}, wizard_language="en", wizard_user=user
         )
         self.assertFalse(form.is_valid())
         self.assertEqual(

@@ -153,6 +153,7 @@ class OrganizationCMSTestCase(CMSTestCase):
             r'<h2 class="person-glimpse__content__wrapper__title">'
             r".*{name:s}.*</h2></a>"
         ).format(
-            url=person.extended_object.get_absolute_url(), name=person.get_full_name()
+            url=person.extended_object.get_absolute_url(),
+            name=person.extended_object.get_title(),
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))

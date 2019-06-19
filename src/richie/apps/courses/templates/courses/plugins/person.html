@@ -3,8 +3,8 @@
 {% if current_page.publisher_is_draft or instance.check_publication is True %}
   {% if form_factor == "tag" %}
     <a class="person-plugin-tag" href="{{ relevant_page.get_absolute_url }}"
-        title="{{ relevant_page.person.get_full_name }}">
-      {{ relevant_page.person.get_full_name }}
+        title="{{ relevant_page.person.get_tile }}">
+      {{ relevant_page.person.get_tile }}
     </a>
   {% else %}
     {% include "courses/cms/fragment_person_glimpse.html" with person=relevant_page.person %}

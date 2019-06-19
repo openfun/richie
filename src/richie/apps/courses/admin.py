@@ -16,7 +16,6 @@ from cms.admin.placeholderadmin import FrontendEditableAdminMixin
 from cms.api import Page
 from cms.extensions import PageExtensionAdmin
 from cms.utils.admin import jsonify_request
-from parler.admin import TranslatableAdmin
 
 from ..core.admin import link_field
 from . import models
@@ -153,7 +152,7 @@ class PageRoleAdmin(admin.ModelAdmin):
 class PersonAdmin(PageExtensionAdmin):
     """Admin class for the Person model"""
 
-    list_display = ["title", "person_title", "first_name", "last_name"]
+    list_display = ["title"]
 
     # pylint: disable=no-self-use
     def title(self, obj):
@@ -161,12 +160,6 @@ class PersonAdmin(PageExtensionAdmin):
         Display the person page title as a read-only field from the related page
         """
         return obj.extended_object.get_title()
-
-
-class PersonTitleAdmin(TranslatableAdmin):
-    """Admin class for the PersonTitle model"""
-
-    list_display = ["title", "abbreviation"]
 
 
 class LicenceAdmin(admin.ModelAdmin):
@@ -184,4 +177,3 @@ admin.site.register(models.Licence, LicenceAdmin)
 admin.site.register(models.Organization, OrganizationAdmin)
 admin.site.register(models.PageRole, PageRoleAdmin)
 admin.site.register(models.Person, PersonAdmin)
-admin.site.register(models.PersonTitle, PersonTitleAdmin)

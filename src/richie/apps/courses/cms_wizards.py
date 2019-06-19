@@ -36,7 +36,6 @@ from .models import (
     Organization,
     PageRole,
     Person,
-    PersonTitle,
 )
 
 
@@ -670,19 +669,6 @@ class PersonWizardForm(BaseWizardForm):
     A related Person model is created for each person page.
     """
 
-    person_title = forms.ModelChoiceField(
-        required=False,
-        queryset=PersonTitle.objects.all(),
-        label=_("Title"),
-        help_text=_("Choose this person's title among existing ones"),
-    )
-    first_name = forms.CharField(
-        max_length=200, widget=forms.TextInput(), label=_("First Name")
-    )
-    last_name = forms.CharField(
-        max_length=200, widget=forms.TextInput(), label=_("Last Name")
-    )
-
     model = Person
 
     def clean(self):
@@ -702,12 +688,7 @@ class PersonWizardForm(BaseWizardForm):
         This method creates the associated person page extension.
         """
         page = super().save()
-        Person.objects.create(
-            extended_object=page,
-            person_title=self.cleaned_data["person_title"],
-            first_name=self.cleaned_data["first_name"],
-            last_name=self.cleaned_data["last_name"],
-        )
+        Person.objects.create(extended_object=page)
         return page
 
 
