@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.2.0] - 2019-06-19
+
 ### Added
 
 - Add field on course to record effort (e.g 5 hours/day) and duration
@@ -339,7 +341,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v1.1.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v1.2.0...master
+[1.2.0]: https://github.com/openfun/richie/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/openfun/richie/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/openfun/richie/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/openfun/richie/compare/v1.0.0-beta.9...v1.0.0
