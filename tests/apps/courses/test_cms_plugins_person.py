@@ -41,7 +41,7 @@ class PersonPluginTestCase(CMSTestCase):
             other_page_title, "richie/single_column.html", settings.LANGUAGE_CODE
         )
         plugin_form = PersonPluginModelForm()
-        self.assertIn(person.get_full_name(), plugin_form.as_table())
+        self.assertIn(person.extended_object.get_title(), plugin_form.as_table())
         self.assertNotIn(other_page_title, plugin_form.as_table())
 
     def test_cms_plugins_person_render_on_public_page(self):
@@ -51,7 +51,6 @@ class PersonPluginTestCase(CMSTestCase):
         # Create a Person
         person = PersonFactory(
             page_title={"en": "person title", "fr": "titre personne"},
-            first_name="Meimei",
             fill_portrait={
                 "original_filename": "portrait.jpg",
                 "default_alt_text": "my portrait",
@@ -84,16 +83,17 @@ class PersonPluginTestCase(CMSTestCase):
         # The person plugin should not be visible on the public page before it is published
         person_page.unpublish("en")
         response = self.client.get(url)
-        self.assertNotContains(response, "Meimei")
+        self.assertNotContains(response, "person title")
 
         # Republishing the plugin should not make it public
         person_page.publish("en")
         response = self.client.get(url)
-        self.assertNotContains(response, "Meimei")
+        self.assertNotContains(response, "person title")
 
         # Now modify the person to have a draft different from the public version
-        person.first_name = "Jiji"
-        person.save()
+        person_title = person.extended_object.title_set.get(language="en")
+        person_title.title = "Jiji"
+        person_title.save()
         bio_en.body = "draft bio"
         bio_en.save()
 
@@ -107,7 +107,7 @@ class PersonPluginTestCase(CMSTestCase):
         self.assertContains(
             response,
             '<a href="/en/person-title/" title="{name:s}">'.format(
-                name=person.public_extension.get_full_name()
+                name=person.public_extension.extended_object.get_title()
             ),
             status_code=200,
         )
@@ -115,11 +115,11 @@ class PersonPluginTestCase(CMSTestCase):
         self.assertContains(
             response,
             '<h2 class="person-glimpse__content__wrapper__title">{:s}</h2>'.format(
-                person.public_extension.get_full_name()
+                person.public_extension.extended_object.get_title()
             ),
             html=True,
         )
-        self.assertContains(response, "Meimei")
+        self.assertContains(response, "person title")
         self.assertNotContains(response, "Jiji")
 
         # Person's portrait should be present
@@ -129,7 +129,7 @@ class PersonPluginTestCase(CMSTestCase):
             r'.*alt="my portrait"'
         ).format(
             href=person_page.get_absolute_url(),
-            title=person.public_extension.get_full_name(),
+            title=person.public_extension.extended_object.get_title(),
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
 
@@ -147,7 +147,7 @@ class PersonPluginTestCase(CMSTestCase):
         self.assertContains(
             response,
             '<a href="/fr/titre-personne/" title="{name:s}">'.format(
-                name=person.public_extension.get_full_name()
+                name=person.public_extension.extended_object.get_title()
             ),
             status_code=200,
         )
@@ -157,7 +157,7 @@ class PersonPluginTestCase(CMSTestCase):
             r'.*alt="my portrait"'
         ).format(
             href=person_page.get_absolute_url(),
-            title=person.public_extension.get_full_name(),
+            title=person.public_extension.extended_object.get_title(),
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
 
@@ -175,7 +175,9 @@ class PersonPluginTestCase(CMSTestCase):
         self.client.login(username=staff.username, password="password")
 
         # Create a Person
-        person = PersonFactory(first_name="Meimei")
+        person = PersonFactory(
+            page_title={"en": "person title", "fr": "titre personne"}
+        )
         person_page = person.extended_object
 
         # Add bio to related placeholder
@@ -196,12 +198,13 @@ class PersonPluginTestCase(CMSTestCase):
 
         # The person plugin should still be visible on the draft page
         response = self.client.get(url)
-        self.assertContains(response, "Meimei")
+        self.assertContains(response, "person title")
         self.assertContains(response, "public bio")
 
         # Now modify the person to have a draft different from the public version
-        person.first_name = "Jiji"
-        person.save()
+        person_title = person.extended_object.title_set.get(language="en")
+        person_title.title = "Jiji"
+        person_title.save()
         bio_en.body = "draft bio"
         bio_en.save()
 
@@ -209,7 +212,7 @@ class PersonPluginTestCase(CMSTestCase):
         response = self.client.get(url)
         self.assertContains(response, "Jiji")
         self.assertContains(response, "draft bio")
-        self.assertNotContains(response, "Meimei")
+        self.assertNotContains(response, "person_title")
         self.assertNotContains(response, "public bio")
 
     def test_cms_plugins_person_render_default_alt(self):
@@ -244,6 +247,6 @@ class PersonPluginTestCase(CMSTestCase):
             r'.*alt="Mei avatar"'
         ).format(
             href=person_page.get_absolute_url(),
-            title=person.public_extension.get_full_name(),
+            title=person.public_extension.extended_object.get_title(),
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))

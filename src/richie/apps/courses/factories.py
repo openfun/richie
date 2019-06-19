@@ -6,7 +6,6 @@ from collections import namedtuple
 from datetime import datetime, timedelta
 
 from django.utils import timezone
-from django.utils.translation import get_language
 
 import factory
 import pytz
@@ -647,37 +646,26 @@ class BlogPostFactory(PageExtensionDjangoModelFactory):
                 )
 
 
-class PersonTitleFactory(factory.django.DjangoModelFactory):
-    """
-    Factory to generate random yet realistic PersonTitle objects with one default translation.
-    """
-
-    translation = factory.RelatedFactory(
-        "richie.apps.courses.factories.PersonTitleTranslationFactory", "master"
-    )
-
-    class Meta:
-        model = models.PersonTitle
-
-
-class PersonTitleTranslationFactory(factory.django.DjangoModelFactory):
-    """
-    Factory to generate random yet realistic translation instances for the PersonTitle model.
-    """
-
-    class Meta:
-        model = models.PersonTitleTranslation
-
-    master = None
-    language_code = factory.LazyAttribute(lambda o: get_language())
-    title = factory.Faker("prefix")
-    abbreviation = factory.LazyAttribute(lambda o: o.title[0])
-
-
 class PersonFactory(PageExtensionDjangoModelFactory):
     """
     Person factory to generate random yet realistic person's name and title
     """
+
+    first_name = factory.Faker("first_name")
+    last_name = factory.Faker("last_name")
+    person_title = factory.Faker("prefix")
+
+    @factory.lazy_attribute
+    def page_title(self):
+        """
+        Build the page title from the person's title and names
+        """
+        # Don't always set a title
+        person_title = random.choice([None, self.person_title])
+
+        # Join the names that are not null into a string
+        names = [person_title, self.first_name, self.last_name]
+        return " ".join([n for n in names if n is not None])
 
     class Meta:
         model = models.Person
@@ -687,27 +675,13 @@ class PersonFactory(PageExtensionDjangoModelFactory):
             "page_parent",
             "page_template",
             "page_title",
+            "first_name",
+            "last_name",
+            "person_title",
         ]
 
     # fields concerning the related page
     page_template = models.Person.PAGE["template"]
-
-    first_name = factory.Faker("first_name")
-    last_name = factory.Faker("last_name")
-    person_title = factory.SubFactory(PersonTitleFactory)
-
-    @factory.lazy_attribute
-    def page_title(self):
-        """
-        Build the page title from the person's title and names
-        """
-        names = [
-            self.person_title.title if self.person_title else None,
-            self.first_name,
-            self.last_name,
-        ]
-        # Join the names that are null into a string
-        return " ".join([n for n in names if n is not None])
 
     @factory.post_generation
     # pylint: disable=unused-argument

@@ -21,8 +21,6 @@ from richie.apps.courses.factories import (
     LicenceFactory,
     OrganizationFactory,
     PersonFactory,
-    PersonTitleFactory,
-    PersonTitleTranslationFactory,
 )
 
 from ...defaults import (
@@ -105,14 +103,6 @@ def create_demo_site():
         )
     )
 
-    title = PersonTitleFactory(translation=None)
-    PersonTitleTranslationFactory(
-        master=title, language_code="en", title="Doctor", abbreviation="Dr."
-    )
-    PersonTitleTranslationFactory(
-        master=title, language_code="fr", title="Docteur", abbreviation="Dr."
-    )
-
     # Create persons under the `persons` page
     persons = []
     persons_for_organization = defaultdict(list)
@@ -125,7 +115,6 @@ def create_demo_site():
             page_in_navigation=True,
             page_languages=["en", "fr"],
             page_parent=pages_created["persons"],
-            person_title=random.choice([title, None]),
             fill_categories=random.sample(
                 subjects, random.randint(1, NB_OBJECTS["person_subjects"])
             ),

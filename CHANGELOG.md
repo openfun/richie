@@ -8,12 +8,16 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Removed
+
+- Replace first name, last name and person title by page title.
+
 ## [1.2.0] - 2019-06-19
 
 ### Added
 
 - Add field on course to record effort (e.g 5 hours/day) and duration
-  (e.g 4 weeks).
+  (e.g 4 weeks),
 - Add a new plugin to easily create HTML sitemaps.
 
 ### Fixed

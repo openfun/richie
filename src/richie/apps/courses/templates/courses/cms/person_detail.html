@@ -4,11 +4,7 @@
 {% block content %}
 {% with header_level=2 person=current_page.person %}
 <div class="person-detail">
-  <h1 class="person-detail__title">
-    {% render_model_block person %}
-      {{ person.person_title.title }} {{ person.first_name }} {{ person.last_name }}
-    {% endrender_model_block %}
-  </h1>
+  <h1 class="person-detail__title">{% render_model current_page "title" %}</h1>
 
   {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"categories" %}
   <div class="person-detail__categories">
