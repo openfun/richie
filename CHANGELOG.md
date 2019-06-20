@@ -16,6 +16,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Replace first name, last name and person title by page title.
 
+### Fixed
+
+- Add missing translation when displaying effort and duration on the course.
+
 ## [1.2.0] - 2019-06-19
 
 ### Added
