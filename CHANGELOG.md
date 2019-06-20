@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.3.0] - 2019-06-20
+
 ### Changed
 
 - Add course effort and duration values to demo site.
@@ -353,7 +355,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v1.2.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v1.3.0...master
+[1.3.0]: https://github.com/openfun/richie/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/openfun/richie/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/openfun/richie/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/openfun/richie/compare/v1.0.0...v1.0.1
