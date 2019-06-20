@@ -59,7 +59,7 @@ class CompositeDurationField(models.CharField):
     A custom charfield to store a duration in database as an integer and a time unit choice.
     """
 
-    description = _("Define a duration by a number of time units")
+    description = _("Define a duration as a number of time units")
 
     error_message = _("%(value)s is not a valid choice for a time unit.")
 
