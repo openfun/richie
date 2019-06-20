@@ -25,7 +25,7 @@ class HTMLSitemapPage(CMSPlugin):
         verbose_name=_("root page"),
         help_text=_(
             "This page will be at the root of your sitemap (or its children if the "
-            '"include root page" flag is unticked.'
+            '"include root page" flag is unticked).'
         ),
         blank=True,
         null=True,

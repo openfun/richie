@@ -55,7 +55,7 @@ class Migration(migrations.Migration):
                     "root_page",
                     models.ForeignKey(
                         blank=True,
-                        help_text='This page will be at the root of your sitemap (or its children if the "include root page" flag is unticked.',
+                        help_text='This page will be at the root of your sitemap (or its children if the "include root page" flag is unticked).',
                         limit_choices_to={"publisher_is_draft": True},
                         null=True,
                         on_delete=django.db.models.deletion.PROTECT,
