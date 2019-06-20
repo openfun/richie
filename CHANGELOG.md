@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Add course effort and duration values to demo site.
+
 ### Removed
 
 - Replace first name, last name and person title by page title.

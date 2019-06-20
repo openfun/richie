@@ -19,7 +19,7 @@ from ..core.factories import (
     create_text_plugin,
     image_getter,
 )
-from . import models
+from . import defaults, models
 from .defaults import ROLE_CHOICES
 
 VideoSample = namedtuple("VideoSample", ["label", "image", "url"])
@@ -190,6 +190,26 @@ class CourseFactory(PageExtensionDjangoModelFactory):
 
     # fields concerning the related page
     page_template = models.Course.PAGE["template"]
+
+    # pylint: disable=no-self-use
+    @factory.lazy_attribute
+    def duration(self):
+        """Generate a random duration for the course between 1 day and 10 months."""
+        return [
+            random.randint(1, 10),
+            random.choice(list(defaults.TIME_UNITS.keys())[2:]),
+        ]
+
+    # pylint: disable=no-self-use
+    @factory.lazy_attribute
+    def effort(self):
+        """Generate a random effort for the course between 1 minute/month and 10 hours/day."""
+        time_units = list(defaults.TIME_UNITS.keys())
+        return [
+            random.randint(1, 10),
+            random.choice(time_units[:2]),
+            random.choice(time_units[2:]),
+        ]
 
     @factory.post_generation
     # pylint: disable=unused-argument
