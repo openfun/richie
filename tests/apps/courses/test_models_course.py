@@ -7,6 +7,7 @@ from django.test.client import RequestFactory
 
 from cms.api import create_page
 
+from richie.apps.core.factories import PageFactory
 from richie.apps.courses.factories import (
     CategoryFactory,
     CourseFactory,
@@ -14,7 +15,7 @@ from richie.apps.courses.factories import (
     OrganizationFactory,
     PersonFactory,
 )
-from richie.apps.courses.models import CourseRun
+from richie.apps.courses.models import Course, CourseRun
 
 # pylint: disable=too-many-public-methods
 
@@ -433,7 +434,7 @@ class CourseModelsTestCase(TestCase):
 
     def test_models_course_field_effort_default(self):
         """The effort field should default to None."""
-        course = CourseFactory()
+        course = Course.objects.create(extended_object=PageFactory())
         self.assertIsNone(course.effort)
 
     # Fields: duration
@@ -501,5 +502,5 @@ class CourseModelsTestCase(TestCase):
 
     def test_models_course_field_duration_default(self):
         """The duration field should default to None."""
-        course = CourseFactory()
+        course = Course.objects.create(extended_object=PageFactory())
         self.assertIsNone(course.duration)
