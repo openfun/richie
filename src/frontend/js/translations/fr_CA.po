@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2019-05-16T14:30:46.542Z\n"
+"POT-Creation-Date: 2019-05-24T16:39:58.245Z\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "MIME-Version: 1.0\n"
@@ -13,14 +13,7 @@ msgstr ""
 "Last-Translator: Samuel Paccoud (sampaccoud)\n"
 "Language-Team: French, Canada\n"
 "Language: fr_CA\n"
-"PO-Revision-Date: 2019-05-22 17:10\n"
-
-#. [common.categoriesHumanName] - Title/name to use when we display a list of categories
-#. defaultMessage is:
-#. Categories
-#: i18n/js/utils/commonMessages.json
-msgid "Categories"
-msgstr "Catégories"
+"PO-Revision-Date: 2019-06-20 13:36\n"
 
 #. [components.SearchFiltersPane.clearFilters] - Helper button in search filters pane in search page to remove all active filters
 #. defaultMessage is:
@@ -28,13 +21,6 @@ msgstr "Catégories"
 #: i18n/js/components/SearchFiltersPane/SearchFiltersPane.json
 msgid "Clear {activeFilterCount, number} active {activeFilterCount, plural, one {filter} other {filters}}"
 msgstr "Remettre à zéro {activeFilterCount, number} {activeFilterCount, plural, one {filtre} other {filtres}} actifs"
-
-#. [common.coursesHumanName] - Title/name to use when we display a list of courses
-#. defaultMessage is:
-#. Courses
-#: i18n/js/utils/commonMessages.json
-msgid "Courses"
-msgstr "Cours"
 
 #. [components.CourseGlimpse.cover] - Placeholder text when the course we are glimpsing at is missing a cover image
 #. defaultMessage is:
@@ -71,26 +57,12 @@ msgstr "Masquer les filtres enfants"
 msgid "Logo for {courseTitle}"
 msgstr "Logo du cours {courseTitle}"
 
-#. [common.organizationsHumanName] - Title/name to use when we display a list of organizations
-#. defaultMessage is:
-#. Organizations
-#: i18n/js/utils/commonMessages.json
-msgid "Organizations"
-msgstr "Organisations"
-
-#. [common.personsHumanName] - Title/name to use when we display a list of persons
-#. defaultMessage is:
-#. Persons
-#: i18n/js/utils/commonMessages.json
-msgid "Persons"
-msgstr ""
-
 #. [components.SearchSuggestField.searchFieldPlaceholder] - Placeholder text displayed in the search field when it is empty.
 #. defaultMessage is:
 #. Search for courses, organizations, categories
 #: i18n/js/components/SearchSuggestField/SearchSuggestField.json
 msgid "Search for courses, organizations, categories"
-msgstr "Recherche des cours, des organisations, des catégories"
+msgstr "Recherche des cours, des institutions, des catégories"
 
 #. [components.SearchSuggestField.searchFieldDefaultSearch] - Default query in the main search field. Lets users run a full text search
 #.       with whatever they have typed in.
