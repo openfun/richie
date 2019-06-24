@@ -51,18 +51,16 @@ describe('<SearchFilterValueParent />', () => {
       </IntlProvider>,
     );
 
-    getByLabelText((content, _) => content.includes('Literature'));
-    expect(getByLabelText('Show child filters')).toHaveAttribute(
+    getByLabelText(content => content.startsWith('Literature'));
+    expect(getByLabelText('Show more filters for Literature')).toHaveAttribute(
       'aria-pressed',
       'false',
     );
     expect(
-      queryByLabelText((content, _) =>
-        content.includes('Classical Literature'),
-      ),
+      queryByLabelText(content => content.startsWith('Classical Literature')),
     ).toEqual(null);
     expect(
-      queryByLabelText((content, _) => content.includes('Modern Literature')),
+      queryByLabelText(content => content.startsWith('Modern Literature')),
     ).toEqual(null);
   });
 
@@ -114,13 +112,13 @@ describe('<SearchFilterValueParent />', () => {
       </IntlProvider>,
     );
 
-    getByLabelText((content, _) => content.includes('Literature'));
-    const button = getByLabelText('Hide child filters');
+    getByLabelText((content, _) => content.startsWith('Literature'));
+    const button = getByLabelText('Hide additional filters for Literature');
     expect(button).toHaveAttribute('aria-pressed', 'true');
 
     await wait();
-    getByLabelText((content, _) => content.includes('Classical Literature'));
-    getByLabelText((content, _) => content.includes('Modern Literature'));
+    getByLabelText((content, _) => content.startsWith('Classical Literature'));
+    getByLabelText((content, _) => content.startsWith('Modern Literature'));
   });
 
   it('hides/show the children when the user clicks on the toggle button', async () => {
@@ -171,15 +169,13 @@ describe('<SearchFilterValueParent />', () => {
       </IntlProvider>,
     );
 
-    getByLabelText((content, _) => content.includes('Literature'));
-    getByLabelText('Hide child filters');
-    expect(getByLabelText('Hide child filters')).toHaveAttribute(
-      'aria-pressed',
-      'true',
-    );
+    getByLabelText(content => content.startsWith('Literature'));
+    expect(
+      getByLabelText('Hide additional filters for Literature'),
+    ).toHaveAttribute('aria-pressed', 'true');
     await wait();
-    getByLabelText((content, _) => content.includes('Classical Literature'));
-    getByLabelText((content, _) => content.includes('Modern Literature'));
+    getByLabelText(content => content.startsWith('Classical Literature'));
+    getByLabelText(content => content.startsWith('Modern Literature'));
 
     expect(mockFetchList).toHaveBeenCalledTimes(1);
     expect(mockFetchList).toHaveBeenLastCalledWith('courses', {
@@ -190,26 +186,24 @@ describe('<SearchFilterValueParent />', () => {
       subjects_include: '.-00040005.{4,}',
     });
 
-    fireEvent.click(getByLabelText('Hide child filters'));
+    fireEvent.click(getByLabelText('Hide additional filters for Literature'));
 
-    getByLabelText((content, _) => content.includes('Literature'));
-    expect(getByLabelText('Show child filters')).toHaveAttribute(
+    getByLabelText(content => content.startsWith('Literature'));
+    expect(getByLabelText('Show more filters for Literature')).toHaveAttribute(
       'aria-pressed',
       'false',
     );
     expect(
-      queryByLabelText((content, _) =>
-        content.includes('Classical Literature'),
-      ),
+      queryByLabelText(content => content.startsWith('Classical Literature')),
     ).toEqual(null);
     expect(
-      queryByLabelText((content, _) => content.includes('Modern Literature')),
+      queryByLabelText(content => content.startsWith('Modern Literature')),
     ).toEqual(null);
     expect(mockFetchList).toHaveBeenCalledTimes(1);
 
-    fireEvent.click(getByLabelText('Show child filters'));
+    fireEvent.click(getByLabelText('Show more filters for Literature'));
 
-    getByLabelText('Hide child filters');
+    getByLabelText('Hide additional filters for Literature');
     expect(mockFetchList).toHaveBeenCalledTimes(2);
     expect(mockFetchList).toHaveBeenLastCalledWith('courses', {
       limit: '999',
@@ -218,13 +212,12 @@ describe('<SearchFilterValueParent />', () => {
       subjects: ['L-000400050004'],
       subjects_include: '.-00040005.{4,}',
     });
-    expect(getByLabelText('Hide child filters')).toHaveAttribute(
-      'aria-pressed',
-      'true',
-    );
+    expect(
+      getByLabelText('Hide additional filters for Literature'),
+    ).toHaveAttribute('aria-pressed', 'true');
     await wait();
-    getByLabelText((content, _) => content.includes('Classical Literature'));
-    getByLabelText((content, _) => content.includes('Modern Literature'));
+    getByLabelText(content => content.startsWith('Classical Literature'));
+    getByLabelText(content => content.startsWith('Modern Literature'));
   });
 
   it('shows the parent filter value itself as inactive when it is not in the search params', () => {
@@ -252,8 +245,8 @@ describe('<SearchFilterValueParent />', () => {
     );
 
     // The filter value is displayed with its facet count
-    const checkbox = getByLabelText((content, _) =>
-      content.includes('Human name'),
+    const checkbox = getByLabelText(content =>
+      content.startsWith('Human name'),
     );
     expect(checkbox!.parentElement).toHaveTextContent('(217)'); // label that contains checkbox
     // The filter is not currently active
@@ -286,8 +279,8 @@ describe('<SearchFilterValueParent />', () => {
     );
 
     // The filter shows its active state
-    const checkbox = getByLabelText((content, _) =>
-      content.includes('Human name'),
+    const checkbox = getByLabelText(content =>
+      content.startsWith('Human name'),
     );
     expect(checkbox).not.toHaveAttribute('checked');
     expect(checkbox).toHaveAttribute('disabled');
@@ -322,8 +315,8 @@ describe('<SearchFilterValueParent />', () => {
       </IntlProvider>,
     );
 
-    const checkbox = getByLabelText((content, _) =>
-      content.includes('Human name'),
+    const checkbox = getByLabelText(content =>
+      content.startsWith('Human name'),
     );
     expect(checkbox!.parentElement).toHaveTextContent('(218)'); // label that contains checkbox
     expect(checkbox).toHaveAttribute('checked');
@@ -359,7 +352,7 @@ describe('<SearchFilterValueParent />', () => {
     );
 
     fireEvent.click(
-      getByLabelText((content, _) => content.includes('Human name')),
+      getByLabelText(content => content.startsWith('Human name')),
     );
     expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
       filter: {
@@ -403,7 +396,7 @@ describe('<SearchFilterValueParent />', () => {
     );
 
     fireEvent.click(
-      getByLabelText((content, _) => content.includes('Human name')),
+      getByLabelText(content => content.startsWith('Human name')),
     );
     expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
       filter: {

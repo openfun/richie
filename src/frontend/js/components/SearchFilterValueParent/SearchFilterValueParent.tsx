@@ -12,13 +12,13 @@ import { SearchFilterValueLeaf } from '../SearchFilterValueLeaf/SearchFilterValu
 
 const messages = defineMessages({
   ariaHideChildren: {
-    defaultMessage: 'Hide child filters',
+    defaultMessage: 'Hide additional filters for {filterValueName}',
     description:
       'Accessibility message for the button to hide children of the current filter',
     id: 'components.SearchFilterValueParent.ariaHideChildren',
   },
   ariaShowChildren: {
-    defaultMessage: 'Show child filters',
+    defaultMessage: 'Show more filters for {filterValueName}',
     description:
       'Accessibility message for the button to show children of the current filter',
     id: 'components.SearchFilterValueParent.ariaShowChildren',
@@ -115,6 +115,9 @@ export const SearchFilterValueParent = injectIntl(
               showChildren
                 ? messages.ariaHideChildren
                 : messages.ariaShowChildren,
+              {
+                filterValueName: value.human_name,
+              },
             )}
             aria-pressed={showChildren}
             className={`search-filter-value-parent__self__unfold ${showChildren &&

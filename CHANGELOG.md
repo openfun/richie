@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Improve label text for the child filter toggle in Search.
+
 ## [1.4.0] - 2019-06-26
 
 ### Added
