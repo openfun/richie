@@ -15,7 +15,6 @@ $richie-org-glimpse-item-border: 1px solid $gray80 !default;
 $richie-org-glimpse-item-border-hover: 1px solid $firebrick6 !default;
 $richie-org-glimpse-item-border-radius: 0.25rem !default;
 
-$richie-org-glimpse-item-title-fontsize: 0.81rem !default;
 $richie-org-glimpse-item-title-fontcolor: $black !default;
 $richie-org-glimpse-item-title-textalign: center !default;
 
@@ -51,8 +50,10 @@ $richie-org-glimpse-item-empty-textalign: left !default;
 
 .organization-glimpse {
   $list-item-selector: &;
-  @include sv-flex(1, 0, calc(50% - #{$richie-org-glimpse-item-gutter * 2}));
   display: flex;
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: calc(100% - #{$richie-org-glimpse-item-gutter * 2});
   margin: $richie-org-glimpse-item-gutter;
   padding: $richie-org-glimpse-item-padding;
   flex-direction: column;
@@ -61,34 +62,44 @@ $richie-org-glimpse-item-empty-textalign: left !default;
   background: $richie-org-glimpse-item-background;
   border: $richie-org-glimpse-item-border;
   border-radius: $richie-org-glimpse-item-border-radius;
-  @include media-breakpoint-up(md) {
-    @include sv-flex(1, 0, calc(25% - #{$richie-org-glimpse-item-gutter * 2}));
+
+  @include media-breakpoint-up(sm) {
+    flex-basis: calc(50% - #{$richie-org-glimpse-item-gutter * 2});
+  }
+
+  @include media-breakpoint-up(xl) {
+    flex-basis: calc(25% - #{$richie-org-glimpse-item-gutter * 2});
   }
 
   &__logo {
-    @include sv-flex(1, 0, auto);
-    display: flex;
     position: relative;
-    flex-direction: row;
-    justify-content: center;
-    align-content: center;
-    align-items: center;
+    width: 100%;
+    margin-bottom: 1rem;
+    padding-bottom: 56.25%; // Aspect ratio 16/9
 
-    img {
-      @include sv-flex(0, 0, auto);
-      max-width: 100%;
+    & > img {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
     }
 
     @include m-o-media_empty($background: $gray97);
   }
 
   &__title {
-    @include sv-flex(0, 0, auto);
+    flex-grow: 1;
+    flex-shrink: 0;
     display: flex;
     justify-content: center;
-    font-size: $richie-org-glimpse-item-title-fontsize;
-    color: $richie-org-glimpse-item-title-fontcolor;
+    align-items: center;
     text-align: $richie-org-glimpse-item-title-textalign;
+    color: $richie-org-glimpse-item-title-fontcolor;
   }
 
   &:hover,
