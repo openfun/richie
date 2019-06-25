@@ -1,9 +1,16 @@
 // Overridable & namespaced global variables
-$richie-org-detail-banner-logo-height: 15rem !default;
-$richie-org-detail-banner-logo-height-md: 20rem !default;
-$richie-org-detail-banner-logo-height-xl: 25rem !default;
+$richie-org-detail-logo-width: 12rem !default;
 
 .organization-detail {
+  $logo-width-base: $richie-org-detail-logo-width;
+  $logo-height-base: $logo-width-base * 9 / 16;
+
+  $logo-width-md: $logo-width-base * 4 / 3;
+  $logo-height-md: $logo-width-md * 9 / 16;
+
+  $logo-width-xl: $logo-width-base * 5 / 3;
+  $logo-height-xl: $logo-width-xl * 9 / 16;
+
   @include make-container();
   @include make-container-max-widths();
   padding-bottom: 1rem;
@@ -11,30 +18,23 @@ $richie-org-detail-banner-logo-height-xl: 25rem !default;
 
   &__banner {
     @include make-row();
-
-    // position & overflow are part of the img hack below
-    position: relative;
-    width: calc(100% + #{$grid-gutter-width});
-    height: $richie-org-detail-banner-logo-height;
-    overflow: hidden;
+    width: 100vw;
+    height: $logo-height-base;
 
     @include media-breakpoint-up(md) {
-      height: $richie-org-detail-banner-logo-height-md;
+      width: auto;
+      height: $logo-height-md;
     }
 
     @include media-breakpoint-up(xl) {
-      height: $richie-org-detail-banner-logo-height-xl;
+      height: $logo-height-xl;
     }
 
-    img {
-      // Hack to center+fill an image we have no control over and can't make into a background image
-      position: absolute;
-      top: -1000%;
-      right: -1000%;
-      bottom: -1000%;
-      left: -1000%;
-      min-width: 100%;
-      margin: auto;
+    & > img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
     }
 
     @include m-o-media_empty($background: $gray97);
@@ -46,57 +46,41 @@ $richie-org-detail-banner-logo-height-xl: 25rem !default;
     background: $white;
     border: 1px solid darken($light, 20%);
 
-    width: $richie-org-detail-banner-logo-height * 0.75;
-    height: $richie-org-detail-banner-logo-height * 0.75;
-    margin: (-$richie-org-detail-banner-logo-height * 0.75 / 2) auto
-      $grid-gutter-width;
+    width: $logo-width-base;
+    height: $logo-height-base;
+    margin: (-$logo-height-base / 2) auto 1rem;
+    padding: 0.5rem;
 
     @include media-breakpoint-up(md) {
-      float: right;
-      width: $richie-org-detail-banner-logo-height-md * 0.75;
-      height: $richie-org-detail-banner-logo-height-md * 0.75;
-      margin: (-$richie-org-detail-banner-logo-height-md / 2) 3rem
-        $grid-gutter-width;
+      width: $logo-width-md;
+      height: $logo-height-md;
+      margin: (-$logo-height-md / 2) auto 1rem;
     }
 
     @include media-breakpoint-up(xl) {
-      width: $richie-org-detail-banner-logo-height-xl * 0.75;
-      height: $richie-org-detail-banner-logo-height-xl * 0.75;
-      margin: (-$richie-org-detail-banner-logo-height-xl / 2) 8rem
-        $grid-gutter-width;
+      float: right;
+      width: $logo-width-xl;
+      height: $logo-height-xl;
+      margin: (-$logo-height-xl / 2) 8rem 1rem;
     }
 
     img {
-      // Hack to center+fill an image we have no control over and can't make into a background image
-      position: absolute;
-      top: -1000%;
-      right: -1000%;
-      bottom: -1000%;
-      left: -1000%;
-      // Make the width fixed so we can never overflow logos - we make the assumption most non-square
-      // logos would be wider as opposed to taller
       width: 100%;
-      min-height: 100%;
-      margin: auto;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
     }
 
     @include m-o-media_empty();
   }
 
   &__title {
-    $h1-calculated-height: $h1-font-size * $headings-line-height;
-    @include media-breakpoint-up(md) {
-      $logo-height: $richie-org-detail-banner-logo-height-md * 0.75;
-      $logo-overflow-height: $logo-height / 3;
-      margin: ($logo-overflow-height - $h1-calculated-height) / 2
-        $grid-gutter-width;
-    }
+    margin: 1rem;
 
     @include media-breakpoint-up(xl) {
-      $logo-height: $richie-org-detail-banner-logo-height-xl * 0.75;
-      $logo-overflow-height: $logo-height / 3;
-      margin: ($logo-overflow-height - $h1-calculated-height) / 2
-        $grid-gutter-width;
+      min-height: 6rem;
+      display: flex;
+      align-items: center;
     }
   }
 

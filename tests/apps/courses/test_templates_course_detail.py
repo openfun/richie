@@ -279,9 +279,8 @@ class CourseCMSTestCase(CMSTestCase):
 
         self.assertEqual(response.status_code, 200)
         pattern = (
-            r'<div class="course-detail__aside__main-org-logo">'
-            r'<a href="{url:s}" title="{title:s}">'
-            r'<img src="/media/filer_public_thumbnails/filer_public/.*logo\.jpg__500x500'
+            r'<a href="{url:s}" title="{title:s}" class="course-detail__aside__main-org-logo">'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*logo\.jpg__200x113'
         ).format(
             url=organizations[0].extended_object.get_absolute_url(),
             title=organizations[0].extended_object.get_title(),

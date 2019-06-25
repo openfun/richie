@@ -115,7 +115,7 @@ class OrganizationPluginTestCase(CMSTestCase):
         # Organziation's logo should be present
         pattern = (
             r'<div class="organization-glimpse__logo">'
-            r'<img src="/media/filer_public_thumbnails/filer_public/.*logo\.jpg__300x300'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*logo\.jpg__200x113'
             r'.*alt="my logo"'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
@@ -133,7 +133,7 @@ class OrganizationPluginTestCase(CMSTestCase):
         )
         pattern = (
             r'<div class="organization-glimpse__logo">'
-            r'<img src="/media/filer_public_thumbnails/filer_public/.*logo\.jpg__300x300'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*logo\.jpg__200x113'
             r'.*alt="my logo"'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
@@ -198,7 +198,7 @@ class OrganizationPluginTestCase(CMSTestCase):
         # organization logo should have our default alt
         pattern = (
             r'<div class="organization-glimpse__logo">'
-            r'<img src="/media/filer_public_thumbnails/filer_public/.*logo\.jpg__300x300'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*logo\.jpg__200x113'
             r'.*alt="organization logo"'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))

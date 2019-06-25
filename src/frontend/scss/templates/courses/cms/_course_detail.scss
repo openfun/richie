@@ -60,7 +60,7 @@ $richie-course-detail-aside-margin: 0 !default;
 $richie-course-detail-aside-padding: 0 !default;
 
 $richie-course-detail-aside-main-org-margin: 0 !default;
-$richie-course-detail-aside-main-org-padding: 1rem !default;
+$richie-course-detail-aside-main-org-padding: 2rem !default;
 $richie-course-detail-aside-main-org-background: $white !default;
 
 .course-detail {
@@ -386,15 +386,21 @@ $richie-course-detail-aside-main-org-background: $white !default;
     }
 
     &__main-org-logo {
+      position: relative;
+      display: block;
       margin: $richie-course-detail-aside-main-org-margin;
-      padding: $richie-course-detail-aside-main-org-padding;
       background: $richie-course-detail-aside-main-org-background;
+      padding: 0 0 56.25%; // Aspect ratio 16/9
+      // Use a border to emulate the padding as we need padding for aspect ratio enforcement
+      border: $richie-course-detail-aside-main-org-padding solid
+        $richie-course-detail-aside-main-org-background;
 
       img {
-        display: block;
-        width: auto;
-        max-width: 100%;
-        margin: auto;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
       }
 
       @include m-o-media_empty($width: 100%, $height: 20vh, $absolute: false);
