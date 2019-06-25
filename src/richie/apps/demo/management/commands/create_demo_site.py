@@ -29,7 +29,7 @@ from ...defaults import (
     NB_OBJECTS,
     PAGES_INFO,
     SINGLECOLUMN_CONTENT,
-    SITEMAP_MAX_DEPTHS,
+    SITEMAP_PAGE_PARAMS,
     SUBJECTS_INFO,
 )
 from ...helpers import create_categories
@@ -503,14 +503,14 @@ def create_demo_site():
         parent_instance = add_plugin(
             language=language, placeholder=placeholder, plugin_type="HTMLSitemapPlugin"
         )
-        for name, max_depth in SITEMAP_MAX_DEPTHS.items():
+        for name, params in SITEMAP_PAGE_PARAMS.items():
             add_plugin(
                 language=language,
                 placeholder=placeholder,
                 plugin_type="HTMLSitemapPagePlugin",
                 target=parent_instance,
                 root_page=pages_created[name],
-                max_depth=max_depth,
+                **params
             )
 
         # Once content has been added we must publish again the sitemap
