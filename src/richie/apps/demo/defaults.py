@@ -264,11 +264,11 @@ SINGLECOLUMN_CONTENT = {
 }
 SINGLECOLUMN_CONTENT.update(getattr(settings, "RICHIE_DEMO_SINGLECOLUMN_CONTENT", {}))
 
-SITEMAP_MAX_DEPTHS = {
-    "blogposts": 1,
-    "courses": 1,
-    "categories": None,
-    "organizations": 1,
-    "persons": 1,
-    "annex": None,
+SITEMAP_PAGE_PARAMS = {
+    "blogposts": {"max_depth": 1},
+    "courses": {"max_depth": 1},
+    "categories": {},
+    "organizations": {"max_depth": 1},
+    "persons": {"max_depth": 1},
+    "annex": {"include_root_page": False},
 }
