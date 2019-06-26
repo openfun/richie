@@ -1,11 +1,11 @@
-# Richie, a FUN CMS for Open edX
+# Richie, the best OpenSource CMS to build education portals
 
 [![CircleCI](https://circleci.com/gh/openfun/richie/tree/master.svg?style=svg)](https://circleci.com/gh/openfun/richie/tree/master)
 
 ## Overview
 
-`Learning Management Systems` are great tools for hosting and playing interactive online courses
-and MOOCs.
+`Learning Management Systems` (LMS) are great tools for hosting and playing interactive online
+courses and MOOCs.
 
 However, if you need to build a complete website with flexible content to aggregate your courses,
 in several languages and from different sources, **you will soon need a CMS**.
@@ -17,7 +17,7 @@ online courses.
 
 Among the features that `Richie` offers out of the box:
 
-- multi-site and multi-lingual by default,
+- multi-lingual by default,
 - advanced access rights and moderation,
 - catalog of courses synchronized with one or more `LMS` instances,
 - search engine based on `Elasticsearch` and pre-configured to offer full-text queries,
