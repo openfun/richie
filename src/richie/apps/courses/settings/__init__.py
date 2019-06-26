@@ -89,6 +89,11 @@ CMS_PLACEHOLDER_CONF = {
         "plugins": ["SimplePicturePlugin"],
         "limits": {"SimplePicturePlugin": 1},
     },
+    "courses/cms/course_detail.html course_introduction": {
+        "name": _("Catch phrase"),
+        "plugins": ["PlainTextPlugin"],
+        "limits": {"PlainTextPlugin": 1},
+    },
     "courses/cms/course_detail.html course_teaser": {
         "name": _("Teaser"),
         "plugins": ["VideoPlayerPlugin", "SimplePicturePlugin"],
@@ -96,7 +101,7 @@ CMS_PLACEHOLDER_CONF = {
     },
     "courses/cms/course_detail.html course_description": {
         "name": _("About the course"),
-        "plugins": ["PlainTextPlugin"],
+        "plugins": ["CKEditorPlugin"],
     },
     "courses/cms/course_detail.html course_format": {
         "name": _("Format"),

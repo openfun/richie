@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Add a catchphrase on top of the course detail view.
+
 ### Changed
 
 - Improve handling of organization-related images to prevent unwanted cropping

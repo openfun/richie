@@ -8,10 +8,10 @@
 
 {% if page.publisher_is_draft or not page|is_empty_placeholder:"course_description" %}
 <div class="course-detail__content__row course-detail__content__description">
-  <h2 class="course-detail__content__row__title">{% trans 'About the course...' %}</h2>
+  <h2 class="course-detail__content__row__title">{% trans 'About the course' %}</h2>
   {% with header_level=3 %}
     {% page_placeholder "course_description" page or %}
-      <p>{% trans 'Enter here a short description of your course.' %}</p>
+      <p>{% trans 'Enter here a description of your course.' %}</p>
     {% endpage_placeholder %}
   {% endwith %}
 </div>

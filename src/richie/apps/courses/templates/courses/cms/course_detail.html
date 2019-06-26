@@ -33,6 +33,12 @@
         {% endif %}
       </h1>
 
+      {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_introduction" %}
+      <div class="course-detail__content__row course-detail__content__introduction">
+        {% page_placeholder "course_introduction" current_page %}
+      </div>
+      {% endif %}
+
       <div class="course-detail__content__row course-detail__content__categories">
           {% with form_factor="tag" %}
             {% page_placeholder "course_categories" current_page or %}
