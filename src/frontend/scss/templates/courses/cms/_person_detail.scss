@@ -1,4 +1,4 @@
-$richie-person-detail-media-width: 120px;
+$richie-person-detail-media-size: 10rem;
 
 .person-detail {
   @include make-container-max-widths();
@@ -6,54 +6,63 @@ $richie-person-detail-media-width: 120px;
   padding: 1rem $grid-gutter-width;
   background: $richie-content-container-bg;
 
-  &__title {
-    text-align: center;
-    @include media-breakpoint-up(lg) {
-      text-align: left;
-    }
-  }
-
   &__card {
-    @include m-o-card(
-      $padding: 1rem 0,
-      $background: $richie-course-glimpse-container-background,
-      $media-margin: 0,
-      $caption-width: $richie-course-glimpse-caption-width,
-      $caption-margin: $richie-course-glimpse-caption-margin,
-      $caption-padding: $richie-course-glimpse-caption-padding,
-      $caption-fontsize: $richie-course-glimpse-caption-fontsize,
-      $caption-background: $richie-course-glimpse-caption-background,
-      $content-flex-justify: flex-start,
-      $wrapper-padding: 0 0 0 1rem,
-      $foot-divider: $richie-course-glimpse-foot-divider,
-      $methodology: 'bem'
-    );
-    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin: 0 0 2rem;
 
-    @include media-breakpoint-up(lg) {
-      @include m-o-card(
-        $media-width: $richie-person-detail-media-width,
-        $methodology: 'bem'
-      );
+    @include media-breakpoint-up(sm) {
+      flex-direction: row;
     }
 
     &__media {
+      flex-grow: 0;
+      flex-shrink: 0;
+      align-self: center;
+      width: 10rem;
+      height: 10rem;
+      margin: 0 0 1rem;
+
+      @include media-breakpoint-up(sm) {
+        order: 1; // Media should be after content on larger screens
+        margin: 0 0 0 1rem;
+      }
+
+      & > img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+      }
+
       img {
         margin: 0 auto;
-        max-width: $richie-person-detail-media-width;
+        max-width: $richie-person-detail-media-size;
         border-radius: 100%;
       }
 
       @include m-o-media_empty(
         $width: 100%,
-        $height: 13vh,
+        $height: 10rem,
         $background: $gray97,
         $absolute: false
       );
     }
 
-    &__content__wrapper {
-      @include m-o-media_empty($width: 100%, $height: 13vh, $absolute: false);
+    &__content {
+      flex-grow: 1;
+
+      &__title {
+        text-align: center;
+
+        @include media-breakpoint-up(sm) {
+          text-align: left;
+        }
+      }
+
+      &__categories {
+        margin: 0 0 0.5rem;
+      }
     }
   }
 }

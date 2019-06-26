@@ -88,7 +88,9 @@ class PersonCMSTestCase(CMSTestCase):
         )
         title = person.extended_object.get_title()
         self.assertContains(
-            response, f'<h1 class="person-detail__title">{title:s}</h1>', html=True
+            response,
+            f'<h1 class="person-detail__card__content__title">{title:s}</h1>',
+            html=True,
         )
         # The published category should be on the page in its published version
         self.assertContains(
@@ -170,7 +172,9 @@ class PersonCMSTestCase(CMSTestCase):
         )
         title = person.extended_object.get_title()
         self.assertContains(
-            response, f'<h1 class="person-detail__title">{title:s}</h1>', html=True
+            response,
+            f'<h1 class="person-detail__card__content__title">{title:s}</h1>',
+            html=True,
         )
 
         # The published category should be on the page in its published version

@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Improve the layout for the person details page.
+
 ### Fixed
 
 - Improve label text for the child filter toggle in Search.

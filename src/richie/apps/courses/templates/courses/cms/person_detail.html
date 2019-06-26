@@ -4,20 +4,6 @@
 {% block content %}
 {% with header_level=2 person=current_page.person %}
 <div class="person-detail">
-  <h1 class="person-detail__title">{% render_model current_page "title" %}</h1>
-
-  {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"categories" %}
-  <div class="person-detail__categories">
-    {% with form_factor="tag" %}
-      {% placeholder "categories" or %}
-        <p class="person-detail__categories__empty">
-          {% trans "No associated categories" %}
-        </p>
-      {% endplaceholder %}
-    {% endwith %}
-  </div>
-  {% endif %}
-
   <div class="person-detail__card">
     <div class="person-detail__card__media">
       {% get_placeholder_plugins "portrait" as plugins or %}
@@ -38,15 +24,26 @@
     </div>
 
     <div class="person-detail__card__content">
-      <div class="person-detail__card__content__wrapper">
-        {% placeholder "bio" or %}
-          <p class="person-detail__card__content__wrapper__empty">{% trans "Enter your bio here..." %}</p>
-        {% endplaceholder %}
+      <h1 class="person-detail__card__content__title">{% render_model current_page "title" %}</h1>
 
-        {% placeholder "maincontent" %}
+      {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"categories" %}
+      <div class="person-detail__card__content__categories">
+        {% with form_factor="tag" %}
+          {% placeholder "categories" or %}
+            <p class="person-detail__card__content__categories__empty">
+              {% trans "No associated categories" %}
+            </p>
+          {% endplaceholder %}
+        {% endwith %}
       </div>
+      {% endif %}
+      {% placeholder "bio" or %}
+        <p class="person-detail__card__content__empty">{% trans "Enter your bio here..." %}</p>
+      {% endplaceholder %}
     </div>
   </div>
+
+  {% placeholder "maincontent" %}
 
   {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"organizations" %}
   <div class="organization-glimpse-list">
