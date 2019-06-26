@@ -16,6 +16,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Improve handling of organization-related images to prevent unwanted cropping
   of organization logos.
+- Change the person bio to a plain text plugin.
 
 ## [1.3.0] - 2019-06-20
 
