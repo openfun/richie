@@ -194,8 +194,8 @@ CMS_PLACEHOLDER_CONF = {
     },
     "courses/cms/person_detail.html bio": {
         "name": _("Bio"),
-        "plugins": ["CKEditorPlugin"],
-        "limits": {"CKEditorPlugin": 1},
+        "plugins": ["PlainTextPlugin"],
+        "limits": {"PlainTextPlugin": 1},
     },
     "courses/cms/person_detail.html organizations": {
         "name": _("Organizations"),
