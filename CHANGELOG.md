@@ -11,6 +11,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Add a catchphrase on top of the course detail view.
+- Allow configuring max length and CKeditor on specific placeholders for text
+  plugins, and propose default configurations using this new feature.
 
 ### Changed
 

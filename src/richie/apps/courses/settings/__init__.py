@@ -265,8 +265,8 @@ CKEDITOR_SETTINGS = {
 # CKEditor widgets/fields
 CKEDITOR_SETTINGS["toolbar_HTMLField"] = CKEDITOR_SETTINGS["toolbar_CMS"]
 
-# Basic CKEditor configuration for restricted inline markup only
-CKEDITOR_BASIC_SETTINGS = {
+# CKEditor configuration for basic formatting
+CKEDITOR_BASIC_CONFIGURATION = {
     "language": "{{ language }}",
     "skin": "moono-lisa",
     "toolbarCanCollapse": False,
@@ -280,6 +280,27 @@ CKEDITOR_BASIC_SETTINGS = {
     "toolbar_HTMLField": [["Undo", "Redo"], ["Bold", "Italic"], ["Link", "Unlink"]],
 }
 
+# CKEditor configuration for formatting limited to:
+# paragraph, bold, italic and numbered or bulleted lists.
+CKEDITOR_LIMITED_CONFIGURATION = {
+    "language": "{{ language }}",
+    "skin": "moono-lisa",
+    "toolbarCanCollapse": False,
+    "contentsCss": "/static/css/ckeditor.css",
+    # Only enable following tag definitions
+    "allowedContent": ["p", "b", "i", "ol", "ul", "li"],
+    # Enabled showblocks as default behavior
+    "startupOutlineBlocks": True,
+    # Default toolbar configurations for djangocms_text_ckeditor
+    "toolbar": "HTMLField",
+    "toolbar_HTMLField": [
+        ["Undo", "Redo"],
+        ["Bold", "Italic"],
+        ["Link", "Unlink"],
+        ["NumberedList", "BulletedList", "-"],
+    ],
+}
+
 # Additional LinkPlugin templates. Note how choice value is just a keyword
 # instead of full template path. Value is used inside a path formatting
 # such as "templates/djangocms_link/VALUE/link.html"
@@ -288,6 +309,18 @@ DJANGOCMS_LINK_TEMPLATES = [("button-caesura", _("Button caesura"))]
 DJANGOCMS_VIDEO_TEMPLATES = [("full-width", _("Full width"))]
 
 # Richie plugins
+
+RICHIE_PLAINTEXT_MAXLENGTH = {"course_introduction": 200, "bio": 150, "excerpt": 200}
+
+RICHIE_SIMPLETEXT_CONFIGURATION = [
+    {"placeholders": ["course_plan"], "ckeditor": "CKEDITOR_LIMITED_CONFIGURATION"},
+    {
+        "placeholders": ["course_description"],
+        "ckeditor": "CKEDITOR_LIMITED_CONFIGURATION",
+        "max_length": 1200,
+    },
+]
+
 RICHIE_SIMPLEPICTURE_PRESETS = {
     # Formatting images for the courses search index
     "glimpse": {
