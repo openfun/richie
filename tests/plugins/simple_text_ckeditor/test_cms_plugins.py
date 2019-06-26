@@ -1,8 +1,12 @@
 """
 Plugin tests
 """
+import random
+from unittest import mock
+
 from django.test import TestCase
 from django.test.client import RequestFactory
+from django.test.utils import override_settings
 
 from cms.api import add_plugin
 from cms.models import Placeholder
@@ -43,3 +47,115 @@ class CKEditorCMSPluginsTestCase(TestCase):
 
         # Check rendered body is correct after save and sanitize
         self.assertInHTML(simpletext.body, html)
+
+    def test_cms_plugins_simpletext_get_form_add(self):
+        """
+        It should be possible to configure the max_length and ckeditor configuration when
+        adding a plugin to a specific placeholder.
+        It should take the first configuration that matches our placeholder.
+        """
+        placeholder = Placeholder.objects.create(
+            slot=random.choice(["first", "second"])
+        )
+        request = RequestFactory().get(f"/?placeholder_id={placeholder.id:d}")
+        plugin = CKEditorPlugin()
+
+        allowed_content = random.sample(["b", "i", "p", "span"], 2)
+        max_length = random.randint(1, 5)
+
+        with mock.patch(
+            "richie.plugins.simple_text_ckeditor.cms_plugins.SIMPLETEXT_CONFIGURATION",
+            [
+                {
+                    "placeholders": ["first", "second"],
+                    "ckeditor": "TEST_CONFIGURATION",
+                    "max_length": max_length,
+                },
+                {
+                    "placeholders": ["first"],
+                    "ckeditor": "WRONG_CONFIGURATION",
+                    "max_length": 10,
+                },
+                {
+                    "placeholders": ["second"],
+                    "ckeditor": "WRONG_CONFIGURATION",
+                    "max_length": 20,
+                },
+            ],
+        ):
+            with override_settings(
+                TEST_CONFIGURATION={"allowedContent": allowed_content}
+            ):
+                form_class = plugin.get_form(request)
+
+        form = form_class()
+        body_field = form.fields["body"]
+        self.assertEqual(len(body_field.validators), 2)
+        self.assertEqual(body_field.validators[1].limit_value, max_length)
+        self.assertEqual(
+            body_field.widget.configuration["allowedContent"], allowed_content
+        )
+
+    def test_cms_plugins_simpletext_get_form_update(self):
+        """
+        It should be possible to configure the max_length and ckeditor configuration when
+        updating an existing plugin on a specific placeholder.
+        It should take the first configuration that matches our placeholder.
+        """
+        placeholder = Placeholder.objects.create(
+            slot=random.choice(["first", "second"])
+        )
+        request = RequestFactory().get("/")
+        plugin = CKEditorPlugin()
+        simple_text = SimpleTextFactory(placeholder=placeholder)
+
+        allowed_content = random.sample(["b", "i", "p", "span"], 2)
+        max_length = random.randint(1, 5)
+
+        with mock.patch(
+            "richie.plugins.simple_text_ckeditor.cms_plugins.SIMPLETEXT_CONFIGURATION",
+            [
+                {
+                    "placeholders": ["first", "second"],
+                    "ckeditor": "TEST_CONFIGURATION",
+                    "max_length": max_length,
+                },
+                {
+                    "placeholders": ["first"],
+                    "ckeditor": "WRONG_CONFIGURATION",
+                    "max_length": 10,
+                },
+                {
+                    "placeholders": ["second"],
+                    "ckeditor": "WRONG_CONFIGURATION",
+                    "max_length": 20,
+                },
+            ],
+        ):
+            with override_settings(
+                TEST_CONFIGURATION={"allowedContent": allowed_content}
+            ):
+                form_class = plugin.get_form(request, obj=simple_text)
+
+        form = form_class()
+        body_field = form.fields["body"]
+        self.assertEqual(len(body_field.validators), 2)
+        self.assertEqual(body_field.validators[1].limit_value, max_length)
+        self.assertEqual(
+            body_field.widget.configuration["allowedContent"], allowed_content
+        )
+
+    def test_cms_plugins_simpletext_get_form_no_setting(self):
+        """Getting the form should not fail if there is no configuration setting."""
+        placeholder = Placeholder.objects.create(slot="slot")
+        request = RequestFactory().get(f"/?placeholder_id={placeholder.id:d}")
+        plugin = CKEditorPlugin()
+
+        with mock.patch(
+            "richie.plugins.simple_text_ckeditor.cms_plugins.SIMPLETEXT_CONFIGURATION",
+            [],
+        ):
+            form_class = plugin.get_form(request)
+
+        form = form_class()
+        self.assertEqual(len(form.fields["body"].validators), 1)
