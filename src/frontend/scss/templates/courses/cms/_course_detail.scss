@@ -12,7 +12,7 @@ $richie-course-detail-title-underline-border: 1px solid $gray40 !default;
 
 $richie-course-detail-content-width-large: 70% !default;
 $richie-course-detail-content-margin: 0 !default;
-$richie-course-detail-content-padding: 0 !default;
+$richie-course-detail-content-padding: 0 0 2rem 0 !default;
 
 $richie-course-detail-row-margin: 0 !default;
 $richie-course-detail-row-padding: 0.5rem 1rem 0 !default;
@@ -109,7 +109,6 @@ $richie-course-detail-aside-main-org-background: $white !default;
       @include media-breakpoint-up($richie-course-detail-breakpoint) {
         font-size: $richie-course-detail-title-fontsize-large;
       }
-
     }
 
     &__row {

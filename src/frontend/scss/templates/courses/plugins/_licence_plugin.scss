@@ -3,6 +3,7 @@ $richie-licence-plugin-logo-width: 100px !default;
 $richie-licence-plugin-title-fontsize: 1.4rem !default;
 $richie-licence-plugin-title-fontcolor: $dodgerblue5 !default;
 $richie-licence-plugin-description-fontcolor: $gray40 !default;
+$richie-licence-plugin-wrapper-spacing: 10px;
 
 .licence-plugin {
   @include media-breakpoint-up($richie-licence-plugin-breakpoint) {
@@ -20,8 +21,16 @@ $richie-licence-plugin-description-fontcolor: $gray40 !default;
   }
 
   &__wrapper {
+    margin-left: $richie-licence-plugin-wrapper-spacing;
     @include media-breakpoint-up($richie-licence-plugin-breakpoint) {
-      @include sv-flex(1, 0, calc(100% - #{$richie-licence-plugin-logo-width}));
+      @include sv-flex(
+        1,
+        0,
+        calc(
+          100% - #{$richie-licence-plugin-logo-width +
+            $richie-licence-plugin-wrapper-spacing}
+        )
+      );
     }
 
     &__title {
