@@ -274,6 +274,9 @@ $richie-course-detail-aside-main-org-background: $white !default;
         width: calc(
           100% - #{$richie-course-detail-teaser-object-padding-horizontal * 2}
         );
+        min-height: calc(
+          100% - #{$richie-course-detail-teaser-object-padding-vertical * 2}
+        );
         border: 0;
       }
 
