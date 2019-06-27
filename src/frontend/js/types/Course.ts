@@ -5,7 +5,6 @@ export interface Course extends Resource {
   absolute_url: string;
   categories: string[];
   cover_image: Nullable<{
-    alt: string;
     sizes: string;
     src: string;
     srcset: string;

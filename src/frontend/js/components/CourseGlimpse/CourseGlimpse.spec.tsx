@@ -4,34 +4,40 @@ import { cleanup, render } from '@testing-library/react';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
-import { Course } from '../../types/Course';
 import { CourseGlimpse } from './CourseGlimpse';
 
 describe('components/CourseGlimpse', () => {
   afterEach(cleanup);
 
+  const course = {
+    absolute_url: 'https://example/com/courses/42/',
+    categories: ['24', '42'],
+    cover_image: {
+      sizes: '330px',
+      src: '/thumbs/small.png',
+      srcset: 'some srcset',
+    },
+    id: '742',
+    organization_highlighted: 'Some Organization',
+    organizations: ['36', '63'],
+    state: {
+      call_to_action: 'Enroll now',
+      datetime: '2019-03-14T10:35:47.823Z',
+      priority: 0,
+      text: 'starts on',
+    },
+    title: 'Course 42',
+  };
+
   it('renders a course glimpse with its data', () => {
-    const course = {
-      cover_image: {
-        alt: 'Alt text for course 42 cover image',
-        src: '/thumbs/small.png',
-      },
-      organization_highlighted: 'Some Organization',
-      state: {
-        call_to_action: 'Enroll now',
-        datetime: '2019-03-14T10:35:47.823Z',
-        text: 'starts on',
-      },
-      title: 'Course 42',
-    } as Course;
-    const { getByAltText, getByText, getByTitle } = render(
+    const { container, getByText } = render(
       <IntlProvider locale="en">
         <CourseGlimpse course={course} />
       </IntlProvider>,
     );
 
-    // The link that wraps the course glimpse has its title
-    getByTitle('Details page for Course 42.');
+    // The link that wraps the course glimpse should have no title as its content is explicit enough
+    expect(container.querySelector('a')).not.toHaveAttribute('title');
     // The course glimpse shows the relevant information
     getByText('Course 42');
     getByText('Some Organization');
@@ -42,56 +48,42 @@ describe('components/CourseGlimpse', () => {
         element.innerHTML.includes('Mar 14, 2019'),
     );
     getByText('Enroll now');
-    // The logo is rendered along with alternate text
-    expect(getByAltText('Alt text for course 42 cover image')).toHaveAttribute(
-      'src',
-      '/thumbs/small.png',
-    );
+    // The logo is rendered along with alt text "" as it is decorative and included in a link block
+    const img = container.querySelector('img');
+    expect(img).toHaveAttribute('alt', '');
+    expect(img).toHaveAttribute('src', '/thumbs/small.png');
   });
 
   it('works when there is no call to action or datetime on the state (eg. an archived course)', () => {
-    const course = {
-      cover_image: {
-        alt: 'Alt text for course 42 cover image',
-        src: '/thumbs/small.png',
-      },
-      organization_highlighted: 'Some Organization',
-      state: {
-        call_to_action: null,
-        datetime: null,
-        text: 'archived',
-      },
-      title: 'Course 42',
-    } as Course;
-    const { getByText, getByTitle } = render(
+    const { getByText } = render(
       <IntlProvider locale="en">
-        <CourseGlimpse course={course} />
+        <CourseGlimpse
+          course={{
+            ...course,
+            state: {
+              ...course.state,
+              call_to_action: null,
+              datetime: null,
+              text: 'archived',
+            },
+          }}
+        />
       </IntlProvider>,
     );
 
     // Make sure the component renders and shows the state
-    getByTitle('Details page for Course 42.');
+    getByText('Course 42');
     getByText('Archived');
   });
 
   it('shows the "Cover" placeholder div when the course is missing a cover image', () => {
-    const course = {
-      cover_image: null,
-      organization_highlighted: 'Some Organization',
-      state: {
-        call_to_action: 'Enroll now',
-        datetime: '2019-03-14T10:35:47.823Z',
-        text: 'starts on',
-      },
-      title: 'Course 42',
-    } as Course;
-    const { getByText, getByTitle } = render(
+    const { getByText } = render(
       <IntlProvider locale="en">
-        <CourseGlimpse course={course} />
+        <CourseGlimpse course={{ ...course, cover_image: null }} />
       </IntlProvider>,
     );
 
-    getByTitle('Details page for Course 42.');
+    getByText('Course 42');
     getByText('Cover');
   });
 });
