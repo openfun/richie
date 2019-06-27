@@ -13,7 +13,8 @@
         {% if instance.picture.width >= 900 %}{% thumbnail instance.picture 900x510 crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}
       "
       sizes="300px"
-      alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'course cover image' %}{% endif %}"
+      {# this is a comment #}
+      alt=""
     />
   {% endblockplugin %}
 </div>

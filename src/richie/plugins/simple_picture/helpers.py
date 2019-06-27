@@ -54,12 +54,4 @@ def get_picture_info(instance, preset_name):
     # - sizes
     picture_info["sizes"] = preset.get("sizes")
 
-    # - alt and caption
-    picture_info.update(
-        {
-            "alt": instance.picture.default_alt_text,
-            "caption": instance.picture.default_caption,
-        }
-    )
-
     return picture_info

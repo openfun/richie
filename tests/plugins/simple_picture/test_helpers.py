@@ -52,8 +52,6 @@ class SimplePictureHelpersTestCase(TestCase):
         self.assertEqual(
             info,
             {
-                "alt": simple_picture.picture.default_alt_text,
-                "caption": simple_picture.picture.default_caption,
                 "sizes": "100vw",
                 "src": "/dummy-url",
                 "srcset": "/dummy-url 1000w, /dummy-url 2000w",
@@ -93,16 +91,7 @@ class SimplePictureHelpersTestCase(TestCase):
         simple_picture = PictureFactory()
         info = get_picture_info(simple_picture, "my-preset")
 
-        self.assertEqual(
-            info,
-            {
-                "alt": simple_picture.picture.default_alt_text,
-                "caption": simple_picture.picture.default_caption,
-                "sizes": None,
-                "src": "/dummy-url",
-                "srcset": None,
-            },
-        )
+        self.assertEqual(info, {"sizes": None, "src": "/dummy-url", "srcset": None})
         self.assertEqual(mock_thumbnail.call_count, 1)
         location = simple_picture.picture.subject_location
         self.assertEqual(

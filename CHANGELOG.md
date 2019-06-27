@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Use empty image alt text & no link title text for course glimpses to comply
+  with accessibility standards (existing alts & titles were redundant).
+
 ## [1.4.1] - 2019-06-26
 
 ### Changed
