@@ -57,14 +57,8 @@
   <div class="course-glimpse-list">
     <h2 class="course-glimpse-list__title">{% trans "Related courses" %}</h2>
     {% for course in courses %}
-      {% if course.extended_object.publisher_is_draft is True %}
-        <a class="course-glimpse course-glimpse--link course-glimpse--draft" href="{{ course.extended_object.get_absolute_url }}">
-          {% include "courses/cms/fragment_course_glimpse.html" %}
-        </a>
-      {% elif course.check_publication is True %}
-        <a class="course-glimpse course-glimpse--link" href="{{ course.extended_object.get_absolute_url }}">
-          {% include "courses/cms/fragment_course_glimpse.html" %}
-        </a>
+      {% if course.extended_object.publisher_is_draft or course.check_publication %}
+        {% include "courses/cms/fragment_course_glimpse.html" with course=course %}
       {% endif %}
     {% endfor %}
     </div>

@@ -115,10 +115,7 @@ class CategoryCMSTestCase(CMSTestCase):
         for course in courses[-2:]:
             self.assertContains(
                 response,
-                (
-                    '<a class="{name:s} {name:s}--link {name:s}--draft" '
-                    'href="{link:s}">'
-                ).format(
+                '<a href="{link:s}" class="{name:s} {name:s}--link {name:s}--draft">'.format(
                     name="course-glimpse",
                     link=course.extended_object.get_absolute_url(),
                 ),

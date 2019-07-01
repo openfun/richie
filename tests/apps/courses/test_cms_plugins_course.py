@@ -94,7 +94,7 @@ class CoursePluginTestCase(TestCase):
         # The course's url should be present
         self.assertContains(
             response,
-            '<a class="course-plugin" href="{url}"'.format(
+            '<a href="{url}" class="course-glimpse course-glimpse--link'.format(
                 url=course_page.get_absolute_url()
             ),
             status_code=200,
@@ -131,7 +131,7 @@ class CoursePluginTestCase(TestCase):
         # The course's url should be present
         self.assertContains(
             response,
-            '<a class="course-plugin" href="{url}"'.format(
+            '<a href="{url}" class="course-glimpse course-glimpse--link'.format(
                 url=course_page.get_absolute_url()
             ),
             status_code=200,
