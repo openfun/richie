@@ -142,15 +142,18 @@ class Course(BasePageExtension):
             title=self.extended_object.get_title(),
         )
 
-    def get_persons(self):
+    def get_persons(self, language=None):
         """
         Return the persons linked to the course via a person plugin in the
         placeholder `course_team` on the course detail page, ranked by their
         `position`.
         """
+        language = language or translation.get_language()
+
         selector = "extended_object__person_plugins__cmsplugin_ptr__placeholder"
         # pylint: disable=no-member
         filter_dict = {
+            "extended_object__person_plugins__cmsplugin_ptr__language": language,
             "{:s}__page".format(selector): self.extended_object,
             "{:s}__slot".format(selector): "course_team",
         }
@@ -166,15 +169,18 @@ class Course(BasePageExtension):
             .distinct()
         )
 
-    def get_organizations(self):
+    def get_organizations(self, language=None):
         """
         Return the organizations linked to the course via an organization plugin in the
         placeholder `course_organizations` on the course detail page, ranked by their
         `position`.
         """
+        language = language or translation.get_language()
+
         selector = "extended_object__organization_plugins__cmsplugin_ptr__placeholder"
         # pylint: disable=no-member
         filter_dict = {
+            "extended_object__organization_plugins__cmsplugin_ptr__language": language,
             "{:s}__page".format(selector): self.extended_object,
             "{:s}__slot".format(selector): "course_organizations",
         }
@@ -200,14 +206,17 @@ class Course(BasePageExtension):
         """
         return self.get_organizations().first()
 
-    def get_categories(self):
+    def get_categories(self, language=None):
         """
         Return the categories linked to the course via a category plugin in the placeholder
         `course_categories` on the course detail page, ranked by their `position`.
         """
+        language = language or translation.get_language()
+
         selector = "extended_object__category_plugins__cmsplugin_ptr__placeholder"
         # pylint: disable=no-member
         filter_dict = {
+            "extended_object__category_plugins__cmsplugin_ptr__language": language,
             "{:s}__page".format(selector): self.extended_object,
             "{:s}__slot".format(selector): "course_categories",
         }

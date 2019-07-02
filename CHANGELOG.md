@@ -10,6 +10,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix language confusion when getting objects that are related to a course via
+  a plugin (organizations, categories and persons),
 - Use empty image alt text & no link title text for course glimpses to comply
   with accessibility standards (existing alts & titles were redundant).
 
