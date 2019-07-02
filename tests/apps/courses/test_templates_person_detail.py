@@ -222,7 +222,7 @@ class PersonCMSTestCase(CMSTestCase):
             response,
             (
                 '<a class="organization-glimpse organization-glimpse--link '
-                'organization-glimpse--draft" href="{url:s}" title="{title:s}">'
+                'organization-glimpse--draft" href="{url:s}">'
             ).format(
                 url=unpublished_organization.extended_object.get_absolute_url(),
                 title=unpublished_organization.extended_object.get_title(),

@@ -1,7 +1,7 @@
 {% load i18n cms_tags extra_tags thumbnail %}
 {% comment %}Obviously, the context template variable "category" is required and must be a Category page extension{% endcomment %}
 {% with category_page=category.extended_object %}
-<a class="category-glimpse category-glimpse--link" href="{{ category_page.get_absolute_url }}" title="{{ category_page.get_title }}">
+<a class="category-glimpse category-glimpse--link" href="{{ category_page.get_absolute_url }}">
   <div class="category-glimpse__body">
     <div class="category-glimpse__logo">
       {% get_placeholder_plugins "logo" category_page as plugins or %}
@@ -15,7 +15,7 @@
             {% if instance.picture.width >= 600 %}{% thumbnail instance.picture 600x600 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
           "
           sizes="200px"
-          alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% blocktrans with title=category_page.get_title %}{{ title }} logo{% endblocktrans %}{% endif %}"
+          alt=""
         />
       {% endblockplugin %}
     </div>

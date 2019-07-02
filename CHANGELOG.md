@@ -10,7 +10,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
-- Fixed typos in header-related SCSS variable names
+- Fixed typos in header-related SCSS variable names.
+- Fix non-conformities in category & organization glimpses'.
 
 ## [1.5.0] - 2019-07-03
 
