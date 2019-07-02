@@ -4,8 +4,9 @@ Unit tests for the Course model
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.test.client import RequestFactory
+from django.utils import translation
 
-from cms.api import create_page
+from cms.api import add_plugin, create_page
 
 from richie.apps.core.factories import PageFactory
 from richie.apps.courses.factories import (
@@ -68,6 +69,36 @@ class CourseModelsTestCase(TestCase):
             list(course.public_extension.get_categories()), published_categories
         )
 
+    def test_models_course_get_categories_language(self):
+        """
+        The `get_categories` method should only return categories linked to a course by
+        a plugin in the current language.
+        """
+        category_fr = CategoryFactory(page_languages=["fr"])
+        category_en = CategoryFactory(page_languages=["en"])
+
+        course = CourseFactory(should_publish=True)
+        placeholder = course.extended_object.placeholders.get(slot="course_categories")
+
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="CategoryPlugin",
+            page=category_en.extended_object,
+        )
+        add_plugin(
+            language="fr",
+            placeholder=placeholder,
+            plugin_type="CategoryPlugin",
+            page=category_fr.extended_object,
+        )
+
+        with translation.override("fr"):
+            self.assertEqual(list(course.get_categories()), [category_fr])
+
+        with translation.override("en"):
+            self.assertEqual(list(course.get_categories()), [category_en])
+
     def test_models_course_get_organizations_empty(self):
         """
         For a course not linked to any organzation the method `get_organizations` should
@@ -102,6 +133,38 @@ class CourseModelsTestCase(TestCase):
         self.assertEqual(
             list(course.public_extension.get_organizations()), published_organizations
         )
+
+    def test_models_course_get_organizations_language(self):
+        """
+        The `get_organizations` method should only return organizations linked to a course by
+        a plugin in the current language.
+        """
+        organization_fr = OrganizationFactory(page_languages=["fr"])
+        organization_en = OrganizationFactory(page_languages=["en"])
+
+        course = CourseFactory(should_publish=True)
+        placeholder = course.extended_object.placeholders.get(
+            slot="course_organizations"
+        )
+
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="OrganizationPlugin",
+            page=organization_en.extended_object,
+        )
+        add_plugin(
+            language="fr",
+            placeholder=placeholder,
+            plugin_type="OrganizationPlugin",
+            page=organization_fr.extended_object,
+        )
+
+        with translation.override("fr"):
+            self.assertEqual(list(course.get_organizations()), [organization_fr])
+
+        with translation.override("en"):
+            self.assertEqual(list(course.get_organizations()), [organization_en])
 
     def test_models_course_get_main_organization_empty(self):
         """
@@ -163,6 +226,36 @@ class CourseModelsTestCase(TestCase):
 
         self.assertEqual(list(course.get_persons()), draft_persons + published_persons)
         self.assertEqual(list(course.public_extension.get_persons()), published_persons)
+
+    def test_models_course_get_persons_language(self):
+        """
+        The `get_persons` method should only return persons linked to a course by a plugin
+        in the current language.
+        """
+        person_fr = PersonFactory(page_languages=["fr"])
+        person_en = PersonFactory(page_languages=["en"])
+
+        course = CourseFactory(should_publish=True)
+        placeholder = course.extended_object.placeholders.get(slot="course_team")
+
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="PersonPlugin",
+            page=person_en.extended_object,
+        )
+        add_plugin(
+            language="fr",
+            placeholder=placeholder,
+            plugin_type="PersonPlugin",
+            page=person_fr.extended_object,
+        )
+
+        with translation.override("fr"):
+            self.assertEqual(list(course.get_persons()), [person_fr])
+
+        with translation.override("en"):
+            self.assertEqual(list(course.get_persons()), [person_en])
 
     def test_models_course_get_course_runs_empty(self):
         """
