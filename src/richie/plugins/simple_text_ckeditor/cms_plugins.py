@@ -49,13 +49,14 @@ class CKEditorPlugin(CMSPluginBase):
         else:
             placeholder = obj.placeholder
 
-        configuration = {}
         for configuration in SIMPLETEXT_CONFIGURATION:
             if (
                 "placeholders" not in configuration
                 or placeholder.slot in configuration["placeholders"]
             ):
                 break
+        else:
+            configuration = {}
 
         body_field = form.base_fields["body"]
         if configuration.get("max_length"):

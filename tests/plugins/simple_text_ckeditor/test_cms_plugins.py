@@ -159,3 +159,37 @@ class CKEditorCMSPluginsTestCase(TestCase):
 
         form = form_class()
         self.assertEqual(len(form.fields["body"].validators), 1)
+
+    def test_cms_plugins_simpletext_get_form_other_placeholder(self):
+        """
+        If the current placeholder is not targeted by the setting, the default configuration
+        should apply.
+        """
+        placeholder = Placeholder.objects.create(slot="slot")
+        request = RequestFactory().get(f"/?placeholder_id={placeholder.id:d}")
+        plugin = CKEditorPlugin()
+
+        allowed_content = random.sample(["b", "i", "p", "span"], 2)
+        max_length = random.randint(1, 5)
+
+        with mock.patch(
+            "richie.plugins.simple_text_ckeditor.cms_plugins.SIMPLETEXT_CONFIGURATION",
+            [
+                {
+                    "placeholders": ["other"],
+                    "ckeditor": "TEST_CONFIGURATION",
+                    "max_length": max_length,
+                }
+            ],
+        ):
+            with override_settings(
+                TEST_CONFIGURATION={"allowedContent": allowed_content}
+            ):
+                form_class = plugin.get_form(request)
+
+        form = form_class()
+        body_field = form.fields["body"]
+        # The max length validator should not have been added
+        self.assertEqual(len(body_field.validators), 1)
+        # The CKEditor configuration should be the default one
+        self.assertEqual(body_field.widget.configuration["allowedContent"], True)
