@@ -18,6 +18,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   a plugin (organizations, categories and persons),
 - Use empty image alt text & no link title text for course glimpses to comply
   with accessibility standards (existing alts & titles were redundant).
+- Fix an issue that caused inconsistent UI and broken search results when
+  selecting a suggestion in course search.
 
 ## [1.4.1] - 2019-06-26
 

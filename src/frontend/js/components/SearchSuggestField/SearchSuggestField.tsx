@@ -182,6 +182,11 @@ export const SearchSuggestField = injectIntl(
         payload: String(suggestion.id),
         type: 'FILTER_ADD',
       });
+      // Clear the current search query as the selected suggestion was generated from the same user input
+      dispatchCourseSearchParamsUpdate({
+        query: '',
+        type: 'QUERY_UPDATE',
+      });
       // Reset the search field state: the task has been completed
       setValue('');
       setSuggestions([]);

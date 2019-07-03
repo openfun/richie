@@ -251,6 +251,10 @@ describe('components/SearchSuggestField', () => {
 
     fireEvent.click(getByText('Organization #27'));
     expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
+      query: '',
+      type: 'QUERY_UPDATE',
+    });
+    expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
       filter: {
         base_path: '0002',
         human_name: 'Organizations',
