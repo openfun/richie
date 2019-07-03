@@ -258,6 +258,34 @@ class CourseModelsTestCase(TestCase):
         with translation.override("en"):
             self.assertEqual(list(course.get_categories()), [category_en])
 
+    def test_models_course_get_categories_other_placeholders(self):
+        """
+        The `get_categories` method should return all categories linked to a course via a plugin
+        on whichever placeholder.
+        """
+        category1, category2 = CategoryFactory.create_batch(2)
+
+        course = CourseFactory(should_publish=True)
+        placeholder1 = course.extended_object.placeholders.get(
+            slot="course_description"
+        )
+        placeholder2 = course.extended_object.placeholders.get(slot="course_format")
+
+        add_plugin(
+            language="en",
+            placeholder=placeholder1,
+            plugin_type="CategoryPlugin",
+            page=category1.extended_object,
+        )
+        add_plugin(
+            language="en",
+            placeholder=placeholder2,
+            plugin_type="CategoryPlugin",
+            page=category2.extended_object,
+        )
+
+        self.assertEqual(list(course.get_categories()), [category1, category2])
+
     def test_models_course_get_organizations_empty(self):
         """
         For a course not linked to any organzation the method `get_organizations` should
@@ -324,6 +352,36 @@ class CourseModelsTestCase(TestCase):
 
         with translation.override("en"):
             self.assertEqual(list(course.get_organizations()), [organization_en])
+
+    def test_models_course_get_organizations_other_placeholders(self):
+        """
+        The `get_organizations` method should return all organizations linked to a course via a
+        plugin on whichever placeholder.
+        """
+        organization1, organization2 = OrganizationFactory.create_batch(2)
+
+        course = CourseFactory(should_publish=True)
+        placeholder1 = course.extended_object.placeholders.get(
+            slot="course_description"
+        )
+        placeholder2 = course.extended_object.placeholders.get(slot="course_format")
+
+        add_plugin(
+            language="en",
+            placeholder=placeholder1,
+            plugin_type="OrganizationPlugin",
+            page=organization1.extended_object,
+        )
+        add_plugin(
+            language="en",
+            placeholder=placeholder2,
+            plugin_type="OrganizationPlugin",
+            page=organization2.extended_object,
+        )
+
+        self.assertEqual(
+            list(course.get_organizations()), [organization1, organization2]
+        )
 
     def test_models_course_get_main_organization_empty(self):
         """
@@ -415,6 +473,34 @@ class CourseModelsTestCase(TestCase):
 
         with translation.override("en"):
             self.assertEqual(list(course.get_persons()), [person_en])
+
+    def test_models_course_get_persons_other_placeholders(self):
+        """
+        The `get_persons` method should return all persons linked to a course via a plugin
+        on whichever placeholder.
+        """
+        person1, person2 = PersonFactory.create_batch(2)
+
+        course = CourseFactory(should_publish=True)
+        placeholder1 = course.extended_object.placeholders.get(
+            slot="course_description"
+        )
+        placeholder2 = course.extended_object.placeholders.get(slot="course_format")
+
+        add_plugin(
+            language="en",
+            placeholder=placeholder1,
+            plugin_type="PersonPlugin",
+            page=person1.extended_object,
+        )
+        add_plugin(
+            language="en",
+            placeholder=placeholder2,
+            plugin_type="PersonPlugin",
+            page=person2.extended_object,
+        )
+
+        self.assertEqual(list(course.get_persons()), [person1, person2])
 
     def test_models_course_get_course_runs_empty(self):
         """
