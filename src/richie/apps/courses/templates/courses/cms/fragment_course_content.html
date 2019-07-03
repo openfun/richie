@@ -17,6 +17,14 @@
 </div>
 {% endif %}
 
+{% if page.publisher_is_draft or not page|is_empty_placeholder:"course_skills" %}
+<div class="course-detail__content__row course-detail__content__skills">
+  <h2 class="course-detail__content__row__title">{% trans "What you will learn" %}</h2>
+  <p>{% trans "At the end of this course, you will be able to:" %}</p>
+  {% page_placeholder "course_skills" page %}
+</div>
+{% endif %}
+
 {% if page.publisher_is_draft or not page|is_empty_placeholder:"course_format" %}
 <div class="course-detail__content__row course-detail__content__format">
   <h2 class="course-detail__content__row__title">{% trans 'Format' %}</h2>
