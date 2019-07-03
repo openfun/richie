@@ -103,6 +103,10 @@ CMS_PLACEHOLDER_CONF = {
         "name": _("About the course"),
         "plugins": ["CKEditorPlugin"],
     },
+    "courses/cms/course_detail.html course_skills": {
+        "name": _("What you will learn"),
+        "plugins": ["CKEditorPlugin"],
+    },
     "courses/cms/course_detail.html course_format": {
         "name": _("Format"),
         "plugins": ["PlainTextPlugin"],
@@ -313,7 +317,10 @@ DJANGOCMS_VIDEO_TEMPLATES = [("full-width", _("Full width"))]
 RICHIE_PLAINTEXT_MAXLENGTH = {"course_introduction": 200, "bio": 150, "excerpt": 200}
 
 RICHIE_SIMPLETEXT_CONFIGURATION = [
-    {"placeholders": ["course_plan"], "ckeditor": "CKEDITOR_LIMITED_CONFIGURATION"},
+    {
+        "placeholders": ["course_skills", "course_plan"],
+        "ckeditor": "CKEDITOR_LIMITED_CONFIGURATION",
+    },
     {
         "placeholders": ["course_description"],
         "ckeditor": "CKEDITOR_LIMITED_CONFIGURATION",

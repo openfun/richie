@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Add a section "What you will learn" to the course page.
+
 ### Fixed
 
 - Fix language confusion when getting objects that are related to a course via
