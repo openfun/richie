@@ -222,18 +222,17 @@ class Course(BasePageExtension):
 
     def get_persons(self, language=None):
         """
-        Return the persons linked to the course via a person plugin in the
-        placeholder `course_team` on the course detail page, ranked by their
-        `position`.
+        Return the persons linked to the course via a person plugin in any of the
+        placeholders on the course detail page, ranked by their `path` to respect
+        the order in the persons tree.
         """
         language = language or translation.get_language()
 
-        selector = "extended_object__person_plugins__cmsplugin_ptr__placeholder"
+        selector = "extended_object__person_plugins__cmsplugin_ptr"
         # pylint: disable=no-member
         filter_dict = {
-            "extended_object__person_plugins__cmsplugin_ptr__language": language,
-            "{:s}__page".format(selector): self.extended_object,
-            "{:s}__slot".format(selector): "course_team",
+            "{:s}__language".format(selector): language,
+            "{:s}__placeholder__page".format(selector): self.extended_object,
         }
         # For a public course, we must filter out persons that are not published in
         # any language
@@ -243,24 +242,23 @@ class Course(BasePageExtension):
         return (
             Person.objects.filter(**filter_dict)
             .select_related("extended_object")
-            .order_by("extended_object__person_plugins__cmsplugin_ptr__position")
+            .order_by("extended_object__node__path")
             .distinct()
         )
 
     def get_organizations(self, language=None):
         """
-        Return the organizations linked to the course via an organization plugin in the
-        placeholder `course_organizations` on the course detail page, ranked by their
-        `position`.
+        Return the organizations linked to the course via an organization plugin in any
+        of the placeholders on the course detail page, ranked by their `path` to respect
+        the order in the organizations tree.
         """
         language = language or translation.get_language()
 
-        selector = "extended_object__organization_plugins__cmsplugin_ptr__placeholder"
+        selector = "extended_object__organization_plugins__cmsplugin_ptr"
         # pylint: disable=no-member
         filter_dict = {
-            "extended_object__organization_plugins__cmsplugin_ptr__language": language,
-            "{:s}__page".format(selector): self.extended_object,
-            "{:s}__slot".format(selector): "course_organizations",
+            "{:s}__language".format(selector): language,
+            "{:s}__placeholder__page".format(selector): self.extended_object,
         }
         # For a public course, we must filter out organizations that are not published in
         # any language
@@ -270,33 +268,39 @@ class Course(BasePageExtension):
         return (
             Organization.objects.filter(**filter_dict)
             .select_related("extended_object")
-            .order_by("extended_object__organization_plugins__cmsplugin_ptr__position")
+            .order_by("extended_object__node__path")
             .distinct()
         )
 
     def get_main_organization(self):
         """
-        Return the main organization linked to the course via an organization plugin in the
-        placeholder `course_organizations` on the course detail page.
+        Return the main organization linked to the course via an organization plugin on the
+        course detail page.
 
         Plugins are sortable by drag-and-drop in the plugin bar so we use this "position"
-        information to return the first one as the main organization.
+        information to return the first one as the main organization. We assume that only one
+        placeholder holds organization plugins and return the first organization in order of
+        position in this placeholder.
         """
-        return self.get_organizations().first()
+        return (
+            self.get_organizations()
+            # .order_by("extended_object__organization_plugins__cmsplugin_ptr__position")
+            .first()
+        )
 
     def get_categories(self, language=None):
         """
-        Return the categories linked to the course via a category plugin in the placeholder
-        `course_categories` on the course detail page, ranked by their `position`.
+        Return the categories linked to the course via a category plugin in any of the
+        placeholders on the course detail page, ranked by their `path` to respect the
+        order in the categories tree.
         """
         language = language or translation.get_language()
 
-        selector = "extended_object__category_plugins__cmsplugin_ptr__placeholder"
+        selector = "extended_object__category_plugins__cmsplugin_ptr"
         # pylint: disable=no-member
         filter_dict = {
-            "extended_object__category_plugins__cmsplugin_ptr__language": language,
-            "{:s}__page".format(selector): self.extended_object,
-            "{:s}__slot".format(selector): "course_categories",
+            "{:s}__language".format(selector): language,
+            "{:s}__placeholder__page".format(selector): self.extended_object,
         }
         # For a public course, we must filter out categories that are not published in
         # any language
@@ -306,16 +310,16 @@ class Course(BasePageExtension):
         return (
             Category.objects.filter(**filter_dict)
             .select_related("extended_object")
-            .order_by("extended_object__category_plugins__cmsplugin_ptr__position")
+            .order_by("extended_object__node__path")
             .distinct()
         )
 
     def get_root_to_leaf_category_pages(self):
         """
-        Build a query retrieving all pages linked to the category or one of its ancestors,
-        excluding the meta category itself.
+        Build a query retrieving all pages linked to this course's categories or one of their
+        ancestors excluding the meta category itself.
 
-        This is useful to build the course Elasticsearch index. When category is linked to a
+        This is useful to build the course Elasticsearch index. When a category is linked to a
         course, we associate all its ancestors (excluding the meta category) to the course so
         that a search for courses in an ancestor category also returns the course.
         """
