@@ -46,39 +46,39 @@
   {% placeholder "maincontent" %}
 
   {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"organizations" %}
-  <div class="organization-glimpse-list">
-    <h2 class="organization-glimpse-list__title">{% trans "Organizations" %}</h2>
-    {% placeholder "organizations" or %}
-      <p class="organization-glimpse-list__empty">
-        {% trans "No associated organizations" %}
-      </p>
-    {% endplaceholder %}
-  </div>
+    <section class="organization-glimpse-list">
+      <h2 class="organization-glimpse-list__title">{% trans "Organizations" %}</h2>
+      {% placeholder "organizations" or %}
+        <p class="organization-glimpse-list__empty">
+          {% trans "No associated organizations" %}
+        </p>
+      {% endplaceholder %}
+    </section>
   {% endif %}
 
   {% with courses=person.get_courses %}
     {% if courses %}
-      <div class="course-glimpse-list">
+      <section class="course-glimpse-list">
         <h2 class="course-glimpse-list__title">{% trans "Courses" %}</h2>
         {% for course in courses %}
           {% if course.extended_object.publisher_is_draft or course.check_publication %}
               {% include "courses/cms/fragment_course_glimpse.html" with course=course %}
           {% endif %}
         {% endfor %}
-      </div>
+      </section>
     {% endif %}
   {% endwith %}
 
   {% with blogposts=person.get_blogposts %}
     {% if blogposts %}
-      <div class="blogpost-glimpse-list">
+      <section class="blogpost-glimpse-list">
         <h2 class="blogpost-glimpse-list__title">{% trans "Blogposts" %}</h2>
         {% for blogpost in blogposts %}
           {% if blogpost.extended_object.publisher_is_draft or blogpost.check_publication %}
               {% include "courses/cms/fragment_blogpost_glimpse.html" with blogpost=blogpost %}
           {% endif %}
         {% endfor %}
-      </div>
+      </section>
     {% endif %}
   {% endwith %}
 

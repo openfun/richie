@@ -51,51 +51,51 @@
 
 {% with courses=category.get_courses %}
   {% if courses %}
-  <div class="course-glimpse-list">
-    <h2 class="course-glimpse-list__title">{% trans "Related courses" %}</h2>
-    {% for course in courses %}
-      {% if course.extended_object.publisher_is_draft or course.check_publication %}
-        {% include "courses/cms/fragment_course_glimpse.html" with course=course %}
-      {% endif %}
-    {% endfor %}
-    </div>
+    <section class="course-glimpse-list">
+      <h2 class="course-glimpse-list__title">{% trans "Related courses" %}</h2>
+      {% for course in courses %}
+        {% if course.extended_object.publisher_is_draft or course.check_publication %}
+          {% include "courses/cms/fragment_course_glimpse.html" with course=course %}
+        {% endif %}
+      {% endfor %}
+    </section>
   {% endif %}
 {% endwith %}
 
 {% with children_categories=category.get_children_categories %}
   {% if children_categories %}
-  <div class="category-glimpse-list">
-    <h2 class="category-glimpse-list__title">{% trans "Sub categories" %}</h2>
-    {% for child_category in children_categories %}
-      {% include "courses/cms/fragment_category_glimpse.html" with category=child_category %}
-    {% endfor %}
-  </div>
+    <section class="category-glimpse-list">
+      <h2 class="category-glimpse-list__title">{% trans "Sub categories" %}</h2>
+      {% for child_category in children_categories %}
+        {% include "courses/cms/fragment_category_glimpse.html" with category=child_category %}
+      {% endfor %}
+    </section>
   {% endif %}
 {% endwith %}
 
 {% with blogposts=category.get_blogposts %}
   {% if blogposts %}
-  <div class="blogpost-glimpse-list">
-    <h2 class="blogpost-glimpse-list__title">{% trans "Related blogposts" %}</h2>
-    {% for blogpost in blogposts %}
-      {% if blogpost.extended_object.publisher_is_draft or blogpost.check_publication %}
-        {% include "courses/cms/fragment_blogpost_glimpse.html" with blogpost=blogpost %}
-      {% endif %}
-    {% endfor %}
-    </div>
+    <section class="blogpost-glimpse-list">
+      <h2 class="blogpost-glimpse-list__title">{% trans "Related blogposts" %}</h2>
+      {% for blogpost in blogposts %}
+        {% if blogpost.extended_object.publisher_is_draft or blogpost.check_publication %}
+          {% include "courses/cms/fragment_blogpost_glimpse.html" with blogpost=blogpost %}
+        {% endif %}
+      {% endfor %}
+    </section>
   {% endif %}
 {% endwith %}
 
 {% with persons=category.get_persons %}
   {% if persons %}
-  <div class="person-glimpse-list">
-    <h2 class="person-glimpse-list__title">{% trans "Related persons" %}</h2>
-    {% for person in persons %}
-      {% if person.extended_object.publisher_is_draft or person.check_publication %}
-        {% include "courses/cms/fragment_person_glimpse.html" with person=person %}
-      {% endif %}
-    {% endfor %}
-  </div>
+    <section class="person-glimpse-list">
+      <h2 class="person-glimpse-list__title">{% trans "Related persons" %}</h2>
+      {% for person in persons %}
+        {% if person.extended_object.publisher_is_draft or person.check_publication %}
+          {% include "courses/cms/fragment_person_glimpse.html" with person=person %}
+        {% endif %}
+      {% endfor %}
+    </section>
   {% endif %}
 {% endwith %}
 
