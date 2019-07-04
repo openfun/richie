@@ -65,7 +65,8 @@ $richie-person-glimpse-caption-background: $gray80 !default;
     $wrapper-padding: $richie-person-glimpse-wrapper-padding,
     $methodology: 'bem'
   );
-  max-width: 100%;
+  flex-basis: calc(100% - 1rem);
+  margin: 0.5rem;
 
   @include media-breakpoint-up(lg) {
     @include m-o-card(

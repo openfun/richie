@@ -5,12 +5,9 @@ $richie-category-plugin-tag-fontcolor: $white;
 $richie-category-plugin-tag-background: $gray7;
 $richie-category-plugin-tag-divider-margin: 0.3rem;
 
-$richie-category-plugin-body-fontsize: small !default;
-$richie-category-plugin-body-fontcolor: $black !default;
-$richie-category-plugin-title-textalign: center !default;
-
 .category-plugin-tag {
-  @include sv-flex(0, 0, auto);
+  flex-grow: 0;
+  flex-shrink: 0;
   margin: $richie-category-plugin-tag-margin;
   padding: $richie-category-plugin-tag-padding;
   font-size: $richie-category-plugin-tag-fontsize;
@@ -25,18 +22,4 @@ $richie-category-plugin-title-textalign: center !default;
   & + & {
     margin-left: $richie-category-plugin-tag-divider-margin;
   }
-}
-
-.category-plugin-container {
-  @include make-col-ready();
-  @include media-breakpoint-up(sm) {
-    @include make-col(6);
-  }
-  @include media-breakpoint-up(md) {
-    @include make-col(4);
-  }
-  @include media-breakpoint-up(lg) {
-    @include make-col(2);
-  }
-  display: flex;
 }
