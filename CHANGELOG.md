@@ -11,7 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Fixed typos in header-related SCSS variable names.
-- Fix non-conformities in blogpost, category & organization glimpses'.
+- Fix non-conformities in blogpost, category, organization & person glimpses.
 
 ## [1.5.0] - 2019-07-03
 

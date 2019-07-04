@@ -103,10 +103,9 @@ class PersonPluginTestCase(CMSTestCase):
         # Check the page content in English
         response = self.client.get(url)
         # Person's name should be present as a link to the cms page
-        # And CMS page title should be in title attribute of the link
         self.assertContains(
             response,
-            '<a href="/en/person-title/" title="{name:s}">'.format(
+            '<a href="/en/person-title/">'.format(
                 name=person.public_extension.extended_object.get_title()
             ),
             status_code=200,
@@ -124,13 +123,10 @@ class PersonPluginTestCase(CMSTestCase):
 
         # Person's portrait should be present
         pattern = (
-            r'<a class="person-glimpse__media" href="{href:s}" title="{title:s} avatar">'
+            r'<a class="person-glimpse__media" href="{href:s}" tabindex="-1" aria-hidden="true">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*portrait\.jpg__200x200'
-            r'.*alt="my portrait"'
-        ).format(
-            href=person_page.get_absolute_url(),
-            title=person.public_extension.extended_object.get_title(),
-        )
+            r'.*alt=""'
+        ).format(href=person_page.get_absolute_url())
         self.assertIsNotNone(re.search(pattern, str(response.content)))
 
         # Short bio should be present
@@ -144,21 +140,12 @@ class PersonPluginTestCase(CMSTestCase):
         # Same checks in French
         url = page.get_absolute_url(language="fr")
         response = self.client.get(url)
-        self.assertContains(
-            response,
-            '<a href="/fr/titre-personne/" title="{name:s}">'.format(
-                name=person.public_extension.extended_object.get_title()
-            ),
-            status_code=200,
-        )
+        self.assertContains(response, '<a href="/fr/titre-personne/">', status_code=200)
         pattern = (
-            r'<a class="person-glimpse__media" href="{href:s}" title="{title:s} avatar">'
+            r'<a class="person-glimpse__media" href="{href:s}" tabindex="-1" aria-hidden="true">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*portrait\.jpg__200x200'
-            r'.*alt="my portrait"'
-        ).format(
-            href=person_page.get_absolute_url(),
-            title=person.public_extension.extended_object.get_title(),
-        )
+            r'.*alt=""'
+        ).format(href=person_page.get_absolute_url())
         self.assertIsNotNone(re.search(pattern, str(response.content)))
 
         self.assertContains(
@@ -214,39 +201,3 @@ class PersonPluginTestCase(CMSTestCase):
         self.assertContains(response, "draft bio")
         self.assertNotContains(response, "person_title")
         self.assertNotContains(response, "public bio")
-
-    def test_cms_plugins_person_render_default_alt(self):
-        """
-        A default alt should be set on the portrait image if the user did not fill if on the
-        file image.
-        """
-        # Create a Person
-        person = PersonFactory(
-            page_title="Mei",
-            fill_portrait={
-                "original_filename": "portrait.jpg",
-                "default_alt_text": None,
-            },
-            should_publish=True,
-        )
-        person_page = person.extended_object
-
-        # Create a page to add the plugin to
-        page = create_i18n_page("A page")
-        placeholder = page.placeholders.get(slot="maincontent")
-        add_plugin(placeholder, PersonPlugin, "en", **{"page": person_page})
-        page.publish("en")
-
-        url = page.get_absolute_url(language="en")
-        response = self.client.get(url)
-
-        # Person's portrait should have our default alt
-        pattern = (
-            r'<a class="person-glimpse__media" href="{href:s}" title="{title:s} avatar">'
-            r'<img src="/media/filer_public_thumbnails/filer_public/.*portrait\.jpg__200x200'
-            r'.*alt="Mei avatar"'
-        ).format(
-            href=person_page.get_absolute_url(),
-            title=person.public_extension.extended_object.get_title(),
-        )
-        self.assertIsNotNone(re.search(pattern, str(response.content)))

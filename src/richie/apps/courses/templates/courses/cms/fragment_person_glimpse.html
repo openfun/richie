@@ -2,7 +2,8 @@
 {% comment %}Obviously, the context template variable "person" is required and must be a Person page extension{% endcomment %}
 {% with person_page=person.extended_object %}
 <div class="person-glimpse">
-  <a class="person-glimpse__media" href="{{ person_page.get_absolute_url }}" title="{{ person.extended_object.get_title }} {% trans 'avatar' %}">
+  {% comment %}Use tabindex and aria-hidden on the image link as it is entirely redundant with the title link{% endcomment %}
+  <a class="person-glimpse__media" href="{{ person_page.get_absolute_url }}" tabindex="-1" aria-hidden="true">
     {% get_placeholder_plugins "portrait" person_page as plugins or %}
       <p class="person-glimpse__media__empty">{% trans "Portrait" %}</p>
     {% endget_placeholder_plugins %}
@@ -14,15 +15,15 @@
           {% if instance.picture.width >= 600 %}{% thumbnail instance.picture 600x600 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
         "
         sizes="200px"
-        alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% blocktrans with title=person_page.get_title %}{{ title }} avatar{% endblocktrans %}{% endif %}"
+        alt=""
       />
     {% endblockplugin %}
   </a>
   <div class="person-glimpse__content">
     <div class="person-glimpse__content__wrapper">
-      <a href="{{ person_page.get_absolute_url }}" title="{{ person.extended_object.get_title }}">
+      <a href="{{ person_page.get_absolute_url }}">
         <h{{ header_level|default:2 }} class="person-glimpse__content__wrapper__title">
-          {{ person.extended_object.get_title }}
+          {{ person_page.get_title }}
         </h{{ header_level|default:2 }}>
       </a>
       <div class="person-glimpse__content__wrapper__categories">

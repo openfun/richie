@@ -146,7 +146,7 @@ class OrganizationCMSTestCase(CMSTestCase):
 
         # The person should be present on the page
         pattern = (
-            r'<a href="{url:s}" title="{name:s}">'
+            r'<a href="{url:s}">'
             r'<h2 class="person-glimpse__content__wrapper__title">'
             r".*{name:s}.*</h2></a>"
         ).format(
