@@ -7,7 +7,7 @@
   // Add shared margin for vertical divider between allowed plugins
   .hero-intro,
   .embed-responsive,
-  .section--highlights,
+  .section-container-cadenced > section,
   .licence-plugin,
   .button-caesura,
   .rich-text-container {
@@ -23,7 +23,7 @@
   }
 
   // Adjust section highlights
-  .section--highlights {
+  .section-container-cadenced > section {
     padding: 1rem 0;
     background: $richie-content-container-bg;
 

@@ -1,222 +1,62 @@
-$richie-section-highlights-padding-top: 3rem !default;
-$richie-section-highlights-padding: $richie-section-highlights-padding-top 1rem !default;
-$richie-section-highlights-background-even: $white !default;
-$richie-section-highlights-background-odd: $snow2 !default;
-$richie-section-highlights-title-color: $gray17 !default;
-$richie-section-highlights-title-margin: 0 auto 1rem !default;
-$richie-section-highlights-title-padding: 1rem !default;
-$richie-section-highlights-title-textalign: center !default;
-$richie-section-highlights-item-gutter: 0.625rem !default;
+$richie-section-cadenced-padding: 3rem 0 !default;
+$richie-section-cadenced-background-even: $white !default;
+$richie-section-cadenced-background-odd: $snow2 !default;
+$richie-section-cadenced-title-color: $gray17 !default;
+$richie-section-cadenced-title-margin: 0 auto 1rem !default;
+$richie-section-cadenced-title-padding: 1rem !default;
+
+.section-container-cadenced {
+  background: $richie-section-cadenced-background-even;
+
+  &:nth-child(odd) {
+    background: $richie-section-cadenced-background-odd;
+  }
+
+  // Section container cadenced below the Hero intro have a bonus padding to correct for the
+  // space taken up by the logo.
+  .hero-intro--with-logo + & {
+    padding-top: 2rem;
+  }
+}
 
 .section {
-  // Include clearfix since section is a hard fullwidth block
-  @include clearfix();
+  display: flex;
+  flex-direction: column;
 
-  &--highlights {
-    padding: $richie-section-highlights-padding;
-    background: $richie-section-highlights-background-even;
-
-    &:nth-child(odd) {
-      background: $richie-section-highlights-background-odd;
-    }
+  .section-container-cadenced & {
+    @include make-container();
+    @include make-container-max-widths();
+    padding: $richie-section-cadenced-padding;
   }
 
   &__title {
-    .section--highlights & {
-      margin: $richie-section-highlights-title-margin;
-      padding: $richie-section-highlights-title-padding;
-      color: $richie-section-highlights-title-color;
-      text-align: $richie-section-highlights-title-textalign;
-      @include media-breakpoint-up(md) {
-        @include make-container();
-        @include make-container-max-widths();
-      }
+    .section-container-cadenced & {
+      margin: $richie-section-cadenced-title-margin;
+      padding: $richie-section-cadenced-title-padding;
+      color: $richie-section-cadenced-title-color;
     }
   }
 
   &__items {
-    .section--highlights & {
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      @include media-breakpoint-up(md) {
-        @include make-container();
-        @include make-container-max-widths();
-      }
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -0.5rem;
 
-      // Some have to take 100% on default behavior
-      & > p,
-      & > figure {
-        @include sv-flex(1, 0, 100%);
-      }
+    // Some elements have to take 100% by default
+    .section-container-cadenced & > p,
+    .section-container-cadenced & > figure {
+      flex-grow: 1;
+      flex-shrink: 0;
+      flex-basis: 100%;
+    }
 
-      .course-plugin-container {
-        @include sv-flex(
-          1,
-          0,
-          calc(100% - #{$richie-section-highlights-item-gutter * 2})
-        );
-        display: flex;
-        min-width: auto;
-        margin: $richie-section-highlights-item-gutter;
-        padding: 0;
-        @include media-breakpoint-up(sm) {
-          @include sv-flex(
-            1,
-            0,
-            calc(50% - #{$richie-section-highlights-item-gutter * 2})
-          );
-        }
-        @include media-breakpoint-up(md) {
-          @include sv-flex(
-            1,
-            0,
-            calc(25% - #{$richie-section-highlights-item-gutter * 2})
-          );
-        }
-
-        .course-plugin {
-          @include sv-flex(1, 0, 100%);
-          margin: 0;
-        }
-      }
-
-      .organization-plugin-container {
-        @include sv-flex(
-          1,
-          0,
-          calc(100% - #{$richie-section-highlights-item-gutter * 2})
-        );
-        display: flex;
-        min-width: auto;
-        margin: $richie-section-highlights-item-gutter;
-        padding: 0;
-        @include media-breakpoint-up(sm) {
-          @include sv-flex(
-            1,
-            0,
-            calc(50% - #{$richie-section-highlights-item-gutter * 2})
-          );
-        }
-        @include media-breakpoint-up(md) {
-          @include sv-flex(
-            1,
-            0,
-            calc(25% - #{$richie-section-highlights-item-gutter * 2})
-          );
-        }
-
-        .organization-plugin {
-          @include sv-flex(1, 0, 100%);
-          margin: 0;
-        }
-      }
-
-      .category-plugin-container {
-        @include sv-flex(
-          1,
-          0,
-          calc(50% - #{$richie-section-highlights-item-gutter * 2})
-        );
-        display: flex;
-        min-width: auto;
-        margin: $richie-section-highlights-item-gutter;
-        padding: 0;
-        @include media-breakpoint-up(sm) {
-          @include sv-flex(
-            1,
-            0,
-            calc(33.3333% - #{$richie-section-highlights-item-gutter * 2})
-          );
-        }
-        @include media-breakpoint-up(md) {
-          @include sv-flex(
-            1,
-            0,
-            calc(25% - #{$richie-section-highlights-item-gutter * 2})
-          );
-        }
-        @include media-breakpoint-up(lg) {
-          @include sv-flex(
-            1,
-            0,
-            calc(16.6667% - #{$richie-section-highlights-item-gutter * 2})
-          );
-        }
-
-        .category-plugin {
-          @include sv-flex(1, 0, 100%);
-          margin: 0;
-        }
-      }
-
-      .person-plugin {
-        @include sv-flex(
-          1,
-          0,
-          calc(100% - #{$richie-section-highlights-item-gutter * 2})
-        );
-        margin: $richie-section-highlights-item-gutter;
-        padding: 1rem;
-        border: 1px solid $gray97;
-        border-radius: 0.2rem;
-
-        &__content {
-          &__wrapper {
-            padding: 0 0 0 1rem;
-          }
-          &__title {
-            font-size: 1rem;
-          }
-          &__text {
-            font-size: 0.9rem;
-          }
-        }
-      }
-
-      .blogpost-plugin-container {
-        @include sv-flex(
-          1,
-          0,
-          calc(100% - #{$richie-section-highlights-item-gutter * 2})
-        );
-        display: flex;
-        min-width: auto;
-        margin: $richie-section-highlights-item-gutter;
-        padding: 0;
-        @include media-breakpoint-up(sm) {
-          @include sv-flex(
-            1,
-            0,
-            calc(50% - #{$richie-section-highlights-item-gutter * 2})
-          );
-        }
-        @include media-breakpoint-up(md) {
-          @include sv-flex(
-            1,
-            0,
-            calc(25% - #{$richie-section-highlights-item-gutter * 2})
-          );
-        }
-
-        .blogpost-plugin {
-          @include sv-flex(1, 0, 100%);
-          margin: 0;
-        }
-      }
-
-      // Ensure caesura always takes full width with some space around
-      // within flex grid
-      .button-caesura {
-        @include sv-flex(1, 0, 100%);
-        margin: 2rem 0.5rem 0;
-      }
+    // Ensure caesura always takes full width with some space around
+    // within flex grid
+    .section-container-cadenced & .button-caesura {
+      flex-grow: 1;
+      flex-shrink: 0;
+      flex-basis: 100%;
+      margin: 2rem 0.5rem 0;
     }
   }
-}
-
-// Section highlight below introduction Hero have a bonus padding to correctly
-// include logo which is partially over it
-.hero-intro--with-logo + .section--highlights {
-  padding-top: $richie-section-highlights-padding-top + 2rem;
 }
