@@ -52,7 +52,7 @@ class BlogPostPluginTestCase(CMSTestCase):
         """
         # Create an blogpost
         blogpost = BlogPostFactory(
-            page_title={"en": "public title", "fr": "titre publique"},
+            page_title={"en": "public title", "fr": "titre public"},
             fill_cover={
                 "original_filename": "cover.jpg",
                 "default_alt_text": "my cover",
@@ -98,9 +98,7 @@ class BlogPostPluginTestCase(CMSTestCase):
         # And CMS page title should be in title attribute of the link
         self.assertContains(
             response,
-            '<a class="blogpost-plugin" href="/en/public-title/" title="{:s}"'.format(
-                blogpost.public_extension.extended_object.get_title()
-            ),
+            '<a href="/en/public-title/" class="blogpost-glimpse blogpost-glimpse--link',
             status_code=200,
         )
         # The blogpost's title should be wrapped in a p
@@ -117,7 +115,7 @@ class BlogPostPluginTestCase(CMSTestCase):
         pattern = (
             r'<div class="blogpost-glimpse__media">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x170'
-            r'.*alt="my cover"'
+            r'.*alt=""'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
 
@@ -126,16 +124,14 @@ class BlogPostPluginTestCase(CMSTestCase):
         response = self.client.get(url)
         self.assertContains(
             response,
-            '<a class="blogpost-plugin" href="/fr/titre-publique/" title="{:s}"'.format(
-                blogpost.public_extension.extended_object.get_title()
-            ),
+            '<a href="/fr/titre-public/" class="blogpost-glimpse blogpost-glimpse--link',
             status_code=200,
         )
         # pylint: disable=no-member
         pattern = (
             r'<div class="blogpost-glimpse__media">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x170'
-            r'.*alt="my cover"'
+            r'.*alt=""'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
 
@@ -174,32 +170,3 @@ class BlogPostPluginTestCase(CMSTestCase):
         response = self.client.get(url)
         self.assertContains(response, "draft title")
         self.assertNotContains(response, "public title")
-
-    def test_cms_plugins_blogpost_render_default_alt(self):
-        """
-        A default alt should be set on the portrait image if the user did not fill if on the
-        file image.
-        """
-        # Create an blogpost
-        blogpost = BlogPostFactory(
-            fill_cover={"original_filename": "cover.jpg", "default_alt_text": None},
-            should_publish=True,
-        )
-        blogpost_page = blogpost.extended_object
-
-        # Create a page to add the plugin to
-        page = create_i18n_page("A page")
-        placeholder = page.placeholders.get(slot="maincontent")
-        add_plugin(placeholder, BlogPostPlugin, "en", **{"page": blogpost_page})
-        page.publish("en")
-
-        url = page.get_absolute_url(language="en")
-        response = self.client.get(url)
-
-        # Blogpost cover should have our default alt
-        pattern = (
-            r'<div class="blogpost-glimpse__media">'
-            r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x170'
-            r'.*alt="blog post cover image"'
-        )
-        self.assertIsNotNone(re.search(pattern, str(response.content)))

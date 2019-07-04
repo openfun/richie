@@ -223,10 +223,7 @@ class PersonCMSTestCase(CMSTestCase):
             (
                 '<a class="organization-glimpse organization-glimpse--link '
                 'organization-glimpse--draft" href="{url:s}">'
-            ).format(
-                url=unpublished_organization.extended_object.get_absolute_url(),
-                title=unpublished_organization.extended_object.get_title(),
-            ),
+            ).format(url=unpublished_organization.extended_object.get_absolute_url()),
         )
         # The modified draft version of the published organization should not be visible
         self.assertNotContains(response, "modified title")

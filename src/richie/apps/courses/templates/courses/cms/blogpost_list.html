@@ -7,9 +7,7 @@
 
   {% for page in current_page.get_child_pages %}
     {% if page.blogpost %}
-    <a class="blogpost-glimpse blogpost-glimpse--link" href="{{ page.get_absolute_url }}">
       {% include "courses/cms/fragment_blogpost_glimpse.html" with blogpost=page.blogpost %}
-    </a>
     {% endif %}
   {% empty %}
     <p class="blogpost-glimpse blogpost-glimpse--empty">

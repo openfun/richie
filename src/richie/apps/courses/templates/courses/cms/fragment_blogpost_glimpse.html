@@ -1,33 +1,35 @@
 {% load i18n cms_tags extra_tags thumbnail %}
 {% comment %}Obviously, the context template variable "blogpost" is required and must be a BlogPost page extension{% endcomment %}
 {% with blogpost_page=blogpost.extended_object %}
-<div class="blogpost-glimpse__media">
-  {% get_placeholder_plugins "cover" blogpost_page as plugins or %}
-    <div class="blogpost-glimpse__media__empty">{% trans 'Cover' %}</div>
-  {% endget_placeholder_plugins %}
-  {% blockplugin plugins.0 %}
-  <img src="{% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %}"
-    srcset="
-      {% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %} 300w,
-      {% if instance.picture.width >= 600 %}{% thumbnail instance.picture 600x340 crop upscale subject_location=instance.picture.subject_location %} 600w,{% endif %}
-      {% if instance.picture.width >= 900 %}{% thumbnail instance.picture 900x510 crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}
-    "
-    sizes="300px"
-    alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'blog post cover image' %}{% endif %}"
-  />
-  {% endblockplugin %}
-</div>
-<div class="blogpost-glimpse__content">
-    <div class="blogpost-glimpse__content__wrapper">
-        <p class="blogpost-glimpse__content__title">{{ blogpost_page.get_title }}</p>
-        <p>
-            {% show_placeholder "excerpt" blogpost_page %}
-        </p>
-    </div>
-    <div class="blogpost-glimpse__footer">
-        <p class="blogpost-glimpse__footer__date">
-            {{ blogpost_page.creation_date|date:"DATE_FORMAT" }}
-        </p>
-    </div>
-</div>
+<a href="{{ blogpost.extended_object.get_absolute_url }}" class="blogpost-glimpse blogpost-glimpse--link {% if blogpost.extended_object.publisher_is_draft %}blogpost-glimpse--draft{% endif %}" >
+  <div class="blogpost-glimpse__media">
+    {% get_placeholder_plugins "cover" blogpost_page as plugins or %}
+      <div class="blogpost-glimpse__media__empty">{% trans 'Cover' %}</div>
+    {% endget_placeholder_plugins %}
+    {% blockplugin plugins.0 %}
+    <img src="{% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %}"
+      srcset="
+        {% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %} 300w,
+        {% if instance.picture.width >= 600 %}{% thumbnail instance.picture 600x340 crop upscale subject_location=instance.picture.subject_location %} 600w,{% endif %}
+        {% if instance.picture.width >= 900 %}{% thumbnail instance.picture 900x510 crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}
+      "
+      sizes="300px"
+      alt=""
+    />
+    {% endblockplugin %}
+  </div>
+  <div class="blogpost-glimpse__content">
+      <div class="blogpost-glimpse__content__wrapper">
+          <p class="blogpost-glimpse__content__title">{{ blogpost_page.get_title }}</p>
+          <p>
+              {% show_placeholder "excerpt" blogpost_page %}
+          </p>
+      </div>
+      <div class="blogpost-glimpse__footer">
+          <p class="blogpost-glimpse__footer__date">
+              {{ blogpost_page.creation_date|date:"DATE_FORMAT" }}
+          </p>
+      </div>
+  </div>
+</a>
 {% endwith %}
