@@ -1,9 +1,26 @@
-{% load cms_tags i18n %}
+{% load cms_tags extra_tags i18n thumbnail %}
 {% spaceless %}
 {% if current_page.publisher_is_draft or instance.check_publication is True %}
   {% if form_factor == "tag" %}
     <a class="category-plugin-tag{% if relevant_page.publisher_is_draft %} category-plugin-tag--draft{% endif %}" href="{{ relevant_page.get_absolute_url }}">
       {{ relevant_page.get_title }}
+    </a>
+  {% elif form_factor == "icon" %}
+    <a class="category-plugin-icon{% if relevant_page.publisher_is_draft %} category-plugin-icon--draft{% endif %}" href="{{ relevant_page.get_absolute_url }}">
+      {% get_placeholder_plugins "icon" relevant_page as icon_plugins %}
+      {% blockplugin icon_plugins.0 %}
+        <figure>
+          <img src="{% thumbnail instance.picture 40x40 crop upscale subject_location=instance.picture.subject_location %}"
+            srcset="
+              {% thumbnail instance.picture 40x40 crop upscale subject_location=instance.picture.subject_location %} 40w,
+              {% if instance.picture.width >= 80 %}{% thumbnail instance.picture 80x80 crop upscale subject_location=instance.picture.subject_location %} 80w,{% endif %}
+              {% if instance.picture.width >= 120 %}{% thumbnail instance.picture 120x120 crop upscale subject_location=instance.picture.subject_location %} 120w{% endif %}
+            "
+            sizes="40px"
+            alt=""/>
+          <figcaption>{{ relevant_page.get_title }}</figcaption>
+        </figure>
+      {% endblockplugin %}
     </a>
   {% else %}
     {% include "courses/cms/fragment_category_glimpse.html" with category=relevant_page.category %}
