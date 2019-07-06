@@ -1,5 +1,6 @@
 """Custom template tags for the courses application of Richie."""
 from django import template
+from django.core.exceptions import ObjectDoesNotExist
 from django.template.loader import render_to_string
 
 from classytags.arguments import Argument, MultiValueArgument
@@ -160,14 +161,19 @@ class GetPlaceholderPlugins(Placeholder):
         if request:
 
             page = _get_page_by_untyped_arg(page_lookup, request, get_site_id(None))
-            placeholder = page.placeholders.get(slot=name)
 
-            context[varname] = [
-                cms_plugin.get_plugin_instance()[0]
-                for cms_plugin in get_plugins(
-                    request, placeholder, template=page.get_template()
-                )
-            ]
+            try:
+                placeholder = page.placeholders.get(slot=name)
+            except ObjectDoesNotExist:
+                context[varname] = []
+                return ""
+            else:
+                context[varname] = [
+                    cms_plugin.get_plugin_instance()[0]
+                    for cms_plugin in get_plugins(
+                        request, placeholder, template=page.get_template()
+                    )
+                ]
 
             # Default content if there is no plugins in the placeholder
             if not context[varname] and nodelist:
