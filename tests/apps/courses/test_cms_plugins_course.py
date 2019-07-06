@@ -13,7 +13,11 @@ from cms.api import add_plugin, create_page
 from richie.apps.core.factories import UserFactory
 from richie.apps.core.helpers import create_i18n_page
 from richie.apps.courses.cms_plugins import CoursePlugin
-from richie.apps.courses.factories import CourseFactory, OrganizationFactory
+from richie.apps.courses.factories import (
+    CategoryFactory,
+    CourseFactory,
+    OrganizationFactory,
+)
 from richie.apps.courses.models import CoursePluginModel
 
 
@@ -56,8 +60,15 @@ class CoursePluginTestCase(TestCase):
 
     def test_cms_plugins_course_render_on_public_page(self):
         """
-        Test that an CoursePlugin correctly renders course's page specific information
+        Test that a CoursePlugin correctly renders course's page specific information
         """
+        icon_category_main = CategoryFactory(
+            page_title={"en": "icon title", "fr": "titre icone"},
+            fill_icon=True,
+            should_publish=True,
+        )
+        icon_category_secondary = CategoryFactory(fill_icon=True, should_publish=True)
+
         # Create a course with a page in both english and french
         organization = OrganizationFactory(
             page_title="public title", should_publish=True
@@ -66,15 +77,14 @@ class CoursePluginTestCase(TestCase):
         course = CourseFactory(
             page_title={"en": "public title", "fr": "titre public"},
             fill_organizations=[organization],
+            fill_icons=[icon_category_main, icon_category_secondary],
             fill_cover={
                 "original_filename": "cover.jpg",
                 "default_alt_text": "my cover",
             },
+            should_publish=True,
         )
         course_page = course.extended_object
-
-        course_page.publish("en")
-        course_page.publish("fr")
 
         # Create a page to add the plugin to
         page = create_i18n_page({"en": "A page", "fr": "Une page"})
@@ -114,6 +124,22 @@ class CoursePluginTestCase(TestCase):
             "<p>{title}</p>".format(title=organization.extended_object.get_title()),
             status_code=200,
         )
+
+        # The course's cover should be present
+        pattern = (
+            r'<div class="course-glimpse__media">'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x170'
+            r'.*alt=""'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
+
+        # The course's icon should be present
+        pattern = (
+            r'<div class="course-glimpse__icon">'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*icon\.jpg__60x60'
+            r'.*alt="icon title"'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
 
         # The draft course plugin should not be present
         # Check if draft is shown after unpublish
@@ -161,6 +187,14 @@ class CoursePluginTestCase(TestCase):
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
 
+        # The course's icon should be present
+        pattern = (
+            r'<div class="course-glimpse__icon">'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*icon\.jpg__60x60'
+            r'.*alt="titre icone"'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
+
         # The draft course plugin should not be present
         # Check if draft is shown after unpublish
         course_page.unpublish("fr")
@@ -203,33 +237,3 @@ class CoursePluginTestCase(TestCase):
         response = self.client.get(url)
         self.assertContains(response, "draft title")
         self.assertNotContains(response, "public title")
-
-    def test_cms_plugins_course_render_default_alt(self):
-        """
-        A default alt should be set on the portrait image if the user did not fill if on the
-        file image.
-        """
-        # Create an blogpost
-        course = CourseFactory(
-            page_title="my course",
-            fill_cover={"original_filename": "cover.jpg", "default_alt_text": None},
-            should_publish=True,
-        )
-        course_page = course.extended_object
-
-        # Create a page to add the plugin to
-        page = create_i18n_page("A page")
-        placeholder = page.placeholders.get(slot="maincontent")
-        add_plugin(placeholder, CoursePlugin, "en", **{"page": course_page})
-        page.publish("en")
-
-        url = page.get_absolute_url(language="en")
-        response = self.client.get(url)
-
-        # Course cover should have our default alt
-        pattern = (
-            r'<div class="course-glimpse__media">'
-            r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x170'
-            r'.*alt=""'
-        )
-        self.assertIsNotNone(re.search(pattern, str(response.content)))

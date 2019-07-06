@@ -3,10 +3,10 @@
 {% with course_page=course.extended_object course_state=course.state main_org_title=course.get_main_organization.extended_object.get_title %}
 <a href="{{ course.extended_object.get_absolute_url }}" class="course-glimpse course-glimpse--link {% if course.extended_object.publisher_is_draft %}course-glimpse--draft{% endif %}">
   <div class="course-glimpse__media">
-    {% get_placeholder_plugins "course_cover" course_page as plugins or %}
+    {% get_placeholder_plugins "course_cover" course_page as cover_plugins or %}
       <p class="course-glimpse__media__empty">{% trans "Cover" %}</p>
     {% endget_placeholder_plugins %}
-    {% blockplugin plugins.0 %}
+    {% blockplugin cover_plugins.0 %}
       <img src="{% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %}"
         srcset="
           {% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %} 300w,
@@ -14,10 +14,18 @@
           {% if instance.picture.width >= 900 %}{% thumbnail instance.picture 900x510 crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}
         "
         sizes="300px"
-        {# this is a comment #}
+        {# alt forced to empty string for a11y because the image does not carry more information than the course title #}
         alt=""
       />
     {% endblockplugin %}
+  </div>
+  <div class="course-glimpse__icon">
+    {% get_placeholder_plugins "course_icons" course_page as icon_plugins %}
+    {% if icon_plugins %}
+      {% with form_factor="mark" %}
+        {% render_plugin icon_plugins.0 %}
+      {% endwith %}
+    {% endif %}
   </div>
   <div class="course-glimpse__content">
       <div class="course-glimpse__content__wrapper">
