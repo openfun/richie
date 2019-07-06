@@ -18,6 +18,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix `get_placeholder_plugins` template tag when the placeholder is missing,
 - Stop limiting course getters to specific placeholder names on all objects,
 - Stop limiting course related objects getters to specific placeholder names,
 
