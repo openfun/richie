@@ -18,6 +18,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Stop limiting course getters to specific placeholder names on all objects,
 - Stop limiting course related objects getters to specific placeholder names,
 
 ## [1.5.2] - 2019-07-15
