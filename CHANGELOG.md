@@ -18,7 +18,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Display an icon on the course glimpse (the first among the course's icons),
 - Add icons to the course detail page via a constrained placeholder,
 - Add an icon to the category detail page via a constrained placeholder,
-- Add icon image to the category search index.
+- Add icon image to the category search index,
+- Add icon image to the course search index.
 
 ### Fixed
 

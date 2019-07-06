@@ -289,7 +289,8 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 # end date in order to limit the number of iterations and courses with a
                 # lot of archived courses.
                 "absolute_url": {"en": "url"},
-                "cover_image": {"en": "image"},
+                "cover_image": {"en": "cover_image.jpg"},
+                "icon": {"en": "icon.jpg"},
                 "title": {"en": "title"},
                 **COURSES[course_id],
                 "course_runs": sorted(
@@ -334,7 +335,8 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             "L-000100010001",
                             "L-00020001",
                         ],
-                        "cover_image": "image",
+                        "cover_image": "cover_image.jpg",
+                        "icon": "icon.jpg",
                         "organization_highlighted": "Org 31",
                         "organizations": ["P-00030001", "P-00030004", "L-000300010001"],
                         "state": {
@@ -356,7 +358,8 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             "L-000100020001",
                             "L-00020001",
                         ],
-                        "cover_image": "image",
+                        "cover_image": "cover_image.jpg",
+                        "icon": "icon.jpg",
                         "organization_highlighted": "Org 32",
                         "organizations": ["P-00030002", "P-00030003", "L-000300020001"],
                         "state": {
@@ -378,7 +381,8 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             "L-000100020002",
                             "L-00020002",
                         ],
-                        "cover_image": "image",
+                        "cover_image": "cover_image.jpg",
+                        "icon": "icon.jpg",
                         "organization_highlighted": "Org 32",
                         "organizations": ["P-00030002", "P-00030004", "L-000300020002"],
                         "state": {
@@ -400,7 +404,8 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             "L-000100010002",
                             "L-00020003",
                         ],
-                        "cover_image": "image",
+                        "cover_image": "cover_image.jpg",
+                        "icon": "icon.jpg",
                         "organization_highlighted": "Org 31",
                         "organizations": ["P-00030001", "P-00030003", "L-000300010002"],
                         "state": {
