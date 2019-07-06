@@ -145,7 +145,7 @@ class Organization(BasePageExtension):
     def get_courses(self, language=None):
         """
         Return a query to get the courses related to this organization ie for which a plugin for
-        this organization is linked to the course page on the "course_organizations" placeholder.
+        this organization is linked to the course page via any placeholder.
         """
         is_draft = self.extended_object.publisher_is_draft
         organization = self if is_draft else self.draft_extension
@@ -155,7 +155,6 @@ class Organization(BasePageExtension):
         filter_dict = {
             "extended_object__node__parent__cms_pages__course__isnull": True,
             "extended_object__publisher_is_draft": is_draft,
-            "extended_object__placeholders__slot": "course_organizations",
             "extended_object__placeholders__cmsplugin__language": language,
             bfs: organization.extended_object,
         }
@@ -178,7 +177,7 @@ class Organization(BasePageExtension):
     def get_persons(self, language=None):
         """
         Return a query to get the persons related to this organization ie for which a plugin for
-        this organization is linked to the person page on the "organizations" placeholder.
+        this organization is linked to the person page via any placeholder.
         """
         is_draft = self.extended_object.publisher_is_draft
         organization = self if is_draft else self.draft_extension
@@ -187,7 +186,6 @@ class Organization(BasePageExtension):
         bfs = "extended_object__placeholders__cmsplugin__courses_organizationpluginmodel__page"
         filter_dict = {
             "extended_object__publisher_is_draft": is_draft,
-            "extended_object__placeholders__slot": "organizations",
             "extended_object__placeholders__cmsplugin__language": language,
             bfs: organization.extended_object,
         }

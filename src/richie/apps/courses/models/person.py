@@ -48,7 +48,7 @@ class Person(BasePageExtension):
     def get_courses(self, language=None):
         """
         Return a query to get the courses related to this person ie for which a plugin for
-        this person is linked to the course page on the "course_team" placeholder.
+        this person is linked to the course page via any placeholder.
         """
         is_draft = self.extended_object.publisher_is_draft
         person = self if is_draft else self.draft_extension
@@ -60,7 +60,6 @@ class Person(BasePageExtension):
         filter_dict = {
             "extended_object__node__parent__cms_pages__course__isnull": True,  # exclude snapshots
             "extended_object__publisher_is_draft": is_draft,
-            "extended_object__placeholders__slot": "course_team",
             "extended_object__placeholders__cmsplugin__language": language,
             bfs: person.extended_object,
         }
@@ -83,8 +82,7 @@ class Person(BasePageExtension):
     def get_blogposts(self, language=None):
         """
         Return a query to get the blogposts this person wrote ie for which a
-        plugin for this person is linked to the blogpost page on the "author"
-        placeholder.
+        plugin for this person is linked to the blogpost page via any placeholder.
         """
         is_draft = self.extended_object.publisher_is_draft
         person = self if is_draft else self.draft_extension
@@ -95,7 +93,6 @@ class Person(BasePageExtension):
         )
         filter_dict = {
             "extended_object__publisher_is_draft": is_draft,
-            "extended_object__placeholders__slot": "author",
             "extended_object__placeholders__cmsplugin__language": language,
             bfs: person.extended_object,
         }

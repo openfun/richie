@@ -68,7 +68,7 @@ class Category(BasePageExtension):
     def get_courses(self, language=None):
         """
         Return a query to get the courses related to this category ie for which a plugin for
-        this category is linked to the course page on the "course_categories" placeholder.
+        this category is linked to the course page via any placeholder.
         """
         is_draft = self.extended_object.publisher_is_draft
         category = self if is_draft else self.draft_extension
@@ -78,7 +78,6 @@ class Category(BasePageExtension):
         filter_dict = {
             "extended_object__node__parent__cms_pages__course__isnull": True,
             "extended_object__publisher_is_draft": is_draft,
-            "extended_object__placeholders__slot": "course_categories",
             "extended_object__placeholders__cmsplugin__language": language,
             bfs: category.extended_object,
         }
@@ -101,8 +100,7 @@ class Category(BasePageExtension):
     def get_blogposts(self, language=None):
         """
         Return a query to get the blogposts related to this category ie for which a
-        plugin for this category is linked to the blogpost page on the "categories"
-        placeholder.
+        plugin for this category is linked to the blogpost page via any placeholder.
         """
         is_draft = self.extended_object.publisher_is_draft
         category = self if is_draft else self.draft_extension
@@ -111,7 +109,6 @@ class Category(BasePageExtension):
         bfs = "extended_object__placeholders__cmsplugin__courses_categorypluginmodel__page"
         filter_dict = {
             "extended_object__publisher_is_draft": is_draft,
-            "extended_object__placeholders__slot": "categories",
             "extended_object__placeholders__cmsplugin__language": language,
             bfs: category.extended_object,
         }
@@ -134,7 +131,7 @@ class Category(BasePageExtension):
     def get_persons(self, language=None):
         """
         Return a query to get the persons related to this category ie for which a plugin for
-        this category is linked to the person page on the "categories" placeholder.
+        this category is linked to the person page via any placeholder.
         """
         is_draft = self.extended_object.publisher_is_draft
         category = self if is_draft else self.draft_extension
@@ -143,7 +140,6 @@ class Category(BasePageExtension):
         bfs = "extended_object__placeholders__cmsplugin__courses_categorypluginmodel__page"
         filter_dict = {
             "extended_object__publisher_is_draft": is_draft,
-            "extended_object__placeholders__slot": "categories",
             "extended_object__placeholders__cmsplugin__language": language,
             bfs: category.extended_object,
         }
