@@ -339,7 +339,7 @@ RICHIE_SIMPLETEXT_CONFIGURATION = [
 
 RICHIE_SIMPLEPICTURE_PRESETS = {
     # Formatting images for the courses search index
-    "glimpse": {
+    "cover": {
         "src": {"size": (300, 170), "crop": "smart"},
         "srcset": [
             {
@@ -356,5 +356,23 @@ RICHIE_SIMPLEPICTURE_PRESETS = {
             },
         ],
         "sizes": "300px",
-    }
+    },
+    "icon": {
+        "src": {"size": (60, 60), "crop": "smart"},
+        "srcset": [
+            {
+                "options": {"size": (60, 60), "crop": "smart", "upscale": True},
+                "descriptor": "60w",
+            },
+            {
+                "options": {"size": (120, 120), "crop": "smart", "upscale": True},
+                "descriptor": "120w",
+            },
+            {
+                "options": {"size": (180, 180), "crop": "smart", "upscale": True},
+                "descriptor": "180w",
+            },
+        ],
+        "sizes": "60px",
+    },
 }

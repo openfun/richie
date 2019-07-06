@@ -48,11 +48,13 @@ class CategoriesIndexer:
             # Not searchable
             "absolute_url": {"type": "object", "enabled": False},
             "logo": {"type": "object", "enabled": False},
+            "icon": {"type": "object", "enabled": False},
         },
     }
     scripts = {}
     display_fields = [
         "absolute_url",
+        "icon",
         "is_meta",
         "logo",
         "nb_children",
@@ -95,6 +97,16 @@ class CategoriesIndexer:
             with translation.override(language):
                 logo_images[language] = get_picture_info(logo, "logo")
 
+        # Prepare icon images
+        icon_images = {}
+        for icon in Picture.objects.filter(
+            cmsplugin_ptr__placeholder__page=category.extended_object,
+            cmsplugin_ptr__placeholder__slot="icon",
+        ):
+            language = icon.cmsplugin_ptr.language
+            with translation.override(language):
+                icon_images[language] = get_picture_info(icon, "icon")
+
         # Prepare description texts
         description = defaultdict(list)
         for simple_text in SimpleText.objects.filter(
@@ -127,6 +139,7 @@ class CategoriesIndexer:
                 for language, title in titles.items()
             },
             "description": {l: " ".join(st) for l, st in description.items()},
+            "icon": icon_images,
             "is_meta": bool(
                 node.parent is None
                 or node.parent.cms_pages.filter(category__isnull=True).exists()
@@ -159,6 +172,7 @@ class CategoriesIndexer:
         """
         source = es_category["_source"]
         return {
+            "icon": get_best_field_language(source["icon"], best_language),
             "id": es_category["_id"],
             "is_meta": source["is_meta"],
             "logo": get_best_field_language(source["logo"], best_language),

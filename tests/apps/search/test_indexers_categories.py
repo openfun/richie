@@ -20,7 +20,7 @@ class CategoriesIndexersTestCase(TestCase):
 
     @mock.patch(
         "richie.apps.search.indexers.categories.get_picture_info",
-        return_value="logo info",
+        return_value="picture info",
     )
     def test_indexers_categories_get_es_documents(self, _mock_picture):
         """
@@ -33,12 +33,14 @@ class CategoriesIndexersTestCase(TestCase):
             ),
             page_reverse_id="subjects",
             page_title={"en": "Subjects", "fr": "Sujets"},
+            fill_icon=True,
             fill_logo=True,
             should_publish=True,
         )
         category1 = CategoryFactory(
             page_parent=meta.extended_object,
             page_title={"en": "my first subject", "fr": "ma première thématique"},
+            fill_icon=True,
             fill_logo=True,
             should_publish=True,
         )
@@ -80,6 +82,7 @@ class CategoriesIndexersTestCase(TestCase):
                         "fr": ["ma deuxième thématic", "deuxième thématic", "thématic"],
                     },
                     "description": {},
+                    "icon": {},
                     "is_meta": False,
                     "kind": "subjects",
                     "logo": {},
@@ -108,9 +111,10 @@ class CategoriesIndexersTestCase(TestCase):
                         "en": "english description line 1. english description line 2.",
                         "fr": "description français ligne 1. description français ligne 2.",
                     },
+                    "icon": {"en": "picture info", "fr": "picture info"},
                     "is_meta": False,
                     "kind": "subjects",
-                    "logo": {"en": "logo info", "fr": "logo info"},
+                    "logo": {"en": "picture info", "fr": "picture info"},
                     "nb_children": 1,
                     "path": "000100010001",
                     "title": {"en": "my first subject", "fr": "ma première thématique"},
@@ -126,9 +130,10 @@ class CategoriesIndexersTestCase(TestCase):
                     },
                     "complete": {"en": ["Subjects"], "fr": ["Sujets"]},
                     "description": {},
+                    "icon": {"en": "picture info", "fr": "picture info"},
                     "is_meta": True,
                     "kind": None,
-                    "logo": {"en": "logo info", "fr": "logo info"},
+                    "logo": {"en": "picture info", "fr": "picture info"},
                     "nb_children": 1,
                     "path": "00010001",
                     "title": {"en": "Subjects", "fr": "Sujets"},
@@ -143,8 +148,9 @@ class CategoriesIndexersTestCase(TestCase):
         es_category = {
             "_id": 89,
             "_source": {
+                "icon": {"en": "/icon_en.png", "fr": "/icon_fr.png"},
                 "is_meta": True,
-                "logo": {"en": "/image_en.png", "fr": "/image_fr.png"},
+                "logo": {"en": "/logo_en.png", "fr": "/logo_fr.png"},
                 "nb_children": 3,
                 "path": "00010001",
                 "title": {"en": "Computer science", "fr": "Informatique"},
@@ -153,9 +159,10 @@ class CategoriesIndexersTestCase(TestCase):
         self.assertEqual(
             CategoriesIndexer.format_es_object_for_api(es_category, "en"),
             {
+                "icon": "/icon_en.png",
                 "id": 89,
                 "is_meta": True,
-                "logo": "/image_en.png",
+                "logo": "/logo_en.png",
                 "nb_children": 3,
                 "path": "00010001",
                 "title": "Computer science",
