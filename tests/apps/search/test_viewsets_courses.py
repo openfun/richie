@@ -290,6 +290,7 @@ class CoursesViewsetsTestCase(TestCase):
                 "absolute_url",
                 "categories",
                 "cover_image",
+                "icon",
                 "organizations",
                 "organizations_names",
                 "title.*",

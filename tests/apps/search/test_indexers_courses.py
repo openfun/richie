@@ -96,24 +96,26 @@ class CoursesIndexersTestCase(TestCase):
 
     @mock.patch(
         "richie.apps.search.indexers.courses.get_picture_info",
-        return_value="cover info",
+        return_value="picture info",
     )
-    def test_indexers_courses_get_es_documents(self, _mock_picture):
+    def test_indexers_courses_get_es_documents_from_models(self, _mock_picture):
         """
         Happy path: the data is retrieved from the models properly formatted
         """
         # Create a course with a page in both english and french
         published_categories = [
             CategoryFactory(  # L-0001
-                page_title={"en": "Open-architected radical application"},
+                fill_icon=True,
+                page_title={"en": "Title L-0001", "fr": "Titre L-0001"},
                 should_publish=True,
             ),
             CategoryFactory(  # L-0002
-                page_title={"en": "Public-key transitional solution"},
+                fill_icon=True,
+                page_title={"en": "Title L-0002", "fr": "Titre L-0002"},
                 should_publish=True,
             ),
         ]
-        draft_category = CategoryFactory()  # L-0003
+        draft_category = CategoryFactory(fill_icon=True)  # L-0003
 
         main_organization = OrganizationFactory(  # L-0004
             page_title={
@@ -151,6 +153,7 @@ class CoursesIndexersTestCase(TestCase):
         course = CourseFactory(
             fill_categories=published_categories + [draft_category],
             fill_cover=True,
+            fill_icons=published_categories + [draft_category],
             fill_organizations=[
                 main_organization,
                 other_draft_organization,
@@ -189,10 +192,8 @@ class CoursesIndexersTestCase(TestCase):
             },
             "categories": ["L-0001", "L-0002"],
             "categories_names": {
-                "en": [
-                    "Open-architected radical application",
-                    "Public-key transitional solution",
-                ]
+                "en": ["Title L-0001", "Title L-0002"],
+                "fr": ["Titre L-0001", "Titre L-0002"],
             },
             "complete": {
                 "en": [
@@ -218,11 +219,12 @@ class CoursesIndexersTestCase(TestCase):
                 }
                 for course_run in course.get_course_runs().order_by("-end")
             ],
-            "cover_image": {"en": "cover info", "fr": "cover info"},
+            "cover_image": {"en": "picture info", "fr": "picture info"},
             "description": {
                 "en": "english description line 1. english description line 2.",
                 "fr": "a propos français ligne 1. a propos français ligne 2.",
             },
+            "icon": {"en": "picture info", "fr": "picture info"},
             "is_new": False,
             "organizations": ["L-0004", "L-0006"],
             "organizations_names": {
@@ -349,7 +351,8 @@ class CoursesIndexersTestCase(TestCase):
             "_source": {
                 "absolute_url": {"en": "campo-qui-format-do"},
                 "categories": [43, 86],
-                "cover_image": {"en": "image.jpg"},
+                "cover_image": {"en": "cover_image.jpg"},
+                "icon": {"en": "icon.jpg"},
                 "organizations": [42, 84],
                 "organizations_names": {"en": ["Org 42", "Org 84"]},
                 "title": {"en": "Duis eu arcu erat"},
@@ -366,7 +369,8 @@ class CoursesIndexersTestCase(TestCase):
                 "id": 93,
                 "absolute_url": "campo-qui-format-do",
                 "categories": [43, 86],
-                "cover_image": "image.jpg",
+                "cover_image": "cover_image.jpg",
+                "icon": "icon.jpg",
                 "organization_highlighted": "Org 42",
                 "organizations": [42, 84],
                 "title": "Duis eu arcu erat",
@@ -386,7 +390,8 @@ class CoursesIndexersTestCase(TestCase):
             "_source": {
                 "absolute_url": {"en": "campo-qui-format-do"},
                 "categories": [43, 86],
-                "cover_image": {"en": "image.jpg"},
+                "cover_image": {"en": "cover_image.jpg"},
+                "icon": {"en": "icon.jpg"},
                 "organizations": [],
                 "organizations_names": {},
                 "title": {"en": "Duis eu arcu erat"},
@@ -403,7 +408,8 @@ class CoursesIndexersTestCase(TestCase):
                 "id": 93,
                 "absolute_url": "campo-qui-format-do",
                 "categories": [43, 86],
-                "cover_image": "image.jpg",
+                "cover_image": "cover_image.jpg",
+                "icon": "icon.jpg",
                 "organization_highlighted": None,
                 "organizations": [],
                 "title": "Duis eu arcu erat",
@@ -423,7 +429,8 @@ class CoursesIndexersTestCase(TestCase):
             "_source": {
                 "absolute_url": {"en": "campo-qui-format-do"},
                 "categories": [43, 86],
-                "cover_image": {"en": "image.jpg"},
+                "cover_image": {"en": "cover_image.jpg"},
+                "icon": {"en": "icon.jpg"},
                 "organizations": [42, 84],
                 "organizations_names": {"en": ["Org 42", "Org 84"]},
                 "title": {"en": "Duis eu arcu erat"},

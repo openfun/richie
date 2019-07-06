@@ -15,7 +15,7 @@ from djangocms_picture.models import Picture
 from richie.plugins.simple_picture.helpers import get_picture_info
 from richie.plugins.simple_text_ckeditor.models import SimpleText
 
-from ...courses.models import MAX_DATE, Course, CourseState
+from ...courses.models import MAX_DATE, CategoryPluginModel, Course, CourseState
 from ..forms import CourseSearchForm
 from ..text_indexing import MULTILINGUAL_TEXT
 from ..utils.i18n import get_best_field_language
@@ -66,12 +66,14 @@ class CoursesIndexer:
             # Not searchable
             "absolute_url": {"type": "object", "enabled": False},
             "cover_image": {"type": "object", "enabled": False},
+            "icon": {"type": "object", "enabled": False},
         },
     }
     display_fields = [
         "absolute_url",
         "categories",
         "cover_image",
+        "icon",
         "organizations",
         "organizations_names",
         "title.*",
@@ -349,6 +351,7 @@ class CoursesIndexer:
         }
     }
 
+    # pylint: disable=too-many-locals
     @classmethod
     def get_es_document_for_course(cls, course, index=None, action="index"):
         """
@@ -370,7 +373,24 @@ class CoursesIndexer:
         ):
             language = cover.cmsplugin_ptr.language
             with translation.override(language):
-                cover_images[language] = get_picture_info(cover, "glimpse")
+                cover_images[language] = get_picture_info(cover, "cover")
+
+        # Prepare the related category icon
+        icon_images = {}
+        for plugin_model in CategoryPluginModel.objects.filter(
+            cmsplugin_ptr__placeholder__page=course.extended_object_id,
+            cmsplugin_ptr__placeholder__slot="course_icons",
+            cmsplugin_ptr__position=0,
+        ):
+            language = plugin_model.language
+            for icon in Picture.objects.filter(
+                cmsplugin_ptr__language=language,
+                cmsplugin_ptr__placeholder__page=plugin_model.page_id,
+                cmsplugin_ptr__placeholder__slot="icon",
+                cmsplugin_ptr__position=0,
+            ):
+                with translation.override(language):
+                    icon_images[language] = get_picture_info(icon, "icon")
 
         # Prepare description texts
         descriptions = defaultdict(list)
@@ -474,6 +494,7 @@ class CoursesIndexer:
             "course_runs": course_runs,
             "cover_image": cover_images,
             "description": {l: " ".join(st) for l, st in descriptions.items()},
+            "icon": icon_images,
             "is_new": len(course_runs) == 1,
             "organizations": [
                 ES_INDICES.organizations.get_es_id(o.extended_object)
@@ -552,6 +573,7 @@ class CoursesIndexer:
             "absolute_url": get_best_field_language(source["absolute_url"], language),
             "categories": source["categories"],
             "cover_image": get_best_field_language(source["cover_image"], language),
+            "icon": get_best_field_language(source["icon"], language),
             "organization_highlighted": organizations_names[0]
             if organizations_names
             else None,
