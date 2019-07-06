@@ -22,6 +22,19 @@
         </figure>
       {% endblockplugin %}
     </a>
+  {% elif form_factor == "mark" %}
+    {% get_placeholder_plugins "icon" relevant_page as icon_plugins %}
+    {% blockplugin icon_plugins.0 %}
+      <img src="{% thumbnail instance.picture 60x60 crop upscale subject_location=instance.picture.subject_location %}"
+        srcset="
+          {% thumbnail instance.picture 60x60 crop upscale subject_location=instance.picture.subject_location %} 60w,
+          {% if instance.picture.width >= 120 %}{% thumbnail instance.picture 120x120 crop upscale subject_location=instance.picture.subject_location %} 120w,{% endif %}
+          {% if instance.picture.width >= 180 %}{% thumbnail instance.picture 180x180 crop upscale subject_location=instance.picture.subject_location %} 180w{% endif %}
+        "
+        sizes="60px"
+        alt="{{ relevant_page.get_title }}"
+      />
+    {% endblockplugin %}
   {% else %}
     {% include "courses/cms/fragment_category_glimpse.html" with category=relevant_page.category %}
   {% endif %}
