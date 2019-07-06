@@ -30,8 +30,9 @@ class CategoriesViewsetsTestCase(TestCase):
             return_value={
                 "_id": 42,
                 "_source": {
+                    "icon": {"fr": "/icon42.png"},
                     "is_meta": True,
-                    "logo": {"fr": "/image42.png"},
+                    "logo": {"fr": "/logo42.png"},
                     "nb_children": 1,
                     "path": "0001",
                     "title": {"fr": "Some Category"},
@@ -48,9 +49,10 @@ class CategoriesViewsetsTestCase(TestCase):
         self.assertEqual(
             response.data,
             {
+                "icon": "/icon42.png",
                 "id": 42,
                 "is_meta": True,
-                "logo": "/image42.png",
+                "logo": "/logo42.png",
                 "nb_children": 1,
                 "path": "0001",
                 "title": "Some Category",
@@ -87,8 +89,9 @@ class CategoriesViewsetsTestCase(TestCase):
                     {
                         "_id": 21,
                         "_source": {
+                            "icon": {"fr": "/icon21.png"},
                             "is_meta": True,
-                            "logo": {"fr": "/image21.png"},
+                            "logo": {"fr": "/logo21.png"},
                             "nb_children": 1,
                             "path": "0002",
                             "title": {"fr": "Computer Science"},
@@ -97,8 +100,9 @@ class CategoriesViewsetsTestCase(TestCase):
                     {
                         "_id": 61,
                         "_source": {
+                            "icon": {"fr": "/icon61.png"},
                             "is_meta": False,
-                            "logo": {"fr": "/image61.png"},
+                            "logo": {"fr": "/logo61.png"},
                             "nb_children": 0,
                             "path": "00020001",
                             "title": {"fr": "Engineering Sciences"},
@@ -121,17 +125,19 @@ class CategoriesViewsetsTestCase(TestCase):
                 "meta": {"count": 2, "offset": 0, "total_count": 32},
                 "objects": [
                     {
+                        "icon": "/icon21.png",
                         "id": 21,
                         "is_meta": True,
-                        "logo": "/image21.png",
+                        "logo": "/logo21.png",
                         "nb_children": 1,
                         "path": "0002",
                         "title": "Computer Science",
                     },
                     {
+                        "icon": "/icon61.png",
                         "id": 61,
                         "is_meta": False,
-                        "logo": "/image61.png",
+                        "logo": "/logo61.png",
                         "nb_children": 0,
                         "path": "00020001",
                         "title": "Engineering Sciences",
@@ -143,6 +149,7 @@ class CategoriesViewsetsTestCase(TestCase):
         mock_search.assert_called_with(
             _source=[
                 "absolute_url",
+                "icon",
                 "is_meta",
                 "logo",
                 "nb_children",
