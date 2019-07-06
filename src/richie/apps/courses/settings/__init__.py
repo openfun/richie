@@ -181,6 +181,11 @@ CMS_PLACEHOLDER_CONF = {
         "plugins": ["SimplePicturePlugin"],
         "limits": {"SimplePicturePlugin": 1},
     },
+    "courses/cms/category_detail.html icon": {
+        "name": _("Icon"),
+        "plugins": ["SimplePicturePlugin"],
+        "limits": {"SimplePicturePlugin": 1},
+    },
     "courses/cms/category_detail.html description": {
         "name": _("Description"),
         "plugins": ["CKEditorPlugin"],

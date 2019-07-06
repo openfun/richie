@@ -5,10 +5,10 @@
 {% with category=current_page.category header_level=2 %}
 <div class="category-detail">
   <div class="category-detail__banner">
-    {% get_placeholder_plugins "banner" as plugins or %}
+    {% get_placeholder_plugins "banner" as banner_plugins or %}
       <div class="category-detail__banner__empty">{% trans "Banner" %}</div>
     {% endget_placeholder_plugins %}
-    {% blockplugin plugins.0 %}
+    {% blockplugin banner_plugins.0 %}
       <img
         src="{% thumbnail instance.picture 1140x400 crop upscale subject_location=instance.picture.subject_location %}"
         srcset="
@@ -23,10 +23,10 @@
   </div>
 
   <div class="category-detail__logo">
-    {% get_placeholder_plugins "logo" as plugins or %}
+    {% get_placeholder_plugins "logo" as logo_plugins or %}
       <div class="category-detail__logo__empty">{% trans "Logo" %}</div>
     {% endget_placeholder_plugins %}
-    {% blockplugin plugins.0 %}
+    {% blockplugin logo_plugins.0 %}
       <img
         src="{% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location %}"
         srcset="
@@ -40,7 +40,23 @@
     {% endblockplugin %}
   </div>
 
-  <h1 class="category-detail__title">{% render_model request.current_page "title" %}</h1>
+  <div class="category-detail__icon">
+    {% get_placeholder_plugins "icon" as icon_plugins %}
+    {% blockplugin icon_plugins.0 %}
+      <img
+        src="{% thumbnail instance.picture 60x60 crop upscale subject_location=instance.picture.subject_location %}"
+        srcset="
+          {% thumbnail instance.picture 60x60 crop upscale subject_location=instance.picture.subject_location %} 60w,
+          {% if instance.picture.width >= 120 %}{% thumbnail instance.picture 120x120 crop upscale subject_location=instance.picture.subject_location %} 80w,{% endif %}
+          {% if instance.picture.width >= 180 %}{% thumbnail instance.picture 180x180 crop upscale subject_location=instance.picture.subject_location %} 120w{% endif %}
+        "
+        sizes="60px"
+        alt=""
+      />
+    {% endblockplugin %}
+  </div>
+
+  <h1 class="category-detail__title">{% render_model current_page "title" %}</h1>
 
   <div class="category-detail__content">
     <div class="category-detail__content__description">

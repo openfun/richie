@@ -537,6 +537,30 @@ class CategoryFactory(BLDPageExtensionDjangoModelFactory):
                         **{"page": self.extended_object},
                     )
 
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def fill_icon(self, create, extracted, **kwargs):
+        """Add an icon with a random image."""
+        if create and extracted:
+            icon_placeholder = self.extended_object.placeholders.get(slot="icon")
+
+            if isinstance(extracted, str):
+                icon = image_getter(extracted)
+            elif callable(extracted):
+                icon = image_getter(extracted())
+            elif isinstance(extracted, dict):
+                icon = FilerImageFactory(**extracted)
+            else:
+                icon = FilerImageFactory(original_filename="icon.jpg")
+
+            for language in self.extended_object.get_languages():
+                add_plugin(
+                    language=language,
+                    placeholder=icon_placeholder,
+                    plugin_type="SimplePicturePlugin",
+                    picture=icon,
+                )
+
 
 class LicenceLogoImageFactory(FilerImageFactory):
     """Image field factory for Licence."""
