@@ -15,12 +15,12 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Factorize the code creating roles & permissions for organizations & courses.
+- Add an icon to the category detail page via a constrained placeholder.
 
 ### Fixed
 
 - Fix `get_placeholder_plugins` template tag when the placeholder is missing,
 - Stop limiting course getters to specific placeholder names on all objects,
-- Stop limiting course related objects getters to specific placeholder names,
 
 ## [1.5.2] - 2019-07-15
 
