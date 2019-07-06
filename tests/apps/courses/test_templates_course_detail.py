@@ -32,12 +32,14 @@ class CourseCMSTestCase(CMSTestCase):
         Validate that the important elements are displayed on a published course page
         """
         categories = CategoryFactory.create_batch(4)
+        icons = CategoryFactory.create_batch(4, fill_icon=True)
         organizations = OrganizationFactory.create_batch(4)
 
         course = CourseFactory(
             page_title="Very interesting course",
             fill_organizations=organizations,
             fill_categories=categories,
+            fill_icons=icons,
         )
         page = course.extended_object
         course_run1, _course_run2 = CourseRunFactory.create_batch(
@@ -45,9 +47,11 @@ class CourseCMSTestCase(CMSTestCase):
         )
         self.assertFalse(course_run1.extended_object.publish("en"))
 
-        # Publish only 2 out of 4 categories and 2 out of 4 organizations
+        # Publish only 2 out of 4 categories, icons and organizations
         categories[0].extended_object.publish("en")
         categories[1].extended_object.publish("en")
+        icons[0].extended_object.publish("en")
+        icons[1].extended_object.publish("en")
         organizations[0].extended_object.publish("en")
         organizations[1].extended_object.publish("en")
 
@@ -56,6 +60,8 @@ class CourseCMSTestCase(CMSTestCase):
         # We want to test both cases.
         categories[2].extended_object.publish("en")
         categories[2].extended_object.unpublish("en")
+        icons[2].extended_object.publish("en")
+        icons[2].extended_object.unpublish("en")
         organizations[2].extended_object.publish("en")
         organizations[2].extended_object.unpublish("en")
 
@@ -95,6 +101,26 @@ class CourseCMSTestCase(CMSTestCase):
             )
         for category in categories[-2:]:
             self.assertNotContains(response, category.extended_object.get_title())
+
+        # Only published icons should be present on the page
+        pattern = (
+            r'<a class="category-plugin-icon" href="{link:s}"><figure>'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*icon\.jpg.* alt=""/>'
+            r"<figcaption>{title:s}</figcaption></figure></a>"
+        )
+
+        for icon in icons[:2]:
+            self.assertIsNotNone(
+                re.search(
+                    pattern.format(
+                        link=icon.extended_object.get_absolute_url(),
+                        title=icon.extended_object.get_title(),
+                    ),
+                    str(response.content),
+                )
+            )
+        for icon in icons[-2:]:
+            self.assertNotContains(response, icon.extended_object.get_title())
 
         # Public organizations should be in response content
         for organization in organizations[:2]:

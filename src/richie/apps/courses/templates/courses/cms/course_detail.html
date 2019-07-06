@@ -49,6 +49,18 @@
           {% endwith %}
       </div>
 
+      {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_icons" %}
+      <div class="course-detail__content__row course-detail__content__icons">
+        {% with form_factor="icon" %}
+          {% placeholder "course_icons" or %}
+            <p class="course-detail__content__icons__empty">
+              {% trans "No associated icons" %}
+            </p>
+          {% endplaceholder %}
+        {% endwith %}
+      </div>
+      {% endif %}
+
       {% include "courses/cms/fragment_course_content.html" with page=current_page %}
     </div>
 

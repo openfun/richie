@@ -318,6 +318,22 @@ class CourseFactory(PageExtensionDjangoModelFactory):
 
     @factory.post_generation
     # pylint: disable=unused-argument
+    def fill_icons(self, create, extracted, **kwargs):
+        """Add category plugin to course from a given list of category instances."""
+
+        if create and extracted:
+            for language in self.extended_object.get_languages():
+                placeholder = self.extended_object.placeholders.get(slot="course_icons")
+                for category in extracted:
+                    add_plugin(
+                        language=language,
+                        placeholder=placeholder,
+                        plugin_type="CategoryPlugin",
+                        **{"page": category.extended_object},
+                    )
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
     def fill_organizations(self, create, extracted, **kwargs):
         """
         Add organizations plugin to course from a given list of organization instances.

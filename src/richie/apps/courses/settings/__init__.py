@@ -146,6 +146,10 @@ CMS_PLACEHOLDER_CONF = {
         "name": _("Categories"),
         "plugins": ["CategoryPlugin"],
     },
+    "courses/cms/course_detail.html course_icons": {
+        "name": _("Icons"),
+        "plugins": ["CategoryPlugin"],
+    },
     "courses/cms/course_detail.html course_organizations": {
         "name": _("Organizations"),
         "plugins": ["OrganizationPlugin"],
