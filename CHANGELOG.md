@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed typos in header-related SCSS variable names
+
 ## [1.5.0] - 2019-07-03
 
 ### Added
