@@ -34,23 +34,23 @@
     "not dead"
   ],
   "devDependencies": {
-    "@babel/core": "7.4.5",
+    "@babel/core": "7.5.0",
     "@babel/plugin-syntax-dynamic-import": "7.2.0",
     "@babel/polyfill": "7.4.4",
-    "@babel/preset-env": "7.4.5",
+    "@babel/preset-env": "7.5.0",
     "@babel/preset-typescript": "7.3.3",
     "@testing-library/react": "8.0.4",
     "@types/fetch-mock": "7.3.1",
     "@types/jest": "24.0.15",
     "@types/lodash-es": "4.17.3",
     "@types/query-string": "6.2.0",
-    "@types/react": "16.8.22",
+    "@types/react": "16.8.23",
     "@types/react-autosuggest": "9.3.9",
     "@types/react-dom": "16.8.4",
     "@types/react-intl": "2.3.18",
     "babel-jest": "24.8.0",
     "babel-loader": "8.0.6",
-    "babel-plugin-react-intl": "3.3.3",
+    "babel-plugin-react-intl": "3.5.1",
     "babel-preset-react": "7.0.0-beta.3",
     "fetch-mock": "7.3.3",
     "jest": "24.8.0",
@@ -63,7 +63,7 @@
     "source-map-loader": "0.2.4",
     "tslint": "5.18.0",
     "typescript": "3.5.2",
-    "webpack": "4.35.0",
+    "webpack": "4.35.2",
     "webpack-cli": "3.3.5",
     "xhr-mock": "2.4.1"
   },
@@ -78,7 +78,7 @@
     "react-intl": "2.9.0"
   },
   "resolutions": {
-    "@types/react": "16.8.22",
+    "@types/react": "16.8.23",
     "babel-core": "7.0.0-bridge.0"
   }
 }
