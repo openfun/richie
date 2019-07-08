@@ -5,13 +5,13 @@ $richie-topbar-breakpoint: lg !default;
 $richie-topbar-shadow: 0 0 rem-calc(3px) rem-calc(3px) rgba($gray40, 0.2) !default;
 $richie-topbar-background: $white !default;
 
-$richie-topbar-hamburger-paddding: 0 1rem !default;
+$richie-topbar-hamburger-padding: 0 1rem !default;
 $richie-topbar-hamburger-fontsize: 2rem !default;
 $richie-topbar-hamburger-fontcolor: $dodgerblue7 !default;
 $richie-topbar-hamburger-fontcolor-hover: $dodgerblue7 !default;
 
 $richie-topbar-brand-height: rem-calc(60px) !default;
-$richie-topbar-brand-paddding: 0 0.4rem !default;
+$richie-topbar-brand-padding: 0 0.4rem !default;
 
 $richie-topbar-menu-list-margin: 0 !default;
 $richie-topbar-menu-list-padding: 0 !default;
@@ -77,7 +77,7 @@ $richie-topbar-menu-item-divider-border-lg: 1px solid $white !default;
   // Will show only on mobile breakpoints
   &__hamburger {
     @include sv-flex(0, 0, auto);
-    padding: $richie-topbar-hamburger-paddding;
+    padding: $richie-topbar-hamburger-padding;
     border: 0;
     font-size: $richie-topbar-hamburger-fontsize;
     line-height: 1;
@@ -113,7 +113,7 @@ $richie-topbar-menu-item-divider-border-lg: 1px solid $white !default;
     // Clickable logo
     &__link {
       @include sv-flex(1, 0, auto);
-      padding: $richie-topbar-brand-paddding;
+      padding: $richie-topbar-brand-padding;
       order: 1;
 
       @include media-breakpoint-up($richie-topbar-breakpoint) {
