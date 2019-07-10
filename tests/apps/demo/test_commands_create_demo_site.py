@@ -51,11 +51,16 @@ class CreateDemoSiteCommandsTestCase(CMSTestCase):
         mock_create.assert_called_once_with()
         mock_logger.assert_called_once_with("done")
 
+    @mock.patch(
+        "richie.apps.demo.management.commands.create_demo_site.get_number_of_icons",
+        return_value=1,
+    )
     @mock.patch.dict(
         NB_OBJECTS,
         {
             "courses": 1,
             "course_courseruns": 1,
+            "course_icons": 1,
             "course_organizations": 1,
             "course_persons": 1,
             "course_subjects": 1,
@@ -76,13 +81,13 @@ class CreateDemoSiteCommandsTestCase(CMSTestCase):
     @mock.patch.dict(
         SUBJECTS_INFO,
         {
-            "title": {"en": "Subject", "fr": "Subjet"},
+            "page_title": {"en": "Subject", "fr": "Subjet"},
             "children": [
                 {
-                    "title": {"en": "Science", "fr": "Sciences"},
+                    "page_title": {"en": "Science", "fr": "Sciences"},
                     "children": [
                         {
-                            "title": {
+                            "page_title": {
                                 "en": "Agronomy and Agriculture",
                                 "fr": "Agronomie et Agriculture",
                             }
@@ -92,7 +97,7 @@ class CreateDemoSiteCommandsTestCase(CMSTestCase):
             ],
         },
     )
-    def test_commands_create_demo_site_method(self):
+    def test_commands_create_demo_site_method(self, *_):
         """
         Validate that the create_demo_site method works (with a minimum number of pages because
         it takes a lot of time).
@@ -101,8 +106,8 @@ class CreateDemoSiteCommandsTestCase(CMSTestCase):
         self.assertEqual(models.BlogPost.objects.count(), 2)
         self.assertEqual(models.Course.objects.count(), 2)
         self.assertEqual(models.CourseRun.objects.count(), 2)
-        self.assertEqual(models.Category.objects.count(), 14)
+        self.assertEqual(models.Category.objects.count(), 26)
         self.assertEqual(models.Organization.objects.count(), 2)
         self.assertEqual(models.Person.objects.count(), 2)
         self.assertEqual(models.Licence.objects.count(), 1)
-        self.assertEqual(CMSPlugin.objects.count(), 324)
+        self.assertEqual(CMSPlugin.objects.count(), 420)

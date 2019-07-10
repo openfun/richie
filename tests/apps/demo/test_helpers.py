@@ -16,23 +16,23 @@ class CoursesHelpersTestCase(CMSTestCase):
         The `create_categories` method should create the whole category tree and return
         only the leaf categories.
         """
-        page = create_i18n_page("Root page")
+        parent = create_i18n_page("Root page")
         test_info = {
-            "title": "Subject",
+            "page_title": "Subject",
             "children": [
                 {
-                    "title": {"en": "Computer science", "fr": "Informatique"},
+                    "page_title": {"en": "Computer science", "fr": "Informatique"},
                     "children": [
-                        {"title": {"en": "Coding", "fr": "Programmation"}},
-                        {"title": {"en": "Security", "fr": "Sécurité"}},
+                        {"page_title": {"en": "Coding", "fr": "Programmation"}},
+                        {"page_title": {"en": "Security", "fr": "Sécurité"}},
                     ],
                 },
-                {"title": "Languages"},
+                {"page_title": "Languages"},
             ],
         }
 
         # The function returns a generator so it should not have been executed yet
-        categories = create_categories(test_info, page)
+        categories = create_categories(page_parent=parent, **test_info)
         self.assertFalse(Category.objects.exists())
 
         # Now force its execution and check that the category tree was created as expected
