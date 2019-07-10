@@ -1,9 +1,12 @@
 """Parameters that define how the demo site will be built."""
 from django.conf import settings
 
+from .utils import pick_image
+
 NB_OBJECTS = {
     "courses": 30,
     "course_courseruns": 5,
+    "course_icons": 3,
     "course_organizations": 3,
     "course_persons": 6,
     "course_subjects": 2,
@@ -75,58 +78,64 @@ PAGES_INFO = {
 
 
 LEVELS_INFO = {
-    "title": {"en": "Level", "fr": "Niveau"},
+    "page_title": {"en": "Level", "fr": "Niveau"},
     "children": [
-        {"title": {"en": "Beginner", "fr": "Débutant"}},
-        {"title": {"en": "Advanced", "fr": "Avancé"}},
-        {"title": {"en": "Expert", "fr": "Expert"}},
+        {"page_title": {"en": "Beginner", "fr": "Débutant"}},
+        {"page_title": {"en": "Advanced", "fr": "Avancé"}},
+        {"page_title": {"en": "Expert", "fr": "Expert"}},
     ],
+    "page_reverse_id": "levels",
 }
 LEVELS_INFO.update(getattr(settings, "RICHIE_DEMO_LEVELS_INFO", {}))
 
 SUBJECTS_INFO = {
-    "title": {"en": "Subject", "fr": "Subjet"},
+    "page_title": {"en": "Subject", "fr": "Subjet"},
     "children": [
         {
-            "title": {"en": "Science", "fr": "Sciences"},
+            "page_title": {"en": "Science", "fr": "Sciences"},
             "children": [
                 {
-                    "title": {
+                    "page_title": {
                         "en": "Agronomy and Agriculture",
                         "fr": "Agronomie et Agriculture",
                     }
                 },
-                {"title": {"en": "Chemistry", "fr": "Chimie"}},
+                {"page_title": {"en": "Chemistry", "fr": "Chimie"}},
                 {
-                    "title": {
+                    "page_title": {
                         "en": "Discovery of the Universe",
                         "fr": "Découverte de l'Univers",
                     }
                 },
-                {"title": {"en": "Environment", "fr": "Environnement"}},
+                {"page_title": {"en": "Environment", "fr": "Environnement"}},
                 {
-                    "title": {
+                    "page_title": {
                         "en": "Mathematics and Statistics",
                         "fr": "Mathématiques et Statistiques",
                     }
                 },
                 {
-                    "title": {
+                    "page_title": {
                         "en": "Tools for Research",
                         "fr": "Outils pour la Recherche",
                     }
                 },
-                {"title": {"en": "Physics", "fr": "Physique"}},
-                {"title": {"en": "Cognitive science", "fr": "Sciences cognitives"}},
+                {"page_title": {"en": "Physics", "fr": "Physique"}},
                 {
-                    "title": {
+                    "page_title": {
+                        "en": "Cognitive science",
+                        "fr": "Sciences cognitives",
+                    }
+                },
+                {
+                    "page_title": {
                         "en": "Earth science and science of the Universe",
                         "fr": "Sciences de la Terre et de l'Univers",
                     }
                 },
-                {"title": {"en": "Life science", "fr": "Sciences de la vie"}},
+                {"page_title": {"en": "Life science", "fr": "Sciences de la vie"}},
                 {
-                    "title": {
+                    "page_title": {
                         "en": "Engineering science",
                         "fr": "Sciences pour l'ingénieur",
                     }
@@ -134,75 +143,114 @@ SUBJECTS_INFO = {
             ],
         },
         {
-            "title": {
+            "page_title": {
                 "en": "Human and social sciences",
                 "fr": "Sciences humaines et social",
             },
             "children": [
-                {"title": {"en": "Communication", "fr": "Communication"}},
+                {"page_title": {"en": "Communication", "fr": "Communication"}},
                 {
-                    "title": {
+                    "page_title": {
                         "en": "Creation, Arts and Design",
                         "fr": "Création, Arts et Design",
                     }
                 },
                 {
-                    "title": {
+                    "page_title": {
                         "en": "Culture and Civilization",
                         "fr": "Cultures et Civilisations",
                     }
                 },
                 {
-                    "title": {
+                    "page_title": {
                         "en": "Social Issues and Social Policy",
                         "fr": "Enjeux de société",
                     }
                 },
-                {"title": {"en": "Geography", "fr": "Géographie"}},
-                {"title": {"en": "History", "fr": "Histoire"}},
-                {"title": {"en": "Innovation", "fr": "Innovation"}},
-                {"title": {"en": "Literature", "fr": "Lettres"}},
-                {"title": {"en": "Media", "fr": "Médias"}},
-                {"title": {"en": "Philosophy", "fr": "Philosophie"}},
-                {"title": {"en": "Political science", "fr": "Sciences politiques"}},
+                {"page_title": {"en": "Geography", "fr": "Géographie"}},
+                {"page_title": {"en": "History", "fr": "Histoire"}},
+                {"page_title": {"en": "Innovation", "fr": "Innovation"}},
+                {"page_title": {"en": "Literature", "fr": "Lettres"}},
+                {"page_title": {"en": "Media", "fr": "Médias"}},
+                {"page_title": {"en": "Philosophy", "fr": "Philosophie"}},
                 {
-                    "title": {
+                    "page_title": {
+                        "en": "Political science",
+                        "fr": "Sciences politiques",
+                    }
+                },
+                {
+                    "page_title": {
                         "en": "International relations",
                         "fr": "Relations internationales",
                     }
                 },
-                {"title": {"en": "Sports", "fr": "Sport"}},
+                {"page_title": {"en": "Sports", "fr": "Sport"}},
             ],
         },
-        {"title": {"en": "Law", "fr": "Droit et juridique"}},
-        {"title": {"en": "Economy and Finance", "fr": "Economie et Finance"}},
-        {"title": {"en": "Education and Training", "fr": "Education et formation"}},
-        {"title": {"en": "Management", "fr": "Management"}},
-        {"title": {"en": "Entrepreneurship", "fr": "Entreprenariat"}},
+        {"page_title": {"en": "Law", "fr": "Droit et juridique"}},
+        {"page_title": {"en": "Economy and Finance", "fr": "Economie et Finance"}},
         {
-            "title": {"en": "Computer science", "fr": "Informatique"},
+            "page_title": {
+                "en": "Education and Training",
+                "fr": "Education et formation",
+            }
+        },
+        {"page_title": {"en": "Management", "fr": "Management"}},
+        {"page_title": {"en": "Entrepreneurship", "fr": "Entreprenariat"}},
+        {
+            "page_title": {"en": "Computer science", "fr": "Informatique"},
             "children": [
                 {
-                    "title": {
+                    "page_title": {
                         "en": "Digital and Technology",
                         "fr": "Numérique et Technologie",
                     }
                 },
                 {
-                    "title": {
+                    "page_title": {
                         "en": "Telecommunication and Networks",
                         "fr": "Télécommunications et Réseaux",
                     }
                 },
-                {"title": {"en": "Coding", "fr": "Programmation"}},
+                {"page_title": {"en": "Coding", "fr": "Programmation"}},
             ],
         },
-        {"title": {"en": "Languages", "fr": "Langues"}},
-        {"title": {"en": "Education and career guidance", "fr": "Orientation"}},
-        {"title": {"en": "Health", "fr": "Santé"}},
+        {"page_title": {"en": "Languages", "fr": "Langues"}},
+        {"page_title": {"en": "Education and career guidance", "fr": "Orientation"}},
+        {"page_title": {"en": "Health", "fr": "Santé"}},
     ],
+    "page_reverse_id": "subjects",
 }
 SUBJECTS_INFO.update(getattr(settings, "RICHIE_DEMO_SUBJECTS_INFO", {}))
+
+ICONS_INFO = {
+    "page_title": {"en": "Icons", "fr": "Icônes"},
+    "children": [
+        {
+            "page_title": {"en": "Academic", "fr": "Diplomant"},
+            "fill_icon": pick_image("icons")("academic.png"),
+        },
+        {
+            "page_title": {"en": "Accessible", "fr": "Accessible"},
+            "fill_icon": pick_image("icons")("accessible.png"),
+        },
+        {
+            "page_title": {"en": "Closed caption", "fr": "Sous-titres malentendants"},
+            "fill_icon": pick_image("icons")("cc.png"),
+        },
+        {
+            "page_title": {"en": "Certificate", "fr": "Certifiant"},
+            "fill_icon": pick_image("icons")("certificate.png"),
+        },
+        {
+            "page_title": {"en": "Subtitles", "fr": "Sous-titres"},
+            "fill_icon": pick_image("icons")("subtitles.png"),
+        },
+    ],
+    "page_reverse_id": "icons",
+}
+ICONS_INFO.update(getattr(settings, "RICHIE_DEMO_ICONS_INFO", {}))
 
 HOMEPAGE_CONTENT = {
     "en": {

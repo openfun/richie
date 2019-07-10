@@ -25,6 +25,7 @@ from richie.apps.courses.factories import (
 
 from ...defaults import (
     HOMEPAGE_CONTENT,
+    ICONS_INFO,
     LEVELS_INFO,
     NB_OBJECTS,
     PAGES_INFO,
@@ -40,10 +41,22 @@ logger = logging.getLogger("richie.commands.demo.create_demo_site")
 
 def get_number_of_course_runs():
     """
-    Returns a random integer between 1 and 5. We make it a convenience method so that it can
-    be mocked in tests.
+    Returns a random integer between 1 and the max number of course runs.
+    We make it a convenience method so that it can be mocked in tests.
     """
     return random.randint(1, NB_OBJECTS["course_courseruns"])  # nosec
+
+
+def get_number_of_icons():
+    """
+    Returns a random integer between 0 and the max number of course icons.
+    0 is weighted to have as much chance to be chosen as all other numbers cumulated because
+    we visually don't want all our courses to have an icon.
+    We make it a convenience method so that it can be mocked in tests.
+    """
+    return random.choice(  # nosec
+        [0] * NB_OBJECTS["course_icons"] + list(range(NB_OBJECTS["course_icons"]))
+    )
 
 
 # pylint: disable=no-member
@@ -85,22 +98,28 @@ def create_demo_site():
     )
 
     # Generate each category tree and return a list of the leaf categories
-    levels = list(
+    icons = list(
         create_categories(
-            LEVELS_INFO,
-            pages_created["categories"],
-            reverse_id="levels",
+            **ICONS_INFO,
             fill_banner=pick_image("banner"),
             fill_logo=pick_image("logo"),
+            page_parent=pages_created["categories"],
+        )
+    )
+    levels = list(
+        create_categories(
+            **LEVELS_INFO,
+            fill_banner=pick_image("banner"),
+            fill_logo=pick_image("logo"),
+            page_parent=pages_created["categories"],
         )
     )
     subjects = list(
         create_categories(
-            SUBJECTS_INFO,
-            pages_created["categories"],
-            reverse_id="subjects",
+            **SUBJECTS_INFO,
             fill_banner=pick_image("banner"),
             fill_logo=pick_image("logo"),
+            page_parent=pages_created["categories"],
         )
     )
 
@@ -175,6 +194,7 @@ def create_demo_site():
                 ),
                 random.choice(levels),  # nosec
             ],
+            fill_icons=random.sample(icons, get_number_of_icons()),
             fill_organizations=course_organizations,
             fill_texts=[
                 "course_description",
@@ -513,7 +533,7 @@ def create_demo_site():
                 plugin_type="HTMLSitemapPagePlugin",
                 target=parent_instance,
                 root_page=pages_created[name],
-                **params
+                **params,
             )
 
         # Once content has been added we must publish again the sitemap
