@@ -24,7 +24,6 @@ export interface Course extends Resource {
     priority: number;
     text: string;
   };
-  title: string;
 }
 
 export type CourseForSuggestion = Pick<Course, 'absolute_url' | 'id' | 'title'>;
