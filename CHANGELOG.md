@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.5.1] - 2019-07-11
+
 ### Fixed
 
 - Fixed typos in header-related SCSS variable names.
@@ -400,7 +402,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v1.5.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v1.5.1...master
+[1.5.1]: https://github.com/openfun/richie/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/openfun/richie/compare/v1.4.1...v1.5.0
 [1.4.1]: https://github.com/openfun/richie/compare/v1.4.0...v1.4.1
 [1.4.0]: https://github.com/openfun/richie/compare/v1.3.0...v1.4.0
