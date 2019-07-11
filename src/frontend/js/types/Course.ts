@@ -25,5 +25,3 @@ export interface Course extends Resource {
     text: string;
   };
 }
-
-export type CourseForSuggestion = Pick<Course, 'absolute_url' | 'id' | 'title'>;

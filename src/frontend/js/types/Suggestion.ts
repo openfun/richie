@@ -1,5 +1,3 @@
-import { FormattedMessage } from 'react-intl';
-
 /**
  * A Default suggestion shape for cases where we need one.
  */
