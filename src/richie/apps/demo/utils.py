@@ -28,7 +28,7 @@ def pick_image(image_type):
         image_directory = os.path.join(
             os.path.dirname(__file__), "fixtures", image_type
         )
-        filename = filename or random.choice(os.listdir(image_directory))
+        filename = filename or random.choice(os.listdir(image_directory))  # nosec
 
         return os.path.join(image_directory, filename)
 

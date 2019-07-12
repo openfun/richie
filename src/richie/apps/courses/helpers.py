@@ -19,7 +19,8 @@ def snapshot_course(page, user, simulate_only=False):
     moving all the course run of the page being snapshotted as children of the new snapshot
     so we keep record of the course as it was when these course runs were played.
     """
-    assert page.publisher_is_draft is True
+    if not page.publisher_is_draft:
+        raise PermissionDenied("You can't snapshot a public page.")
 
     # If the page has a parent that is a course page, it is a snapshot and should therefore
     # not be allowed to be itself snapshotted.

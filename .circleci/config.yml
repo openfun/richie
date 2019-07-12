@@ -153,6 +153,9 @@ jobs:
       - run:
           name: Lint code with pylint
           command: ~/.local/bin/pylint src/richie/apps src/richie/plugins sandbox tests
+      - run:
+          name: Lint code with bandit
+          command: ~/.local/bin/bandit -qr src/richie/apps src/richie/plugins sandbox
 
   # Restore front & back POT files containing strings to translate and upload them to our
   # translation management tool

@@ -58,14 +58,14 @@ def create_text_plugin(
     """
     languages = languages or [settings.LANGUAGE_CODE]
     container = "<p>{:s}</p>" if is_html else "{:s}"
-    nb_paragraphs = nb_paragraphs or random.randint(2, 4)
+    nb_paragraphs = nb_paragraphs or random.randint(2, 4)  # nosec
 
     placeholder = page.placeholders.get(slot=slot)
 
     for language in languages:
         paragraphs = []
         for _ in range(nb_paragraphs):
-            max_nb_chars = max_nb_chars or random.randint(200, 400)
+            max_nb_chars = max_nb_chars or random.randint(200, 400)  # nosec
             paragraphs.append(
                 factory.Faker(
                     "text", max_nb_chars=max_nb_chars, locale=language
@@ -212,7 +212,7 @@ class FilerImageFactory(factory.django.DjangoModelFactory):
         Generate random coordinates within the image.
         We assume its dimensions are 100x100 as is the case for below's random file.
         """
-        return (random.randint(1, 100), random.randint(1, 100))
+        return (random.randint(1, 100), random.randint(1, 100))  # nosec
 
     # pylint: disable=no-self-use
     @factory.lazy_attribute

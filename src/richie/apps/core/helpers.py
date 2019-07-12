@@ -60,7 +60,13 @@ def create_i18n_page(title, languages=None, is_homepage=False, **kwargs):
     if isinstance(title, dict):
         # Check that the languages passed are coherent with the languages requested if any
         if languages:
-            assert set(languages).issubset(title.keys())
+            invalid_languages = set(languages) - set(title.keys())
+            if invalid_languages:
+                raise ValueError(
+                    "Page titles are missing in some requested languages: {:s}".format(
+                        ",".join(invalid_languages)
+                    )
+                )
         else:
             languages = title.keys()
         i18n_titles = title
@@ -76,7 +82,14 @@ def create_i18n_page(title, languages=None, is_homepage=False, **kwargs):
         )
 
     # Assert that the languages passed are declared in settings
-    assert set(languages).issubset({l[0] for l in settings.LANGUAGES})
+    invalid_languages = set(languages) - {l[0] for l in settings.LANGUAGES}
+    if invalid_languages:
+        raise ValueError(
+            "You can't create pages in languages that are not declared: {:s}".format(
+                ",".join(invalid_languages)
+            )
+        )
+
     # Make a copy of languages to avoid muting it in what follows
     languages = list(languages)
     # Create the page with a first language from what is given to us

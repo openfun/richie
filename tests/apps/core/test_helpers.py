@@ -131,9 +131,13 @@ class CreateI18nPageHelpersTestCase(CMSTestCase):
         don't match with the list of languages passed.
         """
         i18n_titles = {"fr": "Titre français", "de": "Deutches Titel"}
-        with self.assertRaises(AssertionError):
+        with self.assertRaises(ValueError) as context:
             create_i18n_page(i18n_titles, languages=["en", "fr"])
 
+        self.assertEqual(
+            str(context.exception),
+            ("Page titles are missing in some requested languages: en"),
+        )
         self.assertFalse(mock_page.called)
         self.assertFalse(mock_title.called)
 
@@ -182,9 +186,13 @@ class CreateI18nPageHelpersTestCase(CMSTestCase):
         """
         Trying to create a multilingual page for languages that don't exist should fail.
         """
-        with self.assertRaises(AssertionError):
+        with self.assertRaises(ValueError) as context:
             create_i18n_page("my title", languages=["en", "de"])
 
+        self.assertEqual(
+            str(context.exception),
+            ("You can't create pages in languages that are not declared: de"),
+        )
         self.assertFalse(mock_page.called)
         self.assertFalse(mock_title.called)
 

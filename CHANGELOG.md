@@ -12,8 +12,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
-- Fixed typos in header-related SCSS variable names.
-- Fix non-conformities in blogpost, category, organization & person glimpses.
+- Remove asserts and prepare codebase for activation of `bandit` linter,
+- Fixed typos in header-related SCSS variable names,
+- Fix non-conformities in blogpost, category, organization & person glimpses,
 - Fix lodash, lodash-es, handlebars vulnerabilities by upgrading versions.
 
 ## [1.5.0] - 2019-07-03

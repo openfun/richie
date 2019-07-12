@@ -107,7 +107,7 @@ class BLDPageExtensionDjangoModelFactory(PageExtensionDjangoModelFactory):
             create_text_plugin(
                 self.extended_object,
                 "description",
-                nb_paragraphs=random.randint(2, 4),
+                nb_paragraphs=random.randint(2, 4),  # nosec
                 languages=self.extended_object.get_languages(),
             )
 
@@ -196,8 +196,8 @@ class CourseFactory(PageExtensionDjangoModelFactory):
     def duration(self):
         """Generate a random duration for the course between 1 day and 10 months."""
         return [
-            random.randint(1, 10),
-            random.choice(list(defaults.TIME_UNITS.keys())[2:]),
+            random.randint(1, 10),  # nosec
+            random.choice(list(defaults.TIME_UNITS.keys())[2:]),  # nosec
         ]
 
     # pylint: disable=no-self-use
@@ -206,9 +206,9 @@ class CourseFactory(PageExtensionDjangoModelFactory):
         """Generate a random effort for the course between 1 minute/month and 10 hours/day."""
         time_units = list(defaults.TIME_UNITS.keys())
         return [
-            random.randint(1, 10),
-            random.choice(time_units[:2]),
-            random.choice(time_units[2:]),
+            random.randint(1, 10),  # nosec
+            random.choice(time_units[:2]),  # nosec
+            random.choice(time_units[2:]),  # nosec
         ]
 
     @factory.post_generation
@@ -228,7 +228,7 @@ class CourseFactory(PageExtensionDjangoModelFactory):
                 video_sample = (
                     extracted
                     if isinstance(extracted, VideoSample)
-                    else random.choice(VIDEO_SAMPLE_LINKS)
+                    else random.choice(VIDEO_SAMPLE_LINKS)  # nosec
                 )
 
                 add_plugin(
@@ -411,7 +411,10 @@ class CourseRunFactory(PageExtensionDjangoModelFactory):
         return (
             self.parent.get_languages()
             if getattr(self, "parent", None)
-            else [l[0] for l in random.sample(ALL_LANGUAGES, random.randint(1, 5))]
+            else [
+                l[0]
+                for l in random.sample(ALL_LANGUAGES, random.randint(1, 5))  # nosec
+            ]
         )
 
     # pylint: disable=no-self-use
@@ -425,7 +428,7 @@ class CourseRunFactory(PageExtensionDjangoModelFactory):
         now = timezone.now()
         period = timedelta(days=200)
         return datetime.utcfromtimestamp(
-            random.randrange(
+            random.randrange(  # nosec
                 int((now - period).timestamp()), int((now + period).timestamp())
             )
         ).replace(tzinfo=pytz.utc)
@@ -439,7 +442,7 @@ class CourseRunFactory(PageExtensionDjangoModelFactory):
             return None
         period = timedelta(days=90)
         return datetime.utcfromtimestamp(
-            random.randrange(
+            random.randrange(  # nosec
                 int(self.start.timestamp()), int((self.start + period).timestamp())
             )
         ).replace(tzinfo=pytz.utc)
@@ -453,7 +456,7 @@ class CourseRunFactory(PageExtensionDjangoModelFactory):
             return None
         period = timedelta(days=90)
         return datetime.utcfromtimestamp(
-            random.randrange(
+            random.randrange(  # nosec
                 int((self.start - period).timestamp()), int(self.start.timestamp())
             )
         ).replace(tzinfo=pytz.utc)
@@ -469,16 +472,16 @@ class CourseRunFactory(PageExtensionDjangoModelFactory):
         if not self.start:
             return None
         enrollment_start = self.enrollment_start or self.start - timedelta(
-            days=random.randint(1, 90)
+            days=random.randint(1, 90)  # nosec
         )
         max_enrollment_end = self.end or self.start + timedelta(
-            days=random.randint(1, 90)
+            days=random.randint(1, 90)  # nosec
         )
         max_enrollment_end = max(
             enrollment_start + timedelta(hours=1), max_enrollment_end
         )
         return datetime.utcfromtimestamp(
-            random.randrange(
+            random.randrange(  # nosec
                 int(enrollment_start.timestamp()), int(max_enrollment_end.timestamp())
             )
         ).replace(tzinfo=pytz.utc)
@@ -594,7 +597,7 @@ class BlogPostFactory(PageExtensionDjangoModelFactory):
             create_text_plugin(
                 self.extended_object,
                 "body",
-                nb_paragraphs=random.randint(4, 6),
+                nb_paragraphs=random.randint(4, 6),  # nosec
                 languages=self.extended_object.get_languages(),
                 plugin_type="TextPlugin",
             )
@@ -656,7 +659,9 @@ class BlogPostFactory(PageExtensionDjangoModelFactory):
 
             for language in self.extended_object.get_languages():
                 text = factory.Faker(
-                    "text", max_nb_chars=random.randint(50, 100), locale=language
+                    "text",
+                    max_nb_chars=random.randint(50, 100),  # nosec
+                    locale=language,
                 ).generate({})
                 add_plugin(
                     language=language,
@@ -681,7 +686,7 @@ class PersonFactory(PageExtensionDjangoModelFactory):
         Build the page title from the person's title and names
         """
         # Don't always set a title
-        person_title = random.choice([None, self.person_title])
+        person_title = random.choice([None, self.person_title])  # nosec
 
         # Join the names that are not null into a string
         names = [person_title, self.first_name, self.last_name]
