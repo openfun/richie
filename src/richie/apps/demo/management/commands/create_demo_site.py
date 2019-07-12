@@ -43,7 +43,7 @@ def get_number_of_course_runs():
     Returns a random integer between 1 and 5. We make it a convenience method so that it can
     be mocked in tests.
     """
-    return random.randint(1, NB_OBJECTS["course_courseruns"])
+    return random.randint(1, NB_OBJECTS["course_courseruns"])  # nosec
 
 
 # pylint: disable=no-member
@@ -109,14 +109,15 @@ def create_demo_site():
     for _ in range(NB_OBJECTS["persons"]):
         # Randomly assign each person to a set of organizations
         person_organizations = random.sample(
-            organizations, random.randint(1, NB_OBJECTS["person_organizations"])
+            organizations,
+            random.randint(1, NB_OBJECTS["person_organizations"]),  # nosec
         )
         person = PersonFactory(
             page_in_navigation=True,
             page_languages=["en", "fr"],
             page_parent=pages_created["persons"],
             fill_categories=random.sample(
-                subjects, random.randint(1, NB_OBJECTS["person_subjects"])
+                subjects, random.randint(1, NB_OBJECTS["person_subjects"])  # nosec
             ),
             fill_organizations=person_organizations,
             fill_portrait=pick_image("portrait"),
@@ -135,7 +136,7 @@ def create_demo_site():
     # relations
     courses = []
     for _ in range(NB_OBJECTS["courses"]):
-        video_sample = random.choice(VIDEO_SAMPLE_LINKS)
+        video_sample = random.choice(VIDEO_SAMPLE_LINKS)  # nosec
 
         # Randomly assign each course to a set of organizations
         course_organizations = random.sample(
@@ -155,13 +156,13 @@ def create_demo_site():
             page_languages=["en", "fr"],
             page_parent=pages_created["courses"],
             fill_licences=[
-                ("course_license_content", random.choice(licences)),
-                ("course_license_participation", random.choice(licences)),
+                ("course_license_content", random.choice(licences)),  # nosec
+                ("course_license_participation", random.choice(licences)),  # nosec
             ],
             fill_team=random.sample(
                 eligible_persons,
                 min(
-                    random.randint(1, NB_OBJECTS["course_persons"]),
+                    random.randint(1, NB_OBJECTS["course_persons"]),  # nosec
                     len(eligible_persons),
                 ),
             ),
@@ -169,9 +170,9 @@ def create_demo_site():
             fill_cover=pick_image("cover")(video_sample.image),
             fill_categories=[
                 *random.sample(
-                    subjects, random.randint(1, NB_OBJECTS["course_subjects"])
+                    subjects, random.randint(1, NB_OBJECTS["course_subjects"])  # nosec
                 ),
-                random.choice(levels),
+                random.choice(levels),  # nosec
             ],
             fill_organizations=course_organizations,
             fill_texts=[
@@ -191,13 +192,13 @@ def create_demo_site():
         # pick a subset of languages for this course (otherwise all courses will have more or
         # less all the languages across their course runs!)
         languages_subset = random.sample(
-            ["de", "en", "es", "fr", "it", "nl"], random.randint(1, 4)
+            ["de", "en", "es", "fr", "it", "nl"], random.randint(1, 4)  # nosec
         )
         for i in range(nb_course_runs):
             CourseRunFactory(
                 __sequence=i,
                 languages=random.sample(
-                    languages_subset, random.randint(1, len(languages_subset))
+                    languages_subset, random.randint(1, len(languages_subset))  # nosec
                 ),
                 page_in_navigation=False,
                 page_languages=["en", "fr"],
@@ -217,7 +218,7 @@ def create_demo_site():
             fill_body=True,
             fill_categories=[
                 *random.sample(subjects, NB_OBJECTS["blogpost_categories"]),
-                random.choice(levels),
+                random.choice(levels),  # nosec
             ],
             fill_author=random.sample(persons, 1),
             should_publish=True,
@@ -392,7 +393,7 @@ def create_demo_site():
     logo = image_getter(pick_image("logo")())
 
     # - Get a video
-    video_sample = random.choice(VIDEO_SAMPLE_LINKS)
+    video_sample = random.choice(VIDEO_SAMPLE_LINKS)  # nosec
 
     # - Create sample page in each language
     for language, content in SINGLECOLUMN_CONTENT.items():
@@ -410,7 +411,7 @@ def create_demo_site():
         create_text_plugin(
             pages_created["annex__about"],
             placeholder,
-            nb_paragraphs=random.randint(3, 4),
+            nb_paragraphs=random.randint(3, 4),  # nosec
             languages=[language],
             plugin_type="TextPlugin",
         )
@@ -436,28 +437,28 @@ def create_demo_site():
             placeholder=placeholder,
             plugin_type="OrganizationPlugin",
             target=sample_section,
-            page=random.choice(organizations).extended_object,
+            page=random.choice(organizations).extended_object,  # nosec
         )
         add_plugin(
             language=language,
             placeholder=placeholder,
             plugin_type="CoursePlugin",
             target=sample_section,
-            page=random.choice(courses).extended_object,
+            page=random.choice(courses).extended_object,  # nosec
         )
         add_plugin(
             language=language,
             placeholder=placeholder,
             plugin_type="OrganizationPlugin",
             target=sample_section,
-            page=random.choice(organizations).extended_object,
+            page=random.choice(organizations).extended_object,  # nosec
         )
         add_plugin(
             language=language,
             placeholder=placeholder,
             plugin_type="BlogPostPlugin",
             target=sample_section,
-            page=random.choice(blogposts).extended_object,
+            page=random.choice(blogposts).extended_object,  # nosec
         )
         add_plugin(
             language=language,
@@ -473,7 +474,7 @@ def create_demo_site():
             language=language,
             placeholder=placeholder,
             plugin_type="LicencePlugin",
-            licence=random.choice(licences),
+            licence=random.choice(licences),  # nosec
         )
         # Add a simple picture entry
         add_plugin(
@@ -484,7 +485,7 @@ def create_demo_site():
         )
         # Add a plain text
         text = factory.Faker(
-            "text", max_nb_chars=random.randint(150, 250), locale=language
+            "text", max_nb_chars=random.randint(150, 250), locale=language  # nosec
         ).generate({})
         add_plugin(
             language=language,

@@ -297,6 +297,32 @@ class SnapshotPageAdminTestCase(CMSTestCase):
             content, {"status": 403, "content": "You can't snapshot a snapshot."}
         )
 
+    def test_admin_page_snapshot_blocked_for_public_page(self):
+        """
+        It should not be possible to snapshot the public page of a course.
+        """
+        user = UserFactory(is_staff=True)
+        self.client.login(username=user.username, password="password")
+
+        public_course = CourseFactory(should_publish=True).public_extension
+
+        # Add the necessary permissions (global and per page)
+        self.add_permission(user, "add_page")
+        self.add_permission(user, "change_page")
+        self.add_page_permission(
+            user, public_course.extended_object, can_change=True, can_add=True
+        )
+
+        # Try triggering the creation of a snapshot for the course
+        url = "/en/admin/courses/course/{:d}/snapshot/".format(public_course.id)
+        response = self.client.post(url, follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        content = json.loads(response.content)
+        self.assertEqual(
+            content, {"status": 400, "content": "Course could not be found."}
+        )
+
     @override_settings(CMS_PERMISSION=False)
     def test_admin_page_snapshot_unknown_page(self):
         """
