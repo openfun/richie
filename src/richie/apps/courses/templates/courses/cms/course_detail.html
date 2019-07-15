@@ -119,14 +119,14 @@
           <dl>
             <dt>{% trans "Enrollment" %}</dt>
             <dd>
-              {% render_model run "enrollment_start" "enrollment_start,enrollment_end" "" "date:'SHORT_DATE_FORMAT'|default:'...'" as start %}
-              {% render_model run "enrollment_end" "enrollment_start,enrollment_end" "" "date:'SHORT_DATE_FORMAT'|default:'...'" as end %}
+              {% render_model run "enrollment_start" "enrollment_start,enrollment_end" "" "date:'DATE_FORMAT'|default:'...'" as start %}
+              {% render_model run "enrollment_end" "enrollment_start,enrollment_end" "" "date:'DATE_FORMAT'|default:'...'" as end %}
               {% trans "From" %} {{ start|safe }} {% trans "to" %} {{ end|safe }}
             </dd>
             <dt>{% trans "Course" %}</dt>
             <dd>
-              {% render_model run "start" "start,end" "" "date:'SHORT_DATE_FORMAT'|default:'...'" as start %}
-              {% render_model run "end" "start,end" "" "date:'SHORT_DATE_FORMAT'|default:'...'" as end %}
+              {% render_model run "start" "start,end" "" "date:'DATE_FORMAT'|default:'...'" as start %}
+              {% render_model run "end" "start,end" "" "date:'DATE_FORMAT'|default:'...'" as end %}
               {% trans "From" %} {{ start|safe }} {% trans "to" %} {{ end|safe }}
             </dd>
             <dt>{% trans "Languages" %}</dt><dd>{% render_model run "get_languages_display" "languages" %}</dd>
