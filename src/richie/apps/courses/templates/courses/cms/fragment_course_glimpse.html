@@ -28,12 +28,12 @@
       </div>
       <div class="course-glimpse__footer">
           <p class="course-glimpse__footer__date">
-              {{ course_state.text|title }}<br>
+              {{ course_state.text|capfirst }}<br>
               {{ course_state.datetime|date:"DATE_FORMAT" }}
           </p>
           {% if course_state.call_to_action %}
           <div class="course-glimpse__footer__cta">
-              <button class="button">{{ course_state.call_to_action|title }}</button>
+              <button class="button">{{ course_state.call_to_action|capfirst }}</button>
           </div>
           {% endif %}
       </div>

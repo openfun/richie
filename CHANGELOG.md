@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Improve english date on course page.
+- Improve course glimpse text formatting.
+
 ## [1.5.1] - 2019-07-11
 
 ### Fixed
