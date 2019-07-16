@@ -1,6 +1,8 @@
 """Define mixins to easily compose custom FilterDefinition classes."""
 import re
 
+from ..defaults import FACET_COUNTS_DEFAULT_LIMIT, FACET_COUNTS_MAX_LIMIT
+
 
 class TermsQueryMixin:
     """A mixin for filter definitions that need to apply term queries."""
@@ -58,6 +60,11 @@ class TermsAggsMixin:
                             "field": self.term,
                             "include": include,
                             "min_doc_count": self.min_doc_count,
+                            # Use the default limit unless the client is requesting a specific
+                            # bunch of docs, in which case we allow for more facet counts
+                            "size": FACET_COUNTS_MAX_LIMIT
+                            if data[f"{self.name:s}_include"]
+                            else FACET_COUNTS_DEFAULT_LIMIT,
                         }
                     }
                 },

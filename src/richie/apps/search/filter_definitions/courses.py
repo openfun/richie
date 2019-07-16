@@ -76,7 +76,7 @@ class IndexableFilterDefinition(TermsAggsMixin, TermsQueryMixin, BaseFilterDefin
                 True,  # an ArrayField expects list values
             ),
             f"{self.name:s}_include": (
-                forms.CharField(max_length=20, required=False),
+                forms.CharField(max_length=500, required=False),
                 False,  # a CharField expects string values
             ),
         }

@@ -33,6 +33,9 @@ RELATED_CONTENT_BOOST = 0.05
 
 FACET_SORTING_DEFAULT = "conf"
 
+FACET_COUNTS_DEFAULT_LIMIT = getattr(settings, "RICHIE_FACET_COUNTS_DEFAULT_LIMIT", 10)
+FACET_COUNTS_MAX_LIMIT = getattr(settings, "RICHIE_FACET_COUNTS_MAX_LIMIT", 50)
+
 FILTERS_CONFIGURATION = [
     (
         "richie.apps.search.filter_definitions.StaticChoicesFilterDefinition",
