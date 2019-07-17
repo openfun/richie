@@ -26,6 +26,8 @@ class Category(BasePageExtension):
     page that presents the thematic.
     """
 
+    color = models.CharField(max_length=10, blank=True, null=True)
+
     PAGE = CATEGORIES_PAGE
 
     class Meta:
