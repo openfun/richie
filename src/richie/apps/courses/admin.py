@@ -20,11 +20,17 @@ from cms.utils.admin import jsonify_request
 from ..core.admin import link_field
 from . import models
 from .fields import CourseRunSplitDateTimeField
-from .forms import LicenceFormAdmin
+from .forms import AdminCategoryForm, AdminLicenceForm
 from .helpers import snapshot_course
 from .widgets import CourseRunSplitDateTimeWidget
 
 REQUIRE_POST = method_decorator(require_POST)
+
+
+class CategoryAdmin(FrontendEditableAdminMixin, PageExtensionAdmin):
+    """Admin class for the Category model"""
+
+    form = AdminCategoryForm
 
 
 class CourseAdmin(FrontendEditableAdminMixin, PageExtensionAdmin):
@@ -168,9 +174,10 @@ class LicenceAdmin(admin.ModelAdmin):
     """
 
     list_display = ["name"]
-    form = LicenceFormAdmin
+    form = AdminLicenceForm
 
 
+admin.site.register(models.Category, CategoryAdmin)
 admin.site.register(models.Course, CourseAdmin)
 admin.site.register(models.CourseRun, CourseRunAdmin)
 admin.site.register(models.Licence, LicenceAdmin)

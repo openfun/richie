@@ -11,7 +11,7 @@ from cms.utils.page_permissions import user_can_add_subpage, user_can_change_pag
 from cms.utils.urlutils import admin_reverse
 
 from .defaults import PAGE_EXTENSION_TOOLBAR_ITEM_POSITION
-from .models import Course, Organization, Person
+from .models import Category, Course, Organization, Person
 
 
 class BaseExtensionToolbar(ExtensionToolbar):
@@ -53,6 +53,15 @@ class BaseExtensionToolbar(ExtensionToolbar):
                     disabled=edit_mode_inactive,
                     position=PAGE_EXTENSION_TOOLBAR_ITEM_POSITION,
                 )
+
+
+@toolbar_pool.register
+class CategoryExtensionToolbar(BaseExtensionToolbar):
+    """
+    This extension class customizes the toolbar for the category page extension
+    """
+
+    model = Category
 
 
 @toolbar_pool.register
