@@ -161,6 +161,15 @@ class OrganizationFactory(BLDPageExtensionDjangoModelFactory):
                         **{"page": self.extended_object},
                     )
 
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def with_permissions(self, create, extracted, **kwargs):
+        """
+        Create a page role with related group, page permission and filer folder.
+        """
+        if create and extracted:
+            self.create_page_role()
+
 
 class PageRoleFactory(factory.django.DjangoModelFactory):
     """A factory to automatically generate random yet meaningful page roles."""
