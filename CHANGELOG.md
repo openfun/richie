@@ -10,7 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-- Factorize the code that creates roles and permissions for organizations.
+- Factorize the code creating roles & permissions for organizations & courses.
 
 ## [1.5.2] - 2019-07-15
 

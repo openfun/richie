@@ -1,19 +1,27 @@
 """
 Unit tests for the Course model
 """
+import random
+from unittest import mock
+
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.test.client import RequestFactory
+from django.test.utils import override_settings
 from django.utils import translation
 
 from cms.api import add_plugin, create_page
+from cms.models import PagePermission
+from filer.models import FolderPermission
 
 from richie.apps.core.factories import PageFactory
+from richie.apps.courses import defaults
 from richie.apps.courses.factories import (
     CategoryFactory,
     CourseFactory,
     CourseRunFactory,
     OrganizationFactory,
+    PageRoleFactory,
     PersonFactory,
 )
 from richie.apps.courses.models import Course, CourseRun
@@ -35,6 +43,157 @@ class CourseModelsTestCase(TestCase):
         course = CourseFactory(extended_object=page)
         with self.assertNumQueries(2):
             self.assertEqual(str(course), "Course: Nano particles")
+
+    def test_models_course_create_page_role(self, *_):
+        """
+        If the CMS_PERMISSIONS settings is True, a page role should be created when saving
+        a course.
+        """
+        role_dict = {
+            "django_permissions": ["cms.change_page"],
+            "course_page_permissions": {
+                "can_change": random.choice([True, False]),
+                "can_add": random.choice([True, False]),
+                "can_delete": random.choice([True, False]),
+                "can_change_advanced_settings": random.choice([True, False]),
+                "can_publish": random.choice([True, False]),
+                "can_change_permissions": random.choice([True, False]),
+                "can_move_page": random.choice([True, False]),
+                "can_view": False,  # can_view = True would make it a view restriction...
+                "grant_on": random.randint(1, 5),
+            },
+            "course_folder_permissions": {
+                "can_read": random.choice([True, False]),
+                "can_edit": random.choice([True, False]),
+                "can_add_children": random.choice([True, False]),
+                "type": random.randint(0, 2),
+            },
+        }
+        page = PageFactory(title__title="My title")
+        course = CourseFactory(extended_object=page)
+        self.assertFalse(page.roles.exists())
+
+        with mock.patch.dict(defaults.COURSE_ADMIN_ROLE, role_dict):
+            course.create_page_role()
+
+        # A page role should have been created
+        self.assertEqual(page.roles.count(), 1)
+        role = page.roles.get(role="ADMIN")
+        self.assertEqual(role.group.name, "Admin | My title")
+        self.assertEqual(role.group.permissions.count(), 1)
+        self.assertEqual(role.folder.name, "Admin | My title")
+
+        # All expected permissions should have been assigned to the group:
+        # - Django permissions
+        self.assertEqual(role.group.permissions.first().codename, "change_page")
+        # - DjangoCMS page permissions
+        self.assertEqual(PagePermission.objects.filter(group=role.group).count(), 1)
+        page_permission = PagePermission.objects.get(group=role.group)
+        for key, value in role_dict["course_page_permissions"].items():
+            self.assertEqual(getattr(page_permission, key), value)
+        # The Django Filer folder permissions
+        self.assertEqual(
+            FolderPermission.objects.filter(group_id=role.group_id).count(), 1
+        )
+        folder_permission = FolderPermission.objects.get(group_id=role.group_id)
+        for key, value in role_dict["course_folder_permissions"].items():
+            self.assertEqual(getattr(folder_permission, key), value)
+
+    @override_settings(CMS_PERMISSION=False)
+    def test_models_course_create_page_role_cms_permissions_off(self, *_):
+        """
+        A page role should not be created for courses when the CMS_PERMISSIONS setting is set
+        to False.
+        """
+        course = CourseFactory()
+        self.assertIsNone(course.create_page_role())
+        self.assertFalse(course.extended_object.roles.exists())
+
+    def test_models_course_create_page_role_public_page(self, *_):
+        """
+        A page role should not be created for the public version of an course.
+        """
+        course = CourseFactory(should_publish=True).public_extension
+        self.assertIsNone(course.create_page_role())
+        self.assertFalse(course.extended_object.roles.exists())
+
+    def test_models_course_create_permissions_for_organization(self, *_):
+        """
+        If the CMS_PERMISSIONS settings is True, a page and folder permission should be created
+        for the course when calling the `create_permissions_for_organization` method.
+        """
+        role_dict = {
+            "courses_page_permissions": {
+                "can_change": random.choice([True, False]),
+                "can_add": random.choice([True, False]),
+                "can_delete": random.choice([True, False]),
+                "can_change_advanced_settings": random.choice([True, False]),
+                "can_publish": random.choice([True, False]),
+                "can_change_permissions": random.choice([True, False]),
+                "can_move_page": random.choice([True, False]),
+                "can_view": False,  # can_view = True would make it a view restriction...
+                "grant_on": random.randint(1, 5),
+            },
+            "courses_folder_permissions": {
+                "can_read": random.choice([True, False]),
+                "can_edit": random.choice([True, False]),
+                "can_add_children": random.choice([True, False]),
+                "type": random.randint(0, 2),
+            },
+        }
+        course = CourseFactory()
+        PageRoleFactory(page=course.extended_object, role="ADMIN")
+
+        organization = OrganizationFactory()
+        organization_role = PageRoleFactory(
+            page=organization.extended_object, role="ADMIN"
+        )
+
+        with mock.patch.dict(defaults.ORGANIZATION_ADMIN_ROLE, role_dict):
+            course.create_permissions_for_organization(organization)
+
+        # All expected permissions should have been assigned to the group:
+        # - DjangoCMS page permissions
+        self.assertEqual(
+            PagePermission.objects.filter(group=organization_role.group).count(), 1
+        )
+        page_permission = PagePermission.objects.get(group=organization_role.group)
+        for key, value in role_dict["courses_page_permissions"].items():
+            self.assertEqual(getattr(page_permission, key), value)
+        # The Django Filer folder permissions
+        self.assertEqual(
+            FolderPermission.objects.filter(
+                group_id=organization_role.group_id
+            ).count(),
+            1,
+        )
+        folder_permission = FolderPermission.objects.get(
+            group_id=organization_role.group_id
+        )
+        for key, value in role_dict["courses_folder_permissions"].items():
+            self.assertEqual(getattr(folder_permission, key), value)
+
+    @override_settings(CMS_PERMISSION=False)
+    def test_models_course_create_permissions_for_organization_cms_permissions_off(
+        self, *_
+    ):
+        """
+        No permissions should be created for courses when the CMS_PERMISSIONS setting is set
+        to False.
+        """
+        course = CourseFactory()
+        organization = OrganizationFactory()
+        self.assertIsNone(course.create_permissions_for_organization(organization))
+        self.assertFalse(PagePermission.objects.exists())
+        self.assertFalse(FolderPermission.objects.exists())
+
+    def test_models_course_create_permissions_for_organization_public_page(self, *_):
+        """No permissions should be created for the public version of an course."""
+        course = CourseFactory(should_publish=True).public_extension
+        organization = OrganizationFactory(should_publish=True).public_extension
+        self.assertIsNone(course.create_permissions_for_organization(organization))
+        self.assertFalse(PagePermission.objects.exists())
+        self.assertFalse(FolderPermission.objects.exists())
 
     def test_models_course_get_categories_empty(self):
         """
