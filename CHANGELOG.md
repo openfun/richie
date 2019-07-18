@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Factorize the code that creates roles and permissions for organizations.
+
 ## [1.5.2] - 2019-07-15
 
 ### Changed

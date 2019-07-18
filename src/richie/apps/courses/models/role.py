@@ -69,12 +69,18 @@ class PageRole(models.Model):
         Validate the object before saving it and create a group if it does not exist yet.
         """
         self.full_clean(exclude=["group"])
+        page_id = str(self.page.id)
 
         # Create the related group the first time the instance is saved
         if not self.group_id:
-            self.group = Group.objects.create(
-                name=str(self)[: Group._meta.get_field("name").max_length]
-            )
+            name = str(self)[: Group._meta.get_field("name").max_length]
+
+            if Group.objects.filter(name=name).exists():
+                name = f"{name:s} [{page_id:s}]"[
+                    : Group._meta.get_field("name").max_length
+                ]
+
+            self.group = Group.objects.create(name=name)
 
         # Create the related filer folder the first time the instance is saved.
         # Why create this folder at the root and not below a parent `organization` folder?
@@ -82,9 +88,14 @@ class PageRole(models.Model):
         #   changed by a user via the interface and break the functionality,
         # - the filer search functionality only finds folders at the root, not nested folders.
         if not self.folder_id:
-            self.folder = Folder.objects.create(
-                name=str(self)[: Folder._meta.get_field("name").max_length]
-            )
+            name = str(self)[: Folder._meta.get_field("name").max_length]
+
+            if Folder.objects.filter(name=name).exists():
+                name = f"{name:s} [{page_id:s}]"[
+                    : Folder._meta.get_field("name").max_length
+                ]
+
+            self.folder = Folder.objects.create(name=name)
 
         super().save(
             force_insert=force_insert,

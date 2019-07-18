@@ -2,6 +2,7 @@
 Declare and configure the models for the courses application
 """
 from django.apps import apps
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Prefetch
@@ -9,12 +10,15 @@ from django.utils import translation
 from django.utils.text import slugify
 from django.utils.translation import ugettext_lazy as _
 
-from cms.api import Page
+from cms.api import Page, PagePermission
 from cms.extensions.extension_pool import extension_pool
 from cms.models import CMSPlugin, Title
+from filer.models import FolderPermission
 
+from ...core.helpers import get_permissions
 from ...core.models import BasePageExtension, PagePluginMixin
-from ..defaults import ORGANIZATIONS_PAGE
+from .. import defaults
+from .role import PageRole
 
 
 class Organization(BasePageExtension):
@@ -31,7 +35,7 @@ class Organization(BasePageExtension):
         _("code"), db_index=True, max_length=100, null=True, blank=True
     )
 
-    PAGE = ORGANIZATIONS_PAGE
+    PAGE = defaults.ORGANIZATIONS_PAGE
 
     class Meta:
         db_table = "richie_organization"
@@ -77,6 +81,59 @@ class Organization(BasePageExtension):
                     {"code": ["An Organization already exists with this code."]}
                 )
         return super().validate_unique(exclude=exclude)
+
+    def create_page_role(self):
+        """
+        Create a new page role for the organization with:
+          - a user group to handle permissions for admins of this organization,
+          - a folder in Django Filer to store images related to this organization,
+          - all necessary permissions.
+        """
+        if not getattr(settings, "CMS_PERMISSION", False):
+            return None
+
+        # The page role is only created for draft organizations
+        if not self.extended_object.publisher_is_draft:
+            return None
+
+        # Don't do anything if it already exists
+        page_role = PageRole.objects.filter(
+            page=self.extended_object, role=defaults.ADMIN
+        ).first()
+
+        if page_role:
+            return page_role
+
+        # Create a role for admins of this organization (which will automatically create a new
+        # user group and a new Filer folder)
+        page_role = PageRole.objects.create(
+            page=self.extended_object, role=defaults.ADMIN
+        )
+
+        # Associate permissions as defined in settings:
+        # - Create Django permissions
+        page_role.group.permissions.set(
+            get_permissions(
+                defaults.ORGANIZATION_ADMIN_ROLE.get("django_permissions", [])
+            )
+        )
+
+        # - Create DjangoCMS page permissions
+        PagePermission.objects.create(
+            group_id=page_role.group_id,
+            page=self.extended_object,
+            **defaults.ORGANIZATION_ADMIN_ROLE.get("organization_page_permissions", {}),
+        )
+
+        # - Create the Django Filer folder permissions
+        FolderPermission.objects.create(
+            folder_id=page_role.folder_id,
+            group_id=page_role.group_id,
+            **defaults.ORGANIZATION_ADMIN_ROLE.get(
+                "organization_folder_permissions", {}
+            ),
+        )
+        return page_role
 
     def save(self, *args, **kwargs):
         """

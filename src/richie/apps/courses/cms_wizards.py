@@ -483,42 +483,10 @@ class OrganizationWizardForm(BaseWizardForm):
         """
         The parent form created the page.
         This method creates the associated organization.
-        It also creates a new role with:
-          - a user group to handle permissions for admins of this organization,
-          - a folder in Django Filer to store images related to this organization,
-          - all necessary permissions.
         """
         page = super().save()
-        Organization.objects.create(extended_object=page)
-
-        # Create a role for admins of this organization (which will create a new user group and
-        # a new Filer folder)
-        page_role = PageRole.objects.create(page=page, role=defaults.ADMIN)
-
-        # Associate permissions as defined in settings:
-        # - Create Django permissions
-        page_role.group.permissions.set(
-            get_permissions(
-                defaults.ORGANIZATION_ADMIN_ROLE.get("django_permissions", [])
-            )
-        )
-
-        # - Create DjangoCMS page permissions
-        PagePermission.objects.create(
-            group_id=page_role.group_id,
-            page=page,
-            **defaults.ORGANIZATION_ADMIN_ROLE.get("organization_page_permissions", {}),
-        )
-
-        # - Create the Django Filer folder permissions
-        FolderPermission.objects.create(
-            folder_id=page_role.folder_id,
-            group_id=page_role.group_id,
-            **defaults.ORGANIZATION_ADMIN_ROLE.get(
-                "organization_folder_permissions", {}
-            ),
-        )
-
+        organization = Organization.objects.create(extended_object=page)
+        organization.create_page_role()
         return page
 
 
