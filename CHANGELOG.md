@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Configure roles and permissions in the demo site.
+
 ### Changed
 
 - Factorize the code creating roles & permissions for organizations & courses.

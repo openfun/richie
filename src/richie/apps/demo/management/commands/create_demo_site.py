@@ -81,6 +81,7 @@ def create_demo_site():
         fill_description=True,
         fill_logo=pick_image("logo"),
         should_publish=True,
+        with_permissions=True,
     )
 
     # Generate each category tree and return a list of the leaf categories
@@ -185,6 +186,7 @@ def create_demo_site():
             ],
             should_publish=True,
         )
+        course.create_permissions_for_organization(course_organizations[0])
         courses.append(course)
 
         # Add a random number of course runs to the course
