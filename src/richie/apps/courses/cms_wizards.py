@@ -17,26 +17,16 @@ from cms.cms_wizards import (
     cms_subpage_wizard,
 )
 from cms.forms.wizards import CreateCMSPageForm, CreateCMSSubPageForm, SlugWidget
-from cms.models import Page, PagePermission
+from cms.models import Page
 from cms.utils.page_permissions import user_can_change_page
 from cms.wizards.forms import BaseFormMixin
 from cms.wizards.wizard_base import Wizard
 from cms.wizards.wizard_pool import wizard_pool
-from filer.models import FolderPermission
 
 from ..core import defaults as core_defaults
-from ..core.helpers import get_permissions
 from . import defaults
 from .helpers import snapshot_course
-from .models import (
-    BlogPost,
-    Category,
-    Course,
-    CourseRun,
-    Organization,
-    PageRole,
-    Person,
-)
+from .models import BlogPost, Category, Course, CourseRun, Organization, Person
 
 
 class ExcludeRootReverseIDMixin:
@@ -215,37 +205,14 @@ class CourseWizardForm(BaseWizardForm):
         The parent form created the page.
         This method creates the associated course page extension.
         If the current page is an organization, the new course should get attached to it via a
-        plugin.
+        plugin, and the admin group of the organization should get admin access to the course.
         """
         page = super().save()
         course = Course.objects.create(extended_object=page)
-
-        # Create a role for admins of this course (which will create a new user group and a new
-        # Filer folder)
-        course_page_role = PageRole.objects.create(page=page, role=defaults.ADMIN)
-
-        # Associate permissions as defined in settings:
-        # - Create Django permissions
-        course_page_role.group.permissions.set(
-            get_permissions(defaults.COURSE_ADMIN_ROLE.get("django_permissions", []))
-        )
-
-        # - Create DjangoCMS page permissions
-        PagePermission.objects.create(
-            group_id=course_page_role.group_id,
-            page=page,
-            **defaults.COURSE_ADMIN_ROLE.get("course_page_permissions", {}),
-        )
-
-        # - Create the Django Filer folder permissions
-        FolderPermission.objects.create(
-            folder_id=course_page_role.folder_id,
-            group_id=course_page_role.group_id,
-            **defaults.COURSE_ADMIN_ROLE.get("course_folder_permissions", {}),
-        )
+        course.create_page_role()
 
         try:
-            self.page.organization
+            organization = self.page.organization
         except Organization.DoesNotExist:
             pass
         else:
@@ -259,32 +226,7 @@ class CourseWizardForm(BaseWizardForm):
                 plugin_type="OrganizationPlugin",
                 **{"page": self.page},
             )
-
-            # Create page permissions on the course page for the admin group of the organization
-            try:
-                organization_page_role = PageRole.objects.only("group").get(
-                    page=self.page, role=defaults.ADMIN
-                )
-            except PageRole.DoesNotExist:
-                pass
-            else:
-                # - Create DjangoCMS page permissions
-                PagePermission.objects.create(
-                    group_id=organization_page_role.group_id,
-                    page_id=course.extended_object_id,
-                    **defaults.ORGANIZATION_ADMIN_ROLE.get(
-                        "courses_page_permissions", {}
-                    ),
-                )
-
-                # - Create the Django Filer folder permissions
-                FolderPermission.objects.create(
-                    folder_id=course_page_role.folder_id,
-                    group_id=organization_page_role.group_id,
-                    **defaults.ORGANIZATION_ADMIN_ROLE.get(
-                        "courses_folder_permissions", {}
-                    ),
-                )
+            course.create_permissions_for_organization(organization)
 
         return page
 

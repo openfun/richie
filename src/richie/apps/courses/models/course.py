@@ -4,6 +4,7 @@ Declare and configure the models for the courses application
 from collections.abc import Mapping
 from datetime import MAXYEAR, datetime
 
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
@@ -12,20 +13,23 @@ from django.utils.functional import lazy
 from django.utils.translation import ugettext_lazy as _
 
 import pytz
-from cms.api import Page
 from cms.extensions.extension_pool import extension_pool
+from cms.models import Page, PagePermission
 from cms.models.pluginmodel import CMSPlugin
 from filer.fields.image import FilerImageField
+from filer.models import FolderPermission
 
 from ...core.defaults import ALL_LANGUAGES
 from ...core.fields.duration import CompositeDurationField
 from ...core.fields.effort import EffortField
 from ...core.fields.multiselect import MultiSelectField
+from ...core.helpers import get_permissions
 from ...core.models import BasePageExtension, PagePluginMixin
 from .. import defaults
 from .category import Category
 from .organization import Organization
 from .person import Person
+from .role import PageRole
 
 MAX_DATE = datetime(MAXYEAR, 12, 31, tzinfo=pytz.utc)
 
@@ -140,6 +144,80 @@ class Course(BasePageExtension):
         return "{model}: {title}".format(
             model=self._meta.verbose_name.title(),
             title=self.extended_object.get_title(),
+        )
+
+    def create_page_role(self):
+        """
+        Create a new page role for the course with:
+          - a user group to handle permissions for admins of this course,
+          - a folder in Django Filer to store images related to this course,
+          - all necessary permissions.
+        """
+        if not getattr(settings, "CMS_PERMISSION", False):
+            return None
+
+        # The page role is only created for draft courses
+        if not self.extended_object.publisher_is_draft:
+            return None
+
+        # Don't do anything if it already exists
+        page_role = PageRole.objects.filter(
+            page=self.extended_object, role=defaults.ADMIN
+        ).first()
+
+        if page_role:
+            return page_role
+
+        # Create a role for admins of this course (which will automatically create a new
+        # user group and a new Filer folder)
+        page_role = PageRole.objects.create(
+            page=self.extended_object, role=defaults.ADMIN
+        )
+
+        # Associate permissions as defined in settings:
+        # - Create Django permissions
+        page_role.group.permissions.set(
+            get_permissions(defaults.COURSE_ADMIN_ROLE.get("django_permissions", []))
+        )
+
+        # - Create DjangoCMS page permissions
+        PagePermission.objects.create(
+            group_id=page_role.group_id,
+            page=self.extended_object,
+            **defaults.COURSE_ADMIN_ROLE.get("course_page_permissions", {}),
+        )
+
+        # - Create the Django Filer folder permissions
+        FolderPermission.objects.create(
+            folder_id=page_role.folder_id,
+            group_id=page_role.group_id,
+            **defaults.COURSE_ADMIN_ROLE.get("course_folder_permissions", {}),
+        )
+        return page_role
+
+    def create_permissions_for_organization(self, organization):
+        """
+        Create page and folder permissions on the course page for the admin group of the
+        organization passed in argument.
+        """
+        course_page_role = self.create_page_role()
+        organization_page_role = organization.create_page_role()
+
+        if organization_page_role is None or course_page_role is None:
+            return
+
+        # - Create DjangoCMS page permissions
+        PagePermission.objects.create(
+            group_id=organization_page_role.group_id,
+            page_id=self.extended_object_id,
+            **defaults.ORGANIZATION_ADMIN_ROLE.get("courses_page_permissions", {}),
+        )
+
+        # - Create the Django Filer folder permissions
+        FolderPermission.objects.create(
+            folder_id=course_page_role.folder_id,
+            group_id=organization_page_role.group_id,
+            **defaults.ORGANIZATION_ADMIN_ROLE.get("courses_folder_permissions", {}),
         )
 
     def get_persons(self, language=None):
