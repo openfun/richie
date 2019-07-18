@@ -1,12 +1,20 @@
 """
 Unit tests for the Organization model
 """
+import random
+from unittest import mock
+
 from django.core.exceptions import ValidationError
 from django.test import TestCase
+from django.test.utils import override_settings
 
 from cms.api import add_plugin, create_page
+from cms.models import PagePermission
+from filer.models import FolderPermission
 
+from richie.apps.core.factories import PageFactory
 from richie.apps.core.helpers import create_i18n_page
+from richie.apps.courses import defaults
 from richie.apps.courses.cms_plugins import OrganizationPlugin
 from richie.apps.courses.factories import (
     CourseFactory,
@@ -76,6 +84,79 @@ class OrganizationModelsTestCase(TestCase):
         organization = Organization(code="SOR", extended_object=page)
         with self.assertNumQueries(1):
             self.assertEqual(str(organization), "Organization: La Sorbonne (SOR)")
+
+    def test_models_organization_create_page_role(self, *_):
+        """
+        If the CMS_PERMISSIONS settings is True, a page role should be created when saving
+        an organization.
+        """
+        role_dict = {
+            "django_permissions": ["cms.change_page"],
+            "organization_page_permissions": {
+                "can_change": random.choice([True, False]),
+                "can_add": random.choice([True, False]),
+                "can_delete": random.choice([True, False]),
+                "can_change_advanced_settings": random.choice([True, False]),
+                "can_publish": random.choice([True, False]),
+                "can_change_permissions": random.choice([True, False]),
+                "can_move_page": random.choice([True, False]),
+                "can_view": False,  # can_view = True would make it a view restriction...
+                "grant_on": random.randint(1, 5),
+            },
+            "organization_folder_permissions": {
+                "can_read": random.choice([True, False]),
+                "can_edit": random.choice([True, False]),
+                "can_add_children": random.choice([True, False]),
+                "type": random.randint(0, 2),
+            },
+        }
+        page = PageFactory(title__title="My title")
+        organization = OrganizationFactory(extended_object=page)
+        self.assertFalse(page.roles.exists())
+
+        with mock.patch.dict(defaults.ORGANIZATION_ADMIN_ROLE, role_dict):
+            organization.create_page_role()
+
+        # A page role should have been created
+        self.assertEqual(page.roles.count(), 1)
+        role = page.roles.get(role="ADMIN")
+        self.assertEqual(role.group.name, "Admin | My title")
+        self.assertEqual(role.group.permissions.count(), 1)
+        self.assertEqual(role.folder.name, "Admin | My title")
+
+        # All expected permissions should have been assigned to the group:
+        # - Django permissions
+        self.assertEqual(role.group.permissions.first().codename, "change_page")
+        # - DjangoCMS page permissions
+        self.assertEqual(PagePermission.objects.filter(group=role.group).count(), 1)
+        page_permission = PagePermission.objects.get(group=role.group)
+        for key, value in role_dict["organization_page_permissions"].items():
+            self.assertEqual(getattr(page_permission, key), value)
+        # The Django Filer folder permissions
+        self.assertEqual(
+            FolderPermission.objects.filter(group_id=role.group_id).count(), 1
+        )
+        folder_permission = FolderPermission.objects.get(group_id=role.group_id)
+        for key, value in role_dict["organization_folder_permissions"].items():
+            self.assertEqual(getattr(folder_permission, key), value)
+
+    @override_settings(CMS_PERMISSION=False)
+    def test_models_organization_create_page_role_cms_permissions_off(self, *_):
+        """
+        A page role should not be created for organizations when the CMS_PERMISSIONS setting is set
+        to False.
+        """
+        organization = OrganizationFactory()
+        self.assertIsNone(organization.create_page_role())
+        self.assertFalse(organization.extended_object.roles.exists())
+
+    def test_models_organization_create_page_role_public_page(self, *_):
+        """
+        A page role should not be created for the public version of an organization.
+        """
+        organization = OrganizationFactory(should_publish=True).public_extension
+        self.assertIsNone(organization.create_page_role())
+        self.assertFalse(organization.extended_object.roles.exists())
 
     def test_models_organization_get_courses(self):
         """

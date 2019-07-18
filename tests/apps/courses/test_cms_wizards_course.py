@@ -16,7 +16,7 @@ from richie.apps.core.factories import UserFactory
 from richie.apps.courses import defaults
 from richie.apps.courses.cms_wizards import CourseWizardForm
 from richie.apps.courses.factories import CourseFactory, OrganizationFactory
-from richie.apps.courses.models import Course, OrganizationPluginModel, PageRole
+from richie.apps.courses.models import Course, Organization, OrganizationPluginModel
 
 # pylint: disable=too-many-locals
 
@@ -267,9 +267,7 @@ class CourseCMSWizardTestCase(CMSTestCase):
         )
 
         organization = OrganizationFactory()
-        organization_page_role = PageRole.objects.create(
-            page_id=organization.extended_object_id, role="ADMIN"
-        )
+        organization_page_role = organization.create_page_role()
 
         # Create a user with just the required permissions
         user = UserFactory(
@@ -378,28 +376,20 @@ class CourseCMSWizardTestCase(CMSTestCase):
             self.assertEqual(getattr(folder_permission, key), value)
 
         # A page permission should have been created for the organization admin role
-        self.assertEqual(
-            PagePermission.objects.filter(
-                group_id=organization_page_role.group_id
-            ).count(),
-            1,
-        )
-        page_permission = PagePermission.objects.get(
+        permission_query = PagePermission.objects.filter(
             group_id=organization_page_role.group_id, page=page
         )
+        self.assertEqual(permission_query.count(), 1)
+        page_permission = permission_query.get()
         for key, value in organization_role_dict["courses_page_permissions"].items():
             self.assertEqual(getattr(page_permission, key), value)
 
         # A Filer folder permission should have been created for the organization admin role
-        self.assertEqual(
-            FolderPermission.objects.filter(
-                group_id=organization_page_role.group_id
-            ).count(),
-            1,
-        )
-        folder_permission = FolderPermission.objects.get(
+        folder_query = FolderPermission.objects.filter(
             group_id=organization_page_role.group_id, folder_id=course_role.folder_id
         )
+        self.assertEqual(folder_query.count(), 1)
+        folder_permission = folder_query.get()
         for key, value in organization_role_dict["courses_folder_permissions"].items():
             self.assertEqual(getattr(folder_permission, key), value)
 
@@ -408,7 +398,8 @@ class CourseCMSWizardTestCase(CMSTestCase):
         response = self.client.get(page.get_absolute_url())
         self.assertEqual(response.status_code, 200)
 
-    def test_cms_wizards_course_submit_form_from_organization_page_no_role(self):
+    @mock.patch.object(Organization, "create_page_role", return_value=None)
+    def test_cms_wizards_course_submit_form_from_organization_page_no_role(self, *_):
         """
         Creating a course via the wizard should not fail if the organization has no associated
         page role.
