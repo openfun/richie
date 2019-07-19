@@ -18,7 +18,7 @@ $richie-course-glimpse-container-background: $white !default;
 $richie-course-glimpse-container-border: 1px solid $gray80 !default;
 $richie-course-glimpse-container-border-hover: 1px solid $firebrick6 !default;
 
-$richie-course-glimpse-media-margin: 0 0 1rem 0 !default;
+$richie-course-glimpse-media-margin: 0 !default;
 
 $richie-course-glimpse-caption-width: 60% !default;
 $richie-course-glimpse-caption-margin: 0 !default;
@@ -33,6 +33,9 @@ $richie-course-glimpse-caption-background: $gray80 !default;
 $richie-course-glimpse-content-fontsize: 0.9rem !default;
 $richie-course-glimpse-content-fontcolor: $gray40 !default;
 $richie-course-glimpse-content-textalign: center !default;
+
+$richie-course-glimpse-icon-size: 2rem !default;
+$richie-course-glimpse-icon-band-end-triangle-width: 1.8em;
 
 $richie-course-glimpse-title-fontsize: 1rem !default;
 $richie-course-glimpse-title-fontweight: bold !default;
@@ -114,10 +117,59 @@ $richie-course-glimpse-foot-cta-background-hover: $firebrick6 !default;
   // Apply gutter
   margin: $richie-course-glimpse-container-gutter;
 
+  &__icon {
+    z-index: 0;
+    display: flex;
+    overflow: hidden;
+
+    &__band {
+      $end-triangle-width: $richie-course-glimpse-icon-band-end-triangle-width;
+
+      flex-grow: 1;
+      align-self: center;
+      position: relative;
+      background: inherit;
+      height: $richie-course-glimpse-icon-size;
+      margin-right: $end-triangle-width;
+      color: white;
+      text-align: right;
+      line-height: $richie-course-glimpse-icon-size;
+      padding-right: 0.5rem;
+      font-weight: 700;
+      font-size: 85%;
+
+      // Add a triangle at the end of the band
+      &__end {
+        width: 0;
+        height: 0;
+        border-top: $end-triangle-width / 3 * 2 solid transparent;
+        border-bottom: $end-triangle-width / 3 * 2 solid transparent;
+        border-left: $end-triangle-width solid transparent; // This color is set through HTML
+        position: absolute;
+        top: 0;
+        right: -$end-triangle-width;
+      }
+    }
+
+    img {
+      width: $richie-course-glimpse-icon-size + (2 * 0.5rem);
+      height: $richie-course-glimpse-icon-size;
+      padding: 0 0.5rem;
+    }
+  }
+
   &__content {
     font-size: $richie-course-glimpse-content-fontsize;
     color: $richie-course-glimpse-content-fontcolor;
     text-align: $richie-course-glimpse-content-textalign;
+
+    margin-top: $richie-course-glimpse-icon-size / 2;
+    margin-bottom: $richie-course-glimpse-icon-size / 2;
+
+    .course-glimpse__icon + & {
+      margin-top: 0;
+      margin-bottom: 0;
+    }
 
     &__title {
       font-size: $richie-course-glimpse-title-fontsize;
