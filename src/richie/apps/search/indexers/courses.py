@@ -390,7 +390,11 @@ class CoursesIndexer:
                 cmsplugin_ptr__position=0,
             ):
                 with translation.override(language):
-                    icon_images[language] = get_picture_info(icon, "icon")
+                    icon_images[language] = {
+                        **get_picture_info(icon, "icon"),
+                        "color": plugin_model.page.category.color,
+                        "title": plugin_model.page.get_title(),
+                    }
 
         # Prepare description texts
         descriptions = defaultdict(list)

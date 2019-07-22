@@ -96,7 +96,7 @@ class CoursesIndexersTestCase(TestCase):
 
     @mock.patch(
         "richie.apps.search.indexers.courses.get_picture_info",
-        return_value="picture info",
+        return_value={"info": "picture info"},
     )
     def test_indexers_courses_get_es_documents_from_models(self, _mock_picture):
         """
@@ -219,12 +219,26 @@ class CoursesIndexersTestCase(TestCase):
                 }
                 for course_run in course.get_course_runs().order_by("-end")
             ],
-            "cover_image": {"en": "picture info", "fr": "picture info"},
+            "cover_image": {
+                "en": {"info": "picture info"},
+                "fr": {"info": "picture info"},
+            },
             "description": {
                 "en": "english description line 1. english description line 2.",
                 "fr": "a propos français ligne 1. a propos français ligne 2.",
             },
-            "icon": {"en": "picture info", "fr": "picture info"},
+            "icon": {
+                "en": {
+                    "color": published_categories[0].color,
+                    "info": "picture info",
+                    "title": "Title L-0001",
+                },
+                "fr": {
+                    "color": published_categories[0].color,
+                    "info": "picture info",
+                    "title": "Titre L-0001",
+                },
+            },
             "is_new": False,
             "organizations": ["L-0004", "L-0006"],
             "organizations_names": {
