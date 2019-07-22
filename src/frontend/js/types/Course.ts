@@ -9,6 +9,13 @@ export interface Course extends Resource {
     src: string;
     srcset: string;
   }>;
+  icon: Nullable<{
+    color: string;
+    sizes: string;
+    src: string;
+    srcset: string;
+    title: string;
+  }>;
   organization_highlighted: string;
   organizations: string[];
   state: {
