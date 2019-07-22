@@ -17,6 +17,7 @@ describe('components/CourseGlimpse', () => {
       src: '/thumbs/small.png',
       srcset: 'some srcset',
     },
+    icon: null,
     id: '742',
     organization_highlighted: 'Some Organization',
     organizations: ['36', '63'],

@@ -35,7 +35,6 @@ $richie-course-glimpse-content-fontcolor: $gray40 !default;
 $richie-course-glimpse-content-textalign: center !default;
 
 $richie-course-glimpse-icon-size: 2rem !default;
-$richie-course-glimpse-icon-band-end-triangle-width: 1.8em;
 
 $richie-course-glimpse-title-fontsize: 1rem !default;
 $richie-course-glimpse-title-fontweight: bold !default;
@@ -123,7 +122,8 @@ $richie-course-glimpse-foot-cta-background-hover: $firebrick6 !default;
     overflow: hidden;
 
     &__band {
-      $end-triangle-width: $richie-course-glimpse-icon-band-end-triangle-width;
+      $end-triangle-height: $richie-course-glimpse-icon-size;
+      $end-triangle-width: $end-triangle-height * 0.8656; // to get an equilateral triangle
 
       flex-grow: 1;
       align-self: center;
@@ -142,8 +142,8 @@ $richie-course-glimpse-foot-cta-background-hover: $firebrick6 !default;
       &__end {
         width: 0;
         height: 0;
-        border-top: $end-triangle-width / 3 * 2 solid transparent;
-        border-bottom: $end-triangle-width / 3 * 2 solid transparent;
+        border-top: $end-triangle-height / 2 solid transparent;
+        border-bottom: $end-triangle-height / 2 solid transparent;
         border-left: $end-triangle-width solid transparent; // This color is set through HTML
         position: absolute;
         top: 0;

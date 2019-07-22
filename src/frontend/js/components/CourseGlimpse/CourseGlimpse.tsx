@@ -32,6 +32,26 @@ export const CourseGlimpse = ({ course }: CourseGlimpseProps) => (
         </div>
       )}
     </div>
+    {course.icon ? (
+      <div className="course-glimpse__icon">
+        <div
+          className="course-glimpse__icon__band"
+          style={{ background: course.icon.color }}
+        >
+          {course.icon.title}
+          <div
+            className="course-glimpse__icon__band__end"
+            style={{ borderLeftColor: course.icon.color }}
+          ></div>
+        </div>
+        <img
+          src={course.icon.src}
+          srcSet={course.icon.srcset}
+          sizes={course.icon.sizes}
+          alt=""
+        />
+      </div>
+    ) : null}
     <div className="course-glimpse__content">
       <div className="course-glimpse__content__wrapper">
         <p className="course-glimpse__content__title">{course.title}</p>
