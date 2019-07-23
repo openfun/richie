@@ -148,6 +148,20 @@ $richie-course-glimpse-foot-cta-background-hover: $firebrick6 !default;
         position: absolute;
         top: 0;
         right: -$end-triangle-width;
+
+        // Fix band-triangle border glitch with an overlapping triangle
+        &::after {
+          content: '';
+          width: 0;
+          height: 0;
+          border-top: $end-triangle-height / 2 solid transparent;
+          border-bottom: $end-triangle-height / 2 solid transparent;
+          border-left: $end-triangle-width solid transparent; // This color is set through HTML
+          border-left-color: inherit;
+          position: absolute;
+          top: -$end-triangle-height / 2;
+          right: 0;
+        }
       }
     }
 
