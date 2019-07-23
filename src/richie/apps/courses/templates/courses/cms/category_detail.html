@@ -40,23 +40,25 @@
     {% endblockplugin %}
   </div>
 
-  <div class="category-detail__icon">
-    {% get_placeholder_plugins "icon" as icon_plugins %}
-    {% blockplugin icon_plugins.0 %}
-      <img
-        src="{% thumbnail instance.picture 60x60 crop upscale subject_location=instance.picture.subject_location %}"
-        srcset="
-          {% thumbnail instance.picture 60x60 crop upscale subject_location=instance.picture.subject_location %} 60w,
-          {% if instance.picture.width >= 120 %}{% thumbnail instance.picture 120x120 crop upscale subject_location=instance.picture.subject_location %} 80w,{% endif %}
-          {% if instance.picture.width >= 180 %}{% thumbnail instance.picture 180x180 crop upscale subject_location=instance.picture.subject_location %} 120w{% endif %}
-        "
-        sizes="60px"
-        alt=""
-      />
-    {% endblockplugin %}
-  </div>
+  <div class="category-detail__title-container">
+    <div class="category-detail__icon">
+      {% get_placeholder_plugins "icon" as icon_plugins %}
+      {% blockplugin icon_plugins.0 %}
+        <img
+          src="{% thumbnail instance.picture 60x60 crop upscale subject_location=instance.picture.subject_location %}"
+          srcset="
+            {% thumbnail instance.picture 60x60 crop upscale subject_location=instance.picture.subject_location %} 60w,
+            {% if instance.picture.width >= 120 %}{% thumbnail instance.picture 120x120 crop upscale subject_location=instance.picture.subject_location %} 80w,{% endif %}
+            {% if instance.picture.width >= 180 %}{% thumbnail instance.picture 180x180 crop upscale subject_location=instance.picture.subject_location %} 120w{% endif %}
+          "
+          sizes="60px"
+          alt=""
+        />
+      {% endblockplugin %}
+    </div>
 
-  <h1 class="category-detail__title">{% render_model current_page "title" %}</h1>
+    <h1 class="category-detail__title">{% render_model current_page "title" %}</h1>
+  </div>
 
   <div class="category-detail__content">
     <div class="category-detail__content__description">

@@ -83,8 +83,24 @@ $richie-category-detail-banner-logo-sizing-xl: 25rem !default;
     @include m-o-media_empty();
   }
 
+  &__title-container {
+    display: flex;
+    align-items: center;
+  }
+
+  &__icon {
+    & > img {
+      width: 3rem;
+      height: 3rem;
+      margin-left: 1rem;
+      flex-shrink: 0;
+      margin-right: -0.25rem;
+    }
+  }
+
   &__title {
     $h1-calculated-height: $h1-font-size * $headings-line-height;
+
     @include media-breakpoint-up(md) {
       $logo-height: $richie-category-detail-banner-logo-sizing-md * 0.75;
       $logo-overflow-height: $logo-height / 3;
