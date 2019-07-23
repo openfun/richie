@@ -104,9 +104,9 @@ class CourseCMSTestCase(CMSTestCase):
 
         # Only published icons should be present on the page
         pattern = (
-            r'<a class="category-plugin-icon" href="{link:s}"><figure>'
-            r'<img src="/media/filer_public_thumbnails/filer_public/.*icon\.jpg.* alt=""/>'
-            r"<figcaption>{title:s}</figcaption></figure></a>"
+            r'<a class="category-plugin-icon" href="{link:s}"><figure'
+            r".*<figcaption.*{title:s}.*</figcaption>"
+            r'.*<img src="/media/filer_public_thumbnails/filer_public/.*icon\.jpg.*alt=""/>'
         )
 
         for icon in icons[:2]:

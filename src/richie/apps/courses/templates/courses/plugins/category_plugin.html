@@ -9,7 +9,13 @@
     <a class="category-plugin-icon{% if relevant_page.publisher_is_draft %} category-plugin-icon--draft{% endif %}" href="{{ relevant_page.get_absolute_url }}">
       {% get_placeholder_plugins "icon" relevant_page as icon_plugins %}
       {% blockplugin icon_plugins.0 %}
-        <figure>
+        <figure class="category-plugin-icon__figure">
+          <figcaption
+            class="category-plugin-icon__figure__caption"
+            style="background: {{ icon_plugins.0.page.category.color }};"
+          >
+            {{ relevant_page.get_title }}
+          </figcaption>
           <img src="{% thumbnail instance.picture 40x40 crop upscale subject_location=instance.picture.subject_location %}"
             srcset="
               {% thumbnail instance.picture 40x40 crop upscale subject_location=instance.picture.subject_location %} 40w,
@@ -17,8 +23,8 @@
               {% if instance.picture.width >= 120 %}{% thumbnail instance.picture 120x120 crop upscale subject_location=instance.picture.subject_location %} 120w{% endif %}
             "
             sizes="40px"
+            class="category-plugin-icon__figure__image"
             alt=""/>
-          <figcaption>{{ relevant_page.get_title }}</figcaption>
         </figure>
       {% endblockplugin %}
     </a>

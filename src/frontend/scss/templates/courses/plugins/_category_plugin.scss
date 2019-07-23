@@ -1,16 +1,11 @@
-$richie-category-plugin-tag-margin: 0 0 0.3rem 0;
 $richie-category-plugin-tag-padding: 0.25rem 0.4rem;
-$richie-category-plugin-tag-fontsize: 0.7rem;
 $richie-category-plugin-tag-fontcolor: $white;
 $richie-category-plugin-tag-background: $gray7;
-$richie-category-plugin-tag-divider-margin: 0.3rem;
 
 .category-plugin-tag {
   flex-grow: 0;
   flex-shrink: 0;
-  margin: $richie-category-plugin-tag-margin;
   padding: $richie-category-plugin-tag-padding;
-  font-size: $richie-category-plugin-tag-fontsize;
   color: $richie-category-plugin-tag-fontcolor;
   background: $richie-category-plugin-tag-background;
   text-decoration: none;
@@ -20,6 +15,36 @@ $richie-category-plugin-tag-divider-margin: 0.3rem;
   }
 
   & + & {
-    margin-left: $richie-category-plugin-tag-divider-margin;
+    margin-left: 0.5rem;
+  }
+}
+
+.category-plugin-icon {
+  color: white;
+
+  &:hover {
+    color: white;
+  }
+
+  & + & {
+    margin-left: 0.5rem;
+  }
+
+  &__figure {
+    display: flex;
+
+    &__caption {
+      align-self: flex-end;
+      padding: 0.5rem;
+      color: inherit;
+      white-space: nowrap;
+    }
+
+    &__image {
+      height: 2.5rem;
+      padding: 0 0.5rem;
+      border: 1px solid $gray80;
+      border-left: none;
+    }
   }
 }
