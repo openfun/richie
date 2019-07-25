@@ -8,13 +8,15 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.6.0] - 2019-07-25
+
 ### Added
 
 - Configure roles and permissions in the demo site.
 
 ### Changed
 
-- Factorize the code creating roles & permissions for organizations & courses.
+- Factorize the code creating roles & permissions for organizations & courses,
 - Display an icon on the course glimpse (the first among the course's icons),
 - Add icons to the course detail page via a constrained placeholder,
 - Add an icon to the category detail page via a constrained placeholder,
@@ -24,7 +26,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Fix `get_placeholder_plugins` template tag when the placeholder is missing,
-- Stop limiting course getters to specific placeholder names on all objects,
+- Stop limiting course getters to specific placeholder names on all objects.
 
 ## [1.5.2] - 2019-07-15
 
@@ -431,7 +433,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v1.5.2...master
+[unreleased]: https://github.com/openfun/richie/compare/v1.6.0...master
+[1.6.0]: https://github.com/openfun/richie/compare/v1.5.2...v1.6.0
 [1.5.2]: https://github.com/openfun/richie/compare/v1.5.1...v1.5.2
 [1.5.1]: https://github.com/openfun/richie/compare/v1.5.0...v1.5.1
 [1.5.0]: https://github.com/openfun/richie/compare/v1.4.1...v1.5.0
