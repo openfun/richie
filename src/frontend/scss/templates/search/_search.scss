@@ -1,9 +1,5 @@
 $richie-template-search-margin: null !default;
-$richie-template-search-padding: 1rem 0 0 !default;
-
-$richie-template-search-title-margin: null !default;
-$richie-template-search-title-padding: null !default;
-$richie-template-search-title-textalign: center !default;
+$richie-template-search-padding: 0 !default;
 
 // Enable flex on the `.body-content` so children can grow to occupy the available vertical space
 .body-content--flex-mode {
@@ -30,11 +26,5 @@ $richie-template-search-title-textalign: center !default;
       display: flex;
       flex-direction: column;
     }
-  }
-
-  &__title {
-    margin: $richie-template-search-title-margin;
-    padding: $richie-template-search-title-padding;
-    text-align: $richie-template-search-title-textalign;
   }
 }

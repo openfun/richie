@@ -15,12 +15,15 @@
 
 {% block content %}
   <div class="search-template">
-    <h1 class="search-template__title">{% page_attribute "page_title" %}</h1>
     <div class="search-template__content">
       {% with header_level=2 %}
         {% placeholder "content" %}
       {% endwith %}
-      <div class="fun-react fun-react--search" data-locale="{{ LANGUAGE_CODE|react_locale }}"></div>
+      <div
+        class="fun-react fun-react--search"
+        data-locale="{{ LANGUAGE_CODE|react_locale }}"
+        data-props='{"pageTitle": "{% page_attribute "page_title" %}"}'
+      ></div>
     </div>
   </div>
 {% endblock content %}

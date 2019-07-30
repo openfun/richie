@@ -11,7 +11,11 @@ import { SearchFiltersPane } from '../SearchFiltersPane/SearchFiltersPane';
 import { SearchLoader } from '../SearchLoader/SearchLoader';
 import { SearchSuggestField } from '../SearchSuggestField/SearchSuggestField';
 
-export const Search = () => {
+interface SearchProps {
+  pageTitle?: string;
+}
+
+export const Search = ({ pageTitle }: SearchProps) => {
   const [courseSearchParams, setCourseSearchParams] = useCourseSearchParams();
   const courseSearchResponse = useCourseSearch(courseSearchParams);
 
@@ -30,20 +34,23 @@ export const Search = () => {
             }
           />
         </div>
-        {courseSearchResponse &&
-        courseSearchResponse.status === requestStatus.SUCCESS ? (
-          <div className="search__results">
-            <SearchSuggestField
-              filters={courseSearchResponse.content.filters}
-            />
-            <CourseGlimpseList
-              courses={courseSearchResponse.content.objects}
-              meta={courseSearchResponse.content.meta}
-            />{' '}
-          </div>
-        ) : (
-          <SearchLoader />
-        )}
+        <div className="search__results">
+          {pageTitle && <h1 className="search__results__title">{pageTitle}</h1>}
+          {courseSearchResponse &&
+          courseSearchResponse.status === requestStatus.SUCCESS ? (
+            <React.Fragment>
+              <SearchSuggestField
+                filters={courseSearchResponse.content.filters}
+              />
+              <CourseGlimpseList
+                courses={courseSearchResponse.content.objects}
+                meta={courseSearchResponse.content.meta}
+              />{' '}
+            </React.Fragment>
+          ) : (
+            <SearchLoader />
+          )}
+        </div>
       </CourseSearchParamsContext.Provider>
     </div>
   );
