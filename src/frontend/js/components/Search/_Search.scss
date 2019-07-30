@@ -35,5 +35,10 @@ $richie-search-results-padding: 0 1rem 0 2rem !default;
       @include sv-flex(1, 0, calc(100% - #{$richie-search-filters-width}));
       padding: $richie-search-results-padding;
     }
+
+    &__title {
+      padding: 1.5rem 0 0;
+      text-align: center;
+    }
   }
 }

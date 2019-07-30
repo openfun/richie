@@ -1,4 +1,6 @@
 """End-to-end tests for the search page."""
+import re
+
 from django.test.utils import override_settings
 
 from cms.test_utils.testcases import CMSTestCase
@@ -26,10 +28,16 @@ class CourseCMSTestCase(CMSTestCase):
 
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertContains(
-            response,
-            '<div class="fun-react fun-react--search" data-locale="en_US"></div>',
-            html=True,
+        self.assertIsNotNone(
+            re.search(
+                (
+                    r"<div[\\n ]*"
+                    r'class="fun-react fun-react--search"[\\n ]*'
+                    r'data-locale="en_US"[\\n ]*'
+                    r'data-props=\\\'{"pageTitle": "search"}\\\''
+                ),
+                str(response.content),
+            )
         )
 
         # In french, the Canadian french locale should get selected
@@ -37,8 +45,14 @@ class CourseCMSTestCase(CMSTestCase):
         url = page.get_absolute_url(language="fr")
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
-        self.assertContains(
-            response,
-            '<div class="fun-react fun-react--search" data-locale="fr_CA"></div>',
-            html=True,
+        self.assertIsNotNone(
+            re.search(
+                (
+                    r"<div[\\n ]*"
+                    r'class="fun-react fun-react--search"[\\n ]*'
+                    r'data-locale="fr_CA"[\\n ]*'
+                    r'data-props=\\\'{"pageTitle": "recherche"}\\\''
+                ),
+                str(response.content),
+            )
         )

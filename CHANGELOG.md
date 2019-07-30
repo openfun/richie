@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Move the page title in Search so it can be placed correctly in the
+  page structure.
+
 ## [1.6.0] - 2019-07-25
 
 ### Added

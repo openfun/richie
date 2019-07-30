@@ -47,12 +47,14 @@ document.addEventListener('DOMContentLoaded', event => {
         .join('');
       // Sanity check: only attempt to access and render components for which we do have a valid name
       if (isComponentName(componentName)) {
+        // Determine a lang (localeCode) based on the `data-locale` attribute
         const locale = element.getAttribute('data-locale') || 'en';
         let localeCode = locale;
         if (localeCode.match(/^.*_.*$/)) {
           localeCode = locale.split('_')[0];
         }
 
+        // Get `react-intl` lang specific parameters and data
         try {
           const localeData = await import(
             `react-intl/locale-data/${localeCode}`
@@ -62,6 +64,7 @@ document.addEventListener('DOMContentLoaded', event => {
           addLocaleData(Object.values(localeData));
         } catch (e) {}
 
+        // Load our own strings for the given lang
         let translatedMessages = null;
         try {
           translatedMessages = await import(`./translations/${locale}.json`);
@@ -69,10 +72,17 @@ document.addEventListener('DOMContentLoaded', event => {
 
         // Do get the component dynamically. We know this WILL produce a valid component thanks to the type guard
         const Component = componentLibrary[componentName];
+
+        // Get the incoming props to pass our component from the `data-props` attribute
+        const dataProps = element.getAttribute('data-props');
+        const props = dataProps
+          ? (JSON.parse(dataProps) as Parameters<typeof Component>[0])
+          : {};
+
         // Render the component inside an `IntlProvider` to be able to access translated strings
         ReactDOM.render(
           <IntlProvider locale={localeCode} messages={translatedMessages}>
-            <Component />
+            <Component {...props} />
           </IntlProvider>,
           element,
         );
