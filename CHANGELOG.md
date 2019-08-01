@@ -13,6 +13,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Move the page title in Search so it can be placed correctly in the
   page structure.
 
+### Changed
+
+- Use the "Exo 2" font throughout Richie.
+
 ## [1.6.0] - 2019-07-25
 
 ### Added
