@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.6.1] - 2019-08-03
+
 ### Fixed
 
 - Move the page title in Search so it can be placed correctly in the
@@ -442,7 +444,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v1.6.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v1.6.1...master
+[1.6.0]: https://github.com/openfun/richie/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/openfun/richie/compare/v1.5.2...v1.6.0
 [1.5.2]: https://github.com/openfun/richie/compare/v1.5.1...v1.5.2
 [1.5.1]: https://github.com/openfun/richie/compare/v1.5.0...v1.5.1
