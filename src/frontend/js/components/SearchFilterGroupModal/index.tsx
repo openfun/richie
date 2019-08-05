@@ -4,7 +4,7 @@ import {
   FormattedMessage,
   MessageDescriptor,
 } from 'react-intl';
-import Modal from 'react-modal';
+import ReactModal from 'react-modal';
 
 import { fetchList } from '../../data/getResourceList/getResourceList';
 import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
@@ -42,6 +42,14 @@ const messages = defineMessages({
     id: 'components.SearchFilterGroupModal.moreOptionsButton',
   },
 });
+
+// The `setAppElement` needs to happen in proper code but breaks our testing environment.
+// This workaround is not satisfactory but it allows us to both test <SearchFilterGroupModal />
+// and avoid compromising accessibility in real-world use.
+const isTestEnv = typeof jest !== 'undefined';
+if (!isTestEnv) {
+  ReactModal.setAppElement('#modal-exclude');
+}
 
 export const SearchFilterGroupModal = ({
   filter,
@@ -108,7 +116,8 @@ export const SearchFilterGroupModal = ({
       >
         <FormattedMessage {...messages.moreOptionsButton} />
       </button>
-      <Modal
+      <ReactModal
+        ariaHideApp={!isTestEnv}
         bodyOpenClassName="has-search-filter-group-modal"
         className="search-filter-group-modal"
         isOpen={modalIsOpen}
@@ -166,7 +175,7 @@ export const SearchFilterGroupModal = ({
         >
           <FormattedMessage {...messages.closeButton} />
         </button>
-      </Modal>
+      </ReactModal>
     </React.Fragment>
   );
 };
