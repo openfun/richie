@@ -9,66 +9,71 @@
         {% render_block "css" %}
 
         <link rel="stylesheet" type="text/css" href="{% static 'richie/css/main.css' %}">
-        <script type="text/javascript" src="{% static 'richie/js/index.js' %}"></script>
     </head>
     <body>
         {% cms_toolbar %}
-        {% block body_header %}
-        <nav class="topbar" id="main-menu">
-            <div class="topbar__brand">
-                <button class="topbar__hamburger"
-                        data-target="main-menu" aria-label="menu" aria-expanded="false">&#8801;</button>
-                <a href="/" class="topbar__brand__link">
-                    <img src="{% static "images/logo.png" %}" class="topbar__brand__logo" alt="{{ SITE.name }}">
-                </a>
-            </div>
-            <div class="topbar__menu">
-                <ul class="topbar__menu__list">
-                    {% show_menu 0 100 0 0 "menu/header_menu.html" %}
-                </ul>
-                <ul class="topbar__menu__list topbar__menu__list--aside">
-                    {% language_chooser "menu/language_menu.html" %}
-                    <li class="topbar__menu__list__item topbar__menu__list__item--cta-hollow">
-                        <a class="topbar__menu__list__item__link" href="#">Sign up</a>
-                    </li>
-                    <li class="topbar__menu__list__item topbar__menu__list__item--cta">
-                        <a class="topbar__menu__list__item__link" href="#">Login</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-        {% endblock body_header %}
 
-        <div class="body-content {% block bodycontent_classes %}{% endblock bodycontent_classes %}">
-        {% block content %}{% endblock content %}
-        </div>
+        {# Wrap all body content in an ID'd element to easily remove it from view (using aria-hidden) #}
+        {# when a modal is open. This is important for accessibility. #}
+        <div id="modal-exclude">
+            {% block body_header %}
+            <nav class="topbar" id="main-menu">
+                <div class="topbar__brand">
+                    <button class="topbar__hamburger"
+                            data-target="main-menu" aria-label="menu" aria-expanded="false">&#8801;</button>
+                    <a href="/" class="topbar__brand__link">
+                        <img src="{% static "images/logo.png" %}" class="topbar__brand__logo" alt="{{ SITE.name }}">
+                    </a>
+                </div>
+                <div class="topbar__menu">
+                    <ul class="topbar__menu__list">
+                        {% show_menu 0 100 0 0 "menu/header_menu.html" %}
+                    </ul>
+                    <ul class="topbar__menu__list topbar__menu__list--aside">
+                        {% language_chooser "menu/language_menu.html" %}
+                        <li class="topbar__menu__list__item topbar__menu__list__item--cta-hollow">
+                            <a class="topbar__menu__list__item__link" href="#">Sign up</a>
+                        </li>
+                        <li class="topbar__menu__list__item topbar__menu__list__item--cta">
+                            <a class="topbar__menu__list__item__link" href="#">Login</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            {% endblock body_header %}
 
-        {% block body_footer %}
-        <div class="body-footer">
-            <div class="body-footer__menu">
-                <ul class="body-footer__menu__list">
-                    {% show_menu_below_id "annex" 0 100 100 100 "menu/footer_menu.html" %}
-                </ul>
+            <div class="body-content {% block bodycontent_classes %}{% endblock bodycontent_classes %}">
+            {% block content %}{% endblock content %}
             </div>
-            <div class="body-footer__brand">
-                <a href="/" class="body-footer__brand__link">
-                    <img src="{% static "images/logo.png" %}" class="body-footer__brand__logo" alt="">
-                </a>
-                {% include "social-networks/footer-badges.html" %}
+
+            {% block body_footer %}
+            <div class="body-footer">
+                <div class="body-footer__menu">
+                    <ul class="body-footer__menu__list">
+                        {% show_menu_below_id "annex" 0 100 100 100 "menu/footer_menu.html" %}
+                    </ul>
+                </div>
+                <div class="body-footer__brand">
+                    <a href="/" class="body-footer__brand__link">
+                        <img src="{% static "images/logo.png" %}" class="body-footer__brand__logo" alt="">
+                    </a>
+                    {% include "social-networks/footer-badges.html" %}
+                </div>
+                <div class="body-footer__mentions">
+                    <p>{% now "Y" %} &copy; Acme {% blocktrans %}All Rights Reserved.{% endblocktrans %}</p>
+                </div>
+                <div class="body-footer__poweredby">
+                    <a href="https://github.com/openfun/richie" class="body-footer__poweredby__link">
+                        <small>Powered by</small>
+                        <strong>Richie</strong>
+                    </a>
+                </div>
             </div>
-            <div class="body-footer__mentions">
-                <p>{% now "Y" %} &copy; Acme {% blocktrans %}All Rights Reserved.{% endblocktrans %}</p>
-            </div>
-            <div class="body-footer__poweredby">
-                <a href="https://github.com/openfun/richie" class="body-footer__poweredby__link">
-                    <small>Powered by</small>
-                    <strong>Richie</strong>
-                </a>
-            </div>
+            {% endblock body_footer %}
         </div>
-        {% endblock body_footer %}
 
         {% render_block "js" %}
+        <script type="text/javascript" src="{% static 'richie/js/index.js' %}"></script>
         <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', () => {
             // Get all topbar burger elements
