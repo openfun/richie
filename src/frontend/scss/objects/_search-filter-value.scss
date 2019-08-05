@@ -1,5 +1,4 @@
 $richie-search-filter-value-padding: 0.4rem 0.5rem !default;
-$richie-search-filter-value-fontsize: 0.9rem !default;
 $richie-search-filter-value-fontcolor: rgba($white, 0.85) !default;
 $richie-search-filter-value-fontcolor-hover: $white !default;
 $richie-search-filter-value-divider-border: 1px solid $gray80 !default;
@@ -14,7 +13,6 @@ $richie-search-filter-value-active-divider-border: 1px solid $white !default;
   border: none;
   background: inherit;
   color: $richie-search-filter-value-fontcolor;
-  font-size: $richie-search-filter-value-fontsize;
   cursor: pointer;
 
   &:hover,

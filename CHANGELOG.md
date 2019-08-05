@@ -21,6 +21,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Paginate the course search results view.
 - Add a CSS helper class make content available only for users
   of assistive technologies.
+- Show a "More options" button along with a modal to find more filter values
+  for each filter in the search filters pane in course search.
 
 ## Changed
 

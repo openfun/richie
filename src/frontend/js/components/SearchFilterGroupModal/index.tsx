@@ -1,0 +1,172 @@
+import React, { useContext, useEffect, useState } from 'react';
+import {
+  defineMessages,
+  FormattedMessage,
+  MessageDescriptor,
+} from 'react-intl';
+import Modal from 'react-modal';
+
+import { fetchList } from '../../data/getResourceList/getResourceList';
+import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
+import { requestStatus } from '../../types/api';
+import { FilterDefinition, FilterValue } from '../../types/filters';
+import { Nullable } from '../../utils/types';
+import { useAsyncEffect } from '../../utils/useAsyncEffect';
+
+interface SearchFilterGroupModalProps {
+  filter: FilterDefinition;
+}
+
+const messages = defineMessages({
+  closeButton: {
+    defaultMessage: 'Close',
+    description: 'Text for the button to close the search filters modal',
+    id: 'components.SearchFilterGroupModal.closeModal',
+  },
+  error: {
+    defaultMessage: 'There was an error while searching for {filterName}.',
+    description:
+      'Error message when the search for more filter value fails in the search filters modal.',
+    id: 'components.SearchFilterGroupModal.error',
+  },
+  modalTitle: {
+    defaultMessage: 'Add filters for {filterName}',
+    description:
+      'Title for the modal to add more filter values in the search filters modal.',
+    id: 'components.SearchFilterGroupModal.modalTitle',
+  },
+  moreOptionsButton: {
+    defaultMessage: 'More options',
+    description:
+      'Test for the button to see more filter values than the top N that appear by default.',
+    id: 'components.SearchFilterGroupModal.moreOptionsButton',
+  },
+});
+
+export const SearchFilterGroupModal = ({
+  filter,
+}: SearchFilterGroupModalProps) => {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [values, setValues] = useState([] as FilterValue[]);
+  const [query, setQuery] = useState('');
+  const [error, setError] = useState(null as Nullable<MessageDescriptor>);
+
+  // We need the current course search params to get the facet counts
+  const [coursesSearchParams, dispatchCourseSearchParamsUpdate] = useContext(
+    CourseSearchParamsContext,
+  );
+
+  // When the modal is closed, reset state so the user gets a brand-new one if they come back
+  useEffect(() => {
+    if (!modalIsOpen) {
+      setValues([]);
+      setQuery('');
+      setError(null);
+    }
+  }, [modalIsOpen]);
+
+  useAsyncEffect(async () => {
+    if (!modalIsOpen) {
+      return;
+    }
+
+    const searchResponse = await fetchList(filter.name, {
+      limit: '20',
+      offset: '0',
+      query,
+    });
+
+    if (searchResponse.status === requestStatus.FAILURE) {
+      setValues([]);
+      return setError(messages.error);
+    }
+
+    const facetResponse = await fetchList('courses', {
+      ...coursesSearchParams,
+      [`${filter.name}_include`]: `.-(${searchResponse.content.objects
+        .map(resource => resource.id.substr(2))
+        .join('|')})`,
+      scope: 'filters',
+    });
+
+    if (facetResponse.status === requestStatus.FAILURE) {
+      setValues([]);
+      return setError(messages.error);
+    }
+
+    const newValues = facetResponse.content.filters[filter.name].values;
+
+    setError(null);
+    setValues(newValues);
+  }, [modalIsOpen, query]);
+
+  return (
+    <React.Fragment>
+      <button
+        className="search-filter-group-modal-button"
+        onClick={() => setModalIsOpen(true)}
+      >
+        <FormattedMessage {...messages.moreOptionsButton} />
+      </button>
+      <Modal
+        bodyOpenClassName="has-search-filter-group-modal"
+        className="search-filter-group-modal"
+        isOpen={modalIsOpen}
+        onRequestClose={() => setModalIsOpen(false)}
+        overlayClassName="search-filter-group-modal-overlay"
+      >
+        <fieldset className="search-filter-group-modal__form">
+          <legend className="search-filter-group-modal__form__title">
+            <FormattedMessage
+              {...messages.modalTitle}
+              values={{ filterName: filter.human_name }}
+            />
+          </legend>
+          <input
+            aria-label="Search for filters to add"
+            className="search-filter-group-modal__form__input"
+            onChange={event => {
+              setQuery(event.target.value);
+            }}
+            placeholder={`Search in ${filter.human_name}`}
+          />
+          {error ? (
+            <FormattedMessage
+              {...messages.error}
+              values={{ filterName: filter.human_name }}
+            />
+          ) : (
+            <ul className="search-filter-group-modal__form__values">
+              {values.map(value => (
+                <li
+                  className="search-filter-group-modal__form__values__item"
+                  key={value.key}
+                >
+                  <button
+                    onClick={() => {
+                      dispatchCourseSearchParamsUpdate({
+                        filter,
+                        payload: value.key,
+                        type: 'FILTER_ADD',
+                      });
+                      setModalIsOpen(false);
+                    }}
+                  >
+                    {value.human_name}&nbsp;
+                    {value.count || value.count === 0 ? `(${value.count})` : ''}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </fieldset>
+        <button
+          className="search-filter-group-modal__close"
+          onClick={() => setModalIsOpen(false)}
+        >
+          <FormattedMessage {...messages.closeButton} />
+        </button>
+      </Modal>
+    </React.Fragment>
+  );
+};

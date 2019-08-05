@@ -2,6 +2,7 @@ import '../../testSetup';
 
 import { render } from '@testing-library/react';
 import React from 'react';
+import { IntlProvider } from 'react-intl';
 
 import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
 import { SearchFilterGroup } from './SearchFilterGroup';
@@ -23,30 +24,32 @@ describe('components/SearchFilterGroup', () => {
 
   it('renders the name of the filter with the values as SearchFilters', () => {
     const { getByText } = render(
-      <CourseSearchParamsContext.Provider
-        value={[{ limit: '999', offset: '0' }, jest.fn()]}
-      >
-        <SearchFilterGroup
-          filter={{
-            base_path: '0001',
-            human_name: 'Organizations',
-            is_autocompletable: true,
-            name: 'organizations',
-            values: [
-              {
-                count: 4,
-                human_name: 'Value One',
-                key: 'P-00010001',
-              },
-              {
-                count: 7,
-                human_name: 'Value Two',
-                key: 'L-00010002',
-              },
-            ],
-          }}
-        />
-      </CourseSearchParamsContext.Provider>,
+      <IntlProvider locale="en">
+        <CourseSearchParamsContext.Provider
+          value={[{ limit: '999', offset: '0' }, jest.fn()]}
+        >
+          <SearchFilterGroup
+            filter={{
+              base_path: '0001',
+              human_name: 'Organizations',
+              is_autocompletable: true,
+              name: 'organizations',
+              values: [
+                {
+                  count: 4,
+                  human_name: 'Value One',
+                  key: 'P-00010001',
+                },
+                {
+                  count: 7,
+                  human_name: 'Value Two',
+                  key: 'L-00010002',
+                },
+              ],
+            }}
+          />
+        </CourseSearchParamsContext.Provider>
+      </IntlProvider>,
     );
     // The filter group title and all filters are shown
     getByText('Organizations');
