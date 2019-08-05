@@ -45,13 +45,6 @@
 // Objects from Partials (eg. styles for templates produced by dependencies)
 @import './objects/react-autosuggest';
 
-// Frontend components objects styles
-@import '../js/components/PaginateCourseSearch/_PaginateCourseSearch';
-@import '../js/components/Search/_Search';
-@import '../js/components/SearchFilterGroup/_SearchFilterGroup';
-@import '../js/components/SearchFiltersPane/_SearchFiltersPane';
-@import '../js/components/SearchLoader/_SearchLoader';
-
 // Shared object styles
 @import './templates/menu/_menu';
 @import './templates/richie/single-column';
@@ -74,6 +67,14 @@
 @import './templates/richie/large_banner/large_banner';
 @import './templates/richie/large_banner/hero-intro';
 @import './templates/richie/section/section';
+
+// Frontend components objects styles
+@import '../js/components/PaginateCourseSearch/_PaginateCourseSearch';
+@import '../js/components/Search/_Search';
+@import '../js/components/SearchFilterGroup/_SearchFilterGroup';
+@import '../js/components/SearchFilterGroupModal/SearchFilterGroupModal';
+@import '../js/components/SearchFiltersPane/_SearchFiltersPane';
+@import '../js/components/SearchLoader/_SearchLoader';
 
 // Page component styles
 @import './components/header';

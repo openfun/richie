@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { FilterDefinition } from '../../types/filters';
+import { SearchFilterGroupModal } from '../SearchFilterGroupModal';
 import { SearchFilterValueLeaf } from '../SearchFilterValueLeaf/SearchFilterValueLeaf';
 import { SearchFilterValueParent } from '../SearchFilterValueParent/SearchFilterValueParent';
 
@@ -30,5 +31,8 @@ export const SearchFilterGroup = ({ filter }: SearchFilterGroupProps) => (
         ),
       )}
     </div>
+    {filter.is_autocompletable ? (
+      <SearchFilterGroupModal filter={filter} />
+    ) : null}
   </fieldset>
 );
