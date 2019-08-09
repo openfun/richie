@@ -9,7 +9,7 @@ export enum requestStatus {
 }
 
 export interface APIResponseListMeta {
-  limit: number;
+  count: number;
   offset: number;
   total_count: number;
 }
