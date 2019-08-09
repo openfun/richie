@@ -1,10 +1,8 @@
 import React, { useContext } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
-import {
-  CourseSearchParamsContext,
-  defaultPagination,
-} from '../../data/useCourseSearchParams/useCourseSearchParams';
+import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
+import { API_LIST_DEFAULT_PARAMS } from '../../settings';
 import { APICourseSearchResponse } from '../../types/api';
 import { Nullable } from '../../utils/types';
 import { SearchFilterGroup } from '../SearchFilterGroup/SearchFilterGroup';
@@ -38,7 +36,7 @@ export const SearchFiltersPane = ({ filters }: SearchFiltersPaneProps) => {
   // Get all the currently active filters to show a count
   const activeFilters = Object.entries(courseSearchParams)
     // Drop filters that are irrelevant to the "clear" button
-    .filter(([key]) => !Object.keys(defaultPagination).includes(key))
+    .filter(([key]) => !Object.keys(API_LIST_DEFAULT_PARAMS).includes(key))
     // Only keep the values
     .map(entry => entry[1])
     // Drop undefined & null values

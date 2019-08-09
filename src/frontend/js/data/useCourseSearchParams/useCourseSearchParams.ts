@@ -1,6 +1,7 @@
 import { parse, stringify } from 'query-string';
 import { createContext, useEffect, useReducer } from 'react';
 
+import { API_LIST_DEFAULT_PARAMS } from '../../settings';
 import { APIListRequestParams } from '../../types/api';
 import { FilterDefinition } from '../../types/filters';
 import { history, location } from '../../utils/indirection/window';
@@ -35,11 +36,6 @@ export const CourseSearchParamsContext = createContext<CourseSearchParamsState>(
   [] as any,
 );
 
-export const defaultPagination = {
-  limit: '999',
-  offset: '0',
-};
-
 const courseSearchParamsReducer = (
   courseSearchParams: APIListRequestParams,
   action: CourseSearchParamsReducerAction,
@@ -70,7 +66,7 @@ const courseSearchParamsReducer = (
     case 'FILTER_RESET':
       // Remove all parameters and reset pagination
       return {
-        ...defaultPagination,
+        ...API_LIST_DEFAULT_PARAMS,
         limit: courseSearchParams.limit,
       };
   }
@@ -78,7 +74,7 @@ const courseSearchParamsReducer = (
 
 export const useCourseSearchParams = (): CourseSearchParamsState => {
   const bootstrapParams = {
-    ...defaultPagination,
+    ...API_LIST_DEFAULT_PARAMS,
     ...(parse(location.search) as APIListRequestParams),
   };
 
