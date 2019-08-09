@@ -5,6 +5,7 @@
 // Our variables must be imported before Bootstrap code so they can override it
 @import './variables';
 @import './fonts';
+@import './utils';
 @import './mixins/shapes';
 @import './mixins/flexbox';
 @import './mixins/empty';
