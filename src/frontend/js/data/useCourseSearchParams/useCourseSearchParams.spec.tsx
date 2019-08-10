@@ -46,18 +46,48 @@ describe('data/useCourseSearchParams', () => {
     mockWindow.location.search = '';
     render(<TestComponent />);
     const [courseSearchParams] = getLatestHookValues();
-    expect(courseSearchParams).toEqual({ limit: '999', offset: '0' });
+    expect(courseSearchParams).toEqual({ limit: '20', offset: '0' });
     // We need an update so the URL reflects the actual query params
     expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
     expect(mockWindow.history.pushState).toHaveBeenCalledWith(
       null,
       '',
-      '?limit=999&offset=0',
+      '?limit=20&offset=0',
     );
   });
 
+  describe('PAGE_CHANGE', () => {
+    it('updates the offset on the courseSearchParams & updates history', () => {
+      mockWindow.location.search = '?languages=fr&limit=13&offset=26';
+      render(<TestComponent />);
+      {
+        const [courseSearchParams, dispatch] = getLatestHookValues();
+        expect(courseSearchParams).toEqual({
+          languages: 'fr',
+          limit: '13',
+          offset: '26',
+        });
+        act(() => dispatch({ offset: '39', type: 'PAGE_CHANGE' }));
+      }
+      {
+        const [courseSearchParams] = getLatestHookValues();
+        expect(courseSearchParams).toEqual({
+          languages: 'fr',
+          limit: '13',
+          offset: '39',
+        });
+        expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
+        expect(mockWindow.history.pushState).toHaveBeenCalledWith(
+          null,
+          '',
+          '?languages=fr&limit=13&offset=39',
+        );
+      }
+    });
+  });
+
   describe('QUERY_UPDATE', () => {
-    it('sets the query on courseSearchParams & updates history', () => {
+    it('sets the query on courseSearchParams, resets pagination & updates history', () => {
       mockWindow.location.search = '?languages=en&limit=17&offset=5';
       render(<TestComponent />);
       {
@@ -74,14 +104,14 @@ describe('data/useCourseSearchParams', () => {
         expect(courseSearchParams).toEqual({
           languages: 'en',
           limit: '17',
-          offset: '5',
+          offset: '0',
           query: 'some text query',
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
           null,
           '',
-          '?languages=en&limit=17&offset=5&query=some%20text%20query',
+          '?languages=en&limit=17&offset=0&query=some%20text%20query',
         );
       }
     });
@@ -150,14 +180,14 @@ describe('data/useCourseSearchParams', () => {
   });
 
   describe('FILTER_ADD [non drilldown]', () => {
-    it('adds the value to the existing list for this filter & updates history', () => {
+    it('adds the value to the existing list for this filter, resets pagination & updates history', () => {
       mockWindow.location.search =
-        '?organizations=L-00010003&organizations=L-00010009&offset=999&limit=0';
+        '?organizations=L-00010003&organizations=L-00010009&offset=999&limit=10';
       render(<TestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
-          limit: '0',
+          limit: '10',
           offset: '999',
           organizations: ['L-00010003', 'L-00010009'],
         });
@@ -176,28 +206,28 @@ describe('data/useCourseSearchParams', () => {
       {
         const [courseSearchParams] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
-          limit: '0',
-          offset: '999',
+          limit: '10',
+          offset: '0',
           organizations: ['L-00010003', 'L-00010009', 'L-00010017'],
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
           null,
           '',
-          '?limit=0&offset=999&organizations=L-00010003&organizations=L-00010009&organizations=L-00010017',
+          '?limit=10&offset=0&organizations=L-00010003&organizations=L-00010009&organizations=L-00010017',
         );
       }
     });
 
-    it('adds to the existing list for non-MPTT-formatted filter value keys', () => {
+    it('adds to the existing list for non-MPTT-formatted filter value keys and resets pagination', () => {
       mockWindow.location.search =
-        '?languages=en&languages=fr&offset=999&limit=0';
+        '?languages=en&languages=fr&offset=999&limit=10';
       render(<TestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           languages: ['en', 'fr'],
-          limit: '0',
+          limit: '10',
           offset: '999',
         });
 
@@ -216,26 +246,26 @@ describe('data/useCourseSearchParams', () => {
         const [courseSearchParams] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           languages: ['en', 'fr', 'it'],
-          limit: '0',
-          offset: '999',
+          limit: '10',
+          offset: '0',
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
           null,
           '',
-          '?languages=en&languages=fr&languages=it&limit=0&offset=999',
+          '?languages=en&languages=fr&languages=it&limit=10&offset=0',
         );
       }
     });
 
-    it('creates a list with the existing single value and the new value & updates history', () => {
+    it('creates a list with the existing single value and the new value, resets pagination & updates history', () => {
       mockWindow.location.search =
-        '?organizations=L-00010003&offset=999&limit=0';
+        '?organizations=L-00010003&offset=999&limit=10';
       render(<TestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
-          limit: '0',
+          limit: '10',
           offset: '999',
           organizations: 'L-00010003',
         });
@@ -254,27 +284,27 @@ describe('data/useCourseSearchParams', () => {
       {
         const [courseSearchParams] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
-          limit: '0',
-          offset: '999',
+          limit: '10',
+          offset: '0',
           organizations: ['L-00010003', 'L-00010017'],
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
           null,
           '',
-          '?limit=0&offset=999&organizations=L-00010003&organizations=L-00010017',
+          '?limit=10&offset=0&organizations=L-00010003&organizations=L-00010017',
         );
       }
     });
 
-    it('creates the new list for non-MPTT-formatted filter value keys', () => {
-      mockWindow.location.search = '?languages=de&offset=999&limit=0';
+    it('creates the new list for non-MPTT-formatted filter value keys and resets pagination', () => {
+      mockWindow.location.search = '?languages=de&offset=999&limit=10';
       render(<TestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           languages: 'de',
-          limit: '0',
+          limit: '10',
           offset: '999',
         });
 
@@ -293,14 +323,14 @@ describe('data/useCourseSearchParams', () => {
         const [courseSearchParams] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           languages: ['de', 'zh'],
-          limit: '0',
-          offset: '999',
+          limit: '10',
+          offset: '0',
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
           null,
           '',
-          '?languages=de&languages=zh&limit=0&offset=999',
+          '?languages=de&languages=zh&limit=10&offset=0',
         );
       }
     });

@@ -7,14 +7,19 @@ import { FilterDefinition } from '../../types/filters';
 import { history, location } from '../../utils/indirection/window';
 import { computeNewFilterValue } from './computeNewFilterValue';
 
+interface FilterResetAction {
+  type: 'FILTER_RESET';
+}
+
 interface FilterSingleAction {
   filter: FilterDefinition;
   payload: string;
   type: 'FILTER_ADD' | 'FILTER_REMOVE';
 }
 
-interface FilterResetAction {
-  type: 'FILTER_RESET';
+interface PageChangeAction {
+  offset: string;
+  type: 'PAGE_CHANGE';
 }
 
 interface QueryAction {
@@ -25,6 +30,7 @@ interface QueryAction {
 export type CourseSearchParamsReducerAction =
   | FilterResetAction
   | FilterSingleAction
+  | PageChangeAction
   | QueryAction;
 
 type CourseSearchParamsState = [
@@ -41,9 +47,17 @@ const courseSearchParamsReducer = (
   action: CourseSearchParamsReducerAction,
 ) => {
   switch (action.type) {
+    case 'PAGE_CHANGE':
+      return {
+        ...courseSearchParams,
+        offset: action.offset,
+      };
+
     case 'QUERY_UPDATE':
       return {
         ...courseSearchParams,
+        // Go back to page 1 when the query changes
+        offset: '0',
         // By replacing the empty string (the only falsy value we could receive for action.query) with `undefined`,
         // we keep a clean interface and ensure `stringify` removes `&query=` from the query string in history.
         query: action.query || undefined,
@@ -53,6 +67,8 @@ const courseSearchParamsReducer = (
     case 'FILTER_REMOVE':
       return {
         ...courseSearchParams,
+        // Go back to page 1 when the query changes
+        offset: '0',
         [action.filter.name]: computeNewFilterValue(
           courseSearchParams[action.filter.name],
           {
