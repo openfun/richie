@@ -48,7 +48,7 @@ describe('components/SearchFiltersPane', () => {
     getByText('Filter courses');
     getByText('Received filter title: Categories');
     getByText('Received filter title: Organizations');
-    expect(getByText('Clear 0 active filters').parentElement).toHaveClass(
+    expect(getByText('Clear 0 active filters')).toHaveClass(
       'search-filters-pane__clear--hidden',
     );
   });

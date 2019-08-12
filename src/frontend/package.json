@@ -48,7 +48,6 @@
     "@types/react": "16.9.1",
     "@types/react-autosuggest": "9.3.10",
     "@types/react-dom": "16.8.5",
-    "@types/react-intl": "2.3.18",
     "babel-jest": "24.8.0",
     "babel-loader": "8.0.6",
     "babel-plugin-react-intl": "4.1.12",
@@ -68,8 +67,10 @@
     "xhr-mock": "2.5.0"
   },
   "dependencies": {
+    "@formatjs/intl-relativetimeformat": "2.6.3",
     "bootstrap": "4.3.1",
     "core-js": "3",
+    "intl-pluralrules": "1.0.3",
     "lodash-es": "4.17.15",
     "query-string": "6.8.2",
     "react": "16.9.0",
