@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
     "esModuleInterop": true,
     "jsx": "preserve",
     "lib": [
@@ -10,10 +11,15 @@
       "scripthost",
       "es2015",
       "es2016",
-      "es2017"
+      "es2017",
+      "es2018.intl",
+      "esnext.intl"
     ],
     "module": "esnext",
     "moduleResolution": "node",
+    "paths": {
+      "intl-pluralrules": ["types/libs/intl-pluralrules"]
+    },
     "resolveJsonModule": true,
     "strict": true,
     "sourceMap": true,

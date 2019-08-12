@@ -5,9 +5,9 @@
  * one in our library and actually do render it in the appropriate element.
  */
 
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
-import { addLocaleData, IntlProvider } from 'react-intl';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { IntlProvider } from 'react-intl';
 
 // Import submodules so we don't get the whole of lodash in the bundle
 import get from 'lodash-es/get';
@@ -16,6 +16,7 @@ import startCase from 'lodash-es/startCase';
 
 // Import the top-level components that can be directly called from the CMS
 import { Search } from './components/Search/Search';
+import { handle } from './utils/errors/handle';
 // List them in an interface for type-safety when we call them. This will let us use the props for
 // any top-level component in a way TypeScript understand and accepts
 interface ComponentLibrary {
@@ -54,15 +55,21 @@ document.addEventListener('DOMContentLoaded', event => {
           localeCode = locale.split('_')[0];
         }
 
-        // Get `react-intl` lang specific parameters and data
+        // Only load Intl polyfills & pre-built locale data for browsers that need it
         try {
-          const localeData = await import(
-            `react-intl/locale-data/${localeCode}`
-          );
-          // async import returns an object of getters containing the value we want. We have to fetch them
-          // by calling Object.values
-          addLocaleData(Object.values(localeData));
-        } catch (e) {}
+          if (!Intl.PluralRules) {
+            await import('intl-pluralrules');
+          }
+          if (!Intl.RelativeTimeFormat) {
+            await import('@formatjs/intl-relativetimeformat');
+            // Get `react-intl`/`formatjs` lang specific parameters and data
+            await import(
+              `@formatjs/intl-relativetimeformat/dist/locale-data/${localeCode}`
+            );
+          }
+        } catch (e) {
+          handle(e);
+        }
 
         // Load our own strings for the given lang
         let translatedMessages = null;
