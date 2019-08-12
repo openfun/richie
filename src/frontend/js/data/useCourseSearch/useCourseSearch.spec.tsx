@@ -11,13 +11,6 @@ jest.mock('../getResourceList/getResourceList', () => ({
 }));
 const mockFetchList = fetchList as jestMockOf<typeof fetchList>;
 
-// This test uses async/await inside `useEffect`, which causes warnings due to the particular timing of
-// resolution for `await` with relation to react renders. For most scenarios, `act` takes care of this
-// scheduling, but `act` does not handle `async` functions and cannot be `await`ed yet.
-// TODO: Remove this when async act is available.
-// tslint:disable:no-console
-console.error = jest.fn();
-
 describe('data/useCourseSearch', () => {
   // Build a helper component with an out-of-scope function to let us reach our Hook from
   // our test cases.
@@ -46,7 +39,7 @@ describe('data/useCourseSearch', () => {
       offset: '0',
     });
 
-    act(() => doResolve('the response'));
+    await act(async () => doResolve('the response'));
     // Wait for the actual resolution under await
     await responseOne;
     expect(getLatestHookValue()).toEqual('the response');
@@ -70,7 +63,7 @@ describe('data/useCourseSearch', () => {
       organizations: ['43'],
     });
 
-    act(() => doResolve('another response'));
+    await act(async () => doResolve('another response'));
     // Wait for the actual resolution under await
     await responseTwo;
     expect(getLatestHookValue()).toEqual('another response');
@@ -91,7 +84,7 @@ describe('data/useCourseSearch', () => {
       offset: '0',
     });
 
-    act(() => doResolve('the response'));
+    await act(async () => doResolve('the response'));
     // Wait for the actual resolution under await
     await responseOne;
     expect(getLatestHookValue()).toEqual('the response');

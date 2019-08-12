@@ -50,15 +50,8 @@ describe('components/SearchSuggestField', () => {
     values: [],
   };
 
-  beforeEach(jest.resetAllMocks);
-
-  // Disable useless async act warnings
-  // TODO: remove this spy as soon as async act is available
-  beforeAll(() => {
-    jest.spyOn(console, 'error');
-  });
-
   afterEach(fetchMock.restore);
+  beforeEach(jest.resetAllMocks);
 
   it('renders', () => {
     const { getByPlaceholderText } = render(
@@ -249,6 +242,8 @@ describe('components/SearchSuggestField', () => {
     expect(queryByText('Subjects')).toEqual(null);
 
     fireEvent.click(getByText('Organization #27'));
+    await wait();
+
     expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
       query: '',
       type: 'QUERY_UPDATE',
@@ -325,6 +320,8 @@ describe('components/SearchSuggestField', () => {
     expect(queryByText('Subjects')).toEqual(null);
 
     fireEvent.click(getByText('Doctor Doom'));
+    await wait();
+
     expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
       filter: {
         base_path: null,
