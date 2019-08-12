@@ -1,6 +1,6 @@
 import '../../testSetup';
 
-import { cleanup, fireEvent, render, wait } from '@testing-library/react';
+import { fireEvent, render, wait } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
@@ -58,7 +58,6 @@ describe('components/SearchSuggestField', () => {
     jest.spyOn(console, 'error');
   });
 
-  afterEach(cleanup);
   afterEach(fetchMock.restore);
 
   it('renders', () => {

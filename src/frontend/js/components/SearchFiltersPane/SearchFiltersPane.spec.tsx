@@ -1,6 +1,6 @@
 import '../../testSetup';
 
-import { cleanup, fireEvent, render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
@@ -14,8 +14,6 @@ jest.mock('../SearchFilterGroup/SearchFilterGroup', () => ({
 }));
 
 describe('components/SearchFiltersPane', () => {
-  afterEach(cleanup);
-
   it('renders all our search filter groups', () => {
     const { getByText } = render(
       <IntlProvider locale="en">

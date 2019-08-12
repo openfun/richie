@@ -1,4 +1,4 @@
-import { act, cleanup, render } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
 import React from 'react';
 
 import * as mockWindow from '../../utils/indirection/window';
@@ -26,8 +26,6 @@ describe('data/useCourseSearchParams', () => {
     );
     jest.resetAllMocks();
   });
-
-  afterEach(cleanup);
 
   it('initializes with the URL query string', () => {
     mockWindow.location.search =
