@@ -40,18 +40,18 @@
     "@babel/preset-env": "7.5.5",
     "@babel/preset-typescript": "7.3.3",
     "@testing-library/jest-dom": "4.0.0",
-    "@testing-library/react": "8.0.7",
+    "@testing-library/react": "9.1.0",
     "@types/fetch-mock": "7.3.1",
-    "@types/jest": "24.0.16",
+    "@types/jest": "24.0.17",
     "@types/lodash-es": "4.17.3",
     "@types/query-string": "6.2.0",
-    "@types/react": "16.8.24",
+    "@types/react": "16.9.1",
     "@types/react-autosuggest": "9.3.10",
     "@types/react-dom": "16.8.5",
     "@types/react-intl": "2.3.18",
     "babel-jest": "24.8.0",
     "babel-loader": "8.0.6",
-    "babel-plugin-react-intl": "4.1.5",
+    "babel-plugin-react-intl": "4.1.12",
     "babel-preset-react": "7.0.0-beta.3",
     "fetch-mock": "7.3.9",
     "jest": "24.8.0",
@@ -72,13 +72,13 @@
     "core-js": "3",
     "lodash-es": "4.17.15",
     "query-string": "6.8.2",
-    "react": "16.8.6",
+    "react": "16.9.0",
     "react-autosuggest": "9.4.3",
-    "react-dom": "16.8.6",
-    "react-intl": "2.9.0"
+    "react-dom": "16.9.0",
+    "react-intl": "3.1.6"
   },
   "resolutions": {
-    "@types/react": "16.8.24",
+    "@types/react": "16.9.1",
     "babel-core": "7.0.0-bridge.0"
   }
 }
