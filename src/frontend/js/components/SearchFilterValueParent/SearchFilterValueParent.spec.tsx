@@ -16,12 +16,6 @@ import { SearchFilterValueParent } from './SearchFilterValueParent';
 const mockFetchList: jestMockOf<typeof fetchList> = fetchList as any;
 
 describe('<SearchFilterValueParent />', () => {
-  // Disable useless async act warnings
-  // TODO: remove this spy as soon as async act is available
-  beforeAll(() => {
-    jest.spyOn(console, 'error');
-  });
-
   afterEach(jest.resetAllMocks);
 
   it('renders the parent filter value and a button to show the children', () => {
