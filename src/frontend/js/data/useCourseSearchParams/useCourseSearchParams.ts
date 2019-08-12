@@ -4,7 +4,7 @@ import { createContext, useEffect, useReducer } from 'react';
 import { API_LIST_DEFAULT_PARAMS } from '../../settings';
 import { APIListRequestParams } from '../../types/api';
 import { FilterDefinition } from '../../types/filters';
-import { history, location } from '../../utils/indirection/window';
+import { history, location, scroll } from '../../utils/indirection/window';
 import { computeNewFilterValue } from './computeNewFilterValue';
 
 interface FilterResetAction {
@@ -100,6 +100,26 @@ export const useCourseSearchParams = (): CourseSearchParamsState => {
   );
 
   useEffect(() => {
+    // We want to scroll back to the top only when pagination is updated. When the user clicks on a page number,
+    // we can safely assume they are done interacting and want to move up top to see the new page.
+    // When they're adding filters, we don't want to jankily force them to scroll again to where they were in
+    // the page if they wanted to add more than one filter.
+    // We're using `stringify(parse(location.search))` as a way to reorder location search to the same order
+    // `stringify` would output for our courseSearchParams. This allows us to avoid doing a deep comparison on
+    // `courseSearchParams` and the result of `parse(location.search)`.
+    if (
+      parse(location.search).offset !== courseSearchParams.offset &&
+      stringify({
+        ...courseSearchParams,
+        offset: parse(location.search).offset,
+      }) === stringify(parse(location.search))
+    ) {
+      scroll({
+        behavior: 'smooth',
+        top: 0,
+      });
+    }
+
     // We should only update the history if the params have actually changed
     // One such case is on load if we're just using query params from the URL
     // We're using `stringify(parse(location.search))` as a way to reorder location search to the same order
