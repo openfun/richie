@@ -1,6 +1,6 @@
 import '../../testSetup';
 
-import { cleanup, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import React from 'react';
 
 import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
@@ -20,7 +20,6 @@ jest.mock('../SearchFilterValueParent/SearchFilterValueParent', () => ({
 
 describe('components/SearchFilterGroup', () => {
   beforeEach(jest.resetAllMocks);
-  afterEach(cleanup);
 
   it('renders the name of the filter with the values as SearchFilters', () => {
     const { getByText } = render(

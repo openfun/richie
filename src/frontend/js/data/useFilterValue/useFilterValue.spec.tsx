@@ -1,4 +1,4 @@
-import { cleanup, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import React from 'react';
 
 import { FilterDefinition, FilterValue } from '../../types/filters';
@@ -22,8 +22,6 @@ describe('data/useFilterValue', () => {
   };
 
   beforeEach(jest.resetAllMocks);
-
-  afterEach(cleanup);
 
   it('returns the active [true] status of the filter value and a function to toggle it', () => {
     const mockDispatchCourseSearchParamsAction = jest.fn();

@@ -1,6 +1,6 @@
 import '../../testSetup';
 
-import { cleanup, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
@@ -8,8 +8,6 @@ import { Course } from '../../types/Course';
 import { CourseGlimpseList } from './CourseGlimpseList';
 
 describe('components/CourseGlimpseList', () => {
-  afterEach(cleanup);
-
   it('renders a list of Courses into a list of CourseGlimpses', () => {
     const courses = [
       {

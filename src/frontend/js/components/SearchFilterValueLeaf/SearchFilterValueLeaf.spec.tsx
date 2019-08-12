@@ -1,6 +1,6 @@
 import '../../testSetup';
 
-import { cleanup, fireEvent, render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
@@ -8,8 +8,6 @@ import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useC
 import { SearchFilterValueLeaf } from './SearchFilterValueLeaf';
 
 describe('components/SearchFilterValueLeaf', () => {
-  afterEach(cleanup);
-
   it('renders the name of the filter value', () => {
     const { getByLabelText } = render(
       <IntlProvider locale="en">

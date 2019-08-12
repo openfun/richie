@@ -1,4 +1,4 @@
-import { act, cleanup, render } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
 import React from 'react';
 
 import { APIListRequestParams } from '../../types/api';
@@ -29,8 +29,6 @@ describe('data/useCourseSearch', () => {
   };
 
   beforeEach(jest.resetAllMocks);
-
-  afterEach(cleanup);
 
   it('gets the courses with the passed params', async () => {
     let doResolve: (value: any) => void;

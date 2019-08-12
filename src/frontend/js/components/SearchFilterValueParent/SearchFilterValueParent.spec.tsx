@@ -1,6 +1,6 @@
 import '../../testSetup';
 
-import { cleanup, fireEvent, render, wait } from '@testing-library/react';
+import { fireEvent, render, wait } from '@testing-library/react';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
@@ -22,10 +22,7 @@ describe('<SearchFilterValueParent />', () => {
     jest.spyOn(console, 'error');
   });
 
-  afterEach(() => {
-    cleanup();
-    jest.resetAllMocks();
-  });
+  afterEach(jest.resetAllMocks);
 
   it('renders the parent filter value and a button to show the children', () => {
     const { getByLabelText, queryByLabelText } = render(
