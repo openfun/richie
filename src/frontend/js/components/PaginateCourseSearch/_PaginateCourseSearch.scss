@@ -1,0 +1,30 @@
+.paginate-course-search {
+  &__list {
+    display: flex;
+    margin: 1rem 0;
+    padding: 0;
+    justify-content: center;
+
+    &__item {
+      list-style-type: none;
+      display: flex;
+      padding: 0.5rem 1rem;
+      background: white;
+      border: 1px solid $dodgerblue1;
+
+      & + & {
+        border-left: 0;
+      }
+
+      &__page-number {
+        color: $dodgerblue1;
+        cursor: pointer;
+
+        &--current {
+          color: $gray40;
+          cursor: default;
+        }
+      }
+    }
+  }
+}

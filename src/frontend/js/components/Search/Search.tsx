@@ -7,6 +7,7 @@ import {
 } from '../../data/useCourseSearchParams/useCourseSearchParams';
 import { requestStatus } from '../../types/api';
 import { CourseGlimpseList } from '../CourseGlimpseList/CourseGlimpseList';
+import { PaginateCourseSearch } from '../PaginateCourseSearch';
 import { SearchFiltersPane } from '../SearchFiltersPane/SearchFiltersPane';
 import { SearchLoader } from '../SearchLoader/SearchLoader';
 import { SearchSuggestField } from '../SearchSuggestField/SearchSuggestField';
@@ -45,7 +46,12 @@ export const Search = ({ pageTitle }: SearchProps) => {
               <CourseGlimpseList
                 courses={courseSearchResponse.content.objects}
                 meta={courseSearchResponse.content.meta}
-              />{' '}
+              />
+              <PaginateCourseSearch
+                courseSearchTotalCount={
+                  courseSearchResponse.content.meta.total_count
+                }
+              />
             </React.Fragment>
           ) : (
             <SearchLoader />
