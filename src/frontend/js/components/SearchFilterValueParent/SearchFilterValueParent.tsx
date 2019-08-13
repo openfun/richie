@@ -7,6 +7,7 @@ import { useFilterValue } from '../../data/useFilterValue/useFilterValue';
 import { requestStatus } from '../../types/api';
 import { FilterDefinition, FilterValue } from '../../types/filters';
 import { getMPTTChildrenPathMatcher } from '../../utils/mptt';
+import { Nullable } from '../../utils/types';
 import { useAsyncEffect } from '../../utils/useAsyncEffect';
 import { SearchFilterValueLeaf } from '../SearchFilterValueLeaf/SearchFilterValueLeaf';
 
@@ -54,11 +55,14 @@ export const SearchFilterValueParent = ({
   const childrenPathMatch = getMPTTChildrenPathMatcher(value.key);
   const childrenPathMatchRegexp = new RegExp(childrenPathMatch);
   // Hide children by default, unless at least one of them is currently active
-  const [showChildren, setShowChildren] = useState(
-    activeValuesList.some(activeValueKey =>
-      childrenPathMatchRegexp.test(activeValueKey),
-    ),
+  const hasActiveChildren = activeValuesList.some(activeValueKey =>
+    childrenPathMatchRegexp.test(activeValueKey),
   );
+  const [userShowChildren, setUserShowChildren] = useState(null as Nullable<
+    boolean
+  >);
+  const showChildren =
+    userShowChildren !== null ? !!userShowChildren : hasActiveChildren;
 
   const [children, setChildren] = useState([] as FilterValue[]);
   useAsyncEffect(async () => {
@@ -122,7 +126,7 @@ export const SearchFilterValueParent = ({
           aria-pressed={showChildren}
           className={`search-filter-value-parent__self__unfold ${showChildren &&
             'search-filter-value-parent__self__unfold--open'}`}
-          onClick={() => setShowChildren(!showChildren)}
+          onClick={() => setUserShowChildren(!showChildren)}
         >
           {showChildren ? '-' : '+'}
         </button>
