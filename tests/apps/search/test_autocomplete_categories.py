@@ -28,7 +28,7 @@ class AutocompleteCategoriesTestCase(TestCase):
     Test category autocomplete queries in a real-world situation with ElasticSearch.
     """
 
-    def execute_query(self, querystring=""):
+    def execute_query(self, querystring="", **extra):
         """
         Not a test.
         Prepare the ElasticSearch index and execute the query in it.
@@ -37,35 +37,51 @@ class AutocompleteCategoriesTestCase(TestCase):
         categories = [
             {
                 "complete": {
-                    "en": slice_string_for_completion("Electric Birdwatching")
+                    "en": slice_string_for_completion("Electric Birdwatching"),
+                    "fr": slice_string_for_completion(
+                        "Observation des oiseaux électriques"
+                    ),
                 },
                 "id": "24",
                 "kind": "subjects",
                 "path": "001000",
-                "title": {"en": "Electric Birdwatching"},
-            },
-            {
-                "complete": {"en": slice_string_for_completion("Ocean biking")},
-                "id": "33",
-                "kind": "subjects",
-                "path": "001001",
-                "title": {"en": "Ocean biking"},
+                "title": {
+                    "en": "Electric Birdwatching",
+                    "fr": "Observation des oiseaux électriques",
+                },
             },
             {
                 "complete": {
-                    "en": slice_string_for_completion("Eclectic bikeshedding")
+                    "en": slice_string_for_completion("Ocean biking"),
+                    "fr": slice_string_for_completion("Cyclisme océanique"),
+                },
+                "id": "33",
+                "kind": "subjects",
+                "path": "001001",
+                "title": {"en": "Ocean biking", "fr": "Cyclisme océanique"},
+            },
+            {
+                "complete": {
+                    "en": slice_string_for_completion("Elegiac bikeshedding"),
+                    "fr": slice_string_for_completion("Élégie de l'abri à vélos"),
                 },
                 "id": "51",
                 "kind": "subjects",
                 "path": "001002",
-                "title": {"en": "Eclectic bikeshedding"},
+                "title": {
+                    "en": "Elegiac bikeshedding",
+                    "fr": "Élégie de l'abri à vélos",
+                },
             },
             {
-                "complete": {"en": slice_string_for_completion("Electric Decoys")},
+                "complete": {
+                    "en": slice_string_for_completion("Electric Decoys"),
+                    "fr": slice_string_for_completion("Leurres électriques"),
+                },
                 "id": "44",
                 "kind": "not_subjects",
                 "path": "001003",
-                "title": {"en": "Electric Decoys"},
+                "title": {"en": "Electric Decoys", "fr": "Leurres électriques"},
             },
         ]
 
@@ -74,14 +90,16 @@ class AutocompleteCategoriesTestCase(TestCase):
         indices_client.delete(index="_all")
         # Create an index we'll use to test the ES features
         indices_client.create(index=CATEGORIES_INDEX)
-        # Use the default categories mapping from the Indexer
-        indices_client.put_mapping(
-            body=CategoriesIndexer.mapping, doc_type="category", index=CATEGORIES_INDEX
-        )
+
         # The index needs to be closed before we set an analyzer
         indices_client.close(index=CATEGORIES_INDEX)
         indices_client.put_settings(body=ANALYSIS_SETTINGS, index=CATEGORIES_INDEX)
         indices_client.open(index=CATEGORIES_INDEX)
+
+        # Use the default categories mapping from the Indexer
+        indices_client.put_mapping(
+            body=CategoriesIndexer.mapping, doc_type="category", index=CATEGORIES_INDEX
+        )
 
         # Actually insert our categories in the index
         actions = [
@@ -90,10 +108,10 @@ class AutocompleteCategoriesTestCase(TestCase):
                 "_index": CATEGORIES_INDEX,
                 "_op_type": "create",
                 "_type": "category",
-                "absolute_url": {"en": "url"},
-                "cover_image": {"en": "image"},
+                "absolute_url": {"en": "en/url", "fr": "fr/url"},
+                "cover_image": {"en": "en/image", "fr": "fr/image"},
                 "is_meta": False,
-                "logo": {"en": "/some/img.png"},
+                "logo": {"en": "en/some/img.png", "fr": "fr/some/img.png"},
                 "nb_children": 0,
                 **category,
             }
@@ -102,7 +120,9 @@ class AutocompleteCategoriesTestCase(TestCase):
         bulk(actions=actions, chunk_size=500, client=ES_CLIENT)
         indices_client.refresh()
 
-        response = self.client.get(f"/api/v1.0/subjects/autocomplete/?{querystring:s}")
+        response = self.client.get(
+            f"/api/v1.0/subjects/autocomplete/?{querystring:s}", **extra
+        )
         self.assertEqual(response.status_code, 200)
 
         return categories, json.loads(response.content)
@@ -121,4 +141,32 @@ class AutocompleteCategoriesTestCase(TestCase):
         self.assertEqual(
             [all_categories[i]["id"] for i in [2, 1]],
             [category["id"] for category in response],
+        )
+
+    def test_autocomplete_diacritics_insensitive_query(self, *_):
+        """
+        Queries are diacritics insensitive.
+        """
+        all_categories, response = self.execute_query(querystring="query=élec")
+        self.assertEqual(
+            [all_categories[0]["id"]], [category["id"] for category in response]
+        )
+
+    def test_autocomplete_diacritics_insensitive_index(self, *_):
+        """
+        Index is diacritics insensitive.
+        """
+        all_categories, response = self.execute_query(
+            querystring="query=elegie", HTTP_ACCEPT_LANGUAGE="fr"
+        )
+        self.assertEqual(
+            [all_categories[2]["id"]], [category["id"] for category in response]
+        )
+
+        # Sanity check for original, accented version
+        all_categories, response = self.execute_query(
+            querystring="query=Élégie", HTTP_ACCEPT_LANGUAGE="fr"
+        )
+        self.assertEqual(
+            [all_categories[2]["id"]], [category["id"] for category in response]
         )

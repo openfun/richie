@@ -14,6 +14,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add a CSS class to move content offscreen so it's only available for users
   of assistive technologies.
 
+## Changed
+
+- Autosuggestion endpoints are diacritics insensitive.
+
 ## [1.6.1] - 2019-08-03
 
 ### Fixed

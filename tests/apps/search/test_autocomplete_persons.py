@@ -28,7 +28,7 @@ class AutocompletePersonsTestCase(TestCase):
     Test person autocomplete queries in a real-world situation with ElasticSearch.
     """
 
-    def execute_query(self, querystring=""):
+    def execute_query(self, querystring="", **extra):
         """
         Not a test.
         Prepare the ElasticSearch index and execute the query in it.
@@ -59,14 +59,17 @@ class AutocompletePersonsTestCase(TestCase):
         indices_client.delete(index="_all")
         # Create an index we'll use to test the ES features
         indices_client.create(index=PERSONS_INDEX)
-        # Use the default persons mapping from the Indexer
-        indices_client.put_mapping(
-            body=PersonsIndexer.mapping, doc_type="person", index=PERSONS_INDEX
-        )
+
         # The index needs to be closed before we set an analyzer
         indices_client.close(index=PERSONS_INDEX)
         indices_client.put_settings(body=ANALYSIS_SETTINGS, index=PERSONS_INDEX)
         indices_client.open(index=PERSONS_INDEX)
+
+        # Use the default persons mapping from the Indexer
+        indices_client.put_mapping(
+            body=PersonsIndexer.mapping, doc_type="person", index=PERSONS_INDEX
+        )
+
         # Actually insert our persons in the index
         actions = [
             {
@@ -83,7 +86,9 @@ class AutocompletePersonsTestCase(TestCase):
         bulk(actions=actions, chunk_size=500, client=ES_CLIENT)
         indices_client.refresh()
 
-        response = self.client.get(f"/api/v1.0/persons/autocomplete/?{querystring:s}")
+        response = self.client.get(
+            f"/api/v1.0/persons/autocomplete/?{querystring:s}", **extra
+        )
         self.assertEqual(response.status_code, 200)
 
         return persons, json.loads(response.content)
@@ -96,4 +101,22 @@ class AutocompletePersonsTestCase(TestCase):
         self.assertEqual([all_persons[1]["id"]], [person["id"] for person in response])
 
         all_persons, response = self.execute_query(querystring="query=épo")
+        self.assertEqual([all_persons[0]["id"]], [person["id"] for person in response])
+
+    def test_autocomplete_diacritics_insensitive_query(self, *_):
+        """
+        Queries are diacritics insensitive.
+        """
+        all_persons, response = self.execute_query(querystring="query=Mônsé")
+        self.assertEqual([all_persons[1]["id"]], [person["id"] for person in response])
+
+    def test_autocomplete_diacritics_insensitive_index(self, *_):
+        """
+        Index is diacritics insensitive.
+        """
+        all_persons, response = self.execute_query(querystring="query=eponine")
+        self.assertEqual([all_persons[0]["id"]], [person["id"] for person in response])
+
+        # Sanity check for original, accented version
+        all_persons, response = self.execute_query(querystring="query=Thénardier")
         self.assertEqual([all_persons[0]["id"]], [person["id"] for person in response])

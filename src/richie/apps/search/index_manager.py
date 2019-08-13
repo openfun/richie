@@ -49,14 +49,15 @@ def perform_create_index(indexable, logger):
     # Create the new index
     logger.info('Creating a new Elasticsearch index "{:s}"...'.format(new_index))
     indices_client.create(index=new_index)
-    indices_client.put_mapping(
-        body=indexable.mapping, doc_type=indexable.document_type, index=new_index
-    )
 
     # The index needs to be closed before we set an analyzer
     indices_client.close(index=new_index)
     indices_client.put_settings(body=ANALYSIS_SETTINGS, index=new_index)
     indices_client.open(index=new_index)
+
+    indices_client.put_mapping(
+        body=indexable.mapping, doc_type=indexable.document_type, index=new_index
+    )
 
     # Populate the new index with data provided from our indexable class
     richie_bulk(indexable.get_es_documents(new_index))
