@@ -10,6 +10,7 @@ jest.mock('../../data/getResourceList/getResourceList', () => ({
 
 import { fetchList } from '../../data/getResourceList/getResourceList';
 import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
+import { APIListRequestParams } from '../../types/api';
 import { jestMockOf } from '../../utils/types';
 import { SearchFilterValueParent } from './SearchFilterValueParent';
 
@@ -55,7 +56,7 @@ describe('<SearchFilterValueParent />', () => {
     ).toEqual(null);
   });
 
-  it('renders the children on load when one of them is active', async () => {
+  it('shows the children when one of them is active', async () => {
     mockFetchList.mockResolvedValue({
       content: {
         filters: {
@@ -77,14 +78,10 @@ describe('<SearchFilterValueParent />', () => {
       },
     } as any);
 
-    const { getByLabelText } = render(
+    // Helper to get the React element with the expected params
+    const getElement = (params: APIListRequestParams) => (
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[
-            { limit: '999', offset: '0', subjects: ['L-000400050004'] },
-            jest.fn(),
-          ]}
-        >
+        <CourseSearchParamsContext.Provider value={[params, jest.fn()]}>
           <SearchFilterValueParent
             filter={{
               base_path: '00010002',
@@ -100,19 +97,34 @@ describe('<SearchFilterValueParent />', () => {
             }}
           />
         </CourseSearchParamsContext.Provider>
-      </IntlProvider>,
+      </IntlProvider>
+    );
+    const { getByLabelText, queryByLabelText, rerender } = render(
+      getElement({ limit: '999', offset: '0', subjects: [] }),
     );
 
-    getByLabelText((content, _) => content.startsWith('Literature'));
+    // Children filters are not shown
+    getByLabelText(content => content.startsWith('Literature'));
+    expect(queryByLabelText('Hide additional filters for Literature')).toEqual(
+      null,
+    );
+    queryByLabelText(content => content.startsWith('Classical Literature'));
+    queryByLabelText(content => content.startsWith('Modern Literature'));
+
+    // The params are updated, now include a child filter of Literature
+    rerender(
+      getElement({ limit: '999', offset: '0', subjects: ['L-000400050004'] }),
+    );
+    await wait();
+
+    // The children filters are now shown along with an icon to hide them
+    getByLabelText(content => content.startsWith('Classical Literature'));
+    getByLabelText(content => content.startsWith('Modern Literature'));
     const button = getByLabelText('Hide additional filters for Literature');
     expect(button).toHaveAttribute('aria-pressed', 'true');
-
-    await wait();
-    getByLabelText((content, _) => content.startsWith('Classical Literature'));
-    getByLabelText((content, _) => content.startsWith('Modern Literature'));
   });
 
-  it('hides/show the children when the user clicks on the toggle button', async () => {
+  it('hides/shows the children when the user clicks on the toggle button', async () => {
     mockFetchList.mockResolvedValue({
       content: {
         filters: {
