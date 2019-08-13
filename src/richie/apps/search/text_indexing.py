@@ -136,6 +136,10 @@ ANALYSIS_SETTINGS = {
                     "asciifolding",
                 ],
             },
+            "simple_diacritics_insensitive": {
+                "tokenizer": "lowercase",
+                "filter": ["asciifolding"],
+            },
         },
         "tokenizer": {
             "trigram": {

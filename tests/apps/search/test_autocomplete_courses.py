@@ -28,7 +28,7 @@ class AutocompleteCoursesTestCase(TestCase):
     Test course autocomplete queries in a real-world situation with ElasticSearch.
     """
 
-    def execute_query(self, querystring=""):
+    def execute_query(self, querystring="", **extra):
         """
         Not a test.
         Prepare the ElasticSearch index and execute the query in it.
@@ -39,34 +39,50 @@ class AutocompleteCoursesTestCase(TestCase):
                 "complete": {
                     "en": slice_string_for_completion(
                         "Artificial intelligence for mushroom picking"
-                    )
+                    ),
+                    "fr": slice_string_for_completion(
+                        "Intelligence artificielle pour la cueillette de chàmpiñons"
+                    ),
                 },
                 "course_runs": [],
                 "id": "24",
                 "path": "001000",
-                "title": {"en": "Artificial intelligence for mushroom picking"},
+                "title": {
+                    "en": "Artificial intelligence for mushroom picking",
+                    "fr": "Intelligence artificielle pour la cueillette de chàmpiñons",
+                },
             },
             {
                 "complete": {
                     "en": slice_string_for_completion(
                         "Kung-fu moves for cloud infrastructure security"
-                    )
+                    ),
+                    "fr": slice_string_for_completion(
+                        "Protéger ses serveurs par la pratique des arts martiaux"
+                    ),
                 },
                 "course_runs": [],
                 "id": "33",
                 "path": "001001",
-                "title": {"en": "Kung-fu moves for cloud infrastructure security"},
+                "title": {
+                    "en": "Kung-fu moves for cloud infrastructure security",
+                    "fr": "Prôtéger ses serveurs par la pratique des arts martiaux",
+                },
             },
             {
                 "complete": {
                     "en": slice_string_for_completion(
                         "Securing funding through token sales"
-                    )
+                    ),
+                    "fr": slice_string_for_completion("Lever des fonds par des ICO"),
                 },
                 "course_runs": [],
                 "id": "51",
                 "path": "001002",
-                "title": {"en": "Securing funding through token sales"},
+                "title": {
+                    "en": "Securing funding through token sales",
+                    "fr": "Lever des fonds par des ICO",
+                },
             },
         ]
 
@@ -75,14 +91,16 @@ class AutocompleteCoursesTestCase(TestCase):
         indices_client.delete(index="_all")
         # Create an index we'll use to test the ES features
         indices_client.create(index=COURSES_INDEX)
-        # Use the default courses mapping from the Indexer
-        indices_client.put_mapping(
-            body=CoursesIndexer.mapping, doc_type="course", index=COURSES_INDEX
-        )
+
         # The index needs to be closed before we set an analyzer
         indices_client.close(index=COURSES_INDEX)
         indices_client.put_settings(body=ANALYSIS_SETTINGS, index=COURSES_INDEX)
         indices_client.open(index=COURSES_INDEX)
+
+        # Use the default courses mapping from the Indexer
+        indices_client.put_mapping(
+            body=CoursesIndexer.mapping, doc_type="course", index=COURSES_INDEX
+        )
         # Add the sorting script
         ES_CLIENT.put_script(id="state", body=CoursesIndexer.scripts["state"])
         # Actually insert our courses in the index
@@ -92,11 +110,11 @@ class AutocompleteCoursesTestCase(TestCase):
                 "_index": COURSES_INDEX,
                 "_op_type": "create",
                 "_type": "course",
-                "absolute_url": {"en": "url"},
+                "absolute_url": {"en": "en/url", "fr": "fr/url"},
                 "categories": ["1", "2", "3"],
-                "cover_image": {"en": "image"},
+                "cover_image": {"en": "en/image", "fr": "fr/image"},
                 "is_meta": False,
-                "logo": {"en": "/some/img.png"},
+                "logo": {"en": "/en/some/img.png", "fr": "/fr/some/img.png"},
                 "nb_children": 0,
                 "organizations": ["11", "12", "13"],
                 **course,
@@ -106,7 +124,9 @@ class AutocompleteCoursesTestCase(TestCase):
         bulk(actions=actions, chunk_size=500, client=ES_CLIENT)
         indices_client.refresh()
 
-        response = self.client.get(f"/api/v1.0/courses/autocomplete/?{querystring:s}")
+        response = self.client.get(
+            f"/api/v1.0/courses/autocomplete/?{querystring:s}", **extra
+        )
         self.assertEqual(response.status_code, 200)
 
         return courses, json.loads(response.content)
@@ -121,4 +141,29 @@ class AutocompleteCoursesTestCase(TestCase):
             [course["id"] for course in response],
         )
         all_courses, response = self.execute_query(querystring="query=kung-fu")
+        self.assertEqual([all_courses[1]["id"]], [course["id"] for course in response])
+
+    def test_autocomplete_diacritics_insensitive_query(self, *_):
+        """
+        Queries are diacritics insensitive.
+        """
+        all_courses, response = self.execute_query(querystring="query=sécür")
+        self.assertEqual(
+            [all_courses[i]["id"] for i in [2, 1]],
+            [course["id"] for course in response],
+        )
+
+    def test_autocomplete_diacritics_insensitive_index(self, *_):
+        """
+        Index is diacritics insensitive.
+        """
+        all_courses, response = self.execute_query(
+            querystring="query=champinon", HTTP_ACCEPT_LANGUAGE="fr"
+        )
+        self.assertEqual([all_courses[0]["id"]], [course["id"] for course in response])
+
+        # Sanity check for original, accented version
+        all_courses, response = self.execute_query(
+            querystring="query=prôtéger", HTTP_ACCEPT_LANGUAGE="fr"
+        )
         self.assertEqual([all_courses[1]["id"]], [course["id"] for course in response])

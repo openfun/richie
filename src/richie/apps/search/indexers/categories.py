@@ -36,6 +36,7 @@ class CategoriesIndexer:
             **{
                 "complete.{:s}".format(lang): {
                     "type": "completion",
+                    "analyzer": "simple_diacritics_insensitive",
                     # Allow filtering autocomplete results with a kindkey to match the value of
                     # the `kind` field of the object
                     "contexts": [{"name": "kind", "type": "category", "path": "kind"}],

@@ -53,7 +53,10 @@ class CoursesIndexer:
             # description, title, category names & organization names are handled
             # by `MULTILINGUAL_TEXT`
             **{
-                "complete.{:s}".format(lang): {"type": "completion"}
+                "complete.{:s}".format(lang): {
+                    "type": "completion",
+                    "analyzer": "simple_diacritics_insensitive",
+                }
                 for lang, _ in settings.LANGUAGES
             },
             # `persons_names` cannot be handled by `MULTILINGUAL_TEXT` because language

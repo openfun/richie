@@ -33,7 +33,10 @@ class PersonsIndexer:
         "properties": {
             # Searchable
             **{
-                "complete.{:s}".format(lang): {"type": "completion"}
+                "complete.{:s}".format(lang): {
+                    "type": "completion",
+                    "analyzer": "simple_diacritics_insensitive",
+                }
                 for lang, _ in settings.LANGUAGES
             },
             **{
