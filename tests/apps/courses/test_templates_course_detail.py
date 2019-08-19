@@ -93,7 +93,10 @@ class CourseCMSTestCase(CMSTestCase):
         for category in categories[:2]:
             self.assertContains(
                 response,
-                '<a class="category-plugin-tag" href="{:s}">{:s}</a>'.format(
+                (
+                    '<a class="category-plugin-tag" href="{:s}">'
+                    '<div class="category-plugin-tag__title">{:s}</div></a>'
+                ).format(
                     category.extended_object.get_absolute_url(),
                     category.extended_object.get_title(),
                 ),
@@ -104,9 +107,11 @@ class CourseCMSTestCase(CMSTestCase):
 
         # Only published icons should be present on the page
         pattern = (
-            r'<a class="category-plugin-icon" href="{link:s}"><figure'
-            r".*<figcaption.*{title:s}.*</figcaption>"
-            r'.*<img src="/media/filer_public_thumbnails/filer_public/.*icon\.jpg.*alt=""/>'
+            r'<a.*class="category-plugin-tag".*href="{link:s}".*>'
+            r'<figure class="category-plugin-tag__figure">'
+            r'<figcaption.*class="category-plugin-tag__figure__caption".*>'
+            r".*{title:s}.*</figcaption>"
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*icon\.jpg.*alt=""/>'
         )
 
         for icon in icons[:2]:
@@ -211,7 +216,10 @@ class CourseCMSTestCase(CMSTestCase):
         for category in categories[:2]:
             self.assertContains(
                 response,
-                '<a class="category-plugin-tag" href="{:s}">{:s}</a>'.format(
+                (
+                    '<a class="category-plugin-tag" href="{:s}">'
+                    '<div class="category-plugin-tag__title">{:s}</div></a>'
+                ).format(
                     category.extended_object.get_absolute_url(),
                     category.extended_object.get_title(),
                 ),
@@ -221,7 +229,10 @@ class CourseCMSTestCase(CMSTestCase):
         for category in categories[-2:]:
             self.assertContains(
                 response,
-                '<a class="{element:s} {element:s}--draft" href="{url:s}">{title:s}</a>'.format(
+                (
+                    '<a class="{element:s} {element:s}--draft" href="{url:s}">'
+                    '<div class="category-plugin-tag__title">{title:s}</div></a>'
+                ).format(
                     url=category.extended_object.get_absolute_url(),
                     element="category-plugin-tag",
                     title=category.extended_object.get_title(),

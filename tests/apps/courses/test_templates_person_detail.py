@@ -95,7 +95,10 @@ class PersonCMSTestCase(CMSTestCase):
         # The published category should be on the page in its published version
         self.assertContains(
             response,
-            '<a class="category-plugin-tag" href="{:s}">{:s}</a>'.format(
+            (
+                '<a class="category-plugin-tag" href="{:s}">'
+                '<div class="category-plugin-tag__title">{:s}</div></a>'
+            ).format(
                 published_category.public_extension.extended_object.get_absolute_url(),
                 published_category.public_extension.extended_object.get_title(),
             ),
@@ -180,7 +183,10 @@ class PersonCMSTestCase(CMSTestCase):
         # The published category should be on the page in its published version
         self.assertContains(
             response,
-            '<a class="category-plugin-tag" href="{:s}">{:s}</a>'.format(
+            (
+                '<a class="category-plugin-tag" href="{:s}">'
+                '<div class="category-plugin-tag__title">{:s}</div></a>'
+            ).format(
                 published_category.public_extension.extended_object.get_absolute_url(),
                 published_category.public_extension.extended_object.get_title(),
             ),
@@ -191,7 +197,7 @@ class PersonCMSTestCase(CMSTestCase):
             response,
             (
                 '<a class="category-plugin-tag category-plugin-tag--draft" '
-                'href="{:s}">{:s}</a>'
+                'href="{:s}"><div class="category-plugin-tag__title">{:s}</div></a>'
             ).format(
                 unpublished_category.extended_object.get_absolute_url(),
                 unpublished_category.extended_object.get_title(),

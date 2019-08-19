@@ -5,44 +5,39 @@ $richie-category-plugin-tag-background: $gray7;
 .category-plugin-tag {
   flex-grow: 0;
   flex-shrink: 0;
-  padding: $richie-category-plugin-tag-padding;
   color: $richie-category-plugin-tag-fontcolor;
-  background: $richie-category-plugin-tag-background;
+  margin-left: 0.5rem;
+  margin-top: 0.5rem;
   text-decoration: none;
 
   &:hover {
     color: $richie-category-plugin-tag-fontcolor;
   }
 
-  & + & {
-    margin-left: 0.5rem;
-  }
-}
-
-.category-plugin-icon {
-  color: white;
-
-  &:hover {
-    color: white;
+  &:first-of-type {
+    margin-left: 0;
   }
 
-  & + & {
-    margin-left: 0.5rem;
+  &__title {
+    padding: $richie-category-plugin-tag-padding;
+    background: $richie-category-plugin-tag-background;
   }
 
   &__figure {
     display: flex;
+    margin: 0;
 
     &__caption {
       align-self: flex-end;
-      padding: 0.5rem;
+      background: $richie-category-plugin-tag-background;
+      padding: $richie-category-plugin-tag-padding;
       color: inherit;
       white-space: nowrap;
     }
 
     &__image {
-      height: 2.5rem;
-      padding: 0 0.5rem;
+      height: 2rem;
+      padding: 0;
       border: 1px solid $gray80;
       border-left: none;
     }

@@ -16,6 +16,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Changed
 
+- Display category icons on the course detail view but not on the glimpse,
 - Autosuggestion endpoints are diacritics insensitive.
 
 ## [1.6.1] - 2019-08-03

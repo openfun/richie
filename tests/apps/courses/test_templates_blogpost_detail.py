@@ -66,7 +66,7 @@ class BlogPostCMSTestCase(CMSTestCase):
             response,
             (
                 '<a class="category-plugin-tag category-plugin-tag--draft" '
-                'href="{:s}">{:s}</a>'
+                'href="{:s}"><div class="category-plugin-tag__title">{:s}</div></a>'
             ).format(
                 category.extended_object.get_absolute_url(),
                 category.extended_object.get_title(),

@@ -518,8 +518,6 @@ class CategoryFactory(BLDPageExtensionDjangoModelFactory):
     and their related page in our tests.
     """
 
-    color = factory.Faker("hex_color")
-
     class Meta:
         model = models.Category
         exclude = [
