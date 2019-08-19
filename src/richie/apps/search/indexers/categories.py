@@ -44,6 +44,7 @@ class CategoriesIndexer:
                 for lang, _ in settings.LANGUAGES
             },
             "is_meta": {"type": "boolean"},
+            "kind": {"type": "keyword"},
             "nb_children": {"type": "integer"},
             "path": {"type": "keyword"},
             # Not searchable

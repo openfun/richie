@@ -121,8 +121,9 @@ class ItemSearchFormTestCase(TestCase):
                         "bool": {
                             "must": [
                                 {
-                                    "match": {
-                                        "title.*": {"query": "some phrase " "terms"}
+                                    "multi_match": {
+                                        "fields": ["title.*"],
+                                        "query": "some phrase " "terms",
                                     }
                                 }
                             ]
@@ -152,8 +153,9 @@ class ItemSearchFormTestCase(TestCase):
                             "must": [
                                 {"term": {"kind": "subjects"}},
                                 {
-                                    "match": {
-                                        "title.*": {"query": "some phrase " "terms"}
+                                    "multi_match": {
+                                        "fields": ["title.*"],
+                                        "query": "some phrase " "terms",
                                     }
                                 },
                             ]
