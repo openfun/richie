@@ -161,7 +161,12 @@ class CategoriesViewsetsTestCase(TestCase):
                     "bool": {
                         "must": [
                             {"term": {"kind": "subjects"}},
-                            {"match": {"title.*": {"query": "Science"}}},
+                            {
+                                "multi_match": {
+                                    "query": "Science",
+                                    "fields": ["title.*"],
+                                }
+                            },
                         ]
                     }
                 }

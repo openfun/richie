@@ -24,7 +24,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Show a "More options" button along with a modal to find more filter values
   for each filter in the search filters pane in course search.
 
-## Changed
+### Fixed
+
+- Fix search API endpoints for categories, organizations & persons.
+
+### Changed
 
 - Display category icons on the course detail view but not on the glimpse.
 - Autosuggestion endpoints are diacritics insensitive.

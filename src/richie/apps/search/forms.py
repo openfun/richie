@@ -334,7 +334,7 @@ class ItemSearchForm(SearchForm):
         # Add a match on the name field if it was handed by the client
         full_text = self.cleaned_data.get("query")
         if full_text:
-            clauses.append({"match": {"title.*": {"query": full_text}}})
+            clauses.append({"multi_match": {"query": full_text, "fields": ["title.*"]}})
 
         # Build the query around the clauses if there are any
         if clauses:
