@@ -93,7 +93,10 @@ class CourseRunCMSTestCase(CMSTestCase):
         for category in categories[:2]:
             self.assertContains(
                 response,
-                '<a class="category-plugin-tag" href="{:s}">{:s}</a>'.format(
+                (
+                    '<a class="category-plugin-tag" href="{:s}">'
+                    '<div class="category-plugin-tag__title">{:s}</div></a>'
+                ).format(
                     category.extended_object.get_absolute_url(),
                     category.extended_object.get_title(),
                 ),
@@ -204,17 +207,24 @@ class CourseRunCMSTestCase(CMSTestCase):
         for category in categories[:2]:
             self.assertContains(
                 response,
-                '<a class="category-plugin-tag" href="{:s}">{:s}</a>'.format(
+                (
+                    '<a class="category-plugin-tag" href="{:s}">'
+                    '<div class="category-plugin-tag__title">{:s}</div></a>'
+                ).format(
                     category.extended_object.get_absolute_url(),
                     category.extended_object.get_title(),
                 ),
                 html=True,
             )
+
         # Draft categories should also be present on the page with an annotation for styling
         for category in categories[-2:]:
             self.assertContains(
                 response,
-                '<a class="{element:s} {element:s}--draft" href="{url:s}">{title:s}</a>'.format(
+                (
+                    '<a class="{element:s} {element:s}--draft" href="{url:s}">'
+                    '<div class="category-plugin-tag__title">{title:s}</div></a>'
+                ).format(
                     url=category.extended_object.get_absolute_url(),
                     element="category-plugin-tag",
                     title=category.extended_object.get_title(),

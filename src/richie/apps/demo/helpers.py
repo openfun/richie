@@ -5,6 +5,7 @@ from richie.apps.courses.factories import CategoryFactory
 # pylint: disable=too-many-arguments
 def create_categories(
     children=None,
+    color=None,
     fill_banner=True,
     fill_description=True,
     fill_icon=False,
@@ -44,6 +45,7 @@ def create_categories(
 
     """
     category = CategoryFactory(
+        color=color,
         fill_banner=fill_banner,
         fill_description=fill_description,
         fill_icon=fill_icon,

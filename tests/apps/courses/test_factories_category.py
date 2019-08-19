@@ -2,7 +2,6 @@
 Unit tests for the Category factory
 """
 import os
-import re
 
 from django.test import TestCase
 
@@ -15,10 +14,9 @@ class CategoryFactoriesTestCase(TestCase):
     """
 
     def test_factories_category_color(self):
-        """The category factory should generate a random color."""
+        """The category factory should leave the color field null."""
         category = CategoryFactory()
-        pattern = r"^#[a-f0-9]{6}"
-        self.assertIsNotNone(re.search(pattern, category.color))
+        self.assertIsNone(category.color)
 
     def test_factories_category_logo(self):
         """

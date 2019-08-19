@@ -229,22 +229,27 @@ ICONS_INFO = {
     "children": [
         {
             "page_title": {"en": "Academic", "fr": "Diplomant"},
+            "color": "#005c08",
             "fill_icon": pick_image("icons")("academic.png"),
         },
         {
             "page_title": {"en": "Accessible", "fr": "Accessible"},
+            "color": "#00a1d6",
             "fill_icon": pick_image("icons")("accessible.png"),
         },
         {
             "page_title": {"en": "Closed caption", "fr": "Sous-titres malentendants"},
+            "color": "#a11000",
             "fill_icon": pick_image("icons")("cc.png"),
         },
         {
             "page_title": {"en": "Certificate", "fr": "Certifiant"},
+            "color": "#ffc400",
             "fill_icon": pick_image("icons")("certificate.png"),
         },
         {
             "page_title": {"en": "Subtitles", "fr": "Sous-titres"},
+            "color": "#6d00ba",
             "fill_icon": pick_image("icons")("subtitles.png"),
         },
     ],

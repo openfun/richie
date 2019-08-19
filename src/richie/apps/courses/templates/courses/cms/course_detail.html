@@ -39,24 +39,17 @@
       </div>
       {% endif %}
 
+      {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_icons" or not current_page|is_empty_placeholder:"course_categories" %}
       <div class="course-detail__content__row course-detail__content__categories">
-          {% with form_factor="tag" %}
-            {% page_placeholder "course_categories" current_page or %}
+        {% with form_factor="tag" %}
+          {% placeholder "course_icons" %}
+          {% page_placeholder "course_categories" current_page or %}
+            {% if current_page.publisher_is_draft and current_page|is_empty_placeholder:"course_icons" %}
               <p class="course-detail__content__categories__placeholder">
                 {% trans "No associated categories" %}
               </p>
-            {% endpage_placeholder %}
-          {% endwith %}
-      </div>
-
-      {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_icons" %}
-      <div class="course-detail__content__row course-detail__content__icons">
-        {% with form_factor="icon" %}
-          {% placeholder "course_icons" or %}
-            <p class="course-detail__content__icons__empty">
-              {% trans "No associated icons" %}
-            </p>
-          {% endplaceholder %}
+            {% endif %}
+          {% endpage_placeholder %}
         {% endwith %}
       </div>
       {% endif %}
