@@ -8,15 +8,17 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.7.0] - 2019-08-21
+
 ### Added
 
 - Paginate the course search results view.
-- Add a CSS class to move content offscreen so it's only available for users
+- Add a CSS helper class make content available only for users
   of assistive technologies.
 
 ## Changed
 
-- Display category icons on the course detail view but not on the glimpse,
+- Display category icons on the course detail view but not on the glimpse.
 - Autosuggestion endpoints are diacritics insensitive.
 
 ## [1.6.1] - 2019-08-03
@@ -455,8 +457,9 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v1.6.1...master
-[1.6.0]: https://github.com/openfun/richie/compare/v1.6.0...v1.6.1
+[unreleased]: https://github.com/openfun/richie/compare/v1.7.0...master
+[1.7.0]: https://github.com/openfun/richie/compare/v1.6.1...v1.7.0
+[1.6.1]: https://github.com/openfun/richie/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/openfun/richie/compare/v1.5.2...v1.6.0
 [1.5.2]: https://github.com/openfun/richie/compare/v1.5.1...v1.5.2
 [1.5.1]: https://github.com/openfun/richie/compare/v1.5.0...v1.5.1
