@@ -1,7 +1,4 @@
 """Define mixins to easily compose custom FilterDefinition classes."""
-import re
-
-from ..defaults import FACET_COUNTS_DEFAULT_LIMIT, FACET_COUNTS_MAX_LIMIT
 
 
 class TermsQueryMixin:
@@ -17,90 +14,6 @@ class TermsQueryMixin:
             if value_list
             else []
         )
-
-
-class TermsAggsMixin:
-    """A mixin for filter definitions that need to apply aggregations as term queries."""
-
-    @property
-    def aggs_include(self):
-        """
-        Return a regex to limit the terms on which the field will be faceted. We return ".*" by
-        default (no limitation) but it can be overriden in children classes.
-        """
-        return ".*"
-
-    # pylint: disable=unused-argument
-    def get_aggs_fragment(self, queries, data, *args, **kwargs):
-        """
-        Build the aggregations as a term query that counts all the different values assigned
-        to the field.
-        """
-        # Look for an include parameter in the form data and default to the regex returned
-        # by the `aggs_include` property:
-        include = data[f"{self.name:s}_include"] or self.aggs_include
-
-        # Use all the query fragments from the queries *but* the one(s) that filter on the
-        # current filter
-        filter_fragments = [
-            clause
-            for kf_pair in queries
-            for clause in kf_pair["fragment"]
-            if kf_pair["key"] is not self.name
-        ]
-
-        # Terms aggregation will return the n top facet counts among all the values taken
-        # by this field
-        terms_aggs = {
-            self.name: {
-                # Rely on the built-in "terms" aggregation to get everything we need
-                "aggregations": {
-                    self.name: {
-                        "terms": {
-                            "field": self.term,
-                            "include": include,
-                            "min_doc_count": self.min_doc_count,
-                            # Use the default limit unless the client is requesting a specific
-                            # bunch of docs, in which case we allow for more facet counts
-                            "size": FACET_COUNTS_MAX_LIMIT
-                            if data[f"{self.name:s}_include"]
-                            else FACET_COUNTS_DEFAULT_LIMIT,
-                        }
-                    }
-                },
-                # Use all the query fragments from the queries *but* the one(s) that
-                # filter on the current filter, as it is handled by ElasticSearch for us
-                "filter": {"bool": {"must": filter_fragments}},
-            }
-        }
-
-        # Filters aggregation for values that were selected in the querystring (we must force
-        # them because they may not be in the n top facet counts but we must make sure we keep
-        # them so that they remain available as options that the user can see and unselect)
-        terms_aggs.update(
-            {
-                # Create a custom aggregation for each value selected in the querystring
-                # and matching the include regex
-                # eg `organizations@P-0001` & `organizations@P-0002`
-                "{:s}@{:s}".format(self.name, value): {
-                    "filter": {
-                        "bool": {
-                            # Use all the query fragments from the queries *but* the one(s) that
-                            # filter on the current filter: we manually add back the only one that
-                            # is relevant to the current choice.
-                            "must": [{"term": {self.term: value}}]
-                            + filter_fragments
-                        }
-                    }
-                }
-                for value in data.get(self.name, [])
-                # The Elasticsearch include regex matches exact values so we must do the same
-                # by adding ^ (resp. $) at the beginning (resp. at the end) of the pattern.
-                if re.match(f"^{include:s}$", value)
-            }
-        )
-
-        return terms_aggs
 
 
 class ChoicesQueryMixin:

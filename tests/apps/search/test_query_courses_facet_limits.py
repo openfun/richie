@@ -172,7 +172,7 @@ class FacetLimitsCoursesQueryTestCase(TestCase):
         return json.loads(response.content)
 
     @mock.patch(
-        "richie.apps.search.filter_definitions.mixins.FACET_COUNTS_DEFAULT_LIMIT", new=5
+        "richie.apps.search.filter_definitions.courses.FACET_COUNTS_DEFAULT_LIMIT", new=5
     )
     def test_query_courses_uses_default_facet_limit(self, *_):
         """
@@ -273,10 +273,10 @@ class FacetLimitsCoursesQueryTestCase(TestCase):
         )
 
     @mock.patch(
-        "richie.apps.search.filter_definitions.mixins.FACET_COUNTS_DEFAULT_LIMIT", new=5
+        "richie.apps.search.filter_definitions.courses.FACET_COUNTS_DEFAULT_LIMIT", new=5
     )
     @mock.patch(
-        "richie.apps.search.filter_definitions.mixins.FACET_COUNTS_MAX_LIMIT", new=10
+        "richie.apps.search.filter_definitions.courses.FACET_COUNTS_MAX_LIMIT", new=10
     )
     def test_query_courses_returns_all_requested_facets_from_include(self, *_):
         """
