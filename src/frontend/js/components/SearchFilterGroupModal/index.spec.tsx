@@ -10,8 +10,10 @@ jest.mock('../../utils/errors/handle', () => ({ handle: jest.fn() }));
 
 const filter = {
   base_path: '0001',
+  has_more_values: false,
   human_name: 'Universities',
   is_autocompletable: true,
+  is_searchable: true,
   name: 'universities',
   values: [
     {

@@ -35,8 +35,10 @@ describe('data/useFilterValue', () => {
         <TestComponent
           filter={{
             base_path: '0003',
+            has_more_values: false,
             human_name: 'Organizations',
             is_autocompletable: false,
+            is_searchable: false,
             name: 'organizations',
             values: [],
           }}
@@ -54,8 +56,10 @@ describe('data/useFilterValue', () => {
     expect(mockDispatchCourseSearchParamsAction).toHaveBeenCalledWith({
       filter: {
         base_path: '0003',
+        has_more_values: false,
         human_name: 'Organizations',
         is_autocompletable: false,
+        is_searchable: false,
         name: 'organizations',
         values: [],
       },
@@ -76,8 +80,10 @@ describe('data/useFilterValue', () => {
         <TestComponent
           filter={{
             base_path: '0003',
+            has_more_values: false,
             human_name: 'Organizations',
             is_autocompletable: true,
+            is_searchable: true,
             name: 'organizations',
             values: [],
           }}
@@ -95,8 +101,10 @@ describe('data/useFilterValue', () => {
     expect(mockDispatchCourseSearchParamsAction).toHaveBeenCalledWith({
       filter: {
         base_path: '0003',
+        has_more_values: false,
         human_name: 'Organizations',
         is_autocompletable: true,
+        is_searchable: true,
         name: 'organizations',
         values: [],
       },
