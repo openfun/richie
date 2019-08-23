@@ -423,6 +423,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "human_name": "Availability",
                         "is_autocompletable": False,
                         "is_drilldown": True,
+                        "is_searchable": False,
                         "name": "availability",
                         "position": 1,
                         "values": [
@@ -445,6 +446,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "human_name": "Languages",
                         "is_autocompletable": False,
                         "is_drilldown": False,
+                        "is_searchable": False,
                         "name": "languages",
                         "position": 5,
                         "values": [
@@ -459,6 +461,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "human_name": "Levels",
                         "is_autocompletable": True,
                         "is_drilldown": False,
+                        "is_searchable": True,
                         "name": "levels",
                         "position": 3,
                         "values": [
@@ -484,6 +487,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "human_name": "New courses",
                         "is_autocompletable": False,
                         "is_drilldown": False,
+                        "is_searchable": False,
                         "name": "new",
                         "position": 0,
                         "values": [
@@ -496,6 +500,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "human_name": "Organizations",
                         "is_autocompletable": True,
                         "is_drilldown": False,
+                        "is_searchable": True,
                         "name": "organizations",
                         "position": 4,
                         "values": [
@@ -527,6 +532,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "human_name": "Persons",
                         "is_autocompletable": True,
                         "is_drilldown": False,
+                        "is_searchable": True,
                         "name": "persons",
                         "position": 5,
                         "values": [{"count": 2, "human_name": "#2", "key": "2"}],
@@ -537,6 +543,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "human_name": "Subjects",
                         "is_autocompletable": True,
                         "is_drilldown": False,
+                        "is_searchable": True,
                         "name": "subjects",
                         "position": 2,
                         "values": [

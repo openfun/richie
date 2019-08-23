@@ -30,6 +30,7 @@ class BaseFilterDefinition:
         human_name=None,
         is_autocompletable=False,
         is_drilldown=False,
+        is_searchable=False,
         min_doc_count=0,
         position=0,
         sorting=FACET_SORTING_DEFAULT,
@@ -40,6 +41,7 @@ class BaseFilterDefinition:
         self.human_name = human_name or name
         self.is_autocompletable = is_autocompletable
         self.is_drilldown = is_drilldown
+        self.is_searchable = is_searchable
         self.min_doc_count = min_doc_count
         self.position = position
         self.sorting = sorting
@@ -261,6 +263,7 @@ class BaseChoicesFilterDefinition(BaseFilterDefinition):
                 "human_name": self.human_name,
                 "is_autocompletable": self.is_autocompletable,
                 "is_drilldown": self.is_drilldown,
+                "is_searchable": self.is_searchable,
                 "name": self.name,
                 "position": self.position,
                 "values": [

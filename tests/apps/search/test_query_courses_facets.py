@@ -210,6 +210,7 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "human_name": "Subjects",
                 "is_autocompletable": True,
                 "is_drilldown": False,
+                "is_searchable": True,
                 "name": "subjects",
                 "position": 2,
                 "values": [
@@ -229,6 +230,7 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "human_name": "Languages",
                 "is_autocompletable": False,
                 "is_drilldown": False,
+                "is_searchable": False,
                 "name": "languages",
                 "position": 5,
                 "values": [
@@ -265,6 +267,7 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "human_name": "Subjects",
                 "is_autocompletable": True,
                 "is_drilldown": False,
+                "is_searchable": True,
                 "name": "subjects",
                 "position": 2,
                 "values": [
@@ -296,6 +299,7 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "human_name": "Languages",
                 "is_autocompletable": False,
                 "is_drilldown": False,
+                "is_searchable": False,
                 "name": "languages",
                 "position": 5,
                 "values": [
@@ -326,6 +330,7 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "human_name": "Subjects",
                 "is_autocompletable": True,
                 "is_drilldown": False,
+                "is_searchable": True,
                 "name": "subjects",
                 "position": 2,
                 "values": [
@@ -345,6 +350,7 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "human_name": "Languages",
                 "is_autocompletable": False,
                 "is_drilldown": False,
+                "is_searchable": False,
                 "name": "languages",
                 "position": 5,
                 "values": [
@@ -373,6 +379,7 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "human_name": "Subjects",
                 "is_autocompletable": True,
                 "is_drilldown": False,
+                "is_searchable": True,
                 "name": "subjects",
                 "position": 2,
                 "values": [
@@ -402,6 +409,7 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "human_name": "Languages",
                 "is_autocompletable": False,
                 "is_drilldown": False,
+                "is_searchable": False,
                 "name": "languages",
                 "position": 5,
                 "values": [
@@ -443,6 +451,7 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "human_name": "Subjects",
                 "is_autocompletable": True,
                 "is_drilldown": False,
+                "is_searchable": True,
                 "name": "subjects",
                 "position": 2,
                 "values": [
@@ -486,6 +495,7 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "human_name": "Languages",
                 "is_autocompletable": False,
                 "is_drilldown": False,
+                "is_searchable": False,
                 "name": "languages",
                 "position": 5,
                 "values": [
@@ -524,6 +534,7 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "human_name": "Subjects",
                 "is_autocompletable": True,
                 "is_drilldown": False,
+                "is_searchable": True,
                 "name": "subjects",
                 "position": 2,
                 "values": [
@@ -567,6 +578,7 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "human_name": "Languages",
                 "is_autocompletable": False,
                 "is_drilldown": False,
+                "is_searchable": False,
                 "name": "languages",
                 "position": 5,
                 "values": [
