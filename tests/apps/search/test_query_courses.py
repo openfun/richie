@@ -1,4 +1,4 @@
-"""Tests for environment ElasticSearch support."""
+"""Integration tests for actual search results and their ordering."""
 # pylint: disable=too-many-lines
 import json
 import random
@@ -419,6 +419,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 ],
                 "filters": {
                     "availability": {
+                        "has_more_values": False,
                         "human_name": "Availability",
                         "is_autocompletable": False,
                         "is_drilldown": True,
@@ -440,6 +441,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         ],
                     },
                     "languages": {
+                        "has_more_values": False,
                         "human_name": "Languages",
                         "is_autocompletable": False,
                         "is_drilldown": False,
@@ -453,6 +455,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                     },
                     "levels": {
                         "base_path": "0002",
+                        "has_more_values": False,
                         "human_name": "Levels",
                         "is_autocompletable": True,
                         "is_drilldown": False,
@@ -477,6 +480,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         ],
                     },
                     "new": {
+                        "has_more_values": False,
                         "human_name": "New courses",
                         "is_autocompletable": False,
                         "is_drilldown": False,
@@ -488,6 +492,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                     },
                     "organizations": {
                         "base_path": "0003",
+                        "has_more_values": False,
                         "human_name": "Organizations",
                         "is_autocompletable": True,
                         "is_drilldown": False,
@@ -518,6 +523,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                     },
                     "persons": {
                         "base_path": None,
+                        "has_more_values": False,
                         "human_name": "Persons",
                         "is_autocompletable": True,
                         "is_drilldown": False,
@@ -527,6 +533,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                     },
                     "subjects": {
                         "base_path": "0001",
+                        "has_more_values": False,
                         "human_name": "Subjects",
                         "is_autocompletable": True,
                         "is_drilldown": False,
