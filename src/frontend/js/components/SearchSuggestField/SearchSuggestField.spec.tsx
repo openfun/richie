@@ -20,32 +20,40 @@ describe('components/SearchSuggestField', () => {
   // Make some filters we can reuse through our tests in <SearchSuggestField /> props
   const levels = {
     base_path: '00030002',
+    has_more_values: false,
     human_name: 'Levels',
     is_autocompletable: false,
+    is_searchable: false,
     name: 'levels',
     values: [],
   };
 
   const organizations = {
     base_path: '0002',
+    has_more_values: false,
     human_name: 'Organizations',
     is_autocompletable: true,
+    is_searchable: true,
     name: 'organizations',
     values: [],
   };
 
   const persons = {
     base_path: null,
+    has_more_values: false,
     human_name: 'Persons',
     is_autocompletable: true,
+    is_searchable: true,
     name: 'persons',
     values: [],
   };
 
   const subjects = {
     base_path: '00030001',
+    has_more_values: false,
     human_name: 'Subjects',
     is_autocompletable: true,
+    is_searchable: true,
     name: 'subjects',
     values: [],
   };
@@ -251,8 +259,10 @@ describe('components/SearchSuggestField', () => {
     expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
       filter: {
         base_path: '0002',
+        has_more_values: false,
         human_name: 'Organizations',
         is_autocompletable: true,
+        is_searchable: true,
         name: 'organizations',
         values: [],
       },
@@ -325,8 +335,10 @@ describe('components/SearchSuggestField', () => {
     expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
       filter: {
         base_path: null,
+        has_more_values: false,
         human_name: 'Persons',
         is_autocompletable: true,
+        is_searchable: true,
         name: 'persons',
         values: [],
       },

@@ -17,8 +17,10 @@ describe('components/SearchFilterValueLeaf', () => {
           <SearchFilterValueLeaf
             filter={{
               base_path: null,
+              has_more_values: false,
               human_name: 'Filter name',
               is_autocompletable: true,
+              is_searchable: true,
               name: 'filter_name',
               values: [],
             }}
@@ -51,8 +53,10 @@ describe('components/SearchFilterValueLeaf', () => {
           <SearchFilterValueLeaf
             filter={{
               base_path: null,
+              has_more_values: false,
               human_name: 'Filter name',
               is_autocompletable: true,
+              is_searchable: true,
               name: 'filter_name',
               values: [],
             }}
@@ -83,8 +87,10 @@ describe('components/SearchFilterValueLeaf', () => {
           <SearchFilterValueLeaf
             filter={{
               base_path: null,
+              has_more_values: false,
               human_name: 'Filter name',
               is_autocompletable: true,
+              is_searchable: true,
               name: 'filter_name',
               values: [],
             }}
@@ -122,8 +128,10 @@ describe('components/SearchFilterValueLeaf', () => {
           <SearchFilterValueLeaf
             filter={{
               base_path: null,
+              has_more_values: false,
               human_name: 'Filter name',
               is_autocompletable: true,
+              is_searchable: true,
               name: 'filter_name',
               values: [],
             }}
@@ -143,8 +151,10 @@ describe('components/SearchFilterValueLeaf', () => {
     expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
       filter: {
         base_path: null,
+        has_more_values: false,
         human_name: 'Filter name',
         is_autocompletable: true,
+        is_searchable: true,
         name: 'filter_name',
         values: [],
       },
@@ -166,8 +176,10 @@ describe('components/SearchFilterValueLeaf', () => {
           <SearchFilterValueLeaf
             filter={{
               base_path: null,
+              has_more_values: false,
               human_name: 'Filter name',
               is_autocompletable: true,
+              is_searchable: true,
               name: 'filter_name',
               values: [],
             }}
@@ -187,8 +199,10 @@ describe('components/SearchFilterValueLeaf', () => {
     expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
       filter: {
         base_path: null,
+        has_more_values: false,
         human_name: 'Filter name',
         is_autocompletable: true,
+        is_searchable: true,
         name: 'filter_name',
         values: [],
       },

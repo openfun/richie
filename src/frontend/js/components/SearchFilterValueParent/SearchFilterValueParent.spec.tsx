@@ -28,8 +28,10 @@ describe('<SearchFilterValueParent />', () => {
           <SearchFilterValueParent
             filter={{
               base_path: '00010002',
+              has_more_values: false,
               human_name: 'Subjects',
               is_autocompletable: true,
+              is_searchable: true,
               name: 'subjects',
               values: [],
             }}
@@ -85,8 +87,10 @@ describe('<SearchFilterValueParent />', () => {
           <SearchFilterValueParent
             filter={{
               base_path: '00010002',
+              has_more_values: false,
               human_name: 'Subjects',
               is_autocompletable: true,
+              is_searchable: true,
               name: 'subjects',
               values: [],
             }}
@@ -157,8 +161,10 @@ describe('<SearchFilterValueParent />', () => {
           <SearchFilterValueParent
             filter={{
               base_path: '00010002',
+              has_more_values: false,
               human_name: 'Subjects',
               is_autocompletable: true,
+              is_searchable: true,
               name: 'subjects',
               values: [],
             }}
@@ -232,8 +238,10 @@ describe('<SearchFilterValueParent />', () => {
           <SearchFilterValueParent
             filter={{
               base_path: '0009',
+              has_more_values: false,
               human_name: 'Filter name',
               is_autocompletable: true,
+              is_searchable: true,
               name: 'filter_name',
               values: [],
             }}
@@ -266,8 +274,10 @@ describe('<SearchFilterValueParent />', () => {
           <SearchFilterValueParent
             filter={{
               base_path: '0009',
+              has_more_values: false,
               human_name: 'Filter name',
               is_autocompletable: true,
+              is_searchable: true,
               name: 'filter_name',
               values: [],
             }}
@@ -303,8 +313,10 @@ describe('<SearchFilterValueParent />', () => {
           <SearchFilterValueParent
             filter={{
               base_path: '0009',
+              has_more_values: false,
               human_name: 'Filter name',
               is_autocompletable: true,
+              is_searchable: true,
               name: 'filter_name',
               values: [],
             }}
@@ -339,8 +351,10 @@ describe('<SearchFilterValueParent />', () => {
           <SearchFilterValueParent
             filter={{
               base_path: '0009',
+              has_more_values: false,
               human_name: 'Filter name',
               is_autocompletable: true,
+              is_searchable: true,
               name: 'filter_name',
               values: [],
             }}
@@ -360,8 +374,10 @@ describe('<SearchFilterValueParent />', () => {
     expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
       filter: {
         base_path: '0009',
+        has_more_values: false,
         human_name: 'Filter name',
         is_autocompletable: true,
+        is_searchable: true,
         name: 'filter_name',
         values: [],
       },
@@ -383,8 +399,10 @@ describe('<SearchFilterValueParent />', () => {
           <SearchFilterValueParent
             filter={{
               base_path: '0009',
+              has_more_values: false,
               human_name: 'Filter name',
               is_autocompletable: true,
+              is_searchable: true,
               name: 'filter_name',
               values: [],
             }}
@@ -404,8 +422,10 @@ describe('<SearchFilterValueParent />', () => {
     expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
       filter: {
         base_path: '0009',
+        has_more_values: false,
         human_name: 'Filter name',
         is_autocompletable: true,
+        is_searchable: true,
         name: 'filter_name',
         values: [],
       },

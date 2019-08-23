@@ -31,8 +31,10 @@ describe('components/SearchFilterGroup', () => {
           <SearchFilterGroup
             filter={{
               base_path: '0001',
+              has_more_values: false,
               human_name: 'Organizations',
               is_autocompletable: true,
+              is_searchable: true,
               name: 'organizations',
               values: [
                 {

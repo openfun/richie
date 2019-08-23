@@ -24,15 +24,19 @@ describe('components/SearchFiltersPane', () => {
             filters={{
               categories: {
                 base_path: '0001',
+                has_more_values: false,
                 human_name: 'Categories',
                 is_autocompletable: true,
+                is_searchable: true,
                 name: 'categories',
                 values: [],
               },
               organizations: {
                 base_path: '0002',
+                has_more_values: false,
                 human_name: 'Organizations',
                 is_autocompletable: true,
+                is_searchable: true,
                 name: 'organizations',
                 values: [],
               },
@@ -83,15 +87,19 @@ describe('components/SearchFiltersPane', () => {
             filters={{
               categories: {
                 base_path: '0001',
+                has_more_values: false,
                 human_name: 'Categories',
                 is_autocompletable: true,
+                is_searchable: true,
                 name: 'categories',
                 values: [],
               },
               organizations: {
                 base_path: '0002',
+                has_more_values: false,
                 human_name: 'Organizations',
                 is_autocompletable: true,
+                is_searchable: true,
                 name: 'organizations',
                 values: [],
               },
