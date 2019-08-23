@@ -191,6 +191,7 @@ class CoursesViewsetsTestCase(TestCase):
                 "objects": ["Course #523", "Course #861"],
                 "filters": {
                     "availability": {
+                        "has_more_values": False,
                         "human_name": "Availability",
                         "is_autocompletable": False,
                         "is_drilldown": True,
@@ -212,6 +213,7 @@ class CoursesViewsetsTestCase(TestCase):
                         ],
                     },
                     "languages": {
+                        "has_more_values": False,
                         "human_name": "Languages",
                         "is_autocompletable": False,
                         "is_drilldown": False,
@@ -224,6 +226,7 @@ class CoursesViewsetsTestCase(TestCase):
                     },
                     "levels": {
                         "base_path": None,
+                        "has_more_values": False,
                         "human_name": "Levels",
                         "is_autocompletable": True,
                         "is_drilldown": False,
@@ -235,6 +238,7 @@ class CoursesViewsetsTestCase(TestCase):
                         ],
                     },
                     "new": {
+                        "has_more_values": False,
                         "human_name": "New courses",
                         "is_autocompletable": False,
                         "is_drilldown": False,
@@ -246,6 +250,7 @@ class CoursesViewsetsTestCase(TestCase):
                     },
                     "organizations": {
                         "base_path": None,
+                        "has_more_values": False,
                         "human_name": "Organizations",
                         "is_autocompletable": True,
                         "is_drilldown": False,
@@ -258,6 +263,7 @@ class CoursesViewsetsTestCase(TestCase):
                     },
                     "persons": {
                         "base_path": None,
+                        "has_more_values": False,
                         "human_name": "Persons",
                         "is_autocompletable": True,
                         "is_drilldown": False,
@@ -271,6 +277,7 @@ class CoursesViewsetsTestCase(TestCase):
                     },
                     "subjects": {
                         "base_path": None,
+                        "has_more_values": False,
                         "human_name": "Subjects",
                         "is_autocompletable": True,
                         "is_drilldown": False,

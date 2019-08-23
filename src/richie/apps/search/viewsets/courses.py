@@ -80,7 +80,8 @@ class CoursesViewSet(AutocompleteMixin, ViewSet):
                 name: faceted_definition
                 for filter in FILTERS.values()
                 for name, faceted_definition in filter.get_faceted_definitions(
-                    course_query_response["aggregations"]["all_courses"]
+                    course_query_response["aggregations"]["all_courses"],
+                    data=params_form.cleaned_data,
                 ).items()
             }
             response_object["filters"] = dict(

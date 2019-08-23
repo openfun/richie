@@ -11,6 +11,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.utils.module_loading import import_string
 
 from ..defaults import FACET_SORTING_DEFAULT
+from .helpers import applicable_facet_limit
 
 
 # pylint: disable=too-many-instance-attributes
@@ -118,7 +119,7 @@ class BaseFilterDefinition:
         """
         raise NotImplementedError()
 
-    def get_faceted_definitions(self, facets, *args, **kwargs):
+    def get_faceted_definitions(self, facets, data, *args, **kwargs):
         """
         Build the filter definition from a filter's common attributes and its Elasticsearch
         facet results. The frontend uses these definitions to display the filters on the
@@ -197,7 +198,7 @@ class BaseChoicesFilterDefinition(BaseFilterDefinition):
             )
         }
 
-    def get_faceted_definitions(self, facets, *args, **kwargs):
+    def get_faceted_definitions(self, facets, data, *args, **kwargs):
         """
         Add the counts to the values from the initial definition to make them complete
         and sorted as the frontend expects them.
@@ -207,12 +208,30 @@ class BaseChoicesFilterDefinition(BaseFilterDefinition):
 
         # for each facet, we derive the value and the count:
         # eg. for facet key `availability@coming_soon`, the value is `coming_soon`
-        facet_counts_dict = {
-            key.split("@")[1]: facet["doc_count"]
+        facet_counts = [
+            (key.split("@")[1], facet["doc_count"])
             for key, facet in facets.items()
             if "{:s}@".format(self.name) in key  # 6 times faster than startswith
             and facet["doc_count"] >= self.min_doc_count
-        }
+        ]
+
+        # Detect the applicable facet counts limit depending on the request
+        facet_counts_limit = applicable_facet_limit(data, self.name)
+
+        # Get the top N values as per the applicable limit
+        # NB: we're using sorting as a quick way to achieve this, we cannot reuse this sorting
+        # later as we also need to sort the active values we add.
+        top_facet_counts = sorted(facet_counts, key=itemgetter(1), reverse=True)[
+            :facet_counts_limit
+        ]
+        # Add in the currently active values for this filter (we always want to show them)
+        active_facet_counts = [
+            facet for facet in facet_counts if facet[0] in data[self.name]
+        ]
+        facet_counts_dict = dict(top_facet_counts + active_facet_counts)
+
+        # Check if there are more available values than we're about to return on the API
+        has_more_values = len(facet_counts) > len(facet_counts_dict)
 
         # Sort facets as requested
         if self.sorting == self.SORTING_NAME:
@@ -238,6 +257,7 @@ class BaseChoicesFilterDefinition(BaseFilterDefinition):
         return {
             self.name: {
                 # We always need to pass the base definition to the frontend
+                "has_more_values": has_more_values,
                 "human_name": self.human_name,
                 "is_autocompletable": self.is_autocompletable,
                 "is_drilldown": self.is_drilldown,
@@ -503,7 +523,7 @@ class NestingWrapper(BaseFilterDefinition):
             )
         return aggs
 
-    def get_faceted_definitions(self, facets, *args, **kwargs):
+    def get_faceted_definitions(self, facets, data, *args, **kwargs):
         """
         Collect facet definitions from the children filter definitions in a dictionary.
         """
@@ -511,6 +531,6 @@ class NestingWrapper(BaseFilterDefinition):
             name: facet_definition
             for fd in self.filter_definitions.values()
             for name, facet_definition in fd.get_faceted_definitions(
-                facets, *args, **kwargs
+                facets, data=data, *args, **kwargs
             ).items()
         }

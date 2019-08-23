@@ -1,6 +1,6 @@
 """Define FilterDefinition classes for the courses index."""
-from functools import reduce
 import re
+from operator import itemgetter
 
 from django import forms
 from django.utils import timezone, translation
@@ -11,11 +11,11 @@ from cms.api import Page
 from richie.apps.core.defaults import ALL_LANGUAGES_DICT
 
 from .. import ES_CLIENT
-from ..defaults import FACET_COUNTS_DEFAULT_LIMIT, FACET_COUNTS_MAX_LIMIT
 from ..fields.array import ArrayField
 from ..indexers import ES_INDICES
 from ..utils.i18n import get_best_field_language
 from .base import BaseChoicesFilterDefinition, BaseFilterDefinition
+from .helpers import applicable_facet_limit
 from .mixins import (
     ChoicesAggsMixin,
     ChoicesQueryMixin,
@@ -65,7 +65,7 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
         """Do not limit which facets are computed by default."""
         return ".*"
 
-    # pylint: disable=unused-argument
+    # pylint: disable=unused-argument,arguments-differ
     def get_aggs_fragment(self, queries, data, *args, **kwargs):
         """
         Build the aggregations as a term query that counts all the different values assigned
@@ -84,6 +84,19 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
             if kf_pair["key"] is not self.name
         ]
 
+        # Detect the applicable facet counts limit depending on the request
+        base_facet_limit = applicable_facet_limit(data, self.name)
+
+        # Add a control length to let us know if there are more items than what what we're
+        # returning. This is achieved by counting the results in `get_faceted_definitions`.
+        # Example:
+        #   - applicable limit is 10;
+        #   - 2 active filters;
+        #   - query the top 13 (10 + 2 + 1) facets;
+        #   => we'll be able to determine if there are more items depending on what is returned
+        #      and how they are ordered. (see in `get_faceted_definitions`).
+        control_length = len(data[self.name]) + 1
+
         # Terms aggregation will return the n top facet counts among all the values taken
         # by this field
         terms_aggs = {
@@ -95,11 +108,7 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
                             "field": self.term,
                             "include": include,
                             "min_doc_count": self.min_doc_count,
-                            # Use the default limit unless the client is requesting a specific
-                            # bunch of docs, in which case we allow for more facet counts
-                            "size": FACET_COUNTS_MAX_LIMIT
-                            if data[f"{self.name:s}_include"]
-                            else FACET_COUNTS_DEFAULT_LIMIT,
+                            "size": base_facet_limit + control_length,
                         }
                     }
                 },
@@ -191,7 +200,7 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
             for doc in search_query_response["hits"]["hits"]
         }
 
-    def get_faceted_definitions(self, facets, *args, **kwargs):
+    def get_faceted_definitions(self, facets, data, *args, **kwargs):
         """
         Build the filter definition's values from base definition and the faceted keys in the
         current language.
@@ -216,15 +225,47 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
         #       }
         #   }
         # 👆 becomes 👇
-        #   {"A": x, "B": y, "C": z}
-        key_count_map = reduce(
-            lambda agg, key_count_dict: {
-                **agg,
-                key_count_dict["key"]: key_count_dict["doc_count"],
-            },
-            facets[self.name][self.name]["buckets"],
-            {},
+        #   [
+        #       ("A", x),
+        #       ("B", y),
+        #       ("C", z),
+        #   ]
+        # sorted from highest facet count to lowest.
+        key_count_pairs = sorted(
+            [
+                (key_count_dict["key"], key_count_dict["doc_count"])
+                for key_count_dict in facets[self.name][self.name]["buckets"]
+            ],
+            key=itemgetter(1),
+            reverse=True,
         )
+
+        # We requested more facets than needed to be able to determine with certainty if there
+        # are more available than what we're returning (see in `get_aggs_fragment`).
+        base_facet_limit = applicable_facet_limit(data, self.name)
+        # There are four possible outcomes:
+        #   - We have as many results as we requested: there are more values (at least the `+1` we
+        #     added to our request besides the base limit and the active values);
+        #   - We have no value(s) besides the base limit: we can safely conclude there are no more
+        #     values (eg. we did not get that requested `+1`)
+        #   - We are somewhere between one more than the base limit and the requested number: this
+        #     is ambiguous because it depends on the placement of our active values (which are
+        #     always included no matter the circumstances).
+        #       => If at least one of the values beyond base limit is not an active value, we know
+        #          we're not going to show it. Therefore there are more values.
+        #       => Otherwise, meaning if all the values beyond the base limit happen to be our
+        #          active values, we are going to show all of them and therefore there is nothing
+        #          more to request.
+        has_more_values = any(
+            filter(
+                lambda c: c[0] not in data[self.name],
+                key_count_pairs[base_facet_limit:],
+            )
+        )
+
+        # Now that we're used our extra values to determine if there are more values to be fetched,
+        # we can trim our counts down to the top N, based on the applicable limit.
+        key_count_map = dict(key_count_pairs[:base_facet_limit])
 
         # Add the facets that were forced because their value was selected in querystring
         # Their result is of the form: {'organizations@P-0001': {'doc_count': 12}}
@@ -243,6 +284,7 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
             self.name: {
                 # We always need to pass the base definition to the frontend
                 "base_path": self.base_page.node.path if self.base_page else None,
+                "has_more_values": has_more_values,
                 "human_name": self.human_name,
                 "is_autocompletable": self.is_autocompletable,
                 "is_drilldown": self.is_drilldown,
