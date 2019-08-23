@@ -31,7 +31,7 @@ export const SearchFilterGroup = ({ filter }: SearchFilterGroupProps) => (
         ),
       )}
     </div>
-    {filter.is_autocompletable ? (
+    {filter.has_more_values && filter.is_searchable ? (
       <SearchFilterGroupModal filter={filter} />
     ) : null}
   </fieldset>
