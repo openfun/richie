@@ -83,6 +83,7 @@ FILTERS_CONFIGURATION = [
         {
             "human_name": _("Subjects"),
             "is_autocompletable": True,
+            "is_searchable": True,
             "min_doc_count": 0,
             "name": "subjects",
             "position": 2,
@@ -95,6 +96,7 @@ FILTERS_CONFIGURATION = [
         {
             "human_name": _("Levels"),
             "is_autocompletable": True,
+            "is_searchable": True,
             "min_doc_count": 0,
             "name": "levels",
             "position": 3,
@@ -107,6 +109,7 @@ FILTERS_CONFIGURATION = [
         {
             "human_name": _("Organizations"),
             "is_autocompletable": True,
+            "is_searchable": True,
             "min_doc_count": 0,
             "name": "organizations",
             "position": 4,
@@ -118,6 +121,7 @@ FILTERS_CONFIGURATION = [
         {
             "human_name": _("Persons"),
             "is_autocompletable": True,
+            "is_searchable": True,
             "min_doc_count": 0,
             "name": "persons",
             "position": 5,

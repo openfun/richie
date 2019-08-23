@@ -288,6 +288,7 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
                 "human_name": self.human_name,
                 "is_autocompletable": self.is_autocompletable,
                 "is_drilldown": self.is_drilldown,
+                "is_searchable": self.is_searchable,
                 "name": self.name,
                 "position": self.position,
                 "values": [
