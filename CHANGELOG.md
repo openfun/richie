@@ -8,6 +8,12 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.7.1] - 2019-08-23
+
+### Fixed
+
+- Add woff2 in MANIFEST.in so new font is included in Python package.
+
 ## [1.7.0] - 2019-08-21
 
 ### Added
@@ -457,7 +463,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v1.7.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v1.7.1...master
+[1.7.1]: https://github.com/openfun/richie/compare/v1.7.0...v1.7.1
 [1.7.0]: https://github.com/openfun/richie/compare/v1.6.1...v1.7.0
 [1.6.1]: https://github.com/openfun/richie/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/openfun/richie/compare/v1.5.2...v1.6.0
