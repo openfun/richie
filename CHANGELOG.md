@@ -16,6 +16,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix missing author name on blogpost detail pages because of an error in
+  the person plugin template.
 - Fix search API endpoints for categories, organizations & persons.
 
 ## [1.7.3] - 2019-08-27

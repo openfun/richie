@@ -4,7 +4,11 @@ End-to-end tests for the blogpost detail view
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
-from richie.apps.courses.factories import BlogPostFactory, CategoryFactory
+from richie.apps.courses.factories import (
+    BlogPostFactory,
+    CategoryFactory,
+    PersonFactory,
+)
 
 
 class BlogPostCMSTestCase(CMSTestCase):
@@ -16,7 +20,12 @@ class BlogPostCMSTestCase(CMSTestCase):
         """
         Validate that the important elements are displayed on a published blogpost page
         """
-        blogpost = BlogPostFactory(page_title="Preums", fill_cover=True, fill_body=True)
+        author = PersonFactory(
+            page_title={"en": "Comte de Saint-Germain"}, should_publish=True
+        )
+        blogpost = BlogPostFactory(
+            page_title="Preums", fill_cover=True, fill_body=True, fill_author=[author]
+        )
         page = blogpost.extended_object
 
         # The page should not be visible before it is published
@@ -33,6 +42,7 @@ class BlogPostCMSTestCase(CMSTestCase):
         self.assertContains(
             response, '<h1 class="blogpost-detail__title">Preums</h1>', html=True
         )
+        self.assertContains(response, "Comte de Saint-Germain", html=True)
 
     def test_templates_blogpost_detail_cms_draft_content(self):
         """
@@ -43,12 +53,16 @@ class BlogPostCMSTestCase(CMSTestCase):
         self.client.login(username=user.username, password="password")
 
         category = CategoryFactory(page_title="Very interesting category")
+        author = PersonFactory(
+            page_title={"en": "Comte de Saint-Germain"}, should_publish=True
+        )
 
         blogpost = BlogPostFactory(
             page_title="Preums",
             fill_cover=True,
             fill_body=True,
             fill_categories=[category],
+            fill_author=[author],
         )
         page = blogpost.extended_object
 
@@ -61,6 +75,7 @@ class BlogPostCMSTestCase(CMSTestCase):
         self.assertContains(
             response, '<h1 class="blogpost-detail__title">Preums</h1>', html=True
         )
+        self.assertContains(response, "Comte de Saint-Germain", html=True)
 
         self.assertContains(
             response,
