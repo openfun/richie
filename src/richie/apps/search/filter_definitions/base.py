@@ -214,7 +214,6 @@ class BaseChoicesFilterDefinition(BaseFilterDefinition):
             (key.split("@")[1], facet["doc_count"])
             for key, facet in facets.items()
             if "{:s}@".format(self.name) in key  # 6 times faster than startswith
-            and facet["doc_count"] >= self.min_doc_count
         ]
 
         # Detect the applicable facet counts limit depending on the request
@@ -259,7 +258,10 @@ class BaseChoicesFilterDefinition(BaseFilterDefinition):
         return {
             self.name: {
                 # We always need to pass the base definition to the frontend
-                "has_more_values": has_more_values,
+                # If values are removed due to `min_doc_count`, we are not returning them, and
+                # therefore by definition our filter `has_more_values`.
+                "has_more_values": has_more_values
+                or any(count < self.min_doc_count for name, count in facet_counts),
                 "human_name": self.human_name,
                 "is_autocompletable": self.is_autocompletable,
                 "is_drilldown": self.is_drilldown,
@@ -269,6 +271,10 @@ class BaseChoicesFilterDefinition(BaseFilterDefinition):
                 "values": [
                     {"count": count, "human_name": values[name], "key": name}
                     for name, count in facet_counts
+                    # Filter out values that do not meet `min_doc_count` unless they are active
+                    # values. We do this at the very end so it does not mess with our facet limits
+                    # and `has_more_values` calculations.
+                    if count >= self.min_doc_count or name in data[self.name]
                 ],
             }
         }

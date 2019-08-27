@@ -107,7 +107,10 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
                         "terms": {
                             "field": self.term,
                             "include": include,
-                            "min_doc_count": self.min_doc_count,
+                            # Always force `min_doc_count` at 0: we filter the results in
+                            # `get_faceted_definitions` so we can have more information on the
+                            # availability of more values below the filter's `min_doc_count`.
+                            "min_doc_count": 0,
                             "size": base_facet_limit + control_length,
                         }
                     }
@@ -263,7 +266,7 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
             )
         )
 
-        # Now that we're used our extra values to determine if there are more values to be fetched,
+        # Now that we've used our extra values to determine if there are more values to be fetched,
         # we can trim our counts down to the top N, based on the applicable limit.
         key_count_map = dict(key_count_pairs[:base_facet_limit])
 
@@ -284,7 +287,10 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
             self.name: {
                 # We always need to pass the base definition to the frontend
                 "base_path": self.base_page.node.path if self.base_page else None,
-                "has_more_values": has_more_values,
+                # If values are removed due to `min_doc_count`, we are not returning them, and
+                # therefore by definition our filter `has_more_values`.
+                "has_more_values": has_more_values
+                or any(count < self.min_doc_count for count in key_count_map.values()),
                 "human_name": self.human_name,
                 "is_autocompletable": self.is_autocompletable,
                 "is_drilldown": self.is_drilldown,
@@ -295,6 +301,10 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
                     # Aggregate the information from right above to build the values
                     {"count": count, "human_name": key_i18n_name_map[key], "key": key}
                     for key, count in key_count_map.items()
+                    # We filter out values that do not meet `min_doc_count` manually instead of
+                    # using ElasticSearch's builtin feature so it does not interfere with our
+                    # `has_more_values` check.
+                    if count >= self.min_doc_count or key in data[self.name]
                 ],
             }
         }
