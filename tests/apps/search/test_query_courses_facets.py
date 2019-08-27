@@ -10,8 +10,16 @@ from elasticsearch.helpers import bulk
 
 from richie.apps.courses.factories import CategoryFactory
 from richie.apps.search import ES_CLIENT
-from richie.apps.search.filter_definitions import FILTERS, IndexableFilterDefinition
-from richie.apps.search.filter_definitions.courses import ALL_LANGUAGES_DICT
+from richie.apps.search.filter_definitions import (
+    FILTERS,
+    FILTERS_CONFIGURATION,
+    IndexableFilterDefinition,
+    NestingWrapper,
+)
+from richie.apps.search.filter_definitions.courses import (
+    ALL_LANGUAGES_DICT,
+    IndexableMPTTFilterDefinition,
+)
 from richie.apps.search.indexers.courses import CoursesIndexer
 from richie.apps.search.text_indexing import ANALYSIS_SETTINGS
 
@@ -593,6 +601,192 @@ class FacetsCoursesQueryTestCase(TestCase):
                     {"count": 1, "human_name": "Bengali", "key": "bn"},
                     {"count": 1, "human_name": "Belarusian", "key": "be"},
                     {"count": 1, "human_name": "Catalan", "key": "ca"},
+                ],
+            },
+        )
+
+    @mock.patch.dict(  # Increase min_doc_count for subjects to 2
+        FILTERS,
+        {
+            "subjects": IndexableMPTTFilterDefinition(
+                **{**FILTERS_CONFIGURATION[2][1], "min_doc_count": 2}
+            )
+        },
+    )
+    def test_query_courses_terms_active_values_min_doc_count(self, *_):
+        """
+        Active values are returned for the subjects filter (based on ES terms) regardless
+        of `min_doc_count`. Other values below the `min_doc_count` are not returned.
+        """
+        content = self.execute_query(querystring="scope=filters&subjects=L-00010011")
+        self.assertEqual(
+            content["filters"]["subjects"],
+            {
+                "base_path": "0001",
+                "has_more_values": True,
+                "human_name": "Subjects",
+                "is_autocompletable": True,
+                "is_drilldown": False,
+                "is_searchable": True,
+                "name": "subjects",
+                "position": 2,
+                "values": [
+                    *[
+                        {
+                            "count": 2,
+                            "human_name": SUBJECTS[i]["title"]["en"],
+                            "key": SUBJECTS[i]["id"],
+                        }
+                        for i in range(0, 5)
+                    ],
+                    {"count": 1, "human_name": "Health", "key": "L-00010011"},
+                ],
+            },
+        )
+
+    @mock.patch.dict(  # Increase min_doc_count for subjects to 2
+        FILTERS,
+        {
+            "subjects": IndexableMPTTFilterDefinition(
+                **{**FILTERS_CONFIGURATION[2][1], "min_doc_count": 2}
+            )
+        },
+    )
+    @mock.patch(  # Increase default facet limit to 15
+        "richie.apps.search.filter_definitions.helpers.FACET_COUNTS_DEFAULT_LIMIT",
+        new=15,
+    )
+    def test_query_courses_terms_min_doc_count_has_more_values(self, *_):
+        """
+        Make sure the interaction between facet limit and `min_doc_count` results
+        in the expected response. In this instance, we would not have more values
+        *if* `min_doc_count` was 0 because we would get all 11 subjects.
+        As `min_doc_count` is 2, we only get 5 subjects, and there are thus more values.
+        """
+        content = self.execute_query(querystring="scope=filters")
+        self.assertEqual(
+            content["filters"]["subjects"],
+            {
+                "base_path": "0001",
+                "has_more_values": True,
+                "human_name": "Subjects",
+                "is_autocompletable": True,
+                "is_drilldown": False,
+                "is_searchable": True,
+                "name": "subjects",
+                "position": 2,
+                "values": [
+                    *[
+                        {
+                            "count": 2,
+                            "human_name": SUBJECTS[i]["title"]["en"],
+                            "key": SUBJECTS[i]["id"],
+                        }
+                        for i in range(0, 5)
+                    ]
+                ],
+            },
+        )
+
+    @mock.patch.dict(  # Increase min_doc_count for languages to 2
+        FILTERS,
+        {
+            "course_runs": NestingWrapper(
+                **{
+                    "name": "course_runs",
+                    "filters": [
+                        (
+                            "richie.apps.search.filter_definitions.LanguagesFilterDefinition",
+                            {
+                                "human_name": "Languages",
+                                "min_doc_count": 2,
+                                "name": "languages",
+                                "position": 5,
+                                "sorting": "count",
+                            },
+                        )
+                    ],
+                }
+            )
+        },
+    )
+    def test_query_courses_manual_active_values_min_doc_count(self, *_):
+        """
+        Active values are returned for the languages filter (based on manual aggregations)
+        regardless of `min_doc_count`. Other values below the `min_doc_count` are not returned.
+        """
+        content = self.execute_query(querystring="scope=filters&languages=ca")
+        self.assertEqual(
+            content["filters"]["languages"],
+            {
+                "has_more_values": True,
+                "human_name": "Languages",
+                "is_autocompletable": False,
+                "is_drilldown": False,
+                "is_searchable": False,
+                "name": "languages",
+                "position": 5,
+                "values": [
+                    {"count": 2, "human_name": "Azerbaijani", "key": "az"},
+                    {"count": 2, "human_name": "Arabic", "key": "ar"},
+                    {"count": 2, "human_name": "Asturian", "key": "ast"},
+                    {"count": 2, "human_name": "Bulgarian", "key": "bg"},
+                    {"count": 2, "human_name": "Afrikaans", "key": "af"},
+                    {"count": 1, "human_name": "Catalan", "key": "ca"},
+                ],
+            },
+        )
+
+    @mock.patch.dict(  # Increase min_doc_count for languages to 2
+        FILTERS,
+        {
+            "course_runs": NestingWrapper(
+                **{
+                    "name": "course_runs",
+                    "filters": [
+                        (
+                            "richie.apps.search.filter_definitions.LanguagesFilterDefinition",
+                            {
+                                "human_name": "Languages",
+                                "min_doc_count": 2,
+                                "name": "languages",
+                                "position": 5,
+                                "sorting": "count",
+                            },
+                        )
+                    ],
+                }
+            )
+        },
+    )
+    @mock.patch(  # Increase default facet limit to 15
+        "richie.apps.search.filter_definitions.helpers.FACET_COUNTS_DEFAULT_LIMIT",
+        new=15,
+    )
+    def test_query_courses_manuel_min_doc_count_has_more_values(self, *_):
+        """
+        Make sure the interaction between facet limit and `min_doc_count` results
+        in the expected response. In this instance, we would not have more values
+        *if* `min_doc_count` was 0 because we would get all 11 languages.
+        As `min_doc_count` is 2, we only get 5 languages, and there are thus more values.
+        """
+        content = self.execute_query(querystring="scope=filters")
+        self.assertEqual(
+            content["filters"]["languages"],
+            {
+                "has_more_values": True,
+                "human_name": "Languages",
+                "is_autocompletable": False,
+                "is_drilldown": False,
+                "is_searchable": False,
+                "name": "languages",
+                "position": 5,
+                "values": [
+                    {"count": 2, "human_name": "Azerbaijani", "key": "az"},
+                    {"count": 2, "human_name": "Arabic", "key": "ar"},
+                    {"count": 2, "human_name": "Asturian", "key": "ast"},
+                    {"count": 2, "human_name": "Bulgarian", "key": "bg"},
+                    {"count": 2, "human_name": "Afrikaans", "key": "af"},
                 ],
             },
         )
