@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.8.0] - 2019-08-28
+
 ### Added
 
 - Show a "More options" button along with a modal to find more filter values
@@ -487,7 +489,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v1.7.3...master
+[unreleased]: https://github.com/openfun/richie/compare/v1.8.0...master
+[1.8.0]: https://github.com/openfun/richie/compare/v1.7.3...v1.8.0
 [1.7.3]: https://github.com/openfun/richie/compare/v1.7.2...v1.7.3
 [1.7.2]: https://github.com/openfun/richie/compare/v1.7.1...v1.7.2
 [1.7.1]: https://github.com/openfun/richie/compare/v1.7.0...v1.7.1
