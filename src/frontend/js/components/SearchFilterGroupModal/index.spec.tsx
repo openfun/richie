@@ -146,6 +146,12 @@ describe('<SearchFilterGroupModal />', () => {
       content => content.startsWith('Value #84') && content.includes('(12)'),
     );
 
+    // User starts typing, less than 3 characters
+    fetchMock.resetHistory();
+    fireEvent.change(field, { target: { value: 'us' } });
+    expect(fetchMock.called()).toEqual(false);
+    getByText('Type at least 3 characters to start searching.');
+
     // User inputs a search query
     fetchMock.get('/api/v1.0/universities/?limit=20&offset=0&query=user', {
       objects: [{ id: 'L-12' }, { id: 'L-17' }],
