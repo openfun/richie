@@ -38,7 +38,7 @@ describe('<SearchFilterGroupModal />', () => {
       objects: [{ id: 'L-42' }, { id: 'L-84' }, { id: 'L-99' }],
     });
     fetchMock.get(
-      '/api/v1.0/courses/?scope=filters&universities_include=.-%2842%7C84%7C99%29',
+      '/api/v1.0/courses/?scope=filters&universities_include=%28L-42%7CL-84%7CL-99%29',
       {
         filters: {
           universities: {
@@ -103,7 +103,7 @@ describe('<SearchFilterGroupModal />', () => {
       objects: [{ id: 'L-42' }, { id: 'L-84' }, { id: 'L-99' }],
     });
     fetchMock.get(
-      '/api/v1.0/courses/?scope=filters&universities_include=.-%2842%7C84%7C99%29',
+      '/api/v1.0/courses/?scope=filters&universities_include=%28L-42%7CL-84%7CL-99%29',
       {
         filters: {
           universities: {
@@ -151,7 +151,7 @@ describe('<SearchFilterGroupModal />', () => {
       objects: [{ id: 'L-12' }, { id: 'L-17' }],
     });
     fetchMock.get(
-      '/api/v1.0/courses/?scope=filters&universities_include=.-%2812%7C17%29',
+      '/api/v1.0/courses/?scope=filters&universities_include=%28L-12%7CL-17%29',
       {
         filters: {
           universities: {
@@ -190,7 +190,7 @@ describe('<SearchFilterGroupModal />', () => {
       },
     );
     fetchMock.get(
-      '/api/v1.0/courses/?scope=filters&universities_include=.-%2803%7C66%29',
+      '/api/v1.0/courses/?scope=filters&universities_include=%28L-03%7CL-66%29',
       {
         filters: {
           universities: {
@@ -227,7 +227,7 @@ describe('<SearchFilterGroupModal />', () => {
       objects: [{ id: 'L-42' }, { id: 'L-84' }, { id: 'L-99' }],
     });
     fetchMock.get(
-      '/api/v1.0/courses/?scope=filters&universities_include=.-%2842%7C84%7C99%29',
+      '/api/v1.0/courses/?scope=filters&universities_include=%28L-42%7CL-84%7CL-99%29',
       {
         filters: {
           universities: {
@@ -276,7 +276,7 @@ describe('<SearchFilterGroupModal />', () => {
       objects: [{ id: 'L-42' }, { id: 'L-84' }, { id: 'L-99' }],
     });
     fetchMock.get(
-      '/api/v1.0/courses/?limit=20&offset=0&scope=filters&universities_include=.-%2842%7C84%7C99%29',
+      '/api/v1.0/courses/?limit=20&offset=0&scope=filters&universities_include=%28L-42%7CL-84%7CL-99%29',
       {
         filters: {
           universities: {
@@ -384,7 +384,7 @@ describe('<SearchFilterGroupModal />', () => {
       objects: [{ id: 'L-42' }, { id: 'L-84' }, { id: 'L-99' }],
     });
     fetchMock.get(
-      '/api/v1.0/courses/?scope=filters&universities_include=.-%2842%7C84%7C99%29',
+      '/api/v1.0/courses/?scope=filters&universities_include=%28L-42%7CL-84%7CL-99%29',
       { throws: new Error('Failed to search for universities') },
     );
 

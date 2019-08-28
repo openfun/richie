@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix "More options" modal for searchable filter values not based on MPTT
+  paths (eg. "Person" in the sandbox environment).
+
 ## [1.8.0] - 2019-08-28
 
 ### Added
