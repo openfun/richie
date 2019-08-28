@@ -12,6 +12,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Fix "More options" modal for searchable filter values not based on MPTT
   paths (eg. "Person" in the sandbox environment).
+- Improve pagination UX by increasing contrast between the active page number
+  and others, and making button clickable areas larger.
 - Stop making failed API requests and instead show a helpful error message
   in the "More options" modal for filter values when the user inputs their
   first 1 or 2 characters.

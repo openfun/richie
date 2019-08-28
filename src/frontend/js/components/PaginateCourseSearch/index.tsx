@@ -73,15 +73,15 @@ export const PaginateCourseSearch = ({
           <React.Fragment key={page}>
             {/* Prepend a cell with "..." when the page number we're rendering does not follow the previous one */}
             {page > (pageList[index - 1] || 0) + 1 && (
-              <li className="paginate-course-search__list__item">...</li>
+              <li className="paginate-course-search__list__item paginate-course-search__list__item--placeholder">
+                ...
+              </li>
             )}
-            <li className="paginate-course-search__list__item">
-              {page === currentPage ? (
-                /* The current page needs different markup as it does not include a link */
-                <span
-                  className={`paginate-course-search__list__item__page-number
-                              paginate-course-search__list__item__page-number--current`}
-                >
+
+            {page === currentPage ? (
+              /* The current page needs different markup as it does not include a link */
+              <li className="paginate-course-search__list__item paginate-course-search__list__item--current">
+                <span className="paginate-course-search__list__item__page-number">
                   {/*  Help assistive technology users with some context */}
                   <span className="offscreen">
                     <FormattedMessage {...messages.currentlyReading} />{' '}
@@ -91,7 +91,9 @@ export const PaginateCourseSearch = ({
                   <span className={page !== 1 ? 'offscreen' : ''}>Page </span>
                   {page}
                 </span>
-              ) : (
+              </li>
+            ) : (
+              <li className="paginate-course-search__list__item">
                 <a
                   className="paginate-course-search__list__item__page-number"
                   onClick={() =>
@@ -114,8 +116,8 @@ export const PaginateCourseSearch = ({
                   <span className={page !== 1 ? 'offscreen' : ''}>Page </span>
                   {page}
                 </a>
-              )}
-            </li>
+              </li>
+            )}
           </React.Fragment>
         ))}
       </ul>
