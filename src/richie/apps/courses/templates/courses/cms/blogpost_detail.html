@@ -14,7 +14,7 @@
       {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"author" %}
       <div class="blogpost-detail__subhead__author">
         {% page_placeholder "author" current_page or %}
-          <span class="blogpost-detail__subhead__author__empty">{% trans 'No author yet.' %}</span>
+          <span class="blogpost-detail__subhead__author__empty">{% trans 'No author yet' %}</span>
         {% endpage_placeholder %}
       </div>
       {% endif %}
