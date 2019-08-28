@@ -20,7 +20,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Security
 
-- Update the mixin-deep package to safe a version.
+- Update the mixin-deep and set-value packages to safe versions.
 
 ## [1.8.0] - 2019-08-28
 
