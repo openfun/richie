@@ -41,6 +41,13 @@ const messages = defineMessages({
       'Test for the button to see more filter values than the top N that appear by default.',
     id: 'components.SearchFilterGroupModal.moreOptionsButton',
   },
+  queryTooShort: {
+    defaultMessage: 'Type 3 characters or more to start searching.',
+    description:
+      'Users need to enter at least 3 characters to search for more filter values; ' +
+      'this message informs them when they start typing.',
+    id: 'components.SearchFilterGroupModal.queryTooShort',
+  },
 });
 
 // The `setAppElement` needs to happen in proper code but breaks our testing environment.
@@ -74,7 +81,8 @@ export const SearchFilterGroupModal = ({
   }, [modalIsOpen]);
 
   useAsyncEffect(async () => {
-    if (!modalIsOpen) {
+    // We can't start using full-text search until our text query is at least 3 characters long.
+    if (!modalIsOpen || (query.length > 0 && query.length < 3)) {
       return;
     }
 
@@ -140,10 +148,16 @@ export const SearchFilterGroupModal = ({
             placeholder={`Search in ${filter.human_name}`}
           />
           {error ? (
-            <FormattedMessage
-              {...messages.error}
-              values={{ filterName: filter.human_name }}
-            />
+            <div className="search-filter-group-modal__form__error">
+              <FormattedMessage
+                {...messages.error}
+                values={{ filterName: filter.human_name }}
+              />
+            </div>
+          ) : query.length > 0 && query.length < 3 ? (
+            <div className="search-filter-group-modal__form__error">
+              <FormattedMessage {...messages.queryTooShort} />
+            </div>
           ) : (
             <ul className="search-filter-group-modal__form__values">
               {values.map(value => (
