@@ -17,6 +17,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Stop making failed API requests and instead show a helpful error message
   in the "More options" modal for filter values when the user inputs their
   first 1 or 2 characters.
+- Improve pagination strings for localization.
 
 ### Security
 
