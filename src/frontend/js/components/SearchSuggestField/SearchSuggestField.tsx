@@ -10,12 +10,6 @@ import { handle } from '../../utils/errors/handle';
 import { getSuggestionsSection } from './getSuggestionsSection';
 
 const messages = defineMessages({
-  searchFieldDefaultSearch: {
-    defaultMessage: 'Search for {query} in courses...',
-    description: `Default query in the main search field. Lets users run a full text search
-      with whatever they have typed in.`,
-    id: 'components.SearchSuggestField.searchFieldDefaultSearch',
-  },
   searchFieldPlaceholder: {
     defaultMessage: 'Search for courses, organizations, categories',
     description:
