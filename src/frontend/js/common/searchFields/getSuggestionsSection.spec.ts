@@ -6,7 +6,7 @@ import { getSuggestionsSection } from './getSuggestionsSection';
 const mockHandle: jest.Mock<typeof handle> = handle as any;
 jest.mock('../../utils/errors/handle');
 
-describe('utils/searchSuggest/getSuggestionsSection', () => {
+describe('common/searchFields/getSuggestionsSection', () => {
   afterEach(() => {
     fetchMock.restore();
   });
