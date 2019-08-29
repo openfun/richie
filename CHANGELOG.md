@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.8.1] - 2019-08-29
+
 ### Fixed
 
 - Fix "More options" modal for searchable filter values not based on MPTT
@@ -504,7 +506,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v1.8.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v1.8.1...master
+[1.8.1]: https://github.com/openfun/richie/compare/v1.8.0...v1.8.1
 [1.8.0]: https://github.com/openfun/richie/compare/v1.7.3...v1.8.0
 [1.7.3]: https://github.com/openfun/richie/compare/v1.7.2...v1.7.3
 [1.7.2]: https://github.com/openfun/richie/compare/v1.7.1...v1.7.2
