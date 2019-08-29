@@ -1,3 +1,5 @@
+import { AutosuggestProps } from 'react-autosuggest';
+
 /**
  * A Default suggestion shape for cases where we need one.
  */
@@ -59,3 +61,22 @@ export type SuggestionSection<
 > = S extends DefaultSuggestion
   ? DefaultSuggestionSection
   : ResourceSuggestionSection<GenericSuggestion>;
+
+/**
+ * Define the kind of suggestions our `<SearchSuggestField />` and `<RootSearchSuggestField />` components support.
+ */
+export type SearchSuggestion = Suggestion<
+  'categories' | 'organizations' | 'persons'
+>;
+
+/**
+ * Derive from `SearchSuggestion` the kind of suggestion sections our `<SearchSuggestField />` and
+ * `<RootSearchSuggestField />` components support
+ */
+export type SearchSuggestionSection = SuggestionSection<SearchSuggestion>;
+
+/**
+ * Helper to typecheck `react-autosuggest` expected props. Defines what is acceptable as a suggestion
+ * throughout our code related to this instance of `<Autosuggest />`.
+ */
+export type SearchAutosuggestProps = AutosuggestProps<SearchSuggestion>;

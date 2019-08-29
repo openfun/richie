@@ -1,6 +1,5 @@
 import take from 'lodash-es/take';
 import { stringify } from 'query-string';
-import { FormattedMessage } from 'react-intl';
 
 import { Suggestion } from '../../types/Suggestion';
 import { handle } from '../../utils/errors/handle';

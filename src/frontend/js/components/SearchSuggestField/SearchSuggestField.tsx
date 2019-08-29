@@ -1,13 +1,20 @@
 import debounce from 'lodash-es/debounce';
 import React, { useContext, useRef, useState } from 'react';
-import Autosuggest, { AutosuggestProps } from 'react-autosuggest';
+import Autosuggest from 'react-autosuggest';
 import { defineMessages, useIntl } from 'react-intl';
 
+import {
+  getRelevantFilter,
+  getSuggestionValue,
+  onSuggestionsFetchRequested,
+  renderSuggestion,
+} from '../../common/searchFields';
 import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
 import { APICourseSearchResponse } from '../../types/api';
-import { Suggestion, SuggestionSection } from '../../types/Suggestion';
-import { handle } from '../../utils/errors/handle';
-import { getSuggestionsSection } from './getSuggestionsSection';
+import {
+  SearchAutosuggestProps,
+  SearchSuggestionSection,
+} from '../../types/Suggestion';
 
 const messages = defineMessages({
   searchFieldPlaceholder: {
@@ -17,46 +24,6 @@ const messages = defineMessages({
     id: 'components.SearchSuggestField.searchFieldPlaceholder',
   },
 });
-
-/**
- * Define the kind of suggestions our `<SearchSuggestField />` component supports.
- */
-type SearchSuggestion = Suggestion<'categories' | 'organizations' | 'persons'>;
-
-/**
- * Derive from `SearchSuggestion` the kind of suggestion sections our `<SearchSuggestField />` component supports.
- */
-type SearchSuggestionSection = SuggestionSection<SearchSuggestion>;
-
-/**
- * Helper to typecheck `react-autosuggest` expected props. Defines what is acceptable as a suggestion
- * throughout our code related to this instance of `<Autosuggest />`.
- */
-type SearchAutosuggestProps = AutosuggestProps<SearchSuggestion>;
-
-/**
- * `react-autosuggest` callback to get a human string value from a Suggestion object.
- * @param suggestion The relevant suggestion object.
- */
-const getSuggestionValue: SearchAutosuggestProps['getSuggestionValue'] = suggestion =>
-  suggestion.title;
-
-/**
- * `react-autosuggest` callback to render one suggestion.
- * @param suggestion Either a resource suggestion with a model name & a machine name, or the default
- * suggestion with some text to render.
- */
-const renderSuggestion: SearchAutosuggestProps['renderSuggestion'] = suggestion => (
-  <span>{suggestion.title}</span>
-);
-
-/**
- * State shape for the SearchSuggestField component.
- */
-interface SearchSuggestFieldState {
-  suggestions: SearchSuggestionSection[];
-  value: string;
-}
 
 /**
  * Props shape for the SearchSuggestField component.
@@ -81,9 +48,7 @@ export const SearchSuggestField = ({ filters }: SearchSuggestFieldProps) => {
   // the current list of suggestions and the input value.
   // Note: the input value is initialized from the courseSearchParams, ie. the `query` query string parameter
   const [value, setValue] = useState(courseSearchParams.query || '');
-  const [suggestions, setSuggestions] = useState<
-    SearchSuggestFieldState['suggestions']
-  >([]);
+  const [suggestions, setSuggestions] = useState<SearchSuggestionSection[]>([]);
 
   /**
    * Helper to update the course search params when the user types. We needed to take it out of
@@ -147,25 +112,7 @@ export const SearchSuggestField = ({ filters }: SearchSuggestFieldProps) => {
     _,
     { suggestion },
   ) => {
-    // Update the search with the newly selected filter value, using the `kind` field on the suggestion to
-    // pick the relevant filter to update.
-    let filter = Object.values(filters).find(
-      fltr => fltr.name === suggestion.kind,
-    )!;
-
-    // We need a special-case to handle categories until we refactor the API to separate endpoints between
-    // kinds of categories
-    if (!filter) {
-      // Pick the filter to update based on the payload's path: it contains the relevant filter's page path
-      // (for eg. a meta-category or the "organizations" root page)
-      filter = Object.values(filters).find(
-        fltr =>
-          !!fltr.base_path &&
-          String(suggestion.id)
-            .substr(2)
-            .startsWith(fltr.base_path),
-      )!;
-    }
+    const filter = getRelevantFilter(filters, suggestion);
 
     // Dispatch the actual update on the relevant filter
     dispatchCourseSearchParamsUpdate({
@@ -183,43 +130,6 @@ export const SearchSuggestField = ({ filters }: SearchSuggestFieldProps) => {
     setSuggestions([]);
   };
 
-  /**
-   * `react-autosuggest` callback to build up the list of suggestions and sections whenever user
-   * interaction requires us to create or update that list.
-   * @param value `value` as key to an anonymous object: the current value of the search suggest form field.
-   */
-  const onSuggestionsFetchRequested: SearchAutosuggestProps['onSuggestionsFetchRequested'] = async ({
-    value: incomingValue,
-  }) => {
-    if (incomingValue.length < 3) {
-      return setSuggestions([]);
-    }
-
-    // Fetch the suggestions for each resource-based section to build out the sections
-    let sections: SearchSuggestionSection[];
-    try {
-      sections = (await Promise.all(
-        Object.values(filters)
-          .filter(filterdef => filterdef.is_autocompletable)
-          .map(filterdef =>
-            getSuggestionsSection(
-              filterdef.name,
-              filterdef.human_name,
-              incomingValue,
-            ),
-          ),
-        // We can assert this because of the catch below
-      )) as SearchSuggestionSection[];
-    } catch (error) {
-      return handle(error);
-    }
-
-    setSuggestions(
-      // Drop sections with no results as there's no use displaying them
-      sections.filter(section => !!section!.values.length),
-    );
-  };
-
   return (
     // TypeScript incorrectly infers the type of the Autosuggest suggestions prop as SearchSuggestion, which
     // would be correct if we did not use sections, but is incorrect as it is.
@@ -229,7 +139,9 @@ export const SearchSuggestField = ({ filters }: SearchSuggestFieldProps) => {
       inputProps={inputProps}
       multiSection={true}
       onSuggestionsClearRequested={() => setSuggestions([])}
-      onSuggestionsFetchRequested={onSuggestionsFetchRequested}
+      onSuggestionsFetchRequested={({ value: incomingValue }) =>
+        onSuggestionsFetchRequested(filters, setSuggestions, incomingValue)
+      }
       onSuggestionSelected={onSuggestionSelected}
       renderSectionTitle={section => section.title}
       renderSuggestion={renderSuggestion}
