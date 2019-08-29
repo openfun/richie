@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2019-05-24T16:39:58.245Z\n"
+"POT-Creation-Date: 2019-08-29T09:35:56.390Z\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "MIME-Version: 1.0\n"
@@ -13,14 +13,28 @@ msgstr ""
 "Last-Translator: Samuel Paccoud (sampaccoud)\n"
 "Language-Team: French, Canada\n"
 "Language: fr_CA\n"
-"PO-Revision-Date: 2019-06-20 13:36\n"
+"PO-Revision-Date: 2019-08-29 11:54\n"
+
+#. [components.SearchFilterGroupModal.modalTitle] - Title for the modal to add more filter values in the search filters modal.
+#. defaultMessage is:
+#. Add filters for {filterName}
+#: i18n/js/components/SearchFilterGroupModal/index.json
+msgid "Add filters for {filterName}"
+msgstr ""
 
 #. [components.SearchFiltersPane.clearFilters] - Helper button in search filters pane in search page to remove all active filters
 #. defaultMessage is:
 #. Clear {activeFilterCount, number} active {activeFilterCount, plural, one {filter} other {filters}}
 #: i18n/js/components/SearchFiltersPane/SearchFiltersPane.json
 msgid "Clear {activeFilterCount, number} active {activeFilterCount, plural, one {filter} other {filters}}"
-msgstr "Remettre à zéro {activeFilterCount, number} {activeFilterCount, plural, one {filtre} other {filtres}} actifs"
+msgstr ""
+
+#. [components.SearchFilterGroupModal.closeModal] - Text for the button to close the search filters modal
+#. defaultMessage is:
+#. Close
+#: i18n/js/components/SearchFilterGroupModal/index.json
+msgid "Close"
+msgstr ""
 
 #. [components.CourseGlimpse.cover] - Placeholder text when the course we are glimpsing at is missing a cover image
 #. defaultMessage is:
@@ -29,12 +43,19 @@ msgstr "Remettre à zéro {activeFilterCount, number} {activeFilterCount, plural
 msgid "Cover"
 msgstr "Couverture"
 
-#. [components.CourseGlimpse.linkText] - Accessibility title for links on course glimpses.
+#. [components.PaginateCourseSearch.currentlyReadingLastPageN] - Accessibility helper in pagination, shown next to the current page number when it is the last page.
 #. defaultMessage is:
-#. Details page for {courseTitle}.
-#: i18n/js/components/CourseGlimpse/CourseGlimpse.json
-msgid "Details page for {courseTitle}."
-msgstr "Page de détails pour {courseTitle}."
+#. Currently reading last page {page}
+#: i18n/js/components/PaginateCourseSearch/index.json
+msgid "Currently reading last page {page}"
+msgstr ""
+
+#. [components.PaginateCourseSearch.currentlyReadingPageN] - Accessibility helper in pagination, shown next to the current page number when it is not the last page.
+#. defaultMessage is:
+#. Currently reading page {page}
+#: i18n/js/components/PaginateCourseSearch/index.json
+msgid "Currently reading page {page}"
+msgstr ""
 
 #. [components.SearchFiltersPane.title] - Title for the search filters pane in course search.
 #. defaultMessage is:
@@ -45,17 +66,53 @@ msgstr "Filtrer les cours"
 
 #. [components.SearchFilterValueParent.ariaHideChildren] - Accessibility message for the button to hide children of the current filter
 #. defaultMessage is:
-#. Hide child filters
+#. Hide additional filters for {filterValueName}
 #: i18n/js/components/SearchFilterValueParent/SearchFilterValueParent.json
-msgid "Hide child filters"
-msgstr "Masquer les filtres enfants"
+msgid "Hide additional filters for {filterValueName}"
+msgstr "Afficher moins de filtres pour {filterValueName}"
 
-#. [components.CourseGlimpse.logoAltText] - Alternate text for the course logo in a course glimpse.
+#. [components.PaginateCourseSearch.lastPageN] - Accessibility helper for pagination, added on the last page link.
 #. defaultMessage is:
-#. Logo for {courseTitle}
-#: i18n/js/components/CourseGlimpse/CourseGlimpse.json
-msgid "Logo for {courseTitle}"
-msgstr "Logo du cours {courseTitle}"
+#. Last page {page}
+#: i18n/js/components/PaginateCourseSearch/index.json
+msgid "Last page {page}"
+msgstr ""
+
+#. [components.SearchFilterGroupModal.moreOptionsButton] - Test for the button to see more filter values than the top N that appear by default.
+#. defaultMessage is:
+#. More options
+#: i18n/js/components/SearchFilterGroupModal/index.json
+msgid "More options"
+msgstr ""
+
+#. [components.PaginateCourseSearch.nextPageN] - Accessibility helper for pagination, added on the next page link.
+#. defaultMessage is:
+#. Next page {page}
+#: i18n/js/components/PaginateCourseSearch/index.json
+msgid "Next page {page}"
+msgstr ""
+
+#. [components.PaginateCourseSearch.pageN] - Accessibility helper for pagination, added on all page links for screen readers,
+#.       only shown next to "page 1" visually.
+#. defaultMessage is:
+#. Page {page}
+#: i18n/js/components/PaginateCourseSearch/index.json
+msgid "Page {page}"
+msgstr ""
+
+#. [components.PaginateCourseSearch.pagination] - Label for the pagination navigation in course search results.
+#. defaultMessage is:
+#. Pagination
+#: i18n/js/components/PaginateCourseSearch/index.json
+msgid "Pagination"
+msgstr ""
+
+#. [components.PaginateCourseSearch.previousPageN] - Accessibility helper for pagination, added on the previous page link.
+#. defaultMessage is:
+#. Previous page {page}
+#: i18n/js/components/PaginateCourseSearch/index.json
+msgid "Previous page {page}"
+msgstr ""
 
 #. [components.SearchSuggestField.searchFieldPlaceholder] - Placeholder text displayed in the search field when it is empty.
 #. defaultMessage is:
@@ -74,22 +131,29 @@ msgstr "Recherche de {query} dans les cours..."
 
 #. [components.SearchFilterValueParent.ariaShowChildren] - Accessibility message for the button to show children of the current filter
 #. defaultMessage is:
-#. Show child filters
+#. Show more filters for {filterValueName}
 #: i18n/js/components/SearchFilterValueParent/SearchFilterValueParent.json
-msgid "Show child filters"
-msgstr "Afficher les filtres enfants"
+msgid "Show more filters for {filterValueName}"
+msgstr "Afficher plus de filtres pour {filterValueName}"
 
-#. [components.CourseGlimpseList.courseCount] - Result count for course search. Appears right above search results
+#. [components.CourseGlimpseList.courseCount] - Result count & pagination information for course search. Appears right above search results
 #. defaultMessage is:
-#. Showing {courseCount, number} {courseCount, plural, one {course} other {courses}} matching your search
+#. Showing {start, number} to {end, number} of {courseCount, number} {courseCount, plural, one {course} other {courses}} matching your search
 #: i18n/js/components/CourseGlimpseList/CourseGlimpseList.json
-msgid "Showing {courseCount, number} {courseCount, plural, one {course} other {courses}} matching your search"
-msgstr "Affichage de {courseCount, number} {courseCount, plural, one {cours} other {cours}} correspondant à votre recherche"
+msgid "Showing {start, number} to {end, number} of {courseCount, number} {courseCount, plural, one {course} other {courses}} matching your search"
+msgstr ""
 
-#. [components.CourseGlimpse.startsOn] - Shows the start date for a course in a course glimpse in a short format such as Sep 4, '1986'
+#. [components.SearchFilterGroupModal.error] - Error message when the search for more filter value fails in the search filters modal.
 #. defaultMessage is:
-#. Starts on {date}
-#: i18n/js/components/CourseGlimpse/CourseGlimpse.json
-msgid "Starts on {date}"
-msgstr "Débute le {date}"
+#. There was an error while searching for {filterName}.
+#: i18n/js/components/SearchFilterGroupModal/index.json
+msgid "There was an error while searching for {filterName}."
+msgstr ""
+
+#. [components.SearchFilterGroupModal.queryTooShort] - Users need to enter at least 3 characters to search for more filter values; this message informs them when they start typing.
+#. defaultMessage is:
+#. Type at least 3 characters to start searching.
+#: i18n/js/components/SearchFilterGroupModal/index.json
+msgid "Type at least 3 characters to start searching."
+msgstr ""
 
