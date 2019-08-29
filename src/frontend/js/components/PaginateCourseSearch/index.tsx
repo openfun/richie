@@ -4,16 +4,47 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
 
 const messages = defineMessages({
-  currentlyReading: {
-    defaultMessage: 'Currently reading',
+  currentlyReadingLastPageN: {
+    defaultMessage: 'Currently reading last page {page}',
     description:
-      'Accessibility helper in pagination, shown next to the current page number (Currently reading Page N)',
-    id: 'components.PaginateCourseSearch.currentlyReading',
+      'Accessibility helper in pagination, shown next to the current page number when it is the last page.',
+    id: 'components.PaginateCourseSearch.currentlyReadingLastPageN',
+  },
+  currentlyReadingPageN: {
+    defaultMessage: 'Currently reading page {page}',
+    description:
+      'Accessibility helper in pagination, shown next to the current page number when it is not the last page.',
+    id: 'components.PaginateCourseSearch.currentlyReadingPageN',
+  },
+  lastPageN: {
+    defaultMessage: 'Last page {page}',
+    description:
+      'Accessibility helper for pagination, added on the last page link.',
+    id: 'components.PaginateCourseSearch.lastPageN',
+  },
+  nextPageN: {
+    defaultMessage: 'Next page {page}',
+    description:
+      'Accessibility helper for pagination, added on the next page link.',
+    id: 'components.PaginateCourseSearch.nextPageN',
+  },
+  pageN: {
+    defaultMessage: 'Page {page}',
+    description: `Accessibility helper for pagination, added on all page links for screen readers,
+      only shown next to "page 1" visually.`,
+    id: 'components.PaginateCourseSearch.pageN',
   },
   pagination: {
     defaultMessage: 'Pagination',
-    description: 'Label for the pagination navigation in course search results',
+    description:
+      'Label for the pagination navigation in course search results.',
     id: 'components.PaginateCourseSearch.pagination',
+  },
+  previousPageN: {
+    defaultMessage: 'Previous page {page}',
+    description:
+      'Accessibility helper for pagination, added on the previous page link.',
+    id: 'components.PaginateCourseSearch.previousPageN',
   },
 });
 
@@ -84,12 +115,26 @@ export const PaginateCourseSearch = ({
                 <span className="paginate-course-search__list__item__page-number">
                   {/*  Help assistive technology users with some context */}
                   <span className="offscreen">
-                    <FormattedMessage {...messages.currentlyReading} />{' '}
+                    {page === maxPage ? (
+                      <FormattedMessage
+                        {...messages.currentlyReadingLastPageN}
+                        values={{ page }}
+                      />
+                    ) : (
+                      <FormattedMessage
+                        {...messages.currentlyReadingPageN}
+                        values={{ page }}
+                      />
+                    )}
                   </span>
-                  {page === maxPage && <span className="offscreen">Last </span>}
-                  {/* Show context "Page 1" on the first item to make it obvious this is pagination */}
-                  <span className={page !== 1 ? 'offscreen' : ''}>Page </span>
-                  {page}
+                  <span aria-hidden={true}>
+                    {/* Show context "Page 1" on the first item to make it obvious this is pagination */}
+                    {page === 1 ? (
+                      <FormattedMessage {...messages.pageN} values={{ page }} />
+                    ) : (
+                      page
+                    )}
+                  </span>
                 </span>
               </li>
             ) : (
@@ -105,16 +150,34 @@ export const PaginateCourseSearch = ({
                   }
                 >
                   {/*  Help assistive technology users with some context */}
-                  {page === currentPage - 1 && (
-                    <span className="offscreen">Previous </span>
-                  )}
-                  {page === currentPage + 1 && (
-                    <span className="offscreen">Next </span>
-                  )}
-                  {page === maxPage && <span className="offscreen">Last </span>}
-                  {/* Show context "Page 1" on the first item to make it obvious this is pagination */}
-                  <span className={page !== 1 ? 'offscreen' : ''}>Page </span>
-                  {page}
+                  <span className="offscreen">
+                    {page === maxPage ? (
+                      <FormattedMessage
+                        {...messages.lastPageN}
+                        values={{ page }}
+                      />
+                    ) : page === currentPage - 1 ? (
+                      <FormattedMessage
+                        {...messages.previousPageN}
+                        values={{ page }}
+                      />
+                    ) : page === currentPage + 1 ? (
+                      <FormattedMessage
+                        {...messages.nextPageN}
+                        values={{ page }}
+                      />
+                    ) : (
+                      <FormattedMessage {...messages.pageN} values={{ page }} />
+                    )}
+                  </span>
+                  <span aria-hidden={true}>
+                    {/* Show context "Page 1" on the first item to make it obvious this is pagination */}
+                    {page === 1 ? (
+                      <FormattedMessage {...messages.pageN} values={{ page }} />
+                    ) : (
+                      page
+                    )}
+                  </span>
                 </a>
               </li>
             )}
