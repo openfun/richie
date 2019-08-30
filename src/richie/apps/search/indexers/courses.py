@@ -598,6 +598,9 @@ class CoursesIndexer:
         full objects.
         """
         return {
+            "absolute_url": get_best_field_language(
+                es_document["_source"]["absolute_url"], language
+            ),
             "id": es_document["_id"],
             "kind": "courses",
             "title": get_best_field_language(es_document["_source"]["title"], language),
