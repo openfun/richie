@@ -441,7 +441,7 @@ class CoursesIndexersTestCase(TestCase):
         es_course = {
             "_id": 93,
             "_source": {
-                "absolute_url": {"en": "campo-qui-format-do"},
+                "absolute_url": {"en": "/en/campo-qui-format-do"},
                 "categories": [43, 86],
                 "cover_image": {"en": "cover_image.jpg"},
                 "icon": {"en": "icon.jpg"},
@@ -457,5 +457,10 @@ class CoursesIndexersTestCase(TestCase):
         }
         self.assertEqual(
             CoursesIndexer.format_es_document_for_autocomplete(es_course, "en"),
-            {"id": 93, "kind": "courses", "title": "Duis eu arcu erat"},
+            {
+                "absolute_url": "/en/campo-qui-format-do",
+                "id": 93,
+                "kind": "courses",
+                "title": "Duis eu arcu erat",
+            },
         )
