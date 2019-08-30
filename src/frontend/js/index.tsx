@@ -15,15 +15,18 @@ import includes from 'lodash-es/includes';
 import startCase from 'lodash-es/startCase';
 
 // Import the top-level components that can be directly called from the CMS
+import { RootSearchSuggestField } from './components/RootSearchSuggestField';
 import { Search } from './components/Search/Search';
 import { handle } from './utils/errors/handle';
 // List them in an interface for type-safety when we call them. This will let us use the props for
 // any top-level component in a way TypeScript understand and accepts
 interface ComponentLibrary {
   Search: typeof Search;
+  RootSearchSuggestField: typeof RootSearchSuggestField;
 }
 // Actually create the component map that we'll use below to access our component classes
 const componentLibrary: ComponentLibrary = {
+  RootSearchSuggestField,
   Search,
 };
 // Type guard: ensures a given string (candidate) is indeed a proper key of the componentLibrary with a corresponding
@@ -82,9 +85,7 @@ document.addEventListener('DOMContentLoaded', event => {
 
         // Get the incoming props to pass our component from the `data-props` attribute
         const dataProps = element.getAttribute('data-props');
-        const props = dataProps
-          ? (JSON.parse(dataProps) as Parameters<typeof Component>[0])
-          : {};
+        const props = dataProps ? JSON.parse(dataProps) : {};
 
         // Render the component inside an `IntlProvider` to be able to access translated strings
         ReactDOM.render(
