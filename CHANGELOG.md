@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Allow overriding Richie's default settings in inheriting configurations
+
 ## [1.8.2] - 2019-08-29
 
 ### Changed

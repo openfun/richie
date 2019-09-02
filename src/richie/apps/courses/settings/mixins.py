@@ -4,17 +4,16 @@ from configurations.utils import uppercase_attributes
 from .. import settings
 
 
+def apply_settings(cls):
+    """A decorator to set class attributes from imported settings."""
+    for key, value in uppercase_attributes(settings).items():
+        setattr(cls, key, value)
+    return cls
+
+
+@apply_settings
 class RichieCoursesConfigurationMixin:
     """
     A Django Configuration mixin to set sensible defaults for the settings of Richie's
     courses app.
     """
-
-    def __new__(cls):
-        """
-        Set all settings as attributes of this class so it can be used as a mixin in
-        Django Configuration.
-        """
-        for key, value in uppercase_attributes(settings).items():
-            setattr(cls, key, value)
-        return super().__new__(cls)
