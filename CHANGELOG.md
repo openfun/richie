@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.8.3] - 2019-09-03
+
 ### Fixed
 
 - Allow overriding Richie's default settings in inheriting configurations
@@ -516,7 +518,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v1.8.2...master
+[unreleased]: https://github.com/openfun/richie/compare/v1.8.3...master
+[1.8.3]: https://github.com/openfun/richie/compare/v1.8.2...v1.8.3
 [1.8.2]: https://github.com/openfun/richie/compare/v1.8.1...v1.8.2
 [1.8.1]: https://github.com/openfun/richie/compare/v1.8.0...v1.8.1
 [1.8.0]: https://github.com/openfun/richie/compare/v1.7.3...v1.8.0
