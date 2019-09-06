@@ -68,15 +68,13 @@
   <h2 class="section__title course-detail__content__row__title course-detail__content__organizations__title">
     {% trans 'Organizations' %}
   </h2>
-  {% if page|is_empty_placeholder:"course_organizations" %}
-    <p class="course-detail__content__organizations__placeholder">
-      {% trans "What are the organizations publishing this course?" %}
-    </p>
-  {% else %}
-    <div class="section__items course-detail__content__organizations__items">
-      {% page_placeholder "course_organizations" page %}
-    </div>
-  {% endif %}
+  <div class="section__items course-detail__content__organizations__items">
+    {% page_placeholder "course_organizations" page or %}
+      <p class="course-detail__content__organizations__placeholder">
+        {% trans "What are the organizations publishing this course?" %}
+      </p>
+    {% endpage_placeholder %}
+  </div>
 </section>
 {% endif %}
 
@@ -86,13 +84,11 @@
     {% trans 'Course team' %}
   </h2>
   {% with header_level=3 %}
-    {% if page|is_empty_placeholder:"course_team" %}
-      <p>{% trans 'Who are the teachers in the course team?' %}</p>
-    {% else %}
-      <div class="section__items course-detail__content__team__items">
-        {% page_placeholder "course_team" page %}
-      </div>
-    {% endif %}
+    <div class="section__items course-detail__content__team__items">
+      {% page_placeholder "course_team" page or %}
+        <p>{% trans 'Who are the teachers in the course team?' %}</p>
+      {% endpage_placeholder %}
+    </div>
   {% endwith %}
 </section>
 {% endif %}
