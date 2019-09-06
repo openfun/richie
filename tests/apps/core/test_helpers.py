@@ -283,7 +283,8 @@ class RecursivePageCreationHelpersTestCase(CMSTestCase):
         self.assertEqual(Page.objects.filter(reverse_id="courses").count(), 2)
         self.assertEqual(Page.objects.filter(reverse_id="organizations").count(), 2)
         self.assertEqual(Page.objects.filter(reverse_id="persons").count(), 2)
-        self.assertEqual(Page.objects.count(), 12)
+        self.assertEqual(Page.objects.filter(reverse_id="programs").count(), 2)
+        self.assertEqual(Page.objects.count(), 14)
 
     def test_helpers_recursive_page_creation_can_be_run_multiple_times(self):
         """Ensure we can run the recursive_page_creation helper multiple times with the same

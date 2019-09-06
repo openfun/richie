@@ -323,5 +323,6 @@ SITEMAP_PAGE_PARAMS = {
     "categories": {},
     "organizations": {"max_depth": 1},
     "persons": {"max_depth": 1},
+    # "programs": {"max_depth": 1},
     "annex": {"include_root_page": False},
 }

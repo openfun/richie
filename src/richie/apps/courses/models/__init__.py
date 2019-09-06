@@ -7,4 +7,5 @@ from .category import *
 from .course import *
 from .organization import *
 from .person import *
+from .program import *
 from .role import *

@@ -1,0 +1,44 @@
+{% extends "richie/fullwidth.html" %}
+{% load cms_tags extra_tags i18n thumbnail %}
+{% block content %}
+{% spaceless %}
+<div class="program-detail">
+  <h1 class="program-detail__title">{% render_model current_page "title" %}</h1>
+
+  <div class="program-detail__cover">
+    {% get_placeholder_plugins "program_cover" as plugins or %}
+      <p class="program-detail__cover__empty">{% trans "Cover" %}</p>
+    {% endget_placeholder_plugins %}
+    {% blockplugin plugins.0 %}
+      <img
+        src="{% thumbnail instance.picture 500x500 subject_location=instance.picture.subject_location %}"
+        srcset="
+          {% thumbnail instance.picture 500x500 subject_location=instance.picture.subject_location %} 500w,
+          {% if instance.picture.width >= 1000 %}{% thumbnail instance.picture 1000x1000 subject_location=instance.picture.subject_location %} 1000w,{% endif %}
+          {% if instance.picture.width >= 2000 %}{% thumbnail instance.picture 2000x2000 subject_location=instance.picture.subject_location %} 2000w{% endif %}
+        "
+        sizes="500px"
+        alt="{% trans 'program cover image' %}"
+      />
+    {% endblockplugin %}
+  </div>
+
+  <div class="program-detail__description">
+    {% placeholder "program_description" or %}
+      <p class="program-detail__description__empty">
+        {% trans "No description content" %}
+      </p>
+    {% endplaceholder %}
+  </div>
+
+  <div class="program-detail__courses">
+    {% placeholder "program_courses" or %}
+      <p class="program-detail__courses__empty">
+        {% trans "No courses" %}
+      </p>
+    {% endplaceholder %}
+  </div>
+
+</div>
+{% endspaceless %}
+{% endblock content %}
