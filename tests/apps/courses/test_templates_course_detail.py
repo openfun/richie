@@ -242,6 +242,59 @@ class CourseCMSTestCase(CMSTestCase):
         # The draft and the published course runs should both be in the page
         self.assertContains(response, "<dd>English and french</dd>", html=True, count=2)
 
+    def test_templates_course_detail_placeholder(self):
+        """
+        Draft editing course page should contain all key placeholders when empty.
+        """
+        user = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=user.username, password="password")
+
+        course = CourseFactory(page_title="Very interesting course")
+        page = course.extended_object
+        url = "{:s}?edit".format(page.get_absolute_url(language="en"))
+        response = self.client.get(url)
+
+        pattern = (
+            r'<div class="course-detail__content__row course-detail__content__introduction">'
+            r'<div class="cms-placeholder'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
+        pattern = (
+            r'<div class="course-detail__content__row course-detail__content__categories">'
+            r'<div class="cms-placeholder'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
+        pattern = (
+            r'<div class="course-detail__content__row course-detail__content__teaser">'
+            r'<div class="cms-placeholder'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
+        pattern = (
+            r'<h2 class="course-detail__content__row__title">About the course</h2>'
+            r'<div class="cms-placeholder'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
+        pattern = (
+            r'<div class="section__items course-detail__content__organizations__items">'
+            r'<div class="cms-placeholder'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
+        pattern = (
+            r'<div class="section__items course-detail__content__team__items">'
+            r'<div class="cms-placeholder'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
+        pattern = (
+            r'<div class="course-detail__content__row course-detail__content__information">'
+            r'<div class="cms-placeholder'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
+        pattern = (
+            r'<h3 class="course-detail__content__license__item__title">'
+            r'License for the course content</h3><div class="cms-placeholder'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
+
     def test_templates_course_detail_no_index(self):
         """
         A course snapshot page should not be indexable by search engine robots.

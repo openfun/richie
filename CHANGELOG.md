@@ -12,6 +12,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Use SVG icons instead of an icon font.
 
+### Fixed
+
+- Fix add plugin to team and organization on fragment_course_content template
+  when they are empty.
+
 ## [1.9.2] - 2019-09-20
 
 ### Fixed
