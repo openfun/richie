@@ -864,8 +864,8 @@ class ProgramFactory(PageExtensionDjangoModelFactory):
         instances.
         """
         if create and extracted:
-            for program in extracted:
-                placeholder = program.extended_object.placeholders.get(
+            for course in extracted:
+                placeholder = self.extended_object.placeholders.get(
                     slot="program_courses"
                 )
                 for language in self.extended_object.get_languages():
@@ -874,7 +874,7 @@ class ProgramFactory(PageExtensionDjangoModelFactory):
                         language=language,
                         placeholder=placeholder,
                         plugin_type="CoursePlugin",
-                        **{"page": self.extended_object},
+                        **{"page": course.extended_object},
                     )
 
     @factory.post_generation

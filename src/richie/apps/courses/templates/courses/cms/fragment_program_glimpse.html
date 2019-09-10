@@ -3,7 +3,7 @@
 {% with program_page=program.extended_object %}
 <a href="{{ program.extended_object.get_absolute_url }}" class="program-glimpse program-glimpse--link {% if program.extended_object.publisher_is_draft %}program-glimpse--draft{% endif %}" >
   <div class="program-glimpse__media">
-    {% get_placeholder_plugins "cover" program_page as plugins or %}
+    {% get_placeholder_plugins "program_cover" program_page as plugins or %}
       <div class="program-glimpse__media__empty">{% trans 'Cover' %}</div>
     {% endget_placeholder_plugins %}
     {% blockplugin plugins.0 %}
@@ -22,7 +22,7 @@
       <div class="program-glimpse__content__wrapper">
           <p class="program-glimpse__content__title">{{ program_page.get_title }}</p>
           <p>
-              {% show_placeholder "description" program_page %}
+              {% show_placeholder "program_description" program_page %}
           </p>
       </div>
       <div class="program-glimpse__footer">
