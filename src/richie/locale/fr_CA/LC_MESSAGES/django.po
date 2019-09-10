@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-08-28 15:20+0000\n"
+"POT-Creation-Date: 2019-09-10 16:57+0200\n"
 "PO-Revision-Date: 2019-08-29 11:54\n"
 "Last-Translator: Samuel Paccoud (sampaccoud)\n"
 "Language-Team: French, Canada\n"
@@ -94,6 +94,14 @@ msgstr "L'enregistrement de {:d} choix nécessite l'enregistrement d'un CharFiel
 #, python-format
 msgid "Switch to %(lang.name_translated)s"
 msgstr "Basculer vers %(lang.name_translated)s"
+
+#: apps/core/templates/richie/base.html:35
+msgid "Sign up"
+msgstr "Inscription"
+
+#: apps/core/templates/richie/base.html:38
+msgid "Login"
+msgstr "Connexion"
 
 #: apps/core/templates/richie/base.html:63
 msgid "All Rights Reserved."

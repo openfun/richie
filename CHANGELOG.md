@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Translate login/signup on header.
+
 ## [1.8.3] - 2019-09-03
 
 ### Fixed
