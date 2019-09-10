@@ -17,11 +17,14 @@ NB_OBJECTS = {
     "persons": 50,
     "blogposts": 20,
     "blogpost_categories": 3,
+    "programs": 6,
+    "programs_courses": 4,
     "home_blogposts": 4,
     "home_courses": 8,
     "home_organizations": 4,
     "home_subjects": 6,
     "home_persons": 3,
+    "home_programs": 4,
 }
 NB_OBJECTS.update(getattr(settings, "RICHIE_DEMO_NB_OBJECTS", {}))
 
@@ -56,6 +59,11 @@ PAGES_INFO = {
         "title": {"en": "Persons", "fr": "Personnes"},
         "in_navigation": True,
         "template": "courses/cms/person_list.html",
+    },
+    "programs": {
+        "title": {"en": "Programs", "fr": "Parcours"},
+        "in_navigation": True,
+        "template": "courses/cms/program_list.html",
     },
     "annex": {
         "title": {"en": "Annex", "fr": "Annexe"},
@@ -272,6 +280,8 @@ HOMEPAGE_CONTENT = {
         "organizations_button_title": "More universities",
         "persons_title": "Persons",
         "persons_button_title": "More persons",
+        "programs_title": "Programs",
+        "programs_button_title": "More programs",
         "subjects_title": "Subjects",
         "subjects_button_title": "More subjects",
     },
@@ -291,6 +301,8 @@ HOMEPAGE_CONTENT = {
         "subjects_button_title": "Plus de thématiques",
         "persons_title": "Personnes",
         "persons_button_title": "Plus de personnes",
+        "programs_title": "Parcours",
+        "programs_button_title": "Plus de parcours",
     },
 }
 HOMEPAGE_CONTENT.update(getattr(settings, "RICHIE_DEMO_HOMEPAGE_CONTENT", {}))
@@ -323,6 +335,6 @@ SITEMAP_PAGE_PARAMS = {
     "categories": {},
     "organizations": {"max_depth": 1},
     "persons": {"max_depth": 1},
-    # "programs": {"max_depth": 1},
+    "programs": {"max_depth": 1},
     "annex": {"include_root_page": False},
 }

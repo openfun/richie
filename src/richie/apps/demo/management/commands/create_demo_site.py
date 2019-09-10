@@ -21,6 +21,7 @@ from richie.apps.courses.factories import (
     LicenceFactory,
     OrganizationFactory,
     PersonFactory,
+    ProgramFactory,
 )
 
 from ...defaults import (
@@ -247,6 +248,20 @@ def create_demo_site():
         )
         blogposts.append(post)
 
+    # Create programs under the `Programs` page
+    programs = []
+    for _ in range(NB_OBJECTS["programs"]):
+        post = ProgramFactory.create(
+            page_in_navigation=True,
+            page_languages=["en", "fr"],
+            page_parent=pages_created["programs"],
+            fill_cover=pick_image("cover"),
+            fill_description=True,
+            fill_courses=[*random.sample(courses, NB_OBJECTS["programs_courses"])],
+            should_publish=True,
+        )
+        programs.append(post)
+
     # Once everything has been created, use some content to create a homepage
     placeholder = pages_created["home"].placeholders.get(slot="maincontent")
 
@@ -320,6 +335,32 @@ def create_demo_site():
             name=content["blogposts_button_title"],
             template=content["button_template_name"],
             internal_link=pages_created["blogposts"],
+        )
+
+        # Add highlighted programs
+        programs_section = add_plugin(
+            language=language,
+            placeholder=placeholder,
+            plugin_type="SectionPlugin",
+            title=content["programs_title"],
+            template=content["section_template"],
+        )
+        for program in random.sample(programs, NB_OBJECTS["home_programs"]):
+            add_plugin(
+                language=language,
+                placeholder=placeholder,
+                plugin_type="ProgramPlugin",
+                target=programs_section,
+                page=program.extended_object,
+            )
+        add_plugin(
+            language=language,
+            placeholder=placeholder,
+            plugin_type="LinkPlugin",
+            target=programs_section,
+            name=content["programs_button_title"],
+            template=content["button_template_name"],
+            internal_link=pages_created["programs"],
         )
 
         # Add highlighted organizations
