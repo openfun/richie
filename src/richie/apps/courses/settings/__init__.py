@@ -241,6 +241,21 @@ CMS_PLACEHOLDER_CONF = {
         "name": _("Body"),
         "excluded_plugins": ["CKEditorPlugin", "GoogleMapPlugin"],
     },
+    # Program page detail
+    "courses/cms/program_detail.html program_cover": {
+        "name": _("Cover"),
+        "plugins": ["SimplePicturePlugin"],
+        "limits": {"SimplePicturePlugin": 1},
+    },
+    "courses/cms/program_detail.html program_description": {
+        "name": _("Description"),
+        "plugins": ["PlainTextPlugin"],
+        "limits": {"PlainTextPlugin": 1},
+    },
+    "courses/cms/program_detail.html program_courses": {
+        "name": _("Courses"),
+        "plugins": ["CoursePlugin"],
+    },
 }
 
 # Main CKEditor configuration

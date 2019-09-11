@@ -26,7 +26,7 @@ from cms.wizards.wizard_pool import wizard_pool
 from ..core import defaults as core_defaults
 from . import defaults
 from .helpers import snapshot_course
-from .models import BlogPost, Category, Course, CourseRun, Organization, Person
+from .models import BlogPost, Category, Course, CourseRun, Organization, Person, Program
 
 
 class ExcludeRootReverseIDMixin:
@@ -620,6 +620,58 @@ wizard_pool.register(
         description=_("Create a new person page"),
         model=Person,
         form=PersonWizardForm,
+        weight=200,
+    )
+)
+
+
+class ProgramWizardForm(BaseWizardForm):
+    """
+    This form is used by the wizard that creates a new program
+    A related program model is created for each program
+    """
+
+    model = Program
+
+    def clean(self):
+        """
+        Permission to add a program was already checked when we displayed the list of
+        wizard entries, but we need to prevent form hacking.
+        """
+        # The user should have permission to create a program object
+        if not (self.user.is_staff and self.user.has_perm("courses.add_program")):
+            raise PermissionDenied()
+
+        return super().clean()
+
+    def save(self):
+        """
+        The parent form created the page.
+        This method creates the associated program.
+        """
+        page = super().save()
+        Program.objects.create(extended_object=page)
+        return page
+
+
+class ProgramWizard(Wizard):
+    """Inherit from Wizard because each wizard must have its own Python class."""
+
+    def user_has_add_permission(self, user, **kwargs):
+        """
+        Returns: True if the user has the permission to add program objects, False otherwise.
+        """
+        return user.has_perm("courses.add_program") and super().user_has_add_permission(
+            user, **kwargs
+        )
+
+
+wizard_pool.register(
+    ProgramWizard(
+        title=_("New program"),
+        description=_("Create a new program"),
+        model=Program,
+        form=ProgramWizardForm,
         weight=200,
     )
 )

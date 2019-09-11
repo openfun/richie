@@ -5,6 +5,7 @@
 <div class="program-detail">
   <h1 class="program-detail__title">{% render_model current_page "title" %}</h1>
 
+  {% if current_page.publisher_is_draft %}
   <div class="program-detail__cover">
     {% get_placeholder_plugins "program_cover" as plugins or %}
       <p class="program-detail__cover__empty">{% trans "Cover" %}</p>
@@ -22,6 +23,7 @@
       />
     {% endblockplugin %}
   </div>
+  {% endif %}
 
   <div class="program-detail__description">
     {% placeholder "program_description" or %}
