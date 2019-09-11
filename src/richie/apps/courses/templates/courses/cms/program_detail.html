@@ -31,14 +31,11 @@
     {% endplaceholder %}
   </div>
 
-  <div class="program-detail__courses">
-    {% placeholder "program_courses" or %}
-      <p class="program-detail__courses__empty">
-        {% trans "No courses" %}
-      </p>
-    {% endplaceholder %}
-  </div>
-
 </div>
+
+<section class="course-glimpse-list">
+    <h2 class="course-glimpse-list__title">{% trans "Related courses" %}</h2>
+    {% placeholder "program_courses" %}
+</section>
 {% endspaceless %}
 {% endblock content %}
