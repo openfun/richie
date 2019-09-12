@@ -1,6 +1,8 @@
 {% extends "richie/fullwidth.html" %}
 {% load cms_tags i18n extra_tags thumbnail %}
 
+{% block breadcrumbs %}{% endblock breadcrumbs %}
+
 {% block meta %}
 {# Make sure course snapshot pages are not indexed by search engines #}
 {% if current_page.parent_page.course %}<meta name="robots" content="noindex">{% endif %}

@@ -43,6 +43,11 @@
             {% endblock body_header %}
 
             <div class="body-content {% block bodycontent_classes %}{% endblock bodycontent_classes %}">
+            {% block breadcrumbs %}
+            <ul class="breadcrumbs">
+                {% block breadcrumbs_content %}{% show_breadcrumb 0 "menu/breadcrumb_item.html" %}{% endblock breadcrumbs_content %}
+            </ul>
+            {% endblock breadcrumbs %}
             {% block content %}{% endblock content %}
             </div>
 
