@@ -21,7 +21,8 @@ class ProgramCMSTestCase(CMSTestCase):
         program = ProgramFactory(
             page_title="Preums",
             fill_cover=True,
-            fill_description=True,
+            fill_excerpt=True,
+            fill_body=True,
             fill_courses=courses,
         )
         page = program.extended_object
@@ -75,7 +76,8 @@ class ProgramCMSTestCase(CMSTestCase):
         program = ProgramFactory(
             page_title="Preums",
             fill_cover=True,
-            fill_description=True,
+            fill_excerpt=True,
+            fill_body=True,
             fill_courses=courses,
         )
         page = program.extended_object

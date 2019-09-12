@@ -247,10 +247,14 @@ CMS_PLACEHOLDER_CONF = {
         "plugins": ["SimplePicturePlugin"],
         "limits": {"SimplePicturePlugin": 1},
     },
-    "courses/cms/program_detail.html program_description": {
-        "name": _("Description"),
+    "courses/cms/program_detail.html program_excerpt": {
+        "name": _("Excerpt"),
         "plugins": ["PlainTextPlugin"],
         "limits": {"PlainTextPlugin": 1},
+    },
+    "courses/cms/program_detail.html program_body": {
+        "name": _("Body"),
+        "excluded_plugins": ["CKEditorPlugin", "GoogleMapPlugin"],
     },
     "courses/cms/program_detail.html program_courses": {
         "name": _("Courses"),

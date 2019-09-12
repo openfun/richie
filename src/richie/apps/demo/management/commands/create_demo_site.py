@@ -251,16 +251,17 @@ def create_demo_site():
     # Create programs under the `Programs` page
     programs = []
     for _ in range(NB_OBJECTS["programs"]):
-        post = ProgramFactory.create(
+        program = ProgramFactory.create(
             page_in_navigation=True,
             page_languages=["en", "fr"],
             page_parent=pages_created["programs"],
             fill_cover=pick_image("cover"),
-            fill_description=True,
+            fill_excerpt=True,
+            fill_body=True,
             fill_courses=[*random.sample(courses, NB_OBJECTS["programs_courses"])],
             should_publish=True,
         )
-        programs.append(post)
+        programs.append(program)
 
     # Once everything has been created, use some content to create a homepage
     placeholder = pages_created["home"].placeholders.get(slot="maincontent")

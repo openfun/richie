@@ -858,6 +858,21 @@ class ProgramFactory(PageExtensionDjangoModelFactory):
 
     @factory.post_generation
     # pylint: disable=unused-argument
+    def fill_body(self, create, extracted, **kwargs):
+        """
+        Add a text plugin for body with a long random text
+        """
+        if create and extracted:
+            create_text_plugin(
+                self.extended_object,
+                "program_body",
+                nb_paragraphs=random.randint(4, 6),  # nosec
+                languages=self.extended_object.get_languages(),
+                plugin_type="TextPlugin",
+            )
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
     def fill_courses(self, create, extracted, **kwargs):
         """
         Add plugins for this program to each course in the given list of course
@@ -907,14 +922,12 @@ class ProgramFactory(PageExtensionDjangoModelFactory):
 
     @factory.post_generation
     # pylint: disable=unused-argument
-    def fill_description(self, create, extracted, **kwargs):
+    def fill_excerpt(self, create, extracted, **kwargs):
         """
-        Add a plain text plugin for description with a short random text
+        Add a plain text plugin for excerpt with a short random text
         """
         if create and extracted:
-            placeholder = self.extended_object.placeholders.get(
-                slot="program_description"
-            )
+            placeholder = self.extended_object.placeholders.get(slot="program_excerpt")
 
             for language in self.extended_object.get_languages():
                 text = factory.Faker(

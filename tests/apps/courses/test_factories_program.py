@@ -13,6 +13,24 @@ class ProgramFactoryTestCase(TestCase):
     Unit test suite to validate the behavior of the Program factory
     """
 
+    def test_factories_program_body(self):
+        """
+        ProgramFactory should be able to generate plugins with a realistic body for
+        several languages.
+        """
+        program = ProgramFactory(page_languages=["fr", "en"], fill_body=True)
+
+        # Check that the body plugins were created as expected
+        body = program.extended_object.placeholders.get(slot="program_body")
+        self.assertEqual(body.cmsplugin_set.count(), 2)
+
+        # The body plugins should contain paragraphs
+        for language in ["fr", "en"]:
+            description_plugin = body.cmsplugin_set.get(
+                plugin_type="TextPlugin", language=language
+            )
+            self.assertIn("<p>", description_plugin.djangocms_text_ckeditor_text.body)
+
     def test_factories_program_cover(self):
         """
         ProgramFactory should be able to generate plugins with a realistic cover for several
@@ -36,22 +54,20 @@ class ProgramFactoryTestCase(TestCase):
                 ),
             )
 
-    def test_factories_program_description(self):
+    def test_factories_program_excerpt(self):
         """
-        ProgramFactory should be able to generate plugins with a realistic description for
+        ProgramFactory should be able to generate plugins with a realistic excerpt for
         several languages.
         """
-        program = ProgramFactory(page_languages=["fr", "en"], fill_description=True)
+        program = ProgramFactory(page_languages=["fr", "en"], fill_excerpt=True)
 
-        # Check that the description plugins were created as expected
-        description = program.extended_object.placeholders.get(
-            slot="program_description"
-        )
-        self.assertEqual(description.cmsplugin_set.count(), 2)
+        # Check that the excerpt plugins were created as expected
+        excerpt = program.extended_object.placeholders.get(slot="program_excerpt")
+        self.assertEqual(excerpt.cmsplugin_set.count(), 2)
 
-        # The description plugins should contain paragraphs
+        # The excerpt plugins should contain paragraphs
         for language in ["fr", "en"]:
-            description_plugin = description.cmsplugin_set.get(
+            excerpt_plugin = excerpt.cmsplugin_set.get(
                 plugin_type="PlainTextPlugin", language=language
             )
-            self.assertTrue(len(description_plugin.plain_text_plaintext.body) > 0)
+            self.assertTrue(len(excerpt_plugin.plain_text_plaintext.body) > 0)

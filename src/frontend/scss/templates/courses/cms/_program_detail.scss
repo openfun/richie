@@ -32,11 +32,16 @@ $richie-program-detail-title-textalign: center !default;
     );
   }
 
-  &__description {
+  &__excerpt {
     margin-bottom: 2rem;
     padding-left: $grid-gutter-width;
     padding-right: $grid-gutter-width;
     font-size: 1.4rem;
+  }
+
+  &__body {
+    padding-left: $grid-gutter-width;
+    padding-right: $grid-gutter-width;
   }
 
   &__courses {

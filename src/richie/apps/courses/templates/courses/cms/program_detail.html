@@ -25,10 +25,18 @@
   </div>
   {% endif %}
 
-  <div class="program-detail__description">
-    {% placeholder "program_description" or %}
-      <p class="program-detail__description__empty">
-        {% trans "No description content" %}
+  <div class="program-detail__excerpt">
+    {% placeholder "program_excerpt" or %}
+      <p class="program-detail__excerpt__empty">
+        {% trans "No excerpt content" %}
+      </p>
+    {% endplaceholder %}
+  </div>
+
+  <div class="program-detail__body">
+    {% placeholder "program_body" or %}
+      <p class="program-detail__body__empty">
+        {% trans "No body content" %}
       </p>
     {% endplaceholder %}
   </div>

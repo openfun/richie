@@ -95,7 +95,6 @@ class ProgramPluginTestCase(CMSTestCase):
         # Check the page content in English
         response = self.client.get(url)
         # The program's name should be present as a link to the cms page
-        # And CMS page title should be in title attribute of the link
         self.assertContains(
             response,
             '<a href="/en/public-title/" class="program-glimpse program-glimpse--link',
