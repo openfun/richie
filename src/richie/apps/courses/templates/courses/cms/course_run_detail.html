@@ -10,6 +10,13 @@
 {# Make sure the course run pages are not indexed by search engines #}
 {% block meta_index_rules %}<meta name="robots" content="noindex">{% endblock meta_index_rules %}
 
+{% block meta_opengraph_contextuals %}
+    {% page_attribute "page_title" as course_run_title %}
+    {% page_attribute "page_title" current_page.parent_page as course_title %}
+    <meta property="og:title" content="{{ course_run_title|capfirst }} - {{ course_title|capfirst|truncatechars:53 }}">
+    <meta property="og:url" content="{{ SITE.web_url }}{{ current_page.get_absolute_url }}">
+{% endblock meta_opengraph_contextuals %}
+
 {% block content %}{% spaceless %}
 <div class="course-detail">
 
