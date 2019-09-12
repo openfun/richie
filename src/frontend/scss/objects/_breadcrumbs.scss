@@ -1,0 +1,30 @@
+$richie-breadcrumbs-separator: '›';
+
+.breadcrumbs {
+  @include make-container();
+  @include make-container-max-widths();
+  display: flex;
+  margin: 0 auto;
+  padding: 1rem;
+  flex-wrap: wrap;
+  font-size: 0.8rem;
+  list-style-type: none;
+  background: $richie-content-container-bg;
+
+  &__item {
+    @include sv-flex(0, 0, auto);
+    font-size: inherit;
+
+    & + & {
+      position: relative;
+      padding-left: 0.8rem;
+
+      &::before {
+        content: $richie-breadcrumbs-separator;
+        position: absolute;
+        top: 0;
+        left: 0.2rem;
+      }
+    }
+  }
+}

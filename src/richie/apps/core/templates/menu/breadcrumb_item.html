@@ -1,0 +1,9 @@
+{% for ancestor in ancestors %}
+<li class="breadcrumbs__item">
+    {% if not forloop.last %}
+    <a href="{{ ancestor.get_absolute_url }}">{{ ancestor.get_menu_title }}</a>
+    {% else %}
+    <span class="active">{{ ancestor.get_menu_title }}</span>
+    {% endif %}
+</li>
+{% endfor %}
