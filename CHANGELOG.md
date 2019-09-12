@@ -14,6 +14,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add a new page type for programs as a collection of courses.
 - New dependency "dj-pagination" to enable pagination on blogpost list
   and person list.
+- Add basic SEO tags with some more relevant ones in page details.
 
 ### Changed
 

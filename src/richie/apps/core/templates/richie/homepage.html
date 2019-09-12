@@ -3,6 +3,12 @@
 
 {% block breadcrumbs %}{% endblock breadcrumbs %}
 
+{% block meta_opengraph_contextuals %}
+    {% page_attribute "page_title" as page_title %}
+    <meta property="og:title" content="{{ page_title|truncatechars:65 }}">
+    <meta property="og:url" content="{{ SITE.web_url }}">
+{% endblock meta_opengraph_contextuals %}
+
 {% block title %}
     {% page_attribute "page_title" %}
 {% endblock title %}

@@ -12,16 +12,10 @@
     {% endif %}
 {% endblock meta_index_rules %}
 
-{% block meta_opengraph %}
-    <meta property="og:title" content="{{ request.current_page.get_title|truncatechars:65 }}">
-    <meta property="og:url" content="{{ SITE.web_url }}{{ request.current_page.get_absolute_url }}">
-    <meta property="og:locale" content="{{ LANGUAGE_CODE }}">
-    <meta property="og:site_name" content="{{ SITE.name }}">
-    {% comment %}<meta property="og:type" content="Unknow">{% endcomment %}
-    {% comment %}<meta property="og:image" content="Should be filled from cover url">{% endcomment %}
-    {% comment %}<meta property="og:video" content="Should be filled from teaser url">{% endcomment %}
-    {% comment %}<meta property="og:description" content="Should be filled from about, limited to 300char and HTML stripped">{% endcomment %}
-{% endblock meta_opengraph %}
+{% block meta_opengraph_contextuals %}
+    <meta property="og:title" content="{{ current_page.get_title|truncatechars:65 }}">
+    <meta property="og:url" content="{{ SITE.web_url }}{{ current_page.get_absolute_url }}">
+{% endblock meta_opengraph_contextuals %}
 
 {% block content %}{% spaceless %}
 <div class="course-detail">
