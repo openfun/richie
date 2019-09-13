@@ -1,0 +1,60 @@
+// Pagination object
+//
+$richie-pagination-maxwidth-constraint: true !default;
+$richie-pagination-margin: 0 auto !default;
+$richie-pagination-padding: 1rem 0.5rem !default;
+
+.pagination {
+  @if $richie-pagination-maxwidth-constraint {
+    @include make-container-max-widths();
+  }
+  @include sv-flex(1, 0, 100%);
+  display: flex;
+  margin: $richie-pagination-margin;
+  padding: $richie-pagination-padding;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  .pagination__previous {
+    @include sv-flex(1, 0, 50%);
+    order: 1;
+    text-align: left;
+
+    @include media-breakpoint-up(lg) {
+      @include sv-flex(0, 0, 10%, $max: false);
+      max-width: none;
+      order: 1;
+    }
+  }
+  .pagination__next {
+    @include sv-flex(1, 0, 50%);
+    order: 2;
+    text-align: right;
+
+    @include media-breakpoint-up(lg) {
+      @include sv-flex(0, 0, 10%, $max: false);
+      max-width: none;
+      order: 3;
+    }
+  }
+
+  .pagination__pages {
+    @include sv-flex(1, 0, 100%);
+    order: 3;
+    text-align: center;
+
+    @include media-breakpoint-up(lg) {
+      @include sv-flex(1, 0, auto);
+      order: 2;
+    }
+
+    &__item {
+      $self: &;
+      display: inline-block;
+
+      & + .pagination__pages__item {
+        margin-left: 0.5rem;
+      }
+    }
+  }
+}
