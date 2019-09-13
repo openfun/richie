@@ -1,5 +1,5 @@
 {% extends "richie/fullwidth.html" %}
-{% load cms_tags i18n %}
+{% load cms_tags i18n pagination_tags %}
 
 {% block breadcrumbs %}{% endblock breadcrumbs %}
 
@@ -7,7 +7,8 @@
 <div class="person-glimpse-list">
   <h1 class="person-glimpse-list__title">{{ current_page.get_title }}</h1>
 
-  {% for page in current_page.get_child_pages %}
+  {% autopaginate current_page.get_child_pages 25 as object_list %}
+  {% for page in object_list %}
     {% if page.person %}
       {% include "courses/cms/fragment_person_glimpse.html" with person=page.person %}
     {% endif %}
@@ -16,5 +17,9 @@
       {% trans "No persons" %}
     </p>
   {% endfor %}
+
+  {% if object_list %}
+    {% paginate using "richie/pagination.html" %}
+  {% endif %}
 </div>
 {% endblock content %}
