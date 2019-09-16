@@ -161,7 +161,7 @@ jobs:
   # translation management tool
   upload-i18n-strings:
     docker:
-      - image: fundocker/crowdin:2.0.27
+      - image: fundocker/crowdin:2.0.31
     working_directory: ~/fun
     steps:
       - checkout

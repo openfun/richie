@@ -12,6 +12,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Add breadcrumbs element on all pages but the listing ones.
 
+### Changed
+
+- Upgrade crowdin image used in circle-ci to version 2.0.31 including
+  tar command.
+
 ### Fixed
 
 - Translate login/signup on header.
