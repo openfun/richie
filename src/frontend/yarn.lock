@@ -775,7 +775,14 @@
     exec-sh "^0.3.2"
     minimist "^1.2.0"
 
-"@formatjs/intl-relativetimeformat@3.1.0", "@formatjs/intl-relativetimeformat@^3.0.2":
+"@formatjs/intl-relativetimeformat@4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@formatjs/intl-relativetimeformat/-/intl-relativetimeformat-4.0.0.tgz#019f36491411359f981cfc1ace34931deec0a7e5"
+  integrity sha512-3HF/f8e7uWVU6Qn/EUhC6o8L9yqpFWFLuGPPOB8D8kIlrZhB7ybhapLjAwYtchnr2dVb6JZoeSjI90/qCWpMDg==
+  dependencies:
+    "@formatjs/intl-utils" "^1.1.1"
+
+"@formatjs/intl-relativetimeformat@^3.0.2":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@formatjs/intl-relativetimeformat/-/intl-relativetimeformat-3.1.0.tgz#a657d67e8e26a5985d72a80699be874c9bc470d3"
   integrity sha512-xSW9RMJtZZTGAlT7qCom+0INLYgshowpBN0Xf+j4kME+U/g/ogTVRFeGvCZX3nDQ21vdTHAabR3AIGQRX7NU1g==
@@ -793,6 +800,11 @@
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@formatjs/intl-utils/-/intl-utils-1.1.0.tgz#9e13ad748e56ca935863235fd911e8e933886616"
   integrity sha512-x8zpQKbvdsziv+TGM+hvioXpFon7g/29xsMa3f0pWo07+wLdixUjTXxbTAp5Fg+6yUbH2QnIv7rt7ZtIlfPByA==
+
+"@formatjs/intl-utils@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@formatjs/intl-utils/-/intl-utils-1.1.1.tgz#53dcae233b53c505e4abe68f7ed6abb506c6d6a5"
+  integrity sha512-80pdaKuGILzALSRNtVwwAcxkrh31cYWzPH/QBfUS/FLilIxr4NtCf8t5h2clFhxk+pLbtgqAY5WrT0X14A5Dsg==
 
 "@jest/console@^24.7.1", "@jest/console@^24.9.0":
   version "24.9.0"
@@ -1624,10 +1636,10 @@ babel-plugin-jest-hoist@^24.9.0:
   dependencies:
     "@types/babel__traverse" "^7.0.6"
 
-babel-plugin-react-intl@4.1.17:
-  version "4.1.17"
-  resolved "https://registry.yarnpkg.com/babel-plugin-react-intl/-/babel-plugin-react-intl-4.1.17.tgz#1b34c05b5b9ccf3fd7eb4e4ea84040761bca9b6f"
-  integrity sha512-haE92gsgtIopuwBhjRE0Es38Cc95mFubTmbA0HdH3V5a1VTPiq5lhNAMhFBpE/LY3tuD092CkhT0PUW8wcMdQQ==
+babel-plugin-react-intl@4.1.18:
+  version "4.1.18"
+  resolved "https://registry.yarnpkg.com/babel-plugin-react-intl/-/babel-plugin-react-intl-4.1.18.tgz#44552a540139a5a3eb1f0a417272fddf6fa1e36d"
+  integrity sha512-Vg83Y8zv8DWyOsO6bmLNs94ulZzxsJ5uWKvSEc6EvrBihcnUpVRSYSiWEra0kAGxZjIYXO0a7G3/JmimQapguw==
   dependencies:
     "@babel/core" "^7.4.5"
     "@babel/helper-plugin-utils" "^7.0.0"
