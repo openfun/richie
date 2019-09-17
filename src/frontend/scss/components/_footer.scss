@@ -34,23 +34,48 @@ $richie-footer-poweredby-link-fontcolor: $white !default;
   color: $richie-footer-fontcolor;
   background: $richie-footer-background;
 
+  &__submenu {
+    @include sv-flex(1, 0, 100%);
+
+    &__list {
+      margin: 0;
+      padding: $richie-footer-menu-link-padding;
+      padding-top: 0;
+      list-style-type: none;
+
+      &__item {
+        &__link {
+          display: block;
+          font-weight: normal;
+          color: $richie-footer-menu-link-fontcolor;
+
+          &:hover {
+            color: $richie-footer-menu-link-fontcolor-hover;
+            text-decoration: none;
+          }
+        }
+      }
+    }
+  }
+
   &__menu {
     @include sv-flex(1, 0, 100%);
     display: flex;
     border-bottom: $richie-footer-menu-border;
 
     &__list {
+      display: flex;
       width: 100%;
       max-width: map-get($container-max-widths, 'xl');
       margin: 0 auto;
-      display: flex;
       flex-direction: row;
       flex-wrap: wrap;
       justify-content: center;
+      list-style-type: none;
 
       &__item {
         @include sv-flex(1, 0, 100%);
-        display: flex;
+        display: block;
         margin: $richie-footer-menu-item-margin;
         padding: $richie-footer-menu-item-padding;
         color: inherit;
@@ -59,10 +84,13 @@ $richie-footer-poweredby-link-fontcolor: $white !default;
           @include sv-flex(0, 0, auto);
           margin: $richie-footer-menu-item-margin-lg;
           padding: $richie-footer-menu-item-padding-lg;
+
+          & + & {
+            margin-left: 1rem;
+          }
         }
 
         &__link {
-          @include sv-flex(1, 0, 100%);
           display: block;
           padding: $richie-footer-menu-link-padding;
           font-weight: $richie-footer-menu-link-fontweight;
