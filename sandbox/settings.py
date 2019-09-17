@@ -258,6 +258,8 @@ class Base(DRFMixin, RichieCoursesConfigurationMixin, Configuration):
 
     # - Django Pagination
     PAGINATION_INVALID_PAGE_RAISES_404 = True
+    PAGINATION_DEFAULT_WINDOW = 2
+    PAGINATION_DEFAULT_MARGIN = 1
 
     # Logging
     LOGGING = {

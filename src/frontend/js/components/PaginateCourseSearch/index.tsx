@@ -91,28 +91,28 @@ export const PaginateCourseSearch = ({
     .filter((page, index, list) => page !== list[index - 1]);
 
   return (
-    <div className="paginate-course-search">
+    <div className="pagination">
       <div id={`pagination-label-${componentId}`} className="offscreen">
         <FormattedMessage {...messages.pagination} />
       </div>
       <ul
         role="navigation"
         aria-labelledby={`pagination-label-${componentId}`}
-        className="paginate-course-search__list"
+        className="pagination__list"
       >
         {pageList.map((page, index) => (
           <React.Fragment key={page}>
             {/* Prepend a cell with "..." when the page number we're rendering does not follow the previous one */}
             {page > (pageList[index - 1] || 0) + 1 && (
-              <li className="paginate-course-search__list__item paginate-course-search__list__item--placeholder">
+              <li className="pagination__list__item pagination__list__item--placeholder">
                 ...
               </li>
             )}
 
             {page === currentPage ? (
               /* The current page needs different markup as it does not include a link */
-              <li className="paginate-course-search__list__item paginate-course-search__list__item--current">
-                <span className="paginate-course-search__list__item__page-number">
+              <li className="pagination__list__item pagination__list__item--current">
+                <span className="pagination__list__item__page-number">
                   {/*  Help assistive technology users with some context */}
                   <span className="offscreen">
                     {page === maxPage ? (
@@ -138,9 +138,9 @@ export const PaginateCourseSearch = ({
                 </span>
               </li>
             ) : (
-              <li className="paginate-course-search__list__item">
+              <li className="pagination__list__item">
                 <a
-                  className="paginate-course-search__list__item__page-number"
+                  className="pagination__list__item__page-number"
                   onClick={() =>
                     dispatchCourseSearchParamsUpdate({
                       // Pages are 1-indexed, we need to 0-index them to calculate the correct offset
