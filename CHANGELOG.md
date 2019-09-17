@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Allow second level children in footer menu.
+
 ### Changed
 
 - Use SVG icons instead of an icon font.

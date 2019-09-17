@@ -1,4 +1,4 @@
-{% load cms_tags %}{% spaceless %}
+{% load menu_tags %}{% spaceless %}
 
 {% for child in children %}
     {% with children_slug=child.get_menu_title|slugify %}
@@ -8,12 +8,24 @@
             {% if child.sibling %} body-footer__menu__list__item--sibling{% endif %}
             {% if child.descendant %} body-footer__menu__list__item--descendant{% endif %}">
             <a class="body-footer__menu__list__item__link" href="{{ child.attr.redirect_url|default:child.get_absolute_url }}">{{ child.get_menu_title }}</a>
-            {% comment %}Dropdown menu are not yet implemented since there is no need about it for now{% endcomment %}
-            {% comment %}{% if child.children %}
-            <ul>
-                {% show_menu from_level to_level extra_inactive extra_active template "" "" child %}
-            </ul>
-            {% endif %}{% endcomment %}
+
+            {% with grand_children=child.children %}
+                {% if grand_children %}
+                <div class="body-footer__submenu">
+                    <ul class="body-footer__submenu__list">
+                        {% for grand_child in grand_children %}
+                            <li class="body-footer__submenu__list__item
+                                {% if grand_child.selected %} body-footer__submenu__list__item--selected{% endif %}
+                                {% if grand_child.ancestor %} body-footer__submenu__list__item--ancestor{% endif %}
+                                {% if grand_child.sibling %} body-footer__submenu__list__item--sibling{% endif %}
+                                {% if grand_child.descendant %} body-footer__submenu__list__item--descendant{% endif %}">
+                                <a class="body-footer__submenu__list__item__link" href="{{ grand_child.attr.redirect_url|default:grand_child.get_absolute_url }}">{{ grand_child.get_menu_title }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+            {% endwith %}
         </li>
     {% endwith %}
 {% endfor %}
