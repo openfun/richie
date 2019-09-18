@@ -8,8 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.9.0] - 2019-09-18
+
 ### Added
 
+- Add a React-powered course search field that can live anywhere in Richie.
 - Add breadcrumbs element on all pages but the listing ones.
 - Add a new page type for programs as a collection of courses.
 - New dependency "dj-pagination" to enable pagination on blogpost list
@@ -18,6 +21,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Refactor course search field to make it reusable.
 - Upgrade crowdin image used in circle-ci to version 2.0.31 including
   tar command.
 
@@ -535,7 +539,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v1.8.3...master
+[unreleased]: https://github.com/openfun/richie/compare/v1.9.0...master
+[1.9.0]: https://github.com/openfun/richie/compare/v1.8.3...v1.9.0
 [1.8.3]: https://github.com/openfun/richie/compare/v1.8.2...v1.8.3
 [1.8.2]: https://github.com/openfun/richie/compare/v1.8.1...v1.8.2
 [1.8.1]: https://github.com/openfun/richie/compare/v1.8.0...v1.8.1
