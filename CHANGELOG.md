@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Add breadcrumbs element on all pages but the listing ones.
+- Add a new page type for programs as a collection of courses.
 
 ### Changed
 

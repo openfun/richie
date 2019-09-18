@@ -835,3 +835,109 @@ class PersonFactory(PageExtensionDjangoModelFactory):
                         plugin_type="OrganizationPlugin",
                         **{"page": organization.extended_object},
                     )
+
+
+class ProgramFactory(PageExtensionDjangoModelFactory):
+    """
+    A factory to automatically generate random yet meaningful program extensions
+    in our tests.
+    """
+
+    class Meta:
+        model = models.Program
+        exclude = [
+            "page_in_navigation",
+            "page_languages",
+            "page_parent",
+            "page_template",
+            "page_title",
+        ]
+
+    # fields concerning the related page
+    page_template = models.Program.PAGE["template"]
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def fill_body(self, create, extracted, **kwargs):
+        """
+        Add a text plugin for body with a long random text
+        """
+        if create and extracted:
+            create_text_plugin(
+                self.extended_object,
+                "program_body",
+                nb_paragraphs=random.randint(4, 6),  # nosec
+                languages=self.extended_object.get_languages(),
+                plugin_type="TextPlugin",
+            )
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def fill_courses(self, create, extracted, **kwargs):
+        """
+        Add plugins for this program to each course in the given list of course
+        instances.
+        """
+        if create and extracted:
+            for course in extracted:
+                placeholder = self.extended_object.placeholders.get(
+                    slot="program_courses"
+                )
+                for language in self.extended_object.get_languages():
+
+                    add_plugin(
+                        language=language,
+                        placeholder=placeholder,
+                        plugin_type="CoursePlugin",
+                        **{"page": course.extended_object},
+                    )
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def fill_cover(self, create, extracted, **kwargs):
+        """
+        Add a picture plugin for program cover with a random image
+        """
+        if create and extracted:
+            cover_placeholder = self.extended_object.placeholders.get(
+                slot="program_cover"
+            )
+
+            if isinstance(extracted, str):
+                cover = image_getter(extracted)
+            elif callable(extracted):
+                cover = image_getter(extracted())
+            elif isinstance(extracted, dict):
+                cover = FilerImageFactory(**extracted)
+            else:
+                cover = FilerImageFactory(original_filename="cover.jpg")
+
+            for language in self.extended_object.get_languages():
+                add_plugin(
+                    language=language,
+                    placeholder=cover_placeholder,
+                    plugin_type="SimplePicturePlugin",
+                    picture=cover,
+                )
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def fill_excerpt(self, create, extracted, **kwargs):
+        """
+        Add a plain text plugin for excerpt with a short random text
+        """
+        if create and extracted:
+            placeholder = self.extended_object.placeholders.get(slot="program_excerpt")
+
+            for language in self.extended_object.get_languages():
+                text = factory.Faker(
+                    "text",
+                    max_nb_chars=random.randint(50, 100),  # nosec
+                    locale=language,
+                ).generate({})
+                add_plugin(
+                    language=language,
+                    placeholder=placeholder,
+                    plugin_type="PlainTextPlugin",
+                    body=text,
+                )

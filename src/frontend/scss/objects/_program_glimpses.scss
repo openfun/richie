@@ -1,0 +1,254 @@
+// Program glimpses
+//
+// A flex grid of program entries
+
+// Available object settings
+$richie-program-glimpse-list-maxwidth-constraint: true !default;
+$richie-program-glimpse-list-margin: 0 auto !default;
+$richie-program-glimpse-list-padding: 1rem 0 !default;
+$richie-program-glimpse-list-title-margin: null !default;
+$richie-program-glimpse-list-title-padding: 0.5rem !default;
+$richie-program-glimpse-list-title-textalign: left !default;
+
+$richie-program-glimpse-container-width-sm: null !default;
+$richie-program-glimpse-container-width-md: 50% !default;
+$richie-program-glimpse-container-width-lg: 33.3333% !default;
+$richie-program-glimpse-container-width-xl: 25% !default;
+$richie-program-glimpse-container-gutter: 0.5rem !default;
+$richie-program-glimpse-container-background: $white !default;
+$richie-program-glimpse-container-border: 1px solid $gray80 !default;
+$richie-program-glimpse-container-border-hover: 1px solid $firebrick6 !default;
+$richie-program-glimpse-container-border-radius: 0.25rem !default;
+
+$richie-program-glimpse-media-width: null !default;
+$richie-program-glimpse-media-margin: 0 !default;
+
+$richie-program-glimpse-caption-width: 60% !default;
+$richie-program-glimpse-caption-margin: 0 !default;
+$richie-program-glimpse-caption-padding: 0.6rem 0.5rem !default;
+$richie-program-glimpse-caption-fontsize: 0.9rem !default;
+$richie-program-glimpse-caption-fontweight: bold !default;
+$richie-program-glimpse-caption-lineheight: 1.1 !default;
+$richie-program-glimpse-caption-textalign: center !default;
+$richie-program-glimpse-caption-texttransform: uppercase !default;
+$richie-program-glimpse-caption-background: $gray80 !default;
+
+$richie-program-glimpse-content-fontsize: 0.9rem !default;
+$richie-program-glimpse-content-fontcolor: $gray40 !default;
+$richie-program-glimpse-content-textalign: center !default;
+
+$richie-program-glimpse-title-margin: 0 0 0.1rem !default;
+$richie-program-glimpse-title-fontsize: 0.9rem !default;
+$richie-program-glimpse-title-fontweight: bold !default;
+$richie-program-glimpse-title-fontcolor: $dodgerblue3 !default;
+
+$richie-program-glimpse-wrapper-padding: 0.6rem 0.2rem !default;
+
+$richie-program-glimpse-foot-divider: null !default;
+
+$richie-program-glimpse-foot-border: 1px solid $gray80 !default;
+
+$richie-program-glimpse-foot-date-width: 55% !default;
+$richie-program-glimpse-foot-date-padding: 0.3rem 0.5rem !default;
+$richie-program-glimpse-foot-date-fontsize: 0.9rem !default;
+$richie-program-glimpse-foot-date-fontcolor: $gray40 !default;
+$richie-program-glimpse-foot-date-textalign: center !default;
+$richie-program-glimpse-foot-date-background: null !default;
+
+$richie-program-glimpse-foot-cta-width: 45% !default;
+$richie-program-glimpse-foot-cta-padding: 0.3rem 0.5rem !default;
+$richie-program-glimpse-foot-cta-fontsize: 0.9rem !default;
+$richie-program-glimpse-foot-cta-fontweight: bold !default;
+$richie-program-glimpse-foot-cta-fontcolor: $white !default;
+$richie-program-glimpse-foot-cta-textalign: center !default;
+$richie-program-glimpse-foot-cta-background: $dodgerblue5 !default;
+$richie-program-glimpse-foot-cta-background-hover: $firebrick6 !default;
+
+.program-glimpse-list {
+  @if $richie-program-glimpse-list-maxwidth-constraint {
+    @include make-container-max-widths();
+  }
+  display: flex;
+  margin: $richie-program-glimpse-list-margin;
+  padding: $richie-program-glimpse-list-padding;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  &__title {
+    @include sv-flex(1, 0, 100%);
+    margin: $richie-program-glimpse-list-title-margin;
+    padding: $richie-program-glimpse-list-title-padding;
+    text-align: $richie-program-glimpse-list-title-textalign;
+  }
+}
+
+.program-glimpse {
+  $glimpse-item-selector: &;
+  // Cell base width for lowest breakpoint
+  @include sv-flex(
+    1,
+    0,
+    calc(100% - #{$richie-program-glimpse-container-gutter * 2})
+  );
+
+  // Apply card styles for elements
+  @include m-o-card(
+    $border: $richie-program-glimpse-container-border,
+    $background: $richie-program-glimpse-container-background,
+    $media-width: $richie-program-glimpse-media-width,
+    $media-margin: $richie-program-glimpse-media-margin,
+    $caption-width: $richie-program-glimpse-caption-width,
+    $caption-margin: $richie-program-glimpse-caption-margin,
+    $caption-padding: $richie-program-glimpse-caption-padding,
+    $caption-fontsize: $richie-program-glimpse-caption-fontsize,
+    $caption-background: $richie-program-glimpse-caption-background,
+    $wrapper-padding: $richie-program-glimpse-wrapper-padding,
+    $foot-divider: $richie-program-glimpse-foot-divider,
+    $methodology: 'bem'
+  );
+
+  // Apply gutter
+  margin: $richie-program-glimpse-container-gutter;
+
+  &__content {
+    font-size: $richie-program-glimpse-content-fontsize;
+    color: $richie-program-glimpse-content-fontcolor;
+    text-align: $richie-program-glimpse-content-textalign;
+
+    &__title {
+      margin: $richie-program-glimpse-title-margin;
+      font-size: $richie-program-glimpse-title-fontsize;
+      font-weight: $richie-program-glimpse-title-fontweight;
+      color: $richie-program-glimpse-title-fontcolor;
+    }
+  }
+
+  &__media {
+    &__caption {
+      text-transform: $richie-program-glimpse-caption-texttransform;
+      font-weight: $richie-program-glimpse-caption-fontweight;
+      line-height: $richie-program-glimpse-caption-lineheight;
+      text-align: $richie-program-glimpse-caption-textalign;
+    }
+
+    @include m-o-media_empty(
+      $width: 100%,
+      $height: 14vh,
+      $background: $gray97,
+      $absolute: false
+    );
+  }
+
+  // A little specific makeup onto footer elements
+  &__footer {
+    display: flex;
+    border-top: $richie-program-glimpse-foot-border;
+
+    &__date {
+      @include sv-flex-cell-width(auto);
+      display: flex;
+      margin: 0;
+      padding: $richie-program-glimpse-foot-date-padding;
+      font-size: $richie-program-glimpse-foot-date-fontsize;
+      color: $richie-program-glimpse-foot-date-fontcolor;
+      justify-content: center;
+      text-align: $richie-program-glimpse-foot-date-textalign;
+      background: $richie-program-glimpse-foot-date-background;
+    }
+
+    &__cta {
+      @include sv-flex-cell-width($richie-program-glimpse-foot-cta-width);
+      display: flex;
+
+      .button {
+        @include sv-flex-cell-width(100%);
+        margin: 0;
+        padding: $richie-program-glimpse-foot-cta-padding;
+        font-size: $richie-program-glimpse-foot-cta-fontsize;
+        font-weight: $richie-program-glimpse-foot-cta-fontweight;
+        color: $richie-program-glimpse-foot-cta-fontcolor;
+        background: $richie-program-glimpse-foot-cta-background;
+        border: 0;
+        cursor: pointer;
+      }
+    }
+  }
+
+  &:hover,
+  &:focus {
+    border: $richie-program-glimpse-container-border-hover;
+
+    #{$glimpse-item-selector}__foot__cta .button {
+      background: $richie-program-glimpse-foot-cta-background-hover;
+    }
+  }
+
+  // Responsive adjustments
+  @if $richie-program-glimpse-container-width-sm {
+    @include media-breakpoint-up(md) {
+      @include sv-flex(
+        1,
+        0,
+        calc(
+          #{$richie-program-glimpse-container-width-sm} - #{$richie-program-glimpse-container-gutter *
+            2}
+        )
+      );
+    }
+  }
+  @if $richie-program-glimpse-container-width-md {
+    @include media-breakpoint-up(md) {
+      @include sv-flex(
+        1,
+        0,
+        calc(
+          #{$richie-program-glimpse-container-width-md} - #{$richie-program-glimpse-container-gutter *
+            2}
+        )
+      );
+    }
+  }
+  @if $richie-program-glimpse-container-width-lg {
+    @include media-breakpoint-up(lg) {
+      @include sv-flex(
+        1,
+        0,
+        calc(
+          #{$richie-program-glimpse-container-width-lg} - #{$richie-program-glimpse-container-gutter *
+            2}
+        )
+      );
+    }
+  }
+  @if $richie-program-glimpse-container-width-xl {
+    @include media-breakpoint-up(xl) {
+      @include sv-flex(
+        1,
+        0,
+        calc(
+          #{$richie-program-glimpse-container-width-xl} - #{$richie-program-glimpse-container-gutter *
+            2}
+        )
+      );
+    }
+  }
+
+  // Special row when there is no entry
+  &--empty {
+    @include sv-flex(
+      1,
+      0,
+      calc(100% - #{$richie-program-glimpse-container-gutter * 2})
+    );
+    padding: 1rem;
+    font-style: italic;
+    color: $gray40;
+    text-align: center;
+    cursor: default;
+
+    &:hover,
+    &:focus {
+      border: $richie-program-glimpse-container-border;
+    }
+  }
+}

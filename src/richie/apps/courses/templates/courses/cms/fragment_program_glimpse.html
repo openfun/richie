@@ -1,0 +1,35 @@
+{% load i18n cms_tags extra_tags thumbnail %}
+{% comment %}Obviously, the context template variable "program" is required and must be a Program page extension{% endcomment %}
+{% with program_page=program.extended_object %}
+<a href="{{ program.extended_object.get_absolute_url }}" class="program-glimpse program-glimpse--link {% if program.extended_object.publisher_is_draft %}program-glimpse--draft{% endif %}" >
+  <div class="program-glimpse__media">
+    {% get_placeholder_plugins "program_cover" program_page as plugins or %}
+      <div class="program-glimpse__media__empty">{% trans 'Cover' %}</div>
+    {% endget_placeholder_plugins %}
+    {% blockplugin plugins.0 %}
+    <img src="{% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %}"
+      srcset="
+        {% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %} 300w,
+        {% if instance.picture.width >= 600 %}{% thumbnail instance.picture 600x340 crop upscale subject_location=instance.picture.subject_location %} 600w,{% endif %}
+        {% if instance.picture.width >= 900 %}{% thumbnail instance.picture 900x510 crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}
+      "
+      sizes="300px"
+      alt=""
+    />
+    {% endblockplugin %}
+  </div>
+  <div class="program-glimpse__content">
+      <div class="program-glimpse__content__wrapper">
+          <p class="program-glimpse__content__title">{{ program_page.get_title }}</p>
+          <p>
+              {% show_placeholder "program_excerpt" program_page %}
+          </p>
+      </div>
+      <div class="program-glimpse__footer">
+          <p class="program-glimpse__footer__date">
+              {{ program_page.creation_date|date:"DATE_FORMAT" }}
+          </p>
+      </div>
+  </div>
+</a>
+{% endwith %}

@@ -39,6 +39,8 @@ CMS_TEMPLATES = (
     ("courses/cms/blogpost_detail.html", _("Blog post page")),
     ("courses/cms/person_detail.html", _("Person page")),
     ("courses/cms/person_list.html", _("Person list")),
+    ("courses/cms/program_detail.html", _("Program page")),
+    ("courses/cms/program_list.html", _("Program list")),
     ("search/search.html", _("Search")),
     ("richie/child_pages_list.html", _("List of child pages")),
     ("richie/homepage.html", _("Homepage")),
@@ -238,6 +240,25 @@ CMS_PLACEHOLDER_CONF = {
     "courses/cms/blogpost_detail.html body": {
         "name": _("Body"),
         "excluded_plugins": ["CKEditorPlugin", "GoogleMapPlugin"],
+    },
+    # Program page detail
+    "courses/cms/program_detail.html program_cover": {
+        "name": _("Cover"),
+        "plugins": ["SimplePicturePlugin"],
+        "limits": {"SimplePicturePlugin": 1},
+    },
+    "courses/cms/program_detail.html program_excerpt": {
+        "name": _("Excerpt"),
+        "plugins": ["PlainTextPlugin"],
+        "limits": {"PlainTextPlugin": 1},
+    },
+    "courses/cms/program_detail.html program_body": {
+        "name": _("Body"),
+        "excluded_plugins": ["CKEditorPlugin", "GoogleMapPlugin"],
+    },
+    "courses/cms/program_detail.html program_courses": {
+        "name": _("Courses"),
+        "plugins": ["CoursePlugin"],
     },
 }
 

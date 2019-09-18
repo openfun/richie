@@ -1,0 +1,51 @@
+{% extends "richie/fullwidth.html" %}
+{% load cms_tags extra_tags i18n thumbnail %}
+{% block content %}
+{% spaceless %}
+<div class="program-detail">
+  <h1 class="program-detail__title">{% render_model current_page "title" %}</h1>
+
+  {% if current_page.publisher_is_draft %}
+  <div class="program-detail__cover">
+    {% get_placeholder_plugins "program_cover" as plugins or %}
+      <p class="program-detail__cover__empty">{% trans "Cover" %}</p>
+    {% endget_placeholder_plugins %}
+    {% blockplugin plugins.0 %}
+      <img
+        src="{% thumbnail instance.picture 500x500 subject_location=instance.picture.subject_location %}"
+        srcset="
+          {% thumbnail instance.picture 500x500 subject_location=instance.picture.subject_location %} 500w,
+          {% if instance.picture.width >= 1000 %}{% thumbnail instance.picture 1000x1000 subject_location=instance.picture.subject_location %} 1000w,{% endif %}
+          {% if instance.picture.width >= 2000 %}{% thumbnail instance.picture 2000x2000 subject_location=instance.picture.subject_location %} 2000w{% endif %}
+        "
+        sizes="500px"
+        alt="{% trans 'program cover image' %}"
+      />
+    {% endblockplugin %}
+  </div>
+  {% endif %}
+
+  <div class="program-detail__excerpt">
+    {% placeholder "program_excerpt" or %}
+      <p class="program-detail__excerpt__empty">
+        {% trans "No excerpt content" %}
+      </p>
+    {% endplaceholder %}
+  </div>
+
+  <div class="program-detail__body">
+    {% placeholder "program_body" or %}
+      <p class="program-detail__body__empty">
+        {% trans "No body content" %}
+      </p>
+    {% endplaceholder %}
+  </div>
+
+</div>
+
+<section class="course-glimpse-list">
+    <h2 class="course-glimpse-list__title">{% trans "Related courses" %}</h2>
+    {% placeholder "program_courses" %}
+</section>
+{% endspaceless %}
+{% endblock content %}

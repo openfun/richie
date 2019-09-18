@@ -71,11 +71,14 @@ class CreateDemoSiteCommandsTestCase(CMSTestCase):
             "persons": 1,
             "blogposts": 1,
             "blogpost_categories": 1,
+            "programs": 1,
+            "programs_courses": 1,
             "home_blogposts": 1,
             "home_courses": 1,
             "home_organizations": 1,
             "home_subjects": 1,
             "home_persons": 1,
+            "home_programs": 1,
         },
     )
     @mock.patch.dict(
@@ -110,4 +113,5 @@ class CreateDemoSiteCommandsTestCase(CMSTestCase):
         self.assertEqual(models.Organization.objects.count(), 2)
         self.assertEqual(models.Person.objects.count(), 2)
         self.assertEqual(models.Licence.objects.count(), 1)
-        self.assertEqual(CMSPlugin.objects.count(), 420)
+        self.assertEqual(models.Program.objects.count(), 2)
+        self.assertEqual(CMSPlugin.objects.count(), 452)

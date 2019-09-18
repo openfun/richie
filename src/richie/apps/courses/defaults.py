@@ -235,6 +235,10 @@ ORGANIZATIONS_PAGE = {
     "template": "courses/cms/organization_detail.html",
 }
 PERSONS_PAGE = {"reverse_id": "persons", "template": "courses/cms/person_detail.html"}
+PROGRAMS_PAGE = {
+    "reverse_id": "programs",
+    "template": "courses/cms/program_detail.html",
+}
 
 PAGES_INFO = {
     "home": {
@@ -267,6 +271,11 @@ PAGES_INFO = {
         "title": "Persons",
         "in_navigation": True,
         "template": "courses/cms/person_list.html",
+    },
+    PROGRAMS_PAGE["reverse_id"]: {
+        "title": "Programs",
+        "in_navigation": True,
+        "template": "courses/cms/program_list.html",
     },
 }
 PAGES_INFO.update(getattr(settings, "PAGES_INFO", {}))

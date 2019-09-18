@@ -17,6 +17,7 @@ from .models import (
     LicencePluginModel,
     OrganizationPluginModel,
     PersonPluginModel,
+    ProgramPluginModel,
 )
 
 
@@ -139,6 +140,28 @@ class BlogPostPlugin(CMSPluginBase):
     model = BlogPostPluginModel
     module = PLUGINS_GROUP
     render_template = "courses/plugins/blogpost.html"
+
+    def render(self, context, instance, placeholder):
+        context.update(
+            {
+                "instance": instance,
+                "relevant_page": instance.relevant_page,
+                "placeholder": placeholder,
+            }
+        )
+        return context
+
+
+@plugin_pool.register_plugin
+class ProgramPlugin(CMSPluginBase):
+    """
+    Program plugin displays a course's information on other pages
+    """
+
+    cache = True
+    model = ProgramPluginModel
+    module = PLUGINS_GROUP
+    render_template = "courses/plugins/program.html"
 
     def render(self, context, instance, placeholder):
         context.update(
