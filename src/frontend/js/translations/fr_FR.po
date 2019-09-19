@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2019-08-29T09:35:56.390Z\n"
+"POT-Creation-Date: 2019-09-16T14:19:38.952Z\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "MIME-Version: 1.0\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Last-Translator: Samuel Paccoud (sampaccoud)\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2019-08-29 11:54\n"
+"PO-Revision-Date: 2019-09-19 14:47\n"
 
 #. [components.SearchFilterGroupModal.modalTitle] - Title for the modal to add more filter values in the search filters modal.
 #. defaultMessage is:
@@ -116,18 +116,17 @@ msgstr "Page précédente: {page}"
 
 #. [components.SearchSuggestField.searchFieldPlaceholder] - Placeholder text displayed in the search field when it is empty.
 #. defaultMessage is:
+#. Search for courses
+#: i18n/js/components/RootSearchSuggestField/index.json
+msgid "Search for courses"
+msgstr "Recherche de cours"
+
+#. [components.SearchSuggestField.searchFieldPlaceholder] - Placeholder text displayed in the search field when it is empty.
+#. defaultMessage is:
 #. Search for courses, organizations, categories
 #: i18n/js/components/SearchSuggestField/SearchSuggestField.json
 msgid "Search for courses, organizations, categories"
 msgstr "Recherche des cours, des organisations, des catégories"
-
-#. [components.SearchSuggestField.searchFieldDefaultSearch] - Default query in the main search field. Lets users run a full text search
-#.       with whatever they have typed in.
-#. defaultMessage is:
-#. Search for {query} in courses...
-#: i18n/js/components/SearchSuggestField/SearchSuggestField.json
-msgid "Search for {query} in courses..."
-msgstr "Recherche de {query} dans les cours..."
 
 #. [components.SearchFilterValueParent.ariaShowChildren] - Accessibility message for the button to show children of the current filter
 #. defaultMessage is:
