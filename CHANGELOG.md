@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Add an UPGRADE.md file to document upgrade instructions.
+
 ## [1.9.0] - 2019-09-18
 
 ### Added
