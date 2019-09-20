@@ -14,6 +14,12 @@ $ make collectstatic
 $ make migrate
 ```
 
+## Unreleased
+
+- Icon font has been removed and replaced with SVG icons. Any overridden
+  template(s) using icons from the icon font need to be updated to use SVG
+  icons too.
+
 ## 1.8.x to 1.9.x
 
 ### Before switching

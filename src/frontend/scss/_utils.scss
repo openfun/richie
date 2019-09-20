@@ -4,3 +4,8 @@
   position: absolute;
   left: -9999rem;
 }
+
+// Helper to force svg icons to be blocks by default for convenience at call sites
+.icon {
+  display: block;
+}

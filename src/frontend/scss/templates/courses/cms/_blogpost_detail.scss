@@ -59,13 +59,16 @@ $richie-blogpost-detail-title-textalign: center !default;
         background: $dodgerblue1;
 
         &:hover {
-          color: $white;
           background: $dodgerblue3;
           text-decoration: none;
         }
 
         & + .social-network-badges__item {
           margin-left: 0.5rem;
+        }
+
+        &:hover > .social-network-badges__item__icon {
+          fill: $white;
         }
       }
 

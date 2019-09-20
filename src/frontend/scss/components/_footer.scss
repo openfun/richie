@@ -92,12 +92,15 @@ $richie-footer-poweredby-link-fontcolor: $white !default;
       @include sv-flex(1, 0, auto);
       display: block;
       margin-left: 1rem;
-      font-size: 2.4rem;
-      color: $gray40;
 
-      &:hover {
-        color: $white;
-        text-decoration: none;
+      &__icon {
+        width: 3rem;
+        height: 3rem;
+        fill: $gray40;
+      }
+
+      &:hover > &__icon {
+        fill: $white;
       }
     }
   }

@@ -8,6 +8,7 @@
     @include sv-flex(1, 0, 2rem);
     display: flex;
     height: 2rem;
+    padding: 6px;
     flex-direction: column;
     justify-content: center;
     color: $white;
@@ -23,6 +24,14 @@
 
     & + #{$badges-selector}__item {
       margin-left: 1rem;
+    }
+
+    &__icon {
+      fill: white;
+
+      .social-network-badges__item:hover > & {
+        fill: $firebrick6;
+      }
     }
   }
 }

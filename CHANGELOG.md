@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Use SVG icons instead of an icon font.
+
 ## [1.9.2] - 2019-09-20
 
 ### Fixed
