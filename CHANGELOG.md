@@ -8,6 +8,12 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.9.2] - 2019-09-20
+
+### Fixed
+
+- Logo image location wrongly targetted in base.html new SEO tags.
+
 ## [1.9.1] - 2019-09-20
 
 ### Added
@@ -549,7 +555,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v1.9.1...master
+[unreleased]: https://github.com/openfun/richie/compare/v1.9.2...master
+[1.9.2]: https://github.com/openfun/richie/compare/v1.9.1...v1.9.2
 [1.9.1]: https://github.com/openfun/richie/compare/v1.9.0...v1.9.1
 [1.9.0]: https://github.com/openfun/richie/compare/v1.8.3...v1.9.0
 [1.8.3]: https://github.com/openfun/richie/compare/v1.8.2...v1.8.3
