@@ -17,9 +17,9 @@
       <img
         src="{% thumbnail instance.picture 1140x400 crop upscale subject_location=instance.picture.subject_location %}"
         srcset="
-          {% thumbnail instance.picture 1140x400 crop upscale subject_location=instance.picture.subject_location %} 1140w,
-          {% if instance.picture.width >= 2280 %}{% thumbnail instance.picture 2280x800 crop upscale subject_location=instance.picture.subject_location %} 2280w,{% endif %}
-          {% if instance.picture.width >= 3420 %}{% thumbnail instance.picture 3420x600 crop upscale subject_location=instance.picture.subject_location %} 3420w{% endif %}
+          {% thumbnail instance.picture 1140x400 crop upscale subject_location=instance.picture.subject_location %} 1140w
+          {% if instance.picture.width >= 2280 %},{% thumbnail instance.picture 2280x800 crop upscale subject_location=instance.picture.subject_location %} 2280w{% endif %}
+          {% if instance.picture.width >= 3420 %},{% thumbnail instance.picture 3420x600 crop upscale subject_location=instance.picture.subject_location %} 3420w{% endif %}
         "
         sizes="1140px"
         alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'category banner' %}{% endif %}"
@@ -35,9 +35,9 @@
       <img
         src="{% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location %}"
         srcset="
-          {% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location %} 200w,
-          {% if instance.picture.width >= 400 %}{% thumbnail instance.picture 400x400 crop upscale subject_location=instance.picture.subject_location %} 400w,{% endif %}
-          {% if instance.picture.width >= 600 %}{% thumbnail instance.picture 600x600 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+          {% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location %} 200w
+          {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x400 crop upscale subject_location=instance.picture.subject_location %} 400w{% endif %}
+          {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x600 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
         "
         sizes="200px"
         alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'category logo' %}{% endif %}"
@@ -52,9 +52,9 @@
         <img
           src="{% thumbnail instance.picture 60x60 crop upscale subject_location=instance.picture.subject_location %}"
           srcset="
-            {% thumbnail instance.picture 60x60 crop upscale subject_location=instance.picture.subject_location %} 60w,
-            {% if instance.picture.width >= 120 %}{% thumbnail instance.picture 120x120 crop upscale subject_location=instance.picture.subject_location %} 80w,{% endif %}
-            {% if instance.picture.width >= 180 %}{% thumbnail instance.picture 180x180 crop upscale subject_location=instance.picture.subject_location %} 120w{% endif %}
+            {% thumbnail instance.picture 60x60 crop upscale subject_location=instance.picture.subject_location %} 60w
+            {% if instance.picture.width >= 120 %},{% thumbnail instance.picture 120x120 crop upscale subject_location=instance.picture.subject_location %} 80w{% endif %}
+            {% if instance.picture.width >= 180 %},{% thumbnail instance.picture 180x180 crop upscale subject_location=instance.picture.subject_location %} 120w{% endif %}
           "
           sizes="60px"
           alt=""
