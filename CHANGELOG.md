@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Filter out Course runs from "sitemap.xml".
+
 ## [1.11.0] - 2019-10-11
 
 ### Added
