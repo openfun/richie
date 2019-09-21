@@ -25,6 +25,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Add missing attribute "alt" on some "<img>" tags in templates,
 - Remove deprecated attribute "type" from some "<script>" tags in templates,
 - In the sandbox, make API calls work behind an htaccess by removing Basic
   Auth fallback,

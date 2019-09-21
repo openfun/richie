@@ -8,7 +8,7 @@
             <div class="hero-intro__body__content">{{ instance.content|safe }}</div>
         {% endif %}
         {% if instance.logo %}
-            <img src="{% thumbnail instance.logo 500x180 %}" class="hero-intro__body__logo" alt="{{ instance.logo_alt_text }}"/>
+            <img src="{% thumbnail instance.logo 500x180 %}" class="hero-intro__body__logo" alt="{{ instance.logo_alt_text }}">
         {% endif %}
     </div>
 </div>

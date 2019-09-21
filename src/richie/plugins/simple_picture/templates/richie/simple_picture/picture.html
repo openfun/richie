@@ -4,7 +4,7 @@
 <img src="{{ picture_info.src }}"
   {% if picture_info.srcset %} srcset="{{ picture_info.srcset }}"{% endif %}
   {% if picture_info.sizes %} sizes="{{ picture_info.sizes }}"{% endif %}
-  {% if picture_info.alt %} alt="{{ picture_info.alt }}"{% endif %}
+  alt="{% if picture_info.alt %}{{ picture_info.alt }}{% endif %}"
 >
 {% if picture_info.caption %}
     <figcaption>{{ picture_info.caption }}</figcaption>
