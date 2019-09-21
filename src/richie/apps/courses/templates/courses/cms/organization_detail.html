@@ -18,10 +18,10 @@
         src="{% thumbnail instance.picture 500x100 upscale subject_location=instance.picture.subject_location %}"
         srcset="
           {% thumbnail instance.picture 500x100 upscale subject_location=instance.picture.subject_location %} 500w,
-          {% thumbnail instance.picture 1000x200 upscale subject_location=instance.picture.subject_location %} 1000w,
-          {% if instance.picture.width >= 1500 %}{% thumbnail instance.picture 1500x300 upscale subject_location=instance.picture.subject_location %} 1500w,{% endif %}
-          {% if instance.picture.width >= 2000 %}{% thumbnail instance.picture 2000x400 upscale subject_location=instance.picture.subject_location %} 2000w{% endif %}
-          {% if instance.picture.width >= 2500 %}{% thumbnail instance.picture 2500x500 upscale subject_location=instance.picture.subject_location %} 2500w{% endif %}
+          {% thumbnail instance.picture 1000x200 upscale subject_location=instance.picture.subject_location %} 1000w
+          {% if instance.picture.width >= 1500 %},{% thumbnail instance.picture 1500x300 upscale subject_location=instance.picture.subject_location %} 1500w{% endif %}
+          {% if instance.picture.width >= 2000 %},{% thumbnail instance.picture 2000x400 upscale subject_location=instance.picture.subject_location %} 2000w{% endif %}
+          {% if instance.picture.width >= 2500 %},{% thumbnail instance.picture 2500x500 upscale subject_location=instance.picture.subject_location %} 2500w{% endif %}
         "
         sizes="100vw"
         alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'organization banner' %}{% endif %}"
@@ -37,10 +37,10 @@
       <img
         src="{% thumbnail instance.picture 200x113 upscale subject_location=instance.picture.subject_location %}"
         srcset="
-          {% thumbnail instance.picture 200x113 upscale subject_location=instance.picture.subject_location %} 200w,
-          {% if instance.picture.width >= 400 %}{% thumbnail instance.picture 400x225 upscale subject_location=instance.picture.subject_location %} 400w,{% endif %}
-          {% if instance.picture.width >= 600 %}{% thumbnail instance.picture 600x338 upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
-          {% if instance.picture.width >= 800 %}{% thumbnail instance.picture 800x450 upscale subject_location=instance.picture.subject_location %} 800w{% endif %}
+          {% thumbnail instance.picture 200x113 upscale subject_location=instance.picture.subject_location %} 200w
+          {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x225 upscale subject_location=instance.picture.subject_location %} 400w{% endif %}
+          {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x338 upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+          {% if instance.picture.width >= 800 %},{% thumbnail instance.picture 800x450 upscale subject_location=instance.picture.subject_location %} 800w{% endif %}
         "
         sizes="12rem, (min-width: 768px) 16rem, (min-width: 1200px) 20rem"
         alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'organization logo' %}{% endif %}"

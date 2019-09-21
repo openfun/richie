@@ -10,9 +10,9 @@
       {% blockplugin plugins.0 %}
         <img src="{% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location %}"
           srcset="
-            {% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location %} 200w,
-            {% if instance.picture.width >= 400 %}{% thumbnail instance.picture 400x400 crop upscale subject_location=instance.picture.subject_location %} 400w,{% endif %}
-            {% if instance.picture.width >= 600 %}{% thumbnail instance.picture 600x600 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+            {% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location %} 200w
+            {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x400 crop upscale subject_location=instance.picture.subject_location %} 400w{% endif %}
+            {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x600 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
           "
           sizes="200px"
           alt=""
