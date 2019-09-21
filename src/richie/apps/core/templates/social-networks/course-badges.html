@@ -24,7 +24,7 @@
             </svg>
         </a>
         <a
-            href="mailto:?subject={{ shared_subject }}&amp;body={{ shared_sentence }}"
+            href="mailto:?subject={{ shared_subject|urlencode }}&amp;body={{ shared_sentence|urlencode }}"
             class="social-network-badges__item"
             target="_blank"
             title="{% trans "Share by Email" %}"
