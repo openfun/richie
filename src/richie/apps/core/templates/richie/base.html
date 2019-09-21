@@ -112,8 +112,8 @@
         </div>
 
         {% render_block "js" %}
-        <script type="text/javascript" src="{% static 'richie/js/index.js' %}"></script>
-        <script type="text/javascript">
+        <script src="{% static 'richie/js/index.js' %}"></script>
+        <script>
         document.addEventListener('DOMContentLoaded', () => {
             // Get all topbar burger elements
             const $topbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.topbar__hamburger'), 0);

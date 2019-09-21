@@ -14,7 +14,7 @@ your `settings.INSTALLED_APPS` and load them in your main template, _e.g._:
         <!-- Load Richie's default styles -->
         <link rel="stylesheet" type="text/css" href="{% static 'richie/css/main.css' %}">
         <!-- Load Richie's front-end application -->
-        <script type="text/javascript" src="{% static 'richie/js/index.js' %}"></script>
+        <script src="{% static 'richie/js/index.js' %}"></script>
     </head>
     <body>
         <!-- Template content goes here -->
