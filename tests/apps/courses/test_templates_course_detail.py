@@ -111,7 +111,7 @@ class CourseCMSTestCase(CMSTestCase):
             r'<figure class="category-plugin-tag__figure">'
             r'<figcaption.*class="category-plugin-tag__figure__caption".*>'
             r".*{title:s}.*</figcaption>"
-            r'<img src="/media/filer_public_thumbnails/filer_public/.*icon\.jpg.*alt=""/>'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*icon\.jpg.*alt="">'
         )
 
         for icon in icons[:2]:
