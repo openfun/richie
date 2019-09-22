@@ -42,7 +42,7 @@
           {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x338 upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
           {% if instance.picture.width >= 800 %},{% thumbnail instance.picture 800x450 upscale subject_location=instance.picture.subject_location %} 800w{% endif %}
         "
-        sizes="12rem, (min-width: 768px) 16rem, (min-width: 1200px) 20rem"
+        sizes="(min-width: 768px) 16rem, (min-width: 1200px) 20rem, 12rem"
         alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'organization logo' %}{% endif %}"
       />
     {% endblockplugin %}
