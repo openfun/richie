@@ -20,7 +20,7 @@
           {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x338 upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
           {% if instance.picture.width >= 800 %},{% thumbnail instance.picture 800x450 upscale subject_location=instance.picture.subject_location %} 800w{% endif %}
         "
-        sizes="100vw, (min-width: 576px) 50vw, (min-width: 1200px) 25vw"
+        sizes="(min-width: 576px) 50vw, (min-width: 1200px) 25vw, 100vw"
         alt=""
       />
     {% endblockplugin %}

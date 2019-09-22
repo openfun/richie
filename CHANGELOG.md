@@ -25,6 +25,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix invalid syntax in "sizes" attribute value on "<img>" tags,
 - Add url escaping on variables inside links from on social network badges,
 - Fix invalid syntax in "srcset" attribute value on "<img>" tags,
 - Add missing attribute "alt" on some "<img>" tags in templates,
