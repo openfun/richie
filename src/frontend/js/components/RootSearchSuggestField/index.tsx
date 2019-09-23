@@ -12,6 +12,7 @@ import {
 import { fetchList } from '../../data/getResourceList/getResourceList';
 import { API_LIST_DEFAULT_PARAMS } from '../../settings';
 import { APICourseSearchResponse, requestStatus } from '../../types/api';
+import { CommonDataProps } from '../../types/commonDataProps';
 import { FilterDefinition } from '../../types/filters';
 import {
   isCourseSuggestion,
@@ -74,7 +75,7 @@ interface RootSearchSuggestFieldProps {
  */
 export const RootSearchSuggestField = ({
   courseSearchPageUrl,
-}: RootSearchSuggestFieldProps) => {
+}: RootSearchSuggestFieldProps & CommonDataProps) => {
   const intl = useIntl();
 
   // Initialize hooks for the two pieces of state the controlled <Autosuggest> component needs to interact with:

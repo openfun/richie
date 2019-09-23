@@ -13,6 +13,12 @@ jest.mock('../../utils/indirection/window', () => ({
 }));
 
 describe('<RootSearchSuggestField />', () => {
+  const commonDataProps = {
+    assets: {
+      icons: '/icons.svg',
+    },
+  };
+
   const subjects = {
     base_path: '00030001',
     has_more_values: false,
@@ -35,7 +41,10 @@ describe('<RootSearchSuggestField />', () => {
 
     const { getByPlaceholderText } = render(
       <IntlProvider locale="en">
-        <RootSearchSuggestField courseSearchPageUrl="/en/courses/" />
+        <RootSearchSuggestField
+          courseSearchPageUrl="/en/courses/"
+          context={commonDataProps}
+        />
       </IntlProvider>,
     );
 
@@ -61,7 +70,10 @@ describe('<RootSearchSuggestField />', () => {
 
     const { getByPlaceholderText, getByText, queryByText } = render(
       <IntlProvider locale="en">
-        <RootSearchSuggestField courseSearchPageUrl="/en/courses/" />
+        <RootSearchSuggestField
+          courseSearchPageUrl="/en/courses/"
+          context={commonDataProps}
+        />
       </IntlProvider>,
     );
 
@@ -108,7 +120,10 @@ describe('<RootSearchSuggestField />', () => {
 
     const { getByPlaceholderText, getByText, queryByText } = render(
       <IntlProvider locale="en">
-        <RootSearchSuggestField courseSearchPageUrl="/en/courses/" />
+        <RootSearchSuggestField
+          courseSearchPageUrl="/en/courses/"
+          context={commonDataProps}
+        />
       </IntlProvider>,
     );
 
@@ -150,7 +165,10 @@ describe('<RootSearchSuggestField />', () => {
 
     const { getByPlaceholderText, getByText, queryByText } = render(
       <IntlProvider locale="en">
-        <RootSearchSuggestField courseSearchPageUrl="/en/courses/" />
+        <RootSearchSuggestField
+          courseSearchPageUrl="/en/courses/"
+          context={commonDataProps}
+        />
       </IntlProvider>,
     );
 
@@ -184,7 +202,10 @@ describe('<RootSearchSuggestField />', () => {
 
     const { getByPlaceholderText } = render(
       <IntlProvider locale="en">
-        <RootSearchSuggestField courseSearchPageUrl="/en/courses/" />
+        <RootSearchSuggestField
+          courseSearchPageUrl="/en/courses/"
+          context={commonDataProps}
+        />
       </IntlProvider>,
     );
 
@@ -219,7 +240,10 @@ describe('<RootSearchSuggestField />', () => {
 
     const { getByPlaceholderText, getByText, queryByText } = render(
       <IntlProvider locale="en">
-        <RootSearchSuggestField courseSearchPageUrl="/en/courses/" />
+        <RootSearchSuggestField
+          courseSearchPageUrl="/en/courses/"
+          context={commonDataProps}
+        />
       </IntlProvider>,
     );
 
