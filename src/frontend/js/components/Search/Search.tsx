@@ -6,6 +6,7 @@ import {
   useCourseSearchParams,
 } from '../../data/useCourseSearchParams/useCourseSearchParams';
 import { requestStatus } from '../../types/api';
+import { CommonDataProps } from '../../types/commonDataProps';
 import { CourseGlimpseList } from '../CourseGlimpseList/CourseGlimpseList';
 import { PaginateCourseSearch } from '../PaginateCourseSearch';
 import { SearchFiltersPane } from '../SearchFiltersPane/SearchFiltersPane';
@@ -16,7 +17,7 @@ interface SearchProps {
   pageTitle?: string;
 }
 
-export const Search = ({ pageTitle }: SearchProps) => {
+export const Search = ({ pageTitle }: SearchProps & CommonDataProps) => {
   const [courseSearchParams, setCourseSearchParams] = useCourseSearchParams();
   const courseSearchResponse = useCourseSearch(courseSearchParams);
 
