@@ -63,7 +63,8 @@ document.addEventListener('DOMContentLoaded', event => {
           if (!Intl.PluralRules) {
             await import('intl-pluralrules');
           }
-          if (!Intl.RelativeTimeFormat) {
+          // TODO: remove type assertion when typescript libs include RelativeTimeFormat
+          if (!(Intl as any).RelativeTimeFormat) {
             await import('@formatjs/intl-relativetimeformat');
             // Get `react-intl`/`formatjs` lang specific parameters and data
             await import(
