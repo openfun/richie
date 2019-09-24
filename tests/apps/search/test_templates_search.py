@@ -34,7 +34,7 @@ class CourseCMSTestCase(CMSTestCase):
                     r"<div[\\n ]*"
                     r'class="fun-react fun-react--search"[\\n ]*'
                     r'data-locale="en_US"[\\n ]*'
-                    r'data-props=\\\'{"pageTitle": "search"}\\\''
+                    r'data-props=\\\'{"pageTitle": "search"'
                 ),
                 str(response.content),
             )
@@ -51,7 +51,7 @@ class CourseCMSTestCase(CMSTestCase):
                     r"<div[\\n ]*"
                     r'class="fun-react fun-react--search"[\\n ]*'
                     r'data-locale="fr_CA"[\\n ]*'
-                    r'data-props=\\\'{"pageTitle": "recherche"}\\\''
+                    r'data-props=\\\'{"pageTitle": "recherche"'
                 ),
                 str(response.content),
             )
