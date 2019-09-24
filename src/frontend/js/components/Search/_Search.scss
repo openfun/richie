@@ -15,7 +15,10 @@ $richie-search-results-padding: 0 1rem 0 2rem !default;
   flex-wrap: wrap;
 
   &__filters {
-    @include sv-flex(1, 0, 100%);
+    z-index: 1;
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: 100%;
     background: $richie-search-filters-background;
 
     // Force the filters sidebar to take up the whole height even when it's empty.
@@ -23,22 +26,78 @@ $richie-search-results-padding: 0 1rem 0 2rem !default;
     // around as the filters appear.
     min-height: 100vh;
 
+    position: absolute;
+    left: 0;
+    max-width: 85vw;
+    transform: translateX(-100.1%);
+    transition: ease-in-out 0.5s;
+
     @include media-breakpoint-up(lg) {
-      @include sv-flex(1, 0, $richie-search-filters-width);
+      z-index: auto;
+      position: relative;
+      left: auto;
+      flex-basis: $richie-search-filters-width;
+      max-width: $richie-search-filters-width;
+      transform: none;
+    }
+
+    &--active {
+      transform: translateX(0);
+    }
+
+    &__toggle {
+      position: absolute;
+      top: 1.25rem;
+      right: -3rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      padding: 8px;
+      background: $richie-search-filters-background;
+      border: none;
+      box-shadow: 2px 2px 5px $gray20;
+
+      &__icon {
+        width: 100%;
+        height: 100%;
+        fill: $white;
+      }
     }
   }
 
   &__results {
-    @include sv-flex(1, 0, 100%);
+    position: relative;
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: 100%;
+    max-width: 100%;
 
     @include media-breakpoint-up(lg) {
-      @include sv-flex(1, 0, calc(100% - #{$richie-search-filters-width}));
+      position: static;
+      flex-basis: calc(100% - #{$richie-search-filters-width});
+      max-width: calc(100% - #{$richie-search-filters-width});
       padding: $richie-search-results-padding;
     }
 
     &__title {
       padding: 1.5rem 0 0;
       text-align: center;
+    }
+
+    &__overlay {
+      visibility: hidden;
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      background: black;
+      opacity: 0;
+      transition: 0.5s ease-in-out;
+
+      &--visible {
+        visibility: visible;
+        opacity: 0.75;
+      }
     }
   }
 }
