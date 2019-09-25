@@ -117,6 +117,12 @@ class Category(BasePageExtension):
         """
         return self.get_page_extensions("blogpost", language=language)
 
+    def get_organizations(self, language=None):
+        """
+        Return a query to get the organizations related to this category ie for which a plugin
+        for this category is linked to the organization page via any placeholder.
+        """
+        return self.get_page_extensions("organization", language=language)
 
     def get_persons(self, language=None):
         """

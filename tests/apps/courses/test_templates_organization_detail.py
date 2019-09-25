@@ -3,10 +3,13 @@ End-to-end tests for the organization detail view
 """
 import re
 
+from cms.api import add_plugin
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
+from richie.apps.courses.cms_plugins import CategoryPlugin, OrganizationPlugin
 from richie.apps.courses.factories import (
+    CategoryFactory,
     CourseFactory,
     OrganizationFactory,
     PersonFactory,
@@ -22,29 +25,72 @@ class OrganizationCMSTestCase(CMSTestCase):
         """
         Validate that the important elements are displayed on a published organization page
         """
-        courses = CourseFactory.create_batch(4)
+        # Categories
+        published_category = CategoryFactory(should_publish=True)
+        extra_published_category = CategoryFactory(should_publish=True)
+        unpublished_category = CategoryFactory(should_publish=True)
+        unpublished_category.extended_object.unpublish("en")
+        not_published_category = CategoryFactory()
+
+        # Courses
+        published_course = CourseFactory(should_publish=True)
+        extra_published_course = CourseFactory(should_publish=True)
+        unpublished_course = CourseFactory()
+        not_published_course = CourseFactory()
+
         organization = OrganizationFactory(
-            page_title="La Sorbonne", fill_courses=courses
+            page_title="La Sorbonne",
+            fill_categories=[
+                published_category,
+                not_published_category,
+                unpublished_category,
+            ],
+            fill_courses=[published_course, not_published_course, unpublished_course],
         )
+        # Republish courses to take into account adding the organization
+        published_course.extended_object.publish("en")
+        unpublished_course.extended_object.publish("en")
+        unpublished_course.extended_object.unpublish("en")
+
         page = organization.extended_object
-
-        # Publish only 2 out of 4 courses
-        courses[0].extended_object.publish("en")
-        courses[1].extended_object.publish("en")
-
-        # The unpublished objects may have been published and unpublished which puts them in a
-        # status different from objects that have never been published.
-        # We want to test both cases.
-        courses[2].extended_object.publish("en")
-        courses[2].extended_object.unpublish("en")
 
         # The page should not be visible before it is published
         url = page.get_absolute_url()
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
 
-        # Publish the organization and ensure the content is correct
+        # Publish the organization
         page.publish("en")
+
+        # Modify the draft version of the published category
+        title_obj = published_category.extended_object.title_set.get(language="en")
+        title_obj.title = "modified category"
+        title_obj.save()
+
+        # Modify the draft version of the published course
+        title_obj = published_course.extended_object.title_set.get(language="en")
+        title_obj.title = "modified course"
+        title_obj.save()
+
+        # Add a new category to the draft organization page but don't publish the modification
+        add_plugin(
+            page.placeholders.get(slot="categories"),
+            CategoryPlugin,
+            "en",
+            page=extra_published_category.extended_object,
+        )
+
+        # Add a new organization to the draft course page but don't publish the modification
+        add_plugin(
+            extra_published_course.extended_object.placeholders.get(
+                slot="course_organizations"
+            ),
+            OrganizationPlugin,
+            "en",
+            page=page,
+        )
+
+        # Ensure the published page content is correct
         response = self.client.get(url)
         self.assertContains(
             response, "<title>La Sorbonne</title>", html=True, status_code=200
@@ -55,17 +101,54 @@ class OrganizationCMSTestCase(CMSTestCase):
             html=True,
         )
 
-        # Only published courses should be present on the page
-        for course in courses[:2]:
-            self.assertContains(
-                response,
-                '<p class="course-glimpse__content__title">{:s}</p>'.format(
-                    course.extended_object.get_title()
-                ),
-                html=True,
-            )
-        for course in courses[-2:]:
-            self.assertNotContains(response, course.extended_object.get_title())
+        # The published category should be on the page in its published version
+        self.assertContains(
+            response,
+            (
+                '<a class="category-plugin-tag" href="{:s}">'
+                '<div class="category-plugin-tag__title">{:s}</div></a>'
+            ).format(
+                published_category.public_extension.extended_object.get_absolute_url(),
+                published_category.public_extension.extended_object.get_title(),
+            ),
+            html=True,
+        )
+        # The other categories should not be leaked:
+        # - new_category linked only on the draft organization page
+        self.assertNotContains(
+            response, extra_published_category.extended_object.get_title()
+        )
+        # - not published category
+        self.assertNotContains(
+            response, not_published_category.extended_object.get_title()
+        )
+        # - unpublished category
+        self.assertNotContains(
+            response, unpublished_category.extended_object.get_title()
+        )
+
+        # The published courses should be on the page in its published version
+        self.assertContains(
+            response,
+            '<p class="course-glimpse__content__title">{:s}</p>'.format(
+                published_course.public_extension.extended_object.get_title()
+            ),
+            html=True,
+        )
+        # The other courses should not be leaked:
+        # - new course linked only on the draft organization page
+        self.assertNotContains(
+            response, extra_published_course.extended_object.get_title()
+        )
+        # - not published course
+        self.assertNotContains(
+            response, not_published_course.extended_object.get_title()
+        )
+        # - unpublished course
+        self.assertNotContains(response, unpublished_course.extended_object.get_title())
+
+        # Modified draft category and course should not be leaked
+        self.assertNotContains(response, "modified")
 
     def test_templates_organization_detail_cms_draft_content(self):
         """
@@ -75,21 +158,31 @@ class OrganizationCMSTestCase(CMSTestCase):
         user = UserFactory(is_staff=True, is_superuser=True)
         self.client.login(username=user.username, password="password")
 
-        courses = CourseFactory.create_batch(4)
+        published_category = CategoryFactory(should_publish=True)
+        not_published_category = CategoryFactory()
+
+        published_course = CourseFactory(should_publish=True)
+        not_published_course = CourseFactory()
+
         organization = OrganizationFactory(
-            page_title="La Sorbonne", fill_courses=courses
+            page_title="La Sorbonne",
+            fill_categories=[published_category, not_published_category],
+            fill_courses=[published_course, not_published_course],
         )
+        # Republish courses to take into account adding the organization
+        published_course.extended_object.publish("en")
+
+        # Modify the draft version of the published category
+        title_obj = published_category.extended_object.title_set.get(language="en")
+        title_obj.title = "modified category"
+        title_obj.save()
+
+        # Modify the draft version of the published course
+        title_obj = published_course.extended_object.title_set.get(language="en")
+        title_obj.title = "modified course"
+        title_obj.save()
+
         page = organization.extended_object
-
-        # Publish only 2 out of 4 courses
-        courses[0].extended_object.publish("en")
-        courses[1].extended_object.publish("en")
-
-        # The unpublished objects may have been published and unpublished which puts them in a
-        # status different from objects that have never been published.
-        # We want to test both cases.
-        courses[2].extended_object.publish("en")
-        courses[2].extended_object.unpublish("en")
 
         # The page should be visible as draft to the staff user
         url = page.get_absolute_url()
@@ -103,31 +196,55 @@ class OrganizationCMSTestCase(CMSTestCase):
             html=True,
         )
 
-        # The published courses should be present on the page
-        for course in courses[:2]:
-            self.assertContains(
-                response,
-                '<p class="course-glimpse__content__title">{:s}</p>'.format(
-                    course.extended_object.get_title()
-                ),
-                html=True,
-            )
-        # Draft courses should also be present on the page with an annotation for styling
-        for course in courses[-2:]:
-            self.assertContains(
-                response,
-                '<a href="{link:s}" class="{name:s} {name:s}--link {name:s}--draft">'.format(
-                    name="course-glimpse",
-                    link=course.extended_object.get_absolute_url(),
-                ),
-            )
-            self.assertContains(
-                response,
-                '<p class="course-glimpse__content__title">{title:s}</p>'.format(
-                    title=course.extended_object.get_title()
-                ),
-                html=True,
-            )
+        # The published category should be on the page in its published version
+        self.assertContains(
+            response,
+            (
+                '<a class="category-plugin-tag" href="{:s}">'
+                '<div class="category-plugin-tag__title">{:s}</div></a>'
+            ).format(
+                published_category.public_extension.extended_object.get_absolute_url(),
+                published_category.public_extension.extended_object.get_title(),
+            ),
+            html=True,
+        )
+        # The not published category should be on the page, mark as draft
+        self.assertContains(
+            response,
+            (
+                '<a class="category-plugin-tag category-plugin-tag--draft" '
+                'href="{:s}"><div class="category-plugin-tag__title">{:s}</div></a>'
+            ).format(
+                not_published_category.extended_object.get_absolute_url(),
+                not_published_category.extended_object.get_title(),
+            ),
+            html=True,
+        )
+        # The modified draft category should not be leaked
+        self.assertNotContains(response, "modified category")
+
+        # The published course should be on the page in its draft version
+        self.assertContains(
+            response,
+            '<p class="course-glimpse__content__title">modified course</p>',
+            html=True,
+        )
+
+        # The not published course should be on the page, mark as draft
+        self.assertContains(
+            response,
+            '<p class="course-glimpse__content__title">{:s}</p>'.format(
+                not_published_course.extended_object.get_title()
+            ),
+            html=True,
+        )
+        self.assertContains(
+            response,
+            (
+                '<a href="{url:s}" class="course-glimpse course-glimpse--link '
+                'course-glimpse--draft">'
+            ).format(url=not_published_course.extended_object.get_absolute_url()),
+        )
 
     def test_templates_organization_detail_related_persons(self):
         """

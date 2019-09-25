@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Allow tagging organizations with categories,
 - Allow second level children in footer menu.
 
 ### Changed
