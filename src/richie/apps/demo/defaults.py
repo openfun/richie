@@ -96,6 +96,17 @@ LEVELS_INFO = {
 }
 LEVELS_INFO.update(getattr(settings, "RICHIE_DEMO_LEVELS_INFO", {}))
 
+PARTNERSHIPS_INFO = {
+    "page_title": {"en": "Partnership", "fr": "Partenariat"},
+    "children": [
+        {"page_title": {"en": "Gold", "fr": "Or"}},
+        {"page_title": {"en": "Silver", "fr": "Argent"}},
+        {"page_title": {"en": "Bronze", "fr": "Bronze"}},
+    ],
+    "page_reverse_id": "partnerships",
+}
+PARTNERSHIPS_INFO.update(getattr(settings, "RICHIE_DEMO_PARTNERSHIPS_INFO", {}))
+
 SUBJECTS_INFO = {
     "page_title": {"en": "Subject", "fr": "Subjet"},
     "children": [

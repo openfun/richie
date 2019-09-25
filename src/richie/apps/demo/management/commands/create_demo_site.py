@@ -30,6 +30,7 @@ from ...defaults import (
     LEVELS_INFO,
     NB_OBJECTS,
     PAGES_INFO,
+    PARTNERSHIPS_INFO,
     SINGLECOLUMN_CONTENT,
     SITEMAP_PAGE_PARAMS,
     SUBJECTS_INFO,
@@ -85,19 +86,6 @@ def create_demo_site():
         NB_OBJECTS["licences"], logo__file__from_path=pick_image("licence")()
     )
 
-    # Create organizations under the `Organizations` page
-    organizations = OrganizationFactory.create_batch(
-        NB_OBJECTS["organizations"],
-        page_in_navigation=True,
-        page_languages=["en", "fr"],
-        page_parent=pages_created["organizations"],
-        fill_banner=pick_image("banner"),
-        fill_description=True,
-        fill_logo=pick_image("logo"),
-        should_publish=True,
-        with_permissions=True,
-    )
-
     # Generate each category tree and return a list of the leaf categories
     icons = list(
         create_categories(
@@ -123,6 +111,34 @@ def create_demo_site():
             page_parent=pages_created["categories"],
         )
     )
+    partnerships = list(
+        create_categories(
+            **PARTNERSHIPS_INFO,
+            fill_banner=pick_image("banner"),
+            fill_logo=pick_image("logo"),
+            page_parent=pages_created["categories"],
+        )
+    )
+
+    # Create organizations under the `Organizations` page
+    organizations = []
+    for i in range(NB_OBJECTS["organizations"]):
+        # Randomly assign each organization to a partnership level category
+        organizations.append(
+            OrganizationFactory(
+                page_in_navigation=True,
+                page_languages=["en", "fr"],
+                page_parent=pages_created["organizations"],
+                fill_banner=pick_image("banner"),
+                fill_categories=[random.choice(partnerships)]  # nosec
+                if (i % 2 == 0)
+                else [],
+                fill_description=True,
+                fill_logo=pick_image("logo"),
+                should_publish=True,
+                with_permissions=True,
+            )
+        )
 
     # Create persons under the `persons` page
     persons = []
