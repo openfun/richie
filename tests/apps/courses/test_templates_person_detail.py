@@ -25,10 +25,11 @@ class PersonCMSTestCase(CMSTestCase):
         Validate that the important elements are displayed on a published person page
         """
         # Categories
-        published_category, extra_published_category = CategoryFactory.create_batch(
-            2, should_publish=True
-        )
-        unpublished_category = CategoryFactory()
+        published_category = CategoryFactory(should_publish=True)
+        unpublished_category = CategoryFactory(should_publish=True)
+        unpublished_category.extended_object.unpublish("en")
+        extra_published_category = CategoryFactory(should_publish=True)
+        not_published_category = CategoryFactory()
 
         # Modify the draft version of the published category
         title_obj = published_category.extended_object.title_set.get(language="en")
@@ -36,10 +37,11 @@ class PersonCMSTestCase(CMSTestCase):
         title_obj.save()
 
         # Organizations
-        published_organization, extra_published_organization = OrganizationFactory.create_batch(
-            2, should_publish=True
-        )
-        unpublished_organization = OrganizationFactory()
+        published_organization = OrganizationFactory(should_publish=True)
+        unpublished_organization = OrganizationFactory(should_publish=True)
+        unpublished_organization.extended_object.unpublish("en")
+        extra_published_organization = OrganizationFactory(should_publish=True)
+        not_published_organization = OrganizationFactory()
 
         # Modify the draft version of the published organization
         title_obj = published_organization.extended_object.title_set.get(language="en")
@@ -50,8 +52,16 @@ class PersonCMSTestCase(CMSTestCase):
             page_title="My page title",
             fill_portrait=True,
             fill_bio=True,
-            fill_categories=[published_category, unpublished_category],
-            fill_organizations=[published_organization, unpublished_organization],
+            fill_categories=[
+                published_category,
+                not_published_category,
+                unpublished_category,
+            ],
+            fill_organizations=[
+                published_organization,
+                not_published_organization,
+                unpublished_organization,
+            ],
         )
         page = person.extended_object
 
@@ -64,18 +74,16 @@ class PersonCMSTestCase(CMSTestCase):
         page.publish("en")
 
         # Add a new category to the draft person page but don't publish the modification
-        placeholder = page.placeholders.get(slot="categories")
         add_plugin(
-            placeholder,
+            page.placeholders.get(slot="categories"),
             CategoryPlugin,
             "en",
             page=extra_published_category.extended_object,
         )
 
         # Add a new organization to the draft person page but don't publish the modification
-        placeholder = page.placeholders.get(slot="organizations")
         add_plugin(
-            placeholder,
+            page.placeholders.get(slot="organizations"),
             OrganizationPlugin,
             "en",
             page=extra_published_organization.extended_object,
@@ -86,10 +94,11 @@ class PersonCMSTestCase(CMSTestCase):
         self.assertContains(
             response, "<title>My page title</title>", html=True, status_code=200
         )
-        title = person.extended_object.get_title()
         self.assertContains(
             response,
-            f'<h1 class="person-detail__card__content__title">{title:s}</h1>',
+            '<h1 class="person-detail__card__content__title">{:s}</h1>'.format(
+                person.extended_object.get_title()
+            ),
             html=True,
         )
         # The published category should be on the page in its published version
@@ -109,12 +118,14 @@ class PersonCMSTestCase(CMSTestCase):
         self.assertNotContains(
             response, extra_published_category.extended_object.get_title(), html=True
         )
+        # - not_published category
+        self.assertNotContains(
+            response, not_published_category.extended_object.get_title(), html=True
+        )
         # - unpublished category
         self.assertNotContains(
             response, unpublished_category.extended_object.get_title(), html=True
         )
-        # - modified draft version of the published category
-        self.assertNotContains(response, "modified title")
 
         # The published organization should be on the page in its published version
         self.assertContains(
@@ -125,19 +136,24 @@ class PersonCMSTestCase(CMSTestCase):
             html=True,
         )
 
-        # The other categories should not be leaked:
-        # - new_organization linked only on the draft person page
+        # The other organizations should not be leaked:
+        # - new organization linked only on the draft person page
         self.assertNotContains(
             response,
             extra_published_organization.extended_object.get_title(),
             html=True,
         )
+        # - not published organization
+        self.assertNotContains(
+            response, not_published_organization.extended_object.get_title(), html=True
+        )
         # - unpublished organization
         self.assertNotContains(
             response, unpublished_organization.extended_object.get_title(), html=True
         )
-        # - modified draft version of the published organization
-        self.assertNotContains(response, "modified title")
+
+        # Modified draft category and organization should not be leaked
+        self.assertNotContains(response, "modified")
 
     def test_templates_person_detail_cms_draft_content(self):
         """
@@ -148,23 +164,28 @@ class PersonCMSTestCase(CMSTestCase):
         self.client.login(username=user.username, password="password")
 
         published_category = CategoryFactory(should_publish=True)
-        unpublished_category = CategoryFactory()
+        not_published_category = CategoryFactory()
 
         published_organization = OrganizationFactory(should_publish=True)
-        unpublished_organization = OrganizationFactory()
-
-        # Then modify its draft version
-        title_obj = published_category.extended_object.title_set.get(language="en")
-        title_obj.title = "modified title"
-        title_obj.save()
+        not_published_organization = OrganizationFactory()
 
         person = PersonFactory(
             page_title="My page title",
             fill_portrait=True,
             fill_bio=True,
-            fill_categories=[published_category, unpublished_category],
-            fill_organizations=[published_organization, unpublished_organization],
+            fill_categories=[published_category, not_published_category],
+            fill_organizations=[published_organization, not_published_organization],
         )
+
+        # Modify the draft version of the published category
+        title_obj = published_category.extended_object.title_set.get(language="en")
+        title_obj.title = "modified category"
+        title_obj.save()
+
+        # Modify the draft version of the published organization
+        title_obj = published_category.extended_object.title_set.get(language="en")
+        title_obj.title = "modified organization"
+        title_obj.save()
         page = person.extended_object
 
         # The page should be visible as draft to the superuser
@@ -192,20 +213,18 @@ class PersonCMSTestCase(CMSTestCase):
             ),
             html=True,
         )
-        # The unpublished category should be on the page, mark as draft
+        # The not published category should be on the page, mark as draft
         self.assertContains(
             response,
             (
                 '<a class="category-plugin-tag category-plugin-tag--draft" '
                 'href="{:s}"><div class="category-plugin-tag__title">{:s}</div></a>'
             ).format(
-                unpublished_category.extended_object.get_absolute_url(),
-                unpublished_category.extended_object.get_title(),
+                not_published_category.extended_object.get_absolute_url(),
+                not_published_category.extended_object.get_title(),
             ),
             html=True,
         )
-        # The modified draft version of the published category should not be visible
-        self.assertNotContains(response, "modified title")
 
         # The published organization should be on the page in its published version
         self.assertContains(
@@ -216,11 +235,11 @@ class PersonCMSTestCase(CMSTestCase):
             html=True,
         )
 
-        # The unpublished organization should be on the page, mark as draft
+        # The not published organization should be on the page, mark as draft
         self.assertContains(
             response,
             '<div class="organization-glimpse__title">{:s}</div>'.format(
-                unpublished_organization.extended_object.get_title()
+                not_published_organization.extended_object.get_title()
             ),
             html=True,
         )
@@ -229,10 +248,11 @@ class PersonCMSTestCase(CMSTestCase):
             (
                 '<a class="organization-glimpse organization-glimpse--link '
                 'organization-glimpse--draft" href="{url:s}">'
-            ).format(url=unpublished_organization.extended_object.get_absolute_url()),
+            ).format(url=not_published_organization.extended_object.get_absolute_url()),
         )
-        # The modified draft version of the published organization should not be visible
-        self.assertNotContains(response, "modified title")
+
+        # Modified draft category and organization should not be leaked
+        self.assertNotContains(response, "modified")
 
     def test_templates_person_detail_organizations_empty(self):
         """
