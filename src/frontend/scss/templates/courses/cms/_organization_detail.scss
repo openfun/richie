@@ -75,7 +75,7 @@ $richie-org-detail-logo-width: 12rem !default;
   }
 
   &__title {
-    margin: 1rem;
+    margin: 1rem 1rem 0 1rem;
 
     @include media-breakpoint-up(xl) {
       min-height: 6rem;
@@ -84,14 +84,36 @@ $richie-org-detail-logo-width: 12rem !default;
     }
   }
 
+  &__categories {
+    display: flex;
+    padding: 0 1rem 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    &__placeholder {
+      flex-grow: 1;
+      flex-shrink: 0;
+      flex-basis: 100%;
+      font-style: italic;
+      color: $gray40;
+      text-align: center;
+      background: transparent;
+
+      &:hover {
+        color: $gray40;
+      }
+    }
+  }
+
   &__content {
     clear: both;
     @include make-row();
+    margin-top: 1rem;
     padding-left: $grid-gutter-width;
     padding-right: $grid-gutter-width;
 
-    &__description,
-    &__courses {
+    &__courses,
+    &__description {
       @include make-col-ready();
       @include make-col(12);
     }

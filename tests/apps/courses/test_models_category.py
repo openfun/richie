@@ -11,9 +11,10 @@ from richie.apps.courses.factories import (
     BlogPostFactory,
     CategoryFactory,
     CourseFactory,
+    OrganizationFactory,
     PersonFactory,
 )
-from richie.apps.courses.models import BlogPost, Category, Course, Person
+from richie.apps.courses.models import BlogPost, Category, Course, Organization, Person
 
 
 class CategoryModelsTestCase(TestCase):
@@ -253,6 +254,64 @@ class CategoryModelsTestCase(TestCase):
         )
         self.assertEqual(BlogPost.objects.count(), 2)
         self.assertEqual(category.get_blogposts().count(), 1)
+
+    def test_models_category_get_organizations(self):
+        """
+        It should be possible to retrieve the list of related organizations on the category
+        instance. The number of queries should be minimal.
+        """
+        category = CategoryFactory(should_publish=True)
+        organizations = OrganizationFactory.create_batch(
+            2, page_title="my title", fill_categories=[category], should_publish=True
+        )
+        retrieved_organizations = category.get_organizations()
+
+        with self.assertNumQueries(2):
+            self.assertEqual(set(retrieved_organizations), set(organizations))
+
+        with self.assertNumQueries(0):
+            for organization in retrieved_organizations:
+                self.assertEqual(
+                    organization.extended_object.prefetched_titles[0].title, "my title"
+                )
+
+    def test_models_category_get_organizations_public_category_page(self):
+        """
+        When a category is added on a draft organization, the organization should not be visible on
+        the public category page until the organization is published.
+        """
+        category = CategoryFactory(should_publish=True)
+        category_page = category.extended_object
+        organization = OrganizationFactory(page_title="my title", should_publish=True)
+        organization_page = organization.extended_object
+
+        # Add a category to the organization but don't publish the modification
+        placeholder = organization_page.placeholders.get(slot="categories")
+        add_plugin(placeholder, CategoryPlugin, "en", page=category_page)
+
+        self.assertEqual(list(category.get_organizations()), [organization])
+        self.assertEqual(list(category.public_extension.get_organizations()), [])
+
+        # Now publish the modification and check that the organization is displayed
+        # on the public category page
+        organization.extended_object.publish("en")
+        self.assertEqual(
+            list(category.public_extension.get_organizations()),
+            [organization.public_extension],
+        )
+
+    def test_models_category_get_organizations_several_languages(self):
+        """
+        The organizations should not be duplicated if they exist in several languages.
+        """
+        category = CategoryFactory(should_publish=True)
+        OrganizationFactory(
+            page_title={"en": "my title", "fr": "mon titre"},
+            fill_categories=[category],
+            should_publish=True,
+        )
+        self.assertEqual(Organization.objects.count(), 2)
+        self.assertEqual(category.get_organizations().count(), 1)
 
     def test_models_category_get_persons(self):
         """

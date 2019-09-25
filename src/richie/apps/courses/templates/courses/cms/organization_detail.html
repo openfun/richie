@@ -50,6 +50,18 @@
 
   <h1 class="organization-detail__title">{% render_model request.current_page "title" %}</h1>
 
+  {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"categories" %}
+    <div class="organization-detail__categories">
+      {% with form_factor="tag" %}
+        {% placeholder "categories" or %}
+          <p class="organization-detail__categories__empty">
+            {% trans "No associated categories" %}
+          </p>
+        {% endplaceholder %}
+      {% endwith %}
+    </div>
+  {% endif %}
+
   <div class="organization-detail__content">
     <div class="organization-detail__content__description">
       {% placeholder "description" %}
