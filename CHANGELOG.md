@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Display related organizations on category detail page,
 - Add a variant option for organization glimpse,
 - Allow tagging organizations with categories,
 - Allow second level children in footer menu.

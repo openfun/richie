@@ -96,6 +96,19 @@
   {% endif %}
 {% endwith %}
 
+{% with organizations=category.get_organizations %}
+  {% if organizations %}
+    <section class="organization-glimpse-list">
+      <h2 class="organization-glimpse-list__title">{% trans "Related organizations" %}</h2>
+      {% for organization in organizations %}
+        {% if organization.extended_object.publisher_is_draft or organization.check_publication %}
+          {% include "courses/cms/fragment_organization_glimpse.html" %}
+        {% endif %}
+      {% endfor %}
+    </section>
+  {% endif %}
+{% endwith %}
+
 {% with blogposts=category.get_blogposts %}
   {% if blogposts %}
     <section class="blogpost-glimpse-list">
