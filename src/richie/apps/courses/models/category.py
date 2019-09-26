@@ -67,7 +67,7 @@ class Category(BasePageExtension):
             extended_object__node__parent__cms_pages__publisher_is_draft=self_is_draft,
         )
 
-    def get_page_extensions(self, model_name, language=None):
+    def get_page_extensions(self, model_name, language=None, include_descendants=True):
         """
         Return a query to get the page extentions of a given model type related to this category
         ie for which a plugin for this category is linked to the organization page via any
@@ -77,19 +77,29 @@ class Category(BasePageExtension):
         category = self if is_draft else self.draft_extension
         language = language or translation.get_language()
 
-        bfs = "extended_object__placeholders__cmsplugin__courses_categorypluginmodel__page"
-        filter_dict = {
-            "extended_object__publisher_is_draft": is_draft,
-            "extended_object__placeholders__cmsplugin__language": language,
-            bfs: category.extended_object,
-        }
+        if include_descendants is True:
+            bfs = (
+                "extended_object__placeholders__cmsplugin__"
+                "courses_categorypluginmodel__page__node"
+            )
+            selector = {
+                f"{bfs:s}__path__startswith": category.extended_object.node.path,
+                f"{bfs:s}__depth__gte": category.extended_object.node.depth,
+            }
+        else:
+            bfs = "extended_object__placeholders__cmsplugin__courses_categorypluginmodel__page"
+            selector = {bfs: category.extended_object}
 
         page_extension_model = apps.get_model(
             app_label="courses", model_name=model_name
         )
         # pylint: disable=no-member
         return (
-            page_extension_model.objects.filter(**filter_dict)
+            page_extension_model.objects.filter(
+                extended_object__publisher_is_draft=is_draft,
+                extended_object__placeholders__cmsplugin__language=language,
+                **selector,
+            )
             .select_related("extended_object")
             .prefetch_related(
                 Prefetch(
@@ -102,35 +112,41 @@ class Category(BasePageExtension):
             .order_by("extended_object__node__path")
         )
 
-    def get_courses(self, language=None):
+    def get_courses(self, language=None, include_descendants=True):
         """
         Return a query to get the courses related to this category ie for which a plugin for
         this category is linked to the course page via any placeholder.
         """
-        return self.get_page_extensions("course", language=language).filter(
-            extended_object__node__parent__cms_pages__course__isnull=True
-        )
+        return self.get_page_extensions(
+            "course", language=language, include_descendants=include_descendants
+        ).filter(extended_object__node__parent__cms_pages__course__isnull=True)
 
-    def get_blogposts(self, language=None):
+    def get_blogposts(self, language=None, include_descendants=True):
         """
         Return a query to get the blogposts related to this category ie for which a
         plugin for this category is linked to the blogpost page via any placeholder.
         """
-        return self.get_page_extensions("blogpost", language=language)
+        return self.get_page_extensions(
+            "blogpost", language=language, include_descendants=include_descendants
+        )
 
-    def get_organizations(self, language=None):
+    def get_organizations(self, language=None, include_descendants=True):
         """
         Return a query to get the organizations related to this category ie for which a plugin
         for this category is linked to the organization page via any placeholder.
         """
-        return self.get_page_extensions("organization", language=language)
+        return self.get_page_extensions(
+            "organization", language=language, include_descendants=include_descendants
+        )
 
-    def get_persons(self, language=None):
+    def get_persons(self, language=None, include_descendants=True):
         """
         Return a query to get the persons related to this category ie for which a plugin for
         this category is linked to the person page via any placeholder.
         """
-        return self.get_page_extensions("person", language=language)
+        return self.get_page_extensions(
+            "person", language=language, include_descendants=include_descendants
+        )
 
     def get_children_categories(self):
         """

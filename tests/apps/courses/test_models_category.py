@@ -148,6 +148,67 @@ class CategoryModelsTestCase(TestCase):
         course1.extended_object.move_page(course3.extended_object.node, position="left")
         self.assertEqual(list(category.get_courses()), [course1, course3, course2])
 
+    def test_models_category_get_courses_descendants(self):
+        """
+        Related courses should include the courses linked to the category's descendants,
+        unless specifically deactivated by the "include_descendants" argument.
+        """
+        category_page = create_page(
+            "Subjects", "courses/cms/category_detail.html", "en", published=True
+        )
+        category = CategoryFactory(extended_object=category_page, should_publish=True)
+        courses = CourseFactory.create_batch(
+            2, fill_categories=[category], should_publish=True
+        )
+
+        child_category_page = create_page(
+            "Literature",
+            "courses/cms/category_detail.html",
+            "en",
+            parent=category_page,
+            published=True,
+        )
+        child_category = CategoryFactory(
+            extended_object=child_category_page, should_publish=True
+        )
+        courses_child = CourseFactory.create_batch(
+            2, fill_categories=[child_category], should_publish=True
+        )
+
+        grand_child_category_page = create_page(
+            "Literature",
+            "courses/cms/category_detail.html",
+            "en",
+            parent=child_category_page,
+            published=True,
+        )
+        grand_child_category = CategoryFactory(
+            extended_object=grand_child_category_page, should_publish=True
+        )
+        courses_grand_child = CourseFactory.create_batch(
+            2, fill_categories=[grand_child_category], should_publish=True
+        )
+
+        # Check that each category gets courses from its descendants
+        # ...unless we pass an argument to deactivate it
+        self.assertEqual(
+            list(category.get_courses()), courses + courses_child + courses_grand_child
+        )
+        self.assertEqual(list(category.get_courses(include_descendants=False)), courses)
+
+        self.assertEqual(
+            list(child_category.get_courses()), courses_child + courses_grand_child
+        )
+        self.assertEqual(
+            list(child_category.get_courses(include_descendants=False)), courses_child
+        )
+
+        self.assertEqual(
+            list(grand_child_category.get_courses(include_descendants=False)),
+            courses_grand_child,
+        )
+        self.assertEqual(list(grand_child_category.get_courses()), courses_grand_child)
+
     def test_models_category_get_courses_public_category_page(self):
         """
         When a category is added on a draft course, the course should not be visible on
@@ -258,6 +319,74 @@ class CategoryModelsTestCase(TestCase):
             list(category.get_blogposts()), [blogpost1, blogpost3, blogpost2]
         )
 
+    def test_models_category_get_blogposts_descendants(self):
+        """
+        Related blogposts should include the blogposts linked to the category's descendants,
+        unless specifically deactivated by the "include_descendants" argument.
+        """
+        category_page = create_page(
+            "Subjects", "courses/cms/category_detail.html", "en", published=True
+        )
+        category = CategoryFactory(extended_object=category_page, should_publish=True)
+        blogposts = BlogPostFactory.create_batch(
+            2, fill_categories=[category], should_publish=True
+        )
+
+        child_category_page = create_page(
+            "Literature",
+            "courses/cms/category_detail.html",
+            "en",
+            parent=category_page,
+            published=True,
+        )
+        child_category = CategoryFactory(
+            extended_object=child_category_page, should_publish=True
+        )
+        blogposts_child = BlogPostFactory.create_batch(
+            2, fill_categories=[child_category], should_publish=True
+        )
+
+        grand_child_category_page = create_page(
+            "Literature",
+            "courses/cms/category_detail.html",
+            "en",
+            parent=child_category_page,
+            published=True,
+        )
+        grand_child_category = CategoryFactory(
+            extended_object=grand_child_category_page, should_publish=True
+        )
+        blogposts_grand_child = BlogPostFactory.create_batch(
+            2, fill_categories=[grand_child_category], should_publish=True
+        )
+
+        # Check that each category gets blogposts from its descendants
+        # ...unless we pass an argument to deactivate it
+        self.assertEqual(
+            list(category.get_blogposts()),
+            blogposts + blogposts_child + blogposts_grand_child,
+        )
+        self.assertEqual(
+            list(category.get_blogposts(include_descendants=False)), blogposts
+        )
+
+        self.assertEqual(
+            list(child_category.get_blogposts()),
+            blogposts_child + blogposts_grand_child,
+        )
+        self.assertEqual(
+            list(child_category.get_blogposts(include_descendants=False)),
+            blogposts_child,
+        )
+
+        self.assertEqual(
+            list(grand_child_category.get_blogposts(include_descendants=False)),
+            blogposts_grand_child,
+        )
+        self.assertEqual(
+            list(grand_child_category.get_blogposts()), blogposts_grand_child
+        )
+
     def test_models_category_get_blogposts_public_category_page(self):
         """
         When a category is added on a draft blog post, the blog post should not be visible on
@@ -344,6 +473,74 @@ class CategoryModelsTestCase(TestCase):
             [organization1, organization3, organization2],
         )
 
+    def test_models_category_get_organizations_descendants(self):
+        """
+        Related organizations should include the organizations linked to the category's
+        descendants, unless specifically deactivated by the "include_descendants" argument.
+        """
+        category_page = create_page(
+            "Subjects", "courses/cms/category_detail.html", "en", published=True
+        )
+        category = CategoryFactory(extended_object=category_page, should_publish=True)
+        organizations = OrganizationFactory.create_batch(
+            2, fill_categories=[category], should_publish=True
+        )
+
+        child_category_page = create_page(
+            "Literature",
+            "courses/cms/category_detail.html",
+            "en",
+            parent=category_page,
+            published=True,
+        )
+        child_category = CategoryFactory(
+            extended_object=child_category_page, should_publish=True
+        )
+        organizations_child = OrganizationFactory.create_batch(
+            2, fill_categories=[child_category], should_publish=True
+        )
+
+        grand_child_category_page = create_page(
+            "Literature",
+            "courses/cms/category_detail.html",
+            "en",
+            parent=child_category_page,
+            published=True,
+        )
+        grand_child_category = CategoryFactory(
+            extended_object=grand_child_category_page, should_publish=True
+        )
+        organizations_grand_child = OrganizationFactory.create_batch(
+            2, fill_categories=[grand_child_category], should_publish=True
+        )
+
+        # Check that each category gets organizations from its descendants
+        # ...unless we pass an argument to deactivate it
+        self.assertEqual(
+            list(category.get_organizations()),
+            organizations + organizations_child + organizations_grand_child,
+        )
+        self.assertEqual(
+            list(category.get_organizations(include_descendants=False)), organizations
+        )
+
+        self.assertEqual(
+            list(child_category.get_organizations()),
+            organizations_child + organizations_grand_child,
+        )
+        self.assertEqual(
+            list(child_category.get_organizations(include_descendants=False)),
+            organizations_child,
+        )
+
+        self.assertEqual(
+            list(grand_child_category.get_organizations(include_descendants=False)),
+            organizations_grand_child,
+        )
+        self.assertEqual(
+            list(grand_child_category.get_organizations()), organizations_grand_child
+        )
+
     def test_models_category_get_organizations_public_category_page(self):
         """
         When a category is added on a draft organization, the organization should not be visible on
@@ -416,6 +613,67 @@ class CategoryModelsTestCase(TestCase):
 
         person1.extended_object.move_page(person3.extended_object.node, position="left")
         self.assertEqual(list(category.get_persons()), [person1, person3, person2])
+
+    def test_models_category_get_persons_descendants(self):
+        """
+        Related persons should include the persons linked to the category's descendants,
+        unless specifically deactivated by the "include_descendants" argument.
+        """
+        category_page = create_page(
+            "Subjects", "courses/cms/category_detail.html", "en", published=True
+        )
+        category = CategoryFactory(extended_object=category_page, should_publish=True)
+        persons = PersonFactory.create_batch(
+            2, fill_categories=[category], should_publish=True
+        )
+
+        child_category_page = create_page(
+            "Literature",
+            "courses/cms/category_detail.html",
+            "en",
+            parent=category_page,
+            published=True,
+        )
+        child_category = CategoryFactory(
+            extended_object=child_category_page, should_publish=True
+        )
+        persons_child = PersonFactory.create_batch(
+            2, fill_categories=[child_category], should_publish=True
+        )
+
+        grand_child_category_page = create_page(
+            "Literature",
+            "courses/cms/category_detail.html",
+            "en",
+            parent=child_category_page,
+            published=True,
+        )
+        grand_child_category = CategoryFactory(
+            extended_object=grand_child_category_page, should_publish=True
+        )
+        persons_grand_child = PersonFactory.create_batch(
+            2, fill_categories=[grand_child_category], should_publish=True
+        )
+
+        # Check that each category gets persons from its descendants
+        # ...unless we pass an argument to deactivate it
+        self.assertEqual(
+            list(category.get_persons()), persons + persons_child + persons_grand_child
+        )
+        self.assertEqual(list(category.get_persons(include_descendants=False)), persons)
+
+        self.assertEqual(
+            list(child_category.get_persons()), persons_child + persons_grand_child
+        )
+        self.assertEqual(
+            list(child_category.get_persons(include_descendants=False)), persons_child
+        )
+
+        self.assertEqual(
+            list(grand_child_category.get_persons(include_descendants=False)),
+            persons_grand_child,
+        )
+        self.assertEqual(list(grand_child_category.get_persons()), persons_grand_child)
 
     def test_models_category_get_persons_public_category_page(self):
         """
