@@ -16,6 +16,7 @@ from .models import (
     CoursePluginModel,
     LicencePluginModel,
     OrganizationPluginModel,
+    OrganizationsByCategoryPluginModel,
     PersonPluginModel,
     ProgramPluginModel,
 )
@@ -39,6 +40,31 @@ class OrganizationPlugin(CMSPluginBase):
                 "instance": instance,
                 "relevant_page": instance.relevant_page,
                 "placeholder": placeholder,
+            }
+        )
+        return context
+
+
+@plugin_pool.register_plugin
+class OrganizationsByCategoryPlugin(CMSPluginBase):
+    """
+    Display a list of organization glimpses for all organizations related to the targeted category.
+    """
+
+    cache = True
+    model = OrganizationsByCategoryPluginModel
+    module = PLUGINS_GROUP
+    render_template = "courses/plugins/organizations_by_category.html"
+
+    def render(self, context, instance, placeholder):
+        """
+        Add to context a query of all the organizations linked to the target category or one of
+        its descendants via a category plugin on the organization detail page.
+        """
+        context.update(
+            {
+                "instance": instance,
+                "organizations": instance.relevant_page.category.get_organizations(),
             }
         )
         return context

@@ -241,4 +241,39 @@ class OrganizationPluginModel(PagePluginMixin, CMSPlugin):
         )
 
 
+class OrganizationsByCategoryPluginModel(PagePluginMixin, CMSPlugin):
+    """
+    Handle the relation between a OrganizationsByCategoryPlugin plugin and its Category
+    instance.
+    """
+
+    page = models.ForeignKey(
+        Page,
+        on_delete=models.CASCADE,
+        related_name="organizations_by_category_plugins",
+        limit_choices_to={
+            "publisher_is_draft": True,  # plugins work with draft instances
+            "category__isnull": False,  # limit to pages linked to a category object
+        },
+    )
+    variant = models.CharField(
+        _("variant"),
+        max_length=50,
+        choices=defaults.ORGANIZATION_GLIMPSE_VARIANT_CHOICES,
+        help_text=_("Optional glimpse variant for a custom look."),
+        blank=True,
+        null=True,
+    )
+
+    class Meta:
+        db_table = "richie_organizations_by_category_plugin"
+        verbose_name = _("organizations by category plugin")
+
+    def __str__(self):
+        """Human representation of a plugin to embed organizations for a category."""
+        return "{model:s}: {id:d}".format(
+            model=self._meta.verbose_name.title(), id=self.id
+        )
+
+
 extension_pool.register(Organization)

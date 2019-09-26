@@ -59,6 +59,7 @@ CMS_PLACEHOLDER_CONF = {
                 "CategoryPlugin",
                 "LinkPlugin",
                 "OrganizationPlugin",
+                "OrganizationsByCategoryPlugin",
                 "PersonPlugin",
             ]
         },
@@ -72,6 +73,7 @@ CMS_PLACEHOLDER_CONF = {
             "CategoryPlugin": ["SectionPlugin"],
             "CoursePlugin": ["SectionPlugin"],
             "OrganizationPlugin": ["SectionPlugin"],
+            "OrganizationsByCategoryPlugin": ["SectionPlugin"],
             "PersonPlugin": ["SectionPlugin"],
         },
         "child_classes": {
@@ -81,6 +83,7 @@ CMS_PLACEHOLDER_CONF = {
                 "CoursePlugin",
                 "LinkPlugin",
                 "OrganizationPlugin",
+                "OrganizationsByCategoryPlugin",
                 "PersonPlugin",
             ]
         },

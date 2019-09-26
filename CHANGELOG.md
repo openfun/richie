@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add plugin to embed organizations by their category on any page,
 - Display related organizations on category detail page,
 - Add a variant option for organization glimpse,
 - Allow tagging organizations with categories,
