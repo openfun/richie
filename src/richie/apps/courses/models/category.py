@@ -99,6 +99,7 @@ class Category(BasePageExtension):
                 )
             )
             .distinct()
+            .order_by("extended_object__node__path")
         )
 
     def get_courses(self, language=None):
