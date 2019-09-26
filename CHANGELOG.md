@@ -16,6 +16,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- When displaying objects related to a category, include objects related to
+  the categories' descendants,
 - When displaying related objects on a category, respect page tree ordering,
 - The filters pane in course search is now a sliding drawer on mobile,
 - Use SVG icons instead of an icon font.
