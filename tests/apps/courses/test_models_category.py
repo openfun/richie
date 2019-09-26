@@ -17,6 +17,7 @@ from richie.apps.courses.factories import (
 from richie.apps.courses.models import BlogPost, Category, Course, Organization, Person
 
 
+# pylint: disable=too-many-public-methods
 class CategoryModelsTestCase(TestCase):
     """
     Unit test suite to validate the behavior of the Category model
@@ -112,7 +113,7 @@ class CategoryModelsTestCase(TestCase):
         )
         self.assertEqual(child_category.get_meta_category(), meta_category)
 
-    def test_models_category_get_courses(self):
+    def test_models_category_get_courses_queries(self):
         """
         It should be possible to retrieve the list of related courses on the category instance.
         The number of queries should be minimal.
@@ -124,13 +125,28 @@ class CategoryModelsTestCase(TestCase):
         retrieved_courses = category.get_courses()
 
         with self.assertNumQueries(2):
-            self.assertEqual(set(retrieved_courses), set(courses))
+            self.assertEqual(list(retrieved_courses), courses)
 
         with self.assertNumQueries(0):
             for course in retrieved_courses:
                 self.assertEqual(
                     course.extended_object.prefetched_titles[0].title, "my title"
                 )
+
+    def test_models_category_get_courses_ordering(self):
+        """The related courses should be sorted by their position in the pages tree."""
+        category = CategoryFactory(should_publish=True)
+        course1, course2, course3 = CourseFactory.create_batch(
+            3, fill_categories=[category], should_publish=True
+        )
+        self.assertEqual(list(category.get_courses()), [course1, course2, course3])
+
+        # Move pages in the tree and check that they are returned in the new order
+        course3.extended_object.move_page(course1.extended_object.node, position="left")
+        self.assertEqual(list(category.get_courses()), [course3, course1, course2])
+
+        course1.extended_object.move_page(course3.extended_object.node, position="left")
+        self.assertEqual(list(category.get_courses()), [course1, course3, course2])
 
     def test_models_category_get_courses_public_category_page(self):
         """
@@ -217,6 +233,31 @@ class CategoryModelsTestCase(TestCase):
                     blogpost.extended_object.prefetched_titles[0].title, "my title"
                 )
 
+    def test_models_category_get_blogposts_ordering(self):
+        """The related blogposts should be sorted by their position in the pages tree."""
+        category = CategoryFactory(should_publish=True)
+        blogpost1, blogpost2, blogpost3 = BlogPostFactory.create_batch(
+            3, fill_categories=[category], should_publish=True
+        )
+        self.assertEqual(
+            list(category.get_blogposts()), [blogpost1, blogpost2, blogpost3]
+        )
+
+        # Move pages in the tree and check that they are returned in the new order
+        blogpost3.extended_object.move_page(
+            blogpost1.extended_object.node, position="left"
+        )
+        self.assertEqual(
+            list(category.get_blogposts()), [blogpost3, blogpost1, blogpost2]
+        )
+
+        blogpost1.extended_object.move_page(
+            blogpost3.extended_object.node, position="left"
+        )
+        self.assertEqual(
+            list(category.get_blogposts()), [blogpost1, blogpost3, blogpost2]
+        )
+
     def test_models_category_get_blogposts_public_category_page(self):
         """
         When a category is added on a draft blog post, the blog post should not be visible on
@@ -275,6 +316,34 @@ class CategoryModelsTestCase(TestCase):
                     organization.extended_object.prefetched_titles[0].title, "my title"
                 )
 
+    def test_models_category_get_organizations_ordering(self):
+        """The related organizations should be sorted by their position in the pages tree."""
+        category = CategoryFactory(should_publish=True)
+        organization1, organization2, organization3 = OrganizationFactory.create_batch(
+            3, fill_categories=[category], should_publish=True
+        )
+        self.assertEqual(
+            list(category.get_organizations()),
+            [organization1, organization2, organization3],
+        )
+
+        # Move pages in the tree and check that they are returned in the new order
+        organization3.extended_object.move_page(
+            organization1.extended_object.node, position="left"
+        )
+        self.assertEqual(
+            list(category.get_organizations()),
+            [organization3, organization1, organization2],
+        )
+
+        organization1.extended_object.move_page(
+            organization3.extended_object.node, position="left"
+        )
+        self.assertEqual(
+            list(category.get_organizations()),
+            [organization1, organization3, organization2],
+        )
+
     def test_models_category_get_organizations_public_category_page(self):
         """
         When a category is added on a draft organization, the organization should not be visible on
@@ -332,6 +401,21 @@ class CategoryModelsTestCase(TestCase):
                 self.assertEqual(
                     person.extended_object.prefetched_titles[0].title, "my title"
                 )
+
+    def test_models_category_get_persons_ordering(self):
+        """The related persons should be sorted by their position in the pages tree."""
+        category = CategoryFactory(should_publish=True)
+        person1, person2, person3 = PersonFactory.create_batch(
+            3, fill_categories=[category], should_publish=True
+        )
+        self.assertEqual(list(category.get_persons()), [person1, person2, person3])
+
+        # Move pages in the tree and check that they are returned in the new order
+        person3.extended_object.move_page(person1.extended_object.node, position="left")
+        self.assertEqual(list(category.get_persons()), [person3, person1, person2])
+
+        person1.extended_object.move_page(person3.extended_object.node, position="left")
+        self.assertEqual(list(category.get_persons()), [person1, person3, person2])
 
     def test_models_category_get_persons_public_category_page(self):
         """
