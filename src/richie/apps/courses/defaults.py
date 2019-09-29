@@ -217,6 +217,10 @@ PAGE_EXTENSION_TOOLBAR_ITEM_POSITION = getattr(
     settings, "RICHIE_PAGE_EXTENSION_TOOLBAR_ITEM_POSITION", 4
 )
 
+ORGANIZATION_GLIMPSE_VARIANT_CHOICES = getattr(
+    settings, "RICHIE_ORGANIZATION_GLIMPSE_VARIANT_CHOICES", [(None, _("Default"))]
+)
+
 # For each type of page we define:
 #   - the `reverse_id` of the page under which pages should be created via the wizard,
 #   - the template to be used when creating a new page of this type,

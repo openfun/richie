@@ -1,6 +1,8 @@
 """
 End-to-end tests for the person detail view
 """
+import re
+
 from cms.api import add_plugin
 from cms.test_utils.testcases import CMSTestCase
 
@@ -243,15 +245,14 @@ class PersonCMSTestCase(CMSTestCase):
             ),
             html=True,
         )
-        self.assertContains(
-            response,
+        self.assertIn(
             (
-                '<a class="organization-glimpse organization-glimpse--link '
-                'organization-glimpse--draft" href="{url:s}">'
+                '<a class=" organization-glimpse organization-glimpse--link '
+                'organization-glimpse--draft " href="{url:s}">'
             ).format(url=not_published_organization.extended_object.get_absolute_url()),
+            re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
 
-        # Modified draft category and organization should not be leaked
         self.assertNotContains(response, "modified")
 
     def test_templates_person_detail_organizations_empty(self):
