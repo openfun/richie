@@ -94,12 +94,12 @@ class OrganizationPluginTestCase(CMSTestCase):
         response = self.client.get(url)
         # The organization's name should be present as a link to the cms page
         # And CMS page title should be in title attribute of the link
-        self.assertContains(
-            response,
-            '<a class="organization-glimpse organization-glimpse--link" '
+        self.assertIn(
+            '<a class=" organization-glimpse organization-glimpse--link " '
             'href="/en/public-title/"',
-            status_code=200,
+            re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
+
         # The organization's title should be wrapped in a div
         self.assertContains(
             response,
@@ -121,11 +121,10 @@ class OrganizationPluginTestCase(CMSTestCase):
         # Same checks in French
         url = page.get_absolute_url(language="fr")
         response = self.client.get(url)
-        self.assertContains(
-            response,
-            '<a class="organization-glimpse organization-glimpse--link" '
+        self.assertIn(
+            '<a class=" organization-glimpse organization-glimpse--link " '
             'href="/fr/titre-public/"',
-            status_code=200,
+            re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
         pattern = (
             r'<div class="organization-glimpse__logo">'
@@ -169,3 +168,40 @@ class OrganizationPluginTestCase(CMSTestCase):
         response = self.client.get(url)
         self.assertContains(response, "draft title")
         self.assertNotContains(response, "public title")
+
+    def test_cms_plugins_organization_render_template(self):
+        """
+        The organization plugin should render according to template choice.
+        """
+        staff = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=staff.username, password="password")
+
+        # Create an Organization
+        organization = OrganizationFactory(page_title="public title")
+        organization_page = organization.extended_object
+
+        # Create a page to add the plugin to
+        page = create_i18n_page("A page")
+        placeholder = page.placeholders.get(slot="maincontent")
+
+        # Add organization plugin with default template
+        add_plugin(placeholder, OrganizationPlugin, "en", page=organization_page)
+
+        url = "{:s}?edit".format(page.get_absolute_url(language="en"))
+
+        # The organization-glimpse default template should not have the small attribute
+        response = self.client.get(url)
+        self.assertNotContains(response, "organization-glimpse__small")
+
+        # Add organization plugin with small template
+        add_plugin(
+            placeholder,
+            OrganizationPlugin,
+            "en",
+            page=organization_page,
+            variant="small",
+        )
+
+        # The organization-glimpse default template should not have the small attribute
+        response = self.client.get(url)
+        self.assertContains(response, "organization-glimpse--small")

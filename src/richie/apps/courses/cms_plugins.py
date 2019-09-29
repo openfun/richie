@@ -28,6 +28,7 @@ class OrganizationPlugin(CMSPluginBase):
     """
 
     cache = True
+    fieldsets = ((None, {"fields": ["page", "variant"]}),)
     model = OrganizationPluginModel
     module = PLUGINS_GROUP
     render_template = "courses/plugins/organization.html"

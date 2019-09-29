@@ -221,6 +221,14 @@ class OrganizationPluginModel(PagePluginMixin, CMSPlugin):
             "organization__isnull": False,  # limit to pages linked to an organization object
         },
     )
+    variant = models.CharField(
+        _("variant"),
+        max_length=50,
+        choices=defaults.ORGANIZATION_GLIMPSE_VARIANT_CHOICES,
+        help_text=_("Optional glimpse variant for a custom look."),
+        blank=True,
+        null=True,
+    )
 
     class Meta:
         db_table = "richie_organization_plugin"
