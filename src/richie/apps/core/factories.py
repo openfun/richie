@@ -17,6 +17,7 @@ from cms import models as cms_models
 from cms.api import add_plugin
 from cms.utils import get_current_site
 from filer.models.imagemodels import Image
+from PIL import Image as PILimage
 
 from ..core.helpers import create_i18n_page, get_permissions
 
@@ -226,13 +227,6 @@ class FilerImageFactory(factory.django.DjangoModelFactory):
         Returns:
             django.core.files.File: File object.
         """
-        # ImageField (both django's and factory_boy's) require PIL.
-        # Try to import it along one of its known installation paths.
-        try:
-            from PIL import Image as PILimage
-        except ImportError:
-            import Image as PILimage
-
         thumb = PILimage.new("RGB", (100, 100), "blue")
         thumb_io = io.BytesIO()
         thumb.save(thumb_io, format="JPEG")
