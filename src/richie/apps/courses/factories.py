@@ -41,6 +41,19 @@ VIDEO_SAMPLE_LINKS = (
 )
 
 
+def associate_extensions(extension, related_extensions, slot, plugin_type):
+    """Add plugins to related pages that point to a given page."""
+    for related_extension in related_extensions:
+        placeholder = extension.extended_object.placeholders.get(slot=slot)
+        for language in extension.extended_object.get_languages():
+            add_plugin(
+                language=language,
+                placeholder=placeholder,
+                plugin_type=plugin_type,
+                **{"page": related_extension.extended_object},
+            )
+
+
 class BLDPageExtensionDjangoModelFactory(PageExtensionDjangoModelFactory):
     """
     This mixin mutualizes filling placeholders for banner, logo and description fields because
@@ -145,16 +158,7 @@ class OrganizationFactory(BLDPageExtensionDjangoModelFactory):
     def fill_categories(self, create, extracted, **kwargs):
         """Add categories plugin to organization from a given list of category instances."""
         if create and extracted:
-            for language in self.extended_object.get_languages():
-                placeholder = self.extended_object.placeholders.get(slot="categories")
-
-                for category in extracted:
-                    add_plugin(
-                        language=language,
-                        placeholder=placeholder,
-                        plugin_type="CategoryPlugin",
-                        **{"page": category.extended_object},
-                    )
+            associate_extensions(self, extracted, "categories", "CategoryPlugin")
 
     @factory.post_generation
     # pylint: disable=unused-argument
@@ -277,18 +281,8 @@ class CourseFactory(PageExtensionDjangoModelFactory):
         """
         Add person plugin for course team from given person instance list
         """
-
         if create and extracted:
-            for language in self.extended_object.get_languages():
-                placeholder = self.extended_object.placeholders.get(slot="course_team")
-
-                for person in extracted:
-                    add_plugin(
-                        language=language,
-                        placeholder=placeholder,
-                        plugin_type="PersonPlugin",
-                        **{"page": person.extended_object},
-                    )
+            associate_extensions(self, extracted, "course_team", "PersonPlugin")
 
     @factory.post_generation
     # pylint: disable=unused-argument
@@ -298,18 +292,7 @@ class CourseFactory(PageExtensionDjangoModelFactory):
         """
 
         if create and extracted:
-            for language in self.extended_object.get_languages():
-                placeholder = self.extended_object.placeholders.get(
-                    slot="course_categories"
-                )
-
-                for category in extracted:
-                    add_plugin(
-                        language=language,
-                        placeholder=placeholder,
-                        plugin_type="CategoryPlugin",
-                        **{"page": category.extended_object},
-                    )
+            associate_extensions(self, extracted, "course_categories", "CategoryPlugin")
 
     @factory.post_generation
     # pylint: disable=unused-argument
@@ -317,15 +300,7 @@ class CourseFactory(PageExtensionDjangoModelFactory):
         """Add category plugin to course from a given list of category instances."""
 
         if create and extracted:
-            for language in self.extended_object.get_languages():
-                placeholder = self.extended_object.placeholders.get(slot="course_icons")
-                for category in extracted:
-                    add_plugin(
-                        language=language,
-                        placeholder=placeholder,
-                        plugin_type="CategoryPlugin",
-                        **{"page": category.extended_object},
-                    )
+            associate_extensions(self, extracted, "course_icons", "CategoryPlugin")
 
     @factory.post_generation
     # pylint: disable=unused-argument
@@ -335,18 +310,9 @@ class CourseFactory(PageExtensionDjangoModelFactory):
         """
 
         if create and extracted:
-            for language in self.extended_object.get_languages():
-                placeholder = self.extended_object.placeholders.get(
-                    slot="course_organizations"
-                )
-
-                for organization in extracted:
-                    add_plugin(
-                        language=language,
-                        placeholder=placeholder,
-                        plugin_type="OrganizationPlugin",
-                        **{"page": organization.extended_object},
-                    )
+            associate_extensions(
+                self, extracted, "course_organizations", "OrganizationPlugin"
+            )
 
     @factory.post_generation
     # pylint: disable=unused-argument
@@ -634,16 +600,7 @@ class BlogPostFactory(PageExtensionDjangoModelFactory):
         """
 
         if create and extracted:
-            for language in self.extended_object.get_languages():
-                placeholder = self.extended_object.placeholders.get(slot="categories")
-
-                for category in extracted:
-                    add_plugin(
-                        language=language,
-                        placeholder=placeholder,
-                        plugin_type="CategoryPlugin",
-                        **{"page": category.extended_object},
-                    )
+            associate_extensions(self, extracted, "categories", "CategoryPlugin")
 
     @factory.post_generation
     # pylint: disable=unused-argument
@@ -736,16 +693,7 @@ class PersonFactory(PageExtensionDjangoModelFactory):
     def fill_categories(self, create, extracted, **kwargs):
         """Add categories plugin to person from a given list of category instances."""
         if create and extracted:
-            for language in self.extended_object.get_languages():
-                placeholder = self.extended_object.placeholders.get(slot="categories")
-
-                for category in extracted:
-                    add_plugin(
-                        language=language,
-                        placeholder=placeholder,
-                        plugin_type="CategoryPlugin",
-                        **{"page": category.extended_object},
-                    )
+            associate_extensions(self, extracted, "categories", "CategoryPlugin")
 
     @factory.post_generation
     # pylint: disable=unused-argument
@@ -797,18 +745,7 @@ class PersonFactory(PageExtensionDjangoModelFactory):
         """
 
         if create and extracted:
-            for language in self.extended_object.get_languages():
-                placeholder = self.extended_object.placeholders.get(
-                    slot="organizations"
-                )
-
-                for organization in extracted:
-                    add_plugin(
-                        language=language,
-                        placeholder=placeholder,
-                        plugin_type="OrganizationPlugin",
-                        **{"page": organization.extended_object},
-                    )
+            associate_extensions(self, extracted, "organizations", "OrganizationPlugin")
 
 
 class ProgramFactory(PageExtensionDjangoModelFactory):
@@ -853,18 +790,7 @@ class ProgramFactory(PageExtensionDjangoModelFactory):
         instances.
         """
         if create and extracted:
-            for course in extracted:
-                placeholder = self.extended_object.placeholders.get(
-                    slot="program_courses"
-                )
-                for language in self.extended_object.get_languages():
-
-                    add_plugin(
-                        language=language,
-                        placeholder=placeholder,
-                        plugin_type="CoursePlugin",
-                        **{"page": course.extended_object},
-                    )
+            associate_extensions(self, extracted, "program_courses", "CoursePlugin")
 
     @factory.post_generation
     # pylint: disable=unused-argument
