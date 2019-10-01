@@ -158,25 +158,6 @@ class OrganizationFactory(BLDPageExtensionDjangoModelFactory):
 
     @factory.post_generation
     # pylint: disable=unused-argument
-    def fill_courses(self, create, extracted, **kwargs):
-        """
-        Add plugins for this organization to each course in the given list of course instances.
-        """
-        if create and extracted:
-            for course in extracted:
-                placeholder = course.extended_object.placeholders.get(
-                    slot="course_organizations"
-                )
-                for language in self.extended_object.get_languages():
-                    add_plugin(
-                        language=language,
-                        placeholder=placeholder,
-                        plugin_type="OrganizationPlugin",
-                        **{"page": self.extended_object},
-                    )
-
-    @factory.post_generation
-    # pylint: disable=unused-argument
     def with_permissions(self, create, extracted, **kwargs):
         """
         Create a page role with related group, page permission and filer folder.
@@ -545,27 +526,6 @@ class CategoryFactory(BLDPageExtensionDjangoModelFactory):
 
     # fields concerning the related page
     page_template = models.Category.PAGE["template"]
-
-    @factory.post_generation
-    # pylint: disable=unused-argument
-    def fill_courses(self, create, extracted, **kwargs):
-        """
-        Add plugins for this category to each course in the given list of course instances.
-        """
-
-        if create and extracted:
-            for course in extracted:
-                placeholder = course.extended_object.placeholders.get(
-                    slot="course_categories"
-                )
-                for language in self.extended_object.get_languages():
-
-                    add_plugin(
-                        language=language,
-                        placeholder=placeholder,
-                        plugin_type="CategoryPlugin",
-                        **{"page": self.extended_object},
-                    )
 
     @factory.post_generation
     # pylint: disable=unused-argument
