@@ -32,12 +32,7 @@ class OrganizationCMSTestCase(CMSTestCase):
         unpublished_category.extended_object.unpublish("en")
         not_published_category = CategoryFactory()
 
-        # Courses
-        published_course = CourseFactory(should_publish=True)
-        extra_published_course = CourseFactory(should_publish=True)
-        unpublished_course = CourseFactory()
-        not_published_course = CourseFactory()
-
+        # Organizations
         organization = OrganizationFactory(
             page_title="La Sorbonne",
             fill_categories=[
@@ -45,8 +40,16 @@ class OrganizationCMSTestCase(CMSTestCase):
                 not_published_category,
                 unpublished_category,
             ],
-            fill_courses=[published_course, not_published_course, unpublished_course],
         )
+
+        # Courses
+        published_course = CourseFactory(
+            fill_organizations=[organization], should_publish=True
+        )
+        extra_published_course = CourseFactory(should_publish=True)
+        unpublished_course = CourseFactory(fill_organizations=[organization])
+        not_published_course = CourseFactory(fill_organizations=[organization])
+
         # Republish courses to take into account adding the organization
         published_course.extended_object.publish("en")
         unpublished_course.extended_object.publish("en")
@@ -161,14 +164,16 @@ class OrganizationCMSTestCase(CMSTestCase):
         published_category = CategoryFactory(should_publish=True)
         not_published_category = CategoryFactory()
 
-        published_course = CourseFactory(should_publish=True)
-        not_published_course = CourseFactory()
-
         organization = OrganizationFactory(
             page_title="La Sorbonne",
             fill_categories=[published_category, not_published_category],
-            fill_courses=[published_course, not_published_course],
         )
+
+        published_course = CourseFactory(
+            fill_organizations=[organization], should_publish=True
+        )
+        not_published_course = CourseFactory(fill_organizations=[organization])
+
         # Republish courses to take into account adding the organization
         published_course.extended_object.publish("en")
 

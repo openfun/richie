@@ -16,10 +16,8 @@ class CategoryCMSTestCase(CMSTestCase):
         """
         Validate that the important elements are displayed on a published category page
         """
-        courses = CourseFactory.create_batch(4)
-        category = CategoryFactory(
-            page_title="Very interesting category", fill_courses=courses
-        )
+        category = CategoryFactory(page_title="Very interesting category")
+        courses = CourseFactory.create_batch(4, fill_categories=[category])
         page = category.extended_object
 
         # Publish only 2 out of 4 courses
@@ -71,10 +69,8 @@ class CategoryCMSTestCase(CMSTestCase):
         user = UserFactory(is_staff=True, is_superuser=True)
         self.client.login(username=user.username, password="password")
 
-        courses = CourseFactory.create_batch(4)
-        category = CategoryFactory(
-            page_title="Very interesting category", fill_courses=courses
-        )
+        category = CategoryFactory(page_title="Very interesting category")
+        courses = CourseFactory.create_batch(4, fill_categories=[category])
         page = category.extended_object
 
         # Publish only 2 out of 4 courses
