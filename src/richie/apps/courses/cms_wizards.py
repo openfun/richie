@@ -284,7 +284,7 @@ class CourseRunWizardForm(BaseWizardForm):
 
     model = CourseRun
 
-    @property
+    @cached_property
     def parent_page(self):
         """
         The parent page of a course run is the course page from which it is being created.

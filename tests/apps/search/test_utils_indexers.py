@@ -21,7 +21,7 @@ class UtilsIndexersTestCase(TestCase):
             organizations="richie.apps.search.indexers.organizations.OrganizationsIndexer",
         )
         self.assertEqual(indices.courses, CoursesIndexer)
-        self.assertEqual([i for i in indices], [CoursesIndexer, OrganizationsIndexer])
+        self.assertEqual(list(indices), [CoursesIndexer, OrganizationsIndexer])
 
     def test_slice_string_for_completion(self):
         """
