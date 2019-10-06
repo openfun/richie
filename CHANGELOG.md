@@ -37,7 +37,20 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - In the sandbox, make API calls work behind an htaccess by removing Basic
   Auth fallback,
 - Fix React pagination role-element pair. Pagination should now be seen as a
-  navigational element by screen readers.
+  navigational element by screen readers,
+- Fix add plugin to team and organization on fragment_course_content template
+  when they are empty,
+- Remove deprecated attribute "type" from some "<script>" tags in templates,
+- Add missing attribute "alt" on some "<img>" tags in templates,
+- Fix invalid syntax in "srcset" attribute value on "<img>" tags,
+- Add url escaping on variables inside links on social network badges,
+- Fix invalid syntax in "sizes" attribute value on "<img>" tags,
+- Fix invalid attributes on "iframe" tag from djangocms_video plugin,
+- Fix invalid "button" tag inside a "a" tag inside course glimpse,
+- Fix invalid "role" value on pagination list with a "nav" tag around bullet
+  list instead,
+- Fix warning about multiple "h1" tags on homepage, section template will
+  always have a default level title to 2.
 
 ## [1.11.0] - 2019-10-11
 
