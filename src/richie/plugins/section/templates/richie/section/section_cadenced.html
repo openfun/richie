@@ -2,7 +2,7 @@
 
 <div class="section-container-cadenced">
     <section class="section">
-        <h{{ header_level|default:1 }} class="section__title">{{ instance.title }}</h{{ header_level|default:1 }}>
+        <h{{ header_level|default:2 }} class="section__title">{{ instance.title }}</h{{ header_level|default:2 }}>
         <div class="section__items">
             {% for plugin in instance.child_plugin_instances %}
                 {% with header_level=3 %}
