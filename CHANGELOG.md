@@ -25,6 +25,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix invalid "button" tag inside a "a" tag inside course glimpse,
 - Fix invalid attributes on "iframe" tag from djangocms_video plugin,
 - Fix invalid syntax in "sizes" attribute value on "<img>" tags,
 - Add url escaping on variables inside links from on social network badges,
