@@ -40,7 +40,9 @@
 
         {% render_block "css" %}
 
+        {% block css_links %}
         <link rel="stylesheet" type="text/css" href="{% static 'richie/css/main.css' %}">
+        {% endblock css_links %}
     </head>
     <body>
         {% cms_toolbar %}

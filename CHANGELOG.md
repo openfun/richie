@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Make stylesheet links overridable in the base template
+
 ## [1.10.0] - 2019-10-08
 
 ### Added
