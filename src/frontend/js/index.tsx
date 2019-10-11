@@ -5,6 +5,12 @@
  * one in our library and actually do render it in the appropriate element.
  */
 
+// Currently, @babel/preset-env is unaware that using import() with Webpack relies on Promise internally.
+// Environments which do not have builtin support for Promise, like Internet Explorer, will require both
+// the promise and iterator polyfills be added manually.
+import 'core-js/modules/es.array.iterator';
+import 'core-js/modules/es.promise';
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { IntlProvider } from 'react-intl';

@@ -6,19 +6,10 @@ module.exports = {
   // webpack config for production.
   mode: 'development',
 
-  // Currently, @babel/preset-env is unaware that using import() with Webpack relies on Promise internally.
-  // Environments which do not have builtin support for Promise, like Internet Explorer, will require both
-  // the promise and iterator polyfills be added manually.
-  //
   // chunkFilename must have a unique and different name on each build
   // this will prevent overwriting of existing chunks if backend static storage
   // is on AWS.
-  entry: [
-    './public-path.js',
-    'core-js/modules/es.promise',
-    'core-js/modules/es.array.iterator',
-    './js/index.tsx',
-  ],
+  entry: ['./public-path.js', './js/index.tsx'],
   output: {
     filename: 'index.js',
     path: __dirname + '/../richie/static/richie/js',
