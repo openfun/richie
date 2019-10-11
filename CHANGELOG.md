@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.10.1] - 2019-10-11
+
 ### Added
 
 - Make stylesheet links overridable in the base template
@@ -586,7 +588,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v1.10.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v1.10.1...master
+[1.10.1]: https://github.com/openfun/richie/compare/v1.10.0...v1.10.1
 [1.10.0]: https://github.com/openfun/richie/compare/v1.9.2...v1.10.0
 [1.9.2]: https://github.com/openfun/richie/compare/v1.9.1...v1.9.2
 [1.9.1]: https://github.com/openfun/richie/compare/v1.9.0...v1.9.1
