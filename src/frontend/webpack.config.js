@@ -1,3 +1,4 @@
+const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
@@ -6,13 +7,16 @@ module.exports = {
   // webpack config for production.
   mode: 'development',
 
-  // chunkFilename must have a unique and different name on each build
-  // this will prevent overwriting of existing chunks if backend static storage
-  // is on AWS.
-  entry: ['./public-path.js', './js/index.tsx'],
+  entry: [
+    path.resolve(__dirname, 'public-path.js'),
+    path.resolve(__dirname, 'js', 'index.tsx'),
+  ],
+
   output: {
     filename: 'index.js',
     path: __dirname + '/../richie/static/richie/js',
+    // `chunkFilename` must have a unique and different name on each build. This will prevent overwriting
+    // of existing chunks if backend static storage is on AWS.
     chunkFilename: '[id].[hash].index.js',
   },
 
