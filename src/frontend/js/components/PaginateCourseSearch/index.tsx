@@ -95,95 +95,102 @@ export const PaginateCourseSearch = ({
       <div id={`pagination-label-${componentId}`} className="offscreen">
         <FormattedMessage {...messages.pagination} />
       </div>
-      <ul
-        role="navigation"
-        aria-labelledby={`pagination-label-${componentId}`}
-        className="pagination__list"
-      >
-        {pageList.map((page, index) => (
-          <React.Fragment key={page}>
-            {/* Prepend a cell with "..." when the page number we're rendering does not follow the previous one */}
-            {page > (pageList[index - 1] || 0) + 1 && (
-              <li className="pagination__list__item pagination__list__item--placeholder">
-                ...
-              </li>
-            )}
+      <nav aria-labelledby={`pagination-label-${componentId}`}>
+        <ul className="pagination__list">
+          {pageList.map((page, index) => (
+            <React.Fragment key={page}>
+              {/* Prepend a cell with "..." when the page number we're rendering does not follow the previous one */}
+              {page > (pageList[index - 1] || 0) + 1 && (
+                <li className="pagination__list__item pagination__list__item--placeholder">
+                  ...
+                </li>
+              )}
 
-            {page === currentPage ? (
-              /* The current page needs different markup as it does not include a link */
-              <li className="pagination__list__item pagination__list__item--current">
-                <span className="pagination__list__item__page-number">
-                  {/*  Help assistive technology users with some context */}
-                  <span className="offscreen">
-                    {page === maxPage ? (
-                      <FormattedMessage
-                        {...messages.currentlyReadingLastPageN}
-                        values={{ page }}
-                      />
-                    ) : (
-                      <FormattedMessage
-                        {...messages.currentlyReadingPageN}
-                        values={{ page }}
-                      />
-                    )}
+              {page === currentPage ? (
+                /* The current page needs different markup as it does not include a link */
+                <li className="pagination__list__item pagination__list__item--current">
+                  <span className="pagination__list__item__page-number">
+                    {/*  Help assistive technology users with some context */}
+                    <span className="offscreen">
+                      {page === maxPage ? (
+                        <FormattedMessage
+                          {...messages.currentlyReadingLastPageN}
+                          values={{ page }}
+                        />
+                      ) : (
+                        <FormattedMessage
+                          {...messages.currentlyReadingPageN}
+                          values={{ page }}
+                        />
+                      )}
+                    </span>
+                    <span aria-hidden={true}>
+                      {/* Show context "Page 1" on the first item to make it obvious this is pagination */}
+                      {page === 1 ? (
+                        <FormattedMessage
+                          {...messages.pageN}
+                          values={{ page }}
+                        />
+                      ) : (
+                        page
+                      )}
+                    </span>
                   </span>
-                  <span aria-hidden={true}>
-                    {/* Show context "Page 1" on the first item to make it obvious this is pagination */}
-                    {page === 1 ? (
-                      <FormattedMessage {...messages.pageN} values={{ page }} />
-                    ) : (
-                      page
-                    )}
-                  </span>
-                </span>
-              </li>
-            ) : (
-              <li className="pagination__list__item">
-                <a
-                  className="pagination__list__item__page-number"
-                  onClick={() =>
-                    dispatchCourseSearchParamsUpdate({
-                      // Pages are 1-indexed, we need to 0-index them to calculate the correct offset
-                      offset: String((page - 1) * limit),
-                      type: 'PAGE_CHANGE',
-                    })
-                  }
-                >
-                  {/*  Help assistive technology users with some context */}
-                  <span className="offscreen">
-                    {page === maxPage ? (
-                      <FormattedMessage
-                        {...messages.lastPageN}
-                        values={{ page }}
-                      />
-                    ) : page === currentPage - 1 ? (
-                      <FormattedMessage
-                        {...messages.previousPageN}
-                        values={{ page }}
-                      />
-                    ) : page === currentPage + 1 ? (
-                      <FormattedMessage
-                        {...messages.nextPageN}
-                        values={{ page }}
-                      />
-                    ) : (
-                      <FormattedMessage {...messages.pageN} values={{ page }} />
-                    )}
-                  </span>
-                  <span aria-hidden={true}>
-                    {/* Show context "Page 1" on the first item to make it obvious this is pagination */}
-                    {page === 1 ? (
-                      <FormattedMessage {...messages.pageN} values={{ page }} />
-                    ) : (
-                      page
-                    )}
-                  </span>
-                </a>
-              </li>
-            )}
-          </React.Fragment>
-        ))}
-      </ul>
+                </li>
+              ) : (
+                <li className="pagination__list__item">
+                  <a
+                    className="pagination__list__item__page-number"
+                    onClick={() =>
+                      dispatchCourseSearchParamsUpdate({
+                        // Pages are 1-indexed, we need to 0-index them to calculate the correct offset
+                        offset: String((page - 1) * limit),
+                        type: 'PAGE_CHANGE',
+                      })
+                    }
+                  >
+                    {/*  Help assistive technology users with some context */}
+                    <span className="offscreen">
+                      {page === maxPage ? (
+                        <FormattedMessage
+                          {...messages.lastPageN}
+                          values={{ page }}
+                        />
+                      ) : page === currentPage - 1 ? (
+                        <FormattedMessage
+                          {...messages.previousPageN}
+                          values={{ page }}
+                        />
+                      ) : page === currentPage + 1 ? (
+                        <FormattedMessage
+                          {...messages.nextPageN}
+                          values={{ page }}
+                        />
+                      ) : (
+                        <FormattedMessage
+                          {...messages.pageN}
+                          values={{ page }}
+                        />
+                      )}
+                    </span>
+                    <span aria-hidden={true}>
+                      {/* Show context "Page 1" on the first item to make it obvious this is pagination */}
+                      {page === 1 ? (
+                        <FormattedMessage
+                          {...messages.pageN}
+                          values={{ page }}
+                        />
+                      ) : (
+                        page
+                      )}
+                    </span>
+                  </a>
+                </li>
+              )}
+            </React.Fragment>
+          ))}
+        </ul>
+      </nav>
     </div>
   );
 };
