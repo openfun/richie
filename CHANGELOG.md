@@ -21,6 +21,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Rename `course-detail__aside__run` selector to `course-detail__aside__runs`
   in `course_detail.html` template to better reflect its content.
 
+### Fixed
+
+- Fix React pagination role-element pair. Pagination should now be seen as a
+  navigational element by screen readers.
+
 ## [1.11.0] - 2019-10-11
 
 ### Added
