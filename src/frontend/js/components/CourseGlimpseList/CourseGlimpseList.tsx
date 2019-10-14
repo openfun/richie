@@ -1,9 +1,9 @@
 import React from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
-import { APIResponseListMeta } from '../../types/api';
-import { Course } from '../../types/Course';
-import { CourseGlimpse } from '../CourseGlimpse/CourseGlimpse';
+import { CourseGlimpse } from 'components/CourseGlimpse/CourseGlimpse';
+import { APIResponseListMeta } from 'types/api';
+import { Course } from 'types/Course';
 
 const messages = defineMessages({
   courseCount: {

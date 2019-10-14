@@ -1,11 +1,11 @@
 import { stringify } from 'query-string';
 
-import { API_LIST_DEFAULT_PARAMS } from '../../settings';
+import { API_LIST_DEFAULT_PARAMS } from 'settings';
 import {
   APICourseSearchResponse,
   APIListRequestParams,
   requestStatus,
-} from '../../types/api';
+} from 'types/api';
 
 export interface GetListSagaSpecifics {
   endpoint: string;

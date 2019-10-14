@@ -1,11 +1,11 @@
-import '../../testSetup';
+import 'testSetup';
 
-import { cleanup, fireEvent, render } from '@testing-library/react';
+import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
+import { CourseSearchParamsContext } from 'data/useCourseSearchParams/useCourseSearchParams';
 import { PaginateCourseSearch } from '.';
-import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
 
 describe('<PaginateCourseSearch />', () => {
   beforeEach(jest.resetAllMocks);

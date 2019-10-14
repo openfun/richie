@@ -1,9 +1,9 @@
 import { act, render } from '@testing-library/react';
 import React from 'react';
 
-import { APIListRequestParams } from '../../types/api';
-import { jestMockOf } from '../../utils/types';
-import { fetchList } from '../getResourceList/getResourceList';
+import { fetchList } from 'data/getResourceList/getResourceList';
+import { APIListRequestParams } from 'types/api';
+import { jestMockOf } from 'utils/types';
 import { useCourseSearch } from './useCourseSearch';
 
 jest.mock('../getResourceList/getResourceList', () => ({

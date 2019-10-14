@@ -1,8 +1,8 @@
 import take from 'lodash-es/take';
 import { stringify } from 'query-string';
 
-import { Suggestion } from '../../types/Suggestion';
-import { handle } from '../../utils/errors/handle';
+import { Suggestion } from 'types/Suggestion';
+import { handle } from 'utils/errors/handle';
 
 /**
  * Build a suggestion section from a model name and a title, requesting the relevant

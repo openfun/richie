@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { useFilterValue } from '../../data/useFilterValue/useFilterValue';
-import { FilterDefinition, FilterValue } from '../../types/filters';
+import { useFilterValue } from 'data/useFilterValue/useFilterValue';
+import { FilterDefinition, FilterValue } from 'types/filters';
 
 export interface SearchFilterValueLeafProps {
   filter: FilterDefinition;

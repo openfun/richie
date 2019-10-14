@@ -1,8 +1,8 @@
 import { render } from '@testing-library/react';
 import React from 'react';
 
-import { FilterDefinition, FilterValue } from '../../types/filters';
-import { CourseSearchParamsContext } from '../useCourseSearchParams/useCourseSearchParams';
+import { CourseSearchParamsContext } from 'data/useCourseSearchParams/useCourseSearchParams';
+import { FilterDefinition, FilterValue } from 'types/filters';
 import { useFilterValue } from './useFilterValue';
 
 describe('data/useFilterValue', () => {

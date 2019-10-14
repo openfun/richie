@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { APICourseSearchResponse } from '../../types/api';
+import { APICourseSearchResponse } from 'types/api';
 import {
   SearchAutosuggestProps,
   SearchSuggestion,
   SearchSuggestionSection,
-} from '../../types/Suggestion';
-import { handle } from '../../utils/errors/handle';
+} from 'types/Suggestion';
+import { handle } from 'utils/errors/handle';
 import { getSuggestionsSection } from './getSuggestionsSection';
 
 /**

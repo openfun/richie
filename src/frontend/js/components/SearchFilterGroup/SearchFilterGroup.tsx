@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { FilterDefinition } from '../../types/filters';
-import { SearchFilterGroupModal } from '../SearchFilterGroupModal';
-import { SearchFilterValueLeaf } from '../SearchFilterValueLeaf/SearchFilterValueLeaf';
-import { SearchFilterValueParent } from '../SearchFilterValueParent/SearchFilterValueParent';
+import { SearchFilterGroupModal } from 'components/SearchFilterGroupModal';
+import { SearchFilterValueLeaf } from 'components/SearchFilterValueLeaf/SearchFilterValueLeaf';
+import { SearchFilterValueParent } from 'components/SearchFilterValueParent/SearchFilterValueParent';
+import { FilterDefinition } from 'types/filters';
 
 export interface SearchFilterGroupProps {
   filter: FilterDefinition;

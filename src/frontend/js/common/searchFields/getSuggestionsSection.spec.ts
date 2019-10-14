@@ -1,10 +1,10 @@
 import fetchMock from 'fetch-mock';
 
-import { handle } from '../../utils/errors/handle';
+import { handle } from 'utils/errors/handle';
 import { getSuggestionsSection } from './getSuggestionsSection';
 
 const mockHandle: jest.Mock<typeof handle> = handle as any;
-jest.mock('../../utils/errors/handle');
+jest.mock('utils/errors/handle');
 
 describe('common/searchFields/getSuggestionsSection', () => {
   afterEach(() => {

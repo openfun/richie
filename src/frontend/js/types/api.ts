@@ -1,6 +1,6 @@
-import { Maybe } from '../utils/types';
-import { Course } from './Course';
-import { FilterDefinition } from './filters';
+import { Course } from 'types/Course';
+import { FilterDefinition } from 'types/filters';
+import { Maybe } from 'utils/types';
 
 export enum requestStatus {
   FAILURE = 'failure',

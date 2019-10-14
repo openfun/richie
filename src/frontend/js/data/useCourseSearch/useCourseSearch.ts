@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
-import { APIListRequestParams } from '../../types/api';
-import { Nullable } from '../../utils/types';
-import { useAsyncEffect } from '../../utils/useAsyncEffect';
+import { APIListRequestParams } from 'types/api';
+import { Nullable } from 'utils/types';
+import { useAsyncEffect } from 'utils/useAsyncEffect';
 import {
   fetchList,
   fetchListResponse,

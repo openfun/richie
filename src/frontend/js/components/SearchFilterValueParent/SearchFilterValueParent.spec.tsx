@@ -1,17 +1,17 @@
-import '../../testSetup';
+import 'testSetup';
 
 import { fireEvent, render, wait } from '@testing-library/react';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
-jest.mock('../../data/getResourceList/getResourceList', () => ({
+jest.mock('data/getResourceList/getResourceList', () => ({
   fetchList: jest.fn(),
 }));
 
-import { fetchList } from '../../data/getResourceList/getResourceList';
-import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
-import { APIListRequestParams } from '../../types/api';
-import { jestMockOf } from '../../utils/types';
+import { fetchList } from 'data/getResourceList/getResourceList';
+import { CourseSearchParamsContext } from 'data/useCourseSearchParams/useCourseSearchParams';
+import { APIListRequestParams } from 'types/api';
+import { jestMockOf } from 'utils/types';
 import { SearchFilterValueParent } from './SearchFilterValueParent';
 
 const mockFetchList: jestMockOf<typeof fetchList> = fetchList as any;

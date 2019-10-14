@@ -1,10 +1,10 @@
 import { act, render } from '@testing-library/react';
 import React from 'react';
 
-import * as mockWindow from '../../utils/indirection/window';
+import * as mockWindow from 'utils/indirection/window';
 import { useCourseSearchParams } from './useCourseSearchParams';
 
-jest.mock('../../utils/indirection/window', () => ({
+jest.mock('utils/indirection/window', () => ({
   history: { pushState: jest.fn() },
   location: {},
   scroll: jest.fn(),

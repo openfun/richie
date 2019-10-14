@@ -1,10 +1,10 @@
 import { parse, stringify } from 'query-string';
 import { createContext, useEffect, useReducer } from 'react';
 
-import { API_LIST_DEFAULT_PARAMS } from '../../settings';
-import { APIListRequestParams } from '../../types/api';
-import { FilterDefinition } from '../../types/filters';
-import { history, location, scroll } from '../../utils/indirection/window';
+import { API_LIST_DEFAULT_PARAMS } from 'settings';
+import { APIListRequestParams } from 'types/api';
+import { FilterDefinition } from 'types/filters';
+import { history, location, scroll } from 'utils/indirection/window';
 import { computeNewFilterValue } from './computeNewFilterValue';
 
 interface FilterResetAction {

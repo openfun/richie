@@ -8,18 +8,18 @@ import {
   getSuggestionValue,
   onSuggestionsFetchRequested,
   renderSuggestion,
-} from '../../common/searchFields';
-import { fetchList } from '../../data/getResourceList/getResourceList';
-import { API_LIST_DEFAULT_PARAMS } from '../../settings';
-import { APICourseSearchResponse, requestStatus } from '../../types/api';
-import { CommonDataProps } from '../../types/commonDataProps';
-import { FilterDefinition } from '../../types/filters';
+} from 'common/searchFields';
+import { fetchList } from 'data/getResourceList/getResourceList';
+import { API_LIST_DEFAULT_PARAMS } from 'settings';
+import { APICourseSearchResponse, requestStatus } from 'types/api';
+import { CommonDataProps } from 'types/commonDataProps';
+import { FilterDefinition } from 'types/filters';
 import {
   isCourseSuggestion,
   SearchAutosuggestProps,
   SearchSuggestionSection,
-} from '../../types/Suggestion';
-import { location } from '../../utils/indirection/window';
+} from 'types/Suggestion';
+import { location } from 'utils/indirection/window';
 
 const messages = defineMessages({
   searchFieldPlaceholder: {

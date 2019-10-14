@@ -1,5 +1,5 @@
-import { Nullable } from '../utils/types';
-import { Resource } from './Resource';
+import { Resource } from 'types/Resource';
+import { Nullable } from 'utils/types';
 
 export interface Course extends Resource {
   absolute_url: string;

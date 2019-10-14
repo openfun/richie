@@ -1,15 +1,15 @@
 import React, { useContext, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { fetchList } from '../../data/getResourceList/getResourceList';
-import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
-import { useFilterValue } from '../../data/useFilterValue/useFilterValue';
-import { requestStatus } from '../../types/api';
-import { FilterDefinition, FilterValue } from '../../types/filters';
-import { getMPTTChildrenPathMatcher } from '../../utils/mptt';
-import { Nullable } from '../../utils/types';
-import { useAsyncEffect } from '../../utils/useAsyncEffect';
-import { SearchFilterValueLeaf } from '../SearchFilterValueLeaf/SearchFilterValueLeaf';
+import { SearchFilterValueLeaf } from 'components/SearchFilterValueLeaf/SearchFilterValueLeaf';
+import { fetchList } from 'data/getResourceList/getResourceList';
+import { CourseSearchParamsContext } from 'data/useCourseSearchParams/useCourseSearchParams';
+import { useFilterValue } from 'data/useFilterValue/useFilterValue';
+import { requestStatus } from 'types/api';
+import { FilterDefinition, FilterValue } from 'types/filters';
+import { getMPTTChildrenPathMatcher } from 'utils/mptt';
+import { Nullable } from 'utils/types';
+import { useAsyncEffect } from 'utils/useAsyncEffect';
 
 const messages = defineMessages({
   ariaHideChildren: {

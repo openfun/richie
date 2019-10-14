@@ -1,10 +1,10 @@
-import '../../testSetup';
+import 'testSetup';
 
 import { render } from '@testing-library/react';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
-import { Course } from '../../types/Course';
+import { Course } from 'types/Course';
 import { CourseGlimpseList } from './CourseGlimpseList';
 
 describe('components/CourseGlimpseList', () => {

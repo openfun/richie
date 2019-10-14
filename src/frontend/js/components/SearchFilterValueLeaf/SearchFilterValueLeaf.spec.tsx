@@ -1,10 +1,10 @@
-import '../../testSetup';
+import 'testSetup';
 
 import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
-import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
+import { CourseSearchParamsContext } from 'data/useCourseSearchParams/useCourseSearchParams';
 import { SearchFilterValueLeaf } from './SearchFilterValueLeaf';
 
 describe('components/SearchFilterValueLeaf', () => {

@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
-    "baseUrl": ".",
+    "baseUrl": "./js",
     "esModuleInterop": true,
     "jsx": "preserve",
     "lib": [

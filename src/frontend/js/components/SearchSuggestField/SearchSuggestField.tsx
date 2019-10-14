@@ -8,13 +8,13 @@ import {
   getSuggestionValue,
   onSuggestionsFetchRequested,
   renderSuggestion,
-} from '../../common/searchFields';
-import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
-import { APICourseSearchResponse } from '../../types/api';
+} from 'common/searchFields';
+import { CourseSearchParamsContext } from 'data/useCourseSearchParams/useCourseSearchParams';
+import { APICourseSearchResponse } from 'types/api';
 import {
   SearchAutosuggestProps,
   SearchSuggestionSection,
-} from '../../types/Suggestion';
+} from 'types/Suggestion';
 
 const messages = defineMessages({
   searchFieldPlaceholder: {

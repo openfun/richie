@@ -1,4 +1,4 @@
-import '../../testSetup';
+import 'testSetup';
 
 import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
@@ -7,7 +7,7 @@ import { IntlProvider } from 'react-intl';
 import { Search } from './Search';
 
 let mockMatches = false;
-jest.mock('../../utils/indirection/window', () => ({
+jest.mock('utils/indirection/window', () => ({
   history: { pushState: jest.fn() },
   location: { search: '' },
   matchMedia: () => {
@@ -15,7 +15,7 @@ jest.mock('../../utils/indirection/window', () => ({
   },
 }));
 
-jest.mock('../../data/useCourseSearch/useCourseSearch', () => ({
+jest.mock('data/useCourseSearch/useCourseSearch', () => ({
   useCourseSearch: () => null,
 }));
 

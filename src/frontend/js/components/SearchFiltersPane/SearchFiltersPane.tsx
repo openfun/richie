@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
-import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
-import { API_LIST_DEFAULT_PARAMS } from '../../settings';
-import { APICourseSearchResponse } from '../../types/api';
-import { Nullable } from '../../utils/types';
-import { SearchFilterGroup } from '../SearchFilterGroup/SearchFilterGroup';
+import { SearchFilterGroup } from 'components/SearchFilterGroup/SearchFilterGroup';
+import { CourseSearchParamsContext } from 'data/useCourseSearchParams/useCourseSearchParams';
+import { API_LIST_DEFAULT_PARAMS } from 'settings';
+import { APICourseSearchResponse } from 'types/api';
+import { Nullable } from 'utils/types';
 
 interface SearchFiltersPaneProps {
   filters: Nullable<APICourseSearchResponse['filters']>;

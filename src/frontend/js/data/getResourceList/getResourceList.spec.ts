@@ -1,6 +1,6 @@
 import fetchMock from 'fetch-mock';
 
-import { requestStatus } from '../../types/api';
+import { requestStatus } from 'types/api';
 import { fetchList } from './getResourceList';
 
 describe('data/getResourceList', () => {

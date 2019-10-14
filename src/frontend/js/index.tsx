@@ -21,9 +21,9 @@ import includes from 'lodash-es/includes';
 import startCase from 'lodash-es/startCase';
 
 // Import the top-level components that can be directly called from the CMS
-import { RootSearchSuggestField } from './components/RootSearchSuggestField';
-import { Search } from './components/Search/Search';
-import { handle } from './utils/errors/handle';
+import { RootSearchSuggestField } from 'components/RootSearchSuggestField';
+import { Search } from 'components/Search/Search';
+import { handle } from 'utils/errors/handle';
 // List them in an interface for type-safety when we call them. This will let us use the props for
 // any top-level component in a way TypeScript understand and accepts
 interface ComponentLibrary {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { defineMessages, FormattedDate, FormattedMessage } from 'react-intl';
 
-import { Course } from '../../types/Course';
+import { Course } from 'types/Course';
 
 export interface CourseGlimpseProps {
   course: Course;

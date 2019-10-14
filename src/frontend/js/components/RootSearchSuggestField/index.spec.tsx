@@ -3,10 +3,10 @@ import fetchMock from 'fetch-mock';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
+import { location } from 'utils/indirection/window';
 import { RootSearchSuggestField } from '.';
-import { location } from '../../utils/indirection/window';
 
-jest.mock('../../utils/indirection/window', () => ({
+jest.mock('utils/indirection/window', () => ({
   location: {
     assign: jest.fn(),
   },

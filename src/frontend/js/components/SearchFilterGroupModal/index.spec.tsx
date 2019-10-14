@@ -3,10 +3,10 @@ import fetchMock from 'fetch-mock';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
+import { CourseSearchParamsContext } from 'data/useCourseSearchParams/useCourseSearchParams';
 import { SearchFilterGroupModal } from '.';
-import { CourseSearchParamsContext } from '../../data/useCourseSearchParams/useCourseSearchParams';
 
-jest.mock('../../utils/errors/handle', () => ({ handle: jest.fn() }));
+jest.mock('utils/errors/handle', () => ({ handle: jest.fn() }));
 
 const filter = {
   base_path: '0001',

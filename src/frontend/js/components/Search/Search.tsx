@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
-import { useCourseSearch } from '../../data/useCourseSearch/useCourseSearch';
+import { CourseGlimpseList } from 'components/CourseGlimpseList/CourseGlimpseList';
+import { PaginateCourseSearch } from 'components/PaginateCourseSearch';
+import { SearchFiltersPane } from 'components/SearchFiltersPane/SearchFiltersPane';
+import { SearchLoader } from 'components/SearchLoader/SearchLoader';
+import { SearchSuggestField } from 'components/SearchSuggestField/SearchSuggestField';
+import { useCourseSearch } from 'data/useCourseSearch/useCourseSearch';
 import {
   CourseSearchParamsContext,
   useCourseSearchParams,
-} from '../../data/useCourseSearchParams/useCourseSearchParams';
-import { requestStatus } from '../../types/api';
-import { CommonDataProps } from '../../types/commonDataProps';
-import { matchMedia } from '../../utils/indirection/window';
-import { CourseGlimpseList } from '../CourseGlimpseList/CourseGlimpseList';
-import { PaginateCourseSearch } from '../PaginateCourseSearch';
-import { SearchFiltersPane } from '../SearchFiltersPane/SearchFiltersPane';
-import { SearchLoader } from '../SearchLoader/SearchLoader';
-import { SearchSuggestField } from '../SearchSuggestField/SearchSuggestField';
+} from 'data/useCourseSearchParams/useCourseSearchParams';
+import { requestStatus } from 'types/api';
+import { CommonDataProps } from 'types/commonDataProps';
+import { matchMedia } from 'utils/indirection/window';
 
 const messages = defineMessages({
   hideFiltersPane: {
