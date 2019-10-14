@@ -156,10 +156,10 @@
       {% endblock synopsis %}
 
       {% block runs %}
-        <div class="course-detail__aside__run">
-          <h2 class="course-detail__aside__run__title">{% trans 'Course runs' %}</h2>
+        <div class="course-detail__aside__runs">
+          <h2 class="course-detail__aside__runs__title">{% trans 'Course runs' %}</h2>
           {% for run in course.get_course_runs_for_language %}
-          <div class="course-detail__aside__run__block">
+          <div class="course-detail__aside__runs__block">
             <dl>
               <dt>{% trans "Enrollment" %}</dt>
               <dd>
@@ -184,17 +184,17 @@
               {% endif %}
             </dl>
             {% if run.state.call_to_action %}
-            <a class="course-detail__aside__run__block__cta" href="{{ run.extended_object.get_absolute_url }}">
+            <a class="course-detail__aside__runs__block__cta" href="{{ run.extended_object.get_absolute_url }}">
               {{ run.state.call_to_action|capfirst }}
             </a>
             {% else %}
-            <a class="course-detail__aside__run__block__cta course-detail__aside__run__block__cta--projected" href="{{ run.extended_object.get_absolute_url }}">
+            <a class="course-detail__aside__runs__block__cta course-detail__aside__runs__block__cta--projected" href="{{ run.extended_object.get_absolute_url }}">
               {{ run.state.text|capfirst }}
             </a>
             {% endif %}
           </div>
           {% empty %}
-            <div class="course-detail__aside__run__empty">{% trans "No associated course runs" %}</div>
+            <div class="course-detail__aside__runs__empty">{% trans "No associated course runs" %}</div>
           {% endfor %}
         </div>
       </div>

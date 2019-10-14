@@ -20,6 +20,19 @@ $ make migrate
   template(s) using icons from the icon font need to be updated to use SVG
   icons too.
 
+## 1.10.x to 1.11.x
+
+## Before switching
+
+- If you override `_course_detail.scss`, the `course-detail__aside__run` selector was renamed
+  to `course-detail__aside__runs` in our `course_detail.html` template.
+
+## 1.9.x to 1.10.x
+
+### Before switching
+
+- For each item in the [changelog](./CHANGELOG.md), check that your css overrides have no impact.
+
 ## 1.8.x to 1.9.x
 
 ### Before switching

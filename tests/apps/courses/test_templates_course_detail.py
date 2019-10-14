@@ -339,7 +339,7 @@ class CourseCMSTestCase(CMSTestCase):
         response = self.prepare_to_test_state(CourseState(0, timezone.now()))
         self.assertContains(
             response,
-            '<a class="course-detail__aside__run__block__cta" '
+            '<a class="course-detail__aside__runs__block__cta" '
             'href="/en/my-course/my-course-run/">Enroll now</a>',
             html=True,
         )
@@ -349,8 +349,8 @@ class CourseCMSTestCase(CMSTestCase):
         response = self.prepare_to_test_state(CourseState(6))
         self.assertContains(
             response,
-            '<a class="course-detail__aside__run__block__cta '
-            'course-detail__aside__run__block__cta--projected" '
+            '<a class="course-detail__aside__runs__block__cta '
+            'course-detail__aside__runs__block__cta--projected" '
             'href="/en/my-course/my-course-run/">To be scheduled</a>',
             html=True,
         )
