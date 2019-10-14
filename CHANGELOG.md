@@ -15,7 +15,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Rename {% block title %} to {% block head_title %} to avoid collision with
-  H1 title.
+  H1 title,
+- Wrap each section of the course detail template in a block to allow partial
+  overrides.
 
 ## [1.11.0] - 2019-10-11
 
