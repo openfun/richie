@@ -3,7 +3,7 @@ import fetchMock from 'fetch-mock';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
-import { CourseSearchParamsContext } from 'data/useCourseSearchParams/useCourseSearchParams';
+import { CourseSearchParamsContext } from 'data/useCourseSearchParams';
 import { SearchFilterGroupModal } from '.';
 
 jest.mock('utils/errors/handle', () => ({ handle: jest.fn() }));

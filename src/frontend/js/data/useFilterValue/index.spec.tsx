@@ -1,9 +1,9 @@
 import { render } from '@testing-library/react';
 import React from 'react';
 
-import { CourseSearchParamsContext } from 'data/useCourseSearchParams/useCourseSearchParams';
+import { CourseSearchParamsContext } from 'data/useCourseSearchParams';
 import { FilterDefinition, FilterValue } from 'types/filters';
-import { useFilterValue } from './useFilterValue';
+import { useFilterValue } from '.';
 
 describe('data/useFilterValue', () => {
   // Build a helper component with an out-of-scope function to let us reach our Hook from

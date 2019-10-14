@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
-import { CourseSearchParamsContext } from 'data/useCourseSearchParams/useCourseSearchParams';
+import { CourseSearchParamsContext } from 'data/useCourseSearchParams';
 
 const messages = defineMessages({
   currentlyReadingLastPageN: {

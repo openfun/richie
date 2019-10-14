@@ -1,12 +1,12 @@
 import { act, render } from '@testing-library/react';
 import React from 'react';
 
-import { fetchList } from 'data/getResourceList/getResourceList';
+import { fetchList } from 'data/getResourceList';
 import { APIListRequestParams } from 'types/api';
 import { jestMockOf } from 'utils/types';
-import { useCourseSearch } from './useCourseSearch';
+import { useCourseSearch } from '.';
 
-jest.mock('../getResourceList/getResourceList', () => ({
+jest.mock('data/getResourceList', () => ({
   fetchList: jest.fn(),
 }));
 const mockFetchList = fetchList as jestMockOf<typeof fetchList>;

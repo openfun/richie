@@ -4,8 +4,8 @@ import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
-import { CourseSearchParamsContext } from 'data/useCourseSearchParams/useCourseSearchParams';
-import { SearchFilterValueLeaf } from './SearchFilterValueLeaf';
+import { CourseSearchParamsContext } from 'data/useCourseSearchParams';
+import { SearchFilterValueLeaf } from '.';
 
 describe('components/SearchFilterValueLeaf', () => {
   it('renders the name of the filter value', () => {

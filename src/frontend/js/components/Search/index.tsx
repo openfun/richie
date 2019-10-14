@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
-import { CourseGlimpseList } from 'components/CourseGlimpseList/CourseGlimpseList';
+import { CourseGlimpseList } from 'components/CourseGlimpseList';
 import { PaginateCourseSearch } from 'components/PaginateCourseSearch';
-import { SearchFiltersPane } from 'components/SearchFiltersPane/SearchFiltersPane';
-import { SearchLoader } from 'components/SearchLoader/SearchLoader';
-import { SearchSuggestField } from 'components/SearchSuggestField/SearchSuggestField';
-import { useCourseSearch } from 'data/useCourseSearch/useCourseSearch';
+import { SearchFiltersPane } from 'components/SearchFiltersPane';
+import { SearchLoader } from 'components/SearchLoader';
+import { SearchSuggestField } from 'components/SearchSuggestField';
+import { useCourseSearch } from 'data/useCourseSearch';
 import {
   CourseSearchParamsContext,
   useCourseSearchParams,
-} from 'data/useCourseSearchParams/useCourseSearchParams';
+} from 'data/useCourseSearchParams';
 import { requestStatus } from 'types/api';
 import { CommonDataProps } from 'types/commonDataProps';
 import { matchMedia } from 'utils/indirection/window';

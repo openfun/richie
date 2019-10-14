@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { CourseSearchParamsContext } from 'data/useCourseSearchParams/useCourseSearchParams';
+import { CourseSearchParamsContext } from 'data/useCourseSearchParams';
 import { FilterDefinition, FilterValue } from 'types/filters';
 
 type UseFilterValue = [boolean, () => void];

@@ -9,7 +9,7 @@ import {
   onSuggestionsFetchRequested,
   renderSuggestion,
 } from 'common/searchFields';
-import { fetchList } from 'data/getResourceList/getResourceList';
+import { fetchList } from 'data/getResourceList';
 import { API_LIST_DEFAULT_PARAMS } from 'settings';
 import { APICourseSearchResponse, requestStatus } from 'types/api';
 import { CommonDataProps } from 'types/commonDataProps';

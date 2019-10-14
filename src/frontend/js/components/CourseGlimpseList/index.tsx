@@ -1,7 +1,7 @@
 import React from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
-import { CourseGlimpse } from 'components/CourseGlimpse/CourseGlimpse';
+import { CourseGlimpse } from 'components/CourseGlimpse';
 import { APIResponseListMeta } from 'types/api';
 import { Course } from 'types/Course';
 

@@ -4,7 +4,7 @@ import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
-import { Search } from './Search';
+import { Search } from '.';
 
 let mockMatches = false;
 jest.mock('utils/indirection/window', () => ({
@@ -15,7 +15,7 @@ jest.mock('utils/indirection/window', () => ({
   },
 }));
 
-jest.mock('data/useCourseSearch/useCourseSearch', () => ({
+jest.mock('data/useCourseSearch', () => ({
   useCourseSearch: () => null,
 }));
 

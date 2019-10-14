@@ -2,7 +2,7 @@ import { act, render } from '@testing-library/react';
 import React from 'react';
 
 import * as mockWindow from 'utils/indirection/window';
-import { useCourseSearchParams } from './useCourseSearchParams';
+import { useCourseSearchParams } from '.';
 
 jest.mock('utils/indirection/window', () => ({
   history: { pushState: jest.fn() },

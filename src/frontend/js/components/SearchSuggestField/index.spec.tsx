@@ -5,8 +5,8 @@ import fetchMock from 'fetch-mock';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
-import { CourseSearchParamsContext } from 'data/useCourseSearchParams/useCourseSearchParams';
-import { SearchSuggestField } from './SearchSuggestField';
+import { CourseSearchParamsContext } from 'data/useCourseSearchParams';
+import { SearchSuggestField } from '.';
 
 jest.mock('utils/indirection/window', () => ({ location: {} }));
 

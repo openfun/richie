@@ -1,10 +1,10 @@
 import React, { useContext, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { SearchFilterValueLeaf } from 'components/SearchFilterValueLeaf/SearchFilterValueLeaf';
-import { fetchList } from 'data/getResourceList/getResourceList';
-import { CourseSearchParamsContext } from 'data/useCourseSearchParams/useCourseSearchParams';
-import { useFilterValue } from 'data/useFilterValue/useFilterValue';
+import { SearchFilterValueLeaf } from 'components/SearchFilterValueLeaf';
+import { fetchList } from 'data/getResourceList';
+import { CourseSearchParamsContext } from 'data/useCourseSearchParams';
+import { useFilterValue } from 'data/useFilterValue';
 import { requestStatus } from 'types/api';
 import { FilterDefinition, FilterValue } from 'types/filters';
 import { getMPTTChildrenPathMatcher } from 'utils/mptt';

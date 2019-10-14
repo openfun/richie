@@ -4,10 +4,10 @@ import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
-import { CourseSearchParamsContext } from 'data/useCourseSearchParams/useCourseSearchParams';
-import { SearchFiltersPane } from './SearchFiltersPane';
+import { CourseSearchParamsContext } from 'data/useCourseSearchParams';
+import { SearchFiltersPane } from '.';
 
-jest.mock('components/SearchFilterGroup/SearchFilterGroup', () => ({
+jest.mock('components/SearchFilterGroup', () => ({
   SearchFilterGroup: ({ filter }: any) => (
     <span>{`Received filter title: ${filter.human_name}`}</span>
   ),

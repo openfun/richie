@@ -70,11 +70,11 @@
 @import './templates/richie/section/section';
 
 // Frontend components objects styles
-@import '../js/components/Search/_Search';
-@import '../js/components/SearchFilterGroup/_SearchFilterGroup';
-@import '../js/components/SearchFilterGroupModal/SearchFilterGroupModal';
-@import '../js/components/SearchFiltersPane/_SearchFiltersPane';
-@import '../js/components/SearchLoader/_SearchLoader';
+@import '../js/components/Search/styles';
+@import '../js/components/SearchFilterGroup/styles';
+@import '../js/components/SearchFilterGroupModal/styles';
+@import '../js/components/SearchFiltersPane/styles';
+@import '../js/components/SearchLoader/styles';
 
 // Page component styles
 @import './components/header';

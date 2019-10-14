@@ -4,16 +4,16 @@ import { render } from '@testing-library/react';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
-import { CourseSearchParamsContext } from 'data/useCourseSearchParams/useCourseSearchParams';
-import { SearchFilterGroup } from './SearchFilterGroup';
+import { CourseSearchParamsContext } from 'data/useCourseSearchParams';
+import { SearchFilterGroup } from '.';
 
-jest.mock('components/SearchFilterValueLeaf/SearchFilterValueLeaf', () => ({
+jest.mock('components/SearchFilterValueLeaf', () => ({
   SearchFilterValueLeaf: ({ value }: any) => (
     <span>{`Received leaf: filter - ${value.human_name}`}</span>
   ),
 }));
 
-jest.mock('components/SearchFilterValueParent/SearchFilterValueParent', () => ({
+jest.mock('components/SearchFilterValueParent', () => ({
   SearchFilterValueParent: ({ value }: any) => (
     <span>{`Received parent: filter - ${value.human_name}`}</span>
   ),

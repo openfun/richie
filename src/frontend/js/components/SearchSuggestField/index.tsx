@@ -9,7 +9,7 @@ import {
   onSuggestionsFetchRequested,
   renderSuggestion,
 } from 'common/searchFields';
-import { CourseSearchParamsContext } from 'data/useCourseSearchParams/useCourseSearchParams';
+import { CourseSearchParamsContext } from 'data/useCourseSearchParams';
 import { APICourseSearchResponse } from 'types/api';
 import {
   SearchAutosuggestProps,

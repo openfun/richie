@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
-import { SearchFilterGroup } from 'components/SearchFilterGroup/SearchFilterGroup';
-import { CourseSearchParamsContext } from 'data/useCourseSearchParams/useCourseSearchParams';
+import { SearchFilterGroup } from 'components/SearchFilterGroup';
+import { CourseSearchParamsContext } from 'data/useCourseSearchParams';
 import { API_LIST_DEFAULT_PARAMS } from 'settings';
 import { APICourseSearchResponse } from 'types/api';
 import { Nullable } from 'utils/types';
