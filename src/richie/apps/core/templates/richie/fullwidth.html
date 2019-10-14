@@ -1,9 +1,9 @@
 {% extends "richie/base.html" %}
 {% load cms_tags %}
 
-{% block title %}
+{% block head_title %}
     {% page_attribute "page_title" %}
-{% endblock title %}
+{% endblock head_title %}
 
 {% block meta_opengraph_contextuals %}
     {% page_attribute "page_title" as page_title %}

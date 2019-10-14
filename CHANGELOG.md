@@ -10,7 +10,12 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- Add a variant option for course glimpses
+- Add a variant option for course glimpses.
+
+### Changed
+
+- Rename {% block title %} to {% block head_title %} to avoid collision with
+  H1 title.
 
 ## [1.11.0] - 2019-10-11
 

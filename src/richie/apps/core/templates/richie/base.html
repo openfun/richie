@@ -3,7 +3,7 @@
 <html lang="{{ LANGUAGE_CODE }}">
     <head>
         {% spaceless %}
-        <title>{% block title %}{{ SITE.name }}{% endblock title %}</title>
+        <title>{% block head_title %}{{ SITE.name }}{% endblock head_title %}</title>
         <meta name="viewport" content="width=device-width,initial-scale=1">
         {% block meta %}
             {% block meta_index_rules %}
