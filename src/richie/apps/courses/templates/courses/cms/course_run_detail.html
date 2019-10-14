@@ -1,11 +1,11 @@
 {% extends "richie/fullwidth.html" %}
 {% load cms_tags i18n extra_tags %}
 
-{% block title %}{% spaceless %}
+{% block head_title %}{% spaceless %}
   {% page_attribute "page_title" as course_run_title %}
   {% page_attribute "page_title" current_page.parent_page as course_title %}
   {{ course_run_title|capfirst }} - {{ course_title|capfirst }}
-{% endspaceless %}{% endblock title %}
+{% endspaceless %}{% endblock head_title %}
 
 {# Make sure the course run pages are not indexed by search engines #}
 {% block meta_index_rules %}<meta name="robots" content="noindex">{% endblock meta_index_rules %}
