@@ -34,12 +34,12 @@
     "not dead"
   ],
   "devDependencies": {
-    "@babel/core": "7.6.2",
+    "@babel/core": "7.6.4",
     "@babel/plugin-syntax-dynamic-import": "7.2.0",
     "@babel/polyfill": "7.6.0",
-    "@babel/preset-env": "7.6.2",
+    "@babel/preset-env": "7.6.3",
     "@babel/preset-typescript": "7.6.0",
-    "@testing-library/jest-dom": "4.1.0",
+    "@testing-library/jest-dom": "4.1.2",
     "@testing-library/react": "9.3.0",
     "@types/fetch-mock": "7.3.1",
     "@types/jest": "24.0.18",
@@ -62,8 +62,8 @@
     "react-intl-po": "2.2.2",
     "source-map-loader": "0.2.4",
     "tslint": "5.20.0",
-    "typescript": "3.6.3",
-    "webpack": "4.41.0",
+    "typescript": "3.6.4",
+    "webpack": "4.41.1",
     "webpack-cli": "3.3.9",
     "xhr-mock": "2.5.0"
   },
