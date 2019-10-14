@@ -17,7 +17,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Rename {% block title %} to {% block head_title %} to avoid collision with
   H1 title,
 - Wrap each section of the course detail template in a block to allow partial
-  overrides.
+  overrides,
+- Rename `course-detail__aside__run` selector to `course-detail__aside__runs`
+  in `course_detail.html` template to better reflect its content.
 
 ## [1.11.0] - 2019-10-11
 
