@@ -169,9 +169,9 @@ class OrganizationPluginTestCase(CMSTestCase):
         self.assertContains(response, "draft title")
         self.assertNotContains(response, "public title")
 
-    def test_cms_plugins_organization_render_template(self):
+    def test_cms_plugins_organization_render_variant(self):
         """
-        The organization plugin should render according to template choice.
+        The organization plugin should render according to the variant option.
         """
         staff = UserFactory(is_staff=True, is_superuser=True)
         self.client.login(username=staff.username, password="password")
@@ -184,16 +184,16 @@ class OrganizationPluginTestCase(CMSTestCase):
         page = create_i18n_page("A page")
         placeholder = page.placeholders.get(slot="maincontent")
 
-        # Add organization plugin with default template
+        # Add organization plugin with default variant
         add_plugin(placeholder, OrganizationPlugin, "en", page=organization_page)
 
         url = "{:s}?edit".format(page.get_absolute_url(language="en"))
 
-        # The organization-glimpse default template should not have the small attribute
+        # The organization-glimpse default variant should not have the small attribute
         response = self.client.get(url)
-        self.assertNotContains(response, "organization-glimpse__small")
+        self.assertNotContains(response, "--small")
 
-        # Add organization plugin with small template
+        # Add organization plugin with small variant
         add_plugin(
             placeholder,
             OrganizationPlugin,
@@ -202,6 +202,6 @@ class OrganizationPluginTestCase(CMSTestCase):
             variant="small",
         )
 
-        # The organization-glimpse default template should not have the small attribute
+        # The new organization-glimpse should have the small attribute
         response = self.client.get(url)
         self.assertContains(response, "organization-glimpse--small")
