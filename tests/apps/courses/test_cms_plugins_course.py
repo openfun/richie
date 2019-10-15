@@ -102,12 +102,10 @@ class CoursePluginTestCase(TestCase):
         self.assertNotContains(response, "titre public")
 
         # The course's url should be present
-        self.assertContains(
-            response,
-            '<a href="{url}" class="course-glimpse course-glimpse--link'.format(
-                url=course_page.get_absolute_url()
-            ),
-            status_code=200,
+        self.assertIn(
+            '<a class=" course-glimpse course-glimpse--link " '
+            'href="/en/public-title/"',
+            re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
 
         # The course's name should be present
@@ -155,12 +153,10 @@ class CoursePluginTestCase(TestCase):
         self.assertContains(response, "titre public")
 
         # The course's url should be present
-        self.assertContains(
-            response,
-            '<a href="{url}" class="course-glimpse course-glimpse--link'.format(
-                url=course_page.get_absolute_url()
-            ),
-            status_code=200,
+        self.assertIn(
+            '<a class=" course-glimpse course-glimpse--link " '
+            'href="/fr/titre-public/"',
+            re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
 
         # The course's name should be present
@@ -237,3 +233,34 @@ class CoursePluginTestCase(TestCase):
         response = self.client.get(url)
         self.assertContains(response, "draft title")
         self.assertNotContains(response, "public title")
+
+    def test_cms_plugins_course_render_variant(self):
+        """
+        The course plugin should render according to the variant option.
+        """
+        staff = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=staff.username, password="password")
+
+        # Create a Course
+        course = CourseFactory(page_title="public title")
+        course_page = course.extended_object
+
+        # Create a page to add the plugin to
+        page = create_i18n_page("A page")
+        placeholder = page.placeholders.get(slot="maincontent")
+
+        # Add course plugin with default variant
+        add_plugin(placeholder, CoursePlugin, "en", page=course_page)
+
+        url = "{:s}?edit".format(page.get_absolute_url(language="en"))
+
+        # The course-glimpse default variant should not have the small attribute
+        response = self.client.get(url)
+        self.assertNotContains(response, "--small")
+
+        # Add course plugin with small variant
+        add_plugin(placeholder, CoursePlugin, "en", page=course_page, variant="small")
+
+        # The new course-glimpse should have the small attribute
+        response = self.client.get(url)
+        self.assertContains(response, "course-glimpse--small")

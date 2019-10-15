@@ -217,6 +217,14 @@ PAGE_EXTENSION_TOOLBAR_ITEM_POSITION = getattr(
     settings, "RICHIE_PAGE_EXTENSION_TOOLBAR_ITEM_POSITION", 4
 )
 
+# Glimpses
+
+COURSE_GLIMPSE_VARIANT_CHOICES = getattr(
+    settings,
+    "RICHIE_COURSE_GLIMPSE_VARIANT_CHOICES",
+    [(None, _("Default")), ("small", "small")],
+)
+
 ORGANIZATION_GLIMPSE_VARIANT_CHOICES = getattr(
     settings, "RICHIE_ORGANIZATION_GLIMPSE_VARIANT_CHOICES", [(None, _("Default"))]
 )

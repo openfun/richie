@@ -558,6 +558,14 @@ class CoursePluginModel(PagePluginMixin, CMSPlugin):
             "course__isnull": False,  # limit to pages linked to a course object
         },
     )
+    variant = models.CharField(
+        _("variant"),
+        max_length=50,
+        choices=defaults.COURSE_GLIMPSE_VARIANT_CHOICES,
+        help_text=_("Optional glimpse variant for a custom look."),
+        blank=True,
+        null=True,
+    )
 
     class Meta:
         db_table = "richie_course_plugin"

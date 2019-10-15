@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Add a variant option for course glimpses
+
 ## [1.11.0] - 2019-10-11
 
 ### Added
