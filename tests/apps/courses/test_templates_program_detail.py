@@ -1,6 +1,8 @@
 """
 End-to-end tests for the program detail view
 """
+import re
+
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
@@ -113,12 +115,10 @@ class ProgramCMSTestCase(CMSTestCase):
             )
         # Draft courses should also be present on the page with an annotation for styling
         for course in courses[-2:]:
-            self.assertContains(
-                response,
-                '<a href="{link:s}" class="{name:s} {name:s}--link {name:s}--draft">'.format(
-                    name="course-glimpse",
-                    link=course.extended_object.get_absolute_url(),
-                ),
+            self.assertIn(
+                '<a class=" course-glimpse course-glimpse--link course-glimpse--draft " '
+                'href="{:s}"'.format(course.extended_object.get_absolute_url()),
+                re.sub(" +", " ", str(response.content).replace("\\n", "")),
             )
             self.assertContains(
                 response,

@@ -243,12 +243,12 @@ class OrganizationCMSTestCase(CMSTestCase):
             ),
             html=True,
         )
-        self.assertContains(
-            response,
-            (
-                '<a href="{url:s}" class="course-glimpse course-glimpse--link '
-                'course-glimpse--draft">'
-            ).format(url=not_published_course.extended_object.get_absolute_url()),
+        self.assertIn(
+            '<a class=" course-glimpse course-glimpse--link course-glimpse--draft " '
+            'href="{:s}"'.format(
+                not_published_course.extended_object.get_absolute_url()
+            ),
+            re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
 
     def test_templates_organization_detail_related_persons(self):

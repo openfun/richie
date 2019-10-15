@@ -99,6 +99,7 @@ class CoursePlugin(CMSPluginBase):
     """
 
     cache = True
+    fieldsets = ((None, {"fields": ["page", "variant"]}),)
     model = CoursePluginModel
     module = PLUGINS_GROUP
     render_template = "courses/plugins/course_plugin.html"
