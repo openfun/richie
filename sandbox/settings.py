@@ -168,9 +168,39 @@ class Base(DRFMixin, RichieCoursesConfigurationMixin, Configuration):
         "dj_pagination.middleware.PaginationMiddleware",
     )
 
+    # Django applications from the highest priority to the lowest
     INSTALLED_APPS = (
-        # Django
+        # Richie stuff
+        "richie.apps.demo",
+        "richie.apps.search",
+        "richie.apps.courses",
+        "richie.apps.core",
+        "richie.plugins.html_sitemap",
+        "richie.plugins.large_banner",
+        "richie.plugins.plain_text",
+        "richie.plugins.section",
+        "richie.plugins.simple_picture",
+        "richie.plugins.simple_text_ckeditor",
+        "richie",
+        # Third party apps
+        "dj_pagination",
+        "dockerflow.django",
+        "parler",
+        "rest_framework",
+        # Django-cms
         "djangocms_admin_style",
+        "djangocms_googlemap",
+        "djangocms_link",
+        "djangocms_picture",
+        "djangocms_text_ckeditor",
+        "djangocms_video",
+        "cms",
+        "menus",
+        "sekizai",
+        "treebeard",
+        "filer",
+        "easy_thumbnails",
+        # Django
         "django.contrib.auth",
         "django.contrib.contenttypes",
         "django.contrib.sessions",
@@ -179,35 +209,6 @@ class Base(DRFMixin, RichieCoursesConfigurationMixin, Configuration):
         "django.contrib.sitemaps",
         "django.contrib.staticfiles",
         "django.contrib.messages",
-        # Django-cms
-        "cms",
-        "menus",
-        "sekizai",
-        "treebeard",
-        "djangocms_text_ckeditor",
-        "filer",
-        "easy_thumbnails",
-        "djangocms_link",
-        "djangocms_googlemap",
-        "djangocms_video",
-        "djangocms_picture",
-        # Richie stuff
-        "richie",
-        "richie.apps.core",
-        "richie.apps.courses",
-        "richie.apps.demo",
-        "richie.apps.search",
-        "richie.plugins.html_sitemap",
-        "richie.plugins.large_banner",
-        "richie.plugins.plain_text",
-        "richie.plugins.section",
-        "richie.plugins.simple_picture",
-        "richie.plugins.simple_text_ckeditor",
-        # Third party apps
-        "dj_pagination",
-        "dockerflow.django",
-        "parler",
-        "rest_framework",
     )
 
     # Languages
