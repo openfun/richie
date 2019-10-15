@@ -77,7 +77,8 @@
     "typescript": "3.6.4",
     "webpack": "4.41.1",
     "webpack-cli": "3.3.9",
-    "xhr-mock": "2.5.0"
+    "xhr-mock": "2.5.0",
+    "yargs": "14.2.0"
   },
   "resolutions": {
     "@types/react": "16.9.5"
