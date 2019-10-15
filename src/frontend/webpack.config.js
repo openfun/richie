@@ -1,5 +1,23 @@
+const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
+
+const argv = require('yargs').argv;
+
+// Specific path resolutions for builds ran by a Richie dependent
+const richieDependentModuleResolutions = argv.richieDependentBuild
+  ? [
+      // Richie dependent node modules
+      path.resolve(__dirname, '..'),
+      // Richie dependent's own code
+      path.resolve(__dirname, '..', '..'),
+    ]
+  : [];
+
+// Load the settings file if its path was passed as an argument and use its overrides
+const overrides = argv.richieSettings
+  ? JSON.parse(fs.readFileSync(argv.richieSettings)).overrides
+  : {};
 
 module.exports = {
   // Disable production-specific optimizations by default
@@ -26,7 +44,12 @@ module.exports = {
   resolve: {
     // Add '.ts' and '.tsx' as resolvable extensions.
     extensions: ['.ts', '.tsx', '.js', '.json'],
-    modules: [path.resolve(__dirname, 'js'), __dirname, 'node_modules'],
+    modules: [
+      path.resolve(__dirname, 'js'),
+      __dirname,
+      'node_modules',
+      ...richieDependentModuleResolutions,
+    ],
   },
 
   module: {
@@ -44,4 +67,15 @@ module.exports = {
       { enforce: 'pre', test: /\.js$/, loader: 'source-map-loader' },
     ],
   },
+
+  plugins: [
+    // Use module replacement to override any number of Richie components as defined in the settings
+    ...Object.entries(overrides).map(
+      entry =>
+        new webpack.NormalModuleReplacementPlugin(
+          new RegExp(`components\/${entry[0]}$`),
+          entry[1],
+        ),
+    ),
+  ],
 };

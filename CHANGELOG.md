@@ -11,6 +11,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Add a variant option for course glimpses.
+- Richie dependents can now run their own frontend build and override
+  components through command line arguments and a dedicated settings file.
 
 ### Changed
 
