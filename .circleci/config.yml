@@ -149,13 +149,19 @@ jobs:
           command: ~/.local/bin/isort --recursive --check-only .
       - run:
           name: Lint code with black
-          command: ~/.local/bin/black src/richie/apps src/richie/plugins sandbox tests --check
+          command: |
+              ~/.local/bin/black src/richie/apps src/richie/plugins \
+              cookiecutter/{{cookiecutter.module_name}}/src/backend \
+              sandbox tests --check
       - run:
           name: Lint code with pylint
           command: ~/.local/bin/pylint src/richie/apps src/richie/plugins sandbox tests
       - run:
           name: Lint code with bandit
-          command: ~/.local/bin/bandit -qr src/richie/apps src/richie/plugins sandbox
+          command: |
+              ~/.local/bin/bandit -qr src/richie/apps src/richie/plugins \
+              cookiecutter/{{cookiecutter.module_name}}/src/backend \
+              sandbox
 
   # Restore front & back POT files containing strings to translate and upload them to our
   # translation management tool

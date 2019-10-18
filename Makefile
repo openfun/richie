@@ -181,7 +181,9 @@ lint-back-diff: ## lint back-end python sources, but only what has changed since
 
 lint-back-black: ## lint back-end python sources with black
 	@echo 'lint:black started…'
-	@$(COMPOSE_TEST_RUN_APP) black src/richie/apps src/richie/plugins sandbox tests
+	@$(COMPOSE_TEST_RUN_APP) black src/richie/apps src/richie/plugins \
+	    cookiecutter/{{cookiecutter.module_name}}/src/backend \
+		sandbox tests
 .PHONY: lint-back-black
 
 lint-back-flake8: ## lint back-end python sources with flake8
@@ -201,7 +203,9 @@ lint-back-pylint: ## lint back-end python sources with pylint
 
 lint-back-bandit: ## lint back-end python sources with bandit
 	@echo 'lint:bandit started…'
-	@$(COMPOSE_TEST_RUN_APP) bandit -qr src/richie/apps src/richie/plugins sandbox
+	@$(COMPOSE_TEST_RUN_APP) bandit -qr src/richie/apps src/richie/plugins \
+	    cookiecutter/{{cookiecutter.module_name}}/src/backend \
+		sandbox
 .PHONY: lint-back-bandit
 
 messages: ## create the .po files used for i18n
