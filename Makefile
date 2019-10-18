@@ -39,18 +39,19 @@ endif
 
 # -- Docker
 # Get the current user ID to use for docker run and docker exec commands
-DOCKER_UID           = $(shell id -u)
-DOCKER_GID           = $(shell id -g)
-DOCKER_USER          = $(DOCKER_UID):$(DOCKER_GID)
-COMPOSE              = DOCKER_USER=$(DOCKER_USER) DB_HOST=$(DB_HOST) DB_PORT=$(DB_PORT) docker-compose
-COMPOSE_RUN          = $(COMPOSE) run --rm
-COMPOSE_EXEC         = $(COMPOSE) exec
-COMPOSE_EXEC_APP     = $(COMPOSE_EXEC) app
-COMPOSE_EXEC_NODE    = $(COMPOSE_EXEC) node
-COMPOSE_RUN_APP      = $(COMPOSE_RUN) app
-COMPOSE_RUN_CROWDIN  = $(COMPOSE_RUN) crowdin -c crowdin/config.yml
-COMPOSE_TEST_RUN     = $(COMPOSE) run --rm -e DJANGO_CONFIGURATION=Test
-COMPOSE_TEST_RUN_APP = $(COMPOSE_TEST_RUN) app
+DOCKER_UID               = $(shell id -u)
+DOCKER_GID               = $(shell id -g)
+DOCKER_USER              = $(DOCKER_UID):$(DOCKER_GID)
+COMPOSE                  = DOCKER_USER=$(DOCKER_USER) DB_HOST=$(DB_HOST) DB_PORT=$(DB_PORT) docker-compose
+COMPOSE_RUN              = $(COMPOSE) run --rm
+COMPOSE_EXEC             = $(COMPOSE) exec
+COMPOSE_EXEC_APP         = $(COMPOSE_EXEC) app
+COMPOSE_EXEC_NODE        = $(COMPOSE_EXEC) node
+COMPOSE_RUN_APP          = $(COMPOSE_RUN) app
+COMPOSE_RUN_COOKIECUTTER = $(COMPOSE_RUN) cookiecutter
+COMPOSE_RUN_CROWDIN      = $(COMPOSE_RUN) crowdin -c crowdin/config.yml
+COMPOSE_TEST_RUN         = $(COMPOSE) run --rm -e DJANGO_CONFIGURATION=Test
+COMPOSE_TEST_RUN_APP     = $(COMPOSE_TEST_RUN) app
 
 # -- Node
 # We must run node with a /home because yarn tries to write to ~/.yarnrc. If the
@@ -222,6 +223,15 @@ superuser: ## create a DjangoCMS superuser
 test-back: ## run back-end tests
 	@DB_PORT=$(DB_PORT) bin/pytest
 .PHONY: test-back
+
+# -- Cookie cutter
+
+start-project: ## bootstrap a new project based on Richie using Cookiecutter
+	@$(COMPOSE_RUN_COOKIECUTTER) \
+		"/app/$$(basename $(PWD))/cookiecutter" \
+		-o /app \
+		--config-file "/app/$$(basename $(PWD))/.cookiecutterrc"
+.PHONY: start-project
 
 # -- Internationalization
 crowdin-download: ## download translated message from Crowdin

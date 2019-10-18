@@ -51,3 +51,9 @@ services:
       - env.d/development/crowdin
     user: "${DOCKER_USER:-1000}"
     working_dir: /app
+
+  cookiecutter:
+    image: fundocker/cookiecutter:1.6.0
+    volumes:
+      - "../:/app"
+    user: "${DOCKER_USER:-1000}"

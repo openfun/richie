@@ -26,6 +26,10 @@ src/richie/static/richie/
 # Settings
 local.py
 
+# Cookiecutter
+.cookiecutter_replay
+.cookiecutterrc
+
 # Unit test / coverage reports
 htmlcov/
 .coverage
