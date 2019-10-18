@@ -193,7 +193,6 @@ jobs:
       - image: circleci/mysql:5.6-ram
         environment:
           MYSQL_ROOT_PASSWORD:
-          MYSQL_ALLOW_EMPTY_PASSWORD: yes
           MYSQL_DATABASE: test_richie
           MYSQL_USER: fun
           MYSQL_PASSWORD: pass
