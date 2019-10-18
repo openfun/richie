@@ -194,7 +194,7 @@ jobs:
         environment:
           MYSQL_ROOT_PASSWORD:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          MYSQL_DATABASE: richie
+          MYSQL_DATABASE: test_richie
           MYSQL_USER: fun
           MYSQL_PASSWORD: pass
         command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
@@ -257,7 +257,7 @@ jobs:
       # services
       - image: circleci/postgres:9.6-ram
         environment:
-          POSTGRES_DB: richie
+          POSTGRES_DB: test_richie
           POSTGRES_USER: fun
           POSTGRES_PASSWORD: pass
       - image: fundocker/openshift-elasticsearch:6.6.2
