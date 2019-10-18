@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# source "$(dirname "${BASH_SOURCE[0]}")/_config.sh"
+
+docker-compose run --rm \
+    -e DJANGO_CONFIGURATION=Test \
+    -e PYTHONPATH=/app \
+    app \
+    dockerize -wait "tcp://db:5432" -timeout 60s \
+        pytest "$@"

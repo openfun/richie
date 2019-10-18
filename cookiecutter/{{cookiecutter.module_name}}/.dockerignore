@@ -1,0 +1,26 @@
+# Python
+__pycache__
+*.pyc
+**/__pycache__
+**/*.pyc
+venv
+.venv
+
+# System-specific files
+.DS_Store
+**/.DS_Store
+
+# Docker
+docker-compose.*
+env.d
+
+# Development/test cache & configurations
+.cache
+.circleci
+.git
+.vscode
+src/frontend/node_modules
+
+# Assets
+data
+src/backend/{{cookiecutter.module_name}}/static/richie/css/main.css

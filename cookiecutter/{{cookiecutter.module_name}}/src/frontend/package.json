@@ -1,0 +1,36 @@
+{
+  "name": "{{cookiecutter.module_name}}",
+  "version": "0.1.0",
+  "description": "{{cookiecutter.description}}",
+  "scripts": {
+    "prettier": "prettier '**/*.+(css|scss)'",
+    "prettier-write": "prettier --write '**/*.+(css|scss)'",
+    "sass": "node-sass --include-path node_modules scss/_main.scss ../backend/{{cookiecutter.module_name}}/static/richie/css/main.css",
+    "sass-production": "node-sass --include-path node_modules --output-style compressed scss/_main.scss ../backend/{{cookiecutter.module_name}}/static/richie/css/main.css",
+    "watch-sass": "nodemon -e scss -x 'yarn sass'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/{{cookiecutter.github_account}}/{{cookiecutter.module_name}}.git"
+  },
+  "keywords": [
+    "MOOC",
+    "CMS"
+  ],
+  "author": {
+    "name": "{{cookiecutter.author_name}}",
+    "email": "{{cookiecutter.author_email}}"
+  },
+  "license": "AGPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/{{cookiecutter.github_account}}/{{cookiecutter.module_name}}/issues"
+  },
+  "homepage": "https://github.com/{{cookiecutter.github_account}}/{{cookiecutter.module_name}}#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "node-sass": "4.11.0",
+    "nodemon": "1.18.10",
+    "prettier": "1.16.4",
+    "richie-education": "{{cookiecutter.richie_version}}"
+  }
+}

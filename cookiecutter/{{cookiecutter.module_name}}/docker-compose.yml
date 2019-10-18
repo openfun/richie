@@ -1,0 +1,67 @@
+version: "3.4"
+
+services:
+  db:
+    image: postgres:9.6
+    env_file:
+      - "env.d/development"
+    ports:
+      - "5440:5432"
+
+  elasticsearch:
+    image: elasticsearch:6.6.2
+    env_file:
+      - "env.d/development"
+    ports:
+      - "9220:9200"
+
+  app:
+    build:
+      context: .
+      target: development
+      args:
+        DOCKER_USER: ${DOCKER_USER:-1000}
+    image: "{{cookiecutter.module_name}}:development"
+    env_file: "env.d/development"
+    ports:
+      - "8080:8000"
+    volumes:
+      - ./src/backend:/app
+      - ./data/static:/data/static
+      - ./data/media:/data/media
+    depends_on:
+      - "db"
+      - "elasticsearch"
+
+  app-ci:
+    build:
+      context: .
+      target: production
+      args:
+        DOCKER_USER: ${DOCKER_USER:-1000}
+    # We tag our images with the current commit sha1 in the CI to make them
+    # unique and avoid collisions in parallel builds.
+    image: "{{cookiecutter.module_name}}:${CIRCLE_SHA1:-ci}"
+    env_file:
+      - env.d/development
+      - env.d/ci
+    ports:
+      - "8000:8000"
+    depends_on:
+      - "db"
+      - "elasticsearch"
+
+  node:
+    image: circleci/node:10
+    working_dir: /app/src/frontend
+    user: "${DOCKER_USER:-1000}"
+    volumes:
+      - .:/app
+
+  terraform:
+    image: hashicorp/terraform:light
+    env_file: env.d/aws
+    user: "${DOCKER_USER:-1000}"
+    working_dir: /app
+    volumes:
+      - ./src/aws:/app

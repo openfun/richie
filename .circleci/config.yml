@@ -28,7 +28,7 @@ jobs:
       - run:
           name: enforce absence of print statements in code
           command: |
-            ! git diff origin/master..HEAD -- . ':(exclude).circleci' | grep "print("
+            ! git diff origin/master..HEAD -- . ':(exclude).circleci' ':(exclude)cookiecutter/{{cookiecutter.module_name}}/.circleci' | grep "print("
       - run:
           name: Check absence of fixup commits
           command: |

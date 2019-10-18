@@ -1,0 +1,384 @@
+generate-version-file: &generate-version-file
+  run:
+    name: Create a version.json
+    command: |
+      # Create a version.json à-la-mozilla
+      # https://github.com/mozilla-services/Dockerflow/blob/master/docs/version_object.md
+      printf '{"commit":"%s","version":"%s","source":"https://github.com/%s/%s","build":"%s"}\n' \
+        "$CIRCLE_SHA1" \
+        "$CIRCLE_TAG" \
+        "$CIRCLE_PROJECT_USERNAME" \
+        "$CIRCLE_PROJECT_REPONAME" \
+        "$CIRCLE_BUILD_URL" > src/backend/version.json
+
+version: 2
+jobs:
+  # Git jobs
+  # Check that the git history is clean and complies with our expectations
+  lint-git:
+    docker:
+      - image: circleci/python:3.7-stretch
+    working_directory: ~/{{cookiecutter.module_name}}
+    steps:
+      - checkout
+      # Make sure the changes don't add a "print" statement to the code base.
+      # We should exclude the ".circleci" folder from the search as the very command that checks
+      # the absence of "print" is including a "print(" itself.
+      - run:
+          name: enforce absence of print statements in code
+          command: |
+            ! git diff origin/master..HEAD -- . ':(exclude).circleci' | grep "print("
+      - run:
+          name: Check absence of fixup commits
+          command: |
+            ! git log | grep 'fixup!'
+      - run:
+          name: Install gitlint
+          command: |
+            pip install --user gitlint
+      - run:
+          name: lint commit messages added to master
+          command: |
+            ~/.local/bin/gitlint --commits origin/master..HEAD
+
+  # Check that the CHANGELOG has been updated in the current branch
+  check-changelog:
+    docker:
+      - image: circleci/buildpack-deps:stretch-scm
+    working_directory: ~/{{cookiecutter.module_name}}
+    steps:
+      - checkout
+      - run:
+          name: Check that the CHANGELOG has been modified in the current branch
+          command: |
+            git whatchanged --name-only --pretty="" origin..HEAD | grep CHANGELOG
+
+  # Check that the CHANGELOG max line length does not exceed 80 characters
+  lint-changelog:
+    docker:
+      - image: debian:stretch
+    working_directory: ~/{{cookiecutter.module_name}}
+    steps:
+      - checkout
+      - run:
+          name: Check CHANGELOG max line length
+          command: |
+            # Get the longuest line width (ignoring release links)
+            test $(cat CHANGELOG.md | grep -Ev "^\[.*\]: https://github.com/" | wc -L) -le 80
+
+  # Build Docker images
+  build-docker:
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    working_directory: ~/{{cookiecutter.module_name}}
+    steps:
+      # Checkout repository sources
+      - checkout
+      # Generate a version.json file describing app release
+      - <<: *generate-version-file
+      # Activate docker-in-docker (with layers caching enabled)
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Build production image
+          command: make env.d/aws && make ci-build
+      - run:
+          name: Check built image availability
+          command: docker images "{{cookiecutter.module_name}}:${CIRCLE_SHA1}"
+      - run:
+          name: Check version.json file
+          command: make ci-version
+      - run:
+          name: Run Django migrations
+          command: make ci-migrate
+      - run:
+          name: Run Django checks with production image
+          command: make ci-check
+
+  # ---- Backend jobs ----
+  # Build backend development environment
+  build-back:
+    docker:
+      - image: circleci/python:3.7-stretch
+    working_directory: ~/{{cookiecutter.module_name}}
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - {% raw %}v1-back-dependencies-{{ .Revision }}{% endraw %}
+      - run:
+          name: Install development dependencies
+          command: >
+            pip install \
+              --user \
+              -r requirements/base.txt \
+              -r requirements/dev.txt
+      - save_cache:
+          paths:
+            - ~/.local
+          key: {% raw %}v1-back-dependencies-{{ .Revision }}{% endraw %}
+
+  lint-back:
+    docker:
+      - image: circleci/python:3.7-stretch
+    working_directory: ~/{{cookiecutter.module_name}}/src/backend/
+    steps:
+      - checkout:
+          path: ~/{{cookiecutter.module_name}}
+      - restore_cache:
+          keys:
+            - {% raw %}v1-back-dependencies-{{ .Revision }}{% endraw %}
+      - run:
+          name: Lint code with flake8
+          command: ~/.local/bin/flake8
+      - run:
+          name: Lint code with isort
+          command: ~/.local/bin/isort --recursive --check-only .
+      - run:
+          name: Lint code with black
+          command: ~/.local/bin/black .
+      - run:
+          name: Lint code with pylint
+          command: ~/.local/bin/pylint .
+      - run:
+          name: Lint code with bandit
+          command: ~/.local/bin/bandit -qr .
+
+  test-back:
+    docker:
+      - image: circleci/python:3.7-stretch
+        environment:
+          DJANGO_SETTINGS_MODULE: {{cookiecutter.module_name}}.settings
+          PYTHONPATH: /home/circleci/{{cookiecutter.module_name}}/src/backend
+          DJANGO_CONFIGURATION: Test
+          DJANGO_SECRET_KEY: ThisIsAnExampleKeyForTestPurposeOnly
+          DB_HOST: localhost
+          DB_NAME: {{cookiecutter.module_name}}
+          DB_USER: {{cookiecutter.module_name}}_user
+          DB_PASSWORD: pass
+          DB_PORT: 5432
+      - image: circleci/postgres:9.6-alpine-ram
+        environment:
+          POSTGRES_DB: {{cookiecutter.module_name}}
+          POSTGRES_USER: {{cookiecutter.module_name}}_user
+          POSTGRES_PASSWORD: pass
+    working_directory: ~/{{cookiecutter.module_name}}/src/backend
+    steps:
+      - checkout:
+          path: ~/{{cookiecutter.module_name}}
+      - restore_cache:
+          keys:
+            - {% raw %}v1-back-dependencies-{{ .Revision }}{% endraw %}
+      # Run back-end (Django) test suite
+      #
+      # Nota bene: to run the django test suite, we need to ensure that the
+      # PostgreSQL service is up and ready. To achieve this,
+      # we wrap the command execution with dockerize, a tiny tool
+      # installed in the development image. In our case, dockerize will wait
+      # up to one minute until the database container is answering on port 5432.
+      - run:
+          name: Run tests
+          command: |
+                dockerize \
+                  -wait tcp://localhost:5432 \
+                  -timeout 60s \
+                    ~/.local/bin/pytest
+
+  # ---- Front-end jobs ----
+  build-front-production:
+    docker:
+      - image: circleci/node:10
+    working_directory: ~/{{cookiecutter.module_name}}/src/frontend/
+    steps:
+      - checkout:
+          path: ~/{{cookiecutter.module_name}}
+      - restore_cache:
+          keys:
+            - {% raw %}v1-front-dependencies-{{ checksum "yarn.lock" }}{% endraw %}
+            - v1-front-dependencies-
+      - run:
+          name: Install frontend dependencies (with locked dependencies)
+          command: yarn install --frozen-lockfile
+      - run:
+          name: Build application styles (production mode)
+          command: yarn sass-production
+      - save_cache:
+          paths:
+            - ./node_modules
+          key: {% raw %}v1-front-dependencies-{{ checksum "yarn.lock" }}{% endraw %}
+
+  lint-front:
+    docker:
+      - image: circleci/node:10
+    working_directory: ~/{{cookiecutter.module_name}}/src/frontend/
+    steps:
+      - checkout:
+          path: ~/{{cookiecutter.module_name}}
+      - restore_cache:
+          keys:
+            - {% raw %}v1-front-dependencies-{{ checksum "yarn.lock" }}{% endraw %}
+      - run:
+          name: Lint CSS/SCSS code with prettier
+          command: yarn prettier
+
+  # ---- DockerHub publication job ----
+  hub:
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    working_directory: ~/{{cookiecutter.module_name}}
+    steps:
+      - checkout
+      # Generate a version.json file describing app release
+      - <<: *generate-version-file
+      # Activate docker-in-docker (with layers caching enabled)
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Build production image
+          command: |
+            docker build \
+              --target production \
+              -t {{cookiecutter.module_name}}:${CIRCLE_SHA1} \
+              .
+      - run:
+          name: Check built image availability
+          command: docker images "{{cookiecutter.module_name}}:${CIRCLE_SHA1}"
+      # Login to DockerHub to Publish new images
+      #
+      # Nota bene: you'll need to define the following secrets environment vars
+      # in CircleCI interface:
+      #
+      #   - DOCKER_USER
+      #   - DOCKER_PASS
+      - run:
+          name: Login to DockerHub
+          command: echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+      # Set environment variables that will be used in next steps
+      - run:
+          name: Setup Environment Variables
+          command: |
+            DOCKER_TAG=$([[ -z "$CIRCLE_TAG" ]] && echo $CIRCLE_BRANCH || echo ${CIRCLE_TAG} | sed 's/^v//')
+            RELEASE_TYPE=$([[ -z "$CIRCLE_TAG" ]] && echo "branch" || echo "tag ")
+            echo "export DOCKER_TAG=${DOCKER_TAG}" >> $BASH_ENV
+            echo "export RELEASE_TYPE=${RELEASE_TYPE}" >> $BASH_ENV
+      # Tag docker images with the same pattern used in Git (Semantic Versioning)
+      #
+      # Git tag: v1.0.1
+      # Docker tag: 1.0.1(-alpine)(-ci)
+      - run:
+          name: Tag images
+          command: |
+            docker images ~/{{cookiecutter.dockerhub_account}}/{{cookiecutter.module_name}}
+            # Display either:
+            # - DOCKER_TAG: master (Git branch)
+            # or
+            # - DOCKER_TAG: 1.1.2 (Git tag v1.1.2)
+            echo "DOCKER_TAG: ${DOCKER_TAG} (Git ${RELEASE_TYPE}${CIRCLE_TAG})"
+            docker tag {{cookiecutter.module_name}}:${CIRCLE_SHA1} {{cookiecutter.dockerhub_account}}/{{cookiecutter.module_name}}:${DOCKER_TAG}
+            if [[ -n "$CIRCLE_TAG" ]]; then
+                docker tag {{cookiecutter.module_name}}:${CIRCLE_SHA1} {{cookiecutter.dockerhub_account}}/{{cookiecutter.module_name}}:latest
+            fi
+            docker images | grep -E "^{{cookiecutter.dockerhub_account}}/{{cookiecutter.module_name}}\s*(${DOCKER_TAG}.*|latest|master)"
+      # Publish images to DockerHub
+      #
+      # Nota bene: logged user (see "Login to DockerHub" step) must have write
+      # permission for the project's repository; this also implies that the
+      # DockerHub repository already exists.
+      - run:
+          name: Publish images
+          command: |
+            # Display either:
+            # - DOCKER_TAG: master (Git branch)
+            # or
+            # - DOCKER_TAG: 1.1.2 (Git tag v1.1.2)
+            echo "DOCKER_TAG: ${DOCKER_TAG} (Git ${RELEASE_TYPE}${CIRCLE_TAG})"
+            docker push {{cookiecutter.dockerhub_account}}/{{cookiecutter.module_name}}:${DOCKER_TAG}
+            if [[ -n "$CIRCLE_TAG" ]]; then
+              docker push {{cookiecutter.dockerhub_account}}/{{cookiecutter.module_name}}:latest
+            fi
+
+workflows:
+  version: 2
+
+  {{cookiecutter.module_name}}:
+    jobs:
+      # Git jobs
+      #
+      # Check validity of git history
+      - lint-git:
+          filters:
+            tags:
+              only: /.*/
+      # Check CHANGELOG update
+      - check-changelog:
+          filters:
+            branches:
+              ignore: master
+            tags:
+              only: /(?!^v).*/
+      - lint-changelog:
+          filters:
+            branches:
+              ignore: master
+            tags:
+              only: /.*/
+
+      # Docker jobs
+      #
+      # Build, lint and test production and development Docker images
+      # (debian-based)
+      - build-docker:
+          filters:
+            tags:
+              only: /.*/
+
+      # Front-end jobs
+      #
+      # Build & lint the front-end apps
+      - build-front-production:
+          filters:
+            tags:
+              only: /.*/
+      - lint-front:
+          requires:
+            - build-front-production
+          filters:
+            tags:
+              only: /.*/
+
+      # Backend jobs
+      #
+      # Build, lint and test production and development Docker images
+      # (debian-based)
+      - build-back:
+          filters:
+            tags:
+              only: /.*/
+      - lint-back:
+          requires:
+            - build-back
+          filters:
+            tags:
+              only: /.*/
+      - test-back:
+          requires:
+            - build-back
+          filters:
+            tags:
+              only: /.*/
+
+      # DockerHub publication.
+      #
+      # Publish docker images only if all build, lint and test jobs succeed and
+      # if the CI workflow has been triggered by a git tag starting with the
+      # letter v or by a PR merged to the master branch
+      - hub:
+          requires:
+            - build-docker
+            - lint-front
+            - lint-back
+          filters:
+            branches:
+              only: master
+            tags:
+              only: /^v.*/

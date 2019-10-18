@@ -1,0 +1,5 @@
+# Nota bene: this environment file is a superset of the development environment
+# to avoid repeating ourselves.
+
+# Django
+DJANGO_CONFIGURATION=ContinuousIntegration

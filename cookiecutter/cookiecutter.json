@@ -1,0 +1,13 @@
+{
+  "project_name": "Learning portal",
+  "module_name": "{{ cookiecutter.project_name.lower() | replace(' ', '') | replace('.', '') | trim() }}",
+  "description": "A learning portal using richie.",
+  "richie_version": "1.11.0",
+  "author_name": "Open FUN (France Université Numérique)",
+  "author_email": "fun.dev@openfun.fr",
+  "github_account": "openfun",
+  "dockerhub_account": "fundocker",
+  "aws_access_key_id": "yourAwsAccessKeyId",
+  "aws_secret_access_key": "YourAwsSecretAccessKey",
+  "aws_default_region": "eu-west-1"
+}

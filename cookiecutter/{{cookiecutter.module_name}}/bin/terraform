@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+# Run Terraform commands in the Hashicorp docker container, passing our
+# environment variables
+DOCKER_USER="$(id -u):$(id -g)" \
+    docker-compose run --rm terraform "$@"

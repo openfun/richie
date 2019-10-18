@@ -1,0 +1,23 @@
+# Python
+PYTHONUNBUFFERED=1
+
+# Django
+DJANGO_SETTINGS_MODULE={{cookiecutter.module_name}}.settings
+DJANGO_CONFIGURATION=Development
+DJANGO_SECRET_KEY=ThisIsAnExampleKeyForDevPurposeOnly
+
+# Elastic search
+RICHIE_ES_HOST=elasticsearch
+discovery.type=single-node
+
+# PostgreSQL db container configuration
+POSTGRES_DB={{cookiecutter.module_name}}
+POSTGRES_USER={{cookiecutter.module_name}}
+POSTGRES_PASSWORD=pass
+
+# App database configuration
+DB_HOST=db
+DB_NAME={{cookiecutter.module_name}}
+DB_USER={{cookiecutter.module_name}}
+DB_PASSWORD=pass
+DB_PORT=5432
