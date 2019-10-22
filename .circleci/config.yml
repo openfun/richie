@@ -67,6 +67,26 @@ jobs:
             # Get the longuest line width (ignoring release links)
             test $(cat CHANGELOG.md | grep -Ev "^\[.*\]: https://github.com/openfun" | wc -L) -le 80
 
+  # Check that all versions (backend, frontend and Cookiecutter) are up-to-date
+  lint-versions:
+    docker:
+      - image: debian:stretch
+    working_directory: ~/fun
+    steps:
+      - checkout
+      - run:
+          name: Test frontend version
+          command: |
+            BACKEND_VERSION=$(cat setup.cfg | grep "version" | cut -d" " -f3)
+            FRONTEND_VERSION=$(cat src/frontend/package.json | grep '"version"' | cut -d'"' -f4)
+            test $BACKEND_VERSION = $FRONTEND_VERSION
+      - run:
+          name: Test Cookiecutter version
+          command: |
+            BACKEND_VERSION=$(cat setup.cfg | grep "version" | cut -d" " -f3)
+            CC_VERSION=$(cat cookiecutter/cookiecutter.json | grep richie_version | cut -d'"' -f4)
+            test $BACKEND_VERSION = $CC_VERSION
+
   # ---- Docker jobs ----
   # Build the Docker image ready for production
   build-docker:
