@@ -8,6 +8,7 @@ class SearchConfig(AppConfig):
     name = "richie.apps.search"
     verbose_name = "Richie search app"
 
+    # pylint: disable=import-outside-toplevel
     def ready(self):
         """Register signals to update the Elasticsearch indexes."""
         from cms.signals import post_publish
