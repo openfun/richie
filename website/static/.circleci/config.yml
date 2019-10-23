@@ -1,0 +1,11 @@
+# CircleCI 2.0 Config File
+# This config file will prevent tests from being run on the gh-pages branch.
+version: 2
+jobs:
+  build:
+    docker:
+      - image: busybox:1.31.0
+    branches:
+      ignore: gh-pages
+    steps:
+      - run: echo "Skipping tests on gh-pages branch"
