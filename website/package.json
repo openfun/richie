@@ -1,0 +1,26 @@
+{
+  "name": "richie-education-docs",
+  "version": "1.11.0",
+  "description": "Documentation website for the Richie project",
+  "scripts": {
+    "examples": "docusaurus-examples",
+    "start": "docusaurus-start",
+    "build": "docusaurus-build",
+    "publish-gh-pages": "docusaurus-publish",
+    "write-translations": "docusaurus-write-translations",
+    "version": "docusaurus-version",
+    "rename-version": "docusaurus-rename-version"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/openfun/richie.git"
+  },
+  "author": {
+    "name": "Open FUN (France Université Numérique)",
+    "email": "fun.dev@fun-mooc.fr"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "docusaurus": "^1.13.0"
+  }
+}

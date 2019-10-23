@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Create a documentation & marketing website for the project. It lives under
+  the `docs` folder and is deployed to Github Pages.
+
 ## [1.12.0] - 2019-10-23
 
 ### Added
