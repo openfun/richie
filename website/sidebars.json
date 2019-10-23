@@ -1,0 +1,11 @@
+{
+  "docs": {
+    "Getting started": [
+      "quick-start",
+      "docker-development",
+      "native-installation"
+    ],
+    "Recipes": ["django-react-interop"],
+    "Contributing": ["contributing-guide", "css-guidelines"]
+  }
+}

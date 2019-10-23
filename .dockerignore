@@ -17,6 +17,7 @@ env.d
 # Docs
 docs
 *.md
+*.log
 
 # Development/test cache & configurations
 .cache

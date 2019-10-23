@@ -1,4 +1,8 @@
-# CSS guidelines
+---
+id: css-guidelines
+title: CSS Guidelines
+sidebar_label: CSS Guidelines
+---
 
 The purpose of these CSS guidelines is to make our CSS as easy as possible to maintain, prune and/or modify over time. To that end, they forgo some of the unwanted parts of CSS. They also require the use of a CSS preprocessor (we picked SASS) to be used effortlessly.
 
@@ -6,7 +10,7 @@ Our approach is two-pronged. First, we put every piece of CSS as close as we can
 
 ## File structuration
 
-Rules should be placed where their purpose is most apparent, and where they are easiest to find. 
+Rules should be placed where their purpose is most apparent, and where they are easiest to find.
 
 Generally, this means CSS rules should live as close as possible to the place they are used. For example, the selectors and rules that define the look for a component should live in a `.scss` file in the same folder as the JS file for this component. This goes for templates too. Such files can only contain rules that are __specific to this component/template and this one only__
 
@@ -21,7 +25,7 @@ Following the [BEM naming convention](http://getbem.com/introduction/), we will 
     .block {}
     .block__element {}
     .block--modifier {}
-    
+
 - `.block` represents the higher level of an abstraction or component.
 - `.block__element` represents a descendent of .block that helps form .block as a whole.
 - `.block--modifier` represents a different state or version of .block.

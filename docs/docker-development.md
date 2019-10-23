@@ -1,6 +1,12 @@
-## To go further with development
+---
+id: docker-development
+title: Developing Richie with Docker
+sidebar_label: Docker development
+---
 
-### Settings
+Now that you have `Richie` up and running, you can start working with it.
+
+## Settings
 
 Settings are defined using [Django
 Configurations](https://django-configurations.readthedocs.io/en/stable/) for
@@ -16,7 +22,7 @@ different environments:
 
 The `Development` environment is defined as the default environment.
 
-### Front-end tools
+## Front-end tools
 
 If you intend to work on the front-end development of the CMS, we also have
 sweet candies for you! 🤓
@@ -29,7 +35,7 @@ $ make watch-css
 $ make watch-ts
 ```
 
-### Container control
+## Container control
 
 You can stop/start/restart a container:
 
@@ -39,7 +45,7 @@ or stop/start/restart all containers in one command:
 
     $ docker-compose [stop|start|restart]
 
-### Debugging
+## Debugging
 
 You can easily see the latest logs for a container:
 
@@ -60,7 +66,7 @@ section):
 
     $ bin/run app python sandbox/manage.py shell
 
-### Using sugar scripts
+## Using sugar scripts
 
 While developing using Docker, you will fall into permission issues if you mount
 the code directory as a volume in the container. Indeed, the Docker engine will,
@@ -79,7 +85,7 @@ error-prone, we provide shortcuts that we call our "sugar scripts":
 - `bin/pytest`: runs `pytest` in the `app` service using the test docker-compose
   file
 
-### Cleanup
+## Cleanup
 
 If you work on the Docker configuration and make repeated modifications,
 remember to periodically clean the unused docker images and containers by
@@ -88,9 +94,9 @@ running:
     $ docker image prune
     $ docker container prune
 
-### Troubleshooting
+## Troubleshooting
 
-#### ElasticSearch service is always down
+### ElasticSearch service is always down
 
 If your `elasticsearch` container fails at booting, checkout the logs via:
 
