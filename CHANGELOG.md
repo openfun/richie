@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.12.0] - 2019-10-23
+
 ### Added
 
 - Add a variant option for course glimpses.
@@ -25,32 +27,12 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
-- Fix invalid "role" value on pagination list with a "nav" tag around bullet
-  list instead,
-- Fix invalid "button" tag inside a "a" tag inside course glimpse,
-- Fix invalid attributes on "iframe" tag from djangocms_video plugin,
-- Fix invalid syntax in "sizes" attribute value on "<img>" tags,
-- Add url escaping on variables inside links from on social network badges,
-- Fix invalid syntax in "srcset" attribute value on "<img>" tags,
-- Add missing attribute "alt" on some "<img>" tags in templates,
-- Remove deprecated attribute "type" from some "<script>" tags in templates,
+- HTML validation warnings and errors,
 - In the sandbox, make API calls work behind an htaccess by removing Basic
   Auth fallback,
-- Fix React pagination role-element pair. Pagination should now be seen as a
-  navigational element by screen readers,
-- Fix add plugin to team and organization on fragment_course_content template
-  when they are empty,
-- Remove deprecated attribute "type" from some "<script>" tags in templates,
-- Add missing attribute "alt" on some "<img>" tags in templates,
-- Fix invalid syntax in "srcset" attribute value on "<img>" tags,
-- Add url escaping on variables inside links on social network badges,
-- Fix invalid syntax in "sizes" attribute value on "<img>" tags,
-- Fix invalid attributes on "iframe" tag from djangocms_video plugin,
-- Fix invalid "button" tag inside a "a" tag inside course glimpse,
-- Fix invalid "role" value on pagination list with a "nav" tag around bullet
-  list instead,
-- Fix warning about multiple "h1" tags on homepage, section template will
-  always have a default level title to 2.
+- Adding person/organization plugins to a new blank course,
+- Remove multiple "h1" tags on homepage, section template will always have a
+  default level title of 2.
 
 ## [1.11.0] - 2019-10-11
 
@@ -632,7 +614,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v1.11.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v1.12.0...master
+[1.12.0]: https://github.com/openfun/richie/compare/v1.11.0...v1.12.0
 [1.11.0]: https://github.com/openfun/richie/compare/v1.10.0...v1.11.0
 [1.10.0]: https://github.com/openfun/richie/compare/v1.9.2...v1.10.0
 [1.9.2]: https://github.com/openfun/richie/compare/v1.9.1...v1.9.2
