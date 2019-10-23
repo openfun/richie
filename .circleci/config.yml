@@ -544,6 +544,22 @@ jobs:
           name: Publish package
           command: npm publish src/frontend
 
+  # ---- Documentation website jobs ----
+  # Deploy the docs website to GitHub pages.
+  deploy-website:
+    docker:
+      - image: circleci/node:10
+    working_directory: ~/fun
+    steps:
+      - checkout
+      - run:
+          name: Deploying to GitHub Pages
+          command: |
+            git config --global user.email "funmoocbot@users.noreply.github.com"
+            git config --global user.name "FUN MOOC Bot"
+            echo "machine github.com login funmoocbot password ${GH_TOKEN}" > ~/.netrc
+            cd ./website && yarn install && GIT_USER=funmoocbot yarn run publish-gh-pages
+
 workflows:
   version: 2
 
@@ -713,3 +729,13 @@ workflows:
               ignore: /.*/
             tags:
               only: /^v.*/
+
+      # Documentation website jobs.
+      #
+      # Publish the documentation website to GitHub Pages.
+      # Only do it for master as tagged releases are supposed to tag their own version of the
+      # documentation in the release commit on master before they go out.
+      - deploy-website:
+          filters:
+            branches:
+              only: master
