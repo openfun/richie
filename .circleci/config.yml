@@ -3,7 +3,8 @@
 version: 2
 jobs:
   build:
-    machine: true
+    docker:
+      - image: busybox:1.31.0
     branches:
       ignore: gh-pages
     steps:
