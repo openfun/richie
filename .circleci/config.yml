@@ -545,6 +545,22 @@ jobs:
           command: npm publish src/frontend
 
   # ---- Documentation website jobs ----
+
+  # check if documentation version is missing
+  check-documentation-version:
+    docker:
+      - image: busybox:1.31.0
+    working_directory: ~/fun
+    steps:
+      - checkout
+      - run:
+          name: Check if the documentation version exists for the current richie version
+          command: |
+            BACKEND_VERSION=$(cat setup.cfg | grep "version" | cut -d" " -f3 | cut -d"." -f1,2)
+            echo "richie version: ${BACKEND_VERSION}"
+            cat website/versions.json | grep "${BACKEND_VERSION}"
+
+
   # Deploy the docs website to GitHub pages.
   deploy-website:
     docker:
@@ -732,10 +748,18 @@ workflows:
 
       # Documentation website jobs.
       #
+      # Check on each PR if the documentation corresponding richie version
+      # is present. If not the build will fail before publishing a new release.
+      - check-documentation-version:
+          filters:
+            tags:
+              only: /.*/
       # Publish the documentation website to GitHub Pages.
       # Only do it for master as tagged releases are supposed to tag their own version of the
       # documentation in the release commit on master before they go out.
       - deploy-website:
+          requires:
+            - check-documentation-version
           filters:
             branches:
               only: master
