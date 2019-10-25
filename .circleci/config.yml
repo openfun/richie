@@ -574,7 +574,7 @@ jobs:
             git config --global user.email "funmoocbot@users.noreply.github.com"
             git config --global user.name "FUN MOOC Bot"
             echo "machine github.com login funmoocbot password ${GH_TOKEN}" > ~/.netrc
-            cd ./website && yarn install && USE_SSH=true GIT_USER=funmoocbot yarn run publish-gh-pages
+            cd ./website && yarn install && GIT_USER=funmoocbot yarn run publish-gh-pages
 
 workflows:
   version: 2
