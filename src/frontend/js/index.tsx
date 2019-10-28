@@ -47,11 +47,11 @@ function isComponentName(
 document.addEventListener('DOMContentLoaded', event => {
   // Find all the elements that need React to render a component
   Array.prototype.forEach.call(
-    document.querySelectorAll('.fun-react'),
+    document.querySelectorAll('.richie-react'),
     async (element: Element) => {
       // Generate a component name. It should be a key of the componentLibrary object / ComponentLibrary interface
       const componentName = startCase(
-        get(element.className.match(/fun-react--([a-zA-Z-]*)/), '[1]') || '',
+        get(element.className.match(/richie-react--([a-zA-Z-]*)/), '[1]') || '',
       )
         .split(' ')
         .join('');
