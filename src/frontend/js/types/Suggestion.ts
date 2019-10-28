@@ -98,4 +98,7 @@ export type SearchSuggestionSection = SuggestionSection<SearchSuggestion>;
  * Helper to typecheck `react-autosuggest` expected props. Defines what is acceptable as a suggestion
  * throughout our code related to this instance of `<Autosuggest />`.
  */
-export type SearchAutosuggestProps = AutosuggestProps<SearchSuggestion>;
+export type SearchAutosuggestProps = AutosuggestProps<
+  SearchSuggestion,
+  SearchSuggestionSection
+>;
