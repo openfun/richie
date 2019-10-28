@@ -32,7 +32,7 @@ class CourseCMSTestCase(CMSTestCase):
             re.search(
                 (
                     r"<div[\\n ]*"
-                    r'class="fun-react fun-react--search"[\\n ]*'
+                    r'class="richie-react richie-react--search"[\\n ]*'
                     r'data-locale="en_US"[\\n ]*'
                     r'data-props=\\\'{"pageTitle": "search"'
                 ),
@@ -49,7 +49,7 @@ class CourseCMSTestCase(CMSTestCase):
             re.search(
                 (
                     r"<div[\\n ]*"
-                    r'class="fun-react fun-react--search"[\\n ]*'
+                    r'class="richie-react richie-react--search"[\\n ]*'
                     r'data-locale="fr_CA"[\\n ]*'
                     r'data-props=\\\'{"pageTitle": "recherche"'
                 ),

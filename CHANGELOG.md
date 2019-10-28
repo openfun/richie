@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Remove the "Exo 2" font from Richie. Use system `sans-serif` instead.
+- Rename the `fun-react` class used to Django-React interop to `richie-react`.
 
 ## [1.12.1] - 2019-10-29
 
