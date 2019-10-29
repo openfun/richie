@@ -33,7 +33,7 @@ describe('<RootSearchSuggestField />', () => {
   afterEach(jest.resetAllMocks);
 
   it('renders', () => {
-    fetchMock.get('/api/v1.0/courses/?limit=0&offset=0&scope=FILTERS', {
+    fetchMock.get('/api/v1.0/courses/?limit=1&offset=0&scope=filters', {
       filters: {
         subjects,
       },
@@ -55,7 +55,7 @@ describe('<RootSearchSuggestField />', () => {
   });
 
   it('gets suggestions from the API when the user types 3 characters or more in the field', async () => {
-    fetchMock.get('/api/v1.0/courses/?limit=0&offset=0&scope=FILTERS', {
+    fetchMock.get('/api/v1.0/courses/?limit=1&offset=0&scope=filters', {
       filters: {
         subjects,
       },
@@ -103,7 +103,7 @@ describe('<RootSearchSuggestField />', () => {
   });
 
   it('goes to the course page when the user selects a course suggestion', async () => {
-    fetchMock.get('/api/v1.0/courses/?limit=0&offset=0&scope=FILTERS', {
+    fetchMock.get('/api/v1.0/courses/?limit=1&offset=0&scope=filters', {
       filters: {
         subjects,
       },
@@ -149,7 +149,7 @@ describe('<RootSearchSuggestField />', () => {
   });
 
   it('goes to course search with the filter value activated when the user clicks on a suggestion', async () => {
-    fetchMock.get('/api/v1.0/courses/?limit=0&offset=0&scope=FILTERS', {
+    fetchMock.get('/api/v1.0/courses/?limit=1&offset=0&scope=filters', {
       filters: {
         subjects,
       },
@@ -223,7 +223,7 @@ describe('<RootSearchSuggestField />', () => {
   });
 
   it('lets the user select the currently highlighted suggestion by pressing ENTER', async () => {
-    fetchMock.get('/api/v1.0/courses/?limit=0&offset=0&scope=FILTERS', {
+    fetchMock.get('/api/v1.0/courses/?limit=1&offset=0&scope=filters', {
       filters: {
         subjects,
       },
