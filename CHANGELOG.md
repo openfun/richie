@@ -13,6 +13,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Create a documentation & marketing website for the project. It lives under
   the `docs` folder and is deployed to Github Pages.
 
+### Fixed
+
+- Fix an API request issue that was breaking the `<RootSearchSuggestField />`
+  component.
+
 ## [1.12.0] - 2019-10-23
 
 ### Added

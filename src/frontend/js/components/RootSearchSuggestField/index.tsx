@@ -53,9 +53,9 @@ const filters: () => Promise<APICourseSearchResponse['filters']> = async () => {
   }
   hasInitiatedRequest = true;
   const response = await fetchList('courses', {
-    limit: '0',
+    limit: '1',
     offset: '0',
-    scope: 'FILTERS',
+    scope: 'filters',
   });
   if (response.status === requestStatus.SUCCESS) {
     return (filtersPromise = new Promise(resolve =>
