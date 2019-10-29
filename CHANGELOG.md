@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.12.1] - 2019-10-29
+
 ### Added
 
 - Create a documentation & marketing website for the project. It lives under
@@ -624,7 +626,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v1.12.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v1.12.1...master
+[1.12.1]: https://github.com/openfun/richie/compare/v1.12.0...v1.12.1
 [1.12.0]: https://github.com/openfun/richie/compare/v1.11.0...v1.12.0
 [1.11.0]: https://github.com/openfun/richie/compare/v1.10.0...v1.11.0
 [1.10.0]: https://github.com/openfun/richie/compare/v1.9.2...v1.10.0
