@@ -11,6 +11,7 @@ from django.views.static import serve
 
 from cms.sitemaps import CMSSitemap
 
+from richie.apps.core.urls import urlpatterns as core_urlpatterns
 from richie.apps.search.urls import urlpatterns as search_urlpatterns
 
 # For now, we use URLPathVersioning to be consistent with fonzie. Fonzie uses it
@@ -22,7 +23,10 @@ admin.autodiscover()
 
 urlpatterns = [
     url(r"^sitemap\.xml$", sitemap, {"sitemaps": {"cmspages": CMSSitemap}}),
-    url(r"^api/{}/".format(API_PREFIX), include(search_urlpatterns)),
+    url(
+        r"^api/{}/".format(API_PREFIX),
+        include([*core_urlpatterns, *search_urlpatterns]),
+    ),
     url(r"^", include("filer.server.urls")),
 ]
 
