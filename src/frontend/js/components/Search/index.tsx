@@ -4,8 +4,8 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { CourseGlimpseList } from 'components/CourseGlimpseList';
 import { PaginateCourseSearch } from 'components/PaginateCourseSearch';
 import { SearchFiltersPane } from 'components/SearchFiltersPane';
-import { SearchLoader } from 'components/SearchLoader';
 import { SearchSuggestField } from 'components/SearchSuggestField';
+import { Spinner } from 'components/Spinner';
 import { useCourseSearch } from 'data/useCourseSearch';
 import {
   CourseSearchParamsContext,
@@ -122,7 +122,7 @@ export const Search = ({
               />
             </React.Fragment>
           ) : (
-            <SearchLoader />
+            <Spinner size="large" />
           )}
           {!alwaysShowFilters && (
             <div
