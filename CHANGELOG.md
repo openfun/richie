@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Remove the "Exo 2" font from Richie. Use system `sans-serif` instead.
+
 ## [1.12.1] - 2019-10-29
 
 ### Added
