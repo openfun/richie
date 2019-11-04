@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Add a React-powered component to handle login/signup and user status in
+  the base template.
+
 ### Changed
 
 - Remove the "Exo 2" font from Richie. Use system `sans-serif` instead.

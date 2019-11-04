@@ -1,4 +1,4 @@
-{% load i18n cms_tags menu_tags static sekizai_tags %}
+{% load i18n cms_tags menu_tags react_locale static sekizai_tags %}
 <!doctype html>
 <html lang="{{ LANGUAGE_CODE }}">
     <head>
@@ -65,13 +65,14 @@
                     </ul>
                     <ul class="topbar__menu__list topbar__menu__list--aside">
                         {% language_chooser "menu/language_menu.html" %}
-                        <li class="topbar__menu__list__item topbar__menu__list__item--cta-hollow">
-                            <a class="topbar__menu__list__item__link" href="#">{% trans "Sign up" %}</a>
-                        </li>
-                        <li class="topbar__menu__list__item topbar__menu__list__item--cta">
-                            <a class="topbar__menu__list__item__link" href="#">{% trans "Login" %}</a>
-                        </li>
                     </ul>
+                    {% block userlogin %}
+                    <div
+                      class="richie-react richie-react--user-login"
+                      data-locale="{{ LANGUAGE_CODE|react_locale }}"
+                      data-props='{"loginUrl": "{% url 'admin:index' %}", "logoutUrl": "{% url 'logout' %}", "signupUrl": "{% url 'admin:index' %}"}'
+                    ></div>
+                    {% endblock userlogin %}
                 </div>
             </nav>
             {% endblock body_header %}

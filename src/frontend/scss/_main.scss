@@ -45,15 +45,16 @@
 // Shared object styles
 @import './templates/menu/_menu';
 @import './templates/richie/single-column';
-@import './objects/breadcrumbs';
-@import './objects/course_glimpses';
 @import './objects/blogpost_glimpses';
-@import './objects/organization_glimpses';
-@import './objects/person_glimpses';
+@import './objects/breadcrumbs';
+@import './objects/buttons';
 @import './objects/category_glimpses';
+@import './objects/course_glimpses';
+@import './objects/organization_glimpses';
+@import './objects/pagination';
+@import './objects/person_glimpses';
 @import './objects/program_glimpses';
 @import './objects/search-filter-value';
-@import './objects/pagination';
 @import './templates/core/social-networks/social-networks';
 @import './templates/courses/plugins/category_plugin';
 @import './templates/courses/plugins/licence_plugin';
@@ -75,6 +76,7 @@
 @import '../js/components/SearchFilterGroupModal/styles';
 @import '../js/components/SearchFiltersPane/styles';
 @import '../js/components/Spinner/styles';
+@import '../js/components/UserLogin/styles';
 
 // Page component styles
 @import './components/header';

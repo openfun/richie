@@ -1,0 +1,45 @@
+.user-login {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  flex-direction: column;
+
+  @include media-breakpoint-up(lg) {
+    min-width: 12rem;
+    width: auto;
+    flex-direction: row;
+    height: 100%;
+  }
+
+  &__btn {
+    min-height: 3rem;
+    height: 100%;
+    min-width: 6rem;
+    width: 100%;
+    margin: 0;
+    border: 0;
+
+    @include media-breakpoint-up(lg) {
+      width: auto;
+    }
+
+    &:hover {
+      background: $dodgerblue7;
+      color: white;
+    }
+  }
+
+  &__logged {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 1rem;
+    min-height: 3rem;
+    background: white;
+
+    &__name {
+      margin-right: 1rem;
+    }
+  }
+}

@@ -1,0 +1,57 @@
+button,
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.25rem;
+  margin: 0 0.5rem;
+  padding: 0 1rem;
+  border: 0;
+  cursor: pointer;
+}
+
+.button {
+  &--primary {
+    background: $dodgerblue7;
+    color: white;
+    border: 2px solid $dodgerblue7;
+
+    &:hover {
+      background: white;
+      color: $dodgerblue7;
+    }
+  }
+
+  &--primary-hollow {
+    background: white;
+    color: $dodgerblue7;
+    border: 2px solid $dodgerblue7;
+
+    &:hover {
+      background: $dodgerblue7;
+      color: white;
+    }
+  }
+
+  &--secondary {
+    background: $firebrick6;
+    color: white;
+    border: 2px solid $firebrick6;
+
+    &:hover {
+      background: white;
+      color: $firebrick6;
+    }
+  }
+
+  &--secondary-hollow {
+    background: white;
+    color: $firebrick6;
+    border: 2px solid $firebrick6;
+
+    &:hover {
+      background: $firebrick6;
+      color: white;
+    }
+  }
+}
