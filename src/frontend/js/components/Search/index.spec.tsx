@@ -1,6 +1,7 @@
 import 'testSetup';
 
-import { fireEvent, render } from '@testing-library/react';
+import { act, fireEvent, render, wait } from '@testing-library/react';
+import fetchMock from 'fetch-mock';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
@@ -15,10 +16,6 @@ jest.mock('utils/indirection/window', () => ({
   },
 }));
 
-jest.mock('data/useCourseSearch', () => ({
-  useCourseSearch: () => null,
-}));
-
 describe('<Search />', () => {
   const commonDataProps = {
     assets: {
@@ -26,7 +23,38 @@ describe('<Search />', () => {
     },
   };
 
+  beforeEach(fetchMock.restore);
+
+  it('shows a spinner while the results are loading', async () => {
+    fetchMock.get('/api/v1.0/courses/?limit=20&offset=0', {
+      meta: {
+        total_count: 200,
+      },
+      objects: [],
+    });
+
+    const { getByText, queryByText } = render(
+      <IntlProvider locale="en">
+        <Search context={commonDataProps} />
+      </IntlProvider>,
+    );
+
+    expect(
+      getByText('Loading search results...').parentElement,
+    ).toHaveAttribute('role', 'status');
+
+    await wait();
+    expect(queryByText('Loading search results...')).toBeNull();
+  });
+
   it('always shows the filters pane on large screens', () => {
+    fetchMock.get('/api/v1.0/courses/?limit=20&offset=0', {
+      meta: {
+        total_count: 200,
+      },
+      objects: [],
+    });
+
     mockMatches = true;
     const { container } = render(
       <IntlProvider locale="en">
@@ -43,8 +71,15 @@ describe('<Search />', () => {
   });
 
   it('hides the filters pane on small screens by default and lets users show it', () => {
+    fetchMock.get('/api/v1.0/courses/?limit=20&offset=0', {
+      meta: {
+        total_count: 200,
+      },
+      objects: [],
+    });
+
     mockMatches = false;
-    const { container, debug, getByText, queryByText } = render(
+    const { container, getByText, queryByText } = render(
       <IntlProvider locale="en">
         <Search context={commonDataProps} />
       </IntlProvider>,
