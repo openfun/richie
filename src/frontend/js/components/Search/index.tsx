@@ -28,6 +28,12 @@ const messages = defineMessages({
       'Accessibility text for the button/icon that toggles *on* the filters pane on mobile',
     id: 'components.Search.showFiltersPane',
   },
+  spinnerText: {
+    defaultMessage: 'Loading search results...',
+    description:
+      'Accessibility text for the spinner while search results are being loaded',
+    id: 'components.Search.spinnerText',
+  },
 });
 
 interface SearchProps {
@@ -122,7 +128,9 @@ export const Search = ({
               />
             </React.Fragment>
           ) : (
-            <Spinner size="large" />
+            <Spinner size="large">
+              <FormattedMessage {...messages.spinnerText} />
+            </Spinner>
           )}
           {!alwaysShowFilters && (
             <div

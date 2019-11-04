@@ -18,6 +18,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Fix undefined behavior on hits on the categories API from unrelated requests,
   return 404 errors instead.
+- Improve React spinner component accessibility.
 
 ## [1.12.1] - 2019-10-29
 
