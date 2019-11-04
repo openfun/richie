@@ -59,6 +59,7 @@ class CourseAdmin(FrontendEditableAdminMixin, PageExtensionAdmin):
             )
         ] + url_patterns
 
+    # pylint: disable=unused-argument
     @REQUIRE_POST
     @transaction.atomic
     def snapshot(self, request, course_id, *args, **kwargs):
