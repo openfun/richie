@@ -164,9 +164,11 @@ $richie-topbar-menu-item-divider-border-lg: 1px solid $white !default;
 
         @include sv-flex(1, 0, auto);
         display: flex;
+        align-items: center;
+        min-height: 3rem;
         margin: $richie-topbar-menu-item-margin;
-        padding: $richie-topbar-menu-item-padding;
         color: $richie-topbar-menu-item-fontcolor;
+        padding-left: 1rem;
 
         @include media-breakpoint-up($richie-topbar-breakpoint) {
           @include sv-flex(0, 0, auto);
@@ -184,7 +186,6 @@ $richie-topbar-menu-item-divider-border-lg: 1px solid $white !default;
           @include sv-flex(1, 0, 100%);
           display: block;
           flex-direction: row;
-          padding: $richie-topbar-menu-link-padding;
           font-size: $richie-topbar-menu-link-fontsize;
           color: $richie-topbar-menu-link-fontcolor;
 
@@ -225,18 +226,6 @@ $richie-topbar-menu-item-divider-border-lg: 1px solid $white !default;
           }
         }
 
-        // Specicif displays for some special button
-        &--cta {
-          color: $richie-topbar-menu-cta-fontcolor;
-          font-weight: $richie-topbar-menu-cta-fontweight;
-          background-color: $richie-topbar-menu-cta-background;
-        }
-        &--cta-hollow {
-          color: $richie-topbar-menu-cta-hollow-fontcolor;
-          font-weight: $richie-topbar-menu-cta-hollow-fontweight;
-          background-color: $richie-topbar-menu-cta-hollow-background;
-        }
-
         // Item divider
         & + #{$item-selector} {
           border-top: $richie-topbar-menu-item-divider-border;
@@ -269,6 +258,16 @@ $richie-topbar-menu-item-divider-border-lg: 1px solid $white !default;
   &.is-open {
     #{$topbar-selector}__menu {
       display: flex;
+    }
+  }
+
+  .richie-react.richie-react--user-login {
+    display: flex;
+    width: 100%;
+
+    @include media-breakpoint-up($richie-topbar-breakpoint) {
+      width: auto;
+      margin: 0 0 0 1rem;
     }
   }
 }

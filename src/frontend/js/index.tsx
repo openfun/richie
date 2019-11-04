@@ -23,17 +23,20 @@ import startCase from 'lodash-es/startCase';
 // Import the top-level components that can be directly called from the CMS
 import { RootSearchSuggestField } from 'components/RootSearchSuggestField';
 import { Search } from 'components/Search';
+import { UserLogin } from 'components/UserLogin';
 import { handle } from 'utils/errors/handle';
 // List them in an interface for type-safety when we call them. This will let us use the props for
 // any top-level component in a way TypeScript understand and accepts
 interface ComponentLibrary {
   Search: typeof Search;
   RootSearchSuggestField: typeof RootSearchSuggestField;
+  UserLogin: typeof UserLogin;
 }
 // Actually create the component map that we'll use below to access our component classes
 const componentLibrary: ComponentLibrary = {
   RootSearchSuggestField,
   Search,
+  UserLogin,
 };
 // Type guard: ensures a given string (candidate) is indeed a proper key of the componentLibrary with a corresponding
 // component. This is a runtime check but it allows TS to check the component prop types at compile time
