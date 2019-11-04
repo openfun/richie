@@ -64,7 +64,7 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         self.assertEqual(response.status_code, 403)
 
     def test_cms_wizards_organization_create_wizards_list_insufficient_permissions(
-        self
+        self,
     ):
         """
         The wizard to create a new organization page should not be present on the wizards list page

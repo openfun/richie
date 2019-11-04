@@ -30,6 +30,7 @@ class AutocompleteMixin:
     resource's indexer.
     """
 
+    # pylint: disable=unused-argument
     @action(detail=False)
     def autocomplete(self, request, version):
         """
