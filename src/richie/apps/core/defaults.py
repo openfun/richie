@@ -1,6 +1,7 @@
 """Default settings for the core app of Richie."""
 from django.conf import global_settings, settings
 from django.core.exceptions import ImproperlyConfigured
+from django.utils.functional import lazy
 from django.utils.translation import ugettext_lazy as _
 
 # Group to add plugin to placeholder "Content"
@@ -33,3 +34,17 @@ for site_language in LANGUAGES_DICT:
         raise ImproperlyConfigured(
             f'"{site_language:s}" in LANGUAGES does not match any language in ALL_LANGUAGES'
         )
+
+# The React i18n library only works with ISO15897 locales (e.g. fr_FR)
+# Django also supports ISO639-1 language codes without a region (e.g. fr) which is sufficient
+# if you don't need to differentiate several regional versions of the same language.
+#
+# You need to make sure a locale corresponding to your language exists in the locales
+# supported by the React frontend.
+#
+# The order matters, because the first matching locale will be used if your LANGUAGES setting
+# declares languages without regions.
+REACT_LOCALES = lazy(
+    lambda: getattr(settings, "REACT_LOCALES", ["en_US", "es_ES", "fr_FR", "fr_CA"]),
+    list,
+)()

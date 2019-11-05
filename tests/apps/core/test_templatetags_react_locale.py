@@ -5,7 +5,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.test import TestCase
 from django.test.utils import override_settings
 
-from richie.apps.search.templatetags.search_tags import react_locale
+from richie.apps.core.templatetags.react_locale import react_locale
 
 
 class ReactLocaleSearchTemplateTagsTestCase(TestCase):

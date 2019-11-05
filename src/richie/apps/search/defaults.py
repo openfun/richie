@@ -2,22 +2,7 @@
 Import custom settings and set up defaults for values the Search app needs
 """
 from django.conf import settings
-from django.utils.functional import lazy
 from django.utils.translation import ugettext_lazy as _
-
-# The React i18n library only works with ISO15897 locales (e.g. fr_FR)
-# Django also supports ISO639-1 language codes without a region (e.g. fr) which is sufficient
-# if you don't need to differentiate several regional versions of the same language.
-#
-# You need to make sure a locale corresponding to your language exists in the locales
-# supported by the React frontend.
-#
-# The order matters, because the first matching locale will be used if your LANGUAGES setting
-# declares languages without regions.
-REACT_LOCALES = lazy(
-    lambda: getattr(settings, "REACT_LOCALES", ["en_US", "es_ES", "fr_FR", "fr_CA"]),
-    list,
-)()
 
 # Elasticsearch
 ES_CHUNK_SIZE = 500
