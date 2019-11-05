@@ -116,6 +116,10 @@ class Base(DRFMixin, RichieCoursesConfigurationMixin, Configuration):
     MEDIA_ROOT = os.path.join(DATA_DIR, "media")
     STATIC_ROOT = os.path.join(DATA_DIR, "static")
 
+    # Login/registration related settings
+    LOGIN_REDIRECT_URL = "/"
+    LOGOUT_REDIRECT_URL = "/"
+
     # Internationalization
     TIME_ZONE = "Europe/Paris"
     USE_I18N = True
