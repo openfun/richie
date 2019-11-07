@@ -6,10 +6,8 @@ from unittest import mock
 from django.test import TestCase
 
 from elasticsearch.exceptions import NotFoundError
-from rest_framework.test import APIRequestFactory
 
 from richie.apps.search import ES_CLIENT
-from richie.apps.search.viewsets.categories import CategoriesViewSet
 
 
 class CategoriesViewsetsTestCase(TestCase):
@@ -21,9 +19,6 @@ class CategoriesViewsetsTestCase(TestCase):
         """
         Happy path: the client requests an existing category, gets it back
         """
-        factory = APIRequestFactory()
-        request = factory.get("/api/v1.0/categories/42")
-
         with mock.patch.object(
             ES_CLIENT,
             "get",
@@ -40,9 +35,7 @@ class CategoriesViewsetsTestCase(TestCase):
             },
         ):
             # Note: we need to use a separate argument for the ID as that is what the ViewSet uses
-            response = CategoriesViewSet.as_view({"get": "retrieve"})(
-                request, 42, version="1.0"
-            )
+            response = self.client.get("/api/v1.0/categories/42/")
 
         # The client received a proper response with the relevant category
         self.assertEqual(response.status_code, 200)
@@ -63,14 +56,9 @@ class CategoriesViewsetsTestCase(TestCase):
         """
         Error case: the client is asking for a category that does not exist
         """
-        factory = APIRequestFactory()
-        request = factory.get("/api/v1.0/categories/43")
-
         # Act like the ES client would when we attempt to get a non-existent document
         with mock.patch.object(ES_CLIENT, "get", side_effect=NotFoundError):
-            response = CategoriesViewSet.as_view({"get": "retrieve"})(
-                request, 43, version="1.0"
-            )
+            response = self.client.get("/api/v1.0/categories/43/", follow=True)
 
         # The client received a standard NotFound response
         self.assertEqual(response.status_code, 404)
@@ -80,9 +68,6 @@ class CategoriesViewsetsTestCase(TestCase):
         """
         Happy path: the category is filtering the categories by name
         """
-        factory = APIRequestFactory()
-        request = factory.get("/api/v1.0/subjects/?query=Science&limit=2")
-
         mock_search.return_value = {
             "hits": {
                 "hits": [
@@ -113,9 +98,7 @@ class CategoriesViewsetsTestCase(TestCase):
             }
         }
 
-        response = CategoriesViewSet.as_view({"get": "list"})(
-            request, version="1.0", kind="subjects"
-        )
+        response = self.client.get("/api/v1.0/subjects/?query=Science&limit=2")
 
         # The client received a properly formatted response
         self.assertEqual(response.status_code, 200)
@@ -181,13 +164,8 @@ class CategoriesViewsetsTestCase(TestCase):
         """
         Error case: the client used an incorrectly formatted request
         """
-        factory = APIRequestFactory()
         # The request contains incorrect params: limit should be a positive integer
-        request = factory.get("/api/v1.0/subjects/?name=&limit=-2")
-
-        response = CategoriesViewSet.as_view({"get": "list"})(
-            request, version="1.0", kind="subjects"
-        )
+        response = self.client.get("/api/v1.0/subjects/?name=&limit=-2")
 
         # The client received a BadRequest response with the relevant data
         self.assertEqual(response.status_code, 400)
