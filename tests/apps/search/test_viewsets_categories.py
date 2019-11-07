@@ -170,3 +170,23 @@ class CategoriesViewsetsTestCase(TestCase):
         # The client received a BadRequest response with the relevant data
         self.assertEqual(response.status_code, 400)
         self.assertTrue("limit" in response.data["errors"])
+
+    def test_viewsets_categories_catchall_retrieve(self):
+        """
+        Error case: unrelated requests end up in the categories ViewSet.
+        Since the categories ViewSet sits on a catchall URL, we need to make sure it returns
+        proper errors and does not raise eg. a 500 when called from an unexpected URL.
+        """
+        # The request is for a user instead of a category
+        response = self.client.get("/api/v1.0/users/42/", follow=True)
+        self.assertEqual(response.status_code, 404)
+
+    def test_viewsets_categories_catchall_search(self):
+        """
+        Error case: unrelated requests end up in the categories ViewSet.
+        Since the categories ViewSet sits on a catchall URL, we need to make sure it returns
+        proper errors and does not raise eg. a 500 when called from an unexpected URL.
+        """
+        # The request is for users instead of categories
+        response = self.client.get("/api/v1.0/users/", follow=True)
+        self.assertEqual(response.status_code, 404)

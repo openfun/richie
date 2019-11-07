@@ -6,6 +6,7 @@ from django.utils.translation import get_language_from_request
 
 from elasticsearch.exceptions import NotFoundError
 from rest_framework.decorators import action
+from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from rest_framework.viewsets import ViewSet
 
@@ -38,16 +39,19 @@ class CategoriesViewSet(ViewSet):
 
         limit, offset, query = params_form.build_es_query(kind=kind)
 
-        # pylint: disable=unexpected-keyword-arg
-        query_response = ES_CLIENT.search(
-            _source=getattr(self._meta.indexer, "display_fields", "*"),
-            index=self._meta.indexer.index_name,
-            doc_type=self._meta.indexer.document_type,
-            body=query,
-            # Directly pass meta-params through as arguments to the ES client
-            from_=offset,
-            size=limit or getattr(settings, "RICHIE_ES_PAGE_SIZE", ES_PAGE_SIZE),
-        )
+        try:
+            # pylint: disable=unexpected-keyword-arg
+            query_response = ES_CLIENT.search(
+                _source=getattr(self._meta.indexer, "display_fields", "*"),
+                index=self._meta.indexer.index_name,
+                doc_type=self._meta.indexer.document_type,
+                body=query,
+                # Directly pass meta-params through as arguments to the ES client
+                from_=offset,
+                size=limit or getattr(settings, "RICHIE_ES_PAGE_SIZE", ES_PAGE_SIZE),
+            )
+        except NotFoundError:
+            raise NotFound
 
         # Format the response in a consumer-friendly way
         # NB: if there are 0 hits the query_response is formatted the exact same way, only the
@@ -84,7 +88,7 @@ class CategoriesViewSet(ViewSet):
                 id=pk,
             )
         except NotFoundError:
-            return Response(status=404)
+            raise NotFound
 
         # Format a clean category object as a response
         return Response(
