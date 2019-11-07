@@ -5,7 +5,7 @@
       "docker-development",
       "native-installation"
     ],
-    "Recipes": ["django-react-interop"],
+    "Recipes": ["django-react-interop", "building-the-frontend"],
     "Contributing": ["contributing-guide", "css-guidelines"]
   }
 }
