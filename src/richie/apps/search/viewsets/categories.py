@@ -71,7 +71,7 @@ class CategoriesViewSet(ViewSet):
         return Response(response_object)
 
     # pylint: disable=no-self-use,invalid-name,unused-argument
-    def retrieve(self, request, pk, version):
+    def retrieve(self, request, pk, version, kind):
         """
         Return a single item by ID
         """
