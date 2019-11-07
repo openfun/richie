@@ -8,11 +8,9 @@ from django.utils import timezone
 
 import pytz
 from elasticsearch.exceptions import NotFoundError
-from rest_framework.test import APIRequestFactory
 
 from richie.apps.search import ES_CLIENT
 from richie.apps.search.indexers.courses import CoursesIndexer
-from richie.apps.search.viewsets.courses import CoursesViewSet
 
 
 # Patch the formatter once so we can keep our tests focused on what we're actually testing
@@ -38,14 +36,9 @@ class CoursesViewsetsTestCase(TestCase):
         """
         Happy path: the client requests an existing course, gets it back
         """
-        factory = APIRequestFactory()
-        request = factory.get("/api/v1.0/courses/42")
-
         with mock.patch.object(ES_CLIENT, "get", return_value={"_id": 42}):
             # Note: we need to use a separate argument for the ID as that is what the ViewSet uses
-            response = CoursesViewSet.as_view({"get": "retrieve"})(
-                request, 42, version="1.0"
-            )
+            response = self.client.get("/api/v1.0/courses/42/")
 
         # The client received a proper response with the relevant course
         self.assertEqual(response.status_code, 200)
@@ -55,14 +48,9 @@ class CoursesViewsetsTestCase(TestCase):
         """
         Error case: the client is asking for a course that does not exist
         """
-        factory = APIRequestFactory()
-        request = factory.get("/api/v1.0/courses/43")
-
         # Act like the ES client would when we attempt to get a non-existent document
         with mock.patch.object(ES_CLIENT, "get", side_effect=NotFoundError):
-            response = CoursesViewSet.as_view({"get": "retrieve"})(
-                request, 43, version="1.0"
-            )
+            response = self.client.get("/api/v1.0/courses/43/", follow=True)
 
         # The client received a standard NotFound response
         self.assertEqual(response.status_code, 404)
@@ -84,11 +72,6 @@ class CoursesViewsetsTestCase(TestCase):
         """
         Happy path: the consumer is filtering courses by matching text
         """
-        factory = APIRequestFactory()
-        request = factory.get(
-            "/api/v1.0/courses?query=some%20phrase%20terms&limit=2&offset=20"
-        )
-
         # We use a mock implementation instead of return_value as a pragmatic way to get results
         # from the whole filters pipeline without having to mock too many things.
         # pylint: disable=inconsistent-return-statements
@@ -180,7 +163,9 @@ class CoursesViewsetsTestCase(TestCase):
 
         mock_search.side_effect = mock_search_implementation
 
-        response = CoursesViewSet.as_view({"get": "list"})(request, version="1.0")
+        response = self.client.get(
+            "/api/v1.0/courses/?query=some%20phrase%20terms&limit=2&offset=20"
+        )
 
         # The client received a properly formatted response
         self.assertEqual(response.status_code, 200)
@@ -325,11 +310,8 @@ class CoursesViewsetsTestCase(TestCase):
         """
         Error case: the query string params are not properly formatted
         """
-        factory = APIRequestFactory()
         # The request contains incorrect params: limit should be an integer, not a string
-        request = factory.get("/api/v1.0/courses?limit=fail")
-
-        response = CoursesViewSet.as_view({"get": "list"})(request, version="1.0")
+        response = self.client.get("/api/v1.0/courses/?limit=fail")
 
         # The client received a BadRequest response with the relevant data
         self.assertEqual(response.status_code, 400)
