@@ -14,6 +14,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Rename the `fun-react` class used to Django-React interop to `richie-react`.
 - Improve documentation on Django-React interop.
 
+### Fixed
+
+- Fix undefined behavior on hits on the categories API from unrelated requests,
+  return 404 errors instead.
+
 ## [1.12.1] - 2019-10-29
 
 ### Added
