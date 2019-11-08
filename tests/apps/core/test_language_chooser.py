@@ -32,6 +32,9 @@ class LanguageChooserTests(CMSTestCase):
         for item in ["en", "fr"]:
             self.assertContains(response, page.get_absolute_url(language=item))
 
+        self.assertContains(response, "en, currently in English")
+        self.assertContains(response, "fr, switch to French")
+
     def test_language_chooser_available_language_with_translated_page(self):
         """
         Menu should contain every available language, current language item
@@ -58,6 +61,8 @@ class LanguageChooserTests(CMSTestCase):
                 'topbar__menu__list__item--en">'
             ),
         )
+        self.assertContains(response, "en, basculer vers Anglais")
+
         self.assertContains(
             response,
             (
@@ -67,3 +72,4 @@ class LanguageChooserTests(CMSTestCase):
                 'topbar__menu__list__item--active">'
             ),
         )
+        self.assertContains(response, "fr, actuellement en Français")
