@@ -71,6 +71,15 @@ Props:
 - `pageTitle` [required] — title for the page, will be used inside the `<h1>` in the rendered component.
 - `context` [required] — see [context](#context).
 
+### &lt;UserLogin /&gt;
+
+Renders a component that uses the `/users/whoami` endpoint to determine if the user is logged in and show them the appropriate interface: Signup/Login buttons or their name along with a Logout button.
+
+Props:
+- `loginUrl` [required] — the URL where the user is sent when they click on "Log in";
+- `logoutUrl` [required] — a link that logs the user out and redirects them (can be the standard django logout URL);
+- `signupUrl` [required] — the URL where the user is sent when they click on "Sign up".
+
 ## Context
 
 All built-in components for Richie accept a `context` prop, that may be required or optional, depending on the component.
