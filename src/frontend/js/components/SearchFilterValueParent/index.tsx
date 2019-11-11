@@ -58,9 +58,9 @@ export const SearchFilterValueParent = ({
   const hasActiveChildren = activeValuesList.some(activeValueKey =>
     childrenPathMatchRegexp.test(activeValueKey),
   );
-  const [userShowChildren, setUserShowChildren] = useState(null as Nullable<
-    boolean
-  >);
+  const [userShowChildren, setUserShowChildren] = useState(
+    null as Nullable<boolean>,
+  );
   const showChildren =
     userShowChildren !== null ? !!userShowChildren : hasActiveChildren;
 
