@@ -23,9 +23,7 @@ class Footer extends React.Component {
             <a href={this.docUrl('quick-start.html', this.props.language)}>
               Getting&nbsp;Started
             </a>
-            <a href="/versions">
-              Versions
-            </a>
+            <a href="/versions">Versions</a>
             <a href={this.docUrl('contributing.html', this.props.language)}>
               Contributing
             </a>

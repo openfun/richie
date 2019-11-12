@@ -45,7 +45,9 @@ class HomeSplash extends React.Component {
         <div className="inner">
           <ProjectTitle siteConfig={siteConfig} />
           <PromoSection>
-            <Button href="https://demo.richie.education">Check out the demo</Button>
+            <Button href="https://demo.richie.education">
+              Check out the demo
+            </Button>
           </PromoSection>
         </div>
       </SplashContainer>
@@ -214,7 +216,12 @@ module.exports = class Index extends React.Component {
       const showcase = siteConfig.users
         .filter(user => user.pinned)
         .map(user => (
-          <img src={user.image} alt={user.caption} title={user.caption} key={user.caption} />
+          <img
+            src={user.image}
+            alt={user.caption}
+            title={user.caption}
+            key={user.caption}
+          />
         ));
 
       return (
