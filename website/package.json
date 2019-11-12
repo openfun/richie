@@ -3,13 +3,14 @@
   "version": "1.12.1",
   "description": "Documentation website for the Richie project",
   "scripts": {
-    "examples": "docusaurus-examples",
-    "start": "docusaurus-start",
     "build": "docusaurus-build",
+    "examples": "docusaurus-examples",
+    "prettier-write": "prettier --write '**/*.+(ts|tsx|json|js|jsx)'",
     "publish-gh-pages": "docusaurus-publish",
-    "write-translations": "docusaurus-write-translations",
+    "rename-version": "docusaurus-rename-version",
+    "start": "docusaurus-start",
     "version": "docusaurus-version",
-    "rename-version": "docusaurus-rename-version"
+    "write-translations": "docusaurus-write-translations"
   },
   "repository": {
     "type": "git",
@@ -20,7 +21,9 @@
     "email": "fun.dev@fun-mooc.fr"
   },
   "license": "MIT",
-  "devDependencies": {
-    "docusaurus": "1.14.0"
+  "devDependencies": {},
+  "dependencies": {
+    "docusaurus": "1.14.0",
+    "prettier": "1.19.1"
   }
 }
