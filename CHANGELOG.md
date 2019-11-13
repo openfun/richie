@@ -16,6 +16,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Rework `<Search />` layout to make it lighter and simpler.
 - Remove the "Exo 2" font from Richie. Use system `sans-serif` instead.
 - Rename the `fun-react` class used to Django-React interop to `richie-react`.
 - Improve documentation on Django-React interop.

@@ -8,11 +8,46 @@ $richie-search-filters-background: $dodgerblue1 !default;
 $richie-search-results-padding: 0 1rem 0 2rem !default;
 
 .search {
+  position: relative;
   display: flex;
-  margin: $richie-search-margin;
-  padding: $richie-search-padding;
   flex-direction: row;
   flex-wrap: wrap;
+  justify-content: center;
+  margin: $richie-search-margin;
+  padding: $richie-search-padding;
+
+  &__header {
+    flex-basis: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 0.5rem;
+    @include make-container-max-widths();
+
+    @include media-breakpoint-up(lg) {
+      flex-direction: row;
+      padding: 4rem;
+    }
+
+    &__title {
+      margin: 0 0 1rem 0;
+
+      @include media-breakpoint-up(lg) {
+        margin: 0 5rem 0 0;
+      }
+    }
+
+    & > .react-autosuggest__container {
+      width: 100%;
+
+      @include media-breakpoint-up(lg) {
+        flex-grow: 1;
+        width: auto;
+        margin: 0;
+      }
+    }
+  }
 
   &__filters {
     z-index: 1;
@@ -48,7 +83,7 @@ $richie-search-results-padding: 0 1rem 0 2rem !default;
     &__toggle {
       position: absolute;
       top: 1.25rem;
-      right: -3rem;
+      right: -3.5rem;
       width: 2.5rem;
       height: 2.5rem;
       padding: 8px;
@@ -77,27 +112,22 @@ $richie-search-results-padding: 0 1rem 0 2rem !default;
       max-width: calc(100% - #{$richie-search-filters-width});
       padding: $richie-search-results-padding;
     }
+  }
 
-    &__title {
-      padding: 1.5rem 0 0;
-      text-align: center;
-    }
+  &__overlay {
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: black;
+    opacity: 0;
+    transition: 0.5s ease-in-out;
 
-    &__overlay {
-      visibility: hidden;
-      position: absolute;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      right: 0;
-      background: black;
-      opacity: 0;
-      transition: 0.5s ease-in-out;
-
-      &--visible {
-        visibility: visible;
-        opacity: 0.75;
-      }
+    &--visible {
+      visibility: visible;
+      opacity: 0.75;
     }
   }
 }

@@ -57,6 +57,15 @@ export const Search = ({
       <CourseSearchParamsContext.Provider
         value={[courseSearchParams, setCourseSearchParams]}
       >
+        <div className="search__header">
+          {pageTitle && <h1 className="search__header__title">{pageTitle}</h1>}
+          {courseSearchResponse &&
+          courseSearchResponse.status === requestStatus.SUCCESS ? (
+            <SearchSuggestField
+              filters={courseSearchResponse.content.filters}
+            />
+          ) : null}
+        </div>
         <div
           className={`search__filters ${
             !alwaysShowFilters && showFilters ? 'search__filters--active' : ''
@@ -110,13 +119,9 @@ export const Search = ({
           )}
         </div>
         <div className="search__results">
-          {pageTitle && <h1 className="search__results__title">{pageTitle}</h1>}
           {courseSearchResponse &&
           courseSearchResponse.status === requestStatus.SUCCESS ? (
             <React.Fragment>
-              <SearchSuggestField
-                filters={courseSearchResponse.content.filters}
-              />
               <CourseGlimpseList
                 courses={courseSearchResponse.content.objects}
                 meta={courseSearchResponse.content.meta}
@@ -132,16 +137,16 @@ export const Search = ({
               <FormattedMessage {...messages.spinnerText} />
             </Spinner>
           )}
-          {!alwaysShowFilters && (
-            <div
-              aria-hidden={true}
-              className={`search__results__overlay ${
-                showFilters ? 'search__results__overlay--visible' : ''
-              }`}
-              onClick={() => setShowFilters(false)}
-            />
-          )}
         </div>
+        {!alwaysShowFilters && (
+          <div
+            aria-hidden={true}
+            className={`search__overlay ${
+              showFilters ? 'search__overlay--visible' : ''
+            }`}
+            onClick={() => setShowFilters(false)}
+          />
+        )}
       </CourseSearchParamsContext.Provider>
     </div>
   );
