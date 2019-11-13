@@ -133,14 +133,10 @@ class SnapshotPageAdminTestCase(CMSTestCase):
         url = "/en/admin/courses/course/{:d}/snapshot/".format(course.id)
         response = self.client.post(url, follow=True)
 
-        self.assertEqual(response.status_code, 200)
-        content = json.loads(response.content)
+        self.assertEqual(response.status_code, 403)
         self.assertEqual(
-            content,
-            {
-                "status": 403,
-                "content": "You don't have sufficient permissions to snapshot this page.",
-            },
+            response.content,
+            b"You don't have sufficient permissions to snapshot this page.",
         )
         # No additional courses should have been created
         self.assertEqual(Course.objects.count(), 2)
@@ -164,14 +160,10 @@ class SnapshotPageAdminTestCase(CMSTestCase):
         url = "/en/admin/courses/course/{:d}/snapshot/".format(course.id)
         response = self.client.post(url, follow=True)
 
-        self.assertEqual(response.status_code, 200)
-        content = json.loads(response.content)
+        self.assertEqual(response.status_code, 403)
         self.assertEqual(
-            content,
-            {
-                "status": 403,
-                "content": "You don't have sufficient permissions to snapshot this page.",
-            },
+            response.content,
+            b"You don't have sufficient permissions to snapshot this page.",
         )
         # No additional courses should have been created
         self.assertEqual(Course.objects.count(), 2)
@@ -229,14 +221,10 @@ class SnapshotPageAdminTestCase(CMSTestCase):
         with mock.patch("time.time", mock.MagicMock(return_value=1541946888)):
             response = self.client.post(url, follow=True)
 
-        self.assertEqual(response.status_code, 200)
-        content = json.loads(response.content)
+        self.assertEqual(response.status_code, 403)
         self.assertEqual(
-            content,
-            {
-                "status": 403,
-                "content": "You don't have sufficient permissions to snapshot this page.",
-            },
+            response.content,
+            b"You don't have sufficient permissions to snapshot this page.",
         )
         # No additional courses should have been created
         self.assertEqual(Course.objects.count(), 2)
@@ -291,11 +279,8 @@ class SnapshotPageAdminTestCase(CMSTestCase):
         url = "/en/admin/courses/course/{:d}/snapshot/".format(snapshot.id)
         response = self.client.post(url, follow=True)
 
-        self.assertEqual(response.status_code, 200)
-        content = json.loads(response.content)
-        self.assertEqual(
-            content, {"status": 403, "content": "You can't snapshot a snapshot."}
-        )
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.content, b"You can't snapshot a snapshot.")
 
     def test_admin_page_snapshot_blocked_for_public_page(self):
         """
@@ -317,11 +302,8 @@ class SnapshotPageAdminTestCase(CMSTestCase):
         url = "/en/admin/courses/course/{:d}/snapshot/".format(public_course.id)
         response = self.client.post(url, follow=True)
 
-        self.assertEqual(response.status_code, 200)
-        content = json.loads(response.content)
-        self.assertEqual(
-            content, {"status": 400, "content": "Course could not be found."}
-        )
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.content, b"Course could not be found.")
 
     @override_settings(CMS_PERMISSION=False)
     def test_admin_page_snapshot_unknown_page(self):
@@ -339,8 +321,5 @@ class SnapshotPageAdminTestCase(CMSTestCase):
         url = "/en/admin/courses/course/1/snapshot/"
         response = self.client.post(url, follow=True)
 
-        self.assertEqual(response.status_code, 200)
-        content = json.loads(response.content)
-        self.assertEqual(
-            content, {"status": 400, "content": "Course could not be found."}
-        )
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.content, b"Course could not be found.")
