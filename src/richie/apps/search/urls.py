@@ -1,8 +1,11 @@
 """
 API Routes exposed by our Search app
 """
+from django.urls import path
+
 from rest_framework import routers
 
+from .views import bootstrap_elasticsearch
 from .viewsets.categories import CategoriesViewSet
 from .viewsets.courses import CoursesViewSet
 from .viewsets.organizations import OrganizationsViewSet
@@ -18,4 +21,12 @@ ROUTER.register(r"persons", PersonsViewSet, "persons")
 ROUTER.register(r"(?P<kind>\w+)", CategoriesViewSet, "categories")
 
 # Use the standard name for our urlpatterns so urls.py can import it effortlessly
-urlpatterns = ROUTER.urls
+urlpatterns = [
+    path(
+        r"bootstrap-elasticsearch",
+        bootstrap_elasticsearch,
+        name="bootstrap_elasticsearch",
+    )
+]
+
+urlpatterns += ROUTER.urls

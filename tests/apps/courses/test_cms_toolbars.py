@@ -17,7 +17,7 @@ from richie.apps.courses.factories import (
     PersonFactory,
 )
 
-from .utils import CheckToolbarMixin
+from ..core.utils import CheckToolbarMixin
 
 
 # pylint: disable=too-many-ancestors

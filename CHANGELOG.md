@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add an Ajax toolbar menu item to regenerate the search index,
 - Add a React-powered component to handle login/signup and user status in
   the base template.
 
