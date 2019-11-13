@@ -47,7 +47,7 @@ describe('<Search />', () => {
     expect(queryByText('Loading search results...')).toBeNull();
   });
 
-  it('always shows the filters pane on large screens', () => {
+  it('always shows the filters pane on large screens', async () => {
     fetchMock.get('/api/v1.0/courses/?limit=20&offset=0', {
       meta: {
         total_count: 200,
@@ -61,6 +61,7 @@ describe('<Search />', () => {
         <Search context={commonDataProps} />
       </IntlProvider>,
     );
+    await wait();
 
     // The search filters pane is not hidden, there is no button to show/hide it
     expect(container.querySelector('.search-filters-pane')).toHaveAttribute(
@@ -70,7 +71,7 @@ describe('<Search />', () => {
     expect(container.querySelector('.search__filters__toggle')).toEqual(null);
   });
 
-  it('hides the filters pane on small screens by default and lets users show it', () => {
+  it('hides the filters pane on small screens by default and lets users show it', async () => {
     fetchMock.get('/api/v1.0/courses/?limit=20&offset=0', {
       meta: {
         total_count: 200,
@@ -84,6 +85,7 @@ describe('<Search />', () => {
         <Search context={commonDataProps} />
       </IntlProvider>,
     );
+    await wait();
 
     // The search filters pane is hidden, there is a button to show/hide it
     expect(container.querySelector('.search-filters-pane')).toHaveAttribute(
