@@ -15,7 +15,6 @@ from django.views.decorators.http import require_POST
 from cms.admin.placeholderadmin import FrontendEditableAdminMixin
 from cms.api import Page
 from cms.extensions import PageExtensionAdmin
-from cms.utils.admin import jsonify_request
 
 from ..core.admin import link_field
 from . import models
@@ -74,14 +73,12 @@ class CourseAdmin(FrontendEditableAdminMixin, PageExtensionAdmin):
                 publisher_is_draft=True, course__id=course_id
             )
         except Page.DoesNotExist:
-            return jsonify_request(
-                HttpResponseBadRequest(force_text(_("Course could not be found.")))
-            )
+            return HttpResponseBadRequest(force_text(_("Course could not be found.")))
 
         try:
             new_page = snapshot_course(page, request.user, simulate_only=False)
         except PermissionDenied as context:
-            return jsonify_request(HttpResponseForbidden(force_text(context)))
+            return HttpResponseForbidden(force_text(context))
 
         return JsonResponse({"id": new_page.course.id})
 
