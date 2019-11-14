@@ -3,10 +3,10 @@ Tests for the course viewset
 """
 from unittest import mock
 
-from django.test import TestCase
 from django.utils import timezone
 
 import pytz
+from cms.test_utils.testcases import CMSTestCase
 from elasticsearch.exceptions import NotFoundError
 
 from richie.apps.search import ES_CLIENT
@@ -20,7 +20,7 @@ from richie.apps.search.indexers.courses import CoursesIndexer
     "format_es_object_for_api",
     side_effect=lambda es_course: "Course #{:n}".format(es_course["_id"]),
 )
-class CoursesViewsetsTestCase(TestCase):
+class CoursesViewsetsTestCase(CMSTestCase):
     """
     Test the API endpoints for courses (list and details)
     """
@@ -30,6 +30,7 @@ class CoursesViewsetsTestCase(TestCase):
         Make sure all our tests are timezone-agnostic. Some of them parse ISO datetimes and those
         would be broken if we did not enforce timezone normalization.
         """
+        super().setUp()
         timezone.activate(pytz.utc)
 
     def test_viewsets_courses_retrieve(self, *_):
@@ -176,6 +177,7 @@ class CoursesViewsetsTestCase(TestCase):
                 "objects": ["Course #523", "Course #861"],
                 "filters": {
                     "availability": {
+                        "base_path": None,
                         "has_more_values": False,
                         "human_name": "Availability",
                         "is_autocompletable": False,
@@ -199,6 +201,7 @@ class CoursesViewsetsTestCase(TestCase):
                         ],
                     },
                     "languages": {
+                        "base_path": None,
                         "has_more_values": False,
                         "human_name": "Languages",
                         "is_autocompletable": False,
@@ -226,6 +229,7 @@ class CoursesViewsetsTestCase(TestCase):
                         ],
                     },
                     "new": {
+                        "base_path": None,
                         "has_more_values": False,
                         "human_name": "New courses",
                         "is_autocompletable": False,

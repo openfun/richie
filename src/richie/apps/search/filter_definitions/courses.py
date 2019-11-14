@@ -203,6 +203,22 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
             for doc in search_query_response["hits"]["hits"]
         }
 
+    def get_static_definitions(self):
+        """
+        Build the static definition from the filter's base properties.
+        """
+        return {
+            self.name: {
+                "base_path": self.base_page.node.path if self.base_page else None,
+                "human_name": self.human_name,
+                "is_autocompletable": self.is_autocompletable,
+                "is_drilldown": self.is_drilldown,
+                "is_searchable": self.is_searchable,
+                "name": self.name,
+                "position": self.position,
+            }
+        }
+
     def get_faceted_definitions(self, facets, data, *args, **kwargs):
         """
         Build the filter definition's values from base definition and the faceted keys in the
@@ -286,17 +302,11 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
         return {
             self.name: {
                 # We always need to pass the base definition to the frontend
-                "base_path": self.base_page.node.path if self.base_page else None,
+                **self.get_static_definitions()[self.name],
                 # If values are removed due to `min_doc_count`, we are not returning them, and
                 # therefore by definition our filter `has_more_values`.
                 "has_more_values": has_more_values
                 or any(count < self.min_doc_count for count in key_count_map.values()),
-                "human_name": self.human_name,
-                "is_autocompletable": self.is_autocompletable,
-                "is_drilldown": self.is_drilldown,
-                "is_searchable": self.is_searchable,
-                "name": self.name,
-                "position": self.position,
                 "values": [
                     # Aggregate the information from right above to build the values
                     {"count": count, "human_name": key_i18n_name_map[key], "key": key}

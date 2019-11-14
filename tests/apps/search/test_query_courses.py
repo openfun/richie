@@ -419,6 +419,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 ],
                 "filters": {
                     "availability": {
+                        "base_path": None,
                         "has_more_values": False,
                         "human_name": "Availability",
                         "is_autocompletable": False,
@@ -442,6 +443,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         ],
                     },
                     "languages": {
+                        "base_path": None,
                         "has_more_values": False,
                         "human_name": "Languages",
                         "is_autocompletable": False,
@@ -483,6 +485,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         ],
                     },
                     "new": {
+                        "base_path": None,
                         "has_more_values": False,
                         "human_name": "New courses",
                         "is_autocompletable": False,
