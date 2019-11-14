@@ -4,9 +4,12 @@ from django.core import management
 from django.http import HttpResponse
 from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
+from django.views.decorators.cache import cache_page
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+
+from .filter_definitions import FILTERS
 
 
 @api_view(["POST"])
@@ -24,3 +27,20 @@ def bootstrap_elasticsearch(request, version):
 
     messages.info(request, _("The search index was successfully bootstrapped"))
     return Response({})
+
+
+@api_view(["GET"])
+@cache_page(60 * 60 * 2)
+# pylint: disable=unused-argument
+def filter_definitions(request, version):
+    """
+    Make available on an API route the static parts of filter definitions.
+    This is useful to some frontend components that need them to configure themselves.
+    """
+    return Response(
+        {
+            name: faceted_definition
+            for filter in FILTERS.values()
+            for name, faceted_definition in filter.get_static_definitions().items()
+        }
+    )
