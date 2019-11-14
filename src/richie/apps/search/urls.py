@@ -23,7 +23,7 @@ ROUTER.register(r"(?P<kind>\w+)", CategoriesViewSet, "categories")
 # Use the standard name for our urlpatterns so urls.py can import it effortlessly
 urlpatterns = [
     path(
-        r"bootstrap-elasticsearch",
+        r"bootstrap-elasticsearch/",
         bootstrap_elasticsearch,
         name="bootstrap_elasticsearch",
     )
