@@ -5,7 +5,7 @@ from django.urls import path
 
 from rest_framework import routers
 
-from .views import bootstrap_elasticsearch
+from .views import bootstrap_elasticsearch, filter_definitions
 from .viewsets.categories import CategoriesViewSet
 from .viewsets.courses import CoursesViewSet
 from .viewsets.organizations import OrganizationsViewSet
@@ -26,7 +26,8 @@ urlpatterns = [
         r"bootstrap-elasticsearch/",
         bootstrap_elasticsearch,
         name="bootstrap_elasticsearch",
-    )
+    ),
+    path(r"filter-definitions/", filter_definitions, name="filter_definitions"),
 ]
 
 urlpatterns += ROUTER.urls
