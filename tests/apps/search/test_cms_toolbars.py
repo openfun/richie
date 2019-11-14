@@ -50,4 +50,4 @@ class SearchCMSToolbarTestCase(CheckToolbarMixin, CMSTestCase):
             toolbar = self.get_toolbar_for_page(page, user)
             item = method(toolbar, "Regenerate search index...", item_type=AjaxItem)
             if item:
-                self.assertEqual(item.action, "/api/v1.0/bootstrap-elasticsearch")
+                self.assertEqual(item.action, "/api/v1.0/bootstrap-elasticsearch/")

@@ -23,7 +23,7 @@ class BootstrapElasticsearchViewTestCase(CMSTestCase):
         # Add the necessary permission
         self.add_permission(user, "can_manage_elasticsearch")
 
-        url = "/api/v1.0/bootstrap-elasticsearch"
+        url = "/api/v1.0/bootstrap-elasticsearch/"
         response = self.client.post(url, follow=True)
         self.assertEqual(response.status_code, 200)
         content = json.loads(response.content)
@@ -44,7 +44,7 @@ class BootstrapElasticsearchViewTestCase(CMSTestCase):
         user = UserFactory(is_staff=True)
         self.client.login(username=user.username, password="password")
 
-        url = "/api/v1.0/bootstrap-elasticsearch"
+        url = "/api/v1.0/bootstrap-elasticsearch/"
         response = self.client.post(url, follow=True)
         self.assertEqual(response.status_code, 403)
         self.assertEqual(
@@ -61,7 +61,7 @@ class BootstrapElasticsearchViewTestCase(CMSTestCase):
         # Add the necessary permission
         self.add_permission(user, "can_manage_elasticsearch")
 
-        url = "/api/v1.0/bootstrap-elasticsearch"
+        url = "/api/v1.0/bootstrap-elasticsearch/"
 
         response = self.client.get(url, follow=True)
         self.assertEqual(response.status_code, 405)
@@ -77,7 +77,7 @@ class BootstrapElasticsearchViewTestCase(CMSTestCase):
     @mock.patch("django.core.management.call_command")
     def test_views_bootstrap_elasticsearch_anonymous(self, mock_command):
         """An anonymous user should not be allowed to bootstrap ES."""
-        url = "/api/v1.0/bootstrap-elasticsearch"
+        url = "/api/v1.0/bootstrap-elasticsearch/"
         response = self.client.post(url, follow=True)
 
         self.assertEqual(response.status_code, 401)
@@ -94,7 +94,7 @@ class BootstrapElasticsearchViewTestCase(CMSTestCase):
         # Add the necessary permission
         self.add_permission(user, "can_manage_elasticsearch")
 
-        url = "/api/v1.0/bootstrap-elasticsearch"
+        url = "/api/v1.0/bootstrap-elasticsearch/"
         response = self.client.post(url, follow=True)
         self.assertEqual(response.status_code, 403)
         self.assertEqual(
