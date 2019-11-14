@@ -121,6 +121,32 @@ class BaseFilterDefinition:
         """
         raise NotImplementedError()
 
+    def get_static_definitions(self):
+        """
+        Build a static filter definition that only uses a filter's intrinsic attributes and
+        holds no contextual information related to a search. This is useful to eg. configure
+        search utilities ex ante.
+
+        Returns:
+        --------
+            Dict: a dictionary mapping the name of a filter with a dictionary of all the
+                information necessary to display make use of the filtre through search.
+                {
+                    languages: {
+                        "base_path": None,
+                        "human_name": "Languages",
+                        "is_autocompletable": False,
+                        "is_searchable": False,
+                        "is_drilldown": False,
+                        "name": "languages",
+                        "position": 5,
+                    }
+                }
+
+        To be implemented in each actual FilterDefintion class.
+        """
+        raise NotImplementedError()
+
     def get_faceted_definitions(self, facets, data, *args, **kwargs):
         """
         Build the filter definition from a filter's common attributes and its Elasticsearch
@@ -141,9 +167,14 @@ class BaseFilterDefinition:
 
                 {
                     languages: {
+                        "base_path": None,
+                        "has_more_values": False,
                         "human_name": "Languages",
+                        "is_autocompletable": False,
+                        "is_searchable": False,
                         "is_drilldown": False,
                         "name": "languages",
+                        "position": 5,
                         "values": [
                             {"key": "en", "human_name": "English", "count": 3},
                             {"key": "fr", "human_name": "French", "count": 2},
@@ -198,6 +229,22 @@ class BaseChoicesFilterDefinition(BaseFilterDefinition):
                 ),
                 True,  # a MultipleChoiceField expects list values
             )
+        }
+
+    def get_static_definitions(self):
+        """
+        Build the static definition from the filter's base properties.
+        """
+        return {
+            self.name: {
+                "base_path": None,
+                "human_name": self.human_name,
+                "is_autocompletable": self.is_autocompletable,
+                "is_drilldown": self.is_drilldown,
+                "is_searchable": self.is_searchable,
+                "name": self.name,
+                "position": self.position,
+            }
         }
 
     def get_faceted_definitions(self, facets, data, *args, **kwargs):
@@ -258,16 +305,11 @@ class BaseChoicesFilterDefinition(BaseFilterDefinition):
         return {
             self.name: {
                 # We always need to pass the base definition to the frontend
+                **self.get_static_definitions()[self.name],
                 # If values are removed due to `min_doc_count`, we are not returning them, and
                 # therefore by definition our filter `has_more_values`.
                 "has_more_values": has_more_values
                 or any(count < self.min_doc_count for name, count in facet_counts),
-                "human_name": self.human_name,
-                "is_autocompletable": self.is_autocompletable,
-                "is_drilldown": self.is_drilldown,
-                "is_searchable": self.is_searchable,
-                "name": self.name,
-                "position": self.position,
                 "values": [
                     {"count": count, "human_name": values[name], "key": name}
                     for name, count in facet_counts
@@ -531,6 +573,16 @@ class NestingWrapper(BaseFilterDefinition):
                 )
             )
         return aggs
+
+    def get_static_definitions(self):
+        """
+        Collect static definitions from the children filter definitions in a dictionary.
+        """
+        return {
+            name: facet_definition
+            for fd in self.filter_definitions.values()
+            for name, facet_definition in fd.get_static_definitions().items()
+        }
 
     def get_faceted_definitions(self, facets, data, *args, **kwargs):
         """

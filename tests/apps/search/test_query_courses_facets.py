@@ -234,6 +234,7 @@ class FacetsCoursesQueryTestCase(TestCase):
         self.assertEqual(
             content["filters"]["languages"],
             {
+                "base_path": None,
                 "has_more_values": True,
                 "human_name": "Languages",
                 "is_autocompletable": False,
@@ -303,6 +304,7 @@ class FacetsCoursesQueryTestCase(TestCase):
         self.assertEqual(
             content["filters"]["languages"],
             {
+                "base_path": None,
                 "has_more_values": True,
                 "human_name": "Languages",
                 "is_autocompletable": False,
@@ -354,6 +356,7 @@ class FacetsCoursesQueryTestCase(TestCase):
         self.assertEqual(
             content["filters"]["languages"],
             {
+                "base_path": None,
                 "has_more_values": True,
                 "human_name": "Languages",
                 "is_autocompletable": False,
@@ -413,6 +416,7 @@ class FacetsCoursesQueryTestCase(TestCase):
         self.assertEqual(
             content["filters"]["languages"],
             {
+                "base_path": None,
                 "has_more_values": False,
                 "human_name": "Languages",
                 "is_autocompletable": False,
@@ -499,6 +503,7 @@ class FacetsCoursesQueryTestCase(TestCase):
         self.assertEqual(
             content["filters"]["languages"],
             {
+                "base_path": None,
                 "has_more_values": True,
                 "human_name": "Languages",
                 "is_autocompletable": False,
@@ -582,6 +587,7 @@ class FacetsCoursesQueryTestCase(TestCase):
         self.assertEqual(
             content["filters"]["languages"],
             {
+                "base_path": None,
                 "has_more_values": False,
                 "human_name": "Languages",
                 "is_autocompletable": False,
@@ -719,6 +725,7 @@ class FacetsCoursesQueryTestCase(TestCase):
         self.assertEqual(
             content["filters"]["languages"],
             {
+                "base_path": None,
                 "has_more_values": True,
                 "human_name": "Languages",
                 "is_autocompletable": False,
@@ -774,6 +781,7 @@ class FacetsCoursesQueryTestCase(TestCase):
         self.assertEqual(
             content["filters"]["languages"],
             {
+                "base_path": None,
                 "has_more_values": True,
                 "human_name": "Languages",
                 "is_autocompletable": False,
