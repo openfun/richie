@@ -33,6 +33,7 @@ describe('<SearchFilterValueParent />', () => {
               is_autocompletable: true,
               is_searchable: true,
               name: 'subjects',
+              position: 0,
               values: [],
             }}
             value={{
@@ -92,6 +93,7 @@ describe('<SearchFilterValueParent />', () => {
               is_autocompletable: true,
               is_searchable: true,
               name: 'subjects',
+              position: 0,
               values: [],
             }}
             value={{
@@ -166,6 +168,7 @@ describe('<SearchFilterValueParent />', () => {
               is_autocompletable: true,
               is_searchable: true,
               name: 'subjects',
+              position: 0,
               values: [],
             }}
             value={{
@@ -243,6 +246,7 @@ describe('<SearchFilterValueParent />', () => {
               is_autocompletable: true,
               is_searchable: true,
               name: 'filter_name',
+              position: 0,
               values: [],
             }}
             value={{
@@ -279,6 +283,7 @@ describe('<SearchFilterValueParent />', () => {
               is_autocompletable: true,
               is_searchable: true,
               name: 'filter_name',
+              position: 0,
               values: [],
             }}
             value={{
@@ -318,6 +323,7 @@ describe('<SearchFilterValueParent />', () => {
               is_autocompletable: true,
               is_searchable: true,
               name: 'filter_name',
+              position: 0,
               values: [],
             }}
             value={{
@@ -356,6 +362,7 @@ describe('<SearchFilterValueParent />', () => {
               is_autocompletable: true,
               is_searchable: true,
               name: 'filter_name',
+              position: 0,
               values: [],
             }}
             value={{
@@ -379,6 +386,7 @@ describe('<SearchFilterValueParent />', () => {
         is_autocompletable: true,
         is_searchable: true,
         name: 'filter_name',
+        position: 0,
         values: [],
       },
       payload: 'P-00040005',
@@ -404,6 +412,7 @@ describe('<SearchFilterValueParent />', () => {
               is_autocompletable: true,
               is_searchable: true,
               name: 'filter_name',
+              position: 0,
               values: [],
             }}
             value={{
@@ -427,6 +436,7 @@ describe('<SearchFilterValueParent />', () => {
         is_autocompletable: true,
         is_searchable: true,
         name: 'filter_name',
+        position: 0,
         values: [],
       },
       payload: 'P-00040005',

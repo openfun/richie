@@ -39,6 +39,7 @@ const coursesConfig: FacetedFilterDefinition = {
   is_autocompletable: true,
   is_searchable: true,
   name: 'courses',
+  position: 99,
   values: [],
 };
 

@@ -29,6 +29,7 @@ describe('components/SearchFiltersPane', () => {
                 is_autocompletable: true,
                 is_searchable: true,
                 name: 'categories',
+                position: 0,
                 values: [],
               },
               organizations: {
@@ -38,6 +39,7 @@ describe('components/SearchFiltersPane', () => {
                 is_autocompletable: true,
                 is_searchable: true,
                 name: 'organizations',
+                position: 1,
                 values: [],
               },
             }}
@@ -92,6 +94,7 @@ describe('components/SearchFiltersPane', () => {
                 is_autocompletable: true,
                 is_searchable: true,
                 name: 'categories',
+                position: 0,
                 values: [],
               },
               organizations: {
@@ -101,6 +104,7 @@ describe('components/SearchFiltersPane', () => {
                 is_autocompletable: true,
                 is_searchable: true,
                 name: 'organizations',
+                position: 1,
                 values: [],
               },
             }}

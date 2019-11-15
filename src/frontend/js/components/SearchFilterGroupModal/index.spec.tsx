@@ -15,6 +15,7 @@ const filter = {
   is_autocompletable: true,
   is_searchable: true,
   name: 'universities',
+  position: 0,
   values: [
     {
       count: 4,
