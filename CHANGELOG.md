@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.13.0] - 2019-11-15
+
 ### Added
 
 - Add an Ajax toolbar menu item to regenerate the search index,
@@ -645,7 +647,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v1.12.1...master
+[unreleased]: https://github.com/openfun/richie/compare/v1.13.0...master
+[1.13.0]: https://github.com/openfun/richie/compare/v1.12.1...v1.13.0
 [1.12.1]: https://github.com/openfun/richie/compare/v1.12.0...v1.12.1
 [1.12.0]: https://github.com/openfun/richie/compare/v1.11.0...v1.12.0
 [1.11.0]: https://github.com/openfun/richie/compare/v1.10.0...v1.11.0

@@ -16,6 +16,7 @@ $ make migrate
 
 ## Unreleased
 
+## 1.12.x to 1.13.x
 
 If you override templates that contain React hooks, rename the `fun-react` class to`richie-react`.
 

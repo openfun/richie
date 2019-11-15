@@ -1,6 +1,6 @@
 {
   "name": "richie-education-docs",
-  "version": "1.12.1",
+  "version": "1.13.0",
   "description": "Documentation website for the Richie project",
   "scripts": {
     "build": "docusaurus-build",
