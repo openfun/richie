@@ -27,6 +27,15 @@ class CourseRunModelsTestCase(TestCase):
         super().setUp()
         self.now = timezone.now()
 
+    def create_run_ongoing_open(self, course):
+        """Create an on-going course run that is open for enrollment."""
+        return CourseRunFactory(
+            page_parent=course.extended_object,
+            start=self.now - timedelta(hours=1),
+            end=self.now + timedelta(hours=2),
+            enrollment_end=self.now + timedelta(hours=1),
+        )
+
     def create_run_ongoing_closed(self, course):
         """Create an on-going course run that is closed for enrollment."""
         return CourseRunFactory(
@@ -159,12 +168,7 @@ class CourseRunModelsTestCase(TestCase):
         Confirm course state when there is an on-going course run open for enrollment.
         """
         course = CourseFactory()
-        course_run = CourseRunFactory(
-            page_parent=course.extended_object,
-            start=self.now - timedelta(hours=1),
-            end=self.now + timedelta(hours=2),
-            enrollment_end=self.now + timedelta(hours=1),
-        )
+        course_run = self.create_run_ongoing_open(course)
         with self.assertNumQueries(2):
             state = course.state
         expected_state = CourseState(0, course_run.enrollment_end)

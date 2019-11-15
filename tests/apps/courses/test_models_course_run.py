@@ -351,7 +351,7 @@ class CourseRunModelsTestCase(TestCase):
             {
                 "priority": 2,
                 "text": "starting on",
-                "call_to_action": "see details",
+                "call_to_action": None,
                 "datetime": self.now + timedelta(hours=3),
             },
         )

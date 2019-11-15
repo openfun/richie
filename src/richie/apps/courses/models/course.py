@@ -40,7 +40,7 @@ class CourseState(Mapping):
     STATE_CALLS_TO_ACTION = (
         _("enroll now"),
         _("enroll now"),
-        _("see details"),
+        None,
         None,
         None,
         None,
@@ -397,6 +397,16 @@ class Course(BasePageExtension):
             )
 
         return course_runs
+
+    def get_course_runs_dict(self):
+        """Returns a dict of course runs grouped by their state."""
+        course_runs_dict = {
+            i: [] for i in range(len(CourseState.STATE_CALLS_TO_ACTION))
+        }
+        for run in self.get_course_runs_for_language():
+            course_runs_dict[run.state["priority"]].append(run)
+
+        return dict(course_runs_dict)
 
     @property
     def state(self):

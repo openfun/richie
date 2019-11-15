@@ -605,7 +605,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                     "text": "starting on",
                 },
                 {
-                    "call_to_action": "see details",
+                    "call_to_action": None,
                     "datetime": COURSE_RUNS["D"]["start"]
                     .isoformat()
                     .replace("+00:00", "Z"),
@@ -804,7 +804,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                     "text": "closing on",
                 },
                 {
-                    "call_to_action": "see details",
+                    "call_to_action": None,
                     "datetime": COURSE_RUNS["D"]["start"]
                     .isoformat()
                     .replace("+00:00", "Z"),

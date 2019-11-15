@@ -10,7 +10,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-- Our course search field now have a "Search" button with a magnifying
+- Segment course runs according to status on course detail page,
+- Our course search fields now have a "Search" button with a magnifying
   glass icon.
 
 ## [1.15.0] - 2019-12-02
