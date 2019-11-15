@@ -1,31 +1,32 @@
 ---
-id: quick-start
-title: Getting started with Richie
-sidebar_label: Quick start
+id: installation
+title: Installing Richie for development
+sidebar_label: Installation
 ---
-
-If you're just looking for a quick preview of `Richie`, you can take a look and have a tour of `Richie` on our dedicated [demo site](https://demo.richie.education).
-
-Login/password are `admin`/`admin`. The database is regularly flushed.
-
-## Architecture
 
 `Richie` is a **container-native application** but can also be installed
 [on your machine](native-installation.md).
 
 For development, the project is defined using a [docker-compose file](../docker-compose.yml) and
-consists of 4 services:
+consists of:
 
-- **db**: the `Postgresql` database,
-- **elasticsearch**: the search engine,
-- **app**: the actual `DjangoCMS` project with all our application code,
-- **node**: used for front-end related tasks, _i.e._ transpiling `TypeScript` sources, bundling
-  them into a JS package, and building the CSS files from Sass sources.
+- 3 running services:
+
+    - **database**: `postgresql` or `mysql` at your preference,
+    - **elasticsearch**: the search engine,
+    - **app**: the actual `DjangoCMS` project with all our application code.
+
+- 3 containers for building purposes:
+
+    - **node**: used for front-end related tasks, _i.e._ transpiling `TypeScript` sources, bundling them into a JS package, and building the CSS files from Sass sources,
+    - **crowdin**: used to upload and retrieve i18n files to and from the
+    [Crowding](https://crowdin.com/) service that we use to crowd source translations,
+    - **cookiecutter**: used to generate a richie project with
+    [Cookiecutter](https://github.com/cookiecutter/cookiecutter) and our predefined
+    [template](../cookiecutter).
 
 At "France Université Numérique", we deploy our applications on `OpenShift`/`Kubernetes` using
 [`Arnold`](https://github.com/openfun/arnold).
-
-## Getting started
 
 ### Docker
 
@@ -40,8 +41,7 @@ $ docker-compose --version
   docker-compose version 1.17.1, build 6d101fb
 ```
 
-⚠️ You may need to run the following commands with `sudo` but this can be avoided by assigning your
-user to the `docker` group.
+⚠️ You may need to run the following commands with `sudo` but this can be avoided by assigning your user to the `docker` group.
 
 ### Project bootstrap
 

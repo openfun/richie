@@ -1,12 +1,13 @@
 {
   "docs": {
     "Getting started": [
-      "quick-start",
-      "docker-development",
-      "native-installation"
+      "discover",
     ],
     "Recipes": ["django-react-interop", "building-the-frontend"],
     "Contributing": [
+      "installation",
+      "docker-development",
+      "native-installation",
       "contributing-guide",
       "accessibility-testing",
       "css-guidelines"
