@@ -2,10 +2,11 @@
 End-to-end tests for the course detail view
 """
 import re
-from unittest import mock
+from datetime import timedelta
 
-from django.utils import timezone
+from django.utils import dateformat, timezone
 
+import pytz
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
@@ -15,7 +16,6 @@ from richie.apps.courses.factories import (
     CourseRunFactory,
     OrganizationFactory,
 )
-from richie.apps.courses.models import CourseRun, CourseState
 
 
 class CourseCMSTestCase(CMSTestCase):
@@ -42,8 +42,15 @@ class CourseCMSTestCase(CMSTestCase):
             fill_icons=icons,
         )
         page = course.extended_object
+        # Create 2 ongoing open course runs
+        now = timezone.now()
         course_run1, _course_run2 = CourseRunFactory.create_batch(
-            2, page_parent=course.extended_object, languages=["en", "fr"]
+            2,
+            page_parent=course.extended_object,
+            start=now - timedelta(hours=1),
+            end=now + timedelta(hours=2),
+            enrollment_end=now + timedelta(hours=1),
+            languages=["en", "fr"],
         )
         self.assertFalse(course_run1.extended_object.publish("en"))
 
@@ -163,8 +170,14 @@ class CourseCMSTestCase(CMSTestCase):
             fill_categories=categories,
         )
         page = course.extended_object
+        now = timezone.now()
         course_run1, _course_run2 = CourseRunFactory.create_batch(
-            2, page_parent=course.extended_object, languages=["en", "fr"]
+            2,
+            page_parent=course.extended_object,
+            start=now - timedelta(hours=1),
+            end=now + timedelta(hours=2),
+            enrollment_end=now + timedelta(hours=1),
+            languages=["en", "fr"],
         )
 
         # Publish only 1 of the course runs
@@ -313,48 +326,6 @@ class CourseCMSTestCase(CMSTestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, '<meta name="robots" content="noindex">')
 
-    def prepare_to_test_state(self, state):
-        """
-        Not a test.
-        Create objects and mock to help testing the impact of the state on template rendering.
-        """
-        course = CourseFactory(page_title="my course", should_publish=True)
-        CourseRunFactory(
-            page_parent=course.extended_object,
-            page_title="my course run",
-            should_publish=True,
-        )
-
-        url = course.extended_object.get_absolute_url()
-        with mock.patch.object(
-            CourseRun, "state", new_callable=mock.PropertyMock, return_value=state
-        ):
-            response = self.client.get(url)
-
-        self.assertEqual(response.status_code, 200)
-        return response
-
-    def test_templates_course_detail_state_with_cta(self):
-        """A course run in a state with a call to action should include a link and the CTA."""
-        response = self.prepare_to_test_state(CourseState(0, timezone.now()))
-        self.assertContains(
-            response,
-            '<a class="course-detail__aside__runs__block__cta" '
-            'href="/en/my-course/my-course-run/">Enroll now</a>',
-            html=True,
-        )
-
-    def test_templates_course_detail_state_without_cta(self):
-        """A course run in a state without a call to action should include a state button."""
-        response = self.prepare_to_test_state(CourseState(6))
-        self.assertContains(
-            response,
-            '<a class="course-detail__aside__runs__block__cta '
-            'course-detail__aside__runs__block__cta--projected" '
-            'href="/en/my-course/my-course-run/">To be scheduled</a>',
-            html=True,
-        )
-
     def test_templates_course_detail_organization_main_logo(self):
         """The main organization logo should be present on the page with a link."""
         user = UserFactory(is_staff=True, is_superuser=True)
@@ -376,3 +347,284 @@ class CourseCMSTestCase(CMSTestCase):
             title=organizations[0].extended_object.get_title(),
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
+
+
+class RunsCourseCMSTestCase(CMSTestCase):
+    """
+    End-to-end test suite to validate the display of course runs on the course detail view.
+    """
+
+    def setUp(self):
+        super().setUp()
+        self.now = timezone.now()
+
+    def create_run_ongoing_open(self, course):
+        """
+        Not a test. Create an on-going course run that is open for enrollment.
+        """
+        return CourseRunFactory(
+            page_parent=course.extended_object,
+            page_title="my course run",
+            start=self.now - timedelta(hours=1),
+            end=self.now + timedelta(hours=2),
+            enrollment_start=self.now - timedelta(hours=1),
+            enrollment_end=self.now + timedelta(hours=1),
+            should_publish=True,
+        )
+
+    def create_run_future_open(self, course):
+        """
+        Not a test. Create a course run in the future and open for enrollment.
+        """
+        return CourseRunFactory(
+            page_parent=course.extended_object,
+            page_title="my course run",
+            start=self.now + timedelta(hours=1),
+            enrollment_start=self.now - timedelta(hours=1),
+            enrollment_end=self.now + timedelta(hours=1),
+            should_publish=True,
+        )
+
+    def create_run_future_not_yet_open(self, course):
+        """
+        Not a test. Create a course run in the future and not yet open for enrollment.
+        """
+        return CourseRunFactory(
+            page_parent=course.extended_object,
+            page_title="my course run",
+            start=self.now + timedelta(hours=2),
+            enrollment_start=self.now + timedelta(hours=1),
+            should_publish=True,
+        )
+
+    def create_run_future_closed(self, course):
+        """
+        Not a test. Create a course run in the future and already closed for enrollment.
+        """
+        return CourseRunFactory(
+            page_parent=course.extended_object,
+            page_title="my course run",
+            start=self.now + timedelta(hours=1),
+            enrollment_start=self.now - timedelta(hours=2),
+            enrollment_end=self.now - timedelta(hours=1),
+            should_publish=True,
+        )
+
+    def create_run_ongoing_closed(self, course):
+        """
+        Not a test. Create an on-going course run that is closed for enrollment.
+        """
+        return CourseRunFactory(
+            page_parent=course.extended_object,
+            page_title="my course run",
+            start=self.now - timedelta(hours=1),
+            end=self.now + timedelta(hours=1),
+            enrollment_end=self.now,
+            should_publish=True,
+        )
+
+    def create_run_archived(self, course):
+        """
+        Not a test. Create an archived course run.
+        """
+        return CourseRunFactory(
+            page_parent=course.extended_object,
+            page_title="my course run",
+            start=self.now - timedelta(hours=1),
+            end=self.now,
+            should_publish=True,
+        )
+
+    def test_templates_course_detail_runs_ongoing_open(self):
+        """
+        Priority 0: a course run open and on-going should always show up.
+        """
+        course = CourseFactory(page_title="my course", should_publish=True)
+        self.create_run_ongoing_open(course)
+
+        url = course.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertNotContains(response, "No open course runs")
+        self.assertContains(
+            response,
+            '<a href="/en/my-course/my-course-run/">Enroll now</a>',
+            html=True,
+        )
+        self.assertNotContains(
+            response, '<h3 class="course-detail__aside__runs__block__title">'
+        )
+
+    def test_templates_course_detail_runs_future_open(self):
+        """
+        Priority 1: an upcoming open course run should show in a separate section.
+        """
+        course = CourseFactory(page_title="my course", should_publish=True)
+        self.create_run_future_open(course)
+
+        url = course.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertNotContains(response, "No open course runs")
+        self.assertContains(
+            response,
+            '<a href="/en/my-course/my-course-run/">Enroll now</a>',
+            html=True,
+        )
+        self.assertNotContains(
+            response, '<h3 class="course-detail__aside__runs__block__title">'
+        )
+
+    @timezone.override(pytz.utc)
+    def test_templates_course_detail_runs_future_not_yet_open(self):
+        """
+        Priority 2: a future not yet open course run should show in a separate section.
+        """
+        course = CourseFactory(page_title="my course", should_publish=True)
+        course_run = self.create_run_future_not_yet_open(course)
+
+        url = course.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertContains(response, "No open course runs")
+        self.assertContains(
+            response,
+            '<h3 class="course-detail__aside__runs__block__title">Upcoming</h3>',
+            html=True,
+        )
+        self.assertContains(
+            response,
+            '<ul class="course-detail__aside__runs__block__list">'
+            '<li><a href="/en/my-course/my-course-run/">'
+            "My course run, from {:s} to {:s}</a></li></ul>".format(
+                dateformat.format(course_run.start, "N j, Y"),
+                dateformat.format(course_run.end, "N j, Y"),
+            ),
+            html=True,
+        )
+
+    @timezone.override(pytz.utc)
+    def test_templates_course_detail_runs_future_closed(self):
+        """
+        Priority 3: a future and closed course run should show in a separate section.
+        """
+        course = CourseFactory(page_title="my course", should_publish=True)
+        course_run = self.create_run_future_closed(course)
+
+        url = course.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertContains(response, "No open course runs")
+        self.assertContains(
+            response,
+            '<h3 class="course-detail__aside__runs__block__title">Ongoing</h3>',
+            html=True,
+        )
+        self.assertContains(
+            response,
+            '<ul class="course-detail__aside__runs__block__list">'
+            '<li><a href="/en/my-course/my-course-run/">'
+            "My course run, from {:s} to {:s}</a></li></ul>".format(
+                dateformat.format(course_run.start, "N j, Y"),
+                dateformat.format(course_run.end, "N j, Y"),
+            ),
+            html=True,
+        )
+
+    @timezone.override(pytz.utc)
+    def test_templates_course_detail_runs_ongoing_closed(self):
+        """
+        Priority 4: an ongoing and closed course run should show in a separate section.
+        """
+        course = CourseFactory(page_title="my course", should_publish=True)
+        course_run = self.create_run_ongoing_closed(course)
+
+        url = course.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertContains(response, "No open course runs")
+        self.assertContains(
+            response,
+            '<h3 class="course-detail__aside__runs__block__title">Ongoing</h3>',
+            html=True,
+        )
+        self.assertContains(
+            response,
+            '<ul class="course-detail__aside__runs__block__list">'
+            '<li><a href="/en/my-course/my-course-run/">'
+            "My course run, from {:s} to {:s}</a></li></ul>".format(
+                dateformat.format(course_run.start, "N j, Y"),
+                dateformat.format(course_run.end, "N j, Y"),
+            ),
+            html=True,
+        )
+
+    @timezone.override(pytz.utc)
+    def test_templates_course_detail_runs_archived(self):
+        """
+        Priority 5: an archived course run should show in a separate section.
+        """
+        course = CourseFactory(page_title="my course", should_publish=True)
+        course_run = self.create_run_archived(course)
+
+        url = course.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertContains(response, "No open course runs")
+        self.assertContains(
+            response,
+            '<h3 class="course-detail__aside__runs__block__title">Archived</h3>',
+            html=True,
+        )
+        self.assertContains(
+            response,
+            '<ul class="course-detail__aside__runs__block__list">'
+            '<li><a href="/en/my-course/my-course-run/">'
+            "My course run, from {:s} to {:s}</a></li></ul>".format(
+                dateformat.format(course_run.start, "N j, Y"),
+                dateformat.format(course_run.end, "N j, Y"),
+            ),
+            html=True,
+        )
+
+    def test_templates_course_detail_runs_to_be_scheduled(self):
+        """
+        Priority 6: a course run with no date is only visible to staff users.
+        """
+        course = CourseFactory(page_title="my course", should_publish=True)
+        CourseRunFactory(
+            page_parent=course.extended_object,
+            page_title="my course run",
+            start=None,
+            should_publish=True,
+        )
+
+        # Anonymous users should not see the course run
+        url = course.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        # Staff users should see the course run
+        user = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=user.username, password="password")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertContains(response, "No open course runs")
+        self.assertContains(
+            response,
+            '<h3 class="course-detail__aside__runs__block__title">To be scheduled</h3>',
+            html=True,
+        )
+        self.assertContains(
+            response,
+            '<ul class="course-detail__aside__runs__block__list">'
+            '<li><a href="/en/my-course/my-course-run/">My course run</a></li></ul>',
+            html=True,
+        )

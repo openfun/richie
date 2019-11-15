@@ -1,0 +1,22 @@
+{% load cms_tags i18n extra_tags %}{% spaceless %}
+<div class="course-detail__aside__runs__block__detail">
+    <dl>
+        <dt>{% trans "Enrollment" %}</dt>
+        <dd>
+            {% blocktrans with enrollment_start=run.enrollment_start|date:'DATE_FORMAT'|default:'...' enrollment_end=run.enrollment_end|date:'DATE_FORMAT'|default:'...' %}
+                From {{ enrollment_start }} to {{ enrollment_end }}
+            {% endblocktrans %}    </dd>
+        <dt>{% trans "Course" %}</dt>
+        <dd>
+            {% blocktrans with start=run.start|date:'DATE_FORMAT'|default:'...' end=run.end|date:'DATE_FORMAT'|default:'...' %}
+                From {{ start }} to {{ end }}
+            {% endblocktrans %}
+        </dd>
+        <dt>{% trans "Languages" %}</dt>
+        <dd>{% render_model run "get_languages_display" "languages" %}</dd>
+    </dl>
+    <a href="{{ run.extended_object.get_absolute_url }}">
+        {{ run.state.call_to_action|capfirst }}
+    </a>
+</div>
+{% endspaceless %}

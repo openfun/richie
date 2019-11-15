@@ -156,51 +156,67 @@
       {% endblock synopsis %}
 
       {% block runs %}
-        <div class="course-detail__aside__runs">
-          <h2 class="course-detail__aside__runs__title">{% trans 'Course runs' %}</h2>
-          {% for run in course.get_course_runs_for_language %}
-          <div class="course-detail__aside__runs__block">
-            <dl>
-              <dt>{% trans "Enrollment" %}</dt>
-              <dd>
-                {% render_model run "enrollment_start" "enrollment_start,enrollment_end" "" "date:'DATE_FORMAT'|default:'...'" as start %}
-                {% render_model run "enrollment_end" "enrollment_start,enrollment_end" "" "date:'DATE_FORMAT'|default:'...'" as end %}
-                {% trans "From" %} {{ start|safe }} {% trans "to" %} {{ end|safe }}
-              </dd>
-              <dt>{% trans "Course" %}</dt>
-              <dd>
-                {% render_model run "start" "start,end" "" "date:'DATE_FORMAT'|default:'...'" as start %}
-                {% render_model run "end" "start,end" "" "date:'DATE_FORMAT'|default:'...'" as end %}
-                {% trans "From" %} {{ start|safe }} {% trans "to" %} {{ end|safe }}
-              </dd>
-              <dt>{% trans "Languages" %}</dt><dd>{% render_model run "get_languages_display" "languages" %}</dd>
-              {% if current_page.publisher_is_draft %}
-              <dt>{% trans "Resource link" %}</dt>
-              <dd>
-                <a href="{{ run.resource_link }}">
-                  {% render_model run "resource_link" "resource_link" %}
-                </a>
-              </dd>
-              {% endif %}
-            </dl>
-            {% if run.state.call_to_action %}
-            <a class="course-detail__aside__runs__block__cta" href="{{ run.extended_object.get_absolute_url }}">
-              {{ run.state.call_to_action|capfirst }}
-            </a>
-            {% else %}
-            <a class="course-detail__aside__runs__block__cta course-detail__aside__runs__block__cta--projected" href="{{ run.extended_object.get_absolute_url }}">
-              {{ run.state.text|capfirst }}
-            </a>
+        {% with runs_dict=course.get_course_runs_dict %}
+          <div class="course-detail__aside__runs">
+            {% block runs_open %}
+              <div class="course-detail__aside__runs__block">
+                <h2 class="course-detail__aside__runs__block__title">{% trans 'Course runs' %}</h2>
+                {% for run in runs_dict.0|add:runs_dict.1 %}
+                  {% include "courses/cms/fragment_course_run.html" %}
+                {% empty %}
+                  <div class="course-detail__aside__runs__block__empty">{% trans "No open course runs" %}</div>
+                {% endfor %}
+              </div>
+            {% endblock runs_open %}
+
+            {% block runs_to_be_scheduled %}
+            {% if runs_dict.6 and current_page.publisher_is_draft %}
+              <div class="course-detail__aside__runs__block">
+                <h3 class="course-detail__aside__runs__block__title">
+                  {% trans "To be scheduled" context "Course runs to be scheduled (plural)" %}
+                </h3>
+                {% include "courses/cms/fragment_course_runs_list.html" with course_runs=runs_dict.6 %}
+              </div>
             {% endif %}
+            {% endblock runs_to_be_scheduled %}
+
+            {% block runs_upcoming %}
+            {% if runs_dict.2 %}
+              <div class="course-detail__aside__runs__block">
+                <h3 class="course-detail__aside__runs__block__title">
+                  {% trans "Upcoming" context "Upcoming course runs (plural)" %}
+                </h3>
+                {% include "courses/cms/fragment_course_runs_list.html" with course_runs=runs_dict.2 %}
+              </div>
+            {% endif %}
+            {% endblock runs_upcoming %}
+
+            {% block runs_ongoing %}
+            {% if runs_dict.3 or runs_dict.4 %}
+              <div class="course-detail__aside__runs__block">
+                <h3 class="course-detail__aside__runs__block__title">
+                  {% trans "Ongoing" context "Ongoing course runs (plural)" %}
+                </h3>
+                {% include "courses/cms/fragment_course_runs_list.html" with course_runs=runs_dict.3|add:runs_dict.4 %}
+              </div>
+            {% endif %}
+            {% endblock runs_ongoing %}
+
+            {% block runs_archived %}
+            {% if runs_dict.5 %}
+              <div class="course-detail__aside__runs__block">
+                <h3 class="course-detail__aside__runs__block__title">
+                  {% trans "Archived" context "Archived course runs (plural)" %}
+                </h3>
+                {% include "courses/cms/fragment_course_runs_list.html" with course_runs=runs_dict.5 %}
+              </div>
+            {% endif %}
+            {% endblock runs_archived %}
+
           </div>
-          {% empty %}
-            <div class="course-detail__aside__runs__empty">{% trans "No associated course runs" %}</div>
-          {% endfor %}
-        </div>
+        {% endwith %}
       {% endblock runs %}
-
     </div>
-
     {% endwith %}
 
 </div>
