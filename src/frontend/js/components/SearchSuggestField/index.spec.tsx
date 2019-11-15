@@ -25,6 +25,7 @@ describe('components/SearchSuggestField', () => {
     is_autocompletable: false,
     is_searchable: false,
     name: 'levels',
+    position: 0,
     values: [],
   };
 
@@ -35,6 +36,7 @@ describe('components/SearchSuggestField', () => {
     is_autocompletable: true,
     is_searchable: true,
     name: 'organizations',
+    position: 1,
     values: [],
   };
 
@@ -45,6 +47,7 @@ describe('components/SearchSuggestField', () => {
     is_autocompletable: true,
     is_searchable: true,
     name: 'persons',
+    position: 2,
     values: [],
   };
 
@@ -55,6 +58,7 @@ describe('components/SearchSuggestField', () => {
     is_autocompletable: true,
     is_searchable: true,
     name: 'subjects',
+    position: 3,
     values: [],
   };
 
@@ -257,15 +261,7 @@ describe('components/SearchSuggestField', () => {
       type: 'QUERY_UPDATE',
     });
     expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
-      filter: {
-        base_path: '0002',
-        has_more_values: false,
-        human_name: 'Organizations',
-        is_autocompletable: true,
-        is_searchable: true,
-        name: 'organizations',
-        values: [],
-      },
+      filter: organizations,
       payload: 'L-00020007',
       type: 'FILTER_ADD',
     });
@@ -333,15 +329,7 @@ describe('components/SearchSuggestField', () => {
     await wait();
 
     expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
-      filter: {
-        base_path: null,
-        has_more_values: false,
-        human_name: 'Persons',
-        is_autocompletable: true,
-        is_searchable: true,
-        name: 'persons',
-        values: [],
-      },
+      filter: persons,
       payload: '73',
       type: 'FILTER_ADD',
     });

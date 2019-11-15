@@ -27,6 +27,7 @@ describe('components/SearchFilterGroup', () => {
     is_autocompletable: true,
     is_searchable: true,
     name: 'organizations',
+    position: 0,
     values: [
       {
         count: 4,

@@ -23,6 +23,7 @@ export interface FilterValue {
  * @property `is_drilldown` — Whether the filter is limited to one active value at a time.
  * @property `is_searchable` — whether the filter has an associated API endpoint for full-text search.
  * @property `name` — Machine name for the filter (for use in API calls, query strings, etc.).
+ * @property `position` — The index-based position of the filter on the filters pane.
  */
 export interface FilterDefinition {
   base_path: Nullable<string>;
@@ -31,6 +32,7 @@ export interface FilterDefinition {
   is_drilldown?: boolean;
   is_searchable: boolean;
   name: string;
+  position: number;
 }
 
 /**

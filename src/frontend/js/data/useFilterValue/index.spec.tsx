@@ -40,6 +40,7 @@ describe('data/useFilterValue', () => {
             is_autocompletable: false,
             is_searchable: false,
             name: 'organizations',
+            position: 0,
             values: [],
           }}
           value={{
@@ -61,6 +62,7 @@ describe('data/useFilterValue', () => {
         is_autocompletable: false,
         is_searchable: false,
         name: 'organizations',
+        position: 0,
         values: [],
       },
       payload: '87',
@@ -85,6 +87,7 @@ describe('data/useFilterValue', () => {
             is_autocompletable: true,
             is_searchable: true,
             name: 'organizations',
+            position: 0,
             values: [],
           }}
           value={{
@@ -106,6 +109,7 @@ describe('data/useFilterValue', () => {
         is_autocompletable: true,
         is_searchable: true,
         name: 'organizations',
+        position: 0,
         values: [],
       },
       payload: '87',
