@@ -16,44 +16,44 @@ $ make migrate
 
 ## Unreleased
 
-- Icon font has been removed and replaced with SVG icons. Any overridden
-  template(s) using icons from the icon font need to be updated to use SVG
-  icons too.
+
+If you override templates that contain React hooks, rename the `fun-react` class to`richie-react`.
+
+## 1.11.x to 1.12.x
+
+If you override `_course_detail.scss`, the `course-detail__aside__run` selector was renamed
+to `course-detail__aside__runs` in our `course_detail.html` template.
 
 ## 1.10.x to 1.11.x
 
-## Before switching
-
-- If you override `_course_detail.scss`, the `course-detail__aside__run` selector was renamed
-  to `course-detail__aside__runs` in our `course_detail.html` template.
+No specific actions are required for this release.
 
 ## 1.9.x to 1.10.x
 
-### Before switching
-
+- Icon font has been removed and replaced with SVG icons. Any overridden
+  template(s) using icons from the icon font need to be updated to use SVG
+  icons too.
 - For each item in the [changelog](./CHANGELOG.md), check that your css overrides have no impact.
 
 ## 1.8.x to 1.9.x
 
-### Before switching
+A new third party application was added to enable pagination on blogposts and persons list.
+You must update your settings as follows:
 
-- A new third party application was added to enable pagination on blogposts and persons list.
-  You must update your settings as follows:
-
-  * Add `dj-pagination` to your installed apps:
-    ```python
-    INSTALLED_APPS = (
-        # ...
-        'dj_pagination',
-    )
-    ```
-  * Add the pagination middleware to your settings:
-    ```python
-    MIDDLEWARE = (
-        # ...
-        'dj_pagination.middleware.PaginationMiddleware',
-    )
-    ```
-  * Add pagination options to your settings as per your requirements.
-    See https://dj-pagination.readthedocs.io/en/latest/usage.html#optional-settings for a list of
-    all available settings.
+- Add `dj-pagination` to your installed apps:
+  ```python
+  INSTALLED_APPS = (
+      # ...
+      'dj_pagination',
+  )
+  ```
+- Add the pagination middleware to your settings:
+  ```python
+  MIDDLEWARE = (
+      # ...
+      'dj_pagination.middleware.PaginationMiddleware',
+  )
+  ```
+- Add pagination options to your settings as per your requirements.
+  See https://dj-pagination.readthedocs.io/en/latest/usage.html#optional-settings for a list of
+  all available settings.
