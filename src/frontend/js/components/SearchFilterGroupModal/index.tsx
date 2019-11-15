@@ -9,12 +9,12 @@ import ReactModal from 'react-modal';
 import { fetchList } from 'data/getResourceList';
 import { CourseSearchParamsContext } from 'data/useCourseSearchParams';
 import { requestStatus } from 'types/api';
-import { FilterDefinition, FilterValue } from 'types/filters';
+import { FacetedFilterDefinition, FilterValue } from 'types/filters';
 import { Nullable } from 'utils/types';
 import { useAsyncEffect } from 'utils/useAsyncEffect';
 
 interface SearchFilterGroupModalProps {
-  filter: FilterDefinition;
+  filter: FacetedFilterDefinition;
 }
 
 const messages = defineMessages({

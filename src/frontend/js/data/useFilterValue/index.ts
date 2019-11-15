@@ -1,12 +1,12 @@
 import { useContext } from 'react';
 
 import { CourseSearchParamsContext } from 'data/useCourseSearchParams';
-import { FilterDefinition, FilterValue } from 'types/filters';
+import { FacetedFilterDefinition, FilterValue } from 'types/filters';
 
 type UseFilterValue = [boolean, () => void];
 
 export const useFilterValue = (
-  filter: FilterDefinition,
+  filter: FacetedFilterDefinition,
   value: FilterValue,
 ): UseFilterValue => {
   const [courseSearchParams, dispatchCourseSearchParamsUpdate] = useContext(

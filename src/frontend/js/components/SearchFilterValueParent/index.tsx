@@ -6,7 +6,7 @@ import { fetchList } from 'data/getResourceList';
 import { CourseSearchParamsContext } from 'data/useCourseSearchParams';
 import { useFilterValue } from 'data/useFilterValue';
 import { requestStatus } from 'types/api';
-import { FilterDefinition, FilterValue } from 'types/filters';
+import { FacetedFilterDefinition, FilterValue } from 'types/filters';
 import { getMPTTChildrenPathMatcher } from 'utils/mptt';
 import { Nullable } from 'utils/types';
 import { useAsyncEffect } from 'utils/useAsyncEffect';
@@ -27,7 +27,7 @@ const messages = defineMessages({
 });
 
 interface SearchFilterValueParentProps {
-  filter: FilterDefinition;
+  filter: FacetedFilterDefinition;
   value: FilterValue;
 }
 

@@ -3,10 +3,10 @@ import React from 'react';
 import { SearchFilterGroupModal } from 'components/SearchFilterGroupModal';
 import { SearchFilterValueLeaf } from 'components/SearchFilterValueLeaf';
 import { SearchFilterValueParent } from 'components/SearchFilterValueParent';
-import { FilterDefinition } from 'types/filters';
+import { FacetedFilterDefinition } from 'types/filters';
 
 export interface SearchFilterGroupProps {
-  filter: FilterDefinition;
+  filter: FacetedFilterDefinition;
 }
 
 export const SearchFilterGroup = ({ filter }: SearchFilterGroupProps) => (

@@ -2,7 +2,7 @@ import { render } from '@testing-library/react';
 import React from 'react';
 
 import { CourseSearchParamsContext } from 'data/useCourseSearchParams';
-import { FilterDefinition, FilterValue } from 'types/filters';
+import { FacetedFilterDefinition, FilterValue } from 'types/filters';
 import { useFilterValue } from '.';
 
 describe('data/useFilterValue', () => {
@@ -13,7 +13,7 @@ describe('data/useFilterValue', () => {
     filter,
     value,
   }: {
-    filter: FilterDefinition;
+    filter: FacetedFilterDefinition;
     value: FilterValue;
   }) => {
     const hookValues = useFilterValue(filter, value);
