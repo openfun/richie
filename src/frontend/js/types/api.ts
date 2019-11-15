@@ -1,5 +1,5 @@
 import { Course } from 'types/Course';
-import { FilterDefinition } from 'types/filters';
+import { FacetedFilterDefinition } from 'types/filters';
 import { Maybe } from 'utils/types';
 
 export enum requestStatus {
@@ -29,7 +29,7 @@ export interface APIListRequestParams {
 
 export interface APICourseSearchResponse {
   filters: {
-    [filterName: string]: FilterDefinition;
+    [filterName: string]: FacetedFilterDefinition;
   };
   meta: APIResponseListMeta;
   objects: Course[];

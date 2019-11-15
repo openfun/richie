@@ -13,7 +13,7 @@ import { fetchList } from 'data/getResourceList';
 import { API_LIST_DEFAULT_PARAMS } from 'settings';
 import { APICourseSearchResponse, requestStatus } from 'types/api';
 import { CommonDataProps } from 'types/commonDataProps';
-import { FilterDefinition } from 'types/filters';
+import { FacetedFilterDefinition } from 'types/filters';
 import {
   isCourseSuggestion,
   SearchAutosuggestProps,
@@ -32,7 +32,7 @@ const messages = defineMessages({
 
 // Our search and autosuggestion pipeline operated based on filter definitions. Obviously, we can filters courses
 // by courses, but we still need a filter-definition-like config to run courses autocompletion.
-const coursesConfig: FilterDefinition = {
+const coursesConfig: FacetedFilterDefinition = {
   base_path: null,
   has_more_values: false,
   human_name: 'Courses',

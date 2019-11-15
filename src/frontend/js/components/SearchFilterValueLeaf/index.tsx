@@ -1,10 +1,10 @@
 import React from 'react';
 
 import { useFilterValue } from 'data/useFilterValue';
-import { FilterDefinition, FilterValue } from 'types/filters';
+import { FacetedFilterDefinition, FilterValue } from 'types/filters';
 
 export interface SearchFilterValueLeafProps {
-  filter: FilterDefinition;
+  filter: FacetedFilterDefinition;
   value: FilterValue;
 }
 
