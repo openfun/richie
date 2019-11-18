@@ -25,6 +25,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- The language chooser should only show public languages,
 - Fix undefined behavior on hits on the categories API from unrelated requests,
   return 404 errors instead.
 - Improve React spinner component accessibility.
