@@ -18,7 +18,11 @@ $ make migrate
 
 ## 1.12.x to 1.13.x
 
-If you override templates that contain React hooks, rename the `fun-react` class to`richie-react`.
+- If you override the `menu/language_menu.html` template, you should now include the <ul> tag in this
+  template and not in `richie/base.html` so that it does not render as an empty element on sites with
+  only one public language,
+- If you override templates that contain React hooks, rename the `fun-react` class to`richie-react`.
+
 
 ## 1.11.x to 1.12.x
 
