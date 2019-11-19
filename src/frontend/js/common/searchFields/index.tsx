@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { APICourseSearchResponse } from 'types/api';
+import { StaticFilterDefinitions } from 'types/filters';
 import {
   SearchAutosuggestProps,
   SearchSuggestion,
@@ -33,7 +34,7 @@ export const renderSuggestion: SearchAutosuggestProps['renderSuggestion'] = sugg
  * @param incomingValue The current value of the search suggest form field.
  */
 export const onSuggestionsFetchRequested = async (
-  filters: APICourseSearchResponse['filters'],
+  filters: StaticFilterDefinitions,
   setSuggestions: (suggestions: SearchSuggestionSection[]) => void,
   incomingValue: string,
 ) => {
@@ -72,7 +73,7 @@ export const onSuggestionsFetchRequested = async (
  * @param suggestion The suggestion with which we're doing some work (eg. the suggestion the user selected).
  */
 export const getRelevantFilter = (
-  filters: APICourseSearchResponse['filters'],
+  filters: StaticFilterDefinitions,
   suggestion: SearchSuggestion,
 ) => {
   // Use the `kind` field on the suggestion to pick the relevant filter to update.

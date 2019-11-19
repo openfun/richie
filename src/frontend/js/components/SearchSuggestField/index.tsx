@@ -10,7 +10,7 @@ import {
   renderSuggestion,
 } from 'common/searchFields';
 import { CourseSearchParamsContext } from 'data/useCourseSearchParams';
-import { APICourseSearchResponse } from 'types/api';
+import { useStaticFilters } from 'data/useStaticFilters';
 import {
   SearchAutosuggestProps,
   SearchSuggestionSection,
@@ -26,18 +26,14 @@ const messages = defineMessages({
 });
 
 /**
- * Props shape for the SearchSuggestField component.
- */
-export interface SearchSuggestFieldProps {
-  filters: APICourseSearchResponse['filters'];
-}
-
-/**
  * Component. Displays the main search field alon with any suggestions organized in relevant sections.
- * @param filters Filter definitions for all the potential suggestable filters.
  */
-export const SearchSuggestField = ({ filters }: SearchSuggestFieldProps) => {
+export const SearchSuggestField = () => {
   const intl = useIntl();
+
+  // We need static filter definitions to act as config for our suggestion sections & requests.
+  const getFilters = useStaticFilters();
+
   // Setup our filters updates (for full-text-search and specific filters) directly through the
   // search parameters hook.
   const [courseSearchParams, dispatchCourseSearchParamsUpdate] = useContext(
@@ -108,11 +104,11 @@ export const SearchSuggestField = ({ filters }: SearchSuggestFieldProps) => {
    * @param _ Unused: selection event.
    * @param suggestion `suggestion` as key to an anonymous object: the suggestion the user picked.
    */
-  const onSuggestionSelected: SearchAutosuggestProps['onSuggestionSelected'] = (
+  const onSuggestionSelected: SearchAutosuggestProps['onSuggestionSelected'] = async (
     _,
     { suggestion },
   ) => {
-    const filter = getRelevantFilter(filters, suggestion);
+    const filter = getRelevantFilter(await getFilters(), suggestion);
 
     // Dispatch the actual update on the relevant filter
     dispatchCourseSearchParamsUpdate({
@@ -139,8 +135,12 @@ export const SearchSuggestField = ({ filters }: SearchSuggestFieldProps) => {
       inputProps={inputProps}
       multiSection={true}
       onSuggestionsClearRequested={() => setSuggestions([])}
-      onSuggestionsFetchRequested={({ value: incomingValue }) =>
-        onSuggestionsFetchRequested(filters, setSuggestions, incomingValue)
+      onSuggestionsFetchRequested={async ({ value: incomingValue }) =>
+        onSuggestionsFetchRequested(
+          await getFilters(),
+          setSuggestions,
+          incomingValue,
+        )
       }
       onSuggestionSelected={onSuggestionSelected}
       renderSectionTitle={section => section.title}

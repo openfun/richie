@@ -9,11 +9,9 @@ import {
   onSuggestionsFetchRequested,
   renderSuggestion,
 } from 'common/searchFields';
-import { fetchList } from 'data/getResourceList';
+import { useStaticFilters } from 'data/useStaticFilters';
 import { API_LIST_DEFAULT_PARAMS } from 'settings';
-import { APICourseSearchResponse, requestStatus } from 'types/api';
 import { CommonDataProps } from 'types/commonDataProps';
-import { FacetedFilterDefinition } from 'types/filters';
 import {
   isCourseSuggestion,
   SearchAutosuggestProps,
@@ -30,43 +28,6 @@ const messages = defineMessages({
   },
 });
 
-// Our search and autosuggestion pipeline operated based on filter definitions. Obviously, we can filters courses
-// by courses, but we still need a filter-definition-like config to run courses autocompletion.
-const coursesConfig: FacetedFilterDefinition = {
-  base_path: null,
-  has_more_values: false,
-  human_name: 'Courses',
-  is_autocompletable: true,
-  is_searchable: true,
-  name: 'courses',
-  position: 99,
-  values: [],
-};
-
-// We don't want to systematically load the filter on page load, when we render <RootSearchSuggestField />
-// Instead, we can create a promise for those filters, and only actually fetch them *once* the first time
-// we actually need them.
-let filtersPromise: Promise<APICourseSearchResponse['filters']>;
-let hasInitiatedRequest: boolean = false;
-const filters: () => Promise<APICourseSearchResponse['filters']> = async () => {
-  if (hasInitiatedRequest) {
-    return await filtersPromise;
-  }
-  hasInitiatedRequest = true;
-  const response = await fetchList('courses', {
-    limit: '1',
-    offset: '0',
-    scope: 'filters',
-  });
-  if (response.status === requestStatus.SUCCESS) {
-    return (filtersPromise = new Promise(resolve =>
-      resolve({ ...response.content.filters, courses: coursesConfig }),
-    ));
-  } else {
-    throw new Error(response.error);
-  }
-};
-
 interface RootSearchSuggestFieldProps {
   courseSearchPageUrl: string;
 }
@@ -78,6 +39,9 @@ export const RootSearchSuggestField = ({
   courseSearchPageUrl,
 }: RootSearchSuggestFieldProps & CommonDataProps) => {
   const intl = useIntl();
+
+  // We need static filter definitions to act as config for our suggestion sections & requests.
+  const getFilters = useStaticFilters(true);
 
   // Initialize hooks for the two pieces of state the controlled <Autosuggest> component needs to interact with:
   // the current list of suggestions and the input value.
@@ -140,7 +104,7 @@ export const RootSearchSuggestField = ({
 
     // Get the relevant filter and move to the course search view with the selected suggestion as an
     // active filter value.
-    const filter = getRelevantFilter(await filters(), suggestion);
+    const filter = getRelevantFilter(await getFilters(), suggestion);
     location.assign(
       `${courseSearchPageUrl}?${stringify({
         ...API_LIST_DEFAULT_PARAMS,
@@ -160,7 +124,7 @@ export const RootSearchSuggestField = ({
       onSuggestionsClearRequested={() => setSuggestions([])}
       onSuggestionsFetchRequested={async ({ value: incomingValue }) =>
         onSuggestionsFetchRequested(
-          await filters(),
+          await getFilters(),
           setSuggestions,
           incomingValue,
         )

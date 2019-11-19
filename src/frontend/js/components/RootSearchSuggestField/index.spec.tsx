@@ -33,10 +33,8 @@ describe('<RootSearchSuggestField />', () => {
   afterEach(jest.resetAllMocks);
 
   it('renders', () => {
-    fetchMock.get('/api/v1.0/courses/?limit=1&offset=0&scope=filters', {
-      filters: {
-        subjects,
-      },
+    fetchMock.get('/api/v1.0/filter-definitions/', {
+      subjects,
     });
 
     const { getByPlaceholderText } = render(
@@ -55,11 +53,10 @@ describe('<RootSearchSuggestField />', () => {
   });
 
   it('gets suggestions from the API when the user types 3 characters or more in the field', async () => {
-    fetchMock.get('/api/v1.0/courses/?limit=1&offset=0&scope=filters', {
-      filters: {
-        subjects,
-      },
+    fetchMock.get('/api/v1.0/filter-definitions/', {
+      subjects,
     });
+
     fetchMock.get('/api/v1.0/subjects/autocomplete/?query=aut', [
       {
         id: 'L-000300010001',
@@ -103,11 +100,10 @@ describe('<RootSearchSuggestField />', () => {
   });
 
   it('goes to the course page when the user selects a course suggestion', async () => {
-    fetchMock.get('/api/v1.0/courses/?limit=1&offset=0&scope=filters', {
-      filters: {
-        subjects,
-      },
+    fetchMock.get('/api/v1.0/filter-definitions/', {
+      subjects,
     });
+
     fetchMock.get('/api/v1.0/subjects/autocomplete/?query=aut', []);
     fetchMock.get('/api/v1.0/courses/autocomplete/?query=aut', [
       {
@@ -149,11 +145,10 @@ describe('<RootSearchSuggestField />', () => {
   });
 
   it('goes to course search with the filter value activated when the user clicks on a suggestion', async () => {
-    fetchMock.get('/api/v1.0/courses/?limit=1&offset=0&scope=filters', {
-      filters: {
-        subjects,
-      },
+    fetchMock.get('/api/v1.0/filter-definitions/', {
+      subjects,
     });
+
     fetchMock.get('/api/v1.0/subjects/autocomplete/?query=aut', [
       {
         id: 'L-000300010001',
@@ -196,6 +191,10 @@ describe('<RootSearchSuggestField />', () => {
   });
 
   it('moves to the search page with a search query when the user types a query and presses ENTER', async () => {
+    fetchMock.get('/api/v1.0/filter-definitions/', {
+      subjects,
+    });
+
     ['courses', 'subjects'].forEach(kind =>
       fetchMock.get(`/api/v1.0/${kind}/autocomplete/?query=some%20query`, []),
     );
@@ -223,11 +222,10 @@ describe('<RootSearchSuggestField />', () => {
   });
 
   it('lets the user select the currently highlighted suggestion by pressing ENTER', async () => {
-    fetchMock.get('/api/v1.0/courses/?limit=1&offset=0&scope=filters', {
-      filters: {
-        subjects,
-      },
+    fetchMock.get('/api/v1.0/filter-definitions/', {
+      subjects,
     });
+
     fetchMock.get('/api/v1.0/subjects/autocomplete/?query=aut', []);
     fetchMock.get('/api/v1.0/courses/autocomplete/?query=aut', [
       {

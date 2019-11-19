@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Change the way frontend search field components are configured.
+
 ## [1.13.0] - 2019-11-15
 
 ### Added
