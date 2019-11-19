@@ -16,13 +16,14 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Frontend components now use `<html lang>` to pick up the locale instead
   of expecting a `data-locale` attribute.
+- Make the section plugin title optional,
 - Change the way frontend search field components are configured.
 
 ### Fixed
 
 - Main organization after an ordering clause was inadvertently commented,
 - The language chooser should only show public languages,
-- The language chooser shouldn't render an empty <ul> on sites with 1 language,
+- The language chooser shouldn't render an empty <ul> on sites with 1 language.
 
 ## [1.13.0] - 2019-11-15
 

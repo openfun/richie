@@ -1,7 +1,7 @@
 """
 Section plugin tests
 """
-from django.db import IntegrityError, transaction
+from django.db import transaction
 
 from cms.api import add_plugin
 from cms.models import Placeholder
@@ -15,21 +15,16 @@ from richie.plugins.section.factories import SectionFactory
 class SectionCMSPluginsTestCase(CMSPluginTestCase):
     """Section plugin tests case"""
 
+    @staticmethod
     @transaction.atomic
-    def test_cms_plugins_section_title_required(self):
+    def test_cms_plugins_section_title_required():
         """
-        A "title" is required when instantiating a section.
+        The "title" field is not required when instantiating a section.
 
         Use ``@transaction.atomic`` decorator because of CMSTestCase behavior,
         see details in CMSPluginTestCase docstring.
         """
-        with self.assertRaises(IntegrityError) as cm:
-            SectionFactory(title=None)
-        self.assertTrue(
-            'null value in column "title" violates not-null constraint'
-            in str(cm.exception)
-            or "Column 'title' cannot be null" in str(cm.exception)
-        )
+        SectionFactory(title=None)
 
     def test_cms_plugins_section_create_success(self):
         """

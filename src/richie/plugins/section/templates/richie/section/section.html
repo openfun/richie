@@ -1,8 +1,14 @@
-{% load cms_tags %}
+{% load cms_tags %}{% spaceless %}
 
 <section class="section">
-    <h{{ header_level|default:2 }} class="section__title">{{ instance.title }}</h{{ header_level|default:2 }}>
+    {% if instance.title %}
+        <h{{ header_level|default:2 }} class="section__title">
+            {{ instance.title }}
+        </h{{ header_level|default:2 }}>
+    {% endif %}
     {% for plugin in instance.child_plugin_instances %}
         {% render_plugin plugin %}
     {% endfor %}
 </section>
+
+{% endspaceless %}
