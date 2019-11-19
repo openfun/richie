@@ -114,9 +114,7 @@ export const Search = ({
           {courseSearchResponse &&
           courseSearchResponse.status === requestStatus.SUCCESS ? (
             <React.Fragment>
-              <SearchSuggestField
-                filters={courseSearchResponse.content.filters}
-              />
+              <SearchSuggestField />
               <CourseGlimpseList
                 courses={courseSearchResponse.content.objects}
                 meta={courseSearchResponse.content.meta}
