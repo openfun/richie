@@ -80,7 +80,7 @@ describe('components/SearchSuggestField', () => {
     getByPlaceholderText('Search for courses, organizations, categories');
   });
 
-  it('picks the query from the URL if there is one', async () => {
+  it('picks the query from the URL if there is one', () => {
     const { getByDisplayValue } = render(
       <IntlProvider locale="en">
         <CourseSearchParamsContext.Provider
@@ -372,7 +372,7 @@ describe('components/SearchSuggestField', () => {
     });
   });
 
-  it('searches as the user types', () => {
+  it('searches as the user types', async () => {
     ['organizations', 'persons', 'subjects'].forEach(kind =>
       fetchMock.get(`begin:/api/v1.0/${kind}/autocomplete/?query=`, []),
     );
@@ -404,18 +404,21 @@ describe('components/SearchSuggestField', () => {
     expect(dispatchCourseSearchParamsUpdate).not.toHaveBeenCalled();
 
     fireEvent.change(field, { target: { value: 'ric' } });
+    await wait();
     expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
       query: 'ric',
       type: 'QUERY_UPDATE',
     });
 
     fireEvent.change(field, { target: { value: 'rich data driven' } });
+    await wait();
     expect(dispatchCourseSearchParamsUpdate).toHaveBeenLastCalledWith({
       query: 'rich data driven',
       type: 'QUERY_UPDATE',
     });
 
     fireEvent.change(field, { target: { value: '' } });
+    await wait();
     expect(dispatchCourseSearchParamsUpdate).toHaveBeenLastCalledWith({
       query: '',
       type: 'QUERY_UPDATE',
