@@ -35,6 +35,10 @@ export interface FilterDefinition {
   position: number;
 }
 
+export interface StaticFilterDefinitions {
+  [filterName: string]: FilterDefinition;
+}
+
 /**
  * Faceted filter definitions add properties specifically relevant to a given search context.
  * @property `has_more_values` — Whether or not there are other values besides those in the `values` array
