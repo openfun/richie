@@ -21,7 +21,7 @@ class Section(CMSPlugin):
     It should be used as filling a title then adding sub content plugins.
     """
 
-    title = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, blank=True, null=True)
     template = models.CharField(
         _("Template"),
         max_length=150,
