@@ -48,6 +48,14 @@ CMS_TEMPLATES = (
 )
 
 CMS_PLACEHOLDER_CONF = {
+    # -- Static Placeholders
+    # Footer
+    "footer": {
+        "name": _("Footer"),
+        "plugins": ["LinkPlugin", "SectionPlugin"],
+        "child_classes": {"SectionPlugin": ["LinkPlugin", "SectionPlugin"]},
+    },
+    # -- Page Placeholders
     # Homepage
     "richie/homepage.html maincontent": {
         "name": _("Main content"),

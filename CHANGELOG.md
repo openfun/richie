@@ -17,6 +17,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Frontend components now use `<html lang>` to pick up the locale instead
   of expecting a `data-locale` attribute.
+- Refactor the footer to use a static placeholder instead of the page tree:
+    * allow organizing footer links in columns or as flat links,
+    * allow customizing footer links (e.g. by setting the link target)
+    * allow adding any internal or external link to the footer,
+    * decorrelate the structure of footer links from the page tree.
 - Make the section plugin title optional,
 - Change the way frontend search field components are configured.
 
