@@ -16,9 +16,22 @@ $ make migrate
 
 ## Unreleased
 
-- If you reused any React components in Django templates through `richie-react`, you should know that the `data-locale` attribute on them is no longer used. Instead, they rely on `<html lang>` to pick up their current locale, which should already be set in all documents anyway.
-- As a result, the `lang` attribute on `<html>`, which is a requirement for an accessible page anyway, is now an absolute requirement. Users who overrode the base template and removed this need to add it again.
-- Users who overrode the `REACT_LOCALES` setting need to rename it to `RFC_5646_LOCALES` and make sure it contains BCP47/RFC5646 locales (`REACT_LOCALES` used ISO15897 locales).
+## 1.13.x to 1.14.x
+
+- If you reused any React components in Django templates through `richie-react`, you should know
+  that the `data-locale` attribute on them is no longer used. Instead, they rely on `<html lang>`
+  to pick up their current locale, which should already be set in all documents anyway.
+- As a result, the `lang` attribute on `<html>`, which is a requirement for an accessible page
+  anyway, is now an absolute requirement. Users who overrode the base template and removed this
+  need to add it again.
+- Users who overrode the `REACT_LOCALES` setting need to rename it to `RFC_5646_LOCALES` and make
+  sure it contains BCP47/RFC5646 locales (`REACT_LOCALES` used ISO15897 locales).
+- Footer links are now defined via a static placeholder (see CHANGELOG). Richie provides a data
+  migration to make sure that an existing footer of flat links is ported to the new static
+  placeholder. Before running the data migration, make sure all changes on the footer pages
+  (pages that are below the page with a reverse_id of "annex") are published. After running the
+  data migration, check the footer (draft and public in each language) to make sure it is as
+  expected.
 
 ## 1.12.x to 1.13.x
 

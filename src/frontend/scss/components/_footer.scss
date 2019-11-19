@@ -7,12 +7,10 @@ $richie-footer-background: $dodgerblue1 !default;
 $richie-footer-menu-border: 1px solid lighten($dodgerblue1, 10%) !default;
 
 $richie-footer-menu-item-margin: 0 !default;
-$richie-footer-menu-item-padding: 0 !default;
+$richie-footer-menu-item-padding: 1rem 0.8rem !default;
 $richie-footer-menu-item-margin-lg: 0 !default;
-$richie-footer-menu-item-padding-lg: 0 !default;
+$richie-footer-menu-item-padding-lg: 1rem 2rem !default;
 
-$richie-footer-menu-link-padding: 1rem 0.8rem !default;
-$richie-footer-menu-link-fontweight: bold !default;
 $richie-footer-menu-link-fontcolor: $white !default;
 $richie-footer-menu-link-fontcolor-hover: $dodgerblue7 !default;
 
@@ -34,51 +32,37 @@ $richie-footer-poweredby-link-fontcolor: $white !default;
   color: $richie-footer-fontcolor;
   background: $richie-footer-background;
 
-  &__submenu {
-    @include sv-flex(1, 0, 100%);
-
-    &__list {
-      margin: 0;
-      padding: $richie-footer-menu-link-padding;
-      padding-top: 0;
-      list-style-type: none;
-
-      &__item {
-        &__link {
-          display: block;
-          font-weight: normal;
-          color: $richie-footer-menu-link-fontcolor;
-
-          &:hover {
-            color: $richie-footer-menu-link-fontcolor-hover;
-            text-decoration: none;
-          }
-        }
-      }
-    }
-  }
-
   &__menu {
     @include sv-flex(1, 0, 100%);
     display: flex;
     border-bottom: $richie-footer-menu-border;
 
-    &__list {
+    & > .section-list {
       display: flex;
       width: 100%;
       max-width: map-get($container-max-widths, 'xl');
       margin: 0 auto;
+      padding: 0;
       flex-direction: row;
       flex-wrap: wrap;
       justify-content: center;
       list-style-type: none;
 
-      &__item {
+      & > .section-list__item {
         @include sv-flex(1, 0, 100%);
         display: block;
         margin: $richie-footer-menu-item-margin;
         padding: $richie-footer-menu-item-padding;
         color: inherit;
+
+        a {
+          font-weight: bold;
+          color: $richie-footer-menu-link-fontcolor;
+          &:hover {
+            color: $richie-footer-menu-link-fontcolor-hover;
+            text-decoration: none;
+          }
+        }
 
         @include media-breakpoint-up(lg) {
           @include sv-flex(0, 0, auto);
@@ -90,15 +74,16 @@ $richie-footer-poweredby-link-fontcolor: $white !default;
           }
         }
 
-        &__link {
-          display: block;
-          padding: $richie-footer-menu-link-padding;
-          font-weight: $richie-footer-menu-link-fontweight;
-          color: $richie-footer-menu-link-fontcolor;
+        .section-list {
+          @include sv-flex(1, 0, 100%);
+          margin: 0;
+          padding: 0;
+          list-style-type: none;
 
-          &:hover {
-            color: $richie-footer-menu-link-fontcolor-hover;
-            text-decoration: none;
+          &:first-child {
+            @include media-breakpoint-up(sm) {
+              margin-top: 2rem;
+            }
           }
         }
       }

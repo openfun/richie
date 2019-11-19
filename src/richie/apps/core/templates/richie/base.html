@@ -86,9 +86,7 @@
             {% block body_footer %}
             <div class="body-footer">
                 <div class="body-footer__menu">
-                    <ul class="body-footer__menu__list">
-                        {% show_menu_below_id "annex" 0 2 100 100 "menu/footer_menu.html" %}
-                    </ul>
+                  {% static_placeholder "footer" %}
                 </div>
                 <div class="body-footer__brand">
                     <a href="/" class="body-footer__brand__link">
