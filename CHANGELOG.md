@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add a template to the section plugin to allow rendering unordered list,
 - Add an API endpoint to get static versions of the filter definitions.
 
 ### Changed
