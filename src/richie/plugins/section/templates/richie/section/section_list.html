@@ -1,0 +1,17 @@
+{% load cms_tags %}{% spaceless %}
+
+{% if instance.title %}
+    <label class="section-label" for="footer-menu-{{ instance.id }}">{{ instance.title }}</label>
+{% endif %}
+
+{% with plugins=instance.child_plugin_instances %}
+    {% if plugins %}
+        <ul id="footer-menu-{{ instance.id }}" class="section-list">
+            {% for plugin in plugins %}
+               <li class="section-list__item">{% render_plugin plugin %}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endwith %}
+
+{% endspaceless %}

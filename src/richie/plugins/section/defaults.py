@@ -10,5 +10,6 @@ SECTION_TEMPLATES = getattr(
     [
         ("richie/section/section.html", _("Default")),
         ("richie/section/section_cadenced.html", _("Highlighted items")),
+        ("richie/section/section_list.html", _("Unordered list")),
     ],
 )
