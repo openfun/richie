@@ -10,6 +10,7 @@ from django.test.utils import override_settings
 
 import factory
 from cms.api import add_plugin
+from cms.models import StaticPlaceholder
 
 from richie.apps.core.factories import create_text_plugin, image_getter
 from richie.apps.core.helpers import recursive_page_creation
@@ -25,6 +26,7 @@ from richie.apps.courses.factories import (
 )
 
 from ...defaults import (
+    FOOTER_CONTENT,
     HOMEPAGE_CONTENT,
     ICONS_INFO,
     LEVELS_INFO,
@@ -80,6 +82,42 @@ def create_demo_site():
 
     # Create pages as described in PAGES_INFOS
     pages_created = recursive_page_creation(site, PAGES_INFO)
+
+    # Create the footer links
+    footer_static_ph = StaticPlaceholder.objects.get_or_create(code="footer")[0]
+    for footer_placeholder in [footer_static_ph.draft, footer_static_ph.public]:
+        for language, content in FOOTER_CONTENT.items():
+            # Create the <ul> section to carry the list of links
+            section_plugin = add_plugin(
+                footer_placeholder,
+                plugin_type="SectionPlugin",
+                language=language,
+                template="richie/section/section_list.html",
+            )
+
+            # One column per content object
+            for footer_info in content:
+                column_plugin = add_plugin(
+                    footer_placeholder,
+                    plugin_type="SectionPlugin",
+                    language=language,
+                    target=section_plugin,
+                    template="richie/section/section_list.html",
+                    title=footer_info.get("title"),
+                )
+                for item_info in footer_info.get("items", []):
+                    if "internal_link" in item_info:
+                        item_info = item_info.copy()
+                        item_info["internal_link"] = pages_created[
+                            item_info["internal_link"]
+                        ]
+                    add_plugin(
+                        footer_placeholder,
+                        plugin_type="LinkPlugin",
+                        language=language,
+                        target=column_plugin,
+                        **item_info,
+                    )
 
     # Create some licences
     licences = LicenceFactory.create_batch(

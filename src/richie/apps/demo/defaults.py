@@ -340,6 +340,46 @@ SINGLECOLUMN_CONTENT = {
 }
 SINGLECOLUMN_CONTENT.update(getattr(settings, "RICHIE_DEMO_SINGLECOLUMN_CONTENT", {}))
 
+FOOTER_CONTENT = {
+    "en": [
+        {
+            "items": [
+                {"name": "About", "internal_link": "annex__about"},
+                {"name": "Sitemap", "internal_link": "annex__sitemap"},
+            ]
+        },
+        {
+            "title": "Richie community",
+            "items": [
+                {"name": "Website", "external_link": "https://richie.education"},
+                {
+                    "name": "Github",
+                    "external_link": "https://github.com/openfun/richie",
+                },
+            ],
+        },
+    ],
+    "fr": [
+        {
+            "items": [
+                {"name": "A propos", "internal_link": "annex__about"},
+                {"name": "Plan du site", "internal_link": "annex__sitemap"},
+            ]
+        },
+        {
+            "title": "Communauté Richie",
+            "items": [
+                {"name": "Site web", "external_link": "https://richie.education"},
+                {
+                    "name": "Github",
+                    "external_link": "https://github.com/openfun/richie",
+                },
+            ],
+        },
+    ],
+}
+FOOTER_CONTENT.update(getattr(settings, "FOOTER_CONTENT", {}))
+
 SITEMAP_PAGE_PARAMS = {
     "blogposts": {"max_depth": 1},
     "courses": {"max_depth": 1},
