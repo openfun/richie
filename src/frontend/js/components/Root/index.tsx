@@ -7,6 +7,7 @@ import ReactDOM from 'react-dom';
 import { RootSearchSuggestField } from 'components/RootSearchSuggestField';
 import { Search } from 'components/Search';
 import { UserLogin } from 'components/UserLogin';
+import { HistoryContext, useHistory } from 'data/useHistory';
 
 // List the top-level components that can be directly called from the Django templates in an interface
 // for type-safety when we call them. This will let us use the props for any top-level component in a
@@ -35,6 +36,8 @@ interface RootProps {
 }
 
 export const Root = ({ richieReactSpots }: RootProps) => {
+  const history = useHistory();
+
   const portals = richieReactSpots.map((element: Element) => {
     // Generate a component name. It should be a key of the componentLibrary object / ComponentLibrary interface
     const componentName = startCase(
@@ -62,5 +65,7 @@ export const Root = ({ richieReactSpots }: RootProps) => {
     }
   });
 
-  return <React.Fragment>{portals}</React.Fragment>;
+  return (
+    <HistoryContext.Provider value={history}>{portals}</HistoryContext.Provider>
+  );
 };
