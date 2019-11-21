@@ -284,7 +284,7 @@ class Course(BasePageExtension):
         """
         return (
             self.get_organizations()
-            # .order_by("extended_object__organization_plugins__cmsplugin_ptr__position")
+            .order_by("extended_object__organization_plugins__cmsplugin_ptr__position")
             .first()
         )
 

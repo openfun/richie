@@ -405,14 +405,21 @@ class CourseModelsTestCase(TestCase):
         *published_organizations, _other_public = OrganizationFactory.create_batch(
             3, should_publish=True
         )
+
+        # Shuffle all organizations to make sure their order in the placeholder is what
+        # determines which one is the main organization
+        all_organizations = draft_organizations + published_organizations
+        random.shuffle(all_organizations)
+
         course = CourseFactory(
-            fill_organizations=draft_organizations + published_organizations,
-            should_publish=True,
+            fill_organizations=all_organizations, should_publish=True
         )
 
-        self.assertEqual(course.get_main_organization(), draft_organizations[0])
+        self.assertEqual(course.get_main_organization(), all_organizations[0])
         self.assertEqual(
-            course.public_extension.get_main_organization(), published_organizations[0]
+            course.public_extension.get_main_organization(),
+            # Find the first published organization in this list of organizations
+            next(o for o in all_organizations if o in published_organizations),
         )
 
     def test_models_course_get_persons_empty(self):
