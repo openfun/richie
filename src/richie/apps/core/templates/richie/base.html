@@ -1,6 +1,6 @@
 {% load i18n cms_tags menu_tags rfc_5646_locale static sekizai_tags %}
 <!doctype html>
-<html lang="{{ LANGUAGE_CODE }}">
+<html lang="{{ LANGUAGE_CODE|rfc_5646_locale }}">
     <head>
         {% spaceless %}
         <title>{% block head_title %}{{ SITE.name }}{% endblock head_title %}</title>
@@ -67,7 +67,6 @@
                     {% block userlogin %}
                     <div
                       class="richie-react richie-react--user-login"
-                      data-locale="{{ LANGUAGE_CODE|rfc_5646_locale }}"
                       data-props='{"loginUrl": "{% url 'admin:index' %}", "logoutUrl": "{% url 'logout' %}", "signupUrl": "{% url 'admin:index' %}"}'
                     ></div>
                     {% endblock userlogin %}
