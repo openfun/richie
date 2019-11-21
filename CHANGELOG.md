@@ -8,9 +8,19 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Add an API endpoint to get static versions of the filter definitions.
+
 ### Changed
 
 - Change the way frontend search field components are configured.
+
+### Fixed
+
+- Main organization after an ordering clause was inadvertently commented,
+- The language chooser should only show public languages,
+- The language chooser shouldn't render an empty <ul> on sites with 1 language,
 
 ## [1.13.0] - 2019-11-15
 
@@ -19,7 +29,6 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add an Ajax toolbar menu item to regenerate the search index,
 - Add a React-powered component to handle login/signup and user status in
   the base template.
-- Add an API endpoint to get static versions of the filter definitions.
 
 ### Changed
 
@@ -29,8 +38,6 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
-- The language chooser should only show public languages,
-- The language chooser shouldn't render an empty <ul> on sites with 1 language,
 - Fix undefined behavior on hits on the categories API from unrelated requests,
   return 404 errors instead.
 - Improve React spinner component accessibility.
