@@ -8,7 +8,7 @@ from cms.test_utils.testcases import CMSTestCase
 from richie.apps.core.helpers import create_i18n_page
 
 
-@override_settings(RFC_5646_LOCALES=["en_US", "fr_CA", "fr_FR", "es_ES"])
+@override_settings(RFC_5646_LOCALES=["en-US", "fr-CA", "fr-FR", "es-ES"])
 class CourseCMSTestCase(CMSTestCase):
     """End-to-end test suite to validate the content of the search page."""
 
@@ -31,9 +31,9 @@ class CourseCMSTestCase(CMSTestCase):
         self.assertIsNotNone(
             re.search(
                 (
+                    r'<html lang="en-US">.*'
                     r"<div[\\n ]*"
                     r'class="richie-react richie-react--search"[\\n ]*'
-                    r'data-locale="en_US"[\\n ]*'
                     r'data-props=\\\'{"pageTitle": "search"'
                 ),
                 str(response.content),
@@ -48,9 +48,9 @@ class CourseCMSTestCase(CMSTestCase):
         self.assertIsNotNone(
             re.search(
                 (
+                    r'<html lang="fr-CA">.*'
                     r"<div[\\n ]*"
                     r'class="richie-react richie-react--search"[\\n ]*'
-                    r'data-locale="fr_CA"[\\n ]*'
                     r'data-props=\\\'{"pageTitle": "recherche"'
                 ),
                 str(response.content),
