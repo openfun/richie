@@ -1,4 +1,4 @@
-{% load i18n cms_tags menu_tags react_locale static sekizai_tags %}
+{% load i18n cms_tags menu_tags rfc_5646_locale static sekizai_tags %}
 <!doctype html>
 <html lang="{{ LANGUAGE_CODE }}">
     <head>
@@ -67,7 +67,7 @@
                     {% block userlogin %}
                     <div
                       class="richie-react richie-react--user-login"
-                      data-locale="{{ LANGUAGE_CODE|react_locale }}"
+                      data-locale="{{ LANGUAGE_CODE|rfc_5646_locale }}"
                       data-props='{"loginUrl": "{% url 'admin:index' %}", "logoutUrl": "{% url 'logout' %}", "signupUrl": "{% url 'admin:index' %}"}'
                     ></div>
                     {% endblock userlogin %}

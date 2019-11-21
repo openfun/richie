@@ -1,5 +1,5 @@
 {% extends "richie/base.html" %}
-{% load cms_tags i18n react_locale static %}
+{% load cms_tags i18n rfc_5646_locale static %}
 {% get_current_language as LANGUAGE_CODE %}
 
 {% block meta %}
@@ -23,7 +23,7 @@
       {% endwith %}
       <div
         class="richie-react richie-react--search"
-        data-locale="{{ LANGUAGE_CODE|react_locale }}"
+        data-locale="{{ LANGUAGE_CODE|rfc_5646_locale }}"
         data-props='{"pageTitle": "{% page_attribute "page_title" %}", "context": { "assets": { "icons": "{% static 'richie/icons.svg' %}" } }}'
       ></div>
     </div>
