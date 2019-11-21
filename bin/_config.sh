@@ -61,8 +61,6 @@ function _docker_compose() {
 function _dc_run() {
     _set_user
 
-    echo "🐳(compose) run command: '$@'"
-
     user_args="--user=$USER_ID"
     if [ -z $USER_ID ]; then
         user_args=""
