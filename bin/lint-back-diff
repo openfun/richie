@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+source "$(dirname "${BASH_SOURCE[0]}")/_config.sh"
+
+DIFF_FILES="$(git diff --name-only master | grep -e .py$ | grep -v migrations | tr "\n" " ")" || true
+
+if [ -z "$DIFF_FILES" ]; then
+    echo "Nothing new to lint since master"
+    exit 0
+fi
+
+_dc_run --no-deps app pylint $DIFF_FILES
+_dc_run --no-deps app black $DIFF_FILES
+_dc_run --no-deps app flake8 $DIFF_FILES
+_dc_run --no-deps app isort --recursive --atomic $DIFF_FILES
+_dc_run --no-deps app bandit -qr $DIFF_FILES

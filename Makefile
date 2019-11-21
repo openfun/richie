@@ -174,6 +174,10 @@ lint-back: \
   lint-back-bandit
 .PHONY: lint-back
 
+lint-back-diff: ## lint back-end python sources, but only what has changed since master
+	@bin/lint-back-diff
+.PHONY: lint-back-diff
+
 lint-back-black: ## lint back-end python sources with black
 	@echo 'lint:black started…'
 	@$(COMPOSE_TEST_RUN_APP) black src/richie/apps src/richie/plugins sandbox tests
