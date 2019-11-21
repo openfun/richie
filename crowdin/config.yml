@@ -23,6 +23,6 @@ files: [
  {
   source : "/frontend/i18n/frontend.pot",
   dest: "/frontend.pot",
-  translation : "/frontend/js/translations/%locale_with_underscore%.po",
+  translation : "/frontend/js/translations/%locale%.po",
  }
 ]
