@@ -8,7 +8,7 @@ from cms.test_utils.testcases import CMSTestCase
 from richie.apps.core.helpers import create_i18n_page
 
 
-@override_settings(REACT_LOCALES=["en_US", "fr_CA", "fr_FR", "es_ES"])
+@override_settings(RFC_5646_LOCALES=["en_US", "fr_CA", "fr_FR", "es_ES"])
 class CourseCMSTestCase(CMSTestCase):
     """End-to-end test suite to validate the content of the search page."""
 

@@ -35,16 +35,20 @@ for site_language in LANGUAGES_DICT:
             f'"{site_language:s}" in LANGUAGES does not match any language in ALL_LANGUAGES'
         )
 
-# The React i18n library only works with ISO15897 locales (e.g. fr_FR)
-# Django also supports ISO639-1 language codes without a region (e.g. fr) which is sufficient
+# Our frontend expects BCP47/RFC5646 locales (eg. fr-FR). Django, on the other hand,
+# supports ISO639-1 language codes without a region (e.g. fr) which is sufficient
 # if you don't need to differentiate several regional versions of the same language.
 #
-# You need to make sure a locale corresponding to your language exists in the locales
-# supported by the React frontend.
+# BCP47/RFC5646 lets us specify language-region pairs by combining ISO639-1 language codes and
+# ISO3166-1 region codes using a dash (eg. fr-FR).
 #
-# The order matters, because the first matching locale will be used if your LANGUAGES setting
-# declares languages without regions.
-REACT_LOCALES = lazy(
-    lambda: getattr(settings, "REACT_LOCALES", ["en_US", "es_ES", "fr_FR", "fr_CA"]),
+# The only thing we're missing for this to be bridged completely is to make sure locales
+# set on the <html> element are also available in our React frontend.
+#
+# This is where this setting comes in: it lists available locales by order of priority:
+# the first matching locale will be used if your LANGUAGES setting declares languages without
+# regions.
+RFC_5646_LOCALES = lazy(
+    lambda: getattr(settings, "RFC_5646_LOCALES", ["en-US", "es-ES", "fr-FR", "fr-CA"]),
     list,
 )()

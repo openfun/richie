@@ -60,8 +60,11 @@ document.addEventListener('DOMContentLoaded', event => {
         .join('');
       // Sanity check: only attempt to access and render components for which we do have a valid name
       if (isComponentName(componentName)) {
-        // Determine a lang (localeCode) based on the `data-locale` attribute
-        const locale = element.getAttribute('data-locale') || 'en';
+        // Determine an ISO15897 locale from a BCP47/RFC5646 locale (eg. en-US to en_US)
+        const locale = (element.getAttribute('data-locale') || 'en-US').replace(
+          '-',
+          '_',
+        );
         let localeCode = locale;
         if (localeCode.match(/^.*_.*$/)) {
           localeCode = locale.split('_')[0];
