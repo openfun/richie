@@ -12,7 +12,11 @@ We needed a convention that enables us to easily mark those areas of the page th
 
 We decided to use a specific CSS class name along with its modifiers. We reserve the `richie-react` class and its modified children for this purpose.
 
-Additionally, components including internationalized data or strings need to know which locale to use. All uses of this `richie-react` class can be paired with a data-attribute specifying the locale. If not defined, `en` is used as a default.
+Additionally, components including internationalized data or strings need to know which locale to use. They will pick up the locale specified through the `lang` attribute of the `<html>` element, which is a requirement to have an accessible page anyway.
+
+They use the BCP47/RFC5646 format.
+
+    <html lang="en-US">
 
 ### Example
 
@@ -20,7 +24,6 @@ Here is how we would call a `<FeaturedCourses />` component from a template, a p
 
     <div
       class="richie-react richie-react--featured-courses"
-      data-locale="fr-ca"
     ></div>
 
 When our JS is loaded, it will recognize this as an element it must take over, and render the FeaturedCourses component in this element.
@@ -39,7 +42,6 @@ Here is how we would pass a `categories={[ "sociology", "anthropology" ]}` prop 
 
     <div
       class="richie-react richie-react--featured-courses"
-      data-locale="fr-ca"
       data-props='{"categories": ["sociology", "anthropology"]}'
     ></div>
 
