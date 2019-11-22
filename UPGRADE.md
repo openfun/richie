@@ -16,9 +16,13 @@ $ make migrate
 
 ## Unreleased
 
+- If you reused any React components in Django templates through `richie-react`, you should know that the `data-locale` attribute on them is no longer used. Instead, they rely on `<html lang>` to pick up their current locale, which should already be set in all documents anyway.
+- As a result, the `lang` attribute on `<html>`, which is a requirement for an accessible page anyway, is now an absolute requirement. Users who overrode the base template and removed this need to add it again.
+- Users who overrode the `REACT_LOCALES` setting need to rename it to `RFC_5646_LOCALES` and make sure it contains BCP47/RFC5646 locales (`REACT_LOCALES` used ISO15897 locales).
+
 ## 1.12.x to 1.13.x
 
-- If you override the `menu/language_menu.html` template, you should now include the <ul> tag in this
+- If you override the `menu/language_menu.html` template, you should now include the `<ul>` tag in this
   template and not in `richie/base.html` so that it does not render as an empty element on sites with
   only one public language,
 - If you override templates that contain React hooks, rename the `fun-react` class to`richie-react`.

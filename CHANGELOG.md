@@ -14,6 +14,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Frontend components now use `<html lang>` to pick up the locale instead
+  of expecting a `data-locale` attribute.
 - Change the way frontend search field components are configured.
 
 ### Fixed
