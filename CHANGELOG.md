@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Add missing migration dependency to avoid IntegrityError on live databases.
+
 ## [1.14.0] - 2019-11-23
 
 ### Added
