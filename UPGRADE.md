@@ -35,6 +35,38 @@ $ make migrate
 
 ## 1.12.x to 1.13.x
 
+- A login/signup component was added at the top right of all pages. It comes with new url routes
+  that you must add to your project:
+  * In your project's `urls.py` non-i18n patterns, add user-related API endpoints via richie's
+    core app urls:
+    ```diff
+    ...
+    + from richie.apps.core.urls import urlpatterns as core_urlpatterns
+    ...
+    urlpatterns = [
+        ...
+    -     url(r"^api/{}/".format(API_PREFIX), include(search_urlpatterns)),
+    +    url(
+    +         r"^api/{}/".format(API_PREFIX),
+    +         include([*core_urlpatterns, *search_urlpatterns]),
+    +     ),
+        ...
+    ]
+    ```
+  * In your project's `urls.py` i18n patterns, add Django contrib auths urls:
+    ```diff
+    urlpatterns += i18n_patterns(
+        ...
+    +   url(r"^accounts/", include("django.contrib.auth.urls")),
+        ...
+    )
+    ```
+  * In your project's settings, configure login and logout redirect urls:
+    ```diff
+    ...
+    + LOGIN_REDIRECT_URL = "/"
+    + LOGOUT_REDIRECT_URL = "/"
+    ```
 - If you override the `menu/language_menu.html` template, you should now include the `<ul>` tag in this
   template and not in `richie/base.html` so that it does not render as an empty element on sites with
   only one public language,
