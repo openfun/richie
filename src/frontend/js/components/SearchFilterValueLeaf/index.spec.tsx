@@ -1,18 +1,29 @@
 import 'testSetup';
 
 import { fireEvent, render } from '@testing-library/react';
+import { stringify } from 'query-string';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
-import { CourseSearchParamsContext } from 'data/useCourseSearchParams';
+import { History, HistoryContext } from 'data/useHistory';
 import { SearchFilterValueLeaf } from '.';
 
 describe('components/SearchFilterValueLeaf', () => {
+  const historyPushState = jest.fn();
+  const historyReplaceState = jest.fn();
+  const makeHistoryOf: (params: any) => History = params => [
+    { state: params, title: '', url: `/search?${stringify(params)}` },
+    historyPushState,
+    historyReplaceState,
+  ];
+
+  beforeEach(jest.resetAllMocks);
+
   it('renders the name of the filter value', () => {
     const { getByLabelText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[{ limit: '999', offset: '0' }, jest.fn()]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '999', offset: '0' })}
         >
           <SearchFilterValueLeaf
             filter={{
@@ -31,7 +42,7 @@ describe('components/SearchFilterValueLeaf', () => {
               key: '42',
             }}
           />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -48,8 +59,12 @@ describe('components/SearchFilterValueLeaf', () => {
   it('shows the filter value as active when it is in the search params', () => {
     const { getByLabelText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[{ filter_name: '42', limit: '999', offset: '0' }, jest.fn()]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({
+            filter_name: '42',
+            limit: '999',
+            offset: '0',
+          })}
         >
           <SearchFilterValueLeaf
             filter={{
@@ -68,7 +83,7 @@ describe('components/SearchFilterValueLeaf', () => {
               key: '42',
             }}
           />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -83,8 +98,8 @@ describe('components/SearchFilterValueLeaf', () => {
   it('disables the value when its count is 0', () => {
     const { getByLabelText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[{ limit: '999', offset: '0' }, jest.fn()]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '999', offset: '0' })}
         >
           <SearchFilterValueLeaf
             filter={{
@@ -103,7 +118,7 @@ describe('components/SearchFilterValueLeaf', () => {
               key: '42',
             }}
           />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -119,14 +134,10 @@ describe('components/SearchFilterValueLeaf', () => {
   });
 
   it('dispatches a FILTER_ADD action on filter click if it was not active', () => {
-    const dispatchCourseSearchParamsUpdate = jest.fn();
     const { getByLabelText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[
-            { limit: '999', offset: '0' },
-            dispatchCourseSearchParamsUpdate,
-          ]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '999', offset: '0' })}
         >
           <SearchFilterValueLeaf
             filter={{
@@ -145,38 +156,29 @@ describe('components/SearchFilterValueLeaf', () => {
               key: '43',
             }}
           />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
     fireEvent.click(
       getByLabelText((content, _) => content.includes('Human name')),
     );
-    expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
-      filter: {
-        base_path: null,
-        has_more_values: false,
-        human_name: 'Filter name',
-        is_autocompletable: true,
-        is_searchable: true,
-        name: 'filter_name',
-        position: 0,
-        values: [],
-      },
-      payload: '43',
-      type: 'FILTER_ADD',
-    });
+    expect(historyPushState).toHaveBeenCalledWith(
+      { filter_name: ['43'], limit: '999', offset: '0' },
+      '',
+      '/?filter_name=43&limit=999&offset=0',
+    );
   });
 
   it('dispatches a FILTER_REMOVE action on filter click if it was active', () => {
-    const dispatchCourseSearchParamsUpdate = jest.fn();
     const { getByLabelText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[
-            { filter_name: '44', limit: '999', offset: '0' },
-            dispatchCourseSearchParamsUpdate,
-          ]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({
+            filter_name: '44',
+            limit: '999',
+            offset: '0',
+          })}
         >
           <SearchFilterValueLeaf
             filter={{
@@ -195,26 +197,17 @@ describe('components/SearchFilterValueLeaf', () => {
               key: '44',
             }}
           />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
     fireEvent.click(
       getByLabelText((content, _) => content.includes('Human name')),
     );
-    expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
-      filter: {
-        base_path: null,
-        has_more_values: false,
-        human_name: 'Filter name',
-        is_autocompletable: true,
-        is_searchable: true,
-        name: 'filter_name',
-        position: 0,
-        values: [],
-      },
-      payload: '44',
-      type: 'FILTER_REMOVE',
-    });
+    expect(historyPushState).toHaveBeenCalledWith(
+      { filter_name: undefined, limit: '999', offset: '0' },
+      '',
+      '/?limit=999&offset=0',
+    );
   });
 });

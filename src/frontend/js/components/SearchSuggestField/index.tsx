@@ -1,5 +1,5 @@
 import debounce from 'lodash-es/debounce';
-import React, { useContext, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Autosuggest from 'react-autosuggest';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -9,7 +9,7 @@ import {
   onSuggestionsFetchRequested,
   renderSuggestion,
 } from 'common/searchFields';
-import { CourseSearchParamsContext } from 'data/useCourseSearchParams';
+import { useCourseSearchParams } from 'data/useCourseSearchParams';
 import { useStaticFilters } from 'data/useStaticFilters';
 import {
   SearchAutosuggestProps,
@@ -36,9 +36,10 @@ export const SearchSuggestField = () => {
 
   // Setup our filters updates (for full-text-search and specific filters) directly through the
   // search parameters hook.
-  const [courseSearchParams, dispatchCourseSearchParamsUpdate] = useContext(
-    CourseSearchParamsContext,
-  );
+  const [
+    courseSearchParams,
+    dispatchCourseSearchParamsUpdate,
+  ] = useCourseSearchParams();
 
   // Initialize hooks for the two pieces of state the controlled <Autosuggest> component needs to interact with:
   // the current list of suggestions and the input value.

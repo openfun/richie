@@ -1,9 +1,9 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { SearchFilterValueLeaf } from 'components/SearchFilterValueLeaf';
 import { fetchList } from 'data/getResourceList';
-import { CourseSearchParamsContext } from 'data/useCourseSearchParams';
+import { useCourseSearchParams } from 'data/useCourseSearchParams';
 import { useFilterValue } from 'data/useFilterValue';
 import { requestStatus } from 'types/api';
 import { FacetedFilterDefinition, FilterValue } from 'types/filters';
@@ -39,7 +39,7 @@ export const SearchFilterValueParent = ({
 
   // Get the current values for the filter definition so we know if any children of this parent
   // filter are active (and we therefore need to get them and unfold the children).
-  const [coursesSearchParams] = useContext(CourseSearchParamsContext);
+  const [coursesSearchParams] = useCourseSearchParams();
   // Default to an array of strings no matter the current value so we can easily check for active values
   const activeFilterValues =
     coursesSearchParams[filter.name] || ([] as string[]);

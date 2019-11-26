@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   defineMessages,
   FormattedMessage,
@@ -7,7 +7,7 @@ import {
 import ReactModal from 'react-modal';
 
 import { fetchList } from 'data/getResourceList';
-import { CourseSearchParamsContext } from 'data/useCourseSearchParams';
+import { useCourseSearchParams } from 'data/useCourseSearchParams';
 import { requestStatus } from 'types/api';
 import { FacetedFilterDefinition, FilterValue } from 'types/filters';
 import { Nullable } from 'utils/types';
@@ -67,9 +67,10 @@ export const SearchFilterGroupModal = ({
   const [error, setError] = useState(null as Nullable<MessageDescriptor>);
 
   // We need the current course search params to get the facet counts
-  const [coursesSearchParams, dispatchCourseSearchParamsUpdate] = useContext(
-    CourseSearchParamsContext,
-  );
+  const [
+    coursesSearchParams,
+    dispatchCourseSearchParamsUpdate,
+  ] = useCourseSearchParams();
 
   // When the modal is closed, reset state so the user gets a brand-new one if they come back
   useEffect(() => {

@@ -1,10 +1,11 @@
 import 'testSetup';
 
 import { fireEvent, render } from '@testing-library/react';
+import { stringify } from 'query-string';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
-import { CourseSearchParamsContext } from 'data/useCourseSearchParams';
+import { History, HistoryContext } from 'data/useHistory';
 import { SearchFiltersPane } from '.';
 
 jest.mock('components/SearchFilterGroup', () => ({
@@ -14,11 +15,19 @@ jest.mock('components/SearchFilterGroup', () => ({
 }));
 
 describe('components/SearchFiltersPane', () => {
+  const historyPushState = jest.fn();
+  const historyReplaceState = jest.fn();
+  const makeHistoryOf: (params: any) => History = params => [
+    { state: params, title: '', url: `/search?${stringify(params)}` },
+    historyPushState,
+    historyReplaceState,
+  ];
+
   it('renders all our search filter groups', () => {
     const { getByText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[{ limit: '999', offset: '0' }, jest.fn()]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '999', offset: '0' })}
         >
           <SearchFiltersPane
             filters={{
@@ -44,7 +53,7 @@ describe('components/SearchFiltersPane', () => {
               },
             }}
           />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -60,30 +69,26 @@ describe('components/SearchFiltersPane', () => {
   it('still renders with its title when it is not passed anything', () => {
     const { getByText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[{ limit: '999', offset: '0' }, jest.fn()]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '999', offset: '0' })}
         >
           <SearchFiltersPane filters={null} />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
     getByText('Filter courses');
   });
 
   it('shows a button to remove all active filters when there are active filters', () => {
-    const mockDispatchCourseSearchParamsUpdate = jest.fn();
     const { getByText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[
-            {
-              limit: '14',
-              offset: '28',
-              organizations: 'L-00010023',
-              query: 'some query',
-            },
-            mockDispatchCourseSearchParamsUpdate,
-          ]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({
+            limit: '14',
+            offset: '28',
+            organizations: 'L-00010023',
+            query: 'some query',
+          })}
         >
           <SearchFiltersPane
             filters={{
@@ -109,7 +114,7 @@ describe('components/SearchFiltersPane', () => {
               },
             }}
           />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -119,8 +124,10 @@ describe('components/SearchFiltersPane', () => {
     );
 
     fireEvent.click(clearButton);
-    expect(mockDispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
-      type: 'FILTER_RESET',
-    });
+    expect(historyPushState).toHaveBeenCalledWith(
+      { limit: '14', offset: '0' },
+      '',
+      '/?limit=14&offset=0',
+    );
   });
 });

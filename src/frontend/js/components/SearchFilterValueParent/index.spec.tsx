@@ -1,6 +1,7 @@
 import 'testSetup';
 
 import { fireEvent, render, wait } from '@testing-library/react';
+import { stringify } from 'query-string';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
@@ -9,7 +10,7 @@ jest.mock('data/getResourceList', () => ({
 }));
 
 import { fetchList } from 'data/getResourceList';
-import { CourseSearchParamsContext } from 'data/useCourseSearchParams';
+import { History, HistoryContext } from 'data/useHistory';
 import { APIListRequestParams } from 'types/api';
 import { jestMockOf } from 'utils/types';
 import { SearchFilterValueParent } from '.';
@@ -17,13 +18,21 @@ import { SearchFilterValueParent } from '.';
 const mockFetchList: jestMockOf<typeof fetchList> = fetchList as any;
 
 describe('<SearchFilterValueParent />', () => {
+  const historyPushState = jest.fn();
+  const historyReplaceState = jest.fn();
+  const makeHistoryOf: (params: any) => History = params => [
+    { state: params, title: '', url: `/search?${stringify(params)}` },
+    historyPushState,
+    historyReplaceState,
+  ];
+
   afterEach(jest.resetAllMocks);
 
   it('renders the parent filter value and a button to show the children', () => {
     const { getByLabelText, queryByLabelText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[{ limit: '999', offset: '0' }, jest.fn()]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '999', offset: '0' })}
         >
           <SearchFilterValueParent
             filter={{
@@ -42,7 +51,7 @@ describe('<SearchFilterValueParent />', () => {
               key: 'P-00040005',
             }}
           />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -84,7 +93,7 @@ describe('<SearchFilterValueParent />', () => {
     // Helper to get the React element with the expected params
     const getElement = (params: APIListRequestParams) => (
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider value={[params, jest.fn()]}>
+        <HistoryContext.Provider value={makeHistoryOf(params)}>
           <SearchFilterValueParent
             filter={{
               base_path: '00010002',
@@ -102,7 +111,7 @@ describe('<SearchFilterValueParent />', () => {
               key: 'P-00040005',
             }}
           />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>
     );
     const { getByLabelText, queryByLabelText, rerender } = render(
@@ -154,11 +163,12 @@ describe('<SearchFilterValueParent />', () => {
 
     const { getByLabelText, queryByLabelText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[
-            { limit: '999', offset: '0', subjects: ['L-000400050004'] },
-            jest.fn(),
-          ]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({
+            limit: '999',
+            offset: '0',
+            subjects: ['L-000400050004'],
+          })}
         >
           <SearchFilterValueParent
             filter={{
@@ -177,7 +187,7 @@ describe('<SearchFilterValueParent />', () => {
               key: 'P-00040005',
             }}
           />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -235,8 +245,8 @@ describe('<SearchFilterValueParent />', () => {
   it('shows the parent filter value itself as inactive when it is not in the search params', () => {
     const { getByLabelText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[{ limit: '999', offset: '0' }, jest.fn()]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '999', offset: '0' })}
         >
           <SearchFilterValueParent
             filter={{
@@ -255,7 +265,7 @@ describe('<SearchFilterValueParent />', () => {
               key: 'P-00040005',
             }}
           />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -272,8 +282,8 @@ describe('<SearchFilterValueParent />', () => {
   it('disables the parent value when its count is 0', () => {
     const { getByLabelText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[{ limit: '999', offset: '0' }, jest.fn()]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '999', offset: '0' })}
         >
           <SearchFilterValueParent
             filter={{
@@ -292,7 +302,7 @@ describe('<SearchFilterValueParent />', () => {
               key: 'P-00040005',
             }}
           />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -309,11 +319,12 @@ describe('<SearchFilterValueParent />', () => {
   it('shows the parent filter value itself as active when it is in the search params', () => {
     const { getByLabelText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[
-            { filter_name: 'P-00040005', limit: '999', offset: '0' },
-            jest.fn(),
-          ]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({
+            filter_name: 'P-00040005',
+            limit: '999',
+            offset: '0',
+          })}
         >
           <SearchFilterValueParent
             filter={{
@@ -332,7 +343,7 @@ describe('<SearchFilterValueParent />', () => {
               key: 'P-00040005',
             }}
           />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -345,14 +356,10 @@ describe('<SearchFilterValueParent />', () => {
   });
 
   it('dispatches a FILTER_ADD action on filter click if it was not active', () => {
-    const dispatchCourseSearchParamsUpdate = jest.fn();
     const { getByLabelText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[
-            { limit: '999', offset: '0' },
-            dispatchCourseSearchParamsUpdate,
-          ]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '999', offset: '0' })}
         >
           <SearchFilterValueParent
             filter={{
@@ -371,38 +378,29 @@ describe('<SearchFilterValueParent />', () => {
               key: 'P-00040005',
             }}
           />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
     fireEvent.click(
       getByLabelText(content => content.startsWith('Human name')),
     );
-    expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
-      filter: {
-        base_path: '0009',
-        has_more_values: false,
-        human_name: 'Filter name',
-        is_autocompletable: true,
-        is_searchable: true,
-        name: 'filter_name',
-        position: 0,
-        values: [],
-      },
-      payload: 'P-00040005',
-      type: 'FILTER_ADD',
-    });
+    expect(historyPushState).toHaveBeenCalledWith(
+      { filter_name: ['P-00040005'], limit: '999', offset: '0' },
+      '',
+      '/?filter_name=P-00040005&limit=999&offset=0',
+    );
   });
 
   it('dispatches a FILTER_REMOVE action on filter click if it was active', () => {
-    const dispatchCourseSearchParamsUpdate = jest.fn();
     const { getByLabelText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[
-            { filter_name: 'P-00040005', limit: '999', offset: '0' },
-            dispatchCourseSearchParamsUpdate,
-          ]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({
+            filter_name: 'P-00040005',
+            limit: '999',
+            offset: '0',
+          })}
         >
           <SearchFilterValueParent
             filter={{
@@ -421,26 +419,17 @@ describe('<SearchFilterValueParent />', () => {
               key: 'P-00040005',
             }}
           />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
     fireEvent.click(
       getByLabelText(content => content.startsWith('Human name')),
     );
-    expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
-      filter: {
-        base_path: '0009',
-        has_more_values: false,
-        human_name: 'Filter name',
-        is_autocompletable: true,
-        is_searchable: true,
-        name: 'filter_name',
-        position: 0,
-        values: [],
-      },
-      payload: 'P-00040005',
-      type: 'FILTER_REMOVE',
-    });
+    expect(historyPushState).toHaveBeenCalledWith(
+      { filter_name: undefined, limit: '999', offset: '0' },
+      '',
+      '/?limit=999&offset=0',
+    );
   });
 });

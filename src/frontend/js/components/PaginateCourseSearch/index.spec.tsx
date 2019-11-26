@@ -1,28 +1,32 @@
 import 'testSetup';
 
 import { fireEvent, render } from '@testing-library/react';
+import { stringify } from 'query-string';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
-import { CourseSearchParamsContext } from 'data/useCourseSearchParams';
+import { History, HistoryContext } from 'data/useHistory';
 import { PaginateCourseSearch } from '.';
 
 describe('<PaginateCourseSearch />', () => {
-  beforeEach(jest.resetAllMocks);
+  const historyPushState = jest.fn();
+  const historyReplaceState = jest.fn();
+  const makeHistoryOf: (params: any) => History = params => [
+    { state: params, title: '', url: `/search?${stringify(params)}` },
+    historyPushState,
+    historyReplaceState,
+  ];
 
-  const dispatchCourseSearchParamsUpdate = jest.fn();
+  beforeEach(jest.resetAllMocks);
 
   it('shows a pagination for course search (when on page 1)', () => {
     const { getByText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[
-            { limit: '20', offset: '0' },
-            dispatchCourseSearchParamsUpdate,
-          ]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '20', offset: '0' })}
         >
           <PaginateCourseSearch courseSearchTotalCount={200} />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -42,14 +46,11 @@ describe('<PaginateCourseSearch />', () => {
   it('shows a pagination for course search (when on the last page)', () => {
     const { getAllByText, getByText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[
-            { limit: '20', offset: '200' },
-            dispatchCourseSearchParamsUpdate,
-          ]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '20', offset: '200' })}
         >
           <PaginateCourseSearch courseSearchTotalCount={211} />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -69,14 +70,11 @@ describe('<PaginateCourseSearch />', () => {
   it('shows a pagination for course search (when on an arbitrary page)', () => {
     const { getAllByText, getByText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[
-            { limit: '10', offset: '110' },
-            dispatchCourseSearchParamsUpdate,
-          ]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '10', offset: '110' })}
         >
           <PaginateCourseSearch courseSearchTotalCount={345} />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -102,14 +100,11 @@ describe('<PaginateCourseSearch />', () => {
   it('does not render itself when there is only one page', () => {
     const { queryByText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[
-            { limit: '20', offset: '0' },
-            dispatchCourseSearchParamsUpdate,
-          ]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '20', offset: '0' })}
         >
           <PaginateCourseSearch courseSearchTotalCount={14} />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -119,14 +114,11 @@ describe('<PaginateCourseSearch />', () => {
   it('updates the course search params when the user clicks on a page', () => {
     const { getByText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[
-            { limit: '20', offset: '0' },
-            dispatchCourseSearchParamsUpdate,
-          ]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '20', offset: '0' })}
         >
           <PaginateCourseSearch courseSearchTotalCount={200} />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -135,23 +127,24 @@ describe('<PaginateCourseSearch />', () => {
 
     // Change pages when the user clicks on another page
     fireEvent.click(page2);
-    expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
-      offset: '20',
-      type: 'PAGE_CHANGE',
-    });
+    expect(historyPushState).toHaveBeenCalledWith(
+      {
+        limit: '20',
+        offset: '20',
+      },
+      '',
+      '/?limit=20&offset=20',
+    );
   });
 
   it('does not update the course search params when the user clicks on the current page', () => {
     const { getByText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[
-            { limit: '20', offset: '0' },
-            dispatchCourseSearchParamsUpdate,
-          ]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '20', offset: '0' })}
         >
           <PaginateCourseSearch courseSearchTotalCount={200} />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -159,8 +152,8 @@ describe('<PaginateCourseSearch />', () => {
     const currentPage1 = getByText('Currently reading page 1');
 
     // Don't do anything when the user clicks on the page they're currently on
-    dispatchCourseSearchParamsUpdate.mockReset();
+    historyPushState.mockReset();
     fireEvent.click(currentPage1);
-    expect(dispatchCourseSearchParamsUpdate).not.toHaveBeenCalled();
+    expect(historyPushState).not.toHaveBeenCalled();
   });
 });

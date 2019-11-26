@@ -1,8 +1,8 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { SearchFilterGroup } from 'components/SearchFilterGroup';
-import { CourseSearchParamsContext } from 'data/useCourseSearchParams';
+import { useCourseSearchParams } from 'data/useCourseSearchParams';
 import { API_LIST_DEFAULT_PARAMS } from 'settings';
 import { APICourseSearchResponse } from 'types/api';
 import { Nullable } from 'utils/types';
@@ -36,9 +36,10 @@ export const SearchFiltersPane = ({
   >) => {
   const filterList = filters && Object.values(filters);
 
-  const [courseSearchParams, dispatchCourseSearchParamsUpdate] = useContext(
-    CourseSearchParamsContext,
-  );
+  const [
+    courseSearchParams,
+    dispatchCourseSearchParamsUpdate,
+  ] = useCourseSearchParams();
 
   // Get all the currently active filters to show a count
   const activeFilters = Object.entries(courseSearchParams)

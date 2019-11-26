@@ -1,9 +1,10 @@
 import { cleanup, fireEvent, render, wait } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
+import { stringify } from 'query-string';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
-import { CourseSearchParamsContext } from 'data/useCourseSearchParams';
+import { History, HistoryContext } from 'data/useHistory';
 import { SearchFilterGroupModal } from '.';
 
 jest.mock('utils/errors/handle', () => ({ handle: jest.fn() }));
@@ -31,7 +32,16 @@ const filter = {
 };
 
 describe('<SearchFilterGroupModal />', () => {
+  const historyPushState = jest.fn();
+  const historyReplaceState = jest.fn();
+  const makeHistoryOf: (params: any) => History = params => [
+    { state: params, title: '', url: `/search?${stringify(params)}` },
+    historyPushState,
+    historyReplaceState,
+  ];
+
   beforeEach(fetchMock.restore);
+  beforeEach(jest.resetAllMocks);
   afterEach(cleanup);
 
   it('renders a button with a modal to search values for a given filter', async () => {
@@ -39,7 +49,7 @@ describe('<SearchFilterGroupModal />', () => {
       objects: [{ id: 'L-42' }, { id: 'L-84' }, { id: 'L-99' }],
     });
     fetchMock.get(
-      '/api/v1.0/courses/?scope=filters&universities_include=%28L-42%7CL-84%7CL-99%29',
+      '/api/v1.0/courses/?limit=20&offset=0&scope=filters&universities_include=%28L-42%7CL-84%7CL-99%29',
       {
         filters: {
           universities: {
@@ -72,7 +82,11 @@ describe('<SearchFilterGroupModal />', () => {
       queryByText,
     } = render(
       <IntlProvider locale="en">
-        <SearchFilterGroupModal filter={filter} />
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '20', offset: '0' })}
+        >
+          <SearchFilterGroupModal filter={filter} />
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -104,7 +118,7 @@ describe('<SearchFilterGroupModal />', () => {
       objects: [{ id: 'L-42' }, { id: 'L-84' }, { id: 'L-99' }],
     });
     fetchMock.get(
-      '/api/v1.0/courses/?scope=filters&universities_include=%28L-42%7CL-84%7CL-99%29',
+      '/api/v1.0/courses/?limit=20&offset=0&scope=filters&universities_include=%28L-42%7CL-84%7CL-99%29',
       {
         filters: {
           universities: {
@@ -127,7 +141,11 @@ describe('<SearchFilterGroupModal />', () => {
 
     const { getByPlaceholderText, getByText } = render(
       <IntlProvider locale="en">
-        <SearchFilterGroupModal filter={filter} />
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '20', offset: '0' })}
+        >
+          <SearchFilterGroupModal filter={filter} />
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -158,7 +176,7 @@ describe('<SearchFilterGroupModal />', () => {
       objects: [{ id: 'L-12' }, { id: 'L-17' }],
     });
     fetchMock.get(
-      '/api/v1.0/courses/?scope=filters&universities_include=%28L-12%7CL-17%29',
+      '/api/v1.0/courses/?limit=20&offset=0&scope=filters&universities_include=%28L-12%7CL-17%29',
       {
         filters: {
           universities: {
@@ -197,7 +215,7 @@ describe('<SearchFilterGroupModal />', () => {
       },
     );
     fetchMock.get(
-      '/api/v1.0/courses/?scope=filters&universities_include=%28L-03%7CL-66%29',
+      '/api/v1.0/courses/?limit=20&offset=0&scope=filters&universities_include=%28L-03%7CL-66%29',
       {
         filters: {
           universities: {
@@ -234,7 +252,7 @@ describe('<SearchFilterGroupModal />', () => {
       objects: [{ id: 'L-42' }, { id: 'L-84' }, { id: 'L-99' }],
     });
     fetchMock.get(
-      '/api/v1.0/courses/?scope=filters&universities_include=%28L-42%7CL-84%7CL-99%29',
+      '/api/v1.0/courses/?limit=20&offset=0&scope=filters&universities_include=%28L-42%7CL-84%7CL-99%29',
       {
         filters: {
           universities: {
@@ -251,7 +269,11 @@ describe('<SearchFilterGroupModal />', () => {
       queryByText,
     } = render(
       <IntlProvider locale="en">
-        <SearchFilterGroupModal filter={filter} />
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '20', offset: '0' })}
+        >
+          <SearchFilterGroupModal filter={filter} />
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -304,7 +326,6 @@ describe('<SearchFilterGroupModal />', () => {
       },
     );
 
-    const dispatchCourseSearchParamsUpdate = jest.fn();
     const {
       getByPlaceholderText,
       getByText,
@@ -312,14 +333,11 @@ describe('<SearchFilterGroupModal />', () => {
       queryByText,
     } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[
-            { limit: '20', offset: '0' },
-            dispatchCourseSearchParamsUpdate,
-          ]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '20', offset: '0' })}
         >
           <SearchFilterGroupModal filter={filter} />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -342,13 +360,17 @@ describe('<SearchFilterGroupModal />', () => {
       content => content.startsWith('Value #84') && content.includes('(12)'),
     );
 
-    // User clicks Value #42, it is added to course search params through a dispatched update
+    // User clicks Value #42, it is added to course search params through pushState
     fireEvent.click(value42);
-    expect(dispatchCourseSearchParamsUpdate).toHaveBeenLastCalledWith({
-      filter,
-      payload: '42',
-      type: 'FILTER_ADD',
-    });
+    expect(historyPushState).toHaveBeenLastCalledWith(
+      {
+        limit: '20',
+        offset: '0',
+        universities: ['42'],
+      },
+      '',
+      '/?limit=20&offset=0&universities=42',
+    );
 
     // The modal is not rendered any more
     expect(queryByText('Add filters for Universities')).toEqual(null);
@@ -367,7 +389,11 @@ describe('<SearchFilterGroupModal />', () => {
       queryByText,
     } = render(
       <IntlProvider locale="en">
-        <SearchFilterGroupModal filter={filter} />
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '20', offset: '0' })}
+        >
+          <SearchFilterGroupModal filter={filter} />
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -391,7 +417,7 @@ describe('<SearchFilterGroupModal />', () => {
       objects: [{ id: 'L-42' }, { id: 'L-84' }, { id: 'L-99' }],
     });
     fetchMock.get(
-      '/api/v1.0/courses/?scope=filters&universities_include=%28L-42%7CL-84%7CL-99%29',
+      '/api/v1.0/courses/?limit=20&offset=0&scope=filters&universities_include=%28L-42%7CL-84%7CL-99%29',
       { throws: new Error('Failed to search for universities') },
     );
 
@@ -402,7 +428,11 @@ describe('<SearchFilterGroupModal />', () => {
       queryByText,
     } = render(
       <IntlProvider locale="en">
-        <SearchFilterGroupModal filter={filter} />
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '20', offset: '0' })}
+        >
+          <SearchFilterGroupModal filter={filter} />
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
