@@ -1,10 +1,11 @@
 import 'testSetup';
 
 import { render } from '@testing-library/react';
+import { stringify } from 'query-string';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
-import { CourseSearchParamsContext } from 'data/useCourseSearchParams';
+import { History, HistoryContext } from 'data/useHistory';
 import { SearchFilterGroup } from '.';
 
 jest.mock('components/SearchFilterValueLeaf', () => ({
@@ -20,6 +21,14 @@ jest.mock('components/SearchFilterValueParent', () => ({
 }));
 
 describe('components/SearchFilterGroup', () => {
+  const historyPushState = jest.fn();
+  const historyReplaceState = jest.fn();
+  const makeHistoryOf: (params: any) => History = params => [
+    { state: params, title: '', url: `/search?${stringify(params)}` },
+    historyPushState,
+    historyReplaceState,
+  ];
+
   const filter = {
     base_path: '0001',
     has_more_values: true,
@@ -47,11 +56,11 @@ describe('components/SearchFilterGroup', () => {
   it('renders the name of the filter with the values as SearchFilters', () => {
     const { getByText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[{ limit: '999', offset: '0' }, jest.fn()]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '20', offset: '0' })}
         >
           <SearchFilterGroup filter={filter} />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
     // The filter group title and all filters are shown
@@ -64,11 +73,11 @@ describe('components/SearchFilterGroup', () => {
   it('does not render the "More options" button & modal if the filter is not searchable', () => {
     const { queryByText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[{ limit: '999', offset: '0' }, jest.fn()]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '20', offset: '0' })}
         >
           <SearchFilterGroup filter={{ ...filter, is_searchable: false }} />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -78,11 +87,11 @@ describe('components/SearchFilterGroup', () => {
   it('does not render the "More options" button & modal if there are no more values to find', () => {
     const { queryByText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[{ limit: '999', offset: '0' }, jest.fn()]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '20', offset: '0' })}
         >
           <SearchFilterGroup filter={{ ...filter, has_more_values: false }} />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 

@@ -1,7 +1,7 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
-import { CourseSearchParamsContext } from 'data/useCourseSearchParams';
+import { useCourseSearchParams } from 'data/useCourseSearchParams';
 
 const messages = defineMessages({
   currentlyReadingLastPageN: {
@@ -58,9 +58,10 @@ export const PaginateCourseSearch = ({
   // Generate a unique ID per instance to ensure our aria-labelledby do not break if there are two
   // or more instances of <PaginateCourseSearch /> on the page
   const [componentId] = useState(Math.random());
-  const [courseSearchParams, dispatchCourseSearchParamsUpdate] = useContext(
-    CourseSearchParamsContext,
-  );
+  const [
+    courseSearchParams,
+    dispatchCourseSearchParamsUpdate,
+  ] = useCourseSearchParams();
 
   // Extract pagination information from params and search results meta
   const limit = Number(courseSearchParams.limit);

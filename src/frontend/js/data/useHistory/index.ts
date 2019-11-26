@@ -18,7 +18,7 @@ type popstateEventListener = (
   ev: WindowEventMap['popstate'],
 ) => any;
 
-type History = [HistoryEntry, pushStateFn, replaceStateFn];
+export type History = [HistoryEntry, pushStateFn, replaceStateFn];
 
 export const HistoryContext = createContext<History>([] as any);
 

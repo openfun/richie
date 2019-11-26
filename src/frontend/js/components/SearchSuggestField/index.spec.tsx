@@ -2,14 +2,17 @@ import 'testSetup';
 
 import { fireEvent, render, wait } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
+import { stringify } from 'query-string';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
-import { CourseSearchParamsContext } from 'data/useCourseSearchParams';
+import { History, HistoryContext } from 'data/useHistory';
 import { FilterDefinition } from 'types/filters';
 import { SearchSuggestField } from '.';
 
-jest.mock('utils/indirection/window', () => ({ location: {} }));
+jest.mock('utils/indirection/window', () => ({
+  location: { pathname: '/search' },
+}));
 
 // Unexplained difficulties with fake timers were encountered in these tests.
 // We decided to mock the debounce function instead.
@@ -18,6 +21,14 @@ jest.mock('lodash-es/debounce', () => (fn: any) => (...args: any[]) =>
 );
 
 describe('components/SearchSuggestField', () => {
+  const historyPushState = jest.fn();
+  const historyReplaceState = jest.fn();
+  const makeHistoryOf: (params: any) => History = params => [
+    { state: params, title: '', url: `/search?${stringify(params)}` },
+    historyPushState,
+    historyReplaceState,
+  ];
+
   // Make some filters we can reuse through our tests with the filter definitions responses
   const levels: FilterDefinition = {
     base_path: '00030002',
@@ -61,11 +72,11 @@ describe('components/SearchSuggestField', () => {
   it('renders', () => {
     const { getByPlaceholderText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[{ limit: '999', offset: '0' }, jest.fn()]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '999', offset: '0' })}
         >
           <SearchSuggestField />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -76,14 +87,15 @@ describe('components/SearchSuggestField', () => {
   it('picks the query from the URL if there is one', () => {
     const { getByDisplayValue } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[
-            { limit: '999', offset: '0', query: 'machine learning' },
-            jest.fn(),
-          ]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({
+            limit: '999',
+            offset: '0',
+            query: 'machine learning',
+          })}
         >
           <SearchSuggestField />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -111,11 +123,11 @@ describe('components/SearchSuggestField', () => {
 
     const { getByPlaceholderText, getByText, queryByText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[{ limit: '999', offset: '0' }, jest.fn()]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '999', offset: '0' })}
         >
           <SearchSuggestField />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -164,11 +176,11 @@ describe('components/SearchSuggestField', () => {
 
     const { getByPlaceholderText, getByText, queryByText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[{ limit: '999', offset: '0' }, jest.fn()]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '999', offset: '0' })}
         >
           <SearchSuggestField />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -217,17 +229,13 @@ describe('components/SearchSuggestField', () => {
       fetchMock.get(`/api/v1.0/${kind}/autocomplete/?query=orga`, []),
     );
 
-    const dispatchCourseSearchParamsUpdate = jest.fn();
     const { getByPlaceholderText, getByText, queryByText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[
-            { limit: '999', offset: '0' },
-            dispatchCourseSearchParamsUpdate,
-          ]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '999', offset: '0' })}
         >
           <SearchSuggestField />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -239,6 +247,12 @@ describe('components/SearchSuggestField', () => {
     fireEvent.focus(field);
     fireEvent.change(field, { target: { value: 'orga' } });
     await wait();
+    expect(historyPushState).toHaveBeenCalledTimes(1);
+    expect(historyPushState).toHaveBeenLastCalledWith(
+      { limit: '999', offset: '0', query: 'orga' },
+      '',
+      '/search?limit=999&offset=0&query=orga',
+    );
 
     expect(
       fetchMock.called('/api/v1.0/levels/autocomplete/?query=orga'),
@@ -264,15 +278,17 @@ describe('components/SearchSuggestField', () => {
     fireEvent.click(getByText('Organization #27'));
     await wait();
 
-    expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
-      query: '',
-      type: 'QUERY_UPDATE',
-    });
-    expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
-      filter: organizations,
-      payload: 'L-00020007',
-      type: 'FILTER_ADD',
-    });
+    expect(historyPushState).toHaveBeenCalledTimes(2);
+    expect(historyPushState).toHaveBeenCalledWith(
+      {
+        limit: '999',
+        offset: '0',
+        organizations: ['L-00020007'],
+        query: undefined,
+      },
+      '',
+      '/search?limit=999&offset=0&organizations=L-00020007',
+    );
   });
 
   it('updates the search params when the user selects a filter suggestion', async () => {
@@ -294,17 +310,13 @@ describe('components/SearchSuggestField', () => {
       fetchMock.get(`/api/v1.0/${kind}/autocomplete/?query=doct`, []),
     );
 
-    const dispatchCourseSearchParamsUpdate = jest.fn();
     const { getByPlaceholderText, getByText, queryByText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[
-            { limit: '999', offset: '0' },
-            dispatchCourseSearchParamsUpdate,
-          ]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '999', offset: '0' })}
         >
           <SearchSuggestField />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -316,6 +328,12 @@ describe('components/SearchSuggestField', () => {
     fireEvent.focus(field);
     fireEvent.change(field, { target: { value: 'doct' } });
     await wait();
+    expect(historyPushState).toHaveBeenCalledTimes(1);
+    expect(historyPushState).toHaveBeenCalledWith(
+      { limit: '999', offset: '0', query: 'doct' },
+      '',
+      '/search?limit=999&offset=0&query=doct',
+    );
 
     expect(
       fetchMock.called('/api/v1.0/levels/autocomplete/?query=doct'),
@@ -341,11 +359,12 @@ describe('components/SearchSuggestField', () => {
     fireEvent.click(getByText('Doctor Doom'));
     await wait();
 
-    expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
-      filter: persons,
-      payload: '73',
-      type: 'FILTER_ADD',
-    });
+    expect(historyPushState).toHaveBeenCalledTimes(2);
+    expect(historyPushState).toHaveBeenCalledWith(
+      { limit: '999', offset: '0', persons: ['73'], query: undefined },
+      '',
+      '/search?limit=999&offset=0&persons=73',
+    );
   });
 
   it('removes the search query when the user presses ENTER on an empty field', async () => {
@@ -360,17 +379,17 @@ describe('components/SearchSuggestField', () => {
       fetchMock.get(`/api/v1.0/${kind}/autocomplete/?query=some%20query`, []),
     );
 
-    const dispatchCourseSearchParamsUpdate = jest.fn();
     const { getByPlaceholderText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[
-            { limit: '999', offset: '0', query: 'some query' },
-            dispatchCourseSearchParamsUpdate,
-          ]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({
+            limit: '999',
+            offset: '0',
+            query: 'some query',
+          })}
         >
           <SearchSuggestField />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -384,10 +403,11 @@ describe('components/SearchSuggestField', () => {
     fireEvent.keyDown(field, { keyCode: 13 });
     await wait();
 
-    expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
-      query: '',
-      type: 'QUERY_UPDATE',
-    });
+    expect(historyPushState).toHaveBeenCalledWith(
+      { limit: '999', offset: '0', query: undefined },
+      '',
+      '/search?limit=999&offset=0',
+    );
   });
 
   it('searches as the user types', async () => {
@@ -402,17 +422,17 @@ describe('components/SearchSuggestField', () => {
       fetchMock.get(`begin:/api/v1.0/${kind}/autocomplete/?query=`, []),
     );
 
-    const dispatchCourseSearchParamsUpdate = jest.fn();
     const { getByPlaceholderText } = render(
       <IntlProvider locale="en">
-        <CourseSearchParamsContext.Provider
-          value={[
-            { limit: '999', offset: '0', query: 'some query' },
-            dispatchCourseSearchParamsUpdate,
-          ]}
+        <HistoryContext.Provider
+          value={makeHistoryOf({
+            limit: '999',
+            offset: '0',
+            query: 'some query',
+          })}
         >
           <SearchSuggestField />
-        </CourseSearchParamsContext.Provider>
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -424,27 +444,34 @@ describe('components/SearchSuggestField', () => {
     // NB: the tests below rely on the very crude debounce mock for lodash-debounce.
     // TODO: rewrite them when we use mocked timers to test our debouncing strategy.
     fireEvent.change(field, { target: { value: 'ri' } });
-    expect(dispatchCourseSearchParamsUpdate).not.toHaveBeenCalled();
+    await wait();
+    expect(historyPushState).not.toHaveBeenCalled();
 
     fireEvent.change(field, { target: { value: 'ric' } });
     await wait();
-    expect(dispatchCourseSearchParamsUpdate).toHaveBeenCalledWith({
-      query: 'ric',
-      type: 'QUERY_UPDATE',
-    });
+    expect(historyPushState).toHaveBeenCalledTimes(1);
+    expect(historyPushState).toHaveBeenLastCalledWith(
+      { limit: '999', offset: '0', query: 'ric' },
+      '',
+      '/search?limit=999&offset=0&query=ric',
+    );
 
     fireEvent.change(field, { target: { value: 'rich data driven' } });
     await wait();
-    expect(dispatchCourseSearchParamsUpdate).toHaveBeenLastCalledWith({
-      query: 'rich data driven',
-      type: 'QUERY_UPDATE',
-    });
+    expect(historyPushState).toHaveBeenCalledTimes(2);
+    expect(historyPushState).toHaveBeenLastCalledWith(
+      { limit: '999', offset: '0', query: 'rich data driven' },
+      '',
+      '/search?limit=999&offset=0&query=rich%20data%20driven',
+    );
 
     fireEvent.change(field, { target: { value: '' } });
     await wait();
-    expect(dispatchCourseSearchParamsUpdate).toHaveBeenLastCalledWith({
-      query: '',
-      type: 'QUERY_UPDATE',
-    });
+    expect(historyPushState).toHaveBeenCalledTimes(3);
+    expect(historyPushState).toHaveBeenLastCalledWith(
+      { limit: '999', offset: '0', query: undefined },
+      '',
+      '/search?limit=999&offset=0',
+    );
   });
 });

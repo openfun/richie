@@ -1,10 +1,12 @@
 import 'testSetup';
 
-import { act, fireEvent, render, wait } from '@testing-library/react';
+import { fireEvent, render, wait } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
+import { stringify } from 'query-string';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
+import { History, HistoryContext } from 'data/useHistory';
 import { Search } from '.';
 
 let mockMatches = false;
@@ -17,6 +19,14 @@ jest.mock('utils/indirection/window', () => ({
 }));
 
 describe('<Search />', () => {
+  const historyPushState = jest.fn();
+  const historyReplaceState = jest.fn();
+  const makeHistoryOf: (params: any) => History = params => [
+    { state: params, title: '', url: `/search?${stringify(params)}` },
+    historyPushState,
+    historyReplaceState,
+  ];
+
   const commonDataProps = {
     assets: {
       icons: '/icons.svg',
@@ -35,7 +45,11 @@ describe('<Search />', () => {
 
     const { getByText, queryByText } = render(
       <IntlProvider locale="en">
-        <Search context={commonDataProps} />
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '20', offset: '0' })}
+        >
+          <Search context={commonDataProps} />
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
 
@@ -58,7 +72,11 @@ describe('<Search />', () => {
     mockMatches = true;
     const { container } = render(
       <IntlProvider locale="en">
-        <Search context={commonDataProps} />
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '20', offset: '0' })}
+        >
+          <Search context={commonDataProps} />
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
     await wait();
@@ -82,7 +100,11 @@ describe('<Search />', () => {
     mockMatches = false;
     const { container, getByText, queryByText } = render(
       <IntlProvider locale="en">
-        <Search context={commonDataProps} />
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '20', offset: '0' })}
+        >
+          <Search context={commonDataProps} />
+        </HistoryContext.Provider>
       </IntlProvider>,
     );
     await wait();

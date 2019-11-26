@@ -1,6 +1,4 @@
-import { useContext } from 'react';
-
-import { CourseSearchParamsContext } from 'data/useCourseSearchParams';
+import { useCourseSearchParams } from 'data/useCourseSearchParams';
 import { FacetedFilterDefinition, FilterValue } from 'types/filters';
 
 type UseFilterValue = [boolean, () => void];
@@ -9,9 +7,10 @@ export const useFilterValue = (
   filter: FacetedFilterDefinition,
   value: FilterValue,
 ): UseFilterValue => {
-  const [courseSearchParams, dispatchCourseSearchParamsUpdate] = useContext(
-    CourseSearchParamsContext,
-  );
+  const [
+    courseSearchParams,
+    dispatchCourseSearchParamsUpdate,
+  ] = useCourseSearchParams();
 
   const isActive = (courseSearchParams[filter.name] || []).includes(value.key);
 
