@@ -91,7 +91,19 @@ document.addEventListener('DOMContentLoaded', async event => {
     try {
       translatedMessages = await import(`./translations/${locale}.json`);
     } catch (e) {
-      handle(e);
+      // Richie implicitly uses 'en-US' as its default locales: it does not provide localization files and strings
+      // for this locale but instead relies on them being the default messages throughout the code.
+      // We therefore do not want to report errors for a missing locale file that is not expected to exist in stock
+      // Richie. We still want errors if another locale is expected but missing, and we still want to log something
+      // to the console so Richie users who provide their own 'en-US' strings are warned if they are not loaded.
+      if (locale === 'en-US') {
+        // tslint:disable:no-console
+        console.log(
+          'No localization file found for default en-US locale, using default messages.',
+        );
+      } else {
+        handle(e);
+      }
     }
 
     richieReactSpots.forEach((element: Element) => {
