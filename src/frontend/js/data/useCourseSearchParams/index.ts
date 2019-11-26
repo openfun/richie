@@ -1,10 +1,11 @@
 import { parse, stringify } from 'query-string';
-import { createContext, useEffect, useReducer } from 'react';
+import { useContext, useEffect } from 'react';
 
+import { HistoryContext } from 'data/useHistory';
 import { API_LIST_DEFAULT_PARAMS } from 'settings';
 import { APIListRequestParams } from 'types/api';
 import { FilterDefinition } from 'types/filters';
-import { history, location, scroll } from 'utils/indirection/window';
+import { location, scroll } from 'utils/indirection/window';
 import { computeNewFilterValue } from './computeNewFilterValue';
 
 interface FilterResetAction {
@@ -37,10 +38,6 @@ type CourseSearchParamsState = [
   APIListRequestParams,
   React.Dispatch<CourseSearchParamsReducerAction>,
 ];
-
-export const CourseSearchParamsContext = createContext<CourseSearchParamsState>(
-  [] as any,
-);
 
 const courseSearchParamsReducer = (
   courseSearchParams: APIListRequestParams,
@@ -89,15 +86,35 @@ const courseSearchParamsReducer = (
 };
 
 export const useCourseSearchParams = (): CourseSearchParamsState => {
-  const bootstrapParams = {
-    ...API_LIST_DEFAULT_PARAMS,
-    ...(parse(location.search) as APIListRequestParams),
-  };
+  // Grab HistoryContext so we can be kept updated when other parts of the component tree use pushState
+  // to change the user search through the query string.
+  const [historyEntry, pushState, replaceState] = useContext(HistoryContext);
 
-  const [courseSearchParams, dispatch] = useReducer(
-    courseSearchParamsReducer,
-    bootstrapParams,
-  );
+  // HistoryEntry.state includes parse query strings, which if we're on a search page should be course search params
+  const courseSearchParams: APIListRequestParams = historyEntry.state;
+
+  // The dispatch + reducer pattern is useful to model changes in the course search params. However, we don't want
+  // to duplicate behavior by having to sync the HistoryContext state with a `useReducer` call here.
+  // We therefore build our own dispatch function that updates the shared value held by HistoryContext.
+  const dispatch = (action: CourseSearchParamsReducerAction) => {
+    const newParams = courseSearchParamsReducer(courseSearchParams, action);
+    // We should only update the history if the params have actually changed
+    // We're using `stringify(parse(location.search))` as a way to reorder location search to the same order
+    // `stringify` would output for our courseSearchParams. This allows us to avoid doing a deep comparison on
+    // `courseSearchParams` and the result of `parse(location.search)`.
+    // It also neatly treats eg. `organizations: '43'` and `organizations: ['43']` as the same.
+    if (stringify(newParams) !== stringify(parse(location.search))) {
+      pushState(newParams, '', `${location.pathname}?${stringify(newParams)}`);
+    } else {
+      // Just issue a replaceState call. This is useful as it means we'll push normalized params from
+      // our reducer function.
+      replaceState(
+        newParams,
+        '',
+        `${location.pathname}?${stringify(newParams)}`,
+      );
+    }
+  };
 
   useEffect(() => {
     // We want to scroll back to the top only when pagination is updated. When the user clicks on a page number,
@@ -120,14 +137,18 @@ export const useCourseSearchParams = (): CourseSearchParamsState => {
       });
     }
 
-    // We should only update the history if the params have actually changed
-    // One such case is on load if we're just using query params from the URL
-    // We're using `stringify(parse(location.search))` as a way to reorder location search to the same order
-    // `stringify` would output for our courseSearchParams. This allows us to avoid doing a deep comparison on
-    // `courseSearchParams` and the result of `parse(location.search)`.
-    // It also neatly treats eg. `organizations: '43'` and `organizations: ['43']` as the same.
-    if (stringify(courseSearchParams) !== stringify(parse(location.search))) {
-      history.pushState(null, '', `?${stringify(courseSearchParams)}`);
+    // The Search view & components operate with default params, and we don't want to have all other pages in Richie
+    // bear the burden of setting them whenever they link to Search.
+    // We can solve this problem by replacing the current history entry if it is lacking the default parameters. This
+    // way all our components will re-render with the correct params immediately but we'll not break history for the
+    // user.
+    if (!courseSearchParams.limit || !courseSearchParams.offset) {
+      const newParams = { ...API_LIST_DEFAULT_PARAMS, ...courseSearchParams };
+      replaceState(
+        newParams,
+        '',
+        `${location.pathname}?${stringify(newParams)}`,
+      );
     }
   }, [courseSearchParams]);
 

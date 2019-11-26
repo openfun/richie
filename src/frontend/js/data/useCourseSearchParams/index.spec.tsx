@@ -1,11 +1,12 @@
 import { act, render } from '@testing-library/react';
 import React from 'react';
 
+import { HistoryContext, useHistory } from 'data/useHistory';
 import * as mockWindow from 'utils/indirection/window';
 import { useCourseSearchParams } from '.';
 
 jest.mock('utils/indirection/window', () => ({
-  history: { pushState: jest.fn() },
+  history: { pushState: jest.fn(), replaceState: jest.fn() },
   location: {},
   scroll: jest.fn(),
 }));
@@ -20,18 +21,28 @@ describe('data/useCourseSearchParams', () => {
     return <div />;
   };
 
+  const WrappedTestComponent = () => {
+    const history = useHistory();
+    return (
+      <HistoryContext.Provider value={history}>
+        <TestComponent />
+      </HistoryContext.Provider>
+    );
+  };
+
   beforeEach(() => {
-    // Remove any keys added to the mockWindow location object
+    // Remove any keys added to the mockWindow location object, reset pathname to /search
     Object.keys(mockWindow.location).forEach(
       key => delete (mockWindow.location as any)[key],
     );
+    mockWindow.location.pathname = '/search';
     jest.resetAllMocks();
   });
 
   it('initializes with the URL query string', () => {
     mockWindow.location.search =
       '?organizations=L-00010003&organizations=L-00010009&query=some%20query&limit=8&offset=3';
-    render(<TestComponent />);
+    render(<WrappedTestComponent />);
     const [courseSearchParams] = getLatestHookValues();
     expect(courseSearchParams).toEqual({
       limit: '8',
@@ -45,22 +56,22 @@ describe('data/useCourseSearchParams', () => {
 
   it('initializes with defaults if there is no query string param', () => {
     mockWindow.location.search = '';
-    render(<TestComponent />);
+    render(<WrappedTestComponent />);
     const [courseSearchParams] = getLatestHookValues();
     expect(courseSearchParams).toEqual({ limit: '20', offset: '0' });
     // We need an update so the URL reflects the actual query params
-    expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
-    expect(mockWindow.history.pushState).toHaveBeenCalledWith(
-      null,
+    expect(mockWindow.history.replaceState).toHaveBeenCalledTimes(1);
+    expect(mockWindow.history.replaceState).toHaveBeenCalledWith(
+      { limit: '20', offset: '0' },
       '',
-      '?limit=20&offset=0',
+      '/search?limit=20&offset=0',
     );
   });
 
   describe('PAGE_CHANGE', () => {
     it('updates the offset on the courseSearchParams & updates history', () => {
       mockWindow.location.search = '?languages=fr&limit=13&offset=26';
-      render(<TestComponent />);
+      render(<WrappedTestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
@@ -79,9 +90,9 @@ describe('data/useCourseSearchParams', () => {
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
-          null,
+          { languages: 'fr', limit: '13', offset: '39' },
           '',
-          '?languages=fr&limit=13&offset=39',
+          '/search?languages=fr&limit=13&offset=39',
         );
       }
       expect(mockWindow.scroll).toHaveBeenCalledWith({
@@ -94,7 +105,7 @@ describe('data/useCourseSearchParams', () => {
   describe('QUERY_UPDATE', () => {
     it('sets the query on courseSearchParams, resets pagination & updates history', () => {
       mockWindow.location.search = '?languages=en&limit=17&offset=5';
-      render(<TestComponent />);
+      render(<WrappedTestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
@@ -114,9 +125,14 @@ describe('data/useCourseSearchParams', () => {
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
-          null,
+          {
+            languages: 'en',
+            limit: '17',
+            offset: '0',
+            query: 'some text query',
+          },
           '',
-          '?languages=en&limit=17&offset=0&query=some%20text%20query',
+          '/search?languages=en&limit=17&offset=0&query=some%20text%20query',
         );
         expect(mockWindow.scroll).not.toHaveBeenCalled();
       }
@@ -125,7 +141,7 @@ describe('data/useCourseSearchParams', () => {
     it('replaces the query on courseSearchParams & updates history', () => {
       mockWindow.location.search =
         '?languages=fr&limit=999&offset=0&query=some%20previous%20query';
-      render(<TestComponent />);
+      render(<WrappedTestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
@@ -146,9 +162,14 @@ describe('data/useCourseSearchParams', () => {
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
-          null,
+          {
+            languages: 'fr',
+            limit: '999',
+            offset: '0',
+            query: 'some new query',
+          },
           '',
-          '?languages=fr&limit=999&offset=0&query=some%20new%20query',
+          '/search?languages=fr&limit=999&offset=0&query=some%20new%20query',
         );
         expect(mockWindow.scroll).not.toHaveBeenCalled();
       }
@@ -157,7 +178,7 @@ describe('data/useCourseSearchParams', () => {
     it('clears the query on courseSearchParams & updates query history', () => {
       mockWindow.location.search =
         '?languages=es&limit=999&offset=0&query=some%20existing%20query';
-      render(<TestComponent />);
+      render(<WrappedTestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
@@ -178,9 +199,9 @@ describe('data/useCourseSearchParams', () => {
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
-          null,
+          { languages: 'es', limit: '999', offset: '0', query: undefined },
           '',
-          '?languages=es&limit=999&offset=0',
+          '/search?languages=es&limit=999&offset=0',
         );
         expect(mockWindow.scroll).not.toHaveBeenCalled();
       }
@@ -191,7 +212,7 @@ describe('data/useCourseSearchParams', () => {
     it('adds the value to the existing list for this filter, resets pagination & updates history', () => {
       mockWindow.location.search =
         '?organizations=L-00010003&organizations=L-00010009&offset=999&limit=10';
-      render(<TestComponent />);
+      render(<WrappedTestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
@@ -220,9 +241,13 @@ describe('data/useCourseSearchParams', () => {
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
-          null,
+          {
+            limit: '10',
+            offset: '0',
+            organizations: ['L-00010003', 'L-00010009', 'L-00010017'],
+          },
           '',
-          '?limit=10&offset=0&organizations=L-00010003&organizations=L-00010009&organizations=L-00010017',
+          '/search?limit=10&offset=0&organizations=L-00010003&organizations=L-00010009&organizations=L-00010017',
         );
         expect(mockWindow.scroll).not.toHaveBeenCalled();
       }
@@ -231,7 +256,7 @@ describe('data/useCourseSearchParams', () => {
     it('adds to the existing list for non-MPTT-formatted filter value keys and resets pagination', () => {
       mockWindow.location.search =
         '?languages=en&languages=fr&offset=999&limit=10';
-      render(<TestComponent />);
+      render(<WrappedTestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
@@ -260,9 +285,9 @@ describe('data/useCourseSearchParams', () => {
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
-          null,
+          { languages: ['en', 'fr', 'it'], limit: '10', offset: '0' },
           '',
-          '?languages=en&languages=fr&languages=it&limit=10&offset=0',
+          '/search?languages=en&languages=fr&languages=it&limit=10&offset=0',
         );
         expect(mockWindow.scroll).not.toHaveBeenCalled();
       }
@@ -271,7 +296,7 @@ describe('data/useCourseSearchParams', () => {
     it('creates a list with the existing single value and the new value, resets pagination & updates history', () => {
       mockWindow.location.search =
         '?organizations=L-00010003&offset=999&limit=10';
-      render(<TestComponent />);
+      render(<WrappedTestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
@@ -300,9 +325,13 @@ describe('data/useCourseSearchParams', () => {
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
-          null,
+          {
+            limit: '10',
+            offset: '0',
+            organizations: ['L-00010003', 'L-00010017'],
+          },
           '',
-          '?limit=10&offset=0&organizations=L-00010003&organizations=L-00010017',
+          '/search?limit=10&offset=0&organizations=L-00010003&organizations=L-00010017',
         );
         expect(mockWindow.scroll).not.toHaveBeenCalled();
       }
@@ -310,7 +339,7 @@ describe('data/useCourseSearchParams', () => {
 
     it('creates the new list for non-MPTT-formatted filter value keys and resets pagination', () => {
       mockWindow.location.search = '?languages=de&offset=999&limit=10';
-      render(<TestComponent />);
+      render(<WrappedTestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
@@ -339,9 +368,13 @@ describe('data/useCourseSearchParams', () => {
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
-          null,
+          {
+            languages: ['de', 'zh'],
+            limit: '10',
+            offset: '0',
+          },
           '',
-          '?languages=de&languages=zh&limit=10&offset=0',
+          '/search?languages=de&languages=zh&limit=10&offset=0',
         );
         expect(mockWindow.scroll).not.toHaveBeenCalled();
       }
@@ -349,7 +382,7 @@ describe('data/useCourseSearchParams', () => {
 
     it('creates a new list with the value & updates history', () => {
       mockWindow.location.search = '?limit=999&offset=0&query=some%20query';
-      render(<TestComponent />);
+      render(<WrappedTestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
@@ -379,9 +412,14 @@ describe('data/useCourseSearchParams', () => {
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
-          null,
+          {
+            limit: '999',
+            offset: '0',
+            organizations: ['L-00010014'],
+            query: 'some query',
+          },
           '',
-          '?limit=999&offset=0&organizations=L-00010014&query=some%20query',
+          '/search?limit=999&offset=0&organizations=L-00010014&query=some%20query',
         );
         expect(mockWindow.scroll).not.toHaveBeenCalled();
       }
@@ -390,7 +428,7 @@ describe('data/useCourseSearchParams', () => {
     it('does nothing if the value is already in the list for this filter', () => {
       mockWindow.location.search =
         '?limit=999&offset=0&query=some%20query&organizations=L-00010009';
-      render(<TestComponent />);
+      render(<WrappedTestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
@@ -433,7 +471,7 @@ describe('data/useCourseSearchParams', () => {
         '&subjects=P-000200030012' +
         // some unrelated category from another meta-category
         '&levels=L-000200020005';
-      render(<TestComponent />);
+      render(<WrappedTestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
@@ -470,9 +508,15 @@ describe('data/useCourseSearchParams', () => {
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
-          null,
+          {
+            levels: 'L-000200020005',
+            limit: '999',
+            offset: '0',
+            query: 'a query',
+            subjects: ['P-000200030012', 'L-000200030005'],
+          },
           '',
-          '?levels=L-000200020005&limit=999&offset=0&query=a%20query&subjects=P-000200030012&subjects=L-000200030005',
+          '/search?levels=L-000200020005&limit=999&offset=0&query=a%20query&subjects=P-000200030012&subjects=L-000200030005',
         );
         expect(mockWindow.scroll).not.toHaveBeenCalled();
       }
@@ -485,7 +529,7 @@ describe('data/useCourseSearchParams', () => {
         '&subjects=L-0002000300050001' +
         // some unrelated category from another meta-category
         '&levels=L-000200020005';
-      render(<TestComponent />);
+      render(<WrappedTestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
@@ -518,9 +562,15 @@ describe('data/useCourseSearchParams', () => {
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
-          null,
+          {
+            levels: 'L-000200020005',
+            limit: '999',
+            offset: '0',
+            query: 'some query',
+            subjects: ['L-000200030005'],
+          },
           '',
-          '?levels=L-000200020005&limit=999&offset=0&query=some%20query&subjects=L-000200030005',
+          '/search?levels=L-000200020005&limit=999&offset=0&query=some%20query&subjects=L-000200030005',
         );
         expect(mockWindow.scroll).not.toHaveBeenCalled();
       }
@@ -535,7 +585,7 @@ describe('data/useCourseSearchParams', () => {
         '&subjects=P-000200030012' +
         // some unrelated category from another meta-category
         '&levels=L-000200020005';
-      render(<TestComponent />);
+      render(<WrappedTestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
@@ -568,9 +618,15 @@ describe('data/useCourseSearchParams', () => {
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
-          null,
+          {
+            levels: 'L-000200020005',
+            limit: '999',
+            offset: '0',
+            query: 'some query',
+            subjects: ['P-000200030012', 'L-0002000300050013'],
+          },
           '',
-          '?levels=L-000200020005&limit=999&offset=0&query=some%20query' +
+          '/search?levels=L-000200020005&limit=999&offset=0&query=some%20query' +
             '&subjects=P-000200030012&subjects=L-0002000300050013',
         );
         expect(mockWindow.scroll).not.toHaveBeenCalled();
@@ -584,7 +640,7 @@ describe('data/useCourseSearchParams', () => {
         '&subjects=P-000200030005' +
         // some unrelated category from another meta-category
         '&levels=L-000200020005';
-      render(<TestComponent />);
+      render(<WrappedTestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
@@ -617,9 +673,15 @@ describe('data/useCourseSearchParams', () => {
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
-          null,
+          {
+            levels: 'L-000200020005',
+            limit: '999',
+            offset: '0',
+            query: 'some query',
+            subjects: ['L-0002000300050013'],
+          },
           '',
-          '?levels=L-000200020005&limit=999&offset=0&query=some%20query&subjects=L-0002000300050013',
+          '/search?levels=L-000200020005&limit=999&offset=0&query=some%20query&subjects=L-0002000300050013',
         );
         expect(mockWindow.scroll).not.toHaveBeenCalled();
       }
@@ -629,7 +691,7 @@ describe('data/useCourseSearchParams', () => {
   describe('FILTER_ADD [drilldown]', () => {
     it('sets the value for the filter', () => {
       mockWindow.location.search = '?limit=999&offset=0';
-      render(<TestComponent />);
+      render(<WrappedTestComponent />);
       {
         // Set a value where there was no value
         const [courseSearchParams, dispatch] = getLatestHookValues();
@@ -658,9 +720,13 @@ describe('data/useCourseSearchParams', () => {
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
-          null,
+          {
+            level: 'L-000200010003',
+            limit: '999',
+            offset: '0',
+          },
           '',
-          '?level=L-000200010003&limit=999&offset=0',
+          '/search?level=L-000200010003&limit=999&offset=0',
         );
         expect(mockWindow.scroll).not.toHaveBeenCalled();
       }
@@ -688,9 +754,13 @@ describe('data/useCourseSearchParams', () => {
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
-          null,
+          {
+            level: 'L-000200010002',
+            limit: '999',
+            offset: '0',
+          },
           '',
-          '?level=L-000200010002&limit=999&offset=0',
+          '/search?level=L-000200010002&limit=999&offset=0',
         );
         expect(mockWindow.scroll).not.toHaveBeenCalled();
       }
@@ -698,7 +768,7 @@ describe('data/useCourseSearchParams', () => {
 
     it('does nothing if the value was already on the filter', () => {
       mockWindow.location.search = '?level=L-000200010001&limit=999&offset=0';
-      render(<TestComponent />);
+      render(<WrappedTestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
@@ -735,7 +805,7 @@ describe('data/useCourseSearchParams', () => {
     it('removes the value from the existing list for this filter & updates history', () => {
       mockWindow.location.search =
         '?limit=999&offset=0&query=some%20query&organizations=L-00010009&organizations=L00010011';
-      render(<TestComponent />);
+      render(<WrappedTestComponent />);
       {
         // Remove from a list of more than one value
         const [courseSearchParams, dispatch] = getLatestHookValues();
@@ -767,9 +837,14 @@ describe('data/useCourseSearchParams', () => {
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
-          null,
+          {
+            limit: '999',
+            offset: '0',
+            organizations: ['L00010011'],
+            query: 'some query',
+          },
           '',
-          '?limit=999&offset=0&organizations=L00010011&query=some%20query',
+          '/search?limit=999&offset=0&organizations=L00010011&query=some%20query',
         );
         expect(mockWindow.scroll).not.toHaveBeenCalled();
       }
@@ -795,9 +870,13 @@ describe('data/useCourseSearchParams', () => {
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
-          null,
+          {
+            limit: '999',
+            offset: '0',
+            query: 'some query',
+          },
           '',
-          '?limit=999&offset=0&query=some%20query',
+          '/search?limit=999&offset=0&query=some%20query',
         );
         expect(mockWindow.scroll).not.toHaveBeenCalled();
       }
@@ -808,7 +887,7 @@ describe('data/useCourseSearchParams', () => {
       // just parsed and not interacted with yet.
       mockWindow.location.search =
         '?limit=999&offset=0&query=some%20query&organizations=L-00010013';
-      render(<TestComponent />);
+      render(<WrappedTestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
@@ -838,9 +917,13 @@ describe('data/useCourseSearchParams', () => {
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
-          null,
+          {
+            limit: '999',
+            offset: '0',
+            query: 'some query',
+          },
           '',
-          '?limit=999&offset=0&query=some%20query',
+          '/search?limit=999&offset=0&query=some%20query',
         );
         expect(mockWindow.scroll).not.toHaveBeenCalled();
       }
@@ -848,7 +931,7 @@ describe('data/useCourseSearchParams', () => {
 
     it('does nothing if there was no value for this filter', () => {
       mockWindow.location.search = '?limit=999&offset=0&query=some%20query';
-      render(<TestComponent />);
+      render(<WrappedTestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
@@ -883,7 +966,7 @@ describe('data/useCourseSearchParams', () => {
     it('does nothing if the value was not in the list for this filter', () => {
       mockWindow.location.search =
         '?limit=999&offset=0&organizations=L-00010003&organizations=L-00010009';
-      render(<TestComponent />);
+      render(<WrappedTestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
@@ -920,7 +1003,7 @@ describe('data/useCourseSearchParams', () => {
       // just parsed and not interacted with yet.
       mockWindow.location.search =
         '?limit=999&offset=0&organizations=L-00010011';
-      render(<TestComponent />);
+      render(<WrappedTestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
@@ -957,7 +1040,7 @@ describe('data/useCourseSearchParams', () => {
     it('removes the value from the filter', () => {
       mockWindow.location.search =
         '?level=L-000200010001&limit=999&offset=0&query=some%20query';
-      render(<TestComponent />);
+      render(<WrappedTestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
@@ -987,9 +1070,13 @@ describe('data/useCourseSearchParams', () => {
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
-          null,
+          {
+            limit: '999',
+            offset: '0',
+            query: 'some query',
+          },
           '',
-          '?limit=999&offset=0&query=some%20query',
+          '/search?limit=999&offset=0&query=some%20query',
         );
         expect(mockWindow.scroll).not.toHaveBeenCalled();
       }
@@ -998,7 +1085,7 @@ describe('data/useCourseSearchParams', () => {
     it('does nothing if the value to remove was not the existing value', () => {
       mockWindow.location.search =
         '?level=L-000200010001&limit=999&offset=0&query=some%20query';
-      render(<TestComponent />);
+      render(<WrappedTestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
@@ -1035,7 +1122,7 @@ describe('data/useCourseSearchParams', () => {
     it('does nothing if there was already no value for this filter', () => {
       mockWindow.location.search =
         '?organizations=L-00010009&limit=999&offset=0&query=some%20query';
-      render(<TestComponent />);
+      render(<WrappedTestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
@@ -1074,7 +1161,7 @@ describe('data/useCourseSearchParams', () => {
     it('resets all the query parameters except limit', () => {
       mockWindow.location.search =
         '?organizations=L-00010004&subjects=P-00030004&subjects=P-00030007&limit=27&offset=54&query=some%20query';
-      render(<TestComponent />);
+      render(<WrappedTestComponent />);
       {
         const [courseSearchParams, dispatch] = getLatestHookValues();
         expect(courseSearchParams).toEqual({
@@ -1091,9 +1178,9 @@ describe('data/useCourseSearchParams', () => {
         const [courseSearchParams] = getLatestHookValues();
         expect(courseSearchParams).toEqual({ limit: '27', offset: '0' });
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
-          null,
+          { limit: '27', offset: '0' },
           '',
-          '?limit=27&offset=0',
+          '/search?limit=27&offset=0',
         );
         expect(mockWindow.scroll).not.toHaveBeenCalled();
       }
