@@ -36,7 +36,7 @@ export type CourseSearchParamsReducerAction =
 
 type CourseSearchParamsState = [
   APIListRequestParams,
-  React.Dispatch<CourseSearchParamsReducerAction>,
+  (...Actions: CourseSearchParamsReducerAction[]) => void,
 ];
 
 const courseSearchParamsReducer = (
@@ -96,8 +96,13 @@ export const useCourseSearchParams = (): CourseSearchParamsState => {
   // The dispatch + reducer pattern is useful to model changes in the course search params. However, we don't want
   // to duplicate behavior by having to sync the HistoryContext state with a `useReducer` call here.
   // We therefore build our own dispatch function that updates the shared value held by HistoryContext.
-  const dispatch = (action: CourseSearchParamsReducerAction) => {
-    const newParams = courseSearchParamsReducer(courseSearchParams, action);
+  const dispatch = (...actions: CourseSearchParamsReducerAction[]) => {
+    // In some scenarios, we want to dispatch more than one action and only effect one actual history state change.
+    // This is useful to eg. clean up the text query and add a filter the user selected through autosuggest.
+    const newParams = actions.reduce(
+      courseSearchParamsReducer,
+      courseSearchParams,
+    );
     // We should only update the history if the params have actually changed
     // We're using `stringify(parse(location.search))` as a way to reorder location search to the same order
     // `stringify` would output for our courseSearchParams. This allows us to avoid doing a deep comparison on

@@ -1186,4 +1186,63 @@ describe('data/useCourseSearchParams', () => {
       }
     });
   });
+
+  it('can handle more than one action passed at the same time', () => {
+    mockWindow.location.search =
+      '?limit=20&offset=0&query=some%20query&organizations=L-00010009&organizations=L00010011';
+    render(<WrappedTestComponent />);
+    {
+      const [courseSearchParams, dispatch] = getLatestHookValues();
+      expect(courseSearchParams).toEqual({
+        limit: '20',
+        offset: '0',
+        organizations: ['L-00010009', 'L00010011'],
+        query: 'some query',
+      });
+      // Dispatch three actions at once to make sure everything is handled cleanly
+      act(() =>
+        dispatch(
+          {
+            filter: {
+              is_drilldown: false,
+              name: 'organizations',
+            },
+            payload: 'L-00010009',
+            type: 'FILTER_REMOVE',
+          },
+          {
+            filter: {
+              is_drilldown: false,
+              name: 'languages',
+            },
+            payload: 'it',
+            type: 'FILTER_ADD',
+          },
+          { query: 'some new query', type: 'QUERY_UPDATE' },
+        ),
+      );
+    }
+    {
+      const [courseSearchParams] = getLatestHookValues();
+      expect(courseSearchParams).toEqual({
+        languages: ['it'],
+        limit: '20',
+        offset: '0',
+        organizations: ['L00010011'],
+        query: 'some new query',
+      });
+      expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
+      expect(mockWindow.history.pushState).toHaveBeenCalledWith(
+        {
+          languages: ['it'],
+          limit: '20',
+          offset: '0',
+          organizations: ['L00010011'],
+          query: 'some new query',
+        },
+        '',
+        '/search?languages=it&limit=20&offset=0&organizations=L00010011&query=some%20new%20query',
+      );
+    }
+  });
 });
