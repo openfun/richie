@@ -60,24 +60,36 @@ Interactions will send the user to the `courseSearchPageUrl` url passed in the p
 It also autocompletes user input with course names and allows users to go directly to the course page if they select a course name among the selected results.
 
 Props:
+
 - `courseSearchPageUrl` [required] — URL for the course search page users should be sent to when they select a suggestion that is not a course, or launch a search with text terms.
 - `context` [optional] — see [context](#context).
 
 ### &lt;Search /&gt;
 
-Renders the full-page course search engine interface, including the search bar, search results, and filters pane.
+Renders the full-page course search engine interface, including the search results, and filters pane, but not the suggest field (which can be added separately with `<SearchSuggestField />`) nor the page title.
 
 NB: the `Search` Django template basically renders just this page. If you need this, use it instead. It is included here for completeness' sake.
 
 Props:
-- `pageTitle` [required] — title for the page, will be used inside the `<h1>` in the rendered component.
+
 - `context` [required] — see [context](#context).
+
+### &lt;SearchSuggestField /&gt;
+
+Renders the course search bar that interacts directly with `<Search />`.
+
+It automatically communicates with `<Search />` through browser history APIs and a shared React provider. This one, unlike `<RootSearchSuggestField />`, is meant to be used in combination with `<Search />` (on the same page).
+
+Props:
+
+- `context` [optional] — see [context](#context).
 
 ### &lt;UserLogin /&gt;
 
 Renders a component that uses the `/users/whoami` endpoint to determine if the user is logged in and show them the appropriate interface: Signup/Login buttons or their name along with a Logout button.
 
 Props:
+
 - `loginUrl` [required] — the URL where the user is sent when they click on "Log in";
 - `logoutUrl` [required] — a link that logs the user out and redirects them (can be the standard django logout URL);
 - `signupUrl` [required] — the URL where the user is sent when they click on "Sign up".

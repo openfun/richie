@@ -16,6 +16,8 @@ $ make migrate
 
 ## Unreleased
 
+- Users who changed the `search.html` template need to update it to include the page title and search bar themselves. They need to add a `<h1>` where they wish on the page, and the `<SearchSuggestField />` component through the django-react interop somewhere on the page too.
+
 ## 1.13.x to 1.14.x
 
 - If you reused any React components in Django templates through `richie-react`, you should know
@@ -37,7 +39,7 @@ $ make migrate
 
 - A login/signup component was added at the top right of all pages. It comes with new url routes
   that you must add to your project:
-  * In your project's `urls.py` non-i18n patterns, add user-related API endpoints via richie's
+  - In your project's `urls.py` non-i18n patterns, add user-related API endpoints via richie's
     core app urls:
     ```diff
     ...
@@ -53,7 +55,7 @@ $ make migrate
         ...
     ]
     ```
-  * In your project's `urls.py` i18n patterns, add Django contrib auths urls:
+  - In your project's `urls.py` i18n patterns, add Django contrib auths urls:
     ```diff
     urlpatterns += i18n_patterns(
         ...
@@ -61,7 +63,7 @@ $ make migrate
         ...
     )
     ```
-  * In your project's settings, configure login and logout redirect urls:
+  - In your project's settings, configure login and logout redirect urls:
     ```diff
     ...
     + LOGIN_REDIRECT_URL = "/"
@@ -71,7 +73,6 @@ $ make migrate
   template and not in `richie/base.html` so that it does not render as an empty element on sites with
   only one public language,
 - If you override templates that contain React hooks, rename the `fun-react` class to`richie-react`.
-
 
 ## 1.11.x to 1.12.x
 

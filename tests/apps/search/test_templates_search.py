@@ -32,9 +32,9 @@ class CourseCMSTestCase(CMSTestCase):
             re.search(
                 (
                     r'<html lang="en-US">.*'
+                    r"<h1>search</h1>.*"
                     r"<div[\\n ]*"
                     r'class="richie-react richie-react--search"[\\n ]*'
-                    r'data-props=\\\'{"pageTitle": "search"'
                 ),
                 str(response.content),
             )
@@ -49,9 +49,9 @@ class CourseCMSTestCase(CMSTestCase):
             re.search(
                 (
                     r'<html lang="fr-CA">.*'
+                    r"<h1>recherche</h1>.*"
                     r"<div[\\n ]*"
                     r'class="richie-react richie-react--search"[\\n ]*'
-                    r'data-props=\\\'{"pageTitle": "recherche"'
                 ),
                 str(response.content),
             )

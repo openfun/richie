@@ -17,14 +17,31 @@ $richie-template-search-padding: 0 !default;
   padding: $richie-template-search-padding;
 
   &__content {
+    position: relative;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
+
+    @include media-breakpoint-up(lg) {
+      align-items: center;
+    }
+
+    &__header {
+      display: flex;
+      flex-direction: column;
+      margin: 2rem;
+      text-align: center;
+
+      @include media-breakpoint-up(lg) {
+        width: 50rem;
+      }
+    }
 
     & > .richie-react--search {
       flex-grow: 1;
       display: flex;
       flex-direction: column;
+      width: 100%;
     }
   }
 }
