@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom';
 
 import { RootSearchSuggestField } from 'components/RootSearchSuggestField';
 import { Search } from 'components/Search';
+import { SearchSuggestField } from 'components/SearchSuggestField';
 import { UserLogin } from 'components/UserLogin';
 import { HistoryContext, useHistory } from 'data/useHistory';
 
@@ -13,14 +14,16 @@ import { HistoryContext, useHistory } from 'data/useHistory';
 // for type-safety when we call them. This will let us use the props for any top-level component in a
 // way TypeScript understand and accepts
 interface ComponentLibrary {
-  Search: typeof Search;
   RootSearchSuggestField: typeof RootSearchSuggestField;
+  Search: typeof Search;
+  SearchSuggestField: typeof SearchSuggestField;
   UserLogin: typeof UserLogin;
 }
 // Actually create the component map that we'll use below to access our component classes
 const componentLibrary: ComponentLibrary = {
   RootSearchSuggestField,
   Search,
+  SearchSuggestField,
   UserLogin,
 };
 // Type guard: ensures a given string (candidate) is indeed a proper key of the componentLibrary with a corresponding

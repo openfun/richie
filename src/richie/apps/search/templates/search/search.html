@@ -21,9 +21,13 @@
       {% with header_level=2 %}
         {% placeholder "content" %}
       {% endwith %}
+      <div class="search-template__content__header">
+        <h1>{% page_attribute "page_title" %}</h1>
+        <div class="richie-react richie-react--search-suggest-field"></div>
+      </div>
       <div
         class="richie-react richie-react--search"
-        data-props='{"pageTitle": "{% page_attribute "page_title" %}", "context": { "assets": { "icons": "{% static 'richie/icons.svg' %}" } }}'
+        data-props='{"context": { "assets": { "icons": "{% static 'richie/icons.svg' %}" } }}'
       ></div>
     </div>
   </div>

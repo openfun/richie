@@ -4,7 +4,6 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 import { CourseGlimpseList } from 'components/CourseGlimpseList';
 import { PaginateCourseSearch } from 'components/PaginateCourseSearch';
 import { SearchFiltersPane } from 'components/SearchFiltersPane';
-import { SearchSuggestField } from 'components/SearchSuggestField';
 import { Spinner } from 'components/Spinner';
 import { useCourseSearch } from 'data/useCourseSearch';
 import { useCourseSearchParams } from 'data/useCourseSearchParams';
@@ -33,14 +32,7 @@ const messages = defineMessages({
   },
 });
 
-interface SearchProps {
-  pageTitle?: string;
-}
-
-export const Search = ({
-  context,
-  pageTitle,
-}: SearchProps & CommonDataProps) => {
+export const Search = ({ context }: CommonDataProps) => {
   const [courseSearchParams] = useCourseSearchParams();
   const courseSearchResponse = useCourseSearch(courseSearchParams);
 
@@ -104,11 +96,9 @@ export const Search = ({
         )}
       </div>
       <div className="search__results">
-        {pageTitle && <h1 className="search__results__title">{pageTitle}</h1>}
         {courseSearchResponse &&
         courseSearchResponse.status === requestStatus.SUCCESS ? (
           <React.Fragment>
-            <SearchSuggestField />
             <CourseGlimpseList
               courses={courseSearchResponse.content.objects}
               meta={courseSearchResponse.content.meta}
