@@ -110,17 +110,19 @@ export const SearchSuggestField = () => {
   ) => {
     const filter = getRelevantFilter(await getFilters(), suggestion);
 
-    // Dispatch the actual update on the relevant filter
-    dispatchCourseSearchParamsUpdate({
-      filter,
-      payload: String(suggestion.id),
-      type: 'FILTER_ADD',
-    });
-    // Clear the current search query as the selected suggestion was generated from the same user input
-    dispatchCourseSearchParamsUpdate({
-      query: '',
-      type: 'QUERY_UPDATE',
-    });
+    // Dispatch the actual update on the relevant filter and clear the current search query as the
+    // selected suggestion was generated from the same user input
+    dispatchCourseSearchParamsUpdate(
+      {
+        query: '',
+        type: 'QUERY_UPDATE',
+      },
+      {
+        filter,
+        payload: String(suggestion.id),
+        type: 'FILTER_ADD',
+      },
+    );
     // Reset the search field state: the task has been completed
     setValue('');
     setSuggestions([]);
