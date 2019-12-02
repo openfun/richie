@@ -16,7 +16,15 @@ $ make migrate
 
 ## Unreleased
 
-- Users who changed the `search.html` template need to update it to include the page title and search bar themselves. They need to add a `<h1>` where they wish on the page, and the `<SearchSuggestField />` component through the django-react interop somewhere on the page too.
+## 1.14.x to 1.15.x
+
+- If you override the `courses/cms/blogpost_list.html` and/or `courses/cms/blogpost_detail.html`
+  templates, you need to port the modifications made to display the `publication_date` instead of
+  the `creation date` and to hide blog posts that are not in the publication window from the
+  public site.
+- Users who changed the `search.html` template need to update it to include the page title and
+  search bar themselves. They need to add a `<h1>` where they wish on the page, and the
+  `<SearchSuggestField />` component through the django-react interop somewhere on the page too.
 
 ## 1.13.x to 1.14.x
 
