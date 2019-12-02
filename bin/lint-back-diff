@@ -1,17 +1,23 @@
 #!/usr/bin/env bash
 source "$(dirname "${BASH_SOURCE[0]}")/_config.sh"
 
+# List modified Python files (excluding migrations that are auto-generated)
 DIFF_FILES="$(git diff --name-only master | grep -e .py$ | grep -v migrations || true)"
 DIFF_WITH_TESTS="$(echo "$DIFF_FILES" | tr "\n" " ")" || true
 DIFF_NO_TESTS="$(echo "$DIFF_FILES" | grep -v tests/ | tr "\n" " ")" || true
 
-if [ -z "$DIFF_FILES" ]; then
+# List new untracked files
+UNTRACKED_FILES="$(git ls-files -o --exclude-standard)"
+UNTRACKED_FILES_WITH_TESTS="$(echo "$UNTRACKED_FILES" | tr "\n" " ")" || true
+UNTRACKED_FILES_NO_TESTS="$(echo "$UNTRACKED_FILES" | grep -v tests/ | tr "\n" " ")" || true
+
+if [ -z "$DIFF_FILES" ] && [ -z "$UNTRACKED_FILES" ]; then
     echo "Nothing new to lint since master"
     exit 0
 fi
 
-_dc_run --no-deps app pylint $DIFF_WITH_TESTS
-_dc_run --no-deps app black $DIFF_WITH_TESTS
-_dc_run --no-deps app flake8 $DIFF_WITH_TESTS
-_dc_run --no-deps app isort --recursive --atomic $DIFF_WITH_TESTS
-_dc_run --no-deps app bandit -qr $DIFF_NO_TESTS
+_dc_run --no-deps app pylint $DIFF_WITH_TESTS $UNTRACKED_FILES_WITH_TESTS
+_dc_run --no-deps app black $DIFF_WITH_TESTS $UNTRACKED_FILES_WITH_TESTS
+_dc_run --no-deps app flake8 $DIFF_WITH_TESTS $UNTRACKED_FILES_WITH_TESTS
+_dc_run --no-deps app isort --recursive --atomic $DIFF_WITH_TESTS $UNTRACKED_FILES_WITH_TESTS
+_dc_run --no-deps app bandit -qr $DIFF_NO_TESTS $UNTRACKED_FILES_NO_TESTS
