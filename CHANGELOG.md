@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Display publication date instead of creation date on blog posts,
 - `<Search />` no longer includes the search bar and page title. Those are
   expected to be included in the Django template. The rationale for this
   change is to give users more freedom with their DOM & page structure.
