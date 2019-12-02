@@ -6,8 +6,12 @@
 {% block content %}
 <div class="blogpost-glimpse-list">
   <h1 class="blogpost-glimpse-list__title">{{ current_page.get_title }}</h1>
+  {% if current_page.publisher_is_draft %}
+    {% autopaginate current_page.get_child_pages 20 as object_list %}
+  {% else %}
+    {% autopaginate current_page.get_child_pages.published.distinct 20 as object_list %}
+  {% endif %}
 
-  {% autopaginate current_page.get_child_pages 20 as object_list %}
   {% for page in object_list %}
     {% if page.blogpost %}
       {% include "courses/cms/fragment_blogpost_glimpse.html" with blogpost=page.blogpost %}
