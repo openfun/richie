@@ -3,9 +3,12 @@
 Unit tests for the BlogPost plugin and its model
 """
 import re
+from datetime import datetime
+from unittest import mock
 
 from django import forms
 from django.conf import settings
+from django.utils import timezone
 
 from cms.api import add_plugin, create_page
 from cms.test_utils.testcases import CMSTestCase
@@ -66,7 +69,12 @@ class BlogPostPluginTestCase(CMSTestCase):
         add_plugin(placeholder, BlogPostPlugin, "en", **{"page": blogpost_page})
         add_plugin(placeholder, BlogPostPlugin, "fr", **{"page": blogpost_page})
 
-        blogpost_page.publish("en")
+        with mock.patch(
+            "cms.models.pagemodel.now",
+            return_value=datetime(2019, 11, 30, tzinfo=timezone.utc),
+        ):
+            blogpost_page.publish("en")
+
         blogpost_page.publish("fr")
         blogpost.refresh_from_db()
 
@@ -119,6 +127,13 @@ class BlogPostPluginTestCase(CMSTestCase):
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
 
+        # Publication date should be set by first publication
+        self.assertContains(
+            response,
+            '<p class="blogpost-glimpse__footer__date">Nov. 30, 2019</p>',
+            html=True,
+        )
+
         # Same checks in French
         url = page.get_absolute_url(language="fr")
         response = self.client.get(url)
@@ -134,6 +149,13 @@ class BlogPostPluginTestCase(CMSTestCase):
             r'.*alt=""'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
+
+        # Publication date should be set by first publication
+        self.assertContains(
+            response,
+            '<p class="blogpost-glimpse__footer__date">30 novembre 2019</p>',
+            html=True,
+        )
 
     def test_cms_plugins_blogpost_render_on_draft_page(self):
         """
@@ -151,10 +173,6 @@ class BlogPostPluginTestCase(CMSTestCase):
         placeholder = page.placeholders.get(slot="maincontent")
         add_plugin(placeholder, BlogPostPlugin, "en", **{"page": blogpost_page})
 
-        blogpost_page.publish("en")
-        blogpost_page.unpublish("en")
-        blogpost_page.refresh_from_db()
-
         url = "{:s}?edit".format(page.get_absolute_url(language="en"))
 
         # The blogpost plugin should still be visible on the draft page
@@ -170,3 +188,6 @@ class BlogPostPluginTestCase(CMSTestCase):
         response = self.client.get(url)
         self.assertContains(response, "draft title")
         self.assertNotContains(response, "public title")
+
+        # Publication date block should be absent
+        self.assertNotContains(response, "__date")

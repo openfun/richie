@@ -1,6 +1,11 @@
 """
 End-to-end tests for the blogpost detail view
 """
+from datetime import datetime
+from unittest import mock
+
+from django.utils import timezone
+
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
@@ -11,7 +16,7 @@ from richie.apps.courses.factories import (
 )
 
 
-class BlogPostCMSTestCase(CMSTestCase):
+class DetailBlogPostCMSTestCase(CMSTestCase):
     """
     End-to-end test suite to validate the content and Ux of the blogpost detail view
     """
@@ -33,9 +38,15 @@ class BlogPostCMSTestCase(CMSTestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 404)
 
-        # Publish the blogpost and ensure the content is correct
-        page.publish("en")
+        # Publish the blogpost with a past date and ensure the content is correct
+        with mock.patch(
+            "cms.models.pagemodel.now",
+            return_value=datetime(2019, 11, 27, tzinfo=timezone.utc),
+        ):
+            page.publish("en")
+
         response = self.client.get(url)
+
         self.assertContains(
             response, "<title>Preums</title>", html=True, status_code=200
         )
@@ -43,6 +54,12 @@ class BlogPostCMSTestCase(CMSTestCase):
             response, '<h1 class="blogpost-detail__title">Preums</h1>', html=True
         )
         self.assertContains(response, "Comte de Saint-Germain", html=True)
+
+        self.assertContains(
+            response,
+            '<p class="blogpost-detail__subhead__date">Nov. 27, 2019</p>',
+            html=True,
+        )
 
     def test_templates_blogpost_detail_cms_draft_content(self):
         """
@@ -69,6 +86,7 @@ class BlogPostCMSTestCase(CMSTestCase):
         # The page should be visible as draft to the staff user
         url = page.get_absolute_url()
         response = self.client.get(url)
+
         self.assertContains(
             response, "<title>Preums</title>", html=True, status_code=200
         )
@@ -86,5 +104,11 @@ class BlogPostCMSTestCase(CMSTestCase):
                 category.extended_object.get_absolute_url(),
                 category.extended_object.get_title(),
             ),
+            html=True,
+        )
+
+        self.assertContains(
+            response,
+            '<p class="blogpost-detail__subhead__date">Not published yet</p>',
             html=True,
         )

@@ -25,11 +25,13 @@
               {% show_placeholder "excerpt" blogpost_page %}
           </p>
       </div>
+      {% if blogpost_page.publication_date %}
       <div class="blogpost-glimpse__footer">
           <p class="blogpost-glimpse__footer__date">
-              {{ blogpost_page.creation_date|date:"DATE_FORMAT" }}
+              {{ blogpost_page.publication_date|date:"DATE_FORMAT" }}
           </p>
       </div>
+      {% endif %}
   </div>
 </a>
 {% endwith %}
