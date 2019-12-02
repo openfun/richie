@@ -23,7 +23,7 @@
   "license": "MIT",
   "devDependencies": {},
   "dependencies": {
-    "docusaurus": "1.14.2",
+    "docusaurus": "1.14.3",
     "prettier": "1.19.1"
   }
 }
