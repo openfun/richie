@@ -121,6 +121,7 @@ class TitleFactory(factory.django.DjangoModelFactory):
 
     language = factory.Iterator([l[0] for l in settings.LANGUAGES])
     page = None
+    path = factory.LazyAttribute(lambda o: o.page.get_path_for_slug(o.slug, o.language))
     slug = factory.LazyAttribute(lambda o: slugify(o.title))
     title = factory.Faker("catch_phrase")
 

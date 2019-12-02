@@ -66,13 +66,13 @@ class HTMLSitemapPluginTestCase(CMSPluginTestCase):
               <ul>
                 <li><a href="/en/root/">Root</a>
                   <ul>
-                    <li><a href="/en/parent/">Parent</a>
+                    <li><a href="/en/root/parent/">Parent</a>
                       <ul>
-                        <li><a href="/en/page/">Page</a></li>
-                        <li><a href="/en/sibling/">Sibling</a></li>
+                        <li><a href="/en/root/parent/page/">Page</a></li>
+                        <li><a href="/en/root/parent/sibling/">Sibling</a></li>
                       </ul>
                     </li>
-                    <li><a href="/en/uncle/">Uncle</a></li>
+                    <li><a href="/en/root/uncle/">Uncle</a></li>
                   </ul>
                 </li>
                 <li><a href="/en/sitemap/">Sitemap</a></li>
@@ -110,10 +110,10 @@ class HTMLSitemapPluginTestCase(CMSPluginTestCase):
             """
             <div class="sitemap">
               <ul>
-                <li><a href="/en/parent/">Parent</a>
+                <li><a href="/en/root/parent/">Parent</a>
                   <ul>
-                    <li><a href="/en/page/">Page</a></li>
-                    <li><a href="/en/sibling/">Sibling</a></li>
+                    <li><a href="/en/root/parent/page/">Page</a></li>
+                    <li><a href="/en/root/parent/sibling/">Sibling</a></li>
                   </ul>
                 </li>
               </ul>
@@ -151,8 +151,8 @@ class HTMLSitemapPluginTestCase(CMSPluginTestCase):
             """
             <div class="sitemap">
               <ul>
-                <li><a href="/en/page/">Page</a></li>
-                <li><a href="/en/sibling/">Sibling</a></li>
+                <li><a href="/en/root/parent/page/">Page</a></li>
+                <li><a href="/en/root/parent/sibling/">Sibling</a></li>
               </ul>
             </div>
             """,
@@ -189,8 +189,8 @@ class HTMLSitemapPluginTestCase(CMSPluginTestCase):
               <ul>
                 <li><a href="/en/root/">Root</a>
                   <ul>
-                    <li><a href="/en/parent/">Parent</a></li>
-                    <li><a href="/en/uncle/">Uncle</a></li>
+                    <li><a href="/en/root/parent/">Parent</a></li>
+                    <li><a href="/en/root/uncle/">Uncle</a></li>
                   </ul>
                 </li>
                 <li><a href="/en/sitemap/">Sitemap</a></li>
@@ -231,8 +231,8 @@ class HTMLSitemapPluginTestCase(CMSPluginTestCase):
               <ul>
                 <li><a href="/en/root/">Root</a>
                   <ul>
-                    <li><a href="/en/parent/">Parent</a></li>
-                    <li><a href="/en/uncle/">Uncle</a></li>
+                    <li><a href="/en/root/parent/">Parent</a></li>
+                    <li><a href="/en/root/uncle/">Uncle</a></li>
                   </ul>
                 </li>
               </ul>
@@ -271,8 +271,8 @@ class HTMLSitemapPluginTestCase(CMSPluginTestCase):
             """
             <div class="sitemap">
               <ul>
-                <li><a href="/en/parent/">Parent</a></li>
-                <li><a href="/en/uncle/">Uncle</a></li>
+                <li><a href="/en/root/parent/">Parent</a></li>
+                <li><a href="/en/root/uncle/">Uncle</a></li>
               </ul>
             </div>
             """,
@@ -306,7 +306,7 @@ class HTMLSitemapPluginTestCase(CMSPluginTestCase):
               <ul>
                 <li><a href="/en/root/">Root</a>
                   <ul>
-                    <li><a href="/en/uncle/">Uncle</a></li>
+                    <li><a href="/en/root/uncle/">Uncle</a></li>
                   </ul>
                 </li>
                 <li><a href="/en/sitemap/">Sitemap</a></li>
@@ -344,7 +344,7 @@ class HTMLSitemapPluginTestCase(CMSPluginTestCase):
               <ul>
                 <li><a href="/en/root/">Root</a>
                   <ul>
-                    <li><a href="/en/uncle/">Uncle</a></li>
+                    <li><a href="/en/root/uncle/">Uncle</a></li>
                   </ul>
                 </li>
                 <li><a href="/en/sitemap/">Sitemap</a></li>
@@ -369,13 +369,13 @@ class HTMLSitemapPluginTestCase(CMSPluginTestCase):
               <ul>
                 <li><a href="/en/root/">Root</a>
                   <ul>
-                    <li><a href="/en/parent/">Parent</a>
+                    <li><a href="/en/root/parent/">Parent</a>
                       <ul>
-                        <li><a href="/en/page/">Page</a></li>
-                        <li><a href="/en/sibling/">Sibling</a></li>
+                        <li><a href="/en/root/parent/page/">Page</a></li>
+                        <li><a href="/en/root/parent/sibling/">Sibling</a></li>
                       </ul>
                     </li>
-                    <li><a href="/en/uncle/">Uncle</a></li>
+                    <li><a href="/en/root/uncle/">Uncle</a></li>
                   </ul>
                 </li>
                 <li><a href="/en/sitemap/">Sitemap</a></li>
@@ -442,7 +442,7 @@ class HTMLSitemapPluginTestCase(CMSPluginTestCase):
               <ul>
                 <li><a href="/en/root/">Root</a>
                   <ul>
-                    <li><a href="/en/uncle/">Uncle</a></li>
+                    <li><a href="/en/root/uncle/">Uncle</a></li>
                   </ul>
                 </li>
                 <li><a href="/en/sitemap/">Sitemap</a></li>
@@ -463,7 +463,7 @@ class HTMLSitemapPluginTestCase(CMSPluginTestCase):
               <ul>
                 <li><a href="/en/root/">modified title</a>
                   <ul>
-                    <li><a href="/en/uncle/">Uncle</a></li>
+                    <li><a href="/en/root/uncle/">Uncle</a></li>
                   </ul>
                 </li>
                 <li><a href="/en/sitemap/">Sitemap</a></li>
@@ -507,13 +507,13 @@ class HTMLSitemapPluginTestCase(CMSPluginTestCase):
               <ul>
                 <li><a href="/en/root/">Root</a>
                   <ul>
-                    <li><a href="/en/parent/">Parent</a>
+                    <li><a href="/en/root/parent/">Parent</a>
                       <ul>
-                        <li><a href="/en/page/">Page</a></li>
-                        <li><a href="/en/sibling/">Sibling</a></li>
+                        <li><a href="/en/root/parent/page/">Page</a></li>
+                        <li><a href="/en/root/parent/sibling/">Sibling</a></li>
                       </ul>
                     </li>
-                    <li><a href="/en/uncle/">Uncle</a></li>
+                    <li><a href="/en/root/uncle/">Uncle</a></li>
                   </ul>
                 </li>
                 <li><a href="/en/sitemap/">Sitemap</a></li>
