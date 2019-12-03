@@ -16,6 +16,8 @@ $ make migrate
 
 ## Unreleased
 
+- Users who make use of `<SearchSuggestField />` or `<RootSearchSuggestField />` in their own templates through `richie-react` need to update all the call sites: the `context` prop is now required for both of them. See the documentation for more details on `context`.
+
 ## 1.14.x to 1.15.x
 
 - If you override the `courses/cms/blogpost_list.html` and/or `courses/cms/blogpost_detail.html`

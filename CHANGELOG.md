@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Our course search field now have a "Search" button with a magnifying
+  glass icon.
+
 ## [1.15.0] - 2019-12-02
 
 ### Changed

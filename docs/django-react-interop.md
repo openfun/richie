@@ -62,7 +62,7 @@ It also autocompletes user input with course names and allows users to go direct
 Props:
 
 - `courseSearchPageUrl` [required] — URL for the course search page users should be sent to when they select a suggestion that is not a course, or launch a search with text terms.
-- `context` [optional] — see [context](#context).
+- `context` [required] — see [context](#context).
 
 ### &lt;Search /&gt;
 
@@ -82,7 +82,7 @@ It automatically communicates with `<Search />` through browser history APIs and
 
 Props:
 
-- `context` [optional] — see [context](#context).
+- `context` [required] — see [context](#context).
 
 ### &lt;UserLogin /&gt;
 
