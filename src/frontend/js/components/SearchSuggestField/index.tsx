@@ -9,8 +9,10 @@ import {
   onSuggestionsFetchRequested,
   renderSuggestion,
 } from 'common/searchFields';
+import { SearchInput } from 'components/SearchInput';
 import { useCourseSearchParams } from 'data/useCourseSearchParams';
 import { useStaticFilters } from 'data/useStaticFilters';
+import { CommonDataProps } from 'types/commonDataProps';
 import {
   SearchAutosuggestProps,
   SearchSuggestionSection,
@@ -27,8 +29,9 @@ const messages = defineMessages({
 
 /**
  * Component. Displays the main search field alon with any suggestions organized in relevant sections.
+ * @param context General contextual app information as defined in common data props.
  */
-export const SearchSuggestField = () => {
+export const SearchSuggestField = ({ context }: CommonDataProps) => {
   const intl = useIntl();
 
   // We need static filter definitions to act as config for our suggestion sections & requests.
@@ -146,6 +149,9 @@ export const SearchSuggestField = () => {
         )
       }
       onSuggestionSelected={onSuggestionSelected}
+      renderInputComponent={passthroughInputProps => (
+        <SearchInput context={context} inputProps={passthroughInputProps} />
+      )}
       renderSectionTitle={section => section.title}
       renderSuggestion={renderSuggestion}
       shouldRenderSuggestions={val => val.length > 2}

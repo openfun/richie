@@ -29,6 +29,12 @@ describe('components/SearchSuggestField', () => {
     historyReplaceState,
   ];
 
+  const context = {
+    assets: {
+      icons: '/icons.svg',
+    },
+  };
+
   // Make some filters we can reuse through our tests with the filter definitions responses
   const levels: FilterDefinition = {
     base_path: '00030002',
@@ -75,7 +81,7 @@ describe('components/SearchSuggestField', () => {
         <HistoryContext.Provider
           value={makeHistoryOf({ limit: '999', offset: '0' })}
         >
-          <SearchSuggestField />
+          <SearchSuggestField context={context} />
         </HistoryContext.Provider>
       </IntlProvider>,
     );
@@ -94,7 +100,7 @@ describe('components/SearchSuggestField', () => {
             query: 'machine learning',
           })}
         >
-          <SearchSuggestField />
+          <SearchSuggestField context={context} />
         </HistoryContext.Provider>
       </IntlProvider>,
     );
@@ -126,7 +132,7 @@ describe('components/SearchSuggestField', () => {
         <HistoryContext.Provider
           value={makeHistoryOf({ limit: '999', offset: '0' })}
         >
-          <SearchSuggestField />
+          <SearchSuggestField context={context} />
         </HistoryContext.Provider>
       </IntlProvider>,
     );
@@ -179,7 +185,7 @@ describe('components/SearchSuggestField', () => {
         <HistoryContext.Provider
           value={makeHistoryOf({ limit: '999', offset: '0' })}
         >
-          <SearchSuggestField />
+          <SearchSuggestField context={context} />
         </HistoryContext.Provider>
       </IntlProvider>,
     );
@@ -234,7 +240,7 @@ describe('components/SearchSuggestField', () => {
         <HistoryContext.Provider
           value={makeHistoryOf({ limit: '999', offset: '0' })}
         >
-          <SearchSuggestField />
+          <SearchSuggestField context={context} />
         </HistoryContext.Provider>
       </IntlProvider>,
     );
@@ -315,7 +321,7 @@ describe('components/SearchSuggestField', () => {
         <HistoryContext.Provider
           value={makeHistoryOf({ limit: '999', offset: '0' })}
         >
-          <SearchSuggestField />
+          <SearchSuggestField context={context} />
         </HistoryContext.Provider>
       </IntlProvider>,
     );
@@ -388,7 +394,7 @@ describe('components/SearchSuggestField', () => {
             query: 'some query',
           })}
         >
-          <SearchSuggestField />
+          <SearchSuggestField context={context} />
         </HistoryContext.Provider>
       </IntlProvider>,
     );
@@ -431,7 +437,7 @@ describe('components/SearchSuggestField', () => {
             query: 'some query',
           })}
         >
-          <SearchSuggestField />
+          <SearchSuggestField context={context} />
         </HistoryContext.Provider>
       </IntlProvider>,
     );
