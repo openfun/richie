@@ -9,6 +9,7 @@ import {
   onSuggestionsFetchRequested,
   renderSuggestion,
 } from 'common/searchFields';
+import { SearchInput } from 'components/SearchInput';
 import { useStaticFilters } from 'data/useStaticFilters';
 import { API_LIST_DEFAULT_PARAMS } from 'settings';
 import { CommonDataProps } from 'types/commonDataProps';
@@ -34,8 +35,11 @@ interface RootSearchSuggestFieldProps {
 
 /**
  * Component. Displays the main search field alon with any suggestions organized in relevant sections.
+ * @param context General contextual app information as defined in common data props.
+ * @param courseSearchPageUrl URL for the course search page. Where users are sent when they use filtering options.
  */
 export const RootSearchSuggestField = ({
+  context,
   courseSearchPageUrl,
 }: RootSearchSuggestFieldProps & CommonDataProps) => {
   const intl = useIntl();
@@ -55,6 +59,17 @@ export const RootSearchSuggestField = ({
     false,
   );
 
+  /**
+   * Helper function; sends the user to the Search view with the current input value as full text search.
+   */
+  const moveToSearchViewWithQuery = () =>
+    location.assign(
+      `${courseSearchPageUrl}?${stringify({
+        ...API_LIST_DEFAULT_PARAMS,
+        query: value,
+      })}`,
+    );
+
   const inputProps: SearchAutosuggestProps['inputProps'] = {
     /**
      * Callback triggered on every user input.
@@ -71,12 +86,7 @@ export const RootSearchSuggestField = ({
       // whatever is currently in the field as a text query.
       // Unless they are currently highlighting a suggestion, in which case we let Autosuggest handle it.
       if (event.keyCode === 13 /* enter */ && !hasHighlightedSuggestion) {
-        location.assign(
-          `${courseSearchPageUrl}?${stringify({
-            ...API_LIST_DEFAULT_PARAMS,
-            query: value,
-          })}`,
-        );
+        moveToSearchViewWithQuery();
       }
     },
     placeholder: intl.formatMessage(messages.searchFieldPlaceholder),
@@ -133,6 +143,13 @@ export const RootSearchSuggestField = ({
         setHasHighlightedSuggestion(!suggestion)
       }
       onSuggestionSelected={onSuggestionSelected}
+      renderInputComponent={passthroughInputProps => (
+        <SearchInput
+          context={context}
+          inputProps={passthroughInputProps}
+          onClick={moveToSearchViewWithQuery}
+        />
+      )}
       renderSectionTitle={section => section.title}
       renderSuggestion={renderSuggestion}
       shouldRenderSuggestions={val => val.length > 2}
