@@ -7,7 +7,7 @@ DIFF_WITH_TESTS="$(echo "$DIFF_FILES" | tr "\n" " ")" || true
 DIFF_NO_TESTS="$(echo "$DIFF_FILES" | grep -v tests/ | tr "\n" " ")" || true
 
 # List new untracked files
-UNTRACKED_FILES="$(git ls-files -o --exclude-standard)"
+UNTRACKED_FILES="$(git ls-files -o --exclude-standard | grep -e .py$ | grep -v migrations || true)"
 UNTRACKED_FILES_WITH_TESTS="$(echo "$UNTRACKED_FILES" | tr "\n" " ")" || true
 UNTRACKED_FILES_NO_TESTS="$(echo "$UNTRACKED_FILES" | grep -v tests/ | tr "\n" " ")" || true
 
