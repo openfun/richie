@@ -1,0 +1,8 @@
+# Do not commit screenshots and videos produced as part of cypress test reports
+screenshots
+videos
+
+# Cypress automatically creates fixtures and plugins directories if it does not find them
+# when it runs. We're not using those for now so we can just ignore them
+fixtures
+plugins
