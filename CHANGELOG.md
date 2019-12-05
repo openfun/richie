@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Add Cypress-based end-to-end tests that check accessibility with axe.
+
 ### Changed
 
 - Segment course runs according to status on course detail page,
