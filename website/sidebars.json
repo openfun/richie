@@ -6,6 +6,10 @@
       "native-installation"
     ],
     "Recipes": ["django-react-interop", "building-the-frontend"],
-    "Contributing": ["contributing-guide", "css-guidelines"]
+    "Contributing": [
+      "contributing-guide",
+      "accessibility-testing",
+      "css-guidelines"
+    ]
   }
 }
