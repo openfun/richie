@@ -12,9 +12,10 @@ module.exports = {
     [
       '@babel/preset-env',
       {
-        forceAllTransforms: true,
-        useBuiltIns: 'usage',
         corejs: 3,
+        forceAllTransforms: true,
+        targets: 'last 1 version, >0.2%, IE 11',
+        useBuiltIns: 'usage',
       },
     ],
     '@babel/preset-typescript',
