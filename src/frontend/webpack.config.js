@@ -19,6 +19,14 @@ const overrides = argv.richieSettings
   ? JSON.parse(fs.readFileSync(argv.richieSettings)).overrides
   : {};
 
+const babelCompileDeps = [
+  'query-string',
+  'react-intl',
+  'react-modal',
+  'split-on-first',
+  'strict-uri-encode',
+];
+
 module.exports = {
   // Disable production-specific optimizations by default
   // They can be re-enabled by running the cli with `--mode=production` or making a separate
@@ -55,7 +63,25 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: new RegExp(`(${babelCompileDeps.join('|')}.*)`),
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              plugins: [
+                ...require('./babel.config').plugins,
+                // Some modules (eg. query-string) are not pre-compiled but do not use import/export
+                // We need to give webpack
+                '@babel/plugin-transform-modules-commonjs',
+              ],
+              presets: require('./babel.config').presets,
+            },
+          },
+        ],
+      },
+      {
+        exclude: /node_modules/,
+        test: new RegExp(`\.(tsx?|jsx?)$`),
         use: [
           {
             loader: 'babel-loader',
