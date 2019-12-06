@@ -110,26 +110,26 @@
         {% render_block "js" %}
         <script src="{% static 'richie/js/index.js' %}"></script>
         <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Get all topbar burger elements
-            const $topbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.topbar__hamburger'), 0);
-
-            // Check if there are any navbar burgers
-            if ($topbarBurgers.length > 0) {
+            document.addEventListener("DOMContentLoaded", function() {
+              // Get all topbar burger elements
+              const topbarBurgers = Array.prototype.slice.call(
+                document.querySelectorAll(".topbar__hamburger"),
+                0
+              );
+              // Check if there are any navbar burgers
+              if (topbarBurgers.length > 0) {
                 // Add a click event on each of them
-                $topbarBurgers.forEach( el => {
-                    el.addEventListener('click', () => {
-                        // Get the target from the "data-target" attribute
-                        const target = el.dataset.target;
-                        const $target = document.getElementById(target);
-
-                        // Toggle the "is-active" class on both the burger and container
-                        el.classList.toggle('is-active');
-                        $target.classList.toggle('is-open');
-                    });
+                topbarBurgers.forEach(function(el) {
+                  el.addEventListener("click", function() {
+                    // Get the target from the "data-target" attribute
+                    const target = document.getElementById(el.dataset.target);
+                    // Toggle the "is-active" class on both the burger and container
+                    el.classList.toggle("is-active");
+                    target.classList.toggle("is-open");
+                  });
                 });
-            }
-        });
+              }
+            });
         </script>
         {% block body_js %}{% endblock body_js %}
     </body>
