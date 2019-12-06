@@ -62,6 +62,7 @@
     "intl-pluralrules": "1.1.1",
     "jest": "24.9.0",
     "lodash-es": "4.17.15",
+    "mdn-polyfills": "5.19.0",
     "node-fetch": "2.6.0",
     "node-sass": "4.13.0",
     "nodemon": "2.0.1",

@@ -36,6 +36,15 @@ document.addEventListener('DOMContentLoaded', async event => {
       );
     }
 
+    // Polyfill outdated browsers who do not have Node.prototype.append
+    if (
+      !Element.prototype.hasOwnProperty('append') &&
+      !Document.prototype.hasOwnProperty('append') &&
+      !DocumentFragment.prototype.hasOwnProperty('append')
+    ) {
+      await import('mdn-polyfills/Node.prototype.append');
+    }
+
     // Only load Intl polyfills & pre-built locale data for browsers that need it
     try {
       if (!Intl.PluralRules) {
