@@ -45,6 +45,11 @@ document.addEventListener('DOMContentLoaded', async event => {
       await import('mdn-polyfills/Node.prototype.append');
     }
 
+    // Polyfill outdated browsers who do not have fetch
+    if (typeof fetch === 'undefined') {
+      await import('whatwg-fetch');
+    }
+
     // Only load Intl polyfills & pre-built locale data for browsers that need it
     try {
       if (!Intl.PluralRules) {
