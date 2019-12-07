@@ -16,7 +16,8 @@ NB_OBJECTS = {
     "licences": 5,
     "persons": 50,
     "blogposts": 20,
-    "blogpost_categories": 3,
+    "blogpost_levels": 1,
+    "blogpost_tags": 1,
     "programs": 6,
     "programs_courses": 4,
     "home_blogposts": 4,
@@ -106,6 +107,20 @@ PARTNERSHIPS_INFO = {
     "page_reverse_id": "partnerships",
 }
 PARTNERSHIPS_INFO.update(getattr(settings, "RICHIE_DEMO_PARTNERSHIPS_INFO", {}))
+
+TAGS_INFO = {
+    "page_title": {"en": "Tag", "fr": "Etiquette"},
+    "children": [
+        {"page_title": {"en": "Event", "fr": "Evénement"}},
+        {"page_title": {"en": "Feature", "fr": "Fonctionnalité"}},
+        {"page_title": {"en": "Around the course", "fr": "Autour du cours"}},
+        {"page_title": {"en": "Partner", "fr": "Partenaire"}},
+        {"page_title": {"en": "Portrait", "fr": "Portrait"}},
+        {"page_title": {"en": "Recruitment", "fr": "Recrutement"}},
+    ],
+    "page_reverse_id": "tags",
+}
+TAGS_INFO.update(getattr(settings, "RICHIE_DEMO_TAGS_INFO", {}))
 
 SUBJECTS_INFO = {
     "page_title": {"en": "Subject", "fr": "Subjet"},

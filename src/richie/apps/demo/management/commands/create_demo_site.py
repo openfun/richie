@@ -36,6 +36,7 @@ from ...defaults import (
     SINGLECOLUMN_CONTENT,
     SITEMAP_PAGE_PARAMS,
     SUBJECTS_INFO,
+    TAGS_INFO,
 )
 from ...helpers import create_categories
 from ...utils import pick_image
@@ -152,6 +153,14 @@ def create_demo_site():
     partnerships = list(
         create_categories(
             **PARTNERSHIPS_INFO,
+            fill_banner=pick_image("banner"),
+            fill_logo=pick_image("logo"),
+            page_parent=pages_created["categories"],
+        )
+    )
+    tags = list(
+        create_categories(
+            **TAGS_INFO,
             fill_banner=pick_image("banner"),
             fill_logo=pick_image("logo"),
             page_parent=pages_created["categories"],
@@ -294,8 +303,8 @@ def create_demo_site():
             fill_excerpt=True,
             fill_body=True,
             fill_categories=[
-                *random.sample(subjects, NB_OBJECTS["blogpost_categories"]),
-                random.choice(levels),  # nosec
+                *random.sample(levels, NB_OBJECTS["blogpost_levels"]),
+                *random.sample(tags, NB_OBJECTS["blogpost_tags"]),
             ],
             fill_author=random.sample(persons, 1),
             should_publish=True,
