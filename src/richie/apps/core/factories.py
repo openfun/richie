@@ -177,9 +177,12 @@ class PageFactory(factory.django.DjangoModelFactory):
         published state.
         """
         super()._after_postgeneration(instance, create, results=results)
+        instance.rescan_placeholders()
+
         if results.get("should_publish", False):
             for language in instance.get_languages():
                 instance.publish(language)
+            instance.get_public_object().rescan_placeholders()
 
         instance.refresh_from_db()
 
