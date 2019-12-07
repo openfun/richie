@@ -14,6 +14,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Our course search fields now have a "Search" button with a magnifying
   glass icon.
 
+### Fixed
+
+- Pin Django to version less than 3.0.
+
 ## [1.15.0] - 2019-12-02
 
 ### Changed
