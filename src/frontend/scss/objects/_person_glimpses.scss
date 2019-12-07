@@ -101,10 +101,13 @@ $richie-person-glimpse-caption-background: $gray80 !default;
 
   &__content__wrapper__categories {
     display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
     margin-bottom: 0.6rem;
     text-align: $richie-person-glimpse-content-title-textalign;
     @include media-breakpoint-up(lg) {
-      text-align: $richie-person-glimpse-content-title-textalign-lg;
+      justify-content: left;
     }
   }
 

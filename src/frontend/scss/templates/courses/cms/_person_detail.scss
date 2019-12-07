@@ -62,6 +62,9 @@ $richie-person-detail-media-size: 10rem;
 
       &__categories {
         display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
         margin: 0 0 0.5rem;
       }
     }
