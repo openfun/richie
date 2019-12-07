@@ -97,8 +97,8 @@ class GetPlaceholderPluginsTemplateTagsTestCase(CMSTestCase):
     @transaction.atomic
     def test_templatetags_get_placeholder_plugins_empty_no_or(self):
         """
-        The "get_placeholder_plugins" template tag should raise an error if it has empty content
-        but the "or keyword was forgotten.
+        The "get_placeholder_plugins" template tag should raise an error if it has block
+        content but the "or keyword was forgotten.
         """
         empty_page = create_page(
             "Test", "richie/single_column.html", "en", published=True
@@ -137,4 +137,23 @@ class GetPlaceholderPluginsTemplateTagsTestCase(CMSTestCase):
             "{% for plugin in plugins %}{% render_plugin plugin %}{% endfor %}"
         )
         output = self.render_template_obj(template, {}, request)
+        self.assertEqual(output, "")
+
+    def test_templatetags_get_placeholder_plugins_unknown_page(self):
+        """
+        The `get_placeholder_plugins` template tag should fail nicely when called with a page
+        lookup that returns no page.
+        """
+        request = RequestFactory().get("/")
+        request.current_page = create_page(
+            "current", "richie/single_column.html", "en", published=True
+        )
+        request.user = AnonymousUser()
+
+        template = (
+            "{% load cms_tags extra_tags %}"
+            '{% get_placeholder_plugins "maincontent" page as plugins %}'
+        )
+
+        output = self.render_template_obj(template, {"page": "unknown"}, request)
         self.assertEqual(output, "")
