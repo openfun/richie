@@ -16,6 +16,8 @@ $ make migrate
 
 ## Unreleased
 
+- If you override the `courses/cms/blogpost_list.html` template and want to benefit from the
+  display of news-related categories on top of the page, you need to add the new markup and css.
 - All occurences of the `form_factor` variable have been renamed to `variant` for clarity.
   Search and replace throughout your template overrides.
 - The `courses/cms/fragment_category_glimpse.html` and `courses/plugins/category_plugin.html`
