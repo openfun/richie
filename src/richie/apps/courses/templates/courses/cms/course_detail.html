@@ -58,7 +58,7 @@
       {% block categories %}
         {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_icons" or not current_page|is_empty_placeholder:"course_categories" %}
         <div class="course-detail__content__row course-detail__content__categories">
-          {% with form_factor="tag" %}
+          {% with variant="tag" %}
             {% placeholder "course_icons" %}
             {% page_placeholder "course_categories" current_page or %}
               {% if current_page.publisher_is_draft and current_page|is_empty_placeholder:"course_icons" %}

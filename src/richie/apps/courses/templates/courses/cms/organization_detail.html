@@ -52,7 +52,7 @@
 
   {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"categories" %}
     <div class="organization-detail__categories">
-      {% with form_factor="tag" %}
+      {% with variant="tag" %}
         {% placeholder "categories" or %}
           <p class="organization-detail__categories__empty">
             {% trans "No associated categories" %}

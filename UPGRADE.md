@@ -16,7 +16,12 @@ $ make migrate
 
 ## Unreleased
 
-- Users who make use of `<SearchSuggestField />` or `<RootSearchSuggestField />` in their own templates through `richie-react` need to update all the call sites: the `context` prop is now required for both of them. See the documentation for more details on `context`.
+- The `courses/cms/fragment_category_glimpse.html` and `courses/plugins/category_plugin.html`
+  templates were refactored for a better modularity and harmonization with other types of pages.
+  You must port these modifications to your project if you override either of these two templates.
+- Users who make use of `<SearchSuggestField />` or `<RootSearchSuggestField />` in their own
+  templates through `richie-react` need to update all the call sites: the `context` prop is now
+  required for both of them. See the documentation for more details on `context`.
 
 ## 1.14.x to 1.15.x
 
