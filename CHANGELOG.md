@@ -20,6 +20,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Improve responsiveness of footer logos that were not folding properly,
 - Pin Django to version less than 3.0.
 
 ## [1.15.0] - 2019-12-02
