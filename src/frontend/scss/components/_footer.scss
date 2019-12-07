@@ -91,19 +91,24 @@ $richie-footer-poweredby-link-fontcolor: $white !default;
   }
 
   &__brand {
-    @include sv-flex(0, 0, auto);
     display: flex;
+    flex-wrap: wrap;
     padding: $richie-footer-brand-padding;
     order: 1;
 
     &__link {
       @include sv-flex(1, 0, auto);
       display: block;
+      margin-top: 0.5rem;
+
+      @include media-breakpoint-down(sm) {
+        flex-basis: 100%;
+      }
     }
 
     &__badge {
-      @include sv-flex(1, 0, auto);
       display: block;
+      margin-top: 0.5rem;
       margin-left: 1rem;
 
       &__icon {
@@ -114,6 +119,10 @@ $richie-footer-poweredby-link-fontcolor: $white !default;
 
       &:hover > &__icon {
         fill: $white;
+      }
+
+      @include media-breakpoint-down(sm) {
+        margin-left: 0;
       }
     }
   }
