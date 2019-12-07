@@ -33,7 +33,7 @@
 
       {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"categories" %}
       <div class="person-detail__card__content__categories">
-        {% with form_factor="tag" %}
+        {% with variant="tag" %}
           {% placeholder "categories" or %}
             <p class="person-detail__card__content__categories__empty">
               {% trans "No associated categories" %}

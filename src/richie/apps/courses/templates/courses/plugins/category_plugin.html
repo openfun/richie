@@ -1,51 +1,8 @@
 {% load cms_tags extra_tags i18n thumbnail %}
 {% spaceless %}
 {% if current_page.publisher_is_draft or instance.check_publication is True %}
-  {% if form_factor == "tag" %}
-    <a
-      class="category-plugin-tag{% if relevant_page.publisher_is_draft %} category-plugin-tag--draft{% endif %}"
-      href="{{ relevant_page.get_absolute_url }}"
-    >
-      {% get_placeholder_plugins "icon" relevant_page as icon_plugins %}
-      {% if icon_plugins %}
-        {% blockplugin icon_plugins.0 %}
-          <figure class="category-plugin-tag__figure">
-            <figcaption
-              class="category-plugin-tag__figure__caption"
-              {% if relevant_page.category.color %}style="background: {{ relevant_page.category.color }};"{% endif %}
-            >
-              {{ relevant_page.get_title }}
-            </figcaption>
-            <img src="{% thumbnail instance.picture 40x40 crop upscale subject_location=instance.picture.subject_location %}"
-            srcset="
-            {% thumbnail instance.picture 40x40 crop upscale subject_location=instance.picture.subject_location %} 40w
-            {% if instance.picture.width >= 80 %},{% thumbnail instance.picture 80x80 crop upscale subject_location=instance.picture.subject_location %} 80w{% endif %}
-            {% if instance.picture.width >= 120 %},{% thumbnail instance.picture 120x120 crop upscale subject_location=instance.picture.subject_location %} 120w{% endif %}
-            "
-            sizes="40px"
-            class="category-plugin-tag__figure__image"
-            alt="">
-          </figure>
-        {% endblockplugin %}
-      {% else %}
-        <div class="category-plugin-tag__title">{{ relevant_page.get_title }}</div>
-      {% endif %}
-    </a>
-  {% elif form_factor == "mark" %}
-    {% get_placeholder_plugins "icon" relevant_page as icon_plugins %}
-    {% blockplugin icon_plugins.0 %}
-      <img src="{% thumbnail instance.picture 60x60 crop upscale subject_location=instance.picture.subject_location %}"
-        srcset="
-          {% thumbnail instance.picture 60x60 crop upscale subject_location=instance.picture.subject_location %} 60w
-          {% if instance.picture.width >= 120 %},{% thumbnail instance.picture 120x120 crop upscale subject_location=instance.picture.subject_location %} 120w{% endif %}
-          {% if instance.picture.width >= 180 %},{% thumbnail instance.picture 180x180 crop upscale subject_location=instance.picture.subject_location %} 180w{% endif %}
-        "
-        sizes="60px"
-        alt="{{ relevant_page.get_title }}"
-      >
-    {% endblockplugin %}
-  {% else %}
-    {% include "courses/cms/fragment_category_glimpse.html" with category=relevant_page.category %}
-  {% endif %}
+  {% with category=relevant_page.category %}
+    {% include "courses/cms/fragment_category_glimpse.html" %}
+  {% endwith %}
 {% endif %}
 {% endspaceless %}

@@ -38,7 +38,7 @@
     {% include "social-networks/blogpost-badges.html" with page_title=request.current_page.get_title page_url=request.current_page.get_absolute_url %}
   </div>
 
-  {% with form_factor="tag" %}
+  {% with variant="tag" %}
     {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"categories" %}
     <div class="blogpost-detail__categories">
       {% page_placeholder "categories" current_page or %}

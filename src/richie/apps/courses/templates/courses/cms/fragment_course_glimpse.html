@@ -32,7 +32,7 @@
         {{ icon_plugins.0.page.get_title }}
         <div class="course-glimpse__icon__band__end" style="border-left-color: {{ icon_plugins.0.page.category.color }};"></div>
       </div>
-      {% with form_factor="mark" %}
+      {% with variant="mark" %}
         {% render_plugin icon_plugins.0 %}
       {% endwith %}
     {% endif %}
