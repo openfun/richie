@@ -20,6 +20,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Make placeholders work on a page created with PageFactory by rescanning
+  placeholders,
 - Improve responsiveness of footer logos and person categories that were not
   folding properly,
 - Pin Django to version less than 3.0.
