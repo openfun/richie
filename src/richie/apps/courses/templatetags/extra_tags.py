@@ -160,12 +160,15 @@ class GetPlaceholderPlugins(Placeholder):
 
         if request:
 
+            context[varname] = []
             page = _get_page_by_untyped_arg(page_lookup, request, get_site_id(None))
+
+            if not page:
+                return ""
 
             try:
                 placeholder = page.placeholders.get(slot=name)
             except ObjectDoesNotExist:
-                context[varname] = []
                 return ""
             else:
                 context[varname] = [
