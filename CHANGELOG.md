@@ -14,6 +14,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Rename all occurences of the "form_factor" variable to "variant",
 - Restructure categories glimpse/plugin for modularity and harmonization,
 - Segment course runs according to status on course detail page,
 - Our course search fields now have a "Search" button with a magnifying

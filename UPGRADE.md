@@ -16,6 +16,8 @@ $ make migrate
 
 ## Unreleased
 
+- All occurences of the `form_factor` variable have been renamed to `variant` for clarity.
+  Search and replace throughout your template overrides.
 - The `courses/cms/fragment_category_glimpse.html` and `courses/plugins/category_plugin.html`
   templates were refactored for a better modularity and harmonization with other types of pages.
   You must port these modifications to your project if you override either of these two templates.
