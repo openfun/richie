@@ -6,10 +6,11 @@ from unittest import mock
 
 from django.utils import timezone
 
+from cms.api import add_plugin
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import PageFactory, UserFactory
-from richie.apps.courses.factories import BlogPostFactory
+from richie.apps.courses.factories import BlogPostFactory, CategoryFactory
 
 
 class ListBlogPostCMSTestCase(CMSTestCase):
@@ -55,3 +56,53 @@ class ListBlogPostCMSTestCase(CMSTestCase):
 
         for title in ["First", "Second", "Third"]:
             self.assertContains(response, title)
+
+    def test_templates_blogpost_list_related_categories(self):
+        """
+        The top of the page should list all categories related to at least one of the blog
+        posts on the blog posts list page.
+        """
+        page = PageFactory(
+            template="courses/cms/blogpost_list.html",
+            title__language="en",
+            should_publish=True,
+        )
+
+        post1, post2 = BlogPostFactory.create_batch(
+            2, page_parent=page, should_publish=True
+        )
+
+        category1, category2, category12, category_alone = CategoryFactory.create_batch(
+            4, should_publish=True
+        )
+
+        # Attach categories to post1
+        placeholder = post1.extended_object.get_public_object().placeholders.all()[0]
+        add_plugin(placeholder, "CategoryPlugin", "en", page=category1.extended_object)
+        add_plugin(placeholder, "CategoryPlugin", "en", page=category12.extended_object)
+
+        # Attach categories to post2
+        placeholder = post2.extended_object.get_public_object().placeholders.all()[0]
+        add_plugin(placeholder, "CategoryPlugin", "en", page=category2.extended_object)
+        add_plugin(placeholder, "CategoryPlugin", "en", page=category12.extended_object)
+
+        response = self.client.get(page.get_absolute_url())
+        self.assertEqual(response.status_code, 200)
+
+        for category in [category1, category2, category12]:
+            self.assertContains(
+                response,
+                (
+                    '<a class="category-plugin-tag" href="{slug:s}">'
+                    '<div class="category-plugin-tag__title">{title:s}</div>'
+                    "</a>"
+                ).format(
+                    slug=category.extended_object.get_absolute_url(),
+                    title=category.extended_object.get_title(),
+                ),
+                html=True,
+            )
+
+        self.assertNotContains(
+            response, category_alone.extended_object.get_absolute_url()
+        )

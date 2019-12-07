@@ -6,16 +6,12 @@ $richie-category-plugin-tag-background: $gray7;
   flex-grow: 0;
   flex-shrink: 0;
   color: $richie-category-plugin-tag-fontcolor;
-  margin-left: 0.5rem;
+  margin-right: 0.5rem;
   margin-top: 0.5rem;
   text-decoration: none;
 
   &:hover {
     color: $richie-category-plugin-tag-fontcolor;
-  }
-
-  &:first-of-type {
-    margin-left: 0;
   }
 
   &__title {

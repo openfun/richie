@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Display all categories related to blogposts on the News page,
 - Add Cypress-based end-to-end tests that check accessibility with axe.
 
 ### Changed
