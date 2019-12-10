@@ -223,6 +223,10 @@ test-back: ## run back-end tests
 	@DB_PORT=$(DB_PORT) bin/pytest
 .PHONY: test-back
 
+test-e2e: ## run end-to-end tests
+	@$(COMPOSE_RUN) cypress
+.PHONY: test-e2e
+
 # -- Internationalization
 crowdin-download: ## download translated message from Crowdin
 	@$(COMPOSE_RUN_CROWDIN) download translations

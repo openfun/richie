@@ -39,8 +39,19 @@ This command simply opens the `Cypress` UI. From there, you can run all or some 
 
 When there are a11y violations, an assertion fails and prints out a list in the `Cypress` UI. You can then click on a violation to print more information in the browser console.
 
+## Running through docker
+
+Richie also includes docker configuration and a make command to run the end-to-end tests (and thus the accessibility checks) through docker.
+
+```bash
+make test-e2e
+```
+
+This will launch the tests using `cypress run`. We do not provide a way to use `cypress open` through docker as this requires dependencies on the host [0]. In our opinion users who need `cypress open` are better off just using `cypress` natively.
+
 ## Documentation reference
 
 - [List of all possible violations covered by `axe`](https://dequeuniversity.com/rules/axe/3.4)
 - [`Cypress` documentation](https://docs.cypress.io)
 - [`axe` and `Cypress` integration](https://github.com/avanslaars/cypress-axe)
+- [[0] - running `cypress open` through docker](https://www.cypress.io/blog/2019/05/02/run-cypress-with-a-single-docker-command/#Interactive-mode)

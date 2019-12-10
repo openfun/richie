@@ -51,3 +51,13 @@ services:
       - env.d/development/crowdin
     user: "${DOCKER_USER:-1000}"
     working_dir: /app
+
+  cypress:
+    image: cypress/included:3.7.0
+    volumes:
+      - "./tests_e2e:/e2e"
+    working_dir: /e2e
+    depends_on:
+      - "app"
+    environment:
+      - CYPRESS_baseUrl=http://app:8000
