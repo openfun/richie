@@ -7,9 +7,7 @@
     <li>
         <a href="{{ run.extended_object.get_absolute_url }}">
             {% if run.start  %}
-                {% blocktrans with title=run.extended_object.get_title|capfirst start=run.start|date:'DATE_FORMAT'|default:'...' end=run.end|date:'DATE_FORMAT'|default:'...' %}
-                    {{ title }}, from {{ start }} to {{ end }}
-                {% endblocktrans %}
+                {% blocktrans with title=run.extended_object.get_title|capfirst start=run.start|date:'DATE_FORMAT'|default:'...' end=run.end|date:'DATE_FORMAT'|default:'...' %}{{ title }}, from {{ start }} to {{ end }}{% endblocktrans %}
             {% else %}
                 {{ run.extended_object.get_title|capfirst }}
             {% endif %}

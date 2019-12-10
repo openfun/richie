@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-23 07:09+0000\n"
-"PO-Revision-Date: 2019-11-23 08:02\n"
+"POT-Creation-Date: 2019-12-09 16:27+0000\n"
+"PO-Revision-Date: 2019-12-10 07:30\n"
 "Last-Translator: Samuel Paccoud (sampaccoud)\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -411,10 +411,6 @@ msgstr "plugin de catégorie"
 msgid "enroll now"
 msgstr "s’inscrire maintenant"
 
-#: apps/courses/models/course.py:43
-msgid "see details"
-msgstr "voir les détails"
-
 #: apps/courses/models/course.py:51
 msgid "closing on"
 msgstr "termine le"
@@ -447,75 +443,74 @@ msgstr "toujours ouvert"
 msgid "course"
 msgstr "cours"
 
-#: apps/courses/models/course.py:437
-#: apps/courses/templates/courses/cms/course_detail.html:178
+#: apps/courses/models/course.py:447
 #: apps/courses/templates/courses/cms/course_run_detail.html:81
 msgid "Resource link"
 msgstr "Lien de la ressource"
 
-#: apps/courses/models/course.py:438
+#: apps/courses/models/course.py:448
 msgid "course start"
 msgstr "début du cours"
 
-#: apps/courses/models/course.py:439
+#: apps/courses/models/course.py:449
 msgid "course end"
 msgstr "fin du cours"
 
-#: apps/courses/models/course.py:441
+#: apps/courses/models/course.py:451
 msgid "enrollment start"
 msgstr "début des inscriptions"
 
-#: apps/courses/models/course.py:443
+#: apps/courses/models/course.py:453
 msgid "enrollment end"
 msgstr "fin des inscriptions"
 
-#: apps/courses/models/course.py:451
+#: apps/courses/models/course.py:461
 msgid "The list of languages in which the course content is available."
 msgstr "Les langues dans lesquelles le contenu du cours est disponible."
 
-#: apps/courses/models/course.py:458
+#: apps/courses/models/course.py:468
 msgid "course run"
 msgstr "session de cours"
 
-#: apps/courses/models/course.py:562 apps/courses/models/organization.py:225
+#: apps/courses/models/course.py:572 apps/courses/models/organization.py:225
 #: apps/courses/models/organization.py:260
 msgid "variant"
 msgstr "variante"
 
-#: apps/courses/models/course.py:565 apps/courses/models/organization.py:228
+#: apps/courses/models/course.py:575 apps/courses/models/organization.py:228
 #: apps/courses/models/organization.py:263
 msgid "Optional glimpse variant for a custom look."
 msgstr "Variante d'aperçu optionnelle pour un affichage personnalisé."
 
-#: apps/courses/models/course.py:572
+#: apps/courses/models/course.py:582
 msgid "course plugin"
 msgstr "plugin de cours"
 
-#: apps/courses/models/course.py:588
+#: apps/courses/models/course.py:598
 msgid "name"
 msgstr "nom"
 
-#: apps/courses/models/course.py:590 plugins/large_banner/models.py:38
+#: apps/courses/models/course.py:600 plugins/large_banner/models.py:38
 msgid "logo"
 msgstr "logo"
 
-#: apps/courses/models/course.py:592
+#: apps/courses/models/course.py:602
 msgid "url"
 msgstr "url"
 
-#: apps/courses/models/course.py:593
+#: apps/courses/models/course.py:603
 msgid "content"
 msgstr "contenu"
 
-#: apps/courses/models/course.py:597
+#: apps/courses/models/course.py:607
 msgid "licence"
 msgstr "license"
 
-#: apps/courses/models/course.py:612
+#: apps/courses/models/course.py:622
 msgid "description"
 msgstr "description"
 
-#: apps/courses/models/course.py:616
+#: apps/courses/models/course.py:626
 msgid "licence plugin"
 msgstr "plugin de licence"
 
@@ -665,7 +660,7 @@ msgstr "Contenu principal"
 
 #: apps/courses/settings/__init__.py:101 apps/courses/settings/__init__.py:246
 #: apps/courses/settings/__init__.py:261
-#: apps/courses/templates/courses/cms/blogpost_detail.html:49
+#: apps/courses/templates/courses/cms/blogpost_detail.html:53
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:8
 #: apps/courses/templates/courses/cms/fragment_course_glimpse.html:14
 #: apps/courses/templates/courses/cms/fragment_program_glimpse.html:8
@@ -751,7 +746,7 @@ msgstr "Bannière"
 
 #: apps/courses/settings/__init__.py:182 apps/courses/settings/__init__.py:202
 #: apps/courses/templates/courses/cms/category_detail.html:32
-#: apps/courses/templates/courses/cms/fragment_category_glimpse.html:9
+#: apps/courses/templates/courses/cms/fragment_category_glimpse.html:55
 #: apps/courses/templates/courses/cms/fragment_organization_glimpse.html:14
 #: apps/courses/templates/courses/cms/organization_detail.html:34
 msgid "Logo"
@@ -796,29 +791,33 @@ msgstr "Bouton caesura"
 msgid "Full width"
 msgstr "Pleine largeur"
 
-#: apps/courses/templates/courses/cms/blogpost_detail.html:28
+#: apps/courses/templates/courses/cms/blogpost_detail.html:24
+msgid "Not published yet"
+msgstr "Pas encore publié"
+
+#: apps/courses/templates/courses/cms/blogpost_detail.html:32
 msgid "No author yet"
 msgstr "Pas d'auteur"
 
-#: apps/courses/templates/courses/cms/blogpost_detail.html:41
+#: apps/courses/templates/courses/cms/blogpost_detail.html:45
 msgid "No categories yet."
 msgstr "Pas de catégories."
 
-#: apps/courses/templates/courses/cms/blogpost_detail.html:60
+#: apps/courses/templates/courses/cms/blogpost_detail.html:64
 msgid "blog post cover image"
 msgstr "image de couverture de billet de blog"
 
-#: apps/courses/templates/courses/cms/blogpost_detail.html:68
+#: apps/courses/templates/courses/cms/blogpost_detail.html:72
 #: apps/courses/templates/courses/cms/program_detail.html:36
 msgid "No excerpt content"
 msgstr "Pas d'extrait"
 
-#: apps/courses/templates/courses/cms/blogpost_detail.html:76
+#: apps/courses/templates/courses/cms/blogpost_detail.html:80
 #: apps/courses/templates/courses/cms/program_detail.html:44
 msgid "No body content"
 msgstr "Pas de contenu"
 
-#: apps/courses/templates/courses/cms/blogpost_list.html:17
+#: apps/courses/templates/courses/cms/blogpost_list.html:31
 msgid "No associated blogposts"
 msgstr "Pas de billets de blog associés"
 
@@ -893,37 +892,33 @@ msgstr "Durée :"
 msgid "Effort:"
 msgstr "Effort :"
 
-#: apps/courses/templates/courses/cms/course_detail.html:160
+#: apps/courses/templates/courses/cms/course_detail.html:163
 msgid "Course runs"
 msgstr "Sessions de cours"
 
-#: apps/courses/templates/courses/cms/course_detail.html:164
-msgid "Enrollment"
-msgstr "Inscription"
-
-#: apps/courses/templates/courses/cms/course_detail.html:168
-#: apps/courses/templates/courses/cms/course_detail.html:174
-msgid "From"
-msgstr "Du"
-
-#: apps/courses/templates/courses/cms/course_detail.html:168
-#: apps/courses/templates/courses/cms/course_detail.html:174
-msgid "to"
-msgstr "au"
-
-#: apps/courses/templates/courses/cms/course_detail.html:170
-msgid "Course"
-msgstr "Cours"
+#: apps/courses/templates/courses/cms/course_detail.html:167
+msgid "No open course runs"
+msgstr "Aucune session ouverte"
 
 #: apps/courses/templates/courses/cms/course_detail.html:176
-#: apps/courses/templates/courses/cms/course_run_detail.html:66
-#: apps/search/defaults.py:54
-msgid "Languages"
-msgstr "Langues"
+msgctxt "Course runs to be scheduled (plural)"
+msgid "To be scheduled"
+msgstr "A programmer"
 
-#: apps/courses/templates/courses/cms/course_detail.html:197
-msgid "No associated course runs"
-msgstr "Aucune session de cours n'est disponible"
+#: apps/courses/templates/courses/cms/course_detail.html:187
+msgctxt "Upcoming course runs (plural)"
+msgid "Upcoming"
+msgstr "A venir"
+
+#: apps/courses/templates/courses/cms/course_detail.html:198
+msgctxt "Ongoing course runs (plural)"
+msgid "Ongoing"
+msgstr "En cours"
+
+#: apps/courses/templates/courses/cms/course_detail.html:209
+msgctxt "Archived course runs (plural)"
+msgid "Archived"
+msgstr "Archivées"
 
 #: apps/courses/templates/courses/cms/course_run_detail.html:47
 msgid "Details"
@@ -944,6 +939,12 @@ msgstr "Début du cours"
 #: apps/courses/templates/courses/cms/course_run_detail.html:60
 msgid "Course ends"
 msgstr "Fin du cours"
+
+#: apps/courses/templates/courses/cms/course_run_detail.html:66
+#: apps/courses/templates/courses/cms/fragment_course_run.html:15
+#: apps/search/defaults.py:54
+msgid "Languages"
+msgstr "Langues"
 
 #: apps/courses/templates/courses/cms/fragment_course_content.html:6
 msgid "Add a video or teaser."
@@ -1004,6 +1005,41 @@ msgstr "Quelle est la licence pour le contenu du cours ?"
 #: apps/courses/templates/courses/cms/fragment_course_content.html:139
 msgid "What is the license for the content created by course participants?"
 msgstr "Quelle est la licence pour le contenu créé par les participants du cours ?"
+
+#: apps/courses/templates/courses/cms/fragment_course_run.html:4
+msgid "Enrollment"
+msgstr "Inscription"
+
+#: apps/courses/templates/courses/cms/fragment_course_run.html:6
+#, python-format
+msgid "\n"
+"                From %(enrollment_start)s to %(enrollment_end)s\n"
+"            "
+msgstr "\n"
+"              Du %(enrollment_start)s au %(enrollment_end)s\n"
+"            "
+
+#: apps/courses/templates/courses/cms/fragment_course_run.html:9
+msgid "Course"
+msgstr "Cours"
+
+#: apps/courses/templates/courses/cms/fragment_course_run.html:11
+#, python-format
+msgid "\n"
+"                From %(start)s to %(end)s\n"
+"            "
+msgstr "\n"
+"              Du %(start)s au %(end)s\n"
+"            "
+
+#: apps/courses/templates/courses/cms/fragment_course_runs_list.html:10
+#, python-format
+msgid "\n"
+"                    %(title)s, from %(start)s to %(end)s\n"
+"                "
+msgstr "\n"
+"                    %(title)s, du %(start)s au %(end)s\n"
+"                "
 
 #: apps/courses/templates/courses/cms/fragment_organization_main_logo.html:7
 #: apps/courses/templates/courses/cms/fragment_organization_main_logo.html:26
