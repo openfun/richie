@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Allow CKEditor with minimal options on course format, prerequisites and
+  assessment sections.
+
 ## [1.16.0] - 2019-12-10
 
 ### Added

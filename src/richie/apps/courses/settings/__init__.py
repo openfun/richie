@@ -122,11 +122,11 @@ CMS_PLACEHOLDER_CONF = {
     },
     "courses/cms/course_detail.html course_format": {
         "name": _("Format"),
-        "plugins": ["PlainTextPlugin"],
+        "plugins": ["CKEditorPlugin"],
     },
     "courses/cms/course_detail.html course_prerequisites": {
         "name": _("Prerequisites"),
-        "plugins": ["PlainTextPlugin"],
+        "plugins": ["CKEditorPlugin"],
     },
     "courses/cms/course_detail.html course_team": {
         "name": _("Team"),
@@ -170,7 +170,7 @@ CMS_PLACEHOLDER_CONF = {
     },
     "courses/cms/course_detail.html course_assessment": {
         "name": _("Assessment and Certification"),
-        "plugins": ["PlainTextPlugin"],
+        "plugins": ["CKEditorPlugin"],
     },
     # Organization detail
     "courses/cms/organization_detail.html banner": {
@@ -371,6 +371,10 @@ RICHIE_SIMPLETEXT_CONFIGURATION = [
         "placeholders": ["course_description"],
         "ckeditor": "CKEDITOR_LIMITED_CONFIGURATION",
         "max_length": 1200,
+    },
+    {
+        "placeholders": ["course_assessment", "course_format", "course_prerequisites"],
+        "ckeditor": "CKEDITOR_BASIC_CONFIGURATION",
     },
 ]
 
