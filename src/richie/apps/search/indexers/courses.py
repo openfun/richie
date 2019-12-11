@@ -497,6 +497,7 @@ class CoursesIndexer:
                 [title for page in category_pages for title in page.published_titles],
                 {},
             ),
+            "categories_data": list(course.get_categories_data_for_glimpse().values()),
             "complete": {
                 language: slice_string_for_completion(title)
                 for language, title in titles.items()

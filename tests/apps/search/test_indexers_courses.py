@@ -9,6 +9,7 @@ from django.test import TestCase
 import pytz
 from cms.api import add_plugin
 
+from richie.apps.core.helpers import create_i18n_page
 from richie.apps.courses.cms_plugins import CategoryPlugin
 from richie.apps.courses.factories import (
     CategoryFactory,
@@ -38,7 +39,19 @@ class CoursesIndexersTestCase(TestCase):
         """
         # Create a course with a page in both english and french
         organization = OrganizationFactory(should_publish=True)
-        category = CategoryFactory(should_publish=True)
+        meta = CategoryFactory(
+            page_parent=create_i18n_page(
+                {"en": "Categories", "fr": "Catégories"}, published=True
+            ),
+            page_reverse_id="subjects",
+            page_title={"en": "Subjects", "fr": "Sujets"},
+            fill_icon=True,
+            fill_logo=True,
+            should_publish=True,
+        )
+        category = CategoryFactory(
+            page_parent=meta.extended_object, should_publish=True
+        )
         course = CourseFactory(
             fill_organizations=[organization],
             fill_categories=[category],
@@ -97,42 +110,79 @@ class CoursesIndexersTestCase(TestCase):
         )
 
     @mock.patch(
+        "richie.apps.courses.models.course.get_picture_info",
+        return_value={"info": "picture info"},
+    )
+    @mock.patch(
         "richie.apps.search.indexers.courses.get_picture_info",
         return_value={"info": "picture info"},
     )
-    def test_indexers_courses_get_es_documents_from_models(self, _mock_picture):
+    # pylint: disable=too-many-locals
+    def test_indexers_courses_get_es_documents_from_models(
+        self, _mock_picture, _mock_picture_
+    ):
         """
         Happy path: the data is retrieved from the models properly formatted
         """
+        # Create meta categories under which we'll tuck our categories
+        categories_main = create_i18n_page(
+            {"en": "Categories", "fr": "Catégories"}, published=True
+        )
+        meta1 = CategoryFactory(
+            page_parent=categories_main,
+            page_reverse_id="subjects",
+            page_title={"en": "Subjects", "fr": "Sujets"},
+            fill_icon=True,
+            fill_logo=True,
+            should_publish=True,
+        )
+        meta2 = CategoryFactory(
+            page_parent=categories_main,
+            page_reverse_id="levels",
+            page_title={"en": "Subjects", "fr": "Sujets"},
+            fill_icon=True,
+            fill_logo=True,
+            should_publish=True,
+        )
         # Create a course with a page in both english and french
         published_categories = [
-            CategoryFactory(  # L-0001
+            CategoryFactory(  # L-000100010001 as child of "Subjects" & "Categories"
+                page_parent=meta1.extended_object,
                 fill_icon=True,
-                page_title={"en": "Title L-0001", "fr": "Titre L-0001"},
+                page_title={"en": "Title Cat 0001", "fr": "Titre Cat 0001"},
                 should_publish=True,
             ),
-            CategoryFactory(  # L-0002
+            CategoryFactory(  # L-000100010002 (ditto)
+                page_parent=meta1.extended_object,
+                fill_icon=False,
+                page_title={"en": "Title Cat 0002", "fr": "Titre Cat 0002"},
+                should_publish=True,
+            ),
+            CategoryFactory(  # L-000100020001 as child of "Levels" & "Categories"
+                page_parent=meta2.extended_object,
                 fill_icon=True,
-                page_title={"en": "Title L-0002", "fr": "Titre L-0002"},
+                page_title={"en": "Title Cat 0003", "fr": "Titre Cat 0003"},
                 should_publish=True,
             ),
         ]
-        draft_category = CategoryFactory(fill_icon=True)  # L-0003
+        draft_category = CategoryFactory(
+            page_parent=meta1.extended_object, fill_icon=True
+        )  # # L-000100010003
 
-        main_organization = OrganizationFactory(  # L-0004
+        main_organization = OrganizationFactory(  # L-0002
             page_title={
                 "en": "english main organization title",
                 "fr": "titre organisation principale français",
             },
             should_publish=True,
         )
-        other_draft_organization = OrganizationFactory(  # L-0005
+        other_draft_organization = OrganizationFactory(  # L-0003
             page_title={
                 "en": "english other organization title",
                 "fr": "titre autre organisation français",
             }
         )
-        other_published_organization = OrganizationFactory(  # L-0006
+        other_published_organization = OrganizationFactory(  # L-0004
             page_title={
                 "en": "english other organization title",
                 "fr": "titre autre organisation français",
@@ -192,10 +242,60 @@ class CoursesIndexersTestCase(TestCase):
                 "en": "/en/an-english-course-title/",
                 "fr": "/fr/un-titre-cours-francais/",
             },
-            "categories": ["L-0001", "L-0002"],
+            "categories": ["L-000100010001", "L-000100010002", "L-000100020001"],
+            "categories_data": [
+                {
+                    "color": None,
+                    "icon": {
+                        "en": {"info": "picture info"},
+                        "fr": {"info": "picture info"},
+                    },
+                    "meta_name": "subjects",
+                    "meta_title": {"en": "Subjects", "fr": "Sujets"},
+                    "name": None,
+                    "parent_name": None,
+                    "parent_title": None,
+                    "placeholders": [
+                        {"position": 0, "slot": "course_categories"},
+                        {"position": 0, "slot": "course_icons"},
+                    ],
+                    "title": {"en": "Title Cat 0001", "fr": "Titre Cat 0001"},
+                },
+                {
+                    "color": None,
+                    "icon": {},
+                    "meta_name": "subjects",
+                    "meta_title": {"en": "Subjects", "fr": "Sujets"},
+                    "name": None,
+                    "parent_name": None,
+                    "parent_title": None,
+                    "placeholders": [
+                        {"position": 1, "slot": "course_categories"},
+                        {"position": 1, "slot": "course_icons"},
+                    ],
+                    "title": {"en": "Title Cat 0002", "fr": "Titre Cat 0002"},
+                },
+                {
+                    "color": None,
+                    "icon": {
+                        "en": {"info": "picture info"},
+                        "fr": {"info": "picture info"},
+                    },
+                    "meta_name": "levels",
+                    "meta_title": {"en": "Subjects", "fr": "Sujets"},
+                    "name": None,
+                    "parent_name": None,
+                    "parent_title": None,
+                    "placeholders": [
+                        {"position": 2, "slot": "course_categories"},
+                        {"position": 2, "slot": "course_icons"},
+                    ],
+                    "title": {"en": "Title Cat 0003", "fr": "Titre Cat 0003"},
+                },
+            ],
             "categories_names": {
-                "en": ["Title L-0001", "Title L-0002"],
-                "fr": ["Titre L-0001", "Titre L-0002"],
+                "en": ["Title Cat 0001", "Title Cat 0002", "Title Cat 0003"],
+                "fr": ["Titre Cat 0001", "Titre Cat 0002", "Titre Cat 0003"],
             },
             "complete": {
                 "en": [
@@ -233,16 +333,16 @@ class CoursesIndexersTestCase(TestCase):
                 "en": {
                     "color": published_categories[0].color,
                     "info": "picture info",
-                    "title": "Title L-0001",
+                    "title": "Title Cat 0001",
                 },
                 "fr": {
                     "color": published_categories[0].color,
                     "info": "picture info",
-                    "title": "Titre L-0001",
+                    "title": "Titre Cat 0001",
                 },
             },
             "is_new": False,
-            "organizations": ["L-0004", "L-0006"],
+            "organizations": ["L-0002", "L-0004"],
             "organizations_names": {
                 "en": [
                     "english main organization title",
@@ -397,7 +497,19 @@ class CoursesIndexersTestCase(TestCase):
             slot="course_icons"
         ).first()
         # Create a category and add it to the course on the icons placeholder
-        category = CategoryFactory(should_publish=True, color="#654321")
+        meta = CategoryFactory(
+            page_parent=create_i18n_page(
+                {"en": "Categories", "fr": "Catégories"}, published=True
+            ),
+            page_reverse_id="subjects",
+            page_title={"en": "Subjects", "fr": "Sujets"},
+            fill_icon=True,
+            fill_logo=True,
+            should_publish=True,
+        )
+        category = CategoryFactory(
+            page_parent=meta.extended_object, should_publish=True, color="#654321"
+        )
         add_plugin(
             course_icons_placeholder,
             CategoryPlugin,

@@ -6,6 +6,7 @@ from unittest import mock
 from django.db import connection
 from django.test import TestCase
 
+from richie.apps.core.helpers import create_i18n_page
 from richie.apps.courses.factories import (
     CategoryFactory,
     CourseFactory,
@@ -173,7 +174,19 @@ class CoursesSignalsTestCase(TestCase):
         Publishing a category should update its document in the Elasticsearch categories
         index, and the documents for published courses to which it is related, excluding snapshots.
         """
-        parent = CategoryFactory(should_publish=True)
+        meta = CategoryFactory(  # Meta category has path 00010001
+            page_parent=create_i18n_page(  # Root category pagee has path 0001
+                {"en": "Categories", "fr": "Catégories"}, published=True
+            ),
+            page_reverse_id="subjects",
+            page_title={"en": "Subjects", "fr": "Sujets"},
+            fill_icon=True,
+            fill_logo=True,
+            should_publish=True,
+        )
+        # Parent category has path 000100010001
+        parent = CategoryFactory(page_parent=meta.extended_object, should_publish=True)
+        # Child category has path 0001000100010001
         category = CategoryFactory(page_parent=parent.extended_object)
         published_course, _unpublished_course = CourseFactory.create_batch(
             2, fill_categories=[category]
@@ -197,9 +210,9 @@ class CoursesSignalsTestCase(TestCase):
             actions[0]["_id"], str(published_course.public_extension.extended_object_id)
         )
         self.assertEqual(actions[0]["_type"], "course")
-        self.assertEqual(actions[1]["_id"], "L-00010001")
+        self.assertEqual(actions[1]["_id"], "L-0001000100010001")  # Child category path
         self.assertEqual(actions[1]["_type"], "category")
-        self.assertEqual(actions[2]["_id"], "P-0001")
+        self.assertEqual(actions[2]["_id"], "P-000100010001")  # Parent category path
         self.assertEqual(actions[2]["_type"], "category")
 
     def test_signals_categories_no_parent(self, mock_bulk, *_):
@@ -207,7 +220,18 @@ class CoursesSignalsTestCase(TestCase):
         Publishing a category should update its document in the Elasticsearch categories
         index, and the documents for published courses to which it is related, excluding snapshots.
         """
-        category = CategoryFactory()
+        meta = CategoryFactory(  # Meta category has path 00010001
+            page_parent=create_i18n_page(  # Root category pagee has path 0001
+                {"en": "Categories", "fr": "Catégories"}, published=True
+            ),
+            page_reverse_id="subjects",
+            page_title={"en": "Subjects", "fr": "Sujets"},
+            fill_icon=True,
+            fill_logo=True,
+            should_publish=True,
+        )
+        # Standalone category has path 000100010001
+        category = CategoryFactory(page_parent=meta.extended_object)
         published_course, _unpublished_course = CourseFactory.create_batch(
             2, fill_categories=[category]
         )
@@ -224,11 +248,15 @@ class CoursesSignalsTestCase(TestCase):
         self.run_commit_hooks()
 
         self.assertEqual(mock_bulk.call_count, 1)
-        self.assertEqual(len(mock_bulk.call_args[1]["actions"]), 2)
+        self.assertEqual(len(mock_bulk.call_args[1]["actions"]), 3)
         actions = list(mock_bulk.call_args[1]["actions"])
         self.assertEqual(
             actions[0]["_id"], str(published_course.public_extension.extended_object_id)
         )
         self.assertEqual(actions[0]["_type"], "course")
-        self.assertEqual(actions[1]["_id"], "L-0001")
+        self.assertEqual(
+            actions[1]["_id"], "L-000100010001"  # Path for standalone category
+        )
         self.assertEqual(actions[1]["_type"], "category")
+        self.assertEqual(actions[2]["_id"], "P-00010001")  # Path for meta category
+        self.assertEqual(actions[2]["_type"], "category")
