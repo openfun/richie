@@ -329,18 +329,6 @@ class CoursesIndexersTestCase(TestCase):
                 "en": "english description line 1. english description line 2.",
                 "fr": "a propos français ligne 1. a propos français ligne 2.",
             },
-            "icon": {
-                "en": {
-                    "color": published_categories[0].color,
-                    "info": "picture info",
-                    "title": "Title Cat 0001",
-                },
-                "fr": {
-                    "color": published_categories[0].color,
-                    "info": "picture info",
-                    "title": "Titre Cat 0001",
-                },
-            },
             "is_new": False,
             "organizations": ["L-0002", "L-0004"],
             "organizations_names": {
@@ -535,8 +523,18 @@ class CoursesIndexersTestCase(TestCase):
             str(course.extended_object.get_public_object().id),
         )
         self.assertEqual(
-            indexed_courses[0]["icon"],
-            {"en": {"color": "#654321", "title": category.extended_object.get_title()}},
+            indexed_courses[0]["categories_data"][0],
+            {
+                "color": "#654321",
+                "icon": {"en": None},
+                "meta_name": "subjects",
+                "meta_title": {"en": "Subjects", "fr": "Sujets"},
+                "name": None,
+                "parent_name": None,
+                "parent_title": None,
+                "placeholders": [{"position": 0, "slot": "course_icons"}],
+                "title": {"en": category.extended_object.get_title()},
+            },
         )
 
     def test_indexers_courses_format_es_object_for_api(self):
@@ -562,7 +560,6 @@ class CoursesIndexersTestCase(TestCase):
                     }
                 ],
                 "cover_image": {"en": "cover_image.jpg"},
-                "icon": {"en": "icon.jpg"},
                 "organizations": [42, 84],
                 "organizations_names": {"en": ["Org 42", "Org 84"]},
                 "title": {"en": "Duis eu arcu erat"},
@@ -593,7 +590,6 @@ class CoursesIndexersTestCase(TestCase):
                     }
                 ],
                 "cover_image": "cover_image.jpg",
-                "icon": "icon.jpg",
                 "organization_highlighted": "Org 42",
                 "organizations": [42, 84],
                 "title": "Duis eu arcu erat",
@@ -627,7 +623,6 @@ class CoursesIndexersTestCase(TestCase):
                     }
                 ],
                 "cover_image": {"en": "cover_image.jpg"},
-                "icon": {"en": "icon.jpg"},
                 "organizations": [],
                 "organizations_names": {},
                 "title": {"en": "Duis eu arcu erat"},
@@ -658,7 +653,6 @@ class CoursesIndexersTestCase(TestCase):
                     }
                 ],
                 "cover_image": "cover_image.jpg",
-                "icon": "icon.jpg",
                 "organization_highlighted": None,
                 "organizations": [],
                 "title": "Duis eu arcu erat",
@@ -691,7 +685,6 @@ class CoursesIndexersTestCase(TestCase):
                     }
                 ],
                 "cover_image": {"en": "cover_image.jpg"},
-                "icon": {},
                 "organizations": [42, 84],
                 "organizations_names": {"en": ["Org 42", "Org 84"]},
                 "title": {"en": "Duis eu arcu erat"},
@@ -722,7 +715,6 @@ class CoursesIndexersTestCase(TestCase):
                     }
                 ],
                 "cover_image": "cover_image.jpg",
-                "icon": None,
                 "organization_highlighted": "Org 42",
                 "organizations": [42, 84],
                 "title": "Duis eu arcu erat",
@@ -755,7 +747,6 @@ class CoursesIndexersTestCase(TestCase):
                     }
                 ],
                 "cover_image": {},
-                "icon": {"en": "icon.jpg"},
                 "organizations": [42, 84],
                 "organizations_names": {"en": ["Org 42", "Org 84"]},
                 "title": {"en": "Duis eu arcu erat"},
@@ -786,7 +777,6 @@ class CoursesIndexersTestCase(TestCase):
                     }
                 ],
                 "cover_image": None,
-                "icon": "icon.jpg",
                 "organization_highlighted": "Org 42",
                 "organizations": [42, 84],
                 "title": "Duis eu arcu erat",
@@ -820,7 +810,6 @@ class CoursesIndexersTestCase(TestCase):
                     }
                 ],
                 "cover_image": {"en": "cover_image.jpg"},
-                "icon": {"en": "icon.jpg"},
                 "organizations": [42, 84],
                 "organizations_names": {"en": ["Org 42", "Org 84"]},
                 "title": {"en": "Duis eu arcu erat"},

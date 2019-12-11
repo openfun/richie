@@ -15,7 +15,7 @@ from djangocms_picture.models import Picture
 from richie.plugins.simple_picture.helpers import get_picture_info
 from richie.plugins.simple_text_ckeditor.models import SimpleText
 
-from ...courses.models import MAX_DATE, CategoryPluginModel, Course, CourseState
+from ...courses.models import MAX_DATE, Course, CourseState
 from ..forms import CourseSearchForm
 from ..text_indexing import MULTILINGUAL_TEXT
 from ..utils.i18n import get_best_field_language
@@ -381,28 +381,6 @@ class CoursesIndexer:
                 if picture_info:
                     cover_images[language] = picture_info
 
-        # Prepare the related category icon
-        icon_images = {}
-        for plugin_model in CategoryPluginModel.objects.filter(
-            cmsplugin_ptr__placeholder__page=course.extended_object_id,
-            cmsplugin_ptr__placeholder__slot="course_icons",
-            cmsplugin_ptr__position=0,
-        ):
-            language = plugin_model.language
-            for icon in Picture.objects.filter(
-                cmsplugin_ptr__language=language,
-                cmsplugin_ptr__placeholder__page=plugin_model.page_id,
-                cmsplugin_ptr__placeholder__slot="icon",
-                cmsplugin_ptr__position=0,
-            ):
-                with translation.override(language):
-                    picture_info = get_picture_info(icon, "icon") or {}
-                    icon_images[language] = {
-                        **picture_info,
-                        "color": plugin_model.page.category.color,
-                        "title": plugin_model.page.get_title(),
-                    }
-
         # Prepare description texts
         descriptions = defaultdict(list)
         for simple_text in SimpleText.objects.filter(
@@ -506,7 +484,6 @@ class CoursesIndexer:
             "course_runs": course_runs,
             "cover_image": cover_images,
             "description": {l: " ".join(st) for l, st in descriptions.items()},
-            "icon": icon_images,
             "is_new": len(course_runs) == 1,
             "organizations": [
                 ES_INDICES.organizations.get_es_id(o.extended_object)
@@ -595,7 +572,6 @@ class CoursesIndexer:
                 for cat_data in source["categories_data"]
             ],
             "cover_image": get_best_field_language(source["cover_image"], language),
-            "icon": get_best_field_language(source["icon"], language),
             "organization_highlighted": organizations_names[0]
             if organizations_names
             else None,
