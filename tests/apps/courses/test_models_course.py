@@ -258,10 +258,11 @@ class CourseModelsTestCase(TestCase):
         with translation.override("en"):
             self.assertEqual(list(course.get_categories()), [category_en])
 
-    def test_models_course_get_categories_other_placeholders(self):
+    def test_models_course_get_categories_with_placeholders(self):
         """
         The `get_categories` method should return all categories linked to a course via a plugin
-        on whichever placeholder.
+        on whichever placeholder. It annotates the category with the placeholder through which
+        they are linked with the course.
         """
         category1, category2 = CategoryFactory.create_batch(2)
 
@@ -284,7 +285,57 @@ class CourseModelsTestCase(TestCase):
             page=category2.extended_object,
         )
 
-        self.assertEqual(list(course.get_categories()), [category1, category2])
+        course_categories = course.get_categories()
+        self.assertEqual(list(course_categories), [category1, category2])
+        self.assertEqual(course_categories[0].placeholder_slot, "course_description")
+        self.assertEqual(course_categories[0].placeholder_position, 0)
+        self.assertEqual(course_categories[1].placeholder_slot, "course_format")
+        self.assertEqual(course_categories[1].placeholder_position, 0)
+
+    def test_models_course_get_categories_duplicate_category_placeholders(self):
+        """
+        The `get_categories` method handles the case of a category linked to a course through
+        two different placeholders.
+        In this case we get duplicated categories (by pk) but with different annotations, in
+        keeping with Django's own behavior.
+        """
+        category1, category2 = CategoryFactory.create_batch(2)
+
+        course = CourseFactory(should_publish=True)
+        placeholder1 = course.extended_object.placeholders.get(
+            slot="course_description"
+        )
+        placeholder2 = course.extended_object.placeholders.get(slot="course_format")
+
+        # Category 1 is linked with the course through both placeholders
+        add_plugin(
+            language="en",
+            placeholder=placeholder1,
+            plugin_type="CategoryPlugin",
+            page=category1.extended_object,
+        )
+        add_plugin(
+            language="en",
+            placeholder=placeholder2,
+            plugin_type="CategoryPlugin",
+            page=category1.extended_object,
+        )
+        # Category 2 is only linked once, through placeholder2
+        add_plugin(
+            language="en",
+            placeholder=placeholder2,
+            plugin_type="CategoryPlugin",
+            page=category2.extended_object,
+        )
+
+        course_categories = course.get_categories()
+        self.assertEqual(list(course_categories), [category1, category1, category2])
+        self.assertEqual(course_categories[0].placeholder_slot, "course_description")
+        self.assertEqual(course_categories[0].placeholder_position, 0)
+        self.assertEqual(course_categories[1].placeholder_slot, "course_format")
+        self.assertEqual(course_categories[1].placeholder_position, 0)
+        self.assertEqual(course_categories[2].placeholder_slot, "course_format")
+        self.assertEqual(course_categories[2].placeholder_position, 1)
 
     def test_models_course_get_organizations_empty(self):
         """

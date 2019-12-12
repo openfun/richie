@@ -7,7 +7,7 @@ from datetime import MAXYEAR, datetime
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import Q
+from django.db.models import F, Q
 from django.utils import timezone, translation
 from django.utils.functional import lazy
 from django.utils.translation import ugettext_lazy as _
@@ -311,6 +311,10 @@ class Course(BasePageExtension):
         return (
             Category.objects.filter(**filter_dict)
             .select_related("extended_object")
+            .annotate(
+                placeholder_slot=F(f"{selector:s}__placeholder__slot"),
+                placeholder_position=F(f"{selector:s}__position"),
+            )
             .order_by("extended_object__node__path")
             .distinct()
         )
