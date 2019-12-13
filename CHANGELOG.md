@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.16.1] - 2019-12-13
+
 ### Changed
 
 - Allow CKEditor with minimal options on course format, prerequisites and
@@ -717,7 +719,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v1.16.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v1.16.1...master
+[1.16.1]: https://github.com/openfun/richie/compare/v1.16.0...v1.16.1
 [1.16.0]: https://github.com/openfun/richie/compare/v1.15.0...v1.16.0
 [1.15.0]: https://github.com/openfun/richie/compare/v1.14.1...v1.15.0
 [1.14.1]: https://github.com/openfun/richie/compare/v1.14.0...v1.14.1
