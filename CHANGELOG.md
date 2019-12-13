@@ -22,6 +22,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Improve ElasticSearch `regenerate_indexes` tests.
+- Replace the `icon` field on courses in the API with a `categories_data`
+  field with more information that gives the frontend more flexibility in
+  the way to use categories for colors & icons.
 
 ## [1.16.2] - 2019-12-18
 

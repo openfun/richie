@@ -20,6 +20,33 @@ from richie.apps.search.text_indexing import ANALYSIS_SETTINGS
 COURSES = [
     {
         "categories": ["P-00010001", "P-00010002", "L-000100010001", "L-00020001"],
+        "categories_data": [
+            {
+                "color": "#aeaeae",
+                "icon": {"en": {"info": "picture_info"}},
+                "meta_name": "subjects",
+                "meta_title": {"en": "Subjects", "fr": "Sujets"},
+                "name": "articifial-intelligence",
+                "parent_name": "computer-science",
+                "parent_title": {"en": "Computer Science", "fr": "Informatique"},
+                "placeholder_names": ["course_categories", "course_icons"],
+                "title": {
+                    "en": "Artificial Intelligence",
+                    "fr": "Intelligence artificielle",
+                },
+            },
+            {
+                "color": None,
+                "icon": None,
+                "meta_name": "seasons",
+                "meta_title": {"en": "Seasons"},
+                "name": "autumn",
+                "parent_name": None,
+                "parent_title": None,
+                "placeholder_names": ["course_categories"],
+                "title": {"en": "Autumn"},
+            },
+        ],
         "categories_names": {"en": ["Artificial intelligence", "Autumn", "Wilderness"]},
         "description": {
             "en": (
@@ -38,6 +65,7 @@ COURSES = [
     },
     {
         "categories": ["P-00010001", "P-00010003", "L-000100010002", "L-00020003"],
+        "categories_data": [],
         "categories_names": {"en": ["Martial arts?", "Autumn"]},
         "description": {
             "en": (
@@ -56,6 +84,7 @@ COURSES = [
     },
     {
         "categories": ["P-00010002", "P-00010003", "L-000100020001", "L-00020001"],
+        "categories_data": [],
         "categories_names": {"en": ["Artificial intelligence", "Water", "Wilderness"]},
         "description": {
             "en": (
@@ -74,6 +103,7 @@ COURSES = [
     },
     {
         "categories": ["P-00010002", "P-00010004", "L-000100020002", "L-00020002"],
+        "categories_data": [],
         "categories_names": {"en": ["Martial arts?", "Water"]},
         "description": {
             "en": (
@@ -335,6 +365,33 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             "L-000100010001",
                             "L-00020001",
                         ],
+                        "categories_data": [
+                            {
+                                "color": "#aeaeae",
+                                "icon": {"info": "picture_info"},
+                                "meta_name": "subjects",
+                                "meta_title": "Subjects",
+                                "name": "articifial-intelligence",
+                                "parent_name": "computer-science",
+                                "parent_title": "Computer Science",
+                                "placeholder_names": [
+                                    "course_categories",
+                                    "course_icons",
+                                ],
+                                "title": "Artificial Intelligence",
+                            },
+                            {
+                                "color": None,
+                                "icon": None,
+                                "name": "autumn",
+                                "meta_name": "seasons",
+                                "meta_title": "Seasons",
+                                "parent_name": None,
+                                "parent_title": None,
+                                "placeholder_names": ["course_categories"],
+                                "title": "Autumn",
+                            },
+                        ],
                         "cover_image": "cover_image.jpg",
                         "icon": "icon.jpg",
                         "organization_highlighted": "Org 31",
@@ -358,6 +415,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             "L-000100020001",
                             "L-00020001",
                         ],
+                        "categories_data": [],
                         "cover_image": "cover_image.jpg",
                         "icon": "icon.jpg",
                         "organization_highlighted": "Org 32",
@@ -381,6 +439,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             "L-000100020002",
                             "L-00020002",
                         ],
+                        "categories_data": [],
                         "cover_image": "cover_image.jpg",
                         "icon": "icon.jpg",
                         "organization_highlighted": "Org 32",
@@ -404,6 +463,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             "L-000100010002",
                             "L-00020003",
                         ],
+                        "categories_data": [],
                         "cover_image": "cover_image.jpg",
                         "icon": "icon.jpg",
                         "organization_highlighted": "Org 31",

@@ -548,6 +548,19 @@ class CoursesIndexersTestCase(TestCase):
             "_source": {
                 "absolute_url": {"en": "campo-qui-format-do"},
                 "categories": [43, 86],
+                "categories_data": [
+                    {
+                        "color": "#654321",
+                        "icon": {"en": {"info": "picture info"}},
+                        "name": "science",
+                        "meta_name": "subjects",
+                        "meta_title": {"en": "Subjects"},
+                        "parent_name": None,
+                        "parent_title": None,
+                        "placeholders": [{"position": 0, "slot": "course_icons"}],
+                        "title": {"en": "Science"},
+                    }
+                ],
                 "cover_image": {"en": "cover_image.jpg"},
                 "icon": {"en": "icon.jpg"},
                 "organizations": [42, 84],
@@ -566,6 +579,19 @@ class CoursesIndexersTestCase(TestCase):
                 "id": 93,
                 "absolute_url": "campo-qui-format-do",
                 "categories": [43, 86],
+                "categories_data": [
+                    {
+                        "color": "#654321",
+                        "icon": {"info": "picture info"},
+                        "name": "science",
+                        "meta_name": "subjects",
+                        "meta_title": "Subjects",
+                        "parent_name": None,
+                        "parent_title": None,
+                        "placeholders": [{"position": 0, "slot": "course_icons"}],
+                        "title": "Science",
+                    }
+                ],
                 "cover_image": "cover_image.jpg",
                 "icon": "icon.jpg",
                 "organization_highlighted": "Org 42",
@@ -587,6 +613,19 @@ class CoursesIndexersTestCase(TestCase):
             "_source": {
                 "absolute_url": {"en": "campo-qui-format-do"},
                 "categories": [43, 86],
+                "categories_data": [
+                    {
+                        "color": "#654321",
+                        "icon": {"en": {"info": "picture info"}},
+                        "name": "science",
+                        "meta_name": "subjects",
+                        "meta_title": {"en": "Subjects"},
+                        "parent_name": None,
+                        "parent_title": None,
+                        "placeholders": [{"position": 0, "slot": "course_icons"}],
+                        "title": {"en": "Science"},
+                    }
+                ],
                 "cover_image": {"en": "cover_image.jpg"},
                 "icon": {"en": "icon.jpg"},
                 "organizations": [],
@@ -605,6 +644,19 @@ class CoursesIndexersTestCase(TestCase):
                 "id": 93,
                 "absolute_url": "campo-qui-format-do",
                 "categories": [43, 86],
+                "categories_data": [
+                    {
+                        "color": "#654321",
+                        "icon": {"info": "picture info"},
+                        "name": "science",
+                        "meta_name": "subjects",
+                        "meta_title": "Subjects",
+                        "parent_name": None,
+                        "parent_title": None,
+                        "placeholders": [{"position": 0, "slot": "course_icons"}],
+                        "title": "Science",
+                    }
+                ],
                 "cover_image": "cover_image.jpg",
                 "icon": "icon.jpg",
                 "organization_highlighted": None,
@@ -625,6 +677,19 @@ class CoursesIndexersTestCase(TestCase):
             "_source": {
                 "absolute_url": {"en": "campo-qui-format-do"},
                 "categories": [43, 86],
+                "categories_data": [
+                    {
+                        "color": "#654321",
+                        "icon": None,
+                        "name": "science",
+                        "meta_name": "subjects",
+                        "meta_title": {"en": "Subjects"},
+                        "parent_name": None,
+                        "parent_title": None,
+                        "placeholders": [{"position": 0, "slot": "course_icons"}],
+                        "title": {"en": "Science"},
+                    }
+                ],
                 "cover_image": {"en": "cover_image.jpg"},
                 "icon": {},
                 "organizations": [42, 84],
@@ -643,6 +708,19 @@ class CoursesIndexersTestCase(TestCase):
                 "id": 93,
                 "absolute_url": "campo-qui-format-do",
                 "categories": [43, 86],
+                "categories_data": [
+                    {
+                        "color": "#654321",
+                        "icon": None,
+                        "name": "science",
+                        "meta_name": "subjects",
+                        "meta_title": "Subjects",
+                        "parent_name": None,
+                        "parent_title": None,
+                        "placeholders": [{"position": 0, "slot": "course_icons"}],
+                        "title": "Science",
+                    }
+                ],
                 "cover_image": "cover_image.jpg",
                 "icon": None,
                 "organization_highlighted": "Org 42",
@@ -663,6 +741,19 @@ class CoursesIndexersTestCase(TestCase):
             "_source": {
                 "absolute_url": {"en": "campo-qui-format-do"},
                 "categories": [43, 86],
+                "categories_data": [
+                    {
+                        "color": "#654321",
+                        "icon": None,
+                        "name": "science",
+                        "meta_name": "subjects",
+                        "meta_title": {"en": "Subjects"},
+                        "parent_name": None,
+                        "parent_title": None,
+                        "placeholders": [{"position": 0, "slot": "course_icons"}],
+                        "title": {"en": "Science"},
+                    }
+                ],
                 "cover_image": {},
                 "icon": {"en": "icon.jpg"},
                 "organizations": [42, 84],
@@ -681,6 +772,19 @@ class CoursesIndexersTestCase(TestCase):
                 "id": 93,
                 "absolute_url": "campo-qui-format-do",
                 "categories": [43, 86],
+                "categories_data": [
+                    {
+                        "color": "#654321",
+                        "icon": None,
+                        "name": "science",
+                        "meta_name": "subjects",
+                        "meta_title": "Subjects",
+                        "parent_name": None,
+                        "parent_title": None,
+                        "placeholders": [{"position": 0, "slot": "course_icons"}],
+                        "title": "Science",
+                    }
+                ],
                 "cover_image": None,
                 "icon": "icon.jpg",
                 "organization_highlighted": "Org 42",
@@ -702,6 +806,19 @@ class CoursesIndexersTestCase(TestCase):
             "_source": {
                 "absolute_url": {"en": "/en/campo-qui-format-do"},
                 "categories": [43, 86],
+                "categories_data": [
+                    {
+                        "color": "#654321",
+                        "icon": {},
+                        "name": "science",
+                        "meta_name": "subjects",
+                        "meta_title": {"en": "Subjects"},
+                        "parent_name": None,
+                        "parent_title": None,
+                        "placeholders": [{"position": 0, "slot": "course_icons"}],
+                        "title": {"en": "Science"},
+                    }
+                ],
                 "cover_image": {"en": "cover_image.jpg"},
                 "icon": {"en": "icon.jpg"},
                 "organizations": [42, 84],

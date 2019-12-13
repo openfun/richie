@@ -139,6 +139,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
                 {
                     "absolute_url": {"en": "url"},
                     "categories": [],
+                    "categories_data": [],
                     "course_runs": [],
                     "cover_image": {"en": "cover_image.jpg"},
                     "icon": {"en": "icon.jpg"},
@@ -216,6 +217,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
                 {
                     "absolute_url": {"en": "url"},
                     "categories": [],
+                    "categories_data": [],
                     "course_runs": [],
                     "cover_image": {"en": "cover_image.jpg"},
                     "icon": {"en": "icon.jpg"},

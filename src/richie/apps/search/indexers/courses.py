@@ -75,6 +75,7 @@ class CoursesIndexer:
     display_fields = [
         "absolute_url",
         "categories",
+        "categories_data",
         "cover_image",
         "icon",
         "organizations",
@@ -583,6 +584,16 @@ class CoursesIndexer:
             "id": es_course["_id"],
             "absolute_url": get_best_field_language(source["absolute_url"], language),
             "categories": source["categories"],
+            "categories_data": [
+                {
+                    **cat_data,
+                    **{
+                        field: get_best_field_language(cat_data[field], language)
+                        for field in ["icon", "meta_title", "parent_title", "title"]
+                    },
+                }
+                for cat_data in source["categories_data"]
+            ],
             "cover_image": get_best_field_language(source["cover_image"], language),
             "icon": get_best_field_language(source["icon"], language),
             "organization_highlighted": organizations_names[0]
