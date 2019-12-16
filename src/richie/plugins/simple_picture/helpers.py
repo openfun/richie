@@ -24,6 +24,11 @@ def get_picture_info(instance, preset_name):
     }
 
     """
+    # Bail out if the picture does not have an image as that's the object we use to get
+    # all the information we need to return any picture info.
+    if not instance.picture:
+        return None
+
     thumbnailer = instance.picture.easy_thumbnails_thumbnailer
 
     # Look for the preset in settings and fallback to "default"

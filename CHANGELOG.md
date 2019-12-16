@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed an issue with Picture instances that did not contain an image.
+
 ## [1.16.1] - 2019-12-13
 
 ### Changed
