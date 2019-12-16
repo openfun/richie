@@ -98,3 +98,12 @@ class SimplePictureHelpersTestCase(TestCase):
             mock_thumbnail.call_args_list,
             [mock.call({"size": (500, 500), "subject_location": location})],
         )
+
+    def test_helpers_simplepicture_get_picture_info_no_picture(self):
+        """
+        The `get_picture_info` method should not fail and raise an error if it encounters
+        a picture without an image.
+        """
+        simple_picture = PictureFactory(picture=None)
+        info = get_picture_info(simple_picture, "my-preset")
+        self.assertEqual(info, None)
