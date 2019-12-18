@@ -376,7 +376,9 @@ class CoursesIndexer:
         ):
             language = cover.cmsplugin_ptr.language
             with translation.override(language):
-                cover_images[language] = get_picture_info(cover, "cover")
+                picture_info = get_picture_info(cover, "cover")
+                if picture_info:
+                    cover_images[language] = picture_info
 
         # Prepare the related category icon
         icon_images = {}
@@ -393,8 +395,9 @@ class CoursesIndexer:
                 cmsplugin_ptr__position=0,
             ):
                 with translation.override(language):
+                    picture_info = get_picture_info(icon, "icon") or {}
                     icon_images[language] = {
-                        **get_picture_info(icon, "icon"),
+                        **picture_info,
                         "color": plugin_model.page.category.color,
                         "title": plugin_model.page.get_title(),
                     }

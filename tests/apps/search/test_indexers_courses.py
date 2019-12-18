@@ -9,6 +9,7 @@ from django.test import TestCase
 import pytz
 from cms.api import add_plugin
 
+from richie.apps.courses.cms_plugins import CategoryPlugin
 from richie.apps.courses.factories import (
     CategoryFactory,
     CourseFactory,
@@ -20,6 +21,7 @@ from richie.apps.courses.models import CourseState
 from richie.apps.search.indexers.categories import CategoriesIndexer
 from richie.apps.search.indexers.courses import CoursesIndexer
 from richie.apps.search.indexers.organizations import OrganizationsIndexer
+from richie.plugins.simple_picture.cms_plugins import SimplePicturePlugin
 
 
 class CoursesIndexersTestCase(TestCase):
@@ -356,6 +358,75 @@ class CoursesIndexersTestCase(TestCase):
             indexed_courses[0]["course_runs"][0]["enrollment_end"].year, 9999
         )
 
+    def test_indexers_courses_get_es_document_no_image_cover_picture(self):
+        """
+        ES document is created without errors when a cover image for the course is
+        actually a Picture instance without an image on it.
+        """
+        # Create the example course to index and get hold of its course_cover placeholder
+        course = CourseFactory(should_publish=True)
+        course_cover_placeholder = (
+            course.extended_object.get_public_object()
+            .placeholders.filter(slot="course_cover")
+            .first()
+        )
+        # Make sure we associate an image-less picture with the course through
+        # the cover placeholder
+        add_plugin(course_cover_placeholder, SimplePicturePlugin, "en", picture=None)
+        course.extended_object.publish("en")
+
+        indexed_courses = list(
+            CoursesIndexer.get_es_documents(index="some_index", action="some_action")
+        )
+
+        self.assertEqual(len(indexed_courses), 1)
+        self.assertEqual(
+            indexed_courses[0]["_id"],
+            str(course.extended_object.get_public_object().id),
+        )
+        self.assertEqual(indexed_courses[0]["cover_image"], {})
+
+    def test_indexers_courses_get_es_document_no_image_icon_picture(self):
+        """
+        ES document is created without errors when a icon image for the course is
+        actually a Picture instance without an image on it.
+        """
+        # Create the example course to index and get hold of its course_icons placeholder
+        course = CourseFactory(should_publish=True)
+        course_icons_placeholder = course.extended_object.placeholders.filter(
+            slot="course_icons"
+        ).first()
+        # Create a category and add it to the course on the icons placeholder
+        category = CategoryFactory(should_publish=True, color="#654321")
+        add_plugin(
+            course_icons_placeholder,
+            CategoryPlugin,
+            "en",
+            **{"page": category.extended_object}
+        )
+        course.extended_object.publish("en")
+        # Make sure we associate an image-less picture with the category through
+        # the icon placeholder
+        category_icon_placeholder = category.extended_object.placeholders.filter(
+            slot="icon"
+        ).first()
+        add_plugin(category_icon_placeholder, SimplePicturePlugin, "en", picture=None)
+        category.extended_object.publish("en")
+
+        indexed_courses = list(
+            CoursesIndexer.get_es_documents(index="some_index", action="some_action")
+        )
+
+        self.assertEqual(len(indexed_courses), 1)
+        self.assertEqual(
+            indexed_courses[0]["_id"],
+            str(course.extended_object.get_public_object().id),
+        )
+        self.assertEqual(
+            indexed_courses[0]["icon"],
+            {"en": {"color": "#654321", "title": category.extended_object.get_title()}},
+        )
+
     def test_indexers_courses_format_es_object_for_api(self):
         """
         Make sure format_es_object_for_api returns a properly formatted course
@@ -426,6 +497,82 @@ class CoursesIndexersTestCase(TestCase):
                 "icon": "icon.jpg",
                 "organization_highlighted": None,
                 "organizations": [],
+                "title": "Duis eu arcu erat",
+                "state": CourseState(
+                    0, datetime(2019, 3, 17, 21, 25, 52, 179667, pytz.utc)
+                ),
+            },
+        )
+
+    def test_indexers_courses_format_es_object_for_api_no_icon(self):
+        """
+        A course that has no icon and was indexed should not raise any errors.
+        """
+        es_course = {
+            "_id": 93,
+            "_source": {
+                "absolute_url": {"en": "campo-qui-format-do"},
+                "categories": [43, 86],
+                "cover_image": {"en": "cover_image.jpg"},
+                "icon": {},
+                "organizations": [42, 84],
+                "organizations_names": {"en": ["Org 42", "Org 84"]},
+                "title": {"en": "Duis eu arcu erat"},
+            },
+            "fields": {
+                "state": [
+                    {"priority": 0, "date_time": "2019-03-17T21:25:52.179667+00:00"}
+                ]
+            },
+        }
+        self.assertEqual(
+            CoursesIndexer.format_es_object_for_api(es_course, "en"),
+            {
+                "id": 93,
+                "absolute_url": "campo-qui-format-do",
+                "categories": [43, 86],
+                "cover_image": "cover_image.jpg",
+                "icon": None,
+                "organization_highlighted": "Org 42",
+                "organizations": [42, 84],
+                "title": "Duis eu arcu erat",
+                "state": CourseState(
+                    0, datetime(2019, 3, 17, 21, 25, 52, 179667, pytz.utc)
+                ),
+            },
+        )
+
+    def test_indexers_courses_format_es_object_for_api_no_cover(self):
+        """
+        A course that has no cover image and was indexed should not raise any errors.
+        """
+        es_course = {
+            "_id": 93,
+            "_source": {
+                "absolute_url": {"en": "campo-qui-format-do"},
+                "categories": [43, 86],
+                "cover_image": {},
+                "icon": {"en": "icon.jpg"},
+                "organizations": [42, 84],
+                "organizations_names": {"en": ["Org 42", "Org 84"]},
+                "title": {"en": "Duis eu arcu erat"},
+            },
+            "fields": {
+                "state": [
+                    {"priority": 0, "date_time": "2019-03-17T21:25:52.179667+00:00"}
+                ]
+            },
+        }
+        self.assertEqual(
+            CoursesIndexer.format_es_object_for_api(es_course, "en"),
+            {
+                "id": 93,
+                "absolute_url": "campo-qui-format-do",
+                "categories": [43, 86],
+                "cover_image": None,
+                "icon": "icon.jpg",
+                "organization_highlighted": "Org 42",
+                "organizations": [42, 84],
                 "title": "Duis eu arcu erat",
                 "state": CourseState(
                     0, datetime(2019, 3, 17, 21, 25, 52, 179667, pytz.utc)
