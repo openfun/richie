@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [1.16.2] - 2019-12-18
+
 ### Fixed
 
 - Fixed an issue with Picture instances that did not contain an image.
@@ -723,7 +725,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v1.16.1...master
+[unreleased]: https://github.com/openfun/richie/compare/v1.16.2...master
+[1.16.2]: https://github.com/openfun/richie/compare/v1.16.1...v1.16.2
 [1.16.1]: https://github.com/openfun/richie/compare/v1.16.0...v1.16.1
 [1.16.0]: https://github.com/openfun/richie/compare/v1.15.0...v1.16.0
 [1.15.0]: https://github.com/openfun/richie/compare/v1.14.1...v1.15.0
