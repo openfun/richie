@@ -36,3 +36,9 @@ class I18nUtilsTestCase(TestCase):
         """
         field = {"fr": "le contenu"}
         self.assertEqual(get_best_field_language(field, "es"), "le contenu")
+
+    def test_utils_i18n_get_best_field_language_nonetype(self):
+        """
+        Does not raise and just returns None if the field is a NoneType.
+        """
+        self.assertEqual(get_best_field_language(None, "de"), None)

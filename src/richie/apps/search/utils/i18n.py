@@ -22,3 +22,5 @@ def get_best_field_language(multilingual_field, best_language):
             return multilingual_field[language]
         except KeyError:
             pass
+        except TypeError:
+            return None
