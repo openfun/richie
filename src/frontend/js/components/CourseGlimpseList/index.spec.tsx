@@ -11,13 +11,35 @@ describe('components/CourseGlimpseList', () => {
   it('renders a list of Courses into a list of CourseGlimpses', () => {
     const courses = [
       {
+        absolute_url: 'example.com/courses/44',
+        categories: [],
+        categories_data: [],
+        cover_image: null,
         id: '44',
-        state: { datetime: '2019-03-14T10:35:47.823Z', text: '' },
+        organization_highlighted: '',
+        organizations: [],
+        state: {
+          call_to_action: null,
+          datetime: '2019-03-14T10:35:47.823Z',
+          priority: 0,
+          text: '',
+        },
         title: 'Course 44',
       },
       {
+        absolute_url: 'example.com/courses/45',
+        categories: [],
+        categories_data: [],
+        cover_image: null,
         id: '45',
-        state: { datetime: '2019-03-14T10:35:47.823Z', text: '' },
+        organization_highlighted: '',
+        organizations: [],
+        state: {
+          call_to_action: null,
+          datetime: '2019-03-14T10:35:47.823Z',
+          priority: 0,
+          text: '',
+        },
         title: 'Course 45',
       },
     ] as Course[];
