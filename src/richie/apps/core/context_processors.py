@@ -1,8 +1,11 @@
 """
 Template context processors
 """
+import json
+
 from django.conf import settings
 from django.contrib.sites.models import Site
+from django.templatetags.static import static
 
 
 def get_site_metas(with_static=False, with_media=False, is_secure=False, extra=None):
@@ -57,3 +60,21 @@ def site_metas(request):
     Context processor to add the current *Site* metas to the context
     """
     return get_site_metas(is_secure=request.is_secure())
+
+
+def frontend_context(request):
+    """
+    Context processor to add the context as expected by the frontend to the template context.
+    """
+    return {
+        "FRONTEND_CONTEXT": json.dumps(
+            {
+                "context": {
+                    "assets": {"icons": static("richie/icons.svg")},
+                    "environment": getattr(settings, "ENVIRONMENT", ""),
+                    "release": getattr(settings, "RELEASE", ""),
+                    "sentry_dsn": getattr(settings, "SENTRY_DSN", ""),
+                }
+            }
+        )
+    }
