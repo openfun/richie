@@ -57,6 +57,11 @@ export const Root = ({ richieReactSpots }: RootProps) => {
       const dataProps = element.getAttribute('data-props');
       const props = dataProps ? JSON.parse(dataProps) : {};
 
+      // Add context to props if they do not already include it
+      if (!props.context) {
+        props.context = (window as any).__richie_frontend_context__;
+      }
+
       return ReactDOM.createPortal(<Component {...props} />, element);
     } else {
       // Emit a warning at runtime when we fail to find a matching component for an element that required one
