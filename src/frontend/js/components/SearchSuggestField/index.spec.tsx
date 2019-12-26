@@ -33,6 +33,9 @@ describe('components/SearchSuggestField', () => {
     assets: {
       icons: '/icons.svg',
     },
+    environment: 'frontend_tests',
+    release: '9.8.7',
+    sentry_dsn: null,
   };
 
   // Make some filters we can reuse through our tests with the filter definitions responses

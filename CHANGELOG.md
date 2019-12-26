@@ -11,6 +11,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Licences (through their "name" and "content" fields) are now translatable.
+- Report frontend errors through Sentry when a sentry DSN is available in
+  Django settings.
 
 ## [1.16.2] - 2019-12-18
 
