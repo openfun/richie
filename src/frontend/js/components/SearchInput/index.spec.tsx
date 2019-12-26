@@ -9,6 +9,9 @@ describe('<SearchInput />', () => {
     assets: {
       icons: '/icons.svg',
     },
+    environment: 'frontend_tests',
+    release: '9.8.7',
+    sentry_dsn: null,
   };
 
   const inputProps = {};
