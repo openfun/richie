@@ -4,6 +4,8 @@ Unit tests for the Course model
 from django.db import IntegrityError
 from django.test import TestCase
 
+from parler.utils.context import switch_language
+
 from richie.apps.courses.factories import LicenceFactory
 
 
@@ -24,6 +26,26 @@ class LicenceTestCase(TestCase):
             # Mysql
             or "Column 'name' cannot be null" in str(cm.exception)
         )
+
+    def test_models_licence_fields_name_internationalized(self):
+        """
+        The "name" field on Licence is internationalized using django-parler.
+        """
+        licence = LicenceFactory(name="licence name")
+
+        with switch_language(licence, "en"):
+            self.assertEqual(licence.name, "licence name")
+
+        with switch_language(licence, "fr"):
+            self.assertEqual(licence.name, "licence name")
+
+            licence.name = "nom de la licence"
+            licence.save()
+
+            self.assertEqual(licence.name, "nom de la licence")
+
+        with switch_language(licence, "en"):
+            self.assertEqual(licence.name, "licence name")
 
     def test_models_license_fields_logo_required(self):
         """
@@ -52,3 +74,23 @@ class LicenceTestCase(TestCase):
             # Mysql
             or "Column 'content' cannot be null" in str(cm.exception)
         )
+
+    def test_models_licence_fields_content_internationalized(self):
+        """
+        The "content" field on Licence is internationalized using django-parler.
+        """
+        licence = LicenceFactory(content="licence text content")
+
+        with switch_language(licence, "en"):
+            self.assertEqual(licence.content, "licence text content")
+
+        with switch_language(licence, "fr"):
+            self.assertEqual(licence.content, "licence text content")
+
+            licence.content = "contenu textuel de la licence"
+            licence.save()
+
+            self.assertEqual(licence.content, "contenu textuel de la licence")
+
+        with switch_language(licence, "en"):
+            self.assertEqual(licence.content, "licence text content")

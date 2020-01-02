@@ -18,6 +18,7 @@ from cms.models import Page, PagePermission
 from cms.models.pluginmodel import CMSPlugin
 from filer.fields.image import FilerImageField
 from filer.models import FolderPermission
+from parler.models import TranslatableModel, TranslatedField, TranslatedFieldsModel
 
 from ...core.defaults import ALL_LANGUAGES
 from ...core.fields.duration import CompositeDurationField
@@ -588,26 +589,55 @@ class CoursePluginModel(PagePluginMixin, CMSPlugin):
         )
 
 
-class Licence(models.Model):
+class Licence(TranslatableModel):
     """
     Licence model.
 
     Instances of this models should only be created by administrators.
     """
 
-    name = models.CharField(_("name"), max_length=200)
+    name = TranslatedField()
+    content = TranslatedField()
     logo = FilerImageField(
         verbose_name=_("logo"), on_delete=models.PROTECT, related_name="licence"
     )
     url = models.CharField(_("url"), blank=True, max_length=255)
-    content = models.TextField(_("content"), blank=False, default="")
+    # Deprecated non-translated fields for name & content
+    # Kept around to avoid a breaking change wrt. blue-green deployments
+    name_deprecated = models.CharField(_("name"), db_column="name", max_length=200)
+    content_deprecated = models.TextField(
+        _("content"), blank=False, db_column="content", default=""
+    )
 
     class Meta:
         db_table = "richie_licence"
         verbose_name = _("licence")
 
     def __str__(self):
-        """Human representation of a person title"""
+        """Human representation of a licence."""
+        return "{model}: {name}".format(
+            model=self._meta.verbose_name.title(), name=self.name
+        )
+
+
+class LicenceTranslation(TranslatedFieldsModel):
+    """
+    Licence Translation model.
+
+    Django parler model linked to the Licence to internationalize the fields.
+    """
+
+    master = models.ForeignKey(Licence, models.CASCADE, related_name="translations")
+    name = models.CharField(_("name"), max_length=200)
+    content = models.TextField(_("content"), blank=False, default="")
+
+    class Meta:
+        db_table = "richie_licence_translation"
+        unique_together = ("language_code", "master")
+        verbose_name = _("Licence translation")
+
+    def __str__(self):
+        """Human representation of a licence translation."""
         return "{model}: {name}".format(
             model=self._meta.verbose_name.title(), name=self.name
         )
@@ -626,7 +656,7 @@ class LicencePluginModel(CMSPlugin):
         verbose_name = _("licence plugin")
 
     def __str__(self):
-        """Human representation of a person plugin"""
+        """Human representation of a licence plugin."""
         return "{model:s}: {name:s}".format(
             model=self._meta.verbose_name.title(), name=self.licence.name
         )

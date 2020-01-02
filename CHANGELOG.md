@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Licences (through their "name" and "content" fields) are now translatable.
+
 ## [1.16.2] - 2019-12-18
 
 ### Fixed

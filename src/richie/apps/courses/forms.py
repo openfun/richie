@@ -6,6 +6,7 @@ from django import forms
 from django.forms import widgets
 
 from djangocms_text_ckeditor.widgets import TextEditorWidget
+from parler.forms import TranslatableModelForm
 
 from .models import Category, Licence, LicencePluginModel
 
@@ -24,7 +25,7 @@ class AdminCategoryForm(forms.ModelForm):
         }
 
 
-class AdminLicenceForm(forms.ModelForm):
+class AdminLicenceForm(TranslatableModelForm):
     """
     Licence model form used within Django admin
     """
