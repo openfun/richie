@@ -15,6 +15,7 @@ from django.views.decorators.http import require_POST
 from cms.admin.placeholderadmin import FrontendEditableAdminMixin
 from cms.api import Page
 from cms.extensions import PageExtensionAdmin
+from parler.admin import TranslatableAdmin
 
 from ..core.admin import link_field
 from . import models
@@ -166,7 +167,7 @@ class PersonAdmin(PageExtensionAdmin):
         return obj.extended_object.get_title()
 
 
-class LicenceAdmin(admin.ModelAdmin):
+class LicenceAdmin(TranslatableAdmin):
     """
     Admin class for the Licence model
     """
