@@ -27,6 +27,18 @@ const babelCompileDeps = [
   'strict-uri-encode',
 ];
 
+// Get the version from package.json to make it available in the bundle
+let version;
+// Get it from the dependent's version first (if there is one)
+if (argv.richieDependentBuild) {
+  version = require(path.resolve(__dirname, '..', '..', 'package.json'))
+    .version;
+}
+// Otherwise get it from Richie itself
+else {
+  version = require(path.resolve(__dirname, 'package.json')).version;
+}
+
 module.exports = {
   // Disable production-specific optimizations by default
   // They can be re-enabled by running the cli with `--mode=production` or making a separate
@@ -103,5 +115,10 @@ module.exports = {
           entry[1],
         ),
     ),
+    // Provide the current running version as a global to our bundle. This is useful for eg. reporting
+    // errors when using different versions in the backend and frontend.
+    new webpack.DefinePlugin({
+      RICHIE_VERSION: `'${version.toString()}'`,
+    }),
   ],
 };
