@@ -235,8 +235,8 @@ class Course(BasePageExtension):
         selector = "extended_object__person_plugins__cmsplugin_ptr"
         # pylint: disable=no-member
         filter_dict = {
-            "{:s}__language".format(selector): language,
-            "{:s}__placeholder__page".format(selector): self.extended_object,
+            f"{selector:s}__language": language,
+            f"{selector:s}__placeholder__page": self.extended_object,
         }
         # For a public course, we must filter out persons that are not published in
         # any language
@@ -261,8 +261,8 @@ class Course(BasePageExtension):
         selector = "extended_object__organization_plugins__cmsplugin_ptr"
         # pylint: disable=no-member
         filter_dict = {
-            "{:s}__language".format(selector): language,
-            "{:s}__placeholder__page".format(selector): self.extended_object,
+            f"{selector:s}__language": language,
+            f"{selector:s}__placeholder__page": self.extended_object,
         }
         # For a public course, we must filter out organizations that are not published in
         # any language
@@ -303,8 +303,8 @@ class Course(BasePageExtension):
         selector = "extended_object__category_plugins__cmsplugin_ptr"
         # pylint: disable=no-member
         filter_dict = {
-            "{:s}__language".format(selector): language,
-            "{:s}__placeholder__page".format(selector): self.extended_object,
+            f"{selector:s}__language": language,
+            f"{selector:s}__placeholder__page": self.extended_object,
         }
         # For a public course, we must filter out categories that are not published in
         # any language
