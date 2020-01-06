@@ -758,12 +758,12 @@
   dependencies:
     "@formatjs/intl-utils" "^1.6.0"
 
-"@formatjs/intl-relativetimeformat@4.5.4":
-  version "4.5.4"
-  resolved "https://registry.yarnpkg.com/@formatjs/intl-relativetimeformat/-/intl-relativetimeformat-4.5.4.tgz#dcf1e27ffa39e8985a3590ffe11e1ddda9d326a8"
-  integrity sha512-RmIQQLeUzL77ShfsZglTUtONBDGFCbbxvU9xWtEhaoaKKb3xD2e4apUG7iaDoOrghsEcjdYDzqDY2vQZyyg+kQ==
+"@formatjs/intl-relativetimeformat@4.5.5":
+  version "4.5.5"
+  resolved "https://registry.yarnpkg.com/@formatjs/intl-relativetimeformat/-/intl-relativetimeformat-4.5.5.tgz#3e789fed219607fa9190d8e5ef3919abafd372e5"
+  integrity sha512-Fk/TdP8lb6HqfL7rAaub4rrGloPFjEciZcjbNxwBkUTZlkrCChI9GJ1TM4++ppozdWd8FPMwU/zmg7ULl39jEw==
   dependencies:
-    "@formatjs/intl-utils" "^2.0.1"
+    "@formatjs/intl-utils" "^2.0.2"
 
 "@formatjs/intl-unified-numberformat@2.2.0", "@formatjs/intl-unified-numberformat@^2.2.0":
   version "2.2.0"
@@ -772,22 +772,23 @@
   dependencies:
     "@formatjs/intl-utils" "^1.6.0"
 
-"@formatjs/intl-unified-numberformat@^3.0.1":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@formatjs/intl-unified-numberformat/-/intl-unified-numberformat-3.0.1.tgz#a0bf05760f20833aaa3dcf4d0f791c8c6eb758fc"
-  integrity sha512-2n2yMLctLE3AUhnlAqxPd9HLy8oXf+/hUomceS21svW2UmhsC3e7Rwq7sp9yAVENTo7d6OgEHwmWf9nNJvE0mQ==
+"@formatjs/intl-unified-numberformat@^3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@formatjs/intl-unified-numberformat/-/intl-unified-numberformat-3.0.2.tgz#0485443ab4b4c8d6a2a7fc48dc88fad75da9b18c"
+  integrity sha512-C5Qtykibb334YtxiaTi12Pax5uMYOqbQwcXdFzzgJeHSV5mA19RJYuOQ4yO/vBCg24UkQAYBbXtkAR2hXhEThQ==
   dependencies:
-    "@formatjs/intl-utils" "^2.0.1"
+    "@formatjs/intl-utils" "^2.0.2"
+    unicode-12.1.0 "0.8"
 
 "@formatjs/intl-utils@^1.6.0":
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/@formatjs/intl-utils/-/intl-utils-1.6.0.tgz#43b094232b9ef98b57a270bcecee99168d329e9f"
   integrity sha512-5D0C4tQgNFJNaJ17BYum0GfAcKNK3oa1VWzgkv/AN7i52fg4r69ZLcpEGpf6tZiX9Qld8CDwTQOeFt6fuOqgVw==
 
-"@formatjs/intl-utils@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@formatjs/intl-utils/-/intl-utils-2.0.1.tgz#6d310808e34b60184564cf3800526f012eb9d622"
-  integrity sha512-g5C+Pfka3lJyQhkB1dvC0g6g3y0uUNYxNyFKjFk7VhVt4m/+wXT1FLK1TDuOgpsrGWstZ/Pt4g5tpgPgTR4s6w==
+"@formatjs/intl-utils@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@formatjs/intl-utils/-/intl-utils-2.0.2.tgz#5861bc4be8cdd06484a713122026d1e4065849eb"
+  integrity sha512-FpMVkOKg73soaA019turLO3kCPW9CbIViYgyUtR4uyNvJS9wH1QCbdPIcjDMskjIzQV+FG3+hW1VvrI8begmKQ==
 
 "@formatjs/macro@0.2.6":
   version "0.2.6"
@@ -1642,17 +1643,17 @@ babel-plugin-jest-hoist@^24.9.0:
   dependencies:
     "@types/babel__traverse" "^7.0.6"
 
-babel-plugin-react-intl@5.1.13:
-  version "5.1.13"
-  resolved "https://registry.yarnpkg.com/babel-plugin-react-intl/-/babel-plugin-react-intl-5.1.13.tgz#bde0ab1006a813480bf15413e104aa5b14696639"
-  integrity sha512-xzdTMvMEqDAvPDqDNbGhYUDglL65f1q0mmLEpIKbIVuxa5gg01nmX+Y/8o6uIsLe6MJxCTw/9M6nzTXqtsk6JQ==
+babel-plugin-react-intl@5.1.14:
+  version "5.1.14"
+  resolved "https://registry.yarnpkg.com/babel-plugin-react-intl/-/babel-plugin-react-intl-5.1.14.tgz#ca426b18f8a4dda7a7cc2fae9746a4c1a87c6e8f"
+  integrity sha512-ytINNJNBcbFQoUHfUsWyDbblPFdUQIqrLMbjnm9zMJ5DoPNPEJqmZ4my+nOGJtlR0Jif/SNhFf17bfcFiWZHmg==
   dependencies:
     "@babel/core" "^7.7.2"
     "@babel/helper-plugin-utils" "^7.0.0"
     "@types/babel__core" "^7.1.3"
     "@types/schema-utils" "^1.0.0"
     fs-extra "^8.0.1"
-    intl-messageformat-parser "^3.5.3"
+    intl-messageformat-parser "^3.6.0"
     schema-utils "^2.2.0"
 
 babel-plugin-syntax-jsx@7.0.0-beta.3:
@@ -2964,10 +2965,10 @@ fb-watchman@^2.0.0:
   dependencies:
     bser "2.1.1"
 
-fetch-mock@8.3.0:
-  version "8.3.0"
-  resolved "https://registry.yarnpkg.com/fetch-mock/-/fetch-mock-8.3.0.tgz#dac9a7f781d970e712ef2ccebf95db279bc80a6e"
-  integrity sha512-khTaO5bUjvlgR8Do7XDtBzLHztDUFej5CvFBByM+B+t4HrE6164QvL5NBATkKiEY/vAfkrsl6taTsxHafwTJIQ==
+fetch-mock@8.3.1:
+  version "8.3.1"
+  resolved "https://registry.yarnpkg.com/fetch-mock/-/fetch-mock-8.3.1.tgz#9c79aab22fa1752fe00b487e2b271ecfc1138461"
+  integrity sha512-7IEIUvkHO6zOHbDSzkMAvkb2mx3N5xy9BS4RjFnIe8kCUDOomoNKBDKGwhTj5E0uuieo8rg55c6cUKorJuk4rg==
   dependencies:
     babel-runtime "^6.26.0"
     core-js "^3.0.0"
@@ -3606,12 +3607,12 @@ intl-messageformat-parser@3.5.1, intl-messageformat-parser@^3.5.1:
   dependencies:
     "@formatjs/intl-unified-numberformat" "^2.2.0"
 
-intl-messageformat-parser@^3.5.3:
-  version "3.5.3"
-  resolved "https://registry.yarnpkg.com/intl-messageformat-parser/-/intl-messageformat-parser-3.5.3.tgz#c9d9cba1ea75792dbb9d143b6f098b495becc6f0"
-  integrity sha512-iVev8//uFlQGTousbrnEDLpSujhlyXJUcgYFW7BCCxXaUY5u0irLxgzsC5dWJLBIdtzhXiDc6ms6LHy88vpRIQ==
+intl-messageformat-parser@^3.6.0:
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/intl-messageformat-parser/-/intl-messageformat-parser-3.6.0.tgz#acd98e27ef1e62e684ca8f719fc29cc667390884"
+  integrity sha512-vSNH4J7SgdsuULhgI4LFSc9G7I+1aQiIyUs4mRrhhsav9u+t0kICBGj7tfFaEw9uSfeZF1wqHajssV+K4qYWOA==
   dependencies:
-    "@formatjs/intl-unified-numberformat" "^3.0.1"
+    "@formatjs/intl-unified-numberformat" "^3.0.2"
 
 intl-messageformat@7.7.2:
   version "7.7.2"
@@ -6980,6 +6981,11 @@ underscore@~1.6.0:
   resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.6.0.tgz#8b38b10cacdef63337b8b24e4ff86d45aea529a8"
   integrity sha1-izixDKze9jM3uLJOT/htRa6lKag=
 
+unicode-12.1.0@0.8:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/unicode-12.1.0/-/unicode-12.1.0-0.8.0.tgz#260f6dd899eefd42a8eae550bcbb62654c90c79d"
+  integrity sha512-OhxidkE3tKlMAouqWtdYtDP2RHVIo1lNdjEruNdVxLrACcbw79TaOcupYKxz6F7ldC1nx8CDygzN5kGmXAU60Q==
+
 unicode-canonical-property-names-ecmascript@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/unicode-canonical-property-names-ecmascript/-/unicode-canonical-property-names-ecmascript-1.0.4.tgz#2619800c4c825800efdd8343af7dd9933cbe2818"
@@ -7480,10 +7486,10 @@ yargs@13.2.4:
     y18n "^4.0.0"
     yargs-parser "^13.1.0"
 
-yargs@15.0.2:
-  version "15.0.2"
-  resolved "https://registry.yarnpkg.com/yargs/-/yargs-15.0.2.tgz#4248bf218ef050385c4f7e14ebdf425653d13bd3"
-  integrity sha512-GH/X/hYt+x5hOat4LMnCqMd8r5Cv78heOMIJn1hr7QPPBqfeC6p89Y78+WB9yGDvfpCvgasfmWLzNzEioOUD9Q==
+yargs@15.1.0:
+  version "15.1.0"
+  resolved "https://registry.yarnpkg.com/yargs/-/yargs-15.1.0.tgz#e111381f5830e863a89550bd4b136bb6a5f37219"
+  integrity sha512-T39FNN1b6hCW4SOIk1XyTOWxtXdcen0t+XYrysQmChzSipvhBO8Bj0nK1ozAasdk24dNWuMZvr4k24nz+8HHLg==
   dependencies:
     cliui "^6.0.0"
     decamelize "^1.2.0"
