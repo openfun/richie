@@ -16,9 +16,12 @@ import pytz
 from cms.extensions.extension_pool import extension_pool
 from cms.models import Page, PagePermission
 from cms.models.pluginmodel import CMSPlugin
+from djangocms_picture.models import Picture
 from filer.fields.image import FilerImageField
 from filer.models import FolderPermission
 from parler.models import TranslatableModel, TranslatedField, TranslatedFieldsModel
+
+from richie.plugins.simple_picture.helpers import get_picture_info
 
 from ...core.defaults import ALL_LANGUAGES
 from ...core.fields.duration import CompositeDurationField
@@ -315,9 +318,83 @@ class Course(BasePageExtension):
                 placeholder_slot=F(f"{selector:s}__placeholder__slot"),
                 placeholder_position=F(f"{selector:s}__position"),
             )
-            .order_by("extended_object__node__path")
+            .order_by("extended_object__node__path", "placeholder_slot")
             .distinct()
         )
+
+    def get_categories_data_for_glimpse(self, language=None):
+        """
+        Get more specific information about course categories as it is needed (or may be needed)
+        to build the course glimpse: meta, parent and placeholder info.
+        """
+        # Helper to shape relevant category data from a category page
+        def get_category_data(category_page):
+            # Get the parent & meta categories for the current category
+            meta_category = category_page.category.get_meta_category()
+            parent_category_page = category_page.get_parent_page()
+            # Nil the parent if it's the meta, as topmost category does not really have a parent
+            parent_category_page = (
+                parent_category_page
+                if parent_category_page.reverse_id
+                != meta_category.extended_object.reverse_id
+                else None
+            )
+
+            category_data = {
+                "name": category_page.reverse_id,
+                "meta_name": meta_category.extended_object.reverse_id,
+                "meta_title": {
+                    title["language"]: title["title"]
+                    for title in meta_category.extended_object.title_set.values()
+                },
+                "parent_name": None,
+                "parent_title": None,
+                "title": {
+                    title["language"]: title["title"]
+                    for title in category_page.title_set.values()
+                },
+            }
+
+            if parent_category_page:
+                category_data["parent_name"] = parent_category_page.reverse_id
+                category_data["parent_title"] = {
+                    title["language"]: title["title"]
+                    for title in parent_category_page.title_set.values()
+                }
+
+            return category_data
+
+        # Use a dict to deduplicate the categories by pk while aggregating their placeholder info
+        categories_data = {}
+        for category in self.get_categories(language):
+            # Set the base shape of the category data with its meta & parent info
+            if not categories_data.get(category.pk):
+                categories_data[category.pk] = get_category_data(
+                    category.extended_object
+                )
+            # Add relevant info about the placeholder(s) which links it with this course
+            placeholder_info = {
+                "position": category.placeholder_position,
+                "slot": category.placeholder_slot,
+            }
+            categories_data[category.pk]["placeholders"] = (
+                # Create an array if it's the first time we encounter this category on this course
+                [placeholder_info]
+                if not categories_data[category.pk].get("placeholders")
+                # Otherwise concatenate existing slot(s) with the current one
+                else [*categories_data[category.pk]["placeholders"], placeholder_info]
+            )
+            categories_data[category.pk]["color"] = category.color or None
+            # Add localized data for the icon, if there is one
+            categories_data[category.pk]["icon"] = {}
+            for icon in Picture.objects.filter(
+                cmsplugin_ptr__placeholder__page=category.extended_object
+            ):
+                categories_data[category.pk]["icon"][
+                    icon.cmsplugin_ptr.language
+                ] = get_picture_info(icon, "icon")
+
+        return categories_data
 
     def get_root_to_leaf_category_pages(self):
         """

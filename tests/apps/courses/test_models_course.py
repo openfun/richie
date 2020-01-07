@@ -337,6 +337,89 @@ class CourseModelsTestCase(TestCase):
         self.assertEqual(course_categories[2].placeholder_slot, "course_format")
         self.assertEqual(course_categories[2].placeholder_position, 1)
 
+    def test_models_course_get_categories_data_for_glimpse(self):
+        """
+        Make sure categories data is formatted in an easy-to-consume way so
+        we can easily build course glimpses.
+        """
+        root_category_page = PageFactory()
+        meta_category1 = CategoryFactory(
+            page_parent=root_category_page,
+            page_reverse_id="subjects",
+            should_publish=True,
+        )
+        meta_category2 = CategoryFactory(
+            page_parent=root_category_page,
+            page_reverse_id="levels",
+            should_publish=True,
+        )
+        parent_category = CategoryFactory(
+            page_parent=meta_category1.extended_object, should_publish=True
+        )
+        category1 = CategoryFactory(
+            page_parent=parent_category.extended_object, should_publish=True
+        )
+        category2 = CategoryFactory(
+            color="#fafafa",
+            page_parent=meta_category2.extended_object,
+            page_reverse_id="category-two",
+            should_publish=True,
+        )
+
+        course = CourseFactory(should_publish=True)
+        placeholder1 = course.extended_object.placeholders.get(slot="course_categories")
+        placeholder2 = course.extended_object.placeholders.get(slot="course_icons")
+
+        add_plugin(
+            language="en",
+            placeholder=placeholder1,
+            plugin_type="CategoryPlugin",
+            page=category1.extended_object,
+        )
+        add_plugin(
+            language="en",
+            placeholder=placeholder1,
+            plugin_type="CategoryPlugin",
+            page=category2.extended_object,
+        )
+        add_plugin(
+            language="en",
+            placeholder=placeholder2,
+            plugin_type="CategoryPlugin",
+            page=category2.extended_object,
+        )
+
+        self.assertEqual(
+            list(course.get_categories_data_for_glimpse().values()),
+            [
+                {
+                    "color": None,
+                    "icon": {},
+                    "meta_name": "subjects",
+                    "meta_title": {"en": meta_category1.extended_object.get_title()},
+                    "name": None,
+                    "parent_name": None,
+                    "parent_title": {"en": parent_category.extended_object.get_title()},
+                    "placeholders": [{"position": 0, "slot": "course_categories"}],
+                    "title": {"en": category1.extended_object.get_title()},
+                },
+                {
+                    "color": "#fafafa",
+                    "icon": {},
+                    "meta_name": "levels",
+                    "meta_title": {"en": meta_category2.extended_object.get_title()},
+                    "name": "category-two",
+                    "parent_name": None,
+                    "parent_title": None,
+                    "placeholders": [
+                        {"position": 1, "slot": "course_categories"},
+                        {"position": 0, "slot": "course_icons"},
+                    ],
+                    "title": {"en": category2.extended_object.get_title()},
+                },
+            ],
+        )
+
     def test_models_course_get_organizations_empty(self):
         """
         For a course not linked to any organzation the method `get_organizations` should
