@@ -59,7 +59,7 @@ export const Root = ({ richieReactSpots }: RootProps) => {
 
       // Add context to props if they do not already include it
       if (!props.context) {
-        props.context = (window as any).__richie_frontend_context__;
+        props.context = (window as any).__richie_frontend_context__.context;
       }
 
       return ReactDOM.createPortal(<Component {...props} />, element);
