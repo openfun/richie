@@ -10,6 +10,7 @@ from django.utils import timezone
 
 import pytz
 from elasticsearch.client import IndicesClient
+from elasticsearch.exceptions import NotFoundError
 
 from richie.apps.search import ES_CLIENT
 from richie.apps.search.index_manager import (
@@ -155,165 +156,98 @@ class IndexManagerTestCase(TestCase):
         )
         mock_logger.info.assert_called()
 
-    # pylint: disable=no-member,unused-argument
-    @mock.patch(
-        "richie.apps.search.index_manager.get_indexes_by_alias",
-        side_effect=lambda existing_indexes, alias: [
-            (alias + "_forgotten", alias),
-            (alias + "_previous", alias),
-        ],
-    )
-    @mock.patch(
-        "richie.apps.search.index_manager.perform_create_index",
-        side_effect=lambda ix, *args: ix.index_name + "_created_index",
-    )
-    @mock.patch("elasticsearch.client.IndicesClient.delete")
-    @mock.patch(
-        "elasticsearch.client.IndicesClient.get_alias",
-        return_value=dict({"richie_orphan": {}}),
-    )
-    @mock.patch("elasticsearch.client.IndicesClient.update_aliases")
-    def test_index_manager_regenerate_indexes(self, *args):
+    def test_index_manager_regenerate_indexes(self):
         """
-        Now test the general index regeneration behavior. We don't need to test the side-effects
-        again as those have mostly been tested through perform_create_index.
-        We mostly have to ensure the proper calls happen and the correct actions/deletions are
-        passed to the indices_client.
+        Make sure indices are created, aliases updated and old, no longer useful indices
+        are pruned when the `regenerate_elasticsearch` function is called.
         """
-        regenerate_indexes(None)
+        # The indices client will be used to test the actual indices in ElasticSearch
+        indices_client = IndicesClient(client=ES_CLIENT)
 
-        self.indices_client.update_aliases.assert_called_with(
-            {
-                "actions": [
-                    {
-                        "add": {
-                            "index": "richie_categories_created_index",
-                            "alias": "richie_categories",
-                        }
-                    },
-                    {
-                        "add": {
-                            "index": "richie_courses_created_index",
-                            "alias": "richie_courses",
-                        }
-                    },
-                    {
-                        "add": {
-                            "index": "richie_organizations_created_index",
-                            "alias": "richie_organizations",
-                        }
-                    },
-                    {
-                        "add": {
-                            "index": "richie_persons_created_index",
-                            "alias": "richie_persons",
-                        }
-                    },
-                    {
-                        "remove": {
-                            "index": "richie_categories_forgotten",
-                            "alias": "richie_categories",
-                        }
-                    },
-                    {
-                        "remove": {
-                            "index": "richie_categories_previous",
-                            "alias": "richie_categories",
-                        }
-                    },
-                    {
-                        "remove": {
-                            "index": "richie_courses_forgotten",
-                            "alias": "richie_courses",
-                        }
-                    },
-                    {
-                        "remove": {
-                            "index": "richie_courses_previous",
-                            "alias": "richie_courses",
-                        }
-                    },
-                    {
-                        "remove": {
-                            "index": "richie_organizations_forgotten",
-                            "alias": "richie_organizations",
-                        }
-                    },
-                    {
-                        "remove": {
-                            "index": "richie_organizations_previous",
-                            "alias": "richie_organizations",
-                        }
-                    },
-                    {
-                        "remove": {
-                            "index": "richie_persons_forgotten",
-                            "alias": "richie_persons",
-                        }
-                    },
-                    {
-                        "remove": {
-                            "index": "richie_persons_previous",
-                            "alias": "richie_persons",
-                        }
-                    },
-                ]
-            }
-        )
-        self.indices_client.delete.assert_called_with(
-            ignore=[400, 404], index="richie_orphan"
-        )
+        # Create all our indices from scratch
+        # Use a mocked timezone.now to  check the names of our indices as they include a datetime
+        creation1_datetime = datetime(2010, 1, 1, tzinfo=timezone.utc)
+        creation1_string = creation1_datetime.strftime("%Y-%m-%d-%Hh%Mm%S.%fs")
+        with mock.patch.object(timezone, "now", return_value=creation1_datetime):
+            regenerate_indexes(None)
 
-    @mock.patch(
-        "richie.apps.search.index_manager.get_indexes_by_alias",
-        side_effect=lambda existing_indexes, alias: [],
-    )
-    @mock.patch(
-        "richie.apps.search.index_manager.perform_create_index",
-        side_effect=lambda ix, *args: ix.index_name + "_created_index",
-    )
-    @mock.patch("elasticsearch.client.IndicesClient.delete")
-    @mock.patch("elasticsearch.client.IndicesClient.get_alias", return_value=dict({}))
-    @mock.patch("elasticsearch.client.IndicesClient.update_aliases")
-    def test_index_manager_regenerate_indexes_with_empty_index(self, *args):
-        """
-        Make sure `regenerate_indexes` still works when there are no existing indexes. This
-        test case was added to reproduce a bug.
-        """
-        regenerate_indexes(None)
+        expected_indices = [
+            "richie_categories",
+            "richie_courses",
+            "richie_organizations",
+            "richie_persons",
+        ]
+        # All indices were created and properly aliased
+        for alias_name in expected_indices:
+            new_index_name = f"{alias_name}_{creation1_string}"
+            # The index is created
+            self.assertIsNotNone(indices_client.get(new_index_name)[new_index_name])
+            # The expected alias is associated with the index
+            self.assertEqual(
+                list(indices_client.get_alias(alias_name).keys())[0], new_index_name
+            )
 
-        self.indices_client.update_aliases.assert_called_with(
-            {
-                "actions": [
-                    {
-                        "add": {
-                            "index": "richie_categories_created_index",
-                            "alias": "richie_categories",
-                        }
-                    },
-                    {
-                        "add": {
-                            "index": "richie_courses_created_index",
-                            "alias": "richie_courses",
-                        }
-                    },
-                    {
-                        "add": {
-                            "index": "richie_organizations_created_index",
-                            "alias": "richie_organizations",
-                        }
-                    },
-                    {
-                        "add": {
-                            "index": "richie_persons_created_index",
-                            "alias": "richie_persons",
-                        }
-                    },
-                ]
-            }
-        )
-        self.indices_client.delete.assert_not_called()
+        # Now regenerate the indices, replacing the ones we just created
+        creation2_datetime = datetime(2011, 2, 2, tzinfo=timezone.utc)
+        creation2_string = creation2_datetime.strftime("%Y-%m-%d-%Hh%Mm%S.%fs")
+        with mock.patch.object(timezone, "now", return_value=creation2_datetime):
+            regenerate_indexes(None)
 
+        # All indices were replaced and aliases updated
+        for alias_name in expected_indices:
+            # The index is created
+            new_index_name = f"{alias_name}_{creation2_string}"
+            self.assertIsNotNone(indices_client.get(new_index_name)[new_index_name])
+            # The expected alias is associated with the new index
+            self.assertEqual(
+                list(indices_client.get_alias(alias_name).keys())[0], new_index_name
+            )
+            # The previous version of the index is still around
+            creation1_index_name = f"{alias_name}_{creation1_string}"
+            self.assertIsNotNone(
+                indices_client.get(creation1_index_name)[creation1_index_name]
+            )
+            # But not aliased any more
+            self.assertEqual(
+                indices_client.get(creation1_index_name)[creation1_index_name][
+                    "aliases"
+                ],
+                {},
+            )
+
+        # Regenerate indices again to make sure versions n-2 of indices are
+        # deleted (not just unaliased)
+        creation3_datetime = datetime(2012, 3, 3, tzinfo=timezone.utc)
+        creation3_string = creation3_datetime.strftime("%Y-%m-%d-%Hh%Mm%S.%fs")
+        with mock.patch.object(timezone, "now", return_value=creation3_datetime):
+            regenerate_indexes(None)
+
+        # All indices were replaced and had their aliases changed
+        for index_name in expected_indices:
+            new_index_name = f"{index_name}_{creation3_string}"
+            # The index is created
+            self.assertIsNotNone(indices_client.get(new_index_name)[new_index_name])
+            # The expected alias is associated with the new index
+            self.assertEqual(
+                list(indices_client.get_alias(index_name).keys())[0], new_index_name
+            )
+            # The previous version of the index is still around
+            creation2_index_name = f"{alias_name}_{creation2_string}"
+            self.assertIsNotNone(
+                indices_client.get(creation2_index_name)[creation2_index_name]
+            )
+            # But not aliased any more
+            self.assertEqual(
+                indices_client.get(creation2_index_name)[creation2_index_name][
+                    "aliases"
+                ],
+                {},
+            )
+            # Version n-2 of the index does not exist any more
+            with self.assertRaises(NotFoundError):
+                indices_client.get(f"{index_name}_{creation1_string}")
+
+    # pylint: disable=unused-argument
     @mock.patch(
         "richie.apps.search.indexers.courses.CoursesIndexer.scripts",
         new={"script_id_A": "script body A", "script_id_B": "script body B"},

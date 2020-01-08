@@ -14,6 +14,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Report frontend errors through Sentry when a sentry DSN is available in
   Django settings.
 
+### Changed
+
+- Improve ElasticSearch `regenerate_indexes` tests.
+
 ## [1.16.2] - 2019-12-18
 
 ### Fixed
