@@ -14,6 +14,8 @@ jest.mock('components/RootSearchSuggestField', () => ({
 }));
 
 describe('<Root />', () => {
+  (window as any).__richie_frontend_context__ = { context: {} };
+
   beforeEach(() => {
     jest.spyOn(console, 'warn').mockImplementation(() => {});
   });
