@@ -36,18 +36,17 @@ def get_indexes_by_alias(existing_indexes, alias):
             yield index, alias
 
 
-def perform_create_index(indexable, logger):
+def perform_create_index(indexable, logger=None):
     """
     Create a new index in ElasticSearch from an indexable instance
     """
     indices_client = IndicesClient(client=ES_CLIENT)
     # Create a new index name, suffixing its name with a timestamp
-    new_index = "{:s}_{:s}".format(
-        indexable.index_name, timezone.now().strftime("%Y-%m-%d-%Hh%Mm%S.%fs")
-    )
+    new_index = f"{indexable.index_name:s}_{timezone.now():%Y-%m-%d-%Hh%Mm%S.%fs}"
 
     # Create the new index
-    logger.info('Creating a new Elasticsearch index "{:s}"...'.format(new_index))
+    if logger:
+        logger.info(f'Creating a new Elasticsearch index "{new_index:s}"...')
     indices_client.create(index=new_index)
 
     # The index needs to be closed before we set an analyzer
@@ -112,7 +111,7 @@ def regenerate_indexes(logger):
     # NB: we *must* do this before the update_aliases call so we don't immediately prune
     # version n-1 of all our indexes
     useless_indexes = [
-        index for index, details in existing_indexes.items() if "aliases" not in details
+        index for index, details in existing_indexes.items() if not details["aliases"]
     ]
 
     # Replace the old indexes with the new ones in 1 atomic operation to avoid outage
@@ -120,7 +119,6 @@ def regenerate_indexes(logger):
         dict(actions=actions_to_create_aliases + actions_to_delete_aliases)
     )
 
-    # Cleanup step: do prune older indexes that are now useless
     for useless_index in useless_indexes:
         # Disable keyword arguments checking as elasticsearch-py uses a decorator to list
         # valid query parameters and inject them as kwargs. I won't say a word about this
@@ -130,7 +128,7 @@ def regenerate_indexes(logger):
         indices_client.delete(index=useless_index, ignore=[400, 404])
 
 
-def store_es_scripts(logger):
+def store_es_scripts(logger=None):
     """
     Iterate over the indexers listed in the settings, import them, and store the scripts
     they define on their "scripts" key in ElasticSearch
@@ -138,5 +136,5 @@ def store_es_scripts(logger):
     for indexer in ES_INDICES:
         for script_id, script_body in indexer.scripts.items():
             if logger:
-                logger.info('Storing script "{:s}"...'.format(script_id))
+                logger.info(f'Storing script "{script_id:s}"...')
             ES_CLIENT.put_script(id=script_id, body=script_body)
