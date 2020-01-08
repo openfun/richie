@@ -12,6 +12,12 @@ import { CommonDataProps } from 'types/commonDataProps';
 import { matchMedia } from 'utils/indirection/window';
 
 const messages = defineMessages({
+  errorMessage: {
+    defaultMessage: `Something's wrong! Courses could not be loaded.`,
+    description:
+      'Error message for Search view when the request to load courses fails',
+    id: 'components.Search.errorMessage',
+  },
   hideFiltersPane: {
     defaultMessage: 'Hide filters pane',
     description:
@@ -109,6 +115,11 @@ export const Search = ({ context }: CommonDataProps) => {
               }
             />
           </React.Fragment>
+        ) : courseSearchResponse &&
+          courseSearchResponse.status === requestStatus.FAILURE ? (
+          <div className="search__results__error">
+            <FormattedMessage {...messages.errorMessage} />
+          </div>
         ) : (
           <Spinner size="large">
             <FormattedMessage {...messages.spinnerText} />

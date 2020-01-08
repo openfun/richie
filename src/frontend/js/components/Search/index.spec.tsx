@@ -64,6 +64,28 @@ describe('<Search />', () => {
     expect(queryByText('Loading search results...')).toBeNull();
   });
 
+  it('shows an error message when it fails to get the results', async () => {
+    fetchMock.get('/api/v1.0/courses/?limit=20&offset=0', 500);
+
+    const { getByText, queryByText } = render(
+      <IntlProvider locale="en">
+        <HistoryContext.Provider
+          value={makeHistoryOf({ limit: '20', offset: '0' })}
+        >
+          <Search context={commonDataProps} />
+        </HistoryContext.Provider>
+      </IntlProvider>,
+    );
+
+    expect(
+      getByText('Loading search results...').parentElement,
+    ).toHaveAttribute('role', 'status');
+
+    await wait();
+    expect(queryByText('Loading search results...')).toBeNull();
+    getByText(`Something's wrong! Courses could not be loaded.`);
+  });
+
   it('always shows the filters pane on large screens', async () => {
     fetchMock.get('/api/v1.0/courses/?limit=20&offset=0', {
       meta: {
