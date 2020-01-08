@@ -18,6 +18,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Fix an issue that crashed `regenerate_indexes` (and therefore
   `bootstrap_elasticsearch`) from a broken state in ES.
+- `<Search />` component handles errors in course search requests, displaying
+  an error message to end users.
 
 ### Changed
 
