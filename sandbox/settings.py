@@ -296,6 +296,9 @@ class Base(DRFMixin, RichieCoursesConfigurationMixin, Configuration):
     RICHIE_ES_HOST = values.Value(
         "elasticsearch", environ_name="RICHIE_ES_HOST", environ_prefix=None
     )
+    RICHIE_ES_INDICES_PREFIX = values.Value(
+        default="richie", environ_name="RICHIE_ES_INDICES_PREFIX", environ_prefix=None
+    )
 
     # Sentry
     SENTRY_DSN = values.Value(None, environ_name="SENTRY_DSN")

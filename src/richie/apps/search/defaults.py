@@ -2,11 +2,15 @@
 Import custom settings and set up defaults for values the Search app needs
 """
 from django.conf import settings
+from django.utils.functional import lazy
 from django.utils.translation import ugettext_lazy as _
 
 # Elasticsearch
 ES_CHUNK_SIZE = 500
 ES_PAGE_SIZE = 10
+
+# Use a lazy to enable easier testing by not defining the value at bootstrap time
+ES_INDICES_PREFIX = lazy(lambda: settings.RICHIE_ES_INDICES_PREFIX)()
 
 # Define the scoring boost (in ElasticSearch) related value names receive when using
 # full-text search.

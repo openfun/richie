@@ -15,6 +15,7 @@ from elasticsearch.exceptions import NotFoundError
 from richie.apps.courses.factories import CourseFactory
 from richie.apps.search import ES_CLIENT
 from richie.apps.search.index_manager import (
+    ES_INDICES,
     get_indices_by_alias,
     perform_create_index,
     regenerate_indices,
@@ -158,7 +159,32 @@ class IndexManagerTestCase(TestCase):
         )
         mock_logger.info.assert_called()
 
-    def test_index_manager_regenerate_indices(self):
+    @mock.patch.object(
+        ES_INDICES.categories,
+        "index_name",
+        new_callable=mock.PropertyMock,
+        return_value="richie_test_categories",
+    )
+    @mock.patch.object(
+        ES_INDICES.courses,
+        "index_name",
+        new_callable=mock.PropertyMock,
+        return_value="richie_test_courses",
+    )
+    @mock.patch.object(
+        ES_INDICES.organizations,
+        "index_name",
+        new_callable=mock.PropertyMock,
+        return_value="richie_test_organizations",
+    )
+    @mock.patch.object(
+        ES_INDICES.persons,
+        "index_name",
+        new_callable=mock.PropertyMock,
+        return_value="richie_test_persons",
+    )
+    # pylint: disable=unused-argument
+    def test_index_manager_regenerate_indices(self, *args):
         """
         Make sure indices are created, aliases updated and old, no longer useful indices
         are pruned when the `regenerate_elasticsearch` function is called.
@@ -174,10 +200,10 @@ class IndexManagerTestCase(TestCase):
             regenerate_indices(None)
 
         expected_indices = [
-            "richie_categories",
-            "richie_courses",
-            "richie_organizations",
-            "richie_persons",
+            "richie_test_categories",
+            "richie_test_courses",
+            "richie_test_organizations",
+            "richie_test_persons",
         ]
         # All indices were created and properly aliased
         for alias_name in expected_indices:
@@ -249,7 +275,14 @@ class IndexManagerTestCase(TestCase):
             with self.assertRaises(NotFoundError):
                 indices_client.get(f"{index_name}_{creation1_string}")
 
-    def test_index_manager_regenerate_indices_from_broken_state(self):
+    @mock.patch.object(
+        ES_INDICES.courses,
+        "index_name",
+        new_callable=mock.PropertyMock,
+        return_value="richie_test_courses",
+    )
+    # pylint: disable=unused-argument
+    def test_index_manager_regenerate_indices_from_broken_state(self, *args):
         """
         `regenerate_indices` should succeed and give us a working ElasticSearch
         when it runs and finds a broken state (eg. with an existing, incorrect
@@ -262,10 +295,10 @@ class IndexManagerTestCase(TestCase):
         indices_client = IndicesClient(client=ES_CLIENT)
 
         # Create a course and trigger a signal to index it. This will create a
-        # broken "richie_courses" index
+        # broken "richie_test_courses" index
         course = CourseFactory(should_publish=True)
         update_course(course.extended_object, "en")
-        self.assertIsNotNone(indices_client.get("richie_courses"))
+        self.assertIsNotNone(indices_client.get("richie_test_courses"))
 
         # Call our `regenerate_indices command`
         creation_datetime = datetime(2010, 1, 1, tzinfo=timezone.utc)
@@ -274,11 +307,13 @@ class IndexManagerTestCase(TestCase):
             regenerate_indices(None)
 
         # No error was thrown, the courses index (like all others) was bootstrapped
-        self.assertIsNotNone(indices_client.get(f"richie_courses_{creation_string}"))
+        self.assertIsNotNone(
+            indices_client.get(f"richie_test_courses_{creation_string}")
+        )
         # The expected alias is associated with the index
         self.assertEqual(
-            list(indices_client.get_alias("richie_courses").keys())[0],
-            f"richie_courses_{creation_string}",
+            list(indices_client.get_alias("richie_test_courses").keys())[0],
+            f"richie_test_courses_{creation_string}",
         )
 
     # pylint: disable=unused-argument
@@ -294,6 +329,7 @@ class IndexManagerTestCase(TestCase):
         new={"script_id_C": "script body C"},
     )
     @mock.patch.object(ES_CLIENT, "put_script")
+    # pylint: disable=unused-argument
     def test_index_manager_store_es_scripts(self, mock_put_script, *args):
         """
         Make sure store_es_scripts iterates over all indexers to store their scripts and

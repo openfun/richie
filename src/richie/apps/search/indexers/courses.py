@@ -16,6 +16,7 @@ from richie.plugins.simple_picture.helpers import get_picture_info
 from richie.plugins.simple_text_ckeditor.models import SimpleText
 
 from ...courses.models import MAX_DATE, CategoryPluginModel, Course, CourseState
+from ..defaults import ES_INDICES_PREFIX
 from ..forms import CourseSearchForm
 from ..text_indexing import MULTILINGUAL_TEXT
 from ..utils.i18n import get_best_field_language
@@ -30,7 +31,7 @@ class CoursesIndexer:
     """
 
     document_type = "course"
-    index_name = "richie_courses"
+    index_name = f"{ES_INDICES_PREFIX}_courses"
     mapping = {
         "dynamic_templates": MULTILINGUAL_TEXT,
         "properties": {
