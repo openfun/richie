@@ -3,6 +3,7 @@ Tests for the course viewset
 """
 from unittest import mock
 
+from django.test.utils import override_settings
 from django.utils import timezone
 
 import pytz
@@ -56,6 +57,7 @@ class CoursesViewsetsTestCase(CMSTestCase):
         # The client received a standard NotFound response
         self.assertEqual(response.status_code, 404)
 
+    @override_settings(RICHIE_ES_INDICES_PREFIX="richie")
     @mock.patch(
         "richie.apps.search.forms.CourseSearchForm.build_es_query",
         lambda *args: (2, 77, {"some": "query"}, {"some": "aggs"}),

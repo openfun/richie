@@ -4,6 +4,7 @@ Tests for the organization viewset
 from unittest import mock
 
 from django.test import TestCase
+from django.test.utils import override_settings
 
 from elasticsearch.exceptions import NotFoundError
 
@@ -51,6 +52,7 @@ class OrganizationsViewsetsTestCase(TestCase):
         # The client received a standard NotFound response
         self.assertEqual(response.status_code, 404)
 
+    @override_settings(RICHIE_ES_INDICES_PREFIX="richie")
     @mock.patch(
         "richie.apps.search.forms.ItemSearchForm.build_es_query",
         lambda x: (2, 0, {"query": "something"}),

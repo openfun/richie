@@ -13,6 +13,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Licences (through their "name" and "content" fields) are now translatable.
 - Report frontend errors through Sentry when a sentry DSN is available in
   Django settings.
+- ElasticSearch index name prefix (currently `richie_`) is now customizable
+  through the settings.
 
 ### Fixed
 

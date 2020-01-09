@@ -4,6 +4,7 @@ Tests for the category viewset
 from unittest import mock
 
 from django.test import TestCase
+from django.test.utils import override_settings
 
 from elasticsearch.exceptions import NotFoundError
 
@@ -63,6 +64,7 @@ class CategoriesViewsetsTestCase(TestCase):
         # The client received a standard NotFound response
         self.assertEqual(response.status_code, 404)
 
+    @override_settings(RICHIE_ES_INDICES_PREFIX="richie")
     @mock.patch.object(ES_CLIENT, "search")
     def test_viewsets_categories_search(self, mock_search):
         """

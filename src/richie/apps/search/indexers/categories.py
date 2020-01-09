@@ -13,6 +13,7 @@ from richie.plugins.simple_picture.helpers import get_picture_info
 from richie.plugins.simple_text_ckeditor.models import SimpleText
 
 from ...courses.models import Category
+from ..defaults import ES_INDICES_PREFIX
 from ..forms import ItemSearchForm
 from ..text_indexing import MULTILINGUAL_TEXT
 from ..utils.i18n import get_best_field_language
@@ -26,7 +27,7 @@ class CategoriesIndexer:
     """
 
     document_type = "category"
-    index_name = "richie_categories"
+    index_name = f"{ES_INDICES_PREFIX}_categories"
     form = ItemSearchForm
     mapping = {
         "dynamic_templates": MULTILINGUAL_TEXT,
