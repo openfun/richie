@@ -7,7 +7,7 @@ from django.conf import settings
 from django.utils import timezone
 
 from elasticsearch.client import IndicesClient
-from elasticsearch.exceptions import NotFoundError
+from elasticsearch.exceptions import NotFoundError, RequestError
 from elasticsearch.helpers import bulk
 
 from . import ES_CLIENT
@@ -117,9 +117,28 @@ def regenerate_indexes(logger):
     ]
 
     # Replace the old indexes with the new ones in 1 atomic operation to avoid outage
-    indices_client.update_aliases(
-        dict(actions=actions_to_create_aliases + actions_to_delete_aliases)
-    )
+    def perform_aliases_update():
+        try:
+            indices_client.update_aliases(
+                dict(actions=actions_to_create_aliases + actions_to_delete_aliases)
+            )
+        except RequestError as e:
+            # This operation can fail if an index exists with the same name as an alias we're
+            # attempting to create. In Richie, this is not supposed to happen and is usually the
+            # result of a broken ES state.
+            if e.error == "invalid_alias_name_exception":
+                # Identify the broken index
+                broken_index = e.info["error"]["index"]
+                # Delete it (it was unusable and we can recreate its data at-will)
+                indices_client.delete(index=broken_index)
+                # Attempt to perform the operation again
+                # We're doing this recursively in case more than one such broken indices existed
+                # (eg. "richie_courses" and "richie_organizations")
+                perform_aliases_update()
+            # Let other kinds of errors be raised
+            else:
+                raise e
+    perform_aliases_update()
 
     for useless_index in useless_indexes:
         # Disable keyword arguments checking as elasticsearch-py uses a decorator to list
