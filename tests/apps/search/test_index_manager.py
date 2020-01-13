@@ -12,6 +12,7 @@ import pytz
 from elasticsearch.client import IndicesClient
 from elasticsearch.exceptions import NotFoundError
 
+from richie.apps.courses.factories import CourseFactory
 from richie.apps.search import ES_CLIENT
 from richie.apps.search.index_manager import (
     get_indexes_by_alias,
@@ -19,6 +20,7 @@ from richie.apps.search.index_manager import (
     regenerate_indexes,
     store_es_scripts,
 )
+from richie.apps.search.signals import update_course
 
 
 class IndexManagerTestCase(TestCase):
@@ -246,6 +248,38 @@ class IndexManagerTestCase(TestCase):
             # Version n-2 of the index does not exist any more
             with self.assertRaises(NotFoundError):
                 indices_client.get(f"{index_name}_{creation1_string}")
+
+    def test_index_manager_regenerate_indexes_from_broken_state(self):
+        """
+        `regenerate_indexes` should succeed and give us a working ElasticSearch
+        when it runs and finds a broken state (eg. with an existing, incorrect
+        index with the name of an alias).
+
+        This can occur when ES restarts and an update signal is triggered before
+        Richie had a chance to bootstrap ES.
+        """
+        # The indices client will be used to test the actual indices in ElasticSearch
+        indices_client = IndicesClient(client=ES_CLIENT)
+
+        # Create a course and trigger a signal to index it. This will create a
+        # broken "richie_courses" index
+        course = CourseFactory(should_publish=True)
+        update_course(course.extended_object, "en")
+        self.assertIsNotNone(indices_client.get("richie_courses"))
+
+        # Call our `regenerate_indexes command`
+        creation_datetime = datetime(2010, 1, 1, tzinfo=timezone.utc)
+        creation_string = creation_datetime.strftime("%Y-%m-%d-%Hh%Mm%S.%fs")
+        with mock.patch.object(timezone, "now", return_value=creation_datetime):
+            regenerate_indexes(None)
+
+        # No error was thrown, the courses index (like all others) was bootstrapped
+        self.assertIsNotNone(indices_client.get(f"richie_courses_{creation_string}"))
+        # The expected alias is associated with the index
+        self.assertEqual(
+            list(indices_client.get_alias("richie_courses").keys())[0],
+            f"richie_courses_{creation_string}",
+        )
 
     # pylint: disable=unused-argument
     @mock.patch(
