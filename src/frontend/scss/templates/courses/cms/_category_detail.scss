@@ -128,4 +128,10 @@ $richie-category-detail-banner-logo-sizing-xl: 25rem !default;
       @include make-col(12);
     }
   }
+
+  &__see-more {
+    width: 100%;
+    margin: 1rem;
+    text-align: center;
+  }
 }

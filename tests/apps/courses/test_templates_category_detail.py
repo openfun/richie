@@ -1,11 +1,15 @@
 """
 End-to-end tests for the category detail view
 """
+from unittest import mock
+
 from cms.api import add_plugin
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
+from richie.apps.core.helpers import create_i18n_page
 from richie.apps.courses.cms_plugins import CategoryPlugin
+from richie.apps.courses.context_processors import PAGES_SETTINGS
 from richie.apps.courses.factories import (
     BlogPostFactory,
     CategoryFactory,
@@ -120,6 +124,110 @@ class CategoryCMSTestCase(CMSTestCase):
             "course_categories",
             '<p class="course-glimpse__content__title">{:s}</p>',
         )
+
+    @mock.patch(
+        "cms.templatetags.cms_tags.PageUrl.get_value", return_value="/the/courses/"
+    )
+    @mock.patch.dict(PAGES_SETTINGS, {"MAX_RELATED_COURSES_ON_DETAILS_PAGES": 2})
+    def test_templates_category_detail_cms_published_content_max_courses(
+        self, _mock_page_url
+    ):
+        """
+        Make sure the category detail page does not display too many courses, even when a large
+        number are related to the current category, as this can cause the page to load very slowly
+        and is not a great experience for the user anyway.
+        """
+        # Create our dummy category and the 3 courses we'll attach to it
+        meta = CategoryFactory(
+            page_parent=create_i18n_page(
+                {"en": "Categories", "fr": "Catégories"}, published=True
+            ),
+            page_reverse_id="subjects",
+            page_title={"en": "Subjects", "fr": "Sujets"},
+            should_publish=True,
+        )
+        category = CategoryFactory(
+            page_parent=meta.extended_object, should_publish=True
+        )
+        courses = CourseFactory.create_batch(
+            3, fill_categories=[category], should_publish=True
+        )
+        # Link the 3 courses with our category through the relevant placeholder
+        for course in courses:
+            add_plugin(
+                course.extended_object.placeholders.get(slot="course_categories"),
+                CategoryPlugin,
+                "en",
+                page=category.extended_object,
+            )
+        # Make sure we do have 3 courses on the category
+        self.assertEqual(category.get_courses().count(), 3)
+
+        # Only the first two are rendered in the template
+        response = self.client.get(category.extended_object.get_absolute_url())
+        self.assertContains(response, courses[0].extended_object.get_title())
+        self.assertContains(response, courses[1].extended_object.get_title())
+        self.assertNotContains(response, courses[2].extended_object.get_title())
+
+        # There is a link to view more related courses directly in the Search view
+        self.assertContains(
+            response, f'href="/the/courses/?subjects={category.get_es_id():s}"'
+        )
+        self.assertContains(
+            response,
+            f"See all courses related to {category.extended_object.get_title():s}",
+        )
+
+    @mock.patch(
+        "cms.templatetags.cms_tags.PageUrl.get_value", return_value="/the/courses/"
+    )
+    @mock.patch.dict(PAGES_SETTINGS, {"MAX_RELATED_COURSES_ON_DETAILS_PAGES": 2})
+    def test_templates_category_detail_cms_published_content_max_courses_on_meta(
+        self, _mock_page_url
+    ):
+        """
+        Meta categories are a special case: technically, any page linked to one of their children
+        is linked to the meta-category too. This means in a lot of cases we just want a link to
+        *all* courses not just their related courses.
+        The Search view is also not equipped to filter on a meta-category. In this case, we just
+        link to it with a different link text.
+        """
+        # Create our dummy category and the 3 courses we'll attach to it
+        meta = CategoryFactory(
+            page_parent=create_i18n_page(
+                {"en": "Categories", "fr": "Catégories"}, published=True
+            ),
+            page_reverse_id="subjects",
+            page_title={"en": "Subjects", "fr": "Sujets"},
+            should_publish=True,
+        )
+        category = CategoryFactory(
+            page_parent=meta.extended_object, should_publish=True
+        )
+        courses = CourseFactory.create_batch(
+            3, fill_categories=[category], should_publish=True
+        )
+        # Link the 3 courses with our category through the relevant placeholder
+        for course in courses:
+            add_plugin(
+                course.extended_object.placeholders.get(slot="course_categories"),
+                CategoryPlugin,
+                "en",
+                page=category.extended_object,
+            )
+        # Make sure we do have 3 courses on the category
+        self.assertEqual(category.get_courses().count(), 3)
+
+        # NB: here we are requesting the meta category's page, not the child category
+        # Only the first two are rendered in the template
+        response = self.client.get(meta.extended_object.get_absolute_url())
+        self.assertContains(response, courses[0].extended_object.get_title())
+        self.assertContains(response, courses[1].extended_object.get_title())
+        self.assertNotContains(response, courses[2].extended_object.get_title())
+
+        # There is a link to view all courses
+        self.assertContains(response, 'href="/the/courses/')
+        self.assertContains(response, "See all courses")
 
     def test_templates_category_detail_cms_published_content_blogposts(self):
         """
