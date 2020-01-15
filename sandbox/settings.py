@@ -142,6 +142,7 @@ class Base(DRFMixin, RichieCoursesConfigurationMixin, Configuration):
                     "cms.context_processors.cms_settings",
                     "richie.apps.core.context_processors.site_metas",
                     "richie.apps.core.context_processors.frontend_context",
+                    "richie.apps.courses.context_processors.page_settings",
                 ],
                 "loaders": [
                     "django.template.loaders.filesystem.Loader",

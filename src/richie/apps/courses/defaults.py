@@ -294,6 +294,15 @@ PAGES_INFO.update(getattr(settings, "PAGES_INFO", {}))
 
 ROOT_REVERSE_IDS = PAGES_INFO.keys()
 
+# Common settings for automatically generated pages for Richie
+# objects (eg. category page, courses pages, etc.)
+PAGES_SETTINGS = {
+    # Allow users to limit the number of related objects automatically displayed on details pages
+    "MAX_RELATED_COURSES_ON_DETAILS_PAGES": getattr(
+        settings, "RICHIE_MAX_RELATED_COURSES_ON_DETAILS_PAGES", 20
+    )
+}
+
 # Fields effort and duration
 MINUTE, HOUR, DAY, WEEK, MONTH = "minute", "hour", "day", "week", "month"
 DEFAULT_TIME_UNIT = HOUR
