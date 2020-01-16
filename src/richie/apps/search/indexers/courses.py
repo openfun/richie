@@ -21,7 +21,6 @@ from ..forms import CourseSearchForm
 from ..text_indexing import MULTILINGUAL_TEXT
 from ..utils.i18n import get_best_field_language
 from ..utils.indexers import slice_string_for_completion
-from . import ES_INDICES
 
 
 class CoursesIndexer:
@@ -518,8 +517,7 @@ class CoursesIndexer:
             if organization_highlighted
             else None,
             "organizations": [
-                ES_INDICES.organizations.get_es_id(o.extended_object)
-                for o in organizations
+                organization.get_es_id() for organization in organizations
             ],
             # Index the names of organizations to surface them in full text searches
             "organizations_names": reduce(

@@ -50,6 +50,17 @@ class Organization(BasePageExtension):
             model=self._meta.verbose_name.title(),
         )
 
+    def get_es_id(self):
+        """
+        An ID built with the node path and the position of this organization in the taxonomy:
+            - P: parent, the organization has children
+            - L: leaf, the organization has no children
+
+        For example: a parent organization `P_00010002` and its child `L_000100020001`.
+        """
+        page = self.extended_object
+        return f"{'L' if page.node.is_leaf() else 'P':s}-{page.node.path:s}"
+
     def clean(self):
         """
         We normalize the code with slugify for better uniqueness

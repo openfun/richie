@@ -49,20 +49,6 @@ class OrganizationsIndexer:
     scripts = {}
     display_fields = ["absolute_url", "logo", "title.*"]
 
-    @staticmethod
-    def get_es_id(page):
-        """
-        An ID built with the node path and the position of this organization in the taxonomy:
-            - P: parent, the organization has children
-            - L: leaf, the organization has no children
-
-        For example: a parent organization `P_00010002` and its child `L_000100020001`.
-        """
-        return "{type:s}-{path:s}".format(
-            type="L" if page.node.is_leaf() else "P",  # Leaf or Parent?
-            path=page.node.path,
-        )
-
     @classmethod
     def get_es_document_for_organization(cls, organization, index=None, action="index"):
         """Build an Elasticsearch document from the category instance."""
@@ -95,7 +81,7 @@ class OrganizationsIndexer:
             description[simple_text.cmsplugin_ptr.language].append(simple_text.body)
 
         return {
-            "_id": cls.get_es_id(organization.extended_object),
+            "_id": organization.get_es_id(),
             "_index": index,
             "_op_type": action,
             "_type": cls.document_type,
