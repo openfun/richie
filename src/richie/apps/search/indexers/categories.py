@@ -65,20 +65,6 @@ class CategoriesIndexer:
         "title.*",
     ]
 
-    @staticmethod
-    def get_es_id(page):
-        """
-        An ID built with the node path and the position of this category in the taxonomy:
-            - P: parent, the category has children
-            - L: leaf, the category has no children
-
-        For example: a parent category `P_00010002` and its child `L_000100020001`.
-        """
-        return "{type:s}-{path:s}".format(
-            type="L" if page.node.is_leaf() else "P",  # Leaf or Parent?
-            path=page.node.path,
-        )
-
     @classmethod
     def get_es_document_for_category(cls, category, index=None, action="index"):
         """Build an Elasticsearch document from the category instance."""
@@ -129,7 +115,7 @@ class CategoriesIndexer:
             kind = None
 
         return {
-            "_id": cls.get_es_id(category.extended_object),
+            "_id": category.get_es_id(),
             "_index": index,
             "_op_type": action,
             "_type": cls.document_type,

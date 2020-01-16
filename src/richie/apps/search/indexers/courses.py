@@ -488,9 +488,7 @@ class CoursesIndexer:
                 language: course.extended_object.get_absolute_url(language)
                 for language in titles.keys()
             },
-            "categories": [
-                ES_INDICES.categories.get_es_id(page) for page in category_pages
-            ],
+            "categories": [page.category.get_es_id() for page in category_pages],
             # Index the names of categories to surface them in full text searches
             "categories_names": reduce(
                 lambda acc, title: {

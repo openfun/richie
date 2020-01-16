@@ -47,6 +47,17 @@ class Category(BasePageExtension):
             title=self.extended_object.get_title(),
         )
 
+    def get_es_id(self):
+        """
+        An ID built with the node path and the position of this category in the taxonomy:
+            - P: parent, the category has children
+            - L: leaf, the category has no children
+
+        For example: a parent category `P_00010002` and its child `L_000100020001`.
+        """
+        page = self.extended_object
+        return f"{'L' if page.node.is_leaf() else 'P':s}-{page.node.path:s}"
+
     def get_meta_category(self):
         """
         Get the meta category the current category falls under. Meta-categories are a special kind
