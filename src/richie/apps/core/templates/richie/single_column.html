@@ -1,5 +1,11 @@
 {% extends "richie/base.html" %}
 {% load cms_tags %}
+{% comment %}
+CHANGELOG:
+- Use "render_model" tag for page title
+- Moved title to subheader
+{% endcomment %}
+
 
 {% block head_title %}
     {% page_attribute "page_title" %}
@@ -11,11 +17,18 @@
     <meta property="og:url" content="{{ SITE.web_url }}{{ current_page.get_absolute_url }}">
 {% endblock meta_opengraph_contextuals %}
 
+
+{% block subheader_content %}
+<div class="subheader__container">
+    <h1 class="subheader__title">
+        {% render_model request.current_page "title" %}
+    </h1>
+</div>
+{% endblock subheader_content %}
+
+
 {% block content %}
 <div class="single-column">
-
-    <h1 class="single-column__title">{{ current_page.get_title }}</h1>
-
     {% block column %}
         {% with header_level=2 %}
             {% placeholder "maincontent" %}

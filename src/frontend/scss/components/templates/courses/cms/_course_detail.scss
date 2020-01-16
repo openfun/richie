@@ -1,0 +1,134 @@
+// Course detail template stylesheet
+//
+// NOTE: Course runs part have been dropped for now since it is not wanted for
+//       fun-corporate
+
+.course-detail {
+    $detail-selector: &;
+    margin: 0 auto;
+    padding: 0;
+
+    &__block {
+        @include detail-block;
+        @include content-padding-fix($target: "&:last-child");
+    }
+
+    &__row {
+        @include detail-row;
+    }
+
+    &__title {
+        @include detail-title;
+        text-align: left;
+    }
+
+    &__item {
+        margin: 1rem 0 0 0;
+    }
+
+    &__label {
+        @include font-size($h4-font-size);
+        margin: 0 0 0.75rem 0;
+        font-family: $font-family-base;
+        font-weight: bold;
+    }
+
+    &__empty {
+        @include detail-empty;
+    }
+
+    &__teaser {
+        @include sv-flex-cell-width(100%);
+        margin: 0;
+        padding: 0;
+        /**
+        * Code below replicate .reponsive-embed from Bootstrap with forced 16/9
+        * cause we cannot use object-fit since it is not compatible under IE
+        * Edge 16. For not forced ratio we may use something like flex-video
+        * (which involve some JS)
+        */
+        position: relative;
+        display: block;
+        overflow: hidden;
+
+        &::before {
+            display: block;
+            content: '';
+            padding-top: percentage(9 / 16);
+        }
+
+        iframe,
+        embed,
+        object,
+        img,
+        video {
+            position: absolute;
+            top: 1.5rem;
+            bottom: 1.5rem;
+            left: 1rem;
+            right: 1rem;
+            width: calc(100% - #{1rem * 2});
+            min-height: calc(100% - #{1.5rem * 2});
+            border: 0;
+        }
+
+        @include m-o-media_empty($background: r-theme-val(course-detail, teaser-empty-background));
+    }
+
+    &__team {
+        #{$detail-selector}__title {
+            text-align: center;
+        }
+    }
+
+    &__organizations {
+        #{$detail-selector}__title {
+            @include font-size($h4-font-size);
+            color: r-theme-val(course-detail, organizations-title-color) !important;
+            text-align: center;
+        }
+
+        .organization-glimpse {
+            $glimpse-gutter: 0.625rem;
+            @include sv-flex($width: calc(100% - #{$glimpse-gutter * 2}));
+            border: 0;
+
+            @include media-breakpoint-up(sm) {
+                @include sv-flex($width: calc(50% - #{$glimpse-gutter * 2}));
+            }
+            @include media-breakpoint-up(xl) {
+                @include sv-flex($width: calc(20% - #{$glimpse-gutter * 2}));
+            }
+        }
+    }
+
+    &__plan {
+        #{$detail-selector}__title {
+            color: r-theme-val(course-detail, plan-title-color);
+        }
+    }
+
+    .plan-accordion {
+        @include accordion-base();
+        @include accordion-plan(
+            $item-dot-color: r-theme-val(accordion-plan, item-dot-color),
+            $title-color: r-theme-val(accordion-plan, title-color),
+            $content-color: r-theme-val(accordion-plan, content-color),
+            $border-color: r-theme-val(accordion-plan, border-color),
+            $background-color: r-theme-val(accordion-plan, background-color),
+            $dot-closed: r-theme-val(accordion-plan, dot-closed),
+            $dot-opened: r-theme-val(accordion-plan, dot-opened),
+        );
+    }
+
+    &__license {
+        #{$detail-selector}__title {
+            @include font-size($h3-font-size);
+        }
+
+        #{$detail-selector}__label {
+            color: r-theme-val(course-detail, license-label-color);
+        }
+    }
+
+}

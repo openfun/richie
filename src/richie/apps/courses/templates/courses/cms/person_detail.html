@@ -1,91 +1,137 @@
 {% extends "richie/fullwidth.html" %}
 {% load cms_tags extra_tags i18n thumbnail %}
+{% comment %}
+CHANGELOG:
+- Moved page title, categories, bio, portrait to "subheader__content" block
+- Restructured content tree to block/row structure
+{% endcomment %}
 
 {% block meta_opengraph_contextuals %}
     <meta property="og:title" content="{{ current_page.get_title|truncatechars:65 }}">
     <meta property="og:url" content="{{ SITE.web_url }}{{ current_page.get_absolute_url }}">
 {% endblock meta_opengraph_contextuals %}
 
+
+{% block subheader %}
+<div class="subheader subheader--alternative">
+    {% block breadcrumbs %}
+    {% include "menu/breadcrumbs.html" %}
+    {% endblock breadcrumbs %}
+
+    {% block subheader_content %}{% spaceless %}
+        {% with course=current_page.course header_level=2 %}
+        <div class="subheader__container">
+            <div class="subheader__intro">
+                <div class="subheader__main">
+                    <h1 class="subheader__title">{% render_model current_page "title" %}</h1>
+
+                    {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"categories" %}
+                    <div class="feature-inlines feature-inlines--tertiary">
+                        <ul class="feature-inlines__container">
+                        {% with variant="feature" %}
+                            {% placeholder "categories" or %}
+                                <li class="feature-inlines__empty">
+                                    {% trans "No associated categories" %}
+                                </li>
+                            {% endplaceholder %}
+                        {% endwith %}
+                        </ul>
+                    </div>
+                    {% endif %}
+
+                    <div class="subheader__content">
+                        {% placeholder "bio" or %}
+                            <p class="subheader__empty">{% trans "Enter your bio here..." %}</p>
+                        {% endplaceholder %}
+                    </div>
+                </div>
+
+                <div class="subheader__aside">
+                    <div class="subheader__cartouche">
+                        {% get_placeholder_plugins "portrait" as plugins or %}
+                        <div class="subheader__empty">
+                        {% trans "Portrait" %}
+                        </div>
+                        {% endget_placeholder_plugins %}
+                        {% blockplugin plugins.0 %}
+                        <div class="subheader__media subheader__media--locket">
+                            <img
+                                src="{% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location %}"
+                                srcset="
+                                    {% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location %} 200w
+                                    {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x400 crop upscale subject_location=instance.picture.subject_location %} 400w{% endif %}
+                                    {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x600 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+                                "
+                                sizes="200px"
+                                alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% blocktrans with title=current_page.get_title %}{{ title }} avatar{% endblocktrans %}{% endif %}"
+                            />
+                        </div>
+                        {% endblockplugin %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endwith %}
+    {% endspaceless %}{% endblock subheader_content %}
+</div>
+{% endblock subheader %}
+
+
+
+
 {% block content %}{% spaceless %}
 {% with header_level=2 person=current_page.person %}
 <div class="person-detail">
-  <div class="person-detail__card">
-    <div class="person-detail__card__media">
-      {% get_placeholder_plugins "portrait" as plugins or %}
-        <div class="person-detail__card__media__empty">{% trans "Portrait" %}</div>
-      {% endget_placeholder_plugins %}
-      {% blockplugin plugins.0 %}
-        <img
-          src="{% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location %}"
-          srcset="
-            {% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location %} 200w
-            {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x400 crop upscale subject_location=instance.picture.subject_location %} 400w{% endif %}
-            {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x600 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
-          "
-          sizes="200px"
-          alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% blocktrans with title=current_page.get_title %}{{ title }} avatar{% endblocktrans %}{% endif %}"
-        />
-      {% endblockplugin %}
+    {% placeholder "maincontent" %}
+
+    {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"organizations" %}
+    <div class="person-detail__organizations person-detail__block person-detail__block--gradient-light person-detail__block--arc">
+        <div class="person-detail__row">
+            <section class="organization-glimpse-list">
+                <h2 class="person-detail__title">{% trans "Organizations" %}</h2>
+                {% placeholder "organizations" or %}
+                    <p class="organization-glimpse-list__empty">
+                        {% trans "No associated organizations" %}
+                    </p>
+                {% endplaceholder %}
+            </section>
+        </div>
     </div>
-
-    <div class="person-detail__card__content">
-      <h1 class="person-detail__card__content__title">{% render_model current_page "title" %}</h1>
-
-      {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"categories" %}
-      <div class="person-detail__card__content__categories">
-        {% with variant="tag" %}
-          {% placeholder "categories" or %}
-            <p class="person-detail__card__content__categories__empty">
-              {% trans "No associated categories" %}
-            </p>
-          {% endplaceholder %}
-        {% endwith %}
-      </div>
-      {% endif %}
-      {% placeholder "bio" or %}
-        <p class="person-detail__card__content__empty">{% trans "Enter your bio here..." %}</p>
-      {% endplaceholder %}
-    </div>
-  </div>
-
-  {% placeholder "maincontent" %}
-
-  {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"organizations" %}
-    <section class="organization-glimpse-list">
-      <h2 class="organization-glimpse-list__title">{% trans "Organizations" %}</h2>
-      {% placeholder "organizations" or %}
-        <p class="organization-glimpse-list__empty">
-          {% trans "No associated organizations" %}
-        </p>
-      {% endplaceholder %}
-    </section>
-  {% endif %}
-
-  {% with courses=person.get_courses %}
-    {% if courses %}
-      <section class="course-glimpse-list">
-        <h2 class="course-glimpse-list__title">{% trans "Courses" %}</h2>
-        {% for course in courses %}
-          {% if course.extended_object.publisher_is_draft or course.check_publication %}
-              {% include "courses/cms/fragment_course_glimpse.html" with course=course %}
-          {% endif %}
-        {% endfor %}
-      </section>
     {% endif %}
-  {% endwith %}
 
-  {% with blogposts=person.get_blogposts %}
-    {% if blogposts %}
-      <section class="blogpost-glimpse-list">
-        <h2 class="blogpost-glimpse-list__title">{% trans "Blogposts" %}</h2>
-        {% for blogpost in blogposts %}
-          {% if blogpost.extended_object.publisher_is_draft or blogpost.check_publication %}
-              {% include "courses/cms/fragment_blogpost_glimpse.html" with blogpost=blogpost %}
-          {% endif %}
-        {% endfor %}
-      </section>
-    {% endif %}
-  {% endwith %}
+    {% with courses=person.get_courses %}
+        {% if courses %}
+            <div class="person-detail__courses person-detail__block">
+                <div class="person-detail__row">
+                    <section class="course-glimpse-list">
+                        <h2 class="person-detail__title">{% trans "Courses" %}</h2>
+                        {% for course in courses %}
+                            {% if course.extended_object.publisher_is_draft or course.check_publication %}
+                                {% include "courses/cms/fragment_course_glimpse.html" with course=course %}
+                            {% endif %}
+                        {% endfor %}
+                    </section>
+                </div>
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    {% with blogposts=person.get_blogposts %}
+        {% if blogposts %}
+            <div class="person-detail__blogposts person-detail__block person-detail__block--divider">
+                <div class="person-detail__row">
+                    <section class="blogpost-glimpse-list">
+                        <h2 class="person-detail__title">{% trans "Blogposts" %}</h2>
+                        {% for blogpost in blogposts %}
+                            {% if blogpost.extended_object.publisher_is_draft or blogpost.check_publication %}
+                                {% include "courses/cms/fragment_blogpost_glimpse.html" with blogpost=blogpost %}
+                            {% endif %}
+                        {% endfor %}
+                    </section>
+                </div>
+            </div>
+        {% endif %}
+    {% endwith %}
 
 </div>
 {% endwith %}

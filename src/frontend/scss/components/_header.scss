@@ -1,273 +1,302 @@
 // Main body header
-
-$richie-topbar-breakpoint: lg !default;
-
-$richie-topbar-shadow: 0 0 rem-calc(3px) rem-calc(3px) rgba($gray40, 0.2) !default;
-$richie-topbar-background: $white !default;
-
-$richie-topbar-hamburger-padding: 0 1rem !default;
-$richie-topbar-hamburger-fontsize: 2rem !default;
-$richie-topbar-hamburger-fontcolor: $dodgerblue7 !default;
-$richie-topbar-hamburger-fontcolor-hover: $dodgerblue7 !default;
-
-$richie-topbar-brand-height: rem-calc(60px) !default;
-$richie-topbar-brand-padding: 0 0.4rem !default;
-
-$richie-topbar-menu-list-margin: 0 !default;
-$richie-topbar-menu-list-padding: 0 !default;
-
-$richie-topbar-menu-list-fontcolor: $white !default;
-$richie-topbar-menu-list-fontcolor-lg: $dodgerblue7 !default;
-$richie-topbar-menu-list-background: $dodgerblue7 !default;
-$richie-topbar-menu-list-background-lg: transparent !default;
-
-$richie-topbar-menu-item-margin: 0 !default;
-$richie-topbar-menu-item-padding: 0 !default;
-$richie-topbar-menu-item-fontcolor: inherit !default;
-
-$richie-topbar-menu-link-padding: 0.8rem 1rem !default;
-$richie-topbar-menu-link-fontsize: 1rem !default;
-$richie-topbar-menu-link-fontcolor: inherit !default;
-
-$richie-topbar-menu-link-padding-md: 1rem 0.7rem !default;
-$richie-topbar-menu-link-fontsize-md: 0.9rem !default;
-$richie-topbar-menu-link-fontcolor-md: inherit !default;
-
-$richie-topbar-menu-link-padding-lg: 1rem !default;
-$richie-topbar-menu-link-fontsize-lg: 1rem !default;
-$richie-topbar-menu-link-fontcolor-lg: inherit !default;
-
-$richie-topbar-menu-link-fontcolor-hover: $white !default;
-$richie-topbar-menu-link-background-hover: lighten($dodgerblue7, 2%) !default;
-
-$richie-topbar-menu-item-active-fontweight: bold !default;
-$richie-topbar-menu-item-active-border: rem-calc(4px) solid
-  lighten($dodgerblue7, 8%) !default;
-$richie-topbar-menu-item-active-fontweight-lg: bold !default;
-$richie-topbar-menu-item-active-border-height-lg: rem-calc(3px) !default;
-$richie-topbar-menu-item-active-border-color-lg: $dodgerblue7 !default;
-
-$richie-topbar-menu-cta-fontcolor: $white !default;
-$richie-topbar-menu-cta-fontweight: bold !default;
-$richie-topbar-menu-cta-background: $firebrick6 !default;
-
-$richie-topbar-menu-cta-hollow-fontcolor: $firebrick6 !default;
-$richie-topbar-menu-cta-hollow-fontweight: bold !default;
-$richie-topbar-menu-cta-hollow-background: $white !default;
-
-$richie-topbar-menu-divider-border: 1px solid $dodgerblue5 !default;
-$richie-topbar-menu-divider-border-lg: 0 !default;
-
-$richie-topbar-menu-item-divider-border: 1px solid $dodgerblue5 !default;
-$richie-topbar-menu-item-divider-border-lg: 1px solid $white !default;
-
 .topbar {
-  $topbar-selector: &;
-  display: flex;
-  flex-direction: column;
-  box-shadow: $richie-topbar-shadow;
-  position: relative;
-  z-index: 200;
+    $topbar-selector: &;
+    padding: 1rem 0;
+    position: relative;
+    z-index: 200;
+    background: r-theme-val(topbar, base-background);
 
-  @include media-breakpoint-up($richie-topbar-breakpoint) {
-    flex-direction: row;
-    background-color: $richie-topbar-background;
-  }
+    @include media-breakpoint-up($r-topbar-breakpoint) {
+        height: $r-topbar-height;
 
-  // Will show only on mobile breakpoints
-  &__hamburger {
-    @include sv-flex(0, 0, auto);
-    padding: $richie-topbar-hamburger-padding;
-    border: 0;
-    font-size: $richie-topbar-hamburger-fontsize;
-    line-height: 1;
-    color: $richie-topbar-hamburger-fontcolor;
-    background: inherit;
-    cursor: pointer;
-    order: 2;
-
-    @include media-breakpoint-up($richie-topbar-breakpoint) {
-      display: none;
+        &--over{
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem 0 0;
+            background: r-theme-val(topbar, over-background);
+            @if r-theme-val(topbar, over-border){
+                border-bottom: $onepixel solid r-theme-val(topbar, over-border);
+            }
+        }
     }
 
-    &:hover {
-      color: $richie-topbar-hamburger-fontcolor-hover;
-    }
-  }
+    // Sub container for optional contain-to-grid behavior
+    &__container {
+        @include make-container();
+        @include make-container-max-widths();
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
 
-  // Brand part with hamburger and clickable logo
-  &__brand {
-    @include sv-flex(1, 0, auto);
-    display: flex;
-    height: $richie-topbar-brand-height;
-    flex-direction: row;
-    align-items: stretch;
-    background: $richie-topbar-background;
-    box-shadow: $richie-topbar-shadow;
-
-    @include media-breakpoint-up($richie-topbar-breakpoint) {
-      @include sv-flex(0, 0, auto);
-      box-shadow: none;
+        @include media-breakpoint-up($r-topbar-breakpoint) {
+            flex-direction: row;
+        }
     }
 
-    // Clickable logo
-    &__link {
-      @include sv-flex(1, 0, auto);
-      padding: $richie-topbar-brand-padding;
-      order: 1;
-
-      @include media-breakpoint-up($richie-topbar-breakpoint) {
+    // Will show only on mobile breakpoints
+    &__hamburger {
         @include sv-flex(0, 0, auto);
-      }
+        padding: 0 1rem;
+        order: 2;
+        color: r-theme-val(topbar, hamburger-color);
+        font-size: 2rem;
+        line-height: 1;
+        border: 0;
+        cursor: pointer;
+        background: inherit;
+
+        @include media-breakpoint-up($r-topbar-breakpoint) {
+            display: none;
+        }
     }
 
-    &__logo {
-      display: block;
-    }
-  }
-
-  // Main menu for pages
-  &__menu {
-    @include sv-flex(1, 0, auto);
-    display: none;
-    flex-direction: row;
-    flex-wrap: wrap;
-
-    @include media-breakpoint-up($richie-topbar-breakpoint) {
-      display: flex;
-      flex-wrap: nowrap;
-    }
-
-    &__list {
-      $list-selector: &;
-
-      @include sv-flex(1, 0, 100%);
-      display: flex;
-      margin: $richie-topbar-menu-list-margin;
-      padding: $richie-topbar-menu-list-padding;
-      flex-direction: column;
-      list-style-type: none;
-      color: $richie-topbar-menu-list-fontcolor;
-      background: $richie-topbar-menu-list-background;
-
-      @include media-breakpoint-up($richie-topbar-breakpoint) {
+    // Brand part with hamburger and clickable logo
+    &__brand {
         @include sv-flex(1, 0, auto);
         display: flex;
         flex-direction: row;
-        color: $richie-topbar-menu-list-fontcolor-lg;
-        background: $richie-topbar-menu-list-background-lg;
-      }
+        align-items: stretch;
+        order: 1;
 
-      // Menu item container
-      &__item {
+        @include media-breakpoint-up($r-topbar-breakpoint) {
+            @include sv-flex(0, 0, 340px);
+            margin-right: 10%;
+        }
+
+        // Clickable logo
+        & > a {
+            @include sv-flex(1, 0, auto);
+            padding: 0;
+            order: 1;
+
+            @include media-breakpoint-up($r-topbar-breakpoint) {
+                @include sv-flex(0, 0, auto);
+            }
+        }
+    }
+
+    &__logo {
+        display: block;
+        width: 15rem;
+
+        @include media-breakpoint-up($r-topbar-breakpoint) {
+            width: 21.25rem;
+        }
+    }
+
+    // Menu item list
+    &__list {
+        $list-selector: &;
+
+        @include sv-flex(1, 0, 100%);
+        display: flex;
+        margin: 0;
+        padding: 0;
+        flex-direction: column;
+        list-style-type: none;
+
+        @include media-breakpoint-up($r-topbar-breakpoint) {
+            @include sv-flex(1, 0, auto);
+            display: flex;
+            flex-direction: row;
+        }
+
+        // Alternative menu behavior for controls/cta
+        &--controls {
+            @include sv-flex(0, 0, 100%);
+
+            @include media-breakpoint-up($r-topbar-breakpoint) {
+                @include sv-flex(0, 0, auto);
+            }
+        }
+    }
+
+    // Main menu for pages
+    &__menu {
+        @include sv-flex(1, 0, 100%);
+        display: none;
+        margin-top: 0.5rem;
+        padding: 0;
+        flex-direction: row;
+        flex-wrap: wrap;
+        order: 3;
+        font-family: $r-font-family-montserrat;
+        font-weight: $font-weight-boldest;
+
+        @include media-breakpoint-up($r-topbar-breakpoint) {
+            display: flex;
+            flex-wrap: nowrap;
+        }
+
+        // Aside menu variation
+        &--aside{
+            @include sv-flex(1, 0, auto);
+            justify-content: flex-end;
+            order: 2;
+            font-family: $r-font-family-hind;
+            font-weight: $font-weight-normal;
+
+            @include media-breakpoint-up($r-topbar-breakpoint) {
+                margin-top: 0;
+            }
+
+            // Item divider
+            & > * + * {
+                margin-top: 0.5rem;
+                @include media-breakpoint-up($r-topbar-breakpoint) {
+                    margin-top: 0;
+                    margin-left: 2rem;
+                }
+            }
+        }
+    }
+
+    // Menu item element
+    &__item {
         $item-selector: &;
 
         @include sv-flex(1, 0, auto);
         display: flex;
-        align-items: center;
-        min-height: 3rem;
-        margin: $richie-topbar-menu-item-margin;
-        color: $richie-topbar-menu-item-fontcolor;
-        padding-left: 1rem;
+        margin: 0;
+        padding: 0;
+        color: r-theme-val(topbar, item-color);
 
-        @include media-breakpoint-up($richie-topbar-breakpoint) {
-          @include sv-flex(0, 0, auto);
+        @include media-breakpoint-up($r-topbar-breakpoint) {
+            @include sv-flex(0, 0, auto);
         }
 
-        &--language {
-          text-transform: uppercase;
+        & > a {
+            @include sv-flex(1, 0, 100%);
+            display: flex;
+            padding: 1rem 0.2rem 1rem 1rem;
+            flex-direction: row;
+            align-items: center;
+            font-family: inherit;
+            font-weight: inherit;
+            color: inherit;
+
+            @include media-breakpoint-up($r-topbar-breakpoint) {
+                padding: 1rem 1rem;
+            }
+
+            &:hover {
+                text-decoration: none;
+
+                @include media-breakpoint-up($r-topbar-breakpoint) {
+                    position: relative;
+
+                    &::after {
+                        content: '';
+                        position: absolute;
+                        bottom: 0;
+                        left: 0;
+                        right: 0;
+                        height: 8px;
+                        background-color: r-theme-val(topbar, item-hover-color);
+                        border-top-left-radius: 0.2rem;
+                        border-top-right-radius: 0.2rem;
+                    }
+                }
+            }
         }
+
         &--active {
-          font-weight: bold;
-        }
-
-        // Item link where every spacing is done
-        &__link {
-          @include sv-flex(1, 0, 100%);
-          display: block;
-          flex-direction: row;
-          font-size: $richie-topbar-menu-link-fontsize;
-          color: $richie-topbar-menu-link-fontcolor;
-
-          @include media-breakpoint-up($richie-topbar-breakpoint) {
-            padding: $richie-topbar-menu-link-padding-lg;
-            font-size: $richie-topbar-menu-link-fontsize-lg;
-            color: $richie-topbar-menu-link-fontcolor-lg;
-          }
-
-          &:hover {
-            color: $richie-topbar-menu-link-fontcolor-hover;
-            text-decoration: none;
-            background: $richie-topbar-menu-link-background-hover;
-          }
+            color: r-theme-val(topbar, item-active-color);
         }
 
         // Current page item or current ancestor
         &--selected,
         &--ancestor {
-          #{$item-selector}__link {
-            font-weight: $richie-topbar-menu-item-active-fontweight;
-            border-left: $richie-topbar-menu-item-active-border;
+            & > a {
+                position: relative;
+                color: r-theme-val(topbar, item-active-color);
 
-            @include media-breakpoint-up($richie-topbar-breakpoint) {
-              position: relative;
-              font-weight: $richie-topbar-menu-item-active-fontweight-lg;
-              border-left: 0;
-              &::after {
-                content: '';
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                height: $richie-topbar-menu-item-active-border-height-lg;
-                background-color: $richie-topbar-menu-item-active-border-color-lg;
-              }
+                &::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    bottom: 0;
+                    left: 0;
+                    width: 0.5rem;
+                    background-color: r-theme-val(topbar, item-active-color);
+                    border-top-right-radius: 0;
+                    border-bottom-right-radius: 0;
+                }
+
+                @include media-breakpoint-up($r-topbar-breakpoint) {
+                    &::before {
+                        display: none;
+                    }
+                    &::after {
+                        content: '';
+                        position: absolute;
+                        bottom: 0;
+                        left: 0;
+                        right: 0;
+                        height: 0.5rem;
+                        background-color: r-theme-val(topbar, item-active-color);
+                        border-top-left-radius: 0.4rem;
+                        border-top-right-radius: 0.4rem;
+                    }
+                }
             }
-          }
+        }
+
+        // Specific displays for some buttons
+        &--cta {
+            align-items: center;
+
+            a{
+                @include button-size($btn-padding-y, $btn-padding-x, $btn-font-size, $btn-line-height, 2rem);
+                @include font-size($font-size-base);
+                justify-content: center;
+                color: r-theme-val(topbar, item-cta-color);
+                background: r-theme-val(topbar, item-cta-background);
+                @if r-theme-val(topbar, item-cta-border){
+                    border: $onepixel solid r-theme-val(topbar, item-cta-border);
+                }
+
+                @include media-breakpoint-up($r-topbar-breakpoint) {
+                    justify-content: flex-start;
+                }
+
+                &:hover{
+                    &::after {
+                        display: none;
+                    }
+                }
+            }
         }
 
         // Item divider
         & + #{$item-selector} {
-          border-top: $richie-topbar-menu-item-divider-border;
-          @include media-breakpoint-up($richie-topbar-breakpoint) {
-            border-top: 0;
-            border-left: $richie-topbar-menu-item-divider-border-lg;
-          }
+            @if r-theme-val(topbar, item-divider-border){
+                border-top: $onepixel solid r-theme-val(topbar, item-divider-border);
+            }
+            @include media-breakpoint-up($r-topbar-breakpoint) {
+                border-top: 0;
+            }
         }
-      }
+    }
 
-      &--aside {
-        @include sv-flex(0, 0, 100%);
+    // Search input bar
+    &__search{
+        @include sv-flex(1, 0, auto);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
 
-        @include media-breakpoint-up($richie-topbar-breakpoint) {
-          @include sv-flex(0, 0, auto);
+        .react-autosuggest__container{
+            @include sv-flex(1, 0, 100%);
         }
-      }
+    }
 
-      // Menu divider
-      & + #{$list-selector} {
-        border-top: $richie-topbar-menu-divider-border;
-        @include media-breakpoint-up($richie-topbar-breakpoint) {
-          border-top: $richie-topbar-menu-divider-border-lg;
+    // Opened state for mobile mode
+    &.is-open {
+        #{$topbar-selector}__menu {
+            display: flex;
         }
-      }
     }
-  }
-
-  // Opened state for mobile mode
-  &.is-open {
-    #{$topbar-selector}__menu {
-      display: flex;
-    }
-  }
-
-  .richie-react.richie-react--user-login {
-    display: flex;
-    width: 100%;
-
-    @include media-breakpoint-up($richie-topbar-breakpoint) {
-      width: auto;
-      margin: 0 0 0 1rem;
-    }
-  }
 }

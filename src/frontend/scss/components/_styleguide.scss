@@ -1,0 +1,167 @@
+//
+// Styleguide stuff
+//
+// Draw a background grid in pure CSS
+@mixin draw-grid(
+    $line-color: null,
+    $border-color: null,
+){
+    @if $line-color{
+        background: linear-gradient(-90deg, $line-color $onepixel, transparent $onepixel),
+            linear-gradient($line-color $onepixel, transparent $onepixel),
+            linear-gradient(-90deg, $line-color $onepixel, transparent $onepixel),
+            linear-gradient($line-color $onepixel, transparent $onepixel),
+            linear-gradient(transparent 0.1875rem, transparent 0.1875rem, transparent 4.875rem, transparent 4.875rem),
+            linear-gradient(-90deg, transparent $onepixel, transparent $onepixel),
+            linear-gradient(-90deg, transparent 0.1875rem, transparent 0.1875rem, transparent 4.875rem, transparent 4.875rem),
+            linear-gradient(transparent $onepixel, transparent $onepixel), transparent;
+    }
+    background-size: 0.625rem 0.625rem,
+        0.625rem 0.625rem,
+        0.625rem 0.625rem,
+        0.625rem 0.625rem,
+        0.625rem 0.625rem,
+        0.625rem 0.625rem,
+        0.625rem 0.625rem,
+        0.625rem 0.625rem;
+    @if $border-color{
+        border: $onepixel solid $border-color;
+    }
+}
+
+.styleguide {
+    @include content-padding-fix;
+
+    &__pane-grid{
+        @include draw-grid(
+            $line-color: r-theme-val(styleguide, grid-line-color),
+            $border-color: r-theme-val(styleguide, grid-border-color),
+        );
+    }
+
+
+    &__buttons{
+        @include draw-grid(
+            $line-color: r-theme-val(styleguide, grid-line-color),
+            $border-color: r-theme-val(styleguide, grid-border-color),
+        );
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        padding: 0 1rem 1rem 1rem;
+
+        .button{
+            display: block;
+            flex: 0 0 auto;
+            margin: 1rem 0 0 0;
+
+            & + .button{
+                margin-left: 1rem;
+            }
+        }
+
+        hr{
+            flex: 1 0 100%;
+            border: 0;
+        }
+
+        // Button mixin combination sample usages
+        .cta-sample{
+            @include button-base($form-factor: "pill");
+            @include r-button-colors(r-theme-val(styleguide, cta-sample), $apply-border: true, $include-hover: true);
+            margin-top: 1rem;
+        }
+
+        .spot-sample{
+            @include spot($font-size: 2rem);
+            @include r-button-colors(r-theme-val(styleguide, spot-sample), $apply-border: true, $include-hover: true);
+            margin-top: 1rem;
+            width: 3rem;
+            height: 3rem;
+        }
+    }
+
+    .palette {
+        $palette-sel: nth(nth(&, 1), 2);
+
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        &__item {
+            flex: 1 0 20%;
+            max-width: 20%;
+            padding: 0.5rem;
+        }
+
+        &__color {
+            width: 100%;
+            height: 3rem;
+        }
+
+        // Iterate through color palette to build a modifier which define
+        // values for each color
+        @each $key, $value in $palette{
+            &__item--#{$key}{
+                #{$palette-sel}__color{
+                    background-color: map-get($palette, $key);
+                }
+
+                #{$palette-sel}__code::before{
+                    content: "#{map-get($palette, $key)}";
+                }
+            }
+        }
+    }
+
+    // A section block element for content with explicitely defined color
+    // properties for children elements and some spacing
+    &__block{
+        $block-selector: &;
+        $spacer: map-get($spacers, 4);
+        padding: $spacer;
+
+        // Color variant modifiers class names following color schemes
+        @each $name, $scheme in map-get($r-theme, "base-schemes"){
+            &--#{$name}{
+                @include r-scheme-colors($scheme);
+            }
+        }
+    }
+
+    // Accordion samples
+    .accordion {
+        @include accordion-base();
+    }
+
+    .accordion-plan {
+        @include accordion-base();
+        @include accordion-plan(
+            $item-dot-color: r-theme-val(accordion-plan, item-dot-color),
+            $title-color: r-theme-val(accordion-plan, title-color),
+            $content-color: r-theme-val(accordion-plan, content-color),
+            $border-color: r-theme-val(accordion-plan, border-color),
+            $background-color: r-theme-val(accordion-plan, background-color),
+            $dot-closed: r-theme-val(accordion-plan, dot-closed),
+            $dot-opened: r-theme-val(accordion-plan, dot-opened),
+        );
+    }
+
+}
+
+// Some debug to output variables to quickly update styleguide
+// settings
+/*@debug "---------------";
+@debug "theme schemes:";
+@debug map-keys(map-get($r-theme, "base-schemes"));
+
+@debug "---------------";
+@debug "$palette:";
+@debug map-keys($palette);
+
+@debug "---------------";
+@debug "$gradient-colors:";
+@debug map-keys($gradient-colors);
+
+@debug "---------------";*/

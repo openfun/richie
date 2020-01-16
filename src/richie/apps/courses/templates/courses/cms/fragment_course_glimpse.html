@@ -1,60 +1,91 @@
-{% load i18n cms_tags extra_tags thumbnail %}
+{% load i18n cms_tags extra_tags static thumbnail %}
 {% comment %}Obviously, the context template variable "course" is required and must be a Course page extension{% endcomment %}
+{% comment %}
+CHANGELOG:
+- Added excerpt base on "course_introduction" content
+- Moved "main_org_title"
+- Removed inline style in icon elements
+- Removed pseudo element for icon band triangle
+{% endcomment %}
 {% with course_page=course.extended_object course_state=course.state main_org_title=course.get_main_organization.extended_object.get_title %}
-<a class="
-      course-glimpse course-glimpse--link
-      {% if variant %} course-glimpse--{{ variant }}{% endif %}
-      {% if course_page.publisher_is_draft is True %} course-glimpse--draft{% endif %}
-    "
-    href="{{ course_page.get_absolute_url }}"
+<a class="course-glimpse course-glimpse--link
+ {% if variant %} course-glimpse--{{ variant }}{% endif %}
+ {% if course_page.publisher_is_draft is True %} course-glimpse--draft{% endif %}"
+ href="{{ course_page.get_absolute_url }}"
 >
-<div class="course-glimpse__media">
-    {% get_page_plugins "course_cover" course_page as cover_plugins or %}
-      <p class="course-glimpse__media__empty">{% trans "Cover" %}</p>
-    {% endget_page_plugins %}
-    {% blockplugin cover_plugins.0 %}
-      <img src="{% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %}"
-        srcset="
-          {% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %} 300w
-          {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x340 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
-          {% if instance.picture.width >= 900 %},{% thumbnail instance.picture 900x510 crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}
-        "
-        sizes="300px"
-        {# alt forced to empty string for a11y because the image does not carry more information than the course title #}
-        alt=""
-      />
-    {% endblockplugin %}
-  </div>
-  <div class="course-glimpse__icon">
-    {% get_page_plugins "course_icons" course_page as icon_plugins %}
-    {% if icon_plugins %}
-      <div class="course-glimpse__icon__band" style="background: {{ icon_plugins.0.page.category.color }};" aria-hidden="true">
-        {{ icon_plugins.0.page.get_title }}
-        <div class="course-glimpse__icon__band__end" style="border-left-color: {{ icon_plugins.0.page.category.color }};"></div>
-      </div>
-      {% with variant="mark" %}
-        {% render_plugin icon_plugins.0 %}
-      {% endwith %}
-    {% endif %}
-  </div>
-  <div class="course-glimpse__content">
-      <div class="course-glimpse__content__wrapper">
-          <p class="course-glimpse__content__title">{{ course_page.get_title }}</p>
-          {% if main_org_title %}
-          <p>{{ main_org_title }}</p>
-          {% endif %}
-      </div>
-      <div class="course-glimpse__footer">
-          <p class="course-glimpse__footer__date">
-              {{ course_state.text|capfirst }}<br>
-              {{ course_state.datetime|date:"DATE_FORMAT" }}
-          </p>
-          {% if course_state.call_to_action %}
-          <div class="course-glimpse__footer__cta">
-              <span class="button">{{ course_state.call_to_action|capfirst }}</span>
-          </div>
-          {% endif %}
-      </div>
-  </div>
+    <div class="course-glimpse__media">
+        {% get_page_plugins "course_cover" course_page as cover_plugins or %}
+            <p class="course-glimpse__empty">{% trans "Cover" %}</p>
+        {% endget_page_plugins %}
+        {% blockplugin cover_plugins.0 %}
+            <img src="{% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %}"
+                srcset="
+                    {% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %} 300w
+                    {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x340 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+                    {% if instance.picture.width >= 900 %},{% thumbnail instance.picture 900x510 crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}
+                "
+                sizes="300px"
+                {# alt forced to empty string for a11y because the image does not carry more information than the course title #}
+                alt=""
+            />
+        {% endblockplugin %}
+    </div>
+    <div class="course-glimpse__content">
+        {% get_page_plugins "course_icons" course_page as icon_plugins %}
+        {% if icon_plugins %}
+        <div class="course-glimpse__icon">
+            <div class="course-glimpse__band" {% comment %}style="background: {{ icon_plugins.0.page.category.color }};"{% endcomment %} aria-hidden="true">
+                {{ icon_plugins.0.page.get_title }}
+            </div>
+            {% with variant="mark" %}
+                {% render_plugin icon_plugins.0 %}
+            {% endwith %}
+        </div>
+        {% endif %}
+        <div class="course-glimpse__wrapper">
+            <p class="course-glimpse__title">{{ course_page.get_title }}</p>
+
+            {% if main_org_title %}
+            <div class="course-glimpse__excerpt">
+                {% get_placeholder_plugins "course_description" course_page as plugins or %}
+                    {% trans "Course descripton" %}
+                {% endget_placeholder_plugins %}
+                {% blockplugin plugins.0 %}
+                    {{ instance.body|truncatewords_html:10|safe }}
+                {% endblockplugin %}
+            </div>
+            {% endif %}
+
+            {% if main_org_title %}
+            <div class="course-glimpse__organization">{{ main_org_title }}</div>
+            {% endif %}
+        </div>
+        <div class="course-glimpse__footer">
+            {% comment %}<p class="course-glimpse__date">
+                {{ course_state.text|capfirst }}<br>
+                {{ course_state.datetime|date:"DATE_FORMAT" }}
+            </p>{% endcomment %}
+            <p class="course-glimpse__date">
+                <svg role="img" class="course-glimpse__svg-icon no-scheme-fill" aria-hidden="true">
+                    <use xlink:href="{% static 'richie/icons.svg' %}#icon-clock" />
+                </svg>
+                {{ course.get_duration_display|default:"NA" }}
+            </p>
+            <p class="course-glimpse__cta">
+                {{ course.get_effort_display|default:"NA" }}
+                <svg role="img" class="course-glimpse__svg-icon no-scheme-fill" aria-hidden="true">
+                    <use xlink:href="{% static 'richie/icons.svg' %}#icon-stopwatch" />
+                </svg>
+            </p>
+            {% comment %}{% if course_state.call_to_action %}
+            <div class="course-glimpse__cta">
+                {{ course_state.call_to_action|capfirst }}
+                <svg role="img" class="course-glimpse__svg-icon no-scheme-fill" aria-hidden="true">
+                    <use xlink:href="{% static 'richie/icons.svg' %}#icon-filter" />
+                </svg>
+            </div>
+            {% endif %}{% endcomment %}
+        </div>
+    </div>
 </a>
 {% endwith %}

@@ -1,12 +1,18 @@
 {% load i18n cms_tags extra_tags thumbnail %}
 {% spaceless %}
+{% comment %}
+CHANGELOG:
+- Changed original element classes to an object one
+{% endcomment %}
+
 {% if organization %}
   {% with organization_page=organization.extended_object %}
-    <a href="{{ organization_page.get_absolute_url }}" title="{{ organization_page.get_title }}" class="course-detail__aside__main-org-logo">
+    <a href="{{ organization_page.get_absolute_url }}" title="{{ organization_page.get_title }}" class="subheader__cartouche">
       {% get_page_plugins "logo" organization_page as plugins or %}
-        <div class="course-detail__aside__main-org-logo__empty">{% trans "Main organization" %}</div>
+        <div class="subheader__empty">{% trans "Main organization" %}</div>
       {% endget_page_plugins %}
       {% blockplugin plugins.0 %}
+      <div class="subheader__media">
         <img src="{% thumbnail instance.picture 200x113 upscale subject_location=instance.picture.subject_location %}"
           srcset="
             {% thumbnail instance.picture 200x113 upscale subject_location=instance.picture.subject_location %} 200w
@@ -17,12 +23,14 @@
           sizes="30vw"
           alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'main organization logo' %}{% endif %}"
         />
+      </div>
+      <p class="subheader__label">{% blocktrans with name=organization_page.get_title %}Suggested by {{ name }}{% endblocktrans %}</p>
       {% endblockplugin %}
     </a>
   {% endwith %}
 {% else %}
-  <div class="course-detail__aside__main-org-logo">
-    <div class="course-detail__aside__main-org-logo__empty">
+  <div class="subheader__cartouche">
+    <div class="subheader__empty">
       {% trans "Main organization" %}
     </div>
   </div>

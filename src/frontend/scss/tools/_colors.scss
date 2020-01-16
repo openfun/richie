@@ -1,0 +1,281 @@
+///
+/// Apply border properties for given scheme.
+///
+/// @arg {Map} $scheme [null]
+///   A Color scheme model.
+///
+/// @arg {String} $prefix [null]
+///   If not null will prefix the property names to search.
+///
+@mixin r-apply-border($scheme, $prefix: null) {
+    $props-prefix: "";
+    @if $prefix{
+        $props-prefix: $prefix + "-";
+    }
+    // Prepare property prefix if any
+    $props-prefix: "";
+    @if $prefix{
+        $props-prefix: $prefix + "-";
+    }
+
+    $border-shortand: map-get($scheme, $props-prefix+"border");
+    $border-color: map-get($scheme, $props-prefix+"border-color");
+    $border-width: map-get($scheme, $props-prefix+"border-width");
+    $border-style: map-get($scheme, $props-prefix+"border-style");
+
+    @if $border-shortand{
+        border: $border-shortand;
+    }
+    @if $border-color{
+        border-color: $border-color;
+    }
+    @if $border-width{
+        border-width: $border-width;
+    }
+    @if $border-style{
+        border-style: $border-style;
+    }
+}
+
+
+///
+/// Include properties from a scheme color to an element. Mainly used to build
+/// blocks and boxes color properties.
+///
+/// Color model definition:
+/// https://sveetch.github.io/Sveetoy/api/#models-variable-Color%20scheme%20model
+///
+/// @arg {Map} $scheme [null]
+///   A Color scheme model.
+///
+/// @arg {Bool} $apply-border [false]
+///   If set to `true`, scheme border properties will be used, else they are
+///   ignored.
+///
+/// @arg {Bool} $apply-border [false]
+///   If set to `true`, scheme border properties will be used, else they are
+///   ignored.
+///
+/// @arg {Bool} $apply-border [false]
+///   If set to `true`, scheme border properties will be used, else they are
+///   ignored.
+///
+/// @arg {String} $prefix [null]
+///   If not null will prefix the property names to search. This is used in
+///   some component like boxes and buttons to apply `hover` behaviors for
+///   every scheme properties.
+///
+/// @example scss
+///   $white-color-scheme: (
+///       font-color: #000000,
+///       background: #ffffff,
+///       h1-color: #f0f0f0,
+///       h2-color: false,
+///       svg-color: #000000,
+///   );
+///
+///   div{
+///       @include r-scheme-colors($white-color-scheme);
+///   }
+///
+/// @example css
+///   div{
+///       color: #000000;
+///       background: #ffffff;
+///
+///       svg:not(.no-scheme-fill){
+///           fill: #000000;
+///       }
+///
+///       h1, .h1{
+///           color: #f0f0f0;
+///       }
+///       h2, .h2{}
+///       h3, .h3{
+///           color: #000000;
+///       }
+///       h4, .h4{
+///           color: #000000;
+///       }
+///       h5, .h5{
+///           color: #000000;
+///       }
+///       h6, .h6{
+///           color: #000000;
+///       }
+///   }
+///
+@mixin r-scheme-colors(
+    $scheme,
+    $apply-border: false,
+    $apply-link: false,
+    $apply-titles: true,
+    $apply-svg: true,
+    $prefix: null
+) {
+    // Raise error if background item is not in scheme but not in
+    // prefixed mode
+    @if not $prefix{
+        @if map-get($scheme, "background") == null {
+            @error "A scheme color must define the background item";
+        } @else if (map-get($scheme, "background") == transparent or map-get($scheme, "background") == inherit) and map-get($scheme, "font-color") == null {
+            @error "A scheme color must define the font-color item if background value is transparent or inherit";
+        }
+    }
+
+    // Prepare property prefix if any
+    $props-prefix: "";
+    @if $prefix{
+        $props-prefix: $prefix + "-";
+    }
+
+    $background: map-get($scheme, $props-prefix+"background");
+    $font-color: map-get($scheme, $props-prefix+"font-color");
+    $link-color: map-get($scheme, $props-prefix+"link-color");
+    $link-color-hover: map-get($scheme, $props-prefix+"link-color-hover");
+    $svg-color: map-get($scheme, $props-prefix+"svg-color");
+
+    @if $font-color{
+        color: $font-color;
+    }
+
+    // Fill svg color but not for elements with ".no-scheme-fill" class
+    @if $apply-svg and $svg-color{
+        svg:not(.no-scheme-fill){
+            fill: $svg-color;
+        }
+    }
+
+    @if $background{
+        background: $background;
+    }
+
+    // Optional border
+    @if $apply-border{
+        @include r-apply-border($scheme);
+    }
+
+    // Titles
+    @if $apply-titles{
+        @for $i from 1 through 6 {
+            h#{$i}, .h#{$i} {
+                @if map-get($scheme, $props-prefix+"h#{$i}-color") == null {
+                    color: $font-color;
+                } @else if map-get($scheme, $props-prefix+"h#{$i}-color") == false {
+                    // 'false' means "Do not define any color on this"
+                } @else {
+                    color: map-get($scheme, $props-prefix+"h#{$i}-color");
+                }
+            }
+        }
+    }
+
+    // Link but not buttons
+    @if $apply-link and $link-color {
+        a:not(.button){
+            color: if($link-color, $link-color, inherit);
+            @if $link-color-hover {
+                &:hover{
+                    color: if($link-color-hover, $link-color-hover, inherit);
+                }
+            }
+        }
+    }
+}
+
+
+///
+/// Include properties from a scheme color to a button element.
+///
+/// Work like `r-scheme-colors()` mixin except properties for links and
+/// titles are ignored.
+///
+/// @arg {Map} $scheme [null]
+///   A Color scheme model.
+///
+/// @arg {Bool} $apply-border [false]
+///   If set to `true`, scheme border properties will be used, else they are
+///   ignored.
+///
+/// @arg {String} $prefix [null]
+///   If not null will prefix the property names to search.
+///
+/// @arg {Bool} $include-hover [false]
+///   If set to `true`, border properties for prefix "hover" will be
+///   automatically added.
+///
+@mixin r-button-colors($scheme, $apply-border: false, $prefix: null, $include-hover: false) {
+    $props-prefix: "";
+
+    @if $prefix{
+        $props-prefix: $prefix + "-";
+    }
+
+    $background: map-get($scheme, $props-prefix+"background");
+    $font-color: map-get($scheme, $props-prefix+"font-color");
+    $svg-color: map-get($scheme, $props-prefix+"svg-color");
+
+    @if $font-color{
+        color: $font-color;
+    }
+
+    // Fill svg color but not for ".no-scheme-fill" class
+    @if $svg-color{
+        svg:not(.no-scheme-fill){
+            fill: $svg-color;
+        }
+    }
+
+    @if $background{
+        background: $background;
+    }
+
+    @if $apply-border{
+        @include r-apply-border($scheme, $prefix: $prefix);
+    }
+
+    @if $include-hover{
+        &:hover{
+            @include r-button-colors($scheme, $apply-border: $apply-border, $prefix: "hover");
+        }
+    }
+}
+
+
+///
+/// A shortand to quickly get a color value in palette setting from given
+/// name. You should quote name to enforce it as a string, single word can be
+/// recognize as CSS keyword and would result as a null value.
+///
+@function r-color($name) {
+    @return map-get($palette, $name);
+}
+
+
+///
+/// A shortand to quickly get a property value from theme schemes.
+/// Property get is safe, it will return `null` if does not exists. But required
+/// scheme have to be defined in `$r-theme` else an error will be
+/// raised.
+///
+/// @arg {String} $scheme-name [null]
+///   Name of scheme registered in `$r-theme`.
+///
+/// @arg {String} $prop-name [null]
+///   Name of property available in required scheme.
+///
+/// @returns {Color}
+///   Value of required property in scheme.
+///
+@function r-theme-val($scheme-name, $prop-name) {
+    $scheme: map-get($r-theme, $scheme-name);
+    @if not $scheme{
+        @debug "r-theme-val(): Cannot retrieve scheme name", $scheme-name;
+    }
+    $prop: map-get($scheme, $prop-name);
+    @if $prop == null{
+        @debug "r-theme-val(): Cannot retrieve property (from scheme " + $scheme-name + "):", $prop-name;
+    }
+
+    @return $prop;
+}

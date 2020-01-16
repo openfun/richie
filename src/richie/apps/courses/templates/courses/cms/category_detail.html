@@ -2,138 +2,162 @@
 {% load cms_tags extra_tags i18n thumbnail %}
 
 {% block meta_opengraph_contextuals %}
-    <meta property="og:title" content="{{ current_page.get_title|truncatechars:65 }}">
-    <meta property="og:url" content="{{ SITE.web_url }}{{ current_page.get_absolute_url }}">
+        <meta property="og:title" content="{{ current_page.get_title|truncatechars:65 }}">
+        <meta property="og:url" content="{{ SITE.web_url }}{{ current_page.get_absolute_url }}">
 {% endblock meta_opengraph_contextuals %}
 
 {% block content %}{% spaceless %}
 {% with category=current_page.category header_level=2 %}
 <div class="category-detail">
-  <div class="category-detail__banner">
-    {% get_placeholder_plugins "banner" as banner_plugins or %}
-      <div class="category-detail__banner__empty">{% trans "Banner" %}</div>
-    {% endget_placeholder_plugins %}
-    {% blockplugin banner_plugins.0 %}
-      <img
-        src="{% thumbnail instance.picture 1140x400 crop upscale subject_location=instance.picture.subject_location %}"
-        srcset="
-          {% thumbnail instance.picture 1140x400 crop upscale subject_location=instance.picture.subject_location %} 1140w
-          {% if instance.picture.width >= 2280 %},{% thumbnail instance.picture 2280x800 crop upscale subject_location=instance.picture.subject_location %} 2280w{% endif %}
-          {% if instance.picture.width >= 3420 %},{% thumbnail instance.picture 3420x600 crop upscale subject_location=instance.picture.subject_location %} 3420w{% endif %}
-        "
-        sizes="1140px"
-        alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'category banner' %}{% endif %}"
-      />
-    {% endblockplugin %}
-  </div>
+    <div class="category-detail__block category-detail__block--unpadded">
+        <div class="category-detail__row category-detail__row--unpadded">
+            <div class="category-detail__banner">
+                {% get_placeholder_plugins "banner" as banner_plugins or %}
+                    <div class="category-detail__empty">{% trans "Banner" %}</div>
+                {% endget_placeholder_plugins %}
+                {% blockplugin banner_plugins.0 %}
+                    <img
+                        src="{% thumbnail instance.picture 1140x400 crop upscale subject_location=instance.picture.subject_location %}"
+                        srcset="
+                            {% thumbnail instance.picture 1140x400 crop upscale subject_location=instance.picture.subject_location %} 1140w
+                            {% if instance.picture.width >= 2280 %},{% thumbnail instance.picture 2280x800 crop upscale subject_location=instance.picture.subject_location %} 2280w{% endif %}
+                            {% if instance.picture.width >= 3420 %},{% thumbnail instance.picture 3420x600 crop upscale subject_location=instance.picture.subject_location %} 3420w{% endif %}
+                        "
+                        sizes="1140px"
+                        alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'category banner' %}{% endif %}"
+                    />
+                {% endblockplugin %}
+            </div>
 
-  <div class="category-detail__logo">
-    {% get_placeholder_plugins "logo" as logo_plugins or %}
-      <div class="category-detail__logo__empty">{% trans "Logo" %}</div>
-    {% endget_placeholder_plugins %}
-    {% blockplugin logo_plugins.0 %}
-      <img
-        src="{% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location %}"
-        srcset="
-          {% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location %} 200w
-          {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x400 crop upscale subject_location=instance.picture.subject_location %} 400w{% endif %}
-          {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x600 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
-        "
-        sizes="200px"
-        alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'category logo' %}{% endif %}"
-      />
-    {% endblockplugin %}
-  </div>
-
-  <div class="category-detail__title-container">
-    <div class="category-detail__icon">
-      {% get_placeholder_plugins "icon" as icon_plugins %}
-      {% blockplugin icon_plugins.0 %}
-        <img
-          src="{% thumbnail instance.picture 60x60 crop upscale subject_location=instance.picture.subject_location %}"
-          srcset="
-            {% thumbnail instance.picture 60x60 crop upscale subject_location=instance.picture.subject_location %} 60w
-            {% if instance.picture.width >= 120 %},{% thumbnail instance.picture 120x120 crop upscale subject_location=instance.picture.subject_location %} 80w{% endif %}
-            {% if instance.picture.width >= 180 %},{% thumbnail instance.picture 180x180 crop upscale subject_location=instance.picture.subject_location %} 120w{% endif %}
-          "
-          sizes="60px"
-          alt=""
-        />
-      {% endblockplugin %}
+            <div class="category-detail__logo">
+                {% get_placeholder_plugins "logo" as logo_plugins or %}
+                    <div class="category-detail__empty">{% trans "Logo" %}</div>
+                {% endget_placeholder_plugins %}
+                {% blockplugin logo_plugins.0 %}
+                    <img
+                        src="{% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location %}"
+                        srcset="
+                            {% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location %} 200w
+                            {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x400 crop upscale subject_location=instance.picture.subject_location %} 400w{% endif %}
+                            {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x600 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+                        "
+                        sizes="200px"
+                        alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'category logo' %}{% endif %}"
+                    />
+                {% endblockplugin %}
+            </div>
+        </div>
     </div>
 
-    <h1 class="category-detail__title">{% render_model current_page "title" %}</h1>
-  </div>
+    <div class="category-detail__intro category-detail__block category-detail__block--unpadded">
+        <div class="category-detail__row">
+            <h1 class="category-detail__title">
+                {% get_placeholder_plugins "icon" as icon_plugins %}
+                {% blockplugin icon_plugins.0 %}
+                    <img
+                        src="{% thumbnail instance.picture 60x60 crop upscale subject_location=instance.picture.subject_location %}"
+                        srcset="
+                            {% thumbnail instance.picture 60x60 crop upscale subject_location=instance.picture.subject_location %} 60w
+                            {% if instance.picture.width >= 120 %},{% thumbnail instance.picture 120x120 crop upscale subject_location=instance.picture.subject_location %} 80w{% endif %}
+                            {% if instance.picture.width >= 180 %},{% thumbnail instance.picture 180x180 crop upscale subject_location=instance.picture.subject_location %} 120w{% endif %}
+                        "
+                        sizes="60px"
+                        alt=""
+                    />
+                {% endblockplugin %}
 
-  <div class="category-detail__content">
-    <div class="category-detail__content__description">
-      {% placeholder "description" %}
+                {% render_model current_page "title" %}
+            </h1>
+
+            <div class="category-detail__description">
+                {% placeholder "description" %}
+            </div>
+        </div>
     </div>
-  </div>
+
+    {% with children_categories=category.get_children_categories %}
+        {% if children_categories %}
+            <div class="category-detail__courses category-detail__block">
+                <div class="category-detail__row">
+                    <h2 class="category-detail__title">{% trans "Sub categories" %}</h2>
+                    <section class="category-glimpse-list">
+                        {% for child_category in children_categories %}
+                            {% include "courses/cms/fragment_category_glimpse.html" with category=child_category %}
+                        {% endfor %}
+                    </section>
+                </div>
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    {% with courses=category.get_courses %}
+        {% if courses %}
+            <div class="category-detail__courses category-detail__block">
+                <div class="category-detail__row">
+                    <h2 class="category-detail__title">{% trans "Related courses" %}</h2>
+                    <section class="course-glimpse-list">
+                        {% for course in courses %}
+                            {% if course.extended_object.publisher_is_draft or course.check_publication %}
+                                {% include "courses/cms/fragment_course_glimpse.html" %}
+                            {% endif %}
+                        {% endfor %}
+                    </section>
+                </div>
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    {% with organizations=category.get_organizations %}
+        {% if organizations %}
+            <div class="category-detail__organizations category-detail__block">
+                <div class="category-detail__row">
+                    <h2 class="category-detail__title">{% trans "Related organizations" %}</h2>
+                    <section class="organization-glimpse-list">
+                        {% for organization in organizations %}
+                            {% if organization.extended_object.publisher_is_draft or organization.check_publication %}
+                                {% include "courses/cms/fragment_organization_glimpse.html" %}
+                            {% endif %}
+                        {% endfor %}
+                    </section>
+                </div>
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    {% with blogposts=category.get_blogposts %}
+        {% if blogposts %}
+            <div class="category-detail__blogposts category-detail__block">
+                <div class="category-detail__row">
+                    <h2 class="category-detail__title">{% trans "Related blogposts" %}</h2>
+                    <section class="blogpost-glimpse-list">
+                        {% for blogpost in blogposts %}
+                            {% if blogpost.extended_object.publisher_is_draft or blogpost.check_publication %}
+                                {% include "courses/cms/fragment_blogpost_glimpse.html" %}
+                            {% endif %}
+                        {% endfor %}
+                    </section>
+                </div>
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    {% with persons=category.get_persons %}
+        {% if persons %}
+            <div class="category-detail__persons category-detail__block category-detail__block--lightest">
+                <div class="category-detail__row">
+                    <h2 class="category-detail__title">{% trans "Related persons" %}</h2>
+                    <section class="person-glimpse-list">
+                        {% for person in persons %}
+                            {% if person.extended_object.publisher_is_draft or person.check_publication %}
+                                {% include "courses/cms/fragment_person_glimpse.html" %}
+                            {% endif %}
+                        {% endfor %}
+                    </section>
+                </div>
+            </div>
+        {% endif %}
+    {% endwith %}
 </div>
-
-{% with children_categories=category.get_children_categories %}
-  {% if children_categories %}
-    <section class="category-glimpse-list">
-      <h2 class="category-glimpse-list__title">{% trans "Sub categories" %}</h2>
-      {% for child_category in children_categories %}
-        {% include "courses/cms/fragment_category_glimpse.html" with category=child_category %}
-      {% endfor %}
-    </section>
-  {% endif %}
-{% endwith %}
-
-{% with courses=category.get_courses %}
-  {% if courses %}
-    <section class="course-glimpse-list">
-      <h2 class="course-glimpse-list__title">{% trans "Related courses" %}</h2>
-      {% for course in courses %}
-        {% if course.extended_object.publisher_is_draft or course.check_publication %}
-          {% include "courses/cms/fragment_course_glimpse.html" %}
-        {% endif %}
-      {% endfor %}
-    </section>
-  {% endif %}
-{% endwith %}
-
-{% with organizations=category.get_organizations %}
-  {% if organizations %}
-    <section class="organization-glimpse-list">
-      <h2 class="organization-glimpse-list__title">{% trans "Related organizations" %}</h2>
-      {% for organization in organizations %}
-        {% if organization.extended_object.publisher_is_draft or organization.check_publication %}
-          {% include "courses/cms/fragment_organization_glimpse.html" %}
-        {% endif %}
-      {% endfor %}
-    </section>
-  {% endif %}
-{% endwith %}
-
-{% with blogposts=category.get_blogposts %}
-  {% if blogposts %}
-    <section class="blogpost-glimpse-list">
-      <h2 class="blogpost-glimpse-list__title">{% trans "Related blogposts" %}</h2>
-      {% for blogpost in blogposts %}
-        {% if blogpost.extended_object.publisher_is_draft or blogpost.check_publication %}
-          {% include "courses/cms/fragment_blogpost_glimpse.html" %}
-        {% endif %}
-      {% endfor %}
-    </section>
-  {% endif %}
-{% endwith %}
-
-{% with persons=category.get_persons %}
-  {% if persons %}
-    <section class="person-glimpse-list">
-      <h2 class="person-glimpse-list__title">{% trans "Related persons" %}</h2>
-      {% for person in persons %}
-        {% if person.extended_object.publisher_is_draft or person.check_publication %}
-          {% include "courses/cms/fragment_person_glimpse.html" %}
-        {% endif %}
-      {% endfor %}
-    </section>
-  {% endif %}
-{% endwith %}
 
 {% endwith %}
 {% endspaceless %}{% endblock content %}

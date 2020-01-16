@@ -2,18 +2,21 @@
   &__container {
     position: relative;
     margin-bottom: 20px;
-
+    /*
     &--open {
     }
+    */
   }
 
   &__input {
     @extend .form-control;
 
+    /*
     &--open {
     }
     &--focused {
     }
+    */
   }
 
   &__suggestions-container {
@@ -36,17 +39,21 @@
       cursor: pointer;
     }
 
+    /*
     &--first {
     }
+    */
     &--highlighted {
       @extend .active;
     }
   }
 
+  /*
   &__section-container {
     &--first {
     }
   }
+  */
 
   &__section-title {
     @extend .dropdown-header;

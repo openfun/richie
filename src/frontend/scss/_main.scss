@@ -1,21 +1,11 @@
-// Basic function must be loaded before settings to be able to use them from
+// Basic functions must be loaded before settings to be able to use them from
 // settings and objects
-@import './functions/generic';
+@import './tools/rem';
+@import './tools/colors';
 
 // Our variables must be imported before Bootstrap code so they can override it
-@import './variables';
-@import './fonts';
-@import './utils';
-@import './mixins/shapes';
-@import './mixins/flexbox';
-@import './mixins/empty';
-@import './mixins/cards';
-@import './mixins/hero';
-@import './mixins/list-group';
-
-// TWITTER BOOTSTRAP V4
-// Required
-@import 'bootstrap/scss/bootstrap-reboot.scss';
+@import './settings/fonts';
+@import './settings/variables';
 
 // TWITTER BOOTSTRAP V4
 // Required
@@ -35,51 +25,73 @@
 @import 'bootstrap/scss/utilities/text';
 @import 'bootstrap/scss/utilities/embed';
 
-// Some basic element styling
-@import './elements/images';
+// Used for prototyping
+@import 'bootstrap/scss/grid';
+@import 'bootstrap/scss/utilities/spacing';
+@import 'bootstrap/scss/utilities/background';
 
-// PORTAL STYLES
-// Objects from Partials (eg. styles for templates produced by dependencies)
-@import './objects/react-autosuggest';
+// Internal addons (import order does matter due to some mixin usage from
+// deeper mixins)
+@import './tools/shapes';
+@import './tools/flexbox';
+@import './tools/empty';
+@import './tools/cards';
+@import './tools/hero';
+@import './tools/list-group';
+@import './tools/buttons';
+@import './tools/background';
+@import './tools/spacing';
+@import './tools/content';
+@import './tools/accordion';
+@import './tools/features';
+@import './tools/detail';
+
+// Generic stuff
+@import './generic/background';
+@import './generic/type';
+@import './generic/images';
+@import './generic/accessibility';
+@import './generic/icons';
 
 // Shared object styles
-@import './templates/menu/_menu';
-@import './templates/richie/single-column';
-@import './objects/blogpost_glimpses';
 @import './objects/breadcrumbs';
-@import './objects/buttons';
-@import './objects/category_glimpses';
 @import './objects/course_glimpses';
+@import './objects/blogpost_glimpses';
 @import './objects/organization_glimpses';
-@import './objects/pagination';
 @import './objects/person_glimpses';
+@import './objects/category_glimpses';
 @import './objects/program_glimpses';
-@import './objects/search-filter-value';
-@import './templates/core/social-networks/social-networks';
-@import './templates/courses/plugins/category_plugin';
-@import './templates/courses/plugins/licence_plugin';
-@import './templates/courses/cms/organization_detail';
-@import './templates/courses/cms/organization_list';
-@import './templates/courses/cms/category_detail';
-@import './templates/courses/cms/course_detail';
-@import './templates/courses/cms/person_detail';
-@import './templates/courses/cms/blogpost_detail';
-@import './templates/courses/cms/program_detail';
-@import './templates/search/search';
-@import './templates/richie/large_banner/large_banner';
-@import './templates/richie/large_banner/hero-intro';
-@import './templates/richie/section/section';
-
-// Frontend components objects styles
-@import '../js/components/Search/styles';
-@import '../js/components/SearchFilterGroup/styles';
-@import '../js/components/SearchFilterGroupModal/styles';
-@import '../js/components/SearchFiltersPane/styles';
-@import '../js/components/SearchInput/styles';
-@import '../js/components/Spinner/styles';
-@import '../js/components/UserLogin/styles';
+@import './objects/pagination';
+@import './objects/social-networks';
+@import './objects/buttons';
+@import './objects/features';
+@import './objects/react-autosuggest';
+@import './objects/search';
+@import './components/templates/courses/plugins/category_plugin';
+@import './components/templates/courses/plugins/licence_plugin';
+@import './components/templates/richie/section/section';
+@import './components/templates/richie/large_banner/large_banner';
 
 // Page component styles
 @import './components/header';
+@import './components/subheader';
 @import './components/footer';
+@import './components/styleguide';
 @import './components/content';
+@import './components/templates/search/search';
+@import './components/templates/richie/single-column';
+@import './components/templates/courses/cms/homepage';
+@import './components/templates/courses/cms/organization_list';
+@import './components/templates/courses/cms/organization_detail';
+@import './components/templates/courses/cms/category_list';
+@import './components/templates/courses/cms/category_detail';
+@import './components/templates/courses/cms/course_detail';
+@import './components/templates/courses/cms/person_list';
+@import './components/templates/courses/cms/person_detail';
+@import './components/templates/courses/cms/blogpost_list';
+@import './components/templates/courses/cms/blogpost_detail';
+@import './components/templates/courses/cms/program_list';
+@import './components/templates/courses/cms/program_detail';
+
+// IE11 patchs
+@import './trumps/ie11-fixes';

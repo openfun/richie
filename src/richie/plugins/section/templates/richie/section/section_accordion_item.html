@@ -1,0 +1,19 @@
+{% load cms_tags i18n %}{% spaceless %}
+{% comment %}To correctly work, your section have to be in <div class="plan-accordion">...</div>{% endcomment %}
+<div class="plan-accordion__item" data-accordion-item>
+    {% if instance.title %}
+        <button class="plan-accordion__title" data-accordion-title>
+            {{ instance.title }}
+        </button>
+    {% else %}
+        <button class="plan-accordion__title" data-accordion-title>
+            {% trans 'Accordion item need a title' %}
+        </button>
+    {% endif %}
+    <div class="plan-accordion__content" data-accordion-content>
+        {% for plugin in instance.child_plugin_instances %}
+            {% render_plugin plugin %}
+        {% endfor %}
+    </div>
+</div>
+{% endspaceless %}

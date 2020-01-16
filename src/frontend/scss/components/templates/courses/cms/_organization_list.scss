@@ -1,0 +1,20 @@
+.organization-list {
+    @include make-container();
+    @include make-container-max-widths();
+    @include content-padding-fix;
+
+    // Temporary until we moved to dedicated section template variants since
+    // we don't want anymore of automatic cadenced backgrounds
+    .section-container-cadenced{
+        color: inherit !important;
+        background: transparent !important;
+    }
+
+    &__content {
+        display: flex;
+        margin: 0 auto;
+        padding: 1rem 0;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+}
