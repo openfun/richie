@@ -1,0 +1,38 @@
+.section {
+    @include detail-block;
+
+    &__title{
+        @include detail-title;
+    }
+
+    &__row{
+        @include detail-row;
+    }
+
+    &__items {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0;
+
+        // Some elements have to take 100% by default
+        & > p,
+        & > figure {
+            flex-grow: 1;
+            flex-shrink: 0;
+            flex-basis: 100%;
+        }
+
+        // Ensure caesura always takes full width with some space around
+        // within flex grid
+        .button-caesura {
+            flex-grow: 1;
+            flex-shrink: 0;
+            flex-basis: calc(100% - 1rem);
+            margin: 1rem 0.5rem 0;
+
+            @include media-breakpoint-up(lg) {
+                margin-top: 2rem;
+            }
+        }
+    }
+}

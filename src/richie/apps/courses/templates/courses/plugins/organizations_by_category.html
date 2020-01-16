@@ -1,7 +1,14 @@
 {% load pagination_tags %}
 {% spaceless %}
+{% comment %}
+CHANGELOG:
+- Use 'organization-glimpse-list' instead of "organization-list__content"
+  which is hardly linked to "organization-list" component
+{% endcomment %}
+
+
 {% if current_page.publisher_is_draft or instance.check_publication is True %}
-  <div class="organization-list__content">
+  <div class="organization-glimpse-list">
     {% for organization in organizations %}
       {% include "courses/cms/fragment_organization_glimpse.html" with variant=instance.variant %}
     {% endfor %}

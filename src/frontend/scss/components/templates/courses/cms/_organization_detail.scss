@@ -1,0 +1,124 @@
+// Organization detail template stylesheet
+//
+
+.organization-detail {
+    margin: 0 auto;
+    padding: 0;
+
+    &__block {
+        @include detail-block;
+        @include content-padding-fix($target: "&:last-child");
+    }
+
+    &__row {
+        @include detail-row;
+    }
+
+    &__title {
+        @include detail-title;
+    }
+
+    &__empty {
+        @include detail-empty;
+    }
+
+    &__banner {
+        position: relative;
+        width: 100%;
+        height: 30vh;
+
+        @include media-breakpoint-up(xl) {
+            height: 25vh;
+        }
+
+        & > img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        @include m-o-media_empty($background: r-theme-val(organization-detail, banner-empty-background));
+
+        // Insert wave curves on top of banner bottom
+        &::after{
+            content: "";
+            display: block;
+            width: 100%;
+            height: 4rem;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-image: r-theme-val(organization-detail, insert-background-image);
+            background-repeat: no-repeat;
+            background-position: top left;
+            background-size: 100% 100%;
+            transform: scaleX(-1); // horizontally reverse
+            z-index: 2;
+        }
+    }
+
+    &__logo {
+        position: absolute;
+        top: 10%;
+        right: 10%;
+        width: 30%;
+        padding: 0.5rem;
+        background: $white;
+        border: $onepixel solid r-theme-val(organization-detail, logo-border);
+        box-shadow: r-theme-val(organization-detail, logo-shadow);
+        z-index: 4;
+
+        @include media-breakpoint-up(lg) {
+            top: 40%;
+            right: 10%;
+            bottom: -2rem;
+            width: 20%;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+        }
+
+        @include m-o-media_empty();
+    }
+
+    &__intro {
+        .organization-detail__title {
+            text-align: left;
+            color: r-theme-val(organization-detail, intro-title);
+
+            @include media-breakpoint-up(lg) {
+                width: calc(70% - 2rem);
+            }
+        }
+    }
+
+    &__categories {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        .category-plugin-tag{
+            @include button-tiny($form-factor: "pill");
+            @include r-button-colors(r-theme-val(organization-detail, categories), $apply-border: true);
+            margin: 0 0.5rem 0.5rem 0;
+
+            &__title{
+                padding: 0;
+                font-weight: bold;
+                background: transparent;
+            }
+        }
+    }
+
+    &__description {
+        margin-top: 1rem;
+        font-size: 1rem;
+        color: r-theme-val(organization-detail, description-color);
+    }
+}

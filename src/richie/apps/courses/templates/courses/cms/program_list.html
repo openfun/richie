@@ -1,18 +1,29 @@
 {% extends "richie/fullwidth.html" %}
 {% load cms_tags i18n %}
+{% comment %}
+CHANGELOG:
+- Wrapped glimpse list in a ".program-list"
+- Moved title inside subheader
+{% endcomment %}
+
+
+{% block subheader_content %}
+<div class="subheader__container">
+    <h1 class="subheader__title">{{ current_page.get_title }}</h1>
+</div>
+{% endblock subheader_content %}
+
 
 {% block content %}
-<div class="program-glimpse-list">
-  <h1 class="program-glimpse-list__title">{{ current_page.get_title }}</h1>
-
-  {% for page in current_page.get_child_pages %}
-    {% if page.program %}
-      {% include "courses/cms/fragment_program_glimpse.html" with program=page.program %}
-    {% endif %}
-  {% empty %}
-    <p class="program-glimpse program-glimpse--empty">
-    {% trans "No associated programs" %}
-    </p>
-  {% endfor %}
+<div class="program-list">
+    {% for page in current_page.get_child_pages %}
+        {% if page.program %}
+            {% include "courses/cms/fragment_program_glimpse.html" with program=page.program %}
+        {% endif %}
+    {% empty %}
+        <p class="program-glimpse program-glimpse--empty">
+        {% trans "No associated programs" %}
+        </p>
+    {% endfor %}
 </div>
 {% endblock content %}

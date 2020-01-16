@@ -1,5 +1,11 @@
 {% extends "richie/base.html" %}
 {% load cms_tags %}
+{% comment %}
+CHANGELOG:
+- Disable "topbar_searchbar" block since the input search is moved intro
+  intro content
+- Wrapped content under "div.homepage" for easier custom homepage styles
+{% endcomment %}
 
 {% block breadcrumbs %}{% endblock breadcrumbs %}
 
@@ -13,6 +19,12 @@
     {% page_attribute "page_title" %}
 {% endblock head_title %}
 
+{% block topbar_classes %}topbar--over{% endblock topbar_classes %}
+
+{% block topbar_searchbar %}{% endblock topbar_searchbar %}
+
 {% block content %}
+<div class="homepage{% if current_page.publisher_is_draft %} homepage--draft{% endif %}">
     {% placeholder "maincontent" %}
+</div>
 {% endblock content %}

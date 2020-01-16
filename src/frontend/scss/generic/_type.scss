@@ -1,0 +1,19 @@
+//
+/// THEME OK
+//
+
+// Build font family class helpers. Each enabled font family class will be
+// like '.font-NAME'
+$r-fonts: () !default;
+@each $name, $value in $r-fonts {
+    &.font-#{$name}{
+        font-family: $value !important;
+    }
+}
+
+// Build text color helpers
+@each $name, $value in $palette {
+    .text-#{$name}{
+        color: $value !important;
+    }
+}

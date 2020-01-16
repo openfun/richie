@@ -1,0 +1,275 @@
+//
+// Common sub-header for breadcrumbs, document title, introduction, etc..
+//
+$r-subheader-search-title-width: 19rem !default; // aligned on computed search result width
+
+
+.subheader {
+    $subheader-selector: &;
+    @include r-scheme-colors(r-theme-val(subheader, base));
+
+    &__container {
+        @include r-scheme-colors(r-theme-val(subheader, container));
+        padding: 1rem 0.5rem;
+
+        @include media-breakpoint-up(lg) {
+            padding: 1.5rem 0.1rem;
+        }
+    }
+
+    &__title {
+        @include make-container();
+        @include make-container-max-widths();
+        @include sv-flex(1, 0, 100%);
+
+        @include media-breakpoint-down(lg) {
+            padding-left: 0;
+            padding-right: 0;
+            text-align: center;
+        }
+    }
+
+    &__cta {
+        @include button-base($font-weight: bold);
+        @include r-button-colors(r-theme-val(subheader, cta), $apply-border: true, $include-hover: true);
+        margin-top: 1rem;
+    }
+
+    &__media{
+        display: block;
+        width: 100%;
+        max-width: rem-calc(150px);
+        margin: 0 auto;
+        background: r-theme-val(subheader, media-background);
+        border-radius: $border-radius-lg;
+
+        img,
+        svg{
+            display: block;
+            width: 100%;
+            margin: 0 auto;
+            border-radius: $border-radius-lg;
+        }
+
+        &--locket{
+            background: transparent;
+            border-radius: 100%;
+            max-width: 15.625rem;
+
+            img,
+            svg{
+                border-radius: 100%;
+            }
+        }
+    }
+
+    &__label{
+        margin: 0 auto;
+        padding: 0.5rem 0.1rem;
+        text-align: center;
+    }
+
+    &__teaser {
+        width: 100%;
+        margin-top: 1rem;
+        @if r-theme-val(subheader, teaser-border){
+            border: 0.25rem solid r-theme-val(subheader, teaser-border);
+        }
+
+        @include media-breakpoint-up(lg) {
+            @include sv-flex(1, 0, 32%);
+            margin-top: 1.5rem;
+        }
+
+        iframe,
+        img {
+            display: block;
+            width: 100%;
+            border: 0;
+        }
+    }
+
+    &__cartouche{
+        display: block;
+        width: 80%;
+        margin: 0 auto;
+        color: inherit;
+
+        &:hover{
+            color: inherit;
+            text-decoration: none;
+        }
+    }
+
+    &__main {
+        @include media-breakpoint-up(lg) {
+            @include sv-flex(1, 0, 75%);
+            display: flex;
+            justify-content: flex-start;
+            align-content: flex-start;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+    }
+
+    &__intro {
+        @include make-container();
+        @include make-container-max-widths();
+
+        @include media-breakpoint-down(lg) {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        @include media-breakpoint-up(lg) {
+            display: flex;
+            justify-content: flex-start;
+            align-content: flex-start;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .feature-inlines__item {
+            color: inherit;
+
+            @include media-breakpoint-down(lg) {
+                margin-bottom: 0.5rem;
+            }
+
+            &:hover {
+                color: inherit;
+            }
+        }
+
+        .feature-inlines__item__icon {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+
+        .social-network-badges {
+            margin-top: 1rem;
+
+            &__item{
+                @include r-button-colors(
+                    r-theme-val(subheader, social-network-badges),
+                    $apply-border: true,
+                    $include-hover: true
+                );
+            }
+        }
+    }
+
+    &__content {
+        margin-top: 1rem;
+        padding: 0.5rem 0;
+        font-size: 1rem;
+
+        @include media-breakpoint-up(lg) {
+            @include sv-flex(1, 0, 75%);
+            margin-top: 1.5rem;
+        }
+
+        &--aside {
+            @include media-breakpoint-up(lg) {
+                @include sv-flex(1, 0, 68%);
+                padding: 0.5rem 2rem;
+            }
+        }
+    }
+
+    &__aside {
+        text-align: center;
+
+        @include media-breakpoint-up(lg) {
+            @include sv-flex(1, 0, 25%);
+        }
+    }
+
+    &__search {
+        @include make-container();
+        @include make-container-max-widths();
+        display: flex;
+        padding: 0;
+        justify-content: flex-start;
+        align-content: flex-start;
+        align-items: center;
+        flex-wrap: wrap;
+
+        @include media-breakpoint-up(lg) {
+            padding: 1rem 0;
+        }
+
+        #{$subheader-selector}__title {
+            @include sv-flex(1, 0, 100%);
+            @include font-size($h2-font-size);
+            margin-bottom: 1rem;
+            padding: 0;
+
+            @include media-breakpoint-up(lg) {
+                @include sv-flex(1, 1, $r-subheader-search-title-width);
+                margin-bottom: 0;
+            }
+        }
+
+        .richie-react--root-search-suggest-field {
+            @include sv-flex(1, 0, 100%);
+
+            @include media-breakpoint-up(lg) {
+                @include sv-flex(1, 1, calc(100% - #{$r-subheader-search-title-width}));
+                padding: 0 0.7rem 0 0.2rem;
+            }
+
+            .react-autosuggest__container {
+                margin-bottom: 0;
+
+                @include media-breakpoint-up(lg) {
+                    padding-left: 1rem;
+                }
+
+                .react-autosuggest__input {
+                    @include font-size($font-size-base);
+                    height: auto;
+                    padding: 0.8rem 1rem;
+                    color: r-theme-val(subheader, search-input-color);
+                    background: r-theme-val(subheader, search-input-background);
+                    @if r-theme-val(subheader, search-input-border){
+                        border: $onepixel solid r-theme-val(subheader, search-input-border);
+                    }
+                    border-radius: $border-radius;
+
+                    &::placeholder {
+                        color: r-theme-val(subheader, search-input-placeholder);
+                    }
+                }
+            }
+        }
+    }
+
+    // Component variants
+    &--alternative {
+        #{$subheader-selector}__container {
+            position: relative;
+            padding-bottom: calc(5vw + 1.5rem) !important;
+            background: r-theme-val(subheader-alt, container-background);
+            @if r-theme-val(subheader-alt, container-border){
+                border-top: 1px solid r-theme-val(subheader-alt, container-border);
+            }
+
+            // Insert bottom curves
+            &::after{
+                content: "";
+                display: block;
+                width: 100%;
+                height: 5vw;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background-image: r-theme-val(subheader-alt, background-image);
+                background-repeat: no-repeat;
+                background-position: top left;
+                background-size: 100% 100%;
+            }
+        }
+    }
+}

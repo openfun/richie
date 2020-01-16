@@ -1,57 +1,101 @@
-button,
-.button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 2.25rem;
-  margin: 0 0.5rem;
-  padding: 0 1rem;
-  border: 0;
-  cursor: pointer;
+//
+// Button objects
+//
+
+// Helper classes
+// Main purpose of these classes is to demonstrate mixins usage
+.button{
+    @include button-base();
+
+    // Form factors
+    &--square{
+        @include button-base($form-factor: "square");
+    }
+    &--pill{
+        @include button-base($form-factor: "pill");
+    }
+    &--round{
+        @include button-base($form-factor: "round");
+    }
+
+    // Size modifiers and their specific form factors
+    &--tiny{
+        @include button-tiny();
+
+        &.button--square{
+            @include button-tiny($form-factor: "square");
+        }
+        &.button--pill{
+            @include button-tiny($form-factor: "pill");
+        }
+        &.button--round{
+            @include button-tiny($form-factor: "round");
+        }
+    }
+
+    &--small{
+        @include button-small();
+
+        &.button--square{
+            @include button-small($form-factor: "square");
+        }
+        &.button--pill{
+            @include button-small($form-factor: "pill");
+        }
+        &.button--round{
+            @include button-small($form-factor: "round");
+        }
+    }
+
+    &--large{
+        @include button-large();
+
+        &.button--square{
+            @include button-large($form-factor: "square");
+        }
+        &.button--pill{
+            @include button-large($form-factor: "pill");
+        }
+        &.button--round{
+            @include button-large($form-factor: "round");
+        }
+    }
+
+    // Color variant modifiers class names following color schemes
+    @each $name, $scheme in map-get($r-theme, "base-schemes") {
+        &--#{$name}{
+            &:not(.disabled){
+                @include r-button-colors($scheme, $apply-border: true);
+
+                &:hover{
+                    @include r-button-colors($scheme, $apply-border: true, $prefix: "hover");
+                }
+            }
+            // Enforce colors opposed to avoid framework 'disabled'
+            // selector to win priority
+            &.disabled{
+                @include r-button-colors($scheme, $apply-border: true);
+            }
+        }
+    }
 }
 
-.button {
-  &--primary {
-    background: $dodgerblue7;
-    color: white;
-    border: 2px solid $dodgerblue7;
 
-    &:hover {
-      background: white;
-      color: $dodgerblue7;
+// Caesura block for single centered button on its own row
+.button-caesura {
+    display: flex;
+    justify-content: center;
+
+    // Enforce an "hollow" display
+    a {
+        @include sv-flex(0, 0, auto);
+        @include button-base($font-weight: bold);
+        @include r-button-colors(r-theme-val(button-caesura, base), $apply-border: true);
+        display: block;
+        text-transform: uppercase;
+
+        &:hover {
+            @include r-button-colors(r-theme-val(button-caesura, base-hover), $apply-border: true, $prefix: "hover");
+        }
     }
-  }
-
-  &--primary-hollow {
-    background: white;
-    color: $dodgerblue7;
-    border: 2px solid $dodgerblue7;
-
-    &:hover {
-      background: $dodgerblue7;
-      color: white;
-    }
-  }
-
-  &--secondary {
-    background: $firebrick6;
-    color: white;
-    border: 2px solid $firebrick6;
-
-    &:hover {
-      background: white;
-      color: $firebrick6;
-    }
-  }
-
-  &--secondary-hollow {
-    background: white;
-    color: $firebrick6;
-    border: 2px solid $firebrick6;
-
-    &:hover {
-      background: $firebrick6;
-      color: white;
-    }
-  }
 }

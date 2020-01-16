@@ -1,0 +1,205 @@
+// Basic large banner template
+.large-banner {
+    // Needed to support img-as-a-background-image
+    position: relative;
+
+    // Support the img-as-a-background-image
+    max-width: 100%;
+    overflow: hidden;
+
+    height: 18rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    // Default background color, may be overridden by the background image
+    background-color: r-theme-val(large-banner, base-background-color);
+
+    color: r-theme-val(large-banner, base-color);
+    text-shadow: 0 0 3px r-theme-val(large-banner, base-shadow);
+
+    @include media-breakpoint-up(md) {
+        height: 20rem;
+    }
+
+    @include media-breakpoint-up(lg) {
+        // Fixed aspect ratio for screens larger than this size;
+        height: 22.5vw;
+    }
+
+    &__background {
+        // Make an img into a background-image to benefit from srcset
+        // We don't need to center it thanks to flex props on large-banner
+        position: absolute;
+        min-width: 100%;
+        min-height: 100%;
+    }
+
+    &__body {
+        // Needed to support img-as-a-background-image
+        position: relative;
+
+        &__title {
+            // Leave some margin between title & logo
+            margin: 0 0.5rem 0 0;
+
+            // Adjust text size for smaller screens
+            font-size: 1.5rem;
+            text-align: center;
+
+            @include media-breakpoint-up(sm) {
+                font-size: 2rem;
+            }
+
+            @include media-breakpoint-up(md) {
+                font-size: 2.5rem;
+            }
+        }
+
+        &__logo {
+            // Leave some margin between title & logo
+            margin: 0 0 0 0.5rem;
+
+            // Adjust logo size for smaller screens
+            max-width: 10rem;
+            max-height: 5rem;
+
+            @include media-breakpoint-up(sm) {
+                max-width: 11.25rem;
+                max-height: 5.625rem;
+            }
+
+            @include media-breakpoint-up(md) {
+                max-width: 12.5rem;
+                max-height: 6.25rem;
+            }
+        }
+    }
+}
+
+// Special hero intro to work right with "topbar over" behavior and a
+// search bar
+//
+.hero-intro {
+    position: relative;
+    padding: 1rem 0;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: auto 100%;
+
+    @include media-breakpoint-up(lg) {
+        padding: $r-topbar-height 0 calc(5vw + 1rem);
+        min-height: ($r-topbar-height + 33.75rem);
+    }
+
+    &::after{
+        content: "";
+        display: block;
+        width: 100%;
+        height: 5vw;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-image: r-theme-val(hero-intro, insert-background-image);
+        background-repeat: no-repeat;
+        background-position: bottom left;
+        background-size: 100% 100%;
+    }
+
+    &__body {
+        @include make-container();
+        @include make-container-max-widths();
+        padding: 1rem;
+
+        @include media-breakpoint-up(lg) {
+            padding: 2rem;
+        }
+    }
+
+    &__title {
+        @include responsive-spacer("margin-bottom", 3, $breakpoints: (
+            "lg": 4,
+        ));
+
+        @include media-breakpoint-up(lg) {
+            width: 50%;
+        }
+    }
+
+    &__content {
+        @include font-size($h5-font-size);
+        color: r-theme-val(hero-intro, content-color);
+    }
+
+    &__search{
+        @include responsive-spacer("padding-top", 3, $breakpoints: (
+            "lg": 5,
+        ));
+        display: flex;
+        flex-wrap: wrap;
+        align-items: flex-start;
+
+        .richie-react--root-search-suggest-field{
+            @include sv-flex(1, 0, 100%);
+            position: relative;
+
+            @include media-breakpoint-up(lg) {
+                @include sv-flex(1, 0, 50%);
+            }
+
+            input{
+                background: r-theme-val(hero-intro, search-input-background);
+            }
+
+            .search-input {
+                &__btn {
+                    background: r-theme-val(hero-intro, search-btn-background);
+                    border-top-right-radius: 3rem;
+                    border-bottom-right-radius: 3rem;
+
+                    &__icon{
+                        fill: r-theme-val(hero-intro, search-icon-fill);
+                    }
+                }
+            }
+        }
+    }
+
+    &__search-title{
+        @include sv-flex(1, 0, 100%);
+        @include font-size($h4-font-size);
+        font-family: $r-font-family-montserrat;
+        font-weight: $font-weight-boldest;
+    }
+
+    &__cta{
+        @include sv-flex(0, 0, auto);
+        @include button-size($btn-padding-y, $btn-padding-x, $btn-font-size, $btn-line-height, $btn-border-radius);
+        @include button-variant(
+            r-theme-val(hero-intro, cta-variant-from),
+            r-theme-val(hero-intro, cta-variant-to)
+        );
+        margin: 1.2rem auto 0;
+        font-size: $font-size-base;
+        color: r-theme-val(hero-intro, cta-color);
+        border: 1px solid r-theme-val(hero-intro, cta-border);
+        border-radius: 2rem;
+
+        @include media-breakpoint-up(lg) {
+            margin-top: 0;
+            @include responsive-spacer("margin-left", 0, $breakpoints: (
+                "lg": 5,
+            ));
+        }
+
+        &:after{
+            content: "→";
+            margin-left: 1rem;
+        }
+
+        &:hover{
+            text-decoration: none;
+        }
+    }
+}

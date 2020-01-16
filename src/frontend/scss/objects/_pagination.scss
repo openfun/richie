@@ -1,43 +1,54 @@
 // Pagination object
 //
 .pagination {
-  @include make-container-max-widths();
-  @include sv-flex(1, 0, 100%);
-  margin: 0 auto;
+    @include make-container-max-widths;
+    @include sv-flex(1, 0, 100%);
+    margin: 0 auto;
 
-  &__list {
-    display: flex;
-    margin: 1rem 0;
-    padding: 0;
-    justify-content: center;
+    &__list {
+        display: flex;
+        margin: 1rem 0;
+        padding: 0;
+        justify-content: center;
+    }
 
     &__item {
-      list-style-type: none;
-      display: flex;
-      background: white;
-      border: 1px solid $dodgerblue1;
-      color: $dodgerblue1;
-      cursor: pointer;
+        list-style-type: none;
+        display: flex;
+        color: r-theme-val(pagination, item-color);
+        font-weight: bold;
+        background: r-theme-val(pagination, item-background);
+        border: $onepixel solid r-theme-val(pagination, item-border);
+        cursor: pointer;
 
-      & + & {
-        border-left: 0;
-      }
+        &:first-child{
+            border-top-left-radius: $border-radius-lg;
+            border-bottom-left-radius: $border-radius-lg;
+        }
 
-      &--current {
-        background: $dodgerblue1;
-        color: white;
-        cursor: default;
-      }
+        &:last-child{
+            border-top-right-radius: $border-radius-lg;
+            border-bottom-right-radius: $border-radius-lg;
+        }
 
-      &--placeholder {
-        padding: 0.5rem 1rem;
-        cursor: default;
-      }
+        & + & {
+            border-left: 0;
+        }
 
-      &__page-number {
+        &--current {
+            color: r-theme-val(pagination, current-color);
+            background: r-theme-val(pagination, current-background);
+            cursor: default;
+        }
+
+        &--placeholder {
+            padding: 0.5rem 1rem;
+            cursor: default;
+        }
+    }
+
+    &__page-number {
         padding: 0.5rem 1rem;
         color: inherit;
-      }
     }
-  }
 }

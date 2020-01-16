@@ -1,55 +1,73 @@
 {% extends "richie/fullwidth.html" %}
 {% load cms_tags extra_tags i18n thumbnail %}
+{% comment %}
+CHANGELOG:
+- Restructured content tree to block/row/grid structure
+- Moved title inside subheader
+{% endcomment %}
+
 
 {% block meta_opengraph_contextuals %}
     <meta property="og:title" content="{{ current_page.get_title|truncatechars:65 }}">
     <meta property="og:url" content="{{ SITE.web_url }}{{ current_page.get_absolute_url }}">
 {% endblock meta_opengraph_contextuals %}
 
+
+{% block subheader_content %}
+<div class="subheader__container">
+    <h1 class="subheader__title">{% render_model current_page "title" %}</h1>
+</div>
+{% endblock subheader_content %}
+
+
 {% block content %}{% spaceless %}
 <div class="program-detail">
-  <h1 class="program-detail__title">{% render_model current_page "title" %}</h1>
+    <div class="program-detail__block">
+    {% if current_page.publisher_is_draft %}
+        <div class="program-detail__cover program-detail__row">
+            {% get_placeholder_plugins "program_cover" as plugins or %}
+                <p class="program-detail__empty">{% trans "Cover" %}</p>
+            {% endget_placeholder_plugins %}
+            {% blockplugin plugins.0 %}
+                <img
+                    src="{% thumbnail instance.picture 500x500 subject_location=instance.picture.subject_location %}"
+                    srcset="
+                        {% thumbnail instance.picture 500x500 subject_location=instance.picture.subject_location %} 500w
+                        {% if instance.picture.width >= 1000 %},{% thumbnail instance.picture 1000x1000 subject_location=instance.picture.subject_location %} 1000w{% endif %}
+                        {% if instance.picture.width >= 2000 %},{% thumbnail instance.picture 2000x2000 subject_location=instance.picture.subject_location %} 2000w{% endif %}
+                    "
+                    sizes="500px"
+                    alt="{% trans 'program cover image' %}"
+                />
+            {% endblockplugin %}
+        </div>
+    {% endif %}
 
-  {% if current_page.publisher_is_draft %}
-  <div class="program-detail__cover">
-    {% get_placeholder_plugins "program_cover" as plugins or %}
-      <p class="program-detail__cover__empty">{% trans "Cover" %}</p>
-    {% endget_placeholder_plugins %}
-    {% blockplugin plugins.0 %}
-      <img
-        src="{% thumbnail instance.picture 500x500 subject_location=instance.picture.subject_location %}"
-        srcset="
-          {% thumbnail instance.picture 500x500 subject_location=instance.picture.subject_location %} 500w
-          {% if instance.picture.width >= 1000 %},{% thumbnail instance.picture 1000x1000 subject_location=instance.picture.subject_location %} 1000w{% endif %}
-          {% if instance.picture.width >= 2000 %},{% thumbnail instance.picture 2000x2000 subject_location=instance.picture.subject_location %} 2000w{% endif %}
-        "
-        sizes="500px"
-        alt="{% trans 'program cover image' %}"
-      />
-    {% endblockplugin %}
-  </div>
-  {% endif %}
+        <div class="program-detail__excerpt program-detail__row">
+            {% placeholder "program_excerpt" or %}
+                <p class="program-detail__empty">
+                    {% trans "No excerpt content" %}
+                </p>
+            {% endplaceholder %}
+        </div>
 
-  <div class="program-detail__excerpt">
-    {% placeholder "program_excerpt" or %}
-      <p class="program-detail__excerpt__empty">
-        {% trans "No excerpt content" %}
-      </p>
-    {% endplaceholder %}
-  </div>
+        <div class="program-detail__body program-detail__row">
+            {% placeholder "program_body" or %}
+                <p class="program-detail__empty">
+                    {% trans "No body content" %}
+                </p>
+            {% endplaceholder %}
+        </div>
+    </div>
 
-  <div class="program-detail__body">
-    {% placeholder "program_body" or %}
-      <p class="program-detail__body__empty">
-        {% trans "No body content" %}
-      </p>
-    {% endplaceholder %}
-  </div>
 
+    <div class="program-detail__courses program-detail__block">
+        <div class="program-detail__row">
+            <section class="course-glimpse-list">
+                <h2 class="program-detail__title">{% trans "Related courses" %}</h2>
+                {% placeholder "program_courses" %}
+            </section>
+        </div>
+    </div>
 </div>
-
-<section class="course-glimpse-list">
-    <h2 class="course-glimpse-list__title">{% trans "Related courses" %}</h2>
-    {% placeholder "program_courses" %}
-</section>
 {% endspaceless %}{% endblock content %}

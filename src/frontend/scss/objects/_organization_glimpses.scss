@@ -1,111 +1,182 @@
-// Overridable & namespaced global variables
-$richie-org-glimpse-list-maxwidth-constraint: true !default;
-$richie-org-glimpse-list-margin: 0 auto !default;
-$richie-org-glimpse-list-padding: 1rem 0 !default;
-$richie-org-glimpse-list-title-margin: null !default;
-$richie-org-glimpse-list-title-padding: 0.5rem !default;
-
-$richie-org-glimpse-content-margin: 0 auto !default;
-$richie-org-glimpse-content-padding: 1rem 0 !default;
-
-$richie-org-glimpse-item-gutter: 0.625rem !default;
-$richie-org-glimpse-item-padding: 1.25rem !default;
-$richie-org-glimpse-item-background: $white !default;
-$richie-org-glimpse-item-border: 1px solid $gray80 !default;
-$richie-org-glimpse-item-border-hover: 1px solid $firebrick6 !default;
-$richie-org-glimpse-item-border-radius: 0.25rem !default;
-
-$richie-org-glimpse-item-title-fontcolor: $black !default;
-$richie-org-glimpse-item-title-textalign: center !default;
-
-$richie-org-glimpse-item-empty-fontcolor: $gray40 !default;
-$richie-org-glimpse-item-empty-textalign: left !default;
-
 .organization-glimpse-list {
-  @if $richie-org-glimpse-list-maxwidth-constraint {
     @include make-container-max-widths();
-  }
-  display: flex;
-  margin: $richie-org-glimpse-list-margin;
-  padding: $richie-org-glimpse-list-padding;
-  flex-direction: row;
-  flex-wrap: wrap;
-
-  &__title {
-    @include sv-flex(1, 0, 100%);
-    margin: $richie-org-glimpse-list-title-margin;
-    padding: $richie-org-glimpse-list-title-padding;
-  }
-
-  // Special row when there is no entry
-  &__empty {
-    @include sv-flex(1, 0, auto);
-    font-style: italic;
-    padding: $richie-org-glimpse-list-title-padding;
-    color: $richie-org-glimpse-item-empty-fontcolor;
-    text-align: $richie-org-glimpse-item-empty-textalign;
-    background: transparent;
-  }
-}
-
-.organization-glimpse {
-  $list-item-selector: &;
-  display: flex;
-  flex-grow: 0;
-  flex-shrink: 0;
-  flex-basis: calc(100% - #{$richie-org-glimpse-item-gutter * 2});
-  margin: $richie-org-glimpse-item-gutter;
-  padding: $richie-org-glimpse-item-padding;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  align-content: space-between;
-  background: $richie-org-glimpse-item-background;
-  border: $richie-org-glimpse-item-border;
-  border-radius: $richie-org-glimpse-item-border-radius;
-
-  @include media-breakpoint-up(sm) {
-    flex-basis: calc(50% - #{$richie-org-glimpse-item-gutter * 2});
-  }
-
-  @include media-breakpoint-up(xl) {
-    flex-basis: calc(25% - #{$richie-org-glimpse-item-gutter * 2});
-  }
-
-  &__logo {
-    position: relative;
+    display: flex;
     width: 100%;
-    margin-bottom: 1rem;
-    padding-bottom: 56.25%; // Aspect ratio 16/9
+    margin: 0 auto;
+    padding: 1rem 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
 
-    & > img {
-      position: absolute;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      object-position: center;
+    &__title {
+        @include sv-flex(1, 0, 100%);
+        padding: 0.5rem;
     }
 
-    @include m-o-media_empty($background: $gray97);
-  }
+    // Special row when there is no entry
+    &__empty {
+        @include sv-flex(1, 0, auto);
+        font-style: italic;
+        padding: 0.5rem;
+        color: r-theme-val(organization-glimpse-list, empty-color);
+        text-align: left;
+        background: r-theme-val(organization-glimpse-list, empty-background);
+    }
+}
 
-  &__title {
-    flex-grow: 1;
-    flex-shrink: 0;
+
+.organization-glimpse {
+    $glimpse-item-selector: &;
+    $glimpse-gutter: 0.625rem;
+
     display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: $richie-org-glimpse-item-title-textalign;
-    color: $richie-org-glimpse-item-title-fontcolor;
-  }
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: calc(100% - #{$glimpse-gutter * 2});
+    margin: $glimpse-gutter;
+    padding: 1rem;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: space-between;
+    background: r-theme-val(organization-glimpse, base-background);
+    border: 1px solid r-theme-val(organization-glimpse, base-border);
 
-  &:hover,
-  &:focus {
-    border: $richie-org-glimpse-item-border-hover;
-    color: $richie-org-glimpse-item-title-fontcolor;
-    cursor: pointer;
-  }
+    @include media-breakpoint-up(sm) {
+        flex-basis: calc(50% - #{$glimpse-gutter * 2});
+    }
+
+    @include media-breakpoint-up(xl) {
+        flex-basis: calc(25% - #{$glimpse-gutter * 2});
+    }
+
+    &__logo {
+        position: relative;
+        width: 100%;
+        padding-bottom: 56.25%; // Aspect ratio 16/9
+
+        & > img {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+        }
+
+        @include m-o-media_empty($background: r-theme-val(organization-glimpse, logo-empty-background));
+    }
+
+    // Default form factor just display org's logo
+    &__content {
+        display: none;
+    }
+
+    // Modifier to explicitely set the object as a link so default link
+    // behaviors is overrided right
+    &--link {
+        color: inherit;
+
+        &:hover,
+        &:focus {
+            border: 1px solid r-theme-val(organization-glimpse, link-border);
+            color: inherit;
+            text-decoration: none;
+            cursor: pointer;
+        }
+    }
+
+    //
+    &--card {
+        // Get the last item from computed selector with ampersand
+        $glimpse-gutter: 0.625rem;
+
+        @include media-breakpoint-up(sm) {
+            flex-basis: calc(50% - #{$glimpse-gutter * 2});
+        }
+        @include media-breakpoint-up(xl) {
+            flex-basis: calc(16.6666% - #{$glimpse-gutter * 2});
+        }
+    }
+
+    //
+    &--row {
+        @include sv-flex(1, 0, 100%);
+        display: block;
+        margin: 0;
+        padding: 1rem 0;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-content: flex-start;
+        align-items: center;
+        background: r-theme-val(organization-glimpse-row, base-background);
+        border: 0;
+
+        @include media-breakpoint-up(sm) {
+            flex-basis: 100%;
+        }
+        @include media-breakpoint-up(lg) {
+            display: flex;
+            padding: 2rem 0;
+        }
+        @include media-breakpoint-up(xl) {
+            flex-basis: 100%;
+        }
+
+        #{$glimpse-item-selector}__logo {
+            position: relative;
+            width: auto;
+            padding-bottom: 0;
+            text-align: center;
+
+            @include media-breakpoint-up(lg) {
+                @include sv-flex(1, 0, 25%);
+            }
+
+            & > img {
+                position: static;
+                width: auto;
+                height: auto;
+                object-fit: initial;
+                object-position: unset;
+            }
+        }
+
+        #{$glimpse-item-selector}__content {
+            display: block;
+            padding: 1rem;
+
+            @include media-breakpoint-up(lg) {
+                @include sv-flex(1, 0, 75%);
+            }
+        }
+
+        #{$glimpse-item-selector}__title {
+            @include font-size($h4-font-size);
+            margin-bottom: 1rem;
+            font-family: $r-font-family-montserrat;
+            font-weight: $font-weight-boldest;
+        }
+
+        & + &{
+            border-top: 1px solid r-theme-val(organization-glimpse-row, divider);
+
+            &:hover,
+            &:focus{
+                border-top: 1px solid r-theme-val(organization-glimpse-row, divider);
+            }
+        }
+
+        &:hover,
+        &:focus{
+            background: r-theme-val(organization-glimpse-row, hover-background);
+            border: 0;
+
+            #{$glimpse-item-selector}__title {
+                color: r-theme-val(organization-glimpse-row, hover-title-color);
+            }
+        }
+    }
 }

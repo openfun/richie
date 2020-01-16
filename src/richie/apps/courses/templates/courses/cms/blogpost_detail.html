@@ -1,9 +1,16 @@
 {% extends "richie/fullwidth.html" %}
-{% load cms_tags extra_tags i18n thumbnail %}
+{% load static category_tags cms_tags extra_tags i18n thumbnail %}
+{% comment %}
+CHANGELOG:
+- Introduced commented sample for ".blogpost-detail__headline" content
+- Introduced
+{% endcomment %}
+
 
 {% block meta_opengraph_type %}
     <meta property="og:type" content="article">
 {% endblock meta_opengraph_type %}
+
 
 {% block meta_opengraph_contextuals %}
     <meta property="og:title" content="{{ current_page.get_title|truncatechars:65 }}">
@@ -11,76 +18,137 @@
     <meta property="article:published_time" content="{{ current_page.publication_date|date:"c" }}">
 {% endblock meta_opengraph_contextuals %}
 
+
+{% block subheader_content %}
+<div class="subheader__container">
+    <h1 class="subheader__title">{% page_attribute "page_title" request.current_page.parent_page %}</h1>
+</div>
+{% endblock subheader_content %}
+
+
 {% block content %}
 {% spaceless %}
-<div class="blogpost-detail">
-  <h1 class="blogpost-detail__title">{% render_model current_page "title" %}</h1>
-
-  <div class="blogpost-detail__subhead">
-    <p class="blogpost-detail__subhead__date">
-      {% if current_page.publication_date %}
-        {{ current_page.publication_date|date:"DATE_FORMAT" }}
-      {% else %}
-        {% trans 'Not published yet' %}
-      {% endif %}
-    </p>
-
-    {% with variant="tag" %}
-      {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"author" %}
-      <div class="blogpost-detail__subhead__author">
-        {% placeholder "author" or %}
-          <span class="blogpost-detail__subhead__author__empty">{% trans 'No author yet' %}</span>
-        {% endplaceholder %}
-      </div>
-      {% endif %}
-    {% endwith %}
-
-    {% include "social-networks/blogpost-badges.html" with page_title=request.current_page.get_title page_url=request.current_page.get_absolute_url %}
-  </div>
-
-  {% with variant="tag" %}
-    {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"categories" %}
-    <div class="blogpost-detail__categories">
-      {% placeholder "categories" or %}
-        <span class="blogpost-detail__categories__empty">{% trans 'No categories yet.' %}</span>
-      {% endplaceholder %}
+{% get_related_category_pages request.current_page.parent_page.get_child_pages as categories %}
+{% if categories %}
+<div class="category-glimpse-badges">
+    <div class="category-glimpse-badges__container">
+        {% for category in categories %}
+            {% include "courses/cms/fragment_category_glimpse.html" with variant="tag" %}
+        {% endfor %}
     </div>
-    {% endif %}
-  {% endwith %}
+</div>
+{% endif %}
 
-  <div class="blogpost-detail__cover">
-    {% get_placeholder_plugins "cover" as plugins or %}
-      <p class="blogpost-detail__cover__empty">{% trans "Cover" %}</p>
-    {% endget_placeholder_plugins %}
-    {% blockplugin plugins.0 %}
-      <img
-        src="{% thumbnail instance.picture 500x500 subject_location=instance.picture.subject_location %}"
-        srcset="
-          {% thumbnail instance.picture 500x500 subject_location=instance.picture.subject_location %} 500w
-          {% if instance.picture.width >= 1000 %},{% thumbnail instance.picture 1000x1000 subject_location=instance.picture.subject_location %} 1000w{% endif %}
-          {% if instance.picture.width >= 2000 %},{% thumbnail instance.picture 2000x2000 subject_location=instance.picture.subject_location %} 2000w{% endif %}
-        "
-        sizes="500px"
-        alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'blog post cover image' %}{% endif %}"
-      />
-    {% endblockplugin %}
-  </div>
 
-  <div class="blogpost-detail__excerpt">
-    {% placeholder "excerpt" or %}
-      <p class="blogpost-detail__excerpt__empty">
-        {% trans "No excerpt content" %}
-      </p>
-    {% endplaceholder %}
-  </div>
+<div class="blogpost-detail">
 
-  <div class="blogpost-detail__body">
-    {% placeholder "body" or %}
-      <p class="blogpost-detail__body__empty">
-        {% trans "No body content" %}
-      </p>
-    {% endplaceholder %}
-  </div>
+    <div class="blogpost-detail__row">
+
+        <div class="blogpost-detail__subhead">
+            {% with variant="tag" %}
+                {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"categories" %}
+                <div class="blogpost-detail__theme">
+                    {% placeholder "categories" current_page or %}
+                        <span class="blogpost-detail__empty">{% trans 'No categories yet.' %}</span>
+                    {% endplaceholder %}
+                </div>
+                {% endif %}
+            {% endwith %}
+
+            <p class="blogpost-detail__pubdate">
+                {% if current_page.publication_date %}
+                    {{ current_page.publication_date|date:"SHORT_DATE_FORMAT" }}
+                {% else %}
+                    {% trans 'Not published yet' %}
+                {% endif %}
+            </p>
+
+            {% with variant="tag" %}
+                {% if current_page.publisher_is_draft %}
+                <div class="blogpost-detail__authors">
+                    {% placeholder "author" or %}
+                        <span class="blogpost-detail__empty">{% trans 'No author yet' %}</span>
+                    {% endplaceholder %}
+                </div>
+                {% endif %}
+            {% endwith %}
+        </div>
+
+        <h1 class="blogpost-detail__title">{% render_model current_page "title" %}</h1>
+
+        {% include "social-networks/blogpost-badges.html" with page_title=request.current_page.get_title page_url=request.current_page.get_absolute_url %}
+
+        <div class="blogpost-detail__grid">
+            <div class="blogpost-detail__grid-main">
+
+                <div class="blogpost-detail__cover">
+                    {% get_placeholder_plugins "cover" as plugins or %}
+                        <p class="blogpost-detail__empty">{% trans "Cover" %}</p>
+                    {% endget_placeholder_plugins %}
+                    {% blockplugin plugins.0 %}
+                        <img
+                            src="{% thumbnail instance.picture 845x500 subject_location=instance.picture.subject_location %}"
+                            srcset="
+                                {% thumbnail instance.picture 845x500 subject_location=instance.picture.subject_location %} 500w
+                                {% if instance.picture.width >= 1000 %},{% thumbnail instance.picture 1000x1000 subject_location=instance.picture.subject_location %} 1000w{% endif %}
+                                {% if instance.picture.width >= 2000 %},{% thumbnail instance.picture 2000x2000 subject_location=instance.picture.subject_location %} 2000w{% endif %}
+                            "
+                            sizes="500px"
+                            alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'blog post cover image' %}{% endif %}"
+                        />
+                    {% endblockplugin %}
+                </div>
+
+                <div class="blogpost-detail__excerpt">
+                    {% placeholder "excerpt" or %}
+                        <p class="blogpost-detail__empty">
+                            {% trans "No excerpt content" %}
+                        </p>
+                    {% endplaceholder %}
+                </div>
+
+                <div class="blogpost-detail__body">
+                    {% placeholder "body" or %}
+                        <p class="blogpost-detail__empty">
+                            {% trans "No body content" %}
+                        </p>
+                    {% endplaceholder %}
+                </div>
+            </div>
+
+            <div class="blogpost-detail__grid-aside">
+                {% with header_level=2 %}
+                    {% placeholder "headline" %}
+                {% endwith %}
+                {% comment %}<div class="blogpost-detail__headline">
+                    <p class="h4">{% lorem 7 w random %}</p>
+                    <p>{% lorem 24 w random %}</p>
+                </div>{% endcomment %}
+
+                {% comment %}Prototyped here until we have the richie's feature to do it right with glimpse fragment{% endcomment %}
+                <div class="blogpost-glimpse-list">
+                    <p class="blogpost-glimpse-list__title"><span>{% trans 'Related posts' %}</span></p>
+                    {% for i in "5354"|make_list %}
+                    {% cycle "richie/images/prototypes/132x80.png" "richie/images/prototypes/135x135.png" "richie/images/prototypes/330x200.png" as fpoimg silent %}
+                    <a href="#" class="blogpost-glimpse blogpost-glimpse--link blogpost-glimpse--mini">
+                        <div class="blogpost-glimpse__media">
+                            <img src="{% static fpoimg %}" alt="">
+                        </div>
+
+                        <div class="blogpost-glimpse__content">
+                            <div class="blogpost-glimpse__wrapper">
+                                <div class="blogpost-glimpse__categories">
+                                    <p class="blogpost-glimpse__theme">{% lorem 3 w random %}</p>
+                                </div>
+                                <p class="blogpost-glimpse__title">{% lorem i w random %}</p>
+                            </div>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
 {% endspaceless %}

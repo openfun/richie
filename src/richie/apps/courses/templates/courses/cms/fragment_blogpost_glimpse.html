@@ -1,42 +1,92 @@
 {% load i18n cms_tags extra_tags thumbnail %}
 {% comment %}Obviously, the context template variable "blogpost" is required and must be a BlogPost page extension{% endcomment %}
+{% comment %}
+CHANGELOG:
+- Implemented new form factor "row", "mini" and "favorite" (currently "mini" is included in default form which is "row")
+{% endcomment %}
 {% with blogpost_page=blogpost.extended_object %}
-  <a href="{{ blogpost.extended_object.get_absolute_url }}"
-    class="
-      blogpost-glimpse blogpost-glimpse--link
-      {% if variant %} blogpost-glimpse--{{ variant }}{% endif %}
-      {% if blogpost_page.publisher_is_draft %} blogpost-glimpse--draft{% endif %}"
-  >
-  <div class="blogpost-glimpse__media">
-    {% get_page_plugins "cover" blogpost_page as plugins or %}
-      <div class="blogpost-glimpse__media__empty">{% trans 'Cover' %}</div>
-    {% endget_page_plugins %}
-    {% blockplugin plugins.0 %}
-    <img src="{% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %}"
-      srcset="
-        {% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %} 300w
-        {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x340 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
-        {% if instance.picture.width >= 900 %},{% thumbnail instance.picture 900x510 crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}
-      "
-      sizes="300px"
-      alt=""
-    />
-    {% endblockplugin %}
-  </div>
-  <div class="blogpost-glimpse__content">
-      <div class="blogpost-glimpse__content__wrapper">
-          <p class="blogpost-glimpse__content__title">{{ blogpost_page.get_title }}</p>
-          <p>
-              {% show_placeholder "excerpt" blogpost_page %}
-          </p>
-      </div>
-      {% if blogpost_page.publication_date %}
-      <div class="blogpost-glimpse__footer">
-          <p class="blogpost-glimpse__footer__date">
-              {{ blogpost_page.publication_date|date:"DATE_FORMAT" }}
-          </p>
-      </div>
-      {% endif %}
-  </div>
-</a>
+
+{% if variant == "favorite" %}
+    <div class="
+        blogpost-glimpse
+        {% if variant %} blogpost-glimpse--{{ variant }}{% endif %}
+        {% if blogpost_page.publisher_is_draft %} blogpost-glimpse--draft{% endif %}"
+    >
+        <div class="blogpost-glimpse__media">
+            {% get_page_plugins "cover" blogpost_page as plugins or %}
+                <div class="blogpost-glimpse__empty">{% trans 'Cover' %}</div>
+            {% endget_page_plugins %}
+
+            {% blockplugin plugins.0 %}
+            <img src="{% thumbnail instance.picture 900x500 crop upscale subject_location=instance.picture.subject_location %}"
+                srcset="{% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %} 300w
+                {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x340 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+                {% if instance.picture.width >= 900 %},{% thumbnail instance.picture 900x510 crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}"
+                sizes="300px"
+                alt="">
+            {% endblockplugin %}
+        </div>
+        <div class="blogpost-glimpse__content">
+            <div class="blogpost-glimpse__wrapper">
+                <h{{ header_level|default:2 }} class="blogpost-glimpse__title">{{ blogpost_page.get_title }}</h{{ header_level|default:2 }}>
+
+                <p class="blogpost-glimpse__excerpt">
+                    {% show_placeholder "excerpt" blogpost_page %}
+                </p>
+
+                <a href="{{ blogpost.extended_object.get_absolute_url }}" class="blogpost-glimpse__cta">
+                    {% trans 'Learn more' %}
+                </a>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <a href="{{ blogpost.extended_object.get_absolute_url }}"
+        class="
+        blogpost-glimpse blogpost-glimpse--link
+        {% if variant %} blogpost-glimpse--{{ variant }}{% endif %}
+        {% if blogpost_page.publisher_is_draft %} blogpost-glimpse--draft{% endif %}"
+    >
+        <p class="blogpost-glimpse__date">
+            {{ blogpost_page.publication_date|date:"DATE_FORMAT" }}
+        </p>
+        <div class="blogpost-glimpse__media">
+            {% get_page_plugins "cover" blogpost_page as plugins or %}
+                <div class="blogpost-glimpse__empty">{% trans 'Cover' %}</div>
+            {% endget_page_plugins %}
+
+            {% blockplugin plugins.0 %}
+            <img src="{% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %}"
+                srcset="{% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %} 300w
+                {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x340 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+                {% if instance.picture.width >= 900 %},{% thumbnail instance.picture 900x510 crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}"
+                sizes="300px"
+                alt="">
+            {% endblockplugin %}
+        </div>
+        <div class="blogpost-glimpse__content">
+            <div class="blogpost-glimpse__wrapper">
+                <div class="blogpost-glimpse__categories">
+                    {% get_placeholder_plugins "categories" blogpost_page as plugins or %}{% endget_placeholder_plugins %}
+                    {% blockplugin plugins.0 %}
+                    <p class="blogpost-glimpse__theme">{{ instance.relevant_page.get_title }}</p>
+                    {% endblockplugin %}
+                </div>
+
+                {% if variant == "favorite" %}
+                <h{{ header_level|default:2 }} class="blogpost-glimpse__title">{{ blogpost_page.get_title }}</h{{ header_level|default:2 }}>
+                {% else %}
+                <p class="blogpost-glimpse__title">{{ blogpost_page.get_title }}</p>
+                {% endif %}
+
+                {% if variant != "row" %}
+                <p class="blogpost-glimpse__excerpt">
+                    {% show_placeholder "excerpt" blogpost_page %}
+                </p>
+                {% endif %}
+            </div>
+        </div>
+    </a>
+{% endif %}
+
 {% endwith %}

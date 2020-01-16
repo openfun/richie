@@ -1,0 +1,47 @@
+.single-column {
+    @include make-container();
+    @include make-container-max-widths();
+    padding: 1rem;
+    @include content-padding-fix;
+    background: r-theme-val(body-content, base-background);
+
+    // Add shared margin for vertical divider between allowed plugins
+    .hero-intro,
+    .embed-responsive,
+    .section-container-cadenced > section,
+    .licence-plugin,
+    .button-caesura,
+    .rich-text-container {
+        margin: 1rem 0;
+
+        &:first-child {
+            margin-top: 0;
+        }
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    // Adjust section highlights
+    .section-container-cadenced > section {
+        padding: 1rem 0;
+        background: r-theme-val(body-content, base-background);
+
+        &:nth-child(odd) {
+            background: r-theme-val(body-content, base-background);
+        }
+
+        // Remove useless spacing for item grid
+        .section__items {
+            padding-right: 0;
+            padding-left: 0;
+
+            // Remove useless spacing from caesura inside a section
+            .button-caesura {
+                margin-left: 0;
+                margin-right: 0;
+            }
+        }
+    }
+}

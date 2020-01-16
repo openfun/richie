@@ -1,6 +1,10 @@
 {% extends "richie/base.html" %}
 {% load cms_tags i18n static %}
 {% get_current_language as LANGUAGE_CODE %}
+{% comment %}
+CHANGELOG:
+- React components need to fit to new glimpse structure
+{% endcomment %}
 
 {% block meta %}
   {% if CDN_DOMAIN %}
@@ -10,10 +14,31 @@
 
 {% block head_title %}{% page_attribute "page_title" %}{% endblock head_title %}
 
-{% block breadcrumbs %}{% endblock breadcrumbs %}
-
 {# Enable flex on the `.body-content` so children can grow to occupy the available vertical space #}
-{% block bodycontent_classes %}body-content--flex-mode{% endblock bodycontent_classes %}
+{% comment %}Dropped since we don't want to overwrite elements CSS classes from template block anymore{% endcomment %}
+{% comment %}{% block bodycontent_classes %}body-content--flex-mode{% endblock bodycontent_classes %}{% endcomment %}
+
+{% block topbar_searchbar %}{% endblock topbar_searchbar %}
+
+
+{% block subheader %}
+<div class="subheader">
+    {% block breadcrumbs %}
+    {% include "menu/breadcrumbs.html" %}
+    {% endblock breadcrumbs %}
+
+    {% block subheader_content %}{% spaceless %}
+        <div class="subheader__container">
+            <div class="subheader__search">
+                <h1 class="subheader__title">Trouver un cours</h1>
+                <div class="richie-react richie-react--root-search-suggest-field"
+                     data-props='{"context": { "assets": { "icons": "{% static 'richie/icons.svg' %}" } }}'></div>
+            </div>
+        </div>
+    {% endspaceless %}{% endblock subheader_content %}
+</div>
+{% endblock subheader %}
+
 
 {% block content %}
   <div class="search-template">
@@ -21,15 +46,8 @@
       {% with header_level=2 %}
         {% placeholder "content" %}
       {% endwith %}
-      <div class="search-template__content__header">
-        <h1>{% page_attribute "page_title" %}</h1>
-        <div
-          class="richie-react richie-react--search-suggest-field"
-        ></div>
-      </div>
-      <div
-        class="richie-react richie-react--search"
-      ></div>
+      <div class="richie-react richie-react--search"
+           data-props='{"context": { "assets": { "icons": "{% static 'richie/icons.svg' %}" } }}'></div>
     </div>
   </div>
 {% endblock content %}

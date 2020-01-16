@@ -1,0 +1,142 @@
+//
+// Features objects
+//
+
+// Simple inline with optional color scheme features
+.feature-inlines {
+    @include feature-list();
+
+    color: inherit;
+
+    &__row {
+        text-align: center;
+    }
+
+    &__item {
+        color: inherit;
+    }
+
+    &__term {
+        color: inherit;
+        align-self: center;
+    }
+
+    // When using through a color scheme, item adopt button behaviors
+    &--primary {
+        .feature-inlines__item {
+            @include button-tiny($form-factor: "pill", $display: flex);
+            @include r-button-colors(r-theme-val(feature-inlines, primary-item), $apply-border: true);
+        }
+    }
+
+    &--secondary {
+        .feature-inlines__item {
+            @include button-tiny($form-factor: "pill", $display: flex);
+            @include r-button-colors(r-theme-val(feature-inlines, secondary-item), $apply-border: true);
+        }
+    }
+
+    &--tertiary {
+        .feature-inlines__item {
+            @include button-tiny($form-factor: "pill", $display: flex);
+            @include r-button-colors(r-theme-val(feature-inlines, tertiary-item), $apply-border: true);
+        }
+    }
+}
+
+// Simple 25% cells in a flexbox flow
+.feature-cells {
+    @include feature-list(
+        $list-valign: stretch,
+        $item-size: 25%,
+        $icon-size: 2rem,
+    );
+
+    &__row {
+        text-align: center;
+    }
+
+    &__item {
+        margin-top: 0.5rem;
+        margin-bottom: 0.5rem;
+    }
+}
+
+// 25% cells with average icon size
+.feature-icons {
+    @include feature-list(
+        $item-size: 20%,
+        $icon-size: auto,
+        $list-hjustify: center,
+    );
+
+    &__item {
+        flex-direction: column;
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        color: inherit;
+
+        @include media-breakpoint-down(md) {
+            flex-basis: calc(25% - 1rem);
+            max-width: calc(25% - 1rem);
+        }
+        @include media-breakpoint-down(sm) {
+            flex-basis: calc(50% - 1rem);
+            max-width: calc(50% - 1rem);
+        }
+    }
+
+    &__row {
+        text-align: center;
+    }
+
+    &__icon {
+        display: block;
+        margin: 0 auto;
+    }
+
+    &__description {
+        @include font-size($h5-font-size);
+        display: block;
+        width: 100%;
+        margin: 0 auto 0.5rem;
+        padding: 0 1rem;
+        color: inherit;
+        font-weight: normal;
+        text-align: center;
+
+        @include media-breakpoint-up(lg) {
+            padding: 0 20%;
+        }
+    }
+
+    &__term {
+        display: block;
+        margin: 0.5rem auto 0;
+        max-width: 80%;
+        text-align: center;
+        color: inherit;
+    }
+
+    // Neutralize section behaviors as there are just used here as structural
+    // element
+    .section{
+        width: 100%;
+        margin: 0 !important;
+        padding: 0 !important;
+
+        &__row{
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        &__items {
+            display: flex;
+            margin: 0 !important;
+            padding: 0 !important;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-content: center;
+        }
+    }
+}

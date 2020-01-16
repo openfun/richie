@@ -1,0 +1,20 @@
+{% load cms_tags %}{% spaceless %}
+
+<div class="section-container-cadenced">
+    <section class="section">
+        {% if instance.title %}
+            <h{{ header_level|default:2 }} class="section__title">
+                {{ instance.title }}
+            </h{{ header_level|default:2 }}>
+        {% endif %}
+        <div class="section__items">
+            {% for plugin in instance.child_plugin_instances %}
+                {% with header_level=3 %}
+                    {% render_plugin plugin %}
+                {% endwith %}
+            {% endfor %}
+        </div>
+    </section>
+</div>
+
+{% endspaceless %}

@@ -1,40 +1,51 @@
 {% extends "richie/fullwidth.html" %}
 {% load category_tags cms_tags i18n pagination_tags %}
+{% comment %}
+CHANGELOG:
+- Re enabled breadcrumbs
+- Moved page title to "subheader__content" block
+- Added dummy category list for temporary integration POC
+{% endcomment %}
 
-{% block breadcrumbs %}{% endblock breadcrumbs %}
+
+{% block subheader_content %}
+<div class="subheader__container">
+    <h1 class="subheader__title">{{ current_page.get_title }}</h1>
+</div>
+{% endblock subheader_content %}
+
 
 {% block content %}{% spaceless %}
-<div class="blogpost-glimpse-list">
-  <h1 class="blogpost-glimpse-list__title">{{ current_page.get_title }}</h1>
-  {% get_related_category_pages current_page.get_child_pages as categories %}
-  {% if categories %}
-    <div class="blogpost-glimpse-list__categories">
-      {% for category in categories %}
-        {% include "courses/cms/fragment_category_glimpse.html" with variant="tag" %}
-      {% endfor %}
+{% get_related_category_pages current_page.get_child_pages as categories %}
+{% if categories %}
+<div class="category-glimpse-badges">
+    <div class="category-glimpse-badges__container">
+        {% for category in categories %}
+            {% include "courses/cms/fragment_category_glimpse.html" with variant="tag" %}
+        {% endfor %}
     </div>
-  {% endif %}
+</div>
+{% endif %}
 
-  {% if current_page.publisher_is_draft %}
-    {% autopaginate current_page.get_child_pages 20 as object_list %}
-  {% else %}
-    {% autopaginate current_page.get_child_pages.published.distinct 20 as object_list %}
-  {% endif %}
 
-  <div class="blogpost-glimpse-list__posts">
+<div class="blogpost-list">
+    {% if current_page.publisher_is_draft %}
+        {% autopaginate current_page.get_child_pages 20 as object_list %}
+    {% else %}
+        {% autopaginate current_page.get_child_pages.published.distinct 20 as object_list %}
+    {% endif %}
     {% for page in object_list %}
-      {% if page.blogpost %}
-        {% include "courses/cms/fragment_blogpost_glimpse.html" with blogpost=page.blogpost %}
-      {% endif %}
+        {% if page.blogpost %}
+            {% include "courses/cms/fragment_blogpost_glimpse.html" with blogpost=page.blogpost %}
+        {% endif %}
     {% empty %}
-      <p class="blogpost-glimpse blogpost-glimpse--empty">
-      {% trans "No associated blogposts" %}
-      </p>
+        <p class="blogpost-glimpse blogpost-glimpse--empty">
+        {% trans "No associated blogposts" %}
+        </p>
     {% endfor %}
-  </div>
 
-  {% if object_list %}
-    {% paginate using "richie/pagination.html" %}
-  {% endif %}
+    {% if object_list %}
+        {% paginate using "richie/pagination.html" %}
+    {% endif %}
 </div>
 {% endspaceless %}{% endblock content %}

@@ -1,0 +1,147 @@
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+
+// Design color palette
+@import 'colors';
+
+// One pixel shortcut
+$onepixel: 0.0625rem;
+// Debug line to possibly calibrate it again when base size has been changed
+//@debug "One pixel is " + rem-calc(1px);
+
+//
+// Customized Bootstrap settings
+//
+
+// Add a new breakpoint "xxl" for more granular downgrading
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1900px,
+);
+
+// Add max width for "xxl" breakpoint
+$container-max-widths: (
+  sm: 540px,
+  md: 720px,
+  lg: 960px,
+  xl: 1140px,
+  xxl: 1240px,
+);
+
+// More space between columns
+$grid-gutter-width: 20px;
+
+// Use the footer bg color it seems to continue to the bottom end even with
+// page is empty, body-content bg will make the real base color for contents
+$body-bg: r-color("white");
+
+// Typography
+//
+$link-color: r-color("denim");
+$link-hover-color: darken($link-color, 15%);
+
+// Adjust font families
+$font-family-base: $r-font-family-hind;
+$headings-font-family: $r-font-family-montserrat;
+
+// Should be near to expected 14px from mockup
+$font-size-base: 0.8rem;
+
+// Enable automatic font-size scaling for responsive behavior
+$enable-responsive-font-sizes: true;
+
+// Define available font weights and add some extra ones
+$font-weight-lighter: lighter; // No usage
+$font-weight-light: 300; // Montserrat only
+$font-weight-normal: 400; // Hind only
+$font-weight-bold: 600; // Hind only
+$font-weight-bolder: 600; // Hind only
+$font-weight-boldest: 700; // Montserrat only
+$font-weight-extrabold: 800; // Montserrat only
+
+// Adjust heading sizes
+$h1-font-size: 3rem;
+$h2-font-size: 2rem;
+$h3-font-size: 1.5rem;
+$h4-font-size: 1.125rem;
+$h5-font-size: 1rem;
+$h6-font-size: 0.9rem;
+
+// Adjust global heading weight
+// NOTE: only h1 and h2 are expected to be extra bold, other ones should be
+// just boldest)
+$headings-font-weight: $font-weight-extrabold;
+
+// Shorter heading line height
+$headings-line-height: 1.1;
+
+$border-radius: .25rem;
+$border-radius-lg: .5rem;
+$border-radius-sm: .2rem;
+
+// Buttons + Forms
+//
+// Shared variables that are reassigned to `$input-` and `$btn-` specific variables.
+
+$input-btn-font-family: $headings-font-family;
+
+$input-btn-padding-y: 0.7rem;
+$input-btn-padding-x: 1.3rem;
+$input-btn-font-size: $font-size-base;
+$input-btn-line-height:  $line-height-base;
+
+$input-btn-padding-y-tiny: 0.2rem;
+$input-btn-padding-x-tiny: 0.5rem;
+$input-btn-font-size-tiny: 0.75rem;
+$input-btn-line-height-tiny: 1.2;
+
+$input-btn-padding-y-sm: 0.35rem;
+$input-btn-padding-x-sm: 0.7rem;
+$input-btn-font-size-sm: $font-size-sm;
+$input-btn-line-height-sm: $line-height-sm;
+
+$input-btn-padding-y-lg: 0.75rem;
+$input-btn-padding-x-lg: 1.6rem;
+$input-btn-font-size-lg: $font-size-lg;
+$input-btn-line-height-lg: $line-height-lg;
+
+$btn-font-family: $input-btn-font-family;
+
+$btn-padding-y: $input-btn-padding-y;
+$btn-padding-x: $input-btn-padding-x;
+$btn-font-size: $input-btn-font-size;
+$btn-line-height: $input-btn-line-height;
+
+$btn-padding-y-tiny: $input-btn-padding-y-tiny;
+$btn-padding-x-tiny: $input-btn-padding-x-tiny;
+$btn-font-size-tiny: $input-btn-font-size-tiny;
+$btn-line-height-tiny: $input-btn-line-height-tiny;
+
+$btn-padding-y-sm: $input-btn-padding-y-sm;
+$btn-padding-x-sm: $input-btn-padding-x-sm;
+$btn-font-size-sm: $input-btn-font-size-sm;
+$btn-line-height-sm: $input-btn-line-height-sm;
+
+$btn-padding-y-lg: $input-btn-padding-y-lg;
+$btn-padding-x-lg: $input-btn-padding-x-lg;
+$btn-font-size-lg: $input-btn-font-size-lg;
+$btn-line-height-lg: $input-btn-line-height-lg;
+
+//
+// Homegrown shared settings
+//
+
+// Main breakpoints for components
+$r-topbar-breakpoint: lg;
+$r-footer-breakpoint: lg;
+
+// Fixed topbar height so we can preserve space
+$r-topbar-height: 8.8125rem;
+
+// Background for content container objects, eg. detailed courses, categories,
+// persons etc. pages.
+$richie-content-container-bg: r-color("white");

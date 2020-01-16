@@ -1,0 +1,130 @@
+//
+// Accordion objects
+//
+// An accordion is commonly a list of item with collapsed content which can
+// be opened when clicking on item title
+//
+
+// Implement behavior related to Javascript component which only hide/show
+// content on title click
+@mixin accordion-base(
+) {
+    $accordion-selector: nth(nth(&, 1), 2);
+
+    &__content {
+        display: none;
+    }
+
+    &__item[data-accordion-open] {
+        #{$accordion-selector}__content {
+            display: block;
+        }
+    }
+}
+
+//
+// Plan accordion layout
+//
+@mixin accordion-plan(
+    $item-dot-color: null,
+    $title-color: null,
+    $content-color: null,
+    $border-color: null,
+    $background-color: null,
+    $dot-closed: null,
+    $dot-opened: null,
+) {
+    // Get the last item from computed selector with ampersand
+    $accordion-selector: nth(nth(&, 1), 2);
+    $accordion-border-size: rem-calc(2px);
+
+    position: relative;
+    padding: 0.5rem 0.5rem 0.5rem 2.5rem;
+    background: $background-color;
+
+    // Draw left border where item dots will be fixed
+    &::before {
+        content: "";
+        position: absolute;
+        top: 1.75rem;
+        left: 1rem;
+        bottom: 1.75rem;
+        width: $accordion-border-size;
+        border-left: $accordion-border-size solid $border-color;
+    }
+
+    &__item {
+        position: relative;
+
+        &:last-child {
+            // Trick to mask border, this would work only with current
+            // accordion background and never with on top of composite
+            // backgrounds like image or gradients
+            &::before {
+                content: "";
+                position: absolute;
+                top: 1.25rem;
+                left: -1.5rem;
+                bottom: 0;
+                width: $accordion-border-size;
+                border-left: $accordion-border-size solid $background-color;
+            }
+        }
+
+        // Draw item dot
+        &::after {
+            content: "";
+            position: absolute;
+            top: 1rem;
+            left: -1.68rem;
+            width: 0.5rem;
+            height: 0.5rem;
+            background: $item-dot-color;
+            border-radius: 100%;
+        }
+    }
+
+    &__title {
+        @include font-size($h3-font-size);
+        position: relative;
+        margin-bottom: 0;
+        padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+        color: $title-color;
+        font-weight: bold;
+        line-height: 1.1;
+        cursor: pointer;
+        background: transparent;
+        border: 0;
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 0.6rem;
+            left: -0.2rem;
+            width: 1.3rem;
+            height: 1.3rem;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 100% 100%;
+            background-image: $dot-closed;
+        }
+    }
+
+    &__content {
+        @include font-size($h6-font-size);
+        padding: 0.5rem 0;
+        color: $content-color;
+
+        ul, ol{
+            padding-left: 1.1rem;
+        }
+    }
+
+    &__item[data-accordion-open] {
+        #{$accordion-selector}__title {
+            &::before{
+                background-image: $dot-opened;
+            }
+        }
+    }
+}

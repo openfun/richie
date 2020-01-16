@@ -1,20 +1,30 @@
 {% extends "richie/fullwidth.html" %}
 {% load cms_tags i18n %}
+{% comment %}
+CHANGELOG:
+- Re enabled breadcrumbs
+- Moved page title to "subheader__content" block
+- Add switch for variant for glimpse card format
+{% endcomment %}
 
-{% block breadcrumbs %}{% endblock breadcrumbs %}
+
+{% block subheader_content %}
+<div class="subheader__container">
+    <h1 class="subheader__title">{{ current_page.get_title }}</h1>
+</div>
+{% endblock subheader_content %}
+
 
 {% block content %}
 <div class="organization-list">
-  <h1 class="organization-list__title">{{ current_page.get_title }}</h1>
-
-  <div class="organization-list__content">
-  {% for page in current_page.get_child_pages %}
-    {% if page.organization %}
-      {% include "courses/cms/fragment_organization_glimpse.html" with organization=page.organization %}
-    {% endif %}
-  {% empty %}
-    <p class="organization-list__content__item--empty">{% trans "No organization yet" %}</p>
-  {% endfor %}
-  </div>
+    <div class="organization-list__content">
+    {% for page in current_page.get_child_pages %}
+        {% if page.organization %}
+            {% include "courses/cms/fragment_organization_glimpse.html" with organization=page.organization variant="card" %}
+        {% endif %}
+    {% empty %}
+        <p class="organization-list__empty">{% trans "No organization yet" %}</p>
+    {% endfor %}
+    </div>
 </div>
 {% endblock content %}

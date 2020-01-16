@@ -1,0 +1,9 @@
+.category-list {
+    @include make-container-max-widths;
+    display: flex;
+    margin: 0 auto;
+    padding: 2rem 0;
+    @include content-padding-fix($gutter: 2rem);
+    flex-direction: row;
+    flex-wrap: wrap;
+}

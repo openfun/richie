@@ -2,276 +2,286 @@
 //
 // A flex grid of blogpost entries
 
-// Available object settings
-$richie-blogpost-glimpse-list-maxwidth-constraint: true !default;
-$richie-blogpost-glimpse-list-margin: 0 auto !default;
-$richie-blogpost-glimpse-list-padding: 1rem 0 !default;
-$richie-blogpost-glimpse-list-title-margin: null !default;
-$richie-blogpost-glimpse-list-title-padding: 0.5rem !default;
-$richie-blogpost-glimpse-list-title-textalign: left !default;
-
-$richie-blogpost-glimpse-container-width-sm: null !default;
-$richie-blogpost-glimpse-container-width-md: 50% !default;
-$richie-blogpost-glimpse-container-width-lg: 33.3333% !default;
-$richie-blogpost-glimpse-container-width-xl: 25% !default;
-$richie-blogpost-glimpse-container-gutter: 0.5rem !default;
-$richie-blogpost-glimpse-container-background: $white !default;
-$richie-blogpost-glimpse-container-border: 1px solid $gray80 !default;
-$richie-blogpost-glimpse-container-border-hover: 1px solid $firebrick6 !default;
-$richie-blogpost-glimpse-container-border-radius: 0.25rem !default;
-
-$richie-blogpost-glimpse-media-width: null !default;
-$richie-blogpost-glimpse-media-margin: 0 !default;
-
-$richie-blogpost-glimpse-caption-width: 60% !default;
-$richie-blogpost-glimpse-caption-margin: 0 !default;
-$richie-blogpost-glimpse-caption-padding: 0.6rem 0.5rem !default;
-$richie-blogpost-glimpse-caption-fontsize: 0.9rem !default;
-$richie-blogpost-glimpse-caption-fontweight: bold !default;
-$richie-blogpost-glimpse-caption-lineheight: 1.1 !default;
-$richie-blogpost-glimpse-caption-textalign: center !default;
-$richie-blogpost-glimpse-caption-texttransform: uppercase !default;
-$richie-blogpost-glimpse-caption-background: $gray80 !default;
-
-$richie-blogpost-glimpse-content-fontsize: 0.9rem !default;
-$richie-blogpost-glimpse-content-fontcolor: $gray40 !default;
-$richie-blogpost-glimpse-content-textalign: center !default;
-
-$richie-blogpost-glimpse-title-margin: 0 0 0.1rem !default;
-$richie-blogpost-glimpse-title-fontsize: 0.9rem !default;
-$richie-blogpost-glimpse-title-fontweight: bold !default;
-$richie-blogpost-glimpse-title-fontcolor: $dodgerblue3 !default;
-
-$richie-blogpost-glimpse-wrapper-padding: 0.6rem 0.2rem !default;
-
-$richie-blogpost-glimpse-foot-divider: null !default;
-
-$richie-blogpost-glimpse-foot-border: 1px solid $gray80 !default;
-
-$richie-blogpost-glimpse-foot-date-width: 55% !default;
-$richie-blogpost-glimpse-foot-date-padding: 0.3rem 0.5rem !default;
-$richie-blogpost-glimpse-foot-date-fontsize: 0.9rem !default;
-$richie-blogpost-glimpse-foot-date-fontcolor: $gray40 !default;
-$richie-blogpost-glimpse-foot-date-textalign: center !default;
-$richie-blogpost-glimpse-foot-date-background: null !default;
-
-$richie-blogpost-glimpse-foot-cta-width: 45% !default;
-$richie-blogpost-glimpse-foot-cta-padding: 0.3rem 0.5rem !default;
-$richie-blogpost-glimpse-foot-cta-fontsize: 0.9rem !default;
-$richie-blogpost-glimpse-foot-cta-fontweight: bold !default;
-$richie-blogpost-glimpse-foot-cta-fontcolor: $white !default;
-$richie-blogpost-glimpse-foot-cta-textalign: center !default;
-$richie-blogpost-glimpse-foot-cta-background: $dodgerblue5 !default;
-$richie-blogpost-glimpse-foot-cta-background-hover: $firebrick6 !default;
+$glimpse-gutter: 1.25rem;
 
 .blogpost-glimpse-list {
-  @if $richie-blogpost-glimpse-list-maxwidth-constraint {
-    @include make-container-max-widths();
-  }
-  display: flex;
-  margin: $richie-blogpost-glimpse-list-margin;
-  padding: $richie-blogpost-glimpse-list-padding;
-  flex-direction: row;
-  flex-wrap: wrap;
-
-  &__title {
-    @include sv-flex(1, 0, 100%);
-    margin: $richie-blogpost-glimpse-list-title-margin;
-    padding: $richie-blogpost-glimpse-list-title-padding;
-    text-align: $richie-blogpost-glimpse-list-title-textalign;
-  }
-
-  &__categories {
+    @include make-container-max-widths;
     display: flex;
+    margin: 0 auto;
+    padding: 1rem 0;
     flex-direction: row;
     flex-wrap: wrap;
-    flex-basis: 100%;
-    max-width: 100%;
-    padding: 0.5rem;
-    justify-content: center;
 
-    @include media-breakpoint-up(sm) {
-      justify-content: left;
+    &__title {
+        @include sv-flex(1, 0, 100%);
+        padding: 0.5rem 0;
+        text-align: left;
     }
-  }
 
-  &__posts {
-    flex-basis: 100%;
-    max-width: 100%;
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    margin-top: 1rem;
-  }
+    // All glimpse got the same size opposed to default behavior
+    .blogpost-glimpse:nth-child(0n+1),
+    .blogpost-glimpse:nth-child(0n+2) {
+        @include media-breakpoint-up(lg) {
+            @include sv-flex(
+                1,
+                0,
+                calc(33.3333% - #{$glimpse-gutter * 2})
+            );
+            align-self: flex-start;
+        }
+    }
 }
 
 .blogpost-glimpse {
-  $glimpse-item-selector: &;
-  // Cell base width for lowest breakpoint
-  @include sv-flex(
-    1,
-    0,
-    calc(100% - #{$richie-blogpost-glimpse-container-gutter * 2})
-  );
+    $glimpse-item-selector: &;
 
-  // Apply card styles for elements
-  @include m-o-card(
-    $border: $richie-blogpost-glimpse-container-border,
-    $background: $richie-blogpost-glimpse-container-background,
-    $media-width: $richie-blogpost-glimpse-media-width,
-    $media-margin: $richie-blogpost-glimpse-media-margin,
-    $caption-width: $richie-blogpost-glimpse-caption-width,
-    $caption-margin: $richie-blogpost-glimpse-caption-margin,
-    $caption-padding: $richie-blogpost-glimpse-caption-padding,
-    $caption-fontsize: $richie-blogpost-glimpse-caption-fontsize,
-    $caption-background: $richie-blogpost-glimpse-caption-background,
-    $wrapper-padding: $richie-blogpost-glimpse-wrapper-padding,
-    $foot-divider: $richie-blogpost-glimpse-foot-divider,
-    $methodology: 'bem'
-  );
+    // Cell base width for lowest breakpoint
+    @include sv-flex(
+        1,
+        0,
+        calc(100% - #{$glimpse-gutter * 2})
+    );
 
-  // Apply gutter
-  margin: $richie-blogpost-glimpse-container-gutter;
+    // Responsive adjustments
+    @include media-breakpoint-up(md) {
+        @include sv-flex(
+            1,
+            0,
+            calc(50% - #{$glimpse-gutter * 2})
+        );
+    }
+    @include media-breakpoint-up(lg) {
+        @include sv-flex(
+            1,
+            0,
+            calc(33.3333% - #{$glimpse-gutter * 2})
+        );
+    }
 
-  &__content {
-    font-size: $richie-blogpost-glimpse-content-fontsize;
-    color: $richie-blogpost-glimpse-content-fontcolor;
-    text-align: $richie-blogpost-glimpse-content-textalign;
+    // Default behavior of first glimpse item is to be bigger than every
+    // other items
+    &:nth-child(0n+1) {
+        @include media-breakpoint-up(lg) {
+            @include sv-flex(
+                1,
+                0,
+                calc(66.6666% - #{$glimpse-gutter * 2})
+            );
+        }
+    }
+    &:nth-child(0n+2) {
+        @include media-breakpoint-up(lg) {
+            @include sv-flex(
+                1,
+                0,
+                calc(33.3333% - #{$glimpse-gutter * 2})
+            );
+            align-self: flex-end;
+        }
+    }
+
+    // Apply card styles for elements
+    @include m-o-card(
+        $border: null,
+        $background: r-theme-val(blogpost-glimpse, card-background),
+        $media-width: null,
+        $media-margin: 0,
+        $wrapper-padding: 0.6rem 0.2rem,
+        $foot-divider: null,
+    );
+
+    // Apply gutter
+    margin: $glimpse-gutter;
+
+    &__content {
+        font-size: 0.9rem;
+        color: r-theme-val(blogpost-glimpse, content-color);
+    }
+
+    &__theme {
+        position: relative;
+        margin: 0 0 0.1rem;
+        padding-left: calc(10% + 0.2rem);
+
+        &::before{
+            content: "";
+            position: absolute;
+            top: calc(50% - 1px);
+            left: 0;
+            width: 10%;
+            border-top: 1px solid r-theme-val(blogpost-glimpse, theme-border);
+        }
+    }
 
     &__title {
-      margin: $richie-blogpost-glimpse-title-margin;
-      font-size: $richie-blogpost-glimpse-title-fontsize;
-      font-weight: $richie-blogpost-glimpse-title-fontweight;
-      color: $richie-blogpost-glimpse-title-fontcolor;
+        @include font-size($h3-font-size);
+        margin: 0 0 0.1rem;
+        font-family: $r-font-family-montserrat;
+        font-weight: $font-weight-boldest;
+        color: r-theme-val(blogpost-glimpse, title-color);
     }
-  }
 
-  &__media {
+    &__media {
+        img{
+            border-radius: $border-radius-lg;
+        }
+
+        @include m-o-media_empty(
+            $width: 100%,
+            $height: 14vh,
+            $background: r-theme-val(blogpost-glimpse, media-background),
+            $absolute: false
+        );
+    }
+
     &__caption {
-      text-transform: $richie-blogpost-glimpse-caption-texttransform;
-      font-weight: $richie-blogpost-glimpse-caption-fontweight;
-      line-height: $richie-blogpost-glimpse-caption-lineheight;
-      text-align: $richie-blogpost-glimpse-caption-textalign;
+        text-transform: uppercase;
+        font-weight: bold;
+        line-height: 1.1;
+        text-align: center;
     }
 
-    @include m-o-media_empty(
-      $width: 100%,
-      $height: 14vh,
-      $background: $gray97,
-      $absolute: false
-    );
-  }
-
-  // A little specific makeup onto footer elements
-  &__footer {
-    display: flex;
-    border-top: $richie-blogpost-glimpse-foot-border;
-
+    // Blogpost date
     &__date {
-      @include sv-flex-cell-width(auto);
-      display: flex;
-      margin: 0;
-      padding: $richie-blogpost-glimpse-foot-date-padding;
-      font-size: $richie-blogpost-glimpse-foot-date-fontsize;
-      color: $richie-blogpost-glimpse-foot-date-fontcolor;
-      justify-content: center;
-      text-align: $richie-blogpost-glimpse-foot-date-textalign;
-      background: $richie-blogpost-glimpse-foot-date-background;
-    }
-
-    &__cta {
-      @include sv-flex-cell-width($richie-blogpost-glimpse-foot-cta-width);
-      display: flex;
-
-      .button {
-        @include sv-flex-cell-width(100%);
         margin: 0;
-        padding: $richie-blogpost-glimpse-foot-cta-padding;
-        font-size: $richie-blogpost-glimpse-foot-cta-fontsize;
-        font-weight: $richie-blogpost-glimpse-foot-cta-fontweight;
-        color: $richie-blogpost-glimpse-foot-cta-fontcolor;
-        background: $richie-blogpost-glimpse-foot-cta-background;
-        border: 0;
-        cursor: pointer;
-      }
+        padding: 0.3rem 0;
+        font-size: 0.8rem;
+        color: r-theme-val(blogpost-glimpse, date-color);
+        text-align: left;
     }
-  }
-
-  &:hover,
-  &:focus {
-    border: $richie-blogpost-glimpse-container-border-hover;
-
-    #{$glimpse-item-selector}__foot__cta .button {
-      background: $richie-blogpost-glimpse-foot-cta-background-hover;
-    }
-  }
-
-  // Responsive adjustments
-  @if $richie-blogpost-glimpse-container-width-sm {
-    @include media-breakpoint-up(md) {
-      @include sv-flex(
-        1,
-        0,
-        calc(
-          #{$richie-blogpost-glimpse-container-width-sm} - #{$richie-blogpost-glimpse-container-gutter *
-            2}
-        )
-      );
-    }
-  }
-  @if $richie-blogpost-glimpse-container-width-md {
-    @include media-breakpoint-up(md) {
-      @include sv-flex(
-        1,
-        0,
-        calc(
-          #{$richie-blogpost-glimpse-container-width-md} - #{$richie-blogpost-glimpse-container-gutter *
-            2}
-        )
-      );
-    }
-  }
-  @if $richie-blogpost-glimpse-container-width-lg {
-    @include media-breakpoint-up(lg) {
-      @include sv-flex(
-        1,
-        0,
-        calc(
-          #{$richie-blogpost-glimpse-container-width-lg} - #{$richie-blogpost-glimpse-container-gutter *
-            2}
-        )
-      );
-    }
-  }
-  @if $richie-blogpost-glimpse-container-width-xl {
-    @include media-breakpoint-up(xl) {
-      @include sv-flex(
-        1,
-        0,
-        calc(
-          #{$richie-blogpost-glimpse-container-width-xl} - #{$richie-blogpost-glimpse-container-gutter *
-            2}
-        )
-      );
-    }
-  }
-
-  // Special row when there is no entry
-  &--empty {
-    @include sv-flex(
-      1,
-      0,
-      calc(100% - #{$richie-blogpost-glimpse-container-gutter * 2})
-    );
-    padding: 1rem;
-    font-style: italic;
-    color: $gray40;
-    text-align: center;
-    cursor: default;
 
     &:hover,
     &:focus {
-      border: $richie-blogpost-glimpse-container-border;
+        &__title {
+            color: r-theme-val(blogpost-glimpse, title-hover-color);
+        }
+
+        #{$glimpse-item-selector}__content{
+            color: r-theme-val(blogpost-glimpse, content-hover-color);
+        }
+
+        #{$glimpse-item-selector}__media {
+            border-radius: $border-radius-lg;
+        }
+
+        #{$glimpse-item-selector}__date {
+            color: r-theme-val(blogpost-glimpse, date-hover-color);
+        }
     }
-  }
+
+    // Special row when there is no entry
+    &--empty {
+        @include sv-flex(
+            1,
+            0,
+            calc(100% - #{$glimpse-gutter * 2})
+        );
+        padding: 1rem;
+        font-style: italic;
+        color: r-theme-val(blogpost-glimpse, empty-color);
+        text-align: center;
+        cursor: default;
+    }
+
+    // Mini flat row variant
+    &--mini {
+        margin: 0;
+        padding: 1rem 0;
+        flex-basis: 100% !important;
+        max-width: 100% !important;
+        flex-direction: row;
+        border-bottom: $onepixel solid r-theme-val(blogpost-glimpse-mini, border);
+
+        #{$glimpse-item-selector}__media {
+            @include sv-flex(1, 0, 8.25rem);
+        }
+
+        #{$glimpse-item-selector}__content {
+            @include sv-flex(1, 1, auto);
+            padding-left: 0.5rem;
+        }
+
+        #{$glimpse-item-selector}__wrapper {
+            padding: 0 0 0 0.2rem;
+        }
+
+        #{$glimpse-item-selector}__theme {
+            padding-left: calc(1.7rem);
+
+            &::before {
+                top: 0.6rem;
+                width: 1.5rem;
+            }
+        }
+
+        #{$glimpse-item-selector}__title {
+            @include font-size($font-size-base);
+        }
+    }
+
+    // Favorite blogpost act like a block content with a big picture
+    &--favorite {
+        margin: 0;
+        padding: 1rem;
+        flex-basis: 100% !important;
+        max-width: 100% !important;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+        @include media-breakpoint-up(lg) {
+            padding: 1rem 0;
+        }
+
+        #{$glimpse-item-selector}__media {
+            @include sv-flex(1, 0, 100%);
+            margin-top: 2rem;
+            order: 2;
+
+            @include media-breakpoint-up(lg) {
+                @include sv-flex(1, 0, 70%);
+                margin-top: 0;
+            }
+        }
+
+        #{$glimpse-item-selector}__content {
+            @include sv-flex(1, 0, 100%);
+            order: 1;
+            color: r-theme-val(blogpost-glimpse-favorite, content-color);
+
+            @include media-breakpoint-up(lg) {
+                @include sv-flex(1, 0, 30%);
+                padding-right: 0.5rem;
+            }
+        }
+
+        #{$glimpse-item-selector}__wrapper {
+            padding: 0;
+        }
+
+        #{$glimpse-item-selector}__title {
+            @include font-size($h2-font-size);
+            margin-bottom: 1rem;
+            font-weight: $font-weight-extrabold;
+            color: r-theme-val(blogpost-glimpse-favorite, title-color);
+        }
+
+        #{$glimpse-item-selector}__excerpt {
+            color: r-theme-val(blogpost-glimpse-favorite, excerpt-color);
+        }
+
+        #{$glimpse-item-selector}__date,
+        #{$glimpse-item-selector}__theme {
+            display: none;
+        }
+
+        #{$glimpse-item-selector}__cta {
+            @include button-base($font-weight: bold);
+            @include r-button-colors(r-theme-val(blogpost-glimpse-favorite, cta), $apply-border: true);
+            text-transform: uppercase;
+
+            &:hover {
+                @include r-button-colors(r-theme-val(blogpost-glimpse-favorite, cta-hover), $apply-border: true, $prefix: "hover");
+            }
+        }
+    }
 }

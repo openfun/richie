@@ -1,14 +1,20 @@
 {% load cms_tags %}{% spaceless %}
 
-<section class="section">
-    {% if instance.title %}
-        <h{{ header_level|default:2 }} class="section__title">
-            {{ instance.title }}
-        </h{{ header_level|default:2 }}>
-    {% endif %}
-    {% for plugin in instance.child_plugin_instances %}
-        {% render_plugin plugin %}
-    {% endfor %}
+<section class="section {{ variants }}">
+    <div class="section__row">
+        {% if instance.title %}
+            <h{{ header_level|default:2 }} class="section__title">
+                {{ instance.title }}
+            </h{{ header_level|default:2 }}>
+        {% endif %}
+        <div class="section__items">
+            {% for plugin in instance.child_plugin_instances %}
+                {% with header_level=3 %}
+                    {% render_plugin plugin %}
+                {% endwith %}
+            {% endfor %}
+        </div>
+    </div>
 </section>
 
 {% endspaceless %}

@@ -1,99 +1,118 @@
 {% extends "richie/fullwidth.html" %}
 {% load cms_tags extra_tags i18n static thumbnail %}
+{% comment %}
+CHANGELOG:
+- Restructured content tree to block/row structure
+{% endcomment %}
 
 {% block meta_opengraph_contextuals %}
     <meta property="og:title" content="{{ current_page.get_title|truncatechars:65 }}">
     <meta property="og:url" content="{{ SITE.web_url }}{{ current_page.get_absolute_url }}">
 {% endblock meta_opengraph_contextuals %}
 
+
 {% block content %}{% spaceless %}
 {% with organization=current_page.organization header_level=2 %}
 <div class="organization-detail">
-  <div class="organization-detail__banner">
-    {% get_placeholder_plugins "banner" as plugins or %}
-      <div class="organization-detail__banner__empty">{% trans "Banner" %}</div>
-    {% endget_placeholder_plugins %}
-    {% blockplugin plugins.0 %}
-      <img
-        src="{% thumbnail instance.picture 500x100 upscale subject_location=instance.picture.subject_location %}"
-        srcset="
-          {% thumbnail instance.picture 500x100 upscale subject_location=instance.picture.subject_location %} 500w,
-          {% thumbnail instance.picture 1000x200 upscale subject_location=instance.picture.subject_location %} 1000w
-          {% if instance.picture.width >= 1500 %},{% thumbnail instance.picture 1500x300 upscale subject_location=instance.picture.subject_location %} 1500w{% endif %}
-          {% if instance.picture.width >= 2000 %},{% thumbnail instance.picture 2000x400 upscale subject_location=instance.picture.subject_location %} 2000w{% endif %}
-          {% if instance.picture.width >= 2500 %},{% thumbnail instance.picture 2500x500 upscale subject_location=instance.picture.subject_location %} 2500w{% endif %}
-        "
-        sizes="100vw"
-        alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'organization banner' %}{% endif %}"
-      />
-    {% endblockplugin %}
-  </div>
+    <div class="organization-detail__block organization-detail__block--unpadded">
+        <div class="organization-detail__row organization-detail__row--unpadded">
+            <div class="organization-detail__banner">
+                {% get_placeholder_plugins "banner" as plugins or %}
+                    <div class="organization-detail__empty">{% trans "Banner" %}</div>
+                {% endget_placeholder_plugins %}
+                {% blockplugin plugins.0 %}
+                    <img
+                        src="{% thumbnail instance.picture 500x100 upscale subject_location=instance.picture.subject_location %}"
+                        srcset="
+                            {% thumbnail instance.picture 500x100 upscale subject_location=instance.picture.subject_location %} 500w,
+                            {% thumbnail instance.picture 1000x200 upscale subject_location=instance.picture.subject_location %} 1000w
+                            {% if instance.picture.width >= 1500 %},{% thumbnail instance.picture 1500x300 upscale subject_location=instance.picture.subject_location %} 1500w{% endif %}
+                            {% if instance.picture.width >= 2000 %},{% thumbnail instance.picture 2000x400 upscale subject_location=instance.picture.subject_location %} 2000w{% endif %}
+                            {% if instance.picture.width >= 2500 %},{% thumbnail instance.picture 2500x500 upscale subject_location=instance.picture.subject_location %} 2500w{% endif %}
+                        "
+                        sizes="100vw"
+                        alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'organization banner' %}{% endif %}"
+                    />
+                {% endblockplugin %}
+            </div>
 
-  <div class="organization-detail__logo">
-    {% get_placeholder_plugins "logo" as plugins or %}
-      <div class="organization-detail__logo__empty">{% trans "Logo" %}</div>
-    {% endget_placeholder_plugins %}
-    {% blockplugin plugins.0 %}
-      <img
-        src="{% thumbnail instance.picture 200x113 upscale subject_location=instance.picture.subject_location %}"
-        srcset="
-          {% thumbnail instance.picture 200x113 upscale subject_location=instance.picture.subject_location %} 200w
-          {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x225 upscale subject_location=instance.picture.subject_location %} 400w{% endif %}
-          {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x338 upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
-          {% if instance.picture.width >= 800 %},{% thumbnail instance.picture 800x450 upscale subject_location=instance.picture.subject_location %} 800w{% endif %}
-        "
-        sizes="(min-width: 768px) 16rem, (min-width: 1200px) 20rem, 12rem"
-        alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'organization logo' %}{% endif %}"
-      />
-    {% endblockplugin %}
-  </div>
-
-  <h1 class="organization-detail__title">{% render_model request.current_page "title" %}</h1>
-
-  {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"categories" %}
-    <div class="organization-detail__categories">
-      {% with variant="tag" %}
-        {% placeholder "categories" or %}
-          <p class="organization-detail__categories__empty">
-            {% trans "No associated categories" %}
-          </p>
-        {% endplaceholder %}
-      {% endwith %}
+            <div class="organization-detail__logo">
+                {% get_placeholder_plugins "logo" as plugins or %}
+                    <div class="organization-detail__empty">{% trans "Logo" %}</div>
+                {% endget_placeholder_plugins %}
+                {% blockplugin plugins.0 %}
+                    <img
+                        src="{% thumbnail instance.picture 200x113 upscale subject_location=instance.picture.subject_location %}"
+                        srcset="
+                            {% thumbnail instance.picture 200x113 upscale subject_location=instance.picture.subject_location %} 200w
+                            {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x225 upscale subject_location=instance.picture.subject_location %} 400w{% endif %}
+                            {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x338 upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+                            {% if instance.picture.width >= 800 %},{% thumbnail instance.picture 800x450 upscale subject_location=instance.picture.subject_location %} 800w{% endif %}
+                        "
+                        sizes="(min-width: 768px) 16rem, (min-width: 1200px) 20rem, 12rem"
+                        alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'organization logo' %}{% endif %}"
+                    />
+                {% endblockplugin %}
+            </div>
+        </div>
     </div>
-  {% endif %}
 
-  <div class="organization-detail__content">
-    <div class="organization-detail__content__description">
-      {% placeholder "description" %}
+    <div class="organization-detail__intro organization-detail__block organization-detail__block--unpadded">
+        <div class="organization-detail__row">
+            <h1 class="organization-detail__title">{% render_model request.current_page "title" %}</h1>
+
+            {% if current_page.publisher_is_draft %}
+            <div class="organization-detail__categories">
+              {% with variant="tag" %}
+                {% placeholder "categories" or %}
+                  <p class="organization-detail__empty">
+                    {% trans "No associated categories" %}
+                  </p>
+                {% endplaceholder %}
+              {% endwith %}
+            </div>
+            {% endif %}
+
+            <div class="organization-detail__description">
+                {% placeholder "description" %}
+            </div>
+        </div>
     </div>
-  </div>
-</div>
 
 {% with courses=organization.get_courses %}
-  {% if courses %}
-    <section class="course-glimpse-list">
-      <h2 class="course-glimpse-list__title">{% trans "Related courses" %}</h2>
-      {% for course in courses %}
-        {% if course.extended_object.publisher_is_draft or course.check_publication %}
-          {% include "courses/cms/fragment_course_glimpse.html" with course=course %}
-        {% endif %}
-      {% endfor %}
-    </section>
-  {% endif %}
+    {% if courses %}
+        <div class="organization-detail__courses organization-detail__block">
+            <div class="organization-detail__row">
+                <section class="course-glimpse-list">
+                    <h2 class="organization-detail__title">{% trans "Related courses" %}</h2>
+                    {% for course in courses %}
+                        {% if course.extended_object.publisher_is_draft or course.check_publication %}
+                        {% include "courses/cms/fragment_course_glimpse.html" with course=course %}
+                        {% endif %}
+                    {% endfor %}
+                </section>
+            </div>
+        </div>
+    {% endif %}
 {% endwith %}
 
 {% with persons=organization.get_persons %}
-  {% if persons %}
-    <section class="person-glimpse-list">
-      <h2 class="person-glimpse-list__title">{% trans "Related persons" %}</h2>
-      {% for person in persons %}
-        {% if person.extended_object.publisher_is_draft or person.check_publication %}
-          {% include "courses/cms/fragment_person_glimpse.html" with person=person %}
-        {% endif %}
-      {% endfor %}
-    </section>
-  {% endif %}
+    {% if persons %}
+        <div class="organization-detail__persons organization-detail__block organization-detail__block--lightest">
+            <div class="organization-detail__row">
+                <section class="person-glimpse-list">
+                    <h2 class="organization-detail__title">{% trans "Related persons" %}</h2>
+                    {% for person in persons %}
+                        {% if person.extended_object.publisher_is_draft or person.check_publication %}
+                        {% include "courses/cms/fragment_person_glimpse.html" with person=person %}
+                        {% endif %}
+                    {% endfor %}
+                </section>
+            </div>
+        </div>
+    {% endif %}
 {% endwith %}
 
+</div>
 {% endwith %}
 {% endspaceless %}{% endblock content %}

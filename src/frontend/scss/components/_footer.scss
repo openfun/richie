@@ -1,183 +1,219 @@
 // Main body footer
-
-$richie-footer-padding: 0 1rem !default;
-$richie-footer-fontcolor: $white !default;
-$richie-footer-background: $dodgerblue1 !default;
-
-$richie-footer-menu-border: 1px solid lighten($dodgerblue1, 10%) !default;
-
-$richie-footer-menu-item-margin: 0 !default;
-$richie-footer-menu-item-padding: 1rem 0.8rem !default;
-$richie-footer-menu-item-margin-lg: 0 !default;
-$richie-footer-menu-item-padding-lg: 1rem 2rem !default;
-
-$richie-footer-menu-link-fontcolor: $white !default;
-$richie-footer-menu-link-fontcolor-hover: $dodgerblue7 !default;
-
-$richie-footer-brand-padding: 1rem 0 !default;
-$richie-footer-mentions-padding: 1rem 0 !default;
-
-$richie-footer-mentions-fontsize: 0.9rem !default;
-$richie-footer-mentions-texttransform: uppercase !default;
-
-$richie-footer-poweredby-padding: 1rem 0 !default;
-$richie-footer-poweredby-link-fontcolor: $white !default;
-
 .body-footer {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  padding: $richie-footer-padding;
-  color: $richie-footer-fontcolor;
-  background: $richie-footer-background;
+    padding: 0;
+    color: r-theme-val(body-footer, base-color);
+    background: r-theme-val(body-footer, base-background);
 
-  &__menu {
-    @include sv-flex(1, 0, 100%);
-    display: flex;
-    border-bottom: $richie-footer-menu-border;
-
-    & > .section-list {
-      display: flex;
-      width: 100%;
-      max-width: map-get($container-max-widths, 'xl');
-      margin: 0 auto;
-      padding: 0;
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: center;
-      list-style-type: none;
-
-      & > .section-list__item {
-        @include sv-flex(1, 0, 100%);
-        display: block;
-        margin: $richie-footer-menu-item-margin;
-        padding: $richie-footer-menu-item-padding;
-        color: inherit;
-
-        a {
-          font-weight: bold;
-          color: $richie-footer-menu-link-fontcolor;
-          &:hover {
-            color: $richie-footer-menu-link-fontcolor-hover;
-            text-decoration: none;
-          }
-        }
-
-        @include media-breakpoint-up(lg) {
-          @include sv-flex(0, 0, auto);
-          margin: $richie-footer-menu-item-margin-lg;
-          padding: $richie-footer-menu-item-padding-lg;
-
-          & + & {
-            margin-left: 1rem;
-          }
-        }
-
-        .section-list {
-          @include sv-flex(1, 0, 100%);
-          margin: 0;
-          padding: 0;
-          list-style-type: none;
-
-          &:first-child {
-            @include media-breakpoint-up(sm) {
-              margin-top: 2rem;
-            }
-          }
-        }
-      }
+    &__container {
+        @include make-container();
+        @include make-container-max-widths();
+        display: flex;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
     }
-  }
 
-  &__brand {
-    display: flex;
-    flex-wrap: wrap;
-    padding: $richie-footer-brand-padding;
-    order: 1;
+    &__brand {
+        @include sv-flex(1, 0, 100%);
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        order: 1;
 
-    &__link {
-      @include sv-flex(1, 0, auto);
-      display: block;
-      margin-top: 0.5rem;
+        @include media-breakpoint-up($r-footer-breakpoint) {
+            @include sv-flex(1, 0, 100%);
+        }
 
-      @include media-breakpoint-down(sm) {
-        flex-basis: 100%;
-      }
+        & > a {
+            @include sv-flex(1, 0, 100%);
+        }
+
+        img,
+        svg {
+            display: block;
+            margin: 0 0 1rem;
+            width: 13.75rem;
+
+            @include media-breakpoint-up($r-footer-breakpoint) {
+                width: 18.125rem;
+            }
+        }
+    }
+
+    &__insert {
+        @include sv-flex(1, 0, 100%);
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-top: 1rem;
+        order: 3;
+
+        @include media-breakpoint-up($r-footer-breakpoint) {
+            @include sv-flex(1, 0, 35%);
+            margin-top: 0;
+            order: 2
+        }
+
+        // Divider between every direct children
+        & > * + *{
+            margin-top: 1rem;
+        }
+
+        .languages-menu {
+            @include sv-flex(1, 0, 100%);
+            padding: 0;
+            margin-bottom: 0;
+            font-family: $r-font-family-montserrat;
+            font-weight: $font-weight-boldest;
+            color: r-theme-val(body-footer, lang-color);
+            list-style-type: none;
+
+            &__item{
+                display: inline-block;
+                margin-left: 0.5rem;
+
+                &--label{
+                    margin-left: 0;
+                }
+            }
+
+            &__link {
+                color: inherit;
+            }
+        }
+    }
+
+    &__title {
+        @include sv-flex(1, 0, 100%);
+        @include font-size($h4-font-size);
+        margin-bottom: 0;
+        font-family: $r-font-family-montserrat;
+        font-weight: $font-weight-boldest;
+    }
+
+    &__badges {
+        @include sv-flex(1, 0, 100%);
+        display: flex;
     }
 
     &__badge {
-      display: block;
-      margin-top: 0.5rem;
-      margin-left: 1rem;
-
-      &__icon {
-        width: 3rem;
-        height: 3rem;
-        fill: $gray40;
-      }
-
-      &:hover > &__icon {
-        fill: $white;
-      }
-
-      @include media-breakpoint-down(sm) {
-        margin-left: 0;
-      }
-    }
-  }
-
-  &__mentions {
-    @include sv-flex(1, 0, 100%);
-    display: flex;
-    padding: $richie-footer-mentions-padding;
-    align-content: center;
-    order: 3;
-
-    @include media-breakpoint-up(lg) {
-      @include sv-flex(0, 0, auto);
-      order: 2;
+        @include sv-flex(1, 0, 2.75rem);
+        @include spot($padding: 0.8rem);
+        @include r-button-colors(r-theme-val(body-footer, badge-button), $apply-border: true, $include-hover: true);
+        margin: 0 1rem 1rem 0;
+        height: 2.75rem;
     }
 
-    p {
-      @include sv-flex(1, 0, 100%);
-      margin: 0;
-      display: flex;
-      align-items: center;
-      font-size: $richie-footer-mentions-fontsize;
-      text-transform: $richie-footer-mentions-texttransform;
-      justify-content: center;
+    &__menu {
+        @include sv-flex(1, 0, 100%);
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        align-content: flex-start;
+        order: 2;
+
+        @include media-breakpoint-up($r-footer-breakpoint) {
+            @include sv-flex(1, 0, 65%);
+            order: 3;
+        }
+
+        // Divider between every direct children
+        & > * + * {
+            margin-top: 1rem;
+        }
+
+        .section-list {
+            @include sv-flex(1, 0, 100%);
+            display: flex;
+            padding: 0;
+            margin-bottom: 0;
+            flex-direction: row;
+            flex-wrap: wrap;
+            list-style-type: none;
+
+            &__item {
+                @include sv-flex(1, 0, 100%);
+                padding: 0.25rem;
+
+                @include media-breakpoint-up($r-footer-breakpoint) {
+                    @include sv-flex(1, 0, 33.3333%);
+                }
+
+                a {
+                    color: inherit;
+
+                    &:hover{
+                        color: r-theme-val(body-footer, section-hover);
+                        text-decoration: none;
+                    }
+                }
+            }
+        }
     }
-  }
 
-  &__poweredby {
-    @include sv-flex(0, 0, auto);
-    display: flex;
-    padding: $richie-footer-poweredby-padding;
-    order: 2;
+    &__subtitle {
+        @include sv-flex(1, 0, 100%);
+        @include font-size($h4-font-size);
+        margin-bottom: 0;
+        padding: 0 0.25rem;
+        color: r-theme-val(body-footer, subtitle-color);
+        font-family: $r-font-family-montserrat;
+        font-weight: $font-weight-boldest;
+    }
+}
 
-    @include media-breakpoint-up(lg) {
-      order: 3;
+
+// Legal mentions
+.body-mentions{
+    padding: 0.8rem 0;
+    color: r-theme-val(body-mentions, base-color);
+    background: r-theme-val(body-mentions, base-background);
+
+    &__container {
+        @include make-container();
+        @include make-container-max-widths();
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
     }
 
-    &__link {
-      @include sv-flex(1, 0, 100%);
-      display: flex;
-      flex-direction: column;
-      flex-wrap: nowrap;
-      justify-content: center;
-      color: $richie-footer-poweredby-link-fontcolor;
+    &__copyright {
+        @include font-size($h5-font-size);
+        @include sv-flex(1, 0, 100%);
+        font-family: $r-font-family-montserrat;
+        text-align: center;
 
-      small {
-        @include sv-flex(0, 0, auto);
-        line-height: 1.1;
-      }
+        @include media-breakpoint-up($r-footer-breakpoint) {
+            @include sv-flex(1, 0, auto);
+            text-align: left;
+        }
 
-      strong {
-        @include sv-flex(0, 0, auto);
-        font-size: 1.4em;
-        line-height: 1.1;
-      }
+        p{
+            margin-bottom: 0;
+        }
     }
-  }
+
+    &__poweredby {
+        @include font-size($h6-font-size);
+        @include sv-flex(1, 0, 100%);
+        font-family: $r-font-family-montserrat;
+        text-align: center;
+
+        @include media-breakpoint-up($r-footer-breakpoint) {
+            @include sv-flex(1, 0, auto);
+            text-align: right;
+        }
+
+        a {
+            color: inherit;
+
+            &:hover{
+                text-decoration: none;
+                color: r-theme-val(body-mentions, poweredby-hover);
+            }
+        }
+    }
 }

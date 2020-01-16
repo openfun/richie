@@ -1,39 +1,30 @@
 // Main body content container
-$richie-body-content-background: $snow2 !default;
-
-$richie-caesura-padding: 1rem 2.5rem !default;
-$richie-caesura-button-fontcolor: $dodgerblue7 !default;
-$richie-caesura-button-background: $white !default;
-$richie-caesura-button-border: 1px solid $dodgerblue5 !default;
-
-$richie-caesura-button-fontcolor-hover: $firebrick3 !default;
-$richie-caesura-button-background-hover: $white !default;
-$richie-caesura-button-border-hover: 1px solid $firebrick3 !default;
-
 .body-content {
-  background: $richie-body-content-background;
+    position: relative;
+    background: r-theme-val(body-content, base-background);
+
+    // Insert footer curves
+    &::after {
+        content: "";
+        display: block;
+        width: 100%;
+        height: 5vw;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-image: r-theme-val(body-content, insert-background-image);
+        background-repeat: no-repeat;
+        background-position: top left;
+        background-size: 100% 100%;
+    }
 }
 
-// Caesura block for single centered button on its own row
-.button-caesura {
-  display: flex;
-  justify-content: center;
 
-  // Enforce an "hollow" display
-  a {
-    @include sv-flex(0, 0, auto);
-    display: block;
-    padding: $richie-caesura-padding;
-    color: $richie-caesura-button-fontcolor;
-    background: $richie-caesura-button-background;
-    border: $richie-caesura-button-border;
-
-    &:hover,
-    &:focus {
-      color: $richie-caesura-button-fontcolor-hover;
-      background: $richie-caesura-button-background-hover;
-      border: $richie-caesura-button-border-hover;
-      text-decoration: none;
-    }
-  }
+// Container relative to some modal components
+#modal-exclude {
+    // Enforce relative position to absorb gap introduced by some more top
+    // level components like DjangoCMS toolbar, so possible absolute positions
+    // from children (like topbar) is correctly calculated when toolbar is displayed.
+    position: relative;
 }

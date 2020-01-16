@@ -1,22 +1,28 @@
 {% load thumbnail %}{% spaceless %}
+{% comment %}
+CHANGELOG:
+- Update class names for better BEM and simpliest DOM
+{% endcomment %}
+
+
 <div class="licence-plugin">
-  <p class="licence-plugin__logo">
-    <img src="{% thumbnail instance.licence.logo 100x50 crop='smart' %}" alt="">
-  </p>
-  <div class="licence-plugin__wrapper">
-    <h{{ header_level|default:2 }} class="licence-plugin__wrapper__title">
-        {% if instance.licence.url %}<a href="{{ instance.licence.url }}">{% endif %}
-        {{ instance.licence.name }}
-        {% if instance.licence.url %}</a>{% endif %}
-    </h{{ header_level|default:2 }}>
-    <div class="licence-plugin__wrapper__content">
-        {{ instance.licence.content|safe }}
+    <p class="licence-plugin__logo">
+        <img src="{% thumbnail instance.licence.logo 100x50 crop='smart' %}" alt="">
+    </p>
+    <div class="licence-plugin__wrapper">
+        <h{{ header_level|default:2 }} class="licence-plugin__title">
+            {% if instance.licence.url %}<a href="{{ instance.licence.url }}">{% endif %}
+            {{ instance.licence.name }}
+            {% if instance.licence.url %}</a>{% endif %}
+        </h{{ header_level|default:2 }}>
+        <div class="licence-plugin__content">
+            {{ instance.licence.content|safe }}
+        </div>
+        {% if instance.description %}
+        <div class="licence-plugin__description">
+            {{ instance.description|safe }}
+        </div>
+        {% endif %}
     </div>
-    {% if instance.description %}
-    <div class="licence-plugin__wrapper__description">
-        {{ instance.description|safe }}
-    </div>
-    {% endif %}
-  </div>
 </div>
 {% endspaceless %}

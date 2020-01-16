@@ -1,0 +1,14 @@
+//
+// https://fonts.google.com/selection?query=Montserrat&selection.family=Hind:400,500|Montserrat:300,700,800
+//
+
+@import url('https://fonts.googleapis.com/css?family=Hind:400,600|Montserrat:300,700,800&display=swap');
+
+// Font family class helpers by name
+$r-font-family-hind: 'Hind', sans-serif;
+$r-font-family-montserrat: 'Montserrat', sans-serif;
+
+$r-fonts: (
+    hind: $r-font-family-hind,
+    montserrat: $r-font-family-montserrat,
+);

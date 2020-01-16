@@ -1,122 +1,118 @@
 // Person glimpse
 //
 
-// Available objects settings
-$richie-person-glimpse-list-maxwidth-constraint: true !default;
-$richie-person-glimpse-list-margin: 0 auto !default;
-$richie-person-glimpse-list-padding: 1rem 0 !default;
-$richie-person-glimpse-list-title-margin: null !default;
-$richie-person-glimpse-list-title-padding: 0.5rem !default;
-$richie-person-glimpse-list-title-textalign: left !default;
-
-$richie-person-glimpse-container-padding: 1rem !default;
-$richie-person-glimpse-container-border: 1px solid $gray80 !default;
-$richie-person-glimpse-container-background: $white !default;
-$richie-person-glimpse-container-divider: 1rem !default;
-
-$richie-person-glimpse-content-title-fontcolor: $dodgerblue5 !default;
-$richie-person-glimpse-content-title-textalign: center !default;
-$richie-person-glimpse-content-title-textalign-lg: left !default;
-
-$richie-person-glimpse-wrapper-padding: 0 0 0 1rem !default;
-
-$richie-person-glimpse-media-width: 100px;
-
-$richie-person-glimpse-caption-width: 60% !default;
-$richie-person-glimpse-caption-margin: 0 !default;
-$richie-person-glimpse-caption-padding: 0.6rem 0.5rem !default;
-$richie-person-glimpse-caption-fontsize: 0.9rem !default;
-$richie-person-glimpse-caption-background: $gray80 !default;
-
 // Common container for glimpse list
 .person-glimpse-list {
-  @if $richie-person-glimpse-list-maxwidth-constraint {
     @include make-container-max-widths();
-  }
-  display: flex;
-  margin: $richie-blogpost-glimpse-list-margin;
-  padding: $richie-blogpost-glimpse-list-padding;
-  flex-direction: row;
-  flex-wrap: wrap;
+    display: flex;
+    margin: 0 auto;
+    padding: 1rem 0;
+    flex-direction: row;
+    flex-wrap: wrap;
 
-  &__title {
-    @include sv-flex(1, 0, 100%);
-    margin: $richie-person-glimpse-list-title-margin;
-    padding: $richie-person-glimpse-list-title-padding;
-    text-align: $richie-person-glimpse-list-title-textalign;
-  }
+    &__title {
+        @include sv-flex(1, 0, 100%);
+        padding: 0.5rem;
+        text-align: left;
+    }
 }
 
 // Glimpse object
 .person-glimpse {
-  @include sv-flex(1, 0, 100%);
+    $glimpse-item-selector: &;
+    $glimpse-gutter: 2rem;
 
-  @include m-o-card(
-    $padding: $richie-person-glimpse-container-padding,
-    $border: $richie-person-glimpse-container-border,
-    $background: $richie-person-glimpse-container-background,
-    $media-margin: 0,
-    $caption-width: $richie-person-glimpse-caption-width,
-    $caption-margin: $richie-person-glimpse-caption-margin,
-    $caption-padding: $richie-person-glimpse-caption-padding,
-    $caption-fontsize: $richie-person-glimpse-caption-fontsize,
-    $caption-background: $richie-person-glimpse-caption-background,
-    $content-flex-justify: flex-start,
-    $wrapper-padding: $richie-person-glimpse-wrapper-padding,
-    $methodology: 'bem'
-  );
-  flex-basis: calc(100% - 1rem);
-  margin: 0.5rem;
-
-  @include media-breakpoint-up(lg) {
+    @include sv-flex(1, 0, calc(100% - #{$glimpse-gutter}));
     @include m-o-card(
-      $media-width: $richie-person-glimpse-media-width,
-      $methodology: 'bem'
+        $padding: 1rem,
+        $border: 0,
+        $background: r-theme-val(person-glimpse, card-background),
+        $media-margin: 0 1.5rem 0 0,
+        $content-flex-justify: flex-start,
+        $wrapper-padding: 0 0 0 1rem,
     );
-  }
+    margin: $glimpse-gutter / 2;
+    border-radius: $border-radius-lg;
+    box-shadow: r-theme-val(person-glimpse, base-shadow);
 
-  &__media {
-    img {
-      margin: 0 auto;
-      max-width: $richie-person-glimpse-media-width;
-      border-radius: 100%;
-    }
-
-    @include m-o-media_empty(
-      $width: 100%,
-      $height: 13vh,
-      $background: $gray97,
-      $absolute: false
-    );
-  }
-
-  &__content__wrapper__title {
-    margin-bottom: 0.3rem;
-    color: $richie-person-glimpse-content-title-fontcolor;
-    text-align: $richie-person-glimpse-content-title-textalign;
     @include media-breakpoint-up(lg) {
-      text-align: $richie-person-glimpse-content-title-textalign-lg;
+        @include m-o-card(
+            $media-width: 100px,
+        );
+        @include sv-flex(1, 0, calc(50% - #{$glimpse-gutter}));
     }
-  }
 
-  &__content__wrapper__categories {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-bottom: 0.6rem;
-    text-align: $richie-person-glimpse-content-title-textalign;
-    @include media-breakpoint-up(lg) {
-      justify-content: left;
+    &__media {
+        @include media-breakpoint-down(lg) {
+            margin-bottom: 1rem;
+            margin-right: 0;
+        }
+
+        img {
+            margin: 0 auto;
+            max-width: 100px;
+            border-radius: 100%;
+        }
+
+        @include m-o-media_empty(
+            $width: 100%,
+            $height: 13vh,
+            $background: r-theme-val(person-glimpse, empty-background),
+            $absolute: false
+        );
     }
-  }
 
-  &__content__wrapper__bio {
-    @include m-o-media_empty($width: 100%, $height: 13vh, $absolute: false);
-  }
+    &__wrapper{
+        @include media-breakpoint-down(lg) {
+            padding-left: 0;
+        }
+    }
 
-  // Divider between object
-  & + .person-glimpse {
-    margin-top: $richie-person-glimpse-container-divider;
-  }
+    &__title {
+        margin-bottom: 0.3rem;
+        @include font-size($h4-font-size);
+        text-align: center;
+
+        @include media-breakpoint-up(lg) {
+            text-align: left;
+        }
+    }
+
+    &__categories {
+        display: flex;
+        margin-bottom: 0.6rem;
+        flex-wrap: wrap;
+        text-align: center;
+        @include media-breakpoint-up(lg) {
+            text-align: left;
+        }
+
+        .category-plugin-tag{
+            @include button-tiny($form-factor: "pill");
+            @include r-button-colors(r-theme-val(person-glimpse, category), $apply-border: true);
+            max-width: 100%;
+            display: flex;
+            align-items: center;
+
+            &__title{
+                padding: 0;
+                font-weight: bold;
+                background: r-theme-val(person-glimpse, category-title);
+            }
+
+            &__caption {
+                font-weight: bold;
+            }
+        }
+    }
+
+    &__bio {
+        font-size: 0.9rem;
+        color: r-theme-val(person-glimpse, bio-color);
+
+        p, li{
+            font-size: inherit;
+            color: inherit;
+        }
+    }
 }
