@@ -9,5 +9,5 @@ class SearchAccess(models.Model):
 
         managed = False
         permissions = (
-            ("can_manage_elasticsearch", "Allow managing Elasticsearch indexes"),
+            ("can_manage_elasticsearch", "Allow managing Elasticsearch indices"),
         )

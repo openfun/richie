@@ -14,10 +14,10 @@ logger = logging.getLogger("richie.search.bootstrap_elasticsearch")
 
 class BootstrapElasticsearchCommandsTestCase(TestCase):
     """
-    Test the command that regenerates the Elasticsearch indexes.
+    Test the command that regenerates the Elasticsearch indices.
     """
 
-    @mock.patch.object(index_manager, "regenerate_indexes")
+    @mock.patch.object(index_manager, "regenerate_indices")
     @mock.patch.object(index_manager, "store_es_scripts")
     @mock.patch.object(logger, "info")
     def test_commands_bootstrap_elasticsearch(

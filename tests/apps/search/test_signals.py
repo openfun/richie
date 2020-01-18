@@ -24,7 +24,7 @@ from richie.apps.search.indexers.courses import CoursesIndexer
 @mock.patch("richie.apps.search.index_manager.bulk")  # Mock call to Elasticsearch
 class CoursesSignalsTestCase(TestCase):
     """
-    Test signals to keep the Elasticsearch indexes up-to-date.
+    Test signals to keep the Elasticsearch indices up-to-date.
     """
 
     @staticmethod

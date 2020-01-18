@@ -1,4 +1,4 @@
-"""Update Elasticsearch indexes each time a page is modified."""
+"""Update Elasticsearch indices each time a page is modified."""
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
@@ -10,7 +10,7 @@ from richie.apps.search.indexers import ES_INDICES
 
 def update_course(instance, _language):
     """
-    Update Elasticsearch indexes when a course was modified and published:
+    Update Elasticsearch indices when a course was modified and published:
     - update the course document in the Elasticsearch courses index.
 
     Returns None if the page was related to a course and the Elasticsearch update is done.
@@ -22,7 +22,7 @@ def update_course(instance, _language):
 
 def update_course_run(instance, _language):
     """
-    Update Elasticsearch indexes when a course run was modified and published:
+    Update Elasticsearch indices when a course run was modified and published:
     - update the course document in the Elasticsearch courses index for the parent course
       of this course run.
 
@@ -35,7 +35,7 @@ def update_course_run(instance, _language):
 
 def update_organization(instance, language):
     """
-    Update Elasticsearch indexes when an organization was modified and published:
+    Update Elasticsearch indices when an organization was modified and published:
     - update the organization document in the Elasticsearch organizations index for the
       organization and its direct parent (because the parent ID may change from Parent to Leaf),
     - update the course documents in the Elasticsearch courses index for all courses linked to
@@ -68,7 +68,7 @@ def update_organization(instance, language):
 
 def update_category(instance, language):
     """
-    Update Elasticsearch indexes when a category was modified and published:
+    Update Elasticsearch indices when a category was modified and published:
     - update the category document in the Elasticsearch categories index for the category
       and its direct parent (because the parent ID may change from Parent to Leaf),
     - update the course documents in the Elasticsearch courses index for all courses linked to

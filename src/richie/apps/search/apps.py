@@ -1,4 +1,4 @@
-"""Signals to update the Elasticsearch indexes when page modifications are published."""
+"""Signals to update the Elasticsearch indices when page modifications are published."""
 from django.apps import AppConfig
 
 
@@ -10,7 +10,7 @@ class SearchConfig(AppConfig):
 
     # pylint: disable=import-outside-toplevel
     def ready(self):
-        """Register signals to update the Elasticsearch indexes."""
+        """Register signals to update the Elasticsearch indices."""
         from cms.signals import post_publish
         from .signals import on_page_publish
 
