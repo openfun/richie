@@ -16,7 +16,7 @@ class PartialMappingsTestCase(TestCase):
 
     def setUp(self):
         """
-        Instantiate our ES client and make sure all indexes are deleted before each test
+        Instantiate our ES client and make sure all indices are deleted before each test
         """
         super().setUp()
         self.indices_client = IndicesClient(client=ES_CLIENT)

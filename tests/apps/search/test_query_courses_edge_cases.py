@@ -72,7 +72,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
         self.create_filter_pages()
         # Index these 4 courses in Elasticsearch
         indices_client = IndicesClient(client=ES_CLIENT)
-        # Delete any existing indexes so we get a clean slate
+        # Delete any existing indices so we get a clean slate
         indices_client.delete(index="_all")
         # Create an index we'll use to test the ES features
         indices_client.create(index="test_courses")

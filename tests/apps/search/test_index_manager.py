@@ -15,9 +15,9 @@ from elasticsearch.exceptions import NotFoundError
 from richie.apps.courses.factories import CourseFactory
 from richie.apps.search import ES_CLIENT
 from richie.apps.search.index_manager import (
-    get_indexes_by_alias,
+    get_indices_by_alias,
     perform_create_index,
-    regenerate_indexes,
+    regenerate_indices,
     store_es_scripts,
 )
 from richie.apps.search.signals import update_course
@@ -25,23 +25,23 @@ from richie.apps.search.signals import update_course
 
 class IndexManagerTestCase(TestCase):
     """
-    Test the functions that generate and maintain our elasticsearch indexes.
+    Test the functions that generate and maintain our elasticsearch indices.
     """
 
     def setUp(self):
         """
-        Make sure all indexes are deleted before each new test is run.
+        Make sure all indices are deleted before each new test is run.
         """
         super().setUp()
         self.indices_client = IndicesClient(client=ES_CLIENT)
         self.indices_client.delete(index="_all")
 
-    def test_index_manager_get_indexes_by_alias(self):
+    def test_index_manager_get_indices_by_alias(self):
         """
         Receive a generator that contains the n-1 index for an alias.
         """
         alias = "richie_courses"
-        existing_indexes = {
+        existing_indices = {
             "richie_courses_2014-05-04-03h12m33.123456s": {},
             "richie_courses_2015-05-04-03h12m33.123456s": {
                 "aliases": {"richie_courses": True}
@@ -51,16 +51,16 @@ class IndexManagerTestCase(TestCase):
             },
         }
         self.assertEqual(
-            list(get_indexes_by_alias(existing_indexes, alias)),
+            list(get_indices_by_alias(existing_indices, alias)),
             [("richie_courses_2015-05-04-03h12m33.123456s", "richie_courses")],
         )
 
-    def test_index_manager_get_indexes_by_alias_with_duplicate(self):
+    def test_index_manager_get_indices_by_alias_with_duplicate(self):
         """
-        Clean up the aliases when starting from a broken state: duplicate indexes for an alias.
+        Clean up the aliases when starting from a broken state: duplicate indices for an alias.
         """
         alias = "richie_courses"
-        existing_indexes = {
+        existing_indices = {
             "richie_courses_2013-05-04-03h12m33.123456s": {},
             "richie_courses_2014-05-04-03h12m33.123456s": {
                 "aliases": {"richie_courses": True}
@@ -73,25 +73,25 @@ class IndexManagerTestCase(TestCase):
             },
         }
         self.assertEqual(
-            list(get_indexes_by_alias(existing_indexes, alias)),
+            list(get_indices_by_alias(existing_indices, alias)),
             [
                 ("richie_courses_2014-05-04-03h12m33.123456s", "richie_courses"),
                 ("richie_courses_2015-05-04-03h12m33.123456s", "richie_courses"),
             ],
         )
 
-    def test_index_manager_get_indexes_by_alias_empty(self):
+    def test_index_manager_get_indices_by_alias_empty(self):
         """
         Don't wrongly push values when there is nothing to return.
         """
         alias = "richie_courses"
-        existing_indexes = {
+        existing_indices = {
             "richie_courses_2013-05-04-03h12m33.123456s": {},
             "richie_organizations_2017-05-04-03h12m33.123456s": {
                 "aliases": {"richie_organizations": True}
             },
         }
-        self.assertEqual(list(get_indexes_by_alias(existing_indexes, alias)), [])
+        self.assertEqual(list(get_indices_by_alias(existing_indices, alias)), [])
 
     # Make sure indexing still works when the number of records is higher than chunk size
     @override_settings(RICHIE_ES_CHUNK_SIZE=2)
@@ -158,7 +158,7 @@ class IndexManagerTestCase(TestCase):
         )
         mock_logger.info.assert_called()
 
-    def test_index_manager_regenerate_indexes(self):
+    def test_index_manager_regenerate_indices(self):
         """
         Make sure indices are created, aliases updated and old, no longer useful indices
         are pruned when the `regenerate_elasticsearch` function is called.
@@ -171,7 +171,7 @@ class IndexManagerTestCase(TestCase):
         creation1_datetime = datetime(2010, 1, 1, tzinfo=timezone.utc)
         creation1_string = creation1_datetime.strftime("%Y-%m-%d-%Hh%Mm%S.%fs")
         with mock.patch.object(timezone, "now", return_value=creation1_datetime):
-            regenerate_indexes(None)
+            regenerate_indices(None)
 
         expected_indices = [
             "richie_categories",
@@ -193,7 +193,7 @@ class IndexManagerTestCase(TestCase):
         creation2_datetime = datetime(2011, 2, 2, tzinfo=timezone.utc)
         creation2_string = creation2_datetime.strftime("%Y-%m-%d-%Hh%Mm%S.%fs")
         with mock.patch.object(timezone, "now", return_value=creation2_datetime):
-            regenerate_indexes(None)
+            regenerate_indices(None)
 
         # All indices were replaced and aliases updated
         for alias_name in expected_indices:
@@ -222,7 +222,7 @@ class IndexManagerTestCase(TestCase):
         creation3_datetime = datetime(2012, 3, 3, tzinfo=timezone.utc)
         creation3_string = creation3_datetime.strftime("%Y-%m-%d-%Hh%Mm%S.%fs")
         with mock.patch.object(timezone, "now", return_value=creation3_datetime):
-            regenerate_indexes(None)
+            regenerate_indices(None)
 
         # All indices were replaced and had their aliases changed
         for index_name in expected_indices:
@@ -249,9 +249,9 @@ class IndexManagerTestCase(TestCase):
             with self.assertRaises(NotFoundError):
                 indices_client.get(f"{index_name}_{creation1_string}")
 
-    def test_index_manager_regenerate_indexes_from_broken_state(self):
+    def test_index_manager_regenerate_indices_from_broken_state(self):
         """
-        `regenerate_indexes` should succeed and give us a working ElasticSearch
+        `regenerate_indices` should succeed and give us a working ElasticSearch
         when it runs and finds a broken state (eg. with an existing, incorrect
         index with the name of an alias).
 
@@ -267,11 +267,11 @@ class IndexManagerTestCase(TestCase):
         update_course(course.extended_object, "en")
         self.assertIsNotNone(indices_client.get("richie_courses"))
 
-        # Call our `regenerate_indexes command`
+        # Call our `regenerate_indices command`
         creation_datetime = datetime(2010, 1, 1, tzinfo=timezone.utc)
         creation_string = creation_datetime.strftime("%Y-%m-%d-%Hh%Mm%S.%fs")
         with mock.patch.object(timezone, "now", return_value=creation_datetime):
-            regenerate_indexes(None)
+            regenerate_indices(None)
 
         # No error was thrown, the courses index (like all others) was bootstrapped
         self.assertIsNotNone(indices_client.get(f"richie_courses_{creation_string}"))

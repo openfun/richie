@@ -5,7 +5,7 @@ import logging
 
 from django.core.management.base import BaseCommand
 
-from ...index_manager import regenerate_indexes, store_es_scripts
+from ...index_manager import regenerate_indices, store_es_scripts
 
 logger = logging.getLogger("richie.search.bootstrap_elasticsearch")
 
@@ -26,7 +26,7 @@ class Command(BaseCommand):
 
         # Creates new indices each time, populates them, and atomically replaces
         # the old indices once the new ones are ready.
-        regenerate_indexes(logger)
+        regenerate_indices(logger)
 
         # Confirm operation success through a console log
         logger.info("ES indices regenerated.")
