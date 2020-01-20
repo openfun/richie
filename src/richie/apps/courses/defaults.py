@@ -229,7 +229,11 @@ COURSE_GLIMPSE_VARIANT_CHOICES = getattr(
 )
 
 ORGANIZATION_GLIMPSE_VARIANT_CHOICES = getattr(
-    settings, "RICHIE_ORGANIZATION_GLIMPSE_VARIANT_CHOICES", [(None, _("Default"))]
+    settings, "RICHIE_ORGANIZATION_GLIMPSE_VARIANT_CHOICES", [
+        (None, _("Default")),
+        ("card", _("Card")),
+        ("row", _("Row")),
+    ]
 )
 
 # For each type of page we define:

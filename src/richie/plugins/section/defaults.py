@@ -9,7 +9,17 @@ SECTION_TEMPLATES = getattr(
     "RICHIE_SECTION_TEMPLATES",
     [
         ("richie/section/section.html", _("Default")),
-        ("richie/section/section_cadenced.html", _("Highlighted items")),
+        ("richie/section/section--light.html", _("Light")),
+        ("richie/section/section--lightest.html", _("Lightest")),
+        ("richie/section/section--gradient-light.html", _("Light gradient")),
+        ("richie/section/section--gradient-dark.html", _("Dark gradient")),
+        ("richie/section/section--clouds.html", _("Clouds")),
+        ("richie/section/section--divider-top.html", _("Top divider")),
         ("richie/section/section_list.html", _("Unordered list")),
+        ("richie/section/section_accordion_item.html", _("Accordion item")),
+        ("richie/section/feature-icons.html", _("Feature icons")),
+        ("richie/section/section--blogpost.html", _("Favorite blogpost")),
+        # DEPRECATED until removed from demo
+        ("richie/section/section_cadenced.html", _("Highlighted items")),
     ],
 )

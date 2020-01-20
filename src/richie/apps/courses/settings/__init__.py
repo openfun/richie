@@ -69,6 +69,8 @@ CMS_PLACEHOLDER_CONF = {
                 "OrganizationPlugin",
                 "OrganizationsByCategoryPlugin",
                 "PersonPlugin",
+                "CKEditorPlugin",
+                "SectionPlugin",
             ]
         },
     },
@@ -134,7 +136,8 @@ CMS_PLACEHOLDER_CONF = {
     },
     "courses/cms/course_detail.html course_plan": {
         "name": _("Plan"),
-        "plugins": ["CKEditorPlugin"],
+        "plugins": ["SectionPlugin"],
+        "child_classes": {"SectionPlugin": ["CKEditorPlugin"]},
     },
     "courses/cms/course_detail.html course_information": {
         "name": _("Complementary information"),
@@ -255,6 +258,11 @@ CMS_PLACEHOLDER_CONF = {
     "courses/cms/blogpost_detail.html body": {
         "name": _("Body"),
         "excluded_plugins": ["CKEditorPlugin", "GoogleMapPlugin"],
+    },
+    "courses/cms/blogpost_detail.html headline": {
+        "name": _("Headline"),
+        "plugins": ["SectionPlugin"],
+        "child_classes": {"SectionPlugin": ["CKEditorPlugin"]},
     },
     # Program page detail
     "courses/cms/program_detail.html program_cover": {
