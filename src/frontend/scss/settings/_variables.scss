@@ -153,3 +153,7 @@ $r-footer-logo-width-lg: 11.875rem;
 // Background for content container objects, eg. detailed courses, categories,
 // persons etc. pages.
 $richie-content-container-bg: r-color("white");
+
+// Course search page shared variables
+$r-search-filters-width: 18rem !default;
+$r-search-filters-gutter: 0.2rem !default;
