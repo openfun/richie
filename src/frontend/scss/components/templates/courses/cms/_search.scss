@@ -101,6 +101,18 @@ $r-search-filters-gutter: 0.2rem !default;
             text-align: center;
         }
 
+        &__error {
+            display: flex;
+            width: 100%;
+            max-width: 80vw;
+            height: 100%;
+            padding-bottom: 20rem;
+            justify-content: center;
+            align-items: center;
+            margin: auto;
+            text-align: center;
+        }
+
         &__overlay {
             visibility: hidden;
             position: absolute;

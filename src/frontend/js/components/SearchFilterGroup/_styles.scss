@@ -1,25 +1,19 @@
-$richie-search-filters-group-margin: 2rem 2.5rem !default;
-$richie-search-filters-group-padding: null !default;
-
-$richie-search-filters-group-title-margin: 0 !default;
-$richie-search-filters-group-title-padding: 0.4rem 0.5rem !default;
-$richie-search-filters-group-title-fontsize: 1.4rem !default;
-$richie-search-filters-group-title-fontweight: null !default;
-$richie-search-filters-group-title-fontcolor: $white !default;
-
 .search-filter-group {
-  margin: $richie-search-filters-group-margin;
-  padding: $richie-search-filters-group-padding;
+    margin: 0 $r-search-filters-gutter;
 
-  &__title {
-    margin: $richie-search-filters-group-title-margin;
-    padding: $richie-search-filters-group-title-padding;
-    font-size: $richie-search-filters-group-title-fontsize;
-    font-weight: $richie-search-filters-group-title-fontweight;
-    color: $richie-search-filters-group-title-fontcolor;
-  }
+    &__title {
+        margin: 0;
+        padding: 0.3rem 0.5rem 0.3rem 0.1rem;
+        color: r-theme-val(search-filters-group, title-color);
+        font-size: 0.7rem;
+        font-weight: $font-weight-boldest;
+    }
 
-  &__list {
-    @include m-o-list-group__container;
-  }
+    &__list {
+        @include m-o-list-group__container;
+    }
+
+    & + .search-filter-group{
+        margin-top: 1rem;
+    }
 }
