@@ -1,5 +1,5 @@
 {% extends "richie/fullwidth.html" %}
-{% load cms_tags extra_tags i18n thumbnail %}
+{% load cms_tags extra_tags first_n i18n thumbnail %}
 
 {% block meta_opengraph_contextuals %}
     <meta property="og:title" content="{{ current_page.get_title|truncatechars:65 }}">
@@ -61,7 +61,7 @@
     </section>
   {% endif %}
 
-  {% with courses=person.get_courses %}
+  {% with courses=person.get_courses|first_n:PAGES_SETTINGS.MAX_RELATED_COURSES_ON_DETAILS_PAGES %}
     {% if courses %}
       <section class="course-glimpse-list">
         <h2 class="course-glimpse-list__title">{% trans "Courses" %}</h2>
@@ -70,6 +70,11 @@
               {% include "courses/cms/fragment_course_glimpse.html" with course=course %}
           {% endif %}
         {% endfor %}
+        {% if courses.count == PAGES_SETTINGS.MAX_RELATED_COURSES_ON_DETAILS_PAGES %}
+          <a href="{% page_url 'courses' %}?persons={{ person.extended_object_id }}" class="person-detail__see-more">
+            {% blocktrans with person_title=person.extended_object.get_title %}See all courses related to {{ person_title }}{% endblocktrans %}
+          </a>
+        {% endif %}
       </section>
     {% endif %}
   {% endwith %}
