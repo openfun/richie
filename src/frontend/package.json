@@ -43,7 +43,7 @@
     "@babel/preset-typescript": "7.8.3",
     "@formatjs/intl-relativetimeformat": "4.5.7",
     "@sentry/browser": "5.11.1",
-    "@testing-library/jest-dom": "5.0.0",
+    "@testing-library/jest-dom": "4.2.4",
     "@testing-library/react": "9.4.0",
     "@types/fetch-mock": "7.3.2",
     "@types/jest": "24.9.0",
