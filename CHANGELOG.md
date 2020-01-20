@@ -29,7 +29,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Improve ElasticSearch `regenerate_indexes` tests.
-- Limit the number of related courses appearing on the category detail page.
+- Limit the number of related courses appearing on the category and
+  organization detail pages.
 
 ## [1.16.2] - 2019-12-18
 
