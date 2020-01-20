@@ -34,10 +34,10 @@
         svg {
             display: block;
             margin: 0 0 1rem;
-            width: 13.75rem;
+            width: $r-footer-logo-width-sm;
 
             @include media-breakpoint-up($r-footer-breakpoint) {
-                width: 18.125rem;
+                width: $r-footer-logo-width-lg;
             }
         }
     }

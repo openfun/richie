@@ -61,7 +61,11 @@
         order: 1;
 
         @include media-breakpoint-up($r-topbar-breakpoint) {
-            @include sv-flex(0, 0, 340px);
+            @if $r-topbar-logo-width-lg{
+                @include sv-flex(0, 0, $r-topbar-logo-width-lg);
+            } @else {
+                @include sv-flex(0, 0, auto);
+            }
             margin-right: 10%;
         }
 
@@ -79,10 +83,10 @@
 
     &__logo {
         display: block;
-        width: 15rem;
+        width: $r-topbar-logo-width-sm;
 
         @include media-breakpoint-up($r-topbar-breakpoint) {
-            width: 21.25rem;
+            width: $r-topbar-logo-width-lg;
         }
     }
 
