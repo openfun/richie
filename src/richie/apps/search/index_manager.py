@@ -11,7 +11,7 @@ from elasticsearch.exceptions import NotFoundError, RequestError
 from elasticsearch.helpers import bulk
 
 from . import ES_CLIENT
-from .defaults import ES_CHUNK_SIZE
+from .defaults import ES_CHUNK_SIZE, ES_INDICES_PREFIX
 from .indexers import ES_INDICES
 from .text_indexing import ANALYSIS_SETTINGS
 
@@ -107,11 +107,13 @@ def regenerate_indices(logger):
         for index, alias in indices_to_unalias
     ]
 
-    # Identify orphaned indices
+    # Identify orphaned indices that belong to our own app.
     # NB: we *must* do this before the update_aliases call so we don't immediately prune
     # version n-1 of all our indices
     useless_indices = [
-        index for index, details in existing_indices.items() if not details["aliases"]
+        index
+        for index, details in existing_indices.items()
+        if index.startswith(str(ES_INDICES_PREFIX)) and not details["aliases"]
     ]
 
     # Replace the old indices with the new ones in 1 atomic operation to avoid outage

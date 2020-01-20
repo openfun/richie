@@ -192,6 +192,15 @@ class IndexManagerTestCase(TestCase):
         # The indices client will be used to test the actual indices in ElasticSearch
         indices_client = IndicesClient(client=ES_CLIENT)
 
+        # Create an unrelated index with an alias to make sure it is unaffected by our operations
+        indices_client.create(index="unrelated_index")
+        indices_client.put_alias(index="unrelated_index", name="unrelated_index_alias")
+        self.assertIsNotNone(indices_client.get("unrelated_index")["unrelated_index"])
+        self.assertEqual(
+            list(indices_client.get_alias("unrelated_index_alias").keys())[0],
+            "unrelated_index",
+        )
+
         # Create all our indices from scratch
         # Use a mocked timezone.now to  check the names of our indices as they include a datetime
         creation1_datetime = datetime(2010, 1, 1, tzinfo=timezone.utc)
@@ -274,6 +283,13 @@ class IndexManagerTestCase(TestCase):
             # Version n-2 of the index does not exist any more
             with self.assertRaises(NotFoundError):
                 indices_client.get(f"{index_name}_{creation1_string}")
+
+        # Make sure our unrelated index was unaffected through regenerations
+        self.assertIsNotNone(indices_client.get("unrelated_index")["unrelated_index"])
+        self.assertEqual(
+            list(indices_client.get_alias("unrelated_index_alias").keys())[0],
+            "unrelated_index",
+        )
 
     @mock.patch.object(
         ES_INDICES.courses,
