@@ -88,8 +88,13 @@
     background-size: auto 100%;
 
     @include media-breakpoint-up(lg) {
-        padding: $r-topbar-height 0 calc(5vw + 1rem);
-        min-height: ($r-topbar-height + 33.75rem);
+        @if $r-topbar-height {
+            padding: $r-topbar-height 0 calc(5vw + 1rem);
+            min-height: ($r-topbar-height + 33.75rem);
+        } @else {
+            padding: 1rem 0 calc(5vw + 1rem);
+            min-height: 34.75rem;
+        }
     }
 
     &::after{
