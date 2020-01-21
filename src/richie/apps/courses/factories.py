@@ -16,6 +16,7 @@ from ..core.factories import (
     FilerImageFactory,
     PageExtensionDjangoModelFactory,
     PageFactory,
+    RichieDjangoModelFactory,
     create_text_plugin,
     image_getter,
 )
@@ -651,7 +652,7 @@ class BlogPostFactory(PageExtensionDjangoModelFactory):
                 )
 
 
-class PersonFactory(PageExtensionDjangoModelFactory):
+class PersonFactory(RichieDjangoModelFactory):
     """
     Person factory to generate random yet realistic person's name and title
     """
@@ -660,26 +661,10 @@ class PersonFactory(PageExtensionDjangoModelFactory):
     last_name = factory.Faker("last_name")
     person_title = factory.Faker("prefix")
 
-    @factory.lazy_attribute
-    def page_title(self):
-        """
-        Build the page title from the person's title and names
-        """
-        # Don't always set a title
-        person_title = random.choice([None, self.person_title])  # nosec
-
-        # Join the names that are not null into a string
-        names = [person_title, self.first_name, self.last_name]
-        return " ".join([n for n in names if n is not None])
-
     class Meta:
         model = models.Person
         exclude = [
-            "page_in_navigation",
-            "page_languages",
-            "page_parent",
             "page_template",
-            "page_title",
             "first_name",
             "last_name",
             "person_title",

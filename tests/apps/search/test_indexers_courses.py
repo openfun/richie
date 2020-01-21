@@ -9,6 +9,7 @@ from django.test import TestCase
 import pytz
 from cms.api import add_plugin
 
+from richie.apps.core.factories import TitleFactory
 from richie.apps.courses.cms_plugins import CategoryPlugin
 from richie.apps.courses.factories import (
     CategoryFactory,
@@ -141,15 +142,29 @@ class CoursesIndexersTestCase(TestCase):
         )
 
         person1 = PersonFactory(
-            page_title={"en": "Eugène Delacroix", "fr": "Eugène Delacroix"},
+            extended_object__title__language="en",
+            extended_object__title__title="Eugène Delacroix",
             should_publish=True,
         )
+        TitleFactory(
+            page=person1.extended_object, language="fr", title="Eugène Delacroix"
+        )
+        person1.extended_object.publish("fr")
         person2 = PersonFactory(
-            page_title={"en": "Comte de Saint-Germain", "fr": "Earl of Saint-Germain"},
+            extended_object__title__language="en",
+            extended_object__title__title="Comte de Saint-Germain",
             should_publish=True,
         )
+        TitleFactory(
+            page=person2.extended_object, language="fr", title="Earl of Saint-Germain"
+        )
+        person2.extended_object.publish("fr")
         person_draft = PersonFactory(
-            page_title={"en": "Jules de Polignac", "fr": "Jules de Polignac"}
+            extended_object__title__language="en",
+            extended_object__title__title="Jules de Polignac",
+        )
+        TitleFactory(
+            page=person_draft.extended_object, language="fr", title="Jules de Polignac"
         )
 
         course = CourseFactory(

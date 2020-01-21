@@ -5,6 +5,7 @@ from django.test import TestCase
 
 from cms.api import add_plugin, create_page
 
+from richie.apps.core.factories import TitleFactory
 from richie.apps.core.helpers import create_i18n_page
 from richie.apps.courses.cms_plugins import CategoryPlugin
 from richie.apps.courses.factories import (
@@ -586,7 +587,11 @@ class CategoryModelsTestCase(TestCase):
         """
         category = CategoryFactory(should_publish=True)
         persons = PersonFactory.create_batch(
-            2, page_title="my title", fill_categories=[category], should_publish=True
+            2,
+            extended_object__title__language="en",
+            extended_object__title__title="my title",
+            fill_categories=[category],
+            should_publish=True,
         )
         retrieved_persons = category.get_persons()
 
@@ -603,7 +608,10 @@ class CategoryModelsTestCase(TestCase):
         """The related persons should be sorted by their position in the pages tree."""
         category = CategoryFactory(should_publish=True)
         person1, person2, person3 = PersonFactory.create_batch(
-            3, fill_categories=[category], should_publish=True
+            3,
+            extended_object__title__language="en",
+            fill_categories=[category],
+            should_publish=True,
         )
         self.assertEqual(list(category.get_persons()), [person1, person2, person3])
 
@@ -624,7 +632,10 @@ class CategoryModelsTestCase(TestCase):
         )
         category = CategoryFactory(extended_object=category_page, should_publish=True)
         persons = PersonFactory.create_batch(
-            2, fill_categories=[category], should_publish=True
+            2,
+            extended_object__title__language="en",
+            fill_categories=[category],
+            should_publish=True,
         )
 
         child_category_page = create_page(
@@ -638,7 +649,10 @@ class CategoryModelsTestCase(TestCase):
             extended_object=child_category_page, should_publish=True
         )
         persons_child = PersonFactory.create_batch(
-            2, fill_categories=[child_category], should_publish=True
+            2,
+            extended_object__title__language="en",
+            fill_categories=[child_category],
+            should_publish=True,
         )
 
         grand_child_category_page = create_page(
@@ -652,7 +666,10 @@ class CategoryModelsTestCase(TestCase):
             extended_object=grand_child_category_page, should_publish=True
         )
         persons_grand_child = PersonFactory.create_batch(
-            2, fill_categories=[grand_child_category], should_publish=True
+            2,
+            extended_object__title__language="en",
+            fill_categories=[grand_child_category],
+            should_publish=True,
         )
 
         # Check that each category gets persons from its descendants
@@ -682,7 +699,11 @@ class CategoryModelsTestCase(TestCase):
         """
         category = CategoryFactory(should_publish=True)
         category_page = category.extended_object
-        person = PersonFactory(page_title="my title", should_publish=True)
+        person = PersonFactory(
+            extended_object__title__language="en",
+            extended_object__title__title="my title",
+            should_publish=True,
+        )
         person_page = person.extended_object
 
         # Add a category to the person but don't publish the modification
@@ -704,11 +725,13 @@ class CategoryModelsTestCase(TestCase):
         The persons should not be duplicated if they exist in several languages.
         """
         category = CategoryFactory(should_publish=True)
-        PersonFactory(
-            page_title={"en": "my title", "fr": "mon titre"},
+        person = PersonFactory(
+            extended_object__title__language="en",
+            extended_object__title__title="my title",
             fill_categories=[category],
             should_publish=True,
         )
+        TitleFactory(page=person.extended_object, language="fr", title="mon titre")
         self.assertEqual(Person.objects.count(), 2)
         self.assertEqual(category.get_persons().count(), 1)
 

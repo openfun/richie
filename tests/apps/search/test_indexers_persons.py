@@ -7,6 +7,7 @@ from django.test import TestCase
 
 from cms.api import add_plugin
 
+from richie.apps.core.factories import FilerImageFactory, TitleFactory
 from richie.apps.courses.factories import PersonFactory
 from richie.apps.search.indexers.persons import PersonsIndexer
 
@@ -26,14 +27,30 @@ class PersonsIndexersTestCase(TestCase):
         Happy path: person data is fetched from the models properly formatted
         """
         person1 = PersonFactory(
-            fill_portrait=True,
-            page_title={"en": "my first person", "fr": "ma première personne"},
+            extended_object__title__language="en",
+            extended_object__title__title="my first person",
             should_publish=True,
         )
+        TitleFactory(
+            page=person1.extended_object, language="fr", title="ma première personne"
+        )
+        for language in ["en", "fr"]:
+            add_plugin(
+                language=language,
+                placeholder=person1.extended_object.placeholders.get(slot="portrait"),
+                plugin_type="SimplePicturePlugin",
+                picture=FilerImageFactory(original_filename="portrait.jpg"),
+            )
+            person1.extended_object.publish(language)
         person2 = PersonFactory(
-            page_title={"en": "my second person", "fr": "ma deuxième personne"},
+            extended_object__title__language="en",
+            extended_object__title__title="my second person",
             should_publish=True,
         )
+        TitleFactory(
+            page=person2.extended_object, language="fr", title="ma deuxième personne"
+        )
+        person2.extended_object.publish("fr")
 
         # Add a description in several languages to the first person
         placeholder = person1.public_extension.extended_object.placeholders.get(

@@ -10,7 +10,7 @@ from django.conf import settings
 from cms.api import add_plugin, create_page
 from cms.test_utils.testcases import CMSTestCase
 
-from richie.apps.core.factories import UserFactory
+from richie.apps.core.factories import TitleFactory, UserFactory
 from richie.apps.core.helpers import create_i18n_page
 from richie.apps.courses.cms_plugins import PersonPlugin
 from richie.apps.courses.factories import PersonFactory
@@ -50,13 +50,16 @@ class PersonPluginTestCase(CMSTestCase):
         """
         # Create a Person
         person = PersonFactory(
-            page_title={"en": "person title", "fr": "titre personne"},
+            extended_object__in_navigation=False,
+            extended_object__title__language="en",
+            extended_object__title__title="person title",
             fill_portrait={
                 "original_filename": "portrait.jpg",
                 "default_alt_text": "my portrait",
             },
         )
         person_page = person.extended_object
+        TitleFactory(page=person_page, language="fr", title="titre personne")
 
         # Add bio to related placeholder
         bio_placeholder = person_page.placeholders.get(slot="bio")
@@ -68,8 +71,8 @@ class PersonPluginTestCase(CMSTestCase):
         # Create a page to add the plugin to
         page = create_i18n_page({"en": "A page", "fr": "Une page"})
         placeholder = page.placeholders.get(slot="maincontent")
-        add_plugin(placeholder, PersonPlugin, "en", **{"page": person.extended_object})
-        add_plugin(placeholder, PersonPlugin, "fr", **{"page": person.extended_object})
+        add_plugin(placeholder, PersonPlugin, "en", **{"page": person_page})
+        add_plugin(placeholder, PersonPlugin, "fr", **{"page": person_page})
 
         person_page.publish("en")
         person_page.publish("fr")
@@ -91,7 +94,7 @@ class PersonPluginTestCase(CMSTestCase):
         self.assertNotContains(response, "person title")
 
         # Now modify the person to have a draft different from the public version
-        person_title = person.extended_object.title_set.get(language="en")
+        person_title = person_page.title_set.get(language="en")
         person_title.title = "Jiji"
         person_title.save()
         bio_en.body = "draft bio"
@@ -163,9 +166,11 @@ class PersonPluginTestCase(CMSTestCase):
 
         # Create a Person
         person = PersonFactory(
-            page_title={"en": "person title", "fr": "titre personne"}
+            extended_object__title__language="en",
+            extended_object__title__title="person title",
         )
         person_page = person.extended_object
+        TitleFactory(page=person_page, language="fr", title="titre personne")
 
         # Add bio to related placeholder
         bio_placeholder = person_page.placeholders.get(slot="bio")
@@ -176,7 +181,7 @@ class PersonPluginTestCase(CMSTestCase):
         # Create a page to add the plugin to
         page = create_i18n_page("A page")
         placeholder = page.placeholders.get(slot="maincontent")
-        add_plugin(placeholder, PersonPlugin, "en", **{"page": person.extended_object})
+        add_plugin(placeholder, PersonPlugin, "en", **{"page": person_page})
 
         person_page.publish("en")
         person_page.unpublish("en")
@@ -189,7 +194,7 @@ class PersonPluginTestCase(CMSTestCase):
         self.assertContains(response, "public bio")
 
         # Now modify the person to have a draft different from the public version
-        person_title = person.extended_object.title_set.get(language="en")
+        person_title = person_page.title_set.get(language="en")
         person_title.title = "Jiji"
         person_title.save()
         bio_en.body = "draft bio"

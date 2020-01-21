@@ -26,7 +26,9 @@ class DetailBlogPostCMSTestCase(CMSTestCase):
         Validate that the important elements are displayed on a published blogpost page
         """
         author = PersonFactory(
-            page_title={"en": "Comte de Saint-Germain"}, should_publish=True
+            extended_object__title__language="en",
+            extended_object__title__title="Comte de Saint-Germain",
+            should_publish=True,
         )
         blogpost = BlogPostFactory(
             page_title="Preums", fill_cover=True, fill_body=True, fill_author=[author]
@@ -71,7 +73,9 @@ class DetailBlogPostCMSTestCase(CMSTestCase):
 
         category = CategoryFactory(page_title="Very interesting category")
         author = PersonFactory(
-            page_title={"en": "Comte de Saint-Germain"}, should_publish=True
+            extended_object__title__language="en",
+            extended_object__title__title="Comte de Saint-Germain",
+            should_publish=True,
         )
 
         blogpost = BlogPostFactory(

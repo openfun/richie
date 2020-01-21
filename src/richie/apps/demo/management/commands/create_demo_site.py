@@ -12,7 +12,7 @@ import factory
 from cms.api import add_plugin
 from cms.models import StaticPlaceholder
 
-from richie.apps.core.factories import create_text_plugin, image_getter
+from richie.apps.core.factories import TitleFactory, create_text_plugin, image_getter
 from richie.apps.core.helpers import recursive_page_creation
 from richie.apps.courses.factories import (
     VIDEO_SAMPLE_LINKS,
@@ -197,9 +197,9 @@ def create_demo_site():
             random.randint(1, NB_OBJECTS["person_organizations"]),  # nosec
         )
         person = PersonFactory(
-            page_in_navigation=True,
-            page_languages=["en", "fr"],
-            page_parent=pages_created["persons"],
+            extended_object__in_navigation=True,
+            extended_object__parent=pages_created["persons"],
+            extended_object__title__language="en",
             fill_categories=random.sample(
                 subjects, random.randint(1, NB_OBJECTS["person_subjects"])  # nosec
             ),
@@ -208,6 +208,7 @@ def create_demo_site():
             fill_bio=True,
             should_publish=True,
         )
+        TitleFactory(page=person.extended_object, language="fr")
         persons.append(person)
         for organization in person_organizations:
             persons_for_organization[organization.id].append(person)

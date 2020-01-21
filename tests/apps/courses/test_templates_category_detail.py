@@ -21,7 +21,7 @@ class CategoryCMSTestCase(CMSTestCase):
     """
 
     def _extension_cms_published_content(
-        self, factory_model, placeholder_slot, control_string
+        self, factory_model, placeholder_slot, control_string, **factory_model_kwargs
     ):
         """
         Not a test. Sharing code for related page extension tests.
@@ -33,14 +33,18 @@ class CategoryCMSTestCase(CMSTestCase):
 
         # Related page extensions
         published_extension = factory_model(
-            fill_categories=[category], should_publish=True
+            fill_categories=[category], should_publish=True, **factory_model_kwargs
         )
-        extra_published_extension = factory_model(should_publish=True)
+        extra_published_extension = factory_model(
+            should_publish=True, **factory_model_kwargs
+        )
         unpublished_extension = factory_model(
-            fill_categories=[category], should_publish=True
+            fill_categories=[category], should_publish=True, **factory_model_kwargs
         )
         unpublished_extension.extended_object.unpublish("en")
-        not_published_extension = factory_model(fill_categories=[category])
+        not_published_extension = factory_model(
+            fill_categories=[category], **factory_model_kwargs
+        )
 
         # The page should not be visible before it is published
         url = page.get_absolute_url()
@@ -141,9 +145,14 @@ class CategoryCMSTestCase(CMSTestCase):
             PersonFactory,
             "categories",
             '<h2 class="person-glimpse__content__wrapper__title">{:s}</h2>',
+            # TODO: move these kwargs in the factorized function once all factories support them
+            extended_object__in_navigation=False,
+            extended_object__title__language="en",
         )
 
-    def _extension_cms_draft_content(self, factory_model, control_string):
+    def _extension_cms_draft_content(
+        self, factory_model, control_string, **factory_model_kwargs
+    ):
         """
         Not a test. Sharing code for related page extension tests.
         Validate how a draft category is displayed with its related page extensions.
@@ -156,9 +165,11 @@ class CategoryCMSTestCase(CMSTestCase):
 
         # Organizations
         published_extension = factory_model(
-            fill_categories=[category], should_publish=True
+            fill_categories=[category], should_publish=True, **factory_model_kwargs
         )
-        not_published_extension = factory_model(fill_categories=[category])
+        not_published_extension = factory_model(
+            fill_categories=[category], **factory_model_kwargs
+        )
 
         # Modify the draft version of the published page extension
         title_obj = published_extension.extended_object.title_set.get(language="en")
@@ -168,6 +179,7 @@ class CategoryCMSTestCase(CMSTestCase):
         # The page should be visible as draft to the staff user
         url = page.get_absolute_url()
         response = self.client.get(url)
+
         self.assertContains(
             response, "<title>Maths</title>", html=True, status_code=200
         )
@@ -211,4 +223,6 @@ class CategoryCMSTestCase(CMSTestCase):
         self._extension_cms_draft_content(
             PersonFactory,
             '<h2 class="person-glimpse__content__wrapper__title">{:s}</h2>',
+            # TODO: move this kwarg in the factorized function once all factories support it
+            extended_object__title__language="en",
         )

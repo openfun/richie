@@ -12,7 +12,7 @@ from cms.api import add_plugin, create_page
 from cms.models import PagePermission
 from filer.models import FolderPermission
 
-from richie.apps.core.factories import PageFactory
+from richie.apps.core.factories import PageFactory, TitleFactory
 from richie.apps.core.helpers import create_i18n_page
 from richie.apps.courses import defaults
 from richie.apps.courses.cms_plugins import OrganizationPlugin
@@ -256,9 +256,10 @@ class OrganizationModelsTestCase(TestCase):
         organization = OrganizationFactory(should_publish=True)
         persons = PersonFactory.create_batch(
             2,
-            page_title="my title",
-            should_publish=True,
+            extended_object__title__language="en",
+            extended_object__title__title="my title",
             fill_organizations=[organization],
+            should_publish=True,
         )
         retrieved_persons = organization.get_persons()
 
@@ -278,7 +279,11 @@ class OrganizationModelsTestCase(TestCase):
         """
         organization = OrganizationFactory(should_publish=True)
         organization_page = organization.extended_object
-        person = PersonFactory(page_title="my title", should_publish=True)
+        person = PersonFactory(
+            extended_object__title__language="en",
+            extended_object__title__title="my title",
+            should_publish=True,
+        )
         person_page = person.extended_object
 
         # Add a organization to the person but don't publish the modification
@@ -300,10 +305,13 @@ class OrganizationModelsTestCase(TestCase):
         The persons should not be duplicated if they exist in several languages.
         """
         organization = OrganizationFactory(should_publish=True)
-        PersonFactory(
-            page_title={"en": "my title", "fr": "mon titre"},
+        person = PersonFactory(
+            extended_object__title__language="en",
+            extended_object__title__title="my title",
             fill_organizations=[organization],
             should_publish=True,
         )
+        TitleFactory(page=person.extended_object, language="fr", title="mon titre")
+        person.extended_object.publish("fr")
         self.assertEqual(Person.objects.count(), 2)
         self.assertEqual(organization.get_persons().count(), 1)

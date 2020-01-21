@@ -51,7 +51,8 @@ class PersonCMSTestCase(CMSTestCase):
         title_obj.save()
 
         person = PersonFactory(
-            page_title="My page title",
+            extended_object__title__language="en",
+            extended_object__title__title="My page title",
             fill_portrait=True,
             fill_bio=True,
             fill_categories=[
@@ -172,7 +173,8 @@ class PersonCMSTestCase(CMSTestCase):
         not_published_organization = OrganizationFactory()
 
         person = PersonFactory(
-            page_title="My page title",
+            extended_object__title__language="en",
+            extended_object__title__title="My page title",
             fill_portrait=True,
             fill_bio=True,
             fill_categories=[published_category, not_published_category],
@@ -283,7 +285,7 @@ class PersonCMSTestCase(CMSTestCase):
         user = UserFactory(is_staff=True, is_superuser=True)
         self.client.login(username=user.username, password="password")
 
-        person = PersonFactory()
+        person = PersonFactory(extended_object__title__language="en")
         course = CourseFactory(fill_team=[person])
 
         url = person.extended_object.get_absolute_url()
@@ -305,11 +307,11 @@ class PersonCMSTestCase(CMSTestCase):
         user = UserFactory(is_staff=True, is_superuser=True)
         self.client.login(username=user.username, password="password")
 
-        person = PersonFactory()
+        person = PersonFactory(extended_object__title__language="en")
         blog_post = BlogPostFactory(fill_author=[person])
 
         url = person.extended_object.get_absolute_url()
-        response = self.client.get(url)
+        response = self.client.get(url, follow=True)
 
         # The blog post should be present on the page
         self.assertContains(

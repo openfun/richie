@@ -456,8 +456,8 @@ class CourseModelsTestCase(TestCase):
         The `get_persons` method should only return persons linked to a course by a plugin
         in the current language.
         """
-        person_fr = PersonFactory(page_languages=["fr"])
-        person_en = PersonFactory(page_languages=["en"])
+        person_fr = PersonFactory(extended_object__title__language="fr")
+        person_en = PersonFactory(extended_object__title__language="en")
 
         course = CourseFactory(should_publish=True)
         placeholder = course.extended_object.placeholders.get(slot="course_team")

@@ -323,7 +323,10 @@ class PersonCMSWizardTestCase(CMSTestCase):
             reverse_id=Person.PAGE["reverse_id"],
         )
         # Create an existing page with a known slug
-        PersonFactory(page_parent=parent_page, page_title="My title")
+        PersonFactory(
+            extended_object__parent=parent_page,
+            extended_object__title__title="My title",
+        )
 
         # Submit a title that will lead to the same slug
         data = {"title": "my title"}
