@@ -103,7 +103,7 @@ class CoursePluginTestCase(TestCase):
 
         # The course's url should be present
         self.assertIn(
-            '<a class=" course-glimpse course-glimpse--link " '
+            '<a class="course-glimpse course-glimpse--link" '
             'href="/en/public-title/"',
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
@@ -111,7 +111,7 @@ class CoursePluginTestCase(TestCase):
         # The course's name should be present
         self.assertContains(
             response,
-            '<p class="course-glimpse__content__title">{title}</p>'.format(
+            '<p class="course-glimpse__title">{title}</p>'.format(
                 title=course_page.get_title()
             ),
             status_code=200,
@@ -119,7 +119,9 @@ class CoursePluginTestCase(TestCase):
         # The course's main organization should be present
         self.assertContains(
             response,
-            "<p>{title}</p>".format(title=organization.extended_object.get_title()),
+            '<div class="course-glimpse__organization">{title}</div>'.format(
+                title=organization.extended_object.get_title()
+            ),
             status_code=200,
         )
 
@@ -154,7 +156,7 @@ class CoursePluginTestCase(TestCase):
 
         # The course's url should be present
         self.assertIn(
-            '<a class=" course-glimpse course-glimpse--link " '
+            '<a class="course-glimpse course-glimpse--link" '
             'href="/fr/titre-public/"',
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
@@ -162,7 +164,7 @@ class CoursePluginTestCase(TestCase):
         # The course's name should be present
         self.assertContains(
             response,
-            '<p class="course-glimpse__content__title">{title}</p>'.format(
+            '<p class="course-glimpse__title">{title}</p>'.format(
                 title=course_page.get_title()
             ),
             status_code=200,
@@ -171,7 +173,9 @@ class CoursePluginTestCase(TestCase):
         # The course's main organization should be present
         self.assertContains(
             response,
-            "<p>{title}</p>".format(title=organization.extended_object.get_title()),
+            '<div class="course-glimpse__organization">{title}</div>'.format(
+                title=organization.extended_object.get_title()
+            ),
             status_code=200,
         )
 
