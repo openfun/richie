@@ -1,17 +1,26 @@
 {% load i18n menu_tags cms_tags %}{% spaceless %}
-{% get_available_languages as languages %}
-{% get_current_language as LANGUAGE_CODE %}
+{% get_current_language as current_language_code %}
 {% if languages|length > 1 %}
     <ul class="languages-menu">
         <li class="languages-menu__item languages-menu__item--label">{% blocktrans %}Language:{% endblocktrans %}</li>
         {% for code, name in languages %}
         {% get_language_info for code as lang %}
-        <li class="languages-menu__item languages-menu__item--{{ code }}{% if code == LANGUAGE_CODE %} languages-menu__item--active{% endif %}">
-            <a class="languages-menu__link" href="{% page_language_url code %}"
-            title="{% blocktrans %}Switch to {{ lang.name_translated }}{% endblocktrans %}">
-                {{ lang.name }}
-            </a>
-        </li>
+        {% if code == current_language_code %}
+            <li class="languages-menu__item languages-menu__item--{{ code }} languages-menu__item--active">
+                <a class="languages-menu__link" href="{% page_language_url code %}"
+                    title="{% blocktrans with code=lang.code|slice:":2" name=lang.name_translated %}{{ code }}, currently in {{ name }}{% endblocktrans %}">
+                    {{ lang.name }}
+                </a>
+            </li>
+        {% else %}
+            <li class="languages-menu__item languages-menu__item--{{ code }}">
+                <a class="languages-menu__link" href="{% page_language_url code %}"
+                    title="{% blocktrans with code=lang.code|slice:":2" name=lang.name_translated %}{{ code }}, switch to {{ name }}{% endblocktrans %}">
+                    {{ lang.name }}
+                </a>
+            </li>
+        {% endif %}
         {% endfor %}
     </ul>
-{% endif %}{% endspaceless %}
+{% endif %}
+{% endspaceless %}

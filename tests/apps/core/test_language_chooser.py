@@ -97,20 +97,17 @@ class LanguageChooserTests(CMSTestCase):
         self.assertContains(
             response,
             (
-                '<li class="topbar__menu__list__item '
-                "topbar__menu__list__item--language "
-                'topbar__menu__list__item--en">'
+                '<li class="languages-menu__item '
+                'languages-menu__item--en">'
             ),
         )
         self.assertContains(response, "en, basculer vers Anglais")
-
         self.assertContains(
             response,
             (
-                '<li class="topbar__menu__list__item '
-                "topbar__menu__list__item--language "
-                "topbar__menu__list__item--fr "
-                'topbar__menu__list__item--active">'
+                '<li class="languages-menu__item '
+                "languages-menu__item--fr "
+                'languages-menu__item--active">'
             ),
         )
         self.assertContains(response, "fr, actuellement en Français")
