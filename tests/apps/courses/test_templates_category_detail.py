@@ -118,7 +118,7 @@ class CategoryCMSTestCase(CMSTestCase):
         self._extension_cms_published_content(
             CourseFactory,
             "course_categories",
-            '<p class="course-glimpse__content__title">{:s}</p>',
+            '<p class="course-glimpse__title">{:s}</p>',
         )
 
     def test_templates_category_detail_cms_published_content_blogposts(self):
@@ -129,7 +129,7 @@ class CategoryCMSTestCase(CMSTestCase):
         self._extension_cms_published_content(
             BlogPostFactory,
             "categories",
-            '<p class="blogpost-glimpse__content__title">{:s}</p>',
+            '<p class="blogpost-glimpse__title">{:s}</p>',
         )
 
     def test_templates_category_detail_cms_published_content_persons(self):
@@ -140,7 +140,7 @@ class CategoryCMSTestCase(CMSTestCase):
         self._extension_cms_published_content(
             PersonFactory,
             "categories",
-            '<h2 class="person-glimpse__content__wrapper__title">{:s}</h2>',
+            '<h2 class="person-glimpse__title">{:s}</h2>',
         )
 
     def _extension_cms_draft_content(self, factory_model, control_string):
@@ -197,18 +197,18 @@ class CategoryCMSTestCase(CMSTestCase):
     def test_templates_category_detail_cms_draft_content_courses(self):
         """Validate how a draft category page is displayed with its related courses."""
         self._extension_cms_draft_content(
-            CourseFactory, '<p class="course-glimpse__content__title">{:s}</p>'
+            CourseFactory, '<p class="course-glimpse__title">{:s}</p>'
         )
 
     def test_templates_category_detail_cms_draft_content_blogposts(self):
         """Validate how a draft category page is displayed with its related blogposts."""
         self._extension_cms_draft_content(
-            BlogPostFactory, '<p class="blogpost-glimpse__content__title">{:s}</p>'
+            BlogPostFactory, '<p class="blogpost-glimpse__title">{:s}</p>'
         )
 
     def test_templates_category_detail_cms_draft_content_persons(self):
         """Validate how a draft category page is displayed with its related persons."""
         self._extension_cms_draft_content(
             PersonFactory,
-            '<h2 class="person-glimpse__content__wrapper__title">{:s}</h2>',
+            '<h2 class="person-glimpse__title">{:s}</h2>',
         )
