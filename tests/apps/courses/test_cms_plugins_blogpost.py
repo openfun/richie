@@ -115,7 +115,7 @@ class BlogPostPluginTestCase(CMSTestCase):
         # The blogpost's title should be wrapped in a p
         self.assertContains(
             response,
-            '<p class="blogpost-glimpse__content__title">{:s}</p>'.format(
+            '<p class="blogpost-glimpse__title">{:s}</p>'.format(
                 blogpost.public_extension.extended_object.get_title()
             ),
             html=True,
@@ -133,7 +133,7 @@ class BlogPostPluginTestCase(CMSTestCase):
         # Publication date should be set by first publication
         self.assertContains(
             response,
-            '<p class="blogpost-glimpse__footer__date">Nov. 30, 2019</p>',
+            '<p class="blogpost-glimpse__date">Nov. 30, 2019</p>',
             html=True,
         )
 
@@ -156,7 +156,7 @@ class BlogPostPluginTestCase(CMSTestCase):
         # Publication date should be set by first publication
         self.assertContains(
             response,
-            '<p class="blogpost-glimpse__footer__date">30 novembre 2019</p>',
+            '<p class="blogpost-glimpse__date">30 novembre 2019</p>',
             html=True,
         )
 

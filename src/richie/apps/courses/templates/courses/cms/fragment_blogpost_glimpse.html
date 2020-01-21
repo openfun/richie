@@ -47,9 +47,11 @@ CHANGELOG:
         {% if variant %} blogpost-glimpse--{{ variant }}{% endif %}
         {% if blogpost_page.publisher_is_draft %} blogpost-glimpse--draft{% endif %}"
     >
+        {% if blogpost_page.publication_date %}
         <p class="blogpost-glimpse__date">
             {{ blogpost_page.publication_date|date:"DATE_FORMAT" }}
         </p>
+        {% endif %}
         <div class="blogpost-glimpse__media">
             {% get_page_plugins "cover" blogpost_page as plugins or %}
                 <div class="blogpost-glimpse__empty">{% trans 'Cover' %}</div>
