@@ -139,8 +139,10 @@ $btn-line-height-lg: $input-btn-line-height-lg;
 $r-topbar-breakpoint: lg;
 $r-footer-breakpoint: lg;
 
-// Fixed topbar height so we can preserve space
-$r-topbar-height: 8.8125rem;
+// Topbar height is required to be able to preserve space in some context like
+// when the tobpar is an absolute position, so content won't be placed below.
+// You will probably need to adjust it along logo height.
+$r-topbar-height: 8.0625rem;
 
 // Header logo width is required for SVG logos
 $r-topbar-logo-width-sm: 11.875rem;
