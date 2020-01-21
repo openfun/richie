@@ -53,11 +53,11 @@ class DetailBlogPostCMSTestCase(CMSTestCase):
         self.assertContains(
             response, '<h1 class="blogpost-detail__title">Preums</h1>', html=True
         )
-        self.assertContains(response, "Comte de Saint-Germain", html=True)
+        self.assertNotContains(response, "Comte de Saint-Germain", html=True)
 
         self.assertContains(
             response,
-            '<p class="blogpost-detail__subhead__date">Nov. 27, 2019</p>',
+            '<p class="blogpost-detail__pubdate">11/27/2019</p>',
             html=True,
         )
 
@@ -109,6 +109,6 @@ class DetailBlogPostCMSTestCase(CMSTestCase):
 
         self.assertContains(
             response,
-            '<p class="blogpost-detail__subhead__date">Not published yet</p>',
+            '<p class="blogpost-detail__pubdate">Not published yet</p>',
             html=True,
         )
