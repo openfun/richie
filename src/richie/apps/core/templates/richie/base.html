@@ -138,6 +138,9 @@
         </div>
 
         {% render_block "js" %}
+        <script>
+            window.__richie_frontend_context__ = JSON.parse('{{ FRONTEND_CONTEXT|safe }}');
+        </script>
         <script src="{% static 'richie/js/index.js' %}"></script>
         <script>
         document.addEventListener("DOMContentLoaded", function() {
