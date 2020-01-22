@@ -95,8 +95,13 @@ class OrganizationPluginTestCase(CMSTestCase):
         # The organization's name should be present as a link to the cms page
         # And CMS page title should be in title attribute of the link
         self.assertIn(
-            '<a class=" organization-glimpse organization-glimpse--link " '
-            'href="/en/public-title/"',
+            (
+                '<a class="organization-glimpse organization-glimpse--link" '
+                'href="/en/public-title/" title="public title">'
+            ).format(
+                url=organization_page.get_absolute_url(),
+                title=organization_page.get_title(),
+            ),
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
 
@@ -122,8 +127,8 @@ class OrganizationPluginTestCase(CMSTestCase):
         url = page.get_absolute_url(language="fr")
         response = self.client.get(url)
         self.assertIn(
-            '<a class=" organization-glimpse organization-glimpse--link " '
-            'href="/fr/titre-public/"',
+            '<a class="organization-glimpse organization-glimpse--link" '
+            'href="/fr/titre-public/" title="titre public"',
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
         pattern = (
