@@ -104,7 +104,9 @@ CHANGELOG:
                     <h2 class="organization-detail__title">{% trans "Related persons" %}</h2>
                     {% for person in persons %}
                         {% if person.extended_object.publisher_is_draft or person.check_publication %}
-                        {% include "courses/cms/fragment_person_glimpse.html" with person=person %}
+                            {% with header_level=3 %}
+                                {% include "courses/cms/fragment_person_glimpse.html" with person=person %}
+                            {% endwith %}
                         {% endif %}
                     {% endfor %}
                 </section>
