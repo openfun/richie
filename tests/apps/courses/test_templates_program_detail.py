@@ -51,14 +51,14 @@ class ProgramCMSTestCase(CMSTestCase):
             response, "<title>Preums</title>", html=True, status_code=200
         )
         self.assertContains(
-            response, '<h1 class="program-detail__title">Preums</h1>', html=True
+            response, '<h1 class="subheader__title">Preums</h1>', html=True
         )
 
         # Only published courses should be present on the page
         for course in courses[:2]:
             self.assertContains(
                 response,
-                '<p class="course-glimpse__content__title">{:s}</p>'.format(
+                '<p class="course-glimpse__title">{:s}</p>'.format(
                     course.extended_object.get_title()
                 ),
                 html=True,
@@ -101,14 +101,14 @@ class ProgramCMSTestCase(CMSTestCase):
             response, "<title>Preums</title>", html=True, status_code=200
         )
         self.assertContains(
-            response, '<h1 class="program-detail__title">Preums</h1>', html=True
+            response, '<h1 class="subheader__title">Preums</h1>', html=True
         )
 
         # The published courses should be present on the page
         for course in courses[:2]:
             self.assertContains(
                 response,
-                '<p class="course-glimpse__content__title">{:s}</p>'.format(
+                '<p class="course-glimpse__title">{:s}</p>'.format(
                     course.extended_object.get_title()
                 ),
                 html=True,
@@ -116,13 +116,13 @@ class ProgramCMSTestCase(CMSTestCase):
         # Draft courses should also be present on the page with an annotation for styling
         for course in courses[-2:]:
             self.assertIn(
-                '<a class=" course-glimpse course-glimpse--link course-glimpse--draft " '
+                '<a class="course-glimpse course-glimpse--link course-glimpse--draft" '
                 'href="{:s}"'.format(course.extended_object.get_absolute_url()),
                 re.sub(" +", " ", str(response.content).replace("\\n", "")),
             )
             self.assertContains(
                 response,
-                '<p class="course-glimpse__content__title">{title:s}</p>'.format(
+                '<p class="course-glimpse__title">{title:s}</p>'.format(
                     title=course.extended_object.get_title()
                 ),
                 html=True,
