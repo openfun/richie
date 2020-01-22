@@ -1,10 +1,6 @@
 {% extends "richie/base.html" %}
 {% load cms_tags i18n static %}
 {% get_current_language as LANGUAGE_CODE %}
-{% comment %}
-CHANGELOG:
-- React components need to fit to new glimpse structure
-{% endcomment %}
 
 {% block meta %}
   {% if CDN_DOMAIN %}
@@ -13,10 +9,6 @@ CHANGELOG:
 {% endblock meta %}
 
 {% block head_title %}{% page_attribute "page_title" %}{% endblock head_title %}
-
-{# Enable flex on the `.body-content` so children can grow to occupy the available vertical space #}
-{% comment %}Dropped since we don't want to overwrite elements CSS classes from template block anymore{% endcomment %}
-{% comment %}{% block bodycontent_classes %}body-content--flex-mode{% endblock bodycontent_classes %}{% endcomment %}
 
 {% block topbar_searchbar %}{% endblock topbar_searchbar %}
 
@@ -30,7 +22,7 @@ CHANGELOG:
     {% block subheader_content %}{% spaceless %}
         <div class="subheader__container">
             <div class="subheader__search">
-                <h1 class="subheader__title">Trouver un cours</h1>
+                <h1 class="subheader__title">{{ current_page.get_title }}</h1>
                 <div class="richie-react richie-react--root-search-suggest-field"
                      data-props='{"context": { "assets": { "icons": "{% static 'richie/icons.svg' %}" } }}'></div>
             </div>
