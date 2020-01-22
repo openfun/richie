@@ -98,7 +98,7 @@ class PersonCMSTestCase(CMSTestCase):
         )
         self.assertContains(
             response,
-            '<h1 class="person-detail__card__content__title">{:s}</h1>'.format(
+            '<h1 class="subheader__title">{:s}</h1>'.format(
                 person.extended_object.get_title()
             ),
             html=True,
@@ -107,8 +107,8 @@ class PersonCMSTestCase(CMSTestCase):
         self.assertContains(
             response,
             (
-                '<a class="category-plugin-tag" href="{:s}">'
-                '<div class="category-plugin-tag__title">{:s}</div></a>'
+                '<a class="feature-inlines__item" href="{:s}">'
+                '<span class="feature-inlines__term">{:s}</span></a>'
             ).format(
                 published_category.public_extension.extended_object.get_absolute_url(),
                 published_category.public_extension.extended_object.get_title(),
@@ -199,7 +199,7 @@ class PersonCMSTestCase(CMSTestCase):
         title = person.extended_object.get_title()
         self.assertContains(
             response,
-            f'<h1 class="person-detail__card__content__title">{title:s}</h1>',
+            f'<h1 class="subheader__title">{title:s}</h1>',
             html=True,
         )
 
@@ -207,8 +207,8 @@ class PersonCMSTestCase(CMSTestCase):
         self.assertContains(
             response,
             (
-                '<a class="category-plugin-tag" href="{:s}">'
-                '<div class="category-plugin-tag__title">{:s}</div></a>'
+                '<a class="feature-inlines__item" href="{:s}">'
+                '<span class="feature-inlines__term">{:s}</span></a>'
             ).format(
                 published_category.public_extension.extended_object.get_absolute_url(),
                 published_category.public_extension.extended_object.get_title(),
@@ -219,8 +219,8 @@ class PersonCMSTestCase(CMSTestCase):
         self.assertContains(
             response,
             (
-                '<a class="category-plugin-tag category-plugin-tag--draft" '
-                'href="{:s}"><div class="category-plugin-tag__title">{:s}</div></a>'
+                '<a class="feature-inlines__item feature-inlines__item--draft" '
+                'href="{:s}"><span class="feature-inlines__term">{:s}</span></a>'
             ).format(
                 not_published_category.extended_object.get_absolute_url(),
                 not_published_category.extended_object.get_title(),
@@ -247,9 +247,12 @@ class PersonCMSTestCase(CMSTestCase):
         )
         self.assertIn(
             (
-                '<a class=" organization-glimpse organization-glimpse--link '
-                'organization-glimpse--draft " href="{url:s}">'
-            ).format(url=not_published_organization.extended_object.get_absolute_url()),
+                '<a class="organization-glimpse organization-glimpse--link '
+                'organization-glimpse--draft" href="{url:s}" title="{title:s}">'
+            ).format(
+                url=not_published_organization.extended_object.get_absolute_url(),
+                title=not_published_organization.extended_object.get_title(),
+            ),
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
 
@@ -292,7 +295,7 @@ class PersonCMSTestCase(CMSTestCase):
         # The course should be present on the page
         self.assertContains(
             response,
-            '<p class="course-glimpse__content__title">{:s}</p>'.format(
+            '<p class="course-glimpse__title">{:s}</p>'.format(
                 course.extended_object.get_title()
             ),
             html=True,
@@ -314,7 +317,7 @@ class PersonCMSTestCase(CMSTestCase):
         # The blog post should be present on the page
         self.assertContains(
             response,
-            '<p class="blogpost-glimpse__content__title">{:s}</p>'.format(
+            '<p class="blogpost-glimpse__title">{:s}</p>'.format(
                 blog_post.extended_object.get_title()
             ),
             html=True,
