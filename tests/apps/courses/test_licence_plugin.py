@@ -53,7 +53,7 @@ class LicencePluginTestCase(CMSPluginTestCase):
         """
         # We deliberately use level '10' since it can be substituted from any
         # reasonable default level.
-        header_format = """<h10 class="licence-plugin__wrapper__title">{}</h10>"""
+        header_format = """<h10 class="licence-plugin__title">{}</h10>"""
 
         # Dummy slot where to include plugin
         placeholder = Placeholder.objects.create(slot="test")
