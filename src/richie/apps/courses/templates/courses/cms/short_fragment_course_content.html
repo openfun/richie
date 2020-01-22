@@ -83,7 +83,7 @@ CHANGELOG:
                 {% trans 'Course team' %}
             </h2>
             {% with header_level=3 %}
-                <div class="section__items course-detail__team__items">
+                <div class="section__items section__items--team">
                     {% page_placeholder "course_team" page or %}
                         <p>{% trans 'Who are the teachers in the course team?' %}</p>
                     {% endpage_placeholder %}
@@ -101,7 +101,7 @@ CHANGELOG:
             <h2 class="course-detail__title">
                 {% trans 'Organizations' %}
             </h2>
-            <div class="section__items course-detail__organizations__items">
+            <div class="section__items section__items--organizations">
                 {% page_placeholder "course_organizations" page or %}
                     <p class="course-detail__empty">
                         {% trans "What are the organizations publishing this course?" %}

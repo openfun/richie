@@ -32,7 +32,7 @@
                     {% block categories %}
                     {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_icons" or not current_page|is_empty_placeholder:"course_categories" %}
                     <div class="feature-inlines">
-                        <ul class="feature-inlines__container">
+                        <ul class="feature-inlines__container feature-inlines__container--categories">
                         {% with variant="feature" %}
                         {% placeholder "course_icons" %}
                         {% placeholder "course_categories" or %}
@@ -76,7 +76,7 @@
                         {% block synopsis %}
                         {% if course.duration or course.effort or current_page.publisher_is_draft %}
                         <div class="feature-inlines">
-                            <ul class="feature-inlines__container">
+                            <ul class="feature-inlines__container feature-inlines__container--times">
                             {% render_model_block course "duration,effort" %}
                                 {% if instance.duration or current_page.publisher_is_draft %}
                                 <li class="feature-inlines__item">
