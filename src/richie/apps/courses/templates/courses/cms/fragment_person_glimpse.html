@@ -1,4 +1,4 @@
-{% load i18n cms_tags extra_tags thumbnail %}
+{% load i18n cms_tags extra_tags thumbnail %}{% spaceless %}
 {% comment %}Obviously, the context template variable "person" is required and must be a Person page extension{% endcomment %}
 {% with person_page=person.extended_object %}
 <div class="person-glimpse">
@@ -38,3 +38,4 @@
     </div>
 </div>
 {% endwith %}
+{% endspaceless %}
