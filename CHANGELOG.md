@@ -20,6 +20,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   `bootstrap_elasticsearch`) from a broken state in ES.
 - `<Search />` component handles errors in course search requests, displaying
   an error message to end users.
+- Make sure the course search API shows the 1st related organization by
+  placeholder position as highlighted organization for a course instead of
+  the first organization by node path.
 
 ### Changed
 

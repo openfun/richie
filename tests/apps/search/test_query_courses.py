@@ -30,6 +30,7 @@ COURSES = [
             )
         },
         "is_new": True,
+        "organization_highlighted": {"en": "Org 311"},
         "organizations": ["P-00030001", "P-00030004", "L-000300010001"],
         "organizations_names": {"en": ["Org 31", "Org 34", "Org 311"]},
         "persons": ["2"],
@@ -48,6 +49,7 @@ COURSES = [
             )
         },
         "is_new": True,
+        "organization_highlighted": {"en": "Org 33"},
         "organizations": ["P-00030001", "P-00030003", "L-000300010002"],
         "organizations_names": {"en": ["Org 31", "Org 33", "Org 312"]},
         "persons": [],
@@ -66,6 +68,7 @@ COURSES = [
             )
         },
         "is_new": False,
+        "organization_highlighted": {"en": "Org 321"},
         "organizations": ["P-00030002", "P-00030003", "L-000300020001"],
         "organizations_names": {"en": ["Org 32", "Org 33", "Org 321"]},
         "persons": [],
@@ -83,6 +86,7 @@ COURSES = [
             )
         },
         "is_new": False,
+        "organization_highlighted": {"en": "Org 34"},
         "organizations": ["P-00030002", "P-00030004", "L-000300020002"],
         "organizations_names": {"en": ["Org 32", "Org 34", "Org 322"]},
         "persons": ["2"],
@@ -337,7 +341,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         ],
                         "cover_image": "cover_image.jpg",
                         "icon": "icon.jpg",
-                        "organization_highlighted": "Org 31",
+                        "organization_highlighted": "Org 311",
                         "organizations": ["P-00030001", "P-00030004", "L-000300010001"],
                         "state": {
                             "priority": 0,
@@ -360,7 +364,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         ],
                         "cover_image": "cover_image.jpg",
                         "icon": "icon.jpg",
-                        "organization_highlighted": "Org 32",
+                        "organization_highlighted": "Org 321",
                         "organizations": ["P-00030002", "P-00030003", "L-000300020001"],
                         "state": {
                             "priority": 0,
@@ -383,7 +387,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         ],
                         "cover_image": "cover_image.jpg",
                         "icon": "icon.jpg",
-                        "organization_highlighted": "Org 32",
+                        "organization_highlighted": "Org 34",
                         "organizations": ["P-00030002", "P-00030004", "L-000300020002"],
                         "state": {
                             "priority": 1,
@@ -406,7 +410,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         ],
                         "cover_image": "cover_image.jpg",
                         "icon": "icon.jpg",
-                        "organization_highlighted": "Org 31",
+                        "organization_highlighted": "Org 33",
                         "organizations": ["P-00030001", "P-00030003", "L-000300010002"],
                         "state": {
                             "priority": 4,
