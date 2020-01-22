@@ -45,10 +45,14 @@ class DefaultTemplatesTestCase(CMSPluginTestCase):
         self.assertHTMLEqual(
             html,
             """
-            <section class="section">
+            <section class="section ">
+            <div class="section__row">
             <h2 class="section__title">My section</h2>
+            <div class="section__items">
             <a href="http://www.example.com/1">Example 1</a>
             <a href="http://www.example.com/2">Example 2</a>
+            </div>
+            </div>
             </section>
             """,
         )
@@ -103,16 +107,28 @@ class DefaultTemplatesTestCase(CMSPluginTestCase):
         self.assertHTMLEqual(
             html,
             """
-            <section class="section">
-            <section class="section">
-            <h2 class="section__title">My section 1</h2>
+            <section class="section ">
+            <div class="section__row">
+            <div class="section__items">
+            <section class="section ">
+            <div class="section__row">
+            <h3 class="section__title">My section 1</h3>
+            <div class="section__items">
             <a href="http://www.example.com/1">Example 1</a>
             <a href="http://www.example.com/2">Example 2</a>
+            </div>
+            </div>
             </section>
-            <section class="section">
+            <section class="section ">
+            <div class="section__row">
+            <div class="section__items">
             <a href="http://www.example.com/1">Example 1</a>
             <a href="http://www.example.com/2">Example 2</a>
+            </div>
+            </div>
             </section>
+            </div>
+            </div>
             </section>
             """,
         )

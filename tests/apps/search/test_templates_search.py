@@ -27,7 +27,6 @@ class CourseCMSTestCase(CMSTestCase):
         page.publish("en")
 
         response = self.client.get(url)
-        print(response.content.decode("utf-8"))
         self.assertEqual(response.status_code, 200)
         self.assertIsNotNone(
             re.search(
