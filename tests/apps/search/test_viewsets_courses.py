@@ -294,8 +294,8 @@ class CoursesViewsetsTestCase(CMSTestCase):
                 "categories",
                 "cover_image",
                 "icon",
+                "organization_highlighted",
                 "organizations",
-                "organizations_names",
                 "title.*",
             ],
             body={

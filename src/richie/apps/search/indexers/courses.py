@@ -77,8 +77,8 @@ class CoursesIndexer:
         "categories",
         "cover_image",
         "icon",
+        "organization_highlighted",
         "organizations",
-        "organizations_names",
         "title.*",
     ]
     form = CourseSearchForm
@@ -440,6 +440,10 @@ class CoursesIndexer:
             .only("extended_object__node")
             .distinct()
         )
+        organization_main = course.get_main_organization()
+        organization_highlighted = (
+            organizations.get(id=organization_main.id) if organization_main else None
+        )
 
         # Prepare persons, making sure we get title information for persons
         # in the same query
@@ -506,6 +510,14 @@ class CoursesIndexer:
             "description": {l: " ".join(st) for l, st in descriptions.items()},
             "icon": icon_images,
             "is_new": len(course_runs) == 1,
+            # Pick the highlighted organization from the organizations QuerySet to benefit from
+            # the prefetch of related title sets
+            "organization_highlighted": {
+                title.language: title.title
+                for title in organization_highlighted.extended_object.published_titles
+            }
+            if organization_highlighted
+            else None,
             "organizations": [
                 ES_INDICES.organizations.get_es_id(o.extended_object)
                 for o in organizations
@@ -575,17 +587,16 @@ class CoursesIndexer:
         except KeyError:
             state["date_time"] = None
 
-        organizations_names = get_best_field_language(
-            source["organizations_names"], language
-        )
         return {
             "id": es_course["_id"],
             "absolute_url": get_best_field_language(source["absolute_url"], language),
             "categories": source["categories"],
             "cover_image": get_best_field_language(source["cover_image"], language),
             "icon": get_best_field_language(source["icon"], language),
-            "organization_highlighted": organizations_names[0]
-            if organizations_names
+            "organization_highlighted": get_best_field_language(
+                source["organization_highlighted"], language
+            )
+            if source.get("organization_highlighted", None)
             else None,
             "organizations": source["organizations"],
             "state": CourseState(**state),

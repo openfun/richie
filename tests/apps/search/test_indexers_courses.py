@@ -242,6 +242,10 @@ class CoursesIndexersTestCase(TestCase):
                 },
             },
             "is_new": False,
+            "organization_highlighted": {
+                "en": "english main organization title",
+                "fr": "titre organisation principale français",
+            },
             "organizations": ["L-0004", "L-0006"],
             "organizations_names": {
                 "en": [
@@ -268,6 +272,49 @@ class CoursesIndexersTestCase(TestCase):
         )
         self.assertEqual(len(indexed_courses), 1)
         self.assertEqual(indexed_courses[0], expected_course)
+
+    def test_indexers_courses_get_es_document_no_organization(self):
+        """
+        Courses with no linked organizations should get indexed without raising exceptions.
+        """
+        course = CourseFactory(
+            page_title="Enhanced incremental circuit", should_publish=True
+        )
+        indexed_courses = list(
+            CoursesIndexer.get_es_documents(index="some_index", action="some_action")
+        )
+        self.assertEqual(
+            indexed_courses,
+            [
+                {
+                    "_id": str(course.extended_object.publisher_public_id),
+                    "_index": "some_index",
+                    "_op_type": "some_action",
+                    "_type": "course",
+                    "absolute_url": {"en": "/en/enhanced-incremental-circuit/"},
+                    "categories": [],
+                    "categories_names": {},
+                    "complete": {
+                        "en": [
+                            "Enhanced incremental circuit",
+                            "incremental circuit",
+                            "circuit",
+                        ]
+                    },
+                    "course_runs": [],
+                    "cover_image": {},
+                    "description": {},
+                    "icon": {},
+                    "is_new": False,
+                    "organization_highlighted": None,
+                    "organizations": [],
+                    "organizations_names": {},
+                    "persons": [],
+                    "persons_names": {},
+                    "title": {"en": "Enhanced incremental circuit"},
+                }
+            ],
+        )
 
     def test_indexers_courses_get_es_documents_no_start(self):
         """
@@ -438,6 +485,7 @@ class CoursesIndexersTestCase(TestCase):
                 "categories": [43, 86],
                 "cover_image": {"en": "cover_image.jpg"},
                 "icon": {"en": "icon.jpg"},
+                "organization_highlighted": {"en": "Org 84"},
                 "organizations": [42, 84],
                 "organizations_names": {"en": ["Org 42", "Org 84"]},
                 "title": {"en": "Duis eu arcu erat"},
@@ -456,7 +504,7 @@ class CoursesIndexersTestCase(TestCase):
                 "categories": [43, 86],
                 "cover_image": "cover_image.jpg",
                 "icon": "icon.jpg",
-                "organization_highlighted": "Org 42",
+                "organization_highlighted": "Org 84",
                 "organizations": [42, 84],
                 "title": "Duis eu arcu erat",
                 "state": CourseState(
@@ -477,6 +525,7 @@ class CoursesIndexersTestCase(TestCase):
                 "categories": [43, 86],
                 "cover_image": {"en": "cover_image.jpg"},
                 "icon": {"en": "icon.jpg"},
+                "organization_highlighted": None,
                 "organizations": [],
                 "organizations_names": {},
                 "title": {"en": "Duis eu arcu erat"},
@@ -515,6 +564,7 @@ class CoursesIndexersTestCase(TestCase):
                 "categories": [43, 86],
                 "cover_image": {"en": "cover_image.jpg"},
                 "icon": {},
+                "organization_highlighted": {"en": "Org 84"},
                 "organizations": [42, 84],
                 "organizations_names": {"en": ["Org 42", "Org 84"]},
                 "title": {"en": "Duis eu arcu erat"},
@@ -533,7 +583,7 @@ class CoursesIndexersTestCase(TestCase):
                 "categories": [43, 86],
                 "cover_image": "cover_image.jpg",
                 "icon": None,
-                "organization_highlighted": "Org 42",
+                "organization_highlighted": "Org 84",
                 "organizations": [42, 84],
                 "title": "Duis eu arcu erat",
                 "state": CourseState(
@@ -553,6 +603,7 @@ class CoursesIndexersTestCase(TestCase):
                 "categories": [43, 86],
                 "cover_image": {},
                 "icon": {"en": "icon.jpg"},
+                "organization_highlighted": {"en": "Org 42"},
                 "organizations": [42, 84],
                 "organizations_names": {"en": ["Org 42", "Org 84"]},
                 "title": {"en": "Duis eu arcu erat"},
