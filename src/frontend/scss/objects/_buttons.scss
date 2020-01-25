@@ -4,98 +4,108 @@
 
 // Helper classes
 // Main purpose of these classes is to demonstrate mixins usage
-.button{
-    @include button-base();
+.button {
+  @include button-base();
 
-    // Form factors
-    &--square{
-        @include button-base($form-factor: "square");
+  // Form factors
+  &--square {
+    @include button-base($form-factor: 'square');
+  }
+  &--pill {
+    @include button-base($form-factor: 'pill');
+  }
+  &--round {
+    @include button-base($form-factor: 'round');
+  }
+
+  // Size modifiers and their specific form factors
+  &--tiny {
+    @include button-tiny();
+
+    &.button--square {
+      @include button-tiny($form-factor: 'square');
     }
-    &--pill{
-        @include button-base($form-factor: "pill");
+    &.button--pill {
+      @include button-tiny($form-factor: 'pill');
     }
-    &--round{
-        @include button-base($form-factor: "round");
+    &.button--round {
+      @include button-tiny($form-factor: 'round');
     }
+  }
 
-    // Size modifiers and their specific form factors
-    &--tiny{
-        @include button-tiny();
+  &--small {
+    @include button-small();
 
-        &.button--square{
-            @include button-tiny($form-factor: "square");
-        }
-        &.button--pill{
-            @include button-tiny($form-factor: "pill");
-        }
-        &.button--round{
-            @include button-tiny($form-factor: "round");
-        }
+    &.button--square {
+      @include button-small($form-factor: 'square');
     }
-
-    &--small{
-        @include button-small();
-
-        &.button--square{
-            @include button-small($form-factor: "square");
-        }
-        &.button--pill{
-            @include button-small($form-factor: "pill");
-        }
-        &.button--round{
-            @include button-small($form-factor: "round");
-        }
+    &.button--pill {
+      @include button-small($form-factor: 'pill');
     }
-
-    &--large{
-        @include button-large();
-
-        &.button--square{
-            @include button-large($form-factor: "square");
-        }
-        &.button--pill{
-            @include button-large($form-factor: "pill");
-        }
-        &.button--round{
-            @include button-large($form-factor: "round");
-        }
+    &.button--round {
+      @include button-small($form-factor: 'round');
     }
+  }
 
-    // Color variant modifiers class names following color schemes
-    @each $name, $scheme in map-get($r-theme, "base-schemes") {
-        &--#{$name}{
-            &:not(.disabled){
-                @include r-button-colors($scheme, $apply-border: true);
+  &--large {
+    @include button-large();
 
-                &:hover{
-                    @include r-button-colors($scheme, $apply-border: true, $prefix: "hover");
-                }
-            }
-            // Enforce colors opposed to avoid framework 'disabled'
-            // selector to win priority
-            &.disabled{
-                @include r-button-colors($scheme, $apply-border: true);
-            }
-        }
+    &.button--square {
+      @include button-large($form-factor: 'square');
     }
+    &.button--pill {
+      @include button-large($form-factor: 'pill');
+    }
+    &.button--round {
+      @include button-large($form-factor: 'round');
+    }
+  }
+
+  // Color variant modifiers class names following color schemes
+  @each $name, $scheme in map-get($r-theme, 'base-schemes') {
+    &--#{$name} {
+      &:not(.disabled) {
+        @include r-button-colors($scheme, $apply-border: true);
+
+        &:hover {
+          @include r-button-colors(
+            $scheme,
+            $apply-border: true,
+            $prefix: 'hover'
+          );
+        }
+      }
+      // Enforce colors opposed to avoid framework 'disabled'
+      // selector to win priority
+      &.disabled {
+        @include r-button-colors($scheme, $apply-border: true);
+      }
+    }
+  }
 }
-
 
 // Caesura block for single centered button on its own row
 .button-caesura {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 
-    // Enforce an "hollow" display
-    a {
-        @include sv-flex(0, 0, auto);
-        @include button-base($font-weight: bold);
-        @include r-button-colors(r-theme-val(button-caesura, base), $apply-border: true);
-        display: block;
-        text-transform: uppercase;
+  // Enforce an "hollow" display
+  a {
+    @include sv-flex(0, 0, auto);
+    @include button-base($font-weight: bold);
+    @include r-button-colors(
+      r-theme-val(button-caesura, base),
+      $apply-border: true
+    );
+    display: block;
+    text-transform: uppercase;
 
-        &:hover {
-            @include r-button-colors(r-theme-val(button-caesura, base-hover), $apply-border: true, $prefix: "hover");
-        }
+    &:hover {
+      @include r-button-colors(
+        r-theme-val(button-caesura, base-hover),
+        $apply-border: true,
+        $prefix: 'hover'
+      );
     }
+  }
 }

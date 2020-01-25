@@ -37,11 +37,11 @@ $grid-gutter-width: 20px;
 
 // Use the footer bg color it seems to continue to the bottom end even with
 // page is empty, body-content bg will make the real base color for contents
-$body-bg: r-color("white");
+$body-bg: r-color('white');
 
 // Typography
 //
-$link-color: r-color("denim");
+$link-color: r-color('denim');
 $link-hover-color: darken($link-color, 15%);
 
 // Adjust font families
@@ -79,9 +79,9 @@ $headings-font-weight: $font-weight-extrabold;
 // Shorter heading line height
 $headings-line-height: 1.1;
 
-$border-radius: .25rem;
-$border-radius-lg: .5rem;
-$border-radius-sm: .2rem;
+$border-radius: 0.25rem;
+$border-radius-lg: 0.5rem;
+$border-radius-sm: 0.2rem;
 
 // Buttons + Forms
 //
@@ -92,7 +92,7 @@ $input-btn-font-family: $headings-font-family;
 $input-btn-padding-y: 0.7rem;
 $input-btn-padding-x: 1.3rem;
 $input-btn-font-size: $font-size-base;
-$input-btn-line-height:  $line-height-base;
+$input-btn-line-height: $line-height-base;
 
 $input-btn-padding-y-tiny: 0.2rem;
 $input-btn-padding-x-tiny: 0.5rem;
@@ -154,7 +154,7 @@ $r-footer-logo-width-lg: 11.875rem;
 
 // Background for content container objects, eg. detailed courses, categories,
 // persons etc. pages.
-$richie-content-container-bg: r-color("white");
+$richie-content-container-bg: r-color('white');
 
 // Aside column width in course detail, if 'null' content and aside columns take
 // full width like common blocks. Usefull if you plan to remove course run from

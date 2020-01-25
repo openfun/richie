@@ -1,219 +1,222 @@
 // Main body footer
 .body-footer {
-    padding: 0;
-    color: r-theme-val(body-footer, base-color);
-    background: r-theme-val(body-footer, base-background);
+  padding: 0;
+  color: r-theme-val(body-footer, base-color);
+  background: r-theme-val(body-footer, base-background);
 
-    &__container {
-        @include make-container();
-        @include make-container-max-widths();
-        display: flex;
-        padding-top: 1rem;
-        padding-bottom: 1rem;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: space-between;
+  &__container {
+    @include make-container();
+    @include make-container-max-widths();
+    display: flex;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  &__brand {
+    @include sv-flex(1, 0, 100%);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    order: 1;
+
+    @include media-breakpoint-up($r-footer-breakpoint) {
+      @include sv-flex(1, 0, 100%);
     }
 
-    &__brand {
+    & > a {
+      @include sv-flex(1, 0, 100%);
+    }
+
+    img,
+    svg {
+      display: block;
+      margin: 0 0 1rem;
+      width: $r-footer-logo-width-sm;
+
+      @include media-breakpoint-up($r-footer-breakpoint) {
+        width: $r-footer-logo-width-lg;
+      }
+    }
+  }
+
+  &__insert {
+    @include sv-flex(1, 0, 100%);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+    order: 3;
+
+    @include media-breakpoint-up($r-footer-breakpoint) {
+      @include sv-flex(1, 0, 35%);
+      margin-top: 0;
+      order: 2;
+    }
+
+    // Divider between every direct children
+    & > * + * {
+      margin-top: 1rem;
+    }
+
+    .languages-menu {
+      @include sv-flex(1, 0, 100%);
+      padding: 0;
+      margin-bottom: 0;
+      font-family: $r-font-family-montserrat;
+      font-weight: $font-weight-boldest;
+      color: r-theme-val(body-footer, lang-color);
+      list-style-type: none;
+
+      &__item {
+        display: inline-block;
+        margin-left: 0.5rem;
+
+        &--label {
+          margin-left: 0;
+        }
+      }
+
+      &__link {
+        color: inherit;
+      }
+    }
+  }
+
+  &__title {
+    @include sv-flex(1, 0, 100%);
+    @include font-size($h4-font-size);
+    margin-bottom: 0;
+    font-family: $r-font-family-montserrat;
+    font-weight: $font-weight-boldest;
+  }
+
+  &__badges {
+    @include sv-flex(1, 0, 100%);
+    display: flex;
+  }
+
+  &__badge {
+    @include sv-flex(1, 0, 2.75rem);
+    @include spot($padding: 0.8rem);
+    @include r-button-colors(
+      r-theme-val(body-footer, badge-button),
+      $apply-border: true,
+      $include-hover: true
+    );
+    margin: 0 1rem 1rem 0;
+    height: 2.75rem;
+  }
+
+  &__menu {
+    @include sv-flex(1, 0, 100%);
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-content: flex-start;
+    order: 2;
+
+    @include media-breakpoint-up($r-footer-breakpoint) {
+      @include sv-flex(1, 0, 65%);
+      order: 3;
+    }
+
+    // Divider between every direct children
+    & > * + * {
+      margin-top: 1rem;
+    }
+
+    .section-list {
+      @include sv-flex(1, 0, 100%);
+      display: flex;
+      padding: 0;
+      margin-bottom: 0;
+      flex-direction: row;
+      flex-wrap: wrap;
+      list-style-type: none;
+
+      &__item {
         @include sv-flex(1, 0, 100%);
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        order: 1;
+        padding: 0.25rem;
 
         @include media-breakpoint-up($r-footer-breakpoint) {
-            @include sv-flex(1, 0, 100%);
-        }
-
-        & > a {
-            @include sv-flex(1, 0, 100%);
-        }
-
-        img,
-        svg {
-            display: block;
-            margin: 0 0 1rem;
-            width: $r-footer-logo-width-sm;
-
-            @include media-breakpoint-up($r-footer-breakpoint) {
-                width: $r-footer-logo-width-lg;
-            }
-        }
-    }
-
-    &__insert {
-        @include sv-flex(1, 0, 100%);
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        margin-top: 1rem;
-        order: 3;
-
-        @include media-breakpoint-up($r-footer-breakpoint) {
-            @include sv-flex(1, 0, 35%);
-            margin-top: 0;
-            order: 2
-        }
-
-        // Divider between every direct children
-        & > * + *{
-            margin-top: 1rem;
-        }
-
-        .languages-menu {
-            @include sv-flex(1, 0, 100%);
-            padding: 0;
-            margin-bottom: 0;
-            font-family: $r-font-family-montserrat;
-            font-weight: $font-weight-boldest;
-            color: r-theme-val(body-footer, lang-color);
-            list-style-type: none;
-
-            &__item{
-                display: inline-block;
-                margin-left: 0.5rem;
-
-                &--label{
-                    margin-left: 0;
-                }
-            }
-
-            &__link {
-                color: inherit;
-            }
-        }
-    }
-
-    &__title {
-        @include sv-flex(1, 0, 100%);
-        @include font-size($h4-font-size);
-        margin-bottom: 0;
-        font-family: $r-font-family-montserrat;
-        font-weight: $font-weight-boldest;
-    }
-
-    &__badges {
-        @include sv-flex(1, 0, 100%);
-        display: flex;
-    }
-
-    &__badge {
-        @include sv-flex(1, 0, 2.75rem);
-        @include spot($padding: 0.8rem);
-        @include r-button-colors(r-theme-val(body-footer, badge-button), $apply-border: true, $include-hover: true);
-        margin: 0 1rem 1rem 0;
-        height: 2.75rem;
-    }
-
-    &__menu {
-        @include sv-flex(1, 0, 100%);
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: row;
-        align-content: flex-start;
-        order: 2;
-
-        @include media-breakpoint-up($r-footer-breakpoint) {
-            @include sv-flex(1, 0, 65%);
-            order: 3;
-        }
-
-        // Divider between every direct children
-        & > * + * {
-            margin-top: 1rem;
-        }
-
-        .section-list {
-            @include sv-flex(1, 0, 100%);
-            display: flex;
-            padding: 0;
-            margin-bottom: 0;
-            flex-direction: row;
-            flex-wrap: wrap;
-            list-style-type: none;
-
-            &__item {
-                @include sv-flex(1, 0, 100%);
-                padding: 0.25rem;
-
-                @include media-breakpoint-up($r-footer-breakpoint) {
-                    @include sv-flex(1, 0, 33.3333%);
-                }
-
-                a {
-                    color: inherit;
-
-                    &:hover{
-                        color: r-theme-val(body-footer, section-hover);
-                        text-decoration: none;
-                    }
-                }
-            }
-        }
-    }
-
-    &__subtitle {
-        @include sv-flex(1, 0, 100%);
-        @include font-size($h4-font-size);
-        margin-bottom: 0;
-        padding: 0 0.25rem;
-        color: r-theme-val(body-footer, subtitle-color);
-        font-family: $r-font-family-montserrat;
-        font-weight: $font-weight-boldest;
-    }
-}
-
-
-// Legal mentions
-.body-mentions{
-    padding: 0.8rem 0;
-    color: r-theme-val(body-mentions, base-color);
-    background: r-theme-val(body-mentions, base-background);
-
-    &__container {
-        @include make-container();
-        @include make-container-max-widths();
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: space-between;
-    }
-
-    &__copyright {
-        @include font-size($h5-font-size);
-        @include sv-flex(1, 0, 100%);
-        font-family: $r-font-family-montserrat;
-        text-align: center;
-
-        @include media-breakpoint-up($r-footer-breakpoint) {
-            @include sv-flex(1, 0, auto);
-            text-align: left;
-        }
-
-        p{
-            margin-bottom: 0;
-        }
-    }
-
-    &__poweredby {
-        @include font-size($h6-font-size);
-        @include sv-flex(1, 0, 100%);
-        font-family: $r-font-family-montserrat;
-        text-align: center;
-
-        @include media-breakpoint-up($r-footer-breakpoint) {
-            @include sv-flex(1, 0, auto);
-            text-align: right;
+          @include sv-flex(1, 0, 33.3333%);
         }
 
         a {
-            color: inherit;
+          color: inherit;
 
-            &:hover{
-                text-decoration: none;
-                color: r-theme-val(body-mentions, poweredby-hover);
-            }
+          &:hover {
+            color: r-theme-val(body-footer, section-hover);
+            text-decoration: none;
+          }
         }
+      }
     }
+  }
+
+  &__subtitle {
+    @include sv-flex(1, 0, 100%);
+    @include font-size($h4-font-size);
+    margin-bottom: 0;
+    padding: 0 0.25rem;
+    color: r-theme-val(body-footer, subtitle-color);
+    font-family: $r-font-family-montserrat;
+    font-weight: $font-weight-boldest;
+  }
+}
+
+// Legal mentions
+.body-mentions {
+  padding: 0.8rem 0;
+  color: r-theme-val(body-mentions, base-color);
+  background: r-theme-val(body-mentions, base-background);
+
+  &__container {
+    @include make-container();
+    @include make-container-max-widths();
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+
+  &__copyright {
+    @include font-size($h5-font-size);
+    @include sv-flex(1, 0, 100%);
+    font-family: $r-font-family-montserrat;
+    text-align: center;
+
+    @include media-breakpoint-up($r-footer-breakpoint) {
+      @include sv-flex(1, 0, auto);
+      text-align: left;
+    }
+
+    p {
+      margin-bottom: 0;
+    }
+  }
+
+  &__poweredby {
+    @include font-size($h6-font-size);
+    @include sv-flex(1, 0, 100%);
+    font-family: $r-font-family-montserrat;
+    text-align: center;
+
+    @include media-breakpoint-up($r-footer-breakpoint) {
+      @include sv-flex(1, 0, auto);
+      text-align: right;
+    }
+
+    a {
+      color: inherit;
+
+      &:hover {
+        text-decoration: none;
+        color: r-theme-val(body-mentions, poweredby-hover);
+      }
+    }
+  }
 }

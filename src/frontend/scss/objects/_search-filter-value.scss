@@ -1,104 +1,104 @@
 .search-filter-value-leaf,
 .search-filter-value-parent__self__label {
-    align-items: center;
-    margin-bottom: 0;
-    border: none;
-    background: inherit;
-    color: r-theme-val(search-filters-value, base-color);
-    cursor: pointer;
+  align-items: center;
+  margin-bottom: 0;
+  border: none;
+  background: inherit;
+  color: r-theme-val(search-filters-value, base-color);
+  cursor: pointer;
 
-    &:hover,
-    &:focus {
-        z-index: 1; // Place hover/active items above their siblings for proper border styling
-        color: r-theme-val(search-filters-value, hover-color);
+  &:hover,
+  &:focus {
+    z-index: 1; // Place hover/active items above their siblings for proper border styling
+    color: r-theme-val(search-filters-value, hover-color);
+  }
+
+  &--disabled,
+  &--disabled:hover,
+  &--disabled:focus {
+    font-style: italic;
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &__checkbox {
+    align-self: start;
+    margin-right: 0.5rem;
+    margin-top: 0.2rem;
+    font-size: 110%;
+  }
+
+  &__content {
+    flex-grow: 1;
+    text-align: start;
+
+    &__count {
+      @extend .badge;
+      @extend .badge-pill;
+
+      display: inline; // So &nbsp; can prevent linebreaks between the name and the count badge
+      color: r-theme-val(search-filters-value, count-color);
+      background: r-theme-val(search-filters-value, count-background);
+      margin-left: 0.375rem;
     }
-
-    &--disabled,
-    &--disabled:hover,
-    &--disabled:focus {
-        font-style: italic;
-        opacity: 0.6;
-        cursor: not-allowed;
-    }
-
-    &__checkbox {
-        align-self: start;
-        margin-right: 0.5rem;
-        margin-top: 0.2rem;
-        font-size: 110%;
-    }
-
-    &__content {
-        flex-grow: 1;
-        text-align: start;
-
-        &__count {
-            @extend .badge;
-            @extend .badge-pill;
-
-            display: inline; // So &nbsp; can prevent linebreaks between the name and the count badge
-            color: r-theme-val(search-filters-value, count-color);
-            background: r-theme-val(search-filters-value, count-background);
-            margin-left: 0.375rem;
-        }
-    }
+  }
 }
 
 // Most active styles are done on the filter button itself (which is the component itself for leaves
 // and an inner part for parents)
 .search-filter-value-leaf.active,
 .search-filter-value-parent__self.active
-    > .search-filter-value-parent__self__label {
-    z-index: 2; // Place active items above their siblings for proper border styling
-    color: r-theme-val(search-filters-value, active-color);
+  > .search-filter-value-parent__self__label {
+  z-index: 2; // Place active items above their siblings for proper border styling
+  color: r-theme-val(search-filters-value, active-color);
 }
 
 // Border styling needs to be done on an outer component for parents, incl. active styling
 .search-filter-value-leaf,
 .search-filter-value-parent__self {
-    display: flex;
-    border-bottom: 1px solid r-theme-val(search-filters-value, base-border);
-    padding: 0.4rem 0.5rem;
+  display: flex;
+  border-bottom: 1px solid r-theme-val(search-filters-value, base-border);
+  padding: 0.4rem 0.5rem;
 
-    &.active {
-        border-bottom: 1px solid r-theme-val(search-filters-value, hover-border);
-    }
+  &.active {
+    border-bottom: 1px solid r-theme-val(search-filters-value, hover-border);
+  }
 }
 
 .search-filter-value-parent {
+  display: flex;
+  flex-direction: column;
+  padding: 0; // Padding is applied by __self & leaves, not parent
+
+  &__self {
+    padding-right: 0; // Make room for the +/-
+
+    &__label {
+      display: flex;
+      flex-grow: 1;
+      padding: 0;
+      text-align: start;
+    }
+
+    &__unfold {
+      border: 0;
+      margin-left: 0.4rem;
+      padding: 0 0.15rem;
+      background: inherit;
+      color: r-theme-val(search-filters-value-parent, unfold-color);
+      transition: 0.2s ease-in-out;
+      line-height: 1.5rem;
+      font-size: 1.3rem;
+      font-weight: $font-weight-light;
+    }
+  }
+
+  &__children {
     display: flex;
     flex-direction: column;
-    padding: 0; // Padding is applied by __self & leaves, not parent
 
-    &__self {
-        padding-right: 0; // Make room for the +/-
-
-        &__label {
-            display: flex;
-            flex-grow: 1;
-            padding: 0;
-            text-align: start;
-        }
-
-        &__unfold {
-            border: 0;
-            margin-left: 0.4rem;
-            padding: 0 0.15rem;
-            background: inherit;
-            color: r-theme-val(search-filters-value-parent, unfold-color);
-            transition: 0.2s ease-in-out;
-            line-height: 1.5rem;
-            font-size: 1.3rem;
-            font-weight: $font-weight-light;
-        }
+    & > .search-filter-value-leaf {
+      padding-left: 1.1rem;
     }
-
-    &__children {
-        display: flex;
-        flex-direction: column;
-
-        & > .search-filter-value-leaf{
-            padding-left: 1.1rem;
-        }
-    }
+  }
 }

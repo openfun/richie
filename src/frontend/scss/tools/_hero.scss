@@ -61,7 +61,7 @@
   $content-margin: null,
   $content-padding: null,
   $logo-margin: null,
-  $logo-padding: null,
+  $logo-padding: null
 ) {
   // Flow direction depending media width value
   @include m-o-hero_container(

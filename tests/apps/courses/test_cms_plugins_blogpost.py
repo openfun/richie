@@ -132,9 +132,7 @@ class BlogPostPluginTestCase(CMSTestCase):
 
         # Publication date should be set by first publication
         self.assertContains(
-            response,
-            '<p class="blogpost-glimpse__date">Nov. 30, 2019</p>',
-            html=True,
+            response, '<p class="blogpost-glimpse__date">Nov. 30, 2019</p>', html=True,
         )
 
         # Same checks in French

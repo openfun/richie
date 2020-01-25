@@ -1,306 +1,312 @@
 // Main body header
 .topbar {
-    $topbar-selector: &;
-    padding: 1rem 0;
-    position: relative;
-    z-index: 200;
-    background: r-theme-val(topbar, base-background);
+  $topbar-selector: &;
+  padding: 1rem 0;
+  position: relative;
+  z-index: 200;
+  background: r-theme-val(topbar, base-background);
+
+  @include media-breakpoint-up($r-topbar-breakpoint) {
+    height: $r-topbar-height;
+
+    &--over {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 1rem 0 0;
+      background: r-theme-val(topbar, over-background);
+      @if r-theme-val(topbar, over-border) {
+        border-bottom: $onepixel solid r-theme-val(topbar, over-border);
+      }
+    }
+  }
+
+  // Sub container for optional contain-to-grid behavior
+  &__container {
+    @include make-container();
+    @include make-container-max-widths();
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
 
     @include media-breakpoint-up($r-topbar-breakpoint) {
-        height: $r-topbar-height;
+      flex-direction: row;
+    }
+  }
 
-        &--over{
+  // Will show only on mobile breakpoints
+  &__hamburger {
+    @include sv-flex(0, 0, auto);
+    padding: 0 1rem;
+    order: 2;
+    color: r-theme-val(topbar, hamburger-color);
+    font-size: 2rem;
+    line-height: 1;
+    border: 0;
+    cursor: pointer;
+    background: inherit;
+
+    @include media-breakpoint-up($r-topbar-breakpoint) {
+      display: none;
+    }
+  }
+
+  // Brand part with hamburger and clickable logo
+  &__brand {
+    @include sv-flex(1, 0, auto);
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    order: 1;
+
+    @include media-breakpoint-up($r-topbar-breakpoint) {
+      @if $r-topbar-logo-width-lg {
+        @include sv-flex(0, 0, $r-topbar-logo-width-lg);
+      } @else {
+        @include sv-flex(0, 0, auto);
+      }
+      margin-right: 10%;
+    }
+
+    // Clickable logo
+    & > a {
+      @include sv-flex(1, 0, auto);
+      padding: 0;
+      order: 1;
+
+      @include media-breakpoint-up($r-topbar-breakpoint) {
+        @include sv-flex(0, 0, auto);
+      }
+    }
+  }
+
+  &__logo {
+    display: block;
+    width: $r-topbar-logo-width-sm;
+
+    @include media-breakpoint-up($r-topbar-breakpoint) {
+      width: $r-topbar-logo-width-lg;
+    }
+  }
+
+  // Menu item list
+  &__list {
+    $list-selector: &;
+
+    @include sv-flex(1, 0, 100%);
+    display: flex;
+    margin: 0;
+    padding: 0;
+    flex-direction: column;
+    list-style-type: none;
+
+    @include media-breakpoint-up($r-topbar-breakpoint) {
+      @include sv-flex(1, 0, auto);
+      display: flex;
+      flex-direction: row;
+    }
+
+    // Alternative menu behavior for controls/cta
+    &--controls {
+      @include sv-flex(0, 0, 100%);
+
+      @include media-breakpoint-up($r-topbar-breakpoint) {
+        @include sv-flex(0, 0, auto);
+      }
+    }
+  }
+
+  // Main menu for pages
+  &__menu {
+    @include sv-flex(1, 0, 100%);
+    display: none;
+    margin-top: 0.5rem;
+    padding: 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+    order: 3;
+    font-family: $r-font-family-montserrat;
+    font-weight: $font-weight-boldest;
+
+    @include media-breakpoint-up($r-topbar-breakpoint) {
+      display: flex;
+      flex-wrap: nowrap;
+    }
+
+    // Aside menu variation
+    &--aside {
+      @include sv-flex(1, 0, auto);
+      justify-content: flex-end;
+      order: 2;
+      font-family: $r-font-family-hind;
+      font-weight: $font-weight-normal;
+
+      @include media-breakpoint-up($r-topbar-breakpoint) {
+        margin-top: 0;
+      }
+
+      // Item divider
+      & > * + * {
+        margin-top: 0.5rem;
+        @include media-breakpoint-up($r-topbar-breakpoint) {
+          margin-top: 0;
+          margin-left: 2rem;
+        }
+      }
+    }
+  }
+
+  // Menu item element
+  &__item {
+    $item-selector: &;
+
+    @include sv-flex(1, 0, auto);
+    display: flex;
+    margin: 0;
+    padding: 0;
+    color: r-theme-val(topbar, item-color);
+
+    @include media-breakpoint-up($r-topbar-breakpoint) {
+      @include sv-flex(0, 0, auto);
+    }
+
+    & > a {
+      @include sv-flex(1, 0, 100%);
+      display: flex;
+      padding: 1rem 0.2rem 1rem 1rem;
+      flex-direction: row;
+      align-items: center;
+      font-family: inherit;
+      font-weight: inherit;
+      color: inherit;
+
+      @include media-breakpoint-up($r-topbar-breakpoint) {
+        padding: 1rem 1rem;
+      }
+
+      &:hover {
+        text-decoration: none;
+
+        @include media-breakpoint-up($r-topbar-breakpoint) {
+          position: relative;
+
+          &::after {
+            content: '';
             position: absolute;
-            top: 0;
+            bottom: 0;
             left: 0;
             right: 0;
-            padding: 1rem 0 0;
-            background: r-theme-val(topbar, over-background);
-            @if r-theme-val(topbar, over-border){
-                border-bottom: $onepixel solid r-theme-val(topbar, over-border);
-            }
+            height: 8px;
+            background-color: r-theme-val(topbar, item-hover-color);
+            border-top-left-radius: 0.2rem;
+            border-top-right-radius: 0.2rem;
+          }
         }
+      }
     }
 
-    // Sub container for optional contain-to-grid behavior
-    &__container {
-        @include make-container();
-        @include make-container-max-widths();
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: column;
-
-        @include media-breakpoint-up($r-topbar-breakpoint) {
-            flex-direction: row;
-        }
+    &--active {
+      color: r-theme-val(topbar, item-active-color);
     }
 
-    // Will show only on mobile breakpoints
-    &__hamburger {
-        @include sv-flex(0, 0, auto);
-        padding: 0 1rem;
-        order: 2;
-        color: r-theme-val(topbar, hamburger-color);
-        font-size: 2rem;
-        line-height: 1;
-        border: 0;
-        cursor: pointer;
-        background: inherit;
+    // Current page item or current ancestor
+    &--selected,
+    &--ancestor {
+      & > a {
+        position: relative;
+        color: r-theme-val(topbar, item-active-color);
+
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          width: 0.5rem;
+          background-color: r-theme-val(topbar, item-active-color);
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+        }
 
         @include media-breakpoint-up($r-topbar-breakpoint) {
+          &::before {
             display: none;
+          }
+          &::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 0.5rem;
+            background-color: r-theme-val(topbar, item-active-color);
+            border-top-left-radius: 0.4rem;
+            border-top-right-radius: 0.4rem;
+          }
         }
+      }
     }
 
-    // Brand part with hamburger and clickable logo
-    &__brand {
-        @include sv-flex(1, 0, auto);
-        display: flex;
-        flex-direction: row;
-        align-items: stretch;
-        order: 1;
+    // Specific displays for some buttons
+    &--cta {
+      align-items: center;
+
+      a {
+        @include button-size(
+          $btn-padding-y,
+          $btn-padding-x,
+          $btn-font-size,
+          $btn-line-height,
+          2rem
+        );
+        @include font-size($font-size-base);
+        justify-content: center;
+        color: r-theme-val(topbar, item-cta-color);
+        background: r-theme-val(topbar, item-cta-background);
+        @if r-theme-val(topbar, item-cta-border) {
+          border: $onepixel solid r-theme-val(topbar, item-cta-border);
+        }
 
         @include media-breakpoint-up($r-topbar-breakpoint) {
-            @if $r-topbar-logo-width-lg{
-                @include sv-flex(0, 0, $r-topbar-logo-width-lg);
-            } @else {
-                @include sv-flex(0, 0, auto);
-            }
-            margin-right: 10%;
+          justify-content: flex-start;
         }
 
-        // Clickable logo
-        & > a {
-            @include sv-flex(1, 0, auto);
-            padding: 0;
-            order: 1;
-
-            @include media-breakpoint-up($r-topbar-breakpoint) {
-                @include sv-flex(0, 0, auto);
-            }
+        &:hover {
+          &::after {
+            display: none;
+          }
         }
+      }
     }
 
-    &__logo {
-        display: block;
-        width: $r-topbar-logo-width-sm;
-
-        @include media-breakpoint-up($r-topbar-breakpoint) {
-            width: $r-topbar-logo-width-lg;
-        }
+    // Item divider
+    & + #{$item-selector} {
+      @if r-theme-val(topbar, item-divider-border) {
+        border-top: $onepixel solid r-theme-val(topbar, item-divider-border);
+      }
+      @include media-breakpoint-up($r-topbar-breakpoint) {
+        border-top: 0;
+      }
     }
+  }
 
-    // Menu item list
-    &__list {
-        $list-selector: &;
+  // Search input bar
+  &__search {
+    @include sv-flex(1, 0, auto);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 
-        @include sv-flex(1, 0, 100%);
-        display: flex;
-        margin: 0;
-        padding: 0;
-        flex-direction: column;
-        list-style-type: none;
-
-        @include media-breakpoint-up($r-topbar-breakpoint) {
-            @include sv-flex(1, 0, auto);
-            display: flex;
-            flex-direction: row;
-        }
-
-        // Alternative menu behavior for controls/cta
-        &--controls {
-            @include sv-flex(0, 0, 100%);
-
-            @include media-breakpoint-up($r-topbar-breakpoint) {
-                @include sv-flex(0, 0, auto);
-            }
-        }
+    .react-autosuggest__container {
+      @include sv-flex(1, 0, 100%);
     }
+  }
 
-    // Main menu for pages
-    &__menu {
-        @include sv-flex(1, 0, 100%);
-        display: none;
-        margin-top: 0.5rem;
-        padding: 0;
-        flex-direction: row;
-        flex-wrap: wrap;
-        order: 3;
-        font-family: $r-font-family-montserrat;
-        font-weight: $font-weight-boldest;
-
-        @include media-breakpoint-up($r-topbar-breakpoint) {
-            display: flex;
-            flex-wrap: nowrap;
-        }
-
-        // Aside menu variation
-        &--aside{
-            @include sv-flex(1, 0, auto);
-            justify-content: flex-end;
-            order: 2;
-            font-family: $r-font-family-hind;
-            font-weight: $font-weight-normal;
-
-            @include media-breakpoint-up($r-topbar-breakpoint) {
-                margin-top: 0;
-            }
-
-            // Item divider
-            & > * + * {
-                margin-top: 0.5rem;
-                @include media-breakpoint-up($r-topbar-breakpoint) {
-                    margin-top: 0;
-                    margin-left: 2rem;
-                }
-            }
-        }
+  // Opened state for mobile mode
+  &.is-open {
+    #{$topbar-selector}__menu {
+      display: flex;
     }
-
-    // Menu item element
-    &__item {
-        $item-selector: &;
-
-        @include sv-flex(1, 0, auto);
-        display: flex;
-        margin: 0;
-        padding: 0;
-        color: r-theme-val(topbar, item-color);
-
-        @include media-breakpoint-up($r-topbar-breakpoint) {
-            @include sv-flex(0, 0, auto);
-        }
-
-        & > a {
-            @include sv-flex(1, 0, 100%);
-            display: flex;
-            padding: 1rem 0.2rem 1rem 1rem;
-            flex-direction: row;
-            align-items: center;
-            font-family: inherit;
-            font-weight: inherit;
-            color: inherit;
-
-            @include media-breakpoint-up($r-topbar-breakpoint) {
-                padding: 1rem 1rem;
-            }
-
-            &:hover {
-                text-decoration: none;
-
-                @include media-breakpoint-up($r-topbar-breakpoint) {
-                    position: relative;
-
-                    &::after {
-                        content: '';
-                        position: absolute;
-                        bottom: 0;
-                        left: 0;
-                        right: 0;
-                        height: 8px;
-                        background-color: r-theme-val(topbar, item-hover-color);
-                        border-top-left-radius: 0.2rem;
-                        border-top-right-radius: 0.2rem;
-                    }
-                }
-            }
-        }
-
-        &--active {
-            color: r-theme-val(topbar, item-active-color);
-        }
-
-        // Current page item or current ancestor
-        &--selected,
-        &--ancestor {
-            & > a {
-                position: relative;
-                color: r-theme-val(topbar, item-active-color);
-
-                &::before {
-                    content: '';
-                    position: absolute;
-                    top: 0;
-                    bottom: 0;
-                    left: 0;
-                    width: 0.5rem;
-                    background-color: r-theme-val(topbar, item-active-color);
-                    border-top-right-radius: 0;
-                    border-bottom-right-radius: 0;
-                }
-
-                @include media-breakpoint-up($r-topbar-breakpoint) {
-                    &::before {
-                        display: none;
-                    }
-                    &::after {
-                        content: '';
-                        position: absolute;
-                        bottom: 0;
-                        left: 0;
-                        right: 0;
-                        height: 0.5rem;
-                        background-color: r-theme-val(topbar, item-active-color);
-                        border-top-left-radius: 0.4rem;
-                        border-top-right-radius: 0.4rem;
-                    }
-                }
-            }
-        }
-
-        // Specific displays for some buttons
-        &--cta {
-            align-items: center;
-
-            a{
-                @include button-size($btn-padding-y, $btn-padding-x, $btn-font-size, $btn-line-height, 2rem);
-                @include font-size($font-size-base);
-                justify-content: center;
-                color: r-theme-val(topbar, item-cta-color);
-                background: r-theme-val(topbar, item-cta-background);
-                @if r-theme-val(topbar, item-cta-border){
-                    border: $onepixel solid r-theme-val(topbar, item-cta-border);
-                }
-
-                @include media-breakpoint-up($r-topbar-breakpoint) {
-                    justify-content: flex-start;
-                }
-
-                &:hover{
-                    &::after {
-                        display: none;
-                    }
-                }
-            }
-        }
-
-        // Item divider
-        & + #{$item-selector} {
-            @if r-theme-val(topbar, item-divider-border){
-                border-top: $onepixel solid r-theme-val(topbar, item-divider-border);
-            }
-            @include media-breakpoint-up($r-topbar-breakpoint) {
-                border-top: 0;
-            }
-        }
-    }
-
-    // Search input bar
-    &__search{
-        @include sv-flex(1, 0, auto);
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-
-        .react-autosuggest__container{
-            @include sv-flex(1, 0, 100%);
-        }
-    }
-
-    // Opened state for mobile mode
-    &.is-open {
-        #{$topbar-selector}__menu {
-            display: flex;
-        }
-    }
+  }
 }

@@ -1,43 +1,43 @@
 $r-breadcrumbs-separator: '›';
 
 .breadcrumbs {
-    &__list{
-        @include make-container();
-        @include make-container-max-widths();
-        display: flex;
-        margin: 0 auto;
-        padding: 1.4rem 1rem;
-        flex-wrap: wrap;
-        font-size: 0.8rem;
-        list-style-type: none;
+  &__list {
+    @include make-container();
+    @include make-container-max-widths();
+    display: flex;
+    margin: 0 auto;
+    padding: 1.4rem 1rem;
+    flex-wrap: wrap;
+    font-size: 0.8rem;
+    list-style-type: none;
+  }
+
+  &__item {
+    @include sv-flex(0, 0, auto);
+    font-size: inherit;
+    font-family: $r-font-family-montserrat;
+    font-weight: $font-weight-boldest;
+
+    a {
+      color: inherit;
     }
 
-    &__item {
-        @include sv-flex(0, 0, auto);
-        font-size: inherit;
-        font-family: $r-font-family-montserrat;
-        font-weight: $font-weight-boldest;
+    & + & {
+      position: relative;
+      padding-left: 0.8rem;
 
-        a{
-            color: inherit;
-        }
-
-        & + & {
-            position: relative;
-            padding-left: 0.8rem;
-
-            &::before {
-                content: $r-breadcrumbs-separator;
-                position: absolute;
-                top: 0;
-                left: 0.2rem;
-            }
-        }
-
-        &:first-child + &{
-            &::before {
-                display: none;
-            }
-        }
+      &::before {
+        content: $r-breadcrumbs-separator;
+        position: absolute;
+        top: 0;
+        left: 0.2rem;
+      }
     }
+
+    &:first-child + & {
+      &::before {
+        display: none;
+      }
+    }
+  }
 }

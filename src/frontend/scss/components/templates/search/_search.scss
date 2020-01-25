@@ -1,136 +1,140 @@
 .search-template {
-    @include make-container();
-    @include make-container-max-widths();
-    padding: 0;
-    @include content-padding-fix;
+  @include make-container();
+  @include make-container-max-widths();
+  padding: 0;
+  @include content-padding-fix;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+
+  &__content {
     flex-grow: 1;
     display: flex;
     flex-direction: column;
 
-    &__content {
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-
-        & > .richie-react--search {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
+    & > .richie-react--search {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
     }
+  }
 }
 
 .search {
-    @include make-container();
-    @include make-container-max-widths();
-    display: flex;
-    margin: 0;
-    flex-direction: row;
-    flex-wrap: wrap;
+  @include make-container();
+  @include make-container-max-widths();
+  display: flex;
+  margin: 0;
+  flex-direction: row;
+  flex-wrap: wrap;
 
-    &__filters {
-        z-index: 1;
-        flex-grow: 1;
-        flex-shrink: 0;
-        flex-basis: 100%;
-        background: r-theme-val(search-filters, base-background);
+  &__filters {
+    z-index: 1;
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: 100%;
+    background: r-theme-val(search-filters, base-background);
 
-        // Force the filters sidebar to take up the whole height even when it's empty.
-        // This should help avoid a glitch where we see the footer at the top of the page and the UI jumps
-        // around as the filters appear.
-        min-height: 100vh;
+    // Force the filters sidebar to take up the whole height even when it's empty.
+    // This should help avoid a glitch where we see the footer at the top of the page and the UI jumps
+    // around as the filters appear.
+    min-height: 100vh;
 
-        position: absolute;
-        left: 0;
-        max-width: 85vw;
-        transform: translateX(-100.1%);
-        transition: ease-in-out 0.5s;
+    position: absolute;
+    left: 0;
+    max-width: 85vw;
+    transform: translateX(-100.1%);
+    transition: ease-in-out 0.5s;
 
-        @include media-breakpoint-up(lg) {
-            z-index: auto;
-            position: relative;
-            left: auto;
-            flex-basis: $r-search-filters-width;
-            max-width: $r-search-filters-width;
-            transform: none;
-        }
-
-        &--active {
-            transform: translateX(0);
-        }
-
-        &__toggle {
-            position: absolute;
-            top: 1.25rem;
-            right: -3rem;
-            width: 2.5rem;
-            height: 2.5rem;
-            padding: 0.5rem;
-            background: r-theme-val(search-filters, toggler-background);
-            border: none;
-            border-radius: $border-radius;
-            box-shadow: r-theme-val(search-filters, toggler-shadow);
-
-            &__icon {
-                width: 100%;
-                height: 100%;
-                fill: r-theme-val(search-filters, toggler-fill);
-            }
-        }
+    @include media-breakpoint-up(lg) {
+      z-index: auto;
+      position: relative;
+      left: auto;
+      flex-basis: $r-search-filters-width;
+      max-width: $r-search-filters-width;
+      transform: none;
     }
 
-    &__results {
-        position: relative;
-        flex-grow: 1;
-        flex-shrink: 0;
-        flex-basis: 100%;
-        max-width: 100%;
-
-        @include media-breakpoint-up(lg) {
-            position: static;
-            flex-basis: calc(100% - #{$r-search-filters-width});
-            max-width: calc(100% - #{$r-search-filters-width});
-            padding: 2rem 0 0 2rem;
-        }
-
-        &__title {
-            padding: 1.5rem 0 0;
-            text-align: center;
-        }
-
-        &__overlay {
-            visibility: hidden;
-            position: absolute;
-            top: 0;
-            left: 0;
-            bottom: 0;
-            right: 0;
-            background: r-theme-val(search-results, overlay);
-            opacity: 0;
-            transition: 0.5s ease-in-out;
-
-            &--visible {
-                visibility: visible;
-                opacity: 0.75;
-            }
-        }
-
-        @include media-breakpoint-up(lg) {
-            & > .spinner-container {
-                margin-top: 15rem;
-            }
-        }
+    &--active {
+      transform: translateX(0);
     }
 
-    // Shorter available width decrease glimpse width
-    .course-glimpse-list {
-        .course-glimpse {
-            @include media-breakpoint-up(md) {
-                @include sv-flex(1, 0, calc(50% - #{$r-course-glimpse-gutter * 2}));
-            }
-            @include media-breakpoint-up(lg) {
-                @include sv-flex(1, 0, calc(33.3333% - #{$r-course-glimpse-gutter * 2}));
-            }
-        }
+    &__toggle {
+      position: absolute;
+      top: 1.25rem;
+      right: -3rem;
+      width: 2.5rem;
+      height: 2.5rem;
+      padding: 0.5rem;
+      background: r-theme-val(search-filters, toggler-background);
+      border: none;
+      border-radius: $border-radius;
+      box-shadow: r-theme-val(search-filters, toggler-shadow);
+
+      &__icon {
+        width: 100%;
+        height: 100%;
+        fill: r-theme-val(search-filters, toggler-fill);
+      }
     }
+  }
+
+  &__results {
+    position: relative;
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: 100%;
+    max-width: 100%;
+
+    @include media-breakpoint-up(lg) {
+      position: static;
+      flex-basis: calc(100% - #{$r-search-filters-width});
+      max-width: calc(100% - #{$r-search-filters-width});
+      padding: 2rem 0 0 2rem;
+    }
+
+    &__title {
+      padding: 1.5rem 0 0;
+      text-align: center;
+    }
+
+    &__overlay {
+      visibility: hidden;
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      background: r-theme-val(search-results, overlay);
+      opacity: 0;
+      transition: 0.5s ease-in-out;
+
+      &--visible {
+        visibility: visible;
+        opacity: 0.75;
+      }
+    }
+
+    @include media-breakpoint-up(lg) {
+      & > .spinner-container {
+        margin-top: 15rem;
+      }
+    }
+  }
+
+  // Shorter available width decrease glimpse width
+  .course-glimpse-list {
+    .course-glimpse {
+      @include media-breakpoint-up(md) {
+        @include sv-flex(1, 0, calc(50% - #{$r-course-glimpse-gutter * 2}));
+      }
+      @include media-breakpoint-up(lg) {
+        @include sv-flex(
+          1,
+          0,
+          calc(33.3333% - #{$r-course-glimpse-gutter * 2})
+        );
+      }
+    }
+  }
 }

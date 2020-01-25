@@ -1,30 +1,29 @@
 // Main body content container
 .body-content {
-    position: relative;
-    background: r-theme-val(body-content, base-background);
+  position: relative;
+  background: r-theme-val(body-content, base-background);
 
-    // Insert footer curves
-    &::after {
-        content: "";
-        display: block;
-        width: 100%;
-        height: 5vw;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background-image: r-theme-val(body-content, insert-background-image);
-        background-repeat: no-repeat;
-        background-position: top left;
-        background-size: 100% 100%;
-    }
+  // Insert footer curves
+  &::after {
+    content: '';
+    display: block;
+    width: 100%;
+    height: 5vw;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-image: r-theme-val(body-content, insert-background-image);
+    background-repeat: no-repeat;
+    background-position: top left;
+    background-size: 100% 100%;
+  }
 }
-
 
 // Container relative to some modal components
 #modal-exclude {
-    // Enforce relative position to absorb gap introduced by some more top
-    // level components like DjangoCMS toolbar, so possible absolute positions
-    // from children (like topbar) is correctly calculated when toolbar is displayed.
-    position: relative;
+  // Enforce relative position to absorb gap introduced by some more top
+  // level components like DjangoCMS toolbar, so possible absolute positions
+  // from children (like topbar) is correctly calculated when toolbar is displayed.
+  position: relative;
 }

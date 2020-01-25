@@ -11,6 +11,6 @@ $rem-calc-base-font-size: 16px !default;
 /// but remember to finally used the calculated value when it's done.
 ///
 @function rem-calc($size) {
-    $remSize: $size / $rem-calc-base-font-size;
-    @return #{$remSize}rem;
+  $remSize: $size / $rem-calc-base-font-size;
+  @return #{$remSize}rem;
 }

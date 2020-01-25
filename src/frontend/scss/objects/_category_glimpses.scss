@@ -4,136 +4,138 @@
 
 // Grid of category cells
 .category-glimpse-list {
-    @include make-container-max-widths();
-    display: flex;
-    margin: 0 auto;
-    padding: 1rem 0;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
+  @include make-container-max-widths();
+  display: flex;
+  margin: 0 auto;
+  padding: 1rem 0;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
 
-    &__title {
-        @include sv-flex(1, 0, 100%);
-        padding: 0.5rem;
-        text-align: left;
-    }
+  &__title {
+    @include sv-flex(1, 0, 100%);
+    padding: 0.5rem;
+    text-align: left;
+  }
 }
 
-
 // List of category badges
-.category-glimpse-badges{
+.category-glimpse-badges {
+  display: flex;
+  padding: 1rem 0 0.5rem;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  border-bottom: 1px solid r-theme-val(category-glimpse-badges, base-border);
+
+  &__container {
+    @include make-container();
+    @include make-container-max-widths();
     display: flex;
-    padding: 1rem 0 0.5rem;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
     align-items: flex-start;
-    border-bottom: 1px solid r-theme-val(category-glimpse-badges, base-border);
+  }
 
-    &__container{
-        @include make-container();
-        @include make-container-max-widths();
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: flex-start;
-        align-items: flex-start;
+  .category-plugin-tag {
+    @include button-tiny($form-factor: 'pill');
+    @include r-button-colors(
+      r-theme-val(category-glimpse-badges, tag),
+      $apply-border: true,
+      $include-hover: true
+    );
+    font-weight: $font-weight-boldest;
+    margin-bottom: 0.5rem;
+    margin-right: 1rem;
+
+    // Badge does not display category icon
+    &__image {
+      display: none;
     }
-
-    .category-plugin-tag{
-        @include button-tiny($form-factor: "pill");
-        @include r-button-colors(r-theme-val(category-glimpse-badges, tag), $apply-border: true, $include-hover: true);
-        font-weight: $font-weight-boldest;
-        margin-bottom: 0.5rem;
-        margin-right: 1rem;
-
-        // Badge does not display category icon
-        &__image{
-            display: none;
-        }
-    }
+  }
 }
 
-
 .category-glimpse {
-    $glimpse-item-selector: &;
-    $glimpse-gutter: 0.5rem;
+  $glimpse-item-selector: &;
+  $glimpse-gutter: 0.5rem;
 
-    @include sv-flex(1, 0, calc(50% - #{$glimpse-gutter * 2}));
+  @include sv-flex(1, 0, calc(50% - #{$glimpse-gutter * 2}));
+  display: flex;
+  margin: $glimpse-gutter;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-content: space-between;
+  border: 1px solid r-theme-val(category-glimpse, base-border);
+  border-radius: $border-radius;
+  background: r-theme-val(category-glimpse, base-background);
+
+  // Responsive adjustments
+  @include media-breakpoint-up(md) {
+    @include sv-flex(1, 0, calc(33.3333% - #{$glimpse-gutter * 2}));
+  }
+  @include media-breakpoint-up(lg) {
+    @include sv-flex(1, 0, calc(25% - #{$glimpse-gutter * 2}));
+  }
+  @include media-breakpoint-up(xl) {
+    @include sv-flex(1, 0, calc(16.6667% - #{$glimpse-gutter * 2}));
+  }
+
+  &__body {
+    @include sv-flex(1, 0, 100%);
     display: flex;
-    margin: $glimpse-gutter;
     flex-direction: column;
     flex-wrap: nowrap;
-    align-content: space-between;
-    border: 1px solid r-theme-val(category-glimpse, base-border);
+    align-items: stretch;
+    color: r-theme-val(category-glimpse, body-color);
+    font-size: small;
+  }
+
+  &__logo {
+    @include sv-flex(1, 0, auto);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    @include m-o-media_empty(
+      $width: 100%,
+      $height: 15vh,
+      $background: r-theme-val(category-glimpse, logo-empty-background),
+      $absolute: false
+    );
+
+    img {
+      @include sv-flex(0, 0, auto);
+      border-radius: $border-radius;
+    }
+  }
+
+  &__empty {
+    @include sv-flex(1, 0, auto);
     border-radius: $border-radius;
-    background: r-theme-val(category-glimpse, base-background);
+  }
 
-    // Responsive adjustments
-    @include media-breakpoint-up(md) {
-        @include sv-flex(1, 0, calc(33.3333% - #{$glimpse-gutter * 2}));
+  &__title {
+    @include sv-flex(0, 0, auto);
+    padding: 0.3rem;
+    word-wrap: break-word;
+    font-size: inherit;
+    font-weight: inherit;
+    color: r-theme-val(category-glimpse, title-color);
+    text-align: center;
+  }
+
+  //
+  &:hover,
+  &:focus {
+    color: r-theme-val(category-glimpse, base-hover-color);
+    border: 1px solid r-theme-val(category-glimpse, base-hover-border);
+
+    #{$glimpse-item-selector}__title {
+      color: r-theme-val(category-glimpse, title-hover-color);
+      text-decoration: none;
     }
-    @include media-breakpoint-up(lg) {
-        @include sv-flex(1, 0, calc(25% - #{$glimpse-gutter * 2}));
-    }
-    @include media-breakpoint-up(xl) {
-        @include sv-flex(1, 0, calc(16.6667% - #{$glimpse-gutter * 2}));
-    }
-
-    &__body {
-        @include sv-flex(1, 0, 100%);
-        display: flex;
-        flex-direction: column;
-        flex-wrap: nowrap;
-        align-items: stretch;
-        color: r-theme-val(category-glimpse, body-color);
-        font-size: small;
-    }
-
-    &__logo {
-        @include sv-flex(1, 0, auto);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-
-        @include m-o-media_empty(
-            $width: 100%,
-            $height: 15vh,
-            $background: r-theme-val(category-glimpse, logo-empty-background),
-            $absolute: false
-        );
-
-        img {
-            @include sv-flex(0, 0, auto);
-            border-radius: $border-radius;
-        }
-    }
-
-    &__empty {
-        @include sv-flex(1, 0, auto);
-        border-radius: $border-radius;
-    }
-
-    &__title {
-        @include sv-flex(0, 0, auto);
-        padding: 0.3rem;
-        word-wrap: break-word;
-        font-size: inherit;
-        font-weight: inherit;
-        color: r-theme-val(category-glimpse, title-color);
-        text-align: center;
-    }
-
-    //
-    &:hover,
-    &:focus {
-        color: r-theme-val(category-glimpse, base-hover-color);
-        border: 1px solid r-theme-val(category-glimpse, base-hover-border);
-
-        #{$glimpse-item-selector}__title{
-            color: r-theme-val(category-glimpse, title-hover-color);
-            text-decoration: none;
-        }
-    }
+  }
 }

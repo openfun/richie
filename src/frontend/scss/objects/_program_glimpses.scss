@@ -5,148 +5,122 @@
 $r-program-glimpse-gutter: 0.5rem !default;
 
 .program-glimpse-list {
-    @include make-container-max-widths();
-    display: flex;
-    margin: 0 auto;
-    padding: 1rem 0;
-    flex-direction: row;
-    flex-wrap: wrap;
+  @include make-container-max-widths();
+  display: flex;
+  margin: 0 auto;
+  padding: 1rem 0;
+  flex-direction: row;
+  flex-wrap: wrap;
 
-    &__title {
-        @include sv-flex(1, 0, 100%);
-        padding: 0.5rem;
-        text-align: left;
-    }
+  &__title {
+    @include sv-flex(1, 0, 100%);
+    padding: 0.5rem;
+    text-align: left;
+  }
 }
 
 .program-glimpse {
-    $glimpse-item-selector: &;
-    // Cell base width for lowest breakpoint
-    @include sv-flex(
-        1,
-        0,
-        calc(100% - #{$r-program-glimpse-gutter * 2})
-    );
+  $glimpse-item-selector: &;
+  // Cell base width for lowest breakpoint
+  @include sv-flex(1, 0, calc(100% - #{$r-program-glimpse-gutter * 2}));
 
-    // Apply card styles for elements
-    @include m-o-card(
-        $border: $onepixel solid r-theme-val(program-glimpse, card-border),
-        $background: r-theme-val(program-glimpse, card-background),
-        $media-margin: 0,
-        $wrapper-padding: 0.6rem 0.2rem,
-    );
+  // Apply card styles for elements
+  @include m-o-card(
+    $border: $onepixel solid r-theme-val(program-glimpse, card-border),
+    $background: r-theme-val(program-glimpse, card-background),
+    $media-margin: 0,
+    $wrapper-padding: 0.6rem 0.2rem
+  );
 
-    // Apply gutter
-    margin: $r-program-glimpse-gutter;
+  // Apply gutter
+  margin: $r-program-glimpse-gutter;
 
-    &__content {
-        font-size: 0.9rem;
-        color: r-theme-val(program-glimpse, content-color);
-        text-align: center;
+  &__content {
+    font-size: 0.9rem;
+    color: r-theme-val(program-glimpse, content-color);
+    text-align: center;
+  }
+
+  &__title {
+    margin: 0 0 0.1rem;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: r-theme-val(program-glimpse, title-color);
+  }
+
+  @include m-o-media_empty(
+    $width: 100%,
+    $height: 14vh,
+    $background: r-theme-val(program-glimpse, empty-background),
+    $absolute: false
+  );
+
+  // A little specific makeup onto footer elements
+  &__footer {
+    display: flex;
+    border-top: $onepixel solid r-theme-val(program-glimpse, footer-border);
+  }
+
+  &__date {
+    @include sv-flex-cell-width(auto);
+    display: flex;
+    margin: 0;
+    padding: 0.3rem 0.5rem;
+    font-size: 0.9rem;
+    color: r-theme-val(program-glimpse, date-color);
+    justify-content: center;
+    text-align: center;
+  }
+
+  &__cta {
+    @include sv-flex-cell-width(45%);
+    display: flex;
+
+    .button {
+      @include sv-flex-cell-width(100%);
+      margin: 0;
+      padding: 0.3rem 0.5rem;
+      font-size: 0.9rem;
+      font-weight: bold;
+      color: r-theme-val(program-glimpse, cta-color);
+      background: r-theme-val(program-glimpse, cta-background);
+      border: 0;
+      cursor: pointer;
     }
+  }
 
-    &__title {
-        margin: 0 0 0.1rem;
-        font-size: 0.9rem;
-        font-weight: bold;
-        color: r-theme-val(program-glimpse, title-color);
+  &:hover,
+  &:focus {
+    border: $onepixel solid r-theme-val(program-glimpse, hover-border);
+
+    #{$glimpse-item-selector}__foot__cta .button {
+      background: r-theme-val(program-glimpse, cta-hover-background);
     }
+  }
 
-    @include m-o-media_empty(
-        $width: 100%,
-        $height: 14vh,
-        $background: r-theme-val(program-glimpse, empty-background),
-        $absolute: false
-    );
+  // Responsive adjustments
+  @include media-breakpoint-up(md) {
+    @include sv-flex(1, 0, calc(50% - #{$r-program-glimpse-gutter * 2}));
+  }
+  @include media-breakpoint-up(lg) {
+    @include sv-flex(1, 0, calc(33.3333% - #{$r-program-glimpse-gutter * 2}));
+  }
+  @include media-breakpoint-up(xl) {
+    @include sv-flex(1, 0, calc(25% - #{$r-program-glimpse-gutter * 2}));
+  }
 
-    // A little specific makeup onto footer elements
-    &__footer {
-        display: flex;
-        border-top: $onepixel solid r-theme-val(program-glimpse, footer-border);
-    }
-
-    &__date {
-        @include sv-flex-cell-width(auto);
-        display: flex;
-        margin: 0;
-        padding: 0.3rem 0.5rem;
-        font-size: 0.9rem;
-        color: r-theme-val(program-glimpse, date-color);
-        justify-content: center;
-        text-align: center;
-    }
-
-    &__cta {
-        @include sv-flex-cell-width(45%);
-        display: flex;
-
-        .button {
-            @include sv-flex-cell-width(100%);
-            margin: 0;
-            padding: 0.3rem 0.5rem;
-            font-size: 0.9rem;
-            font-weight: bold;
-            color: r-theme-val(program-glimpse, cta-color);
-            background: r-theme-val(program-glimpse, cta-background);
-            border: 0;
-            cursor: pointer;
-        }
-    }
+  // Special row when there is no entry
+  &--empty {
+    @include sv-flex(1, 0, calc(100% - #{$r-program-glimpse-gutter * 2}));
+    padding: 1rem;
+    font-style: italic;
+    color: r-theme-val(program-glimpse-empty, card-color);
+    text-align: center;
+    cursor: default;
 
     &:hover,
     &:focus {
-        border: $onepixel solid r-theme-val(program-glimpse, hover-border);
-
-        #{$glimpse-item-selector}__foot__cta .button {
-            background: r-theme-val(program-glimpse, cta-hover-background);
-        }
+      border: $onepixel solid r-theme-val(program-glimpse-empty, hover-border);
     }
-
-    // Responsive adjustments
-    @include media-breakpoint-up(md) {
-        @include sv-flex(
-            1,
-            0,
-            calc(
-                50% - #{$r-program-glimpse-gutter * 2}
-            )
-        );
-    }
-    @include media-breakpoint-up(lg) {
-        @include sv-flex(
-            1,
-            0,
-            calc(
-                33.3333% - #{$r-program-glimpse-gutter * 2}
-            )
-        );
-    }
-    @include media-breakpoint-up(xl) {
-        @include sv-flex(
-            1,
-            0,
-            calc(
-                25% - #{$r-program-glimpse-gutter * 2}
-            )
-        );
-    }
-
-    // Special row when there is no entry
-    &--empty {
-        @include sv-flex(
-            1,
-            0,
-            calc(100% - #{$r-program-glimpse-gutter * 2})
-        );
-        padding: 1rem;
-        font-style: italic;
-        color: r-theme-val(program-glimpse-empty, card-color);
-        text-align: center;
-        cursor: default;
-
-        &:hover,
-        &:focus {
-            border: $onepixel solid r-theme-val(program-glimpse-empty, hover-border);
-        }
-    }
+  }
 }

@@ -297,7 +297,7 @@ HOMEPAGE_CONTENT = {
         "banner_content": "It works! This is the default homepage for the Richie CMS.",
         "banner_template": "richie/large_banner/hero-intro.html",
         "button_template_name": "button-caesura",
-        "section_template": "richie/section/section_cadenced.html",
+        "section_template": "richie/section/section.html",
         "blogposts_title": "Last news",
         "blogposts_button_title": "More news",
         "courses_title": "Popular courses",
@@ -316,7 +316,7 @@ HOMEPAGE_CONTENT = {
         "banner_content": "Ça marche ! Ceci est la page d'accueil par défaut du CMS Richie.",
         "banner_template": "richie/large_banner/hero-intro.html",
         "button_template_name": "button-caesura",
-        "section_template": "richie/section/section_cadenced.html",
+        "section_template": "richie/section/section.html",
         "blogposts_title": "Actualités récentes",
         "blogposts_button_title": "Plus d'actualités",
         "courses_title": "Cours à la une",
@@ -341,7 +341,7 @@ SINGLECOLUMN_CONTENT = {
         "button_template_name": "button-caesura",
         "section_sample_title": "A sample section",
         "section_sample_button_title": "More!",
-        "section_sample_template": "richie/section/section_cadenced.html",
+        "section_sample_template": "richie/section/section.html",
     },
     "fr": {
         "banner_title": "Exemple de template avec une colonne unique",
@@ -350,7 +350,7 @@ SINGLECOLUMN_CONTENT = {
         "button_template_name": "button-caesura",
         "section_sample_title": "Une section d'exemple",
         "section_sample_button_title": "Plus !",
-        "section_sample_template": "richie/section/section_cadenced.html",
+        "section_sample_template": "richie/section/section.html",
     },
 }
 SINGLECOLUMN_CONTENT.update(getattr(settings, "RICHIE_DEMO_SINGLECOLUMN_CONTENT", {}))

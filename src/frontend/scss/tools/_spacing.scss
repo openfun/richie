@@ -14,11 +14,11 @@
 //   will be defined to override the default one.
 //
 @mixin responsive-spacer($prop, $name, $breakpoints: ()) {
-    #{$prop}: map-get($spacers, $name) !important;
+  #{$prop}: map-get($spacers, $name) !important;
 
-    @each $breakpoint,$name in $breakpoints {
-        @include media-breakpoint-up($breakpoint) {
-            #{$prop}: map-get($spacers, $name) !important;
-        }
+  @each $breakpoint, $name in $breakpoints {
+    @include media-breakpoint-up($breakpoint) {
+      #{$prop}: map-get($spacers, $name) !important;
     }
+  }
 }

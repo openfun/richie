@@ -18,203 +18,204 @@
 //   radius value;
 //
 @mixin button-base(
-    $display: inline-block,
-    $font-family: $btn-font-family,
-    $font-size: $btn-font-size,
-    $font-weight: $btn-font-weight,
-    $line-height: $btn-line-height,
-    $text-align: center,
-    $font-color: $body-color,
-    $padding-x: $btn-padding-x,
-    $padding-y: $btn-padding-y,
-    $border-radius: $btn-border-radius,
-    $transition: $btn-transition,
-    $focus-box-shadow: $btn-focus-box-shadow,
-    $disabled-opacity: $btn-disabled-opacity,
-    $active-box-shadow: $btn-active-box-shadow,
-    $border-width: $btn-border-width,
-    $form-factor: null,
+  $display: inline-block,
+  $font-family: $btn-font-family,
+  $font-size: $btn-font-size,
+  $font-weight: $btn-font-weight,
+  $line-height: $btn-line-height,
+  $text-align: center,
+  $font-color: $body-color,
+  $padding-x: $btn-padding-x,
+  $padding-y: $btn-padding-y,
+  $border-radius: $btn-border-radius,
+  $transition: $btn-transition,
+  $focus-box-shadow: $btn-focus-box-shadow,
+  $disabled-opacity: $btn-disabled-opacity,
+  $active-box-shadow: $btn-active-box-shadow,
+  $border-width: $btn-border-width,
+  $form-factor: null
 ) {
+  // Set to null if a form factor is required else it is set to the given
+  // border radius from arg
+  $patched-radius: if($form-factor, null, $border-radius);
 
-    // Set to null if a form factor is required else it is set to the given
-    // border radius from arg
-    $patched-radius: if($form-factor, null, $border-radius);
+  display: $display;
+  font-family: $font-family;
+  font-weight: $font-weight;
+  color: $font-color;
+  text-align: $text-align;
+  vertical-align: middle;
+  user-select: none;
+  background-color: transparent;
+  border: $border-width solid transparent;
+  @include button-size(
+    $padding-y,
+    $padding-x,
+    $font-size,
+    $line-height,
+    $patched-radius
+  );
+  @include transition($transition);
 
-    display: $display;
-    font-family: $font-family;
-    font-weight: $font-weight;
+  // Apply non default form factor radius behaviors
+  @if $form-factor == 'pill' {
+    border-radius: ($padding-y + $font-size);
+  } @else if $form-factor == 'round' {
+    border-radius: 100%;
+  } @else if $form-factor == 'square' {
+    border-radius: 0;
+  }
+
+  @include hover {
     color: $font-color;
-    text-align: $text-align;
-    vertical-align: middle;
-    user-select: none;
-    background-color: transparent;
-    border: $border-width solid transparent;
-    @include button-size($padding-y, $padding-x, $font-size, $line-height, $patched-radius);
-    @include transition($transition);
+    text-decoration: none;
+  }
 
-    // Apply non default form factor radius behaviors
-    @if $form-factor == "pill" {
-        border-radius: ($padding-y + $font-size);
-    } @else if $form-factor == "round" {
-        border-radius: 100%;
-    } @else if $form-factor == "square" {
-        border-radius: 0;
+  &:focus,
+  &.focus {
+    outline: 0;
+    box-shadow: $focus-box-shadow;
+  }
+
+  // Disabled comes first so active can properly restyle
+  &.disabled,
+  &:disabled {
+    opacity: $disabled-opacity;
+    @include box-shadow(none);
+  }
+
+  &:not(:disabled):not(.disabled):active,
+  &:not(:disabled):not(.disabled).active {
+    @include box-shadow($active-box-shadow);
+
+    &:focus {
+      @include box-shadow($focus-box-shadow, $active-box-shadow);
     }
-
-    @include hover {
-        color: $font-color;
-        text-decoration: none;
-    }
-
-    &:focus,
-    &.focus {
-        outline: 0;
-        box-shadow: $focus-box-shadow;
-    }
-
-    // Disabled comes first so active can properly restyle
-    &.disabled,
-    &:disabled {
-        opacity: $disabled-opacity;
-        @include box-shadow(none);
-    }
-
-    &:not(:disabled):not(.disabled):active,
-    &:not(:disabled):not(.disabled).active {
-        @include box-shadow($active-box-shadow);
-
-        &:focus {
-            @include box-shadow($focus-box-shadow, $active-box-shadow);
-        }
-    }
+  }
 }
-
 
 //
 // Tiny button base shortcut
 //
 @mixin button-tiny(
-    $display: inline-block,
-    $font-family: $btn-font-family,
-    $font-size: $btn-font-size-tiny,
-    $font-weight: $btn-font-weight,
-    $line-height: $btn-line-height-tiny,
-    $text-align: center,
-    $font-color: $body-color,
-    $padding-x: $btn-padding-x-tiny,
-    $padding-y: $btn-padding-y-tiny,
-    $border-radius: $btn-border-radius-sm,
-    $transition: $btn-transition,
-    $focus-box-shadow: $btn-focus-box-shadow,
-    $disabled-opacity: $btn-disabled-opacity,
-    $active-box-shadow: $btn-active-box-shadow,
-    $border-width: $btn-border-width,
-    $form-factor: null,
+  $display: inline-block,
+  $font-family: $btn-font-family,
+  $font-size: $btn-font-size-tiny,
+  $font-weight: $btn-font-weight,
+  $line-height: $btn-line-height-tiny,
+  $text-align: center,
+  $font-color: $body-color,
+  $padding-x: $btn-padding-x-tiny,
+  $padding-y: $btn-padding-y-tiny,
+  $border-radius: $btn-border-radius-sm,
+  $transition: $btn-transition,
+  $focus-box-shadow: $btn-focus-box-shadow,
+  $disabled-opacity: $btn-disabled-opacity,
+  $active-box-shadow: $btn-active-box-shadow,
+  $border-width: $btn-border-width,
+  $form-factor: null
 ) {
-    @include button-base(
-        $display: $display,
-        $font-family: $font-family,
-        $font-size: $font-size,
-        $font-weight: $font-weight,
-        $line-height: $line-height,
-        $text-align: $text-align,
-        $font-color: $font-color,
-        $padding-x: $padding-x,
-        $padding-y: $padding-y,
-        $border-radius: $border-radius,
-        $transition: $transition,
-        $focus-box-shadow: $focus-box-shadow,
-        $disabled-opacity: $disabled-opacity,
-        $active-box-shadow: $active-box-shadow,
-        $border-width: $border-width,
-        $form-factor: $form-factor,
-    );
+  @include button-base(
+    $display: $display,
+    $font-family: $font-family,
+    $font-size: $font-size,
+    $font-weight: $font-weight,
+    $line-height: $line-height,
+    $text-align: $text-align,
+    $font-color: $font-color,
+    $padding-x: $padding-x,
+    $padding-y: $padding-y,
+    $border-radius: $border-radius,
+    $transition: $transition,
+    $focus-box-shadow: $focus-box-shadow,
+    $disabled-opacity: $disabled-opacity,
+    $active-box-shadow: $active-box-shadow,
+    $border-width: $border-width,
+    $form-factor: $form-factor
+  );
 }
-
 
 //
 // Small button base shortcut
 //
 @mixin button-small(
-    $display: inline-block,
-    $font-family: $btn-font-family,
-    $font-size: $btn-font-size-sm,
-    $font-weight: $btn-font-weight,
-    $line-height: $btn-line-height-sm,
-    $text-align: center,
-    $font-color: $body-color,
-    $padding-x: $btn-padding-x-sm,
-    $padding-y: $btn-padding-y-sm,
-    $border-radius: $btn-border-radius-sm,
-    $transition: $btn-transition,
-    $focus-box-shadow: $btn-focus-box-shadow,
-    $disabled-opacity: $btn-disabled-opacity,
-    $active-box-shadow: $btn-active-box-shadow,
-    $border-width: $btn-border-width,
-    $form-factor: null,
+  $display: inline-block,
+  $font-family: $btn-font-family,
+  $font-size: $btn-font-size-sm,
+  $font-weight: $btn-font-weight,
+  $line-height: $btn-line-height-sm,
+  $text-align: center,
+  $font-color: $body-color,
+  $padding-x: $btn-padding-x-sm,
+  $padding-y: $btn-padding-y-sm,
+  $border-radius: $btn-border-radius-sm,
+  $transition: $btn-transition,
+  $focus-box-shadow: $btn-focus-box-shadow,
+  $disabled-opacity: $btn-disabled-opacity,
+  $active-box-shadow: $btn-active-box-shadow,
+  $border-width: $btn-border-width,
+  $form-factor: null
 ) {
-    @include button-base(
-        $display: $display,
-        $font-family: $font-family,
-        $font-size: $font-size,
-        $font-weight: $font-weight,
-        $line-height: $line-height,
-        $text-align: $text-align,
-        $font-color: $font-color,
-        $padding-x: $padding-x,
-        $padding-y: $padding-y,
-        $border-radius: $border-radius,
-        $transition: $transition,
-        $focus-box-shadow: $focus-box-shadow,
-        $disabled-opacity: $disabled-opacity,
-        $active-box-shadow: $active-box-shadow,
-        $border-width: $border-width,
-        $form-factor: $form-factor,
-    );
+  @include button-base(
+    $display: $display,
+    $font-family: $font-family,
+    $font-size: $font-size,
+    $font-weight: $font-weight,
+    $line-height: $line-height,
+    $text-align: $text-align,
+    $font-color: $font-color,
+    $padding-x: $padding-x,
+    $padding-y: $padding-y,
+    $border-radius: $border-radius,
+    $transition: $transition,
+    $focus-box-shadow: $focus-box-shadow,
+    $disabled-opacity: $disabled-opacity,
+    $active-box-shadow: $active-box-shadow,
+    $border-width: $border-width,
+    $form-factor: $form-factor
+  );
 }
-
 
 //
 // Large button base shortcut
 //
 @mixin button-large(
-    $display: inline-block,
-    $font-family: $btn-font-family,
-    $font-size: $btn-font-size-lg,
-    $font-weight: $btn-font-weight,
-    $line-height: $btn-line-height-lg,
-    $text-align: center,
-    $font-color: $body-color,
-    $padding-x: $btn-padding-x-lg,
-    $padding-y: $btn-padding-y-lg,
-    $border-radius: $btn-border-radius-lg,
-    $transition: $btn-transition,
-    $focus-box-shadow: $btn-focus-box-shadow,
-    $disabled-opacity: $btn-disabled-opacity,
-    $active-box-shadow: $btn-active-box-shadow,
-    $border-width: $btn-border-width,
-    $form-factor: null,
+  $display: inline-block,
+  $font-family: $btn-font-family,
+  $font-size: $btn-font-size-lg,
+  $font-weight: $btn-font-weight,
+  $line-height: $btn-line-height-lg,
+  $text-align: center,
+  $font-color: $body-color,
+  $padding-x: $btn-padding-x-lg,
+  $padding-y: $btn-padding-y-lg,
+  $border-radius: $btn-border-radius-lg,
+  $transition: $btn-transition,
+  $focus-box-shadow: $btn-focus-box-shadow,
+  $disabled-opacity: $btn-disabled-opacity,
+  $active-box-shadow: $btn-active-box-shadow,
+  $border-width: $btn-border-width,
+  $form-factor: null
 ) {
-    @include button-base(
-        $display: $display,
-        $font-family: $font-family,
-        $font-size: $font-size,
-        $font-weight: $font-weight,
-        $line-height: $line-height,
-        $text-align: $text-align,
-        $font-color: $font-color,
-        $padding-x: $padding-x,
-        $padding-y: $padding-y,
-        $border-radius: $border-radius,
-        $transition: $transition,
-        $focus-box-shadow: $focus-box-shadow,
-        $disabled-opacity: $disabled-opacity,
-        $active-box-shadow: $active-box-shadow,
-        $border-width: $border-width,
-        $form-factor: $form-factor,
-    );
+  @include button-base(
+    $display: $display,
+    $font-family: $font-family,
+    $font-size: $font-size,
+    $font-weight: $font-weight,
+    $line-height: $line-height,
+    $text-align: $text-align,
+    $font-color: $font-color,
+    $padding-x: $padding-x,
+    $padding-y: $padding-y,
+    $border-radius: $border-radius,
+    $transition: $transition,
+    $focus-box-shadow: $focus-box-shadow,
+    $disabled-opacity: $disabled-opacity,
+    $active-box-shadow: $active-box-shadow,
+    $border-width: $border-width,
+    $form-factor: $form-factor
+  );
 }
-
 
 //
 // Spot shortcut stand on button but aimed for unique character like for a
@@ -223,42 +224,42 @@
 // height to ensure a real round spot form.
 //
 @mixin spot(
-    $display: flex,
-    $font-family: $btn-font-family,
-    $font-size: $btn-font-size,
-    $font-weight: $btn-font-weight,
-    $font-color: $body-color,
-    $padding: $btn-padding-x-tiny,
-    $transition: $btn-transition,
-    $focus-box-shadow: $btn-focus-box-shadow,
-    $disabled-opacity: $btn-disabled-opacity,
-    $active-box-shadow: $btn-active-box-shadow,
-    $border-width: $btn-border-width,
+  $display: flex,
+  $font-family: $btn-font-family,
+  $font-size: $btn-font-size,
+  $font-weight: $btn-font-weight,
+  $font-color: $body-color,
+  $padding: $btn-padding-x-tiny,
+  $transition: $btn-transition,
+  $focus-box-shadow: $btn-focus-box-shadow,
+  $disabled-opacity: $btn-disabled-opacity,
+  $active-box-shadow: $btn-active-box-shadow,
+  $border-width: $btn-border-width
 ) {
-    @include button-base(
-        $display: $display,
-        $font-family: $font-family,
-        $font-size: $font-size,
-        $font-weight: $font-weight,
-        $line-height: 1,
-        $font-color: $font-color,
-        $padding-x: $padding,
-        $padding-y: $padding,
-        $transition: $transition,
-        $focus-box-shadow: $focus-box-shadow,
-        $disabled-opacity: $disabled-opacity,
-        $active-box-shadow: $active-box-shadow,
-        $border-width: $border-width,
-        $form-factor: "round",
-    );
-    align-items: center;
-    justify-content: center;
-    align-content: center;
+  @include button-base(
+    $display: $display,
+    $font-family: $font-family,
+    $font-size: $font-size,
+    $font-weight: $font-weight,
+    $line-height: 1,
+    $font-color: $font-color,
+    $padding-x: $padding,
+    $padding-y: $padding,
+    $transition: $transition,
+    $focus-box-shadow: $focus-box-shadow,
+    $disabled-opacity: $disabled-opacity,
+    $active-box-shadow: $active-box-shadow,
+    $border-width: $border-width,
+    $form-factor: 'round'
+  );
+  align-items: center;
+  justify-content: center;
+  align-content: center;
 
-    // Force inside svg icon to respect the spot sizes
-    svg{
-        display: block;
-        width: 100%;
-        height: 100%;
-    }
+  // Force inside svg icon to respect the spot sizes
+  svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
 }

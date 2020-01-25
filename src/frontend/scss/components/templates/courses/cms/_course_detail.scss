@@ -1,195 +1,200 @@
 // Course detail template stylesheet
 //
 
-
 .course-detail {
-    $detail-selector: &;
-    margin: 0 auto;
-    padding: 0;
-    @include content-padding-fix($target: "&:last-child");
+  $detail-selector: &;
+  margin: 0 auto;
+  padding: 0;
+  @include content-padding-fix($target: '&:last-child');
 
-    &__block {
-        @include detail-block;
+  &__block {
+    @include detail-block;
+  }
+
+  &__row {
+    @include detail-row;
+  }
+
+  &__title {
+    @include detail-title;
+    text-align: left;
+  }
+
+  &__empty {
+    @include detail-empty;
+  }
+
+  &__grid {
+    padding-bottom: 1rem;
+
+    @include media-breakpoint-up(lg) {
+      padding-bottom: 2rem;
     }
 
-    &__row {
-        @include detail-row;
+    #{$detail-selector}__wrapper {
+      @include make-container-max-widths();
+      @if $r-course-aside {
+        @include detail-grid;
+      }
+      margin: 0 auto;
+    }
+  }
+
+  @if $r-course-aside {
+    &__content {
+      @include media-breakpoint-up(lg) {
+        @include sv-flex(1, 0, #{100% - $r-course-aside});
+      }
     }
 
-    &__title {
-        @include detail-title;
-        text-align: left;
-    }
+    &__aside {
+      padding: 1rem 0;
 
-    &__empty {
-        @include detail-empty;
-    }
+      @include media-breakpoint-up(lg) {
+        @include sv-flex(1, 0, $r-course-aside);
+        padding: 3rem 0.5rem;
+      }
 
-    &__grid {
+      #{$detail-selector}__row {
+        margin-bottom: 1.5rem;
+      }
+
+      #{$detail-selector}__title {
+        @include font-size($h3-font-size);
         padding-bottom: 1rem;
-
-        @include media-breakpoint-up(lg) {
-            padding-bottom: 2rem;
+        @if r-theme-val(course-detail, aside-title-border) {
+          border-bottom: $onepixel
+            solid
+            r-theme-val(course-detail, aside-title-border);
         }
-
-        #{$detail-selector}__wrapper{
-            @include make-container-max-widths();
-            @if $r-course-aside{
-                @include detail-grid;
-            }
-            margin: 0 auto;
-        }
+      }
     }
+  }
 
-    @if $r-course-aside{
-        &__content {
-            @include media-breakpoint-up(lg) {
-                @include sv-flex(1, 0, #{100% - $r-course-aside});
-            }
-        }
+  &__primary-group {
+    padding-bottom: 0 !important;
+    background: r-theme-val(course-detail, primary-group-background);
 
-        &__aside {
-            padding: 1rem 0;
-
-            @include media-breakpoint-up(lg) {
-                @include sv-flex(1, 0, $r-course-aside);
-                padding: 3rem 0.5rem;
-            }
-
-            #{$detail-selector}__row {
-                margin-bottom: 1.5rem;
-            }
-
-            #{$detail-selector}__title {
-                @include font-size($h3-font-size);
-                padding-bottom: 1rem;
-                @if r-theme-val(course-detail, aside-title-border) {
-                    border-bottom: $onepixel solid r-theme-val(course-detail, aside-title-border);
-                }
-            }
-        }
-    }
-
-    &__primary-group{
-        padding-bottom: 0 !important;
-        background: r-theme-val(course-detail, primary-group-background);
-
-        @if r-theme-val(course-detail, primary-group-arc) {
-            &::after{
-                content: "";
-                display: block;
-                margin-top: map-get($spacers, 4) * 3;
-                width: 100%;
-                height: 2.5vw;
-                background-image: r-theme-val(course-detail, primary-group-arc);
-                background-repeat: no-repeat;
-                background-position: bottom left;
-                background-size: 100% 100%;
-            }
-        }
-    }
-
-    &__run-cta {
+    @if r-theme-val(course-detail, primary-group-arc) {
+      &::after {
+        content: '';
+        display: block;
+        margin-top: map-get($spacers, 4) * 3;
         width: 100%;
-        @include button-small($font-weight: bold);
-        @include r-button-colors(r-theme-val(course-detail, run-cta), $apply-border: true, $include-hover: true);
+        height: 2.5vw;
+        background-image: r-theme-val(course-detail, primary-group-arc);
+        background-repeat: no-repeat;
+        background-position: bottom left;
+        background-size: 100% 100%;
+      }
+    }
+  }
+
+  &__run-cta {
+    width: 100%;
+    @include button-small($font-weight: bold);
+    @include r-button-colors(
+      r-theme-val(course-detail, run-cta),
+      $apply-border: true,
+      $include-hover: true
+    );
+  }
+
+  &__run-descriptions {
+    dl {
+      margin: 0;
     }
 
-    &__run-descriptions{
-        dl {
-            margin: 0;
-        }
-
-        dt {
-            @include font-size($h4-font-size);
-        }
-        dd {
-            @include font-size($h5-font-size);
-            margin-bottom: 1rem;
-        }
-
-        & + #{$detail-selector}__run-descriptions {
-            @if r-theme-val(course-detail, run-descriptions-divider) {
-                &::before{
-                    content: "";
-                    display: block;
-                    width: 60%;
-                    margin: 2rem auto;
-                    border-top: $onepixel solid r-theme-val(course-detail, run-descriptions-divider);
-                }
-            }
-        }
+    dt {
+      @include font-size($h4-font-size);
+    }
+    dd {
+      @include font-size($h5-font-size);
+      margin-bottom: 1rem;
     }
 
-    &__run-list {
-        margin: 0;
-        padding: 0;
-        list-style-type: none;
-
-        li {
-            @include font-size($h5-font-size);
-
-            & + li {
-                margin-top: 1rem;
-            }
+    & + #{$detail-selector}__run-descriptions {
+      @if r-theme-val(course-detail, run-descriptions-divider) {
+        &::before {
+          content: '';
+          display: block;
+          width: 60%;
+          margin: 2rem auto;
+          border-top: $onepixel
+            solid
+            r-theme-val(course-detail, run-descriptions-divider);
         }
+      }
+    }
+  }
 
+  &__run-list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+
+    li {
+      @include font-size($h5-font-size);
+
+      & + li {
+        margin-top: 1rem;
+      }
+    }
+  }
+
+  &__team {
+    #{$detail-selector}__title {
+      text-align: center;
+    }
+  }
+
+  &__organizations {
+    #{$detail-selector}__title {
+      @include font-size($h4-font-size);
+      color: r-theme-val(course-detail, organizations-title-color) !important;
+      text-align: center;
     }
 
-    &__team {
-        #{$detail-selector}__title {
-            text-align: center;
-        }
+    .organization-glimpse {
+      $glimpse-gutter: 0.625rem;
+      @include sv-flex($width: calc(100% - #{$glimpse-gutter * 2}));
+      border: 0;
+
+      @include media-breakpoint-up(sm) {
+        @include sv-flex($width: calc(50% - #{$glimpse-gutter * 2}));
+      }
+      @include media-breakpoint-up(xl) {
+        @include sv-flex($width: calc(20% - #{$glimpse-gutter * 2}));
+      }
+    }
+  }
+
+  &__plan {
+    #{$detail-selector}__title {
+      color: r-theme-val(course-detail, plan-title-color);
+    }
+  }
+
+  .plan-accordion {
+    @include accordion-base();
+    @include accordion-plan(
+      $item-dot-color: r-theme-val(accordion-plan, item-dot-color),
+      $title-color: r-theme-val(accordion-plan, title-color),
+      $content-color: r-theme-val(accordion-plan, content-color),
+      $border-color: r-theme-val(accordion-plan, border-color),
+      $background-color: r-theme-val(accordion-plan, background-color),
+      $dot-closed: r-theme-val(accordion-plan, dot-closed),
+      $dot-opened: r-theme-val(accordion-plan, dot-opened)
+    );
+  }
+
+  &__license {
+    #{$detail-selector}__title {
+      @include font-size($h3-font-size);
     }
 
-    &__organizations {
-        #{$detail-selector}__title {
-            @include font-size($h4-font-size);
-            color: r-theme-val(course-detail, organizations-title-color) !important;
-            text-align: center;
-        }
-
-        .organization-glimpse {
-            $glimpse-gutter: 0.625rem;
-            @include sv-flex($width: calc(100% - #{$glimpse-gutter * 2}));
-            border: 0;
-
-            @include media-breakpoint-up(sm) {
-                @include sv-flex($width: calc(50% - #{$glimpse-gutter * 2}));
-            }
-            @include media-breakpoint-up(xl) {
-                @include sv-flex($width: calc(20% - #{$glimpse-gutter * 2}));
-            }
-        }
+    #{$detail-selector}__label {
+      color: r-theme-val(course-detail, license-label-color);
     }
-
-    &__plan {
-        #{$detail-selector}__title {
-            color: r-theme-val(course-detail, plan-title-color);
-        }
-    }
-
-    .plan-accordion {
-        @include accordion-base();
-        @include accordion-plan(
-            $item-dot-color: r-theme-val(accordion-plan, item-dot-color),
-            $title-color: r-theme-val(accordion-plan, title-color),
-            $content-color: r-theme-val(accordion-plan, content-color),
-            $border-color: r-theme-val(accordion-plan, border-color),
-            $background-color: r-theme-val(accordion-plan, background-color),
-            $dot-closed: r-theme-val(accordion-plan, dot-closed),
-            $dot-opened: r-theme-val(accordion-plan, dot-opened),
-        );
-    }
-
-    &__license {
-        #{$detail-selector}__title {
-            @include font-size($h3-font-size);
-        }
-
-        #{$detail-selector}__label {
-            color: r-theme-val(course-detail, license-label-color);
-        }
-    }
-
+  }
 }

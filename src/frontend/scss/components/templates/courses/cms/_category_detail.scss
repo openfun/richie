@@ -4,116 +4,118 @@ $richie-category-detail-banner-logo-sizing-md: 20rem !default;
 $richie-category-detail-banner-logo-sizing-xl: 25rem !default;
 
 .category-detail {
-    $detail-selector: &;
-    margin: 0 auto;
-    padding: 0;
+  $detail-selector: &;
+  margin: 0 auto;
+  padding: 0;
 
-    &__block {
-        @include detail-block;
-        @include content-padding-fix($target: "&:last-child");
+  &__block {
+    @include detail-block;
+    @include content-padding-fix($target: '&:last-child');
+  }
+
+  &__row {
+    @include detail-row;
+  }
+
+  &__title {
+    @include detail-title;
+  }
+
+  &__empty {
+    @include detail-empty;
+  }
+
+  &__banner {
+    position: relative;
+    width: 100%;
+    height: 30vh;
+
+    @include media-breakpoint-up(xl) {
+      height: 25vh;
     }
 
-    &__row {
-        @include detail-row;
+    & > img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
     }
 
-    &__title {
-        @include detail-title;
+    @include m-o-media_empty(
+      $background: r-theme-val(category-detail, empty-background)
+    );
+
+    // Insert wave curves on top of banner bottom
+    &::after {
+      content: '';
+      display: block;
+      width: 100%;
+      height: 4rem;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-image: r-theme-val(category-detail, insert-background-image);
+      background-repeat: no-repeat;
+      background-position: top left;
+      background-size: 100% 100%;
+      transform: scaleX(-1);
+      z-index: 2;
+    }
+  }
+
+  &__logo {
+    position: absolute;
+    top: 10%;
+    right: 10%;
+    width: 30%;
+    padding: 0.5rem;
+    background: r-theme-val(category-detail, logo-background);
+    border: $onepixel solid r-theme-val(category-detail, logo-border);
+    box-shadow: r-theme-val(category-detail, logo-shadow);
+    z-index: 4;
+
+    @include media-breakpoint-up(lg) {
+      top: 40%;
+      right: 10%;
+      bottom: -2rem;
+      width: 20%;
     }
 
-    &__empty {
-        @include detail-empty;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
     }
 
-    &__banner {
-        position: relative;
-        width: 100%;
-        height: 30vh;
+    @include m-o-media_empty();
+  }
 
-        @include media-breakpoint-up(xl) {
-            height: 25vh;
-        }
+  &__intro {
+    #{$detail-selector}__title {
+      text-align: left;
+      color: r-theme-val(category-detail, intro-title-color);
 
-        & > img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-        }
+      img {
+        display: block;
+        margin: 0 auto;
+      }
 
-        @include m-o-media_empty($background: r-theme-val(category-detail, empty-background));
-
-        // Insert wave curves on top of banner bottom
-        &::after{
-            content: "";
-            display: block;
-            width: 100%;
-            height: 4rem;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background-image: r-theme-val(category-detail, insert-background-image);
-            background-repeat: no-repeat;
-            background-position: top left;
-            background-size: 100% 100%;
-            transform: scaleX(-1);
-            z-index: 2;
-        }
-    }
-
-    &__logo {
-        position: absolute;
-        top: 10%;
-        right: 10%;
-        width: 30%;
-        padding: 0.5rem;
-        background: r-theme-val(category-detail, logo-background);
-        border: $onepixel solid r-theme-val(category-detail, logo-border);
-        box-shadow: r-theme-val(category-detail, logo-shadow);
-        z-index: 4;
-
-        @include media-breakpoint-up(lg) {
-            top: 40%;
-            right: 10%;
-            bottom: -2rem;
-            width: 20%;
-        }
+      @include media-breakpoint-up(lg) {
+        width: calc(70% - 2rem);
 
         img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            object-position: center;
+          display: inline-block;
+          margin: 0;
         }
-
-        @include m-o-media_empty();
+      }
     }
+  }
 
-    &__intro {
-        #{$detail-selector}__title {
-            text-align: left;
-            color: r-theme-val(category-detail, intro-title-color);
-
-            img{
-                display: block;
-                margin: 0 auto;
-            }
-
-            @include media-breakpoint-up(lg) {
-                width: calc(70% - 2rem);
-
-                img{
-                    display: inline-block;
-                    margin: 0;
-                }
-            }
-        }
-    }
-
-    &__description {
-        margin-top: 1rem;
-        font-size: 1rem;
-        color: r-theme-val(category-detail, description-color);
-    }
+  &__description {
+    margin-top: 1rem;
+    font-size: 1rem;
+    color: r-theme-val(category-detail, description-color);
+  }
 }

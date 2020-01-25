@@ -13,116 +13,111 @@
 //
 
 // A block take full width, add some padding and base colors
-@mixin detail-block(
-) {
-    // Use a variable to avoid a bug with other mixin usage which may retain
-    // ampersand value from another previous usage
-    $sel: &;
+@mixin detail-block() {
+  // Use a variable to avoid a bug with other mixin usage which may retain
+  // ampersand value from another previous usage
+  $sel: &;
 
-    margin: 0;
+  margin: 0;
 
-    // Default padding until "--unpadded" modifier is present
-    &:not(#{$sel}--unpadded){
-        padding: 1rem 0;
+  // Default padding until "--unpadded" modifier is present
+  &:not(#{$sel}--unpadded) {
+    padding: 1rem 0;
 
-        @include media-breakpoint-up(lg) {
-            padding: 3rem 0;
-        }
+    @include media-breakpoint-up(lg) {
+      padding: 3rem 0;
     }
+  }
 
-    // Thin top divider line
-    @if r-theme-val(detail-block, divider){
-        &#{$sel} + #{$sel}--divider{
-            border-top: $onepixel solid r-theme-val(detail-block, divider);
-        }
+  // Thin top divider line
+  @if r-theme-val(detail-block, divider) {
+    &#{$sel} + #{$sel}--divider {
+      border-top: $onepixel solid r-theme-val(detail-block, divider);
     }
+  }
 
-    // Implement background variant modifiers
-    @each $name, $scheme in r-theme-val(detail-block, variants){
-        &#{$sel}--#{$name}{
-            @include r-scheme-colors($scheme);
-        }
+  // Implement background variant modifiers
+  @each $name, $scheme in r-theme-val(detail-block, variants) {
+    &#{$sel}--#{$name} {
+      @include r-scheme-colors($scheme);
     }
+  }
 
-    @if r-theme-val(detail-block, alt-arc){
-        &#{$sel}--arc{
-            padding-bottom: 0 !important;
+  @if r-theme-val(detail-block, alt-arc) {
+    &#{$sel}--arc {
+      padding-bottom: 0 !important;
 
-            &::after{
-                content: "";
-                display: block;
-                margin-top: map-get($spacers, 4) * 3;
-                width: 100%;
-                height: 2.5vw;
-                background-image: r-theme-val(detail-block, alt-arc);
-                background-repeat: no-repeat;
-                background-position: bottom left;
-                background-size: 100% 100%;
-            }
-        }
+      &::after {
+        content: '';
+        display: block;
+        margin-top: map-get($spacers, 4) * 3;
+        width: 100%;
+        height: 2.5vw;
+        background-image: r-theme-val(detail-block, alt-arc);
+        background-repeat: no-repeat;
+        background-position: bottom left;
+        background-size: 100% 100%;
+      }
     }
+  }
 
-    @if r-theme-val(detail-block, alt-curve){
-        &#{$sel}--curve{
-            padding-top: 0 !important;
+  @if r-theme-val(detail-block, alt-curve) {
+    &#{$sel}--curve {
+      padding-top: 0 !important;
 
-            &::before{
-                content: "";
-                display: block;
-                width: 100%;
-                height: 2.5vw;
-                background-image: r-theme-val(detail-block, alt-curve);
-                background-repeat: no-repeat;
-                background-position: top left;
-                background-size: 100% 100%;
-            }
-        }
+      &::before {
+        content: '';
+        display: block;
+        width: 100%;
+        height: 2.5vw;
+        background-image: r-theme-val(detail-block, alt-curve);
+        background-repeat: no-repeat;
+        background-position: top left;
+        background-size: 100% 100%;
+      }
     }
+  }
 }
 
 // A row have max width restriction
-@mixin detail-row(
-) {
-    @include make-container-max-widths();
-    position: relative;
-    margin: 0 auto;
+@mixin detail-row() {
+  @include make-container-max-widths();
+  position: relative;
+  margin: 0 auto;
 
-    // Add some padding for mobile breakoints
-    @include media-breakpoint-down(lg) {
-        // Use a variable to avoid a bug with other mixin usage which may retain
-        // ampersand value from another previous usage
-        $sel: &;
-        &:not(#{$sel}--unpadded){
-            padding: 0 0.5rem;
-        }
+  // Add some padding for mobile breakoints
+  @include media-breakpoint-down(lg) {
+    // Use a variable to avoid a bug with other mixin usage which may retain
+    // ampersand value from another previous usage
+    $sel: &;
+    &:not(#{$sel}--unpadded) {
+      padding: 0 0.5rem;
     }
+  }
 }
 
 // A title commonly related to a h2
-@mixin detail-title(
-) {
-    @include sv-flex-cell-width(100%);
-    width: 100%;
-    margin-bottom: 1.5rem;
-    text-align: center;
+@mixin detail-title() {
+  @include sv-flex-cell-width(100%);
+  width: 100%;
+  margin-bottom: 1.5rem;
+  text-align: center;
 }
 
 // Content when a placeholder is empty
 @mixin detail-empty() {
-    color: r-theme-val(detail-block, empty-color);
-    text-align: center;
-    font-style: italic;
+  color: r-theme-val(detail-block, empty-color);
+  text-align: center;
+  font-style: italic;
 }
 
 // A flexbox container such as for content and aside
 // A breakpoint is required since behavior is rarely wanted on mobile mode
-@mixin detail-grid(
-    $breakpoint: lg,
-) {
-    @include media-breakpoint-up($breakpoint) {
-        display: flex;
-        flex-wrap: wrap;
-        flex-direction: row;
-        justify-content: space-between;
-    }
+@mixin detail-grid($breakpoint: lg) {
+  @include media-breakpoint-up($breakpoint) {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+  }
 }

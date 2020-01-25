@@ -231,9 +231,7 @@ class OrganizationCMSTestCase(CMSTestCase):
 
         # The published course should be on the page in its draft version
         self.assertContains(
-            response,
-            '<p class="course-glimpse__title">modified course</p>',
-            html=True,
+            response, '<p class="course-glimpse__title">modified course</p>', html=True,
         )
 
         # The not published course should be on the page, mark as draft
