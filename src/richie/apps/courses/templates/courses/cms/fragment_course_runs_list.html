@@ -2,7 +2,7 @@
 
 {% spaceless %}
 {% if course_runs %}
-<ul class="course-detail__aside__runs__block__list">
+<ul class="course-detail__run-list">
     {% for run in course_runs %}
     <li>
         <a href="{{ run.extended_object.get_absolute_url }}">

@@ -269,13 +269,13 @@
 ///
 @function r-theme-val($scheme-name, $prop-name) {
     $scheme: map-get($r-theme, $scheme-name);
-    @if not $scheme{
-        @debug "r-theme-val(): Cannot retrieve scheme name", $scheme-name;
-    }
+    //@if not $scheme{
+    //    @debug "r-theme-val(): Cannot retrieve scheme name", $scheme-name;
+    //}
     $prop: map-get($scheme, $prop-name);
-    @if $prop == null{
-        @debug "r-theme-val(): Cannot retrieve property (from scheme " + $scheme-name + "):", $prop-name;
-    }
+    //@if $prop == null{
+    //    @debug "r-theme-val(): Cannot retrieve property (from scheme " + $scheme-name + "):", $prop-name;
+    //}
 
     @return $prop;
 }

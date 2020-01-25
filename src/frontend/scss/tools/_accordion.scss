@@ -56,18 +56,20 @@
     &__item {
         position: relative;
 
-        &:last-child {
-            // Trick to mask border, this would work only with current
-            // accordion background and never with on top of composite
-            // backgrounds like image or gradients
-            &::before {
-                content: "";
-                position: absolute;
-                top: 1.25rem;
-                left: -1.5rem;
-                bottom: 0;
-                width: $accordion-border-size;
-                border-left: $accordion-border-size solid $background-color;
+        @if $background-color{
+            &:last-child {
+                // Trick to mask border, this would work only with current
+                // accordion background and never with on top of composite
+                // backgrounds like image or gradients
+                &::before {
+                    content: "";
+                    position: absolute;
+                    top: 1.25rem;
+                    left: -1.5rem;
+                    bottom: 0;
+                    width: $accordion-border-size;
+                    border-left: $accordion-border-size solid $background-color;
+                }
             }
         }
 

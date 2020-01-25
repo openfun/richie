@@ -451,11 +451,18 @@ class RunsCourseCMSTestCase(CMSTestCase):
         self.assertNotContains(response, "No open course runs")
         self.assertContains(
             response,
-            '<a href="/en/my-course/my-course-run/">Enroll now</a>',
+            (
+                '<a href="/en/my-course/my-course-run/" '
+                'class="course-detail__run-cta">Enroll now</a>'
+            ),
             html=True,
         )
         self.assertNotContains(
-            response, '<h3 class="course-detail__aside__runs__block__title">'
+            response, (
+                '<div class="course-detail__row course-detail__runs '
+                'course-detail__runs--inactive">'
+                '<h3 class="course-detail__title">'
+            )
         )
 
     def test_templates_course_detail_runs_future_open(self):
@@ -472,11 +479,18 @@ class RunsCourseCMSTestCase(CMSTestCase):
         self.assertNotContains(response, "No open course runs")
         self.assertContains(
             response,
-            '<a href="/en/my-course/my-course-run/">Enroll now</a>',
+            (
+                '<a href="/en/my-course/my-course-run/" '
+                'class="course-detail__run-cta">Enroll now</a>'
+            ),
             html=True,
         )
         self.assertNotContains(
-            response, '<h3 class="course-detail__aside__runs__block__title">'
+            response, (
+                '<div class="course-detail__row course-detail__runs '
+                'course-detail__runs--inactive">'
+                '<h3 class="course-detail__title">'
+            )
         )
 
     @timezone.override(pytz.utc)
@@ -494,12 +508,12 @@ class RunsCourseCMSTestCase(CMSTestCase):
         self.assertContains(response, "No open course runs")
         self.assertContains(
             response,
-            '<h3 class="course-detail__aside__runs__block__title">Upcoming</h3>',
+            '<h3 class="course-detail__title">Upcoming</h3>',
             html=True,
         )
         self.assertContains(
             response,
-            '<ul class="course-detail__aside__runs__block__list">'
+            '<ul class="course-detail__run-list">'
             '<li><a href="/en/my-course/my-course-run/">'
             "My course run, from {:s} to {:s}</a></li></ul>".format(
                 dateformat.format(course_run.start, "N j, Y"),
@@ -523,12 +537,12 @@ class RunsCourseCMSTestCase(CMSTestCase):
         self.assertContains(response, "No open course runs")
         self.assertContains(
             response,
-            '<h3 class="course-detail__aside__runs__block__title">Ongoing</h3>',
+            '<h3 class="course-detail__title">Ongoing</h3>',
             html=True,
         )
         self.assertContains(
             response,
-            '<ul class="course-detail__aside__runs__block__list">'
+            '<ul class="course-detail__run-list">'
             '<li><a href="/en/my-course/my-course-run/">'
             "My course run, from {:s} to {:s}</a></li></ul>".format(
                 dateformat.format(course_run.start, "N j, Y"),
@@ -552,12 +566,12 @@ class RunsCourseCMSTestCase(CMSTestCase):
         self.assertContains(response, "No open course runs")
         self.assertContains(
             response,
-            '<h3 class="course-detail__aside__runs__block__title">Ongoing</h3>',
+            '<h3 class="course-detail__title">Ongoing</h3>',
             html=True,
         )
         self.assertContains(
             response,
-            '<ul class="course-detail__aside__runs__block__list">'
+            '<ul class="course-detail__run-list">'
             '<li><a href="/en/my-course/my-course-run/">'
             "My course run, from {:s} to {:s}</a></li></ul>".format(
                 dateformat.format(course_run.start, "N j, Y"),
@@ -581,12 +595,12 @@ class RunsCourseCMSTestCase(CMSTestCase):
         self.assertContains(response, "No open course runs")
         self.assertContains(
             response,
-            '<h3 class="course-detail__aside__runs__block__title">Archived</h3>',
+            '<h3 class="course-detail__title">Archived</h3>',
             html=True,
         )
         self.assertContains(
             response,
-            '<ul class="course-detail__aside__runs__block__list">'
+            '<ul class="course-detail__run-list">'
             '<li><a href="/en/my-course/my-course-run/">'
             "My course run, from {:s} to {:s}</a></li></ul>".format(
                 dateformat.format(course_run.start, "N j, Y"),
@@ -621,12 +635,12 @@ class RunsCourseCMSTestCase(CMSTestCase):
         self.assertContains(response, "No open course runs")
         self.assertContains(
             response,
-            '<h3 class="course-detail__aside__runs__block__title">To be scheduled</h3>',
+            '<h3 class="course-detail__title">To be scheduled</h3>',
             html=True,
         )
         self.assertContains(
             response,
-            '<ul class="course-detail__aside__runs__block__list">'
+            '<ul class="course-detail__run-list">'
             '<li><a href="/en/my-course/my-course-run/">My course run</a></li></ul>',
             html=True,
         )

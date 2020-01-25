@@ -84,7 +84,7 @@ class CourseRunCMSTestCase(CMSTestCase):
         )
         self.assertContains(
             response,
-            '<h1 class="course-detail__content__title">'
+            '<h1 class="subheader__title">'
             "Very interesting course<br>first session</h1>",
             html=True,
         )
@@ -94,8 +94,8 @@ class CourseRunCMSTestCase(CMSTestCase):
             self.assertContains(
                 response,
                 (
-                    '<a class="category-plugin-tag" href="{:s}">'
-                    '<div class="category-plugin-tag__title">{:s}</div></a>'
+                    '<a class="feature-inlines__item" href="{:s}">'
+                    '<span class="feature-inlines__term">{:s}</span></a>'
                 ).format(
                     category.extended_object.get_absolute_url(),
                     category.extended_object.get_title(),
@@ -123,12 +123,20 @@ class CourseRunCMSTestCase(CMSTestCase):
 
         # The course run details should be on the page
         self.assertContains(
-            response, "<dt>Enrollment starts</dt><dd>Oct. 21, 2018</dd>"
+            response, "<strong>Enrollment starts</strong><span>Oct. 21, 2018</span>"
         )
-        self.assertContains(response, "<dt>Enrollment ends</dt><dd>Jan. 18, 2019</dd>")
-        self.assertContains(response, "<dt>Course starts</dt><dd>Dec. 10, 2018</dd>")
-        self.assertContains(response, "<dt>Course ends</dt><dd>Feb. 14, 2019</dd>")
-        self.assertContains(response, "<dt>Languages</dt><dd>English and french</dd>")
+        self.assertContains(
+            response, "<strong>Enrollment ends</strong><span>Jan. 18, 2019</span>"
+        )
+        self.assertContains(
+            response, "<strong>Course starts</strong><span>Dec. 10, 2018</span>"
+        )
+        self.assertContains(
+            response, "<strong>Course ends</strong><span>Feb. 14, 2019</span>"
+        )
+        self.assertContains(
+            response, "<strong>Languages</strong><span>English and french</span>"
+        )
 
     def test_templates_course_run_detail_cms_draft_content(self):
         """
@@ -185,7 +193,7 @@ class CourseRunCMSTestCase(CMSTestCase):
         )
         self.assertContains(
             response,
-            '<h1 class="course-detail__content__title">'
+            '<h1 class="subheader__title">'
             "Very interesting course<br>first session</h1>",
             html=True,
         )
@@ -208,8 +216,8 @@ class CourseRunCMSTestCase(CMSTestCase):
             self.assertContains(
                 response,
                 (
-                    '<a class="category-plugin-tag" href="{:s}">'
-                    '<div class="category-plugin-tag__title">{:s}</div></a>'
+                    '<a class="feature-inlines__item" href="{:s}">'
+                    '<span class="feature-inlines__term">{:s}</span></a>'
                 ).format(
                     category.extended_object.get_absolute_url(),
                     category.extended_object.get_title(),
@@ -223,10 +231,10 @@ class CourseRunCMSTestCase(CMSTestCase):
                 response,
                 (
                     '<a class="{element:s} {element:s}--draft" href="{url:s}">'
-                    '<div class="category-plugin-tag__title">{title:s}</div></a>'
+                    '<span class="feature-inlines__term">{title:s}</span></a>'
                 ).format(
                     url=category.extended_object.get_absolute_url(),
-                    element="category-plugin-tag",
+                    element="feature-inlines__item",
                     title=category.extended_object.get_title(),
                 ),
                 html=True,
@@ -234,12 +242,20 @@ class CourseRunCMSTestCase(CMSTestCase):
 
         # The course run details should be on the page
         self.assertContains(
-            response, "<dt>Enrollment starts</dt><dd>Oct. 21, 2018</dd>"
+            response, "<strong>Enrollment starts</strong><span>Oct. 21, 2018</span>"
         )
-        self.assertContains(response, "<dt>Enrollment ends</dt><dd>Jan. 18, 2019</dd>")
-        self.assertContains(response, "<dt>Course starts</dt><dd>Dec. 10, 2018</dd>")
-        self.assertContains(response, "<dt>Course ends</dt><dd>Feb. 14, 2019</dd>")
-        self.assertContains(response, "<dt>Languages</dt><dd>English and french</dd>")
+        self.assertContains(
+            response, "<strong>Enrollment ends</strong><span>Jan. 18, 2019</span>"
+        )
+        self.assertContains(
+            response, "<strong>Course starts</strong><span>Dec. 10, 2018</span>"
+        )
+        self.assertContains(
+            response, "<strong>Course ends</strong><span>Feb. 14, 2019</span>"
+        )
+        self.assertContains(
+            response, "<strong>Languages</strong><span>English and french</span>"
+        )
 
     def test_templates_course_run_detail_no_index(self):
         """
@@ -281,7 +297,7 @@ class CourseRunCMSTestCase(CMSTestCase):
         response = self.prepare_to_test_state(CourseState(0, timezone.now()))
         self.assertContains(
             response,
-            '<a class="course-detail__content__run__block__cta" '
+            '<a class="subheader__cta" '
             'href="https://www.example.com/enroll">Enroll now</a>',
             html=True,
         )
@@ -291,8 +307,8 @@ class CourseRunCMSTestCase(CMSTestCase):
         response = self.prepare_to_test_state(CourseState(6))
         self.assertContains(
             response,
-            '<button class="course-detail__content__run__block__cta '
-            'course-detail__content__run__block__cta--projected">To be scheduled</button>',
+            '<button class="subheader__cta '
+            'subheader__cta--projected">To be scheduled</button>',
             html=True,
         )
 

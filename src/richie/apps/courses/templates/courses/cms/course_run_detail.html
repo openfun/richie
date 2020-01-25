@@ -1,14 +1,15 @@
 {% extends "richie/fullwidth.html" %}
-{% load cms_tags i18n extra_tags menu_tags %}
+{% load cms_tags i18n extra_tags menu_tags static %}
 
 {% block head_title %}{% spaceless %}
-  {% page_attribute "page_title" as course_run_title %}
-  {% page_attribute "page_title" current_page.parent_page as course_title %}
-  {{ course_run_title|capfirst }} - {{ course_title|capfirst }}
+    {% page_attribute "page_title" as course_run_title %}
+    {% page_attribute "page_title" current_page.parent_page as course_title %}
+    {{ course_run_title|capfirst }} - {{ course_title|capfirst }}
 {% endspaceless %}{% endblock head_title %}
 
 {# Make sure the course run pages are not indexed by search engines #}
 {% block meta_index_rules %}<meta name="robots" content="noindex">{% endblock meta_index_rules %}
+
 
 {% block meta_opengraph_contextuals %}
     {% page_attribute "page_title" as course_run_title %}
@@ -17,202 +18,133 @@
     <meta property="og:url" content="{{ SITE.web_url }}{{ current_page.get_absolute_url }}">
 {% endblock meta_opengraph_contextuals %}
 
-{% block breadcrumbs %}
-  <ul class="breadcrumbs">
-    {% block breadcrumbs_content %}
-      {% show_breadcrumb 0 "courses/cms/fragment_course_run_breadcrumb.html" %}
-    {% endblock breadcrumbs_content %}
-  </ul>
-{% endblock breadcrumbs %}
+{% block subheader %}
+<div class="subheader subheader--alternative">
+    {% block breadcrumbs %}
+    <ul class="breadcrumbs">
+        {% block breadcrumbs_content %}
+        {% show_breadcrumb 0 "courses/cms/fragment_course_run_breadcrumb.html" %}
+        {% endblock breadcrumbs_content %}
+    </ul>
+    {% endblock breadcrumbs %}
+
+    {% block subheader_content %}{% spaceless %}
+        {% comment %}{% with course=current_page.parent_page course_run=current_page.course header_level=2 %}{% endcomment %}
+        {% with course=current_page.course course_run=current_page.courserun header_level=2 %}
+        <div class="subheader__container">
+            <div class="subheader__intro">
+                <div class="subheader__main">
+                    {% block categories %}
+                    <div class="feature-inlines">
+                        <ul class="feature-inlines__container feature-inlines__container--categories">
+                        {% with variant="feature" %}
+                        {% page_placeholder "course_icons" current_page.parent_page %}
+                        {% page_placeholder "course_categories" current_page.parent_page or %}
+                            <li class="feature-inlines__empty">
+                                {% trans "No associated categories" %}
+                            </li>
+                        {% endpage_placeholder %}
+                        {% endwith %}
+                        </ul>
+                    </div>
+                    {% endblock categories %}
+
+                    {% block title %}
+                    <h1 class="subheader__title">
+                        {% if request.current_page.parent_page.parent_page.course %}
+                            {{ current_page.parent_page.parent_page.get_title }}
+                        {% else %}
+                            {{ current_page.parent_page.get_title }}
+                        {% endif %}
+                        <br />
+                        {% render_model request.current_page "title" %}
+                    </h1>
+                    {% endblock title %}
+
+                    <div class="subheader__teaser">
+                        {% page_placeholder "course_teaser" current_page.parent_page or %}
+                        <div class="empty">{% trans 'Add a video or teaser.' %}</div>
+                        {% endpage_placeholder %}
+                    </div>
+
+                    <div class="subheader__content subheader__content--aside">
+                        {% if current_page.parent_page.publisher_is_draft or not current_page.parent_page|is_empty_placeholder:"course_description" %}
+                            {% with header_level=3 %}
+                            {% page_placeholder "course_description" current_page.parent_page or %}
+                                <p>{% trans 'Enter here a description of your course.' %}</p>
+                            {% endpage_placeholder %}
+                            {% endwith %}
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="subheader__aside">
+                    <ul class="subheader__definitions">
+                        <li>
+                            <strong>{% trans "Enrollment starts" %}</strong>
+                            <span>{% render_model course_run "enrollment_start" "enrollment_start,enrollment_end" "" "date:'DATE_FORMAT'|default:'...'" %}</span>
+                        </li>
+                        <li>
+                            <strong>{% trans "Enrollment ends" %}</strong>
+                            <span>{% render_model course_run "enrollment_end" "enrollment_start,enrollment_end" "" "date:'DATE_FORMAT'|default:'...'" %}</span>
+                        </li>
+                        <li>
+                            <strong>{% trans "Course starts" %}</strong>
+                            <span>{% render_model course_run "start" "start,end" "" "date:'DATE_FORMAT'|default:'...'" %}</span>
+                        </li>
+                        <li>
+                            <strong>{% trans "Course ends" %}</strong>
+                            <span>{% render_model course_run "end" "start,end" "" "date:'DATE_FORMAT'|default:'...'" %}</span>
+                        </li>
+                        <li>
+                            <strong>{% trans "Languages" %}</strong>
+                            <span>{% render_model course_run "get_languages_display" "languages" %}</span>
+                        </li>
+                        <li class="full">
+                            {% if course_run.state.call_to_action %}
+                            <a class="subheader__cta" href="{{ course_run.resource_link }}">
+                                {{ course_run.state.call_to_action|capfirst }}
+                            </a>
+                            {% else %}
+                            <button class="subheader__cta subheader__cta--projected">
+                                {{ course_run.state.text|capfirst }}
+                            </button>
+                            {% endif %}
+                        </li>
+                        {% if current_page.publisher_is_draft %}
+                        <li class="full">
+                            <strong>{% trans "Resource link" %}</strong>
+                            <span>
+                                <a href="{{ course_run.resource_link }}">
+                                    {% render_model course_run "resource_link" "resource_link" "" "default:'...'" %}
+                                </a>
+                            </span>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% endwith %}
+    {% endspaceless %}{% endblock subheader_content %}
+</div>
+{% endblock subheader %}
+
 
 {% block content %}{% spaceless %}
+{% with course_run=current_page.courserun header_level=2 %}
 <div class="course-detail">
-
-  {% with course_run=current_page.courserun header_level=2 %}
-
-  <div class="course-detail__content course-detail__content--one">
-    <h1 class="course-detail__content__title">
-      {% if request.current_page.parent_page.parent_page.course %}
-        {{ current_page.parent_page.parent_page.get_title }}
-      {% else %}
-        {{ current_page.parent_page.get_title }}
-      {% endif %}
-      <br />
-      {% render_model request.current_page "title" %}
-    </h1>
-
-    <div class="course-detail__content__row course-detail__content__categories">
-      {% with variant="tag" %}
-        {% show_placeholder "course_categories" current_page.parent_page %}
-      {% endwith %}
-    </div>
-
-    <div class="course-detail__content__run">
-      <h2 class="course-detail__content__run__title">{% trans 'Details' %}</h2>
-      <div class="course-detail__content__run__block">
-        <dl>
-          <dt>{% trans "Enrollment starts" %}</dt>
-          <dd>{% render_model course_run "enrollment_start" "enrollment_start,enrollment_end" "" "date:'DATE_FORMAT'|default:'...'" %}</dd>
-          <dt>{% trans "Enrollment ends" %}</dt>
-          <dd>{% render_model course_run "enrollment_end" "enrollment_start,enrollment_end" "" "date:'DATE_FORMAT'|default:'...'" %}</dd>
-        </dl>
-      </div>
-      <div class="course-detail__content__run__block">
-        <dl>
-          <dt>{% trans "Course starts" %}</dt>
-          <dd>{% render_model course_run "start" "start,end" "" "date:'DATE_FORMAT'|default:'...'" %}</dd>
-          <dt>{% trans "Course ends" %}</dt>
-          <dd>{% render_model course_run "end" "start,end" "" "date:'DATE_FORMAT'|default:'...'" %}</dd>
-        </dl>
-      </div>
-      <div class="course-detail__content__run__block">
-        <dl>
-          <dt>{% trans "Languages" %}</dt>
-          <dd>{% render_model course_run "get_languages_display" "languages" %}</dd>
-        </dl>
-        {% if course_run.state.call_to_action %}
-        <a class="course-detail__content__run__block__cta" href="{{ course_run.resource_link }}">
-          {{ course_run.state.call_to_action|capfirst }}
-        </a>
-        {% else %}
-        <button class="course-detail__content__run__block__cta course-detail__content__run__block__cta--projected">
-          {{ course_run.state.text|capfirst }}
-        </button>
-        {% endif %}
-      </div>
-      {% if current_page.publisher_is_draft %}
-      <dl class="course-detail__content__run__block course-detail__content__run__block--full">
-        <dt>{% trans "Resource link" %}</dt>
-        <dd>
-          <a href="{{ course_run.resource_link }}">
-            {% render_model course_run "resource_link" "resource_link" "" "default:'...'" %}
-          </a>
-        </dd>
-      </dl>
-      {% endif %}
-    </div>
-
-    {% block teaser %}
-    <div class="course-detail__content__row course-detail__content__teaser">
-      {% show_placeholder "course_teaser" current_page.parent_page %}
-    </div>
-    {% endblock teaser %}
-
-    {% block description %}
-    {% if not current_page.parent_page|is_empty_placeholder:"course_description" %}
-    <section class="course-detail__content__row course-detail__content__description">
-      <h2 class="course-detail__content__row__title">{% trans 'About the course' %}</h2>
-      {% with header_level=3 %}
-        {% show_placeholder "course_description" current_page.parent_page %}
-      {% endwith %}
-    </section>
-    {% endif %}
-    {% endblock description %}
-
-    {% block skills %}
-    {% if not current_page.parent_page|is_empty_placeholder:"course_skills" %}
-    <div class="course-detail__content__row course-detail__content__skills">
-      <h2 class="course-detail__content__row__title">{% trans "What you will learn" %}</h2>
-      <p>{% trans "At the end of this course, you will be able to:" %}</p>
-      {% show_placeholder "course_skills" current_page.parent_page %}
-    </div>
-    {% endif %}
-    {% endblock skills %}
-
-    {% block format %}
-    {% if not current_page.parent_page|is_empty_placeholder:"course_format" %}
-    <section class="course-detail__content__row course-detail__content__format">
-      <h2 class="course-detail__content__row__title">{% trans 'Format' %}</h2>
-      {% show_placeholder "course_format" current_page.parent_page %}
-    </section>
-    {% endif %}
-    {% endblock format %}
-
-    {% block prerequisites %}
-    {% if not current_page.parent_page|is_empty_placeholder:"course_prerequisites" %}
-    <section class="course-detail__content__row course-detail__content__prerequisites">
-      <h2 class="course-detail__content__row__title">{% trans 'Prerequisites' %}</h2>
-      {% show_placeholder "course_prerequisites" current_page.parent_page %}
-    </section>
-    {% endif %}
-    {% endblock prerequisites %}
-
-    {% block plan %}
-    {% if not current_page.parent_page|is_empty_placeholder:"course_plan" %}
-    <section class="course-detail__content__row course-detail__content__plan">
-      <h2 class="course-detail__content__row__title">{% trans 'Course plan' %}</h2>
-      {% show_placeholder "course_plan" current_page.parent_page %}
-    </section>
-    {% endif %}
-    {% endblock plan %}
-
-    {% block assessment %}
-    {% if not current_page.parent_page|is_empty_placeholder:"course_assessment" %}
-    <section class="course-detail__content__row course-detail__content__assessment">
-      <h2 class="course-detail__content__row__title">{% trans 'Assessment and certification' %}</h2>
-      {% show_placeholder "course_assessment" current_page.parent_page %}
-    </section>
-    {% endif %}
-    {% endblock assessment %}
-
-    {% block organizations %}
-    {% if not current_page.parent_page|is_empty_placeholder:"course_organizations" %}
-    <section class="section course-detail__content__row course-detail__content__organizations">
-      <h2 class="section__title course-detail__content__row__title course-detail__content__organizations__title">
-        {% trans 'Organizations' %}
-      </h2>
-      <div class="section__items course-detail__content__organizations__items">
-        {% show_placeholder "course_organizations" current_page.parent_page %}
-      </div>
-    </section>
-    {% endif %}
-    {% endblock organizations %}
-
-    {% block team %}
-    {% if not current_page.parent_page|is_empty_placeholder:"course_team" %}
-    <section class="section course-detail__content__row course-detail__content__team">
-      <h2 class="section.title course-detail__content__row__title course-detail__content__team__title">
-        {% trans 'Course team' %}
-      </h2>
-      {% with header_level=3 %}
-        <div class="section__items course-detail__content__team__items">
-          {% show_placeholder "course_team" current_page.parent_page %}
+    <div class="course-detail__grid">
+        <div class="course-detail__wrapper">
+            {% include "courses/cms/fragment_course_content.html" with page=current_page.parent_page %}
         </div>
-      {% endwith %}
-    </section>
-    {% endif %}
-    {% endblock team %}
-
-    {% block information %}
-    {% if not current_page.parent_page|is_empty_placeholder:"course_information" %}
-    <div class="course-detail__content__row course-detail__content__information">
-      {% show_placeholder "course_information" current_page.parent_page %}
     </div>
-    {% endif %}
-    {% endblock information %}
 
-    {% block licenses %}
-    <section class="course-detail__content__row course-detail__content__license">
-      <h2 class="course-detail__content__row__title course-detail__content__license__title">{% trans 'License' %}</h2>
-
-      <div class="course-detail__content__license__item">
-        <h3 class="course-detail__content__license__item__title">{% trans 'License for the course content' %}</h3>
-        {% with header_level=4 %}
-          {% show_placeholder "course_license_content" current_page.parent_page %}
-        {% endwith %}
-      </div>
-
-      <div class="course-detail__content__license__item">
-        <h3 class="course-detail__content__license__item__title">{% trans 'License for the content created by course participants' %}</h3>
-        {% with header_level=4 %}
-          {% show_placeholder "course_license_participation" current_page.parent_page %}
-        {% endwith %}
-      </div>
-    </section>
-    {% endblock licenses %}
-
-  </div>
-  {% endwith %}
-
+    {% block fragment_relations %}
+    <div class="course-detail__relations">
+        {% include "courses/cms/fragment_course_relations.html" with page=current_page.parent_page %}
+    </div>
+    {% endblock fragment_relations %}
 </div>
+{% endwith %}
 {% endspaceless %}{% endblock content %}
