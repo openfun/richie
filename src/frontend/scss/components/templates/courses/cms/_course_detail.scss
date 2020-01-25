@@ -1,16 +1,15 @@
 // Course detail template stylesheet
 //
-// NOTE: Course runs part have been dropped for now since it is not wanted for
-//       fun-corporate
+
 
 .course-detail {
     $detail-selector: &;
     margin: 0 auto;
     padding: 0;
+    @include content-padding-fix($target: "&:last-child");
 
     &__block {
         @include detail-block;
-        @include content-padding-fix($target: "&:last-child");
     }
 
     &__row {
@@ -22,57 +21,119 @@
         text-align: left;
     }
 
-    &__item {
-        margin: 1rem 0 0 0;
-    }
-
-    &__label {
-        @include font-size($h4-font-size);
-        margin: 0 0 0.75rem 0;
-        font-family: $font-family-base;
-        font-weight: bold;
-    }
-
     &__empty {
         @include detail-empty;
     }
 
-    &__teaser {
-        @include sv-flex-cell-width(100%);
+    &__grid {
+        padding-bottom: 1rem;
+
+        @include media-breakpoint-up(lg) {
+            padding-bottom: 2rem;
+        }
+
+        #{$detail-selector}__wrapper{
+            @include make-container-max-widths();
+            @if $r-course-aside{
+                @include detail-grid;
+            }
+            margin: 0 auto;
+        }
+    }
+
+    @if $r-course-aside{
+        &__content {
+            @include media-breakpoint-up(lg) {
+                @include sv-flex(1, 0, #{100% - $r-course-aside});
+            }
+        }
+
+        &__aside {
+            padding: 1rem 0;
+
+            @include media-breakpoint-up(lg) {
+                @include sv-flex(1, 0, $r-course-aside);
+                padding: 3rem 0.5rem;
+            }
+
+            #{$detail-selector}__row {
+                margin-bottom: 1.5rem;
+            }
+
+            #{$detail-selector}__title {
+                @include font-size($h3-font-size);
+                padding-bottom: 1rem;
+                @if r-theme-val(course-detail, aside-title-border) {
+                    border-bottom: $onepixel solid r-theme-val(course-detail, aside-title-border);
+                }
+            }
+        }
+    }
+
+    &__primary-group{
+        padding-bottom: 0 !important;
+        background: r-theme-val(course-detail, primary-group-background);
+
+        @if r-theme-val(course-detail, primary-group-arc) {
+            &::after{
+                content: "";
+                display: block;
+                margin-top: map-get($spacers, 4) * 3;
+                width: 100%;
+                height: 2.5vw;
+                background-image: r-theme-val(course-detail, primary-group-arc);
+                background-repeat: no-repeat;
+                background-position: bottom left;
+                background-size: 100% 100%;
+            }
+        }
+    }
+
+    &__run-cta {
+        width: 100%;
+        @include button-small($font-weight: bold);
+        @include r-button-colors(r-theme-val(course-detail, run-cta), $apply-border: true, $include-hover: true);
+    }
+
+    &__run-descriptions{
+        dl {
+            margin: 0;
+        }
+
+        dt {
+            @include font-size($h4-font-size);
+        }
+        dd {
+            @include font-size($h5-font-size);
+            margin-bottom: 1rem;
+        }
+
+        & + #{$detail-selector}__run-descriptions {
+            @if r-theme-val(course-detail, run-descriptions-divider) {
+                &::before{
+                    content: "";
+                    display: block;
+                    width: 60%;
+                    margin: 2rem auto;
+                    border-top: $onepixel solid r-theme-val(course-detail, run-descriptions-divider);
+                }
+            }
+        }
+    }
+
+    &__run-list {
         margin: 0;
         padding: 0;
-        /**
-        * Code below replicate .reponsive-embed from Bootstrap with forced 16/9
-        * cause we cannot use object-fit since it is not compatible under IE
-        * Edge 16. For not forced ratio we may use something like flex-video
-        * (which involve some JS)
-        */
-        position: relative;
-        display: block;
-        overflow: hidden;
+        list-style-type: none;
 
-        &::before {
-            display: block;
-            content: '';
-            padding-top: percentage(9 / 16);
+        li {
+            @include font-size($h5-font-size);
+
+            & + li {
+                margin-top: 1rem;
+            }
         }
 
-        iframe,
-        embed,
-        object,
-        img,
-        video {
-            position: absolute;
-            top: 1.5rem;
-            bottom: 1.5rem;
-            left: 1rem;
-            right: 1rem;
-            width: calc(100% - #{1rem * 2});
-            min-height: calc(100% - #{1.5rem * 2});
-            border: 0;
-        }
-
-        @include m-o-media_empty($background: r-theme-val(course-detail, teaser-empty-background));
     }
 
     &__team {

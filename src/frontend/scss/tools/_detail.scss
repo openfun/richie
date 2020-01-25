@@ -22,7 +22,7 @@
     margin: 0;
 
     // Default padding until "--unpadded" modifier is present
-    &#{$sel}:not(#{$sel}--unpadded){
+    &:not(#{$sel}--unpadded){
         padding: 1rem 0;
 
         @include media-breakpoint-up(lg) {

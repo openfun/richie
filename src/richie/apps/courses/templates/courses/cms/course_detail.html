@@ -107,18 +107,18 @@
                     {% block main_organization %}
                     {% with main_organization=course.get_main_organization %}
                         {% if main_organization %}
-                        {% if current_page.publisher_is_draft %}
-                            {% if main_organization.check_publication is True %}
+                            {% if current_page.publisher_is_draft %}
+                                {% if main_organization.check_publication is True %}
+                                    {% include "courses/cms/fragment_organization_main_logo.html" with organization=main_organization.public_extension %}
+                                {% else %}
+                                    {% include "courses/cms/fragment_organization_main_logo.html" with organization=main_organization %}
+                                {% endif %}
+                            {# If the current page is the published version, show only the organizations that are published #}
+                            {% elif main_organization.check_publication is True %}
                                 {% include "courses/cms/fragment_organization_main_logo.html" with organization=main_organization.public_extension %}
-                            {% else %}
-                                {% include "courses/cms/fragment_organization_main_logo.html" with organization=main_organization %}
                             {% endif %}
-                        {# If the current page is the published version, show only the organizations that are published #}
-                        {% elif main_organization.check_publication is True %}
-                            {% include "courses/cms/fragment_organization_main_logo.html" with organization=main_organization.public_extension %}
-                        {% endif %}
                         {% else %}
-                        {% include "courses/cms/fragment_organization_main_logo.html" with organization=None %}
+                            {% include "courses/cms/fragment_organization_main_logo.html" with organization=None %}
                         {% endif %}
                     {% endwith %}
                     {% endblock main_organization %}
@@ -139,63 +139,143 @@
 
 
 {% block content %}{% spaceless %}
+{% with course=current_page.course header_level=2 %}
 <div class="course-detail">
 
-    {% with course=current_page.course header_level=2 %}
-    <div class="course-detail__content">
+    <div class="course-detail__grid">
+        <div class="course-detail__wrapper">
 
-        {% block snapshot %}
-        {% if request.current_page.parent_page.course %}
-        <div class="course-detail__snapshot">
-            <div class="course-detail__date">
-            {% blocktrans with creation_date=request.current_page.creation_date|date:"SHORT_DATE_FORMAT" %}
-                Archived on {{ creation_date }}
-            {% endblocktrans %}
-            </div>
-            <a href="{{ request.current_page.parent_page.get_absolute_url }}">{% trans "Go to current version" %}</a>
-        </div>
-        {% endif %}
-        {% endblock snapshot %}
-
-        {% block cover %}
-            {% if current_page.publisher_is_draft %}
-            <div class="course-detail__block course-detail__cover">
-                <div class="course-detail__row">
-                    <h2 class="course-detail__title">{% trans 'Glimpse cover' %}</h2>
-                    {% get_placeholder_plugins "course_cover" as plugins or %}
-                    <p class="course-detail__empty">{% trans 'Add an image for course cover on its glimpse.' %}</p>
-                    {% endget_placeholder_plugins %}
-                    {% blockplugin plugins.0 %}
-                    <img
-                        src="{% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %}"
-                        srcset="
-                        {% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %} 300w
-                        {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x340 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
-                        {% if instance.picture.width >= 900 %},{% thumbnail instance.picture 900x510 crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}
-                        "
-                        sizes="300px"
-                        alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'course cover image' %}{% endif %}"
-                    />
-                    {% endblockplugin %}
+            <div class="course-detail__content">
+                {% block snapshot %}
+                {% if request.current_page.parent_page.course %}
+                <div class="course-detail__snapshot">
+                    <div class="course-detail__date">
+                    {% blocktrans with creation_date=request.current_page.creation_date|date:"SHORT_DATE_FORMAT" %}
+                        Archived on {{ creation_date }}
+                    {% endblocktrans %}
+                    </div>
+                    <a href="{{ request.current_page.parent_page.get_absolute_url }}">{% trans "Go to current version" %}</a>
                 </div>
+                {% endif %}
+                {% endblock snapshot %}
+
+                {% block cover %}
+                    {% if current_page.publisher_is_draft %}
+                    <div class="course-detail__block course-detail__cover">
+                        <div class="course-detail__row">
+                            <h2 class="course-detail__title">{% trans 'Glimpse cover' %}</h2>
+                            {% get_placeholder_plugins "course_cover" as plugins or %}
+                            <p class="course-detail__empty">{% trans 'Add an image for course cover on its glimpse.' %}</p>
+                            {% endget_placeholder_plugins %}
+                            {% blockplugin plugins.0 %}
+                            <img
+                                src="{% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %}"
+                                srcset="
+                                {% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %} 300w
+                                {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x340 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+                                {% if instance.picture.width >= 900 %},{% thumbnail instance.picture 900x510 crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}
+                                "
+                                sizes="300px"
+                                alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'course cover image' %}{% endif %}"
+                            />
+                            {% endblockplugin %}
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endblock cover %}
+
+                {% block introduction %}
+                {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_introduction" %}
+                <div class="course-detail__row course-detail__introduction">
+                    {% page_placeholder "course_introduction" current_page %}
+                </div>
+                {% endif %}
+                {% endblock introduction %}
+
+                {% block fragment_content %}
+                    {% include "courses/cms/fragment_course_content.html" with page=current_page %}
+                {% endblock fragment_content %}
+            </div>
+
+            {% block introduction %}
+            {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_introduction" %}
+            <div class="course-detail__row course-detail__introduction">
+                {% placeholder "course_introduction" %}
             </div>
             {% endif %}
-        {% endblock cover %}
+            {% endblock introduction %}
 
-        {% block introduction %}
-        {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_introduction" %}
-        <div class="course-detail__row course-detail__introduction">
-            {% placeholder "course_introduction" %}
+            {% block runs %}
+                <div class="course-detail__aside">
+                    {% with runs_dict=course.get_course_runs_dict %}
+                        {% block runs_open %}
+                            <div class="course-detail__row course-detail__runs course-detail__runs--open">
+                                <h2 class="course-detail__title">{% trans 'Course runs' %}</h2>
+                                {% for run in runs_dict.0|add:runs_dict.1 %}
+                                    {% include "courses/cms/fragment_course_run.html" %}
+                                {% empty %}
+                                    <div class="course-detail__empty">{% trans "No open course runs" %}</div>
+                                {% endfor %}
+                            </div>
+                        {% endblock runs_open %}
+
+                        {% block runs_to_be_scheduled %}
+                        {% if runs_dict.6 and current_page.publisher_is_draft %}
+                            <div class="course-detail__row course-detail__runs course-detail__runs--inactive">
+                                <h3 class="course-detail__title">
+                                    {% trans "To be scheduled" context "Course runs to be scheduled (plural)" %}
+                                </h3>
+                                {% include "courses/cms/fragment_course_runs_list.html" with course_runs=runs_dict.6 %}
+                            </div>
+                        {% endif %}
+                        {% endblock runs_to_be_scheduled %}
+
+                        {% block runs_upcoming %}
+                        {% if runs_dict.2 %}
+                            <div class="course-detail__row course-detail__runs course-detail__runs--inactive">
+                                <h3 class="course-detail__title">
+                                    {% trans "Upcoming" context "Upcoming course runs (plural)" %}
+                                </h3>
+                                {% include "courses/cms/fragment_course_runs_list.html" with course_runs=runs_dict.2 %}
+                            </div>
+                        {% endif %}
+                        {% endblock runs_upcoming %}
+
+                        {% block runs_ongoing %}
+                        {% if runs_dict.3 or runs_dict.4 %}
+                            <div class="course-detail__row course-detail__runs course-detail__runs--inactive">
+                                <h3 class="course-detail__title">
+                                    {% trans "Ongoing" context "Ongoing course runs (plural)" %}
+                                </h3>
+                                {% include "courses/cms/fragment_course_runs_list.html" with course_runs=runs_dict.3|add:runs_dict.4 %}
+                            </div>
+                        {% endif %}
+                        {% endblock runs_ongoing %}
+
+                        {% block runs_archived %}
+                        {% if runs_dict.5 %}
+                            <div class="course-detail__row course-detail__runs course-detail__runs--inactive">
+                                <h3 class="course-detail__title">
+                                    {% trans "Archived" context "Archived course runs (plural)" %}
+                                </h3>
+                                {% include "courses/cms/fragment_course_runs_list.html" with course_runs=runs_dict.5 %}
+                            </div>
+                        {% endif %}
+                        {% endblock runs_archived %}
+
+                    {% endwith %}
+                </div>
+            {% endblock runs %}
+
         </div>
-        {% endif %}
-        {% endblock introduction %}
-
-        {% block fragment %}
-            {% include "courses/cms/short_fragment_course_content.html" with page=current_page %}
-        {% endblock fragment %}
-
     </div>
-    {% endwith %}
+
+    {% block fragment_relations %}
+    <div class="course-detail__relations">
+        {% include "courses/cms/fragment_course_relations.html" with page=current_page %}
+    </div>
+    {% endblock fragment_relations %}
 
 </div>
+{% endwith %}
 {% endspaceless %}{% endblock content %}

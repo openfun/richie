@@ -156,6 +156,11 @@ $r-footer-logo-width-lg: 11.875rem;
 // persons etc. pages.
 $richie-content-container-bg: r-color("white");
 
+// Aside column width in course detail, if 'null' content and aside columns take
+// full width like common blocks. Usefull if you plan to remove course run from
+// template
+$r-course-aside: 25%;
+
 // Course search page shared variables
 $r-search-filters-width: 18rem !default;
 $r-search-filters-gutter: 0.2rem !default;
