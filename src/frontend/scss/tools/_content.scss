@@ -53,26 +53,26 @@ $r-default-content-fix-gutter: 1rem !default;
 ///
 ///
 @mixin content-padding-fix(
-    $preserve: $r-default-content-fix-preserve,
-    $gutter: $r-default-content-fix-gutter,
-    $prop: "padding-bottom",
-    $target: null,
+  $preserve: $r-default-content-fix-preserve,
+  $gutter: $r-default-content-fix-gutter,
+  $prop: 'padding-bottom',
+  $target: null
 ) {
-    @if $preserve {
-      @if $target {
-        #{$target}{
-            @if $gutter {
-                #{$prop}: calc(#{$preserve} + #{$gutter}) !important;
-            } @else {
-                #{$prop}: #{$preserve} !important;
-            }
-        }
-      } @else {
+  @if $preserve {
+    @if $target {
+      #{$target} {
         @if $gutter {
-            #{$prop}: calc(#{$preserve} + #{$gutter}) !important;
+          #{$prop}: calc(#{$preserve} + #{$gutter}) !important;
         } @else {
-            #{$prop}: #{$preserve} !important;
+          #{$prop}: #{$preserve} !important;
         }
       }
+    } @else {
+      @if $gutter {
+        #{$prop}: calc(#{$preserve} + #{$gutter}) !important;
+      } @else {
+        #{$prop}: #{$preserve} !important;
+      }
     }
+  }
 }

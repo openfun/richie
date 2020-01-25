@@ -2,23 +2,23 @@
 //
 
 .person-detail {
-    margin: 0 auto;
-    padding: 0;
-    @include content-padding-fix;
+  margin: 0 auto;
+  padding: 0;
+  @include content-padding-fix;
 
-    &__block {
-        @include detail-block;
-    }
+  &__block {
+    @include detail-block;
+  }
 
-    &__row {
-        @include detail-row;
-    }
+  &__row {
+    @include detail-row;
+  }
 
-    &__title {
-        @include detail-title;
-    }
+  &__title {
+    @include detail-title;
+  }
 
-    &__empty {
-        @include detail-empty;
-    }
+  &__empty {
+    @include detail-empty;
+  }
 }

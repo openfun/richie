@@ -8,35 +8,34 @@
 ///   If not null will prefix the property names to search.
 ///
 @mixin r-apply-border($scheme, $prefix: null) {
-    $props-prefix: "";
-    @if $prefix{
-        $props-prefix: $prefix + "-";
-    }
-    // Prepare property prefix if any
-    $props-prefix: "";
-    @if $prefix{
-        $props-prefix: $prefix + "-";
-    }
+  $props-prefix: '';
+  @if $prefix {
+    $props-prefix: $prefix + '-';
+  }
+  // Prepare property prefix if any
+  $props-prefix: '';
+  @if $prefix {
+    $props-prefix: $prefix + '-';
+  }
 
-    $border-shortand: map-get($scheme, $props-prefix+"border");
-    $border-color: map-get($scheme, $props-prefix+"border-color");
-    $border-width: map-get($scheme, $props-prefix+"border-width");
-    $border-style: map-get($scheme, $props-prefix+"border-style");
+  $border-shortand: map-get($scheme, $props-prefix + 'border');
+  $border-color: map-get($scheme, $props-prefix + 'border-color');
+  $border-width: map-get($scheme, $props-prefix + 'border-width');
+  $border-style: map-get($scheme, $props-prefix + 'border-style');
 
-    @if $border-shortand{
-        border: $border-shortand;
-    }
-    @if $border-color{
-        border-color: $border-color;
-    }
-    @if $border-width{
-        border-width: $border-width;
-    }
-    @if $border-style{
-        border-style: $border-style;
-    }
+  @if $border-shortand {
+    border: $border-shortand;
+  }
+  @if $border-color {
+    border-color: $border-color;
+  }
+  @if $border-width {
+    border-width: $border-width;
+  }
+  @if $border-style {
+    border-style: $border-style;
+  }
 }
-
 
 ///
 /// Include properties from a scheme color to an element. Mainly used to build
@@ -106,83 +105,92 @@
 ///   }
 ///
 @mixin r-scheme-colors(
-    $scheme,
-    $apply-border: false,
-    $apply-link: false,
-    $apply-titles: true,
-    $apply-svg: true,
-    $prefix: null
+  $scheme,
+  $apply-border: false,
+  $apply-link: false,
+  $apply-titles: true,
+  $apply-svg: true,
+  $prefix: null
 ) {
-    // Raise error if background item is not in scheme but not in
-    // prefixed mode
-    @if not $prefix{
-        @if map-get($scheme, "background") == null {
-            @error "A scheme color must define the background item";
-        } @else if (map-get($scheme, "background") == transparent or map-get($scheme, "background") == inherit) and map-get($scheme, "font-color") == null {
-            @error "A scheme color must define the font-color item if background value is transparent or inherit";
+  // Raise error if background item is not in scheme but not in
+  // prefixed mode
+  @if not $prefix {
+    @if map-get($scheme, 'background') == null {
+      @error "A scheme color must define the background item";
+    } @else if
+      (
+        map-get($scheme, 'background') ==
+          transparent or
+          map-get($scheme, 'background') ==
+          inherit
+      ) and
+      map-get($scheme, 'font-color') ==
+      null
+    {
+      @error "A scheme color must define the font-color item if background value is transparent or inherit";
+    }
+  }
+
+  // Prepare property prefix if any
+  $props-prefix: '';
+  @if $prefix {
+    $props-prefix: $prefix + '-';
+  }
+
+  $background: map-get($scheme, $props-prefix + 'background');
+  $font-color: map-get($scheme, $props-prefix + 'font-color');
+  $link-color: map-get($scheme, $props-prefix + 'link-color');
+  $link-color-hover: map-get($scheme, $props-prefix + 'link-color-hover');
+  $svg-color: map-get($scheme, $props-prefix + 'svg-color');
+
+  @if $font-color {
+    color: $font-color;
+  }
+
+  // Fill svg color but not for elements with ".no-scheme-fill" class
+  @if $apply-svg and $svg-color {
+    svg:not(.no-scheme-fill) {
+      fill: $svg-color;
+    }
+  }
+
+  @if $background {
+    background: $background;
+  }
+
+  // Optional border
+  @if $apply-border {
+    @include r-apply-border($scheme);
+  }
+
+  // Titles
+  @if $apply-titles {
+    @for $i from 1 through 6 {
+      h#{$i},
+      .h#{$i} {
+        @if map-get($scheme, $props-prefix + 'h#{$i}-color') == null {
+          color: $font-color;
+        } @else if map-get($scheme, $props-prefix + 'h#{$i}-color') == false {
+          // 'false' means "Do not define any color on this"
+        } @else {
+          color: map-get($scheme, $props-prefix + 'h#{$i}-color');
         }
+      }
     }
+  }
 
-    // Prepare property prefix if any
-    $props-prefix: "";
-    @if $prefix{
-        $props-prefix: $prefix + "-";
-    }
-
-    $background: map-get($scheme, $props-prefix+"background");
-    $font-color: map-get($scheme, $props-prefix+"font-color");
-    $link-color: map-get($scheme, $props-prefix+"link-color");
-    $link-color-hover: map-get($scheme, $props-prefix+"link-color-hover");
-    $svg-color: map-get($scheme, $props-prefix+"svg-color");
-
-    @if $font-color{
-        color: $font-color;
-    }
-
-    // Fill svg color but not for elements with ".no-scheme-fill" class
-    @if $apply-svg and $svg-color{
-        svg:not(.no-scheme-fill){
-            fill: $svg-color;
+  // Link but not buttons
+  @if $apply-link and $link-color {
+    a:not(.button) {
+      color: if($link-color, $link-color, inherit);
+      @if $link-color-hover {
+        &:hover {
+          color: if($link-color-hover, $link-color-hover, inherit);
         }
+      }
     }
-
-    @if $background{
-        background: $background;
-    }
-
-    // Optional border
-    @if $apply-border{
-        @include r-apply-border($scheme);
-    }
-
-    // Titles
-    @if $apply-titles{
-        @for $i from 1 through 6 {
-            h#{$i}, .h#{$i} {
-                @if map-get($scheme, $props-prefix+"h#{$i}-color") == null {
-                    color: $font-color;
-                } @else if map-get($scheme, $props-prefix+"h#{$i}-color") == false {
-                    // 'false' means "Do not define any color on this"
-                } @else {
-                    color: map-get($scheme, $props-prefix+"h#{$i}-color");
-                }
-            }
-        }
-    }
-
-    // Link but not buttons
-    @if $apply-link and $link-color {
-        a:not(.button){
-            color: if($link-color, $link-color, inherit);
-            @if $link-color-hover {
-                &:hover{
-                    color: if($link-color-hover, $link-color-hover, inherit);
-                }
-            }
-        }
-    }
+  }
 }
-
 
 ///
 /// Include properties from a scheme color to a button element.
@@ -204,43 +212,51 @@
 ///   If set to `true`, border properties for prefix "hover" will be
 ///   automatically added.
 ///
-@mixin r-button-colors($scheme, $apply-border: false, $prefix: null, $include-hover: false) {
-    $props-prefix: "";
+@mixin r-button-colors(
+  $scheme,
+  $apply-border: false,
+  $prefix: null,
+  $include-hover: false
+) {
+  $props-prefix: '';
 
-    @if $prefix{
-        $props-prefix: $prefix + "-";
+  @if $prefix {
+    $props-prefix: $prefix + '-';
+  }
+
+  $background: map-get($scheme, $props-prefix + 'background');
+  $font-color: map-get($scheme, $props-prefix + 'font-color');
+  $svg-color: map-get($scheme, $props-prefix + 'svg-color');
+
+  @if $font-color {
+    color: $font-color;
+  }
+
+  // Fill svg color but not for ".no-scheme-fill" class
+  @if $svg-color {
+    svg:not(.no-scheme-fill) {
+      fill: $svg-color;
     }
+  }
 
-    $background: map-get($scheme, $props-prefix+"background");
-    $font-color: map-get($scheme, $props-prefix+"font-color");
-    $svg-color: map-get($scheme, $props-prefix+"svg-color");
+  @if $background {
+    background: $background;
+  }
 
-    @if $font-color{
-        color: $font-color;
+  @if $apply-border {
+    @include r-apply-border($scheme, $prefix: $prefix);
+  }
+
+  @if $include-hover {
+    &:hover {
+      @include r-button-colors(
+        $scheme,
+        $apply-border: $apply-border,
+        $prefix: 'hover'
+      );
     }
-
-    // Fill svg color but not for ".no-scheme-fill" class
-    @if $svg-color{
-        svg:not(.no-scheme-fill){
-            fill: $svg-color;
-        }
-    }
-
-    @if $background{
-        background: $background;
-    }
-
-    @if $apply-border{
-        @include r-apply-border($scheme, $prefix: $prefix);
-    }
-
-    @if $include-hover{
-        &:hover{
-            @include r-button-colors($scheme, $apply-border: $apply-border, $prefix: "hover");
-        }
-    }
+  }
 }
-
 
 ///
 /// A shortand to quickly get a color value in palette setting from given
@@ -248,9 +264,8 @@
 /// recognize as CSS keyword and would result as a null value.
 ///
 @function r-color($name) {
-    @return map-get($palette, $name);
+  @return map-get($palette, $name);
 }
-
 
 ///
 /// A shortand to quickly get a property value from theme schemes.
@@ -268,14 +283,14 @@
 ///   Value of required property in scheme.
 ///
 @function r-theme-val($scheme-name, $prop-name) {
-    $scheme: map-get($r-theme, $scheme-name);
-    //@if not $scheme{
-    //    @debug "r-theme-val(): Cannot retrieve scheme name", $scheme-name;
-    //}
-    $prop: map-get($scheme, $prop-name);
-    //@if $prop == null{
-    //    @debug "r-theme-val(): Cannot retrieve property (from scheme " + $scheme-name + "):", $prop-name;
-    //}
+  $scheme: map-get($r-theme, $scheme-name);
+  //@if not $scheme{
+  //    @debug "r-theme-val(): Cannot retrieve scheme name", $scheme-name;
+  //}
+  $prop: map-get($scheme, $prop-name);
+  //@if $prop == null{
+  //    @debug "r-theme-val(): Cannot retrieve property (from scheme " + $scheme-name + "):", $prop-name;
+  //}
 
-    @return $prop;
+  @return $prop;
 }

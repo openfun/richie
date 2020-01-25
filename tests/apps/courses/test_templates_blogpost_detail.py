@@ -56,9 +56,7 @@ class DetailBlogPostCMSTestCase(CMSTestCase):
         self.assertNotContains(response, "Comte de Saint-Germain", html=True)
 
         self.assertContains(
-            response,
-            '<p class="blogpost-detail__pubdate">11/27/2019</p>',
-            html=True,
+            response, '<p class="blogpost-detail__pubdate">11/27/2019</p>', html=True,
         )
 
     def test_templates_blogpost_detail_cms_draft_content(self):

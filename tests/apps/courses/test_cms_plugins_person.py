@@ -131,9 +131,7 @@ class PersonPluginTestCase(CMSTestCase):
 
         # Short bio should be present
         self.assertContains(
-            response,
-            '<div class="person-glimpse__bio">public bio</div>',
-            html=True,
+            response, '<div class="person-glimpse__bio">public bio</div>', html=True,
         )
         self.assertNotContains(response, "draft bio")
 
@@ -149,9 +147,7 @@ class PersonPluginTestCase(CMSTestCase):
         self.assertIsNotNone(re.search(pattern, str(response.content)))
 
         self.assertContains(
-            response,
-            '<div class="person-glimpse__bio">résumé public</div>',
-            html=True,
+            response, '<div class="person-glimpse__bio">résumé public</div>', html=True,
         )
 
     def test_cms_plugins_person_render_on_draft_page(self):

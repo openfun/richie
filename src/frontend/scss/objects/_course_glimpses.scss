@@ -5,222 +5,217 @@
 // Available object settings
 $r-course-glimpse-gutter: 0.8rem !default;
 
-
 .course-glimpse-list {
-    @include make-container-max-widths();
-    display: flex;
-    margin: 0 auto;
-    padding-top: 1rem;
-    flex-direction: row;
-    flex-wrap: wrap;
+  @include make-container-max-widths();
+  display: flex;
+  margin: 0 auto;
+  padding-top: 1rem;
+  flex-direction: row;
+  flex-wrap: wrap;
 
-    &__title {
-        @include sv-flex(1, 0, 100%);
-        padding: 0.5rem;
+  &__title {
+    @include sv-flex(1, 0, 100%);
+    padding: 0.5rem;
+  }
+
+  &__count {
+    margin-right: $r-course-glimpse-gutter;
+    padding: 0;
+    flex-basis: 100%; // Should not wrap with actual course glimpses
+    color: r-theme-val(course-glimpse-list, count-color);
+    text-align: right;
+
+    @include media-breakpoint-up(lg) {
+      padding: 0;
+
+      &:first-child {
+        margin-top: -1rem; // Cancel out top padding
+      }
     }
-
-    &__count {
-        margin-right: $r-course-glimpse-gutter;
-        padding: 0;
-        flex-basis: 100%; // Should not wrap with actual course glimpses
-        color: r-theme-val(course-glimpse-list, count-color);
-        text-align: right;
-
-        @include media-breakpoint-up(lg) {
-            padding: 0;
-
-            &:first-child {
-                margin-top: -1rem; // Cancel out top padding
-            }
-        }
-    }
+  }
 }
 
 .course-glimpse {
-    $glimpse-item-selector: &;
+  $glimpse-item-selector: &;
 
-    // Apply card styles for elements
-    @include m-o-card(
-        $border: 0,
-        $background: r-theme-val(course-glimpse, card-background),
-        $media-margin: 0,
-        $wrapper-padding: 1.7rem 0.7rem 3rem,
-        $foot-divider: null,
-    );
+  // Apply card styles for elements
+  @include m-o-card(
+    $border: 0,
+    $background: r-theme-val(course-glimpse, card-background),
+    $media-margin: 0,
+    $wrapper-padding: 1.7rem 0.7rem 3rem,
+    $foot-divider: null
+  );
 
-    // Cell base width for lowest breakpoint
-    @include sv-flex(
-        1,
-        0,
-        calc(100% - #{$r-course-glimpse-gutter * 2})
-    );
+  // Cell base width for lowest breakpoint
+  @include sv-flex(1, 0, calc(100% - #{$r-course-glimpse-gutter * 2}));
 
-    position: relative;
-    margin: $r-course-glimpse-gutter;
-    border-radius: $border-radius-lg;
-    box-shadow: r-theme-val(course-glimpse, base-shadow);
+  position: relative;
+  margin: $r-course-glimpse-gutter;
+  border-radius: $border-radius-lg;
+  box-shadow: r-theme-val(course-glimpse, base-shadow);
 
-    @include media-breakpoint-up(sm) {
-        @include sv-flex(1, 0, calc(50% - #{$r-course-glimpse-gutter * 2}));
+  @include media-breakpoint-up(sm) {
+    @include sv-flex(1, 0, calc(50% - #{$r-course-glimpse-gutter * 2}));
+  }
+  @include media-breakpoint-up(lg) {
+    @include sv-flex(1, 0, calc(25% - #{$r-course-glimpse-gutter * 2}));
+  }
+
+  &:hover,
+  &:focus {
+    border: 0;
+    box-shadow: r-theme-val(course-glimpse, base-hover-shadow);
+
+    #{$glimpse-item-selector}__foot__cta .button {
+      background: r-theme-val(course-glimpse, cta-background);
     }
-    @include media-breakpoint-up(lg) {
-        @include sv-flex(1, 0, calc(25% - #{$r-course-glimpse-gutter * 2}));
-    }
+  }
+
+  // Special row when there is no entry
+  &--empty {
+    @include sv-flex(1, 0, calc(100% - #{$r-course-glimpse-gutter * 2}));
+    padding: 1rem;
+    font-style: italic;
+    color: r-theme-val(course-glimpse, empty-color);
+    text-align: center;
+    cursor: default;
 
     &:hover,
     &:focus {
-        border: 0;
-        box-shadow: r-theme-val(course-glimpse, base-hover-shadow);
+      border: 0;
+    }
+  }
 
-        #{$glimpse-item-selector}__foot__cta .button {
-            background: r-theme-val(course-glimpse, cta-background);
-        }
+  &__icon {
+    @include button-small(
+      $border-width: 0,
+      $font-size: 0.8rem,
+      $line-height: 1.1,
+      $font-weight: bold
+    );
+    @include r-button-colors(r-theme-val(course-glimpse, icon));
+    display: flex;
+    position: absolute;
+    top: -1.1rem;
+    left: 0;
+    flex-direction: row;
+    align-items: center;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    box-shadow: r-theme-val(course-glimpse, icon-shadow);
+
+    img {
+      @include sv-flex(0, 0, 1.6rem);
+      margin: 0 0.5rem 0 0;
+      order: 1;
+    }
+  }
+
+  &__band {
+    @include sv-flex(0, 0, auto);
+    order: 2;
+    // NOTE: Disable inline style color since mockup use an unique gradient
+    // Would take back again the flat color or does the category will
+    // enable to pickup gradient color ?
+    background: transparent !important;
+    // NOTE: Deprecated element but still in React component
+    &__end {
+      display: none;
+    }
+  }
+
+  &__content {
+    font-size: 0.9rem;
+    color: r-theme-val(course-glimpse, content-color);
+  }
+
+  &__wrapper {
+    @include sv-flex(1, 0, auto);
+    position: relative;
+  }
+
+  &__title {
+    @include font-size($h6-font-size);
+    font-family: $r-font-family-montserrat;
+    font-weight: $font-weight-boldest;
+    color: r-theme-val(course-glimpse, title-color);
+  }
+
+  &__excerpt {
+    font-size: 0.8rem;
+    line-height: 1.1;
+  }
+
+  &__organization {
+    position: absolute;
+    bottom: 0.4rem;
+    left: 0;
+    padding: 0 0.6rem;
+    font-size: 0.8rem;
+    color: r-theme-val(course-glimpse, organization-color);
+  }
+
+  &__media {
+    border-top-left-radius: $border-radius-lg;
+    border-top-right-radius: $border-radius-lg;
+
+    img,
+    iframe {
+      border-top-left-radius: $border-radius-lg;
+      border-top-right-radius: $border-radius-lg;
     }
 
-    // Special row when there is no entry
-    &--empty {
-        @include sv-flex(
-            1,
-            0,
-            calc(100% - #{$r-course-glimpse-gutter * 2})
-        );
-        padding: 1rem;
-        font-style: italic;
-        color: r-theme-val(course-glimpse, empty-color);
-        text-align: center;
-        cursor: default;
+    @include m-o-media_empty(
+      $width: 100%,
+      $height: 16vh,
+      $background:
+        r-theme-val(course-glimpse, organization-media-empty-background),
+      $absolute: false
+    );
+  }
 
-        &:hover,
-        &:focus {
-            border: 0;
-        }
-    }
+  &__caption {
+    text-transform: uppercase;
+    font-weight: $font-weight-bold;
+    line-height: 1.1;
+    text-align: center;
+  }
 
-    &__icon {
-        @include button-small(
-            $border-width: 0,
-            $font-size: 0.8rem,
-            $line-height: 1.1,
-            $font-weight: bold,
-        );
-        @include r-button-colors(r-theme-val(course-glimpse, icon));
-        display: flex;
-        position: absolute;
-        top: -1.1rem;
-        left: 0;
-        flex-direction: row;
-        align-items: center;
-        border-top-left-radius: 0;
-        border-bottom-left-radius: 0;
-        box-shadow: r-theme-val(course-glimpse, icon-shadow);
+  &__svg-icon {
+    @include sv-flex-cell-width(1.1rem);
+    width: 1.1rem;
+    height: 1.1rem;
+    fill: r-theme-val(course-glimpse, svg-icon-fill);
+    margin: 0 0.5rem;
+  }
 
-        img {
-            @include sv-flex(0, 0, 1.6rem);
-            margin: 0 0.5rem 0 0;
-            order: 1;
-        }
-    }
+  // A little specific makeup onto footer elements
+  &__footer {
+    @include r-button-colors(
+      r-theme-val(course-glimpse, footer),
+      $apply-border: true
+    );
+    display: flex;
+    font-size: 0.75rem;
+    border-bottom-left-radius: $border-radius-lg;
+    border-bottom-right-radius: $border-radius-lg;
+  }
 
-    &__band {
-        @include sv-flex(0, 0, auto);
-        order: 2;
-        // NOTE: Disable inline style color since mockup use an unique gradient
-        // Would take back again the flat color or does the category will
-        // enable to pickup gradient color ?
-        background: transparent !important;
-        // NOTE: Deprecated element but still in React component
-        &__end {
-            display: none;
-        }
-    }
+  &__date,
+  &__cta {
+    @include sv-flex-cell-width(50%);
+    padding: 0.5rem 0;
+    display: flex;
+    margin: 0;
+    align-items: center;
+    justify-content: flex-start;
+    align-content: center;
+    font-weight: bold;
+    line-height: 1.1;
+  }
 
-    &__content {
-        font-size: 0.9rem;
-        color: r-theme-val(course-glimpse, content-color);
-    }
-
-    &__wrapper {
-        @include sv-flex(1, 0, auto);
-        position: relative;
-    }
-
-    &__title {
-        @include font-size($h6-font-size);
-        font-family: $r-font-family-montserrat;
-        font-weight: $font-weight-boldest;
-        color: r-theme-val(course-glimpse, title-color);
-    }
-
-    &__excerpt {
-        font-size: 0.8rem;
-        line-height: 1.1;
-    }
-
-    &__organization {
-        position: absolute;
-        bottom: 0.4rem;
-        left: 0;
-        padding: 0 0.6rem;
-        font-size: 0.8rem;
-        color: r-theme-val(course-glimpse, organization-color);
-    }
-
-    &__media {
-        border-top-left-radius: $border-radius-lg;
-        border-top-right-radius: $border-radius-lg;
-
-        img,
-        iframe{
-            border-top-left-radius: $border-radius-lg;
-            border-top-right-radius: $border-radius-lg;
-        }
-
-        @include m-o-media_empty(
-            $width: 100%,
-            $height: 16vh,
-            $background: r-theme-val(course-glimpse, organization-media-empty-background),
-            $absolute: false
-        );
-    }
-
-    &__caption {
-        text-transform: uppercase;
-        font-weight: $font-weight-bold;
-        line-height: 1.1;
-        text-align: center;
-    }
-
-    &__svg-icon {
-        @include sv-flex-cell-width(1.1rem);
-        width: 1.1rem;
-        height: 1.1rem;
-        fill: r-theme-val(course-glimpse, svg-icon-fill);
-        margin: 0 0.5rem;
-    }
-
-    // A little specific makeup onto footer elements
-    &__footer {
-        @include r-button-colors(r-theme-val(course-glimpse, footer), $apply-border: true);
-        display: flex;
-        font-size: 0.75rem;
-        border-bottom-left-radius: $border-radius-lg;
-        border-bottom-right-radius: $border-radius-lg;
-    }
-
-    &__date,
-    &__cta {
-        @include sv-flex-cell-width(50%);
-        padding: 0.5rem 0;
-        display: flex;
-        margin: 0;
-        align-items: center;
-        justify-content: flex-start;
-        align-content: center;
-        font-weight: bold;
-        line-height: 1.1;
-    }
-
-    &__cta {
-        justify-content: flex-end;
-    }
+  &__cta {
+    justify-content: flex-end;
+  }
 }

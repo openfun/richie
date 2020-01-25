@@ -19,7 +19,5 @@ SECTION_TEMPLATES = getattr(
         ("richie/section/section_accordion_item.html", _("Accordion item")),
         ("richie/section/feature-icons.html", _("Feature icons")),
         ("richie/section/section--blogpost.html", _("Favorite blogpost")),
-        # DEPRECATED until removed from demo
-        ("richie/section/section_cadenced.html", _("Highlighted items")),
     ],
 )

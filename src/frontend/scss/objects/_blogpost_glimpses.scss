@@ -5,283 +5,262 @@
 $glimpse-gutter: 1.25rem;
 
 .blogpost-glimpse-list {
-    @include make-container-max-widths;
-    display: flex;
-    margin: 0 auto;
-    padding: 1rem 0;
-    flex-direction: row;
-    flex-wrap: wrap;
+  @include make-container-max-widths;
+  display: flex;
+  margin: 0 auto;
+  padding: 1rem 0;
+  flex-direction: row;
+  flex-wrap: wrap;
 
-    &__title {
-        @include sv-flex(1, 0, 100%);
-        padding: 0.5rem 0;
-        text-align: left;
-    }
+  &__title {
+    @include sv-flex(1, 0, 100%);
+    padding: 0.5rem 0;
+    text-align: left;
+  }
 
-    // All glimpse got the same size opposed to default behavior
-    .blogpost-glimpse:nth-child(0n+1),
-    .blogpost-glimpse:nth-child(0n+2) {
-        @include media-breakpoint-up(lg) {
-            @include sv-flex(
-                1,
-                0,
-                calc(33.3333% - #{$glimpse-gutter * 2})
-            );
-            align-self: flex-start;
-        }
+  // All glimpse got the same size opposed to default behavior
+  .blogpost-glimpse:nth-child(0n + 1),
+  .blogpost-glimpse:nth-child(0n + 2) {
+    @include media-breakpoint-up(lg) {
+      @include sv-flex(1, 0, calc(33.3333% - #{$glimpse-gutter * 2}));
+      align-self: flex-start;
     }
+  }
 }
 
 .blogpost-glimpse {
-    $glimpse-item-selector: &;
+  $glimpse-item-selector: &;
 
-    // Cell base width for lowest breakpoint
-    @include sv-flex(
-        1,
-        0,
-        calc(100% - #{$glimpse-gutter * 2})
-    );
+  // Cell base width for lowest breakpoint
+  @include sv-flex(1, 0, calc(100% - #{$glimpse-gutter * 2}));
 
-    // Responsive adjustments
-    @include media-breakpoint-up(md) {
-        @include sv-flex(
-            1,
-            0,
-            calc(50% - #{$glimpse-gutter * 2})
-        );
-    }
+  // Responsive adjustments
+  @include media-breakpoint-up(md) {
+    @include sv-flex(1, 0, calc(50% - #{$glimpse-gutter * 2}));
+  }
+  @include media-breakpoint-up(lg) {
+    @include sv-flex(1, 0, calc(33.3333% - #{$glimpse-gutter * 2}));
+  }
+
+  // Default behavior of first glimpse item is to be bigger than every
+  // other items
+  &:nth-child(0n + 1) {
     @include media-breakpoint-up(lg) {
-        @include sv-flex(
-            1,
-            0,
-            calc(33.3333% - #{$glimpse-gutter * 2})
-        );
+      @include sv-flex(1, 0, calc(66.6666% - #{$glimpse-gutter * 2}));
+    }
+  }
+  &:nth-child(0n + 2) {
+    @include media-breakpoint-up(lg) {
+      @include sv-flex(1, 0, calc(33.3333% - #{$glimpse-gutter * 2}));
+      align-self: flex-end;
+    }
+  }
+
+  // Apply card styles for elements
+  @include m-o-card(
+    $border: null,
+    $background: r-theme-val(blogpost-glimpse, card-background),
+    $media-width: null,
+    $media-margin: 0,
+    $wrapper-padding: 0.6rem 0.2rem,
+    $foot-divider: null
+  );
+
+  // Apply gutter
+  margin: $glimpse-gutter;
+
+  &__content {
+    font-size: 0.9rem;
+    color: r-theme-val(blogpost-glimpse, content-color);
+  }
+
+  &__theme {
+    position: relative;
+    margin: 0 0 0.1rem;
+    padding-left: calc(10% + 0.2rem);
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: calc(50% - 1px);
+      left: 0;
+      width: 10%;
+      border-top: 1px solid r-theme-val(blogpost-glimpse, theme-border);
+    }
+  }
+
+  &__title {
+    @include font-size($h3-font-size);
+    margin: 0 0 0.1rem;
+    font-family: $r-font-family-montserrat;
+    font-weight: $font-weight-boldest;
+    color: r-theme-val(blogpost-glimpse, title-color);
+  }
+
+  &__media {
+    img {
+      border-radius: $border-radius-lg;
     }
 
-    // Default behavior of first glimpse item is to be bigger than every
-    // other items
-    &:nth-child(0n+1) {
-        @include media-breakpoint-up(lg) {
-            @include sv-flex(
-                1,
-                0,
-                calc(66.6666% - #{$glimpse-gutter * 2})
-            );
-        }
-    }
-    &:nth-child(0n+2) {
-        @include media-breakpoint-up(lg) {
-            @include sv-flex(
-                1,
-                0,
-                calc(33.3333% - #{$glimpse-gutter * 2})
-            );
-            align-self: flex-end;
-        }
-    }
-
-    // Apply card styles for elements
-    @include m-o-card(
-        $border: null,
-        $background: r-theme-val(blogpost-glimpse, card-background),
-        $media-width: null,
-        $media-margin: 0,
-        $wrapper-padding: 0.6rem 0.2rem,
-        $foot-divider: null,
+    @include m-o-media_empty(
+      $width: 100%,
+      $height: 14vh,
+      $background: r-theme-val(blogpost-glimpse, media-background),
+      $absolute: false
     );
+  }
 
-    // Apply gutter
-    margin: $glimpse-gutter;
+  &__caption {
+    text-transform: uppercase;
+    font-weight: bold;
+    line-height: 1.1;
+    text-align: center;
+  }
 
-    &__content {
-        font-size: 0.9rem;
-        color: r-theme-val(blogpost-glimpse, content-color);
-    }
+  // Blogpost date
+  &__date {
+    margin: 0;
+    padding: 0.3rem 0;
+    font-size: 0.8rem;
+    color: r-theme-val(blogpost-glimpse, date-color);
+    text-align: left;
+  }
 
-    &__theme {
-        position: relative;
-        margin: 0 0 0.1rem;
-        padding-left: calc(10% + 0.2rem);
-
-        &::before{
-            content: "";
-            position: absolute;
-            top: calc(50% - 1px);
-            left: 0;
-            width: 10%;
-            border-top: 1px solid r-theme-val(blogpost-glimpse, theme-border);
-        }
-    }
-
+  &:hover,
+  &:focus {
     &__title {
-        @include font-size($h3-font-size);
-        margin: 0 0 0.1rem;
-        font-family: $r-font-family-montserrat;
-        font-weight: $font-weight-boldest;
-        color: r-theme-val(blogpost-glimpse, title-color);
+      color: r-theme-val(blogpost-glimpse, title-hover-color);
     }
 
-    &__media {
-        img{
-            border-radius: $border-radius-lg;
-        }
+    #{$glimpse-item-selector}__content {
+      color: r-theme-val(blogpost-glimpse, content-hover-color);
+    }
 
-        @include m-o-media_empty(
-            $width: 100%,
-            $height: 14vh,
-            $background: r-theme-val(blogpost-glimpse, media-background),
-            $absolute: false
+    #{$glimpse-item-selector}__media {
+      border-radius: $border-radius-lg;
+    }
+
+    #{$glimpse-item-selector}__date {
+      color: r-theme-val(blogpost-glimpse, date-hover-color);
+    }
+  }
+
+  // Special row when there is no entry
+  &--empty {
+    @include sv-flex(1, 0, calc(100% - #{$glimpse-gutter * 2}));
+    padding: 1rem;
+    font-style: italic;
+    color: r-theme-val(blogpost-glimpse, empty-color);
+    text-align: center;
+    cursor: default;
+  }
+
+  // Mini flat row variant
+  &--mini {
+    margin: 0;
+    padding: 1rem 0;
+    flex-basis: 100% !important;
+    max-width: 100% !important;
+    flex-direction: row;
+    border-bottom: $onepixel solid r-theme-val(blogpost-glimpse-mini, border);
+
+    #{$glimpse-item-selector}__media {
+      @include sv-flex(1, 0, 8.25rem);
+    }
+
+    #{$glimpse-item-selector}__content {
+      @include sv-flex(1, 1, auto);
+      padding-left: 0.5rem;
+    }
+
+    #{$glimpse-item-selector}__wrapper {
+      padding: 0 0 0 0.2rem;
+    }
+
+    #{$glimpse-item-selector}__theme {
+      padding-left: calc(1.7rem);
+
+      &::before {
+        top: 0.6rem;
+        width: 1.5rem;
+      }
+    }
+
+    #{$glimpse-item-selector}__title {
+      @include font-size($font-size-base);
+    }
+  }
+
+  // Favorite blogpost act like a block content with a big picture
+  &--favorite {
+    margin: 0;
+    padding: 1rem;
+    flex-basis: 100% !important;
+    max-width: 100% !important;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    @include media-breakpoint-up(lg) {
+      padding: 1rem 0;
+    }
+
+    #{$glimpse-item-selector}__media {
+      @include sv-flex(1, 0, 100%);
+      margin-top: 2rem;
+      order: 2;
+
+      @include media-breakpoint-up(lg) {
+        @include sv-flex(1, 0, 70%);
+        margin-top: 0;
+      }
+    }
+
+    #{$glimpse-item-selector}__content {
+      @include sv-flex(1, 0, 100%);
+      order: 1;
+      color: r-theme-val(blogpost-glimpse-favorite, content-color);
+
+      @include media-breakpoint-up(lg) {
+        @include sv-flex(1, 0, 30%);
+        padding-right: 0.5rem;
+      }
+    }
+
+    #{$glimpse-item-selector}__wrapper {
+      padding: 0;
+    }
+
+    #{$glimpse-item-selector}__title {
+      @include font-size($h2-font-size);
+      margin-bottom: 1rem;
+      font-weight: $font-weight-extrabold;
+      color: r-theme-val(blogpost-glimpse-favorite, title-color);
+    }
+
+    #{$glimpse-item-selector}__excerpt {
+      color: r-theme-val(blogpost-glimpse-favorite, excerpt-color);
+    }
+
+    #{$glimpse-item-selector}__date,
+    #{$glimpse-item-selector}__theme {
+      display: none;
+    }
+
+    #{$glimpse-item-selector}__cta {
+      @include button-base($font-weight: bold);
+      @include r-button-colors(
+        r-theme-val(blogpost-glimpse-favorite, cta),
+        $apply-border: true
+      );
+      text-transform: uppercase;
+
+      &:hover {
+        @include r-button-colors(
+          r-theme-val(blogpost-glimpse-favorite, cta-hover),
+          $apply-border: true,
+          $prefix: 'hover'
         );
+      }
     }
-
-    &__caption {
-        text-transform: uppercase;
-        font-weight: bold;
-        line-height: 1.1;
-        text-align: center;
-    }
-
-    // Blogpost date
-    &__date {
-        margin: 0;
-        padding: 0.3rem 0;
-        font-size: 0.8rem;
-        color: r-theme-val(blogpost-glimpse, date-color);
-        text-align: left;
-    }
-
-    &:hover,
-    &:focus {
-        &__title {
-            color: r-theme-val(blogpost-glimpse, title-hover-color);
-        }
-
-        #{$glimpse-item-selector}__content{
-            color: r-theme-val(blogpost-glimpse, content-hover-color);
-        }
-
-        #{$glimpse-item-selector}__media {
-            border-radius: $border-radius-lg;
-        }
-
-        #{$glimpse-item-selector}__date {
-            color: r-theme-val(blogpost-glimpse, date-hover-color);
-        }
-    }
-
-    // Special row when there is no entry
-    &--empty {
-        @include sv-flex(
-            1,
-            0,
-            calc(100% - #{$glimpse-gutter * 2})
-        );
-        padding: 1rem;
-        font-style: italic;
-        color: r-theme-val(blogpost-glimpse, empty-color);
-        text-align: center;
-        cursor: default;
-    }
-
-    // Mini flat row variant
-    &--mini {
-        margin: 0;
-        padding: 1rem 0;
-        flex-basis: 100% !important;
-        max-width: 100% !important;
-        flex-direction: row;
-        border-bottom: $onepixel solid r-theme-val(blogpost-glimpse-mini, border);
-
-        #{$glimpse-item-selector}__media {
-            @include sv-flex(1, 0, 8.25rem);
-        }
-
-        #{$glimpse-item-selector}__content {
-            @include sv-flex(1, 1, auto);
-            padding-left: 0.5rem;
-        }
-
-        #{$glimpse-item-selector}__wrapper {
-            padding: 0 0 0 0.2rem;
-        }
-
-        #{$glimpse-item-selector}__theme {
-            padding-left: calc(1.7rem);
-
-            &::before {
-                top: 0.6rem;
-                width: 1.5rem;
-            }
-        }
-
-        #{$glimpse-item-selector}__title {
-            @include font-size($font-size-base);
-        }
-    }
-
-    // Favorite blogpost act like a block content with a big picture
-    &--favorite {
-        margin: 0;
-        padding: 1rem;
-        flex-basis: 100% !important;
-        max-width: 100% !important;
-        flex-direction: row;
-        flex-wrap: wrap;
-
-        @include media-breakpoint-up(lg) {
-            padding: 1rem 0;
-        }
-
-        #{$glimpse-item-selector}__media {
-            @include sv-flex(1, 0, 100%);
-            margin-top: 2rem;
-            order: 2;
-
-            @include media-breakpoint-up(lg) {
-                @include sv-flex(1, 0, 70%);
-                margin-top: 0;
-            }
-        }
-
-        #{$glimpse-item-selector}__content {
-            @include sv-flex(1, 0, 100%);
-            order: 1;
-            color: r-theme-val(blogpost-glimpse-favorite, content-color);
-
-            @include media-breakpoint-up(lg) {
-                @include sv-flex(1, 0, 30%);
-                padding-right: 0.5rem;
-            }
-        }
-
-        #{$glimpse-item-selector}__wrapper {
-            padding: 0;
-        }
-
-        #{$glimpse-item-selector}__title {
-            @include font-size($h2-font-size);
-            margin-bottom: 1rem;
-            font-weight: $font-weight-extrabold;
-            color: r-theme-val(blogpost-glimpse-favorite, title-color);
-        }
-
-        #{$glimpse-item-selector}__excerpt {
-            color: r-theme-val(blogpost-glimpse-favorite, excerpt-color);
-        }
-
-        #{$glimpse-item-selector}__date,
-        #{$glimpse-item-selector}__theme {
-            display: none;
-        }
-
-        #{$glimpse-item-selector}__cta {
-            @include button-base($font-weight: bold);
-            @include r-button-colors(r-theme-val(blogpost-glimpse-favorite, cta), $apply-border: true);
-            text-transform: uppercase;
-
-            &:hover {
-                @include r-button-colors(r-theme-val(blogpost-glimpse-favorite, cta-hover), $apply-border: true, $prefix: "hover");
-            }
-        }
-    }
+  }
 }

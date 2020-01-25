@@ -276,10 +276,7 @@ class CourseCMSTestCase(CMSTestCase):
             r'<div class="cms-placeholder'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
-        pattern = (
-            r'<div class="subheader__teaser">'
-            r'<div class="cms-placeholder'
-        )
+        pattern = r'<div class="subheader__teaser">' r'<div class="cms-placeholder'
         self.assertIsNotNone(re.search(pattern, str(response.content)))
         # Was previously cibling "About the course" title for description but
         # it does not exist anymore, still this selector is accurate
@@ -458,11 +455,12 @@ class RunsCourseCMSTestCase(CMSTestCase):
             html=True,
         )
         self.assertNotContains(
-            response, (
+            response,
+            (
                 '<div class="course-detail__row course-detail__runs '
                 'course-detail__runs--inactive">'
                 '<h3 class="course-detail__title">'
-            )
+            ),
         )
 
     def test_templates_course_detail_runs_future_open(self):
@@ -486,11 +484,12 @@ class RunsCourseCMSTestCase(CMSTestCase):
             html=True,
         )
         self.assertNotContains(
-            response, (
+            response,
+            (
                 '<div class="course-detail__row course-detail__runs '
                 'course-detail__runs--inactive">'
                 '<h3 class="course-detail__title">'
-            )
+            ),
         )
 
     @timezone.override(pytz.utc)
@@ -507,9 +506,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
 
         self.assertContains(response, "No open course runs")
         self.assertContains(
-            response,
-            '<h3 class="course-detail__title">Upcoming</h3>',
-            html=True,
+            response, '<h3 class="course-detail__title">Upcoming</h3>', html=True,
         )
         self.assertContains(
             response,
@@ -536,9 +533,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
 
         self.assertContains(response, "No open course runs")
         self.assertContains(
-            response,
-            '<h3 class="course-detail__title">Ongoing</h3>',
-            html=True,
+            response, '<h3 class="course-detail__title">Ongoing</h3>', html=True,
         )
         self.assertContains(
             response,
@@ -565,9 +560,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
 
         self.assertContains(response, "No open course runs")
         self.assertContains(
-            response,
-            '<h3 class="course-detail__title">Ongoing</h3>',
-            html=True,
+            response, '<h3 class="course-detail__title">Ongoing</h3>', html=True,
         )
         self.assertContains(
             response,
@@ -594,9 +587,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
 
         self.assertContains(response, "No open course runs")
         self.assertContains(
-            response,
-            '<h3 class="course-detail__title">Archived</h3>',
-            html=True,
+            response, '<h3 class="course-detail__title">Archived</h3>', html=True,
         )
         self.assertContains(
             response,

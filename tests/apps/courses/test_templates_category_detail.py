@@ -138,9 +138,7 @@ class CategoryCMSTestCase(CMSTestCase):
         related persons in all publication states.
         """
         self._extension_cms_published_content(
-            PersonFactory,
-            "categories",
-            '<h2 class="person-glimpse__title">{:s}</h2>',
+            PersonFactory, "categories", '<h2 class="person-glimpse__title">{:s}</h2>',
         )
 
     def _extension_cms_draft_content(self, factory_model, control_string):
@@ -209,6 +207,5 @@ class CategoryCMSTestCase(CMSTestCase):
     def test_templates_category_detail_cms_draft_content_persons(self):
         """Validate how a draft category page is displayed with its related persons."""
         self._extension_cms_draft_content(
-            PersonFactory,
-            '<h2 class="person-glimpse__title">{:s}</h2>',
+            PersonFactory, '<h2 class="person-glimpse__title">{:s}</h2>',
         )

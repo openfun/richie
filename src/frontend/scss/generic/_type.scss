@@ -6,14 +6,14 @@
 // like '.font-NAME'
 $r-fonts: () !default;
 @each $name, $value in $r-fonts {
-    &.font-#{$name}{
-        font-family: $value !important;
-    }
+  &.font-#{$name} {
+    font-family: $value !important;
+  }
 }
 
 // Build text color helpers
 @each $name, $value in $palette {
-    .text-#{$name}{
-        color: $value !important;
-    }
+  .text-#{$name} {
+    color: $value !important;
+  }
 }

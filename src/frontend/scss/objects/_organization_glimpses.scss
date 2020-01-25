@@ -1,182 +1,183 @@
 .organization-glimpse-list {
-    @include make-container-max-widths();
-    display: flex;
-    width: 100%;
-    margin: 0 auto;
-    padding: 1rem 0;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
+  @include make-container-max-widths();
+  display: flex;
+  width: 100%;
+  margin: 0 auto;
+  padding: 1rem 0;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
 
-    &__title {
-        @include sv-flex(1, 0, 100%);
-        padding: 0.5rem;
-    }
+  &__title {
+    @include sv-flex(1, 0, 100%);
+    padding: 0.5rem;
+  }
 
-    // Special row when there is no entry
-    &__empty {
-        @include sv-flex(1, 0, auto);
-        font-style: italic;
-        padding: 0.5rem;
-        color: r-theme-val(organization-glimpse-list, empty-color);
-        text-align: left;
-        background: r-theme-val(organization-glimpse-list, empty-background);
-    }
+  // Special row when there is no entry
+  &__empty {
+    @include sv-flex(1, 0, auto);
+    font-style: italic;
+    padding: 0.5rem;
+    color: r-theme-val(organization-glimpse-list, empty-color);
+    text-align: left;
+    background: r-theme-val(organization-glimpse-list, empty-background);
+  }
 }
 
-
 .organization-glimpse {
-    $glimpse-item-selector: &;
+  $glimpse-item-selector: &;
+  $glimpse-gutter: 0.625rem;
+
+  display: flex;
+  flex-grow: 0;
+  flex-shrink: 0;
+  flex-basis: calc(100% - #{$glimpse-gutter * 2});
+  margin: $glimpse-gutter;
+  padding: 1rem;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-content: space-between;
+  background: r-theme-val(organization-glimpse, base-background);
+  border: 1px solid r-theme-val(organization-glimpse, base-border);
+
+  @include media-breakpoint-up(sm) {
+    flex-basis: calc(50% - #{$glimpse-gutter * 2});
+  }
+
+  @include media-breakpoint-up(xl) {
+    flex-basis: calc(25% - #{$glimpse-gutter * 2});
+  }
+
+  &__logo {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; // Aspect ratio 16/9
+
+    & > img {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+
+    @include m-o-media_empty(
+      $background: r-theme-val(organization-glimpse, logo-empty-background)
+    );
+  }
+
+  // Default form factor just display org's logo
+  &__content {
+    display: none;
+  }
+
+  // Modifier to explicitely set the object as a link so default link
+  // behaviors is overrided right
+  &--link {
+    color: inherit;
+
+    &:hover,
+    &:focus {
+      border: 1px solid r-theme-val(organization-glimpse, link-border);
+      color: inherit;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  }
+
+  //
+  &--card {
+    // Get the last item from computed selector with ampersand
     $glimpse-gutter: 0.625rem;
 
-    display: flex;
-    flex-grow: 0;
-    flex-shrink: 0;
-    flex-basis: calc(100% - #{$glimpse-gutter * 2});
-    margin: $glimpse-gutter;
-    padding: 1rem;
-    flex-direction: column;
+    @include media-breakpoint-up(sm) {
+      flex-basis: calc(50% - #{$glimpse-gutter * 2});
+    }
+    @include media-breakpoint-up(xl) {
+      flex-basis: calc(16.6666% - #{$glimpse-gutter * 2});
+    }
+  }
+
+  //
+  &--row {
+    @include sv-flex(1, 0, 100%);
+    display: block;
+    margin: 0;
+    padding: 1rem 0;
+    flex-direction: row;
     flex-wrap: nowrap;
-    align-content: space-between;
-    background: r-theme-val(organization-glimpse, base-background);
-    border: 1px solid r-theme-val(organization-glimpse, base-border);
+    align-content: flex-start;
+    align-items: center;
+    background: r-theme-val(organization-glimpse-row, base-background);
+    border: 0;
 
     @include media-breakpoint-up(sm) {
-        flex-basis: calc(50% - #{$glimpse-gutter * 2});
+      flex-basis: 100%;
     }
-
+    @include media-breakpoint-up(lg) {
+      display: flex;
+      padding: 2rem 0;
+    }
     @include media-breakpoint-up(xl) {
-        flex-basis: calc(25% - #{$glimpse-gutter * 2});
+      flex-basis: 100%;
     }
 
-    &__logo {
-        position: relative;
-        width: 100%;
-        padding-bottom: 56.25%; // Aspect ratio 16/9
+    #{$glimpse-item-selector}__logo {
+      position: relative;
+      width: auto;
+      padding-bottom: 0;
+      text-align: center;
 
-        & > img {
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            object-position: center;
-        }
+      @include media-breakpoint-up(lg) {
+        @include sv-flex(1, 0, 25%);
+      }
 
-        @include m-o-media_empty($background: r-theme-val(organization-glimpse, logo-empty-background));
+      & > img {
+        position: static;
+        width: auto;
+        height: auto;
+        object-fit: initial;
+        object-position: unset;
+      }
     }
 
-    // Default form factor just display org's logo
-    &__content {
-        display: none;
+    #{$glimpse-item-selector}__content {
+      display: block;
+      padding: 1rem;
+
+      @include media-breakpoint-up(lg) {
+        @include sv-flex(1, 0, 75%);
+      }
     }
 
-    // Modifier to explicitely set the object as a link so default link
-    // behaviors is overrided right
-    &--link {
-        color: inherit;
-
-        &:hover,
-        &:focus {
-            border: 1px solid r-theme-val(organization-glimpse, link-border);
-            color: inherit;
-            text-decoration: none;
-            cursor: pointer;
-        }
+    #{$glimpse-item-selector}__title {
+      @include font-size($h4-font-size);
+      margin-bottom: 1rem;
+      font-family: $r-font-family-montserrat;
+      font-weight: $font-weight-boldest;
     }
 
-    //
-    &--card {
-        // Get the last item from computed selector with ampersand
-        $glimpse-gutter: 0.625rem;
+    & + & {
+      border-top: 1px solid r-theme-val(organization-glimpse-row, divider);
 
-        @include media-breakpoint-up(sm) {
-            flex-basis: calc(50% - #{$glimpse-gutter * 2});
-        }
-        @include media-breakpoint-up(xl) {
-            flex-basis: calc(16.6666% - #{$glimpse-gutter * 2});
-        }
+      &:hover,
+      &:focus {
+        border-top: 1px solid r-theme-val(organization-glimpse-row, divider);
+      }
     }
 
-    //
-    &--row {
-        @include sv-flex(1, 0, 100%);
-        display: block;
-        margin: 0;
-        padding: 1rem 0;
-        flex-direction: row;
-        flex-wrap: nowrap;
-        align-content: flex-start;
-        align-items: center;
-        background: r-theme-val(organization-glimpse-row, base-background);
-        border: 0;
+    &:hover,
+    &:focus {
+      background: r-theme-val(organization-glimpse-row, hover-background);
+      border: 0;
 
-        @include media-breakpoint-up(sm) {
-            flex-basis: 100%;
-        }
-        @include media-breakpoint-up(lg) {
-            display: flex;
-            padding: 2rem 0;
-        }
-        @include media-breakpoint-up(xl) {
-            flex-basis: 100%;
-        }
-
-        #{$glimpse-item-selector}__logo {
-            position: relative;
-            width: auto;
-            padding-bottom: 0;
-            text-align: center;
-
-            @include media-breakpoint-up(lg) {
-                @include sv-flex(1, 0, 25%);
-            }
-
-            & > img {
-                position: static;
-                width: auto;
-                height: auto;
-                object-fit: initial;
-                object-position: unset;
-            }
-        }
-
-        #{$glimpse-item-selector}__content {
-            display: block;
-            padding: 1rem;
-
-            @include media-breakpoint-up(lg) {
-                @include sv-flex(1, 0, 75%);
-            }
-        }
-
-        #{$glimpse-item-selector}__title {
-            @include font-size($h4-font-size);
-            margin-bottom: 1rem;
-            font-family: $r-font-family-montserrat;
-            font-weight: $font-weight-boldest;
-        }
-
-        & + &{
-            border-top: 1px solid r-theme-val(organization-glimpse-row, divider);
-
-            &:hover,
-            &:focus{
-                border-top: 1px solid r-theme-val(organization-glimpse-row, divider);
-            }
-        }
-
-        &:hover,
-        &:focus{
-            background: r-theme-val(organization-glimpse-row, hover-background);
-            border: 0;
-
-            #{$glimpse-item-selector}__title {
-                color: r-theme-val(organization-glimpse-row, hover-title-color);
-            }
-        }
+      #{$glimpse-item-selector}__title {
+        color: r-theme-val(organization-glimpse-row, hover-title-color);
+      }
     }
+  }
 }

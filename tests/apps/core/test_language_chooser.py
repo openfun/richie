@@ -95,11 +95,7 @@ class LanguageChooserTests(CMSTestCase):
         # Current language item is marked active according to user language
         # choice (from i18n url prefix)
         self.assertContains(
-            response,
-            (
-                '<li class="languages-menu__item '
-                'languages-menu__item--en">'
-            ),
+            response, ('<li class="languages-menu__item ' 'languages-menu__item--en">'),
         )
         self.assertContains(response, "en, basculer vers Anglais")
         self.assertContains(

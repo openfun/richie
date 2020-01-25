@@ -1,91 +1,99 @@
 .search-filter-group-modal {
-    display: flex;
-    position: absolute;
+  display: flex;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  max-width: 30rem;
+  margin: 3rem auto;
+  color: r-theme-val(search-filters-group-modal, base-color);
+  flex-direction: column;
+  justify-content: space-between;
+  background: r-theme-val(search-filters-group-modal, base-background);
+  border: 1px solid r-theme-val(search-filters-group-modal, base-border);
+  border-radius: 4px;
+  outline: none;
+  overflow: auto;
+
+  &__form {
+    flex-grow: 1;
+
+    &__title {
+      display: block;
+      margin: 0;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: $font-weight-boldest;
+    }
+
+    &__input {
+      width: 100%;
+      padding: 0.5rem 1rem;
+      border: 1px solid r-theme-val(search-filters-group-modal, input-border);
+      border-left-width: 0;
+      border-right-width: 0;
+    }
+
+    &__error {
+      padding: 1rem;
+    }
+
+    &__values {
+      margin: 0;
+      padding: 0;
+      list-style-type: none;
+
+      &__item {
+        & > button {
+          width: 100%;
+          padding: 0.5rem 1rem;
+          text-align: left;
+          background: inherit;
+          border: none;
+          border-bottom: 1px solid
+            r-theme-val(search-filters-group-modal, values-border);
+          color: inherit;
+        }
+      }
+    }
+  }
+
+  &__close {
+    padding: 0.5rem 1rem;
+    flex-shrink: 0;
+    flex-grow: 0;
+    color: r-theme-val(search-filters-group-modal, close-color);
+    background: r-theme-val(search-filters-group-modal, close-background);
+    border-bottom: 0;
+    border-right: 0;
+    border-left: 0;
+  }
+
+  &-overlay {
+    z-index: 10; // Make sure the overlay is above any random 0-1-2 z-indexes in content
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    max-width: 30rem;
-    margin: 3rem auto;
-    color: r-theme-val(search-filters-group-modal, base-color);
-    flex-direction: column;
-    justify-content: space-between;
-    background: r-theme-val(search-filters-group-modal, base-background);
-    border: 1px solid r-theme-val(search-filters-group-modal, base-border);
-    border-radius: 4px;
-    outline: none;
-    overflow: auto;
+    background-color: r-theme-val(
+      search-filters-group-modal,
+      overlay-background
+    );
+  }
 
-    &__form {
-        flex-grow: 1;
-
-        &__title {
-            display: block;
-            margin: 0;
-            padding: 1rem;
-            text-align: center;
-            font-size: 1.1rem;
-            font-weight: $font-weight-boldest;
-        }
-
-        &__input {
-            width: 100%;
-            padding: 0.5rem 1rem;
-            border: 1px solid r-theme-val(search-filters-group-modal, input-border);
-            border-left-width: 0;
-            border-right-width: 0;
-        }
-
-        &__error {
-            padding: 1rem;
-        }
-
-        &__values {
-            margin: 0;
-            padding: 0;
-            list-style-type: none;
-
-            &__item {
-                & > button {
-                    width: 100%;
-                    padding: 0.5rem 1rem;
-                    text-align: left;
-                    background: inherit;
-                    border: none;
-                    border-bottom: 1px solid r-theme-val(search-filters-group-modal, values-border);
-                    color: inherit;
-                }
-            }
-        }
-    }
-
-    &__close {
-        padding: 0.5rem 1rem;
-        flex-shrink: 0;
-        flex-grow: 0;
-        color: r-theme-val(search-filters-group-modal, close-color);
-        background: r-theme-val(search-filters-group-modal, close-background);
-        border-bottom: 0;
-        border-right: 0;
-        border-left: 0;
-    }
-
-    &-overlay {
-        z-index: 10; // Make sure the overlay is above any random 0-1-2 z-indexes in content
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: r-theme-val(search-filters-group-modal, overlay-background);
-    }
-
-    &-button {
-        @include button-small();
-        @include r-button-colors(r-theme-val(search-filters-group-modal, button), $apply-border: true, $include-hover: true);
-        margin-top: 1rem;
-        width: 100%;
-        font-weight: $font-weight-boldest;
-        text-transform: uppercase;
-    }
+  &-button {
+    @include button-small();
+    @include r-button-colors(
+      r-theme-val(search-filters-group-modal, button),
+      $apply-border: true,
+      $include-hover: true
+    );
+    margin-top: 1rem;
+    width: 100%;
+    font-weight: $font-weight-boldest;
+    text-transform: uppercase;
+  }
 }

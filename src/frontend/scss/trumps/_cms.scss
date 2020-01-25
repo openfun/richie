@@ -5,8 +5,8 @@
 /*
  * Trick to get a larger cms bar column so long plugin titles are more readable
  */
-@include breakpoint(xlarge){
-    body div.cms .cms-structure.cms-structure-condensed {
-        width: 30vw;
-    }
+@include breakpoint(xlarge) {
+  body div.cms .cms-structure.cms-structure-condensed {
+    width: 30vw;
+  }
 }
