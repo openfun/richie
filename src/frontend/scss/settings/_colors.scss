@@ -173,6 +173,9 @@ $r-theme: (
     item-cta-color: r-color('white'),
     item-cta-background: r-color('blue-green'),
     item-cta-border: r-color('blue-green'),
+    item-cta-hollow-color: r-color('dark-grey'),
+    item-cta-hollow-background: transparent,
+    item-cta-hollow-border: transparent,
     item-divider-border: r-color('light-grey'),
   ),
   body-content: (

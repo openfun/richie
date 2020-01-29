@@ -114,6 +114,16 @@
       @include media-breakpoint-up($r-topbar-breakpoint) {
         @include sv-flex(0, 0, auto);
       }
+
+      .topbar__item + .topbar__item {
+        margin-top: 0.5rem;
+        border-top: 0;
+
+        @include media-breakpoint-up($r-topbar-breakpoint) {
+          margin-top: 0;
+          margin-left: 0.5rem;
+        }
+      }
     }
   }
 
