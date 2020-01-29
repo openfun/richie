@@ -71,13 +71,11 @@
                             data-props='{"courseSearchPageUrl": "{% page_url 'courses' %}", "context": { "assets": { "icons": "{% static 'richie/icons.svg' %}" } }}'></div>
                         {% endblock topbar_searchbar %}
 
-                        {% comment %}{% block userlogin %}
-                        <div class="richie-react richie-react--user-login"
-                            data-props='{"loginUrl": "{% url 'admin:index' %}", "logoutUrl": "{% url 'logout' %}", "signupUrl": "{% url 'admin:index' %}"}'
-                        ></div>
-                        {% endblock userlogin %}{% endcomment %}
-
                         <ul class="topbar__list topbar__list--controls">
+                            {% block userlogin %}
+                            <li class="topbar__item topbar__item--login richie-react richie-react--user-login"
+                                data-props='{"loginUrl": "{% url 'admin:index' %}", "logoutUrl": "{% url 'logout' %}", "signupUrl": "{% url 'admin:index' %}"}'></li>
+                            {% endblock userlogin %}
                             <li class="topbar__item topbar__item--cta">
                                 <a href="#">{% trans "Contact us" %}</a>
                             </li>

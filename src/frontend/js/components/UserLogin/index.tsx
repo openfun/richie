@@ -85,13 +85,13 @@ export const UserLogin = ({
         <React.Fragment>
           <a
             href={signupUrl}
-            className="button button--secondary user-login__btn user-login__btn--sign-up"
+            className="user-login__btn user-login__btn--sign-up"
           >
             <FormattedMessage {...messages.signUp} />
           </a>
           <a
             href={loginUrl}
-            className="button button--secondary-hollow user-login__btn user-login__btn--log-in"
+            className="user-login__btn user-login__btn--log-in"
           >
             <FormattedMessage {...messages.logIn} />
           </a>
@@ -99,7 +99,10 @@ export const UserLogin = ({
       ) : (
         <div className="user-login__logged">
           <div className="user-login__logged__name">{user.full_name}</div>{' '}
-          <a href={logoutUrl} className="button button--secondary-hollow">
+          <a
+            href={logoutUrl}
+            className="user-login__btn user-login__btn--log-out"
+          >
             <FormattedMessage {...messages.logOut} />
           </a>
         </div>
