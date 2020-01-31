@@ -28,10 +28,19 @@ describe('components/CourseGlimpse', () => {
     title: 'Course 42',
   };
 
+  const commonDataProps = {
+    assets: {
+      icons: '/icons.svg',
+    },
+    environment: 'frontend_tests',
+    release: '9.8.7',
+    sentry_dsn: null,
+  };
+
   it('renders a course glimpse with its data', () => {
     const { container, getByText } = render(
       <IntlProvider locale="en">
-        <CourseGlimpse course={course} />
+        <CourseGlimpse context={commonDataProps} course={course} />
       </IntlProvider>,
     );
 
@@ -57,6 +66,7 @@ describe('components/CourseGlimpse', () => {
     const { getByText } = render(
       <IntlProvider locale="en">
         <CourseGlimpse
+          context={commonDataProps}
           course={{
             ...course,
             state: {
@@ -78,7 +88,10 @@ describe('components/CourseGlimpse', () => {
   it('shows the "Cover" placeholder div when the course is missing a cover image', () => {
     const { getByText } = render(
       <IntlProvider locale="en">
-        <CourseGlimpse course={{ ...course, cover_image: null }} />
+        <CourseGlimpse
+          context={commonDataProps}
+          course={{ ...course, cover_image: null }}
+        />
       </IntlProvider>,
     );
 
