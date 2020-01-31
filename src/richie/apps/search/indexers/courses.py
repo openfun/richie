@@ -77,6 +77,8 @@ class CoursesIndexer:
         "absolute_url",
         "categories",
         "cover_image",
+        "duration",
+        "effort",
         "icon",
         "organization_highlighted",
         "organizations",
@@ -411,6 +413,18 @@ class CoursesIndexer:
         ):
             descriptions[simple_text.cmsplugin_ptr.language].append(simple_text.body)
 
+        # Prepare localized duration texts
+        duration = {}
+        for language, _ in settings.LANGUAGES:
+            with translation.override(language):
+                duration[language] = course.get_duration_display()
+
+        # Prepare localized effort texts
+        effort = {}
+        for language, _ in settings.LANGUAGES:
+            with translation.override(language):
+                effort[language] = course.get_effort_display()
+
         # Prepare categories, making sure we get title information for categories
         # in the same query
         category_pages = (
@@ -509,6 +523,8 @@ class CoursesIndexer:
             "course_runs": course_runs,
             "cover_image": cover_images,
             "description": {l: " ".join(st) for l, st in descriptions.items()},
+            "duration": duration,
+            "effort": effort,
             "icon": icon_images,
             "is_new": len(course_runs) == 1,
             # Pick the highlighted organization from the organizations QuerySet to benefit from
@@ -589,11 +605,19 @@ class CoursesIndexer:
             state["date_time"] = None
 
         return {
+            **{
+                field: get_best_field_language(source[field], language)
+                for field in [
+                    "absolute_url",
+                    "cover_image",
+                    "duration",
+                    "effort",
+                    "icon",
+                    "title",
+                ]
+            },
             "id": es_course["_id"],
-            "absolute_url": get_best_field_language(source["absolute_url"], language),
             "categories": source["categories"],
-            "cover_image": get_best_field_language(source["cover_image"], language),
-            "icon": get_best_field_language(source["icon"], language),
             "organization_highlighted": get_best_field_language(
                 source["organization_highlighted"], language
             )
@@ -601,7 +625,6 @@ class CoursesIndexer:
             else None,
             "organizations": source["organizations"],
             "state": CourseState(**state),
-            "title": get_best_field_language(source["title"], language),
         }
 
     @staticmethod
