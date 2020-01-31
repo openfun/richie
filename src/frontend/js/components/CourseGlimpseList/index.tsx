@@ -3,6 +3,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { CourseGlimpse } from 'components/CourseGlimpse';
 import { APIResponseListMeta } from 'types/api';
+import { CommonDataProps } from 'types/commonDataProps';
 import { Course } from 'types/Course';
 
 const messages = defineMessages({
@@ -22,9 +23,10 @@ interface CourseGlimpseListProps {
 }
 
 export const CourseGlimpseList = ({
+  context,
   courses,
   meta,
-}: CourseGlimpseListProps) => {
+}: CourseGlimpseListProps & CommonDataProps) => {
   return (
     <div className="course-glimpse-list">
       <div className="course-glimpse-list__count">
@@ -38,7 +40,10 @@ export const CourseGlimpseList = ({
         />
       </div>
       {courses.map(
-        course => course && <CourseGlimpse course={course} key={course.id} />,
+        course =>
+          course && (
+            <CourseGlimpse context={context} course={course} key={course.id} />
+          ),
       )}
     </div>
   );

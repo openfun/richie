@@ -1,6 +1,7 @@
 import React from 'react';
 import { defineMessages, FormattedDate, FormattedMessage } from 'react-intl';
 
+import { CommonDataProps } from 'types/commonDataProps';
 import { Course } from 'types/Course';
 
 export interface CourseGlimpseProps {
@@ -16,7 +17,10 @@ const messages = defineMessages({
   },
 });
 
-export const CourseGlimpse = ({ course }: CourseGlimpseProps) => (
+export const CourseGlimpse = ({
+  context,
+  course,
+}: CourseGlimpseProps & CommonDataProps) => (
   <a className="course-glimpse course-glimpse--link" href={course.absolute_url}>
     <div className="course-glimpse__media">
       {course.cover_image ? (
