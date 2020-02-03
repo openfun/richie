@@ -15,6 +15,8 @@ describe('components/CourseGlimpse', () => {
       src: '/thumbs/small.png',
       srcset: 'some srcset',
     },
+    duration: '3 months',
+    effort: '3 hours/week',
     icon: null,
     id: '742',
     organization_highlighted: 'Some Organization',
@@ -40,7 +42,14 @@ describe('components/CourseGlimpse', () => {
   it('renders a course glimpse with its data', () => {
     const { container, getByText } = render(
       <IntlProvider locale="en">
-        <CourseGlimpse context={commonDataProps} course={course} />
+        <CourseGlimpse
+          context={commonDataProps}
+          course={{
+            ...course,
+            duration: '3 months',
+            effort: '3 hours/week',
+          }}
+        />
       </IntlProvider>,
     );
 
@@ -84,7 +93,6 @@ describe('components/CourseGlimpse', () => {
     getByText('Course 42');
     getByText('Archived');
   });
-
   it('shows the "Cover" placeholder div when the course is missing a cover image', () => {
     const { getByText } = render(
       <IntlProvider locale="en">
