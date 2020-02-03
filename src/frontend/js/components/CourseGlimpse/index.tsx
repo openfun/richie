@@ -36,56 +36,57 @@ export const CourseGlimpse = ({
         </div>
       )}
     </div>
-    {course.icon ? (
-      <div className="course-glimpse__icon">
-        <div
-          className="course-glimpse__icon__band"
-          style={{ background: course.icon.color }}
-        >
-          {course.icon.title}
-          <div
-            className="course-glimpse__icon__band__end"
-            style={{ borderLeftColor: course.icon.color }}
-          ></div>
-        </div>
-        <img
-          src={course.icon.src}
-          srcSet={course.icon.srcset}
-          sizes={course.icon.sizes}
-          alt=""
-        />
-      </div>
-    ) : null}
     <div className="course-glimpse__content">
-      <div className="course-glimpse__content__wrapper">
-        <p className="course-glimpse__content__title">{course.title}</p>
-        <p>{course.organization_highlighted}</p>
-      </div>
-    </div>
-    <div className="course-glimpse__footer">
-      <p className="course-glimpse__footer__date">
-        {course.state.text.charAt(0).toUpperCase() +
-          course.state.text.substr(1)}
-        {course.state.datetime ? (
-          <React.Fragment>
-            <br />
-            <FormattedDate
-              value={new Date(course.state.datetime)}
-              year="numeric"
-              month="short"
-              day="numeric"
-            />
-          </React.Fragment>
-        ) : null}
-      </p>
-      {course.state.call_to_action ? (
-        <div className="course-glimpse__footer__cta">
-          <button className="button">
-            {course.state.call_to_action.charAt(0).toUpperCase() +
-              course.state.call_to_action.substr(1)}
-          </button>
+      {course.icon ? (
+        <div className="course-glimpse__icon">
+          <div
+            className="course-glimpse__band"
+            style={{ background: course.icon.color }}
+          >
+            {course.icon.title}
+          </div>
+          <img
+            src={course.icon.src}
+            srcSet={course.icon.srcset}
+            sizes={course.icon.sizes}
+            alt=""
+          />
         </div>
       ) : null}
+      <div className="course-glimpse__wrapper">
+        <p className="course-glimpse__title">{course.title}</p>
+        <div className="course-glimpse__excerpt">
+          Lorem ipsum dolor sit amet consectetur adipiscim elit
+        </div>
+        <div className="course-glimpse__organization">
+          {course.organization_highlighted}
+        </div>
+      </div>
+      <div className="course-glimpse-footer">
+        <div className="course-glimpse-footer__date">
+          {course.state.text.charAt(0).toUpperCase() +
+            course.state.text.substr(1) +
+            ' '}
+          {course.state.datetime ? (
+            <span>
+              <FormattedDate
+                value={new Date(course.state.datetime)}
+                year="numeric"
+                month="short"
+                day="numeric"
+              />
+            </span>
+          ) : null}
+        </div>
+        {course.state.call_to_action ? (
+          <div className="course-glimpse-footer__cta">
+            <button className="button">
+              {course.state.call_to_action.charAt(0).toUpperCase() +
+                course.state.call_to_action.substr(1)}
+            </button>
+          </div>
+        ) : null}
+      </div>{' '}
     </div>
   </a>
 );

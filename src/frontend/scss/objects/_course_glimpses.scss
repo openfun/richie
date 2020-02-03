@@ -54,6 +54,7 @@ $r-course-glimpse-gutter: 0.8rem !default;
   margin: $r-course-glimpse-gutter;
   border-radius: $border-radius-lg;
   box-shadow: r-theme-val(course-glimpse, base-shadow);
+  min-width: 16rem;
 
   @include media-breakpoint-up(sm) {
     @include sv-flex(1, 0, calc(50% - #{$r-course-glimpse-gutter * 2}));

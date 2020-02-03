@@ -1,3 +1,5 @@
+$r-search-filters-width: 15rem !default;
+
 .search-template {
   @include make-container();
   @include make-container-max-widths();
@@ -90,7 +92,7 @@
       position: static;
       flex-basis: calc(100% - #{$r-search-filters-width});
       max-width: calc(100% - #{$r-search-filters-width});
-      padding: 2rem 0 0 2rem;
+      padding: 2rem 0 0 1rem;
     }
 
     &__title {
