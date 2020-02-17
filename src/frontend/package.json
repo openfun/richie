@@ -68,7 +68,7 @@
     "node-sass": "4.13.1",
     "nodemon": "2.0.2",
     "prettier": "1.19.1",
-    "query-string": "6.10.1",
+    "query-string": "6.11.0",
     "react": "16.12.0",
     "react-autosuggest": "9.4.3",
     "react-dom": "16.12.0",
@@ -79,7 +79,7 @@
     "tslint": "5.20.1",
     "typescript": "3.7.5",
     "webpack": "4.41.6",
-    "webpack-cli": "3.3.10",
+    "webpack-cli": "3.3.11",
     "whatwg-fetch": "3.0.0",
     "xhr-mock": "2.5.1",
     "yargs": "15.1.0"
