@@ -2,7 +2,7 @@
 //
 // A flex grid of course cards
 
-// Available object settings
+// Course-glimpse-list related variables
 $r-course-glimpse-gutter: 0.8rem !default;
 
 .course-glimpse-list {
@@ -35,6 +35,9 @@ $r-course-glimpse-gutter: 0.8rem !default;
   }
 }
 
+// Course-glimpse related variables
+$course-glimpse-content-padding-sides: 0.7rem !default;
+
 .course-glimpse {
   $glimpse-item-selector: &;
 
@@ -43,7 +46,7 @@ $r-course-glimpse-gutter: 0.8rem !default;
     $border: 0,
     $background: r-theme-val(course-glimpse, card-background),
     $media-margin: 0,
-    $wrapper-padding: 1.7rem 0.7rem 3rem,
+    $wrapper-padding: 1.7rem $course-glimpse-content-padding-sides 3rem,
     $foot-divider: null
   );
 
@@ -190,33 +193,41 @@ $r-course-glimpse-gutter: 0.8rem !default;
     fill: r-theme-val(course-glimpse, svg-icon-fill);
     margin: 0 0.5rem;
   }
+}
 
-  // A little specific makeup onto footer elements
-  &__footer {
-    @include r-button-colors(
-      r-theme-val(course-glimpse, footer),
-      $apply-border: true
-    );
-    display: flex;
-    font-size: 0.75rem;
-    border-bottom-left-radius: $border-radius-lg;
-    border-bottom-right-radius: $border-radius-lg;
-  }
+.course-glimpse-footer {
+  display: flex;
+  padding: 0 $course-glimpse-content-padding-sides;
+  border-bottom-left-radius: $border-radius-lg;
+  border-bottom-right-radius: $border-radius-lg;
 
-  &__date,
-  &__cta {
-    @include sv-flex-cell-width(50%);
+  &__cta,
+  &__date {
+    flex-basis: 50%;
     padding: 0.5rem 0;
-    display: flex;
-    margin: 0;
-    align-items: center;
-    justify-content: flex-start;
-    align-content: center;
-    font-weight: bold;
-    line-height: 1.1;
   }
 
   &__cta {
+    display: flex;
     justify-content: flex-end;
+
+    & > .button {
+      padding: 0.7rem;
+      background: r-color('blue-green');
+      color: white;
+      font-size: 1; // TODO: remove this when font-size is normalized accross the project
+      font-weight: 700;
+
+      &:hover {
+        color: white;
+      }
+    }
+  }
+
+  &__date {
+    // Force a line-break between the meaningful text and the actual date information
+    & > span {
+      display: table;
+    }
   }
 }
