@@ -32,6 +32,7 @@ class OrganizationPlugin(CMSPluginBase):
     fieldsets = ((None, {"fields": ["page", "variant"]}),)
     model = OrganizationPluginModel
     module = PLUGINS_GROUP
+    name = _("Org")
     render_template = "courses/plugins/organization.html"
 
     def render(self, context, instance, placeholder):
@@ -54,6 +55,7 @@ class OrganizationsByCategoryPlugin(CMSPluginBase):
     cache = True
     model = OrganizationsByCategoryPluginModel
     module = PLUGINS_GROUP
+    name = _("Org by Category")
     render_template = "courses/plugins/organizations_by_category.html"
 
     def render(self, context, instance, placeholder):
@@ -79,6 +81,7 @@ class CategoryPlugin(CMSPluginBase):
     cache = True
     model = CategoryPluginModel
     module = PLUGINS_GROUP
+    name = _("Cat")
     render_template = "courses/plugins/category_plugin.html"
 
     def render(self, context, instance, placeholder):
@@ -102,6 +105,7 @@ class CoursePlugin(CMSPluginBase):
     fieldsets = ((None, {"fields": ["page", "variant"]}),)
     model = CoursePluginModel
     module = PLUGINS_GROUP
+    name = _("Course")
     render_template = "courses/plugins/course_plugin.html"
 
     def render(self, context, instance, placeholder):
@@ -124,6 +128,7 @@ class PersonPlugin(CMSPluginBase):
     cache = True
     model = PersonPluginModel
     module = PLUGINS_GROUP
+    name = _("Person")
     render_template = "courses/plugins/person.html"
 
     def render(self, context, instance, placeholder):
@@ -167,6 +172,7 @@ class BlogPostPlugin(CMSPluginBase):
     cache = True
     model = BlogPostPluginModel
     module = PLUGINS_GROUP
+    name = _("Post")
     render_template = "courses/plugins/blogpost.html"
 
     def render(self, context, instance, placeholder):
@@ -189,6 +195,7 @@ class ProgramPlugin(CMSPluginBase):
     cache = True
     model = ProgramPluginModel
     module = PLUGINS_GROUP
+    name = _("Prog")
     render_template = "courses/plugins/program.html"
 
     def render(self, context, instance, placeholder):

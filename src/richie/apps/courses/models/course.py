@@ -586,12 +586,6 @@ class CoursePluginModel(PagePluginMixin, CMSPlugin):
         db_table = "richie_course_plugin"
         verbose_name = _("course plugin")
 
-    def __str__(self):
-        """Human representation of a page plugin"""
-        return "{model:s}: {id:d}".format(
-            model=self._meta.verbose_name.title(), id=self.id
-        )
-
 
 class Licence(TranslatableModel):
     """

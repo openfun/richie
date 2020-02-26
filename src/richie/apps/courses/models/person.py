@@ -130,11 +130,5 @@ class PersonPluginModel(PagePluginMixin, CMSPlugin):
         db_table = "richie_person_plugin"
         verbose_name = _("person plugin")
 
-    def __str__(self):
-        """Human representation of a person plugin"""
-        return "{model:s}: {id:d}".format(
-            model=self._meta.verbose_name.title(), id=self.id
-        )
-
 
 extension_pool.register(Person)

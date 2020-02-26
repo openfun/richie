@@ -48,11 +48,5 @@ class ProgramPluginModel(PagePluginMixin, CMSPlugin):
         db_table = "richie_program_plugin"
         verbose_name = _("program plugin")
 
-    def __str__(self):
-        """Human representation of a program plugin"""
-        return "{model:s}: {id:d}".format(
-            model=self._meta.verbose_name.title(), id=self.id
-        )
-
 
 extension_pool.register(Program)
