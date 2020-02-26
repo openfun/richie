@@ -204,11 +204,5 @@ class CategoryPluginModel(PagePluginMixin, CMSPlugin):
         db_table = "richie_category_plugin"
         verbose_name = _("category plugin")
 
-    def __str__(self):
-        """Human representation of a page plugin"""
-        return "{model:s}: {id:d}".format(
-            model=self._meta.verbose_name.title(), id=self.id
-        )
-
 
 extension_pool.register(Category)

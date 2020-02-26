@@ -32,6 +32,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Improve plugin description displayed in side toolbar.
 - Improve ElasticSearch `regenerate_indexes` tests.
 - Improve breadcrumb on course run page by creating a specific version.
 

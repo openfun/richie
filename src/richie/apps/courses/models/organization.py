@@ -234,12 +234,6 @@ class OrganizationPluginModel(PagePluginMixin, CMSPlugin):
         db_table = "richie_organization_plugin"
         verbose_name = _("organization plugin")
 
-    def __str__(self):
-        """Human representation of a organization plugin"""
-        return "{model:s}: {id:d}".format(
-            model=self._meta.verbose_name.title(), id=self.id
-        )
-
 
 class OrganizationsByCategoryPluginModel(PagePluginMixin, CMSPlugin):
     """
@@ -268,12 +262,6 @@ class OrganizationsByCategoryPluginModel(PagePluginMixin, CMSPlugin):
     class Meta:
         db_table = "richie_organizations_by_category_plugin"
         verbose_name = _("organizations by category plugin")
-
-    def __str__(self):
-        """Human representation of a plugin to embed organizations for a category."""
-        return "{model:s}: {id:d}".format(
-            model=self._meta.verbose_name.title(), id=self.id
-        )
 
 
 extension_pool.register(Organization)

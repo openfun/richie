@@ -118,3 +118,7 @@ class PagePluginMixin:
         """
         language = language or translation.get_language()
         return self.page.is_published(language)
+
+    def __str__(self):
+        """Human representation of a page plugin"""
+        return self.page.get_title()
