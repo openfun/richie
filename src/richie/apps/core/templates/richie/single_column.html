@@ -1,11 +1,5 @@
 {% extends "richie/base.html" %}
 {% load cms_tags %}
-{% comment %}
-CHANGELOG:
-- Use "render_model" tag for page title
-- Moved title to subheader
-{% endcomment %}
-
 
 {% block head_title %}
     {% page_attribute "page_title" %}

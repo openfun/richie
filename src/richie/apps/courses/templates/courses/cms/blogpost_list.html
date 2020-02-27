@@ -1,12 +1,5 @@
 {% extends "richie/fullwidth.html" %}
 {% load category_tags cms_tags i18n pagination_tags %}
-{% comment %}
-CHANGELOG:
-- Re enabled breadcrumbs
-- Moved page title to "subheader__content" block
-- Added dummy category list for temporary integration POC
-{% endcomment %}
-
 
 {% block subheader_content %}
 <div class="subheader__container">
@@ -18,15 +11,14 @@ CHANGELOG:
 {% block content %}{% spaceless %}
 {% get_related_category_pages current_page.get_child_pages as categories %}
 {% if categories %}
-<div class="category-glimpse-badges">
-    <div class="category-glimpse-badges__container">
-        {% for category in categories %}
-            {% include "courses/cms/fragment_category_glimpse.html" with variant="tag" %}
-        {% endfor %}
+    <div class="category-glimpse-badges">
+        <div class="category-glimpse-badges__container">
+            {% for category in categories %}
+                {% include "courses/cms/fragment_category_glimpse.html" with variant="tag" %}
+            {% endfor %}
+        </div>
     </div>
-</div>
 {% endif %}
-
 
 <div class="blogpost-list">
     {% if current_page.publisher_is_draft %}

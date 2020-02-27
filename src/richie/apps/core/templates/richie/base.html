@@ -102,7 +102,7 @@
             <div class="body-footer">
                 <div class="body-footer__container">
                     <div class="body-footer__menu">
-                        <p class="body-footer__subtitle">{% blocktrans %}Learn more{% endblocktrans %}</p>
+                        <p class="body-footer__subtitle">{% trans "Learn more" %}</p>
                         {% static_placeholder "footer" %}
                     </div>
                     <div class="body-footer__brand">
@@ -111,7 +111,7 @@
                         </a>
                     </div>
                     <div class="body-footer__insert">
-                        <p class="body-footer__title">{% blocktrans %}Life-changing formations!{% endblocktrans %}</p>
+                        <p class="body-footer__title">{% trans "Life-changing learning!" %}</p>
                         {% language_chooser "menu/language_menu.html" %}
                         <div class="body-footer__badges">
                             {% include "social-networks/footer-badges.html" %}
@@ -122,11 +122,11 @@
             <div class="body-mentions">
                 <div class="body-mentions__container">
                     <div class="body-mentions__copyright">
-                        <p>{% now "Y" %} &copy; Acme {% blocktrans %}All Rights Reserved.{% endblocktrans %}</p>
+                        <p>{% now "Y" %} &copy; Acme {% trans "All Rights Reserved." %}</p>
                     </div>
                     <div class="body-mentions__poweredby">
                         <a href="https://github.com/openfun/richie">
-                            <small>{% blocktrans %}Powered by{% endblocktrans %}</small>
+                            <small>{% trans "Powered by" %}</small>
                             <strong>Richie</strong>
                         </a>
                     </div>

@@ -2,7 +2,7 @@
 {% get_current_language as current_language_code %}
 {% if languages|length > 1 %}
     <ul class="languages-menu">
-        <li class="languages-menu__item languages-menu__item--label">{% blocktrans %}Language:{% endblocktrans %}</li>
+        <li class="languages-menu__item languages-menu__item--label">{% trans "Language:" %}</li>
         {% for code, name in languages %}
         {% get_language_info for code as lang %}
         {% if code == current_language_code %}

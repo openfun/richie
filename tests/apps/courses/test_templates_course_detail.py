@@ -276,10 +276,8 @@ class CourseCMSTestCase(CMSTestCase):
             r'<div class="cms-placeholder'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
-        pattern = r'<div class="subheader__teaser">' r'<div class="cms-placeholder'
+        pattern = r'<div class="subheader__teaser"><div class="cms-placeholder'
         self.assertIsNotNone(re.search(pattern, str(response.content)))
-        # Was previously cibling "About the course" title for description but
-        # it does not exist anymore, still this selector is accurate
         pattern = (
             r'<div class="subheader__content subheader__content--aside">'
             r'<div class="cms-placeholder'

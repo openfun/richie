@@ -1,10 +1,6 @@
-{% load thumbnail %}{% spaceless %}
-{% comment %}
-CHANGELOG:
-- Update class names for better BEM and simpliest DOM
-{% endcomment %}
+{% load thumbnail %}
 
-
+{% spaceless %}
 <div class="licence-plugin">
     <p class="licence-plugin__logo">
         <img src="{% thumbnail instance.licence.logo 100x50 crop='smart' %}" alt="">

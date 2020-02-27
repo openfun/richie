@@ -1,9 +1,4 @@
 {% load cms_tags i18n extra_tags %}
-{% comment %}
-CHANGELOG:
-- New template to divide course content from relations so they can used
-  used distinctly in different location
-{% endcomment %}
 
 {% block team %}
     {% if page.publisher_is_draft or not page|is_empty_placeholder:"course_team" %}
