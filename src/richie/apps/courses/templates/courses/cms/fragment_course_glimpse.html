@@ -1,4 +1,6 @@
 {% load i18n cms_tags extra_tags static thumbnail %}
+{% comment %}Obviously, the context template variable "course" is required and must be a Course page extension{% endcomment %}
+
 {% with course_page=course.extended_object course_state=course.state main_org_title=course.get_main_organization.extended_object.get_title %}
 <a class="course-glimpse course-glimpse--link{% if variant %} course-glimpse--{{ variant }}{% endif %}{% if course_page.publisher_is_draft is True %} course-glimpse--draft{% endif %}"
  href="{{ course_page.get_absolute_url }}"

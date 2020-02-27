@@ -1,7 +1,6 @@
 {% extends "richie/fullwidth.html" %}
 {% load cms_tags i18n extra_tags static thumbnail %}
 
-
 {% block meta_index_rules %}
     {# Make sure course snapshot pages are not indexed by search engines #}
     {% if current_page.parent_page.course %}
@@ -127,7 +126,7 @@
                         {% include "social-networks/course-badges.html" with page_title=request.current_page.get_title page_url=request.current_page.get_absolute_url %}
                     {% endblock social_networks %}
 
-                    <a href="#" class="subheader__cta">{% trans "Contacter le reponsable formation" %}</a>
+                    <a href="#" class="subheader__cta">{% trans "Contact us" %}</a>
                 </div>
             </div>
         </div>

@@ -1,11 +1,7 @@
 {% load i18n cms_tags extra_tags thumbnail %}
 {% comment %}Obviously, the context template variable "blogpost" is required and must be a BlogPost page extension{% endcomment %}
-{% comment %}
-CHANGELOG:
-- Implemented new form factor "row", "mini" and "favorite" (currently "mini" is included in default form which is "row")
-{% endcomment %}
-{% with blogpost_page=blogpost.extended_object %}
 
+{% with blogpost_page=blogpost.extended_object %}
 {% if variant == "favorite" %}
     <div class="
         blogpost-glimpse
@@ -70,7 +66,6 @@ CHANGELOG:
             </div>
         </div>
     </a>
-
 {% else %}
     <a href="{{ blogpost.extended_object.get_absolute_url }}"
         class="

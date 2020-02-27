@@ -1,11 +1,5 @@
 {% extends "richie/fullwidth.html" %}
 {% load cms_tags i18n %}
-{% comment %}
-CHANGELOG:
-- Wrapped glimpse list in a ".program-list"
-- Moved title inside subheader
-{% endcomment %}
-
 
 {% block subheader_content %}
 <div class="subheader__container">
@@ -22,7 +16,7 @@ CHANGELOG:
         {% endif %}
     {% empty %}
         <p class="program-glimpse program-glimpse--empty">
-        {% trans "No associated programs" %}
+            {% trans "No associated programs" %}
         </p>
     {% endfor %}
 </div>

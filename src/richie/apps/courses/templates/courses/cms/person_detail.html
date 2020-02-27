@@ -1,10 +1,5 @@
 {% extends "richie/fullwidth.html" %}
 {% load cms_tags extra_tags i18n thumbnail %}
-{% comment %}
-CHANGELOG:
-- Moved page title, categories, bio, portrait to "subheader__content" block
-- Restructured content tree to block/row structure
-{% endcomment %}
 
 {% block meta_opengraph_contextuals %}
     <meta property="og:title" content="{{ current_page.get_title|truncatechars:65 }}">
