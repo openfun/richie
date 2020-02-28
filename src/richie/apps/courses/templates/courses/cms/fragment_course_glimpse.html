@@ -58,32 +58,22 @@ CHANGELOG:
             <div class="course-glimpse__organization">{{ main_org_title }}</div>
             {% endif %}
         </div>
-        <div class="course-glimpse__footer">
-            {% comment %}<p class="course-glimpse__date">
-                {{ course_state.text|capfirst }}<br>
-                {{ course_state.datetime|date:"DATE_FORMAT" }}
-            </p>{% endcomment %}
-            <p class="course-glimpse__date">
-                <svg role="img" class="course-glimpse__svg-icon no-scheme-fill" aria-hidden="true">
-                    <use xlink:href="{% static 'richie/icons.svg' %}#icon-clock" />
-                </svg>
-                {{ course.get_duration_display|default:"NA" }}
-            </p>
-            <p class="course-glimpse__cta">
-                {{ course.get_effort_display|default:"NA" }}
-                <svg role="img" class="course-glimpse__svg-icon no-scheme-fill" aria-hidden="true">
-                    <use xlink:href="{% static 'richie/icons.svg' %}#icon-stopwatch" />
-                </svg>
-            </p>
-            {% comment %}{% if course_state.call_to_action %}
-            <div class="course-glimpse__cta">
-                {{ course_state.call_to_action|capfirst }}
-                <svg role="img" class="course-glimpse__svg-icon no-scheme-fill" aria-hidden="true">
-                    <use xlink:href="{% static 'richie/icons.svg' %}#icon-filter" />
-                </svg>
+
+        {% block course_glimpse_footer %}
+        <div class="course-glimpse-footer">
+            <div class="course-glimpse-footer__date">
+                {{ course_state.text|capfirst }}
+                <span>{{ course_state.datetime|date:"DATE_FORMAT" }}</span>
             </div>
-            {% endif %}{% endcomment %}
+            {% if course_state.call_to_action %}
+            <div class="course-glimpse-footer__cta">
+                <button class="button">
+                    {{ course_state.call_to_action|capfirst }}
+                </button>
+            </div>
+            {% endif %}
         </div>
+        {% endblock course_glimpse_footer %}
     </div>
 </a>
 {% endwith %}
