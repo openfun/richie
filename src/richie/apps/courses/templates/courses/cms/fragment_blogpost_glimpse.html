@@ -40,6 +40,37 @@ CHANGELOG:
             </div>
         </div>
     </div>
+{% elif variant == "mini" %}
+    <a href="{{ blogpost_page.get_absolute_url }}" class="blogpost-glimpse blogpost-glimpse--link blogpost-glimpse--mini">
+        <div class="blogpost-glimpse__media">
+            {% get_placeholder_plugins "cover" blogpost_page as plugins or %}
+                <div class="blogpost-glimpse__empty">{% trans 'Cover' %}</div>
+            {% endget_placeholder_plugins %}
+            {% blockplugin plugins.0 %}
+                <img src="{% thumbnail instance.picture 150x85 crop upscale subject_location=instance.picture.subject_location %}"
+                    srcset="
+                    {% thumbnail instance.picture 150x85 crop upscale subject_location=instance.picture.subject_location %} 150w
+                    {% if instance.picture.width >= 300 %},{% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %} 300w{% endif %}
+                    {% if instance.picture.width >= 450 %},{% thumbnail instance.picture 450x255 crop upscale subject_location=instance.picture.subject_location %} 450w{% endif %}
+                    "
+                    sizes="150px"
+                    alt=""
+                />
+            {% endblockplugin %}
+        </div>
+        <div class="blogpost-glimpse__content">
+            <div class="blogpost-glimpse__wrapper">
+                <div class="blogpost-glimpse__categories">
+                    {% get_placeholder_plugins "categories" blogpost_page as plugins %}
+                        {% for plugin in plugins %}
+                            <span class="blogpost-glimpse__categories__item">{{ plugin.relevant_page.get_title }}</span>
+                        {% endfor %}
+                </div>
+                <p class="blogpost-glimpse__title">{{ blogpost_page.get_title }}</p>
+            </div>
+        </div>
+    </a>
+
 {% else %}
     <a href="{{ blogpost.extended_object.get_absolute_url }}"
         class="

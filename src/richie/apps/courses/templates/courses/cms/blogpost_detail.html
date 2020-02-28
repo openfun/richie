@@ -117,33 +117,15 @@ CHANGELOG:
             </div>
 
             <div class="blogpost-detail__grid-aside">
-                {% with header_level=2 %}
+                <div class="blogpost-detail__headline">
+                    {% static_placeholder "static_blogpost_headline" %}
                     {% placeholder "headline" %}
-                {% endwith %}
-                {% comment %}<div class="blogpost-detail__headline">
-                    <p class="h4">{% lorem 7 w random %}</p>
-                    <p>{% lorem 24 w random %}</p>
-                </div>{% endcomment %}
+                </div>
 
-                {% comment %}Prototyped here until we have the richie's feature to do it right with glimpse fragment{% endcomment %}
                 <div class="blogpost-glimpse-list">
                     <p class="blogpost-glimpse-list__title"><span>{% trans 'Related posts' %}</span></p>
-                    {% for i in "5354"|make_list %}
-                    {% cycle "richie/images/prototypes/132x80.png" "richie/images/prototypes/135x135.png" "richie/images/prototypes/330x200.png" as fpoimg silent %}
-                    <a href="#" class="blogpost-glimpse blogpost-glimpse--link blogpost-glimpse--mini">
-                        <div class="blogpost-glimpse__media">
-                            <img src="{% static fpoimg %}" alt="">
-                        </div>
-
-                        <div class="blogpost-glimpse__content">
-                            <div class="blogpost-glimpse__wrapper">
-                                <div class="blogpost-glimpse__categories">
-                                    <p class="blogpost-glimpse__theme">{% lorem 3 w random %}</p>
-                                </div>
-                                <p class="blogpost-glimpse__title">{% lorem i w random %}</p>
-                            </div>
-                        </div>
-                    </a>
+                    {% for related_blogpost in current_page.blogpost.get_related_blogposts|slice:":3" %}
+                            {% include "courses/cms/fragment_blogpost_glimpse.html" with blogpost=related_blogpost variant="mini" %}
                     {% endfor %}
                 </div>
             </div>
