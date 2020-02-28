@@ -100,10 +100,10 @@ CHANGELOG:
         <div class="blogpost-glimpse__content">
             <div class="blogpost-glimpse__wrapper">
                 <div class="blogpost-glimpse__categories">
-                    {% get_placeholder_plugins "categories" blogpost_page as plugins or %}{% endget_placeholder_plugins %}
-                    {% blockplugin plugins.0 %}
-                    <p class="blogpost-glimpse__theme">{{ instance.relevant_page.get_title }}</p>
-                    {% endblockplugin %}
+                    {% get_placeholder_plugins "categories" blogpost_page as plugins %}
+                    {% for plugin in plugins %}
+                        <span class="blogpost-glimpse__categories__item">{{ plugin.relevant_page.get_title }}</span>
+                    {% endfor %}
                 </div>
 
                 {% if variant == "favorite" %}
