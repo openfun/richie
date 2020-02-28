@@ -74,10 +74,13 @@ $glimpse-gutter: 1.25rem;
     color: r-theme-val(blogpost-glimpse, content-color);
   }
 
-  &__theme {
+  &__categories {
     position: relative;
     margin: 0 0 0.1rem;
     padding-left: calc(10% + 0.2rem);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
     &::before {
       content: '';
@@ -86,6 +89,18 @@ $glimpse-gutter: 1.25rem;
       left: 0;
       width: 10%;
       border-top: 1px solid r-theme-val(blogpost-glimpse, theme-border);
+    }
+
+    &__item {
+      & + .blogpost-glimpse__categories__item {
+        margin-left: 0.1rem;
+
+        &::before {
+          margin-left: 0.1rem;
+          margin-right: 0.2rem;
+          content: '•';
+        }
+      }
     }
   }
 

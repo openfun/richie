@@ -55,6 +55,11 @@ CMS_PLACEHOLDER_CONF = {
         "plugins": ["LinkPlugin", "SectionPlugin"],
         "child_classes": {"SectionPlugin": ["LinkPlugin", "SectionPlugin"]},
     },
+    "static_blogpost_headline": {
+        "name": _("Static headline"),
+        "plugins": ["SectionPlugin", "CKEditorPlugin"],
+        "child_classes": {"SectionPlugin": ["CKEditorPlugin"]},
+    },
     # -- Page Placeholders
     # Homepage
     "richie/homepage.html maincontent": {
@@ -261,7 +266,7 @@ CMS_PLACEHOLDER_CONF = {
     },
     "courses/cms/blogpost_detail.html headline": {
         "name": _("Headline"),
-        "plugins": ["SectionPlugin"],
+        "plugins": ["SectionPlugin", "CKEditorPlugin"],
         "child_classes": {"SectionPlugin": ["CKEditorPlugin"]},
     },
     # Program page detail
