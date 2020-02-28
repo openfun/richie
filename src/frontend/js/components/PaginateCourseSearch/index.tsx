@@ -109,8 +109,8 @@ export const PaginateCourseSearch = ({
 
               {page === currentPage ? (
                 /* The current page needs different markup as it does not include a link */
-                <li className="pagination__list__item pagination__list__item--current">
-                  <span className="pagination__list__item__page-number">
+                <li className="pagination__item pagination__item--current">
+                  <span className="pagination__page-number">
                     {/*  Help assistive technology users with some context */}
                     <span className="offscreen">
                       {page === maxPage ? (
@@ -139,9 +139,9 @@ export const PaginateCourseSearch = ({
                   </span>
                 </li>
               ) : (
-                <li className="pagination__list__item">
+                <li className="pagination__item">
                   <a
-                    className="pagination__list__item__page-number"
+                    className="pagination__page-number"
                     onClick={() =>
                       dispatchCourseSearchParamsUpdate({
                         // Pages are 1-indexed, we need to 0-index them to calculate the correct offset
