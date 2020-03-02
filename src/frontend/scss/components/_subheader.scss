@@ -261,7 +261,7 @@ $r-subheader-search-title-width: 19rem !default; // aligned on computed search r
       }
     }
 
-    .richie-react--root-search-suggest-field {
+    .richie-react--search-suggest-field {
       @include sv-flex(1, 0, 100%);
 
       @include media-breakpoint-up(lg) {
