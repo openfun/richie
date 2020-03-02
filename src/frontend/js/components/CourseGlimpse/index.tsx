@@ -56,9 +56,6 @@ export const CourseGlimpse = ({
       ) : null}
       <div className="course-glimpse__wrapper">
         <p className="course-glimpse__title">{course.title}</p>
-        <div className="course-glimpse__excerpt">
-          Lorem ipsum dolor sit amet consectetur adipiscim elit
-        </div>
         <div className="course-glimpse__organization">
           {course.organization_highlighted}
         </div>

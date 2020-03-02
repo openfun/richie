@@ -1,12 +1,4 @@
 {% load i18n cms_tags extra_tags static thumbnail %}
-{% comment %}Obviously, the context template variable "course" is required and must be a Course page extension{% endcomment %}
-{% comment %}
-CHANGELOG:
-- Added excerpt base on "course_introduction" content
-- Moved "main_org_title"
-- Removed inline style in icon elements
-- Removed pseudo element for icon band triangle
-{% endcomment %}
 {% with course_page=course.extended_object course_state=course.state main_org_title=course.get_main_organization.extended_object.get_title %}
 <a class="course-glimpse course-glimpse--link{% if variant %} course-glimpse--{{ variant }}{% endif %}{% if course_page.publisher_is_draft is True %} course-glimpse--draft{% endif %}"
  href="{{ course_page.get_absolute_url }}"
@@ -42,18 +34,6 @@ CHANGELOG:
         {% endif %}
         <div class="course-glimpse__wrapper">
             <p class="course-glimpse__title">{{ course_page.get_title }}</p>
-
-            {% if main_org_title %}
-            <div class="course-glimpse__excerpt">
-                {% get_placeholder_plugins "course_description" course_page as plugins or %}
-                    {% trans "Course descripton" %}
-                {% endget_placeholder_plugins %}
-                {% blockplugin plugins.0 %}
-                    {{ instance.body|truncatewords_html:10|safe }}
-                {% endblockplugin %}
-            </div>
-            {% endif %}
-
             {% if main_org_title %}
             <div class="course-glimpse__organization">{{ main_org_title }}</div>
             {% endif %}
