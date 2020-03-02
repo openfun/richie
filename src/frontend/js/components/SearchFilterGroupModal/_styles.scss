@@ -7,16 +7,19 @@
   bottom: 0;
   max-width: 30rem;
   margin: 3rem auto;
-  color: r-theme-val(search-filters-group-modal, base-color);
+  color: r-color('slate-grey');
   flex-direction: column;
   justify-content: space-between;
-  background: r-theme-val(search-filters-group-modal, base-background);
-  border: 1px solid r-theme-val(search-filters-group-modal, base-border);
+  background: white;
+  border: 1px solid r-color('slate-grey');
   border-radius: 4px;
   outline: none;
   overflow: auto;
+  font-size: 1rem;
 
   &__form {
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
 
     &__title {
@@ -31,9 +34,9 @@
     &__input {
       width: 100%;
       padding: 0.5rem 1rem;
-      border: 1px solid r-theme-val(search-filters-group-modal, input-border);
-      border-left-width: 0;
-      border-right-width: 0;
+      border: none;
+      background: r-color('light-grey');
+      color: black;
     }
 
     &__error {
@@ -52,8 +55,7 @@
           text-align: left;
           background: inherit;
           border: none;
-          border-bottom: 1px solid
-            r-theme-val(search-filters-group-modal, values-border);
+          border-bottom: 1px solid r-color('light-grey');
           color: inherit;
         }
       }
@@ -64,36 +66,33 @@
     padding: 0.5rem 1rem;
     flex-shrink: 0;
     flex-grow: 0;
-    color: r-theme-val(search-filters-group-modal, close-color);
-    background: r-theme-val(search-filters-group-modal, close-background);
-    border-bottom: 0;
-    border-right: 0;
-    border-left: 0;
+    color: black;
+    background: white;
+    border: none;
+    border-top: 1px solid r-color('light-grey');
   }
 
-  &-overlay {
+  &__overlay {
     z-index: 10; // Make sure the overlay is above any random 0-1-2 z-indexes in content
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: r-theme-val(
-      search-filters-group-modal,
-      overlay-background
-    );
+    background-color: rgba(0, 0, 0, 0.75);
   }
 
   &-button {
     @include button-small();
-    @include r-button-colors(
-      r-theme-val(search-filters-group-modal, button),
-      $apply-border: true,
-      $include-hover: true
-    );
     margin-top: 1rem;
     width: 100%;
     font-weight: $font-weight-boldest;
     text-transform: uppercase;
+    background-color: r-color('blue-green');
+    color: white;
+
+    &:hover {
+      color: white;
+    }
   }
 }

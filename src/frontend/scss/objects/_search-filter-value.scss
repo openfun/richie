@@ -59,6 +59,7 @@
   display: flex;
   border-bottom: 1px solid r-theme-val(search-filters-value, base-border);
   padding: 0.4rem 0.5rem;
+  font-size: 1rem;
 
   &.active {
     border-bottom: 1px solid r-theme-val(search-filters-value, hover-border);

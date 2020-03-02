@@ -131,7 +131,7 @@ export const SearchFilterGroupModal = ({
         className="search-filter-group-modal"
         isOpen={modalIsOpen}
         onRequestClose={() => setModalIsOpen(false)}
-        overlayClassName="search-filter-group-modal-overlay"
+        overlayClassName="search-filter-group-modal__overlay"
       >
         <fieldset className="search-filter-group-modal__form">
           <legend className="search-filter-group-modal__form__title">

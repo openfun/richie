@@ -312,7 +312,6 @@ $r-theme: (
     icon: $dark-gradient-scheme,
     content-color: r-color('slate-grey'),
     title-color: r-color('black'),
-    organization-color: r-color('blue-green'),
     organization-media-empty-background: r-color('smoke'),
     svg-icon-fill: r-color('white'),
     footer: $primary-scheme,
@@ -443,17 +442,6 @@ $r-theme: (
   search-filters-group: (
     title-color: r-color('battleship-grey'),
     modal-overlay-background: r-color('white'),
-  ),
-  search-filters-group-modal: (
-    base-color: r-color('slate-grey'),
-    base-background: r-color('white'),
-    base-border: r-color('slate-grey'),
-    input-border: r-color('white'),
-    values-border: r-color('white'),
-    close-color: r-color('black'),
-    close-background: r-color('white'),
-    overlay-background: r-color('white'),
-    button: $tertiary-scheme,
   ),
   search-filters-value: (
     base-color: r-color('slate-grey'),
