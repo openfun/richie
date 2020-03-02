@@ -1,0 +1,21 @@
+.search-input {
+  @include sv-flex(1, 0, 100%);
+  display: flex;
+  position: relative;
+
+  &__btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0 1.2rem 0 1rem;
+    background: r-theme-val(base-search, input-background);
+    border: 0;
+
+    &__icon {
+      width: 1.4rem;
+      height: 1.4rem;
+      fill: r-theme-val(base-search, icon-fill);
+    }
+  }
+}
