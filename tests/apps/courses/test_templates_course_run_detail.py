@@ -9,7 +9,7 @@ from django.utils import timezone
 import pytz
 from cms.test_utils.testcases import CMSTestCase
 
-from richie.apps.core.factories import UserFactory
+from richie.apps.core.factories import PageFactory, UserFactory
 from richie.apps.courses.factories import (
     CategoryFactory,
     CourseFactory,
@@ -293,5 +293,97 @@ class CourseRunCMSTestCase(CMSTestCase):
             response,
             '<button class="course-detail__content__run__block__cta '
             'course-detail__content__run__block__cta--projected">To be scheduled</button>',
+            html=True,
+        )
+
+    # Breadcrumb
+
+    def test_templates_course_run_detail_breadcrumb_below_course(self):
+        """
+        Validate the format of the breadcrumb on a course run directly placed below the course.
+        """
+        home_page = PageFactory(
+            title__title="home", title__language="en", should_publish=True
+        )
+        search_page = PageFactory(
+            title__title="courses",
+            title__language="en",
+            parent=home_page,
+            should_publish=True,
+        )
+        course = CourseFactory(
+            page_title="course name",
+            page_parent=search_page,
+            page_in_navigation=True,
+            should_publish=True,
+        )
+        course_run = CourseRunFactory(
+            page_title="session 42",
+            page_parent=course.extended_object,
+            should_publish=True,
+        )
+        response = self.client.get(course_run.extended_object.get_absolute_url())
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response,
+            (
+                '<ul class="breadcrumbs">'
+                '  <li class="breadcrumbs__item"><a href="/en/home/">home</a></li>'
+                '  <li class="breadcrumbs__item"><a href="/en/home/courses/">courses</a></li>'
+                '  <li class="breadcrumbs__item">'
+                '    <a href="/en/home/courses/course-name/">course name</a>'
+                "    </li>"
+                '  <li class="breadcrumbs__item"><span class="active">session 42</span></li>'
+                "</ul>"
+            ),
+            html=True,
+        )
+
+    def test_templates_course_run_detail_breadcrumb_below_snapshot(self):
+        """
+        Validate the format of the breadcrumb on a course run placed below a snapshot.
+        """
+        home_page = PageFactory(
+            title__title="home", title__language="en", should_publish=True
+        )
+        search_page = PageFactory(
+            title__title="courses",
+            title__language="en",
+            parent=home_page,
+            should_publish=True,
+        )
+        course = CourseFactory(
+            page_title="course name",
+            page_parent=search_page,
+            page_in_navigation=True,
+            should_publish=True,
+        )
+        snapshot = CourseFactory(
+            page_title="snapshot name",
+            page_parent=course.extended_object,
+            page_in_navigation=True,
+            should_publish=True,
+        )
+        course_run = CourseRunFactory(
+            page_title="session 42",
+            page_parent=snapshot.extended_object,
+            should_publish=True,
+        )
+        response = self.client.get(course_run.extended_object.get_absolute_url())
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response,
+            (
+                '<ul class="breadcrumbs">'
+                '  <li class="breadcrumbs__item"><a href="/en/home/">home</a></li>'
+                '  <li class="breadcrumbs__item"><a href="/en/home/courses/">courses</a></li>'
+                '  <li class="breadcrumbs__item">'
+                '    <a href="/en/home/courses/course-name/">course name</a>'
+                "    </li>"
+                '  <li class="breadcrumbs__item"><span class="active">session 42</span></li>'
+                "</ul>"
+            ),
             html=True,
         )
