@@ -1,0 +1,22 @@
+{% if current_page.parent_page.parent_page.course%}
+    {# Course run placed below a snapshot #}
+    {% for ancestor in ancestors %}
+    <li class="breadcrumbs__item">
+        {% if not forloop.last %}
+        <a href="{{ ancestor.get_absolute_url }}">{{ ancestor.get_menu_title }}</a>
+        {% else %}
+        <span class="active">{{ current_page.get_title }}</span>
+        {% endif %}
+    </li>
+    {% endfor %}
+{% else %}
+    {# Course run directly placed below its course #}
+    {% for ancestor in ancestors %}
+    <li class="breadcrumbs__item">
+        <a href="{{ ancestor.get_absolute_url }}">{{ ancestor.get_menu_title }}</a>
+    </li>
+    {% endfor %}
+    <li class="breadcrumbs__item">
+        <span class="active">{{ current_page.get_title }}</span>
+    </li>
+{% endif %}

@@ -32,6 +32,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Improve ElasticSearch `regenerate_indexes` tests.
+- Improve breadcrumb on course run page by creating a specific version.
 
 ## [1.16.2] - 2019-12-18
 
