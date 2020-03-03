@@ -28,9 +28,9 @@
     {% with variant="tag" %}
       {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"author" %}
       <div class="blogpost-detail__subhead__author">
-        {% page_placeholder "author" current_page or %}
+        {% placeholder "author" or %}
           <span class="blogpost-detail__subhead__author__empty">{% trans 'No author yet' %}</span>
-        {% endpage_placeholder %}
+        {% endplaceholder %}
       </div>
       {% endif %}
     {% endwith %}
@@ -41,9 +41,9 @@
   {% with variant="tag" %}
     {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"categories" %}
     <div class="blogpost-detail__categories">
-      {% page_placeholder "categories" current_page or %}
+      {% placeholder "categories" or %}
         <span class="blogpost-detail__categories__empty">{% trans 'No categories yet.' %}</span>
-      {% endpage_placeholder %}
+      {% endplaceholder %}
     </div>
     {% endif %}
   {% endwith %}

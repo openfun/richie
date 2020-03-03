@@ -8,7 +8,7 @@
             class="category-plugin-tag{% if category_page.publisher_is_draft %} category-plugin-tag--draft{% endif %}"
             href="{{ category_page.get_absolute_url }}"
         >
-            {% get_placeholder_plugins "icon" category_page as icon_plugins %}
+            {% get_page_plugins "icon" category_page as icon_plugins %}
             {% if icon_plugins %}
                 {% blockplugin icon_plugins.0 %}
                     <figure class="category-plugin-tag__figure">
@@ -34,7 +34,7 @@
             {% endif %}
         </a>
     {% elif variant == "mark" %}
-        {% get_placeholder_plugins "icon" category_page as icon_plugins %}
+        {% get_page_plugins "icon" category_page as icon_plugins %}
         {% blockplugin icon_plugins.0 %}
             <img src="{% thumbnail instance.picture 60x60 crop upscale subject_location=instance.picture.subject_location %}"
                 srcset="
@@ -50,9 +50,9 @@
         <a class="category-glimpse category-glimpse--link" href="{{ category_page.get_absolute_url }}">
             <div class="category-glimpse__body">
                 <div class="category-glimpse__logo">
-                    {% get_placeholder_plugins "logo" category_page as plugins or %}
+                    {% get_page_plugins "logo" category_page as plugins or %}
                         <div class="category-glimpse__logo__empty">{% trans "Logo" %}</div>
-                    {% endget_placeholder_plugins %}
+                    {% endget_page_plugins %}
                     {% blockplugin plugins.0 %}
                         <img src="{% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location %}"
                             srcset="

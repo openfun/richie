@@ -16,7 +16,19 @@ $ make migrate
 
 ## Unreleased
 
-- This release changes names for ElasticSearch indices. Unless they explicitly use `RICHIE_ES_INDICES_PREFIX` setting to replicate the previous behavior (by setting it to `"richie"`), all users will have to regenerate all ElasticSearch indices (can be done by running the `bootstrap_elasticsearch` command).
+- The template tags related to placeholders were refactored to fix ghost placeholders. This
+  change impacts the use of template tags in all templates:
+  * The `fragment_course_content.html` template is removed and its content is inserted directly
+    in the `course_detail.html` and `course_run_detail.html` templates, using the `placeholder`
+    template tag for the former and the `show_placeholder` template tag for the latter;
+  * The `get_page_placeholder` template tag is removed and replaced either by `placeholder` when
+    it is used on its own page and `show_placeholder` when it is used on another page;
+  * The `get_placeholder_plugins` template tag is replaced by a new `get_page_plugins` template
+    tag when it is used on another page than the placeholder's own page.
+- This release changes names for ElasticSearch indices. Unless they explicitly use
+  `RICHIE_ES_INDICES_PREFIX` setting to replicate the previous behavior (by setting it to
+  `"richie"`), all users will have to regenerate all ElasticSearch indices (can be done by running
+  the `bootstrap_elasticsearch` command).
 - If you override the `courses/cms/blogpost_list.html` template and want to benefit from the
   display of news-related categories on top of the page, you need to add the new markup and css.
 - All occurences of the `form_factor` variable have been renamed to `variant` for clarity.

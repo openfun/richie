@@ -9,9 +9,9 @@
     href="{{ course_page.get_absolute_url }}"
 >
 <div class="course-glimpse__media">
-    {% get_placeholder_plugins "course_cover" course_page as cover_plugins or %}
+    {% get_page_plugins "course_cover" course_page as cover_plugins or %}
       <p class="course-glimpse__media__empty">{% trans "Cover" %}</p>
-    {% endget_placeholder_plugins %}
+    {% endget_page_plugins %}
     {% blockplugin cover_plugins.0 %}
       <img src="{% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %}"
         srcset="
@@ -26,7 +26,7 @@
     {% endblockplugin %}
   </div>
   <div class="course-glimpse__icon">
-    {% get_placeholder_plugins "course_icons" course_page as icon_plugins %}
+    {% get_page_plugins "course_icons" course_page as icon_plugins %}
     {% if icon_plugins %}
       <div class="course-glimpse__icon__band" style="background: {{ icon_plugins.0.page.category.color }};" aria-hidden="true">
         {{ icon_plugins.0.page.get_title }}

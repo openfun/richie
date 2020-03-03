@@ -50,7 +50,7 @@
       {% block introduction %}
         {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_introduction" %}
         <div class="course-detail__content__row course-detail__content__introduction">
-          {% page_placeholder "course_introduction" current_page %}
+          {% placeholder "course_introduction" %}
         </div>
         {% endif %}
       {% endblock introduction %}
@@ -60,21 +60,161 @@
         <div class="course-detail__content__row course-detail__content__categories">
           {% with variant="tag" %}
             {% placeholder "course_icons" %}
-            {% page_placeholder "course_categories" current_page or %}
+            {% placeholder "course_categories" or %}
               {% if current_page.publisher_is_draft and current_page|is_empty_placeholder:"course_icons" %}
                 <p class="course-detail__content__categories__placeholder">
                   {% trans "No associated categories" %}
                 </p>
               {% endif %}
-            {% endpage_placeholder %}
+            {% endplaceholder %}
           {% endwith %}
         </div>
         {% endif %}
       {% endblock categories %}
 
-      {% block fragment %}
-        {% include "courses/cms/fragment_course_content.html" with page=current_page %}
-      {% endblock fragment %}
+      {% block teaser %}
+        <div class="course-detail__content__row course-detail__content__teaser">
+          {% placeholder "course_teaser" or %}
+            <div class="course-detail__content__row course-detail__content__teaser__empty">{% trans 'Add a video or teaser.' %}</div>
+          {% endplaceholder %}
+        </div>
+      {% endblock teaser %}
+
+      {% block description %}
+        {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_description" %}
+        <section class="course-detail__content__row course-detail__content__description">
+          <h2 class="course-detail__content__row__title">{% trans 'About the course' %}</h2>
+          {% with header_level=3 %}
+            {% placeholder "course_description" or %}
+              <p>{% trans 'Enter here a description of your course.' %}</p>
+            {% endplaceholder %}
+          {% endwith %}
+        </section>
+      {% endif %}
+      {% endblock description %}
+
+      {% block skills %}
+        {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_skills" %}
+        <div class="course-detail__content__row course-detail__content__skills">
+          <h2 class="course-detail__content__row__title">{% trans "What you will learn" %}</h2>
+          <p>{% trans "At the end of this course, you will be able to:" %}</p>
+          {% placeholder "course_skills" %}
+        </div>
+        {% endif %}
+      {% endblock skills %}
+
+      {% block format %}
+        {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_format" %}
+        <section class="course-detail__content__row course-detail__content__format">
+          <h2 class="course-detail__content__row__title">{% trans 'Format' %}</h2>
+          {% placeholder "course_format" or %}
+            <p>{% trans 'How is the course structured?' %}</p>
+          {% endplaceholder %}
+        </section>
+        {% endif %}
+      {% endblock format %}
+
+      {% block prerequisites %}
+        {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_prerequisites" %}
+        <section class="course-detail__content__row course-detail__content__prerequisites">
+          <h2 class="course-detail__content__row__title">{% trans 'Prerequisites' %}</h2>
+          {% placeholder "course_prerequisites" or %}
+            <p>{% trans 'What are the prerequisites to follow this course?' %}</p>
+          {% endplaceholder %}
+        </section>
+        {% endif %}
+      {% endblock prerequisites %}
+
+      {% block plan %}
+        {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_plan" %}
+        <section class="course-detail__content__row course-detail__content__plan">
+          <h2 class="course-detail__content__row__title">{% trans 'Course plan' %}</h2>
+          {% placeholder "course_plan" or %}
+            <p>{% trans 'Enter here the detailed course plan.' %}</p>
+          {% endplaceholder %}
+        </section>
+        {% endif %}
+      {% endblock plan %}
+
+      {% block assessment %}
+        {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_assessment" %}
+        <section class="course-detail__content__row course-detail__content__assessment">
+          <h2 class="course-detail__content__row__title">{% trans 'Assessment and certification' %}</h2>
+          {% placeholder "course_assessment" or %}
+            <p class="course-detail__content__assessment__placeholder">
+              {% trans "How is progress evaluated and/or certified?" %}
+            </p>
+          {% endplaceholder %}
+        </section>
+        {% endif %}
+      {% endblock assessment %}
+
+      {% block organizations %}
+        {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_organizations" %}
+        <section class="section course-detail__content__row course-detail__content__organizations">
+          <h2 class="section__title course-detail__content__row__title course-detail__content__organizations__title">
+            {% trans 'Organizations' %}
+          </h2>
+          <div class="section__items course-detail__content__organizations__items">
+            {% placeholder "course_organizations" or %}
+              <p class="course-detail__content__organizations__placeholder">
+                {% trans "What are the organizations publishing this course?" %}
+              </p>
+            {% endplaceholder %}
+          </div>
+        </section>
+        {% endif %}
+      {% endblock organizations %}
+
+      {% block team %}
+        {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_team" %}
+        <section class="section course-detail__content__row course-detail__content__team">
+          <h2 class="section.title course-detail__content__row__title course-detail__content__team__title">
+            {% trans 'Course team' %}
+          </h2>
+          {% with header_level=3 %}
+            <div class="section__items course-detail__content__team__items">
+              {% placeholder "course_team" or %}
+                <p>{% trans 'Who are the teachers in the course team?' %}</p>
+              {% endplaceholder %}
+            </div>
+          {% endwith %}
+        </section>
+        {% endif %}
+      {% endblock team %}
+
+      {% block information %}
+        {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_information" %}
+        <div class="course-detail__content__row course-detail__content__information">
+          {% placeholder "course_information" %}
+        </div>
+        {% endif %}
+      {% endblock information %}
+
+      {% block licenses %}
+        <section class="course-detail__content__row course-detail__content__license">
+          <h2 class="course-detail__content__row__title course-detail__content__license__title">{% trans 'License' %}</h2>
+
+          <div class="course-detail__content__license__item">
+            <h3 class="course-detail__content__license__item__title">{% trans 'License for the course content' %}</h3>
+            {% with header_level=4 %}
+              {% placeholder "course_license_content" or %}
+                <p>{% trans 'What is the license for the course content?' %}</p>
+              {% endplaceholder %}
+            {% endwith %}
+          </div>
+
+          <div class="course-detail__content__license__item">
+            <h3 class="course-detail__content__license__item__title">{% trans 'License for the content created by course participants' %}</h3>
+            {% with header_level=4 %}
+              {% placeholder "course_license_participation" or %}
+                <p>{% trans 'What is the license for the content created by course participants?' %}</p>
+              {% endplaceholder %}
+            {% endwith %}
+          </div>
+        </section>
+      {% endblock licenses %}
+
     </div>
 
     <div class="course-detail__aside">

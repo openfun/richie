@@ -6,7 +6,6 @@ from django.template.loader import render_to_string
 from classytags.arguments import Argument, MultiValueArgument
 from classytags.core import Options, Tag
 from classytags.utils import flatten_context
-from cms.exceptions import PlaceholderNotFound
 from cms.templatetags.cms_tags import (
     Placeholder,
     PlaceholderOptions,
@@ -14,91 +13,57 @@ from cms.templatetags.cms_tags import (
 )
 from cms.toolbar.utils import get_toolbar_from_request
 from cms.utils import get_site_id
-from cms.utils.placeholder import validate_placeholder_name
 from cms.utils.plugins import get_plugins
 
 # pylint: disable=invalid-name
 register = template.Library()
 
 
-@register.tag("page_placeholder")
-class PagePlaceholder(Placeholder):
+def get_plugins_render_tag(context, name, varname, nodelist, page_lookup=None):
     """
-    This template node is used to output page content and
-    is also used in the admin to dynamically generate input fields.
-    eg:
-    {% page_placeholder "sidebar" page_lookup %}
-    {% page_placeholder "sidebar" page_lookup inherit %}
-    {% page_placeholder "sidebar" page_lookup as varname %}
-    {% page_placeholder "sidebar" page_lookup or %}
-        <div>No content</div>
-    {% endpage_placeholder %}
-    Keyword arguments:
-        name: the name of the placeholder
-        page_lookup: lookup argument for Page. See `_get_page_by_untyped_arg()` for detailed
-            information on the allowed types and their interpretation for the `page_lookup`
-            argument.
-        inherit : optional argument which if given will result in inheriting
-            the content of the placeholder with the same name on parent pages
-        varname: context variable name. Output will be added to template context as this variable
-            instead of being returned.
-        or: optional argument which if given will make the template tag a block
-            tag whose content is shown if the placeholder is empty
+    Retrieve the placeholder's plugins and set them as a variable in the template context.
+    If the placeholder is empty, render the block as fallback content and return the
+    resulting HTML.
+    If the placeholder is editable and rendered on its own page, the edit script and markup
+    are added to the HTML content.
     """
+    content = ""
+    request = context.get("request")
 
-    name = "page_placeholder"
-    options = PlaceholderOptions(
-        Argument("name", resolve=False),
-        Argument("page_lookup"),
-        MultiValueArgument("extra_bits", required=False, resolve=False),
-        blocks=[("endpage_placeholder", "nodelist")],
-    )
+    if request:
 
-    # pylint: disable=arguments-differ,too-many-arguments
-    def render_tag(self, context, name, page_lookup, extra_bits, nodelist=None):
-        validate_placeholder_name(name)
+        context[varname] = []
+        page = _get_page_by_untyped_arg(page_lookup, request, get_site_id(None))
 
-        request = context.get("request")
-
-        if request:
-            page = _get_page_by_untyped_arg(page_lookup, request, get_site_id(None))
-
-            toolbar = get_toolbar_from_request(request)
-            renderer = toolbar.get_content_renderer()
-
-            inherit = "inherit" in extra_bits
-
-            # A placeholder is only editable on its own page
-            editable = page == request.current_page
-
-            try:
-                content = renderer.render_page_placeholder(
-                    slot=name,
-                    context=context,
-                    inherit=inherit,
-                    page=page,
-                    nodelist=nodelist,
-                    editable=editable,
-                )
-            except PlaceholderNotFound:
-                content = ""
-        else:
-            content = ""
-
-        if not content and nodelist:
-            content = nodelist.render(context)
-
-        if "as" in extra_bits:
-            try:
-                varname = extra_bits[extra_bits.index("as") + 1]
-            except IndexError:
-                raise template.TemplateSyntaxError(
-                    'the "as" word should be followed by the variable name'
-                )
-            context[varname] = content
+        if not page:
             return ""
 
-        return content
+        try:
+            placeholder = page.placeholders.get(slot=name)
+        except ObjectDoesNotExist:
+            return ""
+        else:
+            context[varname] = [
+                cms_plugin.get_plugin_instance()[0]
+                for cms_plugin in get_plugins(
+                    request, placeholder, template=page.get_template()
+                )
+            ]
+
+        # Default content if there is no plugins in the placeholder
+        if not context[varname] and nodelist:
+            content = nodelist.render(context)
+
+        # Add the edit script and markup to the content, only if the placeholder is editable
+        # and the visited page is the one on which the placeholder is declared.
+        toolbar = get_toolbar_from_request(request)
+        if placeholder.page == request.current_page and toolbar.edit_mode_active:
+            renderer = toolbar.get_content_renderer()
+            data = renderer.get_editable_placeholder_context(placeholder, page=page)
+            data["content"] = content
+            content = renderer.placeholder_edit_template.format(**data)
+
+    return content
 
 
 @register.tag("get_placeholder_plugins")
@@ -108,24 +73,20 @@ class GetPlaceholderPlugins(Placeholder):
     instead of rendering them eg:
 
         {% get_placeholder_plugins "logo" as varname %}
-        {% get_placeholder_plugins "logo" page_lookup as varname %}
-        {% get_placeholder_plugins "logo" page_lookup as varname or %}
+        {% get_placeholder_plugins "logo" as varname or %}
             <div>No content</div>
         {% endget_placeholder_plugins %}
 
-    This tag can typically be used in association with the block_plugin tag, in a placeholder
-    limited to one plugin, to customize the way it is rendered eg:
+    This tag can typically be used in association with the block_plugin tag, to customize the
+    way it is rendered eg:
 
-        {% get_placeholder_plugins "logo" page_lookup as plugins %}
+        {% get_placeholder_plugins "logo" as plugins %}
         {% blockplugin plugins.0 %}
             <img src="{% thumbnail instance.picture 300x150 %}"/>
         {% endblockplugin %}
 
     Keyword arguments:
         name: the name of the placeholder
-        page_lookup[optional]: lookup argument for Page. See `_get_page_by_untyped_arg()`
-            for detailed information on the allowed types and their interpretation for the
-            `page_lookup` argument.
         varname: context variable name. Output will be added to template context as this variable
             instead of being returned.
         or: optional argument which if given will make the template tag a block
@@ -138,7 +99,6 @@ class GetPlaceholderPlugins(Placeholder):
     name = "get_placeholder_plugins"
     options = PlaceholderOptions(
         Argument("name", resolve=False),
-        Argument("page_lookup", required=False),
         "as",
         Argument("varname", resolve=False),
         MultiValueArgument("extra_bits", required=False, resolve=False),
@@ -146,52 +106,54 @@ class GetPlaceholderPlugins(Placeholder):
     )
 
     # pylint: disable=arguments-differ,too-many-arguments
+    def render_tag(self, context, name, varname, extra_bits, nodelist=None):
+        return get_plugins_render_tag(context, name, varname, nodelist)
+
+
+@register.tag("get_page_plugins")
+class GetPagePlugins(Tag):
+    """
+    A template tag that gets plugins from a page's placeholder returns them as a context variable:
+
+        {% get_page_plugins "logo" page_lookup as varname %}
+        {% get_page_plugins "logo" page_lookup as varname or %}
+            <div>No content</div>
+        {% endget_page_plugins %}
+
+    This tag can typically be used in association with the block_plugin tag,
+    to render the retrieved plugins:
+
+        {% get_page_plugins "logo" page_lookup as plugins %}
+        {% blockplugin plugins.0 %}
+            <img src="{% thumbnail instance.picture 300x150 %}"/>
+        {% endblockplugin %}
+
+    Keyword arguments:
+        name: the name of the placeholder
+        page_lookup: lookup argument for Page. See `_get_page_by_untyped_arg()`
+            for detailed information on the allowed types and their interpretation for the
+            `page_lookup` argument.
+        varname: context variable name. Output will be added to template context as this variable
+            instead of being returned.
+        or: optional argument which if given will make the template tag a block
+            tag whose content is shown if the placeholder is empty
+    """
+
+    name = "get_page_plugins"
+    options = PlaceholderOptions(
+        Argument("name", resolve=False),
+        Argument("page_lookup"),
+        "as",
+        Argument("varname", resolve=False),
+        MultiValueArgument("extra_bits", required=False, resolve=False),
+        blocks=[("endget_page_plugins", "nodelist")],
+    )
+
+    # pylint: disable=arguments-differ,too-many-arguments, unused-argument
     def render_tag(
         self, context, name, page_lookup, varname, extra_bits, nodelist=None
     ):
-        """
-        Retrieves the placeholder's plugins and set them as a variable in the template context.
-        If the placeholder is empty, render the block as fallback content and return the
-        resulting HTML.
-        If the placholder is editable, the edit script and markup are added to the HTML content.
-        """
-        content = ""
-        request = context.get("request")
-
-        if request:
-
-            context[varname] = []
-            page = _get_page_by_untyped_arg(page_lookup, request, get_site_id(None))
-
-            if not page:
-                return ""
-
-            try:
-                placeholder = page.placeholders.get(slot=name)
-            except ObjectDoesNotExist:
-                return ""
-            else:
-                context[varname] = [
-                    cms_plugin.get_plugin_instance()[0]
-                    for cms_plugin in get_plugins(
-                        request, placeholder, template=page.get_template()
-                    )
-                ]
-
-            # Default content if there is no plugins in the placeholder
-            if not context[varname] and nodelist:
-                content = nodelist.render(context)
-
-            # Add the edit script and markup to the content, only if the placeholder is editable
-            # and the visited page is the one on which the placeholder is declared.
-            toolbar = get_toolbar_from_request(request)
-            if placeholder.page == request.current_page and toolbar.edit_mode_active:
-                renderer = toolbar.get_content_renderer()
-                data = renderer.get_editable_placeholder_context(placeholder, page=page)
-                data["content"] = content
-                content = renderer.placeholder_edit_template.format(**data)
-
-        return content
+        return get_plugins_render_tag(context, name, varname, nodelist, page_lookup)
 
 
 @register.tag()

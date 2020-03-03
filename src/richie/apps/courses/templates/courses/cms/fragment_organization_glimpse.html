@@ -9,9 +9,9 @@
     href="{{ organization_page.get_absolute_url }}"
 >
   <div class="organization-glimpse__logo">
-    {% get_placeholder_plugins "logo" organization_page as plugins or %}
+    {% get_page_plugins "logo" organization_page as plugins or %}
       <p class="organization-glimpse__logo__empty">{% trans "Logo" %}</p>
-    {% endget_placeholder_plugins %}
+    {% endget_page_plugins %}
     {% blockplugin plugins.0 %}
       <img src="{% thumbnail instance.picture 200x113 upscale subject_location=instance.picture.subject_location %}"
         srcset="
