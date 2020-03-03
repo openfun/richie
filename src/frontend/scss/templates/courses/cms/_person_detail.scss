@@ -66,6 +66,9 @@ $richie-person-detail-media-size: 10rem;
         flex-wrap: wrap;
         justify-content: center;
         margin: 0 0 0.5rem;
+        @include media-breakpoint-up(sm) {
+          justify-content: left;
+        }
       }
     }
   }
