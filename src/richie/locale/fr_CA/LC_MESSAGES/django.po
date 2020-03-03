@@ -1011,35 +1011,20 @@ msgid "Enrollment"
 msgstr "Inscription"
 
 #: apps/courses/templates/courses/cms/fragment_course_run.html:6
-#, python-format
-msgid "\n"
-"                From %(enrollment_start)s to %(enrollment_end)s\n"
-"            "
-msgstr "\n"
-"                Du %(enrollment_start)s au %(enrollment_end)s\n"
-"            "
+msgid "From %(enrollment_start)s to %(enrollment_end)s"
+msgstr "Du %(enrollment_start)s au %(enrollment_end)s"
 
-#: apps/courses/templates/courses/cms/fragment_course_run.html:9
+#: apps/courses/templates/courses/cms/fragment_course_run.html:8
 msgid "Course"
 msgstr "Cours"
 
-#: apps/courses/templates/courses/cms/fragment_course_run.html:11
-#, python-format
-msgid "\n"
-"                From %(start)s to %(end)s\n"
-"            "
-msgstr "\n"
-"                Du %(start)s au %(end)s\n"
-"            "
+#: apps/courses/templates/courses/cms/fragment_course_run.html:10
+msgid "From %(start)s to %(end)s"
+msgstr "Du %(start)s au %(end)s"
 
 #: apps/courses/templates/courses/cms/fragment_course_runs_list.html:10
-#, python-format
-msgid "\n"
-"                    %(title)s, from %(start)s to %(end)s\n"
-"                "
-msgstr "\n"
-"                    %(title)s, du %(start)s au %(end)s\n"
-"                "
+msgid "%(title)s, from %(start)s to %(end)s"
+msgstr "%(title)s, du %(start)s au %(end)s"
 
 #: apps/courses/templates/courses/cms/fragment_organization_main_logo.html:7
 #: apps/courses/templates/courses/cms/fragment_organization_main_logo.html:26

@@ -27,6 +27,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Make sure the course search API shows the 1st related organization by
   placeholder position as highlighted organization for a course instead of
   the first organization by node path.
+- Fix translations for segmented course runs on course page.
 
 ### Changed
 
