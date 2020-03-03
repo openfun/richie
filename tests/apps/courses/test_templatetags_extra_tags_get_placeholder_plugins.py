@@ -19,7 +19,7 @@ class GetPlaceholderPluginsTemplateTagsTestCase(CMSTestCase):
     def test_templatetags_get_placeholder_plugins_current_page(self):
         """
         The "get_placeholder_plugins" template tag should inject in the context, the plugins
-        of the targeted placeholder on the current page by default.
+        of the targeted placeholder on the current page.
         """
         page = create_page("Test", "richie/single_column.html", "en", published=True)
         placeholder = page.placeholders.all()[0]
@@ -39,39 +39,11 @@ class GetPlaceholderPluginsTemplateTagsTestCase(CMSTestCase):
         self.assertEqual(output, "<b>Test 1</b>\n<b>Test 2</b>\n")
 
     @transaction.atomic
-    def test_templatetags_get_placeholder_plugins_other_page(self):
-        """
-        The "get_placeholder_plugins" template tag should inject in the context, the plugins
-        of the targeted placeholder on the page targeted by a page lookup when it is provided.
-        """
-        page = create_page("Test", "richie/single_column.html", "en", published=True)
-        placeholder = page.placeholders.all()[0]
-        add_plugin(placeholder, CKEditorPlugin, "en", body="<b>Test 1</b>")
-        add_plugin(placeholder, CKEditorPlugin, "en", body="<b>Test 2</b>")
-
-        request = RequestFactory().get("/")
-        request.current_page = create_page(
-            "current", "richie/single_column.html", "en", published=True
-        )
-        request.user = AnonymousUser()
-
-        template = (
-            "{% load cms_tags extra_tags %}"
-            '{% get_placeholder_plugins "maincontent" page as plugins %}'
-            "{% for plugin in plugins %}{% render_plugin plugin %}{% endfor %}"
-        )
-        output = self.render_template_obj(template, {"page": page}, request)
-        self.assertEqual(output, "<b>Test 1</b>\n<b>Test 2</b>\n")
-
-    @transaction.atomic
     def test_templatetags_get_placeholder_plugins_empty(self):
         """
         The "get_placeholder_plugins" template tag should render its node content if it has
         no plugins and the "or keyword is passed.
         """
-        empty_page = create_page(
-            "Test", "richie/single_column.html", "en", published=True
-        )
         page = create_page("Test", "richie/single_column.html", "en", published=True)
         placeholder = page.placeholders.all()[0]
         add_plugin(placeholder, CKEditorPlugin, "en", body="<b>Test</b>")
@@ -84,14 +56,11 @@ class GetPlaceholderPluginsTemplateTagsTestCase(CMSTestCase):
 
         template = (
             "{% load cms_tags extra_tags %}"
-            '{% get_placeholder_plugins "maincontent" page as plugins or %}'
+            '{% get_placeholder_plugins "maincontent" as plugins or %}'
             "<i>empty content</i>{% endget_placeholder_plugins %}"
             "{% for plugin in plugins %}{% render_plugin plugin %}{% endfor %}"
         )
-        output = self.render_template_obj(template, {"page": page}, request)
-        self.assertEqual("<b>Test</b>\n", output)
-
-        output = self.render_template_obj(template, {"page": empty_page}, request)
+        output = self.render_template_obj(template, {}, request)
         self.assertEqual("<i>empty content</i>", output)
 
     @transaction.atomic
@@ -100,10 +69,6 @@ class GetPlaceholderPluginsTemplateTagsTestCase(CMSTestCase):
         The "get_placeholder_plugins" template tag should raise an error if it has block
         content but the "or keyword was forgotten.
         """
-        empty_page = create_page(
-            "Test", "richie/single_column.html", "en", published=True
-        )
-
         request = RequestFactory().get("/")
         request.current_page = create_page(
             "current", "richie/single_column.html", "en", published=True
@@ -112,12 +77,12 @@ class GetPlaceholderPluginsTemplateTagsTestCase(CMSTestCase):
 
         template_without_or = (
             "{% load cms_tags extra_tags %}"
-            '{% get_placeholder_plugins "maincontent" page as plugins %}'
+            '{% get_placeholder_plugins "maincontent" as plugins %}'
             "<i>empty content</i>{% endget_placeholder_plugins %}"
         )
 
         with self.assertRaises(TemplateSyntaxError):
-            self.render_template_obj(template_without_or, {"page": empty_page}, request)
+            self.render_template_obj(template_without_or, {}, request)
 
     @transaction.atomic
     def test_templatetags_get_placeholder_plugins_unknown_placeholder(self):
@@ -137,23 +102,4 @@ class GetPlaceholderPluginsTemplateTagsTestCase(CMSTestCase):
             "{% for plugin in plugins %}{% render_plugin plugin %}{% endfor %}"
         )
         output = self.render_template_obj(template, {}, request)
-        self.assertEqual(output, "")
-
-    def test_templatetags_get_placeholder_plugins_unknown_page(self):
-        """
-        The `get_placeholder_plugins` template tag should fail nicely when called with a page
-        lookup that returns no page.
-        """
-        request = RequestFactory().get("/")
-        request.current_page = create_page(
-            "current", "richie/single_column.html", "en", published=True
-        )
-        request.user = AnonymousUser()
-
-        template = (
-            "{% load cms_tags extra_tags %}"
-            '{% get_placeholder_plugins "maincontent" page as plugins %}'
-        )
-
-        output = self.render_template_obj(template, {"page": "unknown"}, request)
         self.assertEqual(output, "")

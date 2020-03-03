@@ -4,9 +4,9 @@
 <div class="person-glimpse">
   {% comment %}Use tabindex and aria-hidden on the image link as it is entirely redundant with the title link{% endcomment %}
   <a class="person-glimpse__media" href="{{ person_page.get_absolute_url }}" tabindex="-1" aria-hidden="true">
-    {% get_placeholder_plugins "portrait" person_page as plugins or %}
+    {% get_page_plugins "portrait" person_page as plugins or %}
       <p class="person-glimpse__media__empty">{% trans "Portrait" %}</p>
-    {% endget_placeholder_plugins %}
+    {% endget_page_plugins %}
     {% blockplugin plugins.0 %}
       <img src="{% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location %}"
         srcset="
