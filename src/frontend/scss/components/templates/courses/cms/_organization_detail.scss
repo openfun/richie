@@ -103,27 +103,6 @@
     }
   }
 
-  &__categories {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-
-    .category-plugin-tag {
-      @include button-tiny($form-factor: 'pill');
-      @include r-button-colors(
-        r-theme-val(organization-detail, categories),
-        $apply-border: true
-      );
-      margin: 0 0.5rem 0.5rem 0;
-
-      &__title {
-        padding: 0;
-        font-weight: bold;
-        background: transparent;
-      }
-    }
-  }
-
   &__description {
     margin-top: 1rem;
     font-size: 1rem;

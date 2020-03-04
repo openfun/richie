@@ -26,10 +26,7 @@
         {% get_page_plugins "course_icons" course_page as icon_plugins %}
         {% if icon_plugins %}
         <div class="course-glimpse__icon">
-            <div class="course-glimpse__band" {% comment %}style="background: {{ icon_plugins.0.page.category.color }};"{% endcomment %} aria-hidden="true">
-                {{ icon_plugins.0.page.get_title }}
-            </div>
-            {% with variant="mark" %}
+            {% with variant="badge" has_link=False %}
                 {% render_plugin icon_plugins.0 %}
             {% endwith %}
         </div>

@@ -58,10 +58,10 @@
             <h1 class="organization-detail__title">{% render_model request.current_page "title" %}</h1>
 
             {% if current_page.publisher_is_draft %}
-            <div class="organization-detail__categories">
+            <div class="category-tag-list category-tag-list--primary">
               {% with variant="tag" %}
                 {% placeholder "categories" or %}
-                  <p class="organization-detail__empty">
+                  <p class="category-tag-list__empty">
                     {% trans "No associated categories" %}
                   </p>
                 {% endplaceholder %}

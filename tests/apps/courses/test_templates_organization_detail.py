@@ -109,8 +109,8 @@ class OrganizationCMSTestCase(CMSTestCase):
         self.assertNotContains(
             response,
             (
-                '<a class="category-plugin-tag" href="{:s}">'
-                '<div class="category-plugin-tag__title">{:s}</div></a>'
+                '<a class="category-tag" href="{:s}">'
+                '<span class="category-tag__title">{:s}</span></a>'
             ).format(
                 published_category.public_extension.extended_object.get_absolute_url(),
                 published_category.public_extension.extended_object.get_title(),
@@ -206,8 +206,8 @@ class OrganizationCMSTestCase(CMSTestCase):
         self.assertContains(
             response,
             (
-                '<a class="category-plugin-tag" href="{:s}">'
-                '<div class="category-plugin-tag__title">{:s}</div></a>'
+                '<a class="category-tag" href="{:s}">'
+                '<span class="category-tag__title">{:s}</span></a>'
             ).format(
                 published_category.public_extension.extended_object.get_absolute_url(),
                 published_category.public_extension.extended_object.get_title(),
@@ -218,8 +218,8 @@ class OrganizationCMSTestCase(CMSTestCase):
         self.assertContains(
             response,
             (
-                '<a class="category-plugin-tag category-plugin-tag--draft" '
-                'href="{:s}"><div class="category-plugin-tag__title">{:s}</div></a>'
+                '<a class="category-tag category-tag--draft" '
+                'href="{:s}"><span class="category-tag__title">{:s}</span></a>'
             ).format(
                 not_published_category.extended_object.get_absolute_url(),
                 not_published_category.extended_object.get_title(),

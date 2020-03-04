@@ -23,17 +23,15 @@
   }
 }
 
-//
-// Single feature item
-//
 @mixin feature-item(
-  $divider: null,
+  $size: null,
+  $divider: 1rem,
   $expand: false,
   $hjustify: flex-start,
   $halign: flex-start,
   $valign: center,
-  $icon-size: null,
-  $icon-hspace: null,
+  $icon-size: 1rem,
+  $icon-hspace: 0.25rem,
   $icon-fill: null,
   $parent_selector: &
 ) {
@@ -42,6 +40,16 @@
   align-content: $halign;
   align-items: $valign;
   margin-right: $divider;
+
+  @if $size {
+    @if $divider {
+      @include sv-flex(1, 1, calc(#{$size} - #{$divider}));
+    } @else {
+      @include sv-flex(1, 1, $size);
+    }
+  } @else {
+    @include sv-flex(0, 0, auto);
+  }
 
   #{$parent_selector}__term {
     @if $expand {
@@ -64,69 +72,42 @@
 
 @mixin feature-list(
   $width: 100%,
-  $container-width: $width,
-  $divider: null,
+  $margin: 0,
+  $padding: 0,
   $list-halign: flex-start,
   $list-hjustify: flex-start,
   $list-valign: stretch,
-  $item-parent: &,
-  $item-divider: 1rem,
-  $item-hjustify: flex-start,
-  $item-halign: flex-start,
-  $item-valign: center,
-  $item-size: null,
-  $icon-size: 1rem,
-  $icon-hspace: 0.25rem,
-  $icon-fill: null
+  $container: true,
+  $container-width: $width,
+  $row: true
 ) {
-  $base-selector: &;
-
   display: flex;
   width: $width;
-  margin: 0;
-  padding: 0;
+  margin: if($container, null, $margin);
+  padding: if($container, null, $padding);
   flex-wrap: wrap;
   justify-content: $list-hjustify;
   align-content: $list-halign;
   align-items: $list-valign;
   list-style-type: none;
 
-  &__container {
-    display: flex;
-    width: $container-width;
-    margin: 0;
-    padding: 0;
-    flex-wrap: wrap;
-    justify-content: $list-hjustify;
-    align-content: $list-halign;
-    align-items: $list-valign;
-    list-style-type: none;
+  @if $container {
+    &__container {
+      display: flex;
+      width: $container-width;
+      margin: $margin;
+      padding: $padding;
+      flex-wrap: wrap;
+      justify-content: $list-hjustify;
+      align-content: $list-halign;
+      align-items: $list-valign;
+      list-style-type: none;
+    }
   }
 
-  &__row {
-    @include feature-row;
-  }
-
-  &__item {
-    @include feature-item(
-      $divider: $item-divider,
-      $hjustify: $item-hjustify,
-      $halign: $item-halign,
-      $valign: $item-valign,
-      $icon-size: $icon-size,
-      $icon-hspace: $icon-hspace,
-      $icon-fill: $icon-fill,
-      $parent_selector: $base-selector,
-      $expand: if($item-size, true, false)
-    );
-    @if $item-size {
-      @if $item-divider {
-        @include sv-flex(1, 1, calc(#{$item-size} - #{$item-divider}));
-      } @else {
-        @include sv-flex(1, 1, $item-size);
-      }
-    } @else {
-      @include sv-flex(0, 0, auto);
+  @if $row {
+    &__row {
+      @include feature-row;
     }
   }
 }

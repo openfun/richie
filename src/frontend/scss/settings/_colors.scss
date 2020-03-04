@@ -282,10 +282,6 @@ $r-theme: (
     base: $primary-scheme,
     base-hover: $primary-scheme,
   ),
-  category-glimpse-badges: (
-    base-border: r-color('light-grey'),
-    tag: $primary-scheme,
-  ),
   category-glimpse: (
     base-border: rgba(r-color('black'), 0.125),
     base-hover-border: r-color('blue-green'),
@@ -316,7 +312,17 @@ $r-theme: (
     svg-icon-fill: r-color('white'),
     footer: $primary-scheme,
   ),
-  feature-inlines: (
+  category-badges: (
+    primary-item: $primary-scheme,
+    secondary-item: $secondary-scheme,
+    tertiary-item: $tertiary-scheme,
+  ),
+  category-tags: (
+    primary-item: $primary-scheme,
+    secondary-item: $secondary-scheme,
+    tertiary-item: $tertiary-scheme,
+  ),
+  characteristics: (
     primary-item: $primary-scheme,
     secondary-item: $secondary-scheme,
     tertiary-item: $tertiary-scheme,
@@ -383,6 +389,7 @@ $r-theme: (
     aside-glimpse-title-border: r-color('denim'),
     categories: $primary-scheme,
     categories-tag-background: transparent,
+    top-border: r-color('light-grey'),
     theme-border: r-color('blue-green'),
     pubdate-border: r-color('blue-green'),
     authors-border: r-color('blue-green'),

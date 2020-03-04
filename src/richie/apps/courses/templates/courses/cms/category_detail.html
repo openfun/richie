@@ -82,7 +82,7 @@
                     <h2 class="category-detail__title">{% trans "Sub categories" %}</h2>
                     <section class="category-glimpse-list">
                         {% for child_category in children_categories %}
-                            {% include "courses/cms/fragment_category_glimpse.html" with category=child_category %}
+                            {% include "courses/cms/fragment_category_glimpse.html" with category=child_category variant="glimpse" %}
                         {% endfor %}
                     </section>
                 </div>

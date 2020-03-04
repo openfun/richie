@@ -123,10 +123,6 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
     // Would take back again the flat color or does the category will
     // enable to pickup gradient color ?
     background: transparent !important;
-    // NOTE: Deprecated element but still in React component
-    &__end {
-      display: none;
-    }
   }
 
   &__content {

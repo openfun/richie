@@ -36,3 +36,70 @@
     }
   }
 }
+
+// Special section for tiny category glimpses
+.section-mini-category {
+  @include feature-list($list-hjustify: center, $row: false);
+
+  .category-glimpse {
+    flex-basis: calc(6.5rem - 1rem);
+    max-width: calc(6.5rem - 1rem);
+    border: 0;
+
+    &__logo {
+      img {
+        max-width: 3.75rem;
+        margin: 0 auto;
+      }
+    }
+  }
+
+  &__row {
+    text-align: center;
+  }
+
+  &__title {
+    @include font-size($h5-font-size);
+    display: block;
+    width: 100%;
+    margin: 0 auto 0.5rem;
+    padding: 0 1rem;
+    color: inherit;
+    font-weight: normal;
+    text-align: center;
+
+    @include media-breakpoint-up(lg) {
+      padding: 0 20%;
+    }
+  }
+
+  &__term {
+    display: block;
+    margin: 0.5rem auto 0;
+    max-width: 80%;
+    text-align: center;
+    color: inherit;
+  }
+
+  // Neutralize section behaviors as there are just used here as structural
+  // element
+  .section {
+    width: 100%;
+    margin: 0 !important;
+    padding: 0 !important;
+
+    &__row {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    &__items {
+      display: flex;
+      margin: 0 !important;
+      padding: 0 !important;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-content: center;
+    }
+  }
+}

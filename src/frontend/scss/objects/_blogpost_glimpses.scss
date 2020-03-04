@@ -78,9 +78,6 @@ $glimpse-gutter: 1.25rem;
     position: relative;
     margin: 0 0 0.1rem;
     padding-left: calc(10% + 0.2rem);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
 
     &::before {
       content: '';
@@ -91,14 +88,36 @@ $glimpse-gutter: 1.25rem;
       border-top: 1px solid r-theme-val(blogpost-glimpse, theme-border);
     }
 
-    &__item {
-      & + .blogpost-glimpse__categories__item {
-        margin-left: 0.1rem;
+    .category-tag {
+      display: inline-block;
+      margin: 0 0 0 0.1rem;
+      color: inherit;
+
+      &::before {
+        content: '•';
+        position: relative;
+        left: -0.6rem;
+      }
+
+      &:first-child {
+        margin-left: 0;
 
         &::before {
-          margin-left: 0.1rem;
-          margin-right: 0.2rem;
-          content: '•';
+          content: '';
+          display: none;
+        }
+      }
+
+      .category-tag__title {
+        display: inline-block;
+        padding: 0;
+        color: inherit;
+        font-weight: bold;
+        background: transparent;
+
+        img,
+        svg {
+          display: none;
         }
       }
     }

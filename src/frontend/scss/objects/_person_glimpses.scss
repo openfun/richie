@@ -85,7 +85,7 @@
       text-align: left;
     }
 
-    .category-plugin-tag {
+    .category-tag {
       @include button-tiny($form-factor: 'pill');
       @include r-button-colors(
         r-theme-val(person-glimpse, category),

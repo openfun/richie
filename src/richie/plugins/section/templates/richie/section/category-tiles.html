@@ -1,0 +1,18 @@
+{% load cms_tags %}{% spaceless %}
+
+<div class="section-mini-category">
+    <div class="section-mini-category__container">
+        {% if instance.title %}
+            <h{{ header_level|default:2 }} class="section-mini-category__title">{{ instance.title }}</h{{ header_level|default:2 }}>
+        {% endif %}
+        <div class="category-glimpse-list">
+        {% for plugin in instance.child_plugin_instances %}
+            {% with variant="glimpse" %}
+                {% render_plugin plugin %}
+            {% endwith %}
+        {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endspaceless %}

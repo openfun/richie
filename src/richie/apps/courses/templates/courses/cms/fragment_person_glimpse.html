@@ -27,9 +27,11 @@
                 </h{{ header_level|default:2 }}>
             </a>
             <div class="person-glimpse__categories">
-                {% with variant="tag" %}
-                    {% show_placeholder "categories" person_page %}
-                {% endwith %}
+                <div class="category-tag-list category-tag-list--primary">
+                    {% with variant="tag" %}
+                        {% show_placeholder "categories" person_page %}
+                    {% endwith %}
+                </div>
             </div>
             <div class="person-glimpse__bio">
                 {% show_placeholder "bio" person_page %}

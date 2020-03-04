@@ -24,8 +24,8 @@
 {% spaceless %}
 {% get_related_category_pages request.current_page.parent_page.get_child_pages as categories %}
 {% if categories %}
-<div class="category-glimpse-badges">
-    <div class="category-glimpse-badges__container">
+<div class="category-tag-list category-tag-list--primary">
+    <div class="category-tag-list__container">
         {% for category in categories %}
             {% include "courses/cms/fragment_category_glimpse.html" with variant="tag" %}
         {% endfor %}

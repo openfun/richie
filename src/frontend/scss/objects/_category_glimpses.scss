@@ -1,86 +1,14 @@
-// Category glimpses
+// Category glimpses variants
 //
-// A flex grid of category entries
 
-// Grid of category cells
-.category-glimpse-list {
-  @include make-container-max-widths();
-  display: flex;
-  margin: 0 auto;
-  padding: 1rem 0;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-
-  &__title {
-    @include sv-flex(1, 0, 100%);
-    padding: 0.5rem;
-    text-align: left;
-  }
-}
-
-// List of category badges
-.category-glimpse-badges {
-  display: flex;
-  padding: 1rem 0 0.5rem;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  align-items: flex-start;
-  border-bottom: 1px solid r-theme-val(category-glimpse-badges, base-border);
-
-  &__container {
-    @include make-container();
-    @include make-container-max-widths();
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-items: flex-start;
-  }
-
-  .category-plugin-tag {
-    @include button-tiny($form-factor: 'pill');
-    @include r-button-colors(
-      r-theme-val(category-glimpse-badges, tag),
-      $apply-border: true,
-      $include-hover: true
-    );
-    font-weight: $font-weight-boldest;
-    margin-bottom: 0.5rem;
-    margin-right: 1rem;
-
-    // Badge does not display category icon
-    &__image {
-      display: none;
-    }
-  }
-}
-
+//
+// Glimpse variant
+//
 .category-glimpse {
-  $glimpse-item-selector: &;
-  $glimpse-gutter: 0.5rem;
-
-  @include sv-flex(1, 0, calc(50% - #{$glimpse-gutter * 2}));
-  display: flex;
-  margin: $glimpse-gutter;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  align-content: space-between;
+  display: inline-block;
   border: 1px solid r-theme-val(category-glimpse, base-border);
   border-radius: $border-radius;
   background: r-theme-val(category-glimpse, base-background);
-
-  // Responsive adjustments
-  @include media-breakpoint-up(md) {
-    @include sv-flex(1, 0, calc(33.3333% - #{$glimpse-gutter * 2}));
-  }
-  @include media-breakpoint-up(lg) {
-    @include sv-flex(1, 0, calc(25% - #{$glimpse-gutter * 2}));
-  }
-  @include media-breakpoint-up(xl) {
-    @include sv-flex(1, 0, calc(16.6667% - #{$glimpse-gutter * 2}));
-  }
 
   &__body {
     @include sv-flex(1, 0, 100%);
@@ -89,7 +17,6 @@
     flex-wrap: nowrap;
     align-items: stretch;
     color: r-theme-val(category-glimpse, body-color);
-    font-size: small;
   }
 
   &__logo {
@@ -121,6 +48,7 @@
     @include sv-flex(0, 0, auto);
     padding: 0.3rem;
     word-wrap: break-word;
+    font-family: inherit;
     font-size: inherit;
     font-weight: inherit;
     color: r-theme-val(category-glimpse, title-color);
@@ -133,9 +61,251 @@
     color: r-theme-val(category-glimpse, base-hover-color);
     border: 1px solid r-theme-val(category-glimpse, base-hover-border);
 
-    #{$glimpse-item-selector}__title {
+    &__title {
       color: r-theme-val(category-glimpse, title-hover-color);
       text-decoration: none;
+    }
+  }
+}
+
+//
+// Glimpse list
+//
+.category-glimpse-list {
+  @include make-container-max-widths();
+  display: flex;
+  margin: 0 auto;
+  padding: 1rem 0;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  &__title {
+    @include sv-flex(1, 0, 100%);
+    padding: 0.5rem;
+    text-align: left;
+  }
+
+  .category-glimpse {
+    $glimpse-gutter: 0.5rem;
+
+    @include sv-flex(1, 0, calc(50% - #{$glimpse-gutter * 2}));
+    display: flex;
+    margin: $glimpse-gutter;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: space-between;
+
+    // Responsive adjustments
+    @include media-breakpoint-up(md) {
+      @include sv-flex(1, 0, calc(33.3333% - #{$glimpse-gutter * 2}));
+    }
+    @include media-breakpoint-up(lg) {
+      @include sv-flex(1, 0, calc(25% - #{$glimpse-gutter * 2}));
+    }
+    @include media-breakpoint-up(xl) {
+      @include sv-flex(1, 0, calc(16.6667% - #{$glimpse-gutter * 2}));
+    }
+  }
+}
+
+//
+// Tag variant
+//
+.category-tag {
+  @include button-tiny(
+    $form-factor: 'pill',
+    $font-weight: $font-weight-boldest,
+    $font-color: inherit
+  );
+
+  &__title {
+    font-family: inherit;
+    font-weight: inherit;
+    color: inherit;
+  }
+
+  // When using through a color scheme, adopts its colors
+  &--primary {
+    @include r-button-colors(
+      r-theme-val(category-tags, primary-item),
+      $apply-border: true
+    );
+  }
+  &--secondary {
+    @include r-button-colors(
+      r-theme-val(category-tags, secondary-item),
+      $apply-border: true
+    );
+  }
+
+  &--tertiary {
+    @include r-button-colors(
+      r-theme-val(category-tags, tertiary-item),
+      $apply-border: true
+    );
+  }
+}
+
+//
+// Tag list
+//
+.category-tag-list {
+  @include feature-list($padding: 1rem 0 0.5rem);
+
+  &__title {
+    @include sv-flex(1, 0, 100%);
+    padding: 0.5rem 0;
+    text-align: left;
+  }
+
+  &__container {
+    @include make-container();
+    @include make-container-max-widths();
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .category-tag {
+    margin-bottom: 0.5rem;
+    margin-right: 1rem;
+  }
+
+  // When using through a color scheme, adopts its colors
+  &--primary {
+    .category-tag {
+      @include r-button-colors(
+        r-theme-val(category-tags, primary-item),
+        $apply-border: true
+      );
+    }
+  }
+  &--secondary {
+    .category-tag {
+      @include r-button-colors(
+        r-theme-val(category-tags, secondary-item),
+        $apply-border: true
+      );
+    }
+  }
+  &--tertiary {
+    .category-tag {
+      @include r-button-colors(
+        r-theme-val(category-tags, tertiary-item),
+        $apply-border: true
+      );
+    }
+  }
+}
+
+//
+// Badge variant
+//
+.category-badge {
+  @include button-tiny(
+    $form-factor: 'pill',
+    $font-color: inherit,
+    $font-weight: $font-weight-boldest
+  );
+
+  &__title {
+    font-family: inherit;
+    font-weight: inherit;
+    color: inherit;
+  }
+
+  &__icon {
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: auto;
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+  }
+
+  // When using through a color scheme, adopts its colors
+  &--primary {
+    @include r-button-colors(
+      r-theme-val(category-badges, primary-item),
+      $apply-border: true
+    );
+  }
+  &--secondary {
+    @include r-button-colors(
+      r-theme-val(category-badges, secondary-item),
+      $apply-border: true
+    );
+  }
+
+  &--tertiary {
+    @include r-button-colors(
+      r-theme-val(category-badges, tertiary-item),
+      $apply-border: true
+    );
+  }
+}
+
+//
+// Badge list
+//
+.category-badge-list {
+  @include feature-list();
+
+  &__row {
+    text-align: center;
+  }
+
+  &__title {
+    @include sv-flex(1, 0, 100%);
+    padding: 0.5rem 0;
+    text-align: left;
+  }
+
+  &__term {
+    color: inherit;
+    align-self: center;
+  }
+
+  .category-badge {
+    @include button-tiny(
+      $form-factor: 'pill',
+      $display: flex,
+      $font-color: inherit,
+      $font-weight: $font-weight-boldest
+    );
+    margin-bottom: 0.5rem;
+    margin-right: 1rem;
+    align-items: center;
+  }
+
+  // When using through a color scheme, adopts its colors
+  &--primary {
+    .category-badge {
+      @include r-button-colors(
+        r-theme-val(category-badges, primary-item),
+        $apply-border: true
+      );
+    }
+  }
+  &--secondary {
+    .category-badge {
+      @include r-button-colors(
+        r-theme-val(category-badges, secondary-item),
+        $apply-border: true
+      );
+    }
+  }
+  &--tertiary {
+    .category-badge {
+      @include r-button-colors(
+        r-theme-val(category-badges, tertiary-item),
+        $apply-border: true
+      );
     }
   }
 }

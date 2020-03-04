@@ -57,10 +57,11 @@
         <div class="blogpost-glimpse__content">
             <div class="blogpost-glimpse__wrapper">
                 <div class="blogpost-glimpse__categories">
-                    {% get_placeholder_plugins "categories" blogpost_page as plugins %}
-                        {% for plugin in plugins %}
-                            <span class="blogpost-glimpse__categories__item">{{ plugin.relevant_page.get_title }}</span>
-                        {% endfor %}
+                    {% with variant="tag" has_link=False %}
+                        {% page_placeholder "categories" blogpost_page or %}
+                            <span class="blogpost-glimpse__empty">{% trans 'No categories yet.' %}</span>
+                        {% endpage_placeholder %}
+                    {% endwith %}
                 </div>
                 <p class="blogpost-glimpse__title">{{ blogpost_page.get_title }}</p>
             </div>
@@ -95,10 +96,11 @@
         <div class="blogpost-glimpse__content">
             <div class="blogpost-glimpse__wrapper">
                 <div class="blogpost-glimpse__categories">
-                    {% get_placeholder_plugins "categories" blogpost_page as plugins %}
-                    {% for plugin in plugins %}
-                        <span class="blogpost-glimpse__categories__item">{{ plugin.relevant_page.get_title }}</span>
-                    {% endfor %}
+                    {% with variant="tag" has_link=False %}
+                        {% page_placeholder "categories" blogpost_page or %}
+                            <span class="blogpost-glimpse__empty">{% trans 'No categories yet.' %}</span>
+                        {% endpage_placeholder %}
+                    {% endwith %}
                 </div>
 
                 {% if variant == "favorite" %}
