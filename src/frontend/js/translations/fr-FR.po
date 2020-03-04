@@ -1,19 +1,18 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2019-12-04T10:12:31.790Z\n"
+"POT-Creation-Date: 2020-01-22T09:13:35.666Z\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "MIME-Version: 1.0\n"
-"X-Generator: crowdin.com\n"
+"X-Generator: react-intl-po\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Crowdin-Project: richie\n"
 "X-Crowdin-Language: fr\n"
 "X-Crowdin-File: frontend.pot\n"
 "Project-Id-Version: richie\n"
-"Last-Translator: Samuel Paccoud (sampaccoud)\n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
-"PO-Revision-Date: 2019-12-10 07:30\n"
+"PO-Revision-Date: 2020-03-04 12:48\n"
 
 #. [components.SearchFilterGroupModal.modalTitle] - Title for the modal to add more filter values in the search filters modal.
 #. defaultMessage is:
@@ -197,6 +196,13 @@ msgstr "Résultats {start, number} à {end, number} sur {courseCount, number} {c
 #: i18n/js/components/UserLogin/index.json
 msgid "Sign up"
 msgstr "Inscription"
+
+#. [components.Search.errorMessage] - Error message for Search view when the request to load courses fails
+#. defaultMessage is:
+#. Something's wrong! Courses could not be loaded.
+#: i18n/js/components/Search/index.json
+msgid "Something's wrong! Courses could not be loaded."
+msgstr "Quelque chose s'est mal passé ! Les cours n'ont pas pu être chargés."
 
 #. [components.SearchFilterGroupModal.error] - Error message when the search for more filter value fails in the search filters modal.
 #. defaultMessage is:
