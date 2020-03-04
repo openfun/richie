@@ -136,7 +136,7 @@ class CoursePluginTestCase(TestCase):
         # The course's icon should be present
         pattern = (
             r'<div class="course-glimpse__icon">'
-            r'.*<img src="/media/filer_public_thumbnails/filer_public/.*icon\.jpg__60x60'
+            r'.*<img src="/media/filer_public_thumbnails/filer_public/.*icon\.jpg__40x40'
             r'.*alt="icon title"'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
@@ -190,7 +190,7 @@ class CoursePluginTestCase(TestCase):
         # The course's icon should be present
         pattern = (
             r'<div class="course-glimpse__icon">'
-            r'.*<img src="/media/filer_public_thumbnails/filer_public/.*icon\.jpg__60x60'
+            r'.*<img src="/media/filer_public_thumbnails/filer_public/.*icon\.jpg__40x40'
             r'.*alt="titre icone"'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))

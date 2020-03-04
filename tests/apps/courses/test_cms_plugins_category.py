@@ -147,10 +147,9 @@ class CategoryPluginTestCase(CMSTestCase):
         # And CMS page title should be in title attribute of the link
         self.assertContains(
             response,
-            (
-                '<a class="category-glimpse category-glimpse--link" '
-                'href="/en/public-title/"'
-            ).format(title=category.public_extension.extended_object.get_title()),
+            ('<a class="category-glimpse" ' 'href="/en/public-title/"').format(
+                title=category.public_extension.extended_object.get_title()
+            ),
             status_code=200,
         )
         # The category's title should be wrapped in a div
@@ -176,10 +175,9 @@ class CategoryPluginTestCase(CMSTestCase):
         response = self.client.get(url)
         self.assertContains(
             response,
-            (
-                '<a class="category-glimpse category-glimpse--link" '
-                'href="/fr/titre-publique/"'
-            ).format(title=category.public_extension.extended_object.get_title()),
+            ('<a class="category-glimpse" ' 'href="/fr/titre-publique/"').format(
+                title=category.public_extension.extended_object.get_title()
+            ),
             status_code=200,
         )
         pattern = (

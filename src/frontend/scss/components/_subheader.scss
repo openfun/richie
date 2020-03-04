@@ -61,7 +61,8 @@ $r-subheader-search-title-width: 19rem !default; // aligned on computed search r
       flex-wrap: wrap;
     }
 
-    .feature-inlines__item {
+    .category-badges__item,
+    .characteristic__item {
       color: inherit;
 
       @include media-breakpoint-down(lg) {
@@ -73,7 +74,8 @@ $r-subheader-search-title-width: 19rem !default; // aligned on computed search r
       }
     }
 
-    .feature-inlines__item__icon {
+    .category-badges__item__icon,
+    .characteristic__item__icon {
       width: 1.5rem;
       height: 1.5rem;
     }

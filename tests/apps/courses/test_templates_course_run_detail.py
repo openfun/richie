@@ -94,8 +94,8 @@ class CourseRunCMSTestCase(CMSTestCase):
             self.assertContains(
                 response,
                 (
-                    '<a class="feature-inlines__item" href="{:s}">'
-                    '<span class="feature-inlines__term">{:s}</span></a>'
+                    '<a class="category-badge" href="{:s}">'
+                    '<span class="category-badge__title">{:s}</span></a>'
                 ).format(
                     category.extended_object.get_absolute_url(),
                     category.extended_object.get_title(),
@@ -216,8 +216,8 @@ class CourseRunCMSTestCase(CMSTestCase):
             self.assertContains(
                 response,
                 (
-                    '<a class="feature-inlines__item" href="{:s}">'
-                    '<span class="feature-inlines__term">{:s}</span></a>'
+                    '<a class="category-badge" href="{:s}">'
+                    '<span class="category-badge__title">{:s}</span></a>'
                 ).format(
                     category.extended_object.get_absolute_url(),
                     category.extended_object.get_title(),
@@ -231,10 +231,10 @@ class CourseRunCMSTestCase(CMSTestCase):
                 response,
                 (
                     '<a class="{element:s} {element:s}--draft" href="{url:s}">'
-                    '<span class="feature-inlines__term">{title:s}</span></a>'
+                    '<span class="category-badge__title">{title:s}</span></a>'
                 ).format(
                     url=category.extended_object.get_absolute_url(),
-                    element="feature-inlines__item",
+                    element="category-badge",
                     title=category.extended_object.get_title(),
                 ),
                 html=True,

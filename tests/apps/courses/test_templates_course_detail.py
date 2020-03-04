@@ -101,8 +101,8 @@ class CourseCMSTestCase(CMSTestCase):
             self.assertContains(
                 response,
                 (
-                    '<a class="feature-inlines__item" href="{:s}">'
-                    '<span class="feature-inlines__term">{:s}</span></a>'
+                    '<a class="category-badge" href="{:s}">'
+                    '<span class="category-badge__title">{:s}</span></a>'
                 ).format(
                     category.extended_object.get_absolute_url(),
                     category.extended_object.get_title(),
@@ -114,9 +114,9 @@ class CourseCMSTestCase(CMSTestCase):
 
         # Only published icons should be present on the page
         pattern = (
-            r'<a.*class="feature-inlines__item".*href="{link:s}".*>'
-            r'<img src="/media/filer_public_thumbnails/filer_public/.*icon\.jpg.*alt="">'
-            r'<span class="feature-inlines__term">'
+            r'<a.*class="category-badge".*href="{link:s}".*>'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*icon\.jpg.*alt="{title:s}">'
+            r'<span class="category-badge__title">'
             r".*{title:s}.*</span>"
         )
 
@@ -229,8 +229,8 @@ class CourseCMSTestCase(CMSTestCase):
             self.assertContains(
                 response,
                 (
-                    '<a class="feature-inlines__item" href="{:s}">'
-                    '<span class="feature-inlines__term">{:s}</span></a>'
+                    '<a class="category-badge" href="{:s}">'
+                    '<span class="category-badge__title">{:s}</span></a>'
                 ).format(
                     category.extended_object.get_absolute_url(),
                     category.extended_object.get_title(),
@@ -243,10 +243,10 @@ class CourseCMSTestCase(CMSTestCase):
                 response,
                 (
                     '<a class="{element:s} {element:s}--draft" href="{url:s}">'
-                    '<span class="feature-inlines__term">{title:s}</span></a>'
+                    '<span class="category-badge__title">{title:s}</span></a>'
                 ).format(
                     url=category.extended_object.get_absolute_url(),
-                    element="feature-inlines__item",
+                    element="category-badge",
                     title=category.extended_object.get_title(),
                 ),
                 html=True,
@@ -272,7 +272,7 @@ class CourseCMSTestCase(CMSTestCase):
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
         pattern = (
-            r'<ul class="feature-inlines__container feature-inlines__container--categories">'
+            r'<div class="category-badge-list__container">'
             r'<div class="cms-placeholder'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))

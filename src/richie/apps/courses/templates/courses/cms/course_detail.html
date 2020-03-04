@@ -30,19 +30,19 @@
                 <div class="subheader__main">
                     {% block categories %}
                     {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_icons" or not current_page|is_empty_placeholder:"course_categories" %}
-                    <div class="feature-inlines">
-                        <ul class="feature-inlines__container feature-inlines__container--categories">
-                        {% with variant="feature" %}
+                    <div class="category-badge-list">
+                        <div class="category-badge-list__container">
+                        {% with variant="badge" %}
                         {% placeholder "course_icons" %}
                         {% placeholder "course_categories" or %}
                             {% if current_page.publisher_is_draft and current_page|is_empty_placeholder:"course_icons" %}
-                            <li class="feature-inlines__empty">
+                            <span class="category-badge-list__empty">
                                 {% trans "No associated categories" %}
-                            </li>
+                            </span>
                             {% endif %}
                         {% endplaceholder %}
                         {% endwith %}
-                        </ul>
+                        </div>
                     </div>
                     {% endif %}
                     {% endblock categories %}
@@ -74,23 +74,23 @@
 
                         {% block synopsis %}
                         {% if course.duration or course.effort or current_page.publisher_is_draft %}
-                        <div class="feature-inlines">
-                            <ul class="feature-inlines__container feature-inlines__container--times">
+                        <div class="characteristics">
+                            <ul class="characteristics__container">
                             {% render_model_block course "duration,effort" %}
                                 {% if instance.duration or current_page.publisher_is_draft %}
-                                <li class="feature-inlines__item">
-                                    <svg role="img" class="feature-inlines__icon" aria-hidden="true">
+                                <li class="characteristics__item">
+                                    <svg role="img" class="characteristics__icon" aria-hidden="true">
                                         <use xlink:href="{% static 'richie/icons.svg' %}#icon-clock" />
                                     </svg>
-                                    <span class="feature-inlines__term">{% trans "Duration:" %} {{ instance.get_duration_display|default:"NA" }}</span>
+                                    <span class="characteristics__term">{% trans "Duration:" %} {{ instance.get_duration_display|default:"NA" }}</span>
                                 </li>
                                 {% endif %}
                                 {% if instance.effort or current_page.publisher_is_draft %}
-                                <li class="feature-inlines__item">
-                                    <svg role="img" class="feature-inlines__icon" aria-hidden="true">
+                                <li class="characteristics__item">
+                                    <svg role="img" class="characteristics__icon" aria-hidden="true">
                                         <use xlink:href="{% static 'richie/icons.svg' %}#icon-stopwatch" />
                                     </svg>
-                                    <span class="feature-inlines__term">{% trans "Effort:" %} {{ instance.get_effort_display|default:"NA" }}</span>
+                                    <span class="characteristics__term">{% trans "Effort:" %} {{ instance.get_effort_display|default:"NA" }}</span>
                                 </li>
                                 {% endif %}
                             {% endrender_model_block %}

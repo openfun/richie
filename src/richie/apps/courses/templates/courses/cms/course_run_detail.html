@@ -35,17 +35,19 @@
             <div class="subheader__intro">
                 <div class="subheader__main">
                     {% block categories %}
-                    <div class="feature-inlines">
-                        <ul class="feature-inlines__container feature-inlines__container--categories">
-                        {% with variant="feature" %}
-                        {% page_placeholder "course_icons" current_page.parent_page %}
-                        {% page_placeholder "course_categories" current_page.parent_page or %}
-                            <li class="feature-inlines__empty">
-                                {% trans "No associated categories" %}
-                            </li>
-                        {% endpage_placeholder %}
+                    <div class="category-badge-list">
+                        <div class="category-badge-list__container">
+                        {% with variant="badge" %}
+                            {% page_placeholder "course_icons" current_page.parent_page %}
+                            {% page_placeholder "course_categories" current_page.parent_page or %}
+                                {% if current_page.publisher_is_draft and current_page|is_empty_placeholder:"course_icons" %}
+                                <span class="category-badge-list__empty">
+                                    {% trans "No associated categories" %}
+                                </span>
+                                {% endif %}
+                            {% endpage_placeholder %}
                         {% endwith %}
-                        </ul>
+                        </div>
                     </div>
                     {% endblock categories %}
 

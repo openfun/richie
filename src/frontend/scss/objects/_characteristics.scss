@@ -1,0 +1,55 @@
+//
+// Characteristic object list
+//
+
+// Simple inline with optional color scheme features
+.characteristics {
+  @include feature-list();
+
+  color: inherit;
+
+  &__row {
+    text-align: center;
+  }
+
+  &__item {
+    @include feature-item($parent_selector: '.characteristics');
+    color: inherit;
+  }
+
+  &__term {
+    color: inherit;
+    align-self: center;
+  }
+
+  // When using through a color scheme, item adopt button behaviors
+  &--primary {
+    .characteristics__item {
+      @include button-tiny($form-factor: 'pill', $display: flex);
+      @include r-button-colors(
+        r-theme-val(characteristics, primary-item),
+        $apply-border: true
+      );
+    }
+  }
+
+  &--secondary {
+    .characteristics__item {
+      @include button-tiny($form-factor: 'pill', $display: flex);
+      @include r-button-colors(
+        r-theme-val(characteristics, secondary-item),
+        $apply-border: true
+      );
+    }
+  }
+
+  &--tertiary {
+    .characteristics__item {
+      @include button-tiny($form-factor: 'pill', $display: flex);
+      @include r-button-colors(
+        r-theme-val(characteristics, tertiary-item),
+        $apply-border: true
+      );
+    }
+  }
+}

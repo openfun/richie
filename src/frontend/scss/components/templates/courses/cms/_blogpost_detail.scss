@@ -4,16 +4,8 @@
 .blogpost-detail {
   margin: 0 auto;
   padding: 0 0.5rem;
+  border-top: 1px solid r-theme-val(blogpost-detail, top-border);
   @include content-padding-fix;
-
-  @include media-breakpoint-up(lg) {
-    @include sv-flex(1, 0, map-get($container-max-widths, 'lg'));
-    padding-left: 0;
-    padding-right: 0;
-  }
-  @include media-breakpoint-up(xl) {
-    @include sv-flex(1, 0, map-get($container-max-widths, 'xl'));
-  }
 
   &__block {
     @include detail-block;
@@ -83,36 +75,6 @@
     }
   }
 
-  .blogpost-glimpse-categories {
-    .category-plugin-tag {
-      @include button-tiny($form-factor: 'pill');
-      @include r-button-colors(
-        r-theme-val(blogpost-detail, categories),
-        $apply-border: true,
-        $include-hover: true
-      );
-      font-weight: $font-weight-boldest;
-      margin: 0 1rem 0.5rem 0;
-
-      .category-plugin-tag__title {
-        padding: 0;
-        background: r-theme-val(blogpost-detail, categories-tag-background);
-      }
-    }
-  }
-
-  &__categories {
-    @include sv-flex(1, 0, 50rem);
-    display: flex;
-    margin: 0 auto 2rem;
-    flex-wrap: wrap;
-    justify-content: center;
-
-    .category-plugin-tag {
-      @include sv-flex(0, 0, auto);
-    }
-  }
-
   &__subhead {
     padding: 0.5rem 0;
 
@@ -150,13 +112,27 @@
       }
     }
 
-    .category-plugin-tag {
+    .category-tag {
       display: inline-block;
-      margin: 0;
+      margin: 0 0 0 0.1rem;
       color: inherit;
 
-      .category-plugin-tag__figure,
-      .category-plugin-tag__title {
+      &::before {
+        content: '•';
+        position: relative;
+        left: -0.6rem;
+      }
+
+      &:first-child {
+        margin-left: 0;
+
+        &::before {
+          content: '';
+          display: none;
+        }
+      }
+
+      .category-tag__title {
         display: inline-block;
         padding: 0;
         color: inherit;
@@ -166,16 +142,6 @@
         img,
         svg {
           display: none;
-        }
-      }
-
-      & + .category-plugin-tag {
-        margin-left: 0.1rem;
-
-        &::before {
-          margin-left: 0.1rem;
-          margin-right: 0.2rem;
-          content: '•';
         }
       }
     }
