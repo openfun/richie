@@ -46,34 +46,43 @@ class CourseModelsTestCase(TestCase):
 
     def test_models_course_create_page_role(self, *_):
         """
-        If the CMS_PERMISSIONS settings is True, a page role should be created when saving
-        a course.
+        If the CMS_PERMISSIONS settings is True, a page role should be created when calling
+        `create_page_role` on a course.
+        Calling the method several times should not duplicate permissions.
         """
-        role_dict = {
-            "django_permissions": ["cms.change_page"],
-            "course_page_permissions": {
-                "can_change": random.choice([True, False]),
-                "can_add": random.choice([True, False]),
-                "can_delete": random.choice([True, False]),
-                "can_change_advanced_settings": random.choice([True, False]),
-                "can_publish": random.choice([True, False]),
-                "can_change_permissions": random.choice([True, False]),
-                "can_move_page": random.choice([True, False]),
-                "can_view": False,  # can_view = True would make it a view restriction...
-                "grant_on": random.randint(1, 5),
-            },
-            "course_folder_permissions": {
-                "can_read": random.choice([True, False]),
-                "can_edit": random.choice([True, False]),
-                "can_add_children": random.choice([True, False]),
-                "type": random.randint(0, 2),
-            },
-        }
+
+        def get_random_role_dict():
+            return {
+                "django_permissions": ["cms.change_page"],
+                "course_page_permissions": {
+                    "can_change": random.choice([True, False]),
+                    "can_add": random.choice([True, False]),
+                    "can_delete": random.choice([True, False]),
+                    "can_change_advanced_settings": random.choice([True, False]),
+                    "can_publish": random.choice([True, False]),
+                    "can_change_permissions": random.choice([True, False]),
+                    "can_move_page": random.choice([True, False]),
+                    "can_view": False,  # can_view = True would make it a view restriction...
+                    "grant_on": random.randint(1, 5),
+                },
+                "course_folder_permissions": {
+                    "can_read": random.choice([True, False]),
+                    "can_edit": random.choice([True, False]),
+                    "can_add_children": random.choice([True, False]),
+                    "type": random.randint(0, 2),
+                },
+            }
+
         page = PageFactory(title__title="My title")
         course = CourseFactory(extended_object=page)
         self.assertFalse(page.roles.exists())
 
+        role_dict = get_random_role_dict()
         with mock.patch.dict(defaults.COURSE_ADMIN_ROLE, role_dict):
+            course.create_page_role()
+
+        # Call the method another time with different permissions to check it has no effect
+        with mock.patch.dict(defaults.COURSE_ADMIN_ROLE, get_random_role_dict()):
             course.create_page_role()
 
         # A page role should have been created
@@ -111,7 +120,7 @@ class CourseModelsTestCase(TestCase):
 
     def test_models_course_create_page_role_public_page(self, *_):
         """
-        A page role should not be created for the public version of an course.
+        A page role should not be created for the public version of a course.
         """
         course = CourseFactory(should_publish=True).public_extension
         self.assertIsNone(course.create_page_role())
@@ -121,26 +130,30 @@ class CourseModelsTestCase(TestCase):
         """
         If the CMS_PERMISSIONS settings is True, a page and folder permission should be created
         for the course when calling the `create_permissions_for_organization` method.
+        Calling the method several times should not duplicate permissions.
         """
-        role_dict = {
-            "courses_page_permissions": {
-                "can_change": random.choice([True, False]),
-                "can_add": random.choice([True, False]),
-                "can_delete": random.choice([True, False]),
-                "can_change_advanced_settings": random.choice([True, False]),
-                "can_publish": random.choice([True, False]),
-                "can_change_permissions": random.choice([True, False]),
-                "can_move_page": random.choice([True, False]),
-                "can_view": False,  # can_view = True would make it a view restriction...
-                "grant_on": random.randint(1, 5),
-            },
-            "courses_folder_permissions": {
-                "can_read": random.choice([True, False]),
-                "can_edit": random.choice([True, False]),
-                "can_add_children": random.choice([True, False]),
-                "type": random.randint(0, 2),
-            },
-        }
+
+        def get_random_role_dict():
+            return {
+                "courses_page_permissions": {
+                    "can_change": random.choice([True, False]),
+                    "can_add": random.choice([True, False]),
+                    "can_delete": random.choice([True, False]),
+                    "can_change_advanced_settings": random.choice([True, False]),
+                    "can_publish": random.choice([True, False]),
+                    "can_change_permissions": random.choice([True, False]),
+                    "can_move_page": random.choice([True, False]),
+                    "can_view": False,  # can_view = True would make it a view restriction...
+                    "grant_on": random.randint(1, 5),
+                },
+                "courses_folder_permissions": {
+                    "can_read": random.choice([True, False]),
+                    "can_edit": random.choice([True, False]),
+                    "can_add_children": random.choice([True, False]),
+                    "type": random.randint(0, 2),
+                },
+            }
+
         course = CourseFactory()
         PageRoleFactory(page=course.extended_object, role="ADMIN")
 
@@ -149,7 +162,12 @@ class CourseModelsTestCase(TestCase):
             page=organization.extended_object, role="ADMIN"
         )
 
+        role_dict = get_random_role_dict()
         with mock.patch.dict(defaults.ORGANIZATION_ADMIN_ROLE, role_dict):
+            course.create_permissions_for_organization(organization)
+
+        # Call the method another time with different permissions to check it has no effect
+        with mock.patch.dict(defaults.ORGANIZATION_ADMIN_ROLE, get_random_role_dict()):
             course.create_permissions_for_organization(organization)
 
         # All expected permissions should have been assigned to the group:

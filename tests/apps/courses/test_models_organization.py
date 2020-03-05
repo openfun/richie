@@ -89,32 +89,42 @@ class OrganizationModelsTestCase(TestCase):
         """
         If the CMS_PERMISSIONS settings is True, a page role should be created when saving
         an organization.
+        Calling the method several times should not duplicate permissions nor update the
+        permissions.
         """
-        role_dict = {
-            "django_permissions": ["cms.change_page"],
-            "organization_page_permissions": {
-                "can_change": random.choice([True, False]),
-                "can_add": random.choice([True, False]),
-                "can_delete": random.choice([True, False]),
-                "can_change_advanced_settings": random.choice([True, False]),
-                "can_publish": random.choice([True, False]),
-                "can_change_permissions": random.choice([True, False]),
-                "can_move_page": random.choice([True, False]),
-                "can_view": False,  # can_view = True would make it a view restriction...
-                "grant_on": random.randint(1, 5),
-            },
-            "organization_folder_permissions": {
-                "can_read": random.choice([True, False]),
-                "can_edit": random.choice([True, False]),
-                "can_add_children": random.choice([True, False]),
-                "type": random.randint(0, 2),
-            },
-        }
+
+        def get_random_role_dict():
+            return {
+                "django_permissions": ["cms.change_page"],
+                "organization_page_permissions": {
+                    "can_change": random.choice([True, False]),
+                    "can_add": random.choice([True, False]),
+                    "can_delete": random.choice([True, False]),
+                    "can_change_advanced_settings": random.choice([True, False]),
+                    "can_publish": random.choice([True, False]),
+                    "can_change_permissions": random.choice([True, False]),
+                    "can_move_page": random.choice([True, False]),
+                    "can_view": False,  # can_view = True would make it a view restriction...
+                    "grant_on": random.randint(1, 5),
+                },
+                "organization_folder_permissions": {
+                    "can_read": random.choice([True, False]),
+                    "can_edit": random.choice([True, False]),
+                    "can_add_children": random.choice([True, False]),
+                    "type": random.randint(0, 2),
+                },
+            }
+
         page = PageFactory(title__title="My title")
         organization = OrganizationFactory(extended_object=page)
         self.assertFalse(page.roles.exists())
 
+        role_dict = get_random_role_dict()
         with mock.patch.dict(defaults.ORGANIZATION_ADMIN_ROLE, role_dict):
+            organization.create_page_role()
+
+        # Call the method another time with different permissions to check it has no effect
+        with mock.patch.dict(defaults.ORGANIZATION_ADMIN_ROLE, get_random_role_dict()):
             organization.create_page_role()
 
         # A page role should have been created

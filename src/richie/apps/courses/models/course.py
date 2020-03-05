@@ -208,17 +208,21 @@ class Course(BasePageExtension):
             return
 
         # - Create DjangoCMS page permissions
-        PagePermission.objects.create(
+        PagePermission.objects.get_or_create(
             group_id=organization_page_role.group_id,
             page_id=self.extended_object_id,
-            **defaults.ORGANIZATION_ADMIN_ROLE.get("courses_page_permissions", {}),
+            defaults=defaults.ORGANIZATION_ADMIN_ROLE.get(
+                "courses_page_permissions", {}
+            ),
         )
 
         # - Create the Django Filer folder permissions
-        FolderPermission.objects.create(
-            folder_id=course_page_role.folder_id,
+        FolderPermission.objects.get_or_create(
             group_id=organization_page_role.group_id,
-            **defaults.ORGANIZATION_ADMIN_ROLE.get("courses_folder_permissions", {}),
+            folder_id=course_page_role.folder_id,
+            defaults=defaults.ORGANIZATION_ADMIN_ROLE.get(
+                "courses_folder_permissions", {}
+            ),
         )
 
     def get_persons(self, language=None):

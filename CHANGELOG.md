@@ -21,6 +21,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Refactor our template tags related to placeholders to fix ghost placeholders
+- Prevent unintentionally creating duplicate permissions programmatically
 - Fix an issue that crashed `regenerate_indexes` (and therefore
   `bootstrap_elasticsearch`) from a broken state in ES.
 - `<Search />` component handles errors in course search requests, displaying
