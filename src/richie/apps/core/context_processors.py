@@ -8,65 +8,21 @@ from django.contrib.sites.models import Site
 from django.templatetags.static import static
 
 
-def get_site_metas(with_static=False, with_media=False, is_secure=False, extra=None):
+def site_metas(request):
     """
-    Return metas from the current *Site* and settings
-
-    Added Site metas will be callable in templates like this
-    ``SITE.themetaname``
-
-    This can be used in code out of a Django requests (like in management
-    commands) or in a context processor to get the *Site* urls.
-
-    Default metas returned :
-
-    * SITE.name: Current *Site* entry name;
-    * SITE.domain: Current *Site* entry domain;
-    * SITE.web_url: The Current *Site* entry domain prefixed with the http
-      protocol like ``http://mydomain.com``. If HTTPS is enabled 'https' will
-      be used instead of 'http';
-
-    Optionally it can also return ``STATIC_URL`` and ``MEDIA_URL`` if needed
-    (like out of Django requests).
+    Context processor to add all information required by Richie CMS templates and frontend.
 
     If `CDN_DOMAIN` settings is defined we add it in the context. It allows
     to load statics js on a CDN like cloudfront.
     """
     site_current = Site.objects.get_current()
-    metas = {
+    protocol = "https" if request.is_secure() else "http"
+    context = {
         "SITE": {
             "name": site_current.name,
             "domain": site_current.domain,
-            "web_url": f"http://{site_current.domain}",
-        }
-    }
-    if is_secure:
-        metas["web_url"] = f"https://{site_current.domain}"
-    if with_media:
-        metas["MEDIA_URL"] = getattr(settings, "MEDIA_URL", "")
-    if with_static:
-        metas["STATIC_URL"] = getattr(settings, "STATIC_URL", "")
-    if extra:
-        metas.update(extra)
-
-    if getattr(settings, "CDN_DOMAIN", False):
-        metas["CDN_DOMAIN"] = settings.CDN_DOMAIN
-
-    return metas
-
-
-def site_metas(request):
-    """
-    Context processor to add the current *Site* metas to the context
-    """
-    return get_site_metas(is_secure=request.is_secure())
-
-
-def frontend_context(request):
-    """
-    Context processor to add the context as expected by the frontend to the template context.
-    """
-    return {
+            "web_url": f"{protocol:s}://{site_current.domain:s}",
+        },
         "FRONTEND_CONTEXT": json.dumps(
             {
                 "context": {
@@ -76,5 +32,9 @@ def frontend_context(request):
                     "sentry_dsn": getattr(settings, "SENTRY_DSN", ""),
                 }
             }
-        )
+        ),
     }
+    if getattr(settings, "CDN_DOMAIN", False):
+        context["CDN_DOMAIN"] = settings.CDN_DOMAIN
+
+    return context

@@ -39,7 +39,6 @@ $ make migrate
 - Users who make use of `<SearchSuggestField />` or `<RootSearchSuggestField />` in their own
   templates through `richie-react` need to update all the call sites: the `context` prop is now
   required for both of them. See the documentation for more details on `context`.
-- Users who are handling their own settings need to add the new frontend context processor (`"richie.apps.core.context_processors.frontend_context"`) in their own settings
 
 ## 1.14.x to 1.15.x
 
