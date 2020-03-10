@@ -39,9 +39,9 @@
 {% elif variant == "mini" %}
     <a href="{{ blogpost_page.get_absolute_url }}" class="blogpost-glimpse blogpost-glimpse--link blogpost-glimpse--mini">
         <div class="blogpost-glimpse__media">
-            {% get_placeholder_plugins "cover" blogpost_page as plugins or %}
+            {% get_page_plugins "cover" blogpost_page as plugins or %}
                 <div class="blogpost-glimpse__empty">{% trans 'Cover' %}</div>
-            {% endget_placeholder_plugins %}
+            {% endget_page_plugins %}
             {% blockplugin plugins.0 %}
                 <img src="{% thumbnail instance.picture 150x85 crop upscale subject_location=instance.picture.subject_location %}"
                     srcset="
@@ -58,9 +58,7 @@
             <div class="blogpost-glimpse__wrapper">
                 <div class="blogpost-glimpse__categories">
                     {% with variant="tag" has_link=False %}
-                        {% page_placeholder "categories" blogpost_page or %}
-                            <span class="blogpost-glimpse__empty">{% trans 'No categories yet.' %}</span>
-                        {% endpage_placeholder %}
+                        {% show_placeholder "categories" blogpost_page %}
                     {% endwith %}
                 </div>
                 <p class="blogpost-glimpse__title">{{ blogpost_page.get_title }}</p>
@@ -97,9 +95,7 @@
             <div class="blogpost-glimpse__wrapper">
                 <div class="blogpost-glimpse__categories">
                     {% with variant="tag" has_link=False %}
-                        {% page_placeholder "categories" blogpost_page or %}
-                            <span class="blogpost-glimpse__empty">{% trans 'No categories yet.' %}</span>
-                        {% endpage_placeholder %}
+                        {% show_placeholder "categories" blogpost_page %}
                     {% endwith %}
                 </div>
 

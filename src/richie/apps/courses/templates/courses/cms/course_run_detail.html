@@ -38,14 +38,8 @@
                     <div class="category-badge-list">
                         <div class="category-badge-list__container">
                         {% with variant="badge" %}
-                            {% page_placeholder "course_icons" current_page.parent_page %}
-                            {% page_placeholder "course_categories" current_page.parent_page or %}
-                                {% if current_page.publisher_is_draft and current_page|is_empty_placeholder:"course_icons" %}
-                                <span class="category-badge-list__empty">
-                                    {% trans "No associated categories" %}
-                                </span>
-                                {% endif %}
-                            {% endpage_placeholder %}
+                            {% show_placeholder "course_icons" current_page.parent_page %}
+                            {% show_placeholder "course_categories" current_page.parent_page %}
                         {% endwith %}
                         </div>
                     </div>
@@ -64,17 +58,13 @@
                     {% endblock title %}
 
                     <div class="subheader__teaser">
-                        {% page_placeholder "course_teaser" current_page.parent_page or %}
-                        <div class="empty">{% trans 'Add a video or teaser.' %}</div>
-                        {% endpage_placeholder %}
+                        {% show_placeholder "course_teaser" current_page.parent_page %}
                     </div>
 
                     <div class="subheader__content subheader__content--aside">
                         {% if current_page.parent_page.publisher_is_draft or not current_page.parent_page|is_empty_placeholder:"course_description" %}
                             {% with header_level=3 %}
-                            {% page_placeholder "course_description" current_page.parent_page or %}
-                                <p>{% trans 'Enter here a description of your course.' %}</p>
-                            {% endpage_placeholder %}
+                            {% show_placeholder "course_description" current_page.parent_page %}
                             {% endwith %}
                         {% endif %}
                     </div>
@@ -138,13 +128,124 @@
 <div class="course-detail">
     <div class="course-detail__grid">
         <div class="course-detail__wrapper">
-            {% include "courses/cms/fragment_course_content.html" with page=current_page.parent_page %}
+            <div class="course-detail__block course-detail__primary-group">
+                {% block skills %}
+                    {% if not current_page.parent_page|is_empty_placeholder:"course_skills" %}
+                    <div class="course-detail__skills course-detail__row course-detail__skills">
+                        <h2 class="course-detail__title">{% trans "What you will learn" %}</h2>
+                        <p>{% trans "At the end of this course, you will be able to:" %}</p>
+                        {% show_placeholder "course_skills" current_page.parent_page %}
+                    </div>
+                    {% endif %}
+                {% endblock skills %}
+
+                {% block format %}
+                    {% if not current_page.parent_page|is_empty_placeholder:"course_format" %}
+                        <section class="course-detail__row course-detail__format">
+                            <h2 class="course-detail__title">{% trans 'Format' %}</h2>
+                            {% show_placeholder "course_format" current_page.parent_page %}
+                        </section>
+                    {% endif %}
+                {% endblock format %}
+
+                {% block prerequisites %}
+                    {% if not current_page.parent_page|is_empty_placeholder:"course_prerequisites" %}
+                        <section class="course-detail__prerequisites course-detail__row course-detail__prerequisites">
+                            <h2 class="course-detail__title">{% trans 'Prerequisites' %}</h2>
+                            {% show_placeholder "course_prerequisites" current_page.parent_page %}
+                        </section>
+                    {% endif %}
+                {% endblock prerequisites %}
+
+                {% block assessment %}
+                    {% if not current_page.parent_page|is_empty_placeholder:"course_assessment" %}
+                    <section class="course-detail__row course-detail__assessment">
+                        <h2 class="course-detail__title">{% trans 'Assessment and certification' %}</h2>
+                        {% show_placeholder "course_assessment" current_page.parent_page %}
+                    </section>
+                    {% endif %}
+                {% endblock assessment %}
+
+                {% block information %}
+                    {% if not current_page.parent_page|is_empty_placeholder:"course_information" %}
+                    <div class="course-detail__row course-detail__information">
+                        {% show_placeholder "course_information" current_page.parent_page %}
+                    </div>
+                    {% endif %}
+                {% endblock information %}
+            </div>
+
+            {% block plan %}
+                <div class="course-detail__block course-detail__secondary-group">
+                    {% if not current_page.parent_page|is_empty_placeholder:"course_plan" %}
+                    <section class="course-detail__row course-detail__plan">
+                        <h2 class="course-detail__title">{% trans 'Course plan' %}</h2>
+
+                        <div class="plan-accordion">
+                            {% show_placeholder "course_plan" current_page.parent_page %}
+                        </div>
+                    </section>
+                    {% endif %}
+                </div>
+            {% endblock plan %}
         </div>
     </div>
 
     {% block fragment_relations %}
     <div class="course-detail__relations">
-        {% include "courses/cms/fragment_course_relations.html" with page=current_page.parent_page %}
+        {% block team %}
+            {% if not current_page.parent_page|is_empty_placeholder:"course_team" %}
+            <div class="course-detail__team course-detail__block course-detail__block--lightest">
+                <section class="section course-detail__row course-detail__team">
+                    <h2 class="course-detail__title">
+                        {% trans 'Course team' %}
+                    </h2>
+                    {% with header_level=3 %}
+                        <div class="section__items section__items--team">
+                            {% show_placeholder "course_team" current_page.parent_page %}
+                        </div>
+                    {% endwith %}
+                </section>
+            </div>
+            {% endif %}
+        {% endblock team %}
+
+        {% block organizations %}
+            {% if not current_page.parent_page|is_empty_placeholder:"course_organizations" %}
+            <div class="course-detail__organizations course-detail__block">
+                <section class="section course-detail__row course-detail__organizations">
+                    <h2 class="course-detail__title">
+                        {% trans 'Organizations' %}
+                    </h2>
+                    <div class="section__items section__items--organizations">
+                        {% show_placeholder "course_organizations" current_page.parent_page %}
+                    </div>
+                </section>
+            </div>
+            {% endif %}
+        {% endblock organizations %}
+
+        {% block licenses %}
+            <div class="course-detail__license course-detail__block course-detail__block--divider">
+                <section class="course-detail__row">
+                    <h2 class="course-detail__title">{% trans 'License' %}</h2>
+
+                    <div class="course-detail__item">
+                        <h3 class="course-detail__label">{% trans 'License for the course content' %}</h3>
+                        {% with header_level=4 %}
+                            {% show_placeholder "course_license_content" current_page.parent_page %}
+                        {% endwith %}
+                    </div>
+
+                    <div class="course-detail__item">
+                        <h3 class="course-detail__label">{% trans 'License for the content created by course participants' %}</h3>
+                        {% with header_level=4 %}
+                            {% show_placeholder "course_license_participation" current_page.parent_page %}
+                        {% endwith %}
+                    </div>
+                </section>
+            </div>
+        {% endblock licenses %}
     </div>
     {% endblock fragment_relations %}
 </div>
