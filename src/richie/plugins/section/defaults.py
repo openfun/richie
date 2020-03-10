@@ -19,6 +19,5 @@ SECTION_TEMPLATES = getattr(
         ("richie/section/section_accordion_item.html", _("Accordion item")),
         ("richie/section/category-tiles.html", _("Category tiles")),
         ("richie/section/section--blogpost.html", _("Favorite blogpost")),
-        ("richie/section/category-styleguide.html", _("Category styleguide")),
     ],
 )
