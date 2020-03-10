@@ -29,9 +29,9 @@
         </div>
         {% if variant == "row" %}
         <div class="organization-glimpse__excerpt">
-            {% get_placeholder_plugins "description" organization_page as plugins or %}
+            {% get_page_plugins "description" organization_page as plugins or %}
                 {% trans "Description" %}
-            {% endget_placeholder_plugins %}
+            {% endget_page_plugins %}
             {% blockplugin plugins.0 %}
                 {{ instance.body|truncatewords_html:40|safe }}
             {% endblockplugin %}
