@@ -70,8 +70,10 @@ export const SearchSuggestField = ({ context }: CommonDataProps) => {
       });
     }
   };
-  const updateCourseSearchParamsRef = useRef(
-    debounce(searchAsTheUserTypes, 500, { maxWait: 1100 }),
+  const updateCourseSearchParamsDebounced = debounce(
+    searchAsTheUserTypes,
+    500,
+    { maxWait: 1100 },
   );
 
   const inputProps: SearchAutosuggestProps['inputProps'] = {
@@ -85,7 +87,7 @@ export const SearchSuggestField = ({ context }: CommonDataProps) => {
     onChange: (_, { method, newValue }) => {
       // Always update the state, delegate search-as-the-user-types to debounced function
       setValue(newValue);
-      updateCourseSearchParamsRef.current(_, { method, newValue });
+      updateCourseSearchParamsDebounced(_, { method, newValue });
     },
     onKeyDown: event => {
       if (event.keyCode === 13 /* enter */ && !value) {
