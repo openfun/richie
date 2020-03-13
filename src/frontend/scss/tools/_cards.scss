@@ -39,11 +39,6 @@
 //     If not null and more than zero, trigger a CSS triangle absolutely
 //     positionned relatively to 'content' element.
 //
-// @arg {String} $methodology ['bem']
-//     If value is "bem", object element selectors will be created with BEM
-//     methodology and starting from given `$parent`. Any other value trigger
-//     natural methodology.
-//
 // @arg {Selector} $parent [&]
 //     Parent selector used only with BEM methodology to define element
 //     selectors. Default is parent reference `&`. Usually you don't have to

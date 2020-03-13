@@ -175,6 +175,7 @@ class Base(DRFMixin, RichieCoursesConfigurationMixin, Configuration):
         "richie.apps.search",
         "richie.apps.courses",
         "richie.apps.core",
+        "richie.plugins.glimpse",
         "richie.plugins.html_sitemap",
         "richie.plugins.large_banner",
         "richie.plugins.plain_text",

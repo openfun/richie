@@ -17,6 +17,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   Django settings.
 - ElasticSearch index name prefix (currently `richie_`) is now customizable
   through the settings.
+- Add new plugin "Glimpse" to include some basic content with some variant
+  form factor available.
 
 ### Fixed
 
