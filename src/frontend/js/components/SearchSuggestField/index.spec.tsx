@@ -6,11 +6,16 @@ import { stringify } from 'query-string';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
-import { History, HistoryContext } from 'data/useHistory';
+import { History, HistoryContext, useHistory } from 'data/useHistory';
 import { FilterDefinition } from 'types/filters';
+import { history, location } from 'utils/indirection/window';
 import { SearchSuggestField } from '.';
 
 jest.mock('utils/indirection/window', () => ({
+  history: {
+    pushState: jest.fn(),
+    replaceState: jest.fn(),
+  },
   location: { pathname: '/search' },
 }));
 
@@ -21,13 +26,14 @@ jest.mock('lodash-es/debounce', () => (fn: any) => (...args: any[]) =>
 );
 
 describe('components/SearchSuggestField', () => {
-  const historyPushState = jest.fn();
-  const historyReplaceState = jest.fn();
-  const makeHistoryOf: (params: any) => History = params => [
-    { state: params, title: '', url: `/search?${stringify(params)}` },
-    historyPushState,
-    historyReplaceState,
-  ];
+  const HistoryWrapper = ({ children }: { children: React.ReactNode }) => {
+    const localHistory = useHistory();
+    return (
+      <HistoryContext.Provider value={localHistory}>
+        {children}
+      </HistoryContext.Provider>
+    );
+  };
 
   const context = {
     assets: {
@@ -77,15 +83,14 @@ describe('components/SearchSuggestField', () => {
 
   afterEach(fetchMock.restore);
   beforeEach(jest.resetAllMocks);
+  beforeEach(() => (location.search = ''));
 
   it('renders', () => {
     const { getByPlaceholderText } = render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '999', offset: '0' })}
-        >
+        <HistoryWrapper>
           <SearchSuggestField context={context} />
-        </HistoryContext.Provider>
+        </HistoryWrapper>
       </IntlProvider>,
     );
 
@@ -94,17 +99,12 @@ describe('components/SearchSuggestField', () => {
   });
 
   it('picks the query from the URL if there is one', () => {
+    location.search = '?limit=20&offset=0&query=machine%20learning';
     const { getByDisplayValue } = render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({
-            limit: '999',
-            offset: '0',
-            query: 'machine learning',
-          })}
-        >
+        <HistoryWrapper>
           <SearchSuggestField context={context} />
-        </HistoryContext.Provider>
+        </HistoryWrapper>
       </IntlProvider>,
     );
 
@@ -132,11 +132,9 @@ describe('components/SearchSuggestField', () => {
 
     const { getByPlaceholderText, getByText, queryByText } = render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '999', offset: '0' })}
-        >
+        <HistoryWrapper>
           <SearchSuggestField context={context} />
-        </HistoryContext.Provider>
+        </HistoryWrapper>
       </IntlProvider>,
     );
 
@@ -183,13 +181,11 @@ describe('components/SearchSuggestField', () => {
       fetchMock.get(`/api/v1.0/${kind}/autocomplete/?query=xyz`, []),
     );
 
-    const { getByPlaceholderText, getByText, queryByText } = render(
+    const { getByPlaceholderText } = render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '999', offset: '0' })}
-        >
+        <HistoryWrapper>
           <SearchSuggestField context={context} />
-        </HistoryContext.Provider>
+        </HistoryWrapper>
       </IntlProvider>,
     );
 
@@ -240,11 +236,9 @@ describe('components/SearchSuggestField', () => {
 
     const { getByPlaceholderText, getByText, queryByText } = render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '999', offset: '0' })}
-        >
+        <HistoryWrapper>
           <SearchSuggestField context={context} />
-        </HistoryContext.Provider>
+        </HistoryWrapper>
       </IntlProvider>,
     );
 
@@ -256,11 +250,11 @@ describe('components/SearchSuggestField', () => {
     fireEvent.focus(field);
     fireEvent.change(field, { target: { value: 'orga' } });
     await wait();
-    expect(historyPushState).toHaveBeenCalledTimes(1);
-    expect(historyPushState).toHaveBeenLastCalledWith(
-      { limit: '999', offset: '0', query: 'orga' },
+    expect(history.pushState).toHaveBeenCalledTimes(1);
+    expect(history.pushState).toHaveBeenLastCalledWith(
+      { limit: '20', offset: '0', query: 'orga' },
       '',
-      '/search?limit=999&offset=0&query=orga',
+      '/search?limit=20&offset=0&query=orga',
     );
 
     expect(
@@ -287,16 +281,16 @@ describe('components/SearchSuggestField', () => {
     fireEvent.click(getByText('Organization #27'));
     await wait();
 
-    expect(historyPushState).toHaveBeenCalledTimes(2);
-    expect(historyPushState).toHaveBeenCalledWith(
+    expect(history.pushState).toHaveBeenCalledTimes(2);
+    expect(history.pushState).toHaveBeenCalledWith(
       {
-        limit: '999',
+        limit: '20',
         offset: '0',
         organizations: ['L-00020007'],
         query: undefined,
       },
       '',
-      '/search?limit=999&offset=0&organizations=L-00020007',
+      '/search?limit=20&offset=0&organizations=L-00020007',
     );
   });
 
@@ -321,11 +315,9 @@ describe('components/SearchSuggestField', () => {
 
     const { getByPlaceholderText, getByText, queryByText } = render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '999', offset: '0' })}
-        >
+        <HistoryWrapper>
           <SearchSuggestField context={context} />
-        </HistoryContext.Provider>
+        </HistoryWrapper>
       </IntlProvider>,
     );
 
@@ -337,11 +329,11 @@ describe('components/SearchSuggestField', () => {
     fireEvent.focus(field);
     fireEvent.change(field, { target: { value: 'doct' } });
     await wait();
-    expect(historyPushState).toHaveBeenCalledTimes(1);
-    expect(historyPushState).toHaveBeenCalledWith(
-      { limit: '999', offset: '0', query: 'doct' },
+    expect(history.pushState).toHaveBeenCalledTimes(1);
+    expect(history.pushState).toHaveBeenCalledWith(
+      { limit: '20', offset: '0', query: 'doct' },
       '',
-      '/search?limit=999&offset=0&query=doct',
+      '/search?limit=20&offset=0&query=doct',
     );
 
     expect(
@@ -368,15 +360,17 @@ describe('components/SearchSuggestField', () => {
     fireEvent.click(getByText('Doctor Doom'));
     await wait();
 
-    expect(historyPushState).toHaveBeenCalledTimes(2);
-    expect(historyPushState).toHaveBeenCalledWith(
-      { limit: '999', offset: '0', persons: ['73'], query: undefined },
+    expect(history.pushState).toHaveBeenCalledTimes(2);
+    expect(history.pushState).toHaveBeenCalledWith(
+      { limit: '20', offset: '0', persons: ['73'], query: undefined },
       '',
-      '/search?limit=999&offset=0&persons=73',
+      '/search?limit=20&offset=0&persons=73',
     );
   });
 
   it('removes the search query when the user presses ENTER on an empty field', async () => {
+    location.search = '?limit=20&offset=0&query=some%20query';
+
     fetchMock.get('/api/v1.0/filter-definitions/', {
       levels,
       organizations,
@@ -390,15 +384,9 @@ describe('components/SearchSuggestField', () => {
 
     const { getByPlaceholderText } = render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({
-            limit: '999',
-            offset: '0',
-            query: 'some query',
-          })}
-        >
+        <HistoryWrapper>
           <SearchSuggestField context={context} />
-        </HistoryContext.Provider>
+        </HistoryWrapper>
       </IntlProvider>,
     );
 
@@ -412,10 +400,10 @@ describe('components/SearchSuggestField', () => {
     fireEvent.keyDown(field, { keyCode: 13 });
     await wait();
 
-    expect(historyPushState).toHaveBeenCalledWith(
-      { limit: '999', offset: '0', query: undefined },
+    expect(history.pushState).toHaveBeenCalledWith(
+      { limit: '20', offset: '0', query: undefined },
       '',
-      '/search?limit=999&offset=0',
+      '/search?limit=20&offset=0',
     );
   });
 
@@ -433,15 +421,9 @@ describe('components/SearchSuggestField', () => {
 
     const { getByPlaceholderText } = render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({
-            limit: '999',
-            offset: '0',
-            query: 'some query',
-          })}
-        >
+        <HistoryWrapper>
           <SearchSuggestField context={context} />
-        </HistoryContext.Provider>
+        </HistoryWrapper>
       </IntlProvider>,
     );
 
@@ -454,33 +436,108 @@ describe('components/SearchSuggestField', () => {
     // TODO: rewrite them when we use mocked timers to test our debouncing strategy.
     fireEvent.change(field, { target: { value: 'ri' } });
     await wait();
-    expect(historyPushState).not.toHaveBeenCalled();
+    expect(history.pushState).not.toHaveBeenCalled();
 
     fireEvent.change(field, { target: { value: 'ric' } });
     await wait();
-    expect(historyPushState).toHaveBeenCalledTimes(1);
-    expect(historyPushState).toHaveBeenLastCalledWith(
-      { limit: '999', offset: '0', query: 'ric' },
+    expect(history.pushState).toHaveBeenCalledTimes(1);
+    expect(history.pushState).toHaveBeenLastCalledWith(
+      { limit: '20', offset: '0', query: 'ric' },
       '',
-      '/search?limit=999&offset=0&query=ric',
+      '/search?limit=20&offset=0&query=ric',
     );
 
     fireEvent.change(field, { target: { value: 'rich data driven' } });
     await wait();
-    expect(historyPushState).toHaveBeenCalledTimes(2);
-    expect(historyPushState).toHaveBeenLastCalledWith(
-      { limit: '999', offset: '0', query: 'rich data driven' },
+    expect(history.pushState).toHaveBeenCalledTimes(2);
+    expect(history.pushState).toHaveBeenLastCalledWith(
+      { limit: '20', offset: '0', query: 'rich data driven' },
       '',
-      '/search?limit=999&offset=0&query=rich%20data%20driven',
+      '/search?limit=20&offset=0&query=rich%20data%20driven',
     );
 
     fireEvent.change(field, { target: { value: '' } });
     await wait();
-    expect(historyPushState).toHaveBeenCalledTimes(3);
-    expect(historyPushState).toHaveBeenLastCalledWith(
-      { limit: '999', offset: '0', query: undefined },
+    expect(history.pushState).toHaveBeenCalledTimes(3);
+    expect(history.pushState).toHaveBeenLastCalledWith(
+      { limit: '20', offset: '0', query: undefined },
       '',
-      '/search?limit=999&offset=0',
+      '/search?limit=20&offset=0',
+    );
+  });
+
+  it('does not remove other filters when it searches as the user types', async () => {
+    fetchMock.get('/api/v1.0/filter-definitions/', {
+      levels,
+      organizations,
+      persons,
+      subjects,
+    });
+
+    fetchMock.get('/api/v1.0/organizations/autocomplete/?query=orga', [
+      {
+        id: 'L-00020007',
+        kind: 'whatever',
+        title: 'Organization #27',
+      },
+    ]);
+    fetchMock.get('/api/v1.0/organizations/autocomplete/?query=ric', []);
+
+    ['persons', 'subjects'].forEach(kind =>
+      fetchMock.get(`begin:/api/v1.0/${kind}/autocomplete/?query=`, []),
+    );
+
+    const { getByPlaceholderText, getByText } = render(
+      <IntlProvider locale="en">
+        <HistoryWrapper>
+          <SearchSuggestField context={context} />
+        </HistoryWrapper>
+      </IntlProvider>,
+    );
+
+    const field = getByPlaceholderText(
+      'Search for courses, organizations, categories',
+    );
+    fireEvent.focus(field);
+
+    // The user is typing an organization name
+    fireEvent.change(field, { target: { value: 'orga' } });
+    await wait();
+    expect(history.pushState).toHaveBeenCalledTimes(1);
+    expect(history.pushState).toHaveBeenLastCalledWith(
+      { limit: '20', offset: '0', query: 'orga' },
+      '',
+      '/search?limit=20&offset=0&query=orga',
+    );
+    // The user selects an organization from suggestions
+    fireEvent.click(getByText('Organization #27'));
+    await wait();
+
+    expect(history.pushState).toHaveBeenCalledTimes(2);
+    expect(history.pushState).toHaveBeenCalledWith(
+      {
+        limit: '20',
+        offset: '0',
+        organizations: ['L-00020007'],
+        query: undefined,
+      },
+      '',
+      '/search?limit=20&offset=0&organizations=L-00020007',
+    );
+
+    // The user starts typing a full-text search, the organization remains selected
+    fireEvent.change(field, { target: { value: 'ric' } });
+    await wait();
+    expect(history.pushState).toHaveBeenCalledTimes(3);
+    expect(history.pushState).toHaveBeenLastCalledWith(
+      {
+        limit: '20',
+        offset: '0',
+        organizations: ['L-00020007'],
+        query: 'ric',
+      },
+      '',
+      '/search?limit=20&offset=0&organizations=L-00020007&query=ric',
     );
   });
 });
