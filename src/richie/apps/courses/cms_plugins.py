@@ -170,6 +170,7 @@ class BlogPostPlugin(CMSPluginBase):
     """
 
     cache = True
+    fieldsets = ((None, {"fields": ["page", "variant"]}),)
     model = BlogPostPluginModel
     module = PLUGINS_GROUP
     name = _("Post")
@@ -181,6 +182,7 @@ class BlogPostPlugin(CMSPluginBase):
                 "instance": instance,
                 "relevant_page": instance.relevant_page,
                 "placeholder": placeholder,
+                "variant": instance.variant or context.get("variant"),
             }
         )
         return context
