@@ -10,7 +10,7 @@ from cms.extensions.extension_pool import extension_pool
 from cms.models.pluginmodel import CMSPlugin
 
 from ...core.models import BasePageExtension, PagePluginMixin
-from ..defaults import BLOGPOSTS_PAGE
+from .. import defaults
 
 
 class BlogPost(BasePageExtension):
@@ -18,7 +18,7 @@ class BlogPost(BasePageExtension):
     The blogpost extension represents and records a blog article.
     """
 
-    PAGE = BLOGPOSTS_PAGE
+    PAGE = defaults.BLOGPOSTS_PAGE
 
     class Meta:
         db_table = "richie_blog_post"
@@ -89,6 +89,14 @@ class BlogPostPluginModel(PagePluginMixin, CMSPlugin):
         on_delete=models.CASCADE,
         related_name="blogpost_plugins",
         limit_choices_to={"publisher_is_draft": True, "blogpost__isnull": False},
+    )
+    variant = models.CharField(
+        _("variant"),
+        max_length=50,
+        choices=defaults.BLOGPOST_GLIMPSE_VARIANT_CHOICES,
+        help_text=_("Optional glimpse variant for a custom look."),
+        blank=True,
+        null=True,
     )
 
     class Meta:

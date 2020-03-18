@@ -1,7 +1,12 @@
 {% load i18n cms_tags extra_tags thumbnail %}
 {% comment %}Obviously, the context template variable "blogpost" is required and must be a BlogPost page extension{% endcomment %}
 {% with blogpost_page=blogpost.extended_object %}
-<a href="{{ blogpost.extended_object.get_absolute_url }}" class="blogpost-glimpse blogpost-glimpse--link {% if blogpost.extended_object.publisher_is_draft %}blogpost-glimpse--draft{% endif %}" >
+  <a href="{{ blogpost.extended_object.get_absolute_url }}"
+    class="
+      blogpost-glimpse blogpost-glimpse--link
+      {% if variant %} blogpost-glimpse--{{ variant }}{% endif %}
+      {% if blogpost_page.publisher_is_draft %} blogpost-glimpse--draft{% endif %}"
+  >
   <div class="blogpost-glimpse__media">
     {% get_page_plugins "cover" blogpost_page as plugins or %}
       <div class="blogpost-glimpse__media__empty">{% trans 'Cover' %}</div>

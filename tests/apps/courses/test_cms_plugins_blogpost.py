@@ -8,9 +8,12 @@ from unittest import mock
 
 from django import forms
 from django.conf import settings
+from django.contrib.auth.models import AnonymousUser
+from django.test.client import RequestFactory
 from django.utils import timezone
 
 from cms.api import add_plugin, create_page
+from cms.plugin_rendering import ContentRenderer
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
@@ -104,11 +107,11 @@ class BlogPostPluginTestCase(CMSTestCase):
         response = self.client.get(url)
         # The blogpost's name should be present as a link to the cms page
         # And CMS page title should be in title attribute of the link
-        self.assertContains(
-            response,
-            '<a href="/en/public-title/" class="blogpost-glimpse blogpost-glimpse--link',
-            status_code=200,
+        self.assertIn(
+            '<a href="/en/public-title/" class=" blogpost-glimpse blogpost-glimpse--link " ',
+            re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
+
         # The blogpost's title should be wrapped in a p
         self.assertContains(
             response,
@@ -137,11 +140,11 @@ class BlogPostPluginTestCase(CMSTestCase):
         # Same checks in French
         url = page.get_absolute_url(language="fr")
         response = self.client.get(url)
-        self.assertContains(
-            response,
-            '<a href="/fr/titre-public/" class="blogpost-glimpse blogpost-glimpse--link',
-            status_code=200,
+        self.assertIn(
+            '<a href="/fr/titre-public/" class=" blogpost-glimpse blogpost-glimpse--link " ',
+            re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
+
         # pylint: disable=no-member
         pattern = (
             r'<div class="blogpost-glimpse__media">'
@@ -191,3 +194,64 @@ class BlogPostPluginTestCase(CMSTestCase):
 
         # Publication date block should be absent
         self.assertNotContains(response, "__date")
+
+    def test_cms_plugins_blogpost_render_template(self):
+        """
+        The blogpost plugin should render according to variant choice.
+        """
+        staff = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=staff.username, password="password")
+
+        # Create an blogpost
+        blogpost = BlogPostFactory(page_title="public title")
+        blogpost_page = blogpost.extended_object
+
+        # Create a page to add the plugin to
+        page = create_i18n_page("A page")
+        placeholder = page.placeholders.get(slot="maincontent")
+
+        # Add blogpost plugin with default template
+        add_plugin(placeholder, BlogPostPlugin, "en", page=blogpost_page)
+
+        url = "{:s}?edit".format(page.get_absolute_url(language="en"))
+
+        # The blogpost-glimpse default template should not have the small attribute
+        response = self.client.get(url)
+        self.assertNotContains(response, "blogpost-glimpse__small")
+
+        # Add blogpost plugin with small template
+        add_plugin(
+            placeholder, BlogPostPlugin, "en", page=blogpost_page, variant="small",
+        )
+
+        # The blogpost-glimpse default template should not have the small attribute
+        response = self.client.get(url)
+        self.assertContains(response, "blogpost-glimpse--small")
+
+    def test_cms_plugins_blogpost_default_variant(self):
+        """
+        If the variant is not specified on the blogpost pluging, it should render according
+        to variant variable eventually present in the context of its container.
+        """
+        # Create an blogpost
+        blogpost = BlogPostFactory(page_title="public title")
+        blogpost_page = blogpost.extended_object
+
+        # Create a page to add the plugin to
+        page = create_i18n_page("A page")
+        placeholder = page.placeholders.get(slot="maincontent")
+
+        # Add blogpost plugin with default template
+        model_instance = add_plugin(
+            placeholder, BlogPostPlugin, "en", page=blogpost_page
+        )
+
+        # Get generated html
+        request = RequestFactory()
+        request.current_page = page
+        request.user = AnonymousUser()
+        context = {"current_page": page, "variant": "xxl", "request": request}
+        renderer = ContentRenderer(request=request)
+        html = renderer.render_plugin(model_instance, context)
+
+        self.assertIn("blogpost-glimpse--xxl", html)

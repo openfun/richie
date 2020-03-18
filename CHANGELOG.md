@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add a variant option for blogpost glimpses,
 - Add a method to retrieve the list of blogposts related to (ie that
   share at least one category with) another blogpost.
 - Licences (through their "name" and "content" fields) are now translatable.
