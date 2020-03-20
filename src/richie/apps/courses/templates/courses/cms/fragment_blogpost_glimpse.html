@@ -99,17 +99,11 @@
                     {% endwith %}
                 </div>
 
-                {% if variant == "favorite" %}
-                <h{{ header_level|default:2 }} class="blogpost-glimpse__title">{{ blogpost_page.get_title }}</h{{ header_level|default:2 }}>
-                {% else %}
                 <p class="blogpost-glimpse__title">{{ blogpost_page.get_title }}</p>
-                {% endif %}
 
-                {% if variant != "row" %}
                 <p class="blogpost-glimpse__excerpt">
                     {% show_placeholder "excerpt" blogpost_page %}
                 </p>
-                {% endif %}
             </div>
         </div>
     </a>
