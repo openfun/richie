@@ -48,6 +48,9 @@
             <div class="course-glimpse-footer__cta">
                 <button class="button">
                     {{ course_state.call_to_action|capfirst }}
+                    <svg aria-hidden={true} role="img" class="icon">
+                        <use xlink:href="{% static 'richie/icons.svg' %}#icon-arrow-right" />
+                    </svg>
                 </button>
             </div>
             {% endif %}

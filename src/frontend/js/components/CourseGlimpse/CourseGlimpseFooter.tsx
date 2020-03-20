@@ -5,10 +5,11 @@ import { CommonDataProps } from 'types/commonDataProps';
 import { Course } from 'types/Course';
 
 /**
- * <CourgeGlimpseFooter />.
+ * <CourseGlimpseFooter />.
  * This is spun off from <CourseGlimpse /> to allow easier override through webpack.
  */
 export const CourseGlimpseFooter = ({
+  context,
   course,
 }: { course: Course } & CommonDataProps) => (
   <div className="course-glimpse-footer">
@@ -32,6 +33,9 @@ export const CourseGlimpseFooter = ({
         <button className="button">
           {course.state.call_to_action.charAt(0).toUpperCase() +
             course.state.call_to_action.substr(1)}
+          <svg aria-hidden={true} role="img" className="icon">
+            <use xlinkHref={`${context.assets.icons}#icon-arrow-right`} />
+          </svg>{' '}
         </button>
       </div>
     ) : null}
