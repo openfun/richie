@@ -344,7 +344,8 @@ class CourseRunCMSTestCase(CMSTestCase):
         self.assertContains(
             response,
             (
-                '<ul class="breadcrumbs">'
+                '<ul class="breadcrumbs__list">'
+                '  <li class="breadcrumbs__item">You are here:</li>'
                 '  <li class="breadcrumbs__item"><a href="/en/home/">home</a></li>'
                 '  <li class="breadcrumbs__item"><a href="/en/home/courses/">courses</a></li>'
                 '  <li class="breadcrumbs__item">'
@@ -392,7 +393,8 @@ class CourseRunCMSTestCase(CMSTestCase):
         self.assertContains(
             response,
             (
-                '<ul class="breadcrumbs">'
+                '<ul class="breadcrumbs__list">'
+                '  <li class="breadcrumbs__item">You are here:</li>'
                 '  <li class="breadcrumbs__item"><a href="/en/home/">home</a></li>'
                 '  <li class="breadcrumbs__item"><a href="/en/home/courses/">courses</a></li>'
                 '  <li class="breadcrumbs__item">'

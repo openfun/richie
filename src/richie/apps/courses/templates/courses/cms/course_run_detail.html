@@ -21,11 +21,9 @@
 {% block subheader %}
 <div class="subheader subheader--alternative">
     {% block breadcrumbs %}
-    <ul class="breadcrumbs">
         {% block breadcrumbs_content %}
         {% show_breadcrumb 0 "courses/cms/fragment_course_run_breadcrumb.html" %}
         {% endblock breadcrumbs_content %}
-    </ul>
     {% endblock breadcrumbs %}
 
     {% block subheader_content %}{% spaceless %}
