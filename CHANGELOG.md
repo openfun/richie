@@ -19,6 +19,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   through the settings.
 - Add new plugin "Glimpse" to include some basic content with some variant
   form factor available.
+- Add new plugin "NestedItem" to implement structured nestable and foldable
+  content items.
 
 ### Fixed
 

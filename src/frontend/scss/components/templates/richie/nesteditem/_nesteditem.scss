@@ -1,0 +1,161 @@
+.nesteditem {
+  $nesteditem-base-selector: &;
+
+  //
+  // Default variant acts like a simple horizontal menu
+  //
+  &--default {
+    @include sv-flex(1, 0, 100%);
+
+    #{$nesteditem-base-selector}__content {
+      font-weight: bold;
+
+      p {
+        margin: 0;
+      }
+    }
+
+    #{$nesteditem-base-selector}__items {
+      @include sv-flex(1, 0, 100%);
+      display: flex;
+      padding: 0;
+      margin-bottom: 0;
+      flex-direction: row;
+      flex-wrap: wrap;
+      list-style-type: none;
+
+      // First level items
+      & > #{$nesteditem-base-selector},
+      a {
+        @include sv-flex(1, 0, calc(100% - 0.2rem));
+        margin: 0.1rem;
+        padding: 0.25rem;
+
+        @include media-breakpoint-up($r-footer-breakpoint) {
+          @include sv-flex(1, 0, auto);
+        }
+
+        // Second level items
+        //#{$nesteditem-base-selector}, a {}
+      }
+    }
+  }
+
+  //
+  // Accordion variant folds first level which can be unfolded, second level
+  // is always a list
+  //
+  &--accordion {
+    $accordion-background-color: r-theme-val(accordion-plan, border-color);
+    $accordion-border-size: rem-calc(2px);
+
+    #{$nesteditem-base-selector}__item-content {
+      display: none;
+    }
+
+    #{$nesteditem-base-selector}__item[data-accordion-open] {
+      #{$nesteditem-base-selector}__item-content {
+        display: block;
+      }
+    }
+
+    #{$nesteditem-base-selector}__items {
+      position: relative;
+      padding: 0.5rem 0.5rem 0.5rem 2.5rem;
+      background: r-theme-val(accordion-plan, background-color);
+
+      // Draw left border where item dots will be fixed
+      &::before {
+        content: '';
+        position: absolute;
+        top: 1.75rem;
+        left: 1rem;
+        bottom: 1.75rem;
+        width: $accordion-border-size;
+        border-left: $accordion-border-size solid $accordion-background-color;
+      }
+    }
+
+    #{$nesteditem-base-selector}__item {
+      position: relative;
+
+      @if $accordion-background-color {
+        &:last-child {
+          // Trick to mask border, this would work only with current
+          // accordion background and never with on top of composite
+          // backgrounds like image or gradients
+          &::before {
+            content: '';
+            position: absolute;
+            top: 1.25rem;
+            left: -1.5rem;
+            bottom: 0;
+            width: $accordion-border-size;
+            border-left: $accordion-border-size
+              solid
+              $accordion-background-color;
+          }
+        }
+      }
+
+      // Draw item dot
+      &::after {
+        content: '';
+        position: absolute;
+        top: 1rem;
+        left: -1.68rem;
+        width: 0.5rem;
+        height: 0.5rem;
+        background: r-theme-val(accordion-plan, item-dot-color);
+        border-radius: 100%;
+      }
+    }
+
+    #{$nesteditem-base-selector}__item-title,
+    #{$nesteditem-base-selector}__item > a {
+      @include font-size($h3-font-size);
+      display: block;
+      position: relative;
+      margin-bottom: 0;
+      padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+      color: r-theme-val(accordion-plan, title-color);
+      font-weight: bold;
+      line-height: 1.1;
+      cursor: pointer;
+      background: transparent;
+      border: 0;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0.6rem;
+        left: -0.2rem;
+        width: 1.3rem;
+        height: 1.3rem;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 100% 100%;
+        background-image: r-theme-val(accordion-plan, dot-closed);
+      }
+    }
+
+    #{$nesteditem-base-selector}__item-content {
+      @include font-size($h6-font-size);
+      padding: 0.5rem 0;
+      color: r-theme-val(accordion-plan, content-color);
+
+      ul,
+      ol {
+        padding-left: 1.1rem;
+      }
+    }
+
+    #{$nesteditem-base-selector}__item[data-accordion-open] {
+      #{$nesteditem-base-selector}__item-title {
+        &::before {
+          background-image: r-theme-val(accordion-plan, dot-opened);
+        }
+      }
+    }
+  }
+}

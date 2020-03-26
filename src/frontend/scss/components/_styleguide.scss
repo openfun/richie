@@ -143,24 +143,6 @@
       }
     }
   }
-
-  // Accordion samples
-  .accordion {
-    @include accordion-base();
-  }
-
-  .accordion-plan {
-    @include accordion-base();
-    @include accordion-plan(
-      $item-dot-color: r-theme-val(accordion-plan, item-dot-color),
-      $title-color: r-theme-val(accordion-plan, title-color),
-      $content-color: r-theme-val(accordion-plan, content-color),
-      $border-color: r-theme-val(accordion-plan, border-color),
-      $background-color: r-theme-val(accordion-plan, background-color),
-      $dot-closed: r-theme-val(accordion-plan, dot-closed),
-      $dot-opened: r-theme-val(accordion-plan, dot-opened)
-    );
-  }
 }
 
 // Some debug to output variables to quickly update styleguide

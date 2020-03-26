@@ -170,9 +170,11 @@
                     const title = Array.prototype.slice.call(
                         itemObject.querySelectorAll('[data-accordion-title]'), 0
                     );
-                    title[0].addEventListener('click', () => {
-                        itemObject.toggleAttribute('data-accordion-open');
-                    });
+                    if (title.length > 0) {
+                        title[0].addEventListener('click', () => {
+                            itemObject.toggleAttribute('data-accordion-open');
+                        });
+                    }
                 });
             }
         });

@@ -175,7 +175,7 @@
     }
   }
 
-  .plan-accordion {
+  /*.plan-accordion {
     @include accordion-base();
     @include accordion-plan(
       $item-dot-color: r-theme-val(accordion-plan, item-dot-color),
@@ -186,7 +186,7 @@
       $dot-closed: r-theme-val(accordion-plan, dot-closed),
       $dot-opened: r-theme-val(accordion-plan, dot-opened)
     );
-  }
+  }*/
 
   &__license {
     #{$detail-selector}__title {

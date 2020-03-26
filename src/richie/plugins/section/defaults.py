@@ -16,7 +16,6 @@ SECTION_TEMPLATES = getattr(
         ("richie/section/section--clouds.html", _("Clouds")),
         ("richie/section/section--divider-top.html", _("Top divider")),
         ("richie/section/section_list.html", _("Unordered list")),
-        ("richie/section/section_accordion_item.html", _("Accordion item")),
         ("richie/section/category-tiles.html", _("Category tiles")),
         ("richie/section/section--blogpost.html", _("Favorite blogpost")),
     ],

@@ -80,7 +80,7 @@ CMS_PLACEHOLDER_CONF = {
         },
     },
     # Single column page
-    "richie/single-column.html maincontent": {
+    "richie/single_column.html maincontent": {
         "name": _("Main content"),
         "excluded_plugins": ["CKEditorPlugin", "GoogleMapPlugin"],
         "parent_classes": {
@@ -100,7 +100,9 @@ CMS_PLACEHOLDER_CONF = {
                 "OrganizationPlugin",
                 "OrganizationsByCategoryPlugin",
                 "PersonPlugin",
-            ]
+                "NestedItemPlugin",
+            ],
+            "NestedItemPlugin": ["NestedItemPlugin", "LinkPlugin"],
         },
     },
     # Course detail
@@ -141,8 +143,8 @@ CMS_PLACEHOLDER_CONF = {
     },
     "courses/cms/course_detail.html course_plan": {
         "name": _("Plan"),
-        "plugins": ["SectionPlugin"],
-        "child_classes": {"SectionPlugin": ["CKEditorPlugin"]},
+        "plugins": ["NestedItemPlugin"],
+        "child_classes": {"NestedItemPlugin": ["NestedItemPlugin", "LinkPlugin"]},
     },
     "courses/cms/course_detail.html course_information": {
         "name": _("Complementary information"),

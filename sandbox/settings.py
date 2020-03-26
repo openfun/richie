@@ -178,6 +178,7 @@ class Base(DRFMixin, RichieCoursesConfigurationMixin, Configuration):
         "richie.plugins.glimpse",
         "richie.plugins.html_sitemap",
         "richie.plugins.large_banner",
+        "richie.plugins.nesteditem",
         "richie.plugins.plain_text",
         "richie.plugins.section",
         "richie.plugins.simple_picture",
