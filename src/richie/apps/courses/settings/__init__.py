@@ -144,7 +144,7 @@ CMS_PLACEHOLDER_CONF = {
     "courses/cms/course_detail.html course_plan": {
         "name": _("Plan"),
         "plugins": ["NestedItemPlugin"],
-        "child_classes": {"NestedItemPlugin": ["NestedItemPlugin", "LinkPlugin"]},
+        "child_classes": {"NestedItemPlugin": ["NestedItemPlugin"]},
     },
     "courses/cms/course_detail.html course_information": {
         "name": _("Complementary information"),

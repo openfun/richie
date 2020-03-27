@@ -15,7 +15,6 @@ SECTION_TEMPLATES = getattr(
         ("richie/section/section--gradient-dark.html", _("Dark gradient")),
         ("richie/section/section--clouds.html", _("Clouds")),
         ("richie/section/section--divider-top.html", _("Top divider")),
-        ("richie/section/section_list.html", _("Unordered list")),
         ("richie/section/category-tiles.html", _("Category tiles")),
         ("richie/section/section--blogpost.html", _("Favorite blogpost")),
     ],

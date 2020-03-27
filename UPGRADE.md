@@ -44,6 +44,17 @@ $ make migrate
 - Users who make use of `<SearchSuggestField />` or `<RootSearchSuggestField />` in their own
   templates through `richie-react` need to update all the call sites: the `context` prop is now
   required for both of them. See the documentation for more details on `context`.
+- Section plugin template "section_cadenced" has been removed since it was covering special
+  case from old layout integration. A migration has been added to automatically update Section
+  plugins which used it to use the default one instead (the first from `SECTION_TEMPLATES`
+  choices). You may have to upgrade your settings if you were overriding it through
+  `RICHIE_SECTION_TEMPLATES`.
+- Section plugin template "section_list" has been removed since it was covering special case
+  for footer menu which is now intended to be done with new `NestedItem`. A migration has been
+  added to automatically update Section plugins which used it to use the default one instead
+  (the first from `SECTION_TEMPLATES` choices). You may have to upgrade your settings if
+  you were overriding it through `RICHIE_SECTION_TEMPLATES`. Also we recommend you to rebuild
+  your footer menu with `NestedItem` instead of `Section` plugins.
 
 ## 1.14.x to 1.15.x
 

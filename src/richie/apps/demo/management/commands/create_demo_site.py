@@ -88,24 +88,21 @@ def create_demo_site():
     footer_static_ph = StaticPlaceholder.objects.get_or_create(code="footer")[0]
     for footer_placeholder in [footer_static_ph.draft, footer_static_ph.public]:
         for language, content in FOOTER_CONTENT.items():
-            # Create the <ul> section to carry the list of links
-            section_plugin = add_plugin(
-                footer_placeholder,
-                plugin_type="SectionPlugin",
-                language=language,
-                template="richie/section/section_list.html",
+            # Create root nest
+            nest_root_plugin = add_plugin(
+                footer_placeholder, plugin_type="NestedItemPlugin", language=language,
             )
-
-            # One column per content object
             for footer_info in content:
-                column_plugin = add_plugin(
+                # Create the first level items for main columns
+                nest_column_plugin = add_plugin(
                     footer_placeholder,
-                    plugin_type="SectionPlugin",
+                    plugin_type="NestedItemPlugin",
                     language=language,
-                    target=section_plugin,
-                    template="richie/section/section_list.html",
-                    title=footer_info.get("title"),
+                    target=nest_root_plugin,
+                    content=footer_info.get("title", ""),
                 )
+
+                # Create the second level items for links
                 for item_info in footer_info.get("items", []):
                     if "internal_link" in item_info:
                         item_info = item_info.copy()
@@ -116,7 +113,7 @@ def create_demo_site():
                         footer_placeholder,
                         plugin_type="LinkPlugin",
                         language=language,
-                        target=column_plugin,
+                        target=nest_column_plugin,
                         **item_info,
                     )
 

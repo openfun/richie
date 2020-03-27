@@ -22,6 +22,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add new plugin "NestedItem" to implement structured nestable and foldable
   content items.
 
+
 ### Fixed
 
 - Fix an issue that crashed `regenerate_indexes` (and therefore
@@ -42,6 +43,12 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Improve ElasticSearch `regenerate_indexes` tests.
 - Implement new integration from fun-corporate work.
+
+### Removed
+
+- Some Section plugin templates has been removed: "section_cadenced",
+  "section_list". There are some migrations to clean plugin objects which
+  used them.
 
 ## [1.16.2] - 2019-12-18
 
