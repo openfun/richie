@@ -15,6 +15,7 @@ class NestedItem(CMSPlugin):
     Nested item
     """
 
+    content = models.TextField(_("Content"), blank=True, default="")
     variant = models.CharField(
         _("Variant"),
         max_length=50,
@@ -24,7 +25,6 @@ class NestedItem(CMSPlugin):
         null=True,
         help_text=_("Form factor variant"),
     )
-    content = models.TextField(_("Content"), blank=False, default="")
 
     def __str__(self):
         return Truncator(self.content).words(6, truncate="...")

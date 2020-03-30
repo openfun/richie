@@ -20,9 +20,8 @@ class NestedItemPlugin(CMSPluginBase):
     cache = True
     model = NestedItem
     module = PLUGINS_GROUP
-    name = _("NestedItem")
+    name = _("Nested item")
     allow_children = True
-    # child_classes = ["NestedItemPlugin"]
     render_template = "richie/nesteditem/nesteditem.html"
     fieldsets = ((None, {"fields": ["variant", "content"]}),)
 

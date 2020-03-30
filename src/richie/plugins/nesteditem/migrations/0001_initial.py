@@ -28,6 +28,7 @@ class Migration(migrations.Migration):
                         to="cms.CMSPlugin",
                     ),
                 ),
+                ("content", models.TextField(default="", verbose_name="Content")),
                 (
                     "variant",
                     models.CharField(
@@ -44,7 +45,6 @@ class Migration(migrations.Migration):
                         verbose_name="Variant",
                     ),
                 ),
-                ("content", models.TextField(default="", verbose_name="Content")),
             ],
             options={"abstract": False,},
             bases=("cms.cmsplugin",),
