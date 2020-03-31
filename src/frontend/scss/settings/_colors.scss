@@ -273,7 +273,7 @@ $r-theme: (
   ),
   blogpost-glimpse-favorite: (
     content-color: inherit,
-    title-color: inherit,
+    title-color: r-color('denim'),
     excerpt-color: r-color('slate-grey'),
     cta: $primary-scheme,
     cta-hover: $primary-scheme,

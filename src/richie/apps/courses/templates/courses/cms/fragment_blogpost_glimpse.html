@@ -14,11 +14,12 @@
             {% endget_page_plugins %}
 
             {% blockplugin plugins.0 %}
-            <img src="{% thumbnail instance.picture 900x500 crop upscale subject_location=instance.picture.subject_location %}"
-                srcset="{% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %} 300w
-                {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x340 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
-                {% if instance.picture.width >= 900 %},{% thumbnail instance.picture 900x510 crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}"
-                sizes="300px"
+            <img
+                src="{% thumbnail instance.picture 845x500 subject_location=instance.picture.subject_location %}"
+                srcset="{% thumbnail instance.picture 845x500 subject_location=instance.picture.subject_location %} 500w
+                    {% if instance.picture.width >= 1000 %},{% thumbnail instance.picture 1000x1000 subject_location=instance.picture.subject_location %} 1000w{% endif %}
+                    {% if instance.picture.width >= 2000 %},{% thumbnail instance.picture 2000x2000 subject_location=instance.picture.subject_location %} 2000w{% endif %}"
+                sizes="500px"
                 alt="">
             {% endblockplugin %}
         </div>

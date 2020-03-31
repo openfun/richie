@@ -222,7 +222,7 @@ $glimpse-gutter: 1.25rem;
     }
 
     #{$glimpse-item-selector}__categories {
-        display: flex;
+      display: flex;
     }
 
     #{$glimpse-item-selector}__title {
@@ -249,7 +249,7 @@ $glimpse-gutter: 1.25rem;
       order: 2;
 
       @include media-breakpoint-up(lg) {
-        @include sv-flex(1, 0, 70%);
+        @include sv-flex(1, 0, 65%);
         margin-top: 0;
       }
     }
@@ -260,8 +260,8 @@ $glimpse-gutter: 1.25rem;
       color: r-theme-val(blogpost-glimpse-favorite, content-color);
 
       @include media-breakpoint-up(lg) {
-        @include sv-flex(1, 0, 30%);
-        padding-right: 0.5rem;
+        @include sv-flex(1, 0, 35%);
+        padding-right: 1.5rem;
       }
     }
 
