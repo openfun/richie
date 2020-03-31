@@ -2,13 +2,31 @@
 //
 
 //
-// Glimpse variant
+// Glimpse default variant
 //
 .category-glimpse {
-  display: inline-block;
+  $glimpse-gutter: 0.5rem;
+
+  @include sv-flex(1, 0, calc(50% - #{$glimpse-gutter * 2}));
+  display: flex;
+  margin: $glimpse-gutter;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-content: space-between;
   border: 1px solid r-theme-val(category-glimpse, base-border);
   border-radius: $border-radius;
   background: r-theme-val(category-glimpse, base-background);
+
+  // Responsive adjustments
+  @include media-breakpoint-up(md) {
+    @include sv-flex(1, 0, calc(33.3333% - #{$glimpse-gutter * 2}));
+  }
+  @include media-breakpoint-up(lg) {
+    @include sv-flex(1, 0, calc(25% - #{$glimpse-gutter * 2}));
+  }
+  @include media-breakpoint-up(xl) {
+    @include sv-flex(1, 0, calc(16.6667% - #{$glimpse-gutter * 2}));
+  }
 
   &__body {
     @include sv-flex(1, 0, 100%);
@@ -84,28 +102,6 @@
     @include sv-flex(1, 0, 100%);
     padding: 0.5rem;
     text-align: left;
-  }
-
-  .category-glimpse {
-    $glimpse-gutter: 0.5rem;
-
-    @include sv-flex(1, 0, calc(50% - #{$glimpse-gutter * 2}));
-    display: flex;
-    margin: $glimpse-gutter;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    align-content: space-between;
-
-    // Responsive adjustments
-    @include media-breakpoint-up(md) {
-      @include sv-flex(1, 0, calc(33.3333% - #{$glimpse-gutter * 2}));
-    }
-    @include media-breakpoint-up(lg) {
-      @include sv-flex(1, 0, calc(25% - #{$glimpse-gutter * 2}));
-    }
-    @include media-breakpoint-up(xl) {
-      @include sv-flex(1, 0, calc(16.6667% - #{$glimpse-gutter * 2}));
-    }
   }
 }
 
