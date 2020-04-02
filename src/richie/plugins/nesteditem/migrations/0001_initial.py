@@ -34,7 +34,8 @@ class Migration(migrations.Migration):
                     models.CharField(
                         blank=True,
                         choices=[
-                            (None, "Default from parent template"),
+                            (None, "Inherit"),
+                            ("default", "Default"),
                             ("accordion", "Accordion"),
                             ("list", "List"),
                         ],

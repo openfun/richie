@@ -2,7 +2,7 @@
 {% comment %}Obviously, the context template variable "course" is required and must be a Course page extension{% endcomment %}
 
 {% with course_page=course.extended_object course_state=course.state main_org_title=course.get_main_organization.extended_object.get_title %}
-<a class="course-glimpse course-glimpse--link{% if variant %} course-glimpse--{{ variant }}{% endif %}{% if course_page.publisher_is_draft is True %} course-glimpse--draft{% endif %}"
+<a class="course-glimpse course-glimpse--link{% if course_variant %} course-glimpse--{{ course_variant }}{% endif %}{% if course_page.publisher_is_draft is True %} course-glimpse--draft{% endif %}"
  href="{{ course_page.get_absolute_url }}"
 >
     <div class="course-glimpse__media">
@@ -26,7 +26,7 @@
         {% get_page_plugins "course_icons" course_page as icon_plugins %}
         {% if icon_plugins %}
         <div class="course-glimpse__icon">
-            {% with variant="badge" has_link=False %}
+            {% with category_variant="badge" has_link=False %}
                 {% render_plugin icon_plugins.0 %}
             {% endwith %}
         </div>

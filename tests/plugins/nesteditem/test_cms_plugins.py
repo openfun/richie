@@ -111,7 +111,7 @@ class NestedItemCMSPluginsTestCase(CMSPluginTestCase):
         placeholder = Placeholder.objects.create(slot="test")
 
         dummy_context = {
-            "variant": "ping",
+            "nesteditem_variant": "ping",
         }
 
         # Create plugin without a variant

@@ -1,6 +1,6 @@
 {% load i18n cms_tags %}{% spaceless %}
 
-{% with variant=variant|default:"default" %}
+{% with nesteditem_variant=nesteditem_variant|default:"default" %}
 
 {% comment %}Accordion variant build a structure to ease folding content and it
 has two sub variants to do so: Container and item.
@@ -9,9 +9,9 @@ and necessary structure for folding its children items.
 Then "Item" is automatically applied on second level items (below the root
 one). Finally, every children items below second level will switch to simple
 "list" variant.{% endcomment %}
-{% if variant == "accordion" %}
+{% if nesteditem_variant == "accordion" %}
     {% if not is_item %}
-        <div class="nesteditem nesteditem--{{ variant }}">
+        <div class="nesteditem nesteditem--{{ nesteditem_variant }}">
             {% if instance.content %}
                 <h{{ header_level|default:2 }} class="nesteditem__head">
                     {{ instance.content|linebreaksbr }}
@@ -20,7 +20,7 @@ one). Finally, every children items below second level will switch to simple
             {% if instance.child_plugin_instances %}
             <div class="nesteditem__items">
                 {% for plugin in instance.child_plugin_instances %}
-                    {% with is_item=True variant="accordion" %}
+                    {% with is_item=True nesteditem_variant="accordion" %}
                         <div class="nesteditem__item" data-accordion-item>
                         {% render_plugin plugin %}
                         </div>
@@ -44,7 +44,7 @@ one). Finally, every children items below second level will switch to simple
             <ul>
             {% for plugin in instance.child_plugin_instances %}
                 <li>
-                {% with variant="list" %}
+                {% with nesteditem_variant="list" %}
                     {% render_plugin plugin %}
                 {% endwith %}
                 </li>
@@ -54,8 +54,8 @@ one). Finally, every children items below second level will switch to simple
         {% endif %}
     {% endif %}
 {% comment %}List variant just turns every items into a simple bullet list{% endcomment %}
-{% elif variant == "list" %}
-    <div class="nesteditem nesteditem--{{ variant }}">
+{% elif nesteditem_variant == "list" %}
+    <div class="nesteditem nesteditem--{{ nesteditem_variant }}">
         {% if instance.content %}
         <div class="nesteditem__content">
             {{ instance.content|linebreaksbr }}
@@ -74,7 +74,7 @@ one). Finally, every children items below second level will switch to simple
     </div>
 {% comment %}Default variant, default layout displays it as an horizontal menu{% endcomment %}
 {% else %}
-    <div class="nesteditem nesteditem--{{ variant }}">
+    <div class="nesteditem nesteditem--{{ nesteditem_variant }}">
         {% if instance.content %}
         <div class="nesteditem__content">
             {{ instance.content|linebreaks }}

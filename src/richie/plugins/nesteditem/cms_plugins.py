@@ -30,19 +30,19 @@ class NestedItemPlugin(CMSPluginBase):
         """
         Get the right final "variant" value for template context.
 
-        * If model instance has an empty "variant" attribute, use the "variant"
+        * If model instance has an empty "variant" attribute, use the "nesteditem_variant"
           value from parent template context, default to None if not set;
         * If model instance has a not null "variant" attribute use it, no
           matter what the value from parent template context is;
         """
-        return instance.variant or context.get("variant")
+        return instance.variant or context.get("nesteditem_variant")
 
     def render(self, context, instance, placeholder):
         context.update(
             {
                 "instance": instance,
                 "placeholder": placeholder,
-                "variant": self.compute_variant(context, instance),
+                "nesteditem_variant": self.compute_variant(context, instance),
             }
         )
         return context

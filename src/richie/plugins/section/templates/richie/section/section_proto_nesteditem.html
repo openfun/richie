@@ -1,0 +1,33 @@
+{% load cms_tags %}{% spaceless %}
+
+<section class="section {{ variants }}">
+    <div class="section__row">
+        {% if instance.title %}
+            <h{{ header_level|default:2 }} class="section__title">
+                {{ instance.title }}
+            </h{{ header_level|default:2 }}>
+        {% endif %}
+        <div class="section__items">
+
+            <h3 class="section__title">Default</h3>
+            {% for plugin in instance.child_plugin_instances %}
+                {% with header_level=3 %}
+                    {% render_plugin plugin %}
+                {% endwith %}
+            {% endfor %}
+
+            <hr>
+
+            <h3 class="section__title">New accordion</h3>
+            <div class="styleguide">
+                {% for plugin in instance.child_plugin_instances %}
+                    {% with header_level=3 variant="accordion" %}
+                        {% render_plugin plugin %}
+                    {% endwith %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endspaceless %}

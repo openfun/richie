@@ -1,15 +1,14 @@
 {% load i18n cms_tags extra_tags thumbnail %}{% spaceless %}
 {% comment %}Obviously, the context template variable "category" is required and must be a Category page extension{% endcomment %}
 
-{% with category_page=category.extended_object variant=variant|default:"glimpse" %}
+{% with category_page=category.extended_object category_variant=category_variant|default:"glimpse" %}
     {% if has_link or has_link|default_if_none:True %}
-    <a class="category-{{ variant }}{% if category_page.publisher_is_draft %} category-{{ variant }}--draft{% endif %}" href="{{ category_page.get_absolute_url }}"{% comment %}{% if category_page.category.color %} style="background: {{ category_page.category.color }};"{% endif %}{% endcomment %}>
+        <a class="category-{{ category_variant }}{% if category_page.publisher_is_draft %} category-{{ category_variant }}--draft{% endif %}" href="{{ category_page.get_absolute_url }}">
     {% else %}
-    <span class="category-{{ variant }}{% if category_page.publisher_is_draft %} category-{{ variant }}--draft{% endif %}"
-        {% comment %}{% if category_page.category.color %}style="background: {{ category_page.category.color }};"{% endif %}{% endcomment %}>
+        <span class="category-{{ category_variant }}{% if category_page.publisher_is_draft %} category-{{ category_variant }}--draft{% endif %}">
     {% endif %}
 
-        {% if variant == "badge" %}
+        {% if category_variant == "badge" %}
             {% comment %}Small CTA alike, icon + title, commonly horizontal{% endcomment %}
             {% get_page_plugins "icon" category_page as icon_plugins %}
             {% if icon_plugins %}
@@ -26,7 +25,7 @@
                 {% endblockplugin %}
             {% endif %}
             <span class="category-badge__title">{{ category_page.get_title }}</span>
-        {% elif variant == "tag" %}
+        {% elif category_variant == "tag" %}
             {% comment %}Small CTA alike, only title and no image, commonly horizontal{% endcomment %}
             <span class="category-tag__title">{{ category_page.get_title }}</span>
         {% else %}

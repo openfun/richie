@@ -52,8 +52,8 @@ CMS_PLACEHOLDER_CONF = {
     # Footer
     "footer": {
         "name": _("Footer"),
-        "plugins": ["LinkPlugin", "SectionPlugin"],
-        "child_classes": {"SectionPlugin": ["LinkPlugin", "SectionPlugin"]},
+        "plugins": ["NestedItemPlugin"],
+        "NestedItemPlugin": ["NestedItemPlugin", "LinkPlugin"],
     },
     "static_blogpost_headline": {
         "name": _("Static headline"),
@@ -76,7 +76,9 @@ CMS_PLACEHOLDER_CONF = {
                 "PersonPlugin",
                 "CKEditorPlugin",
                 "SectionPlugin",
-            ]
+                "NestedItemPlugin",
+            ],
+            "NestedItemPlugin": ["CategoryPlugin"],
         },
     },
     # Single column page

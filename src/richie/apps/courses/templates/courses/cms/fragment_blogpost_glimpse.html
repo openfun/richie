@@ -1,13 +1,9 @@
 {% load i18n cms_tags extra_tags thumbnail %}
 {% comment %}Obviously, the context template variable "blogpost" is required and must be a BlogPost page extension{% endcomment %}
 
-{% with blogpost_page=blogpost.extended_object %}
-{% if variant == "favorite" %}
-    <div class="
-        blogpost-glimpse
-        {% if variant %} blogpost-glimpse--{{ variant }}{% endif %}
-        {% if blogpost_page.publisher_is_draft %} blogpost-glimpse--draft{% endif %}"
-    >
+{% with blogpost_page=blogpost.extended_object blogpost_variant=blogpost_variant|default:"glimpse" %}
+{% if blogpost_variant == "favorite" %}
+    <div class="blogpost-glimpse{% if blogpost_variant %} blogpost-glimpse--{{ blogpost_variant }}{% endif %}{% if blogpost_page.publisher_is_draft %} blogpost-glimpse--draft{% endif %}">
         <div class="blogpost-glimpse__media">
             {% get_page_plugins "cover" blogpost_page as plugins or %}
                 <div class="blogpost-glimpse__empty">{% trans 'Cover' %}</div>
@@ -37,7 +33,7 @@
             </div>
         </div>
     </div>
-{% elif variant == "mini" %}
+{% elif blogpost_variant == "mini" %}
     <a href="{{ blogpost_page.get_absolute_url }}" class="blogpost-glimpse blogpost-glimpse--link blogpost-glimpse--mini">
         <div class="blogpost-glimpse__media">
             {% get_page_plugins "cover" blogpost_page as plugins or %}
@@ -58,7 +54,7 @@
         <div class="blogpost-glimpse__content">
             <div class="blogpost-glimpse__wrapper">
                 <div class="blogpost-glimpse__categories">
-                    {% with variant="tag" has_link=False %}
+                    {% with blogpost_variant="tag" has_link=False %}
                         {% show_placeholder "categories" blogpost_page %}
                     {% endwith %}
                 </div>
@@ -68,11 +64,7 @@
     </a>
 {% else %}
     <a href="{{ blogpost.extended_object.get_absolute_url }}"
-        class="
-        blogpost-glimpse blogpost-glimpse--link
-        {% if variant %} blogpost-glimpse--{{ variant }}{% endif %}
-        {% if blogpost_page.publisher_is_draft %} blogpost-glimpse--draft{% endif %}"
-    >
+        class="blogpost-glimpse blogpost-glimpse--link{% if blogpost_variant %} blogpost-glimpse--{{ blogpost_variant }}{% endif %}{% if blogpost_page.publisher_is_draft %} blogpost-glimpse--draft{% endif %}">
         {% if blogpost_page.publication_date %}
         <p class="blogpost-glimpse__date">
             {{ blogpost_page.publication_date|date:"DATE_FORMAT" }}
@@ -95,7 +87,7 @@
         <div class="blogpost-glimpse__content">
             <div class="blogpost-glimpse__wrapper">
                 <div class="blogpost-glimpse__categories">
-                    {% with variant="tag" has_link=False %}
+                    {% with category_variant="tag" has_link=False %}
                         {% show_placeholder "categories" blogpost_page %}
                     {% endwith %}
                 </div>

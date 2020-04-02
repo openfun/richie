@@ -8,7 +8,7 @@ GLIMPSE_VARIANTS = getattr(
     settings,
     "RICHIE_GLIMPSE_VARIANTS",
     [
-        (None, _("Default from parent template")),
+        (None, _("Inherit")),
         ("card_square", _("Square card")),
         ("row_half", _("Half row")),
         ("row_full", _("Full row")),

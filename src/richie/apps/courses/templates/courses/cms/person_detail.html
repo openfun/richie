@@ -23,7 +23,7 @@
                     {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"categories" %}
                     <div class="category-badge-list category-badge-list--tertiary">
                         <ul class="category-badge-list__container">
-                        {% with variant="badge" %}
+                        {% with category_variant="badge" %}
                             {% placeholder "categories" or %}
                                 <li class="category-badge-list__empty">
                                     {% trans "No associated categories" %}

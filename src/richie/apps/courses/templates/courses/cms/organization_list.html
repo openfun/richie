@@ -13,7 +13,7 @@
     <div class="organization-list__content">
     {% for page in current_page.get_child_pages %}
         {% if page.organization %}
-            {% include "courses/cms/fragment_organization_glimpse.html" with organization=page.organization variant="card" %}
+            {% include "courses/cms/fragment_organization_glimpse.html" with organization=page.organization organization_variant="card" %}
         {% endif %}
     {% empty %}
         <p class="organization-list__empty">{% trans "No organization yet" %}</p>

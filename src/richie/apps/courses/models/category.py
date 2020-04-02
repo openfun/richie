@@ -14,7 +14,7 @@ from cms.models import Title
 from cms.models.pluginmodel import CMSPlugin
 
 from ...core.models import BasePageExtension, PagePluginMixin
-from ..defaults import CATEGORIES_PAGE
+from ..defaults import CATEGORIES_PAGE, CATEGORY_GLIMPSE_VARIANT_CHOICES
 
 
 class Category(BasePageExtension):
@@ -198,6 +198,14 @@ class CategoryPluginModel(PagePluginMixin, CMSPlugin):
         related_name="category_plugins",
         limit_choices_to=get_category_limit_choices_to,
         on_delete=models.CASCADE,
+    )
+    variant = models.CharField(
+        _("variant"),
+        max_length=50,
+        choices=CATEGORY_GLIMPSE_VARIANT_CHOICES,
+        help_text=_("Optional glimpse variant for a custom look."),
+        blank=True,
+        null=True,
     )
 
     class Meta:

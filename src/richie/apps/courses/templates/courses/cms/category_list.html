@@ -13,7 +13,7 @@
   <div class="category-glimpse-list">
   {% for page in current_page.get_child_pages %}
     {% if page.category %}
-      {% include "courses/cms/fragment_category_glimpse.html" with category=page.category variant="glimpse" %}
+      {% include "courses/cms/fragment_category_glimpse.html" with category=page.category category_variant="glimpse" %}
     {% endif %}
   {% empty %}
     <p class="category-glimpse-list category-glimpse-list--empty">

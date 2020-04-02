@@ -32,7 +32,7 @@
                     {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_icons" or not current_page|is_empty_placeholder:"course_categories" %}
                     <div class="category-badge-list">
                         <div class="category-badge-list__container">
-                        {% with variant="badge" %}
+                        {% with category_variant="badge" %}
                         {% placeholder "course_icons" %}
                         {% placeholder "course_categories" or %}
                             {% if current_page.publisher_is_draft and current_page|is_empty_placeholder:"course_icons" %}

@@ -27,7 +27,7 @@
 <div class="category-tag-list category-tag-list--primary">
     <div class="category-tag-list__container">
         {% for category in categories %}
-            {% include "courses/cms/fragment_category_glimpse.html" with variant="tag" %}
+            {% include "courses/cms/fragment_category_glimpse.html" with category_variant="tag" %}
         {% endfor %}
     </div>
 </div>
@@ -39,7 +39,7 @@
     <div class="blogpost-detail__row">
 
         <div class="blogpost-detail__subhead">
-            {% with variant="tag" %}
+            {% with category_variant="tag" %}
                 {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"categories" %}
                 <div class="blogpost-detail__theme">
                     {% placeholder "categories" current_page or %}
@@ -57,7 +57,7 @@
                 {% endif %}
             </p>
 
-            {% with variant="tag" %}
+            {% with person_variant="tag" %}
                 {% if current_page.publisher_is_draft %}
                 <div class="blogpost-detail__authors">
                     {% placeholder "author" or %}
@@ -119,7 +119,7 @@
                 <div class="blogpost-glimpse-list">
                     <p class="blogpost-glimpse-list__title"><span>{% trans 'Related posts' %}</span></p>
                     {% for related_blogpost in current_page.blogpost.get_related_blogposts|slice:":3" %}
-                            {% include "courses/cms/fragment_blogpost_glimpse.html" with blogpost=related_blogpost variant="mini" %}
+                            {% include "courses/cms/fragment_blogpost_glimpse.html" with blogpost=related_blogpost blogpost_variant="mini" %}
                     {% endfor %}
                 </div>
             </div>

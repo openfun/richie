@@ -170,7 +170,7 @@ class GlimpseCMSPluginsTestCase(CMSPluginTestCase):
         placeholder = Placeholder.objects.create(slot="test")
 
         dummy_context = {
-            "variant": "ping",
+            "glimpse_variant": "ping",
         }
 
         # Create plugin without a variant

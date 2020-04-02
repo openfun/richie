@@ -246,7 +246,8 @@ class PersonCMSTestCase(CMSTestCase):
         self.assertIn(
             (
                 '<a class="organization-glimpse organization-glimpse--link '
-                'organization-glimpse--draft" href="{url:s}" title="{title:s}">'
+                'organization-glimpse--glimpse organization-glimpse--draft" '
+                'href="{url:s}" title="{title:s}">'
             ).format(
                 url=not_published_organization.extended_object.get_absolute_url(),
                 title=not_published_organization.extended_object.get_title(),

@@ -59,7 +59,7 @@
 
             {% if current_page.publisher_is_draft %}
             <div class="category-tag-list category-tag-list--primary">
-              {% with variant="tag" %}
+              {% with category_variant="tag" %}
                 {% placeholder "categories" or %}
                   <p class="category-tag-list__empty">
                     {% trans "No associated categories" %}

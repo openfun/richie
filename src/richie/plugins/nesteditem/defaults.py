@@ -8,7 +8,8 @@ NESTEDITEM_VARIANTS = getattr(
     settings,
     "RICHIE_NESTEDITEM_VARIANTS",
     [
-        (None, _("Default from parent template")),
+        (None, _("Inherit")),
+        ("default", _("Default")),
         ("accordion", _("Accordion")),
         ("list", _("List")),
     ],

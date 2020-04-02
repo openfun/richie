@@ -6,8 +6,11 @@ import re
 
 from django import forms
 from django.conf import settings
+from django.contrib.auth.models import AnonymousUser
+from django.test.client import RequestFactory
 
 from cms.api import add_plugin, create_page
+from cms.plugin_rendering import ContentRenderer
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
@@ -96,8 +99,9 @@ class OrganizationPluginTestCase(CMSTestCase):
         # And CMS page title should be in title attribute of the link
         self.assertIn(
             (
-                '<a class="organization-glimpse organization-glimpse--link" '
-                'href="/en/public-title/" title="public title">'
+                '<a class="organization-glimpse organization-glimpse--link '
+                'organization-glimpse--glimpse" href="/en/public-title/" '
+                'title="public title">'
             ).format(
                 url=organization_page.get_absolute_url(),
                 title=organization_page.get_title(),
@@ -127,8 +131,9 @@ class OrganizationPluginTestCase(CMSTestCase):
         url = page.get_absolute_url(language="fr")
         response = self.client.get(url)
         self.assertIn(
-            '<a class="organization-glimpse organization-glimpse--link" '
-            'href="/fr/titre-public/" title="titre public"',
+            '<a class="organization-glimpse organization-glimpse--link '
+            'organization-glimpse--glimpse" href="/fr/titre-public/" '
+            'title="titre public"',
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
         pattern = (
@@ -174,9 +179,10 @@ class OrganizationPluginTestCase(CMSTestCase):
         self.assertContains(response, "draft title")
         self.assertNotContains(response, "public title")
 
-    def test_cms_plugins_organization_render_variant(self):
+    def test_cms_plugins_organization_render_instance_variant(self):
         """
-        The organization plugin should render according to the variant option.
+        The organization plugin should render according to the variant plugin
+        option.
         """
         staff = UserFactory(is_staff=True, is_superuser=True)
         self.client.login(username=staff.username, password="password")
@@ -210,3 +216,39 @@ class OrganizationPluginTestCase(CMSTestCase):
         # The new organization-glimpse should have the small attribute
         response = self.client.get(url)
         self.assertContains(response, "organization-glimpse--small")
+
+    def test_cms_plugins_organization_render_context_variant(self):
+        """
+        The organization plugin should render according to variant variable
+        eventually present in the context of its container.
+        """
+        # Create an blogpost
+        organization = OrganizationFactory(page_title="public title")
+        organization_page = organization.extended_object
+
+        # Create a page to add the plugin to
+        page = create_i18n_page("A page")
+        placeholder = page.placeholders.get(slot="maincontent")
+
+        # Add blogpost plugin with default template
+        model_instance = add_plugin(
+            placeholder,
+            OrganizationPlugin,
+            "en",
+            page=organization_page,
+            variant="small",
+        )
+
+        # Get generated html
+        request = RequestFactory()
+        request.current_page = page
+        request.user = AnonymousUser()
+        context = {
+            "current_page": page,
+            "organization_variant": "xxl",
+            "request": request,
+        }
+        renderer = ContentRenderer(request=request)
+        html = renderer.render_plugin(model_instance, context)
+
+        self.assertIn("organization-glimpse--small", html)

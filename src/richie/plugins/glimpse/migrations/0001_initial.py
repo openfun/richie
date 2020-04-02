@@ -39,7 +39,7 @@ class Migration(migrations.Migration):
                     models.CharField(
                         blank=True,
                         choices=[
-                            (None, "Default from parent template"),
+                            (None, "Inherit"),
                             ("card_square", "Square card"),
                             ("row_half", "Half row"),
                             ("row_full", "Full row"),

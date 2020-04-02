@@ -35,7 +35,7 @@
                     {% block categories %}
                     <div class="category-badge-list">
                         <div class="category-badge-list__container">
-                        {% with variant="badge" %}
+                        {% with category_variant="badge" %}
                             {% show_placeholder "course_icons" current_page.parent_page %}
                             {% show_placeholder "course_categories" current_page.parent_page %}
                         {% endwith %}

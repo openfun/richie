@@ -143,6 +143,7 @@ class CategoryPluginTestCase(CMSTestCase):
 
         # Check the page content in English
         response = self.client.get(url)
+
         # Category's title should be present as a link to the cms page
         # And CMS page title should be in title attribute of the link
         self.assertContains(

@@ -108,7 +108,11 @@ class BlogPostPluginTestCase(CMSTestCase):
         # The blogpost's name should be present as a link to the cms page
         # And CMS page title should be in title attribute of the link
         self.assertIn(
-            '<a href="/en/public-title/" class=" blogpost-glimpse blogpost-glimpse--link " ',
+            (
+                '<a href="/en/public-title/" '
+                'class="blogpost-glimpse blogpost-glimpse--link '
+                'blogpost-glimpse--glimpse"'
+            ),
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
 
@@ -139,7 +143,11 @@ class BlogPostPluginTestCase(CMSTestCase):
         url = page.get_absolute_url(language="fr")
         response = self.client.get(url)
         self.assertIn(
-            '<a href="/fr/titre-public/" class=" blogpost-glimpse blogpost-glimpse--link " ',
+            (
+                '<a href="/fr/titre-public/" '
+                'class="blogpost-glimpse blogpost-glimpse--link '
+                'blogpost-glimpse--glimpse"'
+            ),
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
 
@@ -228,8 +236,38 @@ class BlogPostPluginTestCase(CMSTestCase):
 
     def test_cms_plugins_blogpost_default_variant(self):
         """
-        If the variant is not specified on the blogpost pluging, it should render according
-        to variant variable eventually present in the context of its container.
+        If the variant is not specified on the blogpost pluging, it should render
+        according to variant variable eventually present in the context of its
+        container.
+        """
+        # Create an blogpost
+        blogpost = BlogPostFactory(page_title="public title")
+        blogpost_page = blogpost.extended_object
+
+        # Create a page to add the plugin to
+        page = create_i18n_page("A page")
+        placeholder = page.placeholders.get(slot="maincontent")
+
+        # Add blogpost plugin with default template
+        model_instance = add_plugin(
+            placeholder, BlogPostPlugin, "en", page=blogpost_page, variant="small"
+        )
+
+        # Get generated html
+        request = RequestFactory()
+        request.current_page = page
+        request.user = AnonymousUser()
+        context = {"current_page": page, "blogpost_variant": "xxl", "request": request}
+        renderer = ContentRenderer(request=request)
+        html = renderer.render_plugin(model_instance, context)
+
+        self.assertIn("blogpost-glimpse--small", html)
+
+    def test_cms_plugins_blogpost_cascade_variant(self):
+        """
+        If the variant is specified on the blogpost pluging and also as variant
+        variable in the context of its container, the instance variable should
+        be used.
         """
         # Create an blogpost
         blogpost = BlogPostFactory(page_title="public title")
@@ -248,7 +286,7 @@ class BlogPostPluginTestCase(CMSTestCase):
         request = RequestFactory()
         request.current_page = page
         request.user = AnonymousUser()
-        context = {"current_page": page, "variant": "xxl", "request": request}
+        context = {"current_page": page, "blogpost_variant": "xxl", "request": request}
         renderer = ContentRenderer(request=request)
         html = renderer.render_plugin(model_instance, context)
 

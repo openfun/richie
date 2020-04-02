@@ -41,6 +41,8 @@ class OrganizationPlugin(CMSPluginBase):
                 "instance": instance,
                 "relevant_page": instance.relevant_page,
                 "placeholder": placeholder,
+                "organization_variant": instance.variant
+                or context.get("organization_variant"),
             }
         )
         return context
@@ -67,6 +69,8 @@ class OrganizationsByCategoryPlugin(CMSPluginBase):
             {
                 "instance": instance,
                 "organizations": instance.relevant_page.category.get_organizations(),
+                "organization_variant": instance.variant
+                or context.get("organization_variant"),
             }
         )
         return context
@@ -79,6 +83,7 @@ class CategoryPlugin(CMSPluginBase):
     """
 
     cache = True
+    fieldsets = ((None, {"fields": ["page", "variant"]}),)
     model = CategoryPluginModel
     module = PLUGINS_GROUP
     name = _("Cat")
@@ -90,8 +95,10 @@ class CategoryPlugin(CMSPluginBase):
                 "instance": instance,
                 "relevant_page": instance.relevant_page,
                 "placeholder": placeholder,
+                "category_variant": instance.variant or context.get("category_variant"),
             }
         )
+
         return context
 
 
@@ -114,6 +121,7 @@ class CoursePlugin(CMSPluginBase):
                 "instance": instance,
                 "relevant_page": instance.relevant_page,
                 "placeholder": placeholder,
+                "course_variant": instance.variant or context.get("course_variant"),
             }
         )
         return context
@@ -182,7 +190,7 @@ class BlogPostPlugin(CMSPluginBase):
                 "instance": instance,
                 "relevant_page": instance.relevant_page,
                 "placeholder": placeholder,
-                "variant": instance.variant or context.get("variant"),
+                "blogpost_variant": instance.variant or context.get("blogpost_variant"),
             }
         )
         return context
