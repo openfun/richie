@@ -80,7 +80,12 @@ export const SearchSuggestField = ({ context }: CommonDataProps) => {
     _,
     { method, newValue },
   ) => {
-    if (method === 'type' && (newValue.length === 0 || newValue.length >= 3)) {
+    if (
+      method === 'type' &&
+      // Check length against trimmed version as our backend API needs 3 non-space characters to
+      // do a full-text search.
+      (newValue.length === 0 || newValue.trim().length >= 3)
+    ) {
       dispatchCourseSearchParamsUpdate({
         query: newValue,
         type: 'QUERY_UPDATE',

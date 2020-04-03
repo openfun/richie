@@ -34,6 +34,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   when using full text search.
 - Properly clear the search input when using the "clear fields" button on the
   course search view.
+- Prevent search view errors when the search query is 3 or more characters
+  long, but 2 or less when whitespace is trimmed from both ends.
 
 ### Changed
 

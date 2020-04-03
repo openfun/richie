@@ -502,6 +502,55 @@ describe('components/SearchSuggestField', () => {
     );
   });
 
+  it('does not search until the user types 3 actual (non-space) characters', async () => {
+    fetchMock.get('/api/v1.0/filter-definitions/', {
+      levels,
+      organizations,
+      persons,
+      subjects,
+    });
+
+    ['organizations', 'persons', 'subjects'].forEach((kind) =>
+      fetchMock.get(`begin:/api/v1.0/${kind}/autocomplete/?query=`, []),
+    );
+
+    const { getByPlaceholderText } = render(
+      <IntlProvider locale="en">
+        <HistoryWrapper>
+          <SearchSuggestField context={context} />
+        </HistoryWrapper>
+      </IntlProvider>,
+    );
+
+    const field = getByPlaceholderText(
+      'Search for courses, organizations, categories',
+    );
+    fireEvent.focus(field);
+
+    // NB: the tests below rely on the very crude debounce mock for lodash-debounce.
+    // TODO: rewrite them when we use mocked timers to test our debouncing strategy.
+    fireEvent.change(field, { target: { value: 'ri' } });
+    await wait();
+    expect(history.pushState).not.toHaveBeenCalled();
+
+    fireEvent.change(field, { target: { value: 'ri ' } });
+    await wait();
+    expect(history.pushState).not.toHaveBeenCalled();
+
+    fireEvent.change(field, { target: { value: ' ri' } });
+    await wait();
+    expect(history.pushState).not.toHaveBeenCalled();
+
+    fireEvent.change(field, { target: { value: 'ric' } });
+    await wait();
+    expect(history.pushState).toHaveBeenCalledTimes(1);
+    expect(history.pushState).toHaveBeenLastCalledWith(
+      { limit: '20', offset: '0', query: 'ric' },
+      '',
+      '/search?limit=20&offset=0&query=ric',
+    );
+  });
+
   it('does not remove other filters when it searches as the user types', async () => {
     fetchMock.get('/api/v1.0/filter-definitions/', {
       levels,
