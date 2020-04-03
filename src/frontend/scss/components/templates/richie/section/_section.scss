@@ -1,5 +1,6 @@
 .section {
   @include detail-block;
+  @include sv-flex(1, 0, 100%);
 
   &__title {
     @include detail-title;
@@ -33,6 +34,98 @@
       @include media-breakpoint-up(lg) {
         margin-top: 2rem;
       }
+    }
+  }
+}
+
+//
+// A special container to turn glimpses into tiny glimpses
+//
+.section-tiles {
+  @include sv-flex(1, 0, 100%);
+
+  &__title {
+    @include detail-title;
+    margin: 0;
+  }
+
+  &__row {
+    @include detail-row;
+    width: 100%;
+  }
+
+  &__items {
+    @include feature-list($list-hjustify: center, $row: false);
+    display: flex;
+    margin: 0 auto;
+    padding: 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    // Fix basic direct element to act like a full width block
+    & > h1,
+    & > h2,
+    & > h3,
+    & > h4,
+    & > h5,
+    & > h6,
+    & > p,
+    & > ul,
+    & > ol {
+      @include sv-flex(1, 0, 100%);
+      margin: 0 auto 0.5rem;
+      padding: 0 1rem;
+
+      @include media-breakpoint-up(lg) {
+        padding: 0 20%;
+      }
+    }
+
+    // Fix some basic direct element text font
+    & > p,
+    & > ul,
+    & > ol {
+      @include font-size($h5-font-size);
+      color: inherit;
+      font-family: $headings-font-family;
+      font-weight: normal;
+      line-height: 1.1;
+    }
+  }
+
+  .category-glimpse {
+    @include sv-flex(1, 0, 15%);
+    background: transparent;
+    border: 0;
+
+    &__logo {
+      img {
+        max-width: 3.75rem;
+        margin: 0 auto;
+      }
+    }
+  }
+
+  // Neutralize sub section behaviors since they are just used as structural
+  // element
+  .section {
+    width: 100%;
+    margin: 0 !important;
+    padding: 0 !important;
+
+    &__row {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    &__items {
+      display: flex;
+      margin: 0 !important;
+      padding: 0 !important;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-content: center;
     }
   }
 }
