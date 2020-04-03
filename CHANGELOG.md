@@ -32,6 +32,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   the first organization by node path.
 - Fix an issue in Course Search that removed existing filters in some cases
   when using full text search.
+- Properly clear the search input when using the "clear fields" button on the
+  course search view.
 
 ### Changed
 
