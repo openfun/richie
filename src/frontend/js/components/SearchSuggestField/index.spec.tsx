@@ -1,12 +1,12 @@
 import 'testSetup';
 
-import { fireEvent, render, wait } from '@testing-library/react';
+import { act, fireEvent, render, wait } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
-import { stringify } from 'query-string';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
-import { History, HistoryContext, useHistory } from 'data/useHistory';
+import { useCourseSearchParams } from 'data/useCourseSearchParams';
+import { HistoryContext, useHistory } from 'data/useHistory';
 import { FilterDefinition } from 'types/filters';
 import { history, location } from 'utils/indirection/window';
 import { SearchSuggestField } from '.';
@@ -110,6 +110,42 @@ describe('components/SearchSuggestField', () => {
 
     // The existing query is shown in the input
     getByDisplayValue('machine learning');
+  });
+
+  it('clears the input field when the query is removed by another component elsewhere in the tree', () => {
+    let doDispatchCourseSearchParamsUpdate: any;
+    const OtherComponent = () => {
+      const [, dispatchCourseSearchParamsUpdate] = useCourseSearchParams();
+      doDispatchCourseSearchParamsUpdate = dispatchCourseSearchParamsUpdate;
+      return <div></div>;
+    };
+
+    location.search = '?limit=20&offset=0&query=social%20sciences';
+    const { getByDisplayValue, rerender } = render(
+      <IntlProvider locale="en">
+        <HistoryWrapper>
+          <SearchSuggestField context={context} />
+          <OtherComponent />
+        </HistoryWrapper>
+      </IntlProvider>,
+    );
+
+    // The existing query is shown in the input
+    const input: any = getByDisplayValue('social sciences');
+
+    // Some other component resets the filter, in effect clearing the query
+    act(() => doDispatchCourseSearchParamsUpdate({ type: 'FILTER_RESET' }));
+    rerender(
+      <IntlProvider locale="en">
+        <HistoryWrapper>
+          <SearchSuggestField context={context} />
+          <OtherComponent />
+        </HistoryWrapper>
+      </IntlProvider>,
+    );
+
+    // The input does not show a value anymore
+    expect(input.value).toEqual('');
   });
 
   it('gets suggestions from the API when the user types something in the field', async () => {

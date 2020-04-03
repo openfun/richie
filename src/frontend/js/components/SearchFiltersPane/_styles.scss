@@ -14,6 +14,7 @@ $richie-search-filters-pane-clear-padding: 0rem 0.5rem 0 !default;
 .search-filters-pane {
   background: $richie-search-filters-pane-background;
   overflow: hidden; // Prevent margin-collapsing as .search-filters-pane has a background
+  color: white;
 
   &__title {
     margin: $richie-search-filters-pane-title-margin;
