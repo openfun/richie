@@ -68,7 +68,7 @@ interface ResourceSuggestionSection<S extends Suggestion<string>> {
 interface DefaultSuggestionSection {
   kind: DefaultSuggestion['kind'];
   title: null;
-  values: Array<Suggestion<'default'>>;
+  values: Suggestion<'default'>[];
 }
 
 /**

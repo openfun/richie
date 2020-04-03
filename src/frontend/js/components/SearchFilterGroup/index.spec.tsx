@@ -23,7 +23,7 @@ jest.mock('components/SearchFilterValueParent', () => ({
 describe('components/SearchFilterGroup', () => {
   const historyPushState = jest.fn();
   const historyReplaceState = jest.fn();
-  const makeHistoryOf: (params: any) => History = params => [
+  const makeHistoryOf: (params: any) => History = (params) => [
     { state: params, title: '', url: `/search?${stringify(params)}` },
     historyPushState,
     historyReplaceState,

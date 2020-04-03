@@ -19,7 +19,7 @@ import { Root } from 'components/Root';
 import { handle } from 'utils/errors/handle';
 
 // Wait for the DOM to load before we scour it for an element that requires React to be rendered
-document.addEventListener('DOMContentLoaded', async event => {
+document.addEventListener('DOMContentLoaded', async (event) => {
   // Find all the elements that need React to render a component
   const richieReactSpots = Array.prototype.slice.call(
     document.querySelectorAll('.richie-react'),

@@ -85,9 +85,9 @@ export const PaginateCourseSearch = ({
     maxPage,
   ]
     // Filter out page numbers below 1 (when currentPage is 1 or 2)
-    .filter(page => page > 0)
+    .filter((page) => page > 0)
     // Filter out page numbers above the max (they do not have anything to display)
-    .filter(page => page <= maxPage)
+    .filter((page) => page <= maxPage)
     // Drop duplicates (this is trivial as our pageList is sorted)
     .filter((page, index, list) => page !== list[index - 1]);
 

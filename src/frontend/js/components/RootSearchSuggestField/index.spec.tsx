@@ -198,7 +198,7 @@ describe('<RootSearchSuggestField />', () => {
       subjects,
     });
 
-    ['courses', 'subjects'].forEach(kind =>
+    ['courses', 'subjects'].forEach((kind) =>
       fetchMock.get(`/api/v1.0/${kind}/autocomplete/?query=some%20query`, []),
     );
 

@@ -16,7 +16,7 @@ export const useAsyncEffect = <T extends ReadonlyArray<any>>(
   return useEffect(() => {
     const cleanupPromise = effect();
     return () => {
-      cleanupPromise.then(cleanup => cleanup && cleanup());
+      cleanupPromise.then((cleanup) => cleanup && cleanup());
     };
   }, dependencies);
 };

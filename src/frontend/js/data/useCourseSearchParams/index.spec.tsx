@@ -33,7 +33,7 @@ describe('data/useCourseSearchParams', () => {
   beforeEach(() => {
     // Remove any keys added to the mockWindow location object, reset pathname to /search
     Object.keys(mockWindow.location).forEach(
-      key => delete (mockWindow.location as any)[key],
+      (key) => delete (mockWindow.location as any)[key],
     );
     mockWindow.location.pathname = '/search';
     jest.resetAllMocks();

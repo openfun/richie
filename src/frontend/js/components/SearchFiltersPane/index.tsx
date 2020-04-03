@@ -46,9 +46,9 @@ export const SearchFiltersPane = ({
     // Drop filters that are irrelevant to the "clear" button
     .filter(([key]) => !Object.keys(API_LIST_DEFAULT_PARAMS).includes(key))
     // Only keep the values
-    .map(entry => entry[1])
+    .map((entry) => entry[1])
     // Drop undefined & null values
-    .filter(item => !!item);
+    .filter((item) => !!item);
   // Flatten the list of active filters before counting
   // This allows us to eg. count 3 if there are 3 active organization filters
   const activeFilterCount = ([] as any[]) // Type safety does not matter as we're only counting
@@ -74,7 +74,7 @@ export const SearchFiltersPane = ({
         />
       </a>
       {filterList &&
-        filterList.map(filter => (
+        filterList.map((filter) => (
           <SearchFilterGroup filter={filter} key={filter.name} />
         ))}
     </div>

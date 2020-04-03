@@ -42,7 +42,7 @@ export const getSuggestionsSection = async (
     );
   }
 
-  let responseData: Array<Suggestion<string>>;
+  let responseData: Suggestion<string>[];
   try {
     responseData = await response.json();
   } catch (error) {

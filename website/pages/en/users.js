@@ -11,7 +11,7 @@ module.exports = class Users extends React.Component {
       return null;
     }
 
-    const showcase = siteConfig.users.map(user => (
+    const showcase = siteConfig.users.map((user) => (
       <img
         src={user.image}
         alt={user.caption}

@@ -25,7 +25,7 @@ describe('data/useCourseSearch', () => {
 
   it('gets the courses with the passed params', async () => {
     let doResolve: (value: any) => void;
-    const responseOne = new Promise(resolve => (doResolve = resolve));
+    const responseOne = new Promise((resolve) => (doResolve = resolve));
     mockFetchList.mockReturnValue(responseOne as any);
     const { rerender } = render(
       <TestComponent params={{ limit: '999', offset: '0' }} />,
@@ -46,7 +46,7 @@ describe('data/useCourseSearch', () => {
 
     // We then reset our fetchList mock and change the search params
     mockFetchList.mockReset();
-    const responseTwo = new Promise(resolve => (doResolve = resolve));
+    const responseTwo = new Promise((resolve) => (doResolve = resolve));
     mockFetchList.mockReturnValue(responseTwo as any);
     rerender(
       <TestComponent
@@ -71,7 +71,7 @@ describe('data/useCourseSearch', () => {
 
   it('does not trigger a new request if the params are unchanged', async () => {
     let doResolve: (value: any) => void;
-    const responseOne = new Promise(resolve => (doResolve = resolve));
+    const responseOne = new Promise((resolve) => (doResolve = resolve));
     mockFetchList.mockReturnValue(responseOne as any);
     const params = { limit: '999', offset: '0' };
     const { rerender } = render(<TestComponent params={params} />);

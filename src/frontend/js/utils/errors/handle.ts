@@ -11,7 +11,7 @@ if (context && context.sentry_dsn) {
     environment: context.environment,
     release: RICHIE_VERSION,
   });
-  Sentry.configureScope(scope => scope.setExtra('application', 'frontend'));
+  Sentry.configureScope((scope) => scope.setExtra('application', 'frontend'));
 }
 
 /**
