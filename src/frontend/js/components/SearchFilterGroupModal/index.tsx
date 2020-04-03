@@ -101,7 +101,7 @@ export const SearchFilterGroupModal = ({
     const facetResponse = await fetchList('courses', {
       ...coursesSearchParams,
       [`${filter.name}_include`]: `(${searchResponse.content.objects
-        .map(resource => resource.id)
+        .map((resource) => resource.id)
         .join('|')})`,
       scope: 'filters',
     });
@@ -143,7 +143,7 @@ export const SearchFilterGroupModal = ({
           <input
             aria-label="Search for filters to add"
             className="search-filter-group-modal__form__input"
-            onChange={event => {
+            onChange={(event) => {
               setQuery(event.target.value);
             }}
             placeholder={`Search in ${filter.human_name}`}
@@ -161,7 +161,7 @@ export const SearchFilterGroupModal = ({
             </div>
           ) : (
             <ul className="search-filter-group-modal__form__values">
-              {values.map(value => (
+              {values.map((value) => (
                 <li
                   className="search-filter-group-modal__form__values__item"
                   key={value.key}

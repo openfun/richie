@@ -55,7 +55,7 @@ export const SearchFilterValueParent = ({
   const childrenPathMatch = getMPTTChildrenPathMatcher(value.key);
   const childrenPathMatchRegexp = new RegExp(childrenPathMatch);
   // Hide children by default, unless at least one of them is currently active
-  const hasActiveChildren = activeValuesList.some(activeValueKey =>
+  const hasActiveChildren = activeValuesList.some((activeValueKey) =>
     childrenPathMatchRegexp.test(activeValueKey),
   );
   const [userShowChildren, setUserShowChildren] = useState(
@@ -124,8 +124,9 @@ export const SearchFilterValueParent = ({
             },
           )}
           aria-pressed={showChildren}
-          className={`search-filter-value-parent__self__unfold ${showChildren &&
-            'search-filter-value-parent__self__unfold--open'}`}
+          className={`search-filter-value-parent__self__unfold ${
+            showChildren && 'search-filter-value-parent__self__unfold--open'
+          }`}
           onClick={() => setUserShowChildren(!showChildren)}
         >
           {showChildren ? '-' : '+'}
@@ -133,7 +134,7 @@ export const SearchFilterValueParent = ({
       </div>
       {showChildren && (
         <div className="search-filter-value-parent__children">
-          {children.map(childValue => (
+          {children.map((childValue) => (
             <SearchFilterValueLeaf
               filter={filter}
               key={childValue.key}

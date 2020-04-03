@@ -28,7 +28,7 @@ export const useStaticFilters = (includeCoursesConfig = false) => {
     Nullable<(filters: StaticFilterDefinitions) => void>
   >(null);
   const [filtersPromise] = useState<Promise<StaticFilterDefinitions>>(
-    () => new Promise(resolve => (filtersResolver.current = resolve)),
+    () => new Promise((resolve) => (filtersResolver.current = resolve)),
   );
 
   useAsyncEffect(async () => {

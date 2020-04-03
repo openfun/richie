@@ -34,7 +34,7 @@ const filter = {
 describe('<SearchFilterGroupModal />', () => {
   const historyPushState = jest.fn();
   const historyReplaceState = jest.fn();
-  const makeHistoryOf: (params: any) => History = params => [
+  const makeHistoryOf: (params: any) => History = (params) => [
     { state: params, title: '', url: `/search?${stringify(params)}` },
     historyPushState,
     historyReplaceState,
@@ -103,13 +103,13 @@ describe('<SearchFilterGroupModal />', () => {
     // Default search results are shown with their facet counts
     await wait();
     getByText(
-      content => content.startsWith('Value #42') && content.includes('(7)'),
+      (content) => content.startsWith('Value #42') && content.includes('(7)'),
     );
     getByText(
-      content => content.startsWith('Value #84') && content.includes('(12)'),
+      (content) => content.startsWith('Value #84') && content.includes('(12)'),
     );
     getByText(
-      content => content.startsWith('Value #99') && content.includes('(21)'),
+      (content) => content.startsWith('Value #99') && content.includes('(21)'),
     );
   });
 
@@ -159,10 +159,10 @@ describe('<SearchFilterGroupModal />', () => {
     // Default search results are shown with their facet counts
     await wait();
     getByText(
-      content => content.startsWith('Value #42') && content.includes('(7)'),
+      (content) => content.startsWith('Value #42') && content.includes('(7)'),
     );
     getByText(
-      content => content.startsWith('Value #84') && content.includes('(12)'),
+      (content) => content.startsWith('Value #84') && content.includes('(12)'),
     );
 
     // User starts typing, less than 3 characters
@@ -201,10 +201,10 @@ describe('<SearchFilterGroupModal />', () => {
     // New search results are shown with their facet counts
     await wait();
     getByText(
-      content => content.startsWith('Value #12') && content.includes('(7)'),
+      (content) => content.startsWith('Value #12') && content.includes('(7)'),
     );
     getByText(
-      content => content.startsWith('Value #17') && content.includes('(12)'),
+      (content) => content.startsWith('Value #17') && content.includes('(12)'),
     );
 
     // User further refines their search query
@@ -240,10 +240,10 @@ describe('<SearchFilterGroupModal />', () => {
     // New search results are shown with their facet counts
     await wait();
     getByText(
-      content => content.startsWith('Value #03') && content.includes('(12)'),
+      (content) => content.startsWith('Value #03') && content.includes('(12)'),
     );
     getByText(
-      content => content.startsWith('Value #17') && content.includes('(2)'),
+      (content) => content.startsWith('Value #17') && content.includes('(2)'),
     );
   });
 
@@ -354,10 +354,10 @@ describe('<SearchFilterGroupModal />', () => {
     // Default search results are shown with their facet counts
     await wait();
     const value42 = getByText(
-      content => content.startsWith('Value #42') && content.includes('(7)'),
+      (content) => content.startsWith('Value #42') && content.includes('(7)'),
     );
     getByText(
-      content => content.startsWith('Value #84') && content.includes('(12)'),
+      (content) => content.startsWith('Value #84') && content.includes('(12)'),
     );
 
     // User clicks Value #42, it is added to course search params through pushState

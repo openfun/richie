@@ -109,7 +109,7 @@ module.exports = {
   plugins: [
     // Use module replacement to override any number of Richie components as defined in the settings
     ...Object.entries(overrides).map(
-      entry =>
+      (entry) =>
         new webpack.NormalModuleReplacementPlugin(
           new RegExp(`components\/${entry[0]}$`),
           entry[1],

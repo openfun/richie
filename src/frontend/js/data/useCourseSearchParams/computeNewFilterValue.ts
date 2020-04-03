@@ -63,7 +63,7 @@ export const computeNewFilterValue = (
     // ADD: Just push the new value into our existing array of values
     FILTER_ADD: () => [
       ...existingValue.filter(
-        value =>
+        (value) =>
           value !== update.payload &&
           !isMPTTParentOf(value, update.payload) &&
           !isMPTTChildOf(value, update.payload),
@@ -72,7 +72,7 @@ export const computeNewFilterValue = (
     ],
     // REMOVE: Return the existing array of values without the one we needed to remove
     FILTER_REMOVE: () =>
-      dropEmptyArray(existingValue.filter(v => v !== update.payload)),
+      dropEmptyArray(existingValue.filter((v) => v !== update.payload)),
   }[update.action]();
 
   function dropEmptyArray(array: string[]) {

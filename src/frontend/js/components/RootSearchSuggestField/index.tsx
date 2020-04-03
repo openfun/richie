@@ -81,7 +81,7 @@ export const RootSearchSuggestField = ({
       // Always update the state
       setValue(newValue);
     },
-    onKeyDown: event => {
+    onKeyDown: (event) => {
       // When ther user presses enter from the search field, move to the course search view with
       // whatever is currently in the field as a text query.
       // Unless they are currently highlighting a suggestion, in which case we let Autosuggest handle it.
@@ -127,7 +127,7 @@ export const RootSearchSuggestField = ({
     // TypeScript incorrectly infers the type of the Autosuggest suggestions prop as SearchSuggestion, which
     // would be correct if we did not use sections, but is incorrect as it is.
     <Autosuggest
-      getSectionSuggestions={section => section.values}
+      getSectionSuggestions={(section) => section.values}
       getSuggestionValue={getSuggestionValue}
       inputProps={inputProps}
       multiSection={true}
@@ -143,16 +143,16 @@ export const RootSearchSuggestField = ({
         setHasHighlightedSuggestion(!suggestion)
       }
       onSuggestionSelected={onSuggestionSelected}
-      renderInputComponent={passthroughInputProps => (
+      renderInputComponent={(passthroughInputProps) => (
         <SearchInput
           context={context}
           inputProps={passthroughInputProps}
           onClick={moveToSearchViewWithQuery}
         />
       )}
-      renderSectionTitle={section => section.title}
+      renderSectionTitle={(section) => section.title}
       renderSuggestion={renderSuggestion}
-      shouldRenderSuggestions={val => val.length > 2}
+      shouldRenderSuggestions={(val) => val.length > 2}
       suggestions={suggestions as any}
     />
   );

@@ -126,7 +126,7 @@ describe('components/SearchSuggestField', () => {
         title: 'Subject #311',
       },
     ]);
-    ['organizations', 'persons'].forEach(kind =>
+    ['organizations', 'persons'].forEach((kind) =>
       fetchMock.get(`/api/v1.0/${kind}/autocomplete/?query=aut`, []),
     );
 
@@ -177,7 +177,7 @@ describe('components/SearchSuggestField', () => {
       subjects,
     });
 
-    ['organizations', 'persons', 'subjects'].forEach(kind =>
+    ['organizations', 'persons', 'subjects'].forEach((kind) =>
       fetchMock.get(`/api/v1.0/${kind}/autocomplete/?query=xyz`, []),
     );
 
@@ -230,7 +230,7 @@ describe('components/SearchSuggestField', () => {
         title: 'Organization #27',
       },
     ]);
-    ['persons', 'subjects'].forEach(kind =>
+    ['persons', 'subjects'].forEach((kind) =>
       fetchMock.get(`/api/v1.0/${kind}/autocomplete/?query=orga`, []),
     );
 
@@ -309,7 +309,7 @@ describe('components/SearchSuggestField', () => {
         title: 'Doctor Doom',
       },
     ]);
-    ['organizations', 'subjects'].forEach(kind =>
+    ['organizations', 'subjects'].forEach((kind) =>
       fetchMock.get(`/api/v1.0/${kind}/autocomplete/?query=doct`, []),
     );
 
@@ -378,7 +378,7 @@ describe('components/SearchSuggestField', () => {
       subjects,
     });
 
-    ['organizations', 'persons', 'subjects'].forEach(kind =>
+    ['organizations', 'persons', 'subjects'].forEach((kind) =>
       fetchMock.get(`/api/v1.0/${kind}/autocomplete/?query=some%20query`, []),
     );
 
@@ -415,7 +415,7 @@ describe('components/SearchSuggestField', () => {
       subjects,
     });
 
-    ['organizations', 'persons', 'subjects'].forEach(kind =>
+    ['organizations', 'persons', 'subjects'].forEach((kind) =>
       fetchMock.get(`begin:/api/v1.0/${kind}/autocomplete/?query=`, []),
     );
 
@@ -483,7 +483,7 @@ describe('components/SearchSuggestField', () => {
     ]);
     fetchMock.get('/api/v1.0/organizations/autocomplete/?query=ric', []);
 
-    ['persons', 'subjects'].forEach(kind =>
+    ['persons', 'subjects'].forEach((kind) =>
       fetchMock.get(`begin:/api/v1.0/${kind}/autocomplete/?query=`, []),
     );
 

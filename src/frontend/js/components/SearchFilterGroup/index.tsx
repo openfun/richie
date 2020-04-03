@@ -13,7 +13,7 @@ export const SearchFilterGroup = ({ filter }: SearchFilterGroupProps) => (
   <fieldset className="search-filter-group">
     <legend className="search-filter-group__title">{filter.human_name}</legend>
     <div className="search-filter-group__list">
-      {filter.values.map(value =>
+      {filter.values.map((value) =>
         value.key.startsWith(
           'P-',
         ) /* Values with children have a key that starts with `P-` by convention */ ? (

@@ -47,7 +47,7 @@ export const useHistory: () => History = () => {
   // Listen to external changes to history to make sure we re-render any component(s) that depend on
   // the contents of the URL and the current history entry
   useEffect(() => {
-    const handlePopstate: popstateEventListener = event => {
+    const handlePopstate: popstateEventListener = (event) => {
       setHistoryEntry({
         state: event.state,
         title: '',

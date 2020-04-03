@@ -89,7 +89,7 @@ export const SearchSuggestField = ({ context }: CommonDataProps) => {
       setValue(newValue);
       updateCourseSearchParamsDebounced(_, { method, newValue });
     },
-    onKeyDown: event => {
+    onKeyDown: (event) => {
       if (event.keyCode === 13 /* enter */ && !value) {
         dispatchCourseSearchParamsUpdate({
           query: '',
@@ -138,7 +138,7 @@ export const SearchSuggestField = ({ context }: CommonDataProps) => {
     // TypeScript incorrectly infers the type of the Autosuggest suggestions prop as SearchSuggestion, which
     // would be correct if we did not use sections, but is incorrect as it is.
     <Autosuggest
-      getSectionSuggestions={section => section.values}
+      getSectionSuggestions={(section) => section.values}
       getSuggestionValue={getSuggestionValue}
       inputProps={inputProps}
       multiSection={true}
@@ -151,12 +151,12 @@ export const SearchSuggestField = ({ context }: CommonDataProps) => {
         )
       }
       onSuggestionSelected={onSuggestionSelected}
-      renderInputComponent={passthroughInputProps => (
+      renderInputComponent={(passthroughInputProps) => (
         <SearchInput context={context} inputProps={passthroughInputProps} />
       )}
-      renderSectionTitle={section => section.title}
+      renderSectionTitle={(section) => section.title}
       renderSuggestion={renderSuggestion}
-      shouldRenderSuggestions={val => val.length > 2}
+      shouldRenderSuggestions={(val) => val.length > 2}
       suggestions={suggestions as any}
     />
   );
