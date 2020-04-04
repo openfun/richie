@@ -1,13 +1,13 @@
 {% load i18n cms_tags extra_tags static thumbnail %}
 {% comment %}Obviously, the context template variable "course" is required and must be a Course page extension{% endcomment %}
 
-{% with course_page=course.extended_object course_state=course.state main_org_title=course.get_main_organization.extended_object.get_title %}
-<a class="course-glimpse course-glimpse--link{% if course_variant %} course-glimpse--{{ course_variant }}{% endif %}{% if course_page.publisher_is_draft is True %} course-glimpse--draft{% endif %}"
+{% with course_page=course.extended_object course_state=course.state main_org_title=course.get_main_organization.extended_object.get_title course_variant=course_variant|default:"glimpse" %}
+<a class="course-{{ course_variant }}{% if course_page.publisher_is_draft is True %} course-{{ course_variant }}--draft{% endif %}"
  href="{{ course_page.get_absolute_url }}"
 >
-    <div class="course-glimpse__media">
+    <div class="course-{{ course_variant }}__media">
         {% get_page_plugins "course_cover" course_page as cover_plugins or %}
-            <p class="course-glimpse__empty">{% trans "Cover" %}</p>
+            <p class="course-{{ course_variant }}__empty">{% trans "Cover" %}</p>
         {% endget_page_plugins %}
         {% blockplugin cover_plugins.0 %}
             <img src="{% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %}"
@@ -22,30 +22,30 @@
             />
         {% endblockplugin %}
     </div>
-    <div class="course-glimpse__content">
+    <div class="course-{{ course_variant }}__content">
         {% get_page_plugins "course_icons" course_page as icon_plugins %}
         {% if icon_plugins %}
-        <div class="course-glimpse__icon">
+        <div class="course-{{ course_variant }}__icon">
             {% with category_variant="badge" has_link=False %}
                 {% render_plugin icon_plugins.0 %}
             {% endwith %}
         </div>
         {% endif %}
-        <div class="course-glimpse__wrapper">
-            <p class="course-glimpse__title">{{ course_page.get_title }}</p>
+        <div class="course-{{ course_variant }}__wrapper">
+            <p class="course-{{ course_variant }}__title">{{ course_page.get_title }}</p>
             {% if main_org_title %}
-            <div class="course-glimpse__organization">{{ main_org_title }}</div>
+            <div class="course-{{ course_variant }}__organization">{{ main_org_title }}</div>
             {% endif %}
         </div>
 
         {% block course_glimpse_footer %}
-        <div class="course-glimpse-footer">
-            <div class="course-glimpse-footer__date">
+        <div class="course-{{ course_variant }}-footer">
+            <div class="course-{{ course_variant }}-footer__date">
                 {{ course_state.text|capfirst }}
                 <span>{{ course_state.datetime|date:"DATE_FORMAT" }}</span>
             </div>
             {% if course_state.call_to_action %}
-            <div class="course-glimpse-footer__cta">
+            <div class="course-{{ course_variant }}-footer__cta">
                 <button class="button">
                     {{ course_state.call_to_action|capfirst }}
                     <svg aria-hidden={true} role="img" class="icon">

@@ -2,11 +2,11 @@
 {% comment %}Obviously, the context template variable "organization" is required and must be an Organization page extension{% endcomment %}
 
 {% with organization_page=organization.extended_object organization_variant=organization_variant|default:"glimpse" %}
-{% if blogpost_variant == "row" %}
-    <a class="organization-glimpse organization-glimpse--link organization-glimpse--{{ organization_variant }}{% if organization_page.publisher_is_draft is True %} organization-glimpse--draft{% endif %}" href="{{ organization_page.get_absolute_url }}" title="{{ organization_page.get_title }}">
-        <div class="organization-glimpse__logo">
+{% if organization_variant == "row" %}
+    <a class="organization-{{ organization_variant }}{% if organization_page.publisher_is_draft is True %} organization-{{ organization_variant }}--draft{% endif %}" href="{{ organization_page.get_absolute_url }}" title="{{ organization_page.get_title }}">
+        <div class="organization-{{ organization_variant }}__logo">
             {% get_page_plugins "logo" organization_page as plugins or %}
-                <p class="organization-glimpse__empty">{% trans "Logo" %}</p>
+                <p class="organization-{{ organization_variant }}__empty">{% trans "Logo" %}</p>
             {% endget_page_plugins %}
             {% blockplugin plugins.0 %}
                 <img src="{% thumbnail instance.picture 200x113 upscale subject_location=instance.picture.subject_location %}"
@@ -21,11 +21,11 @@
                 />
             {% endblockplugin %}
         </div>
-        <div class="organization-glimpse__content">
-            <div class="organization-glimpse__title">
+        <div class="organization-{{ organization_variant }}__content">
+            <div class="organization-{{ organization_variant }}__title">
                 {{ organization_page.get_title }}
             </div>
-            <div class="organization-glimpse__excerpt">
+            <div class="organization-{{ organization_variant }}__excerpt">
                 {% get_page_plugins "description" organization_page as plugins or %}
                     {% trans "Description" %}
                 {% endget_page_plugins %}
@@ -36,10 +36,10 @@
         </div>
     </a>
 {% else %}
-    <a class="organization-glimpse organization-glimpse--link organization-glimpse--{{ organization_variant }}{% if organization_page.publisher_is_draft is True %} organization-glimpse--draft{% endif %}" href="{{ organization_page.get_absolute_url }}" title="{{ organization_page.get_title }}">
-        <div class="organization-glimpse__logo">
+    <a class="organization-{{ organization_variant }}{% if organization_page.publisher_is_draft is True %} organization-{{ organization_variant }}--draft{% endif %}" href="{{ organization_page.get_absolute_url }}" title="{{ organization_page.get_title }}">
+        <div class="organization-{{ organization_variant }}__logo">
             {% get_page_plugins "logo" organization_page as plugins or %}
-                <p class="organization-glimpse__empty">{% trans "Logo" %}</p>
+                <p class="organization-{{ organization_variant }}__empty">{% trans "Logo" %}</p>
             {% endget_page_plugins %}
             {% blockplugin plugins.0 %}
                 <img src="{% thumbnail instance.picture 200x113 upscale subject_location=instance.picture.subject_location %}"
@@ -54,8 +54,8 @@
                 />
             {% endblockplugin %}
         </div>
-        <div class="organization-glimpse__content">
-            <div class="organization-glimpse__title">
+        <div class="organization-{{ organization_variant }}__content">
+            <div class="organization-{{ organization_variant }}__title">
                 {{ organization_page.get_title }}
             </div>
         </div>

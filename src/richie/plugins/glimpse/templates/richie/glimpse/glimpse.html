@@ -4,12 +4,12 @@
 
     {% if instance.get_link %}
         <a href="{{ instance.get_link }}"{% if instance.is_blank_target %} target="_blank" rel=”noopener noreferrer”{% endif %}
-        class="glimpse glimpse--{{ glimpse_variant }}">
+        class="glimpse-{{ glimpse_variant }}">
     {% else %}
-        <div class="glimpse glimpse--{{ glimpse_variant }}">
+        <div class="glimpse-{{ glimpse_variant }}">
     {% endif %}
         {% if instance.image %}
-        <div class="glimpse__media">
+        <div class="glimpse-{{ glimpse_variant }}__media">
             {% if glimpse_variant == "card_square" %}
             <img src="{% thumbnail instance.image 300x170 crop upscale subject_location=instance.image.subject_location %}"
                 srcset="{% thumbnail instance.image 300x170 crop upscale subject_location=instance.image.subject_location %} 300w
@@ -28,15 +28,15 @@
         </div>
         {% endif %}
 
-        <div class="glimpse__wrapper">
+        <div class="glimpse-{{ glimpse_variant }}__wrapper">
             {% if instance.title %}
-                <h{{ header_level|default:2 }} class="glimpse__title">
+                <h{{ header_level|default:2 }} class="glimpse-{{ glimpse_variant }}__title">
                     {{ instance.title }}
                 </h{{ header_level|default:2 }}>
             {% endif %}
 
             {% if instance.content %}
-            <div class="glimpse__content">
+            <div class="glimpse-{{ glimpse_variant }}__content">
                 {{ instance.content|linebreaks }}
             </div>
             {% endif %}

@@ -188,118 +188,204 @@ $glimpse-gutter: 1.25rem;
     text-align: center;
     cursor: default;
   }
+}
 
-  // Mini flat row variant
-  &--mini {
-    margin: 0;
+//
+// Favorite blogpost act like a block content with a big picture
+//
+.blogpost-favorite {
+  @include sv-flex(1, 0, 100%);
+  @include m-o-card(
+    $border: null,
+    $background: r-theme-val(blogpost-glimpse, card-background),
+    $media-width: null,
+    $media-margin: 0,
+    $wrapper-padding: 0.6rem 0.2rem,
+    $foot-divider: null
+  );
+  margin: 0;
+  padding: 1rem;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  @include media-breakpoint-up(lg) {
     padding: 1rem 0;
-    flex-basis: 100% !important;
-    max-width: 100% !important;
-    flex-direction: row;
-    border-bottom: $onepixel solid r-theme-val(blogpost-glimpse-mini, border);
+  }
 
-    #{$glimpse-item-selector}__media {
-      @include sv-flex(1, 0, 8.25rem);
+  &__title {
+    @include font-size($h2-font-size);
+    margin-bottom: 1rem;
+    font-family: $r-font-family-montserrat;
+    font-weight: $font-weight-extrabold;
+    color: r-theme-val(blogpost-glimpse-favorite, title-color);
+  }
+
+  &__media {
+    @include sv-flex(1, 0, 100%);
+    margin-top: 2rem;
+    order: 2;
+
+    @include media-breakpoint-up(lg) {
+      @include sv-flex(1, 0, 65%);
+      margin-top: 0;
     }
 
-    #{$glimpse-item-selector}__content {
-      @include sv-flex(1, 1, auto);
-      padding-left: 0.5rem;
-      overflow: hidden;
+    img {
+      border-radius: $border-radius-lg;
     }
 
-    #{$glimpse-item-selector}__wrapper {
-      padding: 0 0 0 0.2rem;
-    }
+    @include m-o-media_empty(
+      $width: 100%,
+      $height: 14vh,
+      $background: r-theme-val(blogpost-glimpse, media-background),
+      $absolute: false
+    );
+  }
 
-    #{$glimpse-item-selector}__theme {
-      padding-left: calc(1.7rem);
+  &__content {
+    @include sv-flex(1, 0, 100%);
+    order: 1;
+    font-size: 0.9rem;
+    color: r-theme-val(blogpost-glimpse-favorite, content-color);
 
-      &::before {
-        top: 0.6rem;
-        width: 1.5rem;
-      }
-    }
-
-    #{$glimpse-item-selector}__categories {
-      display: flex;
-    }
-
-    #{$glimpse-item-selector}__title {
-      @include font-size($font-size-base);
+    @include media-breakpoint-up(lg) {
+      @include sv-flex(1, 0, 35%);
+      padding-right: 1.5rem;
     }
   }
 
-  // Favorite blogpost act like a block content with a big picture
-  &--favorite {
-    margin: 0;
-    padding: 1rem;
-    flex-basis: 100% !important;
-    max-width: 100% !important;
-    flex-direction: row;
-    flex-wrap: wrap;
+  &__wrapper {
+    padding: 0;
+  }
 
-    @include media-breakpoint-up(lg) {
-      padding: 1rem 0;
-    }
+  &__excerpt {
+    color: r-theme-val(blogpost-glimpse-favorite, excerpt-color);
+  }
 
-    #{$glimpse-item-selector}__media {
-      @include sv-flex(1, 0, 100%);
-      margin-top: 2rem;
-      order: 2;
+  &__date,
+  &__theme {
+    display: none;
+  }
 
-      @include media-breakpoint-up(lg) {
-        @include sv-flex(1, 0, 65%);
-        margin-top: 0;
-      }
-    }
+  &__cta {
+    @include button-base($font-weight: bold);
+    @include r-button-colors(
+      r-theme-val(blogpost-glimpse-favorite, cta),
+      $apply-border: true
+    );
+    text-transform: uppercase;
 
-    #{$glimpse-item-selector}__content {
-      @include sv-flex(1, 0, 100%);
-      order: 1;
-      color: r-theme-val(blogpost-glimpse-favorite, content-color);
-
-      @include media-breakpoint-up(lg) {
-        @include sv-flex(1, 0, 35%);
-        padding-right: 1.5rem;
-      }
-    }
-
-    #{$glimpse-item-selector}__wrapper {
-      padding: 0;
-    }
-
-    #{$glimpse-item-selector}__title {
-      @include font-size($h2-font-size);
-      margin-bottom: 1rem;
-      font-weight: $font-weight-extrabold;
-      color: r-theme-val(blogpost-glimpse-favorite, title-color);
-    }
-
-    #{$glimpse-item-selector}__excerpt {
-      color: r-theme-val(blogpost-glimpse-favorite, excerpt-color);
-    }
-
-    #{$glimpse-item-selector}__date,
-    #{$glimpse-item-selector}__theme {
-      display: none;
-    }
-
-    #{$glimpse-item-selector}__cta {
-      @include button-base($font-weight: bold);
+    &:hover {
       @include r-button-colors(
-        r-theme-val(blogpost-glimpse-favorite, cta),
-        $apply-border: true
+        r-theme-val(blogpost-glimpse-favorite, cta-hover),
+        $apply-border: true,
+        $prefix: 'hover'
       );
-      text-transform: uppercase;
+    }
+  }
+}
 
-      &:hover {
-        @include r-button-colors(
-          r-theme-val(blogpost-glimpse-favorite, cta-hover),
-          $apply-border: true,
-          $prefix: 'hover'
-        );
+//
+// Mini flat row variant
+//
+.blogpost-mini {
+  @include sv-flex(1, 0, 100%);
+  @include m-o-card(
+    $border: null,
+    $background: r-theme-val(blogpost-glimpse, card-background),
+    $media-width: null,
+    $media-margin: 0,
+    $wrapper-padding: 0.6rem 0.2rem,
+    $foot-divider: null
+  );
+  margin: 0;
+  padding: 1rem 0;
+  flex-direction: row;
+  border-bottom: $onepixel solid r-theme-val(blogpost-glimpse-mini, border);
+
+  &__media {
+    @include sv-flex(1, 0, 8.25rem);
+    img {
+      border-radius: $border-radius-lg;
+    }
+  }
+
+  &__content {
+    @include sv-flex(1, 1, auto);
+    padding-left: 0.5rem;
+    font-size: 0.9rem;
+    color: r-theme-val(blogpost-glimpse, content-color);
+    overflow: hidden;
+  }
+
+  &__wrapper {
+    padding: 0 0 0 0.2rem;
+  }
+
+  &__theme {
+    padding-left: calc(1.7rem);
+
+    &::before {
+      top: 0.6rem;
+      width: 1.5rem;
+    }
+  }
+
+  &__categories {
+    display: flex;
+    position: relative;
+    margin: 0 0 0.1rem;
+    padding-left: calc(10% + 0.2rem);
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: calc(50% - 1px);
+      left: 0;
+      width: 10%;
+      border-top: 1px solid r-theme-val(blogpost-glimpse, theme-border);
+    }
+
+    .category-tag {
+      display: inline-block;
+      margin: 0 0 0 0.1rem;
+      color: inherit;
+
+      &::before {
+        content: '•';
+        position: relative;
+        left: -0.6rem;
+      }
+
+      &:first-child {
+        margin-left: 0;
+
+        &::before {
+          content: '';
+          display: none;
+        }
+      }
+
+      .category-tag__title {
+        display: inline-block;
+        padding: 0;
+        color: inherit;
+        font-weight: bold;
+        background: transparent;
+
+        img,
+        svg {
+          display: none;
+        }
       }
     }
+  }
+
+  &__title {
+    @include font-size($font-size-base);
+    margin: 0 0 0.1rem;
+    font-family: $r-font-family-montserrat;
+    font-weight: $font-weight-boldest;
+    color: r-theme-val(blogpost-glimpse, title-color);
   }
 }

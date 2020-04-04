@@ -243,7 +243,7 @@ class OrganizationCMSTestCase(CMSTestCase):
             html=True,
         )
         self.assertIn(
-            '<a class="course-glimpse course-glimpse--link course-glimpse--draft" '
+            '<a class="course-glimpse course-glimpse--draft" '
             'href="{:s}"'.format(
                 not_published_course.extended_object.get_absolute_url()
             ),

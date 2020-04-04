@@ -11,17 +11,17 @@ one). Finally, every children items below second level will switch to simple
 "list" variant.{% endcomment %}
 {% if nesteditem_variant == "accordion" %}
     {% if not is_item %}
-        <div class="nesteditem nesteditem--{{ nesteditem_variant }}">
+        <div class="nested-{{ nesteditem_variant }}">
             {% if instance.content %}
-                <h{{ header_level|default:2 }} class="nesteditem__head">
+                <h{{ header_level|default:2 }} class="nested-{{ nesteditem_variant }}__head">
                     {{ instance.content|linebreaksbr }}
                 </h{{ header_level|default:2 }}>
             {% endif %}
             {% if instance.child_plugin_instances %}
-            <div class="nesteditem__items">
+            <div class="nested-{{ nesteditem_variant }}__items">
                 {% for plugin in instance.child_plugin_instances %}
                     {% with is_item=True nesteditem_variant="accordion" %}
-                        <div class="nesteditem__item" data-accordion-item>
+                        <div class="nested-{{ nesteditem_variant }}__item" data-accordion-item>
                         {% render_plugin plugin %}
                         </div>
                     {% endwith %}
@@ -31,16 +31,16 @@ one). Finally, every children items below second level will switch to simple
         </div>
     {% else %}
         {% if instance.content %}
-            <button class="nesteditem__item-title" data-accordion-title>
+            <button class="nested-{{ nesteditem_variant }}__item-title" data-accordion-title>
                 {{ instance.content }}
             </button>
         {% else %}
-            <button class="nesteditem__item-title" data-accordion-title>
+            <button class="nested-{{ nesteditem_variant }}__item-title" data-accordion-title>
                 {% trans 'Accordion item need a content' %}
             </button>
         {% endif %}
         {% if instance.child_plugin_instances %}
-        <div class="nesteditem__item-content" data-accordion-content>
+        <div class="nested-{{ nesteditem_variant }}__item-content" data-accordion-content>
             <ul>
             {% for plugin in instance.child_plugin_instances %}
                 <li>
@@ -55,15 +55,15 @@ one). Finally, every children items below second level will switch to simple
     {% endif %}
 {% comment %}List variant just turns every items into a simple bullet list{% endcomment %}
 {% elif nesteditem_variant == "list" %}
-    <div class="nesteditem nesteditem--{{ nesteditem_variant }}">
+    <div class="nested-{{ nesteditem_variant }}">
         {% if instance.content %}
-        <div class="nesteditem__content">
+        <div class="nested-{{ nesteditem_variant }}__content">
             {{ instance.content|linebreaksbr }}
         </div>
         {% endif %}
 
         {% if instance.child_plugin_instances %}
-        <ul class="nesteditem__items">
+        <ul class="nested-{{ nesteditem_variant }}__items">
             <li>
             {% for plugin in instance.child_plugin_instances %}
                 {% render_plugin plugin %}
@@ -74,15 +74,15 @@ one). Finally, every children items below second level will switch to simple
     </div>
 {% comment %}Default variant, default layout displays it as an horizontal menu{% endcomment %}
 {% else %}
-    <div class="nesteditem nesteditem--{{ nesteditem_variant }}">
+    <div class="nested-{{ nesteditem_variant }}">
         {% if instance.content %}
-        <div class="nesteditem__content">
+        <div class="nested-{{ nesteditem_variant }}__content">
             {{ instance.content|linebreaks }}
         </div>
         {% endif %}
 
         {% if instance.child_plugin_instances %}
-        <div class="nesteditem__items">
+        <div class="nested-{{ nesteditem_variant }}__items">
             {% for plugin in instance.child_plugin_instances %}
                 {% render_plugin plugin %}
             {% endfor %}

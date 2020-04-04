@@ -108,11 +108,7 @@ class BlogPostPluginTestCase(CMSTestCase):
         # The blogpost's name should be present as a link to the cms page
         # And CMS page title should be in title attribute of the link
         self.assertIn(
-            (
-                '<a href="/en/public-title/" '
-                'class="blogpost-glimpse blogpost-glimpse--link '
-                'blogpost-glimpse--glimpse"'
-            ),
+            ('<a href="/en/public-title/" ' 'class="blogpost-glimpse"'),
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
 
@@ -143,11 +139,7 @@ class BlogPostPluginTestCase(CMSTestCase):
         url = page.get_absolute_url(language="fr")
         response = self.client.get(url)
         self.assertIn(
-            (
-                '<a href="/fr/titre-public/" '
-                'class="blogpost-glimpse blogpost-glimpse--link '
-                'blogpost-glimpse--glimpse"'
-            ),
+            ('<a href="/fr/titre-public/" ' 'class="blogpost-glimpse"'),
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
 
@@ -221,18 +213,18 @@ class BlogPostPluginTestCase(CMSTestCase):
 
         url = "{:s}?edit".format(page.get_absolute_url(language="en"))
 
-        # The blogpost-glimpse default template should not have the small attribute
+        # The blogpost-glimpse default variant should be glimpse
         response = self.client.get(url)
-        self.assertNotContains(response, "blogpost-glimpse__small")
+        self.assertContains(response, "blogpost-glimpse")
 
-        # Add blogpost plugin with small template
+        # Add blogpost plugin with small variant
         add_plugin(
             placeholder, BlogPostPlugin, "en", page=blogpost_page, variant="small",
         )
 
         # The blogpost-glimpse default template should not have the small attribute
         response = self.client.get(url)
-        self.assertContains(response, "blogpost-glimpse--small")
+        self.assertContains(response, "blogpost-small")
 
     def test_cms_plugins_blogpost_default_variant(self):
         """
@@ -261,7 +253,7 @@ class BlogPostPluginTestCase(CMSTestCase):
         renderer = ContentRenderer(request=request)
         html = renderer.render_plugin(model_instance, context)
 
-        self.assertIn("blogpost-glimpse--small", html)
+        self.assertIn("blogpost-small", html)
 
     def test_cms_plugins_blogpost_cascade_variant(self):
         """
@@ -290,4 +282,4 @@ class BlogPostPluginTestCase(CMSTestCase):
         renderer = ContentRenderer(request=request)
         html = renderer.render_plugin(model_instance, context)
 
-        self.assertIn("blogpost-glimpse--xxl", html)
+        self.assertIn("blogpost-xxl", html)

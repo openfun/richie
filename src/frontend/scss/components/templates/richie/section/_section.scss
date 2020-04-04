@@ -15,12 +15,25 @@
     flex-wrap: wrap;
     margin: 0;
 
-    // Some elements have to take 100% by default
+    // Fix basic direct elements (alike from ckeditor plugin) to act like a full
+    // width block
+    & > h1,
+    & > h2,
+    & > h3,
+    & > h4,
+    & > h5,
+    & > h6,
     & > p,
+    & > ul,
+    & > ol,
     & > figure {
-      flex-grow: 1;
-      flex-shrink: 0;
-      flex-basis: 100%;
+      @include sv-flex(1, 0, 100%);
+      margin: 0 auto 0.5rem;
+      padding: 0 1rem;
+
+      @include media-breakpoint-up(lg) {
+        padding: 0 20%;
+      }
     }
 
     // Ensure caesura always takes full width with some space around
@@ -51,7 +64,6 @@
 
   &__row {
     @include detail-row;
-    width: 100%;
   }
 
   &__items {
@@ -59,11 +71,11 @@
     display: flex;
     margin: 0 auto;
     padding: 0;
-    flex-direction: row;
     flex-wrap: wrap;
     justify-content: center;
 
-    // Fix basic direct element to act like a full width block
+    // Fix basic direct element (alike from ckeditor plugin) to act like a full
+    // width block
     & > h1,
     & > h2,
     & > h3,
@@ -95,7 +107,16 @@
   }
 
   .category-glimpse {
-    @include sv-flex(1, 0, 15%);
+    @include sv-flex(1, 0, calc(15% - 1rem));
+    max-width: none;
+
+    @include media-breakpoint-up(md) {
+      @include sv-flex(1, 0, calc(20% - 1rem));
+    }
+    @include media-breakpoint-up(lg) {
+      @include sv-flex(1, 0, calc(15% - 1rem));
+    }
+
     background: transparent;
     border: 0;
 

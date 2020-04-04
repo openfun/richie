@@ -3,10 +3,10 @@
 
 {% with blogpost_page=blogpost.extended_object blogpost_variant=blogpost_variant|default:"glimpse" %}
 {% if blogpost_variant == "favorite" %}
-    <div class="blogpost-glimpse{% if blogpost_variant %} blogpost-glimpse--{{ blogpost_variant }}{% endif %}{% if blogpost_page.publisher_is_draft %} blogpost-glimpse--draft{% endif %}">
-        <div class="blogpost-glimpse__media">
+    <div class="blogpost-{{ blogpost_variant }}{% if blogpost_page.publisher_is_draft %} blogpost-{{ blogpost_variant }}--draft{% endif %}">
+        <div class="blogpost-{{ blogpost_variant }}__media">
             {% get_page_plugins "cover" blogpost_page as plugins or %}
-                <div class="blogpost-glimpse__empty">{% trans 'Cover' %}</div>
+                <div class="blogpost-{{ blogpost_variant }}__empty">{% trans 'Cover' %}</div>
             {% endget_page_plugins %}
 
             {% blockplugin plugins.0 %}
@@ -19,25 +19,25 @@
                 alt="">
             {% endblockplugin %}
         </div>
-        <div class="blogpost-glimpse__content">
-            <div class="blogpost-glimpse__wrapper">
-                <h{{ header_level|default:2 }} class="blogpost-glimpse__title">{{ blogpost_page.get_title }}</h{{ header_level|default:2 }}>
+        <div class="blogpost-{{ blogpost_variant }}__content">
+            <div class="blogpost-{{ blogpost_variant }}__wrapper">
+                <h{{ header_level|default:2 }} class="blogpost-{{ blogpost_variant }}__title">{{ blogpost_page.get_title }}</h{{ header_level|default:2 }}>
 
-                <p class="blogpost-glimpse__excerpt">
+                <p class="blogpost-{{ blogpost_variant }}__excerpt">
                     {% show_placeholder "excerpt" blogpost_page %}
                 </p>
 
-                <a href="{{ blogpost.extended_object.get_absolute_url }}" class="blogpost-glimpse__cta">
+                <a href="{{ blogpost.extended_object.get_absolute_url }}" class="blogpost-{{ blogpost_variant }}__cta">
                     {% trans 'Learn more' %}
                 </a>
             </div>
         </div>
     </div>
 {% elif blogpost_variant == "mini" %}
-    <a href="{{ blogpost_page.get_absolute_url }}" class="blogpost-glimpse blogpost-glimpse--link blogpost-glimpse--mini">
-        <div class="blogpost-glimpse__media">
+    <a href="{{ blogpost_page.get_absolute_url }}" class="blogpost-{{ blogpost_variant }}{% if blogpost_page.publisher_is_draft %} blogpost-{{ blogpost_variant }}--draft{% endif %}">
+        <div class="blogpost-{{ blogpost_variant }}__media">
             {% get_page_plugins "cover" blogpost_page as plugins or %}
-                <div class="blogpost-glimpse__empty">{% trans 'Cover' %}</div>
+                <div class="blogpost-{{ blogpost_variant }}__empty">{% trans 'Cover' %}</div>
             {% endget_page_plugins %}
             {% blockplugin plugins.0 %}
                 <img src="{% thumbnail instance.picture 150x85 crop upscale subject_location=instance.picture.subject_location %}"
@@ -51,28 +51,28 @@
                 />
             {% endblockplugin %}
         </div>
-        <div class="blogpost-glimpse__content">
-            <div class="blogpost-glimpse__wrapper">
-                <div class="blogpost-glimpse__categories">
-                    {% with blogpost_variant="tag" has_link=False %}
+        <div class="blogpost-{{ blogpost_variant }}__content">
+            <div class="blogpost-{{ blogpost_variant }}__wrapper">
+                <div class="blogpost-{{ blogpost_variant }}__categories">
+                    {% with category_variant="tag" has_link=False %}
                         {% show_placeholder "categories" blogpost_page %}
                     {% endwith %}
                 </div>
-                <p class="blogpost-glimpse__title">{{ blogpost_page.get_title }}</p>
+                <p class="blogpost-{{ blogpost_variant }}__title">{{ blogpost_page.get_title }}</p>
             </div>
         </div>
     </a>
 {% else %}
     <a href="{{ blogpost.extended_object.get_absolute_url }}"
-        class="blogpost-glimpse blogpost-glimpse--link{% if blogpost_variant %} blogpost-glimpse--{{ blogpost_variant }}{% endif %}{% if blogpost_page.publisher_is_draft %} blogpost-glimpse--draft{% endif %}">
+        class="blogpost-{{ blogpost_variant }}{% if blogpost_page.publisher_is_draft %} blogpost-{{ blogpost_variant }}--draft{% endif %}">
         {% if blogpost_page.publication_date %}
-        <p class="blogpost-glimpse__date">
+        <p class="blogpost-{{ blogpost_variant }}__date">
             {{ blogpost_page.publication_date|date:"DATE_FORMAT" }}
         </p>
         {% endif %}
-        <div class="blogpost-glimpse__media">
+        <div class="blogpost-{{ blogpost_variant }}__media">
             {% get_page_plugins "cover" blogpost_page as plugins or %}
-                <div class="blogpost-glimpse__empty">{% trans 'Cover' %}</div>
+                <div class="blogpost-{{ blogpost_variant }}__empty">{% trans 'Cover' %}</div>
             {% endget_page_plugins %}
 
             {% blockplugin plugins.0 %}
@@ -84,17 +84,17 @@
                 alt="">
             {% endblockplugin %}
         </div>
-        <div class="blogpost-glimpse__content">
-            <div class="blogpost-glimpse__wrapper">
-                <div class="blogpost-glimpse__categories">
+        <div class="blogpost-{{ blogpost_variant }}__content">
+            <div class="blogpost-{{ blogpost_variant }}__wrapper">
+                <div class="blogpost-{{ blogpost_variant }}__categories">
                     {% with category_variant="tag" has_link=False %}
                         {% show_placeholder "categories" blogpost_page %}
                     {% endwith %}
                 </div>
 
-                <p class="blogpost-glimpse__title">{{ blogpost_page.get_title }}</p>
+                <p class="blogpost-{{ blogpost_variant }}__title">{{ blogpost_page.get_title }}</p>
 
-                <p class="blogpost-glimpse__excerpt">
+                <p class="blogpost-{{ blogpost_variant }}__excerpt">
                     {% show_placeholder "excerpt" blogpost_page %}
                 </p>
             </div>

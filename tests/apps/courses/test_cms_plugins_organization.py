@@ -99,8 +99,7 @@ class OrganizationPluginTestCase(CMSTestCase):
         # And CMS page title should be in title attribute of the link
         self.assertIn(
             (
-                '<a class="organization-glimpse organization-glimpse--link '
-                'organization-glimpse--glimpse" href="/en/public-title/" '
+                '<a class="organization-glimpse" href="/en/public-title/" '
                 'title="public title">'
             ).format(
                 url=organization_page.get_absolute_url(),
@@ -131,8 +130,7 @@ class OrganizationPluginTestCase(CMSTestCase):
         url = page.get_absolute_url(language="fr")
         response = self.client.get(url)
         self.assertIn(
-            '<a class="organization-glimpse organization-glimpse--link '
-            'organization-glimpse--glimpse" href="/fr/titre-public/" '
+            '<a class="organization-glimpse" href="/fr/titre-public/" '
             'title="titre public"',
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
@@ -215,7 +213,7 @@ class OrganizationPluginTestCase(CMSTestCase):
 
         # The new organization-glimpse should have the small attribute
         response = self.client.get(url)
-        self.assertContains(response, "organization-glimpse--small")
+        self.assertContains(response, "organization-small")
 
     def test_cms_plugins_organization_render_context_variant(self):
         """
@@ -251,4 +249,4 @@ class OrganizationPluginTestCase(CMSTestCase):
         renderer = ContentRenderer(request=request)
         html = renderer.render_plugin(model_instance, context)
 
-        self.assertIn("organization-glimpse--small", html)
+        self.assertIn("organization-small", html)

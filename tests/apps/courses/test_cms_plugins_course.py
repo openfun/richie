@@ -103,8 +103,7 @@ class CoursePluginTestCase(TestCase):
 
         # The course's url should be present
         self.assertIn(
-            '<a class="course-glimpse course-glimpse--link" '
-            'href="/en/public-title/"',
+            '<a class="course-glimpse" href="/en/public-title/"',
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
 
@@ -156,8 +155,7 @@ class CoursePluginTestCase(TestCase):
 
         # The course's url should be present
         self.assertIn(
-            '<a class="course-glimpse course-glimpse--link" '
-            'href="/fr/titre-public/"',
+            '<a class="course-glimpse" href="/fr/titre-public/"',
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
 
@@ -260,11 +258,11 @@ class CoursePluginTestCase(TestCase):
 
         # The course-glimpse default variant should not have the small attribute
         response = self.client.get(url)
-        self.assertNotContains(response, "--small")
+        self.assertNotContains(response, "-small")
 
         # Add course plugin with small variant
         add_plugin(placeholder, CoursePlugin, "en", page=course_page, variant="small")
 
         # The new course-glimpse should have the small attribute
         response = self.client.get(url)
-        self.assertContains(response, "course-glimpse--small")
+        self.assertContains(response, "course-small")

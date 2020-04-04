@@ -116,7 +116,7 @@ class ProgramCMSTestCase(CMSTestCase):
         # Draft courses should also be present on the page with an annotation for styling
         for course in courses[-2:]:
             self.assertIn(
-                '<a class="course-glimpse course-glimpse--link course-glimpse--draft" '
+                '<a class="course-glimpse course-glimpse--draft" '
                 'href="{:s}"'.format(course.extended_object.get_absolute_url()),
                 re.sub(" +", " ", str(response.content).replace("\\n", "")),
             )
