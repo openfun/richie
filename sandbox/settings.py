@@ -35,6 +35,72 @@ def get_release():
         return "NA"  # Default: not available
 
 
+class StyleguideMixin:
+    """
+    Theme styleguide reference
+
+    Only used to build styleguide page without to hardcode properties and
+    values into styleguide template.
+    """
+
+    STYLEGUIDE = {
+        # Named color palette
+        "palette": [
+            "black",
+            "dark-grey",
+            "charcoal",
+            "slate-grey",
+            "battleship-grey",
+            "light-grey",
+            "silver",
+            "azure2",
+            "smoke",
+            "white",
+            "denim",
+            "steelblue3",
+            "blue-green",
+            "greeny-blue",
+            "mediumturquoise",
+            "firebrick6",
+        ],
+        # Enabled color for Bootstrap theme
+        "theme_colors": [
+            "primary",
+            "secondary",
+            "tertiary",
+            "quaternary",
+            "clear",
+            "lightest",
+            "light",
+            "slate",
+            "dark",
+            "darker",
+            "darkest",
+            "success",
+            "info",
+            "warning",
+            "danger",
+        ],
+        # Available gradient background
+        "gradient_colors": ["light-gradient", "middle-gradient", "dark-gradient"],
+        # Available color schemes
+        "schemes": [
+            "primary",
+            "secondary",
+            "tertiary",
+            "clear",
+            "light",
+            "lightest",
+            "light-gradient",
+            "middle-gradient",
+            "dark-gradient",
+            "transparent-clear",
+            "transparent-darkest",
+            "clouds",
+        ],
+    }
+
+
 class DRFMixin:
     """
     Django Rest Framework configuration mixin.
@@ -52,7 +118,7 @@ class DRFMixin:
     }
 
 
-class Base(DRFMixin, RichieCoursesConfigurationMixin, Configuration):
+class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configuration):
     """
     This is the base configuration every configuration (aka environnement) should inherit from. It
     is recommended to configure third-party applications by creating a configuration mixins in

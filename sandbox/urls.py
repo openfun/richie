@@ -39,13 +39,24 @@ urlpatterns += i18n_patterns(
 
 # This is only needed when using runserver.
 if settings.DEBUG:
+    # NOTE: DEV: Mount some static page for prototyping
+    from django.views.generic import TemplateView
+
     urlpatterns = (
         [
+            url(
+                r"^styleguide/$",
+                TemplateView.as_view(
+                    template_name="richie/styleguide/index.html",
+                    extra_context={"STYLEGUIDE": settings.STYLEGUIDE},
+                ),
+                name="styleguide",
+            ),
             url(
                 r"^media/(?P<path>.*)$",
                 serve,
                 {"document_root": settings.MEDIA_ROOT, "show_indexes": True},
-            )
+            ),
         ]
         + staticfiles_urlpatterns()
         + urlpatterns

@@ -253,11 +253,9 @@
                         <section class="course-detail__row course-detail__plan">
                             <h2 class="course-detail__title">{% trans 'Course plan' %}</h2>
 
-                            <div class="plan-accordion">
-                                {% placeholder "course_plan" or %}
-                                    <p class="plan-accordion__empty">{% trans 'Enter here the detailed course plan.' %}</p>
-                                {% endplaceholder %}
-                            </div>
+                            {% placeholder "course_plan" or %}
+                                <p class="course-detail__empty">{% trans 'Enter here the detailed course plan.' %}</p>
+                            {% endplaceholder %}
                         </section>
                         {% endif %}
                     </div>

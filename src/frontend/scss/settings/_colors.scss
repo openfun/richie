@@ -45,7 +45,7 @@ $dark-gradient: linear-gradient(
 
 // Basic color schemes
 // ---------
-$primary-scheme: (
+$blue-green-scheme: (
   font-color: r-color('white'),
   link-color: r-color('light-grey'),
   svg-color: r-color('white'),
@@ -53,7 +53,7 @@ $primary-scheme: (
   hover-font-color: r-color('white'),
   hover-background: r-color('mediumturquoise'),
 );
-$secondary-scheme: (
+$denim-scheme: (
   font-color: r-color('white'),
   link-color: r-color('mediumturquoise'),
   svg-color: r-color('white'),
@@ -61,14 +61,14 @@ $secondary-scheme: (
   hover-font-color: r-color('white'),
   hover-background: lighten(r-color('denim'), 8%),
 );
-$tertiary-scheme: (
+$mediumturquoise-scheme: (
   font-color: r-color('denim'),
   svg-color: r-color('denim'),
   background: r-color('mediumturquoise'),
   hover-font-color: r-color('denim'),
   hover-background: lighten(r-color('mediumturquoise'), 8%),
 );
-$clear-scheme: (
+$white-scheme: (
   font-color: r-color('black'),
   h1-color: r-color('dark-grey'),
   h2-color: r-color('dark-grey'),
@@ -77,7 +77,7 @@ $clear-scheme: (
   hover-font-color: r-color('blue-green'),
   hover-background: darken(r-color('white'), 8%),
 );
-$light-scheme: (
+$light-grey-scheme: (
   font-color: r-color('black'),
   h1-color: r-color('dark-grey'),
   h2-color: r-color('dark-grey'),
@@ -86,7 +86,7 @@ $light-scheme: (
   hover-font-color: r-color('blue-green'),
   hover-background: r-color('battleship-grey'),
 );
-$lightest-scheme: (
+$azure2: (
   font-color: r-color('black'),
   h1-color: r-color('dark-grey'),
   h2-color: r-color('dark-grey'),
@@ -99,7 +99,7 @@ $clouds-scheme: (
   background: bottom left / 100% 70% no-repeat r-color('smoke')
     url('../../richie/images/components/clouds.jpg'),
 );
-$transparent-clear-scheme: (
+$transparent-white-scheme: (
   font-color: r-color('white'),
   svg-color: r-color('white'),
   background: transparent,
@@ -108,7 +108,7 @@ $transparent-clear-scheme: (
   hover-svg-color: r-color('white'),
   hover-background: rgba(r-color('white'), 0.3),
 );
-$transparent-darkest-scheme: (
+$transparent-dark-scheme: (
   font-color: r-color('black'),
   h1-color: r-color('dark-grey'),
   h2-color: r-color('dark-grey'),
@@ -144,17 +144,17 @@ $dark-gradient-scheme: (
 // Theme schemes
 $r-theme: (
   base-schemes: (
-    primary: $primary-scheme,
-    secondary: $secondary-scheme,
-    tertiary: $tertiary-scheme,
-    clear: $clear-scheme,
-    light: $light-scheme,
-    lightest: $lightest-scheme,
+    primary: $blue-green-scheme,
+    secondary: $denim-scheme,
+    tertiary: $mediumturquoise-scheme,
+    clear: $white-scheme,
+    light: $light-grey-scheme,
+    lightest: $azure2,
     light-gradient: $light-gradient-scheme,
     middle-gradient: $middle-gradient-scheme,
     dark-gradient: $dark-gradient-scheme,
-    transparent-clear: $transparent-clear-scheme,
-    transparent-darkest: $transparent-darkest-scheme,
+    transparent-clear: $transparent-white-scheme,
+    transparent-darkest: $transparent-dark-scheme,
     clouds: $clouds-scheme,
   ),
   base-gradients: (
@@ -188,7 +188,7 @@ $r-theme: (
     lang-color: r-color('white'),
     section-hover: r-color('white'),
     subtitle-color: r-color('white'),
-    badge-button: $primary-scheme,
+    badge-button: $blue-green-scheme,
   ),
   body-mentions: (
     base-color: r-color('slate-grey'),
@@ -198,27 +198,27 @@ $r-theme: (
   subheader: (
     base: $dark-gradient-scheme,
     container: $middle-gradient-scheme,
-    cta: $secondary-scheme,
+    cta: $denim-scheme,
     media-background: r-color('white'),
     teaser-border: rgba(r-color('mediumturquoise'), 0.7),
     search-input-color: r-color('white'),
     search-input-background: transparent,
     search-input-border: r-color('white'),
     search-input-placeholder: r-color('white'),
-    social-network-badges: $transparent-clear-scheme,
+    social-network-badges: $transparent-white-scheme,
   ),
   subheader-alt: (
     container-background: transparent,
     container-border: r-color('mediumturquoise'),
     background-image: url('../../richie/images/components/wave-white.svg'),
   ),
-  detail-block: (
+  block-schemes: (
     empty-color: r-color('slate-grey'),
     divider: r-color('azure2'),
     variants: (
-      clear: $light-scheme,
-      light: $light-scheme,
-      lightest: $lightest-scheme,
+      clear: $light-grey-scheme,
+      light: $light-grey-scheme,
+      lightest: $azure2,
       gradient-light: $light-gradient-scheme,
       gradient-dark: $dark-gradient-scheme,
       clouds: $clouds-scheme,
@@ -275,12 +275,12 @@ $r-theme: (
     content-color: inherit,
     title-color: r-color('denim'),
     excerpt-color: r-color('slate-grey'),
-    cta: $primary-scheme,
-    cta-hover: $primary-scheme,
+    cta: $blue-green-scheme,
+    cta-hover: $blue-green-scheme,
   ),
   button-caesura: (
-    base: $primary-scheme,
-    base-hover: $primary-scheme,
+    base: $blue-green-scheme,
+    base-hover: $blue-green-scheme,
   ),
   category-glimpse: (
     base-border: rgba(r-color('black'), 0.125),
@@ -310,22 +310,22 @@ $r-theme: (
     title-color: r-color('black'),
     organization-media-empty-background: r-color('smoke'),
     svg-icon-fill: r-color('white'),
-    footer: $primary-scheme,
+    footer: $blue-green-scheme,
   ),
   category-badges: (
-    primary-item: $primary-scheme,
-    secondary-item: $secondary-scheme,
-    tertiary-item: $tertiary-scheme,
+    primary-item: $blue-green-scheme,
+    secondary-item: $denim-scheme,
+    tertiary-item: $mediumturquoise-scheme,
   ),
   category-tags: (
-    primary-item: $primary-scheme,
-    secondary-item: $secondary-scheme,
-    tertiary-item: $tertiary-scheme,
+    primary-item: $blue-green-scheme,
+    secondary-item: $denim-scheme,
+    tertiary-item: $mediumturquoise-scheme,
   ),
   characteristics: (
-    primary-item: $primary-scheme,
-    secondary-item: $secondary-scheme,
-    tertiary-item: $tertiary-scheme,
+    primary-item: $blue-green-scheme,
+    secondary-item: $denim-scheme,
+    tertiary-item: $mediumturquoise-scheme,
   ),
   organization-glimpse-list: (
     empty-color: r-color('slate-grey'),
@@ -354,7 +354,7 @@ $r-theme: (
     card-background: r-color('white'),
     base-shadow: 0 1px 2px rgba(r-color('battleship-grey'), 0.4),
     empty-background: r-color('smoke'),
-    category: $primary-scheme,
+    category: $blue-green-scheme,
     category-title: transparent,
     bio-color: r-color('slate-grey'),
   ),
@@ -381,13 +381,13 @@ $r-theme: (
     input-border: r-color('light-grey'),
   ),
   social-network-badges: (
-    base: $primary-scheme,
+    base: $blue-green-scheme,
   ),
   blogpost-detail: (
     aside-glimpse-title-color: r-color('denim'),
     aside-glimpse-title-background: r-color('white'),
     aside-glimpse-title-border: r-color('denim'),
-    categories: $primary-scheme,
+    categories: $blue-green-scheme,
     categories-tag-background: transparent,
     top-border: r-color('light-grey'),
     theme-border: r-color('blue-green'),
@@ -398,7 +398,7 @@ $r-theme: (
     headline-color: r-color('slate-grey'),
     headline-border: r-color('dark-grey'),
     headline-title-color: r-color('dark-grey'),
-    social-network-badges: $transparent-darkest-scheme,
+    social-network-badges: $transparent-dark-scheme,
   ),
   category-detail: (
     empty-background: r-color('smoke'),
@@ -413,9 +413,10 @@ $r-theme: (
   course-detail: (
     organizations-title-color: r-color('slate-grey'),
     aside-title-border: r-color('dark-grey'),
-    primary-group-background: $light-gradient,
-    primary-group-arc: url('../../richie/images/components/arc-white.svg'),
-    run-cta: $secondary-scheme,
+    primary-group-title-color: r-color('blue-green'),
+    primary-group-background: null,
+    primary-group-arc: null,
+    run-cta: $denim-scheme,
     run-descriptions-divider: r-color('light-grey'),
     plan-title-color: r-color('blue-green'),
     license-label-color: r-color('denim'),
@@ -427,7 +428,7 @@ $r-theme: (
     logo-border: r-color('light-grey'),
     logo-shadow: 0 0.25rem 1.5625rem r-color('slate-grey'),
     intro-title: r-color('blue-green'),
-    categories: $primary-scheme,
+    categories: $blue-green-scheme,
     description-color: r-color('slate-grey'),
   ),
   program-detail: (
@@ -465,7 +466,7 @@ $r-theme: (
   styleguide: (
     grid-line-color: lighten(r-color('silver'), 5%),
     grid-border-color: r-color('silver'),
-    cta-sample: $secondary-scheme,
-    spot-sample: $primary-scheme,
+    cta-sample: $denim-scheme,
+    spot-sample: $blue-green-scheme,
   ),
 );

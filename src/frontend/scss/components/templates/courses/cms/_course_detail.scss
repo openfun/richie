@@ -75,6 +75,12 @@
     padding-bottom: 0 !important;
     background: r-theme-val(course-detail, primary-group-background);
 
+    @if r-theme-val(course-detail, primary-group-title-color) {
+      #{$detail-selector}__title {
+        color: r-theme-val(course-detail, primary-group-title-color);
+      }
+    }
+
     @if r-theme-val(course-detail, primary-group-arc) {
       &::after {
         content: '';
@@ -174,19 +180,6 @@
       color: r-theme-val(course-detail, plan-title-color);
     }
   }
-
-  /*.plan-accordion {
-    @include accordion-base();
-    @include accordion-plan(
-      $item-dot-color: r-theme-val(accordion-plan, item-dot-color),
-      $title-color: r-theme-val(accordion-plan, title-color),
-      $content-color: r-theme-val(accordion-plan, content-color),
-      $border-color: r-theme-val(accordion-plan, border-color),
-      $background-color: r-theme-val(accordion-plan, background-color),
-      $dot-closed: r-theme-val(accordion-plan, dot-closed),
-      $dot-opened: r-theme-val(accordion-plan, dot-opened)
-    );
-  }*/
 
   &__license {
     #{$detail-selector}__title {

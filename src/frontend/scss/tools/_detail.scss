@@ -1,15 +1,7 @@
 //
-/// THEME ON THE WAY
-///
-/// TODO: On the way to refactoring to new theming system, background variant
-/// have to be resolved
-//
-
-//
 // Detail objects
 //
-// There is some mixin helpers to build common structure elements for a detail
-// page
+// There is some mixin helpers to build common structure elements
 //
 
 // A block take full width, add some padding and base colors
@@ -30,20 +22,20 @@
   }
 
   // Thin top divider line
-  @if r-theme-val(detail-block, divider) {
+  @if r-theme-val(block-schemes, divider) {
     &#{$sel} + #{$sel}--divider {
-      border-top: $onepixel solid r-theme-val(detail-block, divider);
+      border-top: $onepixel solid r-theme-val(block-schemes, divider);
     }
   }
 
   // Implement background variant modifiers
-  @each $name, $scheme in r-theme-val(detail-block, variants) {
+  @each $name, $scheme in r-theme-val(block-schemes, variants) {
     &#{$sel}--#{$name} {
       @include r-scheme-colors($scheme);
     }
   }
 
-  @if r-theme-val(detail-block, alt-arc) {
+  @if r-theme-val(block-schemes, alt-arc) {
     &#{$sel}--arc {
       padding-bottom: 0 !important;
 
@@ -53,7 +45,7 @@
         margin-top: map-get($spacers, 4) * 3;
         width: 100%;
         height: 2.5vw;
-        background-image: r-theme-val(detail-block, alt-arc);
+        background-image: r-theme-val(block-schemes, alt-arc);
         background-repeat: no-repeat;
         background-position: bottom left;
         background-size: 100% 100%;
@@ -61,7 +53,7 @@
     }
   }
 
-  @if r-theme-val(detail-block, alt-curve) {
+  @if r-theme-val(block-schemes, alt-curve) {
     &#{$sel}--curve {
       padding-top: 0 !important;
 
@@ -70,7 +62,7 @@
         display: block;
         width: 100%;
         height: 2.5vw;
-        background-image: r-theme-val(detail-block, alt-curve);
+        background-image: r-theme-val(block-schemes, alt-curve);
         background-repeat: no-repeat;
         background-position: top left;
         background-size: 100% 100%;
@@ -106,7 +98,7 @@
 
 // Content when a placeholder is empty
 @mixin detail-empty() {
-  color: r-theme-val(detail-block, empty-color);
+  color: r-theme-val(block-schemes, empty-color);
   text-align: center;
   font-style: italic;
 }
