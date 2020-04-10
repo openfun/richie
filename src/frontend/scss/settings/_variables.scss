@@ -35,13 +35,12 @@ $container-max-widths: (
 // More space between columns
 $grid-gutter-width: 20px;
 
-// Use the footer bg color it seems to continue to the bottom end even with
-// page is empty, body-content bg will make the real base color for contents
-$body-bg: r-color('white');
+// Base body background
+$body-bg: r-theme-val(body-content, base-background);
 
 // Typography
 //
-$link-color: r-color('denim');
+$link-color: r-theme-val(body-content, base-link-color);
 $link-hover-color: darken($link-color, 15%);
 
 // Adjust font families
@@ -151,10 +150,6 @@ $r-topbar-logo-width-lg: 11.875rem;
 // Header logo width is required for SVG logos
 $r-footer-logo-width-sm: 11.875rem;
 $r-footer-logo-width-lg: 11.875rem;
-
-// Background for content container objects, eg. detailed courses, categories,
-// persons etc. pages.
-$richie-content-container-bg: r-color('white');
 
 // Aside column width in course detail, if 'null' content and aside columns take
 // full width like common blocks. Usefull if you plan to remove course run from

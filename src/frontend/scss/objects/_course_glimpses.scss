@@ -68,6 +68,8 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
 
   &:hover,
   &:focus {
+    color: inherit;
+    text-decoration: none;
     border: 0;
     box-shadow: r-theme-val(course-glimpse, base-hover-shadow);
 
@@ -147,8 +149,7 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
     bottom: 0.4rem;
     left: 0;
     padding: 0 0.6rem;
-    font-size: 1; // TODO: remove this when font-size is normalized accross the project
-    color: r-color('blue-green');
+    color: r-theme-val(course-glimpse, organization-color);
   }
 
   &__media {
@@ -216,9 +217,7 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
 
     & > .button {
       padding: 0;
-      background: r-color('blue-green');
       color: white;
-      font-size: 1; // TODO: remove this when font-size is normalized accross the project
       font-weight: 700;
 
       &:hover {

@@ -82,20 +82,10 @@
 //
 .hero-intro {
   position: relative;
-  padding: 1rem 0;
+  padding: 0;
   background-repeat: no-repeat;
   background-position: center;
-  background-size: auto 100%;
-
-  @include media-breakpoint-up(lg) {
-    @if $r-topbar-height {
-      padding: $r-topbar-height 0 calc(5vw + 1rem);
-      min-height: ($r-topbar-height + 33.75rem);
-    } @else {
-      padding: 1rem 0 calc(5vw + 1rem);
-      min-height: 34.75rem;
-    }
-  }
+  background-size: 100% auto;
 
   &::after {
     content: '';
@@ -106,10 +96,29 @@
     bottom: 0;
     left: 0;
     right: 0;
-    background-image: r-theme-val(hero-intro, insert-background-image);
-    background-repeat: no-repeat;
-    background-position: bottom left;
-    background-size: 100% 100%;
+    @if r-theme-val(hero-intro, insert-background-image) {
+      background-image: r-theme-val(hero-intro, insert-background-image);
+      background-repeat: no-repeat;
+      background-position: bottom left;
+      background-size: 100% 100%;
+    }
+  }
+
+  &__inner {
+    padding: 1rem 0;
+    @if r-theme-val(hero-intro, inner-background) {
+      background: r-theme-val(hero-intro, inner-background);
+    }
+
+    @include media-breakpoint-up(lg) {
+      @if $r-topbar-height {
+        padding: $r-topbar-height 0 calc(5vw + 1rem);
+        min-height: ($r-topbar-height + 33.75rem);
+      } @else {
+        padding: 1rem 0 calc(5vw + 1rem);
+        min-height: 34.75rem;
+      }
+    }
   }
 
   &__body {

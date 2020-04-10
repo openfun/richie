@@ -28,6 +28,13 @@
     @include sv-flex(1, 0, calc(16.6667% - #{$glimpse-gutter * 2}));
   }
 
+  // Disabled default link behaviors
+  &:hover,
+  &:focus {
+    color: inherit;
+    text-decoration: none;
+  }
+
   &__body {
     @include sv-flex(1, 0, 100%);
     display: flex;

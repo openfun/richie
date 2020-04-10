@@ -7,11 +7,11 @@
   bottom: 0;
   max-width: 30rem;
   margin: 3rem auto;
-  color: r-color('slate-grey');
+  color: r-theme-val(search-filters-group-modal, base-color);
   flex-direction: column;
   justify-content: space-between;
-  background: white;
-  border: 1px solid r-color('slate-grey');
+  background: r-theme-val(search-filters-group-modal, base-background);
+  border: 1px solid r-theme-val(search-filters-group-modal, base-border);
   border-radius: 4px;
   outline: none;
   overflow: auto;
@@ -34,9 +34,9 @@
     &__input {
       width: 100%;
       padding: 0.5rem 1rem;
+      color: r-theme-val(search-filters-group-modal, input-color);
+      background: r-theme-val(search-filters-group-modal, input-background);
       border: none;
-      background: r-color('light-grey');
-      color: black;
     }
 
     &__error {
@@ -55,7 +55,8 @@
           text-align: left;
           background: inherit;
           border: none;
-          border-bottom: 1px solid r-color('light-grey');
+          border-bottom: 1px solid
+            r-theme-val(search-filters-group-modal, item-border);
           color: inherit;
         }
       }
@@ -66,10 +67,10 @@
     padding: 0.5rem 1rem;
     flex-shrink: 0;
     flex-grow: 0;
-    color: black;
-    background: white;
+    color: r-theme-val(search-filters-group-modal, close-color);
+    background: r-theme-val(search-filters-group-modal, close-background);
     border: none;
-    border-top: 1px solid r-color('light-grey');
+    border-top: 1px solid r-theme-val(search-filters-group-modal, close-border);
   }
 
   &__overlay {
@@ -79,7 +80,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.75);
+    background: r-theme-val(search-filters-group-modal, overlay-background);
   }
 
   &-button {
@@ -88,11 +89,11 @@
     width: 100%;
     font-weight: $font-weight-boldest;
     text-transform: uppercase;
-    background-color: r-color('blue-green');
-    color: white;
+    background: r-theme-val(search-filters-group-modal, button-background);
+    color: r-theme-val(search-filters-group-modal, button-color);
 
     &:hover {
-      color: white;
+      color: r-theme-val(search-filters-group-modal, button-color);
     }
   }
 }

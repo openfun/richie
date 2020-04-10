@@ -127,7 +127,7 @@ def create_demo_site():
         create_categories(
             **ICONS_INFO,
             fill_banner=pick_image("banner"),
-            fill_logo=pick_image("logo"),
+            fill_logo=pick_image("category_logo"),
             page_parent=pages_created["categories"],
         )
     )
@@ -135,7 +135,7 @@ def create_demo_site():
         create_categories(
             **LEVELS_INFO,
             fill_banner=pick_image("banner"),
-            fill_logo=pick_image("logo"),
+            fill_logo=pick_image("category_logo"),
             page_parent=pages_created["categories"],
         )
     )
@@ -143,7 +143,7 @@ def create_demo_site():
         create_categories(
             **SUBJECTS_INFO,
             fill_banner=pick_image("banner"),
-            fill_logo=pick_image("logo"),
+            fill_logo=pick_image("category_logo"),
             page_parent=pages_created["categories"],
         )
     )
@@ -151,7 +151,7 @@ def create_demo_site():
         create_categories(
             **PARTNERSHIPS_INFO,
             fill_banner=pick_image("banner"),
-            fill_logo=pick_image("logo"),
+            fill_logo=pick_image("category_logo"),
             page_parent=pages_created["categories"],
         )
     )
@@ -159,7 +159,7 @@ def create_demo_site():
         create_categories(
             **TAGS_INFO,
             fill_banner=pick_image("banner"),
-            fill_logo=pick_image("logo"),
+            fill_logo=pick_image("category_logo"),
             page_parent=pages_created["categories"],
         )
     )
@@ -341,8 +341,6 @@ def create_demo_site():
             plugin_type="LargeBannerPlugin",
             title=content["banner_title"],
             background_image=banner,
-            logo=logo,
-            logo_alt_text="logo",
             content=content["banner_content"],
             template=content["banner_template"],
         )
