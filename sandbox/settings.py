@@ -44,6 +44,8 @@ class StyleguideMixin:
     """
 
     STYLEGUIDE = {
+        # Available font family names
+        "fonts": ["hind", "montserrat"],
         # Named color palette
         "palette": [
             "black",
@@ -63,26 +65,13 @@ class StyleguideMixin:
             "mediumturquoise",
             "firebrick6",
         ],
-        # Enabled color for Bootstrap theme
-        "theme_colors": [
-            "primary",
-            "secondary",
-            "tertiary",
-            "quaternary",
-            "clear",
-            "lightest",
-            "light",
-            "slate",
-            "dark",
-            "darker",
-            "darkest",
-            "success",
-            "info",
-            "warning",
-            "danger",
-        ],
         # Available gradient background
-        "gradient_colors": ["light-gradient", "middle-gradient", "dark-gradient"],
+        "gradient_colors": [
+            "light-gradient",
+            "middle-gradient",
+            "dark-gradient",
+            "white-mask-gradient",
+        ],
         # Available color schemes
         "schemes": [
             "primary",
@@ -94,6 +83,7 @@ class StyleguideMixin:
             "light-gradient",
             "middle-gradient",
             "dark-gradient",
+            "white-mask-gradient",
             "transparent-clear",
             "transparent-darkest",
             "clouds",

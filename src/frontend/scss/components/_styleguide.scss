@@ -1,6 +1,7 @@
 //
 // Styleguide stuff
 //
+
 // Draw a background grid in pure CSS
 @mixin draw-grid($line-color: null, $border-color: null) {
   @if $line-color {
@@ -39,6 +40,7 @@
 .styleguide {
   @include content-padding-fix;
 
+  // A basic panel which include a visual grid
   &__pane-grid {
     @include draw-grid(
       $line-color: r-theme-val(styleguide, grid-line-color),
@@ -46,6 +48,13 @@
     );
   }
 
+  // Let browser split the rows on two columns
+  &__text-columns {
+    column-count: 2;
+    column-gap: 2rem;
+  }
+
+  // Special button container which include a visual grid
   &__buttons {
     @include draw-grid(
       $line-color: r-theme-val(styleguide, grid-line-color),
@@ -103,7 +112,8 @@
     flex-direction: row;
     flex-wrap: wrap;
 
-    &__item {
+    &__item,
+    &__gradient {
       flex: 1 0 20%;
       max-width: 20%;
       padding: 0.5rem;
@@ -119,11 +129,25 @@
     @each $key, $value in $palette {
       &__item--#{$key} {
         #{$palette-sel}__color {
-          background-color: map-get($palette, $key);
+          background-color: $value;
         }
 
+        // Display color code value as a pseudo element
         #{$palette-sel}__code::before {
-          content: '#{map-get($palette, $key)}';
+          content: '#{$value}';
+        }
+      }
+    }
+    // Doing the same for available gradient backgrounds
+    @each $key, $value in map-get($r-theme, 'base-gradients') {
+      &__gradient--#{$key} {
+        #{$palette-sel}__color {
+          background: $value;
+        }
+
+        // Display color code value as a pseudo element
+        #{$palette-sel}__code::before {
+          content: '#{$value}';
         }
       }
     }

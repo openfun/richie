@@ -2,7 +2,7 @@
 //
 // A flex grid of blogpost entries
 
-$glimpse-gutter: 1.25rem;
+$glimpse-gutter: 0.6rem;
 
 .blogpost-glimpse-list {
   @include make-container-max-widths;
@@ -58,7 +58,10 @@ $glimpse-gutter: 1.25rem;
 
   // Apply card styles for elements
   @include m-o-card(
+    $margin: $glimpse-gutter,
+    $padding: 0 $glimpse-gutter,
     $border: null,
+    $radius: $border-radius-lg,
     $background: r-theme-val(blogpost-glimpse, card-background),
     $media-width: null,
     $media-margin: 0,
@@ -67,7 +70,6 @@ $glimpse-gutter: 1.25rem;
   );
 
   // Apply gutter
-  margin: $glimpse-gutter;
 
   // Disabled default link behaviors
   &:hover,

@@ -1,7 +1,3 @@
-//
-/// THEME OK
-//
-
 // Build font family class helpers. Each enabled font family class will be
 // like '.font-NAME'
 $r-fonts: () !default;
@@ -16,4 +12,9 @@ $r-fonts: () !default;
   .text-#{$name} {
     color: $value !important;
   }
+}
+
+// Additional weights
+.font-weight-extrabold {
+  font-weight: $font-weight-extrabold !important;
 }

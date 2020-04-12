@@ -53,7 +53,8 @@
 ///
 /// @arg {Bool} $apply-border [false]
 ///   If set to `true`, scheme border properties will be used, else they are
-///   ignored.
+///   ignored except if scheme contain the special property "border-apply" that
+///   will force border application.
 ///
 /// @arg {Bool} $apply-border [false]
 ///   If set to `true`, scheme border properties will be used, else they are
@@ -137,6 +138,7 @@
     $props-prefix: $prefix + '-';
   }
 
+  $border-apply: map-get($scheme, $props-prefix + 'border-apply');
   $background: map-get($scheme, $props-prefix + 'background');
   $font-color: map-get($scheme, $props-prefix + 'font-color');
   $link-color: map-get($scheme, $props-prefix + 'link-color');
@@ -159,7 +161,7 @@
   }
 
   // Optional border
-  @if $apply-border {
+  @if $border-apply or $apply-border {
     @include r-apply-border($scheme);
   }
 

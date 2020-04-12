@@ -156,27 +156,38 @@ $dark-gradient-scheme: (
   background: $dark-gradient,
   hover-font-color: r-color('white'),
 );
+$white-mask-gradient-scheme: (
+  font-color: r-color('black'),
+  h1-color: r-color('dark-grey'),
+  h2-color: r-color('dark-grey'),
+  svg-color: r-color('black'),
+  background: $white-mask-gradient,
+  hover-font-color: r-color('blue-green'),
+);
 
 // Theme schemes
 $r-theme: (
-  base-schemes: (
-    primary: $blue-green-scheme,
-    secondary: $denim-scheme,
-    tertiary: $mediumturquoise-scheme,
-    clear: $white-scheme,
-    light: $light-grey-scheme,
-    lightest: $azure2,
-    light-gradient: $light-gradient-scheme,
-    middle-gradient: $middle-gradient-scheme,
-    dark-gradient: $dark-gradient-scheme,
-    transparent-clear: $transparent-white-scheme,
-    transparent-darkest: $transparent-dark-scheme,
-    clouds: $clouds-scheme,
-  ),
+  // Used from styleguide to build available scheme to demonstrate, used to create button variant
+    base-schemes:
+    (
+      primary: $blue-green-scheme,
+      secondary: $denim-scheme,
+      tertiary: $mediumturquoise-scheme,
+      clear: $white-scheme,
+      light: $light-grey-scheme,
+      lightest: $azure2,
+      light-gradient: $light-gradient-scheme,
+      middle-gradient: $middle-gradient-scheme,
+      dark-gradient: $dark-gradient-scheme,
+      white-mask-gradient: $white-mask-gradient-scheme,
+      transparent-darkest: $transparent-dark-scheme,
+      clouds: $clouds-scheme,
+    ),
   base-gradients: (
     light-gradient: $light-gradient,
     middle-gradient: $middle-gradient,
     dark-gradient: $dark-gradient,
+    white-mask-gradient: $white-mask-gradient,
   ),
   topbar: (
     base-background: r-color('white'),
@@ -275,7 +286,7 @@ $r-theme: (
     description-color: r-color('slate-grey'),
   ),
   blogpost-glimpse: (
-    card-background: transparent,
+    card-background: r-color('white'),
     title-color: r-color('black'),
     title-hover-color: r-color('blue-green'),
     theme-border: r-color('blue-green'),
@@ -502,5 +513,5 @@ $r-theme: (
     grid-border-color: r-color('silver'),
     cta-sample: $denim-scheme,
     spot-sample: $blue-green-scheme,
-  ),
+  )
 );

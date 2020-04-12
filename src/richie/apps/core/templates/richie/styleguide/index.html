@@ -16,42 +16,20 @@
 
     <div class="pt-4 pb-4">
         <div class="container mt-4 text-center">
-            <h2 class="display-3">Typography</h2>
+            <h2 class="display-3 p-4">Typography</h2>
         </div>
 
         <div class="container mt-4">
             <hr>
             <h3 class="display-4 mb-3">Font families</h3>
 
-            <h4 class="font-hind">Hind</h3>
-            <p class="font-hind">{% include "richie/styleguide/fragment_inline_markup.html" %}</p>
-
-            <h4 class="font-montserrat">Montserrat</h3>
-            <p class="font-montserrat">{% include "richie/styleguide/fragment_inline_markup.html" %}</p>
-        </div>
-
-        <div class="container mt-4">
-            <hr>
-            <h3 class="display-4 mb-3">Titles</h3>
-
             <div class="row">
-                <div class="col">
-                    <h1>h1) Bootstrap heading</h1>
-                    <h2>h2) Bootstrap heading</h2>
-                    <h3>h3) Bootstrap heading</h3>
-                    <h4>h4) Bootstrap heading</h4>
-                    <h5>h5) Bootstrap heading</h5>
-                    <h6>h6) Bootstrap heading</h6>
+                {% for name in STYLEGUIDE.fonts %}
+                <div class="col font-{{ name }}">
+                    <h4>{{ name }}</h4>
+                    <p>{% include "richie/styleguide/fragment_inline_markup.html" %}</p>
                 </div>
-
-                <div class="col">
-                    <p class="h1">p.h1) Bootstrap heading</p>
-                    <p class="h2">p.h2) Bootstrap heading</p>
-                    <p class="h3">p.h3) Bootstrap heading</p>
-                    <p class="h4">p.h4) Bootstrap heading</p>
-                    <p class="h5">p.h5) Bootstrap heading</p>
-                    <p class="h6">p.h6) Bootstrap heading</p>
-                </div>
+                {% endfor %}
             </div>
         </div>
 
@@ -71,16 +49,51 @@
 
         <div class="container mt-4">
             <hr>
-            <h3 class="display-4 mb-3">Thickness (todo)</h3>
+            <h3 class="display-4 mb-3">Thickness</h3>
 
-            <p>List of defined thickness</p>
+
+            <div class="row">
+                {% for name in STYLEGUIDE.fonts %}
+                    <div class="col font-{{ name }}">
+                        <h4>{{ name|title }}</h3>
+                        <p class="font-weight-extrabold">Extra Bold text.</p>
+                        <p class="font-weight-boldest">Boldest text.</p>
+                        <p class="font-weight-bolder">Bolder text.</p>
+                        <p class="font-weight-bold">Bold text.</p>
+                        <p class="font-weight-normal">Normal weight text.</p>
+                        <p class="font-weight-light">Light weight text.</p>
+                        <p class="font-weight-lighter">Lighter weight text.</p>
+                        <p class="font-italic">Italic text.</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="container mt-4">
+            <hr>
+            <h3 class="display-4 mb-3">Sizes</h3>
+
+            <div class="row">
+                <div class="col">
+                    {% for i in "123456"|make_list %}
+                    <h{{ i }}>&lt;h{{ i }}&gt; {% lorem 2 w random %}</{{ i }}>
+                    {% endfor %}
+                </div>
+
+                <div class="col">
+                    {% for i in "123456"|make_list %}
+                    <p class="h{{ i }}">&lt;p.h{{ i }}&gt; {% lorem 2 w random %}</p>
+                    {% endfor %}
+                    <p>&lt;p&gt; {% lorem 2 w random %}</p>
+                </div>
+            </div>
         </div>
     </div>
 
 
     <div class="pt-4 pb-4">
         <div class="container text-center">
-            <h2 class="display-3">Palette</h2>
+            <h2 class="display-3 p-4">Palette</h2>
         </div>
 
         <div class="container mt-4">
@@ -92,15 +105,24 @@
                         <p class="palette__name">{{ item }}</p>
                     </div>
                 {% endfor %}
+                {% for item in STYLEGUIDE.gradient_colors %}
+                    <div class="palette__gradient palette__gradient--{{ item }}">
+                        <div class="palette__color"></div>
+                        <p class="palette__code"></p>
+                        <p class="palette__name">{{ item }}</p>
+                    </div>
+                {% endfor %}
             </div>
         </div>
 
         <div class="container mt-4">
             <h3 class="display-4 mb-3">As text</h3>
 
-            {% for item in STYLEGUIDE.palette %}
-                <p class="text-{{ item }}{% if item == "white" %} bg-black{% endif %}">.text-{{ item }}: <b>Bold</b>, <span class="h4">Title 4</span>, <span class="h3">Title 3</span></p>
-            {% endfor %}
+            <div class="styleguide__text-columns">
+                {% for item in STYLEGUIDE.palette %}
+                    <p class="text-{{ item }}{% if item == "white" %} bg-black{% endif %}">.text-{{ item }}: <b>Bold</b>, <span class="h4">Title 4</span>, <span class="h3">Title 3</span></p>
+                {% endfor %}
+            </div>
         </div>
 
     </div>
@@ -108,7 +130,7 @@
 
     <div class="pt-4 pb-4">
         <div class="container text-center">
-            <h2 class="display-3">Color schemes</h2>
+            <h2 class="display-3 p-4">Color schemes</h2>
         </div>
 
         <div class="container styleguide__pane-grid">
@@ -129,7 +151,7 @@
 
     <div class="pt-4 pb-4">
         <div class="container text-center">
-            <h2 class="display-3">Controls</h2>
+            <h2 class="display-3 p-4">Controls</h2>
         </div>
 
         <div class="container mt-4">
@@ -198,7 +220,7 @@
 
     <div class="pt-4 pb-4">
         <div class="container text-center">
-            <h2 class="display-3">Social badges samples</h2>
+            <h2 class="display-3 p-4">Social badges samples</h2>
         </div>
 
         <div class="container mt-4">
@@ -227,7 +249,7 @@
 
     <div class="pt-4 pb-4">
         <div class="container text-center">
-            <h2 class="display-3">Accordion</h2>
+            <h2 class="display-3 p-4">Accordion</h2>
         </div>
 
         <div class="container mt-4">

@@ -1,7 +1,3 @@
-//
-/// THEME OK
-//
-
 // Build additional gradient backgrounds
 $gradient-colors: () !default;
 @each $color, $value in map-get($r-theme, 'base-gradients') {

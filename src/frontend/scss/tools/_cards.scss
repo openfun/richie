@@ -48,6 +48,7 @@
   $padding: null,
   $border: null,
   $background: null,
+  $radius: null,
   $media-width: null,
   $media-margin: null,
   $media-padding: null,
@@ -83,6 +84,7 @@
   padding: $padding;
   background: $background;
   border: $border;
+  border-radius: $radius;
 
   @if $direction == 'vertical' {
     flex-direction: column;
