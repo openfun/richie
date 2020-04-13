@@ -6,6 +6,7 @@
 //
 .category-glimpse {
   $glimpse-gutter: 0.5rem;
+  $glimpse-item-selector: &;
 
   @include sv-flex(1, 0, calc(50% - #{$glimpse-gutter * 2}));
   display: flex;
@@ -26,13 +27,6 @@
   }
   @include media-breakpoint-up(xl) {
     @include sv-flex(1, 0, calc(16.6667% - #{$glimpse-gutter * 2}));
-  }
-
-  // Disabled default link behaviors
-  &:hover,
-  &:focus {
-    color: inherit;
-    text-decoration: none;
   }
 
   &__body {
@@ -83,10 +77,11 @@
   //
   &:hover,
   &:focus {
+    text-decoration: none;
     color: r-theme-val(category-glimpse, base-hover-color);
     border: 1px solid r-theme-val(category-glimpse, base-hover-border);
 
-    &__title {
+    #{$glimpse-item-selector}__title {
       color: r-theme-val(category-glimpse, title-hover-color);
       text-decoration: none;
     }

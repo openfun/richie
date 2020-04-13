@@ -69,6 +69,7 @@
   &__title {
     margin-bottom: 0.3rem;
     @include font-size($h4-font-size);
+    color: r-theme-val(person-glimpse, title-color);
     text-align: center;
 
     @include media-breakpoint-up(lg) {

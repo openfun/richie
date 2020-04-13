@@ -171,7 +171,7 @@ $glimpse-gutter: 0.6rem;
 
   &:hover,
   &:focus {
-    &__title {
+    #{$glimpse-item-selector}__title {
       color: r-theme-val(blogpost-glimpse, title-hover-color);
     }
 

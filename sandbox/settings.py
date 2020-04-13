@@ -49,7 +49,6 @@ class StyleguideMixin:
         # Named color palette
         "palette": [
             "black",
-            "dark-grey",
             "charcoal",
             "slate-grey",
             "battleship-grey",
@@ -59,11 +58,13 @@ class StyleguideMixin:
             "smoke",
             "white",
             "denim",
-            "steelblue3",
-            "blue-green",
-            "greeny-blue",
-            "mediumturquoise",
             "firebrick6",
+            "grey32",
+            "grey59",
+            "grey87",
+            "purplish-grey",
+            "midnightblue",
+            "indianred3",
         ],
         # Available gradient background
         "gradient_colors": [
@@ -84,9 +85,10 @@ class StyleguideMixin:
             "middle-gradient",
             "dark-gradient",
             "white-mask-gradient",
-            "transparent-clear",
             "transparent-darkest",
             "clouds",
+            "purplish-grey",
+            "battleship-grey",
         ],
     }
 

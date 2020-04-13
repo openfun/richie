@@ -21,6 +21,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   form factor available.
 - Add new plugin "NestedItem" to implement structured nestable and foldable
   content items.
+- Add Styleguide view only available on `/styleguide/` in debug mode.
 
 
 ### Fixed
@@ -43,10 +44,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Improve ElasticSearch `regenerate_indexes` tests.
 - Implement new integration from fun-corporate work.
+- New layout for demo.
 
 ### Removed
 
-- Some Section plugin templates has been removed: "section_cadenced",
+- Some Section plugin templates have been removed: "section_cadenced",
   "section_list". There are some migrations to clean plugin objects which
   used them.
 
