@@ -10,6 +10,18 @@
                 <meta name="robots" content="index,follow,all">
             {% endblock meta_index_rules %}
 
+            {% block meta_favicons %}
+            <link rel="apple-touch-icon" sizes="120x120" href="{% static 'richie/favicon/apple-touch-icon.png' %}">
+            <link rel="icon" type="image/png" sizes="32x32" href="{% static 'richie/favicon/favicon-32x32.png' %}">
+            <link rel="icon" type="image/png" sizes="16x16" href="{% static 'richie/favicon/favicon-16x16.png' %}">
+            <link rel="manifest" href="{% static 'richie/favicon/site.webmanifest' %}">
+            <link rel="mask-icon" href="{% static 'richie/favicon/safari-pinned-tab.svg' %}" color="#f72c30">
+            <link rel="shortcut icon" href="{% static 'richie/favicon/favicon.ico' %}">
+            <meta name="msapplication-TileColor" content="#eceff1">
+            <meta name="msapplication-config" content="{% static 'richie/favicon/browserconfig.xml' %}">
+            <meta name="theme-color" content="#ffffff">
+            {% endblock meta_favicons %}
+
             {% block meta_html %}
                 {% page_attribute "meta_description" as meta_description %}
                 {% if meta_description and meta_description != "None" %}<meta name="description" content="{% block meta-description %}{{ meta_description }}{% endblock %}">{% endif %}

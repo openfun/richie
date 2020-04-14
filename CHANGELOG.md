@@ -22,6 +22,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add new plugin "NestedItem" to implement structured nestable and foldable
   content items.
 - Add Styleguide view only available on `/styleguide/` in debug mode.
+- Add full favicon set to cover every usages (browser, mobile app, etc..).
 
 
 ### Fixed
