@@ -46,12 +46,12 @@
             </div>
             {% if course_state.call_to_action %}
             <div class="course-{{ course_variant }}-footer__cta">
-                <button class="button">
+                <span class="button">
                     {{ course_state.call_to_action|capfirst }}
-                    <svg aria-hidden={true} role="img" class="icon">
+                    <svg aria-hidden="true" role="img" class="icon">
                         <use xlink:href="{% static 'richie/icons.svg' %}#icon-arrow-right" />
                     </svg>
-                </button>
+                </span>
             </div>
             {% endif %}
         </div>
