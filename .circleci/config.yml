@@ -558,7 +558,7 @@ jobs:
           command: |
             BACKEND_VERSION=$(cat setup.cfg | grep "version" | cut -d" " -f3 | cut -d"." -f1,2)
             echo "richie version: ${BACKEND_VERSION}"
-            cat website/versions.json | grep "${BACKEND_VERSION}"
+            cat website/versions.json | grep "${BACKEND_VERSION}" || cat setup.cfg | grep "beta"
 
   # Run relevant linters (eg. prettier for now) on the documentation website
   lint-website:
