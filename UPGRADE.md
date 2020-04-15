@@ -16,6 +16,8 @@ $ make migrate
 
 ## Unreleased
 
+## 1.16.x to 1.17.x
+
 - The template tags related to placeholders were refactored to fix ghost placeholders. This
   change impacts the use of template tags in all templates:
   * The `fragment_course_content.html` template is removed and its content is inserted directly
@@ -29,6 +31,9 @@ $ make migrate
   `RICHIE_ES_INDICES_PREFIX` setting to replicate the previous behavior (by setting it to
   `"richie"`), all users will have to regenerate all ElasticSearch indices (can be done by running
   the `bootstrap_elasticsearch` command).
+
+## 1.15.x to 1.16.x
+
 - If you override the `courses/cms/blogpost_list.html` template and want to benefit from the
   display of news-related categories on top of the page, you need to add the new markup and css.
 - All occurences of the `form_factor` variable have been renamed to `variant` for clarity.
