@@ -8,15 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-## [1.17.0] - 2020-04-15
-
 ### Added
 
-- Licences (through their "name" and "content" fields) are now translatable.
-- Report frontend errors through Sentry when a sentry DSN is available in
-  Django settings.
-- ElasticSearch index name prefix (currently `richie_`) is now customizable
-  through the settings.
 - Add new plugin "Glimpse" to include some basic content with some variant
   form factor available.
 - Add new plugin "NestedItem" to implement structured nestable and foldable
@@ -24,9 +17,31 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add Styleguide view only available on `/styleguide/` in debug mode.
 - Add full favicon set to cover every usages (browser, mobile app, etc..).
 
+### Changed
+
+- Major templates/css refactor to bring a complete new design for the demo.
+
+### Removed
+
+- The `section_cadenced` and `section_list` templates from the section plugin.
+
+## [1.17.0] - 2020-04-15
+
+### Added
+
+- Add a variant option for blogpost glimpses,
+- Add a method to retrieve the list of blogposts related to (ie that
+  share at least one category with) another blogpost.
+- Licences (through their "name" and "content" fields) are now translatable.
+- Report frontend errors through Sentry when a sentry DSN is available in
+  Django settings.
+- ElasticSearch index name prefix (currently `richie_`) is now customizable
+  through the settings.
 
 ### Fixed
 
+- Refactor our template tags related to placeholders to fix ghost placeholders
+- Prevent unintentionally creating duplicate permissions programmatically
 - Fix an issue that crashed `regenerate_indexes` (and therefore
   `bootstrap_elasticsearch`) from a broken state in ES.
 - `<Search />` component handles errors in course search requests, displaying
@@ -43,15 +58,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Improve plugin description displayed in side toolbar.
 - Improve ElasticSearch `regenerate_indexes` tests.
-- Implement new integration from fun-corporate work.
-- New layout for demo.
-
-### Removed
-
-- Some Section plugin templates have been removed: "section_cadenced",
-  "section_list". There are some migrations to clean plugin objects which
-  used them.
+- Improve breadcrumb on course run page by creating a specific version.
 
 ## [1.16.2] - 2019-12-18
 
