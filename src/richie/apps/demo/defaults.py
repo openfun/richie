@@ -20,11 +20,11 @@ NB_OBJECTS = {
     "blogpost_tags": 1,
     "programs": 6,
     "programs_courses": 4,
-    "home_blogposts": 4,
+    "home_blogposts": 5,
     "home_courses": 8,
     "home_organizations": 4,
     "home_subjects": 6,
-    "home_persons": 3,
+    "home_persons": 4,
     "home_programs": 4,
 }
 NB_OBJECTS.update(getattr(settings, "RICHIE_DEMO_NB_OBJECTS", {}))
@@ -361,6 +361,7 @@ FOOTER_CONTENT = {
             "items": [
                 {"name": "About", "internal_link": "annex__about"},
                 {"name": "Sitemap", "internal_link": "annex__sitemap"},
+                {"name": "Style guide", "external_link": "/styleguide/"},
             ]
         },
         {
@@ -379,6 +380,7 @@ FOOTER_CONTENT = {
             "items": [
                 {"name": "A propos", "internal_link": "annex__about"},
                 {"name": "Plan du site", "internal_link": "annex__sitemap"},
+                {"name": "Style guide", "external_link": "/styleguide/"},
             ]
         },
         {

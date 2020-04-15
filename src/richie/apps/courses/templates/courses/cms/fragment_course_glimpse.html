@@ -44,16 +44,6 @@
                 {{ course_state.text|capfirst }}
                 <span>{{ course_state.datetime|date:"DATE_FORMAT" }}</span>
             </div>
-            {% if course_state.call_to_action %}
-            <div class="course-{{ course_variant }}-footer__cta">
-                <span class="button">
-                    {{ course_state.call_to_action|capfirst }}
-                    <svg aria-hidden="true" role="img" class="icon">
-                        <use xlink:href="{% static 'richie/icons.svg' %}#icon-arrow-right" />
-                    </svg>
-                </span>
-            </div>
-            {% endif %}
         </div>
         {% endblock course_glimpse_footer %}
     </div>

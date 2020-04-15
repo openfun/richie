@@ -197,8 +197,7 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
     $apply-border: true
   );
 
-  &__date,
-  &__cta {
+  &__date {
     display: flex;
     @include sv-flex-cell-width(50%);
     flex-direction: column;
@@ -209,31 +208,6 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
     align-content: center;
     font-weight: bold;
     line-height: 1.1;
-  }
-
-  &__cta {
-    display: flex;
-    align-items: flex-end;
-
-    & > .button {
-      padding: 0;
-      color: white;
-      font-weight: 700;
-
-      &:hover {
-        color: white;
-      }
-
-      & > .icon {
-        display: inline-block;
-        height: 1rem;
-        width: 1rem;
-        margin-left: 0.2rem;
-      }
-    }
-  }
-
-  &__date {
     // Force a line-break between the meaningful text and the actual date information
     & > span {
       display: table;

@@ -6,6 +6,7 @@
 // ---------
 $palette: (
   'black': #090909,
+  'dark-grey': #232323,
   'charcoal': #29303b,
   'slate-grey': #686868,
   'battleship-grey': #686f7a,
@@ -224,7 +225,7 @@ $r-theme: (
   ),
   body-footer: (
     base-color: r-color('slate-grey'),
-    base-background: r-color('black'),
+    base-background: r-color('dark-grey'),
     lang-color: r-color('white'),
     section-hover: r-color('white'),
     subtitle-color: r-color('white'),
@@ -437,7 +438,7 @@ $r-theme: (
     pubdate-border: r-color('firebrick6'),
     authors-border: r-color('firebrick6'),
     cover-empty-background: r-color('smoke'),
-    body-color: transparent,
+    body-color: inherit,
     headline-color: r-color('slate-grey'),
     headline-border: r-color('black'),
     headline-title-color: r-color('black'),

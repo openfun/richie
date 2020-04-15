@@ -80,6 +80,9 @@ def create_demo_site():
     plugins to each page.
     """
     site = Site.objects.get(id=1)
+    site.domain = "localhost:8070"
+    site.name = "Richie demonstration"
+    site.save()
 
     # Create pages as described in PAGES_INFOS
     pages_created = recursive_page_creation(site, PAGES_INFO)

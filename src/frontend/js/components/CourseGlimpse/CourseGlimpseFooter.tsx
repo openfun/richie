@@ -28,16 +28,5 @@ export const CourseGlimpseFooter = ({
         </span>
       ) : null}
     </div>
-    {course.state.call_to_action ? (
-      <div className="course-glimpse-footer__cta">
-        <button className="button">
-          {course.state.call_to_action.charAt(0).toUpperCase() +
-            course.state.call_to_action.substr(1)}
-          <svg aria-hidden={true} role="img" className="icon">
-            <use xlinkHref={`${context.assets.icons}#icon-arrow-right`} />
-          </svg>{' '}
-        </button>
-      </div>
-    ) : null}
   </div>
 );

@@ -64,7 +64,6 @@ describe('components/CourseGlimpse', () => {
         element.innerHTML.startsWith('Starts on') &&
         element.innerHTML.includes('Mar 14, 2019'),
     );
-    getByText('Enroll now');
     // The logo is rendered along with alt text "" as it is decorative and included in a link block
     const img = container.querySelector('img');
     expect(img).toHaveAttribute('alt', '');

@@ -49,6 +49,7 @@ class StyleguideMixin:
         # Named color palette
         "palette": [
             "black",
+            "dark-grey",
             "charcoal",
             "slate-grey",
             "battleship-grey",
