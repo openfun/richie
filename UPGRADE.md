@@ -16,6 +16,8 @@ $ make migrate
 
 ## Unreleased
 
+## 1.17.x to 2.0.x
+
 - Richie version 2 is a major overhaul of all the project's templates and css files to bring
   a complete new design. If you were overriding the old templates and css base, you have 2
   options:
