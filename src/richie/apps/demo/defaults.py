@@ -123,7 +123,7 @@ TAGS_INFO = {
 TAGS_INFO.update(getattr(settings, "RICHIE_DEMO_TAGS_INFO", {}))
 
 SUBJECTS_INFO = {
-    "page_title": {"en": "Subject", "fr": "Subjet"},
+    "page_title": {"en": "Subject", "fr": "Sujet"},
     "children": [
         {
             "page_title": {"en": "Science", "fr": "Sciences"},

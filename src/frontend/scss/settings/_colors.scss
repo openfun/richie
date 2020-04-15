@@ -167,6 +167,15 @@ $dark-gradient-scheme: (
   background: $dark-gradient,
   hover-font-color: r-color('black'),
 );
+$dark-gradient-alt-scheme: map-merge(
+  $dark-gradient-scheme,
+  (
+    font-color: r-color('white'),
+    link-color: r-color('white'),
+    svg-color: r-color('white'),
+    hover-font-color: r-color('white'),
+  )
+);
 $white-mask-gradient-scheme: (
   font-color: r-color('black'),
   h1-color: r-color('black'),
@@ -224,7 +233,7 @@ $r-theme: (
     base-link-color: r-color('firebrick6'),
   ),
   body-footer: (
-    base-color: r-color('slate-grey'),
+    base-color: r-color('light-grey'),
     base-background: r-color('dark-grey'),
     lang-color: r-color('white'),
     section-hover: r-color('white'),
@@ -347,7 +356,7 @@ $r-theme: (
       0 10px 50px 0 rgba(r-color('black'), 0.05),
       0 12px 34px 0 rgba(r-color('black'), 0.15),
     ),
-    icon: $dark-gradient-scheme,
+    icon: $middle-gradient-scheme,
     content-color: r-color('slate-grey'),
     title-color: r-color('black'),
     organization-media-empty-background: r-color('smoke'),
