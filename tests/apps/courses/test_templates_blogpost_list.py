@@ -93,8 +93,8 @@ class ListBlogPostCMSTestCase(CMSTestCase):
             self.assertContains(
                 response,
                 (
-                    '<a class="category-plugin-tag" href="{slug:s}">'
-                    '<div class="category-plugin-tag__title">{title:s}</div>'
+                    '<a class="category-tag" href="{slug:s}">'
+                    '<span class="category-tag__title">{title:s}</span>'
                     "</a>"
                 ).format(
                     slug=category.extended_object.get_absolute_url(),

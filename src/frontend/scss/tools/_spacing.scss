@@ -1,0 +1,24 @@
+//
+// Include a spacer size for a property with optional responsive behaviors
+//
+// @arg {String} $prop [null]
+//   CSS property name to include.
+//
+// @arg {String} $name [null]
+//   Spacer name (as its key index in '$spacers' map from Bootstrap variables)
+//   for default property value.
+//
+// @arg {List} $breakpoints [()]
+//   Map of breakpoints values where key name is the breakpoint name and key
+//   value is the property value to define. For each given breakpoint, a value
+//   will be defined to override the default one.
+//
+@mixin responsive-spacer($prop, $name, $breakpoints: ()) {
+  #{$prop}: map-get($spacers, $name) !important;
+
+  @each $breakpoint, $name in $breakpoints {
+    @include media-breakpoint-up($breakpoint) {
+      #{$prop}: map-get($spacers, $name) !important;
+    }
+  }
+}

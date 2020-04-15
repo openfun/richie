@@ -1,7 +1,7 @@
 {% load cms_tags i18n %}
 {% spaceless %}
 {% if current_page.publisher_is_draft or instance.check_publication is True %}
-  {% if variant == "tag" %}
+  {% if person_variant == "tag" %}
     <a class="person-plugin-tag" href="{{ relevant_page.get_absolute_url }}">
       {{ relevant_page.get_title }}
     </a>

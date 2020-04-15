@@ -1,5 +1,5 @@
 {% load cms_tags i18n extra_tags %}{% spaceless %}
-<div class="course-detail__aside__runs__block__detail">
+<div class="course-detail__run-descriptions">
     <dl>
         <dt>{% trans "Enrollment" %}</dt>
         <dd>
@@ -12,7 +12,7 @@
         <dt>{% trans "Languages" %}</dt>
         <dd>{% render_model run "get_languages_display" "languages" %}</dd>
     </dl>
-    <a href="{{ run.extended_object.get_absolute_url }}">
+    <a href="{{ run.extended_object.get_absolute_url }}" class="course-detail__run-cta">
         {{ run.state.call_to_action|capfirst }}
     </a>
 </div>

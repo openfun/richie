@@ -1,0 +1,130 @@
+//
+// Square card variant is vertical
+//
+.glimpse-card_square {
+  @include sv-flex(1, 0, calc(100% - 1.25rem));
+  position: relative;
+  margin: 0.625rem;
+  padding: 1rem;
+  color: inherit;
+
+  @include media-breakpoint-up(md) {
+    @include sv-flex(1, 0, calc(50% - 1.25rem));
+  }
+  @include media-breakpoint-up(lg) {
+    @include sv-flex(1, 0, calc(25% - 1.25rem));
+  }
+
+  &:hover {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  &__media {
+    margin-bottom: 0.5rem;
+
+    img,
+    iframe {
+      display: block;
+      margin: 0 auto;
+      //width: 100%;
+      max-width: 100%;
+      height: auto;
+    }
+  }
+
+  &__title {
+    margin-bottom: 0.5rem;
+  }
+}
+
+//
+// Half row variant is horizontal
+//
+.glimpse-row_half {
+  @include sv-flex(1, 0, calc(100% - 1.25rem));
+  position: relative;
+  margin: 0.625rem;
+  padding: 1rem;
+  color: inherit;
+
+  @include media-breakpoint-up(md) {
+    display: flex;
+    flex-direction: row;
+  }
+  @include media-breakpoint-up(lg) {
+    @include sv-flex(1, 0, calc(50% - 1.25rem));
+  }
+
+  &:hover {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  &__media {
+    margin-bottom: 0.5rem;
+
+    @include media-breakpoint-up(md) {
+      @include sv-flex(1, 0, 12.5rem);
+      margin-right: 1rem;
+      margin-bottom: 0;
+    }
+
+    img,
+    iframe {
+      display: block;
+      margin: 0 auto;
+      //width: 100%;
+      max-width: 100%;
+      height: auto;
+    }
+  }
+
+  &__title {
+    margin-bottom: 0.5rem;
+  }
+}
+
+//
+// Full row variant is horizontal
+//
+.glimpse-row_full {
+  @include sv-flex(1, 0, calc(100% - 1.25rem));
+  position: relative;
+  margin: 0.625rem;
+  padding: 1rem;
+  color: inherit;
+
+  @include media-breakpoint-up(md) {
+    display: flex;
+    flex-direction: row;
+  }
+
+  &:hover {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  &__media {
+    margin-bottom: 0.5rem;
+
+    @include media-breakpoint-up(md) {
+      @include sv-flex(1, 0, 12.5rem);
+      margin-right: 1rem;
+      margin-bottom: 0;
+    }
+
+    img,
+    iframe {
+      display: block;
+      margin: 0 auto;
+      //width: 100%;
+      max-width: 100%;
+      height: auto;
+    }
+  }
+
+  &__title {
+    margin-bottom: 0.5rem;
+  }
+}

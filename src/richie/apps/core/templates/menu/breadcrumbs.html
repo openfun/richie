@@ -1,0 +1,7 @@
+{% load i18n menu_tags %}
+<div class="breadcrumbs">
+    <ul class="breadcrumbs__list">
+        <li class="breadcrumbs__item">{% trans "You are here:" %}</li>
+        {% block breadcrumbs_content %}{% show_breadcrumb 0 "menu/breadcrumb_item.html" %}{% endblock breadcrumbs_content %}
+    </ul>
+</div>

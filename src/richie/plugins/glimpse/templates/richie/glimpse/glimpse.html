@@ -1,0 +1,52 @@
+{% load thumbnail %}{% spaceless %}
+
+{% with glimpse_variant=glimpse_variant|default:"card_square" %}
+
+    {% if instance.get_link %}
+        <a href="{{ instance.get_link }}"{% if instance.is_blank_target %} target="_blank" rel=”noopener noreferrer”{% endif %}
+        class="glimpse-{{ glimpse_variant }}">
+    {% else %}
+        <div class="glimpse-{{ glimpse_variant }}">
+    {% endif %}
+        {% if instance.image %}
+        <div class="glimpse-{{ glimpse_variant }}__media">
+            {% if glimpse_variant == "card_square" %}
+            <img src="{% thumbnail instance.image 300x170 crop upscale subject_location=instance.image.subject_location %}"
+                srcset="{% thumbnail instance.image 300x170 crop upscale subject_location=instance.image.subject_location %} 300w
+                    {% if instance.image.width >= 600 %},{% thumbnail instance.image 600x340 crop upscale subject_location=instance.image.subject_location %} 600w{% endif %}
+                    {% if instance.image.width >= 900 %},{% thumbnail instance.image 900x510 crop upscale subject_location=instance.image.subject_location %} 900w{% endif %}"
+                sizes="300px"
+                alt="">
+            {% else %}
+            <img src="{% thumbnail instance.image 200x200 crop upscale subject_location=instance.image.subject_location %}"
+                srcset="{% thumbnail instance.image 200x200 crop upscale subject_location=instance.image.subject_location %} 200w
+                    {% if instance.image.width >= 400 %},{% thumbnail instance.image 400x400 crop upscale subject_location=instance.image.subject_location %} 400w{% endif %}
+                    {% if instance.image.width >= 800 %},{% thumbnail instance.image 800x800 crop upscale subject_location=instance.image.subject_location %} 800w{% endif %}"
+                sizes="200px"
+                alt="">
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <div class="glimpse-{{ glimpse_variant }}__wrapper">
+            {% if instance.title %}
+                <h{{ header_level|default:2 }} class="glimpse-{{ glimpse_variant }}__title">
+                    {{ instance.title }}
+                </h{{ header_level|default:2 }}>
+            {% endif %}
+
+            {% if instance.content %}
+            <div class="glimpse-{{ glimpse_variant }}__content">
+                {{ instance.content|linebreaks }}
+            </div>
+            {% endif %}
+        </div>
+
+    {% if instance.get_link %}
+        </a>
+    {% else %}
+        </div>
+    {% endif %}
+
+{% endwith %}
+{% endspaceless %}

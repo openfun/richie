@@ -53,12 +53,10 @@ class DetailBlogPostCMSTestCase(CMSTestCase):
         self.assertContains(
             response, '<h1 class="blogpost-detail__title">Preums</h1>', html=True
         )
-        self.assertContains(response, "Comte de Saint-Germain", html=True)
+        self.assertNotContains(response, "Comte de Saint-Germain", html=True)
 
         self.assertContains(
-            response,
-            '<p class="blogpost-detail__subhead__date">Nov. 27, 2019</p>',
-            html=True,
+            response, '<p class="blogpost-detail__pubdate">11/27/2019</p>', html=True,
         )
 
     def test_templates_blogpost_detail_cms_draft_content(self):
@@ -98,8 +96,8 @@ class DetailBlogPostCMSTestCase(CMSTestCase):
         self.assertContains(
             response,
             (
-                '<a class="category-plugin-tag category-plugin-tag--draft" '
-                'href="{:s}"><div class="category-plugin-tag__title">{:s}</div></a>'
+                '<a class="category-tag category-tag--draft" '
+                'href="{:s}"><span class="category-tag__title">{:s}</span></a>'
             ).format(
                 category.extended_object.get_absolute_url(),
                 category.extended_object.get_title(),
@@ -109,6 +107,6 @@ class DetailBlogPostCMSTestCase(CMSTestCase):
 
         self.assertContains(
             response,
-            '<p class="blogpost-detail__subhead__date">Not published yet</p>',
+            '<p class="blogpost-detail__pubdate">Not published yet</p>',
             html=True,
         )

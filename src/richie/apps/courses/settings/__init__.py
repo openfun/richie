@@ -52,8 +52,13 @@ CMS_PLACEHOLDER_CONF = {
     # Footer
     "footer": {
         "name": _("Footer"),
-        "plugins": ["LinkPlugin", "SectionPlugin"],
-        "child_classes": {"SectionPlugin": ["LinkPlugin", "SectionPlugin"]},
+        "plugins": ["NestedItemPlugin"],
+        "NestedItemPlugin": ["NestedItemPlugin", "LinkPlugin"],
+    },
+    "static_blogpost_headline": {
+        "name": _("Static headline"),
+        "plugins": ["SectionPlugin", "CKEditorPlugin"],
+        "child_classes": {"SectionPlugin": ["CKEditorPlugin"]},
     },
     # -- Page Placeholders
     # Homepage
@@ -69,17 +74,23 @@ CMS_PLACEHOLDER_CONF = {
                 "OrganizationPlugin",
                 "OrganizationsByCategoryPlugin",
                 "PersonPlugin",
-            ]
+                "CKEditorPlugin",
+                "SectionPlugin",
+                "NestedItemPlugin",
+                "GlimpsePlugin",
+            ],
+            "NestedItemPlugin": ["CategoryPlugin"],
         },
     },
     # Single column page
-    "richie/single-column.html maincontent": {
+    "richie/single_column.html maincontent": {
         "name": _("Main content"),
         "excluded_plugins": ["CKEditorPlugin", "GoogleMapPlugin"],
         "parent_classes": {
             "BlogPostPlugin": ["SectionPlugin"],
             "CategoryPlugin": ["SectionPlugin"],
             "CoursePlugin": ["SectionPlugin"],
+            "GlimpsePlugin": ["SectionPlugin"],
             "OrganizationPlugin": ["SectionPlugin"],
             "OrganizationsByCategoryPlugin": ["SectionPlugin"],
             "PersonPlugin": ["SectionPlugin"],
@@ -89,11 +100,14 @@ CMS_PLACEHOLDER_CONF = {
                 "BlogPostPlugin",
                 "CategoryPlugin",
                 "CoursePlugin",
+                "GlimpsePlugin",
                 "LinkPlugin",
                 "OrganizationPlugin",
                 "OrganizationsByCategoryPlugin",
                 "PersonPlugin",
-            ]
+                "NestedItemPlugin",
+            ],
+            "NestedItemPlugin": ["NestedItemPlugin", "LinkPlugin"],
         },
     },
     # Course detail
@@ -134,7 +148,8 @@ CMS_PLACEHOLDER_CONF = {
     },
     "courses/cms/course_detail.html course_plan": {
         "name": _("Plan"),
-        "plugins": ["CKEditorPlugin"],
+        "plugins": ["NestedItemPlugin"],
+        "child_classes": {"NestedItemPlugin": ["NestedItemPlugin"]},
     },
     "courses/cms/course_detail.html course_information": {
         "name": _("Complementary information"),
@@ -255,6 +270,11 @@ CMS_PLACEHOLDER_CONF = {
     "courses/cms/blogpost_detail.html body": {
         "name": _("Body"),
         "excluded_plugins": ["CKEditorPlugin", "GoogleMapPlugin"],
+    },
+    "courses/cms/blogpost_detail.html headline": {
+        "name": _("Headline"),
+        "plugins": ["SectionPlugin", "CKEditorPlugin"],
+        "child_classes": {"SectionPlugin": ["CKEditorPlugin"]},
     },
     # Program page detail
     "courses/cms/program_detail.html program_cover": {

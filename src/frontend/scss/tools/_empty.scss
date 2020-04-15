@@ -1,0 +1,45 @@
+@mixin m-o-media_empty(
+  $width: null,
+  $height: null,
+  $margin: 0,
+  $padding: 1rem,
+  $fontsize: null,
+  $fontstyle: italic,
+  $fontcolor: null,
+  $textalign: center,
+  $border: null,
+  $background: null,
+  $absolute: true,
+  $selector: '&__empty'
+) {
+  #{$selector} {
+    width: $width;
+    min-height: $height;
+    margin: $margin;
+    padding: $padding;
+    font-size: $fontsize;
+    font-style: $fontstyle;
+    text-align: $textalign;
+    color: $fontcolor;
+    border: $border;
+    background: $background;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+    text-decoration: none;
+
+    @if ($absolute) {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
+
+    &:hover {
+      color: $fontcolor;
+      text-decoration: none;
+    }
+  }
+}

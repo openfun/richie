@@ -1,0 +1,194 @@
+// Structural rules for Card types
+
+// Full card structure including every available elements.
+//
+// Flow can be either horizontal or vertical depending `$media-width`.
+//
+// Best usage is in a flexbox grid so every cards on the same row have equal
+// height and their content is correctly aligned.
+//
+// Following is the required structure sample for a card. Note that this
+// mixin doesn't create the card container selector, you have to include mixin
+// inside your own selector. For inside elements, their selectors are created
+// following methodology given as argument.
+//
+// @example html
+//     <card-container>
+//
+//         <media>
+//                 <img_or_iframe>
+//                 <optional_caption>
+//         </media>
+//
+//         <content-container>
+//                 <wrapper>
+//                         <contents*>
+//                 </wrapper>
+//
+//                 <footer>
+//                         <contents*>
+//                 </footer>
+//         </content-container>
+//
+//     </card-container>
+//
+// @arg {Number} $media-width [null]
+//     If not null and more than zero, trigger horizontal flow behavior.
+//
+// @arg {Number} $triangle-size [null]
+//     If not null and more than zero, trigger a CSS triangle absolutely
+//     positionned relatively to 'content' element.
+//
+// @arg {Selector} $parent [&]
+//     Parent selector used only with BEM methodology to define element
+//     selectors. Default is parent reference `&`. Usually you don't have to
+//     change this unless your are working inside a modifier or a sub element.
+@mixin m-o-card(
+  $margin: null,
+  $padding: null,
+  $border: null,
+  $background: null,
+  $radius: null,
+  $media-width: null,
+  $media-margin: null,
+  $media-padding: null,
+  $media-background: null,
+  $media-border: null,
+  $media-constraint: true,
+  $caption-width: null,
+  $caption-margin: null,
+  $caption-padding: null,
+  $caption-fontsize: null,
+  $caption-textalign: null,
+  $caption-border: null,
+  $caption-background: null,
+  $content-margin: null,
+  $content-padding: null,
+  $content-flex-justify: space-between,
+  $content-background: null,
+  $content-border: null,
+  $wrapper-margin: null,
+  $wrapper-padding: null,
+  $wrapper-background: null,
+  $wrapper-border: null,
+  $foot-divider: null,
+  $triangle-size: null,
+  $triangle-color: null,
+  $triangle-direction: 'up'
+) {
+  // Flow direction depends on media width value
+  $direction: if(($media-width and $media-width > 0), 'horizontal', 'vertical');
+
+  display: flex;
+  margin: $margin;
+  padding: $padding;
+  background: $background;
+  border: $border;
+  border-radius: $radius;
+
+  @if $direction == 'vertical' {
+    flex-direction: column;
+  } @else {
+    flex-direction: row;
+  }
+
+  // Link modifier disable default common link element behaviors
+  &--link {
+    color: inherit;
+
+    &:hover {
+      color: inherit;
+      text-decoration: none;
+    }
+  }
+
+  // Media element
+  &__media {
+    display: block;
+    position: relative;
+    margin: $media-margin;
+    padding: $media-padding;
+    background: $media-background;
+    border: $media-border;
+
+    // Media element size and flow direction
+    @if ($media-width and $media-width > 0) {
+      // Horizontal
+      @include sv-flex(1, 0, $media-width);
+    } @else {
+      // Vertical
+      @include sv-flex(0, 1, 0%, $max: false);
+      max-width: none;
+    }
+
+    // Media element constraint
+    @if ($media-constraint) {
+      img,
+      iframe {
+        display: block;
+        width: 100%;
+        max-width: 100%;
+        height: auto;
+      }
+    }
+  }
+
+  &__caption {
+    @if ($caption-width) {
+      position: absolute;
+      left: (100% - $caption-width) / 2;
+      width: $caption-width;
+      @if ($caption-fontsize) {
+        bottom: -$caption-fontsize;
+      } @else {
+        bottom: 0;
+      }
+    }
+    margin: $caption-margin;
+    padding: $caption-padding;
+    font-size: $caption-fontsize;
+    line-height: 1.1;
+    text-align: $caption-textalign;
+    background: $caption-background;
+    border: $caption-border;
+  }
+
+  // Main text content container
+  &__content {
+    display: flex;
+    position: relative;
+    @include sv-flex(1, 1, 0%, $max: false);
+    flex-direction: column;
+    justify-content: $content-flex-justify;
+    margin: $content-margin;
+    padding: $content-padding;
+    background: $content-background;
+    border: $content-border;
+
+    @if $triangle-size and $triangle-size > 0 {
+      &::before {
+        @include m-o-triangle(
+          $triangle-size,
+          $triangle-color,
+          $triangle-direction,
+          $absolute: true
+        );
+      }
+    }
+  }
+
+  &__wrapper {
+    margin: $wrapper-margin;
+    padding: $wrapper-padding;
+    background: $wrapper-background;
+    border: $wrapper-border;
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__footer {
+    margin-top: $foot-divider;
+  }
+}

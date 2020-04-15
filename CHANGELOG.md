@@ -8,6 +8,23 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Add new plugin "Glimpse" to include some basic content with some variant
+  form factor available.
+- Add new plugin "NestedItem" to implement structured nestable and foldable
+  content items.
+- Add Styleguide view only available on `/styleguide/` in debug mode.
+- Add full favicon set to cover every usages (browser, mobile app, etc..).
+
+### Changed
+
+- Major templates/css refactor to bring a complete new design for the demo.
+
+### Removed
+
+- The `section_cadenced` and `section_list` templates from the section plugin.
+
 ## [1.17.0] - 2020-04-15
 
 ### Added

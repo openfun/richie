@@ -1,10 +1,11 @@
 {% load pagination_tags %}
+
 {% spaceless %}
 {% if current_page.publisher_is_draft or instance.check_publication is True %}
-  <div class="organization-list__content">
-    {% for organization in organizations %}
-      {% include "courses/cms/fragment_organization_glimpse.html" with variant=instance.variant %}
-    {% endfor %}
-  </div>
+    <div class="organization-glimpse-list">
+        {% for organization in organizations %}
+            {% include "courses/cms/fragment_organization_glimpse.html" %}
+        {% endfor %}
+    </div>
 {% endif %}
 {% endspaceless %}

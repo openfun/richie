@@ -113,7 +113,7 @@ class PersonPluginTestCase(CMSTestCase):
         # The person's full name should be wrapped in a h2
         self.assertContains(
             response,
-            '<h2 class="person-glimpse__content__wrapper__title">{:s}</h2>'.format(
+            '<h2 class="person-glimpse__title">{:s}</h2>'.format(
                 person.public_extension.extended_object.get_title()
             ),
             html=True,
@@ -131,9 +131,7 @@ class PersonPluginTestCase(CMSTestCase):
 
         # Short bio should be present
         self.assertContains(
-            response,
-            '<div class="person-glimpse__content__wrapper__bio">public bio</div>',
-            html=True,
+            response, '<div class="person-glimpse__bio">public bio</div>', html=True,
         )
         self.assertNotContains(response, "draft bio")
 
@@ -149,9 +147,7 @@ class PersonPluginTestCase(CMSTestCase):
         self.assertIsNotNone(re.search(pattern, str(response.content)))
 
         self.assertContains(
-            response,
-            '<div class="person-glimpse__content__wrapper__bio">résumé public</div>',
-            html=True,
+            response, '<div class="person-glimpse__bio">résumé public</div>', html=True,
         )
 
     def test_cms_plugins_person_render_on_draft_page(self):

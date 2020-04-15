@@ -1,13 +1,17 @@
 {% extends "richie/fullwidth.html" %}
 {% load cms_tags i18n pagination_tags %}
 
-{% block breadcrumbs %}{% endblock breadcrumbs %}
+
+{% block subheader_content %}
+<div class="subheader__container">
+    <h1 class="subheader__title">{{ current_page.get_title }}</h1>
+</div>
+{% endblock subheader_content %}
+
 
 {% block content %}
-<div class="person-glimpse-list">
-  <h1 class="person-glimpse-list__title">{{ current_page.get_title }}</h1>
-
-  {% autopaginate current_page.get_child_pages 25 as object_list %}
+<div class="person-list">
+  {% autopaginate current_page.get_child_pages 24 as object_list %}
   {% for page in object_list %}
     {% if page.person %}
       {% include "courses/cms/fragment_person_glimpse.html" with person=page.person %}

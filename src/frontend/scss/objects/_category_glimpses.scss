@@ -1,76 +1,33 @@
-// Category glimpses
+// Category glimpses variants
 //
-// A flex grid of category entries
 
-// Available object settings
-$richie-category-glimpse-list-maxwidth-constraint: true !default;
-$richie-category-glimpse-list-margin: 0 auto !default;
-$richie-category-glimpse-list-padding: 1rem 0 !default;
-$richie-category-glimpse-list-title-margin: null !default;
-$richie-category-glimpse-list-title-padding: 0.5rem !default;
-$richie-blogpost-glimpse-list-title-textalign: left !default;
-
-$richie-category-glimpse-container-width-sm: 50% !default;
-$richie-category-glimpse-container-width-md: 33.3333% !default;
-$richie-category-glimpse-container-width-lg: 25% !default;
-$richie-category-glimpse-container-width-xl: 16.6667% !default;
-$richie-category-glimpse-container-gutter: 0.5rem !default;
-$richie-category-glimpse-container-background: $white !default;
-$richie-category-glimpse-container-border: 1px solid rgba($black, 0.125) !default;
-$richie-category-glimpse-container-border-hover: 1px solid $firebrick6 !default;
-$richie-category-glimpse-container-border-radius: 0.25rem !default;
-
-$richie-category-glimpse-content-fontsize: 0.9rem !default;
-$richie-category-glimpse-content-fontcolor: $gray40 !default;
-$richie-category-glimpse-content-textalign: center !default;
-
-$richie-category-glimpse-title-padding: 0.3rem !default;
-$richie-category-glimpse-title-fontsize: inherit !default;
-$richie-category-glimpse-title-fontweight: inherit !default;
-$richie-category-glimpse-title-fontcolor: inherit !default;
-$richie-category-glimpse-title-textalign: center !default;
-
-$richie-category-glimpse-body-fontsize: small !default;
-$richie-category-glimpse-body-fontcolor: $black !default;
-
-.category-glimpse-list {
-  @if $richie-category-glimpse-list-maxwidth-constraint {
-    @include make-container-max-widths();
-  }
-  display: flex;
-  margin: $richie-category-glimpse-list-margin;
-  padding: $richie-category-glimpse-list-padding;
-  flex-direction: row;
-  flex-wrap: wrap;
-
-  &__title {
-    @include sv-flex(1, 0, 100%);
-    margin: $richie-category-glimpse-list-title-margin;
-    padding: $richie-category-glimpse-list-title-padding;
-    text-align: $richie-blogpost-glimpse-list-title-textalign;
-  }
-}
-
+//
+// Glimpse default variant
+//
 .category-glimpse {
+  $glimpse-gutter: 0.5rem;
   $glimpse-item-selector: &;
-  // Cell base width for lowest breakpoint
-  @include sv-flex(
-    1,
-    0,
-    calc(
-      #{$richie-category-glimpse-container-width-sm} - #{$richie-category-glimpse-container-gutter *
-        2}
-    )
-  );
 
+  @include sv-flex(1, 0, calc(50% - #{$glimpse-gutter * 2}));
   display: flex;
-  margin: $richie-category-glimpse-container-gutter;
+  margin: $glimpse-gutter;
   flex-direction: column;
   flex-wrap: nowrap;
   align-content: space-between;
-  border: $richie-category-glimpse-container-border;
-  border-radius: $richie-category-glimpse-container-border-radius;
-  background: $white;
+  border: 1px solid r-theme-val(category-glimpse, base-border);
+  border-radius: $border-radius;
+  background: r-theme-val(category-glimpse, base-background);
+
+  // Responsive adjustments
+  @include media-breakpoint-up(md) {
+    @include sv-flex(1, 0, calc(33.3333% - #{$glimpse-gutter * 2}));
+  }
+  @include media-breakpoint-up(lg) {
+    @include sv-flex(1, 0, calc(25% - #{$glimpse-gutter * 2}));
+  }
+  @include media-breakpoint-up(xl) {
+    @include sv-flex(1, 0, calc(16.6667% - #{$glimpse-gutter * 2}));
+  }
 
   &__body {
     @include sv-flex(1, 0, 100%);
@@ -78,8 +35,7 @@ $richie-category-glimpse-body-fontcolor: $black !default;
     flex-direction: column;
     flex-wrap: nowrap;
     align-items: stretch;
-    color: $richie-category-glimpse-body-fontcolor;
-    font-size: $richie-category-glimpse-body-fontsize;
+    color: r-theme-val(category-glimpse, body-color);
   }
 
   &__logo {
@@ -92,70 +48,261 @@ $richie-category-glimpse-body-fontcolor: $black !default;
     @include m-o-media_empty(
       $width: 100%,
       $height: 15vh,
-      $background: $gray97,
+      $background: r-theme-val(category-glimpse, logo-empty-background),
       $absolute: false
     );
 
-    &__empty {
-      @include sv-flex(1, 0, auto);
-      border-radius: $richie-category-glimpse-container-border-radius;
-    }
-
     img {
       @include sv-flex(0, 0, auto);
-      border-radius: $richie-category-glimpse-container-border-radius;
+      border-radius: $border-radius;
     }
+  }
+
+  &__empty {
+    @include sv-flex(1, 0, auto);
+    border-radius: $border-radius;
   }
 
   &__title {
     @include sv-flex(0, 0, auto);
-    padding: $richie-category-glimpse-title-padding;
+    padding: 0.3rem;
     word-wrap: break-word;
-    font-size: $richie-category-glimpse-title-fontsize;
-    font-weight: $richie-category-glimpse-title-fontweight;
-    color: $richie-category-glimpse-title-fontcolor;
-    text-align: $richie-category-glimpse-title-textalign;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    color: r-theme-val(category-glimpse, title-color);
+    text-align: center;
   }
 
+  //
   &:hover,
   &:focus {
-    border: $richie-category-glimpse-container-border-hover;
+    text-decoration: none;
+    color: r-theme-val(category-glimpse, base-hover-color);
+    border: 1px solid r-theme-val(category-glimpse, base-hover-border);
+
+    #{$glimpse-item-selector}__title {
+      color: r-theme-val(category-glimpse, title-hover-color);
+      text-decoration: none;
+    }
+  }
+}
+
+//
+// Glimpse list
+//
+.category-glimpse-list {
+  @include make-container-max-widths();
+  display: flex;
+  margin: 0 auto;
+  padding: 1rem 0;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  &__title {
+    @include sv-flex(1, 0, 100%);
+    padding: 0.5rem;
+    text-align: left;
+  }
+}
+
+//
+// Tag variant
+//
+.category-tag {
+  @include button-tiny(
+    $form-factor: 'pill',
+    $font-weight: $font-weight-boldest,
+    $font-color: inherit
+  );
+
+  &__title {
+    font-family: inherit;
+    font-weight: inherit;
+    color: inherit;
   }
 
-  // Responsive adjustments
-  @if $richie-category-glimpse-container-width-md {
-    @include media-breakpoint-up(md) {
-      @include sv-flex(
-        1,
-        0,
-        calc(
-          #{$richie-category-glimpse-container-width-md} - #{$richie-category-glimpse-container-gutter *
-            2}
-        )
+  // When using through a color scheme, adopts its colors
+  &--primary {
+    @include r-button-colors(
+      r-theme-val(category-tags, primary-item),
+      $apply-border: true
+    );
+  }
+  &--secondary {
+    @include r-button-colors(
+      r-theme-val(category-tags, secondary-item),
+      $apply-border: true
+    );
+  }
+
+  &--tertiary {
+    @include r-button-colors(
+      r-theme-val(category-tags, tertiary-item),
+      $apply-border: true
+    );
+  }
+}
+
+//
+// Tag list
+//
+.category-tag-list {
+  @include feature-list($padding: 1rem 0 0.5rem);
+
+  &__title {
+    @include sv-flex(1, 0, 100%);
+    padding: 0.5rem 0;
+    text-align: left;
+  }
+
+  &__container {
+    @include make-container();
+    @include make-container-max-widths();
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+  }
+
+  .category-tag {
+    margin-bottom: 0.5rem;
+    margin-right: 1rem;
+  }
+
+  // When using through a color scheme, adopts its colors
+  &--primary {
+    .category-tag {
+      @include r-button-colors(
+        r-theme-val(category-tags, primary-item),
+        $apply-border: true
       );
     }
   }
-  @if $richie-category-glimpse-container-width-lg {
-    @include media-breakpoint-up(lg) {
-      @include sv-flex(
-        1,
-        0,
-        calc(
-          #{$richie-category-glimpse-container-width-lg} - #{$richie-category-glimpse-container-gutter *
-            2}
-        )
+  &--secondary {
+    .category-tag {
+      @include r-button-colors(
+        r-theme-val(category-tags, secondary-item),
+        $apply-border: true
       );
     }
   }
-  @if $richie-category-glimpse-container-width-xl {
-    @include media-breakpoint-up(xl) {
-      @include sv-flex(
-        1,
-        0,
-        calc(
-          #{$richie-category-glimpse-container-width-xl} - #{$richie-category-glimpse-container-gutter *
-            2}
-        )
+  &--tertiary {
+    .category-tag {
+      @include r-button-colors(
+        r-theme-val(category-tags, tertiary-item),
+        $apply-border: true
+      );
+    }
+  }
+}
+
+//
+// Badge variant
+//
+.category-badge {
+  @include button-tiny(
+    $form-factor: 'pill',
+    $font-color: inherit,
+    $font-weight: $font-weight-boldest
+  );
+
+  &__title {
+    font-family: inherit;
+    font-weight: inherit;
+    color: inherit;
+  }
+
+  &__icon {
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: auto;
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    margin-left: 0.25rem;
+    margin-right: 0.25rem;
+  }
+
+  // When using through a color scheme, adopts its colors
+  &--primary {
+    @include r-button-colors(
+      r-theme-val(category-badges, primary-item),
+      $apply-border: true
+    );
+  }
+  &--secondary {
+    @include r-button-colors(
+      r-theme-val(category-badges, secondary-item),
+      $apply-border: true
+    );
+  }
+
+  &--tertiary {
+    @include r-button-colors(
+      r-theme-val(category-badges, tertiary-item),
+      $apply-border: true
+    );
+  }
+}
+
+//
+// Badge list
+//
+.category-badge-list {
+  @include feature-list();
+
+  &__row {
+    text-align: center;
+  }
+
+  &__title {
+    @include sv-flex(1, 0, 100%);
+    padding: 0.5rem 0;
+    text-align: left;
+  }
+
+  &__term {
+    color: inherit;
+    align-self: center;
+  }
+
+  .category-badge {
+    @include button-tiny(
+      $form-factor: 'pill',
+      $display: flex,
+      $font-color: inherit,
+      $font-weight: $font-weight-boldest
+    );
+    margin-bottom: 0.5rem;
+    margin-right: 1rem;
+    align-items: center;
+  }
+
+  // When using through a color scheme, adopts its colors
+  &--primary {
+    .category-badge {
+      @include r-button-colors(
+        r-theme-val(category-badges, primary-item),
+        $apply-border: true
+      );
+    }
+  }
+  &--secondary {
+    .category-badge {
+      @include r-button-colors(
+        r-theme-val(category-badges, secondary-item),
+        $apply-border: true
+      );
+    }
+  }
+  &--tertiary {
+    .category-badge {
+      @include r-button-colors(
+        r-theme-val(category-badges, tertiary-item),
+        $apply-border: true
       );
     }
   }

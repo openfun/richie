@@ -9,7 +9,12 @@ SECTION_TEMPLATES = getattr(
     "RICHIE_SECTION_TEMPLATES",
     [
         ("richie/section/section.html", _("Default")),
-        ("richie/section/section_cadenced.html", _("Highlighted items")),
-        ("richie/section/section_list.html", _("Unordered list")),
+        ("richie/section/section_primary.html", _("Primary scheme")),
+        ("richie/section/section_secondary.html", _("Secondary scheme")),
+        ("richie/section/section_tertiary.html", _("Tertiary scheme")),
+        ("richie/section/section_quaternary.html", _("Quaternary scheme")),
+        ("richie/section/section_quinary.html", _("Quinary scheme")),
+        ("richie/section/section_senary.html", _("Senary scheme")),
+        ("richie/section/section_tiles.html", _("Item tiles")),
     ],
 )

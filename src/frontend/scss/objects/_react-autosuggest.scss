@@ -2,18 +2,14 @@
   &__container {
     position: relative;
     margin-bottom: 20px;
-
-    &--open {
-    }
   }
 
   &__input {
     @extend .form-control;
-
-    &--open {
-    }
-    &--focused {
-    }
+    @include button-base($text-align: left, $form-factor: 'pill');
+    padding-right: 3.6rem;
+    height: auto;
+    border: 1px solid r-theme-val(base-search, input-border);
   }
 
   &__suggestions-container {
@@ -36,15 +32,8 @@
       cursor: pointer;
     }
 
-    &--first {
-    }
     &--highlighted {
       @extend .active;
-    }
-  }
-
-  &__section-container {
-    &--first {
     }
   }
 

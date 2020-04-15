@@ -1,0 +1,113 @@
+//
+// Features objects
+//
+// Features are usually a list of terms with their related icon
+//
+
+// A row for inner content which always take 100% width
+@mixin feature-row() {
+  @include sv-flex(1, 0, 100%);
+  margin: 0 auto;
+  width: 100%;
+
+  // Use a variable to avoid a bug with other mixin usage which may retain
+  // ampersand value from another previous usage
+  $sel: &;
+  &:not(#{$sel}--unpadded) {
+    padding: 0.5rem 0;
+  }
+
+  // Remove last child bottom margin to respect strict padding with items
+  & *:last-child {
+    margin-bottom: 0;
+  }
+}
+
+@mixin feature-item(
+  $size: null,
+  $divider: 1rem,
+  $expand: false,
+  $hjustify: flex-start,
+  $halign: flex-start,
+  $valign: center,
+  $icon-size: 1rem,
+  $icon-hspace: 0.25rem,
+  $icon-fill: null,
+  $parent_selector: &
+) {
+  display: flex;
+  justify-content: $hjustify;
+  align-content: $halign;
+  align-items: $valign;
+  margin-right: $divider;
+
+  @if $size {
+    @if $divider {
+      @include sv-flex(1, 1, calc(#{$size} - #{$divider}));
+    } @else {
+      @include sv-flex(1, 1, $size);
+    }
+  } @else {
+    @include sv-flex(0, 0, auto);
+  }
+
+  #{$parent_selector}__term {
+    @if $expand {
+      @include sv-flex(1, 1, auto);
+    } @else {
+      @include sv-flex(0, 0, auto);
+    }
+  }
+
+  #{$parent_selector}__icon {
+    @include sv-flex(0, 0, auto);
+    display: block;
+    width: $icon-size;
+    height: $icon-size;
+    fill: $icon-fill;
+    margin-left: $icon-hspace;
+    margin-right: $icon-hspace;
+  }
+}
+
+@mixin feature-list(
+  $width: 100%,
+  $margin: 0,
+  $padding: 0,
+  $list-halign: flex-start,
+  $list-hjustify: flex-start,
+  $list-valign: stretch,
+  $container: true,
+  $container-width: $width,
+  $row: true
+) {
+  display: flex;
+  width: $width;
+  margin: if($container, null, $margin);
+  padding: if($container, null, $padding);
+  flex-wrap: wrap;
+  justify-content: $list-hjustify;
+  align-content: $list-halign;
+  align-items: $list-valign;
+  list-style-type: none;
+
+  @if $container {
+    &__container {
+      display: flex;
+      width: $container-width;
+      margin: $margin;
+      padding: $padding;
+      flex-wrap: wrap;
+      justify-content: $list-hjustify;
+      align-content: $list-halign;
+      align-items: $list-valign;
+      list-style-type: none;
+    }
+  }
+
+  @if $row {
+    &__row {
+      @include feature-row;
+    }
+  }
+}

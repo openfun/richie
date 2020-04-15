@@ -1,0 +1,65 @@
+{% load cms_tags i18n extra_tags %}
+
+{% block team %}
+    {% if page.publisher_is_draft or not page|is_empty_placeholder:"course_team" %}
+    <div class="course-detail__team course-detail__block course-detail__block--lightest">
+        <section class="section course-detail__row course-detail__team">
+            <h2 class="course-detail__title">
+                {% trans 'Course team' %}
+            </h2>
+            {% with header_level=3 %}
+                <div class="section__items section__items--team">
+                    {% placeholder "course_team" page or %}
+                        <p>{% trans 'Who are the teachers in the course team?' %}</p>
+                    {% endplaceholder %}
+                </div>
+            {% endwith %}
+        </section>
+    </div>
+    {% endif %}
+{% endblock team %}
+
+{% block organizations %}
+    {% if page.publisher_is_draft or not page|is_empty_placeholder:"course_organizations" %}
+    <div class="course-detail__organizations course-detail__block">
+        <section class="section course-detail__row course-detail__organizations">
+            <h2 class="course-detail__title">
+                {% trans 'Organizations' %}
+            </h2>
+            <div class="section__items section__items--organizations">
+                {% placeholder "course_organizations" page or %}
+                    <p class="course-detail__empty">
+                        {% trans "What are the organizations publishing this course?" %}
+                    </p>
+                {% endplaceholder %}
+            </div>
+        </section>
+    </div>
+    {% endif %}
+{% endblock organizations %}
+
+{% block licenses %}
+    <div class="course-detail__license course-detail__block course-detail__block--divider">
+        <section class="course-detail__row">
+            <h2 class="course-detail__title">{% trans 'License' %}</h2>
+
+            <div class="course-detail__item">
+                <h3 class="course-detail__label">{% trans 'License for the course content' %}</h3>
+                {% with header_level=4 %}
+                    {% placeholder "course_license_content" page or %}
+                        <p>{% trans 'What is the license for the course content?' %}</p>
+                    {% endplaceholder %}
+                {% endwith %}
+            </div>
+
+            <div class="course-detail__item">
+                <h3 class="course-detail__label">{% trans 'License for the content created by course participants' %}</h3>
+                {% with header_level=4 %}
+                    {% placeholder "course_license_participation" page or %}
+                        <p>{% trans 'What is the license for the content created by course participants?' %}</p>
+                    {% endplaceholder %}
+                {% endwith %}
+            </div>
+        </section>
+    </div>
+{% endblock licenses %}

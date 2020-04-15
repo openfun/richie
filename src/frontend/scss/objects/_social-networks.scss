@@ -1,0 +1,26 @@
+//
+// Social network badges
+
+.social-network-badges {
+  $badges-selector: &;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+
+  &__item {
+    @include spot($font-size: 2rem);
+    @include sv-flex(1, 0, 2rem);
+    // Default color scheme
+    @include r-button-colors(
+      r-theme-val(social-network-badges, base),
+      $apply-border: true,
+      $include-hover: true
+    );
+    height: 2rem;
+    margin-bottom: 1rem;
+
+    & + & {
+      margin-left: 1rem;
+    }
+  }
+}

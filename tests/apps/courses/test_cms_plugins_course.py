@@ -103,15 +103,14 @@ class CoursePluginTestCase(TestCase):
 
         # The course's url should be present
         self.assertIn(
-            '<a class=" course-glimpse course-glimpse--link " '
-            'href="/en/public-title/"',
+            '<a class="course-glimpse" href="/en/public-title/"',
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
 
         # The course's name should be present
         self.assertContains(
             response,
-            '<p class="course-glimpse__content__title">{title}</p>'.format(
+            '<p class="course-glimpse__title">{title}</p>'.format(
                 title=course_page.get_title()
             ),
             status_code=200,
@@ -119,7 +118,9 @@ class CoursePluginTestCase(TestCase):
         # The course's main organization should be present
         self.assertContains(
             response,
-            "<p>{title}</p>".format(title=organization.extended_object.get_title()),
+            '<div class="course-glimpse__organization">{title}</div>'.format(
+                title=organization.extended_object.get_title()
+            ),
             status_code=200,
         )
 
@@ -134,7 +135,7 @@ class CoursePluginTestCase(TestCase):
         # The course's icon should be present
         pattern = (
             r'<div class="course-glimpse__icon">'
-            r'.*<img src="/media/filer_public_thumbnails/filer_public/.*icon\.jpg__60x60'
+            r'.*<img src="/media/filer_public_thumbnails/filer_public/.*icon\.jpg__40x40'
             r'.*alt="icon title"'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
@@ -154,15 +155,14 @@ class CoursePluginTestCase(TestCase):
 
         # The course's url should be present
         self.assertIn(
-            '<a class=" course-glimpse course-glimpse--link " '
-            'href="/fr/titre-public/"',
+            '<a class="course-glimpse" href="/fr/titre-public/"',
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
 
         # The course's name should be present
         self.assertContains(
             response,
-            '<p class="course-glimpse__content__title">{title}</p>'.format(
+            '<p class="course-glimpse__title">{title}</p>'.format(
                 title=course_page.get_title()
             ),
             status_code=200,
@@ -171,7 +171,9 @@ class CoursePluginTestCase(TestCase):
         # The course's main organization should be present
         self.assertContains(
             response,
-            "<p>{title}</p>".format(title=organization.extended_object.get_title()),
+            '<div class="course-glimpse__organization">{title}</div>'.format(
+                title=organization.extended_object.get_title()
+            ),
             status_code=200,
         )
 
@@ -186,7 +188,7 @@ class CoursePluginTestCase(TestCase):
         # The course's icon should be present
         pattern = (
             r'<div class="course-glimpse__icon">'
-            r'.*<img src="/media/filer_public_thumbnails/filer_public/.*icon\.jpg__60x60'
+            r'.*<img src="/media/filer_public_thumbnails/filer_public/.*icon\.jpg__40x40'
             r'.*alt="titre icone"'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
@@ -256,11 +258,11 @@ class CoursePluginTestCase(TestCase):
 
         # The course-glimpse default variant should not have the small attribute
         response = self.client.get(url)
-        self.assertNotContains(response, "--small")
+        self.assertNotContains(response, "-small")
 
         # Add course plugin with small variant
         add_plugin(placeholder, CoursePlugin, "en", page=course_page, variant="small")
 
         # The new course-glimpse should have the small attribute
         response = self.client.get(url)
-        self.assertContains(response, "course-glimpse--small")
+        self.assertContains(response, "course-small")

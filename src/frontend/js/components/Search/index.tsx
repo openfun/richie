@@ -106,6 +106,7 @@ export const Search = ({ context }: CommonDataProps) => {
         courseSearchResponse.status === requestStatus.SUCCESS ? (
           <React.Fragment>
             <CourseGlimpseList
+              context={context}
               courses={courseSearchResponse.content.objects}
               meta={courseSearchResponse.content.meta}
             />

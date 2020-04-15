@@ -8,6 +8,15 @@ import { Course } from 'types/Course';
 import { CourseGlimpseList } from '.';
 
 describe('components/CourseGlimpseList', () => {
+  const commonDataProps = {
+    assets: {
+      icons: '/icons.svg',
+    },
+    environment: 'frontend_tests',
+    release: '9.8.7',
+    sentry_dsn: null,
+  };
+
   it('renders a list of Courses into a list of CourseGlimpses', () => {
     const courses = [
       {
@@ -24,6 +33,7 @@ describe('components/CourseGlimpseList', () => {
     const { getAllByText, getByText } = render(
       <IntlProvider locale="en">
         <CourseGlimpseList
+          context={commonDataProps}
           courses={courses}
           meta={{ count: 20, offset: 0, total_count: 45 }}
         />

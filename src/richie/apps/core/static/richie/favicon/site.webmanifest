@@ -1,0 +1,14 @@
+{
+    "name": "Richie demo",
+    "short_name": "Richie demo",
+    "icons": [
+        {
+            "src": "/static/richie/favicon/android-chrome-96x96.png",
+            "sizes": "96x96",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#ffffff",
+    "background_color": "#ffffff",
+    "display": "standalone"
+}

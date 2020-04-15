@@ -1,0 +1,278 @@
+{% extends "richie/base.html" %}
+{% load static %}
+
+{% block breadcrumbs %}{% endblock breadcrumbs %}
+
+{% block head_title %}Styleguide{% endblock head_title %}
+
+{% block content %}
+<div class="styleguide">
+    <div class="pt-4 pb-4">
+        <div class="container text-center">
+            <h1 class="display-2">Styleguide</h1>
+        </div>
+    </div>
+
+
+    <div class="pt-4 pb-4">
+        <div class="container mt-4 text-center">
+            <h2 class="display-3 p-4">Typography</h2>
+        </div>
+
+        <div class="container mt-4">
+            <hr>
+            <h3 class="display-4 mb-3">Font families</h3>
+
+            <div class="row">
+                {% for name in STYLEGUIDE.fonts %}
+                <div class="col font-{{ name }}">
+                    <h4>{{ name }}</h4>
+                    <p>{% include "richie/styleguide/fragment_inline_markup.html" %}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="container mt-4">
+            <hr>
+            <h3 class="display-4 mb-3">Base text</h3>
+
+            <p>{% include "richie/styleguide/fragment_inline_markup.html" %}</p>
+            {% lorem 1 p random %}
+
+            <ul>
+                {% for i in "35256"|make_list %}
+                <li>{% lorem i w random %}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="container mt-4">
+            <hr>
+            <h3 class="display-4 mb-3">Thickness</h3>
+
+
+            <div class="row">
+                {% for name in STYLEGUIDE.fonts %}
+                    <div class="col font-{{ name }}">
+                        <h4>{{ name|title }}</h3>
+                        <p class="font-weight-extrabold">Extra Bold text.</p>
+                        <p class="font-weight-boldest">Boldest text.</p>
+                        <p class="font-weight-bolder">Bolder text.</p>
+                        <p class="font-weight-bold">Bold text.</p>
+                        <p class="font-weight-normal">Normal weight text.</p>
+                        <p class="font-weight-light">Light weight text.</p>
+                        <p class="font-weight-lighter">Lighter weight text.</p>
+                        <p class="font-italic">Italic text.</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="container mt-4">
+            <hr>
+            <h3 class="display-4 mb-3">Sizes</h3>
+
+            <div class="row">
+                <div class="col">
+                    {% for i in "123456"|make_list %}
+                    <h{{ i }}>&lt;h{{ i }}&gt; {% lorem 2 w random %}</{{ i }}>
+                    {% endfor %}
+                </div>
+
+                <div class="col">
+                    {% for i in "123456"|make_list %}
+                    <p class="h{{ i }}">&lt;p.h{{ i }}&gt; {% lorem 2 w random %}</p>
+                    {% endfor %}
+                    <p>&lt;p&gt; {% lorem 2 w random %}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="pt-4 pb-4">
+        <div class="container text-center">
+            <h2 class="display-3 p-4">Palette</h2>
+        </div>
+
+        <div class="container mt-4">
+            <div class="palette">
+                {% for item in STYLEGUIDE.palette %}
+                    <div class="palette__item palette__item--{{ item }}">
+                        <div class="palette__color"></div>
+                        <p class="palette__code"></p>
+                        <p class="palette__name">{{ item }}</p>
+                    </div>
+                {% endfor %}
+                {% for item in STYLEGUIDE.gradient_colors %}
+                    <div class="palette__gradient palette__gradient--{{ item }}">
+                        <div class="palette__color"></div>
+                        <p class="palette__code"></p>
+                        <p class="palette__name">{{ item }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="container mt-4">
+            <h3 class="display-4 mb-3">As text</h3>
+
+            <div class="styleguide__text-columns">
+                {% for item in STYLEGUIDE.palette %}
+                    <p class="text-{{ item }}{% if item == "white" %} bg-black{% endif %}">.text-{{ item }}: <b>Bold</b>, <span class="h4">Title 4</span>, <span class="h3">Title 3</span></p>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="pt-4 pb-4">
+        <div class="container text-center">
+            <h2 class="display-3 p-4">Color schemes</h2>
+        </div>
+
+        <div class="container styleguide__pane-grid">
+            {% for item in STYLEGUIDE.schemes %}
+                <div class="styleguide__block styleguide__block--{{ item }}">
+                    <p class="h1">{{ item }}</p>
+                    {% for i in "23456"|make_list %}
+                    <p class="h{{ i }}">{% lorem 2 w random %}</p>
+                    {% endfor %}
+                    <p>{% include "richie/styleguide/fragment_inline_markup.html" %}</p>
+                    {% lorem 1 p random %}
+                </div>
+                {% if not forloop.last %}<hr>{% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+
+    <div class="pt-4 pb-4">
+        <div class="container text-center">
+            <h2 class="display-3 p-4">Controls</h2>
+        </div>
+
+        <div class="container mt-4">
+            <h3 class="display-4 mb-3">Buttons</h3>
+
+            <hr>
+            <h4 class="h2 mb-3">Element support</h4>
+            <div class="styleguide__buttons">
+                <p class="button button--primary">Default .button as <code>&lt;p&gt;</code></p>
+                <a href="#" class="button button--primary">Default .button as <code>&lt;a&gt;</code></a>
+                <button class="button button--primary">Default .button as <code>&lt;button&gt;</code></button>
+            </div>
+
+            <hr>
+            <h4 class="h2 mb-3">Color scheme modifiers</h4>
+            <div class="styleguide__buttons">
+                <a href="#" class="button">Uncolored</a>
+                {% for item in STYLEGUIDE.schemes %}
+                    <a href="#" class="button button--{{ item }}">{{ item }}</a>
+                {% endfor %}
+            </div>
+
+            <hr>
+            <h4 class="h2 mb-3">Size modifiers</h4>
+            <div class="styleguide__buttons">
+                <a href="#" class="button button--primary button--tiny">Tiny size</a>
+                <a href="#" class="button button--primary button--small">Small size</a>
+                <a href="#" class="button button--primary">Default size</a>
+                <a href="#" class="button button--primary button--large">Large size</a>
+            </div>
+
+            <hr>
+            <h4 class="h2 mb-3">Form factors</h4>
+            <div class="styleguide__buttons">
+                <a href="#" class="button button--primary button--tiny">Default</a>
+                <a href="#" class="button button--primary button--tiny button--square">Square</a>
+                <a href="#" class="button button--primary button--tiny button--pill">Pill</a>
+                <a href="#" class="button button--primary button--tiny button--round">Round</a>
+                <hr>
+                <a href="#" class="button button--primary button--small">Default</a>
+                <a href="#" class="button button--primary button--small button--square">Square</a>
+                <a href="#" class="button button--primary button--small button--pill">Pill</a>
+                <a href="#" class="button button--primary button--small button--round">Round</a>
+                <hr>
+                <a href="#" class="button button--primary">Default</a>
+                <a href="#" class="button button--primary button--square">Square</a>
+                <a href="#" class="button button--primary button--pill">Pill</a>
+                <a href="#" class="button button--primary button--round">Round</a>
+                <hr>
+                <a href="#" class="button button--primary button--large">Default</a>
+                <a href="#" class="button button--primary button--large button--square">Square</a>
+                <a href="#" class="button button--primary button--large button--pill">Pill</a>
+                <a href="#" class="button button--primary button--large button--round">Round</a>
+            </div>
+
+            <hr>
+            <h4 class="h2 mb-3">Mixin combination samples</h4>
+            <div class="styleguide__buttons">
+                <a href="#" class="cta-sample mr-3">Lorem ipsum</a>
+                <a href="#" class="spot-sample mr-3">A</a>
+            </div>
+        </div>
+
+    </div>
+
+
+    <div class="pt-4 pb-4">
+        <div class="container text-center">
+            <h2 class="display-3 p-4">Social badges samples</h2>
+        </div>
+
+        <div class="container mt-4">
+            <div class="styleguide__pane-grid">
+                <div class="social-network-badges mt-4">
+                    <a href="#" class="social-network-badges__item">
+                        <svg role="img" class="icon social-network-badges__item__icon">
+                            <use xlink:href="{% static 'richie/icons.svg' %}#icon-facebook" />
+                        </svg>
+                    </a>
+                    <a href="#" class="social-network-badges__item">
+                        <svg role="img" class="icon social-network-badges__item__icon">
+                            <use xlink:href="{% static 'richie/icons.svg' %}#icon-twitter" />
+                        </svg>
+                    </a>
+                    <a href="#" class="social-network-badges__item">
+                        <svg role="img" class="icon social-network-badges__item__icon">
+                            <use xlink:href="{% static 'richie/icons.svg' %}#icon-envelope" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="pt-4 pb-4">
+        <div class="container text-center">
+            <h2 class="display-3 p-4">Accordion</h2>
+        </div>
+
+        <div class="container mt-4">
+            <div class="nested-accordion">
+                <div class="nested-accordion__items">
+                {% for a in "5263"|make_list %}
+                    <div class="nested-accordion__item" data-accordion-item>
+                        <button class="nested-accordion__item-title" data-accordion-title>
+                            {% lorem a w random %}
+                        </button>
+                        <div class="nested-accordion__item-content" data-accordion-content>
+                            <ul>
+                                {% for i in "35256"|make_list %}
+                                <li>{% lorem i w random %}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock content %}

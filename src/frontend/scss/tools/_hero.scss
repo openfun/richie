@@ -1,0 +1,111 @@
+// Structural rules for Hero types
+
+// Main container properties
+@mixin m-o-hero_container(
+  $margin: null,
+  $padding: null,
+  $base-height: null,
+  $responsive-heights: null,
+  $justify-content: null,
+  $align-items: null,
+  $background-repeat: null,
+  $background-position: null,
+  $background-size: null
+) {
+  display: flex;
+  flex-direction: row;
+  margin: $margin;
+  padding: $padding;
+
+  // Inner content axis alignments
+  justify-content: $justify-content;
+  align-items: $align-items;
+
+  min-height: $base-height;
+  @each $breakpoint, $value in $responsive-heights {
+    @include media-breakpoint-up($breakpoint) {
+      min-height: $value;
+    }
+  }
+
+  background-repeat: $background-repeat;
+  background-position: $background-position;
+  background-size: $background-size;
+}
+
+// Body element properties
+@mixin m-o-hero__body($margin: null, $padding: null) {
+  position: relative;
+  margin: $margin;
+  padding: $padding;
+}
+
+// Full hero structure including every available elements.
+@mixin m-o-hero(
+  $margin: null,
+  $padding: null,
+  $base-height: null,
+  $responsive-heights: null,
+  $justify-content: center,
+  $align-items: center,
+  $background-repeat: no-repeat,
+  $background-position: center,
+  $background-size: cover,
+  $body-margin: null,
+  $body-padding: null,
+  $title-margin: null,
+  $title-padding: null,
+  $title-fontsize: null,
+  $title-responsive-fontsizes: null,
+  $title-textalign: null,
+  $content-margin: null,
+  $content-padding: null,
+  $logo-margin: null,
+  $logo-padding: null
+) {
+  // Flow direction depending media width value
+  @include m-o-hero_container(
+    $margin: $margin,
+    $padding: $padding,
+    $base-height: $base-height,
+    $responsive-heights: $responsive-heights,
+    $justify-content: $justify-content,
+    $align-items: $align-items,
+    $background-repeat: $background-repeat,
+    $background-position: $background-position,
+    $background-size: $background-size
+  );
+
+  // Body element
+  &__body {
+    @include m-o-hero__body($margin: $body-margin, $padding: $body-padding);
+  }
+
+  // Title element
+  &__body__title {
+    margin: $title-margin;
+    padding: $title-padding;
+
+    // Adjust text size for smaller screens
+    font-size: $title-fontsize;
+    @each $breakpoint, $value in $title-responsive-fontsizes {
+      @include media-breakpoint-up($breakpoint) {
+        font-size: $value;
+      }
+    }
+
+    text-align: $title-textalign;
+  }
+
+  // Content element
+  &__body__content {
+    margin: $content-margin;
+    padding: $content-padding;
+  }
+
+  // Logo element
+  &__body__logo {
+    margin: $logo-margin;
+    padding: $logo-padding;
+  }
+}

@@ -7,6 +7,7 @@ from django.conf.urls.i18n import i18n_patterns
 from django.contrib import admin
 from django.contrib.sitemaps.views import sitemap
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.views.generic import TemplateView
 from django.views.static import serve
 
 from cms.sitemaps import CMSSitemap
@@ -33,6 +34,14 @@ urlpatterns = [
 urlpatterns += i18n_patterns(
     url(r"^admin/", admin.site.urls),
     url(r"^accounts/", include("django.contrib.auth.urls")),
+    url(
+        r"^styleguide/$",
+        TemplateView.as_view(
+            template_name="richie/styleguide/index.html",
+            extra_context={"STYLEGUIDE": settings.STYLEGUIDE},
+        ),
+        name="styleguide",
+    ),
     url(r"^", include("cms.urls")),  # NOQA
 )
 
@@ -45,7 +54,7 @@ if settings.DEBUG:
                 r"^media/(?P<path>.*)$",
                 serve,
                 {"document_root": settings.MEDIA_ROOT, "show_indexes": True},
-            )
+            ),
         ]
         + staticfiles_urlpatterns()
         + urlpatterns

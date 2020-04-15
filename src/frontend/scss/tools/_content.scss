@@ -1,0 +1,78 @@
+/// Default values for 'content-padding-fix()' so you may be able to disable it
+/// from settings just by setting $preserve to null.
+$r-default-content-fix-preserve: 5vw !default;
+$r-default-content-fix-gutter: 1rem !default;
+
+///
+/// Versatile mixin helper to apply a property to preserve some space
+/// for a possible included pseudo-element background.
+///
+/// @arg {Number} $preserve [5vw]
+///     Base value to preserve. Default value follow the footer trick for 'wave'
+///     pictogram. This argument should not be null.
+///
+/// @arg {Number} $gutter [1rem]
+///     Optional additional value to append to '$preserve' in a calc() method.
+///     Set it to null if you just need the base value. For more complex value
+///     calcul you may have to pass your own calc() function directly to
+///     $preserve.
+///
+/// @arg {Bool} $target [false]
+///     Enable behavior to apply property on last child element. If 'false',
+///     property is directly inserted to the current element.
+///
+/// @arg {String} $prop ["padding-bottom"]
+///     Property to append computed value to preserve space.
+///
+/// @example scss
+///   .foo{
+///     @include content-padding-fix($target: "& > *:last-child");
+///   }
+///
+///   .bar{
+///     @include content-padding-fix($gutter: null, $target: "&:last-child");
+///   }
+///
+///   .direct-foo{
+///     @include content-padding-fix;
+///   }
+///
+/// @example css
+///   div{
+///   .foo > *:last-child {
+///     padding-bottom: calc(5vw + 1rem);
+///   }
+///
+///   .bar:last-child {
+///     padding-bottom: 5vw;
+///   }
+///
+///   .direct-foo {
+///     padding-bottom: calc(5vw + 1rem);
+///   }
+///
+///
+@mixin content-padding-fix(
+  $preserve: $r-default-content-fix-preserve,
+  $gutter: $r-default-content-fix-gutter,
+  $prop: 'padding-bottom',
+  $target: null
+) {
+  @if $preserve {
+    @if $target {
+      #{$target} {
+        @if $gutter {
+          #{$prop}: calc(#{$preserve} + #{$gutter}) !important;
+        } @else {
+          #{$prop}: #{$preserve} !important;
+        }
+      }
+    } @else {
+      @if $gutter {
+        #{$prop}: calc(#{$preserve} + #{$gutter}) !important;
+      } @else {
+        #{$prop}: #{$preserve} !important;
+      }
+    }
+  }
+}

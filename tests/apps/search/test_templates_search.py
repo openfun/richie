@@ -32,7 +32,7 @@ class CourseCMSTestCase(CMSTestCase):
             re.search(
                 (
                     r'<html lang="en-US">.*'
-                    r"<h1>search</h1>.*"
+                    r'<h1 class="subheader__title">search</h1>.*'
                     r"<div[\\n ]*"
                     r'class="richie-react richie-react--search"[\\n ]*'
                 ),
@@ -49,7 +49,7 @@ class CourseCMSTestCase(CMSTestCase):
             re.search(
                 (
                     r'<html lang="fr-CA">.*'
-                    r"<h1>recherche</h1>.*"
+                    r'<h1 class="subheader__title">recherche</h1>.*'
                     r"<div[\\n ]*"
                     r'class="richie-react richie-react--search"[\\n ]*'
                 ),

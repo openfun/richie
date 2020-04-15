@@ -15,6 +15,8 @@ describe('components/CourseGlimpse', () => {
       src: '/thumbs/small.png',
       srcset: 'some srcset',
     },
+    duration: '3 months',
+    effort: '3 hours/week',
     icon: null,
     id: '742',
     organization_highlighted: 'Some Organization',
@@ -28,10 +30,26 @@ describe('components/CourseGlimpse', () => {
     title: 'Course 42',
   };
 
+  const commonDataProps = {
+    assets: {
+      icons: '/icons.svg',
+    },
+    environment: 'frontend_tests',
+    release: '9.8.7',
+    sentry_dsn: null,
+  };
+
   it('renders a course glimpse with its data', () => {
     const { container, getByText } = render(
       <IntlProvider locale="en">
-        <CourseGlimpse course={course} />
+        <CourseGlimpse
+          context={commonDataProps}
+          course={{
+            ...course,
+            duration: '3 months',
+            effort: '3 hours/week',
+          }}
+        />
       </IntlProvider>,
     );
 
@@ -46,7 +64,6 @@ describe('components/CourseGlimpse', () => {
         element.innerHTML.startsWith('Starts on') &&
         element.innerHTML.includes('Mar 14, 2019'),
     );
-    getByText('Enroll now');
     // The logo is rendered along with alt text "" as it is decorative and included in a link block
     const img = container.querySelector('img');
     expect(img).toHaveAttribute('alt', '');
@@ -57,6 +74,7 @@ describe('components/CourseGlimpse', () => {
     const { getByText } = render(
       <IntlProvider locale="en">
         <CourseGlimpse
+          context={commonDataProps}
           course={{
             ...course,
             state: {
@@ -74,11 +92,13 @@ describe('components/CourseGlimpse', () => {
     getByText('Course 42');
     getByText('Archived');
   });
-
   it('shows the "Cover" placeholder div when the course is missing a cover image', () => {
     const { getByText } = render(
       <IntlProvider locale="en">
-        <CourseGlimpse course={{ ...course, cover_image: null }} />
+        <CourseGlimpse
+          context={commonDataProps}
+          course={{ ...course, cover_image: null }}
+        />
       </IntlProvider>,
     );
 

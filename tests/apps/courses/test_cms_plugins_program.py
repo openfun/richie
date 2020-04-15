@@ -103,7 +103,7 @@ class ProgramPluginTestCase(CMSTestCase):
         # The program's title should be wrapped in a p
         self.assertContains(
             response,
-            '<p class="program-glimpse__content__title">{:s}</p>'.format(
+            '<p class="program-glimpse__title">{:s}</p>'.format(
                 program.public_extension.extended_object.get_title()
             ),
             html=True,

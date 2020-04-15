@@ -1,0 +1,12 @@
+// Build additional gradient backgrounds
+$gradient-colors: () !default;
+@each $color, $value in map-get($r-theme, 'base-gradients') {
+  @include bg-gradient('.bg-gradient-#{$color}', $value);
+}
+
+// Build background colors
+@each $name, $value in $palette {
+  .bg-#{$name} {
+    background-color: $value !important;
+  }
+}

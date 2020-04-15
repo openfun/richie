@@ -1,0 +1,13 @@
+.organization-list {
+  @include make-container();
+  @include make-container-max-widths();
+  @include content-padding-fix;
+
+  &__content {
+    display: flex;
+    margin: 0 auto;
+    padding: 1rem 0;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}

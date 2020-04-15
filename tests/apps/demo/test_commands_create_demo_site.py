@@ -114,4 +114,4 @@ class CreateDemoSiteCommandsTestCase(CMSTestCase):
         self.assertEqual(models.Person.objects.count(), 2)
         self.assertEqual(models.Licence.objects.count(), 1)
         self.assertEqual(models.Program.objects.count(), 2)
-        self.assertEqual(CMSPlugin.objects.count(), 616)
+        self.assertEqual(CMSPlugin.objects.count(), 620)

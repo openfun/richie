@@ -104,12 +104,13 @@ class OrganizationCMSTestCase(CMSTestCase):
             html=True,
         )
 
-        # The published category should be on the page in its published version
-        self.assertContains(
+        # Published category should not be on the page since we only display
+        # them in draft mode
+        self.assertNotContains(
             response,
             (
-                '<a class="category-plugin-tag" href="{:s}">'
-                '<div class="category-plugin-tag__title">{:s}</div></a>'
+                '<a class="category-tag" href="{:s}">'
+                '<span class="category-tag__title">{:s}</span></a>'
             ).format(
                 published_category.public_extension.extended_object.get_absolute_url(),
                 published_category.public_extension.extended_object.get_title(),
@@ -133,7 +134,7 @@ class OrganizationCMSTestCase(CMSTestCase):
         # The published courses should be on the page in its published version
         self.assertContains(
             response,
-            '<p class="course-glimpse__content__title">{:s}</p>'.format(
+            '<p class="course-glimpse__title">{:s}</p>'.format(
                 published_course.public_extension.extended_object.get_title()
             ),
             html=True,
@@ -205,8 +206,8 @@ class OrganizationCMSTestCase(CMSTestCase):
         self.assertContains(
             response,
             (
-                '<a class="category-plugin-tag" href="{:s}">'
-                '<div class="category-plugin-tag__title">{:s}</div></a>'
+                '<a class="category-tag" href="{:s}">'
+                '<span class="category-tag__title">{:s}</span></a>'
             ).format(
                 published_category.public_extension.extended_object.get_absolute_url(),
                 published_category.public_extension.extended_object.get_title(),
@@ -217,8 +218,8 @@ class OrganizationCMSTestCase(CMSTestCase):
         self.assertContains(
             response,
             (
-                '<a class="category-plugin-tag category-plugin-tag--draft" '
-                'href="{:s}"><div class="category-plugin-tag__title">{:s}</div></a>'
+                '<a class="category-tag category-tag--draft" '
+                'href="{:s}"><span class="category-tag__title">{:s}</span></a>'
             ).format(
                 not_published_category.extended_object.get_absolute_url(),
                 not_published_category.extended_object.get_title(),
@@ -230,21 +231,19 @@ class OrganizationCMSTestCase(CMSTestCase):
 
         # The published course should be on the page in its draft version
         self.assertContains(
-            response,
-            '<p class="course-glimpse__content__title">modified course</p>',
-            html=True,
+            response, '<p class="course-glimpse__title">modified course</p>', html=True,
         )
 
         # The not published course should be on the page, mark as draft
         self.assertContains(
             response,
-            '<p class="course-glimpse__content__title">{:s}</p>'.format(
+            '<p class="course-glimpse__title">{:s}</p>'.format(
                 not_published_course.extended_object.get_title()
             ),
             html=True,
         )
         self.assertIn(
-            '<a class=" course-glimpse course-glimpse--link course-glimpse--draft " '
+            '<a class="course-glimpse course-glimpse--draft" '
             'href="{:s}"'.format(
                 not_published_course.extended_object.get_absolute_url()
             ),
@@ -269,8 +268,8 @@ class OrganizationCMSTestCase(CMSTestCase):
         # The person should be present on the page
         pattern = (
             r'<a href="{url:s}">'
-            r'<h2 class="person-glimpse__content__wrapper__title">'
-            r".*{name:s}.*</h2></a>"
+            r'<h3 class="person-glimpse__title">'
+            r".*{name:s}.*</h3></a>"
         ).format(
             url=person.extended_object.get_absolute_url(),
             name=person.extended_object.get_title(),

@@ -1,53 +1,35 @@
-{% load i18n cms_tags extra_tags thumbnail %}
+{% load i18n cms_tags extra_tags thumbnail %}{% spaceless %}
 {% comment %}Obviously, the context template variable "category" is required and must be a Category page extension{% endcomment %}
 
-{% with category_page=category.extended_object %}
+{% with category_page=category.extended_object category_variant=category_variant|default:"glimpse" %}
+    {% if has_link or has_link|default_if_none:True %}
+        <a class="category-{{ category_variant }}{% if category_page.publisher_is_draft %} category-{{ category_variant }}--draft{% endif %}" href="{{ category_page.get_absolute_url }}">
+    {% else %}
+        <span class="category-{{ category_variant }}{% if category_page.publisher_is_draft %} category-{{ category_variant }}--draft{% endif %}">
+    {% endif %}
 
-    {% if variant == "tag" %}
-        <a
-            class="category-plugin-tag{% if category_page.publisher_is_draft %} category-plugin-tag--draft{% endif %}"
-            href="{{ category_page.get_absolute_url }}"
-        >
+        {% if category_variant == "badge" %}
+            {% comment %}Small CTA alike, icon + title, commonly horizontal{% endcomment %}
             {% get_page_plugins "icon" category_page as icon_plugins %}
             {% if icon_plugins %}
                 {% blockplugin icon_plugins.0 %}
-                    <figure class="category-plugin-tag__figure">
-                        <figcaption
-                            class="category-plugin-tag__figure__caption"
-                            {% if category_page.category.color %}style="background: {{ category_page.category.color }};"{% endif %}
-                        >
-                            {{ category_page.get_title }}
-                        </figcaption>
-                        <img src="{% thumbnail instance.picture 40x40 crop upscale subject_location=instance.picture.subject_location %}"
-                            srcset="
-                            {% thumbnail instance.picture 40x40 crop upscale subject_location=instance.picture.subject_location %} 40w
-                            {% if instance.picture.width >= 80 %},{% thumbnail instance.picture 80x80 crop upscale subject_location=instance.picture.subject_location %} 80w{% endif %}
-                            {% if instance.picture.width >= 120 %},{% thumbnail instance.picture 120x120 crop upscale subject_location=instance.picture.subject_location %} 120w{% endif %}
-                            "
-                            sizes="40px"
-                            class="category-plugin-tag__figure__image"
-                            alt="">
-                    </figure>
+                <img src="{% thumbnail instance.picture 40x40 crop upscale subject_location=instance.picture.subject_location %}"
+                    srcset="
+                    {% thumbnail instance.picture 40x40 crop upscale subject_location=instance.picture.subject_location %} 40w
+                    {% if instance.picture.width >= 80 %},{% thumbnail instance.picture 80x80 crop upscale subject_location=instance.picture.subject_location %} 80w{% endif %}
+                    {% if instance.picture.width >= 120 %},{% thumbnail instance.picture 120x120 crop upscale subject_location=instance.picture.subject_location %} 120w{% endif %}
+                    "
+                    sizes="40px"
+                    class="category-badge__icon"
+                    alt="{{ category_page.get_title }}">
                 {% endblockplugin %}
-            {% else %}
-                <div class="category-plugin-tag__title">{{ category_page.get_title }}</div>
             {% endif %}
-        </a>
-    {% elif variant == "mark" %}
-        {% get_page_plugins "icon" category_page as icon_plugins %}
-        {% blockplugin icon_plugins.0 %}
-            <img src="{% thumbnail instance.picture 60x60 crop upscale subject_location=instance.picture.subject_location %}"
-                srcset="
-                  {% thumbnail instance.picture 60x60 crop upscale subject_location=instance.picture.subject_location %} 60w
-                  {% if instance.picture.width >= 120 %},{% thumbnail instance.picture 120x120 crop upscale subject_location=instance.picture.subject_location %} 120w{% endif %}
-                  {% if instance.picture.width >= 180 %},{% thumbnail instance.picture 180x180 crop upscale subject_location=instance.picture.subject_location %} 180w{% endif %}
-                "
-                sizes="60px"
-                alt="{{ category_page.get_title }}"
-            >
-        {% endblockplugin %}
-    {% else %}
-        <a class="category-glimpse category-glimpse--link" href="{{ category_page.get_absolute_url }}">
+            <span class="category-badge__title">{{ category_page.get_title }}</span>
+        {% elif category_variant == "tag" %}
+            {% comment %}Small CTA alike, only title and no image, commonly horizontal{% endcomment %}
+            <span class="category-tag__title">{{ category_page.get_title }}</span>
+        {% else %}
+            {% comment %}Larger look, logo + title, commonly vertical cell near to a vertical card, title is in a hX element{% endcomment %}
             <div class="category-glimpse__body">
                 <div class="category-glimpse__logo">
                     {% get_page_plugins "logo" category_page as plugins or %}
@@ -56,19 +38,20 @@
                     {% blockplugin plugins.0 %}
                         <img src="{% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location %}"
                             srcset="
-                              {% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location %} 200w
-                              {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x400 crop upscale subject_location=instance.picture.subject_location %} 400w{% endif %}
-                              {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x600 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+                                {% thumbnail instance.picture 200x200 crop upscale subject_location=instance.picture.subject_location %} 200w
+                                {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x400 crop upscale subject_location=instance.picture.subject_location %} 400w{% endif %}
+                                {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x600 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
                             "
                             sizes="200px"
-                            alt=""
-                        />
+                            alt="{{ category_page.get_title }}">
                     {% endblockplugin %}
                 </div>
                 <h{{ header_level|default:2 }} class="category-glimpse__title">
                     {{ category_page.get_title }}
                 </h{{ header_level|default:2 }}>
             </div>
-        </a>
-    {% endif %}
+        {% endif %}
+
+    {% if has_link or has_link|default_if_none:True %}</a>{% else %}</span>{% endif %}
 {% endwith %}
+{% endspaceless %}

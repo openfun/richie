@@ -1,0 +1,79 @@
+/*
+ * CSS trick to fix some issues with IE11 only since conditional stylesheets are
+ * not a thing anymore and we need to support IE11 which have some bad
+ * implementations especially with flexbox and svg.
+ *
+ * https://browserstrangeness.bitbucket.io/css_hacks.html
+ *
+ * Done with IE version 11.0.9600.18860
+ */
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+  // Header menu
+  .topbar__item {
+    flex-grow: 1;
+
+    & > a {
+      flex-basis: auto;
+      max-width: none;
+    }
+  }
+
+  // Blogpost glimpse
+  .blogpost-glimpse {
+    display: block;
+  }
+
+  // Course glimpse
+  .course-glimpse__media {
+    flex-basis: auto;
+  }
+  .course-glimpse__content {
+    flex-basis: auto;
+  }
+  .course-glimpse__icon {
+    top: -1.8rem;
+  }
+
+  // Program glimpse
+  .program-glimpse__content {
+    flex-basis: auto;
+  }
+  .program-glimpse__media {
+    flex-basis: auto;
+  }
+
+  // Category glimpse
+  .category-glimpse__body {
+    flex-basis: auto;
+    max-width: none;
+  }
+
+  // Organization glimpse
+  .organization-glimpse {
+    flex-basis: auto;
+  }
+  .organization-glimpse__logo {
+    padding-bottom: 0;
+    text-align: center;
+
+    & > img {
+      position: static;
+    }
+  }
+
+  // Organization list
+  .organization-list__content .organization-glimpse {
+    flex-basis: auto;
+  }
+  .organization-list__content .organization-glimpse--long {
+    flex-basis: 100%;
+  }
+
+  // Organization detail
+  .organization-detail__logo {
+    position: absolute;
+    top: 1rem;
+    bottom: auto;
+  }
+}

@@ -1,18 +1,23 @@
 {% extends "richie/fullwidth.html" %}
 {% load cms_tags i18n %}
 
-{% block content %}
-<div class="program-glimpse-list">
-  <h1 class="program-glimpse-list__title">{{ current_page.get_title }}</h1>
+{% block subheader_content %}
+<div class="subheader__container">
+    <h1 class="subheader__title">{{ current_page.get_title }}</h1>
+</div>
+{% endblock subheader_content %}
 
-  {% for page in current_page.get_child_pages %}
-    {% if page.program %}
-      {% include "courses/cms/fragment_program_glimpse.html" with program=page.program %}
-    {% endif %}
-  {% empty %}
-    <p class="program-glimpse program-glimpse--empty">
-    {% trans "No associated programs" %}
-    </p>
-  {% endfor %}
+
+{% block content %}
+<div class="program-list">
+    {% for page in current_page.get_child_pages %}
+        {% if page.program %}
+            {% include "courses/cms/fragment_program_glimpse.html" with program=page.program %}
+        {% endif %}
+    {% empty %}
+        <p class="program-glimpse program-glimpse--empty">
+            {% trans "No associated programs" %}
+        </p>
+    {% endfor %}
 </div>
 {% endblock content %}

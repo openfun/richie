@@ -1,20 +1,25 @@
 {% extends "richie/fullwidth.html" %}
 {% load cms_tags i18n %}
 
-{% block breadcrumbs %}{% endblock breadcrumbs %}
+{% block subheader_content %}
+<div class="subheader__container">
+    <h1 class="subheader__title">{{ current_page.get_title }}</h1>
+</div>
+{% endblock subheader_content %}
+
 
 {% block content %}
-<div class="category-glimpse-list">
-  <h1 class="category-glimpse-list__title">{{ current_page.get_title }}</h1>
-
+<div class="category-list">
+  <div class="category-glimpse-list">
   {% for page in current_page.get_child_pages %}
     {% if page.category %}
-      {% include "courses/cms/fragment_category_glimpse.html" with category=page.category %}
+      {% include "courses/cms/fragment_category_glimpse.html" with category=page.category category_variant="glimpse" %}
     {% endif %}
   {% empty %}
-    <p class="category-glimpse category-glimpse--empty">
+    <p class="category-glimpse-list category-glimpse-list--empty">
     {% trans "No categories" %}
     </p>
   {% endfor %}
+  </div>
 </div>
 {% endblock content %}

@@ -220,16 +220,40 @@ PAGE_EXTENSION_TOOLBAR_ITEM_POSITION = getattr(
 # Glimpses
 
 BLOGPOST_GLIMPSE_VARIANT_CHOICES = getattr(
-    settings, "RICHIE_BLOGPOST_GLIMPSE_VARIANT_CHOICES", [(None, _("Default"))]
+    settings,
+    "RICHIE_BLOGPOST_GLIMPSE_VARIANT_CHOICES",
+    [
+        (None, _("Inherit")),
+        ("glimpse", _("Default")),
+        ("mini", _("Mini")),
+        ("favorite", _("Favorite")),
+    ],
+)
+CATEGORY_GLIMPSE_VARIANT_CHOICES = getattr(
+    settings,
+    "RICHIE_CATEGORY_GLIMPSE_VARIANT_CHOICES",
+    [
+        (None, _("Inherit")),
+        ("glimpse", _("Default")),
+        ("badge", _("badge")),
+        ("tag", _("Tag")),
+    ],
 )
 COURSE_GLIMPSE_VARIANT_CHOICES = getattr(
     settings,
     "RICHIE_COURSE_GLIMPSE_VARIANT_CHOICES",
-    [(None, _("Default")), ("small", "small")],
+    [(None, _("Inherit")), ("glimpse", _("Default")), ("small", "small")],
 )
 
 ORGANIZATION_GLIMPSE_VARIANT_CHOICES = getattr(
-    settings, "RICHIE_ORGANIZATION_GLIMPSE_VARIANT_CHOICES", [(None, _("Default"))]
+    settings,
+    "RICHIE_ORGANIZATION_GLIMPSE_VARIANT_CHOICES",
+    [
+        (None, _("Inherit")),
+        ("glimpse", _("Default")),
+        ("card", _("Card")),
+        ("row", _("Row")),
+    ],
 )
 
 # For each type of page we define:

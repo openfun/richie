@@ -13,6 +13,13 @@
     {% page_attribute "page_title" %}
 {% endblock head_title %}
 
+{% block topbar_classes %}topbar--over{% endblock topbar_classes %}
+
+{# Disable search field in topbar since it is in the homepage banner #}
+{% block topbar_searchbar %}{% endblock topbar_searchbar %}
+
 {% block content %}
+<div class="homepage{% if current_page.publisher_is_draft %} homepage--draft{% endif %}">
     {% placeholder "maincontent" %}
+</div>
 {% endblock content %}

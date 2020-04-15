@@ -10,6 +10,7 @@ import pytz
 from cms.api import add_plugin
 
 from richie.apps.courses.cms_plugins import CategoryPlugin
+from richie.apps.courses.defaults import DAY, HOUR, MINUTE, WEEK
 from richie.apps.courses.factories import (
     CategoryFactory,
     CourseFactory,
@@ -153,6 +154,8 @@ class CoursesIndexersTestCase(TestCase):
         )
 
         course = CourseFactory(
+            duration=[3, WEEK],
+            effort=[2, HOUR, WEEK],
             fill_categories=published_categories + [draft_category],
             fill_cover=True,
             fill_icons=published_categories + [draft_category],
@@ -229,6 +232,8 @@ class CoursesIndexersTestCase(TestCase):
                 "en": "english description line 1. english description line 2.",
                 "fr": "a propos français ligne 1. a propos français ligne 2.",
             },
+            "duration": {"en": "3 weeks", "fr": "3 semaines"},
+            "effort": {"en": "2 hours/week", "fr": "2 heures/semaine"},
             "icon": {
                 "en": {
                     "color": published_categories[0].color,
@@ -278,7 +283,10 @@ class CoursesIndexersTestCase(TestCase):
         Courses with no linked organizations should get indexed without raising exceptions.
         """
         course = CourseFactory(
-            page_title="Enhanced incremental circuit", should_publish=True
+            duration=[12, WEEK],
+            effort=[5, MINUTE, DAY],
+            page_title="Enhanced incremental circuit",
+            should_publish=True,
         )
         indexed_courses = list(
             CoursesIndexer.get_es_documents(index="some_index", action="some_action")
@@ -304,6 +312,8 @@ class CoursesIndexersTestCase(TestCase):
                     "course_runs": [],
                     "cover_image": {},
                     "description": {},
+                    "duration": {"en": "12 weeks", "fr": "12 semaines"},
+                    "effort": {"en": "5 minutes/day", "fr": "5 minutes/jour"},
                     "icon": {},
                     "is_new": False,
                     "organization_highlighted": None,
@@ -484,6 +494,8 @@ class CoursesIndexersTestCase(TestCase):
                 "absolute_url": {"en": "campo-qui-format-do"},
                 "categories": [43, 86],
                 "cover_image": {"en": "cover_image.jpg"},
+                "duration": {"en": "6 months"},
+                "effort": {"en": "3 hours/day"},
                 "icon": {"en": "icon.jpg"},
                 "organization_highlighted": {"en": "Org 84"},
                 "organizations": [42, 84],
@@ -503,6 +515,8 @@ class CoursesIndexersTestCase(TestCase):
                 "absolute_url": "campo-qui-format-do",
                 "categories": [43, 86],
                 "cover_image": "cover_image.jpg",
+                "duration": "6 months",
+                "effort": "3 hours/day",
                 "icon": "icon.jpg",
                 "organization_highlighted": "Org 84",
                 "organizations": [42, 84],
@@ -524,6 +538,8 @@ class CoursesIndexersTestCase(TestCase):
                 "absolute_url": {"en": "campo-qui-format-do"},
                 "categories": [43, 86],
                 "cover_image": {"en": "cover_image.jpg"},
+                "duration": {"en": "3 weeks"},
+                "effort": {"en": "10 minutes/week"},
                 "icon": {"en": "icon.jpg"},
                 "organization_highlighted": None,
                 "organizations": [],
@@ -543,6 +559,8 @@ class CoursesIndexersTestCase(TestCase):
                 "absolute_url": "campo-qui-format-do",
                 "categories": [43, 86],
                 "cover_image": "cover_image.jpg",
+                "duration": "3 weeks",
+                "effort": "10 minutes/week",
                 "icon": "icon.jpg",
                 "organization_highlighted": None,
                 "organizations": [],
@@ -563,6 +581,8 @@ class CoursesIndexersTestCase(TestCase):
                 "absolute_url": {"en": "campo-qui-format-do"},
                 "categories": [43, 86],
                 "cover_image": {"en": "cover_image.jpg"},
+                "duration": {"en": "N/A"},
+                "effort": {"en": "N/A"},
                 "icon": {},
                 "organization_highlighted": {"en": "Org 84"},
                 "organizations": [42, 84],
@@ -582,6 +602,8 @@ class CoursesIndexersTestCase(TestCase):
                 "absolute_url": "campo-qui-format-do",
                 "categories": [43, 86],
                 "cover_image": "cover_image.jpg",
+                "duration": "N/A",
+                "effort": "N/A",
                 "icon": None,
                 "organization_highlighted": "Org 84",
                 "organizations": [42, 84],
@@ -602,6 +624,8 @@ class CoursesIndexersTestCase(TestCase):
                 "absolute_url": {"en": "campo-qui-format-do"},
                 "categories": [43, 86],
                 "cover_image": {},
+                "duration": {"en": "N/A"},
+                "effort": {"en": "N/A"},
                 "icon": {"en": "icon.jpg"},
                 "organization_highlighted": {"en": "Org 42"},
                 "organizations": [42, 84],
@@ -621,6 +645,8 @@ class CoursesIndexersTestCase(TestCase):
                 "absolute_url": "campo-qui-format-do",
                 "categories": [43, 86],
                 "cover_image": None,
+                "duration": "N/A",
+                "effort": "N/A",
                 "icon": "icon.jpg",
                 "organization_highlighted": "Org 42",
                 "organizations": [42, 84],

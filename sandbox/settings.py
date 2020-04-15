@@ -35,6 +35,65 @@ def get_release():
         return "NA"  # Default: not available
 
 
+class StyleguideMixin:
+    """
+    Theme styleguide reference
+
+    Only used to build styleguide page without to hardcode properties and
+    values into styleguide template.
+    """
+
+    STYLEGUIDE = {
+        # Available font family names
+        "fonts": ["hind", "montserrat"],
+        # Named color palette
+        "palette": [
+            "black",
+            "dark-grey",
+            "charcoal",
+            "slate-grey",
+            "battleship-grey",
+            "light-grey",
+            "silver",
+            "azure2",
+            "smoke",
+            "white",
+            "denim",
+            "firebrick6",
+            "grey32",
+            "grey59",
+            "grey87",
+            "purplish-grey",
+            "midnightblue",
+            "indianred3",
+        ],
+        # Available gradient background
+        "gradient_colors": [
+            "light-gradient",
+            "middle-gradient",
+            "dark-gradient",
+            "white-mask-gradient",
+        ],
+        # Available color schemes
+        "schemes": [
+            "primary",
+            "secondary",
+            "tertiary",
+            "clear",
+            "light",
+            "lightest",
+            "light-gradient",
+            "middle-gradient",
+            "dark-gradient",
+            "white-mask-gradient",
+            "transparent-darkest",
+            "clouds",
+            "purplish-grey",
+            "battleship-grey",
+        ],
+    }
+
+
 class DRFMixin:
     """
     Django Rest Framework configuration mixin.
@@ -52,7 +111,7 @@ class DRFMixin:
     }
 
 
-class Base(DRFMixin, RichieCoursesConfigurationMixin, Configuration):
+class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configuration):
     """
     This is the base configuration every configuration (aka environnement) should inherit from. It
     is recommended to configure third-party applications by creating a configuration mixins in
@@ -175,8 +234,10 @@ class Base(DRFMixin, RichieCoursesConfigurationMixin, Configuration):
         "richie.apps.search",
         "richie.apps.courses",
         "richie.apps.core",
+        "richie.plugins.glimpse",
         "richie.plugins.html_sitemap",
         "richie.plugins.large_banner",
+        "richie.plugins.nesteditem",
         "richie.plugins.plain_text",
         "richie.plugins.section",
         "richie.plugins.simple_picture",

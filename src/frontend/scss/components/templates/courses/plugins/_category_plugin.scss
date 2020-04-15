@@ -1,0 +1,38 @@
+// Category plugin
+//
+
+.category-tag {
+  display: flex;
+  flex-grow: 0;
+  flex-shrink: 0;
+  align-items: center;
+  margin-right: 0.5rem;
+  margin-top: 0.5rem;
+  text-decoration: none;
+
+  &:last-of-type {
+    margin-right: 0;
+  }
+
+  &__title {
+    padding: 0;
+    font-weight: bold;
+  }
+
+  &__figure {
+    display: flex;
+    margin: 0;
+  }
+
+  &__caption {
+    align-self: center;
+    color: inherit;
+    white-space: nowrap;
+  }
+
+  &__image {
+    margin-right: 0.5rem;
+    height: 1.4rem;
+    padding: 0;
+  }
+}

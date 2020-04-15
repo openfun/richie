@@ -1,4 +1,60 @@
 .user-login {
+  @include sv-flex(1, 0, 100%);
+  display: flex;
+  align-items: center;
+
+  @include media-breakpoint-up($r-topbar-breakpoint) {
+    @include sv-flex(1, 0, auto);
+  }
+
+  &__btn {
+    @include sv-flex(1, 0, auto);
+    @include button-size(
+      $btn-padding-y,
+      $btn-padding-x,
+      $btn-font-size,
+      $btn-line-height,
+      2rem
+    );
+    @include font-size($font-size-base);
+    font-family: inherit;
+    font-weight: inherit;
+    justify-content: center;
+    color: r-theme-val(topbar, item-cta-color);
+    text-align: center;
+    background: r-theme-val(topbar, item-cta-background);
+    @if r-theme-val(topbar, item-cta-border) {
+      border: $onepixel solid r-theme-val(topbar, item-cta-border);
+    }
+
+    @include media-breakpoint-up($r-topbar-breakpoint) {
+      @include sv-flex(0, 0, auto);
+    }
+
+    & + .user-login__btn {
+      margin-left: 0.5rem;
+      border-top: 0;
+    }
+
+    &:hover {
+      color: r-theme-val(topbar, item-cta-color) !important;
+      text-decoration: none;
+    }
+
+    &--sign-up,
+    &--log-out {
+      color: r-theme-val(topbar, item-cta-hollow-color);
+      background: r-theme-val(topbar, item-cta-hollow-background);
+      border-color: r-theme-val(topbar, item-cta-hollow-border);
+
+      &:hover {
+        color: r-theme-val(topbar, item-cta-hollow-color) !important;
+      }
+    }
+  }
+}
+
+.old_user-login {
   display: flex;
   align-items: center;
   width: 100%;
@@ -24,7 +80,7 @@
     }
 
     &:hover {
-      background: $dodgerblue7;
+      background: blue;
       color: white;
     }
   }

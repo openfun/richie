@@ -1,0 +1,7 @@
+// Some background utilities
+
+@mixin bg-gradient($parent, $value) {
+  #{$parent} {
+    background-image: $value !important;
+  }
+}

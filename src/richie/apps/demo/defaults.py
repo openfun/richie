@@ -20,11 +20,11 @@ NB_OBJECTS = {
     "blogpost_tags": 1,
     "programs": 6,
     "programs_courses": 4,
-    "home_blogposts": 4,
+    "home_blogposts": 5,
     "home_courses": 8,
     "home_organizations": 4,
     "home_subjects": 6,
-    "home_persons": 3,
+    "home_persons": 4,
     "home_programs": 4,
 }
 NB_OBJECTS.update(getattr(settings, "RICHIE_DEMO_NB_OBJECTS", {}))
@@ -123,7 +123,7 @@ TAGS_INFO = {
 TAGS_INFO.update(getattr(settings, "RICHIE_DEMO_TAGS_INFO", {}))
 
 SUBJECTS_INFO = {
-    "page_title": {"en": "Subject", "fr": "Subjet"},
+    "page_title": {"en": "Subject", "fr": "Sujet"},
     "children": [
         {
             "page_title": {"en": "Science", "fr": "Sciences"},
@@ -297,7 +297,7 @@ HOMEPAGE_CONTENT = {
         "banner_content": "It works! This is the default homepage for the Richie CMS.",
         "banner_template": "richie/large_banner/hero-intro.html",
         "button_template_name": "button-caesura",
-        "section_template": "richie/section/section_cadenced.html",
+        "section_template": "richie/section/section.html",
         "blogposts_title": "Last news",
         "blogposts_button_title": "More news",
         "courses_title": "Popular courses",
@@ -316,7 +316,7 @@ HOMEPAGE_CONTENT = {
         "banner_content": "Ça marche ! Ceci est la page d'accueil par défaut du CMS Richie.",
         "banner_template": "richie/large_banner/hero-intro.html",
         "button_template_name": "button-caesura",
-        "section_template": "richie/section/section_cadenced.html",
+        "section_template": "richie/section/section.html",
         "blogposts_title": "Actualités récentes",
         "blogposts_button_title": "Plus d'actualités",
         "courses_title": "Cours à la une",
@@ -341,7 +341,7 @@ SINGLECOLUMN_CONTENT = {
         "button_template_name": "button-caesura",
         "section_sample_title": "A sample section",
         "section_sample_button_title": "More!",
-        "section_sample_template": "richie/section/section_cadenced.html",
+        "section_sample_template": "richie/section/section.html",
     },
     "fr": {
         "banner_title": "Exemple de template avec une colonne unique",
@@ -350,7 +350,7 @@ SINGLECOLUMN_CONTENT = {
         "button_template_name": "button-caesura",
         "section_sample_title": "Une section d'exemple",
         "section_sample_button_title": "Plus !",
-        "section_sample_template": "richie/section/section_cadenced.html",
+        "section_sample_template": "richie/section/section.html",
     },
 }
 SINGLECOLUMN_CONTENT.update(getattr(settings, "RICHIE_DEMO_SINGLECOLUMN_CONTENT", {}))
@@ -361,6 +361,7 @@ FOOTER_CONTENT = {
             "items": [
                 {"name": "About", "internal_link": "annex__about"},
                 {"name": "Sitemap", "internal_link": "annex__sitemap"},
+                {"name": "Style guide", "external_link": "/styleguide/"},
             ]
         },
         {
@@ -379,6 +380,7 @@ FOOTER_CONTENT = {
             "items": [
                 {"name": "A propos", "internal_link": "annex__about"},
                 {"name": "Plan du site", "internal_link": "annex__sitemap"},
+                {"name": "Style guide", "external_link": "/styleguide/"},
             ]
         },
         {

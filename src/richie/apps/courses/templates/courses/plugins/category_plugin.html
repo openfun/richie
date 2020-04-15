@@ -1,4 +1,4 @@
-{% load cms_tags extra_tags i18n thumbnail %}
+{% load cms_tags i18n %}
 {% spaceless %}
 {% if current_page.publisher_is_draft or instance.check_publication is True %}
   {% with category=relevant_page.category %}

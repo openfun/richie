@@ -108,14 +108,14 @@ class BlogPostPluginTestCase(CMSTestCase):
         # The blogpost's name should be present as a link to the cms page
         # And CMS page title should be in title attribute of the link
         self.assertIn(
-            '<a href="/en/public-title/" class=" blogpost-glimpse blogpost-glimpse--link " ',
+            ('<a href="/en/public-title/" ' 'class="blogpost-glimpse"'),
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
 
         # The blogpost's title should be wrapped in a p
         self.assertContains(
             response,
-            '<p class="blogpost-glimpse__content__title">{:s}</p>'.format(
+            '<p class="blogpost-glimpse__title">{:s}</p>'.format(
                 blogpost.public_extension.extended_object.get_title()
             ),
             html=True,
@@ -132,16 +132,14 @@ class BlogPostPluginTestCase(CMSTestCase):
 
         # Publication date should be set by first publication
         self.assertContains(
-            response,
-            '<p class="blogpost-glimpse__footer__date">Nov. 30, 2019</p>',
-            html=True,
+            response, '<p class="blogpost-glimpse__date">Nov. 30, 2019</p>', html=True,
         )
 
         # Same checks in French
         url = page.get_absolute_url(language="fr")
         response = self.client.get(url)
         self.assertIn(
-            '<a href="/fr/titre-public/" class=" blogpost-glimpse blogpost-glimpse--link " ',
+            ('<a href="/fr/titre-public/" ' 'class="blogpost-glimpse"'),
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
 
@@ -156,7 +154,7 @@ class BlogPostPluginTestCase(CMSTestCase):
         # Publication date should be set by first publication
         self.assertContains(
             response,
-            '<p class="blogpost-glimpse__footer__date">30 novembre 2019</p>',
+            '<p class="blogpost-glimpse__date">30 novembre 2019</p>',
             html=True,
         )
 
@@ -215,23 +213,53 @@ class BlogPostPluginTestCase(CMSTestCase):
 
         url = "{:s}?edit".format(page.get_absolute_url(language="en"))
 
-        # The blogpost-glimpse default template should not have the small attribute
+        # The blogpost-glimpse default variant should be glimpse
         response = self.client.get(url)
-        self.assertNotContains(response, "blogpost-glimpse__small")
+        self.assertContains(response, "blogpost-glimpse")
 
-        # Add blogpost plugin with small template
+        # Add blogpost plugin with small variant
         add_plugin(
             placeholder, BlogPostPlugin, "en", page=blogpost_page, variant="small",
         )
 
         # The blogpost-glimpse default template should not have the small attribute
         response = self.client.get(url)
-        self.assertContains(response, "blogpost-glimpse--small")
+        self.assertContains(response, "blogpost-small")
 
     def test_cms_plugins_blogpost_default_variant(self):
         """
-        If the variant is not specified on the blogpost pluging, it should render according
-        to variant variable eventually present in the context of its container.
+        If the variant is not specified on the blogpost pluging, it should render
+        according to variant variable eventually present in the context of its
+        container.
+        """
+        # Create an blogpost
+        blogpost = BlogPostFactory(page_title="public title")
+        blogpost_page = blogpost.extended_object
+
+        # Create a page to add the plugin to
+        page = create_i18n_page("A page")
+        placeholder = page.placeholders.get(slot="maincontent")
+
+        # Add blogpost plugin with default template
+        model_instance = add_plugin(
+            placeholder, BlogPostPlugin, "en", page=blogpost_page, variant="small"
+        )
+
+        # Get generated html
+        request = RequestFactory()
+        request.current_page = page
+        request.user = AnonymousUser()
+        context = {"current_page": page, "blogpost_variant": "xxl", "request": request}
+        renderer = ContentRenderer(request=request)
+        html = renderer.render_plugin(model_instance, context)
+
+        self.assertIn("blogpost-small", html)
+
+    def test_cms_plugins_blogpost_cascade_variant(self):
+        """
+        If the variant is specified on the blogpost pluging and also as variant
+        variable in the context of its container, the instance variable should
+        be used.
         """
         # Create an blogpost
         blogpost = BlogPostFactory(page_title="public title")
@@ -250,8 +278,8 @@ class BlogPostPluginTestCase(CMSTestCase):
         request = RequestFactory()
         request.current_page = page
         request.user = AnonymousUser()
-        context = {"current_page": page, "variant": "xxl", "request": request}
+        context = {"current_page": page, "blogpost_variant": "xxl", "request": request}
         renderer = ContentRenderer(request=request)
         html = renderer.render_plugin(model_instance, context)
 
-        self.assertIn("blogpost-glimpse--xxl", html)
+        self.assertIn("blogpost-xxl", html)

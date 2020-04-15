@@ -1,0 +1,95 @@
+{% load i18n cms_tags %}{% spaceless %}
+
+{% with nesteditem_variant=nesteditem_variant|default:"default" %}
+
+{% comment %}Accordion variant build a structure to ease folding content and it
+has two sub variants to do so: Container and item.
+Container is the default one for the root item which hold an optional title
+and necessary structure for folding its children items.
+Then "Item" is automatically applied on second level items (below the root
+one). Finally, every children items below second level will switch to simple
+"list" variant.{% endcomment %}
+{% if nesteditem_variant == "accordion" %}
+    {% if not is_item %}
+        <div class="nested-{{ nesteditem_variant }}">
+            {% if instance.content %}
+                <h{{ header_level|default:2 }} class="nested-{{ nesteditem_variant }}__head">
+                    {{ instance.content|linebreaksbr }}
+                </h{{ header_level|default:2 }}>
+            {% endif %}
+            {% if instance.child_plugin_instances %}
+            <div class="nested-{{ nesteditem_variant }}__items">
+                {% for plugin in instance.child_plugin_instances %}
+                    {% with is_item=True nesteditem_variant="accordion" %}
+                        <div class="nested-{{ nesteditem_variant }}__item" data-accordion-item>
+                        {% render_plugin plugin %}
+                        </div>
+                    {% endwith %}
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    {% else %}
+        {% if instance.content %}
+            <button class="nested-{{ nesteditem_variant }}__item-title" data-accordion-title>
+                {{ instance.content }}
+            </button>
+        {% else %}
+            <button class="nested-{{ nesteditem_variant }}__item-title" data-accordion-title>
+                {% trans 'Accordion item need a content' %}
+            </button>
+        {% endif %}
+        {% if instance.child_plugin_instances %}
+        <div class="nested-{{ nesteditem_variant }}__item-content" data-accordion-content>
+            <ul>
+            {% for plugin in instance.child_plugin_instances %}
+                <li>
+                {% with nesteditem_variant="list" %}
+                    {% render_plugin plugin %}
+                {% endwith %}
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    {% endif %}
+{% comment %}List variant just turns every items into a simple bullet list{% endcomment %}
+{% elif nesteditem_variant == "list" %}
+    <div class="nested-{{ nesteditem_variant }}">
+        {% if instance.content %}
+        <div class="nested-{{ nesteditem_variant }}__content">
+            {{ instance.content|linebreaksbr }}
+        </div>
+        {% endif %}
+
+        {% if instance.child_plugin_instances %}
+        <ul class="nested-{{ nesteditem_variant }}__items">
+            <li>
+            {% for plugin in instance.child_plugin_instances %}
+                {% render_plugin plugin %}
+            {% endfor %}
+            </li>
+        </ul>
+        {% endif %}
+    </div>
+{% comment %}Default variant, default layout displays it as an horizontal menu{% endcomment %}
+{% else %}
+    <div class="nested-{{ nesteditem_variant }}">
+        {% if instance.content %}
+        <div class="nested-{{ nesteditem_variant }}__content">
+            {{ instance.content|linebreaks }}
+        </div>
+        {% endif %}
+
+        {% if instance.child_plugin_instances %}
+        <div class="nested-{{ nesteditem_variant }}__items">
+            {% for plugin in instance.child_plugin_instances %}
+                {% render_plugin plugin %}
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+{% endif %}
+
+{% endwith %}
+{% endspaceless %}
