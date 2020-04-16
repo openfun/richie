@@ -8,6 +8,12 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [2.0.0-beta.1] - 2020-04-16
+
+### Fixed
+
+- Add missing favicon static files to MANIFEST.in
+
 ## [2.0.0-beta.0] - 2020-04-15
 
 ### Added
@@ -781,7 +787,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.0.0-beta.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.0.0-beta.1...master
+[2.0.0-beta.1]: https://github.com/openfun/richie/compare/v2.0.0-beta.0...v2.0.0-beta.1
 [2.0.0-beta.0]: https://github.com/openfun/richie/compare/v1.17.0...v2.0.0-beta.0
 [1.17.0]: https://github.com/openfun/richie/compare/v1.16.2...v1.17.0
 [1.16.2]: https://github.com/openfun/richie/compare/v1.16.1...v1.16.2
