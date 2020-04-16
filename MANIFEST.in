@@ -1,4 +1,6 @@
 include LICENSE
 include README.md
-recursive-include src/richie *.html *.png *.gif *.js *.css *.jpg *.jpeg *.po *.mo *.eot *.svg *.ttf *.woff *.woff2
+recursive-include src/richie *.html *.png *.gif *.js *.css *.ico *.jpg *.jpeg *.po *.mo *.eot *.svg *.ttf *.woff *.woff2
 include src/richie/apps/core/static/fonts/icomoon/selection.json
+include src/richie/apps/core/static/richie/favicon/browserconfig.xml
+include src/richie/apps/core/static/richie/favicon/site.webmanifest
