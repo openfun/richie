@@ -14,6 +14,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Liquidate pending migrations in view of the v2.0.0 release
 - Fix section migration 0005 that was depending on NestedItem initial
   migration.
 - Limit the number of related objects appearing on all types of detail pages.
