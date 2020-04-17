@@ -7,6 +7,8 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django.templatetags.static import static
 
+from . import defaults
+
 
 def site_metas(request):
     """
@@ -18,6 +20,13 @@ def site_metas(request):
     site_current = Site.objects.get_current()
     protocol = "https" if request.is_secure() else "http"
     context = {
+        **{
+            f"GLIMPSE_PAGINATION_{k.upper()}": v
+            for k, v in {
+                **defaults.GLIMPSE_PAGINATION,
+                **getattr(settings, "RICHIE_GLIMPSE_PAGINATION", {}),
+            }.items()
+        },
         "SITE": {
             "name": site_current.name,
             "domain": site_current.domain,

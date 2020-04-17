@@ -24,13 +24,13 @@
         {% else %}
           {% if page == 1 %}
             <li class="pagination__item">
-              <a href="{{ request.path }}{% if getvars %}?{{ getvars|slice:"1:" }}{% endif %}" class="pagination__page-number">
+              <a href="{{ request.path }}{% if getvars %}?{{ getvars|slice:"1:" }}{% endif %}#page{{ page_suffix }}" class="pagination__page-number">
                 {% blocktrans %}Page {{ page }}{% endblocktrans %}
               </a>
             </li>
           {% else %}
             <li class="pagination__item">
-              <a href="?page{{ page_suffix }}={{ page }}{{ getvars }}" class="pagination__page-number">
+              <a href="?page{{ page_suffix }}={{ page }}{{ getvars }}#page{{ page_suffix }}" class="pagination__page-number">
                 <span class="offscreen">
                   {% if page == page_obj.previous_page_number %}
                     {% blocktrans %}Previous page {{ page }}{% endblocktrans %}

@@ -52,3 +52,12 @@ RFC_5646_LOCALES = lazy(
     lambda: getattr(settings, "RFC_5646_LOCALES", ["en-US", "es-ES", "fr-FR", "fr-CA"]),
     list,
 )()
+
+GLIMPSE_PAGINATION = {
+    "categories": 8,
+    "courses": 8,
+    "organizations": 8,
+    "blogposts": 6,
+    "persons": 4,
+    "programs": 4,
+}
