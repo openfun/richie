@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Add blocks to each part of the blogpost detail template.
+
 ### Changed
 
 - Enforce course glimpse footer to be on a single line.
