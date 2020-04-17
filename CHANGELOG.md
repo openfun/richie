@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Enforce course glimpse footer to be on a single line.
+
 ## [2.0.0-beta.1] - 2020-04-16
 
 ### Fixed

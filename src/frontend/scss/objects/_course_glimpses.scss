@@ -188,29 +188,21 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
 }
 
 .course-glimpse-footer {
-  display: flex;
-  padding: 0 $course-glimpse-content-padding-sides;
-  border-bottom-left-radius: $border-radius-lg;
-  border-bottom-right-radius: $border-radius-lg;
   @include r-button-colors(
     r-theme-val(course-glimpse, footer),
     $apply-border: true
   );
+  display: flex;
+  padding: 0 $course-glimpse-content-padding-sides;
+  border-bottom-left-radius: $border-radius-lg;
+  border-bottom-right-radius: $border-radius-lg;
+  font-size: 0.8rem;
 
   &__date {
-    display: flex;
-    @include sv-flex-cell-width(50%);
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
+    @include sv-flex(1, 0, auto);
     margin: 0;
-    padding: 0.5rem 0;
-    align-content: center;
+    padding: 0.75rem 0;
     font-weight: bold;
     line-height: 1.1;
-    // Force a line-break between the meaningful text and the actual date information
-    & > span {
-      display: table;
-    }
   }
 }
