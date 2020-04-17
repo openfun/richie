@@ -2,6 +2,9 @@
 End-to-end tests for the organization detail view
 """
 import re
+from unittest import mock
+
+from django.test.utils import override_settings
 
 from cms.api import add_plugin
 from cms.test_utils.testcases import CMSTestCase
@@ -153,6 +156,49 @@ class OrganizationCMSTestCase(CMSTestCase):
 
         # Modified draft category and course should not be leaked
         self.assertNotContains(response, "modified")
+
+    @mock.patch(
+        "cms.templatetags.cms_tags.PageUrl.get_value", return_value="/the/courses/"
+    )
+    @override_settings(RICHIE_GLIMPSE_PAGINATION={"courses": 2})
+    def test_templates_organization_detail_cms_published_content_max_courses(
+        self, _mock_page_url
+    ):
+        """
+        Make sure the organization detail page does not display too many courses, even when a large
+        number are related to the current organization, as this can cause the page to load very
+        slowly and is not a great experience for the user anyway.
+        """
+        # Create our dummy organization and the 3 courses we'll attach to it
+        organization = OrganizationFactory(should_publish=True)
+        courses = CourseFactory.create_batch(
+            3, fill_organizations=[organization], should_publish=True
+        )
+        # Link the 3 courses with our organization through the relevant placeholder
+        for course in courses:
+            add_plugin(
+                course.extended_object.placeholders.get(slot="course_organizations"),
+                OrganizationPlugin,
+                "en",
+                page=organization.extended_object,
+            )
+        # Make sure we do have 3 courses on the organization
+        self.assertEqual(organization.get_courses().count(), 3)
+
+        # Only the first two are rendered in the template
+        response = self.client.get(organization.extended_object.get_absolute_url())
+        self.assertContains(response, courses[0].extended_object.get_title())
+        self.assertContains(response, courses[1].extended_object.get_title())
+        self.assertNotContains(response, courses[2].extended_object.get_title())
+
+        # There is a link to view more related courses directly in the Search view
+        self.assertContains(
+            response, f'href="/the/courses/?organizations={organization.get_es_id():s}"'
+        )
+        self.assertContains(
+            response,
+            f"See all courses related to {organization.extended_object.get_title():s}",
+        )
 
     def test_templates_organization_detail_cms_draft_content(self):
         """

@@ -1,3 +1,16 @@
+section {
+  // Ensure caesura always takes full width with some space around
+  // within flex grid
+  .button-caesura {
+    @include sv-flex(1, 0, calc(100% - 1rem));
+    margin: 1rem 0.5rem 0;
+
+    @include media-breakpoint-up(lg) {
+      margin-top: 2rem;
+    }
+  }
+}
+
 .section {
   @include detail-block;
   @include sv-flex(1, 0, 100%);

@@ -1,5 +1,5 @@
 {% extends "richie/fullwidth.html" %}
-{% load cms_tags extra_tags i18n thumbnail %}
+{% load cms_tags extra_tags i18n pagination_tags thumbnail %}
 
 {% block meta_opengraph_contextuals %}
     <meta property="og:title" content="{{ current_page.get_title|truncatechars:65 }}">
@@ -71,9 +71,6 @@
 </div>
 {% endblock subheader %}
 
-
-
-
 {% block content %}{% spaceless %}
 {% with header_level=2 person=current_page.person %}
 <div class="person-detail">
@@ -96,15 +93,26 @@
 
     {% with courses=person.get_courses %}
         {% if courses %}
-            <div class="person-detail__courses person-detail__block">
+            {% autopaginate courses GLIMPSE_PAGINATION_COURSES %}
+            <div id="page{{ page_suffix }}" class="person-detail__courses person-detail__block">
                 <div class="person-detail__row">
                     <section class="course-glimpse-list">
                         <h2 class="person-detail__title">{% trans "Courses" %}</h2>
-                        {% for course in courses %}
+                        {% for course in page_obj.object_list %}
                             {% if course.extended_object.publisher_is_draft or course.check_publication %}
                                 {% include "courses/cms/fragment_course_glimpse.html" with course=course %}
                             {% endif %}
                         {% endfor %}
+                        {% if paginator.num_pages > 1 %}
+                            {% paginate using "richie/pagination.html" %}
+                            <div class="button-caesura">
+                                <a href="{% page_url 'courses' %}?persons={{ person.extended_object_id }}" class="person-detail__see-more">
+                                {% blocktrans with person_title=person.extended_object.get_title %}
+                                    See all courses related to {{ person_title }}
+                                {% endblocktrans %}
+                                </a>
+                            </div>
+                        {% endif %}
                     </section>
                 </div>
             </div>
@@ -113,15 +121,19 @@
 
     {% with blogposts=person.get_blogposts %}
         {% if blogposts %}
-            <div class="person-detail__blogposts person-detail__block person-detail__block--divider">
+            {% autopaginate blogposts GLIMPSE_PAGINATION_BLOGPOSTS %}
+            <div id="page{{ page_suffix }}" class="person-detail__blogposts person-detail__block person-detail__block--divider">
                 <div class="person-detail__row">
                     <section class="blogpost-glimpse-list">
                         <h2 class="person-detail__title">{% trans "Blogposts" %}</h2>
-                        {% for blogpost in blogposts %}
+                        {% for blogpost in page_obj.object_list %}
                             {% if blogpost.extended_object.publisher_is_draft or blogpost.check_publication %}
                                 {% include "courses/cms/fragment_blogpost_glimpse.html" with blogpost=blogpost %}
                             {% endif %}
                         {% endfor %}
+                        {% if paginator.num_pages > 1 %}
+                            {% paginate using "richie/pagination.html" %}
+                        {% endif %}
                     </section>
                 </div>
             </div>

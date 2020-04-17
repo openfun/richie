@@ -2,12 +2,19 @@
 End-to-end tests for the person detail view
 """
 import re
+from unittest import mock
+
+from django.test.utils import override_settings
 
 from cms.api import add_plugin
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
-from richie.apps.courses.cms_plugins import CategoryPlugin, OrganizationPlugin
+from richie.apps.courses.cms_plugins import (
+    CategoryPlugin,
+    OrganizationPlugin,
+    PersonPlugin,
+)
 from richie.apps.courses.factories import (
     BlogPostFactory,
     CategoryFactory,
@@ -297,6 +304,46 @@ class PersonCMSTestCase(CMSTestCase):
                 course.extended_object.get_title()
             ),
             html=True,
+        )
+
+    @mock.patch(
+        "cms.templatetags.cms_tags.PageUrl.get_value", return_value="/the/courses/"
+    )
+    @override_settings(RICHIE_GLIMPSE_PAGINATION={"courses": 2})
+    def test_templates_person_detail_related_max_courses(self, _mock_page_url):
+        """
+        Make sure the person detail page does not display too many courses, even when a large
+        number are related to the current person, as this can cause the page to load very slowly
+        and is not a great experience for the user anyway.
+        """
+        # Create our dummy person and the 3 courses we'll attach to it
+        person = PersonFactory(should_publish=True)
+        courses = CourseFactory.create_batch(3, fill_team=[person], should_publish=True)
+        # Link the 3 courses with our person through the relevant placeholder
+        for course in courses:
+            add_plugin(
+                course.extended_object.placeholders.get(slot="course_team"),
+                PersonPlugin,
+                "en",
+                page=person.extended_object,
+            )
+        # Make sure we do have 3 courses on the person
+        self.assertEqual(person.get_courses().count(), 3)
+
+        # Only the first two are rendered in the template
+        response = self.client.get(person.extended_object.get_absolute_url())
+        self.assertContains(response, courses[0].extended_object.get_title())
+        self.assertContains(response, courses[1].extended_object.get_title())
+        self.assertNotContains(response, courses[2].extended_object.get_title())
+
+        # There is a link to view more related courses directly in the Search view
+        self.assertContains(
+            response,
+            f'href="/the/courses/?persons={person.public_extension.extended_object_id}"',
+        )
+        self.assertContains(
+            response,
+            f"See all courses related to {person.extended_object.get_title():s}",
         )
 
     def test_templates_person_detail_related_blog_posts(self):
