@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: richie\n"
 "Language-Team: French, Canada\n"
 "Language: fr_CA\n"
-"PO-Revision-Date: 2020-03-04 12:51\n"
+"PO-Revision-Date: 2020-04-17 14:29\n"
 
 #. [components.SearchFilterGroupModal.modalTitle] - Title for the modal to add more filter values in the search filters modal.
 #. defaultMessage is:
@@ -202,7 +202,7 @@ msgstr "Inscription"
 #. Something's wrong! Courses could not be loaded.
 #: i18n/js/components/Search/index.json
 msgid "Something's wrong! Courses could not be loaded."
-msgstr ""
+msgstr "Quelque chose s'est mal passé ! Les cours n'ont pas pu être chargés."
 
 #. [components.SearchFilterGroupModal.error] - Error message when the search for more filter value fails in the search filters modal.
 #. defaultMessage is:

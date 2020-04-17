@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: richie\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2020-03-04 12:51\n"
+"PO-Revision-Date: 2020-04-17 14:29\n"
 
 #. [components.SearchFilterGroupModal.modalTitle] - Title for the modal to add more filter values in the search filters modal.
 #. defaultMessage is:
