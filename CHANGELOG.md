@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [2.0.0-beta.2] - 2020-04-17
+
 ### Added
 
 - Add blocks to each part of the blogpost detail template.
@@ -802,7 +804,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.0.0-beta.1...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.0.0-beta.2...master
+[2.0.0-beta.2]: https://github.com/openfun/richie/compare/v2.0.0-beta.1...v2.0.0-beta.2
 [2.0.0-beta.1]: https://github.com/openfun/richie/compare/v2.0.0-beta.0...v2.0.0-beta.1
 [2.0.0-beta.0]: https://github.com/openfun/richie/compare/v1.17.0...v2.0.0-beta.0
 [1.17.0]: https://github.com/openfun/richie/compare/v1.16.2...v1.17.0
