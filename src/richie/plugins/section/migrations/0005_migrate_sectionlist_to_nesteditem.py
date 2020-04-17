@@ -20,7 +20,6 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ("section", "0004_remove_section_cadenced"),
-        ("nesteditem", "0001_initial"),
     ]
 
     operations = [migrations.RunPython(forwards_func, migrations.RunPython.noop)]
