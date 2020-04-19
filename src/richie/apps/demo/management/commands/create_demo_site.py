@@ -60,7 +60,9 @@ def create_demo_site():
     plugins to each page.
     """
     site = Site.objects.get(id=1)
-    site.domain = "localhost:8070"
+    site.domain = getattr(
+        settings, "RICHIE_DEMO_SITE_DOMAIN", defaults.DEFAULT_DEMO_SITE_DOMAIN
+    )
     site.name = "Richie demonstration"
     site.save()
 

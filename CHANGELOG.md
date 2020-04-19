@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Allow configuring a custom domain on demo site.
+
 ## [2.0.0-beta.2] - 2020-04-17
 
 ### Added
