@@ -14,30 +14,9 @@ from cms.models import StaticPlaceholder
 
 from richie.apps.core.factories import create_text_plugin, image_getter
 from richie.apps.core.helpers import recursive_page_creation
-from richie.apps.courses.factories import (
-    VIDEO_SAMPLE_LINKS,
-    BlogPostFactory,
-    CourseFactory,
-    CourseRunFactory,
-    LicenceFactory,
-    OrganizationFactory,
-    PersonFactory,
-    ProgramFactory,
-)
+from richie.apps.courses import factories
 
-from ...defaults import (
-    FOOTER_CONTENT,
-    HOMEPAGE_CONTENT,
-    ICONS_INFO,
-    LEVELS_INFO,
-    NB_OBJECTS,
-    PAGES_INFO,
-    PARTNERSHIPS_INFO,
-    SINGLECOLUMN_CONTENT,
-    SITEMAP_PAGE_PARAMS,
-    SUBJECTS_INFO,
-    TAGS_INFO,
-)
+from ... import defaults
 from ...helpers import create_categories
 from ...utils import pick_image
 
@@ -49,7 +28,7 @@ def get_number_of_course_runs():
     Returns a random integer between 1 and the max number of course runs.
     We make it a convenience method so that it can be mocked in tests.
     """
-    return random.randint(1, NB_OBJECTS["course_courseruns"])  # nosec
+    return random.randint(1, defaults.NB_OBJECTS["course_courseruns"])  # nosec
 
 
 def get_number_of_icons():
@@ -60,7 +39,8 @@ def get_number_of_icons():
     We make it a convenience method so that it can be mocked in tests.
     """
     return random.choice(  # nosec
-        [0] * NB_OBJECTS["course_icons"] + list(range(NB_OBJECTS["course_icons"]))
+        [0] * defaults.NB_OBJECTS["course_icons"]
+        + list(range(defaults.NB_OBJECTS["course_icons"]))
     )
 
 
@@ -85,15 +65,15 @@ def create_demo_site():
     site.save()
 
     # Create pages as described in PAGES_INFOS
-    pages_created = recursive_page_creation(site, PAGES_INFO)
+    pages_created = recursive_page_creation(site, defaults.PAGES_INFO)
 
     # Create the footer links
     footer_static_ph = StaticPlaceholder.objects.get_or_create(code="footer")[0]
     for footer_placeholder in [footer_static_ph.draft, footer_static_ph.public]:
-        for language, content in FOOTER_CONTENT.items():
+        for language, content in defaults.FOOTER_CONTENT.items():
             # Create root nest
             nest_root_plugin = add_plugin(
-                footer_placeholder, plugin_type="NestedItemPlugin", language=language,
+                footer_placeholder, plugin_type="NestedItemPlugin", language=language
             )
             for footer_info in content:
                 # Create the first level items for main columns
@@ -121,14 +101,14 @@ def create_demo_site():
                     )
 
     # Create some licences
-    licences = LicenceFactory.create_batch(
-        NB_OBJECTS["licences"], logo__file__from_path=pick_image("licence")()
+    licences = factories.LicenceFactory.create_batch(
+        defaults.NB_OBJECTS["licences"], logo__file__from_path=pick_image("licence")()
     )
 
     # Generate each category tree and return a list of the leaf categories
     icons = list(
         create_categories(
-            **ICONS_INFO,
+            **defaults.ICONS_INFO,
             fill_banner=pick_image("banner"),
             fill_logo=pick_image("category_logo"),
             page_parent=pages_created["categories"],
@@ -136,7 +116,7 @@ def create_demo_site():
     )
     levels = list(
         create_categories(
-            **LEVELS_INFO,
+            **defaults.LEVELS_INFO,
             fill_banner=pick_image("banner"),
             fill_logo=pick_image("category_logo"),
             page_parent=pages_created["categories"],
@@ -144,7 +124,7 @@ def create_demo_site():
     )
     subjects = list(
         create_categories(
-            **SUBJECTS_INFO,
+            **defaults.SUBJECTS_INFO,
             fill_banner=pick_image("banner"),
             fill_logo=pick_image("category_logo"),
             page_parent=pages_created["categories"],
@@ -152,7 +132,7 @@ def create_demo_site():
     )
     partnerships = list(
         create_categories(
-            **PARTNERSHIPS_INFO,
+            **defaults.PARTNERSHIPS_INFO,
             fill_banner=pick_image("banner"),
             fill_logo=pick_image("category_logo"),
             page_parent=pages_created["categories"],
@@ -160,7 +140,7 @@ def create_demo_site():
     )
     tags = list(
         create_categories(
-            **TAGS_INFO,
+            **defaults.TAGS_INFO,
             fill_banner=pick_image("banner"),
             fill_logo=pick_image("category_logo"),
             page_parent=pages_created["categories"],
@@ -169,10 +149,10 @@ def create_demo_site():
 
     # Create organizations under the `Organizations` page
     organizations = []
-    for i in range(NB_OBJECTS["organizations"]):
+    for i in range(defaults.NB_OBJECTS["organizations"]):
         # Randomly assign each organization to a partnership level category
         organizations.append(
-            OrganizationFactory(
+            factories.OrganizationFactory(
                 page_in_navigation=True,
                 page_languages=["en", "fr"],
                 page_parent=pages_created["organizations"],
@@ -190,18 +170,19 @@ def create_demo_site():
     # Create persons under the `persons` page
     persons = []
     persons_for_organization = defaultdict(list)
-    for _ in range(NB_OBJECTS["persons"]):
+    for _ in range(defaults.NB_OBJECTS["persons"]):
         # Randomly assign each person to a set of organizations
         person_organizations = random.sample(
             organizations,
-            random.randint(1, NB_OBJECTS["person_organizations"]),  # nosec
+            random.randint(1, defaults.NB_OBJECTS["person_organizations"]),  # nosec
         )
-        person = PersonFactory(
+        person = factories.PersonFactory(
             page_in_navigation=True,
             page_languages=["en", "fr"],
             page_parent=pages_created["persons"],
             fill_categories=random.sample(
-                subjects, random.randint(1, NB_OBJECTS["person_subjects"])  # nosec
+                subjects,
+                random.randint(1, defaults.NB_OBJECTS["person_subjects"]),  # nosec
             ),
             fill_organizations=person_organizations,
             fill_portrait=pick_image("portrait"),
@@ -219,12 +200,12 @@ def create_demo_site():
     # Create courses under the `Course` page with categories and organizations
     # relations
     courses = []
-    for _ in range(NB_OBJECTS["courses"]):
-        video_sample = random.choice(VIDEO_SAMPLE_LINKS)  # nosec
+    for _ in range(defaults.NB_OBJECTS["courses"]):
+        video_sample = random.choice(factories.VIDEO_SAMPLE_LINKS)  # nosec
 
         # Randomly assign each course to a set of organizations
         course_organizations = random.sample(
-            organizations, NB_OBJECTS["course_organizations"]
+            organizations, defaults.NB_OBJECTS["course_organizations"]
         )
 
         # Only the persons members of these organizations are eligible to be part
@@ -235,7 +216,7 @@ def create_demo_site():
             for person in persons_for_organization[o.id]
         )
 
-        course = CourseFactory(
+        course = factories.CourseFactory(
             page_in_navigation=True,
             page_languages=["en", "fr"],
             page_parent=pages_created["courses"],
@@ -246,7 +227,7 @@ def create_demo_site():
             fill_team=random.sample(
                 eligible_persons,
                 min(
-                    random.randint(1, NB_OBJECTS["course_persons"]),  # nosec
+                    random.randint(1, defaults.NB_OBJECTS["course_persons"]),  # nosec
                     len(eligible_persons),
                 ),
             ),
@@ -254,7 +235,8 @@ def create_demo_site():
             fill_cover=pick_image("cover")(video_sample.image),
             fill_categories=[
                 *random.sample(
-                    subjects, random.randint(1, NB_OBJECTS["course_subjects"])  # nosec
+                    subjects,
+                    random.randint(1, defaults.NB_OBJECTS["course_subjects"]),  # nosec
                 ),
                 random.choice(levels),  # nosec
             ],
@@ -281,7 +263,7 @@ def create_demo_site():
             ["de", "en", "es", "fr", "it", "nl"], random.randint(1, 4)  # nosec
         )
         for i in range(nb_course_runs):
-            CourseRunFactory(
+            factories.CourseRunFactory(
                 __sequence=i,
                 languages=random.sample(
                     languages_subset, random.randint(1, len(languages_subset))  # nosec
@@ -294,8 +276,8 @@ def create_demo_site():
 
     # Create blog posts under the `News` page
     blogposts = []
-    for _ in range(NB_OBJECTS["blogposts"]):
-        post = BlogPostFactory.create(
+    for _ in range(defaults.NB_OBJECTS["blogposts"]):
+        post = factories.BlogPostFactory.create(
             page_in_navigation=True,
             page_languages=["en", "fr"],
             page_parent=pages_created["blogposts"],
@@ -303,8 +285,8 @@ def create_demo_site():
             fill_excerpt=True,
             fill_body=True,
             fill_categories=[
-                *random.sample(levels, NB_OBJECTS["blogpost_levels"]),
-                *random.sample(tags, NB_OBJECTS["blogpost_tags"]),
+                *random.sample(levels, defaults.NB_OBJECTS["blogpost_levels"]),
+                *random.sample(tags, defaults.NB_OBJECTS["blogpost_tags"]),
             ],
             fill_author=random.sample(persons, 1),
             should_publish=True,
@@ -313,15 +295,17 @@ def create_demo_site():
 
     # Create programs under the `Programs` page
     programs = []
-    for _ in range(NB_OBJECTS["programs"]):
-        program = ProgramFactory.create(
+    for _ in range(defaults.NB_OBJECTS["programs"]):
+        program = factories.ProgramFactory.create(
             page_in_navigation=True,
             page_languages=["en", "fr"],
             page_parent=pages_created["programs"],
             fill_cover=pick_image("cover"),
             fill_excerpt=True,
             fill_body=True,
-            fill_courses=[*random.sample(courses, NB_OBJECTS["programs_courses"])],
+            fill_courses=[
+                *random.sample(courses, defaults.NB_OBJECTS["programs_courses"])
+            ],
             should_publish=True,
         )
         programs.append(program)
@@ -336,7 +320,7 @@ def create_demo_site():
     logo = image_getter(pick_image("logo")())
 
     # - Create the home page in each language
-    for language, content in HOMEPAGE_CONTENT.items():
+    for language, content in defaults.HOMEPAGE_CONTENT.items():
         # Add a banner
         add_plugin(
             language=language,
@@ -355,7 +339,7 @@ def create_demo_site():
             title=content["courses_title"],
             template=content["section_template"],
         )
-        for course in random.sample(courses, NB_OBJECTS["home_courses"]):
+        for course in random.sample(courses, defaults.NB_OBJECTS["home_courses"]):
             add_plugin(
                 language=language,
                 placeholder=placeholder,
@@ -381,7 +365,7 @@ def create_demo_site():
             title=content["blogposts_title"],
             template=content["section_template"],
         )
-        for blogpost in random.sample(blogposts, NB_OBJECTS["home_blogposts"]):
+        for blogpost in random.sample(blogposts, defaults.NB_OBJECTS["home_blogposts"]):
             add_plugin(
                 language=language,
                 placeholder=placeholder,
@@ -407,7 +391,7 @@ def create_demo_site():
             title=content["programs_title"],
             template=content["section_template"],
         )
-        for program in random.sample(programs, NB_OBJECTS["home_programs"]):
+        for program in random.sample(programs, defaults.NB_OBJECTS["home_programs"]):
             add_plugin(
                 language=language,
                 placeholder=placeholder,
@@ -434,7 +418,7 @@ def create_demo_site():
             template=content["section_template"],
         )
         for organization in random.sample(
-            organizations, NB_OBJECTS["home_organizations"]
+            organizations, defaults.NB_OBJECTS["home_organizations"]
         ):
             add_plugin(
                 language=language,
@@ -461,7 +445,7 @@ def create_demo_site():
             title=content["subjects_title"],
             template=content["section_template"],
         )
-        for subject in random.sample(subjects, NB_OBJECTS["home_subjects"]):
+        for subject in random.sample(subjects, defaults.NB_OBJECTS["home_subjects"]):
             add_plugin(
                 language=language,
                 placeholder=placeholder,
@@ -487,7 +471,7 @@ def create_demo_site():
             title=content["persons_title"],
             template=content["section_template"],
         )
-        for person in random.sample(persons, NB_OBJECTS["home_persons"]):
+        for person in random.sample(persons, defaults.NB_OBJECTS["home_persons"]):
             add_plugin(
                 language=language,
                 placeholder=placeholder,
@@ -518,10 +502,10 @@ def create_demo_site():
     logo = image_getter(pick_image("logo")())
 
     # - Get a video
-    video_sample = random.choice(VIDEO_SAMPLE_LINKS)  # nosec
+    video_sample = random.choice(factories.VIDEO_SAMPLE_LINKS)  # nosec
 
     # - Create sample page in each language
-    for language, content in SINGLECOLUMN_CONTENT.items():
+    for language, content in defaults.SINGLECOLUMN_CONTENT.items():
         # Add a banner
         add_plugin(
             language=language,
@@ -629,7 +613,7 @@ def create_demo_site():
         parent_instance = add_plugin(
             language=language, placeholder=placeholder, plugin_type="HTMLSitemapPlugin"
         )
-        for name, params in SITEMAP_PAGE_PARAMS.items():
+        for name, params in defaults.SITEMAP_PAGE_PARAMS.items():
             add_plugin(
                 language=language,
                 placeholder=placeholder,
