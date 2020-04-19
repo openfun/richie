@@ -13,11 +13,8 @@ from cms.models import CMSPlugin
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.courses import models
-from richie.apps.demo.management.commands.create_demo_site import (
-    NB_OBJECTS,
-    SUBJECTS_INFO,
-    create_demo_site,
-)
+from richie.apps.demo import defaults
+from richie.apps.demo.management.commands.create_demo_site import create_demo_site
 
 
 class CreateDemoSiteCommandsTestCase(CMSTestCase):
@@ -56,7 +53,7 @@ class CreateDemoSiteCommandsTestCase(CMSTestCase):
         return_value=1,
     )
     @mock.patch.dict(
-        NB_OBJECTS,
+        defaults.NB_OBJECTS,
         {
             "courses": 1,
             "course_courseruns": 1,
@@ -82,7 +79,7 @@ class CreateDemoSiteCommandsTestCase(CMSTestCase):
         },
     )
     @mock.patch.dict(
-        SUBJECTS_INFO,
+        defaults.SUBJECTS_INFO,
         {
             "page_title": {"en": "Subject", "fr": "Subjet"},
             "children": [
