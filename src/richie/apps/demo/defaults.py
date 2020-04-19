@@ -3,6 +3,8 @@ from django.conf import settings
 
 from .utils import pick_image
 
+DEFAULT_DEMO_SITE_DOMAIN = "localhost:8070"
+
 NB_OBJECTS = {
     "courses": 75,
     "course_courseruns": 5,

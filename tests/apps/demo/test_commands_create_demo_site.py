@@ -5,6 +5,7 @@ from logging import Logger
 from unittest import mock
 
 from django.conf import settings
+from django.contrib.sites.models import Site
 from django.core.management import call_command
 from django.core.management.base import CommandError
 from django.test.utils import override_settings
@@ -48,6 +49,7 @@ class CreateDemoSiteCommandsTestCase(CMSTestCase):
         mock_create.assert_called_once_with()
         mock_logger.assert_called_once_with("done")
 
+    @override_settings(RICHIE_DEMO_SITE_DOMAIN="richie.education:9999")
     @mock.patch(
         "richie.apps.demo.management.commands.create_demo_site.get_number_of_icons",
         return_value=1,
@@ -112,3 +114,5 @@ class CreateDemoSiteCommandsTestCase(CMSTestCase):
         self.assertEqual(models.Licence.objects.count(), 1)
         self.assertEqual(models.Program.objects.count(), 2)
         self.assertEqual(CMSPlugin.objects.count(), 620)
+
+        self.assertEqual(Site.objects.first().domain, "richie.education:9999")
