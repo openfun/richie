@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Allow defining custom image fixtures on demo site,
 - Allow configuring a custom domain on demo site.
 
 ## [2.0.0-beta.2] - 2020-04-17
