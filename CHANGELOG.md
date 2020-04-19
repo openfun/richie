@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [2.0.0-beta.3] - 2020-04-19
+
 ### Added
 
 - Allow defining custom image fixtures on demo site,
@@ -809,7 +811,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.0.0-beta.2...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.0.0-beta.3...master
+[2.0.0-beta.3]: https://github.com/openfun/richie/compare/v2.0.0-beta.2...v2.0.0-beta.3
 [2.0.0-beta.2]: https://github.com/openfun/richie/compare/v2.0.0-beta.1...v2.0.0-beta.2
 [2.0.0-beta.1]: https://github.com/openfun/richie/compare/v2.0.0-beta.0...v2.0.0-beta.1
 [2.0.0-beta.0]: https://github.com/openfun/richie/compare/v1.17.0...v2.0.0-beta.0
