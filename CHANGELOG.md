@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Custom fixtures directory setting should point to the "fixtures" directory
+
 ## [2.0.0-beta.3] - 2020-04-19
 
 ### Added
