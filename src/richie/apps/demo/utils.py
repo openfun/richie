@@ -27,16 +27,15 @@ def pick_image(image_type):
         Pick a random file path from fixtures within the image type passed as argument to the
         parent function.
         """
+        default_directory = os.path.join(os.path.dirname(__file__), "fixtures")
         fixtures_directory = getattr(
-            settings, "RICHIE_DEMO_FIXTURES_DIR", os.path.dirname(__file__)
+            settings, "RICHIE_DEMO_FIXTURES_DIR", default_directory
         )
-        image_directory = os.path.join(fixtures_directory, "fixtures", image_type)
+        image_directory = os.path.join(fixtures_directory, image_type)
 
         if not os.path.exists(image_directory):
             # Fallback to the fixtures directory in the demo app
-            image_directory = os.path.join(
-                os.path.dirname(__file__), "fixtures", image_type
-            )
+            image_directory = os.path.join(default_directory, image_type)
 
         filename = filename or random.choice(os.listdir(image_directory))  # nosec
         return os.path.join(image_directory, filename)
