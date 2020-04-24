@@ -53,10 +53,6 @@ class PersonsViewSetTestCase(TestCase):
         self.assertEqual(response.status_code, 404)
 
     @override_settings(RICHIE_ES_INDICES_PREFIX="richie")
-    @mock.patch(
-        "richie.apps.search.forms.ItemSearchForm.build_es_query",
-        lambda x: (2, 0, {"query": "something"}),
-    )
     @mock.patch.object(ES_CLIENT, "search")
     def test_viewsets_persons_search(self, mock_search):
         """
@@ -109,7 +105,21 @@ class PersonsViewSetTestCase(TestCase):
         # The ES connector was called with a query that matches the client's request
         mock_search.assert_called_with(
             _source=["absolute_url", "portrait", "title.*"],
-            body={"query": "something"},
+            body={
+                "query": {
+                    "bool": {
+                        "must": [
+                            {
+                                "multi_match": {
+                                    "analyzer": "english",
+                                    "fields": ["title.*"],
+                                    "query": "Michel",
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
             doc_type="person",
             from_=0,
             index="richie_persons",

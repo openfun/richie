@@ -116,9 +116,19 @@ class CourseSearchFormTestCase(TestCase):
         form = CourseSearchForm(
             data=QueryDict(
                 query_string=(
-                    "availability=coming_soon&levels=1&levels_include=.*&languages=fr&limit=9&"
-                    "offset=3&organizations=10&organizations_include=.*&query=maths&new=new&"
-                    "scope=objects&subjects=1&subjects_include=.*"
+                    "availability=coming_soon"
+                    "&languages=fr"
+                    "&levels=1"
+                    "&levels_include=.*"
+                    "&limit=9"
+                    "&new=new"
+                    "&offset=3"
+                    "&organizations=10"
+                    "&organizations_include=.*"
+                    "&query=maths"
+                    "&scope=objects"
+                    "&subjects=1"
+                    "&subjects_include=.*"
                 )
             )
         )
@@ -152,10 +162,25 @@ class CourseSearchFormTestCase(TestCase):
         form = CourseSearchForm(
             data=QueryDict(
                 query_string=(
-                    "availability=coming_soon&availability=ongoing&levels=1&levels=2&"
-                    "languages=fr&languages=en&limit=9&limit=11&offset=3&offset=17&"
-                    "organizations=10&organizations=11&query=maths&query=physics&new=new&"
-                    "scope=objects&scope=filters&subjects=1&subjects=2"
+                    "availability=coming_soon"
+                    "&availability=ongoing"
+                    "&languages=fr"
+                    "&languages=en"
+                    "&levels=1"
+                    "&levels=2"
+                    "&limit=9"
+                    "&limit=11"
+                    "&new=new"
+                    "&offset=3"
+                    "&offset=17"
+                    "&organizations=10"
+                    "&organizations=11"
+                    "&query=maths"
+                    "&query=physics"
+                    "&scope=objects"
+                    "&scope=filters"
+                    "&subjects=1"
+                    "&subjects=2"
                 )
             )
         )
@@ -187,7 +212,7 @@ class CourseSearchFormTestCase(TestCase):
         Happy path: build a query that filters courses by matching text
         """
         form = CourseSearchForm(
-            data=QueryDict(query_string="query=some%20phrase%20terms&limit=2&offset=20")
+            data=QueryDict(query_string="limit=2&offset=20&query=some%20phrase%20terms")
         )
         self.assertTrue(form.is_valid())
         self.assertEqual(
@@ -196,35 +221,17 @@ class CourseSearchFormTestCase(TestCase):
                 "bool": {
                     "must": [
                         {
-                            "bool": {
-                                "should": [
-                                    {
-                                        "multi_match": {
-                                            "fields": ["description.*", "title.*"],
-                                            "query": "some phrase terms",
-                                            "type": "cross_fields",
-                                        }
-                                    },
-                                    {
-                                        "multi_match": {
-                                            "boost": 0.05,
-                                            "fields": [
-                                                "categories_names.*",
-                                                "organizations_names.*",
-                                            ],
-                                            "query": "some phrase terms",
-                                            "type": "cross_fields",
-                                        }
-                                    },
-                                    {
-                                        "multi_match": {
-                                            "boost": 0.05,
-                                            "fields": ["persons_names.*"],
-                                            "query": "some phrase " "terms",
-                                            "type": "cross_fields",
-                                        }
-                                    },
-                                ]
+                            "multi_match": {
+                                "analyzer": "english",
+                                "fields": [
+                                    "description.*",
+                                    "title.*",
+                                    "categories_names.*^0.05",
+                                    "organizations_names.*^0.05",
+                                    "persons_names.*^0.05",
+                                ],
+                                "query": "some phrase terms",
+                                "type": "cross_fields",
                             }
                         }
                     ]

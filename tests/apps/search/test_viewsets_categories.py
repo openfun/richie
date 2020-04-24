@@ -148,8 +148,9 @@ class CategoriesViewsetsTestCase(TestCase):
                             {"term": {"kind": "subjects"}},
                             {
                                 "multi_match": {
-                                    "query": "Science",
+                                    "analyzer": "english",
                                     "fields": ["title.*"],
+                                    "query": "Science",
                                 }
                             },
                         ]

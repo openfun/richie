@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix an issue where analyzing course search queries with irrelevant analyzers
+  caused very low relevance results in course search.
+
 ## [2.0.0-beta.4] - 2020-04-20
 
 ### Fixed

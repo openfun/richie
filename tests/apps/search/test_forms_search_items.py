@@ -93,7 +93,7 @@ class ItemSearchFormTestCase(TestCase):
     def test_forms_items_single_values_in_querystring(self, *_):
         """
         The fields from filter definitions should be normalized as lists. The fields defined
-        on the form should be single values (limit, offset and query)
+        on the form should be single values (limit, offset and query).
         """
         form = ItemSearchForm(
             data=QueryDict(query_string=("limit=9&offset=3&query=maths"))
@@ -108,7 +108,7 @@ class ItemSearchFormTestCase(TestCase):
         Happy path: build a query that filters items by matching text
         """
         form = ItemSearchForm(
-            data=QueryDict(query_string="query=some%20phrase%20terms&limit=20&offset=2")
+            data=QueryDict(query_string="limit=20&offset=2&query=some%20phrase%20terms")
         )
         self.assertTrue(form.is_valid())
         self.assertEqual(
@@ -122,6 +122,7 @@ class ItemSearchFormTestCase(TestCase):
                             "must": [
                                 {
                                     "multi_match": {
+                                        "analyzer": "english",
                                         "fields": ["title.*"],
                                         "query": "some phrase " "terms",
                                     }
@@ -139,7 +140,7 @@ class ItemSearchFormTestCase(TestCase):
         as argument.
         """
         form = ItemSearchForm(
-            data=QueryDict(query_string="query=some%20phrase%20terms&limit=20&offset=2")
+            data=QueryDict(query_string="limit=20&offset=2&query=some%20phrase%20terms")
         )
         self.assertTrue(form.is_valid())
         self.assertEqual(
@@ -154,6 +155,7 @@ class ItemSearchFormTestCase(TestCase):
                                 {"term": {"kind": "subjects"}},
                                 {
                                     "multi_match": {
+                                        "analyzer": "english",
                                         "fields": ["title.*"],
                                         "query": "some phrase " "terms",
                                     }
