@@ -6,10 +6,11 @@ from functools import reduce
 
 from django import forms
 from django.conf import settings
+from django.utils.translation import get_language
 
 import arrow
 
-from .defaults import RELATED_CONTENT_BOOST
+from .defaults import QUERY_ANALYZERS, RELATED_CONTENT_BOOST
 from .filter_definitions import FILTERS, AvailabilityFilterDefinition
 
 # Instantiate filter fields for each filter defined in settings
@@ -192,48 +193,26 @@ class CourseSearchForm(SearchForm):
         # Full text search is a regular (multilingual) match query
         full_text = self.cleaned_data.get("query")
         if full_text:
+            related_content_boost = getattr(
+                settings, "RICHIE_RELATED_CONTENT_BOOST", RELATED_CONTENT_BOOST
+            )
+            lang = get_language()
             queries.append(
                 {
                     "key": "query",
                     "fragment": [
                         {
-                            "bool": {
-                                "should": [
-                                    {
-                                        "multi_match": {
-                                            "fields": ["description.*", "title.*"],
-                                            "query": full_text,
-                                            "type": "cross_fields",
-                                        }
-                                    },
-                                    {
-                                        "multi_match": {
-                                            "boost": getattr(
-                                                settings,
-                                                "RICHIE_RELATED_CONTENT_BOOST",
-                                                RELATED_CONTENT_BOOST,
-                                            ),
-                                            "fields": [
-                                                "categories_names.*",
-                                                "organizations_names.*",
-                                            ],
-                                            "query": full_text,
-                                            "type": "cross_fields",
-                                        }
-                                    },
-                                    {
-                                        "multi_match": {
-                                            "boost": getattr(
-                                                settings,
-                                                "RICHIE_RELATED_CONTENT_BOOST",
-                                                RELATED_CONTENT_BOOST,
-                                            ),
-                                            "fields": ["persons_names.*"],
-                                            "query": full_text,
-                                            "type": "cross_fields",
-                                        }
-                                    },
-                                ]
+                            "multi_match": {
+                                "analyzer": QUERY_ANALYZERS[lang],
+                                "fields": [
+                                    "description.*",
+                                    "title.*",
+                                    f"categories_names.*^{related_content_boost}",
+                                    f"organizations_names.*^{related_content_boost}",
+                                    f"persons_names.*^{related_content_boost}",
+                                ],
+                                "query": full_text,
+                                "type": "cross_fields",
                             }
                         }
                     ],
@@ -334,7 +313,15 @@ class ItemSearchForm(SearchForm):
         # Add a match on the name field if it was handed by the client
         full_text = self.cleaned_data.get("query")
         if full_text:
-            clauses.append({"multi_match": {"query": full_text, "fields": ["title.*"]}})
+            clauses.append(
+                {
+                    "multi_match": {
+                        "analyzer": QUERY_ANALYZERS[get_language()],
+                        "fields": ["title.*"],
+                        "query": full_text,
+                    }
+                }
+            )
 
         # Build the query around the clauses if there are any
         if clauses:
