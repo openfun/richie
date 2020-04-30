@@ -39,7 +39,7 @@ const messages = defineMessages({
 });
 
 export const Search = ({ context }: CommonDataProps) => {
-  const [courseSearchParams] = useCourseSearchParams();
+  const { courseSearchParams } = useCourseSearchParams();
   const courseSearchResponse = useCourseSearch(courseSearchParams);
 
   const alwaysShowFilters = matchMedia('(min-width: 992px)').matches;

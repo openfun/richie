@@ -7,10 +7,10 @@ export const useFilterValue = (
   filter: FacetedFilterDefinition,
   value: FilterValue,
 ): UseFilterValue => {
-  const [
+  const {
     courseSearchParams,
     dispatchCourseSearchParamsUpdate,
-  ] = useCourseSearchParams();
+  } = useCourseSearchParams();
 
   const isActive = (courseSearchParams[filter.name] || []).includes(value.key);
 

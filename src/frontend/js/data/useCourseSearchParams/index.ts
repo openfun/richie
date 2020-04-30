@@ -34,10 +34,12 @@ export type CourseSearchParamsReducerAction =
   | PageChangeAction
   | QueryAction;
 
-type CourseSearchParamsState = [
-  APIListRequestParams,
-  (...Actions: CourseSearchParamsReducerAction[]) => void,
-];
+type CourseSearchParamsState = {
+  courseSearchParams: APIListRequestParams;
+  dispatchCourseSearchParamsUpdate: (
+    ...Actions: CourseSearchParamsReducerAction[]
+  ) => void;
+};
 
 const courseSearchParamsReducer = (
   courseSearchParams: APIListRequestParams,
@@ -157,5 +159,8 @@ export const useCourseSearchParams = (): CourseSearchParamsState => {
     }
   }, [courseSearchParams]);
 
-  return [courseSearchParams, dispatch];
+  return {
+    courseSearchParams,
+    dispatchCourseSearchParamsUpdate: dispatch,
+  };
 };

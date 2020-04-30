@@ -36,10 +36,10 @@ export const SearchFiltersPane = ({
   >) => {
   const filterList = filters && Object.values(filters);
 
-  const [
+  const {
     courseSearchParams,
     dispatchCourseSearchParamsUpdate,
-  ] = useCourseSearchParams();
+  } = useCourseSearchParams();
 
   // Get all the currently active filters to show a count
   const activeFilters = Object.entries(courseSearchParams)

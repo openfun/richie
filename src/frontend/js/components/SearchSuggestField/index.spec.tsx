@@ -115,7 +115,7 @@ describe('components/SearchSuggestField', () => {
   it('clears the input field when the query is removed by another component elsewhere in the tree', () => {
     let doDispatchCourseSearchParamsUpdate: any;
     const OtherComponent = () => {
-      const [, dispatchCourseSearchParamsUpdate] = useCourseSearchParams();
+      const { dispatchCourseSearchParamsUpdate } = useCourseSearchParams();
       doDispatchCourseSearchParamsUpdate = dispatchCourseSearchParamsUpdate;
       return <div></div>;
     };

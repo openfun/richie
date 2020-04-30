@@ -39,10 +39,10 @@ export const SearchFilterValueParent = ({
 
   // Get the current values for the filter definition so we know if any children of this parent
   // filter are active (and we therefore need to get them and unfold the children).
-  const [coursesSearchParams] = useCourseSearchParams();
+  const { courseSearchParams } = useCourseSearchParams();
   // Default to an array of strings no matter the current value so we can easily check for active values
   const activeFilterValues =
-    coursesSearchParams[filter.name] || ([] as string[]);
+    courseSearchParams[filter.name] || ([] as string[]);
   const activeValuesList =
     typeof activeFilterValues === 'string'
       ? [activeFilterValues]
@@ -69,7 +69,7 @@ export const SearchFilterValueParent = ({
     if (showChildren) {
       // Get only the filters & facet counts for the children of the current parent
       const childrenResponse = await fetchList('courses', {
-        ...coursesSearchParams,
+        ...courseSearchParams,
         [`${filter.name}_include`]: childrenPathMatch,
         scope: 'filters',
       });
@@ -84,7 +84,7 @@ export const SearchFilterValueParent = ({
     }
     // Be sure to include courseSearchParams in the dependencies so the children counts are re-fetched whenever
     // the user applies new filters or queries
-  }, [showChildren, value, coursesSearchParams]);
+  }, [showChildren, value, courseSearchParams]);
 
   // We also need to know if the current filter is active itself and let the user toggle it directly
   const [isActive, toggle] = useFilterValue(filter, value);
