@@ -58,10 +58,10 @@ export const PaginateCourseSearch = ({
   // Generate a unique ID per instance to ensure our aria-labelledby do not break if there are two
   // or more instances of <PaginateCourseSearch /> on the page
   const [componentId] = useState(Math.random());
-  const [
+  const {
     courseSearchParams,
     dispatchCourseSearchParamsUpdate,
-  ] = useCourseSearchParams();
+  } = useCourseSearchParams();
 
   // Extract pagination information from params and search results meta
   const limit = Number(courseSearchParams.limit);

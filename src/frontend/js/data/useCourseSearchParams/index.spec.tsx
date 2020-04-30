@@ -43,7 +43,7 @@ describe('data/useCourseSearchParams', () => {
     mockWindow.location.search =
       '?organizations=L-00010003&organizations=L-00010009&query=some%20query&limit=8&offset=3';
     render(<WrappedTestComponent />);
-    const [courseSearchParams] = getLatestHookValues();
+    const { courseSearchParams } = getLatestHookValues();
     expect(courseSearchParams).toEqual({
       limit: '8',
       offset: '3',
@@ -57,7 +57,7 @@ describe('data/useCourseSearchParams', () => {
   it('initializes with defaults if there is no query string param', () => {
     mockWindow.location.search = '';
     render(<WrappedTestComponent />);
-    const [courseSearchParams] = getLatestHookValues();
+    const { courseSearchParams } = getLatestHookValues();
     expect(courseSearchParams).toEqual({ limit: '20', offset: '0' });
     // We need an update so the URL reflects the actual query params
     expect(mockWindow.history.replaceState).toHaveBeenCalledTimes(1);
@@ -73,16 +73,24 @@ describe('data/useCourseSearchParams', () => {
       mockWindow.location.search = '?languages=fr&limit=13&offset=26';
       render(<WrappedTestComponent />);
       {
-        const [courseSearchParams, dispatch] = getLatestHookValues();
+        const {
+          courseSearchParams,
+          dispatchCourseSearchParamsUpdate,
+        } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           languages: 'fr',
           limit: '13',
           offset: '26',
         });
-        act(() => dispatch({ offset: '39', type: 'PAGE_CHANGE' }));
+        act(() =>
+          dispatchCourseSearchParamsUpdate({
+            offset: '39',
+            type: 'PAGE_CHANGE',
+          }),
+        );
       }
       {
-        const [courseSearchParams] = getLatestHookValues();
+        const { courseSearchParams } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           languages: 'fr',
           limit: '13',
@@ -107,16 +115,24 @@ describe('data/useCourseSearchParams', () => {
       mockWindow.location.search = '?languages=en&limit=17&offset=5';
       render(<WrappedTestComponent />);
       {
-        const [courseSearchParams, dispatch] = getLatestHookValues();
+        const {
+          courseSearchParams,
+          dispatchCourseSearchParamsUpdate,
+        } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           languages: 'en',
           limit: '17',
           offset: '5',
         });
-        act(() => dispatch({ query: 'some text query', type: 'QUERY_UPDATE' }));
+        act(() =>
+          dispatchCourseSearchParamsUpdate({
+            query: 'some text query',
+            type: 'QUERY_UPDATE',
+          }),
+        );
       }
       {
-        const [courseSearchParams] = getLatestHookValues();
+        const { courseSearchParams } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           languages: 'en',
           limit: '17',
@@ -143,17 +159,25 @@ describe('data/useCourseSearchParams', () => {
         '?languages=fr&limit=999&offset=0&query=some%20previous%20query';
       render(<WrappedTestComponent />);
       {
-        const [courseSearchParams, dispatch] = getLatestHookValues();
+        const {
+          courseSearchParams,
+          dispatchCourseSearchParamsUpdate,
+        } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           languages: 'fr',
           limit: '999',
           offset: '0',
           query: 'some previous query',
         });
-        act(() => dispatch({ query: 'some new query', type: 'QUERY_UPDATE' }));
+        act(() =>
+          dispatchCourseSearchParamsUpdate({
+            query: 'some new query',
+            type: 'QUERY_UPDATE',
+          }),
+        );
       }
       {
-        const [courseSearchParams] = getLatestHookValues();
+        const { courseSearchParams } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           languages: 'fr',
           limit: '999',
@@ -180,17 +204,25 @@ describe('data/useCourseSearchParams', () => {
         '?languages=es&limit=999&offset=0&query=some%20existing%20query';
       render(<WrappedTestComponent />);
       {
-        const [courseSearchParams, dispatch] = getLatestHookValues();
+        const {
+          courseSearchParams,
+          dispatchCourseSearchParamsUpdate,
+        } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           languages: 'es',
           limit: '999',
           offset: '0',
           query: 'some existing query',
         });
-        act(() => dispatch({ query: undefined, type: 'QUERY_UPDATE' }));
+        act(() =>
+          dispatchCourseSearchParamsUpdate({
+            query: undefined,
+            type: 'QUERY_UPDATE',
+          }),
+        );
       }
       {
-        const [courseSearchParams] = getLatestHookValues();
+        const { courseSearchParams } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           languages: 'es',
           limit: '999',
@@ -214,7 +246,10 @@ describe('data/useCourseSearchParams', () => {
         '?organizations=L-00010003&organizations=L-00010009&offset=999&limit=10';
       render(<WrappedTestComponent />);
       {
-        const [courseSearchParams, dispatch] = getLatestHookValues();
+        const {
+          courseSearchParams,
+          dispatchCourseSearchParamsUpdate,
+        } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '10',
           offset: '999',
@@ -222,7 +257,7 @@ describe('data/useCourseSearchParams', () => {
         });
 
         act(() =>
-          dispatch({
+          dispatchCourseSearchParamsUpdate({
             filter: {
               is_drilldown: false,
               name: 'organizations',
@@ -233,7 +268,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const [courseSearchParams] = getLatestHookValues();
+        const { courseSearchParams } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '10',
           offset: '0',
@@ -258,7 +293,10 @@ describe('data/useCourseSearchParams', () => {
         '?languages=en&languages=fr&offset=999&limit=10';
       render(<WrappedTestComponent />);
       {
-        const [courseSearchParams, dispatch] = getLatestHookValues();
+        const {
+          courseSearchParams,
+          dispatchCourseSearchParamsUpdate,
+        } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           languages: ['en', 'fr'],
           limit: '10',
@@ -266,7 +304,7 @@ describe('data/useCourseSearchParams', () => {
         });
 
         act(() =>
-          dispatch({
+          dispatchCourseSearchParamsUpdate({
             filter: {
               is_drilldown: false,
               name: 'languages',
@@ -277,7 +315,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const [courseSearchParams] = getLatestHookValues();
+        const { courseSearchParams } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           languages: ['en', 'fr', 'it'],
           limit: '10',
@@ -298,7 +336,10 @@ describe('data/useCourseSearchParams', () => {
         '?organizations=L-00010003&offset=999&limit=10';
       render(<WrappedTestComponent />);
       {
-        const [courseSearchParams, dispatch] = getLatestHookValues();
+        const {
+          courseSearchParams,
+          dispatchCourseSearchParamsUpdate,
+        } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '10',
           offset: '999',
@@ -306,7 +347,7 @@ describe('data/useCourseSearchParams', () => {
         });
 
         act(() =>
-          dispatch({
+          dispatchCourseSearchParamsUpdate({
             filter: {
               is_drilldown: false,
               name: 'organizations',
@@ -317,7 +358,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const [courseSearchParams] = getLatestHookValues();
+        const { courseSearchParams } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '10',
           offset: '0',
@@ -341,7 +382,10 @@ describe('data/useCourseSearchParams', () => {
       mockWindow.location.search = '?languages=de&offset=999&limit=10';
       render(<WrappedTestComponent />);
       {
-        const [courseSearchParams, dispatch] = getLatestHookValues();
+        const {
+          courseSearchParams,
+          dispatchCourseSearchParamsUpdate,
+        } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           languages: 'de',
           limit: '10',
@@ -349,7 +393,7 @@ describe('data/useCourseSearchParams', () => {
         });
 
         act(() =>
-          dispatch({
+          dispatchCourseSearchParamsUpdate({
             filter: {
               is_drilldown: false,
               name: 'languages',
@@ -360,7 +404,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const [courseSearchParams] = getLatestHookValues();
+        const { courseSearchParams } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           languages: ['de', 'zh'],
           limit: '10',
@@ -384,7 +428,10 @@ describe('data/useCourseSearchParams', () => {
       mockWindow.location.search = '?limit=999&offset=0&query=some%20query';
       render(<WrappedTestComponent />);
       {
-        const [courseSearchParams, dispatch] = getLatestHookValues();
+        const {
+          courseSearchParams,
+          dispatchCourseSearchParamsUpdate,
+        } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -392,7 +439,7 @@ describe('data/useCourseSearchParams', () => {
         });
 
         act(() =>
-          dispatch({
+          dispatchCourseSearchParamsUpdate({
             filter: {
               is_drilldown: false,
               name: 'organizations',
@@ -403,7 +450,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const [courseSearchParams] = getLatestHookValues();
+        const { courseSearchParams } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -430,7 +477,10 @@ describe('data/useCourseSearchParams', () => {
         '?limit=999&offset=0&query=some%20query&organizations=L-00010009';
       render(<WrappedTestComponent />);
       {
-        const [courseSearchParams, dispatch] = getLatestHookValues();
+        const {
+          courseSearchParams,
+          dispatchCourseSearchParamsUpdate,
+        } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -439,7 +489,7 @@ describe('data/useCourseSearchParams', () => {
         });
 
         act(() =>
-          dispatch({
+          dispatchCourseSearchParamsUpdate({
             filter: {
               is_drilldown: false,
               name: 'organizations',
@@ -450,7 +500,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const [courseSearchParams] = getLatestHookValues();
+        const { courseSearchParams } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -473,7 +523,10 @@ describe('data/useCourseSearchParams', () => {
         '&levels=L-000200020005';
       render(<WrappedTestComponent />);
       {
-        const [courseSearchParams, dispatch] = getLatestHookValues();
+        const {
+          courseSearchParams,
+          dispatchCourseSearchParamsUpdate,
+        } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           levels: 'L-000200020005',
           limit: '999',
@@ -487,7 +540,7 @@ describe('data/useCourseSearchParams', () => {
         });
 
         act(() =>
-          dispatch({
+          dispatchCourseSearchParamsUpdate({
             filter: {
               is_drilldown: false,
               name: 'subjects',
@@ -498,7 +551,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const [courseSearchParams] = getLatestHookValues();
+        const { courseSearchParams } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           levels: 'L-000200020005',
           limit: '999',
@@ -531,7 +584,10 @@ describe('data/useCourseSearchParams', () => {
         '&levels=L-000200020005';
       render(<WrappedTestComponent />);
       {
-        const [courseSearchParams, dispatch] = getLatestHookValues();
+        const {
+          courseSearchParams,
+          dispatchCourseSearchParamsUpdate,
+        } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           levels: 'L-000200020005',
           limit: '999',
@@ -541,7 +597,7 @@ describe('data/useCourseSearchParams', () => {
         });
 
         act(() =>
-          dispatch({
+          dispatchCourseSearchParamsUpdate({
             filter: {
               is_drilldown: false,
               name: 'subjects',
@@ -552,7 +608,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const [courseSearchParams] = getLatestHookValues();
+        const { courseSearchParams } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           levels: 'L-000200020005',
           limit: '999',
@@ -587,7 +643,10 @@ describe('data/useCourseSearchParams', () => {
         '&levels=L-000200020005';
       render(<WrappedTestComponent />);
       {
-        const [courseSearchParams, dispatch] = getLatestHookValues();
+        const {
+          courseSearchParams,
+          dispatchCourseSearchParamsUpdate,
+        } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           levels: 'L-000200020005',
           limit: '999',
@@ -597,7 +656,7 @@ describe('data/useCourseSearchParams', () => {
         });
 
         act(() =>
-          dispatch({
+          dispatchCourseSearchParamsUpdate({
             filter: {
               is_drilldown: false,
               name: 'subjects',
@@ -608,7 +667,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const [courseSearchParams] = getLatestHookValues();
+        const { courseSearchParams } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           levels: 'L-000200020005',
           limit: '999',
@@ -642,7 +701,10 @@ describe('data/useCourseSearchParams', () => {
         '&levels=L-000200020005';
       render(<WrappedTestComponent />);
       {
-        const [courseSearchParams, dispatch] = getLatestHookValues();
+        const {
+          courseSearchParams,
+          dispatchCourseSearchParamsUpdate,
+        } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           levels: 'L-000200020005',
           limit: '999',
@@ -652,7 +714,7 @@ describe('data/useCourseSearchParams', () => {
         });
 
         act(() =>
-          dispatch({
+          dispatchCourseSearchParamsUpdate({
             filter: {
               is_drilldown: false,
               name: 'subjects',
@@ -663,7 +725,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const [courseSearchParams] = getLatestHookValues();
+        const { courseSearchParams } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           levels: 'L-000200020005',
           limit: '999',
@@ -694,14 +756,17 @@ describe('data/useCourseSearchParams', () => {
       render(<WrappedTestComponent />);
       {
         // Set a value where there was no value
-        const [courseSearchParams, dispatch] = getLatestHookValues();
+        const {
+          courseSearchParams,
+          dispatchCourseSearchParamsUpdate,
+        } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
         });
 
         act(() =>
-          dispatch({
+          dispatchCourseSearchParamsUpdate({
             filter: {
               is_drilldown: true,
               name: 'level',
@@ -712,7 +777,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const [courseSearchParams] = getLatestHookValues();
+        const { courseSearchParams } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           level: 'L-000200010003',
           limit: '999',
@@ -733,9 +798,9 @@ describe('data/useCourseSearchParams', () => {
       {
         // Replace an existing value
         jest.resetAllMocks();
-        const [, dispatch] = getLatestHookValues();
+        const { dispatchCourseSearchParamsUpdate } = getLatestHookValues();
         act(() =>
-          dispatch({
+          dispatchCourseSearchParamsUpdate({
             filter: {
               is_drilldown: true,
               name: 'level',
@@ -746,7 +811,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const [courseSearchParams] = getLatestHookValues();
+        const { courseSearchParams } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           level: 'L-000200010002',
           limit: '999',
@@ -770,7 +835,10 @@ describe('data/useCourseSearchParams', () => {
       mockWindow.location.search = '?level=L-000200010001&limit=999&offset=0';
       render(<WrappedTestComponent />);
       {
-        const [courseSearchParams, dispatch] = getLatestHookValues();
+        const {
+          courseSearchParams,
+          dispatchCourseSearchParamsUpdate,
+        } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           level: 'L-000200010001',
           limit: '999',
@@ -778,7 +846,7 @@ describe('data/useCourseSearchParams', () => {
         });
 
         act(() =>
-          dispatch({
+          dispatchCourseSearchParamsUpdate({
             filter: {
               is_drilldown: true,
               name: 'level',
@@ -789,7 +857,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const [courseSearchParams] = getLatestHookValues();
+        const { courseSearchParams } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           level: 'L-000200010001',
           limit: '999',
@@ -808,7 +876,10 @@ describe('data/useCourseSearchParams', () => {
       render(<WrappedTestComponent />);
       {
         // Remove from a list of more than one value
-        const [courseSearchParams, dispatch] = getLatestHookValues();
+        const {
+          courseSearchParams,
+          dispatchCourseSearchParamsUpdate,
+        } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -817,7 +888,7 @@ describe('data/useCourseSearchParams', () => {
         });
 
         act(() =>
-          dispatch({
+          dispatchCourseSearchParamsUpdate({
             filter: {
               is_drilldown: false,
               name: 'organizations',
@@ -828,7 +899,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const [courseSearchParams] = getLatestHookValues();
+        const { courseSearchParams } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -851,10 +922,10 @@ describe('data/useCourseSearchParams', () => {
       {
         // Remove from a list of just one value
         jest.resetAllMocks();
-        const [, dispatch] = getLatestHookValues();
+        const { dispatchCourseSearchParamsUpdate } = getLatestHookValues();
 
         act(() =>
-          dispatch({
+          dispatchCourseSearchParamsUpdate({
             filter: { is_drilldown: false, name: 'organizations' },
             payload: 'L00010011',
             type: 'FILTER_REMOVE',
@@ -862,7 +933,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const [courseSearchParams] = getLatestHookValues();
+        const { courseSearchParams } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -889,7 +960,10 @@ describe('data/useCourseSearchParams', () => {
         '?limit=999&offset=0&query=some%20query&organizations=L-00010013';
       render(<WrappedTestComponent />);
       {
-        const [courseSearchParams, dispatch] = getLatestHookValues();
+        const {
+          courseSearchParams,
+          dispatchCourseSearchParamsUpdate,
+        } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -898,7 +972,7 @@ describe('data/useCourseSearchParams', () => {
         });
 
         act(() =>
-          dispatch({
+          dispatchCourseSearchParamsUpdate({
             filter: {
               is_drilldown: false,
               name: 'organizations',
@@ -909,7 +983,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const [courseSearchParams] = getLatestHookValues();
+        const { courseSearchParams } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -933,7 +1007,10 @@ describe('data/useCourseSearchParams', () => {
       mockWindow.location.search = '?limit=999&offset=0&query=some%20query';
       render(<WrappedTestComponent />);
       {
-        const [courseSearchParams, dispatch] = getLatestHookValues();
+        const {
+          courseSearchParams,
+          dispatchCourseSearchParamsUpdate,
+        } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -941,7 +1018,7 @@ describe('data/useCourseSearchParams', () => {
         });
 
         act(() =>
-          dispatch({
+          dispatchCourseSearchParamsUpdate({
             filter: {
               is_drilldown: false,
               name: 'subjects',
@@ -952,7 +1029,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const [courseSearchParams] = getLatestHookValues();
+        const { courseSearchParams } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -968,7 +1045,10 @@ describe('data/useCourseSearchParams', () => {
         '?limit=999&offset=0&organizations=L-00010003&organizations=L-00010009';
       render(<WrappedTestComponent />);
       {
-        const [courseSearchParams, dispatch] = getLatestHookValues();
+        const {
+          courseSearchParams,
+          dispatchCourseSearchParamsUpdate,
+        } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -976,7 +1056,7 @@ describe('data/useCourseSearchParams', () => {
         });
 
         act(() =>
-          dispatch({
+          dispatchCourseSearchParamsUpdate({
             filter: {
               is_drilldown: false,
               name: 'organizations',
@@ -987,7 +1067,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const [courseSearchParams] = getLatestHookValues();
+        const { courseSearchParams } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -1005,7 +1085,10 @@ describe('data/useCourseSearchParams', () => {
         '?limit=999&offset=0&organizations=L-00010011';
       render(<WrappedTestComponent />);
       {
-        const [courseSearchParams, dispatch] = getLatestHookValues();
+        const {
+          courseSearchParams,
+          dispatchCourseSearchParamsUpdate,
+        } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -1013,7 +1096,7 @@ describe('data/useCourseSearchParams', () => {
         });
 
         act(() =>
-          dispatch({
+          dispatchCourseSearchParamsUpdate({
             filter: {
               is_drilldown: false,
               name: 'organizations',
@@ -1024,7 +1107,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const [courseSearchParams] = getLatestHookValues();
+        const { courseSearchParams } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -1042,7 +1125,10 @@ describe('data/useCourseSearchParams', () => {
         '?level=L-000200010001&limit=999&offset=0&query=some%20query';
       render(<WrappedTestComponent />);
       {
-        const [courseSearchParams, dispatch] = getLatestHookValues();
+        const {
+          courseSearchParams,
+          dispatchCourseSearchParamsUpdate,
+        } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           level: 'L-000200010001',
           limit: '999',
@@ -1051,7 +1137,7 @@ describe('data/useCourseSearchParams', () => {
         });
 
         act(() =>
-          dispatch({
+          dispatchCourseSearchParamsUpdate({
             filter: {
               is_drilldown: true,
               name: 'level',
@@ -1062,7 +1148,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const [courseSearchParams] = getLatestHookValues();
+        const { courseSearchParams } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -1087,7 +1173,10 @@ describe('data/useCourseSearchParams', () => {
         '?level=L-000200010001&limit=999&offset=0&query=some%20query';
       render(<WrappedTestComponent />);
       {
-        const [courseSearchParams, dispatch] = getLatestHookValues();
+        const {
+          courseSearchParams,
+          dispatchCourseSearchParamsUpdate,
+        } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           level: 'L-000200010001',
           limit: '999',
@@ -1096,7 +1185,7 @@ describe('data/useCourseSearchParams', () => {
         });
 
         act(() =>
-          dispatch({
+          dispatchCourseSearchParamsUpdate({
             filter: {
               is_drilldown: true,
               name: 'level',
@@ -1107,7 +1196,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const [courseSearchParams] = getLatestHookValues();
+        const { courseSearchParams } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           level: 'L-000200010001',
           limit: '999',
@@ -1124,7 +1213,10 @@ describe('data/useCourseSearchParams', () => {
         '?organizations=L-00010009&limit=999&offset=0&query=some%20query';
       render(<WrappedTestComponent />);
       {
-        const [courseSearchParams, dispatch] = getLatestHookValues();
+        const {
+          courseSearchParams,
+          dispatchCourseSearchParamsUpdate,
+        } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -1133,7 +1225,7 @@ describe('data/useCourseSearchParams', () => {
         });
 
         act(() =>
-          dispatch({
+          dispatchCourseSearchParamsUpdate({
             filter: {
               is_drilldown: true,
               name: 'level',
@@ -1144,7 +1236,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const [courseSearchParams] = getLatestHookValues();
+        const { courseSearchParams } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -1163,7 +1255,10 @@ describe('data/useCourseSearchParams', () => {
         '?organizations=L-00010004&subjects=P-00030004&subjects=P-00030007&limit=27&offset=54&query=some%20query';
       render(<WrappedTestComponent />);
       {
-        const [courseSearchParams, dispatch] = getLatestHookValues();
+        const {
+          courseSearchParams,
+          dispatchCourseSearchParamsUpdate,
+        } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '27',
           offset: '54',
@@ -1172,10 +1267,10 @@ describe('data/useCourseSearchParams', () => {
           subjects: ['P-00030004', 'P-00030007'],
         });
 
-        act(() => dispatch({ type: 'FILTER_RESET' }));
+        act(() => dispatchCourseSearchParamsUpdate({ type: 'FILTER_RESET' }));
       }
       {
-        const [courseSearchParams] = getLatestHookValues();
+        const { courseSearchParams } = getLatestHookValues();
         expect(courseSearchParams).toEqual({ limit: '27', offset: '0' });
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
           { limit: '27', offset: '0' },
@@ -1192,7 +1287,10 @@ describe('data/useCourseSearchParams', () => {
       '?limit=20&offset=0&query=some%20query&organizations=L-00010009&organizations=L00010011';
     render(<WrappedTestComponent />);
     {
-      const [courseSearchParams, dispatch] = getLatestHookValues();
+      const {
+        courseSearchParams,
+        dispatchCourseSearchParamsUpdate,
+      } = getLatestHookValues();
       expect(courseSearchParams).toEqual({
         limit: '20',
         offset: '0',
@@ -1201,7 +1299,7 @@ describe('data/useCourseSearchParams', () => {
       });
       // Dispatch three actions at once to make sure everything is handled cleanly
       act(() =>
-        dispatch(
+        dispatchCourseSearchParamsUpdate(
           {
             filter: {
               is_drilldown: false,
@@ -1223,7 +1321,7 @@ describe('data/useCourseSearchParams', () => {
       );
     }
     {
-      const [courseSearchParams] = getLatestHookValues();
+      const { courseSearchParams } = getLatestHookValues();
       expect(courseSearchParams).toEqual({
         languages: ['it'],
         limit: '20',

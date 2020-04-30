@@ -67,10 +67,10 @@ export const SearchFilterGroupModal = ({
   const [error, setError] = useState(null as Nullable<MessageDescriptor>);
 
   // We need the current course search params to get the facet counts
-  const [
-    coursesSearchParams,
+  const {
+    courseSearchParams,
     dispatchCourseSearchParamsUpdate,
-  ] = useCourseSearchParams();
+  } = useCourseSearchParams();
 
   // When the modal is closed, reset state so the user gets a brand-new one if they come back
   useEffect(() => {
@@ -99,7 +99,7 @@ export const SearchFilterGroupModal = ({
     }
 
     const facetResponse = await fetchList('courses', {
-      ...coursesSearchParams,
+      ...courseSearchParams,
       [`${filter.name}_include`]: `(${searchResponse.content.objects
         .map((resource) => resource.id)
         .join('|')})`,
