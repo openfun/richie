@@ -35,7 +35,11 @@ describe('<SearchFilterGroupModal />', () => {
   const historyPushState = jest.fn();
   const historyReplaceState = jest.fn();
   const makeHistoryOf: (params: any) => History = (params) => [
-    { state: params, title: '', url: `/search?${stringify(params)}` },
+    {
+      state: { name: 'courseSearch', data: { params } },
+      title: '',
+      url: `/search?${stringify(params)}`,
+    },
     historyPushState,
     historyReplaceState,
   ];
@@ -364,9 +368,15 @@ describe('<SearchFilterGroupModal />', () => {
     fireEvent.click(value42);
     expect(historyPushState).toHaveBeenLastCalledWith(
       {
-        limit: '20',
-        offset: '0',
-        universities: ['42'],
+        name: 'courseSearch',
+        data: {
+          lastDispatchActions: expect.any(Array),
+          params: {
+            limit: '20',
+            offset: '0',
+            universities: ['42'],
+          },
+        },
       },
       '',
       '/?limit=20&offset=0&universities=42',

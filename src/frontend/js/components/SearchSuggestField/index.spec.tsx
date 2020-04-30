@@ -288,7 +288,13 @@ describe('components/SearchSuggestField', () => {
     await wait();
     expect(history.pushState).toHaveBeenCalledTimes(1);
     expect(history.pushState).toHaveBeenLastCalledWith(
-      { limit: '20', offset: '0', query: 'orga' },
+      {
+        name: 'courseSearch',
+        data: {
+          lastDispatchActions: expect.any(Array),
+          params: { limit: '20', offset: '0', query: 'orga' },
+        },
+      },
       '',
       '/search?limit=20&offset=0&query=orga',
     );
@@ -320,10 +326,16 @@ describe('components/SearchSuggestField', () => {
     expect(history.pushState).toHaveBeenCalledTimes(2);
     expect(history.pushState).toHaveBeenCalledWith(
       {
-        limit: '20',
-        offset: '0',
-        organizations: ['L-00020007'],
-        query: undefined,
+        name: 'courseSearch',
+        data: {
+          lastDispatchActions: expect.any(Array),
+          params: {
+            limit: '20',
+            offset: '0',
+            organizations: ['L-00020007'],
+            query: undefined,
+          },
+        },
       },
       '',
       '/search?limit=20&offset=0&organizations=L-00020007',
@@ -367,7 +379,13 @@ describe('components/SearchSuggestField', () => {
     await wait();
     expect(history.pushState).toHaveBeenCalledTimes(1);
     expect(history.pushState).toHaveBeenCalledWith(
-      { limit: '20', offset: '0', query: 'doct' },
+      {
+        name: 'courseSearch',
+        data: {
+          lastDispatchActions: expect.any(Array),
+          params: { limit: '20', offset: '0', query: 'doct' },
+        },
+      },
       '',
       '/search?limit=20&offset=0&query=doct',
     );
@@ -398,7 +416,18 @@ describe('components/SearchSuggestField', () => {
 
     expect(history.pushState).toHaveBeenCalledTimes(2);
     expect(history.pushState).toHaveBeenCalledWith(
-      { limit: '20', offset: '0', persons: ['73'], query: undefined },
+      {
+        name: 'courseSearch',
+        data: {
+          lastDispatchActions: expect.any(Array),
+          params: {
+            limit: '20',
+            offset: '0',
+            persons: ['73'],
+            query: undefined,
+          },
+        },
+      },
       '',
       '/search?limit=20&offset=0&persons=73',
     );
@@ -437,7 +466,13 @@ describe('components/SearchSuggestField', () => {
     await wait();
 
     expect(history.pushState).toHaveBeenCalledWith(
-      { limit: '20', offset: '0', query: undefined },
+      {
+        name: 'courseSearch',
+        data: {
+          lastDispatchActions: expect.any(Array),
+          params: { limit: '20', offset: '0', query: undefined },
+        },
+      },
       '',
       '/search?limit=20&offset=0',
     );
@@ -478,7 +513,13 @@ describe('components/SearchSuggestField', () => {
     await wait();
     expect(history.pushState).toHaveBeenCalledTimes(1);
     expect(history.pushState).toHaveBeenLastCalledWith(
-      { limit: '20', offset: '0', query: 'ric' },
+      {
+        name: 'courseSearch',
+        data: {
+          lastDispatchActions: expect.any(Array),
+          params: { limit: '20', offset: '0', query: 'ric' },
+        },
+      },
       '',
       '/search?limit=20&offset=0&query=ric',
     );
@@ -487,7 +528,13 @@ describe('components/SearchSuggestField', () => {
     await wait();
     expect(history.pushState).toHaveBeenCalledTimes(2);
     expect(history.pushState).toHaveBeenLastCalledWith(
-      { limit: '20', offset: '0', query: 'rich data driven' },
+      {
+        name: 'courseSearch',
+        data: {
+          lastDispatchActions: expect.any(Array),
+          params: { limit: '20', offset: '0', query: 'rich data driven' },
+        },
+      },
       '',
       '/search?limit=20&offset=0&query=rich%20data%20driven',
     );
@@ -496,7 +543,13 @@ describe('components/SearchSuggestField', () => {
     await wait();
     expect(history.pushState).toHaveBeenCalledTimes(3);
     expect(history.pushState).toHaveBeenLastCalledWith(
-      { limit: '20', offset: '0', query: undefined },
+      {
+        name: 'courseSearch',
+        data: {
+          lastDispatchActions: expect.any(Array),
+          params: { limit: '20', offset: '0', query: undefined },
+        },
+      },
       '',
       '/search?limit=20&offset=0',
     );
@@ -545,7 +598,13 @@ describe('components/SearchSuggestField', () => {
     await wait();
     expect(history.pushState).toHaveBeenCalledTimes(1);
     expect(history.pushState).toHaveBeenLastCalledWith(
-      { limit: '20', offset: '0', query: 'ric' },
+      {
+        name: 'courseSearch',
+        data: {
+          lastDispatchActions: expect.any(Array),
+          params: { limit: '20', offset: '0', query: 'ric' },
+        },
+      },
       '',
       '/search?limit=20&offset=0&query=ric',
     );
@@ -590,7 +649,13 @@ describe('components/SearchSuggestField', () => {
     await wait();
     expect(history.pushState).toHaveBeenCalledTimes(1);
     expect(history.pushState).toHaveBeenLastCalledWith(
-      { limit: '20', offset: '0', query: 'orga' },
+      {
+        name: 'courseSearch',
+        data: {
+          lastDispatchActions: expect.any(Array),
+          params: { limit: '20', offset: '0', query: 'orga' },
+        },
+      },
       '',
       '/search?limit=20&offset=0&query=orga',
     );
@@ -601,10 +666,16 @@ describe('components/SearchSuggestField', () => {
     expect(history.pushState).toHaveBeenCalledTimes(2);
     expect(history.pushState).toHaveBeenCalledWith(
       {
-        limit: '20',
-        offset: '0',
-        organizations: ['L-00020007'],
-        query: undefined,
+        name: 'courseSearch',
+        data: {
+          lastDispatchActions: expect.any(Array),
+          params: {
+            limit: '20',
+            offset: '0',
+            organizations: ['L-00020007'],
+            query: undefined,
+          },
+        },
       },
       '',
       '/search?limit=20&offset=0&organizations=L-00020007',
@@ -616,10 +687,16 @@ describe('components/SearchSuggestField', () => {
     expect(history.pushState).toHaveBeenCalledTimes(3);
     expect(history.pushState).toHaveBeenLastCalledWith(
       {
-        limit: '20',
-        offset: '0',
-        organizations: ['L-00020007'],
-        query: 'ric',
+        name: 'courseSearch',
+        data: {
+          lastDispatchActions: expect.any(Array),
+          params: {
+            limit: '20',
+            offset: '0',
+            organizations: ['L-00020007'],
+            query: 'ric',
+          },
+        },
       },
       '',
       '/search?limit=20&offset=0&organizations=L-00020007&query=ric',

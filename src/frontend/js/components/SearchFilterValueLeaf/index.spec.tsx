@@ -12,7 +12,11 @@ describe('components/SearchFilterValueLeaf', () => {
   const historyPushState = jest.fn();
   const historyReplaceState = jest.fn();
   const makeHistoryOf: (params: any) => History = (params) => [
-    { state: params, title: '', url: `/search?${stringify(params)}` },
+    {
+      state: { name: 'courseSearch', data: { params } },
+      title: '',
+      url: `/search?${stringify(params)}`,
+    },
     historyPushState,
     historyReplaceState,
   ];
@@ -164,7 +168,13 @@ describe('components/SearchFilterValueLeaf', () => {
       getByLabelText((content, _) => content.includes('Human name')),
     );
     expect(historyPushState).toHaveBeenCalledWith(
-      { filter_name: ['43'], limit: '999', offset: '0' },
+      {
+        name: 'courseSearch',
+        data: {
+          lastDispatchActions: expect.any(Array),
+          params: { filter_name: ['43'], limit: '999', offset: '0' },
+        },
+      },
       '',
       '/?filter_name=43&limit=999&offset=0',
     );
@@ -205,7 +215,13 @@ describe('components/SearchFilterValueLeaf', () => {
       getByLabelText((content, _) => content.includes('Human name')),
     );
     expect(historyPushState).toHaveBeenCalledWith(
-      { filter_name: undefined, limit: '999', offset: '0' },
+      {
+        name: 'courseSearch',
+        data: {
+          lastDispatchActions: expect.any(Array),
+          params: { filter_name: undefined, limit: '999', offset: '0' },
+        },
+      },
       '',
       '/?limit=999&offset=0',
     );

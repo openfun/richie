@@ -93,7 +93,7 @@ export const useCourseSearchParams = (): CourseSearchParamsState => {
   const [historyEntry, pushState, replaceState] = useContext(HistoryContext);
 
   // HistoryEntry.state includes parse query strings, which if we're on a search page should be course search params
-  const courseSearchParams: APIListRequestParams = historyEntry.state;
+  const courseSearchParams: APIListRequestParams = historyEntry.state.data.params;
 
   // The dispatch + reducer pattern is useful to model changes in the course search params. However, we don't want
   // to duplicate behavior by having to sync the HistoryContext state with a `useReducer` call here.
@@ -111,12 +111,22 @@ export const useCourseSearchParams = (): CourseSearchParamsState => {
     // `courseSearchParams` and the result of `parse(location.search)`.
     // It also neatly treats eg. `organizations: '43'` and `organizations: ['43']` as the same.
     if (stringify(newParams) !== stringify(parse(location.search))) {
-      pushState(newParams, '', `${location.pathname}?${stringify(newParams)}`);
+      pushState(
+        {
+          name: 'courseSearch',
+          data: { params: newParams, lastDispatchActions: actions },
+        },
+        '',
+        `${location.pathname}?${stringify(newParams)}`,
+      );
     } else {
       // Just issue a replaceState call. This is useful as it means we'll push normalized params from
       // our reducer function.
       replaceState(
-        newParams,
+        {
+          name: 'courseSearch',
+          data: { params: newParams, lastDispatchActions: actions },
+        },
         '',
         `${location.pathname}?${stringify(newParams)}`,
       );
@@ -152,7 +162,10 @@ export const useCourseSearchParams = (): CourseSearchParamsState => {
     if (!courseSearchParams.limit || !courseSearchParams.offset) {
       const newParams = { ...API_LIST_DEFAULT_PARAMS, ...courseSearchParams };
       replaceState(
-        newParams,
+        {
+          name: 'courseSearch',
+          data: { params: newParams, lastDispatchActions: null },
+        },
         '',
         `${location.pathname}?${stringify(newParams)}`,
       );

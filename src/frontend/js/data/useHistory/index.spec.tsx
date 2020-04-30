@@ -34,7 +34,10 @@ describe('data/useHistory', () => {
     render(<TestComponent />);
     const [historyEntry] = getLatestHookValues();
     expect(historyEntry).toEqual({
-      state: { param1: 'value1', param2: 'value2' },
+      state: {
+        name: '',
+        data: { params: { param1: 'value1', param2: 'value2' } },
+      },
       title: '',
       url: '/to/the/path?param1=value1&param2=value2',
     });
@@ -46,7 +49,10 @@ describe('data/useHistory', () => {
       render(<TestComponent />);
       const [historyEntry] = getLatestHookValues();
       expect(historyEntry).toEqual({
-        state: { param1: 'value1', param2: 'value2' },
+        state: {
+          name: '',
+          data: { params: { param1: 'value1', param2: 'value2' } },
+        },
         title: '',
         url: '/to/the/path?param1=value1&param2=value2',
       });
@@ -76,7 +82,10 @@ describe('data/useHistory', () => {
       render(<TestComponent />);
       const [historyEntry, pushState] = getLatestHookValues();
       expect(historyEntry).toEqual({
-        state: { param1: 'value1', param2: 'value2' },
+        state: {
+          name: '',
+          data: { params: { param1: 'value1', param2: 'value2' } },
+        },
         title: '',
         url: '/to/the/path?param1=value1&param2=value2',
       });
@@ -112,7 +121,10 @@ describe('data/useHistory', () => {
       render(<TestComponent />);
       const [historyEntry, , replaceState] = getLatestHookValues();
       expect(historyEntry).toEqual({
-        state: { param1: 'value1', param2: 'value2' },
+        state: {
+          name: '',
+          data: { params: { param1: 'value1', param2: 'value2' } },
+        },
         title: '',
         url: '/to/the/path?param1=value1&param2=value2',
       });

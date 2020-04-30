@@ -62,7 +62,13 @@ describe('data/useCourseSearchParams', () => {
     // We need an update so the URL reflects the actual query params
     expect(mockWindow.history.replaceState).toHaveBeenCalledTimes(1);
     expect(mockWindow.history.replaceState).toHaveBeenCalledWith(
-      { limit: '20', offset: '0' },
+      {
+        name: 'courseSearch',
+        data: {
+          lastDispatchActions: null,
+          params: { limit: '20', offset: '0' },
+        },
+      },
       '',
       '/search?limit=20&offset=0',
     );
@@ -98,7 +104,18 @@ describe('data/useCourseSearchParams', () => {
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
-          { languages: 'fr', limit: '13', offset: '39' },
+          {
+            name: 'courseSearch',
+            data: {
+              lastDispatchActions: [
+                {
+                  offset: '39',
+                  type: 'PAGE_CHANGE',
+                },
+              ],
+              params: { languages: 'fr', limit: '13', offset: '39' },
+            },
+          },
           '',
           '/search?languages=fr&limit=13&offset=39',
         );
@@ -142,10 +159,21 @@ describe('data/useCourseSearchParams', () => {
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
           {
-            languages: 'en',
-            limit: '17',
-            offset: '0',
-            query: 'some text query',
+            name: 'courseSearch',
+            data: {
+              lastDispatchActions: [
+                {
+                  query: 'some text query',
+                  type: 'QUERY_UPDATE',
+                },
+              ],
+              params: {
+                languages: 'en',
+                limit: '17',
+                offset: '0',
+                query: 'some text query',
+              },
+            },
           },
           '',
           '/search?languages=en&limit=17&offset=0&query=some%20text%20query',
@@ -187,10 +215,21 @@ describe('data/useCourseSearchParams', () => {
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
           {
-            languages: 'fr',
-            limit: '999',
-            offset: '0',
-            query: 'some new query',
+            name: 'courseSearch',
+            data: {
+              lastDispatchActions: [
+                {
+                  query: 'some new query',
+                  type: 'QUERY_UPDATE',
+                },
+              ],
+              params: {
+                languages: 'fr',
+                limit: '999',
+                offset: '0',
+                query: 'some new query',
+              },
+            },
           },
           '',
           '/search?languages=fr&limit=999&offset=0&query=some%20new%20query',
@@ -231,7 +270,23 @@ describe('data/useCourseSearchParams', () => {
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
-          { languages: 'es', limit: '999', offset: '0', query: undefined },
+          {
+            name: 'courseSearch',
+            data: {
+              lastDispatchActions: [
+                {
+                  query: undefined,
+                  type: 'QUERY_UPDATE',
+                },
+              ],
+              params: {
+                languages: 'es',
+                limit: '999',
+                offset: '0',
+                query: undefined,
+              },
+            },
+          },
           '',
           '/search?languages=es&limit=999&offset=0',
         );
@@ -277,9 +332,24 @@ describe('data/useCourseSearchParams', () => {
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
           {
-            limit: '10',
-            offset: '0',
-            organizations: ['L-00010003', 'L-00010009', 'L-00010017'],
+            name: 'courseSearch',
+            data: {
+              lastDispatchActions: [
+                {
+                  filter: {
+                    is_drilldown: false,
+                    name: 'organizations',
+                  },
+                  payload: 'L-00010017',
+                  type: 'FILTER_ADD',
+                },
+              ],
+              params: {
+                limit: '10',
+                offset: '0',
+                organizations: ['L-00010003', 'L-00010009', 'L-00010017'],
+              },
+            },
           },
           '',
           '/search?limit=10&offset=0&organizations=L-00010003&organizations=L-00010009&organizations=L-00010017',
@@ -323,7 +393,26 @@ describe('data/useCourseSearchParams', () => {
         });
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
-          { languages: ['en', 'fr', 'it'], limit: '10', offset: '0' },
+          {
+            name: 'courseSearch',
+            data: {
+              lastDispatchActions: [
+                {
+                  filter: {
+                    is_drilldown: false,
+                    name: 'languages',
+                  },
+                  payload: 'it',
+                  type: 'FILTER_ADD',
+                },
+              ],
+              params: {
+                languages: ['en', 'fr', 'it'],
+                limit: '10',
+                offset: '0',
+              },
+            },
+          },
           '',
           '/search?languages=en&languages=fr&languages=it&limit=10&offset=0',
         );
@@ -367,9 +456,24 @@ describe('data/useCourseSearchParams', () => {
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
           {
-            limit: '10',
-            offset: '0',
-            organizations: ['L-00010003', 'L-00010017'],
+            name: 'courseSearch',
+            data: {
+              lastDispatchActions: [
+                {
+                  filter: {
+                    is_drilldown: false,
+                    name: 'organizations',
+                  },
+                  payload: 'L-00010017',
+                  type: 'FILTER_ADD',
+                },
+              ],
+              params: {
+                limit: '10',
+                offset: '0',
+                organizations: ['L-00010003', 'L-00010017'],
+              },
+            },
           },
           '',
           '/search?limit=10&offset=0&organizations=L-00010003&organizations=L-00010017',
@@ -413,9 +517,24 @@ describe('data/useCourseSearchParams', () => {
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
           {
-            languages: ['de', 'zh'],
-            limit: '10',
-            offset: '0',
+            name: 'courseSearch',
+            data: {
+              lastDispatchActions: [
+                {
+                  filter: {
+                    is_drilldown: false,
+                    name: 'languages',
+                  },
+                  payload: 'zh',
+                  type: 'FILTER_ADD',
+                },
+              ],
+              params: {
+                languages: ['de', 'zh'],
+                limit: '10',
+                offset: '0',
+              },
+            },
           },
           '',
           '/search?languages=de&languages=zh&limit=10&offset=0',
@@ -460,10 +579,25 @@ describe('data/useCourseSearchParams', () => {
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
           {
-            limit: '999',
-            offset: '0',
-            organizations: ['L-00010014'],
-            query: 'some query',
+            name: 'courseSearch',
+            data: {
+              lastDispatchActions: [
+                {
+                  filter: {
+                    is_drilldown: false,
+                    name: 'organizations',
+                  },
+                  payload: 'L-00010014',
+                  type: 'FILTER_ADD',
+                },
+              ],
+              params: {
+                limit: '999',
+                offset: '0',
+                organizations: ['L-00010014'],
+                query: 'some query',
+              },
+            },
           },
           '',
           '/search?limit=999&offset=0&organizations=L-00010014&query=some%20query',
@@ -562,11 +696,26 @@ describe('data/useCourseSearchParams', () => {
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
           {
-            levels: 'L-000200020005',
-            limit: '999',
-            offset: '0',
-            query: 'a query',
-            subjects: ['P-000200030012', 'L-000200030005'],
+            name: 'courseSearch',
+            data: {
+              lastDispatchActions: [
+                {
+                  filter: {
+                    is_drilldown: false,
+                    name: 'subjects',
+                  },
+                  payload: 'L-000200030005',
+                  type: 'FILTER_ADD',
+                },
+              ],
+              params: {
+                levels: 'L-000200020005',
+                limit: '999',
+                offset: '0',
+                query: 'a query',
+                subjects: ['P-000200030012', 'L-000200030005'],
+              },
+            },
           },
           '',
           '/search?levels=L-000200020005&limit=999&offset=0&query=a%20query&subjects=P-000200030012&subjects=L-000200030005',
@@ -619,11 +768,26 @@ describe('data/useCourseSearchParams', () => {
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
           {
-            levels: 'L-000200020005',
-            limit: '999',
-            offset: '0',
-            query: 'some query',
-            subjects: ['L-000200030005'],
+            name: 'courseSearch',
+            data: {
+              lastDispatchActions: [
+                {
+                  filter: {
+                    is_drilldown: false,
+                    name: 'subjects',
+                  },
+                  payload: 'L-000200030005',
+                  type: 'FILTER_ADD',
+                },
+              ],
+              params: {
+                levels: 'L-000200020005',
+                limit: '999',
+                offset: '0',
+                query: 'some query',
+                subjects: ['L-000200030005'],
+              },
+            },
           },
           '',
           '/search?levels=L-000200020005&limit=999&offset=0&query=some%20query&subjects=L-000200030005',
@@ -678,11 +842,26 @@ describe('data/useCourseSearchParams', () => {
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
           {
-            levels: 'L-000200020005',
-            limit: '999',
-            offset: '0',
-            query: 'some query',
-            subjects: ['P-000200030012', 'L-0002000300050013'],
+            name: 'courseSearch',
+            data: {
+              lastDispatchActions: [
+                {
+                  filter: {
+                    is_drilldown: false,
+                    name: 'subjects',
+                  },
+                  payload: 'L-0002000300050013',
+                  type: 'FILTER_ADD',
+                },
+              ],
+              params: {
+                levels: 'L-000200020005',
+                limit: '999',
+                offset: '0',
+                query: 'some query',
+                subjects: ['P-000200030012', 'L-0002000300050013'],
+              },
+            },
           },
           '',
           '/search?levels=L-000200020005&limit=999&offset=0&query=some%20query' +
@@ -736,11 +915,26 @@ describe('data/useCourseSearchParams', () => {
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
           {
-            levels: 'L-000200020005',
-            limit: '999',
-            offset: '0',
-            query: 'some query',
-            subjects: ['L-0002000300050013'],
+            name: 'courseSearch',
+            data: {
+              lastDispatchActions: [
+                {
+                  filter: {
+                    is_drilldown: false,
+                    name: 'subjects',
+                  },
+                  payload: 'L-0002000300050013',
+                  type: 'FILTER_ADD',
+                },
+              ],
+              params: {
+                levels: 'L-000200020005',
+                limit: '999',
+                offset: '0',
+                query: 'some query',
+                subjects: ['L-0002000300050013'],
+              },
+            },
           },
           '',
           '/search?levels=L-000200020005&limit=999&offset=0&query=some%20query&subjects=L-0002000300050013',
@@ -786,9 +980,24 @@ describe('data/useCourseSearchParams', () => {
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
           {
-            level: 'L-000200010003',
-            limit: '999',
-            offset: '0',
+            name: 'courseSearch',
+            data: {
+              lastDispatchActions: [
+                {
+                  filter: {
+                    is_drilldown: true,
+                    name: 'level',
+                  },
+                  payload: 'L-000200010003',
+                  type: 'FILTER_ADD',
+                },
+              ],
+              params: {
+                level: 'L-000200010003',
+                limit: '999',
+                offset: '0',
+              },
+            },
           },
           '',
           '/search?level=L-000200010003&limit=999&offset=0',
@@ -820,9 +1029,24 @@ describe('data/useCourseSearchParams', () => {
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
           {
-            level: 'L-000200010002',
-            limit: '999',
-            offset: '0',
+            name: 'courseSearch',
+            data: {
+              lastDispatchActions: [
+                {
+                  filter: {
+                    is_drilldown: true,
+                    name: 'level',
+                  },
+                  payload: 'L-000200010002',
+                  type: 'FILTER_ADD',
+                },
+              ],
+              params: {
+                level: 'L-000200010002',
+                limit: '999',
+                offset: '0',
+              },
+            },
           },
           '',
           '/search?level=L-000200010002&limit=999&offset=0',
@@ -909,10 +1133,25 @@ describe('data/useCourseSearchParams', () => {
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
           {
-            limit: '999',
-            offset: '0',
-            organizations: ['L00010011'],
-            query: 'some query',
+            name: 'courseSearch',
+            data: {
+              lastDispatchActions: [
+                {
+                  filter: {
+                    is_drilldown: false,
+                    name: 'organizations',
+                  },
+                  payload: 'L-00010009',
+                  type: 'FILTER_REMOVE',
+                },
+              ],
+              params: {
+                limit: '999',
+                offset: '0',
+                organizations: ['L00010011'],
+                query: 'some query',
+              },
+            },
           },
           '',
           '/search?limit=999&offset=0&organizations=L00010011&query=some%20query',
@@ -942,9 +1181,24 @@ describe('data/useCourseSearchParams', () => {
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
           {
-            limit: '999',
-            offset: '0',
-            query: 'some query',
+            name: 'courseSearch',
+            data: {
+              lastDispatchActions: [
+                {
+                  filter: {
+                    is_drilldown: false,
+                    name: 'organizations',
+                  },
+                  payload: 'L00010011',
+                  type: 'FILTER_REMOVE',
+                },
+              ],
+              params: {
+                limit: '999',
+                offset: '0',
+                query: 'some query',
+              },
+            },
           },
           '',
           '/search?limit=999&offset=0&query=some%20query',
@@ -992,9 +1246,24 @@ describe('data/useCourseSearchParams', () => {
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
           {
-            limit: '999',
-            offset: '0',
-            query: 'some query',
+            name: 'courseSearch',
+            data: {
+              lastDispatchActions: [
+                {
+                  filter: {
+                    is_drilldown: false,
+                    name: 'organizations',
+                  },
+                  payload: 'L-00010013',
+                  type: 'FILTER_REMOVE',
+                },
+              ],
+              params: {
+                limit: '999',
+                offset: '0',
+                query: 'some query',
+              },
+            },
           },
           '',
           '/search?limit=999&offset=0&query=some%20query',
@@ -1157,9 +1426,24 @@ describe('data/useCourseSearchParams', () => {
         expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
           {
-            limit: '999',
-            offset: '0',
-            query: 'some query',
+            name: 'courseSearch',
+            data: {
+              lastDispatchActions: [
+                {
+                  filter: {
+                    is_drilldown: true,
+                    name: 'level',
+                  },
+                  payload: 'L-000200010001',
+                  type: 'FILTER_REMOVE',
+                },
+              ],
+              params: {
+                limit: '999',
+                offset: '0',
+                query: 'some query',
+              },
+            },
           },
           '',
           '/search?limit=999&offset=0&query=some%20query',
@@ -1273,7 +1557,17 @@ describe('data/useCourseSearchParams', () => {
         const { courseSearchParams } = getLatestHookValues();
         expect(courseSearchParams).toEqual({ limit: '27', offset: '0' });
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
-          { limit: '27', offset: '0' },
+          {
+            name: 'courseSearch',
+            data: {
+              lastDispatchActions: [
+                {
+                  type: 'FILTER_RESET',
+                },
+              ],
+              params: { limit: '27', offset: '0' },
+            },
+          },
           '',
           '/search?limit=27&offset=0',
         );
@@ -1332,11 +1626,38 @@ describe('data/useCourseSearchParams', () => {
       expect(mockWindow.history.pushState).toHaveBeenCalledTimes(1);
       expect(mockWindow.history.pushState).toHaveBeenCalledWith(
         {
-          languages: ['it'],
-          limit: '20',
-          offset: '0',
-          organizations: ['L00010011'],
-          query: 'some new query',
+          name: 'courseSearch',
+          data: {
+            lastDispatchActions: [
+              {
+                filter: {
+                  is_drilldown: false,
+                  name: 'organizations',
+                },
+                payload: 'L-00010009',
+                type: 'FILTER_REMOVE',
+              },
+              {
+                filter: {
+                  is_drilldown: false,
+                  name: 'languages',
+                },
+                payload: 'it',
+                type: 'FILTER_ADD',
+              },
+              {
+                query: 'some new query',
+                type: 'QUERY_UPDATE',
+              },
+            ],
+            params: {
+              languages: ['it'],
+              limit: '20',
+              offset: '0',
+              organizations: ['L00010011'],
+              query: 'some new query',
+            },
+          },
         },
         '',
         '/search?languages=it&limit=20&offset=0&organizations=L00010011&query=some%20new%20query',

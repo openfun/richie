@@ -10,7 +10,11 @@ describe('data/useFilterValue', () => {
   const historyPushState = jest.fn();
   const historyReplaceState = jest.fn();
   const makeHistoryOf: (params: any) => History = (params) => [
-    { state: params, title: '', url: `/search?${stringify(params)}` },
+    {
+      state: { name: 'courseSearch', data: { params } },
+      title: '',
+      url: `/search?${stringify(params)}`,
+    },
     historyPushState,
     historyReplaceState,
   ];
@@ -60,7 +64,28 @@ describe('data/useFilterValue', () => {
     expect(isActive).toEqual(false);
     toggle();
     expect(historyPushState).toHaveBeenCalledWith(
-      { limit: '999', offset: '0', organizations: ['87'] },
+      {
+        name: 'courseSearch',
+        data: {
+          lastDispatchActions: [
+            {
+              filter: {
+                base_path: '0003',
+                has_more_values: false,
+                human_name: 'Organizations',
+                is_autocompletable: false,
+                is_searchable: false,
+                name: 'organizations',
+                position: 0,
+                values: [],
+              },
+              payload: '87',
+              type: 'FILTER_ADD',
+            },
+          ],
+          params: { limit: '999', offset: '0', organizations: ['87'] },
+        },
+      },
       '',
       '/?limit=999&offset=0&organizations=87',
     );
@@ -98,7 +123,28 @@ describe('data/useFilterValue', () => {
     expect(isActive).toEqual(true);
     toggle();
     expect(historyPushState).toHaveBeenCalledWith(
-      { limit: '999', offset: '0', organizations: undefined },
+      {
+        name: 'courseSearch',
+        data: {
+          lastDispatchActions: [
+            {
+              filter: {
+                base_path: '0003',
+                has_more_values: false,
+                human_name: 'Organizations',
+                is_autocompletable: true,
+                is_searchable: true,
+                name: 'organizations',
+                position: 0,
+                values: [],
+              },
+              payload: '87',
+              type: 'FILTER_REMOVE',
+            },
+          ],
+          params: { limit: '999', offset: '0', organizations: undefined },
+        },
+      },
       '',
       '/?limit=999&offset=0',
     );

@@ -24,7 +24,7 @@ export const HistoryContext = createContext<History>([] as any);
 
 export const useHistory: () => History = () => {
   const [historyEntry, setHistoryEntry] = useState<HistoryEntry>({
-    state: parse(location.search),
+    state: { name: '', data: { params: parse(location.search) } },
     title: '',
     url: `${location.pathname}${location.search}`,
   });
