@@ -12,7 +12,11 @@ describe('<PaginateCourseSearch />', () => {
   const historyPushState = jest.fn();
   const historyReplaceState = jest.fn();
   const makeHistoryOf: (params: any) => History = (params) => [
-    { state: params, title: '', url: `/search?${stringify(params)}` },
+    {
+      state: { name: 'courseSearch', data: { params } },
+      title: '',
+      url: `/search?${stringify(params)}`,
+    },
     historyPushState,
     historyReplaceState,
   ];
@@ -129,8 +133,14 @@ describe('<PaginateCourseSearch />', () => {
     fireEvent.click(page2);
     expect(historyPushState).toHaveBeenCalledWith(
       {
-        limit: '20',
-        offset: '20',
+        name: 'courseSearch',
+        data: {
+          lastDispatchActions: expect.any(Array),
+          params: {
+            limit: '20',
+            offset: '20',
+          },
+        },
       },
       '',
       '/?limit=20&offset=20',

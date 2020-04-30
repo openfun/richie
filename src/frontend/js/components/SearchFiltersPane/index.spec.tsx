@@ -18,7 +18,11 @@ describe('components/SearchFiltersPane', () => {
   const historyPushState = jest.fn();
   const historyReplaceState = jest.fn();
   const makeHistoryOf: (params: any) => History = (params) => [
-    { state: params, title: '', url: `/search?${stringify(params)}` },
+    {
+      state: { name: 'courseSearch', data: { params } },
+      title: '',
+      url: `/search?${stringify(params)}`,
+    },
     historyPushState,
     historyReplaceState,
   ];
@@ -125,7 +129,13 @@ describe('components/SearchFiltersPane', () => {
 
     fireEvent.click(clearButton);
     expect(historyPushState).toHaveBeenCalledWith(
-      { limit: '14', offset: '0' },
+      {
+        name: 'courseSearch',
+        data: {
+          lastDispatchActions: expect.any(Array),
+          params: { limit: '14', offset: '0' },
+        },
+      },
       '',
       '/?limit=14&offset=0',
     );
