@@ -70,7 +70,7 @@ class PlainTextPluginTestCase(TestCase):
         a plain text plugin on a specific placeholder.
         """
         placeholder = Placeholder.objects.create(slot="first")
-        request = RequestFactory().get(f"/")
+        request = RequestFactory().get("/")
         plugin = PlainTextPlugin()
         plain_text = PlainTextFactory(placeholder=placeholder)
 

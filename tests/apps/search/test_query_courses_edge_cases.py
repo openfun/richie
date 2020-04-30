@@ -107,7 +107,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
 
         self.prepare_index([])
         self.client.cookies = SimpleCookie({"django_language": "fr"})
-        response = self.client.get(f"/api/v1.0/courses/")
+        response = self.client.get("/api/v1.0/courses/")
         self.assertEqual(response.status_code, 200)
         content = json.loads(response.content)
         self.assertEqual(
@@ -155,7 +155,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
         )
 
         # If not filter is applied, the 10 top facets should be returned
-        response = self.client.get(f"/api/v1.0/courses/")
+        response = self.client.get("/api/v1.0/courses/")
         self.assertEqual(response.status_code, 200)
         content = json.loads(response.content)
         self.assertEqual(
@@ -179,7 +179,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
         # - at the end for the one that is not in the top 10 and should not be included
         #   if it wasn't forced...
         response = self.client.get(
-            f"/api/v1.0/courses/?organizations=L-00030002&organizations=L-00030011"
+            "/api/v1.0/courses/?organizations=L-00030002&organizations=L-00030011"
         )
         self.assertEqual(response.status_code, 200)
         content = json.loads(response.content)
@@ -235,7 +235,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
             ]
         )
 
-        response = self.client.get(f"/api/v1.0/courses/?organizations=L-000300010001")
+        response = self.client.get("/api/v1.0/courses/?organizations=L-000300010001")
         self.assertEqual(response.status_code, 200)
         content = json.loads(response.content)
 
