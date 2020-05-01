@@ -14,6 +14,16 @@ import { FilterDefinition } from 'types/filters';
 import { history, location } from 'utils/indirection/window';
 import { SearchSuggestField } from '.';
 
+// Unexplained difficulties with fake timers were encountered in these tests.
+// We decided to mock the debounce function instead.
+jest.mock('lodash-es/debounce', () => (fn: any) => (...args: any[]) =>
+  fn(...args),
+);
+
+jest.mock('settings', () => ({
+  API_LIST_DEFAULT_PARAMS: { limit: '13', offset: '0' },
+}));
+
 jest.mock('utils/indirection/window', () => ({
   history: {
     pushState: jest.fn(),
@@ -22,12 +32,6 @@ jest.mock('utils/indirection/window', () => ({
   location: { pathname: '/search' },
   scroll: jest.fn(),
 }));
-
-// Unexplained difficulties with fake timers were encountered in these tests.
-// We decided to mock the debounce function instead.
-jest.mock('lodash-es/debounce', () => (fn: any) => (...args: any[]) =>
-  fn(...args),
-);
 
 describe('components/SearchSuggestField', () => {
   const HistoryWrapper = ({ children }: { children: React.ReactNode }) => {
@@ -300,11 +304,11 @@ describe('components/SearchSuggestField', () => {
         name: 'courseSearch',
         data: {
           lastDispatchActions: expect.any(Array),
-          params: { limit: '20', offset: '0', query: 'orga' },
+          params: { limit: '13', offset: '0', query: 'orga' },
         },
       },
       '',
-      '/search?limit=20&offset=0&query=orga',
+      '/search?limit=13&offset=0&query=orga',
     );
 
     expect(
@@ -338,7 +342,7 @@ describe('components/SearchSuggestField', () => {
         data: {
           lastDispatchActions: expect.any(Array),
           params: {
-            limit: '20',
+            limit: '13',
             offset: '0',
             organizations: ['L-00020007'],
             query: undefined,
@@ -346,7 +350,7 @@ describe('components/SearchSuggestField', () => {
         },
       },
       '',
-      '/search?limit=20&offset=0&organizations=L-00020007',
+      '/search?limit=13&offset=0&organizations=L-00020007',
     );
   });
 
@@ -391,11 +395,11 @@ describe('components/SearchSuggestField', () => {
         name: 'courseSearch',
         data: {
           lastDispatchActions: expect.any(Array),
-          params: { limit: '20', offset: '0', query: 'doct' },
+          params: { limit: '13', offset: '0', query: 'doct' },
         },
       },
       '',
-      '/search?limit=20&offset=0&query=doct',
+      '/search?limit=13&offset=0&query=doct',
     );
 
     expect(
@@ -429,7 +433,7 @@ describe('components/SearchSuggestField', () => {
         data: {
           lastDispatchActions: expect.any(Array),
           params: {
-            limit: '20',
+            limit: '13',
             offset: '0',
             persons: ['73'],
             query: undefined,
@@ -437,7 +441,7 @@ describe('components/SearchSuggestField', () => {
         },
       },
       '',
-      '/search?limit=20&offset=0&persons=73',
+      '/search?limit=13&offset=0&persons=73',
     );
   });
 
@@ -525,11 +529,11 @@ describe('components/SearchSuggestField', () => {
         name: 'courseSearch',
         data: {
           lastDispatchActions: expect.any(Array),
-          params: { limit: '20', offset: '0', query: 'ric' },
+          params: { limit: '13', offset: '0', query: 'ric' },
         },
       },
       '',
-      '/search?limit=20&offset=0&query=ric',
+      '/search?limit=13&offset=0&query=ric',
     );
 
     fireEvent.change(field, { target: { value: 'rich data driven' } });
@@ -540,11 +544,11 @@ describe('components/SearchSuggestField', () => {
         name: 'courseSearch',
         data: {
           lastDispatchActions: expect.any(Array),
-          params: { limit: '20', offset: '0', query: 'rich data driven' },
+          params: { limit: '13', offset: '0', query: 'rich data driven' },
         },
       },
       '',
-      '/search?limit=20&offset=0&query=rich%20data%20driven',
+      '/search?limit=13&offset=0&query=rich%20data%20driven',
     );
 
     fireEvent.change(field, { target: { value: '' } });
@@ -555,11 +559,11 @@ describe('components/SearchSuggestField', () => {
         name: 'courseSearch',
         data: {
           lastDispatchActions: expect.any(Array),
-          params: { limit: '20', offset: '0', query: undefined },
+          params: { limit: '13', offset: '0', query: undefined },
         },
       },
       '',
-      '/search?limit=20&offset=0',
+      '/search?limit=13&offset=0',
     );
   });
 
@@ -610,11 +614,11 @@ describe('components/SearchSuggestField', () => {
         name: 'courseSearch',
         data: {
           lastDispatchActions: expect.any(Array),
-          params: { limit: '20', offset: '0', query: 'ric' },
+          params: { limit: '13', offset: '0', query: 'ric' },
         },
       },
       '',
-      '/search?limit=20&offset=0&query=ric',
+      '/search?limit=13&offset=0&query=ric',
     );
   });
 
@@ -661,11 +665,11 @@ describe('components/SearchSuggestField', () => {
         name: 'courseSearch',
         data: {
           lastDispatchActions: expect.any(Array),
-          params: { limit: '20', offset: '0', query: 'orga' },
+          params: { limit: '13', offset: '0', query: 'orga' },
         },
       },
       '',
-      '/search?limit=20&offset=0&query=orga',
+      '/search?limit=13&offset=0&query=orga',
     );
     // The user selects an organization from suggestions
     fireEvent.click(getByText('Organization #27'));
@@ -678,7 +682,7 @@ describe('components/SearchSuggestField', () => {
         data: {
           lastDispatchActions: expect.any(Array),
           params: {
-            limit: '20',
+            limit: '13',
             offset: '0',
             organizations: ['L-00020007'],
             query: undefined,
@@ -686,7 +690,7 @@ describe('components/SearchSuggestField', () => {
         },
       },
       '',
-      '/search?limit=20&offset=0&organizations=L-00020007',
+      '/search?limit=13&offset=0&organizations=L-00020007',
     );
 
     // The user starts typing a full-text search, the organization remains selected
@@ -699,7 +703,7 @@ describe('components/SearchSuggestField', () => {
         data: {
           lastDispatchActions: expect.any(Array),
           params: {
-            limit: '20',
+            limit: '13',
             offset: '0',
             organizations: ['L-00020007'],
             query: 'ric',
@@ -707,7 +711,7 @@ describe('components/SearchSuggestField', () => {
         },
       },
       '',
-      '/search?limit=20&offset=0&organizations=L-00020007&query=ric',
+      '/search?limit=13&offset=0&organizations=L-00020007&query=ric',
     );
   });
 });

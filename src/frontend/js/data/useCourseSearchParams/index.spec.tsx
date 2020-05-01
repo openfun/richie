@@ -5,6 +5,10 @@ import { HistoryContext, useHistory } from 'data/useHistory';
 import * as mockWindow from 'utils/indirection/window';
 import { CourseSearchParamsAction, useCourseSearchParams } from '.';
 
+jest.mock('settings', () => ({
+  API_LIST_DEFAULT_PARAMS: { limit: '13', offset: '0' },
+}));
+
 jest.mock('utils/indirection/window', () => ({
   history: { pushState: jest.fn(), replaceState: jest.fn() },
   location: {},
@@ -58,7 +62,7 @@ describe('data/useCourseSearchParams', () => {
     mockWindow.location.search = '';
     render(<WrappedTestComponent />);
     const { courseSearchParams } = getLatestHookValues();
-    expect(courseSearchParams).toEqual({ limit: '20', offset: '0' });
+    expect(courseSearchParams).toEqual({ limit: '13', offset: '0' });
     // We need an update so the URL reflects the actual query params
     expect(mockWindow.history.replaceState).toHaveBeenCalledTimes(1);
     expect(mockWindow.history.replaceState).toHaveBeenCalledWith(
@@ -66,11 +70,11 @@ describe('data/useCourseSearchParams', () => {
         name: 'courseSearch',
         data: {
           lastDispatchActions: null,
-          params: { limit: '20', offset: '0' },
+          params: { limit: '13', offset: '0' },
         },
       },
       '',
-      '/search?limit=20&offset=0',
+      '/search?limit=13&offset=0',
     );
   });
 
