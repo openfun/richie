@@ -1,4 +1,7 @@
-import { useCourseSearchParams } from 'data/useCourseSearchParams';
+import {
+  CourseSearchParamsAction,
+  useCourseSearchParams,
+} from 'data/useCourseSearchParams';
 import { FacetedFilterDefinition, FilterValue } from 'types/filters';
 
 type UseFilterValue = [boolean, () => void];
@@ -18,7 +21,9 @@ export const useFilterValue = (
     dispatchCourseSearchParamsUpdate({
       filter,
       payload: value.key,
-      type: isActive ? 'FILTER_REMOVE' : 'FILTER_ADD',
+      type: isActive
+        ? CourseSearchParamsAction.filterRemove
+        : CourseSearchParamsAction.filterAdd,
     });
 
   return [isActive, toggle];

@@ -9,27 +9,37 @@ import { location, scroll } from 'utils/indirection/window';
 import { Maybe } from 'utils/types';
 import { computeNewFilterValue } from './computeNewFilterValue';
 
+export enum CourseSearchParamsAction {
+  filterReset = 'FILTER_RESET',
+  filterAdd = 'FILTER_ADD',
+  filterRemove = 'FILTER_REMOVE',
+  pageChange = 'PAGE_CHANGE',
+  queryUpdate = 'QUERY_UPDATE',
+}
+
 interface FilterResetAction {
-  type: 'FILTER_RESET';
+  type: CourseSearchParamsAction.filterReset;
 }
 
 interface FilterSingleAction {
   filter: FilterDefinition;
   payload: string;
-  type: 'FILTER_ADD' | 'FILTER_REMOVE';
+  type:
+    | CourseSearchParamsAction.filterAdd
+    | CourseSearchParamsAction.filterRemove;
 }
 
 interface PageChangeAction {
   offset: string;
-  type: 'PAGE_CHANGE';
+  type: CourseSearchParamsAction.pageChange;
 }
 
 interface QueryAction {
   query: string;
-  type: 'QUERY_UPDATE';
+  type: CourseSearchParamsAction.queryUpdate;
 }
 
-export type CourseSearchParamsReducerAction =
+type CourseSearchParamsReducerAction =
   | FilterResetAction
   | FilterSingleAction
   | PageChangeAction
@@ -48,13 +58,13 @@ const courseSearchParamsReducer = (
   action: CourseSearchParamsReducerAction,
 ) => {
   switch (action.type) {
-    case 'PAGE_CHANGE':
+    case CourseSearchParamsAction.pageChange:
       return {
         ...courseSearchParams,
         offset: action.offset,
       };
 
-    case 'QUERY_UPDATE':
+    case CourseSearchParamsAction.queryUpdate:
       return {
         ...courseSearchParams,
         // Go back to page 1 when the query changes
@@ -64,8 +74,8 @@ const courseSearchParamsReducer = (
         query: action.query || undefined,
       };
 
-    case 'FILTER_ADD':
-    case 'FILTER_REMOVE':
+    case CourseSearchParamsAction.filterAdd:
+    case CourseSearchParamsAction.filterRemove:
       return {
         ...courseSearchParams,
         // Go back to page 1 when the query changes
@@ -80,7 +90,7 @@ const courseSearchParamsReducer = (
         ),
       };
 
-    case 'FILTER_RESET':
+    case CourseSearchParamsAction.filterReset:
       // Remove all parameters and reset pagination
       return {
         ...API_LIST_DEFAULT_PARAMS,
@@ -144,7 +154,7 @@ export const useCourseSearchParams = (): CourseSearchParamsState => {
       historyEntry.state.data.lastDispatchActions &&
       !historyEntry.state.data?.lastDispatchActions
         ?.map((action: CourseSearchParamsReducerAction) => action.type)
-        .includes('QUERY_UPDATE')
+        .includes(CourseSearchParamsAction.queryUpdate)
     ) {
       scroll({
         behavior: 'smooth',

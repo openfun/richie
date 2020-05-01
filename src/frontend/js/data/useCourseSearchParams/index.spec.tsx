@@ -3,7 +3,7 @@ import React from 'react';
 
 import { HistoryContext, useHistory } from 'data/useHistory';
 import * as mockWindow from 'utils/indirection/window';
-import { useCourseSearchParams } from '.';
+import { CourseSearchParamsAction, useCourseSearchParams } from '.';
 
 jest.mock('utils/indirection/window', () => ({
   history: { pushState: jest.fn(), replaceState: jest.fn() },
@@ -91,7 +91,7 @@ describe('data/useCourseSearchParams', () => {
         act(() =>
           dispatchCourseSearchParamsUpdate({
             offset: '39',
-            type: 'PAGE_CHANGE',
+            type: CourseSearchParamsAction.pageChange,
           }),
         );
       }
@@ -110,7 +110,7 @@ describe('data/useCourseSearchParams', () => {
               lastDispatchActions: [
                 {
                   offset: '39',
-                  type: 'PAGE_CHANGE',
+                  type: CourseSearchParamsAction.pageChange,
                 },
               ],
               params: { languages: 'fr', limit: '13', offset: '39' },
@@ -144,7 +144,7 @@ describe('data/useCourseSearchParams', () => {
         act(() =>
           dispatchCourseSearchParamsUpdate({
             query: 'some text query',
-            type: 'QUERY_UPDATE',
+            type: CourseSearchParamsAction.queryUpdate,
           }),
         );
       }
@@ -164,7 +164,7 @@ describe('data/useCourseSearchParams', () => {
               lastDispatchActions: [
                 {
                   query: 'some text query',
-                  type: 'QUERY_UPDATE',
+                  type: CourseSearchParamsAction.queryUpdate,
                 },
               ],
               params: {
@@ -200,7 +200,7 @@ describe('data/useCourseSearchParams', () => {
         act(() =>
           dispatchCourseSearchParamsUpdate({
             query: 'some new query',
-            type: 'QUERY_UPDATE',
+            type: CourseSearchParamsAction.queryUpdate,
           }),
         );
       }
@@ -220,7 +220,7 @@ describe('data/useCourseSearchParams', () => {
               lastDispatchActions: [
                 {
                   query: 'some new query',
-                  type: 'QUERY_UPDATE',
+                  type: CourseSearchParamsAction.queryUpdate,
                 },
               ],
               params: {
@@ -256,7 +256,7 @@ describe('data/useCourseSearchParams', () => {
         act(() =>
           dispatchCourseSearchParamsUpdate({
             query: undefined,
-            type: 'QUERY_UPDATE',
+            type: CourseSearchParamsAction.queryUpdate,
           }),
         );
       }
@@ -276,7 +276,7 @@ describe('data/useCourseSearchParams', () => {
               lastDispatchActions: [
                 {
                   query: undefined,
-                  type: 'QUERY_UPDATE',
+                  type: CourseSearchParamsAction.queryUpdate,
                 },
               ],
               params: {
@@ -318,7 +318,7 @@ describe('data/useCourseSearchParams', () => {
               name: 'organizations',
             },
             payload: 'L-00010017',
-            type: 'FILTER_ADD',
+            type: CourseSearchParamsAction.filterAdd,
           }),
         );
       }
@@ -341,7 +341,7 @@ describe('data/useCourseSearchParams', () => {
                     name: 'organizations',
                   },
                   payload: 'L-00010017',
-                  type: 'FILTER_ADD',
+                  type: CourseSearchParamsAction.filterAdd,
                 },
               ],
               params: {
@@ -380,7 +380,7 @@ describe('data/useCourseSearchParams', () => {
               name: 'languages',
             },
             payload: 'it',
-            type: 'FILTER_ADD',
+            type: CourseSearchParamsAction.filterAdd,
           }),
         );
       }
@@ -403,7 +403,7 @@ describe('data/useCourseSearchParams', () => {
                     name: 'languages',
                   },
                   payload: 'it',
-                  type: 'FILTER_ADD',
+                  type: CourseSearchParamsAction.filterAdd,
                 },
               ],
               params: {
@@ -442,7 +442,7 @@ describe('data/useCourseSearchParams', () => {
               name: 'organizations',
             },
             payload: 'L-00010017',
-            type: 'FILTER_ADD',
+            type: CourseSearchParamsAction.filterAdd,
           }),
         );
       }
@@ -465,7 +465,7 @@ describe('data/useCourseSearchParams', () => {
                     name: 'organizations',
                   },
                   payload: 'L-00010017',
-                  type: 'FILTER_ADD',
+                  type: CourseSearchParamsAction.filterAdd,
                 },
               ],
               params: {
@@ -503,7 +503,7 @@ describe('data/useCourseSearchParams', () => {
               name: 'languages',
             },
             payload: 'zh',
-            type: 'FILTER_ADD',
+            type: CourseSearchParamsAction.filterAdd,
           }),
         );
       }
@@ -526,7 +526,7 @@ describe('data/useCourseSearchParams', () => {
                     name: 'languages',
                   },
                   payload: 'zh',
-                  type: 'FILTER_ADD',
+                  type: CourseSearchParamsAction.filterAdd,
                 },
               ],
               params: {
@@ -564,7 +564,7 @@ describe('data/useCourseSearchParams', () => {
               name: 'organizations',
             },
             payload: 'L-00010014',
-            type: 'FILTER_ADD',
+            type: CourseSearchParamsAction.filterAdd,
           }),
         );
       }
@@ -588,7 +588,7 @@ describe('data/useCourseSearchParams', () => {
                     name: 'organizations',
                   },
                   payload: 'L-00010014',
-                  type: 'FILTER_ADD',
+                  type: CourseSearchParamsAction.filterAdd,
                 },
               ],
               params: {
@@ -629,7 +629,7 @@ describe('data/useCourseSearchParams', () => {
               name: 'organizations',
             },
             payload: 'L-00010009',
-            type: 'FILTER_ADD',
+            type: CourseSearchParamsAction.filterAdd,
           }),
         );
       }
@@ -680,7 +680,7 @@ describe('data/useCourseSearchParams', () => {
               name: 'subjects',
             },
             payload: 'L-000200030005',
-            type: 'FILTER_ADD',
+            type: CourseSearchParamsAction.filterAdd,
           }),
         );
       }
@@ -705,7 +705,7 @@ describe('data/useCourseSearchParams', () => {
                     name: 'subjects',
                   },
                   payload: 'L-000200030005',
-                  type: 'FILTER_ADD',
+                  type: CourseSearchParamsAction.filterAdd,
                 },
               ],
               params: {
@@ -752,7 +752,7 @@ describe('data/useCourseSearchParams', () => {
               name: 'subjects',
             },
             payload: 'L-000200030005',
-            type: 'FILTER_ADD',
+            type: CourseSearchParamsAction.filterAdd,
           }),
         );
       }
@@ -777,7 +777,7 @@ describe('data/useCourseSearchParams', () => {
                     name: 'subjects',
                   },
                   payload: 'L-000200030005',
-                  type: 'FILTER_ADD',
+                  type: CourseSearchParamsAction.filterAdd,
                 },
               ],
               params: {
@@ -826,7 +826,7 @@ describe('data/useCourseSearchParams', () => {
               name: 'subjects',
             },
             payload: 'L-0002000300050013',
-            type: 'FILTER_ADD',
+            type: CourseSearchParamsAction.filterAdd,
           }),
         );
       }
@@ -851,7 +851,7 @@ describe('data/useCourseSearchParams', () => {
                     name: 'subjects',
                   },
                   payload: 'L-0002000300050013',
-                  type: 'FILTER_ADD',
+                  type: CourseSearchParamsAction.filterAdd,
                 },
               ],
               params: {
@@ -899,7 +899,7 @@ describe('data/useCourseSearchParams', () => {
               name: 'subjects',
             },
             payload: 'L-0002000300050013',
-            type: 'FILTER_ADD',
+            type: CourseSearchParamsAction.filterAdd,
           }),
         );
       }
@@ -924,7 +924,7 @@ describe('data/useCourseSearchParams', () => {
                     name: 'subjects',
                   },
                   payload: 'L-0002000300050013',
-                  type: 'FILTER_ADD',
+                  type: CourseSearchParamsAction.filterAdd,
                 },
               ],
               params: {
@@ -966,7 +966,7 @@ describe('data/useCourseSearchParams', () => {
               name: 'level',
             },
             payload: 'L-000200010003',
-            type: 'FILTER_ADD',
+            type: CourseSearchParamsAction.filterAdd,
           }),
         );
       }
@@ -989,7 +989,7 @@ describe('data/useCourseSearchParams', () => {
                     name: 'level',
                   },
                   payload: 'L-000200010003',
-                  type: 'FILTER_ADD',
+                  type: CourseSearchParamsAction.filterAdd,
                 },
               ],
               params: {
@@ -1015,7 +1015,7 @@ describe('data/useCourseSearchParams', () => {
               name: 'level',
             },
             payload: 'L-000200010002',
-            type: 'FILTER_ADD',
+            type: CourseSearchParamsAction.filterAdd,
           }),
         );
       }
@@ -1038,7 +1038,7 @@ describe('data/useCourseSearchParams', () => {
                     name: 'level',
                   },
                   payload: 'L-000200010002',
-                  type: 'FILTER_ADD',
+                  type: CourseSearchParamsAction.filterAdd,
                 },
               ],
               params: {
@@ -1076,7 +1076,7 @@ describe('data/useCourseSearchParams', () => {
               name: 'level',
             },
             payload: 'L-000200010001',
-            type: 'FILTER_ADD',
+            type: CourseSearchParamsAction.filterAdd,
           }),
         );
       }
@@ -1118,7 +1118,7 @@ describe('data/useCourseSearchParams', () => {
               name: 'organizations',
             },
             payload: 'L-00010009',
-            type: 'FILTER_REMOVE',
+            type: CourseSearchParamsAction.filterRemove,
           }),
         );
       }
@@ -1142,7 +1142,7 @@ describe('data/useCourseSearchParams', () => {
                     name: 'organizations',
                   },
                   payload: 'L-00010009',
-                  type: 'FILTER_REMOVE',
+                  type: CourseSearchParamsAction.filterRemove,
                 },
               ],
               params: {
@@ -1167,7 +1167,7 @@ describe('data/useCourseSearchParams', () => {
           dispatchCourseSearchParamsUpdate({
             filter: { is_drilldown: false, name: 'organizations' },
             payload: 'L00010011',
-            type: 'FILTER_REMOVE',
+            type: CourseSearchParamsAction.filterRemove,
           }),
         );
       }
@@ -1190,7 +1190,7 @@ describe('data/useCourseSearchParams', () => {
                     name: 'organizations',
                   },
                   payload: 'L00010011',
-                  type: 'FILTER_REMOVE',
+                  type: CourseSearchParamsAction.filterRemove,
                 },
               ],
               params: {
@@ -1232,7 +1232,7 @@ describe('data/useCourseSearchParams', () => {
               name: 'organizations',
             },
             payload: 'L-00010013',
-            type: 'FILTER_REMOVE',
+            type: CourseSearchParamsAction.filterRemove,
           }),
         );
       }
@@ -1255,7 +1255,7 @@ describe('data/useCourseSearchParams', () => {
                     name: 'organizations',
                   },
                   payload: 'L-00010013',
-                  type: 'FILTER_REMOVE',
+                  type: CourseSearchParamsAction.filterRemove,
                 },
               ],
               params: {
@@ -1293,7 +1293,7 @@ describe('data/useCourseSearchParams', () => {
               name: 'subjects',
             },
             payload: 'L-00010076',
-            type: 'FILTER_REMOVE',
+            type: CourseSearchParamsAction.filterRemove,
           }),
         );
       }
@@ -1331,7 +1331,7 @@ describe('data/useCourseSearchParams', () => {
               name: 'organizations',
             },
             payload: '121',
-            type: 'FILTER_REMOVE',
+            type: CourseSearchParamsAction.filterRemove,
           }),
         );
       }
@@ -1371,7 +1371,7 @@ describe('data/useCourseSearchParams', () => {
               name: 'organizations',
             },
             payload: '121',
-            type: 'FILTER_REMOVE',
+            type: CourseSearchParamsAction.filterRemove,
           }),
         );
       }
@@ -1412,7 +1412,7 @@ describe('data/useCourseSearchParams', () => {
               name: 'level',
             },
             payload: 'L-000200010001',
-            type: 'FILTER_REMOVE',
+            type: CourseSearchParamsAction.filterRemove,
           }),
         );
       }
@@ -1435,7 +1435,7 @@ describe('data/useCourseSearchParams', () => {
                     name: 'level',
                   },
                   payload: 'L-000200010001',
-                  type: 'FILTER_REMOVE',
+                  type: CourseSearchParamsAction.filterRemove,
                 },
               ],
               params: {
@@ -1475,7 +1475,7 @@ describe('data/useCourseSearchParams', () => {
               name: 'level',
             },
             payload: 'L-000200010003',
-            type: 'FILTER_REMOVE',
+            type: CourseSearchParamsAction.filterRemove,
           }),
         );
       }
@@ -1515,7 +1515,7 @@ describe('data/useCourseSearchParams', () => {
               name: 'level',
             },
             payload: 'L-000200010002',
-            type: 'FILTER_REMOVE',
+            type: CourseSearchParamsAction.filterRemove,
           }),
         );
       }
@@ -1551,7 +1551,11 @@ describe('data/useCourseSearchParams', () => {
           subjects: ['P-00030004', 'P-00030007'],
         });
 
-        act(() => dispatchCourseSearchParamsUpdate({ type: 'FILTER_RESET' }));
+        act(() =>
+          dispatchCourseSearchParamsUpdate({
+            type: CourseSearchParamsAction.filterReset,
+          }),
+        );
       }
       {
         const { courseSearchParams } = getLatestHookValues();
@@ -1562,7 +1566,7 @@ describe('data/useCourseSearchParams', () => {
             data: {
               lastDispatchActions: [
                 {
-                  type: 'FILTER_RESET',
+                  type: CourseSearchParamsAction.filterReset,
                 },
               ],
               params: { limit: '27', offset: '0' },
@@ -1600,7 +1604,7 @@ describe('data/useCourseSearchParams', () => {
               name: 'organizations',
             },
             payload: 'L-00010009',
-            type: 'FILTER_REMOVE',
+            type: CourseSearchParamsAction.filterRemove,
           },
           {
             filter: {
@@ -1608,9 +1612,12 @@ describe('data/useCourseSearchParams', () => {
               name: 'languages',
             },
             payload: 'it',
-            type: 'FILTER_ADD',
+            type: CourseSearchParamsAction.filterAdd,
           },
-          { query: 'some new query', type: 'QUERY_UPDATE' },
+          {
+            query: 'some new query',
+            type: CourseSearchParamsAction.queryUpdate,
+          },
         ),
       );
     }
@@ -1635,7 +1642,7 @@ describe('data/useCourseSearchParams', () => {
                   name: 'organizations',
                 },
                 payload: 'L-00010009',
-                type: 'FILTER_REMOVE',
+                type: CourseSearchParamsAction.filterRemove,
               },
               {
                 filter: {
@@ -1643,11 +1650,11 @@ describe('data/useCourseSearchParams', () => {
                   name: 'languages',
                 },
                 payload: 'it',
-                type: 'FILTER_ADD',
+                type: CourseSearchParamsAction.filterAdd,
               },
               {
                 query: 'some new query',
-                type: 'QUERY_UPDATE',
+                type: CourseSearchParamsAction.queryUpdate,
               },
             ],
             params: {

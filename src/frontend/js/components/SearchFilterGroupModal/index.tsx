@@ -7,7 +7,10 @@ import {
 import ReactModal from 'react-modal';
 
 import { fetchList } from 'data/getResourceList';
-import { useCourseSearchParams } from 'data/useCourseSearchParams';
+import {
+  CourseSearchParamsAction,
+  useCourseSearchParams,
+} from 'data/useCourseSearchParams';
 import { requestStatus } from 'types/api';
 import { FacetedFilterDefinition, FilterValue } from 'types/filters';
 import { Nullable } from 'utils/types';
@@ -171,7 +174,7 @@ export const SearchFilterGroupModal = ({
                       dispatchCourseSearchParamsUpdate({
                         filter,
                         payload: value.key,
-                        type: 'FILTER_ADD',
+                        type: CourseSearchParamsAction.filterAdd,
                       });
                       setModalIsOpen(false);
                     }}

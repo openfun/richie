@@ -10,7 +10,10 @@ import {
   renderSuggestion,
 } from 'common/searchFields';
 import { SearchInput } from 'components/SearchInput';
-import { useCourseSearchParams } from 'data/useCourseSearchParams';
+import {
+  CourseSearchParamsAction,
+  useCourseSearchParams,
+} from 'data/useCourseSearchParams';
 import { useStaticFilters } from 'data/useStaticFilters';
 import { CommonDataProps } from 'types/commonDataProps';
 import {
@@ -58,7 +61,7 @@ export const SearchSuggestField = ({ context }: CommonDataProps) => {
     !courseSearchParams.query &&
     lastDispatchActions
       ?.map((action) => action.type)
-      .includes('FILTER_RESET') &&
+      .includes(CourseSearchParamsAction.filterReset) &&
     value
   ) {
     setValue('');
@@ -85,7 +88,7 @@ export const SearchSuggestField = ({ context }: CommonDataProps) => {
     ) {
       dispatchCourseSearchParamsUpdate({
         query: newValue,
-        type: 'QUERY_UPDATE',
+        type: CourseSearchParamsAction.queryUpdate,
       });
     }
   };
@@ -112,7 +115,7 @@ export const SearchSuggestField = ({ context }: CommonDataProps) => {
       if (event.keyCode === 13 /* enter */ && !value) {
         dispatchCourseSearchParamsUpdate({
           query: '',
-          type: 'QUERY_UPDATE',
+          type: CourseSearchParamsAction.queryUpdate,
         });
       }
     },
@@ -140,12 +143,12 @@ export const SearchSuggestField = ({ context }: CommonDataProps) => {
     dispatchCourseSearchParamsUpdate(
       {
         query: '',
-        type: 'QUERY_UPDATE',
+        type: CourseSearchParamsAction.queryUpdate,
       },
       {
         filter,
         payload: String(suggestion.id),
-        type: 'FILTER_ADD',
+        type: CourseSearchParamsAction.filterAdd,
       },
     );
     // Reset the search field state: the task has been completed

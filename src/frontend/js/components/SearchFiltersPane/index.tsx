@@ -2,7 +2,10 @@ import React from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { SearchFilterGroup } from 'components/SearchFilterGroup';
-import { useCourseSearchParams } from 'data/useCourseSearchParams';
+import {
+  CourseSearchParamsAction,
+  useCourseSearchParams,
+} from 'data/useCourseSearchParams';
 import { API_LIST_DEFAULT_PARAMS } from 'settings';
 import { APICourseSearchResponse } from 'types/api';
 import { Nullable } from 'utils/types';
@@ -65,7 +68,9 @@ export const SearchFiltersPane = ({
         }`}
         tabIndex={0}
         onClick={() =>
-          dispatchCourseSearchParamsUpdate({ type: 'FILTER_RESET' })
+          dispatchCourseSearchParamsUpdate({
+            type: CourseSearchParamsAction.filterReset,
+          })
         }
       >
         <FormattedMessage
