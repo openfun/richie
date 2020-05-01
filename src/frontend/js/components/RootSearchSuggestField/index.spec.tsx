@@ -6,6 +6,10 @@ import { IntlProvider } from 'react-intl';
 import { location } from 'utils/indirection/window';
 import { RootSearchSuggestField } from '.';
 
+jest.mock('settings', () => ({
+  API_LIST_DEFAULT_PARAMS: { limit: '13', offset: '0' },
+}));
+
 jest.mock('utils/indirection/window', () => ({
   location: {
     assign: jest.fn(),
@@ -189,7 +193,7 @@ describe('<RootSearchSuggestField />', () => {
     fireEvent.click(subject);
     await wait();
     expect(location.assign).toHaveBeenCalledWith(
-      '/en/courses/?limit=20&offset=0&subjects=L-000300010001',
+      '/en/courses/?limit=13&offset=0&subjects=L-000300010001',
     );
   });
 
@@ -220,7 +224,7 @@ describe('<RootSearchSuggestField />', () => {
     await wait();
 
     expect(location.assign).toHaveBeenCalledWith(
-      '/en/courses/?limit=20&offset=0&query=some%20query',
+      '/en/courses/?limit=13&offset=0&query=some%20query',
     );
   });
 

@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Scroll course search to top when the user interacts with the filters pane.
+- Increase default course search results number from 20 to 21.
 
 ## [2.0.0-beta.5] - 2020-05-04
 
