@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Scroll course search to top when the user interacts with the filters pane.
+
 ## [2.0.0-beta.5] - 2020-05-04
 
 ### Fixed

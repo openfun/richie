@@ -17,6 +17,7 @@ jest.mock('utils/indirection/window', () => ({
     replaceState: jest.fn(),
   },
   location: { pathname: '/search' },
+  scroll: jest.fn(),
 }));
 
 // Unexplained difficulties with fake timers were encountered in these tests.

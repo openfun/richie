@@ -93,7 +93,8 @@ export const useCourseSearchParams = (): CourseSearchParamsState => {
   const [historyEntry, pushState, replaceState] = useContext(HistoryContext);
 
   // HistoryEntry.state includes parse query strings, which if we're on a search page should be course search params
-  const courseSearchParams: APIListRequestParams = historyEntry.state.data.params;
+  const courseSearchParams: APIListRequestParams =
+    historyEntry.state.data.params;
 
   // The dispatch + reducer pattern is useful to model changes in the course search params. However, we don't want
   // to duplicate behavior by having to sync the HistoryContext state with a `useReducer` call here.
@@ -134,19 +135,14 @@ export const useCourseSearchParams = (): CourseSearchParamsState => {
   };
 
   useEffect(() => {
-    // We want to scroll back to the top only when pagination is updated. When the user clicks on a page number,
-    // we can safely assume they are done interacting and want to move up top to see the new page.
-    // When they're adding filters, we don't want to jankily force them to scroll again to where they were in
-    // the page if they wanted to add more than one filter.
-    // We're using `stringify(parse(location.search))` as a way to reorder location search to the same order
-    // `stringify` would output for our courseSearchParams. This allows us to avoid doing a deep comparison on
-    // `courseSearchParams` and the result of `parse(location.search)`.
+    // We want to scroll back to the top when course search params have changed, unless the last action resulted
+    // from a user interaction with the SuggestField, eg. changed the query
     if (
-      parse(location.search).offset !== courseSearchParams.offset &&
-      stringify({
-        ...courseSearchParams,
-        offset: parse(location.search).offset,
-      }) === stringify(parse(location.search))
+      historyEntry.state.data &&
+      historyEntry.state.data.lastDispatchActions &&
+      !historyEntry.state.data?.lastDispatchActions
+        ?.map((action: CourseSearchParamsReducerAction) => action.type)
+        .includes('QUERY_UPDATE')
     ) {
       scroll({
         behavior: 'smooth',
@@ -170,7 +166,7 @@ export const useCourseSearchParams = (): CourseSearchParamsState => {
         `${location.pathname}?${stringify(newParams)}`,
       );
     }
-  }, [courseSearchParams]);
+  }, [stringify(courseSearchParams)]);
 
   return {
     courseSearchParams,
