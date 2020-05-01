@@ -2,6 +2,7 @@ import { render } from '@testing-library/react';
 import { stringify } from 'query-string';
 import React from 'react';
 
+import { CourseSearchParamsAction } from 'data/useCourseSearchParams';
 import { History, HistoryContext } from 'data/useHistory';
 import { FacetedFilterDefinition, FilterValue } from 'types/filters';
 import { useFilterValue } from '.';
@@ -80,7 +81,7 @@ describe('data/useFilterValue', () => {
                 values: [],
               },
               payload: '87',
-              type: 'FILTER_ADD',
+              type: CourseSearchParamsAction.filterAdd,
             },
           ],
           params: { limit: '999', offset: '0', organizations: ['87'] },
@@ -139,7 +140,7 @@ describe('data/useFilterValue', () => {
                 values: [],
               },
               payload: '87',
-              type: 'FILTER_REMOVE',
+              type: CourseSearchParamsAction.filterRemove,
             },
           ],
           params: { limit: '999', offset: '0', organizations: undefined },

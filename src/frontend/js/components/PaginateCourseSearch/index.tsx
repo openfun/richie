@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
-import { useCourseSearchParams } from 'data/useCourseSearchParams';
+import {
+  CourseSearchParamsAction,
+  useCourseSearchParams,
+} from 'data/useCourseSearchParams';
 
 const messages = defineMessages({
   currentlyReadingLastPageN: {
@@ -146,7 +149,7 @@ export const PaginateCourseSearch = ({
                       dispatchCourseSearchParamsUpdate({
                         // Pages are 1-indexed, we need to 0-index them to calculate the correct offset
                         offset: String((page - 1) * limit),
-                        type: 'PAGE_CHANGE',
+                        type: CourseSearchParamsAction.pageChange,
                       })
                     }
                   >

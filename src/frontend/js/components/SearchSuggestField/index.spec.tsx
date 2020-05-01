@@ -5,7 +5,10 @@ import fetchMock from 'fetch-mock';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
-import { useCourseSearchParams } from 'data/useCourseSearchParams';
+import {
+  useCourseSearchParams,
+  CourseSearchParamsAction,
+} from 'data/useCourseSearchParams';
 import { HistoryContext, useHistory } from 'data/useHistory';
 import { FilterDefinition } from 'types/filters';
 import { history, location } from 'utils/indirection/window';
@@ -135,7 +138,11 @@ describe('components/SearchSuggestField', () => {
     const input: any = getByDisplayValue('social sciences');
 
     // Some other component resets the filter, in effect clearing the query
-    act(() => doDispatchCourseSearchParamsUpdate({ type: 'FILTER_RESET' }));
+    act(() =>
+      doDispatchCourseSearchParamsUpdate({
+        type: CourseSearchParamsAction.filterReset,
+      }),
+    );
     rerender(
       <IntlProvider locale="en">
         <HistoryWrapper>
