@@ -6,6 +6,7 @@ import { API_LIST_DEFAULT_PARAMS } from 'settings';
 import { APIListRequestParams } from 'types/api';
 import { FilterDefinition } from 'types/filters';
 import { location, scroll } from 'utils/indirection/window';
+import { Maybe } from 'utils/types';
 import { computeNewFilterValue } from './computeNewFilterValue';
 
 interface FilterResetAction {
@@ -39,6 +40,7 @@ type CourseSearchParamsState = {
   dispatchCourseSearchParamsUpdate: (
     ...Actions: CourseSearchParamsReducerAction[]
   ) => void;
+  lastDispatchActions: Maybe<CourseSearchParamsReducerAction[]>;
 };
 
 const courseSearchParamsReducer = (
@@ -171,5 +173,6 @@ export const useCourseSearchParams = (): CourseSearchParamsState => {
   return {
     courseSearchParams,
     dispatchCourseSearchParamsUpdate: dispatch,
+    lastDispatchActions: historyEntry.state.data?.lastDispatchActions,
   };
 };
