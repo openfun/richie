@@ -4,7 +4,9 @@
 .person-detail {
   margin: 0 auto;
   padding: 0;
-  @include content-padding-fix;
+  @if $body-padding-fix {
+    @include content-padding-fix;
+  }
 
   &__block {
     @include detail-block;

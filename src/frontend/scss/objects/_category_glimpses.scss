@@ -14,9 +14,11 @@
   flex-direction: column;
   flex-wrap: nowrap;
   align-content: space-between;
-  border: 1px solid r-theme-val(category-glimpse, base-border);
-  border-radius: $border-radius;
   background: r-theme-val(category-glimpse, base-background);
+  border-radius: $border-radius;
+  @if r-theme-val(category-glimpse, base-border) {
+    border: 1px solid r-theme-val(category-glimpse, base-border);
+  }
 
   // Responsive adjustments
   @include media-breakpoint-up(md) {
@@ -79,7 +81,9 @@
   &:focus {
     text-decoration: none;
     color: r-theme-val(category-glimpse, base-hover-color);
-    border: 1px solid r-theme-val(category-glimpse, base-hover-border);
+    @if r-theme-val(category-glimpse, base-hover-border) {
+      border: 1px solid r-theme-val(category-glimpse, base-hover-border);
+    }
 
     #{$glimpse-item-selector}__title {
       color: r-theme-val(category-glimpse, title-hover-color);

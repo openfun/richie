@@ -35,8 +35,10 @@ $container-max-widths: (
 // More space between columns
 $grid-gutter-width: 20px;
 
-// Base body background
+// Base body
+$body-color: r-theme-val(body-content, base-color);
 $body-bg: r-theme-val(body-content, base-background);
+$body-padding-fix: true;
 
 // Typography
 //

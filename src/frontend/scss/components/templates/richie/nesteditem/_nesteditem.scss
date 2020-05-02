@@ -100,15 +100,17 @@
     }
 
     // Draw item dot
-    &::after {
-      content: '';
-      position: absolute;
-      top: 1rem;
-      left: -1.68rem;
-      width: 0.5rem;
-      height: 0.5rem;
-      background: r-theme-val(accordion-plan, item-dot-color);
-      border-radius: 100%;
+    @if r-theme-val(accordion-plan, item-dot-color) {
+      &::after {
+        content: '';
+        position: absolute;
+        top: 1rem;
+        left: -1.68rem;
+        width: 0.5rem;
+        height: 0.5rem;
+        background: r-theme-val(accordion-plan, item-dot-color);
+        border-radius: 100%;
+      }
     }
   }
 
@@ -126,17 +128,19 @@
     background: transparent;
     border: 0;
 
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0.6rem;
-      left: -0.2rem;
-      width: 1.3rem;
-      height: 1.3rem;
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: 100% 100%;
-      background-image: r-theme-val(accordion-plan, dot-closed);
+    @if r-theme-val(accordion-plan, dot-closed) {
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0.6rem;
+        left: -0.2rem;
+        width: 1.3rem;
+        height: 1.3rem;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 100% 100%;
+        background-image: r-theme-val(accordion-plan, dot-closed);
+      }
     }
   }
 
@@ -154,8 +158,10 @@
 
   &__item[data-accordion-open] {
     #{$nesteditem-base-selector}__item-title {
-      &::before {
-        background-image: r-theme-val(accordion-plan, dot-opened);
+      @if r-theme-val(accordion-plan, dot-closed) {
+        &::before {
+          background-image: r-theme-val(accordion-plan, dot-closed);
+        }
       }
     }
   }

@@ -3,7 +3,9 @@
   display: flex;
   margin: 0 auto;
   padding: 1rem 0;
-  @include content-padding-fix;
   flex-direction: row;
   flex-wrap: wrap;
+  @if $body-padding-fix {
+    @include content-padding-fix;
+  }
 }

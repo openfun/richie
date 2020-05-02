@@ -1,7 +1,9 @@
 .organization-list {
   @include make-container();
   @include make-container-max-widths();
-  @include content-padding-fix;
+  @if $body-padding-fix {
+    @include content-padding-fix;
+  }
 
   &__content {
     display: flex;

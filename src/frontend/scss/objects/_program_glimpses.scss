@@ -140,9 +140,13 @@ $r-program-glimpse-gutter: 0.8rem !default;
     text-align: center;
     cursor: default;
 
-    &:hover,
-    &:focus {
-      border: $onepixel solid r-theme-val(program-glimpse-empty, hover-border);
+    @if r-theme-val(program-glimpse-empty, hover-border) {
+      &:hover,
+      &:focus {
+        border: $onepixel
+          solid
+          r-theme-val(program-glimpse-empty, hover-border);
+      }
     }
   }
 }

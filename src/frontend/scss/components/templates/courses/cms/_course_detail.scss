@@ -5,7 +5,9 @@
   $detail-selector: &;
   margin: 0 auto;
   padding: 0;
-  @include content-padding-fix($target: '&:last-child');
+  @if $body-padding-fix {
+    @include content-padding-fix($target: '&:last-child');
+  }
 
   &__block {
     @include detail-block;
@@ -72,7 +74,6 @@
   }
 
   &__primary-group {
-    padding-bottom: 0 !important;
     background: r-theme-val(course-detail, primary-group-background);
 
     @if r-theme-val(course-detail, primary-group-title-color) {
@@ -82,6 +83,8 @@
     }
 
     @if r-theme-val(course-detail, primary-group-arc) {
+      padding-bottom: 0 !important;
+
       &::after {
         content: '';
         display: block;

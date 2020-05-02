@@ -18,7 +18,9 @@
     color: r-theme-val(pagination, item-color);
     font-weight: bold;
     background: r-theme-val(pagination, item-background);
-    border: $onepixel solid r-theme-val(pagination, item-border);
+    @if r-theme-val(pagination, item-border) {
+      border: $onepixel solid r-theme-val(pagination, item-border);
+    }
     cursor: pointer;
 
     &:first-child {

@@ -49,7 +49,9 @@
     left: 1rem;
     bottom: 1.75rem;
     width: $accordion-border-size;
-    border-left: $accordion-border-size solid $border-color;
+    @if $border-color {
+      border-left: $accordion-border-size solid $border-color;
+    }
   }
 
   &__item {

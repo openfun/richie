@@ -15,8 +15,11 @@
 
 {% block topbar_classes %}topbar--over{% endblock topbar_classes %}
 
-{# Disable search field in topbar since it is in the homepage banner #}
+{% comment %}Disable search field in topbar since it is in the homepage banner{% endcomment %}
 {% block topbar_searchbar %}{% endblock topbar_searchbar %}
+
+{% comment %}Disable subheader base HTML since it is not required on homepage{% endcomment %}
+{% block subheader %}{% endblock subheader %}
 
 {% block content %}
 <div class="homepage{% if current_page.publisher_is_draft %} homepage--draft{% endif %}">

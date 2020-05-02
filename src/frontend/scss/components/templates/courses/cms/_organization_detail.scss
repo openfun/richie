@@ -7,7 +7,9 @@
 
   &__block {
     @include detail-block;
-    @include content-padding-fix($target: '&:last-child');
+    @if $body-padding-fix {
+      @include content-padding-fix($target: '&:last-child');
+    }
   }
 
   &__row {
@@ -42,25 +44,27 @@
       $background: r-theme-val(organization-detail, banner-empty-background)
     );
 
-    // Insert wave curves on top of banner bottom
-    &::after {
-      content: '';
-      display: block;
-      width: 100%;
-      height: 4rem;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background-image: r-theme-val(
-        organization-detail,
-        insert-background-image
-      );
-      background-repeat: no-repeat;
-      background-position: top left;
-      background-size: 100% 100%;
-      transform: scaleX(-1); // horizontally reverse
-      z-index: 2;
+    // Insert decoration over banner bottom
+    @if r-theme-val(organization-detail, insert-background-image) {
+      &::after {
+        content: '';
+        display: block;
+        width: 100%;
+        height: 4rem;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-image: r-theme-val(
+          organization-detail,
+          insert-background-image
+        );
+        background-repeat: no-repeat;
+        background-position: top left;
+        background-size: 100% 100%;
+        transform: scaleX(-1); // horizontally reverse
+        z-index: 2;
+      }
     }
   }
 
@@ -71,7 +75,9 @@
     width: 30%;
     padding: 0.5rem;
     background: $white;
-    border: $onepixel solid r-theme-val(organization-detail, logo-border);
+    @if r-theme-val(organization-detail, logo-border) {
+      border: $onepixel solid r-theme-val(organization-detail, logo-border);
+    }
     box-shadow: r-theme-val(organization-detail, logo-shadow);
     z-index: 4;
 
