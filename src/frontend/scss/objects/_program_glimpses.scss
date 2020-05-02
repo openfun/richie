@@ -2,7 +2,7 @@
 //
 // A flex grid of program entries
 
-$r-program-glimpse-gutter: 0.5rem !default;
+$r-program-glimpse-gutter: 0.8rem !default;
 
 .program-glimpse-list {
   @include make-container-max-widths();
@@ -21,19 +21,55 @@ $r-program-glimpse-gutter: 0.5rem !default;
 
 .program-glimpse {
   $glimpse-item-selector: &;
+  $card-border: null;
+  @if r-theme-val(program-glimpse, card-border) {
+    $card-border: $onepixel solid r-theme-val(program-glimpse, card-border);
+  }
+
   // Cell base width for lowest breakpoint
   @include sv-flex(1, 0, calc(100% - #{$r-program-glimpse-gutter * 2}));
 
   // Apply card styles for elements
   @include m-o-card(
-    $border: $onepixel solid r-theme-val(program-glimpse, card-border),
+    $border: $card-border,
     $background: r-theme-val(program-glimpse, card-background),
     $media-margin: 0,
-    $wrapper-padding: 0.6rem 0.2rem
+    $wrapper-padding: 1rem 0.5rem 2rem
   );
 
-  // Apply gutter
   margin: $r-program-glimpse-gutter;
+  border-radius: $border-radius-lg;
+  box-shadow: r-theme-val(program-glimpse, base-shadow);
+
+  &__media {
+    position: relative;
+    border-top-left-radius: $border-radius-lg;
+    border-top-right-radius: $border-radius-lg;
+
+    @if r-theme-val(program-glimpse, media-decoration) {
+      padding-bottom: 0 !important;
+
+      &::after {
+        content: '';
+        display: block;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 1.5rem;
+        background-image: r-theme-val(program-glimpse, media-decoration);
+        background-repeat: no-repeat;
+        background-position: bottom left;
+        background-size: 100% 100%;
+      }
+    }
+
+    img,
+    iframe {
+      border-top-left-radius: $border-radius-lg;
+      border-top-right-radius: $border-radius-lg;
+    }
+  }
 
   &__content {
     font-size: 0.9rem;
@@ -42,9 +78,10 @@ $r-program-glimpse-gutter: 0.5rem !default;
   }
 
   &__title {
-    margin: 0 0 0.1rem;
-    font-size: 0.9rem;
-    font-weight: bold;
+    margin: 0 0 1.5rem;
+    @include font-size($h6-font-size);
+    font-family: $r-font-family-montserrat;
+    font-weight: $font-weight-boldest;
     color: r-theme-val(program-glimpse, title-color);
   }
 
@@ -55,47 +92,32 @@ $r-program-glimpse-gutter: 0.5rem !default;
     $absolute: false
   );
 
-  // A little specific makeup onto footer elements
   &__footer {
+    @include r-button-colors(
+      r-theme-val(program-glimpse, footer),
+      $apply-border: true
+    );
     display: flex;
-    border-top: $onepixel solid r-theme-val(program-glimpse, footer-border);
+    padding: 0 0.5rem;
+    font-size: 0.8rem;
+    border-bottom-left-radius: $border-radius-lg;
+    border-bottom-right-radius: $border-radius-lg;
   }
 
   &__date {
-    @include sv-flex-cell-width(auto);
-    display: flex;
+    @include sv-flex(1, 0, auto);
     margin: 0;
-    padding: 0.3rem 0.5rem;
-    font-size: 0.9rem;
-    color: r-theme-val(program-glimpse, date-color);
-    justify-content: center;
-    text-align: center;
-  }
-
-  &__cta {
-    @include sv-flex-cell-width(45%);
-    display: flex;
-
-    .button {
-      @include sv-flex-cell-width(100%);
-      margin: 0;
-      padding: 0.3rem 0.5rem;
-      font-size: 0.9rem;
-      font-weight: bold;
-      color: r-theme-val(program-glimpse, cta-color);
-      background: r-theme-val(program-glimpse, cta-background);
-      border: 0;
-      cursor: pointer;
-    }
+    padding: 0.75rem 0;
+    font-weight: bold;
+    line-height: 1.1;
   }
 
   &:hover,
   &:focus {
-    border: $onepixel solid r-theme-val(program-glimpse, hover-border);
-
-    #{$glimpse-item-selector}__foot__cta .button {
-      background: r-theme-val(program-glimpse, cta-hover-background);
+    @if r-theme-val(program-glimpse, card-hover-border) {
+      border: $onepixel solid r-theme-val(program-glimpse, card-hover-border);
     }
+    box-shadow: r-theme-val(program-glimpse, base-hover-shadow);
   }
 
   // Responsive adjustments
