@@ -4,8 +4,12 @@
 .blogpost-detail {
   margin: 0 auto;
   padding: 0 0.5rem;
-  border-top: 1px solid r-theme-val(blogpost-detail, top-border);
-  @include content-padding-fix;
+  @if r-theme-val(blogpost-detail, top-border) {
+    border-top: 1px solid r-theme-val(blogpost-detail, top-border);
+  }
+  @if $body-padding-fix {
+    @include content-padding-fix;
+  }
 
   &__block {
     @include detail-block;
@@ -61,16 +65,19 @@
         z-index: 4;
       }
 
-      &::after {
-        content: '';
-        position: absolute;
-        top: calc(50% - 0.35rem);
-        left: 0;
-        right: 0;
-        display: block;
-        border-bottom: 0.625rem solid
-          r-theme-val(blogpost-detail, aside-glimpse-title-border);
-        z-index: 3;
+      @if r-theme-val(blogpost-detail, aside-glimpse-title-border) {
+        &::after {
+          content: '';
+          position: absolute;
+          top: calc(50% - 0.35rem);
+          left: 0;
+          right: 0;
+          display: block;
+          border-bottom: 0.625rem
+            solid
+            r-theme-val(blogpost-detail, aside-glimpse-title-border);
+          z-index: 3;
+        }
       }
     }
   }
@@ -98,17 +105,18 @@
       padding-left: 4.5rem;
     }
 
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0.5rem;
-      left: 0;
-      width: 0.8rem;
-      border-top: $onepixel solid r-theme-val(blogpost-detail, theme-border);
+    @if r-theme-val(blogpost-detail, theme-border) {
+      &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 0.8rem;
+        border-top: $onepixel solid r-theme-val(blogpost-detail, theme-border);
 
-      @include media-breakpoint-up(lg) {
-        top: calc(50% - #{$onepixel});
-        width: 4rem;
+        @include media-breakpoint-up(lg) {
+          width: 4rem;
+        }
       }
     }
 
@@ -150,23 +158,26 @@
   &__pubdate {
     position: relative;
     margin: 0 0.5rem 0 0;
-    padding-left: 1rem;
+    padding: 0.2rem 0.5rem 0.2rem 1rem;
 
     @include media-breakpoint-up(lg) {
       padding-left: 2rem;
     }
 
-    &::before {
-      content: '';
-      position: absolute;
-      top: 0.5rem;
-      left: 0;
-      width: 0.8rem;
-      border-top: $onepixel solid r-theme-val(blogpost-detail, pubdate-border);
+    @if r-theme-val(blogpost-detail, pubdate-border) {
+      &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 0.8rem;
+        border-top: $onepixel
+          solid
+          r-theme-val(blogpost-detail, pubdate-border);
 
-      @include media-breakpoint-up(lg) {
-        top: calc(50% - #{$onepixel});
-        width: 1.5rem;
+        @include media-breakpoint-up(lg) {
+          width: 1.5rem;
+        }
       }
     }
   }
@@ -174,19 +185,23 @@
   &__authors {
     position: relative;
     margin: 0 0.5rem 0 0;
-    padding-left: 2rem;
+    padding: 0.2rem 0.5rem 0.2rem 2rem;
 
     .person-plugin-tag {
       color: inherit;
     }
 
-    &::before {
-      content: '';
-      position: absolute;
-      top: calc(50% - #{$onepixel});
-      left: 0;
-      width: 1.5rem;
-      border-top: $onepixel solid r-theme-val(blogpost-detail, authors-border);
+    @if r-theme-val(blogpost-detail, authors-border) {
+      &::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 1.5rem;
+        border-top: $onepixel
+          solid
+          r-theme-val(blogpost-detail, authors-border);
+      }
     }
   }
 
@@ -275,7 +290,9 @@
     padding: 0.5rem 0 !important;
     font-size: 1rem;
     color: r-theme-val(blogpost-detail, headline-color);
-    border-top: 0.625rem solid r-theme-val(blogpost-detail, headline-border);
+    @if r-theme-val(blogpost-detail, headline-border) {
+      border-top: 0.625rem solid r-theme-val(blogpost-detail, headline-border);
+    }
 
     &__row {
       margin: 0 !important;

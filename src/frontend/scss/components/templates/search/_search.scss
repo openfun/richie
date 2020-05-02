@@ -4,10 +4,12 @@ $r-search-filters-width: 15rem !default;
   @include make-container();
   @include make-container-max-widths();
   padding: 0;
-  @include content-padding-fix;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
+  @if $body-padding-fix {
+    @include content-padding-fix;
+  }
 
   &__content {
     flex-grow: 1;

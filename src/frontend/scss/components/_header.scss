@@ -201,16 +201,18 @@
         @include media-breakpoint-up($r-topbar-breakpoint) {
           position: relative;
 
-          &::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 8px;
-            background-color: r-theme-val(topbar, item-hover-color);
-            border-top-left-radius: 0.2rem;
-            border-top-right-radius: 0.2rem;
+          @if r-theme-val(topbar, item-hover-color) {
+            &::after {
+              content: '';
+              position: absolute;
+              bottom: 0;
+              left: 0;
+              right: 0;
+              height: 8px;
+              background-color: r-theme-val(topbar, item-hover-color);
+              border-top-left-radius: 0.2rem;
+              border-top-right-radius: 0.2rem;
+            }
           }
         }
       }
@@ -227,32 +229,34 @@
         position: relative;
         color: r-theme-val(topbar, item-active-color);
 
-        &::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          bottom: 0;
-          left: 0;
-          width: 0.5rem;
-          background-color: r-theme-val(topbar, item-active-color);
-          border-top-right-radius: 0;
-          border-bottom-right-radius: 0;
-        }
-
-        @include media-breakpoint-up($r-topbar-breakpoint) {
+        @if r-theme-val(topbar, item-active-color) {
           &::before {
-            display: none;
-          }
-          &::after {
             content: '';
             position: absolute;
+            top: 0;
             bottom: 0;
             left: 0;
-            right: 0;
-            height: 0.5rem;
+            width: 0.5rem;
             background-color: r-theme-val(topbar, item-active-color);
-            border-top-left-radius: 0.4rem;
-            border-top-right-radius: 0.4rem;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+          }
+
+          @include media-breakpoint-up($r-topbar-breakpoint) {
+            &::before {
+              display: none;
+            }
+            &::after {
+              content: '';
+              position: absolute;
+              bottom: 0;
+              left: 0;
+              right: 0;
+              height: 0.5rem;
+              background-color: r-theme-val(topbar, item-active-color);
+              border-top-left-radius: 0.4rem;
+              border-top-right-radius: 0.4rem;
+            }
           }
         }
       }

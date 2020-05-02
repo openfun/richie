@@ -43,7 +43,9 @@
   align-content: space-between;
   color: inherit;
   background: r-theme-val(organization-glimpse, base-background);
-  border: 1px solid r-theme-val(organization-glimpse, base-border);
+  @if r-theme-val(organization-glimpse, base-border) {
+    border: 1px solid r-theme-val(organization-glimpse, base-border);
+  }
 
   @include media-breakpoint-up(sm) {
     flex-basis: calc(50% - #{$glimpse-gutter * 2});
@@ -55,10 +57,12 @@
 
   &:hover,
   &:focus {
-    border: 1px solid r-theme-val(organization-glimpse, link-border);
     color: inherit;
     text-decoration: none;
     cursor: pointer;
+    @if r-theme-val(organization-glimpse, link-border) {
+      border: 1px solid r-theme-val(organization-glimpse, link-border);
+    }
   }
 
   &__logo {
@@ -107,7 +111,9 @@
   align-content: space-between;
   color: inherit;
   background: r-theme-val(organization-glimpse, base-background);
-  border: 1px solid r-theme-val(organization-glimpse, base-border);
+  @if r-theme-val(organization-glimpse, base-border) {
+    border: 1px solid r-theme-val(organization-glimpse, base-border);
+  }
 
   @include media-breakpoint-up(sm) {
     flex-basis: calc(50% - #{$glimpse-gutter * 2});
@@ -118,10 +124,12 @@
 
   &:hover,
   &:focus {
-    border: 1px solid r-theme-val(organization-glimpse, link-border);
     color: inherit;
     text-decoration: none;
     cursor: pointer;
+    @if r-theme-val(organization-glimpse, link-border) {
+      border: 1px solid r-theme-val(organization-glimpse, link-border);
+    }
   }
 
   &__logo {
@@ -184,10 +192,12 @@
 
   &:hover,
   &:focus {
-    border: 1px solid r-theme-val(organization-glimpse, link-border);
     color: inherit;
     text-decoration: none;
     cursor: pointer;
+    @if r-theme-val(organization-glimpse, link-border) {
+      border: 1px solid r-theme-val(organization-glimpse, link-border);
+    }
   }
 
   &__logo {
@@ -229,11 +239,15 @@
   }
 
   & + & {
-    border-top: 1px solid r-theme-val(organization-glimpse-row, divider);
+    @if r-theme-val(organization-glimpse-row, divider) {
+      border-top: 1px solid r-theme-val(organization-glimpse-row, divider);
+    }
 
     &:hover,
     &:focus {
-      border-top: 1px solid r-theme-val(organization-glimpse-row, divider);
+      @if r-theme-val(organization-glimpse-row, divider) {
+        border-top: 1px solid r-theme-val(organization-glimpse-row, divider);
+      }
     }
   }
 

@@ -10,7 +10,9 @@ $richie-category-detail-banner-logo-sizing-xl: 25rem !default;
 
   &__block {
     @include detail-block;
-    @include content-padding-fix($target: '&:last-child');
+    @if $body-padding-fix {
+      @include content-padding-fix($target: '&:last-child');
+    }
   }
 
   &__row {
@@ -45,22 +47,24 @@ $richie-category-detail-banner-logo-sizing-xl: 25rem !default;
       $background: r-theme-val(category-detail, empty-background)
     );
 
-    // Insert wave curves on top of banner bottom
-    &::after {
-      content: '';
-      display: block;
-      width: 100%;
-      height: 4rem;
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background-image: r-theme-val(category-detail, insert-background-image);
-      background-repeat: no-repeat;
-      background-position: top left;
-      background-size: 100% 100%;
-      transform: scaleX(-1);
-      z-index: 2;
+    // Insert decoration over banner bottom
+    @if r-theme-val(category-detail, insert-background-image) {
+      &::after {
+        content: '';
+        display: block;
+        width: 100%;
+        height: 4rem;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-image: r-theme-val(category-detail, insert-background-image);
+        background-repeat: no-repeat;
+        background-position: top left;
+        background-size: 100% 100%;
+        transform: scaleX(-1);
+        z-index: 2;
+      }
     }
   }
 
@@ -71,7 +75,9 @@ $richie-category-detail-banner-logo-sizing-xl: 25rem !default;
     width: 30%;
     padding: 0.5rem;
     background: r-theme-val(category-detail, logo-background);
-    border: $onepixel solid r-theme-val(category-detail, logo-border);
+    @if r-theme-val(category-detail, logo-border) {
+      border: $onepixel solid r-theme-val(category-detail, logo-border);
+    }
     box-shadow: r-theme-val(category-detail, logo-shadow);
     z-index: 4;
 

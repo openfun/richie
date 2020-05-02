@@ -8,8 +8,10 @@
   padding: 0;
 
   // Default behavior for published view to include content fix
-  &:not(#{$homepage-selector}--draft) {
-    @include content-padding-fix($target: '& > *:last-child');
+  @if $body-padding-fix {
+    &:not(#{$homepage-selector}--draft) {
+      @include content-padding-fix($target: '& > *:last-child');
+    }
   }
 
   // Sadly In draft mode, the invisible cms stuff trouble selecting the right
@@ -17,6 +19,8 @@
   // stuff from last-child selector, so for now we apply content-fix directly
   // on container even if it disturb the expected layout.
   &--draft {
-    @include content-padding-fix();
+    @if $body-padding-fix {
+      @include content-padding-fix;
+    }
   }
 }

@@ -16,7 +16,9 @@
   background-color: r-theme-val(large-banner, base-background-color);
 
   color: r-theme-val(large-banner, base-color);
-  text-shadow: 0 0 3px r-theme-val(large-banner, base-shadow);
+  @if r-theme-val(large-banner, base-shadow) {
+    text-shadow: 0 0 3px r-theme-val(large-banner, base-shadow);
+  }
 
   @include media-breakpoint-up(md) {
     height: 20rem;
@@ -133,6 +135,7 @@
 
   &__title {
     @include responsive-spacer('margin-bottom', 3, $breakpoints: ('lg': 4));
+    color: r-theme-val(hero-intro, title-color);
 
     @include media-breakpoint-up(lg) {
       width: 50%;
@@ -199,8 +202,10 @@
     margin: 1.2rem auto 0;
     font-size: $font-size-base;
     color: r-theme-val(hero-intro, cta-color);
-    border: 1px solid r-theme-val(hero-intro, cta-border);
     border-radius: 2rem;
+    @if r-theme-val(hero-intro, cta-border) {
+      border: 1px solid r-theme-val(hero-intro, cta-border);
+    }
 
     @include media-breakpoint-up(lg) {
       margin-top: 0;

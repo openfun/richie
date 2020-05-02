@@ -7,7 +7,9 @@
 
   &__block {
     @include detail-block;
-    @include content-padding-fix($target: '&:last-child');
+    @if $body-padding-fix {
+      @include content-padding-fix($target: '&:last-child');
+    }
   }
 
   &__row {

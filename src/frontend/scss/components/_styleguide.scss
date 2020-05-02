@@ -38,7 +38,9 @@
 }
 
 .styleguide {
-  @include content-padding-fix;
+  @if $body-padding-fix {
+    @include content-padding-fix;
+  }
 
   // A basic panel which include a visual grid
   &__pane-grid {

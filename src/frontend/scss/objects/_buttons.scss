@@ -91,7 +91,7 @@
 
   // Enforce an "hollow" display
   a {
-    @include sv-flex(0, 0, auto);
+    @include sv-flex(0, 1, auto);
     @include button-base($font-weight: bold);
     @include r-button-colors(
       r-theme-val(button-caesura, base),

@@ -57,12 +57,20 @@
 .search-filter-value-leaf,
 .search-filter-value-parent__self {
   display: flex;
-  border-bottom: 1px solid r-theme-val(search-filters-value, base-border);
   padding: 0.4rem 0.5rem;
   font-size: 1rem;
+  @if r-theme-val(search-filters-value, base-border) {
+    border-bottom: $onepixel
+      solid
+      r-theme-val(search-filters-value, base-border);
+  }
 
   &.active {
-    border-bottom: 1px solid r-theme-val(search-filters-value, hover-border);
+    @if r-theme-val(search-filters-value, hover-border) {
+      border-bottom: $onepixel
+        solid
+        r-theme-val(search-filters-value, hover-border);
+    }
   }
 }
 

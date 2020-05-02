@@ -16,6 +16,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - New Program glimpse layout.
+- A lot of minor fixes and changes in Sass sources.
 
 ## [2.0.0-beta.4] - 2020-04-20
 

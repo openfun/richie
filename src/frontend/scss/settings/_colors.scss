@@ -27,7 +27,7 @@ $palette: (
 
 // Named gradients
 // ---------
-$light-gradient: linear-gradient(
+$neutral-gradient: linear-gradient(
   to top,
   r-color('silver') 0,
   r-color('smoke') 13rem,
@@ -145,11 +145,11 @@ $transparent-dark-scheme: (
   hover-svg-color: r-color('firebrick6'),
   hover-border-color: r-color('firebrick6'),
 );
-$light-gradient-scheme: (
+$neutral-gradient-scheme: (
   font-color: r-color('black'),
   link-color: r-color('firebrick6'),
   svg-color: r-color('black'),
-  background: $light-gradient,
+  background: $neutral-gradient,
 );
 $middle-gradient-scheme: (
   font-color: r-color('black'),
@@ -196,7 +196,7 @@ $r-theme: (
       clear: $white-scheme,
       light: $light-grey-scheme,
       lightest: $azure2,
-      light-gradient: $light-gradient-scheme,
+      neutral-gradient: $neutral-gradient-scheme,
       middle-gradient: $middle-gradient-scheme,
       dark-gradient: $dark-gradient-scheme,
       white-mask-gradient: $white-mask-gradient-scheme,
@@ -206,7 +206,7 @@ $r-theme: (
       battleship-grey: $battleship-grey-scheme,
     ),
   base-gradients: (
-    light-gradient: $light-gradient,
+    neutral-gradient: $neutral-gradient,
     middle-gradient: $middle-gradient,
     dark-gradient: $dark-gradient,
     white-mask-gradient: $white-mask-gradient,
@@ -228,6 +228,7 @@ $r-theme: (
     item-divider-border: r-color('light-grey'),
   ),
   body-content: (
+    base-color: r-color('black'),
     base-background: r-color('white'),
     insert-background-image: url('../../richie/images/components/wave-dark.svg'),
     base-link-color: r-color('firebrick6'),
@@ -269,12 +270,13 @@ $r-theme: (
       clear: $light-grey-scheme,
       light: $light-grey-scheme,
       lightest: $azure2,
-      gradient-light: $light-gradient-scheme,
+      gradient-neutral: $neutral-gradient-scheme,
       gradient-dark: $dark-gradient-scheme,
       clouds: $clouds-scheme,
     ),
     alt-arc: url('../../richie/images/components/arc-white.svg'),
     alt-curve: url('../../richie/images/components/curve-white.svg'),
+    alt-wave: url('../../richie/images/components/wave-white.svg'),
   ),
   accordion-plan: (
     item-dot-color: r-color('black'),
@@ -294,7 +296,8 @@ $r-theme: (
     insert-background-image:
       url('../../richie/images/components/wave-white.svg'),
     inner-background: $white-mask-gradient,
-    content-color: r-color('slate-grey'),
+    title-color: r-color('firebrick6'),
+    content-color: r-color('black'),
     search-input-background: rgba(r-color('white'), 0.7),
     search-btn-background: r-color('firebrick6'),
     search-icon-fill: r-color('white'),
@@ -516,7 +519,6 @@ $r-theme: (
     button-color: r-color('white'),
     button-background: r-color('firebrick6'),
     overlay-background: rgba(r-color('black'), 0.75),
-    foobar: r-color('foo'),
   ),
   search-filters-value: (
     base-color: r-color('slate-grey'),
