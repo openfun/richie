@@ -64,10 +64,10 @@
                     </div>
 
                     <div class="subheader__content subheader__content--aside">
-                        {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_description" %}
+                        {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_introduction" %}
                             {% with header_level=3 %}
-                            {% placeholder "course_description" or %}
-                                <p>{% trans 'Enter here a description of your course.' %}</p>
+                            {% placeholder "course_introduction" or %}
+                                <p>{% trans 'Enter here a introduction of your course.' %}</p>
                             {% endplaceholder %}
                             {% endwith %}
                         {% endif %}
@@ -183,25 +183,26 @@
                     {% endif %}
                 {% endblock cover %}
 
-                {% block introduction %}
-                {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_introduction" %}
-                <div class="course-detail__row course-detail__introduction">
-                    {% placeholder "course_introduction" %}
-                </div>
-                {% endif %}
-                {% endblock introduction %}
-
                 {% block fragment_content %}
                 <div class="course-detail__block course-detail__primary-group">
                     {% block skills %}
                         {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_skills" %}
-                        <div class="course-detail__skills course-detail__row course-detail__skills">
+                        <div class="course-detail__row course-detail__skills">
                             <h2 class="course-detail__title">{% trans "What you will learn" %}</h2>
                             <p>{% trans "At the end of this course, you will be able to:" %}</p>
                             {% placeholder "course_skills" %}
                         </div>
                         {% endif %}
                     {% endblock skills %}
+
+                    {% block description %}
+                        {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_description" %}
+                        <div class="course-detail__row course-detail__description">
+                            <h2 class="course-detail__title">{% trans "Description" %}</h2>
+                            {% placeholder "course_description" %}
+                        </div>
+                        {% endif %}
+                    {% endblock description %}
 
                     {% block format %}
                         {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_format" %}

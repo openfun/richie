@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Invert course description and introduction blocks
+
 ### Changed
 
 - Scroll course search to top when the user interacts with the filters pane.
