@@ -246,11 +246,11 @@ def create_demo_site():
             fill_organizations=course_organizations,
             fill_texts=[
                 "course_description",
+                "course_introduction",
                 "course_format",
                 "course_prerequisites",
                 "course_plan",
-                # "course_license_content",
-                # "course_license_participation",
+                "course_skills",
             ],
             should_publish=True,
         )

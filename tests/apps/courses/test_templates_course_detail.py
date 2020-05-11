@@ -267,7 +267,8 @@ class CourseCMSTestCase(CMSTestCase):
         response = self.client.get(url)
 
         pattern = (
-            r'<div class="course-detail__row course-detail__introduction">'
+            r'<div class="course-detail__row course-detail__description">'
+            r'<h2 class="course-detail__title">Description</h2>'
             r'<div class="cms-placeholder'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
