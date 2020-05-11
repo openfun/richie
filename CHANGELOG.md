@@ -14,6 +14,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Refactor nested items to simplify them
 - Remove the "suggested by" sentence from course detail view
 - Allow removing the contact us button in a theme
 - Center organizations on course detail view

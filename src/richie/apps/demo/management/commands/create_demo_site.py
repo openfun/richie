@@ -246,12 +246,13 @@ def create_demo_site():
             ],
             fill_icons=random.sample(icons, get_number_of_icons()),
             fill_organizations=course_organizations,
+            fill_plan=True,
             fill_texts=[
+                "course_assessment",
                 "course_description",
                 "course_introduction",
                 "course_format",
                 "course_prerequisites",
-                "course_plan",
                 "course_skills",
             ],
         )

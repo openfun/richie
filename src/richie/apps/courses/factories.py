@@ -11,6 +11,8 @@ import factory
 import pytz
 from cms.api import add_plugin
 
+from richie.plugins.nesteditem.defaults import ACCORDION
+
 from ..core.defaults import ALL_LANGUAGES
 from ..core.factories import (
     FilerImageFactory,
@@ -331,6 +333,38 @@ class CourseFactory(PageExtensionDjangoModelFactory):
                         plugin_type="LicencePlugin",
                         **{"licence": licence},
                     )
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
+    def fill_plan(self, create, extracted, **kwargs):
+        """Add a course plan composed of random nested items."""
+        if create and extracted:
+            for language in self.extended_object.get_languages():
+                placeholder = self.extended_object.placeholders.get(slot="course_plan")
+                container = add_plugin(
+                    language=language,
+                    placeholder=placeholder,
+                    plugin_type="NestedItemPlugin",
+                    variant=ACCORDION,
+                )
+                for chapter in range(random.randint(2, 4)):  # nosec
+                    chapter_plugin = add_plugin(
+                        language=language,
+                        placeholder=placeholder,
+                        plugin_type="NestedItemPlugin",
+                        target=container,
+                        content=f"Chapter {chapter:d}",
+                        variant=ACCORDION,
+                    )
+                    for part in range(random.randint(2, 4)):  # nosec
+                        add_plugin(
+                            language=language,
+                            placeholder=placeholder,
+                            plugin_type="NestedItemPlugin",
+                            target=chapter_plugin,
+                            content=f"Part {part:d}",
+                            variant=ACCORDION,
+                        )
 
     @factory.post_generation
     # pylint: disable=unused-argument

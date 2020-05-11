@@ -8,13 +8,13 @@ from cms.plugin_pool import plugin_pool
 
 from richie.apps.core.defaults import PLUGINS_GROUP
 
+from .defaults import NESTEDITEM_VARIANTS
 from .models import NestedItem
-
 
 @plugin_pool.register_plugin
 class NestedItemPlugin(CMSPluginBase):
     """
-    CMSPlugin to add a nesteditem with a variant form factor
+    CMSPlugin to add a nested item with a variant form factor
     """
 
     cache = True
@@ -25,24 +25,13 @@ class NestedItemPlugin(CMSPluginBase):
     render_template = "richie/nesteditem/nesteditem.html"
     fieldsets = ((None, {"fields": ["variant", "content"]}),)
 
-    # pylint: disable=R0201
-    def compute_variant(self, context, instance):
-        """
-        Get the right final "variant" value for template context.
-
-        * If model instance has an empty "variant" attribute, use the "nesteditem_variant"
-          value from parent template context, default to None if not set;
-        * If model instance has a not null "variant" attribute use it, no
-          matter what the value from parent template context is;
-        """
-        return instance.variant or context.get("nesteditem_variant")
-
     def render(self, context, instance, placeholder):
         context.update(
             {
                 "instance": instance,
                 "placeholder": placeholder,
-                "nesteditem_variant": self.compute_variant(context, instance),
+                "nesting_level": context.get("nesting_level", 0)
+                "parent_variant": context.get("parent_variant", NESTEDITEM_VARIANTS[0][0])
             }
         )
         return context

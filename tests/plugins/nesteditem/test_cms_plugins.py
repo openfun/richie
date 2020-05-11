@@ -28,6 +28,19 @@ class NestedItemCMSPluginsTestCase(CMSPluginTestCase):
             or "Column 'content' cannot be null" in str(cm.exception)
         )
 
+    @transaction.atomic
+    def test_factory_nesteditem_variant_required(self):
+        """
+        The "variant" field is required to be not null.
+        """
+        with self.assertRaises(IntegrityError) as cm:
+            NestedItemFactory(variant=None)
+        self.assertTrue(
+            'null value in column "variant" violates not-null constraint'
+            in str(cm.exception)
+            or "Column 'variant' cannot be null" in str(cm.exception)
+        )
+
     def test_factory_nesteditem_create_success(self):
         """
         NestedItem plugin creation success
@@ -66,80 +79,3 @@ class NestedItemCMSPluginsTestCase(CMSPluginTestCase):
 
         # Check rendered content
         self.assertIn(nesteditem.content, html)
-
-    def test_cms_plugins_nesteditem_compute_variant_without_context_value(self):
-        """
-        When there is no "variant" value set from template parent, if instance
-        variant is empty the variant should be null and if instance variant is
-        set the variant should be set accorded to the instance variant.
-        """
-        placeholder = Placeholder.objects.create(slot="test")
-
-        # Create plugin without a variant
-        nesteditem_neutral = NestedItemFactory(variant=None)
-        model_instance = add_plugin(
-            placeholder,
-            NestedItemPlugin,
-            "en",
-            content=nesteditem_neutral.content,
-            variant=nesteditem_neutral.variant,
-        )
-        plugin_instance = model_instance.get_plugin_class_instance()
-        computed_variant = plugin_instance.compute_variant({}, nesteditem_neutral)
-        self.assertEqual(computed_variant, None)
-
-        # Create plugin with a dummy variant
-        nesteditem_variantized = NestedItemFactory(variant="foo")
-        model_instance = add_plugin(
-            placeholder,
-            NestedItemPlugin,
-            "en",
-            content=nesteditem_variantized.content,
-            variant=nesteditem_variantized.variant,
-        )
-        plugin_instance = model_instance.get_plugin_class_instance()
-        computed_variant = plugin_instance.compute_variant({}, nesteditem_variantized)
-        self.assertEqual(computed_variant, "foo")
-
-    def test_cms_plugins_nesteditem_compute_variant_with_context_value(self):
-        """
-        When there is a "variant" value set from template parent, if instance
-        variant is empty the variant should adopt the one from template parent
-        and if instance variant is set the variant should be set accorded to
-        the instance variant.
-        """
-        placeholder = Placeholder.objects.create(slot="test")
-
-        dummy_context = {
-            "nesteditem_variant": "ping",
-        }
-
-        # Create plugin without a variant
-        nesteditem_neutral = NestedItemFactory(variant=None)
-        model_instance = add_plugin(
-            placeholder,
-            NestedItemPlugin,
-            "en",
-            content=nesteditem_neutral.content,
-            variant=nesteditem_neutral.variant,
-        )
-        plugin_instance = model_instance.get_plugin_class_instance()
-        computed_variant = plugin_instance.compute_variant(
-            dummy_context, nesteditem_neutral
-        )
-        self.assertEqual(computed_variant, "ping")
-
-        # Create plugin with a dummy variant
-        nesteditem_variantized = NestedItemFactory(variant="foo")
-        model_instance = add_plugin(
-            placeholder,
-            NestedItemPlugin,
-            "en",
-            content=nesteditem_variantized.content,
-            variant=nesteditem_variantized.variant,
-        )
-        plugin_instance = model_instance.get_plugin_class_instance()
-        computed_variant = plugin_instance.compute_variant(
-            dummy_context, nesteditem_variantized
-        )
-        self.assertEqual(computed_variant, "foo")
