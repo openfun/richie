@@ -158,9 +158,6 @@
             const topbarBurgers = Array.prototype.slice.call(
                 document.querySelectorAll(".topbar__hamburger"), 0
             );
-            const $accordionItems = Array.prototype.slice.call(
-                document.querySelectorAll('[data-accordion-item]'), 0
-            );
 
             // Check if there are any navbar burgers
             if (topbarBurgers.length > 0) {
@@ -177,16 +174,15 @@
             }
 
             // Implement accordion item behaviors
+            const $accordionItems = Array.prototype.slice.call(
+                document.querySelectorAll('[data-accordion-button]'), 0
+            );
+
             if ($accordionItems.length > 0) {
                 $accordionItems.forEach(function(itemObject, itemIndex) {
-                    const title = Array.prototype.slice.call(
-                        itemObject.querySelectorAll('[data-accordion-title]'), 0
-                    );
-                    if (title.length > 0) {
-                        title[0].addEventListener('click', () => {
-                            itemObject.toggleAttribute('data-accordion-open');
-                        });
-                    }
+                    itemObject.addEventListener('click', () => {
+                        itemObject.toggleAttribute('data-accordion-open');
+                    });
                 });
             }
         });

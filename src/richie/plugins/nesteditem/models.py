@@ -21,8 +21,6 @@ class NestedItem(CMSPlugin):
         max_length=50,
         choices=NESTEDITEM_VARIANTS,
         default=NESTEDITEM_VARIANTS[0][0],
-        blank=True,
-        null=True,
         help_text=_("Form factor variant"),
     )
 
