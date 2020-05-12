@@ -397,7 +397,13 @@ FOOTER_CONTENT = {
         },
     ],
 }
-FOOTER_CONTENT.update(getattr(settings, "FOOTER_CONTENT", {}))
+FOOTER_CONTENT.update(getattr(settings, "RICHIE_DEMO_FOOTER_CONTENT", {}))
+
+COURSE_CONTENT = {
+    "en": {"partners_title": "Partners", "sponsors_title": "Sponsors"},
+    "fr": {"partners_title": "Partenaires", "sponsors_title": "Sponsors"},
+}
+COURSE_CONTENT.update(getattr(settings, "RICHIE_DEMO_COURSE_CONTENT", {}))
 
 SITEMAP_PAGE_PARAMS = {
     "blogposts": {"max_depth": 1},

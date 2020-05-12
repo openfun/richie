@@ -10,7 +10,6 @@ from django.core.management import call_command
 from django.core.management.base import CommandError
 from django.test.utils import override_settings
 
-from cms.models import CMSPlugin
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.courses import models
@@ -113,6 +112,5 @@ class CreateDemoSiteCommandsTestCase(CMSTestCase):
         self.assertEqual(models.Person.objects.count(), 2)
         self.assertEqual(models.Licence.objects.count(), 1)
         self.assertEqual(models.Program.objects.count(), 2)
-        self.assertEqual(CMSPlugin.objects.count(), 620)
 
         self.assertEqual(Site.objects.first().domain, "richie.education:9999")

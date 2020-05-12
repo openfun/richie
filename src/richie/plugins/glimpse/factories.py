@@ -18,4 +18,4 @@ class GlimpseFactory(factory.django.DjangoModelFactory):
     title = factory.Faker("sentence", nb_words=6)
     variant = GLIMPSE_VARIANTS[0][0]
     image = factory.SubFactory("richie.apps.core.factories.FilerImageFactory")
-    content = factory.Faker("text", max_nb_chars=84)
+    content = factory.Faker("text", max_nb_chars=200)
