@@ -15,6 +15,8 @@ from cms.models import StaticPlaceholder
 from richie.apps.core.factories import create_text_plugin, image_getter
 from richie.apps.core.helpers import recursive_page_creation
 from richie.apps.courses import factories
+from richie.plugins.glimpse.defaults import CARD_SQUARE, ROW_FULL, ROW_HALF
+from richie.plugins.glimpse.factories import GlimpseFactory
 
 from ... import defaults
 from ...helpers import create_categories
@@ -252,10 +254,83 @@ def create_demo_site():
                 "course_plan",
                 "course_skills",
             ],
-            should_publish=True,
         )
         course.create_permissions_for_organization(course_organizations[0])
         courses.append(course)
+
+        # Add extra information
+        for language in course.extended_object.get_languages():
+            placeholder = course.extended_object.placeholders.get(
+                slot="course_information"
+            )
+            nb_half_rows = 2 * random.randint(0, 1)  # nosec
+            nb_full_rows = random.randint(0, 2)  # nosec
+            nb_cards = 4 * random.randint(0, 1)  # nosec
+
+            # Partners
+            if nb_half_rows or nb_full_rows:
+                partner_section = add_plugin(
+                    language=language,
+                    placeholder=placeholder,
+                    plugin_type="SectionPlugin",
+                    title=defaults.COURSE_CONTENT[language]["partners_title"],
+                )
+            for _ in range(nb_half_rows):
+                glimpse_data = factory.build(
+                    dict,
+                    FACTORY_CLASS=GlimpseFactory,
+                    variant=ROW_HALF,
+                    image=image_getter(pick_image("logo")()),
+                )
+                glimpse_data["image"].save()
+                add_plugin(
+                    language=language,
+                    placeholder=placeholder,
+                    plugin_type="GlimpsePlugin",
+                    target=partner_section,
+                    **glimpse_data,
+                )
+            for _ in range(nb_full_rows):
+                glimpse_data = factory.build(
+                    dict,
+                    FACTORY_CLASS=GlimpseFactory,
+                    variant=ROW_FULL,
+                    image=image_getter(pick_image("logo")()),
+                )
+                glimpse_data["image"].save()
+                add_plugin(
+                    language=language,
+                    placeholder=placeholder,
+                    plugin_type="GlimpsePlugin",
+                    target=partner_section,
+                    **glimpse_data,
+                )
+            # Sponsors
+            if nb_cards:
+                sponsor_section = add_plugin(
+                    language=language,
+                    placeholder=placeholder,
+                    plugin_type="SectionPlugin",
+                    title=defaults.COURSE_CONTENT[language]["sponsors_title"],
+                )
+            for _ in range(nb_cards):
+                glimpse_data = factory.build(
+                    dict,
+                    FACTORY_CLASS=GlimpseFactory,
+                    variant=CARD_SQUARE,
+                    image=image_getter(pick_image("logo")()),
+                )
+                glimpse_data["image"].save()
+                add_plugin(
+                    language=language,
+                    placeholder=placeholder,
+                    plugin_type="GlimpsePlugin",
+                    target=sponsor_section,
+                    **glimpse_data,
+                )
+
+        for language in course.extended_object.get_languages():
+            course.extended_object.publish(language)
 
         # Add a random number of course runs to the course
         nb_course_runs = get_number_of_course_runs()

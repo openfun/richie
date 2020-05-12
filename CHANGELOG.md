@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Add glimpse plugins to the course information placeholder on demo site
+
 ### Changed
 
 - Remove the "suggested by" sentence from course detail view
