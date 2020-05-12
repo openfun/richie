@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Allow removing the contact us button in a theme
 - Center organizations on course detail view
 
 ### Fixed

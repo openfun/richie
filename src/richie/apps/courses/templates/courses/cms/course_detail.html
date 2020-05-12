@@ -126,7 +126,9 @@
                         {% include "social-networks/course-badges.html" with page_title=request.current_page.get_title page_url=request.current_page.get_absolute_url %}
                     {% endblock social_networks %}
 
-                    <a href="#" class="subheader__cta">{% trans "Contact us" %}</a>
+                    {% block contact %}
+                        <a href="#" class="subheader__cta">{% trans "Contact us" %}</a>
+                    {% endblock contact %}
                 </div>
             </div>
         </div>
