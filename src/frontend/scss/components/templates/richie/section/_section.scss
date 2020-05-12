@@ -26,6 +26,7 @@ section {
   &__items {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     margin: 0;
 
     // Fix basic direct elements (alike from ckeditor plugin) to act like a full

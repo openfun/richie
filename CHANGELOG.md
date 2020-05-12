@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Center organizations on course detail view
+
 ### Fixed
 
 - Invert course description and introduction blocks
