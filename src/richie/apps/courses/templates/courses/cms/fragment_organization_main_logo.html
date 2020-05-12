@@ -20,7 +20,6 @@
                       alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'main organization logo' %}{% endif %}"
                     />
                 </div>
-                <p class="subheader__label">{% blocktrans with name=organization_page.get_title %}Suggested by {{ name }}{% endblocktrans %}</p>
             {% endblockplugin %}
         </a>
     {% endwith %}

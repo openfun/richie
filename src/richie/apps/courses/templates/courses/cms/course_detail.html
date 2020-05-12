@@ -240,14 +240,6 @@
                         </section>
                         {% endif %}
                     {% endblock assessment %}
-
-                    {% block information %}
-                        {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_information" %}
-                        <div class="course-detail__row course-detail__information">
-                            {% placeholder "course_information" %}
-                        </div>
-                        {% endif %}
-                    {% endblock information %}
                 </div>
 
                 {% block plan %}
@@ -370,6 +362,14 @@
             </div>
             {% endif %}
         {% endblock organizations %}
+
+        {% block information %}
+            {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_information" %}
+                <div class="course-detail__row course-detail__information">
+                    {% placeholder "course_information" %}
+                </div>
+            {% endif %}
+        {% endblock information %}
 
         {% block licenses %}
             <div class="course-detail__license course-detail__block course-detail__block--divider">
