@@ -15,6 +15,10 @@ services:
   elasticsearch:
     image: fundocker/openshift-elasticsearch:6.6.2
 
+  memcached:
+    image: memcached:1.6.5
+    command: memcached
+
   app:
     build:
       context: .
@@ -35,6 +39,7 @@ services:
     depends_on:
       - "${DB_HOST:-postgresql}"
       - "elasticsearch"
+      - "memcached"
 
   node:
     image: circleci/node:10

@@ -58,7 +58,7 @@ FROM base as core
 # Install gettext
 RUN apt-get update && \
     apt-get install -y \
-    gettext && \
+    gettext libmemcached-tools && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy installed python dependencies

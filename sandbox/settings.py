@@ -165,6 +165,14 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
     }
     MIGRATION_MODULES = {}
 
+    # Caching
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.memcached.PyLibMCCache",
+            "LOCATION": values.Value("memcached", environ_name="MEMCACHED_HOST"),
+        }
+    }
+
     # Static files (CSS, JavaScript, Images)
     STATIC_URL = "/static/"
     MEDIA_URL = "/media/"
