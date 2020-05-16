@@ -253,23 +253,57 @@
         </div>
 
         <div class="container mt-4">
-            <div class="nested-accordion">
-                <div class="nested-accordion__items">
-                {% for a in "5263"|make_list %}
-                    <div class="nested-accordion__item" data-accordion-item>
-                        <button class="nested-accordion__item-title" data-accordion-title>
-                            {% lorem a w random %}
-                        </button>
-                        <div class="nested-accordion__item-content" data-accordion-content>
-                            <ul>
-                                {% for i in "35256"|make_list %}
-                                <li>{% lorem i w random %}</li>
+            <div class="nested-item nested-item--accordion nested-item--0">
+                <ul class="nested-item__items">
+                    {% for level1_counter in "123"|make_list %}
+                    <li>
+
+                        <div class="nested-item nested-item--accordion nested-item--1">
+                            <button class="nested-item__title" data-accordion-button="">
+                                Item {{ level1_counter }}
+                            </button>
+                            <ul class="nested-item__items">
+
+                                {% for level2_counter in "ABC"|make_list %}
+                                <li>
+                                    <div class="nested-item nested-item--accordion nested-item--2">
+                                        <button class="nested-item__title" data-accordion-button="">
+                                            Item {{ level1_counter }}.{{ level2_counter }}
+                                        </button>
+                                        <ul class="nested-item__items">
+                                            {% for level3_counter in "abc"|make_list %}
+                                            <li>
+
+                                                <div class="nested-item nested-item--list nested-item--3">
+                                                    <button class="nested-item__title" data-accordion-button="">
+                                                        Item {{ level1_counter }}.{{ level2_counter }}.{{ level3_counter }}
+                                                    </button>
+                                                    <ul class="nested-item__items">
+                                                        {% for level4_counter in "12"|make_list %}
+                                                        <li>
+                                                            <div class="nested-item nested-item--list nested-item--4">
+                                                                <div class="nested-item__content">
+                                                                    Item {{ level1_counter }}.{{ level2_counter }}.{{ level3_counter }}.{{ level4_counter }}
+                                                                </div>
+                                                            </div>
+                                                        </li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+
+
+                                            </li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+                                </li>
                                 {% endfor %}
                             </ul>
                         </div>
-                    </div>
-                {% endfor %}
-                </div>
+
+                    </li>
+                    {% endfor %}
+                </ul>
             </div>
         </div>
 

@@ -11,6 +11,7 @@ from richie.apps.core.defaults import PLUGINS_GROUP
 from .defaults import NESTEDITEM_VARIANTS
 from .models import NestedItem
 
+
 @plugin_pool.register_plugin
 class NestedItemPlugin(CMSPluginBase):
     """
@@ -30,8 +31,10 @@ class NestedItemPlugin(CMSPluginBase):
             {
                 "instance": instance,
                 "placeholder": placeholder,
-                "nesting_level": context.get("nesting_level", 0)
-                "parent_variant": context.get("parent_variant", NESTEDITEM_VARIANTS[0][0])
+                "nesting_level": context.get("nesting_level", 0),
+                "parent_variant": context.get(
+                    "parent_variant", NESTEDITEM_VARIANTS[0][0]
+                ),
             }
         )
         return context
