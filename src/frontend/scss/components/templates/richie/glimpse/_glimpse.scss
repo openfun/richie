@@ -1,18 +1,25 @@
+$r-glimpse-gutter: 0.4rem !default;
+
 //
 // Square card variant is vertical
 //
 .glimpse-card_square {
-  @include sv-flex(1, 0, calc(100% - 1.25rem));
+  @include sv-flex(1, 0, calc(100% - #{$r-glimpse-gutter * 2}));
   position: relative;
-  margin: 0.625rem;
-  padding: 1rem;
-  color: inherit;
+  margin: 0.5rem $r-glimpse-gutter 0;
+  padding: 0.4rem;
+  background: r-theme-val(card-glimpse, base-background);
+  border-top-left-radius: $border-radius;
+  border-top-right-radius: $border-radius;
+  @if r-theme-val(card-glimpse, divider-color) {
+    border-bottom: $onepixel solid r-theme-val(card-glimpse, divider-color);
+  }
 
   @include media-breakpoint-up(md) {
-    @include sv-flex(1, 0, calc(50% - 1.25rem));
+    @include sv-flex(1, 0, calc(50% - #{$r-glimpse-gutter * 2}));
   }
   @include media-breakpoint-up(lg) {
-    @include sv-flex(1, 0, calc(25% - 1.25rem));
+    @include sv-flex(1, 0, calc(25% - #{$r-glimpse-gutter * 2}));
   }
 
   &:hover {
@@ -21,7 +28,7 @@
   }
 
   &__media {
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
 
     img,
     iframe {
@@ -29,11 +36,31 @@
       margin: 0 auto;
       max-width: 100%;
       height: auto;
+      border-radius: $border-radius;
     }
   }
 
+  &__wrapper {
+  }
+
   &__title {
+    @include font-size($h5-font-size);
+    margin-top: 0.5rem;
     margin-bottom: 0.5rem;
+    color: r-theme-val(card-glimpse, title-color);
+  }
+
+  &__content {
+    @include font-size($h6-font-size);
+    color: r-theme-val(card-glimpse, content-color);
+
+    p {
+      margin-bottom: 0.5rem;
+    }
+
+    & > *:last-child {
+      margin-bottom: 0;
+    }
   }
 }
 
@@ -41,18 +68,23 @@
 // Half row variant is horizontal
 //
 .glimpse-row_half {
-  @include sv-flex(1, 0, calc(100% - 1.25rem));
+  @include sv-flex(1, 0, calc(100% - #{$r-glimpse-gutter * 2}));
   position: relative;
-  margin: 0.625rem;
-  padding: 1rem;
-  color: inherit;
+  margin: 0.5rem $r-glimpse-gutter 0;
+  padding: 0.4rem;
+  background: r-theme-val(row_half-glimpse, base-background);
+  border-top-left-radius: $border-radius;
+  border-top-right-radius: $border-radius;
+  @if r-theme-val(row_half-glimpse, divider-color) {
+    border-bottom: $onepixel solid r-theme-val(row_half-glimpse, divider-color);
+  }
 
   @include media-breakpoint-up(md) {
     display: flex;
     flex-direction: row;
   }
   @include media-breakpoint-up(lg) {
-    @include sv-flex(1, 0, calc(50% - 1.25rem));
+    @include sv-flex(1, 0, calc(50% - #{$r-glimpse-gutter * 2}));
   }
 
   &:hover {
@@ -61,7 +93,7 @@
   }
 
   &__media {
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
 
     @include media-breakpoint-up(md) {
       @include sv-flex(1, 0, 12.5rem);
@@ -73,14 +105,33 @@
     iframe {
       display: block;
       margin: 0 auto;
-      //width: 100%;
       max-width: 100%;
       height: auto;
+      border-radius: $border-radius;
     }
   }
 
+  &__wrapper {
+  }
+
   &__title {
+    @include font-size($h5-font-size);
+    margin-top: 0.5rem;
     margin-bottom: 0.5rem;
+    color: r-theme-val(row_half-glimpse, title-color);
+  }
+
+  &__content {
+    @include font-size($h6-font-size);
+    color: r-theme-val(row_half-glimpse, content-color);
+
+    p {
+      margin-bottom: 0.5rem;
+    }
+
+    & > *:last-child {
+      margin-bottom: 0;
+    }
   }
 }
 
@@ -88,11 +139,16 @@
 // Full row variant is horizontal
 //
 .glimpse-row_full {
-  @include sv-flex(1, 0, calc(100% - 1.25rem));
+  @include sv-flex(1, 0, calc(100% - #{$r-glimpse-gutter * 2}));
   position: relative;
-  margin: 0.625rem;
-  padding: 1rem;
-  color: inherit;
+  margin: 0.5rem $r-glimpse-gutter 0;
+  padding: 0.4rem;
+  background: r-theme-val(row_full-glimpse, base-background);
+  border-top-left-radius: $border-radius;
+  border-top-right-radius: $border-radius;
+  @if r-theme-val(row_full-glimpse, divider-color) {
+    border-bottom: $onepixel solid r-theme-val(row_full-glimpse, divider-color);
+  }
 
   @include media-breakpoint-up(md) {
     display: flex;
@@ -105,7 +161,7 @@
   }
 
   &__media {
-    margin-bottom: 0.5rem;
+    margin-bottom: 1rem;
 
     @include media-breakpoint-up(md) {
       @include sv-flex(1, 0, 12.5rem);
@@ -119,10 +175,30 @@
       margin: 0 auto;
       max-width: 100%;
       height: auto;
+      border-radius: $border-radius;
     }
   }
 
+  &__wrapper {
+  }
+
   &__title {
+    @include font-size($h5-font-size);
+    margin-top: 0.5rem;
     margin-bottom: 0.5rem;
+    color: r-theme-val(row_full-glimpse, title-color);
+  }
+
+  &__content {
+    @include font-size($h6-font-size);
+    color: r-theme-val(row_full-glimpse, content-color);
+
+    p {
+      margin-bottom: 0.5rem;
+    }
+
+    & > *:last-child {
+      margin-bottom: 0;
+    }
   }
 }

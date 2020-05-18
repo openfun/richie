@@ -336,6 +336,12 @@ $r-theme: (
     base: $firebrick6-scheme,
     base-hover: $firebrick6-scheme,
   ),
+  card-glimpse: (
+    base-background: r-color('white'),
+    divider-color: r-color('firebrick6'),
+    title-color: r-color('black'),
+    content-color: r-color('slate-grey'),
+  ),
   category-glimpse: (
     base-border: rgba(r-color('black'), 0.125),
     base-hover-border: r-color('firebrick6'),
@@ -429,6 +435,18 @@ $r-theme: (
   program-glimpse-empty: (
     card-color: r-color('slate-grey'),
     hover-border: r-color('light-grey'),
+  ),
+  row_half-glimpse: (
+    base-background: r-color('white'),
+    divider-color: r-color('firebrick6'),
+    title-color: r-color('black'),
+    content-color: r-color('slate-grey'),
+  ),
+  row_full-glimpse: (
+    base-background: r-color('white'),
+    divider-color: r-color('firebrick6'),
+    title-color: r-color('black'),
+    content-color: r-color('slate-grey'),
   ),
   base-search: (
     input-background: transparent,
