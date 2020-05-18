@@ -10,7 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- New integration for nested items
+- New integration for nested items and glimpse plugins
 - Add glimpse plugins to the course information placeholder on demo site
 
 ### Changed
