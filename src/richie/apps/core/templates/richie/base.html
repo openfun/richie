@@ -88,9 +88,11 @@
                             <li class="topbar__item topbar__item--login richie-react richie-react--user-login"
                                 data-props='{"loginUrl": "{% url 'admin:index' %}", "logoutUrl": "{% url 'logout' %}", "signupUrl": "{% url 'admin:index' %}"}'></li>
                             {% endblock userlogin %}
+                            {% block topbar_contact %}
                             <li class="topbar__item topbar__item--cta">
                                 <a href="#">{% trans "Contact us" %}</a>
                             </li>
+                            {% endblock topbar_contact %}
                         </ul>
                     </div>
                 </div>
