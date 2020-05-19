@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Allow overriding the contact us button in the topbar
+
 ## [2.0.0-beta.6] - 2020-05-19
 
 ### Added
@@ -19,7 +23,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Refactor nested items to simplify them
 - Remove the "suggested by" sentence from course detail view
-- Allow removing the contact us button in a theme
+- Allow overriding the contact us button in a theme
 - Center organizations on course detail view
 - Scroll course search to top when the user interacts with the filters pane.
 - Increase default course search results number from 20 to 21.
