@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [2.0.0-beta.6] - 2020-05-19
+
 ### Added
 
 - New integration for nested items and glimpse plugins
@@ -19,15 +21,12 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Remove the "suggested by" sentence from course detail view
 - Allow removing the contact us button in a theme
 - Center organizations on course detail view
+- Scroll course search to top when the user interacts with the filters pane.
+- Increase default course search results number from 20 to 21.
 
 ### Fixed
 
 - Invert course description and introduction blocks
-
-### Changed
-
-- Scroll course search to top when the user interacts with the filters pane.
-- Increase default course search results number from 20 to 21.
 
 ## [2.0.0-beta.5] - 2020-05-04
 
@@ -850,7 +849,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.0.0-beta.5...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.0.0-beta.6...master
+[2.0.0-beta.6]: https://github.com/openfun/richie/compare/v2.0.0-beta.5...v2.0.0-beta.6
 [2.0.0-beta.5]: https://github.com/openfun/richie/compare/v2.0.0-beta.4...v2.0.0-beta.5
 [2.0.0-beta.4]: https://github.com/openfun/richie/compare/v2.0.0-beta.3...v2.0.0-beta.4
 [2.0.0-beta.3]: https://github.com/openfun/richie/compare/v2.0.0-beta.2...v2.0.0-beta.3
