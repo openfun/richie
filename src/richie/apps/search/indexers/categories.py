@@ -127,7 +127,9 @@ class CategoriesIndexer:
                 language: slice_string_for_completion(title)
                 for language, title in titles.items()
             },
-            "description": {l: " ".join(st) for l, st in description.items()},
+            "description": {
+                language: " ".join(st) for language, st in description.items()
+            },
             "icon": icon_images,
             "is_meta": bool(
                 node.parent is None

@@ -91,7 +91,7 @@ class PersonsIndexer:
                 language: person.extended_object.get_absolute_url(language)
                 for language in titles.keys()
             },
-            "bio": {l: " ".join(st) for l, st in bio.items()},
+            "bio": {language: " ".join(st) for language, st in bio.items()},
             "complete": {
                 language: slice_string_for_completion(title)
                 for language, title in titles.items()

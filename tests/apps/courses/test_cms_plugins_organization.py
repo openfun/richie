@@ -101,9 +101,6 @@ class OrganizationPluginTestCase(CMSTestCase):
             (
                 '<a class="organization-glimpse" href="/en/public-title/" '
                 'title="public title">'
-            ).format(
-                url=organization_page.get_absolute_url(),
-                title=organization_page.get_title(),
             ),
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
