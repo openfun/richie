@@ -170,7 +170,11 @@ COURSE_RUNS = {
 # pylint: disable=too-many-public-methods
 @mock.patch.dict(  # Reduce the number of languages
     ALL_LANGUAGES_DICT,
-    {l: "#{:s}".format(l) for cr in COURSE_RUNS.values() for l in cr["languages"]},
+    {
+        language: "#{:s}".format(language)
+        for cr in COURSE_RUNS.values()
+        for language in cr["languages"]
+    },
     clear=True,
 )
 @mock.patch.object(  # Avoid having to build the categories and organizations indices

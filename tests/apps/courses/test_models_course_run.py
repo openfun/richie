@@ -418,7 +418,7 @@ class CourseRunModelsTestCase(TestCase):
         """
         The languages field should not accept more than 50 choices.
         """
-        languages = [l[0] for l in ALL_LANGUAGES[:51]]
+        languages = [language[0] for language in ALL_LANGUAGES[:51]]
 
         # 50 languages should be fine
         CourseRunFactory(languages=languages[:-1])

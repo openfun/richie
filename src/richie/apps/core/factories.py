@@ -119,7 +119,7 @@ class PermissionFactory(factory.django.DjangoModelFactory):
 class TitleFactory(factory.django.DjangoModelFactory):
     """Create random title objects for CMS pages."""
 
-    language = factory.Iterator([l[0] for l in settings.LANGUAGES])
+    language = factory.Iterator([lang[0] for lang in settings.LANGUAGES])
     page = None
     path = factory.LazyAttribute(lambda o: o.page.get_path_for_slug(o.slug, o.language))
     slug = factory.LazyAttribute(lambda o: slugify(o.title))

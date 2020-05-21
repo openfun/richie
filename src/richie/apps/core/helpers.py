@@ -82,7 +82,9 @@ def create_i18n_page(title, languages=None, is_homepage=False, **kwargs):
         )
 
     # Assert that the languages passed are declared in settings
-    invalid_languages = set(languages) - {l[0] for l in settings.LANGUAGES}
+    invalid_languages = set(languages) - {
+        language[0] for language in settings.LANGUAGES
+    }
     if invalid_languages:
         raise ValueError(
             "You can't create pages in languages that are not declared: {:s}".format(

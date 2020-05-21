@@ -103,13 +103,7 @@ class PersonPluginTestCase(CMSTestCase):
         # Check the page content in English
         response = self.client.get(url)
         # Person's name should be present as a link to the cms page
-        self.assertContains(
-            response,
-            '<a href="/en/person-title/">'.format(
-                name=person.public_extension.extended_object.get_title()
-            ),
-            status_code=200,
-        )
+        self.assertContains(response, '<a href="/en/person-title/">', status_code=200)
         # The person's full name should be wrapped in a h2
         self.assertContains(
             response,
@@ -131,7 +125,7 @@ class PersonPluginTestCase(CMSTestCase):
 
         # Short bio should be present
         self.assertContains(
-            response, '<div class="person-glimpse__bio">public bio</div>', html=True,
+            response, '<div class="person-glimpse__bio">public bio</div>', html=True
         )
         self.assertNotContains(response, "draft bio")
 
@@ -147,7 +141,7 @@ class PersonPluginTestCase(CMSTestCase):
         self.assertIsNotNone(re.search(pattern, str(response.content)))
 
         self.assertContains(
-            response, '<div class="person-glimpse__bio">résumé public</div>', html=True,
+            response, '<div class="person-glimpse__bio">résumé public</div>', html=True
         )
 
     def test_cms_plugins_person_render_on_draft_page(self):

@@ -94,7 +94,9 @@ class OrganizationsIndexer:
                 for language, title in titles.items()
             },
             "logo": logo_images,
-            "description": {l: " ".join(st) for l, st in description.items()},
+            "description": {
+                language: " ".join(st) for language, st in description.items()
+            },
             "title": titles,
         }
 

@@ -519,7 +519,9 @@ class CoursesIndexer:
             },
             "course_runs": course_runs,
             "cover_image": cover_images,
-            "description": {l: " ".join(st) for l, st in descriptions.items()},
+            "description": {
+                language: " ".join(st) for language, st in descriptions.items()
+            },
             "duration": duration,
             "effort": effort,
             "icon": icon_images,

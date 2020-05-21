@@ -432,8 +432,10 @@ class CourseRunFactory(PageExtensionDjangoModelFactory):
             self.parent.get_languages()
             if getattr(self, "parent", None)
             else [
-                l[0]
-                for l in random.sample(ALL_LANGUAGES, random.randint(1, 5))  # nosec
+                language[0]
+                for language in random.sample(
+                    ALL_LANGUAGES, random.randint(1, 5)  # nosec
+                )
             ]
         )
 
