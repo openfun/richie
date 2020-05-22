@@ -2,7 +2,7 @@ import { act, render } from '@testing-library/react';
 import React from 'react';
 
 import { history, location } from 'utils/indirection/window';
-import { useHistory } from '.';
+import { HistoryProvider, useHistory } from '.';
 
 jest.mock('utils/indirection/window', () => ({
   history: {
@@ -31,7 +31,11 @@ describe('data/useHistory', () => {
   });
 
   it('makes the current history entry available at bootstrap', () => {
-    render(<TestComponent />);
+    render(
+      <HistoryProvider>
+        <TestComponent />
+      </HistoryProvider>,
+    );
     const [historyEntry] = getLatestHookValues();
     expect(historyEntry).toEqual({
       state: {
@@ -46,7 +50,11 @@ describe('data/useHistory', () => {
   it('re-renders with a new value when the popstate event is fired', () => {
     {
       // Assert our initial values
-      render(<TestComponent />);
+      render(
+        <HistoryProvider>
+          <TestComponent />
+        </HistoryProvider>,
+      );
       const [historyEntry] = getLatestHookValues();
       expect(historyEntry).toEqual({
         state: {
@@ -79,7 +87,11 @@ describe('data/useHistory', () => {
   it('provides a pushState helper that creates a new history entry', () => {
     {
       // Assert our initial values
-      render(<TestComponent />);
+      render(
+        <HistoryProvider>
+          <TestComponent />
+        </HistoryProvider>,
+      );
       const [historyEntry, pushState] = getLatestHookValues();
       expect(historyEntry).toEqual({
         state: {
@@ -118,7 +130,11 @@ describe('data/useHistory', () => {
   it('provides a replaceState helper that replaces the current history entry', () => {
     {
       // Assert our initial values
-      render(<TestComponent />);
+      render(
+        <HistoryProvider>
+          <TestComponent />
+        </HistoryProvider>,
+      );
       const [historyEntry, , replaceState] = getLatestHookValues();
       expect(historyEntry).toEqual({
         state: {

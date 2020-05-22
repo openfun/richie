@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Allow overriding the contact us button in the topbar
+- Improve performance of Search frontend.
 
 ## [2.0.0-beta.6] - 2020-05-19
 
