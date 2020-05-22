@@ -18,7 +18,7 @@ const messages = defineMessages({
   },
 });
 
-export const CourseGlimpse = ({
+const CourseGlimpseBase = ({
   context,
   course,
 }: CourseGlimpseProps & CommonDataProps) => (
@@ -64,3 +64,12 @@ export const CourseGlimpse = ({
     </div>
   </a>
 );
+
+const areEqual: (
+  prevProps: Readonly<CourseGlimpseProps & CommonDataProps>,
+  newProps: Readonly<CourseGlimpseProps & CommonDataProps>,
+) => boolean = (prevProps, newProps) =>
+  prevProps.context === newProps.context &&
+  prevProps.course.id === newProps.course.id;
+
+export const CourseGlimpse = React.memo(CourseGlimpseBase, areEqual);

@@ -8,7 +8,7 @@ export interface SearchFilterValueLeafProps {
   value: FilterValue;
 }
 
-export const SearchFilterValueLeaf = ({
+const SearchFilterValueLeafBase = ({
   filter,
   value,
 }: SearchFilterValueLeafProps) => {
@@ -34,3 +34,14 @@ export const SearchFilterValueLeaf = ({
     </label>
   );
 };
+
+const areEqual: (
+  prevProps: Readonly<SearchFilterValueLeafProps>,
+  newProps: Readonly<SearchFilterValueLeafProps>,
+) => boolean = (prevProps, newProps) =>
+  prevProps.value.count === newProps.value.count;
+
+export const SearchFilterValueLeaf = React.memo(
+  SearchFilterValueLeafBase,
+  areEqual,
+);

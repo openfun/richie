@@ -1,5 +1,11 @@
 import { parse } from 'query-string';
-import { createContext, useEffect, useState } from 'react';
+import React, {
+  createContext,
+  PropsWithChildren,
+  useEffect,
+  useState,
+  useContext,
+} from 'react';
 
 import { history, location } from 'utils/indirection/window';
 import { Maybe, Nullable } from 'utils/types';
@@ -22,7 +28,20 @@ export type History = [HistoryEntry, pushStateFn, replaceStateFn];
 
 export const HistoryContext = createContext<History>([] as any);
 
-export const useHistory: () => History = () => {
+export const useHistory = () => {
+  return useContext(HistoryContext);
+};
+
+export const HistoryProvider = ({ children }: PropsWithChildren<{}>) => {
+  const historyValue = useProvideHistory();
+  return (
+    <HistoryContext.Provider value={historyValue}>
+      {children}
+    </HistoryContext.Provider>
+  );
+};
+
+const useProvideHistory: () => History = () => {
   const [historyEntry, setHistoryEntry] = useState<HistoryEntry>({
     state: { name: '', data: { params: parse(location.search) } },
     title: '',

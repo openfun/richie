@@ -9,7 +9,7 @@ import {
   useCourseSearchParams,
   CourseSearchParamsAction,
 } from 'data/useCourseSearchParams';
-import { HistoryContext, useHistory } from 'data/useHistory';
+import { HistoryProvider } from 'data/useHistory';
 import { FilterDefinition } from 'types/filters';
 import { history, location } from 'utils/indirection/window';
 import { SearchSuggestField } from '.';
@@ -34,15 +34,6 @@ jest.mock('utils/indirection/window', () => ({
 }));
 
 describe('components/SearchSuggestField', () => {
-  const HistoryWrapper = ({ children }: { children: React.ReactNode }) => {
-    const localHistory = useHistory();
-    return (
-      <HistoryContext.Provider value={localHistory}>
-        {children}
-      </HistoryContext.Provider>
-    );
-  };
-
   const context = {
     assets: {
       icons: '/icons.svg',
@@ -96,9 +87,9 @@ describe('components/SearchSuggestField', () => {
   it('renders', () => {
     const { getByPlaceholderText } = render(
       <IntlProvider locale="en">
-        <HistoryWrapper>
+        <HistoryProvider>
           <SearchSuggestField context={context} />
-        </HistoryWrapper>
+        </HistoryProvider>
       </IntlProvider>,
     );
 
@@ -110,9 +101,9 @@ describe('components/SearchSuggestField', () => {
     location.search = '?limit=20&offset=0&query=machine%20learning';
     const { getByDisplayValue } = render(
       <IntlProvider locale="en">
-        <HistoryWrapper>
+        <HistoryProvider>
           <SearchSuggestField context={context} />
-        </HistoryWrapper>
+        </HistoryProvider>
       </IntlProvider>,
     );
 
@@ -131,10 +122,10 @@ describe('components/SearchSuggestField', () => {
     location.search = '?limit=20&offset=0&query=social%20sciences';
     const { getByDisplayValue, rerender } = render(
       <IntlProvider locale="en">
-        <HistoryWrapper>
+        <HistoryProvider>
           <SearchSuggestField context={context} />
           <OtherComponent />
-        </HistoryWrapper>
+        </HistoryProvider>
       </IntlProvider>,
     );
 
@@ -149,10 +140,10 @@ describe('components/SearchSuggestField', () => {
     );
     rerender(
       <IntlProvider locale="en">
-        <HistoryWrapper>
+        <HistoryProvider>
           <SearchSuggestField context={context} />
           <OtherComponent />
-        </HistoryWrapper>
+        </HistoryProvider>
       </IntlProvider>,
     );
 
@@ -180,9 +171,9 @@ describe('components/SearchSuggestField', () => {
 
     const { getByPlaceholderText, getByText, queryByText } = render(
       <IntlProvider locale="en">
-        <HistoryWrapper>
+        <HistoryProvider>
           <SearchSuggestField context={context} />
-        </HistoryWrapper>
+        </HistoryProvider>
       </IntlProvider>,
     );
 
@@ -231,9 +222,9 @@ describe('components/SearchSuggestField', () => {
 
     const { getByPlaceholderText } = render(
       <IntlProvider locale="en">
-        <HistoryWrapper>
+        <HistoryProvider>
           <SearchSuggestField context={context} />
-        </HistoryWrapper>
+        </HistoryProvider>
       </IntlProvider>,
     );
 
@@ -284,9 +275,9 @@ describe('components/SearchSuggestField', () => {
 
     const { getByPlaceholderText, getByText, queryByText } = render(
       <IntlProvider locale="en">
-        <HistoryWrapper>
+        <HistoryProvider>
           <SearchSuggestField context={context} />
-        </HistoryWrapper>
+        </HistoryProvider>
       </IntlProvider>,
     );
 
@@ -375,9 +366,9 @@ describe('components/SearchSuggestField', () => {
 
     const { getByPlaceholderText, getByText, queryByText } = render(
       <IntlProvider locale="en">
-        <HistoryWrapper>
+        <HistoryProvider>
           <SearchSuggestField context={context} />
-        </HistoryWrapper>
+        </HistoryProvider>
       </IntlProvider>,
     );
 
@@ -461,9 +452,9 @@ describe('components/SearchSuggestField', () => {
 
     const { getByPlaceholderText } = render(
       <IntlProvider locale="en">
-        <HistoryWrapper>
+        <HistoryProvider>
           <SearchSuggestField context={context} />
-        </HistoryWrapper>
+        </HistoryProvider>
       </IntlProvider>,
     );
 
@@ -504,9 +495,9 @@ describe('components/SearchSuggestField', () => {
 
     const { getByPlaceholderText } = render(
       <IntlProvider locale="en">
-        <HistoryWrapper>
+        <HistoryProvider>
           <SearchSuggestField context={context} />
-        </HistoryWrapper>
+        </HistoryProvider>
       </IntlProvider>,
     );
 
@@ -581,9 +572,9 @@ describe('components/SearchSuggestField', () => {
 
     const { getByPlaceholderText } = render(
       <IntlProvider locale="en">
-        <HistoryWrapper>
+        <HistoryProvider>
           <SearchSuggestField context={context} />
-        </HistoryWrapper>
+        </HistoryProvider>
       </IntlProvider>,
     );
 
@@ -645,9 +636,9 @@ describe('components/SearchSuggestField', () => {
 
     const { getByPlaceholderText, getByText } = render(
       <IntlProvider locale="en">
-        <HistoryWrapper>
+        <HistoryProvider>
           <SearchSuggestField context={context} />
-        </HistoryWrapper>
+        </HistoryProvider>
       </IntlProvider>,
     );
 
