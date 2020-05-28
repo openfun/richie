@@ -157,6 +157,7 @@ CMS_PLACEHOLDER_CONF = {
         "parent_classes": {
             "CKEditorPlugin": ["SectionPlugin"],
             "SimplePicturePlugin": ["SectionPlugin"],
+            "GlimpsePlugin": ["SectionPlugin"],
         },
         "child_classes": {"SectionPlugin": ["CKEditorPlugin", "SimplePicturePlugin"]},
     },

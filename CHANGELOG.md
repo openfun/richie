@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Allow glimpse plugin in course information placeholder
 - Allow overriding the contact us button in the topbar
 - Improve performance of Search frontend.
 
