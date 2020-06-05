@@ -23,7 +23,7 @@ NB_OBJECTS = {
     "programs": 6,
     "programs_courses": 4,
     "home_blogposts": 5,
-    "home_courses": 8,
+    "home_courses": 7,
     "home_organizations": 4,
     "home_subjects": 6,
     "home_persons": 4,
