@@ -15,6 +15,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Improve performance of Search frontend.
 - Refine Large banner plugin layout for hero variant.
 - First course glimpses on three columns on homepage.
+- Fix glitch with "scaleX" usage on wave decoration on category and
+  organization detail banner.
 
 ## [2.0.0-beta.6] - 2020-05-19
 
