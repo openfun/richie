@@ -4,28 +4,25 @@
     >
     <div class="hero-intro__inner">
         <div class="hero-intro__body">
-            <h{{ header_level|default:1 }} class="hero-intro__title">
-                {{ instance.title }}
-            </h{{ header_level|default:1 }}>
             <div class="hero-intro__content">
                 {{ instance.content|safe }}
 
                 {% if instance.logo %}
                     <img src="{% thumbnail instance.logo 500x180 %}" class="hero-intro__logo" alt="{{ instance.logo_alt_text }}">
                 {% endif %}
+            </div>
 
-                <div class="hero-intro__search">
-                    <p class="hero-intro__search-title">
-                        {% trans "Search in our courses" %}
-                    </p>
+            <div class="hero-intro__search">
+                <p class="hero-intro__search-title">
+                    {% trans "Search in our courses" %}
+                </p>
 
-                    <div class="richie-react richie-react--root-search-suggest-field"
-                        data-props='{"courseSearchPageUrl": "{% page_url 'courses' %}", "context": { "assets": { "icons": "{% static 'richie/icons.svg' %}" } }}'></div>
+                <div class="richie-react richie-react--root-search-suggest-field"
+                    data-props='{"courseSearchPageUrl": "{% page_url 'courses' %}", "context": { "assets": { "icons": "{% static 'richie/icons.svg' %}" } }}'></div>
 
-                    <a class="hero-intro__cta" href="{% page_url 'courses' %}">
-                        {% trans "Explore our catalog" %}
-                    </a>
-                </div>
+                <a class="hero-intro__cta" href="{% page_url 'courses' %}">
+                    {% trans "Explore our catalog" %}
+                </a>
             </div>
         </div>
     </div>

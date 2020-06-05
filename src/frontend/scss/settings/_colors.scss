@@ -297,6 +297,7 @@ $r-theme: (
       url('../../richie/images/components/wave-white.svg'),
     inner-background: $white-mask-gradient,
     title-color: r-color('firebrick6'),
+    title-alt-color: r-color('charcoal'),
     content-color: r-color('black'),
     search-input-background: rgba(r-color('white'), 0.7),
     search-btn-background: r-color('firebrick6'),

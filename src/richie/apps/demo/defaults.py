@@ -296,7 +296,10 @@ ICONS_INFO.update(getattr(settings, "RICHIE_DEMO_ICONS_INFO", {}))
 HOMEPAGE_CONTENT = {
     "en": {
         "banner_title": "Welcome to Richie",
-        "banner_content": "It works! This is the default homepage for the Richie CMS.",
+        "banner_content": (
+            """<h1 class="hero-intro__title">Welcome <strong>to Richie</strong></h1>"""
+            """<p>It works! This is the default homepage for the Richie CMS.</p>"""
+        ),
         "banner_template": "richie/large_banner/hero-intro.html",
         "button_template_name": "button-caesura",
         "section_template": "richie/section/section.html",
@@ -315,7 +318,10 @@ HOMEPAGE_CONTENT = {
     },
     "fr": {
         "banner_title": "Bienvenue sur Richie",
-        "banner_content": "Ça marche ! Ceci est la page d'accueil par défaut du CMS Richie.",
+        "banner_content": (
+            """<h1 class="hero-intro__title">Bienvenue <strong>sur Richie</strong></h1>"""
+            """<p>Ça marche ! Ceci est la page d'accueil par défaut du CMS Richie.</p>"""
+        ),
         "banner_template": "richie/large_banner/hero-intro.html",
         "button_template_name": "button-caesura",
         "section_template": "richie/section/section.html",

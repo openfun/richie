@@ -113,6 +113,8 @@
     }
 
     @include media-breakpoint-up(lg) {
+      display: flex;
+
       @if $r-topbar-height {
         padding: $r-topbar-height 0 calc(5vw + 1rem);
         min-height: ($r-topbar-height + 33.75rem);
@@ -129,7 +131,10 @@
     padding: 1rem;
 
     @include media-breakpoint-up(lg) {
+      display: flex;
       padding: 2rem;
+      flex-direction: column;
+      justify-content: space-between;
     }
   }
 
@@ -140,6 +145,11 @@
     @include media-breakpoint-up(lg) {
       width: 50%;
     }
+
+    strong {
+      color: r-theme-val(hero-intro, title-alt-color);
+      font-weight: inherit;
+    }
   }
 
   &__content {
@@ -148,8 +158,8 @@
   }
 
   &__search {
-    @include responsive-spacer('padding-top', 3, $breakpoints: ('lg': 5));
     display: flex;
+    padding-top: 1rem;
     flex-wrap: wrap;
     align-items: flex-start;
 
