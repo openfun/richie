@@ -5,6 +5,7 @@ import json
 
 from django.conf import settings
 from django.contrib.sites.models import Site
+from django.middleware.csrf import get_token
 
 from . import defaults
 
@@ -34,6 +35,7 @@ def site_metas(request):
         "FRONTEND_CONTEXT": json.dumps(
             {
                 "context": {
+                    "csrftoken": get_token(request),
                     "environment": getattr(settings, "ENVIRONMENT", ""),
                     "release": getattr(settings, "RELEASE", ""),
                     "sentry_dsn": getattr(settings, "SENTRY_DSN", ""),

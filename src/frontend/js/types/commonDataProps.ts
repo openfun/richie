@@ -6,6 +6,7 @@ import { Nullable } from 'utils/types';
  */
 export interface CommonDataProps {
   context: {
+    csrftoken: string;
     environment: string;
     release: string;
     sentry_dsn: Nullable<string>;
