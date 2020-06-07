@@ -13,6 +13,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add Linkedin badge in social networks templates.
 - Add new section "septenary" with a new wave decoration.
 
+### Fixed
+
+- Spinner component was broken due to missing styles.
+
 ## [2.0.0-beta.9] - 2020-07-01
 
 ### Added
