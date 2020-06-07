@@ -16,8 +16,9 @@ export interface CourseState {
   text: string;
 }
 
-/**
- * Use an empty type to make sure we do not depend on any LMS-specific fields
- * on enrollment objects, just use HTTP response codes.
- */
-export interface Enrollment {}
+export interface Enrollment {
+  created_at: string;
+  course_run: CourseRun['id'];
+  id: number;
+  user: number;
+}
