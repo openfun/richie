@@ -20,4 +20,5 @@ export interface CourseState {
  * Use an empty type to make sure we do not depend on any LMS-specific fields
  * on enrollment objects, just use HTTP response codes.
  */
+// tslint:disable-next-line
 export interface Enrollment {}

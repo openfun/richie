@@ -108,16 +108,6 @@
     }
   }
 
-  &__run-cta {
-    width: 100%;
-    @include button-small($font-weight: bold);
-    @include r-button-colors(
-      r-theme-val(course-detail, run-cta),
-      $apply-border: true,
-      $include-hover: true
-    );
-  }
-
   &__run-descriptions {
     dl {
       margin: 0;

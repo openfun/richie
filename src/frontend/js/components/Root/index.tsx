@@ -4,6 +4,7 @@ import startCase from 'lodash-es/startCase';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import { CourseRunEnrollment } from 'components/CourseRunEnrollment';
 import { RootSearchSuggestField } from 'components/RootSearchSuggestField';
 import { Search } from 'components/Search';
 import { SearchSuggestField } from 'components/SearchSuggestField';
@@ -14,6 +15,7 @@ import { HistoryProvider } from 'data/useHistory';
 // for type-safety when we call them. This will let us use the props for any top-level component in a
 // way TypeScript understand and accepts
 interface ComponentLibrary {
+  CourseRunEnrollment: typeof CourseRunEnrollment;
   RootSearchSuggestField: typeof RootSearchSuggestField;
   Search: typeof Search;
   SearchSuggestField: typeof SearchSuggestField;
@@ -21,6 +23,7 @@ interface ComponentLibrary {
 }
 // Actually create the component map that we'll use below to access our component classes
 const componentLibrary: ComponentLibrary = {
+  CourseRunEnrollment,
   RootSearchSuggestField,
   Search,
   SearchSuggestField,
