@@ -10,6 +10,7 @@ describe('components/CourseGlimpseList', () => {
     assets: {
       icons: '/icons.svg',
     },
+    csrftoken: 'the csrf token',
     environment: 'frontend_tests',
     release: '9.8.7',
     sentry_dsn: null,
