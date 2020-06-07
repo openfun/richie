@@ -7,8 +7,8 @@
 
 .spinner {
   border: 0.125rem solid transparent;
-  border-left-color: $dodgerblue5;
-  border-top-color: $dodgerblue5;
+  border-left-color: r-color('denim');
+  border-top-color: r-color('denim');
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   display: inline-block;
