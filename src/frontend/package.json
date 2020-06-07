@@ -54,6 +54,7 @@
     "@types/react-dom": "16.9.8",
     "@types/react-modal": "3.10.6",
     "babel-jest": "26.3.0",
+    "@xstate/react": "0.8.1",
     "babel-loader": "8.1.0",
     "babel-plugin-react-intl": "7.8.2",
     "babel-preset-react": "7.0.0-beta.3",
@@ -82,6 +83,7 @@
     "webpack-cli": "3.3.12",
     "whatwg-fetch": "3.4.0",
     "xhr-mock": "2.5.1",
+    "xstate": "4.10.0",
     "yargs": "15.4.1"
   },
   "resolutions": {
