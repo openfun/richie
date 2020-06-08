@@ -341,76 +341,6 @@ jobs:
           name: Upload built packages to PyPI
           command: ~/.local/bin/twine upload dist/*
 
-  # ---- DockerHub publication job ----
-  hub:
-    docker:
-      - image: circleci/buildpack-deps:stretch
-    working_directory: ~/fun
-    steps:
-      # Checkout repository sources
-      - checkout
-      # Generate a version.json file describing app release
-      - <<: *generate-version-file
-      # Activate docker-in-docker (with layers caching enabled)
-      - setup_remote_docker:
-          docker_layer_caching: true
-      - run:
-          name: Build production image (using cached layers)
-          command: docker build -t richie:${CIRCLE_SHA1} --target production .
-      - run:
-          name: Check built images availability
-          command: docker images "richie:${CIRCLE_SHA1}*"
-      # Login to DockerHub to Publish new images
-      #
-      # Nota bene: you'll need to define the following secrets environment vars
-      # in CircleCI interface:
-      #
-      #   - DOCKER_USER
-      #   - DOCKER_PASS
-      - run:
-          name: Login to DockerHub
-          command: echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
-      # Tag docker images with the same pattern used in Git (Semantic Versioning)
-      #
-      # Git tag: v1.0.1
-      # Docker tag: 1.0.1(-ci)
-      - run:
-          name: Tag images
-          command: |
-            docker images fundocker/richie
-            DOCKER_TAG=$([[ -z "$CIRCLE_TAG" ]] && echo $CIRCLE_BRANCH || echo ${CIRCLE_TAG} | sed 's/^v//')
-            RELEASE_TYPE=$([[ -z "$CIRCLE_TAG" ]] && echo "branch" || echo "tag ")
-            # Display either:
-            # - DOCKER_TAG: master (Git branch)
-            # or
-            # - DOCKER_TAG: 1.1.2 (Git tag v1.1.2)
-            echo "DOCKER_TAG: ${DOCKER_TAG} (Git ${RELEASE_TYPE}${CIRCLE_TAG})"
-            docker tag richie:${CIRCLE_SHA1} fundocker/richie:${DOCKER_TAG}
-            if [[ -n "$CIRCLE_TAG" ]]; then
-                docker tag richie:${CIRCLE_SHA1} fundocker/richie:latest
-            fi
-            docker images | grep -E "^fundocker/richie\s*(${DOCKER_TAG}.*|latest|master)"
-
-      # Publish images to DockerHub
-      #
-      # Nota bene: logged user (see "Login to DockerHub" step) must have write
-      # permission for the project's repository; this also implies that the
-      # DockerHub repository already exists.
-      - run:
-          name: Publish images
-          command: |
-            DOCKER_TAG=$([[ -z "$CIRCLE_TAG" ]] && echo $CIRCLE_BRANCH || echo ${CIRCLE_TAG} | sed 's/^v//')
-            RELEASE_TYPE=$([[ -z "$CIRCLE_TAG" ]] && echo "branch" || echo "tag ")
-            # Display either:
-            # - DOCKER_TAG: master (Git branch)
-            # or
-            # - DOCKER_TAG: 1.1.2 (Git tag v1.1.2)
-            echo "DOCKER_TAG: ${DOCKER_TAG} (Git ${RELEASE_TYPE}${CIRCLE_TAG})"
-            docker push fundocker/richie:${DOCKER_TAG}
-            if [[ -n "$CIRCLE_TAG" ]]; then
-              docker push fundocker/richie:latest
-            fi
-
   # ---- Front-end jobs ----
   build-front:
     docker:
@@ -714,23 +644,6 @@ workflows:
           filters:
             tags:
               only: /.*/
-
-      # DockerHub publication.
-      #
-      # Publish docker images only if all build, lint and test jobs succeed
-      # and it has been tagged with a tag starting with the letter v or is on
-      # the master branch
-      - hub:
-          requires:
-            - build-docker
-            - test-front
-            - test-back-mysql
-            - test-back-postgresql
-          filters:
-            branches:
-              only: master
-            tags:
-              only: /^v.*/
 
       # PyPI publication.
       #
