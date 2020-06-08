@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [2.0.0-beta.7] - 2020-06-08
+
 ### Changed
 
 - Allow glimpse plugin in course information placeholder
@@ -861,7 +863,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.0.0-beta.6...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.0.0-beta.7...master
+[2.0.0-beta.7]: https://github.com/openfun/richie/compare/v2.0.0-beta.6...v2.0.0-beta.7
 [2.0.0-beta.6]: https://github.com/openfun/richie/compare/v2.0.0-beta.5...v2.0.0-beta.6
 [2.0.0-beta.5]: https://github.com/openfun/richie/compare/v2.0.0-beta.4...v2.0.0-beta.5
 [2.0.0-beta.4]: https://github.com/openfun/richie/compare/v2.0.0-beta.3...v2.0.0-beta.4
