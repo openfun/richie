@@ -135,6 +135,9 @@ section {
     border: 0;
 
     &__logo {
+      flex-grow: 0;
+      justify-content: flex-start;
+
       img {
         max-width: 3.75rem;
         margin: 0 auto;

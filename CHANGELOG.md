@@ -17,6 +17,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - First course glimpses on three columns on homepage.
 - Fix glitch with "scaleX" usage on wave decoration on category and
   organization detail banner.
+- Fix content vertical alignment for category glimpses in section
+  tiles.
 
 ## [2.0.0-beta.6] - 2020-05-19
 
