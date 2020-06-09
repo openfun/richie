@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Add checkmark icon to course skills bullet lists.
+
 ### Changed
 
 - Change course detail content titles to neutral dark color;
