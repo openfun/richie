@@ -48,7 +48,7 @@
   // is always a list
   //
   &--accordion {
-    $accordion-background-color: r-theme-val(accordion-plan, border-color);
+    $accordion-border-color: r-theme-val(accordion-plan, border-color);
     $accordion-border-size: rem-calc(2px);
 
     @include sv-flex(1, 0, 100%);
@@ -101,7 +101,7 @@
         left: 1rem;
         bottom: 1.75rem;
         width: $accordion-border-size;
-        border-left: $accordion-border-size solid $accordion-background-color;
+        border-left: $accordion-border-size solid $accordion-border-color;
       }
 
       & > li {
@@ -109,21 +109,21 @@
         position: relative;
         list-style-type: none;
 
-        @if $accordion-background-color {
-          &:last-child {
-            // Trick to mask border, this would work only with current
-            // accordion background and never with on top of composite
-            // backgrounds like image or gradients
-            &::before {
-              content: '';
-              position: absolute;
-              top: 1.25rem;
-              left: -1.5rem;
-              bottom: 0;
-              width: $accordion-border-size;
-              border-left: $accordion-border-size
-                solid
-                $accordion-background-color;
+        @if $accordion-border-color {
+          &[data-accordion-active] {
+            &:last-child {
+              // Trick to continue border
+              &::before {
+                content: '';
+                position: absolute;
+                top: 1.25rem;
+                left: -1.5rem;
+                bottom: 0;
+                width: $accordion-border-size;
+                border-left: $accordion-border-size
+                  solid
+                  $accordion-border-color;
+              }
             }
           }
         }
