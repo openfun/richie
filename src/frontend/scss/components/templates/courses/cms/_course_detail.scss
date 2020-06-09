@@ -193,6 +193,41 @@
     }
   }
 
+  &__skills {
+    @if r-theme-val(course-detail, checkmark-list-decoration) {
+      ul {
+        padding-left: 0.3rem;
+        list-style-type: none;
+
+        li {
+          position: relative;
+          padding-left: 1.5rem;
+
+          &::before {
+            content: '';
+            display: block;
+            position: absolute;
+            top: 0.1rem;
+            left: 0;
+            width: 0.8rem;
+            height: 0.8rem;
+            background-image: r-theme-val(
+              course-detail,
+              checkmark-list-decoration
+            );
+            background-repeat: no-repeat;
+            background-position: top left;
+            background-size: 100% 100%;
+          }
+
+          & + li {
+            margin-top: 0.9rem;
+          }
+        }
+      }
+    }
+  }
+
   &__license {
     #{$detail-selector}__title {
       @include font-size($h3-font-size);
