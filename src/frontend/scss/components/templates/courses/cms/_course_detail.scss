@@ -15,6 +15,7 @@
 
   &__row {
     @include detail-row;
+    font-size: 1rem;
   }
 
   &__title {
@@ -79,6 +80,14 @@
     @if r-theme-val(course-detail, primary-group-title-color) {
       #{$detail-selector}__title {
         color: r-theme-val(course-detail, primary-group-title-color);
+      }
+    }
+
+    #{$detail-selector}__row {
+      padding-bottom: 1rem;
+
+      & > p:last-of-type {
+        margin-bottom: 0;
       }
     }
 
