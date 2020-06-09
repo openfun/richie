@@ -100,5 +100,7 @@
 @import './components/templates/courses/cms/program_list';
 @import './components/templates/courses/cms/program_detail';
 
+// CMS patchs
+@import './trumps/cms';
 // IE11 patchs
 @import './trumps/ie11-fixes';
