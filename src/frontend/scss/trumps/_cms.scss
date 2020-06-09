@@ -1,8 +1,26 @@
-/*
- * Trick to get a larger cms bar column so long plugin titles are more readable
- */
-@include breakpoint(xlarge) {
-  body div.cms .cms-structure.cms-structure-condensed {
-    width: 30vw;
+div.cms {
+  .cms-structure {
+    //
+    // Trick to get a larger cms bar column so long plugin titles are more
+    // readable
+    //
+    @include media-breakpoint-up(lg) {
+      &.cms-structure-condensed {
+        width: 30vw;
+      }
+    }
+
+    //
+    // Hack page plugins tree menu to push plugin label on two lines,
+    // one for the plugin class title and one for the plugin object title
+    //
+    .cms-dragitem-text {
+      font-size: 0.8rem;
+      line-height: 1.2;
+
+      strong {
+        display: block;
+      }
+    }
   }
 }

@@ -14,7 +14,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-- Change course detail content titles to neutral dark color;
+- Change course detail content titles to neutral dark color.
+- Customize CMS placeholder menu for more readability.
 
 ### Fixed
 
