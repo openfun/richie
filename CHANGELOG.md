@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Change course detail content titles to neutral dark color;
+
 ## [2.0.0-beta.7] - 2020-06-08
 
 ### Changed
