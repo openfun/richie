@@ -19,6 +19,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Fix course detail vertical rhythm and font size.
+- Fix accordion border line.
 
 ## [2.0.0-beta.7] - 2020-06-08
 

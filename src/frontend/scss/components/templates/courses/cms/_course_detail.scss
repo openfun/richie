@@ -201,13 +201,14 @@
 
         li {
           position: relative;
+          margin-top: 0.9rem;
           padding-left: 1.5rem;
 
           &::before {
             content: '';
             display: block;
             position: absolute;
-            top: 0.1rem;
+            top: 0.2rem;
             left: 0;
             width: 0.8rem;
             height: 0.8rem;
@@ -218,10 +219,6 @@
             background-repeat: no-repeat;
             background-position: top left;
             background-size: 100% 100%;
-          }
-
-          & + li {
-            margin-top: 0.9rem;
           }
         }
       }

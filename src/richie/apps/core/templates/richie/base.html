@@ -183,6 +183,7 @@
             if ($accordionItems.length > 0) {
                 $accordionItems.forEach(function(itemObject, itemIndex) {
                     itemObject.addEventListener('click', () => {
+                        itemObject.closest('li').toggleAttribute('data-accordion-active');
                         itemObject.toggleAttribute('data-accordion-open');
                     });
                 });
