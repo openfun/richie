@@ -182,6 +182,7 @@ class PersonCMSTestCase(CMSTestCase):
             page_title="My page title",
             fill_portrait=True,
             fill_bio=True,
+            fill_maincontent=True,
             fill_categories=[published_category, not_published_category],
             fill_organizations=[published_organization, not_published_organization],
         )
@@ -207,6 +208,9 @@ class PersonCMSTestCase(CMSTestCase):
         self.assertContains(
             response, f'<h1 class="subheader__title">{title:s}</h1>', html=True,
         )
+
+        # Main content should be present when not empty
+        self.assertContains(response, "person-detail__maincontent")
 
         # The published category should be on the page in its published version
         self.assertContains(
@@ -283,6 +287,18 @@ class PersonCMSTestCase(CMSTestCase):
         response = self.client.get(url)
         self.assertContains(response, person.extended_object.get_title())
         self.assertContains(response, "organization-glimpse-list")
+
+    def test_templates_person_detail_maincontent_empty(self):
+        """
+        The "maincontent" placeholder block should not be displayed when empty.
+        """
+        person = PersonFactory(should_publish=True)
+
+        # The "organizations" section should not be present on the public page
+        url = person.public_extension.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertContains(response, person.extended_object.get_title())
+        self.assertNotContains(response, "person-detail__maincontent")
 
     def test_templates_person_detail_related_courses(self):
         """
