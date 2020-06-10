@@ -74,7 +74,13 @@
 {% block content %}{% spaceless %}
 {% with header_level=2 person=current_page.person %}
 <div class="person-detail">
-    {% placeholder "maincontent" %}
+    {% if not current_page|is_empty_placeholder:"maincontent" %}
+    <div class="person-detail__maincontent person-detail__block">
+        <div class="person-detail__row">
+            {% placeholder "maincontent" %}
+        </div>
+    </div>
+    {% endif %}
 
     {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"organizations" %}
     <div class="person-detail__organizations person-detail__block person-detail__block--gradient-neutral person-detail__block--arc">

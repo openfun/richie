@@ -191,6 +191,7 @@ def create_demo_site():
             fill_organizations=person_organizations,
             fill_portrait=pick_image("portrait"),
             fill_bio=True,
+            fill_maincontent=True,
             should_publish=True,
         )
         persons.append(person)

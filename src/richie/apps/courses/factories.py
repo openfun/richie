@@ -775,6 +775,20 @@ class PersonFactory(PageExtensionDjangoModelFactory):
 
     @factory.post_generation
     # pylint: disable=unused-argument
+    def fill_maincontent(self, create, extracted, **kwargs):
+        """
+        Add a text plugin for maincontent with a long random text
+        """
+        if create and extracted:
+            create_text_plugin(
+                self.extended_object,
+                "maincontent",
+                nb_paragraphs=1,
+                languages=self.extended_object.get_languages(),
+            )
+
+    @factory.post_generation
+    # pylint: disable=unused-argument
     def fill_organizations(self, create, extracted, **kwargs):
         """
         Add organizations plugin to person from a given list of organization instances.
