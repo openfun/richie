@@ -44,10 +44,11 @@ section {
       @include sv-flex(1, 0, 100%);
       margin: 0 auto 0.5rem;
       padding: 0 1rem;
+    }
 
-      @include media-breakpoint-up(lg) {
-        padding: 0 20%;
-      }
+    & > img {
+      display: block;
+      margin: 0 auto 1rem;
     }
 
     // Ensure caesura always takes full width with some space around
