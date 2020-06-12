@@ -1,0 +1,288 @@
+//
+// Apply menu position
+//
+// @arg {String} $position ["bottom-right"]
+//     Menu box position name. First part is the vertical position, before ("top")
+//     or after ("bottom") the CTA. Second part is for the horizontal behavior,
+//     "left" means to stick the box at CTA right side and expand to the left,
+//     "right" means to stick the box at CTA left side and expand to the right,
+//     "middle" center the box to the horizontal CTA middle.
+//
+// @arg {Number} $margin [0.625rem]
+//     Distance between the CTA and the menu box, commonly accorded to the
+//     menu arrow height.
+//
+@mixin dropmic-menu-position($position: 'bottom-right', $margin: 0.625rem) {
+  @if $position == 'top-left' {
+    top: 0;
+    right: 0;
+    bottom: auto;
+    left: auto;
+    -webkit-transform: translateY(calc(-100% - #{$margin}));
+    transform: translateY(calc(-100% - #{$margin}));
+  } @else if $position == 'top-right' {
+    top: 0;
+    right: auto;
+    bottom: auto;
+    left: 0;
+    -webkit-transform: translateY(calc(-100% - #{$margin}));
+    transform: translateY(calc(-100% - #{$margin}));
+  } @else if $position == 'top-middle' {
+    top: 0;
+    right: auto;
+    bottom: auto;
+    left: 50%;
+    -webkit-transform: translateX(-50%) translateY(calc(-100% - #{$margin}));
+    transform: translateX(-50%) translateY(calc(-100% - #{$margin}));
+  } @else if $position == 'bottom-left' {
+    top: auto;
+    right: 0;
+    bottom: 0;
+    left: auto;
+    -webkit-transform: translateY(calc(100% + #{$margin}));
+    transform: translateY(calc(100% + #{$margin}));
+  } @else if $position == 'bottom-middle' {
+    top: auto;
+    right: auto;
+    bottom: 0;
+    left: 50%;
+    -webkit-transform: translateX(-50%) translateY(calc(100% + #{$margin}));
+    transform: translateX(-50%) translateY(calc(100% + #{$margin}));
+  } @else {
+    top: auto;
+    right: auto;
+    bottom: 0;
+    left: 0;
+    -webkit-transform: translateY(calc(100% + #{$margin}));
+    transform: translateY(calc(100% + #{$margin}));
+  }
+}
+
+//
+// Draw arrow border
+//
+// Commonly this is on the dropdown pseudo element "before".
+//
+// @arg {String} $vertical ["bottom"]
+//     Vertical menu direction to place the arrow.
+//
+// @arg {String} $horizontal ["right"]
+//     Horizontal menu direction to place the arrow.
+//
+// @arg {Number} $height [0.625rem]
+//     Distance between the CTA and the menu box which will define the arrow
+//     height.
+//
+@mixin dropmic-arrow-border(
+  $vertical: 'bottom',
+  $horizontal: 'right',
+  $height: 0.625rem
+) {
+  @if $vertical == 'top' {
+    top: rem-calc(-24px);
+    bottom: -$onepixel;
+    border: rem-calc(7px) solid transparent;
+    -webkit-transform: translateY(100%);
+    transform: translateY(100%);
+
+    @if $horizontal == 'left' {
+      right: calc(50% - #{rem-calc(5px)});
+      left: auto;
+    }
+
+    @if $horizontal == 'right' {
+      right: auto;
+      left: calc(50% - #{rem-calc(7px)});
+    }
+
+    @if $horizontal == 'middle' {
+      right: auto;
+      left: 50%;
+      -webkit-transform: translateX(-50%) translateY(100%);
+      transform: translateX(-50%) translateY(100%);
+    }
+  } @else {
+    top: calc(100% + #{$height});
+    border: rem-calc(7px) solid transparent;
+    -webkit-transform: translateY(-100%);
+    transform: translateY(-100%);
+
+    @if $horizontal == 'right' {
+      right: calc(50% - #{rem-calc(4px)});
+    }
+
+    @if $horizontal == 'left' {
+      right: calc(50% - #{rem-calc(4px)});
+    }
+
+    @if $horizontal == 'middle' {
+      right: auto;
+      left: calc(50% - #{rem-calc(3px)});
+      -webkit-transform: translateX(-50%) translateY(-100%);
+      transform: translateX(-50%) translateY(-100%);
+    }
+  }
+}
+
+//
+// Draw arrow background
+//
+// Commonly this is on the dropdown pseudo element "after".
+//
+// @arg {String} $vertical ["bottom"]
+//     Vertical menu direction to place the arrow.
+//
+// @arg {String} $horizontal ["right"]
+//     Horizontal menu direction to place the arrow.
+//
+// @arg {Number} $height [10px]
+//     Distance between the CTA and the menu box which will define the arrow
+//     height.
+//
+@mixin dropmic-arrow-background(
+  $vertical: 'bottom',
+  $horizontal: 'right',
+  $height: 0.625rem
+) {
+  @if $vertical == 'top' {
+    top: rem-calc(-25px);
+    bottom: 0;
+    border: rem-calc(7px) solid transparent;
+    -webkit-transform: translateY(100%);
+    transform: translateY(100%);
+
+    @if $horizontal == 'left' {
+      right: calc(50% - #{rem-calc(5px)});
+      left: auto;
+    }
+
+    @if $horizontal == 'right' {
+      right: auto;
+      left: calc(50% - #{rem-calc(7px)});
+    }
+
+    @if $horizontal == 'middle' {
+      right: auto;
+      left: 50%;
+      -webkit-transform: translateX(-50%) translateY(100%);
+      transform: translateX(-50%) translateY(100%);
+    }
+  } @else {
+    top: calc(100% + #{$height + $onepixel});
+    border: rem-calc(7px) solid transparent;
+    -webkit-transform: translateY(-100%);
+    transform: translateY(-100%);
+
+    @if $horizontal == 'right' {
+      right: calc(50% - #{rem-calc(4px)});
+    }
+
+    @if $horizontal == 'left' {
+      right: calc(50% - #{rem-calc(4px)});
+    }
+
+    @if $horizontal == 'middle' {
+      right: auto;
+      left: calc(50% - #{rem-calc(3px)});
+      -webkit-transform: translateX(-50%) translateY(-100%);
+      transform: translateX(-50%) translateY(-100%);
+    }
+  }
+}
+
+//
+// Container elements colorizer
+//
+// Use it to customize colors for all or some container elements.
+//
+// @arg {String} $cta [null]
+//
+@mixin dropmic-base-colorizer($cta: null) {
+  // Dropdown elements
+  @if $cta {
+    @include r-button-colors($cta, $apply-border: true, $include-hover: true);
+  }
+}
+
+//
+// Menu elements colorizer
+//
+// Use it to customize colors for all or some menu elements.
+//
+// @arg {String} $vertical ["bottom"]
+//     Vertical menu direction to place the arrow.
+//
+// @arg {String} $horizontal ["right"]
+//     Horizontal menu direction to place the arrow.
+//
+// @arg {String} $menu-font-color [null]
+//
+// @arg {String} $menu-background-color [null]
+//
+// @arg {String} $menu-border-color [null]
+//
+// @arg {String} $divider-color [null]
+//
+// @arg {String} $item-active-color [null]
+//
+// @arg {String} $item-active-background-color [null]
+//
+@mixin dropmic-menu-colorizer(
+  $vertical: 'top',
+  $horizontal: 'middle',
+  $menu-font-color: null,
+  $menu-background-color: null,
+  $menu-border-color: null,
+  $divider-color: null,
+  $item-active-color: null,
+  $item-active-background-color: null
+) {
+  color: $menu-font-color !important;
+  background: $menu-background-color !important;
+  @if $menu-border-color {
+    border: $onepixel solid $menu-border-color !important;
+  }
+
+  &__content {
+    // When list come after legend content
+    @if $divider-color {
+      &:nth-child(n) {
+        border-top: $onepixel solid $divider-color !important;
+      }
+    }
+
+    // States
+    &:hover,
+    &:active {
+      background-color: $item-active-background-color !important;
+      color: $item-active-color !important;
+    }
+  }
+
+  // When list come first
+  &__list:first-child &__content {
+    border-top: none;
+    @if $divider-color {
+      border-bottom: $onepixel solid $divider-color !important;
+    }
+  }
+}
+
+//
+// Colorize arrow
+//
+// Either for its border or background element.
+//
+// @arg {String} $vertical ["bottom"]
+//     Vertical menu direction to place the arrow.
+//
+// @arg {String} $color [null]
+//     Color to apply.
+//
+@mixin dropmic-arrow-colorizer($vertical: 'bottom', $color: null) {
+  @if $vertical == 'top' {
+    border-top-color: $color;
+  } @else {
+    border-bottom-color: $color;
+  }
+}

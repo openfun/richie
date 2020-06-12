@@ -135,6 +135,18 @@ $clouds-scheme: (
 );
 $transparent-dark-scheme: (
   font-color: r-color('black'),
+  link-color: r-color('firebrick6'),
+  background: transparent,
+  hover-font-color: r-color('firebrick6'),
+);
+$transparent-white-scheme: (
+  font-color: r-color('white'),
+  link-color: r-color('firebrick6'),
+  background: transparent,
+  hover-font-color: r-color('firebrick6'),
+);
+$hollow-dark-scheme: (
+  font-color: r-color('black'),
   h1-color: r-color('black'),
   h2-color: r-color('black'),
   link-color: r-color('firebrick6'),
@@ -201,6 +213,8 @@ $r-theme: (
       dark-gradient: $dark-gradient-scheme,
       white-mask-gradient: $white-mask-gradient-scheme,
       transparent-darkest: $transparent-dark-scheme,
+      transparent-white: $transparent-white-scheme,
+      hollow-dark: $hollow-dark-scheme,
       clouds: $clouds-scheme,
       purplish-grey: $purplish-grey-scheme,
       battleship-grey: $battleship-grey-scheme,
@@ -226,6 +240,7 @@ $r-theme: (
     item-cta-hollow-background: transparent,
     item-cta-hollow-border: transparent,
     item-divider-border: r-color('light-grey'),
+    lang-cta: $transparent-dark-scheme,
   ),
   body-content: (
     base-color: r-color('black'),
@@ -237,6 +252,7 @@ $r-theme: (
     base-color: r-color('light-grey'),
     base-background: r-color('dark-grey'),
     lang-color: r-color('white'),
+    lang-cta: $transparent-white-scheme,
     section-hover: r-color('white'),
     subtitle-color: r-color('white'),
     badge-button: $firebrick6-scheme,
@@ -256,7 +272,7 @@ $r-theme: (
     search-input-background: transparent,
     search-input-border: r-color('black'),
     search-input-placeholder: r-color('black'),
-    social-network-badges: $transparent-dark-scheme,
+    social-network-badges: $hollow-dark-scheme,
   ),
   subheader-alt: (
     container-background: $middle-gradient,
@@ -286,6 +302,14 @@ $r-theme: (
     background-color: null,
     dot-closed: url('../../richie/images/components/add-outline.svg'),
     dot-opened: url('../../richie/images/components/minus-outline.svg'),
+  ),
+  dropdown: (
+    base-color: r-color('charcoal'),
+    base-background-color: r-color('white'),
+    base-border-color: r-color('silver'),
+    base-divider-color: r-color('azure2'),
+    item-active-color: r-color('charcoal'),
+    item-active-background-color: r-color('azure2'),
   ),
   large-banner: (
     base-background-color: r-color('black'),
@@ -472,7 +496,7 @@ $r-theme: (
     headline-color: r-color('slate-grey'),
     headline-border: r-color('black'),
     headline-title-color: r-color('black'),
-    social-network-badges: $transparent-dark-scheme,
+    social-network-badges: $hollow-dark-scheme,
   ),
   category-detail: (
     empty-background: r-color('smoke'),

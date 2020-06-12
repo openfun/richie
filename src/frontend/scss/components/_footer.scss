@@ -60,28 +60,72 @@
     & > * + * {
       margin-top: 1rem;
     }
+  }
 
-    .languages-menu {
-      @include sv-flex(1, 0, 100%);
-      padding: 0;
-      margin-bottom: 0;
-      font-family: $r-font-family-montserrat;
+  &__language-chooser {
+    @include sv-flex(1, 0, 100%);
+    padding: 0;
+    margin-bottom: 0;
+    font-family: $r-font-family-montserrat;
+    font-weight: $font-weight-boldest;
+    color: r-theme-val(body-footer, lang-color);
+
+    .dropmic {
+      &::before {
+        @include dropmic-arrow-border($vertical: 'top', $horizontal: 'right');
+        @include dropmic-arrow-colorizer(
+          $vertical: 'top',
+          $color: r-theme-val(dropdown, base-border-color)
+        );
+      }
+      &::after {
+        @include dropmic-arrow-background(
+          $vertical: 'top',
+          $horizontal: 'right'
+        );
+        @include dropmic-arrow-colorizer(
+          $vertical: 'top',
+          $color: r-theme-val(dropdown, base-background-color)
+        );
+      }
+
+      .dropmic-menu {
+        @include dropmic-menu-position($position: 'top-right');
+      }
+    }
+
+    .dropmic__cta {
+      position: relative;
+      padding-right: 1.2rem;
+      font-size: inherit;
       font-weight: $font-weight-boldest;
-      color: r-theme-val(body-footer, lang-color);
-      list-style-type: none;
+      @include dropmic-base-colorizer($cta: r-theme-val(body-footer, lang-cta));
 
-      &__item {
-        display: inline-block;
-        margin-left: 0.5rem;
+      &::after {
+        @include m-o-triangle(
+          0.35rem,
+          map-get(r-theme-val(body-footer, lang-cta), 'font-color'),
+          'down'
+        );
+        position: absolute;
+        right: 0.2rem;
+        top: calc(50% - 0.05rem);
+      }
 
-        &--label {
-          margin-left: 0;
+      @if map-get(r-theme-val(body-footer, lang-cta), 'hover-font-color') {
+        &:hover::after {
+          @include m-o-triangle(
+            0.35rem,
+            map-get(r-theme-val(body-footer, lang-cta), 'hover-font-color'),
+            'down'
+          );
         }
       }
-
-      &__link {
-        color: inherit;
-      }
+    }
+    .dropmic .dropmic-menu__legend,
+    .dropmic .dropmic-menu__content {
+      font-size: inherit;
+      font-weight: $font-weight-normal;
     }
   }
 

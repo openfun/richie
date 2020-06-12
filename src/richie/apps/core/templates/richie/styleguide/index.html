@@ -249,6 +249,119 @@
 
     <div class="pt-4 pb-4">
         <div class="container text-center">
+            <h2 class="display-3 p-4">Dropdown</h2>
+        </div>
+
+        <div class="container mt-4">
+
+            <div class="dropmic" data-dropmic>
+                <button class="dropmic__cta" data-dropmic-btn>Basic</button>
+                <div class="dropmic-menu" aria-hidden="true">Any content</div>
+            </div>
+
+        </div>
+
+        <div class="container mt-4">
+
+            <div class="dropmic dropmic--bottom-right" data-dropmic role="navigation">
+                <button class="dropmic__cta" data-dropmic-btn>At bottom to the right</button>
+                <div class="dropmic-menu" aria-hidden="true">
+                    <div class="dropmic-menu__legend">{% lorem 3 w random %}</div>
+                    <ul class="dropmic-menu__list" role="menu">
+                        <li class="dropmic-menu____item" role="menuitem">
+                            <a class="dropmic-menu__content" href="http://example.com" tabindex="-1">label link</a>
+                        </li>
+                        <li class="dropmic-menu____item" role="menuitem">
+                            <button class="dropmic-menu__content" tabindex="-1">{% lorem 5 w random %}</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="dropmic dropmic--bottom-left" data-dropmic role="navigation">
+                <button class="dropmic__cta" data-dropmic-btn>At bottom to the left</button>
+                <div class="dropmic-menu" aria-hidden="true">
+                    <div class="dropmic-menu__legend">{% lorem 3 w random %}</div>
+                    <ul class="dropmic-menu__list" role="menu">
+                        <li class="dropmic-menu____item" role="menuitem">
+                            <a class="dropmic-menu__content" href="http://example.com" tabindex="-1">label link</a>
+                        </li>
+                        <li class="dropmic-menu____item" role="menuitem">
+                            <button class="dropmic-menu__content" tabindex="-1">{% lorem 5 w random %}</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="dropmic dropmic--bottom-middle" data-dropmic role="navigation">
+                <button class="dropmic__cta" data-dropmic-btn>At bottom centered</button>
+                <div class="dropmic-menu" aria-hidden="true">
+                    <ul class="dropmic-menu__list" role="menu">
+                        <li class="dropmic-menu____item" role="menuitem">
+                            <a class="dropmic-menu__content" href="http://example.com" tabindex="-1">label link</a>
+                        </li>
+                        <li class="dropmic-menu____item" role="menuitem">
+                            <button class="dropmic-menu__content" tabindex="-1">{% lorem 5 w random %}</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="container mt-4">
+
+            <div class="dropmic dropmic--top-right" data-dropmic role="navigation">
+                <button class="dropmic__cta" data-dropmic-btn>At top to the right</button>
+                <div class="dropmic-menu" aria-hidden="true">
+                    <div class="dropmic-menu__legend">{% lorem 3 w random %}</div>
+                    <ul class="dropmic-menu__list" role="menu">
+                        <li class="dropmic-menu____item" role="menuitem">
+                            <a class="dropmic-menu__content" href="http://example.com" tabindex="-1">label link</a>
+                        </li>
+                        <li class="dropmic-menu____item" role="menuitem">
+                            <button class="dropmic-menu__content" tabindex="-1">{% lorem 5 w random %}</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="dropmic dropmic--top-left" data-dropmic role="navigation">
+                <button class="dropmic__cta" data-dropmic-btn>At top to the left</button>
+                <div class="dropmic-menu" aria-hidden="true">
+                    <div class="dropmic-menu__legend">{% lorem 3 w random %}</div>
+                    <ul class="dropmic-menu__list" role="menu">
+                        <li class="dropmic-menu____item" role="menuitem">
+                            <a class="dropmic-menu__content" href="http://example.com" tabindex="-1">label link</a>
+                        </li>
+                        <li class="dropmic-menu____item" role="menuitem">
+                            <button class="dropmic-menu__content" tabindex="-1">{% lorem 5 w random %}</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="dropmic dropmic--top-middle" data-dropmic role="navigation">
+                <button class="dropmic__cta" data-dropmic-btn>At top centered</button>
+                <div class="dropmic-menu" aria-hidden="true">
+                    <div class="dropmic-menu__legend">{% lorem 3 w random %}</div>
+                    <ul class="dropmic-menu__list" role="menu">
+                        <li class="dropmic-menu____item" role="menuitem">
+                            <a class="dropmic-menu__content" href="http://example.com" tabindex="-1">label link</a>
+                        </li>
+                        <li class="dropmic-menu____item" role="menuitem">
+                            <button class="dropmic-menu__content" tabindex="-1">{% lorem 5 w random %}</button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="pt-4 pb-4">
+        <div class="container text-center">
             <h2 class="display-3 p-4">Accordion</h2>
         </div>
 
@@ -261,6 +374,7 @@
                         <div class="nested-item nested-item--accordion nested-item--1">
                             <button class="nested-item__title" data-accordion-button="">
                                 Item {{ level1_counter }}
+                                {% if forloop.last %}<br>{% lorem 4 w random %}{% endif %}
                             </button>
                             <ul class="nested-item__items">
 

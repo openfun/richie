@@ -1,0 +1,262 @@
+//
+// Dropdown container
+//
+.dropmic {
+  position: relative;
+  display: -webkit-inline-box;
+  display: inline-flex;
+
+  // Arrow base pseudo elements drawing
+  &::before {
+    position: absolute;
+    width: 0;
+    height: 0;
+    background-size: 100% 100%;
+    content: '';
+  }
+
+  &::before,
+  &::after {
+    position: absolute;
+    z-index: 1;
+    display: none;
+    width: 0;
+    height: 0;
+    background-size: 100% 100%;
+    content: '';
+  }
+
+  // Draw arrow for default bottom right menu
+  &::before {
+    @include dropmic-arrow-border($vertical: 'bottom', $horizontal: 'right');
+    @include dropmic-arrow-colorizer(
+      $vertical: 'bottom',
+      $color: r-theme-val(dropdown, base-border-color)
+    );
+  }
+  &::after {
+    @include dropmic-arrow-background(
+      $vertical: 'bottom',
+      $horizontal: 'right'
+    );
+    @include dropmic-arrow-colorizer(
+      $vertical: 'bottom',
+      $color: r-theme-val(dropdown, base-background-color)
+    );
+  }
+
+  // Default button layout
+  &__cta {
+    @include button-small();
+  }
+
+  // Display menu and arrow when dropdown is active
+  &.dropmic--show {
+    .dropmic-menu {
+      display: block;
+    }
+
+    // Reveal arrow
+    &::before,
+    &::after {
+      display: block;
+    }
+  }
+
+  // Modifier helpers for menu positions
+  &.dropmic--bottom-left .dropmic-menu {
+    @include dropmic-menu-position($position: 'bottom-left');
+  }
+
+  &.dropmic--bottom-middle .dropmic-menu {
+    @include dropmic-menu-position($position: 'bottom-middle');
+  }
+
+  &.dropmic--top-right .dropmic-menu {
+    @include dropmic-menu-position($position: 'top-right');
+  }
+
+  &.dropmic--top-left .dropmic-menu {
+    @include dropmic-menu-position($position: 'top-left');
+  }
+
+  &.dropmic--top-middle .dropmic-menu {
+    @include dropmic-menu-position($position: 'top-middle');
+  }
+
+  //
+  // Menu arrow drawing helpers
+  &--bottom-left {
+    &::before {
+      @include dropmic-arrow-border($vertical: 'bottom', $horizontal: 'left');
+      @include dropmic-arrow-colorizer(
+        $vertical: 'bottom',
+        $color: r-theme-val(dropdown, base-border-color)
+      );
+    }
+    &::after {
+      @include dropmic-arrow-background(
+        $vertical: 'bottom',
+        $horizontal: 'left'
+      );
+      @include dropmic-arrow-colorizer(
+        $vertical: 'bottom',
+        $color: r-theme-val(dropdown, base-background-color)
+      );
+    }
+  }
+
+  &--bottom-middle {
+    &::before {
+      @include dropmic-arrow-border($vertical: 'bottom', $horizontal: 'middle');
+      @include dropmic-arrow-colorizer(
+        $vertical: 'bottom',
+        $color: r-theme-val(dropdown, base-border-color)
+      );
+    }
+    &::after {
+      @include dropmic-arrow-background(
+        $vertical: 'bottom',
+        $horizontal: 'middle'
+      );
+      @include dropmic-arrow-colorizer(
+        $vertical: 'bottom',
+        $color: r-theme-val(dropdown, base-background-color)
+      );
+    }
+  }
+
+  &--top-right {
+    &::before {
+      @include dropmic-arrow-border($vertical: 'top', $horizontal: 'right');
+      @include dropmic-arrow-colorizer(
+        $vertical: 'top',
+        $color: r-theme-val(dropdown, base-border-color)
+      );
+    }
+    &::after {
+      @include dropmic-arrow-background($vertical: 'top', $horizontal: 'right');
+      @include dropmic-arrow-colorizer(
+        $vertical: 'top',
+        $color: r-theme-val(dropdown, base-background-color)
+      );
+    }
+  }
+
+  &--top-left {
+    &::before {
+      @include dropmic-arrow-border($vertical: 'top', $horizontal: 'left');
+      @include dropmic-arrow-colorizer(
+        $vertical: 'top',
+        $color: r-theme-val(dropdown, base-border-color)
+      );
+    }
+    &::after {
+      @include dropmic-arrow-background($vertical: 'top', $horizontal: 'left');
+      @include dropmic-arrow-colorizer(
+        $vertical: 'top',
+        $color: r-theme-val(dropdown, base-background-color)
+      );
+    }
+  }
+
+  &--top-middle {
+    &::before {
+      @include dropmic-arrow-border($vertical: 'top', $horizontal: 'middle');
+      @include dropmic-arrow-colorizer(
+        $vertical: 'top',
+        $color: r-theme-val(dropdown, base-border-color)
+      );
+    }
+    &::after {
+      @include dropmic-arrow-background(
+        $vertical: 'top',
+        $horizontal: 'middle'
+      );
+      @include dropmic-arrow-colorizer(
+        $vertical: 'top',
+        $color: r-theme-val(dropdown, base-background-color)
+      );
+    }
+  }
+
+  //
+  // Dropdown menu
+  //
+  .dropmic-menu {
+    position: absolute;
+    z-index: 1;
+    display: none;
+    min-width: 10vw;
+    max-width: 60vw;
+    max-height: 90vh;
+    width: -webkit-max-content;
+    width: -moz-max-content;
+    width: max-content;
+    border-radius: $btn-border-radius;
+
+    // Default colors
+    @include dropmic-menu-colorizer(
+      $menu-font-color: r-theme-val(dropdown, base-color),
+      $menu-background-color: r-theme-val(dropdown, base-background-color),
+      $menu-border-color: r-theme-val(dropdown, base-border-color),
+      $divider-color: r-theme-val(dropdown, base-divider-color),
+      $item-active-color: r-theme-val(dropdown, item-active-color),
+      $item-active-background-color:
+        r-theme-val(dropdown, item-active-background-color)
+    );
+
+    @include media-breakpoint-up(sm) {
+      max-width: 50vw;
+    }
+
+    // Default menu position at bottom and expand to the right
+    @include dropmic-menu-position($position: 'bottom-right');
+
+    //
+    // Dropdown menu content
+    &__legend,
+    &__content,
+    &__content:link,
+    &__content:visited {
+      display: block;
+      overflow: hidden;
+      width: 100%;
+      border: none;
+      border-radius: 0;
+      background: none;
+      color: inherit;
+      text-align: left;
+      text-decoration: none;
+      text-overflow: ellipsis;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    &__legend {
+      padding: 0.9375rem 1.875rem;
+      cursor: inherit;
+    }
+
+    &__list,
+    &__item {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    &__content {
+      padding: 0.625rem 1.875rem;
+    }
+
+    // When list come first
+    &__list:first-child &__content {
+      border-top: none;
+    }
+
+    // When there is only list items
+    &__list:only-child &__item:last-child &__content {
+      border-bottom: none;
+    }
+  }
+}

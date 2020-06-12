@@ -94,6 +94,11 @@
                                 <a href="#">{% trans "Contact us" %}</a>
                             </li>
                             {% endblock topbar_contact %}
+                            {% block topbar_languages %}
+                            <li class="topbar__item topbar__item--language-chooser">
+                                {% language_chooser "menu/language_menu.html" %}
+                            </li>
+                            {% endblock topbar_languages %}
                         </ul>
                     </div>
                 </div>
@@ -129,7 +134,13 @@
                         {% block body_footer_title %}
                             <p class="body-footer__title">{% trans "Life-changing learning!" %}</p>
                         {% endblock body_footer_title %}
-                        {% language_chooser "menu/language_menu.html" %}
+                        {% block body_footer_languages %}
+                        <div class="body-footer__language-chooser">
+                            <span class="body-footer__language-label">{% trans "Language:" %}</span>
+                            {% language_chooser "menu/language_menu.html" %}
+                        </div>
+                        {% endblock body_footer_languages %}
+
                         <div class="body-footer__badges">
                             {% include "social-networks/footer-badges.html" %}
                         </div>
@@ -157,6 +168,7 @@
             window.__richie_frontend_context__ = JSON.parse('{{ FRONTEND_CONTEXT|safe }}');
         </script>
         <script src="{% static 'richie/js/index.js' %}"></script>
+        <script src="{% static 'richie/js/dropmic.js' %}"></script>
         <script>
         document.addEventListener("DOMContentLoaded", function() {
             // Get all topbar burger elements
@@ -179,16 +191,28 @@
             }
 
             // Implement accordion item behaviors
-            const $accordionItems = Array.prototype.slice.call(
+            const accordionItems = Array.prototype.slice.call(
                 document.querySelectorAll('[data-accordion-button]'), 0
             );
 
-            if ($accordionItems.length > 0) {
-                $accordionItems.forEach(function(itemObject, itemIndex) {
+            if (accordionItems.length > 0) {
+                accordionItems.forEach(function(itemObject, itemIndex) {
                     itemObject.addEventListener('click', () => {
                         itemObject.closest('li').toggleAttribute('data-accordion-active');
                         itemObject.toggleAttribute('data-accordion-open');
                     });
+                });
+            }
+
+            // Get all dropdown elements to instanciate
+            const dropdownElements = Array.prototype.slice.call(
+                document.querySelectorAll("[data-dropmic]"), 0
+            );
+
+            if (dropdownElements.length > 0) {
+                // Add a click event on each of them
+                dropdownElements.forEach(function(el) {
+                    new Dropmic(el);
                 });
             }
         });

@@ -94,16 +94,23 @@ class LanguageChooserTests(CMSTestCase):
 
         # Current language item is marked active according to user language
         # choice (from i18n url prefix)
+        # dropmic-menu__item dropmic-menu__item--en
         self.assertContains(
-            response, ('<li class="languages-menu__item ' 'languages-menu__item--en">'),
+            response,
+            (
+                '<li class="dropmic-menu__item '
+                'dropmic-menu__item--en" '
+                'role="menuitem">'
+            ),
         )
         self.assertContains(response, "en, basculer vers Anglais")
         self.assertContains(
             response,
             (
-                '<li class="languages-menu__item '
-                "languages-menu__item--fr "
-                'languages-menu__item--active">'
+                '<li class="dropmic-menu__item '
+                "dropmic-menu__item--fr "
+                'dropmic-menu__item--active" '
+                'role="menuitem">'
             ),
         )
         self.assertContains(response, "fr, actuellement en Français")

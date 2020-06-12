@@ -1,26 +1,33 @@
 {% load i18n menu_tags cms_tags %}{% spaceless %}
 {% get_current_language as current_language_code %}
+{% get_language_info for current_language_code as current_language %}
 {% if languages|length > 1 %}
-    <ul class="languages-menu">
-        <li class="languages-menu__item languages-menu__item--label">{% trans "Language:" %}</li>
-        {% for code, name in languages %}
-        {% get_language_info for code as lang %}
-        {% if code == current_language_code %}
-            <li class="languages-menu__item languages-menu__item--{{ code }} languages-menu__item--active">
-                <a class="languages-menu__link" href="{% page_language_url code %}"
-                    title="{% blocktrans with code=lang.code|slice:":2" name=lang.name_translated %}{{ code }}, currently in {{ name }}{% endblocktrans %}">
-                    {{ lang.name }}
-                </a>
-            </li>
-        {% else %}
-            <li class="languages-menu__item languages-menu__item--{{ code }}">
-                <a class="languages-menu__link" href="{% page_language_url code %}"
-                    title="{% blocktrans with code=lang.code|slice:":2" name=lang.name_translated %}{{ code }}, switch to {{ name }}{% endblocktrans %}">
-                    {{ lang.name }}
-                </a>
-            </li>
-        {% endif %}
-        {% endfor %}
-    </ul>
+<div class="dropmic" data-dropmic role="navigation">
+    <button class="dropmic__cta" data-dropmic-btn>{{ current_language.name }}</button>
+    <div class="dropmic-menu" aria-hidden="true">
+        <ul class="dropmic-menu__list" role="menu">
+            {% for code, name in languages %}
+                {% get_language_info for code as lang %}
+                {% if code == current_language_code %}
+                    <li class="dropmic-menu__item dropmic-menu__item--{{ code }} dropmic-menu__item--active" role="menuitem">
+                        <a class="dropmic-menu__content" href="{% page_language_url code %}"
+                            tabindex="-1"
+                            title="{% blocktrans with code=lang.code|slice:":2" name=lang.name_translated %}{{ code }}, currently in {{ name }}{% endblocktrans %}">
+                            {{ lang.name }}
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="dropmic-menu__item dropmic-menu__item--{{ code }}" role="menuitem">
+                        <a class="dropmic-menu__content" href="{% page_language_url code %}"
+                            tabindex="-1"
+                            title="{% blocktrans with code=lang.code|slice:":2" name=lang.name_translated %}{{ code }}, switch to {{ name }}{% endblocktrans %}">
+                            {{ lang.name }}
+                        </a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+</div>
 {% endif %}
 {% endspaceless %}

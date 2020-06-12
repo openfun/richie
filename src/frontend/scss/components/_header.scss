@@ -303,6 +303,57 @@
       }
     }
 
+    &--language-chooser {
+      font-family: $r-font-family-montserrat;
+      align-items: center;
+
+      .dropmic .dropmic-menu {
+        @include dropmic-menu-position($position: 'bottom-right');
+        @include media-breakpoint-up($r-topbar-breakpoint) {
+          @include dropmic-menu-position($position: 'bottom-left');
+        }
+      }
+
+      .dropmic__cta {
+        @include button-size(
+          $btn-padding-y,
+          $btn-padding-x,
+          $btn-font-size,
+          $btn-line-height,
+          2rem
+        );
+        @include dropmic-base-colorizer($cta: r-theme-val(topbar, lang-cta));
+        position: relative;
+        font-size: inherit;
+        font-weight: $font-weight-bold;
+
+        &::after {
+          @include m-o-triangle(
+            0.35rem,
+            map-get(r-theme-val(topbar, lang-cta), 'font-color'),
+            'down'
+          );
+          position: absolute;
+          right: 0.2rem;
+          top: calc(50% - 0.05rem);
+        }
+
+        @if map-get(r-theme-val(topbar, lang-cta), 'hover-font-color') {
+          &:hover::after {
+            @include m-o-triangle(
+              0.35rem,
+              map-get(r-theme-val(topbar, lang-cta), 'hover-font-color'),
+              'down'
+            );
+          }
+        }
+      }
+      .dropmic .dropmic-menu__legend,
+      .dropmic .dropmic-menu__content {
+        font-size: inherit;
+      }
+    }
+
     // Item divider
     & + #{$item-selector} {
       @if r-theme-val(topbar, item-divider-border) {

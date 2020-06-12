@@ -12,7 +12,7 @@
 // @arg {Keyword} $triangle-direction [null]
 //   Triangle peak direction. Can be `up`, `right`, `down`, or `left`.
 //
-// @arg {Boolean} $absolute [true]
+// @arg {Boolean} $absolute [null]
 //   If enabled, properties will be made to absolutely positionnate
 //   triangle. Position is determined from peak direction such as "up"
 //   direction means positionnate triangle at bottom, "left" means triangle
@@ -21,7 +21,7 @@
   $triangle-size,
   $triangle-color,
   $triangle-direction,
-  $absolute
+  $absolute: null
 ) {
   display: block;
   width: 0;

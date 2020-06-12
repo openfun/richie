@@ -17,6 +17,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Improve search error message layout
+- Language menu integration with dropdown component.
 
 ### Fixed
 
@@ -38,6 +39,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Add checkmark icon to course skills bullet lists.
+- Add new dropdown component with a new Javascript library, Sass
+  object and theme property group.
+- Add language menu to the header (but keeping the one from footer).
 
 ### Changed
 
