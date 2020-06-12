@@ -11,6 +11,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Add oauth2 and OIDC authentication backends for SSO with Open edX
+- Create a new optional "enrollments" app to manage enrollments in Richie,
+  starting with a model and buttons on the course views.
 - Add an icon to the 'login' button.
 - Add icons in course glimpse footer & next to organization name.
 
