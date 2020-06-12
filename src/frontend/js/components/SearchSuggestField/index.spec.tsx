@@ -10,6 +10,7 @@ import {
   CourseSearchParamsAction,
 } from 'data/useCourseSearchParams';
 import { HistoryProvider } from 'data/useHistory';
+import { CommonDataProps } from 'types/commonDataProps';
 import { FilterDefinition } from 'types/filters';
 import { history, location } from 'utils/indirection/window';
 import { SearchSuggestField } from '.';
@@ -34,10 +35,7 @@ jest.mock('utils/indirection/window', () => ({
 }));
 
 describe('components/SearchSuggestField', () => {
-  const context = {
-    assets: {
-      icons: '/icons.svg',
-    },
+  const context: CommonDataProps['context'] = {
     environment: 'frontend_tests',
     release: '9.8.7',
     sentry_dsn: null,

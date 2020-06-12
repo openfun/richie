@@ -23,8 +23,7 @@
         <div class="subheader__container">
             <div class="subheader__search">
                 <h1 class="subheader__title">{{ current_page.get_title }}</h1>
-                <div class="richie-react richie-react--search-suggest-field"
-                     data-props='{"context": { "assets": { "icons": "{% static 'richie/icons.svg' %}" } }}'></div>
+                <div class="richie-react richie-react--search-suggest-field"></div>
             </div>
         </div>
     {% endspaceless %}{% endblock subheader_content %}
@@ -38,8 +37,7 @@
       {% with header_level=2 %}
         {% placeholder "content" %}
       {% endwith %}
-      <div class="richie-react richie-react--search"
-           data-props='{"context": { "assets": { "icons": "{% static 'richie/icons.svg' %}" } }}'></div>
+      <div class="richie-react richie-react--search"></div>
     </div>
   </div>
 {% endblock content %}

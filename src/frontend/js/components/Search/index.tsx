@@ -78,7 +78,7 @@ export const Search = ({ context }: CommonDataProps) => {
                   role="img"
                   className="icon search__filters__toggle__icon"
                 >
-                  <use xlinkHref={`${context.assets.icons}#icon-cross`} />
+                  <use xlinkHref="#icon-cross" />
                 </svg>{' '}
                 <span className="offscreen">
                   <FormattedMessage {...messages.hideFiltersPane} />
@@ -91,7 +91,7 @@ export const Search = ({ context }: CommonDataProps) => {
                   role="img"
                   className="icon search__filters__toggle__icon"
                 >
-                  <use xlinkHref={`${context.assets.icons}#icon-filter`} />
+                  <use xlinkHref="#icon-filter" />
                 </svg>
                 <span className="offscreen">
                   <FormattedMessage {...messages.showFiltersPane} />
