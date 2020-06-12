@@ -322,6 +322,7 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         # Richie stuff
         "richie.apps.demo",
         "richie.apps.search",
+        "richie.apps.enrollments",
         "richie.apps.courses",
         "richie.apps.core",
         "richie.apps.social",
