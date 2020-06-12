@@ -57,6 +57,7 @@
         {% endblock css_links %}
     </head>
     <body>
+        {% include "richie/icons.html" %}
         {% cms_toolbar %}
 
         {# Wrap all body content in an ID'd element to easily remove it from view (using aria-hidden) #}
@@ -80,7 +81,7 @@
                     <div class="topbar__menu topbar__menu--aside">
                         {% block topbar_searchbar %}
                         <div class="topbar__search richie-react richie-react--root-search-suggest-field"
-                            data-props='{"courseSearchPageUrl": "{% page_url 'courses' %}", "context": { "assets": { "icons": "{% static 'richie/icons.svg' %}" } }}'></div>
+                            data-props='{"courseSearchPageUrl": "{% page_url 'courses' %}"}'></div>
                         {% endblock topbar_searchbar %}
 
                         <ul class="topbar__list topbar__list--controls">

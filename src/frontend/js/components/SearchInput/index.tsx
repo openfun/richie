@@ -32,7 +32,7 @@ export const SearchInput = ({
         role="img"
         className="icon search-input__btn__icon"
       >
-        <use xlinkHref={`${context.assets.icons}#icon-magnifying-glass`} />
+        <use xlinkHref="#icon-magnifying-glass" />
       </svg>{' '}
       <span className="offscreen">
         <FormattedMessage {...messages.button} />

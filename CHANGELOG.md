@@ -22,6 +22,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Fix course detail vertical rhythm and font size.
 - Fix accordion border line.
 - Fix basic block element alignment in section.
+- Include the SVG icons sprite in `base.html` instead of loading it as
+  external content so it can support usage with CDNs.
 - Add grid constraint on person 'main_content' placeholder content.
 
 ## [2.0.0-beta.7] - 2020-06-08

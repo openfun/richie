@@ -2,13 +2,11 @@ import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
+import { CommonDataProps } from 'types/commonDataProps';
 import { SearchInput } from '.';
 
 describe('<SearchInput />', () => {
-  const context = {
-    assets: {
-      icons: '/icons.svg',
-    },
+  const context: CommonDataProps['context'] = {
     environment: 'frontend_tests',
     release: '9.8.7',
     sentry_dsn: null,
@@ -26,7 +24,7 @@ describe('<SearchInput />', () => {
     getByText('Search');
     // NB: we're searching the DOM as labelling and a11y for this input are handled by `react-autosuggest`
     expect(container.querySelector('input')).not.toBeNull();
-    expect(container.innerHTML).toContain('/icons.svg');
+    expect(container.innerHTML).toContain('icon-magnifying-glass');
   });
 
   it('triggers the passed callback on click', () => {
