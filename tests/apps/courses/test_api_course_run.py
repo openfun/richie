@@ -1,4 +1,6 @@
-"""Tests for the courses app API endpoints."""
+"""
+Tests for CourseRun API endpoints in the courses app.
+"""
 import arrow
 from cms.test_utils.testcases import CMSTestCase
 
@@ -8,7 +10,7 @@ from richie.apps.courses.models import CourseRun
 from richie.apps.courses.serializers import CourseRunSerializer
 
 
-class CoursesApiTestCase(CMSTestCase):
+class CourseRunApiTestCase(CMSTestCase):
     """Test requests on courses app API endpoints."""
 
     # LIST, CREATE, UPDATE and DESTROY are not supported
