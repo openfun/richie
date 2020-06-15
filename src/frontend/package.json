@@ -42,14 +42,14 @@
     "@babel/preset-env": "7.10.2",
     "@babel/preset-typescript": "7.10.1",
     "@formatjs/intl-relativetimeformat": "5.2.6",
-    "@sentry/browser": "5.16.1",
-    "@testing-library/jest-dom": "5.9.0",
+    "@sentry/browser": "5.17.0",
+    "@testing-library/jest-dom": "5.10.1",
     "@testing-library/react": "10.2.1",
     "@types/fetch-mock": "7.3.2",
-    "@types/jest": "25.2.3",
+    "@types/jest": "26.0.0",
     "@types/lodash-es": "4.17.3",
     "@types/query-string": "6.3.0",
-    "@types/react": "16.9.35",
+    "@types/react": "16.9.36",
     "@types/react-autosuggest": "9.3.14",
     "@types/react-dom": "16.9.8",
     "@types/react-modal": "3.10.5",
@@ -68,7 +68,7 @@
     "node-sass": "4.14.1",
     "nodemon": "2.0.4",
     "prettier": "2.0.5",
-    "query-string": "6.13.0",
+    "query-string": "6.13.1",
     "react": "16.13.1",
     "react-autosuggest": "10.0.2",
     "react-dom": "16.13.1",
@@ -85,6 +85,6 @@
     "yargs": "15.3.1"
   },
   "resolutions": {
-    "@types/react": "16.9.35"
+    "@types/react": "16.9.36"
   }
 }
