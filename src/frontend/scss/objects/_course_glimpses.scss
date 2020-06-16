@@ -98,7 +98,7 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
       $border-width: 0,
       $font-size: 0.8rem,
       $line-height: 1.1,
-      $font-weight: bold
+      $font-weight: $font-weight-normal
     );
     @include r-button-colors(r-theme-val(course-glimpse, icon));
     display: flex;
@@ -110,6 +110,12 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     box-shadow: r-theme-val(course-glimpse, icon-shadow);
+
+    .category-badge {
+      padding: 0;
+      font-size: inherit;
+      font-weight: inherit;
+    }
 
     img {
       @include sv-flex(0, 0, 1.6rem);
@@ -202,7 +208,7 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
     @include sv-flex(1, 0, auto);
     margin: 0;
     padding: 0.75rem 0;
-    font-weight: bold;
+    font-weight: $font-weight-bold;
     line-height: 1.1;
   }
 }

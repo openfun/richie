@@ -26,6 +26,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Include the SVG icons sprite in `base.html` instead of loading it as
   external content so it can support usage with CDNs.
 - Add grid constraint on person 'main_content' placeholder content.
+- Make course glimpse category cartouche less "aggressive".
 
 ## [2.0.0-beta.7] - 2020-06-08
 
