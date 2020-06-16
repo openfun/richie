@@ -33,6 +33,7 @@
 
     & + .user-login__btn {
       margin-left: 0.5rem;
+      text-transform: uppercase;
       border-top: 0;
     }
 
@@ -44,6 +45,7 @@
     &--sign-up,
     &--log-out {
       color: r-theme-val(topbar, item-cta-hollow-color);
+      text-transform: uppercase;
       background: r-theme-val(topbar, item-cta-hollow-background);
       border-color: r-theme-val(topbar, item-cta-hollow-border);
 
