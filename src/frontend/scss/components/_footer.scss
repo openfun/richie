@@ -27,7 +27,7 @@
     }
 
     & > a {
-      @include sv-flex(1, 0, 100%);
+      @include sv-flex(0, 0, auto);
     }
 
     img,

@@ -27,6 +27,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   external content so it can support usage with CDNs.
 - Add grid constraint on person 'main_content' placeholder content.
 - Make course glimpse category cartouche less "aggressive".
+- Improve accessibility on 'body-mentions'
 
 ## [2.0.0-beta.7] - 2020-06-08
 
