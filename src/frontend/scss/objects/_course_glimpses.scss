@@ -151,11 +151,25 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
   }
 
   &__organization {
+    display: flex;
     position: absolute;
     bottom: 0.4rem;
     left: 0;
+    right: 0;
     padding: 0 0.6rem;
+    align-items: center;
     color: r-theme-val(course-glimpse, organization-color);
+    font-size: 0.9rem;
+    line-height: 1.1;
+
+    svg {
+      @include sv-flex(1, 0, 1.4rem);
+      width: 1.4rem;
+      height: 0.9rem;
+      margin-bottom: 0.15rem;
+      margin-right: 0.5rem;
+      fill: r-theme-val(course-glimpse, organization-color);
+    }
   }
 
   &__media {
@@ -202,13 +216,22 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
   padding: 0 $course-glimpse-content-padding-sides;
   border-bottom-left-radius: $border-radius-lg;
   border-bottom-right-radius: $border-radius-lg;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
 
   &__date {
     @include sv-flex(1, 0, auto);
+    display: flex;
     margin: 0;
-    padding: 0.75rem 0;
+    padding: 0.45rem 0;
+    align-items: center;
     font-weight: $font-weight-bold;
     line-height: 1.1;
+
+    svg {
+      @include sv-flex(1, 0, 1.4rem);
+      width: 1.4rem;
+      height: 1.3rem;
+      margin-right: 0.5rem;
+    }
   }
 }

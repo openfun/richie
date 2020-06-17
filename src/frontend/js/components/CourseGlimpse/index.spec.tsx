@@ -59,11 +59,7 @@ describe('components/CourseGlimpse', () => {
     getByText('Course 42');
     getByText('Some Organization');
     // Matches on 'Starts on Mar 14, 2019', date is wrapped with intl <span>
-    getByText(
-      (_, element) =>
-        element.innerHTML.startsWith('Starts on') &&
-        element.innerHTML.includes('Mar 14, 2019'),
-    );
+    getByText('Starts on Mar 14, 2019');
     // The logo is rendered along with alt text "" as it is decorative and included in a link block
     const img = container.querySelector('img');
     expect(img).toHaveAttribute('alt', '');

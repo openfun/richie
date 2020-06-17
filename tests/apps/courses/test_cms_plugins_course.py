@@ -116,12 +116,18 @@ class CoursePluginTestCase(TestCase):
             status_code=200,
         )
         # The course's main organization should be present
+        self.assertIsNotNone(
+            re.search(
+                (
+                    r'<div class="course-glimpse__organization">'
+                    r'<svg role="img".*'
+                    r'<use xlink:href="#icon-pin" />'
+                ),
+                str(response.content),
+            )
+        )
         self.assertContains(
-            response,
-            '<div class="course-glimpse__organization">{title}</div>'.format(
-                title=organization.extended_object.get_title()
-            ),
-            status_code=200,
+            response, organization.extended_object.get_title(), status_code=200,
         )
 
         # The course's cover should be present
@@ -169,12 +175,18 @@ class CoursePluginTestCase(TestCase):
         )
 
         # The course's main organization should be present
+        self.assertIsNotNone(
+            re.search(
+                (
+                    r'<div class="course-glimpse__organization">'
+                    r'<svg role="img".*'
+                    r'<use xlink:href="#icon-pin" />'
+                ),
+                str(response.content),
+            )
+        )
         self.assertContains(
-            response,
-            '<div class="course-glimpse__organization">{title}</div>'.format(
-                title=organization.extended_object.get_title()
-            ),
-            status_code=200,
+            response, organization.extended_object.get_title(), status_code=200,
         )
 
         # The course's cover should be present
