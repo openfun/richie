@@ -17,6 +17,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Change course detail content titles to neutral dark color.
 - Customize CMS placeholder menu for more readability.
 - Make login/logout CTA more visible.
+- Add template block around footer slogan.
 
 ### Fixed
 
