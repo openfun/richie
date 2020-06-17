@@ -57,7 +57,10 @@ const CourseGlimpseBase = ({
       <div className="course-glimpse__wrapper">
         <p className="course-glimpse__title">{course.title}</p>
         <div className="course-glimpse__organization">
-          {course.organization_highlighted}
+          <svg aria-hidden={true} role="img" className="icon">
+            <use xlinkHref="#icon-pin" />
+          </svg>
+          <span>{course.organization_highlighted}</span>
         </div>
       </div>
       <CourseGlimpseFooter context={context} course={course} />

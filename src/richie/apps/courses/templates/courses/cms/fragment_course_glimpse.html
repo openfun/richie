@@ -1,4 +1,4 @@
-{% load i18n cms_tags extra_tags static thumbnail %}
+{% load i18n cms_tags extra_tags static thumbnail %}{% spaceless %}
 {% comment %}Obviously, the context template variable "course" is required and must be a Course page extension{% endcomment %}
 
 {% with course_page=course.extended_object course_state=course.state main_org_title=course.get_main_organization.extended_object.get_title course_variant=course_variant|default:"glimpse" %}
@@ -34,18 +34,29 @@
         <div class="course-{{ course_variant }}__wrapper">
             <p class="course-{{ course_variant }}__title">{{ course_page.get_title }}</p>
             {% if main_org_title %}
-            <div class="course-{{ course_variant }}__organization">{{ main_org_title }}</div>
+            <div class="course-{{ course_variant }}__organization">
+                <svg role="img" aria-hidden="true" class="icon">
+                    <use xlink:href="#icon-pin" />
+                </svg>
+                <span>{{ main_org_title }}</span>
+            </div>
             {% endif %}
         </div>
 
         {% block course_glimpse_footer %}
         <div class="course-{{ course_variant }}-footer">
             <div class="course-{{ course_variant }}-footer__date">
+                <svg role="img" aria-hidden="true" class="icon">
+                    <use xlink:href="#icon-calendar" />
+                </svg>
                 {{ course_state.text|capfirst }}
-                <span>{{ course_state.datetime|date:"DATE_FORMAT" }}</span>
+                {% if course_state.datetime %}
+                    {{ course_state.datetime|date:"DATE_FORMAT" }}
+                {% endif %}
             </div>
         </div>
         {% endblock course_glimpse_footer %}
     </div>
 </a>
 {% endwith %}
+{% endspaceless %}
