@@ -126,7 +126,9 @@
                         </a>
                     </div>
                     <div class="body-footer__insert">
-                        <p class="body-footer__title">{% trans "Life-changing learning!" %}</p>
+                        {% block body_footer_title %}
+                            <p class="body-footer__title">{% trans "Life-changing learning!" %}</p>
+                        {% endblock body_footer_title %}
                         {% language_chooser "menu/language_menu.html" %}
                         <div class="body-footer__badges">
                             {% include "social-networks/footer-badges.html" %}
