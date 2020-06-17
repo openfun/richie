@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [2.0.0-beta.8] - 2020-06-17
+
 ### Added
 
 - Add checkmark icon to course skills bullet lists.
@@ -885,7 +887,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.0.0-beta.7...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.0.0-beta.8...master
+[2.0.0-beta.8]: https://github.com/openfun/richie/compare/v2.0.0-beta.7...v2.0.0-beta.8
 [2.0.0-beta.7]: https://github.com/openfun/richie/compare/v2.0.0-beta.6...v2.0.0-beta.7
 [2.0.0-beta.6]: https://github.com/openfun/richie/compare/v2.0.0-beta.5...v2.0.0-beta.6
 [2.0.0-beta.5]: https://github.com/openfun/richie/compare/v2.0.0-beta.4...v2.0.0-beta.5
