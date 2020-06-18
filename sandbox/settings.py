@@ -174,6 +174,26 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
     # Login/registration related settings
     LOGIN_REDIRECT_URL = "/"
     LOGOUT_REDIRECT_URL = "/"
+    LOGIN_URL = "login"
+    LOGOUT_URL = "logout"
+
+    AUTHENTICATION_BACKENDS = (
+        "richie.apps.core.backends.EdXOAuth2",
+        "richie.apps.core.backends.EdXOIDC",
+        "django.contrib.auth.backends.ModelBackend",
+    )
+
+    # Social auth
+    SOCIAL_AUTH_EDX_OAUTH2_KEY = values.Value()
+    SOCIAL_AUTH_EDX_OAUTH2_SECRET = values.Value()
+    SOCIAL_AUTH_EDX_OAUTH2_ENDPOINT = values.Value()
+    SOCIAL_AUTH_EDX_OAUTH2_CONFIGURATION_ENDPOINT = values.Value()
+    SOCIAL_AUTH_EDX_OIDC_KEY = values.Value()
+    SOCIAL_AUTH_EDX_OIDC_SECRET = values.Value()
+    SOCIAL_AUTH_EDX_OIDC_ID_TOKEN_DECRYPTION_KEY = values.Value()
+    SOCIAL_AUTH_EDX_OIDC_ENDPOINT = values.Value()
+    SOCIAL_AUTH_EDX_OIDC_CONFIGURATION_ENDPOINT = values.Value()
+    SOCIAL_AUTH_POSTGRES_JSONFIELD = False  # Mysql compatibility by default
 
     # Internationalization
     TIME_ZONE = "Europe/Paris"
@@ -200,6 +220,8 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
                     "django.template.context_processors.static",
                     "cms.context_processors.cms_settings",
                     "richie.apps.core.context_processors.site_metas",
+                    "social_django.context_processors.backends",
+                    "social_django.context_processors.login_redirect",
                 ],
                 "loaders": [
                     "django.template.loaders.filesystem.Loader",
@@ -225,6 +247,7 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         "cms.middleware.toolbar.ToolbarMiddleware",
         "cms.middleware.language.LanguageCookieMiddleware",
         "dj_pagination.middleware.PaginationMiddleware",
+        "social_django.middleware.SocialAuthExceptionMiddleware",
     )
 
     # Django applications from the highest priority to the lowest
@@ -248,6 +271,7 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         "dockerflow.django",
         "parler",
         "rest_framework",
+        "social_django",
         # Django-cms
         "djangocms_admin_style",
         "djangocms_googlemap",

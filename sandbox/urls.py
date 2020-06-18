@@ -34,6 +34,7 @@ urlpatterns = [
 urlpatterns += i18n_patterns(
     url(r"^admin/", admin.site.urls),
     url(r"^accounts/", include("django.contrib.auth.urls")),
+    url(r"^oauth/", include("social_django.urls", namespace="social")),
     url(
         r"^styleguide/$",
         TemplateView.as_view(
