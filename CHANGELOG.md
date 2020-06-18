@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Add oauth2 and OIDC authentication backends for SSO with Open edX
+- Add 'login' item in SVG icon map.
 
 ## [2.0.0-beta.8] - 2020-06-17
 
