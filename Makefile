@@ -185,12 +185,12 @@ lint-back-black: ## lint back-end python sources with black
 
 lint-back-flake8: ## lint back-end python sources with flake8
 	@echo 'lint:flake8 started…'
-	@$(COMPOSE_TEST_RUN_APP) flake8
+	@$(COMPOSE_TEST_RUN_APP) flake8 src/richie/apps src/richie/plugins sandbox tests
 .PHONY: lint-back-flake8
 
 lint-back-isort: ## automatically re-arrange python imports in back-end code base
 	@echo 'lint:isort started…'
-	@$(COMPOSE_TEST_RUN_APP) isort --recursive --atomic .
+	@$(COMPOSE_TEST_RUN_APP) isort --recursive --atomic src/richie/apps src/richie/plugins sandbox tests
 .PHONY: lint-back-isort
 
 lint-back-pylint: ## lint back-end python sources with pylint
