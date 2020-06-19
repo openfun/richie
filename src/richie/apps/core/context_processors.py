@@ -32,6 +32,9 @@ def site_metas(request):
             "domain": site_current.domain,
             "web_url": f"{protocol:s}://{site_current.domain:s}",
         },
+        "RICHIE_APPS": {
+            "enrollments": "richie.apps.enrollments" in settings.INSTALLED_APPS,
+        },
         "FRONTEND_CONTEXT": json.dumps(
             {
                 "context": {
