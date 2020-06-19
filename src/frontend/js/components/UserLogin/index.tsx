@@ -93,6 +93,9 @@ export const UserLogin = ({
             href={loginUrl}
             className="user-login__btn user-login__btn--log-in"
           >
+            <svg aria-hidden={true} role="img" className="icon">
+              <use xlinkHref="#icon-login" />
+            </svg>
             <FormattedMessage {...messages.logIn} />
           </a>
         </React.Fragment>
