@@ -4,6 +4,8 @@ End-to-end tests for the course detail view
 import re
 from datetime import timedelta
 
+from django.conf import settings
+from django.test.utils import override_settings
 from django.utils import dateformat, timezone
 
 import pytz
@@ -433,6 +435,11 @@ class RunsCourseCMSTestCase(CMSTestCase):
             should_publish=True,
         )
 
+    @override_settings(
+        INSTALLED_APPS=filter(
+            lambda app: app != "richie.apps.enrollments", settings.INSTALLED_APPS
+        )
+    )
     def test_templates_course_detail_runs_ongoing_open(self):
         """
         Priority 0: a course run open and on-going should always show up.
@@ -462,6 +469,32 @@ class RunsCourseCMSTestCase(CMSTestCase):
             ),
         )
 
+    def test_templates_course_detail_runs_ongoing_open_with_enrollments_app(self):
+        """
+        Priority 0: when the enrollments app is enabled, responsibility for the
+        CTA is delegated to the frontend component.
+        """
+        course = CourseFactory(should_publish=True)
+        course_run = self.create_run_ongoing_open(course)
+        response = self.client.get(course.extended_object.get_absolute_url())
+
+        self.assertIsNotNone(
+            re.search(
+                (
+                    r'.*class="richie-react richie-react--course-run-enrollment".*'
+                    r"data-props=\\\'{{\"courseRunId\": {}}}\\\'".format(
+                        course_run.public_extension_id
+                    )
+                ),
+                str(response.content),
+            )
+        )
+
+    @override_settings(
+        INSTALLED_APPS=filter(
+            lambda app: app != "richie.apps.enrollments", settings.INSTALLED_APPS
+        )
+    )
     def test_templates_course_detail_runs_future_open(self):
         """
         Priority 1: an upcoming open course run should show in a separate section.
@@ -489,6 +522,27 @@ class RunsCourseCMSTestCase(CMSTestCase):
                 'course-detail__runs--inactive">'
                 '<h3 class="course-detail__title">'
             ),
+        )
+
+    def test_templates_course_detail_runs_future_open_with_enrollments_app(self):
+        """
+        Priority 1: when the enrollments app is enabled, responsibility for the
+        CTA is delegated to the frontend component.
+        """
+        course = CourseFactory(should_publish=True)
+        course_run = self.create_run_future_open(course)
+        response = self.client.get(course.extended_object.get_absolute_url())
+
+        self.assertIsNotNone(
+            re.search(
+                (
+                    r'.*class="richie-react richie-react--course-run-enrollment".*'
+                    r"data-props=\\\'{{\"courseRunId\": {}}}\\\'".format(
+                        course_run.public_extension_id
+                    )
+                ),
+                str(response.content),
+            )
         )
 
     @timezone.override(pytz.utc)

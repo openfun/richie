@@ -1,9 +1,12 @@
 """
 End-to-end tests for the course run detail view
 """
+import re
 from datetime import datetime
 from unittest import mock
 
+from django.conf import settings
+from django.test.utils import override_settings
 from django.utils import timezone
 
 import pytz
@@ -290,11 +293,17 @@ class CourseRunCMSTestCase(CMSTestCase):
             response = self.client.get(url)
 
         self.assertEqual(response.status_code, 200)
-        return response
+        return (response, course_run)
 
-    def test_templates_course_run_detail_state_with_cta(self):
+    # Without Richie enrollments, the CTA and link are managed by the backend template
+    @override_settings(
+        INSTALLED_APPS=filter(
+            lambda app: app != "richie.apps.enrollments", settings.INSTALLED_APPS
+        )
+    )
+    def test_templates_course_run_detail_state_without_enrollments_app_with_cta(self):
         """A course run in a state with a call to action should include a link and the CTA."""
-        response = self.prepare_to_test_state(CourseState(0, timezone.now()))
+        response, _ = self.prepare_to_test_state(CourseState(0, timezone.now()))
         self.assertContains(
             response,
             '<a class="subheader__cta" '
@@ -302,14 +311,56 @@ class CourseRunCMSTestCase(CMSTestCase):
             html=True,
         )
 
-    def test_templates_course_run_detail_state_without_cta(self):
+    @override_settings(
+        INSTALLED_APPS=filter(
+            lambda app: app != "richie.apps.enrollments", settings.INSTALLED_APPS
+        )
+    )
+    def test_templates_course_run_detail_state_without_enrollments_app_without_cta(
+        self,
+    ):
         """A course run in a state without a call to action should include a state button."""
-        response = self.prepare_to_test_state(CourseState(6))
+        response, _ = self.prepare_to_test_state(CourseState(6))
         self.assertContains(
             response,
             '<button class="subheader__cta '
             'subheader__cta--projected">To be scheduled</button>',
             html=True,
+        )
+
+    # With Richie enrollments, the responsibility is always delegated to the frontend component
+    def test_templates_course_run_detail_state_with_enrollments_app_with_cta(self):
+        """A course run in a state with a call to action just calls the frontend component."""
+        response, course_run = self.prepare_to_test_state(
+            CourseState(0, timezone.now())
+        )
+        self.assertIsNotNone(
+            re.search(
+                (
+                    r'.*class="richie-react richie-react--course-run-enrollment".*'
+                    r"data-props=\\\'{{\"courseRunId\": {}}}\\\'".format(
+                        course_run.public_extension_id
+                    )
+                ),
+                str(response.content),
+            )
+        )
+
+    def test_templates_course_run_detail_state_with_enrollments_app_without_cta(self):
+        """A course run in a state without a call to action just calls the frontend component."""
+        response, course_run = self.prepare_to_test_state(
+            CourseState(6, timezone.now())
+        )
+        self.assertIsNotNone(
+            re.search(
+                (
+                    r'.*class="richie-react richie-react--course-run-enrollment".*'
+                    r"data-props=\\\'{{\"courseRunId\": {}}}\\\'".format(
+                        course_run.public_extension_id
+                    )
+                ),
+                str(response.content),
+            )
         )
 
     # Breadcrumb

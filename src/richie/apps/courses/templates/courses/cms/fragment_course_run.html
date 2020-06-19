@@ -12,8 +12,18 @@
         <dt>{% trans "Languages" %}</dt>
         <dd>{% render_model run "get_languages_display" "languages" %}</dd>
     </dl>
-    <a href="{{ run.extended_object.get_absolute_url }}" class="course-detail__run-cta">
-        {{ run.state.call_to_action|capfirst }}
-    </a>
+    {% if RICHIE_APPS.enrollments %}
+        <a href="{{ run.extended_object.get_absolute_url }}" class="course-detail__run-session-link">
+            {% trans "See this course run" %}
+        </a>
+        <div
+            class="richie-react richie-react--course-run-enrollment"
+            data-props='{"courseRunId": {{ run.id }}}'
+        ></div>
+    {% else %}
+        <a href="{{ run.extended_object.get_absolute_url }}" class="course-detail__run-cta">
+            {{ run.state.call_to_action|capfirst }}
+        </a>
+    {% endif %}
 </div>
 {% endspaceless %}
