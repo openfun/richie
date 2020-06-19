@@ -42,6 +42,7 @@
     "@babel/preset-env": "7.10.3",
     "@babel/preset-typescript": "7.10.1",
     "@formatjs/intl-relativetimeformat": "5.2.10",
+    "@helpscout/helix": "0.1.2",
     "@sentry/browser": "5.18.1",
     "@testing-library/jest-dom": "5.11.0",
     "@testing-library/react": "10.4.3",
