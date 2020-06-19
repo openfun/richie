@@ -14,7 +14,9 @@
         <div class="organization-detail__row organization-detail__row--unpadded">
             <div class="organization-detail__banner">
                 {% get_placeholder_plugins "banner" as plugins or %}
-                    <div class="organization-detail__empty">{% trans "Banner" %}</div>
+                    <img src="{% static "richie/images/empty/organization_banner.jpg" %}"
+                         class="organization-detail__banner--empty"
+                         alt="">
                 {% endget_placeholder_plugins %}
                 {% blockplugin plugins.0 %}
                     <img
@@ -34,7 +36,9 @@
 
             <div class="organization-detail__logo">
                 {% get_placeholder_plugins "logo" as plugins or %}
-                    <div class="organization-detail__empty">{% trans "Logo" %}</div>
+                    <img src="{% static "richie/images/empty/organization_logo.png" %}"
+                         class="organization-detail__logo--empty"
+                         alt="">
                 {% endget_placeholder_plugins %}
                 {% blockplugin plugins.0 %}
                     <img

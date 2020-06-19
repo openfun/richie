@@ -1,4 +1,4 @@
-{% load i18n cms_tags extra_tags thumbnail %}
+{% load i18n cms_tags extra_tags static thumbnail %}
 {% comment %}Obviously, the context template variable "organization" is required and must be an Organization page extension{% endcomment %}
 
 {% with organization_page=organization.extended_object organization_variant=organization_variant|default:"glimpse" %}
@@ -6,7 +6,9 @@
     <a class="organization-{{ organization_variant }}{% if organization_page.publisher_is_draft is True %} organization-{{ organization_variant }}--draft{% endif %}" href="{{ organization_page.get_absolute_url }}" title="{{ organization_page.get_title }}">
         <div class="organization-{{ organization_variant }}__logo">
             {% get_page_plugins "logo" organization_page as plugins or %}
-                <p class="organization-{{ organization_variant }}__empty">{% trans "Logo" %}</p>
+                <img src="{% static "richie/images/empty/organization_logo.png" %}"
+                     class="organization-{{ organization_variant }}__logo--empty"
+                     alt="">
             {% endget_page_plugins %}
             {% blockplugin plugins.0 %}
                 <img src="{% thumbnail instance.picture 200x113 upscale subject_location=instance.picture.subject_location %}"
@@ -39,7 +41,9 @@
     <a class="organization-{{ organization_variant }}{% if organization_page.publisher_is_draft is True %} organization-{{ organization_variant }}--draft{% endif %}" href="{{ organization_page.get_absolute_url }}" title="{{ organization_page.get_title }}">
         <div class="organization-{{ organization_variant }}__logo">
             {% get_page_plugins "logo" organization_page as plugins or %}
-                <p class="organization-{{ organization_variant }}__empty">{% trans "Logo" %}</p>
+                <img src="{% static "richie/images/empty/organization_logo.png" %}"
+                     class="organization-{{ organization_variant }}__logo--empty"
+                     alt="">
             {% endget_page_plugins %}
             {% blockplugin plugins.0 %}
                 <img src="{% thumbnail instance.picture 200x113 upscale subject_location=instance.picture.subject_location %}"

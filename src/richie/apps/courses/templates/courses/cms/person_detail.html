@@ -1,5 +1,5 @@
 {% extends "richie/fullwidth.html" %}
-{% load cms_tags extra_tags i18n pagination_tags thumbnail %}
+{% load cms_tags extra_tags i18n pagination_tags static thumbnail %}
 
 {% block meta_opengraph_contextuals %}
     <meta property="og:title" content="{{ current_page.get_title|truncatechars:65 }}">
@@ -44,8 +44,10 @@
                 <div class="subheader__aside">
                     <div class="subheader__cartouche">
                         {% get_placeholder_plugins "portrait" as plugins or %}
-                        <div class="subheader__empty">
-                        {% trans "Portrait" %}
+                        <div class="subheader__media subheader__media--locket subheader__empty">
+                            <img src="{% static "richie/images/empty/person_portrait.png" %}"
+                                 class="subheader__empty--avatar"
+                                 alt="">
                         </div>
                         {% endget_placeholder_plugins %}
                         {% blockplugin plugins.0 %}
