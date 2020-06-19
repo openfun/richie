@@ -8,6 +8,8 @@
   }
 
   &__btn {
+    display: flex;
+    align-items: center;
     @include sv-flex(1, 0, auto);
     @include button-size(
       $btn-padding-y,
@@ -52,6 +54,13 @@
       &:hover {
         color: r-theme-val(topbar, item-cta-hollow-color) !important;
       }
+    }
+
+    & > .icon {
+      height: 1.25rem;
+      width: 1.25rem;
+      margin-right: 0.5rem;
+      fill: white;
     }
   }
 }
