@@ -1,5 +1,3 @@
-import 'testSetup';
-
 import { act, fireEvent, render, wait } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import React from 'react';

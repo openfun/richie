@@ -1,5 +1,3 @@
-import 'testSetup';
-
 import { fireEvent, render, wait } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { stringify } from 'query-string';
