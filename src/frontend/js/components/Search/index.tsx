@@ -119,7 +119,12 @@ export const Search = ({ context }: CommonDataProps) => {
         ) : courseSearchResponse &&
           courseSearchResponse.status === requestStatus.FAILURE ? (
           <div className="search__results__error">
-            <FormattedMessage {...messages.errorMessage} />
+            <svg aria-hidden={true} role="img">
+              <use xlinkHref="#icon-search-fail" />
+            </svg>
+            <p>
+              <FormattedMessage {...messages.errorMessage} />
+            </p>
           </div>
         ) : (
           <Spinner size="large">
