@@ -13,7 +13,7 @@ $r-breadcrumbs-separator: '›';
   }
 
   &__item {
-    @include sv-flex(0, 0, auto);
+    @include sv-flex(0, 1, auto);
     font-size: inherit;
     font-family: $r-font-family-montserrat;
     font-weight: $font-weight-boldest;

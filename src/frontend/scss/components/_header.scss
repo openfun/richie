@@ -66,7 +66,13 @@
       } @else {
         @include sv-flex(0, 0, auto);
       }
-      margin-right: 10%;
+      margin-right: 1vw;
+    }
+    @include media-breakpoint-up(xl) {
+      margin-right: 4vw;
+    }
+    @include media-breakpoint-up(xxl) {
+      margin-right: 6vw;
     }
 
     // Clickable logo
@@ -161,7 +167,10 @@
         margin-top: 0.5rem;
         @include media-breakpoint-up($r-topbar-breakpoint) {
           margin-top: 0;
-          margin-left: 2rem;
+          margin-left: 0.6rem;
+        }
+        @include media-breakpoint-up(xl) {
+          margin-left: 1rem;
         }
       }
     }
