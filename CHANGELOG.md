@@ -18,6 +18,20 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Improve search error message layout
 
+### Fixed
+
+- Lowered down global 'h1' and 'h2' font size and added new
+  'extra-font-size' variable with previous h1 value.
+- Adjust title size 'large_banner' variants.
+- Fix accordion button 'nested-item__title' alignment to the left.
+- Another attempt to definitively fix the glitch with wave decoration
+  and Chrome zoom/unzoom.
+- Add a little bit of space between banner and title on organization
+  and category detail.
+- Fix header menus align/position between breakpoint 'md' end and
+  'lg' start.
+- Fix breadcrumb item on small breakpoints when text is too long.
+
 ## [2.0.0-beta.8] - 2020-06-17
 
 ### Added

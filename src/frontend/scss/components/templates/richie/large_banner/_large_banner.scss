@@ -42,20 +42,10 @@
     position: relative;
 
     &__title {
+      @include font-size($h1-font-size);
       // Leave some margin between title & logo
       margin: 0 0.5rem 0 0;
-
-      // Adjust text size for smaller screens
-      font-size: 1.5rem;
       text-align: center;
-
-      @include media-breakpoint-up(sm) {
-        font-size: 2rem;
-      }
-
-      @include media-breakpoint-up(md) {
-        font-size: 2.5rem;
-      }
     }
 
     &__logo {
@@ -140,6 +130,7 @@
 
   &__title {
     @include responsive-spacer('margin-bottom', 3, $breakpoints: ('lg': 4));
+    @include font-size($extra-font-size);
     color: r-theme-val(hero-intro, title-color);
 
     @include media-breakpoint-up(lg) {
