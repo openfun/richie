@@ -14,6 +14,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add an icon to the 'login' button.
 - Add icons in course glimpse footer & next to organization name.
 
+### Changed
+
+- Improve search error message layout
+
 ## [2.0.0-beta.8] - 2020-06-17
 
 ### Added
