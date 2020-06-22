@@ -72,7 +72,7 @@
     "react": "16.13.1",
     "react-autosuggest": "10.0.2",
     "react-dom": "16.13.1",
-    "react-intl": "4.6.10",
+    "react-intl": "4.6.9",
     "react-intl-po": "2.2.2",
     "react-modal": "3.11.2",
     "source-map-loader": "1.0.0",
