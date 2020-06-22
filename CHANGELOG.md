@@ -31,6 +31,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Fix header menus align/position between breakpoint 'md' end and
   'lg' start.
 - Fix breadcrumb item on small breakpoints when text is too long.
+- Fix nesteditem list variant to act like a basic list.
 
 ## [2.0.0-beta.8] - 2020-06-17
 
