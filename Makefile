@@ -62,7 +62,9 @@ COMPOSE_RUN_NODE     = $(COMPOSE_RUN) -e HOME="/tmp" node
 YARN                 = $(COMPOSE_RUN_NODE) yarn
 
 # -- Django
-MANAGE               = $(COMPOSE_RUN_APP) dockerize -wait tcp://$(DB_HOST):$(DB_PORT) -timeout 60s python sandbox/manage.py
+MANAGE               = $(COMPOSE_RUN_APP) python sandbox/manage.py
+WAIT_DB              = $(COMPOSE_RUN) dockerize -wait tcp://$(DB_HOST):$(DB_PORT) -timeout 60s
+WAIT_ES              = $(COMPOSE_RUN) dockerize -wait tcp://elasticsearch:9200 -timeout 60s
 
 # ==============================================================================
 # RULES
@@ -97,6 +99,9 @@ logs: ## display app logs (follow mode)
 
 run: ## start the development server
 	@$(COMPOSE) up -d app
+	@echo "Wait for services to be up..."
+	@$(WAIT_DB)
+	@$(WAIT_ES)
 .PHONY: run
 
 status: ## an alias for "docker-compose ps"
@@ -208,10 +213,16 @@ messages: ## create the .po files used for i18n
 .PHONY: messages
 
 migrate: ## perform database migrations
+	@$(COMPOSE) up -d ${DB_HOST}
+	@$(WAIT_DB)
 	@$(MANAGE) migrate
 .PHONY: migrate
 
 search-index: ## (re)generate the Elasticsearch index
+	@$(COMPOSE) up -d ${DB_HOST}
+	@$(WAIT_DB)
+	@$(COMPOSE) up -d elasticsearch
+	@$(WAIT_ES)
 	@$(MANAGE) bootstrap_elasticsearch
 .PHONY: search-index
 

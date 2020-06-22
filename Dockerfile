@@ -105,15 +105,6 @@ COPY . /app/
 RUN pip uninstall -y richie
 RUN pip install -e .[dev]
 
-# Install dockerize. It is used to ensure that the database service is accepting
-# connections before trying to access it from the main application.
-ENV DOCKERIZE_VERSION v0.6.1
-RUN curl -sL \
-    --output dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
-    https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && \
-    tar -C /usr/local/bin -xzvf dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz && \
-    rm dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz
-
 # Restore the un-privileged user running the application
 ARG DOCKER_USER
 USER ${DOCKER_USER}
@@ -123,11 +114,8 @@ USER ${DOCKER_USER}
 ENV DB_HOST=postgresql \
     DB_PORT=5432
 
-# Run django development server (wrapped by dockerize to ensure the db is ready
-# to accept connections before running the development server)
-CMD cd sandbox && \
-    dockerize -wait tcp://${DB_HOST}:${DB_PORT} -timeout 60s \
-    python manage.py runserver 0.0.0.0:8000
+# Run django development server
+CMD cd sandbox && python manage.py runserver 0.0.0.0:8000
 
 # ---- Production image ----
 FROM core as production
