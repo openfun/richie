@@ -128,29 +128,44 @@
       margin-top: 1rem;
     }
 
-    .section-list {
+    //
+    // Default variant acts like a simple horizontal menu
+    //
+    .nested-item--list {
+      $nesteditem-base-selector: '.nested-item';
       @include sv-flex(1, 0, 100%);
-      display: flex;
-      padding: 0;
-      margin-bottom: 0;
-      flex-direction: row;
-      flex-wrap: wrap;
-      list-style-type: none;
 
-      &__item {
-        @include sv-flex(1, 0, 100%);
-        padding: 0.25rem;
+      a {
+        display: block;
+        color: inherit;
+      }
 
-        @include media-breakpoint-up($r-footer-breakpoint) {
-          @include sv-flex(1, 0, 33.3333%);
+      #{$nesteditem-base-selector}__content {
+        margin: 0.1rem;
+        padding: 0.25rem 0.25rem 0.25rem 0;
+        font-weight: bold;
+
+        p {
+          margin: 0;
         }
+      }
 
-        a {
-          color: inherit;
+      #{$nesteditem-base-selector}__items {
+        @include sv-flex(1, 0, 100%);
+        display: flex;
+        padding: 0;
+        margin-bottom: 0;
+        flex-direction: row;
+        flex-wrap: wrap;
+        list-style-type: none;
 
-          &:hover {
-            color: r-theme-val(body-footer, section-hover);
-            text-decoration: none;
+        li {
+          @include sv-flex(1, 0, calc(100% - 0.2rem));
+          margin: 0.1rem;
+          padding: 0.25rem 0.25rem 0.25rem 0;
+
+          @include media-breakpoint-up($r-footer-breakpoint) {
+            @include sv-flex(1, 0, auto);
           }
         }
       }

@@ -2,43 +2,25 @@
   $nesteditem-base-selector: &;
 
   //
-  // Default variant acts like a simple horizontal menu
+  // Default variant acts like a basic bullet list with some minor adjustments
   //
   &--list {
     @include sv-flex(1, 0, 100%);
 
-    a {
-      display: block;
-      color: inherit;
-    }
-
-    #{$nesteditem-base-selector}__content {
-      margin: 0.1rem;
-      padding: 0.25rem 0.25rem 0.25rem 0;
-      font-weight: bold;
-
-      p {
-        margin: 0;
-      }
+    // First level item title have a little bit of distinction for readability
+    &.nested-item--0 > #{$nesteditem-base-selector}__content {
+      @include font-size($h6-font-size);
+      margin-bottom: 0.5rem;
     }
 
     #{$nesteditem-base-selector}__items {
-      @include sv-flex(1, 0, 100%);
-      display: flex;
-      padding: 0;
-      margin-bottom: 0;
-      flex-direction: row;
-      flex-wrap: wrap;
-      list-style-type: none;
+      margin: 0;
+      padding: 0 0 0 0.9rem;
+      list-style-type: disc;
 
       li {
-        @include sv-flex(1, 0, calc(100% - 0.2rem));
         margin: 0.1rem;
-        padding: 0.25rem 0.25rem 0.25rem 0;
-
-        @include media-breakpoint-up($r-footer-breakpoint) {
-          @include sv-flex(1, 0, auto);
-        }
+        padding: initial;
       }
     }
   }
