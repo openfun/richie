@@ -44,7 +44,7 @@ describe('<SearchFilterGroupModal />', () => {
     historyReplaceState,
   ];
 
-  beforeEach(fetchMock.restore);
+  beforeEach(() => fetchMock.restore());
   beforeEach(jest.resetAllMocks);
   afterEach(cleanup);
 

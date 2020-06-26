@@ -36,7 +36,7 @@ describe('<RootSearchSuggestField />', () => {
     values: [],
   };
 
-  afterEach(fetchMock.restore);
+  afterEach(() => fetchMock.restore());
   afterEach(jest.resetAllMocks);
 
   it('renders', () => {

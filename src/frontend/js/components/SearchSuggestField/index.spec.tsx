@@ -78,7 +78,7 @@ describe('components/SearchSuggestField', () => {
     position: 3,
   };
 
-  afterEach(fetchMock.restore);
+  afterEach(() => fetchMock.restore());
   beforeEach(jest.resetAllMocks);
   beforeEach(() => (location.search = ''));
 

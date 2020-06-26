@@ -19,7 +19,7 @@ describe('<UserLogin />', () => {
     signupUrl: '/signup',
   };
 
-  beforeEach(fetchMock.restore);
+  beforeEach(() => fetchMock.restore());
 
   it('gets and renders the user name and a log out button', async () => {
     fetchMock.get('/api/v1.0/users/whoami/', {
