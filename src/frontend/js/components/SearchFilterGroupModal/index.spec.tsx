@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { stringify } from 'query-string';
 import React from 'react';
@@ -46,7 +46,6 @@ describe('<SearchFilterGroupModal />', () => {
 
   beforeEach(() => fetchMock.restore());
   beforeEach(jest.resetAllMocks);
-  afterEach(cleanup);
 
   it('renders a button with a modal to search values for a given filter', async () => {
     fetchMock.get('/api/v1.0/universities/?limit=20&offset=0&query=', {
