@@ -1,6 +1,6 @@
 import 'testSetup';
 
-import { act, fireEvent, render, wait } from '@testing-library/react';
+import { act, fireEvent, render, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
@@ -188,7 +188,14 @@ describe('components/SearchSuggestField', () => {
     // Simulate the user entering some text in the autocomplete field
     fireEvent.focus(field);
     fireEvent.change(field, { target: { value: 'aut' } });
-    await wait();
+
+    await waitFor(() => {
+      expect(
+        fetchMock.called('/api/v1.0/subjects/autocomplete/?query=aut'),
+      ).toEqual(true);
+    });
+    getByText('Subjects');
+    getByText('Subject #311');
 
     expect(
       fetchMock.called('/api/v1.0/levels/autocomplete/?query=aut'),
@@ -204,12 +211,6 @@ describe('components/SearchSuggestField', () => {
       fetchMock.called('/api/v1.0/persons/autocomplete/?query=aut'),
     ).toEqual(true);
     expect(queryByText('Persons')).toEqual(null);
-
-    expect(
-      fetchMock.called('/api/v1.0/subjects/autocomplete/?query=aut'),
-    ).toEqual(true);
-    getByText('Subjects');
-    getByText('Subject #311');
   });
 
   it('does not attempt to get or show any suggestions before the user types 3 characters', async () => {
@@ -239,11 +240,16 @@ describe('components/SearchSuggestField', () => {
     // Simulate the user entering some text in the autocomplete field
     fireEvent.focus(field);
     fireEvent.change(field, { target: { value: 'x' } });
-    await wait();
-    expect(fetchMock.calls().length).toEqual(0);
+    await waitFor(() => {
+      expect(fetchMock.calls().length).toEqual(0);
+    });
 
     fireEvent.change(field, { target: { value: 'xyz' } });
-    await wait();
+    await waitFor(() => {
+      expect(
+        fetchMock.called('/api/v1.0/subjects/autocomplete/?query=xyz'),
+      ).toEqual(true);
+    });
     expect(
       fetchMock.called('/api/v1.0/levels/autocomplete/?query=xyz'),
     ).toEqual(false);
@@ -252,9 +258,6 @@ describe('components/SearchSuggestField', () => {
     ).toEqual(true);
     expect(
       fetchMock.called('/api/v1.0/persons/autocomplete/?query=xyz'),
-    ).toEqual(true);
-    expect(
-      fetchMock.called('/api/v1.0/subjects/autocomplete/?query=xyz'),
     ).toEqual(true);
   });
 
@@ -292,8 +295,10 @@ describe('components/SearchSuggestField', () => {
     // Simulate the user entering some text in the autocomplete field
     fireEvent.focus(field);
     fireEvent.change(field, { target: { value: 'orga' } });
-    await wait();
-    expect(history.pushState).toHaveBeenCalledTimes(1);
+
+    await waitFor(() => {
+      expect(history.pushState).toHaveBeenCalledTimes(1);
+    });
     expect(history.pushState).toHaveBeenLastCalledWith(
       {
         name: 'courseSearch',
@@ -328,9 +333,10 @@ describe('components/SearchSuggestField', () => {
     expect(queryByText('Subjects')).toEqual(null);
 
     fireEvent.click(getByText('Organization #27'));
-    await wait();
 
-    expect(history.pushState).toHaveBeenCalledTimes(2);
+    await waitFor(() => {
+      expect(history.pushState).toHaveBeenCalledTimes(2);
+    });
     expect(history.pushState).toHaveBeenCalledWith(
       {
         name: 'courseSearch',
@@ -383,8 +389,10 @@ describe('components/SearchSuggestField', () => {
     // Simulate the user entering some text in the autocomplete field
     fireEvent.focus(field);
     fireEvent.change(field, { target: { value: 'doct' } });
-    await wait();
-    expect(history.pushState).toHaveBeenCalledTimes(1);
+
+    await waitFor(() => {
+      expect(history.pushState).toHaveBeenCalledTimes(1);
+    });
     expect(history.pushState).toHaveBeenCalledWith(
       {
         name: 'courseSearch',
@@ -419,9 +427,10 @@ describe('components/SearchSuggestField', () => {
     expect(queryByText('Subjects')).toEqual(null);
 
     fireEvent.click(getByText('Doctor Doom'));
-    await wait();
 
-    expect(history.pushState).toHaveBeenCalledTimes(2);
+    await waitFor(() => {
+      expect(history.pushState).toHaveBeenCalledTimes(2);
+    });
     expect(history.pushState).toHaveBeenCalledWith(
       {
         name: 'courseSearch',
@@ -470,19 +479,20 @@ describe('components/SearchSuggestField', () => {
     fireEvent.focus(field);
     fireEvent.change(field, { target: { value: '' } });
     fireEvent.keyDown(field, { keyCode: 13 });
-    await wait();
 
-    expect(history.pushState).toHaveBeenCalledWith(
-      {
-        name: 'courseSearch',
-        data: {
-          lastDispatchActions: expect.any(Array),
-          params: { limit: '20', offset: '0', query: undefined },
+    await waitFor(() => {
+      expect(history.pushState).toHaveBeenCalledWith(
+        {
+          name: 'courseSearch',
+          data: {
+            lastDispatchActions: expect.any(Array),
+            params: { limit: '20', offset: '0', query: undefined },
+          },
         },
-      },
-      '',
-      '/search?limit=20&offset=0',
-    );
+        '',
+        '/search?limit=20&offset=0',
+      );
+    });
   });
 
   it('searches as the user types', async () => {
@@ -513,12 +523,14 @@ describe('components/SearchSuggestField', () => {
     // NB: the tests below rely on the very crude debounce mock for lodash-debounce.
     // TODO: rewrite them when we use mocked timers to test our debouncing strategy.
     fireEvent.change(field, { target: { value: 'ri' } });
-    await wait();
-    expect(history.pushState).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(history.pushState).not.toHaveBeenCalled();
+    });
 
     fireEvent.change(field, { target: { value: 'ric' } });
-    await wait();
-    expect(history.pushState).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(history.pushState).toHaveBeenCalledTimes(1);
+    });
     expect(history.pushState).toHaveBeenLastCalledWith(
       {
         name: 'courseSearch',
@@ -532,8 +544,9 @@ describe('components/SearchSuggestField', () => {
     );
 
     fireEvent.change(field, { target: { value: 'rich data driven' } });
-    await wait();
-    expect(history.pushState).toHaveBeenCalledTimes(2);
+    await waitFor(() => {
+      expect(history.pushState).toHaveBeenCalledTimes(2);
+    });
     expect(history.pushState).toHaveBeenLastCalledWith(
       {
         name: 'courseSearch',
@@ -547,8 +560,9 @@ describe('components/SearchSuggestField', () => {
     );
 
     fireEvent.change(field, { target: { value: '' } });
-    await wait();
-    expect(history.pushState).toHaveBeenCalledTimes(3);
+    await waitFor(() => {
+      expect(history.pushState).toHaveBeenCalledTimes(3);
+    });
     expect(history.pushState).toHaveBeenLastCalledWith(
       {
         name: 'courseSearch',
@@ -590,20 +604,24 @@ describe('components/SearchSuggestField', () => {
     // NB: the tests below rely on the very crude debounce mock for lodash-debounce.
     // TODO: rewrite them when we use mocked timers to test our debouncing strategy.
     fireEvent.change(field, { target: { value: 'ri' } });
-    await wait();
-    expect(history.pushState).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(history.pushState).not.toHaveBeenCalled();
+    });
 
     fireEvent.change(field, { target: { value: 'ri ' } });
-    await wait();
-    expect(history.pushState).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(history.pushState).not.toHaveBeenCalled();
+    });
 
     fireEvent.change(field, { target: { value: ' ri' } });
-    await wait();
-    expect(history.pushState).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(history.pushState).not.toHaveBeenCalled();
+    });
 
     fireEvent.change(field, { target: { value: 'ric' } });
-    await wait();
-    expect(history.pushState).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(history.pushState).toHaveBeenCalledTimes(1);
+    });
     expect(history.pushState).toHaveBeenLastCalledWith(
       {
         name: 'courseSearch',
@@ -653,8 +671,9 @@ describe('components/SearchSuggestField', () => {
 
     // The user is typing an organization name
     fireEvent.change(field, { target: { value: 'orga' } });
-    await wait();
-    expect(history.pushState).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(history.pushState).toHaveBeenCalledTimes(1);
+    });
     expect(history.pushState).toHaveBeenLastCalledWith(
       {
         name: 'courseSearch',
@@ -668,9 +687,9 @@ describe('components/SearchSuggestField', () => {
     );
     // The user selects an organization from suggestions
     fireEvent.click(getByText('Organization #27'));
-    await wait();
-
-    expect(history.pushState).toHaveBeenCalledTimes(2);
+    await waitFor(() => {
+      expect(history.pushState).toHaveBeenCalledTimes(2);
+    });
     expect(history.pushState).toHaveBeenCalledWith(
       {
         name: 'courseSearch',
@@ -690,8 +709,9 @@ describe('components/SearchSuggestField', () => {
 
     // The user starts typing a full-text search, the organization remains selected
     fireEvent.change(field, { target: { value: 'ric' } });
-    await wait();
-    expect(history.pushState).toHaveBeenCalledTimes(3);
+    await waitFor(() => {
+      expect(history.pushState).toHaveBeenCalledTimes(3);
+    });
     expect(history.pushState).toHaveBeenLastCalledWith(
       {
         name: 'courseSearch',

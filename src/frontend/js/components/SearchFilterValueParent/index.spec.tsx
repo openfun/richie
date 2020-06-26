@@ -1,6 +1,6 @@
 import 'testSetup';
 
-import { fireEvent, render, wait } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { stringify } from 'query-string';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
@@ -134,10 +134,12 @@ describe('<SearchFilterValueParent />', () => {
     rerender(
       getElement({ limit: '999', offset: '0', subjects: ['L-000400050004'] }),
     );
-    await wait();
+
+    await screen.findByLabelText((content) =>
+      content.startsWith('Classical Literature'),
+    );
 
     // The children filters are now shown along with an icon to hide them
-    getByLabelText((content) => content.startsWith('Classical Literature'));
     getByLabelText((content) => content.startsWith('Modern Literature'));
     const button = getByLabelText('Hide additional filters for Literature');
     expect(button).toHaveAttribute('aria-pressed', 'true');
@@ -199,8 +201,9 @@ describe('<SearchFilterValueParent />', () => {
     expect(
       getByLabelText('Hide additional filters for Literature'),
     ).toHaveAttribute('aria-pressed', 'true');
-    await wait();
-    getByLabelText((content) => content.startsWith('Classical Literature'));
+    await screen.findByLabelText((content) =>
+      content.startsWith('Classical Literature'),
+    );
     getByLabelText((content) => content.startsWith('Modern Literature'));
 
     expect(mockFetchList).toHaveBeenCalledTimes(1);
@@ -241,8 +244,9 @@ describe('<SearchFilterValueParent />', () => {
     expect(
       getByLabelText('Hide additional filters for Literature'),
     ).toHaveAttribute('aria-pressed', 'true');
-    await wait();
-    getByLabelText((content) => content.startsWith('Classical Literature'));
+    await screen.findByLabelText((content) =>
+      content.startsWith('Classical Literature'),
+    );
     getByLabelText((content) => content.startsWith('Modern Literature'));
   });
 

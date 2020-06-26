@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, wait } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { stringify } from 'query-string';
 import React from 'react';
@@ -105,8 +105,7 @@ describe('<SearchFilterGroupModal />', () => {
     getByPlaceholderText('Search in Universities');
 
     // Default search results are shown with their facet counts
-    await wait();
-    getByText(
+    await screen.findByText(
       (content) => content.startsWith('Value #42') && content.includes('(7)'),
     );
     getByText(
@@ -161,8 +160,7 @@ describe('<SearchFilterGroupModal />', () => {
     fireEvent.focus(field);
 
     // Default search results are shown with their facet counts
-    await wait();
-    getByText(
+    await screen.findByText(
       (content) => content.startsWith('Value #42') && content.includes('(7)'),
     );
     getByText(
@@ -203,8 +201,7 @@ describe('<SearchFilterGroupModal />', () => {
     fireEvent.change(field, { target: { value: 'user' } });
 
     // New search results are shown with their facet counts
-    await wait();
-    getByText(
+    await screen.findByText(
       (content) => content.startsWith('Value #12') && content.includes('(7)'),
     );
     getByText(
@@ -242,8 +239,7 @@ describe('<SearchFilterGroupModal />', () => {
     fireEvent.change(field, { target: { value: 'user input' } });
 
     // New search results are shown with their facet counts
-    await wait();
-    getByText(
+    await screen.findByText(
       (content) => content.startsWith('Value #03') && content.includes('(12)'),
     );
     getByText(
@@ -297,11 +293,11 @@ describe('<SearchFilterGroupModal />', () => {
     fireEvent.click(closeButton);
 
     // The modal is not rendered any more
-    expect(queryByText('Add filters for Universities')).toEqual(null);
+    await waitFor(() => {
+      expect(queryByText('Add filters for Universities')).toEqual(null);
+    });
     expect(queryByPlaceholderText('Search in Universities')).toEqual(null);
     expect(queryByText('Close')).toEqual(null);
-
-    await wait();
   });
 
   it('adds the value and closes when the user clicks a filter value', async () => {
@@ -356,12 +352,11 @@ describe('<SearchFilterGroupModal />', () => {
     getByPlaceholderText('Search in Universities');
 
     // Default search results are shown with their facet counts
-    await wait();
+    await screen.findByText(
+      (content) => content.startsWith('Value #84') && content.includes('(12)'),
+    );
     const value42 = getByText(
       (content) => content.startsWith('Value #42') && content.includes('(7)'),
-    );
-    getByText(
-      (content) => content.startsWith('Value #84') && content.includes('(12)'),
     );
 
     // User clicks Value #42, it is added to course search params through pushState
@@ -418,8 +413,9 @@ describe('<SearchFilterGroupModal />', () => {
     getByPlaceholderText('Search in Universities');
 
     // The search request failed, the error is logged and a message is displayed
-    await wait();
-    getByText('There was an error while searching for Universities.');
+    await screen.findByText(
+      'There was an error while searching for Universities.',
+    );
   });
 
   it('shows an error message when it fails to get the actual filter', async () => {
@@ -457,7 +453,8 @@ describe('<SearchFilterGroupModal />', () => {
     getByPlaceholderText('Search in Universities');
 
     // The filters request failed, the error is logged and a message is displayed
-    await wait();
-    getByText('There was an error while searching for Universities.');
+    await screen.findByText(
+      'There was an error while searching for Universities.',
+    );
   });
 });

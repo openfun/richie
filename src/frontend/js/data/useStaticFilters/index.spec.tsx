@@ -4,6 +4,7 @@ import React from 'react';
 
 import { FilterDefinition } from 'types/filters';
 import { useStaticFilters } from '.';
+import { Deferred } from 'utils/tests/Deferred';
 
 describe('data/useStaticFilters', () => {
   // Build a helper component with an out-of-scope function to let us reach our Hook from
@@ -62,25 +63,31 @@ describe('data/useStaticFilters', () => {
   beforeEach(() => fetchMock.restore());
 
   it('gets and returns the static filter definitions', async () => {
-    fetchMock.get('/api/v1.0/filter-definitions/', staticFilterDefinitions);
+    const deferred = new Deferred();
+    fetchMock.get('/api/v1.0/filter-definitions/', deferred.promise);
 
     render(<TestComponent />);
-
     // No request is made until we actually use the hook's return value
-    await wait();
     expect(fetchMock.called('/api/v1.0/filter-definitions/')).toEqual(false);
 
     // useStaticFilters returns a promise for the static filter definitions
     let filters;
-    await act(async () => (filters = await getLatestHookValues()()));
+    await act(async () => {
+      deferred.resolve(staticFilterDefinitions);
+      filters = await getLatestHookValues()();
+    });
     expect(filters).toEqual(staticFilterDefinitions);
     expect(fetchMock.calls('/api/v1.0/filter-definitions/').length).toEqual(1);
-
+    fetchMock.restore();
+    fetchMock.get(
+      '/api/v1.0/filter-definitions/',
+      new Error('should not be called'),
+    );
     // More calls return the filter but don't request on the API again
     let filtersAgain;
     await act(async () => (filtersAgain = await getLatestHookValues()()));
     expect(filtersAgain).toEqual(staticFilterDefinitions);
-    expect(fetchMock.calls('/api/v1.0/filter-definitions/').length).toEqual(1);
+    expect(fetchMock.calls('/api/v1.0/filter-definitions/').length).toEqual(0);
   });
 
   it('includes a course config when requested', async () => {
