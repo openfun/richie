@@ -40,7 +40,7 @@ describe('<Search />', () => {
     sentry_dsn: null,
   };
 
-  beforeEach(fetchMock.restore);
+  beforeEach(() => fetchMock.restore());
 
   it('shows a spinner while the results are loading', async () => {
     fetchMock.get('/api/v1.0/courses/?limit=20&offset=0', {

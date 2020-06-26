@@ -36,7 +36,7 @@ describe('data/getResourceList', () => {
   };
 
   describe('fetchList', () => {
-    afterEach(fetchMock.restore);
+    afterEach(() => fetchMock.restore());
 
     it('requests the resource list, parses the JSON response and resolves with the results', async () => {
       fetchMock.mock(

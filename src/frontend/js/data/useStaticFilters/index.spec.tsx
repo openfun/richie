@@ -59,7 +59,7 @@ describe('data/useStaticFilters', () => {
     subjects,
   };
 
-  beforeEach(fetchMock.restore);
+  beforeEach(() => fetchMock.restore());
 
   it('gets and returns the static filter definitions', async () => {
     fetchMock.get('/api/v1.0/filter-definitions/', staticFilterDefinitions);
