@@ -6,6 +6,7 @@ module.exports = {
   moduleNameMapper: {
     '\\.(css)$': '<rootDir>/front/__mocks__/styleMock.js',
   },
+  setupFilesAfterEnv: ['./js/testSetup.ts'],
   testMatch: [`${__dirname}/js/**/*.spec.+(ts|tsx|js)`],
   testURL: 'https://localhost',
   transformIgnorePatterns: ['node_modules/(?!(lodash-es)/)'],

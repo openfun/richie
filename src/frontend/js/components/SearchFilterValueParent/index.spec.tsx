@@ -1,5 +1,3 @@
-import 'testSetup';
-
 import { fireEvent, render, screen } from '@testing-library/react';
 import { stringify } from 'query-string';
 import React from 'react';
