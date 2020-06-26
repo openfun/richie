@@ -1,4 +1,4 @@
-import { fireEvent, render, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { stringify } from 'query-string';
 import React from 'react';
@@ -48,7 +48,7 @@ describe('<Search />', () => {
       objects: [],
     });
 
-    const { getByText, queryByText } = render(
+    render(
       <IntlProvider locale="en">
         <HistoryContext.Provider
           value={makeHistoryOf({ limit: '20', offset: '0' })}
@@ -59,18 +59,18 @@ describe('<Search />', () => {
     );
 
     expect(
-      getByText('Loading search results...').parentElement,
+      screen.getByText('Loading search results...').parentElement,
     ).toHaveAttribute('role', 'status');
 
     await waitFor(() => {
-      expect(queryByText('Loading search results...')).toBeNull();
+      expect(screen.queryByText('Loading search results...')).toBeNull();
     });
   });
 
   it('shows an error message when it fails to get the results', async () => {
     fetchMock.get('/api/v1.0/courses/?limit=20&offset=0', 500);
 
-    const { getByText, queryByText } = render(
+    render(
       <IntlProvider locale="en">
         <HistoryContext.Provider
           value={makeHistoryOf({ limit: '20', offset: '0' })}
@@ -81,13 +81,13 @@ describe('<Search />', () => {
     );
 
     expect(
-      getByText('Loading search results...').parentElement,
+      screen.getByText('Loading search results...').parentElement,
     ).toHaveAttribute('role', 'status');
 
     await waitFor(() => {
-      expect(queryByText('Loading search results...')).toBeNull();
+      expect(screen.queryByText('Loading search results...')).toBeNull();
     });
-    getByText(`Something's wrong! Courses could not be loaded.`);
+    screen.getByText(`Something's wrong! Courses could not be loaded.`);
   });
 
   it('always shows the filters pane on large screens', async () => {
@@ -128,7 +128,7 @@ describe('<Search />', () => {
     });
 
     mockMatches = false;
-    const { container, getByText, queryByText } = render(
+    const { container } = render(
       <IntlProvider locale="en">
         <HistoryContext.Provider
           value={makeHistoryOf({ limit: '20', offset: '0' })}
@@ -151,8 +151,8 @@ describe('<Search />', () => {
 
     {
       // We have a "Show" button with the appropriate aria helper
-      expect(queryByText('Hide filters pane')).toEqual(null);
-      const button = getByText('Show filters pane');
+      expect(screen.queryByText('Hide filters pane')).toEqual(null);
+      const button = screen.getByText('Show filters pane');
       expect(
         container.querySelector('.search__filters__toggle'),
       ).toHaveAttribute('aria-expanded', 'false');
@@ -166,8 +166,8 @@ describe('<Search />', () => {
     }
     {
       // We now have a "Hide" button with the appropriate aria helper
-      expect(queryByText('Show filters pane')).toEqual(null);
-      const button = getByText('Hide filters pane');
+      expect(screen.queryByText('Show filters pane')).toEqual(null);
+      const button = screen.getByText('Hide filters pane');
       expect(
         container.querySelector('.search__filters__toggle'),
       ).toHaveAttribute('aria-expanded', 'true');

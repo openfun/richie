@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
@@ -28,7 +28,7 @@ describe('components/CourseGlimpseList', () => {
         title: 'Course 45',
       },
     ] as Course[];
-    const { getAllByText, getByText } = render(
+    render(
       <IntlProvider locale="en">
         <CourseGlimpseList
           context={commonDataProps}
@@ -39,10 +39,11 @@ describe('components/CourseGlimpseList', () => {
     );
 
     expect(
-      getAllByText('Showing 1 to 20 of 45 courses matching your search').length,
+      screen.getAllByText('Showing 1 to 20 of 45 courses matching your search')
+        .length,
     ).toEqual(1);
     // Both courses' titles are shown
-    getByText('Course 44');
-    getByText('Course 45');
+    screen.getByText('Course 44');
+    screen.getByText('Course 45');
   });
 });

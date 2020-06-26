@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
@@ -38,7 +38,7 @@ describe('components/CourseGlimpse', () => {
   };
 
   it('renders a course glimpse with its data', () => {
-    const { container, getByText } = render(
+    render(
       <IntlProvider locale="en">
         <CourseGlimpse
           context={commonDataProps}
@@ -52,20 +52,20 @@ describe('components/CourseGlimpse', () => {
     );
 
     // The link that wraps the course glimpse should have no title as its content is explicit enough
-    expect(container.querySelector('a')).not.toHaveAttribute('title');
+    expect(screen.getByRole('link')).not.toHaveAttribute('title');
     // The course glimpse shows the relevant information
-    getByText('Course 42');
-    getByText('Some Organization');
+    screen.getByText('Course 42');
+    screen.getByText('Some Organization');
     // Matches on 'Starts on Mar 14, 2019', date is wrapped with intl <span>
-    getByText('Starts on Mar 14, 2019');
+    screen.getByText('Starts on Mar 14, 2019');
     // The logo is rendered along with alt text "" as it is decorative and included in a link block
-    const img = container.querySelector('img');
+    const img = screen.getByRole('img');
     expect(img).toHaveAttribute('alt', '');
     expect(img).toHaveAttribute('src', '/thumbs/small.png');
   });
 
   it('works when there is no call to action or datetime on the state (eg. an archived course)', () => {
-    const { getByText } = render(
+    render(
       <IntlProvider locale="en">
         <CourseGlimpse
           context={commonDataProps}
@@ -83,11 +83,12 @@ describe('components/CourseGlimpse', () => {
     );
 
     // Make sure the component renders and shows the state
-    getByText('Course 42');
-    getByText('Archived');
+    screen.getByText('Course 42');
+    screen.getByText('Archived');
   });
+
   it('shows the "Cover" placeholder div when the course is missing a cover image', () => {
-    const { getByText } = render(
+    render(
       <IntlProvider locale="en">
         <CourseGlimpse
           context={commonDataProps}
@@ -96,7 +97,7 @@ describe('components/CourseGlimpse', () => {
       </IntlProvider>,
     );
 
-    getByText('Course 42');
-    getByText('Cover');
+    screen.getByText('Course 42');
+    screen.getByText('Cover');
   });
 });
