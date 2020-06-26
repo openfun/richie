@@ -2,11 +2,24 @@
 API endpoints for the courses app.
 """
 
-from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import BasePermission
 from rest_framework.viewsets import ModelViewSet
 
 from .models import CourseRun
 from .serializers import CourseRunSerializer
+
+
+class NotAllowed(BasePermission):
+    """
+    Utility permission class to deny all requests. This is used as a default to close
+    requests to unsupported actions.
+    """
+
+    def has_permission(self, request, view):
+        """
+        Always deny permission.
+        """
+        return False
 
 
 class CourseRunsViewSet(ModelViewSet):
@@ -14,7 +27,7 @@ class CourseRunsViewSet(ModelViewSet):
     API endpoints to access and perform actions on course runs.
     """
 
-    permission_classes = [IsAdminUser]
+    permission_classes = [NotAllowed]
     queryset = CourseRun.objects.all()
     serializer_class = CourseRunSerializer
 
