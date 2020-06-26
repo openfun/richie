@@ -1,4 +1,4 @@
-import { fireEvent, render, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
@@ -44,7 +44,7 @@ describe('<RootSearchSuggestField />', () => {
       subjects,
     });
 
-    const { getByPlaceholderText } = render(
+    render(
       <IntlProvider locale="en">
         <RootSearchSuggestField
           courseSearchPageUrl="/en/courses/"
@@ -54,7 +54,7 @@ describe('<RootSearchSuggestField />', () => {
     );
 
     // The placeholder text is shown in the input
-    getByPlaceholderText('Search for courses');
+    screen.getByPlaceholderText('Search for courses');
     // The component should not issue any request "on load", before the user starts interacting
     expect(fetchMock.called()).toEqual(false);
   });
@@ -72,7 +72,7 @@ describe('<RootSearchSuggestField />', () => {
     ]);
     fetchMock.get('/api/v1.0/courses/autocomplete/?query=aut', []);
 
-    const { getByPlaceholderText, getByText, queryByText } = render(
+    render(
       <IntlProvider locale="en">
         <RootSearchSuggestField
           courseSearchPageUrl="/en/courses/"
@@ -81,7 +81,7 @@ describe('<RootSearchSuggestField />', () => {
       </IntlProvider>,
     );
 
-    const field = getByPlaceholderText('Search for courses');
+    const field = screen.getByPlaceholderText('Search for courses');
 
     // Simulate the user entering some text in the autocomplete field
     fireEvent.focus(field);
@@ -98,14 +98,14 @@ describe('<RootSearchSuggestField />', () => {
       expect(
         fetchMock.called('/api/v1.0/subjects/autocomplete/?query=aut'),
       ).toEqual(true);
-      getByText('Subjects');
-      getByText('Subject #311');
+      screen.getByText('Subjects');
+      screen.getByText('Subject #311');
     });
 
     expect(
       fetchMock.called('/api/v1.0/courses/autocomplete/?query=aut'),
     ).toEqual(true);
-    expect(queryByText('Courses')).toEqual(null);
+    expect(screen.queryByText('Courses')).toEqual(null);
   });
 
   it('goes to the course page when the user selects a course suggestion', async () => {
@@ -123,7 +123,7 @@ describe('<RootSearchSuggestField />', () => {
       },
     ]);
 
-    const { getByPlaceholderText, getByText, queryByText } = render(
+    render(
       <IntlProvider locale="en">
         <RootSearchSuggestField
           courseSearchPageUrl="/en/courses/"
@@ -132,7 +132,7 @@ describe('<RootSearchSuggestField />', () => {
       </IntlProvider>,
     );
 
-    const field = getByPlaceholderText('Search for courses');
+    const field = screen.getByPlaceholderText('Search for courses');
     fireEvent.focus(field);
     fireEvent.change(field, { target: { value: 'aut' } });
 
@@ -141,13 +141,13 @@ describe('<RootSearchSuggestField />', () => {
         fetchMock.called('/api/v1.0/courses/autocomplete/?query=aut'),
       ).toEqual(true);
     });
-    getByText('Courses');
-    const course = getByText('Course #42');
+    screen.getByText('Courses');
+    const course = screen.getByText('Course #42');
 
     expect(
       fetchMock.called('/api/v1.0/subjects/autocomplete/?query=aut'),
     ).toEqual(true);
-    expect(queryByText('Subjects')).toEqual(null);
+    expect(screen.queryByText('Subjects')).toEqual(null);
 
     fireEvent.click(course);
     await waitFor(() => {
@@ -169,7 +169,7 @@ describe('<RootSearchSuggestField />', () => {
     ]);
     fetchMock.get('/api/v1.0/courses/autocomplete/?query=aut', []);
 
-    const { getByPlaceholderText, getByText, queryByText } = render(
+    render(
       <IntlProvider locale="en">
         <RootSearchSuggestField
           courseSearchPageUrl="/en/courses/"
@@ -178,7 +178,7 @@ describe('<RootSearchSuggestField />', () => {
       </IntlProvider>,
     );
 
-    const field = getByPlaceholderText('Search for courses');
+    const field = screen.getByPlaceholderText('Search for courses');
     fireEvent.focus(field);
     fireEvent.change(field, { target: { value: 'aut' } });
 
@@ -187,13 +187,13 @@ describe('<RootSearchSuggestField />', () => {
         fetchMock.called('/api/v1.0/subjects/autocomplete/?query=aut'),
       ).toEqual(true);
     });
-    getByText('Subjects');
-    const subject = getByText('Subject #311');
+    screen.getByText('Subjects');
+    const subject = screen.getByText('Subject #311');
 
     expect(
       fetchMock.called('/api/v1.0/courses/autocomplete/?query=aut'),
     ).toEqual(true);
-    expect(queryByText('Courses')).toEqual(null);
+    expect(screen.queryByText('Courses')).toEqual(null);
 
     fireEvent.click(subject);
     await waitFor(() => {
@@ -212,7 +212,7 @@ describe('<RootSearchSuggestField />', () => {
       fetchMock.get(`/api/v1.0/${kind}/autocomplete/?query=some%20query`, []),
     );
 
-    const { getByPlaceholderText } = render(
+    render(
       <IntlProvider locale="en">
         <RootSearchSuggestField
           courseSearchPageUrl="/en/courses/"
@@ -221,7 +221,7 @@ describe('<RootSearchSuggestField />', () => {
       </IntlProvider>,
     );
 
-    const field = getByPlaceholderText('Search for courses');
+    const field = screen.getByPlaceholderText('Search for courses');
 
     // Simulate the user typing in some text in the autocomplete field
     fireEvent.focus(field);
@@ -250,7 +250,7 @@ describe('<RootSearchSuggestField />', () => {
       },
     ]);
 
-    const { getByPlaceholderText, getByText, queryByText } = render(
+    render(
       <IntlProvider locale="en">
         <RootSearchSuggestField
           courseSearchPageUrl="/en/courses/"
@@ -259,7 +259,7 @@ describe('<RootSearchSuggestField />', () => {
       </IntlProvider>,
     );
 
-    const field = getByPlaceholderText('Search for courses');
+    const field = screen.getByPlaceholderText('Search for courses');
     fireEvent.focus(field);
     fireEvent.change(field, { target: { value: 'aut' } });
 
@@ -268,13 +268,13 @@ describe('<RootSearchSuggestField />', () => {
         fetchMock.called('/api/v1.0/courses/autocomplete/?query=aut'),
       ).toEqual(true);
     });
-    getByText('Courses');
-    getByText('Course #42');
+    screen.getByText('Courses');
+    screen.getByText('Course #42');
 
     expect(
       fetchMock.called('/api/v1.0/subjects/autocomplete/?query=aut'),
     ).toEqual(true);
-    expect(queryByText('Subjects')).toEqual(null);
+    expect(screen.queryByText('Subjects')).toEqual(null);
 
     fireEvent.keyDown(field, { keyCode: 40 }); // Select the desired suggestion (there is only one)
     fireEvent.keyDown(field, { keyCode: 13 }); // Press enter

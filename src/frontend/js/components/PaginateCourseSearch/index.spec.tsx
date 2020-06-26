@@ -1,4 +1,4 @@
-import { fireEvent, render } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { stringify } from 'query-string';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
@@ -22,7 +22,7 @@ describe('<PaginateCourseSearch />', () => {
   beforeEach(jest.resetAllMocks);
 
   it('shows a pagination for course search (when on page 1)', () => {
-    const { getByText } = render(
+    render(
       <IntlProvider locale="en">
         <HistoryContext.Provider
           value={makeHistoryOf({ limit: '20', offset: '0' })}
@@ -32,21 +32,21 @@ describe('<PaginateCourseSearch />', () => {
       </IntlProvider>,
     );
 
-    getByText('Pagination');
+    screen.getByRole('navigation', { name: 'Pagination' });
     // Accessibility helpers
-    getByText('Currently reading page 1');
-    getByText('Next page 2');
-    getByText('Page 3');
-    getByText('Last page 10');
+    screen.getByText('Currently reading page 1');
+    screen.getByText('Next page 2');
+    screen.getByText('Page 3');
+    screen.getByText('Last page 10');
     // Visual pagination
-    getByText('Page 1');
-    getByText('3');
-    getByText('2');
-    getByText('10');
+    screen.getByText('Page 1');
+    screen.getByText('3');
+    screen.getByText('2');
+    screen.getByText('10');
   });
 
   it('shows a pagination for course search (when on the last page)', () => {
-    const { getAllByText, getByText } = render(
+    render(
       <IntlProvider locale="en">
         <HistoryContext.Provider
           value={makeHistoryOf({ limit: '20', offset: '200' })}
@@ -56,21 +56,21 @@ describe('<PaginateCourseSearch />', () => {
       </IntlProvider>,
     );
 
-    getByText('Pagination');
+    screen.getByRole('navigation', { name: 'Pagination' });
     // Common text for the first page
-    getAllByText('Page 1');
+    screen.getAllByText('Page 1');
     // Accessibility helpers
-    getByText('Page 9');
-    getByText('Previous page 10');
-    getByText('Currently reading last page 11');
+    screen.getByText('Page 9');
+    screen.getByText('Previous page 10');
+    screen.getByText('Currently reading last page 11');
     // Visual pagination
-    getByText('9');
-    getByText('10');
-    getByText('11');
+    screen.getByText('9');
+    screen.getByText('10');
+    screen.getByText('11');
   });
 
   it('shows a pagination for course search (when on an arbitrary page)', () => {
-    const { getAllByText, getByText } = render(
+    render(
       <IntlProvider locale="en">
         <HistoryContext.Provider
           value={makeHistoryOf({ limit: '10', offset: '110' })}
@@ -80,27 +80,27 @@ describe('<PaginateCourseSearch />', () => {
       </IntlProvider>,
     );
 
-    getByText('Pagination');
+    screen.getByRole('navigation', { name: 'Pagination' });
     // Common text for the first page
-    getAllByText('Page 1');
+    screen.getAllByText('Page 1');
     // Accessibility helpers
-    getByText('Page 10');
-    getByText('Previous page 11');
-    getByText('Currently reading page 12');
-    getByText('Next page 13');
-    getByText('Page 14');
-    getByText('Last page 35');
+    screen.getByText('Page 10');
+    screen.getByText('Previous page 11');
+    screen.getByText('Currently reading page 12');
+    screen.getByText('Next page 13');
+    screen.getByText('Page 14');
+    screen.getByText('Last page 35');
     // Visual pagination
-    getByText('10');
-    getByText('11');
-    getByText('12');
-    getByText('13');
-    getByText('14');
-    getByText('35');
+    screen.getByText('10');
+    screen.getByText('11');
+    screen.getByText('12');
+    screen.getByText('13');
+    screen.getByText('14');
+    screen.getByText('35');
   });
 
   it('does not render itself when there is only one page', () => {
-    const { queryByText } = render(
+    render(
       <IntlProvider locale="en">
         <HistoryContext.Provider
           value={makeHistoryOf({ limit: '20', offset: '0' })}
@@ -110,11 +110,13 @@ describe('<PaginateCourseSearch />', () => {
       </IntlProvider>,
     );
 
-    expect(queryByText('Pagination')).toEqual(null);
+    expect(screen.queryByRole('pagination', { name: 'Pagination' })).toEqual(
+      null,
+    );
   });
 
   it('updates the course search params when the user clicks on a page', () => {
-    const { getByText } = render(
+    render(
       <IntlProvider locale="en">
         <HistoryContext.Provider
           value={makeHistoryOf({ limit: '20', offset: '0' })}
@@ -124,8 +126,8 @@ describe('<PaginateCourseSearch />', () => {
       </IntlProvider>,
     );
 
-    getByText('Pagination');
-    const page2 = getByText('Next page 2');
+    screen.getByRole('navigation', { name: 'Pagination' });
+    const page2 = screen.getByText('Next page 2');
 
     // Change pages when the user clicks on another page
     fireEvent.click(page2);
@@ -146,7 +148,7 @@ describe('<PaginateCourseSearch />', () => {
   });
 
   it('does not update the course search params when the user clicks on the current page', () => {
-    const { getByText } = render(
+    render(
       <IntlProvider locale="en">
         <HistoryContext.Provider
           value={makeHistoryOf({ limit: '20', offset: '0' })}
@@ -156,8 +158,8 @@ describe('<PaginateCourseSearch />', () => {
       </IntlProvider>,
     );
 
-    getByText('Pagination');
-    const currentPage1 = getByText('Currently reading page 1');
+    screen.getByRole('navigation', { name: 'Pagination' });
+    const currentPage1 = screen.getByText('Currently reading page 1');
 
     // Don't do anything when the user clicks on the page they're currently on
     historyPushState.mockReset();

@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { stringify } from 'query-string';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
@@ -56,7 +56,7 @@ describe('components/SearchFilterGroup', () => {
   beforeEach(jest.resetAllMocks);
 
   it('renders the name of the filter with the values as SearchFilters', () => {
-    const { getByText } = render(
+    render(
       <IntlProvider locale="en">
         <HistoryContext.Provider
           value={makeHistoryOf({ limit: '20', offset: '0' })}
@@ -66,14 +66,14 @@ describe('components/SearchFilterGroup', () => {
       </IntlProvider>,
     );
     // The filter group title and all filters are shown
-    getByText('Organizations');
-    getByText('Received parent: filter - Value One');
-    getByText('Received leaf: filter - Value Two');
-    getByText('More options');
+    screen.getByRole('group', { name: 'Organizations' });
+    screen.getByText('Received parent: filter - Value One');
+    screen.getByText('Received leaf: filter - Value Two');
+    screen.getByRole('button', { name: 'More options' });
   });
 
   it('does not render the "More options" button & modal if the filter is not searchable', () => {
-    const { queryByText } = render(
+    render(
       <IntlProvider locale="en">
         <HistoryContext.Provider
           value={makeHistoryOf({ limit: '20', offset: '0' })}
@@ -83,11 +83,13 @@ describe('components/SearchFilterGroup', () => {
       </IntlProvider>,
     );
 
-    expect(queryByText('More options')).toEqual(null);
+    expect(screen.queryByRole('button', { name: 'More options' })).toEqual(
+      null,
+    );
   });
 
   it('does not render the "More options" button & modal if there are no more values to find', () => {
-    const { queryByText } = render(
+    render(
       <IntlProvider locale="en">
         <HistoryContext.Provider
           value={makeHistoryOf({ limit: '20', offset: '0' })}
@@ -97,6 +99,8 @@ describe('components/SearchFilterGroup', () => {
       </IntlProvider>,
     );
 
-    expect(queryByText('More options')).toEqual(null);
+    expect(screen.queryByRole('button', { name: 'More options' })).toEqual(
+      null,
+    );
   });
 });
