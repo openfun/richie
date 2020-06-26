@@ -1,4 +1,4 @@
-import { fireEvent, render, wait } from '@testing-library/react';
+import { fireEvent, render, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
@@ -88,22 +88,24 @@ describe('<RootSearchSuggestField />', () => {
 
     // No requests are made until the user enters at least 3 characters
     fireEvent.change(field, { target: { value: 'au' } });
-    await wait();
-    expect(fetchMock.called()).toEqual(false);
+    await waitFor(() => {
+      expect(fetchMock.called()).toEqual(false);
+    });
 
     fireEvent.change(field, { target: { value: 'aut' } });
-    await wait();
+
+    await waitFor(() => {
+      expect(
+        fetchMock.called('/api/v1.0/subjects/autocomplete/?query=aut'),
+      ).toEqual(true);
+      getByText('Subjects');
+      getByText('Subject #311');
+    });
 
     expect(
       fetchMock.called('/api/v1.0/courses/autocomplete/?query=aut'),
     ).toEqual(true);
     expect(queryByText('Courses')).toEqual(null);
-
-    expect(
-      fetchMock.called('/api/v1.0/subjects/autocomplete/?query=aut'),
-    ).toEqual(true);
-    getByText('Subjects');
-    getByText('Subject #311');
   });
 
   it('goes to the course page when the user selects a course suggestion', async () => {
@@ -133,22 +135,24 @@ describe('<RootSearchSuggestField />', () => {
     const field = getByPlaceholderText('Search for courses');
     fireEvent.focus(field);
     fireEvent.change(field, { target: { value: 'aut' } });
-    await wait();
+
+    await waitFor(() => {
+      expect(
+        fetchMock.called('/api/v1.0/courses/autocomplete/?query=aut'),
+      ).toEqual(true);
+    });
+    getByText('Courses');
+    const course = getByText('Course #42');
 
     expect(
       fetchMock.called('/api/v1.0/subjects/autocomplete/?query=aut'),
     ).toEqual(true);
     expect(queryByText('Subjects')).toEqual(null);
 
-    expect(
-      fetchMock.called('/api/v1.0/courses/autocomplete/?query=aut'),
-    ).toEqual(true);
-    getByText('Courses');
-    const course = getByText('Course #42');
-
     fireEvent.click(course);
-    await wait();
-    expect(location.assign).toHaveBeenCalledWith('/en/courses/42');
+    await waitFor(() => {
+      expect(location.assign).toHaveBeenCalledWith('/en/courses/42');
+    });
   });
 
   it('goes to course search with the filter value activated when the user clicks on a suggestion', async () => {
@@ -177,24 +181,26 @@ describe('<RootSearchSuggestField />', () => {
     const field = getByPlaceholderText('Search for courses');
     fireEvent.focus(field);
     fireEvent.change(field, { target: { value: 'aut' } });
-    await wait();
+
+    await waitFor(() => {
+      expect(
+        fetchMock.called('/api/v1.0/subjects/autocomplete/?query=aut'),
+      ).toEqual(true);
+    });
+    getByText('Subjects');
+    const subject = getByText('Subject #311');
 
     expect(
       fetchMock.called('/api/v1.0/courses/autocomplete/?query=aut'),
     ).toEqual(true);
     expect(queryByText('Courses')).toEqual(null);
 
-    expect(
-      fetchMock.called('/api/v1.0/subjects/autocomplete/?query=aut'),
-    ).toEqual(true);
-    getByText('Subjects');
-    const subject = getByText('Subject #311');
-
     fireEvent.click(subject);
-    await wait();
-    expect(location.assign).toHaveBeenCalledWith(
-      '/en/courses/?limit=13&offset=0&subjects=L-000300010001',
-    );
+    await waitFor(() => {
+      expect(location.assign).toHaveBeenCalledWith(
+        '/en/courses/?limit=13&offset=0&subjects=L-000300010001',
+      );
+    });
   });
 
   it('moves to the search page with a search query when the user types a query and presses ENTER', async () => {
@@ -221,11 +227,12 @@ describe('<RootSearchSuggestField />', () => {
     fireEvent.focus(field);
     fireEvent.change(field, { target: { value: 'some query' } });
     fireEvent.keyDown(field, { keyCode: 13 });
-    await wait();
 
-    expect(location.assign).toHaveBeenCalledWith(
-      '/en/courses/?limit=13&offset=0&query=some%20query',
-    );
+    await waitFor(() => {
+      expect(location.assign).toHaveBeenCalledWith(
+        '/en/courses/?limit=13&offset=0&query=some%20query',
+      );
+    });
   });
 
   it('lets the user select the currently highlighted suggestion by pressing ENTER', async () => {
@@ -255,22 +262,24 @@ describe('<RootSearchSuggestField />', () => {
     const field = getByPlaceholderText('Search for courses');
     fireEvent.focus(field);
     fireEvent.change(field, { target: { value: 'aut' } });
-    await wait();
+
+    await waitFor(() => {
+      expect(
+        fetchMock.called('/api/v1.0/courses/autocomplete/?query=aut'),
+      ).toEqual(true);
+    });
+    getByText('Courses');
+    getByText('Course #42');
 
     expect(
       fetchMock.called('/api/v1.0/subjects/autocomplete/?query=aut'),
     ).toEqual(true);
     expect(queryByText('Subjects')).toEqual(null);
 
-    expect(
-      fetchMock.called('/api/v1.0/courses/autocomplete/?query=aut'),
-    ).toEqual(true);
-    getByText('Courses');
-    getByText('Course #42');
-
     fireEvent.keyDown(field, { keyCode: 40 }); // Select the desired suggestion (there is only one)
     fireEvent.keyDown(field, { keyCode: 13 }); // Press enter
-    await wait();
-    expect(location.assign).toHaveBeenCalledWith('/en/courses/42');
+    await waitFor(() => {
+      expect(location.assign).toHaveBeenCalledWith('/en/courses/42');
+    });
   });
 });

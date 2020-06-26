@@ -1,6 +1,6 @@
 import 'testSetup';
 
-import { fireEvent, render, wait } from '@testing-library/react';
+import { fireEvent, render, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { stringify } from 'query-string';
 import React from 'react';
@@ -64,8 +64,9 @@ describe('<Search />', () => {
       getByText('Loading search results...').parentElement,
     ).toHaveAttribute('role', 'status');
 
-    await wait();
-    expect(queryByText('Loading search results...')).toBeNull();
+    await waitFor(() => {
+      expect(queryByText('Loading search results...')).toBeNull();
+    });
   });
 
   it('shows an error message when it fails to get the results', async () => {
@@ -85,8 +86,9 @@ describe('<Search />', () => {
       getByText('Loading search results...').parentElement,
     ).toHaveAttribute('role', 'status');
 
-    await wait();
-    expect(queryByText('Loading search results...')).toBeNull();
+    await waitFor(() => {
+      expect(queryByText('Loading search results...')).toBeNull();
+    });
     getByText(`Something's wrong! Courses could not be loaded.`);
   });
 
@@ -108,13 +110,14 @@ describe('<Search />', () => {
         </HistoryContext.Provider>
       </IntlProvider>,
     );
-    await wait();
 
-    // The search filters pane is not hidden, there is no button to show/hide it
-    expect(container.querySelector('.search-filters-pane')).toHaveAttribute(
-      'aria-hidden',
-      'false',
-    );
+    await waitFor(() => {
+      // The search filters pane is not hidden, there is no button to show/hide it
+      expect(container.querySelector('.search-filters-pane')).toHaveAttribute(
+        'aria-hidden',
+        'false',
+      );
+    });
     expect(container.querySelector('.search__filters__toggle')).toEqual(null);
   });
 
@@ -136,13 +139,14 @@ describe('<Search />', () => {
         </HistoryContext.Provider>
       </IntlProvider>,
     );
-    await wait();
 
-    // The search filters pane is hidden, there is a button to show/hide it
-    expect(container.querySelector('.search-filters-pane')).toHaveAttribute(
-      'aria-hidden',
-      'true',
-    );
+    await waitFor(() => {
+      // The search filters pane is hidden, there is a button to show/hide it
+      expect(container.querySelector('.search-filters-pane')).toHaveAttribute(
+        'aria-hidden',
+        'true',
+      );
+    });
     expect(container.querySelector('.search__filters__toggle')).toEqual(
       jasmine.any(HTMLButtonElement),
     );
