@@ -8,6 +8,49 @@
     {% else %}
         <div class="glimpse-{{ glimpse_variant }}">
     {% endif %}
+
+    {% comment %}
+    Quote variant is actually the only one to have its own structure, every
+    other variants share the same one
+    {% endcomment %}
+    {% if glimpse_variant == "quote" %}
+        <div class="glimpse-{{ glimpse_variant }}__wrapper">
+            {% if instance.image %}
+            <div class="glimpse-{{ glimpse_variant }}__media">
+                {% if glimpse_variant == "card_square" %}
+                <img src="{% thumbnail instance.image 300x170 crop upscale subject_location=instance.image.subject_location %}"
+                    srcset="{% thumbnail instance.image 300x170 crop upscale subject_location=instance.image.subject_location %} 300w
+                        {% if instance.image.width >= 600 %},{% thumbnail instance.image 600x340 crop upscale subject_location=instance.image.subject_location %} 600w{% endif %}
+                        {% if instance.image.width >= 900 %},{% thumbnail instance.image 900x510 crop upscale subject_location=instance.image.subject_location %} 900w{% endif %}"
+                    sizes="300px"
+                    alt="">
+                {% else %}
+                <img src="{% thumbnail instance.image 200x200 crop upscale subject_location=instance.image.subject_location %}"
+                    srcset="{% thumbnail instance.image 200x200 crop upscale subject_location=instance.image.subject_location %} 200w
+                        {% if instance.image.width >= 400 %},{% thumbnail instance.image 400x400 crop upscale subject_location=instance.image.subject_location %} 400w{% endif %}
+                        {% if instance.image.width >= 800 %},{% thumbnail instance.image 800x800 crop upscale subject_location=instance.image.subject_location %} 800w{% endif %}"
+                    sizes="200px"
+                    alt="">
+                {% endif %}
+            </div>
+            {% endif %}
+
+            {% if instance.title %}
+                <h{{ header_level|default:2 }} class="glimpse-{{ glimpse_variant }}__title">
+                    {{ instance.title }}
+                </h{{ header_level|default:2 }}>
+            {% endif %}
+        </div>
+
+        {% if instance.content %}
+        <div class="glimpse-{{ glimpse_variant }}__content">
+            <svg role="img">
+                <use xlink:href="#icon-quote" />
+            </svg>
+            {{ instance.content|linebreaks }}
+        </div>
+        {% endif %}
+    {% else %}
         {% if instance.image %}
         <div class="glimpse-{{ glimpse_variant }}__media">
             {% if glimpse_variant == "card_square" %}
@@ -41,6 +84,7 @@
             </div>
             {% endif %}
         </div>
+    {% endif %}
 
     {% if instance.get_link %}
         </a>

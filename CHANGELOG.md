@@ -13,6 +13,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add oauth2 and OIDC authentication backends for SSO with Open edX
 - Add an icon to the 'login' button.
 - Add icons in course glimpse footer & next to organization name.
+- Add new variant "quote" to glimpse plugin.
 
 ### Changed
 

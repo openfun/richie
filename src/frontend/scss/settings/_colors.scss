@@ -437,6 +437,13 @@ $r-theme: (
     card-color: r-color('slate-grey'),
     hover-border: r-color('light-grey'),
   ),
+  quote-glimpse: (
+    base-background: r-color('white'),
+    base-shadow: 0 0 4px r-color('light-grey'),
+    title-color: r-color('black'),
+    content-color: r-color('purplish-grey'),
+    icon-color: r-color('midnightblue'),
+  ),
   row_half-glimpse: (
     base-background: r-color('white'),
     divider-color: r-color('firebrick6'),
