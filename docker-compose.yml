@@ -1,4 +1,4 @@
-version: "3.4"
+version: "3.5"
 
 services:
   postgresql:
@@ -25,6 +25,9 @@ services:
     env_file:
         - env.d/development/common
         - env.d/development/${DB_HOST:-postgresql}
+    networks:
+      - default
+      - lms_outside
     ports:
         - "8070:8000"
     volumes:
@@ -90,4 +93,9 @@ services:
 
   dockerize:
     image: jwilder/dockerize
+
+networks:
+  lms_outside:
+    driver: bridge
+    name: "${RICHIE_LMS_NETWORK:-edx_outside}"
 
