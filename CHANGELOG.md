@@ -18,6 +18,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Improve search error message layout
+- Make larger thumbnail for course and blogpost glimpses.
 
 ### Fixed
 
