@@ -1,5 +1,5 @@
 import debounce from 'lodash-es/debounce';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Autosuggest from 'react-autosuggest';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -54,18 +54,24 @@ export const SearchSuggestField = ({ context }: CommonDataProps) => {
   const [value, setValue] = useState(courseSearchParams.query || '');
   const [suggestions, setSuggestions] = useState<SearchSuggestionSection[]>([]);
 
-  // Use current value of courseSearchParams and last dispatched actions to guess if the text query
-  // has been removed by another component in the tree, and clear the field as well
-  // NB: this will do nothing on the first render as there are then no last dispatched actions.
+  // Create a ref too keep around courseSearchParams as they were during render N-1
+  const previousCourseSearchParams = useRef(courseSearchParams);
+
+  // Use the previous & current values of courseSearchParams to guess if the text query had
+  // been removed by another component in the tree, and clear the field as well
+  // NB: this will do nothing on the first render as courseSearchParams and the ref
+  // (previousCourseSearchParams.current) will hold the exact same object at that time.
   if (
     !courseSearchParams.query &&
-    lastDispatchActions
-      ?.map((action) => action.type)
-      .includes(CourseSearchParamsAction.filterReset) &&
+    previousCourseSearchParams.current.query &&
     value
   ) {
     setValue('');
   }
+
+  // Then update the ref to the current courseSearchParams so we can have them to compare
+  // during the next render.
+  previousCourseSearchParams.current = courseSearchParams;
 
   /**
    * Helper to update the course search params when the user types. We needed to take it out of

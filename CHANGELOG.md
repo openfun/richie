@@ -32,6 +32,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   'lg' start.
 - Fix breadcrumb item on small breakpoints when text is too long.
 - Fix nesteditem list variant to act like a basic list.
+- Revert commit 1bfb2d7
 
 ## [2.0.0-beta.8] - 2020-06-17
 
