@@ -77,9 +77,9 @@
 
             {% blockplugin plugins.0 %}
             <img src="{% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %}"
-                srcset="{% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %} 300w
-                {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x340 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
-                {% if instance.picture.width >= 900 %},{% thumbnail instance.picture 900x510 crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}"
+                srcset="{% thumbnail instance.picture 800x480 crop upscale subject_location=instance.picture.subject_location %} 300w
+                {% if instance.picture.width >= 1600 %},{% thumbnail instance.picture 1600x960 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+                {% if instance.picture.width >= 2400 %},{% thumbnail instance.picture 2400x1440 crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}"
                 sizes="300px"
                 alt="">
             {% endblockplugin %}
