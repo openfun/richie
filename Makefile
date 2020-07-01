@@ -81,7 +81,8 @@ bootstrap: \
   build-front \
   build \
   run \
-  migrate
+  migrate \
+  superuser
 .PHONY: bootstrap
 
 # -- Docker/compose
@@ -226,8 +227,11 @@ search-index: ## (re)generate the Elasticsearch index
 	@$(MANAGE) bootstrap_elasticsearch
 .PHONY: search-index
 
-superuser: ## create a DjangoCMS superuser
-	@$(MANAGE) createsuperuser
+superuser: ## Create an admin user with password "admin"
+	@$(COMPOSE) up -d mysql
+	@echo "Wait for services to be up..."
+	@$(WAIT_DB)
+	@$(MANAGE) shell -c "from django.contrib.auth.models import User; not User.objects.filter(username='admin').exists() and User.objects.create_superuser('admin', 'admin@example.com', 'admin')"
 .PHONY: superuser
 
 test-back: ## run back-end tests
