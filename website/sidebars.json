@@ -5,7 +5,11 @@
       "docker-development",
       "native-installation"
     ],
-    "Recipes": ["django-react-interop", "building-the-frontend"],
+    "Recipes": [
+      "django-react-interop",
+      "building-the-frontend",
+      "lms-connection"
+    ],
     "Contributing": [
       "contributing-guide",
       "accessibility-testing",

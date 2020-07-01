@@ -73,3 +73,24 @@ requesting you to create some required root pages. So it is easier as a first ap
 CMS with the demo site.
 
 You should be able to view the site at [localhost:8070](http://localhost:8070)
+
+### Connecting Richie to OpenEdx
+
+This project is pre-configured to connect with an OpenEdx instance started with
+[OpenEdx Docker](https://github.com/openfun/openedx-docker], which provides a ready to use
+docker-compose stack of OpenEdx in several flavors. Head over to
+[OpenEdx Docker README](https://github.com/openfun/openedx-docker#readme) for instructions on how
+to bootstrap an instance.
+
+To handle HTTP redirections between the 2 Docker Compose stacks during the authentication process,
+you should edit your local hosts definitions (_e.g._ `/etc/hosts` on a \*NIX system) to add `edx`
+as a `localhost` alias:
+
+```
+# /etc/hosts
+127.0.0.1 localhost edx
+```
+
+Once this has been done, the LMS app should respond on http://edx:8073 and `richie` should be able
+to connect via the [SSO](https://richie.education/docs/lms-connection#sso) and the
+[API bridge](https://richie.education/docs/lms-connection#api-bridge).
