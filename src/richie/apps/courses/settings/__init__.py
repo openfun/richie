@@ -18,6 +18,9 @@ Otherwise, you can just use the usual Django pattern in your settings.py file:
 """
 from django.utils.translation import ugettext_lazy as _
 
+# Associated LMS backends
+LMS_BACKENDS = []
+
 # Easy Thumbnails
 THUMBNAIL_PROCESSORS = (
     "easy_thumbnails.processors.colorspace",
