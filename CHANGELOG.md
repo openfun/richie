@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [2.0.0-beta.9] - 2020-07-01
+
 ### Added
 
 - Add oauth2 and OIDC authentication backends for SSO with Open edX
@@ -916,7 +918,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.0.0-beta.8...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.0.0-beta.9...master
+[2.0.0-beta.9]: https://github.com/openfun/richie/compare/v2.0.0-beta.8...v2.0.0-beta.9
 [2.0.0-beta.8]: https://github.com/openfun/richie/compare/v2.0.0-beta.7...v2.0.0-beta.8
 [2.0.0-beta.7]: https://github.com/openfun/richie/compare/v2.0.0-beta.6...v2.0.0-beta.7
 [2.0.0-beta.6]: https://github.com/openfun/richie/compare/v2.0.0-beta.5...v2.0.0-beta.6
