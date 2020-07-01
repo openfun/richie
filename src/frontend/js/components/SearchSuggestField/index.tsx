@@ -1,5 +1,5 @@
 import debounce from 'lodash-es/debounce';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Autosuggest from 'react-autosuggest';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -57,15 +57,17 @@ export const SearchSuggestField = ({ context }: CommonDataProps) => {
   // Use current value of courseSearchParams and last dispatched actions to guess if the text query
   // has been removed by another component in the tree, and clear the field as well
   // NB: this will do nothing on the first render as there are then no last dispatched actions.
-  if (
-    !courseSearchParams.query &&
-    lastDispatchActions
-      ?.map((action) => action.type)
-      .includes(CourseSearchParamsAction.filterReset) &&
-    value
-  ) {
-    setValue('');
-  }
+  useEffect(() => {
+    if (
+      !courseSearchParams.query &&
+      lastDispatchActions
+        ?.map((action) => action.type)
+        .includes(CourseSearchParamsAction.filterReset) &&
+      value
+    ) {
+      setValue('');
+    }
+  }, [lastDispatchActions]);
 
   /**
    * Helper to update the course search params when the user types. We needed to take it out of

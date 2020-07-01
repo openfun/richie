@@ -147,6 +147,12 @@ describe('components/SearchSuggestField', () => {
 
     // The input does not show a value anymore
     expect(input.value).toEqual('');
+
+    // Simulate the user entering some text in the autocomplete field
+    fireEvent.focus(input);
+    fireEvent.change(input, { target: { value: 'au' } });
+
+    expect(input.value).toEqual('au');
   });
 
   it('gets suggestions from the API when the user types something in the field', async () => {
