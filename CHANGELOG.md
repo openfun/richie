@@ -32,6 +32,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   'lg' start.
 - Fix breadcrumb item on small breakpoints when text is too long.
 - Fix nesteditem list variant to act like a basic list.
+- Fix an issue that broke the course search field after the user clicked
+  the "reset filters" helper.
 
 ## [2.0.0-beta.8] - 2020-06-17
 
