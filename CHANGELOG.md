@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Add LMS backend with enrollment methods for Open edX
+
 ### Changed
 
 - Add default image for empty person portrait
