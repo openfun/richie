@@ -133,6 +133,10 @@ $clouds-scheme: (
   background: bottom left / 100% 70% no-repeat r-color('smoke')
     url('../../richie/images/components/clouds.jpg'),
 );
+$waves-scheme: (
+  background: top 1vw left 50% / 98% 7vw no-repeat r-color('white')
+    url('../../richie/images/components/waves.svg'),
+);
 $transparent-dark-scheme: (
   font-color: r-color('black'),
   h1-color: r-color('black'),
@@ -202,6 +206,7 @@ $r-theme: (
       white-mask-gradient: $white-mask-gradient-scheme,
       transparent-darkest: $transparent-dark-scheme,
       clouds: $clouds-scheme,
+      waves: $waves-scheme,
       purplish-grey: $purplish-grey-scheme,
       battleship-grey: $battleship-grey-scheme,
     ),
@@ -273,6 +278,7 @@ $r-theme: (
       gradient-neutral: $neutral-gradient-scheme,
       gradient-dark: $dark-gradient-scheme,
       clouds: $clouds-scheme,
+      waves: $waves-scheme,
     ),
     alt-arc: url('../../richie/images/components/arc-white.svg'),
     alt-curve: url('../../richie/images/components/curve-white.svg'),
