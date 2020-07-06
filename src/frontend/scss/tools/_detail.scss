@@ -35,6 +35,22 @@
     }
   }
 
+  // Some specific responsives adjustments for the 'waves' section
+  &#{$sel}--waves {
+    padding-top: 3vw;
+    @include media-breakpoint-up(lg) {
+      padding-top: 3vw;
+      background-size: 98% 6vw;
+    }
+
+    #{$sel}__title {
+      margin-bottom: 2vw;
+      @include media-breakpoint-up(lg) {
+        margin-bottom: 3vw;
+      }
+    }
+  }
+
   @if r-theme-val(block-schemes, alt-arc) {
     &#{$sel}--arc {
       padding-bottom: 0 !important;

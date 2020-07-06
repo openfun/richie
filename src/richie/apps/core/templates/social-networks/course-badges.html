@@ -24,6 +24,16 @@
             </svg>
         </a>
         <a
+            href="https://www.linkedin.com/sharing/share-offsite/?url={{ full_page_url }}"
+            class="social-network-badges__item"
+            target="_blank"
+            title="{% trans "Share on Linkedin" %}"
+        >
+            <svg role="img">
+                <use xlink:href="#icon-linkedin" />
+            </svg>
+        </a>
+        <a
             href="mailto:?subject={{ shared_subject|urlencode }}&amp;body={{ shared_sentence|urlencode }}"
             class="social-network-badges__item"
             target="_blank"

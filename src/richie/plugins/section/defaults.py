@@ -15,6 +15,7 @@ SECTION_TEMPLATES = getattr(
         ("richie/section/section_quaternary.html", _("Quaternary scheme")),
         ("richie/section/section_quinary.html", _("Quinary scheme")),
         ("richie/section/section_senary.html", _("Senary scheme")),
+        ("richie/section/section_septenary.html", _("Septenary scheme")),
         ("richie/section/section_tiles.html", _("Item tiles")),
     ],
 )

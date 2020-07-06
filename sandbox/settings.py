@@ -88,6 +88,7 @@ class StyleguideMixin:
             "white-mask-gradient",
             "transparent-darkest",
             "clouds",
+            "waves",
             "purplish-grey",
             "battleship-grey",
         ],
