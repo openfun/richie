@@ -35,27 +35,27 @@
   ],
   "devDependencies": {},
   "dependencies": {
-    "@babel/core": "7.10.4",
+    "@babel/core": "7.10.5",
     "@babel/plugin-syntax-dynamic-import": "7.8.3",
     "@babel/plugin-transform-modules-commonjs": "7.10.4",
     "@babel/polyfill": "7.10.4",
     "@babel/preset-env": "7.10.4",
     "@babel/preset-typescript": "7.10.4",
-    "@formatjs/intl-relativetimeformat": "6.0.2",
-    "@sentry/browser": "5.19.1",
+    "@formatjs/intl-relativetimeformat": "6.2.2",
+    "@sentry/browser": "5.19.2",
     "@testing-library/jest-dom": "5.11.0",
-    "@testing-library/react": "10.4.5",
+    "@testing-library/react": "10.4.6",
     "@types/fetch-mock": "7.3.2",
     "@types/jest": "26.0.4",
     "@types/lodash-es": "4.17.3",
     "@types/query-string": "6.3.0",
-    "@types/react": "16.9.41",
+    "@types/react": "16.9.43",
     "@types/react-autosuggest": "9.3.14",
     "@types/react-dom": "16.9.8",
     "@types/react-modal": "3.10.6",
     "babel-jest": "26.1.0",
     "babel-loader": "8.1.0",
-    "babel-plugin-react-intl": "7.5.28",
+    "babel-plugin-react-intl": "7.8.0",
     "babel-preset-react": "7.0.0-beta.3",
     "bootstrap": "4.5.0",
     "core-js": "3.6.5",
@@ -72,7 +72,7 @@
     "react": "16.13.1",
     "react-autosuggest": "10.0.2",
     "react-dom": "16.13.1",
-    "react-intl": "5.0.2",
+    "react-intl": "5.3.0",
     "react-intl-po": "2.2.2",
     "react-modal": "3.11.2",
     "source-map-loader": "1.0.1",
@@ -82,9 +82,9 @@
     "webpack-cli": "3.3.12",
     "whatwg-fetch": "3.2.0",
     "xhr-mock": "2.5.1",
-    "yargs": "15.4.0"
+    "yargs": "15.4.1"
   },
   "resolutions": {
-    "@types/react": "16.9.41"
+    "@types/react": "16.9.43"
   }
 }
