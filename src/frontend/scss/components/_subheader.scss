@@ -227,9 +227,14 @@ $r-subheader-search-title-width: 19rem !default; // aligned on computed search r
       width: 100%;
     }
 
-    a:not(.subheader__cta) {
+    &__resource-link {
       color: inherit;
       text-decoration: underline;
+    }
+
+    .course-run-enrollment__helptext,
+    .course-run-enrollment__errortext {
+      color: black;
     }
 
     .subheader__cta {
