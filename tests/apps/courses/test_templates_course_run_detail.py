@@ -4,6 +4,7 @@ End-to-end tests for the course run detail view
 from datetime import datetime
 from unittest import mock
 
+from django.test.utils import override_settings
 from django.utils import timezone
 
 import pytz
@@ -310,6 +311,62 @@ class CourseRunCMSTestCase(CMSTestCase):
             '<button class="subheader__cta '
             'subheader__cta--projected">To be scheduled</button>',
             html=True,
+        )
+
+    @override_settings(
+        LMS_BACKENDS=[
+            {
+                "BACKEND": "richie.apps.courses.lms.edx.TokenEdXLMSBackend",
+                "COURSE_REGEX": r"^.*/courses/(?P<course_id>.*)/course/?$",
+                "BASE_URL": "http://edx:8073",
+                "API_TOKEN": "fakesecret",
+            }
+        ]
+    )
+    def test_templates_course_run_detail_state_with_enrollments_app_with_cta(self):
+        """A course run in a state with a call to action just calls the frontend component."""
+        response, course_run = self.prepare_to_test_state(
+            CourseState(0, timezone.now()),
+            resource_link="http://edx:8073/courses/course-v1:edX+DemoX+Demo/course/",
+        )
+        self.assertIsNotNone(
+            re.search(
+                (
+                    r'.*class="richie-react richie-react--course-run-enrollment".*'
+                    r"data-props=\\\'{{\"courseRunId\": {}}}\\\'".format(
+                        course_run.public_extension_id
+                    )
+                ),
+                str(response.content),
+            )
+        )
+
+    @override_settings(
+        LMS_BACKENDS=[
+            {
+                "BACKEND": "richie.apps.courses.lms.edx.TokenEdXLMSBackend",
+                "COURSE_REGEX": r"^.*/courses/(?P<course_id>.*)/course/?$",
+                "BASE_URL": "http://edx:8073",
+                "API_TOKEN": "fakesecret",
+            }
+        ]
+    )
+    def test_templates_course_run_detail_state_with_enrollments_app_without_cta(self):
+        """A course run in a state without a call to action just calls the frontend component."""
+        response, course_run = self.prepare_to_test_state(
+            CourseState(6, timezone.now()),
+            resource_link="http://edx:8073/courses/course-v1:edX+DemoX+Demo/course/",
+        )
+        self.assertIsNotNone(
+            re.search(
+                (
+                    r'.*class="richie-react richie-react--course-run-enrollment".*'
+                    r"data-props=\\\'{{\"courseRunId\": {}}}\\\'".format(
+                        course_run.public_extension_id
+                    )
+                ),
+                str(response.content),
+            )
         )
 
     # Breadcrumb

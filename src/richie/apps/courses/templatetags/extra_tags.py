@@ -15,6 +15,8 @@ from cms.toolbar.utils import get_toolbar_from_request
 from cms.utils import get_site_id
 from cms.utils.plugins import get_plugins
 
+from ..lms import LMSHandler
+
 # pylint: disable=invalid-name
 register = template.Library()
 
@@ -204,3 +206,14 @@ def is_empty_placeholder(page, slot):
     """
     placeholder = page.placeholders.get(slot=slot)
     return not placeholder.cmsplugin_set.exists()
+
+
+@register.filter()
+def has_connected_lms(course_run):
+    """
+    Determine if the passed course run has a connected LMS (as determined through out LMSHandler
+    and settings).
+    This enables our templates to either use the <CourseRunEnrollment /> component or a simple
+    link to the course run.
+    """
+    return LMSHandler.select_lms(course_run.resource_link) is not None

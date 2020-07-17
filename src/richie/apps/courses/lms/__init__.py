@@ -15,13 +15,19 @@ class LMSHandler:
 
     @staticmethod
     def select_lms(url):
-        """Select and return the first LMS backend matching the url passed in argument."""
+        """
+        Select and return the first LMS backend matching the url passed in argument.
+
+        Default to None if no LMS is found to enable use-cases where we need to detect whether
+        a course run has a matching LMS or not. Callers can determine if not finding an LMS
+        backend is an exception or not.
+        """
 
         for lms_configuration in settings.LMS_BACKENDS:
             if re.match(lms_configuration.get("SELECTOR_REGEX", r".*"), url):
                 return import_string(lms_configuration["BACKEND"])(lms_configuration)
 
-        raise ImproperlyConfigured()
+        return None
 
     @classmethod
     def get_enrollment(cls, user, url):
