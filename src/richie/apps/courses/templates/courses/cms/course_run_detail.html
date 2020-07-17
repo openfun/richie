@@ -116,21 +116,28 @@
                             <span>{% render_model course_run "get_languages_display" "languages" %}</span>
                         </li>
                         <li class="full">
-                            {% if course_run.state.call_to_action %}
-                            <a class="subheader__cta" href="{{ course_run.resource_link }}">
-                                {{ course_run.state.call_to_action|capfirst }}
-                            </a>
-                            {% else %}
-                            <button class="subheader__cta subheader__cta--projected">
-                                {{ course_run.state.text|capfirst }}
-                            </button>
-                            {% endif %}
+                                {% if course_run|has_connected_lms %}
+                                    <div
+                                        class="richie-react richie-react--course-run-enrollment"
+                                        data-props='{"courseRunId": {{ course_run.id }}}'
+                                    ></div>
+                                {% else %}
+                                    {% if course_run.state.call_to_action %}
+                                    <a class="subheader__cta" href="{{ course_run.resource_link }}">
+                                        {{ course_run.state.call_to_action|capfirst }}
+                                    </a>
+                                    {% else %}
+                                    <button class="subheader__cta subheader__cta--projected">
+                                        {{ course_run.state.text|capfirst }}
+                                    </button>
+                                    {% endif %}
+                                {% endif %}
                         </li>
                         {% if current_page.publisher_is_draft %}
                         <li class="full">
                             <strong>{% trans "Resource link" %}</strong>
                             <span>
-                                <a href="{{ course_run.resource_link }}">
+                                <a href="{{ course_run.resource_link }}" class="subheader__definitions__resource-link">
                                     {% render_model course_run "resource_link" "resource_link" "" "default:'...'" %}
                                 </a>
                             </span>

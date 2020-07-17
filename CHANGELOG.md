@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add LMS connection (back and front) to handle enrollment on course runs
 - Add LMS backend with enrollment methods for Open edX
 
 ### Changed

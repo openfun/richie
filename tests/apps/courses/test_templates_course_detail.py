@@ -357,7 +357,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
         super().setUp()
         self.now = timezone.now()
 
-    def create_run_ongoing_open(self, course):
+    def create_run_ongoing_open(self, course, **kwargs):
         """
         Not a test. Create an on-going course run that is open for enrollment.
         """
@@ -369,9 +369,10 @@ class RunsCourseCMSTestCase(CMSTestCase):
             enrollment_start=self.now - timedelta(hours=1),
             enrollment_end=self.now + timedelta(hours=1),
             should_publish=True,
+            **kwargs
         )
 
-    def create_run_future_open(self, course):
+    def create_run_future_open(self, course, **kwargs):
         """
         Not a test. Create a course run in the future and open for enrollment.
         """
@@ -382,6 +383,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
             enrollment_start=self.now - timedelta(hours=1),
             enrollment_end=self.now + timedelta(hours=1),
             should_publish=True,
+            **kwargs
         )
 
     def create_run_future_not_yet_open(self, course):
@@ -434,6 +436,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
             should_publish=True,
         )
 
+    @override_settings(LMS_BACKENDS=[])
     def test_templates_course_detail_runs_ongoing_open(self):
         """
         Priority 0: a course run open and on-going should always show up.
@@ -545,7 +548,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
         course = CourseFactory(should_publish=True)
         course_run = self.create_run_future_open(
             course,
-            resource_link="http://edx:8073/courses/course-v1:edX+DemoX+Demo_Course/course/",
+            resource_link="http://edx:8073/courses/course-v1:edX+DemoX+Demo/course/",
         )
         response = self.client.get(course.extended_object.get_absolute_url())
         self.assertIsNotNone(
