@@ -4,6 +4,7 @@ End-to-end tests for the course detail view
 import re
 from datetime import timedelta
 
+from django.test.utils import override_settings
 from django.utils import dateformat, timezone
 
 import pytz
@@ -462,6 +463,41 @@ class RunsCourseCMSTestCase(CMSTestCase):
             ),
         )
 
+    @override_settings(
+        LMS_BACKENDS=[
+            {
+                "BACKEND": "richie.apps.courses.lms.edx.TokenEdXLMSBackend",
+                "COURSE_REGEX": r"^.*/courses/(?P<course_id>.*)/course/?$",
+                "BASE_URL": "http://edx:8073",
+                "API_TOKEN": "fakesecret",
+            }
+        ]
+    )
+    def test_templates_course_detail_runs_ongoing_open_with_enrollments_app(self):
+        """
+        Priority 0: when the enrollments app is enabled, responsibility for the
+        CTA is delegated to the frontend component.
+        """
+        course = CourseFactory(should_publish=True)
+        course_run = self.create_run_ongoing_open(
+            course,
+            resource_link="http://edx:8073/courses/course-v1:edX+DemoX+Demo/course/",
+        )
+        response = self.client.get(course.extended_object.get_absolute_url())
+
+        self.assertIsNotNone(
+            re.search(
+                (
+                    r'.*class="richie-react richie-react--course-run-enrollment".*'
+                    r"data-props=\\\'{{\"courseRunId\": {}}}\\\'".format(
+                        course_run.public_extension_id
+                    )
+                ),
+                str(response.content),
+            )
+        )
+
+    @override_settings(LMS_BACKENDS=[])
     def test_templates_course_detail_runs_future_open(self):
         """
         Priority 1: an upcoming open course run should show in a separate section.
@@ -491,6 +527,39 @@ class RunsCourseCMSTestCase(CMSTestCase):
             ),
         )
 
+    @override_settings(
+        LMS_BACKENDS=[
+            {
+                "BACKEND": "richie.apps.courses.lms.edx.TokenEdXLMSBackend",
+                "COURSE_REGEX": r"^.*/courses/(?P<course_id>.*)/course/?$",
+                "BASE_URL": "http://edx:8073",
+                "API_TOKEN": "fakesecret",
+            }
+        ]
+    )
+    def test_templates_course_detail_runs_future_open_with_enrollments_app(self):
+        """
+        Priority 1: when the enrollments app is enabled, responsibility for the
+        CTA is delegated to the frontend component.
+        """
+        course = CourseFactory(should_publish=True)
+        course_run = self.create_run_future_open(
+            course,
+            resource_link="http://edx:8073/courses/course-v1:edX+DemoX+Demo_Course/course/",
+        )
+        response = self.client.get(course.extended_object.get_absolute_url())
+        self.assertIsNotNone(
+            re.search(
+                (
+                    r'.*class="richie-react richie-react--course-run-enrollment".*'
+                    r"data-props=\\\'{{\"courseRunId\": {}}}\\\'".format(
+                        course_run.public_extension_id
+                    )
+                ),
+                str(response.content),
+            )
+        )
+
     @timezone.override(pytz.utc)
     def test_templates_course_detail_runs_future_not_yet_open(self):
         """
@@ -505,7 +574,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
 
         self.assertContains(response, "No open course runs")
         self.assertContains(
-            response, '<h3 class="course-detail__title">Upcoming</h3>', html=True,
+            response, '<h3 class="course-detail__title">Upcoming</h3>', html=True
         )
         self.assertContains(
             response,
@@ -532,7 +601,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
 
         self.assertContains(response, "No open course runs")
         self.assertContains(
-            response, '<h3 class="course-detail__title">Ongoing</h3>', html=True,
+            response, '<h3 class="course-detail__title">Ongoing</h3>', html=True
         )
         self.assertContains(
             response,
@@ -559,7 +628,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
 
         self.assertContains(response, "No open course runs")
         self.assertContains(
-            response, '<h3 class="course-detail__title">Ongoing</h3>', html=True,
+            response, '<h3 class="course-detail__title">Ongoing</h3>', html=True
         )
         self.assertContains(
             response,
@@ -586,7 +655,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
 
         self.assertContains(response, "No open course runs")
         self.assertContains(
-            response, '<h3 class="course-detail__title">Archived</h3>', html=True,
+            response, '<h3 class="course-detail__title">Archived</h3>', html=True
         )
         self.assertContains(
             response,
@@ -624,9 +693,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
 
         self.assertContains(response, "No open course runs")
         self.assertContains(
-            response,
-            '<h3 class="course-detail__title">To be scheduled</h3>',
-            html=True,
+            response, '<h3 class="course-detail__title">To be scheduled</h3>', html=True
         )
         self.assertContains(
             response,
