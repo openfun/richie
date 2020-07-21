@@ -200,6 +200,15 @@ jobs:
       - image: fundocker/openshift-elasticsearch:6.6.2
         environment:
           discovery.type: single-node
+      - image: docker.io/bitnami/redis:6.0-debian-10
+        name: redis-primary
+        environment:
+          ALLOW_EMPTY_PASSWORD: yes
+          REDIS_REPLICATION_MODE: master
+      - image: docker.io/bitnami/redis-sentinel:6.0-debian-10
+        name: redis-sentinel
+        environment:
+          REDIS_MASTER_HOST: redis-primary
     working_directory: ~/fun
     steps:
       - checkout
@@ -262,6 +271,15 @@ jobs:
       - image: fundocker/openshift-elasticsearch:6.6.2
         environment:
           discovery.type: single-node
+      - image: docker.io/bitnami/redis:6.0-debian-10
+        name: redis-primary
+        environment:
+          ALLOW_EMPTY_PASSWORD: yes
+          REDIS_REPLICATION_MODE: master
+      - image: docker.io/bitnami/redis-sentinel:6.0-debian-10
+        name: redis-sentinel
+        environment:
+          REDIS_MASTER_HOST: redis-primary
     working_directory: ~/fun
     steps:
       - checkout

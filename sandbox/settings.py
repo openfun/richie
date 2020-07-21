@@ -438,6 +438,14 @@ class Development(Base):
 class Test(Base):
     """Test environment settings"""
 
+    CACHES = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": "mymaster/redis-sentinel:26379,redis-sentinel:26379/0",
+            "OPTIONS": {"CLIENT_CLASS": "richie.apps.core.cache.SentinelClient"},
+        }
+    }
+
 
 class ContinuousIntegration(Test):
     """

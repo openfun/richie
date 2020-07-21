@@ -35,6 +35,7 @@ services:
     depends_on:
       - "${DB_HOST:-postgresql}"
       - "elasticsearch"
+      - redis-sentinel
     stdin_open: true
     tty: true
 
@@ -53,3 +54,32 @@ services:
       - env.d/development/crowdin
     user: "${DOCKER_USER:-1000}"
     working_dir: /app
+
+  redis-sentinel:
+    image: docker.io/bitnami/redis-sentinel:6.0-debian-10
+    depends_on:
+      - redis-primary
+      - redis-replica1
+      - redis-replica2
+    environment:
+      - REDIS_MASTER_HOST=redis-primary
+
+  redis-primary:
+    image: docker.io/bitnami/redis:6.0-debian-10
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_REPLICATION_MODE=master
+
+  redis-replica1:
+    image: docker.io/bitnami/redis:6.0-debian-10
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_REPLICATION_MODE=slave
+      - REDIS_MASTER_HOST=redis-primary
+
+  redis-replica2:
+    image: docker.io/bitnami/redis:6.0-debian-10
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+      - REDIS_REPLICATION_MODE=slave
+      - REDIS_MASTER_HOST=redis-primary
