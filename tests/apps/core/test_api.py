@@ -1,7 +1,7 @@
 """Tests for user-related API endpoints."""
 import json
 
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 
 
@@ -19,7 +19,7 @@ class ApiUsersViewSetTestCase(TestCase):
         logged in user.
         """
         # Create a stub user and force-login it to test our API
-        user = User.objects.create_user(
+        user = get_user_model().objects.create_user(
             email="juv@example.com",
             first_name="Decimus Iunius",
             last_name="Iuvenalis",
