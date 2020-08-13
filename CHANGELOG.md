@@ -13,6 +13,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add Linkedin badge in social networks templates.
 - Add new section "septenary" with a new wave decoration.
 - Add redis sentinel cache backend
+- Allow to configure cache and session settings with environment variables
 
 ### Fixed
 
