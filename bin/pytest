@@ -2,9 +2,14 @@
 
 source "$(dirname "${BASH_SOURCE[0]}")/_config.sh"
 
+# Recreate the redis sentinel service to avoid inconsistent state
+_docker_compose up -d -V redis-sentinel
+
 _dc_run \
     -e DJANGO_CONFIGURATION=Test \
     -e PYTHONPATH=/app/sandbox \
     app \
-    dockerize -wait "tcp://${DB_HOST:-postgresql}:${DB_PORT:-5432}" -timeout 60s \
-        pytest "$@"
+    dockerize -wait "tcp://${DB_HOST:-postgresql}:${DB_PORT:-5432}" \
+        -wait "tcp://redis-primary:6379" \
+        -wait "tcp://redis-sentinel:26379" \
+        -timeout 60s pytest "$@"
