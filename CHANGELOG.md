@@ -17,6 +17,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Allow one simple text plugin as person page main content
 - Allow glimpse plugins in course page information placeholder
 - Revert to long plugin names in side toolbar placeholder plugin list
 

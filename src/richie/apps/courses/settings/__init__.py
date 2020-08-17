@@ -246,6 +246,11 @@ CMS_PLACEHOLDER_CONF = {
         "plugins": ["PlainTextPlugin"],
         "limits": {"PlainTextPlugin": 1},
     },
+    "courses/cms/person_detail.html maincontent": {
+        "name": _("Main Content"),
+        "plugins": ["CKEditorPlugin"],
+        "limits": {"CKEditorPlugin": 1},
+    },
     "courses/cms/person_detail.html organizations": {
         "name": _("Organizations"),
         "plugins": ["OrganizationPlugin"],
@@ -394,6 +399,11 @@ RICHIE_SIMPLETEXT_CONFIGURATION = [
         "placeholders": ["course_description"],
         "ckeditor": "CKEDITOR_LIMITED_CONFIGURATION",
         "max_length": 1200,
+    },
+    {
+        "placeholders": ["maincontent"],
+        "ckeditor": "CKEDITOR_LIMITED_CONFIGURATION",
+        "max_length": 5000,
     },
     {
         "placeholders": ["course_assessment", "course_format", "course_prerequisites"],
