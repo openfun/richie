@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-17 13:36+0000\n"
-"PO-Revision-Date: 2020-04-17 14:29\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2020-08-17 13:18+0000\n"
+"PO-Revision-Date: 2020-08-17 15:06\n"
+"Last-Translator: \n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
@@ -12,8 +12,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Crowdin-Project: richie\n"
+"X-Crowdin-Project-ID: 308578\n"
 "X-Crowdin-Language: es-ES\n"
 "X-Crowdin-File: backend.pot\n"
+"X-Crowdin-File-ID: 32\n"
 
 #: apps/core/defaults.py:8
 msgid "Richie Plugins"
@@ -112,25 +114,25 @@ msgstr "%(code)s actualmente en %(name)s"
 msgid "%(code)s, switch to %(name)s"
 msgstr "%(code)s, cambia a %(name)s"
 
-#: apps/core/templates/richie/base.html:93
-#: apps/courses/templates/courses/cms/course_detail.html:129
+#: apps/core/templates/richie/base.html:95
+#: apps/courses/templates/courses/cms/course_detail.html:130
 msgid "Contact us"
 msgstr ""
 
-#: apps/core/templates/richie/base.html:118
+#: apps/core/templates/richie/base.html:121
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:32
 msgid "Learn more"
 msgstr ""
 
-#: apps/core/templates/richie/base.html:127
+#: apps/core/templates/richie/base.html:131
 msgid "Life-changing learning!"
 msgstr ""
 
-#: apps/core/templates/richie/base.html:138
+#: apps/core/templates/richie/base.html:143
 msgid "All Rights Reserved."
 msgstr "Todos los derechos reservados."
 
-#: apps/core/templates/richie/base.html:142
+#: apps/core/templates/richie/base.html:147
 msgid "Powered by"
 msgstr ""
 
@@ -195,6 +197,11 @@ msgstr "Compartir en Twitter"
 
 #: apps/core/templates/social-networks/blogpost-badges.html:30
 #: apps/core/templates/social-networks/course-badges.html:30
+msgid "Share on Linkedin"
+msgstr ""
+
+#: apps/core/templates/social-networks/blogpost-badges.html:40
+#: apps/core/templates/social-networks/course-badges.html:40
 msgid "Share by Email"
 msgstr "Compartir por Email"
 
@@ -219,6 +226,11 @@ msgstr "Página de Twitter"
 msgid "Twitter"
 msgstr "Twitter"
 
+#: apps/core/templates/social-networks/footer-badges.html:27
+#: apps/core/templates/social-networks/footer-badges.html:30
+msgid "Linkedin"
+msgstr ""
+
 #: apps/courses/admin.py:77
 msgid "Course could not be found."
 msgstr "No se pudo encontrar el curso."
@@ -232,15 +244,15 @@ msgid "See filer folder"
 msgstr "Ver carpeta de archivos"
 
 #: apps/courses/cms_plugins.py:35
-msgid "Org"
+msgid "Organization"
 msgstr ""
 
 #: apps/courses/cms_plugins.py:60
-msgid "Org by Category"
+msgid "Organization by Category"
 msgstr ""
 
 #: apps/courses/cms_plugins.py:89
-msgid "Cat"
+msgid "Category"
 msgstr ""
 
 #: apps/courses/cms_plugins.py:115
@@ -261,7 +273,7 @@ msgid "Post"
 msgstr ""
 
 #: apps/courses/cms_plugins.py:208
-msgid "Prog"
+msgid "Program"
 msgstr ""
 
 #: apps/courses/cms_toolbars.py:49
@@ -391,14 +403,13 @@ msgstr "Admin"
 
 #: apps/courses/defaults.py:226 apps/courses/defaults.py:236
 #: apps/courses/defaults.py:245 apps/courses/defaults.py:252
-#: plugins/glimpse/defaults.py:11 plugins/nesteditem/defaults.py:11
+#: plugins/glimpse/defaults.py:18
 msgid "Inherit"
 msgstr ""
 
 #: apps/courses/defaults.py:227 apps/courses/defaults.py:237
 #: apps/courses/defaults.py:245 apps/courses/defaults.py:253
-#: plugins/large_banner/defaults.py:11 plugins/nesteditem/defaults.py:12
-#: plugins/section/defaults.py:11
+#: plugins/large_banner/defaults.py:11 plugins/section/defaults.py:11
 msgid "Default"
 msgstr "Por defecto"
 
@@ -755,9 +766,9 @@ msgstr ""
 msgid "Main content"
 msgstr "Contenido principal"
 
-#: apps/courses/settings/__init__.py:115 apps/courses/settings/__init__.py:261
-#: apps/courses/settings/__init__.py:281
-#: apps/courses/templates/courses/cms/blogpost_detail.html:80
+#: apps/courses/settings/__init__.py:115 apps/courses/settings/__init__.py:269
+#: apps/courses/settings/__init__.py:289
+#: apps/courses/templates/courses/cms/blogpost_detail.html:96
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:10
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:41
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:76
@@ -780,19 +791,19 @@ msgid "About the course"
 msgstr "Acerca del curso"
 
 #: apps/courses/settings/__init__.py:134
-#: apps/courses/templates/courses/cms/course_detail.html:199
+#: apps/courses/templates/courses/cms/course_detail.html:193
 #: apps/courses/templates/courses/cms/course_run_detail.html:134
 msgid "What you will learn"
 msgstr "Lo que aprenderás"
 
 #: apps/courses/settings/__init__.py:138
-#: apps/courses/templates/courses/cms/course_detail.html:209
+#: apps/courses/templates/courses/cms/course_detail.html:212
 #: apps/courses/templates/courses/cms/course_run_detail.html:144
 msgid "Format"
 msgstr "Formato"
 
 #: apps/courses/settings/__init__.py:142
-#: apps/courses/templates/courses/cms/course_detail.html:220
+#: apps/courses/templates/courses/cms/course_detail.html:223
 #: apps/courses/templates/courses/cms/course_run_detail.html:153
 msgid "Prerequisites"
 msgstr "Prerrequisitos"
@@ -809,49 +820,49 @@ msgstr "Plan"
 msgid "Complementary information"
 msgstr "Información complementaria"
 
-#: apps/courses/settings/__init__.py:164
-#: apps/courses/templates/courses/cms/course_detail.html:377
+#: apps/courses/settings/__init__.py:167
+#: apps/courses/templates/courses/cms/course_detail.html:380
 #: apps/courses/templates/courses/cms/course_run_detail.html:233
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:47
 msgid "License for the course content"
 msgstr "Licencia para el contenido del curso"
 
-#: apps/courses/settings/__init__.py:169
-#: apps/courses/templates/courses/cms/course_detail.html:386
+#: apps/courses/settings/__init__.py:172
+#: apps/courses/templates/courses/cms/course_detail.html:389
 #: apps/courses/templates/courses/cms/course_run_detail.html:240
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:56
 msgid "License for the content created by course participants"
 msgstr "Licencia para el contenido creado por los participantes del curso"
 
-#: apps/courses/settings/__init__.py:174 apps/courses/settings/__init__.py:202
-#: apps/courses/settings/__init__.py:233 apps/courses/settings/__init__.py:257
+#: apps/courses/settings/__init__.py:177 apps/courses/settings/__init__.py:205
+#: apps/courses/settings/__init__.py:236 apps/courses/settings/__init__.py:265
 msgid "Categories"
 msgstr "Categorías"
 
-#: apps/courses/settings/__init__.py:178 apps/courses/settings/__init__.py:222
+#: apps/courses/settings/__init__.py:181 apps/courses/settings/__init__.py:225
 msgid "Icon"
 msgstr "Icono"
 
-#: apps/courses/settings/__init__.py:183 apps/courses/settings/__init__.py:247
-#: apps/courses/templates/courses/cms/course_detail.html:357
+#: apps/courses/settings/__init__.py:186 apps/courses/settings/__init__.py:255
+#: apps/courses/templates/courses/cms/course_detail.html:352
 #: apps/courses/templates/courses/cms/course_run_detail.html:217
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:27
-#: apps/courses/templates/courses/cms/person_detail.html:83
-#: apps/search/defaults.py:99
+#: apps/courses/templates/courses/cms/person_detail.html:89
+#: apps/search/defaults.py:104
 msgid "Organizations"
 msgstr "Organizaciones"
 
-#: apps/courses/settings/__init__.py:187
+#: apps/courses/settings/__init__.py:190
 msgid "Assessment and Certification"
 msgstr "Evaluación y certificación"
 
-#: apps/courses/settings/__init__.py:192 apps/courses/settings/__init__.py:212
+#: apps/courses/settings/__init__.py:195 apps/courses/settings/__init__.py:215
 #: apps/courses/templates/courses/cms/category_detail.html:16
 #: apps/courses/templates/courses/cms/organization_detail.html:17
 msgid "Banner"
 msgstr "Banner"
 
-#: apps/courses/settings/__init__.py:197 apps/courses/settings/__init__.py:217
+#: apps/courses/settings/__init__.py:200 apps/courses/settings/__init__.py:220
 #: apps/courses/templates/courses/cms/category_detail.html:34
 #: apps/courses/templates/courses/cms/fragment_category_glimpse.html:40
 #: apps/courses/templates/courses/cms/fragment_organization_glimpse.html:10
@@ -860,77 +871,82 @@ msgstr "Banner"
 msgid "Logo"
 msgstr "Logo"
 
-#: apps/courses/settings/__init__.py:206 apps/courses/settings/__init__.py:227
+#: apps/courses/settings/__init__.py:209 apps/courses/settings/__init__.py:230
+#: apps/courses/templates/courses/cms/course_detail.html:203
 #: apps/courses/templates/courses/cms/fragment_organization_glimpse.html:31
 msgid "Description"
 msgstr "Descripción"
 
-#: apps/courses/settings/__init__.py:237
+#: apps/courses/settings/__init__.py:240
 #: apps/courses/templates/courses/cms/fragment_person_glimpse.html:10
 #: apps/courses/templates/courses/cms/person_detail.html:48
 msgid "Portrait"
 msgstr "Retrato"
 
-#: apps/courses/settings/__init__.py:242
+#: apps/courses/settings/__init__.py:245
 msgid "Bio"
 msgstr "Biografía"
 
-#: apps/courses/settings/__init__.py:252
+#: apps/courses/settings/__init__.py:250
+msgid "Main Content"
+msgstr ""
+
+#: apps/courses/settings/__init__.py:260
 msgid "Author"
 msgstr "Autor"
 
-#: apps/courses/settings/__init__.py:266 apps/courses/settings/__init__.py:286
+#: apps/courses/settings/__init__.py:274 apps/courses/settings/__init__.py:294
 msgid "Excerpt"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:271 apps/courses/settings/__init__.py:291
+#: apps/courses/settings/__init__.py:279 apps/courses/settings/__init__.py:299
 msgid "Body"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:275
+#: apps/courses/settings/__init__.py:283
 msgid "Headline"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:295
-#: apps/courses/templates/courses/cms/person_detail.html:100
+#: apps/courses/settings/__init__.py:303
+#: apps/courses/templates/courses/cms/person_detail.html:106
 msgid "Courses"
 msgstr "Cursos"
 
-#: apps/courses/settings/__init__.py:377
+#: apps/courses/settings/__init__.py:385
 msgid "Button caesura"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:379
+#: apps/courses/settings/__init__.py:387
 msgid "Full width"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/blogpost_detail.html:46
+#: apps/courses/templates/courses/cms/blogpost_detail.html:50
 msgid "No categories yet."
 msgstr "No hay categorías aún."
 
-#: apps/courses/templates/courses/cms/blogpost_detail.html:56
+#: apps/courses/templates/courses/cms/blogpost_detail.html:62
 msgid "Not published yet"
 msgstr "Sin publicar"
 
-#: apps/courses/templates/courses/cms/blogpost_detail.html:64
+#: apps/courses/templates/courses/cms/blogpost_detail.html:72
 msgid "No author yet"
 msgstr "No hay autor aún"
 
-#: apps/courses/templates/courses/cms/blogpost_detail.html:91
+#: apps/courses/templates/courses/cms/blogpost_detail.html:107
 msgid "blog post cover image"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/blogpost_detail.html:99
+#: apps/courses/templates/courses/cms/blogpost_detail.html:117
 #: apps/courses/templates/courses/cms/program_detail.html:43
 msgid "No excerpt content"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/blogpost_detail.html:107
+#: apps/courses/templates/courses/cms/blogpost_detail.html:127
 #: apps/courses/templates/courses/cms/program_detail.html:51
 msgid "No body content"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/blogpost_detail.html:120
+#: apps/courses/templates/courses/cms/blogpost_detail.html:146
 msgid "Related posts"
 msgstr ""
 
@@ -995,8 +1011,8 @@ msgid "Add a video or teaser."
 msgstr ""
 
 #: apps/courses/templates/courses/cms/course_detail.html:70
-msgid "Enter here a description of your course."
-msgstr "Introduzca aquí una descripción de su curso."
+msgid "Enter here a introduction of your course."
+msgstr ""
 
 #: apps/courses/templates/courses/cms/course_detail.html:85
 msgid "Duration:"
@@ -1006,116 +1022,116 @@ msgstr "Duración:"
 msgid "Effort:"
 msgstr "Esfuerzo:"
 
-#: apps/courses/templates/courses/cms/course_detail.html:152
+#: apps/courses/templates/courses/cms/course_detail.html:154
 #, python-format
 msgid "\n"
 "                        Archived on %(creation_date)s\n"
 "                    "
 msgstr ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:156
+#: apps/courses/templates/courses/cms/course_detail.html:158
 msgid "Go to current version"
 msgstr "Ir a la sesión actual"
 
-#: apps/courses/templates/courses/cms/course_detail.html:165
+#: apps/courses/templates/courses/cms/course_detail.html:167
 msgid "Glimpse cover"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:167
+#: apps/courses/templates/courses/cms/course_detail.html:169
 msgid "Add an image for course cover on its glimpse."
 msgstr ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:178
+#: apps/courses/templates/courses/cms/course_detail.html:180
 msgid "course cover image"
 msgstr "imagen de portada del curso"
 
-#: apps/courses/templates/courses/cms/course_detail.html:200
+#: apps/courses/templates/courses/cms/course_detail.html:194
 #: apps/courses/templates/courses/cms/course_run_detail.html:135
 msgid "At the end of this course, you will be able to:"
 msgstr "Al final de este curso, podrá:"
 
-#: apps/courses/templates/courses/cms/course_detail.html:211
+#: apps/courses/templates/courses/cms/course_detail.html:214
 msgid "How is the course structured?"
 msgstr "¿Cómo está estructurado el curso?"
 
-#: apps/courses/templates/courses/cms/course_detail.html:222
+#: apps/courses/templates/courses/cms/course_detail.html:225
 msgid "What are the prerequisites to follow this course?"
 msgstr "¿Cuáles son los perrequisitos para seguir este curso?"
 
-#: apps/courses/templates/courses/cms/course_detail.html:231
+#: apps/courses/templates/courses/cms/course_detail.html:234
 #: apps/courses/templates/courses/cms/course_run_detail.html:162
 msgid "Assessment and certification"
 msgstr "Evaluación y certificación"
 
-#: apps/courses/templates/courses/cms/course_detail.html:234
+#: apps/courses/templates/courses/cms/course_detail.html:237
 msgid "How is progress evaluated and/or certified?"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:254
+#: apps/courses/templates/courses/cms/course_detail.html:249
 #: apps/courses/templates/courses/cms/course_run_detail.html:181
 msgid "Course plan"
 msgstr "Plan del curso"
 
-#: apps/courses/templates/courses/cms/course_detail.html:257
+#: apps/courses/templates/courses/cms/course_detail.html:252
 msgid "Enter here the detailed course plan."
 msgstr "Ingrese aquí el plan detallado del curso."
 
-#: apps/courses/templates/courses/cms/course_detail.html:271
+#: apps/courses/templates/courses/cms/course_detail.html:266
 msgid "Course runs"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:275
+#: apps/courses/templates/courses/cms/course_detail.html:270
 msgid "No open course runs"
 msgstr ""
 
-#: apps/courses/templates/courses/cms/course_detail.html:284
+#: apps/courses/templates/courses/cms/course_detail.html:279
 msgctxt "Course runs to be scheduled (plural)"
 msgid "To be scheduled"
 msgstr "Por ser programado"
 
-#: apps/courses/templates/courses/cms/course_detail.html:295
+#: apps/courses/templates/courses/cms/course_detail.html:290
 msgctxt "Upcoming course runs (plural)"
 msgid "Upcoming"
 msgstr "Próximo"
 
-#: apps/courses/templates/courses/cms/course_detail.html:306
+#: apps/courses/templates/courses/cms/course_detail.html:301
 msgctxt "Ongoing course runs (plural)"
 msgid "Ongoing"
 msgstr "En progreso"
 
-#: apps/courses/templates/courses/cms/course_detail.html:317
+#: apps/courses/templates/courses/cms/course_detail.html:312
 msgctxt "Archived course runs (plural)"
 msgid "Archived"
 msgstr "Archivado"
 
-#: apps/courses/templates/courses/cms/course_detail.html:338
+#: apps/courses/templates/courses/cms/course_detail.html:333
 #: apps/courses/templates/courses/cms/course_run_detail.html:200
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:8
 msgid "Course team"
 msgstr "Equipo del curso"
 
-#: apps/courses/templates/courses/cms/course_detail.html:343
+#: apps/courses/templates/courses/cms/course_detail.html:338
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:13
 msgid "Who are the teachers in the course team?"
 msgstr "¿Quiénes son los profesores del equipo del curso?"
 
-#: apps/courses/templates/courses/cms/course_detail.html:362
+#: apps/courses/templates/courses/cms/course_detail.html:357
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:32
 msgid "What are the organizations publishing this course?"
 msgstr "¿Cuáles son las organizaciones que publican este curso?"
 
-#: apps/courses/templates/courses/cms/course_detail.html:374
+#: apps/courses/templates/courses/cms/course_detail.html:377
 #: apps/courses/templates/courses/cms/course_run_detail.html:230
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:44
 msgid "License"
 msgstr "Licencia"
 
-#: apps/courses/templates/courses/cms/course_detail.html:380
+#: apps/courses/templates/courses/cms/course_detail.html:383
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:50
 msgid "What is the license for the course content?"
 msgstr "¿Cuál es la licencia para el contenido del curso?"
 
-#: apps/courses/templates/courses/cms/course_detail.html:389
+#: apps/courses/templates/courses/cms/course_detail.html:392
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:59
 msgid "What is the license for the content created by course participants?"
 msgstr "¿Cuál es la licencia para el contenido creado por los participantes del curso?"
@@ -1138,7 +1154,7 @@ msgstr "El curso termina"
 
 #: apps/courses/templates/courses/cms/course_run_detail.html:91
 #: apps/courses/templates/courses/cms/fragment_course_run.html:12
-#: apps/search/defaults.py:58
+#: apps/search/defaults.py:63
 msgid "Languages"
 msgstr "Idiomas"
 
@@ -1162,18 +1178,13 @@ msgid "%(title)s, from %(start)s to %(end)s"
 msgstr "%(title)s, de %(start)s a %(end)s"
 
 #: apps/courses/templates/courses/cms/fragment_organization_main_logo.html:8
-#: apps/courses/templates/courses/cms/fragment_organization_main_logo.html:30
+#: apps/courses/templates/courses/cms/fragment_organization_main_logo.html:29
 msgid "Main organization"
 msgstr "Organización principal"
 
 #: apps/courses/templates/courses/cms/fragment_organization_main_logo.html:20
 msgid "main organization logo"
 msgstr "logo principal de la organización"
-
-#: apps/courses/templates/courses/cms/fragment_organization_main_logo.html:23
-#, python-format
-msgid "Suggested by %(name)s"
-msgstr ""
 
 #: apps/courses/templates/courses/cms/organization_detail.html:30
 msgid "organization banner"
@@ -1203,18 +1214,18 @@ msgstr "Introduzca su biografía aquí..."
 msgid "%(title)s avatar"
 msgstr "%(title)s avatar"
 
-#: apps/courses/templates/courses/cms/person_detail.html:86
+#: apps/courses/templates/courses/cms/person_detail.html:92
 msgid "No associated organizations"
 msgstr "No hay organizaciones asociadas"
 
-#: apps/courses/templates/courses/cms/person_detail.html:110
+#: apps/courses/templates/courses/cms/person_detail.html:116
 #, python-format
 msgid "\n"
 "                                    See all courses related to %(person_title)s\n"
 "                                "
 msgstr ""
 
-#: apps/courses/templates/courses/cms/person_detail.html:128
+#: apps/courses/templates/courses/cms/person_detail.html:134
 msgid "Blogposts"
 msgstr ""
 
@@ -1234,27 +1245,27 @@ msgstr "No hay programas asociados"
 msgid "Regenerate search index..."
 msgstr "Regenerar índice de búsqueda..."
 
-#: apps/search/defaults.py:33
+#: apps/search/defaults.py:38
 msgid "New courses"
 msgstr "Nuevos cursos"
 
-#: apps/search/defaults.py:37
+#: apps/search/defaults.py:42
 msgid "First session"
 msgstr "Primera sesión"
 
-#: apps/search/defaults.py:48
+#: apps/search/defaults.py:53
 msgid "Availability"
 msgstr "Disponibilidad"
 
-#: apps/search/defaults.py:73
+#: apps/search/defaults.py:78
 msgid "Subjects"
 msgstr "Temas"
 
-#: apps/search/defaults.py:86
+#: apps/search/defaults.py:91
 msgid "Levels"
 msgstr "Niveles"
 
-#: apps/search/defaults.py:111
+#: apps/search/defaults.py:116
 msgid "Persons"
 msgstr "Personas"
 
@@ -1290,23 +1301,27 @@ msgstr ""
 msgid "Link settings"
 msgstr ""
 
-#: plugins/glimpse/defaults.py:12
+#: plugins/glimpse/defaults.py:19
 msgid "Square card"
 msgstr ""
 
-#: plugins/glimpse/defaults.py:13
+#: plugins/glimpse/defaults.py:20
 msgid "Half row"
 msgstr ""
 
-#: plugins/glimpse/defaults.py:14
+#: plugins/glimpse/defaults.py:21
 msgid "Full row"
+msgstr ""
+
+#: plugins/glimpse/defaults.py:22
+msgid "Quote"
 msgstr ""
 
 #: plugins/glimpse/models.py:22 plugins/nesteditem/models.py:20
 msgid "Variant"
 msgstr ""
 
-#: plugins/glimpse/models.py:28 plugins/nesteditem/models.py:26
+#: plugins/glimpse/models.py:28 plugins/nesteditem/models.py:24
 msgid "Form factor variant"
 msgstr ""
 
@@ -1411,28 +1426,24 @@ msgstr "Plantilla"
 msgid "Choose template to render plugin."
 msgstr ""
 
-#: plugins/large_banner/templates/richie/large_banner/hero-intro.html:19
+#: plugins/large_banner/templates/richie/large_banner/hero-intro.html:17
 msgid "Search in our courses"
 msgstr ""
 
-#: plugins/large_banner/templates/richie/large_banner/hero-intro.html:26
+#: plugins/large_banner/templates/richie/large_banner/hero-intro.html:24
 msgid "Explore our catalog"
 msgstr ""
 
-#: plugins/nesteditem/cms_plugins.py:23
+#: plugins/nesteditem/cms_plugins.py:24
 msgid "Nested item"
 msgstr ""
 
-#: plugins/nesteditem/defaults.py:13
-msgid "Accordion"
-msgstr ""
-
-#: plugins/nesteditem/defaults.py:14
+#: plugins/nesteditem/defaults.py:12
 msgid "List"
 msgstr ""
 
-#: plugins/nesteditem/templates/richie/nesteditem/nesteditem.html:40
-msgid "Accordion item need a content"
+#: plugins/nesteditem/defaults.py:12
+msgid "Accordion"
 msgstr ""
 
 #: plugins/plain_text/cms_plugins.py:29
@@ -1472,6 +1483,10 @@ msgid "Senary scheme"
 msgstr ""
 
 #: plugins/section/defaults.py:18
+msgid "Septenary scheme"
+msgstr ""
+
+#: plugins/section/defaults.py:19
 msgid "Item tiles"
 msgstr ""
 
