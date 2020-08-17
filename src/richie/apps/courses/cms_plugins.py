@@ -32,7 +32,7 @@ class OrganizationPlugin(CMSPluginBase):
     fieldsets = ((None, {"fields": ["page", "variant"]}),)
     model = OrganizationPluginModel
     module = PLUGINS_GROUP
-    name = _("Org")
+    name = _("Organization")
     render_template = "courses/plugins/organization.html"
 
     def render(self, context, instance, placeholder):
@@ -57,7 +57,7 @@ class OrganizationsByCategoryPlugin(CMSPluginBase):
     cache = True
     model = OrganizationsByCategoryPluginModel
     module = PLUGINS_GROUP
-    name = _("Org by Category")
+    name = _("Organization by Category")
     render_template = "courses/plugins/organizations_by_category.html"
 
     def render(self, context, instance, placeholder):
@@ -86,7 +86,7 @@ class CategoryPlugin(CMSPluginBase):
     fieldsets = ((None, {"fields": ["page", "variant"]}),)
     model = CategoryPluginModel
     module = PLUGINS_GROUP
-    name = _("Cat")
+    name = _("Category")
     render_template = "courses/plugins/category_plugin.html"
 
     def render(self, context, instance, placeholder):
@@ -205,7 +205,7 @@ class ProgramPlugin(CMSPluginBase):
     cache = True
     model = ProgramPluginModel
     module = PLUGINS_GROUP
-    name = _("Prog")
+    name = _("Program")
     render_template = "courses/plugins/program.html"
 
     def render(self, context, instance, placeholder):

@@ -15,6 +15,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add redis sentinel cache backend
 - Allow to configure cache and session settings with environment variables
 
+### Changed
+
+- Revert to long plugin names in side toolbar placeholder plugin list
+
 ### Fixed
 
 - Spinner component was broken due to missing styles.
