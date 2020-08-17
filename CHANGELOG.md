@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix typo in python dev dependencies
+
 ## [2.0.0-beta.10] - 2020-08-17
 
 ### Added
