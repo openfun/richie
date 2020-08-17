@@ -68,8 +68,9 @@ CMS_PLACEHOLDER_CONF = {
         "child_classes": {
             "SectionPlugin": [
                 "BlogPostPlugin",
-                "CoursePlugin",
                 "CategoryPlugin",
+                "CoursePlugin",
+                "GlimpsePlugin",
                 "LinkPlugin",
                 "OrganizationPlugin",
                 "OrganizationsByCategoryPlugin",
@@ -77,7 +78,6 @@ CMS_PLACEHOLDER_CONF = {
                 "CKEditorPlugin",
                 "SectionPlugin",
                 "NestedItemPlugin",
-                "GlimpsePlugin",
             ],
             "NestedItemPlugin": ["CategoryPlugin"],
         },
@@ -159,7 +159,9 @@ CMS_PLACEHOLDER_CONF = {
             "SimplePicturePlugin": ["SectionPlugin"],
             "GlimpsePlugin": ["SectionPlugin"],
         },
-        "child_classes": {"SectionPlugin": ["CKEditorPlugin", "SimplePicturePlugin"]},
+        "child_classes": {
+            "SectionPlugin": ["CKEditorPlugin", "SimplePicturePlugin", "GlimpsePlugin"]
+        },
     },
     "courses/cms/course_detail.html course_license_content": {
         "name": _("License for the course content"),
