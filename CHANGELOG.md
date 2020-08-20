@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Add translation context to course and course run detail page section titles
+
 ### Fixed
 
 - Reorder sections on the course run detail page to mirror course detail page

@@ -155,7 +155,7 @@
                 {% block skills %}
                     {% if not current_page.parent_page|is_empty_placeholder:"course_skills" %}
                     <div class="course-detail__skills course-detail__row course-detail__skills">
-                        <h2 class="course-detail__title">{% trans "What you will learn" %}</h2>
+                        <h2 class="course-detail__title">{% blocktrans context "course_detail__title" %}What you will learn{% endblocktrans %}</h2>
                         <p>{% trans "At the end of this course, you will be able to:" %}</p>
                         {% show_placeholder "course_skills" current_page.parent_page %}
                     </div>
@@ -165,7 +165,7 @@
                 {% block description %}
                     {% if not current_page.parent_page|is_empty_placeholder:"course_description" %}
                         <div class="course-detail__row course-detail__description">
-                            <h2 class="course-detail__title">{% trans "Description" %}</h2>
+                            <h2 class="course-detail__title">{% blocktrans context "course_detail__title" %}Description{% endblocktrans %}</h2>
                             {% show_placeholder "course_description" current_page.parent_page %}
                         </div>
                     {% endif %}
@@ -174,7 +174,7 @@
                 {% block format %}
                     {% if not current_page.parent_page|is_empty_placeholder:"course_format" %}
                         <section class="course-detail__row course-detail__format">
-                            <h2 class="course-detail__title">{% trans 'Format' %}</h2>
+                            <h2 class="course-detail__title">{% blocktrans context "course_detail__title" %}Format{% endblocktrans %}</h2>
                             {% show_placeholder "course_format" current_page.parent_page %}
                         </section>
                     {% endif %}
@@ -183,7 +183,7 @@
                 {% block prerequisites %}
                     {% if not current_page.parent_page|is_empty_placeholder:"course_prerequisites" %}
                         <section class="course-detail__prerequisites course-detail__row course-detail__prerequisites">
-                            <h2 class="course-detail__title">{% trans 'Prerequisites' %}</h2>
+                            <h2 class="course-detail__title">{% blocktrans context "course_detail__title" %}Prerequisites{% endblocktrans %}</h2>
                             {% show_placeholder "course_prerequisites" current_page.parent_page %}
                         </section>
                     {% endif %}
@@ -192,7 +192,7 @@
                 {% block assessment %}
                     {% if not current_page.parent_page|is_empty_placeholder:"course_assessment" %}
                     <section class="course-detail__row course-detail__assessment">
-                        <h2 class="course-detail__title">{% trans 'Assessment and certification' %}</h2>
+                        <h2 class="course-detail__title">{% blocktrans context "course_detail__title" %}Assessment and certification{% endblocktrans %}</h2>
                         {% show_placeholder "course_assessment" current_page.parent_page %}
                     </section>
                     {% endif %}
@@ -203,7 +203,7 @@
                 <div class="course-detail__block course-detail__secondary-group">
                     {% if not current_page.parent_page|is_empty_placeholder:"course_plan" %}
                     <section class="course-detail__row course-detail__plan">
-                        <h2 class="course-detail__title">{% trans 'Course plan' %}</h2>
+                        <h2 class="course-detail__title">{% blocktrans context "course_detail__title" %}Course plan{% endblocktrans %}</h2>
 
                         <div class="plan-accordion">
                             {% show_placeholder "course_plan" current_page.parent_page %}
@@ -222,7 +222,7 @@
             <div class="course-detail__team course-detail__block course-detail__block--lightest">
                 <section class="section course-detail__row course-detail__team">
                     <h2 class="course-detail__title">
-                        {% trans 'Course team' %}
+                        {% blocktrans context "course_detail__title" %}Course team{% endblocktrans %}
                     </h2>
                     {% with header_level=3 %}
                         <div class="section__items section__items--team">
@@ -239,7 +239,7 @@
             <div class="course-detail__organizations course-detail__block">
                 <section class="section course-detail__row course-detail__organizations">
                     <h2 class="course-detail__title">
-                        {% trans 'Organizations' %}
+                        {% blocktrans context "course_detail__title" %}Organizations{% endblocktrans %}
                     </h2>
                     <div class="section__items section__items--organizations">
                         {% show_placeholder "course_organizations" current_page.parent_page %}
@@ -261,7 +261,7 @@
         {% block licenses %}
             <div class="course-detail__license course-detail__block course-detail__block--divider">
                 <section class="course-detail__row">
-                    <h2 class="course-detail__title">{% trans 'License' %}</h2>
+                    <h2 class="course-detail__title">{% blocktrans context "course_detail__title" %}License{% endblocktrans %}</h2>
 
                     <div class="course-detail__item">
                         <h3 class="course-detail__label">{% trans 'License for the course content' %}</h3>
