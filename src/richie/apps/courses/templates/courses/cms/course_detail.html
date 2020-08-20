@@ -190,7 +190,7 @@
                     {% block skills %}
                         {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_skills" %}
                         <div class="course-detail__row course-detail__skills">
-                            <h2 class="course-detail__title">{% trans "What you will learn" %}</h2>
+                            <h2 class="course-detail__title">{% blocktrans context "course_detail__title" %}What you will learn{% endblocktrans %}</h2>
                             <p>{% trans "At the end of this course, you will be able to:" %}</p>
                             {% placeholder "course_skills" %}
                         </div>
@@ -200,7 +200,7 @@
                     {% block description %}
                         {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_description" %}
                         <div class="course-detail__row course-detail__description">
-                            <h2 class="course-detail__title">{% trans "Description" %}</h2>
+                            <h2 class="course-detail__title">{% blocktrans context "course_detail__title" %}Description{% endblocktrans %}</h2>
                             {% placeholder "course_description" %}
                         </div>
                         {% endif %}
@@ -209,7 +209,7 @@
                     {% block format %}
                         {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_format" %}
                             <section class="course-detail__row course-detail__format">
-                                <h2 class="course-detail__title">{% trans 'Format' %}</h2>
+                                <h2 class="course-detail__title">{% blocktrans context "course_detail__title" %}Format{% endblocktrans %}</h2>
                                 {% placeholder "course_format" or %}
                                 <p>{% trans 'How is the course structured?' %}</p>
                                 {% endplaceholder %}
@@ -220,7 +220,7 @@
                     {% block prerequisites %}
                         {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_prerequisites" %}
                             <section class="course-detail__prerequisites course-detail__row course-detail__prerequisites">
-                                <h2 class="course-detail__title">{% trans 'Prerequisites' %}</h2>
+                                <h2 class="course-detail__title">{% blocktrans context "course_detail__title" %}Prerequisites{% endblocktrans %}</h2>
                                 {% placeholder "course_prerequisites" or %}
                                     <p>{% trans 'What are the prerequisites to follow this course?' %}</p>
                                 {% endplaceholder %}
@@ -231,7 +231,7 @@
                     {% block assessment %}
                         {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_assessment" %}
                         <section class="course-detail__row course-detail__assessment">
-                            <h2 class="course-detail__title">{% trans 'Assessment and certification' %}</h2>
+                            <h2 class="course-detail__title">{% blocktrans context "course_detail__title" %}Assessment and certification{% endblocktrans %}</h2>
                             {% placeholder "course_assessment" or %}
                                 <p class="course-detail__assessment__placeholder">
                                     {% trans "How is progress evaluated and/or certified?" %}
@@ -246,7 +246,7 @@
                     <div class="course-detail__block course-detail__secondary-group">
                         {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_plan" %}
                         <section class="course-detail__row course-detail__plan">
-                            <h2 class="course-detail__title">{% trans 'Course plan' %}</h2>
+                            <h2 class="course-detail__title">{% blocktrans context "course_detail__title" %}Course plan{% endblocktrans %}</h2>
 
                             {% placeholder "course_plan" or %}
                                 <p class="course-detail__empty">{% trans 'Enter here the detailed course plan.' %}</p>
@@ -263,7 +263,7 @@
                     {% with runs_dict=course.get_course_runs_dict %}
                         {% block runs_open %}
                             <div class="course-detail__row course-detail__runs course-detail__runs--open">
-                                <h2 class="course-detail__title">{% trans 'Course runs' %}</h2>
+                                <h2 class="course-detail__title">{% blocktrans context "course_detail__title" %}Course runs{% endblocktrans %}</h2>
                                 {% for run in runs_dict.0|add:runs_dict.1 %}
                                     {% include "courses/cms/fragment_course_run.html" %}
                                 {% empty %}
@@ -330,7 +330,7 @@
             <div class="course-detail__team course-detail__block course-detail__block--lightest">
                 <section class="section course-detail__row course-detail__team">
                     <h2 class="course-detail__title">
-                        {% trans 'Course team' %}
+                        {% blocktrans context "course_detail__title" %}Course team{% endblocktrans %}
                     </h2>
                     {% with header_level=3 %}
                         <div class="section__items section__items--team">
@@ -349,7 +349,7 @@
             <div class="course-detail__organizations course-detail__block">
                 <section class="section course-detail__row course-detail__organizations">
                     <h2 class="course-detail__title">
-                        {% trans 'Organizations' %}
+                        {% blocktrans context "course_detail__title" %}Organizations{% endblocktrans %}
                     </h2>
                     <div class="section__items section__items--organizations">
                         {% placeholder "course_organizations" or %}
@@ -374,7 +374,7 @@
         {% block licenses %}
             <div class="course-detail__license course-detail__block course-detail__block--divider">
                 <section class="course-detail__row">
-                    <h2 class="course-detail__title">{% trans 'License' %}</h2>
+                    <h2 class="course-detail__title">{% blocktrans context "course_detail__title" %}License{% endblocktrans %}</h2>
 
                     <div class="course-detail__item">
                         <h3 class="course-detail__label">{% trans 'License for the course content' %}</h3>

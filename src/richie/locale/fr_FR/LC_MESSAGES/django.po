@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-17 13:18+0000\n"
+"POT-Creation-Date: 2020-08-20 19:27+0200\n"
 "PO-Revision-Date: 2020-08-17 14:23\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
@@ -48,7 +48,8 @@ msgstr "Définir un effort"
 
 #: apps/core/fields/effort.py:244
 msgid "An effort should be a triplet: number, time unit and reference unit."
-msgstr "Un effort doit être un triplet: numéro / unité de temps / unité de référence."
+msgstr ""
+"Un effort doit être un triplet: numéro / unité de temps / unité de référence."
 
 #: apps/core/fields/effort.py:257
 msgid "An effort should be a round number of time units."
@@ -60,7 +61,9 @@ msgstr "Un effort doit être positif."
 
 #: apps/core/fields/effort.py:286
 msgid "The effort time unit should be shorter than the reference unit."
-msgstr "L'unité de temps d'effort doit être plus courte que l'unité de temps de référence."
+msgstr ""
+"L'unité de temps d'effort doit être plus courte que l'unité de temps de "
+"référence."
 
 #: apps/core/fields/multiselect.py:27
 msgid "{:s} and {:s}"
@@ -88,8 +91,12 @@ msgstr[0] "La valeur %(value)s n'est pas un choix valide."
 msgstr[1] "Les valeurs %(value)s ne sont pas des choix valides."
 
 #: apps/core/fields/multiselect.py:133
-msgid "Storing {:d} choices could require storing a CharField of up to {:d} characters. Please reduce 'max_choices' or increase 'max_length'."
-msgstr "L'enregistrement de {:d} choix nécessite l'enregistrement d'un CharField de {:d} caractères. Veuillez réduire 'max_choices' ou augmenter 'max_length'."
+msgid ""
+"Storing {:d} choices could require storing a CharField of up to {:d} "
+"characters. Please reduce 'max_choices' or increase 'max_length'."
+msgstr ""
+"L'enregistrement de {:d} choix nécessite l'enregistrement d'un CharField de "
+"{:d} caractères. Veuillez réduire 'max_choices' ou augmenter 'max_length'."
 
 #: apps/core/templates/djangocms_video/default/video_player.html:22
 msgid "Your browser doesn't support this video format."
@@ -285,8 +292,12 @@ msgid "Snapshot this page..."
 msgstr "Capture instantanée de cette page..."
 
 #: apps/courses/cms_toolbars.py:109
-msgid "This will place a copy of this page as its child and move all its courseruns as children of its new copy."
-msgstr "Ceci copie la page vers une page enfant et les sessions de cours actuelles deviennent des enfants de cette copie."
+msgid ""
+"This will place a copy of this page as its child and move all its courseruns "
+"as children of its new copy."
+msgstr ""
+"Ceci copie la page vers une page enfant et les sessions de cours actuelles "
+"deviennent des enfants de cette copie."
 
 #: apps/courses/cms_wizards.py:58
 msgid "New page"
@@ -321,8 +332,14 @@ msgid "Slug of the page in current language"
 msgstr "Chemin de la page dans la langue actuelle"
 
 #: apps/courses/cms_wizards.py:119
-msgid "This slug is too long. The length of the path built by prepending the slug of the parent page would be {:d} characters long and it should be less than 255"
-msgstr "Ce chemin est trop long. Le lien construit en faisant précéder ce chemin par le lien de la page parente serait trop long de {:d} caractères et devrait être de moins de 255 caractères"
+msgid ""
+"This slug is too long. The length of the path built by prepending the slug "
+"of the parent page would be {:d} characters long and it should be less than "
+"255"
+msgstr ""
+"Ce chemin est trop long. Le lien construit en faisant précéder ce chemin par "
+"le lien de la page parente serait trop long de {:d} caractères et devrait "
+"être de moins de 255 caractères"
 
 #: apps/courses/cms_wizards.py:132
 msgid "This slug is already in use"
@@ -330,8 +347,11 @@ msgstr "Ce chemin est déjà utilisé"
 
 #: apps/courses/cms_wizards.py:150
 #, python-brace-format
-msgid "You must first create a parent page and set its `reverse_id` to `{reverse}`."
-msgstr "Vous devez d’abord créer une page parente dont le 'reverse_id' est la valeur '{reverse} '."
+msgid ""
+"You must first create a parent page and set its `reverse_id` to `{reverse}`."
+msgstr ""
+"Vous devez d’abord créer une page parente dont le 'reverse_id' est la valeur "
+"'{reverse} '."
 
 #: apps/courses/cms_wizards.py:261
 msgid "New course page"
@@ -346,8 +366,13 @@ msgid "Snapshot the course"
 msgstr "Capture instantanée de ce cours"
 
 #: apps/courses/cms_wizards.py:279
-msgid "Tick this box if you want to snapshot the current version of the course and link the new course run to a new version of the course."
-msgstr "Cocher cette case si vous voulez faire une capture instantanée de la version actuelle du cours et attacher la nouvelle session de cours à une nouvelle version du cours."
+msgid ""
+"Tick this box if you want to snapshot the current version of the course and "
+"link the new course run to a new version of the course."
+msgstr ""
+"Cocher cette case si vous voulez faire une capture instantanée de la version "
+"actuelle du cours et attacher la nouvelle session de cours à une nouvelle "
+"version du cours."
 
 #: apps/courses/cms_wizards.py:396
 msgid "New course run page"
@@ -479,11 +504,14 @@ msgstr "mois"
 
 #: apps/courses/helpers.py:33
 msgid "You can't snapshot a snapshot."
-msgstr "Vous ne pouvez pas faire une capture instantanée d'une capture instantanée."
+msgstr ""
+"Vous ne pouvez pas faire une capture instantanée d'une capture instantanée."
 
 #: apps/courses/helpers.py:46
 msgid "You don't have sufficient permissions to snapshot this page."
-msgstr "Vous n'avez pas les permissions suffisantes pour faire une capture instantanée de cette page."
+msgstr ""
+"Vous n'avez pas les permissions suffisantes pour faire une capture "
+"instantanée de cette page."
 
 #: apps/courses/helpers.py:62
 msgid "Snapshot of {:s}"
@@ -554,7 +582,7 @@ msgid "course"
 msgstr "cours"
 
 #: apps/courses/models/course.py:452
-#: apps/courses/templates/courses/cms/course_run_detail.html:107
+#: apps/courses/templates/courses/cms/course_run_detail.html:131
 msgid "Resource link"
 msgstr "Lien de la ressource"
 
@@ -655,8 +683,12 @@ msgid "role"
 msgstr "rôle"
 
 #: apps/courses/models/role.py:22
-msgid "A role describes all the permissions that should be granted to the user group."
-msgstr "Un rôle décrit toutes les permissions qui doivent être accordées au groupe d'utilisateurs."
+msgid ""
+"A role describes all the permissions that should be granted to the user "
+"group."
+msgstr ""
+"Un rôle décrit toutes les permissions qui doivent être accordées au groupe "
+"d'utilisateurs."
 
 #: apps/courses/models/role.py:29
 msgid "page"
@@ -791,20 +823,14 @@ msgid "About the course"
 msgstr "À propos du cours"
 
 #: apps/courses/settings/__init__.py:134
-#: apps/courses/templates/courses/cms/course_detail.html:193
-#: apps/courses/templates/courses/cms/course_run_detail.html:134
 msgid "What you will learn"
 msgstr "Ce que vous allez apprendre"
 
 #: apps/courses/settings/__init__.py:138
-#: apps/courses/templates/courses/cms/course_detail.html:212
-#: apps/courses/templates/courses/cms/course_run_detail.html:144
 msgid "Format"
 msgstr "Format"
 
 #: apps/courses/settings/__init__.py:142
-#: apps/courses/templates/courses/cms/course_detail.html:223
-#: apps/courses/templates/courses/cms/course_run_detail.html:153
 msgid "Prerequisites"
 msgstr "Prérequis"
 
@@ -822,14 +848,14 @@ msgstr "Informations complémentaires"
 
 #: apps/courses/settings/__init__.py:167
 #: apps/courses/templates/courses/cms/course_detail.html:380
-#: apps/courses/templates/courses/cms/course_run_detail.html:233
+#: apps/courses/templates/courses/cms/course_run_detail.html:267
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:47
 msgid "License for the course content"
 msgstr "Licence pour le contenu du cours"
 
 #: apps/courses/settings/__init__.py:172
 #: apps/courses/templates/courses/cms/course_detail.html:389
-#: apps/courses/templates/courses/cms/course_run_detail.html:240
+#: apps/courses/templates/courses/cms/course_run_detail.html:274
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:56
 msgid "License for the content created by course participants"
 msgstr "Licence pour le contenu créé par les participants du cours"
@@ -844,8 +870,6 @@ msgid "Icon"
 msgstr "Icône"
 
 #: apps/courses/settings/__init__.py:186 apps/courses/settings/__init__.py:255
-#: apps/courses/templates/courses/cms/course_detail.html:352
-#: apps/courses/templates/courses/cms/course_run_detail.html:217
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:27
 #: apps/courses/templates/courses/cms/person_detail.html:89
 #: apps/search/defaults.py:104
@@ -872,7 +896,6 @@ msgid "Logo"
 msgstr "Logo"
 
 #: apps/courses/settings/__init__.py:209 apps/courses/settings/__init__.py:230
-#: apps/courses/templates/courses/cms/course_detail.html:203
 #: apps/courses/templates/courses/cms/fragment_organization_glimpse.html:31
 msgid "Description"
 msgstr "Description"
@@ -974,11 +997,15 @@ msgstr "Cours associés"
 
 #: apps/courses/templates/courses/cms/category_detail.html:110
 #, python-format
-msgid "\n"
-"                                    See all courses related to %(category_title)s\n"
+msgid ""
+"\n"
+"                                    See all courses related to "
+"%(category_title)s\n"
 "                                  "
-msgstr "\n"
-"                                    Voir tous les cours liés à %(category_title)s\n"
+msgstr ""
+"\n"
+"                                    Voir tous les cours liés à "
+"%(category_title)s\n"
 "                                  "
 
 #: apps/courses/templates/courses/cms/category_detail.html:116
@@ -1017,19 +1044,23 @@ msgid "Enter here a introduction of your course."
 msgstr "Saisissez ici une courte description du cours."
 
 #: apps/courses/templates/courses/cms/course_detail.html:85
+#: apps/courses/templates/courses/cms/course_run_detail.html:77
 msgid "Duration:"
 msgstr "Durée :"
 
 #: apps/courses/templates/courses/cms/course_detail.html:93
+#: apps/courses/templates/courses/cms/course_run_detail.html:85
 msgid "Effort:"
 msgstr "Effort :"
 
 #: apps/courses/templates/courses/cms/course_detail.html:154
 #, python-format
-msgid "\n"
+msgid ""
+"\n"
 "                        Archived on %(creation_date)s\n"
 "                    "
-msgstr "\n"
+msgstr ""
+"\n"
 "              Archivé le %(creation_date)s\n"
 "                    "
 
@@ -1049,21 +1080,46 @@ msgstr "Ajouter une image pour la couverture du cours sur son aperçu."
 msgid "course cover image"
 msgstr "image de couverture du cours"
 
+#: apps/courses/templates/courses/cms/course_detail.html:193
+#: apps/courses/templates/courses/cms/course_run_detail.html:158
+msgctxt "course_detail__title"
+msgid "What you will learn"
+msgstr "Ce que vous allez apprendre"
+
 #: apps/courses/templates/courses/cms/course_detail.html:194
-#: apps/courses/templates/courses/cms/course_run_detail.html:135
+#: apps/courses/templates/courses/cms/course_run_detail.html:159
 msgid "At the end of this course, you will be able to:"
 msgstr "À la fin de ce cours, vous serez capable de :"
+
+#: apps/courses/templates/courses/cms/course_detail.html:203
+#: apps/courses/templates/courses/cms/course_run_detail.html:168
+msgctxt "course_detail__title"
+msgid "Description"
+msgstr "Description"
+
+#: apps/courses/templates/courses/cms/course_detail.html:212
+#: apps/courses/templates/courses/cms/course_run_detail.html:177
+msgctxt "course_detail__title"
+msgid "Format"
+msgstr "Format"
 
 #: apps/courses/templates/courses/cms/course_detail.html:214
 msgid "How is the course structured?"
 msgstr "Quelle est la structure du cours ?"
+
+#: apps/courses/templates/courses/cms/course_detail.html:223
+#: apps/courses/templates/courses/cms/course_run_detail.html:186
+msgctxt "course_detail__title"
+msgid "Prerequisites"
+msgstr "Prérequis"
 
 #: apps/courses/templates/courses/cms/course_detail.html:225
 msgid "What are the prerequisites to follow this course?"
 msgstr "Quels sont les prérequis pour suivre ce cours ?"
 
 #: apps/courses/templates/courses/cms/course_detail.html:234
-#: apps/courses/templates/courses/cms/course_run_detail.html:162
+#: apps/courses/templates/courses/cms/course_run_detail.html:195
+msgctxt "course_detail__title"
 msgid "Assessment and certification"
 msgstr "Evaluation et Certification"
 
@@ -1072,7 +1128,8 @@ msgid "How is progress evaluated and/or certified?"
 msgstr "Comment les étudiants sont ils évalués et/ou certifiés ?"
 
 #: apps/courses/templates/courses/cms/course_detail.html:249
-#: apps/courses/templates/courses/cms/course_run_detail.html:181
+#: apps/courses/templates/courses/cms/course_run_detail.html:206
+msgctxt "course_detail__title"
 msgid "Course plan"
 msgstr "Plan de cours"
 
@@ -1081,6 +1138,7 @@ msgid "Enter here the detailed course plan."
 msgstr "Détaillez ici le plan du cours."
 
 #: apps/courses/templates/courses/cms/course_detail.html:266
+msgctxt "course_detail__title"
 msgid "Course runs"
 msgstr "Sessions de cours"
 
@@ -1109,8 +1167,8 @@ msgid "Archived"
 msgstr "Archivées"
 
 #: apps/courses/templates/courses/cms/course_detail.html:333
-#: apps/courses/templates/courses/cms/course_run_detail.html:200
-#: apps/courses/templates/courses/cms/fragment_course_relations.html:8
+#: apps/courses/templates/courses/cms/course_run_detail.html:225
+msgctxt "course_detail__title"
 msgid "Course team"
 msgstr "Équipe pédagogique"
 
@@ -1119,14 +1177,20 @@ msgstr "Équipe pédagogique"
 msgid "Who are the teachers in the course team?"
 msgstr "Qui sont les enseignants de l’équipe pédagogique ?"
 
+#: apps/courses/templates/courses/cms/course_detail.html:352
+#: apps/courses/templates/courses/cms/course_run_detail.html:242
+msgctxt "course_detail__title"
+msgid "Organizations"
+msgstr "Établissements"
+
 #: apps/courses/templates/courses/cms/course_detail.html:357
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:32
 msgid "What are the organizations publishing this course?"
 msgstr "Qui sont les établissements publiant ce cours ?"
 
 #: apps/courses/templates/courses/cms/course_detail.html:377
-#: apps/courses/templates/courses/cms/course_run_detail.html:230
-#: apps/courses/templates/courses/cms/fragment_course_relations.html:44
+#: apps/courses/templates/courses/cms/course_run_detail.html:264
+msgctxt "course_detail__title"
 msgid "License"
 msgstr "Licence"
 
@@ -1138,29 +1202,38 @@ msgstr "Quelle est la licence pour le contenu du cours ?"
 #: apps/courses/templates/courses/cms/course_detail.html:392
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:59
 msgid "What is the license for the content created by course participants?"
-msgstr "Quelle est la licence pour le contenu créé par les participants du cours ?"
+msgstr ""
+"Quelle est la licence pour le contenu créé par les participants du cours ?"
 
-#: apps/courses/templates/courses/cms/course_run_detail.html:75
+#: apps/courses/templates/courses/cms/course_run_detail.html:99
 msgid "Enrollment starts"
 msgstr "Début des inscriptions"
 
-#: apps/courses/templates/courses/cms/course_run_detail.html:79
+#: apps/courses/templates/courses/cms/course_run_detail.html:103
 msgid "Enrollment ends"
 msgstr "Fin des inscriptions"
 
-#: apps/courses/templates/courses/cms/course_run_detail.html:83
+#: apps/courses/templates/courses/cms/course_run_detail.html:107
 msgid "Course starts"
 msgstr "Début du cours"
 
-#: apps/courses/templates/courses/cms/course_run_detail.html:87
+#: apps/courses/templates/courses/cms/course_run_detail.html:111
 msgid "Course ends"
 msgstr "Fin du cours"
 
-#: apps/courses/templates/courses/cms/course_run_detail.html:91
+#: apps/courses/templates/courses/cms/course_run_detail.html:115
 #: apps/courses/templates/courses/cms/fragment_course_run.html:12
 #: apps/search/defaults.py:63
 msgid "Languages"
 msgstr "Langues"
+
+#: apps/courses/templates/courses/cms/fragment_course_relations.html:8
+msgid "Course team"
+msgstr "Équipe pédagogique"
+
+#: apps/courses/templates/courses/cms/fragment_course_relations.html:44
+msgid "License"
+msgstr "Licence"
 
 #: apps/courses/templates/courses/cms/fragment_course_run.html:4
 msgid "Enrollment"
@@ -1200,11 +1273,15 @@ msgstr "logo d'établissement"
 
 #: apps/courses/templates/courses/cms/organization_detail.html:94
 #, python-format
-msgid "\n"
-"                                    See all courses related to %(organization_title)s\n"
+msgid ""
+"\n"
+"                                    See all courses related to "
+"%(organization_title)s\n"
 "                                "
-msgstr "\n"
-"                                    Voir tous les cours liés à %(organization_title)s\n"
+msgstr ""
+"\n"
+"                                    Voir tous les cours liés à "
+"%(organization_title)s\n"
 "                                "
 
 #: apps/courses/templates/courses/cms/organization_list.html:19
@@ -1226,11 +1303,15 @@ msgstr "Aucun établissement associé"
 
 #: apps/courses/templates/courses/cms/person_detail.html:116
 #, python-format
-msgid "\n"
-"                                    See all courses related to %(person_title)s\n"
+msgid ""
+"\n"
+"                                    See all courses related to "
+"%(person_title)s\n"
 "                                "
-msgstr "\n"
-"                                    Voir tous les cours liés à %(person_title)s\n"
+msgstr ""
+"\n"
+"                                    Voir tous les cours liés à "
+"%(person_title)s\n"
 "                                "
 
 #: apps/courses/templates/courses/cms/person_detail.html:134
@@ -1363,8 +1444,12 @@ msgid "HTML Sitemap"
 msgstr "Plan de site HTML"
 
 #: plugins/html_sitemap/cms_plugins.py:72
-msgid "Press save to create a site map. You will then be able to add a child plugin for each subtree in your sitemap."
-msgstr "Appuyez sur \"Enregistrer\" pour créer un plan de site. Vous pourrez ensuite ajouter un plugin enfant pour chaque sous-arbre de votre plan de site."
+msgid ""
+"Press save to create a site map. You will then be able to add a child plugin "
+"for each subtree in your sitemap."
+msgstr ""
+"Appuyez sur \"Enregistrer\" pour créer un plan de site. Vous pourrez ensuite "
+"ajouter un plugin enfant pour chaque sous-arbre de votre plan de site."
 
 #: plugins/html_sitemap/cms_plugins.py:82
 msgid "HTML sitemap page"
@@ -1375,32 +1460,46 @@ msgid "root page"
 msgstr "page racine"
 
 #: plugins/html_sitemap/models.py:27
-msgid "This page will be at the root of your sitemap (or its children if the \"include root page\" flag is unticked)."
-msgstr "Cette page sera à la racine de votre plan de site (ou ses enfants au lieu d'elle si la case \"inclure la page racine\" n'est pas sélectionnée)."
+msgid ""
+"This page will be at the root of your sitemap (or its children if the "
+"\"include root page\" flag is unticked)."
+msgstr ""
+"Cette page sera à la racine de votre plan de site (ou ses enfants au lieu "
+"d'elle si la case \"inclure la page racine\" n'est pas sélectionnée)."
 
 #: plugins/html_sitemap/models.py:34
 msgid "max depth"
 msgstr "profondeur maximale"
 
 #: plugins/html_sitemap/models.py:36
-msgid "Limit the level of nesting that your sitemap will contain below this page. An empty field or 0 equals to no limit."
-msgstr "Limitez la profondeur de votre plan de site sous cette page. Un champ vide ou égal à 0 correspond à une profondeur illimitée."
+msgid ""
+"Limit the level of nesting that your sitemap will contain below this page. "
+"An empty field or 0 equals to no limit."
+msgstr ""
+"Limitez la profondeur de votre plan de site sous cette page. Un champ vide "
+"ou égal à 0 correspond à une profondeur illimitée."
 
 #: plugins/html_sitemap/models.py:44
 msgid "in navigation"
 msgstr "dans le menu"
 
 #: plugins/html_sitemap/models.py:46
-msgid "Tick to exclude from sitemap the pages that are excluded from navigation."
-msgstr "Sélectionner pour exclure du plan de site les pages qui sont exclues du menu."
+msgid ""
+"Tick to exclude from sitemap the pages that are excluded from navigation."
+msgstr ""
+"Sélectionner pour exclure du plan de site les pages qui sont exclues du menu."
 
 #: plugins/html_sitemap/models.py:51
 msgid "include root page"
 msgstr "inclure la page racine"
 
 #: plugins/html_sitemap/models.py:53
-msgid "Tick to include the root page and its descendants. Untick to include only its descendants."
-msgstr "Sélectionner pour inclure la page racine et ses descendants. Ne pas sélectionner pour n'inclure que les descendants de la page racine."
+msgid ""
+"Tick to include the root page and its descendants. Untick to include only "
+"its descendants."
+msgstr ""
+"Sélectionner pour inclure la page racine et ses descendants. Ne pas "
+"sélectionner pour n'inclure que les descendants de la page racine."
 
 #: plugins/html_sitemap/models.py:60
 msgid "HTML Sitemaps"
@@ -1516,8 +1615,15 @@ msgstr "corps"
 
 #: plugins/simple_text_ckeditor/validators.py:16
 #, python-format
-msgid "Ensure this text has at most %(limit_value)d character (it has %(show_value)d)."
-msgid_plural "Ensure this text has at most %(limit_value)d characters (it has %(show_value)d)."
-msgstr[0] "Assurez-vous que ce texte a au maximum %(limit_value)d caractères (il en a %(show_value)d)."
-msgstr[1] "Assurez-vous que ce texte fait au maximum %(limit_value)d caractères (il en a %(show_value)d)."
-
+msgid ""
+"Ensure this text has at most %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this text has at most %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+"Assurez-vous que ce texte a au maximum %(limit_value)d caractères (il en a "
+"%(show_value)d)."
+msgstr[1] ""
+"Assurez-vous que ce texte fait au maximum %(limit_value)d caractères (il en "
+"a %(show_value)d)."
