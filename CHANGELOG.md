@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Reorder sections on the course run detail page to mirror course detail page
+
 ## [2.0.0-beta.11] - 2020-08-17
 
 ### Fixed

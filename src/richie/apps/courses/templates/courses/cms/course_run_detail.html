@@ -27,8 +27,7 @@
     {% endblock breadcrumbs %}
 
     {% block subheader_content %}{% spaceless %}
-        {% comment %}{% with course=current_page.parent_page course_run=current_page.course header_level=2 %}{% endcomment %}
-        {% with course=current_page.course course_run=current_page.courserun header_level=2 %}
+        {% with course=current_page.parent_page.course course_run=current_page.courserun header_level=2 %}
         <div class="subheader__container">
             <div class="subheader__intro">
                 <div class="subheader__main">
@@ -60,11 +59,37 @@
                     </div>
 
                     <div class="subheader__content subheader__content--aside">
-                        {% if current_page.parent_page.publisher_is_draft or not current_page.parent_page|is_empty_placeholder:"course_description" %}
+                        {% if current_page.parent_page.publisher_is_draft or not current_page.parent_page|is_empty_placeholder:"course_introduction" %}
                             {% with header_level=3 %}
-                            {% show_placeholder "course_description" current_page.parent_page %}
+                                {% show_placeholder "course_introduction" current_page.parent_page %}
                             {% endwith %}
                         {% endif %}
+
+                        {% block synopsis %}
+                        {% if course.duration or course.effort %}
+                        <div class="characteristics">
+                            <ul class="characteristics__container">
+                                {% if course.duration %}
+                                <li class="characteristics__item">
+                                    <svg role="img" class="characteristics__icon" aria-hidden="true">
+                                        <use xlink:href="#icon-clock" />
+                                    </svg>
+                                    <span class="characteristics__term">{% trans "Duration:" %} {{ course.get_duration_display|default:"NA" }}</span>
+                                </li>
+                                {% endif %}
+                                {% if course.effort %}
+                                <li class="characteristics__item">
+                                    <svg role="img" class="characteristics__icon" aria-hidden="true">
+                                        <use xlink:href="#icon-stopwatch" />
+                                    </svg>
+                                    <span class="characteristics__term">{% trans "Effort:" %} {{ course.get_effort_display|default:"NA" }}</span>
+                                </li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                        {% endblock synopsis %}
+
                     </div>
                 </div>
 
@@ -137,6 +162,15 @@
                     {% endif %}
                 {% endblock skills %}
 
+                {% block description %}
+                    {% if not current_page.parent_page|is_empty_placeholder:"course_description" %}
+                        <div class="course-detail__row course-detail__description">
+                            <h2 class="course-detail__title">{% trans "Description" %}</h2>
+                            {% show_placeholder "course_description" current_page.parent_page %}
+                        </div>
+                    {% endif %}
+                {% endblock description %}
+
                 {% block format %}
                     {% if not current_page.parent_page|is_empty_placeholder:"course_format" %}
                         <section class="course-detail__row course-detail__format">
@@ -163,14 +197,6 @@
                     </section>
                     {% endif %}
                 {% endblock assessment %}
-
-                {% block information %}
-                    {% if not current_page.parent_page|is_empty_placeholder:"course_information" %}
-                    <div class="course-detail__row course-detail__information">
-                        {% show_placeholder "course_information" current_page.parent_page %}
-                    </div>
-                    {% endif %}
-                {% endblock information %}
             </div>
 
             {% block plan %}
@@ -222,6 +248,15 @@
             </div>
             {% endif %}
         {% endblock organizations %}
+
+
+        {% block information %}
+            {% if not current_page.parent_page|is_empty_placeholder:"course_information" %}
+                <div class="course-detail__row course-detail__information">
+                    {% show_placeholder "course_information" current_page.parent_page %}
+                </div>
+            {% endif %}
+        {% endblock information %}
 
         {% block licenses %}
             <div class="course-detail__license course-detail__block course-detail__block--divider">
