@@ -39,14 +39,16 @@ class DatetimeRangeField(forms.Field):
         try:
             iso_start, iso_end = json.loads(value)
         # JSON parsing failed: blame the formatting
-        except json.JSONDecodeError:
-            raise ValidationError("Invalid JSON formatting")
+        except json.JSONDecodeError as error:
+            raise ValidationError("Invalid JSON formatting") from error
         # Unpacking failed: input was not a list of a least 2 values
-        except ValueError:
-            raise ValidationError("Empty datetimerange is invalid")
+        except ValueError as error:
+            raise ValidationError("Empty datetimerange is invalid") from error
         # Sanity check: don't throw a 500 when the param is entirely wrong
-        except TypeError:
-            raise ValidationError("Invalid parameter type: must be a JSON array")
+        except TypeError as error:
+            raise ValidationError(
+                "Invalid parameter type: must be a JSON array"
+            ) from error
 
         # Reject input that is made up of falsy values
         if not iso_start and not iso_end:
@@ -57,7 +59,7 @@ class DatetimeRangeField(forms.Field):
                 arrow.get(iso_datetime) if iso_datetime else None
                 for iso_datetime in (iso_start, iso_end)
             )
-        except arrow.parser.ParserError:
-            raise ValidationError("Invalid datetime format; use ISO 8601")
+        except arrow.parser.ParserError as error:
+            raise ValidationError("Invalid datetime format; use ISO 8601") from error
 
         return datetime_range

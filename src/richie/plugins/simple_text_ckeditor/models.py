@@ -26,7 +26,7 @@ class SimpleText(CMSPlugin):
         return Truncator(strip_tags(self.body)).words(6, truncate="...")
 
     def __init__(self, *args, **kwargs):
-        super(SimpleText, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.body = force_text(self.body)
 
     # pylint: disable=signature-differs
@@ -34,4 +34,4 @@ class SimpleText(CMSPlugin):
         # Clean HTML from potential XSS content
         self.body = clean_html(self.body, full=False)
 
-        super(SimpleText, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)

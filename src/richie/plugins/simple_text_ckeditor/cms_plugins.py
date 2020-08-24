@@ -75,6 +75,6 @@ class CKEditorPlugin(CMSPluginBase):
         """
         Build plugin context passed to its template to perform rendering
         """
-        context = super(CKEditorPlugin, self).render(context, instance, placeholder)
+        context = super().render(context, instance, placeholder)
         context.update({"instance": instance})
         return context

@@ -27,7 +27,7 @@ class SentinelClient(DefaultClient):
         Slightly different logic than connection to multiple Redis servers.
         Reserve only one write and one read descriptor, as they will be closed on exit anyway.
         """
-        super(SentinelClient, self).__init__(server, params, backend)
+        super().__init__(server, params, backend)
         self._client_write = None
         self._client_read = None
         (
@@ -48,8 +48,10 @@ class SentinelClient(DefaultClient):
             master_name, servers_string, database_name = connection_string.split("/")
             servers = [host_port.split(":") for host_port in servers_string.split(",")]
             sentinel_hosts = [(host, int(port)) for host, port in servers]
-        except (ValueError, TypeError, IndexError):
-            raise ImproperlyConfigured("Incorrect format '%s'" % (connection_string))
+        except (ValueError, TypeError, IndexError) as error:
+            raise ImproperlyConfigured(
+                "Incorrect format '%s'" % (connection_string)
+            ) from error
 
         return master_name, sentinel_hosts, database_name
 

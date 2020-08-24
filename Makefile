@@ -190,7 +190,7 @@ lint-back-flake8: ## lint back-end python sources with flake8
 
 lint-back-isort: ## automatically re-arrange python imports in back-end code base
 	@echo 'lint:isort started…'
-	@$(COMPOSE_TEST_RUN_APP) isort --recursive --atomic src/richie/apps src/richie/plugins sandbox tests
+	@$(COMPOSE_TEST_RUN_APP) isort --atomic src/richie/apps src/richie/plugins sandbox tests
 .PHONY: lint-back-isort
 
 lint-back-pylint: ## lint back-end python sources with pylint

@@ -57,6 +57,6 @@ class PlainTextPlugin(CMSPluginBase):
         """
         Build plugin context passed to its template to perform rendering
         """
-        context = super(PlainTextPlugin, self).render(context, instance, placeholder)
+        context = super().render(context, instance, placeholder)
         context["body"] = instance.body
         return context

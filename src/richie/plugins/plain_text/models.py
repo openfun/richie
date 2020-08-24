@@ -23,5 +23,5 @@ class PlainText(CMSPlugin):
         return Truncator(strip_tags(self.body)).words(6, truncate="...")
 
     def __init__(self, *args, **kwargs):
-        super(PlainText, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.body = force_text(self.body)

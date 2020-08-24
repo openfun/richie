@@ -168,10 +168,10 @@ class EffortField(models.CharField):
 
         try:
             duration, unit, reference = value.split("|")
-        except ValueError:
+        except ValueError as error:
             raise DataError(
                 "Value in database should be of the form '{duration:d}|{unit:s}|{reference:s}'"
-            )
+            ) from error
 
         if not duration:
             return None
@@ -189,10 +189,10 @@ class EffortField(models.CharField):
         if isinstance(value, str):
             try:
                 duration, unit, reference = value.split("|")
-            except ValueError:
+            except ValueError as error:
                 raise DataError(
                     "Value in database should be of the form '{duration:d}|{unit:s}|{reference:s}'"
-                )
+                ) from error
 
             return int(duration.strip()), unit.strip(), reference.strip()
 
@@ -252,11 +252,11 @@ class EffortField(models.CharField):
                 # Check that the duration is an integer
                 try:
                     duration = int(duration)
-                except ValueError:
+                except ValueError as error:
                     raise exceptions.ValidationError(
                         _("An effort should be a round number of time units."),
                         code="invalid_effort",
-                    )
+                    ) from error
 
                 # Check that the duration is positive
                 if duration <= 0:
