@@ -111,12 +111,12 @@ class EdXOIDC(OpenIdConnectAuth):
                 issuer=self.id_token_issuer(),
                 options=self.JWT_DECODE_OPTIONS,
             )
-        except ExpiredSignatureError:
-            raise AuthTokenError(self, "Signature has expired")
+        except ExpiredSignatureError as error:
+            raise AuthTokenError(self, "Signature has expired") from error
         except JWTClaimsError as error:
-            raise AuthTokenError(self, str(error))
-        except JWTError:
-            raise AuthTokenError(self, "Invalid signature")
+            raise AuthTokenError(self, str(error)) from error
+        except JWTError as error:
+            raise AuthTokenError(self, "Invalid signature") from error
 
         self.validate_claims(claims)
 

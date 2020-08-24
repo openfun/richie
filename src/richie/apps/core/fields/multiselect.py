@@ -51,7 +51,7 @@ class MultiSelectFormField(MultipleChoiceField):
         Set validators for the field's maximum number of choices.
         """
         self.max_choices = kwargs.pop("max_choices", None)
-        super(MultiSelectFormField, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
 
         if self.max_choices is not None:
             self.validators.append(MaxChoicesValidator(self.max_choices))
@@ -243,9 +243,7 @@ class MultiSelectField(models.CharField):
 
         We choose to display a sentence of the form: "French, English and German".
         """
-        super(MultiSelectField, self).contribute_to_class(
-            cls, name, private_only=private_only
-        )
+        super().contribute_to_class(cls, name, private_only=private_only)
         if self.choices:
             choicedict = dict(self.choices)
 

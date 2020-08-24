@@ -134,10 +134,10 @@ class CompositeDurationField(models.CharField):
 
         try:
             duration, unit = value.split("|")
-        except ValueError:
+        except ValueError as error:
             raise DataError(
                 "Value in database should be of the form '{duration:d}|{unit:s}'"
-            )
+            ) from error
 
         if not duration:
             return None
@@ -155,10 +155,10 @@ class CompositeDurationField(models.CharField):
         if isinstance(value, str):
             try:
                 duration, unit = value.split("|")
-            except ValueError:
+            except ValueError as error:
                 raise DataError(
                     "Value in database should be of the form '{duration:d}|{unit:s}'"
-                )
+                ) from error
 
             return int(duration.strip()), unit.strip()
 
@@ -216,13 +216,13 @@ class CompositeDurationField(models.CharField):
                 # Check that the duration is an integer
                 try:
                     duration = int(duration)
-                except ValueError:
+                except ValueError as error:
                     raise exceptions.ValidationError(
                         _(
                             "A composite duration should be a round number of time units."
                         ),
                         code="invalid_duration",
-                    )
+                    ) from error
 
                 # Check that the duration is positive
                 if duration <= 0:

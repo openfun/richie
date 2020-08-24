@@ -35,10 +35,10 @@ class ArrayField(forms.Field):
                     self.base_type.clean(base_type_value) for base_type_value in value
                 ]
             # Iteration over subvalues failed, the value was invalid
-            except TypeError:
+            except TypeError as error:
                 raise ValidationError(
                     "Failed to iterate over value, got a non-iterable type."
-                )
+                ) from error
         # We're missing a required value
         elif self.required:
             raise ValidationError("Missing required value.")

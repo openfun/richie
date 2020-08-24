@@ -142,7 +142,7 @@ class BaseWizardForm(BaseFormMixin, forms.Form):
             return Page.objects.get(
                 reverse_id=self.model.PAGE["reverse_id"], publisher_is_draft=True
             )
-        except Page.DoesNotExist:
+        except Page.DoesNotExist as error:
             raise forms.ValidationError(
                 {
                     "slug": [
@@ -152,7 +152,7 @@ class BaseWizardForm(BaseFormMixin, forms.Form):
                         )
                     ]
                 }
-            )
+            ) from error
 
     def save(self):
         """
@@ -187,8 +187,8 @@ class CourseWizardForm(BaseWizardForm):
 
         try:
             self.page.organization
-        except Organization.DoesNotExist:
-            raise PermissionDenied()
+        except Organization.DoesNotExist as error:
+            raise PermissionDenied() from error
 
         # The user should be allowed to modify this organization page
         if not user_can_change_page(self.user, self.page):
@@ -298,10 +298,10 @@ class CourseRunWizardForm(BaseWizardForm):
         """
         try:
             course = self.page.course
-        except Course.DoesNotExist:
+        except Course.DoesNotExist as error:
             raise forms.ValidationError(
                 "Course runs can only be created from a course page."
-            )
+            ) from error
         else:
             if course.extended_object.parent_page:
                 try:

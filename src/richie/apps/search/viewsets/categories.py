@@ -50,8 +50,8 @@ class CategoriesViewSet(ViewSet):
                 from_=offset,
                 size=limit or getattr(settings, "RICHIE_ES_PAGE_SIZE", ES_PAGE_SIZE),
             )
-        except NotFoundError:
-            raise NotFound
+        except NotFoundError as error:
+            raise NotFound from error
 
         # Format the response in a consumer-friendly way
         # NB: if there are 0 hits the query_response is formatted the exact same way, only the
@@ -87,8 +87,8 @@ class CategoriesViewSet(ViewSet):
                 doc_type=self._meta.indexer.document_type,
                 id=pk,
             )
-        except NotFoundError:
-            raise NotFound
+        except NotFoundError as error:
+            raise NotFound from error
 
         # Format a clean category object as a response
         return Response(

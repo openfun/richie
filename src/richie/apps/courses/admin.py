@@ -142,7 +142,7 @@ class PageRoleAdmin(admin.ModelAdmin):
     search_fields = ("id", "page__title_set__title")
 
     def get_fieldsets(self, request, obj=None):
-        fieldsets = super(PageRoleAdmin, self).get_fieldsets(request, obj)
+        fieldsets = super().get_fieldsets(request, obj)
         if not obj:
             fieldsets[0][1]["fields"] = ["role", "page"]
         return fieldsets
