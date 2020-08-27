@@ -15,6 +15,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Stop synchronizing user permission fields on oauth: `is_staff` and
+  `is_superuser`
 - Add default image for empty person portrait
 - Add default images for empty organization logo and banner
 - Add translation context to course and course run detail page section titles

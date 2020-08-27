@@ -27,8 +27,6 @@ EDX_USER_PROFILE_TO_DJANGO = {
     "family_name": "last_name",
     "locale": "language",
     "user_id": "user_id",
-    "administrator": "is_staff",
-    "superuser": "is_superuser",
 }
 
 
