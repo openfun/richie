@@ -449,7 +449,9 @@ class CourseRun(BasePageExtension):
     and an end date.
     """
 
-    resource_link = models.URLField(_("Resource link"), blank=True, null=True)
+    resource_link = models.CharField(
+        _("Resource link"), max_length=200, blank=True, null=True
+    )
     start = models.DateTimeField(_("course start"), blank=True, null=True)
     end = models.DateTimeField(_("course end"), blank=True, null=True)
     enrollment_start = models.DateTimeField(
