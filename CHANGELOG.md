@@ -21,6 +21,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Authentication urls should not be i18n
 - Reorder sections on the course run detail page to mirror course detail page
 
 ## [2.0.0-beta.11] - 2020-08-17

@@ -29,13 +29,13 @@ urlpatterns = [
         r"^api/{}/".format(API_PREFIX),
         include([*core_urlpatterns, *courses_urlpatterns, *search_urlpatterns]),
     ),
+    url(r"^oauth/", include("social_django.urls", namespace="social")),
     url(r"^", include("filer.server.urls")),
 ]
 
 urlpatterns += i18n_patterns(
     url(r"^admin/", admin.site.urls),
     url(r"^accounts/", include("django.contrib.auth.urls")),
-    url(r"^oauth/", include("social_django.urls", namespace="social")),
     url(
         r"^styleguide/$",
         TemplateView.as_view(
@@ -56,7 +56,7 @@ if settings.DEBUG:
                 r"^media/(?P<path>.*)$",
                 serve,
                 {"document_root": settings.MEDIA_ROOT, "show_indexes": True},
-            ),
+            )
         ]
         + staticfiles_urlpatterns()
         + urlpatterns
