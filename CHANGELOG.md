@@ -15,6 +15,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Allow any format for course run urls
 - Stop synchronizing user permission fields on oauth: `is_staff` and
   `is_superuser`
 - Add default image for empty person portrait
