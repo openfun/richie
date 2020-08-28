@@ -1,26 +1,24 @@
 {% load i18n menu_tags cms_tags %}{% spaceless %}
 {% get_current_language as current_language_code %}
 {% if languages|length > 1 %}
-    <ul class="languages-menu">
-        <li class="languages-menu__item languages-menu__item--label">{% trans "Language:" %}</li>
-        {% for code, name in languages %}
-        {% get_language_info for code as lang %}
-        {% if code == current_language_code %}
-            <li class="languages-menu__item languages-menu__item--{{ code }} languages-menu__item--active">
-                <a class="languages-menu__link" href="{% page_language_url code %}"
-                    title="{% blocktrans with code=lang.code|slice:":2" name=lang.name_translated %}{{ code }}, currently in {{ name }}{% endblocktrans %}">
-                    {{ lang.name }}
-                </a>
-            </li>
-        {% else %}
-            <li class="languages-menu__item languages-menu__item--{{ code }}">
-                <a class="languages-menu__link" href="{% page_language_url code %}"
-                    title="{% blocktrans with code=lang.code|slice:":2" name=lang.name_translated %}{{ code }}, switch to {{ name }}{% endblocktrans %}">
-                    {{ lang.name }}
-                </a>
-            </li>
-        {% endif %}
-        {% endfor %}
-    </ul>
+  <script data-language-selector type="application/json">
+  {
+    "currentLanguage": "{{ current_language_code }}",
+    "languages": {
+      {% for code, name in languages %}
+      "{{ code }}": {
+        "code": "{{ code }}",
+        "name": "{{ name }}",
+        "url": "{% page_language_url code %}"
+      {% if forloop.last %}
+      }
+      {% else %}
+      },
+      {% endif %}
+      {% endfor %}
+    }
+  }
+  </script>
+  <div class="richie-react richie-react--language-selector" data-props-source="[data-language-selector]"></div>
 {% endif %}
 {% endspaceless %}
