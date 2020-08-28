@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [2.0.0-beta.13] - 2020-08-27
+
 ### Added
 
 - Add a language picker menu to Richie's header & footer, powered by a new
@@ -969,7 +971,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.0.0-beta.12...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.0.0-beta.13...master
+[2.0.0-beta.13]: https://github.com/openfun/richie/compare/v2.0.0-beta.12...v2.0.0-beta.13
 [2.0.0-beta.12]: https://github.com/openfun/richie/compare/v2.0.0-beta.11...v2.0.0-beta.12
 [2.0.0-beta.11]: https://github.com/openfun/richie/compare/v2.0.0-beta.10...v2.0.0-beta.11
 [2.0.0-beta.10]: https://github.com/openfun/richie/compare/v2.0.0-beta.9...v2.0.0-beta.10

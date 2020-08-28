@@ -1,18 +1,27 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2020-01-22T09:13:35.666Z\n"
+"POT-Creation-Date: 2020-08-28T18:05:44.793Z\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "MIME-Version: 1.0\n"
 "X-Generator: react-intl-po\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Crowdin-Project: richie\n"
+"X-Crowdin-Project-ID: 308578\n"
 "X-Crowdin-Language: fr-CA\n"
 "X-Crowdin-File: frontend.pot\n"
+"X-Crowdin-File-ID: 36\n"
 "Project-Id-Version: richie\n"
 "Language-Team: French, Canada\n"
 "Language: fr_CA\n"
-"PO-Revision-Date: 2020-04-17 14:29\n"
+"PO-Revision-Date: 2020-08-28 22:08\n"
+
+#. [components.LanguageSelector.currentlySelected] - Accessible hint to mark the currently selected language in the language selector
+#. defaultMessage is:
+#. (currently selected)
+#: i18n/js/components/LanguageSelector/index.json
+msgid "(currently selected)"
+msgstr "(actuellement sélectionné)"
 
 #. [components.SearchFilterGroupModal.modalTitle] - Title for the modal to add more filter values in the search filters modal.
 #. defaultMessage is:
@@ -56,12 +65,33 @@ msgstr "Actuellement sur la dernière page: {page}"
 msgid "Currently reading page {page}"
 msgstr "Actuellement sur la page {page}"
 
+#. [components.CourseRunEnrollment.enroll] - CTA for users who can enroll in the course run or could enroll if they logged in.
+#. defaultMessage is:
+#. Enroll now
+#: i18n/js/components/CourseRunEnrollment/index.json
+msgid "Enroll now"
+msgstr "S’inscrire maintenant"
+
+#. [components.CourseRunEnrollment.enrollmentClosed] - Help text replacing the CTA on a course run when enrollment is closed.
+#. defaultMessage is:
+#. Enrollment in this course run is closed at the moment
+#: i18n/js/components/CourseRunEnrollment/index.json
+msgid "Enrollment in this course run is closed at the moment"
+msgstr "L'inscription à cette session de cours est fermée pour le moment"
+
 #. [components.SearchFiltersPane.title] - Title for the search filters pane in course search.
 #. defaultMessage is:
 #. Filter courses
 #: i18n/js/components/SearchFiltersPane/index.json
 msgid "Filter courses"
 msgstr "Filtrer les cours"
+
+#. [components.CourseRunEnrollment.goToCourse] - CTA for users who are already enrolled in a course run.
+#. defaultMessage is:
+#. Go to course
+#: i18n/js/components/CourseRunEnrollment/index.json
+msgid "Go to course"
+msgstr "Aller au cours"
 
 #. [components.SearchFilterValueParent.ariaHideChildren] - Accessibility message for the button to hide children of the current filter
 #. defaultMessage is:
@@ -77,12 +107,26 @@ msgstr "Cacher les filtres supplémentaires pour {filterValueName}"
 msgid "Hide filters pane"
 msgstr "Cacher le menu des filtres"
 
+#. [components.LanguageSelector.languages] - Default text for the language selector button when the current language cannot be identified
+#. defaultMessage is:
+#. Languages
+#: i18n/js/components/LanguageSelector/index.json
+msgid "Languages"
+msgstr "Langues"
+
 #. [components.PaginateCourseSearch.lastPageN] - Accessibility helper for pagination, added on the last page link.
 #. defaultMessage is:
 #. Last page {page}
 #: i18n/js/components/PaginateCourseSearch/index.json
 msgid "Last page {page}"
 msgstr "Dernière page: {page}"
+
+#. [components.CourseRunEnrollment.loadingInitial] - Accessible text for the initial loading spinner on the course run enrollment button.
+#. defaultMessage is:
+#. Loading enrollment information...
+#: i18n/js/components/CourseRunEnrollment/index.json
+msgid "Loading enrollment information..."
+msgstr "Chargement des informations d'inscription..."
 
 #. [components.UserLogin.spinnerText] - Accessibility text for the spinner in the login area.
 #. defaultMessage is:
@@ -169,6 +213,13 @@ msgstr "Recherche de cours"
 msgid "Search for courses, organizations, categories"
 msgstr "Recherche des cours, des organisations, des catégories"
 
+#. [components.LanguageSelector.selectLanguage] - Accessible label for the language selector button
+#. defaultMessage is:
+#. Select a language:
+#: i18n/js/components/LanguageSelector/index.json
+msgid "Select a language:"
+msgstr "Sélectionnez une langue:"
+
 #. [components.Search.showFiltersPane] - Accessibility text for the button/icon that toggles *on* the filters pane on mobile
 #. defaultMessage is:
 #. Show filters pane
@@ -197,12 +248,26 @@ msgstr "Affichage de {start, number} à {end, number} de {courseCount, number} {
 msgid "Sign up"
 msgstr "Inscription"
 
+#. [components.CourseRunEnrollment.loginToEnroll] - Helper text below the disabled enrolle button for non logged in users
+#. defaultMessage is:
+#. Sign up or log in to enroll
+#: i18n/js/components/CourseRunEnrollment/index.json
+msgid "Sign up or log in to enroll"
+msgstr "Inscrivez-vous ou connectez-vous pour vous inscrire"
+
 #. [components.Search.errorMessage] - Error message for Search view when the request to load courses fails
 #. defaultMessage is:
 #. Something's wrong! Courses could not be loaded.
 #: i18n/js/components/Search/index.json
 msgid "Something's wrong! Courses could not be loaded."
 msgstr "Quelque chose s'est mal passé ! Les cours n'ont pas pu être chargés."
+
+#. [components.LanguageSelector.switchToLanguage] - Accessible link title for the language switching links in language selector
+#. defaultMessage is:
+#. Switch to {language}
+#: i18n/js/components/LanguageSelector/index.json
+msgid "Switch to {language}"
+msgstr "Basculer vers {language}"
 
 #. [components.SearchFilterGroupModal.error] - Error message when the search for more filter value fails in the search filters modal.
 #. defaultMessage is:
@@ -217,4 +282,18 @@ msgstr "La recherche de filtres pour {filterName} a rencontré une erreur."
 #: i18n/js/components/SearchFilterGroupModal/index.json
 msgid "Type at least 3 characters to start searching."
 msgstr "Tapez 3 caractères ou plus pour commencer à chercher."
+
+#. [components.CourseRunEnrollment.enrolled] - Help text for users who see the "Go to course" CTA on course run enrollment
+#. defaultMessage is:
+#. You are enrolled in this course run
+#: i18n/js/components/CourseRunEnrollment/index.json
+msgid "You are enrolled in this course run"
+msgstr "Vous êtes inscrit à ce cours"
+
+#. [components.CourseRunEnrollment.enrollmentFailed] - Help text below the "Enroll now" CTA when an enrollment attempt has already failed.
+#. defaultMessage is:
+#. Your enrollment request failed.
+#: i18n/js/components/CourseRunEnrollment/index.json
+msgid "Your enrollment request failed."
+msgstr "Votre demande d'inscription a échoué."
 
