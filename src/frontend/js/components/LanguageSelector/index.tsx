@@ -67,6 +67,13 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
       </label>
       <button {...getToggleButtonProps()} className="language-selector__button">
         {selectedItem?.name || intl.formatMessage(messages.languages)}
+        <svg
+          role="img"
+          className="language-selector__button__icon"
+          aria-hidden="true"
+        >
+          <use xlinkHref="#icon-chevron-down" />
+        </svg>
       </button>
       <ul
         {...getMenuProps()}
