@@ -5,6 +5,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { CourseRunEnrollment } from 'components/CourseRunEnrollment';
+import { LanguageSelector } from 'components/LanguageSelector';
 import { RootSearchSuggestField } from 'components/RootSearchSuggestField';
 import { Search } from 'components/Search';
 import { SearchSuggestField } from 'components/SearchSuggestField';
@@ -16,6 +17,7 @@ import { HistoryProvider } from 'data/useHistory';
 // way TypeScript understand and accepts
 interface ComponentLibrary {
   CourseRunEnrollment: typeof CourseRunEnrollment;
+  LanguageSelector: typeof LanguageSelector;
   RootSearchSuggestField: typeof RootSearchSuggestField;
   Search: typeof Search;
   SearchSuggestField: typeof SearchSuggestField;
@@ -24,6 +26,7 @@ interface ComponentLibrary {
 // Actually create the component map that we'll use below to access our component classes
 const componentLibrary: ComponentLibrary = {
   CourseRunEnrollment,
+  LanguageSelector,
   RootSearchSuggestField,
   Search,
   SearchSuggestField,
@@ -54,9 +57,21 @@ export const Root = ({ richieReactSpots }: RootProps) => {
       // Do get the component dynamically. We know this WILL produce a valid component thanks to the type guard
       const Component = componentLibrary[componentName];
 
-      // Get the incoming props to pass our component from the `data-props` attribute
+      let props: any = {};
+
+      // Get the props to pass our components from the `data-props-source` if
+      const dataPropsSource = element.getAttribute('data-props-source');
+      if (dataPropsSource) {
+        props = JSON.parse(
+          document.querySelector(dataPropsSource)!.textContent!,
+        );
+      }
+
+      // Get the incoming props to pass our component from `data-props` if applicable
       const dataProps = element.getAttribute('data-props');
-      const props = dataProps ? JSON.parse(dataProps) : {};
+      if (dataProps) {
+        props = { ...props, ...JSON.parse(dataProps) };
+      }
 
       // Add context to props if they do not already include it
       if (!props.context) {
