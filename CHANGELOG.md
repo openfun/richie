@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Add a language picker menu to Richie's header & footer, powered by a new
+  React component.
+
 ## [2.0.0-beta.12] - 2020-08-27
 
 ### Added

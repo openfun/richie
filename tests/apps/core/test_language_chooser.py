@@ -30,12 +30,13 @@ class LanguageChooserTests(CMSTestCase):
         url = page.get_absolute_url(language="en")
         response = self.client.get(url)
 
-        # Every available language is present
-        for item in ["en", "fr"]:
-            self.assertContains(response, page.get_absolute_url(language=item))
-
-        self.assertContains(response, "en, currently in English")
-        self.assertContains(response, "fr, switch to French")
+        self.assertContains(response, '"currentLanguage": "en"')
+        self.assertContains(response, '"code": "en"')
+        self.assertContains(response, '"name": "English"')
+        self.assertContains(response, '"url": "/en/language-test-page/"')
+        self.assertContains(response, '"code": "fr"')
+        self.assertContains(response, '"name": "French"')
+        self.assertContains(response, '"url": "/fr/language-test-page/"')
 
     @override_settings(
         LANGUAGES=(("en", "English"), ("fr", "Français"), ("de", "Deutsch")),
@@ -67,43 +68,14 @@ class LanguageChooserTests(CMSTestCase):
         url = page.get_absolute_url(language="fr")
         response = self.client.get(url)
 
-        # English should not be in the language chooser as it is not public
-        self.assertContains(response, page.get_absolute_url(language="fr"))
-        self.assertContains(response, page.get_absolute_url(language="de"))
-        self.assertNotContains(response, page.get_absolute_url(language="en"))
+        self.assertContains(response, '"currentLanguage": "fr"')
+        self.assertContains(response, '"code": "fr"')
+        self.assertContains(response, '"name": "Français"')
+        self.assertContains(response, '"url": "/fr/test-du-menu-de-langues/"')
+        self.assertContains(response, '"code": "de"')
+        self.assertContains(response, '"name": "Deutsch"')
+        self.assertContains(response, '"url": "/de/sprachmenu-test/"')
 
-        self.assertContains(response, "fr, actuellement en Français")
-        self.assertContains(response, "de, basculer vers Allemand")
-        self.assertNotContains(response, "en, basculer vers Anglais")
-
-    def test_language_chooser_available_language_with_translated_page(self):
-        """
-        Menu should contain every available language, current language item
-        should be marked with a distinct class name
-        """
-        content = {"en": "Language menu test", "fr": "Test du menu de langues"}
-        page = create_i18n_page(
-            content, published=True, template="richie/single_column.html"
-        )
-        url = page.get_absolute_url(language="fr")
-        response = self.client.get(url)
-
-        # Every available language is present
-        for item in ["en", "fr"]:
-            self.assertContains(response, page.get_absolute_url(language=item))
-
-        # Current language item is marked active according to user language
-        # choice (from i18n url prefix)
-        self.assertContains(
-            response, ('<li class="languages-menu__item ' 'languages-menu__item--en">'),
-        )
-        self.assertContains(response, "en, basculer vers Anglais")
-        self.assertContains(
-            response,
-            (
-                '<li class="languages-menu__item '
-                "languages-menu__item--fr "
-                'languages-menu__item--active">'
-            ),
-        )
-        self.assertContains(response, "fr, actuellement en Français")
+        self.assertNotContains(response, '"code": "en"')
+        self.assertNotContains(response, '"name": "English"')
+        self.assertNotContains(response, '"url": "/en/language-test-page/"')

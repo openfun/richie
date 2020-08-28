@@ -181,6 +181,55 @@
     font-family: $r-font-family-montserrat;
     font-weight: $font-weight-boldest;
   }
+
+  .richie-react--language-selector {
+    display: flex;
+    align-items: center;
+
+    .language-selector {
+      color: white;
+
+      &__button {
+        padding-left: 0;
+      }
+
+      &__list {
+        top: auto;
+        bottom: calc(100% + 0.5rem);
+
+        // As the language menu is close to the left edge of the screen in the footer on small screens,
+        // we need to have it pop to the right so it has room to display the available languageS.
+        left: 0;
+        right: auto;
+        @media (min-width: 768px) {
+          left: auto;
+          right: 0;
+        }
+
+        &:after,
+        &:before {
+          bottom: auto;
+          top: 100%;
+
+          // As we moved the language menu (see above), we also needed to move the dropdown arrow.
+          left: 0;
+          @media (min-width: 768px) {
+            left: 50%;
+          }
+        }
+
+        &:after {
+          border-bottom-color: rgba(255, 255, 255, 0);
+          border-top-color: white;
+        }
+
+        &:before {
+          border-bottom-color: rgba(255, 255, 255, 0);
+          border-top-color: r-color('light-grey');
+        }
+      }
+    }
+  }
 }
 
 // Legal mentions
