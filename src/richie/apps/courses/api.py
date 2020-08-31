@@ -98,7 +98,8 @@ class EnrollmentViewSet(ViewSet):
             # We have no information on the error reason, thus cannot provide any message
             # to the user through our client
             return Response(
-                status=400, data={"errors": [_("Enrollment failed on the LMS.")]},
+                status=400,
+                data={"errors": [_("Enrollment failed on the LMS.")]},
             )
 
         # Return an empty response with a success code, which should be understood by the client

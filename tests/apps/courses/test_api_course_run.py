@@ -171,7 +171,9 @@ class CourseRunApiTestCase(CMSTestCase):
         course_run = CourseRunFactory()
         self.assertEqual(CourseRun.objects.count(), 1)
 
-        response = self.client.delete(f"/api/v1.0/course-runs/{course_run.id}/",)
+        response = self.client.delete(
+            f"/api/v1.0/course-runs/{course_run.id}/",
+        )
 
         self.assertEqual(response.status_code, 403)
         self.assertEqual(CourseRun.objects.count(), 1)
@@ -184,7 +186,9 @@ class CourseRunApiTestCase(CMSTestCase):
         self.assertEqual(CourseRun.objects.count(), 1)
 
         self.client.force_login(UserFactory())
-        response = self.client.delete(f"/api/v1.0/course-runs/{course_run.id}/",)
+        response = self.client.delete(
+            f"/api/v1.0/course-runs/{course_run.id}/",
+        )
 
         self.assertEqual(response.status_code, 403)
         self.assertEqual(CourseRun.objects.count(), 1)
@@ -197,7 +201,9 @@ class CourseRunApiTestCase(CMSTestCase):
         self.assertEqual(CourseRun.objects.count(), 1)
 
         self.client.force_login(UserFactory(is_staff=True, is_superuser=True))
-        response = self.client.delete(f"/api/v1.0/course-runs/{course_run.id}/",)
+        response = self.client.delete(
+            f"/api/v1.0/course-runs/{course_run.id}/",
+        )
 
         self.assertEqual(response.status_code, 403)
         self.assertEqual(CourseRun.objects.count(), 1)

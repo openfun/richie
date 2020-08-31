@@ -206,7 +206,9 @@ class PersonCMSTestCase(CMSTestCase):
         )
         title = person.extended_object.get_title()
         self.assertContains(
-            response, f'<h1 class="subheader__title">{title:s}</h1>', html=True,
+            response,
+            f'<h1 class="subheader__title">{title:s}</h1>',
+            html=True,
         )
 
         # Main content should be present when not empty

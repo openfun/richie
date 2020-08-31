@@ -420,10 +420,14 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
                 environ_prefix=None,
             ),
             "LOCATION": values.Value(
-                "", environ_name="CACHE_DEFAULT_LOCATION", environ_prefix=None,
+                "",
+                environ_name="CACHE_DEFAULT_LOCATION",
+                environ_prefix=None,
             ),
             "OPTIONS": values.DictValue(
-                {}, environ_name="CACHE_DEFAULT_OPTIONS", environ_prefix=None,
+                {},
+                environ_name="CACHE_DEFAULT_OPTIONS",
+                environ_prefix=None,
             ),
         }
     }
