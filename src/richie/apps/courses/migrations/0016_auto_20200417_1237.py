@@ -13,12 +13,25 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterUniqueTogether(
-            name="persontitletranslation", unique_together=None,
+            name="persontitletranslation",
+            unique_together=None,
         ),
-        migrations.RemoveField(model_name="persontitletranslation", name="master",),
-        migrations.RemoveField(model_name="person", name="first_name",),
-        migrations.RemoveField(model_name="person", name="last_name",),
-        migrations.RemoveField(model_name="person", name="person_title",),
+        migrations.RemoveField(
+            model_name="persontitletranslation",
+            name="master",
+        ),
+        migrations.RemoveField(
+            model_name="person",
+            name="first_name",
+        ),
+        migrations.RemoveField(
+            model_name="person",
+            name="last_name",
+        ),
+        migrations.RemoveField(
+            model_name="person",
+            name="person_title",
+        ),
         migrations.AlterField(
             model_name="blogpostpluginmodel",
             name="variant",
@@ -183,6 +196,10 @@ class Migration(migrations.Migration):
                 verbose_name="variant",
             ),
         ),
-        migrations.DeleteModel(name="PersonTitle",),
-        migrations.DeleteModel(name="PersonTitleTranslation",),
+        migrations.DeleteModel(
+            name="PersonTitle",
+        ),
+        migrations.DeleteModel(
+            name="PersonTitleTranslation",
+        ),
     ]

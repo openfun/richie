@@ -143,6 +143,8 @@ class GetRelatedCategoriesTemplateTagsTestCase(CMSTestCase):
         # - Linked with a page in a different publication status
         with self.assertNumQueries(1):
             output = self.render_template_obj(
-                template, {"current_page": current_page, "pages": [page1]}, request,
+                template,
+                {"current_page": current_page, "pages": [page1]},
+                request,
             )
         self.assertEqual(output, "")

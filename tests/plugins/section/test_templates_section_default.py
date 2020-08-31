@@ -63,7 +63,10 @@ class DefaultTemplatesTestCase(CMSPluginTestCase):
         placeholder = Placeholder.objects.create(slot="footer")
 
         container = add_plugin(
-            placeholder, SectionPlugin, "en", template="richie/section/section.html",
+            placeholder,
+            SectionPlugin,
+            "en",
+            template="richie/section/section.html",
         )
         # A first section with a title as label
         parent1 = add_plugin(

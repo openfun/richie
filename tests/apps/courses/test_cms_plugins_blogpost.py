@@ -132,7 +132,9 @@ class BlogPostPluginTestCase(CMSTestCase):
 
         # Publication date should be set by first publication
         self.assertContains(
-            response, '<p class="blogpost-glimpse__date">Nov. 30, 2019</p>', html=True,
+            response,
+            '<p class="blogpost-glimpse__date">Nov. 30, 2019</p>',
+            html=True,
         )
 
         # Same checks in French
@@ -219,7 +221,11 @@ class BlogPostPluginTestCase(CMSTestCase):
 
         # Add blogpost plugin with small variant
         add_plugin(
-            placeholder, BlogPostPlugin, "en", page=blogpost_page, variant="small",
+            placeholder,
+            BlogPostPlugin,
+            "en",
+            page=blogpost_page,
+            variant="small",
         )
 
         # The blogpost-glimpse default template should not have the small attribute
