@@ -29,7 +29,7 @@ sweet candies for you! 🤓
 
 ```bash
 # Start the Sass watcher
-$ make watch-css
+$ make watch-sass
 
 # In a new terminal or session, start the TypeScript watcher
 $ make watch-ts

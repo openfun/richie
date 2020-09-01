@@ -158,7 +158,9 @@ dependencies _via_:
 
 - JS build
 
-  npm run build
+```bash
+npm run build
+```
 
 - CSS build
 
