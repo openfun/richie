@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Change CTA enrollment button for anonymous users
+
 ## [2.0.0-beta.13] - 2020-08-27
 
 ### Added
