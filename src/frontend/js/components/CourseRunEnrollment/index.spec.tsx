@@ -38,7 +38,11 @@ describe('<CourseRunEnrollment />', () => {
 
     render(
       <IntlProvider locale="en">
-        <CourseRunEnrollment context={context} courseRunId={courseRun.id} />
+        <CourseRunEnrollment
+          context={context}
+          courseRunId={courseRun.id}
+          loginUrl={'/oauth/login/edx-oauth2/?next=/en/courses/'}
+        />
       </IntlProvider>,
     );
     screen.getByRole('status', { name: 'Loading enrollment information...' });
@@ -84,7 +88,11 @@ describe('<CourseRunEnrollment />', () => {
 
     render(
       <IntlProvider locale="en">
-        <CourseRunEnrollment context={context} courseRunId={courseRun.id} />
+        <CourseRunEnrollment
+          context={context}
+          courseRunId={courseRun.id}
+          loginUrl={'/oauth/login/edx-oauth2/?next=/en/courses/'}
+        />
       </IntlProvider>,
     );
     screen.getByRole('status', { name: 'Loading enrollment information...' });
@@ -128,7 +136,11 @@ describe('<CourseRunEnrollment />', () => {
 
     render(
       <IntlProvider locale="en">
-        <CourseRunEnrollment context={context} courseRunId={courseRun.id} />
+        <CourseRunEnrollment
+          context={context}
+          courseRunId={courseRun.id}
+          loginUrl={'/oauth/login/edx-oauth2/?next=/en/courses/'}
+        />
       </IntlProvider>,
     );
     screen.getByRole('status', { name: 'Loading enrollment information...' });
@@ -164,7 +176,11 @@ describe('<CourseRunEnrollment />', () => {
 
     render(
       <IntlProvider locale="en">
-        <CourseRunEnrollment context={context} courseRunId={courseRun.id} />
+        <CourseRunEnrollment
+          context={context}
+          courseRunId={courseRun.id}
+          loginUrl={'/oauth/login/edx-oauth2/?next=/en/courses/'}
+        />
       </IntlProvider>,
     );
     screen.getByRole('status', { name: 'Loading enrollment information...' });
@@ -197,7 +213,11 @@ describe('<CourseRunEnrollment />', () => {
 
     render(
       <IntlProvider locale="en">
-        <CourseRunEnrollment context={context} courseRunId={courseRun.id} />
+        <CourseRunEnrollment
+          context={context}
+          courseRunId={courseRun.id}
+          loginUrl={'/oauth/login/edx-oauth2/?next=/en/courses/'}
+        />
       </IntlProvider>,
     );
     screen.getByRole('status', { name: 'Loading enrollment information...' });
@@ -207,8 +227,6 @@ describe('<CourseRunEnrollment />', () => {
       enrollmentsDeferred.resolve([]);
     });
 
-    const button = screen.getByRole('button', { name: 'Enroll now' });
-    expect(button).toHaveAttribute('aria-disabled', 'true');
-    screen.getByText('Sign up or log in to enroll');
+    screen.getByRole('link', { name: 'Log in to enroll' });
   });
 });

@@ -492,8 +492,10 @@ class RunsCourseCMSTestCase(CMSTestCase):
             re.search(
                 (
                     r'.*class="richie-react richie-react--course-run-enrollment".*'
-                    r"data-props=\\\'{{\"courseRunId\": {}}}\\\'".format(
-                        course_run.public_extension_id
+                    r"data-props=\\\'{{\"courseRunId\": {}, \"loginUrl\": "
+                    r"\"/oauth/login/edx-oauth2/\?next={}\"}}\\\'".format(
+                        course_run.public_extension_id,
+                        course.extended_object.get_absolute_url(),
                     )
                 ),
                 str(response.content),
@@ -555,8 +557,10 @@ class RunsCourseCMSTestCase(CMSTestCase):
             re.search(
                 (
                     r'.*class="richie-react richie-react--course-run-enrollment".*'
-                    r"data-props=\\\'{{\"courseRunId\": {}}}\\\'".format(
-                        course_run.public_extension_id
+                    r"data-props=\\\'{{\"courseRunId\": {}, \"loginUrl\": "
+                    r"\"/oauth/login/edx-oauth2/\?next={}\"}}\\\'".format(
+                        course_run.public_extension_id,
+                        course.extended_object.get_absolute_url(),
                     )
                 ),
                 str(response.content),

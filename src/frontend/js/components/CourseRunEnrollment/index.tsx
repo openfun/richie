@@ -48,9 +48,8 @@ const messages = defineMessages({
     id: 'components.CourseRunEnrollment.loadingInitial',
   },
   loginToEnroll: {
-    defaultMessage: 'Sign up or log in to enroll',
-    description:
-      'Helper text below the disabled enrolle button for non logged in users',
+    defaultMessage: 'Log in to enroll',
+    description: 'Helper text in the enroll button for non logged in users',
     id: 'components.CourseRunEnrollment.loginToEnroll',
   },
 });
@@ -171,11 +170,12 @@ const headers = {
 
 interface CourseRunEnrollmentProps {
   courseRunId: number;
+  loginUrl: string;
 }
 
 export const CourseRunEnrollment: React.FC<
   CourseRunEnrollmentProps & CommonDataProps
-> = ({ context, courseRunId }) => {
+> = ({ context, courseRunId, loginUrl }) => {
   const [state, send] = useMachine(machine, {
     guards: {
       isCourseRunClosed: (ctx) =>
@@ -259,17 +259,9 @@ export const CourseRunEnrollment: React.FC<
 
     case state.matches('anonymous'):
       return (
-        <React.Fragment>
-          <button
-            className="course-run-enrollment__cta disabled"
-            aria-disabled="true"
-          >
-            <FormattedMessage {...messages.enroll} />
-          </button>
-          <div className="course-run-enrollment__helptext">
-            <FormattedMessage {...messages.loginToEnroll} />
-          </div>
-        </React.Fragment>
+        <a href={loginUrl} className="course-run-enrollment__cta">
+          <FormattedMessage {...messages.loginToEnroll} />
+        </a>
       );
 
     case state.matches('closed'):
