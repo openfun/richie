@@ -6,8 +6,7 @@ import { CommonDataProps } from 'types/commonDataProps';
 const messages = defineMessages({
   button: {
     defaultMessage: 'Search',
-    description:
-      'Accessibility text for the search button inside the Search input.',
+    description: 'Accessibility text for the search button inside the Search input.',
     id: 'components.SearchInput.button',
   },
 });
@@ -27,11 +26,7 @@ export const SearchInput = ({
   <div className="search-input">
     <input {...inputProps} />
     <button className="search-input__btn" onClick={onClick}>
-      <svg
-        aria-hidden={true}
-        role="img"
-        className="icon search-input__btn__icon"
-      >
+      <svg aria-hidden={true} role="img" className="icon search-input__btn__icon">
         <use xlinkHref="#icon-magnifying-glass" />
       </svg>{' '}
       <span className="offscreen">

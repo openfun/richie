@@ -24,9 +24,7 @@ interface FilterResetAction {
 interface FilterSingleAction {
   filter: FilterDefinition;
   payload: string;
-  type:
-    | CourseSearchParamsAction.filterAdd
-    | CourseSearchParamsAction.filterRemove;
+  type: CourseSearchParamsAction.filterAdd | CourseSearchParamsAction.filterRemove;
 }
 
 interface PageChangeAction {
@@ -47,9 +45,7 @@ type CourseSearchParamsReducerAction =
 
 type CourseSearchParamsState = {
   courseSearchParams: APIListRequestParams;
-  dispatchCourseSearchParamsUpdate: (
-    ...Actions: CourseSearchParamsReducerAction[]
-  ) => void;
+  dispatchCourseSearchParamsUpdate: (...Actions: CourseSearchParamsReducerAction[]) => void;
   lastDispatchActions: Maybe<CourseSearchParamsReducerAction[]>;
 };
 
@@ -80,14 +76,11 @@ const courseSearchParamsReducer = (
         ...courseSearchParams,
         // Go back to page 1 when the query changes
         offset: '0',
-        [action.filter.name]: computeNewFilterValue(
-          courseSearchParams[action.filter.name],
-          {
-            action: action.type,
-            isDrilldown: !!action.filter.is_drilldown,
-            payload: action.payload,
-          },
-        ),
+        [action.filter.name]: computeNewFilterValue(courseSearchParams[action.filter.name], {
+          action: action.type,
+          isDrilldown: !!action.filter.is_drilldown,
+          payload: action.payload,
+        }),
       };
 
     case CourseSearchParamsAction.filterReset:
@@ -105,8 +98,7 @@ export const useCourseSearchParams = (): CourseSearchParamsState => {
   const [historyEntry, pushState, replaceState] = useContext(HistoryContext);
 
   // HistoryEntry.state includes parse query strings, which if we're on a search page should be course search params
-  const courseSearchParams: APIListRequestParams =
-    historyEntry.state.data.params;
+  const courseSearchParams: APIListRequestParams = historyEntry.state.data.params;
 
   // The dispatch + reducer pattern is useful to model changes in the course search params. However, we don't want
   // to duplicate behavior by having to sync the HistoryContext state with a `useReducer` call here.
@@ -114,10 +106,7 @@ export const useCourseSearchParams = (): CourseSearchParamsState => {
   const dispatch = (...actions: CourseSearchParamsReducerAction[]) => {
     // In some scenarios, we want to dispatch more than one action and only effect one actual history state change.
     // This is useful to eg. clean up the text query and add a filter the user selected through autosuggest.
-    const newParams = actions.reduce(
-      courseSearchParamsReducer,
-      courseSearchParams,
-    );
+    const newParams = actions.reduce(courseSearchParamsReducer, courseSearchParams);
     // We should only update the history if the params have actually changed
     // We're using `stringify(parse(location.search))` as a way to reorder location search to the same order
     // `stringify` would output for our courseSearchParams. This allows us to avoid doing a deep comparison on

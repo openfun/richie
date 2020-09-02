@@ -34,16 +34,8 @@ $neutral-gradient: linear-gradient(
   r-color('white') 14rem,
   r-color('white')
 );
-$middle-gradient: linear-gradient(
-  285deg,
-  r-color('grey59') 3%,
-  r-color('grey87') 98%
-);
-$dark-gradient: linear-gradient(
-  285deg,
-  r-color('grey32') 3%,
-  r-color('grey59') 98%
-);
+$middle-gradient: linear-gradient(285deg, r-color('grey59') 3%, r-color('grey87') 98%);
+$dark-gradient: linear-gradient(285deg, r-color('grey32') 3%, r-color('grey59') 98%);
 $white-mask-gradient: (
   linear-gradient(
     to right,
@@ -299,8 +291,7 @@ $r-theme: (
     base-shadow: r-color('black'),
   ),
   hero-intro: (
-    insert-background-image:
-      url('../../richie/images/components/wave-white.svg'),
+    insert-background-image: url('../../richie/images/components/wave-white.svg'),
     inner-background: $white-mask-gradient,
     title-color: r-color('firebrick6'),
     title-alt-color: r-color('charcoal'),
@@ -489,8 +480,7 @@ $r-theme: (
   ),
   category-detail: (
     empty-background: r-color('smoke'),
-    insert-background-image:
-      url('../../richie/images/components/wave-white.svg'),
+    insert-background-image: url('../../richie/images/components/wave-white.svg'),
     logo-background: r-color('white'),
     logo-border: r-color('light-grey'),
     logo-shadow: 0 0.25rem 1.5625rem r-color('slate-grey'),
@@ -507,13 +497,11 @@ $r-theme: (
     run-descriptions-divider: r-color('light-grey'),
     plan-title-color: r-color('firebrick6'),
     license-label-color: r-color('denim'),
-    checkmark-list-decoration:
-      url('../../richie/images/components/checkmark.svg'),
+    checkmark-list-decoration: url('../../richie/images/components/checkmark.svg'),
   ),
   organization-detail: (
     banner-empty-background: r-color('smoke'),
-    insert-background-image:
-      url('../../richie/images/components/wave-white.svg'),
+    insert-background-image: url('../../richie/images/components/wave-white.svg'),
     logo-border: r-color('light-grey'),
     logo-shadow: 0 0.25rem 1.5625rem r-color('slate-grey'),
     intro-title: r-color('firebrick6'),

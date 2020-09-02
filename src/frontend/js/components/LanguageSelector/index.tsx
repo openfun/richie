@@ -7,8 +7,7 @@ import { location } from 'utils/indirection/window';
 const messages = defineMessages({
   currentlySelected: {
     defaultMessage: '(currently selected)',
-    description:
-      'Accessible hint to mark the currently selected language in the language selector',
+    description: 'Accessible hint to mark the currently selected language in the language selector',
     id: 'components.LanguageSelector.currentlySelected',
   },
   languages: {
@@ -24,8 +23,7 @@ const messages = defineMessages({
   },
   switchToLanguage: {
     defaultMessage: 'Switch to {language}',
-    description:
-      'Accessible link title for the language switching links in language selector',
+    description: 'Accessible link title for the language switching links in language selector',
     id: 'components.LanguageSelector.switchToLanguage',
   },
 });
@@ -67,31 +65,20 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
       </label>
       <button {...getToggleButtonProps()} className="language-selector__button">
         {selectedItem?.name || intl.formatMessage(messages.languages)}
-        <svg
-          role="img"
-          className="language-selector__button__icon"
-          aria-hidden="true"
-        >
+        <svg role="img" className="language-selector__button__icon" aria-hidden="true">
           <use xlinkHref="#icon-chevron-down" />
         </svg>
       </button>
       <ul
         {...getMenuProps()}
-        className={`language-selector__list ${
-          isOpen ? '' : 'language-selector__list--is-closed'
-        }`}
+        className={`language-selector__list ${isOpen ? '' : 'language-selector__list--is-closed'}`}
       >
         {isOpen &&
           languagesList.map((language, index) => (
-            <li
-              key={`${language.code}${index}`}
-              {...getItemProps({ item: language, index })}
-            >
+            <li key={`${language.code}${index}`} {...getItemProps({ item: language, index })}>
               <a
                 className={`language-selector__list__link ${
-                  highlightedIndex === index
-                    ? 'language-selector__list__link--highlighted'
-                    : ''
+                  highlightedIndex === index ? 'language-selector__list__link--highlighted' : ''
                 }`}
                 href={language.url}
                 title={`${intl.formatMessage(messages.switchToLanguage, {

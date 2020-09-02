@@ -33,9 +33,7 @@ describe('<SearchFilterValueParent />', () => {
   it('renders the parent filter value and a button to show the children', () => {
     const { getByLabelText, queryByLabelText } = render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '999', offset: '0' })}
-        >
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '999', offset: '0' })}>
           <SearchFilterValueParent
             filter={{
               base_path: '00010002',
@@ -62,12 +60,8 @@ describe('<SearchFilterValueParent />', () => {
       'aria-pressed',
       'false',
     );
-    expect(
-      queryByLabelText((content) => content.startsWith('Classical Literature')),
-    ).toEqual(null);
-    expect(
-      queryByLabelText((content) => content.startsWith('Modern Literature')),
-    ).toEqual(null);
+    expect(queryByLabelText((content) => content.startsWith('Classical Literature'))).toEqual(null);
+    expect(queryByLabelText((content) => content.startsWith('Modern Literature'))).toEqual(null);
   });
 
   it('shows the children when one of them is active', async () => {
@@ -122,20 +116,14 @@ describe('<SearchFilterValueParent />', () => {
 
     // Children filters are not shown
     getByLabelText((content) => content.startsWith('Literature'));
-    expect(queryByLabelText('Hide additional filters for Literature')).toEqual(
-      null,
-    );
+    expect(queryByLabelText('Hide additional filters for Literature')).toEqual(null);
     queryByLabelText((content) => content.startsWith('Classical Literature'));
     queryByLabelText((content) => content.startsWith('Modern Literature'));
 
     // The params are updated, now include a child filter of Literature
-    rerender(
-      getElement({ limit: '999', offset: '0', subjects: ['L-000400050004'] }),
-    );
+    rerender(getElement({ limit: '999', offset: '0', subjects: ['L-000400050004'] }));
 
-    await screen.findByLabelText((content) =>
-      content.startsWith('Classical Literature'),
-    );
+    await screen.findByLabelText((content) => content.startsWith('Classical Literature'));
 
     // The children filters are now shown along with an icon to hide them
     getByLabelText((content) => content.startsWith('Modern Literature'));
@@ -196,12 +184,11 @@ describe('<SearchFilterValueParent />', () => {
     );
 
     getByLabelText((content) => content.startsWith('Literature'));
-    expect(
-      getByLabelText('Hide additional filters for Literature'),
-    ).toHaveAttribute('aria-pressed', 'true');
-    await screen.findByLabelText((content) =>
-      content.startsWith('Classical Literature'),
+    expect(getByLabelText('Hide additional filters for Literature')).toHaveAttribute(
+      'aria-pressed',
+      'true',
     );
+    await screen.findByLabelText((content) => content.startsWith('Classical Literature'));
     getByLabelText((content) => content.startsWith('Modern Literature'));
 
     expect(mockFetchList).toHaveBeenCalledTimes(1);
@@ -220,12 +207,8 @@ describe('<SearchFilterValueParent />', () => {
       'aria-pressed',
       'false',
     );
-    expect(
-      queryByLabelText((content) => content.startsWith('Classical Literature')),
-    ).toEqual(null);
-    expect(
-      queryByLabelText((content) => content.startsWith('Modern Literature')),
-    ).toEqual(null);
+    expect(queryByLabelText((content) => content.startsWith('Classical Literature'))).toEqual(null);
+    expect(queryByLabelText((content) => content.startsWith('Modern Literature'))).toEqual(null);
     expect(mockFetchList).toHaveBeenCalledTimes(1);
 
     fireEvent.click(getByLabelText('Show more filters for Literature'));
@@ -239,21 +222,18 @@ describe('<SearchFilterValueParent />', () => {
       subjects: ['L-000400050004'],
       subjects_include: '.-00040005.{4,}',
     });
-    expect(
-      getByLabelText('Hide additional filters for Literature'),
-    ).toHaveAttribute('aria-pressed', 'true');
-    await screen.findByLabelText((content) =>
-      content.startsWith('Classical Literature'),
+    expect(getByLabelText('Hide additional filters for Literature')).toHaveAttribute(
+      'aria-pressed',
+      'true',
     );
+    await screen.findByLabelText((content) => content.startsWith('Classical Literature'));
     getByLabelText((content) => content.startsWith('Modern Literature'));
   });
 
   it('shows the parent filter value itself as inactive when it is not in the search params', () => {
     const { getByLabelText } = render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '999', offset: '0' })}
-        >
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '999', offset: '0' })}>
           <SearchFilterValueParent
             filter={{
               base_path: '0009',
@@ -276,9 +256,7 @@ describe('<SearchFilterValueParent />', () => {
     );
 
     // The filter value is displayed with its facet count
-    const checkbox = getByLabelText((content) =>
-      content.startsWith('Human name'),
-    );
+    const checkbox = getByLabelText((content) => content.startsWith('Human name'));
     expect(checkbox!.parentElement).toHaveTextContent('(217)'); // label that contains checkbox
     // The filter is not currently active
     expect(checkbox).not.toHaveAttribute('checked');
@@ -288,9 +266,7 @@ describe('<SearchFilterValueParent />', () => {
   it('disables the parent value when its count is 0', () => {
     const { getByLabelText } = render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '999', offset: '0' })}
-        >
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '999', offset: '0' })}>
           <SearchFilterValueParent
             filter={{
               base_path: '0009',
@@ -313,14 +289,10 @@ describe('<SearchFilterValueParent />', () => {
     );
 
     // The filter shows its active state
-    const checkbox = getByLabelText((content) =>
-      content.startsWith('Human name'),
-    );
+    const checkbox = getByLabelText((content) => content.startsWith('Human name'));
     expect(checkbox).not.toHaveAttribute('checked');
     expect(checkbox).toHaveAttribute('disabled');
-    expect(checkbox.parentElement).toHaveClass(
-      'search-filter-value-parent__self__label--disabled',
-    );
+    expect(checkbox.parentElement).toHaveClass('search-filter-value-parent__self__label--disabled');
   });
   it('shows the parent filter value itself as active when it is in the search params', () => {
     const { getByLabelText } = render(
@@ -353,9 +325,7 @@ describe('<SearchFilterValueParent />', () => {
       </IntlProvider>,
     );
 
-    const checkbox = getByLabelText((content) =>
-      content.startsWith('Human name'),
-    );
+    const checkbox = getByLabelText((content) => content.startsWith('Human name'));
     expect(checkbox!.parentElement).toHaveTextContent('(218)'); // label that contains checkbox
     expect(checkbox).toHaveAttribute('checked');
     expect(checkbox!.parentElement!.parentElement).toHaveClass('active'); // parent self filter
@@ -364,9 +334,7 @@ describe('<SearchFilterValueParent />', () => {
   it('dispatches a FILTER_ADD action on filter click if it was not active', () => {
     const { getByLabelText } = render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '999', offset: '0' })}
-        >
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '999', offset: '0' })}>
           <SearchFilterValueParent
             filter={{
               base_path: '0009',
@@ -388,9 +356,7 @@ describe('<SearchFilterValueParent />', () => {
       </IntlProvider>,
     );
 
-    fireEvent.click(
-      getByLabelText((content) => content.startsWith('Human name')),
-    );
+    fireEvent.click(getByLabelText((content) => content.startsWith('Human name')));
     expect(historyPushState).toHaveBeenCalledWith(
       {
         name: 'courseSearch',
@@ -435,9 +401,7 @@ describe('<SearchFilterValueParent />', () => {
       </IntlProvider>,
     );
 
-    fireEvent.click(
-      getByLabelText((content) => content.startsWith('Human name')),
-    );
+    fireEvent.click(getByLabelText((content) => content.startsWith('Human name')));
     expect(historyPushState).toHaveBeenCalledWith(
       {
         name: 'courseSearch',

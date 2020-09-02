@@ -40,8 +40,7 @@ describe('components/CourseGlimpseList', () => {
     );
 
     expect(
-      screen.getAllByText('Showing 1 to 20 of 45 courses matching your search')
-        .length,
+      screen.getAllByText('Showing 1 to 20 of 45 courses matching your search').length,
     ).toEqual(1);
     // Both courses' titles are shown
     screen.getByText('Course 44');

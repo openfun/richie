@@ -47,8 +47,7 @@
 // Most active styles are done on the filter button itself (which is the component itself for leaves
 // and an inner part for parents)
 .search-filter-value-leaf.active,
-.search-filter-value-parent__self.active
-  > .search-filter-value-parent__self__label {
+.search-filter-value-parent__self.active > .search-filter-value-parent__self__label {
   z-index: 2; // Place active items above their siblings for proper border styling
   color: r-theme-val(search-filters-value, active-color);
 }
@@ -60,16 +59,12 @@
   padding: 0.4rem 0.5rem;
   font-size: 1rem;
   @if r-theme-val(search-filters-value, base-border) {
-    border-bottom: $onepixel
-      solid
-      r-theme-val(search-filters-value, base-border);
+    border-bottom: $onepixel solid r-theme-val(search-filters-value, base-border);
   }
 
   &.active {
     @if r-theme-val(search-filters-value, hover-border) {
-      border-bottom: $onepixel
-        solid
-        r-theme-val(search-filters-value, hover-border);
+      border-bottom: $onepixel solid r-theme-val(search-filters-value, hover-border);
     }
   }
 }

@@ -19,11 +19,7 @@ describe('common/searchFields/getSuggestionsSection', () => {
 
     let suggestionsSection;
     try {
-      suggestionsSection = await getSuggestionsSection(
-        'courses',
-        'Courses',
-        'some search',
-      );
+      suggestionsSection = await getSuggestionsSection('courses', 'Courses', 'some search');
     } catch (error) {
       fail('Did not expect getSuggestionsSection to fail');
     }
@@ -43,9 +39,7 @@ describe('common/searchFields/getSuggestionsSection', () => {
       throws: new Error('Failed to send API request'),
     });
     await getSuggestionsSection('courses', 'Courses', 'some search');
-    expect(mockHandle).toHaveBeenCalledWith(
-      new Error('Failed to send API request'),
-    );
+    expect(mockHandle).toHaveBeenCalledWith(new Error('Failed to send API request'));
   });
 
   it('reports the error when the server returns an error code', async () => {
@@ -60,10 +54,7 @@ describe('common/searchFields/getSuggestionsSection', () => {
   });
 
   it('reports the error when it receives broken json', async () => {
-    fetchMock.get(
-      '/api/v1.0/courses/autocomplete/?query=some%20search',
-      'not json',
-    );
+    fetchMock.get('/api/v1.0/courses/autocomplete/?query=some%20search', 'not json');
     await getSuggestionsSection('courses', 'Courses', 'some search');
     expect(mockHandle).toHaveBeenCalledWith(
       new Error(

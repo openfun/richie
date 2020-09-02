@@ -1,0 +1,3 @@
+# Because django templates requires syntax which can't contain line break
+# Prettier must ignore all Django templates files
+src/richie/**/*.html

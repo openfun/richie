@@ -1,11 +1,7 @@
 import { stringify } from 'query-string';
 
 import { API_LIST_DEFAULT_PARAMS } from 'settings';
-import {
-  APICourseSearchResponse,
-  APIListRequestParams,
-  requestStatus,
-} from 'types/api';
+import { APICourseSearchResponse, APIListRequestParams, requestStatus } from 'types/api';
 
 export interface GetListSagaSpecifics {
   endpoint: string;
@@ -29,9 +25,7 @@ export async function fetchList(
 
     if (!response.ok) {
       // Push remote errors to the error channel for consistency
-      throw new Error(
-        `Failed to get list from ${kind} search : ${response.status}.`,
-      );
+      throw new Error(`Failed to get list from ${kind} search : ${response.status}.`);
     }
 
     const content = await response.json();

@@ -28,9 +28,7 @@ describe('components/SearchFiltersPane', () => {
   it('renders all our search filter groups', () => {
     const { getByText } = render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '999', offset: '0' })}
-        >
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '999', offset: '0' })}>
           <SearchFiltersPane
             filters={{
               categories: {
@@ -63,17 +61,13 @@ describe('components/SearchFiltersPane', () => {
     getByText('Filter courses');
     getByText('Received filter title: Categories');
     getByText('Received filter title: Organizations');
-    expect(getByText('Clear 0 active filters')).toHaveClass(
-      'search-filters-pane__clear--hidden',
-    );
+    expect(getByText('Clear 0 active filters')).toHaveClass('search-filters-pane__clear--hidden');
   });
 
   it('still renders with its title when it is not passed anything', () => {
     const { getByText } = render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '999', offset: '0' })}
-        >
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '999', offset: '0' })}>
           <SearchFiltersPane filters={null} />
         </HistoryContext.Provider>
       </IntlProvider>,

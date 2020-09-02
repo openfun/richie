@@ -12,16 +12,12 @@ export interface CourseGlimpseProps {
 const messages = defineMessages({
   cover: {
     defaultMessage: 'Cover',
-    description:
-      'Placeholder text when the course we are glimpsing at is missing a cover image',
+    description: 'Placeholder text when the course we are glimpsing at is missing a cover image',
     id: 'components.CourseGlimpse.cover',
   },
 });
 
-const CourseGlimpseBase = ({
-  context,
-  course,
-}: CourseGlimpseProps & CommonDataProps) => (
+const CourseGlimpseBase = ({ context, course }: CourseGlimpseProps & CommonDataProps) => (
   <a className="course-glimpse course-glimpse--link" href={course.absolute_url}>
     <div className="course-glimpse__media">
       {course.cover_image ? (
@@ -40,18 +36,10 @@ const CourseGlimpseBase = ({
     <div className="course-glimpse__content">
       {course.icon ? (
         <div className="course-glimpse__icon">
-          <div
-            className="course-glimpse__band"
-            style={{ background: course.icon.color }}
-          >
+          <div className="course-glimpse__band" style={{ background: course.icon.color }}>
             {course.icon.title}
           </div>
-          <img
-            src={course.icon.src}
-            srcSet={course.icon.srcset}
-            sizes={course.icon.sizes}
-            alt=""
-          />
+          <img src={course.icon.src} srcSet={course.icon.srcset} sizes={course.icon.sizes} alt="" />
         </div>
       ) : null}
       <div className="course-glimpse__wrapper">
@@ -72,7 +60,6 @@ const areEqual: (
   prevProps: Readonly<CourseGlimpseProps & CommonDataProps>,
   newProps: Readonly<CourseGlimpseProps & CommonDataProps>,
 ) => boolean = (prevProps, newProps) =>
-  prevProps.context === newProps.context &&
-  prevProps.course.id === newProps.course.id;
+  prevProps.context === newProps.context && prevProps.course.id === newProps.course.id;
 
 export const CourseGlimpse = React.memo(CourseGlimpseBase, areEqual);

@@ -39,9 +39,7 @@ describe('data/useFilterValue', () => {
 
   it('returns the active [false] status of the filter value and a function to toggle it', () => {
     render(
-      <HistoryContext.Provider
-        value={makeHistoryOf({ limit: '999', offset: '0' })}
-      >
+      <HistoryContext.Provider value={makeHistoryOf({ limit: '999', offset: '0' })}>
         <TestComponent
           filter={{
             base_path: '0003',

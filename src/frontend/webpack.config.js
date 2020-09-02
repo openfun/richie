@@ -31,8 +31,7 @@ const babelCompileDeps = [
 let version;
 // Get it from the dependent's version first (if there is one)
 if (argv.richieDependentBuild) {
-  version = require(path.resolve(__dirname, '..', '..', 'package.json'))
-    .version;
+  version = require(path.resolve(__dirname, '..', '..', 'package.json')).version;
 }
 // Otherwise get it from Richie itself
 else {
@@ -45,10 +44,7 @@ module.exports = {
   // webpack config for production.
   mode: 'development',
 
-  entry: [
-    path.resolve(__dirname, 'public-path.js'),
-    path.resolve(__dirname, 'js', 'index.tsx'),
-  ],
+  entry: [path.resolve(__dirname, 'public-path.js'), path.resolve(__dirname, 'js', 'index.tsx')],
 
   output: {
     filename: 'index.js',
@@ -110,10 +106,7 @@ module.exports = {
     // Use module replacement to override any number of Richie components as defined in the settings
     ...Object.entries(overrides).map(
       (entry) =>
-        new webpack.NormalModuleReplacementPlugin(
-          new RegExp(`components\/${entry[0]}$`),
-          entry[1],
-        ),
+        new webpack.NormalModuleReplacementPlugin(new RegExp(`components\/${entry[0]}$`), entry[1]),
     ),
     // Provide the current running version as a global to our bundle. This is useful for eg. reporting
     // errors when using different versions in the backend and frontend.

@@ -21,9 +21,7 @@ import { handle } from 'utils/errors/handle';
 // Wait for the DOM to load before we scour it for an element that requires React to be rendered
 document.addEventListener('DOMContentLoaded', async (event) => {
   // Find all the elements that need React to render a component
-  const richieReactSpots = Array.prototype.slice.call(
-    document.querySelectorAll('.richie-react'),
-  );
+  const richieReactSpots = Array.prototype.slice.call(document.querySelectorAll('.richie-react'));
 
   // Only move on with anything if there are actually components to render
   if (richieReactSpots.length) {
@@ -31,9 +29,7 @@ document.addEventListener('DOMContentLoaded', async (event) => {
     const locale = document.querySelector('html')!.getAttribute('lang');
 
     if (!locale) {
-      throw new Error(
-        '<html> lang attribute is required to be set with a BCP47/RFC5646 locale.',
-      );
+      throw new Error('<html> lang attribute is required to be set with a BCP47/RFC5646 locale.');
     }
 
     // Polyfill outdated browsers who do not have Node.prototype.append
@@ -64,9 +60,7 @@ document.addEventListener('DOMContentLoaded', async (event) => {
           languageCode = locale.split('_')[0];
         }
         // Get `react-intl`/`formatjs` lang specific parameters and data
-        await import(
-          `@formatjs/intl-relativetimeformat/locale-data/${languageCode}`
-        );
+        await import(`@formatjs/intl-relativetimeformat/locale-data/${languageCode}`);
       }
     } catch (e) {
       handle(e);
@@ -84,9 +78,7 @@ document.addEventListener('DOMContentLoaded', async (event) => {
       // to the console so Richie users who provide their own 'en-US' strings are warned if they are not loaded.
       if (locale === 'en-US') {
         // tslint:disable:no-console
-        console.log(
-          'No localization file found for default en-US locale, using default messages.',
-        );
+        console.log('No localization file found for default en-US locale, using default messages.');
       } else {
         handle(e);
       }

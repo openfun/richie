@@ -33,11 +33,7 @@ describe('<SearchInput />', () => {
 
     const { getByText } = render(
       <IntlProvider locale="en">
-        <SearchInput
-          context={context}
-          inputProps={inputProps}
-          onClick={callback}
-        />
+        <SearchInput context={context} inputProps={inputProps} onClick={callback} />
       </IntlProvider>,
     );
 

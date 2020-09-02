@@ -24,9 +24,7 @@ const coursesConfig: FilterDefinition = {
 export const useStaticFilters = (includeCoursesConfig = false) => {
   const [needsFilters, setNeedsFilters] = useState(false);
 
-  const filtersResolver = useRef<
-    Nullable<(filters: StaticFilterDefinitions) => void>
-  >(null);
+  const filtersResolver = useRef<Nullable<(filters: StaticFilterDefinitions) => void>>(null);
   const [filtersPromise] = useState<Promise<StaticFilterDefinitions>>(
     () => new Promise((resolve) => (filtersResolver.current = resolve)),
   );

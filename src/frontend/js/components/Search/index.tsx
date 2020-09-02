@@ -14,8 +14,7 @@ import { matchMedia } from 'utils/indirection/window';
 const messages = defineMessages({
   errorMessage: {
     defaultMessage: `Something's wrong! Courses could not be loaded.`,
-    description:
-      'Error message for Search view when the request to load courses fails',
+    description: 'Error message for Search view when the request to load courses fails',
     id: 'components.Search.errorMessage',
   },
   hideFiltersPane: {
@@ -32,8 +31,7 @@ const messages = defineMessages({
   },
   spinnerText: {
     defaultMessage: 'Loading search results...',
-    description:
-      'Accessibility text for the spinner while search results are being loaded',
+    description: 'Accessibility text for the spinner while search results are being loaded',
     id: 'components.Search.spinnerText',
   },
 });
@@ -57,8 +55,7 @@ export const Search = ({ context }: CommonDataProps) => {
         <SearchFiltersPane
           aria-hidden={alwaysShowFilters ? false : !showFilters}
           filters={
-            courseSearchResponse &&
-            courseSearchResponse.status === requestStatus.SUCCESS
+            courseSearchResponse && courseSearchResponse.status === requestStatus.SUCCESS
               ? courseSearchResponse.content.filters
               : null
           }
@@ -73,11 +70,7 @@ export const Search = ({ context }: CommonDataProps) => {
           >
             {showFilters ? (
               <React.Fragment>
-                <svg
-                  aria-hidden={true}
-                  role="img"
-                  className="icon search__filters__toggle__icon"
-                >
+                <svg aria-hidden={true} role="img" className="icon search__filters__toggle__icon">
                   <use xlinkHref="#icon-cross" />
                 </svg>{' '}
                 <span className="offscreen">
@@ -86,11 +79,7 @@ export const Search = ({ context }: CommonDataProps) => {
               </React.Fragment>
             ) : (
               <React.Fragment>
-                <svg
-                  aria-hidden={true}
-                  role="img"
-                  className="icon search__filters__toggle__icon"
-                >
+                <svg aria-hidden={true} role="img" className="icon search__filters__toggle__icon">
                   <use xlinkHref="#icon-filter" />
                 </svg>
                 <span className="offscreen">
@@ -102,8 +91,7 @@ export const Search = ({ context }: CommonDataProps) => {
         )}
       </div>
       <div className="search__results">
-        {courseSearchResponse &&
-        courseSearchResponse.status === requestStatus.SUCCESS ? (
+        {courseSearchResponse && courseSearchResponse.status === requestStatus.SUCCESS ? (
           <React.Fragment>
             <CourseGlimpseList
               context={context}
@@ -111,13 +99,10 @@ export const Search = ({ context }: CommonDataProps) => {
               meta={courseSearchResponse.content.meta}
             />
             <PaginateCourseSearch
-              courseSearchTotalCount={
-                courseSearchResponse.content.meta.total_count
-              }
+              courseSearchTotalCount={courseSearchResponse.content.meta.total_count}
             />
           </React.Fragment>
-        ) : courseSearchResponse &&
-          courseSearchResponse.status === requestStatus.FAILURE ? (
+        ) : courseSearchResponse && courseSearchResponse.status === requestStatus.FAILURE ? (
           <div className="search__results__error">
             <svg aria-hidden={true} role="img">
               <use xlinkHref="#icon-search-fail" />

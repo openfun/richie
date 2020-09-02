@@ -8,10 +8,7 @@ export interface SearchFilterValueLeafProps {
   value: FilterValue;
 }
 
-const SearchFilterValueLeafBase = ({
-  filter,
-  value,
-}: SearchFilterValueLeafProps) => {
+const SearchFilterValueLeafBase = ({ filter, value }: SearchFilterValueLeafProps) => {
   const [isActive, toggle] = useFilterValue(filter, value);
 
   return (
@@ -38,10 +35,6 @@ const SearchFilterValueLeafBase = ({
 const areEqual: (
   prevProps: Readonly<SearchFilterValueLeafProps>,
   newProps: Readonly<SearchFilterValueLeafProps>,
-) => boolean = (prevProps, newProps) =>
-  prevProps.value.count === newProps.value.count;
+) => boolean = (prevProps, newProps) => prevProps.value.count === newProps.value.count;
 
-export const SearchFilterValueLeaf = React.memo(
-  SearchFilterValueLeafBase,
-  areEqual,
-);
+export const SearchFilterValueLeaf = React.memo(SearchFilterValueLeafBase, areEqual);

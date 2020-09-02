@@ -62,9 +62,7 @@ export const Root = ({ richieReactSpots }: RootProps) => {
       // Get the props to pass our components from the `data-props-source` if
       const dataPropsSource = element.getAttribute('data-props-source');
       if (dataPropsSource) {
-        props = JSON.parse(
-          document.querySelector(dataPropsSource)!.textContent!,
-        );
+        props = JSON.parse(document.querySelector(dataPropsSource)!.textContent!);
       }
 
       // Get the incoming props to pass our component from `data-props` if applicable
@@ -81,10 +79,7 @@ export const Root = ({ richieReactSpots }: RootProps) => {
       return ReactDOM.createPortal(<Component {...props} />, element);
     } else {
       // Emit a warning at runtime when we fail to find a matching component for an element that required one
-      console.warn(
-        'Failed to load React component: no such component in Library ' +
-          componentName,
-      );
+      console.warn('Failed to load React component: no such component in Library ' + componentName);
       return null;
     }
   });

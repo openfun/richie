@@ -27,9 +27,7 @@ describe('data/useCourseSearch', () => {
     let doResolve: (value: any) => void;
     const responseOne = new Promise((resolve) => (doResolve = resolve));
     mockFetchList.mockReturnValue(responseOne as any);
-    const { rerender } = render(
-      <TestComponent params={{ limit: '999', offset: '0' }} />,
-    );
+    const { rerender } = render(<TestComponent params={{ limit: '999', offset: '0' }} />);
 
     // Initial pass gets us a null value but issues the call
     expect(getLatestHookValue()).toEqual(null);
@@ -48,11 +46,7 @@ describe('data/useCourseSearch', () => {
     mockFetchList.mockReset();
     const responseTwo = new Promise((resolve) => (doResolve = resolve));
     mockFetchList.mockReturnValue(responseTwo as any);
-    rerender(
-      <TestComponent
-        params={{ limit: '999', offset: '0', organizations: ['43'] }}
-      />,
-    );
+    rerender(<TestComponent params={{ limit: '999', offset: '0', organizations: ['43'] }} />);
 
     // A new request is issued (meanwhile we still return the existing response)
     expect(getLatestHookValue()).toEqual('the response');

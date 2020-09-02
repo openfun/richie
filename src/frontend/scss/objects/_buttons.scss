@@ -68,11 +68,7 @@
         @include r-button-colors($scheme, $apply-border: true);
 
         &:hover {
-          @include r-button-colors(
-            $scheme,
-            $apply-border: true,
-            $prefix: 'hover'
-          );
+          @include r-button-colors($scheme, $apply-border: true, $prefix: 'hover');
         }
       }
       // Enforce colors opposed to avoid framework 'disabled'
@@ -93,10 +89,7 @@
   a {
     @include sv-flex(0, 1, auto);
     @include button-base($font-weight: bold);
-    @include r-button-colors(
-      r-theme-val(button-caesura, base),
-      $apply-border: true
-    );
+    @include r-button-colors(r-theme-val(button-caesura, base), $apply-border: true);
     display: block;
     text-transform: uppercase;
 

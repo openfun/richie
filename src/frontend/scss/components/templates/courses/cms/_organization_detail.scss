@@ -55,10 +55,7 @@
         bottom: -0.05rem;
         left: 0;
         right: 0;
-        background-image: r-theme-val(
-          organization-detail,
-          insert-background-image
-        );
+        background-image: r-theme-val(organization-detail, insert-background-image);
         background-repeat: no-repeat;
         background-position: top left;
         background-size: 100% 100%;

@@ -58,10 +58,7 @@
         padding-right: 0.5rem;
         display: inline-block;
         color: r-theme-val(blogpost-detail, aside-glimpse-title-color);
-        background: r-theme-val(
-          blogpost-detail,
-          aside-glimpse-title-background
-        );
+        background: r-theme-val(blogpost-detail, aside-glimpse-title-background);
         z-index: 4;
       }
 
@@ -73,9 +70,7 @@
           left: 0;
           right: 0;
           display: block;
-          border-bottom: 0.625rem
-            solid
-            r-theme-val(blogpost-detail, aside-glimpse-title-border);
+          border-bottom: 0.625rem solid r-theme-val(blogpost-detail, aside-glimpse-title-border);
           z-index: 3;
         }
       }
@@ -171,9 +166,7 @@
         top: 50%;
         left: 0;
         width: 0.8rem;
-        border-top: $onepixel
-          solid
-          r-theme-val(blogpost-detail, pubdate-border);
+        border-top: $onepixel solid r-theme-val(blogpost-detail, pubdate-border);
 
         @include media-breakpoint-up(lg) {
           width: 1.5rem;
@@ -198,9 +191,7 @@
         top: 50%;
         left: 0;
         width: 1.5rem;
-        border-top: $onepixel
-          solid
-          r-theme-val(blogpost-detail, authors-border);
+        border-top: $onepixel solid r-theme-val(blogpost-detail, authors-border);
       }
     }
   }

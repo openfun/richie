@@ -82,9 +82,7 @@
       object-position: center;
     }
 
-    @include m-o-media_empty(
-      $background: r-theme-val(organization-glimpse, logo-empty-background)
-    );
+    @include m-o-media_empty($background: r-theme-val(organization-glimpse, logo-empty-background));
   }
 
   // Default form factor just display org's logo
@@ -149,9 +147,7 @@
       object-position: center;
     }
 
-    @include m-o-media_empty(
-      $background: r-theme-val(organization-glimpse, logo-empty-background)
-    );
+    @include m-o-media_empty($background: r-theme-val(organization-glimpse, logo-empty-background));
   }
 
   // Default form factor just display org's logo
@@ -217,9 +213,7 @@
       object-position: unset;
     }
 
-    @include m-o-media_empty(
-      $background: r-theme-val(organization-glimpse, logo-empty-background)
-    );
+    @include m-o-media_empty($background: r-theme-val(organization-glimpse, logo-empty-background));
   }
 
   &__content {

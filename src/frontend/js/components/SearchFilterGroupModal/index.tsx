@@ -1,16 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import {
-  defineMessages,
-  FormattedMessage,
-  MessageDescriptor,
-} from 'react-intl';
+import { defineMessages, FormattedMessage, MessageDescriptor } from 'react-intl';
 import ReactModal from 'react-modal';
 
 import { fetchList } from 'data/getResourceList';
-import {
-  CourseSearchParamsAction,
-  useCourseSearchParams,
-} from 'data/useCourseSearchParams';
+import { CourseSearchParamsAction, useCourseSearchParams } from 'data/useCourseSearchParams';
 import { requestStatus } from 'types/api';
 import { FacetedFilterDefinition, FilterValue } from 'types/filters';
 import { Nullable } from 'utils/types';
@@ -34,8 +27,7 @@ const messages = defineMessages({
   },
   modalTitle: {
     defaultMessage: 'Add filters for {filterName}',
-    description:
-      'Title for the modal to add more filter values in the search filters modal.',
+    description: 'Title for the modal to add more filter values in the search filters modal.',
     id: 'components.SearchFilterGroupModal.modalTitle',
   },
   moreOptionsButton: {
@@ -61,19 +53,14 @@ if (!isTestEnv) {
   ReactModal.setAppElement('#modal-exclude');
 }
 
-export const SearchFilterGroupModal = ({
-  filter,
-}: SearchFilterGroupModalProps) => {
+export const SearchFilterGroupModal = ({ filter }: SearchFilterGroupModalProps) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [values, setValues] = useState([] as FilterValue[]);
   const [query, setQuery] = useState('');
   const [error, setError] = useState(null as Nullable<MessageDescriptor>);
 
   // We need the current course search params to get the facet counts
-  const {
-    courseSearchParams,
-    dispatchCourseSearchParamsUpdate,
-  } = useCourseSearchParams();
+  const { courseSearchParams, dispatchCourseSearchParamsUpdate } = useCourseSearchParams();
 
   // When the modal is closed, reset state so the user gets a brand-new one if they come back
   useEffect(() => {
@@ -122,10 +109,7 @@ export const SearchFilterGroupModal = ({
 
   return (
     <React.Fragment>
-      <button
-        className="search-filter-group-modal-button"
-        onClick={() => setModalIsOpen(true)}
-      >
+      <button className="search-filter-group-modal-button" onClick={() => setModalIsOpen(true)}>
         <FormattedMessage {...messages.moreOptionsButton} />
       </button>
       <ReactModal
@@ -138,10 +122,7 @@ export const SearchFilterGroupModal = ({
       >
         <fieldset className="search-filter-group-modal__form">
           <legend className="search-filter-group-modal__form__title">
-            <FormattedMessage
-              {...messages.modalTitle}
-              values={{ filterName: filter.human_name }}
-            />
+            <FormattedMessage {...messages.modalTitle} values={{ filterName: filter.human_name }} />
           </legend>
           <input
             aria-label="Search for filters to add"
@@ -153,10 +134,7 @@ export const SearchFilterGroupModal = ({
           />
           {error ? (
             <div className="search-filter-group-modal__form__error">
-              <FormattedMessage
-                {...messages.error}
-                values={{ filterName: filter.human_name }}
-              />
+              <FormattedMessage {...messages.error} values={{ filterName: filter.human_name }} />
             </div>
           ) : query.length > 0 && query.length < 3 ? (
             <div className="search-filter-group-modal__form__error">
@@ -165,10 +143,7 @@ export const SearchFilterGroupModal = ({
           ) : (
             <ul className="search-filter-group-modal__form__values">
               {values.map((value) => (
-                <li
-                  className="search-filter-group-modal__form__values__item"
-                  key={value.key}
-                >
+                <li className="search-filter-group-modal__form__values__item" key={value.key}>
                   <button
                     onClick={() => {
                       dispatchCourseSearchParamsUpdate({
@@ -187,10 +162,7 @@ export const SearchFilterGroupModal = ({
             </ul>
           )}
         </fieldset>
-        <button
-          className="search-filter-group-modal__close"
-          onClick={() => setModalIsOpen(false)}
-        >
+        <button className="search-filter-group-modal__close" onClick={() => setModalIsOpen(false)}>
           <FormattedMessage {...messages.closeButton} />
         </button>
       </ReactModal>

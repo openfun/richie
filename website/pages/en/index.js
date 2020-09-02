@@ -19,8 +19,7 @@ class HomeSplash extends React.Component {
 
     const ProjectTitle = () => (
       <h2 className="projectTitle">
-        Richie enables you to build rich education portals quickly and with less
-        code.
+        Richie enables you to build rich education portals quickly and with less code.
       </h2>
     );
 
@@ -45,9 +44,7 @@ class HomeSplash extends React.Component {
         <div className="inner">
           <ProjectTitle siteConfig={siteConfig} />
           <PromoSection>
-            <Button href="https://demo.richie.education">
-              Check out the demo
-            </Button>
+            <Button href="https://demo.richie.education">Check out the demo</Button>
           </PromoSection>
         </div>
       </SplashContainer>
@@ -64,16 +61,8 @@ module.exports = class Index extends React.Component {
     const docUrl = (doc) => `${baseUrl}${docsPart}${langPart}${doc}`;
 
     const Block = (props) => (
-      <Container
-        padding={['bottom', 'top']}
-        id={props.id}
-        background={props.background}
-      >
-        <GridBlock
-          align={props.textAlign}
-          contents={props.children}
-          layout={props.layout}
-        />
+      <Container padding={['bottom', 'top']} id={props.id} background={props.background}>
+        <GridBlock align={props.textAlign} contents={props.children} layout={props.layout} />
       </Container>
     );
 
@@ -84,9 +73,7 @@ module.exports = class Index extends React.Component {
             content:
               '<p>Richie is a specialized Content Management System designed to make learning portals. It is full-featured and ready-to-go.</p>' +
               '<p>It is a toolbox to easily create full fledged websites with a catalog of online courses in days, not months.</p>' +
-              `<a class="button" href="${docUrl(
-                'quick-start.html',
-              )}">Get started</a>`,
+              `<a class="button" href="${docUrl('quick-start.html')}">Get started</a>`,
             image: `${baseUrl}img/undraw_professor.svg`,
             imageAlign: 'left',
             title: siteConfig.tagline,
@@ -145,30 +132,26 @@ module.exports = class Index extends React.Component {
       <div className="container homepage__feature-list">
         <div className="wrapper">
           <div className="gridBlock">
-            <h2 className="homepage__feature-list__title">
-              What Richie brings you
-            </h2>
+            <h2 className="homepage__feature-list__title">What Richie brings you</h2>
             <div className="blockElement blockElement--left twoByGridBlock">
               <div className="blockContent">
                 <h3>An LMS-agnostic education portal</h3>
                 <p>
-                  Your course catalog can be synchronized with one or more LMS
-                  instances running different kinds of software, such as Open
-                  edX or Moodle. Richie is built to aggregate it all for your
-                  users.
+                  Your course catalog can be synchronized with one or more LMS instances running
+                  different kinds of software, such as Open edX or Moodle. Richie is built to
+                  aggregate it all for your users.
                 </p>
                 <h3>An editor back-office</h3>
                 <p>
-                  All the content in Richie is meant to be created and updated
-                  by regular editors, not software engineers. As it is based on
-                  Django CMS, you get a rich editor interface along with Richie.
+                  All the content in Richie is meant to be created and updated by regular editors,
+                  not software engineers. As it is based on Django CMS, you get a rich editor
+                  interface along with Richie.
                 </p>
                 <h3>Advanced access rights and moderation</h3>
                 <p>
-                  From CMS content structured objects like organizations,
-                  courses, and categories, everything is managed through
-                  comprehensive access rights. Those can be based on individual
-                  user or tied to organizations.
+                  From CMS content structured objects like organizations, courses, and categories,
+                  everything is managed through comprehensive access rights. Those can be based on
+                  individual user or tied to organizations.
                 </p>
               </div>
             </div>
@@ -176,15 +159,14 @@ module.exports = class Index extends React.Component {
               <div className="blockContent">
                 <h3>A multilingual website</h3>
                 <p>
-                  Richie itself is already available in more than one language,
-                  and you can add yours by talking to us. All the content can be
-                  added and managed in as many languages as you need.
+                  Richie itself is already available in more than one language, and you can add
+                  yours by talking to us. All the content can be added and managed in as many
+                  languages as you need.
                 </p>
                 <h3>An extensible platform</h3>
                 <p>
-                  Richie is offered as a Django application (and adjoining NPM
-                  packaged). You can install it as a third-party app to build
-                  your own learning platform with Django.
+                  Richie is offered as a Django application (and adjoining NPM packaged). You can
+                  install it as a third-party app to build your own learning platform with Django.
                 </p>
               </div>
             </div>
@@ -216,12 +198,7 @@ module.exports = class Index extends React.Component {
       const showcase = siteConfig.users
         .filter((user) => user.pinned)
         .map((user) => (
-          <img
-            src={user.image}
-            alt={user.caption}
-            title={user.caption}
-            key={user.caption}
-          />
+          <img src={user.image} alt={user.caption} title={user.caption} key={user.caption} />
         ));
 
       return (

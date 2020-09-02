@@ -280,10 +280,7 @@ $glimpse-gutter: 0.6rem;
 
   &__cta {
     @include button-base($font-weight: bold);
-    @include r-button-colors(
-      r-theme-val(blogpost-glimpse-favorite, cta),
-      $apply-border: true
-    );
+    @include r-button-colors(r-theme-val(blogpost-glimpse-favorite, cta), $apply-border: true);
     text-transform: uppercase;
 
     &:hover {

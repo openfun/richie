@@ -10,22 +10,15 @@ import {
   renderSuggestion,
 } from 'common/searchFields';
 import { SearchInput } from 'components/SearchInput';
-import {
-  CourseSearchParamsAction,
-  useCourseSearchParams,
-} from 'data/useCourseSearchParams';
+import { CourseSearchParamsAction, useCourseSearchParams } from 'data/useCourseSearchParams';
 import { useStaticFilters } from 'data/useStaticFilters';
 import { CommonDataProps } from 'types/commonDataProps';
-import {
-  SearchAutosuggestProps,
-  SearchSuggestionSection,
-} from 'types/Suggestion';
+import { SearchAutosuggestProps, SearchSuggestionSection } from 'types/Suggestion';
 
 const messages = defineMessages({
   searchFieldPlaceholder: {
     defaultMessage: 'Search for courses, organizations, categories',
-    description:
-      'Placeholder text displayed in the search field when it is empty.',
+    description: 'Placeholder text displayed in the search field when it is empty.',
     id: 'components.SearchSuggestField.searchFieldPlaceholder',
   },
 });
@@ -94,11 +87,7 @@ export const SearchSuggestField = ({ context }: CommonDataProps) => {
       });
     }
   };
-  const updateCourseSearchParamsDebounced = debounce(
-    searchAsTheUserTypes,
-    500,
-    { maxWait: 1100 },
-  );
+  const updateCourseSearchParamsDebounced = debounce(searchAsTheUserTypes, 500, { maxWait: 1100 });
 
   const inputProps: SearchAutosuggestProps['inputProps'] = {
     /**
@@ -168,11 +157,7 @@ export const SearchSuggestField = ({ context }: CommonDataProps) => {
       multiSection={true}
       onSuggestionsClearRequested={() => setSuggestions([])}
       onSuggestionsFetchRequested={async ({ value: incomingValue }) =>
-        onSuggestionsFetchRequested(
-          await getFilters(),
-          setSuggestions,
-          incomingValue,
-        )
+        onSuggestionsFetchRequested(await getFilters(), setSuggestions, incomingValue)
       }
       onSuggestionSelected={onSuggestionSelected}
       renderInputComponent={(passthroughInputProps) => (

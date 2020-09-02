@@ -120,10 +120,7 @@
       @error "A scheme color must define the background item";
     } @else if
       (
-        map-get($scheme, 'background') ==
-          transparent or
-          map-get($scheme, 'background') ==
-          inherit
+        map-get($scheme, 'background') == transparent or map-get($scheme, 'background') == inherit
       ) and
       map-get($scheme, 'font-color') ==
       null
@@ -214,12 +211,7 @@
 ///   If set to `true`, border properties for prefix "hover" will be
 ///   automatically added.
 ///
-@mixin r-button-colors(
-  $scheme,
-  $apply-border: false,
-  $prefix: null,
-  $include-hover: false
-) {
+@mixin r-button-colors($scheme, $apply-border: false, $prefix: null, $include-hover: false) {
   $props-prefix: '';
 
   @if $prefix {
@@ -251,11 +243,7 @@
 
   @if $include-hover {
     &:hover {
-      @include r-button-colors(
-        $scheme,
-        $apply-border: $apply-border,
-        $prefix: 'hover'
-      );
+      @include r-button-colors($scheme, $apply-border: $apply-border, $prefix: 'hover');
     }
   }
 }

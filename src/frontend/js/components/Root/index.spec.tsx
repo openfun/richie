@@ -25,10 +25,7 @@ describe('<Root />', () => {
   it('finds all richie-react containers and renders the relevant components into them with their passed props', () => {
     // Create the containers for the two components we're about to render
     const userLoginContainer = document.createElement('div');
-    userLoginContainer.setAttribute(
-      'class',
-      'richie-react richie-react--user-login',
-    );
+    userLoginContainer.setAttribute('class', 'richie-react richie-react--user-login');
     document.body.append(userLoginContainer);
     const rootSearchSuggestFieldContainer = document.createElement('div');
     rootSearchSuggestFieldContainer.setAttribute(
@@ -44,12 +41,7 @@ describe('<Root />', () => {
     // Render the root component, passing the elements in need of frontend rendering
     render(
       <IntlProvider locale="en">
-        <Root
-          richieReactSpots={[
-            userLoginContainer,
-            rootSearchSuggestFieldContainer,
-          ]}
-        />
+        <Root richieReactSpots={[userLoginContainer, rootSearchSuggestFieldContainer]} />
       </IntlProvider>,
     );
 
@@ -63,17 +55,11 @@ describe('<Root />', () => {
   it('prints a console warning and still renders everything else when it fails to find a component', () => {
     // Create the containers for the component we're about to render
     const userLoginContainer = document.createElement('div');
-    userLoginContainer.setAttribute(
-      'class',
-      'richie-react richie-react--user-login',
-    );
+    userLoginContainer.setAttribute('class', 'richie-react richie-react--user-login');
     document.body.append(userLoginContainer);
     // On the other hand, <UserFeedback /> is not a component that exists in Richie
     const userFeedbackContainer = document.createElement('div');
-    userFeedbackContainer.setAttribute(
-      'class',
-      'richie-react richie-react--user-feedback',
-    );
+    userFeedbackContainer.setAttribute('class', 'richie-react richie-react--user-feedback');
     document.body.append(userFeedbackContainer);
 
     // Render the root component, passing our real element and our bogus one

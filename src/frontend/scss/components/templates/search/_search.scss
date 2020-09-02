@@ -166,11 +166,7 @@ $r-search-filters-width: 15rem !default;
         @include sv-flex(1, 0, calc(50% - #{$r-course-glimpse-gutter * 2}));
       }
       @include media-breakpoint-up(lg) {
-        @include sv-flex(
-          1,
-          0,
-          calc(33.3333% - #{$r-course-glimpse-gutter * 2})
-        );
+        @include sv-flex(1, 0, calc(33.3333% - #{$r-course-glimpse-gutter * 2}));
       }
     }
   }
