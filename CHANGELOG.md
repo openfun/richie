@@ -12,6 +12,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Change CTA enrollment button for anonymous users
 
+### Fixed
+
+- Limit number of text plugins to 1 in the course description placeholder
+
 ## [2.0.0-beta.13] - 2020-08-27
 
 ### Added

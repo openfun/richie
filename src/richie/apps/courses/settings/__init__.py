@@ -132,6 +132,7 @@ CMS_PLACEHOLDER_CONF = {
     "courses/cms/course_detail.html course_description": {
         "name": _("About the course"),
         "plugins": ["CKEditorPlugin"],
+        "limits": {"CKEditorPlugin": 1},
     },
     "courses/cms/course_detail.html course_skills": {
         "name": _("What you will learn"),
