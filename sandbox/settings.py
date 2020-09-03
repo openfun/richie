@@ -194,6 +194,9 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
     SOCIAL_AUTH_EDX_OIDC_ENDPOINT = values.Value()
     SOCIAL_AUTH_POSTGRES_JSONFIELD = False  # Mysql compatibility by default
 
+    # Mapping between edx and richie profile fields
+    EDX_USER_PROFILE_TO_DJANGO = values.DictValue()
+
     # LMS
     LMS_BACKENDS = [
         {

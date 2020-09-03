@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Change CTA enrollment button for anonymous users
+- Allow to configure EDX_USER_PROFILE_TO_DJANGO setting
 
 ### Fixed
 
