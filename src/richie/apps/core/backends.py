@@ -11,6 +11,7 @@ import base64
 import datetime
 from calendar import timegm
 
+from django.conf import settings
 from django.core.cache import cache
 
 from jose import jwk, jwt
@@ -19,15 +20,19 @@ from social_core.backends.oauth import BaseOAuth2
 from social_core.backends.open_id_connect import OpenIdConnectAuth
 from social_core.exceptions import AuthTokenError
 
-EDX_USER_PROFILE_TO_DJANGO = {
-    "preferred_username": "username",
-    "email": "email",
-    "name": "full_name",
-    "given_name": "first_name",
-    "family_name": "last_name",
-    "locale": "language",
-    "user_id": "user_id",
-}
+EDX_USER_PROFILE_TO_DJANGO = getattr(
+    settings,
+    "EDX_USER_PROFILE_TO_DJANGO",
+    {
+        "preferred_username": "username",
+        "email": "email",
+        "name": "full_name",
+        "given_name": "first_name",
+        "family_name": "last_name",
+        "locale": "language",
+        "user_id": "user_id",
+    },
+)
 
 
 # pylint: disable=abstract-method,invalid-name
