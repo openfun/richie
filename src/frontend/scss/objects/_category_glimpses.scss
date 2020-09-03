@@ -129,23 +129,14 @@
 
   // When using through a color scheme, adopts its colors
   &--primary {
-    @include r-button-colors(
-      r-theme-val(category-tags, primary-item),
-      $apply-border: true
-    );
+    @include r-button-colors(r-theme-val(category-tags, primary-item), $apply-border: true);
   }
   &--secondary {
-    @include r-button-colors(
-      r-theme-val(category-tags, secondary-item),
-      $apply-border: true
-    );
+    @include r-button-colors(r-theme-val(category-tags, secondary-item), $apply-border: true);
   }
 
   &--tertiary {
-    @include r-button-colors(
-      r-theme-val(category-tags, tertiary-item),
-      $apply-border: true
-    );
+    @include r-button-colors(r-theme-val(category-tags, tertiary-item), $apply-border: true);
   }
 }
 
@@ -179,26 +170,17 @@
   // When using through a color scheme, adopts its colors
   &--primary {
     .category-tag {
-      @include r-button-colors(
-        r-theme-val(category-tags, primary-item),
-        $apply-border: true
-      );
+      @include r-button-colors(r-theme-val(category-tags, primary-item), $apply-border: true);
     }
   }
   &--secondary {
     .category-tag {
-      @include r-button-colors(
-        r-theme-val(category-tags, secondary-item),
-        $apply-border: true
-      );
+      @include r-button-colors(r-theme-val(category-tags, secondary-item), $apply-border: true);
     }
   }
   &--tertiary {
     .category-tag {
-      @include r-button-colors(
-        r-theme-val(category-tags, tertiary-item),
-        $apply-border: true
-      );
+      @include r-button-colors(r-theme-val(category-tags, tertiary-item), $apply-border: true);
     }
   }
 }
@@ -232,23 +214,14 @@
 
   // When using through a color scheme, adopts its colors
   &--primary {
-    @include r-button-colors(
-      r-theme-val(category-badges, primary-item),
-      $apply-border: true
-    );
+    @include r-button-colors(r-theme-val(category-badges, primary-item), $apply-border: true);
   }
   &--secondary {
-    @include r-button-colors(
-      r-theme-val(category-badges, secondary-item),
-      $apply-border: true
-    );
+    @include r-button-colors(r-theme-val(category-badges, secondary-item), $apply-border: true);
   }
 
   &--tertiary {
-    @include r-button-colors(
-      r-theme-val(category-badges, tertiary-item),
-      $apply-border: true
-    );
+    @include r-button-colors(r-theme-val(category-badges, tertiary-item), $apply-border: true);
   }
 }
 
@@ -288,26 +261,17 @@
   // When using through a color scheme, adopts its colors
   &--primary {
     .category-badge {
-      @include r-button-colors(
-        r-theme-val(category-badges, primary-item),
-        $apply-border: true
-      );
+      @include r-button-colors(r-theme-val(category-badges, primary-item), $apply-border: true);
     }
   }
   &--secondary {
     .category-badge {
-      @include r-button-colors(
-        r-theme-val(category-badges, secondary-item),
-        $apply-border: true
-      );
+      @include r-button-colors(r-theme-val(category-badges, secondary-item), $apply-border: true);
     }
   }
   &--tertiary {
     .category-badge {
-      @include r-button-colors(
-        r-theme-val(category-badges, tertiary-item),
-        $apply-border: true
-      );
+      @include r-button-colors(r-theme-val(category-badges, tertiary-item), $apply-border: true);
     }
   }
 }

@@ -17,12 +17,7 @@
 //   triangle. Position is determined from peak direction such as "up"
 //   direction means positionnate triangle at bottom, "left" means triangle
 //   at right, etc..
-@mixin m-o-triangle(
-  $triangle-size,
-  $triangle-color,
-  $triangle-direction,
-  $absolute
-) {
+@mixin m-o-triangle($triangle-size, $triangle-color, $triangle-direction, $absolute) {
   display: block;
   width: 0;
   height: 0;

@@ -36,11 +36,7 @@ interface UserLoginProps {
   signupUrl: string;
 }
 
-export const UserLogin = ({
-  loginUrl,
-  logoutUrl,
-  signupUrl,
-}: UserLoginProps) => {
+export const UserLogin = ({ loginUrl, logoutUrl, signupUrl }: UserLoginProps) => {
   /**
    * `user` is:
    * - `undefined` when we have not made the `whoami` request yet;
@@ -83,16 +79,10 @@ export const UserLogin = ({
         </Spinner>
       ) : user === null ? (
         <React.Fragment>
-          <a
-            href={signupUrl}
-            className="user-login__btn user-login__btn--sign-up"
-          >
+          <a href={signupUrl} className="user-login__btn user-login__btn--sign-up">
             <FormattedMessage {...messages.signUp} />
           </a>
-          <a
-            href={loginUrl}
-            className="user-login__btn user-login__btn--log-in"
-          >
+          <a href={loginUrl} className="user-login__btn user-login__btn--log-in">
             <svg aria-hidden={true} role="img" className="icon">
               <use xlinkHref="#icon-login" />
             </svg>
@@ -102,10 +92,7 @@ export const UserLogin = ({
       ) : (
         <div className="user-login__logged">
           <div className="user-login__logged__name">{user.full_name}</div>{' '}
-          <a
-            href={logoutUrl}
-            className="user-login__btn user-login__btn--log-out"
-          >
+          <a href={logoutUrl} className="user-login__btn user-login__btn--log-out">
             <FormattedMessage {...messages.logOut} />
           </a>
         </div>

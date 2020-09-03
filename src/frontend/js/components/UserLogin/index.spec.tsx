@@ -77,8 +77,6 @@ describe('<UserLogin />', () => {
     getByText('Log in');
     getByText('Sign up');
     expect(queryByText('Loading login status...')).toBeNull();
-    expect(handle).toHaveBeenCalledWith(
-      new Error('Failed to get current user.'),
-    );
+    expect(handle).toHaveBeenCalledWith(new Error('Failed to get current user.'));
   });
 });

@@ -3,10 +3,7 @@ import fetchMock from 'fetch-mock';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
-import {
-  useCourseSearchParams,
-  CourseSearchParamsAction,
-} from 'data/useCourseSearchParams';
+import { useCourseSearchParams, CourseSearchParamsAction } from 'data/useCourseSearchParams';
 import { HistoryProvider } from 'data/useHistory';
 import { CommonDataProps } from 'types/commonDataProps';
 import { FilterDefinition } from 'types/filters';
@@ -15,9 +12,7 @@ import { SearchSuggestField } from '.';
 
 // Unexplained difficulties with fake timers were encountered in these tests.
 // We decided to mock the debounce function instead.
-jest.mock('lodash-es/debounce', () => (fn: any) => (...args: any[]) =>
-  fn(...args),
-);
+jest.mock('lodash-es/debounce', () => (fn: any) => (...args: any[]) => fn(...args));
 
 jest.mock('settings', () => ({
   API_LIST_DEFAULT_PARAMS: { limit: '13', offset: '0' },
@@ -180,35 +175,25 @@ describe('components/SearchSuggestField', () => {
       </IntlProvider>,
     );
 
-    const field = getByPlaceholderText(
-      'Search for courses, organizations, categories',
-    );
+    const field = getByPlaceholderText('Search for courses, organizations, categories');
 
     // Simulate the user entering some text in the autocomplete field
     fireEvent.focus(field);
     fireEvent.change(field, { target: { value: 'aut' } });
 
     await waitFor(() => {
-      expect(
-        fetchMock.called('/api/v1.0/subjects/autocomplete/?query=aut'),
-      ).toEqual(true);
+      expect(fetchMock.called('/api/v1.0/subjects/autocomplete/?query=aut')).toEqual(true);
     });
     getByText('Subjects');
     getByText('Subject #311');
 
-    expect(
-      fetchMock.called('/api/v1.0/levels/autocomplete/?query=aut'),
-    ).toEqual(false);
+    expect(fetchMock.called('/api/v1.0/levels/autocomplete/?query=aut')).toEqual(false);
     expect(queryByText('Levels')).toEqual(null);
 
-    expect(
-      fetchMock.called('/api/v1.0/organizations/autocomplete/?query=aut'),
-    ).toEqual(true);
+    expect(fetchMock.called('/api/v1.0/organizations/autocomplete/?query=aut')).toEqual(true);
     expect(queryByText('Organizations')).toEqual(null);
 
-    expect(
-      fetchMock.called('/api/v1.0/persons/autocomplete/?query=aut'),
-    ).toEqual(true);
+    expect(fetchMock.called('/api/v1.0/persons/autocomplete/?query=aut')).toEqual(true);
     expect(queryByText('Persons')).toEqual(null);
   });
 
@@ -232,9 +217,7 @@ describe('components/SearchSuggestField', () => {
       </IntlProvider>,
     );
 
-    const field = getByPlaceholderText(
-      'Search for courses, organizations, categories',
-    );
+    const field = getByPlaceholderText('Search for courses, organizations, categories');
 
     // Simulate the user entering some text in the autocomplete field
     fireEvent.focus(field);
@@ -245,19 +228,11 @@ describe('components/SearchSuggestField', () => {
 
     fireEvent.change(field, { target: { value: 'xyz' } });
     await waitFor(() => {
-      expect(
-        fetchMock.called('/api/v1.0/subjects/autocomplete/?query=xyz'),
-      ).toEqual(true);
+      expect(fetchMock.called('/api/v1.0/subjects/autocomplete/?query=xyz')).toEqual(true);
     });
-    expect(
-      fetchMock.called('/api/v1.0/levels/autocomplete/?query=xyz'),
-    ).toEqual(false);
-    expect(
-      fetchMock.called('/api/v1.0/organizations/autocomplete/?query=xyz'),
-    ).toEqual(true);
-    expect(
-      fetchMock.called('/api/v1.0/persons/autocomplete/?query=xyz'),
-    ).toEqual(true);
+    expect(fetchMock.called('/api/v1.0/levels/autocomplete/?query=xyz')).toEqual(false);
+    expect(fetchMock.called('/api/v1.0/organizations/autocomplete/?query=xyz')).toEqual(true);
+    expect(fetchMock.called('/api/v1.0/persons/autocomplete/?query=xyz')).toEqual(true);
   });
 
   it('updates the search params when the user selects a filter suggestion', async () => {
@@ -287,9 +262,7 @@ describe('components/SearchSuggestField', () => {
       </IntlProvider>,
     );
 
-    const field = getByPlaceholderText(
-      'Search for courses, organizations, categories',
-    );
+    const field = getByPlaceholderText('Search for courses, organizations, categories');
 
     // Simulate the user entering some text in the autocomplete field
     fireEvent.focus(field);
@@ -310,25 +283,17 @@ describe('components/SearchSuggestField', () => {
       '/search?limit=13&offset=0&query=orga',
     );
 
-    expect(
-      fetchMock.called('/api/v1.0/levels/autocomplete/?query=orga'),
-    ).toEqual(false);
+    expect(fetchMock.called('/api/v1.0/levels/autocomplete/?query=orga')).toEqual(false);
     expect(queryByText('Levels')).toEqual(null);
 
-    expect(
-      fetchMock.called('/api/v1.0/organizations/autocomplete/?query=orga'),
-    ).toEqual(true);
+    expect(fetchMock.called('/api/v1.0/organizations/autocomplete/?query=orga')).toEqual(true);
     getByText('Organizations');
     getByText('Organization #27');
 
-    expect(
-      fetchMock.called('/api/v1.0/persons/autocomplete/?query=orga'),
-    ).toEqual(true);
+    expect(fetchMock.called('/api/v1.0/persons/autocomplete/?query=orga')).toEqual(true);
     expect(queryByText('Persons')).toEqual(null);
 
-    expect(
-      fetchMock.called('/api/v1.0/subjects/autocomplete/?query=orga'),
-    ).toEqual(true);
+    expect(fetchMock.called('/api/v1.0/subjects/autocomplete/?query=orga')).toEqual(true);
     expect(queryByText('Subjects')).toEqual(null);
 
     fireEvent.click(getByText('Organization #27'));
@@ -381,9 +346,7 @@ describe('components/SearchSuggestField', () => {
       </IntlProvider>,
     );
 
-    const field = getByPlaceholderText(
-      'Search for courses, organizations, categories',
-    );
+    const field = getByPlaceholderText('Search for courses, organizations, categories');
 
     // Simulate the user entering some text in the autocomplete field
     fireEvent.focus(field);
@@ -404,25 +367,17 @@ describe('components/SearchSuggestField', () => {
       '/search?limit=13&offset=0&query=doct',
     );
 
-    expect(
-      fetchMock.called('/api/v1.0/levels/autocomplete/?query=doct'),
-    ).toEqual(false);
+    expect(fetchMock.called('/api/v1.0/levels/autocomplete/?query=doct')).toEqual(false);
     expect(queryByText('Levels')).toEqual(null);
 
-    expect(
-      fetchMock.called('/api/v1.0/organizations/autocomplete/?query=doct'),
-    ).toEqual(true);
+    expect(fetchMock.called('/api/v1.0/organizations/autocomplete/?query=doct')).toEqual(true);
     expect(queryByText('Organizations')).toEqual(null);
 
-    expect(
-      fetchMock.called('/api/v1.0/persons/autocomplete/?query=doct'),
-    ).toEqual(true);
+    expect(fetchMock.called('/api/v1.0/persons/autocomplete/?query=doct')).toEqual(true);
     getByText('Persons');
     getByText('Doctor Doom');
 
-    expect(
-      fetchMock.called('/api/v1.0/subjects/autocomplete/?query=doct'),
-    ).toEqual(true);
+    expect(fetchMock.called('/api/v1.0/subjects/autocomplete/?query=doct')).toEqual(true);
     expect(queryByText('Subjects')).toEqual(null);
 
     fireEvent.click(getByText('Doctor Doom'));
@@ -470,9 +425,7 @@ describe('components/SearchSuggestField', () => {
       </IntlProvider>,
     );
 
-    const field = getByPlaceholderText(
-      'Search for courses, organizations, categories',
-    );
+    const field = getByPlaceholderText('Search for courses, organizations, categories');
 
     // Simulate the user deleting the text in the autocomplete field
     fireEvent.focus(field);
@@ -514,9 +467,7 @@ describe('components/SearchSuggestField', () => {
       </IntlProvider>,
     );
 
-    const field = getByPlaceholderText(
-      'Search for courses, organizations, categories',
-    );
+    const field = getByPlaceholderText('Search for courses, organizations, categories');
     fireEvent.focus(field);
 
     // NB: the tests below rely on the very crude debounce mock for lodash-debounce.
@@ -595,9 +546,7 @@ describe('components/SearchSuggestField', () => {
       </IntlProvider>,
     );
 
-    const field = getByPlaceholderText(
-      'Search for courses, organizations, categories',
-    );
+    const field = getByPlaceholderText('Search for courses, organizations, categories');
     fireEvent.focus(field);
 
     // NB: the tests below rely on the very crude debounce mock for lodash-debounce.
@@ -663,9 +612,7 @@ describe('components/SearchSuggestField', () => {
       </IntlProvider>,
     );
 
-    const field = getByPlaceholderText(
-      'Search for courses, organizations, categories',
-    );
+    const field = getByPlaceholderText('Search for courses, organizations, categories');
     fireEvent.focus(field);
 
     // The user is typing an organization name

@@ -14,14 +14,12 @@ import { useAsyncEffect } from 'utils/useAsyncEffect';
 const messages = defineMessages({
   ariaHideChildren: {
     defaultMessage: 'Hide additional filters for {filterValueName}',
-    description:
-      'Accessibility message for the button to hide children of the current filter',
+    description: 'Accessibility message for the button to hide children of the current filter',
     id: 'components.SearchFilterValueParent.ariaHideChildren',
   },
   ariaShowChildren: {
     defaultMessage: 'Show more filters for {filterValueName}',
-    description:
-      'Accessibility message for the button to show children of the current filter',
+    description: 'Accessibility message for the button to show children of the current filter',
     id: 'components.SearchFilterValueParent.ariaShowChildren',
   },
 });
@@ -31,22 +29,16 @@ interface SearchFilterValueParentProps {
   value: FilterValue;
 }
 
-export const SearchFilterValueParent = ({
-  filter,
-  value,
-}: SearchFilterValueParentProps) => {
+export const SearchFilterValueParent = ({ filter, value }: SearchFilterValueParentProps) => {
   const intl = useIntl();
 
   // Get the current values for the filter definition so we know if any children of this parent
   // filter are active (and we therefore need to get them and unfold the children).
   const { courseSearchParams } = useCourseSearchParams();
   // Default to an array of strings no matter the current value so we can easily check for active values
-  const activeFilterValues =
-    courseSearchParams[filter.name] || ([] as string[]);
+  const activeFilterValues = courseSearchParams[filter.name] || ([] as string[]);
   const activeValuesList =
-    typeof activeFilterValues === 'string'
-      ? [activeFilterValues]
-      : activeFilterValues;
+    typeof activeFilterValues === 'string' ? [activeFilterValues] : activeFilterValues;
 
   // We can easily determine if any children are active without having to GET them first through our
   // path key convention.
@@ -58,11 +50,8 @@ export const SearchFilterValueParent = ({
   const hasActiveChildren = activeValuesList.some((activeValueKey) =>
     childrenPathMatchRegexp.test(activeValueKey),
   );
-  const [userShowChildren, setUserShowChildren] = useState(
-    null as Nullable<boolean>,
-  );
-  const showChildren =
-    userShowChildren !== null ? !!userShowChildren : hasActiveChildren;
+  const [userShowChildren, setUserShowChildren] = useState(null as Nullable<boolean>);
+  const showChildren = userShowChildren !== null ? !!userShowChildren : hasActiveChildren;
 
   const [children, setChildren] = useState([] as FilterValue[]);
   useAsyncEffect(async () => {
@@ -75,9 +64,7 @@ export const SearchFilterValueParent = ({
       });
 
       if (childrenResponse.status === requestStatus.FAILURE) {
-        throw new Error(
-          `Failed to get children filters for ${filter.name}/${childrenPathMatch}`,
-        );
+        throw new Error(`Failed to get children filters for ${filter.name}/${childrenPathMatch}`);
       }
 
       setChildren(childrenResponse.content.filters[filter.name].values);
@@ -90,16 +77,10 @@ export const SearchFilterValueParent = ({
   const [isActive, toggle] = useFilterValue(filter, value);
   return (
     <div className="search-filter-value-parent">
-      <div
-        className={`search-filter-value-parent__self ${
-          isActive ? 'active' : ''
-        }`}
-      >
+      <div className={`search-filter-value-parent__self ${isActive ? 'active' : ''}`}>
         <label
           className={`search-filter-value-parent__self__label ${
-            value.count === 0
-              ? 'search-filter-value-parent__self__label--disabled'
-              : ''
+            value.count === 0 ? 'search-filter-value-parent__self__label--disabled' : ''
           }`}
         >
           <input
@@ -116,9 +97,7 @@ export const SearchFilterValueParent = ({
         </label>
         <button
           aria-label={intl.formatMessage(
-            showChildren
-              ? messages.ariaHideChildren
-              : messages.ariaShowChildren,
+            showChildren ? messages.ariaHideChildren : messages.ariaShowChildren,
             {
               filterValueName: value.human_name,
             },
@@ -135,11 +114,7 @@ export const SearchFilterValueParent = ({
       {showChildren && (
         <div className="search-filter-value-parent__children">
           {children.map((childValue) => (
-            <SearchFilterValueLeaf
-              filter={filter}
-              key={childValue.key}
-              value={childValue}
-            />
+            <SearchFilterValueLeaf filter={filter} key={childValue.key} value={childValue} />
           ))}
         </div>
       )}

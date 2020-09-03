@@ -23,8 +23,7 @@ import { location } from 'utils/indirection/window';
 const messages = defineMessages({
   searchFieldPlaceholder: {
     defaultMessage: 'Search for courses',
-    description:
-      'Placeholder text displayed in the search field when it is empty.',
+    description: 'Placeholder text displayed in the search field when it is empty.',
     id: 'components.SearchSuggestField.searchFieldPlaceholder',
   },
 });
@@ -55,9 +54,7 @@ export const RootSearchSuggestField = ({
 
   // Helper to know if the user is currently highlighting a suggestion. This is necessary to make sure we do not
   // override default `Autosuggest` behavior when we receive the ENTER keycode that triggers text search.
-  const [hasHighlightedSuggestion, setHasHighlightedSuggestion] = useState(
-    false,
-  );
+  const [hasHighlightedSuggestion, setHasHighlightedSuggestion] = useState(false);
 
   /**
    * Helper function; sends the user to the Search view with the current input value as full text search.
@@ -133,15 +130,9 @@ export const RootSearchSuggestField = ({
       multiSection={true}
       onSuggestionsClearRequested={() => setSuggestions([])}
       onSuggestionsFetchRequested={async ({ value: incomingValue }) =>
-        onSuggestionsFetchRequested(
-          await getFilters(),
-          setSuggestions,
-          incomingValue,
-        )
+        onSuggestionsFetchRequested(await getFilters(), setSuggestions, incomingValue)
       }
-      onSuggestionHighlighted={({ suggestion }) =>
-        setHasHighlightedSuggestion(!suggestion)
-      }
+      onSuggestionHighlighted={({ suggestion }) => setHasHighlightedSuggestion(!suggestion)}
       onSuggestionSelected={onSuggestionSelected}
       renderInputComponent={(passthroughInputProps) => (
         <SearchInput

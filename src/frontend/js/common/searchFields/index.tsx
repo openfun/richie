@@ -14,18 +14,17 @@ import { getSuggestionsSection } from './getSuggestionsSection';
  * `react-autosuggest` callback to get a human string value from a Suggestion object.
  * @param suggestion The relevant suggestion object.
  */
-export const getSuggestionValue: SearchAutosuggestProps['getSuggestionValue'] = (
-  suggestion,
-) => suggestion.title;
+export const getSuggestionValue: SearchAutosuggestProps['getSuggestionValue'] = (suggestion) =>
+  suggestion.title;
 
 /**
  * `react-autosuggest` callback to render one suggestion.
  * @param suggestion Either a resource suggestion with a model name & a machine name, or the default
  * suggestion with some text to render.
  */
-export const renderSuggestion: SearchAutosuggestProps['renderSuggestion'] = (
-  suggestion,
-) => <span>{suggestion.title}</span>;
+export const renderSuggestion: SearchAutosuggestProps['renderSuggestion'] = (suggestion) => (
+  <span>{suggestion.title}</span>
+);
 
 /**
  * `react-autosuggest` callback to build up the list of suggestions and sections whenever user
@@ -50,11 +49,7 @@ export const onSuggestionsFetchRequested = async (
       Object.values(await filters)
         .filter((filterdef) => filterdef.is_autocompletable)
         .map((filterdef) =>
-          getSuggestionsSection(
-            filterdef.name,
-            filterdef.human_name,
-            incomingValue,
-          ),
+          getSuggestionsSection(filterdef.name, filterdef.human_name, incomingValue),
         ),
       // We can assert this because of the catch below
     )) as SearchSuggestionSection[];
@@ -78,9 +73,7 @@ export const getRelevantFilter = (
   suggestion: SearchSuggestion,
 ) => {
   // Use the `kind` field on the suggestion to pick the relevant filter to update.
-  let filter = Object.values(filters).find(
-    (fltr) => fltr.name === suggestion.kind,
-  )!;
+  let filter = Object.values(filters).find((fltr) => fltr.name === suggestion.kind)!;
 
   // We need a special-case to handle categories until we refactor the API to separate endpoints between
   // kinds of categories
@@ -88,9 +81,7 @@ export const getRelevantFilter = (
     // Pick the filter to update based on the payload's path: it contains the relevant filter's page path
     // (for eg. a meta-category or the "organizations" root page)
     filter = Object.values(filters).find(
-      (fltr) =>
-        !!fltr.base_path &&
-        String(suggestion.id).substr(2).startsWith(fltr.base_path),
+      (fltr) => !!fltr.base_path && String(suggestion.id).substr(2).startsWith(fltr.base_path),
     )!;
   }
 

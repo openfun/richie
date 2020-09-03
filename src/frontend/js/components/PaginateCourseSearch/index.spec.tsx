@@ -24,9 +24,7 @@ describe('<PaginateCourseSearch />', () => {
   it('shows a pagination for course search (when on page 1)', () => {
     render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '20', offset: '0' })}
-        >
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
           <PaginateCourseSearch courseSearchTotalCount={200} />
         </HistoryContext.Provider>
       </IntlProvider>,
@@ -48,9 +46,7 @@ describe('<PaginateCourseSearch />', () => {
   it('shows a pagination for course search (when on the last page)', () => {
     render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '20', offset: '200' })}
-        >
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '200' })}>
           <PaginateCourseSearch courseSearchTotalCount={211} />
         </HistoryContext.Provider>
       </IntlProvider>,
@@ -72,9 +68,7 @@ describe('<PaginateCourseSearch />', () => {
   it('shows a pagination for course search (when on an arbitrary page)', () => {
     render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '10', offset: '110' })}
-        >
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '10', offset: '110' })}>
           <PaginateCourseSearch courseSearchTotalCount={345} />
         </HistoryContext.Provider>
       </IntlProvider>,
@@ -102,25 +96,19 @@ describe('<PaginateCourseSearch />', () => {
   it('does not render itself when there is only one page', () => {
     render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '20', offset: '0' })}
-        >
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
           <PaginateCourseSearch courseSearchTotalCount={14} />
         </HistoryContext.Provider>
       </IntlProvider>,
     );
 
-    expect(screen.queryByRole('pagination', { name: 'Pagination' })).toEqual(
-      null,
-    );
+    expect(screen.queryByRole('pagination', { name: 'Pagination' })).toEqual(null);
   });
 
   it('updates the course search params when the user clicks on a page', () => {
     render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '20', offset: '0' })}
-        >
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
           <PaginateCourseSearch courseSearchTotalCount={200} />
         </HistoryContext.Provider>
       </IntlProvider>,
@@ -150,9 +138,7 @@ describe('<PaginateCourseSearch />', () => {
   it('does not update the course search params when the user clicks on the current page', () => {
     render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '20', offset: '0' })}
-        >
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
           <PaginateCourseSearch courseSearchTotalCount={200} />
         </HistoryContext.Provider>
       </IntlProvider>,

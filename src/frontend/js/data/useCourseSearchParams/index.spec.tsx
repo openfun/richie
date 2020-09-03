@@ -27,9 +27,7 @@ describe('data/useCourseSearchParams', () => {
 
   beforeEach(() => {
     // Remove any keys added to the mockWindow location object, reset pathname to /search
-    Object.keys(mockWindow.location).forEach(
-      (key) => delete (mockWindow.location as any)[key],
-    );
+    Object.keys(mockWindow.location).forEach((key) => delete (mockWindow.location as any)[key]);
     mockWindow.location.pathname = '/search';
     jest.resetAllMocks();
   });
@@ -86,10 +84,7 @@ describe('data/useCourseSearchParams', () => {
         </HistoryProvider>,
       );
       {
-        const {
-          courseSearchParams,
-          dispatchCourseSearchParamsUpdate,
-        } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           languages: 'fr',
           limit: '13',
@@ -143,10 +138,7 @@ describe('data/useCourseSearchParams', () => {
         </HistoryProvider>,
       );
       {
-        const {
-          courseSearchParams,
-          dispatchCourseSearchParamsUpdate,
-        } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           languages: 'en',
           limit: '17',
@@ -194,18 +186,14 @@ describe('data/useCourseSearchParams', () => {
     });
 
     it('replaces the query on courseSearchParams & updates history', () => {
-      mockWindow.location.search =
-        '?languages=fr&limit=999&offset=0&query=some%20previous%20query';
+      mockWindow.location.search = '?languages=fr&limit=999&offset=0&query=some%20previous%20query';
       render(
         <HistoryProvider>
           <TestComponent />
         </HistoryProvider>,
       );
       {
-        const {
-          courseSearchParams,
-          dispatchCourseSearchParamsUpdate,
-        } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           languages: 'fr',
           limit: '999',
@@ -254,18 +242,14 @@ describe('data/useCourseSearchParams', () => {
     });
 
     it('clears the query on courseSearchParams & updates query history', () => {
-      mockWindow.location.search =
-        '?languages=es&limit=999&offset=0&query=some%20existing%20query';
+      mockWindow.location.search = '?languages=es&limit=999&offset=0&query=some%20existing%20query';
       render(
         <HistoryProvider>
           <TestComponent />
         </HistoryProvider>,
       );
       {
-        const {
-          courseSearchParams,
-          dispatchCourseSearchParamsUpdate,
-        } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           languages: 'es',
           limit: '999',
@@ -324,10 +308,7 @@ describe('data/useCourseSearchParams', () => {
         </HistoryProvider>,
       );
       {
-        const {
-          courseSearchParams,
-          dispatchCourseSearchParamsUpdate,
-        } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '10',
           offset: '999',
@@ -382,18 +363,14 @@ describe('data/useCourseSearchParams', () => {
     });
 
     it('adds to the existing list for non-MPTT-formatted filter value keys and resets pagination', () => {
-      mockWindow.location.search =
-        '?languages=en&languages=fr&offset=999&limit=10';
+      mockWindow.location.search = '?languages=en&languages=fr&offset=999&limit=10';
       render(
         <HistoryProvider>
           <TestComponent />
         </HistoryProvider>,
       );
       {
-        const {
-          courseSearchParams,
-          dispatchCourseSearchParamsUpdate,
-        } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           languages: ['en', 'fr'],
           limit: '10',
@@ -448,18 +425,14 @@ describe('data/useCourseSearchParams', () => {
     });
 
     it('creates a list with the existing single value and the new value, resets pagination & updates history', () => {
-      mockWindow.location.search =
-        '?organizations=L-00010003&offset=999&limit=10';
+      mockWindow.location.search = '?organizations=L-00010003&offset=999&limit=10';
       render(
         <HistoryProvider>
           <TestComponent />
         </HistoryProvider>,
       );
       {
-        const {
-          courseSearchParams,
-          dispatchCourseSearchParamsUpdate,
-        } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '10',
           offset: '999',
@@ -521,10 +494,7 @@ describe('data/useCourseSearchParams', () => {
         </HistoryProvider>,
       );
       {
-        const {
-          courseSearchParams,
-          dispatchCourseSearchParamsUpdate,
-        } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           languages: 'de',
           limit: '10',
@@ -586,10 +556,7 @@ describe('data/useCourseSearchParams', () => {
         </HistoryProvider>,
       );
       {
-        const {
-          courseSearchParams,
-          dispatchCourseSearchParamsUpdate,
-        } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -654,10 +621,7 @@ describe('data/useCourseSearchParams', () => {
         </HistoryProvider>,
       );
       {
-        const {
-          courseSearchParams,
-          dispatchCourseSearchParamsUpdate,
-        } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -704,20 +668,13 @@ describe('data/useCourseSearchParams', () => {
         </HistoryProvider>,
       );
       {
-        const {
-          courseSearchParams,
-          dispatchCourseSearchParamsUpdate,
-        } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           levels: 'L-000200020005',
           limit: '999',
           offset: '0',
           query: 'a query',
-          subjects: [
-            'L-0002000300050001',
-            'L-0002000300050004',
-            'P-000200030012',
-          ],
+          subjects: ['L-0002000300050001', 'L-0002000300050004', 'P-000200030012'],
         });
 
         act(() =>
@@ -784,10 +741,7 @@ describe('data/useCourseSearchParams', () => {
         </HistoryProvider>,
       );
       {
-        const {
-          courseSearchParams,
-          dispatchCourseSearchParamsUpdate,
-        } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           levels: 'L-000200020005',
           limit: '999',
@@ -862,10 +816,7 @@ describe('data/useCourseSearchParams', () => {
         </HistoryProvider>,
       );
       {
-        const {
-          courseSearchParams,
-          dispatchCourseSearchParamsUpdate,
-        } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           levels: 'L-000200020005',
           limit: '999',
@@ -939,10 +890,7 @@ describe('data/useCourseSearchParams', () => {
         </HistoryProvider>,
       );
       {
-        const {
-          courseSearchParams,
-          dispatchCourseSearchParamsUpdate,
-        } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           levels: 'L-000200020005',
           limit: '999',
@@ -1013,10 +961,7 @@ describe('data/useCourseSearchParams', () => {
       );
       {
         // Set a value where there was no value
-        const {
-          courseSearchParams,
-          dispatchCourseSearchParamsUpdate,
-        } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -1126,10 +1071,7 @@ describe('data/useCourseSearchParams', () => {
         </HistoryProvider>,
       );
       {
-        const {
-          courseSearchParams,
-          dispatchCourseSearchParamsUpdate,
-        } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           level: 'L-000200010001',
           limit: '999',
@@ -1171,10 +1113,7 @@ describe('data/useCourseSearchParams', () => {
       );
       {
         // Remove from a list of more than one value
-        const {
-          courseSearchParams,
-          dispatchCourseSearchParamsUpdate,
-        } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -1289,10 +1228,7 @@ describe('data/useCourseSearchParams', () => {
         </HistoryProvider>,
       );
       {
-        const {
-          courseSearchParams,
-          dispatchCourseSearchParamsUpdate,
-        } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -1355,10 +1291,7 @@ describe('data/useCourseSearchParams', () => {
         </HistoryProvider>,
       );
       {
-        const {
-          courseSearchParams,
-          dispatchCourseSearchParamsUpdate,
-        } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -1397,10 +1330,7 @@ describe('data/useCourseSearchParams', () => {
         </HistoryProvider>,
       );
       {
-        const {
-          courseSearchParams,
-          dispatchCourseSearchParamsUpdate,
-        } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -1433,18 +1363,14 @@ describe('data/useCourseSearchParams', () => {
     it('does nothing if the existing single value does not match the payload', () => {
       // This is a special case when there is a single value not wrapper in an array after it was
       // just parsed and not interacted with yet.
-      mockWindow.location.search =
-        '?limit=999&offset=0&organizations=L-00010011';
+      mockWindow.location.search = '?limit=999&offset=0&organizations=L-00010011';
       render(
         <HistoryProvider>
           <TestComponent />
         </HistoryProvider>,
       );
       {
-        const {
-          courseSearchParams,
-          dispatchCourseSearchParamsUpdate,
-        } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -1477,18 +1403,14 @@ describe('data/useCourseSearchParams', () => {
 
   describe('FILTER_REMOVE [drilldown]', () => {
     it('removes the value from the filter', () => {
-      mockWindow.location.search =
-        '?level=L-000200010001&limit=999&offset=0&query=some%20query';
+      mockWindow.location.search = '?level=L-000200010001&limit=999&offset=0&query=some%20query';
       render(
         <HistoryProvider>
           <TestComponent />
         </HistoryProvider>,
       );
       {
-        const {
-          courseSearchParams,
-          dispatchCourseSearchParamsUpdate,
-        } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           level: 'L-000200010001',
           limit: '999',
@@ -1544,18 +1466,14 @@ describe('data/useCourseSearchParams', () => {
     });
 
     it('does nothing if the value to remove was not the existing value', () => {
-      mockWindow.location.search =
-        '?level=L-000200010001&limit=999&offset=0&query=some%20query';
+      mockWindow.location.search = '?level=L-000200010001&limit=999&offset=0&query=some%20query';
       render(
         <HistoryProvider>
           <TestComponent />
         </HistoryProvider>,
       );
       {
-        const {
-          courseSearchParams,
-          dispatchCourseSearchParamsUpdate,
-        } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           level: 'L-000200010001',
           limit: '999',
@@ -1596,10 +1514,7 @@ describe('data/useCourseSearchParams', () => {
         </HistoryProvider>,
       );
       {
-        const {
-          courseSearchParams,
-          dispatchCourseSearchParamsUpdate,
-        } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -1642,10 +1557,7 @@ describe('data/useCourseSearchParams', () => {
         </HistoryProvider>,
       );
       {
-        const {
-          courseSearchParams,
-          dispatchCourseSearchParamsUpdate,
-        } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
         expect(courseSearchParams).toEqual({
           limit: '27',
           offset: '54',
@@ -1692,10 +1604,7 @@ describe('data/useCourseSearchParams', () => {
       </HistoryProvider>,
     );
     {
-      const {
-        courseSearchParams,
-        dispatchCourseSearchParamsUpdate,
-      } = getLatestHookValues();
+      const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
       expect(courseSearchParams).toEqual({
         limit: '20',
         offset: '0',

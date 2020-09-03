@@ -2,10 +2,7 @@ import React from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { SearchFilterGroup } from 'components/SearchFilterGroup';
-import {
-  CourseSearchParamsAction,
-  useCourseSearchParams,
-} from 'data/useCourseSearchParams';
+import { CourseSearchParamsAction, useCourseSearchParams } from 'data/useCourseSearchParams';
 import { API_LIST_DEFAULT_PARAMS } from 'settings';
 import { APICourseSearchResponse } from 'types/api';
 import { Nullable } from 'utils/types';
@@ -18,8 +15,7 @@ const messages = defineMessages({
   clearFilters: {
     defaultMessage:
       'Clear {activeFilterCount, number} active {activeFilterCount, plural, one {filter} other {filters}}',
-    description:
-      'Helper button in search filters pane in search page to remove all active filters',
+    description: 'Helper button in search filters pane in search page to remove all active filters',
     id: 'components.SearchFiltersPane.clearFilters',
   },
   filter: {
@@ -33,16 +29,10 @@ export const SearchFiltersPane = ({
   filters,
   ...passThroughProps
 }: SearchFiltersPaneProps &
-  React.DetailedHTMLProps<
-    React.HTMLAttributes<HTMLDivElement>,
-    HTMLDivElement
-  >) => {
+  React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>) => {
   const filterList = filters && Object.values(filters);
 
-  const {
-    courseSearchParams,
-    dispatchCourseSearchParamsUpdate,
-  } = useCourseSearchParams();
+  const { courseSearchParams, dispatchCourseSearchParamsUpdate } = useCourseSearchParams();
 
   // Get all the currently active filters to show a count
   const activeFilters = Object.entries(courseSearchParams)
@@ -73,15 +63,10 @@ export const SearchFiltersPane = ({
           })
         }
       >
-        <FormattedMessage
-          {...messages.clearFilters}
-          values={{ activeFilterCount }}
-        />
+        <FormattedMessage {...messages.clearFilters} values={{ activeFilterCount }} />
       </a>
       {filterList &&
-        filterList.map((filter) => (
-          <SearchFilterGroup filter={filter} key={filter.name} />
-        ))}
+        filterList.map((filter) => <SearchFilterGroup filter={filter} key={filter.name} />)}
     </div>
   );
 };

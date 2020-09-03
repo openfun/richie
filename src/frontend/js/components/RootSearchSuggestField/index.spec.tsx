@@ -47,10 +47,7 @@ describe('<RootSearchSuggestField />', () => {
 
     render(
       <IntlProvider locale="en">
-        <RootSearchSuggestField
-          courseSearchPageUrl="/en/courses/"
-          context={commonDataProps}
-        />
+        <RootSearchSuggestField courseSearchPageUrl="/en/courses/" context={commonDataProps} />
       </IntlProvider>,
     );
 
@@ -75,10 +72,7 @@ describe('<RootSearchSuggestField />', () => {
 
     render(
       <IntlProvider locale="en">
-        <RootSearchSuggestField
-          courseSearchPageUrl="/en/courses/"
-          context={commonDataProps}
-        />
+        <RootSearchSuggestField courseSearchPageUrl="/en/courses/" context={commonDataProps} />
       </IntlProvider>,
     );
 
@@ -96,16 +90,12 @@ describe('<RootSearchSuggestField />', () => {
     fireEvent.change(field, { target: { value: 'aut' } });
 
     await waitFor(() => {
-      expect(
-        fetchMock.called('/api/v1.0/subjects/autocomplete/?query=aut'),
-      ).toEqual(true);
+      expect(fetchMock.called('/api/v1.0/subjects/autocomplete/?query=aut')).toEqual(true);
       screen.getByText('Subjects');
       screen.getByText('Subject #311');
     });
 
-    expect(
-      fetchMock.called('/api/v1.0/courses/autocomplete/?query=aut'),
-    ).toEqual(true);
+    expect(fetchMock.called('/api/v1.0/courses/autocomplete/?query=aut')).toEqual(true);
     expect(screen.queryByText('Courses')).toEqual(null);
   });
 
@@ -126,10 +116,7 @@ describe('<RootSearchSuggestField />', () => {
 
     render(
       <IntlProvider locale="en">
-        <RootSearchSuggestField
-          courseSearchPageUrl="/en/courses/"
-          context={commonDataProps}
-        />
+        <RootSearchSuggestField courseSearchPageUrl="/en/courses/" context={commonDataProps} />
       </IntlProvider>,
     );
 
@@ -138,16 +125,12 @@ describe('<RootSearchSuggestField />', () => {
     fireEvent.change(field, { target: { value: 'aut' } });
 
     await waitFor(() => {
-      expect(
-        fetchMock.called('/api/v1.0/courses/autocomplete/?query=aut'),
-      ).toEqual(true);
+      expect(fetchMock.called('/api/v1.0/courses/autocomplete/?query=aut')).toEqual(true);
     });
     screen.getByText('Courses');
     const course = screen.getByText('Course #42');
 
-    expect(
-      fetchMock.called('/api/v1.0/subjects/autocomplete/?query=aut'),
-    ).toEqual(true);
+    expect(fetchMock.called('/api/v1.0/subjects/autocomplete/?query=aut')).toEqual(true);
     expect(screen.queryByText('Subjects')).toEqual(null);
 
     fireEvent.click(course);
@@ -172,10 +155,7 @@ describe('<RootSearchSuggestField />', () => {
 
     render(
       <IntlProvider locale="en">
-        <RootSearchSuggestField
-          courseSearchPageUrl="/en/courses/"
-          context={commonDataProps}
-        />
+        <RootSearchSuggestField courseSearchPageUrl="/en/courses/" context={commonDataProps} />
       </IntlProvider>,
     );
 
@@ -184,16 +164,12 @@ describe('<RootSearchSuggestField />', () => {
     fireEvent.change(field, { target: { value: 'aut' } });
 
     await waitFor(() => {
-      expect(
-        fetchMock.called('/api/v1.0/subjects/autocomplete/?query=aut'),
-      ).toEqual(true);
+      expect(fetchMock.called('/api/v1.0/subjects/autocomplete/?query=aut')).toEqual(true);
     });
     screen.getByText('Subjects');
     const subject = screen.getByText('Subject #311');
 
-    expect(
-      fetchMock.called('/api/v1.0/courses/autocomplete/?query=aut'),
-    ).toEqual(true);
+    expect(fetchMock.called('/api/v1.0/courses/autocomplete/?query=aut')).toEqual(true);
     expect(screen.queryByText('Courses')).toEqual(null);
 
     fireEvent.click(subject);
@@ -215,10 +191,7 @@ describe('<RootSearchSuggestField />', () => {
 
     render(
       <IntlProvider locale="en">
-        <RootSearchSuggestField
-          courseSearchPageUrl="/en/courses/"
-          context={commonDataProps}
-        />
+        <RootSearchSuggestField courseSearchPageUrl="/en/courses/" context={commonDataProps} />
       </IntlProvider>,
     );
 
@@ -253,10 +226,7 @@ describe('<RootSearchSuggestField />', () => {
 
     render(
       <IntlProvider locale="en">
-        <RootSearchSuggestField
-          courseSearchPageUrl="/en/courses/"
-          context={commonDataProps}
-        />
+        <RootSearchSuggestField courseSearchPageUrl="/en/courses/" context={commonDataProps} />
       </IntlProvider>,
     );
 
@@ -265,16 +235,12 @@ describe('<RootSearchSuggestField />', () => {
     fireEvent.change(field, { target: { value: 'aut' } });
 
     await waitFor(() => {
-      expect(
-        fetchMock.called('/api/v1.0/courses/autocomplete/?query=aut'),
-      ).toEqual(true);
+      expect(fetchMock.called('/api/v1.0/courses/autocomplete/?query=aut')).toEqual(true);
     });
     screen.getByText('Courses');
     screen.getByText('Course #42');
 
-    expect(
-      fetchMock.called('/api/v1.0/subjects/autocomplete/?query=aut'),
-    ).toEqual(true);
+    expect(fetchMock.called('/api/v1.0/subjects/autocomplete/?query=aut')).toEqual(true);
     expect(screen.queryByText('Subjects')).toEqual(null);
 
     fireEvent.keyDown(field, { keyCode: 40 }); // Select the desired suggestion (there is only one)

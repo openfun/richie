@@ -40,10 +40,7 @@ export const CourseGlimpseList = ({
         />
       </div>
       {courses.map(
-        (course) =>
-          course && (
-            <CourseGlimpse context={context} course={course} key={course.id} />
-          ),
+        (course) => course && <CourseGlimpse context={context} course={course} key={course.id} />,
       )}
     </div>
   );

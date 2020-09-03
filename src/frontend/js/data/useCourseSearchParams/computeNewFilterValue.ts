@@ -7,9 +7,7 @@ import { CourseSearchParamsAction } from '.';
 export const computeNewFilterValue = (
   existingValue: Maybe<string | string[]>,
   update: {
-    action:
-      | CourseSearchParamsAction.filterAdd
-      | CourseSearchParamsAction.filterRemove;
+    action: CourseSearchParamsAction.filterAdd | CourseSearchParamsAction.filterRemove;
     isDrilldown: boolean;
     payload: string;
   },
@@ -23,9 +21,7 @@ export const computeNewFilterValue = (
       // - Keep it otherwise
       [CourseSearchParamsAction.filterRemove]: () =>
         // Drilldown filters only support one value at a time
-        existingValue === update.payload
-          ? undefined
-          : existingValue || undefined,
+        existingValue === update.payload ? undefined : existingValue || undefined,
     }[update.action]();
   }
 

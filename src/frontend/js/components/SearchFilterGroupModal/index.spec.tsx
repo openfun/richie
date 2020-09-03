@@ -78,16 +78,9 @@ describe('<SearchFilterGroupModal />', () => {
       },
     );
 
-    const {
-      getByPlaceholderText,
-      getByText,
-      queryByPlaceholderText,
-      queryByText,
-    } = render(
+    const { getByPlaceholderText, getByText, queryByPlaceholderText, queryByText } = render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '20', offset: '0' })}
-        >
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
           <SearchFilterGroupModal filter={filter} />
         </HistoryContext.Provider>
       </IntlProvider>,
@@ -107,12 +100,8 @@ describe('<SearchFilterGroupModal />', () => {
     await screen.findByText(
       (content) => content.startsWith('Value #42') && content.includes('(7)'),
     );
-    getByText(
-      (content) => content.startsWith('Value #84') && content.includes('(12)'),
-    );
-    getByText(
-      (content) => content.startsWith('Value #99') && content.includes('(21)'),
-    );
+    getByText((content) => content.startsWith('Value #84') && content.includes('(12)'));
+    getByText((content) => content.startsWith('Value #99') && content.includes('(21)'));
   });
 
   it('searches as the user types', async () => {
@@ -143,9 +132,7 @@ describe('<SearchFilterGroupModal />', () => {
 
     const { getByPlaceholderText, getByText } = render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '20', offset: '0' })}
-        >
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
           <SearchFilterGroupModal filter={filter} />
         </HistoryContext.Provider>
       </IntlProvider>,
@@ -162,9 +149,7 @@ describe('<SearchFilterGroupModal />', () => {
     await screen.findByText(
       (content) => content.startsWith('Value #42') && content.includes('(7)'),
     );
-    getByText(
-      (content) => content.startsWith('Value #84') && content.includes('(12)'),
-    );
+    getByText((content) => content.startsWith('Value #84') && content.includes('(12)'));
 
     // User starts typing, less than 3 characters
     fetchMock.resetHistory();
@@ -203,17 +188,12 @@ describe('<SearchFilterGroupModal />', () => {
     await screen.findByText(
       (content) => content.startsWith('Value #12') && content.includes('(7)'),
     );
-    getByText(
-      (content) => content.startsWith('Value #17') && content.includes('(12)'),
-    );
+    getByText((content) => content.startsWith('Value #17') && content.includes('(12)'));
 
     // User further refines their search query
-    fetchMock.get(
-      '/api/v1.0/universities/?limit=20&offset=0&query=user%20input',
-      {
-        objects: [{ id: 'L-03' }, { id: 'L-66' }],
-      },
-    );
+    fetchMock.get('/api/v1.0/universities/?limit=20&offset=0&query=user%20input', {
+      objects: [{ id: 'L-03' }, { id: 'L-66' }],
+    });
     fetchMock.get(
       '/api/v1.0/courses/?limit=20&offset=0&scope=filters&universities_include=%28L-03%7CL-66%29',
       {
@@ -241,9 +221,7 @@ describe('<SearchFilterGroupModal />', () => {
     await screen.findByText(
       (content) => content.startsWith('Value #03') && content.includes('(12)'),
     );
-    getByText(
-      (content) => content.startsWith('Value #17') && content.includes('(2)'),
-    );
+    getByText((content) => content.startsWith('Value #17') && content.includes('(2)'));
   });
 
   it('closes when the user clicks the close button', async () => {
@@ -261,16 +239,9 @@ describe('<SearchFilterGroupModal />', () => {
       },
     );
 
-    const {
-      getByPlaceholderText,
-      getByText,
-      queryByPlaceholderText,
-      queryByText,
-    } = render(
+    const { getByPlaceholderText, getByText, queryByPlaceholderText, queryByText } = render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '20', offset: '0' })}
-        >
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
           <SearchFilterGroupModal filter={filter} />
         </HistoryContext.Provider>
       </IntlProvider>,
@@ -325,16 +296,9 @@ describe('<SearchFilterGroupModal />', () => {
       },
     );
 
-    const {
-      getByPlaceholderText,
-      getByText,
-      queryByPlaceholderText,
-      queryByText,
-    } = render(
+    const { getByPlaceholderText, getByText, queryByPlaceholderText, queryByText } = render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '20', offset: '0' })}
-        >
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
           <SearchFilterGroupModal filter={filter} />
         </HistoryContext.Provider>
       </IntlProvider>,
@@ -386,16 +350,9 @@ describe('<SearchFilterGroupModal />', () => {
       throws: new Error('Failed to search for universities'),
     });
 
-    const {
-      getByPlaceholderText,
-      getByText,
-      queryByPlaceholderText,
-      queryByText,
-    } = render(
+    const { getByPlaceholderText, getByText, queryByPlaceholderText, queryByText } = render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '20', offset: '0' })}
-        >
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
           <SearchFilterGroupModal filter={filter} />
         </HistoryContext.Provider>
       </IntlProvider>,
@@ -412,9 +369,7 @@ describe('<SearchFilterGroupModal />', () => {
     getByPlaceholderText('Search in Universities');
 
     // The search request failed, the error is logged and a message is displayed
-    await screen.findByText(
-      'There was an error while searching for Universities.',
-    );
+    await screen.findByText('There was an error while searching for Universities.');
   });
 
   it('shows an error message when it fails to get the actual filter', async () => {
@@ -426,16 +381,9 @@ describe('<SearchFilterGroupModal />', () => {
       { throws: new Error('Failed to search for universities') },
     );
 
-    const {
-      getByPlaceholderText,
-      getByText,
-      queryByPlaceholderText,
-      queryByText,
-    } = render(
+    const { getByPlaceholderText, getByText, queryByPlaceholderText, queryByText } = render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '20', offset: '0' })}
-        >
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
           <SearchFilterGroupModal filter={filter} />
         </HistoryContext.Provider>
       </IntlProvider>,
@@ -452,8 +400,6 @@ describe('<SearchFilterGroupModal />', () => {
     getByPlaceholderText('Search in Universities');
 
     // The filters request failed, the error is logged and a message is displayed
-    await screen.findByText(
-      'There was an error while searching for Universities.',
-    );
+    await screen.findByText('There was an error while searching for Universities.');
   });
 });

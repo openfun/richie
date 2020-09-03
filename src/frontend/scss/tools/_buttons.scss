@@ -48,13 +48,7 @@
   user-select: none;
   background-color: transparent;
   border: $border-width solid transparent;
-  @include button-size(
-    $padding-y,
-    $padding-x,
-    $font-size,
-    $line-height,
-    $patched-radius
-  );
+  @include button-size($padding-y, $padding-x, $font-size, $line-height, $patched-radius);
   @include transition($transition);
 
   // Apply non default form factor radius behaviors

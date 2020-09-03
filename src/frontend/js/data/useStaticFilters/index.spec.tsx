@@ -79,10 +79,7 @@ describe('data/useStaticFilters', () => {
     expect(filters).toEqual(staticFilterDefinitions);
     expect(fetchMock.calls('/api/v1.0/filter-definitions/').length).toEqual(1);
     fetchMock.restore();
-    fetchMock.get(
-      '/api/v1.0/filter-definitions/',
-      new Error('should not be called'),
-    );
+    fetchMock.get('/api/v1.0/filter-definitions/', new Error('should not be called'));
     // More calls return the filter but don't request on the API again
     let filtersAgain;
     await act(async () => (filtersAgain = await getLatestHookValues()()));

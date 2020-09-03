@@ -33,9 +33,7 @@ export const isMPTTChildOf = (childKey: string, parentKey: string) =>
  */
 export const getMPTTChildrenPathMatcher = (parentMPTTPath: string) => {
   if (!isMPTTPath(parentMPTTPath)) {
-    throw new Error(
-      `${parentMPTTPath} is not an MPTT path, cannot build a children path matcher.`,
-    );
+    throw new Error(`${parentMPTTPath} is not an MPTT path, cannot build a children path matcher.`);
   }
 
   return `.-${parentMPTTPath.substr(2)}.{4,}`;

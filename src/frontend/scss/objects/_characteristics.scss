@@ -26,30 +26,21 @@
   &--primary {
     .characteristics__item {
       @include button-tiny($form-factor: 'pill', $display: flex);
-      @include r-button-colors(
-        r-theme-val(characteristics, primary-item),
-        $apply-border: true
-      );
+      @include r-button-colors(r-theme-val(characteristics, primary-item), $apply-border: true);
     }
   }
 
   &--secondary {
     .characteristics__item {
       @include button-tiny($form-factor: 'pill', $display: flex);
-      @include r-button-colors(
-        r-theme-val(characteristics, secondary-item),
-        $apply-border: true
-      );
+      @include r-button-colors(r-theme-val(characteristics, secondary-item), $apply-border: true);
     }
   }
 
   &--tertiary {
     .characteristics__item {
       @include button-tiny($form-factor: 'pill', $display: flex);
-      @include r-button-colors(
-        r-theme-val(characteristics, tertiary-item),
-        $apply-border: true
-      );
+      @include r-button-colors(r-theme-val(characteristics, tertiary-item), $apply-border: true);
     }
   }
 }

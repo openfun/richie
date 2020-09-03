@@ -91,10 +91,7 @@ describe('components/CourseGlimpse', () => {
   it('shows the "Cover" placeholder div when the course is missing a cover image', () => {
     render(
       <IntlProvider locale="en">
-        <CourseGlimpse
-          context={commonDataProps}
-          course={{ ...course, cover_image: null }}
-        />
+        <CourseGlimpse context={commonDataProps} course={{ ...course, cover_image: null }} />
       </IntlProvider>,
     );
 

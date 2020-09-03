@@ -29,8 +29,7 @@ describe('data/getResourceList', () => {
     languages: ['fr', 'es'],
     organizations: [11],
     session_number: 1,
-    short_description:
-      'Phasellus hendrerit tortor nulla, ut tristique ante aliquam sed.',
+    short_description: 'Phasellus hendrerit tortor nulla, ut tristique ante aliquam sed.',
     start: '2018-03-01T06:00:00.000Z',
     title: 'Programming 101 in Python',
   };

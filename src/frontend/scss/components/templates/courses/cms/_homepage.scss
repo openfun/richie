@@ -28,11 +28,7 @@
     .course-glimpse {
       &:nth-child(-n + 3) {
         @include media-breakpoint-up(lg) {
-          @include sv-flex(
-            1,
-            0,
-            calc(33.3333% - #{$r-course-glimpse-gutter * 2})
-          );
+          @include sv-flex(1, 0, calc(33.3333% - #{$r-course-glimpse-gutter * 2}));
         }
       }
     }

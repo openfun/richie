@@ -43,9 +43,7 @@ $richie-category-detail-banner-logo-sizing-xl: 25rem !default;
       object-position: center;
     }
 
-    @include m-o-media_empty(
-      $background: r-theme-val(category-detail, empty-background)
-    );
+    @include m-o-media_empty($background: r-theme-val(category-detail, empty-background));
 
     // Insert decoration over banner bottom
     @if r-theme-val(category-detail, insert-background-image) {

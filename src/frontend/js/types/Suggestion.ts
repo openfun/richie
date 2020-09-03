@@ -28,9 +28,7 @@ interface CourseSuggestion extends GenericSuggestion {
 /**
  * We also need a way to help TypeScript discriminate between CourseSuggestions and GenericSuggestions
  */
-export function isCourseSuggestion(
-  suggestion: Suggestion<string>,
-): suggestion is CourseSuggestion {
+export function isCourseSuggestion(suggestion: Suggestion<string>): suggestion is CourseSuggestion {
   return suggestion.kind === 'courses';
 }
 
@@ -75,18 +73,14 @@ interface DefaultSuggestionSection {
  * Utility type that allows a consumer to easily define the kinds of suggestion sections it supports and
  * get proper typechecking around them.
  */
-export type SuggestionSection<
-  S extends Suggestion<string>
-> = S extends DefaultSuggestion
+export type SuggestionSection<S extends Suggestion<string>> = S extends DefaultSuggestion
   ? DefaultSuggestionSection
   : ResourceSuggestionSection<GenericSuggestion>;
 
 /**
  * Define the kind of suggestions our `<SearchSuggestField />` and `<RootSearchSuggestField />` components support.
  */
-export type SearchSuggestion = Suggestion<
-  'categories' | 'courses' | 'organizations' | 'persons'
->;
+export type SearchSuggestion = Suggestion<'categories' | 'courses' | 'organizations' | 'persons'>;
 
 /**
  * Derive from `SearchSuggestion` the kind of suggestion sections our `<SearchSuggestField />` and
@@ -98,7 +92,4 @@ export type SearchSuggestionSection = SuggestionSection<SearchSuggestion>;
  * Helper to typecheck `react-autosuggest` expected props. Defines what is acceptable as a suggestion
  * throughout our code related to this instance of `<Autosuggest />`.
  */
-export type SearchAutosuggestProps = AutosuggestProps<
-  SearchSuggestion,
-  SearchSuggestionSection
->;
+export type SearchAutosuggestProps = AutosuggestProps<SearchSuggestion, SearchSuggestionSection>;

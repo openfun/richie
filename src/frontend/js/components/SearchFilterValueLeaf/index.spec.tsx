@@ -24,9 +24,7 @@ describe('components/SearchFilterValueLeaf', () => {
   it('renders the name of the filter value', () => {
     const { getByLabelText } = render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '999', offset: '0' })}
-        >
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '999', offset: '0' })}>
           <SearchFilterValueLeaf
             filter={{
               base_path: null,
@@ -49,9 +47,7 @@ describe('components/SearchFilterValueLeaf', () => {
     );
 
     // The filter value is displayed with its facet count
-    const checkbox = getByLabelText((content, _) =>
-      content.includes('Human name'),
-    );
+    const checkbox = getByLabelText((content, _) => content.includes('Human name'));
     expect(checkbox.parentElement).toHaveTextContent('(217)');
     // The filter is not currently active
     expect(checkbox).not.toHaveAttribute('checked');
@@ -90,9 +86,7 @@ describe('components/SearchFilterValueLeaf', () => {
     );
 
     // The filter shows its active state
-    const checkbox = getByLabelText((content, _) =>
-      content.includes('Human name'),
-    );
+    const checkbox = getByLabelText((content, _) => content.includes('Human name'));
     expect(checkbox).toHaveAttribute('checked');
     expect(checkbox.parentElement).toHaveClass('active'); // label that contains checkbox
   });
@@ -100,9 +94,7 @@ describe('components/SearchFilterValueLeaf', () => {
   it('disables the value when its count is 0', () => {
     const { getByLabelText } = render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '999', offset: '0' })}
-        >
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '999', offset: '0' })}>
           <SearchFilterValueLeaf
             filter={{
               base_path: null,
@@ -125,22 +117,16 @@ describe('components/SearchFilterValueLeaf', () => {
     );
 
     // The filter shows its active state
-    const checkbox = getByLabelText((content, _) =>
-      content.includes('Human name'),
-    );
+    const checkbox = getByLabelText((content, _) => content.includes('Human name'));
     expect(checkbox).not.toHaveAttribute('checked');
     expect(checkbox).toHaveAttribute('disabled');
-    expect(checkbox.parentElement).toHaveClass(
-      'search-filter-value-leaf--disabled',
-    );
+    expect(checkbox.parentElement).toHaveClass('search-filter-value-leaf--disabled');
   });
 
   it('dispatches a FILTER_ADD action on filter click if it was not active', () => {
     const { getByLabelText } = render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '999', offset: '0' })}
-        >
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '999', offset: '0' })}>
           <SearchFilterValueLeaf
             filter={{
               base_path: null,
@@ -162,9 +148,7 @@ describe('components/SearchFilterValueLeaf', () => {
       </IntlProvider>,
     );
 
-    fireEvent.click(
-      getByLabelText((content, _) => content.includes('Human name')),
-    );
+    fireEvent.click(getByLabelText((content, _) => content.includes('Human name')));
     expect(historyPushState).toHaveBeenCalledWith(
       {
         name: 'courseSearch',
@@ -209,9 +193,7 @@ describe('components/SearchFilterValueLeaf', () => {
       </IntlProvider>,
     );
 
-    fireEvent.click(
-      getByLabelText((content, _) => content.includes('Human name')),
-    );
+    fireEvent.click(getByLabelText((content, _) => content.includes('Human name')));
     expect(historyPushState).toHaveBeenCalledWith(
       {
         name: 'courseSearch',

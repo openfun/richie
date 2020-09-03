@@ -12,22 +12,15 @@ import { handle } from 'utils/errors/handle';
  * @param sectionTitleMessage MessageDescriptor for the title of the section that displays the suggestions.
  * @param query The actual payload to run the completion search with.
  */
-export const getSuggestionsSection = async (
-  kind: string,
-  title: string,
-  query: string,
-) => {
+export const getSuggestionsSection = async (kind: string, title: string, query: string) => {
   // Run the search for the section on the API
   let response: Response;
   try {
-    response = await fetch(
-      `/api/v1.0/${kind}/autocomplete/?${stringify({ query })}`,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+    response = await fetch(`/api/v1.0/${kind}/autocomplete/?${stringify({ query })}`, {
+      headers: {
+        'Content-Type': 'application/json',
       },
-    );
+    });
   } catch (error) {
     return handle(error);
   }
@@ -35,20 +28,14 @@ export const getSuggestionsSection = async (
   // Fetch treats remote errors (400, 404, 503...) as successes
   // The ok flag is the way to discriminate
   if (!response.ok) {
-    return handle(
-      new Error(
-        `Failed to get list from ${kind} autocomplete : ${response.status}`,
-      ),
-    );
+    return handle(new Error(`Failed to get list from ${kind} autocomplete : ${response.status}`));
   }
 
   let responseData: Suggestion<string>[];
   try {
     responseData = await response.json();
   } catch (error) {
-    return handle(
-      new Error('Failed to decode JSON in getSuggestionSection ' + error),
-    );
+    return handle(new Error('Failed to decode JSON in getSuggestionSection ' + error));
   }
 
   return {

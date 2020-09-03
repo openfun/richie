@@ -58,9 +58,7 @@ describe('components/SearchFilterGroup', () => {
   it('renders the name of the filter with the values as SearchFilters', () => {
     render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '20', offset: '0' })}
-        >
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
           <SearchFilterGroup filter={filter} />
         </HistoryContext.Provider>
       </IntlProvider>,
@@ -75,32 +73,24 @@ describe('components/SearchFilterGroup', () => {
   it('does not render the "More options" button & modal if the filter is not searchable', () => {
     render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '20', offset: '0' })}
-        >
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
           <SearchFilterGroup filter={{ ...filter, is_searchable: false }} />
         </HistoryContext.Provider>
       </IntlProvider>,
     );
 
-    expect(screen.queryByRole('button', { name: 'More options' })).toEqual(
-      null,
-    );
+    expect(screen.queryByRole('button', { name: 'More options' })).toEqual(null);
   });
 
   it('does not render the "More options" button & modal if there are no more values to find', () => {
     render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '20', offset: '0' })}
-        >
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
           <SearchFilterGroup filter={{ ...filter, has_more_values: false }} />
         </HistoryContext.Provider>
       </IntlProvider>,
     );
 
-    expect(screen.queryByRole('button', { name: 'More options' })).toEqual(
-      null,
-    );
+    expect(screen.queryByRole('button', { name: 'More options' })).toEqual(null);
   });
 });

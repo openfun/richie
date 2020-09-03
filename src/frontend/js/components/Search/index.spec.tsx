@@ -51,17 +51,16 @@ describe('<Search />', () => {
 
     render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '20', offset: '0' })}
-        >
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
           <Search context={commonDataProps} />
         </HistoryContext.Provider>
       </IntlProvider>,
     );
 
-    expect(
-      screen.getByText('Loading search results...').parentElement,
-    ).toHaveAttribute('role', 'status');
+    expect(screen.getByText('Loading search results...').parentElement).toHaveAttribute(
+      'role',
+      'status',
+    );
 
     await waitFor(() => {
       expect(screen.queryByText('Loading search results...')).toBeNull();
@@ -73,17 +72,16 @@ describe('<Search />', () => {
 
     render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '20', offset: '0' })}
-        >
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
           <Search context={commonDataProps} />
         </HistoryContext.Provider>
       </IntlProvider>,
     );
 
-    expect(
-      screen.getByText('Loading search results...').parentElement,
-    ).toHaveAttribute('role', 'status');
+    expect(screen.getByText('Loading search results...').parentElement).toHaveAttribute(
+      'role',
+      'status',
+    );
 
     await waitFor(() => {
       expect(screen.queryByText('Loading search results...')).toBeNull();
@@ -102,9 +100,7 @@ describe('<Search />', () => {
     mockMatches = true;
     const { container } = render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '20', offset: '0' })}
-        >
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
           <Search context={commonDataProps} />
         </HistoryContext.Provider>
       </IntlProvider>,
@@ -131,9 +127,7 @@ describe('<Search />', () => {
     mockMatches = false;
     const { container } = render(
       <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({ limit: '20', offset: '0' })}
-        >
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
           <Search context={commonDataProps} />
         </HistoryContext.Provider>
       </IntlProvider>,
@@ -154,9 +148,10 @@ describe('<Search />', () => {
       // We have a "Show" button with the appropriate aria helper
       expect(screen.queryByText('Hide filters pane')).toEqual(null);
       const button = screen.getByText('Show filters pane');
-      expect(
-        container.querySelector('.search__filters__toggle'),
-      ).toHaveAttribute('aria-expanded', 'false');
+      expect(container.querySelector('.search__filters__toggle')).toHaveAttribute(
+        'aria-expanded',
+        'false',
+      );
 
       // After a click the filters pane is now shown
       fireEvent.click(button);
@@ -169,9 +164,10 @@ describe('<Search />', () => {
       // We now have a "Hide" button with the appropriate aria helper
       expect(screen.queryByText('Show filters pane')).toEqual(null);
       const button = screen.getByText('Hide filters pane');
-      expect(
-        container.querySelector('.search__filters__toggle'),
-      ).toHaveAttribute('aria-expanded', 'true');
+      expect(container.querySelector('.search__filters__toggle')).toHaveAttribute(
+        'aria-expanded',
+        'true',
+      );
 
       // After another click the filters pane is hidden again
       fireEvent.click(button);

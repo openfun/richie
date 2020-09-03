@@ -21,12 +21,11 @@ module.exports = function Versions(props) {
             <h1>{siteConfig.title} versions and documentation</h1>
           </header>
           <p>
-            New versions of this project are shipped regularly. Every new
-            version includes its own version of the documentation.
+            New versions of this project are shipped regularly. Every new version includes its own
+            version of the documentation.
           </p>
           <p>
-            Versions below <code>1.12.0</code> did not have a dedicated
-            documentation website.
+            Versions below <code>1.12.0</code> did not have a dedicated documentation website.
           </p>
           <h3 id="latest">Current version (Stable)</h3>
           <table className="versions">
@@ -43,16 +42,14 @@ module.exports = function Versions(props) {
                   </a>
                 </td>
                 <td>
-                  <a href={`${repoUrl}/releases/tag/v${latestVersion}.0`}>
-                    Release Notes
-                  </a>
+                  <a href={`${repoUrl}/releases/tag/v${latestVersion}.0`}>Release Notes</a>
                 </td>
               </tr>
             </tbody>
           </table>
           <p>
-            This is the version that is configured automatically when you first
-            install this project.
+            This is the version that is configured automatically when you first install this
+            project.
           </p>
           <h3 id="rc">Pre-release versions</h3>
           <table className="versions">
@@ -94,9 +91,7 @@ module.exports = function Versions(props) {
                         </a>
                       </td>
                       <td>
-                        <a href={`${repoUrl}/releases/tag/v${version}`}>
-                          Release Notes
-                        </a>
+                        <a href={`${repoUrl}/releases/tag/v${version}`}>Release Notes</a>
                       </td>
                     </tr>
                   ),
@@ -104,8 +99,7 @@ module.exports = function Versions(props) {
             </tbody>
           </table>
           <p>
-            You can find past versions of this project on{' '}
-            <a href={repoUrl}>GitHub</a>.
+            You can find past versions of this project on <a href={repoUrl}>GitHub</a>.
           </p>
         </div>
       </Container>

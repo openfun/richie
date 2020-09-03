@@ -20,9 +20,7 @@ describe('utils/mptt', () => {
 
     it('returns true when both args are MPTT paths and x is a parent of y', () => {
       expect(isMPTTParentOf('P-00020004', 'L-000200040003')).toEqual(true);
-      expect(isMPTTParentOf('P-00020004', 'L-000200040003000C0009')).toEqual(
-        true,
-      );
+      expect(isMPTTParentOf('P-00020004', 'L-000200040003000C0009')).toEqual(true);
     });
   });
 
@@ -34,12 +32,8 @@ describe('utils/mptt', () => {
 
     it('returns a regex-string that will match paths for children of the passed MPTT path entity', () => {
       expect(getMPTTChildrenPathMatcher('P-0001')).toEqual('.-0001.{4,}');
-      expect(getMPTTChildrenPathMatcher('L-0001000C')).toEqual(
-        '.-0001000C.{4,}',
-      );
-      expect(getMPTTChildrenPathMatcher('P-000100090006000C')).toEqual(
-        '.-000100090006000C.{4,}',
-      );
+      expect(getMPTTChildrenPathMatcher('L-0001000C')).toEqual('.-0001000C.{4,}');
+      expect(getMPTTChildrenPathMatcher('P-000100090006000C')).toEqual('.-000100090006000C.{4,}');
     });
   });
 });

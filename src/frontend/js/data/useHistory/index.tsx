@@ -1,11 +1,5 @@
 import { parse } from 'query-string';
-import React, {
-  createContext,
-  PropsWithChildren,
-  useEffect,
-  useState,
-  useContext,
-} from 'react';
+import React, { createContext, PropsWithChildren, useEffect, useState, useContext } from 'react';
 
 import { history, location } from 'utils/indirection/window';
 import { Maybe, Nullable } from 'utils/types';
@@ -19,10 +13,7 @@ interface HistoryEntry {
 type pushStateFn = typeof history.pushState;
 type replaceStateFn = typeof history.replaceState;
 
-type popstateEventListener = (
-  this: Window,
-  ev: WindowEventMap['popstate'],
-) => any;
+type popstateEventListener = (this: Window, ev: WindowEventMap['popstate']) => any;
 
 export type History = [HistoryEntry, pushStateFn, replaceStateFn];
 
@@ -34,11 +25,7 @@ export const useHistory = () => {
 
 export const HistoryProvider = ({ children }: PropsWithChildren<{}>) => {
   const historyValue = useProvideHistory();
-  return (
-    <HistoryContext.Provider value={historyValue}>
-      {children}
-    </HistoryContext.Provider>
-  );
+  return <HistoryContext.Provider value={historyValue}>{children}</HistoryContext.Provider>;
 };
 
 const useProvideHistory: () => History = () => {

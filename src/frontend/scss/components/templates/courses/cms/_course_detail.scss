@@ -66,9 +66,7 @@
         @include font-size($h3-font-size);
         padding-bottom: 1rem;
         @if r-theme-val(course-detail, aside-title-border) {
-          border-bottom: $onepixel
-            solid
-            r-theme-val(course-detail, aside-title-border);
+          border-bottom: $onepixel solid r-theme-val(course-detail, aside-title-border);
         }
       }
     }
@@ -128,9 +126,7 @@
           display: block;
           width: 60%;
           margin: 2rem auto;
-          border-top: $onepixel
-            solid
-            r-theme-val(course-detail, run-descriptions-divider);
+          border-top: $onepixel solid r-theme-val(course-detail, run-descriptions-divider);
         }
       }
     }
@@ -208,10 +204,7 @@
             left: 0;
             width: 0.8rem;
             height: 0.8rem;
-            background-image: r-theme-val(
-              course-detail,
-              checkmark-list-decoration
-            );
+            background-image: r-theme-val(course-detail, checkmark-list-decoration);
             background-repeat: no-repeat;
             background-position: top left;
             background-size: 100% 100%;

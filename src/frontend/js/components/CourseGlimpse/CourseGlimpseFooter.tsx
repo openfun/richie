@@ -8,9 +8,7 @@ import { Course } from 'types/Course';
  * <CourseGlimpseFooter />.
  * This is spun off from <CourseGlimpse /> to allow easier override through webpack.
  */
-export const CourseGlimpseFooter: React.FC<
-  { course: Course } & CommonDataProps
-> = ({ course }) => {
+export const CourseGlimpseFooter: React.FC<{ course: Course } & CommonDataProps> = ({ course }) => {
   const intl = useIntl();
   return (
     <div className="course-glimpse-footer">

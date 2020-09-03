@@ -93,10 +93,7 @@ $r-program-glimpse-gutter: 0.8rem !default;
   );
 
   &__footer {
-    @include r-button-colors(
-      r-theme-val(program-glimpse, footer),
-      $apply-border: true
-    );
+    @include r-button-colors(r-theme-val(program-glimpse, footer), $apply-border: true);
     display: flex;
     padding: 0 0.5rem;
     font-size: 0.8rem;
@@ -143,9 +140,7 @@ $r-program-glimpse-gutter: 0.8rem !default;
     @if r-theme-val(program-glimpse-empty, hover-border) {
       &:hover,
       &:focus {
-        border: $onepixel
-          solid
-          r-theme-val(program-glimpse-empty, hover-border);
+        border: $onepixel solid r-theme-val(program-glimpse-empty, hover-border);
       }
     }
   }

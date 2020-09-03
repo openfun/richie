@@ -20,14 +20,12 @@ const messages = defineMessages({
   },
   enrolled: {
     defaultMessage: 'You are enrolled in this course run',
-    description:
-      'Help text for users who see the "Go to course" CTA on course run enrollment',
+    description: 'Help text for users who see the "Go to course" CTA on course run enrollment',
     id: 'components.CourseRunEnrollment.enrolled',
   },
   enrollmentClosed: {
     defaultMessage: 'Enrollment in this course run is closed at the moment',
-    description:
-      'Help text replacing the CTA on a course run when enrollment is closed.',
+    description: 'Help text replacing the CTA on a course run when enrollment is closed.',
     id: 'components.CourseRunEnrollment.enrollmentClosed',
   },
   enrollmentFailed: {
@@ -173,16 +171,16 @@ interface CourseRunEnrollmentProps {
   loginUrl: string;
 }
 
-export const CourseRunEnrollment: React.FC<
-  CourseRunEnrollmentProps & CommonDataProps
-> = ({ context, courseRunId, loginUrl }) => {
+export const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonDataProps> = ({
+  context,
+  courseRunId,
+  loginUrl,
+}) => {
   const [state, send] = useMachine(machine, {
     guards: {
-      isCourseRunClosed: (ctx) =>
-        !!ctx.courseRun && ctx.courseRun.state.priority > 1,
+      isCourseRunClosed: (ctx) => !!ctx.courseRun && ctx.courseRun.state.priority > 1,
       isEnrolled: (ctx) => !!ctx.enrollment,
-      isInitialReady: (ctx) =>
-        !!ctx.courseRun && !!ctx.currentUser && !!ctx.enrollment,
+      isInitialReady: (ctx) => !!ctx.courseRun && !!ctx.currentUser && !!ctx.enrollment,
       isLoggedInUser: (ctx) => !!ctx.currentUser,
     },
     services: {
@@ -195,9 +193,7 @@ export const CourseRunEnrollment: React.FC<
         if (response.ok) {
           return true; // There is no content in the enrollment success response
         }
-        throw new Error(
-          `Failed to enroll in ${courseRunId}, ${response.status}`,
-        );
+        throw new Error(`Failed to enroll in ${courseRunId}, ${response.status}`);
       },
       getCourseRun: async () => {
         const response = await fetch(`/api/v1.0/course-runs/${courseRunId}/`, {
@@ -206,9 +202,7 @@ export const CourseRunEnrollment: React.FC<
         if (response.ok) {
           return await response.json();
         }
-        throw new Error(
-          `Failed to get course run ${courseRunId}, ${response.status}.`,
-        );
+        throw new Error(`Failed to get course run ${courseRunId}, ${response.status}.`);
       },
       getCurrentUser: async () => {
         const response = await fetch('/api/v1.0/users/whoami/', { headers });
@@ -223,10 +217,7 @@ export const CourseRunEnrollment: React.FC<
       },
       getEnrollment: async () => {
         const params = { course_run: courseRunId };
-        const response = await fetch(
-          `/api/v1.0/enrollments/?${stringify(params)}`,
-          { headers },
-        );
+        const response = await fetch(`/api/v1.0/enrollments/?${stringify(params)}`, { headers });
         if (response.ok) {
           const enrollments = await response.json();
           return enrollments.length > 0 ? enrollments[0] : null;
@@ -236,9 +227,7 @@ export const CourseRunEnrollment: React.FC<
         if (response.status === 401 || response.status === 403) {
           return null;
         }
-        throw new Error(
-          `Failed to get enrollments for user, ${response.status}`,
-        );
+        throw new Error(`Failed to get enrollments for user, ${response.status}`);
       },
     },
   });
@@ -247,10 +236,7 @@ export const CourseRunEnrollment: React.FC<
   switch (true) {
     case state.matches('loadingInitial'):
       return (
-        <Spinner
-          size="small"
-          aria-labelledby={`loading-course-run-${courseRunId}`}
-        >
+        <Spinner size="small" aria-labelledby={`loading-course-run-${courseRunId}`}>
           <span id={`loading-course-run-${courseRunId}`}>
             <FormattedMessage {...messages.loadingInitial} />
           </span>
@@ -279,9 +265,7 @@ export const CourseRunEnrollment: React.FC<
           <button
             onClick={() => send('ENROLL')}
             className={`course-run-enrollment__cta ${
-              state.matches('enrollmentLoading')
-                ? 'course-run-enrollment__cta--loading'
-                : ''
+              state.matches('enrollmentLoading') ? 'course-run-enrollment__cta--loading' : ''
             }`}
             aria-busy={state.matches('enrollmentLoading')}
           >
@@ -306,10 +290,7 @@ export const CourseRunEnrollment: React.FC<
     case state.matches('enrolled'):
       return (
         <React.Fragment>
-          <a
-            href={courseRun?.resource_link}
-            className="course-run-enrollment__cta"
-          >
+          <a href={courseRun?.resource_link} className="course-run-enrollment__cta">
             <FormattedMessage {...messages.goToCourse} />
           </a>
           <div className="course-run-enrollment__helptext">
@@ -320,8 +301,6 @@ export const CourseRunEnrollment: React.FC<
   }
 
   // Switch should cover all our cases. Report the error and do not render anything if we end up here.
-  handle(
-    new Error(`<CourseRunEnrollment /> in an impossible state, ${state.value}`),
-  );
+  handle(new Error(`<CourseRunEnrollment /> in an impossible state, ${state.value}`));
   return null;
 };

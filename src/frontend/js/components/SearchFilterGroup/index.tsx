@@ -17,11 +17,7 @@ export const SearchFilterGroup = ({ filter }: SearchFilterGroupProps) => (
         value.key.startsWith(
           'P-',
         ) /* Values with children have a key that starts with `P-` by convention */ ? (
-          <SearchFilterValueParent
-            filter={filter}
-            value={value}
-            key={value.key}
-          />
+          <SearchFilterValueParent filter={filter} value={value} key={value.key} />
         ) : (
           /* Other values' keys start with `L-` */ <SearchFilterValueLeaf
             filter={filter}
