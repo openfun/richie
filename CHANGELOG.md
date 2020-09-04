@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- Improve Course Search UX by triggering scroll up after courses are retrieved
+
 ## [2.0.0-beta.14] - 2020-09-03
 
 ### Changed
@@ -91,7 +95,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Lowered down global 'h1' and 'h2' font size and added new
   'extra-font-size' variable with previous h1 value.
 - Adjust title size 'large_banner' variants.
-- Fix accordion button 'nested-item__title' alignment to the left.
+- Fix accordion button 'nested-item\_\_title' alignment to the left.
 - Another attempt to definitively fix the glitch with wave decoration
   and Chrome zoom/unzoom.
 - Add a little bit of space between banner and title on organization
@@ -330,10 +334,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Frontend components now use `<html lang>` to pick up the locale instead
   of expecting a `data-locale` attribute.
 - Refactor the footer to use a static placeholder instead of the page tree:
-    * allow organizing footer links in columns or as flat links,
-    * allow customizing footer links (e.g. by setting the link target)
-    * allow adding any internal or external link to the footer,
-    * decorrelate the structure of footer links from the page tree.
+  - allow organizing footer links in columns or as flat links,
+  - allow customizing footer links (e.g. by setting the link target)
+  - allow adding any internal or external link to the footer,
+  - decorrelate the structure of footer links from the page tree.
 - Make the section plugin title optional,
 - Change the way frontend search field components are configured.
 

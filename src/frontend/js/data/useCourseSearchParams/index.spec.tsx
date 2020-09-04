@@ -12,7 +12,6 @@ jest.mock('settings', () => ({
 jest.mock('utils/indirection/window', () => ({
   history: { pushState: jest.fn(), replaceState: jest.fn() },
   location: {},
-  scroll: jest.fn(),
 }));
 
 describe('data/useCourseSearchParams', () => {
@@ -122,10 +121,6 @@ describe('data/useCourseSearchParams', () => {
           '/search?languages=fr&limit=13&offset=39',
         );
       }
-      expect(mockWindow.scroll).toHaveBeenCalledWith({
-        behavior: 'smooth',
-        top: 0,
-      });
     });
   });
 
@@ -181,7 +176,6 @@ describe('data/useCourseSearchParams', () => {
           '',
           '/search?languages=en&limit=17&offset=0&query=some%20text%20query',
         );
-        expect(mockWindow.scroll).not.toHaveBeenCalled();
       }
     });
 
@@ -237,7 +231,6 @@ describe('data/useCourseSearchParams', () => {
           '',
           '/search?languages=fr&limit=999&offset=0&query=some%20new%20query',
         );
-        expect(mockWindow.scroll).not.toHaveBeenCalled();
       }
     });
 
@@ -293,7 +286,6 @@ describe('data/useCourseSearchParams', () => {
           '',
           '/search?languages=es&limit=999&offset=0',
         );
-        expect(mockWindow.scroll).not.toHaveBeenCalled();
       }
     });
   });
@@ -358,7 +350,6 @@ describe('data/useCourseSearchParams', () => {
           '',
           '/search?limit=10&offset=0&organizations=L-00010003&organizations=L-00010009&organizations=L-00010017',
         );
-        expect(mockWindow.scroll).toHaveBeenCalled();
       }
     });
 
@@ -420,7 +411,6 @@ describe('data/useCourseSearchParams', () => {
           '',
           '/search?languages=en&languages=fr&languages=it&limit=10&offset=0',
         );
-        expect(mockWindow.scroll).toHaveBeenCalled();
       }
     });
 
@@ -482,7 +472,6 @@ describe('data/useCourseSearchParams', () => {
           '',
           '/search?limit=10&offset=0&organizations=L-00010003&organizations=L-00010017',
         );
-        expect(mockWindow.scroll).toHaveBeenCalled();
       }
     });
 
@@ -544,7 +533,6 @@ describe('data/useCourseSearchParams', () => {
           '',
           '/search?languages=de&languages=zh&limit=10&offset=0',
         );
-        expect(mockWindow.scroll).toHaveBeenCalled();
       }
     });
 
@@ -608,7 +596,6 @@ describe('data/useCourseSearchParams', () => {
           '',
           '/search?limit=999&offset=0&organizations=L-00010014&query=some%20query',
         );
-        expect(mockWindow.scroll).toHaveBeenCalled();
       }
     });
 
@@ -649,7 +636,6 @@ describe('data/useCourseSearchParams', () => {
           query: 'some query',
         });
         expect(mockWindow.history.pushState).not.toHaveBeenCalled();
-        expect(mockWindow.scroll).not.toHaveBeenCalled();
       }
     });
 
@@ -724,7 +710,6 @@ describe('data/useCourseSearchParams', () => {
           '',
           '/search?levels=L-000200020005&limit=999&offset=0&query=a%20query&subjects=P-000200030012&subjects=L-000200030005',
         );
-        expect(mockWindow.scroll).toHaveBeenCalled();
       }
     });
 
@@ -797,7 +782,6 @@ describe('data/useCourseSearchParams', () => {
           '',
           '/search?levels=L-000200020005&limit=999&offset=0&query=some%20query&subjects=L-000200030005',
         );
-        expect(mockWindow.scroll).toHaveBeenCalled();
       }
     });
 
@@ -873,7 +857,6 @@ describe('data/useCourseSearchParams', () => {
           '/search?levels=L-000200020005&limit=999&offset=0&query=some%20query' +
             '&subjects=P-000200030012&subjects=L-0002000300050013',
         );
-        expect(mockWindow.scroll).toHaveBeenCalled();
       }
     });
 
@@ -946,7 +929,6 @@ describe('data/useCourseSearchParams', () => {
           '',
           '/search?levels=L-000200020005&limit=999&offset=0&query=some%20query&subjects=L-0002000300050013',
         );
-        expect(mockWindow.scroll).toHaveBeenCalled();
       }
     });
   });
@@ -1010,7 +992,6 @@ describe('data/useCourseSearchParams', () => {
           '',
           '/search?level=L-000200010003&limit=999&offset=0',
         );
-        expect(mockWindow.scroll).toHaveBeenCalled();
       }
       {
         // Replace an existing value
@@ -1059,7 +1040,6 @@ describe('data/useCourseSearchParams', () => {
           '',
           '/search?level=L-000200010002&limit=999&offset=0',
         );
-        expect(mockWindow.scroll).toHaveBeenCalled();
       }
     });
 
@@ -1097,7 +1077,6 @@ describe('data/useCourseSearchParams', () => {
           offset: '0',
         });
         expect(mockWindow.history.pushState).not.toHaveBeenCalled();
-        expect(mockWindow.scroll).not.toHaveBeenCalled();
       }
     });
   });
@@ -1166,7 +1145,6 @@ describe('data/useCourseSearchParams', () => {
           '',
           '/search?limit=999&offset=0&organizations=L00010011&query=some%20query',
         );
-        expect(mockWindow.scroll).toHaveBeenCalled();
       }
       {
         // Remove from a list of just one value
@@ -1213,7 +1191,6 @@ describe('data/useCourseSearchParams', () => {
           '',
           '/search?limit=999&offset=0&query=some%20query',
         );
-        expect(mockWindow.scroll).toHaveBeenCalled();
       }
     });
 
@@ -1279,7 +1256,6 @@ describe('data/useCourseSearchParams', () => {
           '',
           '/search?limit=999&offset=0&query=some%20query',
         );
-        expect(mockWindow.scroll).toHaveBeenCalled();
       }
     });
 
@@ -1317,7 +1293,6 @@ describe('data/useCourseSearchParams', () => {
           query: 'some query',
         });
         expect(mockWindow.history.pushState).not.toHaveBeenCalled();
-        expect(mockWindow.scroll).not.toHaveBeenCalled();
       }
     });
 
@@ -1356,7 +1331,6 @@ describe('data/useCourseSearchParams', () => {
           organizations: ['L-00010003', 'L-00010009'],
         });
         expect(mockWindow.history.pushState).not.toHaveBeenCalled();
-        expect(mockWindow.scroll).not.toHaveBeenCalled();
       }
     });
 
@@ -1396,7 +1370,6 @@ describe('data/useCourseSearchParams', () => {
           organizations: 'L-00010011',
         });
         expect(mockWindow.history.pushState).not.toHaveBeenCalled();
-        expect(mockWindow.scroll).not.toHaveBeenCalled();
       }
     });
   });
@@ -1461,7 +1434,6 @@ describe('data/useCourseSearchParams', () => {
           '',
           '/search?limit=999&offset=0&query=some%20query',
         );
-        expect(mockWindow.scroll).toHaveBeenCalled();
       }
     });
 
@@ -1501,7 +1473,6 @@ describe('data/useCourseSearchParams', () => {
           query: 'some query',
         });
         expect(mockWindow.history.pushState).not.toHaveBeenCalled();
-        expect(mockWindow.scroll).not.toHaveBeenCalled();
       }
     });
 
@@ -1542,7 +1513,6 @@ describe('data/useCourseSearchParams', () => {
           query: 'some query',
         });
         expect(mockWindow.history.pushState).not.toHaveBeenCalled();
-        expect(mockWindow.scroll).not.toHaveBeenCalled();
       }
     });
   });
@@ -1590,7 +1560,6 @@ describe('data/useCourseSearchParams', () => {
           '',
           '/search?limit=27&offset=0',
         );
-        expect(mockWindow.scroll).toHaveBeenCalled();
       }
     });
   });

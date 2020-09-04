@@ -1,27 +1,27 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import React from 'react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { stringify } from 'query-string';
-import React from 'react';
 import { IntlProvider } from 'react-intl';
 
 import { History, HistoryContext } from 'data/useHistory';
 import { Search } from '.';
+import * as mockWindow from 'utils/indirection/window';
 
 let mockMatches = false;
 jest.mock('utils/indirection/window', () => ({
   history: { pushState: jest.fn() },
   location: { search: '' },
-  matchMedia: () => {
-    return { matches: mockMatches };
-  },
+  matchMedia: () => ({ matches: mockMatches }),
+  scroll: jest.fn(),
 }));
 
 describe('<Search />', () => {
   const historyPushState = jest.fn();
   const historyReplaceState = jest.fn();
-  const makeHistoryOf: (params: any) => History = (params) => [
+  const makeHistoryOf: (params: any) => History = ({ lastDispatchActions, ...params }) => [
     {
-      state: { name: 'courseSearch', data: { params } },
+      state: { name: 'courseSearch', data: { params, lastDispatchActions } },
       title: '',
       url: `/search?${stringify(params)}`,
     },
@@ -39,7 +39,10 @@ describe('<Search />', () => {
     sentry_dsn: null,
   };
 
-  beforeEach(() => fetchMock.restore());
+  beforeEach(() => {
+    fetchMock.restore();
+    jest.resetAllMocks();
+  });
 
   it('shows a spinner while the results are loading', async () => {
     fetchMock.get('/api/v1.0/courses/?limit=20&offset=0', {
@@ -176,5 +179,53 @@ describe('<Search />', () => {
         'true',
       );
     }
+  });
+
+  it('should scroll up when filters have changed and courses are retrieved', async () => {
+    await act(async () => {
+      fetchMock.get('/api/v1.0/courses/?limit=20&offset=0', {
+        meta: {
+          total_count: 200,
+        },
+        objects: [],
+      });
+
+      render(
+        <IntlProvider locale="en">
+          <HistoryContext.Provider
+            value={makeHistoryOf({
+              limit: '20',
+              offset: '0',
+              lastDispatchActions: [{ type: 'FILTER_RESET' }],
+            })}
+          >
+            <Search context={commonDataProps} />
+          </HistoryContext.Provider>
+        </IntlProvider>,
+      );
+    });
+
+    expect(mockWindow.scroll).toHaveBeenCalledWith({
+      behavior: 'smooth',
+      top: 0,
+    });
+  });
+
+  it('should not scroll up when filter changes contain QUERY_UPDATE', async () => {
+    await act(async () => {
+      render(
+        <IntlProvider locale="en">
+          <HistoryContext.Provider
+            value={makeHistoryOf({
+              lastDispatchActions: [{ type: 'QUERY_UPDATE' }],
+            })}
+          >
+            <Search context={commonDataProps} />
+          </HistoryContext.Provider>
+        </IntlProvider>,
+      );
+    });
+
+    expect(mockWindow.scroll).not.toHaveBeenCalled();
   });
 });

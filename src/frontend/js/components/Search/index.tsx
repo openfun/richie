@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { CourseGlimpseList } from 'components/CourseGlimpseList';
@@ -6,10 +6,10 @@ import { PaginateCourseSearch } from 'components/PaginateCourseSearch';
 import { SearchFiltersPane } from 'components/SearchFiltersPane';
 import { Spinner } from 'components/Spinner';
 import { useCourseSearch } from 'data/useCourseSearch';
-import { useCourseSearchParams } from 'data/useCourseSearchParams';
+import { useCourseSearchParams, CourseSearchParamsAction } from 'data/useCourseSearchParams';
 import { requestStatus } from 'types/api';
 import { CommonDataProps } from 'types/commonDataProps';
-import { matchMedia } from 'utils/indirection/window';
+import { matchMedia, scroll } from 'utils/indirection/window';
 
 const messages = defineMessages({
   errorMessage: {
@@ -37,13 +37,27 @@ const messages = defineMessages({
 });
 
 export const Search = ({ context }: CommonDataProps) => {
-  const { courseSearchParams } = useCourseSearchParams();
+  const { courseSearchParams, lastDispatchActions } = useCourseSearchParams();
   const courseSearchResponse = useCourseSearch(courseSearchParams);
 
   const alwaysShowFilters = matchMedia('(min-width: 992px)').matches;
   const [showFilters, setShowFilters] = useState(false);
 
   const [referenceId] = useState(`control-${Math.random()}`);
+
+  useEffect(() => {
+    // We want to scroll back to the top when courses have changed, unless the last action resulted
+    // from a user interaction with the SuggestField, eg. changed the query
+    if (
+      lastDispatchActions &&
+      lastDispatchActions?.every((action) => action.type !== CourseSearchParamsAction.queryUpdate)
+    ) {
+      scroll({
+        behavior: 'smooth',
+        top: 0,
+      });
+    }
+  }, [courseSearchResponse]);
 
   return (
     <div className="search">
