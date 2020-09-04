@@ -5,7 +5,7 @@ import { HistoryContext } from 'data/useHistory';
 import { API_LIST_DEFAULT_PARAMS } from 'settings';
 import { APIListRequestParams } from 'types/api';
 import { FilterDefinition } from 'types/filters';
-import { location, scroll } from 'utils/indirection/window';
+import { location } from 'utils/indirection/window';
 import { Maybe } from 'utils/types';
 import { computeNewFilterValue } from './computeNewFilterValue';
 
@@ -136,21 +136,6 @@ export const useCourseSearchParams = (): CourseSearchParamsState => {
   };
 
   useEffect(() => {
-    // We want to scroll back to the top when course search params have changed, unless the last action resulted
-    // from a user interaction with the SuggestField, eg. changed the query
-    if (
-      historyEntry.state.data &&
-      historyEntry.state.data.lastDispatchActions &&
-      !historyEntry.state.data?.lastDispatchActions
-        ?.map((action: CourseSearchParamsReducerAction) => action.type)
-        .includes(CourseSearchParamsAction.queryUpdate)
-    ) {
-      scroll({
-        behavior: 'smooth',
-        top: 0,
-      });
-    }
-
     // The Search view & components operate with default params, and we don't want to have all other pages in Richie
     // bear the burden of setting them whenever they link to Search.
     // We can solve this problem by replacing the current history entry if it is lacking the default parameters. This
