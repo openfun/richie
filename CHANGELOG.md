@@ -16,6 +16,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Improve Course Search UX by triggering scroll up after courses are retrieved
 
+### Fixed
+
+- Use variables for button colors in language selector so it fits in
+  with themes.
+
 ## [2.0.0-beta.14] - 2020-09-03
 
 ### Changed
