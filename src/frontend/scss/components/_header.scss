@@ -338,5 +338,10 @@
     display: flex;
     align-items: center;
     margin-left: 0;
+    color: r-theme-val(topbar, item-color);
+
+    &__button__icon {
+      fill: r-theme-val(topbar, item-color);
+    }
   }
 }
