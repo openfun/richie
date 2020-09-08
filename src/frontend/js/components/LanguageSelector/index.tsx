@@ -59,26 +59,26 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
   });
 
   return (
-    <div className="language-selector">
+    <div className="selector">
       <label {...getLabelProps()} className="offscreen">
         <FormattedMessage {...messages.selectLanguage} />
       </label>
-      <button {...getToggleButtonProps()} className="language-selector__button">
+      <button {...getToggleButtonProps()} className="selector__button">
         {selectedItem?.name || intl.formatMessage(messages.languages)}
-        <svg role="img" className="language-selector__button__icon" aria-hidden="true">
+        <svg role="img" className="selector__button__icon" aria-hidden="true">
           <use xlinkHref="#icon-chevron-down" />
         </svg>
       </button>
       <ul
         {...getMenuProps()}
-        className={`language-selector__list ${isOpen ? '' : 'language-selector__list--is-closed'}`}
+        className={`selector__list ${isOpen ? '' : 'selector__list--is-closed'}`}
       >
         {isOpen &&
           languagesList.map((language, index) => (
             <li key={`${language.code}${index}`} {...getItemProps({ item: language, index })}>
               <a
-                className={`language-selector__list__link ${
-                  highlightedIndex === index ? 'language-selector__list__link--highlighted' : ''
+                className={`selector__list__link ${
+                  highlightedIndex === index ? 'selector__list__link--highlighted' : ''
                 }`}
                 href={language.url}
                 title={`${intl.formatMessage(messages.switchToLanguage, {
