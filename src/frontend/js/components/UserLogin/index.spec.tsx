@@ -1,4 +1,5 @@
-import { act, render } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import fetchMock from 'fetch-mock';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
@@ -11,7 +12,15 @@ jest.mock('utils/errors/handle', () => ({
   handle: jest.fn(),
 }));
 
-describe('<UserLogin />', () => {
+jest.mock('utils/indirection/window', () => ({
+  matchMedia: () => ({
+    matches: true,
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+  }),
+}));
+
+describe.only('<UserLogin />', () => {
   const props = {
     loginUrl: '/login',
     logoutUrl: '/logout',
@@ -20,7 +29,7 @@ describe('<UserLogin />', () => {
 
   beforeEach(() => fetchMock.restore());
 
-  it('gets and renders the user name and a log out button', async () => {
+  it('gets and renders the user name and a dropdown containing a logout link', async () => {
     const deferred = new Deferred();
     fetchMock.get('/api/v1.0/users/whoami/', deferred.promise);
 
@@ -36,8 +45,21 @@ describe('<UserLogin />', () => {
       deferred.resolve({
         full_name: 'Decimus Iunius Iuvenalis',
         username: 'Juvénal',
+        urls: [
+          {
+            label: 'Profile',
+            href: 'https://acme.org',
+          },
+        ],
       }),
     );
+
+    const button = screen.getByRole('button', {
+      name: 'Access to your profile settings Decimus Iunius Iuvenalis',
+    });
+
+    userEvent.click(button);
+
     getByText('Decimus Iunius Iuvenalis');
     getByText('Log out');
     expect(queryByText('Loading login status...')).toBeNull();

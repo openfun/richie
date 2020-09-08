@@ -14,8 +14,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- Add a dropdown menu into UserLogin React component
-  to access to user urls customisable through MAIN_LMS_USER_URLS setting
+- Add `urls` property to `UserSerializer`. The urls are built with a new setting
+  `MAIN_LMS_USER_URLS` which contains custom links to access to LMS profile
+  views from richie.
 - Add a useMatchMedia hook to easily show/hide react component
   through media query
 

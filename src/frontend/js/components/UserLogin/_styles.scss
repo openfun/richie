@@ -1,36 +1,36 @@
 .user-login {
   @include sv-flex(1, 0, 100%);
-  display: flex;
   align-items: center;
+  display: flex;
 
   @include media-breakpoint-up($r-topbar-breakpoint) {
     @include sv-flex(1, 0, auto);
   }
 
   &__btn {
-    display: flex;
-    align-items: center;
     @include sv-flex(1, 0, auto);
     @include button-size($btn-padding-y, $btn-padding-x, $btn-font-size, $btn-line-height, 2rem);
     @include font-size($font-size-base);
-    font-family: inherit;
-    font-weight: inherit;
-    justify-content: center;
-    color: r-theme-val(topbar, item-cta-color);
-    text-align: center;
+    align-items: center;
     background: r-theme-val(topbar, item-cta-background);
     @if r-theme-val(topbar, item-cta-border) {
       border: $onepixel solid r-theme-val(topbar, item-cta-border);
     }
+    color: r-theme-val(topbar, item-cta-color);
+    display: flex;
+    font-family: inherit;
+    font-weight: inherit;
+    justify-content: center;
+    text-align: center;
 
     @include media-breakpoint-up($r-topbar-breakpoint) {
       @include sv-flex(0, 0, auto);
     }
 
     & + .user-login__btn {
+      border-top: 0;
       margin-left: 0.5rem;
       text-transform: uppercase;
-      border-top: 0;
     }
 
     &:hover {
@@ -41,9 +41,9 @@
     &--sign-up,
     &--log-out {
       color: r-theme-val(topbar, item-cta-hollow-color);
-      text-transform: uppercase;
       background: r-theme-val(topbar, item-cta-hollow-background);
       border-color: r-theme-val(topbar, item-cta-hollow-border);
+      text-transform: uppercase;
 
       &:hover {
         color: r-theme-val(topbar, item-cta-hollow-color) !important;
@@ -52,9 +52,9 @@
 
     & > .icon {
       height: 1.25rem;
-      width: 1.25rem;
-      margin-right: 0.5rem;
       fill: white;
+      margin-right: 0.5rem;
+      width: 1.25rem;
     }
   }
 }
