@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { defineMessages, FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { Spinner } from 'components/Spinner';
+import { UserMenu } from 'components/UserMenu';
 import { User } from 'types/User';
 import { handle } from 'utils/errors/handle';
 import { Maybe, Nullable } from 'utils/types';
@@ -43,6 +44,7 @@ export const UserLogin = ({ loginUrl, logoutUrl, signupUrl }: UserLoginProps) =>
    * - `null` when the user is anonymous or the request failed;
    * - a user object when the user is logged in.
    */
+  const intl = useIntl();
   const [user, setUser] = useState<Maybe<Nullable<User>>>(undefined);
 
   useAsyncEffect(async () => {
@@ -65,7 +67,7 @@ export const UserLogin = ({ loginUrl, logoutUrl, signupUrl }: UserLoginProps) =>
       const content = await response.json();
       setUser(content);
     } catch (error) {
-      // Default to the "anonymous user" state to enable loggging in anyway
+      // Default to the "anonymous user" state to enable logging in anyway
       setUser(null);
       handle(error);
     }
@@ -90,12 +92,11 @@ export const UserLogin = ({ loginUrl, logoutUrl, signupUrl }: UserLoginProps) =>
           </a>
         </React.Fragment>
       ) : (
-        <div className="user-login__logged">
-          <div className="user-login__logged__name">{user.full_name}</div>{' '}
-          <a href={logoutUrl} className="user-login__btn user-login__btn--log-out">
-            <FormattedMessage {...messages.logOut} />
-          </a>
-        </div>
+        <UserMenu
+          // If user's fullname is empty, we use its username as a fallback
+          user={user.full_name || user.username}
+          links={[...user.urls, { label: intl.formatMessage(messages.logOut), href: logoutUrl }]}
+        />
       )}
     </div>
   );

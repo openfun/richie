@@ -297,3 +297,9 @@ msgstr "Vous êtes inscrit à ce cours"
 msgid "Your enrollment request failed."
 msgstr "Votre demande d'inscription a échoué."
 
+#. [components.UserDesktopMenu.menuPurpose] - Accessible label for user menu button.
+#. defaultMessage is:
+#. Access to your profile settings
+#: i18n/js/components/UserMenu/index.json
+msgid "Access to your profile settings"
+msgstr "Accéder aux préférences de votre profile"
