@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fix how EDX_USER_PROFILE_TO_DJANGO default value is set
+
 ### Changed
 
 - Improve Course Search UX by triggering scroll up after courses are retrieved
