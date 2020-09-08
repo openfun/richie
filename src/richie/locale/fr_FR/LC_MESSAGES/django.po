@@ -1210,7 +1210,7 @@ msgstr "%(title)s, du %(start)s au %(end)s"
 #: apps/courses/templates/courses/cms/fragment_organization_main_logo.html:8
 #: apps/courses/templates/courses/cms/fragment_organization_main_logo.html:29
 msgid "Main organization"
-msgstr "Etablissement principal"
+msgstr "Établissement principal"
 
 #: apps/courses/templates/courses/cms/fragment_organization_main_logo.html:20
 msgid "main organization logo"
@@ -1547,3 +1547,10 @@ msgid_plural "Ensure this text has at most %(limit_value)d characters (it has %(
 msgstr[0] "Assurez-vous que ce texte a au maximum %(limit_value)d caractères (il en a %(show_value)d)."
 msgstr[1] "Assurez-vous que ce texte fait au maximum %(limit_value)d caractères (il en a %(show_value)d)."
 
+#: core/serializers.py:31
+msgid "Profile"
+msgstr "Profil"
+
+#: core/serializers.py:31
+msgid "Account"
+msgstr "Compte"

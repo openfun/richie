@@ -1539,3 +1539,10 @@ msgid_plural "Ensure this text has at most %(limit_value)d characters (it has %(
 msgstr[0] "Asegúrese de que este texto tiene como máximo %(limit_value)d caracter (tiene %(show_value)d)."
 msgstr[1] "Asegúrese de que este texto tiene como máximo %(limit_value)d caracteres (tiene %(show_value)d)."
 
+#: core/serializers.py:31
+msgid "Profile"
+msgstr "Perfil"
+
+#: core/serializers.py:31
+msgid "Account"
+msgstr "Cuenta"
