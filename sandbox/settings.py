@@ -222,6 +222,16 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         }
     ]
 
+    # Custom links to access to LMS profile views from richie
+    # Link order will reflect the order of display in frontend
+    # /!\ Careful - {base_url} is got from the first LMS_BACKEND conf
+    MAIN_LMS_USER_URLS = values.ListValue(
+        [
+            {"label": _("Profile"), "href": _("{base_url:s}/u/{username:s}")},
+            {"label": _("Account"), "href": _("{base_url:s}/account/settings")},
+        ]
+    )
+
     # Internationalization
     TIME_ZONE = "Europe/Paris"
     USE_I18N = True

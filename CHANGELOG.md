@@ -12,6 +12,13 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Fix how EDX_USER_PROFILE_TO_DJANGO default value is set
 
+### Added
+
+- Add a dropdown menu into UserLogin React component
+  to access to user urls customisable through MAIN_LMS_USER_URLS setting
+- Add a useMatchMedia hook to easily show/hide react component
+  through media query
+
 ### Changed
 
 - Switch from deprecated tslint to eslint js linter and update codebase

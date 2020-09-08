@@ -3,6 +3,7 @@ import json
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase
+from django.test.utils import override_settings
 
 
 class ApiUsersViewSetTestCase(TestCase):
@@ -13,10 +14,17 @@ class ApiUsersViewSetTestCase(TestCase):
         response = self.client.get("/api/v1.0/users/whoami/")
         self.assertEqual(response.status_code, 401)
 
+    @override_settings(
+        LMS_BACKENDS=[{"BASE_URL": "https://www.example.com"}],
+        MAIN_LMS_USER_URLS=[
+            {"label": "Test", "href": "{base_url:s}/user/{username:s}"}
+        ],
+    )
     def test_viewsets_users_whoami_logged_in(self):
         """
         whoami returns information about the current user when requested by a
         logged in user.
+        It also binds urls defined into MAIN_LMS_USER_URLS setting.
         """
         # Create a stub user and force-login it to test our API
         user = get_user_model().objects.create_user(
@@ -33,5 +41,11 @@ class ApiUsersViewSetTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
             json.loads(response.content),
-            {"full_name": "Decimus Iunius Iuvenalis", "username": "juvénal"},
+            {
+                "full_name": "Decimus Iunius Iuvenalis",
+                "username": "juvénal",
+                "urls": [
+                    {"label": "Test", "href": "https://www.example.com/user/juvénal"},
+                ],
+            },
         )

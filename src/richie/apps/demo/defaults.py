@@ -54,7 +54,7 @@ PAGES_INFO = {
         "template": "courses/cms/category_list.html",
     },
     "organizations": {
-        "title": {"en": "Organizations", "fr": "Etablissements"},
+        "title": {"en": "Organizations", "fr": "Établissements"},
         "in_navigation": True,
         "template": "courses/cms/organization_list.html",
     },
