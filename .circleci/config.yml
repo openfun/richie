@@ -435,7 +435,7 @@ jobs:
           keys:
             - v5-front-dependencies-{{ checksum "yarn.lock" }}
       - run:
-          name: Lint code with tslint
+          name: Lint code with eslint
           command: yarn lint
       - run:
           name: Lint JS/TS/JSON and CSS/SCSS code with prettier

@@ -1,0 +1,68 @@
+{
+  "env": {
+    "browser": true,
+    "jest": true,
+    "es6": true
+  },
+  "extends": [
+    "airbnb-typescript",
+    "prettier",
+    "prettier/react",
+    "prettier/@typescript-eslint",
+    "plugin:prettier/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    /* 
+      To use eslint with VSCode and see lint error directly in file,
+      you have to install dbaeumer.vscode-eslint extension
+      and you may have to tweak your workspace settings with:
+      "eslint.workingDirectories": ["src/frontend"]
+
+      As frontend is not at the root of the repository,
+      this setting allows ESLint extension to find the ./tsconfig.json file
+    */
+    "project": "./tsconfig.json",
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  },
+  "plugins": ["@typescript-eslint"],
+  /* Disable some rules to be iso with tslint which was previously used */
+  "rules": {
+    "@typescript-eslint/explicit-member-accessibility": ["error", { "accessibility": "no-public" }],
+    "@typescript-eslint/lines-between-class-members": "off",
+    "@typescript-eslint/no-use-before-define": "off",
+    "arrow-parens": "error",
+    "consistent-return": "off",
+    "default-case": "off",
+    "global-require": "off",
+    "import/extensions": "off",
+    "import/no-cycle": ["off"],
+    "import/no-dynamic-require": "off",
+    "import/prefer-default-export": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "jsx-a11y/label-has-associated-control": "warn",
+    "no-console": ["error", { "allow": ["warn"] }],
+    "no-else-return": "off",
+    "no-empty-function": "off",
+    "no-nested-ternary": "warn",
+    "no-param-reassign": "off",
+    "no-plusplus": "off",
+    "no-prototype-builtins": "off",
+    "no-return-assign": "off",
+    "no-return-await": "off",
+    "no-undef": "off",
+    "no-underscore-dangle": "off",
+    "no-useless-escape": "off",
+    "prefer-template": "off",
+    "react/button-has-type": "off",
+    "react/destructuring-assignment": "off",
+    "react/jsx-boolean-value": "off",
+    "react/jsx-fragments": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/no-array-index-key": "warn",
+    "react/prop-types": "off",
+    "react/require-default-props": "off"
+  }
+}
