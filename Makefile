@@ -135,7 +135,7 @@ install-front: ## install front-end dependencies
 
 lint-front: ## run all front-end "linters"
 lint-front: \
-  lint-front-tslint \
+  lint-front-eslint \
   lint-front-prettier
 .PHONY: lint-front
 
@@ -143,9 +143,9 @@ lint-front-prettier: ## run prettier over js/jsx/json/ts/tsx files -- beware! ov
 	@$(YARN) prettier-write
 .PHONY: lint-front-prettier
 
-lint-front-tslint: ## lint TypeScript sources
+lint-front-eslint: ## lint TypeScript sources
 	@$(YARN) lint
-.PHONY: lint-front-tslint
+.PHONY: lint-front-eslint
 
 test-front: ## run front-end tests
 	@$(YARN) test --runInBand

@@ -16,7 +16,7 @@ We use strict flake8, pylint, isort and black linters to check the validity of o
 
     $ make lint-back
 
-We use strict tslint and prettier to check the validity of our frontend code:
+We use strict eslint and prettier to check the validity of our frontend code:
 
     $ make lint-front
 
