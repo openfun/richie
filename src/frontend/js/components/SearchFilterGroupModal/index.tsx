@@ -4,7 +4,7 @@ import ReactModal from 'react-modal';
 
 import { fetchList } from 'data/getResourceList';
 import { CourseSearchParamsAction, useCourseSearchParams } from 'data/useCourseSearchParams';
-import { requestStatus } from 'types/api';
+import { RequestStatus } from 'types/api';
 import { FacetedFilterDefinition, FilterValue } from 'types/filters';
 import { Nullable } from 'utils/types';
 import { useAsyncEffect } from 'utils/useAsyncEffect';
@@ -83,7 +83,7 @@ export const SearchFilterGroupModal = ({ filter }: SearchFilterGroupModalProps) 
       query,
     });
 
-    if (searchResponse.status === requestStatus.FAILURE) {
+    if (searchResponse.status === RequestStatus.FAILURE) {
       setValues([]);
       return setError(messages.error);
     }
@@ -96,7 +96,7 @@ export const SearchFilterGroupModal = ({ filter }: SearchFilterGroupModalProps) 
       scope: 'filters',
     });
 
-    if (facetResponse.status === requestStatus.FAILURE) {
+    if (facetResponse.status === RequestStatus.FAILURE) {
       setValues([]);
       return setError(messages.error);
     }

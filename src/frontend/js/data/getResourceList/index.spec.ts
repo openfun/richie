@@ -1,6 +1,6 @@
 import fetchMock from 'fetch-mock';
 
-import { requestStatus } from 'types/api';
+import { RequestStatus } from 'types/api';
 import { fetchList } from '.';
 
 describe('data/getResourceList', () => {
@@ -48,11 +48,11 @@ describe('data/getResourceList', () => {
         offset: '43',
       })) as any;
 
-      expect(response.status).toEqual(requestStatus.SUCCESS);
+      expect(response.status).toEqual(RequestStatus.SUCCESS);
       expect(response.content).toEqual({ objects: [course43, course44] });
     });
 
-    it('rejects with a fetchListResponse containing an error when it fails to make the request', async () => {
+    it('rejects with a FetchListResponse containing an error when it fails to make the request', async () => {
       fetchMock.mock(
         '/api/v1.0/courses/?limit=2&offset=43',
         Promise.reject(new Error('Failed to perform the request')),
@@ -63,11 +63,11 @@ describe('data/getResourceList', () => {
         offset: '43',
       })) as any;
 
-      expect(response.status).toEqual(requestStatus.FAILURE);
+      expect(response.status).toEqual(RequestStatus.FAILURE);
       expect(response.error).toEqual(jasmine.any(Error));
     });
 
-    it('rejects with a fetchListResponse containing an error when the API returns an error code', async () => {
+    it('rejects with a FetchListResponse containing an error when the API returns an error code', async () => {
       fetchMock.mock('/api/v1.0/courses/?limit=2&offset=43', 404);
 
       const response = (await fetchList('courses', {

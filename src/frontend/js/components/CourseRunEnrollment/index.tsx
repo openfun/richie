@@ -273,7 +273,7 @@ export const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonData
             {state.matches('enrollmentLoading') ? (
               <span aria-hidden="true">
                 <Spinner>
-                  <React.Fragment></React.Fragment>
+                  <React.Fragment />
                   {/* No children with loading text as the spinner is aria-hidden (handled by aria-busy) */}
                 </Spinner>
               </span>
@@ -290,9 +290,11 @@ export const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonData
     case state.matches('enrolled'):
       return (
         <React.Fragment>
-          <a href={courseRun?.resource_link} className="course-run-enrollment__cta">
-            <FormattedMessage {...messages.goToCourse} />
-          </a>
+          {courseRun && (
+            <a href={courseRun.resource_link} className="course-run-enrollment__cta">
+              <FormattedMessage {...messages.goToCourse} />
+            </a>
+          )}
           <div className="course-run-enrollment__helptext">
             <FormattedMessage {...messages.enrolled} />
           </div>

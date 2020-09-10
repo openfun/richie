@@ -1,4 +1,4 @@
-export type jestMockOf<T extends (...args: any[]) => any> = jest.Mock<ReturnType<T>, Parameters<T>>;
+export type JestMockOf<T extends (...args: any[]) => any> = jest.Mock<ReturnType<T>, Parameters<T>>;
 
 export type Maybe<T> = T | undefined;
 

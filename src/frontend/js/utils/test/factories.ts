@@ -1,4 +1,4 @@
-import { compose, createSpec, derived, faker } from '@helpscout/helix';
+import { createSpec, derived, faker } from '@helpscout/helix';
 
 const CourseStateFactory = createSpec({
   priority: derived(() => Math.floor(Math.random() * 7)),

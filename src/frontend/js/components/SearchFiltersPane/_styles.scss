@@ -10,6 +10,7 @@
   }
 
   &__clear {
+    @include button-reset-style();
     display: block;
     cursor: pointer;
     margin: 0.2rem $r-search-filters-gutter;

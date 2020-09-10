@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const webpack = require('webpack');
 
-const argv = require('yargs').argv;
+const { argv } = require('yargs');
 
 // Specific path resolutions for builds ran by a Richie dependent
 const richieDependentModuleResolutions = argv.richieDependentBuild
@@ -48,7 +48,7 @@ module.exports = {
 
   output: {
     filename: 'index.js',
-    path: __dirname + '/../richie/static/richie/js',
+    path: path.join(__dirname, '/../richie/static/richie/js'),
     // `chunkFilename` must have a unique and different name on each build. This will prevent overwriting
     // of existing chunks if backend static storage is on AWS.
     chunkFilename: '[id].[hash].index.js',

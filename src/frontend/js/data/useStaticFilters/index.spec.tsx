@@ -1,10 +1,10 @@
-import { act, render, wait } from '@testing-library/react';
+import { act, render } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import React from 'react';
 
 import { FilterDefinition } from 'types/filters';
-import { useStaticFilters } from '.';
 import { Deferred } from 'utils/tests/Deferred';
+import { useStaticFilters } from '.';
 
 describe('data/useStaticFilters', () => {
   // Build a helper component with an out-of-scope function to let us reach our Hook from

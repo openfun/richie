@@ -9,7 +9,7 @@ interface SpinnerProps {
 export const Spinner: React.FC<SpinnerProps> = (props) => {
   const { children, size } = props;
   const spinnerProps = props['aria-labelledby']
-    ? { ['aria-labelledby']: props['aria-labelledby'] }
+    ? { 'aria-labelledby': props['aria-labelledby'] }
     : {};
 
   return (

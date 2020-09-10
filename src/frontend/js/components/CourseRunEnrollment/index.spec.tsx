@@ -35,7 +35,7 @@ describe('<CourseRunEnrollment />', () => {
         <CourseRunEnrollment
           context={context}
           courseRunId={courseRun.id}
-          loginUrl={'/oauth/login/edx-oauth2/?next=/en/courses/'}
+          loginUrl="/oauth/login/edx-oauth2/?next=/en/courses/"
         />
       </IntlProvider>,
     );
@@ -79,7 +79,7 @@ describe('<CourseRunEnrollment />', () => {
         <CourseRunEnrollment
           context={context}
           courseRunId={courseRun.id}
-          loginUrl={'/oauth/login/edx-oauth2/?next=/en/courses/'}
+          loginUrl="/oauth/login/edx-oauth2/?next=/en/courses/"
         />
       </IntlProvider>,
     );
@@ -121,7 +121,7 @@ describe('<CourseRunEnrollment />', () => {
         <CourseRunEnrollment
           context={context}
           courseRunId={courseRun.id}
-          loginUrl={'/oauth/login/edx-oauth2/?next=/en/courses/'}
+          loginUrl="/oauth/login/edx-oauth2/?next=/en/courses/"
         />
       </IntlProvider>,
     );
@@ -155,7 +155,7 @@ describe('<CourseRunEnrollment />', () => {
         <CourseRunEnrollment
           context={context}
           courseRunId={courseRun.id}
-          loginUrl={'/oauth/login/edx-oauth2/?next=/en/courses/'}
+          loginUrl="/oauth/login/edx-oauth2/?next=/en/courses/"
         />
       </IntlProvider>,
     );
@@ -186,7 +186,7 @@ describe('<CourseRunEnrollment />', () => {
         <CourseRunEnrollment
           context={context}
           courseRunId={courseRun.id}
-          loginUrl={'/oauth/login/edx-oauth2/?next=/en/courses/'}
+          loginUrl="/oauth/login/edx-oauth2/?next=/en/courses/"
         />
       </IntlProvider>,
     );

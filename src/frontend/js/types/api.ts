@@ -2,7 +2,7 @@ import { Course } from 'types/Course';
 import { FacetedFilterDefinition } from 'types/filters';
 import { Maybe } from 'utils/types';
 
-export enum requestStatus {
+export enum RequestStatus {
   FAILURE = 'failure',
   LOADING = 'loading',
   SUCCESS = 'success',

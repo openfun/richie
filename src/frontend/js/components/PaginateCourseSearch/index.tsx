@@ -123,7 +123,7 @@ export const PaginateCourseSearch = ({ courseSearchTotalCount }: PaginateCourseS
                 </li>
               ) : (
                 <li className="pagination__item">
-                  <a
+                  <button
                     className="pagination__page-number"
                     onClick={() =>
                       dispatchCourseSearchParamsUpdate({
@@ -153,7 +153,7 @@ export const PaginateCourseSearch = ({ courseSearchTotalCount }: PaginateCourseS
                         page
                       )}
                     </span>
-                  </a>
+                  </button>
                 </li>
               )}
             </React.Fragment>

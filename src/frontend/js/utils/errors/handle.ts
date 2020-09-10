@@ -17,11 +17,11 @@ if (context && context.sentry_dsn) {
  * Generic error handler to be called whenever we need to do error reporting throughout the app.
  * Passes errors to Sentry if available, logs the error to the console otherwise.
  */
-// tslint:disable:no-console
 export const handle = (error: Error) => {
   if (context.sentry_dsn) {
     Sentry.captureException(error);
   } else {
+    // eslint-disable-next-line no-console
     console.error(error);
   }
 };
