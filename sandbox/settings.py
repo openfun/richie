@@ -179,8 +179,8 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
     LOGOUT_URL = "logout"
 
     AUTHENTICATION_BACKENDS = (
-        "richie.apps.core.backends.EdXOAuth2",
-        "richie.apps.core.backends.EdXOIDC",
+        "richie.apps.social.backends.EdXOAuth2",
+        "richie.apps.social.backends.EdXOIDC",
         "django.contrib.auth.backends.ModelBackend",
     )
 
@@ -294,6 +294,7 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         "richie.apps.search",
         "richie.apps.courses",
         "richie.apps.core",
+        "richie.apps.social",
         "richie.plugins.glimpse",
         "richie.plugins.html_sitemap",
         "richie.plugins.large_banner",

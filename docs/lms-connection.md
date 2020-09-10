@@ -30,8 +30,8 @@ project's settings file:
 
 ```python
 AUTHENTICATION_BACKENDS = (
-    "richie.apps.core.backends.EdXOAuth2",
-    "richie.apps.core.backends.EdXOIDC",
+    "richie.apps.social.backends.EdXOAuth2",
+    "richie.apps.social.backends.EdXOIDC",
     "django.contrib.auth.backends.ModelBackend",
 )
 ```
