@@ -5,8 +5,8 @@ import { stringify } from 'query-string';
 import { IntlProvider } from 'react-intl';
 
 import { History, HistoryContext } from 'data/useHistory';
-import { Search } from '.';
 import * as mockWindow from 'utils/indirection/window';
+import { Search } from '.';
 
 let mockMatches = false;
 jest.mock('utils/indirection/window', () => ({

@@ -3,13 +3,13 @@ import React from 'react';
 
 import { fetchList } from 'data/getResourceList';
 import { APIListRequestParams } from 'types/api';
-import { jestMockOf } from 'utils/types';
+import { JestMockOf } from 'utils/types';
 import { useCourseSearch } from '.';
 
 jest.mock('data/getResourceList', () => ({
   fetchList: jest.fn(),
 }));
-const mockFetchList = fetchList as jestMockOf<typeof fetchList>;
+const mockFetchList = fetchList as JestMockOf<typeof fetchList>;
 
 describe('data/useCourseSearch', () => {
   // Build a helper component with an out-of-scope function to let us reach our Hook from

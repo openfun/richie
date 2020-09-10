@@ -5,7 +5,7 @@ import { SearchFilterValueLeaf } from 'components/SearchFilterValueLeaf';
 import { fetchList } from 'data/getResourceList';
 import { useCourseSearchParams } from 'data/useCourseSearchParams';
 import { useFilterValue } from 'data/useFilterValue';
-import { requestStatus } from 'types/api';
+import { RequestStatus } from 'types/api';
 import { FacetedFilterDefinition, FilterValue } from 'types/filters';
 import { getMPTTChildrenPathMatcher } from 'utils/mptt';
 import { Nullable } from 'utils/types';
@@ -63,7 +63,7 @@ export const SearchFilterValueParent = ({ filter, value }: SearchFilterValuePare
         scope: 'filters',
       });
 
-      if (childrenResponse.status === requestStatus.FAILURE) {
+      if (childrenResponse.status === RequestStatus.FAILURE) {
         throw new Error(`Failed to get children filters for ${filter.name}/${childrenPathMatch}`);
       }
 

@@ -52,7 +52,7 @@ export const SearchFiltersPane = ({
       <h2 className="search-filters-pane__title">
         <FormattedMessage {...messages.filter} />
       </h2>
-      <a
+      <button
         className={`search-filters-pane__clear ${
           !activeFilterCount ? 'search-filters-pane__clear--hidden' : ''
         }`}
@@ -64,7 +64,7 @@ export const SearchFiltersPane = ({
         }
       >
         <FormattedMessage {...messages.clearFilters} values={{ activeFilterCount }} />
-      </a>
+      </button>
       {filterList &&
         filterList.map((filter) => <SearchFilterGroup filter={filter} key={filter.name} />)}
     </div>

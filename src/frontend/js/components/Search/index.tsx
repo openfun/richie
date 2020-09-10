@@ -7,7 +7,7 @@ import { SearchFiltersPane } from 'components/SearchFiltersPane';
 import { Spinner } from 'components/Spinner';
 import { useCourseSearch } from 'data/useCourseSearch';
 import { useCourseSearchParams, CourseSearchParamsAction } from 'data/useCourseSearchParams';
-import { requestStatus } from 'types/api';
+import { RequestStatus } from 'types/api';
 import { CommonDataProps } from 'types/commonDataProps';
 import { matchMedia, scroll } from 'utils/indirection/window';
 
@@ -69,7 +69,7 @@ export const Search = ({ context }: CommonDataProps) => {
         <SearchFiltersPane
           aria-hidden={alwaysShowFilters ? false : !showFilters}
           filters={
-            courseSearchResponse && courseSearchResponse.status === requestStatus.SUCCESS
+            courseSearchResponse?.status === RequestStatus.SUCCESS
               ? courseSearchResponse.content.filters
               : null
           }
@@ -79,7 +79,7 @@ export const Search = ({ context }: CommonDataProps) => {
           <button
             aria-expanded={showFilters}
             aria-controls={referenceId}
-            className={'search__filters__toggle'}
+            className="search__filters__toggle"
             onClick={() => setShowFilters(!showFilters)}
           >
             {showFilters ? (
@@ -105,7 +105,7 @@ export const Search = ({ context }: CommonDataProps) => {
         )}
       </div>
       <div className="search__results">
-        {courseSearchResponse && courseSearchResponse.status === requestStatus.SUCCESS ? (
+        {courseSearchResponse && courseSearchResponse.status === RequestStatus.SUCCESS ? (
           <React.Fragment>
             <CourseGlimpseList
               context={context}
@@ -116,7 +116,7 @@ export const Search = ({ context }: CommonDataProps) => {
               courseSearchTotalCount={courseSearchResponse.content.meta.total_count}
             />
           </React.Fragment>
-        ) : courseSearchResponse && courseSearchResponse.status === requestStatus.FAILURE ? (
+        ) : courseSearchResponse && courseSearchResponse.status === RequestStatus.FAILURE ? (
           <div className="search__results__error">
             <svg aria-hidden={true} role="img">
               <use xlinkHref="#icon-search-fail" />

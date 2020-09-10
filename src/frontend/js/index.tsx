@@ -19,7 +19,7 @@ import { Root } from 'components/Root';
 import { handle } from 'utils/errors/handle';
 
 // Wait for the DOM to load before we scour it for an element that requires React to be rendered
-document.addEventListener('DOMContentLoaded', async (event) => {
+document.addEventListener('DOMContentLoaded', async () => {
   // Find all the elements that need React to render a component
   const richieReactSpots = Array.prototype.slice.call(document.querySelectorAll('.richie-react'));
 
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', async (event) => {
         // Polyfilled locale data is keyed by 2-letter language code
         let languageCode = locale;
         if (languageCode.match(/^.*_.*$/)) {
-          languageCode = locale.split('_')[0];
+          [languageCode] = locale.split('_');
         }
         // Get `react-intl`/`formatjs` lang specific parameters and data
         await import(`@formatjs/intl-relativetimeformat/locale-data/${languageCode}`);
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', async (event) => {
       // Richie. We still want errors if another locale is expected but missing, and we still want to log something
       // to the console so Richie users who provide their own 'en-US' strings are warned if they are not loaded.
       if (locale === 'en-US') {
-        // tslint:disable:no-console
+        // eslint-disable-next-line no-console
         console.log('No localization file found for default en-US locale, using default messages.');
       } else {
         handle(e);

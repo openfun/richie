@@ -19,7 +19,7 @@ describe('data/useHistory', () => {
   // Build a helper component with an out-of-scope function to let us reach our Hook from
   // our test cases.
   let getLatestHookValues: any;
-  const TestComponent = ({}: {}) => {
+  const TestComponent = () => {
     const hookValues = useHistory();
     getLatestHookValues = () => hookValues;
     return <div />;

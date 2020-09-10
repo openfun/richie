@@ -257,3 +257,14 @@
     height: 100%;
   }
 }
+
+@mixin button-reset-style() {
+  appearance: none;
+  background: none;
+  border: none;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  margin: inherit;
+  padding: inherit;
+}

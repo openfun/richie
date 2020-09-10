@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { APICourseSearchResponse } from 'types/api';
 import { StaticFilterDefinitions } from 'types/filters';
 import {
   SearchAutosuggestProps,

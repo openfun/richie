@@ -108,7 +108,7 @@ describe('components/SearchSuggestField', () => {
     const OtherComponent = () => {
       const { dispatchCourseSearchParamsUpdate } = useCourseSearchParams();
       doDispatchCourseSearchParamsUpdate = dispatchCourseSearchParamsUpdate;
-      return <div></div>;
+      return <div />;
     };
 
     location.search = '?limit=20&offset=0&query=social%20sciences';
