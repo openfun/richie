@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Create a function checking username in social auth pipeline
+
 ### Fixed
 
 - Fix how EDX_USER_PROFILE_TO_DJANGO default value is set
