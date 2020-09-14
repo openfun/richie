@@ -83,6 +83,11 @@ PAGES_INFO = {
                 "in_navigation": True,
                 "template": "richie/single_column.html",
             },
+            "login-error": {
+                "title": {"en": "Login error", "fr": "Erreur de connexion"},
+                "in_navigation": False,
+                "template": "richie/single_column.html",
+            },
         },
     },
 }
