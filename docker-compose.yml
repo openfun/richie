@@ -38,7 +38,6 @@ services:
     depends_on:
       - "${DB_HOST:-postgresql}"
       - "elasticsearch"
-
     stdin_open: true
     tty: true
 
