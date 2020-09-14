@@ -225,6 +225,8 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
     # Mapping between edx and richie profile fields
     EDX_USER_PROFILE_TO_DJANGO = values.DictValue()
 
+    SOCIAL_ERROR_REVERSE_ID = values.Value()
+
     # LMS
     LMS_BACKENDS = [
         {
@@ -312,7 +314,7 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         "cms.middleware.toolbar.ToolbarMiddleware",
         "cms.middleware.language.LanguageCookieMiddleware",
         "dj_pagination.middleware.PaginationMiddleware",
-        "social_django.middleware.SocialAuthExceptionMiddleware",
+        "richie.apps.social.middleware.SocialAuthExceptionMiddleware",
     )
 
     # Django applications from the highest priority to the lowest

@@ -16,6 +16,8 @@ DJANGO_SOCIAL_AUTH_EDX_OIDC_SECRET=fakesecret
 DJANGO_SOCIAL_AUTH_EDX_OIDC_ID_TOKEN_DECRYPTION_KEY=fakesecret
 DJANGO_SOCIAL_AUTH_EDX_OIDC_ENDPOINT=http://edx:8073/oauth2
 
+DJANGO_SOCIAL_ERROR_REVERSE_ID=login-error
+
 # LMS Backend
 EDX_BACKEND=richie.apps.courses.lms.edx.TokenEdXLMSBackend
 EDX_COURSE_REGEX=^.*/courses/(?P<course_id>.*)/info$

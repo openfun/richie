@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Create a function checking username in social auth pipeline
+- Extend social-auth middleware to use a page to display error
 
 ### Fixed
 
