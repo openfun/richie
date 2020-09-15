@@ -27,6 +27,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Allow empty content on glimpse plugins
 - Switch from deprecated tslint to eslint js linter and update codebase
   accordingly.
 - Improve Course Search UX by triggering scroll up after courses are retrieved

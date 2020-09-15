@@ -27,6 +27,13 @@ class GlimpseCMSPluginsTestCase(CMSPluginTestCase):
         """
         GlimpseFactory(title=None)
 
+    @staticmethod
+    def test_factory_glimpse_content_not_required():
+        """
+        The "content" field is not required when instantiating a glimpse.
+        """
+        GlimpseFactory(content=None)
+
     def test_factory_glimpse_create_success(self):
         """
         Glimpse plugin creation success
