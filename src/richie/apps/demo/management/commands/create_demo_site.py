@@ -15,7 +15,7 @@ from cms.models import StaticPlaceholder
 from richie.apps.core.factories import create_text_plugin, image_getter
 from richie.apps.core.helpers import recursive_page_creation
 from richie.apps.courses import factories
-from richie.plugins.glimpse.defaults import CARD_SQUARE, ROW_FULL, ROW_HALF
+from richie.plugins.glimpse import defaults as glimpse_defaults
 from richie.plugins.glimpse.factories import GlimpseFactory
 
 from ... import defaults
@@ -281,7 +281,7 @@ def create_demo_site():
                 glimpse_data = factory.build(
                     dict,
                     FACTORY_CLASS=GlimpseFactory,
-                    variant=ROW_HALF,
+                    variant=glimpse_defaults.ROW_HALF,
                     image=image_getter(pick_image("logo")()),
                 )
                 glimpse_data["image"].save()
@@ -296,7 +296,7 @@ def create_demo_site():
                 glimpse_data = factory.build(
                     dict,
                     FACTORY_CLASS=GlimpseFactory,
-                    variant=ROW_FULL,
+                    variant=glimpse_defaults.ROW_FULL,
                     image=image_getter(pick_image("logo")()),
                 )
                 glimpse_data["image"].save()
@@ -319,7 +319,7 @@ def create_demo_site():
                 glimpse_data = factory.build(
                     dict,
                     FACTORY_CLASS=GlimpseFactory,
-                    variant=CARD_SQUARE,
+                    variant=glimpse_defaults.CARD_SQUARE,
                     image=image_getter(pick_image("logo")()),
                 )
                 glimpse_data["image"].save()
@@ -568,6 +568,54 @@ def create_demo_site():
             template=content["button_template_name"],
             internal_link=pages_created["persons"],
         )
+
+        # Add Glimpse quotes with empty title
+        quotes_section = add_plugin(
+            language=language,
+            placeholder=placeholder,
+            plugin_type="SectionPlugin",
+            title="",
+        )
+        for _ in range(3):
+            glimpse_data = factory.build(
+                dict,
+                FACTORY_CLASS=GlimpseFactory,
+                variant=glimpse_defaults.QUOTE,
+                title=None,
+                image=image_getter(pick_image("portrait")()),
+            )
+            glimpse_data["image"].save()
+            add_plugin(
+                language=language,
+                placeholder=placeholder,
+                plugin_type="GlimpsePlugin",
+                target=quotes_section,
+                **glimpse_data,
+            )
+
+        # Add Glimpse cards with empty content
+        cards_section = add_plugin(
+            language=language,
+            placeholder=placeholder,
+            plugin_type="SectionPlugin",
+            title="",
+        )
+        for _ in range(4):
+            glimpse_data = factory.build(
+                dict,
+                FACTORY_CLASS=GlimpseFactory,
+                variant=glimpse_defaults.CARD_SQUARE,
+                content=None,
+                image=image_getter(pick_image("cover")()),
+            )
+            glimpse_data["image"].save()
+            add_plugin(
+                language=language,
+                placeholder=placeholder,
+                plugin_type="GlimpsePlugin",
+                target=cards_section,
+                **glimpse_data,
+            )
 
         # Once content has been added we must publish again homepage
         pages_created["home"].publish(language)

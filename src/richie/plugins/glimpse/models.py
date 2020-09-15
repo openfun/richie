@@ -34,7 +34,7 @@ class Glimpse(CMSPlugin):
         null=True,
         blank=True,
     )
-    content = models.TextField(_("Content"), blank=False, default="")
+    content = models.TextField(_("Content"), null=True, blank=True, default="")
     link_url = models.URLField(
         verbose_name=_("External URL"),
         blank=True,
