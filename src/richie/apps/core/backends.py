@@ -187,9 +187,12 @@ class EdXOAuth2(BaseOAuth2):
         config = cache.get(cache_key)
 
         if not config:
-            config = self.get_json(
-                self.endpoint() + "/.well-known/openid-configuration"
-            )
+            config = {
+                "authorization_endpoint": self.endpoint() + "/authorize",
+                "token_endpoint": self.endpoint() + "/access_token",
+                # "end_session_endpoint": self.endpoint() + "/revoke_token",
+                "end_session_endpoint": '',
+            }
 
             # Cache for one week since the configuration rarely changes
             cache.set(
