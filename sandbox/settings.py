@@ -188,6 +188,7 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
     SOCIAL_AUTH_EDX_OAUTH2_KEY = values.Value()
     SOCIAL_AUTH_EDX_OAUTH2_SECRET = values.Value()
     SOCIAL_AUTH_EDX_OAUTH2_ENDPOINT = values.Value()
+    SOCIAL_AUTH_EDX_OAUTH2_REGISTRATION_ENDPOINT = values.Value()
     SOCIAL_AUTH_EDX_OIDC_KEY = values.Value()
     SOCIAL_AUTH_EDX_OIDC_SECRET = values.Value()
     SOCIAL_AUTH_EDX_OIDC_ID_TOKEN_DECRYPTION_KEY = values.Value()

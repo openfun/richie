@@ -6,6 +6,7 @@ import json
 from django.conf import settings
 from django.contrib.sites.models import Site
 from django.middleware.csrf import get_token
+from django.urls import reverse
 
 from . import defaults
 
@@ -31,6 +32,12 @@ def site_metas(request):
             "name": site_current.name,
             "domain": site_current.domain,
             "web_url": f"{protocol:s}://{site_current.domain:s}",
+        },
+        "SOCIAL": {
+            "registration_endpoint": getattr(
+                settings, "SOCIAL_AUTH_EDX_OAUTH2_REGISTRATION_ENDPOINT", ""
+            )
+            or reverse("admin:index")
         },
         "FRONTEND_CONTEXT": json.dumps(
             {

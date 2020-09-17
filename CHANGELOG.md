@@ -10,6 +10,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Allow to configure `SOCIAL_AUTH_EDX_OAUTH2_REGISTRATION_ENDPOINT` which is
+  used to customize sign up url.
 - Create a function checking username in social auth pipeline
 - Extend social-auth middleware to use a page to display error
 - Add `urls` property to `UserSerializer`. The urls are built with a new setting
