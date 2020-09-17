@@ -37,13 +37,17 @@ def site_metas(request):
             "registration_endpoint": getattr(
                 settings, "SOCIAL_AUTH_EDX_OAUTH2_REGISTRATION_ENDPOINT", ""
             )
-            or reverse("admin:index")
+            or reverse("admin:index"),
+            "oauth2_whoami_endpoint": getattr(
+                settings, "SOCIAL_AUTH_EDX_OAUTH2_WHOAMI_ENDPOINT", None
+            ),
         },
         "FRONTEND_CONTEXT": json.dumps(
             {
                 "context": {
                     "csrftoken": get_token(request),
                     "environment": getattr(settings, "ENVIRONMENT", ""),
+                    "redirect_whitelist": getattr(settings, "REDIRECT_WHITELIST", []),
                     "release": getattr(settings, "RELEASE", ""),
                     "sentry_dsn": getattr(settings, "SENTRY_DSN", ""),
                 }

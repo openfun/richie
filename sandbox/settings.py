@@ -189,6 +189,9 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
     SOCIAL_AUTH_EDX_OAUTH2_SECRET = values.Value()
     SOCIAL_AUTH_EDX_OAUTH2_ENDPOINT = values.Value()
     SOCIAL_AUTH_EDX_OAUTH2_REGISTRATION_ENDPOINT = values.Value()
+    #  This endpoint should return a 200 status code when the user is logged in
+    # no matter the body content
+    SOCIAL_AUTH_EDX_OAUTH2_WHOAMI_ENDPOINT = values.Value()
     SOCIAL_AUTH_EDX_OIDC_KEY = values.Value()
     SOCIAL_AUTH_EDX_OIDC_SECRET = values.Value()
     SOCIAL_AUTH_EDX_OIDC_ID_TOKEN_DECRYPTION_KEY = values.Value()

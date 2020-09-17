@@ -7,6 +7,7 @@ import { User } from 'types/User';
 import { handle } from 'utils/errors/handle';
 import { Maybe, Nullable } from 'utils/types';
 import { useAsyncEffect } from 'utils/useAsyncEffect';
+import { location } from 'utils/indirection/window';
 
 const messages = defineMessages({
   logIn: {
@@ -35,9 +36,15 @@ interface UserLoginProps {
   loginUrl: string;
   logoutUrl: string;
   signupUrl: string;
+  oAuth2WhoamiUrl?: string;
 }
 
-export const UserLogin = ({ loginUrl, logoutUrl, signupUrl }: UserLoginProps) => {
+export const UserLogin = ({
+  loginUrl,
+  logoutUrl,
+  signupUrl,
+  oAuth2WhoamiUrl,
+}: UserLoginProps & CommonDataProps) => {
   /**
    * `user` is:
    * - `undefined` when we have not made the `whoami` request yet;
@@ -48,28 +55,37 @@ export const UserLogin = ({ loginUrl, logoutUrl, signupUrl }: UserLoginProps) =>
   const [user, setUser] = useState<Maybe<Nullable<User>>>(undefined);
 
   useAsyncEffect(async () => {
+    let content = null;
     try {
-      const response = await fetch('/api/v1.0/users/whoami/', {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      let response = await fetch('/api/v1.0/users/whoami/', { credentials: 'include' });
 
-      if (!response.ok) {
-        // 401 is the expected response for anonymous users
-        if (response.status === 401) {
-          return setUser(null); // null means anonymous user
-        }
-        // Push remote errors to the error channel for consistency
-        throw new Error('Failed to get current user.');
+      if (response.ok) {
+        content = await response.json();
+        return;
       }
 
-      const content = await response.json();
-      setUser(content);
+        // 401 is the expected response for anonymous users
+        if (response.status === 401) {
+          if (oAuth2WhoamiUrl) {
+            // If an endpoint to check if user is logged in on oauth2 provider exists, check that.
+            response = await fetch(oAuth2WhoamiUrl, { credentials: 'include' });
+            // If user is already logged in on oauth2 provider, we call automatically the login url
+            if (response.ok) {
+              return destroySessionThenGoTo(loginUrl);
+            } else if (response.status !== 401) {
+              throw new Error('Failed to reach OAuth2 Whoami endpoint.');
+            }
+          }
+          return setUser(null);
+        }
+      }
+      // Push remote errors to the error channel for consistency
+      throw new Error('Failed to get current user.');
     } catch (error) {
       // Default to the "anonymous user" state to enable logging in anyway
-      setUser(null);
       handle(error);
+    } finally {
+      setUser(content);
     }
   }, []);
 

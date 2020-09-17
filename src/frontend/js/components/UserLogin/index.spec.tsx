@@ -6,6 +6,8 @@ import { IntlProvider } from 'react-intl';
 
 import { handle } from 'utils/errors/handle';
 import { Deferred } from 'utils/tests/Deferred';
+import { location as mockLocation } from 'utils/indirection/window';
+import { CommonDataPropsFactory } from 'utils/test/factories';
 import { UserLogin } from '.';
 
 jest.mock('utils/errors/handle', () => ({
@@ -18,6 +20,7 @@ jest.mock('utils/indirection/window', () => ({
     addListener: jest.fn(),
     removeListener: jest.fn(),
   }),
+  location: { replace: jest.fn() },
 }));
 
 describe.only('<UserLogin />', () => {
@@ -25,6 +28,8 @@ describe.only('<UserLogin />', () => {
     loginUrl: '/login',
     logoutUrl: '/logout',
     signupUrl: '/signup',
+    oAuth2WhoamiUrl: 'https://acme.org/fakeapi/whoami',
+    context: CommonDataPropsFactory(),
   };
 
   beforeEach(() => fetchMock.restore());
@@ -68,6 +73,7 @@ describe.only('<UserLogin />', () => {
   it('renders signup/login buttons when the user is not logged in', async () => {
     const deferred = new Deferred();
     fetchMock.get('/api/v1.0/users/whoami/', deferred.promise);
+    fetchMock.get(props.oAuth2WhoamiUrl, deferred.promise);
 
     const { getByText, queryByText } = render(
       <IntlProvider locale="en">
@@ -77,9 +83,13 @@ describe.only('<UserLogin />', () => {
     expect(fetchMock.calls('/api/v1.0/users/whoami/').length).toEqual(1);
     getByText('Loading login status...');
 
-    await act(async () => deferred.resolve(401));
+    await act(async () => {
+      deferred.resolve(401);
+    });
+
     getByText('Log in');
     getByText('Sign up');
+    expect(fetchMock.calls(props.oAuth2WhoamiUrl).length).toEqual(1);
     expect(queryByText('Loading login status...')).toBeNull();
   });
 
@@ -96,9 +106,33 @@ describe.only('<UserLogin />', () => {
     getByText('Loading login status...');
 
     await act(async () => deferred.resolve(500));
+
     getByText('Log in');
     getByText('Sign up');
     expect(queryByText('Loading login status...')).toBeNull();
     expect(handle).toHaveBeenCalledWith(new Error('Failed to get current user.'));
+  });
+
+  it('triggers automatically login process if user is logged off on richie but logged in on oauth2 provider', async () => {
+    const deferredWhoami = new Deferred();
+    const deferredOAuth2Whoami = new Deferred();
+
+    fetchMock.get('/api/v1.0/users/whoami/', deferredWhoami.promise);
+    fetchMock.get(props.oAuth2WhoamiUrl, deferredOAuth2Whoami.promise);
+
+    render(
+      <IntlProvider locale="en">
+        <UserLogin {...props} />
+      </IntlProvider>,
+    );
+
+    await act(async () => {
+      deferredWhoami.resolve(401);
+      deferredOAuth2Whoami.resolve(200);
+    });
+
+    expect(fetchMock.calls('/api/v1.0/users/whoami/').length).toEqual(1);
+    expect(fetchMock.calls(props.oAuth2WhoamiUrl).length).toEqual(1);
+    expect(mockLocation.replace).toHaveBeenCalledTimes(1);
   });
 });
