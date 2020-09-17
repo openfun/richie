@@ -2,6 +2,7 @@
 create_demo_site management command tests
 """
 from logging import Logger
+import random
 from unittest import mock
 
 from django.conf import settings
@@ -15,6 +16,30 @@ from cms.test_utils.testcases import CMSTestCase
 from richie.apps.courses import models
 from richie.apps.demo import defaults
 from richie.apps.demo.management.commands.create_demo_site import create_demo_site
+
+TEST_NB_OBJECTS = {
+    "courses": 1,
+    "course_courseruns": 1,
+    "course_icons": 1,
+    "course_organizations": 1,
+    "course_persons": 1,
+    "course_subjects": 1,
+    "person_organizations": 1,
+    "person_subjects": 1,
+    "organizations": 1,
+    "licences": random.randint(0, 1),
+    "persons": 1,
+    "blogposts": 1,
+    "blogpost_categories": 1,
+    "programs": 1,
+    "programs_courses": 1,
+    "home_blogposts": 1,
+    "home_courses": 1,
+    "home_organizations": 1,
+    "home_subjects": 1,
+    "home_persons": 1,
+    "home_programs": 1,
+}
 
 
 class CreateDemoSiteCommandsTestCase(CMSTestCase):
@@ -53,32 +78,7 @@ class CreateDemoSiteCommandsTestCase(CMSTestCase):
         "richie.apps.demo.management.commands.create_demo_site.get_number_of_icons",
         return_value=1,
     )
-    @mock.patch.dict(
-        defaults.NB_OBJECTS,
-        {
-            "courses": 1,
-            "course_courseruns": 1,
-            "course_icons": 1,
-            "course_organizations": 1,
-            "course_persons": 1,
-            "course_subjects": 1,
-            "person_organizations": 1,
-            "person_subjects": 1,
-            "organizations": 1,
-            "licences": 1,
-            "persons": 1,
-            "blogposts": 1,
-            "blogpost_categories": 1,
-            "programs": 1,
-            "programs_courses": 1,
-            "home_blogposts": 1,
-            "home_courses": 1,
-            "home_organizations": 1,
-            "home_subjects": 1,
-            "home_persons": 1,
-            "home_programs": 1,
-        },
-    )
+    @mock.patch.dict(defaults.NB_OBJECTS, TEST_NB_OBJECTS)
     @mock.patch.dict(
         defaults.SUBJECTS_INFO,
         {
@@ -110,7 +110,7 @@ class CreateDemoSiteCommandsTestCase(CMSTestCase):
         self.assertEqual(models.Category.objects.count(), 48)
         self.assertEqual(models.Organization.objects.count(), 2)
         self.assertEqual(models.Person.objects.count(), 2)
-        self.assertEqual(models.Licence.objects.count(), 1)
+        self.assertEqual(models.Licence.objects.count(), TEST_NB_OBJECTS["licences"])
         self.assertEqual(models.Program.objects.count(), 2)
 
         self.assertEqual(Site.objects.first().domain, "richie.education:9999")

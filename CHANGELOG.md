@@ -12,13 +12,6 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Create a function checking username in social auth pipeline
 - Extend social-auth middleware to use a page to display error
-
-### Fixed
-
-- Fix how EDX_USER_PROFILE_TO_DJANGO default value is set
-
-### Added
-
 - Add `urls` property to `UserSerializer`. The urls are built with a new setting
   `MAIN_LMS_USER_URLS` which contains custom links to access to LMS profile
   views from richie.
@@ -27,6 +20,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Make demo site work without licences placeholder
 - Allow empty content on glimpse plugins
 - Switch from deprecated tslint to eslint js linter and update codebase
   accordingly.
@@ -34,6 +28,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix how EDX_USER_PROFILE_TO_DJANGO default value is set
 - Use variables for button colors in language selector so it fits in
   with themes.
 
