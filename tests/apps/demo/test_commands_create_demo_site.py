@@ -1,8 +1,8 @@
 """
 create_demo_site management command tests
 """
-from logging import Logger
 import random
+from logging import Logger
 from unittest import mock
 
 from django.conf import settings

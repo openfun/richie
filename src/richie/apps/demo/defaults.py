@@ -91,6 +91,7 @@ PAGES_INFO = {
         },
     },
 }
+PAGES_INFO.update(getattr(settings, "RICHIE_DEMO_PAGES_INFO", {}))
 
 
 LEVELS_INFO = {

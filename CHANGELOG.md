@@ -20,6 +20,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Allow customizing the side pages created by the demo site
 - Make demo site work without licences placeholder
 - Allow empty content on glimpse plugins
 - Switch from deprecated tslint to eslint js linter and update codebase
