@@ -105,8 +105,13 @@ def create_demo_site():
                     )
 
     # Create some licences
-    licences = factories.LicenceFactory.create_batch(
-        defaults.NB_OBJECTS["licences"], logo__file__from_path=pick_image("licence")()
+    licences = (
+        factories.LicenceFactory.create_batch(
+            defaults.NB_OBJECTS["licences"],
+            logo__file__from_path=pick_image("licence")(),
+        )
+        if defaults.NB_OBJECTS.get("licences")
+        else []
     )
 
     # Generate each category tree and return a list of the leaf categories
@@ -221,14 +226,20 @@ def create_demo_site():
             for person in persons_for_organization[o.id]
         )
 
+        course_licences = (
+            [
+                ("course_license_content", random.choice(licences)),  # nosec
+                ("course_license_participation", random.choice(licences)),  # nosec
+            ]
+            if licences
+            else []
+        )
+
         course = factories.CourseFactory(
             page_in_navigation=True,
             page_languages=["en", "fr"],
             page_parent=pages_created["courses"],
-            fill_licences=[
-                ("course_license_content", random.choice(licences)),  # nosec
-                ("course_license_participation", random.choice(licences)),  # nosec
-            ],
+            fill_licences=course_licences,
             fill_team=random.sample(
                 eligible_persons,
                 min(
@@ -707,12 +718,13 @@ def create_demo_site():
             internal_link=pages_created["home"],
         )
         # Add a licence
-        add_plugin(
-            language=language,
-            placeholder=placeholder,
-            plugin_type="LicencePlugin",
-            licence=random.choice(licences),  # nosec
-        )
+        if licences:
+            add_plugin(
+                language=language,
+                placeholder=placeholder,
+                plugin_type="LicencePlugin",
+                licence=random.choice(licences),  # nosec
+            )
         # Add a simple picture entry
         add_plugin(
             language=language,
