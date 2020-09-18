@@ -186,15 +186,11 @@
     display: flex;
     align-items: center;
 
-    .language-selector {
+    .selector {
       color: r-theme-val(body-footer, base-color);
 
       &__button {
         padding-left: 0;
-
-        &__icon {
-          fill: r-theme-val(body-footer, base-color);
-        }
       }
 
       &__list {
