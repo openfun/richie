@@ -28,9 +28,18 @@ Among the features that `Richie` offers out of the box:
 
 ## Quick preview
 
-If you're just looking for a quick preview of `Richie`, you can take look and have a tour of `Richie` on our dedicated [demo site](https://demo.richie.education).
+If you're just looking for a quick preview of `Richie`, you can take a look and have a tour of
+`Richie` on our dedicated [demo site](https://demo.richie.education).
 
-Login/password are `admin`/`admin`. The database is regularly flushed.
+It is connected back-to-back with a demo of OpenEdX running on
+[OpenEdX Docker](https://github.com/openfun/openedx-docker).
+
+Two users are available for testing:
+
+- admin: `admin@example.com`/`admin`
+- student: `edx@example.com`/`edx`
+
+The database is regularly flushed.
 
 ## Getting started
 
