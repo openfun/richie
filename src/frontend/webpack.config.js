@@ -88,7 +88,7 @@ module.exports = {
         ],
       },
       {
-        exclude: /node_modules/,
+        exclude: /node_modules(?!\/richie-education)/,
         test: new RegExp(`\.(tsx?|jsx?)$`),
         use: [
           {
