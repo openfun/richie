@@ -9,11 +9,12 @@
     "prettier",
     "prettier/react",
     "prettier/@typescript-eslint",
+    "plugin:compat/recommended",
     "plugin:prettier/recommended"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    /* 
+    /*
       To use eslint with VSCode and see lint error directly in file,
       you have to install dbaeumer.vscode-eslint extension
       and you may have to tweak your workspace settings with:
@@ -64,5 +65,8 @@
     "react/no-array-index-key": "warn",
     "react/prop-types": "off",
     "react/require-default-props": "off"
+  },
+  "settings": {
+    "polyfills": ["fetch", "Promise"]
   }
 }
