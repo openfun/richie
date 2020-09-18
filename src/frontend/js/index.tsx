@@ -5,9 +5,8 @@
  * one in our library and actually do render it in the appropriate element.
  */
 
-// Currently, @babel/preset-env is unaware that using import() with Webpack relies on Promise internally.
-// Environments which do not have builtin support for Promise, like Internet Explorer, will require both
-// the promise and iterator polyfills be added manually.
+// Those two polyfills are required for webpack async loaders, which use them internally,
+// regardless of their use throughout the Richie codebase itself.
 import 'core-js/modules/es.array.iterator';
 import 'core-js/modules/es.promise';
 
