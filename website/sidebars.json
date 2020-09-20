@@ -1,7 +1,12 @@
 {
   "docs": {
     "Getting started": ["quick-start", "docker-development", "native-installation"],
-    "Recipes": ["django-react-interop", "building-the-frontend", "lms-connection"],
+    "Recipes": [
+      "django-react-interop",
+      "building-the-frontend",
+      "frontend-overrides",
+      "lms-connection"
+    ],
     "Contributing": ["contributing-guide", "accessibility-testing", "css-guidelines"]
   }
 }
