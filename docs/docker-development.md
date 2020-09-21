@@ -115,3 +115,10 @@ In this case, increase virtual memory as follows (UNIX systems):
 ```
 $ sudo sysctl -w vm/max_map_count=262144
 ```
+
+This fix will apply to your current session. To make it permanent on your system, edit the
+`/etc/sysctl.conf` file and add the following line:
+
+```
+vm.max_map_count=262144
+```
