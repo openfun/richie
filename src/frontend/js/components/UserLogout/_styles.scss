@@ -1,0 +1,15 @@
+.user-logout {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 4rem;
+  padding: 1rem;
+  text-align: center;
+
+  & > * {
+    margin-bottom: 1rem;
+    @include media-breakpoint-down(md) {
+      font-size: 0.8rem;
+    }
+  }
+}

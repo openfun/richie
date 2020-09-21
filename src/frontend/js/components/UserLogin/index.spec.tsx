@@ -23,7 +23,7 @@ jest.mock('utils/indirection/window', () => ({
   location: { replace: jest.fn() },
 }));
 
-describe.only('<UserLogin />', () => {
+describe('<UserLogin />', () => {
   const props = {
     loginUrl: '/login',
     logoutUrl: '/logout',

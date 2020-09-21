@@ -10,6 +10,7 @@ import { RootSearchSuggestField } from 'components/RootSearchSuggestField';
 import { Search } from 'components/Search';
 import { SearchSuggestField } from 'components/SearchSuggestField';
 import { UserLogin } from 'components/UserLogin';
+import { UserLogout } from 'components/UserLogout';
 import { HistoryProvider } from 'data/useHistory';
 
 // List the top-level components that can be directly called from the Django templates in an interface
@@ -22,6 +23,7 @@ interface ComponentLibrary {
   Search: typeof Search;
   SearchSuggestField: typeof SearchSuggestField;
   UserLogin: typeof UserLogin;
+  UserLogout: typeof UserLogout;
 }
 // Actually create the component map that we'll use below to access our component classes
 const componentLibrary: ComponentLibrary = {
@@ -31,6 +33,7 @@ const componentLibrary: ComponentLibrary = {
   Search,
   SearchSuggestField,
   UserLogin,
+  UserLogout,
 };
 // Type guard: ensures a given string (candidate) is indeed a proper key of the componentLibrary with a corresponding
 // component. This is a runtime check but it allows TS to check the component prop types at compile time

@@ -303,3 +303,24 @@ msgstr ""
 #: i18n/js/components/UserMenu/index.json
 msgid "Access to your profile settings"
 msgstr ""
+
+#. [components.UserLogout.loggingOut] - Message to precise the context of this page.
+#. defaultMessage is:
+#. Logging out from Richie applications, please wait...
+#: i18n/js/components/UserLogout/index.json
+msgid "Logging out from Richie applications, please wait..."
+msgstr ""
+
+#. [components.UserLogout.helpMessage] - Message to help user in case of redirect failure.
+#. defaultMessage is:
+#. If you are not automatically redirected
+#: i18n/js/components/UserLogout/index.json
+msgid "If you are not automatically redirected"
+msgstr ""
+
+#. [components.UserLogout.helpCTA] - Message to help user in case of redirect failure.
+#. defaultMessage is:
+#. back to home manually
+#: i18n/js/components/UserLogout/index.json
+msgid "back to home manually"
+msgstr ""

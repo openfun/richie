@@ -303,3 +303,24 @@ msgstr "Votre demande d'inscription a échoué."
 #: i18n/js/components/UserMenu/index.json
 msgid "Access to your profile settings"
 msgstr "Accéder aux préférences de votre profile"
+
+#. [components.UserLogout.loggingOut] - Message to precise the context of this page.
+#. defaultMessage is:
+#. Logging out from Richie applications, please wait...
+#: i18n/js/components/UserLogout/index.json
+msgid "Logging out from Richie applications, please wait..."
+msgstr "Déconnexion des applications Richie, merci de patienter..."
+
+#. [components.UserLogout.helpMessage] - Message to help user in case of redirect failure.
+#. defaultMessage is:
+#. If you are not automatically redirected
+#: i18n/js/components/UserLogout/index.json
+msgid "If you are not automatically redirected"
+msgstr "Si vous êtes n'êtes pas redirigez automatiquement"
+
+#. [components.UserLogout.helpCTA] - Message to help user in case of redirect failure.
+#. defaultMessage is:
+#. back to home manually
+#: i18n/js/components/UserLogout/index.json
+msgid "back to home manually"
+msgstr "retournez à l'accueil manuellement"

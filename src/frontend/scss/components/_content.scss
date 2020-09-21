@@ -21,6 +21,13 @@
       background-size: 100% 100%;
     }
   }
+
+  & > .richie-react--user-logout {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: center;
+  }
 }
 
 // Container relative to some modal components

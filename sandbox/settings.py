@@ -532,11 +532,13 @@ class Development(Base):
     """
     Development environment settings
 
-    We set DEBUG to True and configure the server to respond from all hosts.
+    We set DEBUG to True and configure the server to respond from all hosts and
+    authorize to redirect anywhere.
     """
 
     DEBUG = True
-    ALLOWED_HOSTS = ["localhost", "edx"]
+    ALLOWED_HOSTS = ["*"]
+    REDIRECT_WHITELIST = ["*"]
 
 
 class Test(Base):
@@ -566,10 +568,17 @@ class Production(Base):
     configuration (and derived configurations):
 
     DJANGO_ALLOWED_HOSTS="foo.com,foo.fr"
+
+    If you intend to call logout route from an external domain,
+    you must define the DJANGO_REDIRECT_WHITELIST environment variable in Production
+    configuration (and derived configurations):
+
+    DJANGO_REDIRECT_WHITELIST=["foo.com", "bar.fr"]
     """
 
     # Security
     ALLOWED_HOSTS = values.ListValue(None)
+    REDIRECT_WHITELIST = values.ListValue(None)
     CSRF_COOKIE_SECURE = True
     SECURE_BROWSER_XSS_FILTER = True
     SECURE_CONTENT_TYPE_NOSNIFF = True

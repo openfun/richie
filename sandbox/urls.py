@@ -9,14 +9,13 @@ from django.contrib.sitemaps.views import sitemap
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.views.generic import TemplateView
 from django.views.static import serve
-from django.contrib.auth import views as auth_views
 
 from cms.sitemaps import CMSSitemap
 
 from richie.apps.core.urls import urlpatterns as core_urlpatterns
+from richie.apps.core.views import logout as logout_view
 from richie.apps.courses.urls import urlpatterns as courses_urlpatterns
 from richie.apps.search.urls import urlpatterns as search_urlpatterns
-from richie.apps.core.views import logout as logout_view
 
 # For now, we use URLPathVersioning to be consistent with fonzie. Fonzie uses it
 # because DRF OpenAPI only supports URLPathVersioning for now.

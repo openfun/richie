@@ -6,8 +6,10 @@ import { Nullable } from 'utils/types';
  */
 export interface CommonDataProps {
   context: {
+    allowed_hosts: string[];
     csrftoken: string;
     environment: string;
+    oauth2_whoami: string;
     release: string;
     sentry_dsn: Nullable<string>;
   };
