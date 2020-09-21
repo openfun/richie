@@ -10,6 +10,12 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add a SessionProvider which aims to avoid extra api requests by storing user
+  information in SessionStorage
+- Add a logout view which aims to log out user from richie and all its third
+  party applications defined in LMS_BACKENDS if a LOGOUT_URL is provided.
+- Add reboot style to force html & body elements to take
+  full width & height of the window.
 - Allow to configure `SOCIAL_AUTH_EDX_OAUTH2_WHOAMI_ENDPOINT` which allows
   frontend to check if user is logged in on oauth2 provider.
 - Allow to configure `SOCIAL_AUTH_EDX_OAUTH2_REGISTRATION_ENDPOINT` which is

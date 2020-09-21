@@ -7,9 +7,8 @@
 @import './settings/fonts';
 @import './settings/variables';
 
-// TWITTER BOOTSTRAP V4
-// Required
-@import 'bootstrap/scss/bootstrap-reboot.scss';
+// Must be included before bootstrap styles
+@import './generic/reboot';
 
 // Only what we use
 @import 'bootstrap/scss/badge';

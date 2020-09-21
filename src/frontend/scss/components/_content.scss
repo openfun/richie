@@ -1,7 +1,8 @@
 // Main body content container
 .body-content {
-  position: relative;
   background: r-theme-val(body-content, base-background);
+  flex: 1;
+  position: relative;
 
   // Insert footer decoration
   @if r-theme-val(body-content, insert-background-image) {
@@ -27,5 +28,8 @@
   // Enforce relative position to absorb gap introduced by some more top
   // level components like DjangoCMS toolbar, so possible absolute positions
   // from children (like topbar) is correctly calculated when toolbar is displayed.
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   position: relative;
 }
