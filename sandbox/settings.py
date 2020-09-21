@@ -253,6 +253,9 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
                 environ_name="EDX_API_TOKEN", environ_prefix=None
             ),
             "BASE_URL": values.Value(environ_name="EDX_BASE_URL", environ_prefix=None),
+            "LOGOUT_URL": values.Value(
+                environ_name="EDX_LOGOUT_URL", environ_prefix=None
+            ),
         }
     ]
 
@@ -533,7 +536,7 @@ class Development(Base):
     """
 
     DEBUG = True
-    ALLOWED_HOSTS = ["*"]
+    ALLOWED_HOSTS = ["localhost", "edx"]
 
 
 class Test(Base):

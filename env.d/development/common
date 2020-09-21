@@ -25,3 +25,4 @@ EDX_BACKEND=richie.apps.courses.lms.edx.TokenEdXLMSBackend
 EDX_COURSE_REGEX=^.*/courses/(?P<course_id>.*)/info$
 EDX_API_TOKEN=FakeEdXAPIKey
 EDX_BASE_URL=http://edx:8073
+EDX_LOGOUT_URL=http://edx:8073/logout

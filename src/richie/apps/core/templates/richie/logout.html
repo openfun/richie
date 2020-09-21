@@ -1,0 +1,17 @@
+{% extends "richie/base.html" %}
+{% load i18n cms_tags sekizai_tags %}
+{% get_current_language as LANGUAGE_CODE %}
+{% block breadcrumbs %}{% endblock breadcrumbs %}
+{% block content %}
+<div class="richie-react richie-react--user-logout" data-props-source="[data-user-logout]"></div>
+{% endblock content %}
+{% block body_js %}
+<script data-user-logout type="application/json">
+    {"logoutUrls": [
+        "{% url 'logout' %}",
+        {% for url in LOGOUT_URLS %}"{{url|safe}}"{% endfor %}
+    ],
+    "logoutRedirectUrl": "{{ LOGOUT_REDIRECT_URL|safe }}"
+}
+</script>
+{% endblock body_js %}
