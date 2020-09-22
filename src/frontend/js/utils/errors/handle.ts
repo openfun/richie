@@ -2,7 +2,7 @@ import * as Sentry from '@sentry/browser';
 
 import { CommonDataProps } from 'types/commonDataProps';
 
-const context: CommonDataProps['context'] = (window as any).__richie_frontend_context__;
+const context: CommonDataProps['context'] = (window as any).__richie_frontend_context__?.context;
 
 if (context && context.sentry_dsn) {
   Sentry.init({

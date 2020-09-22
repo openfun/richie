@@ -44,6 +44,9 @@ class PagesTests(CMSTestCase):
         """
         Create a page and make sure it includes the frontend context as included
         in `base.html`.
+
+        ⚠️ If this test fails, before fixing it, identify if this change has had
+        ⚠️ an impact on frontend and update frontend accordingly.
         """
         page = PageFactory(should_publish=True, template="richie/single_column.html")
         response = self.client.get(page.get_public_url())

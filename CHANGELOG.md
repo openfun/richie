@@ -29,6 +29,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Frontend did not report error to Sentry
 - Fix how EDX_USER_PROFILE_TO_DJANGO default value is set
 - Use variables for button colors in language selector so it fits in
   with themes.
