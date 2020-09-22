@@ -362,7 +362,7 @@ jobs:
   # ---- Front-end jobs ----
   build-front:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:12
     working_directory: ~/fun/src/frontend
     steps:
       - checkout:
@@ -396,7 +396,7 @@ jobs:
 
   build-front-production:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:12
     working_directory: ~/fun/src/frontend
     steps:
       - checkout:
@@ -426,7 +426,7 @@ jobs:
 
   lint-front:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:12
     working_directory: ~/fun/src/frontend
     steps:
       - checkout:
@@ -443,7 +443,7 @@ jobs:
 
   test-front:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:12
     working_directory: ~/fun/src/frontend
     steps:
       - checkout:
@@ -459,7 +459,7 @@ jobs:
 
   test-front-package:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:12
     working_directory: ~/wrk
     steps:
       - checkout:
@@ -480,7 +480,7 @@ jobs:
   # environment variables in CircleCI UI (with your PyPI credentials)
   npm:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:12
     working_directory: ~/fun
     steps:
       - checkout:
@@ -511,7 +511,7 @@ jobs:
   # Run relevant linters (eg. prettier for now) on the documentation website
   lint-website:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:12
     working_directory: ~/fun/website
     steps:
       - checkout:
@@ -526,7 +526,7 @@ jobs:
   # Deploy the docs website to GitHub pages.
   deploy-website:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:12
     working_directory: ~/fun
     steps:
       - checkout

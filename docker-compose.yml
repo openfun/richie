@@ -4,7 +4,7 @@ services:
   postgresql:
     image: postgres:9.6
     env_file:
-        - env.d/development/postgresql
+      - env.d/development/postgresql
 
   mysql:
     image: mysql:5.6
@@ -23,38 +23,38 @@ services:
         DOCKER_USER: ${DOCKER_USER:-1000}
     image: richie:development
     env_file:
-        - env.d/development/common
-        - env.d/development/${DB_HOST:-postgresql}
+      - env.d/development/common
+      - env.d/development/${DB_HOST:-postgresql}
     networks:
       - default
       - lms_outside
     ports:
-        - "8070:8000"
+      - '8070:8000'
     volumes:
       - .:/app
       - ./data/static:/data/static
       - ./data/media:/data/media
       - ./data/smedia:/data/smedia
     depends_on:
-      - "${DB_HOST:-postgresql}"
-      - "elasticsearch"
+      - '${DB_HOST:-postgresql}'
+      - 'elasticsearch'
     stdin_open: true
     tty: true
 
   node:
-    image: circleci/node:10
+    image: circleci/node:12
     working_dir: /app/src/frontend
-    user: "${DOCKER_USER:-1000}"
+    user: '${DOCKER_USER:-1000}'
     volumes:
       - .:/app
 
   crowdin:
     image: fundocker/crowdin:2.0.27
     volumes:
-      - ".:/app"
+      - '.:/app'
     env_file:
       - env.d/development/crowdin
-    user: "${DOCKER_USER:-1000}"
+    user: '${DOCKER_USER:-1000}'
     working_dir: /app
 
   redis-sentinel:
@@ -96,5 +96,4 @@ services:
 networks:
   lms_outside:
     driver: bridge
-    name: "${RICHIE_LMS_NETWORK:-edx_outside}"
-
+    name: '${RICHIE_LMS_NETWORK:-edx_outside}'
