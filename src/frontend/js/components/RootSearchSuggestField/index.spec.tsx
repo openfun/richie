@@ -3,6 +3,7 @@ import fetchMock from 'fetch-mock';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
+import { CommonDataPropsFactory } from 'utils/test/factories';
 import { location } from 'utils/indirection/window';
 import { RootSearchSuggestField } from '.';
 
@@ -17,15 +18,7 @@ jest.mock('utils/indirection/window', () => ({
 }));
 
 describe('<RootSearchSuggestField />', () => {
-  const commonDataProps = {
-    assets: {
-      icons: '/icons.svg',
-    },
-    csrftoken: 'the csrf token',
-    environment: 'frontend_tests',
-    release: '9.8.7',
-    sentry_dsn: null,
-  };
+  const commonDataProps = CommonDataPropsFactory();
 
   const subjects = {
     base_path: '00030001',

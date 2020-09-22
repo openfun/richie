@@ -8,6 +8,7 @@ import { HistoryProvider } from 'data/useHistory';
 import { CommonDataProps } from 'types/commonDataProps';
 import { FilterDefinition } from 'types/filters';
 import { history, location } from 'utils/indirection/window';
+import { CommonDataPropsFactory } from 'utils/test/factories';
 import { SearchSuggestField } from '.';
 
 // Unexplained difficulties with fake timers were encountered in these tests.
@@ -28,12 +29,7 @@ jest.mock('utils/indirection/window', () => ({
 }));
 
 describe('components/SearchSuggestField', () => {
-  const context: CommonDataProps['context'] = {
-    csrftoken: 'the csrf token',
-    environment: 'frontend_tests',
-    release: '9.8.7',
-    sentry_dsn: null,
-  };
+  const context: CommonDataProps['context'] = CommonDataPropsFactory();
 
   // Make some filters we can reuse through our tests with the filter definitions responses
   const levels: FilterDefinition = {

@@ -5,17 +5,13 @@ import { IntlProvider } from 'react-intl';
 
 import { CourseRun } from 'types';
 import { CommonDataProps } from 'types/commonDataProps';
+import { CommonDataPropsFactory } from 'utils/test/factories';
 import { Deferred } from 'utils/test/deferred';
 import * as factories from 'utils/test/factories';
 import { CourseRunEnrollment } from '.';
 
 describe('<CourseRunEnrollment />', () => {
-  const context: CommonDataProps['context'] = {
-    csrftoken: 'the csrf token',
-    environment: 'PROD',
-    release: '42.3.1',
-    sentry_dsn: 'the sentry dsn',
-  };
+  const context: CommonDataProps['context'] = CommonDataPropsFactory();
 
   afterEach(() => fetchMock.restore());
 

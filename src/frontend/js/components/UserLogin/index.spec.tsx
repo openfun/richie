@@ -3,9 +3,10 @@ import userEvent from '@testing-library/user-event';
 import fetchMock from 'fetch-mock';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
+import { SessionProvider } from 'data/useSession';
 
 import { handle } from 'utils/errors/handle';
-import { Deferred } from 'utils/tests/Deferred';
+import { Deferred } from 'utils/test/deferred';
 import { location as mockLocation } from 'utils/indirection/window';
 import { CommonDataPropsFactory } from 'utils/test/factories';
 import { UserLogin } from '.';
@@ -32,7 +33,10 @@ describe('<UserLogin />', () => {
     context: CommonDataPropsFactory(),
   };
 
-  beforeEach(() => fetchMock.restore());
+  beforeEach(() => {
+    fetchMock.restore();
+    sessionStorage.clear();
+  });
 
   it('gets and renders the user name and a dropdown containing a logout link', async () => {
     const deferred = new Deferred();
@@ -40,7 +44,9 @@ describe('<UserLogin />', () => {
 
     const { getByText, queryByText } = render(
       <IntlProvider locale="en">
-        <UserLogin {...props} />
+        <SessionProvider>
+          <UserLogin {...props} />
+        </SessionProvider>
       </IntlProvider>,
     );
     expect(fetchMock.calls('/api/v1.0/users/whoami/').length).toEqual(1);
@@ -77,7 +83,9 @@ describe('<UserLogin />', () => {
 
     const { getByText, queryByText } = render(
       <IntlProvider locale="en">
-        <UserLogin {...props} />
+        <SessionProvider>
+          <UserLogin {...props} />
+        </SessionProvider>
       </IntlProvider>,
     );
     expect(fetchMock.calls('/api/v1.0/users/whoami/').length).toEqual(1);
@@ -99,7 +107,9 @@ describe('<UserLogin />', () => {
 
     const { getByText, queryByText } = render(
       <IntlProvider locale="en">
-        <UserLogin {...props} />
+        <SessionProvider>
+          <UserLogin {...props} />
+        </SessionProvider>
       </IntlProvider>,
     );
     expect(fetchMock.calls('/api/v1.0/users/whoami/').length).toEqual(1);
@@ -122,7 +132,9 @@ describe('<UserLogin />', () => {
 
     render(
       <IntlProvider locale="en">
-        <UserLogin {...props} />
+        <SessionProvider>
+          <UserLogin {...props} />
+        </SessionProvider>
       </IntlProvider>,
     );
 

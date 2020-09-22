@@ -4,7 +4,7 @@ import fetchMock from 'fetch-mock';
 import { IntlProvider } from 'react-intl';
 import { SessionProvider } from 'data/useSession';
 
-import { Deferred } from 'utils/tests/Deferred';
+import { Deferred } from 'utils/test/deferred';
 import { location } from 'utils/indirection/window';
 import { UserLogout } from '.';
 

@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { useCallback } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import { useUser } from 'data/useSession';
 import { Spinner } from 'components/Spinner';
 import { UserMenu } from 'components/UserMenu';
-import { User } from 'types/User';
 import { handle } from 'utils/errors/handle';
-import { Maybe, Nullable } from 'utils/types';
 import { useAsyncEffect } from 'utils/useAsyncEffect';
 import { location } from 'utils/indirection/window';
+import { CommonDataProps } from 'types/commonDataProps';
 
 const messages = defineMessages({
   logIn: {
@@ -51,18 +51,26 @@ export const UserLogin = ({
    * - `null` when the user is anonymous or the request failed;
    * - a user object when the user is logged in.
    */
+  const [user, setUser, destroySession] = useUser();
   const intl = useIntl();
-  const [user, setUser] = useState<Maybe<Nullable<User>>>(undefined);
+
+  const destroySessionThenGoTo = useCallback(
+    (url) => {
+      destroySession();
+      location.replace(url);
+    },
+    [location, destroySession],
+  );
 
   useAsyncEffect(async () => {
-    let content = null;
-    try {
-      let response = await fetch('/api/v1.0/users/whoami/', { credentials: 'include' });
+    if (user === undefined) {
+      try {
+        let response = await fetch('/api/v1.0/users/whoami/', { credentials: 'include' });
 
-      if (response.ok) {
-        content = await response.json();
-        return;
-      }
+        if (response.ok) {
+          const content = await response.json();
+          return setUser(content);
+        }
 
         // 401 is the expected response for anonymous users
         if (response.status === 401) {
@@ -78,14 +86,13 @@ export const UserLogin = ({
           }
           return setUser(null);
         }
+        // Push remote errors to the error channel for consistency
+        throw new Error('Failed to get current user.');
+      } catch (error) {
+        // Default to the "anonymous user" state to enable logging in anyway
+        setUser(null);
+        handle(error);
       }
-      // Push remote errors to the error channel for consistency
-      throw new Error('Failed to get current user.');
-    } catch (error) {
-      // Default to the "anonymous user" state to enable logging in anyway
-      handle(error);
-    } finally {
-      setUser(content);
     }
   }, []);
 
@@ -97,15 +104,21 @@ export const UserLogin = ({
         </Spinner>
       ) : user === null ? (
         <React.Fragment>
-          <a href={signupUrl} className="user-login__btn user-login__btn--sign-up">
+          <button
+            onClick={() => destroySessionThenGoTo(signupUrl)}
+            className="user-login__btn user-login__btn--sign-up"
+          >
             <FormattedMessage {...messages.signUp} />
-          </a>
-          <a href={loginUrl} className="user-login__btn user-login__btn--log-in">
+          </button>
+          <button
+            onClick={() => destroySessionThenGoTo(loginUrl)}
+            className="user-login__btn user-login__btn--log-in"
+          >
             <svg aria-hidden={true} role="img" className="icon">
               <use xlinkHref="#icon-login" />
             </svg>
             <FormattedMessage {...messages.logIn} />
-          </a>
+          </button>
         </React.Fragment>
       ) : (
         <UserMenu

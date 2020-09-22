@@ -2,19 +2,12 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
+import { CommonDataPropsFactory } from 'utils/test/factories';
 import { Course } from 'types/Course';
 import { CourseGlimpseList } from '.';
 
 describe('components/CourseGlimpseList', () => {
-  const commonDataProps = {
-    assets: {
-      icons: '/icons.svg',
-    },
-    csrftoken: 'the csrf token',
-    environment: 'frontend_tests',
-    release: '9.8.7',
-    sentry_dsn: null,
-  };
+  const commonDataProps = CommonDataPropsFactory();
 
   it('renders a list of Courses into a list of CourseGlimpses', () => {
     const courses = [

@@ -12,6 +12,7 @@ import { SearchSuggestField } from 'components/SearchSuggestField';
 import { UserLogin } from 'components/UserLogin';
 import { UserLogout } from 'components/UserLogout';
 import { HistoryProvider } from 'data/useHistory';
+import { SessionProvider } from 'data/useSession';
 
 // List the top-level components that can be directly called from the Django templates in an interface
 // for type-safety when we call them. This will let us use the props for any top-level component in a
@@ -87,5 +88,9 @@ export const Root = ({ richieReactSpots }: RootProps) => {
     }
   });
 
-  return <HistoryProvider>{portals}</HistoryProvider>;
+  return (
+    <HistoryProvider>
+      <SessionProvider>{portals}</SessionProvider>
+    </HistoryProvider>
+  );
 };

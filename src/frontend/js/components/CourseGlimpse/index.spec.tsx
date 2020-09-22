@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
+import { CommonDataPropsFactory } from 'utils/test/factories';
 
 import { CourseGlimpse } from '.';
 
@@ -28,15 +29,7 @@ describe('components/CourseGlimpse', () => {
     title: 'Course 42',
   };
 
-  const commonDataProps = {
-    assets: {
-      icons: '/icons.svg',
-    },
-    csrftoken: 'the csrf token',
-    environment: 'frontend_tests',
-    release: '9.8.7',
-    sentry_dsn: null,
-  };
+  const commonDataProps = CommonDataPropsFactory();
 
   it('renders a course glimpse with its data', () => {
     render(

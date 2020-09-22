@@ -1,4 +1,5 @@
 import { createSpec, derived, faker } from '@helpscout/helix';
+import { CommonDataProps } from 'types/commonDataProps';
 
 const CourseStateFactory = createSpec({
   priority: derived(() => Math.floor(Math.random() * 7)),
@@ -28,4 +29,16 @@ export const EnrollmentFactory = createSpec({
 export const UserFactory = createSpec({
   full_name: faker.fake('{{name.firstName}} {{name.lastName}}'),
   username: faker.internet.email(),
+});
+
+export const CommonDataPropsFactory = (props: Partial<CommonDataProps> = {}) => ({
+  assets: {
+    icons: '/icons.svg',
+  },
+  csrftoken: 'the csrf token',
+  environment: 'frontend_tests',
+  release: '9.8.7',
+  sentry_dsn: null,
+  redirect_whitelist: [],
+  ...props,
 });

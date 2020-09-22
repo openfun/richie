@@ -5,6 +5,7 @@ import { location } from 'utils/indirection/window';
 import { handle } from 'utils/errors/handle';
 import { isSafeURI } from 'utils/isSafeURI';
 import { Spinner } from 'components/Spinner';
+import { useUser } from 'data/useSession';
 
 const messages = defineMessages({
   loggingOut: {
@@ -31,6 +32,7 @@ interface UserLogoutProps {
 
 export const UserLogout = ({ logoutUrls, logoutRedirectUrl }: UserLogoutProps) => {
   const { next } = useMemo(() => parse(location.search), [location.search]);
+  const [, , destroySession] = useUser();
   const redirectTo = useMemo(
     () => (typeof next === 'string' && isSafeURI(next) ? next : logoutRedirectUrl),
     [next],
@@ -57,7 +59,8 @@ export const UserLogout = ({ logoutUrls, logoutRedirectUrl }: UserLogoutProps) =
         before redirect to the next page
       */
       setTimeout(() => {
-        // location.replace(redirectTo);
+        destroySession();
+        location.replace(redirectTo);
       }, Math.max(1500 - delta, 0));
 
       results.forEach((result) => {

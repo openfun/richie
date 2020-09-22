@@ -3,15 +3,11 @@ import React from 'react';
 import { IntlProvider } from 'react-intl';
 
 import { CommonDataProps } from 'types/commonDataProps';
+import { CommonDataPropsFactory } from 'utils/test/factories';
 import { SearchInput } from '.';
 
 describe('<SearchInput />', () => {
-  const context: CommonDataProps['context'] = {
-    csrftoken: 'the csrf token',
-    environment: 'frontend_tests',
-    release: '9.8.7',
-    sentry_dsn: null,
-  };
+  const context: CommonDataProps['context'] = CommonDataPropsFactory();
 
   const inputProps = {};
 

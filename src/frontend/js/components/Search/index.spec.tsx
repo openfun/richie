@@ -4,6 +4,7 @@ import fetchMock from 'fetch-mock';
 import { stringify } from 'query-string';
 import { IntlProvider } from 'react-intl';
 
+import { CommonDataPropsFactory } from 'utils/test/factories';
 import { History, HistoryContext } from 'data/useHistory';
 import * as mockWindow from 'utils/indirection/window';
 import { Search } from '.';
@@ -29,15 +30,7 @@ describe('<Search />', () => {
     historyReplaceState,
   ];
 
-  const commonDataProps = {
-    assets: {
-      icons: '/icons.svg',
-    },
-    csrftoken: 'the csrf token',
-    environment: 'frontend_tests',
-    release: '9.8.7',
-    sentry_dsn: null,
-  };
+  const commonDataProps = CommonDataPropsFactory();
 
   beforeEach(() => {
     fetchMock.restore();
