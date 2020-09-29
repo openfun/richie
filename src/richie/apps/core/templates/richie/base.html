@@ -140,15 +140,14 @@
             </div>
             <div class="body-mentions">
                 <div class="body-mentions__container">
-                    <div class="body-mentions__copyright">
-                        <p>{% now "Y" %} &copy; Acme {% trans "All Rights Reserved." %}</p>
-                    </div>
+                    {% block body_mentions %}
                     <div class="body-mentions__poweredby">
                         <a href="https://richie.education">
                             <small>{% trans "Powered by" %}</small>
                             <strong>Richie</strong>
                         </a>
                     </div>
+                    {% endblock body_mentions %}
                 </div>
             </div>
             {% endblock body_footer %}

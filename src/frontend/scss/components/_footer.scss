@@ -247,22 +247,6 @@
     justify-content: space-between;
   }
 
-  &__copyright {
-    @include font-size($h5-font-size);
-    @include sv-flex(1, 0, 100%);
-    font-family: $r-font-family-montserrat;
-    text-align: center;
-
-    @include media-breakpoint-up($r-footer-breakpoint) {
-      @include sv-flex(1, 0, auto);
-      text-align: left;
-    }
-
-    p {
-      margin-bottom: 0;
-    }
-  }
-
   &__poweredby {
     @include font-size($h6-font-size);
     @include sv-flex(1, 0, 100%);

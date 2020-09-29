@@ -20,6 +20,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Remove copyright notice from footer in base template and allow customizing it
 - Allow customizing the side pages created by the demo site
 - Make demo site work without licences placeholder
 - Allow empty content on glimpse plugins
