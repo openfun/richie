@@ -299,6 +299,7 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
     ]
 
     MIDDLEWARE = (
+        "richie.apps.core.cache.LimitBrowserCacheTTLHeaders",
         "cms.middleware.utils.ApphookReloadMiddleware",
         "django.middleware.security.SecurityMiddleware",
         "django.contrib.sessions.middleware.SessionMiddleware",
@@ -587,6 +588,24 @@ class Production(Base):
     STATICFILES_STORAGE = (
         "django.contrib.staticfiles.storage.ManifestStaticFilesStorage"
     )
+
+    # For more details about CMS_CACHE_DURATION, see :
+    # http://docs.django-cms.org/en/latest/reference/configuration.html#cms-cache-durations
+    CMS_CACHE_DURATIONS = values.DictValue(
+        {"menus": 3600, "content": 86400, "permissions": 86400}
+    )
+
+    # By default, Django CMS sends cached responses with a
+    # Cache-control: max-age value that reflects the server cache TTL
+    # (CMS_CACHE_DURATIONS["content"])
+    #
+    # The thing is : we can invalidate a server side cache entry, but we cannot
+    # invalidate our client browser cache entries. That's why we want to set a
+    # long TTL on the server side, but a much lower TTL on the browser cache.
+    #
+    # This setting allows to define a maximum value for the max-age header
+    # returned by Django CMS views.
+    MAX_BROWSER_CACHE_TTL = 600
 
 
 class Feature(Production):
