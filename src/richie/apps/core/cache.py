@@ -10,11 +10,15 @@ import random
 
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
+from django.utils.cache import get_max_age, patch_response_headers
+from django.utils.deprecation import MiddlewareMixin
 
 from django_redis.client import DefaultClient
 from redis.sentinel import Sentinel
 
 DJANGO_REDIS_LOGGER = getattr(settings, "DJANGO_REDIS_LOGGER", __name__)
+
+logger = logging.getLogger(__name__)
 
 
 class SentinelClient(DefaultClient):
@@ -131,3 +135,40 @@ class SentinelClient(DefaultClient):
         del self._client_read
         self._client_write = None
         self._client_read = None
+
+
+class LimitBrowserCacheTTLHeaders(MiddlewareMixin):
+    """
+    This middleware allows to define a maximum cache timeout for the cache
+    response headers (Cache-control: max-age and Expires).
+
+    It can be configured with the MAX_BROWSER_CACHE_TTL setting.
+    This value is expressed in seconds.
+
+    LimitBrowserCacheTTLHeaders should be placed at the beginning of the
+    MIDDLEWARE list, so that it'll get called last during the response phase.
+    """
+
+    # pylint: disable=no-self-use
+    def process_response(self, request, response):
+        """
+        Rewrite the "Cache-control" and "Expires headers" in the response
+        if needed.
+        """
+        try:
+            max_ttl = int(getattr(settings, "MAX_BROWSER_CACHE_TTL", None))
+            if max_ttl < 0:
+                raise ValueError("MAX_BROWSER_CACHE_TTL must be a positive integer")
+        except (ValueError, TypeError) as err:
+            logger.error(err)
+            return response
+
+        max_age = get_max_age(response)
+        if max_age is not None and max_age > max_ttl:
+            if response.has_header("Expires"):
+                # Remove the Expires response Header because patch_response_headers()
+                # adds it only if it isn't already set
+                del response["Expires"]
+            patch_response_headers(response, cache_timeout=max_ttl)
+
+        return response

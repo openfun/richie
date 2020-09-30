@@ -17,6 +17,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   views from richie.
 - Add a useMatchMedia hook to easily show/hide react component
   through media query
+- Add LimitBrowserCacheTTLHeaders middleware to limit the browser cache TTL
 
 ### Changed
 

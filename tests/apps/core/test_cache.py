@@ -1,24 +1,32 @@
 """
 Test suite for the cache module in the `core` application
-
-Credits :
- - https://github.com/lamoda/django-sentinel
- - https://github.com/KabbageInc/django-redis-sentinel
 """
 
 import time
 from datetime import datetime
 
+from django.conf import settings
 from django.core.cache import cache, caches
+from django.http import HttpRequest, HttpResponse
 from django.test import TestCase
+from django.utils.cache import patch_response_headers
+from django.utils.http import http_date
 
 from django_redis.serializers import json as json_serializer
 from django_redis.serializers import msgpack as msgpack_serializer
 
-
 # pylint: disable=too-many-public-methods
+from richie.apps.core.cache import LimitBrowserCacheTTLHeaders
+
+
 class TestSentinelClient(TestCase):
-    """Test case for the SentinelClient"""
+    """
+    Test case for the SentinelClient
+
+    Credits :
+    - https://github.com/lamoda/django-sentinel
+    - https://github.com/KabbageInc/django-redis-sentinel
+    """
 
     def setUp(self) -> None:
         """Clears the cache before each test"""
@@ -407,3 +415,92 @@ class TestSentinelClient(TestCase):
 
         res = cache.get("keytest", version=2)
         self.assertEqual(res, 2)
+
+
+class TestLimitBrowserCacheTTLHeaders(TestCase):
+    """
+    Test case for the LimitBrowserCacheTTLHeaders middleware.
+    """
+
+    def test_middleware_with_no_cache_headers(self):
+        """
+        Ensure that the middleware does not rewrite the response if it does
+        not contains Cache headers.
+        """
+        response = HttpResponse("OK")
+        expected_headers = response.serialize_headers()
+
+        with self.settings(MAX_BROWSER_CACHE_TTL=1):
+            middleware = LimitBrowserCacheTTLHeaders(lambda request: response)
+            response_to_test = middleware(HttpRequest())
+            self.assertEqual(expected_headers, response_to_test.serialize_headers())
+
+    def test_middleware_limit_reached(self):
+        """
+        Ensure that the middleware rewrite the response if the cache headers
+        timeout are greater than MAX_BROWSER_CACHE_TTL
+        """
+        response = HttpResponse("OK")
+        patch_response_headers(response, cache_timeout=3600)
+
+        self.assertIn("max-age=3600", response["Cache-Control"])
+
+        with self.settings(MAX_BROWSER_CACHE_TTL=5):
+            middleware = LimitBrowserCacheTTLHeaders(lambda request: response)
+            response_to_test = middleware(HttpRequest())
+            expected_expires = http_date(time.time() + 5)
+            self.assertEqual(expected_expires, response_to_test["Expires"])
+            self.assertIn("max-age=5", response_to_test["Cache-Control"])
+
+    def test_middleware_limit_not_reached(self):
+        """
+        Ensure that the middleware does not rewrite the response if the cache
+        headers timeout are lower than MAX_BROWSER_CACHE_TTL
+        """
+        response = HttpResponse("OK")
+        patch_response_headers(response, cache_timeout=30)
+        expected_headers = response.serialize_headers()
+        self.assertIn("max-age=30", response["Cache-Control"])
+
+        with self.settings(MAX_BROWSER_CACHE_TTL=60):
+            middleware = LimitBrowserCacheTTLHeaders(lambda request: response)
+            response_to_test = middleware(HttpRequest())
+            self.assertEqual(expected_headers, response_to_test.serialize_headers())
+
+    def test_middleware_invalid_settings(self):
+        """
+        Ensure that the middleware does not rewrite the response if
+        MAX_BROWSER_CACHE_TTL is not a positive integer.
+        """
+
+        def response_builder(request):
+            response = HttpResponse("OK")
+            patch_response_headers(response, cache_timeout=3600)
+            return response
+
+        expected_expires = http_date(time.time() + 3600)
+        with self.settings(MAX_BROWSER_CACHE_TTL=-10):
+            middleware = LimitBrowserCacheTTLHeaders(response_builder)
+            response = middleware(HttpRequest())
+            self.assertEqual(expected_expires, response["Expires"])
+            self.assertIn("max-age=3600", response["Cache-Control"])
+
+        with self.settings(MAX_BROWSER_CACHE_TTL="pouet"):
+            middleware = LimitBrowserCacheTTLHeaders(response_builder)
+            response = middleware(HttpRequest())
+            self.assertEqual(expected_expires, response["Expires"])
+            self.assertIn("max-age=3600", response["Cache-Control"])
+
+        with self.settings(MAX_BROWSER_CACHE_TTL=None):
+            middleware = LimitBrowserCacheTTLHeaders(response_builder)
+            response = middleware(HttpRequest())
+            self.assertEqual(expected_expires, response["Expires"])
+            self.assertIn("max-age=3600", response["Cache-Control"])
+
+        # Test the case where the MAX_BROWSER_CACHE_TTL setting is not set
+        with self.settings():
+            del settings.MAX_BROWSER_CACHE_TTL
+            middleware = LimitBrowserCacheTTLHeaders(response_builder)
+            response = middleware(HttpRequest())
+            self.assertEqual(expected_expires, response["Expires"])
+            self.assertIn("max-age=3600", response["Cache-Control"])
