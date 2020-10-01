@@ -1,8 +1,8 @@
 export interface User {
-  full_name: string;
+  full_name?: string;
   username: string;
   urls: {
     label: string;
-    href: string;
+    action: string | (() => void);
   }[];
 }

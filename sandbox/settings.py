@@ -227,6 +227,31 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
 
     SOCIAL_ERROR_REVERSE_ID = values.Value()
 
+    # AUTHENTICATION
+    AUTHENTICATION_DELEGATION = {
+        "BASE_URL": values.Value(
+            "", environ_name="AUTHENTICATION_BASE_URL", environ_prefix=None
+        ),
+        "BACKEND": values.Value(
+            "richie.apps.courses.lms.base.BaseLMSBackend",
+            environ_name="AUTHENTICATION_BACKEND",
+            environ_prefix=None,
+        ),
+        # PROFILE_URLS are custom links to access to Auth profile views
+        # from Richie. Link order will reflect the order of display in frontend.
+        # (i) Info - {base_url} is AUTHENTICATION_DELEGATION.BASE_URL
+        # (i) If you need to bind user data into href url, wrap the property between ()
+        # e.g: for user.username = johndoe, /u/(username) will be /u/johndoe
+        "PROFILE_URLS": values.ListValue(
+            [
+                {"label": _("Profile"), "href": _("{base_url:s}/u/(username)")},
+                {"label": _("Account"), "href": _("{base_url:s}/account/settings")},
+            ],
+            environ_name="AUTHENTICATION_PROFILE_URLS",
+            environ_prefix=None,
+        ),
+    }
+
     # LMS
     LMS_BACKENDS = [
         {
@@ -251,16 +276,6 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
             "BASE_URL": values.Value(environ_name="EDX_BASE_URL", environ_prefix=None),
         }
     ]
-
-    # Custom links to access to LMS profile views from richie
-    # Link order will reflect the order of display in frontend
-    # /!\ Careful - {base_url} is got from the first LMS_BACKEND conf
-    MAIN_LMS_USER_URLS = values.ListValue(
-        [
-            {"label": _("Profile"), "href": _("{base_url:s}/u/{username:s}")},
-            {"label": _("Account"), "href": _("{base_url:s}/account/settings")},
-        ]
-    )
 
     # Internationalization
     TIME_ZONE = "Europe/Paris"

@@ -26,10 +26,17 @@
           border-bottom: $onepixel solid r-theme-val(topbar, item-divider-border);
         }
 
-        & > a {
+        & > * {
+          color: r-theme-val(topbar, item-active-color);
+          @include button-reset-style();
           display: inline-block;
           padding: 1rem 0.2rem 1rem 1rem;
+          text-align: left;
           width: 100%;
+
+          &:hover {
+            text-decoration: underline;
+          }
         }
       }
     }

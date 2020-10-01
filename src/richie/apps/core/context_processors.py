@@ -19,6 +19,7 @@ def site_metas(request):
     """
     site_current = Site.objects.get_current()
     protocol = "https" if request.is_secure() else "http"
+    authentication_delegation = getattr(settings, "AUTHENTICATION_DELEGATION", {})
     context = {
         **{
             f"GLIMPSE_PAGINATION_{k.upper()}": v
@@ -32,6 +33,21 @@ def site_metas(request):
             "domain": site_current.domain,
             "web_url": f"{protocol:s}://{site_current.domain:s}",
         },
+        "AUTHENTICATION": {
+            "PROFILE_URLS": json.dumps(
+                [
+                    {
+                        "label": str(url["label"]),
+                        "action": str(
+                            url["href"].format(
+                                base_url=authentication_delegation["BASE_URL"]
+                            )
+                        ),
+                    }
+                    for url in authentication_delegation["PROFILE_URLS"]
+                ]
+            ),
+        },
         "FRONTEND_CONTEXT": json.dumps(
             {
                 "context": {
@@ -39,6 +55,19 @@ def site_metas(request):
                     "environment": getattr(settings, "ENVIRONMENT", ""),
                     "release": getattr(settings, "RELEASE", ""),
                     "sentry_dsn": getattr(settings, "SENTRY_DSN", ""),
+                    "authentication": {
+                        "endpoint": authentication_delegation["BASE_URL"],
+                        "backend": authentication_delegation["BACKEND"],
+                    },
+                    "lms_backends": [
+                        {
+                            "endpoint": lms["BASE_URL"],
+                            "backend": lms["BACKEND"],
+                            "course_regexp": lms["JS_COURSE_REGEX"],
+                            "selector_regexp": lms["JS_SELECTOR_REGEX"],
+                        }
+                        for lms in getattr(settings, "LMS_BACKENDS", [])
+                    ],
                 }
             }
         ),

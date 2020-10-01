@@ -33,7 +33,6 @@
     ">1%",
     "not dead"
   ],
-  "devDependencies": {},
   "dependencies": {
     "@babel/core": "7.12.3",
     "@babel/plugin-syntax-dynamic-import": "7.8.3",
@@ -50,6 +49,7 @@
     "@types/faker": "5.1.2",
     "@types/fetch-mock": "7.3.3",
     "@types/jest": "26.0.15",
+    "@types/js-cookie": "2.2.6",
     "@types/lodash-es": "4.17.3",
     "@types/query-string": "6.3.0",
     "@types/react": "16.9.53",
@@ -58,7 +58,6 @@
     "@types/react-modal": "3.10.6",
     "@typescript-eslint/eslint-plugin": "4.1.0",
     "@typescript-eslint/parser": "4.1.0",
-    "@xstate/react": "1.0.1",
     "babel-jest": "26.6.1",
     "babel-loader": "8.1.0",
     "babel-plugin-react-intl": "8.2.10",
@@ -82,6 +81,7 @@
     "glob": "7.1.6",
     "intl-pluralrules": "1.2.2",
     "jest": "26.6.1",
+    "js-cookie": "2.2.1",
     "lodash-es": "4.17.15",
     "mdn-polyfills": "5.20.0",
     "node-fetch": "2.6.1",

@@ -2,7 +2,7 @@ import React from 'react';
 import { IntlProvider } from 'react-intl';
 
 import { getByText, render } from '@testing-library/react';
-import { Root } from '.';
+import { ContextFactory } from 'utils/test/factories';
 
 jest.mock('components/UserLogin', () => ({
   UserLogin: () => 'user login component rendered',
@@ -15,7 +15,7 @@ jest.mock('components/RootSearchSuggestField', () => ({
 
 describe('<Root />', () => {
   (window as any).__richie_frontend_context__ = {
-    context: ContextFactory().generate(),
+    context: ContextFactory({ sentry_dsn: null }).generate(),
   };
   const { Root } = require('.');
 
