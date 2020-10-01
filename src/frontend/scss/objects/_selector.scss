@@ -58,14 +58,17 @@
     }
 
     &__link {
+      @include button-reset-style();
       color: r-color('charcoal');
       display: block;
       font-size: 1rem;
       min-width: 10rem;
       padding: 0.5rem 1.5rem;
+      text-align: left;
 
       &:hover {
         color: r-color('charcoal');
+        text-decoration: underline;
       }
 
       &--highlighted {

@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+/* eslint-disable no-nested-ternary */
+import React from 'react';
+import { defineMessages, FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
 
 import { Spinner } from 'components/Spinner';
 import { UserMenu } from 'components/UserMenu';
+import { useSession } from 'data/useSession';
+import { CommonDataProps } from 'types/commonDataProps';
 import { User } from 'types/User';
-import { handle } from 'utils/errors/handle';
-import { Maybe, Nullable } from 'utils/types';
-import { useAsyncEffect } from 'utils/useAsyncEffect';
 
-const messages = defineMessages({
+const messages: { [key: string]: MessageDescriptor } = defineMessages({
   logIn: {
     defaultMessage: 'Log in',
     description: 'Text for the login button.',
@@ -32,46 +32,42 @@ const messages = defineMessages({
 });
 
 interface UserLoginProps {
-  loginUrl: string;
-  logoutUrl: string;
-  signupUrl: string;
+  context: CommonDataProps['context'];
+  profileUrls?: User['urls'];
 }
 
-export const UserLogin = ({ loginUrl, logoutUrl, signupUrl }: UserLoginProps) => {
+/*
+  bindUserDataToUrl
+
+  @param url an url defined in profileUrls prop
+  @param user the loggedin user
+
+  Profile urls are just strings provided by the backend then consumed by the frontend to display
+  custom links in user menu. In some case, these urls may require user dynamic fields.
+  So this is why, it is possible to define a dynamic fields by wrapping field name into parentheses.
+  bindUserDataToUrl function aims to match these dynamic
+  fields then bind it with corresponding user data.
+
+  e.g:
+  In backend, a profile url can be written as following: /profile/(username)
+  Then from frontend, this string is parsed and match (<dynamic_field>) pattern
+  So the provided /profile/(username) string will be transform into /profile/johndoe
+*/
+const REGEXP_PROFILE_URL = /\((?<prop>[a-zA-Z0-9-_]*)\)/g;
+const bindUserDataToUrl = (url: string, user: any) =>
+  url.replace(REGEXP_PROFILE_URL, (match: string, prop: string): string =>
+    typeof user[prop] === 'string' ? user[prop] : match,
+  );
+
+export const UserLogin = ({ profileUrls = [] }: UserLoginProps) => {
   /**
    * `user` is:
    * - `undefined` when we have not made the `whoami` request yet;
    * - `null` when the user is anonymous or the request failed;
    * - a user object when the user is logged in.
    */
+  const { user, destroy, login, register } = useSession();
   const intl = useIntl();
-  const [user, setUser] = useState<Maybe<Nullable<User>>>(undefined);
-
-  useAsyncEffect(async () => {
-    try {
-      const response = await fetch('/api/v1.0/users/whoami/', {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        // 401 is the expected response for anonymous users
-        if (response.status === 401) {
-          return setUser(null); // null means anonymous user
-        }
-        // Push remote errors to the error channel for consistency
-        throw new Error('Failed to get current user.');
-      }
-
-      const content = await response.json();
-      setUser(content);
-    } catch (error) {
-      // Default to the "anonymous user" state to enable logging in anyway
-      setUser(null);
-      handle(error);
-    }
-  }, []);
 
   return (
     <div className="user-login">
@@ -81,21 +77,32 @@ export const UserLogin = ({ loginUrl, logoutUrl, signupUrl }: UserLoginProps) =>
         </Spinner>
       ) : user === null ? (
         <React.Fragment>
-          <a href={signupUrl} className="user-login__btn user-login__btn--sign-up">
+          <button onClick={register} className="user-login__btn user-login__btn--sign-up">
             <FormattedMessage {...messages.signUp} />
-          </a>
-          <a href={loginUrl} className="user-login__btn user-login__btn--log-in">
+          </button>
+          <button onClick={login} className="user-login__btn user-login__btn--log-in">
             <svg aria-hidden={true} role="img" className="icon">
               <use xlinkHref="#icon-login" />
             </svg>
             <FormattedMessage {...messages.logIn} />
-          </a>
+          </button>
         </React.Fragment>
       ) : (
         <UserMenu
           // If user's fullname is empty, we use its username as a fallback
-          user={user.full_name || user.username}
-          links={[...user.urls, { label: intl.formatMessage(messages.logOut), href: logoutUrl }]}
+          user={{
+            ...user,
+            urls: [
+              ...profileUrls.map(({ label, action }) => ({
+                label,
+                action: typeof action === 'string' ? bindUserDataToUrl(action, user) : action,
+              })),
+              {
+                label: intl.formatMessage(messages.logOut),
+                action: destroy,
+              },
+            ],
+          }}
         />
       )}
     </div>

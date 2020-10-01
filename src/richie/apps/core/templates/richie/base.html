@@ -86,8 +86,7 @@
 
                         <ul class="topbar__list topbar__list--controls">
                             {% block userlogin %}
-                            <li class="topbar__item topbar__item--login richie-react richie-react--user-login"
-                                data-props='{"loginUrl": "{% url 'social:begin' 'edx-oauth2' %}?next={{ request.path }}", "logoutUrl": "{% url 'logout' %}", "signupUrl": "{% url 'admin:index' %}"}'></li>
+                                <li class="topbar__item topbar__item--login richie-react richie-react--user-login" data-props='{"profileUrls": {{ AUTHENTICATION.PROFILE_URLS }}}'></li>
                             {% endblock userlogin %}
                             {% block topbar_contact %}
                             <li class="topbar__item topbar__item--cta">

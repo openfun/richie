@@ -8,21 +8,23 @@ import { UserMenu } from '.';
 let mockMatches = true;
 
 const props = {
-  user: 'John Doe',
-  links: [
-    {
-      label: 'Log out',
-      href: '/logout',
-    },
-    {
-      label: 'Profile',
-      href: 'https://acme.org/profile/johndoe',
-    },
-    {
-      label: 'My Dashboard',
-      href: 'https://acme.org/dashboard',
-    },
-  ],
+  user: {
+    username: 'John Doe',
+    urls: [
+      {
+        label: 'Log out',
+        action: '/logout',
+      },
+      {
+        label: 'Profile',
+        action: 'https://acme.org/profile/johndoe',
+      },
+      {
+        label: 'My Dashboard',
+        action: 'https://acme.org/dashboard',
+      },
+    ],
+  },
 };
 
 jest.mock('utils/indirection/window', () => ({

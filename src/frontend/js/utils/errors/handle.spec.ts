@@ -8,12 +8,10 @@ jest.mock('@sentry/browser');
 
 describe('handle', () => {
   (window as any).__richie_frontend_context__ = {
-    context: {
-      sentry_dsn: 'https://sentry.richie',
-      environment: 'test',
-    },
+    context: ContextFactory({
+      sentry_dsn: 'https://sentry.local.test',
+    }).generate(),
   };
-
   const { handle } = require('./handle');
 
   it('should initialize sentry', () => {

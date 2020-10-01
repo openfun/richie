@@ -9,6 +9,7 @@ module.exports = {
   setupFilesAfterEnv: ['./js/testSetup.ts'],
   testMatch: [`${__dirname}/js/**/*.spec.+(ts|tsx|js)`],
   testURL: 'https://localhost',
+  coverageDirectory: '.coverage',
   transformIgnorePatterns: ['node_modules/(?!(lodash-es)/)'],
   globals: {
     RICHIE_VERSION: 'test',

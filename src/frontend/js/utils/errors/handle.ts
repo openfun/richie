@@ -18,7 +18,7 @@ if (context?.sentry_dsn) {
  * Passes errors to Sentry if available, logs the error to the console otherwise.
  */
 export const handle = (error: Error) => {
-  if (context.sentry_dsn) {
+  if (context?.sentry_dsn) {
     Sentry.captureException(error);
   } else {
     // eslint-disable-next-line no-console

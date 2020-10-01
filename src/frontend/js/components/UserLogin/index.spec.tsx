@@ -1,12 +1,14 @@
-import { act, render, screen } from '@testing-library/react';
+import React from 'react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import fetchMock from 'fetch-mock';
-import React from 'react';
 import { IntlProvider } from 'react-intl';
 
-import { handle } from 'utils/errors/handle';
-import { Deferred } from 'utils/tests/Deferred';
-import { UserLogin } from '.';
+import { ContextFactory } from 'utils/test/factories';
+import { SESSION_CACHE_KEY } from 'settings';
+import faker from 'faker';
+import { Deferred } from 'utils/test/deferred';
+import { act } from 'react-dom/test-utils';
 
 jest.mock('utils/errors/handle', () => ({
   handle: jest.fn(),
@@ -26,7 +28,7 @@ describe('<UserLogin />', () => {
   const { UserLogin } = require('.');
   const { SessionProvider } = require('data/useSession');
 
-  const setSessionStorage = () => {
+  const initializeUser = () => {
     const username = faker.internet.userName();
     sessionStorage.setItem(
       SESSION_CACHE_KEY,
@@ -40,78 +42,79 @@ describe('<UserLogin />', () => {
     return username;
   };
 
-  beforeEach(() => fetchMock.restore());
+  afterEach(() => {
+    sessionStorage.clear();
+    fetchMock.restore();
+  });
 
   it('gets and renders the user name and a dropdown containing a logout link', async () => {
-    const deferred = new Deferred();
-    fetchMock.get('/api/v1.0/users/whoami/', deferred.promise);
+    const username = initializeUser();
 
     const { getByText, queryByText } = render(
       <IntlProvider locale="en">
-        <UserLogin {...props} />
+        <SessionProvider>
+          <UserLogin context={contextProps} />
+        </SessionProvider>
       </IntlProvider>,
-    );
-    expect(fetchMock.calls('/api/v1.0/users/whoami/').length).toEqual(1);
-    getByText('Loading login status...');
-
-    await act(async () =>
-      deferred.resolve({
-        full_name: 'Decimus Iunius Iuvenalis',
-        username: 'Juvénal',
-        urls: [
-          {
-            label: 'Profile',
-            href: 'https://acme.org',
-          },
-        ],
-      }),
     );
 
     const button = screen.getByRole('button', {
-      name: 'Access to your profile settings Decimus Iunius Iuvenalis',
+      name: `Access to your profile settings ${username}`,
     });
 
     userEvent.click(button);
 
-    getByText('Decimus Iunius Iuvenalis');
+    getByText(username);
     getByText('Log out');
     expect(queryByText('Loading login status...')).toBeNull();
   });
 
   it('renders signup/login buttons when the user is not logged in', async () => {
-    const deferred = new Deferred();
-    fetchMock.get('/api/v1.0/users/whoami/', deferred.promise);
+    const loginDeferred = new Deferred();
+    fetchMock.get('https://endpoint.test/api/user/v1/me', loginDeferred.promise);
 
     const { getByText, queryByText } = render(
       <IntlProvider locale="en">
-        <UserLogin {...props} />
+        <SessionProvider>
+          <UserLogin context={contextProps} />
+        </SessionProvider>
       </IntlProvider>,
     );
-    expect(fetchMock.calls('/api/v1.0/users/whoami/').length).toEqual(1);
-    getByText('Loading login status...');
 
-    await act(async () => deferred.resolve(401));
+    await act(async () => {
+      loginDeferred.resolve(401);
+    });
+
     getByText('Log in');
     getByText('Sign up');
     expect(queryByText('Loading login status...')).toBeNull();
   });
 
-  it('defaults to the logged off state when it fails to get the user', async () => {
-    const deferred = new Deferred();
-    fetchMock.get('/api/v1.0/users/whoami/', deferred.promise);
+  it('should renders profile urls and bind user info if needed', () => {
+    const username = initializeUser();
+    const profileUrls = [
+      { label: 'Settings', action: 'https://auth.local.test/settings' },
+      { label: 'Account', action: 'https://auth.local.test/u/(username)' },
+    ];
 
-    const { getByText, queryByText } = render(
+    const { getByText, getByRole } = render(
       <IntlProvider locale="en">
-        <UserLogin {...props} />
+        <SessionProvider>
+          <UserLogin context={contextProps} profileUrls={profileUrls} />
+        </SessionProvider>
       </IntlProvider>,
     );
-    expect(fetchMock.calls('/api/v1.0/users/whoami/').length).toEqual(1);
-    getByText('Loading login status...');
 
-    await act(async () => deferred.resolve(500));
-    getByText('Log in');
-    getByText('Sign up');
-    expect(queryByText('Loading login status...')).toBeNull();
-    expect(handle).toHaveBeenCalledWith(new Error('Failed to get current user.'));
+    const button = screen.getByRole('button', {
+      name: `Access to your profile settings ${username}`,
+    });
+
+    userEvent.click(button);
+
+    getByText(username);
+    const settingsLink = getByRole('link', { name: 'Settings' });
+    const accountLink = getByRole('link', { name: 'Account' });
+    expect(settingsLink.getAttribute('href')).toEqual('https://auth.local.test/settings');
+    expect(accountLink.getAttribute('href')).toEqual(`https://auth.local.test/u/${username}`);
   });
 });
