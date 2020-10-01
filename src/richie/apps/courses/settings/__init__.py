@@ -406,7 +406,7 @@ RICHIE_SIMPLETEXT_CONFIGURATION = [
     },
     {
         "placeholders": ["maincontent"],
-        "ckeditor": "CKEDITOR_LIMITED_CONFIGURATION",
+        "ckeditor": "CKEDITOR_SETTINGS",
         "max_length": 5000,
     },
     {
