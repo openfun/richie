@@ -47,6 +47,7 @@
     "@testing-library/jest-dom": "5.11.5",
     "@testing-library/react": "11.1.0",
     "@testing-library/user-event": "12.1.10",
+    "@types/faker": "5.1.2",
     "@types/fetch-mock": "7.3.3",
     "@types/jest": "26.0.15",
     "@types/lodash-es": "4.17.3",
@@ -76,6 +77,7 @@
     "eslint-plugin-prettier": "3.1.4",
     "eslint-plugin-react": "7.21.5",
     "eslint-plugin-react-hooks": "4.2.0",
+    "faker": "5.1.0",
     "fetch-mock": "9.10.7",
     "glob": "7.1.6",
     "intl-pluralrules": "1.2.2",
@@ -98,7 +100,6 @@
     "webpack-cli": "4.1.0",
     "whatwg-fetch": "3.4.1",
     "xhr-mock": "2.5.1",
-    "xstate": "4.13.0",
     "yargs": "16.1.0"
   },
   "resolutions": {
