@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add main content placeholder to programs list view
 - Create a function checking username in social auth pipeline
 - Extend social-auth middleware to use a page to display error
 - Add `urls` property to `UserSerializer`. The urls are built with a new setting
