@@ -1,11 +1,21 @@
 .program-list {
   @include make-container-max-widths;
-  display: flex;
   margin: 0 auto;
   padding: 1rem 0;
-  flex-direction: row;
-  flex-wrap: wrap;
-  @if $body-padding-fix {
-    @include content-padding-fix;
+
+  &__block {
+    @include detail-block;
+    @if $body-padding-fix {
+      @include content-padding-fix($target: '&:last-child');
+    }
+  }
+
+  &__row {
+    @include detail-row;
+  }
+
+  &__maincontent {
+    padding-left: $grid-gutter-width;
+    padding-right: $grid-gutter-width;
   }
 }

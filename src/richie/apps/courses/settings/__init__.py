@@ -307,6 +307,26 @@ CMS_PLACEHOLDER_CONF = {
         "name": _("Courses"),
         "plugins": ["CoursePlugin"],
     },
+    "courses/cms/program_list.html maincontent": {
+        "name": _("Main content"),
+        "plugins": ["SectionPlugin"],
+        "child_classes": {
+            "SectionPlugin": [
+                "BlogPostPlugin",
+                "CategoryPlugin",
+                "CoursePlugin",
+                "GlimpsePlugin",
+                "LinkPlugin",
+                "OrganizationPlugin",
+                "OrganizationsByCategoryPlugin",
+                "PersonPlugin",
+                "CKEditorPlugin",
+                "SectionPlugin",
+                "NestedItemPlugin",
+            ],
+            "NestedItemPlugin": ["CategoryPlugin"],
+        },
+    },
 }
 
 # Main CKEditor configuration

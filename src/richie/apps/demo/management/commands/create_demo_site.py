@@ -401,6 +401,21 @@ def create_demo_site():
         )
         programs.append(program)
 
+    # Create some content on the programs list page
+    placeholder = pages_created["programs"].placeholders.get(slot="maincontent")
+
+    for language in pages_created["programs"].get_languages():
+        create_text_plugin(
+            pages_created["programs"],
+            placeholder,
+            nb_paragraphs=random.randint(3, 4),  # nosec
+            languages=[language],
+            plugin_type="TextPlugin",
+        )
+
+        # Once content has been added we must publish again homepage
+        pages_created["programs"].publish(language)
+
     # Once everything has been created, use some content to create a homepage
     placeholder = pages_created["home"].placeholders.get(slot="maincontent")
 

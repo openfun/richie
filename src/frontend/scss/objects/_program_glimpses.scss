@@ -136,6 +136,7 @@ $r-program-glimpse-gutter: 0.8rem !default;
     color: r-theme-val(program-glimpse-empty, card-color);
     text-align: center;
     cursor: default;
+    border: $onepixel solid r-theme-val(program-glimpse, card-background); // avoid jumping footer on hover
 
     @if r-theme-val(program-glimpse-empty, hover-border) {
       &:hover,
