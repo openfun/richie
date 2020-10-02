@@ -1,15 +1,15 @@
-import { useMachine } from '@xstate/react';
-import { stringify } from 'query-string';
-import React from 'react';
+import React, { useCallback, useEffect, useReducer } from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
-import { assign, Machine } from 'xstate';
 
 import { Spinner } from 'components/Spinner';
-import { CourseRun, Enrollment } from 'types';
+import { useSession } from 'data/useSession';
+import { CourseRun } from 'types';
 import { User } from 'types/User';
-import { Nullable } from 'utils/types';
+import { Maybe, Nullable } from 'utils/types';
 import { handle } from 'utils/errors/handle';
+import { useAsyncEffect } from 'utils/useAsyncEffect';
 import { CommonDataProps } from 'types/commonDataProps';
+import CourseEnrollmentAPI from 'utils/api/courseEnrollment';
 
 const messages = defineMessages({
   enroll: {
@@ -52,189 +52,155 @@ const messages = defineMessages({
   },
 });
 
-interface MachineContext {
-  courseRun: Nullable<CourseRun>;
-  currentUser: Nullable<User>;
-  enrollment: Nullable<Enrollment>;
-}
-
-const machine = Machine<MachineContext>({
-  context: {
-    courseRun: null,
-    currentUser: null,
-    enrollment: null,
-  },
-  initial: 'loadingInitial',
-  states: {
-    loadingInitial: {
-      type: 'parallel',
-      states: {
-        courseRun: {
-          initial: 'loading',
-          states: {
-            success: { type: 'final' },
-            failure: {},
-            loading: {
-              invoke: {
-                onDone: {
-                  target: 'success',
-                  actions: assign({ courseRun: (_, event) => event.data }),
-                },
-                onError: { target: 'failure' },
-                src: 'getCourseRun',
-              },
-            },
-          },
-        },
-        currentUser: {
-          initial: 'loading',
-          states: {
-            success: { type: 'final' },
-            failure: {},
-            loading: {
-              invoke: {
-                onDone: {
-                  target: 'success',
-                  actions: assign({ currentUser: (_, event) => event.data }),
-                },
-                onError: { target: 'failure' },
-                src: 'getCurrentUser',
-              },
-            },
-          },
-        },
-        enrollment: {
-          initial: 'loading',
-          states: {
-            success: { type: 'final' },
-            failure: {},
-            loading: {
-              invoke: {
-                onDone: {
-                  target: 'success',
-                  actions: assign({ enrollment: (_, event) => event.data }),
-                },
-                onError: { target: 'failure' },
-                src: 'getEnrollment',
-              },
-            },
-          },
-        },
-      },
-      onDone: { target: 'readyInitial' },
-    },
-    // Determine where to go once initial loading is over based on a list of guards
-    readyInitial: {
-      on: {
-        '': [
-          { target: 'enrolled', cond: 'isEnrolled' },
-          { target: 'closed', cond: 'isCourseRunClosed' },
-          { target: 'idle', cond: 'isLoggedInUser' },
-          // Anonymous is last: only users who are not logged-in but are looking at an
-          // open-for-enrollment course run should end up in this state.
-          { target: 'anonymous' },
-        ],
-      },
-    },
-    anonymous: {},
-    closed: {},
-    enrolled: {},
-    enrollmentLoading: {
-      invoke: {
-        onDone: {
-          target: 'enrolled',
-          actions: assign({ enrollment: (_, event) => event.data }),
-        },
-        onError: { target: 'enrollmentFailed' },
-        src: 'doEnroll',
-      },
-    },
-    enrollmentFailed: {
-      on: {
-        ENROLL: { target: 'enrollmentLoading' },
-      },
-    },
-    idle: {
-      on: {
-        ENROLL: { target: 'enrollmentLoading' },
-      },
-    },
-  },
-});
-
 const headers = {
   'Content-Type': 'application/json',
 };
 
 interface CourseRunEnrollmentProps {
   courseRunId: number;
-  loginUrl: string;
 }
 
+enum Step {
+  ANONYMOUS = 'anonymous',
+  CLOSED = 'closed',
+  LOADING = 'loading',
+  ENROLLED = 'enrolled',
+  ENROLLING = 'enrolling',
+  ENROLLMENT_FAILED = 'enrollmentFailed',
+  FAILED = 'failed',
+  IDLE = 'idle',
+}
+
+enum ActionType {
+  UPDATE_CONTEXT = 'UPDATE_CONTEXT',
+  ENROLL = 'ENROLL',
+  ERROR = 'ERROR',
+}
+interface ReducerState {
+  step: Step;
+  context: {
+    isEnrolled: Maybe<Nullable<Boolean>>;
+    courseRun: Maybe<Nullable<CourseRun>>;
+    currentUser: Maybe<Nullable<User>>;
+  };
+  error?: Error;
+}
+type ReducerAction =
+  | { type: ActionType.UPDATE_CONTEXT; payload: Partial<ReducerState['context']> }
+  | { type: ActionType.ENROLL }
+  | { type: ActionType.ERROR; payload: { error: Error } };
+
+const initialState = {
+  step: Step.LOADING,
+  context: {
+    currentUser: undefined,
+    courseRun: undefined,
+    isEnrolled: undefined,
+  },
+};
+
+const getStepFromContext = (
+  { currentUser, courseRun, isEnrolled }: ReducerState['context'],
+  previousStep: Step,
+) => {
+  switch (true) {
+    case courseRun && courseRun.state.priority > 1:
+      return Step.CLOSED;
+    case previousStep === Step.ENROLLING && !isEnrolled:
+      return Step.ENROLLMENT_FAILED;
+    case currentUser === undefined || courseRun === undefined || isEnrolled === undefined:
+      return Step.LOADING;
+    case currentUser === null:
+      return Step.ANONYMOUS;
+    case !!isEnrolled:
+      return Step.ENROLLED;
+    case !isEnrolled:
+      return Step.IDLE;
+    default:
+      throw new Error('Impossible state');
+  }
+};
+
+const reducer = ({ step, context }: ReducerState, action: ReducerAction): ReducerState => {
+  switch (action.type) {
+    case ActionType.UPDATE_CONTEXT: {
+      const nextContext = { ...context, ...action.payload };
+      return { step: getStepFromContext(nextContext, step), context: nextContext };
+    }
+    case ActionType.ENROLL:
+      return { step: Step.ENROLLING, context };
+    case ActionType.ERROR:
+      return { step: Step.FAILED, context, ...action.payload };
+    default:
+      return { step, context };
+  }
+};
+
 export const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonDataProps> = ({
-  context,
   courseRunId,
-  loginUrl,
 }) => {
-  const [state, send] = useMachine(machine, {
-    guards: {
-      isCourseRunClosed: (ctx) => !!ctx.courseRun && ctx.courseRun.state.priority > 1,
-      isEnrolled: (ctx) => !!ctx.enrollment,
-      isInitialReady: (ctx) => !!ctx.courseRun && !!ctx.currentUser && !!ctx.enrollment,
-      isLoggedInUser: (ctx) => !!ctx.currentUser,
+  const [
+    {
+      step,
+      context: { currentUser, isEnrolled, courseRun },
+      error,
     },
-    services: {
-      doEnroll: async () => {
-        const response = await fetch(`/api/v1.0/enrollments/`, {
-          body: JSON.stringify({ course_run: courseRunId }),
-          headers: { ...headers, 'X-CSRFToken': context.csrftoken },
-          method: 'POST',
-        });
-        if (response.ok) {
-          return true; // There is no content in the enrollment success response
-        }
-        throw new Error(`Failed to enroll in ${courseRunId}, ${response.status}`);
-      },
-      getCourseRun: async () => {
-        const response = await fetch(`/api/v1.0/course-runs/${courseRunId}/`, {
-          headers,
-        });
-        if (response.ok) {
-          return await response.json();
-        }
-        throw new Error(`Failed to get course run ${courseRunId}, ${response.status}.`);
-      },
-      getCurrentUser: async () => {
-        const response = await fetch('/api/v1.0/users/whoami/', { headers });
-        if (response.ok) {
-          return await response.json();
-        }
-        // 401 is the expected response for anonymous users
-        if (response.status === 401) {
-          return null;
-        }
-        throw new Error(`Failed to get current user, ${response.status}.`);
-      },
-      getEnrollment: async () => {
-        const params = { course_run: courseRunId };
-        const response = await fetch(`/api/v1.0/enrollments/?${stringify(params)}`, { headers });
-        if (response.ok) {
-          const enrollments = await response.json();
-          return enrollments.length > 0 ? enrollments[0] : null;
-        }
-        // Do not go through the failure channel if it's just an anonymous user that therefore is
-        // not authorized to make list requests on enrollments
-        if (response.status === 401 || response.status === 403) {
-          return null;
-        }
-        throw new Error(`Failed to get enrollments for user, ${response.status}`);
-      },
-    },
-  });
-  const { courseRun } = state.context;
+    dispatch,
+  ] = useReducer<React.Reducer<ReducerState, ReducerAction>, ReducerState>(
+    reducer,
+    initialState,
+    (s) => s,
+  );
+  const { user, login } = useSession();
+
+  const enroll = useCallback(async () => {
+    dispatch({ type: ActionType.ENROLL });
+    if (courseRun && currentUser) {
+      const enrollmentSucceeded = await CourseEnrollmentAPI.set(
+        courseRun.resource_link,
+        currentUser,
+      );
+      dispatch({ type: ActionType.UPDATE_CONTEXT, payload: { isEnrolled: enrollmentSucceeded } });
+    }
+  }, [courseRun, currentUser, dispatch]);
+
+  useAsyncEffect(async () => {
+    const response = await fetch(`/api/v1.0/course-runs/${courseRunId}/`, {
+      headers,
+    });
+    if (response.ok) {
+      const data = await response.json();
+      dispatch({ type: ActionType.UPDATE_CONTEXT, payload: { courseRun: data } });
+    } else {
+      dispatch({
+        type: ActionType.ERROR,
+        payload: { error: new Error(`Failed to get course run ${courseRunId}`) },
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    dispatch({
+      type: ActionType.UPDATE_CONTEXT,
+      payload: { currentUser: user, isEnrolled: undefined },
+    });
+  }, [user]);
+
+  useAsyncEffect(async () => {
+    if (currentUser !== undefined && courseRun && isEnrolled === undefined) {
+      const response = await CourseEnrollmentAPI.isEnrolled(courseRun.resource_link, currentUser);
+      dispatch({ type: ActionType.UPDATE_CONTEXT, payload: { isEnrolled: response } });
+    }
+  }, [currentUser, courseRun]);
 
   switch (true) {
-    case state.matches('loadingInitial'):
+    case step === Step.ANONYMOUS:
+      return (
+        <button onClick={login} className="course-run-enrollment__cta">
+          <FormattedMessage {...messages.loginToEnroll} />
+        </button>
+      );
+    case step === Step.LOADING:
       return (
         <Spinner size="small" aria-labelledby={`loading-course-run-${courseRunId}`}>
           <span id={`loading-course-run-${courseRunId}`}>
@@ -243,34 +209,27 @@ export const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonData
         </Spinner>
       );
 
-    case state.matches('anonymous'):
-      return (
-        <a href={loginUrl} className="course-run-enrollment__cta">
-          <FormattedMessage {...messages.loginToEnroll} />
-        </a>
-      );
-
-    case state.matches('closed'):
+    case step === Step.CLOSED:
       return (
         <div className="course-run-enrollment__helptext">
           <FormattedMessage {...messages.enrollmentClosed} />
         </div>
       );
 
-    case state.matches('idle'):
-    case state.matches('enrollmentLoading'):
-    case state.matches('enrollmentFailed'):
+    case step === Step.IDLE:
+    case step === Step.ENROLLING:
+    case step === Step.ENROLLMENT_FAILED:
       return (
         <React.Fragment>
           <button
-            onClick={() => send('ENROLL')}
+            onClick={enroll}
             className={`course-run-enrollment__cta ${
-              state.matches('enrollmentLoading') ? 'course-run-enrollment__cta--loading' : ''
+              step === Step.ENROLLING ? 'course-run-enrollment__cta--loading' : ''
             }`}
-            aria-busy={state.matches('enrollmentLoading')}
+            aria-busy={step === Step.ENROLLING}
           >
             <FormattedMessage {...messages.enroll} />
-            {state.matches('enrollmentLoading') ? (
+            {step === Step.ENROLLING ? (
               <span aria-hidden="true">
                 <Spinner>
                   <React.Fragment />
@@ -279,15 +238,14 @@ export const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonData
               </span>
             ) : null}
           </button>
-          {state.matches('enrollmentFailed') ? (
+          {step === Step.ENROLLMENT_FAILED ? (
             <div className="course-run-enrollment__errortext">
               <FormattedMessage {...messages.enrollmentFailed} />
             </div>
           ) : null}
         </React.Fragment>
       );
-
-    case state.matches('enrolled'):
+    case step === Step.ENROLLED:
       return (
         <React.Fragment>
           {courseRun && (
@@ -302,7 +260,11 @@ export const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonData
       );
   }
 
-  // Switch should cover all our cases. Report the error and do not render anything if we end up here.
-  handle(new Error(`<CourseRunEnrollment /> in an impossible state, ${state.value}`));
+  if (step === Step.FAILED && error) {
+    handle(error);
+  } else {
+    // Switch should cover all our cases. Report the error and do not render anything if we end up here.
+    handle(new Error(`<CourseRunEnrollment /> in an impossible state, ${JSON.stringify(step)}`));
+  }
   return null;
 };
