@@ -12,7 +12,6 @@ from django.views.static import serve
 
 from cms.sitemaps import CMSSitemap
 
-from richie.apps.core.urls import urlpatterns as core_urlpatterns
 from richie.apps.courses.urls import urlpatterns as courses_urlpatterns
 from richie.apps.search.urls import urlpatterns as search_urlpatterns
 
@@ -27,7 +26,7 @@ urlpatterns = [
     url(r"^sitemap\.xml$", sitemap, {"sitemaps": {"cmspages": CMSSitemap}}),
     url(
         r"^api/{}/".format(API_PREFIX),
-        include([*core_urlpatterns, *courses_urlpatterns, *search_urlpatterns]),
+        include([*courses_urlpatterns, *search_urlpatterns]),
     ),
     url(r"^oauth/", include("social_django.urls", namespace="social")),
     url(r"^", include("filer.server.urls")),
