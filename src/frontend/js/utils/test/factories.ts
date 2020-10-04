@@ -1,4 +1,5 @@
 import { createSpec, derived, faker } from '@helpscout/helix';
+import { CommonDataProps } from 'types/commonDataProps';
 
 const CourseStateFactory = createSpec({
   priority: derived(() => Math.floor(Math.random() * 7)),
@@ -27,5 +28,28 @@ export const EnrollmentFactory = createSpec({
 
 export const UserFactory = createSpec({
   full_name: faker.fake('{{name.firstName}} {{name.lastName}}'),
-  username: faker.internet.email(),
+  username: faker.internet.userName(),
 });
+
+export const ContextFactory = (context: Partial<CommonDataProps['context']> = {}) => {
+  return createSpec({
+    auth_endpoint: 'https://endpoint.test',
+    csrftoken: faker.random.alphaNumeric(64),
+    environment: 'test',
+    authentication: {
+      backend: 'richie.apps.courses.lms.base.BaseLMSBackend',
+      endpoint: 'https://endpoint.test',
+    },
+    lms_backends: [
+      {
+        backend: 'richie.apps.courses.lms.base.BaseLMSBackend',
+        selector_regexp: '.*',
+        course_regexp: '.*',
+        endpoint: 'https://endpoint.test',
+      },
+    ],
+    release: faker.system.semver(),
+    sentry_dsn: null,
+    ...context,
+  });
+};

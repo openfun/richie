@@ -2,19 +2,13 @@ import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
+import { ContextFactory } from 'utils/test/factories';
+import { CommonDataProps } from 'types/commonDataProps';
 import { Course } from 'types/Course';
 import { CourseGlimpseList } from '.';
 
 describe('components/CourseGlimpseList', () => {
-  const commonDataProps = {
-    assets: {
-      icons: '/icons.svg',
-    },
-    csrftoken: 'the csrf token',
-    environment: 'frontend_tests',
-    release: '9.8.7',
-    sentry_dsn: null,
-  };
+  const contextProps: CommonDataProps['context'] = ContextFactory().generate();
 
   it('renders a list of Courses into a list of CourseGlimpses', () => {
     const courses = [
@@ -32,7 +26,7 @@ describe('components/CourseGlimpseList', () => {
     render(
       <IntlProvider locale="en">
         <CourseGlimpseList
-          context={commonDataProps}
+          context={contextProps}
           courses={courses}
           meta={{ count: 20, offset: 0, total_count: 45 }}
         />

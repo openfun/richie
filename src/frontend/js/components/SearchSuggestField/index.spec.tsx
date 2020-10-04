@@ -5,9 +5,10 @@ import { IntlProvider } from 'react-intl';
 
 import { useCourseSearchParams, CourseSearchParamsAction } from 'data/useCourseSearchParams';
 import { HistoryProvider } from 'data/useHistory';
+import { history, location } from 'utils/indirection/window';
+import { ContextFactory } from 'utils/test/factories';
 import { CommonDataProps } from 'types/commonDataProps';
 import { FilterDefinition } from 'types/filters';
-import { history, location } from 'utils/indirection/window';
 import { SearchSuggestField } from '.';
 
 // Unexplained difficulties with fake timers were encountered in these tests.
@@ -28,12 +29,7 @@ jest.mock('utils/indirection/window', () => ({
 }));
 
 describe('components/SearchSuggestField', () => {
-  const context: CommonDataProps['context'] = {
-    csrftoken: 'the csrf token',
-    environment: 'frontend_tests',
-    release: '9.8.7',
-    sentry_dsn: null,
-  };
+  const contextProps: CommonDataProps['context'] = ContextFactory().generate();
 
   // Make some filters we can reuse through our tests with the filter definitions responses
   const levels: FilterDefinition = {
@@ -80,7 +76,7 @@ describe('components/SearchSuggestField', () => {
     const { getByPlaceholderText } = render(
       <IntlProvider locale="en">
         <HistoryProvider>
-          <SearchSuggestField context={context} />
+          <SearchSuggestField context={contextProps} />
         </HistoryProvider>
       </IntlProvider>,
     );
@@ -94,7 +90,7 @@ describe('components/SearchSuggestField', () => {
     const { getByDisplayValue } = render(
       <IntlProvider locale="en">
         <HistoryProvider>
-          <SearchSuggestField context={context} />
+          <SearchSuggestField context={contextProps} />
         </HistoryProvider>
       </IntlProvider>,
     );
@@ -115,7 +111,7 @@ describe('components/SearchSuggestField', () => {
     const { getByDisplayValue, rerender } = render(
       <IntlProvider locale="en">
         <HistoryProvider>
-          <SearchSuggestField context={context} />
+          <SearchSuggestField context={contextProps} />
           <OtherComponent />
         </HistoryProvider>
       </IntlProvider>,
@@ -133,7 +129,7 @@ describe('components/SearchSuggestField', () => {
     rerender(
       <IntlProvider locale="en">
         <HistoryProvider>
-          <SearchSuggestField context={context} />
+          <SearchSuggestField context={contextProps} />
           <OtherComponent />
         </HistoryProvider>
       </IntlProvider>,
@@ -170,7 +166,7 @@ describe('components/SearchSuggestField', () => {
     const { getByPlaceholderText, getByText, queryByText } = render(
       <IntlProvider locale="en">
         <HistoryProvider>
-          <SearchSuggestField context={context} />
+          <SearchSuggestField context={contextProps} />
         </HistoryProvider>
       </IntlProvider>,
     );
@@ -212,7 +208,7 @@ describe('components/SearchSuggestField', () => {
     const { getByPlaceholderText } = render(
       <IntlProvider locale="en">
         <HistoryProvider>
-          <SearchSuggestField context={context} />
+          <SearchSuggestField context={contextProps} />
         </HistoryProvider>
       </IntlProvider>,
     );
@@ -257,7 +253,7 @@ describe('components/SearchSuggestField', () => {
     const { getByPlaceholderText, getByText, queryByText } = render(
       <IntlProvider locale="en">
         <HistoryProvider>
-          <SearchSuggestField context={context} />
+          <SearchSuggestField context={contextProps} />
         </HistoryProvider>
       </IntlProvider>,
     );
@@ -341,7 +337,7 @@ describe('components/SearchSuggestField', () => {
     const { getByPlaceholderText, getByText, queryByText } = render(
       <IntlProvider locale="en">
         <HistoryProvider>
-          <SearchSuggestField context={context} />
+          <SearchSuggestField context={contextProps} />
         </HistoryProvider>
       </IntlProvider>,
     );
@@ -420,7 +416,7 @@ describe('components/SearchSuggestField', () => {
     const { getByPlaceholderText } = render(
       <IntlProvider locale="en">
         <HistoryProvider>
-          <SearchSuggestField context={context} />
+          <SearchSuggestField context={contextProps} />
         </HistoryProvider>
       </IntlProvider>,
     );
@@ -462,7 +458,7 @@ describe('components/SearchSuggestField', () => {
     const { getByPlaceholderText } = render(
       <IntlProvider locale="en">
         <HistoryProvider>
-          <SearchSuggestField context={context} />
+          <SearchSuggestField context={contextProps} />
         </HistoryProvider>
       </IntlProvider>,
     );
@@ -541,7 +537,7 @@ describe('components/SearchSuggestField', () => {
     const { getByPlaceholderText } = render(
       <IntlProvider locale="en">
         <HistoryProvider>
-          <SearchSuggestField context={context} />
+          <SearchSuggestField context={contextProps} />
         </HistoryProvider>
       </IntlProvider>,
     );
@@ -607,7 +603,7 @@ describe('components/SearchSuggestField', () => {
     const { getByPlaceholderText, getByText } = render(
       <IntlProvider locale="en">
         <HistoryProvider>
-          <SearchSuggestField context={context} />
+          <SearchSuggestField context={contextProps} />
         </HistoryProvider>
       </IntlProvider>,
     );

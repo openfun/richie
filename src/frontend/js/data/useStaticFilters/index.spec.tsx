@@ -3,7 +3,7 @@ import fetchMock from 'fetch-mock';
 import React from 'react';
 
 import { FilterDefinition } from 'types/filters';
-import { Deferred } from 'utils/tests/Deferred';
+import { Deferred } from 'utils/test/deferred';
 import { useStaticFilters } from '.';
 
 describe('data/useStaticFilters', () => {

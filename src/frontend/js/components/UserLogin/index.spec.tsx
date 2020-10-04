@@ -20,11 +20,24 @@ jest.mock('utils/indirection/window', () => ({
   }),
 }));
 
-describe.only('<UserLogin />', () => {
-  const props = {
-    loginUrl: '/login',
-    logoutUrl: '/logout',
-    signupUrl: '/signup',
+describe('<UserLogin />', () => {
+  const contextProps = ContextFactory().generate();
+  (window as any).__richie_frontend_context__ = { context: contextProps };
+  const { UserLogin } = require('.');
+  const { SessionProvider } = require('data/useSession');
+
+  const setSessionStorage = () => {
+    const username = faker.internet.userName();
+    sessionStorage.setItem(
+      SESSION_CACHE_KEY,
+      btoa(
+        JSON.stringify({
+          value: { username },
+          expiredAt: Date.now() + 60_0000,
+        }),
+      ),
+    );
+    return username;
   };
 
   beforeEach(() => fetchMock.restore());

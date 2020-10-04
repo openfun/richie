@@ -4,7 +4,7 @@ import { CommonDataProps } from 'types/commonDataProps';
 
 const context: CommonDataProps['context'] = (window as any).__richie_frontend_context__?.context;
 
-if (context && context.sentry_dsn) {
+if (context?.sentry_dsn) {
   Sentry.init({
     dsn: context.sentry_dsn,
     environment: context.environment,

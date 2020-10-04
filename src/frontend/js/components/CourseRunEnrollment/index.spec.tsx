@@ -7,15 +7,11 @@ import { CourseRun } from 'types';
 import { CommonDataProps } from 'types/commonDataProps';
 import { Deferred } from 'utils/test/deferred';
 import * as factories from 'utils/test/factories';
-import { CourseRunEnrollment } from '.';
 
 describe('<CourseRunEnrollment />', () => {
-  const context: CommonDataProps['context'] = {
-    csrftoken: 'the csrf token',
-    environment: 'PROD',
-    release: '42.3.1',
-    sentry_dsn: 'the sentry dsn',
-  };
+  const contextProps: CommonDataProps['context'] = factories.ContextFactory().generate();
+  (window as any).__richie_frontend_context__ = { context: contextProps };
+  const { CourseRunEnrollment } = require('.');
 
   afterEach(() => fetchMock.restore());
 
@@ -33,7 +29,7 @@ describe('<CourseRunEnrollment />', () => {
     render(
       <IntlProvider locale="en">
         <CourseRunEnrollment
-          context={context}
+          context={contextProps}
           courseRunId={courseRun.id}
           loginUrl="/oauth/login/edx-oauth2/?next=/en/courses/"
         />
@@ -77,7 +73,7 @@ describe('<CourseRunEnrollment />', () => {
     render(
       <IntlProvider locale="en">
         <CourseRunEnrollment
-          context={context}
+          context={contextProps}
           courseRunId={courseRun.id}
           loginUrl="/oauth/login/edx-oauth2/?next=/en/courses/"
         />
@@ -119,7 +115,7 @@ describe('<CourseRunEnrollment />', () => {
     render(
       <IntlProvider locale="en">
         <CourseRunEnrollment
-          context={context}
+          context={contextProps}
           courseRunId={courseRun.id}
           loginUrl="/oauth/login/edx-oauth2/?next=/en/courses/"
         />
@@ -153,7 +149,7 @@ describe('<CourseRunEnrollment />', () => {
     render(
       <IntlProvider locale="en">
         <CourseRunEnrollment
-          context={context}
+          context={contextProps}
           courseRunId={courseRun.id}
           loginUrl="/oauth/login/edx-oauth2/?next=/en/courses/"
         />
@@ -184,7 +180,7 @@ describe('<CourseRunEnrollment />', () => {
     render(
       <IntlProvider locale="en">
         <CourseRunEnrollment
-          context={context}
+          context={contextProps}
           courseRunId={courseRun.id}
           loginUrl="/oauth/login/edx-oauth2/?next=/en/courses/"
         />
