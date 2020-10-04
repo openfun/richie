@@ -3,22 +3,18 @@ import React from 'react';
 import { IntlProvider } from 'react-intl';
 
 import { CommonDataProps } from 'types/commonDataProps';
+import { ContextFactory } from 'utils/test/factories';
 import { SearchInput } from '.';
 
 describe('<SearchInput />', () => {
-  const context: CommonDataProps['context'] = {
-    csrftoken: 'the csrf token',
-    environment: 'frontend_tests',
-    release: '9.8.7',
-    sentry_dsn: null,
-  };
+  const contextProps: CommonDataProps['context'] = ContextFactory().generate();
 
   const inputProps = {};
 
   it('renders with the input field and button', () => {
     const { container, getByText } = render(
       <IntlProvider locale="en">
-        <SearchInput context={context} inputProps={inputProps} />
+        <SearchInput context={contextProps} inputProps={inputProps} />
       </IntlProvider>,
     );
 
@@ -33,7 +29,7 @@ describe('<SearchInput />', () => {
 
     const { getByText } = render(
       <IntlProvider locale="en">
-        <SearchInput context={context} inputProps={inputProps} onClick={callback} />
+        <SearchInput context={contextProps} inputProps={inputProps} onClick={callback} />
       </IntlProvider>,
     );
 

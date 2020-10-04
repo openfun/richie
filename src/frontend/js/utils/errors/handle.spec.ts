@@ -2,6 +2,7 @@
  * @jest-environment jsdom
  */
 import * as Sentry from '@sentry/browser';
+import { ContextFactory } from 'utils/test/factories';
 
 jest.mock('@sentry/browser');
 

@@ -1,6 +1,8 @@
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
+import { CommonDataProps } from 'types/commonDataProps';
+import { ContextFactory } from 'utils/test/factories';
 
 import { CourseGlimpse } from '.';
 
@@ -28,21 +30,13 @@ describe('components/CourseGlimpse', () => {
     title: 'Course 42',
   };
 
-  const commonDataProps = {
-    assets: {
-      icons: '/icons.svg',
-    },
-    csrftoken: 'the csrf token',
-    environment: 'frontend_tests',
-    release: '9.8.7',
-    sentry_dsn: null,
-  };
+  const contextProps: CommonDataProps['context'] = ContextFactory().generate();
 
   it('renders a course glimpse with its data', () => {
     render(
       <IntlProvider locale="en">
         <CourseGlimpse
-          context={commonDataProps}
+          context={contextProps}
           course={{
             ...course,
             duration: '3 months',
@@ -69,7 +63,7 @@ describe('components/CourseGlimpse', () => {
     render(
       <IntlProvider locale="en">
         <CourseGlimpse
-          context={commonDataProps}
+          context={contextProps}
           course={{
             ...course,
             state: {
@@ -91,7 +85,7 @@ describe('components/CourseGlimpse', () => {
   it('shows the "Cover" placeholder div when the course is missing a cover image', () => {
     render(
       <IntlProvider locale="en">
-        <CourseGlimpse context={commonDataProps} course={{ ...course, cover_image: null }} />
+        <CourseGlimpse context={contextProps} course={{ ...course, cover_image: null }} />
       </IntlProvider>,
     );
 

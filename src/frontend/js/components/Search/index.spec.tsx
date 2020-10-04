@@ -6,6 +6,8 @@ import { IntlProvider } from 'react-intl';
 
 import { History, HistoryContext } from 'data/useHistory';
 import * as mockWindow from 'utils/indirection/window';
+import { ContextFactory } from 'utils/test/factories';
+import { CommonDataProps } from 'types/commonDataProps';
 import { Search } from '.';
 
 let mockMatches = false;
@@ -29,15 +31,7 @@ describe('<Search />', () => {
     historyReplaceState,
   ];
 
-  const commonDataProps = {
-    assets: {
-      icons: '/icons.svg',
-    },
-    csrftoken: 'the csrf token',
-    environment: 'frontend_tests',
-    release: '9.8.7',
-    sentry_dsn: null,
-  };
+  const contextProps: CommonDataProps['context'] = ContextFactory().generate();
 
   beforeEach(() => {
     fetchMock.restore();
@@ -55,7 +49,7 @@ describe('<Search />', () => {
     render(
       <IntlProvider locale="en">
         <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
-          <Search context={commonDataProps} />
+          <Search context={contextProps} />
         </HistoryContext.Provider>
       </IntlProvider>,
     );
@@ -76,7 +70,7 @@ describe('<Search />', () => {
     render(
       <IntlProvider locale="en">
         <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
-          <Search context={commonDataProps} />
+          <Search context={contextProps} />
         </HistoryContext.Provider>
       </IntlProvider>,
     );
@@ -104,7 +98,7 @@ describe('<Search />', () => {
     const { container } = render(
       <IntlProvider locale="en">
         <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
-          <Search context={commonDataProps} />
+          <Search context={contextProps} />
         </HistoryContext.Provider>
       </IntlProvider>,
     );
@@ -131,7 +125,7 @@ describe('<Search />', () => {
     const { container } = render(
       <IntlProvider locale="en">
         <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
-          <Search context={commonDataProps} />
+          <Search context={contextProps} />
         </HistoryContext.Provider>
       </IntlProvider>,
     );
@@ -199,7 +193,7 @@ describe('<Search />', () => {
               lastDispatchActions: [{ type: 'FILTER_RESET' }],
             })}
           >
-            <Search context={commonDataProps} />
+            <Search context={contextProps} />
           </HistoryContext.Provider>
         </IntlProvider>,
       );
@@ -220,7 +214,7 @@ describe('<Search />', () => {
               lastDispatchActions: [{ type: 'QUERY_UPDATE' }],
             })}
           >
-            <Search context={commonDataProps} />
+            <Search context={contextProps} />
           </HistoryContext.Provider>
         </IntlProvider>,
       );
