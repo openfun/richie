@@ -734,8 +734,8 @@ def create_demo_site():
         )
         # Add a plain text
         text = factory.Faker(
-            "text", max_nb_chars=random.randint(150, 250), locale=language  # nosec
-        ).generate({})
+            "text", max_nb_chars=random.randint(150, 250)  # nosec
+        ).generate({"locale": language})
         add_plugin(
             language=language,
             placeholder=placeholder,
