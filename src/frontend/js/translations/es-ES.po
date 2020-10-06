@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2020-08-28T18:05:44.793Z\n"
+"POT-Creation-Date: 2020-09-11T19:32:43.830Z\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "MIME-Version: 1.0\n"
@@ -14,13 +14,20 @@ msgstr ""
 "Project-Id-Version: richie\n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
-"PO-Revision-Date: 2020-08-28 22:08\n"
+"PO-Revision-Date: 2020-10-06 11:47\n"
 
 #. [components.LanguageSelector.currentlySelected] - Accessible hint to mark the currently selected language in the language selector
 #. defaultMessage is:
 #. (currently selected)
 #: i18n/js/components/LanguageSelector/index.json
 msgid "(currently selected)"
+msgstr ""
+
+#. [components.DesktopUserMenu.menuPurpose] - Accessible label for user menu button
+#. defaultMessage is:
+#. Access to your profile settings
+#: i18n/js/components/UserMenu/DesktopUserMenu.json
+msgid "Access to your profile settings"
 msgstr ""
 
 #. [components.SearchFilterGroupModal.modalTitle] - Title for the modal to add more filter values in the search filters modal.
@@ -149,6 +156,13 @@ msgstr "Cargando resultados de búsqueda..."
 msgid "Log in"
 msgstr "Iniciar sesión"
 
+#. [components.CourseRunEnrollment.loginToEnroll] - Helper text in the enroll button for non logged in users
+#. defaultMessage is:
+#. Log in to enroll
+#: i18n/js/components/CourseRunEnrollment/index.json
+msgid "Log in to enroll"
+msgstr ""
+
 #. [components.UserLogin.logOut] - Text for the logout button.
 #. defaultMessage is:
 #. Log out
@@ -248,13 +262,6 @@ msgstr "Mostrando {start, number} a {end, number} de {courseCount, number} ¡ {c
 msgid "Sign up"
 msgstr "Regístrarse"
 
-#. [components.CourseRunEnrollment.loginToEnroll] - Helper text below the disabled enrolle button for non logged in users
-#. defaultMessage is:
-#. Sign up or log in to enroll
-#: i18n/js/components/CourseRunEnrollment/index.json
-msgid "Sign up or log in to enroll"
-msgstr ""
-
 #. [components.Search.errorMessage] - Error message for Search view when the request to load courses fails
 #. defaultMessage is:
 #. Something's wrong! Courses could not be loaded.
@@ -297,9 +304,3 @@ msgstr ""
 msgid "Your enrollment request failed."
 msgstr ""
 
-#. [components.UserDesktopMenu.menuPurpose] - Accessible label for user menu button.
-#. defaultMessage is:
-#. Access to your profile settings
-#: i18n/js/components/UserMenu/index.json
-msgid "Access to your profile settings"
-msgstr ""
