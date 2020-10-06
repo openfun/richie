@@ -161,7 +161,7 @@ jobs:
   # translation management tool
   upload-i18n-strings:
     docker:
-      - image: fundocker/crowdin:2.0.31
+      - image: crowdin/cli:3.3.0
     working_directory: ~/fun
     steps:
       - checkout
@@ -169,7 +169,7 @@ jobs:
           at: ~/fun
       - run:
           name: upload files to crowdin
-          command: crowdin -c crowdin/config.yml upload sources
+          command: crowdin upload sources -c crowdin/config.yml
 
   test-back-mysql:
     docker:
