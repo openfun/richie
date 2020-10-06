@@ -19,6 +19,9 @@ jobs:
   lint-git:
     docker:
       - image: circleci/python:3.7-stretch
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
     working_directory: ~/fun
     steps:
       - checkout
@@ -46,6 +49,9 @@ jobs:
   check-changelog:
     docker:
       - image: circleci/buildpack-deps:stretch-scm
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
     working_directory: ~/fun
     steps:
       - checkout
@@ -58,6 +64,9 @@ jobs:
   lint-changelog:
     docker:
       - image: debian:stretch
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
     working_directory: ~/fun
     steps:
       - checkout
@@ -72,6 +81,9 @@ jobs:
   build-docker:
     docker:
       - image: circleci/buildpack-deps:stretch
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
     working_directory: ~/fun
     steps:
       # Checkout repository sources
@@ -81,6 +93,9 @@ jobs:
       # Activate docker-in-docker (with layers caching enabled)
       - setup_remote_docker:
           docker_layer_caching: true
+      - run:
+          name: Login to DockerHub
+          command: echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
       # Each image is tagged with the current git commit sha1 to avoid
       # collisions in parallel builds.
       - run:
@@ -95,6 +110,9 @@ jobs:
   build-back:
     docker:
       - image: circleci/python:3.7-stretch
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
     working_directory: ~/fun
     steps:
       - checkout
@@ -113,6 +131,9 @@ jobs:
   build-back-i18n:
     docker:
       - image: circleci/python:3.7-stretch
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
     working_directory: ~/fun/src/richie
     steps:
       - checkout:
@@ -135,6 +156,9 @@ jobs:
   lint-back:
     docker:
       - image: circleci/python:3.7-stretch
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
     working_directory: ~/fun
     steps:
       - checkout
@@ -162,6 +186,9 @@ jobs:
   upload-i18n-strings:
     docker:
       - image: crowdin/cli:3.3.0
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
     working_directory: ~/fun
     steps:
       - checkout
@@ -174,6 +201,9 @@ jobs:
   test-back-mysql:
     docker:
       - image: circleci/python:3.7-stretch
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
         environment:
           DJANGO_SETTINGS_MODULE: settings
           DJANGO_CONFIGURATION: Test
@@ -191,6 +221,9 @@ jobs:
           DB_PORT: 3306
       # services
       - image: circleci/mysql:5.6-ram
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
         environment:
           MYSQL_ROOT_PASSWORD:
           MYSQL_DATABASE: test_richie
@@ -198,14 +231,23 @@ jobs:
           MYSQL_PASSWORD: pass
         command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
       - image: fundocker/openshift-elasticsearch:6.6.2
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
         environment:
           discovery.type: single-node
       - image: docker.io/bitnami/redis:6.0-debian-10
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
         name: redis-primary
         environment:
           ALLOW_EMPTY_PASSWORD: yes
           REDIS_REPLICATION_MODE: master
       - image: docker.io/bitnami/redis-sentinel:6.0-debian-10
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
         name: redis-sentinel
         environment:
           REDIS_MASTER_HOST: redis-primary
@@ -251,6 +293,9 @@ jobs:
   test-back-postgresql:
     docker:
       - image: circleci/python:3.7-stretch
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
         environment:
           DJANGO_SETTINGS_MODULE: settings
           DJANGO_CONFIGURATION: Test
@@ -264,19 +309,31 @@ jobs:
           DB_PORT: 5432
       # services
       - image: circleci/postgres:9.6-ram
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
         environment:
           POSTGRES_DB: test_richie
           POSTGRES_USER: fun
           POSTGRES_PASSWORD: pass
       - image: fundocker/openshift-elasticsearch:6.6.2
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
         environment:
           discovery.type: single-node
       - image: docker.io/bitnami/redis:6.0-debian-10
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
         name: redis-primary
         environment:
           ALLOW_EMPTY_PASSWORD: yes
           REDIS_REPLICATION_MODE: master
       - image: docker.io/bitnami/redis-sentinel:6.0-debian-10
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
         name: redis-sentinel
         environment:
           REDIS_MASTER_HOST: redis-primary
@@ -317,6 +374,9 @@ jobs:
   package-back:
     docker:
       - image: circleci/python:3.7-stretch
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
     working_directory: ~/fun
     steps:
       - checkout
@@ -343,6 +403,9 @@ jobs:
   pypi:
     docker:
       - image: circleci/python:3.7-stretch
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
     working_directory: ~/fun
     steps:
       - checkout
@@ -363,6 +426,9 @@ jobs:
   build-front:
     docker:
       - image: circleci/node:10
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
     working_directory: ~/fun/src/frontend
     steps:
       - checkout:
@@ -397,6 +463,9 @@ jobs:
   build-front-production:
     docker:
       - image: circleci/node:10
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
     working_directory: ~/fun/src/frontend
     steps:
       - checkout:
@@ -427,6 +496,9 @@ jobs:
   lint-front:
     docker:
       - image: circleci/node:10
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
     working_directory: ~/fun/src/frontend
     steps:
       - checkout:
@@ -444,6 +516,9 @@ jobs:
   test-front:
     docker:
       - image: circleci/node:10
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
     working_directory: ~/fun/src/frontend
     steps:
       - checkout:
@@ -460,6 +535,9 @@ jobs:
   test-front-package:
     docker:
       - image: circleci/node:10
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
     working_directory: ~/wrk
     steps:
       - checkout:
@@ -481,6 +559,9 @@ jobs:
   npm:
     docker:
       - image: circleci/node:10
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
     working_directory: ~/fun
     steps:
       - checkout:
@@ -498,6 +579,9 @@ jobs:
   check-documentation-version:
     docker:
       - image: busybox:1.31.0
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
     working_directory: ~/fun
     steps:
       - checkout
@@ -512,6 +596,9 @@ jobs:
   lint-website:
     docker:
       - image: circleci/node:10
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
     working_directory: ~/fun/website
     steps:
       - checkout:
@@ -527,6 +614,9 @@ jobs:
   deploy-website:
     docker:
       - image: circleci/node:10
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
     working_directory: ~/fun
     steps:
       - checkout
