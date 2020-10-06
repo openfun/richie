@@ -74,7 +74,7 @@ CMS with the demo site.
 
 You should be able to view the site at [localhost:8070](http://localhost:8070)
 
-### Connecting Richie to OpenEdx
+### Basic - Connecting Richie to OpenEdx
 
 This project is pre-configured to connect with an OpenEdx instance started with
 [OpenEdx Docker](https://github.com/openfun/openedx-docker], which provides a ready to use
@@ -82,15 +82,12 @@ docker-compose stack of OpenEdx in several flavors. Head over to
 [OpenEdx Docker README](https://github.com/openfun/openedx-docker#readme) for instructions on how
 to bootstrap an instance.
 
-To handle HTTP redirections between the 2 Docker Compose stacks during the authentication process,
-you should edit your local hosts definitions (_e.g._ `/etc/hosts` on a \*NIX system) to add `edx`
-as a `localhost` alias:
+Just start apps with `make run`.
 
-```
-# /etc/hosts
-127.0.0.1 localhost edx
-```
+Richie should respond on `http://localhost:8070` and OpenEdx on `http://localhost:8073`.
 
-Once this has been done, the LMS app should respond on http://edx:8073 and `richie` should be able
-to connect via the [SSO](https://richie.education/docs/lms-connection#sso) and the
-[API bridge](https://richie.education/docs/lms-connection#api-bridge).
+### Advanced - Connecting Richie to OpenEdx
+
+If you want users to enroll on courses in OpenEdx directly from Richie via API calls, you should
+read [the advanced guide](lms-connection.md#connecting-richie-and-openedx-over-tls) to connect
+Richie to OpenEdx over TLS.

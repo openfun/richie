@@ -18,11 +18,16 @@ $ make migrate
 
 ## 1.17.x to 2.0.x
 
+- Richie version 2 introduces a new `AUTHENTICATION_BACKEND` setting used to get session information
+  from OpenEdX through CORS requests. So login, register and logout routes are constructed from
+  the BASE_URL of this setting. Furthermore it takes an extra property `PROFILE_URLS`.
+  This property is consumed by UserLogin react component to display links that should redirect user
+  on backend authentication account views (e.g: Profile, Dashboard, Settings).
 - Richie version 2 is a major overhaul of all the project's templates and css files to bring
   a complete new design. If you were overriding the old templates and css base, you have 2
   options:
-  * copy the old templates and css files to your project and start maintaining them on your own,
-  * refactor your project to accomodate the new design.
+  - copy the old templates and css files to your project and start maintaining them on your own,
+  - refactor your project to accomodate the new design.
 - Section plugin template "section_cadenced" has been removed since it was covering special
   case from old layout integration. A migration has been added to automatically update Section
   plugins which used it to use the default one instead (the first from `SECTION_TEMPLATES`
@@ -39,12 +44,12 @@ $ make migrate
 
 - The template tags related to placeholders were refactored to fix ghost placeholders. This
   change impacts the use of template tags in all templates:
-  * The `fragment_course_content.html` template is removed and its content is inserted directly
+  - The `fragment_course_content.html` template is removed and its content is inserted directly
     in the `course_detail.html` and `course_run_detail.html` templates, using the `placeholder`
     template tag for the former and the `show_placeholder` template tag for the latter;
-  * The `get_page_placeholder` template tag is removed and replaced either by `placeholder` when
+  - The `get_page_placeholder` template tag is removed and replaced either by `placeholder` when
     it is used on its own page and `show_placeholder` when it is used on another page;
-  * The `get_placeholder_plugins` template tag is replaced by a new `get_page_plugins` template
+  - The `get_placeholder_plugins` template tag is replaced by a new `get_page_plugins` template
     tag when it is used on another page than the placeholder's own page.
 - This release changes names for ElasticSearch indices. Unless they explicitly use
   `RICHIE_ES_INDICES_PREFIX` setting to replicate the previous behavior (by setting it to
