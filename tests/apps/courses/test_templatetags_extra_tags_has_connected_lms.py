@@ -18,7 +18,6 @@ class HasConnectedLMSFilterTestCase(CMSTestCase):
         LMS_BACKENDS=[
             {
                 "BACKEND": "richie.apps.courses.lms.edx.TokenEdXLMSBackend",
-                "COURSE_REGEX": r"^.*/courses/(?P<course_id>.*)/course/?$",
                 "BASE_URL": "http://example.edx:8073",
                 "API_TOKEN": "fakesecret",
             }

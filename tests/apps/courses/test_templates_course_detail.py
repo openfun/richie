@@ -470,7 +470,9 @@ class RunsCourseCMSTestCase(CMSTestCase):
         LMS_BACKENDS=[
             {
                 "BACKEND": "richie.apps.courses.lms.edx.TokenEdXLMSBackend",
-                "COURSE_REGEX": r"^.*/courses/(?P<course_id>.*)/course/?$",
+                "SELECTOR_REGEX": r".*",
+                "JS_COURSE_REGEX": r"^.*/courses/(?<course_id>.*)/course/?$",
+                "JS_SELECTOR_REGEX": r".*",
                 "BASE_URL": "http://edx:8073",
                 "API_TOKEN": "fakesecret",
             }
@@ -492,10 +494,8 @@ class RunsCourseCMSTestCase(CMSTestCase):
             re.search(
                 (
                     r'.*class="richie-react richie-react--course-run-enrollment".*'
-                    r"data-props=\\\'{{\"courseRunId\": {}, \"loginUrl\": "
-                    r"\"/oauth/login/edx-oauth2/\?next={}\"}}\\\'".format(
+                    r"data-props=\\\'{{\"courseRunId\": {}}}\\\'".format(
                         course_run.public_extension_id,
-                        course.extended_object.get_absolute_url(),
                     )
                 ),
                 str(response.content),
@@ -536,7 +536,9 @@ class RunsCourseCMSTestCase(CMSTestCase):
         LMS_BACKENDS=[
             {
                 "BACKEND": "richie.apps.courses.lms.edx.TokenEdXLMSBackend",
-                "COURSE_REGEX": r"^.*/courses/(?P<course_id>.*)/course/?$",
+                "SELECTOR_REGEX": r".*",
+                "JS_COURSE_REGEX": r"^.*/courses/(?<course_id>.*)/course/?$",
+                "JS_SELECTOR_REGEX": r".*",
                 "BASE_URL": "http://edx:8073",
                 "API_TOKEN": "fakesecret",
             }
@@ -557,10 +559,8 @@ class RunsCourseCMSTestCase(CMSTestCase):
             re.search(
                 (
                     r'.*class="richie-react richie-react--course-run-enrollment".*'
-                    r"data-props=\\\'{{\"courseRunId\": {}, \"loginUrl\": "
-                    r"\"/oauth/login/edx-oauth2/\?next={}\"}}\\\'".format(
+                    r"data-props=\\\'{{\"courseRunId\": {}}}\\\'".format(
                         course_run.public_extension_id,
-                        course.extended_object.get_absolute_url(),
                     )
                 ),
                 str(response.content),

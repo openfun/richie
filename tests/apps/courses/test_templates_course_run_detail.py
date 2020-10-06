@@ -323,7 +323,9 @@ class CourseRunCMSTestCase(CMSTestCase):
         LMS_BACKENDS=[
             {
                 "BACKEND": "richie.apps.courses.lms.edx.TokenEdXLMSBackend",
-                "COURSE_REGEX": r"^.*/courses/(?P<course_id>.*)/course/?$",
+                "SELECTOR_REGEX": r".*",
+                "JS_COURSE_REGEX": r"^.*/courses/(?<course_id>.*)/course/?$",
+                "JS_SELECTOR_REGEX": r".*",
                 "BASE_URL": "http://edx:8073",
                 "API_TOKEN": "fakesecret",
             }
@@ -351,7 +353,9 @@ class CourseRunCMSTestCase(CMSTestCase):
         LMS_BACKENDS=[
             {
                 "BACKEND": "richie.apps.courses.lms.edx.TokenEdXLMSBackend",
-                "COURSE_REGEX": r"^.*/courses/(?P<course_id>.*)/course/?$",
+                "SELECTOR_REGEX": r".*",
+                "JS_COURSE_REGEX": r"^.*/courses/(?<course_id>.*)/course/?$",
+                "JS_SELECTOR_REGEX": r".*",
                 "BASE_URL": "http://edx:8073",
                 "API_TOKEN": "fakesecret",
             }

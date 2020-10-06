@@ -15,7 +15,7 @@
     {% if run|has_connected_lms %}
         <div
             class="richie-react richie-react--course-run-enrollment"
-            data-props='{"courseRunId": {{ run.id }}, "loginUrl": "{% url 'social:begin' 'edx-oauth2' %}?next={{ request.path }}"}'
+            data-props='{"courseRunId": {{ run.id }}}'
         ></div>
     {% else %}
         <a href="{{ run.extended_object.get_absolute_url }}" class="course-run-enrollment__cta">
