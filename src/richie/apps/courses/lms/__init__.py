@@ -2,7 +2,6 @@
 import re
 
 from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
 from django.utils.module_loading import import_string
 
 
@@ -30,29 +29,3 @@ class LMSHandler:
                 return import_string(lms_configuration["BACKEND"])(lms_configuration)
 
         return None
-
-    @classmethod
-    def get_enrollment(cls, user, url):
-        """
-        Get enrollment statuc for a user on a course run given its url. This method is a wrapper
-        that routes the request to the LMS linked to this LMS.
-        """
-        lms = cls.select_lms(url)
-
-        try:
-            return lms.get_enrollment(user, url)
-        except AttributeError as error:
-            raise ImproperlyConfigured() from error
-
-    @classmethod
-    def set_enrollment(cls, user, url):
-        """
-        Set enrollment for a user with a course run given its url. This method is a wrapper
-        that routes the request to the LMS linked to this LMS.
-        """
-        lms = cls.select_lms(url)
-
-        try:
-            return lms.set_enrollment(user, url)
-        except AttributeError as error:
-            raise ImproperlyConfigured() from error
