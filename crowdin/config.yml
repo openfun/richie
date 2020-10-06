@@ -1,15 +1,15 @@
 #
 # Your Crowdin's credentials
 #
-api_key_env: CROWDIN_API_KEY
-project_identifier_env: CROWDIN_PROJECT_IDENTIFIER
+api_token_env: CROWDIN_API_TOKEN
+project_id_env: CROWDIN_PROJECT_ID
 base_path_env: CROWDIN_BASE_PATH
 
 #
 # Choose file structure in crowdin
 # e.g. true or false
 #
-preserve_hierarchy: false
+preserve_hierarchy: true
 
 #
 # Files configuration

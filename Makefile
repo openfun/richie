@@ -48,7 +48,7 @@ COMPOSE_EXEC         = $(COMPOSE) exec
 COMPOSE_EXEC_APP     = $(COMPOSE_EXEC) app
 COMPOSE_EXEC_NODE    = $(COMPOSE_EXEC) node
 COMPOSE_RUN_APP      = $(COMPOSE_RUN) app
-COMPOSE_RUN_CROWDIN  = $(COMPOSE_RUN) crowdin -c crowdin/config.yml
+COMPOSE_RUN_CROWDIN  = $(COMPOSE_RUN) crowdin crowdin
 COMPOSE_TEST_RUN     = $(COMPOSE) run --rm -e DJANGO_CONFIGURATION=Test
 COMPOSE_TEST_RUN_APP = $(COMPOSE_TEST_RUN) app
 
@@ -240,11 +240,11 @@ test-back: ## run back-end tests
 
 # -- Internationalization
 crowdin-download: ## download translated message from Crowdin
-	@$(COMPOSE_RUN_CROWDIN) download translations
+	@$(COMPOSE_RUN_CROWDIN) download -c crowdin/config.yml
 .PHONY: crowdin-download
 
 crowdin-upload: ## upload source translations to Crowdin
-	@$(COMPOSE_RUN_CROWDIN) upload sources
+	@$(COMPOSE_RUN_CROWDIN) upload sources -c crowdin/config.yml
 .PHONY: crowdin-upload
 
 i18n-compile: ## compile translated messages to be used by all applications

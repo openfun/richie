@@ -49,7 +49,7 @@ services:
       - .:/app
 
   crowdin:
-    image: fundocker/crowdin:2.0.27
+    image: crowdin/cli:3.3.0
     volumes:
       - ".:/app"
     env_file:
