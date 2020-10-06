@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [2.0.0-beta.15] - 2020-10-06
+
 ### Added
 
 - Add main content placeholder to programs list view
@@ -1012,7 +1014,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.0.0-beta.14...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.0.0-beta.15...master
+[2.0.0-beta.15]: https://github.com/openfun/richie/compare/v2.0.0-beta.14...v2.0.0-beta.15
 [2.0.0-beta.14]: https://github.com/openfun/richie/compare/v2.0.0-beta.13...v2.0.0-beta.14
 [2.0.0-beta.13]: https://github.com/openfun/richie/compare/v2.0.0-beta.12...v2.0.0-beta.13
 [2.0.0-beta.12]: https://github.com/openfun/richie/compare/v2.0.0-beta.11...v2.0.0-beta.12
