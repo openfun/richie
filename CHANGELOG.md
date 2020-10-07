@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Replace course-detail__run-cta in fragment_course_run template by
+  course-run-enrollment__cta
+
 ## [2.0.0-beta.15] - 2020-10-06
 
 ### Added
