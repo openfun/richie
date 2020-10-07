@@ -453,7 +453,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
             response,
             (
                 '<a href="/en/my-course/my-course-run/" '
-                'class="course-detail__run-cta">Enroll now</a>'
+                'class="course-run-enrollment__cta">Enroll now</a>'
             ),
             html=True,
         )
@@ -519,7 +519,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
             response,
             (
                 '<a href="/en/my-course/my-course-run/" '
-                'class="course-detail__run-cta">Enroll now</a>'
+                'class="course-run-enrollment__cta">Enroll now</a>'
             ),
             html=True,
         )

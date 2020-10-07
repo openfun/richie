@@ -18,7 +18,7 @@
             data-props='{"courseRunId": {{ run.id }}, "loginUrl": "{% url 'social:begin' 'edx-oauth2' %}?next={{ request.path }}"}'
         ></div>
     {% else %}
-        <a href="{{ run.extended_object.get_absolute_url }}" class="course-detail__run-cta">
+        <a href="{{ run.extended_object.get_absolute_url }}" class="course-run-enrollment__cta">
             {{ run.state.call_to_action|capfirst }}
         </a>
     {% endif %}
