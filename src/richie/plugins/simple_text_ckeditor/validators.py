@@ -1,4 +1,7 @@
 """Custom validators for the simple text editor plugin."""
+from html import unescape
+from unicodedata import normalize
+
 from django.core.validators import BaseValidator
 from django.utils.deconstruct import deconstructible
 from django.utils.html import strip_spaces_between_tags, strip_tags
@@ -24,5 +27,13 @@ class HTMLMaxLengthValidator(BaseValidator):
         return a > b
 
     def clean(self, x):
-        """Strip all HTML tags and useless spaces before counting the number of characters."""
-        return len(strip_tags(strip_spaces_between_tags(x)).replace("&nbsp;", ""))
+        """
+        Before counting the number of characters in the text submitted by CKEditor:
+        - normalize it,
+        - unescape it,
+        - strip all HTML tags,
+        - strip useless spaces.
+        """
+        x = normalize("NFKC", unescape(x))
+        x = strip_tags(strip_spaces_between_tags(x))
+        return len(x)

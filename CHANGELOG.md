@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Improve sanitizing of input text on CKEditor plugin
 - Replace course-detail__run-cta in fragment_course_run template by
   course-run-enrollment__cta
 
