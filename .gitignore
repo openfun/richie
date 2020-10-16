@@ -90,3 +90,7 @@ website/translated_docs
 website/build/
 website/node_modules
 website/i18n/*
+
+# TLS Conf files
+docker/files/etc/nginx/ssl/*
+!docker/files/etc/nginx/ssl/ssl.conf.tpl

@@ -4,7 +4,7 @@ services:
   postgresql:
     image: postgres:9.6
     env_file:
-        - env.d/development/postgresql
+      - env.d/development/postgresql
 
   mysql:
     image: mysql:5.6
@@ -23,13 +23,11 @@ services:
         DOCKER_USER: ${DOCKER_USER:-1000}
     image: richie:development
     env_file:
-        - env.d/development/common
-        - env.d/development/${DB_HOST:-postgresql}
+      - env.d/development/common
+      - env.d/development/${DEV_ENV_FILE:-dev}
+      - env.d/development/${DB_HOST:-postgresql}
     networks:
       - default
-      - lms_outside
-    ports:
-        - "8070:8000"
     volumes:
       - .:/app
       - ./data/static:/data/static
@@ -40,6 +38,18 @@ services:
       - "elasticsearch"
     stdin_open: true
     tty: true
+
+  nginx:
+    image: nginx
+    ports:
+      - "8070:8070"
+    networks:
+      - default
+      - lms_outside
+    volumes:
+      - ./docker/files/etc/nginx/${NGINX_CONF:-conf.d}:/etc/nginx/conf.d:ro
+    depends_on:
+      - app
 
   node:
     image: circleci/node:14
