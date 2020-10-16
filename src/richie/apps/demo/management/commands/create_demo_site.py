@@ -70,6 +70,10 @@ def create_demo_site():
     site.name = "Richie demonstration"
     site.save()
 
+    lms_endpoint = getattr(
+        settings, "LMS_BACKENDS", [{"BASE_URL": defaults.DEFAULT_LMS_ENDPOINT}]
+    )[0]["BASE_URL"]
+
     # Create pages as described in PAGES_INFOS
     pages_created = recursive_page_creation(site, defaults.PAGES_INFO)
 
@@ -375,7 +379,7 @@ def create_demo_site():
                 page_in_navigation=False,
                 page_languages=["en", "fr"],
                 page_parent=course.extended_object,
-                resource_link="http://edx:8073/courses/course-v1:edX+DemoX+Demo_Course/info",
+                resource_link=f"{lms_endpoint}/courses/course-v1:edX+DemoX+Demo_Course/info",
                 should_publish=True,
             )
 

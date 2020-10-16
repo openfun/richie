@@ -4,6 +4,7 @@ from django.conf import settings
 from .utils import pick_image
 
 DEFAULT_DEMO_SITE_DOMAIN = "localhost:8070"
+DEFAULT_LMS_ENDPOINT = "http://localhost:8073"
 
 NB_OBJECTS = {
     "courses": 75,

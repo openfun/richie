@@ -43,11 +43,14 @@ DOCKER_UID           = $(shell id -u)
 DOCKER_GID           = $(shell id -g)
 DOCKER_USER          = $(DOCKER_UID):$(DOCKER_GID)
 COMPOSE              = DOCKER_USER=$(DOCKER_USER) DB_HOST=$(DB_HOST) DB_PORT=$(DB_PORT) docker-compose
+COMPOSE_SSL          = NGINX_CONF=ssl DEV_ENV_FILE=dev-ssl $(COMPOSE)
 COMPOSE_RUN          = $(COMPOSE) run --rm
+COMPOSE_RUN_SSL      = $(COMPOSE_SSL) run --rm
 COMPOSE_EXEC         = $(COMPOSE) exec
 COMPOSE_EXEC_APP     = $(COMPOSE_EXEC) app
 COMPOSE_EXEC_NODE    = $(COMPOSE_EXEC) node
 COMPOSE_RUN_APP      = $(COMPOSE_RUN) app
+COMPOSE_RUN_SSL_APP  = $(COMPOSE_RUN_SSL) app
 COMPOSE_RUN_CROWDIN  = $(COMPOSE_RUN) crowdin crowdin
 COMPOSE_TEST_RUN     = $(COMPOSE) run --rm -e DJANGO_CONFIGURATION=Test
 COMPOSE_TEST_RUN_APP = $(COMPOSE_TEST_RUN) app
@@ -63,8 +66,10 @@ YARN                 = $(COMPOSE_RUN_NODE) yarn
 
 # -- Django
 MANAGE               = $(COMPOSE_RUN_APP) python sandbox/manage.py
+MANAGE_SSL           = $(COMPOSE_RUN_SSL_APP) python sandbox/manage.py
 WAIT_DB              = $(COMPOSE_RUN) dockerize -wait tcp://$(DB_HOST):$(DB_PORT) -timeout 60s
 WAIT_ES              = $(COMPOSE_RUN) dockerize -wait tcp://elasticsearch:9200 -timeout 60s
+WAIT_APP             = $(COMPOSE_RUN) dockerize -wait tcp://app:8000 -timeout 60s
 
 # ==============================================================================
 # RULES
@@ -99,11 +104,20 @@ logs: ## display app logs (follow mode)
 .PHONY: logs
 
 run: ## start the development server
-	@$(COMPOSE) up -d app
+	@$(COMPOSE) up -d nginx
 	@echo "Wait for services to be up..."
 	@$(WAIT_DB)
 	@$(WAIT_ES)
+	@$(WAIT_APP)
 .PHONY: run
+
+run-ssl: ## start the development server over TLS
+	@$(COMPOSE_SSL) up -d nginx
+	@echo "Wait for services to be up..."
+	@$(WAIT_DB)
+	@$(WAIT_ES)
+	@$(WAIT_APP)
+.PHONY: run-ssl
 
 status: ## an alias for "docker-compose ps"
 	@$(COMPOSE) ps
@@ -165,9 +179,14 @@ compilemessages: ## compile the gettext files
 	@$(COMPOSE_RUN) -w /app/src/richie app python /app/sandbox/manage.py compilemessages
 .PHONY: compilemessages
 
-demo-site: ## create a demo site
+demo-site: ## create a demo site if app container is running
+	@echo "Check app container is running..."
+	@if [ $(shell docker container inspect -f '{{.State.Running}}' "$(shell $(COMPOSE) ps -q app)") = "false" ] ; then\
+		echo "❌ App must be up and running to create demo site.";\
+		exit 1;\
+	fi
 	@$(MANAGE) flush
-	@$(MANAGE) create_demo_site
+	@$(COMPOSE_EXEC_APP) python sandbox/manage.py create_demo_site
 	@${MAKE} search-index
 .PHONY: demo-site
 
