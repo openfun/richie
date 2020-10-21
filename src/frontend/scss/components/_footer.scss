@@ -45,13 +45,14 @@
   &__insert {
     @include sv-flex(1, 0, 100%);
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    justify-content: start;
     flex-wrap: wrap;
     margin-top: 1rem;
     order: 3;
 
     @include media-breakpoint-up($r-footer-breakpoint) {
-      @include sv-flex(1, 0, 35%);
+      @include sv-flex(1, 0, auto);
       margin-top: 0;
       order: 2;
     }
@@ -61,8 +62,9 @@
       margin-top: 1rem;
     }
 
-    .languages-menu {
-      @include sv-flex(1, 0, 100%);
+    .richie-react--language-selector {
+      align-items: flex-start;
+      @include sv-flex(1, 0, auto);
       padding: 0;
       margin-bottom: 0;
       font-family: $r-font-family-montserrat;
@@ -86,7 +88,7 @@
   }
 
   &__title {
-    @include sv-flex(1, 0, 100%);
+    @include sv-flex(0, 0, auto);
     @include font-size($h4-font-size);
     margin-bottom: 0;
     font-family: $r-font-family-montserrat;
@@ -94,7 +96,7 @@
   }
 
   &__badges {
-    @include sv-flex(1, 0, 100%);
+    @include sv-flex(0, 0, auto);
     display: flex;
   }
 
@@ -110,16 +112,32 @@
     height: 2.75rem;
   }
 
-  &__menu {
+  &__items {
+    align-content: flex-start;
     @include sv-flex(1, 0, 100%);
     display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+
+    & > * {
+      margin-bottom: 1rem;
+    }
+
+    @include media-breakpoint-up($r-footer-breakpoint) {
+      flex-direction: row;
+    }
+  }
+
+  &__menu {
+    @include sv-flex(1, 0, 100%);
     flex-wrap: wrap;
     flex-direction: row;
     align-content: flex-start;
     order: 2;
+    margin-right: -3vw;
 
     @include media-breakpoint-up($r-footer-breakpoint) {
-      @include sv-flex(1, 0, 65%);
+      @include sv-flex(0, 0, auto);
       order: 3;
     }
 
@@ -133,7 +151,8 @@
     //
     .nested-item--list {
       $nesteditem-base-selector: '.nested-item';
-      @include sv-flex(1, 0, 100%);
+      @include sv-flex(0, 0, auto);
+      padding-right: 3vw;
 
       a {
         display: block;
@@ -151,21 +170,22 @@
       }
 
       #{$nesteditem-base-selector}__items {
-        @include sv-flex(1, 0, 100%);
+        @include sv-flex(0, 0, auto);
         display: flex;
         padding: 0;
         margin-bottom: 0;
-        flex-direction: row;
+        flex-direction: column;
         flex-wrap: wrap;
         list-style-type: none;
 
         li {
           @include sv-flex(1, 0, calc(100% - 0.2rem));
           margin: 0.1rem;
-          padding: 0.25rem 0.25rem 0.25rem 0;
+          padding: 0.25rem 0.25rem 0.25rem 0rem;
 
           @include media-breakpoint-up($r-footer-breakpoint) {
-            @include sv-flex(1, 0, auto);
+            @include sv-flex(0, 0, auto);
+            min-width: 15%;
           }
         }
       }
@@ -184,7 +204,6 @@
 
   .richie-react--language-selector {
     display: flex;
-    align-items: center;
 
     .selector {
       color: r-theme-val(body-footer, base-color);

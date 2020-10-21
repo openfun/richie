@@ -374,7 +374,15 @@ FOOTER_CONTENT = {
         {
             "items": [
                 {"name": "About", "internal_link": "annex__about"},
+            ]
+        },
+        {
+            "items": [
                 {"name": "Sitemap", "internal_link": "annex__sitemap"},
+            ]
+        },
+        {
+            "items": [
                 {"name": "Style guide", "external_link": "/styleguide/"},
             ]
         },
@@ -386,6 +394,14 @@ FOOTER_CONTENT = {
                     "name": "Github",
                     "external_link": "https://github.com/openfun/richie",
                 },
+                {
+                    "name": "Site factory",
+                    "external_link": "https://github.com/openfun/richie-site-factory",
+                },
+                {
+                    "name": "Example site",
+                    "external_link": "https://www.fun-campus.fr",
+                },
             ],
         },
     ],
@@ -393,7 +409,15 @@ FOOTER_CONTENT = {
         {
             "items": [
                 {"name": "A propos", "internal_link": "annex__about"},
+            ]
+        },
+        {
+            "items": [
                 {"name": "Plan du site", "internal_link": "annex__sitemap"},
+            ]
+        },
+        {
+            "items": [
                 {"name": "Style guide", "external_link": "/styleguide/"},
             ]
         },
@@ -404,6 +428,14 @@ FOOTER_CONTENT = {
                 {
                     "name": "Github",
                     "external_link": "https://github.com/openfun/richie",
+                },
+                {
+                    "name": "Usine à sites",
+                    "external_link": "https://github.com/openfun/richie-site-factory",
+                },
+                {
+                    "name": "Site exemple",
+                    "external_link": "https://www.fun-campus.fr",
                 },
             ],
         },

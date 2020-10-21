@@ -75,17 +75,12 @@ def create_demo_site():
     footer_static_ph = StaticPlaceholder.objects.get_or_create(code="footer")[0]
     for footer_placeholder in [footer_static_ph.draft, footer_static_ph.public]:
         for language, content in defaults.FOOTER_CONTENT.items():
-            # Create root nest
-            nest_root_plugin = add_plugin(
-                footer_placeholder, plugin_type="NestedItemPlugin", language=language
-            )
             for footer_info in content:
                 # Create the first level items for main columns
                 nest_column_plugin = add_plugin(
                     footer_placeholder,
                     plugin_type="NestedItemPlugin",
                     language=language,
-                    target=nest_root_plugin,
                     content=footer_info.get("title", ""),
                 )
 
