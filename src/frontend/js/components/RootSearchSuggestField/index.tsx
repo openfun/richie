@@ -24,7 +24,7 @@ const messages = defineMessages({
   searchFieldPlaceholder: {
     defaultMessage: 'Search for courses',
     description: 'Placeholder text displayed in the search field when it is empty.',
-    id: 'components.SearchSuggestField.searchFieldPlaceholder',
+    id: 'components.RootSearchSuggestField.searchFieldPlaceholder',
   },
 });
 

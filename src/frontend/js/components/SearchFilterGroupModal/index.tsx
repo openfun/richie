@@ -39,8 +39,7 @@ const messages = defineMessages({
   queryTooShort: {
     defaultMessage: 'Type at least 3 characters to start searching.',
     description:
-      'Users need to enter at least 3 characters to search for more filter values; ' +
-      'this message informs them when they start typing.',
+      'Users need to enter at least 3 characters to search for more filter values; this message informs them when they start typing.',
     id: 'components.SearchFilterGroupModal.queryTooShort',
   },
 });

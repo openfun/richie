@@ -1,0 +1,166 @@
+{
+  "components.CourseGlimpse.cover": {
+    "description": "Placeholder text when the course we are glimpsing at is missing a cover image",
+    "message": "Couverture"
+  },
+  "components.CourseGlimpseList.courseCount": {
+    "description": "Result count & pagination information for course search. Appears right above search results",
+    "message": "Résultats {start, number} à {end, number} sur {courseCount, number} {courseCount, plural, one {cours} other {cours}} correspondant à votre recherche"
+  },
+  "components.CourseRunEnrollment.enroll": {
+    "description": "CTA for users who can enroll in the course run or could enroll if they logged in.",
+    "message": "S’inscrire maintenant"
+  },
+  "components.CourseRunEnrollment.enrolled": {
+    "description": "Help text for users who see the \"Go to course\" CTA on course run enrollment",
+    "message": "Vous êtes inscrit à cette session"
+  },
+  "components.CourseRunEnrollment.enrollmentClosed": {
+    "description": "Help text replacing the CTA on a course run when enrollment is closed.",
+    "message": "L'inscription à ce cours est fermée pour le moment"
+  },
+  "components.CourseRunEnrollment.enrollmentFailed": {
+    "description": "Help text below the \"Enroll now\" CTA when an enrollment attempt has already failed.",
+    "message": "Votre demande d'inscription a échoué"
+  },
+  "components.CourseRunEnrollment.goToCourse": {
+    "description": "CTA for users who are already enrolled in a course run.",
+    "message": "Accéder au cours"
+  },
+  "components.CourseRunEnrollment.loadingInitial": {
+    "description": "Accessible text for the initial loading spinner on the course run enrollment button.",
+    "message": "Chargement des critères d'inscription..."
+  },
+  "components.CourseRunEnrollment.loginToEnroll": {
+    "description": "Helper text in the enroll button for non logged in users",
+    "message": "Connectez-vous pour vous inscrire"
+  },
+  "components.DesktopUserMenu.menuPurpose": {
+    "description": "Accessible label for user menu button",
+    "message": "Accéder aux préférences de votre profil"
+  },
+  "components.LanguageSelector.currentlySelected": {
+    "description": "Accessible hint to mark the currently selected language in the language selector",
+    "message": "(actuellement sélectionné)"
+  },
+  "components.LanguageSelector.languages": {
+    "description": "Default text for the language selector button when the current language cannot be identified",
+    "message": "Langues"
+  },
+  "components.LanguageSelector.selectLanguage": {
+    "description": "Accessible label for the language selector button",
+    "message": "Sélectionnez une langue:"
+  },
+  "components.LanguageSelector.switchToLanguage": {
+    "description": "Accessible link title for the language switching links in language selector",
+    "message": "Voir en {language}"
+  },
+  "components.PaginateCourseSearch.currentlyReadingLastPageN": {
+    "description": "Accessibility helper in pagination, shown next to the current page number when it is the last page.",
+    "message": "Actuellement sur la dernière page: {page}"
+  },
+  "components.PaginateCourseSearch.currentlyReadingPageN": {
+    "description": "Accessibility helper in pagination, shown next to the current page number when it is not the last page.",
+    "message": "Actuellement sur la page {page}"
+  },
+  "components.PaginateCourseSearch.lastPageN": {
+    "description": "Accessibility helper for pagination, added on the last page link.",
+    "message": "Dernière page: {page}"
+  },
+  "components.PaginateCourseSearch.nextPageN": {
+    "description": "Accessibility helper for pagination, added on the next page link.",
+    "message": "Page suivante: {page}"
+  },
+  "components.PaginateCourseSearch.pageN": {
+    "description": "Accessibility helper for pagination, added on all page links for screen readers,\n      only shown next to \"page 1\" visually.",
+    "message": "Page {page}"
+  },
+  "components.PaginateCourseSearch.pagination": {
+    "description": "Label for the pagination navigation in course search results.",
+    "message": "Pagination"
+  },
+  "components.PaginateCourseSearch.previousPageN": {
+    "description": "Accessibility helper for pagination, added on the previous page link.",
+    "message": "Page précédente: {page}"
+  },
+  "components.RootSearchSuggestField.searchFieldPlaceholder": {
+    "description": "Placeholder text displayed in the search field when it is empty.",
+    "message": "Recherche de cours"
+  },
+  "components.Search.errorMessage": {
+    "description": "Error message for Search view when the request to load courses fails",
+    "message": "Quelque chose s'est mal passé ! Les cours n'ont pas pu être chargés."
+  },
+  "components.Search.hideFiltersPane": {
+    "description": "Accessibility text for the button/icon that toggles *off* the filters pane on mobile",
+    "message": "Cacher le menu des filtres"
+  },
+  "components.Search.showFiltersPane": {
+    "description": "Accessibility text for the button/icon that toggles *on* the filters pane on mobile",
+    "message": "Montrer le menu des filtres"
+  },
+  "components.Search.spinnerText": {
+    "description": "Accessibility text for the spinner while search results are being loaded",
+    "message": "Chargement des résultats de recherche..."
+  },
+  "components.SearchFilterGroupModal.closeModal": {
+    "description": "Text for the button to close the search filters modal",
+    "message": "Fermer"
+  },
+  "components.SearchFilterGroupModal.error": {
+    "description": "Error message when the search for more filter value fails in the search filters modal.",
+    "message": "La recherche de filtres pour {filterName} a rencontré une erreur."
+  },
+  "components.SearchFilterGroupModal.modalTitle": {
+    "description": "Title for the modal to add more filter values in the search filters modal.",
+    "message": "Ajouter des filtres pour {filterName}"
+  },
+  "components.SearchFilterGroupModal.moreOptionsButton": {
+    "description": "Test for the button to see more filter values than the top N that appear by default.",
+    "message": "Plus de choix"
+  },
+  "components.SearchFilterGroupModal.queryTooShort": {
+    "description": "Users need to enter at least 3 characters to search for more filter values; this message informs them when they start typing.",
+    "message": "Tapez 3 caractères ou plus pour commencer à chercher."
+  },
+  "components.SearchFilterValueParent.ariaHideChildren": {
+    "description": "Accessibility message for the button to hide children of the current filter",
+    "message": "Cacher les filtres supplémentaires pour {filterValueName}"
+  },
+  "components.SearchFilterValueParent.ariaShowChildren": {
+    "description": "Accessibility message for the button to show children of the current filter",
+    "message": "Montrer plus de filtres pour {filterValueName}"
+  },
+  "components.SearchFiltersPane.clearFilters": {
+    "description": "Helper button in search filters pane in search page to remove all active filters",
+    "message": "Retirer {activeFilterCount, number} {activeFilterCount, plural, one {filtre actif} other {filtres actifs}}"
+  },
+  "components.SearchFiltersPane.title": {
+    "description": "Title for the search filters pane in course search.",
+    "message": "Filtrer les cours"
+  },
+  "components.SearchInput.button": {
+    "description": "Accessibility text for the search button inside the Search input.",
+    "message": "Chercher"
+  },
+  "components.SearchSuggestField.searchFieldPlaceholder": {
+    "description": "Placeholder text displayed in the search field when it is empty.",
+    "message": "Recherche des cours, des organisations, des catégories"
+  },
+  "components.UserLogin.logIn": {
+    "description": "Text for the login button.",
+    "message": "Connexion"
+  },
+  "components.UserLogin.logOut": {
+    "description": "Text for the logout button.",
+    "message": "Déconnexion"
+  },
+  "components.UserLogin.signup": {
+    "description": "Text for the signup button.",
+    "message": "Inscription"
+  },
+  "components.UserLogin.spinnerText": {
+    "description": "Accessibility text for the spinner in the login area.",
+    "message": "Vérification de l'état de connexion..."
+  }
+}

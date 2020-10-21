@@ -26,6 +26,7 @@ COPY ./src/frontend /builder/src/frontend
 WORKDIR /builder/src/frontend
 
 RUN yarn install --frozen-lockfile && \
+    yarn compile-translations && \
     yarn build-production && \
     yarn sass-production
 

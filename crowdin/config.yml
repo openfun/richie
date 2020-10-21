@@ -21,8 +21,8 @@ files: [
   translation : "/richie/locale/%locale_with_underscore%/LC_MESSAGES/django.po",
  },
  {
-  source : "/frontend/i18n/frontend.pot",
-  dest: "/frontend.pot",
-  translation : "/frontend/js/translations/%locale%.po",
+  source : "/frontend/i18n/frontend.json",
+  dest: "/frontend.json",
+  translation : "/frontend/i18n/locales/%locale%.json",
  }
 ]

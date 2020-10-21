@@ -1,2 +1,3 @@
 js/translations/*
+i18n/**/*
 public-path.js

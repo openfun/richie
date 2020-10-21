@@ -126,6 +126,7 @@ build-sass: ## build Sass files to CSS
 .PHONY: build-sass
 
 build-ts: ## build TypeScript application
+	@$(YARN) compile-translations
 	@$(YARN) build
 .PHONY: build-ts
 
@@ -258,7 +259,7 @@ i18n-compile-back:
 .PHONY: i18n-compile-back
 
 i18n-compile-front:
-	@$(YARN) generate-translations
+	@$(YARN) compile-translations
 .PHONY: i18n-compile-front
 
 i18n-download-and-compile: ## download all translated messages and compile them to be used by all applications
@@ -284,7 +285,7 @@ i18n-generate-back:
 .PHONY: i18n-generate-back
 
 i18n-generate-front: build-ts
-	@$(YARN) generate-l10n-template
+	@$(YARN) extract-translations
 .PHONY: i18n-generate-front
 
 # -- Misc

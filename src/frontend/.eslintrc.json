@@ -28,7 +28,7 @@
       "jsx": true
     }
   },
-  "plugins": ["@typescript-eslint"],
+  "plugins": ["formatjs", "@typescript-eslint"],
   /* Disable some rules to be iso with tslint which was previously used */
   "rules": {
     "@typescript-eslint/explicit-member-accessibility": ["error", { "accessibility": "no-public" }],
@@ -37,6 +37,9 @@
     "arrow-parens": "error",
     "consistent-return": "off",
     "default-case": "off",
+    "formatjs/no-multiple-whitespaces": "error",
+    "formatjs/enforce-description": "error",
+    "formatjs/enforce-default-message": "error",
     "global-require": "off",
     "import/extensions": "off",
     "import/no-cycle": ["off"],
