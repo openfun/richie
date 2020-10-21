@@ -9,8 +9,7 @@ import { Course } from 'types/Course';
 const messages = defineMessages({
   courseCount: {
     defaultMessage:
-      'Showing {start, number} to {end, number} of {courseCount, number} ' +
-      '{courseCount, plural, one {course} other {courses}} matching your search',
+      'Showing {start, number} to {end, number} of {courseCount, number} {courseCount, plural, one {course} other {courses}} matching your search',
     description:
       'Result count & pagination information for course search. Appears right above search results',
     id: 'components.CourseGlimpseList.courseCount',

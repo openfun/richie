@@ -9,13 +9,18 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ### Fixed
-  - has_connected_lms crashed when course_run is blank
+
+- has_connected_lms crashed when course_run is blank
+- Avoid stretching of footer menu items
 
 ### Added
-  - Allow use of columns in footer menu items
+
+- Allow use of columns in footer menu items
 
 ### Changed
-  - Avoid stretching of footer menu items
+
+- Remove react-intl-po
+- Rework front i18n workflow
 
 ## [2.0.0-beta.16] - 2020-10-23
 
@@ -141,7 +146,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Lowered down global 'h1' and 'h2' font size and added new
   'extra-font-size' variable with previous h1 value.
 - Adjust title size 'large_banner' variants.
-- Fix accordion button 'nested-item\_\_title' alignment to the left.
+- Fix accordion button 'nested-item__title' alignment to the left.
 - Another attempt to definitively fix the glitch with wave decoration
   and Chrome zoom/unzoom.
 - Add a little bit of space between banner and title on organization

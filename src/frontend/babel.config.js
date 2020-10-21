@@ -3,7 +3,9 @@ module.exports = {
     [
       'react-intl',
       {
-        messagesDir: './i18n',
+        ast: true,
+        extractFromFormatMessageCall: true,
+        idInterpolationPattern: '[sha512:contenthash:base64:6]',
       },
     ],
     ['@babel/plugin-syntax-dynamic-import'],

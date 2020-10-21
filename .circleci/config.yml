@@ -193,7 +193,7 @@ jobs:
           name: Lint code with bandit
           command: ~/.local/bin/bandit -qr src/richie/apps src/richie/plugins sandbox
 
-  # Restore front & back POT files containing strings to translate and upload them to our
+  # Restore back POT & front json files containing strings to translate and upload them to our
   # translation management tool
   upload-i18n-strings:
     docker:
@@ -457,12 +457,12 @@ jobs:
           name: Build application styles
           command: yarn sass
       - run:
-          name: Use react-intl-po to generate our frontend.pot file
-          command: yarn generate-l10n-template
+          name: Use formatjs-cli to generate frontend.json file
+          command: yarn extract-translations
       - persist_to_workspace:
           root: ~/fun
           paths:
-            - src/frontend/i18n/frontend.pot
+            - src/frontend/i18n/frontend.json
       - save_cache:
           paths:
             - ./node_modules
