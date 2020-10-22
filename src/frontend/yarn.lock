@@ -926,12 +926,12 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@formatjs/cli@^2.13.2":
-  version "2.13.2"
-  resolved "https://registry.yarnpkg.com/@formatjs/cli/-/cli-2.13.2.tgz#08402f07eb6c6cb626ccd33e304012f30c1fb345"
-  integrity sha512-o0jY7AmaXIHugiV35xhKeNYQ9pzTi0O+stfZqY0+Sqb3MFk6oLz/K5ExvnXHvf3soiCOat4UhzAxHSR9T0QWwQ==
+"@formatjs/cli@2.13.5":
+  version "2.13.5"
+  resolved "https://registry.yarnpkg.com/@formatjs/cli/-/cli-2.13.5.tgz#833892bfa01df1c6f1eab438585a10675a553b09"
+  integrity sha512-t4dWNXjguodNL2xYWCnVqXjm36QNkMUMQPbYvILIjgLxoQSqY5/t9qgF1QwAFt6zhMPzvrw+FRdO9dBYupRcvQ==
   dependencies:
-    "@formatjs/ts-transformer" "^2.11.3"
+    "@formatjs/ts-transformer" "^2.12.0"
     "@types/json-stable-stringify" "^1.0.32"
     "@types/lodash" "^4.14.150"
     "@types/loud-rejection" "^2.0.0"
@@ -940,7 +940,7 @@
     commander "^6.1.0"
     fast-glob "^3.2.4"
     fs-extra "^9.0.0"
-    intl-messageformat-parser "^6.0.10"
+    intl-messageformat-parser "^6.0.11"
     json-stable-stringify "^1.0.1"
     lodash "^4.17.15"
     loud-rejection "^2.2.0"
@@ -992,12 +992,12 @@
     intl-messageformat-parser "^6.0.11"
     tslib "^2.0.1"
 
-"@formatjs/ts-transformer@^2.11.3":
-  version "2.11.3"
-  resolved "https://registry.yarnpkg.com/@formatjs/ts-transformer/-/ts-transformer-2.11.3.tgz#9d253ba4681f1654dddbfb43e453d0692f8c85c9"
-  integrity sha512-nt51rmoeDnORFXGkJGX3tpC1oYY6WDkJTpOCCsYkRxWxmgY1kT5v8wckNB/CvBmz4egFNShr1iRNDa7o+EsKZA==
+"@formatjs/ts-transformer@^2.12.0":
+  version "2.12.0"
+  resolved "https://registry.yarnpkg.com/@formatjs/ts-transformer/-/ts-transformer-2.12.0.tgz#71bb3d1af3e818996211b36231d1b753859f46f9"
+  integrity sha512-bi7XVicXTPHMEK4vapp29wJQnBHt9IrNW5QREiBPR5NF52EGvuVQeLmfU17nnojnHf4+X0PoamW7Sr0WPTtmWA==
   dependencies:
-    intl-messageformat-parser "^6.0.10"
+    intl-messageformat-parser "^6.0.11"
     tslib "^2.0.1"
     typescript "^4.0"
 
@@ -1623,32 +1623,42 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@typescript-eslint/eslint-plugin@^4.1.0":
-  version "4.4.1"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-4.4.1.tgz#b8acea0373bd2a388ac47df44652f00bf8b368f5"
-  integrity sha512-O+8Utz8pb4OmcA+Nfi5THQnQpHSD2sDUNw9AxNHpuYOo326HZTtG8gsfT+EAYuVrFNaLyNb2QnUNkmTRDskuRA==
+"@typescript-eslint/eslint-plugin@4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-4.1.0.tgz#7d309f60815ff35e9627ad85e41928d7b7fd443f"
+  integrity sha512-U+nRJx8XDUqJxYF0FCXbpmD9nWt/xHDDG0zsw1vrVYAmEAuD/r49iowfurjSL2uTA2JsgtpsyG7mjO7PHf2dYw==
   dependencies:
-    "@typescript-eslint/experimental-utils" "4.4.1"
-    "@typescript-eslint/scope-manager" "4.4.1"
+    "@typescript-eslint/experimental-utils" "4.1.0"
+    "@typescript-eslint/scope-manager" "4.1.0"
     debug "^4.1.1"
     functional-red-black-tree "^1.0.1"
     regexpp "^3.0.0"
     semver "^7.3.2"
     tsutils "^3.17.1"
 
-"@typescript-eslint/experimental-utils@4.4.1":
-  version "4.4.1"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/experimental-utils/-/experimental-utils-4.4.1.tgz#40613b9757fa0170de3e0043254dbb077cafac0c"
-  integrity sha512-Nt4EVlb1mqExW9cWhpV6pd1a3DkUbX9DeyYsdoeziKOpIJ04S2KMVDO+SEidsXRH/XHDpbzXykKcMTLdTXH6cQ==
+"@typescript-eslint/experimental-utils@4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/experimental-utils/-/experimental-utils-4.1.0.tgz#263d7225645c09a411c8735eeffd417f50f49026"
+  integrity sha512-paEYLA37iqRIDPeQwAmoYSiZ3PiHsaAc3igFeBTeqRHgPnHjHLJ9OGdmP6nwAkF65p2QzEsEBtpjNUBWByNWzA==
   dependencies:
     "@types/json-schema" "^7.0.3"
-    "@typescript-eslint/scope-manager" "4.4.1"
-    "@typescript-eslint/types" "4.4.1"
-    "@typescript-eslint/typescript-estree" "4.4.1"
+    "@typescript-eslint/scope-manager" "4.1.0"
+    "@typescript-eslint/types" "4.1.0"
+    "@typescript-eslint/typescript-estree" "4.1.0"
     eslint-scope "^5.0.0"
     eslint-utils "^2.0.0"
 
-"@typescript-eslint/parser@4.4.1", "@typescript-eslint/parser@^4.1.0":
+"@typescript-eslint/parser@4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/parser/-/parser-4.1.0.tgz#9b0409411725f14cd7faa81a664e5051225961db"
+  integrity sha512-hM/WNCQTzDHgS0Ke3cR9zPndL3OTKr9OoN9CL3UqulsAjYDrglSwIIgswSmHBcSbOzLmgaMARwrQEbIumIglvQ==
+  dependencies:
+    "@typescript-eslint/scope-manager" "4.1.0"
+    "@typescript-eslint/types" "4.1.0"
+    "@typescript-eslint/typescript-estree" "4.1.0"
+    debug "^4.1.1"
+
+"@typescript-eslint/parser@4.4.1":
   version "4.4.1"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/parser/-/parser-4.4.1.tgz#25fde9c080611f303f2f33cedb145d2c59915b80"
   integrity sha512-S0fuX5lDku28Au9REYUsV+hdJpW/rNW0gWlc4SXzF/kdrRaAVX9YCxKpziH7djeWT/HFAjLZcnY7NJD8xTeUEg==
@@ -1657,6 +1667,14 @@
     "@typescript-eslint/types" "4.4.1"
     "@typescript-eslint/typescript-estree" "4.4.1"
     debug "^4.1.1"
+
+"@typescript-eslint/scope-manager@4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/scope-manager/-/scope-manager-4.1.0.tgz#9e389745ee9cfe12252ed1e9958808abd6b3a683"
+  integrity sha512-HD1/u8vFNnxwiHqlWKC/Pigdn0Mvxi84Y6GzbZ5f5sbLrFKu0al02573Er+D63Sw67IffVUXR0uR8rpdfdk+vA==
+  dependencies:
+    "@typescript-eslint/types" "4.1.0"
+    "@typescript-eslint/visitor-keys" "4.1.0"
 
 "@typescript-eslint/scope-manager@4.4.1":
   version "4.4.1"
@@ -1671,10 +1689,29 @@
   resolved "https://registry.yarnpkg.com/@typescript-eslint/types/-/types-3.10.1.tgz#1d7463fa7c32d8a23ab508a803ca2fe26e758727"
   integrity sha512-+3+FCUJIahE9q0lDi1WleYzjCwJs5hIsbugIgnbB+dSCYUxl8L6PwmsyOPFZde2hc1DlTo/xnkOgiTLSyAbHiQ==
 
+"@typescript-eslint/types@4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/types/-/types-4.1.0.tgz#edbd3fec346f34e13ce7aa176b03b497a32c496a"
+  integrity sha512-rkBqWsO7m01XckP9R2YHVN8mySOKKY2cophGM8K5uDK89ArCgahItQYdbg/3n8xMxzu2elss+an1TphlUpDuJw==
+
 "@typescript-eslint/types@4.4.1":
   version "4.4.1"
   resolved "https://registry.yarnpkg.com/@typescript-eslint/types/-/types-4.4.1.tgz#c507b35cf523bc7ba00aae5f75ee9b810cdabbc1"
   integrity sha512-KNDfH2bCyax5db+KKIZT4rfA8rEk5N0EJ8P0T5AJjo5xrV26UAzaiqoJCxeaibqc0c/IvZxp7v2g3difn2Pn3w==
+
+"@typescript-eslint/typescript-estree@4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/typescript-estree/-/typescript-estree-4.1.0.tgz#394046ead25164494218c0e3d6b960695ea967f6"
+  integrity sha512-r6et57qqKAWU173nWyw31x7OfgmKfMEcjJl9vlJEzS+kf9uKNRr4AVTRXfTCwebr7bdiVEkfRY5xGnpPaNPe4Q==
+  dependencies:
+    "@typescript-eslint/types" "4.1.0"
+    "@typescript-eslint/visitor-keys" "4.1.0"
+    debug "^4.1.1"
+    globby "^11.0.1"
+    is-glob "^4.0.1"
+    lodash "^4.17.15"
+    semver "^7.3.2"
+    tsutils "^3.17.1"
 
 "@typescript-eslint/typescript-estree@4.4.1":
   version "4.4.1"
@@ -1710,6 +1747,14 @@
   integrity sha512-9JgC82AaQeglebjZMgYR5wgmfUdUc+EitGUUMW8u2nDckaeimzW+VsoLV6FoimPv2id3VQzfjwBxEMVz08ameQ==
   dependencies:
     eslint-visitor-keys "^1.1.0"
+
+"@typescript-eslint/visitor-keys@4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/visitor-keys/-/visitor-keys-4.1.0.tgz#b2d528c9484e7eda1aa4f86ccf0432fb16e4d545"
+  integrity sha512-+taO0IZGCtCEsuNTTF2Q/5o8+fHrlml8i9YsZt2AiDCdYEJzYlsmRY991l/6f3jNXFyAWepdQj7n8Na6URiDRQ==
+  dependencies:
+    "@typescript-eslint/types" "4.1.0"
+    eslint-visitor-keys "^2.0.0"
 
 "@typescript-eslint/visitor-keys@4.4.1":
   version "4.4.1"
@@ -2010,11 +2055,6 @@ ansi-styles@^4.0.0, ansi-styles@^4.1.0:
   dependencies:
     color-convert "^2.0.1"
 
-ansi-styles@~1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/ansi-styles/-/ansi-styles-1.0.0.tgz#cb102df1c56f5123eab8b67cd7b98027a0279178"
-  integrity sha1-yxAt8cVvUSPquLZ817mAJ6AnkXg=
-
 anymatch@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/anymatch/-/anymatch-2.0.0.tgz#bcb24b4f37934d9aa7ac17b4adaf89e7c76ef2eb"
@@ -2253,18 +2293,18 @@ babel-plugin-jest-hoist@^26.5.0:
     "@types/babel__core" "^7.0.0"
     "@types/babel__traverse" "^7.0.6"
 
-babel-plugin-react-intl@8.2.7:
-  version "8.2.7"
-  resolved "https://registry.yarnpkg.com/babel-plugin-react-intl/-/babel-plugin-react-intl-8.2.7.tgz#0ca4c30fca55c10027fe38dc904522c9141e3c81"
-  integrity sha512-cxubzh/ep1PLlghF1WXJI3W2aBcfZLPoXHrQNDDL6z//VhfWx4HsvS15BpBW6J0h9XXjEiPHJ3LdBDpjUR4TzA==
+babel-plugin-react-intl@8.2.10:
+  version "8.2.10"
+  resolved "https://registry.yarnpkg.com/babel-plugin-react-intl/-/babel-plugin-react-intl-8.2.10.tgz#b80db63ea462a195918aa630b28bb8cbd3a73169"
+  integrity sha512-+cEBDvRWM7CvZsbjpm3W+CX4D9JA8dbH+EMod6vEW7wEhUqePwPrMG7ES3WO1/4HPZUJEZNz2hggtftCABRsJQ==
   dependencies:
     "@babel/core" "^7.9.0"
     "@babel/helper-plugin-utils" "^7.8.3"
     "@babel/types" "^7.9.5"
-    "@formatjs/ts-transformer" "^2.11.3"
+    "@formatjs/ts-transformer" "^2.12.0"
     "@types/babel__core" "^7.1.7"
     "@types/schema-utils" "^2.4.0"
-    intl-messageformat-parser "^6.0.10"
+    intl-messageformat-parser "^6.0.11"
     schema-utils "^3.0.0"
     tslib "^2.0.1"
 
@@ -2561,7 +2601,7 @@ chalk@^1.1.1:
     strip-ansi "^3.0.0"
     supports-color "^2.0.0"
 
-chalk@^2.0.0, chalk@^2.3.2, chalk@^2.4.2:
+chalk@^2.0.0, chalk@^2.4.2:
   version "2.4.2"
   resolved "https://registry.yarnpkg.com/chalk/-/chalk-2.4.2.tgz#cd42541677a54333cf541a49108c1432b44c9424"
   integrity sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==
@@ -2585,15 +2625,6 @@ chalk@^4.0.0, chalk@^4.1.0:
   dependencies:
     ansi-styles "^4.1.0"
     supports-color "^7.1.0"
-
-chalk@~0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/chalk/-/chalk-0.4.0.tgz#5199a3ddcd0c1efe23bc08c1b027b06176e0c64f"
-  integrity sha1-UZmj3c0MHv4jvAjBsCewYXbgxk8=
-  dependencies:
-    ansi-styles "~1.0.0"
-    has-color "~0.1.0"
-    strip-ansi "~0.1.0"
 
 char-regex@^1.0.2:
   version "1.0.2"
@@ -2674,6 +2705,11 @@ cliui@^7.0.2:
     strip-ansi "^6.0.0"
     wrap-ansi "^7.0.0"
 
+cljs-merge@1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/cljs-merge/-/cljs-merge-1.1.1.tgz#b0c6657219ec0ce34c22ca8fe6f71f89a087a07b"
+  integrity sha512-EnSi+cgaul+L9RrRtY0D+UzkCwKDjwyyJ+Cg1Lho7T3WWuG+Rr1cdK28OFmCrn+wEl7BLkBuCXbc0W4YxQI9wg==
+
 clone-response@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/clone-response/-/clone-response-1.0.2.tgz#d1dc973920314df67fbeb94223b4ee350239e96b"
@@ -2750,7 +2786,7 @@ command-line-usage@^6.1.0:
     table-layout "^1.0.0"
     typical "^5.2.0"
 
-commander@^2.15.1, commander@^2.20.0:
+commander@^2.20.0:
   version "2.20.3"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
   integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
@@ -3167,13 +3203,6 @@ emojis-list@^3.0.0:
   resolved "https://registry.yarnpkg.com/emojis-list/-/emojis-list-3.0.0.tgz#5570662046ad29e2e916e71aae260abdff4f6a78"
   integrity sha512-/kyM18EfinwXZbno9FyUGeFh87KC8HRQBQGildHZbEuRyWFOmv1U10o9BBp8XVZDVNNuQKyIGIu5ZYAAXJ0V2Q==
 
-encoding@^0.1.11:
-  version "0.1.13"
-  resolved "https://registry.yarnpkg.com/encoding/-/encoding-0.1.13.tgz#56574afdd791f54a8e9b2785c0582a2d26210fa9"
-  integrity sha512-ETBauow1T35Y/WZMkio9jiM0Z5xjHHmJ4XmjZOq1l/dXz3lr2sRn87nJy20RupqSh1F2m3HHPSp8ShIPQJrJ3A==
-  dependencies:
-    iconv-lite "^0.6.2"
-
 end-of-stream@^1.1.0:
   version "1.4.4"
   resolved "https://registry.yarnpkg.com/end-of-stream/-/end-of-stream-1.4.4.tgz#5ae64a5f45057baf3626ec14da0ca5e4b2431eb0"
@@ -3353,18 +3382,18 @@ eslint-plugin-compat@3.8.0:
     mdn-browser-compat-data "^1.0.28"
     semver "7.3.2"
 
-eslint-plugin-formatjs@2.7.15:
-  version "2.7.15"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-formatjs/-/eslint-plugin-formatjs-2.7.15.tgz#572cad6b063495588a04cfeb5f172fc3e9a2e9c1"
-  integrity sha512-iUKElgM6efBnijsy6DnzQnS0c6F8ZqLbg2GTPMaDMVopiN6l0sYFoaur3GwjGH7cpd/rH9tbyUC9O5BMc8gqKg==
+eslint-plugin-formatjs@2.8.0:
+  version "2.8.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-formatjs/-/eslint-plugin-formatjs-2.8.0.tgz#c430c3053c8371d0b117e1c8f8a6abe8e0ae5701"
+  integrity sha512-7km1pvk7QGX3c0isTXXU/7P4Qf4O4xAVnE2zYPhpclOsZNnQENuGbM4sb51URYE1ddMiE7dalUpphu9TPETJ6Q==
   dependencies:
-    "@formatjs/ts-transformer" "^2.11.3"
+    "@formatjs/ts-transformer" "^2.12.0"
     "@types/emoji-regex" "^8.0.0"
     "@types/eslint" "^7.2.0"
     "@types/estree" "^0.0.45"
     "@typescript-eslint/typescript-estree" "^3.6.0"
     emoji-regex "^9.0.0"
-    intl-messageformat-parser "^6.0.10"
+    intl-messageformat-parser "^6.0.11"
     tslib "^2.0.1"
 
 eslint-plugin-import@2.22.1:
@@ -3946,13 +3975,6 @@ getpass@^0.1.1:
   dependencies:
     assert-plus "^1.0.0"
 
-gettext-parser@1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/gettext-parser/-/gettext-parser-1.1.0.tgz#2c5a6638d893934b9b55037d0ad82cb7004b2679"
-  integrity sha1-LFpmONiTk0ubVQN9CtgstwBLJnk=
-  dependencies:
-    encoding "^0.1.11"
-
 glob-parent@^5.0.0, glob-parent@^5.1.0, glob-parent@~5.1.0:
   version "5.1.1"
   resolved "https://registry.yarnpkg.com/glob-parent/-/glob-parent-5.1.1.tgz#b6c1ef417c4e5663ea498f1c45afac6916bbc229"
@@ -3965,7 +3987,7 @@ glob-to-regexp@^0.4.0, glob-to-regexp@^0.4.1:
   resolved "https://registry.yarnpkg.com/glob-to-regexp/-/glob-to-regexp-0.4.1.tgz#c75297087c851b9a578bd217dd59a92f59fe546e"
   integrity sha512-lkX1HJXwyMcprw/5YUZc2s7DrpAiHB21/V+E1rHUrVNokkvB6bqMzT0VfV6/86ZNabt1k14YOIaT7nDvOX3Iiw==
 
-glob@^7.0.0, glob@^7.0.3, glob@^7.1.1, glob@^7.1.2, glob@^7.1.3, glob@^7.1.4, glob@^7.1.6, glob@~7.1.1:
+glob@7.1.6, glob@^7.0.0, glob@^7.0.3, glob@^7.1.1, glob@^7.1.2, glob@^7.1.3, glob@^7.1.4, glob@^7.1.6, glob@~7.1.1:
   version "7.1.6"
   resolved "https://registry.yarnpkg.com/glob/-/glob-7.1.6.tgz#141f33b81a7c2492e125594307480c46679278a6"
   integrity sha512-LwaxwyZ72Lk7vZINtNNrywX0ZuLyStrdDtabefZKAY5ZGJhVtgdznluResxNmPitE0SAO+O26sWTHeKSI2wMBA==
@@ -4071,11 +4093,6 @@ has-ansi@^2.0.0:
   integrity sha1-NPUEnOHs3ysGSa8+8k5F7TVBbZE=
   dependencies:
     ansi-regex "^2.0.0"
-
-has-color@~0.1.0:
-  version "0.1.7"
-  resolved "https://registry.yarnpkg.com/has-color/-/has-color-0.1.7.tgz#67144a5260c34fc3cca677d041daf52fe7b78b2f"
-  integrity sha1-ZxRKUmDDT8PMpnfQQdr1L+e3iy8=
 
 has-flag@^3.0.0:
   version "3.0.0"
@@ -4286,14 +4303,6 @@ interpret@^2.0.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/interpret/-/interpret-2.2.0.tgz#1a78a0b5965c40a5416d007ad6f50ad27c417df9"
   integrity sha512-Ju0Bz/cEia55xDwUWEa8+olFpCiQoypjnQySseKtmjNrnps3P+xfpUmGr90T7yjlVJmOtybRvPXhKMbHr+fWnw==
-
-intl-messageformat-parser@^6.0.10:
-  version "6.0.10"
-  resolved "https://registry.yarnpkg.com/intl-messageformat-parser/-/intl-messageformat-parser-6.0.10.tgz#6202bd4e9b59eaa5bf34d4db2ef8c2af46d40037"
-  integrity sha512-xURB8PchDsdLEpedzPLzBmGCK996FPBl3yLQIUxcM3EAA3TdhXPArX6GY4LVXQNeq8V4WtwmgxaJOKtdOpA8pg==
-  dependencies:
-    "@formatjs/ecma402-abstract" "^1.2.5"
-    tslib "^2.0.1"
 
 intl-messageformat-parser@^6.0.11:
   version "6.0.11"
@@ -5725,14 +5734,6 @@ nodemon@2.0.6:
     undefsafe "^2.0.3"
     update-notifier "^4.1.0"
 
-nomnom@1.8.1:
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/nomnom/-/nomnom-1.8.1.tgz#2151f722472ba79e50a76fc125bb8c8f2e4dc2a7"
-  integrity sha1-IVH3Ikcrp55Qp2/BJbuMjy5Nwqc=
-  dependencies:
-    chalk "~0.4.0"
-    underscore "~1.6.0"
-
 "nopt@2 || 3":
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/nopt/-/nopt-3.0.6.tgz#c6465dbf08abcd4db359317f79ac68a646b28ff9"
@@ -6185,14 +6186,6 @@ pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
-po2json@^0.4.5:
-  version "0.4.5"
-  resolved "https://registry.yarnpkg.com/po2json/-/po2json-0.4.5.tgz#47bb2952da32d58a1be2f256a598eebc0b745118"
-  integrity sha1-R7spUtoy1Yob4vJWpZjuvAt0URg=
-  dependencies:
-    gettext-parser "1.1.0"
-    nomnom "1.8.1"
-
 posix-character-classes@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/posix-character-classes/-/posix-character-classes-0.1.1.tgz#01eac0fe3b5af71a2a6c02feabb8c1fef7e00eab"
@@ -6365,11 +6358,6 @@ querystring@0.2.0, querystring@^0.2.0:
   resolved "https://registry.yarnpkg.com/querystring/-/querystring-0.2.0.tgz#b209849203bb25df820da756e747005878521620"
   integrity sha1-sgmEkgO7Jd+CDadW50cAWHhSFiA=
 
-ramda@^0.25.0:
-  version "0.25.0"
-  resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.25.0.tgz#8fdf68231cffa90bc2f9460390a0cb74a29b29a9"
-  integrity sha512-GXpfrYVPwx3K7RQ6aYT8KPS8XViSXUVJT1ONhoKPE9VAleW42YE+U+8VEyGWt41EnEQW7gwecYJriTI0pKoecQ==
-
 randombytes@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/randombytes/-/randombytes-2.1.0.tgz#df6f84372f0270dc65cdf6291349ab7a473d4f2a"
@@ -6406,18 +6394,6 @@ react-dom@17.0.1:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     scheduler "^0.20.1"
-
-react-intl-po@2.2.2:
-  version "2.2.2"
-  resolved "https://registry.yarnpkg.com/react-intl-po/-/react-intl-po-2.2.2.tgz#ca5b5d8cefe1a693b0c316cb5f6dd4caf8b0141c"
-  integrity sha512-BvW4gyohm4Ac0sSN6dBJB3+PeIjsns+IE9JqT/7NolBRGNc+fCKzWa5e1eZdhu9nY+7W1t0sWqhrt+LXgXb6Iw==
-  dependencies:
-    chalk "^2.3.2"
-    commander "^2.15.1"
-    glob "^7.1.2"
-    mkdirp "^0.5.1"
-    po2json "^0.4.5"
-    ramda "^0.25.0"
 
 react-intl@5.8.8:
   version "5.8.8"
@@ -7335,11 +7311,6 @@ strip-ansi@^6.0.0:
   dependencies:
     ansi-regex "^5.0.0"
 
-strip-ansi@~0.1.0:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/strip-ansi/-/strip-ansi-0.1.1.tgz#39e8a98d044d150660abe4a6808acf70bb7bc991"
-  integrity sha1-OeipjQRNFQZgq+SmgIrPcLt7yZE=
-
 strip-bom@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/strip-bom/-/strip-bom-2.0.0.tgz#6219a85616520491f35788bdbf1447a99c7e6b0e"
@@ -7708,11 +7679,6 @@ undefsafe@^2.0.3:
   integrity sha512-nrXZwwXrD/T/JXeygJqdCO6NZZ1L66HrxM/Z7mIq2oPanoN0F1nLx3lwJMu6AwJY69hdixaFQOuoYsMjE5/C2A==
   dependencies:
     debug "^2.2.0"
-
-underscore@~1.6.0:
-  version "1.6.0"
-  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.6.0.tgz#8b38b10cacdef63337b8b24e4ff86d45aea529a8"
-  integrity sha1-izixDKze9jM3uLJOT/htRa6lKag=
 
 unicode-canonical-property-names-ecmascript@^1.0.4:
   version "1.0.4"

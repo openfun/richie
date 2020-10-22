@@ -18,7 +18,7 @@
 FROM python:3.7-stretch as base
 
 # ---- Front-end builder image ----
-FROM node:10 as front-builder
+FROM node:14 as front-builder
 
 # Copy frontend app sources
 COPY ./src/frontend /builder/src/frontend

@@ -23,8 +23,8 @@ aliases:
     restore_cache:
       name: Restore node_modules cache
       keys:
-        - v5-front-dependencies-{{ checksum "~/fun/src/frontend/yarn.lock" }}
-        - v5-front-dependencies-
+        - v7-front-dependencies-{{ checksum "~/fun/src/frontend/yarn.lock" }}
+        - v7-front-dependencies-
 
 jobs:
   # Git jobs
@@ -106,6 +106,7 @@ jobs:
       # Activate docker-in-docker (with layers caching enabled)
       - setup_remote_docker:
           docker_layer_caching: true
+          version: 19.03.13
       - run:
           name: Login to DockerHub
           command: echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
@@ -437,7 +438,7 @@ jobs:
   # ---- Front-end jobs ----
   build-front:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:14
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -466,11 +467,11 @@ jobs:
       - save_cache:
           paths:
             - ./node_modules
-          key: v5-front-dependencies-{{ checksum "yarn.lock" }}
+          key: v7-front-dependencies-{{ checksum "yarn.lock" }}
 
   build-front-production:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:14
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -499,7 +500,7 @@ jobs:
 
   build-dependent-front:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:14
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -541,7 +542,7 @@ jobs:
 
   lint-front:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:14
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -558,7 +559,7 @@ jobs:
 
   test-front:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:14
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -574,7 +575,7 @@ jobs:
 
   test-front-package:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:14
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -597,7 +598,7 @@ jobs:
   # environment variables in CircleCI UI (with your PyPI credentials)
   npm:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:14
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -633,7 +634,7 @@ jobs:
   # Run relevant linters (eg. prettier for now) on the documentation website
   lint-website:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:14
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
@@ -650,7 +651,7 @@ jobs:
   # Deploy the docs website to GitHub pages.
   deploy-website:
     docker:
-      - image: circleci/node:10
+      - image: circleci/node:14
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
