@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Hide unpublished pages from public version of organizations list page
 - Improve sanitizing of input text on CKEditor plugin
 - Replace course-detail__run-cta in fragment_course_run template by
   course-run-enrollment__cta
