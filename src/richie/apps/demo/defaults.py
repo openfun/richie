@@ -371,21 +371,9 @@ SINGLECOLUMN_CONTENT.update(getattr(settings, "RICHIE_DEMO_SINGLECOLUMN_CONTENT"
 
 FOOTER_CONTENT = {
     "en": [
-        {
-            "items": [
-                {"name": "About", "internal_link": "annex__about"},
-            ]
-        },
-        {
-            "items": [
-                {"name": "Sitemap", "internal_link": "annex__sitemap"},
-            ]
-        },
-        {
-            "items": [
-                {"name": "Style guide", "external_link": "/styleguide/"},
-            ]
-        },
+        {"name": "About", "internal_link": "annex__about"},
+        {"name": "Sitemap", "internal_link": "annex__sitemap"},
+        {"name": "Style guide", "external_link": "/styleguide/"},
         {
             "title": "Richie community",
             "items": [
@@ -406,21 +394,9 @@ FOOTER_CONTENT = {
         },
     ],
     "fr": [
-        {
-            "items": [
-                {"name": "A propos", "internal_link": "annex__about"},
-            ]
-        },
-        {
-            "items": [
-                {"name": "Plan du site", "internal_link": "annex__sitemap"},
-            ]
-        },
-        {
-            "items": [
-                {"name": "Style guide", "external_link": "/styleguide/"},
-            ]
-        },
+        {"name": "A propos", "internal_link": "annex__about"},
+        {"name": "Plan du site", "internal_link": "annex__sitemap"},
+        {"name": "Style guide", "external_link": "/styleguide/"},
         {
             "title": "Communauté Richie",
             "items": [
