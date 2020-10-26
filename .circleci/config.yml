@@ -13,6 +13,19 @@ generate-version-file: &generate-version-file
         "$CIRCLE_BUILD_URL" > sandbox/version.json
 
 version: 2
+
+aliases:
+  - &checkout_fun
+    checkout:
+      path: ~/fun
+
+  - &restore_node_modules
+    restore_cache:
+      name: Restore node_modules cache
+      keys:
+        - v5-front-dependencies-{{ checksum "~/fun/src/frontend/yarn.lock" }}
+        - v5-front-dependencies-
+
 jobs:
   # Git jobs
   # Check that the git history is clean and complies with our expectations
@@ -136,8 +149,7 @@ jobs:
           password: $DOCKER_PASS
     working_directory: ~/fun/src/richie
     steps:
-      - checkout:
-          path: ~/fun
+      - *checkout_fun
       - restore_cache:
           keys:
             - v2-back-dependencies-{{ .Revision }}
@@ -431,12 +443,8 @@ jobs:
           password: $DOCKER_PASS
     working_directory: ~/fun/src/frontend
     steps:
-      - checkout:
-          path: ~/fun
-      - restore_cache:
-          keys:
-            - v5-front-dependencies-{{ checksum "yarn.lock" }}
-            - v5-front-dependencies-
+      - *checkout_fun
+      - *restore_node_modules
       # If the yarn.lock file is not up-to-date with the package.json file,
       # using the --frozen-lockfile should fail.
       - run:
@@ -468,12 +476,8 @@ jobs:
           password: $DOCKER_PASS
     working_directory: ~/fun/src/frontend
     steps:
-      - checkout:
-          path: ~/fun
-      - restore_cache:
-          keys:
-            - v5-front-dependencies-{{ checksum "yarn.lock" }}
-            - v5-front-dependencies-
+      - *checkout_fun
+      - *restore_node_modules
       - run:
           name: Build front-end application in production mode
           command: yarn build-production
@@ -493,6 +497,48 @@ jobs:
             - src/richie/static/richie/js/*.js
             - src/richie/static/richie/css/*.css
 
+  build-dependent-front:
+    docker:
+      - image: circleci/node:10
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
+    working_directory: ~/fun-site-factory/frontend
+    steps:
+      - *checkout_fun
+      - *restore_node_modules
+      - run:
+          name: Initialize a frontend project that uses richie-education module
+          command: | 
+            yarn init -y
+            cp ~/fun/src/frontend/yarn.lock .
+            yarn add ~/fun/src/frontend
+            echo '{"extends": "./node_modules/richie-education/tsconfig.json", "include": ["./**/*"]}' > tsconfig.json
+      - run:
+          name: Create an overridden React component
+          command: | 
+            mkdir -p js/components/Spinner
+            cp -R ~/fun/src/frontend/js/components/Spinner/*.tsx js/components/Spinner
+            echo '{"overrides": {"Spinner/index.tsx": "../../../../../js/components/Spinner/index.tsx"}}' > overrides.json
+      - run:
+          name: Create scss/_main.scss file using richie-education styles & mixins
+          command: |
+            mkdir scss
+            sed "s|'../|'richie-education/|g; s|'./|'richie-education/scss/|g;" < ~/fun/src/frontend/scss/_main.scss > scss/_main.scss
+      - run:
+          name: Build front-end application with richie-dependent-build enabled
+          command: yarn webpack --config node_modules/richie-education/webpack.config.js -o build/js --env richie-dependent-build --env richie-settings=overrides.json
+      - run:
+          name: Build front-end styles
+          command: yarn node-sass --include-path node_modules scss/_main.scss build/css/main.css
+      - run:
+          name: List build files
+          command: |
+            echo "== CSS =="
+            ls ./build/css/*.css
+            echo "== Javascript =="
+            ls ./build/js/*.js
+
   lint-front:
     docker:
       - image: circleci/node:10
@@ -501,11 +547,8 @@ jobs:
           password: $DOCKER_PASS
     working_directory: ~/fun/src/frontend
     steps:
-      - checkout:
-          path: ~/fun
-      - restore_cache:
-          keys:
-            - v5-front-dependencies-{{ checksum "yarn.lock" }}
+      - *checkout_fun
+      - *restore_node_modules
       - run:
           name: Lint code with eslint
           command: yarn lint
@@ -521,11 +564,8 @@ jobs:
           password: $DOCKER_PASS
     working_directory: ~/fun/src/frontend
     steps:
-      - checkout:
-          path: ~/fun
-      - restore_cache:
-          keys:
-            - v5-front-dependencies-{{ checksum "yarn.lock" }}
+      - *checkout_fun
+      - *restore_node_modules
       - run:
           name: Run tests
           # Circle CI needs the tests to be ran sequentially, otherwise it hangs. See Jest docs below:
@@ -540,8 +580,7 @@ jobs:
           password: $DOCKER_PASS
     working_directory: ~/wrk
     steps:
-      - checkout:
-          path: ~/fun
+      - *checkout_fun
       - run:
           name: Check SCSS library
           command: |
@@ -564,8 +603,7 @@ jobs:
           password: $DOCKER_PASS
     working_directory: ~/fun
     steps:
-      - checkout:
-          path: ~/fun
+      - *checkout_fun
       - run:
           name: Authenticate with registry
           command: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/fun/.npmrc
@@ -601,8 +639,7 @@ jobs:
           password: $DOCKER_PASS
     working_directory: ~/fun/website
     steps:
-      - checkout:
-          path: ~/fun
+      - *checkout_fun
       - run:
           name: Install dependencies
           command: yarn install --frozen-lockfile
@@ -641,6 +678,12 @@ workflows:
             tags:
               only: /.*/
       - build-front-production:
+          requires:
+            - build-front
+          filters:
+            tags:
+              only: /.*/
+      - build-dependent-front:
           requires:
             - build-front
           filters:
