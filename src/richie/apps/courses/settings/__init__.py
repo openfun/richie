@@ -55,8 +55,8 @@ CMS_PLACEHOLDER_CONF = {
     # Footer
     "footer": {
         "name": _("Footer"),
-        "plugins": ["NestedItemPlugin"],
-        "NestedItemPlugin": ["NestedItemPlugin", "LinkPlugin"],
+        "plugins": ["NestedItemPlugin", "LinkPlugin"],
+        "NestedItemPlugin": ["LinkPlugin"],
     },
     "static_blogpost_headline": {
         "name": _("Static headline"),

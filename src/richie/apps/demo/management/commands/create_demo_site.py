@@ -53,6 +53,8 @@ def get_number_of_icons():
 # We choose to ignore this false positive warning.
 
 # pylint: disable=too-many-locals,too-many-statements,too-many-branches
+
+
 @override_settings(RICHIE_KEEP_SEARCH_UPDATED=False)
 def create_demo_site():
     """
@@ -72,31 +74,48 @@ def create_demo_site():
     pages_created = recursive_page_creation(site, defaults.PAGES_INFO)
 
     # Create the footer links
+    def create_footer_link(**link_info):
+        """
+        Use LinkPlugin to create a link in footer menu with link_info
+
+        Links can be nested into a NestedItemPlugin, in this case link_info contains
+        a target key.
+        """
+        if "internal_link" in link_info:
+            link_info = link_info.copy()
+            link_info["internal_link"] = pages_created[link_info["internal_link"]]
+        add_plugin(
+            plugin_type="LinkPlugin",
+            **link_info,
+        )
+
     footer_static_ph = StaticPlaceholder.objects.get_or_create(code="footer")[0]
     for footer_placeholder in [footer_static_ph.draft, footer_static_ph.public]:
         for language, content in defaults.FOOTER_CONTENT.items():
             for footer_info in content:
-                # Create the first level items for main columns
-                nest_column_plugin = add_plugin(
-                    footer_placeholder,
-                    plugin_type="NestedItemPlugin",
-                    language=language,
-                    content=footer_info.get("title", ""),
-                )
-
-                # Create the second level items for links
-                for item_info in footer_info.get("items", []):
-                    if "internal_link" in item_info:
-                        item_info = item_info.copy()
-                        item_info["internal_link"] = pages_created[
-                            item_info["internal_link"]
-                        ]
-                    add_plugin(
+                if "items" in footer_info:
+                    # Create the first level items for main columns
+                    nest_column_plugin = add_plugin(
                         footer_placeholder,
-                        plugin_type="LinkPlugin",
+                        plugin_type="NestedItemPlugin",
                         language=language,
-                        target=nest_column_plugin,
-                        **item_info,
+                        content=footer_info.get("title", ""),
+                    )
+
+                    # Create the second level items for links
+                    for item_info in footer_info.get("items", []):
+                        create_footer_link(
+                            language=language,
+                            placeholder=footer_placeholder,
+                            target=nest_column_plugin,
+                            **item_info,
+                        )
+                else:
+                    # Create link at first level
+                    create_footer_link(
+                        language=language,
+                        placeholder=footer_placeholder,
+                        **footer_info,
                     )
 
     # Create some licences

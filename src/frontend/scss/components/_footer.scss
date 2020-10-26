@@ -146,22 +146,21 @@
       margin-top: 1rem;
     }
 
+    a {
+      color: inherit;
+      display: block;
+    }
+
     //
     // Default variant acts like a simple horizontal menu
     //
-    .nested-item--list {
+    .nested-item--list,
+    a {
       $nesteditem-base-selector: '.nested-item';
       @include sv-flex(0, 0, auto);
       padding-right: 3vw;
 
-      a {
-        display: block;
-        color: inherit;
-      }
-
       #{$nesteditem-base-selector}__content {
-        margin: 0.1rem;
-        padding: 0.25rem 0.25rem 0.25rem 0;
         font-weight: bold;
 
         p {
@@ -196,7 +195,6 @@
     @include sv-flex(1, 0, 100%);
     @include font-size($h4-font-size);
     margin-bottom: 0;
-    padding: 0 0.25rem;
     color: r-theme-val(body-footer, subtitle-color);
     font-family: $r-font-family-montserrat;
     font-weight: $font-weight-boldest;

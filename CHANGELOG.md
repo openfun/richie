@@ -8,12 +8,14 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+- Allow use of columns in footer menu items
+- Avoid stretching of footer menu items
+
 ## [2.0.0-beta.16] - 2020-10-23
 
 ### Fixed
 
 - Hide unpublished pages from public version of organizations list page
-- Avoid stretching of footer menu items
 - Improve sanitizing of input text on CKEditor plugin
 - Replace course-detail__run-cta in fragment_course_run template by
   course-run-enrollment__cta
