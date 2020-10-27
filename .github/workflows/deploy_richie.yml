@@ -1,0 +1,21 @@
+name: Deploy_richie
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so the job can access it
+      - uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: pip3 install setuptools; pip3 install GitPython; pip3 install PyGithub;
+
+      # GITHUB_REF##*/ turns refs/heads/v1.3 to v1.3
+      - name: Deploy
+        run: python3 ./.github/workflows/deploy_richie.py ${GITHUB_REF##*/} ${{ secrets.API_KEY_GITHUB }}
