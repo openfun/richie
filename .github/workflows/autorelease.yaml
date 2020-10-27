@@ -1,0 +1,18 @@
+name: Autorelease
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so the job can access it
+      - uses: actions/checkout@v2
+
+      # GITHUB_REF##*/ turns refs/heads/v1.3 to v1.3
+      - name: Autorelease
+        run: ./.github/workflows/autorelease.sh ${GITHUB_REF##*/} ${{ secrets.API_KEY_GITHUB }}
