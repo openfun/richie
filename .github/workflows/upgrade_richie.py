@@ -38,7 +38,7 @@ repo = getRepoFromURl(repo_url)
 fork_url = f"https://github.com/{user.login}/{repo.name}"
 
 base_branch = "master"
-branch_name = "deploy-richie"
+branch_name = "upgrade-richie"
 
 number_of_sites = 5
 
@@ -67,8 +67,8 @@ Repo.create_remote(local_repo, "upstream", repo_url)
 cmd.run(
     f"cd {repo.name}; \
         git checkout {branch_name}; \
-        git config user.email 'deploy-bot'; \
-        git config user.name 'deploy-bot@fun-mooc.fr'; \
+        git config user.email 'upgrade-bot'; \
+        git config user.name 'upgrade-bot@fun-mooc.fr'; \
         ./bin/upgrade "
     + version
     + " -c; \
