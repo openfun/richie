@@ -7,7 +7,6 @@ fi
 
 CHANGELOG_FILE="CHANGELOG.md"
 
-# Sort tags by date and pick the last one
 LAST_TAG_RAW=$1
 
 # Remove 'v' in front of the tag
@@ -15,12 +14,25 @@ LAST_TAG="${LAST_TAG_RAW:1}"
 
 # The format is based on [Keep a Changelog] -> 1
 # ## [Unreleased]                           -> 2
-# ## [Current tag]                          -> 3
+# ## [Last tag]                             -> 3
 # ## [Previous tag]                         -> 4
 # If no previous tag, [.*] matches one of the links at the bottom of the file and the result is the same
 CHANGELOG_TITLES=$(grep -n "\[.*\]" ${CHANGELOG_FILE})
-LINE_BEGIN=$(echo "${CHANGELOG_TITLES}" | cut -d $'\n' -f 3 | cut -d : -f 1)
-LINE_END=$(echo "${CHANGELOG_TITLES}" | cut -d $'\n' -f 4 | cut -d : -f 1)
+LAST_TAG_NB=3
+PREVIOUS_TAG_NB=4
+
+LINE_BEGIN=$(echo "${CHANGELOG_TITLES}" | cut -d $'\n' -f ${LAST_TAG_NB})
+
+# Check that the last
+echo "${LINE_BEGIN}" | grep "${LAST_TAG}" > /dev/null
+RETURN_VALUE=$?
+if [ ${RETURN_VALUE} -ne 0 ]; then
+    echo "Error: LAST_TAG and last CHANGELOG tags not corresponding."
+    exit 1
+fi
+
+LINE_BEGIN=$(echo ${LINE_BEGIN} | cut -d : -f 1)
+LINE_END=$(echo "${CHANGELOG_TITLES}" | cut -d $'\n' -f ${PREVIOUS_TAG_NB} | cut -d : -f 1)
 
 # Remote title at the beginning and newlines at the end
 LINE_BEGIN=$((${LINE_BEGIN} + 2))
