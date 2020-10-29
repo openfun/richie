@@ -27,7 +27,7 @@ class LMSSelectTestCase(TestCase):
     def test_lms_select(self):
         """
         The "select_lms" util function should return a backend instance with its configuration
-        or raise an ImproperlyConfigurer error if the url does not match any backend.
+        or raise an ImproperlyConfigurer error if the url does not match any backend or is blank.
         """
         backend = LMSHandler.select_lms("https://www.example.com/course/123")
         self.assertEqual(type(backend), TokenEdXLMSBackend)
@@ -38,3 +38,5 @@ class LMSSelectTestCase(TestCase):
         self.assertEqual(backend.configuration["BASE_URL"], "https://edx.org")
 
         self.assertIsNone(LMSHandler.select_lms("https://unknown.io/course/123"))
+
+        self.assertIsNone(LMSHandler.select_lms(None))

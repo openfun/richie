@@ -8,8 +8,14 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-- Allow use of columns in footer menu items
-- Avoid stretching of footer menu items
+### Fixed
+  - has_connected_lms crashed when course_run is blank
+
+### Added
+  - Allow use of columns in footer menu items
+
+### Changed
+  - Avoid stretching of footer menu items
 
 ## [2.0.0-beta.16] - 2020-10-23
 

@@ -22,6 +22,8 @@ class LMSHandler:
         a course run has a matching LMS or not. Callers can determine if not finding an LMS
         backend is an exception or not.
         """
+        if url is None:
+            return None
 
         for lms_configuration in settings.LMS_BACKENDS:
             if re.match(lms_configuration.get("SELECTOR_REGEX", r".*"), url):
