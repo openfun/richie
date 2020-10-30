@@ -2,7 +2,7 @@
 Declare and configure the models for the program part
 """
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from cms.api import Page
 from cms.extensions.extension_pool import extension_pool

@@ -397,7 +397,7 @@ class CourseRunCMSWizardTestCase(CMSTestCase):
         self.assertFalse(form.is_valid())
         self.assertEqual(
             form.errors["slug"][0],
-            "Enter a valid 'slug' consisting of letters, numbers, underscores or hyphens.",
+            "Enter a valid “slug” consisting of letters, numbers, underscores or hyphens.",
         )
 
         # Snapshot was not request and should not have been triggered

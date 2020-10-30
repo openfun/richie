@@ -4,7 +4,7 @@ Django settings for richie project.
 import json
 import os
 
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 # pylint: disable=ungrouped-imports
 import sentry_sdk

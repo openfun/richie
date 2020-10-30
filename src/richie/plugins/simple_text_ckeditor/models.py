@@ -2,16 +2,15 @@
 Simple text plugin models
 """
 from django.db import models
-from django.utils.encoding import force_text, python_2_unicode_compatible
+from django.utils.encoding import force_str
 from django.utils.html import strip_tags
 from django.utils.text import Truncator
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from cms.models.pluginmodel import CMSPlugin
 from djangocms_text_ckeditor.html import clean_html
 
 
-@python_2_unicode_compatible
 class SimpleText(CMSPlugin):
     """
     Simple text plugin model.
@@ -27,7 +26,7 @@ class SimpleText(CMSPlugin):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.body = force_text(self.body)
+        self.body = force_str(self.body)
 
     # pylint: disable=signature-differs
     def save(self, *args, **kwargs):

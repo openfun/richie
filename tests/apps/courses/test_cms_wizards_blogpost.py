@@ -315,7 +315,7 @@ class BlogPostCMSWizardTestCase(CMSTestCase):
         self.assertFalse(form.is_valid())
         self.assertEqual(
             form.errors["slug"][0],
-            "Enter a valid 'slug' consisting of letters, numbers, underscores or hyphens.",
+            "Enter a valid “slug” consisting of letters, numbers, underscores or hyphens.",
         )
 
     def test_cms_wizards_blogpost_submit_form_slug_duplicate(self):

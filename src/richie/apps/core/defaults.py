@@ -2,7 +2,7 @@
 from django.conf import global_settings, settings
 from django.core.exceptions import ImproperlyConfigured
 from django.utils.functional import lazy
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 # Group to add plugin to placeholder "Content"
 PLUGINS_GROUP = _("Richie Plugins")

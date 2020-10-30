@@ -4,7 +4,7 @@ from functools import reduce
 from django.contrib.sites.models import Site
 from django.db.models import F, Q
 from django.utils import translation
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from cms.constants import PUBLISHER_STATE_PENDING
 from cms.models.pagemodel import Page

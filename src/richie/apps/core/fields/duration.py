@@ -7,7 +7,7 @@ from django.core import checks, exceptions
 from django.db import models
 from django.db.utils import DataError
 from django.forms import widgets
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
 class CompositeDurationWidget(widgets.MultiWidget):

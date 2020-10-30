@@ -16,7 +16,7 @@ Otherwise, you can just use the usual Django pattern in your settings.py file:
     from richie.apps.courses.settings import *
     ```
 """
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 # Associated LMS backends
 LMS_BACKENDS = []

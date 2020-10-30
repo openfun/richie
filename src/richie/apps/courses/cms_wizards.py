@@ -7,7 +7,7 @@ from django.core.exceptions import PermissionDenied
 from django.template.defaultfilters import slugify
 from django.utils.functional import cached_property
 from django.utils.translation import get_language
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from cms.api import add_plugin, create_page
 from cms.cms_wizards import (

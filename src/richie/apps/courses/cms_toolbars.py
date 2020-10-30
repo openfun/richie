@@ -2,7 +2,7 @@
 Toolbar extension for the courses application
 """
 from django.utils.text import capfirst
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from cms.api import get_page_draft
 from cms.extensions.toolbar import ExtensionToolbar
