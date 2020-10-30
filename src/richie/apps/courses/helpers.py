@@ -4,7 +4,7 @@ Helpers that can be useful throughout Richie's courses app
 import time
 
 from django.core.exceptions import PermissionDenied
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from cms.api import create_title
 from cms.utils import page_permissions

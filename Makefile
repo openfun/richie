@@ -300,7 +300,7 @@ i18n-generate-and-upload: \
 .PHONY: i18n-generate-and-upload
 
 i18n-generate-back:
-	@$(COMPOSE_RUN) -w /app/src/richie app python /app/sandbox/manage.py makemessages --ignore "venv/**/*" --keep-pot
+	@$(COMPOSE_RUN) -w /app/src/richie app python /app/sandbox/manage.py makemessages --ignore "venv/**/*" --keep-pot --all
 .PHONY: i18n-generate-back
 
 i18n-generate-front: build-ts

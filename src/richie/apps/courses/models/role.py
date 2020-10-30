@@ -3,7 +3,7 @@ Declare and configure the models for the courses application
 """
 from django.contrib.auth.models import Group
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from cms.api import Page
 from filer.models import Folder

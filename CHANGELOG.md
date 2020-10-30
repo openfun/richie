@@ -8,19 +8,20 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-### Fixed
-
-- has_connected_lms crashed when course_run is blank
-- Avoid stretching of footer menu items
-
 ### Added
 
 - Allow use of columns in footer menu items
 
 ### Changed
 
+- Upgrade to DjangoCMS 3.8.0 (and subsequently to Django 3.1.2)
 - Remove react-intl-po
 - Rework front i18n workflow
+
+### Fixed
+
+- has_connected_lms crashed when course_run is blank
+- Avoid stretching of footer menu items
 
 ## [2.0.0-beta.16] - 2020-10-23
 

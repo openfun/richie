@@ -160,7 +160,7 @@ jobs:
       # Generate and persist the translations base file
       - run:
           name: Generate a POT file from strings extracted from the project
-          command: ~/.local/bin/django-admin makemessages --keep-pot
+          command: ~/.local/bin/django-admin makemessages --keep-pot --all
       - persist_to_workspace:
           root: ~/fun
           paths:

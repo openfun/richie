@@ -2,8 +2,8 @@
 from django.contrib import messages
 from django.core import management
 from django.http import HttpResponse
-from django.utils.encoding import force_text
-from django.utils.translation import ugettext_lazy as _
+from django.utils.encoding import force_str
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.cache import cache_page
 
 from rest_framework.decorators import api_view
@@ -19,7 +19,7 @@ def bootstrap_elasticsearch(request, version):
     user = request.user
     if not (user.is_staff and request.user.has_perm("search.can_manage_elasticsearch")):
         return HttpResponse(
-            force_text(_("You are not allowed to manage the search index.")),
+            force_str(_("You are not allowed to manage the search index.")),
             status=403 if request.user.is_authenticated else 401,
         )
 

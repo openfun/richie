@@ -3,8 +3,8 @@ from django.core import checks, exceptions, validators
 from django.db import models
 from django.forms import MultipleChoiceField, widgets
 from django.utils.text import capfirst
+from django.utils.translation import gettext_lazy as _
 from django.utils.translation import ngettext_lazy
-from django.utils.translation import ugettext_lazy as _
 
 
 def to_sentence(elements):

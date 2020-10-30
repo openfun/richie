@@ -8,8 +8,8 @@ from django.db import models as django_models
 from django.db import transaction
 from django.http import HttpResponseBadRequest, HttpResponseForbidden, JsonResponse
 from django.utils.decorators import method_decorator
-from django.utils.encoding import force_text
-from django.utils.translation import ugettext_lazy as _
+from django.utils.encoding import force_str
+from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
 from cms.admin.placeholderadmin import FrontendEditableAdminMixin
@@ -74,12 +74,12 @@ class CourseAdmin(FrontendEditableAdminMixin, PageExtensionAdmin):
                 publisher_is_draft=True, course__id=course_id
             )
         except Page.DoesNotExist:
-            return HttpResponseBadRequest(force_text(_("Course could not be found.")))
+            return HttpResponseBadRequest(force_str(_("Course could not be found.")))
 
         try:
             new_page = snapshot_course(page, request.user, simulate_only=False)
         except PermissionDenied as context:
-            return HttpResponseForbidden(force_text(context))
+            return HttpResponseForbidden(force_str(context))
 
         return JsonResponse({"id": new_page.course.id})
 

@@ -2,16 +2,14 @@
 Section plugin models
 """
 from django.db import models
-from django.utils.encoding import python_2_unicode_compatible
 from django.utils.text import Truncator
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from cms.models.pluginmodel import CMSPlugin
 
 from .defaults import SECTION_TEMPLATES
 
 
-@python_2_unicode_compatible
 class Section(CMSPlugin):
     """
     Section plugin model
