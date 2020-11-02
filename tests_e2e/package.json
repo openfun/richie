@@ -8,6 +8,6 @@
   "dependencies": {
     "axe-core": "4.0.2",
     "cypress": "5.5.0",
-    "cypress-axe": "0.8.2"
+    "cypress-axe": "0.9.1"
   }
 }
