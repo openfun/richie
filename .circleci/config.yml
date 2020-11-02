@@ -453,10 +453,10 @@ jobs:
           command: yarn install --frozen-lockfile
       - run:
           name: Build front-end application
-          command: yarn build
+          command: yarn build-ts
       - run:
           name: Build application styles
-          command: yarn sass
+          command: yarn build-sass
       - run:
           name: Use formatjs-cli to generate frontend.json file
           command: yarn extract-translations
@@ -481,10 +481,10 @@ jobs:
       - *restore_node_modules
       - run:
           name: Build front-end application in production mode
-          command: yarn build-production
+          command: yarn build-ts-production
       - run:
           name: Build application styles in production mode
-          command: yarn sass-production
+          command: yarn build-sass-production
       - run:
           name: List builds
           command: |
@@ -531,7 +531,7 @@ jobs:
           command: yarn webpack --config node_modules/richie-education/webpack.config.js -o build/js --env richie-dependent-build --env richie-settings=overrides.json
       - run:
           name: Build front-end styles
-          command: yarn node-sass --include-path node_modules scss/_main.scss build/css/main.css
+          command: yarn sass scss/_main.scss build/css/main.css --load-path=node_modules
       - run:
           name: List build files
           command: |
@@ -586,13 +586,13 @@ jobs:
           name: Check SCSS library
           command: |
             # Install the sass library/compiler
-            yarn add node-sass
+            yarn add sass
             # Install the package locally
             yarn add file:/home/circleci/fun/src/frontend
             # Create a scss file to compile that imports the package main entry
             echo -e "@import 'richie-education/scss/main';\n" > main.scss
             # Compile it!
-            yarn node-sass --include-path node_modules main.scss main.css
+            yarn sass main.scss main.css --load-path=node_modules
 
   # Publishing to npm requires that you have define the NPM_TOKEN secret
   # environment variables in CircleCI UI (with your PyPI credentials)

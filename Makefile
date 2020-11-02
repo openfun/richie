@@ -136,12 +136,12 @@ build-front: \
 .PHONY: build-front
 
 build-sass: ## build Sass files to CSS
-	@$(YARN) sass
+	@$(YARN) build-sass
 .PHONY: build-sass
 
 build-ts: ## build TypeScript application
 	@$(YARN) compile-translations
-	@$(YARN) build
+	@$(YARN) build-ts
 .PHONY: build-ts
 
 install-front: ## install front-end dependencies
@@ -171,7 +171,7 @@ watch-sass: ## watch changes in Sass files
 .PHONY: watch-sass
 
 watch-ts: ## watch changes in TypeScript files
-	@$(YARN) build --watch
+	@$(YARN) watch-ts
 .PHONY: watch-ts
 
 # -- Back-end
