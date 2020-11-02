@@ -579,11 +579,15 @@ class CoursesIndexer:
         """
         index = index or cls.index_name
 
-        for course in Course.objects.filter(
-            extended_object__publisher_is_draft=False,  # index the public object
-            extended_object__title_set__published=True,  # only index published courses
-            extended_object__node__parent__cms_pages__course__isnull=True,  # exclude snapshots
-        ).distinct():
+        for course in (
+            Course.objects.filter(
+                extended_object__publisher_is_draft=False,  # index the public object
+                extended_object__title_set__published=True,  # only index published courses
+                extended_object__node__parent__cms_pages__course__isnull=True,  # exclude snapshots
+            )
+            .distinct()
+            .iterator()
+        ):
             yield cls.get_es_document_for_course(course, index=index, action=action)
 
     @staticmethod

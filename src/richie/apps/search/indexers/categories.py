@@ -149,10 +149,14 @@ class CategoriesIndexer:
         """
         index = index or cls.index_name
 
-        for category in Category.objects.filter(
-            extended_object__publisher_is_draft=False,
-            extended_object__title_set__published=True,
-        ).distinct():
+        for category in (
+            Category.objects.filter(
+                extended_object__publisher_is_draft=False,
+                extended_object__title_set__published=True,
+            )
+            .distinct()
+            .iterator()
+        ):
             yield cls.get_es_document_for_category(category, index=index, action=action)
 
     @staticmethod

@@ -107,10 +107,14 @@ class OrganizationsIndexer:
         """
         index = index or cls.index_name
 
-        for organization in Organization.objects.filter(
-            extended_object__publisher_is_draft=False,
-            extended_object__title_set__published=True,
-        ).distinct():
+        for organization in (
+            Organization.objects.filter(
+                extended_object__publisher_is_draft=False,
+                extended_object__title_set__published=True,
+            )
+            .distinct()
+            .iterator()
+        ):
             yield cls.get_es_document_for_organization(
                 organization, index=index, action=action
             )
