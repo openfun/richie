@@ -107,10 +107,14 @@ class PersonsIndexer:
         """
         index = index or cls.index_name
 
-        for person in Person.objects.filter(
-            extended_object__publisher_is_draft=False,
-            extended_object__title_set__published=True,
-        ).distinct():
+        for person in (
+            Person.objects.filter(
+                extended_object__publisher_is_draft=False,
+                extended_object__title_set__published=True,
+            )
+            .distinct()
+            .iterator()
+        ):
             yield cls.get_es_document_for_person(person, index=index, action=action)
 
     @staticmethod
