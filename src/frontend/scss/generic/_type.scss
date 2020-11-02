@@ -2,7 +2,7 @@
 // like '.font-NAME'
 $r-fonts: () !default;
 @each $name, $value in $r-fonts {
-  &.font-#{$name} {
+  .font-#{$name} {
     font-family: $value !important;
   }
 }

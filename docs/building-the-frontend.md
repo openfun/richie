@@ -75,7 +75,7 @@ You are now ready to run the CSS build:
 
 ```
 cd src/frontend
-yarn sass
+yarn build-sass
 ```
 
 This gives you one output CSS file that you can put in the static files directory of your project and use to override Richie's style or add your own parts.
