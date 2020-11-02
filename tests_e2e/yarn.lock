@@ -370,10 +370,10 @@ cross-spawn@^7.0.0:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
-cypress-axe@0.8.2:
-  version "0.8.2"
-  resolved "https://registry.yarnpkg.com/cypress-axe/-/cypress-axe-0.8.2.tgz#6f18084dd1399d6334aa0ca97315bc96829eb625"
-  integrity sha512-Gz7UUHfENfTUfgtv9cu4xctg5JsSpdZ6eTWIyoBQI42DdebJO6lZUEXX/paVDPVeSU0YVl6WWmTzQduUzaWuAw==
+cypress-axe@0.9.1:
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/cypress-axe/-/cypress-axe-0.9.1.tgz#f2e5520df5865c39c48374ffe3628cd6037edff4"
+  integrity sha512-K7STKejZygJv/ZlVg6n8MQ0np/c0vGNHTUHe5MiVeCSt+CY5c8R7kGfMzhmXW7ee3bx2thM+4AnUnVCami0HGw==
 
 cypress@5.5.0:
   version "5.5.0"
