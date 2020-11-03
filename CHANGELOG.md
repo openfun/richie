@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [2.0.0-beta.17] - 2020-11-03
+
 ### Added
 
 - Add a flag allowing to exclude some courses from the search index and page
@@ -1048,7 +1050,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.0.0-beta.16...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.0.0-beta.17...master
+[2.0.0-beta.17]: https://github.com/openfun/richie/compare/v2.0.0-beta.16...v2.0.0-beta.17
 [2.0.0-beta.16]: https://github.com/openfun/richie/compare/v2.0.0-beta.15...v2.0.0-beta.16
 [2.0.0-beta.15]: https://github.com/openfun/richie/compare/v2.0.0-beta.14...v2.0.0-beta.15
 [2.0.0-beta.14]: https://github.com/openfun/richie/compare/v2.0.0-beta.13...v2.0.0-beta.14

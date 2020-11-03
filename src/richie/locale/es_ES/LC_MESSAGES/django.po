@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-06 11:40+0000\n"
-"PO-Revision-Date: 2020-10-06 11:47\n"
+"POT-Creation-Date: 2020-11-04 09:05+0000\n"
+"PO-Revision-Date: 2020-11-04 09:24\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -100,21 +100,21 @@ msgstr "Su navegador no admite este formato de vídeo."
 msgid "You are here:"
 msgstr ""
 
-#: apps/core/templates/richie/base.html:95
+#: apps/core/templates/richie/base.html:94
 #: apps/courses/templates/courses/cms/course_detail.html:130
 msgid "Contact us"
 msgstr ""
 
-#: apps/core/templates/richie/base.html:123
+#: apps/core/templates/richie/base.html:122
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:32
 msgid "Learn more"
 msgstr ""
 
-#: apps/core/templates/richie/base.html:133
+#: apps/core/templates/richie/base.html:134
 msgid "Life-changing learning!"
 msgstr ""
 
-#: apps/core/templates/richie/base.html:147
+#: apps/core/templates/richie/base.html:148
 msgid "Powered by"
 msgstr ""
 
@@ -224,18 +224,6 @@ msgstr "Ver grupo de usuarios"
 #: apps/courses/admin.py:138
 msgid "See filer folder"
 msgstr "Ver carpeta de archivos"
-
-#: apps/courses/api.py:92
-msgid "Course run is not open for enrollments."
-msgstr ""
-
-#: apps/courses/api.py:102
-msgid "Enrollment failed on the LMS."
-msgstr ""
-
-#: apps/courses/api.py:123
-msgid "The \"course_run\" parameter is mandatory."
-msgstr ""
 
 #: apps/courses/cms_plugins.py:35
 msgid "Organization"
@@ -488,13 +476,13 @@ msgid "blog post"
 msgstr "entrada de blog"
 
 #: apps/courses/models/blog.py:94 apps/courses/models/category.py:214
-#: apps/courses/models/course.py:579 apps/courses/models/organization.py:236
+#: apps/courses/models/course.py:584 apps/courses/models/organization.py:236
 #: apps/courses/models/organization.py:265
 msgid "variant"
 msgstr ""
 
 #: apps/courses/models/blog.py:97 apps/courses/models/category.py:217
-#: apps/courses/models/course.py:582 apps/courses/models/organization.py:239
+#: apps/courses/models/course.py:587 apps/courses/models/organization.py:239
 #: apps/courses/models/organization.py:268
 msgid "Optional glimpse variant for a custom look."
 msgstr ""
@@ -543,72 +531,80 @@ msgstr "por ser programado"
 msgid "forever open"
 msgstr "siempre abierto"
 
-#: apps/courses/models/course.py:141
+#: apps/courses/models/course.py:138
+msgid "is listed"
+msgstr ""
+
+#: apps/courses/models/course.py:139
+msgid "Tick if you want the course to be visible on the search page."
+msgstr ""
+
+#: apps/courses/models/course.py:146
 msgid "course"
 msgstr "curso"
 
-#: apps/courses/models/course.py:453
+#: apps/courses/models/course.py:458
 #: apps/courses/templates/courses/cms/course_run_detail.html:138
 msgid "Resource link"
 msgstr "Enlace de recursos"
 
-#: apps/courses/models/course.py:455
+#: apps/courses/models/course.py:460
 msgid "course start"
 msgstr "inicio del curso"
 
-#: apps/courses/models/course.py:456
+#: apps/courses/models/course.py:461
 msgid "course end"
 msgstr "fin del curso"
 
-#: apps/courses/models/course.py:458
+#: apps/courses/models/course.py:463
 msgid "enrollment start"
 msgstr ""
 
-#: apps/courses/models/course.py:460
+#: apps/courses/models/course.py:465
 msgid "enrollment end"
 msgstr ""
 
-#: apps/courses/models/course.py:468
+#: apps/courses/models/course.py:473
 msgid "The list of languages in which the course content is available."
 msgstr "Lista de idiomas en los que el contenido del curso está disponible."
 
-#: apps/courses/models/course.py:475
+#: apps/courses/models/course.py:480
 msgid "course run"
 msgstr "sesión de curso"
 
-#: apps/courses/models/course.py:589
+#: apps/courses/models/course.py:594
 msgid "course plugin"
 msgstr "plugin de curso"
 
-#: apps/courses/models/course.py:602 plugins/large_banner/models.py:38
+#: apps/courses/models/course.py:607 plugins/large_banner/models.py:38
 msgid "logo"
 msgstr "logo"
 
-#: apps/courses/models/course.py:604
+#: apps/courses/models/course.py:609
 msgid "url"
 msgstr "url"
 
-#: apps/courses/models/course.py:607 apps/courses/models/course.py:631
+#: apps/courses/models/course.py:612 apps/courses/models/course.py:636
 msgid "name"
 msgstr "nombre"
 
-#: apps/courses/models/course.py:609 apps/courses/models/course.py:632
+#: apps/courses/models/course.py:614 apps/courses/models/course.py:637
 msgid "content"
 msgstr "contenido"
 
-#: apps/courses/models/course.py:614
+#: apps/courses/models/course.py:619
 msgid "licence"
 msgstr "licencia"
 
-#: apps/courses/models/course.py:637
+#: apps/courses/models/course.py:642
 msgid "Licence translation"
 msgstr ""
 
-#: apps/courses/models/course.py:652
+#: apps/courses/models/course.py:657
 msgid "description"
 msgstr "descripción"
 
-#: apps/courses/models/course.py:656
+#: apps/courses/models/course.py:661
 msgid "licence plugin"
 msgstr "plugin de licencia"
 
@@ -892,11 +888,11 @@ msgstr ""
 msgid "Courses"
 msgstr "Cursos"
 
-#: apps/courses/settings/__init__.py:409
+#: apps/courses/settings/__init__.py:436
 msgid "Button caesura"
 msgstr ""
 
-#: apps/courses/settings/__init__.py:411
+#: apps/courses/settings/__init__.py:438
 msgid "Full width"
 msgstr ""
 
@@ -1224,7 +1220,7 @@ msgid "\n"
 "                                "
 msgstr ""
 
-#: apps/courses/templates/courses/cms/organization_list.html:19
+#: apps/courses/templates/courses/cms/organization_list.html:24
 msgid "No organization yet"
 msgstr ""
 
@@ -1441,7 +1437,7 @@ msgstr ""
 msgid "background image"
 msgstr "imagen de fondo"
 
-#: plugins/large_banner/models.py:45 plugins/section/models.py:26
+#: plugins/large_banner/models.py:45 plugins/section/models.py:24
 msgid "Template"
 msgstr "Plantilla"
 
@@ -1477,7 +1473,7 @@ msgstr "Texto simple"
 msgid "plain text"
 msgstr "texto plano"
 
-#: plugins/section/cms_plugins.py:26
+#: plugins/section/cms_plugins.py:28
 msgid "Section"
 msgstr "Sección"
 
@@ -1513,7 +1509,7 @@ msgstr ""
 msgid "Item tiles"
 msgstr ""
 
-#: plugins/section/models.py:30
+#: plugins/section/models.py:28
 msgid "Optional template for custom look."
 msgstr ""
 
@@ -1525,11 +1521,11 @@ msgstr "Imagen"
 msgid "Simple text"
 msgstr "Texto simple"
 
-#: plugins/simple_text_ckeditor/models.py:23
+#: plugins/simple_text_ckeditor/models.py:22
 msgid "body"
 msgstr ""
 
-#: plugins/simple_text_ckeditor/validators.py:16
+#: plugins/simple_text_ckeditor/validators.py:19
 #, python-format
 msgid "Ensure this text has at most %(limit_value)d character (it has %(show_value)d)."
 msgid_plural "Ensure this text has at most %(limit_value)d characters (it has %(show_value)d)."
