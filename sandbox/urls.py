@@ -21,6 +21,8 @@ from richie.apps.search.urls import urlpatterns as search_urlpatterns
 API_PREFIX = r"v(?P<version>[0-9]+\.[0-9]+)"
 
 admin.autodiscover()
+admin.site.enable_nav_sidebar = False
+
 
 urlpatterns = [
     path(r"sitemap.xml", sitemap, {"sitemaps": {"cmspages": CMSSitemap}}),
