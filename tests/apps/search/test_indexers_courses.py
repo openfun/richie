@@ -247,6 +247,7 @@ class CoursesIndexersTestCase(TestCase):
                 },
             },
             "is_new": False,
+            "is_listed": True,
             "organization_highlighted": {
                 "en": "english main organization title",
                 "fr": "titre organisation principale français",
@@ -316,6 +317,7 @@ class CoursesIndexersTestCase(TestCase):
                     "effort": {"en": "5 minutes/day", "fr": "5 minutes/jour"},
                     "icon": {},
                     "is_new": False,
+                    "is_listed": True,
                     "organization_highlighted": None,
                     "organizations": [],
                     "organizations_names": {},
@@ -325,6 +327,19 @@ class CoursesIndexersTestCase(TestCase):
                 }
             ],
         )
+
+    def test_indexers_courses_get_es_documents_is_listed(self):
+        """
+        Courses that are flagged to be hidden from the search page should be marked as such.
+        """
+        CourseFactory(should_publish=True, is_listed=False)
+
+        indexed_courses = list(
+            CoursesIndexer.get_es_documents(index="some_index", action="some_action")
+        )
+        self.assertEqual(len(indexed_courses), 1)
+        self.assertFalse(indexed_courses[0]["is_listed"])
+        self.assertIsNone(indexed_courses[0]["complete"], None)
 
     def test_indexers_courses_get_es_documents_no_start(self):
         """

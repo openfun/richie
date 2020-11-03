@@ -47,7 +47,7 @@ class AutocompleteMixin:
             doc_type=indexer.document_type,
             body={
                 "suggest": {
-                    "organizations": {
+                    "objects": {
                         "prefix": request.query_params["query"],
                         "completion": {
                             "field": "complete.{:s}".format(
@@ -65,8 +65,8 @@ class AutocompleteMixin:
                 indexer.format_es_document_for_autocomplete(
                     option, get_language_from_request(request)
                 )
-                for option in autocomplete_query_response["suggest"]["organizations"][
-                    0
-                ]["options"]
+                for option in autocomplete_query_response["suggest"]["objects"][0][
+                    "options"
+                ]
             ]
         )

@@ -66,6 +66,7 @@ class CoursesIndexer:
                 for lang, _ in settings.LANGUAGES
             },
             "is_new": {"type": "boolean"},
+            "is_listed": {"type": "boolean"},
             # Not searchable
             "absolute_url": {"type": "object", "enabled": False},
             "cover_image": {"type": "object", "enabled": False},
@@ -516,7 +517,9 @@ class CoursesIndexer:
             "complete": {
                 language: slice_string_for_completion(title)
                 for language, title in titles.items()
-            },
+            }
+            if course.is_listed
+            else None,
             "course_runs": course_runs,
             "cover_image": cover_images,
             "description": {
@@ -526,6 +529,7 @@ class CoursesIndexer:
             "effort": effort,
             "icon": icon_images,
             "is_new": len(course_runs) == 1,
+            "is_listed": course.is_listed,
             # Pick the highlighted organization from the organizations QuerySet to benefit from
             # the prefetch of related title sets
             "organization_highlighted": {

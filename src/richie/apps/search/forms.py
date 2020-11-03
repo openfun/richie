@@ -184,7 +184,8 @@ class CourseSearchForm(SearchForm):
                     ...
                 ]
         """
-        queries = []
+        # Always filter out courses that are not flagged for listing
+        queries = [{"key": "is_listed", "fragment": [{"term": {"is_listed": True}}]}]
 
         # Add the query fragments of each filter definition to the list of queries
         for filter_definition in FILTERS.values():
@@ -242,18 +243,14 @@ class CourseSearchForm(SearchForm):
         # https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-bool-query.html
         queries = self.get_queries()
 
-        # Default to a match_all query
-        if not queries:
-            query = {"match_all": {}}
-        else:
-            # Concatenate all the sub-queries lists together to form the queries list
-            query = {
-                "bool": {
-                    "must":
-                    # queries => map(pluck("fragment")) => flatten()
-                    [clause for kf_pair in queries for clause in kf_pair["fragment"]]
-                }
+        # Concatenate all the sub-queries lists together to form the queries list
+        query = {
+            "bool": {
+                "must":
+                # queries => map(pluck("fragment")) => flatten()
+                [clause for kf_pair in queries for clause in kf_pair["fragment"]]
             }
+        }
 
         # Concatenate our hardcoded filters query fragments with organizations and categories
         # terms aggregations build on-the-fly

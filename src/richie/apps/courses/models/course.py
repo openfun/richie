@@ -133,6 +133,11 @@ class Course(BasePageExtension):
         blank=True,
         null=True,
     )
+    is_listed = models.BooleanField(
+        default=True,
+        verbose_name=_("is listed"),
+        help_text=_("Tick if you want the course to be visible on the search page."),
+    )
 
     PAGE = defaults.COURSES_PAGE
 

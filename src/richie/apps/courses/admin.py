@@ -36,8 +36,8 @@ class CategoryAdmin(FrontendEditableAdminMixin, PageExtensionAdmin):
 class CourseAdmin(FrontendEditableAdminMixin, PageExtensionAdmin):
     """Admin class for the Course model"""
 
-    list_display = ["title"]
-    frontend_editable_fields = ("effort", "duration")
+    list_display = ["title", "is_listed"]
+    frontend_editable_fields = ("effort", "duration", "is_listed")
 
     # pylint: disable=no-self-use
     def title(self, obj):
