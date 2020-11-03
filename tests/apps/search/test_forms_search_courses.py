@@ -220,6 +220,7 @@ class CourseSearchFormTestCase(TestCase):
             {
                 "bool": {
                     "must": [
+                        {"term": {"is_listed": True}},
                         {
                             "multi_match": {
                                 "analyzer": "english",
@@ -233,7 +234,7 @@ class CourseSearchFormTestCase(TestCase):
                                 "query": "some phrase terms",
                                 "type": "cross_fields",
                             }
-                        }
+                        },
                     ]
                 }
             },

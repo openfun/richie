@@ -146,6 +146,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
                     "icon": {"en": "icon.jpg"},
                     "id": index,
                     "is_new": False,
+                    "is_listed": True,
                     "organizations": [id],
                     "organizations_names": {"en": ["Org #{:s}".format(id)]},
                     "title": {"en": "title"},
@@ -225,6 +226,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
                     "icon": {"en": "icon.jpg"},
                     "id": index,
                     "is_new": False,
+                    "is_listed": True,
                     "organizations": random.sample(
                         organizations, random.randint(1, len(organizations))
                     ),
@@ -243,3 +245,39 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
             "L-000300010001",
             [o["key"] for o in content["filters"]["organizations"]["values"]],
         )
+
+    def test_query_courses_is_listed(self, *_):
+        """
+        A course that is not flagged for listing should be excluded from results.
+        """
+        hidden_id = random.randint(0, 2)
+        self.prepare_index(
+            [
+                {
+                    "absolute_url": {"en": "url"},
+                    "categories": [],
+                    "course_runs": [],
+                    "cover_image": {"en": "cover_image.jpg"},
+                    "duration": {"en": "N/A"},
+                    "effort": {"en": "N/A"},
+                    "icon": {"en": "icon.jpg"},
+                    "id": index,
+                    "is_new": False,
+                    "is_listed": index != hidden_id,
+                    "organizations": [],
+                    "organizations_names": {"en": []},
+                    "title": {"en": "title"},
+                }
+                for index in range(3)
+            ]
+        )
+
+        response = self.client.get("/api/v1.0/courses/")
+        self.assertEqual(response.status_code, 200)
+
+        content = json.loads(response.content)
+        self.assertEqual(len(content["objects"]), 2)
+
+        result_ids = [o["id"] for o in content["objects"]]
+        for index in range(3):
+            self.assertEqual(str(index) in result_ids, index != hidden_id)

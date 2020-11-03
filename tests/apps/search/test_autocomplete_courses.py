@@ -16,6 +16,59 @@ from richie.apps.search.utils.indexers import slice_string_for_completion
 
 COURSES_INDEX = "test_courses"
 
+TEST_COURSES = [
+    {
+        "complete": {
+            "en": slice_string_for_completion(
+                "Artificial intelligence for mushroom picking"
+            ),
+            "fr": slice_string_for_completion(
+                "Intelligence artificielle pour la cueillette de chàmpiñons"
+            ),
+        },
+        "course_runs": [],
+        "id": "24",
+        "is_listed": True,
+        "path": "001000",
+        "title": {
+            "en": "Artificial intelligence for mushroom picking",
+            "fr": "Intelligence artificielle pour la cueillette de chàmpiñons",
+        },
+    },
+    {
+        "complete": {
+            "en": slice_string_for_completion(
+                "Kung-fu moves for cloud infrastructure security"
+            ),
+            "fr": slice_string_for_completion(
+                "Protéger ses serveurs par la pratique des arts martiaux"
+            ),
+        },
+        "course_runs": [],
+        "id": "33",
+        "is_listed": True,
+        "path": "001001",
+        "title": {
+            "en": "Kung-fu moves for cloud infrastructure security",
+            "fr": "Prôtéger ses serveurs par la pratique des arts martiaux",
+        },
+    },
+    {
+        "complete": {
+            "en": slice_string_for_completion("Securing funding through token sales"),
+            "fr": slice_string_for_completion("Lever des fonds par des ICO"),
+        },
+        "course_runs": [],
+        "id": "51",
+        "is_listed": True,
+        "path": "001002",
+        "title": {
+            "en": "Securing funding through token sales",
+            "fr": "Lever des fonds par des ICO",
+        },
+    },
+]
+
 
 @mock.patch.object(  # Plug the test index we're filling on the indexer itself
     CoursesIndexer,
@@ -28,63 +81,11 @@ class AutocompleteCoursesTestCase(TestCase):
     Test course autocomplete queries in a real-world situation with ElasticSearch.
     """
 
-    def execute_query(self, querystring="", **extra):
+    def execute_query(self, courses, querystring="", **extra):
         """
         Not a test.
         Prepare the ElasticSearch index and execute the query in it.
         """
-
-        courses = [
-            {
-                "complete": {
-                    "en": slice_string_for_completion(
-                        "Artificial intelligence for mushroom picking"
-                    ),
-                    "fr": slice_string_for_completion(
-                        "Intelligence artificielle pour la cueillette de chàmpiñons"
-                    ),
-                },
-                "course_runs": [],
-                "id": "24",
-                "path": "001000",
-                "title": {
-                    "en": "Artificial intelligence for mushroom picking",
-                    "fr": "Intelligence artificielle pour la cueillette de chàmpiñons",
-                },
-            },
-            {
-                "complete": {
-                    "en": slice_string_for_completion(
-                        "Kung-fu moves for cloud infrastructure security"
-                    ),
-                    "fr": slice_string_for_completion(
-                        "Protéger ses serveurs par la pratique des arts martiaux"
-                    ),
-                },
-                "course_runs": [],
-                "id": "33",
-                "path": "001001",
-                "title": {
-                    "en": "Kung-fu moves for cloud infrastructure security",
-                    "fr": "Prôtéger ses serveurs par la pratique des arts martiaux",
-                },
-            },
-            {
-                "complete": {
-                    "en": slice_string_for_completion(
-                        "Securing funding through token sales"
-                    ),
-                    "fr": slice_string_for_completion("Lever des fonds par des ICO"),
-                },
-                "course_runs": [],
-                "id": "51",
-                "path": "001002",
-                "title": {
-                    "en": "Securing funding through token sales",
-                    "fr": "Lever des fonds par des ICO",
-                },
-            },
-        ]
 
         indices_client = IndicesClient(client=ES_CLIENT)
         # Delete any existing indices so we get a clean slate
@@ -124,46 +125,73 @@ class AutocompleteCoursesTestCase(TestCase):
         bulk(actions=actions, chunk_size=500, client=ES_CLIENT)
         indices_client.refresh()
 
-        response = self.client.get(
+        results = self.client.get(
             f"/api/v1.0/courses/autocomplete/?{querystring:s}", **extra
         )
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(results.status_code, 200)
 
-        return courses, json.loads(response.content)
+        return json.loads(results.content)
 
     def test_autocomplete_text(self, *_):
         """
         Make sure autocomplete is operational and returns the expected courses.
         """
-        all_courses, response = self.execute_query(querystring="query=sec")
+        results = self.execute_query(TEST_COURSES, querystring="query=sec")
         self.assertEqual(
-            [all_courses[i]["id"] for i in [2, 1]],
-            [course["id"] for course in response],
+            [TEST_COURSES[i]["id"] for i in [2, 1]],
+            [course["id"] for course in results],
         )
-        all_courses, response = self.execute_query(querystring="query=kung-fu")
-        self.assertEqual([all_courses[1]["id"]], [course["id"] for course in response])
+        results = self.execute_query(TEST_COURSES, querystring="query=kung-fu")
+        self.assertEqual([TEST_COURSES[1]["id"]], [course["id"] for course in results])
 
     def test_autocomplete_diacritics_insensitive_query(self, *_):
         """
         Queries are diacritics insensitive.
         """
-        all_courses, response = self.execute_query(querystring="query=sécür")
+        results = self.execute_query(TEST_COURSES, querystring="query=sécür")
         self.assertEqual(
-            [all_courses[i]["id"] for i in [2, 1]],
-            [course["id"] for course in response],
+            [TEST_COURSES[i]["id"] for i in [2, 1]],
+            [course["id"] for course in results],
         )
 
     def test_autocomplete_diacritics_insensitive_index(self, *_):
         """
         Index is diacritics insensitive.
         """
-        all_courses, response = self.execute_query(
-            querystring="query=champinon", HTTP_ACCEPT_LANGUAGE="fr"
+        results = self.execute_query(
+            TEST_COURSES, querystring="query=champinon", HTTP_ACCEPT_LANGUAGE="fr"
         )
-        self.assertEqual([all_courses[0]["id"]], [course["id"] for course in response])
+        self.assertEqual([TEST_COURSES[0]["id"]], [course["id"] for course in results])
 
         # Sanity check for original, accented version
-        all_courses, response = self.execute_query(
-            querystring="query=prôtéger", HTTP_ACCEPT_LANGUAGE="fr"
+        results = self.execute_query(
+            TEST_COURSES, querystring="query=prôtéger", HTTP_ACCEPT_LANGUAGE="fr"
         )
-        self.assertEqual([all_courses[1]["id"]], [course["id"] for course in response])
+        self.assertEqual([TEST_COURSES[1]["id"]], [course["id"] for course in results])
+
+    def test_autocomplete_is_listed(self, *_):
+        """
+        Courses that are not flagged for listing should not appear in results.
+        """
+        all_courses = [
+            {
+                "complete": {
+                    "en": slice_string_for_completion(
+                        "Artificial intelligence for mushroom picking"
+                    )
+                },
+                "course_runs": [],
+                "id": "24",
+                "path": "001000",
+                "title": {"en": "Artificial intelligence for mushroom picking"},
+            },
+            {
+                "complete": None,
+                "course_runs": [],
+                "id": "25",
+                "path": "001001",
+                "title": {"en": "Artificial intelligence for mushroom picking"},
+            },
+        ]
+        results = self.execute_query(all_courses, querystring="query=intelligence")
+        self.assertEqual([all_courses[0]["id"]], [course["id"] for course in results])

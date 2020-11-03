@@ -30,6 +30,7 @@ COURSES = [
             )
         },
         "is_new": True,
+        "is_listed": True,
         "organization_highlighted": {"en": "Org 311"},
         "organizations": ["P-00030001", "P-00030004", "L-000300010001"],
         "organizations_names": {"en": ["Org 31", "Org 34", "Org 311"]},
@@ -49,6 +50,7 @@ COURSES = [
             )
         },
         "is_new": True,
+        "is_listed": True,
         "organization_highlighted": {"en": "Org 33"},
         "organizations": ["P-00030001", "P-00030003", "L-000300010002"],
         "organizations_names": {"en": ["Org 31", "Org 33", "Org 312"]},
@@ -68,6 +70,7 @@ COURSES = [
             )
         },
         "is_new": False,
+        "is_listed": True,
         "organization_highlighted": {"en": "Org 321"},
         "organizations": ["P-00030002", "P-00030003", "L-000300020001"],
         "organizations_names": {"en": ["Org 32", "Org 33", "Org 321"]},
@@ -86,6 +89,7 @@ COURSES = [
             )
         },
         "is_new": False,
+        "is_listed": True,
         "organization_highlighted": {"en": "Org 34"},
         "organizations": ["P-00030002", "P-00030004", "L-000300020002"],
         "organizations_names": {"en": ["Org 32", "Org 34", "Org 322"]},
