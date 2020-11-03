@@ -9,51 +9,51 @@
   },
   "components.CourseRunEnrollment.enroll": {
     "description": "CTA for users who can enroll in the course run or could enroll if they logged in.",
-    "message": ""
+    "message": "Inscribirse ahora"
   },
   "components.CourseRunEnrollment.enrolled": {
     "description": "Help text for users who see the \"Go to course\" CTA on course run enrollment",
-    "message": ""
+    "message": "You are enrolled in this course run"
   },
   "components.CourseRunEnrollment.enrollmentClosed": {
     "description": "Help text replacing the CTA on a course run when enrollment is closed.",
-    "message": ""
+    "message": "Enrollment in this course run is closed at the moment"
   },
   "components.CourseRunEnrollment.enrollmentFailed": {
     "description": "Help text below the \"Enroll now\" CTA when an enrollment attempt has already failed.",
-    "message": ""
+    "message": "Your enrollment request failed."
   },
   "components.CourseRunEnrollment.goToCourse": {
     "description": "CTA for users who are already enrolled in a course run.",
-    "message": ""
+    "message": "Go to course"
   },
   "components.CourseRunEnrollment.loadingInitial": {
     "description": "Accessible text for the initial loading spinner on the course run enrollment button.",
-    "message": ""
+    "message": "Loading enrollment information..."
   },
   "components.CourseRunEnrollment.loginToEnroll": {
     "description": "Helper text in the enroll button for non logged in users",
-    "message": ""
+    "message": "Log in to enroll"
   },
   "components.DesktopUserMenu.menuPurpose": {
     "description": "Accessible label for user menu button",
-    "message": ""
+    "message": "Access to your profile settings"
   },
   "components.LanguageSelector.currentlySelected": {
     "description": "Accessible hint to mark the currently selected language in the language selector",
-    "message": ""
+    "message": "(currently selected)"
   },
   "components.LanguageSelector.languages": {
     "description": "Default text for the language selector button when the current language cannot be identified",
-    "message": ""
+    "message": "Idiomas"
   },
   "components.LanguageSelector.selectLanguage": {
     "description": "Accessible label for the language selector button",
-    "message": ""
+    "message": "Select a language:"
   },
   "components.LanguageSelector.switchToLanguage": {
     "description": "Accessible link title for the language switching links in language selector",
-    "message": ""
+    "message": "Switch to {language}"
   },
   "components.PaginateCourseSearch.currentlyReadingLastPageN": {
     "description": "Accessibility helper in pagination, shown next to the current page number when it is the last page.",
@@ -69,7 +69,7 @@
   },
   "components.PaginateCourseSearch.nextPageN": {
     "description": "Accessibility helper for pagination, added on the next page link.",
-    "message": "Página {page}"
+    "message": "Página siguiente {page}"
   },
   "components.PaginateCourseSearch.pageN": {
     "description": "Accessibility helper for pagination, added on all page links for screen readers,\n      only shown next to \"page 1\" visually.",
@@ -89,7 +89,7 @@
   },
   "components.Search.errorMessage": {
     "description": "Error message for Search view when the request to load courses fails",
-    "message": ""
+    "message": "Something's wrong! Courses could not be loaded."
   },
   "components.Search.hideFiltersPane": {
     "description": "Accessibility text for the button/icon that toggles *off* the filters pane on mobile",

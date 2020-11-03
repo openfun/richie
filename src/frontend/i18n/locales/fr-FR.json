@@ -21,7 +21,7 @@
   },
   "components.CourseRunEnrollment.enrollmentFailed": {
     "description": "Help text below the \"Enroll now\" CTA when an enrollment attempt has already failed.",
-    "message": "Votre demande d'inscription a échoué"
+    "message": "Votre demande d'inscription a échoué."
   },
   "components.CourseRunEnrollment.goToCourse": {
     "description": "CTA for users who are already enrolled in a course run.",
@@ -141,7 +141,7 @@
   },
   "components.SearchInput.button": {
     "description": "Accessibility text for the search button inside the Search input.",
-    "message": "Chercher"
+    "message": "Recherche"
   },
   "components.SearchSuggestField.searchFieldPlaceholder": {
     "description": "Placeholder text displayed in the search field when it is empty.",
