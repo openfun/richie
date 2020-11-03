@@ -82,6 +82,7 @@ yarn-error.log
 
 # Exported strings & generated translation templates
 src/frontend/i18n/frontend.json
+*.pot
 
 # Documentation related files to ignore
 lib/core/metadata.js
