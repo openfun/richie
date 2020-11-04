@@ -9,6 +9,7 @@ from cms.plugin_pool import plugin_pool
 from richie.apps.core.defaults import PLUGINS_GROUP
 
 from .defaults import SECTION_TEMPLATES
+from .forms import SectionForm
 from .models import Section
 
 
@@ -20,10 +21,12 @@ class SectionPlugin(CMSPluginBase):
 
     allow_children = True
     cache = True
+    form = SectionForm
     fieldsets = ((None, {"fields": ["title", "template"]}),)
     model = Section
     module = PLUGINS_GROUP
     name = _("Section")
+
     # Required from CMSPluginBase signature but not used since we override it
     # from render()
     render_template = SECTION_TEMPLATES[0][0]

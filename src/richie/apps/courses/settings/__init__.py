@@ -403,6 +403,33 @@ CKEDITOR_LIMITED_CONFIGURATION = {
     ],
 }
 
+# CKEditor configuration for formatting section title:
+# only bold entity
+CKEDITOR_INLINE_BOLD_CONFIGURATION = {
+    "language": "{{ language }}",
+    "skin": "moono-lisa",
+    "toolbarCanCollapse": False,
+    "contentsCss": "/static/css/ckeditor.css",
+    # Only enable following tag definitions
+    "allowedContent": ["strong"],
+    # Block commands which adds break lines (Enter & Shift + Enter)
+    # Enter Key Code = 13
+    # CKEDITOR.SHIFT + Enter = 2228224 + 13 = 2228237
+    "blockedKeystrokes": [13, 2228237],
+    "keystrokes": [[13, None], [2228237, None]],
+    # Enabled showblocks as default behavior
+    "startupOutlineBlocks": True,
+    # Default toolbar configurations for djangocms_text_ckeditor
+    "toolbar_HTMLField": [
+        ["Undo", "Redo"],
+        ["Bold"],
+    ],
+    "enterMode": 2,
+    "autoParagraph": False,
+    "resize_enabled": False,
+    "height": 68,
+}
+
 # Additional LinkPlugin templates. Note how choice value is just a keyword
 # instead of full template path. Value is used inside a path formatting
 # such as "templates/djangocms_link/VALUE/link.html"

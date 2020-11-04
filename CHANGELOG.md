@@ -12,6 +12,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Add a flag allowing to exclude some courses from the search index and page
 - Allow use of columns in footer menu items
+- Use Limited CKEditor to edit section title
 
 ### Changed
 
