@@ -17,6 +17,11 @@ section {
 
   &__title {
     @include detail-title;
+
+    & > strong {
+      color: r-theme-val(section-plugin, title-emphased-color);
+      font-weight: inherit;
+    }
   }
 
   &__row {

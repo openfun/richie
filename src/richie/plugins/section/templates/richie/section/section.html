@@ -4,7 +4,7 @@
     <div class="section__row">
         {% if instance.title %}
             <h{{ header_level|default:2 }} class="section__title">
-                {{ instance.title }}
+                {{ instance.title|safe }}
             </h{{ header_level|default:2 }}>
         {% endif %}
         <div class="section__items">
