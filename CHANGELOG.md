@@ -22,6 +22,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Reinitialize JS after saving a modification in edit mode
 - has_connected_lms crashed when course_run is blank
 - Avoid stretching of footer menu items
 

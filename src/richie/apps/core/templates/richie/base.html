@@ -160,41 +160,59 @@
         </script>
         <script src="{% static 'richie/js/index.js' %}"></script>
         <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Get all topbar burger elements
-            const topbarBurgers = Array.prototype.slice.call(
-                document.querySelectorAll(".topbar__hamburger"), 0
-            );
+            function initializeHamburgerMenu() {
+                // Get all topbar burger elements
+                const topbarBurgers = Array.prototype.slice.call(
+                    document.querySelectorAll(".topbar__hamburger"), 0
+                );
 
-            // Check if there are any navbar burgers
-            if (topbarBurgers.length > 0) {
-                // Add a click event on each of them
-                topbarBurgers.forEach(function(el) {
-                    el.addEventListener("click", function() {
-                        // Get the target from the "data-target" attribute
-                        const target = document.getElementById(el.dataset.target);
-                        // Toggle the "is-active" class on both the burger and container
-                        el.classList.toggle("is-active");
-                        target.classList.toggle("is-open");
+                // Check if there are any navbar burgers
+                if (topbarBurgers.length > 0) {
+                    // Add a click event on each of them
+                    topbarBurgers.forEach(function(el) {
+                        el.addEventListener("click", function() {
+                            // Get the target from the "data-target" attribute
+                            const target = document.getElementById(el.dataset.target);
+                            // Toggle the "is-active" class on both the burger and container
+                            el.classList.toggle("is-active");
+                            target.classList.toggle("is-open");
+                        });
                     });
-                });
+                }
             }
 
-            // Implement accordion item behaviors
-            const $accordionItems = Array.prototype.slice.call(
-                document.querySelectorAll('[data-accordion-button]'), 0
-            );
+            function initializeAccordions() {
+                // Implement accordion item behaviors
+                const $accordionItems = Array.prototype.slice.call(
+                    document.querySelectorAll('[data-accordion-button]'), 0
+                );
 
-            if ($accordionItems.length > 0) {
-                $accordionItems.forEach(function(itemObject, itemIndex) {
-                    itemObject.addEventListener('click', function () {
-                        itemObject.closest('li').toggleAttribute('data-accordion-active');
-                        itemObject.toggleAttribute('data-accordion-open');
+                if ($accordionItems.length > 0) {
+                    $accordionItems.forEach(function(itemObject, itemIndex) {
+                        itemObject.addEventListener('click', function () {
+                            itemObject.closest('li').toggleAttribute('data-accordion-active');
+                            itemObject.toggleAttribute('data-accordion-open');
+                        });
                     });
-                });
+                }
             }
-        });
+
+            document.addEventListener("DOMContentLoaded", function() {
+                initializeAccordions();
+                initializeHamburgerMenu();
+            });
         </script>
+        // When edit mode is active, we have to refresh js scripts after saving modifications
+        // https://docs.django-cms.org/en/latest/topics/frontend-integration.html
+        {% if request.toolbar and request.toolbar.edit_mode_active %}
+        <script>
+            CMS.$(window).on('cms-content-refresh', function () {
+                __RICHIE__.build();
+                initializeAccordions();
+                initializeHamburgerMenu();
+            });
+        </script>
+        {% endif %}
         {% block body_js %}{% endblock body_js %}
     </body>
 </html>
