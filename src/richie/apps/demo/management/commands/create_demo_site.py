@@ -70,8 +70,9 @@ def create_demo_site():
     site.name = "Richie demonstration"
     site.save()
 
-    lms_endpoint = getattr(
-        settings, "LMS_BACKENDS", [{"BASE_URL": defaults.DEFAULT_LMS_ENDPOINT}]
+    lms_endpoint = (
+        getattr(settings, "LMS_BACKENDS", None)
+        or [{"BASE_URL": defaults.DEFAULT_LMS_ENDPOINT}]
     )[0]["BASE_URL"]
 
     # Create pages as described in PAGES_INFOS
