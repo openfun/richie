@@ -1,4 +1,5 @@
 import { CommonDataProps } from 'types/commonDataProps';
+import { handle } from 'utils/errors/handle';
 import { Nullable } from 'utils/types';
 import { User } from 'types/User';
 import { Enrollment } from 'types';
@@ -23,7 +24,6 @@ const context: CommonDataProps['context'] = (window as any).__richie_frontend_co
 if (!context) throw new Error('No context frontend context available');
 
 const LMS_BACKENDS = context.lms_backends;
-if (!LMS_BACKENDS) throw new Error('No LMS_BACKENDS sets in frontend context.');
 
 const selectAPIWithUrl = (url: string) => {
   const API = LMS_BACKENDS.find((lms) => new RegExp(lms.selector_regexp).test(url));
@@ -38,9 +38,11 @@ const LmsAPIHandler = (url: string): ApiImplementation => {
       return BaseApiInterface(api);
     case 'richie.apps.courses.lms.edx.TokenEdXLMSBackend':
       return OpenEdxApiInterface(api);
-    default:
-      throw new Error(`No LMS Backend found for ${url}.`);
   }
+
+  const error = new Error(`No LMS Backend found for ${url}.`);
+  handle(error);
+  throw error;
 };
 
 export default LmsAPIHandler;

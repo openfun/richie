@@ -1,4 +1,5 @@
 import React, { createContext, useCallback, useContext, useState, PropsWithChildren } from 'react';
+import { handle } from 'utils/errors/handle';
 import { Maybe, Nullable } from 'utils/types';
 import { User } from 'types/User';
 import { AuthenticationApi } from 'utils/api/authentication';
@@ -37,7 +38,6 @@ const Session = createContext<SessionContext>({} as any);
  * @param user the current user state. Read below to see possible states
  * @param destroy set Session to undefined then make a request to logout user from EDX
  */
-// TODO Store session in cache to not spam EDX API
 export const SessionProvider = ({ children }: PropsWithChildren<any>) => {
   /**
    * `user` is:
@@ -59,29 +59,38 @@ export const SessionProvider = ({ children }: PropsWithChildren<any>) => {
   );
 
   const login = useCallback(() => {
+    if (!AuthenticationApi) return handle(new Error('No AuthenticationAPI configured!'));
+
     clearCachedSession();
-    AuthenticationApi.login();
-  }, [clearCachedSession, AuthenticationApi.login]);
+    AuthenticationApi!.login();
+  }, [clearCachedSession, AuthenticationApi?.login]);
 
   const register = useCallback(() => {
+    if (!AuthenticationApi) return handle(new Error('No AuthenticationAPI configured!'));
+
     clearCachedSession();
-    AuthenticationApi.register();
-  }, [clearCachedSession, AuthenticationApi.register]);
+    AuthenticationApi!.register();
+  }, [clearCachedSession, AuthenticationApi?.register]);
 
   const destroy = useCallback(async () => {
+    if (!AuthenticationApi) return handle(new Error('No AuthenticationAPI configured!'));
+
     setUser(undefined);
-    await AuthenticationApi.logout();
+    await AuthenticationApi!.logout();
     setUser(null);
   }, [setUser]);
 
   useAsyncEffect(async () => {
-    const cachedUser = getCachedSession();
-    if (cachedUser !== undefined) {
-      setUser(cachedUser);
-    } else {
-      const me = await AuthenticationApi.me();
-      setUser(me);
+    let me = null;
+    if (AuthenticationApi) {
+      const cachedUser = getCachedSession();
+      if (cachedUser !== undefined) {
+        me = cachedUser;
+      } else {
+        me = await AuthenticationApi.me();
+      }
     }
+    setUser(me);
   }, []);
 
   return <Session.Provider value={{ user, destroy, login, register }}>{children}</Session.Provider>;
