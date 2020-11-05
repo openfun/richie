@@ -8,6 +8,7 @@
   }
 
   &__btn {
+    @include button-reset-style();
     @include sv-flex(1, 0, auto);
     @include button-size($btn-padding-y, $btn-padding-x, $btn-font-size, $btn-line-height, 2rem);
     @include font-size($font-size-base);

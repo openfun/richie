@@ -13,7 +13,7 @@
     "build-sass": "sass scss/_main.scss ../richie/static/richie/css/main.css --load-path=node_modules",
     "build-sass-production": "sass scss/_main.scss ../richie/static/richie/css/main.css --style=compressed --load-path=node_modules",
     "test": "jest",
-    "watch-sass": "yarn build-sass --watch",
+    "watch-sass": "yarn build-sass --watch --load-path js",
     "watch-ts": "yarn build-ts --watch"
   },
   "repository": {

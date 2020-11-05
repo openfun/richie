@@ -8,6 +8,12 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- Support case when AUTHENTICATION_DELEGATION is not defined
+- Fix a bug on create_demo_site.py when LMS_BACKENDS is not defined
+- Fix a style issue related to buttons in topbar
+
 ## [2.0.0-beta.17] - 2020-11-03
 
 ### Added
