@@ -7,27 +7,25 @@
  */
 import { handle } from 'utils/errors/handle';
 import { AuthenticationBackend } from 'types/commonDataProps';
+import { Nullable } from 'utils/types';
 import { ApiImplementation } from './lms';
 import BaseApiInterface from './lms/base';
 import OpenEdxApiInterface from './lms/edx';
 
-const AuthenticationAPIHandler = (): ApiImplementation => {
+const AuthenticationAPIHandler = (): Nullable<ApiImplementation['user']> => {
   const AUTHENTICATION: AuthenticationBackend = (window as any).__richie_frontend_context__?.context
     ?.authentication;
-  if (!AUTHENTICATION) {
-    const error = new Error('"authentication" is missing in frontend context.');
-    handle(error);
-    throw error;
-  }
+  if (!AUTHENTICATION) return null;
 
   switch (AUTHENTICATION.backend) {
     case 'richie.apps.courses.lms.base.BaseLMSBackend':
-      return BaseApiInterface(AUTHENTICATION);
+      return BaseApiInterface(AUTHENTICATION).user;
     case 'richie.apps.courses.lms.edx.TokenEdXLMSBackend':
-      return OpenEdxApiInterface(AUTHENTICATION);
+      return OpenEdxApiInterface(AUTHENTICATION).user;
     default:
-      throw new Error(`No Authentication Backend found for ${AUTHENTICATION.backend}.`);
+      handle(new Error(`No Authentication Backend found for ${AUTHENTICATION.backend}.`));
+      return null;
   }
 };
 
-export const AuthenticationApi = AuthenticationAPIHandler().user;
+export const AuthenticationApi = AuthenticationAPIHandler();

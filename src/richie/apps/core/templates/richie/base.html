@@ -86,7 +86,9 @@
 
                         <ul class="topbar__list topbar__list--controls">
                             {% block userlogin %}
-                                <li class="topbar__item topbar__item--login richie-react richie-react--user-login" data-props='{"profileUrls": {{ AUTHENTICATION.PROFILE_URLS }}}'></li>
+                                {% if AUTHENTICATION %}
+                                    <li class="topbar__item topbar__item--login richie-react richie-react--user-login" data-props='{"profileUrls": {{ AUTHENTICATION.profile_urls }}}'></li>
+                                {% endif %}
                             {% endblock userlogin %}
                             {% block topbar_contact %}
                             <li class="topbar__item topbar__item--cta">
@@ -207,7 +209,7 @@
         {% if request.toolbar and request.toolbar.edit_mode_active %}
         <script>
             CMS.$(window).on('cms-content-refresh', function () {
-                __RICHIE__.build();
+                __RICHIE__.render();
                 initializeAccordions();
                 initializeHamburgerMenu();
             });

@@ -19,7 +19,7 @@ def site_metas(request):
     """
     site_current = Site.objects.get_current()
     protocol = "https" if request.is_secure() else "http"
-    authentication_delegation = getattr(settings, "AUTHENTICATION_DELEGATION", {})
+
     context = {
         **{
             f"GLIMPSE_PAGINATION_{k.upper()}": v
@@ -33,8 +33,24 @@ def site_metas(request):
             "domain": site_current.domain,
             "web_url": f"{protocol:s}://{site_current.domain:s}",
         },
-        "AUTHENTICATION": {
-            "PROFILE_URLS": json.dumps(
+        "FRONTEND_CONTEXT": {
+            "context": {
+                "csrftoken": get_token(request),
+                "environment": getattr(settings, "ENVIRONMENT", ""),
+                "release": getattr(settings, "RELEASE", ""),
+                "sentry_dsn": getattr(settings, "SENTRY_DSN", ""),
+            }
+        },
+    }
+
+    if getattr(settings, "CDN_DOMAIN", None):
+        context["CDN_DOMAIN"] = settings.CDN_DOMAIN
+
+    if getattr(settings, "AUTHENTICATION_DELEGATION", None):
+        authentication_delegation = getattr(settings, "AUTHENTICATION_DELEGATION", None)
+
+        context["AUTHENTICATION"] = {
+            "profile_urls": json.dumps(
                 [
                     {
                         "label": str(url["label"]),
@@ -44,35 +60,26 @@ def site_metas(request):
                             )
                         ),
                     }
-                    for url in authentication_delegation["PROFILE_URLS"]
+                    for url in authentication_delegation.get("PROFILE_URLS", [])
                 ]
             ),
-        },
-        "FRONTEND_CONTEXT": json.dumps(
-            {
-                "context": {
-                    "csrftoken": get_token(request),
-                    "environment": getattr(settings, "ENVIRONMENT", ""),
-                    "release": getattr(settings, "RELEASE", ""),
-                    "sentry_dsn": getattr(settings, "SENTRY_DSN", ""),
-                    "authentication": {
-                        "endpoint": authentication_delegation["BASE_URL"],
-                        "backend": authentication_delegation["BACKEND"],
-                    },
-                    "lms_backends": [
-                        {
-                            "endpoint": lms["BASE_URL"],
-                            "backend": lms["BACKEND"],
-                            "course_regexp": lms["JS_COURSE_REGEX"],
-                            "selector_regexp": lms["JS_SELECTOR_REGEX"],
-                        }
-                        for lms in getattr(settings, "LMS_BACKENDS", [])
-                    ],
-                }
-            }
-        ),
-    }
-    if getattr(settings, "CDN_DOMAIN", False):
-        context["CDN_DOMAIN"] = settings.CDN_DOMAIN
+        }
 
+        context["FRONTEND_CONTEXT"]["context"]["authentication"] = {
+            "endpoint": authentication_delegation["BASE_URL"],
+            "backend": authentication_delegation["BACKEND"],
+        }
+
+    if getattr(settings, "LMS_BACKENDS", None):
+        context["FRONTEND_CONTEXT"]["context"]["lms_backends"] = [
+            {
+                "endpoint": lms["BASE_URL"],
+                "backend": lms["BACKEND"],
+                "course_regexp": lms["JS_COURSE_REGEX"],
+                "selector_regexp": lms["JS_SELECTOR_REGEX"],
+            }
+            for lms in getattr(settings, "LMS_BACKENDS", [])
+        ]
+
+    context["FRONTEND_CONTEXT"] = json.dumps(context["FRONTEND_CONTEXT"])
     return context
