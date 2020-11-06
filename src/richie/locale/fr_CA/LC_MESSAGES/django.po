@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-04 09:05+0000\n"
+"POT-Creation-Date: 2020-11-06 15:36+0100\n"
 "PO-Revision-Date: 2020-11-04 09:24\n"
 "Last-Translator: \n"
 "Language-Team: French, Canada\n"
@@ -48,7 +48,8 @@ msgstr "Définir un effort"
 
 #: apps/core/fields/effort.py:244
 msgid "An effort should be a triplet: number, time unit and reference unit."
-msgstr "Un effort doit être un triplet: numéro / unité de temps / unité de référence."
+msgstr ""
+"Un effort doit être un triplet: numéro / unité de temps / unité de référence."
 
 #: apps/core/fields/effort.py:257
 msgid "An effort should be a round number of time units."
@@ -60,7 +61,9 @@ msgstr "Un effort doit être positif."
 
 #: apps/core/fields/effort.py:286
 msgid "The effort time unit should be shorter than the reference unit."
-msgstr "L'unité de temps d'effort doit être plus courte que l'unité de temps de référence."
+msgstr ""
+"L'unité de temps d'effort doit être plus courte que l'unité de temps de "
+"référence."
 
 #: apps/core/fields/multiselect.py:27
 msgid "{:s} and {:s}"
@@ -88,8 +91,12 @@ msgstr[0] "La valeur %(value)s n'est pas un choix valide."
 msgstr[1] "Les valeurs %(value)s ne sont pas des choix valides."
 
 #: apps/core/fields/multiselect.py:133
-msgid "Storing {:d} choices could require storing a CharField of up to {:d} characters. Please reduce 'max_choices' or increase 'max_length'."
-msgstr "L'enregistrement de {:d} choix nécessite l'enregistrement d'un CharField de {:d} caractères. Veuillez réduire 'max_choices' ou augmenter 'max_length'."
+msgid ""
+"Storing {:d} choices could require storing a CharField of up to {:d} "
+"characters. Please reduce 'max_choices' or increase 'max_length'."
+msgstr ""
+"L'enregistrement de {:d} choix nécessite l'enregistrement d'un CharField de "
+"{:d} caractères. Veuillez réduire 'max_choices' ou augmenter 'max_length'."
 
 #: apps/core/templates/djangocms_video/default/video_player.html:22
 msgid "Your browser doesn't support this video format."
@@ -100,21 +107,21 @@ msgstr "Votre navigateur ne supporte pas ce format de vidéo."
 msgid "You are here:"
 msgstr "Vous êtes ici:"
 
-#: apps/core/templates/richie/base.html:94
+#: apps/core/templates/richie/base.html:96
 #: apps/courses/templates/courses/cms/course_detail.html:130
 msgid "Contact us"
 msgstr "Contactez-nous"
 
-#: apps/core/templates/richie/base.html:122
+#: apps/core/templates/richie/base.html:124
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:32
 msgid "Learn more"
 msgstr "En savoir plus"
 
-#: apps/core/templates/richie/base.html:134
+#: apps/core/templates/richie/base.html:136
 msgid "Life-changing learning!"
 msgstr "Un apprentissage renversant!"
 
-#: apps/core/templates/richie/base.html:148
+#: apps/core/templates/richie/base.html:150
 msgid "Powered by"
 msgstr "Propulsé par"
 
@@ -267,8 +274,12 @@ msgid "Snapshot this page..."
 msgstr "Prise d'un instantanée de cette page..."
 
 #: apps/courses/cms_toolbars.py:109
-msgid "This will place a copy of this page as its child and move all its courseruns as children of its new copy."
-msgstr "Ceci copie la page vers une page enfant et les sessions de cours actuelles deviennent des enfants de cette copie."
+msgid ""
+"This will place a copy of this page as its child and move all its courseruns "
+"as children of its new copy."
+msgstr ""
+"Ceci copie la page vers une page enfant et les sessions de cours actuelles "
+"deviennent des enfants de cette copie."
 
 #: apps/courses/cms_wizards.py:58
 msgid "New page"
@@ -303,8 +314,14 @@ msgid "Slug of the page in current language"
 msgstr "Chemin de la page dans la langue actuelle"
 
 #: apps/courses/cms_wizards.py:119
-msgid "This slug is too long. The length of the path built by prepending the slug of the parent page would be {:d} characters long and it should be less than 255"
-msgstr "Ce chemin est trop long. Le lien construit en faisant précéder ce chemin par le lien de la page parente serait trop long de {:d} caractères et devrait être de moins de 255 caractères"
+msgid ""
+"This slug is too long. The length of the path built by prepending the slug "
+"of the parent page would be {:d} characters long and it should be less than "
+"255"
+msgstr ""
+"Ce chemin est trop long. Le lien construit en faisant précéder ce chemin par "
+"le lien de la page parente serait trop long de {:d} caractères et devrait "
+"être de moins de 255 caractères"
 
 #: apps/courses/cms_wizards.py:132
 msgid "This slug is already in use"
@@ -312,8 +329,11 @@ msgstr "Ce chemin est déjà utilisé"
 
 #: apps/courses/cms_wizards.py:150
 #, python-brace-format
-msgid "You must first create a parent page and set its `reverse_id` to `{reverse}`."
-msgstr "Vous devez d’abord créer une page parente dont le 'reverse_id' est la valeur '{reverse} '."
+msgid ""
+"You must first create a parent page and set its `reverse_id` to `{reverse}`."
+msgstr ""
+"Vous devez d’abord créer une page parente dont le 'reverse_id' est la valeur "
+"'{reverse} '."
 
 #: apps/courses/cms_wizards.py:261
 msgid "New course page"
@@ -328,8 +348,13 @@ msgid "Snapshot the course"
 msgstr "Capture instantanée de ce cours"
 
 #: apps/courses/cms_wizards.py:279
-msgid "Tick this box if you want to snapshot the current version of the course and link the new course run to a new version of the course."
-msgstr "Cocher cette case si vous voulez faire une capture instantanée de la version actuelle du cours et attacher la nouvelle session de cours à une nouvelle version du cours."
+msgid ""
+"Tick this box if you want to snapshot the current version of the course and "
+"link the new course run to a new version of the course."
+msgstr ""
+"Cocher cette case si vous voulez faire une capture instantanée de la version "
+"actuelle du cours et attacher la nouvelle session de cours à une nouvelle "
+"version du cours."
 
 #: apps/courses/cms_wizards.py:396
 msgid "New course run page"
@@ -461,11 +486,14 @@ msgstr "mois"
 
 #: apps/courses/helpers.py:33
 msgid "You can't snapshot a snapshot."
-msgstr "Vous ne pouvez pas faire une capture instantanée d'une capture instantanée."
+msgstr ""
+"Vous ne pouvez pas faire une capture instantanée d'une capture instantanée."
 
 #: apps/courses/helpers.py:46
 msgid "You don't have sufficient permissions to snapshot this page."
-msgstr "Vous n'avez pas les permissions suffisantes pour faire une capture instantanée de cette page."
+msgstr ""
+"Vous n'avez pas les permissions suffisantes pour faire une capture "
+"instantanée de cette page."
 
 #: apps/courses/helpers.py:62
 msgid "Snapshot of {:s}"
@@ -537,7 +565,8 @@ msgstr "est listé"
 
 #: apps/courses/models/course.py:139
 msgid "Tick if you want the course to be visible on the search page."
-msgstr "Cochez si vous voulez que le cours soit visible sur la page de recherche."
+msgstr ""
+"Cochez si vous voulez que le cours soit visible sur la page de recherche."
 
 #: apps/courses/models/course.py:146
 msgid "course"
@@ -645,8 +674,12 @@ msgid "role"
 msgstr "rôle"
 
 #: apps/courses/models/role.py:22
-msgid "A role describes all the permissions that should be granted to the user group."
-msgstr "Un rôle décrit toutes les permissions qui doivent être accordées au groupe d'utilisateurs."
+msgid ""
+"A role describes all the permissions that should be granted to the user "
+"group."
+msgstr ""
+"Un rôle décrit toutes les permissions qui doivent être accordées au groupe "
+"d'utilisateurs."
 
 #: apps/courses/models/role.py:29
 msgid "page"
@@ -950,11 +983,15 @@ msgstr "Cours offerts"
 
 #: apps/courses/templates/courses/cms/category_detail.html:110
 #, python-format
-msgid "\n"
-"                                    See all courses related to %(category_title)s\n"
+msgid ""
+"\n"
+"                                    See all courses related to "
+"%(category_title)s\n"
 "                                  "
-msgstr "\n"
-"                                    Voir tous les cours liés à %(category_title)s\n"
+msgstr ""
+"\n"
+"                                    Voir tous les cours liés à "
+"%(category_title)s\n"
 "                                  "
 
 #: apps/courses/templates/courses/cms/category_detail.html:116
@@ -1004,10 +1041,12 @@ msgstr "Effort :"
 
 #: apps/courses/templates/courses/cms/course_detail.html:154
 #, python-format
-msgid "\n"
+msgid ""
+"\n"
 "                        Archived on %(creation_date)s\n"
 "                    "
-msgstr "\n"
+msgstr ""
+"\n"
 "              Archivé le %(creation_date)s\n"
 "                    "
 
@@ -1149,7 +1188,8 @@ msgstr "Quelle est la licence pour le contenu du cours ?"
 #: apps/courses/templates/courses/cms/course_detail.html:392
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:59
 msgid "What is the license for the content created by course participants?"
-msgstr "Quelle est la licence pour le contenu créé par les participants du cours ?"
+msgstr ""
+"Quelle est la licence pour le contenu créé par les participants du cours ?"
 
 #: apps/courses/templates/courses/cms/course_run_detail.html:99
 msgid "Enrollment starts"
@@ -1219,11 +1259,15 @@ msgstr "logo de l'institution"
 
 #: apps/courses/templates/courses/cms/organization_detail.html:98
 #, python-format
-msgid "\n"
-"                                    See all courses related to %(organization_title)s\n"
+msgid ""
+"\n"
+"                                    See all courses related to "
+"%(organization_title)s\n"
 "                                "
-msgstr "\n"
-"                                    Voir tous les cours liés à %(organization_title)s\n"
+msgstr ""
+"\n"
+"                                    Voir tous les cours liés à "
+"%(organization_title)s\n"
 "                                "
 
 #: apps/courses/templates/courses/cms/organization_list.html:24
@@ -1245,11 +1289,15 @@ msgstr "Aucune institution associée"
 
 #: apps/courses/templates/courses/cms/person_detail.html:118
 #, python-format
-msgid "\n"
-"                                    See all courses related to %(person_title)s\n"
+msgid ""
+"\n"
+"                                    See all courses related to "
+"%(person_title)s\n"
 "                                "
-msgstr "\n"
-"                                    Voir tous les cours liés à %(person_title)s\n"
+msgstr ""
+"\n"
+"                                    Voir tous les cours liés à "
+"%(person_title)s\n"
 "                                "
 
 #: apps/courses/templates/courses/cms/person_detail.html:136
@@ -1382,8 +1430,12 @@ msgid "HTML Sitemap"
 msgstr "Plan de site HTML"
 
 #: plugins/html_sitemap/cms_plugins.py:72
-msgid "Press save to create a site map. You will then be able to add a child plugin for each subtree in your sitemap."
-msgstr "Appuyez sur «Enregistrer» pour créer un plan de site. Vous pourrez ensuite ajouter un plugin enfant pour chaque sous-arbre de votre plan de site."
+msgid ""
+"Press save to create a site map. You will then be able to add a child plugin "
+"for each subtree in your sitemap."
+msgstr ""
+"Appuyez sur «Enregistrer» pour créer un plan de site. Vous pourrez ensuite "
+"ajouter un plugin enfant pour chaque sous-arbre de votre plan de site."
 
 #: plugins/html_sitemap/cms_plugins.py:82
 msgid "HTML sitemap page"
@@ -1394,32 +1446,46 @@ msgid "root page"
 msgstr "page racine"
 
 #: plugins/html_sitemap/models.py:27
-msgid "This page will be at the root of your sitemap (or its children if the \"include root page\" flag is unticked)."
-msgstr "Cette page sera à la racine de votre plan de site (ou de ses enfants si «inclure la page racine» n'a pas été sélectionné)."
+msgid ""
+"This page will be at the root of your sitemap (or its children if the "
+"\"include root page\" flag is unticked)."
+msgstr ""
+"Cette page sera à la racine de votre plan de site (ou de ses enfants si "
+"«inclure la page racine» n'a pas été sélectionné)."
 
 #: plugins/html_sitemap/models.py:34
 msgid "max depth"
 msgstr "profondeur maximale"
 
 #: plugins/html_sitemap/models.py:36
-msgid "Limit the level of nesting that your sitemap will contain below this page. An empty field or 0 equals to no limit."
-msgstr "Limitez la profondeur de votre plan de site sous cette page. Un champ vide ou égal à 0 correspond à une profondeur illimitée."
+msgid ""
+"Limit the level of nesting that your sitemap will contain below this page. "
+"An empty field or 0 equals to no limit."
+msgstr ""
+"Limitez la profondeur de votre plan de site sous cette page. Un champ vide "
+"ou égal à 0 correspond à une profondeur illimitée."
 
 #: plugins/html_sitemap/models.py:44
 msgid "in navigation"
 msgstr "dans le menu"
 
 #: plugins/html_sitemap/models.py:46
-msgid "Tick to exclude from sitemap the pages that are excluded from navigation."
-msgstr "Sélectionner pour exclure du plan de site les pages qui sont exclues du menu."
+msgid ""
+"Tick to exclude from sitemap the pages that are excluded from navigation."
+msgstr ""
+"Sélectionner pour exclure du plan de site les pages qui sont exclues du menu."
 
 #: plugins/html_sitemap/models.py:51
 msgid "include root page"
 msgstr "inclure la page racine"
 
 #: plugins/html_sitemap/models.py:53
-msgid "Tick to include the root page and its descendants. Untick to include only its descendants."
-msgstr "Sélectionner pour inclure la page racine et ses descendants. Ne pas sélectionner pour n'inclure que les descendants de la page racine."
+msgid ""
+"Tick to include the root page and its descendants. Untick to include only "
+"its descendants."
+msgstr ""
+"Sélectionner pour inclure la page racine et ses descendants. Ne pas "
+"sélectionner pour n'inclure que les descendants de la page racine."
 
 #: plugins/html_sitemap/models.py:60
 msgid "HTML Sitemaps"
@@ -1535,8 +1601,21 @@ msgstr "corps"
 
 #: plugins/simple_text_ckeditor/validators.py:19
 #, python-format
-msgid "Ensure this text has at most %(limit_value)d character (it has %(show_value)d)."
-msgid_plural "Ensure this text has at most %(limit_value)d characters (it has %(show_value)d)."
-msgstr[0] "Assurez-vous que ce texte a au maximum %(limit_value)d caractère (il a %(show_value)d)."
-msgstr[1] "Assurez-vous que ce texte a au maximum %(limit_value)d caractères (il a %(show_value)d)."
+msgid ""
+"Ensure this text has at most %(limit_value)d character (it has "
+"%(show_value)d)."
+msgid_plural ""
+"Ensure this text has at most %(limit_value)d characters (it has "
+"%(show_value)d)."
+msgstr[0] ""
+"Assurez-vous que ce texte a au maximum %(limit_value)d caractère (il a "
+"%(show_value)d)."
+msgstr[1] ""
+"Assurez-vous que ce texte a au maximum %(limit_value)d caractères (il a "
+"%(show_value)d)."
 
+msgid "Profile"
+msgstr "Profil"
+
+msgid "Account"
+msgstr "Compte"
