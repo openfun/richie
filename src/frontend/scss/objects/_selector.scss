@@ -20,8 +20,8 @@
   }
 
   &__list {
-    background: #ffffff;
-    border: 1px solid r-color('light-grey');
+    background: r-theme-val(selector, base-background);
+    border: 1px solid r-theme-val(selector, base-border);
     list-style: none;
     margin: 0;
     outline: none !important;
@@ -52,14 +52,15 @@
       margin-left: calc(3rem - 10px);
     }
     &:before {
-      border-bottom-color: r-color('light-grey');
+      border-bottom-color: r-theme-val(selector, base-border);
       border-width: 12px;
       margin-left: calc(3rem - 12px);
     }
 
     &__link {
       @include button-reset-style();
-      color: r-color('charcoal');
+      background: r-theme-val(selector, base-background);
+      color: r-theme-val(selector, base-color);
       display: block;
       font-size: 1rem;
       min-width: 10rem;
@@ -67,12 +68,13 @@
       text-align: left;
 
       &:hover {
-        color: r-color('charcoal');
+        color: r-theme-val(selector, hover-color);
         text-decoration: underline;
       }
 
       &--highlighted {
-        background: r-color('light-grey');
+        background: r-theme-val(selector, hover-background);
+        color: r-theme-val(selector, hover-color);
       }
 
       .selector--dark & {
