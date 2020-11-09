@@ -204,9 +204,9 @@
                 initializeHamburgerMenu();
             });
         </script>
-        // When edit mode is active, we have to refresh js scripts after saving modifications
-        // https://docs.django-cms.org/en/latest/topics/frontend-integration.html
         {% if request.toolbar and request.toolbar.edit_mode_active %}
+        {# When edit mode is active, we have to refresh js scripts after saving modifications #}
+        {# https://docs.django-cms.org/en/latest/topics/frontend-integration.html #}
         <script>
             CMS.$(window).on('cms-content-refresh', function () {
                 __RICHIE__.render();
