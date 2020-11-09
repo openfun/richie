@@ -6,7 +6,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic
 Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.0-beta.18 - 2020-11-06
+## [Unrealeased]
+
+## [2.0.0-beta.19] - 2020-11-09
+
+### Added
+
+- Add a color palette for selector component
+- Add a color palette for spinner component
+
+### Fixed
+
+- Fix a typo in base template
+
+## [2.0.0-beta.18] - 2020-11-06
 
 ### Fixed
 
@@ -1056,7 +1069,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.0.0-beta.18...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.0.0-beta.19...master
+[2.0.0-beta.19]: https://github.com/openfun/richie/compare/v2.0.0-beta.18...v2.0.0-beta.19
 [2.0.0-beta.18]: https://github.com/openfun/richie/compare/v2.0.0-beta.17...v2.0.0-beta.18
 [2.0.0-beta.17]: https://github.com/openfun/richie/compare/v2.0.0-beta.16...v2.0.0-beta.17
 [2.0.0-beta.16]: https://github.com/openfun/richie/compare/v2.0.0-beta.15...v2.0.0-beta.16
