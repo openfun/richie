@@ -292,7 +292,8 @@ class PersonCMSTestCase(CMSTestCase):
 
     def test_templates_person_detail_maincontent_empty(self):
         """
-        The "maincontent" placeholder block should not be displayed when empty.
+        The "maincontent" placeholder block should not be displayed on the public
+        page when empty but only on the draft version for staff.
         """
         person = PersonFactory(should_publish=True)
 
@@ -301,6 +302,15 @@ class PersonCMSTestCase(CMSTestCase):
         response = self.client.get(url)
         self.assertContains(response, person.extended_object.get_title())
         self.assertNotContains(response, "person-detail__maincontent")
+
+        # But it should be present on the draft page
+        user = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=user.username, password="password")
+
+        url = person.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertContains(response, person.extended_object.get_title())
+        self.assertContains(response, "person-detail__maincontent")
 
     def test_templates_person_detail_related_courses(self):
         """
