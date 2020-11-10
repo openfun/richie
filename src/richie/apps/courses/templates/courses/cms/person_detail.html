@@ -76,7 +76,7 @@
 {% block content %}{% spaceless %}
 {% with header_level=2 person=current_page.person %}
 <div class="person-detail">
-    {% if not current_page|is_empty_placeholder:"maincontent" %}
+    {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"maincontent" %}
     <div class="person-detail__maincontent person-detail__block">
         <div class="person-detail__row">
             {% placeholder "maincontent" %}

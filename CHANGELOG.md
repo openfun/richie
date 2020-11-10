@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Fix maincontent placeholder on person detail page when empty
+
 ## [2.0.0-beta.19] - 2020-11-09
 
 ### Added
