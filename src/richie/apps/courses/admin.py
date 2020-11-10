@@ -1,12 +1,12 @@
 """
 Courses application admin
 """
-from django.conf.urls import url
 from django.contrib import admin
 from django.core.exceptions import PermissionDenied
 from django.db import models as django_models
 from django.db import transaction
 from django.http import HttpResponseBadRequest, HttpResponseForbidden, JsonResponse
+from django.urls import re_path
 from django.utils.decorators import method_decorator
 from django.utils.encoding import force_str
 from django.utils.translation import gettext_lazy as _
@@ -52,7 +52,7 @@ class CourseAdmin(FrontendEditableAdminMixin, PageExtensionAdmin):
         """
         url_patterns = super().get_urls()
         return [
-            url(
+            re_path(
                 r"^(?P<course_id>[0-9]+)/snapshot/$",
                 self.admin_site.admin_view(self.snapshot),
                 name="cms_course_snapshot",
