@@ -14,6 +14,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [2.0.0-beta.20] - 2020-11-10
 
+### Added
+
+- Add a large variant for course glimpses
+
 ### Fixed
 
 - Fix maincontent placeholder on person detail page when empty

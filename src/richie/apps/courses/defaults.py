@@ -242,7 +242,12 @@ CATEGORY_GLIMPSE_VARIANT_CHOICES = getattr(
 COURSE_GLIMPSE_VARIANT_CHOICES = getattr(
     settings,
     "RICHIE_COURSE_GLIMPSE_VARIANT_CHOICES",
-    [(None, _("Inherit")), ("glimpse", _("Default")), ("small", "small")],
+    [
+        (None, _("Inherit")),
+        ("glimpse", _("Default")),
+        ("glimpse", _("Small")),
+        ("glimpse__large", _("Large")),
+    ],
 )
 
 ORGANIZATION_GLIMPSE_VARIANT_CHOICES = getattr(
