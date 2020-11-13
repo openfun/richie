@@ -272,13 +272,15 @@ class CoursePluginTestCase(TestCase):
 
         url = "{:s}?edit".format(page.get_absolute_url(language="en"))
 
-        # The course-glimpse default variant should not have the small attribute
+        # The course-glimpse default variant should not have the large attribute
         response = self.client.get(url)
-        self.assertNotContains(response, "-small")
+        self.assertNotContains(response, "glimpse__large")
 
-        # Add course plugin with small variant
-        add_plugin(placeholder, CoursePlugin, "en", page=course_page, variant="small")
+        # Add course plugin with large variant
+        add_plugin(
+            placeholder, CoursePlugin, "en", page=course_page, variant="glimpse__large"
+        )
 
-        # The new course-glimpse should have the small attribute
+        # The new course-glimpse should have the large attribute
         response = self.client.get(url)
-        self.assertContains(response, "course-small")
+        self.assertContains(response, "course-glimpse__large")

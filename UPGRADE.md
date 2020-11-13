@@ -17,7 +17,6 @@ $ make migrate
 ## Unreleased
 
 ## 1.17.x to 2.0.x
-
 - Richie version 2 introduces a new `AUTHENTICATION_BACKEND` setting used to get session information
   from OpenEdX through CORS requests. So login, register and logout routes are constructed from
   the BASE_URL of this setting. Furthermore it takes an extra property `PROFILE_URLS`.
@@ -39,6 +38,9 @@ $ make migrate
   (the first from `SECTION_TEMPLATES` choices). You may have to upgrade your settings if
   you were overriding it through `RICHIE_SECTION_TEMPLATES`. Also we recommend you to rebuild
   your footer menu with `NestedItem` instead of `Section` plugins.
+- Course plugin variant choices has been updated. Previously "small" variant existed but do nothing,
+  now this variant apply same styles than default variant to prevent layout issue. Furthermore a
+  "large" variant has been added which display larger course glimpse.
 
 ## 1.16.x to 1.17.x
 

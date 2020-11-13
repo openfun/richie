@@ -38,7 +38,8 @@ $r-course-glimpse-gutter: 0.8rem !default;
 // Course-glimpse related variables
 $course-glimpse-content-padding-sides: 0.7rem !default;
 
-.course-glimpse {
+.course-glimpse,
+.course-glimpse__large {
   $glimpse-item-selector: &;
 
   // Apply card styles for elements
@@ -90,6 +91,12 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
     &:hover,
     &:focus {
       border: 0;
+    }
+  }
+
+  @include media-breakpoint-up(lg) {
+    &--large {
+      @include sv-flex(1, 0, calc(33.33333% - #{$r-course-glimpse-gutter * 2}));
     }
   }
 
@@ -182,6 +189,14 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
       border-top-right-radius: $border-radius-lg;
     }
 
+    img {
+      height: 16vh;
+      min-height: 170px;
+      width: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+
     @include m-o-media_empty(
       $width: 100%,
       $height: 16vh,
@@ -206,7 +221,8 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
   }
 }
 
-.course-glimpse-footer {
+.course-glimpse-footer,
+.course-glimpse__large-footer {
   @include r-button-colors(r-theme-val(course-glimpse, footer), $apply-border: true);
   display: flex;
   padding: 0 $course-glimpse-content-padding-sides;
@@ -229,5 +245,14 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
       height: 1.3rem;
       margin-right: 0.5rem;
     }
+  }
+}
+
+//
+// Course Glimpse Large
+//
+.course-glimpse__large {
+  @include media-breakpoint-up(lg) {
+    @include sv-flex(1, 0, calc(33.33333% - #{$r-course-glimpse-gutter * 2}));
   }
 }

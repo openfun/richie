@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-06 15:36+0100\n"
+"POT-Creation-Date: 2020-11-17 11:13+0100\n"
 "PO-Revision-Date: 2020-11-04 09:24\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
@@ -409,13 +409,13 @@ msgid "Admin"
 msgstr "Admin"
 
 #: apps/courses/defaults.py:226 apps/courses/defaults.py:236
-#: apps/courses/defaults.py:245 apps/courses/defaults.py:252
+#: apps/courses/defaults.py:246 apps/courses/defaults.py:257
 #: plugins/glimpse/defaults.py:18
 msgid "Inherit"
 msgstr "Hériter"
 
 #: apps/courses/defaults.py:227 apps/courses/defaults.py:237
-#: apps/courses/defaults.py:245 apps/courses/defaults.py:253
+#: apps/courses/defaults.py:247 apps/courses/defaults.py:258
 #: plugins/large_banner/defaults.py:11 plugins/section/defaults.py:11
 msgid "Default"
 msgstr "Par défaut"
@@ -436,51 +436,59 @@ msgstr "badge"
 msgid "Tag"
 msgstr "Tag"
 
-#: apps/courses/defaults.py:254
+#: apps/courses/defaults.py:248
+msgid "Small"
+msgstr "Petite"
+
+#: apps/courses/defaults.py:249
+msgid "Large"
+msgstr "Grande"
+
+#: apps/courses/defaults.py:259
 msgid "Card"
 msgstr "Carte"
 
-#: apps/courses/defaults.py:255
+#: apps/courses/defaults.py:260
 msgid "Row"
 msgstr "Rangée"
 
-#: apps/courses/defaults.py:331
+#: apps/courses/defaults.py:336
 msgid "minute"
 msgstr "minute"
 
-#: apps/courses/defaults.py:331
+#: apps/courses/defaults.py:336
 msgid "minutes"
 msgstr "minutes"
 
-#: apps/courses/defaults.py:332
+#: apps/courses/defaults.py:337
 msgid "hour"
 msgstr "heure"
 
-#: apps/courses/defaults.py:332
+#: apps/courses/defaults.py:337
 msgid "hours"
 msgstr "heures"
 
-#: apps/courses/defaults.py:333
+#: apps/courses/defaults.py:338
 msgid "day"
 msgstr "jour"
 
-#: apps/courses/defaults.py:333
+#: apps/courses/defaults.py:338
 msgid "days"
 msgstr "jours"
 
-#: apps/courses/defaults.py:334
+#: apps/courses/defaults.py:339
 msgid "week"
 msgstr "semaine"
 
-#: apps/courses/defaults.py:334
+#: apps/courses/defaults.py:339
 msgid "weeks"
 msgstr "semaines"
 
-#: apps/courses/defaults.py:335
+#: apps/courses/defaults.py:340
 msgid "month"
 msgstr "mois"
 
-#: apps/courses/defaults.py:335
+#: apps/courses/defaults.py:340
 msgid "months"
 msgstr "mois"
 
@@ -796,7 +804,7 @@ msgstr "Contenu principal"
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:10
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:41
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:76
-#: apps/courses/templates/courses/cms/fragment_course_glimpse.html:11
+#: apps/courses/templates/courses/cms/fragment_course_glimpse.html:10
 #: apps/courses/templates/courses/cms/fragment_program_glimpse.html:8
 #: apps/courses/templates/courses/cms/program_detail.html:23
 msgid "Cover"
@@ -1613,9 +1621,3 @@ msgstr[0] ""
 msgstr[1] ""
 "Assurez-vous que ce texte fait au maximum %(limit_value)d caractères (il en "
 "a %(show_value)d)."
-
-msgid "Profile"
-msgstr "Profil"
-
-msgid "Account"
-msgstr "Compte"
