@@ -93,7 +93,7 @@ export const PaginateCourseSearch = ({ courseSearchTotalCount }: PaginateCourseS
             <React.Fragment key={page}>
               {/* Prepend a cell with "..." when the page number we're rendering does not follow the previous one */}
               {page > (pageList[index - 1] || 0) + 1 && (
-                <li className="pagination__list__item pagination__list__item--placeholder">...</li>
+                <li className="pagination__item pagination__item--placeholder">...</li>
               )}
 
               {page === currentPage ? (

@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Fix an issue about PaginateSearchCourse layout
+
 ## [2.0.0-beta.20] - 2020-11-10
 
 ### Fixed
