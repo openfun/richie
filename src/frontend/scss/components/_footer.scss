@@ -126,39 +126,18 @@
     @include media-breakpoint-up($r-footer-breakpoint) {
       flex-direction: row;
     }
-  }
-
-  &__menu {
-    @include sv-flex(1, 0, 100%);
-    flex-wrap: wrap;
-    flex-direction: row;
-    align-content: flex-start;
-    order: 2;
-    margin-right: -3vw;
-
-    @include media-breakpoint-up($r-footer-breakpoint) {
-      @include sv-flex(0, 0, auto);
-      order: 3;
-    }
-
-    // Divider between every direct children
-    & > * + * {
-      margin-top: 1rem;
-    }
-
-    a {
-      color: inherit;
-      display: block;
-    }
 
     //
     // Default variant acts like a simple horizontal menu
     //
-    .nested-item--list,
-    a {
+    & > .nested-item--list,
+    & > a {
       $nesteditem-base-selector: '.nested-item';
       @include sv-flex(0, 0, auto);
       padding-right: 3vw;
+      @include media-breakpoint-up('xl') {
+        padding-right: 4vw;
+      }
 
       #{$nesteditem-base-selector}__content {
         font-weight: bold;
@@ -188,6 +167,33 @@
           }
         }
       }
+    }
+  }
+
+  &__menu {
+    @include sv-flex(1, 0, 100%);
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-content: flex-start;
+    order: 2;
+    margin-right: -3vw;
+    @include media-breakpoint-up('xl') {
+      padding-right: -4vw;
+    }
+
+    @include media-breakpoint-up($r-footer-breakpoint) {
+      @include sv-flex(0, 0, auto);
+      order: 3;
+    }
+
+    // Divider between every direct children
+    & > * + * {
+      margin-top: 1rem;
+    }
+
+    a {
+      color: inherit;
+      display: block;
     }
   }
 

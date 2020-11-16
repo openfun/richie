@@ -12,6 +12,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Add a new variant "Badge" to glimpse plugin
 
+### Changed
+
+- Improve the layout of the footer to save space
+
 ### Fixed
 
 - Fix an issue about PaginateSearchCourse layout
