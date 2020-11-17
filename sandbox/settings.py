@@ -275,8 +275,13 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
                 environ_name="EDX_BACKEND",
                 environ_prefix=None,
             ),
+            "COURSE_REGEX": values.Value(
+                r".*", environ_name="EDX_COURSE_REGEX", environ_prefix=None
+            ),
             "SELECTOR_REGEX": values.Value(
-                r".*", environ_name="EDX_SELECTOR_REGEX", environ_prefix=None
+                r"^(?P<course_id>.*)$",
+                environ_name="EDX_SELECTOR_REGEX",
+                environ_prefix=None,
             ),
             "JS_SELECTOR_REGEX": values.Value(
                 r".*", environ_name="EDX_JS_SELECTOR_REGEX", environ_prefix=None
