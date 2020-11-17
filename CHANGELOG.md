@@ -15,6 +15,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Fix an issue about PaginateSearchCourse layout
+- Prevent enrollment failure if course run's resource_link does not match the
+  course regexp
 
 ## [2.0.0-beta.20] - 2020-11-10
 

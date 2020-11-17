@@ -39,3 +39,22 @@ class HasConnectedLMSFilterTestCase(CMSTestCase):
         """
         course_run = CourseRunFactory()
         self.assertEqual(has_connected_lms(course_run), False)
+
+    @override_settings(
+        LMS_BACKENDS=[
+            {
+                "BACKEND": "richie.apps.courses.lms.edx.TokenEdXLMSBackend",
+                "BASE_URL": "http://example.edx:8073",
+                "COURSE_REGEX": r"^.*/courses/(?P<course_id>.*)/course",
+                "API_TOKEN": "fakesecret",
+            }
+        ]
+    )
+    def test_course_run_with_malformed_resource_link_has_no_connected_lms(self):
+        """
+        When the course run resource_link is malformed, the filter returns False.
+        """
+        course_run = CourseRunFactory(
+            resource_link="http://example.edx:8073/courses/course-v1:edX+DemoX+Demo_Course/info/"
+        )
+        self.assertEqual(has_connected_lms(course_run), False)
