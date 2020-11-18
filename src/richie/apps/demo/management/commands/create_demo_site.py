@@ -380,7 +380,7 @@ def create_demo_site():
                 page_in_navigation=False,
                 page_languages=["en", "fr"],
                 page_parent=course.extended_object,
-                resource_link=f"{lms_endpoint}/courses/course-v1:edX+DemoX+Demo_Course/info",
+                resource_link=f"{lms_endpoint}/courses/course-v1:edX+DemoX+Demo_Course/course",
                 should_publish=True,
             )
 
