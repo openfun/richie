@@ -235,7 +235,7 @@ CATEGORY_GLIMPSE_VARIANT_CHOICES = getattr(
     [
         (None, _("Inherit")),
         ("glimpse", _("Default")),
-        ("badge", _("badge")),
+        ("badge", _("Badge")),
         ("tag", _("Tag")),
     ],
 )
