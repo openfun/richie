@@ -285,3 +285,56 @@ $r-glimpse-gutter: 0.4rem !default;
     }
   }
 }
+
+//
+// Badge variant
+//
+.glimpse-badge {
+  background: r-theme-val(badge-glimpse, base-background);
+  @include sv-flex(1, 0, calc(50% - #{$r-glimpse-gutter * 2}));
+  margin: 0.5rem $r-glimpse-gutter 1rem;
+  padding: 0.4rem;
+  position: relative;
+  text-align: center;
+
+  @include media-breakpoint-up(lg) {
+    @include sv-flex(1, 0, calc(25% - #{$r-glimpse-gutter * 2}));
+  }
+
+  &:hover {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  &__media {
+    margin-bottom: 1rem;
+
+    img {
+      border-radius: $border-radius;
+      display: block;
+      height: auto;
+      margin: 0 auto;
+      max-width: 40%;
+    }
+  }
+
+  &__title {
+    color: r-theme-val(badge-glimpse, title-color);
+    font-family: $r-font-family-montserrat;
+    @include font-size($h6-font-size);
+    font-weight: 500;
+    letter-spacing: 0.26px;
+    line-height: 1.35em;
+    margin-bottom: 0.5rem;
+    margin-top: 0.5rem;
+    text-align: center;
+    max-width: 200px;
+    margin: 0 auto;
+  }
+
+  &__content {
+    color: r-theme-val(badge-glimpse, content-color);
+    line-height: 1.35em;
+    margin-top: 0.4rem;
+  }
+}

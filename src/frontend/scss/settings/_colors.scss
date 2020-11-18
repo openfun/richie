@@ -337,6 +337,11 @@ $r-theme: (
     base: $firebrick6-scheme,
     base-hover: $firebrick6-scheme,
   ),
+  badge-glimpse: (
+    base-background: r-color('white'),
+    title-color: r-color('charcoal'),
+    content-color: r-color('slate-grey'),
+  ),
   card-glimpse: (
     base-background: r-color('white'),
     divider-color: r-color('firebrick6'),

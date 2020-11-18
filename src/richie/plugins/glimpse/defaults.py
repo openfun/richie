@@ -4,11 +4,12 @@ Glimpse plugin default settings
 from django.conf import settings
 from django.utils.translation import gettext_lazy as _
 
-CARD_SQUARE, ROW_HALF, ROW_FULL, QUOTE = (
+CARD_SQUARE, ROW_HALF, ROW_FULL, QUOTE, BADGE = (
     "card_square",
     "row_half",
     "row_full",
     "quote",
+    "badge",
 )
 
 GLIMPSE_VARIANTS = getattr(
@@ -20,5 +21,6 @@ GLIMPSE_VARIANTS = getattr(
         (ROW_HALF, _("Half row")),
         (ROW_FULL, _("Full row")),
         (QUOTE, _("Quote")),
+        (BADGE, _("Badge")),
     ],
 )
