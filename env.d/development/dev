@@ -4,6 +4,6 @@ AUTHENTICATION_BACKEND=richie.apps.courses.lms.edx.TokenEdXLMSBackend
 
 # LMS Backend
 EDX_BACKEND=richie.apps.courses.lms.base.BaseLMSBackend
-EDX_COURSE_REGEX=^.*/courses/(?P<course_id>.*)/info$
-EDX_JS_COURSE_REGEX=^.*/courses/(?<course_id>.*)/info$
+EDX_COURSE_REGEX=^.*/courses/(?P<course_id>.*)/course$
+EDX_JS_COURSE_REGEX=^.*/courses/(?<course_id>.*)/course$
 EDX_BASE_URL=http://localhost:8073
