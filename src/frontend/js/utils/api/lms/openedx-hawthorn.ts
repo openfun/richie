@@ -2,21 +2,49 @@ import Cookies from 'js-cookie';
 import { AuthenticationBackend, LMSBackend } from 'types/commonDataProps';
 import { Maybe, Nullable } from 'utils/types';
 import { User } from 'types/User';
+import { ApiImplementation, ApiOptions } from 'types/api';
 import { location } from 'utils/indirection/window';
 import { handle } from 'utils/errors/handle';
 import { EDX_CSRF_TOKEN_COOKIE_NAME } from 'settings';
-import { ApiImplementation } from '.';
 
-const API = (APIConf: AuthenticationBackend | LMSBackend): ApiImplementation => {
+/**
+ *
+ * EDX Hawthorn API Implementation
+ *
+ * This implementation is used for EDX Hawthorn and upper until routes used
+ * will not be compatible.
+ *
+ */
+
+const API = (
+  APIConf: AuthenticationBackend | LMSBackend,
+  options?: ApiOptions,
+): ApiImplementation => {
   const extractCourseIdFromUrl = (url: string): Maybe<Nullable<string>> =>
     url.match((APIConf as LMSBackend).course_regexp)?.groups?.course_id;
+
+  const ROUTES = {
+    user: {
+      me: APIConf.endpoint.concat(options?.routes?.user?.me ?? '/api/user/v1/me'),
+      login: APIConf.endpoint.concat(options?.routes?.user?.login ?? `/login`),
+      register: APIConf.endpoint.concat(options?.routes?.user?.register ?? `/register`),
+      logout: APIConf.endpoint.concat(options?.routes?.user?.logout ?? '/logout'),
+    },
+    enrollment: {
+      get: APIConf.endpoint.concat(
+        options?.routes?.enrollment?.get ?? '/api/enrollment/v1/enrollment',
+      ),
+      isEnrolled: APIConf.endpoint.concat(
+        options?.routes?.enrollment?.isEnrolled ?? '/api/enrollment/v1/enrollment',
+      ),
+      set: APIConf.endpoint.concat('/api/enrollment/v1/enrollment'),
+    },
+  };
 
   return {
     user: {
       me: async () => {
-        return await fetch(`${APIConf.endpoint}/api/user/v1/me`, {
-          credentials: 'include',
-        })
+        return await fetch(ROUTES.user.me, { credentials: 'include' })
           .then((res) => {
             if (res.ok) return res.json();
             if (res.status === 401) return null;
@@ -29,13 +57,12 @@ const API = (APIConf: AuthenticationBackend | LMSBackend): ApiImplementation => 
       },
       /* 
         / ! \ Prefix next param with richie.
-        In this way, EDX Nginx conf knows that we want to go back to richie app after login/redirect
+        In this way, OpenEdX Nginx conf knows that we want to go back to richie app after login/redirect
       */
-      login: () => location.assign(`${APIConf.endpoint}/login?next=richie${location.pathname}`),
-      register: () =>
-        location.assign(`${APIConf.endpoint}/register?&next=richie${location.pathname}`),
+      login: () => location.assign(`${ROUTES.user.login}?next=richie${location.pathname}`),
+      register: () => location.assign(`${ROUTES.user.register}?next=richie${location.pathname}`),
       logout: async () => {
-        await fetch(`${APIConf.endpoint}/logout`, {
+        await fetch(ROUTES.user.logout, {
           mode: 'no-cors',
           credentials: 'include',
         });
@@ -46,7 +73,7 @@ const API = (APIConf: AuthenticationBackend | LMSBackend): ApiImplementation => 
         const courseId = extractCourseIdFromUrl(url);
         const params = user ? `${user.username},${courseId}` : courseId;
 
-        return fetch(`${APIConf.endpoint}/api/enrollment/v1/enrollment/${params}`, {
+        return fetch(`${ROUTES.enrollment.get}/${params}`, {
           credentials: 'include',
         })
           .then((response) => {
@@ -67,7 +94,7 @@ const API = (APIConf: AuthenticationBackend | LMSBackend): ApiImplementation => 
         const courseId = extractCourseIdFromUrl(url);
         const params = user ? `${user.username},${courseId}` : courseId;
 
-        return fetch(`${APIConf.endpoint}/api/enrollment/v1/enrollment/${params}`, {
+        return fetch(`${ROUTES.enrollment.isEnrolled}/${params}`, {
           credentials: 'include',
         })
           .then((response) => {
@@ -94,7 +121,7 @@ const API = (APIConf: AuthenticationBackend | LMSBackend): ApiImplementation => 
           */
           const csrfToken = Cookies.get(EDX_CSRF_TOKEN_COOKIE_NAME) || '';
 
-          const isEnrolled = await fetch(`${APIConf.endpoint}/api/enrollment/v1/enrollment`, {
+          const isEnrolled = await fetch(ROUTES.enrollment.set, {
             method: 'POST',
             credentials: 'include',
             headers: {

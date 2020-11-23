@@ -1,8 +1,9 @@
 import fetchMock from 'fetch-mock';
+import { ApiBackend } from 'types/api';
 import { ContextFactory } from 'utils/test/factories';
 import faker from 'faker';
 
-describe('Base API', () => {
+describe('OpenEdX Hawthorn API', () => {
   const EDX_ENDPOINT = 'https://demo.endpoint/api';
   let courseId = '';
   let username = '';
@@ -10,7 +11,7 @@ describe('Base API', () => {
   const context = ContextFactory({
     lms_backends: [
       {
-        backend: 'richie.apps.courses.lms.edx.TokenEdXLMSBackend',
+        backend: ApiBackend.OPENEDX_HAWTHORN,
         course_regexp: 'course_id=(?<course_id>.*$)',
         endpoint: EDX_ENDPOINT,
         selector_regexp: '.*',
@@ -18,9 +19,21 @@ describe('Base API', () => {
     ],
   }).generate();
   (window as any).__richie_frontend_context__ = { context };
-  const { default: API } = require('./edx');
+  const { default: API } = require('./openedx-hawthorn');
   const LMSConf = context.lms_backends[0];
-  const EdxAPI = API(LMSConf);
+  const HawthornApi = API(LMSConf);
+
+  describe('ApiOptions', () => {
+    it('if a route is overriden in ApiOptions, related request uses it', async () => {
+      const CustomApi = API(LMSConf, {
+        routes: { user: { me: '/my-custom-api/user/v2.0/whoami' } },
+      });
+
+      fetchMock.get(`${EDX_ENDPOINT}/my-custom-api/user/v2.0/whoami`, 401);
+
+      await expect(CustomApi.user.me()).resolves.toBe(null);
+    });
+  });
 
   describe('enrollment', () => {
     beforeEach(() => {
@@ -32,7 +45,7 @@ describe('Base API', () => {
     describe('get', () => {
       it('returns null if the user is not enrolled to the provided course_id', async () => {
         fetchMock.get(`${EDX_ENDPOINT}/api/enrollment/v1/enrollment/${username},${courseId}`, 200);
-        const response = await EdxAPI.enrollment.get(
+        const response = await HawthornApi.enrollment.get(
           `https://demo.endpoint/courses?course_id=${courseId}`,
           { username },
         );
@@ -41,7 +54,7 @@ describe('Base API', () => {
 
       it('returns null if the user is anonymous', async () => {
         fetchMock.get(`${EDX_ENDPOINT}/api/enrollment/v1/enrollment/${courseId}`, 401);
-        const response = await EdxAPI.enrollment.get(
+        const response = await HawthornApi.enrollment.get(
           `https://demo.endpoint/courses?course_id=${courseId}`,
         );
         expect(response).toBeNull();
@@ -51,7 +64,7 @@ describe('Base API', () => {
         fetchMock.get(`${EDX_ENDPOINT}/api/enrollment/v1/enrollment/${username},${courseId}`, 500);
 
         await expect(
-          EdxAPI.enrollment.get(`https://demo.endpoint/courses?course_id=${courseId}`, {
+          HawthornApi.enrollment.get(`https://demo.endpoint/courses?course_id=${courseId}`, {
             username,
           }),
         ).resolves.toBeNull();
@@ -63,7 +76,7 @@ describe('Base API', () => {
           user: username,
         });
 
-        const response = await EdxAPI.enrollment.get(
+        const response = await HawthornApi.enrollment.get(
           `https://demo.endpoint/courses?course_id=${courseId}`,
           { username },
         );
@@ -80,7 +93,7 @@ describe('Base API', () => {
           user: username,
         });
 
-        const response = await EdxAPI.enrollment.get(
+        const response = await HawthornApi.enrollment.get(
           `https://demo.endpoint/courses?course_id=${courseId}`,
           { username },
         );
@@ -90,7 +103,7 @@ describe('Base API', () => {
 
       it('returns false if user is not enrolled', async () => {
         fetchMock.get(`${EDX_ENDPOINT}/api/enrollment/v1/enrollment/${username},${courseId}`, 200);
-        const response = await EdxAPI.enrollment.isEnrolled(
+        const response = await HawthornApi.enrollment.isEnrolled(
           `https://demo.endpoint/courses?course_id=${courseId}`,
           { username },
         );
@@ -100,7 +113,7 @@ describe('Base API', () => {
 
       it('returns false if user is anonymous', async () => {
         fetchMock.get(`${EDX_ENDPOINT}/api/enrollment/v1/enrollment/${username},${courseId}`, 401);
-        const response = await EdxAPI.enrollment.isEnrolled(
+        const response = await HawthornApi.enrollment.isEnrolled(
           `https://demo.endpoint/courses?course_id=${courseId}`,
           { username },
         );
@@ -114,7 +127,7 @@ describe('Base API', () => {
         fetchMock.post(`${EDX_ENDPOINT}/api/enrollment/v1/enrollment`, {
           is_active: true,
         });
-        const response = await EdxAPI.enrollment.set(
+        const response = await HawthornApi.enrollment.set(
           `https://demo.endpoint/courses?course_id=${courseId}`,
           { username },
         );
@@ -125,7 +138,7 @@ describe('Base API', () => {
       it('returns false if request failed', async () => {
         fetchMock.post(`${EDX_ENDPOINT}/api/enrollment/v1/enrollment`, 500);
 
-        const response = await EdxAPI.enrollment.set(
+        const response = await HawthornApi.enrollment.set(
           `https://demo.endpoint/courses?course_id=${courseId}`,
           { username },
         );

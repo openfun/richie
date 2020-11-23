@@ -74,7 +74,7 @@ def site_metas(request):
         context["FRONTEND_CONTEXT"]["context"]["lms_backends"] = [
             {
                 "endpoint": lms["BASE_URL"],
-                "backend": lms["BACKEND"],
+                "backend": lms["JS_BACKEND"],
                 "course_regexp": lms["JS_COURSE_REGEX"],
                 "selector_regexp": lms["JS_SELECTOR_REGEX"],
             }

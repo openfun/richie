@@ -1,10 +1,11 @@
 import { ContextFactory } from 'utils/test/factories';
+import { ApiBackend } from 'types/api';
 
 describe('Base API', () => {
   const context = ContextFactory({
     lms_backends: [
       {
-        backend: 'richie.apps.courses.lms.base.BaseLMSBackend',
+        backend: ApiBackend.BASE,
         course_regexp: '(?<course_id>.*)',
         endpoint: 'https://demo.endpoint/api',
         selector_regexp: '.*',
