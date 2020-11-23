@@ -20,6 +20,7 @@ based on a regex match on the URL of the course.
 LMS_BACKENDS=[
     {
         "BACKEND": "richie.apps.courses.lms.edx.TokenEdXLMSBackend",
+        "JS_BACKEND": "openedx-hawthorn",
         "SELECTOR_REGEX": r".*lms-example2.org.*",
         "JS_SELECTOR_REGEX": r".*lms-example2.org.*",
         "BASE_URL": "https://www.lms-example2.org",
@@ -31,6 +32,12 @@ LMS_BACKENDS=[
 For information about how to generate an API access on your OpenEdx instance, refer to the
 documentation.
 
+_Note: `JS_BACKEND` accepts `base`, `openedx-dogwood` and `openedx-hawthorn` values._
+_We have to implement several interfaces to be compatible to OpenEdx API:_
+_`openedx-dogwood` has been tested with Dogwood and Eucalyptus versions._
+_`openedx-hawthorn` has been tested with Hawthorn and Ironwood versions._
+_If you encounter an issue with these API interfaces or need to have a new interface, propose a PR_
+_or create an issue on our repository_
 
 ## Connecting Richie and OpenEdx over TLS
 

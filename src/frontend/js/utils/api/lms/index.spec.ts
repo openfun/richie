@@ -1,14 +1,16 @@
+import { ApiBackend } from 'types/api';
+
 describe('API LMS', () => {
   (window as any).__richie_frontend_context__ = {
     context: {
       lms_backends: [
         {
-          backend: 'richie.apps.courses.lms.base.BaseLMSBackend',
+          backend: ApiBackend.BASE,
           endpoint: 'https://demo.endpoint/api',
           selector_regexp: /.*base.org\/.*/,
         },
         {
-          backend: 'richie.apps.courses.lms.edx.TokenEdXLMSBackend',
+          backend: ApiBackend.OPENEDX_HAWTHORN,
           endpoint: 'https://edx.endpoint/api',
           selector_regexp: /.*edx.org\/.*/,
         },

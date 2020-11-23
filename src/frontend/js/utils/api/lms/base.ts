@@ -1,15 +1,15 @@
 import { AuthenticationBackend, LMSBackend } from 'types/commonDataProps';
 import { Nullable, Maybe } from 'utils/types';
 import { User } from 'types/User';
-import { ApiImplementation } from '.';
-import EDX from './edx';
+import { ApiImplementation } from 'types/api';
+import OpenEdxHawthornApiInterface from './openedx-hawthorn';
 
 const API = (APIConf: LMSBackend | AuthenticationBackend): ApiImplementation => {
   const extractCourseIdFromUrl = (url: string): Maybe<Nullable<string>> =>
     url.match((APIConf as LMSBackend).course_regexp)?.groups?.course_id;
 
   return {
-    user: EDX(APIConf).user,
+    user: OpenEdxHawthornApiInterface(APIConf).user,
     enrollment: {
       get: async (url: string, user: Nullable<User>) =>
         new Promise((resolve) => {

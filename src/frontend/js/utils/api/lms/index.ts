@@ -1,24 +1,9 @@
 import { CommonDataProps } from 'types/commonDataProps';
 import { handle } from 'utils/errors/handle';
-import { Nullable } from 'utils/types';
-import { User } from 'types/User';
-import { Enrollment } from 'types';
+import { ApiImplementation, ApiBackend } from 'types/api';
 import BaseApiInterface from './base';
-import OpenEdxApiInterface from './edx';
-
-export interface ApiImplementation {
-  user: {
-    me: () => Promise<Nullable<User>>;
-    login: () => void;
-    register: () => void;
-    logout: () => Promise<void>;
-  };
-  enrollment: {
-    get: (url: string, user: Nullable<User>) => Promise<Nullable<Enrollment>>;
-    isEnrolled: (url: string, user: Nullable<User>) => Promise<boolean>;
-    set: (url: string, user: User) => Promise<boolean>;
-  };
-}
+import OpenEdxDogwoodApiInterface from './openedx-dogwood';
+import OpenEdxHawthornApiInterface from './openedx-hawthorn';
 
 const context: CommonDataProps['context'] = (window as any).__richie_frontend_context__?.context;
 if (!context) throw new Error('No context frontend context available');
@@ -34,10 +19,12 @@ const LmsAPIHandler = (url: string): ApiImplementation => {
   const api = selectAPIWithUrl(url);
 
   switch (api?.backend) {
-    case 'richie.apps.courses.lms.base.BaseLMSBackend':
+    case ApiBackend.BASE:
       return BaseApiInterface(api);
-    case 'richie.apps.courses.lms.edx.TokenEdXLMSBackend':
-      return OpenEdxApiInterface(api);
+    case ApiBackend.OPENEDX_DOGWOOD:
+      return OpenEdxDogwoodApiInterface(api);
+    case ApiBackend.OPENEDX_HAWTHORN:
+      return OpenEdxHawthornApiInterface(api);
   }
 
   const error = new Error(`No LMS Backend found for ${url}.`);

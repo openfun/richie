@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add a frontend API Implementation for OpenEdX Dogwood/Eucalyptus
 - Add a new variant "Badge" to glimpse plugin
 
 ### Changed

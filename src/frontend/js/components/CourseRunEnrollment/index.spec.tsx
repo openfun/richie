@@ -6,6 +6,7 @@ import faker from 'faker';
 
 import { CourseRun } from 'types';
 import { CommonDataProps } from 'types/commonDataProps';
+import { ApiBackend } from 'types/api';
 import { Deferred } from 'utils/test/deferred';
 import * as factories from 'utils/test/factories';
 import { SESSION_CACHE_KEY } from 'settings';
@@ -17,11 +18,11 @@ describe('<CourseRunEnrollment />', () => {
     .ContextFactory({
       authentication: {
         endpoint,
-        backend: 'richie.apps.courses.lms.edx.TokenEdXLMSBackend',
+        backend: ApiBackend.OPENEDX_HAWTHORN,
       },
       lms_backends: [
         {
-          backend: 'richie.apps.courses.lms.edx.TokenEdXLMSBackend',
+          backend: ApiBackend.OPENEDX_HAWTHORN,
           course_regexp: '(?<course_id>.*)',
           endpoint,
           selector_regexp: '.*',
