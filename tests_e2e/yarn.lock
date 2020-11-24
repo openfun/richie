@@ -165,10 +165,10 @@ aws4@^1.8.0:
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.9.0.tgz#24390e6ad61386b0a747265754d2a17219de862c"
   integrity sha512-Uvq6hVe90D0B2WEnUqtdgY1bATGz3mw33nH9Y+dmA+w5DHvUmBgkr5rM/KCHpCsiFNRUfokW/szpPPgMK2hm4A==
 
-axe-core@4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.0.2.tgz#c7cf7378378a51fcd272d3c09668002a4990b1cb"
-  integrity sha512-arU1h31OGFu+LPrOLGZ7nB45v940NMDMEJeNmbutu57P+UFDVnkZg3e+J1I2HJRZ9hT7gO8J91dn/PMrAiKakA==
+axe-core@4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.1.1.tgz#70a7855888e287f7add66002211a423937063eaf"
+  integrity sha512-5Kgy8Cz6LPC9DJcNb3yjAXTu3XihQgEdnIg50c//zOC/MyLP0Clg+Y8Sh9ZjjnvBrDZU4DgXS9C3T9r4/scGZQ==
 
 balanced-match@^1.0.0:
   version "1.0.0"
@@ -370,15 +370,15 @@ cross-spawn@^7.0.0:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
-cypress-axe@0.10.0:
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/cypress-axe/-/cypress-axe-0.10.0.tgz#fc3536d7da47ff90f9665cf8fbf8e820e09202b9"
-  integrity sha512-McmUZl34tD+DFEEvQYsmszMahsSEKYoNb9lJpIUHHhmcFPEjStCFFxmCmWkfRBh/FkWJ+8WoCHkcl663+w3E/w==
+cypress-axe@0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/cypress-axe/-/cypress-axe-0.11.0.tgz#6abda41ed52454747fcc9ebf12bb4859b1a66bc4"
+  integrity sha512-lROvWRvLE36NuCLh9abH4GxG/ybWVc/f5IYz7IoY7vlMNpEy2uLGceLZ6uhFdyOaZclxervxuQmiYD/QuHnwZg==
 
-cypress@5.6.0:
-  version "5.6.0"
-  resolved "https://registry.yarnpkg.com/cypress/-/cypress-5.6.0.tgz#6781755c3ddfd644ce3179fcd7389176c0c82280"
-  integrity sha512-cs5vG3E2JLldAc16+5yQxaVRLLqMVya5RlrfPWkC72S5xrlHFdw7ovxPb61s4wYweROKTyH01WQc2PFzwwVvyQ==
+cypress@6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/cypress/-/cypress-6.0.0.tgz#57050773c61e8fe1e5c9871cc034c616fcacded9"
+  integrity sha512-A/w9S15xGxX5UVeAQZacKBqaA0Uqlae9e5WMrehehAdFiLOZj08IgSVZOV8YqA9OH9Z0iBOnmsEkK3NNj43VrA==
   dependencies:
     "@cypress/listr-verbose-renderer" "^0.4.1"
     "@cypress/request" "^2.88.5"
