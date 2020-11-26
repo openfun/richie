@@ -10,11 +10,11 @@ import { SESSION_CACHE_KEY } from 'settings';
  * useSession
  *
  * An utils to manage user session in Richie
- * User session information are extracted from EDX cookies.
- * This means that EDX and Richie must be accessible through the same domain and
- * EDX must be configured to share cookies to Richie sub domain.
+ * User session information are extracted from OpenEdX cookies.
+ * This means that OpenEdX and Richie must be accessible through the same domain and
+ * OpenEdX must be configured to share cookies to Richie sub domain.
  *
- * "edxloggedin" cookie is used to know if an EDX session is active or not,
+ * "edxloggedin" cookie is used to know if an OpenEdX session is active or not,
  * then user information are extracted from "edx-user-info" cookie.
  *
  * useSession use a context to dispatch any change to all react widgets.
@@ -36,7 +36,7 @@ const Session = createContext<SessionContext>({} as any);
  *
  * Session:
  * @param user the current user state. Read below to see possible states
- * @param destroy set Session to undefined then make a request to logout user from EDX
+ * @param destroy set Session to undefined then make a request to logout user from OpenEdX
  */
 export const SessionProvider = ({ children }: PropsWithChildren<any>) => {
   /**
