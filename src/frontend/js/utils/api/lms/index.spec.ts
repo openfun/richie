@@ -21,7 +21,7 @@ describe('API LMS', () => {
 
   const { default: LMSHandler } = require('./index');
 
-  it('returns EDX API if url that match edx selector is provided', () => {
+  it('returns OpenEdX API if url that match edx selector is provided', () => {
     const api = LMSHandler('https://edx.org/courses/a-test-course');
     expect(api).toBeDefined();
   });

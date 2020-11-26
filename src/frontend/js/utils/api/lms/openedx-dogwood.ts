@@ -4,7 +4,7 @@ import OpenEdxHawthornApiInterface from './openedx-hawthorn';
 
 /**
  *
- * EDX Dogwood API Implementation
+ * OpenEdX Dogwood API Implementation
  *
  * This implementation inherits from Hawthorn implementation.
  * The `user.me` methods has to be overriden since `/user/v1/me` route does not

@@ -9,9 +9,9 @@ import { EDX_CSRF_TOKEN_COOKIE_NAME } from 'settings';
 
 /**
  *
- * EDX Hawthorn API Implementation
+ * OpenEdX Hawthorn API Implementation
  *
- * This implementation is used for EDX Hawthorn and upper until routes used
+ * This implementation is used for OpenEdX Hawthorn and upper until routes used
  * will not be compatible.
  *
  */
@@ -48,7 +48,7 @@ const API = (
           .then((res) => {
             if (res.ok) return res.json();
             if (res.status === 401) return null;
-            throw new Error(`[SESSION EDX API] > Cannot retrieve user`);
+            throw new Error(`[SESSION OpenEdX API] > Cannot retrieve user`);
           })
           .catch((error) => {
             handle(error);
