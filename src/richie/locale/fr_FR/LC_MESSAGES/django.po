@@ -251,7 +251,7 @@ msgstr "Cours"
 
 #: apps/courses/cms_plugins.py:139
 msgid "Person"
-msgstr "Pers"
+msgstr "Personne"
 
 #: apps/courses/cms_plugins.py:166
 msgid "Licence"
