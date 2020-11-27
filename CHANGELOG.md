@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [2.0.0-beta.21] - 2020-11-27
+
 ### Added
 
 - Add a frontend API Implementation for OpenEdX Dogwood/Eucalyptus
@@ -1096,7 +1098,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.0.0-beta.20...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.0.0-beta.21...master
+[2.0.0-beta.21]: https://github.com/openfun/richie/compare/v2.0.0-beta.20...v2.0.0-beta.21
 [2.0.0-beta.20]: https://github.com/openfun/richie/compare/v2.0.0-beta.19...v2.0.0-beta.20
 [2.0.0-beta.19]: https://github.com/openfun/richie/compare/v2.0.0-beta.18...v2.0.0-beta.19
 [2.0.0-beta.18]: https://github.com/openfun/richie/compare/v2.0.0-beta.17...v2.0.0-beta.18
