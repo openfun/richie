@@ -15,6 +15,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Improve the layout of the footer to save space
+- Allow ProgramPlugin in SectionPlugin on Homepage
 
 ### Fixed
 
