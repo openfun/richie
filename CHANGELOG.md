@@ -16,6 +16,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Improve the layout of the footer to save space
 - Allow ProgramPlugin in SectionPlugin on Homepage
+- Allow only one CKEditorPlugin to program_body placeholder
 
 ### Fixed
 

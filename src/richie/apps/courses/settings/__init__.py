@@ -304,7 +304,8 @@ CMS_PLACEHOLDER_CONF = {
     },
     "courses/cms/program_detail.html program_body": {
         "name": _("Body"),
-        "excluded_plugins": ["CKEditorPlugin", "GoogleMapPlugin"],
+        "plugins": ["CKEditorPlugin"],
+        "limits": {"CKEditorPlugin": 1},
     },
     "courses/cms/program_detail.html program_courses": {
         "name": _("Courses"),
