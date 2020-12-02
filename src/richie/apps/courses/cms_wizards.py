@@ -23,10 +23,8 @@ from cms.wizards.forms import BaseFormMixin
 from cms.wizards.wizard_base import Wizard
 from cms.wizards.wizard_pool import wizard_pool
 
-from ..core import defaults as core_defaults
 from . import defaults
-from .helpers import snapshot_course
-from .models import BlogPost, Category, Course, CourseRun, Organization, Person, Program
+from .models import BlogPost, Category, Course, Organization, Person, Program
 
 
 class ExcludeRootReverseIDMixin:
@@ -262,141 +260,6 @@ wizard_pool.register(
         description=_("Create a new course page"),
         model=Course,
         form=CourseWizardForm,
-        weight=200,
-    )
-)
-
-
-class CourseRunWizardForm(BaseWizardForm):
-    """
-    This form is used by the wizard that creates a new course run page.
-    A related CourseRun model is created for each course run page.
-    """
-
-    should_snapshot_course = forms.BooleanField(
-        label=_("Snapshot the course"),
-        help_text=_(
-            "Tick this box if you want to snapshot the current version of the course and link "
-            "the new course run to a new version of the course."
-        ),
-        required=False,
-    )
-
-    model = CourseRun
-
-    @cached_property
-    def parent_page(self):
-        """
-        The parent page of a course run is the course page from which it is being created.
-        """
-        return self.page
-
-    def clean(self):
-        """
-        Permission to add a course run was already checked when we displayed the list of wizard
-        entries, but we need to prevent form hacking.
-        """
-        try:
-            course = self.page.course
-        except Course.DoesNotExist as error:
-            raise forms.ValidationError(
-                "Course runs can only be created from a course page."
-            ) from error
-        else:
-            if course.extended_object.parent_page:
-                try:
-                    course.extended_object.parent_page.course
-                except Course.DoesNotExist:
-                    pass
-                else:
-                    raise forms.ValidationError(
-                        "Course runs can not be created from a course snapshot page."
-                    )
-
-        # The user should have permission to create a course run object
-        if not (self.user.is_staff and self.user.has_perm("courses.add_courserun")):
-            raise PermissionDenied()
-
-        if self.cleaned_data["should_snapshot_course"]:
-            try:
-                snapshot_course(self.page, self.user, simulate_only=True)
-            except PermissionDenied as context:
-                # In this case, where the attempt results from a ticked checkbox, we should
-                # raise the exception as a validation error so it is displayed on the form.
-                raise forms.ValidationError(context)
-
-        return super().clean()
-
-    def save(self):
-        """
-        The parent form created the page.
-        This method creates the associated course run page extension.
-        """
-        # Start by snapshotting the course if it is requested
-        if self.cleaned_data["should_snapshot_course"]:
-            snapshot_course(self.page, self.user)
-
-        page = super().save()
-
-        # Look for a language matching the active language in the list of ALL_LANGUAGES
-        # (it might happen that the project was configured in a way that the active language
-        # is not one of the possibilities in ALL_LANGUAGES)
-        languages = []
-        active_language = get_language()
-        if active_language in core_defaults.ALL_LANGUAGES_DICT:
-            languages.append(active_language)
-        else:
-            # if "fr-ca" was not found, look for the first language that starts with "fr-"
-            generic_language_code = active_language.split("-")[0]
-            for language_candidate in core_defaults.ALL_LANGUAGES_DICT:
-                if language_candidate.startswith(generic_language_code):
-                    languages.append(language_candidate)
-                    break
-
-        CourseRun.objects.create(extended_object=page, languages=languages)
-        return page
-
-
-class CourseRunWizard(Wizard):
-    """Inherit from Wizard because each wizard must have its own Python class."""
-
-    def user_has_add_permission(self, user, **kwargs):
-        """
-        Returns: True if it is possible to add a course run, False otherwise:
-            - the user should have the permission to add course run objects,
-            - course runs can only be created from a course page,
-            - if should not be possible to add a course run below a course snapshot.
-        """
-        try:
-            course = kwargs["page"].course
-        except Course.DoesNotExist:
-            # Course runs can only be created from a course page
-            return False
-        else:
-            # If the course has a parent that is a course page, it is a snapshot and should
-            # therefore not be allowed to received a new course run (it can still be done
-            # by moving the course run after it's created, so we don't want to make it a main
-            # feature as it can lead to mistakes with occasional users).
-            if course.extended_object.parent_page:
-                try:
-                    course.extended_object.parent_page.course
-                except Course.DoesNotExist:
-                    pass
-                else:
-                    return False
-
-        # The user should have permission to create a course run object
-        return user.has_perm(
-            "courses.add_courserun"
-        ) and super().user_has_add_permission(user, **kwargs)
-
-
-wizard_pool.register(
-    CourseRunWizard(
-        title=_("New course run page"),
-        description=_("Create a new course run page"),
-        model=CourseRun,
-        form=CourseRunWizardForm,
         weight=200,
     )
 )

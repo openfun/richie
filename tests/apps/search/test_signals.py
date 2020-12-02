@@ -9,7 +9,6 @@ from django.test import TestCase
 from richie.apps.courses.factories import (
     CategoryFactory,
     CourseFactory,
-    CourseRunFactory,
     OrganizationFactory,
 )
 from richie.apps.search.indexers.courses import CoursesIndexer
@@ -60,49 +59,6 @@ class CoursesSignalsTestCase(TestCase):
         self.assertEqual(action["_id"], str(course.public_extension.extended_object_id))
         self.assertEqual(action["_type"], "course")
 
-    def test_signals_course_runs_course_published(self, mock_bulk, *_):
-        """
-        Publishing a course run should update its course document in the Elasticsearch courses
-        index if published, excluding snapshots.
-        """
-        course = CourseFactory(should_publish=True)
-        CourseFactory(page_parent=course.extended_object, should_publish=True)
-        self.run_commit_hooks()
-        mock_bulk.reset_mock()
-
-        course_run = CourseRunFactory(page_parent=course.extended_object)
-        self.run_commit_hooks()
-
-        # Elasticsearch should not be called until the course run is published
-        self.assertFalse(mock_bulk.called)
-
-        self.assertTrue(course_run.extended_object.publish("en"))
-
-        # Elasticsearch should not be called before the db transaction is successful
-        self.assertFalse(mock_bulk.called)
-        self.run_commit_hooks()
-
-        self.assertEqual(mock_bulk.call_count, 1)
-        self.assertEqual(len(mock_bulk.call_args[1]["actions"]), 1)
-        action = mock_bulk.call_args[1]["actions"][0]
-        self.assertEqual(action["_id"], str(course.public_extension.extended_object_id))
-        self.assertEqual(action["_type"], "course")
-
-    def test_signals_course_runs_course_unpublished(self, mock_bulk, *_):
-        """
-        Publishing a course run should not update its course document in Elasticsearch if not
-        published.
-        """
-        course = CourseFactory()
-        course_run = CourseRunFactory(
-            page_parent=course.extended_object, should_publish=True
-        )
-
-        self.assertFalse(course_run.extended_object.publish("en"))
-        self.run_commit_hooks()
-
-        self.assertFalse(mock_bulk.called)
-
     def test_signals_organizations(self, mock_bulk, *_):
         """
         Publishing an organization should update its document in the Elasticsearch organizations
@@ -113,12 +69,12 @@ class CoursesSignalsTestCase(TestCase):
         published_course, _unpublished_course = CourseFactory.create_batch(
             2, fill_organizations=[organization]
         )
-        published_course.extended_object.publish("en")
+        self.assertTrue(published_course.extended_object.publish("en"))
         published_course.refresh_from_db()
         self.run_commit_hooks()
         mock_bulk.reset_mock()
 
-        organization.extended_object.publish("en")
+        self.assertTrue(organization.extended_object.publish("en"))
         organization.refresh_from_db()
 
         # Elasticsearch should not be called before the db transaction is successful
@@ -146,12 +102,12 @@ class CoursesSignalsTestCase(TestCase):
         published_course, _unpublished_course = CourseFactory.create_batch(
             2, fill_organizations=[organization]
         )
-        published_course.extended_object.publish("en")
+        self.assertTrue(published_course.extended_object.publish("en"))
         published_course.refresh_from_db()
         self.run_commit_hooks()
         mock_bulk.reset_mock()
 
-        organization.extended_object.publish("en")
+        self.assertTrue(organization.extended_object.publish("en"))
         organization.refresh_from_db()
 
         # Elasticsearch should not be called before the db transaction is successful
@@ -178,12 +134,12 @@ class CoursesSignalsTestCase(TestCase):
         published_course, _unpublished_course = CourseFactory.create_batch(
             2, fill_categories=[category]
         )
-        published_course.extended_object.publish("en")
+        self.assertTrue(published_course.extended_object.publish("en"))
         published_course.refresh_from_db()
         self.run_commit_hooks()
         mock_bulk.reset_mock()
 
-        category.extended_object.publish("en")
+        self.assertTrue(category.extended_object.publish("en"))
         category.refresh_from_db()
 
         # Elasticsearch should not be called before the db transaction is successful
@@ -211,12 +167,12 @@ class CoursesSignalsTestCase(TestCase):
         published_course, _unpublished_course = CourseFactory.create_batch(
             2, fill_categories=[category]
         )
-        published_course.extended_object.publish("en")
+        self.assertTrue(published_course.extended_object.publish("en"))
         published_course.refresh_from_db()
         self.run_commit_hooks()
         mock_bulk.reset_mock()
 
-        category.extended_object.publish("en")
+        self.assertTrue(category.extended_object.publish("en"))
         category.refresh_from_db()
 
         # Elasticsearch should not be called before the db transaction is successful

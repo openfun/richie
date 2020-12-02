@@ -41,11 +41,10 @@ class CoursesIndexersTestCase(TestCase):
         organization = OrganizationFactory(should_publish=True)
         category = CategoryFactory(should_publish=True)
         course = CourseFactory(
-            fill_organizations=[organization],
-            fill_categories=[category],
-            should_publish=True,
+            fill_organizations=[organization], fill_categories=[category]
         )
-        CourseRunFactory(page_parent=course.extended_object, should_publish=True)
+        CourseRunFactory(direct_course=course)
+        course.extended_object.publish("en")
 
         course_document = list(
             CoursesIndexer.get_es_documents(index="some_index", action="some_action")
@@ -169,11 +168,11 @@ class CoursesIndexersTestCase(TestCase):
                 "en": "an english course title",
                 "fr": "un titre cours français",
             },
-            should_publish=True,
         )
-        CourseRunFactory.create_batch(
-            2, page_parent=course.extended_object, should_publish=True
-        )
+        CourseRunFactory.create_batch(2, direct_course=course)
+        course.extended_object.publish("en")
+        course.extended_object.publish("fr")
+        course.refresh_from_db()
 
         # Add a description in several languages
         placeholder = course.public_extension.extended_object.placeholders.get(
@@ -216,11 +215,11 @@ class CoursesIndexersTestCase(TestCase):
             },
             "course_runs": [
                 {
-                    "start": course_run.public_extension.start,
-                    "end": course_run.public_extension.end,
-                    "enrollment_start": course_run.public_extension.enrollment_start,
-                    "enrollment_end": course_run.public_extension.enrollment_end,
-                    "languages": course_run.public_extension.languages,
+                    "start": course_run.public_course_run.start,
+                    "end": course_run.public_course_run.end,
+                    "enrollment_start": course_run.public_course_run.enrollment_start,
+                    "enrollment_end": course_run.public_course_run.enrollment_end,
+                    "languages": course_run.public_course_run.languages,
                 }
                 for course_run in course.get_course_runs().order_by("-end")
             ],
@@ -345,10 +344,9 @@ class CoursesIndexersTestCase(TestCase):
         """
         Course runs with no start date should not get indexed.
         """
-        course = CourseFactory(should_publish=True)
-        CourseRunFactory(
-            page_parent=course.extended_object, start=None, should_publish=True
-        )
+        course = CourseFactory()
+        CourseRunFactory(direct_course=course, start=None)
+        course.extended_object.publish("en")
 
         indexed_courses = list(
             CoursesIndexer.get_es_documents(index="some_index", action="some_action")
@@ -360,12 +358,9 @@ class CoursesIndexersTestCase(TestCase):
         """
         Course runs with no start of enrollment date should not get indexed.
         """
-        course = CourseFactory(should_publish=True)
-        CourseRunFactory(
-            page_parent=course.extended_object,
-            enrollment_start=None,
-            should_publish=True,
-        )
+        course = CourseFactory()
+        CourseRunFactory(direct_course=course, enrollment_start=None)
+        course.extended_object.publish("en")
 
         indexed_courses = list(
             CoursesIndexer.get_es_documents(index="some_index", action="some_action")
@@ -378,10 +373,9 @@ class CoursesIndexersTestCase(TestCase):
         Course runs with no end of enrollment date should get their end date as date of end
         of enrollment.
         """
-        course = CourseFactory(should_publish=True)
-        course_run = CourseRunFactory(
-            page_parent=course.extended_object, enrollment_end=None, should_publish=True
-        )
+        course = CourseFactory()
+        course_run = CourseRunFactory(direct_course=course, enrollment_end=None)
+        course.extended_object.publish("en")
 
         indexed_courses = list(
             CoursesIndexer.get_es_documents(index="some_index", action="some_action")
@@ -396,10 +390,9 @@ class CoursesIndexersTestCase(TestCase):
         """
         Course runs with no end date should be on-going for ever.
         """
-        course = CourseFactory(should_publish=True)
-        CourseRunFactory(
-            page_parent=course.extended_object, end=None, should_publish=True
-        )
+        course = CourseFactory()
+        CourseRunFactory(direct_course=course, end=None)
+        course.extended_object.publish("en")
 
         indexed_courses = list(
             CoursesIndexer.get_es_documents(index="some_index", action="some_action")
@@ -412,13 +405,9 @@ class CoursesIndexersTestCase(TestCase):
         """
         Course runs with no end date and no date of end of enrollment should be open for ever.
         """
-        course = CourseFactory(should_publish=True)
-        CourseRunFactory(
-            page_parent=course.extended_object,
-            end=None,
-            enrollment_end=None,
-            should_publish=True,
-        )
+        course = CourseFactory()
+        CourseRunFactory(direct_course=course, end=None, enrollment_end=None)
+        course.extended_object.publish("en")
 
         indexed_courses = list(
             CoursesIndexer.get_es_documents(index="some_index", action="some_action")

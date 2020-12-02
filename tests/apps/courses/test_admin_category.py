@@ -14,6 +14,20 @@ class CategoryAdminTestCase(CMSTestCase):
     Integration test suite to validate the behavior of admin pages for the Category model.
     """
 
+    def test_admin_category_index(self):
+        """Categories should not be listed on the index as they are page extensions."""
+        user = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=user.username, password="password")
+
+        # Get the admin index view
+        url = reverse("admin:index")
+        response = self.client.get(url, follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        # Check that a link to the category list view is not on the page
+        category_url = reverse("admin:courses_category_changelist")
+        self.assertNotContains(response, category_url)
+
     def test_admin_category_change_view_get(self):
         """The admin change view should include the color field."""
         user = UserFactory(is_staff=True, is_superuser=True)

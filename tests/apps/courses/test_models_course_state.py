@@ -30,7 +30,7 @@ class CourseRunModelsTestCase(TestCase):
     def create_run_ongoing_open(self, course):
         """Create an on-going course run that is open for enrollment."""
         return CourseRunFactory(
-            page_parent=course.extended_object,
+            direct_course=course,
             start=self.now - timedelta(hours=1),
             end=self.now + timedelta(hours=2),
             enrollment_end=self.now + timedelta(hours=1),
@@ -39,7 +39,7 @@ class CourseRunModelsTestCase(TestCase):
     def create_run_ongoing_closed(self, course):
         """Create an on-going course run that is closed for enrollment."""
         return CourseRunFactory(
-            page_parent=course.extended_object,
+            direct_course=course,
             start=self.now - timedelta(hours=1),
             end=self.now + timedelta(hours=1),
             enrollment_end=self.now,
@@ -48,7 +48,7 @@ class CourseRunModelsTestCase(TestCase):
     def create_run_archived(self, course):
         """Create an archived course run."""
         return CourseRunFactory(
-            page_parent=course.extended_object,
+            direct_course=course,
             start=self.now - timedelta(hours=1),
             end=self.now,
         )
@@ -56,7 +56,7 @@ class CourseRunModelsTestCase(TestCase):
     def create_run_future_not_yet_open(self, course):
         """Create a course run in the future and not yet open for enrollment."""
         return CourseRunFactory(
-            page_parent=course.extended_object,
+            direct_course=course,
             start=self.now + timedelta(hours=2),
             enrollment_start=self.now + timedelta(hours=1),
         )
@@ -64,7 +64,7 @@ class CourseRunModelsTestCase(TestCase):
     def create_run_future_closed(self, course):
         """Create a course run in the future and already closed for enrollment."""
         return CourseRunFactory(
-            page_parent=course.extended_object,
+            direct_course=course,
             start=self.now + timedelta(hours=1),
             enrollment_start=self.now - timedelta(hours=2),
             enrollment_end=self.now - timedelta(hours=1),
@@ -73,7 +73,7 @@ class CourseRunModelsTestCase(TestCase):
     def create_run_future_open(self, course):
         """Create a course run in the future and open for enrollment."""
         return CourseRunFactory(
-            page_parent=course.extended_object,
+            direct_course=course,
             start=self.now + timedelta(hours=1),
             enrollment_start=self.now - timedelta(hours=1),
             enrollment_end=self.now + timedelta(hours=1),
@@ -121,9 +121,10 @@ class CourseRunModelsTestCase(TestCase):
         expected_state = CourseState(2, course_run.start)
         self.assertEqual(state, expected_state)
 
-        # Adding an on-going but closed course run should not change the result
+        # Adding an on-going but closed course run should not change the result and require
+        # only 1 additional database query
         self.create_run_ongoing_closed(course)
-        with self.assertNumQueries(2):
+        with self.assertNumQueries(1):
             state = course.state
         self.assertEqual(state, expected_state)
 
@@ -139,9 +140,10 @@ class CourseRunModelsTestCase(TestCase):
         expected_state = CourseState(3)
         self.assertEqual(state, expected_state)
 
-        # Adding an on-going but closed course run should not change the result
+        # Adding an on-going but closed course run should not change the result and require
+        # only 1 additional database query
         self.create_run_ongoing_closed(course)
-        with self.assertNumQueries(2):
+        with self.assertNumQueries(1):
             state = course.state
         self.assertEqual(state, expected_state)
 
@@ -156,10 +158,11 @@ class CourseRunModelsTestCase(TestCase):
         expected_state = CourseState(1, course_run.start)
         self.assertEqual(state, expected_state)
 
-        # Adding courses in less priorietary states should not change the result
+        # Adding course runs of lower priority states should not change the result and require
+        # only 1 additional database query
         self.create_run_ongoing_closed(course)
         self.create_run_future_closed(course)
-        with self.assertNumQueries(2):
+        with self.assertNumQueries(1):
             state = course.state
         self.assertEqual(state, expected_state)
 
@@ -174,10 +177,11 @@ class CourseRunModelsTestCase(TestCase):
         expected_state = CourseState(0, course_run.enrollment_end)
         self.assertEqual(state, expected_state)
 
-        # Adding courses in less priorietary states should not change the result
+        # Adding course runs of lower priority states should not change the result and require
+        # only 1 additional database query
         self.create_run_ongoing_closed(course)
         self.create_run_future_closed(course)
         self.create_run_future_open(course)
-        with self.assertNumQueries(2):
+        with self.assertNumQueries(1):
             state = course.state
         self.assertEqual(state, expected_state)

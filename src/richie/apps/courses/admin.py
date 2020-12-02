@@ -1,6 +1,7 @@
 """
 Courses application admin
 """
+from django import forms
 from django.contrib import admin
 from django.core.exceptions import PermissionDenied
 from django.db import models as django_models
@@ -16,6 +17,7 @@ from cms.admin.placeholderadmin import FrontendEditableAdminMixin
 from cms.api import Page
 from cms.extensions import PageExtensionAdmin
 from parler.admin import TranslatableAdmin
+from parler.forms import TranslatableModelForm
 
 from ..core.admin import link_field
 from . import models
@@ -31,6 +33,86 @@ class CategoryAdmin(FrontendEditableAdminMixin, PageExtensionAdmin):
     """Admin class for the Category model"""
 
     form = AdminCategoryForm
+
+
+class CourseRunAdminForm(TranslatableModelForm):
+    """Admin form used for frontend editing."""
+
+    class Meta:
+        model = models.CourseRun
+        fields = [
+            "direct_course",
+            "title",
+            "resource_link",
+            "start",
+            "end",
+            "enrollment_start",
+            "enrollment_end",
+            "languages",
+        ]
+
+    def __init__(self, *args, **kwargs):
+        """
+        If the form is instanciated to update an existing course run:
+            > show the direct course select box only if the course has one or more snapshots
+              and limit choices to either the master course or one of its snapshots
+
+        If the form is instanciated to create a new course run and the "Add" form is opened via
+        the widget from the course detail page on the frontend, the "direct_course" field receives
+        the "id" of the related course as initial value (e.g. happens when you pass it via the
+        querystring in Django admin):
+            > hide the direct course select box
+        """
+        super().__init__(*args, **kwargs)
+
+        if self.instance.pk:
+            course_query = (
+                self.instance.get_course().get_snapshots(include_self=True).distinct()
+            )
+            if len(course_query) > 1:
+                self.fields["direct_course"].choices = [
+                    (c.pk, c.extended_object.get_title()) for c in course_query
+                ]
+            else:
+                self.fields["direct_course"].widget = forms.HiddenInput()
+        elif kwargs.get("initial", {}).get("direct_course"):
+            self.fields["direct_course"].widget = forms.HiddenInput()
+
+
+class CourseRunAdmin(FrontendEditableAdminMixin, TranslatableAdmin):
+    """Admin class for the CourseRun model"""
+
+    frontend_editable_fields = (
+        "direct_course",
+        "title",
+        "resource_link",
+        "start",
+        "end",
+        "enrollment_start",
+        "enrollment_end",
+        "languages",
+    )
+    list_display = [
+        "title",
+        "resource_link",
+        "start",
+        "end",
+        "enrollment_start",
+        "enrollment_end",
+    ]
+    form = CourseRunAdminForm
+    formfield_overrides = {
+        django_models.DateTimeField: {
+            "form_class": CourseRunSplitDateTimeField,
+            "widget": CourseRunSplitDateTimeWidget,
+        }
+    }
+
+    def has_module_permission(self, request):
+        """
+        Hide course runs from the admin page as frontend editing provides a better experience.
+        """
+        return False
 
 
 class CourseAdmin(FrontendEditableAdminMixin, PageExtensionAdmin):
@@ -82,33 +164,6 @@ class CourseAdmin(FrontendEditableAdminMixin, PageExtensionAdmin):
             return HttpResponseForbidden(force_str(context))
 
         return JsonResponse({"id": new_page.course.id})
-
-
-class CourseRunAdmin(FrontendEditableAdminMixin, PageExtensionAdmin):
-    """Admin class for the CourseRun model"""
-
-    list_display = ["title"]
-    frontend_editable_fields = (
-        "languages",
-        "resource_link",
-        "start",
-        "end",
-        "enrollment_start",
-        "enrollment_end",
-    )
-    formfield_overrides = {
-        django_models.DateTimeField: {
-            "form_class": CourseRunSplitDateTimeField,
-            "widget": CourseRunSplitDateTimeWidget,
-        }
-    }
-
-    # pylint: disable=no-self-use
-    def title(self, obj):
-        """
-        Display the course title as a read-only field from the related page
-        """
-        return obj.extended_object.get_title()
 
 
 class OrganizationAdmin(PageExtensionAdmin):

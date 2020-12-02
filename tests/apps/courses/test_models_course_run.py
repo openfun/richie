@@ -11,10 +11,13 @@ from django.test.client import RequestFactory
 from django.utils import timezone
 
 import pytz
+from cms.constants import PUBLISHER_STATE_DEFAULT, PUBLISHER_STATE_DIRTY
+from parler.utils.context import switch_language
 
 from richie.apps.core.defaults import ALL_LANGUAGES
 from richie.apps.core.helpers import create_i18n_page
 from richie.apps.courses.factories import CourseFactory, CourseRunFactory
+from richie.apps.courses.models import CourseRun, CourseRunTranslation
 
 
 # pylint: disable=too-many-public-methods
@@ -34,36 +37,44 @@ class CourseRunModelsTestCase(TestCase):
         query we build in `get_course` can create duplicates if we don't add the right clauses).
         """
         page = create_i18n_page("A page", published=True)
-        course = CourseFactory(page_parent=page, should_publish=True)
-        course_run = CourseRunFactory(
-            page_parent=course.extended_object, should_publish=True
-        )
+        course = CourseFactory(page_parent=page)
+        course_run = CourseRunFactory(direct_course=course)
+        self.assertTrue(course.extended_object.publish("en"))
+
+        course.refresh_from_db()
+        course_run.refresh_from_db()
+
         # Add a sibling course to make sure it is not returned
         CourseFactory(should_publish=True)
+
         # Add a snapshot to make sure it does not interfere
         CourseFactory(page_parent=course.extended_object, should_publish=True)
 
         self.assertEqual(course_run.get_course(), course)
         self.assertEqual(
-            course_run.public_extension.get_course(), course.public_extension
+            course_run.public_course_run.get_course(), course.public_extension
         )
 
     def test_models_course_run_get_course_direct_child(self):
         """
         We should be able to retrieve the course from a course run that is its direct child.
         """
-        course = CourseFactory(should_publish=True)
-        course_run = CourseRunFactory(
-            page_parent=course.extended_object, should_publish=True
-        )
+        course = CourseFactory()
+        course_run = CourseRunFactory(direct_course=course)
+        self.assertTrue(course.extended_object.publish("en"))
+
+        course.refresh_from_db()
+        course_run.refresh_from_db()
+
         # Add a sibling course to make sure it is not returned
         CourseFactory(should_publish=True)
+
         # Add a snapshot to make sure it does not interfere
         CourseFactory(page_parent=course.extended_object, should_publish=True)
 
         self.assertEqual(course_run.get_course(), course)
         self.assertEqual(
-            course_run.public_extension.get_course(), course.public_extension
+            course_run.public_course_run.get_course(), course.public_extension
         )
 
     def test_models_course_run_get_course_child_of_snapshot(self):
@@ -72,18 +83,17 @@ class CourseRunModelsTestCase(TestCase):
         its snapshots.
         """
         course = CourseFactory(should_publish=True)
-        snapshot = CourseFactory(
-            page_parent=course.extended_object, should_publish=True
-        )
-        course_run = CourseRunFactory(
-            page_parent=snapshot.extended_object, should_publish=True
-        )
+        snapshot = CourseFactory(page_parent=course.extended_object)
+        course_run = CourseRunFactory(direct_course=snapshot)
+        self.assertTrue(snapshot.extended_object.publish("en"))
+        course_run.refresh_from_db()
+
         # Add a sibling course to make sure it is not returned
         CourseFactory(should_publish=True)
 
         self.assertEqual(course_run.get_course(), course)
         self.assertEqual(
-            course_run.public_extension.get_course(), course.public_extension
+            course_run.public_course_run.get_course(), course.public_extension
         )
 
     def test_models_course_run_state_start_to_be_scheduled(self):
@@ -497,3 +507,297 @@ class CourseRunModelsTestCase(TestCase):
         course_run = CourseRunFactory(languages=["fr"])
         request = RequestFactory().get("/")
         self.assertEqual(course_run.get_languages_display(request), "French")
+
+    def test_models_course_run_copy_translations_all_languages(self):
+        """
+        The "copy_translations" method should port parler's translations for all languages
+        from one course run to the other.
+        """
+        course_run = CourseRunFactory(title="my title")
+        CourseRunTranslation.objects.create(
+            master=course_run, language_code="fr", title="mon titre"
+        )
+        old_course_run = CourseRun.objects.get(pk=course_run.pk)
+        self.assertEqual(CourseRunTranslation.objects.count(), 2)
+        with switch_language(old_course_run, "fr"):
+            self.assertEqual(old_course_run.title, "mon titre")
+
+        course_run.pk = None
+        course_run.save()
+        self.assertEqual(CourseRunTranslation.objects.count(), 2)
+
+        course_run.copy_translations(old_course_run)
+
+        self.assertEqual(CourseRun.objects.count(), 2)
+        self.assertEqual(CourseRunTranslation.objects.count(), 4)
+        self.assertEqual(
+            CourseRunTranslation.objects.filter(master=course_run).count(), 2
+        )
+
+        course_run.refresh_from_db()
+        self.assertEqual(course_run.title, "my title")
+        with switch_language(course_run, "fr"):
+            self.assertEqual(course_run.title, "mon titre")
+
+    def test_models_course_run_copy_translations_one_language(self):
+        """
+        The "copy_translations" method called for a specific language should only port parler's
+        translations for this language from one course run to the other.
+        """
+        course_run = CourseRunFactory(title="my title")
+        CourseRunTranslation.objects.create(
+            master=course_run, language_code="fr", title="mon titre"
+        )
+        old_course_run = CourseRun.objects.get(pk=course_run.pk)
+        self.assertEqual(CourseRunTranslation.objects.count(), 2)
+        with switch_language(old_course_run, "fr"):
+            self.assertEqual(old_course_run.title, "mon titre")
+
+        course_run.pk = None
+        course_run.save()
+        self.assertEqual(CourseRunTranslation.objects.count(), 2)
+
+        course_run.copy_translations(old_course_run, language="fr")
+
+        self.assertEqual(CourseRun.objects.count(), 2)
+        self.assertEqual(CourseRunTranslation.objects.count(), 3)
+        self.assertEqual(
+            CourseRunTranslation.objects.filter(master=course_run).count(), 1
+        )
+
+        course_run.refresh_from_db()
+        self.assertEqual(course_run.title, "mon titre")  # Fallback to french
+        with switch_language(course_run, "fr"):
+            self.assertEqual(course_run.title, "mon titre")
+
+    # Mark course dirty
+
+    def test_models_course_run_mark_dirty_any_field(self):
+        """
+        Updating the value of an editable field on the course run should mark the related
+        course page as dirty (waiting to be published).
+        """
+        course_run = CourseRunFactory()
+        self.assertTrue(course_run.direct_course.extended_object.publish("en"))
+        title_obj = course_run.direct_course.extended_object.title_set.first()
+
+        field = random.choice(
+            [
+                f
+                for f in course_run._meta.fields
+                if f.editable and not f.auto_created and not f.name == "direct_course"
+            ]
+        ).name
+        stub = CourseRunFactory()  # New random values to update our course run
+        setattr(course_run, field, getattr(stub, field))
+
+        self.assertEqual(title_obj.publisher_state, PUBLISHER_STATE_DEFAULT)
+
+        course_run.save()
+        title_obj.refresh_from_db()
+
+        self.assertEqual(title_obj.publisher_state, PUBLISHER_STATE_DIRTY)
+
+    def test_models_course_run_mark_dirty_direct_course_field(self):
+        """
+        Changing the course to which a course run is related should mark both the source and the
+        target course pages as dirty (waiting to be published).
+        """
+        course_run = CourseRunFactory()
+        course_source = course_run.direct_course
+        course_target = CourseFactory(should_publish=True)
+        self.assertTrue(course_source.extended_object.publish("en"))
+        title_obj_source = course_source.extended_object.title_set.first()
+        title_obj_target = course_target.extended_object.title_set.first()
+
+        course_run.direct_course = course_target
+
+        self.assertEqual(title_obj_source.publisher_state, PUBLISHER_STATE_DEFAULT)
+        self.assertEqual(title_obj_target.publisher_state, PUBLISHER_STATE_DEFAULT)
+
+        course_run.save()
+        title_obj_source.refresh_from_db()
+        title_obj_target.refresh_from_db()
+
+        self.assertEqual(title_obj_source.publisher_state, PUBLISHER_STATE_DIRTY)
+        self.assertEqual(title_obj_target.publisher_state, PUBLISHER_STATE_DIRTY)
+
+    def test_models_course_run_mark_dirty_parler(self):
+        """
+        Updating the value of a field translatable via parler should mark the related
+        course page dirty (waiting to be published) only in the impacted language.
+        """
+        course = CourseFactory(page_languages=["en", "fr"])
+        course_run = CourseRunFactory(direct_course=course)
+        CourseRunTranslation.objects.create(
+            master=course_run, language_code="fr", title="mon titre"
+        )
+        self.assertTrue(course_run.direct_course.extended_object.publish("en"))
+        self.assertTrue(course_run.direct_course.extended_object.publish("fr"))
+        course_run.refresh_from_db()
+        self.assertIsNotNone(course_run.public_course_run)
+
+        title_query = course_run.direct_course.extended_object.title_set
+        title_obj_en = title_query.get(language="en")
+        title_obj_fr = title_query.get(language="fr")
+        self.assertEqual(title_query.count(), 2)
+
+        with switch_language(course_run, "fr"):
+            course_run.title = "nouveau titre"
+
+        self.assertEqual(title_obj_en.publisher_state, PUBLISHER_STATE_DEFAULT)
+        self.assertEqual(title_obj_fr.publisher_state, PUBLISHER_STATE_DEFAULT)
+
+        course_run.save()
+        title_obj_en.refresh_from_db()
+        title_obj_fr.refresh_from_db()
+
+        self.assertEqual(title_obj_en.publisher_state, PUBLISHER_STATE_DEFAULT)
+        self.assertEqual(title_obj_fr.publisher_state, PUBLISHER_STATE_DIRTY)
+
+    def test_models_course_run_mark_dirty_update_to_be_scheduled_to(self):
+        """
+        Resetting a scheduled course run to a state "to be scheduled" should mark the related
+        course page dirty.
+        """
+        course_run = CourseRunFactory()
+        self.assertTrue(course_run.direct_course.extended_object.publish("en"))
+        title_obj = course_run.direct_course.extended_object.title_set.first()
+
+        course_run.start = None
+        course_run.save()
+        title_obj.refresh_from_db()
+
+        self.assertEqual(title_obj.publisher_state, PUBLISHER_STATE_DIRTY)
+
+    def test_models_course_run_mark_dirty_update_to_be_scheduled_from(self):
+        """
+        Scheduling a course run that was to be scheduled should mark the related
+        course page dirty.
+        """
+        now = timezone.now()
+        course_run = CourseRunFactory(start=None, enrollment_start=now)
+        self.assertTrue(course_run.direct_course.extended_object.publish("en"))
+        title_obj = course_run.direct_course.extended_object.title_set.first()
+
+        course_run.start = now
+        course_run.save()
+        title_obj.refresh_from_db()
+
+        self.assertEqual(title_obj.publisher_state, PUBLISHER_STATE_DIRTY)
+
+    def test_models_course_run_mark_dirty_update_to_be_scheduled_remain(self):
+        """
+        Modifying a course run to be scheduled but keeping its state "to be scheduled" should
+        not mark the related course page dirty.
+        """
+        course_run = CourseRunFactory(start=None)
+        self.assertTrue(course_run.direct_course.extended_object.publish("en"))
+        title_obj = course_run.direct_course.extended_object.title_set.first()
+
+        course_run.end = timezone.now()
+        course_run.save()
+        title_obj.refresh_from_db()
+
+        self.assertEqual(title_obj.publisher_state, PUBLISHER_STATE_DEFAULT)
+
+    def test_models_course_run_mark_dirty_create_course_run(self):
+        """
+        Creating a new course run in a scheduled state should mark the related course page dirty.
+        """
+        course = CourseFactory(should_publish=True)
+        title_obj = course.extended_object.title_set.first()
+
+        self.assertEqual(title_obj.publisher_state, PUBLISHER_STATE_DEFAULT)
+
+        CourseRunFactory(direct_course=course)
+        title_obj.refresh_from_db()
+
+        self.assertEqual(title_obj.publisher_state, PUBLISHER_STATE_DIRTY)
+
+    def test_models_course_run_mark_dirty_create_course_run_to_be_scheduled(self):
+        """
+        Creating a new course run in a state "to be scheduled" should not mark the related
+        course page dirty.
+        """
+        course = CourseFactory(should_publish=True)
+        title_obj = course.extended_object.title_set.first()
+
+        self.assertEqual(title_obj.publisher_state, PUBLISHER_STATE_DEFAULT)
+
+        field = random.choice(["start", "enrollment_start"])
+        CourseRunFactory(**{field: None})
+        title_obj.refresh_from_db()
+
+        self.assertEqual(title_obj.publisher_state, PUBLISHER_STATE_DEFAULT)
+
+    def test_models_course_run_mark_dirty_delete_course_run(self):
+        """
+        Deleting a scheduled course run should mark the related course page dirty.
+        """
+        course_run = CourseRunFactory()
+        self.assertTrue(course_run.direct_course.extended_object.publish("en"))
+        title_obj = course_run.direct_course.extended_object.title_set.first()
+        course_run.refresh_from_db()
+
+        self.assertEqual(title_obj.publisher_state, PUBLISHER_STATE_DEFAULT)
+
+        course_run.delete()
+        title_obj.refresh_from_db()
+
+        self.assertEqual(title_obj.publisher_state, PUBLISHER_STATE_DIRTY)
+
+    def test_models_course_run_mark_dirty_delete_course_run_to_be_scheduled(self):
+        """
+        Deleting a course run yet to be scheduled should not mark the related course page dirty.
+        """
+        field = random.choice(["start", "enrollment_start"])
+        course_run = CourseRunFactory(**{field: None})
+        self.assertTrue(course_run.direct_course.extended_object.publish("en"))
+        title_obj = course_run.direct_course.extended_object.title_set.first()
+        course_run.refresh_from_db()
+
+        course_run.delete()
+        title_obj.refresh_from_db()
+
+        self.assertEqual(title_obj.publisher_state, PUBLISHER_STATE_DEFAULT)
+
+    def test_models_course_run_delete_draft(self):
+        """
+        Deleting a draft course run that is not published should delete all its
+        related translations.
+        """
+        course = CourseFactory(page_languages=["en", "fr"])
+        course_run = CourseRunFactory(direct_course=course)
+        CourseRunTranslation.objects.create(
+            master=course_run, language_code="fr", title="mon titre"
+        )
+
+        self.assertEqual(CourseRun.objects.count(), 1)
+        self.assertEqual(CourseRunTranslation.objects.count(), 2)
+
+        course_run.delete()
+
+        self.assertFalse(CourseRun.objects.exists())
+        self.assertFalse(CourseRunTranslation.objects.exists())
+
+    def test_models_course_run_delete_published_cascade(self):
+        """
+        Deleting a draft course run that is published should delete its public
+        counterpart and all its translations by cascade.
+        """
+        course = CourseFactory(page_languages=["en", "fr"])
+        course_run = CourseRunFactory(direct_course=course)
+        CourseRunTranslation.objects.create(
+            master=course_run, language_code="fr", title="mon titre"
+        )
+        self.assertTrue(course_run.direct_course.extended_object.publish("en"))
+        self.assertTrue(course_run.direct_course.extended_object.publish("fr"))
+
+        self.assertEqual(CourseRun.objects.count(), 2)
+        self.assertEqual(CourseRunTranslation.objects.count(), 4)
+
+        course_run.delete()
+
+        self.assertFalse(CourseRun.objects.exists())
+        self.assertFalse(CourseRunTranslation.objects.exists())

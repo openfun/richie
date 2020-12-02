@@ -8,11 +8,13 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
+from django.urls import reverse
 from django.utils import timezone, translation
 from django.utils.functional import lazy
 from django.utils.translation import gettext_lazy as _
 
 import pytz
+from cms.constants import PUBLISHER_STATE_DIRTY
 from cms.extensions.extension_pool import extension_pool
 from cms.models import Page, PagePermission
 from cms.models.pluginmodel import CMSPlugin
@@ -153,6 +155,13 @@ class Course(BasePageExtension):
             title=self.extended_object.get_title(),
         )
 
+    def get_admin_url_to_add_run(self, request):
+        """
+        Get the admin url of the form to add a course run with the "direct_course"
+        field pre-populated to self.
+        """
+        base_url = reverse("admin:courses_courserun_add")
+        return f"{base_url:s}?direct_course={self.id:d}"
 
     @property
     def is_snapshot(self):
@@ -248,7 +257,6 @@ class Course(BasePageExtension):
         language = language or translation.get_language()
 
         selector = "extended_object__person_plugins__cmsplugin_ptr"
-        # pylint: disable=no-member
         filter_dict = {
             "{:s}__language".format(selector): language,
             "{:s}__placeholder__page".format(selector): self.extended_object,
@@ -360,69 +368,58 @@ class Course(BasePageExtension):
             )
         return page_query.distinct()
 
-    def get_course_runs(self):
+    def get_snapshots(self, include_self=False):
         """
-        Returns a query yielding the course runs related to the course. They may be direct
-        children of the course or children of a snapshot of the course.
+        Get a query yielding all snapshots of a course.
 
-        For a draft course instance, the related draft course runs are retrieved.
-        For a public course instance, the related public course runs are retrieved, but only
-        those that are currently published in at least one language*.
+        Arguments:
+        ----------
+        include_self (boolean): whether the current object should be included in the query
+            or just its snapshots.
 
-        (*) The catch here is that a course run could have been published and then unpublished
-            for all languages. The public instance is created the first time a draft page is
-            published. Of course, this public instance will still exist if the object is then
-            unpublished for all languages...
-            Said differently, a page can have a public version of itself in database but not be
-            currently published in any language.
+        Returns:
+        --------
+        Queryset[Course]: All snapshots of a course (calling this method on a snapshot would
+            return an empty queryset)
+
         """
-        node = self.extended_object.node
         is_draft = self.extended_object.publisher_is_draft
-        filter_dict = {
-            "extended_object__publisher_is_draft": is_draft,
-            "extended_object__node__path__startswith": node.path,
-            "extended_object__node__depth__gt": node.depth,
-        }
-        # For a public course, we must filter out course runs that are not published in
-        # any language
-        if is_draft is False:
-            filter_dict["extended_object__title_set__published"] = True
+        node = self.extended_object.node
+        current_and_descendant_nodes = node.__class__.get_tree(parent=node)
 
-        return (
-            CourseRun.objects.filter(**filter_dict)
-            .order_by("extended_object__node__path")
-            .distinct()
+        query = self.__class__.objects.filter(
+            extended_object__node__in=current_and_descendant_nodes,
+            extended_object__publisher_is_draft=is_draft,
         )
 
-    def get_course_runs_for_language(self, language=None):
-        """
-        Returns a query yielding the course runs related to the course for the current
-        language (or the language passed in arguments). They may be direct children of
-        the course or children of a snapshot of the course.
-        """
-        language = language or translation.get_language()
-        course_runs = self.get_course_runs()
+        if include_self is False:
+            query = query.exclude(pk=self.pk)
 
-        # For a public course, we must filter out course runs that are not published in
-        # the language
-        if self.extended_object.publisher_is_draft is False:
-            course_runs = course_runs.filter(
-                extended_object__title_set__language=language,
-                extended_object__title_set__published=True,
-            )
-        else:
-            course_runs = course_runs.filter(
-                extended_object__title_set__language=language
-            )
+        return query
 
-        return course_runs
+    def get_course_runs(self):
+        """
+        Returns a query yielding the course runs related to the course. They may be directly
+        related to the course or to a snapshot of the course.
+
+        The draft and the public page have their own course runs. The course runs on the draft
+        page are copied to the public page when the course is published (for any language).
+        """
+        is_draft = self.extended_object.publisher_is_draft
+        node = self.extended_object.node
+        current_and_descendant_nodes = node.__class__.get_tree(parent=node)
+
+        return CourseRun.objects.filter(
+            direct_course__extended_object__node__in=current_and_descendant_nodes,
+            direct_course__extended_object__publisher_is_draft=is_draft,
+        ).order_by("-start")
 
     def get_course_runs_dict(self):
         """Returns a dict of course runs grouped by their state."""
         course_runs_dict = {
             i: [] for i in range(len(CourseState.STATE_CALLS_TO_ACTION))
         }
-        for run in self.get_course_runs_for_language():
+        for run in self.get_course_runs():
             course_runs_dict[run.state["priority"]].append(run)
 
         return dict(course_runs_dict)
@@ -437,7 +434,7 @@ class Course(BasePageExtension):
         # The default state is for a course that has no course runs
         best_state = CourseState(6)
 
-        for course_run in self.get_course_runs_for_language().only(
+        for course_run in self.get_course_runs().only(
             "start", "end", "enrollment_start", "enrollment_end"
         ):
             state = course_run.state
@@ -449,6 +446,43 @@ class Course(BasePageExtension):
 
         return best_state
 
+    def copy_relations(self, oldinstance, language):
+        """
+        This method is called for 2 types of copying:
+            1- cloning (copying a draft page to another position in the page tree)
+            2- publishing (copying a draft page to its public counterpart)
+
+        When cloning a course, we do not want the related course runs to follow. Each copy of the
+        course has its own distinct runs.
+
+        When publishing a course, the course runs must be manually copied to the public page as
+        it should perfectly reflect the state of the draft page at the moment we clicked on the
+        publish button.
+        """
+        # Don't copy the course runs if this is a copy to clone
+        if oldinstance.public_extension_id != self.id:
+            return
+
+        # Since this is a copy to publish, let's copy the course runs
+        for old_course_run in oldinstance.runs.all():
+            course_run = CourseRun.objects.get(pk=old_course_run.pk)
+            course_run.direct_course = self
+
+            # If the course run already exists on the public course, update it,
+            try:
+                public_course_run = old_course_run.public_course_run
+            except CourseRun.DoesNotExist:
+                # Otherwise create a new public course run and link it to its draft
+                course_run.draft_course_run_id = old_course_run.id
+                course_run.pk = None
+                course_run.save()
+            else:
+                course_run.draft_course_run_id = old_course_run.id
+                course_run.pk = public_course_run.pk
+                course_run.save()
+
+            course_run.copy_translations(old_course_run, language=language)
+
     def save(self, *args, **kwargs):
         """
         Enforce validation each time an instance is saved
@@ -457,14 +491,28 @@ class Course(BasePageExtension):
         super().save(*args, **kwargs)
 
 
-class CourseRun(BasePageExtension):
+class CourseRun(TranslatableModel):
     """
     The course run represents and records the occurence of a course between a start
     and an end date.
     """
 
+    direct_course = models.ForeignKey(
+        Course, on_delete=models.CASCADE, related_name="runs"
+    )
+    # We register the foreign key in "draft_course_run" and not in "public_course_run"
+    # so that the public course run gets deleted by cascade in the database when the
+    # draft page is deleted. Doing it the other way would be fragile.
+    draft_course_run = models.OneToOneField(
+        "self",
+        on_delete=models.CASCADE,
+        null=True,
+        editable=False,
+        related_name="public_course_run",
+    )
+    title = TranslatedField()
     resource_link = models.CharField(
-        _("Resource link"), max_length=200, blank=True, null=True
+        _("resource link"), max_length=200, blank=True, null=True
     )
     start = models.DateTimeField(_("course start"), blank=True, null=True)
     end = models.DateTimeField(_("course end"), blank=True, null=True)
@@ -482,8 +530,6 @@ class CourseRun(BasePageExtension):
         help_text=_("The list of languages in which the course content is available."),
     )
 
-    PAGE = defaults.COURSERUNS_PAGE
-
     class Meta:
         db_table = "richie_course_run"
         verbose_name = _("course run")
@@ -492,17 +538,102 @@ class CourseRun(BasePageExtension):
     def __str__(self):
         """Human representation of a course run."""
         start = "{:%y/%m/%d %H:%M} - ".format(self.start) if self.start else ""
-        return "{start:s}{course:s}".format(
-            course=self.extended_object.get_title(), start=start
-        )
+        return f"Course run {self.id!s} starting {start:s}"
+
+    def copy_translations(self, oldinstance, language=None):
+        """Copy translation objects for a language if provided or for all languages."""
+        query = CourseRunTranslation.objects.filter(master=oldinstance)
+        if language:
+            query = query.filter(language_code=language)
+
+        for translation_object in query:
+            try:
+                target_pk = CourseRunTranslation.objects.filter(
+                    master=self, language_code=translation_object.language_code
+                ).values_list("pk", flat=True)[0]
+            except IndexError:
+                translation_object.pk = None
+            else:
+                translation_object.pk = target_pk
+            translation_object.master = self
+            translation_object.save()
 
     # pylint: disable=arguments-differ
     def save(self, *args, **kwargs):
         """
         Enforce validation each time an instance is saved.
+        Mark the related course page as dirty if the course run has changed so that the
+        modifications can be published.
         """
+        if self.pk:
+            try:
+                public_instance = self.__class__.objects.get(
+                    draft_course_run__pk=self.pk
+                )
+            except self.__class__.DoesNotExist:
+                pass
+            else:
+                is_visible = (
+                    self.state["priority"] < 6 or public_instance.state["priority"] < 6
+                )
+                # Mark the related course page dirty if the course run content has changed
+                # Break out of the for loop as soon as we found a difference
+                for field in self._meta.fields:
+                    if field.name == "direct_course":
+                        if (
+                            public_instance.direct_course.draft_extension
+                            != self.direct_course
+                            and is_visible
+                        ):
+                            self.direct_course.extended_object.title_set.update(
+                                publisher_state=PUBLISHER_STATE_DIRTY
+                            )  # mark target page dirty in all languages
+                            page = (
+                                public_instance.direct_course.draft_extension.extended_object
+                            )
+                            page.title_set.update(
+                                publisher_state=PUBLISHER_STATE_DIRTY
+                            )  # mark source page dirty in all languages
+                            break
+                    elif (
+                        field.editable
+                        and not field.auto_created
+                        and getattr(public_instance, field.name)
+                        != getattr(self, field.name)
+                        and is_visible
+                    ):
+                        self.direct_course.extended_object.title_set.update(
+                            publisher_state=PUBLISHER_STATE_DIRTY
+                        )  # mark page dirty in all languages
+                        break
+        else:
+            # This is a new instance, mark page dirty in all languages unless
+            # the course run is yet to be scheduled (hidden from public page in this case)
+            if self.state["priority"] < 6:
+                self.direct_course.extended_object.title_set.update(
+                    publisher_state=PUBLISHER_STATE_DIRTY
+                )
+
         self.full_clean()
         super().save(*args, **kwargs)
+
+    # pylint: disable=signature-differs
+    def delete(self, *args, **kwargs):
+        """
+        Mark the related course page as dirty if the course about to be deleted was
+        published and visible (not to be scheduled).
+        """
+        try:
+            # pylint: disable=no-member
+            public_course_run = self.public_course_run
+        except CourseRun.DoesNotExist:
+            pass
+        else:
+            if public_course_run.state["priority"] != 6:
+                self.direct_course.extended_object.title_set.update(
+                    publisher_state=PUBLISHER_STATE_DIRTY
+                )  # mark page dirty in all languages
+        return super().delete(*args, **kwargs)
 
     # pylint: disable=too-many-return-statements
     @staticmethod
@@ -549,22 +680,67 @@ class CourseRun(BasePageExtension):
 
     def get_course(self):
         """Get the course for this course run."""
-        nodes = self.extended_object.node.get_ancestors()
-        return Course.objects.get(
+        is_draft = self.direct_course.extended_object.publisher_is_draft
+        ancestor_nodes = self.direct_course.extended_object.node.get_ancestors()
+        return Course.objects.filter(
             # Joining on `cms_pages` generate duplicates for courses that are under a parent page
             # when this page exists both in draft and public versions. We need to exclude the
             # parent public page to avoid this duplication
             Q(
-                extended_object__node__parent__cms_pages__publisher_is_draft=True
+                extended_object__node__cms_pages__publisher_is_draft=is_draft
             )  # course has a parent
-            | Q(extended_object__node__parent__isnull=True),  # course has no parent
-            # Target courses that are ancestors of the course run
-            extended_object__node__in=nodes,
+            | Q(extended_object__node__isnull=True),  # course has no parent
+            # Target courses that are ancestors of the course related to the course run
+            Q(id=self.direct_course_id) | Q(extended_object__node__in=ancestor_nodes),
             # Exclude snapshots
             extended_object__node__parent__cms_pages__course__isnull=True,  # exclude snapshots
             # Get the course in the same version as the course run
-            extended_object__publisher_is_draft=self.extended_object.publisher_is_draft,
+            extended_object__publisher_is_draft=is_draft,
+        ).distinct()[0]
+
+
+class CourseRunTranslation(TranslatedFieldsModel):
+    """
+    CourseRun Translation model.
+
+    Django parler model linked to the CourseRun to internationalize the fields.
+    """
+
+    master = models.ForeignKey(CourseRun, models.CASCADE, related_name="translations")
+    title = models.CharField(_("title"), max_length=255)
+
+    class Meta:
+        db_table = "richie_course_run_translation"
+        unique_together = ("language_code", "master")
+        verbose_name = _("Course run translation")
+        verbose_name_plural = _("Course run translations")
+
+    def __str__(self):
+        """Human representation of a course run translation."""
+        return "{model}: {name}".format(
+            model=self._meta.verbose_name.title(), name=self.title
         )
+
+    # pylint: disable=signature-differs
+    def save(self, *args, **kwargs):
+        """
+        Mark related course page dirty if the title has changed compared to the public version.
+        """
+        if (
+            # Does the public translation have a different title?
+            self.__class__.objects.filter(
+                master__draft_course_run__translations__pk=self.pk,
+                language_code=self.language_code,
+            )
+            .exclude(title=self.title)
+            .exists()
+        ):
+            self.master.direct_course.extended_object.title_set.filter(
+                language=self.language_code
+            ).update(
+                publisher_state=PUBLISHER_STATE_DIRTY
+            )  # mark page dirty
+        return super().save(*args, **kwargs)
 
 
 class CoursePluginModel(PagePluginMixin, CMSPlugin):
@@ -682,4 +858,3 @@ class LicencePluginModel(CMSPlugin):
 
 
 extension_pool.register(Course)
-extension_pool.register(CourseRun)

@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Changed
+
+- Refactor course runs to not be CMS pages anymore
+
 ### Fixed
 
 - Stop indexing snapshots on signal update
