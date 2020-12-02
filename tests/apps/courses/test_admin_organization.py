@@ -16,6 +16,20 @@ class OrganizationAdminTestCase(CMSTestCase):
     model
     """
 
+    def test_admin_organization_index(self):
+        """Organizations should not be listed on the index as they are page extensions."""
+        user = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=user.username, password="password")
+
+        # Get the admin index view
+        url = reverse("admin:index")
+        response = self.client.get(url, follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        # Check that a link to the organization list view is not on the page
+        organization_url = reverse("admin:courses_organization_changelist")
+        self.assertNotContains(response, organization_url)
+
     def test_admin_organization_list_view(self):
         """
         The organizations admin list view should display their code and the title of the

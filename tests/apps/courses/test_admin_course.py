@@ -14,6 +14,20 @@ class CourseAdminTestCase(CMSTestCase):
     Integration test suite to validate the behavior of admin pages for the Course model
     """
 
+    def test_admin_course_index(self):
+        """Courses should not be listed on the index as they are page extensions."""
+        user = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=user.username, password="password")
+
+        # Get the admin index view
+        url = reverse("admin:index")
+        response = self.client.get(url, follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        # Check that a link to the course list view is not on the page
+        course_url = reverse("admin:courses_course_changelist")
+        self.assertNotContains(response, course_url)
+
     def test_admin_course_list_view(self):
         """
         The admin list view of courses should display the title of the related page.

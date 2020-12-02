@@ -21,19 +21,6 @@ def update_course(instance, _language):
         richie_bulk([ES_INDICES.courses.get_es_document_for_course(course)])
 
 
-def update_course_run(instance, _language):
-    """
-    Update Elasticsearch indices when a course run was modified and published:
-    - update the course document in the Elasticsearch courses index for the parent course
-      of this course run.
-
-    Returns None if the page was related to a course run and the Elasticsearch update is done.
-    Raises ObjectDoesNotExist if the page instance is not related to a course run.
-    """
-    course = instance.courserun.get_course().public_extension
-    richie_bulk([ES_INDICES.courses.get_es_document_for_course(course)])
-
-
 def update_organization(instance, language):
     """
     Update Elasticsearch indices when an organization was modified and published:
@@ -105,7 +92,6 @@ def update_page_extension(instance, language):
     """
     for method in [
         update_course,
-        update_course_run,
         update_category,
         update_organization,
     ]:

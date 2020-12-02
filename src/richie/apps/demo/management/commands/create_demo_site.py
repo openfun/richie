@@ -14,7 +14,7 @@ from cms.models import StaticPlaceholder
 
 from richie.apps.core.factories import create_text_plugin, image_getter
 from richie.apps.core.helpers import recursive_page_creation
-from richie.apps.courses import factories
+from richie.apps.courses import factories, models
 from richie.plugins.glimpse import defaults as glimpse_defaults
 from richie.plugins.glimpse.factories import GlimpseFactory
 
@@ -361,9 +361,6 @@ def create_demo_site():
                     **glimpse_data,
                 )
 
-        for language in course.extended_object.get_languages():
-            course.extended_object.publish(language)
-
         # Add a random number of course runs to the course
         nb_course_runs = get_number_of_course_runs()
         # pick a subset of languages for this course (otherwise all courses will have more or
@@ -372,17 +369,21 @@ def create_demo_site():
             ["de", "en", "es", "fr", "it", "nl"], random.randint(1, 4)  # nosec
         )
         for i in range(nb_course_runs):
-            factories.CourseRunFactory(
+            course_run = factories.CourseRunFactory(
                 __sequence=i,
                 languages=random.sample(
                     languages_subset, random.randint(1, len(languages_subset))  # nosec
                 ),
-                page_in_navigation=False,
-                page_languages=["en", "fr"],
-                page_parent=course.extended_object,
+                direct_course=course,
                 resource_link=f"{lms_endpoint}/courses/course-v1:edX+DemoX+Demo_Course/info",
-                should_publish=True,
             )
+            models.CourseRunTranslation.objects.create(
+                master=course_run, language_code="fr", title=f"Session {i:d}"
+            )
+
+        # Publish the course in all languages
+        for language in course.extended_object.get_languages():
+            course.extended_object.publish(language)
 
     # Create blog posts under the `News` page
     blogposts = []

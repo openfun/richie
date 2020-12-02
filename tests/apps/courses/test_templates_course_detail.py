@@ -17,6 +17,7 @@ from richie.apps.courses.factories import (
     CourseRunFactory,
     OrganizationFactory,
 )
+from richie.apps.courses.models import CourseRun
 
 
 class CourseCMSTestCase(CMSTestCase):
@@ -43,35 +44,34 @@ class CourseCMSTestCase(CMSTestCase):
             fill_icons=icons,
         )
         page = course.extended_object
-        # Create 2 ongoing open course runs
+        # Create an ongoing open course run that will be published (created before
+        # publishing the page)
         now = timezone.now()
-        course_run1, _course_run2 = CourseRunFactory.create_batch(
-            2,
-            page_parent=course.extended_object,
+        CourseRunFactory(
+            direct_course=course,
             start=now - timedelta(hours=1),
             end=now + timedelta(hours=2),
             enrollment_end=now + timedelta(hours=1),
             languages=["en", "fr"],
         )
-        self.assertFalse(course_run1.extended_object.publish("en"))
 
         # Publish only 2 out of 4 categories, icons and organizations
-        categories[0].extended_object.publish("en")
-        categories[1].extended_object.publish("en")
-        icons[0].extended_object.publish("en")
-        icons[1].extended_object.publish("en")
-        organizations[0].extended_object.publish("en")
-        organizations[1].extended_object.publish("en")
+        self.assertTrue(categories[0].extended_object.publish("en"))
+        self.assertTrue(categories[1].extended_object.publish("en"))
+        self.assertTrue(icons[0].extended_object.publish("en"))
+        self.assertTrue(icons[1].extended_object.publish("en"))
+        self.assertTrue(organizations[0].extended_object.publish("en"))
+        self.assertTrue(organizations[1].extended_object.publish("en"))
 
         # The unpublished objects may have been published and unpublished which puts them in a
         # status different from objects that have never been published.
         # We want to test both cases.
-        categories[2].extended_object.publish("en")
-        categories[2].extended_object.unpublish("en")
-        icons[2].extended_object.publish("en")
-        icons[2].extended_object.unpublish("en")
-        organizations[2].extended_object.publish("en")
-        organizations[2].extended_object.unpublish("en")
+        self.assertTrue(categories[2].extended_object.publish("en"))
+        self.assertTrue(categories[2].extended_object.unpublish("en"))
+        self.assertTrue(icons[2].extended_object.publish("en"))
+        self.assertTrue(icons[2].extended_object.unpublish("en"))
+        self.assertTrue(organizations[2].extended_object.publish("en"))
+        self.assertTrue(organizations[2].extended_object.unpublish("en"))
 
         # The page should not be visible before it is published
         url = page.get_absolute_url()
@@ -79,11 +79,17 @@ class CourseCMSTestCase(CMSTestCase):
         self.assertEqual(response.status_code, 404)
 
         # Publish and ensure content is correct
-        page.publish("en")
+        self.assertTrue(page.publish("en"))
 
-        # Now we can publish children course runs: publish only 1 of the 2
-        course_run1.extended_object.parent_page.refresh_from_db()
-        self.assertTrue(course_run1.extended_object.publish("en"))
+        # Create an unpublished ongoing open course run (created after
+        # publishing the page)
+        CourseRunFactory(
+            direct_course=course,
+            start=now - timedelta(hours=1),
+            end=now + timedelta(hours=2),
+            enrollment_end=now + timedelta(hours=1),
+            languages=["en", "fr"],
+        )
 
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
@@ -151,6 +157,7 @@ class CourseCMSTestCase(CMSTestCase):
             )
 
         # Only the published course run should be in response content
+        self.assertEqual(CourseRun.objects.count(), 3)
         self.assertContains(response, "<dd>English and french</dd>", html=True, count=1)
 
     def test_templates_course_detail_cms_draft_content(self):
@@ -171,31 +178,27 @@ class CourseCMSTestCase(CMSTestCase):
         )
         page = course.extended_object
         now = timezone.now()
-        course_run1, _course_run2 = CourseRunFactory.create_batch(
-            2,
-            page_parent=course.extended_object,
+        CourseRunFactory(
+            direct_course=course,
             start=now - timedelta(hours=1),
             end=now + timedelta(hours=2),
             enrollment_end=now + timedelta(hours=1),
             languages=["en", "fr"],
         )
 
-        # Publish only 1 of the course runs
-        course_run1.extended_object.publish("en")
-
         # Publish only 2 out of 4 categories and 2 out of 4 organizations
-        categories[0].extended_object.publish("en")
-        categories[1].extended_object.publish("en")
-        organizations[0].extended_object.publish("en")
-        organizations[1].extended_object.publish("en")
+        self.assertTrue(categories[0].extended_object.publish("en"))
+        self.assertTrue(categories[1].extended_object.publish("en"))
+        self.assertTrue(organizations[0].extended_object.publish("en"))
+        self.assertTrue(organizations[1].extended_object.publish("en"))
 
         # The unpublished objects may have been published and unpublished which puts them in a
         # status different from objects that have never been published.
         # We want to test both cases.
-        categories[2].extended_object.publish("en")
-        categories[2].extended_object.unpublish("en")
-        organizations[2].extended_object.publish("en")
-        organizations[2].extended_object.unpublish("en")
+        self.assertTrue(categories[2].extended_object.publish("en"))
+        self.assertTrue(categories[2].extended_object.unpublish("en"))
+        self.assertTrue(organizations[2].extended_object.publish("en"))
+        self.assertTrue(organizations[2].extended_object.unpublish("en"))
 
         # The page should be visible as draft to the staff user
         url = page.get_absolute_url()
@@ -252,8 +255,8 @@ class CourseCMSTestCase(CMSTestCase):
                 ),
                 html=True,
             )
-        # The draft and the published course runs should both be in the page
-        self.assertContains(response, "<dd>English and french</dd>", html=True, count=2)
+        # The course run should be in the page
+        self.assertContains(response, "<dd>English and french</dd>", html=True, count=1)
 
     def test_templates_course_detail_placeholder(self):
         """
@@ -362,14 +365,13 @@ class RunsCourseCMSTestCase(CMSTestCase):
         Not a test. Create an on-going course run that is open for enrollment.
         """
         return CourseRunFactory(
-            page_parent=course.extended_object,
-            page_title="my course run",
+            direct_course=course,
+            title="my course run",
             start=self.now - timedelta(hours=1),
             end=self.now + timedelta(hours=2),
             enrollment_start=self.now - timedelta(hours=1),
             enrollment_end=self.now + timedelta(hours=1),
-            should_publish=True,
-            **kwargs
+            **kwargs,
         )
 
     def create_run_future_open(self, course, **kwargs):
@@ -377,13 +379,12 @@ class RunsCourseCMSTestCase(CMSTestCase):
         Not a test. Create a course run in the future and open for enrollment.
         """
         return CourseRunFactory(
-            page_parent=course.extended_object,
-            page_title="my course run",
+            direct_course=course,
+            title="my course run",
             start=self.now + timedelta(hours=1),
             enrollment_start=self.now - timedelta(hours=1),
             enrollment_end=self.now + timedelta(hours=1),
-            should_publish=True,
-            **kwargs
+            **kwargs,
         )
 
     def create_run_future_not_yet_open(self, course):
@@ -391,11 +392,10 @@ class RunsCourseCMSTestCase(CMSTestCase):
         Not a test. Create a course run in the future and not yet open for enrollment.
         """
         return CourseRunFactory(
-            page_parent=course.extended_object,
-            page_title="my course run",
+            direct_course=course,
+            title="my course run",
             start=self.now + timedelta(hours=2),
             enrollment_start=self.now + timedelta(hours=1),
-            should_publish=True,
         )
 
     def create_run_future_closed(self, course):
@@ -403,12 +403,11 @@ class RunsCourseCMSTestCase(CMSTestCase):
         Not a test. Create a course run in the future and already closed for enrollment.
         """
         return CourseRunFactory(
-            page_parent=course.extended_object,
-            page_title="my course run",
+            direct_course=course,
+            title="my course run",
             start=self.now + timedelta(hours=1),
             enrollment_start=self.now - timedelta(hours=2),
             enrollment_end=self.now - timedelta(hours=1),
-            should_publish=True,
         )
 
     def create_run_ongoing_closed(self, course):
@@ -416,12 +415,11 @@ class RunsCourseCMSTestCase(CMSTestCase):
         Not a test. Create an on-going course run that is closed for enrollment.
         """
         return CourseRunFactory(
-            page_parent=course.extended_object,
-            page_title="my course run",
+            direct_course=course,
+            title="my course run",
             start=self.now - timedelta(hours=1),
             end=self.now + timedelta(hours=1),
             enrollment_end=self.now,
-            should_publish=True,
         )
 
     def create_run_archived(self, course):
@@ -429,11 +427,10 @@ class RunsCourseCMSTestCase(CMSTestCase):
         Not a test. Create an archived course run.
         """
         return CourseRunFactory(
-            page_parent=course.extended_object,
-            page_title="my course run",
+            direct_course=course,
+            title="my course run",
             start=self.now - timedelta(hours=1),
             end=self.now,
-            should_publish=True,
         )
 
     @override_settings(LMS_BACKENDS=[])
@@ -441,8 +438,9 @@ class RunsCourseCMSTestCase(CMSTestCase):
         """
         Priority 0: a course run open and on-going should always show up.
         """
-        course = CourseFactory(page_title="my course", should_publish=True)
-        self.create_run_ongoing_open(course)
+        course = CourseFactory(page_title="my course")
+        course_run = self.create_run_ongoing_open(course)
+        self.assertTrue(course.extended_object.publish("en"))
 
         url = course.extended_object.get_absolute_url()
         response = self.client.get(url)
@@ -452,7 +450,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
         self.assertContains(
             response,
             (
-                '<a href="/en/my-course/my-course-run/" '
+                f'<a href="{course_run.resource_link:s}" '
                 'class="course-run-enrollment__cta">Enroll now</a>'
             ),
             html=True,
@@ -484,11 +482,14 @@ class RunsCourseCMSTestCase(CMSTestCase):
         Priority 0: when the enrollments app is enabled, responsibility for the
         CTA is delegated to the frontend component.
         """
-        course = CourseFactory(should_publish=True)
+        course = CourseFactory()
         course_run = self.create_run_ongoing_open(
             course,
             resource_link="http://edx:8073/courses/course-v1:edX+DemoX+Demo/course/",
         )
+        self.assertTrue(course.extended_object.publish("en"))
+        course_run.refresh_from_db()
+
         response = self.client.get(course.extended_object.get_absolute_url())
 
         self.assertIsNotNone(
@@ -496,7 +497,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
                 (
                     r'.*class="richie-react richie-react--course-run-enrollment".*'
                     r"data-props=\\\'{{\"courseRunId\": {}}}\\\'".format(
-                        course_run.public_extension_id,
+                        course_run.public_course_run.id
                     )
                 ),
                 str(response.content),
@@ -508,8 +509,9 @@ class RunsCourseCMSTestCase(CMSTestCase):
         """
         Priority 1: an upcoming open course run should show in a separate section.
         """
-        course = CourseFactory(page_title="my course", should_publish=True)
-        self.create_run_future_open(course)
+        course = CourseFactory(page_title="my course")
+        course_run = self.create_run_future_open(course)
+        self.assertTrue(course.extended_object.publish("en"))
 
         url = course.extended_object.get_absolute_url()
         response = self.client.get(url)
@@ -519,7 +521,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
         self.assertContains(
             response,
             (
-                '<a href="/en/my-course/my-course-run/" '
+                f'<a href="{course_run.resource_link:s}" '
                 'class="course-run-enrollment__cta">Enroll now</a>'
             ),
             html=True,
@@ -551,18 +553,21 @@ class RunsCourseCMSTestCase(CMSTestCase):
         Priority 1: when the enrollments app is enabled, responsibility for the
         CTA is delegated to the frontend component.
         """
-        course = CourseFactory(should_publish=True)
+        course = CourseFactory()
         course_run = self.create_run_future_open(
             course,
             resource_link="http://edx:8073/courses/course-v1:edX+DemoX+Demo/course/",
         )
+        self.assertTrue(course.extended_object.publish("en"))
+        course_run.refresh_from_db()
+
         response = self.client.get(course.extended_object.get_absolute_url())
         self.assertIsNotNone(
             re.search(
                 (
                     r'.*class="richie-react richie-react--course-run-enrollment".*'
                     r"data-props=\\\'{{\"courseRunId\": {}}}\\\'".format(
-                        course_run.public_extension_id,
+                        course_run.public_course_run.id
                     )
                 ),
                 str(response.content),
@@ -574,8 +579,9 @@ class RunsCourseCMSTestCase(CMSTestCase):
         """
         Priority 2: a future not yet open course run should show in a separate section.
         """
-        course = CourseFactory(page_title="my course", should_publish=True)
+        course = CourseFactory(page_title="my course")
         course_run = self.create_run_future_not_yet_open(course)
+        self.assertTrue(course.extended_object.publish("en"))
 
         url = course.extended_object.get_absolute_url()
         response = self.client.get(url)
@@ -587,9 +593,8 @@ class RunsCourseCMSTestCase(CMSTestCase):
         )
         self.assertContains(
             response,
-            '<ul class="course-detail__run-list">'
-            '<li><a href="/en/my-course/my-course-run/">'
-            "My course run, from {:s} to {:s}</a></li></ul>".format(
+            '<ul class="course-detail__run-list"><li>'
+            "My course run from {:s} to {:s}</li></ul>".format(
                 dateformat.format(course_run.start, "N j, Y"),
                 dateformat.format(course_run.end, "N j, Y"),
             ),
@@ -601,8 +606,9 @@ class RunsCourseCMSTestCase(CMSTestCase):
         """
         Priority 3: a future and closed course run should show in a separate section.
         """
-        course = CourseFactory(page_title="my course", should_publish=True)
+        course = CourseFactory(page_title="my course")
         course_run = self.create_run_future_closed(course)
+        self.assertTrue(course.extended_object.publish("en"))
 
         url = course.extended_object.get_absolute_url()
         response = self.client.get(url)
@@ -614,9 +620,8 @@ class RunsCourseCMSTestCase(CMSTestCase):
         )
         self.assertContains(
             response,
-            '<ul class="course-detail__run-list">'
-            '<li><a href="/en/my-course/my-course-run/">'
-            "My course run, from {:s} to {:s}</a></li></ul>".format(
+            '<ul class="course-detail__run-list"><li>'
+            "My course run from {:s} to {:s}</li></ul>".format(
                 dateformat.format(course_run.start, "N j, Y"),
                 dateformat.format(course_run.end, "N j, Y"),
             ),
@@ -628,8 +633,9 @@ class RunsCourseCMSTestCase(CMSTestCase):
         """
         Priority 4: an ongoing and closed course run should show in a separate section.
         """
-        course = CourseFactory(page_title="my course", should_publish=True)
+        course = CourseFactory(page_title="my course")
         course_run = self.create_run_ongoing_closed(course)
+        self.assertTrue(course.extended_object.publish("en"))
 
         url = course.extended_object.get_absolute_url()
         response = self.client.get(url)
@@ -641,9 +647,8 @@ class RunsCourseCMSTestCase(CMSTestCase):
         )
         self.assertContains(
             response,
-            '<ul class="course-detail__run-list">'
-            '<li><a href="/en/my-course/my-course-run/">'
-            "My course run, from {:s} to {:s}</a></li></ul>".format(
+            '<ul class="course-detail__run-list"><li>'
+            "My course run from {:s} to {:s}</li></ul>".format(
                 dateformat.format(course_run.start, "N j, Y"),
                 dateformat.format(course_run.end, "N j, Y"),
             ),
@@ -655,8 +660,9 @@ class RunsCourseCMSTestCase(CMSTestCase):
         """
         Priority 5: an archived course run should show in a separate section.
         """
-        course = CourseFactory(page_title="my course", should_publish=True)
+        course = CourseFactory(page_title="my course")
         course_run = self.create_run_archived(course)
+        self.assertTrue(course.extended_object.publish("en"))
 
         url = course.extended_object.get_absolute_url()
         response = self.client.get(url)
@@ -668,9 +674,8 @@ class RunsCourseCMSTestCase(CMSTestCase):
         )
         self.assertContains(
             response,
-            '<ul class="course-detail__run-list">'
-            '<li><a href="/en/my-course/my-course-run/">'
-            "My course run, from {:s} to {:s}</a></li></ul>".format(
+            '<ul class="course-detail__run-list"><li>'
+            "My course run from {:s} to {:s}</li></ul>".format(
                 dateformat.format(course_run.start, "N j, Y"),
                 dateformat.format(course_run.end, "N j, Y"),
             ),
@@ -681,13 +686,9 @@ class RunsCourseCMSTestCase(CMSTestCase):
         """
         Priority 6: a course run with no date is only visible to staff users.
         """
-        course = CourseFactory(page_title="my course", should_publish=True)
-        CourseRunFactory(
-            page_parent=course.extended_object,
-            page_title="my course run",
-            start=None,
-            should_publish=True,
-        )
+        course = CourseFactory(page_title="my course")
+        CourseRunFactory(direct_course=course, title="my course run", start=None)
+        self.assertTrue(course.extended_object.publish("en"))
 
         # Anonymous users should not see the course run
         url = course.extended_object.get_absolute_url()
@@ -706,7 +707,6 @@ class RunsCourseCMSTestCase(CMSTestCase):
         )
         self.assertContains(
             response,
-            '<ul class="course-detail__run-list">'
-            '<li><a href="/en/my-course/my-course-run/">My course run</a></li></ul>',
+            '<ul class="course-detail__run-list">' "<li>My course run</li></ul>",
             html=True,
         )

@@ -3,9 +3,11 @@ Test suite defining the admin pages for the Course model
 """
 import json
 import random
+from datetime import datetime
 from unittest import mock
 
 from django.test.utils import override_settings
+from django.utils import timezone
 
 from cms.test_utils.testcases import CMSTestCase
 
@@ -36,22 +38,14 @@ class SnapshotPageAdminTestCase(CMSTestCase):
         course = CourseFactory(
             page_title={"en": "a course", "fr": "un cours", "de": "ein Kurs"}
         )
-        course.extended_object.publish("en")
-        course.extended_object.publish("fr")
+        # Create a course run for this course
+        course_run = CourseRunFactory(direct_course=course)
 
-        # Create a course run published only in English
-        course_run1 = CourseRunFactory(page_parent=course.extended_object)
-        course_run1.extended_object.publish("en")
-        self.assertTrue(course_run1.check_publication("en"))
-        self.assertFalse(course_run1.check_publication("fr"))
-        self.assertFalse(course_run1.check_publication("de"))
+        self.assertTrue(course.extended_object.publish("en"))
+        self.assertTrue(course.extended_object.publish("fr"))
 
-        # Create a course run published only in French
-        course_run2 = CourseRunFactory(page_parent=course.extended_object)
-        course_run2.extended_object.publish("fr")
-        self.assertFalse(course_run2.check_publication("en"))
-        self.assertTrue(course_run2.check_publication("fr"))
-        self.assertFalse(course_run2.check_publication("de"))
+        # It should have copied the course run to the published page
+        self.assertEqual(CourseRun.objects.count(), 2)
 
         # Add the necessary permissions (global and per page)
         self.add_permission(user, "add_page")
@@ -62,12 +56,15 @@ class SnapshotPageAdminTestCase(CMSTestCase):
 
         # Trigger the creation of a snapshot for the course
         url = "/en/admin/courses/course/{:d}/snapshot/".format(course.id)
-        with mock.patch("time.time", mock.MagicMock(return_value=1541946888)):
+        now = datetime(2010, 1, 1, tzinfo=timezone.utc)
+        with mock.patch.object(timezone, "now", return_value=now):
             response = self.client.post(url, follow=True)
 
         self.assertEqual(response.status_code, 200)
         content = json.loads(response.content)
         self.assertEqual(Course.objects.count(), 4)
+        self.assertEqual(CourseRun.objects.count(), 2)
+
         snapshot = (
             Course.objects.exclude(id=course.id)
             .exclude(public_extension__isnull=True)
@@ -75,44 +72,30 @@ class SnapshotPageAdminTestCase(CMSTestCase):
         )
         self.assertEqual(content, {"id": snapshot.id})
 
-        # The snapshot title and slug should be the timestamp at the time of snapshot
+        # The snapshot title and slug should include the version with datetime of snapshot
         expected_titles = {
-            "en": "1541946888 - Snapshot of a course",
-            "fr": "1541946888 - Snapshot of un cours",
-            "de": "1541946888 - Snapshot of ein Kurs",
+            "en": "a course (Archived on 2010-01-01 00:00:00)",
+            "fr": "un cours (Archived on 2010-01-01 00:00:00)",
+            "de": "ein Kurs (Archived on 2010-01-01 00:00:00)",
         }
         for language in ["en", "fr", "de"]:
             self.assertEqual(
                 snapshot.extended_object.get_title(language), expected_titles[language]
             )
-            self.assertEqual(snapshot.extended_object.get_slug(language), "1541946888")
+            self.assertEqual(
+                snapshot.extended_object.get_slug(language),
+                "archived-on-2010-01-01-000000",
+            )
 
         # The publication status of the course should be respected on the snapshot
         self.assertTrue(snapshot.check_publication("en"))
         self.assertTrue(snapshot.check_publication("fr"))
         self.assertFalse(snapshot.check_publication("de"))
 
-        # The course runs should have moved below the snapshot
-        # and they should have kept their publication status
-        self.assertEqual(CourseRun.objects.count(), 2 + 2)  # 2 drafts + 2 published
-
-        # - course run 1 should be published only in english
-        course_run1 = CourseRun.objects.get(id=course_run1.id)
-        self.assertEqual(
-            course_run1.extended_object.parent_page, snapshot.extended_object
-        )
-        self.assertTrue(course_run1.check_publication("en"))
-        self.assertFalse(course_run1.check_publication("fr"))
-        self.assertFalse(course_run1.check_publication("de"))
-
-        # - course run 2 should be published only in french
-        course_run2 = CourseRun.objects.get(id=course_run2.id)
-        self.assertEqual(
-            course_run2.extended_object.parent_page, snapshot.extended_object
-        )
-        self.assertFalse(course_run2.check_publication("en"))
-        self.assertTrue(course_run2.check_publication("fr"))
-        self.assertFalse(course_run2.check_publication("de"))
+        # The course run should have moved below the snapshot
+        self.assertEqual(CourseRun.objects.count(), 2)
+        course_run.refresh_from_db()
+        self.assertEqual(course_run.direct_course, snapshot)
 
     def test_admin_page_snapshot_page_permissions_not_granted(self):
         """

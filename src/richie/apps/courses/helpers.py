@@ -1,9 +1,9 @@
 """
 Helpers that can be useful throughout Richie's courses app
 """
-import time
-
 from django.core.exceptions import PermissionDenied
+from django.utils import timezone
+from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
 from cms.api import create_title
@@ -54,26 +54,34 @@ def snapshot_course(page, user, simulate_only=False):
         site, parent_node=page.node, translations=False, extensions=True
     )
 
-    # The snapshot title and slug is set to a timestamp of the time of snapshot. It is
+    # The snapshot title and slug is set with the date and time of snapshot. It is
     # published only in languages for which the original course page was published.
+    now = timezone.now()
     for language in page.get_languages():
         base = page.get_path(language)
-        timestamp = str(int(time.time()))
-        snapshot_title = _("Snapshot of {:s}").format(page.get_title(language))
+        title = page.get_title(language)
+        version = _(f"Archived on {now:%Y-%m-%d %H:%M:%S}")
+        slug = slugify(version)
         create_title(
             language=language,
-            menu_title=timestamp,
-            title="{:s} - {:s}".format(timestamp, snapshot_title),
-            slug=timestamp,
-            path="{:s}/{:s}".format(base, timestamp) if base else timestamp,
+            menu_title=version,
+            title=_(f"{title:s} ({version!s})"),
+            slug=slug,
+            path=f"{base!s}/{slug!s}" if base else slug,
             page=snapshot_page,
         )
         if page.is_published(language) is True:
             snapshot_page.publish(language)
 
-    # Move the existing course run subpages as children of the snapshot
+    # Change the existing course runs to be related children of the snapshot
     # Their publication status will be respected
-    for subpage in page.get_child_pages().filter(courserun__isnull=False):
-        subpage.move_page(snapshot_page.node, position="last-child")
+    for run in page.course.runs.all():
+        run.direct_course = snapshot_page.course
+        run.save()
+
+    if page.publisher_public and snapshot_page.publisher_public:
+        for run in page.publisher_public.course.runs.all():
+            run.direct_course = snapshot_page.publisher_public.course
+            run.save()
 
     return snapshot_page

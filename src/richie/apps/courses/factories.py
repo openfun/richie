@@ -385,7 +385,7 @@ class CourseFactory(PageExtensionDjangoModelFactory):
                 )
 
 
-class CourseRunFactory(PageExtensionDjangoModelFactory):
+class CourseRunFactory(factory.django.DjangoModelFactory):
     """
     A factory to automatically generate random yet meaningful course runs in our tests.
 
@@ -397,47 +397,21 @@ class CourseRunFactory(PageExtensionDjangoModelFactory):
 
     class Meta:
         model = models.CourseRun
-        exclude = [
-            "page_in_navigation",
-            "page_languages",
-            "page_parent",
-            "page_template",
-            "page_title",
-        ]
 
-    # fields concerning the related page
-    page_template = models.CourseRun.PAGE["template"]
-    page_title = factory.Sequence("session {:d}".format)
-
+    direct_course = factory.SubFactory(CourseFactory)
+    title = factory.Sequence("Run {:d}".format)
     resource_link = factory.Faker("uri")
 
-    @factory.lazy_attribute
-    def page_languages(self):
-        """
-        Try getting the list of languages from the parent page and default to None.
-        """
-        return (
-            self.page_parent.get_languages()
-            if getattr(self, "page_parent", None)
-            else None
-        )
-
+    # pylint: disable=no-self-use
     @factory.lazy_attribute
     def languages(self):
         """
-        Try getting the list of languages from the parent page and default to a random set of
-        languages from the complete list of Django supported languages.
+        Compute a random set of languages from the complete list of Django supported languages.
         """
-        return (
-            self.parent.get_languages()
-            if getattr(self, "parent", None)
-            else [
-                language[0]
-                for language in random.sample(
-                    ALL_LANGUAGES, random.randint(1, 5)  # nosec
-                )
-            ]
-        )
+        return [
+            language[0]
+            for language in random.sample(ALL_LANGUAGES, random.randint(1, 5))  # nosec
+        ]
 
     # pylint: disable=no-self-use
     @factory.lazy_attribute
@@ -675,8 +649,7 @@ class BlogPostFactory(PageExtensionDjangoModelFactory):
 
             for language in self.extended_object.get_languages():
                 text = factory.Faker(
-                    "text",
-                    max_nb_chars=random.randint(50, 100),  # nosec
+                    "text", max_nb_chars=random.randint(50, 100)  # nosec
                 ).generate({"locale": language})
                 add_plugin(
                     language=language,
@@ -880,8 +853,7 @@ class ProgramFactory(PageExtensionDjangoModelFactory):
 
             for language in self.extended_object.get_languages():
                 text = factory.Faker(
-                    "text",
-                    max_nb_chars=random.randint(50, 100),  # nosec
+                    "text", max_nb_chars=random.randint(50, 100)  # nosec
                 ).generate({"locale": language})
                 add_plugin(
                     language=language,

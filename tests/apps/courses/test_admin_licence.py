@@ -16,6 +16,20 @@ class LicenceAdminTestCase(CMSTestCase):
     Integration test suite to validate the behavior of admin pages for the Licence model
     """
 
+    def test_admin_licence_index(self):
+        """Licences should be listed on the index."""
+        user = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=user.username, password="password")
+
+        # Get the admin index view
+        url = reverse("admin:index")
+        response = self.client.get(url, follow=True)
+        self.assertEqual(response.status_code, 200)
+
+        # Check that a link to the licence list view is on the page
+        licence_url = reverse("admin:courses_licence_changelist")
+        self.assertContains(response, licence_url)
+
     def test_admin_licence_list_view(self):
         """
         The admin list view of licences should display the name of the licence.
