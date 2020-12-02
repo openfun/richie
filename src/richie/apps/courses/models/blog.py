@@ -24,6 +24,7 @@ class BlogPost(BasePageExtension):
         db_table = "richie_blog_post"
         ordering = ["-pk"]
         verbose_name = _("blog post")
+        verbose_name_plural = _("blog posts")
 
     def __str__(self):
         """Human representation of a blogpost"""
@@ -102,6 +103,7 @@ class BlogPostPluginModel(PagePluginMixin, CMSPlugin):
     class Meta:
         db_table = "richie_blog_post_plugin"
         verbose_name = _("blog post plugin")
+        verbose_name_plural = _("blog post plugins")
 
 
 extension_pool.register(BlogPost)

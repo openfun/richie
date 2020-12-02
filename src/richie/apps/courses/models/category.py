@@ -34,6 +34,7 @@ class Category(BasePageExtension):
         db_table = "richie_category"
         ordering = ["-pk"]
         verbose_name = _("category")
+        verbose_name_plural = _("categories")
 
     def __str__(self):
         """Human representation of a category"""
@@ -222,6 +223,7 @@ class CategoryPluginModel(PagePluginMixin, CMSPlugin):
     class Meta:
         db_table = "richie_category_plugin"
         verbose_name = _("category plugin")
+        verbose_name_plural = _("category plugins")
 
 
 extension_pool.register(Category)

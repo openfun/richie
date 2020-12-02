@@ -23,6 +23,7 @@ class Program(BasePageExtension):
         db_table = "richie_program"
         ordering = ["-pk"]
         verbose_name = _("program")
+        verbose_name_plural = _("programs")
 
     def __str__(self):
         """Human representation of a program"""
@@ -47,6 +48,7 @@ class ProgramPluginModel(PagePluginMixin, CMSPlugin):
     class Meta:
         db_table = "richie_program_plugin"
         verbose_name = _("program plugin")
+        verbose_name_plural = _("program plugins")
 
 
 extension_pool.register(Program)

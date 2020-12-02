@@ -31,6 +31,7 @@ class Person(BasePageExtension):
     class Meta:
         db_table = "richie_person"
         verbose_name = _("person")
+        verbose_name_plural = _("persons")
 
     def __str__(self):
         """Human representation of a person."""
@@ -129,6 +130,7 @@ class PersonPluginModel(PagePluginMixin, CMSPlugin):
     class Meta:
         db_table = "richie_person_plugin"
         verbose_name = _("person plugin")
+        verbose_name_plural = _("person plugins")
 
 
 extension_pool.register(Person)

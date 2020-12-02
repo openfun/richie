@@ -56,6 +56,7 @@ class PageRole(models.Model):
     class Meta:
         db_table = "richie_page_role"
         verbose_name = _("page role")
+        verbose_name_plural = _("page roles")
         unique_together = ("page", "role")
 
     def __str__(self):

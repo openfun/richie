@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Fix object names plurals in admin
+
 ## [2.0.0-beta.21] - 2020-11-27
 
 ### Added

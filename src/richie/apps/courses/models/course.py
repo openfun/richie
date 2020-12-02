@@ -144,6 +144,7 @@ class Course(BasePageExtension):
     class Meta:
         db_table = "richie_course"
         verbose_name = _("course")
+        verbose_name_plural = _("courses")
 
     def __str__(self):
         """Human representation of a course."""
@@ -478,6 +479,7 @@ class CourseRun(BasePageExtension):
     class Meta:
         db_table = "richie_course_run"
         verbose_name = _("course run")
+        verbose_name_plural = _("course runs")
 
     def __str__(self):
         """Human representation of a course run."""
@@ -592,6 +594,7 @@ class CoursePluginModel(PagePluginMixin, CMSPlugin):
     class Meta:
         db_table = "richie_course_plugin"
         verbose_name = _("course plugin")
+        verbose_name_plural = _("course plugins")
 
 
 class Licence(TranslatableModel):
@@ -617,6 +620,7 @@ class Licence(TranslatableModel):
     class Meta:
         db_table = "richie_licence"
         verbose_name = _("licence")
+        verbose_name_plural = _("licences")
 
     def __str__(self):
         """Human representation of a licence."""
@@ -640,6 +644,7 @@ class LicenceTranslation(TranslatedFieldsModel):
         db_table = "richie_licence_translation"
         unique_together = ("language_code", "master")
         verbose_name = _("Licence translation")
+        verbose_name_plural = _("licence translations")
 
     def __str__(self):
         """Human representation of a licence translation."""
@@ -659,6 +664,7 @@ class LicencePluginModel(CMSPlugin):
     class Meta:
         db_table = "richie_licence_plugin"
         verbose_name = _("licence plugin")
+        verbose_name_plural = _("licence plugins")
 
     def __str__(self):
         """Human representation of a licence plugin."""
