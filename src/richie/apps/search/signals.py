@@ -17,7 +17,8 @@ def update_course(instance, _language):
     Raises ObjectDoesNotExist if the page instance is not related to a course.
     """
     course = Course.objects.get(draft_extension__extended_object=instance)
-    richie_bulk([ES_INDICES.courses.get_es_document_for_course(course)])
+    if not course.is_snapshot:
+        richie_bulk([ES_INDICES.courses.get_es_document_for_course(course)])
 
 
 def update_course_run(instance, _language):
@@ -48,6 +49,7 @@ def update_organization(instance, language):
     actions = [
         ES_INDICES.courses.get_es_document_for_course(course)
         for course in organization.get_courses(language)
+        if not course.is_snapshot
     ]
     actions.append(
         ES_INDICES.organizations.get_es_document_for_organization(organization)
@@ -81,6 +83,7 @@ def update_category(instance, language):
     actions = [
         ES_INDICES.courses.get_es_document_for_course(course)
         for course in category.get_courses(language)
+        if not course.is_snapshot
     ]
     actions.append(ES_INDICES.categories.get_es_document_for_category(category))
 

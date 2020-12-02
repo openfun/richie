@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Stop indexing snapshots on signal update
 - Fix object names plurals in admin
 
 ## [2.0.0-beta.21] - 2020-11-27

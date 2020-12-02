@@ -153,6 +153,14 @@ class Course(BasePageExtension):
             title=self.extended_object.get_title(),
         )
 
+
+    @property
+    def is_snapshot(self):
+        """Return True if the course is a snapshot (it has a course as parent)."""
+        return Course.objects.filter(
+            id=self.id, extended_object__node__parent__cms_pages__course__isnull=False
+        ).exists()
+
     def create_page_role(self):
         """
         Create a new page role for the course with:
