@@ -40,6 +40,7 @@ class Organization(BasePageExtension):
     class Meta:
         db_table = "richie_organization"
         verbose_name = _("organization")
+        verbose_name_plural = _("organizations")
         ordering = ["-pk"]
 
     def __str__(self):
@@ -244,6 +245,7 @@ class OrganizationPluginModel(PagePluginMixin, CMSPlugin):
     class Meta:
         db_table = "richie_organization_plugin"
         verbose_name = _("organization plugin")
+        verbose_name_plural = _("organization plugins")
 
 
 class OrganizationsByCategoryPluginModel(PagePluginMixin, CMSPlugin):
@@ -273,6 +275,7 @@ class OrganizationsByCategoryPluginModel(PagePluginMixin, CMSPlugin):
     class Meta:
         db_table = "richie_organizations_by_category_plugin"
         verbose_name = _("organizations by category plugin")
+        verbose_name_plural = _("organizations by category plugins")
 
 
 extension_pool.register(Organization)
