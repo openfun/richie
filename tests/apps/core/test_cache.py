@@ -478,23 +478,22 @@ class TestLimitBrowserCacheTTLHeaders(TestCase):
             patch_response_headers(response, cache_timeout=3600)
             return response
 
-        expected_expires = http_date(time.time() + 3600)
         with self.settings(MAX_BROWSER_CACHE_TTL=-10):
             middleware = LimitBrowserCacheTTLHeaders(response_builder)
             response = middleware(HttpRequest())
-            self.assertEqual(expected_expires, response["Expires"])
+            self.assertEqual(http_date(time.time() + 3600), response["Expires"])
             self.assertIn("max-age=3600", response["Cache-Control"])
 
         with self.settings(MAX_BROWSER_CACHE_TTL="pouet"):
             middleware = LimitBrowserCacheTTLHeaders(response_builder)
             response = middleware(HttpRequest())
-            self.assertEqual(expected_expires, response["Expires"])
+            self.assertEqual(http_date(time.time() + 3600), response["Expires"])
             self.assertIn("max-age=3600", response["Cache-Control"])
 
         with self.settings(MAX_BROWSER_CACHE_TTL=None):
             middleware = LimitBrowserCacheTTLHeaders(response_builder)
             response = middleware(HttpRequest())
-            self.assertEqual(expected_expires, response["Expires"])
+            self.assertEqual(http_date(time.time() + 3600), response["Expires"])
             self.assertIn("max-age=3600", response["Cache-Control"])
 
         # Test the case where the MAX_BROWSER_CACHE_TTL setting is not set
@@ -502,5 +501,5 @@ class TestLimitBrowserCacheTTLHeaders(TestCase):
             del settings.MAX_BROWSER_CACHE_TTL
             middleware = LimitBrowserCacheTTLHeaders(response_builder)
             response = middleware(HttpRequest())
-            self.assertEqual(expected_expires, response["Expires"])
+            self.assertEqual(http_date(time.time() + 3600), response["Expires"])
             self.assertIn("max-age=3600", response["Cache-Control"])
