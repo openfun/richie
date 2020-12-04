@@ -5,14 +5,13 @@ import { act, render } from '@testing-library/react';
 import { ContextFactory } from 'utils/test/factories';
 import { Deferred } from 'utils/test/deferred';
 import { SESSION_CACHE_KEY } from 'settings';
-import { SessionContext } from '.';
 
 describe('useSession', () => {
   const context = ContextFactory().generate();
   (window as any).__richie_frontend_context__ = { context };
   const { SessionProvider, useSession } = require('.');
 
-  let getLatestHookValues: (prop?: string) => SessionContext;
+  let getLatestHookValues: (prop?: string) => any;
 
   const TestComponent = () => {
     const hooksValues = useSession();
