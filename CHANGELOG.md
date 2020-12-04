@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [2.0.0-beta.22] - 2020-12-04
+
 ### Changed
 
 - Refactor course runs to not be CMS pages anymore
@@ -1107,7 +1109,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.0.0-beta.21...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.0.0-beta.22...master
+[2.0.0-beta.22]: https://github.com/openfun/richie/compare/v2.0.0-beta.21...v2.0.0-beta.22
 [2.0.0-beta.21]: https://github.com/openfun/richie/compare/v2.0.0-beta.20...v2.0.0-beta.21
 [2.0.0-beta.20]: https://github.com/openfun/richie/compare/v2.0.0-beta.19...v2.0.0-beta.20
 [2.0.0-beta.19]: https://github.com/openfun/richie/compare/v2.0.0-beta.18...v2.0.0-beta.19
