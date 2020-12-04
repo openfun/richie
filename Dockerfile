@@ -51,7 +51,10 @@ COPY --from=front-builder \
 RUN pip install --upgrade pip
 
 RUN mkdir /install && \
-    pip install --prefix=/install .[sandbox]
+    pip install --prefix=/install .[sandbox] \
+    # Use temporarily a forked version of djangocms-admin-style
+    # Remove this when djangocms-admin-style 2.0.3 will be released
+    pip install --prefix=/install git+https://github.com/jbpenrath/djangocms-admin-style@fun#egg=djangocms-admin-style
 
 # ---- Core application image ----
 FROM base as core
