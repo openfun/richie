@@ -40,25 +40,35 @@ MAX_DATE = datetime(MAXYEAR, 12, 31, tzinfo=pytz.utc)
 class CourseState(Mapping):
     """An immutable object to describe a course (resp. course run) state."""
 
-    STATE_CALLS_TO_ACTION = (
-        _("enroll now"),
-        _("enroll now"),
-        None,
-        None,
-        None,
-        None,
-        None,
-    )
+    (
+        ONGOING_OPEN,
+        FUTURE_OPEN,
+        FUTURE_NOT_YET_OPEN,
+        FUTURE_CLOSED,
+        ONGOING_CLOSED,
+        ARCHIVED,
+        TO_BE_SCHEDULED,
+    ) = range(7)
 
-    STATE_TEXTS = (
-        _("closing on"),
-        _("starting on"),
-        _("starting on"),
-        _("enrollment closed"),
-        _("on-going"),
-        _("archived"),
-        _("to be scheduled"),
-    )
+    STATE_CALLS_TO_ACTION = {
+        ONGOING_OPEN: _("enroll now"),
+        FUTURE_OPEN: _("enroll now"),
+        FUTURE_NOT_YET_OPEN: None,
+        FUTURE_CLOSED: None,
+        ONGOING_CLOSED: None,
+        ARCHIVED: None,
+        TO_BE_SCHEDULED: None,
+    }
+
+    STATE_TEXTS = {
+        ONGOING_OPEN: _("closing on"),
+        FUTURE_OPEN: _("starting on"),
+        FUTURE_NOT_YET_OPEN: _("starting on"),
+        FUTURE_CLOSED: _("enrollment closed"),
+        ONGOING_CLOSED: _("on-going"),
+        ARCHIVED: _("archived"),
+        TO_BE_SCHEDULED: _("to be scheduled"),
+    }
 
     def __init__(self, priority, date_time=None):
         """
@@ -76,14 +86,18 @@ class CourseState(Mapping):
           6: theres's no run with a start date or no run at all > "to be scheduled": {None}
         """
         # Check that `date_time` is set when it should be
-        if date_time is None and priority in [0, 1, 2]:
+        if date_time is None and priority in [
+            CourseState.ONGOING_OPEN,
+            CourseState.FUTURE_OPEN,
+            CourseState.FUTURE_NOT_YET_OPEN,
+        ]:
             raise ValidationError(
                 "date_time should not be null for a {:d} course state.".format(priority)
             )
 
         # A special case of being open is when enrollment never ends
         text = self.STATE_TEXTS[priority]
-        if priority == 0 and date_time.year == MAXYEAR:
+        if priority == CourseState.ONGOING_OPEN and date_time.year == MAXYEAR:
             text = _("forever open")
             date_time = None
         kwargs = {
@@ -432,7 +446,7 @@ class Course(BasePageExtension):
         The game is to find the highest priority state for this course among its course runs.
         """
         # The default state is for a course that has no course runs
-        best_state = CourseState(6)
+        best_state = CourseState(CourseState.TO_BE_SCHEDULED)
 
         for course_run in self.get_course_runs().only(
             "start", "end", "enrollment_start", "enrollment_end"
@@ -440,7 +454,7 @@ class Course(BasePageExtension):
             state = course_run.state
             if state < best_state:
                 best_state = state
-            if state == 0:
+            if state["priority"] == CourseState.ONGOING_OPEN:
                 # We found the best state, don't waste more time
                 break
 
@@ -574,7 +588,8 @@ class CourseRun(TranslatableModel):
                 pass
             else:
                 is_visible = (
-                    self.state["priority"] < 6 or public_instance.state["priority"] < 6
+                    self.state["priority"] < CourseState.TO_BE_SCHEDULED
+                    or public_instance.state["priority"] < CourseState.TO_BE_SCHEDULED
                 )
                 # Mark the related course page dirty if the course run content has changed
                 # Break out of the for loop as soon as we found a difference
@@ -609,7 +624,7 @@ class CourseRun(TranslatableModel):
         else:
             # This is a new instance, mark page dirty in all languages unless
             # the course run is yet to be scheduled (hidden from public page in this case)
-            if self.state["priority"] < 6:
+            if self.state["priority"] < CourseState.TO_BE_SCHEDULED:
                 self.direct_course.extended_object.title_set.update(
                     publisher_state=PUBLISHER_STATE_DIRTY
                 )
@@ -629,7 +644,7 @@ class CourseRun(TranslatableModel):
         except CourseRun.DoesNotExist:
             pass
         else:
-            if public_course_run.state["priority"] != 6:
+            if public_course_run.state["priority"] < CourseState.TO_BE_SCHEDULED:
                 self.direct_course.extended_object.title_set.update(
                     publisher_state=PUBLISHER_STATE_DIRTY
                 )  # mark page dirty in all languages
