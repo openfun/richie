@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Add permission checks to course run admin based on their related course page
+
 ## [2.0.0-beta.22] - 2020-12-04
 
 ### Changed

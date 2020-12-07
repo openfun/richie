@@ -1,9 +1,12 @@
 """
 Courses application admin
 """
+from itertools import chain
+
 from django import forms
+from django.conf import settings
 from django.contrib import admin
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import models as django_models
 from django.db import transaction
 from django.http import HttpResponseBadRequest, HttpResponseForbidden, JsonResponse
@@ -16,6 +19,7 @@ from django.views.decorators.http import require_POST
 from cms.admin.placeholderadmin import FrontendEditableAdminMixin
 from cms.api import Page
 from cms.extensions import PageExtensionAdmin
+from cms.utils import page_permissions
 from parler.admin import TranslatableAdmin
 from parler.forms import TranslatableModelForm
 
@@ -65,18 +69,61 @@ class CourseRunAdminForm(TranslatableModelForm):
         """
         super().__init__(*args, **kwargs)
 
+        if "direct_course" not in self.fields:
+            return
+
         if self.instance.pk:
             course_query = (
-                self.instance.get_course().get_snapshots(include_self=True).distinct()
+                self.instance.get_course()
+                .get_snapshots(include_self=True)
+                .filter(extended_object__publisher_is_draft=True)
+                .distinct()
             )
-            if len(course_query) > 1:
-                self.fields["direct_course"].choices = [
-                    (c.pk, c.extended_object.get_title()) for c in course_query
-                ]
-            else:
+        else:
+            course_query = models.Course.objects.filter(
+                extended_object__publisher_is_draft=True
+            )
+
+            # pylint: disable=no-member
+            user = self.request.user
+            if getattr(settings, "CMS_PERMISSION", False) and not user.is_superuser:
+                course_query = models.Course.objects.filter(
+                    django_models.Q(extended_object__pagepermission__user=user)
+                    | django_models.Q(
+                        extended_object__pagepermission__group__user=user
+                    ),
+                    extended_object__pagepermission__can_change=True,
+                    extended_object__publisher_is_draft=True,
+                )
+
+            if kwargs.get("initial", {}).get("direct_course"):
                 self.fields["direct_course"].widget = forms.HiddenInput()
-        elif kwargs.get("initial", {}).get("direct_course"):
+
+        self.fields["direct_course"].choices = chain(
+            [("", self.fields["direct_course"].empty_label)],
+            [(c.pk, c.extended_object.get_title()) for c in course_query],
+        )
+
+        if len(course_query) < 2:
             self.fields["direct_course"].widget = forms.HiddenInput()
+
+    def clean_direct_course(self):
+        """Ensure that the user has the required permissions to change the related course page."""
+        course = self.cleaned_data["direct_course"]
+        if (
+            course
+            and getattr(settings, "CMS_PERMISSION", False)
+            and not page_permissions.user_can_change_page(
+                self.request.user,  # pylint: disable=no-member
+                course.extended_object,
+                course.extended_object.node.site,
+            )
+        ):
+            raise ValidationError(
+                "You do not have permission to change this course page."
+            )
+
+        return course
 
 
 class CourseRunAdmin(FrontendEditableAdminMixin, TranslatableAdmin):
@@ -113,6 +160,60 @@ class CourseRunAdmin(FrontendEditableAdminMixin, TranslatableAdmin):
         Hide course runs from the admin page as frontend editing provides a better experience.
         """
         return False
+
+    def get_form(self, request, obj=None, **kwargs):
+        """Add request to form so we can validate fields according to the user."""
+        form = super().get_form(request, obj=obj, **kwargs)
+        form.request = request
+        return form
+
+    def get_queryset(self, request):
+        """Exclude public course runs from admin views."""
+        user = request.user
+
+        qs = super().get_queryset(request)
+
+        if user.is_superuser or not getattr(settings, "CMS_PERMISSION", False):
+            return qs.filter(draft_course_run__isnull=True)
+
+        return qs.filter(
+            django_models.Q(direct_course__extended_object__pagepermission__user=user)
+            | django_models.Q(
+                direct_course__extended_object__pagepermission__group__user=user
+            ),
+            direct_course__extended_object__pagepermission__can_change=True,
+            draft_course_run__isnull=True,
+        )
+
+    def has_view_permission(self, request, obj=None):
+        """Allow view only if the user is allowed to change the related course page."""
+        if obj and getattr(settings, "CMS_PERMISSION", False):
+            course_page = obj.direct_course.extended_object
+            if not page_permissions.user_can_change_page(
+                request.user, course_page, course_page.node.site
+            ):
+                return False
+        return super().has_view_permission(request, obj=obj)
+
+    def has_change_permission(self, request, obj=None):
+        """Allow change only if the user is allowed to change the related course page."""
+        if obj and getattr(settings, "CMS_PERMISSION", False):
+            course_page = obj.direct_course.extended_object
+            if not page_permissions.user_can_change_page(
+                request.user, course_page, course_page.node.site
+            ):
+                return False
+        return super().has_change_permission(request, obj=obj)
+
+    def has_delete_permission(self, request, obj=None):
+        """Allow change only if the user is allowed to change the related course page."""
+        if obj and getattr(settings, "CMS_PERMISSION", False):
+            course_page = obj.direct_course.extended_object
+            if not page_permissions.user_can_change_page(
+                request.user, course_page, course_page.node.site
+            ):
+                return False
+        return super().has_delete_permission(request, obj=obj)
 
 
 class CourseAdmin(FrontendEditableAdminMixin, PageExtensionAdmin):

@@ -34,7 +34,7 @@ def snapshot_course(page, user, simulate_only=False):
 
     site = page.node.site
 
-    # User can only snapshot pages he can see
+    # User can only snapshot pages he can change
     can_snapshot = page_permissions.user_can_change_page(user, page, site)
 
     if can_snapshot:
