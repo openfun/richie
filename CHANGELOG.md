@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Object names plurals migration
+
 ## [2.0.0-beta.22] - 2020-12-04
 
 ### Changed
