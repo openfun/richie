@@ -7,6 +7,8 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django.core.management.base import BaseCommand, CommandError
 from django.test.utils import override_settings
+from django.utils import translation
+from django.utils.translation import gettext_lazy as _
 
 import factory
 from cms.api import add_plugin
@@ -89,10 +91,7 @@ def create_demo_site():
         if "internal_link" in link_info:
             link_info = link_info.copy()
             link_info["internal_link"] = pages_created[link_info["internal_link"]]
-        add_plugin(
-            plugin_type="LinkPlugin",
-            **link_info,
-        )
+        add_plugin(plugin_type="LinkPlugin", **link_info)
 
     footer_static_ph = StaticPlaceholder.objects.get_or_create(code="footer")[0]
     for footer_placeholder in [footer_static_ph.draft, footer_static_ph.public]:
@@ -118,9 +117,7 @@ def create_demo_site():
                 else:
                     # Create link at first level
                     create_footer_link(
-                        language=language,
-                        placeholder=footer_placeholder,
-                        **footer_info,
+                        language=language, placeholder=footer_placeholder, **footer_info
                     )
 
     # Create some licences
@@ -198,7 +195,7 @@ def create_demo_site():
     # Create persons under the `persons` page
     persons = []
     persons_for_organization = defaultdict(list)
-    for _ in range(defaults.NB_OBJECTS["persons"]):
+    for _i in range(defaults.NB_OBJECTS["persons"]):
         # Randomly assign each person to a set of organizations
         person_organizations = random.sample(
             organizations,
@@ -229,7 +226,7 @@ def create_demo_site():
     # Create courses under the `Course` page with categories and organizations
     # relations
     courses = []
-    for _ in range(defaults.NB_OBJECTS["courses"]):
+    for _i in range(defaults.NB_OBJECTS["courses"]):
         video_sample = random.choice(factories.VIDEO_SAMPLE_LINKS)  # nosec
 
         # Randomly assign each course to a set of organizations
@@ -307,7 +304,7 @@ def create_demo_site():
                     plugin_type="SectionPlugin",
                     title=defaults.COURSE_CONTENT[language]["partners_title"],
                 )
-            for _ in range(nb_half_rows):
+            for _i in range(nb_half_rows):
                 glimpse_data = factory.build(
                     dict,
                     FACTORY_CLASS=GlimpseFactory,
@@ -322,7 +319,7 @@ def create_demo_site():
                     target=partner_section,
                     **glimpse_data,
                 )
-            for _ in range(nb_full_rows):
+            for _i in range(nb_full_rows):
                 glimpse_data = factory.build(
                     dict,
                     FACTORY_CLASS=GlimpseFactory,
@@ -345,7 +342,7 @@ def create_demo_site():
                     plugin_type="SectionPlugin",
                     title=defaults.COURSE_CONTENT[language]["sponsors_title"],
                 )
-            for _ in range(nb_cards):
+            for _i in range(nb_cards):
                 glimpse_data = factory.build(
                     dict,
                     FACTORY_CLASS=GlimpseFactory,
@@ -377,9 +374,13 @@ def create_demo_site():
                 direct_course=course,
                 resource_link=f"{lms_endpoint}/courses/course-v1:edX+DemoX+Demo_Course/info",
             )
-            models.CourseRunTranslation.objects.create(
-                master=course_run, language_code="fr", title=f"Session {i:d}"
-            )
+            for language in course.extended_object.get_languages():
+                with translation.override(language):
+                    models.CourseRunTranslation.objects.update_or_create(
+                        master=course_run,
+                        language_code=language,
+                        defaults={"title": _(f"Run {i:d}")},
+                    )
 
         # Publish the course in all languages
         for language in course.extended_object.get_languages():
@@ -387,7 +388,7 @@ def create_demo_site():
 
     # Create blog posts under the `News` page
     blogposts = []
-    for _ in range(defaults.NB_OBJECTS["blogposts"]):
+    for _i in range(defaults.NB_OBJECTS["blogposts"]):
         post = factories.BlogPostFactory.create(
             page_in_navigation=True,
             page_languages=["en", "fr"],
@@ -406,7 +407,7 @@ def create_demo_site():
 
     # Create programs under the `Programs` page
     programs = []
-    for _ in range(defaults.NB_OBJECTS["programs"]):
+    for _i in range(defaults.NB_OBJECTS["programs"]):
         program = factories.ProgramFactory.create(
             page_in_navigation=True,
             page_languages=["en", "fr"],
@@ -622,7 +623,7 @@ def create_demo_site():
             plugin_type="SectionPlugin",
             title="",
         )
-        for _ in range(3):
+        for _i in range(3):
             glimpse_data = factory.build(
                 dict,
                 FACTORY_CLASS=GlimpseFactory,
@@ -646,7 +647,7 @@ def create_demo_site():
             plugin_type="SectionPlugin",
             title="",
         )
-        for _ in range(4):
+        for _i in range(4):
             glimpse_data = factory.build(
                 dict,
                 FACTORY_CLASS=GlimpseFactory,

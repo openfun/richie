@@ -6,6 +6,7 @@ from collections import namedtuple
 from datetime import datetime, timedelta
 
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 import factory
 import pytz
@@ -399,7 +400,7 @@ class CourseRunFactory(factory.django.DjangoModelFactory):
         model = models.CourseRun
 
     direct_course = factory.SubFactory(CourseFactory)
-    title = factory.Sequence("Run {:d}".format)
+    title = factory.Sequence(_("Run {:d}").format)
     resource_link = factory.Faker("uri")
 
     # pylint: disable=no-self-use
