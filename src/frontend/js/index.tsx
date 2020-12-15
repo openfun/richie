@@ -53,13 +53,17 @@ async function render() {
       // TODO: remove type assertion when typescript libs include RelativeTimeFormat
       if (!(Intl as any).RelativeTimeFormat) {
         await import('@formatjs/intl-relativetimeformat');
-        // Polyfilled locale data is keyed by 2-letter language code
-        let languageCode = locale;
-        if (languageCode.match(/^.*_.*$/)) {
-          [languageCode] = locale.split('_');
+
+        // When countryCode is identical to languageCode, intlrelativeformat uses
+        // only languageCode as locale file name
+        let localeFilename = locale;
+        const [languageCode, countryCode] = localeFilename.split('-');
+        if (RegExp(languageCode, 'i').test(countryCode)) {
+          localeFilename = languageCode;
         }
+
         // Get `react-intl`/`formatjs` lang specific parameters and data
-        await import(`@formatjs/intl-relativetimeformat/locale-data/${languageCode}`);
+        await import(`@formatjs/intl-relativetimeformat/locale-data/${localeFilename}`);
       }
     } catch (e) {
       handle(e);
