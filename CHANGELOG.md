@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix Sentry SDK initialization enrivonment and release parameters
 - intl-relativetimeformat polyfill did not use the right locale filename
   when locale was composed of a languageCode identical to countryCode
 - Make generate demo site work when the default language is set to "fr"

@@ -552,8 +552,8 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         if cls.SENTRY_DSN is not None:
             sentry_sdk.init(
                 dsn=cls.SENTRY_DSN,
-                environment=cls.ENVIRONMENT,
-                release=cls.RELEASE,
+                environment=cls.__name__.lower(),
+                release=get_release(),
                 integrations=[DjangoIntegration()],
             )
             with sentry_sdk.configure_scope() as scope:
