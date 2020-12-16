@@ -3,7 +3,6 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { Spinner } from 'components/Spinner';
 import { useSession } from 'data/useSession';
-import { CourseRun } from 'types';
 import { User } from 'types/User';
 import { Maybe, Nullable } from 'utils/types';
 import { handle } from 'utils/errors/handle';
@@ -52,12 +51,12 @@ const messages = defineMessages({
   },
 });
 
-const headers = {
-  'Content-Type': 'application/json',
-};
-
 interface CourseRunEnrollmentProps {
-  courseRunId: number;
+  courseRun: {
+    id: number;
+    resource_link: string;
+    priority: number;
+  };
 }
 
 enum Step {
@@ -80,7 +79,7 @@ interface ReducerState {
   step: Step;
   context: {
     isEnrolled: Maybe<Nullable<Boolean>>;
-    courseRun: Maybe<Nullable<CourseRun>>;
+    courseRun: CourseRunEnrollmentProps['courseRun'];
     currentUser: Maybe<Nullable<User>>;
   };
   error?: Error;
@@ -90,21 +89,21 @@ type ReducerAction =
   | { type: ActionType.ENROLL }
   | { type: ActionType.ERROR; payload: { error: Error } };
 
-const initialState = {
+const initialState = (courseRun: CourseRunEnrollmentProps['courseRun']) => ({
   step: Step.LOADING,
   context: {
     currentUser: undefined,
-    courseRun: undefined,
+    courseRun,
     isEnrolled: undefined,
   },
-};
+});
 
 const getStepFromContext = (
   { currentUser, courseRun, isEnrolled }: ReducerState['context'],
   previousStep: Step,
 ) => {
   switch (true) {
-    case courseRun && courseRun.state.priority > 1:
+    case courseRun.priority > 1:
       return Step.CLOSED;
     case previousStep === Step.ENROLLING && !isEnrolled:
       return Step.ENROLLMENT_FAILED;
@@ -136,9 +135,9 @@ const reducer = ({ step, context }: ReducerState, action: ReducerAction): Reduce
   }
 };
 
-export const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonDataProps> = ({
-  courseRunId,
-}) => {
+export const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonDataProps> = (
+  props,
+) => {
   const [
     {
       step,
@@ -148,7 +147,7 @@ export const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonData
     dispatch,
   ] = useReducer<React.Reducer<ReducerState, ReducerAction>, ReducerState>(
     reducer,
-    initialState,
+    initialState(props.courseRun),
     (s) => s,
   );
   const { user, login } = useSession();
@@ -164,21 +163,6 @@ export const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonData
     }
   }, [courseRun, currentUser, dispatch]);
 
-  useAsyncEffect(async () => {
-    const response = await fetch(`/api/v1.0/course-runs/${courseRunId}/`, {
-      headers,
-    });
-    if (response.ok) {
-      const data = await response.json();
-      dispatch({ type: ActionType.UPDATE_CONTEXT, payload: { courseRun: data } });
-    } else {
-      dispatch({
-        type: ActionType.ERROR,
-        payload: { error: new Error(`Failed to get course run ${courseRunId}`) },
-      });
-    }
-  }, []);
-
   useEffect(() => {
     dispatch({
       type: ActionType.UPDATE_CONTEXT,
@@ -187,13 +171,22 @@ export const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonData
   }, [user]);
 
   useAsyncEffect(async () => {
-    if (currentUser !== undefined && courseRun && isEnrolled === undefined) {
-      const response = await CourseEnrollmentAPI.isEnrolled(courseRun.resource_link, currentUser);
-      dispatch({ type: ActionType.UPDATE_CONTEXT, payload: { isEnrolled: response } });
+    if (isEnrolled === undefined) {
+      let enrolled = false;
+      if (currentUser) {
+        enrolled = await CourseEnrollmentAPI.isEnrolled(courseRun.resource_link, currentUser);
+      }
+      dispatch({ type: ActionType.UPDATE_CONTEXT, payload: { isEnrolled: enrolled } });
     }
   }, [currentUser, courseRun]);
 
   switch (true) {
+    case step === Step.CLOSED:
+      return (
+        <div className="course-run-enrollment__helptext">
+          <FormattedMessage {...messages.enrollmentClosed} />
+        </div>
+      );
     case step === Step.ANONYMOUS:
       return (
         <button onClick={login} className="course-run-enrollment__cta">
@@ -202,20 +195,12 @@ export const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonData
       );
     case step === Step.LOADING:
       return (
-        <Spinner size="small" aria-labelledby={`loading-course-run-${courseRunId}`}>
-          <span id={`loading-course-run-${courseRunId}`}>
+        <Spinner size="small" aria-labelledby={`loading-course-run-${courseRun.id}`}>
+          <span id={`loading-course-run-${courseRun.id}`}>
             <FormattedMessage {...messages.loadingInitial} />
           </span>
         </Spinner>
       );
-
-    case step === Step.CLOSED:
-      return (
-        <div className="course-run-enrollment__helptext">
-          <FormattedMessage {...messages.enrollmentClosed} />
-        </div>
-      );
-
     case step === Step.IDLE:
     case step === Step.ENROLLING:
     case step === Step.ENROLLMENT_FAILED:
@@ -248,11 +233,9 @@ export const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonData
     case step === Step.ENROLLED:
       return (
         <React.Fragment>
-          {courseRun && (
-            <a href={courseRun.resource_link} className="course-run-enrollment__cta">
-              <FormattedMessage {...messages.goToCourse} />
-            </a>
-          )}
+          <a href={courseRun.resource_link} className="course-run-enrollment__cta">
+            <FormattedMessage {...messages.goToCourse} />
+          </a>
           <div className="course-run-enrollment__helptext">
             <FormattedMessage {...messages.enrolled} />
           </div>

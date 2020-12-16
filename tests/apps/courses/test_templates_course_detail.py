@@ -492,16 +492,20 @@ class RunsCourseCMSTestCase(CMSTestCase):
 
         response = self.client.get(course.extended_object.get_absolute_url())
 
-        self.assertIsNotNone(
-            re.search(
-                (
-                    r'.*class="richie-react richie-react--course-run-enrollment".*'
-                    r"data-props=\\\'{{\"courseRunId\": {}}}\\\'".format(
-                        course_run.public_course_run.id
-                    )
-                ),
-                str(response.content),
-            )
+        pattern = r".*data-props=\"{{.*{}.*{}.*{}.*{}.*{}.*{}.*{}.*}}\"".format(
+            "courseRun",
+            "id",
+            course_run.public_course_run.id,
+            "resource_link",
+            re.escape(course_run.public_course_run.resource_link),
+            "priority",
+            course_run.public_course_run.state["priority"],
+        )
+
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
+        self.assertContains(
+            response,
+            r'class="richie-react richie-react--course-run-enrollment"',
         )
 
     @override_settings(LMS_BACKENDS=[])
@@ -562,16 +566,21 @@ class RunsCourseCMSTestCase(CMSTestCase):
         course_run.refresh_from_db()
 
         response = self.client.get(course.extended_object.get_absolute_url())
-        self.assertIsNotNone(
-            re.search(
-                (
-                    r'.*class="richie-react richie-react--course-run-enrollment".*'
-                    r"data-props=\\\'{{\"courseRunId\": {}}}\\\'".format(
-                        course_run.public_course_run.id
-                    )
-                ),
-                str(response.content),
-            )
+
+        pattern = r".*data-props=\"{{.*{}.*{}.*{}.*{}.*{}.*{}.*{}.*}}\"".format(
+            "courseRun",
+            "id",
+            course_run.public_course_run.id,
+            "resource_link",
+            re.escape(course_run.public_course_run.resource_link),
+            "priority",
+            course_run.public_course_run.state["priority"],
+        )
+
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
+        self.assertContains(
+            response,
+            r'class="richie-react richie-react--course-run-enrollment"',
         )
 
     @timezone.override(pytz.utc)
