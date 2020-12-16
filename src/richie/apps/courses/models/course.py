@@ -134,6 +134,15 @@ class Course(BasePageExtension):
     page that presents the course.
     """
 
+    CODE_MAX_LENGTH = 100
+
+    code = models.CharField(
+        _("code"),
+        max_length=CODE_MAX_LENGTH,
+        help_text=_("Unique reference for the course."),
+        null=True,
+        blank=True,
+    )
     effort = EffortField(
         time_units=defaults.TIME_UNITS,
         default_effort_unit=defaults.DEFAULT_EFFORT_UNIT,
@@ -169,6 +178,30 @@ class Course(BasePageExtension):
             title=self.extended_object.get_title(),
         )
 
+    def validate_unique(self, exclude=None):
+        """
+        We can't enforce code unicity with a db constraint because it is repeated across
+        the draft and public versions of the page AND in each snapshot of a course.
+
+        A complex unique constraint would have to span the "extended_object" public key
+        which is not possible.
+        """
+        super().validate_unique()
+        if (
+            self.extended_object.publisher_is_draft
+            and not self.is_snapshot
+            and self.__class__.objects.exclude(pk=self.pk)
+            .filter(
+                code=self.code,
+                # allow public duplicates
+                extended_object__publisher_is_draft=True,
+                # allow snapshot duplicates
+                extended_object__node__parent__cms_pages__course__isnull=True,
+            )
+            .exists()
+        ):
+            raise ValidationError({"code": ["Code must be unique."]})
+
     def get_admin_url_to_add_run(self, request):
         """
         Get the admin url of the form to add a course run with the "direct_course"
@@ -180,8 +213,10 @@ class Course(BasePageExtension):
     @property
     def is_snapshot(self):
         """Return True if the course is a snapshot (it has a course as parent)."""
-        return Course.objects.filter(
-            id=self.id, extended_object__node__parent__cms_pages__course__isnull=False
+        # Look for the page and not the course as the course may not yet be created in database
+        # (see "validate_unique" method below)
+        return Page.objects.filter(
+            id=self.extended_object.id, node__parent__cms_pages__course__isnull=False
         ).exists()
 
     def create_page_role(self):

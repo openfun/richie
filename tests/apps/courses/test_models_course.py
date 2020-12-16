@@ -45,6 +45,24 @@ class CourseModelsTestCase(TestCase):
         with self.assertNumQueries(2):
             self.assertEqual(str(course), "Course: Nano particles")
 
+    def test_models_course_unique_code_draft(self):
+        """The code field should be unique among all draft courses."""
+        CourseFactory(code="123")
+        with self.assertRaises(ValidationError):
+            CourseFactory(code="123")
+
+    def test_models_course_unique_code_public(self):
+        """The code field can be repeated from a draft course to its public counterpart."""
+        course = CourseFactory(code="123", should_publish=True)
+        snapshot = CourseFactory(
+            code="123", page_parent=course.extended_object, should_publish=True
+        )
+
+        self.assertEqual(course.code, "123")
+        self.assertEqual(course.public_extension.code, "123")
+        self.assertEqual(snapshot.code, "123")
+        self.assertEqual(snapshot.public_extension.code, "123")
+
     def test_models_course_create_page_role(self, *_):
         """
         If the CMS_PERMISSIONS settings is True, a page role should be created when calling
