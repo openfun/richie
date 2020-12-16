@@ -1,4 +1,6 @@
 """Custom template tags for the courses application of Richie."""
+import json
+
 from django import template
 from django.core.exceptions import ObjectDoesNotExist
 from django.template.loader import render_to_string
@@ -217,3 +219,22 @@ def has_connected_lms(course_run):
     link to the course run.
     """
     return LMSHandler.select_lms(course_run.resource_link) is not None
+
+
+@register.simple_tag(takes_context=True)
+def course_enrollment_widget_props(context):
+    """
+    Return a json dumps which contains all course_run's properties required by
+    CourseEnrollment React widget
+    """
+    course_run = context["run"]
+
+    return json.dumps(
+        {
+            "courseRun": {
+                "id": course_run.id,
+                "resource_link": course_run.resource_link,
+                "priority": course_run.state["priority"],
+            }
+        }
+    )

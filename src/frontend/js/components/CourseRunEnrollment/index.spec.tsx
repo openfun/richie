@@ -48,6 +48,12 @@ describe('<CourseRunEnrollment />', () => {
     return loggedin ? username : null;
   };
 
+  const getCourseRunProp = (courseRun: CourseRun) => ({
+    id: courseRun.id,
+    resource_link: courseRun.resource_link,
+    priority: courseRun.state.priority,
+  });
+
   afterEach(() => {
     sessionStorage.clear();
     fetchMock.restore();
@@ -58,8 +64,6 @@ describe('<CourseRunEnrollment />', () => {
     const courseRun: CourseRun = factories.CourseRunFactory.generate();
     courseRun.state.priority = 0;
 
-    const courseRunDeferred = new Deferred();
-    fetchMock.get(`/api/v1.0/course-runs/${courseRun.id}/`, courseRunDeferred.promise);
     const enrollmentsDeferred = new Deferred();
     fetchMock.get(
       `${endpoint}/api/enrollment/v1/enrollment/${username},${courseRun.resource_link}`,
@@ -69,14 +73,13 @@ describe('<CourseRunEnrollment />', () => {
     render(
       <IntlProvider locale="en">
         <SessionProvider>
-          <CourseRunEnrollment context={contextProps} courseRunId={courseRun.id} />
+          <CourseRunEnrollment context={contextProps} courseRun={getCourseRunProp(courseRun)} />
         </SessionProvider>
       </IntlProvider>,
     );
     screen.getByRole('status', { name: 'Loading enrollment information...' });
 
     await act(async () => {
-      courseRunDeferred.resolve(courseRun);
       enrollmentsDeferred.resolve({});
     });
 
@@ -96,13 +99,11 @@ describe('<CourseRunEnrollment />', () => {
     screen.getByText('You are enrolled in this course run');
   });
 
-  it('shows an error message and the enrollment button when the enrollment fails', async () => {
+  it.only('shows an error message and the enrollment button when the enrollment fails', async () => {
     const username = initializeUser();
     const courseRun: CourseRun = factories.CourseRunFactory.generate();
     courseRun.state.priority = 0;
 
-    const courseRunDeferred = new Deferred();
-    fetchMock.get(`/api/v1.0/course-runs/${courseRun.id}/`, courseRunDeferred.promise);
     const enrollmentsDeferred = new Deferred();
     fetchMock.get(
       `${endpoint}/api/enrollment/v1/enrollment/${username},${courseRun.resource_link}`,
@@ -114,7 +115,7 @@ describe('<CourseRunEnrollment />', () => {
         <SessionProvider>
           <CourseRunEnrollment
             context={contextProps}
-            courseRunId={courseRun.id}
+            courseRun={getCourseRunProp(courseRun)}
             loginUrl="/oauth/login/edx-oauth2/?next=/en/courses/"
           />
         </SessionProvider>
@@ -123,7 +124,6 @@ describe('<CourseRunEnrollment />', () => {
     screen.getByRole('status', { name: 'Loading enrollment information...' });
 
     await act(async () => {
-      courseRunDeferred.resolve(courseRun);
       enrollmentsDeferred.resolve(false);
     });
 
@@ -134,7 +134,7 @@ describe('<CourseRunEnrollment />', () => {
     fireEvent.click(button);
 
     await act(async () => {
-      enrollmentAction.reject();
+      enrollmentAction.reject('500 - Internal Server Error');
     });
 
     screen.getByRole('button', { name: 'Enroll now' });
@@ -157,7 +157,7 @@ describe('<CourseRunEnrollment />', () => {
     render(
       <IntlProvider locale="en">
         <SessionProvider>
-          <CourseRunEnrollment context={contextProps} courseRunId={courseRun.id} />
+          <CourseRunEnrollment context={contextProps} courseRun={getCourseRunProp(courseRun)} />
         </SessionProvider>
       </IntlProvider>,
     );
@@ -177,27 +177,13 @@ describe('<CourseRunEnrollment />', () => {
     const courseRun: CourseRun = factories.CourseRunFactory.generate();
     courseRun.state.priority = 4;
 
-    const courseRunDeferred = new Deferred();
-    fetchMock.get(`/api/v1.0/course-runs/${courseRun.id}/`, courseRunDeferred.promise);
-    const enrollmentsDeferred = new Deferred();
-    fetchMock.get(
-      `${endpoint}/api/enrollment/v1/enrollment/${courseRun.resource_link}`,
-      enrollmentsDeferred.promise,
-    );
-
     render(
       <IntlProvider locale="en">
         <SessionProvider>
-          <CourseRunEnrollment context={contextProps} courseRunId={courseRun.id} />
+          <CourseRunEnrollment context={contextProps} courseRun={getCourseRunProp(courseRun)} />
         </SessionProvider>
       </IntlProvider>,
     );
-    screen.getByRole('status', { name: 'Loading enrollment information...' });
-
-    await act(async () => {
-      courseRunDeferred.resolve(courseRun);
-      enrollmentsDeferred.resolve(false);
-    });
 
     screen.getByText('Enrollment in this course run is closed at the moment');
     expect(screen.queryByRole('button', { name: 'Enroll now' })).toBeNull();
@@ -208,27 +194,13 @@ describe('<CourseRunEnrollment />', () => {
     const courseRun: CourseRun = factories.CourseRunFactory.generate();
     courseRun.state.priority = 0;
 
-    const courseRunDeferred = new Deferred();
-    fetchMock.get(`/api/v1.0/course-runs/${courseRun.id}/`, courseRunDeferred.promise);
-    const enrollmentsDeferred = new Deferred();
-    fetchMock.get(
-      `${endpoint}/api/enrollment/v1/enrollment/${courseRun.resource_link}`,
-      enrollmentsDeferred.promise,
-    );
-
     render(
       <IntlProvider locale="en">
         <SessionProvider>
-          <CourseRunEnrollment context={contextProps} courseRunId={courseRun.id} />
+          <CourseRunEnrollment context={contextProps} courseRun={getCourseRunProp(courseRun)} />
         </SessionProvider>
       </IntlProvider>,
     );
-    screen.getByRole('status', { name: 'Loading enrollment information...' });
-
-    await act(async () => {
-      courseRunDeferred.resolve(courseRun);
-      enrollmentsDeferred.resolve(false);
-    });
 
     screen.getByRole('button', { name: 'Log in to enroll' });
   });

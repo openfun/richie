@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Changed
+
+- Remove a xhr request by passing course run information to the
+  CourseRunEnrollment widget via data-props
+
 ### Fixed
 
 - Fix Sentry SDK initialization enrivonment and release parameters
