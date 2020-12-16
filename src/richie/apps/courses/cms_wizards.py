@@ -2,6 +2,7 @@
 CMS Wizard to add a course page
 """
 from django import forms
+from django.conf import settings
 from django.core import validators
 from django.core.exceptions import PermissionDenied
 from django.template.defaultfilters import slugify
@@ -172,6 +173,13 @@ class CourseWizardForm(BaseWizardForm):
     A related Course model is created for each course page.
     """
 
+    code = forms.CharField(
+        max_length=Course.CODE_MAX_LENGTH,
+        required=getattr(settings, "RICHIE_COURSE_CODE_REQUIRED", False),
+        label=_("Code"),
+        help_text=_("Unique reference for the course."),
+    )
+
     model = Course
 
     def clean(self):
@@ -206,7 +214,9 @@ class CourseWizardForm(BaseWizardForm):
         plugin, and the admin group of the organization should get admin access to the course.
         """
         page = super().save()
-        course = Course.objects.create(extended_object=page)
+        course = Course.objects.create(
+            extended_object=page, code=self.cleaned_data["code"]
+        )
         course.create_page_role()
 
         try:

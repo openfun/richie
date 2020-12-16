@@ -13,6 +13,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Remove a xhr request by passing course run information to the
   CourseRunEnrollment widget via data-props
 
+### Added
+
+- Add a "code" field on the course model to allow reference & synchronization
+
 ### Fixed
 
 - Fix Sentry SDK initialization enrivonment and release parameters

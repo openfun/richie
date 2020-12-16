@@ -202,6 +202,8 @@ class CourseFactory(PageExtensionDjangoModelFactory):
     # fields concerning the related page
     page_template = models.Course.PAGE["template"]
 
+    code = factory.Sequence(lambda k: f"{k:05d}")
+
     # pylint: disable=no-self-use
     @factory.lazy_attribute
     def duration(self):
