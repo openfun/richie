@@ -272,7 +272,6 @@ CATEGORIES_PAGE = {
     "reverse_id": "categories",
     "template": "courses/cms/category_detail.html",
 }
-COURSERUNS_PAGE = {"template": "courses/cms/course_run_detail.html"}
 COURSES_PAGE = {"reverse_id": "courses", "template": "courses/cms/course_detail.html"}
 ORGANIZATIONS_PAGE = {
     "reverse_id": "organizations",
