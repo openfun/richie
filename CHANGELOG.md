@@ -17,6 +17,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Add a "code" field on the course model to allow reference & synchronization
 
+### Changed
+
+- Make the course run "title" field optional
+
 ### Fixed
 
 - Fix Sentry SDK initialization enrivonment and release parameters

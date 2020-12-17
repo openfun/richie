@@ -9,11 +9,8 @@
                 {% if course != run.direct_course %}
                     <a href="{{ run.direct_course.extended_object.get_absolute_url }}">
                 {% endif %}
-                {% if run.start  %}
-                    {% blocktrans with title=run.title|capfirst start=run.start|date:'DATE_FORMAT'|default:'...' end=run.end|date:'DATE_FORMAT'|default:'...' %}{{ title }} from {{ start }} to {{ end }}{% endblocktrans %}
-                {% else %}
-                    {{ run.title|capfirst }}
-                {% endif %}
+                {% blocktrans with title=run.title|default:"" start=run.start|date:'DATE_FORMAT'|default:'...' end=run.end|date:'DATE_FORMAT'|default:'...' asvar run_title %}{{ title }} from {{ start }} to {{ end }}{% endblocktrans %}
+                {{ run_title.strip|capfirst }}
                 {% if course != run.direct_course %}
                     </a>
                 {% endif %}

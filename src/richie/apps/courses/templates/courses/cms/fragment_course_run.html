@@ -1,7 +1,7 @@
 {% load cms_tags i18n extra_tags %}{% spaceless %}
 <div class="course-detail__run-descriptions">
     {% render_model_block run %}
-        <h3>{{ run.title|capfirst }}</h3>
+        {% if run.title %}<h3>{{ run.title|capfirst }}</h3>{% endif %}
         <dl>
             <dt>{% trans "Enrollment" %}</dt>
             <dd>
