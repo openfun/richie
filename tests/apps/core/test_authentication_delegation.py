@@ -12,10 +12,10 @@ from cms.test_utils.testcases import CMSTestCase
 
 
 class UserMenuTests(CMSTestCase):
-    """Test the user menu according to AUTHENTICATION_DELEGATION settings"""
+    """Test the user menu according to RICHIE_AUTHENTICATION_DELEGATION settings"""
 
     @override_settings(
-        AUTHENTICATION_DELEGATION={
+        RICHIE_AUTHENTICATION_DELEGATION={
             "BASE_URL": "https://richie.education:9999",
             "BACKEND": "richie.apps.courses.lms.base.BaseLMSBackend",
             "PROFILE_URLS": [
@@ -53,10 +53,10 @@ class UserMenuTests(CMSTestCase):
             ),
         )
 
-    @override_settings(AUTHENTICATION_DELEGATION=None)
+    @override_settings(RICHIE_AUTHENTICATION_DELEGATION=None)
     def test_user_menu_without_authentication_delegation(self):
         """
-        If AUTHENTICATION_DELEGATION is not defined, user menu should not be rendered
+        If RICHIE_AUTHENTICATION_DELEGATION is not defined, user menu should not be rendered
         """
         page = create_page(
             title="Home",
@@ -76,14 +76,14 @@ class UserMenuTests(CMSTestCase):
         )
 
     @override_settings(
-        AUTHENTICATION_DELEGATION={
+        RICHIE_AUTHENTICATION_DELEGATION={
             "BASE_URL": "https://richie.education:9999",
             "BACKEND": "richie.apps.courses.lms.base.BaseLMSBackend",
         }
     )
     def test_user_menu_without_profile_urls(self):
         """
-        If AUTHENTICATION_DELEGATION.PROFILE_URLS is not defined,
+        If RICHIE_AUTHENTICATION_DELEGATION.PROFILE_URLS is not defined,
         user menu should render correctly and
         profileUrls data-props should be an empty array
         """
