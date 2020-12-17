@@ -15,6 +15,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add an API endpoint to synchronize course runs from e.g. an external LMS
 - Add a "code" field on the course model to allow reference & synchronization
 
 ### Changed

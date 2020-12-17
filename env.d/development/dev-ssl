@@ -3,8 +3,4 @@ AUTHENTICATION_BASE_URL=https://edx.local.dev:8073
 AUTHENTICATION_BACKEND=openedx-hawthorn
 
 # LMS Backend
-EDX_BACKEND=richie.apps.courses.lms.edx.TokenEdXLMSBackend
-EDX_JS_BACKEND=openedx-hawthorn
-EDX_COURSE_REGEX=^.*/courses/(?P<course_id>.*)/info$
-EDX_JS_COURSE_REGEX=^.*/courses/(?<course_id>.*)/info$
 EDX_BASE_URL=https://edx.local.dev:8073

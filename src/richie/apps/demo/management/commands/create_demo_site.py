@@ -73,7 +73,7 @@ def create_demo_site():
     site.save()
 
     lms_endpoint = (
-        getattr(settings, "LMS_BACKENDS", None)
+        getattr(settings, "RICHIE_LMS_BACKENDS", None)
         or [{"BASE_URL": defaults.DEFAULT_LMS_ENDPOINT}]
     )[0]["BASE_URL"]
 

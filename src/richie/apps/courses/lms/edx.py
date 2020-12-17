@@ -2,13 +2,29 @@
 Backend to connect Open edX richie with an LMS
 """
 import logging
+import re
 
 import requests
 from requests.auth import AuthBase
 
+from ..serializers import SyncCourseRunSerializer
 from .base import BaseLMSBackend
 
 logger = logging.getLogger(__name__)
+
+
+def split_course_key(key):
+    """Split an OpenEdX course key by organization, course and course run codes.
+
+    We first try splitting the key as a version 1 key (course-v1:org+course+run)
+    and fallback the old version (org/course/run).
+    """
+    if key.startswith("course-v1:"):
+        organization, course, run = key[10:].split("+")
+    else:
+        organization, course, run = key.split("/")
+
+    return organization, course, run
 
 
 class EdXTokenAuth(AuthBase):
@@ -41,10 +57,24 @@ class TokenAPIClient(requests.Session):
         self.auth = EdXTokenAuth(token)
 
 
-class TokenEdXLMSBackend(BaseLMSBackend):
+class EdXLMSBackend(BaseLMSBackend):
     """LMS backend for Richie tested with Open EdX Dogwood to Hawthorn."""
 
     @property
     def api_client(self):
         """Instantiate and return an edx token API client."""
         return TokenAPIClient(self.configuration["API_TOKEN"])
+
+    def extract_course_id(self, url):
+        """Extract the LMS course id from the course run url."""
+        return re.match(self.configuration["COURSE_REGEX"], url).group("course_id")
+
+    def extract_course_number(self, data):
+        """Extract the LMS course number from data dictionary."""
+        course_id = self.extract_course_id(data.get("resource_link"))
+        return split_course_key(course_id)[1]
+
+    @staticmethod
+    def get_course_run_serializer(data, partial=False):
+        """Prepare data and return a bound serializer."""
+        return SyncCourseRunSerializer(data=data, partial=partial)

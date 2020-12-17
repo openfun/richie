@@ -575,7 +575,7 @@ class CourseRunModelsTestCase(TestCase):
     def test_models_course_run_mark_dirty_any_field(self):
         """
         Updating the value of an editable field on the course run should mark the related
-        course page as dirty (waiting to be published).
+        course page dirty (waiting to be published).
         """
         course_run = CourseRunFactory()
         self.assertTrue(course_run.direct_course.extended_object.publish("en"))
@@ -588,12 +588,16 @@ class CourseRunModelsTestCase(TestCase):
                 if f.editable and not f.auto_created and not f.name == "direct_course"
             ]
         ).name
-        stub = CourseRunFactory()  # New random values to update our course run
+
+        stub = CourseRunFactory(
+            sync_mode="manual"
+        )  # New random values to update our course run
         setattr(course_run, field, getattr(stub, field))
+        course_run.save()
 
         self.assertEqual(title_obj.publisher_state, PUBLISHER_STATE_DEFAULT)
 
-        course_run.save()
+        course_run.mark_course_dirty()
         title_obj.refresh_from_db()
 
         self.assertEqual(title_obj.publisher_state, PUBLISHER_STATE_DIRTY)
@@ -601,7 +605,7 @@ class CourseRunModelsTestCase(TestCase):
     def test_models_course_run_mark_dirty_direct_course_field(self):
         """
         Changing the course to which a course run is related should mark both the source and the
-        target course pages as dirty (waiting to be published).
+        target course pages dirty (waiting to be published).
         """
         course_run = CourseRunFactory()
         course_source = course_run.direct_course
@@ -611,11 +615,12 @@ class CourseRunModelsTestCase(TestCase):
         title_obj_target = course_target.extended_object.title_set.first()
 
         course_run.direct_course = course_target
+        course_run.save()
 
         self.assertEqual(title_obj_source.publisher_state, PUBLISHER_STATE_DEFAULT)
         self.assertEqual(title_obj_target.publisher_state, PUBLISHER_STATE_DEFAULT)
 
-        course_run.save()
+        course_run.mark_course_dirty()
         title_obj_source.refresh_from_db()
         title_obj_target.refresh_from_db()
 
@@ -644,11 +649,12 @@ class CourseRunModelsTestCase(TestCase):
 
         with switch_language(course_run, "fr"):
             course_run.title = "nouveau titre"
+        course_run.save()
 
         self.assertEqual(title_obj_en.publisher_state, PUBLISHER_STATE_DEFAULT)
         self.assertEqual(title_obj_fr.publisher_state, PUBLISHER_STATE_DEFAULT)
 
-        course_run.save()
+        course_run.mark_course_dirty()
         title_obj_en.refresh_from_db()
         title_obj_fr.refresh_from_db()
 
@@ -666,6 +672,7 @@ class CourseRunModelsTestCase(TestCase):
 
         course_run.start = None
         course_run.save()
+        course_run.mark_course_dirty()
         title_obj.refresh_from_db()
 
         self.assertEqual(title_obj.publisher_state, PUBLISHER_STATE_DIRTY)
@@ -682,6 +689,7 @@ class CourseRunModelsTestCase(TestCase):
 
         course_run.start = now
         course_run.save()
+        course_run.mark_course_dirty()
         title_obj.refresh_from_db()
 
         self.assertEqual(title_obj.publisher_state, PUBLISHER_STATE_DIRTY)
@@ -697,6 +705,7 @@ class CourseRunModelsTestCase(TestCase):
 
         course_run.end = timezone.now()
         course_run.save()
+        course_run.mark_course_dirty()
         title_obj.refresh_from_db()
 
         self.assertEqual(title_obj.publisher_state, PUBLISHER_STATE_DEFAULT)
@@ -710,7 +719,8 @@ class CourseRunModelsTestCase(TestCase):
 
         self.assertEqual(title_obj.publisher_state, PUBLISHER_STATE_DEFAULT)
 
-        CourseRunFactory(direct_course=course)
+        course_run = CourseRunFactory(direct_course=course)
+        course_run.mark_course_dirty()
         title_obj.refresh_from_db()
 
         self.assertEqual(title_obj.publisher_state, PUBLISHER_STATE_DIRTY)
@@ -726,7 +736,8 @@ class CourseRunModelsTestCase(TestCase):
         self.assertEqual(title_obj.publisher_state, PUBLISHER_STATE_DEFAULT)
 
         field = random.choice(["start", "enrollment_start"])
-        CourseRunFactory(**{field: None})
+        course_run = CourseRunFactory(**{field: None})
+        course_run.mark_course_dirty()
         title_obj.refresh_from_db()
 
         self.assertEqual(title_obj.publisher_state, PUBLISHER_STATE_DEFAULT)

@@ -9,7 +9,7 @@ class LMSHandler:
     """Class to handle LMS backends.
 
     Actions on a particular course are automatically routed to the LMS handling this course
-    via the `SELECTOR_REGEX` configured for each LMS.
+    via the `COURSE_REGEX` configured for each LMS.
     """
 
     @staticmethod
@@ -24,10 +24,8 @@ class LMSHandler:
         if url is None:
             return None
 
-        for lms_configuration in settings.LMS_BACKENDS:
-            if re.match(
-                lms_configuration.get("SELECTOR_REGEX", r".*"), url
-            ) and re.match(lms_configuration.get("COURSE_REGEX", r".*"), url):
+        for lms_configuration in settings.RICHIE_LMS_BACKENDS:
+            if re.match(lms_configuration.get("COURSE_REGEX", r".*"), url):
                 return import_string(lms_configuration["BACKEND"])(lms_configuration)
 
         return None

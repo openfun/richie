@@ -70,7 +70,7 @@ def site_metas(request):
             "backend": authentication_delegation["BACKEND"],
         }
 
-    if getattr(settings, "LMS_BACKENDS", None):
+    if getattr(settings, "RICHIE_LMS_BACKENDS", None):
         context["FRONTEND_CONTEXT"]["context"]["lms_backends"] = [
             {
                 "endpoint": lms["BASE_URL"],
@@ -78,7 +78,7 @@ def site_metas(request):
                 "course_regexp": lms["JS_COURSE_REGEX"],
                 "selector_regexp": lms["JS_SELECTOR_REGEX"],
             }
-            for lms in getattr(settings, "LMS_BACKENDS", [])
+            for lms in getattr(settings, "RICHIE_LMS_BACKENDS", [])
         ]
 
     context["FRONTEND_CONTEXT"] = json.dumps(context["FRONTEND_CONTEXT"])

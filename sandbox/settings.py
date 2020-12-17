@@ -246,9 +246,7 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
             "", environ_name="AUTHENTICATION_BASE_URL", environ_prefix=None
         ),
         "BACKEND": values.Value(
-            "base",
-            environ_name="AUTHENTICATION_BACKEND",
-            environ_prefix=None,
+            "base", environ_name="AUTHENTICATION_BACKEND", environ_prefix=None
         ),
         # PROFILE_URLS are custom links to access to Auth profile views
         # from Richie. Link order will reflect the order of display in frontend.
@@ -266,39 +264,46 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
     }
 
     # LMS
-    LMS_BACKENDS = [
+    RICHIE_LMS_BACKENDS = [
         {
             # We configure default values that work with the test configuration of
             # github.com/openfun/openedx-docker.
+            "BASE_URL": values.Value(environ_name="EDX_BASE_URL", environ_prefix=None),
+            # Django backend
             "BACKEND": values.Value(
-                "richie.apps.courses.lms.base.BaseLMSBackend",
+                "richie.apps.courses.lms.edx.EdXLMSBackend",
                 environ_name="EDX_BACKEND",
                 environ_prefix=None,
             ),
-            "JS_BACKEND": values.Value(
-                "base",
-                environ_name="EDX_JS_BACKEND",
+            "COURSE_REGEX": values.Value(
+                r"^.*/courses/(?P<course_id>.*)/course/?$",
+                environ_name="EDX_COURSE_REGEX",
                 environ_prefix=None,
             ),
-            "COURSE_REGEX": values.Value(
-                r".*", environ_name="EDX_COURSE_REGEX", environ_prefix=None
+            "DEFAULT_COURSE_RUN_SYNC_MODE": "sync_to_public",
+            # React frontend
+            "JS_BACKEND": values.Value(
+                "base", environ_name="EDX_JS_BACKEND", environ_prefix=None
             ),
-            "SELECTOR_REGEX": values.Value(
-                r"^(?P<course_id>.*)$",
-                environ_name="EDX_SELECTOR_REGEX",
+            "JS_COURSE_REGEX": values.Value(
+                r"^.*/courses/(?<course_id>.*)/course/?$",
+                environ_name="EDX_JS_COURSE_REGEX",
                 environ_prefix=None,
             ),
             "JS_SELECTOR_REGEX": values.Value(
                 r".*", environ_name="EDX_JS_SELECTOR_REGEX", environ_prefix=None
             ),
-            "JS_COURSE_REGEX": values.Value(
-                r"^(?<course_id>.*)$",
-                environ_name="EDX_JS_COURSE_REGEX",
-                environ_prefix=None,
-            ),
-            "BASE_URL": values.Value(environ_name="EDX_BASE_URL", environ_prefix=None),
         }
     ]
+    RICHIE_COURSE_RUN_SYNC_SECRETS = values.ListValue([])
+
+    # Elasticsearch
+    RICHIE_ES_HOST = values.Value(
+        "elasticsearch", environ_name="RICHIE_ES_HOST", environ_prefix=None
+    )
+    RICHIE_ES_INDICES_PREFIX = values.Value(
+        default="richie", environ_name="RICHIE_ES_INDICES_PREFIX", environ_prefix=None
+    )
 
     # Internationalization
     TIME_ZONE = "Europe/Paris"
@@ -483,14 +488,6 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         },
     }
 
-    # Elasticsearch
-    RICHIE_ES_HOST = values.Value(
-        "elasticsearch", environ_name="RICHIE_ES_HOST", environ_prefix=None
-    )
-    RICHIE_ES_INDICES_PREFIX = values.Value(
-        default="richie", environ_name="RICHIE_ES_INDICES_PREFIX", environ_prefix=None
-    )
-
     # Cache
     CACHES = {
         "default": {
@@ -500,14 +497,10 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
                 environ_prefix=None,
             ),
             "LOCATION": values.Value(
-                "",
-                environ_name="CACHE_DEFAULT_LOCATION",
-                environ_prefix=None,
+                "", environ_name="CACHE_DEFAULT_LOCATION", environ_prefix=None
             ),
             "OPTIONS": values.DictValue(
-                {},
-                environ_name="CACHE_DEFAULT_OPTIONS",
-                environ_prefix=None,
+                {}, environ_name="CACHE_DEFAULT_OPTIONS", environ_prefix=None
             ),
         }
     }
@@ -581,6 +574,17 @@ class Test(Base):
             "OPTIONS": {"CLIENT_CLASS": "richie.apps.core.cache.SentinelClient"},
         }
     }
+
+    RICHIE_LMS_BACKENDS = [
+        {
+            "BASE_URL": "http://localhost:8073",
+            "BACKEND": "richie.apps.courses.lms.edx.EdXLMSBackend",
+            "COURSE_REGEX": r"^.*/courses/(?P<course_id>.*)/course/?$",
+            "JS_BACKEND": "base",
+            "JS_COURSE_REGEX": r"^.*/courses/(?<course_id>.*)/course/?$",
+            "JS_SELECTOR_REGEX": r".*",
+        }
+    ]
 
 
 class ContinuousIntegration(Test):
