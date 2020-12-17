@@ -757,7 +757,7 @@ class CourseRunTranslation(TranslatedFieldsModel):
     """
 
     master = models.ForeignKey(CourseRun, models.CASCADE, related_name="translations")
-    title = models.CharField(_("title"), max_length=255)
+    title = models.CharField(_("title"), null=True, blank=True, max_length=255)
 
     class Meta:
         db_table = "richie_course_run_translation"

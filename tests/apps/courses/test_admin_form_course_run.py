@@ -109,7 +109,6 @@ class CourseRunAdminTestCase(CMSTestCase):
             form.errors,
             {
                 "direct_course": ["This field is required."],
-                "title": ["This field is required."],
                 "languages": ["This field is required."],
             },
         )

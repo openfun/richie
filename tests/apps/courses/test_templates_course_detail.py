@@ -2,7 +2,7 @@
 End-to-end tests for the course detail view
 """
 import re
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from django.test.utils import override_settings
 from django.utils import dateformat, timezone
@@ -704,6 +704,8 @@ class RunsCourseCMSTestCase(CMSTestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
+        self.assertNotContains(response, "My course run")
+
         # Staff users should see the course run
         user = UserFactory(is_staff=True, is_superuser=True)
         self.client.login(username=user.username, password="password")
@@ -714,8 +716,33 @@ class RunsCourseCMSTestCase(CMSTestCase):
         self.assertContains(
             response, '<h3 class="course-detail__title">To be scheduled</h3>', html=True
         )
+
         self.assertContains(
             response,
-            '<ul class="course-detail__run-list">' "<li>My course run</li></ul>",
+            '<ul class="course-detail__run-list"><li>My course run from ... to ...</li></ul>',
             html=True,
+        )
+
+    def test_templates_course_detail_course_run_title_empty(self):
+        """
+        A course run title can be empty and in this case the "From ..." string should be
+        capitalized.
+        """
+        course = CourseFactory()
+        page = course.extended_object
+        CourseRunFactory(
+            direct_course=course,
+            title=None,
+            start=pytz.utc.localize(datetime(2020, 12, 12)),
+            end=pytz.utc.localize(datetime(2020, 12, 15)),
+        )
+        self.assertTrue(page.publish("en"))
+
+        url = course.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        # The description line should start with a capital letter
+        self.assertContains(
+            response, "<li>From Dec. 12, 2020 to Dec. 15, 2020</li>", html=True
         )
