@@ -495,7 +495,7 @@ class Course(BasePageExtension):
 
         return best_state
 
-    def copy_relations(self, oldinstance, language):
+    def copy_relations(self, oldinstance, language=None):
         """
         This method is called for 2 types of copying:
             1- cloning (copying a draft page to another position in the page tree)
