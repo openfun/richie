@@ -151,8 +151,8 @@ class MultiSelectField(models.CharField):
 
     def to_python(self, value):
         """Convert a string value to a list value. Used for deserialization and in clean forms."""
-        if isinstance(value, list):
-            return value
+        if not isinstance(value, str) and hasattr(value, "__iter__"):
+            return list(value)
         if not value:
             return None if value is None else []
         return list([v.strip() for v in value.split(",")])

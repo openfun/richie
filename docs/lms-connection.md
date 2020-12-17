@@ -17,13 +17,13 @@ The `APIHandler` utility acts as a proxy that routes queries to the correct LMS 
 based on a regex match on the URL of the course.
 
 ```python
-LMS_BACKENDS=[
+RICHIE_LMS_BACKENDS=[
     {
-        "BACKEND": "richie.apps.courses.lms.edx.TokenEdXLMSBackend",
-        "JS_BACKEND": "openedx-hawthorn",
-        "SELECTOR_REGEX": r".*lms-example2.org.*",
-        "JS_SELECTOR_REGEX": r".*lms-example2.org.*",
         "BASE_URL": "https://www.lms-example2.org",
+        "BACKEND": "richie.apps.courses.lms.edx.EdXLMSBackend",
+        "COURSE_REGEX": r"^.*/courses/(?P<course_id>.*)/course/?$",
+        "JS_BACKEND": "openedx-hawthorn",
+        "JS_SELECTOR_REGEX": r".*lms-example2.org.*",
         "JS_COURSE_REGEX": r"^.*/course/(?<course_id>[0-9]*)$",
     },
 ]
@@ -43,8 +43,8 @@ _or create an issue on our repository_
 
 #### Purpose
 
-About the default configuration, if you check `LMS_BACKEND` settings in `env.d/development` you will
-see that we use `base.BaseLMSBackend` as `LMS_BACKEND`.
+About the default configuration, if you check `RICHIE_LMS_BACKENDS` settings in `env.d/development`
+you will see that we use `base.BaseLMSBackend` as `RICHIE_LMS_BACKENDS`.
 In fact, this base backend uses session storage to fake enrollment to course runs.
 
 Maybe are you asking why? Because, to make Create/Update/Delete requests from an external domain,
@@ -74,7 +74,7 @@ to make CORS XHR requests.
 
 #### Enable TLS
 
-If you want to develop with OpenEdx as `LMS_BACKEND` of Richie, you need to enable TLS for your
+If you want to develop with OpenEdx as `RICHIE_LMS_BACKENDS` of Richie, you need to enable TLS for your
 development servers. Both Richie and OpenEdx use Nginx as reverse proxy that ease the SSL setup.
 
 ##### 1. Install mkcert ans its Certificate Authority

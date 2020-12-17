@@ -540,6 +540,14 @@ class Course(BasePageExtension):
         super().save(*args, **kwargs)
 
 
+class CourseRunSyncMode(models.TextChoices):
+    """Course run synchronization mode choices for the "sync_mode" field."""
+
+    MANUAL = "manual", _("Manual")
+    SYNC_TO_DRAFT = "sync_to_draft", _("Synchronization to draft page")
+    SYNC_TO_PUBLIC = "sync_to_public", _("Synchronization to public page")
+
+
 class CourseRun(TranslatableModel):
     """
     The course run represents and records the occurence of a course between a start
@@ -559,6 +567,12 @@ class CourseRun(TranslatableModel):
         editable=False,
         related_name="public_course_run",
     )
+    sync_mode = models.CharField(
+        max_length=20,
+        choices=CourseRunSyncMode.choices,
+        default=CourseRunSyncMode.MANUAL,
+    )
+
     title = TranslatedField()
     resource_link = models.CharField(
         _("resource link"), max_length=200, blank=True, null=True
@@ -607,63 +621,55 @@ class CourseRun(TranslatableModel):
             translation_object.master = self
             translation_object.save()
 
-    # pylint: disable=arguments-differ
-    def save(self, *args, **kwargs):
+    def mark_course_dirty(self):
         """
-        Enforce validation each time an instance is saved.
-        Mark the related course page as dirty if the course run has changed so that the
-        modifications can be published.
+        Mark the related course page as dirty if the course run has changed since it was last
+        published, so that the modifications can be checked and confirmed by a reviewer.
         """
-        if self.pk:
-            try:
-                public_instance = self.__class__.objects.get(
-                    draft_course_run__pk=self.pk
-                )
-            except self.__class__.DoesNotExist:
-                pass
-            else:
-                is_visible = (
-                    self.state["priority"] < CourseState.TO_BE_SCHEDULED
-                    or public_instance.state["priority"] < CourseState.TO_BE_SCHEDULED
-                )
-                # Mark the related course page dirty if the course run content has changed
-                # Break out of the for loop as soon as we found a difference
-                for field in self._meta.fields:
-                    if field.name == "direct_course":
-                        if (
-                            public_instance.direct_course.draft_extension
-                            != self.direct_course
-                            and is_visible
-                        ):
-                            self.direct_course.extended_object.title_set.update(
-                                publisher_state=PUBLISHER_STATE_DIRTY
-                            )  # mark target page dirty in all languages
-                            page = (
-                                public_instance.direct_course.draft_extension.extended_object
-                            )
-                            page.title_set.update(
-                                publisher_state=PUBLISHER_STATE_DIRTY
-                            )  # mark source page dirty in all languages
-                            break
-                    elif (
-                        field.editable
-                        and not field.auto_created
-                        and getattr(public_instance, field.name)
-                        != getattr(self, field.name)
-                        and is_visible
-                    ):
-                        self.direct_course.extended_object.title_set.update(
-                            publisher_state=PUBLISHER_STATE_DIRTY
-                        )  # mark page dirty in all languages
-                        break
-        else:
+        try:
+            public_instance = self.__class__.objects.get(draft_course_run__pk=self.pk)
+        except self.__class__.DoesNotExist:
             # This is a new instance, mark page dirty in all languages unless
             # the course run is yet to be scheduled (hidden from public page in this case)
             if self.state["priority"] < CourseState.TO_BE_SCHEDULED:
                 self.direct_course.extended_object.title_set.update(
                     publisher_state=PUBLISHER_STATE_DIRTY
                 )
+            return
 
+        is_visible = (
+            self.state["priority"] < CourseState.TO_BE_SCHEDULED
+            or public_instance.state["priority"] < CourseState.TO_BE_SCHEDULED
+        )
+        # Mark the related course page dirty if the course run content has changed
+        # Break out of the for loop as soon as we found a difference
+        for field in self._meta.fields:
+            if field.name == "direct_course":
+                if (
+                    public_instance.direct_course.draft_extension != self.direct_course
+                    and is_visible
+                ):
+                    self.direct_course.extended_object.title_set.update(
+                        publisher_state=PUBLISHER_STATE_DIRTY
+                    )  # mark target page dirty in all languages
+                    page = public_instance.direct_course.draft_extension.extended_object
+                    page.title_set.update(
+                        publisher_state=PUBLISHER_STATE_DIRTY
+                    )  # mark source page dirty in all languages
+                    break
+            elif (
+                field.editable
+                and not field.auto_created
+                and getattr(public_instance, field.name) != getattr(self, field.name)
+                and is_visible
+            ):
+                self.direct_course.extended_object.title_set.update(
+                    publisher_state=PUBLISHER_STATE_DIRTY
+                )  # mark page dirty in all languages
+                break
+
+    def save(self, *args, **kwargs):
+        """Enforce validation each time an instance is saved."""
         self.full_clean()
         super().save(*args, **kwargs)
 
@@ -790,6 +796,7 @@ class CourseRunTranslation(TranslatedFieldsModel):
             ).update(
                 publisher_state=PUBLISHER_STATE_DIRTY
             )  # mark page dirty
+
         return super().save(*args, **kwargs)
 
 

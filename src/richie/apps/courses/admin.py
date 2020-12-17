@@ -215,6 +215,17 @@ class CourseRunAdmin(FrontendEditableAdminMixin, TranslatableAdmin):
                 return False
         return super().has_delete_permission(request, obj=obj)
 
+    # pylint: disable=no-member
+    def save(self, commit=True):
+        """
+        Trigger check that will mark the related course page dirty if its content has changed
+        since it was last saved.
+        """
+        super().save(commit=commit)
+        if commit is True:
+            self.instance.mark_course_dirty()
+        return self.instance
+
 
 class CourseAdmin(FrontendEditableAdminMixin, PageExtensionAdmin):
     """Admin class for the Course model"""

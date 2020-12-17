@@ -74,7 +74,7 @@ class CreateDemoSiteCommandsTestCase(CMSTestCase):
         mock_logger.assert_called_once_with("done")
 
     @override_settings(RICHIE_DEMO_SITE_DOMAIN="richie.education:9999")
-    @override_settings(LMS_BACKENDS=[])
+    @override_settings(RICHIE_LMS_BACKENDS=[])
     @mock.patch(
         "richie.apps.demo.management.commands.create_demo_site.get_number_of_icons",
         return_value=1,

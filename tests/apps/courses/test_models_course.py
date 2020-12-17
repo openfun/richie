@@ -596,12 +596,7 @@ class CourseModelsTestCase(TestCase):
         self.assertEqual(CourseRun.objects.count(), 3 * 3)
 
         sorted_runs = sorted(
-            [
-                course_run,
-                course_run_draft,
-                child_course_run,
-                child_course_run_draft,
-            ],
+            [course_run, course_run_draft, child_course_run, child_course_run_draft],
             key=lambda o: o.start,
             reverse=True,
         )
@@ -619,10 +614,7 @@ class CourseModelsTestCase(TestCase):
             result = list(public_course.get_course_runs())
 
         expected_public_course_runs = sorted(
-            [
-                course_run.public_course_run,
-                child_course_run.public_course_run,
-            ],
+            [course_run.public_course_run, child_course_run.public_course_run],
             key=lambda o: o.start,
             reverse=True,
         )

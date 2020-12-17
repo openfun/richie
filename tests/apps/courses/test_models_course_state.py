@@ -94,7 +94,7 @@ class CourseRunModelsTestCase(TestCase):
         """
         course = CourseFactory()
         self.create_run_archived(course)
-        with self.assertNumQueries(2):
+        with self.assertNumQueries(3):
             state = course.state
         self.assertEqual(state, CourseState(5))
 
@@ -105,7 +105,7 @@ class CourseRunModelsTestCase(TestCase):
         """
         course = CourseFactory()
         self.create_run_ongoing_closed(course)
-        with self.assertNumQueries(2):
+        with self.assertNumQueries(3):
             state = course.state
         self.assertEqual(state, CourseState(4))
 
@@ -116,7 +116,7 @@ class CourseRunModelsTestCase(TestCase):
         """
         course = CourseFactory()
         course_run = self.create_run_future_not_yet_open(course)
-        with self.assertNumQueries(2):
+        with self.assertNumQueries(3):
             state = course.state
         expected_state = CourseState(2, course_run.start)
         self.assertEqual(state, expected_state)
@@ -135,7 +135,7 @@ class CourseRunModelsTestCase(TestCase):
         """
         course = CourseFactory()
         self.create_run_future_closed(course)
-        with self.assertNumQueries(2):
+        with self.assertNumQueries(3):
             state = course.state
         expected_state = CourseState(3)
         self.assertEqual(state, expected_state)
@@ -153,7 +153,7 @@ class CourseRunModelsTestCase(TestCase):
         """
         course = CourseFactory()
         course_run = self.create_run_future_open(course)
-        with self.assertNumQueries(2):
+        with self.assertNumQueries(3):
             state = course.state
         expected_state = CourseState(1, course_run.start)
         self.assertEqual(state, expected_state)
@@ -172,7 +172,7 @@ class CourseRunModelsTestCase(TestCase):
         """
         course = CourseFactory()
         course_run = self.create_run_ongoing_open(course)
-        with self.assertNumQueries(2):
+        with self.assertNumQueries(3):
             state = course.state
         expected_state = CourseState(0, course_run.enrollment_end)
         self.assertEqual(state, expected_state)

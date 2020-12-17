@@ -15,11 +15,10 @@ class HasConnectedLMSFilterTestCase(CMSTestCase):
     """
 
     @override_settings(
-        LMS_BACKENDS=[
+        RICHIE_LMS_BACKENDS=[
             {
-                "BACKEND": "richie.apps.courses.lms.edx.TokenEdXLMSBackend",
+                "BACKEND": "richie.apps.courses.lms.edx.EdXLMSBackend",
                 "BASE_URL": "http://example.edx:8073",
-                "API_TOKEN": "fakesecret",
             }
         ]
     )
@@ -32,7 +31,7 @@ class HasConnectedLMSFilterTestCase(CMSTestCase):
         )
         self.assertEqual(has_connected_lms(course_run), True)
 
-    @override_settings(LMS_BACKENDS=[])
+    @override_settings(RICHIE_LMS_BACKENDS=[])
     def test_course_run_has_no_connected_lms(self):
         """
         When there is no matching LMS backend, the filter returns False.
@@ -41,12 +40,11 @@ class HasConnectedLMSFilterTestCase(CMSTestCase):
         self.assertEqual(has_connected_lms(course_run), False)
 
     @override_settings(
-        LMS_BACKENDS=[
+        RICHIE_LMS_BACKENDS=[
             {
-                "BACKEND": "richie.apps.courses.lms.edx.TokenEdXLMSBackend",
+                "BACKEND": "richie.apps.courses.lms.edx.EdXLMSBackend",
                 "BASE_URL": "http://example.edx:8073",
                 "COURSE_REGEX": r"^.*/courses/(?P<course_id>.*)/course",
-                "API_TOKEN": "fakesecret",
             }
         ]
     )
