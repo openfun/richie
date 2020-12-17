@@ -241,7 +241,7 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
     SOCIAL_ERROR_REVERSE_ID = values.Value()
 
     # AUTHENTICATION
-    AUTHENTICATION_DELEGATION = {
+    RICHIE_AUTHENTICATION_DELEGATION = {
         "BASE_URL": values.Value(
             "", environ_name="AUTHENTICATION_BASE_URL", environ_prefix=None
         ),
@@ -250,7 +250,7 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         ),
         # PROFILE_URLS are custom links to access to Auth profile views
         # from Richie. Link order will reflect the order of display in frontend.
-        # (i) Info - {base_url} is AUTHENTICATION_DELEGATION.BASE_URL
+        # (i) Info - {base_url} is RICHIE_AUTHENTICATION_DELEGATION.BASE_URL
         # (i) If you need to bind user data into href url, wrap the property between ()
         # e.g: for user.username = johndoe, /u/(username) will be /u/johndoe
         "PROFILE_URLS": values.ListValue(

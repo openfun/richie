@@ -46,8 +46,10 @@ def site_metas(request):
     if getattr(settings, "CDN_DOMAIN", None):
         context["CDN_DOMAIN"] = settings.CDN_DOMAIN
 
-    if getattr(settings, "AUTHENTICATION_DELEGATION", None):
-        authentication_delegation = getattr(settings, "AUTHENTICATION_DELEGATION", None)
+    authentication_delegation = getattr(
+        settings, "RICHIE_AUTHENTICATION_DELEGATION", None
+    )
+    if authentication_delegation:
 
         context["AUTHENTICATION"] = {
             "profile_urls": json.dumps(
