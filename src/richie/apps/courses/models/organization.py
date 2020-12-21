@@ -183,6 +183,7 @@ class Organization(BasePageExtension):
                     queryset=Title.objects.filter(language=language),
                 )
             )
+            .order_by("extended_object__node__path")
             .distinct()
         )
 
