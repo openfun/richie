@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Migrate factories to factory_boy 3.2.0
 - Remove a xhr request by passing course run information to the
   CourseRunEnrollment widget via data-props
 

@@ -654,7 +654,7 @@ class BlogPostFactory(PageExtensionDjangoModelFactory):
             for language in self.extended_object.get_languages():
                 text = factory.Faker(
                     "text", max_nb_chars=random.randint(50, 100)  # nosec
-                ).generate({"locale": language})
+                ).evaluate(None, None, {"locale": language})
                 add_plugin(
                     language=language,
                     placeholder=placeholder,
@@ -858,7 +858,7 @@ class ProgramFactory(PageExtensionDjangoModelFactory):
             for language in self.extended_object.get_languages():
                 text = factory.Faker(
                     "text", max_nb_chars=random.randint(50, 100)  # nosec
-                ).generate({"locale": language})
+                ).evaluate(None, None, {"locale": language})
                 add_plugin(
                     language=language,
                     placeholder=placeholder,

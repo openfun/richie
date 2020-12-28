@@ -68,8 +68,8 @@ def create_text_plugin(
         for _ in range(nb_paragraphs):
             max_nb_chars = max_nb_chars or random.randint(200, 400)  # nosec
             paragraphs.append(
-                factory.Faker("text", max_nb_chars=max_nb_chars).generate(
-                    {"locale": language}
+                factory.Faker("text", max_nb_chars=max_nb_chars).evaluate(
+                    None, None, {"locale": language}
                 )
             )
         body = [container.format(p) for p in paragraphs]
@@ -275,7 +275,9 @@ class PageExtensionDjangoModelFactory(factory.django.DjangoModelFactory):
             # Create realistic titles in each language with faker
             languages = languages or [settings.LANGUAGE_CODE]
             title = {
-                language: factory.Faker("catch_phrase").generate({"locale": language})
+                language: factory.Faker("catch_phrase").evaluate(
+                    None, None, {"locale": language}
+                )
                 for language in languages
             }
 
