@@ -1,7 +1,15 @@
+// Enforce html and body elements to take full document height
+html,
+body {
+  height: 100%;
+}
+
 // Main body content container
 .body-content {
-  position: relative;
+  // Enforce this block to spread if its parent does not cover the full body height
+  @include sv-flex(1, 0, auto);
   background: r-theme-val(body-content, base-background);
+  position: relative;
 
   // Insert footer decoration
   @if r-theme-val(body-content, insert-background-image) {
@@ -28,4 +36,9 @@
   // level components like DjangoCMS toolbar, so possible absolute positions
   // from children (like topbar) is correctly calculated when toolbar is displayed.
   position: relative;
+
+  // Enforce this block to take at least full body height
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
 }
