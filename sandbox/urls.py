@@ -62,3 +62,8 @@ if settings.DEBUG:
         + staticfiles_urlpatterns()
         + urlpatterns
     )
+
+handler400 = "richie.apps.core.views.error.error_400_view_handler"
+handler403 = "richie.apps.core.views.error.error_403_view_handler"
+handler404 = "richie.apps.core.views.error.error_404_view_handler"
+handler500 = "richie.apps.core.views.error.error_500_view_handler"

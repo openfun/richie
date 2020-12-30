@@ -1,0 +1,26 @@
+//
+// Errors page stylesheet
+//
+
+.error {
+  @include make-container();
+  @include make-container-max-widths();
+  display: flex;
+  padding: 4rem 1.5rem;
+
+  & > .error-icon {
+    height: 120px;
+    margin-right: 4vw;
+    width: 120px;
+  }
+
+  @include media-breakpoint-down(sm) {
+    align-items: center;
+    flex-direction: column;
+    padding: 3rem 1rem 6rem 1rem;
+
+    & > .error-icon {
+      margin-bottom: 2rem;
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{% extends "richie/base.html" %}
+{% load i18n cms_tags %}
+
+{% block head_title %}
+    {{status}} - {{ title }}
+{% endblock head_title %}
+
+{% block breadcrumbs %}{% endblock breadcrumbs %}
+
+
+{% block content %}
+<div class="error">
+  <svg class="error-icon"><use href="#icon-search-fail" /></svg>
+  <section>
+    <h2>{{ title }}</h2>
+    <p>{{ content }}</p>
+    <a href="/">{% trans "Back to home" %}</a>
+  </section>
+</div>
+{% endblock content %}

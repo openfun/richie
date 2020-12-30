@@ -8,11 +8,15 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Use custom views to handle errors (400, 403, 404, 500)
+
 ### Changed
 
 - Migrate factories to factory_boy 3.2.0
 - Spread body-content block if document content height is smaller than
-  the window height.
+  the window height
 - Remove a xhr request by passing course run information to the
   CourseRunEnrollment widget via data-props
 - Make the course run "title" field optional

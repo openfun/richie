@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-18 10:57+0100\n"
+"POT-Creation-Date: 2021-01-07 10:11+0100\n"
 "PO-Revision-Date: 2020-11-04 09:24\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
@@ -129,6 +129,10 @@ msgstr ""
 msgid "This page has no child objects"
 msgstr ""
 
+#: apps/core/templates/richie/error.html:17
+msgid "Back to home"
+msgstr ""
+
 #: apps/core/templates/richie/pagination.html:5
 msgid "Pagination"
 msgstr "Paginación"
@@ -218,6 +222,38 @@ msgstr "Twitter"
 #: apps/core/templates/social-networks/footer-badges.html:27
 #: apps/core/templates/social-networks/footer-badges.html:30
 msgid "Linkedin"
+msgstr ""
+
+#: apps/core/views/error.py:7
+msgid "Bad request"
+msgstr ""
+
+#: apps/core/views/error.py:9
+msgid "Your query seems to be malformed. Please check your data and try again."
+msgstr ""
+
+#: apps/core/views/error.py:13
+msgid "Forbidden"
+msgstr ""
+
+#: apps/core/views/error.py:15
+msgid "You do not have the required permissions to access this resource."
+msgstr ""
+
+#: apps/core/views/error.py:19
+msgid "Page not found"
+msgstr ""
+
+#: apps/core/views/error.py:20
+msgid "The requested resource does not exist."
+msgstr ""
+
+#: apps/core/views/error.py:23
+msgid "Server bad request"
+msgstr ""
+
+#: apps/core/views/error.py:24
+msgid "Something went wrong. Please try again later."
 msgstr ""
 
 #: apps/courses/admin.py:77
