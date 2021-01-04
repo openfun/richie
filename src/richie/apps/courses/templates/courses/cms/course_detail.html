@@ -76,7 +76,7 @@
                                 {% if instance.duration or current_page.publisher_is_draft %}
                                 <li class="characteristics__item">
                                     <svg role="img" class="characteristics__icon" aria-hidden="true">
-                                        <use xlink:href="#icon-clock" />
+                                        <use href="#icon-clock" />
                                     </svg>
                                     <span class="characteristics__term">{% trans "Duration:" %} {{ instance.get_duration_display|default:"NA" }}</span>
                                 </li>
@@ -84,7 +84,7 @@
                                 {% if instance.effort or current_page.publisher_is_draft %}
                                 <li class="characteristics__item">
                                     <svg role="img" class="characteristics__icon" aria-hidden="true">
-                                        <use xlink:href="#icon-stopwatch" />
+                                        <use href="#icon-stopwatch" />
                                     </svg>
                                     <span class="characteristics__term">{% trans "Effort:" %} {{ instance.get_effort_display|default:"NA" }}</span>
                                 </li>

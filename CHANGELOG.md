@@ -13,15 +13,13 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Migrate factories to factory_boy 3.2.0
 - Remove a xhr request by passing course run information to the
   CourseRunEnrollment widget via data-props
+- Make the course run "title" field optional
+- Replace deprecated xlink:href svg attribute by href
 
 ### Added
 
 - Add an API endpoint to synchronize course runs from e.g. an external LMS
 - Add a "code" field on the course model to allow reference & synchronization
-
-### Changed
-
-- Make the course run "title" field optional
 
 ### Fixed
 
