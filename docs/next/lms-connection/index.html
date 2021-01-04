@@ -62,13 +62,13 @@ to synchronize course information and enrollments.</p>
 <h3><a class="anchor" aria-hidden="true" id="api-bridge"></a><a href="#api-bridge" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>API bridge</h3>
 <p>The <code>APIHandler</code> utility acts as a proxy that routes queries to the correct LMS backend API,
 based on a regex match on the URL of the course.</p>
-<pre><code class="hljs css language-python">LMS_BACKENDS=[
+<pre><code class="hljs css language-python">RICHIE_LMS_BACKENDS=[
     {
-        <span class="hljs-string">"BACKEND"</span>: <span class="hljs-string">"richie.apps.courses.lms.edx.TokenEdXLMSBackend"</span>,
-        <span class="hljs-string">"JS_BACKEND"</span>: <span class="hljs-string">"openedx-hawthorn"</span>,
-        <span class="hljs-string">"SELECTOR_REGEX"</span>: <span class="hljs-string">r".*lms-example2.org.*"</span>,
-        <span class="hljs-string">"JS_SELECTOR_REGEX"</span>: <span class="hljs-string">r".*lms-example2.org.*"</span>,
         <span class="hljs-string">"BASE_URL"</span>: <span class="hljs-string">"https://www.lms-example2.org"</span>,
+        <span class="hljs-string">"BACKEND"</span>: <span class="hljs-string">"richie.apps.courses.lms.edx.EdXLMSBackend"</span>,
+        <span class="hljs-string">"COURSE_REGEX"</span>: <span class="hljs-string">r"^.*/courses/(?P&lt;course_id&gt;.*)/course/?$"</span>,
+        <span class="hljs-string">"JS_BACKEND"</span>: <span class="hljs-string">"openedx-hawthorn"</span>,
+        <span class="hljs-string">"JS_SELECTOR_REGEX"</span>: <span class="hljs-string">r".*lms-example2.org.*"</span>,
         <span class="hljs-string">"JS_COURSE_REGEX"</span>: <span class="hljs-string">r"^.*/course/(?&lt;course_id&gt;[0-9]*)$"</span>,
     },
 ]
@@ -83,8 +83,8 @@ documentation.</p>
 <em>or create an issue on our repository</em></p>
 <h2><a class="anchor" aria-hidden="true" id="connecting-richie-and-openedx-over-tls"></a><a href="#connecting-richie-and-openedx-over-tls" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Connecting Richie and OpenEdx over TLS</h2>
 <h4><a class="anchor" aria-hidden="true" id="purpose"></a><a href="#purpose" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Purpose</h4>
-<p>About the default configuration, if you check <code>LMS_BACKEND</code> settings in <code>env.d/development</code> you will
-see that we use <code>base.BaseLMSBackend</code> as <code>LMS_BACKEND</code>.
+<p>About the default configuration, if you check <code>RICHIE_LMS_BACKENDS</code> settings in <code>env.d/development</code>
+you will see that we use <code>base.BaseLMSBackend</code> as <code>RICHIE_LMS_BACKENDS</code>.
 In fact, this base backend uses session storage to fake enrollment to course runs.</p>
 <p>Maybe are you asking why? Because, to make Create/Update/Delete requests from an external domain,
 OpenEdx requires the use of a CORS CSRF Cookie. This cookie is flagged as secure, that means we are
@@ -105,7 +105,7 @@ two subdomains <code>richie</code> and <code>edx</code> to localhost:</p>
 and Richie should respond on <a href="http://richie.local.dev:8070">http://richie.local.dev:8070</a> and should be able
 to make CORS XHR requests.</p>
 <h4><a class="anchor" aria-hidden="true" id="enable-tls"></a><a href="#enable-tls" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Enable TLS</h4>
-<p>If you want to develop with OpenEdx as <code>LMS_BACKEND</code> of Richie, you need to enable TLS for your
+<p>If you want to develop with OpenEdx as <code>RICHIE_LMS_BACKENDS</code> of Richie, you need to enable TLS for your
 development servers. Both Richie and OpenEdx use Nginx as reverse proxy that ease the SSL setup.</p>
 <h5><a class="anchor" aria-hidden="true" id="1-install-mkcert-ans-its-certificate-authority"></a><a href="#1-install-mkcert-ans-its-certificate-authority" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>1. Install mkcert ans its Certificate Authority</h5>
 <p>First you will need to install mkcert and its Certificate Authority.
@@ -141,4 +141,4 @@ on <a href="https://richie.local.dev:8070">https://richie.local.dev:8070</a> wit
 <p>You need to follow these steps once. If you want to use SSL later, just use <code>make run-ssl</code> to run
 OpenEdx and Richie apps.
 Of course, you can still run apps without ssl by using <code>make run</code>.</p>
-</span></div></article></div><div class="docLastUpdate"><em>Last updated on 11/27/2020</em></div><div class="docs-prevnext"><a class="docs-prev button" href="/docs/next/frontend-overrides"><span class="arrow-prev">← </span><span>Frontend overrides</span></a><a class="docs-next button" href="/docs/next/contributing-guide"><span>Contributing guide</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#connecting-richie-and-openedx-over-tls">Connecting Richie and OpenEdx over TLS</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><div><h5>Documentation</h5><a href="/docs/en/quick-start.html">Getting Started</a><a href="/versions">Versions</a><a href="/docs/en/contributing.html">Contributing</a></div><div><h5>Community</h5><a href="/en/users.html">User Showcase</a><a href="https://github.com/openfun/richie">GitHub</a></div></section><section class="copyright">Creative Commons 2021 — Richie contributors / Illustrations Katerina Limpitsouni</section></footer></div></body></html>
+</span></div></article></div><div class="docLastUpdate"><em>Last updated on 1/4/2021</em></div><div class="docs-prevnext"><a class="docs-prev button" href="/docs/next/frontend-overrides"><span class="arrow-prev">← </span><span>Frontend overrides</span></a><a class="docs-next button" href="/docs/next/contributing-guide"><span>Contributing guide</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#connecting-richie-and-openedx-over-tls">Connecting Richie and OpenEdx over TLS</a></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><div><h5>Documentation</h5><a href="/docs/en/quick-start.html">Getting Started</a><a href="/versions">Versions</a><a href="/docs/en/contributing.html">Contributing</a></div><div><h5>Community</h5><a href="/en/users.html">User Showcase</a><a href="https://github.com/openfun/richie">GitHub</a></div></section><section class="copyright">Creative Commons 2021 — Richie contributors / Illustrations Katerina Limpitsouni</section></footer></div></body></html>
