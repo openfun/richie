@@ -121,7 +121,7 @@ class CoursePluginTestCase(TestCase):
                 (
                     r'<div class="course-glimpse__organization">'
                     r'<svg role="img".*'
-                    r'<use xlink:href="#icon-pin" />'
+                    r'<use href="#icon-pin" />'
                 ),
                 str(response.content),
             )
@@ -182,7 +182,7 @@ class CoursePluginTestCase(TestCase):
                 (
                     r'<div class="course-glimpse__organization">'
                     r'<svg role="img".*'
-                    r'<use xlink:href="#icon-pin" />'
+                    r'<use href="#icon-pin" />'
                 ),
                 str(response.content),
             )
