@@ -44,8 +44,12 @@ services:
     ports:
       - "8070:8070"
     networks:
-      - default
-      - lms_outside
+      default:
+        aliases:
+          - nginx
+      lms_outside:
+        aliases:
+          - richie
     volumes:
       - ./docker/files/etc/nginx/${NGINX_CONF:-conf.d}:/etc/nginx/conf.d:ro
     depends_on:
