@@ -20,15 +20,15 @@
                 {% endget_placeholder_plugins %}
                 {% blockplugin plugins.0 %}
                     <img
-                        src="{% thumbnail instance.picture 320x100 upscale subject_location=instance.picture.subject_location %}"
+                        src="{% thumbnail instance.picture 320x100 upscale %}"
                         srcset="
-                            {% thumbnail instance.picture 640x200 upscale subject_location=instance.picture.subject_location %} 600w,
-                            {% thumbnail instance.picture 1000x200 upscale subject_location=instance.picture.subject_location %} 1000w
-                            {% if instance.picture.width >= 1500 %},{% thumbnail instance.picture 1500x300 upscale subject_location=instance.picture.subject_location %} 1500w{% endif %}
-                            {% if instance.picture.width >= 2000 %},{% thumbnail instance.picture 2000x400 upscale subject_location=instance.picture.subject_location %} 2000w{% endif %}
-                            {% if instance.picture.width >= 2500 %},{% thumbnail instance.picture 2500x500 upscale subject_location=instance.picture.subject_location %} 2500w{% endif %}
+                            {% thumbnail instance.picture 640x200 upscale %} 640w,
+                            {% thumbnail instance.picture 1280x300 upscale %} 1280w,
+                            {% if instance.picture.width >= 1500 %},{% thumbnail instance.picture 1500x351 upscale %} 1500w,{% endif %}
+                            {% if instance.picture.width >= 2000 %},{% thumbnail instance.picture 2000x468 upscale %} 2000w,{% endif %}
+                            {% if instance.picture.width >= 2500 %},{% thumbnail instance.picture 2500x585 upscale %} 2500w,{% endif %}
                         "
-                        sizes="300px"
+                        sizes="(min-width: 576px) 80vw, (min-width: 1200px) 1140px, 100vw"
                         alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'organization banner' %}{% endif %}"
                     />
                 {% endblockplugin %}
@@ -42,12 +42,12 @@
                 {% endget_placeholder_plugins %}
                 {% blockplugin plugins.0 %}
                     <img
-                        src="{% thumbnail instance.picture 200x113 upscale subject_location=instance.picture.subject_location %}"
+                        src="{% thumbnail instance.picture 200x113 upscale %}"
                         srcset="
-                            {% thumbnail instance.picture 200x113 upscale subject_location=instance.picture.subject_location %} 200w
-                            {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x225 upscale subject_location=instance.picture.subject_location %} 400w{% endif %}
-                            {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x338 upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
-                            {% if instance.picture.width >= 800 %},{% thumbnail instance.picture 800x450 upscale subject_location=instance.picture.subject_location %} 800w{% endif %}
+                            {% thumbnail instance.picture 200x113 upscale %} 200w,
+                            {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x225 upscale %} 400w,{% endif %}
+                            {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x338 upscale %} 600w,{% endif %}
+                            {% if instance.picture.width >= 800 %},{% thumbnail instance.picture 800x450 upscale %} 800w{% endif %}
                         "
                         sizes="(min-width: 768px) 16rem, (min-width: 1200px) 20rem, 12rem"
                         alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'organization logo' %}{% endif %}"

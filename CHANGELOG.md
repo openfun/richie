@@ -8,10 +8,6 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
-### Added
-
-- Use custom views to handle errors (400, 403, 404, 500)
-
 ### Changed
 
 - Migrate factories to factory_boy 3.2.0
@@ -26,6 +22,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Add an API endpoint to synchronize course runs from e.g. an external LMS
 - Add a "code" field on the course model to allow reference & synchronization
+- Use custom views to handle errors (400, 403, 404, 500)
 
 ### Fixed
 
@@ -34,6 +31,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   when locale was composed of a languageCode identical to countryCode
 - Make generate demo site work when the default language is set to "fr"
 - Add permission checks to course run admin based on their related course page
+- Fix image srcset in organization_detail template
 
 ## [2.0.0-beta.22] - 2020-12-04
 
