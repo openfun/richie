@@ -99,7 +99,7 @@ describe('<CourseRunEnrollment />', () => {
     screen.getByText('You are enrolled in this course run');
   });
 
-  it.only('shows an error message and the enrollment button when the enrollment fails', async () => {
+  it('shows an error message and the enrollment button when the enrollment fails', async () => {
     const username = initializeUser();
     const courseRun: CourseRun = factories.CourseRunFactory.generate();
     courseRun.state.priority = 0;
