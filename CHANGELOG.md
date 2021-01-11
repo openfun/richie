@@ -17,6 +17,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   CourseRunEnrollment widget via data-props
 - Make the course run "title" field optional
 - Replace deprecated xlink:href svg attribute by href
+- Update and include the latest version of translations
 
 ### Added
 
