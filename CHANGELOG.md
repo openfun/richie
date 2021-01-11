@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [2.0.0] - 2021-01-11
+
 ### Changed
 
 - Migrate factories to factory_boy 3.2.0
@@ -28,7 +30,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
-- Fix Sentry SDK initialization enrivonment and release parameters
+- Fix Sentry SDK initialization environment and release parameters
 - intl-relativetimeformat polyfill did not use the right locale filename
   when locale was composed of a languageCode identical to countryCode
 - Make generate demo site work when the default language is set to "fr"
@@ -1136,7 +1138,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.0.0-beta.22...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.0.0...master
+[2.0.0]: https://github.com/openfun/richie/compare/v2.0.0-beta.22...v2.0.0
 [2.0.0-beta.22]: https://github.com/openfun/richie/compare/v2.0.0-beta.21...v2.0.0-beta.22
 [2.0.0-beta.21]: https://github.com/openfun/richie/compare/v2.0.0-beta.20...v2.0.0-beta.21
 [2.0.0-beta.20]: https://github.com/openfun/richie/compare/v2.0.0-beta.19...v2.0.0-beta.20
