@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [2.0.1] - 2021-01-11
+
 ### Fixed
 
 - Deprecate `JS_SELECTOR_REGEXP`
@@ -1142,7 +1144,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.0.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.0.1...master
+[2.0.1]: https://github.com/openfun/richie/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/openfun/richie/compare/v2.0.0-beta.22...v2.0.0
 [2.0.0-beta.22]: https://github.com/openfun/richie/compare/v2.0.0-beta.21...v2.0.0-beta.22
 [2.0.0-beta.21]: https://github.com/openfun/richie/compare/v2.0.0-beta.20...v2.0.0-beta.21
