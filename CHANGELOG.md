@@ -18,6 +18,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Make the course run "title" field optional
 - Replace deprecated xlink:href svg attribute by href
 - Update and include the latest version of translations
+- Bump `docs` to version 2.0.0
 
 ### Added
 
