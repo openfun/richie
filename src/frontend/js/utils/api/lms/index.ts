@@ -11,7 +11,7 @@ if (!context) throw new Error('No context frontend context available');
 const LMS_BACKENDS = context.lms_backends;
 
 const selectAPIWithUrl = (url: string) => {
-  const API = LMS_BACKENDS.find((lms) => new RegExp(lms.selector_regexp).test(url));
+  const API = LMS_BACKENDS.find((lms) => new RegExp(lms.course_regexp).test(url));
   return API;
 };
 

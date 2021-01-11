@@ -6,7 +6,6 @@ import { Nullable } from 'utils/types';
  */
 export interface LMSBackend {
   backend: string;
-  selector_regexp: RegExp | string;
   course_regexp: RegExp | string;
   endpoint: string;
 }

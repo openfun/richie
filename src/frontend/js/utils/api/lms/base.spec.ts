@@ -8,7 +8,6 @@ describe('Base API', () => {
         backend: ApiBackend.BASE,
         course_regexp: '(?<course_id>.*)',
         endpoint: 'https://demo.endpoint/api',
-        selector_regexp: '.*',
       },
     ],
   }).generate();
