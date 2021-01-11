@@ -14,7 +14,6 @@ describe('OpenEdX Hawthorn API', () => {
         backend: ApiBackend.OPENEDX_HAWTHORN,
         course_regexp: 'course_id=(?<course_id>.*$)',
         endpoint: EDX_ENDPOINT,
-        selector_regexp: '.*',
       },
     ],
   }).generate();

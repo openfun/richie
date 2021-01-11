@@ -78,7 +78,6 @@ def site_metas(request):
                 "endpoint": lms["BASE_URL"],
                 "backend": lms["JS_BACKEND"],
                 "course_regexp": lms["JS_COURSE_REGEX"],
-                "selector_regexp": lms["JS_SELECTOR_REGEX"],
             }
             for lms in getattr(settings, "RICHIE_LMS_BACKENDS", [])
         ]

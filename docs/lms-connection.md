@@ -23,7 +23,6 @@ RICHIE_LMS_BACKENDS=[
         "BACKEND": "richie.apps.courses.lms.edx.EdXLMSBackend",
         "COURSE_REGEX": r"^.*/courses/(?P<course_id>.*)/course/?$",
         "JS_BACKEND": "openedx-hawthorn",
-        "JS_SELECTOR_REGEX": r".*lms-example2.org.*",
         "JS_COURSE_REGEX": r"^.*/course/(?<course_id>[0-9]*)$",
     },
 ]

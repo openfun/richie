@@ -471,7 +471,6 @@ class RunsCourseCMSTestCase(CMSTestCase):
                 "JS_BACKEND": "openedx-hawthorn",
                 "COURSE_REGEX": r".*",
                 "JS_COURSE_REGEX": r"^.*/courses/(?<course_id>.*)/course/?$",
-                "JS_SELECTOR_REGEX": r".*",
                 "BASE_URL": "http://edx:8073",
                 "API_TOKEN": "fakesecret",
             }
@@ -546,7 +545,6 @@ class RunsCourseCMSTestCase(CMSTestCase):
                 "JS_BACKEND": "openedx-hawthorn",
                 "COURSE_REGEX": r".*",
                 "JS_COURSE_REGEX": r"^.*/courses/(?<course_id>.*)/course/?$",
-                "JS_SELECTOR_REGEX": r".*",
                 "BASE_URL": "http://edx:8073",
                 "API_TOKEN": "fakesecret",
             }

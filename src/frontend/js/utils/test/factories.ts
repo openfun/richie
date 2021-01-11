@@ -44,7 +44,6 @@ export const ContextFactory = (context: Partial<CommonDataProps['context']> = {}
     lms_backends: [
       {
         backend: ApiBackend.BASE,
-        selector_regexp: '.*',
         course_regexp: '.*',
         endpoint: 'https://endpoint.test',
       },

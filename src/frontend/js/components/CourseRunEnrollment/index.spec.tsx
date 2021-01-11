@@ -25,7 +25,6 @@ describe('<CourseRunEnrollment />', () => {
           backend: ApiBackend.OPENEDX_HAWTHORN,
           course_regexp: '(?<course_id>.*)',
           endpoint,
-          selector_regexp: '.*',
         },
       ],
     })

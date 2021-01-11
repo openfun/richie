@@ -290,9 +290,6 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
                 environ_name="EDX_JS_COURSE_REGEX",
                 environ_prefix=None,
             ),
-            "JS_SELECTOR_REGEX": values.Value(
-                r".*", environ_name="EDX_JS_SELECTOR_REGEX", environ_prefix=None
-            ),
         }
     ]
     RICHIE_COURSE_RUN_SYNC_SECRETS = values.ListValue([])
@@ -582,7 +579,6 @@ class Test(Base):
             "COURSE_REGEX": r"^.*/courses/(?P<course_id>.*)/course/?$",
             "JS_BACKEND": "base",
             "JS_COURSE_REGEX": r"^.*/courses/(?<course_id>.*)/course/?$",
-            "JS_SELECTOR_REGEX": r".*",
         }
     ]
 

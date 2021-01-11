@@ -7,12 +7,12 @@ describe('API LMS', () => {
         {
           backend: ApiBackend.BASE,
           endpoint: 'https://demo.endpoint/api',
-          selector_regexp: /.*base.org\/.*/,
+          course_regexp: /.*base.org\/.*/,
         },
         {
           backend: ApiBackend.OPENEDX_HAWTHORN,
           endpoint: 'https://edx.endpoint/api',
-          selector_regexp: /.*edx.org\/.*/,
+          course_regexp: /.*edx.org\/.*/,
         },
       ],
       environment: 'test',

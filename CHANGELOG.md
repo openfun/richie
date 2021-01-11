@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Deprecate `JS_SELECTOR_REGEXP`
+
 ## [2.0.0] - 2021-01-11
 
 ### Changed
