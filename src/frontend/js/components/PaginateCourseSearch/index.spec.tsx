@@ -77,6 +77,7 @@ describe('<PaginateCourseSearch />', () => {
     screen.getByRole('navigation', { name: 'Pagination' });
     // Common text for the first page
     screen.getAllByText('Page 1');
+    screen.getAllByText('...');
     // Accessibility helpers
     screen.getByText('Page 10');
     screen.getByText('Previous page 11');
@@ -91,6 +92,34 @@ describe('<PaginateCourseSearch />', () => {
     screen.getByText('13');
     screen.getByText('14');
     screen.getByText('35');
+  });
+
+  it('does not truncate pagination number with ... if all page numbers follow each other.', () => {
+    render(
+      <IntlProvider locale="en">
+        <HistoryContext.Provider value={makeHistoryOf({ limit: '21', offset: '0' })}>
+          <PaginateCourseSearch courseSearchTotalCount={101} />
+        </HistoryContext.Provider>
+      </IntlProvider>,
+    );
+
+    screen.getByRole('navigation', { name: 'Pagination' });
+    // Accessibility helpers
+    screen.getByText('Currently reading page 1');
+    screen.getByText('Next page 2');
+    screen.getByText('Page 3');
+    screen.getByText('Last page 5');
+
+    // Visual pagination
+    screen.getAllByText('Page 1');
+    screen.getByText('2');
+    screen.getByText('3');
+    screen.getByText('4');
+    screen.getByText('5');
+
+    // Any truncation label is displayed
+    const truncationLabel = screen.queryAllByText('...');
+    expect(truncationLabel).toHaveLength(0);
   });
 
   it('does not render itself when there is only one page', () => {

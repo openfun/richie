@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Changed
+
+- Improve UX of course search pagination by avoiding truncation of page number
+  when it is not relevant
+
 ## [2.0.1] - 2021-01-11
 
 ### Fixed

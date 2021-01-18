@@ -68,11 +68,17 @@ export const PaginateCourseSearch = ({ courseSearchTotalCount }: PaginateCourseS
   // Create the default list of all the page numbers we intend to show
   const pageList = [
     1,
+    // If there is just one page between first page and currentPage - 2,
+    // we can display this page number instead of "..."
+    currentPage - 2 === 3 ? currentPage - 3 : -1,
     currentPage - 2,
     currentPage - 1,
     currentPage,
     currentPage + 1,
     currentPage + 2,
+    // If there is just one page between maxPage and currentPage + 2,
+    // we can display this page number instead of "..."
+    currentPage + 3 === maxPage - 1 ? currentPage + 3 : -1,
     maxPage,
   ]
     // Filter out page numbers below 1 (when currentPage is 1 or 2)
