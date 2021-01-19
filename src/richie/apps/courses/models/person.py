@@ -127,6 +127,16 @@ class PersonPluginModel(PagePluginMixin, CMSPlugin):
         limit_choices_to={"publisher_is_draft": True, "person__isnull": False},
         related_name="person_plugins",
     )
+    bio = models.TextField(
+        _("Custom bio"),
+        null=True,
+        blank=True,
+        default="",
+        help_text=_(
+            "Optional: provide a custom bio "
+            "(if you leave it empty, it will display the person's bio)."
+        ),
+    )
 
     class Meta:
         db_table = "richie_person_plugin"

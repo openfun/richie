@@ -144,6 +144,62 @@ class PersonPluginTestCase(CMSTestCase):
             response, '<div class="person-glimpse__bio">résumé public</div>', html=True
         )
 
+    def test_cms_plugins_person_render_on_public_page_custom_bio(self):
+        """
+        It should be possible to override the person's bio on the glimpse rendered by the plugin.
+        """
+        # Create a Person
+        person = PersonFactory(
+            page_title={"en": "person title", "fr": "titre personne"},
+            should_publish=True,
+        )
+
+        # Add bio to related placeholder
+        bio_placeholder = person.extended_object.placeholders.get(slot="bio")
+        add_plugin(
+            bio_placeholder, PlainTextPlugin, "en", **{"body": "original public bio"}
+        )
+        add_plugin(
+            bio_placeholder,
+            PlainTextPlugin,
+            "fr",
+            **{"body": "résumé public d'origine"}
+        )
+
+        # Create a page to add the plugin to
+        page = create_i18n_page({"en": "A page", "fr": "Une page"})
+        placeholder = page.placeholders.get(slot="maincontent")
+        add_plugin(
+            placeholder,
+            PersonPlugin,
+            "en",
+            **{"page": person.extended_object, "bio": "custom public bio"}
+        )
+        add_plugin(
+            placeholder,
+            PersonPlugin,
+            "fr",
+            **{"page": person.extended_object, "bio": "résumé public modifié"}
+        )
+        page.publish("en")
+        page.publish("fr")
+
+        # The custom bio should be present on the glimpse and not the original bio
+
+        # Check the page content in English
+        url = page.get_absolute_url(language="en")
+        response = self.client.get(url)
+
+        self.assertContains(response, "custom public bio", status_code=200)
+        self.assertNotContains(response, "origine")
+
+        # Check the page content in French
+        url = page.get_absolute_url(language="fr")
+        response = self.client.get(url)
+
+        self.assertContains(response, "résumé public modifié", status_code=200)
+        self.assertNotContains(response, "original")
+
     def test_cms_plugins_person_render_on_draft_page(self):
         """
         The person plugin should render as expected on a draft page.

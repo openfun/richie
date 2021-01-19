@@ -36,7 +36,11 @@
                 </div>
             </div>
             <div class="person-glimpse__bio">
-                {% show_placeholder "bio" person_page %}
+                {% if instance.bio %}
+                    {{ instance.bio }}
+                {% else %}
+                    {% show_placeholder "bio" person_page %}
+                {% endif %}
             </div>
         </div>
     </div>
