@@ -152,6 +152,12 @@
     }
   }
 
+  &__programs {
+    #{$detail-selector}__title {
+      text-align: center;
+    }
+  }
+
   &__team {
     #{$detail-selector}__title {
       text-align: center;

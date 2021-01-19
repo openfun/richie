@@ -7,7 +7,7 @@ from datetime import MAXYEAR, datetime
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import Q
+from django.db.models import Prefetch, Q
 from django.urls import reverse
 from django.utils import timezone, translation
 from django.utils.functional import lazy
@@ -16,7 +16,7 @@ from django.utils.translation import gettext_lazy as _
 import pytz
 from cms.constants import PUBLISHER_STATE_DIRTY
 from cms.extensions.extension_pool import extension_pool
-from cms.models import Page, PagePermission
+from cms.models import Page, PagePermission, Title
 from cms.models.pluginmodel import CMSPlugin
 from filer.fields.image import FilerImageField
 from filer.models import FolderPermission
@@ -32,6 +32,7 @@ from .. import defaults
 from .category import Category
 from .organization import Organization
 from .person import Person
+from .program import Program
 from .role import PageRole
 
 MAX_DATE = datetime(MAXYEAR, 12, 31, tzinfo=pytz.utc)
@@ -472,6 +473,39 @@ class Course(BasePageExtension):
             course_runs_dict[run.state["priority"]].append(run)
 
         return dict(course_runs_dict)
+
+    def get_programs(self, language=None):
+        """
+        Return a query to get the programs related to this course ie for which a plugin for
+        this course is linked to the program page via any placeholder.
+        """
+        is_draft = self.extended_object.publisher_is_draft
+        course = self if is_draft else self.draft_extension
+        language = language or translation.get_language()
+
+        bfs = (
+            "extended_object__placeholders__cmsplugin__courses_coursepluginmodel__page"
+        )
+        filter_dict = {
+            "extended_object__publisher_is_draft": is_draft,
+            "extended_object__placeholders__cmsplugin__language": language,
+            bfs: course.extended_object,
+        }
+
+        # pylint: disable=no-member
+        return (
+            Program.objects.filter(**filter_dict)
+            .select_related("extended_object")
+            .prefetch_related(
+                Prefetch(
+                    "extended_object__title_set",
+                    to_attr="prefetched_titles",
+                    queryset=Title.objects.filter(language=language),
+                )
+            )
+            .order_by("extended_object__node__path")
+            .distinct()
+        )
 
     @property
     def state(self):
