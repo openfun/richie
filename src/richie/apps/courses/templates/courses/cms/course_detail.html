@@ -49,8 +49,13 @@
 
                     {% block title %}
                     <h1 class="subheader__title">
-                        {% render_model request.current_page "title" %}
+                        {% render_model current_page "title" %}
                     </h1>
+                    {% if course.code or current_page.publisher_is_draft %}
+                        <div class="subheader__code">
+                            {% trans "Ref. " %}{% render_model course "code" "code,is_listed" "" "default:'...'" %}
+                        </div>
+                    {% endif %}
                     {% endblock title %}
 
                     <div class="subheader__teaser">

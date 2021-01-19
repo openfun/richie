@@ -99,6 +99,11 @@ class CourseCMSTestCase(CMSTestCase):
         )
         self.assertContains(
             response,
+            f'<div class="subheader__code">Ref. {course.code:s}</div>',
+            html=True,
+        )
+        self.assertContains(
+            response,
             '<h1 class="subheader__title">Very interesting course</h1>',
             html=True,
         )
@@ -160,6 +165,21 @@ class CourseCMSTestCase(CMSTestCase):
         self.assertEqual(CourseRun.objects.count(), 3)
         self.assertContains(response, "<dd>English and french</dd>", html=True, count=1)
 
+    def test_templates_course_detail_cms_published_content_no_code(self):
+        """
+        Validate that the corresponding markup is absent from the public page
+        when the "code" field is not set.
+        """
+        course = CourseFactory(
+            page_title="Very interesting course", should_publish=True, code=None
+        )
+
+        url = course.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertNotContains(response, "subheader__code")
+
     def test_templates_course_detail_cms_draft_content(self):
         """
         A staff user should see a draft course including its draft elements with
@@ -214,6 +234,11 @@ class CourseCMSTestCase(CMSTestCase):
             '<h1 class="subheader__title">Very interesting course</h1>',
             html=True,
         )
+        self.assertContains(
+            response,
+            f'<div class="subheader__code">Ref. {course.code:s}</div>',
+            html=True,
+        )
 
         # Draft and public organizations should all be present on the page
         for organization in organizations:
@@ -257,6 +282,27 @@ class CourseCMSTestCase(CMSTestCase):
             )
         # The course run should be in the page
         self.assertContains(response, "<dd>English and french</dd>", html=True, count=1)
+
+    def test_templates_course_detail_cms_draft_content_no_code(self):
+        """
+        Validate that the code is replaced by "..." on the draft page when the "code"
+        field is not set.
+        """
+        user = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=user.username, password="password")
+
+        course = CourseFactory(page_title="Very interesting course", code=None)
+
+        # The page should be visible as draft to the staff user
+        url = course.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertContains(
+            response,
+            '<div class="subheader__code">Ref. ...</div>',
+            html=True,
+        )
 
     def test_templates_course_detail_placeholder(self):
         """
