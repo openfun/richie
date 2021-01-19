@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Display "code" on the course detail page and allow frontend editing
+
 ### Changed
 
 - Improve UX of course search pagination by avoiding truncation of page number
