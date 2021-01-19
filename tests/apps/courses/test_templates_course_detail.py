@@ -601,7 +601,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
         self.assertContains(
             response,
             '<ul class="course-detail__run-list"><li>'
-            "My course run from {:s} to {:s}</li></ul>".format(
+            "My course run, from {:s} to {:s}</li></ul>".format(
                 dateformat.format(course_run.start, "N j, Y"),
                 dateformat.format(course_run.end, "N j, Y"),
             ),
@@ -628,7 +628,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
         self.assertContains(
             response,
             '<ul class="course-detail__run-list"><li>'
-            "My course run from {:s} to {:s}</li></ul>".format(
+            "My course run, from {:s} to {:s}</li></ul>".format(
                 dateformat.format(course_run.start, "N j, Y"),
                 dateformat.format(course_run.end, "N j, Y"),
             ),
@@ -655,7 +655,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
         self.assertContains(
             response,
             '<ul class="course-detail__run-list"><li>'
-            "My course run from {:s} to {:s}</li></ul>".format(
+            "My course run, from {:s} to {:s}</li></ul>".format(
                 dateformat.format(course_run.start, "N j, Y"),
                 dateformat.format(course_run.end, "N j, Y"),
             ),
@@ -682,7 +682,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
         self.assertContains(
             response,
             '<ul class="course-detail__run-list"><li>'
-            "My course run from {:s} to {:s}</li></ul>".format(
+            "My course run, from {:s} to {:s}</li></ul>".format(
                 dateformat.format(course_run.start, "N j, Y"),
                 dateformat.format(course_run.end, "N j, Y"),
             ),
@@ -717,7 +717,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
 
         self.assertContains(
             response,
-            '<ul class="course-detail__run-list"><li>My course run from ... to ...</li></ul>',
+            '<ul class="course-detail__run-list"><li>My course run, from ... to ...</li></ul>',
             html=True,
         )
 
