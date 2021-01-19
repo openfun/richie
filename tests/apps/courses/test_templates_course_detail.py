@@ -16,6 +16,7 @@ from richie.apps.courses.factories import (
     CourseFactory,
     CourseRunFactory,
     OrganizationFactory,
+    ProgramFactory,
 )
 from richie.apps.courses.models import CourseRun
 
@@ -54,6 +55,11 @@ class CourseCMSTestCase(CMSTestCase):
             enrollment_end=now + timedelta(hours=1),
             languages=["en", "fr"],
         )
+
+        program_published, program_unpublished = ProgramFactory.create_batch(
+            2, fill_courses=[course], should_publish=True
+        )
+        program_unpublished.extended_object.unpublish("en")
 
         # Publish only 2 out of 4 categories, icons and organizations
         self.assertTrue(categories[0].extended_object.publish("en"))
@@ -165,6 +171,16 @@ class CourseCMSTestCase(CMSTestCase):
         self.assertEqual(CourseRun.objects.count(), 3)
         self.assertContains(response, "<dd>English and french</dd>", html=True, count=1)
 
+        # Only the published program should be in response content
+        self.assertContains(response, "course-detail__programs")
+        self.assertContains(response, "This course is part of a program")
+        self.assertContains(
+            response, program_published.extended_object.get_title(), html=True, count=1
+        )
+        self.assertNotContains(
+            response, program_unpublished.extended_object.get_title()
+        )
+
     def test_templates_course_detail_cms_published_content_no_code(self):
         """
         Validate that the corresponding markup is absent from the public page
@@ -205,6 +221,11 @@ class CourseCMSTestCase(CMSTestCase):
             enrollment_end=now + timedelta(hours=1),
             languages=["en", "fr"],
         )
+
+        program_published, program_unpublished = ProgramFactory.create_batch(
+            2, fill_courses=[course], should_publish=True
+        )
+        program_unpublished.extended_object.unpublish("en")
 
         # Publish only 2 out of 4 categories and 2 out of 4 organizations
         self.assertTrue(categories[0].extended_object.publish("en"))
@@ -282,6 +303,19 @@ class CourseCMSTestCase(CMSTestCase):
             )
         # The course run should be in the page
         self.assertContains(response, "<dd>English and french</dd>", html=True, count=1)
+
+        # Both programs should be in response content
+        self.assertContains(response, "course-detail__programs")
+        self.assertContains(response, "This course is part of programs")
+        self.assertContains(
+            response, program_published.extended_object.get_title(), html=True, count=1
+        )
+        self.assertContains(
+            response,
+            program_unpublished.extended_object.get_title(),
+            html=True,
+            count=1,
+        )
 
     def test_templates_course_detail_cms_draft_content_no_code(self):
         """
@@ -395,6 +429,16 @@ class CourseCMSTestCase(CMSTestCase):
             title=organizations[0].extended_object.get_title(),
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
+
+    def test_templates_course_detail_no_programs(self):
+        """
+        If the course is not part of any program, the section should be hidden.
+        """
+        course = CourseFactory(should_publish=True)
+        url = course.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, "course-detail__programs")
 
 
 class RunsCourseCMSTestCase(CMSTestCase):
@@ -549,8 +593,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
 
         self.assertIsNotNone(re.search(pattern, str(response.content)))
         self.assertContains(
-            response,
-            r'class="richie-react richie-react--course-run-enrollment"',
+            response, r'class="richie-react richie-react--course-run-enrollment"'
         )
 
     @override_settings(RICHIE_LMS_BACKENDS=[])
@@ -623,8 +666,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
 
         self.assertIsNotNone(re.search(pattern, str(response.content)))
         self.assertContains(
-            response,
-            r'class="richie-react richie-react--course-run-enrollment"',
+            response, r'class="richie-react richie-react--course-run-enrollment"'
         )
 
     @timezone.override(pytz.utc)

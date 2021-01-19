@@ -16,16 +16,9 @@ from filer.models import FolderPermission
 from parler.utils.context import switch_language
 
 from richie.apps.core.factories import PageFactory, TitleFactory
-from richie.apps.courses import defaults
-from richie.apps.courses.factories import (
-    CategoryFactory,
-    CourseFactory,
-    CourseRunFactory,
-    OrganizationFactory,
-    PageRoleFactory,
-    PersonFactory,
-)
-from richie.apps.courses.models import Course, CourseRun, CourseRunTranslation
+from richie.apps.courses import defaults, factories
+from richie.apps.courses.cms_plugins import CoursePlugin
+from richie.apps.courses.models import Course, CourseRun, CourseRunTranslation, Program
 
 # pylint: disable=too-many-public-methods
 
@@ -41,20 +34,20 @@ class CourseModelsTestCase(TestCase):
         fields. Only 1 query to the associated page should be generated.
         """
         page = create_page("Nano particles", "courses/cms/course_detail.html", "en")
-        course = CourseFactory(extended_object=page)
+        course = factories.CourseFactory(extended_object=page)
         with self.assertNumQueries(2):
             self.assertEqual(str(course), "Course: Nano particles")
 
     def test_models_course_unique_code_draft(self):
         """The code field should be unique among all draft courses."""
-        CourseFactory(code="123")
+        factories.CourseFactory(code="123")
         with self.assertRaises(ValidationError):
-            CourseFactory(code="123")
+            factories.CourseFactory(code="123")
 
     def test_models_course_unique_code_public(self):
         """The code field can be repeated from a draft course to its public counterpart."""
-        course = CourseFactory(code="123", should_publish=True)
-        snapshot = CourseFactory(
+        course = factories.CourseFactory(code="123", should_publish=True)
+        snapshot = factories.CourseFactory(
             code="123", page_parent=course.extended_object, should_publish=True
         )
 
@@ -93,7 +86,7 @@ class CourseModelsTestCase(TestCase):
             }
 
         page = PageFactory(title__title="My title")
-        course = CourseFactory(extended_object=page)
+        course = factories.CourseFactory(extended_object=page)
         self.assertFalse(page.roles.exists())
 
         role_dict = get_random_role_dict()
@@ -133,7 +126,7 @@ class CourseModelsTestCase(TestCase):
         A page role should not be created for courses when the CMS_PERMISSIONS setting is set
         to False.
         """
-        course = CourseFactory()
+        course = factories.CourseFactory()
         self.assertIsNone(course.create_page_role())
         self.assertFalse(course.extended_object.roles.exists())
 
@@ -141,7 +134,7 @@ class CourseModelsTestCase(TestCase):
         """
         A page role should not be created for the public version of a course.
         """
-        course = CourseFactory(should_publish=True).public_extension
+        course = factories.CourseFactory(should_publish=True).public_extension
         self.assertIsNone(course.create_page_role())
         self.assertFalse(course.extended_object.roles.exists())
 
@@ -173,11 +166,11 @@ class CourseModelsTestCase(TestCase):
                 },
             }
 
-        course = CourseFactory()
-        PageRoleFactory(page=course.extended_object, role="ADMIN")
+        course = factories.CourseFactory()
+        factories.PageRoleFactory(page=course.extended_object, role="ADMIN")
 
-        organization = OrganizationFactory()
-        organization_role = PageRoleFactory(
+        organization = factories.OrganizationFactory()
+        organization_role = factories.PageRoleFactory(
             page=organization.extended_object, role="ADMIN"
         )
 
@@ -218,16 +211,18 @@ class CourseModelsTestCase(TestCase):
         No permissions should be created for courses when the CMS_PERMISSIONS setting is set
         to False.
         """
-        course = CourseFactory()
-        organization = OrganizationFactory()
+        course = factories.CourseFactory()
+        organization = factories.OrganizationFactory()
         self.assertIsNone(course.create_permissions_for_organization(organization))
         self.assertFalse(PagePermission.objects.exists())
         self.assertFalse(FolderPermission.objects.exists())
 
     def test_models_course_create_permissions_for_organization_public_page(self, *_):
         """No permissions should be created for the public version of an course."""
-        course = CourseFactory(should_publish=True).public_extension
-        organization = OrganizationFactory(should_publish=True).public_extension
+        course = factories.CourseFactory(should_publish=True).public_extension
+        organization = factories.OrganizationFactory(
+            should_publish=True
+        ).public_extension
         self.assertIsNone(course.create_permissions_for_organization(organization))
         self.assertFalse(PagePermission.objects.exists())
         self.assertFalse(FolderPermission.objects.exists())
@@ -237,7 +232,7 @@ class CourseModelsTestCase(TestCase):
         For a course not linked to any category the method `get_categories` should
         return an empty query.
         """
-        course = CourseFactory(should_publish=True)
+        course = factories.CourseFactory(should_publish=True)
         self.assertFalse(course.get_categories().exists())
         self.assertFalse(course.public_extension.get_categories().exists())
 
@@ -250,11 +245,11 @@ class CourseModelsTestCase(TestCase):
         # course in the following, the third category will not be linked so we can check that
         # only the categories linked to the course are retrieved (its name starts with `_`
         # because it is not used and only here for unpacking purposes)
-        *draft_categories, _other_draft = CategoryFactory.create_batch(3)
-        *published_categories, _other_public = CategoryFactory.create_batch(
+        *draft_categories, _other_draft = factories.CategoryFactory.create_batch(3)
+        *published_categories, _other_public = factories.CategoryFactory.create_batch(
             3, should_publish=True
         )
-        course = CourseFactory(
+        course = factories.CourseFactory(
             fill_categories=draft_categories + published_categories, should_publish=True
         )
 
@@ -270,10 +265,10 @@ class CourseModelsTestCase(TestCase):
         The `get_categories` method should only return categories linked to a course by
         a plugin in the current language.
         """
-        category_fr = CategoryFactory(page_languages=["fr"])
-        category_en = CategoryFactory(page_languages=["en"])
+        category_fr = factories.CategoryFactory(page_languages=["fr"])
+        category_en = factories.CategoryFactory(page_languages=["en"])
 
-        course = CourseFactory(should_publish=True)
+        course = factories.CourseFactory(should_publish=True)
         placeholder = course.extended_object.placeholders.get(slot="course_categories")
 
         add_plugin(
@@ -300,9 +295,9 @@ class CourseModelsTestCase(TestCase):
         The `get_categories` method should return all categories linked to a course via a plugin
         on whichever placeholder.
         """
-        category1, category2 = CategoryFactory.create_batch(2)
+        category1, category2 = factories.CategoryFactory.create_batch(2)
 
-        course = CourseFactory(should_publish=True)
+        course = factories.CourseFactory(should_publish=True)
         placeholder1 = course.extended_object.placeholders.get(
             slot="course_description"
         )
@@ -328,7 +323,7 @@ class CourseModelsTestCase(TestCase):
         For a course not linked to any organzation the method `get_organizations` should
         return an empty query.
         """
-        course = CourseFactory(should_publish=True)
+        course = factories.CourseFactory(should_publish=True)
         self.assertFalse(course.get_organizations().exists())
         self.assertFalse(course.public_extension.get_organizations().exists())
 
@@ -341,11 +336,14 @@ class CourseModelsTestCase(TestCase):
         # course in the following, the third category will not be linked so we can check that
         # only the organizations linked to the course are retrieved (its name starts with `_`
         # because it is not used and only here for unpacking purposes)
-        *draft_organizations, _other_draft = OrganizationFactory.create_batch(3)
-        *published_organizations, _other_public = OrganizationFactory.create_batch(
-            3, should_publish=True
+        *draft_organizations, _other_draft = factories.OrganizationFactory.create_batch(
+            3
         )
-        course = CourseFactory(
+        (
+            *published_organizations,
+            _other_public,
+        ) = factories.OrganizationFactory.create_batch(3, should_publish=True)
+        course = factories.CourseFactory(
             fill_organizations=draft_organizations + published_organizations,
             should_publish=True,
         )
@@ -363,10 +361,10 @@ class CourseModelsTestCase(TestCase):
         The `get_organizations` method should only return organizations linked to a course by
         a plugin in the current language.
         """
-        organization_fr = OrganizationFactory(page_languages=["fr"])
-        organization_en = OrganizationFactory(page_languages=["en"])
+        organization_fr = factories.OrganizationFactory(page_languages=["fr"])
+        organization_en = factories.OrganizationFactory(page_languages=["en"])
 
-        course = CourseFactory(should_publish=True)
+        course = factories.CourseFactory(should_publish=True)
         placeholder = course.extended_object.placeholders.get(
             slot="course_organizations"
         )
@@ -395,9 +393,9 @@ class CourseModelsTestCase(TestCase):
         The `get_organizations` method should return all organizations linked to a course via a
         plugin on whichever placeholder.
         """
-        organization1, organization2 = OrganizationFactory.create_batch(2)
+        organization1, organization2 = factories.OrganizationFactory.create_batch(2)
 
-        course = CourseFactory(should_publish=True)
+        course = factories.CourseFactory(should_publish=True)
         placeholder1 = course.extended_object.placeholders.get(
             slot="course_description"
         )
@@ -425,7 +423,7 @@ class CourseModelsTestCase(TestCase):
         For a course not linked to any organzation the method `get_main_organization` should
         return `None`.
         """
-        course = CourseFactory(should_publish=True)
+        course = factories.CourseFactory(should_publish=True)
         self.assertIsNone(course.get_main_organization())
         self.assertIsNone(course.public_extension.get_main_organization())
 
@@ -438,17 +436,20 @@ class CourseModelsTestCase(TestCase):
         # course in the following, the third category will not be linked so we can check that
         # only the organizations linked to the course are retrieved (its name starts with `_`
         # because it is not used and only here for unpacking purposes)
-        *draft_organizations, _other_draft = OrganizationFactory.create_batch(3)
-        *published_organizations, _other_public = OrganizationFactory.create_batch(
-            3, should_publish=True
+        *draft_organizations, _other_draft = factories.OrganizationFactory.create_batch(
+            3
         )
+        (
+            *published_organizations,
+            _other_public,
+        ) = factories.OrganizationFactory.create_batch(3, should_publish=True)
 
         # Shuffle all organizations to make sure their order in the placeholder is what
         # determines which one is the main organization
         all_organizations = draft_organizations + published_organizations
         random.shuffle(all_organizations)
 
-        course = CourseFactory(
+        course = factories.CourseFactory(
             fill_organizations=all_organizations, should_publish=True
         )
 
@@ -464,7 +465,7 @@ class CourseModelsTestCase(TestCase):
         For a course not linked to any person the method `get_persons` should
         return an empty query.
         """
-        course = CourseFactory(should_publish=True)
+        course = factories.CourseFactory(should_publish=True)
         self.assertFalse(course.get_persons().exists())
         self.assertFalse(course.public_extension.get_persons().exists())
 
@@ -477,11 +478,11 @@ class CourseModelsTestCase(TestCase):
         # course in the following, the third person will not be linked so we can check that
         # only the persons linked to the course are retrieved (its name starts with `_`
         # because it is not used and only here for unpacking purposes)
-        *draft_persons, _other_draft = PersonFactory.create_batch(3)
-        *published_persons, _other_public = PersonFactory.create_batch(
+        *draft_persons, _other_draft = factories.PersonFactory.create_batch(3)
+        *published_persons, _other_public = factories.PersonFactory.create_batch(
             3, should_publish=True
         )
-        course = CourseFactory(
+        course = factories.CourseFactory(
             fill_team=draft_persons + published_persons, should_publish=True
         )
 
@@ -493,10 +494,10 @@ class CourseModelsTestCase(TestCase):
         The `get_persons` method should only return persons linked to a course by a plugin
         in the current language.
         """
-        person_fr = PersonFactory(page_languages=["fr"])
-        person_en = PersonFactory(page_languages=["en"])
+        person_fr = factories.PersonFactory(page_languages=["fr"])
+        person_en = factories.PersonFactory(page_languages=["en"])
 
-        course = CourseFactory(should_publish=True)
+        course = factories.CourseFactory(should_publish=True)
         placeholder = course.extended_object.placeholders.get(slot="course_team")
 
         add_plugin(
@@ -523,9 +524,9 @@ class CourseModelsTestCase(TestCase):
         The `get_persons` method should return all persons linked to a course via a plugin
         on whichever placeholder.
         """
-        person1, person2 = PersonFactory.create_batch(2)
+        person1, person2 = factories.PersonFactory.create_batch(2)
 
-        course = CourseFactory(should_publish=True)
+        course = factories.CourseFactory(should_publish=True)
         placeholder1 = course.extended_object.placeholders.get(
             slot="course_description"
         )
@@ -551,7 +552,7 @@ class CourseModelsTestCase(TestCase):
         For a course without course runs the methods `get_course_runs` should
         return an empty query.
         """
-        course = CourseFactory(should_publish=True)
+        course = factories.CourseFactory(should_publish=True)
         self.assertFalse(course.get_course_runs().exists())
         self.assertFalse(course.public_extension.get_course_runs().exists())
 
@@ -560,36 +561,36 @@ class CourseModelsTestCase(TestCase):
         The `get_course_runs` method should return all descendants ranked by start date,
         not only direct children.
         """
-        course = CourseFactory(page_languages=["en", "fr"])
+        course = factories.CourseFactory(page_languages=["en", "fr"])
 
         # Create draft and published course runs for this course
-        course_run = CourseRunFactory(direct_course=course)
+        course_run = factories.CourseRunFactory(direct_course=course)
 
         self.assertTrue(course.extended_object.publish("en"))
         self.assertTrue(course.extended_object.publish("fr"))
 
-        course_run_draft = CourseRunFactory(direct_course=course)
+        course_run_draft = factories.CourseRunFactory(direct_course=course)
 
         # Create a child course with draft and published course runs (what results from
         # snapshotting a course)
-        child_course = CourseFactory(
+        child_course = factories.CourseFactory(
             page_languages=["en", "fr"], page_parent=course.extended_object
         )
-        child_course_run = CourseRunFactory(direct_course=child_course)
+        child_course_run = factories.CourseRunFactory(direct_course=child_course)
 
         self.assertTrue(child_course.extended_object.publish("en"))
         self.assertTrue(child_course.extended_object.publish("fr"))
 
-        child_course_run_draft = CourseRunFactory(direct_course=child_course)
+        child_course_run_draft = factories.CourseRunFactory(direct_course=child_course)
 
         # Create another course, not related to the first one, with draft and published course runs
-        other_course = CourseFactory(page_languages=["en", "fr"])
-        CourseRunFactory(direct_course=other_course)
+        other_course = factories.CourseFactory(page_languages=["en", "fr"])
+        factories.CourseRunFactory(direct_course=other_course)
 
         self.assertTrue(other_course.extended_object.publish("en"))
         self.assertTrue(other_course.extended_object.publish("fr"))
 
-        CourseRunFactory(direct_course=other_course)
+        factories.CourseRunFactory(direct_course=other_course)
 
         # Check that the draft course retrieves all its descendant course runs
         # 3 draft course runs and 2 published course runs per course
@@ -620,6 +621,63 @@ class CourseModelsTestCase(TestCase):
         )
         self.assertEqual(result, expected_public_course_runs)
 
+    def test_models_course_get_programs(self):
+        """
+        It should be possible to retrieve the list of related programs on the course instance.
+        The number of queries should be minimal.
+        """
+        course = factories.CourseFactory(should_publish=True)
+        programs = factories.ProgramFactory.create_batch(
+            3, page_title="my title", fill_courses=[course], should_publish=True
+        )
+        retrieved_programs = course.get_programs()
+
+        with self.assertNumQueries(2):
+            self.assertEqual(set(retrieved_programs), set(programs))
+
+        with self.assertNumQueries(0):
+            for program in retrieved_programs:
+                self.assertEqual(
+                    program.extended_object.prefetched_titles[0].title, "my title"
+                )
+
+    def test_models_course_get_programs_public_course_page(self):
+        """
+        When a course is added on a draft program, the program should not be visible on
+        the public course page until the program is published.
+        """
+        course = factories.CourseFactory(should_publish=True)
+        course_page = course.extended_object
+        program = factories.ProgramFactory(page_title="my title", should_publish=True)
+        program_page = program.extended_object
+
+        # Add a course to the program but don't publish the modification
+        placeholder = program_page.placeholders.get(slot="program_courses")
+        add_plugin(placeholder, CoursePlugin, "en", page=course_page)
+
+        self.assertEqual(list(course.get_programs()), [program])
+        self.assertEqual(list(course.public_extension.get_programs()), [])
+
+        # Now publish the modification and check that the program is displayed
+        # on the public course page
+        program.extended_object.publish("en")
+        self.assertEqual(
+            list(course.public_extension.get_programs()), [program.public_extension]
+        )
+
+    def test_models_course_get_programs_several_languages(self):
+        """
+        The programs should not be duplicated if they exist in several languages.
+        """
+        course = factories.CourseFactory(should_publish=True)
+        factories.ProgramFactory(
+            page_title={"en": "my title", "fr": "mon titre"},
+            fill_courses=[course],
+            should_publish=True,
+        )
+        self.assertEqual(Program.objects.count(), 2)
+        self.assertEqual(course.get_programs().count(), 1)
+
     def test_models_course_get_root_to_leaf_category_pages_leaf(self):
         """
         A course linked to a leaf category, in a nested category tree, should be associated
@@ -627,15 +685,17 @@ class CourseModelsTestCase(TestCase):
         """
         # Create nested categories
         create_page("Categories", "richie/single_column.html", "en")
-        meta_category = CategoryFactory(should_publish=True)
-        parent_category = CategoryFactory(
+        meta_category = factories.CategoryFactory(should_publish=True)
+        parent_category = factories.CategoryFactory(
             page_parent=meta_category.extended_object, should_publish=True
         )
-        leaf_category = CategoryFactory(
+        leaf_category = factories.CategoryFactory(
             page_parent=parent_category.extended_object, should_publish=True
         )
 
-        course = CourseFactory(fill_categories=[leaf_category], should_publish=True)
+        course = factories.CourseFactory(
+            fill_categories=[leaf_category], should_publish=True
+        )
 
         expected_pages = [
             parent_category.public_extension.extended_object,
@@ -650,15 +710,17 @@ class CourseModelsTestCase(TestCase):
         """
         # Create nested categories
         create_page("Categories", "richie/single_column.html", "en")
-        meta_category = CategoryFactory(should_publish=True)
-        parent_category = CategoryFactory(
+        meta_category = factories.CategoryFactory(should_publish=True)
+        parent_category = factories.CategoryFactory(
             page_parent=meta_category.extended_object, should_publish=True
         )
-        CategoryFactory(
+        factories.CategoryFactory(
             page_parent=parent_category.extended_object, should_publish=True
         )
 
-        course = CourseFactory(fill_categories=[parent_category], should_publish=True)
+        course = factories.CourseFactory(
+            fill_categories=[parent_category], should_publish=True
+        )
 
         expected_pages = [parent_category.public_extension.extended_object]
         self.assertEqual(expected_pages, list(course.get_root_to_leaf_category_pages()))
@@ -670,18 +732,18 @@ class CourseModelsTestCase(TestCase):
         """
         # Create nested categories
         create_page("Categories", "richie/single_column.html", "en")
-        meta_category = CategoryFactory(should_publish=True)
-        parent_category = CategoryFactory(
+        meta_category = factories.CategoryFactory(should_publish=True)
+        parent_category = factories.CategoryFactory(
             page_parent=meta_category.extended_object, should_publish=True
         )
-        leaf_category1 = CategoryFactory(
+        leaf_category1 = factories.CategoryFactory(
             page_parent=parent_category.extended_object, should_publish=True
         )
-        leaf_category2 = CategoryFactory(
+        leaf_category2 = factories.CategoryFactory(
             page_parent=parent_category.extended_object, should_publish=True
         )
 
-        course = CourseFactory(
+        course = factories.CourseFactory(
             fill_categories=[leaf_category1, leaf_category2], should_publish=True
         )
 
@@ -696,14 +758,14 @@ class CourseModelsTestCase(TestCase):
 
     def test_models_course_field_effort_null(self):
         """The effort field can be null."""
-        course = CourseFactory(effort=None)
+        course = factories.CourseFactory(effort=None)
         self.assertIsNone(course.effort)
         self.assertEqual(course.get_effort_display(), "")
 
     def test_models_course_field_effort_invalid(self):
         """An effort should be a triplet: number, time unit and reference unit."""
         with self.assertRaises(ValidationError) as context:
-            CourseFactory(effort=[5, "unit"])
+            factories.CourseFactory(effort=[5, "unit"])
         self.assertEqual(
             context.exception.messages[0],
             "An effort should be a triplet: number, time unit and reference unit.",
@@ -713,7 +775,7 @@ class CourseModelsTestCase(TestCase):
         """The first value of the effort triplet should be an integer."""
         for value in ["a", "1.0"]:
             with self.assertRaises(ValidationError) as context:
-                CourseFactory(effort=[value, "minute", "hour"])
+                factories.CourseFactory(effort=[value, "minute", "hour"])
             self.assertEqual(
                 context.exception.messages[0],
                 "An effort should be a round number of time units.",
@@ -722,13 +784,13 @@ class CourseModelsTestCase(TestCase):
     def test_models_course_field_effort_positive(self):
         """The first value should be a positive integer."""
         with self.assertRaises(ValidationError) as context:
-            CourseFactory(effort=[-1, "day", "month"])
+            factories.CourseFactory(effort=[-1, "day", "month"])
         self.assertEqual(context.exception.messages[0], "An effort should be positive.")
 
     def test_models_course_field_effort_invalid_unit(self):
         """The second value should be a valid time unit choice."""
         with self.assertRaises(ValidationError) as context:
-            CourseFactory(effort=[1, "invalid", "month"])
+            factories.CourseFactory(effort=[1, "invalid", "month"])
         self.assertEqual(
             context.exception.messages[0],
             "invalid is not a valid choice for a time unit.",
@@ -737,7 +799,7 @@ class CourseModelsTestCase(TestCase):
     def test_models_course_field_effort_invalid_reference(self):
         """The third value should be a valid time unit choice."""
         with self.assertRaises(ValidationError) as context:
-            CourseFactory(effort=[1, "day", "invalid"])
+            factories.CourseFactory(effort=[1, "day", "invalid"])
         self.assertEqual(
             context.exception.messages[0],
             "invalid is not a valid choice for a time unit.",
@@ -746,7 +808,7 @@ class CourseModelsTestCase(TestCase):
     def test_models_course_field_effort_order(self):
         """The effort unit should be shorter than the reference unit."""
         with self.assertRaises(ValidationError) as context:
-            CourseFactory(effort=[1, "day", "day"])
+            factories.CourseFactory(effort=[1, "day", "day"])
         self.assertEqual(
             context.exception.messages[0],
             "The effort time unit should be shorter than the reference unit.",
@@ -754,12 +816,12 @@ class CourseModelsTestCase(TestCase):
 
     def test_models_course_field_effort_display_singular(self):
         """Validate that a value of 1 time unit is displayed as expected."""
-        course = CourseFactory(effort=[1, "day", "week"])
+        course = factories.CourseFactory(effort=[1, "day", "week"])
         self.assertEqual(course.get_effort_display(), "1 day/week")
 
     def test_models_course_field_effort_display_plural(self):
         """Validate that a plural number of time units is displayed as expected."""
-        course = CourseFactory(effort=[2, "day", "week"])
+        course = factories.CourseFactory(effort=[2, "day", "week"])
         self.assertEqual(course.get_effort_display(), "2 days/week")
 
     def test_models_course_field_effort_display_request(self):
@@ -767,7 +829,7 @@ class CourseModelsTestCase(TestCase):
         When used in the `render_model` template tag, it should not break when passed a
         request argument (the DjangoCMS frontend editing does it).
         """
-        course = CourseFactory(effort=[1, "week", "month"])
+        course = factories.CourseFactory(effort=[1, "week", "month"])
         request = RequestFactory().get("/")
         self.assertEqual(course.get_effort_display(request), "1 week/month")
 
@@ -780,14 +842,14 @@ class CourseModelsTestCase(TestCase):
 
     def test_models_course_field_duration_null(self):
         """The duration field can be null."""
-        course = CourseFactory(duration=None)
+        course = factories.CourseFactory(duration=None)
         self.assertIsNone(course.duration)
         self.assertEqual(course.get_duration_display(), "")
 
     def test_models_course_field_duration_invalid(self):
         """The duration should be a pair: number and unit."""
         with self.assertRaises(ValidationError) as context:
-            CourseFactory(duration=5)
+            factories.CourseFactory(duration=5)
         self.assertEqual(
             context.exception.messages[0],
             "A composite duration should be a pair: number and time unit.",
@@ -797,7 +859,7 @@ class CourseModelsTestCase(TestCase):
         """The first value of the duration pair should be an integer."""
         for value in ["a", "1.0"]:
             with self.assertRaises(ValidationError) as context:
-                CourseFactory(duration=[value, "minute"])
+                factories.CourseFactory(duration=[value, "minute"])
             self.assertEqual(
                 context.exception.messages[0],
                 "A composite duration should be a round number of time units.",
@@ -806,7 +868,7 @@ class CourseModelsTestCase(TestCase):
     def test_models_course_field_duration_positive(self):
         """The first value should be a positive integer."""
         with self.assertRaises(ValidationError) as context:
-            CourseFactory(duration=[-1, "day"])
+            factories.CourseFactory(duration=[-1, "day"])
         self.assertEqual(
             context.exception.messages[0], "A composite duration should be positive."
         )
@@ -814,7 +876,7 @@ class CourseModelsTestCase(TestCase):
     def test_models_course_field_duration_invalid_unit(self):
         """The second value should be a valid time unit choice."""
         with self.assertRaises(ValidationError) as context:
-            CourseFactory(duration=[1, "invalid"])
+            factories.CourseFactory(duration=[1, "invalid"])
         self.assertEqual(
             context.exception.messages[0],
             "invalid is not a valid choice for a time unit.",
@@ -822,12 +884,12 @@ class CourseModelsTestCase(TestCase):
 
     def test_models_course_field_duration_display_singular(self):
         """Validate that a value of 1 time unit is displayed as expected."""
-        course = CourseFactory(duration=[1, "day"])
+        course = factories.CourseFactory(duration=[1, "day"])
         self.assertEqual(course.get_duration_display(), "1 day")
 
     def test_models_course_field_duration_display_plural(self):
         """Validate that a plural number of time units is displayed as expected."""
-        course = CourseFactory(duration=[2, "day"])
+        course = factories.CourseFactory(duration=[2, "day"])
         self.assertEqual(course.get_duration_display(), "2 days")
 
     def test_models_course_field_duration_display_request(self):
@@ -835,7 +897,7 @@ class CourseModelsTestCase(TestCase):
         When used in the `render_model` template tag, it should not break when passed a
         request argument (the DjangoCMS frontend editing does it).
         """
-        course = CourseFactory(duration=[1, "week"])
+        course = factories.CourseFactory(duration=[1, "week"])
         request = RequestFactory().get("/")
         self.assertEqual(course.get_duration_display(request), "1 week")
 
@@ -858,11 +920,11 @@ class CourseModelsTestCase(TestCase):
         """
         # 1- Publishing a draft course
 
-        course = CourseFactory(page_title="my course title")
+        course = factories.CourseFactory(page_title="my course title")
         TitleFactory(
             page=course.extended_object, language="fr", title="mon titre de cours"
         )
-        course_run = CourseRunFactory(direct_course=course, title="my run")
+        course_run = factories.CourseRunFactory(direct_course=course, title="my run")
         CourseRunTranslation.objects.create(
             master=course_run, language_code="fr", title="ma session"
         )
@@ -893,12 +955,12 @@ class CourseModelsTestCase(TestCase):
 
     def test_models_course_copy_relations_cloning(self):
         """When cloning a page, the course runs should not be copied."""
-        course = CourseFactory(page_title="my course title")
+        course = factories.CourseFactory(page_title="my course title")
         page = course.extended_object
         TitleFactory(
             page=course.extended_object, language="fr", title="mon titre de cours"
         )
-        course_run = CourseRunFactory(direct_course=course, title="my run")
+        course_run = factories.CourseRunFactory(direct_course=course, title="my run")
         CourseRunTranslation.objects.create(
             master=course_run, language_code="fr", title="ma session"
         )
@@ -921,11 +983,11 @@ class CourseModelsTestCase(TestCase):
         used instances instead of update queries, this test was generating an infinite
         recursive loop.
         """
-        course = CourseFactory(page_title="my course title")
+        course = factories.CourseFactory(page_title="my course title")
         TitleFactory(
             page=course.extended_object, language="fr", title="mon titre de cours"
         )
-        course_run = CourseRunFactory(direct_course=course, title="my run")
+        course_run = factories.CourseRunFactory(direct_course=course, title="my run")
         course_run_translation_fr = CourseRunTranslation.objects.create(
             master=course_run, language_code="fr", title="ma session"
         )

@@ -1,5 +1,5 @@
 {% extends "richie/fullwidth.html" %}
-{% load cms_tags i18n extra_tags static thumbnail %}
+{% load cms_tags i18n extra_tags pagination_tags static thumbnail %}
 
 {% block meta_index_rules %}
     {# Make sure course snapshot pages are not indexed by search engines #}
@@ -329,6 +329,37 @@
 
     {% block fragment_relations %}
     <div class="course-detail__relations">
+        {% block programs %}
+            {% with programs=course.get_programs %}
+                {% if programs %}
+                    {% autopaginate programs GLIMPSE_PAGINATION_PROGRAMS %}
+                    <div id="page{{ page_suffix }}" class="course-detail__programs course-detail__block">
+                        <div class="course-detail__row">
+                            <section class="course-glimpse-list">
+                                <h2 class="course-detail__title">
+                                    {% blocktrans count counter=programs|length %}
+                                        This course is part of a program
+                                    {% plural %}
+                                        This course is part of programs
+                                    {% endblocktrans %}
+                                </h2>
+                                <div class="section__items section__items--programs">
+                                    {% for program in page_obj.object_list %}
+                                        {% if program.extended_object.publisher_is_draft or program.check_publication %}
+                                            {% include "courses/cms/fragment_program_glimpse.html" with program=program %}
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                                {% if paginator.num_pages > 1 %}
+                                    {% paginate using "richie/pagination.html" %}
+                                {% endif %}
+                            </section>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endwith %}
+        {% endblock programs %}
+
         {% block team %}
             {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_team" %}
             <div class="course-detail__team course-detail__block course-detail__block--lightest">
