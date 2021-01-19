@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Allow overriding a person's bio on the person plugin
 - Display "code" on the course detail page and allow frontend editing
 
 ### Changed
