@@ -188,6 +188,7 @@ demo-site: ## create a demo site if app container is running
 	@$(MANAGE) flush
 	@$(COMPOSE_EXEC_APP) python sandbox/manage.py create_demo_site
 	@${MAKE} search-index
+	@${MAKE} superuser
 .PHONY: demo-site
 
 # Nota bene: Black should come after isort just in case they don't agree...
