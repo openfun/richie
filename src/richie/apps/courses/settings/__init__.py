@@ -254,7 +254,10 @@ CMS_PLACEHOLDER_CONF = {
     },
     "courses/cms/person_detail.html maincontent": {
         "name": _("Main Content"),
-        "plugins": ["CKEditorPlugin"],
+        "plugins": ["CKEditorPlugin", "PersonPlugin", "SectionPlugin", "GlimpsePlugin"],
+        "child_classes": {
+            "SectionPlugin": ["CKEditorPlugin", "GlimpsePlugin", "PersonPlugin"]
+        },
         "limits": {"CKEditorPlugin": 1},
     },
     "courses/cms/person_detail.html organizations": {
@@ -423,10 +426,7 @@ CKEDITOR_INLINE_BOLD_CONFIGURATION = {
     # Enabled showblocks as default behavior
     "startupOutlineBlocks": True,
     # Default toolbar configurations for djangocms_text_ckeditor
-    "toolbar_HTMLField": [
-        ["Undo", "Redo"],
-        ["Bold"],
-    ],
+    "toolbar_HTMLField": [["Undo", "Redo"], ["Bold"]],
     "enterMode": 2,
     "autoParagraph": False,
     "resize_enabled": False,
