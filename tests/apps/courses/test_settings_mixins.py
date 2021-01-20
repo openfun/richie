@@ -20,7 +20,7 @@ class SettingsMixinsTestCase(TestCase):
 
         # pylint: disable=no-member
         cms_templates = TestConfiguration().CMS_TEMPLATES
-        self.assertEqual(len(cms_templates), 16)
+        self.assertEqual(len(cms_templates), 15)
         self.assertEqual(cms_templates[0][0], "courses/cms/course_detail.html")
 
     def test_settings_mixins_override(self):

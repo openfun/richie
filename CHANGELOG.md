@@ -21,6 +21,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Delete template `course_run_detail.html` was still referenced in settings
 - Fix unwanted comma when displaying course runs list on course detail page
 
 ## [2.0.1] - 2021-01-11
