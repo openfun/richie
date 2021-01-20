@@ -379,12 +379,14 @@ class CourseFactory(PageExtensionDjangoModelFactory):
         in a list of slot names.
         """
         if create and extracted:
-            for slot in extracted:
+            for slot, plugin_type in extracted.items():
                 create_text_plugin(
                     self.extended_object,
                     slot,
                     nb_paragraphs=1,
                     languages=self.extended_object.get_languages(),
+                    is_html=plugin_type != "PlainTextPlugin",
+                    plugin_type=plugin_type,
                 )
 
 
@@ -747,6 +749,8 @@ class PersonFactory(PageExtensionDjangoModelFactory):
                 "bio",
                 nb_paragraphs=1,
                 languages=self.extended_object.get_languages(),
+                is_html=False,
+                plugin_type="PlainTextPlugin",
             )
 
     @factory.post_generation
