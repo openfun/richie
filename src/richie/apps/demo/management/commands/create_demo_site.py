@@ -275,14 +275,14 @@ def create_demo_site():
             fill_icons=random.sample(icons, get_number_of_icons()),
             fill_organizations=course_organizations,
             fill_plan=True,
-            fill_texts=[
-                "course_assessment",
-                "course_description",
-                "course_introduction",
-                "course_format",
-                "course_prerequisites",
-                "course_skills",
-            ],
+            fill_texts={
+                "course_assessment": "CKEditorPlugin",
+                "course_description": "CKEditorPlugin",
+                "course_introduction": "PlainTextPlugin",
+                "course_format": "CKEditorPlugin",
+                "course_prerequisites": "CKEditorPlugin",
+                "course_skills": "CKEditorPlugin",
+            },
         )
         course.create_permissions_for_organization(course_organizations[0])
         courses.append(course)

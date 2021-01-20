@@ -50,6 +50,6 @@ class PersonFactoryTestCase(TestCase):
         # The bio plugins should contain paragraphs
         for language in ["fr", "en"]:
             bio_plugin = bio.cmsplugin_set.get(
-                plugin_type="CKEditorPlugin", language=language
+                plugin_type="PlainTextPlugin", language=language
             )
-            self.assertIn("<p>", bio_plugin.simple_text_ckeditor_simpletext.body)
+            self.assertTrue(bio_plugin.plain_text_plaintext.body.count(".") >= 2)
