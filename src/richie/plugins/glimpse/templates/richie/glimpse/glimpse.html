@@ -5,7 +5,7 @@
 {% else %}
 
     {% if instance.get_link %}
-        <a href="{{ instance.get_link }}"{% if instance.is_blank_target %} target="_blank" rel=”noopener noreferrer”{% endif %}
+        <a href="{{ instance.get_link }}"{% if instance.is_blank_target %} target="_blank" rel="noopener noreferrer"{% endif %}
         class="glimpse-{{ glimpse_variant }}">
     {% else %}
         <div class="glimpse-{{ glimpse_variant }}">
