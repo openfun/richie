@@ -133,11 +133,10 @@ class GlimpseCMSPluginsTestCase(CMSPluginTestCase):
         # variable
         self.assertInHTML(expected_header, html)
 
-    def test_cms_plugins_glimpse_compute_variant_without_context_value(self):
+    def test_cms_plugins_glimpse_compute_variant_default(self):
         """
         When there is no "variant" value set from template parent, if instance
-        variant is empty the variant should be null and if instance variant is
-        set the variant should be set accorded to the instance variant.
+        variant is empty, the variant should default to "square_card".
         """
         placeholder = Placeholder.objects.create(slot="test")
 
@@ -152,7 +151,14 @@ class GlimpseCMSPluginsTestCase(CMSPluginTestCase):
         )
         plugin_instance = model_instance.get_plugin_class_instance()
         computed_variant = plugin_instance.compute_variant({}, glimpse_neutral)
-        self.assertEqual(computed_variant, None)
+        self.assertEqual(computed_variant, "card_square")
+
+    def test_cms_plugins_glimpse_compute_variant_without_context_value(self):
+        """
+        If instance variant is set, the variant should be set according to the
+        instance variant.
+        """
+        placeholder = Placeholder.objects.create(slot="test")
 
         # Create plugin with a dummy variant
         glimpse_variantized = GlimpseFactory(variant="foo")

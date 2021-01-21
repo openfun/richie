@@ -1,0 +1,38 @@
+{% load thumbnail %}{% spaceless %}
+<div class="person-glimpse">
+    {% if instance.get_link %}
+        <a href="{{ instance.get_link }}"{% if instance.is_blank_target %} target="_blank" rel=”noopener noreferrer”{% endif %}
+        class="person-glimpse__media" tabindex="-1" aria-hidden="true">
+    {% else %}
+        <div class="person-glimpse__media">
+    {% endif %}
+    <img src="{% thumbnail instance.image 200x200 crop upscale subject_location=instance.image.subject_location %}"
+    srcset="{% thumbnail instance.image 200x200 crop upscale subject_location=instance.image.subject_location %} 200w
+        {% if instance.image.width >= 400 %},{% thumbnail instance.image 400x400 crop upscale subject_location=instance.image.subject_location %} 400w{% endif %}
+        {% if instance.image.width >= 600 %},{% thumbnail instance.image 600x600 crop upscale subject_location=instance.image.subject_location %} 600w{% endif %}"
+    sizes="200px"
+    alt="">
+    {% if instance.get_link %}
+        </a>
+    {% else %}
+        </div>
+    {% endif %}
+
+    <div class="person-glimpse__content">
+        <div class="person-glimpse__wrapper">
+            {% if instance.get_link %}
+                <a href="{{ instance.get_link }}"{% if instance.is_blank_target %} target="_blank" rel=”noopener noreferrer”{% endif %}>
+            {% endif %}
+                <h3 class="person-glimpse__title">{{ instance.title }}</h3>
+            {% if instance.get_link %}
+                </a>
+            {% endif %}
+            <div class="person-glimpse__categories">
+                <div class="category-tag-list category-tag-list--primary"></div>
+            </div>
+            <div class="person-glimpse__bio">{{ instance.content }}</div>
+        </div>
+    </div>
+
+</div>
+{% endspaceless %}

@@ -8,6 +8,7 @@ from cms.plugin_pool import plugin_pool
 
 from richie.apps.core.defaults import PLUGINS_GROUP
 
+from .defaults import CARD_SQUARE
 from .models import Glimpse
 
 
@@ -40,7 +41,7 @@ class GlimpsePlugin(CMSPluginBase):
         * If model instance has a not null "variant" attribute use it, no
           matter what the value from parent template context is;
         """
-        return instance.variant or context.get("glimpse_variant")
+        return instance.variant or context.get("glimpse_variant") or CARD_SQUARE
 
     def render(self, context, instance, placeholder):
         context.update(

@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Add a "person" variant to the glimpse plugin for persons without a page
 - Allow person and glimpse plugins on the person detail page
 - Allow overriding a person's bio on the person plugin
 - Add new section on the course detail page to display related programs
