@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [2.1.0] - 2021-01-22
+
 ### Added
 
 - Add a "person" variant to the glimpse plugin for persons without a page
@@ -1172,7 +1174,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.0.1...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.1.0...master
+[2.1.0]: https://github.com/openfun/richie/compare/v2.0.1...v2.1.0
 [2.0.1]: https://github.com/openfun/richie/compare/v2.0.0...v2.0.1
 [2.0.0]: https://github.com/openfun/richie/compare/v2.0.0-beta.22...v2.0.0
 [2.0.0-beta.22]: https://github.com/openfun/richie/compare/v2.0.0-beta.21...v2.0.0-beta.22
