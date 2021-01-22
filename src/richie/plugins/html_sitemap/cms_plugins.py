@@ -93,7 +93,7 @@ class HTMLSitemapPagePlugin(CMSPluginBase):
         to construct the <ul> <li> structure in the template.
         """
         language = translation.get_language()
-        current_page_is_draft = instance.placeholder.page.publisher_is_draft
+        current_page_is_draft = context["current_page"].publisher_is_draft
 
         if instance.root_page:
             if current_page_is_draft:
