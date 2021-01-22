@@ -23,6 +23,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix HTMLSiteMap plugin when placed in a static placeholder
 - Delete template `course_run_detail.html` was still referenced in settings
 - Fix unwanted comma when displaying course runs list on course detail page
 

@@ -2,7 +2,7 @@
 from django.test.client import RequestFactory
 
 from cms.api import add_plugin
-from cms.models import Placeholder
+from cms.models import Placeholder, StaticPlaceholder
 from cms.plugin_rendering import ContentRenderer
 
 from richie.apps.core.factories import PageFactory, UserFactory
@@ -47,7 +47,7 @@ class HTMLSitemapPluginTestCase(CMSPluginTestCase):
         placeholder = Placeholder.objects.create(slot="maincontent")
         page.placeholders.add(placeholder)
 
-        context = self.get_practical_plugin_context()
+        context = self.get_practical_plugin_context({"current_page": page})
         parent_instance = add_plugin(placeholder, HTMLSitemapPlugin, "en")
         add_plugin(
             placeholder,
@@ -92,7 +92,7 @@ class HTMLSitemapPluginTestCase(CMSPluginTestCase):
         placeholder = Placeholder.objects.create(slot="maincontent")
         page.placeholders.add(placeholder)
 
-        context = self.get_practical_plugin_context()
+        context = self.get_practical_plugin_context({"current_page": page})
         parent_instance = add_plugin(placeholder, HTMLSitemapPlugin, "en")
         add_plugin(
             placeholder,
@@ -132,7 +132,7 @@ class HTMLSitemapPluginTestCase(CMSPluginTestCase):
         placeholder = Placeholder.objects.create(slot="maincontent")
         page.placeholders.add(placeholder)
 
-        context = self.get_practical_plugin_context()
+        context = self.get_practical_plugin_context({"current_page": page})
         parent_instance = add_plugin(placeholder, HTMLSitemapPlugin, "en")
         add_plugin(
             placeholder,
@@ -169,7 +169,7 @@ class HTMLSitemapPluginTestCase(CMSPluginTestCase):
         placeholder = Placeholder.objects.create(slot="maincontent")
         page.placeholders.add(placeholder)
 
-        context = self.get_practical_plugin_context()
+        context = self.get_practical_plugin_context({"current_page": page})
         parent_instance = add_plugin(placeholder, HTMLSitemapPlugin, "en")
         add_plugin(
             placeholder,
@@ -210,7 +210,7 @@ class HTMLSitemapPluginTestCase(CMSPluginTestCase):
         placeholder = Placeholder.objects.create(slot="maincontent")
         page.placeholders.add(placeholder)
 
-        context = self.get_practical_plugin_context()
+        context = self.get_practical_plugin_context({"current_page": page})
         parent_instance = add_plugin(placeholder, HTMLSitemapPlugin, "en")
         add_plugin(
             placeholder,
@@ -251,7 +251,7 @@ class HTMLSitemapPluginTestCase(CMSPluginTestCase):
         placeholder = Placeholder.objects.create(slot="maincontent")
         page.placeholders.add(placeholder)
 
-        context = self.get_practical_plugin_context()
+        context = self.get_practical_plugin_context({"current_page": page})
         parent_instance = add_plugin(placeholder, HTMLSitemapPlugin, "en")
         add_plugin(
             placeholder,
@@ -286,7 +286,7 @@ class HTMLSitemapPluginTestCase(CMSPluginTestCase):
         placeholder = Placeholder.objects.create(slot="maincontent")
         page.placeholders.add(placeholder)
 
-        context = self.get_practical_plugin_context()
+        context = self.get_practical_plugin_context({"current_page": page})
         parent_instance = add_plugin(placeholder, HTMLSitemapPlugin, "en")
         add_plugin(
             placeholder,
@@ -325,7 +325,7 @@ class HTMLSitemapPluginTestCase(CMSPluginTestCase):
         placeholder = Placeholder.objects.create(slot="maincontent")
         page.placeholders.add(placeholder)
 
-        context = self.get_practical_plugin_context()
+        context = self.get_practical_plugin_context({"current_page": page})
         parent_instance = add_plugin(placeholder, HTMLSitemapPlugin, "en")
         add_plugin(
             placeholder,
@@ -421,9 +421,10 @@ class HTMLSitemapPluginTestCase(CMSPluginTestCase):
         )
         self.assertTrue(page.is_published("en"))
         placeholder = Placeholder.objects.create(slot="maincontent")
-        page.get_public_object().placeholders.add(placeholder)
+        public_page = page.get_public_object()
+        public_page.placeholders.add(placeholder)
 
-        context = self.get_practical_plugin_context()
+        context = self.get_practical_plugin_context({"current_page": public_page})
         parent_instance = add_plugin(placeholder, HTMLSitemapPlugin, "en")
         add_plugin(
             placeholder,
@@ -483,7 +484,7 @@ class HTMLSitemapPluginTestCase(CMSPluginTestCase):
         placeholder = Placeholder.objects.create(slot="maincontent")
         page.placeholders.add(placeholder)
 
-        context = self.get_practical_plugin_context()
+        context = self.get_practical_plugin_context({"current_page": page})
         request = RequestFactory()
         request.current_page = page
         request.user = UserFactory()
@@ -499,6 +500,48 @@ class HTMLSitemapPluginTestCase(CMSPluginTestCase):
 
         html = context["cms_content_renderer"].render_placeholder(
             placeholder, context=context, language="en"
+        )
+        self.assertHTMLEqual(
+            html,
+            """
+            <div class="sitemap">
+              <ul>
+                <li><a href="/en/root/">Root</a>
+                  <ul>
+                    <li><a href="/en/root/parent/">Parent</a>
+                      <ul>
+                        <li><a href="/en/root/parent/page/">Page</a></li>
+                        <li><a href="/en/root/parent/sibling/">Sibling</a></li>
+                      </ul>
+                    </li>
+                    <li><a href="/en/root/uncle/">Uncle</a></li>
+                  </ul>
+                </li>
+                <li><a href="/en/sitemap/">Sitemap</a></li>
+              </ul>
+            </div>
+            """,
+        )
+
+    def test_cms_plugins_htmlsitemap_static_placeholder(self):
+        """A sitemap page placed in a static placeholder should work."""
+        self.create_page_tree()
+
+        page = PageFactory(title__title="Sitemap")
+        self.assertEqual(StaticPlaceholder.objects.count(), 1)
+        placeholder = StaticPlaceholder.objects.get()
+
+        context = self.get_practical_plugin_context({"current_page": page})
+        parent_instance = add_plugin(placeholder.draft, HTMLSitemapPlugin, "en")
+        add_plugin(
+            placeholder.draft,
+            plugin_type="HTMLSitemapPagePlugin",
+            language="en",
+            target=parent_instance,
+        )
+
+        html = context["cms_content_renderer"].render_placeholder(
+            placeholder.draft, context=context, language="en"
         )
         self.assertHTMLEqual(
             html,
