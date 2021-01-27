@@ -11,6 +11,11 @@ import { Deferred } from 'utils/test/deferred';
 import * as factories from 'utils/test/factories';
 import { SESSION_CACHE_KEY } from 'settings';
 
+import { handle } from 'utils/errors/handle';
+
+const mockHandle: jest.Mock<typeof handle> = handle as any;
+jest.mock('utils/errors/handle');
+
 describe('<CourseRunEnrollment />', () => {
   const endpoint = 'https://demo.endpoint';
 
@@ -138,6 +143,7 @@ describe('<CourseRunEnrollment />', () => {
 
     screen.getByRole('button', { name: 'Enroll now' });
     screen.getByText('Your enrollment request failed.');
+    expect(mockHandle).toHaveBeenCalledWith('500 - Internal Server Error');
   });
 
   it('shows a link to the course if the user is already enrolled', async () => {

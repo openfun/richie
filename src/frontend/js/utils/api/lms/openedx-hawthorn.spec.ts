@@ -3,6 +3,11 @@ import { ApiBackend } from 'types/api';
 import { ContextFactory } from 'utils/test/factories';
 import faker from 'faker';
 
+import { handle } from 'utils/errors/handle';
+
+const mockHandle: jest.Mock<typeof handle> = handle as any;
+jest.mock('utils/errors/handle');
+
 describe('OpenEdX Hawthorn API', () => {
   const EDX_ENDPOINT = 'https://demo.endpoint/api';
   let courseId = '';
@@ -39,6 +44,7 @@ describe('OpenEdX Hawthorn API', () => {
       courseId = faker.random.uuid();
       username = faker.internet.userName();
       fetchMock.restore();
+      mockHandle.mockRestore();
     });
 
     describe('get', () => {
@@ -67,6 +73,10 @@ describe('OpenEdX Hawthorn API', () => {
             username,
           }),
         ).resolves.toBeNull();
+
+        expect(mockHandle).toHaveBeenCalledWith(
+          new Error('[GET - Enrollment] > 500 - Internal Server Error'),
+        );
       });
 
       it('returns course run information if user is enrolled', async () => {
@@ -143,6 +153,9 @@ describe('OpenEdX Hawthorn API', () => {
         );
 
         expect(response).toBeFalsy();
+        expect(mockHandle).toHaveBeenCalledWith(
+          new Error('[SET - Enrollment] > 500 - Internal Server Error'),
+        );
       });
     });
   });
