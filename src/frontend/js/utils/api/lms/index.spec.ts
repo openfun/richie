@@ -1,5 +1,10 @@
 import { ApiBackend } from 'types/api';
 
+import { handle } from 'utils/errors/handle';
+
+const mockHandle: jest.Mock<typeof handle> = handle as any;
+jest.mock('utils/errors/handle');
+
 describe('API LMS', () => {
   (window as any).__richie_frontend_context__ = {
     context: {
@@ -34,6 +39,9 @@ describe('API LMS', () => {
   it('throw an error if an unknown url is provided', () => {
     expect(() => LMSHandler('https://unknown.org/course/a-test-course')).toThrow(
       `No LMS Backend found for https://unknown.org/course/a-test-course.`,
+    );
+    expect(mockHandle).toHaveBeenCalledWith(
+      new Error('No LMS Backend found for https://unknown.org/course/a-test-course.'),
     );
   });
 });

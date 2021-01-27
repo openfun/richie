@@ -18,6 +18,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Mock error handler on frontend tests
 - Show 403 page instead of course run list when trying to edit a course run
   with insufficient permissions
 - Improve UX of course search pagination by avoiding truncation of page number
