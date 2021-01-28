@@ -27,6 +27,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Fix course pages subtree following removal of course run pages
 - Fix HTMLSiteMap plugin when placed in a static placeholder
+- Fix HTMLSiteMap plugin when `current_page` property context is not defined
 - Delete template `course_run_detail.html` was still referenced in settings
 - Fix unwanted comma when displaying course runs list on course detail page
 

@@ -93,7 +93,14 @@ class HTMLSitemapPagePlugin(CMSPluginBase):
         to construct the <ul> <li> structure in the template.
         """
         language = translation.get_language()
-        current_page_is_draft = context["current_page"].publisher_is_draft
+
+        # It is possible to have a view without `current_page` in its context
+        # In this case, we consider this page as public. i.e : error views.
+        current_page_is_draft = (
+            context["current_page"].publisher_is_draft
+            if context.get("current_page")
+            else False
+        )
 
         if instance.root_page:
             if current_page_is_draft:

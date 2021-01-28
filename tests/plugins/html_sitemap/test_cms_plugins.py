@@ -564,3 +564,53 @@ class HTMLSitemapPluginTestCase(CMSPluginTestCase):
             </div>
             """,
         )
+
+    def test_cms_plugins_htmlsitemap_no_current_page(self):
+        """
+        A sitemap plugin inserted on a page with no current_page in its context
+        should display all published pages from its root
+        """
+        self.create_page_tree()
+
+        root = PageFactory(
+            title__title="Root", title__language="en", should_publish=True
+        )
+        PageFactory(
+            title__title="Parent",
+            parent=root,
+            title__language="en",
+            should_publish=True,
+        )
+        PageFactory(
+            title__title="Uncle", parent=root, title__language="en", should_publish=True
+        )
+        self.assertEqual(StaticPlaceholder.objects.count(), 1)
+        placeholder = StaticPlaceholder.objects.get()
+
+        context = self.get_practical_plugin_context()
+        parent_instance = add_plugin(placeholder.draft, HTMLSitemapPlugin, "en")
+        add_plugin(
+            placeholder.draft,
+            plugin_type="HTMLSitemapPagePlugin",
+            language="en",
+            target=parent_instance,
+        )
+
+        html = context["cms_content_renderer"].render_placeholder(
+            placeholder.draft, context=context, language="en"
+        )
+        self.assertHTMLEqual(
+            html,
+            """
+            <div class="sitemap">
+              <ul>
+                <li><a href="/en/root/">Root</a>
+                  <ul>
+                    <li><a href="/en/root/parent/">Parent</a></li>
+                    <li><a href="/en/root/uncle/">Uncle</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            """,
+        )
