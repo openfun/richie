@@ -9,7 +9,7 @@ from django.urls import reverse
 from django.utils import timezone
 
 import pytz
-from cms.models import PagePermission
+from cms.models import GlobalPagePermission, PagePermission
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
@@ -79,7 +79,7 @@ class CourseRunAdminTestCase(CMSTestCase):
 
     def test_admin_course_run_list_view_superuser(self):
         """
-        The admin list view of course runs should only show draft objects.
+        The admin list view of course runs should only show the id field.
         """
         user = UserFactory(is_staff=True, is_superuser=True)
         self.client.login(username=user.username, password="password")
@@ -95,22 +95,34 @@ class CourseRunAdminTestCase(CMSTestCase):
         response = self.client.get(url, follow=True)
         self.assertEqual(response.status_code, 200)
 
-        # Check that the page includes only the draft course run
+        # Check that only the id field is displayed
+        self.assertContains(response, "field-id", 2)
+        self.assertContains(response, "field-", 2)
+
+        # Check that the page includes both course run
         self.assertContains(
-            response, '<p class="paginator">1 course run</p>', html=True
+            response, '<p class="paginator">2 course runs</p>', html=True
         )
-        change_url = reverse("admin:courses_courserun_change", args=[course_run.id])
-        self.assertContains(response, change_url)
+
+        change_url_draft = reverse(
+            "admin:courses_courserun_change", args=[course_run.id]
+        )
+        self.assertContains(response, change_url_draft)
+
+        change_url_public = reverse(
+            "admin:courses_courserun_change", args=[course_run.public_course_run.id]
+        )
+        self.assertContains(response, change_url_public)
 
     def test_admin_course_run_list_view_staff(self):
         """
-        On the course run change list view, staff users should only see course runs related
-        to course pages for on which they have change permission.
+        On the course run change list view, staff users can see all draft course runs
+        whether they have related page permissions or not.
         """
         user = UserFactory(is_staff=True)
         self.client.login(username=user.username, password="password")
 
-        # Create a course run linked to a page
+        # Create course runs each linked to their page
         course_run1 = CourseRunFactory()
         course_run2 = CourseRunFactory()
 
@@ -134,12 +146,14 @@ class CourseRunAdminTestCase(CMSTestCase):
 
         # Check that the page includes only the first course run
         self.assertContains(
-            response, '<p class="paginator">1 course run</p>', html=True
+            response, '<p class="paginator">2 course runs</p>', html=True
         )
-        change_url = reverse("admin:courses_courserun_change", args=[course_run1.id])
-        self.assertContains(response, change_url)
+        change_url1 = reverse("admin:courses_courserun_change", args=[course_run1.id])
+        self.assertContains(response, change_url1)
+        change_url2 = reverse("admin:courses_courserun_change", args=[course_run2.id])
+        self.assertContains(response, change_url2)
 
-        # Unless the CMS permissions are not activated
+        # Same if the CMS permissions are not activated
         with override_settings(CMS_PERMISSION=False):
             response = self.client.get(url, follow=True)
         self.assertEqual(response.status_code, 200)
@@ -215,9 +229,7 @@ class CourseRunAdminTestCase(CMSTestCase):
         url = reverse("admin:courses_courserun_change", args=[public_course_run.id])
         response = self.client.get(url, follow=True)
 
-        self.assertEqual(response.status_code, 200)
-        self.assertNotContains(response, "id_title")
-        self.assertContains(response, "Perhaps it was deleted?")
+        self.assertEqual(response.status_code, 403)
 
     def test_admin_course_run_change_view_get_staff_missing_model_permission(self):
         """
@@ -269,9 +281,7 @@ class CourseRunAdminTestCase(CMSTestCase):
         url = reverse("admin:courses_courserun_change", args=[course_run.id])
         response = self.client.get(url, follow=True)
 
-        self.assertEqual(response.status_code, 200)
-        self.assertNotContains(response, "id_title")
-        self.assertContains(response, "Perhaps it was deleted?")
+        self.assertEqual(response.status_code, 403)
 
     def test_admin_course_run_change_view_get_staff_all_permissions(self):
         """
@@ -489,10 +499,9 @@ class CourseRunAdminTestCase(CMSTestCase):
         user = UserFactory(is_staff=True, is_superuser=True)
         self.client.login(username=user.username, password="password")
 
-        response = self._prepare_change_view_post(
-            course_run.public_course_run, snapshot, 200, self.assertNotEqual
+        self._prepare_change_view_post(
+            course_run.public_course_run, snapshot, 403, self.assertNotEqual
         )
-        self.assertContains(response, "Perhaps it was deleted?")
 
     def test_admin_course_run_change_view_post_staff_user_missing_permission(self):
         """
@@ -510,7 +519,7 @@ class CourseRunAdminTestCase(CMSTestCase):
         self.add_permission(user, "change_courserun")
         self.add_permission(user, "change_page")
 
-        self._prepare_change_view_post(course_run, snapshot, 200, self.assertNotEqual)
+        self._prepare_change_view_post(course_run, snapshot, 403, self.assertNotEqual)
 
         # But it should work if CMS permissions are not activated
         with override_settings(CMS_PERMISSION=False):
@@ -540,6 +549,32 @@ class CourseRunAdminTestCase(CMSTestCase):
 
         self._prepare_change_view_post(course_run, snapshot, 200, self.assertEqual)
 
+    def test_admin_course_run_change_view_post_staff_user_global_page_permission(self):
+        """
+        Staff users missing page permissions can still update the course run if the
+        global permissions allow it.
+        """
+        course_run = CourseRunFactory()
+        snapshot = CourseFactory(page_parent=course_run.direct_course.extended_object)
+
+        user = UserFactory(is_staff=True)
+        self.client.login(username=user.username, password="password")
+
+        # Add all necessary model and object level permissions
+        self.add_permission(user, "add_courserun")
+        self.add_permission(user, "change_courserun")
+        self.add_permission(user, "change_page")
+        GlobalPagePermission.objects.create(
+            user=user,
+            can_add=False,
+            can_change=True,
+            can_delete=False,
+            can_publish=False,
+            can_move_page=False,
+        )
+
+        self._prepare_change_view_post(course_run, snapshot, 200, self.assertEqual)
+
     # Delete
 
     def _prepare_delete(self, course_run, status_code, check_method):
@@ -550,7 +585,7 @@ class CourseRunAdminTestCase(CMSTestCase):
         self.assertEqual(response.status_code, status_code)
 
         # Check whether the course run was deleted
-        check_method(CourseRun.objects.exists())
+        check_method(CourseRun.objects.filter(id=course_run.id).exists())
         return response
 
     def test_admin_course_run_delete_anonymous(self):
@@ -593,10 +628,7 @@ class CourseRunAdminTestCase(CMSTestCase):
         user = UserFactory(is_staff=True, is_superuser=True)
         self.client.login(username=user.username, password="password")
 
-        response = self._prepare_delete(
-            course_run.public_course_run, 200, self.assertTrue
-        )
-        self.assertContains(response, "Perhaps it was deleted?")
+        self._prepare_delete(course_run.public_course_run, 200, self.assertFalse)
 
     def test_admin_course_run_delete_staff_user_missing_permission(self):
         """
@@ -612,7 +644,7 @@ class CourseRunAdminTestCase(CMSTestCase):
         self.add_permission(user, "delete_courserun")
         self.add_permission(user, "change_page")
 
-        self._prepare_delete(course_run, 200, self.assertTrue)
+        self._prepare_delete(course_run, 403, self.assertTrue)
 
         # But it should work if CMS permissions are not activated
         with override_settings(CMS_PERMISSION=False):

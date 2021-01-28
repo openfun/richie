@@ -139,14 +139,7 @@ class CourseRunAdmin(FrontendEditableAdminMixin, TranslatableAdmin):
         "enrollment_end",
         "languages",
     )
-    list_display = [
-        "title",
-        "resource_link",
-        "start",
-        "end",
-        "enrollment_start",
-        "enrollment_end",
-    ]
+    list_display = ["id"]
     form = CourseRunAdminForm
     formfield_overrides = {
         django_models.DateTimeField: {
@@ -167,29 +160,15 @@ class CourseRunAdmin(FrontendEditableAdminMixin, TranslatableAdmin):
         form.request = request
         return form
 
-    def get_queryset(self, request):
-        """Exclude public course runs from admin views."""
-        user = request.user
-
-        qs = super().get_queryset(request)
-
-        if user.is_superuser or not getattr(settings, "CMS_PERMISSION", False):
-            return qs.filter(draft_course_run__isnull=True)
-
-        return qs.filter(
-            django_models.Q(direct_course__extended_object__pagepermission__user=user)
-            | django_models.Q(
-                direct_course__extended_object__pagepermission__group__user=user
-            ),
-            direct_course__extended_object__pagepermission__can_change=True,
-            draft_course_run__isnull=True,
-        )
-
     def has_view_permission(self, request, obj=None):
         """Allow view only if the user is allowed to change the related course page."""
-        if obj and getattr(settings, "CMS_PERMISSION", False):
+        if obj:
             course_page = obj.direct_course.extended_object
-            if not page_permissions.user_can_change_page(
+            if not course_page.publisher_is_draft:
+                return False
+            if getattr(
+                settings, "CMS_PERMISSION", False
+            ) and not page_permissions.user_can_change_page(
                 request.user, course_page, course_page.node.site
             ):
                 return False
@@ -197,9 +176,13 @@ class CourseRunAdmin(FrontendEditableAdminMixin, TranslatableAdmin):
 
     def has_change_permission(self, request, obj=None):
         """Allow change only if the user is allowed to change the related course page."""
-        if obj and getattr(settings, "CMS_PERMISSION", False):
+        if obj:
             course_page = obj.direct_course.extended_object
-            if not page_permissions.user_can_change_page(
+            if not course_page.publisher_is_draft:
+                return False
+            if getattr(
+                settings, "CMS_PERMISSION", False
+            ) and not page_permissions.user_can_change_page(
                 request.user, course_page, course_page.node.site
             ):
                 return False
