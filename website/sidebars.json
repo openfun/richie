@@ -4,6 +4,7 @@
     "Recipes": [
       "django-react-interop",
       "building-the-frontend",
+      "internationalization",
       "frontend-overrides",
       "lms-connection"
     ],
