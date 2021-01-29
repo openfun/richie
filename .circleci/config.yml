@@ -107,9 +107,17 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
           version: 19.03.13
+
+      # Login to Docker Hub with encrypted credentials stored as secret
+      # environment variables (set in CircleCI project settings) if the expected
+      # environment variable is set; switch to anonymous mode otherwise.
       - run:
           name: Login to DockerHub
-          command: echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+          command: >
+            test -n "$DOCKER_USER" &&
+              echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin ||
+              echo "Docker Hub anonymous mode"
+
       # Each image is tagged with the current git commit sha1 to avoid
       # collisions in parallel builds.
       - run:
