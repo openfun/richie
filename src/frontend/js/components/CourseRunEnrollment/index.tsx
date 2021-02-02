@@ -56,6 +56,7 @@ interface CourseRunEnrollmentProps {
     id: number;
     resource_link: string;
     priority: number;
+    starts_in_message: Nullable<string>;
   };
 }
 
@@ -233,12 +234,23 @@ export const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonData
     case step === Step.ENROLLED:
       return (
         <React.Fragment>
-          <a href={courseRun.resource_link} className="course-run-enrollment__cta">
-            <FormattedMessage {...messages.goToCourse} />
-          </a>
-          <div className="course-run-enrollment__helptext">
-            <FormattedMessage {...messages.enrolled} />
-          </div>
+          {courseRun.starts_in_message ? (
+            <div>
+              <a href={courseRun.resource_link} className="course-run-enrollment__cta">
+                <FormattedMessage {...messages.enrolled} />
+              </a>
+              <div className="course-run-enrollment__helptext">{courseRun.starts_in_message}</div>
+            </div>
+          ) : (
+            <div>
+              <a href={courseRun.resource_link} className="course-run-enrollment__cta">
+                <FormattedMessage {...messages.goToCourse} />
+              </a>
+              <div className="course-run-enrollment__helptext">
+                <FormattedMessage {...messages.enrolled} />
+              </div>
+            </div>
+          )}
         </React.Fragment>
       );
   }

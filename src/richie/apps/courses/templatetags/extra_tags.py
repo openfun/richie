@@ -4,7 +4,12 @@ import json
 from django import template
 from django.core.exceptions import ObjectDoesNotExist
 from django.template.loader import render_to_string
+from django.utils import timezone
+from django.utils.translation import get_language
+from django.utils.translation import gettext as _
+from django.utils.translation import to_locale
 
+import arrow
 from classytags.arguments import Argument, MultiValueArgument
 from classytags.core import Options, Tag
 from classytags.utils import flatten_context
@@ -229,12 +234,21 @@ def course_enrollment_widget_props(context):
     """
     course_run = context["run"]
 
+    starts_in_message = None
+    if course_run.start > timezone.now():
+        course_start = arrow.get(course_run.start)
+        humanized_course_start = course_start.humanize(
+            arrow.now(), locale=to_locale(get_language())
+        )
+        starts_in_message = _("The course will start {:s}").format(humanized_course_start)
+
     return json.dumps(
         {
             "courseRun": {
                 "id": course_run.id,
                 "resource_link": course_run.resource_link,
                 "priority": course_run.state["priority"],
+                "starts_in_message": starts_in_message,
             }
         }
     )

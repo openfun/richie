@@ -56,6 +56,7 @@ describe('<CourseRunEnrollment />', () => {
     id: courseRun.id,
     resource_link: courseRun.resource_link,
     priority: courseRun.state.priority,
+    starts_in_message: courseRun.starts_in_message,
   });
 
   afterEach(() => {
@@ -175,6 +176,40 @@ describe('<CourseRunEnrollment />', () => {
 
     screen.getByRole('link', { name: 'Go to course' });
     screen.getByText('You are enrolled in this course run');
+  });
+
+  it("shows remaining course opening time and a link to the lms dashboard if the user is already enrolled and if the course hasn't started yet", async () => {
+    const username = initializeUser();
+    const courseRun: CourseRun = factories.CourseRunFactory.generate();
+    courseRun.state.priority = 0;
+    courseRun.starts_in_message = 'The course will start in 3 days';
+
+    const courseRunDeferred = new Deferred();
+    fetchMock.get(`/api/v1.0/course-runs/${courseRun.id}/`, courseRunDeferred.promise);
+    const enrollmentsDeferred = new Deferred();
+    fetchMock.get(
+      `${endpoint}/api/enrollment/v1/enrollment/${username},${courseRun.resource_link}`,
+      enrollmentsDeferred.promise,
+    );
+
+    render(
+      <IntlProvider locale="en">
+        <SessionProvider>
+          <CourseRunEnrollment context={contextProps} courseRun={getCourseRunProp(courseRun)} />
+        </SessionProvider>
+      </IntlProvider>,
+    );
+    screen.getByRole('status', { name: 'Loading enrollment information...' });
+
+    await act(async () => {
+      courseRunDeferred.resolve(courseRun);
+      enrollmentsDeferred.resolve({ is_active: true });
+    });
+
+    expect(screen.queryByRole('link', { name: 'Go to course' })).toBeNull();
+    // screen.getByRole('link', { name: 'Go to dashboard' });
+    screen.getByText('You are enrolled in this course run');
+    screen.getByText('The course will start in 3 days');
   });
 
   it('shows a helpful message if the course run is closed', async () => {

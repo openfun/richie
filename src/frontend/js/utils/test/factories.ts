@@ -18,6 +18,7 @@ export const CourseRunFactory = createSpec({
   enrollment_end: derived(() => faker.date.past()().toISOString()),
   languages: faker.random.locale(),
   state: CourseStateFactory,
+  starts_in_message: null,
 });
 
 export const EnrollmentFactory = createSpec({
