@@ -7,6 +7,7 @@ export interface CourseRun {
   enrollment_end: string;
   languages: string[];
   state: CourseState;
+  starts_in_message: string;
 }
 
 export interface CourseState {

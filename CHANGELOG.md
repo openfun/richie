@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+- Hide "Go to course" button if lms course hasn't started yet 
+
 ### Added
 
 - Add a "person" variant to the glimpse plugin for persons without a page

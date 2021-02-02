@@ -2,6 +2,10 @@
 Unit tests for the `course_enrollment_widget_props` template filter.
 """
 import json
+from datetime import timedelta
+from unittest import mock
+
+from django.utils import timezone
 
 from cms.test_utils.testcases import CMSTestCase
 
@@ -20,19 +24,26 @@ class CourseEnrollmentWidgetPropsTagTestCase(CMSTestCase):
         course_enrollment_widget_props should return these properties wrapped into
         a courseRun object as a stringified json.
         """
+        now = timezone.now()
         course_run = CourseRunFactory(
-            resource_link="http://example.edx:8073/courses/course-v1:edX+DemoX+Demo_Course/course/"
+            resource_link=(
+                "http://example.edx:8073/courses/course-v1:edX+DemoX+Demo_Course/course/"
+            ),
+            start=now + timedelta(days=1),
         )
         context = {"run": course_run}
-        self.assertEqual(
-            course_enrollment_widget_props(context),
-            json.dumps(
-                {
-                    "courseRun": {
-                        "id": course_run.id,
-                        "resource_link": course_run.resource_link,
-                        "priority": course_run.direct_course.state["priority"],
+
+        with mock.patch.object(timezone, "now", return_value=now):
+            self.assertEqual(
+                course_enrollment_widget_props(context),
+                json.dumps(
+                    {
+                        "courseRun": {
+                            "id": course_run.id,
+                            "resource_link": course_run.resource_link,
+                            "priority": course_run.direct_course.state["priority"],
+                            "starts_in_message": "The course will start in a day",
+                        }
                     }
-                }
-            ),
-        )
+                ),
+            )
