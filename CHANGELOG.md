@@ -9,7 +9,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unrealeased]
 
 - Hide "Go to course" button if lms course hasn't started yet 
-- Add dashboard link to user menu 
+- Add dashboard link to user menu
+- Use dashboard link if enrolled lms course hasn't started yet
 
 ### Added
 

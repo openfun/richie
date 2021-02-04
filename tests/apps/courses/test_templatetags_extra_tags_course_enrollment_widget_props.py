@@ -31,7 +31,14 @@ class CourseEnrollmentWidgetPropsTagTestCase(CMSTestCase):
             ),
             start=now + timedelta(days=1),
         )
-        context = {"run": course_run}
+        profile_urls = json.dumps(
+            [
+                {"action": "http://example.edx:8073/dashboard"},
+                {"action": "http://example.edx:8073/u/edx"},
+                {"action": "http://example.edx:8073/account/settings"},
+            ]
+        )
+        context = {"run": course_run, "AUTHENTICATION": {"profile_urls": profile_urls}}
 
         with mock.patch.object(timezone, "now", return_value=now):
             self.assertEqual(
@@ -43,6 +50,7 @@ class CourseEnrollmentWidgetPropsTagTestCase(CMSTestCase):
                             "resource_link": course_run.resource_link,
                             "priority": course_run.direct_course.state["priority"],
                             "starts_in_message": "The course will start in a day",
+                            "dashboard_link": "http://example.edx:8073/dashboard",
                         }
                     }
                 ),

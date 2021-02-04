@@ -57,6 +57,7 @@ describe('<CourseRunEnrollment />', () => {
     resource_link: courseRun.resource_link,
     priority: courseRun.state.priority,
     starts_in_message: courseRun.starts_in_message,
+    dashboard_link: courseRun.dashboard_link,
   });
 
   afterEach(() => {
@@ -183,6 +184,7 @@ describe('<CourseRunEnrollment />', () => {
     const courseRun: CourseRun = factories.CourseRunFactory.generate();
     courseRun.state.priority = 0;
     courseRun.starts_in_message = 'The course will start in 3 days';
+    courseRun.dashboard_link = 'https://edx.local.dev:8073/dashboard';
 
     const courseRunDeferred = new Deferred();
     fetchMock.get(`/api/v1.0/course-runs/${courseRun.id}/`, courseRunDeferred.promise);
@@ -207,8 +209,10 @@ describe('<CourseRunEnrollment />', () => {
     });
 
     expect(screen.queryByRole('link', { name: 'Go to course' })).toBeNull();
-    // screen.getByRole('link', { name: 'Go to dashboard' });
-    screen.getByText('You are enrolled in this course run');
+    expect(screen.getByText('You are enrolled in this course run')).toHaveAttribute(
+      'href',
+      'https://edx.local.dev:8073/dashboard',
+    );
     screen.getByText('The course will start in 3 days');
   });
 

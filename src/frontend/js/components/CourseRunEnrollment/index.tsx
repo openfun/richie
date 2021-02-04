@@ -57,6 +57,7 @@ interface CourseRunEnrollmentProps {
     resource_link: string;
     priority: number;
     starts_in_message: Nullable<string>;
+    dashboard_link: string;
   };
 }
 
@@ -236,7 +237,7 @@ export const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonData
         <React.Fragment>
           {courseRun.starts_in_message ? (
             <div>
-              <a href={courseRun.resource_link} className="course-run-enrollment__cta">
+              <a href={courseRun.dashboard_link} className="course-run-enrollment__cta">
                 <FormattedMessage {...messages.enrolled} />
               </a>
               <div className="course-run-enrollment__helptext">{courseRun.starts_in_message}</div>

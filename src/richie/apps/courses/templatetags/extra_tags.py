@@ -234,13 +234,22 @@ def course_enrollment_widget_props(context):
     """
     course_run = context["run"]
 
+    dashboard_link = None
+    profile_urls = json.loads(context.get("AUTHENTICATION").get("profile_urls"))
+    for url in profile_urls:
+        action = url.get("action")
+        if "dashboard" in action:
+            dashboard_link = action
+
     starts_in_message = None
     if course_run.start > timezone.now():
         course_start = arrow.get(course_run.start)
         humanized_course_start = course_start.humanize(
             arrow.now(), locale=to_locale(get_language())
         )
-        starts_in_message = _("The course will start {:s}").format(humanized_course_start)
+        starts_in_message = _("The course will start {:s}").format(
+            humanized_course_start
+        )
 
     return json.dumps(
         {
@@ -249,6 +258,7 @@ def course_enrollment_widget_props(context):
                 "resource_link": course_run.resource_link,
                 "priority": course_run.state["priority"],
                 "starts_in_message": starts_in_message,
+                "dashboard_link": dashboard_link,
             }
         }
     )
