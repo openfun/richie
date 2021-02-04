@@ -255,6 +255,7 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         # e.g: for user.username = johndoe, /u/(username) will be /u/johndoe
         "PROFILE_URLS": values.ListValue(
             [
+                {"label": _("Dashboard"), "href": _("{base_url:s}/dashboard")},
                 {"label": _("Profile"), "href": _("{base_url:s}/u/(username)")},
                 {"label": _("Account"), "href": _("{base_url:s}/account/settings")},
             ],
