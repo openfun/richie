@@ -8,6 +8,7 @@ export interface CourseRun {
   languages: string[];
   state: CourseState;
   starts_in_message: string;
+  dashboard_link: string;
 }
 
 export interface CourseState {
