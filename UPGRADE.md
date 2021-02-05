@@ -16,6 +16,10 @@ $ make migrate
 
 ## Unreleased
 
+## 2.0.x to 2.1.x
+- `RICHIE_AUTHENTICATION_DELEGATION["PROFILE_URLS"]` setting is now a dictionary : a key has been
+  added to each url, permitting to get one easily.
+
 ## 1.17.x to 2.0.x
 - Richie version 2 introduces a new `AUTHENTICATION_BACKEND` setting used to get session information
   from OpenEdX through CORS requests. So login, register and logout routes are constructed from
