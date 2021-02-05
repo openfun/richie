@@ -1,3 +1,5 @@
+import { Nullable } from 'utils/types';
+
 export interface CourseRun {
   id: number;
   resource_link: string;
@@ -7,8 +9,8 @@ export interface CourseRun {
   enrollment_end: string;
   languages: string[];
   state: CourseState;
-  starts_in_message: string;
-  dashboard_link: string;
+  starts_in_message: Nullable<string>;
+  dashboard_link: Nullable<string>;
 }
 
 export interface CourseState {
