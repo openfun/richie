@@ -245,8 +245,10 @@ def course_enrollment_widget_props(context):
         humanized_course_start = course_start.humanize(
             arrow.now(), locale=to_locale(get_language())
         )
-        starts_in_message = _("The course will start {:s}").format(
-            humanized_course_start
+        # Translators: delay indicates when the course will start as a duration.
+        # In english the string will be "The course will start in 3 days"
+        starts_in_message = _("The course will start {delay:s}").format(
+            delay=humanized_course_start
         )
 
     return json.dumps(
