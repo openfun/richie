@@ -242,11 +242,11 @@ export const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonData
                   <FormattedMessage {...messages.enrolled} />
                 </a>
               ) : (
-                <div className="course-run-enrollment__helptext">
+                <p className="course-run-enrollment__helptext">
                   <FormattedMessage {...messages.enrolled} />
-                </div>
+                </p>
               )}
-              <div className="course-run-enrollment__helptext">{courseRun.starts_in_message}</div>
+              <p className="course-run-enrollment__helptext">{courseRun.starts_in_message}</p>
             </div>
           ) : (
             <div>
