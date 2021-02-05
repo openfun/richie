@@ -53,8 +53,8 @@ def site_metas(request):
 
         context["AUTHENTICATION"] = {
             "profile_urls": json.dumps(
-                [
-                    {
+                {
+                    key: {
                         "label": str(url["label"]),
                         "action": str(
                             url["href"].format(
@@ -62,8 +62,10 @@ def site_metas(request):
                             )
                         ),
                     }
-                    for url in authentication_delegation.get("PROFILE_URLS", [])
-                ]
+                    for key, url in authentication_delegation.get(
+                        "PROFILE_URLS", {}
+                    ).items()
+                }
             ),
         }
 

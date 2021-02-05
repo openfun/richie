@@ -93,11 +93,13 @@ export const UserLogin = ({ profileUrls = [] }: UserLoginProps) => {
           user={{
             ...user,
             urls: [
-              ...profileUrls.map(({ label, action }) => ({
+              ...Object.entries(profileUrls).map(([key, { label, action }]) => ({
+                key,
                 label,
                 action: typeof action === 'string' ? bindUserDataToUrl(action, user) : action,
               })),
               {
+                key: 'logout',
                 label: intl.formatMessage(messages.logOut),
                 action: destroy,
               },

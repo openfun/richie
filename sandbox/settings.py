@@ -253,12 +253,21 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         # (i) Info - {base_url} is RICHIE_AUTHENTICATION_DELEGATION.BASE_URL
         # (i) If you need to bind user data into href url, wrap the property between ()
         # e.g: for user.username = johndoe, /u/(username) will be /u/johndoe
-        "PROFILE_URLS": values.ListValue(
-            [
-                {"label": _("Dashboard"), "href": _("{base_url:s}/dashboard")},
-                {"label": _("Profile"), "href": _("{base_url:s}/u/(username)")},
-                {"label": _("Account"), "href": _("{base_url:s}/account/settings")},
-            ],
+        "PROFILE_URLS": values.DictValue(
+            {
+                "dashboard": {
+                    "label": _("Dashboard"),
+                    "href": _("{base_url:s}/dashboard"),
+                },
+                "profile": {
+                    "label": _("Profile"),
+                    "href": _("{base_url:s}/u/(username)"),
+                },
+                "account": {
+                    "label": _("Account"),
+                    "href": _("{base_url:s}/account/settings"),
+                },
+            },
             environ_name="AUTHENTICATION_PROFILE_URLS",
             environ_prefix=None,
         ),

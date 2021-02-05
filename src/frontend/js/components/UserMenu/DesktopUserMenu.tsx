@@ -51,7 +51,7 @@ export const DesktopUserMenu: React.FC<UserMenuProps> = ({ user }) => {
       >
         {isOpen &&
           user.urls.map((link, index) => (
-            <li key={`user-link-${link.label}-${index}`} {...getItemProps({ item: link, index })}>
+            <li key={link.key} {...getItemProps({ item: link, index })}>
               {typeof link.action === 'string' ? (
                 <a
                   className={`selector__list__link ${
