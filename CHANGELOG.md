@@ -8,11 +8,6 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
-- Hide "Go to course" button if lms course hasn't started yet 
-- Add dashboard link to user menu
-- Use dashboard link if enrolled lms course hasn't started yet
-- Urls keys added in profile_url settings 
-
 ### Added
 
 - Add a "person" variant to the glimpse plugin for persons without a page
@@ -20,6 +15,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Allow overriding a person's bio on the person plugin
 - Add new section on the course detail page to display related programs
 - Display "code" on the course detail page and allow frontend editing
+- Add dashboard link to user menu
+- Use dashboard link if enrolled lms course hasn't started yet
 
 ### Changed
 
@@ -28,6 +25,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   with insufficient permissions
 - Improve UX of course search pagination by avoiding truncation of page number
   when it is not relevant
+- Hide "Go to course" button if lms course hasn't started yet
+- Add Urls `key` property in profile_url settings
 
 ### Fixed
 
