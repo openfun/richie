@@ -92,10 +92,10 @@ describe('<UserLogin />', () => {
 
   it('should renders profile urls and bind user info if needed', () => {
     const username = initializeUser();
-    const profileUrls = [
-      { label: 'Settings', action: 'https://auth.local.test/settings' },
-      { label: 'Account', action: 'https://auth.local.test/u/(username)' },
-    ];
+    const profileUrls = {
+      settings: { label: 'Settings', action: 'https://auth.local.test/settings' },
+      account: { label: 'Account', action: 'https://auth.local.test/u/(username)' },
+    };
 
     const { getByText, getByRole } = render(
       <IntlProvider locale="en">

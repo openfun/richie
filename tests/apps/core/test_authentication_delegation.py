@@ -18,12 +18,12 @@ class UserMenuTests(CMSTestCase):
         RICHIE_AUTHENTICATION_DELEGATION={
             "BASE_URL": "https://richie.education:9999",
             "BACKEND": "richie.apps.courses.lms.base.BaseLMSBackend",
-            "PROFILE_URLS": [
-                {
+            "PROFILE_URLS": {
+                "profile": {
                     "label": "Profile",
                     "href": _("{base_url:s}/profile"),
                 }
-            ],
+            },
         }
     )
     def test_user_menu_with_profile_urls(self):
@@ -85,7 +85,7 @@ class UserMenuTests(CMSTestCase):
         """
         If RICHIE_AUTHENTICATION_DELEGATION.PROFILE_URLS is not defined,
         user menu should render correctly and
-        profileUrls data-props should be an empty array
+        profileUrls data-props should be an empty object
         """
         page = create_page(
             title="Home",
@@ -96,4 +96,4 @@ class UserMenuTests(CMSTestCase):
         response = self.client.get(page.get_public_url())
 
         self.assertContains(response, "richie-react richie-react--user-login")
-        self.assertContains(response, "data-props='{\"profileUrls\": []}'")
+        self.assertContains(response, "data-props='{\"profileUrls\": {}}'")

@@ -234,12 +234,10 @@ def course_enrollment_widget_props(context):
     """
     course_run = context["run"]
 
-    dashboard_link = None
-    profile_urls = json.loads(context.get("AUTHENTICATION").get("profile_urls"))
-    for url in profile_urls:
-        action = url.get("action")
-        if "dashboard" in action:
-            dashboard_link = action
+    profile_urls = json.loads(
+        context.get("AUTHENTICATION", {}).get("profile_urls", "{}")
+    )
+    dashboard_link = profile_urls.get("dashboard", {}).get("action")
 
     starts_in_message = None
     if course_run.start > timezone.now():

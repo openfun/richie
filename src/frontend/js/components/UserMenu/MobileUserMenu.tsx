@@ -10,8 +10,8 @@ export const MobileUserMenu: React.FC<UserMenuProps> = ({ user }) => (
       {user.username}
     </h6>
     <ul className="user-menu__list">
-      {user.urls.map(({ label, action }, index) => (
-        <li className="user-menu__list__item" key={`user-link-${label}-${index}`}>
+      {user.urls.map(({ key, label, action }) => (
+        <li className="user-menu__list__item" key={key}>
           {typeof action === 'string' ? (
             <a href={action}>{label}</a>
           ) : (

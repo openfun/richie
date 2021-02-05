@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Hide "Go to course" button if lms course hasn't started yet 
 - Add dashboard link to user menu
 - Use dashboard link if enrolled lms course hasn't started yet
+- Urls keys added in profile_url settings 
 
 ### Added
 

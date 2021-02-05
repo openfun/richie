@@ -12,14 +12,17 @@ const props = {
     username: 'John Doe',
     urls: [
       {
+        key: 'logout',
         label: 'Log out',
         action: '/logout',
       },
       {
+        key: 'profile',
         label: 'Profile',
         action: 'https://acme.org/profile/johndoe',
       },
       {
+        key: 'dashboard',
         label: 'My Dashboard',
         action: 'https://acme.org/dashboard',
       },
