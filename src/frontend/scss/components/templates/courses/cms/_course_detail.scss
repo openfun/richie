@@ -47,6 +47,7 @@
     &__content {
       @include media-breakpoint-up(lg) {
         @include sv-flex(1, 0, #{100% - $r-course-aside});
+        padding-right: 3rem;
       }
     }
 
@@ -55,7 +56,7 @@
 
       @include media-breakpoint-up(lg) {
         @include sv-flex(1, 0, $r-course-aside);
-        padding: 3rem 0.5rem;
+        padding: 3rem 1rem;
       }
 
       #{$detail-selector}__row {

@@ -364,7 +364,10 @@ class CourseCMSTestCase(CMSTestCase):
         pattern = r'<div class="subheader__teaser"><div class="cms-placeholder'
         self.assertIsNotNone(re.search(pattern, str(response.content)))
         pattern = (
-            r'<div class="subheader__content subheader__content--aside">'
+            r'<div class="subheader__content">'
+            r'<div class="characteristics">'
+            r"<ul.*</ul>"
+            r"</div>"
             r'<div class="cms-placeholder'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))

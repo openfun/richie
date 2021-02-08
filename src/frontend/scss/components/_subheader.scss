@@ -23,6 +23,8 @@ $r-subheader-search-title-width: 19rem !default; // aligned on computed search r
     @include make-container();
     @include make-container-max-widths();
     @include sv-flex(1, 0, 100%);
+    padding-left: 0;
+    padding-right: 0;
 
     @include media-breakpoint-down(lg) {
       padding-left: 0;
@@ -36,6 +38,8 @@ $r-subheader-search-title-width: 19rem !default; // aligned on computed search r
     @include make-container();
     @include make-container-max-widths();
     @include sv-flex(1, 0, 100%);
+    padding-left: 0;
+    padding-right: 0;
 
     margin-top: -0.5rem;
     margin-bottom: 0.5rem;
@@ -63,6 +67,8 @@ $r-subheader-search-title-width: 19rem !default; // aligned on computed search r
   &__intro {
     @include make-container();
     @include make-container-max-widths();
+    padding-left: 0;
+    padding-right: 0;
 
     @include media-breakpoint-down(lg) {
       padding-left: 0;
@@ -73,7 +79,6 @@ $r-subheader-search-title-width: 19rem !default; // aligned on computed search r
       display: flex;
       justify-content: flex-start;
       align-content: flex-start;
-      align-items: center;
       flex-wrap: wrap;
     }
 
@@ -112,7 +117,7 @@ $r-subheader-search-title-width: 19rem !default; // aligned on computed search r
   // Main subheader container alongside 'aside' container
   &__main {
     @include media-breakpoint-up(lg) {
-      @include sv-flex(1, 0, 75%);
+      @include sv-flex(1, 0, calc(100% - #{$r-course-aside}));
       display: flex;
       justify-content: flex-start;
       align-content: flex-start;
@@ -123,22 +128,11 @@ $r-subheader-search-title-width: 19rem !default; // aligned on computed search r
 
   // Main content with possible categories
   &__content {
+    @include make-container();
+    padding-left: 0;
+    padding-right: 0;
     margin-top: 0.5rem;
-    padding: 0.5rem 0;
     font-size: 1rem;
-
-    @include media-breakpoint-up(lg) {
-      @include sv-flex(1, 0, 75%);
-      margin-top: 0.5rem;
-    }
-
-    // Variant to preserve some space for teaser
-    &--aside {
-      @include media-breakpoint-up(lg) {
-        @include sv-flex(1, 0, 68%);
-        padding: 0.5rem 2rem;
-      }
-    }
   }
 
   // Aside subheader container alongside 'main' content
@@ -146,21 +140,34 @@ $r-subheader-search-title-width: 19rem !default; // aligned on computed search r
     text-align: center;
 
     @include media-breakpoint-up(lg) {
-      @include sv-flex(1, 0, 25%);
+      @include sv-flex(1, 0, $r-course-aside);
+      padding: 3rem 1rem;
     }
   }
 
   // Video container aside main content
   &__teaser {
     width: 100%;
-    margin-top: 0.5rem;
+    margin: 3rem 0 1rem;
+
     @if r-theme-val(subheader, teaser-border) {
       border: 0.25rem solid r-theme-val(subheader, teaser-border);
     }
 
     @include media-breakpoint-up(lg) {
-      @include sv-flex(1, 0, 32%);
-      margin-top: 0.5rem;
+      @include sv-flex(1, 0, 90%);
+    }
+
+    .aspect-ratio {
+      position: relative;
+      padding-bottom: 56.25%; // Aspect ratio 16/9
+
+      iframe {
+        position: absolute;
+        height: 100%;
+        object-fit: contain;
+        object-position: center;
+      }
     }
 
     iframe,
@@ -188,7 +195,7 @@ $r-subheader-search-title-width: 19rem !default; // aligned on computed search r
   &__media {
     display: block;
     width: 100%;
-    max-width: rem-calc(150px);
+    max-width: rem-calc(250px);
     margin: 0 auto;
     background: r-theme-val(subheader, media-background);
     border-radius: $border-radius-lg;

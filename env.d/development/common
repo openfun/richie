@@ -18,3 +18,6 @@ DJANGO_SOCIAL_AUTH_EDX_OIDC_SECRET=fakesecret
 DJANGO_SOCIAL_ERROR_REVERSE_ID=login-error
 
 DJANGO_RICHIE_COURSE_RUN_SYNC_SECRETS=shared secret
+
+#LTI Consumer plugin
+LTI_TEST_BASE_URL=http://localhost:8060/lti/videos/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}

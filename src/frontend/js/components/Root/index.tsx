@@ -6,6 +6,7 @@ import ReactDOM from 'react-dom';
 
 import { CourseRunEnrollment } from 'components/CourseRunEnrollment';
 import { LanguageSelector } from 'components/LanguageSelector';
+import { LtiConsumer } from 'components/LtiConsumer';
 import { RootSearchSuggestField } from 'components/RootSearchSuggestField';
 import { Search } from 'components/Search';
 import { SearchSuggestField } from 'components/SearchSuggestField';
@@ -19,6 +20,7 @@ import { SessionProvider } from 'data/useSession';
 interface ComponentLibrary {
   CourseRunEnrollment: typeof CourseRunEnrollment;
   LanguageSelector: typeof LanguageSelector;
+  LtiConsumer: typeof LtiConsumer;
   RootSearchSuggestField: typeof RootSearchSuggestField;
   Search: typeof Search;
   SearchSuggestField: typeof SearchSuggestField;
@@ -28,6 +30,7 @@ interface ComponentLibrary {
 const componentLibrary: ComponentLibrary = {
   CourseRunEnrollment,
   LanguageSelector,
+  LtiConsumer,
   RootSearchSuggestField,
   Search,
   SearchSuggestField,

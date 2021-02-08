@@ -59,21 +59,7 @@
                     {% endif %}
                     {% endblock title %}
 
-                    <div class="subheader__teaser">
-                        {% placeholder "course_teaser" or %}
-                        <div class="empty">{% trans 'Add a video or teaser.' %}</div>
-                        {% endplaceholder %}
-                    </div>
-
-                    <div class="subheader__content subheader__content--aside">
-                        {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_introduction" %}
-                            {% with header_level=3 %}
-                            {% placeholder "course_introduction" or %}
-                                <p>{% trans 'Enter here a introduction of your course.' %}</p>
-                            {% endplaceholder %}
-                            {% endwith %}
-                        {% endif %}
-
+                    <div class="subheader__content">
                         {% block synopsis %}
                         {% if course.duration or course.effort or current_page.publisher_is_draft %}
                         <div class="characteristics">
@@ -109,6 +95,19 @@
                         {% endif %}
                         {% endblock synopsis %}
 
+                        {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_introduction" %}
+                            {% with header_level=3 %}
+                            {% placeholder "course_introduction" or %}
+                                <p>{% trans 'Enter here a introduction of your course.' %}</p>
+                            {% endplaceholder %}
+                            {% endwith %}
+                        {% endif %}
+                    </div>
+
+                    <div class="subheader__teaser">
+                        {% placeholder "course_teaser" or %}
+                        <div class="empty">{% trans 'Add a video or teaser.' %}</div>
+                        {% endplaceholder %}
                     </div>
                 </div>
 

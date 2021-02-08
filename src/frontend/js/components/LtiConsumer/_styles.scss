@@ -1,0 +1,12 @@
+.lti-consumer {
+  animation: fadeIn 400ms ease-out forwards;
+  background-color: #ffffff;
+}
+@keyframes fadeIn {
+  from {
+    background-color: #ffffff00;
+  }
+  to {
+    background-color: #ffffff;
+  }
+}
