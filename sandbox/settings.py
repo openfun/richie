@@ -312,6 +312,31 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         default="richie", environ_name="RICHIE_ES_INDICES_PREFIX", environ_prefix=None
     )
 
+    # LTI Content
+    RICHIE_LTI_PROVIDERS = {
+        "lti_provider_test": {
+            "oauth_consumer_key": values.Value(
+                "InsecureOauthConsumerKey",
+                environ_name="LTI_TEST_OAUTH_CONSUMER_KEY",
+                environ_prefix=None,
+            ),
+            "shared_secret": values.Value(
+                "InsecureSharedSecret",
+                environ_name="LTI_TEST_SHARED_SECRET",
+                environ_prefix=None,
+            ),
+            "base_url": values.Value(
+                "https://lti.tools/saltire/tp",
+                environ_name="LTI_TEST_BASE_URL",
+                environ_prefix=None,
+            ),
+            "display_name": "LTI Provider Test Video",
+            "is_base_url_regex": True,
+            "automatic_resizing": True,
+            "inline_ratio": 0.5625,
+        }
+    }
+
     # Internationalization
     TIME_ZONE = "Europe/Paris"
     USE_I18N = True
@@ -384,6 +409,7 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
         "richie.plugins.section",
         "richie.plugins.simple_picture",
         "richie.plugins.simple_text_ckeditor",
+        "richie.plugins.lti_consumer",
         "richie",
         # Third party apps
         "dj_pagination",
@@ -569,6 +595,10 @@ class Development(Base):
 
     DEBUG = True
     ALLOWED_HOSTS = ["*"]
+    # Needed by LTI Consumer plugin
+    # When we use a LTI provider on localhost domain, browser security needs to be lowered,
+    # as crossdomain iframe posting is dangerous.
+    SECURE_REFERRER_POLICY = "unsafe-url"
 
 
 class Test(Base):

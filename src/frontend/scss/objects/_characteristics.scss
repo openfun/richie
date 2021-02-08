@@ -4,7 +4,7 @@
 
 // Simple inline with optional color scheme features
 .characteristics {
-  @include feature-list();
+  @include feature-list($margin: 0 0 0.5rem 0);
 
   color: inherit;
 

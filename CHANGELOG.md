@@ -16,6 +16,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add `is_self_paced` boolean field to course model
 - Add pace and duration icons.
 - Add `get_pace` and `get_pace_display` methods to course model
+- Add new plugin "LTI consumer" to include LTI provided content.
 
 ### Changed
 

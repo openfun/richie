@@ -1843,6 +1843,11 @@
     "@types/react" "*"
     hoist-non-react-statics "^3.3.0"
 
+"@types/iframe-resizer@3.5.8":
+  version "3.5.8"
+  resolved "https://registry.yarnpkg.com/@types/iframe-resizer/-/iframe-resizer-3.5.8.tgz#d141f3cbebca951788e3b9a7654d46317bb9345b"
+  integrity sha512-gkdjvjShS1aKe3giEwOlKGJzUixA5kqMlFRT4zwjC+K+BZWiwGq5/HMSDFu2oeTBJlKP0iWABabssSYjc9PVuQ==
+
 "@types/istanbul-lib-coverage@*", "@types/istanbul-lib-coverage@^2.0.0", "@types/istanbul-lib-coverage@^2.0.1":
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/@types/istanbul-lib-coverage/-/istanbul-lib-coverage-2.0.3.tgz#4ba8ddb720221f432e443bd5f9117fd22cfd4762"
@@ -4592,6 +4597,11 @@ icss-utils@^4.0.0, icss-utils@^4.1.1:
   integrity sha512-4aFq7wvWyMHKgxsH8QQtGpvbASCf+eM3wPRLI6R+MgAnTCZ6STYsRvttLvRWK0Nfif5piF394St3HeJDaljGPA==
   dependencies:
     postcss "^7.0.14"
+
+iframe-resizer@4.3.1:
+  version "4.3.1"
+  resolved "https://registry.yarnpkg.com/iframe-resizer/-/iframe-resizer-4.3.1.tgz#7aca964ac02ba1fd2b8099b8ef30bc9a1f4f72ca"
+  integrity sha512-PkoTPNF6EYhTbDjogdKu7JVgKqRwwNBXMeywZaQyzEYM3BNltA8O9fIIrtUkmj+8VZGckXpwtXsWsaQ5lrhd0w==
 
 ignore-by-default@^1.0.1:
   version "1.0.1"
