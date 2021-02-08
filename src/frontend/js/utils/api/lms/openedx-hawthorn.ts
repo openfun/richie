@@ -44,7 +44,7 @@ const API = (
   return {
     user: {
       me: async () => {
-        return await fetch(ROUTES.user.me, { credentials: 'include' })
+        return fetch(ROUTES.user.me, { credentials: 'include' })
           .then((res) => {
             if (res.ok) return res.json();
             if (res.status === 401) return null;
