@@ -19,6 +19,17 @@ $ make migrate
 ## 2.0.x to 2.1.x
 - `RICHIE_AUTHENTICATION_DELEGATION["PROFILE_URLS"]` setting is now a dictionary : a key has been
   added to each url, permitting to get one easily.
+- Richie has now its own error templates. You can use them by setting `handler400`, `handler403`,
+  `handler404` and `handler500` to its related view
+  (`richie.apps.core.views.error.error_<ERROR_CODE>_view_handler`).
+  - In your project's `urls.py`, add these lines at the end of the file:
+    ```diff
+        ...
+    +   handler400 = "richie.apps.core.views.error.error_400_view_handler"
+    +   handler403 = "richie.apps.core.views.error.error_403_view_handler"
+    +   handler404 = "richie.apps.core.views.error.error_404_view_handler"
+    +   handler500 = "richie.apps.core.views.error.error_500_view_handler"
+    ```
 
 ## 1.17.x to 2.0.x
 - Richie version 2 introduces a new `AUTHENTICATION_BACKEND` setting used to get session information
