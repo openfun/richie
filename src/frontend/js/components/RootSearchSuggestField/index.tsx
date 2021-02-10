@@ -132,7 +132,7 @@ export const RootSearchSuggestField = ({
       onSuggestionsFetchRequested={async ({ value: incomingValue }) =>
         onSuggestionsFetchRequested(await getFilters(), setSuggestions, incomingValue)
       }
-      onSuggestionHighlighted={({ suggestion }) => setHasHighlightedSuggestion(!suggestion)}
+      onSuggestionHighlighted={({ suggestion }) => setHasHighlightedSuggestion(!!suggestion)}
       onSuggestionSelected={onSuggestionSelected}
       renderInputComponent={(passthroughInputProps) => (
         <SearchInput

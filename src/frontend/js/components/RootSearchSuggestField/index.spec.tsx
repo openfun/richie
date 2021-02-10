@@ -31,8 +31,10 @@ describe('<RootSearchSuggestField />', () => {
     values: [],
   };
 
-  afterEach(() => fetchMock.restore());
-  afterEach(jest.resetAllMocks);
+  afterEach(() => {
+    fetchMock.restore();
+    jest.resetAllMocks();
+  });
 
   it('renders', () => {
     fetchMock.get('/api/v1.0/filter-definitions/', {
@@ -129,6 +131,7 @@ describe('<RootSearchSuggestField />', () => {
 
     fireEvent.click(course);
     await waitFor(() => {
+      expect(location.assign).toHaveBeenCalledTimes(1);
       expect(location.assign).toHaveBeenCalledWith('/en/courses/42');
     });
   });
@@ -168,6 +171,7 @@ describe('<RootSearchSuggestField />', () => {
 
     fireEvent.click(subject);
     await waitFor(() => {
+      expect(location.assign).toHaveBeenCalledTimes(1);
       expect(location.assign).toHaveBeenCalledWith(
         '/en/courses/?limit=13&offset=0&subjects=L-000300010001',
       );
@@ -197,6 +201,7 @@ describe('<RootSearchSuggestField />', () => {
     fireEvent.keyDown(field, { keyCode: 13 });
 
     await waitFor(() => {
+      expect(location.assign).toHaveBeenCalledTimes(1);
       expect(location.assign).toHaveBeenCalledWith(
         '/en/courses/?limit=13&offset=0&query=some%20query',
       );
@@ -240,6 +245,7 @@ describe('<RootSearchSuggestField />', () => {
     fireEvent.keyDown(field, { keyCode: 40 }); // Select the desired suggestion (there is only one)
     fireEvent.keyDown(field, { keyCode: 13 }); // Press enter
     await waitFor(() => {
+      expect(location.assign).toHaveBeenCalledTimes(1);
       expect(location.assign).toHaveBeenCalledWith('/en/courses/42');
     });
   });
