@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Fix autosuggest to redirect user directly on the course page when a course
+  entry has been selected from the suggestion dropdown
+
 ## [2.1.0] - 2021-01-22
 
 ### Added
