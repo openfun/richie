@@ -16,7 +16,13 @@ $ make migrate
 
 ## Unreleased
 
+## 2.1.x to 2.2.x
+
+- A css `.banner` component has been created. You may have to import the component style
+  `objects/_banner.scss` into your main stylesheet to be able to use it.
+
 ## 2.0.x to 2.1.x
+
 - `RICHIE_AUTHENTICATION_DELEGATION["PROFILE_URLS"]` setting is now a dictionary : a key has been
   added to each url, permitting to get one easily.
 - Richie has now its own error templates. You can use them by setting `handler400`, `handler403`,
@@ -32,6 +38,7 @@ $ make migrate
     ```
 
 ## 1.17.x to 2.0.x
+
 - Richie version 2 introduces a new `AUTHENTICATION_BACKEND` setting used to get session information
   from OpenEdX through CORS requests. So login, register and logout routes are constructed from
   the BASE_URL of this setting. Furthermore it takes an extra property `PROFILE_URLS`.
