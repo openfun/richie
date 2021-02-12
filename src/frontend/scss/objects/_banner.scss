@@ -1,0 +1,42 @@
+// Banner
+//
+// A Row to display an inlined message
+
+.banner {
+  @include make-container();
+  @include make-container-max-widths();
+  display: flex;
+  padding: 1.4rem 1rem;
+  margin: 1rem auto;
+
+  &--error {
+    @include r-scheme-colors(r-theme-val(banner, error));
+  }
+
+  &--success {
+    @include r-scheme-colors(r-theme-val(banner, success));
+  }
+
+  &--info {
+    @include r-scheme-colors(r-theme-val(banner, info));
+  }
+
+  &--warning {
+    @include r-scheme-colors(r-theme-val(banner, warning));
+  }
+
+  &--rounded {
+    border-radius: 6px;
+  }
+
+  &__icon {
+    height: 1rem;
+    margin-right: 1rem;
+    width: 1rem;
+  }
+
+  &__message {
+    font-size: 1em;
+    margin-bottom: 0;
+  }
+}
