@@ -9,127 +9,131 @@
 
 {% block content %}{% spaceless %}
 {% with organization=current_page.organization header_level=2 %}
-<div class="organization-detail">
-    <div class="organization-detail__block organization-detail__block--unpadded">
-        <div class="organization-detail__row organization-detail__row--unpadded">
-            <div class="organization-detail__banner">
-                {% get_placeholder_plugins "banner" as plugins or %}
-                    <img src="{% static "richie/images/empty/organization_banner.jpg" %}"
-                         class="organization-detail__banner--empty"
-                         alt="">
-                {% endget_placeholder_plugins %}
-                {% blockplugin plugins.0 %}
-                    <img
-                        src="{% thumbnail instance.picture 320x100 upscale %}"
-                        srcset="
-                            {% thumbnail instance.picture 640x200 upscale %} 640w,
-                            {% thumbnail instance.picture 1280x300 upscale %} 1280w,
-                            {% if instance.picture.width >= 1500 %},{% thumbnail instance.picture 1500x351 upscale %} 1500w,{% endif %}
-                            {% if instance.picture.width >= 2000 %},{% thumbnail instance.picture 2000x468 upscale %} 2000w,{% endif %}
-                            {% if instance.picture.width >= 2500 %},{% thumbnail instance.picture 2500x585 upscale %} 2500w,{% endif %}
-                        "
-                        sizes="(min-width: 576px) 80vw, (min-width: 1200px) 1140px, 100vw"
-                        alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'organization banner' %}{% endif %}"
-                    />
-                {% endblockplugin %}
-            </div>
+{% if organization %}
+    <div class="organization-detail">
+        <div class="organization-detail__block organization-detail__block--unpadded">
+            <div class="organization-detail__row organization-detail__row--unpadded">
+                <div class="organization-detail__banner">
+                    {% get_placeholder_plugins "banner" as plugins or %}
+                        <img src="{% static "richie/images/empty/organization_banner.jpg" %}"
+                            class="organization-detail__banner--empty"
+                            alt="">
+                    {% endget_placeholder_plugins %}
+                    {% blockplugin plugins.0 %}
+                        <img
+                            src="{% thumbnail instance.picture 320x100 upscale %}"
+                            srcset="
+                                {% thumbnail instance.picture 640x200 upscale %} 640w,
+                                {% thumbnail instance.picture 1280x300 upscale %} 1280w,
+                                {% if instance.picture.width >= 1500 %},{% thumbnail instance.picture 1500x351 upscale %} 1500w,{% endif %}
+                                {% if instance.picture.width >= 2000 %},{% thumbnail instance.picture 2000x468 upscale %} 2000w,{% endif %}
+                                {% if instance.picture.width >= 2500 %},{% thumbnail instance.picture 2500x585 upscale %} 2500w,{% endif %}
+                            "
+                            sizes="(min-width: 576px) 80vw, (min-width: 1200px) 1140px, 100vw"
+                            alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'organization banner' %}{% endif %}"
+                        />
+                    {% endblockplugin %}
+                </div>
 
-            <div class="organization-detail__logo">
-                {% get_placeholder_plugins "logo" as plugins or %}
-                    <img src="{% static "richie/images/empty/organization_logo.png" %}"
-                         class="organization-detail__logo--empty"
-                         alt="">
-                {% endget_placeholder_plugins %}
-                {% blockplugin plugins.0 %}
-                    <img
-                        src="{% thumbnail instance.picture 200x113 upscale %}"
-                        srcset="
-                            {% thumbnail instance.picture 200x113 upscale %} 200w,
-                            {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x225 upscale %} 400w,{% endif %}
-                            {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x338 upscale %} 600w,{% endif %}
-                            {% if instance.picture.width >= 800 %},{% thumbnail instance.picture 800x450 upscale %} 800w{% endif %}
-                        "
-                        sizes="(min-width: 768px) 16rem, (min-width: 1200px) 20rem, 12rem"
-                        alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'organization logo' %}{% endif %}"
-                    />
-                {% endblockplugin %}
-            </div>
-        </div>
-    </div>
-
-    <div class="organization-detail__intro organization-detail__block organization-detail__block--unpadded">
-        <div class="organization-detail__row">
-            <h1 class="organization-detail__title">{% render_model request.current_page "title" %}</h1>
-
-            {% if current_page.publisher_is_draft %}
-            <div class="category-tag-list category-tag-list--primary">
-              {% with category_variant="tag" %}
-                {% placeholder "categories" or %}
-                  <p class="category-tag-list__empty">
-                    {% trans "No associated categories" %}
-                  </p>
-                {% endplaceholder %}
-              {% endwith %}
-            </div>
-            {% endif %}
-
-            <div class="organization-detail__description">
-                {% placeholder "description" %}
+                <div class="organization-detail__logo">
+                    {% get_placeholder_plugins "logo" as plugins or %}
+                        <img src="{% static "richie/images/empty/organization_logo.png" %}"
+                            class="organization-detail__logo--empty"
+                            alt="">
+                    {% endget_placeholder_plugins %}
+                    {% blockplugin plugins.0 %}
+                        <img
+                            src="{% thumbnail instance.picture 200x113 upscale %}"
+                            srcset="
+                                {% thumbnail instance.picture 200x113 upscale %} 200w,
+                                {% if instance.picture.width >= 400 %},{% thumbnail instance.picture 400x225 upscale %} 400w,{% endif %}
+                                {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x338 upscale %} 600w,{% endif %}
+                                {% if instance.picture.width >= 800 %},{% thumbnail instance.picture 800x450 upscale %} 800w{% endif %}
+                            "
+                            sizes="(min-width: 768px) 16rem, (min-width: 1200px) 20rem, 12rem"
+                            alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'organization logo' %}{% endif %}"
+                        />
+                    {% endblockplugin %}
+                </div>
             </div>
         </div>
-    </div>
 
-{% with courses=organization.get_courses %}
-    {% if courses %}
-        {% autopaginate courses GLIMPSE_PAGINATION_COURSES %}
-        <div id="page{{ page_suffix }}" class="organization-detail__courses organization-detail__block">
+        <div class="organization-detail__intro organization-detail__block organization-detail__block--unpadded">
             <div class="organization-detail__row">
-                <section class="course-glimpse-list">
-                    <h2 class="organization-detail__title">{% trans "Related courses" %}</h2>
-                    {% for course in page_obj.object_list %}
-                        {% if course.extended_object.publisher_is_draft or course.check_publication %}
-                            {% include "courses/cms/fragment_course_glimpse.html" with course=course %}
-                        {% endif %}
-                    {% endfor %}
-                    {% if paginator.num_pages > 1 %}
-                        {% paginate using "richie/pagination.html" %}
-                        <div class="button-caesura">
-                            <a href="{% page_url 'courses' %}?organizations={{ organization.get_es_id }}" class="organization-detail__see-more">
-                                {% blocktrans with organization_title=organization.extended_object.get_title %}
-                                    See all courses related to {{ organization_title }}
-                                {% endblocktrans %}
-                            </a>
-                        </div>
-                    {% endif %}
-                </section>
+                <h1 class="organization-detail__title">{% render_model request.current_page "title" %}</h1>
+
+                {% if current_page.publisher_is_draft %}
+                <div class="category-tag-list category-tag-list--primary">
+                {% with category_variant="tag" %}
+                    {% placeholder "categories" or %}
+                    <p class="category-tag-list__empty">
+                        {% trans "No associated categories" %}
+                    </p>
+                    {% endplaceholder %}
+                {% endwith %}
+                </div>
+                {% endif %}
+
+                <div class="organization-detail__description">
+                    {% placeholder "description" %}
+                </div>
             </div>
         </div>
-    {% endif %}
-{% endwith %}
 
-{% with persons=organization.get_persons %}
-    {% if persons %}
-        {% autopaginate persons GLIMPSE_PAGINATION_PERSONS %}
-        <div id="page{{ page_suffix }}" class="organization-detail__persons organization-detail__block organization-detail__block--lightest">
-            <div class="organization-detail__row">
-                <section class="person-glimpse-list">
-                    <h2 class="organization-detail__title">{% trans "Related persons" %}</h2>
-                    {% for person in page_obj.object_list %}
-                        {% if person.extended_object.publisher_is_draft or person.check_publication %}
-                            {% with header_level=3 %}
-                                {% include "courses/cms/fragment_person_glimpse.html" with person=person %}
-                            {% endwith %}
+    {% with courses=organization.get_courses %}
+        {% if courses %}
+            {% autopaginate courses GLIMPSE_PAGINATION_COURSES %}
+            <div id="page{{ page_suffix }}" class="organization-detail__courses organization-detail__block">
+                <div class="organization-detail__row">
+                    <section class="course-glimpse-list">
+                        <h2 class="organization-detail__title">{% trans "Related courses" %}</h2>
+                        {% for course in page_obj.object_list %}
+                            {% if course.extended_object.publisher_is_draft or course.check_publication %}
+                                {% include "courses/cms/fragment_course_glimpse.html" with course=course %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if paginator.num_pages > 1 %}
+                            {% paginate using "richie/pagination.html" %}
+                            <div class="button-caesura">
+                                <a href="{% page_url 'courses' %}?organizations={{ organization.get_es_id }}" class="organization-detail__see-more">
+                                    {% blocktrans with organization_title=organization.extended_object.get_title %}
+                                        See all courses related to {{ organization_title }}
+                                    {% endblocktrans %}
+                                </a>
+                            </div>
                         {% endif %}
-                    {% endfor %}
-                    {% if paginator.num_pages > 1 %}
-                        {% paginate using "richie/pagination.html" %}
-                    {% endif %}
-                </section>
+                    </section>
+                </div>
             </div>
-        </div>
-    {% endif %}
-{% endwith %}
+        {% endif %}
+    {% endwith %}
 
-</div>
+    {% with persons=organization.get_persons %}
+        {% if persons %}
+            {% autopaginate persons GLIMPSE_PAGINATION_PERSONS %}
+            <div id="page{{ page_suffix }}" class="organization-detail__persons organization-detail__block organization-detail__block--lightest">
+                <div class="organization-detail__row">
+                    <section class="person-glimpse-list">
+                        <h2 class="organization-detail__title">{% trans "Related persons" %}</h2>
+                        {% for person in page_obj.object_list %}
+                            {% if person.extended_object.publisher_is_draft or person.check_publication %}
+                                {% with header_level=3 %}
+                                    {% include "courses/cms/fragment_person_glimpse.html" with person=person %}
+                                {% endwith %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if paginator.num_pages > 1 %}
+                            {% paginate using "richie/pagination.html" %}
+                        {% endif %}
+                    </section>
+                </div>
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    </div>
+{% else %}
+    {% include "courses/cms/fragment_error_detail_template_banner.html" with model="organization" %}
+{% endif %}
 {% endwith %}
 {% endspaceless %}{% endblock content %}
