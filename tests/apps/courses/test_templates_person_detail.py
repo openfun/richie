@@ -9,7 +9,7 @@ from django.test.utils import override_settings
 from cms.api import add_plugin
 from cms.test_utils.testcases import CMSTestCase
 
-from richie.apps.core.factories import UserFactory
+from richie.apps.core.factories import PageFactory, UserFactory
 from richie.apps.courses.cms_plugins import (
     CategoryPlugin,
     OrganizationPlugin,
@@ -392,6 +392,40 @@ class PersonCMSTestCase(CMSTestCase):
             response,
             '<p class="blogpost-glimpse__title">{:s}</p>'.format(
                 blog_post.extended_object.get_title()
+            ),
+            html=True,
+        )
+
+    def test_template_person_detail_without_person(self):
+        """
+        A person template page without attached person should show an error banner
+        explaining to the user that he/she is misusing the template.
+        """
+        page = PageFactory(
+            template="courses/cms/person_detail.html",
+            title__language="en",
+            should_publish=True,
+        )
+
+        with self.assertTemplateUsed(
+            "courses/cms/fragment_error_detail_template_banner.html"
+        ):
+            response = self.client.get(page.get_absolute_url())
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response,
+            (
+                '<div class="banner banner--error banner--rounded" role="alert">'
+                '<svg class="banner__icon"><use href="#icon-cross" /></svg>'
+                '<p class="banner__message">'
+                "A person object is missing on this person page. "
+                "Please select another page template."
+                "<br />"
+                "If what you need is a person page, you need to create it "
+                'via the wizard and choose "New person page".'
+                "</p>"
+                "</div>"
             ),
             html=True,
         )

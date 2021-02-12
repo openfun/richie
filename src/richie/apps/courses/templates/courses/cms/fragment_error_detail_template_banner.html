@@ -1,0 +1,14 @@
+{% load i18n %}
+
+{% spaceless %}
+<div class="banner banner--error banner--rounded" role="alert">
+    <svg class="banner__icon"><use href="#icon-cross" /></svg>
+    <p class="banner__message">
+        {% blocktrans %}
+        A {{model}} object is missing on this {{model}} page. Please select another page template.
+        <br />
+        If what you need is a {{model}} page, you need to create it via the wizard and choose "New {{model}} page".
+        {% endblocktrans %}
+    </p>
+</div>
+{% endspaceless %}

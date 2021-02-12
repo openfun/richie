@@ -25,6 +25,7 @@
 
     {% block subheader_content %}{% spaceless %}
         {% with course=current_page.course header_level=2 %}
+        {% if course %}
         <div class="subheader__container">
             <div class="subheader__intro">
                 <div class="subheader__main">
@@ -133,6 +134,7 @@
                 </div>
             </div>
         </div>
+        {% endif %}
         {% endwith %}
     {% endspaceless %}{% endblock subheader_content %}
 </div>
@@ -143,6 +145,7 @@
 {% block content %}{% spaceless %}
 {% with course=current_page.course header_level=2 %}
 <div class="course-detail">
+    {% if course %}
 
     <div class="course-detail__grid">
         <div class="course-detail__wrapper">
@@ -434,6 +437,9 @@
     </div>
     {% endblock fragment_relations %}
 
+    {% else %}
+        {% include "courses/cms/fragment_error_detail_template_banner.html" with model="course" %}
+    {% endif %}
 </div>
 {% endwith %}
 {% endspaceless %}{% endblock content %}

@@ -10,7 +10,7 @@ from django.utils import dateformat, timezone
 import pytz
 from cms.test_utils.testcases import CMSTestCase
 
-from richie.apps.core.factories import UserFactory
+from richie.apps.core.factories import PageFactory, UserFactory
 from richie.apps.courses.factories import (
     CategoryFactory,
     CourseFactory,
@@ -875,4 +875,38 @@ class RunsCourseCMSTestCase(CMSTestCase):
         # The description line should start with a capital letter
         self.assertContains(
             response, "<li>From Dec. 12, 2020 to Dec. 15, 2020</li>", html=True
+        )
+
+    def test_template_course_detail_without_course(self):
+        """
+        A course template page without attached course should show an error banner
+        explaining to the user that he/she is misusing the template.
+        """
+        page = PageFactory(
+            template="courses/cms/course_detail.html",
+            title__language="en",
+            should_publish=True,
+        )
+
+        with self.assertTemplateUsed(
+            "courses/cms/fragment_error_detail_template_banner.html"
+        ):
+            response = self.client.get(page.get_absolute_url())
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response,
+            (
+                '<div class="banner banner--error banner--rounded" role="alert">'
+                '<svg class="banner__icon"><use href="#icon-cross" /></svg>'
+                '<p class="banner__message">'
+                "A course object is missing on this course page. "
+                "Please select another page template."
+                "<br />"
+                "If what you need is a course page, you need to create it "
+                'via the wizard and choose "New course page".'
+                "</p>"
+                "</div>"
+            ),
+            html=True,
         )

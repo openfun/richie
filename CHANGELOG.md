@@ -16,6 +16,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Prevent a 500 error when an editor uses a template for a page
+  that requires to have a model attached as a page extension
+  (course, person, organization and category detail templates)
 - Fix autosuggest to redirect user directly on the course page when a course
   entry has been selected from the suggestion dropdown
 - Pin `django-treebeard` to `4.4` as the 4.5 release introduces BC
