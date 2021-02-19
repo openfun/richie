@@ -4,11 +4,14 @@ import OpenEdxHawthornApiInterface from './openedx-hawthorn';
 
 /**
  *
- * OpenEdX Dogwood API Implementation
+ * OpenEdX completed by Fonzie API Implementation
  *
  * This implementation inherits from Hawthorn implementation.
- * The `user.me` method has to be overriden since `/user/v1/me` route does not
- * exist in OpenEdX Dogwood & Eucalyptus Rest API.
+ * The `user.me` method has to be overriden to retrieve user information from
+ * fonzie API to retrieve a JWT Token
+ *
+ * Related resources:
+ * https://github.com/openfun/fonzie/pull/24
  *
  */
 
@@ -16,7 +19,7 @@ const API = (APIConf: LMSBackend | AuthenticationBackend): APILms => {
   const ApiOptions = {
     routes: {
       user: {
-        me: '/api/mobile/v0.5/my_user_info',
+        me: '/api/v1.0/user/me',
       },
     },
   };

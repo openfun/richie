@@ -1,6 +1,6 @@
 import { CommonDataProps } from 'types/commonDataProps';
 import { handle } from 'utils/errors/handle';
-import { ApiImplementation, ApiBackend } from 'types/api';
+import { APILms, ApiBackend } from 'types/api';
 import BaseApiInterface from './base';
 import OpenEdxDogwoodApiInterface from './openedx-dogwood';
 import OpenEdxHawthornApiInterface from './openedx-hawthorn';
@@ -15,7 +15,7 @@ const selectAPIWithUrl = (url: string) => {
   return API;
 };
 
-const LmsAPIHandler = (url: string): ApiImplementation => {
+const LmsAPIHandler = (url: string): APILms => {
   const api = selectAPIWithUrl(url);
 
   switch (api?.backend) {

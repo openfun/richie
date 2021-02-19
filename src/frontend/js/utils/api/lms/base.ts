@@ -1,10 +1,10 @@
 import { AuthenticationBackend, LMSBackend } from 'types/commonDataProps';
 import { Nullable, Maybe } from 'utils/types';
 import { User } from 'types/User';
-import { ApiImplementation } from 'types/api';
+import { APILms } from 'types/api';
 import OpenEdxHawthornApiInterface from './openedx-hawthorn';
 
-const API = (APIConf: LMSBackend | AuthenticationBackend): ApiImplementation => {
+const API = (APIConf: LMSBackend | AuthenticationBackend): APILms => {
   const extractCourseIdFromUrl = (url: string): Maybe<Nullable<string>> => {
     const matches = url.match((APIConf as LMSBackend).course_regexp);
     return matches && matches[1] ? matches[1] : null;
