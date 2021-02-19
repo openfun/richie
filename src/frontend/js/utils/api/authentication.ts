@@ -8,12 +8,13 @@
 import { handle } from 'utils/errors/handle';
 import { AuthenticationBackend } from 'types/commonDataProps';
 import { Nullable } from 'utils/types';
-import { ApiImplementation, ApiBackend } from 'types/api';
+import { APIAuthentication, ApiBackend } from 'types/api';
 import BaseApiInterface from './lms/base';
 import OpenEdxDogwoodApiInterface from './lms/openedx-dogwood';
 import OpenEdxHawthornApiInterface from './lms/openedx-hawthorn';
+import OpenEdxFonzieApiInterface from './lms/openedx-fonzie';
 
-const AuthenticationAPIHandler = (): Nullable<ApiImplementation['user']> => {
+const AuthenticationAPIHandler = (): Nullable<APIAuthentication> => {
   const AUTHENTICATION: AuthenticationBackend = (window as any).__richie_frontend_context__?.context
     ?.authentication;
   if (!AUTHENTICATION) return null;
@@ -25,6 +26,8 @@ const AuthenticationAPIHandler = (): Nullable<ApiImplementation['user']> => {
       return OpenEdxDogwoodApiInterface(AUTHENTICATION).user;
     case ApiBackend.OPENEDX_HAWTHORN:
       return OpenEdxHawthornApiInterface(AUTHENTICATION).user;
+    case ApiBackend.FONZIE:
+      return OpenEdxFonzieApiInterface(AUTHENTICATION).user;
     default:
       handle(new Error(`No Authentication Backend found for ${AUTHENTICATION.backend}.`));
       return null;

@@ -2,7 +2,7 @@ import Cookies from 'js-cookie';
 import { AuthenticationBackend, LMSBackend } from 'types/commonDataProps';
 import { Maybe, Nullable } from 'utils/types';
 import { User } from 'types/User';
-import { ApiImplementation, ApiOptions } from 'types/api';
+import { APILms, ApiOptions } from 'types/api';
 import { location } from 'utils/indirection/window';
 import { handle } from 'utils/errors/handle';
 import { EDX_CSRF_TOKEN_COOKIE_NAME } from 'settings';
@@ -16,10 +16,7 @@ import { EDX_CSRF_TOKEN_COOKIE_NAME } from 'settings';
  *
  */
 
-const API = (
-  APIConf: AuthenticationBackend | LMSBackend,
-  options?: ApiOptions,
-): ApiImplementation => {
+const API = (APIConf: AuthenticationBackend | LMSBackend, options?: ApiOptions): APILms => {
   const extractCourseIdFromUrl = (url: string): Maybe<Nullable<string>> => {
     const matches = url.match((APIConf as LMSBackend).course_regexp);
     return matches && matches[1] ? matches[1] : null;

@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Add a new authentication backend `fonzie`
+
 ## [2.5.0] - 2021-04-21
 
 ### Added

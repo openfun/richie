@@ -37,30 +37,35 @@ export interface APICourseSearchResponse {
   objects: Course[];
 }
 
-export interface ApiImplementation {
-  user: {
-    me: () => Promise<Nullable<User>>;
-    login: () => void;
-    register: () => void;
-    logout: () => Promise<void>;
-  };
-  enrollment: {
-    get: (url: string, user: Nullable<User>) => Promise<Nullable<Enrollment>>;
-    isEnrolled: (url: string, user: Nullable<User>) => Promise<boolean>;
-    set: (url: string, user: User) => Promise<boolean>;
-  };
+export interface APIAuthentication {
+  login: () => void;
+  logout: () => Promise<void>;
+  me: () => Promise<Nullable<User>>;
+  register: () => void;
+}
+
+export interface APIEnrollment {
+  get: (url: string, user: Nullable<User>) => Promise<Nullable<Enrollment>>;
+  isEnrolled: (url: string, user: Nullable<User>) => Promise<boolean>;
+  set: (url: string, user: User) => Promise<boolean>;
+}
+
+export interface APILms {
+  user: APIAuthentication;
+  enrollment: APIEnrollment;
 }
 
 export interface ApiOptions {
   routes: {
-    [Model: string]: {
-      [Method: string]: string;
+    [key: string]: {
+      [key: string]: string;
     };
   };
 }
 
 export enum ApiBackend {
   BASE = 'base',
+  FONZIE = 'fonzie',
   OPENEDX_DOGWOOD = 'openedx-dogwood',
   OPENEDX_HAWTHORN = 'openedx-hawthorn',
 }
