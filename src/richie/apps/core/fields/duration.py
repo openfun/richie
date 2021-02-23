@@ -92,7 +92,7 @@ class CompositeDurationField(models.CharField):
         if not (
             isinstance(self.time_units, dict)
             and all(
-                [isinstance(c, tuple) and len(c) == 2 for c in self.time_units.values()]
+                (isinstance(c, tuple) and len(c) == 2 for c in self.time_units.values())
             )
         ):
             return [

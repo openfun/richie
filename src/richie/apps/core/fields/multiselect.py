@@ -147,7 +147,7 @@ class MultiSelectField(models.CharField):
         """Convert a database value to a list value."""
         if not value:
             return None if value is None else []
-        return list([v.strip() for v in value.split(",")])
+        return list((v.strip() for v in value.split(",")))
 
     def to_python(self, value):
         """Convert a string value to a list value. Used for deserialization and in clean forms."""
@@ -155,7 +155,7 @@ class MultiSelectField(models.CharField):
             return list(value)
         if not value:
             return None if value is None else []
-        return list([v.strip() for v in value.split(",")])
+        return list((v.strip() for v in value.split(",")))
 
     def get_prep_value(self, value):
         """
