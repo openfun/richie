@@ -10,6 +10,8 @@ from django.utils.translation import get_language
 
 import arrow
 
+from richie.apps.courses.models import CourseState
+
 from .defaults import QUERY_ANALYZERS, RELATED_CONTENT_BOOST
 from .filter_definitions import FILTERS, AvailabilityFilterDefinition
 
@@ -88,13 +90,21 @@ class CourseSearchForm(SearchForm):
         """
         availabilities = self.cleaned_data.get("availability", [])
         if AvailabilityFilterDefinition.OPEN in availabilities:
-            self.states = [0, 1]
+            self.states = [
+                CourseState.ONGOING_OPEN,
+                CourseState.FUTURE_OPEN,
+                CourseState.ARCHIVED_OPEN,
+            ]
         elif AvailabilityFilterDefinition.ONGOING in availabilities:
-            self.states = [0, 4]
+            self.states = [CourseState.ONGOING_OPEN, CourseState.ONGOING_CLOSED]
         elif AvailabilityFilterDefinition.COMING_SOON in availabilities:
-            self.states = [1, 2, 3]
+            self.states = [
+                CourseState.FUTURE_OPEN,
+                CourseState.FUTURE_NOT_YET_OPEN,
+                CourseState.FUTURE_CLOSED,
+            ]
         elif AvailabilityFilterDefinition.ARCHIVED in availabilities:
-            self.states = [5]
+            self.states = [CourseState.ARCHIVED_OPEN, CourseState.ARCHIVED_CLOSED]
 
         return availabilities
 

@@ -13,8 +13,19 @@ export interface CourseRun {
   dashboard_link: Nullable<string>;
 }
 
+export enum Priority {
+  ONGOING_OPEN,
+  FUTURE_OPEN,
+  ARCHIVED_OPEN,
+  FUTURE_NOT_YET_OPEN,
+  FUTURE_CLOSED,
+  ONGOING_CLOSED,
+  ARCHIVED_CLOSED,
+  TO_BE_SCHEDULED,
+}
+
 export interface CourseState {
-  priority: number;
+  priority: Priority;
   datetime: string;
   call_to_action: string;
   text: string;

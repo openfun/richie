@@ -268,7 +268,7 @@
                                     {% blocktrans context "course_detail__title" %}Course runs{% endblocktrans %}
                                     {% render_model_add course "" "" "get_admin_url_to_add_run" %}
                                 </h2>
-                                {% for run in runs_dict.0|add:runs_dict.1 %}
+                                {% for run in runs_dict.0|add:runs_dict.1|add:runs_dict.2 %}
                                     {% include "courses/cms/fragment_course_run.html" %}
                                 {% empty %}
                                     <div class="course-detail__empty">{% trans "No open course runs" %}</div>
@@ -277,45 +277,45 @@
                         {% endblock runs_open %}
 
                         {% block runs_to_be_scheduled %}
-                        {% if runs_dict.6 and current_page.publisher_is_draft %}
+                        {% if runs_dict.7 and current_page.publisher_is_draft %}
                             <div class="course-detail__row course-detail__runs course-detail__runs--inactive">
                                 <h3 class="course-detail__title">
                                     {% trans "To be scheduled" context "Course runs to be scheduled (plural)" %}
                                 </h3>
-                                {% include "courses/cms/fragment_course_runs_list.html" with course_runs=runs_dict.6 %}
+                                {% include "courses/cms/fragment_course_runs_list.html" with course_runs=runs_dict.7 %}
                             </div>
                         {% endif %}
                         {% endblock runs_to_be_scheduled %}
 
                         {% block runs_upcoming %}
-                        {% if runs_dict.2 %}
+                        {% if runs_dict.3 %}
                             <div class="course-detail__row course-detail__runs course-detail__runs--inactive">
                                 <h3 class="course-detail__title">
                                     {% trans "Upcoming" context "Upcoming course runs (plural)" %}
                                 </h3>
-                                {% include "courses/cms/fragment_course_runs_list.html" with course_runs=runs_dict.2 %}
+                                {% include "courses/cms/fragment_course_runs_list.html" with course_runs=runs_dict.3 %}
                             </div>
                         {% endif %}
                         {% endblock runs_upcoming %}
 
                         {% block runs_ongoing %}
-                        {% if runs_dict.3 or runs_dict.4 %}
+                        {% if runs_dict.4 or runs_dict.5 %}
                             <div class="course-detail__row course-detail__runs course-detail__runs--inactive">
                                 <h3 class="course-detail__title">
                                     {% trans "Ongoing" context "Ongoing course runs (plural)" %}
                                 </h3>
-                                {% include "courses/cms/fragment_course_runs_list.html" with course_runs=runs_dict.3|add:runs_dict.4 %}
+                                {% include "courses/cms/fragment_course_runs_list.html" with course_runs=runs_dict.4|add:runs_dict.5 %}
                             </div>
                         {% endif %}
                         {% endblock runs_ongoing %}
 
                         {% block runs_archived %}
-                        {% if runs_dict.5 %}
+                        {% if runs_dict.6 %}
                             <div class="course-detail__row course-detail__runs course-detail__runs--inactive">
                                 <h3 class="course-detail__title">
                                     {% trans "Archived" context "Archived course runs (plural)" %}
                                 </h3>
-                                {% include "courses/cms/fragment_course_runs_list.html" with course_runs=runs_dict.5 %}
+                                {% include "courses/cms/fragment_course_runs_list.html" with course_runs=runs_dict.6 %}
                             </div>
                         {% endif %}
                         {% endblock runs_archived %}

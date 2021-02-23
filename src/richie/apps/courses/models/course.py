@@ -44,30 +44,33 @@ class CourseState(Mapping):
     (
         ONGOING_OPEN,
         FUTURE_OPEN,
+        ARCHIVED_OPEN,
         FUTURE_NOT_YET_OPEN,
         FUTURE_CLOSED,
         ONGOING_CLOSED,
-        ARCHIVED,
+        ARCHIVED_CLOSED,
         TO_BE_SCHEDULED,
-    ) = range(7)
+    ) = range(8)
 
     STATE_CALLS_TO_ACTION = {
         ONGOING_OPEN: _("enroll now"),
         FUTURE_OPEN: _("enroll now"),
+        ARCHIVED_OPEN: _("study now"),
         FUTURE_NOT_YET_OPEN: None,
         FUTURE_CLOSED: None,
         ONGOING_CLOSED: None,
-        ARCHIVED: None,
+        ARCHIVED_CLOSED: None,
         TO_BE_SCHEDULED: None,
     }
 
     STATE_TEXTS = {
         ONGOING_OPEN: _("closing on"),
         FUTURE_OPEN: _("starting on"),
+        ARCHIVED_OPEN: _("closing on"),
         FUTURE_NOT_YET_OPEN: _("starting on"),
         FUTURE_CLOSED: _("enrollment closed"),
         ONGOING_CLOSED: _("on-going"),
-        ARCHIVED: _("archived"),
+        ARCHIVED_CLOSED: _("archived"),
         TO_BE_SCHEDULED: _("to be scheduled"),
     }
 
@@ -78,18 +81,22 @@ class CourseState(Mapping):
         Several states are possible for a course run each of which is given a priority. The
         lower the priority, the more interesting the course run is (a course run open for
         enrollment is more interesting than an archived course run):
-          0: a run is on-going and open for enrollment > "closing on": {enrollment_end}
-          1: a run is future and open for enrollment > "starting on": {start}
-          2: a run is future and not yet open for enrollment > "starting on": {start}
-          3: a run is future and no more open for enrollment > "closed": {None}
-          4: a run is on-going but closed for enrollment > "on going": {None}
-          5: there's a finished run in the past > "archived": {None}
-          6: theres's no run with a start date or no run at all > "to be scheduled": {None}
+        - ONGOING_OPEN: a run is on-going and open for enrollment > "closing on": {enrollment_end}
+        - FUTURE_OPEN: a run is future and open for enrollment > "starting on": {start}
+        - ARCHIVED_OPEN: a run is past but open for enrollment > "closing on": {enrollment_end}
+        - FUTURE_NOT_YET_OPEN: a run is future and not yet open for enrollment
+            > "starting on": {start}
+        - FUTURE_CLOSED: a run is future and no more open for enrollment > "closed": {None}
+        - ONGOING_CLOSED: a run is on-going but closed for enrollment > "on going": {None}
+        - ARCHIVED_CLOSED: there's a finished run in the past > "archived": {None}
+        - TO_BE_SCHEDULED: theres's no run with a start date or no run at all
+            > "to be scheduled": {None}
         """
         # Check that `date_time` is set when it should be
         if date_time is None and priority in [
             CourseState.ONGOING_OPEN,
             CourseState.FUTURE_OPEN,
+            CourseState.ARCHIVED_OPEN,
             CourseState.FUTURE_NOT_YET_OPEN,
         ]:
             raise ValidationError(
@@ -98,7 +105,10 @@ class CourseState(Mapping):
 
         # A special case of being open is when enrollment never ends
         text = self.STATE_TEXTS[priority]
-        if priority == CourseState.ONGOING_OPEN and date_time.year == MAXYEAR:
+        if (
+            priority in [CourseState.ONGOING_OPEN, CourseState.ARCHIVED_OPEN]
+            and date_time.year == MAXYEAR
+        ):
             text = _("forever open")
             date_time = None
         kwargs = {
@@ -735,31 +745,34 @@ class CourseRun(TranslatableModel):
         A static method not using the instance allows to call it with an Elasticsearch result.
         """
         if not start or not enrollment_start:
-            return CourseState(6)
+            return CourseState(CourseState.TO_BE_SCHEDULED)
 
         # course run end dates are not required and should default to forever
         # e.g. a course run with no end date is presumed to be always on-going
         end = end or MAX_DATE
-        enrollment_end = enrollment_end or end
+        enrollment_end = enrollment_end or MAX_DATE
 
         now = timezone.now()
         if start < now:
             if end > now:
                 if enrollment_end > now:
                     # ongoing open
-                    return CourseState(0, enrollment_end)
+                    return CourseState(CourseState.ONGOING_OPEN, enrollment_end)
                 # ongoing closed
-                return CourseState(4)
-            # archived
-            return CourseState(5)
+                return CourseState(CourseState.ONGOING_CLOSED)
+            if enrollment_start < now < enrollment_end:
+                # archived open
+                return CourseState(CourseState.ARCHIVED_OPEN, enrollment_end)
+            # archived closed
+            return CourseState(CourseState.ARCHIVED_CLOSED)
         if enrollment_start > now:
             # future not yet open
-            return CourseState(2, start)
+            return CourseState(CourseState.FUTURE_NOT_YET_OPEN, start)
         if enrollment_end > now:
             # future open
-            return CourseState(1, start)
+            return CourseState(CourseState.FUTURE_OPEN, start)
         # future already closed
-        return CourseState(3)
+        return CourseState(CourseState.FUTURE_CLOSED)
 
     @property
     def state(self):

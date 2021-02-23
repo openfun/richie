@@ -129,39 +129,47 @@ COURSE_RUNS = {
         "languages": ["en"],
     },
     "D": {
-        # D) not started yet, will start after the other upcoming course
+        # D) already finished course but enrollment still open
+        "start": arrow.utcnow().shift(days=-80).datetime,
+        "end": arrow.utcnow().shift(days=-15).datetime,
+        "enrollment_start": arrow.utcnow().shift(days=-100).datetime,
+        "enrollment_end": arrow.utcnow().shift(days=+15).datetime,
+        "languages": ["en"],
+    },
+    "E": {
+        # E) not started yet, will start after the other upcoming course
         "start": arrow.utcnow().shift(days=+45).datetime,
         "end": arrow.utcnow().shift(days=+120).datetime,
         "enrollment_start": arrow.utcnow().shift(days=+30).datetime,
         "enrollment_end": arrow.utcnow().shift(days=+60).datetime,
         "languages": ["fr", "de"],
     },
-    "E": {
-        # E) ongoing course, most recent to end enrollment
+    "F": {
+        # F) ongoing course, most recent to end enrollment
         "start": arrow.utcnow().shift(days=-90).datetime,
         "end": arrow.utcnow().shift(days=+15).datetime,
         "enrollment_start": arrow.utcnow().shift(days=-120).datetime,
         "enrollment_end": arrow.utcnow().shift(days=-30).datetime,
         "languages": ["en"],
     },
-    "F": {
-        # F) ongoing course, enrollment has been over for the longest
+    "G": {
+        # G) ongoing course, enrollment has been over for the longest
         "start": arrow.utcnow().shift(days=-75).datetime,
         "end": arrow.utcnow().shift(days=+30).datetime,
         "enrollment_start": arrow.utcnow().shift(days=-100).datetime,
         "enrollment_end": arrow.utcnow().shift(days=-45).datetime,
         "languages": ["fr"],
     },
-    "G": {
-        # G) the other already finished course; it finished more recently than H)
+    "H": {
+        # H) already finished course; it finished more recently than I)
         "start": arrow.utcnow().shift(days=-80).datetime,
         "end": arrow.utcnow().shift(days=-15).datetime,
         "enrollment_start": arrow.utcnow().shift(days=-100).datetime,
         "enrollment_end": arrow.utcnow().shift(days=-60).datetime,
         "languages": ["en"],
     },
-    "H": {
-        # H) the course that has been over for the longest
+    "I": {
+        # I) the course that has been over for the longest
         "start": arrow.utcnow().shift(days=-120).datetime,
         "end": arrow.utcnow().shift(days=-30).datetime,
         "enrollment_start": arrow.utcnow().shift(days=-150).datetime,
@@ -232,7 +240,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         Compute the expected course ids from the course run ids.
         """
         # Remove courses that don't have archived course runs
-        # > [[3, ["H", "D"]], [2, ["G", "E"]]]
+        # > [[3, ["I", "E"]], [2, ["H", "F"]]]
         filtered_courses = list(
             filter(
                 lambda o: any((id in course_run_ids for id in o[1])), courses_definition
@@ -240,12 +248,12 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         )
 
         # Sort our courses according to the ranking of their open course runs:
-        # > [[2, ["G", "E"]], [3, ["H", "D"]]]
+        # > [[2, ["H", "F"]], [3, ["I", "E"]]]
         # Note that we only consider open course runs to sort our courses otherwise
-        # some better course runs could make it incoherent. In our example, the "C"
+        # some better course runs could make it incoherent. In our example, the "D"
         # course run, if taken into account, would have lead to the following sequence
         # which is not what we expect:
-        #   [[2, ["H", "D"]], [3, ["G", "E"]]]
+        #   [[2, ["I", "E"]], [3, ["H", "F"]]]
         sorted_courses = sorted(
             filtered_courses,
             key=lambda o: min(
@@ -265,13 +273,16 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         - prepare the Elasticsearch index,
         - execute the query.
         """
-        # Shuffle our course runs to assign them randomly to 4 courses
-        # For example: ["H", "D", "C", "F", "B", "A", "G", "E"]
-        suite = suite or random.sample(list(COURSE_RUNS), len(COURSE_RUNS))
+        # Shuffle and group our course runs to assign them randomly to 4 courses
+        # For example: [["I", "E", "C"], ["D", "G"], ["B", "A"], ["H", "F"]]
+        if not suite:
+            shuffled_runs = random.sample(list(COURSE_RUNS), len(COURSE_RUNS))
+            suite = [shuffled_runs[i::4] for i in range(4)]
 
-        # Assume 4 courses and associate 2 course runs to each course
-        # > [[3, ["H", "D"]], [0, ["C", "F"]], [1, ["B", "A"]], [2, ["G", "E"]]]
-        courses_definition = [[i, suite[2 * i : 2 * i + 2]] for i in range(4)]  # noqa
+        # Associate groups of course runs to each course
+        # > [[3, ["I", "E", "C"]], [0, ["D", "G"]], [1, ["B", "A"]], [2, ["H", "F"]]]
+        self.assertEqual(len(suite), 4)
+        courses_definition = [[i, suite[i]] for i in range(4)]
 
         # Index these 4 courses in Elasticsearch
         indices_client = IndicesClient(client=ES_CLIENT)
@@ -309,7 +320,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 **COURSES[course_id],
                 "course_runs": sorted(
                     [
-                        # Each course randomly gets 2 course runs (thanks to above shuffle)
+                        # Each course randomly gets course runs (thanks to above shuffle)
                         COURSE_RUNS[course_run_id]
                         for course_run_id in course_run_ids
                     ],
@@ -334,7 +345,9 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         should be 1. See next test).
         """
         self.create_filter_pages()
-        _, content = self.execute_query(suite=["A", "D", "G", "F", "B", "H", "C", "E"])
+        _, content = self.execute_query(
+            suite=[["A", "E"], ["H", "G"], ["B", "I"], ["C", "F"]]
+        )
         self.assertEqual(
             content,
             {
@@ -431,7 +444,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "organization_highlighted": "Org 33",
                         "organizations": ["P-00030001", "P-00030003", "L-000300010002"],
                         "state": {
-                            "priority": 4,
+                            "priority": 5,
                             "datetime": None,
                             "call_to_action": None,
                             "text": "on-going",
@@ -606,7 +619,9 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         - D/H course runs grouped under the same course:
           => 1 german course instead of 2
         """
-        _, content = self.execute_query(suite=["A", "B", "G", "C", "D", "H", "F", "E"])
+        _, content = self.execute_query(
+            suite=[["A", "B"], ["H", "C"], ["E", "I"], ["G", "F"]]
+        )
         self.assertEqual(
             list((o["state"] for o in content["objects"])),
             [
@@ -628,16 +643,16 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 },
                 {
                     "call_to_action": None,
-                    "datetime": COURSE_RUNS["D"]["start"]
+                    "datetime": COURSE_RUNS["E"]["start"]
                     .isoformat()
                     .replace("+00:00", "Z"),
-                    "priority": 2,
+                    "priority": 3,
                     "text": "starting on",
                 },
                 {
                     "call_to_action": None,
                     "datetime": None,
-                    "priority": 4,
+                    "priority": 5,
                     "text": "on-going",
                 },
             ],
@@ -667,7 +682,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         courses_definition, content = self.execute_query("availability=open")
         self.assertEqual(
             list((int(c["id"]) for c in content["objects"])),
-            self.get_expected_courses(courses_definition, ["A", "B", "C"]),
+            self.get_expected_courses(courses_definition, ["A", "B", "C", "D"]),
         )
 
     def test_query_courses_match_all_scope_objects(self, *_):
@@ -696,7 +711,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         """
         self.create_filter_pages()
         _, content = self.execute_query(
-            "availability=open", suite=["A", "B", "G", "C", "D", "H", "F", "E"]
+            "availability=open", suite=[["A", "B"], ["H", "C"], ["E", "I"], ["G", "F"]]
         )
         self.assertEqual(
             list((o["state"] for o in content["objects"])),
@@ -769,7 +784,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         courses_definition, content = self.execute_query("availability=ongoing")
         self.assertEqual(
             list((int(c["id"]) for c in content["objects"])),
-            self.get_expected_courses(courses_definition, ["A", "B", "E", "F"]),
+            self.get_expected_courses(courses_definition, ["A", "B", "F", "G"]),
         )
 
     def test_query_courses_course_runs_filter_coming_soon_courses(self, *_):
@@ -779,7 +794,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         courses_definition, content = self.execute_query("availability=coming_soon")
         self.assertEqual(
             list((int(c["id"]) for c in content["objects"])),
-            self.get_expected_courses(courses_definition, ["C", "D"]),
+            self.get_expected_courses(courses_definition, ["C", "E"]),
         )
 
     def test_query_courses_course_runs_filter_archived_courses(self, *_):
@@ -789,7 +804,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         courses_definition, content = self.execute_query("availability=archived")
         self.assertEqual(
             list((int(c["id"]) for c in content["objects"])),
-            self.get_expected_courses(courses_definition, ["G", "H"]),
+            self.get_expected_courses(courses_definition, ["D", "H", "I"]),
         )
 
     def test_query_courses_course_runs_filter_language(self, *_):
@@ -799,7 +814,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         courses_definition, content = self.execute_query("languages=fr")
         self.assertEqual(
             list((int(c["id"]) for c in content["objects"])),
-            self.get_expected_courses(courses_definition, ["A", "D", "F"]),
+            self.get_expected_courses(courses_definition, ["A", "E", "G"]),
         )
 
     def test_query_courses_course_runs_filter_language_facets(self, *_):
@@ -812,7 +827,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         """
         self.create_filter_pages()
         _, content = self.execute_query(
-            "languages=fr", suite=["A", "B", "G", "C", "D", "H", "F", "E"]
+            "languages=fr", suite=[["A", "B"], ["H", "D"], ["E", "I"], ["G", "F"]]
         )
         self.assertEqual(
             list((o["state"] for o in content["objects"])),
@@ -827,16 +842,16 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 },
                 {
                     "call_to_action": None,
-                    "datetime": COURSE_RUNS["D"]["start"]
+                    "datetime": COURSE_RUNS["E"]["start"]
                     .isoformat()
                     .replace("+00:00", "Z"),
-                    "priority": 2,
+                    "priority": 3,
                     "text": "starting on",
                 },
                 {
                     "call_to_action": None,
                     "datetime": None,
-                    "priority": 4,
+                    "priority": 5,
                     "text": "on-going",
                 },
             ],
@@ -858,7 +873,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 {"count": 0, "human_name": "Archived", "key": "archived"},
             ],
         )
-        # A, D and F course runs are in French
+        # A, E and G course runs are in French
         # So only courses 0, 2 and 3 are selected
         self.assertEqual(
             content["filters"]["subjects"]["values"],
@@ -894,7 +909,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         courses_definition, content = self.execute_query("languages=fr&languages=de")
         self.assertEqual(
             list((int(c["id"]) for c in content["objects"])),
-            self.get_expected_courses(courses_definition, ["A", "D", "F", "H"]),
+            self.get_expected_courses(courses_definition, ["A", "E", "G", "I"]),
         )
 
     def test_query_courses_course_runs_filter_composed(self, *_):
@@ -906,7 +921,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         )
         self.assertEqual(
             list((int(c["id"]) for c in content["objects"])),
-            self.get_expected_courses(courses_definition, ["B", "E"]),
+            self.get_expected_courses(courses_definition, ["B", "F"]),
         )
 
     def test_query_courses_course_runs_filter_composed_facets(self, *_):
@@ -920,7 +935,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         self.create_filter_pages()
         _, content = self.execute_query(
             "availability=ongoing&languages=en",
-            suite=["A", "B", "G", "C", "D", "H", "F", "E"],
+            suite=[["A", "B"], ["H", "C"], ["E", "I"], ["G", "F"]],
         )
         self.assertEqual(
             list((o["state"] for o in content["objects"])),
@@ -936,7 +951,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 {
                     "call_to_action": None,
                     "datetime": None,
-                    "priority": 4,
+                    "priority": 5,
                     "text": "on-going",
                 },
             ],
