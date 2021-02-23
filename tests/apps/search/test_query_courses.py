@@ -235,7 +235,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         # > [[3, ["H", "D"]], [2, ["G", "E"]]]
         filtered_courses = list(
             filter(
-                lambda o: any([id in course_run_ids for id in o[1]]), courses_definition
+                lambda o: any((id in course_run_ids for id in o[1])), courses_definition
             )
         )
 
@@ -608,7 +608,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         """
         _, content = self.execute_query(suite=["A", "B", "G", "C", "D", "H", "F", "E"])
         self.assertEqual(
-            list([o["state"] for o in content["objects"]]),
+            list((o["state"] for o in content["objects"])),
             [
                 {
                     "call_to_action": "enroll now",
@@ -666,7 +666,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         """
         courses_definition, content = self.execute_query("availability=open")
         self.assertEqual(
-            list([int(c["id"]) for c in content["objects"]]),
+            list((int(c["id"]) for c in content["objects"])),
             self.get_expected_courses(courses_definition, ["A", "B", "C"]),
         )
 
@@ -699,7 +699,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             "availability=open", suite=["A", "B", "G", "C", "D", "H", "F", "E"]
         )
         self.assertEqual(
-            list([o["state"] for o in content["objects"]]),
+            list((o["state"] for o in content["objects"])),
             [
                 {
                     "call_to_action": "enroll now",
@@ -768,7 +768,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         """
         courses_definition, content = self.execute_query("availability=ongoing")
         self.assertEqual(
-            list([int(c["id"]) for c in content["objects"]]),
+            list((int(c["id"]) for c in content["objects"])),
             self.get_expected_courses(courses_definition, ["A", "B", "E", "F"]),
         )
 
@@ -778,7 +778,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         """
         courses_definition, content = self.execute_query("availability=coming_soon")
         self.assertEqual(
-            list([int(c["id"]) for c in content["objects"]]),
+            list((int(c["id"]) for c in content["objects"])),
             self.get_expected_courses(courses_definition, ["C", "D"]),
         )
 
@@ -788,7 +788,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         """
         courses_definition, content = self.execute_query("availability=archived")
         self.assertEqual(
-            list([int(c["id"]) for c in content["objects"]]),
+            list((int(c["id"]) for c in content["objects"])),
             self.get_expected_courses(courses_definition, ["G", "H"]),
         )
 
@@ -798,7 +798,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         """
         courses_definition, content = self.execute_query("languages=fr")
         self.assertEqual(
-            list([int(c["id"]) for c in content["objects"]]),
+            list((int(c["id"]) for c in content["objects"])),
             self.get_expected_courses(courses_definition, ["A", "D", "F"]),
         )
 
@@ -815,7 +815,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             "languages=fr", suite=["A", "B", "G", "C", "D", "H", "F", "E"]
         )
         self.assertEqual(
-            list([o["state"] for o in content["objects"]]),
+            list((o["state"] for o in content["objects"])),
             [
                 {
                     "call_to_action": "enroll now",
@@ -893,7 +893,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         """
         courses_definition, content = self.execute_query("languages=fr&languages=de")
         self.assertEqual(
-            list([int(c["id"]) for c in content["objects"]]),
+            list((int(c["id"]) for c in content["objects"])),
             self.get_expected_courses(courses_definition, ["A", "D", "F", "H"]),
         )
 
@@ -905,7 +905,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             "availability=ongoing&languages=en"
         )
         self.assertEqual(
-            list([int(c["id"]) for c in content["objects"]]),
+            list((int(c["id"]) for c in content["objects"])),
             self.get_expected_courses(courses_definition, ["B", "E"]),
         )
 
@@ -923,7 +923,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             suite=["A", "B", "G", "C", "D", "H", "F", "E"],
         )
         self.assertEqual(
-            list([o["state"] for o in content["objects"]]),
+            list((o["state"] for o in content["objects"])),
             [
                 {
                     "call_to_action": "enroll now",
@@ -995,7 +995,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         courses_definition = filter(lambda c: c[0] in [0, 1], courses_definition)
 
         self.assertEqual(
-            list([int(c["id"]) for c in content["objects"]]),
+            list((int(c["id"]) for c in content["objects"])),
             self.get_expected_courses(courses_definition, list(COURSE_RUNS)),
         )
 
@@ -1009,7 +1009,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         courses_definition = filter(lambda c: c[0] in [2, 3], courses_definition)
 
         self.assertEqual(
-            list([int(c["id"]) for c in content["objects"]]),
+            list((int(c["id"]) for c in content["objects"])),
             self.get_expected_courses(courses_definition, list(COURSE_RUNS)),
         )
         self.assertEqual(
@@ -1033,7 +1033,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         courses_definition = filter(lambda c: c[0] in [0, 2, 3], courses_definition)
 
         self.assertEqual(
-            list([int(c["id"]) for c in content["objects"]]),
+            list((int(c["id"]) for c in content["objects"])),
             self.get_expected_courses(courses_definition, list(COURSE_RUNS)),
         )
 
@@ -1064,7 +1064,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         courses_definition = filter(lambda c: c[0] in [0, 1], courses_definition)
 
         self.assertEqual(
-            list([int(c["id"]) for c in content["objects"]]),
+            list((int(c["id"]) for c in content["objects"])),
             self.get_expected_courses(courses_definition, list(COURSE_RUNS)),
         )
 
@@ -1079,7 +1079,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         courses_definition = filter(lambda c: c[0] in [0, 1, 3], courses_definition)
 
         self.assertEqual(
-            list([int(c["id"]) for c in content["objects"]]),
+            list((int(c["id"]) for c in content["objects"])),
             self.get_expected_courses(courses_definition, list(COURSE_RUNS)),
         )
 
@@ -1110,7 +1110,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         courses_definition = filter(lambda c: c[0] in [0, 2], courses_definition)
 
         self.assertEqual(
-            list([int(c["id"]) for c in content["objects"]]),
+            list((int(c["id"]) for c in content["objects"])),
             self.get_expected_courses(courses_definition, list(COURSE_RUNS)),
         )
 
@@ -1125,7 +1125,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         courses_definition = filter(lambda c: c[0] in [0, 2, 3], courses_definition)
 
         self.assertEqual(
-            list([int(c["id"]) for c in content["objects"]]),
+            list((int(c["id"]) for c in content["objects"])),
             self.get_expected_courses(courses_definition, list(COURSE_RUNS)),
         )
 
@@ -1149,7 +1149,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         # Keep only the courses that are linked to persons whose name contains "boulgakov"
         courses_definition = filter(lambda c: c[0] in [0, 3], courses_definition)
         self.assertEqual(
-            list([int(c["id"]) for c in content["objects"]]),
+            list((int(c["id"]) for c in content["objects"])),
             self.get_expected_courses(courses_definition, list(COURSE_RUNS)),
         )
 
@@ -1162,7 +1162,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         # Keep only the courses that contain the word "artificial"
         courses_definition = filter(lambda c: c[0] in [2, 0, 3], courses_definition)
         self.assertEqual(
-            list([int(c["id"]) for c in content["objects"]]),
+            list((int(c["id"]) for c in content["objects"])),
             self.get_expected_courses(courses_definition, list(COURSE_RUNS)),
         )
 
@@ -1177,6 +1177,6 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         courses_definition = filter(lambda c: c[0] in [0], courses_definition)
 
         self.assertEqual(
-            list([int(c["id"]) for c in content["objects"]]),
+            list((int(c["id"]) for c in content["objects"])),
             self.get_expected_courses(courses_definition, list(COURSE_RUNS)),
         )
