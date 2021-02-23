@@ -105,7 +105,7 @@ class CourseRunModelsTestCase(TestCase):
         self.assertEqual(
             dict(course_run.state),
             {
-                "priority": 6,
+                "priority": 7,
                 "text": "to be scheduled",
                 "call_to_action": None,
                 "datetime": None,
@@ -121,7 +121,7 @@ class CourseRunModelsTestCase(TestCase):
         self.assertEqual(
             dict(course_run.state),
             {
-                "priority": 6,
+                "priority": 7,
                 "text": "to be scheduled",
                 "call_to_action": None,
                 "datetime": None,
@@ -161,7 +161,7 @@ class CourseRunModelsTestCase(TestCase):
         self.assertEqual(
             dict(state),
             {
-                "priority": 4,
+                "priority": 5,
                 "text": "on-going",
                 "call_to_action": None,
                 "datetime": None,
@@ -170,7 +170,7 @@ class CourseRunModelsTestCase(TestCase):
 
     def test_models_course_run_state_no_enrollment_end(self):
         """
-        A course run that has no end of enrollemnt is deemed to be open until its end.
+        A course run that has no end of enrollment is deemed to be always open.
         """
         course_run = CourseRunFactory(enrollment_end=None)
 
@@ -210,13 +210,13 @@ class CourseRunModelsTestCase(TestCase):
             dict(state),
             {
                 "priority": 0,
-                "text": "closing on",
+                "text": "forever open",
                 "call_to_action": "enroll now",
-                "datetime": course_run.end,
+                "datetime": None,
             },
         )
 
-        # The course run should be archived after its end
+        # The course run should be archived open after its end
         now = datetime.utcfromtimestamp(
             random.randrange(
                 int(course_run.end.timestamp()) + 1,
@@ -230,9 +230,9 @@ class CourseRunModelsTestCase(TestCase):
         self.assertEqual(
             dict(state),
             {
-                "priority": 5,
-                "text": "archived",
-                "call_to_action": None,
+                "priority": 2,
+                "text": "forever open",
+                "call_to_action": "study now",
                 "datetime": None,
             },
         )
@@ -285,18 +285,40 @@ class CourseRunModelsTestCase(TestCase):
             },
         )
 
-    def test_models_course_run_state_archived(self):
+    def test_models_course_run_state_archived_open_closing_on(self):
         """
-        A course run that is passed should return a state with priority 5 and "archived"
-        as text.
+        A course run that is passed and has an enrollment end in the future should return
+        a state with priority 2 and "closing on" as text.
         """
         course_run = CourseRunFactory(
-            start=self.now - timedelta(hours=2), end=self.now - timedelta(hours=1)
+            start=self.now - timedelta(hours=2),
+            end=self.now - timedelta(hours=1),
+            enrollment_end=self.now + timedelta(hours=1),
         )
         self.assertEqual(
             dict(course_run.state),
             {
-                "priority": 5,
+                "priority": 2,
+                "text": "closing on",
+                "call_to_action": "study now",
+                "datetime": course_run.enrollment_end,
+            },
+        )
+
+    def test_models_course_run_state_archived_closed(self):
+        """
+        A course run that is passed should return a state with priority 6 and "archived"
+        as text.
+        """
+        course_run = CourseRunFactory(
+            start=self.now - timedelta(hours=2),
+            end=self.now - timedelta(hours=1),
+            enrollment_end=self.now - timedelta(hours=1),
+        )
+        self.assertEqual(
+            dict(course_run.state),
+            {
+                "priority": 6,
                 "text": "archived",
                 "call_to_action": None,
                 "datetime": None,
@@ -338,7 +360,7 @@ class CourseRunModelsTestCase(TestCase):
         self.assertEqual(
             dict(course_run.state),
             {
-                "priority": 4,
+                "priority": 5,
                 "text": "on-going",
                 "call_to_action": None,
                 "datetime": None,
@@ -359,7 +381,7 @@ class CourseRunModelsTestCase(TestCase):
         self.assertEqual(
             dict(course_run.state),
             {
-                "priority": 2,
+                "priority": 3,
                 "text": "starting on",
                 "call_to_action": None,
                 "datetime": self.now + timedelta(hours=3),
@@ -401,7 +423,7 @@ class CourseRunModelsTestCase(TestCase):
         self.assertEqual(
             dict(course_run.state),
             {
-                "priority": 3,
+                "priority": 4,
                 "text": "enrollment closed",
                 "call_to_action": None,
                 "datetime": None,

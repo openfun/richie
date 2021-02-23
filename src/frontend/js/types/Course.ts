@@ -1,3 +1,4 @@
+import { Priority } from 'types';
 import { Resource } from 'types/Resource';
 import { Nullable } from 'utils/types';
 
@@ -23,7 +24,7 @@ export interface Course extends Resource {
   state: {
     call_to_action: Nullable<string>;
     datetime: Nullable<string>;
-    priority: number;
+    priority: Priority;
     text: string;
   };
 }

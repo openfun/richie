@@ -512,15 +512,28 @@ class RunsCourseCMSTestCase(CMSTestCase):
             enrollment_end=self.now,
         )
 
-    def create_run_archived(self, course):
+    def create_run_archived_open(self, course):
         """
-        Not a test. Create an archived course run.
+        Not a test. Create an archived open course run.
         """
         return CourseRunFactory(
             direct_course=course,
             title="my course run",
             start=self.now - timedelta(hours=1),
             end=self.now,
+            enrollment_end=self.now + timedelta(hours=1),
+        )
+
+    def create_run_archived_closed(self, course):
+        """
+        Not a test. Create an archived closed course run.
+        """
+        return CourseRunFactory(
+            direct_course=course,
+            title="my course run",
+            start=self.now - timedelta(hours=1),
+            end=self.now,
+            enrollment_end=self.now - timedelta(hours=1),
         )
 
     @override_settings(RICHIE_LMS_BACKENDS=[])
@@ -670,9 +683,40 @@ class RunsCourseCMSTestCase(CMSTestCase):
         )
 
     @timezone.override(pytz.utc)
+    def test_templates_course_detail_runs_archived_open(self):
+        """
+        Priority 2: an archived open course run should show in a separate section.
+        """
+        course = CourseFactory(page_title="my course")
+        course_run = self.create_run_archived_open(course)
+        self.assertTrue(course.extended_object.publish("en"))
+
+        url = course.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertNotContains(response, "No open course runs")
+        self.assertContains(
+            response,
+            (
+                f'<a href="{course_run.resource_link:s}" '
+                'class="course-run-enrollment__cta">Study now</a>'
+            ),
+            html=True,
+        )
+        self.assertNotContains(
+            response,
+            (
+                '<div class="course-detail__row course-detail__runs '
+                'course-detail__runs--inactive">'
+                '<h3 class="course-detail__title">'
+            ),
+        )
+
+    @timezone.override(pytz.utc)
     def test_templates_course_detail_runs_future_not_yet_open(self):
         """
-        Priority 2: a future not yet open course run should show in a separate section.
+        Priority 3: a future not yet open course run should show in a separate section.
         """
         course = CourseFactory(page_title="my course")
         course_run = self.create_run_future_not_yet_open(course)
@@ -699,7 +743,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
     @timezone.override(pytz.utc)
     def test_templates_course_detail_runs_future_closed(self):
         """
-        Priority 3: a future and closed course run should show in a separate section.
+        Priority 4: a future and closed course run should show in a separate section.
         """
         course = CourseFactory(page_title="my course")
         course_run = self.create_run_future_closed(course)
@@ -726,7 +770,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
     @timezone.override(pytz.utc)
     def test_templates_course_detail_runs_ongoing_closed(self):
         """
-        Priority 4: an ongoing and closed course run should show in a separate section.
+        Priority 5: an ongoing and closed course run should show in a separate section.
         """
         course = CourseFactory(page_title="my course")
         course_run = self.create_run_ongoing_closed(course)
@@ -751,12 +795,12 @@ class RunsCourseCMSTestCase(CMSTestCase):
         )
 
     @timezone.override(pytz.utc)
-    def test_templates_course_detail_runs_archived(self):
+    def test_templates_course_detail_runs_archived_closed(self):
         """
-        Priority 5: an archived course run should show in a separate section.
+        Priority 6: an archived closed course run should show in a separate section.
         """
         course = CourseFactory(page_title="my course")
-        course_run = self.create_run_archived(course)
+        course_run = self.create_run_archived_closed(course)
         self.assertTrue(course.extended_object.publish("en"))
 
         url = course.extended_object.get_absolute_url()
@@ -779,7 +823,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
 
     def test_templates_course_detail_runs_to_be_scheduled(self):
         """
-        Priority 6: a course run with no date is only visible to staff users.
+        Priority 7: a course run with no date is only visible to staff users.
         """
         course = CourseFactory(page_title="my course")
         CourseRunFactory(direct_course=course, title="my course run", start=None)

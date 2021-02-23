@@ -8,6 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Add new state for courses archived yet open for enrollment and position them
+  well in search results
+
 ### Fixed
 
 - Fix autosuggest to redirect user directly on the course page when a course

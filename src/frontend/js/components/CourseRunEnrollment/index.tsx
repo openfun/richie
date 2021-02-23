@@ -3,6 +3,7 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { Spinner } from 'components/Spinner';
 import { useSession } from 'data/useSession';
+import { Priority } from 'types';
 import { User } from 'types/User';
 import { Maybe, Nullable } from 'utils/types';
 import { handle } from 'utils/errors/handle';
@@ -55,7 +56,7 @@ interface CourseRunEnrollmentProps {
   courseRun: {
     id: number;
     resource_link: string;
-    priority: number;
+    priority: Priority;
     starts_in_message: Nullable<string>;
     dashboard_link: Nullable<string>;
   };
@@ -105,7 +106,7 @@ const getStepFromContext = (
   previousStep: Step,
 ) => {
   switch (true) {
-    case courseRun.priority > 1:
+    case courseRun.priority > Priority.ARCHIVED_OPEN:
       return Step.CLOSED;
     case previousStep === Step.ENROLLING && !isEnrolled:
       return Step.ENROLLMENT_FAILED;

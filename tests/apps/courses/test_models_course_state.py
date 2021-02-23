@@ -45,12 +45,22 @@ class CourseRunModelsTestCase(TestCase):
             enrollment_end=self.now,
         )
 
-    def create_run_archived(self, course):
+    def create_run_archived_open(self, course):
         """Create an archived course run."""
         return CourseRunFactory(
             direct_course=course,
             start=self.now - timedelta(hours=1),
             end=self.now,
+            enrollment_end=self.now + timedelta(hours=1),
+        )
+
+    def create_run_archived_closed(self, course):
+        """Create an archived course run."""
+        return CourseRunFactory(
+            direct_course=course,
+            start=self.now - timedelta(hours=1),
+            end=self.now,
+            enrollment_end=self.now - timedelta(hours=1),
         )
 
     def create_run_future_not_yet_open(self, course):
@@ -79,24 +89,34 @@ class CourseRunModelsTestCase(TestCase):
             enrollment_end=self.now + timedelta(hours=1),
         )
 
-    def test_models_course_state_coming_soon(self):
+    def test_models_course_state_to_be_scheduled(self):
         """
         Confirm course state result when there is no course runs at all.
         """
         course = CourseFactory()
         with self.assertNumQueries(3):
             state = course.state
-        self.assertEqual(state, CourseState(6))
+        self.assertEqual(state, CourseState(7))
 
-    def test_models_course_state_archived(self):
+    def test_models_course_state_archived_closed(self):
         """
         Confirm course state when there is a course run only in the past.
         """
         course = CourseFactory()
-        self.create_run_archived(course)
+        self.create_run_archived_closed(course)
         with self.assertNumQueries(3):
             state = course.state
-        self.assertEqual(state, CourseState(5))
+        self.assertEqual(state, CourseState(6))
+
+    def test_models_course_state_archived_open(self):
+        """
+        Confirm course state when there is a past course run but open for enrollment.
+        """
+        course = CourseFactory()
+        course_run = self.create_run_archived_open(course)
+        with self.assertNumQueries(3):
+            state = course.state
+        self.assertEqual(state, CourseState(2, course_run.enrollment_end))
 
     def test_models_course_state_ongoing_enrollment_closed(self):
         """
@@ -107,7 +127,7 @@ class CourseRunModelsTestCase(TestCase):
         self.create_run_ongoing_closed(course)
         with self.assertNumQueries(3):
             state = course.state
-        self.assertEqual(state, CourseState(4))
+        self.assertEqual(state, CourseState(5))
 
     def test_models_course_state_future_enrollment_not_yet_open(self):
         """
@@ -118,7 +138,7 @@ class CourseRunModelsTestCase(TestCase):
         course_run = self.create_run_future_not_yet_open(course)
         with self.assertNumQueries(3):
             state = course.state
-        expected_state = CourseState(2, course_run.start)
+        expected_state = CourseState(3, course_run.start)
         self.assertEqual(state, expected_state)
 
         # Adding an on-going but closed course run should not change the result and require
@@ -137,7 +157,7 @@ class CourseRunModelsTestCase(TestCase):
         self.create_run_future_closed(course)
         with self.assertNumQueries(3):
             state = course.state
-        expected_state = CourseState(3)
+        expected_state = CourseState(4)
         self.assertEqual(state, expected_state)
 
         # Adding an on-going but closed course run should not change the result and require
