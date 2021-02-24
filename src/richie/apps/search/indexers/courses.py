@@ -78,7 +78,7 @@ class CoursesIndexer:
         "categories",
         "cover_image",
         "duration",
-        "effort",
+        "pace",
         "icon",
         "organization_highlighted",
         "organizations",
@@ -455,11 +455,11 @@ class CoursesIndexer:
             with translation.override(language):
                 duration[language] = course.get_duration_display()
 
-        # Prepare localized effort texts
-        effort = {}
+        # Prepare localized pace texts
+        pace = {}
         for language, _ in settings.LANGUAGES:
             with translation.override(language):
-                effort[language] = course.get_effort_display()
+                pace[language] = course.get_pace_display()
 
         # Prepare categories, making sure we get title information for categories
         # in the same query
@@ -562,7 +562,7 @@ class CoursesIndexer:
                 language: " ".join(st) for language, st in descriptions.items()
             },
             "duration": duration,
-            "effort": effort,
+            "pace": pace,
             "icon": icon_images,
             "is_new": len(course_runs) == 1,
             "is_listed": course.is_listed,
@@ -653,7 +653,7 @@ class CoursesIndexer:
                     "absolute_url",
                     "cover_image",
                     "duration",
-                    "effort",
+                    "pace",
                     "icon",
                     "title",
                 ]

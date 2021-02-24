@@ -1,5 +1,5 @@
 """
-A custom field that defines efforts as a number of pre-defined time units per reference time unit
+A custom field that defines rythm as a number of pre-defined time units per reference time unit
 (e.g 2 hours/day, 5 hours/week or 3 days/months).
 """
 from django import forms
@@ -10,9 +10,9 @@ from django.forms import widgets
 from django.utils.translation import gettext_lazy as _
 
 
-class EffortWidget(widgets.MultiWidget):
+class PaceWidget(widgets.MultiWidget):
     """
-    A widget that splits the input of an effort into one integer input box and two select boxes.
+    A widget that splits the input of an pace into one integer input box and two select boxes.
     """
 
     template_name = "richie/forms/widgets/composite_widget.html"
@@ -21,7 +21,7 @@ class EffortWidget(widgets.MultiWidget):
         self,
         attrs=None,
         choices=(),
-        default_effort_unit=None,
+        default_pace_unit=None,
         default_reference_unit=None,
     ):
         """
@@ -33,7 +33,7 @@ class EffortWidget(widgets.MultiWidget):
 
         e.g: 3 hours/day is split in: 3 (integer input) | hour (select) | day (select)
         """
-        self.default_effort_unit = default_effort_unit
+        self.default_pace_unit = default_pace_unit
         self.default_reference_unit = default_reference_unit
         super().__init__(
             (
@@ -42,7 +42,7 @@ class EffortWidget(widgets.MultiWidget):
                 # than the reference time unit
                 widgets.Select(attrs, choices[:-1]),
                 # Remove the first choice: it can never be chosen as it must be strictly greater
-                # than the effort time unit
+                # than the pace time unit
                 widgets.Select(attrs, choices[1:]),
             )
         )
@@ -53,12 +53,12 @@ class EffortWidget(widgets.MultiWidget):
         In the absence of a value, pre-configure the two time unit select widgets as defined
         in the field.
         """
-        return value or ["", self.default_effort_unit, self.default_reference_unit]
+        return value or ["", self.default_pace_unit, self.default_reference_unit]
 
 
-class EffortFormField(forms.CharField):
+class PaceFormField(forms.CharField):
     """
-    The composite duration field is saved in database as a charfield but represented in Python
+    The composite pace field is saved in database as a charfield but represented in Python
     by a triplet [duration,unit,reference]. We should not force its value to str.
     """
 
@@ -67,22 +67,22 @@ class EffortFormField(forms.CharField):
         return value
 
 
-class EffortField(models.CharField):
+class PaceField(models.CharField):
     """
-    A custom charfield to store an effort in database as an integer and 2 time unit choices.
+    A custom charfield to store an pace in database as an integer and 2 time unit choices.
     """
 
-    description = _("Define an effort")
+    description = _("Define a pace")
 
     error_message = _("%(value)s is not a valid choice for a time unit.")
 
     def __init__(self, *args, **kwargs):
         """
-        Record the three additional field attributes `time_units`, `default_effort_unit` and
+        Record the three additional field attributes `time_units`, `default_pace_unit` and
         `default_reference_unit` in the instance.
         """
         self.time_units = kwargs.pop("time_units", None)
-        self.default_effort_unit = kwargs.pop("default_effort_unit", None)
+        self.default_pace_unit = kwargs.pop("default_pace_unit", None)
         self.default_reference_unit = kwargs.pop("default_reference_unit", None)
         super().__init__(*args, **kwargs)
 
@@ -90,7 +90,7 @@ class EffortField(models.CharField):
         """Return enough information to recreate the field as a 4-tuple."""
         name, path, args, kwargs = super().deconstruct()
         kwargs["time_units"] = self.time_units
-        kwargs["default_effort_unit"] = self.default_effort_unit
+        kwargs["default_pace_unit"] = self.default_pace_unit
         kwargs["default_reference_unit"] = self.default_reference_unit
         return name, path, args, kwargs
 
@@ -99,7 +99,7 @@ class EffortField(models.CharField):
         if self.time_units is None:
             return [
                 checks.Error(
-                    "Effort fields must define a 'time_units' attribute.",
+                    "Pace fields must define a 'time_units' attribute.",
                     obj=self,
                     id="fields.E1010",
                 )
@@ -120,12 +120,12 @@ class EffortField(models.CharField):
 
         return []
 
-    def _check_default_effort_unit_attribute(self):
-        """Check that `default_effort_unit` is well configured."""
-        if self.default_effort_unit and self.default_effort_unit not in self.time_units:
+    def _check_default_pace_unit_attribute(self):
+        """Check that `default_pace_unit` is well configured."""
+        if self.default_pace_unit and self.default_pace_unit not in self.time_units:
             return [
                 checks.Error(
-                    "'{:s}' is not a valid time unit.".format(self.default_effort_unit),
+                    "'{:s}' is not a valid time unit.".format(self.default_pace_unit),
                     obj=self,
                     id="fields.E1012",
                 )
@@ -156,7 +156,7 @@ class EffortField(models.CharField):
         return (
             super().check(**kwargs)
             + self._check_time_units_attribute()
-            + self._check_default_effort_unit_attribute()
+            + self._check_default_pace_unit_attribute()
             + self._check_default_reference_unit_attribute()
         )
 
@@ -205,7 +205,7 @@ class EffortField(models.CharField):
         Arguments:
         ----------
         value (List[string]): a list of strings representing the Python representation
-            of an effort.
+            of an pace.
 
         Returns:
         --------
@@ -241,7 +241,7 @@ class EffortField(models.CharField):
             if size != 3:
                 raise exceptions.ValidationError(
                     _(
-                        "An effort should be a triplet: number, time unit and reference unit."
+                        "An pace should be a triplet: number, time unit and reference unit."
                     ),
                     code="invalid_format",
                 )
@@ -254,14 +254,14 @@ class EffortField(models.CharField):
                     duration = int(duration)
                 except ValueError as error:
                     raise exceptions.ValidationError(
-                        _("An effort should be a round number of time units."),
-                        code="invalid_effort",
+                        _("An pace should be a round number of time units."),
+                        code="invalid_pace",
                     ) from error
 
                 # Check that the duration is positive
                 if duration <= 0:
                     raise exceptions.ValidationError(
-                        _("An effort should be positive."), code="negative_effort"
+                        _("An pace should be positive."), code="negative_pace"
                     )
 
             choices = list(dict(self.time_units))
@@ -283,7 +283,7 @@ class EffortField(models.CharField):
             if choices.index(unit) >= choices.index(reference):
                 raise exceptions.ValidationError(
                     _(
-                        "The effort time unit should be shorter than the reference unit."
+                        "The pace time unit should be shorter than the reference unit."
                     ),
                     code="unit_order",
                 )
@@ -295,15 +295,15 @@ class EffortField(models.CharField):
             raise exceptions.ValidationError(self.error_messages["blank"], code="blank")
 
     def formfield(self, **kwargs):
-        """Declare the above EffortFormField as form field for this model field."""
+        """Declare the above PaceFormField as form field for this model field."""
         kwargs = {
             **kwargs,
-            "form_class": EffortFormField,
-            "widget": EffortWidget(
+            "form_class": PaceFormField,
+            "widget": PaceWidget(
                 choices=tuple(
                     (name, strings[0]) for name, strings in self.time_units.items()
                 ),
-                default_effort_unit=self.default_effort_unit,
+                default_pace_unit=self.default_pace_unit,
                 default_reference_unit=self.default_reference_unit,
             ),
         }

@@ -3,7 +3,7 @@
 from django.db import migrations
 
 import richie.apps.core.fields.duration
-import richie.apps.core.fields.effort
+import richie.apps.core.fields.pace
 
 
 class Migration(migrations.Migration):
@@ -14,9 +14,9 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="course",
             name="effort",
-            field=richie.apps.core.fields.effort.EffortField(
+            field=richie.apps.core.fields.pace.PaceField(
                 blank=True,
-                default_effort_unit="week",
+                default_pace_unit="week",
                 default_reference_unit="month",
                 time_units={
                     "day": ("day", "days"),

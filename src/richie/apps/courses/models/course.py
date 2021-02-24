@@ -24,7 +24,7 @@ from parler.models import TranslatableModel, TranslatedField, TranslatedFieldsMo
 
 from ...core.defaults import ALL_LANGUAGES
 from ...core.fields.duration import CompositeDurationField
-from ...core.fields.effort import EffortField
+from ...core.fields.pace import PaceField
 from ...core.fields.multiselect import MultiSelectField
 from ...core.helpers import get_permissions
 from ...core.models import BasePageExtension, PagePluginMixin
@@ -154,9 +154,9 @@ class Course(BasePageExtension):
         null=True,
         blank=True,
     )
-    effort = EffortField(
+    pace = PaceField(
         time_units=defaults.TIME_UNITS,
-        default_effort_unit=defaults.DEFAULT_EFFORT_UNIT,
+        default_pace_unit=defaults.DEFAULT_PACE_UNIT,
         default_reference_unit=defaults.DEFAULT_REFERENCE_UNIT,
         max_length=80,
         blank=True,

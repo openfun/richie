@@ -754,89 +754,89 @@ class CourseModelsTestCase(TestCase):
         ]
         self.assertEqual(expected_pages, list(course.get_root_to_leaf_category_pages()))
 
-    # Fields: effort
+    # Fields: pace
 
-    def test_models_course_field_effort_null(self):
-        """The effort field can be null."""
-        course = factories.CourseFactory(effort=None)
-        self.assertIsNone(course.effort)
-        self.assertEqual(course.get_effort_display(), "")
+    def test_models_course_field_pace_null(self):
+        """The pace field can be null."""
+        course = factories.CourseFactory(pace=None)
+        self.assertIsNone(course.pace)
+        self.assertEqual(course.get_pace_display(), "")
 
-    def test_models_course_field_effort_invalid(self):
-        """An effort should be a triplet: number, time unit and reference unit."""
+    def test_models_course_field_pace_invalid(self):
+        """An pace should be a triplet: number, time unit and reference unit."""
         with self.assertRaises(ValidationError) as context:
-            factories.CourseFactory(effort=[5, "unit"])
+            factories.CourseFactory(pace=[5, "unit"])
         self.assertEqual(
             context.exception.messages[0],
-            "An effort should be a triplet: number, time unit and reference unit.",
+            "An pace should be a triplet: number, time unit and reference unit.",
         )
 
-    def test_models_course_field_effort_integer(self):
-        """The first value of the effort triplet should be an integer."""
+    def test_models_course_field_pace_integer(self):
+        """The first value of the pace triplet should be an integer."""
         for value in ["a", "1.0"]:
             with self.assertRaises(ValidationError) as context:
-                factories.CourseFactory(effort=[value, "minute", "hour"])
+                factories.CourseFactory(pace=[value, "minute", "hour"])
             self.assertEqual(
                 context.exception.messages[0],
-                "An effort should be a round number of time units.",
+                "An pace should be a round number of time units.",
             )
 
-    def test_models_course_field_effort_positive(self):
+    def test_models_course_field_pace_positive(self):
         """The first value should be a positive integer."""
         with self.assertRaises(ValidationError) as context:
-            factories.CourseFactory(effort=[-1, "day", "month"])
-        self.assertEqual(context.exception.messages[0], "An effort should be positive.")
+            factories.CourseFactory(pace=[-1, "day", "month"])
+        self.assertEqual(context.exception.messages[0], "An pace should be positive.")
 
-    def test_models_course_field_effort_invalid_unit(self):
+    def test_models_course_field_pace_invalid_unit(self):
         """The second value should be a valid time unit choice."""
         with self.assertRaises(ValidationError) as context:
-            factories.CourseFactory(effort=[1, "invalid", "month"])
+            factories.CourseFactory(pace=[1, "invalid", "month"])
         self.assertEqual(
             context.exception.messages[0],
             "invalid is not a valid choice for a time unit.",
         )
 
-    def test_models_course_field_effort_invalid_reference(self):
+    def test_models_course_field_pace_invalid_reference(self):
         """The third value should be a valid time unit choice."""
         with self.assertRaises(ValidationError) as context:
-            factories.CourseFactory(effort=[1, "day", "invalid"])
+            factories.CourseFactory(pace=[1, "day", "invalid"])
         self.assertEqual(
             context.exception.messages[0],
             "invalid is not a valid choice for a time unit.",
         )
 
-    def test_models_course_field_effort_order(self):
-        """The effort unit should be shorter than the reference unit."""
+    def test_models_course_field_pace_order(self):
+        """The pace unit should be shorter than the reference unit."""
         with self.assertRaises(ValidationError) as context:
-            factories.CourseFactory(effort=[1, "day", "day"])
+            factories.CourseFactory(pace=[1, "day", "day"])
         self.assertEqual(
             context.exception.messages[0],
-            "The effort time unit should be shorter than the reference unit.",
+            "The pace time unit should be shorter than the reference unit.",
         )
 
-    def test_models_course_field_effort_display_singular(self):
+    def test_models_course_field_pace_display_singular(self):
         """Validate that a value of 1 time unit is displayed as expected."""
-        course = factories.CourseFactory(effort=[1, "day", "week"])
-        self.assertEqual(course.get_effort_display(), "1 day/week")
+        course = factories.CourseFactory(pace=[1, "day", "week"])
+        self.assertEqual(course.get_pace_display(), "1 day/week")
 
-    def test_models_course_field_effort_display_plural(self):
+    def test_models_course_field_pace_display_plural(self):
         """Validate that a plural number of time units is displayed as expected."""
-        course = factories.CourseFactory(effort=[2, "day", "week"])
-        self.assertEqual(course.get_effort_display(), "2 days/week")
+        course = factories.CourseFactory(pace=[2, "day", "week"])
+        self.assertEqual(course.get_pace_display(), "2 days/week")
 
-    def test_models_course_field_effort_display_request(self):
+    def test_models_course_field_pace_display_request(self):
         """
         When used in the `render_model` template tag, it should not break when passed a
         request argument (the DjangoCMS frontend editing does it).
         """
-        course = factories.CourseFactory(effort=[1, "week", "month"])
+        course = factories.CourseFactory(pace=[1, "week", "month"])
         request = RequestFactory().get("/")
-        self.assertEqual(course.get_effort_display(request), "1 week/month")
+        self.assertEqual(course.get_pace_display(request), "1 week/month")
 
-    def test_models_course_field_effort_default(self):
-        """The effort field should default to None."""
+    def test_models_course_field_pace_default(self):
+        """The pace field should default to None."""
         course = Course.objects.create(extended_object=PageFactory())
-        self.assertIsNone(course.effort)
+        self.assertIsNone(course.pace)
 
     # Fields: duration
 

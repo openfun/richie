@@ -296,7 +296,7 @@ class CoursesViewsetsTestCase(CMSTestCase):
                 "categories",
                 "cover_image",
                 "duration",
-                "effort",
+                "pace",
                 "icon",
                 "organization_highlighted",
                 "organizations",
