@@ -30,6 +30,16 @@ FACET_SORTING_DEFAULT = "conf"
 FACET_COUNTS_DEFAULT_LIMIT = getattr(settings, "RICHIE_FACET_COUNTS_DEFAULT_LIMIT", 10)
 FACET_COUNTS_MAX_LIMIT = getattr(settings, "RICHIE_FACET_COUNTS_MAX_LIMIT", 50)
 
+ES_STATE_WEIGHTS = getattr(settings, "RICHIE_ES_STATE_WEIGHTS", None) or [
+    80,  # ONGOING_OPEN
+    40,  # FUTURE_OPEN
+    20,  # ARCHIVED_OPEN
+    10,  # FUTURE_NOT_YET_OPEN
+    6,  # FUTURE_CLOSED
+    5,  # ONGOING_CLOSED
+    1,  # ARCHIVED_CLOSED
+]
+
 FILTERS_CONFIGURATION = [
     (
         "richie.apps.search.filter_definitions.StaticChoicesFilterDefinition",

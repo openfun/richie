@@ -16,11 +16,141 @@ from richie.plugins.simple_picture.helpers import get_picture_info
 from richie.plugins.simple_text_ckeditor.models import SimpleText
 
 from ...courses.models import MAX_DATE, CategoryPluginModel, Course, CourseState
-from ..defaults import ES_INDICES_PREFIX
+from ..defaults import ES_INDICES_PREFIX, ES_STATE_WEIGHTS
 from ..forms import CourseSearchForm
 from ..text_indexing import MULTILINGUAL_TEXT
 from ..utils.i18n import get_best_field_language
 from ..utils.indexers import slice_string_for_completion
+
+BEST_STATE_SCRIPT = """
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
+        "yyyy-MM-dd'T'HH:mm:ss[.SSSSSS]XXXXX"
+    );
+    int best_state = 7;
+    int best_index = 0;
+    long start, end, enrollment_start, enrollment_end;
+    Set intersection;
+
+    // Go through the sorted course runs nested under this course to look for the
+    // best course run (open for enrollment > future > on-going > archived)
+    for (int i = 0; i < params._source.course_runs.length; ++i) {
+        start = ZonedDateTime.parse(
+            params._source.course_runs[i]['start'], formatter
+        ).toInstant().toEpochMilli();
+        end = ZonedDateTime.parse(
+            params._source.course_runs[i]['end'], formatter
+        ).toInstant().toEpochMilli();
+        enrollment_start = ZonedDateTime.parse(
+            params._source.course_runs[i]['enrollment_start'], formatter
+        ).toInstant().toEpochMilli();
+        enrollment_end = ZonedDateTime.parse(
+            params._source.course_runs[i]['enrollment_end'], formatter
+        ).toInstant().toEpochMilli();
+
+        // Use language sets to check their intersection
+        intersection = new HashSet(params._source.course_runs[i]['languages']);
+        if (params.languages != null) {
+            intersection.retainAll(new HashSet(params.languages))
+        }
+
+        // Only consider this course run if it is in a desired language
+        if (params.languages == null || !intersection.isEmpty()) {
+            if (start < params.ms_since_epoch) {
+                if (end > params.ms_since_epoch) {
+                    if (enrollment_end > params.ms_since_epoch) {
+                        // on-going open
+                        if (params.states == null || params.states.contains(0)) {
+                            best_state = 0;
+                            best_index = i;
+                            // We already found the best... let's save iterations
+                            break;
+                        }
+                    }
+                    else {
+                        // on-going closed
+                        if (
+                            best_state > 5 && (
+                                params.states == null ||
+                                params.states.contains(5)
+                            )
+                        ) {
+                            best_state = 5;
+                            best_index = i;
+                        }
+                    }
+                }
+                else {
+                    if (enrollment_end > params.ms_since_epoch) {
+                        // archived open
+                        if (
+                            best_state > 2 && (
+                                params.states == null ||
+                                params.states.contains(2)
+                            )
+                        ) {
+                            best_state = 2;
+                            best_index = i;
+                            // Course runs are ordered by `end` date so we know all
+                            // remaining course runs will not be better than
+                            // archived open.
+                            // Let's break to save iterations:
+                            break;
+                        }
+                    }
+                    else {
+                        // archived closed
+                        if (
+                            best_state > 6 && (
+                                params.states == null ||
+                                params.states.contains(6)
+                            )
+                        ) {
+                            best_state = 6;
+                            best_index = i;
+                        }
+                    }
+                }
+            }
+            else if (enrollment_start > params.ms_since_epoch) {
+                // future not yet open
+                if (
+                    best_state > 3 && (
+                        params.states == null ||
+                        params.states.contains(3)
+                    )
+                ) {
+                    best_state = 3;
+                    best_index = i;
+                }
+            }
+            else if (enrollment_end > params.ms_since_epoch) {
+                // future open
+                if (
+                    best_state > 1 && (
+                        params.states == null ||
+                        params.states.contains(1)
+                    )
+                ) {
+                    best_state = 1;
+                    best_index = i;
+                }
+            }
+            else {
+                // future already closed
+                if (
+                    best_state > 4 && (
+                        params.states == null ||
+                        params.states.contains(4)
+                    )
+                ) {
+                    best_state = 4;
+                    best_index = i;
+                }
+            }
+        }
+    }
+
+"""
 
 
 class CoursesIndexer:
@@ -87,310 +217,206 @@ class CoursesIndexer:
     form = CourseSearchForm
 
     scripts = {
-        # We use the same `state` script for several use cases as the code is mostly common and
-        # we don't have any other way to factorize it.
-        #
-        # 1) Field script
-        # ===============
-        # Computing a course's state based on the current state of each of its course runs.
-        #
-        # 2) Sorting script
-        # =================
         # The ordering process first splits the courses into 7 buckets (Bucket 0 to Bucket 6),
         # based on their state with further ordering inside each one of those buckets.
         #
+        # The priority of each bucket is determined by a weight coming from the settings:
+        #     > RICHIE_ES_STATE_WEIGHTS = [80, 40, 20, 10, 6, 5, 1]
+        #
+        # The priority of each course within a bucket is determined by a delta that is based on
+        # one of the course's datetimes (start, end or end_of_enrollment date depending on its
+        # state). This delta is added for dates later than the current datetime (in order to rank
+        # them by ascending order), and substracted for dates earlier than the current time (in
+        # order to rank them by descending order). Said differently, courses are ranked within a
+        # bucket by the descending proximity of their signifiant datetime with the current
+        # datetime.
+        #
+        # The boost factor for each course is given by the formula
+        # (We add 1 to _score so that it is always > 0 and never brings boost factors to 0):
+        #
+        #     > boost_factor = (_score + 1) * (weight * now -/+ significant_datetime)
+        #
         # Here's a schematic representation that shows the ordering factor for each
-        # course (to be used in ascending order later on) :
+        # course (to be used in descending order later on) :
         #
         #                   TOP OF THE LIST
         #                   ———————————————
-        # -------------- NOW (current timestamp) --------------
-        #     Bucket 0: Courses that are ongoing and open
+        # --------------------- weight_0 ---------------------
+        #     Bucket 0: Courses that are on-going and open
         #      sorted by ascending end of enrollment date
         #
-        # --------------   1 x datetime.MAXYEAR  --------------
+        # --------------------- weight_1 ---------------------
         #      Bucket 1: Courses that are future and open
         #            sorted by ascending start date
         #
-        # --------------   2 x datetime.MAXYEAR  --------------
+        # --------------------- weight_2 ---------------------
         #      Bucket 2: Courses that are archived but open
-        #       sorted by descending end of enrollment date
+        #       sorted by ascending end of enrollment date
         #
-        # --------------   3 x datetime.MAXYEAR  --------------
+        # --------------------- weight_3 ---------------------
         #  Bucket 3: Courses that are future but not yet open
         #            sorted by ascending start date
         #
-        # --------------   4 x datetime.MAXYEAR  --------------
+        # --------------------- weight_4 ---------------------
         # Bucket 4: Courses that are future but already closed
-        #      sorted by descending end of enrollment date
+        #            sorted by ascending start date
         #
-        # --------------   5 x datetime.MAXYEAR  --------------
-        #     Bucket 5: Courses that are ongoing but closed
-        #      sorted by descending end of enrollment date
+        # --------------------- weight_5 ---------------------
+        #     Bucket 5: Courses that are on-going but closed
+        #           sorted by ascending end date
         #
-        # --------------   6 x datetime.MAXYEAR  --------------
+        # --------------------- weight_6 ---------------------
         #          Bucket 6: Courses that are archived
-        #             sorted by descending end date
+        #            sorted by descending end date
         #
-        # --------------   7 x datetime.MAXYEAR  --------------
-        #     Bucket 7: Courses that have no course runs
+        # ------------------ Weight set to 0 -----------------
+        #      Bucket 7: Courses that have no course runs
         #                No specific ordering
         #                   ———————————————
         #                   END OF THE LIST
         #
-        # For reference MAXYEAR's timestamp is more than 2 orders of magnitude larger than
-        # this year's timestamp (2018).
-        # This means there can be no overlap between the various buckets, but we can still
-        # sort courses inside each bucket as we see fit by simply adding timestamps (ascending
-        # order) or substracting them (descending order).
-        "state": {
+        "score": {
             "script": {
                 "lang": "painless",
-                "source": """
-                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
-                        "yyyy-MM-dd'T'HH:mm:ss[.SSSSSS]XXXXX"
+                "source": BEST_STATE_SCRIPT
+                + """
+                if (best_state == 0) {{
+                    // The course is on-going and open
+                    // Ordered by ascending end of enrollment datetime. The next course to
+                    // end enrollment is displayed first.
+                    return (_score + 1) * (
+                        {weight_0:d} * params.ms_since_epoch - ZonedDateTime.parse(
+                            params._source.course_runs[best_index]['enrollment_end'], formatter
+                        ).toInstant().toEpochMilli()
                     );
-                    int best_state = 7;
-                    int best_index = 0;
-                    long start, end, enrollment_start, enrollment_end;
-                    Set intersection;
-
-                    // Go through the sorted course runs nested under this course to look for the
-                    // best course run (open for enrollment > future > on-going > archived)
-                    for (int i = 0; i < params._source.course_runs.length; ++i) {
-                        start = ZonedDateTime.parse(
-                            params._source.course_runs[i]['start'], formatter
-                        ).toInstant().toEpochMilli();
-                        end = ZonedDateTime.parse(
-                            params._source.course_runs[i]['end'], formatter
-                        ).toInstant().toEpochMilli();
-                        enrollment_start = ZonedDateTime.parse(
-                            params._source.course_runs[i]['enrollment_start'], formatter
-                        ).toInstant().toEpochMilli();
-                        enrollment_end = ZonedDateTime.parse(
-                            params._source.course_runs[i]['enrollment_end'], formatter
-                        ).toInstant().toEpochMilli();
-
-                        // Use language sets to check their intersection
-                        intersection = new HashSet(params._source.course_runs[i]['languages']);
-                        if (params.languages != null) {
-                            intersection.retainAll(new HashSet(params.languages))
-                        }
-
-                        // Only consider this course run if it is in a desired language
-                        if (params.languages == null || !intersection.isEmpty()) {
-                            if (start < params.ms_since_epoch) {
-                                if (end > params.ms_since_epoch) {
-                                    if (enrollment_end > params.ms_since_epoch) {
-                                        // ongoing open
-                                        if (params.states == null || params.states.contains(0)) {
-                                            best_state = 0;
-                                            best_index = i;
-                                            // We already found the best... let's save iterations
-                                            break;
-                                        }
-                                    }
-                                    else {
-                                        // ongoing closed
-                                        if (
-                                            best_state > 5 && (
-                                                params.states == null ||
-                                                params.states.contains(5)
-                                            )
-                                        ) {
-                                            best_state = 5;
-                                            best_index = i;
-                                        }
-                                    }
-                                }
-                                else {
-                                    if (enrollment_end > params.ms_since_epoch) {
-                                        // archived open
-                                        if (
-                                            best_state > 2 && (
-                                                params.states == null ||
-                                                params.states.contains(2)
-                                            )
-                                        ) {
-                                            best_state = 2;
-                                            best_index = i;
-                                            // Course runs are ordered by `end` date so we know all
-                                            // remaining course runs will not be better than
-                                            // archived open.
-                                            // Let's break to save iterations:
-                                            break;
-                                        }
-                                    }
-                                    else {
-                                        // archived closed
-                                        if (
-                                            best_state > 6 && (
-                                                params.states == null ||
-                                                params.states.contains(6)
-                                            )
-                                        ) {
-                                            best_state = 6;
-                                            best_index = i;
-                                        }
-                                    }
-                                }
-                            }
-                            else if (enrollment_start > params.ms_since_epoch) {
-                                // future not yet open
-                                if (
-                                    best_state > 3 && (
-                                        params.states == null ||
-                                        params.states.contains(3)
-                                    )
-                                ) {
-                                    best_state = 3;
-                                    best_index = i;
-                                }
-                            }
-                            else if (enrollment_end > params.ms_since_epoch) {
-                                // future open
-                                if (
-                                    best_state > 1 && (
-                                        params.states == null ||
-                                        params.states.contains(1)
-                                    )
-                                ) {
-                                    best_state = 1;
-                                    best_index = i;
-                                }
-                            }
-                            else {
-                                // future already closed
-                                if (
-                                    best_state > 4 && (
-                                        params.states == null ||
-                                        params.states.contains(4)
-                                    )
-                                ) {
-                                    best_state = 4;
-                                    best_index = i;
-                                }
-                            }
-                        }
+                }}
+                else if (best_state == 1) {{
+                    // The course is future and open
+                    // Ordered by starting datetime. The next course to start is displayed
+                    // first.
+                    return (_score + 1) * (
+                        {weight_1:d} * params.ms_since_epoch - ZonedDateTime.parse(
+                            params._source.course_runs[best_index]['start'], formatter
+                        ).toInstant().toEpochMilli()
+                    );
+                }}
+                else if (best_state == 2) {{
+                    // The course is archived but open for enrollment
+                    // Ordered by ascending end of enrollment datetime. The next course to
+                    // end enrollment is displayed first.
+                    return (_score + 1) * (
+                        {weight_2:d} * params.ms_since_epoch - ZonedDateTime.parse(
+                            params._source.course_runs[best_index]['enrollment_end'], formatter
+                        ).toInstant().toEpochMilli()
+                    );
+                }}
+                else if (best_state == 3) {{
+                    // The course is future but not yet open for enrollment
+                    // Ordered by starting datetime. The next course to start is displayed
+                    // first.
+                    return (_score + 1) * (
+                        {weight_3:d} * params.ms_since_epoch - ZonedDateTime.parse(
+                            params._source.course_runs[best_index]['start'], formatter
+                        ).toInstant().toEpochMilli()
+                    );
+                }}
+                else if (best_state == 4) {{
+                    // The course is future but already closed for enrollment
+                    // Ordered by end datetime. The next course to end is displayed first
+                    return (_score + 1) * (
+                        {weight_4:d} * params.ms_since_epoch - ZonedDateTime.parse(
+                            params._source.course_runs[best_index]['start'], formatter
+                        ).toInstant().toEpochMilli()
+                    );
+                }}
+                else if (best_state == 5) {{
+                    // The course is on-going and closed for enrollment
+                    // Ordered by end datetime. The next course to end is displayed first
+                    return (_score + 1) * (
+                        {weight_5:d} * params.ms_since_epoch - ZonedDateTime.parse(
+                            params._source.course_runs[best_index]['end'], formatter
+                        ).toInstant().toEpochMilli()
+                    );
+                }}
+                else if (best_state == 6) {{
+                    // The course is archived and closed for enrollment
+                    // Ordered by end datetime. The next course to start is displayed
+                    // first.
+                    return (_score + 1) * (
+                        {weight_6:d} * params.ms_since_epoch + ZonedDateTime.parse(
+                            params._source.course_runs[best_index]['end'], formatter
+                        ).toInstant().toEpochMilli()
+                    );
+                }}
+                // The course has no course runs
+                return 0;
+                """.format(
+                    **{
+                        f"weight_{i:d}": weight
+                        for i, weight in enumerate(ES_STATE_WEIGHTS)
                     }
-
-                    // Sorting script
-                    if (params.use_case == "sorting") {
-                        if (best_state == 0) {
-                            // The course is ongoing and open
-                            // Ordered by ascending end of enrollment datetime. The next course to
-                            // end enrollment is displayed first.
-                            return ZonedDateTime.parse(
-                                params._source.course_runs[best_index]['enrollment_end'], formatter
-                            ).toInstant().toEpochMilli();
-                        }
-                        else if (best_state == 1) {
-                            // The course is future and open
-                            // Ordered by starting datetime. The next course to start is displayed
-                            // first.
-                            return params.max_date + ZonedDateTime.parse(
-                                params._source.course_runs[best_index]['start'], formatter
-                            ).toInstant().toEpochMilli();
-                        }
-                        else if (best_state == 2) {
-                            // The course is archived but open
-                            // Ordered by ascending end of enrollment datetime. The next course to
-                            // end enrollment is displayed first.
-                            return 2 * params.max_date - ZonedDateTime.parse(
-                                params._source.course_runs[best_index]['enrollment_end'], formatter
-                            ).toInstant().toEpochMilli();
-                        }
-                        else if (best_state == 3) {
-                            // The course is future but not yet open for enrollment
-                            // Ordered by starting datetime. The next course to start is displayed
-                            // first.
-                            return 3 * params.max_date + ZonedDateTime.parse(
-                                params._source.course_runs[best_index]['start'], formatter
-                            ).toInstant().toEpochMilli();
-                        }
-                        else if (best_state == 4) {
-                            // The course is future but already closed for enrollment
-                            // Ordered by starting datetime. The next course to start is displayed
-                            // first.
-                            return 4 * params.max_date - ZonedDateTime.parse(
-                                params._source.course_runs[best_index]['enrollment_end'], formatter
-                            ).toInstant().toEpochMilli();
-                        }
-                        else if (best_state == 5) {
-                            // The course is ongoing and closed for enrollment
-                            // Ordered by descending end of enrollment datetime. The course for
-                            // which enrollment has ended last is displayed first.
-                            return 5 * params.max_date - ZonedDateTime.parse(
-                                params._source.course_runs[best_index]['enrollment_end'], formatter
-                            ).toInstant().toEpochMilli();
-                        }
-                        else if (best_state == 6) {
-                            // The course is archived
-                            // Ordered by descending end datetime. The course that has finished
-                            // last is displayed first.
-                            return 6 * params.max_date - ZonedDateTime.parse(
-                                params._source.course_runs[best_index]['end'], formatter
-                            ).toInstant().toEpochMilli();
-                        }
-                        // The course has no course runs
-                        return 7 * params.max_date;
-                    }
-                    // Field script
-                    else if (params.use_case == 'field') {
-                        if (best_state == 0) {
-                            // The course is ongoing and open
-                            // Return the date of end of enrollment
-                            return [
-                                'priority': 0,
-                                'date_time': params._source.course_runs[best_index][
-                                    'enrollment_end']
-                            ];
-                        }
-                        else if (best_state == 1) {
-                            // The course is future and open
-                            // Return the start date
-                            return [
-                                'priority': 1,
-                                'date_time': params._source.course_runs[best_index]['start']
-                            ];
-                        }
-                        else if (best_state == 2) {
-                            // The course is archived but open
-                            // Return the date of end of enrollment
-                            return [
-                                'priority': 2,
-                                'date_time': params._source.course_runs[best_index][
-                                    'enrollment_end']
-                            ];
-                        }
-                        else if (best_state == 3) {
-                            // The course is future but not yet open for enrollment
-                            // Return the start date
-                            return [
-                                'priority': 3,
-                                'date_time': params._source.course_runs[best_index]['start']
-                            ];
-                        }
-                        else if (best_state == 4) {
-                            // The course is future but already closed for enrollment
-                            return ['priority': 4];
-                        }
-                        else if (best_state == 5) {
-                            // The course is ongoing and closed for enrollment
-                            return ['priority': 5];
-                        }
-                        else if (best_state == 6) {
-                            // The course is archived
-                            return ['priority': 6];
-                        }
-                        else {
-                            // The course has no course runs
-                            return ['priority': 7];
-                        }
-                    }
+                ),
+            }
+        },
+        # Compute a course's state based on the current state of each of its course runs.
+        "state_field": {
+            "script": {
+                "lang": "painless",
+                "source": BEST_STATE_SCRIPT
+                + """
+                if (best_state == 0) {
+                    // The course is on-going and open
+                    // Return the date of end of enrollment
+                    return [
+                        'priority': 0,
+                        'date_time': params._source.course_runs[best_index][
+                            'enrollment_end']
+                    ];
+                }
+                else if (best_state == 1) {
+                    // The course is future and open
+                    // Return the start date
+                    return [
+                        'priority': 1,
+                        'date_time': params._source.course_runs[best_index]['start']
+                    ];
+                }
+                else if (best_state == 2) {
+                    // The course is archived but open
+                    // Return the date of end of enrollment
+                    return [
+                        'priority': 2,
+                        'date_time': params._source.course_runs[best_index][
+                            'enrollment_end']
+                    ];
+                }
+                else if (best_state == 3) {
+                    // The course is future but not yet open for enrollment
+                    // Return the start date
+                    return [
+                        'priority': 3,
+                        'date_time': params._source.course_runs[best_index]['start']
+                    ];
+                }
+                else if (best_state == 4) {
+                    // The course is future but already closed for enrollment
+                    return ['priority': 4];
+                }
+                else if (best_state == 5) {
+                    // The course is on-going and closed for enrollment
+                    return ['priority': 5];
+                }
+                else if (best_state == 6) {
+                    // The course is archived
+                    return ['priority': 6];
+                }
+                else {
+                    // The course has no course runs
+                    return ['priority': 7];
+                }
                 """,
             }
-        }
+        },
     }
 
     # pylint: disable=too-many-locals

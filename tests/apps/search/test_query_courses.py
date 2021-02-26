@@ -299,7 +299,11 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             body=CoursesIndexer.mapping, doc_type="course", index="test_courses"
         )
         # Add the sorting script
-        ES_CLIENT.put_script(id="state", body=CoursesIndexer.scripts["state"])
+        ES_CLIENT.put_script(id="score", body=CoursesIndexer.scripts["score"])
+        ES_CLIENT.put_script(
+            id="state_field", body=CoursesIndexer.scripts["state_field"]
+        )
+
         # Actually insert our courses in the index
         now = arrow.utcnow()
         actions = [
@@ -337,7 +341,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
 
         return courses_definition, json.loads(response.content)
 
-    def test_query_courses_match_all(self, *_):
+    def test_query_courses_match_all_general(self, *_):
         """
         Validate the detailed format of the response to a match all query.
         We force the suite to a precise example because the facet count may vary if for example
@@ -1168,17 +1172,21 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             self.get_expected_courses(courses_definition, list(COURSE_RUNS)),
         )
 
-    def test_query_courses_text_language_analyzer(self, *_):
+    def test_query_courses_text_language_analyzer_query(self, *_):
         """
         Full-text search appropriately returns the list of courses that match a given
         word through a language analyzer.
+        The score of the text query impacts ordering.
         """
-        courses_definition, content = self.execute_query("query=artificial")
+        courses_definition, content = self.execute_query(
+            "query=artificial",
+            suite=[["B", "F", "I"], ["E", "C"], ["H", "G"], ["D", "A"]],
+        )
         # Keep only the courses that contain the word "artificial"
         courses_definition = filter(lambda c: c[0] in [2, 0, 3], courses_definition)
         self.assertEqual(
             list((int(c["id"]) for c in content["objects"])),
-            self.get_expected_courses(courses_definition, list(COURSE_RUNS)),
+            [0, 3, 2],
         )
 
     def test_query_courses_text_language_analyzer_with_filter_category(self, *_):
