@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Take into account fulltext search score for sorting
 - Add new state for courses archived yet open for enrollment and position them
   well in search results
 - Add a banner component to display brief messages to the user

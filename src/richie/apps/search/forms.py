@@ -1,7 +1,6 @@
 """
 Validate and clean request parameters for our endpoints using Django forms
 """
-from datetime import MAXYEAR
 from functools import reduce
 
 from django import forms
@@ -112,12 +111,10 @@ class CourseSearchForm(SearchForm):
         """
         Build the part of the Elasticseach query that defines script fields ie fields that can not
         be indexed because they are dynamic and shoud be calculated at query time:
-        - ms_since_epoch: evolves with time to stay relevant on course dates even if the ES
-          instance and/or the Django server are long running.
         - languages and states: depend on the filters applied by the user so that we only take into
           consideration course runs that are interesting for this search.
-        - use_case: the script is used both for sorting and field computations because most of the
-          code is common and their is no other way to share code.
+        - ms_since_epoch: evolves with time to stay relevant on course dates even if the ES
+          instance and/or the Django server are long running.
 
         Note: we use script storage to save time on the script compilation, which is an expensive
         operation. We'll only do it once at bootstrap time.
@@ -125,55 +122,13 @@ class CourseSearchForm(SearchForm):
         return {
             "state": {
                 "script": {
-                    "id": "state",
+                    "id": "state_field",
                     "params": {
                         "languages": self.cleaned_data.get("languages") or None,
                         "ms_since_epoch": arrow.utcnow().int_timestamp * 1000,
                         "states": self.states,
-                        "use_case": "field",
                     },
                 }
-            }
-        }
-
-    def get_sorting_script(self):
-        """
-        Build the part of the Elasticseach query that defines sorting. We use a script for sorting
-        because we sort courses based on the complex and dynamic status of their course runs which
-        are under a nested field. The parameters passed to the script are up-to-date at query time:
-        - ms_since_epoch: evolves with time to stay relevant on course dates even if the ES
-          instance and/or the Django server are long running,
-        - languages and states: depend on the filters applied by the user so that we only take into
-          consideration course runs that are interesting for this search,
-        - max_date: passed as parameter to optimize script compilation,
-        - use_case: the script is used both for sorting and field computations because most of the
-          code is common and their is no other way to share code.
-
-
-        Call the relevant sorting script for courses lists, regenerating the parameters on each
-        call. This will allow the ms_since_epoch value to stay relevant even if the ES instance
-        and/or the Django server are long running.
-
-        The list of languages and states are passed to the script because the context of the
-        search defines which course runs are relevant or not for sorting.
-
-        Note: we use script storage to save time on the script compilation, which is an expensive
-        operation. We'll only do it once at bootstrap time.
-        """
-        return {
-            "_script": {
-                "order": "asc",
-                "script": {
-                    "id": "state",
-                    "params": {
-                        "languages": self.cleaned_data.get("languages") or None,
-                        "max_date": arrow.get(MAXYEAR, 12, 31).int_timestamp * 1000,
-                        "ms_since_epoch": arrow.utcnow().int_timestamp * 1000,
-                        "states": self.states,
-                        "use_case": "sorting",
-                    },
-                },
-                "type": "number",
             }
         }
 
@@ -194,8 +149,7 @@ class CourseSearchForm(SearchForm):
                     ...
                 ]
         """
-        # Always filter out courses that are not flagged for listing
-        queries = [{"key": "is_listed", "fragment": [{"term": {"is_listed": True}}]}]
+        queries = []
 
         # Add the query fragments of each filter definition to the list of queries
         for filter_definition in FILTERS.values():
@@ -223,7 +177,7 @@ class CourseSearchForm(SearchForm):
                                     f"persons_names.*^{related_content_boost}",
                                 ],
                                 "query": full_text,
-                                "type": "cross_fields",
+                                "type": "best_fields",
                             }
                         }
                     ],
@@ -255,10 +209,31 @@ class CourseSearchForm(SearchForm):
 
         # Concatenate all the sub-queries lists together to form the queries list
         query = {
-            "bool": {
-                "must":
-                # queries => map(pluck("fragment")) => flatten()
-                [clause for kf_pair in queries for clause in kf_pair["fragment"]]
+            "function_score": {
+                "query": {
+                    "bool": {
+                        # Always filter out courses that are not flagged for listing
+                        "filter": {"term": {"is_listed": True}},
+                        "must":
+                        # queries => map(pluck("fragment")) => flatten()
+                        [
+                            clause
+                            for kf_pair in queries
+                            for clause in kf_pair["fragment"]
+                        ],
+                    }
+                },
+                "boost_mode": "replace",
+                "script_score": {
+                    "script": {
+                        "id": "score",
+                        "params": {
+                            "languages": self.cleaned_data.get("languages") or None,
+                            "ms_since_epoch": arrow.utcnow().timestamp() * 1000,
+                            "states": self.states,
+                        },
+                    },
+                },
             }
         }
 

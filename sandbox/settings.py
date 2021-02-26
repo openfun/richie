@@ -313,6 +313,7 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
     RICHIE_ES_INDICES_PREFIX = values.Value(
         default="richie", environ_name="RICHIE_ES_INDICES_PREFIX", environ_prefix=None
     )
+    RICHIE_ES_STATE_WEIGHTS = values.ListValue(None)
 
     # LTI Content
     RICHIE_LTI_PROVIDERS = {

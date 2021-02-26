@@ -170,7 +170,11 @@ class FacetsCoursesQueryTestCase(TestCase):
             body=CoursesIndexer.mapping, doc_type="course", index="test_courses"
         )
         # Add the sorting script
-        ES_CLIENT.put_script(id="state", body=CoursesIndexer.scripts["state"])
+        ES_CLIENT.put_script(id="score", body=CoursesIndexer.scripts["score"])
+        ES_CLIENT.put_script(
+            id="state_field", body=CoursesIndexer.scripts["state_field"]
+        )
+
         # Actually insert our courses in the index
         actions = [
             {

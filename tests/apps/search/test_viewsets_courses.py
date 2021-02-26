@@ -63,10 +63,6 @@ class CoursesViewsetsTestCase(CMSTestCase):
         lambda *args: (2, 77, {"some": "query"}, {"some": "aggs"}),
     )
     @mock.patch(
-        "richie.apps.search.forms.CourseSearchForm.get_sorting_script",
-        lambda *args: {"some": "sorting"},
-    )
-    @mock.patch(
         "richie.apps.search.forms.CourseSearchForm.get_script_fields",
         lambda *args: {"some": "fields"},
     )
@@ -306,7 +302,6 @@ class CoursesViewsetsTestCase(CMSTestCase):
                 "aggs": {"some": "aggs"},
                 "query": {"some": "query"},
                 "script_fields": {"some": "fields"},
-                "sort": {"some": "sorting"},
             },
             doc_type="course",
             from_=77,

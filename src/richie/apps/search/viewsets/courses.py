@@ -40,7 +40,6 @@ class CoursesViewSet(AutocompleteMixin, ViewSet):
 
         body = {
             "script_fields": params_form.get_script_fields(),
-            "sort": params_form.get_sorting_script(),
         }
 
         # The querystring may request only the query or only the aggregations

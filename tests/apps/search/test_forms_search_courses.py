@@ -216,11 +216,11 @@ class CourseSearchFormTestCase(TestCase):
         )
         self.assertTrue(form.is_valid())
         self.assertEqual(
-            form.build_es_query()[2],
+            form.build_es_query()[2]["function_score"]["query"],
             {
                 "bool": {
+                    "filter": {"term": {"is_listed": True}},
                     "must": [
-                        {"term": {"is_listed": True}},
                         {
                             "multi_match": {
                                 "analyzer": "english",
@@ -232,10 +232,10 @@ class CourseSearchFormTestCase(TestCase):
                                     "persons_names.*^0.05",
                                 ],
                                 "query": "some phrase terms",
-                                "type": "cross_fields",
+                                "type": "best_fields",
                             }
-                        },
-                    ]
+                        }
+                    ],
                 }
             },
         )
