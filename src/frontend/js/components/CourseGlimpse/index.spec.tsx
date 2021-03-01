@@ -16,7 +16,7 @@ describe('components/CourseGlimpse', () => {
       srcset: 'some srcset',
     },
     duration: '3 months',
-    effort: '3 hours/week',
+    effort: '3 hours',
     icon: null,
     id: '742',
     organization_highlighted: 'Some Organization',
@@ -40,7 +40,7 @@ describe('components/CourseGlimpse', () => {
           course={{
             ...course,
             duration: '3 months',
-            effort: '3 hours/week',
+            effort: '3 hours',
           }}
         />
       </IntlProvider>,

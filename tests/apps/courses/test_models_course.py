@@ -763,75 +763,59 @@ class CourseModelsTestCase(TestCase):
         self.assertEqual(course.get_effort_display(), "")
 
     def test_models_course_field_effort_invalid(self):
-        """An effort should be a triplet: number, time unit and reference unit."""
+        """An effort should be a pair: number, time unit."""
         with self.assertRaises(ValidationError) as context:
-            factories.CourseFactory(effort=[5, "unit"])
+            factories.CourseFactory(effort=[5])
         self.assertEqual(
             context.exception.messages[0],
-            "An effort should be a triplet: number, time unit and reference unit.",
+            "A composite duration should be a pair: number and time unit.",
         )
 
     def test_models_course_field_effort_integer(self):
-        """The first value of the effort triplet should be an integer."""
+        """The first value of the effort pair should be an integer."""
         for value in ["a", "1.0"]:
             with self.assertRaises(ValidationError) as context:
-                factories.CourseFactory(effort=[value, "minute", "hour"])
+                factories.CourseFactory(effort=[value, "hour"])
             self.assertEqual(
                 context.exception.messages[0],
-                "An effort should be a round number of time units.",
+                "A composite duration should be a round number of time units.",
             )
 
     def test_models_course_field_effort_positive(self):
         """The first value should be a positive integer."""
         with self.assertRaises(ValidationError) as context:
-            factories.CourseFactory(effort=[-1, "day", "month"])
-        self.assertEqual(context.exception.messages[0], "An effort should be positive.")
+            factories.CourseFactory(effort=[-1, "hour"])
+        self.assertEqual(
+            context.exception.messages[0], "A composite duration should be positive."
+        )
 
     def test_models_course_field_effort_invalid_unit(self):
         """The second value should be a valid time unit choice."""
         with self.assertRaises(ValidationError) as context:
-            factories.CourseFactory(effort=[1, "invalid", "month"])
+            factories.CourseFactory(effort=[1, "invalid"])
         self.assertEqual(
             context.exception.messages[0],
             "invalid is not a valid choice for a time unit.",
-        )
-
-    def test_models_course_field_effort_invalid_reference(self):
-        """The third value should be a valid time unit choice."""
-        with self.assertRaises(ValidationError) as context:
-            factories.CourseFactory(effort=[1, "day", "invalid"])
-        self.assertEqual(
-            context.exception.messages[0],
-            "invalid is not a valid choice for a time unit.",
-        )
-
-    def test_models_course_field_effort_order(self):
-        """The effort unit should be shorter than the reference unit."""
-        with self.assertRaises(ValidationError) as context:
-            factories.CourseFactory(effort=[1, "day", "day"])
-        self.assertEqual(
-            context.exception.messages[0],
-            "The effort time unit should be shorter than the reference unit.",
         )
 
     def test_models_course_field_effort_display_singular(self):
         """Validate that a value of 1 time unit is displayed as expected."""
-        course = factories.CourseFactory(effort=[1, "day", "week"])
-        self.assertEqual(course.get_effort_display(), "1 day/week")
+        course = factories.CourseFactory(effort=[1, "hour"])
+        self.assertEqual(course.get_effort_display(), "1 hour")
 
     def test_models_course_field_effort_display_plural(self):
         """Validate that a plural number of time units is displayed as expected."""
-        course = factories.CourseFactory(effort=[2, "day", "week"])
-        self.assertEqual(course.get_effort_display(), "2 days/week")
+        course = factories.CourseFactory(effort=[2, "hour"])
+        self.assertEqual(course.get_effort_display(), "2 hours")
 
     def test_models_course_field_effort_display_request(self):
         """
         When used in the `render_model` template tag, it should not break when passed a
         request argument (the DjangoCMS frontend editing does it).
         """
-        course = factories.CourseFactory(effort=[1, "week", "month"])
+        course = factories.CourseFactory(effort=[1, "hour"])
         request = RequestFactory().get("/")
-        self.assertEqual(course.get_effort_display(request), "1 week/month")
+        self.assertEqual(course.get_effort_display(request), "1 hour")
 
     def test_models_course_field_effort_default(self):
         """The effort field should default to None."""

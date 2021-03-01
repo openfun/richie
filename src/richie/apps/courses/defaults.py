@@ -328,7 +328,7 @@ ROOT_REVERSE_IDS = PAGES_INFO.keys()
 # Fields effort and duration
 MINUTE, HOUR, DAY, WEEK, MONTH = "minute", "hour", "day", "week", "month"
 DEFAULT_TIME_UNIT = HOUR
-DEFAULT_EFFORT_UNIT = WEEK
+DEFAULT_EFFORT_UNIT = HOUR
 DEFAULT_REFERENCE_UNIT = MONTH
 
 TIME_UNITS = {
@@ -337,4 +337,9 @@ TIME_UNITS = {
     DAY: (_("day"), _("days")),
     WEEK: (_("week"), _("weeks")),
     MONTH: (_("month"), _("months")),
+}
+
+EFFORT_UNITS = {
+    MINUTE: TIME_UNITS[MINUTE],
+    HOUR: TIME_UNITS[HOUR],
 }

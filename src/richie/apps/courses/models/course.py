@@ -24,7 +24,6 @@ from parler.models import TranslatableModel, TranslatedField, TranslatedFieldsMo
 
 from ...core.defaults import ALL_LANGUAGES
 from ...core.fields.duration import CompositeDurationField
-from ...core.fields.effort import EffortField
 from ...core.fields.multiselect import MultiSelectField
 from ...core.helpers import get_permissions
 from ...core.models import BasePageExtension, PagePluginMixin
@@ -154,25 +153,35 @@ class Course(BasePageExtension):
         null=True,
         blank=True,
     )
-    effort = EffortField(
-        time_units=defaults.TIME_UNITS,
-        default_effort_unit=defaults.DEFAULT_EFFORT_UNIT,
-        default_reference_unit=defaults.DEFAULT_REFERENCE_UNIT,
-        max_length=80,
-        blank=True,
-        null=True,
-    )
+
     duration = CompositeDurationField(
         time_units=defaults.TIME_UNITS,
         default_unit=defaults.DEFAULT_TIME_UNIT,
         max_length=80,
         blank=True,
         null=True,
+        help_text=_("The course time range."),
     )
+
+    effort = CompositeDurationField(
+        time_units=defaults.EFFORT_UNITS,
+        default_unit=defaults.DEFAULT_EFFORT_UNIT,
+        max_length=80,
+        blank=True,
+        null=True,
+        help_text=_("Total amount of time to complete this course."),
+    )
+
     is_listed = models.BooleanField(
         default=True,
         verbose_name=_("is listed"),
         help_text=_("Tick if you want the course to be visible on the search page."),
+    )
+
+    is_self_paced = models.BooleanField(
+        default=False,
+        verbose_name=_("is self paced"),
+        help_text=_("Tick if the course pace is self paced."),
     )
 
     PAGE = defaults.COURSES_PAGE
