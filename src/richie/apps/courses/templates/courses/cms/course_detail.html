@@ -78,11 +78,11 @@
                         {% if course.duration or course.effort or current_page.publisher_is_draft %}
                         <div class="characteristics">
                             <ul class="characteristics__container">
-                            {% render_model_block course "duration,effort" %}
+                            {% render_model_block course "duration,effort,is_self_paced" %}
                                 {% if instance.duration or current_page.publisher_is_draft %}
                                 <li class="characteristics__item">
                                     <svg role="img" class="characteristics__icon" aria-hidden="true">
-                                        <use href="#icon-clock" />
+                                        <use href="#icon-duration" />
                                     </svg>
                                     <span class="characteristics__term">{% trans "Duration:" %} {{ instance.get_duration_display|default:"NA" }}</span>
                                 </li>
@@ -90,9 +90,17 @@
                                 {% if instance.effort or current_page.publisher_is_draft %}
                                 <li class="characteristics__item">
                                     <svg role="img" class="characteristics__icon" aria-hidden="true">
-                                        <use href="#icon-stopwatch" />
+                                        <use href="#icon-clock" />
                                     </svg>
                                     <span class="characteristics__term">{% trans "Effort:" %} {{ instance.get_effort_display|default:"NA" }}</span>
+                                </li>
+                                {% endif %}
+                                {% if instance.get_pace_display or current_page.publisher_is_draft %}
+                                <li class="characteristics__item">
+                                    <svg role="img" class="characteristics__icon" aria-hidden="true">
+                                        <use href="#icon-pace" />
+                                    </svg>
+                                    <span class="characteristics__term">{% trans "Pace:" %} {{ instance.get_pace_display|default:"NA" }}</span>
                                 </li>
                                 {% endif %}
                             {% endrender_model_block %}

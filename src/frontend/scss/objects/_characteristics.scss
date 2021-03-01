@@ -18,8 +18,9 @@
   }
 
   &__term {
+    align-items: center;
     color: inherit;
-    align-self: center;
+    padding-top: 0.2125rem; // Fine tune vertical alignment with icons
   }
 
   // When using through a color scheme, item adopt button behaviors

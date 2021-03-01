@@ -1,6 +1,7 @@
 """
 Declare and configure the models for the courses application
 """
+# pylint: disable=too-many-lines
 from collections.abc import Mapping
 from datetime import MAXYEAR, datetime
 
@@ -492,6 +493,91 @@ class Course(BasePageExtension):
             course_runs_dict[run.state["priority"]].append(run)
 
         return dict(course_runs_dict)
+
+    def get_pace(self):
+        """
+        Returns the course pace computed according to duration and effort fields or
+        None if one of these fields is blank or if `is_self_paced` flag is equal to False.
+
+        This method returns a tuple of three values:
+        - pace : the float value of the pace (ratio between effort / duration)
+        - pace_unit
+        - pace_reference_unit
+        """
+        if self.is_self_paced is True or self.duration is None:
+            return None
+
+        if self.effort is None:
+            raise ValueError("Cannot compute pace without effort.")
+
+        (effort, effort_unit) = self.effort
+        (duration, duration_unit) = self.duration
+
+        time_units_keys = list(dict(defaults.TIME_UNITS))
+        if time_units_keys.index(effort_unit) >= time_units_keys.index(duration_unit):
+            raise ValueError(
+                (
+                    "Cannot compute pace with effort unit less than or equal to the duration unit."
+                    f" ({effort_unit}/{duration_unit})"
+                )
+            )
+
+        pace = effort / duration
+        return (pace, effort_unit, duration_unit)
+
+    def get_pace_display(self):
+        """
+        Returns a human readable pace value to display.
+        If the course is self paced or has no duration, it returns `Self paced`.
+        If pace cannot be computed, it returns None.
+
+        To improve readability, we manage three cases with different renders:
+        - Pace is a full hour -> ~2 hours/day
+        - Pace is more than a full hour -> ~2h30/day
+        - Pace is under an hour -> ~45 minutes/day
+
+        Furthermore, as this information is an estimation, we do not want the
+        value be too precise, so we round minutes to fifteen minutes slots.
+        """
+        try:
+            (pace, pace_unit, pace_reference_unit) = self.get_pace()
+        except TypeError:
+            return _("Self paced")
+        except ValueError:
+            return None
+
+        time_units = defaults.TIME_UNITS
+        pace_in_minutes = pace * 60 if pace_unit == defaults.HOUR else pace
+        pace_hours = int(pace_in_minutes // 60)
+        pace_minutes = int(pace_in_minutes % 60)
+        pace_minutes_rounded_by_quarter = (
+            round(pace_minutes / 15) * 15
+        )  # round minutes by fifteen
+
+        # Pace is under an hour
+        if pace_hours == 0:
+            resolution = 15 if pace_minutes > 15 else 5
+            return _("~{pace:d} {effort_unit!s}/{duration_unit!s}").format(
+                pace=round(pace / resolution) * resolution
+                or 5,  # Display at least 5 minutes
+                effort_unit=time_units[defaults.MINUTE][1],
+                duration_unit=time_units[pace_reference_unit][0],
+            )
+        # Pace is a full hour
+        if pace_minutes_rounded_by_quarter == 0:
+            count_index = 1 if pace_hours > 1 else 0
+            return _("~{pace:d} {effort_unit!s}/{duration_unit!s}").format(
+                pace=pace_hours,
+                effort_unit=time_units[defaults.HOUR][count_index],
+                duration_unit=time_units[pace_reference_unit][0],
+            )
+
+        # Pace is more than a full hour
+        return _("~{pace_hours:d}h{pace_minutes:d}/{duration_unit!s}").format(
+            pace_hours=pace_hours,
+            pace_minutes=pace_minutes_rounded_by_quarter,
+            duration_unit=time_units[pace_reference_unit][0],
+        )
 
     def get_programs(self, language=None):
         """
