@@ -128,7 +128,7 @@ class CourseSearchForm(SearchForm):
                     "id": "state",
                     "params": {
                         "languages": self.cleaned_data.get("languages") or None,
-                        "ms_since_epoch": arrow.utcnow().timestamp * 1000,
+                        "ms_since_epoch": arrow.utcnow().int_timestamp * 1000,
                         "states": self.states,
                         "use_case": "field",
                     },
@@ -167,8 +167,8 @@ class CourseSearchForm(SearchForm):
                     "id": "state",
                     "params": {
                         "languages": self.cleaned_data.get("languages") or None,
-                        "max_date": arrow.get(MAXYEAR, 12, 31).timestamp * 1000,
-                        "ms_since_epoch": arrow.utcnow().timestamp * 1000,
+                        "max_date": arrow.get(MAXYEAR, 12, 31).int_timestamp * 1000,
+                        "ms_since_epoch": arrow.utcnow().int_timestamp * 1000,
                         "states": self.states,
                         "use_case": "sorting",
                     },
