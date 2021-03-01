@@ -1,6 +1,7 @@
 """
 Unit tests for the Course model
 """
+# pylint: disable=too-many-lines
 import random
 from unittest import mock
 
@@ -981,3 +982,138 @@ class CourseModelsTestCase(TestCase):
         course_run_translation_fr.save()
 
         self.assertTrue(course.extended_object.publish("fr"))
+
+    # Testing methods get_pace
+    def test_models_course_get_pace_with_no_effort_and_duration(self):
+        """
+        get_pace should return None if duration and effort fields are empty.
+        """
+        course = factories.CourseFactory(
+            duration=None, effort=None, is_self_paced=False
+        )
+        self.assertIsNone(course.get_pace())
+
+    def test_models_course_get_pace_with_is_self_paced_enabled(self):
+        """
+        get_pace should return None if course is self paced.
+        """
+        course = factories.CourseFactory(
+            duration=[5, "week"],
+            effort=[2, "hour"],
+            is_self_paced=True,
+        )
+        self.assertIsNone(course.get_pace())
+
+    def test_models_course_get_pace_with_empty_effort(self):
+        """
+        get_pace should raise a ValueError if effort is empty.
+        """
+        course = factories.CourseFactory(
+            duration=[1, "hour"],
+            effort=None,
+            is_self_paced=False,
+        )
+
+        with self.assertRaises(ValueError) as context:
+            course.get_pace()
+
+        self.assertEqual(
+            str(context.exception),
+            "Cannot compute pace without effort.",
+        )
+
+    def test_models_course_get_pace_with_uncomputable_values(self):
+        """
+        get_pace should raise a ValueError if effort unit is less or equal then duration unit.
+        """
+        course = factories.CourseFactory(duration=[1, "hour"], effort=[1, "hour"])
+
+        with self.assertRaises(ValueError) as context:
+            course.get_pace()
+
+        self.assertEqual(
+            str(context.exception),
+            "Cannot compute pace with effort unit less than or equal to the duration unit. "
+            "(hour/hour)",
+        )
+
+    def test_models_course_get_pace(self):
+        """
+        Otherwise get_pace should return a triplet tuple (pace, pace_unit, pace_unit_reference)
+        """
+        course = factories.CourseFactory(duration=[7, "day"], effort=[7, "hour"])
+        self.assertEqual(course.get_pace(), (1.0, "hour", "day"))
+
+    # Testing methods get_pace_display
+    def test_models_course_get_pace_display_with_full_hour_pace(self):
+        """
+        If pace is a full hour, hour label should be displayed
+        """
+        course = factories.CourseFactory(duration=[7, "day"], effort=[7, "hour"])
+        self.assertEqual(course.get_pace_display(), "~1 hour/day")
+
+    def test_models_course_get_pace_display_with_full_hour_pace_plural(self):
+        """
+        If pace is several full hours, plural hour label should be displayed
+        """
+        course = factories.CourseFactory(duration=[7, "day"], effort=[14, "hour"])
+        self.assertEqual(course.get_pace_display(), "~2 hours/day")
+
+    def test_models_course_get_pace_display_with_less_than_hour_pace(self):
+        """
+        If pace is less than an hour, plural minutes label should be displayed
+        """
+        course = factories.CourseFactory(duration=[7, "day"], effort=[70, "minute"])
+        self.assertEqual(course.get_pace_display(), "~10 minutes/day")
+
+    def test_models_course_get_pace_display_near_to_zero(self):
+        """
+        If pace is near to 0, at least a 5 minutes pace should be display.
+        """
+        course = factories.CourseFactory(
+            duration=[7, "day"],
+            effort=[10, "minute"],
+            is_self_paced=False,
+        )
+        self.assertEqual(course.get_pace_display(), "~5 minutes/day")
+
+    def test_models_course_get_pace_display_with_less_than_hour_pace_rounded_by_fifteen(
+        self,
+    ):
+        """
+        If pace is less than an hour, plural minute label should be display and
+        pace should be rounded by fifteen.
+        """
+        course = factories.CourseFactory(duration=[7, "day"], effort=[350, "minute"])
+        self.assertEqual(course.get_pace_display(), "~45 minutes/day")
+
+    def test_models_course_get_pace_display_with_not_a_full_hour_pace(self):
+        """
+        If pace is not a full hour, a label with hour
+        and minutes rounded by fifteen should be displayed.
+        """
+        course = factories.CourseFactory(duration=[7, "day"], effort=[23, "hour"])
+        self.assertEqual(course.get_pace_display(), "~3h15/day")
+
+    def test_models_course_get_pace_display_with_is_self_paced(self):
+        """
+        If course is self paced, a "Self paced" label should be display
+        """
+        course = factories.CourseFactory(
+            is_self_paced=True,
+        )
+        self.assertEqual(course.get_pace_display(), "Self paced")
+
+    def test_models_course_get_pace_display_with_empty_effort(self):
+        """
+        If course effort is not defined, None should be return.
+        """
+        course = factories.CourseFactory(duration=[7, "hour"], effort=None)
+        self.assertIsNone(course.get_pace_display())
+
+    def test_models_course_get_pace_display_with_uncomputable_value(self):
+        """
+        If pace is uncomputable, None should be return.
+        """
+        course = factories.CourseFactory(duration=[7, "hour"], effort=[7, "hour"])
+        self.assertIsNone(course.get_pace_display())
