@@ -216,12 +216,10 @@ class CourseFactory(PageExtensionDjangoModelFactory):
     # pylint: disable=no-self-use
     @factory.lazy_attribute
     def effort(self):
-        """Generate a random effort for the course between 1 minute/month and 10 hours/day."""
-        time_units = list(defaults.TIME_UNITS.keys())
+        """Generate a random effort for the course between 1 minute and 500 hours."""
         return [
-            random.randint(1, 10),  # nosec
-            random.choice(time_units[:2]),  # nosec
-            random.choice(time_units[2:]),  # nosec
+            random.randint(1, 500),  # nosec
+            random.choice(list(defaults.EFFORT_UNITS.keys())),  # nosec
         ]
 
     @factory.post_generation
