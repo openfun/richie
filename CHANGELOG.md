@@ -14,6 +14,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   well in search results
 - Add a banner component to display brief messages to the user
 
+### Changed
+
+- Order blog posts by their publication date on the blog post list view
+
 ### Fixed
 
 - Prevent a 500 error when an editor uses a template for a page

@@ -1,5 +1,5 @@
 {% extends "richie/fullwidth.html" %}
-{% load category_tags cms_tags i18n pagination_tags %}
+{% load category_tags cms_tags extra_tags i18n pagination_tags %}
 
 {% block subheader_content %}
 <div class="subheader__container">
@@ -21,23 +21,25 @@
 {% endif %}
 
 <div class="blogpost-list">
-    {% if current_page.publisher_is_draft %}
-        {% autopaginate current_page.get_child_pages 20 as object_list %}
-    {% else %}
-        {% autopaginate current_page.get_child_pages.published.distinct 20 as object_list %}
-    {% endif %}
-    {% for page in object_list %}
-        {% if page.blogpost %}
-            {% include "courses/cms/fragment_blogpost_glimpse.html" with blogpost=page.blogpost %}
+    {% with sorted_pages=current_page.get_child_pages|order_by:"-publication_date" %}
+        {% if current_page.publisher_is_draft %}
+            {% autopaginate sorted_pages 20 as object_list %}
+        {% else %}
+            {% autopaginate sorted_pages.published.distinct 20 as object_list %}
         {% endif %}
-    {% empty %}
-        <p class="blogpost-glimpse blogpost-glimpse--empty">
-            {% trans "No associated blogposts" %}
-        </p>
-    {% endfor %}
+        {% for page in object_list %}
+            {% if page.blogpost %}
+                {% include "courses/cms/fragment_blogpost_glimpse.html" with blogpost=page.blogpost %}
+            {% endif %}
+        {% empty %}
+            <p class="blogpost-glimpse blogpost-glimpse--empty">
+                {% trans "No associated blogposts" %}
+            </p>
+        {% endfor %}
 
-    {% if object_list %}
-        {% paginate using "richie/pagination.html" %}
-    {% endif %}
+        {% if object_list %}
+            {% paginate using "richie/pagination.html" %}
+        {% endif %}
+    {% endwith %}
 </div>
 {% endspaceless %}{% endblock content %}
