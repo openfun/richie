@@ -216,6 +216,17 @@ def is_empty_placeholder(page, slot):
 
 
 @register.filter()
+def order_by(queryset, args):
+    """A template filter to force ordering on a queryset.
+
+    Taken from: https://djangosnippets.org/snippets/741/
+    This is useful for DjangoCMS page querysets because we don't have access to the view.
+    """
+    args = [x.strip() for x in args.split(",")]
+    return queryset.order_by(*args)
+
+
+@register.filter()
 def has_connected_lms(course_run):
     """
     Determine if the passed course run has a connected LMS (as determined through out LMSHandler
