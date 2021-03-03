@@ -14,6 +14,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   well in search results
 - Add a banner component to display brief messages to the user
 - Add `is_self_paced` boolean field to course model
+- Add pace and duration icons.
 
 ### Changed
 
