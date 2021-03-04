@@ -24,10 +24,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Change type of `effort` course field
   from `EffortField` to `CompositeDurationField`
-
-### Changed
-
 - Order blog posts by their publication date on the blog post list view
+- Removed SimplePicturePlugin in course_teaser placeholder
+- In course_teaser placeholder, image from course_cover placeholder is used
+  if no video is present
 
 ### Fixed
 
