@@ -106,7 +106,24 @@
 
                     <div class="subheader__teaser">
                         {% placeholder "course_teaser" or %}
-                        <div class="empty">{% trans 'Add a video or teaser.' %}</div>
+                            {% get_placeholder_plugins "course_cover" as plugins or %}
+                                {% if current_page.publisher_is_draft %}
+                                    <p class="empty">{% trans 'Add a teaser video or add a cover image below and it will be used as teaser image as well.' %}</p>
+                                {% endif %}
+                            {% endget_placeholder_plugins %}
+                            {% blockplugin plugins.0 %}
+                                <img
+                                    src="{% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %}"
+                                    srcset="
+                                    {% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %} 300w
+                                    {% if instance.picture.width >= 600 %},{% thumbnail instance.picture 600x340 crop upscale subject_location=instance.picture.subject_location %} 600w{% endif %}
+                                    {% if instance.picture.width >= 900 %},{% thumbnail instance.picture 900x510 crop upscale subject_location=instance.picture.subject_location %} 900w{% endif %}
+                                    "
+                                    sizes="300px"
+                                    alt="{% if instance.picture.default_alt_text %}{{ instance.picture.default_alt_text }}{% else %}{% trans 'course cover image' %}{% endif %}"
+                                />
+                            {% endblockplugin %}
+
                         {% endplaceholder %}
                     </div>
                 </div>

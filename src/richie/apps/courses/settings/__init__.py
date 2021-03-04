@@ -128,8 +128,8 @@ CMS_PLACEHOLDER_CONF = {
     },
     "courses/cms/course_detail.html course_teaser": {
         "name": _("Teaser"),
-        "plugins": ["VideoPlayerPlugin", "SimplePicturePlugin"],
-        "limits": {"VideoPlayerPlugin": 1, "SimplePicturePlugin": 1},
+        "plugins": ["VideoPlayerPlugin"],
+        "limits": {"VideoPlayerPlugin": 1},
     },
     "courses/cms/course_detail.html course_description": {
         "name": _("About the course"),

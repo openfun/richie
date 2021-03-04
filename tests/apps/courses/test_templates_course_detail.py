@@ -1,6 +1,8 @@
 """
 End-to-end tests for the course detail view
 """
+# pylint: disable=too-many-lines
+import random
 import re
 from datetime import datetime, timedelta
 
@@ -12,6 +14,7 @@ from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import PageFactory, UserFactory
 from richie.apps.courses.factories import (
+    VIDEO_SAMPLE_LINKS,
     CategoryFactory,
     CourseFactory,
     CourseRunFactory,
@@ -19,6 +22,7 @@ from richie.apps.courses.factories import (
     ProgramFactory,
 )
 from richie.apps.courses.models import CourseRun
+from richie.apps.demo.utils import pick_image
 
 
 class CourseCMSTestCase(CMSTestCase):
@@ -442,6 +446,103 @@ class CourseCMSTestCase(CMSTestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
         self.assertNotContains(response, "course-detail__programs")
+
+    def test_templates_course_detail_teaser_empty_cover_empty_edit(self):
+        """
+        Without video in `course_teaser` placeholder and no image in `course_cover` placeholder,
+        no component should be present on the `course_teaser` placeholder.
+        """
+        user = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=user.username, password="password")
+        course = CourseFactory()
+
+        response = self.client.get(course.extended_object.get_absolute_url())
+
+        self.assertEqual(response.status_code, 200)
+        pattern = (
+            r'<div class="subheader__teaser">'
+            r'<p class="empty">'
+            r"Add a teaser video or add a cover image below"
+            r" and it will be used as teaser image as well."
+            r"</p>"
+            r"</div>"
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
+
+    def test_templates_course_detail_teaser_empty_cover_empty(self):
+        """
+        Without video in `course_teaser` placeholder and no image in `course_cover` placeholder,
+        no component should be present on the `course_teaser` placeholder.
+        """
+        course = CourseFactory(should_publish=True)
+
+        response = self.client.get(course.extended_object.get_absolute_url())
+
+        self.assertEqual(response.status_code, 200)
+        pattern = r'<div class="subheader__teaser"></div>'
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
+
+    def test_templates_course_detail_teaser_video_cover_empty(self):
+        """
+        With video in `course_teaser` placeholder and no image in `course_cover` placeholder,
+        video component should be present on the `course_teaser` placeholder.
+        """
+        video_sample = random.choice(VIDEO_SAMPLE_LINKS)
+        course = CourseFactory(fill_teaser=video_sample, should_publish=True)
+
+        response = self.client.get(course.extended_object.get_absolute_url())
+
+        self.assertEqual(response.status_code, 200)
+        pattern = (
+            r'<div class="subheader__teaser">'
+            r'<div class="aspect-ratio">'
+            r'<iframe src="{url:s}"  allowfullscreen></iframe>'
+            r"</div>"
+            r"</div>"
+        ).format(url=video_sample.url)
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
+
+    def test_templates_course_detail_teaser_empty_cover_image(self):
+        """
+        Without video in `course_teaser` placeholder and with image in `course_cover` placeholder,
+        image component should be present on the `course_teaser` placeholder.
+        """
+        video_sample = random.choice(VIDEO_SAMPLE_LINKS)
+        course = CourseFactory(
+            fill_cover=pick_image("cover")(video_sample.image), should_publish=True
+        )
+
+        response = self.client.get(course.extended_object.get_absolute_url())
+
+        self.assertEqual(response.status_code, 200)
+        pattern = r'<div class="subheader__teaser"><img.*/{image:s}.*/></div>'.format(
+            image=video_sample.image
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
+
+    def test_templates_course_detail_teaser_video_cover_image(self):
+        """
+        With video in `course_teaser` placeholder and with image in `course_cover` placeholder,
+        video component should be present on the `course_teaser` placeholder.
+        """
+        video_sample = random.choice(VIDEO_SAMPLE_LINKS)
+        course = CourseFactory(
+            fill_teaser=video_sample,
+            fill_cover=pick_image("cover")(video_sample.image),
+            should_publish=True,
+        )
+
+        response = self.client.get(course.extended_object.get_absolute_url())
+
+        self.assertEqual(response.status_code, 200)
+        pattern = (
+            r'<div class="subheader__teaser">'
+            r'<div class="aspect-ratio">'
+            r'<iframe src="{url:s}"  allowfullscreen></iframe>'
+            r"</div>"
+            r"</div>"
+        ).format(url=video_sample.url)
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
 
 
 class RunsCourseCMSTestCase(CMSTestCase):
