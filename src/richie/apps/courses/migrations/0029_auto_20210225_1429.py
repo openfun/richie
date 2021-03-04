@@ -26,13 +26,7 @@ class Migration(migrations.Migration):
                 help_text="Total amount of time to complete this course.",
                 max_length=80,
                 null=True,
-                time_units={
-                    "day": ("day", "days"),
-                    "hour": ("hour", "hours"),
-                    "minute": ("minute", "minutes"),
-                    "month": ("month", "months"),
-                    "week": ("week", "weeks"),
-                },
+                time_units={"hour": ("hour", "hours"), "minute": ("minute", "minutes")},
             ),
         ),
         migrations.AlterField(
