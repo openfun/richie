@@ -290,6 +290,8 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
                 environ_name="EDX_COURSE_REGEX",
                 environ_prefix=None,
             ),
+            # Synchronization
+            "COURSE_RUN_SYNC_NO_UPDATE_FIELDS": [],
             "DEFAULT_COURSE_RUN_SYNC_MODE": "sync_to_public",
             # React frontend
             "JS_BACKEND": values.Value(

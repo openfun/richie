@@ -74,6 +74,14 @@ class EdXLMSBackend(BaseLMSBackend):
         course_id = self.extract_course_id(data.get("resource_link"))
         return split_course_key(course_id)[1]
 
+    def clean_course_run_data(self, data):
+        """Remove course run's protected fields to the data dictionnary."""
+        return {
+            key: value
+            for (key, value) in data.items()
+            if key not in self.configuration.get("COURSE_RUN_SYNC_NO_UPDATE_FIELDS", [])
+        }
+
     @staticmethod
     def get_course_run_serializer(data, partial=False):
         """Prepare data and return a bound serializer."""

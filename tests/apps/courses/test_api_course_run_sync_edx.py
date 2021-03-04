@@ -6,6 +6,7 @@ import hmac
 import json
 from unittest import mock
 
+from django.conf import settings
 from django.test import override_settings
 
 from cms.constants import PUBLISHER_STATE_DEFAULT, PUBLISHER_STATE_DIRTY
@@ -857,6 +858,78 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             if field == "end":
                 continue
             self.assertEqual(draft_serializer.data[field], origin_data[field])
+
+        self.assertEqual(
+            course.extended_object.title_set.first().publisher_state,
+            PUBLISHER_STATE_DIRTY,
+        )
+        self.assertFalse(mock_signal.called)
+
+    @override_settings(
+        TIME_ZONE="utc",
+        RICHIE_LMS_BACKENDS=[
+            {
+                "BASE_URL": "http://localhost:8073",
+                "BACKEND": "richie.apps.courses.lms.edx.EdXLMSBackend",
+                "COURSE_RUN_SYNC_NO_UPDATE_FIELDS": ["languages", "start"],
+                "COURSE_REGEX": r"^.*/courses/(?P<course_id>.*)/course/?$",
+                "JS_BACKEND": "base",
+                "JS_COURSE_REGEX": r"^.*/courses/(?<course_id>.*)/course/?$",
+            }
+        ],
+    )
+    def test_api_course_run_sync_with_no_update_fields(self, mock_signal):
+        """
+        If a course run exists and LMS Backend has course run protected fields,
+        these fields should not be updated.
+        """
+        link = "http://example.edx:8073/courses/course-v1:edX+DemoX+01/course/"
+        course = CourseFactory(code="DemoX")
+        course_run = CourseRunFactory(
+            direct_course=course, resource_link=link, sync_mode="sync_to_draft"
+        )
+        Title.objects.update(publisher_state=PUBLISHER_STATE_DEFAULT)
+
+        self.assertEqual(
+            course.extended_object.title_set.first().publisher_state,
+            PUBLISHER_STATE_DEFAULT,
+        )
+        mock_signal.reset_mock()
+
+        origin_data = SyncCourseRunSerializer(instance=course_run).data
+        data = {
+            "resource_link": link,
+            "start": "2020-12-09T09:31:59.417817Z",
+            "end": "2021-03-14T09:31:59.417895Z",
+            "enrollment_start": "2020-11-09T09:31:59.417936Z",
+            "enrollment_end": "2020-12-24T09:31:59.417972Z",
+            "languages": ["en", "fr"],
+        }
+
+        response = self.client.post(
+            "/api/v1.0/course-runs-sync",
+            data,
+            content_type="application/json",
+            HTTP_AUTHORIZATION=(
+                "SIG-HMAC-SHA256 338f7c262254e8220fea54467526f8f1f4562ee3adf1e3a71abaf23a20b739e4"
+            ),
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content), {"success": True})
+        self.assertEqual(CourseRun.objects.count(), 1)
+
+        # Check that the draft course run was updated except protected fields
+        draft_course_run = CourseRun.objects.get(direct_course=course)
+        draft_serializer = SyncCourseRunSerializer(instance=draft_course_run)
+
+        no_update_fields = getattr(settings, "RICHIE_LMS_BACKENDS")[0].get(
+            "COURSE_RUN_SYNC_NO_UPDATE_FIELDS"
+        )
+        for field in draft_serializer.fields:
+            if field in no_update_fields:
+                self.assertEqual(draft_serializer.data[field], origin_data[field])
+            else:
+                self.assertEqual(draft_serializer.data[field], data[field])
 
         self.assertEqual(
             course.extended_object.title_set.first().publisher_state,
