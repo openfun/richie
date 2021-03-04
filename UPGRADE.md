@@ -16,6 +16,9 @@ $ make migrate
 
 ## Unreleased
 
+- A new `COURSE_RUN_SYNC_NO_UPDATE_FIELDS` setting has been added to `RICHIE_LMS_BACKENDS`.
+  These fields will not be updated by the course run synchronization hook.
+
 ## 2.1.x to 2.2.x
 
 - A css `.banner` component has been created. You may have to import the component style

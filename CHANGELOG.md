@@ -17,6 +17,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Add pace and duration icons.
 - Add `get_pace` and `get_pace_display` methods to course model
 - Add new plugin "LTI consumer" to include LTI provided content.
+- Add `COURSE_RUN_SYNC_NO_UPDATE_FIELDS` setting into `RICHIE_LMS_BACKENDS`
 
 ### Changed
 

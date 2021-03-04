@@ -139,6 +139,9 @@ def course_runs_sync(request, version):
         return Response(serializer.errors, status=400)
 
     if draft_course_runs:
+        # Remove protected fields before update
+        cleaned_data = lms.clean_course_run_data(serializer.validated_data)
+
         for course_run in draft_course_runs.filter(
             sync_mode__in=[
                 CourseRunSyncMode.SYNC_TO_DRAFT,
@@ -151,7 +154,7 @@ def course_runs_sync(request, version):
                     draft_course_run__sync_mode=CourseRunSyncMode.SYNC_TO_PUBLIC,
                     draft_course_run=course_run,
                 )
-            ).update(**serializer.validated_data)
+            ).update(**cleaned_data)
 
             public_course = course_run.direct_course.public_extension
             if course_run.sync_mode == CourseRunSyncMode.SYNC_TO_PUBLIC:
