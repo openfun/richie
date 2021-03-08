@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Fix an issue about text selection on search input on Firefox
+
 ## [2.2.0] - 2021-03-05
 
 ### Added
