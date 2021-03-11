@@ -6,7 +6,7 @@ import {
   LtiConsumerContentParameters as LtiConsumerContentParametersProps,
   LtiConsumer as LtiConsumerProps,
 } from 'types/LtiConsumer';
-import { LtiConsumer } from '.';
+import LtiConsumer from '.';
 
 describe('components/LtiConsumer', () => {
   it('renders an auto-resized iframe with a LTI content', async () => {

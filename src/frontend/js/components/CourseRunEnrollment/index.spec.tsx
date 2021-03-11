@@ -35,7 +35,7 @@ describe('<CourseRunEnrollment />', () => {
     })
     .generate();
   (window as any).__richie_frontend_context__ = { context: contextProps };
-  const { CourseRunEnrollment } = require('.');
+  const CourseRunEnrollment = require('.').default;
   const { SessionProvider } = require('data/useSession');
 
   const initializeUser = (loggedin = true) => {

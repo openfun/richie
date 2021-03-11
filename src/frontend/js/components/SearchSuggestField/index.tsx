@@ -27,7 +27,7 @@ const messages = defineMessages({
  * Component. Displays the main search field alon with any suggestions organized in relevant sections.
  * @param context General contextual app information as defined in common data props.
  */
-export const SearchSuggestField = ({ context }: CommonDataProps) => {
+const SearchSuggestField = ({ context }: CommonDataProps) => {
   const intl = useIntl();
 
   // We need static filter definitions to act as config for our suggestion sections & requests.
@@ -170,3 +170,5 @@ export const SearchSuggestField = ({ context }: CommonDataProps) => {
     />
   );
 };
+
+export default SearchSuggestField;

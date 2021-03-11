@@ -8,7 +8,7 @@ import { History, HistoryContext } from 'data/useHistory';
 import * as mockWindow from 'utils/indirection/window';
 import { ContextFactory } from 'utils/test/factories';
 import { CommonDataProps } from 'types/commonDataProps';
-import { Search } from '.';
+import Search from '.';
 
 let mockMatches = false;
 jest.mock('utils/indirection/window', () => ({
@@ -207,10 +207,19 @@ describe('<Search />', () => {
 
   it('should not scroll up when filter changes contain QUERY_UPDATE', async () => {
     await act(async () => {
+      fetchMock.get('/api/v1.0/courses/?limit=20&offset=0', {
+        meta: {
+          total_count: 200,
+        },
+        objects: [],
+      });
+
       render(
         <IntlProvider locale="en">
           <HistoryContext.Provider
             value={makeHistoryOf({
+              limit: '20',
+              offset: '0',
               lastDispatchActions: [{ type: 'QUERY_UPDATE' }],
             })}
           >

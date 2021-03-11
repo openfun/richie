@@ -138,9 +138,7 @@ const reducer = ({ step, context }: ReducerState, action: ReducerAction): Reduce
   }
 };
 
-export const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonDataProps> = (
-  props,
-) => {
+const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonDataProps> = (props) => {
   const [
     {
       step,
@@ -271,3 +269,5 @@ export const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonData
   }
   return null;
 };
+
+export default CourseRunEnrollment;

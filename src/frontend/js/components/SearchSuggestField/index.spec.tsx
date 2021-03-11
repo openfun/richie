@@ -9,7 +9,7 @@ import { history, location } from 'utils/indirection/window';
 import { ContextFactory } from 'utils/test/factories';
 import { CommonDataProps } from 'types/commonDataProps';
 import { FilterDefinition } from 'types/filters';
-import { SearchSuggestField } from '.';
+import SearchSuggestField from '.';
 
 // Unexplained difficulties with fake timers were encountered in these tests.
 // We decided to mock the debounce function instead.

@@ -37,7 +37,7 @@ interface RootSearchSuggestFieldProps {
  * @param context General contextual app information as defined in common data props.
  * @param courseSearchPageUrl URL for the course search page. Where users are sent when they use filtering options.
  */
-export const RootSearchSuggestField = ({
+const RootSearchSuggestField = ({
   context,
   courseSearchPageUrl,
 }: RootSearchSuggestFieldProps & CommonDataProps) => {
@@ -148,3 +148,5 @@ export const RootSearchSuggestField = ({
     />
   );
 };
+
+export default RootSearchSuggestField;

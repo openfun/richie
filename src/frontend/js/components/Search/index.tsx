@@ -36,7 +36,7 @@ const messages = defineMessages({
   },
 });
 
-export const Search = ({ context }: CommonDataProps) => {
+const Search = ({ context }: CommonDataProps) => {
   const { courseSearchParams, lastDispatchActions } = useCourseSearchParams();
   const courseSearchResponse = useCourseSearch(courseSearchParams);
 
@@ -143,3 +143,5 @@ export const Search = ({ context }: CommonDataProps) => {
     </div>
   );
 };
+
+export default Search;
