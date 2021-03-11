@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
-import { LanguageSelector } from '.';
+import LanguageSelector from '.';
 
 describe('<LanguageSelector />', () => {
   it('shows a dropdown menu that allows the user to change languages', () => {

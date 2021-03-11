@@ -59,7 +59,7 @@ const bindUserDataToUrl = (url: string, user: any) =>
     typeof user[prop] === 'string' ? user[prop] : match,
   );
 
-export const UserLogin = ({ profileUrls = [] }: UserLoginProps) => {
+const UserLogin = ({ profileUrls = [] }: UserLoginProps) => {
   /**
    * `user` is:
    * - `undefined` when we have not made the `whoami` request yet;
@@ -110,3 +110,5 @@ export const UserLogin = ({ profileUrls = [] }: UserLoginProps) => {
     </div>
   );
 };
+
+export default UserLogin;

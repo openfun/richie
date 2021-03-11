@@ -1,21 +1,23 @@
 import React from 'react';
 import { IntlProvider } from 'react-intl';
 
-import { getByText, render } from '@testing-library/react';
+import { findByText, render } from '@testing-library/react';
 import { ContextFactory } from 'utils/test/factories';
 
 jest.mock('components/UserLogin', () => ({
-  UserLogin: () => 'user login component rendered',
+  __esModule: true,
+  default: () => 'user login component rendered',
 }));
 
 jest.mock('components/RootSearchSuggestField', () => ({
-  RootSearchSuggestField: ({ exampleProp }: { exampleProp: string }) =>
+  __esModule: true,
+  default: ({ exampleProp }: { exampleProp: string }) =>
     `root search suggest field component rendered with ${exampleProp}`,
 }));
 
 describe('<Root />', () => {
   (window as any).__richie_frontend_context__ = {
-    context: ContextFactory({ sentry_dsn: null }).generate(),
+    context: ContextFactory({ authentication: undefined }).generate(),
   };
   const { Root } = require('.');
 
@@ -23,9 +25,12 @@ describe('<Root />', () => {
     jest.spyOn(console, 'warn').mockImplementation(() => {});
   });
 
-  afterEach(jest.restoreAllMocks);
+  afterEach(() => {
+    jest.restoreAllMocks();
+    document.body.innerHTML = '';
+  });
 
-  it('finds all richie-react containers and renders the relevant components into them with their passed props', () => {
+  it('finds all richie-react containers and renders the relevant components into them with their passed props', async () => {
     // Create the containers for the two components we're about to render
     const userLoginContainer = document.createElement('div');
     userLoginContainer.setAttribute('class', 'richie-react richie-react--user-login');
@@ -48,14 +53,14 @@ describe('<Root />', () => {
       </IntlProvider>,
     );
 
-    getByText(userLoginContainer, 'user login component rendered');
-    getByText(
+    await findByText(userLoginContainer, 'user login component rendered');
+    await findByText(
       rootSearchSuggestFieldContainer,
       'root search suggest field component rendered with the prop value',
     );
   });
 
-  it('prints a console warning and still renders everything else when it fails to find a component', () => {
+  it('prints a console warning and still renders everything else when it fails to find a component', async () => {
     // Create the containers for the component we're about to render
     const userLoginContainer = document.createElement('div');
     userLoginContainer.setAttribute('class', 'richie-react richie-react--user-login');
@@ -72,8 +77,8 @@ describe('<Root />', () => {
       </IntlProvider>,
     );
 
-    getByText(userLoginContainer, 'user login component rendered');
-    expect(userFeedbackContainer.innerHTML).toEqual('');
+    await findByText(userLoginContainer, 'user login component rendered');
+    await findByText(userFeedbackContainer, '');
     expect(console.warn).toHaveBeenCalledWith(
       'Failed to load React component: no such component in Library UserFeedback',
     );

@@ -33,10 +33,7 @@ interface LanguageSelectorProps {
   languages: { [code: string]: { code: string; name: string; url: string } };
 }
 
-export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
-  currentLanguage,
-  languages,
-}) => {
+const LanguageSelector: React.FC<LanguageSelectorProps> = ({ currentLanguage, languages }) => {
   const intl = useIntl();
   const languagesList = Object.values(languages);
 
@@ -98,3 +95,5 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
     </div>
   );
 };
+
+export default LanguageSelector;

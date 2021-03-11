@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { iframeResizer } from 'iframe-resizer';
 import { LtiConsumer as LtiConsumerProps } from 'types/LtiConsumer';
 
-export const LtiConsumer = ({
+const LtiConsumer = ({
   url,
   content_parameters: contentParameters,
   automatic_resizing,
@@ -50,3 +50,5 @@ export const LtiConsumer = ({
     </div>
   );
 };
+
+export default LtiConsumer;

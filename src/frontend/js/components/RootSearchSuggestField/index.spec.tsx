@@ -6,7 +6,7 @@ import { IntlProvider } from 'react-intl';
 import { location } from 'utils/indirection/window';
 import { ContextFactory } from 'utils/test/factories';
 import { CommonDataProps } from 'types/commonDataProps';
-import { RootSearchSuggestField } from '.';
+import RootSearchSuggestField from '.';
 
 jest.mock('settings', () => ({
   API_LIST_DEFAULT_PARAMS: { limit: '13', offset: '0' },
