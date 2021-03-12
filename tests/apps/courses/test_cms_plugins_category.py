@@ -3,10 +3,13 @@
 Unit tests for the category plugin and its model
 """
 import re
+from datetime import datetime
+from unittest import mock
 
 from django import forms
 from django.conf import settings
 from django.test.utils import override_settings
+from django.utils import timezone
 
 from cms.api import add_plugin, create_page
 from cms.test_utils.testcases import CMSTestCase
@@ -205,16 +208,103 @@ class CategoryPluginTestCase(CMSTestCase):
 
         url = "{:s}?edit".format(page.get_absolute_url(language="en"))
 
-        # The category plugin should still be visible on the draft page
+        # The unpublished category plugin should not be visible on the draft page
         response = self.client.get(url)
-        self.assertContains(response, "public title")
+        self.assertNotContains(response, "public title")
 
-        # Now modify the category to have a draft different from the public version
+        # Now publish the category and modify it to have a draft different from the
+        # public version
+        category_page.publish("en")
         title_obj = category_page.get_title_obj(language="en")
         title_obj.title = "draft title"
         title_obj.save()
 
-        # The draft version of the category plugin should now be visible
+        # The draft version of the category plugin should not be visible
         response = self.client.get(url)
-        self.assertContains(response, "draft title")
+        self.assertNotContains(response, "draft title")
+        self.assertContains(response, "public title")
+
+    def test_cms_plugins_category_fallback_when_never_published(self):
+        """
+        The category plugin should render in the fallback language when the category
+        page has never been published in the current language.
+        """
+        # Create a category
+        category = CategoryFactory(
+            page_title={"en": "public title", "fr": "titre public"},
+            fill_logo={"original_filename": "logo.jpg", "default_alt_text": "my logo"},
+        )
+        category_page = category.extended_object
+
+        # Create a page to add the plugin to
+        page = create_i18n_page({"en": "A page", "fr": "Une page"})
+        placeholder = page.placeholders.get(slot="maincontent")
+        add_plugin(placeholder, CategoryPlugin, "en", **{"page": category_page})
+        add_plugin(placeholder, CategoryPlugin, "fr", **{"page": category_page})
+
+        # Publish only the French version of the category
+        category_page.publish("fr")
+
+        # Check the page content in English
+        page.publish("en")
+        url = page.get_absolute_url(language="en")
+        response = self.client.get(url)
+
+        # The english category's name should be present as a link to the cms page
+        # But the locale in the url should remain "en"
+        self.assertIn(
+            '<a class="category-glimpse" href="/en/titre-public/"',
+            re.sub(" +", " ", str(response.content).replace("\\n", "")),
+        )
+
+        # The category's title should be wrapped in a p
+        category.refresh_from_db()
+        self.assertContains(
+            response,
+            '<h2 class="category-glimpse__title">titre public</h2>',
+            html=True,
+        )
         self.assertNotContains(response, "public title")
+
+        # category's cover should be present
+        pattern = (
+            r'<div class="category-glimpse__logo">'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*logo\.jpg__200x200'
+            r'.*alt=""'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
+
+    def test_cms_plugins_category_fallback_when_published_unpublished(self):
+        """
+        The category plugin should not render when the category was voluntarily
+        unpublished in the current language.
+        """
+        # Create a category
+        category = CategoryFactory(
+            page_title={"en": "public title", "fr": "titre public"},
+            fill_logo={"original_filename": "logo.jpg", "default_alt_text": "my logo"},
+        )
+        category_page = category.extended_object
+
+        # Create a page to add the plugin to
+        page = create_i18n_page({"en": "A page", "fr": "Une page"})
+        placeholder = page.placeholders.get(slot="maincontent")
+        add_plugin(placeholder, CategoryPlugin, "en", **{"page": category_page})
+        add_plugin(placeholder, CategoryPlugin, "fr", **{"page": category_page})
+
+        # Publish only the French version of the category
+        with mock.patch(
+            "cms.models.pagemodel.now",
+            return_value=datetime(2019, 11, 30, tzinfo=timezone.utc),
+        ):
+            category_page.publish("fr")
+
+        category_page.publish("en")
+        category_page.unpublish("en")
+
+        # Check the page content in English
+        page.publish("en")
+        url = page.get_absolute_url(language="en")
+        response = self.client.get(url)
+
+        self.assertNotContains(response, "glimpse")

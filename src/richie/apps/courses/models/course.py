@@ -27,7 +27,7 @@ from ...core.defaults import ALL_LANGUAGES
 from ...core.fields.duration import CompositeDurationField
 from ...core.fields.multiselect import MultiSelectField
 from ...core.helpers import get_permissions
-from ...core.models import BasePageExtension, PagePluginMixin
+from ...core.models import BasePageExtension
 from .. import defaults
 from .category import Category
 from .organization import Organization
@@ -942,7 +942,7 @@ class CourseRunTranslation(TranslatedFieldsModel):
         return super().save(*args, **kwargs)
 
 
-class CoursePluginModel(PagePluginMixin, CMSPlugin):
+class CoursePluginModel(CMSPlugin):
     """
     Course plugin model handles the relation from CoursePlugin
     to their Course instance

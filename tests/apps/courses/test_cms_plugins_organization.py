@@ -115,7 +115,7 @@ class OrganizationPluginTestCase(CMSTestCase):
         )
         self.assertNotContains(response, "draft title")
 
-        # Organziation's logo should be present
+        # Organization's logo should be present
         pattern = (
             r'<div class="organization-glimpse__logo">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*logo\.jpg__200x113'
@@ -160,30 +160,33 @@ class OrganizationPluginTestCase(CMSTestCase):
 
         url = "{:s}?edit".format(page.get_absolute_url(language="en"))
 
-        # The organization plugin should still be visible on the draft page
+        # The unpublished organization plugin should not be visible on the draft page
         response = self.client.get(url)
-        self.assertContains(response, "public title")
+        self.assertNotContains(response, "public title")
 
         # Now modify the organization to have a draft different from the public version
+        organization_page.publish("en")
         title_obj = organization_page.get_title_obj(language="en")
         title_obj.title = "draft title"
         title_obj.save()
 
-        # The draft version of the organization plugin should now be visible
+        # The draft version of the organization plugin should not be visible
         response = self.client.get(url)
-        self.assertContains(response, "draft title")
-        self.assertNotContains(response, "public title")
+        self.assertNotContains(response, "draft title")
+        self.assertContains(response, "public title")
 
     def test_cms_plugins_organization_render_instance_variant(self):
         """
-        The organization plugin should render according to the variant plugin
-        option.
+        The organization plugin should render according to variant variable
+        eventually present in the context of its container.
         """
         staff = UserFactory(is_staff=True, is_superuser=True)
         self.client.login(username=staff.username, password="password")
 
         # Create an Organization
-        organization = OrganizationFactory(page_title="public title")
+        organization = OrganizationFactory(
+            page_title="public title", should_publish=True
+        )
         organization_page = organization.extended_object
 
         # Create a page to add the plugin to
@@ -214,18 +217,20 @@ class OrganizationPluginTestCase(CMSTestCase):
 
     def test_cms_plugins_organization_render_context_variant(self):
         """
-        The organization plugin should render according to variant variable
-        eventually present in the context of its container.
+        The organization plugin should render according to the variant plugin
+        option.
         """
-        # Create an blogpost
-        organization = OrganizationFactory(page_title="public title")
+        # Create an organization
+        organization = OrganizationFactory(
+            page_title="public title", should_publish=True
+        )
         organization_page = organization.extended_object
 
         # Create a page to add the plugin to
         page = create_i18n_page("A page")
         placeholder = page.placeholders.get(slot="maincontent")
 
-        # Add blogpost plugin with default template
+        # Add organization plugin with default template
         model_instance = add_plugin(
             placeholder,
             OrganizationPlugin,
@@ -237,6 +242,7 @@ class OrganizationPluginTestCase(CMSTestCase):
         # Get generated html
         request = RequestFactory()
         request.current_page = page
+        request.path_info = "/en/my-path/"
         request.user = AnonymousUser()
         context = {
             "current_page": page,
@@ -247,3 +253,84 @@ class OrganizationPluginTestCase(CMSTestCase):
         html = renderer.render_plugin(model_instance, context)
 
         self.assertIn("organization-small", html)
+
+    def test_cms_plugins_organization_fallback_when_never_published(self):
+        """
+        The organization plugin should render in the fallback language when the organization
+        page has never been published in the current language.
+        """
+        # Create a organization
+        organization = OrganizationFactory(
+            page_title={"en": "public organization", "fr": "organisation publique"},
+            fill_logo={"original_filename": "logo.jpg", "default_alt_text": "my logo"},
+        )
+        organization_page = organization.extended_object
+
+        # Create a page to add the plugin to
+        page = create_i18n_page({"en": "A page", "fr": "Une page"})
+        placeholder = page.placeholders.get(slot="maincontent")
+        add_plugin(placeholder, OrganizationPlugin, "en", **{"page": organization_page})
+        add_plugin(placeholder, OrganizationPlugin, "fr", **{"page": organization_page})
+
+        # Publish only the French version of the organization
+        organization_page.publish("fr")
+
+        # Check the page content in English
+        page.publish("en")
+        url = page.get_absolute_url(language="en")
+        response = self.client.get(url)
+
+        # Organization's name should be present as a link to the cms page
+        self.assertContains(
+            response,
+            (
+                '<a class="organization-glimpse" href="/en/organisation-publique/" '
+                'title="organisation publique">'
+            ),
+            status_code=200,
+        )
+        # The organization's full name should be wrapped in a h2
+        self.assertContains(
+            response,
+            '<div class="organization-glimpse__title">organisation publique</div>',
+            html=True,
+        )
+        self.assertNotContains(response, "public organization")
+
+        # Organization's logo should be present
+        pattern = (
+            r'<div class="organization-glimpse__logo">'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*logo\.jpg__200x113'
+            r'.*alt=""'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
+
+    def test_cms_plugins_organization_fallback_when_published_unpublished(self):
+        """
+        The organization plugin should not render when the organization was voluntarily
+        unpublished in the current language.
+        """
+        # Create a organization
+        organization = OrganizationFactory(
+            page_title={"en": "public title", "fr": "titre public"},
+            fill_logo={"original_filename": "logo.jpg", "default_alt_text": "my logo"},
+        )
+        organization_page = organization.extended_object
+
+        # Create a page to add the plugin to
+        page = create_i18n_page({"en": "A page", "fr": "Une page"})
+        placeholder = page.placeholders.get(slot="maincontent")
+        add_plugin(placeholder, OrganizationPlugin, "en", **{"page": organization_page})
+        add_plugin(placeholder, OrganizationPlugin, "fr", **{"page": organization_page})
+
+        # Publish only the French version of the organization
+        organization_page.publish("fr")
+        organization_page.publish("en")
+        organization_page.unpublish("en")
+
+        # Check the page content in English
+        page.publish("en")
+        url = page.get_absolute_url(language="en")
+        response = self.client.get(url)
+
+        self.assertNotContains(response, "glimpse")

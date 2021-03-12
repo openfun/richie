@@ -1,6 +1,6 @@
 {% load cms_tags i18n %}
 {% spaceless %}
-{% if current_page.publisher_is_draft or instance.check_publication %}
-  {% include "courses/cms/fragment_program_glimpse.html" with program=relevant_page.program %}
+{% if target_page %}
+  {% include "courses/cms/fragment_program_glimpse.html" with program=target_page.program %}
 {% endif %}
 {% endspaceless %}

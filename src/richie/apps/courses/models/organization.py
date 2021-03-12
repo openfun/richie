@@ -16,7 +16,7 @@ from cms.models import CMSPlugin, Title
 from filer.models import FolderPermission
 
 from ...core.helpers import get_permissions
-from ...core.models import BasePageExtension, PagePluginMixin
+from ...core.models import BasePageExtension
 from .. import defaults
 from .role import PageRole
 
@@ -219,7 +219,7 @@ class Organization(BasePageExtension):
         )
 
 
-class OrganizationPluginModel(PagePluginMixin, CMSPlugin):
+class OrganizationPluginModel(CMSPlugin):
     """
     Organization plugin model handles the relation from OrganizationPlugin
     to their Organization instance
@@ -249,7 +249,7 @@ class OrganizationPluginModel(PagePluginMixin, CMSPlugin):
         verbose_name_plural = _("organization plugins")
 
 
-class OrganizationsByCategoryPluginModel(PagePluginMixin, CMSPlugin):
+class OrganizationsByCategoryPluginModel(CMSPlugin):
     """
     Handle the relation between a OrganizationsByCategoryPlugin plugin and its Category
     instance.

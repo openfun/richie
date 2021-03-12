@@ -202,18 +202,19 @@ class CourseCMSTestCase(CMSTestCase):
 
     def test_templates_course_detail_cms_draft_content(self):
         """
-        A staff user should see a draft course including its draft elements with
-        an annotation
+        A staff user should see a draft course including only the related objects that
+        are published.
         """
         user = UserFactory(is_staff=True, is_superuser=True)
         self.client.login(username=user.username, password="password")
 
         categories = CategoryFactory.create_batch(4)
-        organizations = OrganizationFactory.create_batch(4)
+        organizations = OrganizationFactory.create_batch(2)
+        published_organizations = OrganizationFactory.create_batch(2)
 
         course = CourseFactory(
             page_title="Very interesting course",
-            fill_organizations=organizations,
+            fill_organizations=organizations + published_organizations,
             fill_categories=categories,
         )
         page = course.extended_object
@@ -234,16 +235,16 @@ class CourseCMSTestCase(CMSTestCase):
         # Publish only 2 out of 4 categories and 2 out of 4 organizations
         self.assertTrue(categories[0].extended_object.publish("en"))
         self.assertTrue(categories[1].extended_object.publish("en"))
-        self.assertTrue(organizations[0].extended_object.publish("en"))
-        self.assertTrue(organizations[1].extended_object.publish("en"))
+        self.assertTrue(published_organizations[0].extended_object.publish("en"))
+        self.assertTrue(published_organizations[1].extended_object.publish("en"))
 
         # The unpublished objects may have been published and unpublished which puts them in a
         # status different from objects that have never been published.
         # We want to test both cases.
         self.assertTrue(categories[2].extended_object.publish("en"))
         self.assertTrue(categories[2].extended_object.unpublish("en"))
-        self.assertTrue(organizations[2].extended_object.publish("en"))
-        self.assertTrue(organizations[2].extended_object.unpublish("en"))
+        self.assertTrue(organizations[0].extended_object.publish("en"))
+        self.assertTrue(organizations[0].extended_object.unpublish("en"))
 
         # The page should be visible as draft to the staff user
         url = page.get_absolute_url()
@@ -265,8 +266,10 @@ class CourseCMSTestCase(CMSTestCase):
             html=True,
         )
 
-        # Draft and public organizations should all be present on the page
+        # only public organizations should be present on the page
         for organization in organizations:
+            self.assertNotContains(response, organization.extended_object.get_title())
+        for organization in published_organizations:
             self.assertContains(
                 response,
                 '<div class="organization-glimpse__title">{title:s}</div>'.format(
@@ -274,9 +277,6 @@ class CourseCMSTestCase(CMSTestCase):
                 ),
                 html=True,
             )
-
-        # Draft organizations should be annotated for styling
-        self.assertContains(response, "organization-glimpse--draft", count=2)
 
         # The published categories should be present on the page
         for category in categories[:2]:
@@ -291,18 +291,11 @@ class CourseCMSTestCase(CMSTestCase):
                 ),
                 html=True,
             )
-        # Draft categories should also be present on the page with an annotation for styling
+        # Draft categories should not be present on the page
         for category in categories[-2:]:
-            self.assertContains(
+            self.assertNotContains(
                 response,
-                (
-                    '<a class="{element:s} {element:s}--draft" href="{url:s}">'
-                    '<span class="category-badge__title">{title:s}</span></a>'
-                ).format(
-                    url=category.extended_object.get_absolute_url(),
-                    element="category-badge",
-                    title=category.extended_object.get_title(),
-                ),
+                category.extended_object.get_title(),
                 html=True,
             )
         # The course run should be in the page

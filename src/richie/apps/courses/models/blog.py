@@ -9,7 +9,7 @@ from cms.api import Page
 from cms.extensions.extension_pool import extension_pool
 from cms.models.pluginmodel import CMSPlugin
 
-from ...core.models import BasePageExtension, PagePluginMixin
+from ...core.models import BasePageExtension
 from .. import defaults
 
 
@@ -79,7 +79,7 @@ class BlogPost(BasePageExtension):
         )
 
 
-class BlogPostPluginModel(PagePluginMixin, CMSPlugin):
+class BlogPostPluginModel(CMSPlugin):
     """
     BlogPost plugin model handles the relation between the BlogPostPluginModel
     and its blogpost instance

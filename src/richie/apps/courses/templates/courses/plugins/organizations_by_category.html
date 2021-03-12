@@ -1,5 +1,5 @@
 {% spaceless %}
-{% if current_page.publisher_is_draft or instance.check_publication is True %}
+{% if organizations %}
     <div class="organization-glimpse-list">
         {% for organization in organizations %}
             {% include "courses/cms/fragment_organization_glimpse.html" %}

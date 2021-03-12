@@ -202,8 +202,8 @@ class OrganizationCMSTestCase(CMSTestCase):
 
     def test_templates_organization_detail_cms_draft_content(self):
         """
-        A staff user should see a draft organization including its draft elements with an
-        annotation.
+        A staff user should see a draft organization including only the related objects that
+        are published.
         """
         user = UserFactory(is_staff=True, is_superuser=True)
         self.client.login(username=user.username, password="password")
@@ -260,17 +260,10 @@ class OrganizationCMSTestCase(CMSTestCase):
             ),
             html=True,
         )
-        # The not published category should be on the page, mark as draft
-        self.assertContains(
+        # The not published category should not be on the page
+        self.assertNotContains(
             response,
-            (
-                '<a class="category-tag category-tag--draft" '
-                'href="{:s}"><span class="category-tag__title">{:s}</span></a>'
-            ).format(
-                not_published_category.extended_object.get_absolute_url(),
-                not_published_category.extended_object.get_title(),
-            ),
-            html=True,
+            not_published_category.extended_object.get_title(),
         )
         # The modified draft category should not be leaked
         self.assertNotContains(response, "modified category")
@@ -282,20 +275,10 @@ class OrganizationCMSTestCase(CMSTestCase):
             html=True,
         )
 
-        # The not published course should be on the page, mark as draft
-        self.assertContains(
+        # The not published course should not be on the page
+        self.assertNotContains(
             response,
-            '<p class="course-glimpse__title">{:s}</p>'.format(
-                not_published_course.extended_object.get_title()
-            ),
-            html=True,
-        )
-        self.assertIn(
-            '<a class="course-glimpse course-glimpse--draft" '
-            'href="{:s}"'.format(
-                not_published_course.extended_object.get_absolute_url()
-            ),
-            re.sub(" +", " ", str(response.content).replace("\\n", "")),
+            not_published_course.extended_object.get_title(),
         )
 
     def test_templates_organization_detail_related_persons(self):

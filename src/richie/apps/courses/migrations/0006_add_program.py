@@ -83,6 +83,6 @@ class Migration(migrations.Migration):
                 "verbose_name": "program plugin",
                 "db_table": "richie_program_plugin",
             },
-            bases=(richie.apps.core.models.PagePluginMixin, "cms.cmsplugin"),
+            bases=("cms.cmsplugin",),
         ),
     ]

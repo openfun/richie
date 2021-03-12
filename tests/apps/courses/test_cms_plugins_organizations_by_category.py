@@ -152,15 +152,16 @@ class OrganizationsByCategoryPluginTestCase(CMSTestCase):
         self.client.login(username=staff.username, password="password")
 
         # Create a category
-        category = CategoryFactory(page_title="public title")
+        category = CategoryFactory(page_title="public category")
         category_page = category.extended_object
 
         # Create organizations
         organization = OrganizationFactory(
-            page_title={"en": "public title", "fr": "titre public"},
+            page_title={"en": "public organization", "fr": "organisation publique"},
             fill_categories=[category],
             fill_logo={"original_filename": "logo.jpg"},
         )
+        organization_page = organization.extended_object
 
         # Create a page to add the plugin to
         page = create_i18n_page("A page")
@@ -175,16 +176,27 @@ class OrganizationsByCategoryPluginTestCase(CMSTestCase):
 
         url = "{:s}?edit".format(page.get_absolute_url(language="en"))
 
-        # The organization plugin should still be visible on the draft page
+        # The unpublished organization should not be visible on the draft page
         response = self.client.get(url)
-        self.assertContains(response, "public title")
+        self.assertNotContains(response, "public organization")
+        self.assertNotContains(response, "public category")
 
-        # Now modify the organization to have a draft different from the public version
+        # Now publish the category to which the organization is linked
+        category_page.publish("en")
+
+        # The unpublished organization should still not be visible
+        response = self.client.get(url)
+        self.assertNotContains(response, "public organization")
+        self.assertNotContains(response, "public category")
+
+        # Now publish the organization and modify it to have a draft different from
+        # the public version
+        organization_page.publish("en")
         title_obj = organization.extended_object.get_title_obj(language="en")
-        title_obj.title = "draft title"
+        title_obj.title = "draft organization"
         title_obj.save()
 
-        # The draft version of the organization plugin should now be visible
+        # Only the public organization should be visible
         response = self.client.get(url)
-        self.assertContains(response, "draft title")
-        self.assertNotContains(response, "public title")
+        self.assertNotContains(response, "draft organization")
+        self.assertContains(response, "public organization")

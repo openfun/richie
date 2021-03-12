@@ -8,7 +8,7 @@ from cms.api import Page
 from cms.extensions.extension_pool import extension_pool
 from cms.models.pluginmodel import CMSPlugin
 
-from ...core.models import BasePageExtension, PagePluginMixin
+from ...core.models import BasePageExtension
 from ..defaults import PROGRAMS_PAGE
 
 
@@ -32,7 +32,7 @@ class Program(BasePageExtension):
         )
 
 
-class ProgramPluginModel(PagePluginMixin, CMSPlugin):
+class ProgramPluginModel(CMSPlugin):
     """
     Program plugin model handles the relation between the ProgramPluginModel
     and its program instance

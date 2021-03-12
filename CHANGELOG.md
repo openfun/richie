@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Changed
+
+- Take fallback languages into account in page extension plugins
+
 ### Fixed
 
 - Fix an issue about text selection on search input on Firefox
