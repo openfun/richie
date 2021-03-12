@@ -8,6 +8,7 @@ from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 
 from richie.apps.core.defaults import PLUGINS_GROUP
+from richie.apps.core.models import get_public_page_with_fallbacks
 
 from .forms import LicencePluginForm
 from .models import (
@@ -36,10 +37,12 @@ class OrganizationPlugin(CMSPluginBase):
     render_template = "courses/plugins/organization.html"
 
     def render(self, context, instance, placeholder):
+        """Populate and return the context for rendering."""
+        target_page = get_public_page_with_fallbacks(instance.page, context["request"])
         context.update(
             {
                 "instance": instance,
-                "relevant_page": instance.relevant_page,
+                "target_page": target_page,
                 "placeholder": placeholder,
                 "organization_variant": instance.variant
                 or context.get("organization_variant"),
@@ -65,10 +68,12 @@ class OrganizationsByCategoryPlugin(CMSPluginBase):
         Add to context a query of all the organizations linked to the target category or one of
         its descendants via a category plugin on the organization detail page.
         """
+        target_page = get_public_page_with_fallbacks(instance.page, context["request"])
+        organizations = target_page.category.get_organizations() if target_page else []
         context.update(
             {
                 "instance": instance,
-                "organizations": instance.relevant_page.category.get_organizations(),
+                "organizations": organizations,
                 "organization_variant": instance.variant
                 or context.get("organization_variant"),
             }
@@ -90,12 +95,14 @@ class CategoryPlugin(CMSPluginBase):
     render_template = "courses/plugins/category_plugin.html"
 
     def render(self, context, instance, placeholder):
+        """Populate and return the context for rendering."""
+        target_page = get_public_page_with_fallbacks(instance.page, context["request"])
         context.update(
             {
-                "instance": instance,
-                "relevant_page": instance.relevant_page,
-                "placeholder": placeholder,
                 "category_variant": instance.variant or context.get("category_variant"),
+                "instance": instance,
+                "placeholder": placeholder,
+                "target_page": target_page,
             }
         )
 
@@ -116,12 +123,14 @@ class CoursePlugin(CMSPluginBase):
     render_template = "courses/plugins/course_plugin.html"
 
     def render(self, context, instance, placeholder):
+        """Populate and return the context for rendering."""
+        target_page = get_public_page_with_fallbacks(instance.page, context["request"])
         context.update(
             {
                 "instance": instance,
-                "relevant_page": instance.relevant_page,
-                "placeholder": placeholder,
                 "course_variant": instance.variant or context.get("course_variant"),
+                "placeholder": placeholder,
+                "target_page": target_page,
             }
         )
         return context
@@ -140,11 +149,13 @@ class PersonPlugin(CMSPluginBase):
     render_template = "courses/plugins/person.html"
 
     def render(self, context, instance, placeholder):
+        """Populate and return the context for rendering."""
+        target_page = get_public_page_with_fallbacks(instance.page, context["request"])
         context.update(
             {
                 "instance": instance,
-                "relevant_page": instance.relevant_page,
                 "placeholder": placeholder,
+                "target_page": target_page,
             }
         )
         return context
@@ -167,6 +178,7 @@ class LicencePlugin(CMSPluginBase):
     render_template = "courses/plugins/licence_plugin.html"
 
     def render(self, context, instance, placeholder):
+        """Populate and return the context for rendering."""
         context.update({"instance": instance, "placeholder": placeholder})
         return context
 
@@ -185,12 +197,14 @@ class BlogPostPlugin(CMSPluginBase):
     render_template = "courses/plugins/blogpost.html"
 
     def render(self, context, instance, placeholder):
+        """Populate and return the context for rendering."""
+        target_page = get_public_page_with_fallbacks(instance.page, context["request"])
         context.update(
             {
-                "instance": instance,
-                "relevant_page": instance.relevant_page,
-                "placeholder": placeholder,
                 "blogpost_variant": instance.variant or context.get("blogpost_variant"),
+                "instance": instance,
+                "placeholder": placeholder,
+                "target_page": target_page,
             }
         )
         return context
@@ -209,11 +223,13 @@ class ProgramPlugin(CMSPluginBase):
     render_template = "courses/plugins/program.html"
 
     def render(self, context, instance, placeholder):
+        """Populate and return the context for rendering."""
+        target_page = get_public_page_with_fallbacks(instance.page, context["request"])
         context.update(
             {
                 "instance": instance,
-                "relevant_page": instance.relevant_page,
                 "placeholder": placeholder,
+                "target_page": target_page,
             }
         )
         return context

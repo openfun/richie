@@ -1,7 +1,7 @@
 {% load cms_tags i18n %}
 {% spaceless %}
-{% if current_page.publisher_is_draft or instance.check_publication is True %}
-  {% with course=relevant_page.course %}
+{% if target_page %}
+  {% with course=target_page.course %}
     {% include "courses/cms/fragment_course_glimpse.html" %}
   {% endwith %}
 {% endif %}

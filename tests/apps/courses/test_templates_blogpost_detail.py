@@ -63,13 +63,13 @@ class DetailBlogPostCMSTestCase(CMSTestCase):
 
     def test_templates_blogpost_detail_cms_draft_content(self):
         """
-        A staff user should see a draft blogpost including its draft elements with an
-        annotation.
+        A staff user should see a draft blogpost including only its published linked objects.
         """
         user = UserFactory(is_staff=True, is_superuser=True)
         self.client.login(username=user.username, password="password")
 
-        category = CategoryFactory(page_title="Very interesting category")
+        category = CategoryFactory()
+        published_category = CategoryFactory(should_publish=True)
         author = PersonFactory(
             page_title={"en": "Comte de Saint-Germain"}, should_publish=True
         )
@@ -78,7 +78,7 @@ class DetailBlogPostCMSTestCase(CMSTestCase):
             page_title="Preums",
             fill_cover=True,
             fill_body=True,
-            fill_categories=[category],
+            fill_categories=[category, published_category],
             fill_author=[author],
         )
         page = blogpost.extended_object
@@ -94,17 +94,20 @@ class DetailBlogPostCMSTestCase(CMSTestCase):
             response, '<h1 class="blogpost-detail__title">Preums</h1>', html=True
         )
         self.assertContains(response, "Comte de Saint-Germain", html=True)
-
         self.assertContains(
             response,
             (
-                '<a class="category-tag category-tag--draft" '
+                '<a class="category-tag" '
                 'href="{:s}"><span class="category-tag__title">{:s}</span></a>'
             ).format(
-                category.extended_object.get_absolute_url(),
-                category.extended_object.get_title(),
+                published_category.extended_object.get_absolute_url(),
+                published_category.extended_object.get_title(),
             ),
             html=True,
+        )
+        self.assertNotContains(
+            response,
+            category.extended_object.get_title(),
         )
 
         self.assertContains(

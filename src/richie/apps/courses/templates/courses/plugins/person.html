@@ -1,12 +1,12 @@
 {% load cms_tags i18n %}
 {% spaceless %}
-{% if current_page.publisher_is_draft or instance.check_publication is True %}
+{% if target_page %}
   {% if person_variant == "tag" %}
-    <a class="person-plugin-tag" href="{{ relevant_page.get_absolute_url }}">
-      {{ relevant_page.get_title }}
+    <a class="person-plugin-tag" href="{{ target_page.get_absolute_url }}">
+      {{ target_page.get_title }}
     </a>
   {% else %}
-    {% include "courses/cms/fragment_person_glimpse.html" with person=relevant_page.person %}
+    {% include "courses/cms/fragment_person_glimpse.html" with person=target_page.person %}
   {% endif %}
 {% endif %}
 {% endspaceless %}

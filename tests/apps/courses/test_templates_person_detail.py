@@ -1,7 +1,6 @@
 """
 End-to-end tests for the person detail view
 """
-import re
 from unittest import mock
 
 from django.test.utils import override_settings
@@ -226,17 +225,10 @@ class PersonCMSTestCase(CMSTestCase):
             ),
             html=True,
         )
-        # The not published category should be on the page, mark as draft
-        self.assertContains(
+        # The not published category should not be on the page
+        self.assertNotContains(
             response,
-            (
-                '<a class="category-badge category-badge--draft" '
-                'href="{:s}"><span class="category-badge__title">{:s}</span></a>'
-            ).format(
-                not_published_category.extended_object.get_absolute_url(),
-                not_published_category.extended_object.get_title(),
-            ),
-            html=True,
+            not_published_category.extended_object.get_title(),
         )
 
         # The published organization should be on the page in its published version
@@ -248,23 +240,9 @@ class PersonCMSTestCase(CMSTestCase):
             html=True,
         )
 
-        # The not published organization should be on the page, mark as draft
-        self.assertContains(
-            response,
-            '<div class="organization-glimpse__title">{:s}</div>'.format(
-                not_published_organization.extended_object.get_title()
-            ),
-            html=True,
-        )
-        self.assertIn(
-            (
-                '<a class="organization-glimpse organization-glimpse--draft" '
-                'href="{url:s}" title="{title:s}">'
-            ).format(
-                url=not_published_organization.extended_object.get_absolute_url(),
-                title=not_published_organization.extended_object.get_title(),
-            ),
-            re.sub(" +", " ", str(response.content).replace("\\n", "")),
+        # The not published organization should not be on the page
+        self.assertNotContains(
+            response, not_published_organization.extended_object.get_title()
         )
 
         self.assertNotContains(response, "modified")

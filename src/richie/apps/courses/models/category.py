@@ -13,7 +13,7 @@ from cms.extensions.extension_pool import extension_pool
 from cms.models import Title
 from cms.models.pluginmodel import CMSPlugin
 
-from ...core.models import BasePageExtension, PagePluginMixin
+from ...core.models import BasePageExtension
 from ..defaults import CATEGORIES_PAGE, CATEGORY_GLIMPSE_VARIANT_CHOICES
 
 
@@ -193,7 +193,7 @@ def get_category_limit_choices_to():
     return limit_choices_to
 
 
-class CategoryPluginModel(PagePluginMixin, CMSPlugin):
+class CategoryPluginModel(CMSPlugin):
     """
     Category plugin model handles the relation between CategoryPlugin
     and their Category instance

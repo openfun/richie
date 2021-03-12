@@ -3,10 +3,13 @@
 Unit tests for the Course plugin and its model
 """
 import re
+from datetime import datetime
+from unittest import mock
 
 from django import forms
 from django.conf import settings
 from django.test import TestCase
+from django.utils import timezone
 
 from cms.api import add_plugin, create_page
 
@@ -127,9 +130,7 @@ class CoursePluginTestCase(TestCase):
             )
         )
         self.assertContains(
-            response,
-            organization.extended_object.get_title(),
-            status_code=200,
+            response, organization.extended_object.get_title(), status_code=200
         )
 
         # The course's cover should be present
@@ -188,9 +189,7 @@ class CoursePluginTestCase(TestCase):
             )
         )
         self.assertContains(
-            response,
-            organization.extended_object.get_title(),
-            status_code=200,
+            response, organization.extended_object.get_title(), status_code=200
         )
 
         # The course's cover should be present
@@ -238,19 +237,21 @@ class CoursePluginTestCase(TestCase):
 
         url = "{:s}?edit".format(page.get_absolute_url(language="en"))
 
-        # The course plugin should still be visible on the draft page
+        # The unpublished course plugin should not be visible on the draft page
         response = self.client.get(url)
-        self.assertContains(response, "public title")
+        self.assertNotContains(response, "public title")
 
-        # Now modify the course to have a draft different from the public version
+        # Now publish the category and modify it to have a draft different from the
+        # public version
+        course_page.publish("en")
         title_obj = course_page.get_title_obj(language="en")
         title_obj.title = "draft title"
         title_obj.save()
 
-        # The draft version of the course plugin should now be visible
+        # The draft version of the course plugin should not be visible
         response = self.client.get(url)
-        self.assertContains(response, "draft title")
-        self.assertNotContains(response, "public title")
+        self.assertNotContains(response, "draft title")
+        self.assertContains(response, "public title")
 
     def test_cms_plugins_course_render_variant(self):
         """
@@ -260,7 +261,7 @@ class CoursePluginTestCase(TestCase):
         self.client.login(username=staff.username, password="password")
 
         # Create a Course
-        course = CourseFactory(page_title="public title")
+        course = CourseFactory(page_title="public title", should_publish=True)
         course_page = course.extended_object
 
         # Create a page to add the plugin to
@@ -284,3 +285,88 @@ class CoursePluginTestCase(TestCase):
         # The new course-glimpse should have the large attribute
         response = self.client.get(url)
         self.assertContains(response, "course-glimpse__large")
+
+    def test_cms_plugins_course_fallback_when_never_published(self):
+        """
+        The course plugin should render in the fallback language when the course
+        page has never been published in the current language.
+        """
+        course = CourseFactory(
+            page_title={"en": "public course", "fr": "cours public"},
+            fill_cover={
+                "original_filename": "cover.jpg",
+                "default_alt_text": "my cover",
+            },
+        )
+        course_page = course.extended_object
+
+        # Create a page to add the plugin to
+        page = create_i18n_page({"en": "A page", "fr": "Une page"})
+        placeholder = page.placeholders.get(slot="maincontent")
+        add_plugin(placeholder, CoursePlugin, "en", **{"page": course_page})
+        add_plugin(placeholder, CoursePlugin, "fr", **{"page": course_page})
+
+        # Publish only the French version of the course
+        course_page.publish("fr")
+
+        # Check the page content in English
+        page.publish("en")
+        url = page.get_absolute_url(language="en")
+        response = self.client.get(url)
+
+        # The course path in french should be in the url but the locale in the
+        # url should remain "en"
+        self.assertIn(
+            '<a class="course-glimpse" href="/en/cours-public/"',
+            re.sub(" +", " ", str(response.content).replace("\\n", "")),
+        )
+
+        # The course's name should be present
+        self.assertIn(
+            '<p class="course-glimpse__title">cours public</p>',
+            re.sub(" +", " ", str(response.content).replace("\\n", "")),
+        )
+        self.assertNotContains(response, "public course")
+
+        # The course's cover should be present
+        pattern = (
+            r'<div class="course-glimpse__media">'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x170'
+            r'.*alt=""'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
+
+    def test_cms_plugins_course_fallback_when_published_unpublished(self):
+        """
+        The course plugin should not render when the course was voluntarily
+        unpublished in the current language.
+        """
+        # Create a course
+        course = CourseFactory(
+            page_title={"en": "public title", "fr": "titre public"},
+            should_publish=True,
+        )
+        course_page = course.extended_object
+
+        # Create a page to add the plugin to
+        page = create_i18n_page({"en": "A page", "fr": "Une page"})
+        placeholder = page.placeholders.get(slot="maincontent")
+        add_plugin(placeholder, CoursePlugin, "en", **{"page": course_page})
+        add_plugin(placeholder, CoursePlugin, "fr", **{"page": course_page})
+
+        # Publish only the French version of the course
+        with mock.patch(
+            "cms.models.pagemodel.now",
+            return_value=datetime(2019, 11, 30, tzinfo=timezone.utc),
+        ):
+            course_page.publish("fr")
+
+        course_page.publish("en")
+        course_page.unpublish("en")
+
+        # Check the page content in English
+        page.publish("en")
+        url = page.get_absolute_url(language="en")
+        response = self.client.get(url)
+
+        self.assertNotContains(response, "glimpse")

@@ -91,7 +91,7 @@ class Migration(migrations.Migration):
                 "verbose_name": "blog post plugin",
                 "db_table": "richie_blog_post_plugin",
             },
-            bases=(richie.apps.core.models.PagePluginMixin, "cms.cmsplugin"),
+            bases=("cms.cmsplugin",),
         ),
         migrations.CreateModel(
             name="Category",
@@ -159,7 +159,7 @@ class Migration(migrations.Migration):
                 "verbose_name": "category plugin",
                 "db_table": "richie_category_plugin",
             },
-            bases=(richie.apps.core.models.PagePluginMixin, "cms.cmsplugin"),
+            bases=("cms.cmsplugin",),
         ),
         migrations.CreateModel(
             name="Course",
@@ -228,7 +228,7 @@ class Migration(migrations.Migration):
                 "verbose_name": "course plugin",
                 "db_table": "richie_course_plugin",
             },
-            bases=(richie.apps.core.models.PagePluginMixin, "cms.cmsplugin"),
+            bases=("cms.cmsplugin",),
         ),
         migrations.CreateModel(
             name="CourseRun",
@@ -536,7 +536,7 @@ class Migration(migrations.Migration):
                 "verbose_name": "organization plugin",
                 "db_table": "richie_organization_plugin",
             },
-            bases=(richie.apps.core.models.PagePluginMixin, "cms.cmsplugin"),
+            bases=("cms.cmsplugin",),
         ),
         migrations.CreateModel(
             name="Person",
@@ -600,7 +600,7 @@ class Migration(migrations.Migration):
                 "verbose_name": "person plugin",
                 "db_table": "richie_person_plugin",
             },
-            bases=(richie.apps.core.models.PagePluginMixin, "cms.cmsplugin"),
+            bases=("cms.cmsplugin",),
         ),
         migrations.CreateModel(
             name="PersonTitle",

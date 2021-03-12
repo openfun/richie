@@ -68,8 +68,7 @@ class ProgramCMSTestCase(CMSTestCase):
 
     def test_templates_program_detail_cms_draft_content(self):
         """
-        A staff user should see a draft program including its draft elements with an
-        annotation.
+        A staff user should see a draft program including only its public elements.
         """
         user = UserFactory(is_staff=True, is_superuser=True)
         self.client.login(username=user.username, password="password")
@@ -113,17 +112,14 @@ class ProgramCMSTestCase(CMSTestCase):
                 ),
                 html=True,
             )
-        # Draft courses should also be present on the page with an annotation for styling
+        # Draft courses should not be present on the page
         for course in courses[-2:]:
-            self.assertIn(
-                '<a class="course-glimpse course-glimpse--draft" '
-                'href="{:s}"'.format(course.extended_object.get_absolute_url()),
+            self.assertNotIn(
+                course.extended_object.get_absolute_url(),
                 re.sub(" +", " ", str(response.content).replace("\\n", "")),
             )
-            self.assertContains(
+            self.assertNotContains(
                 response,
-                '<p class="course-glimpse__title">{title:s}</p>'.format(
-                    title=course.extended_object.get_title()
-                ),
+                course.extended_object.get_title(),
                 html=True,
             )

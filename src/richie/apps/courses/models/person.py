@@ -12,7 +12,7 @@ from cms.extensions.extension_pool import extension_pool
 from cms.models import Title
 from cms.models.pluginmodel import CMSPlugin
 
-from ...core.models import BasePageExtension, PagePluginMixin
+from ...core.models import BasePageExtension
 from ..defaults import PERSONS_PAGE
 
 
@@ -115,7 +115,7 @@ class Person(BasePageExtension):
         )
 
 
-class PersonPluginModel(PagePluginMixin, CMSPlugin):
+class PersonPluginModel(CMSPlugin):
     """
     Person plugin model handles the relation from PersonPlugin
     to their Person instance

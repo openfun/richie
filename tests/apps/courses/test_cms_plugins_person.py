@@ -229,12 +229,14 @@ class PersonPluginTestCase(CMSTestCase):
 
         url = "{:s}?edit".format(page.get_absolute_url(language="en"))
 
-        # The person plugin should still be visible on the draft page
+        # The unpublished category plugin should not be visible on the draft page
         response = self.client.get(url)
-        self.assertContains(response, "person title")
-        self.assertContains(response, "public bio")
+        self.assertNotContains(response, "person title")
+        self.assertNotContains(response, "public bio")
 
-        # Now modify the person to have a draft different from the public version
+        # Now publish the category and modify it to have a draft different from the
+        # public version
+        person_page.publish("en")
         person_title = person.extended_object.title_set.get(language="en")
         person_title.title = "Jiji"
         person_title.save()
@@ -243,7 +245,90 @@ class PersonPluginTestCase(CMSTestCase):
 
         # The draft version of the person plugin should now be visible
         response = self.client.get(url)
-        self.assertContains(response, "Jiji")
-        self.assertContains(response, "draft bio")
-        self.assertNotContains(response, "person_title")
-        self.assertNotContains(response, "public bio")
+        self.assertNotContains(response, "Jiji")
+        self.assertNotContains(response, "draft bio")
+        self.assertContains(response, "person title")
+        self.assertContains(response, "public bio")
+
+    def test_cms_plugins_person_fallback_when_never_published(self):
+        """
+        The person plugin should render in the fallback language when the person
+        page has never been published in the current language.
+        """
+        # Create a person
+        person = PersonFactory(
+            page_title={"en": "public person", "fr": "personne publique"},
+            fill_portrait={
+                "original_filename": "portrait.jpg",
+                "default_alt_text": "my portrait",
+            },
+        )
+        person_page = person.extended_object
+
+        # Create a page to add the plugin to
+        page = create_i18n_page({"en": "A page", "fr": "Une page"})
+        placeholder = page.placeholders.get(slot="maincontent")
+        add_plugin(placeholder, PersonPlugin, "en", **{"page": person_page})
+        add_plugin(placeholder, PersonPlugin, "fr", **{"page": person_page})
+
+        # Publish only the French version of the person
+        person_page.publish("fr")
+
+        # Check the page content in English
+        page.publish("en")
+        url = page.get_absolute_url(language="en")
+        response = self.client.get(url)
+
+        # Person's name should be present as a link to the cms page
+        self.assertContains(
+            response, '<a href="/en/personne-publique/">', status_code=200
+        )
+        # The person's full name should be wrapped in a h2
+        self.assertContains(
+            response,
+            '<h2 class="person-glimpse__title">personne publique</h2>',
+            html=True,
+        )
+        self.assertNotContains(response, "public person")
+
+        # Person's portrait should be present
+        pattern = (
+            r'<a class="person-glimpse__media" href="/en/personne-publique/" '
+            r'tabindex="-1" aria-hidden="true">'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*portrait\.jpg__200x200'
+            r'.*alt=""'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
+
+    def test_cms_plugins_person_fallback_when_published_unpublished(self):
+        """
+        The person plugin should not render when the person was voluntarily
+        unpublished in the current language.
+        """
+        # Create a person
+        person = PersonFactory(
+            page_title={"en": "public title", "fr": "titre public"},
+            fill_portrait={
+                "original_filename": "portrait.jpg",
+                "default_alt_text": "my portrait",
+            },
+        )
+        person_page = person.extended_object
+
+        # Create a page to add the plugin to
+        page = create_i18n_page({"en": "A page", "fr": "Une page"})
+        placeholder = page.placeholders.get(slot="maincontent")
+        add_plugin(placeholder, PersonPlugin, "en", **{"page": person_page})
+        add_plugin(placeholder, PersonPlugin, "fr", **{"page": person_page})
+
+        # Publish only the French version of the person
+        person_page.publish("fr")
+        person_page.publish("en")
+        person_page.unpublish("en")
+
+        # Check the page content in English
+        page.publish("en")
+        url = page.get_absolute_url(language="en")
+        response = self.client.get(url)
+
+        self.assertNotContains(response, "glimpse")

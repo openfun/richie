@@ -57,7 +57,7 @@ class Migration(migrations.Migration):
                 "verbose_name": "organizations by category plugin",
                 "db_table": "richie_organizations_by_category_plugin",
             },
-            bases=(richie.apps.core.models.PagePluginMixin, "cms.cmsplugin"),
+            bases=("cms.cmsplugin",),
         ),
         migrations.AlterField(
             model_name="organizationpluginmodel",

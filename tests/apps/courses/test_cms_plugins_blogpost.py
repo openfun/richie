@@ -56,7 +56,7 @@ class BlogPostPluginTestCase(CMSTestCase):
         """
         The blogpost plugin should render as expected on a public page.
         """
-        # Create an blogpost
+        # Create a blogpost
         blogpost = BlogPostFactory(
             page_title={"en": "public title", "fr": "titre public"},
             fill_cover={
@@ -79,7 +79,6 @@ class BlogPostPluginTestCase(CMSTestCase):
             blogpost_page.publish("en")
 
         blogpost_page.publish("fr")
-        blogpost.refresh_from_db()
 
         page.publish("en")
         page.publish("fr")
@@ -113,6 +112,7 @@ class BlogPostPluginTestCase(CMSTestCase):
         )
 
         # The blogpost's title should be wrapped in a p
+        blogpost.refresh_from_db()
         self.assertContains(
             response,
             '<p class="blogpost-glimpse__title">{:s}</p>'.format(
@@ -160,15 +160,115 @@ class BlogPostPluginTestCase(CMSTestCase):
             html=True,
         )
 
+    def test_cms_plugins_blogpost_fallback_when_never_published(self):
+        """
+        The blogpost plugin should render in the fallback language when the blogpost
+        page has never been published in the current language.
+        """
+        # Create a blogpost
+        blogpost = BlogPostFactory(
+            page_title={"en": "public title", "fr": "titre public"},
+            fill_cover={
+                "original_filename": "cover.jpg",
+                "default_alt_text": "my cover",
+            },
+        )
+        blogpost_page = blogpost.extended_object
+
+        # Create a page to add the plugin to
+        page = create_i18n_page({"en": "A page", "fr": "Une page"})
+        placeholder = page.placeholders.get(slot="maincontent")
+        add_plugin(placeholder, BlogPostPlugin, "en", **{"page": blogpost_page})
+        add_plugin(placeholder, BlogPostPlugin, "fr", **{"page": blogpost_page})
+
+        # Publish only the French version of the blog post
+        with mock.patch(
+            "cms.models.pagemodel.now",
+            return_value=datetime(2019, 11, 30, tzinfo=timezone.utc),
+        ):
+            blogpost_page.publish("fr")
+
+        # Check the page content in English
+        page.publish("en")
+        url = page.get_absolute_url(language="en")
+        response = self.client.get(url)
+
+        # The english blogpost's name should be present as a link to the cms page
+        # But the locale in the url should remain "en"
+        self.assertIn(
+            ('<a href="/en/titre-public/" class="blogpost-glimpse"'),
+            re.sub(" +", " ", str(response.content).replace("\\n", "")),
+        )
+
+        # The blogpost's title should be wrapped in a p
+        blogpost.refresh_from_db()
+        self.assertContains(
+            response,
+            '<p class="blogpost-glimpse__title">titre public</p>',
+            html=True,
+        )
+        self.assertNotContains(response, "public title")
+
+        # Blogpost's cover should be present
+        pattern = (
+            r'<div class="blogpost-glimpse__media">'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x170'
+            r'.*alt=""'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
+
+        # Publication date should be set by first publication
+        self.assertContains(
+            response, '<p class="blogpost-glimpse__date">Nov. 30, 2019</p>', html=True
+        )
+
+    def test_cms_plugins_blogpost_fallback_when_published_unpublished(self):
+        """
+        The blogpost plugin should not render when the blogpost was voluntarily
+        unpublished in the current language.
+        """
+        # Create a blogpost
+        blogpost = BlogPostFactory(
+            page_title={"en": "public title", "fr": "titre public"},
+            fill_cover={
+                "original_filename": "cover.jpg",
+                "default_alt_text": "my cover",
+            },
+        )
+        blogpost_page = blogpost.extended_object
+
+        # Create a page to add the plugin to
+        page = create_i18n_page({"en": "A page", "fr": "Une page"})
+        placeholder = page.placeholders.get(slot="maincontent")
+        add_plugin(placeholder, BlogPostPlugin, "en", **{"page": blogpost_page})
+        add_plugin(placeholder, BlogPostPlugin, "fr", **{"page": blogpost_page})
+
+        # Publish only the French version of the blog post
+        with mock.patch(
+            "cms.models.pagemodel.now",
+            return_value=datetime(2019, 11, 30, tzinfo=timezone.utc),
+        ):
+            blogpost_page.publish("fr")
+
+        blogpost_page.publish("en")
+        blogpost_page.unpublish("en")
+
+        # Check the page content in English
+        page.publish("en")
+        url = page.get_absolute_url(language="en")
+        response = self.client.get(url)
+
+        self.assertNotContains(response, "glimpse")
+
     def test_cms_plugins_blogpost_render_on_draft_page(self):
         """
-        The blogpost plugin should render as expected on a draft page.
+        The blogpost plugin should render its public version on a draft page.
         """
         staff = UserFactory(is_staff=True, is_superuser=True)
         self.client.login(username=staff.username, password="password")
 
         # Create a BlogPost
-        blogpost = BlogPostFactory(page_title="public title")
+        blogpost = BlogPostFactory(page_title="public title", should_publish=True)
         blogpost_page = blogpost.extended_object
 
         # Create a page to add the plugin to
@@ -187,13 +287,13 @@ class BlogPostPluginTestCase(CMSTestCase):
         title_obj.title = "draft title"
         title_obj.save()
 
-        # The draft version of the blogpost plugin should now be visible
+        # The public version of the blogpost plugin should still be visible
         response = self.client.get(url)
-        self.assertContains(response, "draft title")
-        self.assertNotContains(response, "public title")
+        self.assertNotContains(response, "draft title")
+        self.assertContains(response, "public title")
 
         # Publication date block should be absent
-        self.assertNotContains(response, "__date")
+        self.assertContains(response, "__date")
 
     def test_cms_plugins_blogpost_render_template(self):
         """
@@ -203,7 +303,7 @@ class BlogPostPluginTestCase(CMSTestCase):
         self.client.login(username=staff.username, password="password")
 
         # Create an blogpost
-        blogpost = BlogPostFactory(page_title="public title")
+        blogpost = BlogPostFactory(page_title="public title", should_publish=True)
         blogpost_page = blogpost.extended_object
 
         # Create a page to add the plugin to
@@ -221,11 +321,7 @@ class BlogPostPluginTestCase(CMSTestCase):
 
         # Add blogpost plugin with small variant
         add_plugin(
-            placeholder,
-            BlogPostPlugin,
-            "en",
-            page=blogpost_page,
-            variant="small",
+            placeholder, BlogPostPlugin, "en", page=blogpost_page, variant="small"
         )
 
         # The blogpost-glimpse default template should not have the small attribute
@@ -234,12 +330,12 @@ class BlogPostPluginTestCase(CMSTestCase):
 
     def test_cms_plugins_blogpost_default_variant(self):
         """
-        If the variant is not specified on the blogpost pluging, it should render
-        according to variant variable eventually present in the context of its
-        container.
+        If the variant is specified on the blogpost plugin and also as variant
+        variable in the context of its container, the instance variable should
+        be used.
         """
         # Create an blogpost
-        blogpost = BlogPostFactory(page_title="public title")
+        blogpost = BlogPostFactory(page_title="public title", should_publish=True)
         blogpost_page = blogpost.extended_object
 
         # Create a page to add the plugin to
@@ -254,6 +350,7 @@ class BlogPostPluginTestCase(CMSTestCase):
         # Get generated html
         request = RequestFactory()
         request.current_page = page
+        request.path_info = "/en/my-path/"
         request.user = AnonymousUser()
         context = {"current_page": page, "blogpost_variant": "xxl", "request": request}
         renderer = ContentRenderer(request=request)
@@ -263,12 +360,12 @@ class BlogPostPluginTestCase(CMSTestCase):
 
     def test_cms_plugins_blogpost_cascade_variant(self):
         """
-        If the variant is specified on the blogpost pluging and also as variant
-        variable in the context of its container, the instance variable should
-        be used.
+        If the variant is not specified on the blogpost plugin, it should render
+        according to variant variable eventually present in the context of its
+        container.
         """
         # Create an blogpost
-        blogpost = BlogPostFactory(page_title="public title")
+        blogpost = BlogPostFactory(page_title="public title", should_publish=True)
         blogpost_page = blogpost.extended_object
 
         # Create a page to add the plugin to
@@ -283,6 +380,7 @@ class BlogPostPluginTestCase(CMSTestCase):
         # Get generated html
         request = RequestFactory()
         request.current_page = page
+        request.path_info = "/en/my-path/"
         request.user = AnonymousUser()
         context = {"current_page": page, "blogpost_variant": "xxl", "request": request}
         renderer = ContentRenderer(request=request)

@@ -132,14 +132,7 @@
                     {% block main_organization %}
                     {% with main_organization=course.get_main_organization %}
                         {% if main_organization %}
-                            {% if current_page.publisher_is_draft %}
-                                {% if main_organization.check_publication is True %}
-                                    {% include "courses/cms/fragment_organization_main_logo.html" with organization=main_organization.public_extension %}
-                                {% else %}
-                                    {% include "courses/cms/fragment_organization_main_logo.html" with organization=main_organization %}
-                                {% endif %}
-                            {# If the current page is the published version, show only the organizations that are published #}
-                            {% elif main_organization.check_publication is True %}
+                            {% if main_organization.check_publication is True %}
                                 {% include "courses/cms/fragment_organization_main_logo.html" with organization=main_organization.public_extension %}
                             {% endif %}
                         {% else %}

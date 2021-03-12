@@ -3,6 +3,69 @@ from django.db import models
 from django.utils import translation
 
 from cms.extensions import PageExtension
+from cms.utils import get_current_site, i18n, page_permissions
+
+
+def get_public_page_with_fallbacks(page, request):
+    """
+    the plugin should show the published page whenever it exists or the draft page otherwise.
+
+    On a public content, the draft page should not be shown at all but this is left to the
+    caller.
+
+    This is inspired by what DjangoCMS does in its main view:
+    https://github.com/django-cms/django-cms/blob/3.8.0/cms/views.py#L37
+    """
+    page = page.get_public_object()
+    request_language = translation.get_language_from_request(request, check_path=True)
+
+    if not page:
+        return None
+
+    # Check permissions
+    site = get_current_site()
+    if not page_permissions.user_can_view_page(request.user, page, site):
+        return None
+
+    if request.user.is_staff:
+        user_languages = i18n.get_language_list(site_id=site.pk)
+    else:
+        user_languages = i18n.get_public_languages(site_id=site.pk)
+
+    # These languages are then filtered out by the user allowed languages
+    available_languages = [
+        language
+        for language in user_languages
+        if language in list(page.get_published_languages())
+    ]
+
+    if request_language not in user_languages:
+        # Language is not allowed
+        # Use the default site language
+        default_language = i18n.get_default_language_for_site(site.pk)
+        fallbacks = i18n.get_fallback_languages(default_language, site_id=site.pk)
+        fallbacks = [default_language] + fallbacks
+    else:
+        fallbacks = i18n.get_fallback_languages(request_language, site_id=site.pk)
+
+    # Only fallback to languages the user is allowed to see
+    fallback_languages = [
+        language
+        for language in fallbacks
+        if language != request_language and language in available_languages
+    ]
+
+    if request_language not in available_languages:
+        if not fallback_languages:
+            # There is no page with the requested language
+            # and there's no configured fallbacks
+            return None
+        if request_language in page.get_languages():
+            # The page was already published and later unpublished in the current
+            # language. In this case we must not fallback to another language.
+            return None
+
+    return page
 
 
 class PageExtensionQuerySet(models.QuerySet):
@@ -81,44 +144,3 @@ class BasePageExtension(PageExtension):
         """
         language = language or translation.get_language()
         return self.extended_object.is_published(language)
-
-
-class PagePluginMixin:
-    """
-    A base plugin model to build all our plugins that are used to publish a glimpse of a page on
-    another page.
-    """
-
-    @property
-    def relevant_page(self):
-        """
-        the plugin should show the published page whenever it exists or the draft page otherwise.
-
-        On a public content, the draft page should not be shown at all but this is left to the
-        caller.
-        """
-        if self.page.is_published(translation.get_language()):
-            return self.page.get_public_object()
-        return self.page
-
-    def check_publication(self, language=None):
-        """
-        Allow checking if the page is published without passing any language (unlike the
-        "is_published" method on the page object): if not explicitly passed as argument, the
-        language is retrieved from the context.
-
-        The actual check is subcontracted to the "is_published" method on the related Django CMS
-        Page object.
-
-        Note: We choose not to name our method "is_published" like Django CMS, because it is a
-        bad practice. Indeed, someone may think it is a property and use it without invocating it
-        and the returned value (a bound method) will always be truthy... This issue happened a lot
-        with the "is_authenticated" method on Django's User model before they converted it to a
-        property.
-        """
-        language = language or translation.get_language()
-        return self.page.is_published(language)
-
-    def __str__(self):
-        """Human representation of a page plugin"""
-        return self.page.get_title()

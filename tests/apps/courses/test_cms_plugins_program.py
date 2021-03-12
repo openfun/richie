@@ -156,16 +156,102 @@ class ProgramPluginTestCase(CMSTestCase):
 
         url = "{:s}?edit".format(page.get_absolute_url(language="en"))
 
-        # The program plugin should still be visible on the draft page
+        # The unpublished program plugin should not be visible on the draft page
         response = self.client.get(url)
-        self.assertContains(response, "public title")
+        self.assertNotContains(response, "public title")
 
-        # Now modify the program to have a draft different from the public version
+        # Now publish the program and modify it to have a draft different from the
+        # public version
+        program_page.publish("en")
         title_obj = program_page.get_title_obj(language="en")
         title_obj.title = "draft title"
         title_obj.save()
 
         # The draft version of the program plugin should now be visible
         response = self.client.get(url)
-        self.assertContains(response, "draft title")
-        self.assertNotContains(response, "public title")
+        self.assertNotContains(response, "draft title")
+        self.assertContains(response, "public title")
+
+    def test_cms_plugins_program_fallback_when_never_published(self):
+        """
+        The program plugin should render in the fallback language when the program
+        page has never been published in the current language.
+        """
+        # Create a program
+        program = ProgramFactory(
+            page_title={"en": "public program", "fr": "programme publique"},
+            fill_cover={
+                "original_filename": "cover.jpg",
+                "default_alt_text": "my cover",
+            },
+        )
+        program_page = program.extended_object
+
+        # Create a page to add the plugin to
+        page = create_i18n_page({"en": "A page", "fr": "Une page"})
+        placeholder = page.placeholders.get(slot="maincontent")
+        add_plugin(placeholder, ProgramPlugin, "en", **{"page": program_page})
+        add_plugin(placeholder, ProgramPlugin, "fr", **{"page": program_page})
+
+        # Publish only the French version of the program
+        program_page.publish("fr")
+
+        # Check the page content in English
+        page.publish("en")
+        url = page.get_absolute_url(language="en")
+        response = self.client.get(url)
+
+        # Program's name should be present as a link to the cms page
+        self.assertContains(
+            response,
+            '<a href="/en/programme-publique/" class="program-glimpse program-glimpse--link" >',
+            status_code=200,
+        )
+        # The program's full name should be wrapped in a h2
+        self.assertContains(
+            response,
+            '<p class="program-glimpse__title">programme publique</p>',
+            html=True,
+        )
+        self.assertNotContains(response, "public program")
+
+        # Program's cover should be present
+        pattern = (
+            r'<div class="program-glimpse__media">'
+            r'<img src="/media/filer_public_thumbnails/filer_public/.*cover\.jpg__300x170'
+            r'.*alt=""'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
+
+    def test_cms_plugins_program_fallback_when_published_unpublished(self):
+        """
+        The program plugin should not render when the program was voluntarily
+        unpublished in the current language.
+        """
+        # Create a program
+        program = ProgramFactory(
+            page_title={"en": "public title", "fr": "titre public"},
+            fill_cover={
+                "original_filename": "cover.jpg",
+                "default_alt_text": "my cover",
+            },
+        )
+        program_page = program.extended_object
+
+        # Create a page to add the plugin to
+        page = create_i18n_page({"en": "A page", "fr": "Une page"})
+        placeholder = page.placeholders.get(slot="maincontent")
+        add_plugin(placeholder, ProgramPlugin, "en", **{"page": program_page})
+        add_plugin(placeholder, ProgramPlugin, "fr", **{"page": program_page})
+
+        # Publish only the French version of the program
+        program_page.publish("fr")
+        program_page.publish("en")
+        program_page.unpublish("en")
+
+        # Check the page content in English
+        page.publish("en")
+        url = page.get_absolute_url(language="en")
+        response = self.client.get(url)
+
+        self.assertNotContains(response, "glimpse")

@@ -1,7 +1,7 @@
 {% load i18n cms_tags extra_tags thumbnail %}
 {% comment %}Obviously, the context template variable "program" is required and must be a Program page extension{% endcomment %}
 {% with program_page=program.extended_object %}
-<a href="{{ program.extended_object.get_absolute_url }}" class="program-glimpse program-glimpse--link {% if program.extended_object.publisher_is_draft %}program-glimpse--draft{% endif %}" >
+<a href="{{ program.extended_object.get_absolute_url }}" class="program-glimpse program-glimpse--link{% if program.extended_object.publisher_is_draft %} program-glimpse--draft{% endif %}" >
     <div class="program-glimpse__media">
     {% get_page_plugins "program_cover" program_page as plugins or %}
         <div class="program-glimpse__empty">{% trans 'Cover' %}</div>
