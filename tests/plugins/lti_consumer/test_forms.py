@@ -1,9 +1,26 @@
 """
 Forms tests
 """
-from django.test import TestCase
+from unittest import mock
+
+from django.test import TestCase, override_settings
+
+import exrex
 
 from richie.plugins.lti_consumer.forms import LTIConsumerForm
+
+
+def get_lti_settings(is_regex=True):
+    """Returns LTI provider settings to override settings in our tests."""
+    suffix = "[0-9a-f]{8}-[0-9a-f]" if is_regex else ""
+    return {
+        "lti_provider_test": {
+            "base_url": f"http://localhost:8060/lti/videos/{suffix:s}",
+            "is_base_url_regex": is_regex,
+            "oauth_consumer_key": "TestOauthConsumerKey",
+            "shared_secret": "TestSharedSecret",
+        }
+    }
 
 
 class LTIConsumerFormTestCase(TestCase):
@@ -14,10 +31,7 @@ class LTIConsumerFormTestCase(TestCase):
         Verify LTI consumer form lists predefined providers
         """
         self.assertListEqual(
-            [
-                ("", "---------"),
-                ("lti_provider_test", "LTI Provider Test Video"),
-            ],
+            [("", "---------"), ("lti_provider_test", "LTI Provider Test Video")],
             LTIConsumerForm().fields["lti_provider_id"].widget.choices,
         )
 
@@ -50,9 +64,7 @@ class LTIConsumerFormTestCase(TestCase):
                     "oauth_consumer_key": "InsecureOauthConsumerKey",
                     "shared_secret": "InsecureSharedSecret",
                 },
-                {
-                    "url": ["Please fill this field"],
-                },
+                {"url": ["Please fill this field"]},
             ),
             (
                 {
@@ -60,9 +72,7 @@ class LTIConsumerFormTestCase(TestCase):
                     "url": "http://example.com",
                     "shared_secret": "InsecureSharedSecret",
                 },
-                {
-                    "oauth_consumer_key": ["Please fill this field"],
-                },
+                {"oauth_consumer_key": ["Please fill this field"]},
             ),
             (
                 {
@@ -70,15 +80,10 @@ class LTIConsumerFormTestCase(TestCase):
                     "url": "http://example.com",
                     "oauth_consumer_key": "InsecureOauthConsumerKey",
                 },
-                {
-                    "shared_secret": ["Please fill this field"],
-                },
+                {"shared_secret": ["Please fill this field"]},
             ),
             (
-                {
-                    "lti_provider_id": "",
-                    "url": "http://example.com",
-                },
+                {"lti_provider_id": "", "url": "http://example.com"},
                 {
                     "oauth_consumer_key": ["Please fill this field"],
                     "shared_secret": ["Please fill this field"],
@@ -111,3 +116,48 @@ class LTIConsumerFormTestCase(TestCase):
                 self.assertDictEqual(form.errors, {})
                 instance = form.save()
                 self.assertIsNotNone(instance.url)
+
+    @override_settings(RICHIE_LTI_PROVIDERS=get_lti_settings())
+    @mock.patch.object(
+        exrex, "getone", return_value="http://localhost:8060/lti/videos/1234abcd-1"
+    )
+    def test_forms_lti_consumer_url_regex_match(self, _mock_getone):
+        """
+        The url field should match the regex url if a predefined LTI provider is
+        used and has a regex url.
+        """
+        data = {"lti_provider_id": "lti_provider_test", "url": "http://invalid.com"}
+        form = LTIConsumerForm(data=data)
+        self.assertFalse(form.is_valid())
+        self.assertDictEqual(
+            form.errors,
+            {
+                "url": [
+                    (
+                        "The url is not valid for this provider. "
+                        'It should be of the form "http://localhost:8060/lti/videos/1234abcd-1".'
+                    )
+                ]
+            },
+        )
+
+    @override_settings(RICHIE_LTI_PROVIDERS=get_lti_settings(is_regex=False))
+    def test_forms_lti_consumer_url_not_regex_included(self):
+        """
+        The url field should include the provider's base url if a predefined LTI provider
+        is used and has a regex url.
+        """
+        data = {"lti_provider_id": "lti_provider_test", "url": "http://invalid.com"}
+        form = LTIConsumerForm(data=data)
+        self.assertFalse(form.is_valid())
+        self.assertDictEqual(
+            form.errors,
+            {
+                "url": [
+                    (
+                        "The url is not valid for this provider. "
+                        'It should start with "http://localhost:8060/lti/videos/".'
+                    )
+                ]
+            },
+        )

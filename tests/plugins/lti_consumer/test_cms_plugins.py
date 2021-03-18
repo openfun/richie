@@ -1,89 +1,83 @@
 """Testing DjangoCMS plugin declaration for Richie's LTI consumer plugin."""
+import json
+import random
 from unittest import mock
 
-from django.test import TestCase
+from django.contrib.auth.models import AnonymousUser
+from django.test import TestCase, override_settings
 from django.test.client import RequestFactory
 
 from cms.api import add_plugin
 from cms.models import Placeholder
 from cms.plugin_rendering import ContentRenderer
+from cms.toolbar.toolbar import CMSToolbar
 
 from richie.plugins.lti_consumer.cms_plugins import LTIConsumerPlugin
-from richie.plugins.lti_consumer.factories import LTIConsumerFactory
+from richie.plugins.lti_consumer.models import LTIConsumer
 
 
 class LTIConsumerPluginTestCase(TestCase):
     """Test suite for the LTI consumer plugin."""
 
-    def test_cms_plugins_lti_consumer_context_and_html(self):
+    @mock.patch.object(
+        LTIConsumer, "get_content_parameters", return_value="test_content"
+    )
+    def test_cms_plugins_lti_consumer_context_and_html(self, mock_params):
         """
         Instanciating this plugin with an instance should populate the context
         and render in the template.
         """
         placeholder = Placeholder.objects.create(slot="test")
 
-        lti_consumer = LTIConsumerFactory()
+        url = "http://localhost:8060/lti/videos/"
+        resizing = random.choice([True, False])
+        edit = random.choice([True, False])
+        lti_providers = {
+            "lti_provider_test": {
+                "base_url": "http://localhost:8060/lti/videos/",
+                "is_base_url_regex": False,
+                "automatic_resizing": resizing,
+                "inline_ratio": 0.3312,
+                "oauth_consumer_key": "TestOauthConsumerKey",
+                "shared_secret": "TestSharedSecret",
+            }
+        }
+
+        request = RequestFactory()
+        request.user = AnonymousUser()
+        request.session = {}
+        request.path = "/"
+        request.toolbar = CMSToolbar(request)
+        request.toolbar.edit_mode_active = edit
+        global_context = {"request": request}
 
         model_instance = add_plugin(
             placeholder,
             LTIConsumerPlugin,
             "en",
-            url=lti_consumer.url,
-            lti_provider_id=lti_consumer.lti_provider_id,
+            url=url,
+            lti_provider_id="lti_provider_test",
         )
         plugin_instance = model_instance.get_plugin_class_instance()
-        context = plugin_instance.render({}, model_instance, None)
 
-        # Check if instance is in context
-        self.assertEqual(model_instance, context["instance"])
+        # Check context
+        with override_settings(RICHIE_LTI_PROVIDERS=lti_providers):
+            context = plugin_instance.render(global_context, model_instance, None)
 
-        # Get generated html for LTI consumer url
-        renderer = ContentRenderer(request=RequestFactory())
-        html = renderer.render_plugin(model_instance, {})
+        self.assertEqual(context["instance"], model_instance)
+        widget_props = json.loads(context["widget_props"])
+        self.assertEqual(widget_props["automatic_resizing"], resizing)
+        self.assertEqual(widget_props["url"], "http://localhost:8060/lti/videos/")
+        self.assertEqual(widget_props["content_parameters"], "test_content")
+        mock_params.assert_called_once_with(edit=edit)
 
         # Check rendered url is correct after save and sanitize
-        self.assertIn(lti_consumer.url, html)
-        self.assertIn("student", html)
+        mock_params.reset_mock()
+        renderer = ContentRenderer(request=request)
+        with override_settings(RICHIE_LTI_PROVIDERS=lti_providers):
+            html = renderer.render_plugin(model_instance, global_context)
 
-    @mock.patch(
-        "richie.plugins.lti_consumer.models.LTIConsumer.authorize",
-        return_value={
-            "Authorization": (
-                'OAuth oauth_nonce="80966668944732164491378916897", oauth_timestamp="1378916897", '
-                'oauth_version="1.0", oauth_signature_method="HMAC-SHA1", '
-                'oauth_consumer_key="InsecureOauthConsumerKey", '
-                'oauth_signature="frVp4JuvT1mVXlxktiAUjQ7%2F1cw%3D"'
-            )
-        },
-    )
-    def test_cms_plugins_get_lti_consumer_widget_props(self, _):
-        """
-        Verify that LTI content consumption parameters are correctly built through
-        content_parameters wrapper
-        """
-        lti_consumer = LTIConsumerFactory()
-        expected_content_parameters = {
-            "lti_message_type": lti_consumer.lti_provider.get("display_name"),
-            "lti_version": "LTI-1p0",
-            "resource_link_id": str(lti_consumer.id),
-            "context_id": "example.com",
-            "user_id": "richie",
-            "lis_person_contact_email_primary": "",
-            "roles": "instructor",
-            "oauth_consumer_key": lti_consumer.lti_provider.get("oauth_consumer_key"),
-            "oauth_signature_method": "HMAC-SHA1",
-            "oauth_timestamp": "1378916897",
-            "oauth_nonce": "80966668944732164491378916897",
-            "oauth_version": "1.0",
-            "oauth_signature": "frVp4JuvT1mVXlxktiAUjQ7/1cw=",
-        }
-        expected_widget_props = {
-            "url": lti_consumer.url,
-            "content_parameters": expected_content_parameters,
-            "automatic_resizing": True,
-        }
-
-        self.assertDictEqual(
-            expected_widget_props,
-            LTIConsumerPlugin.get_lti_consumer_widget_props(lti_consumer, edit=True),
-        )
+        self.assertIn(url, html)
+        self.assertIn("test_content", html)
+        self.assertIn('style="padding-bottom: 33.12%"', html)
+        mock_params.assert_called_once_with(edit=edit)

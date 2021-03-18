@@ -49,17 +49,10 @@ class LTIConsumerPlugin(CMSPluginBase):
 
         context = super().render(context, instance, placeholder)
         context["widget_props"] = json.dumps(
-            self.get_lti_consumer_widget_props(instance, edit=edit)
+            {
+                "url": instance.url,
+                "content_parameters": instance.get_content_parameters(edit=edit),
+                "automatic_resizing": instance.automatic_resizing,
+            }
         )
         return context
-
-    @staticmethod
-    def get_lti_consumer_widget_props(instance, edit=False):
-        """
-        Return all LTI consumer properties required by LTIConsumer React widget
-        """
-        return {
-            "url": instance.url,
-            "content_parameters": instance.content_parameters(edit=edit),
-            "automatic_resizing": instance.automatic_resizing,
-        }

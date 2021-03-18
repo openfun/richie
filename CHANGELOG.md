@@ -16,6 +16,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix LTI consumer plugin (edit mode, manual config and update after create)
 - Fix an issue about text selection on search input on Firefox
 
 ## [2.2.0] - 2021-03-05
