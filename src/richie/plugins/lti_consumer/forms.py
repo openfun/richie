@@ -1,6 +1,11 @@
 """LTI Consumer plugin forms."""
+import re
+
 from django import forms
+from django.conf import settings
 from django.utils.translation import gettext_lazy as _
+
+import exrex
 
 from .models import LTIConsumer
 
@@ -27,28 +32,50 @@ class LTIConsumerForm(forms.ModelForm):
 
         Here we're adding related errors
         """
-        if not self.cleaned_data.get("lti_provider_id"):
-            missing_url = not self.cleaned_data.get("url")
-            missing_oauth_consumer_key = not self.cleaned_data.get("oauth_consumer_key")
-            missing_shared_secret = not self.cleaned_data.get("shared_secret")
+        provider_id = self.cleaned_data.get("lti_provider_id")
+        url = self.cleaned_data.get("url")
 
-            if missing_url and missing_oauth_consumer_key and missing_shared_secret:
+        if provider_id:
+            if url:
+                provider = getattr(settings, "RICHIE_LTI_PROVIDERS", {}).get(
+                    provider_id, {}
+                )
+                is_regex = provider.get("is_base_url_regex", True)
+                base_url = provider.get("base_url", "")
+
+                if is_regex and not re.compile(base_url).search(url):
+                    message = _(
+                        'The url is not valid for this provider. It should be of the form "{:s}".'
+                    ).format(exrex.getone(base_url))
+                    self.add_error("url", message)
+
+                if not is_regex and base_url not in url:
+                    message = _(
+                        'The url is not valid for this provider. It should start with "{:s}".'
+                    ).format(base_url)
+                    self.add_error("url", message)
+        else:
+            oauth_consumer_key = self.cleaned_data.get("oauth_consumer_key")
+            shared_secret = self.cleaned_data.get("shared_secret")
+
+            if not url and not oauth_consumer_key and not shared_secret:
                 self.add_error(
                     "lti_provider_id",
                     _("Please choose a predefined provider, or fill fields below"),
                 )
-                error_message = _(
+                message = _(
                     "Please choose a predefined provider above, or fill this field"
                 )
-                self.add_error("url", error_message)
-                self.add_error("oauth_consumer_key", error_message)
-                self.add_error("shared_secret", error_message)
+                self.add_error("url", message)
+                self.add_error("oauth_consumer_key", message)
+                self.add_error("shared_secret", message)
             else:
-                error_message = _("Please fill this field")
-                if missing_url:
-                    self.add_error("url", error_message)
-                if missing_oauth_consumer_key:
-                    self.add_error("oauth_consumer_key", error_message)
-                if missing_shared_secret:
-                    self.add_error("shared_secret", error_message)
+                message = _("Please fill this field")
+                if not url:
+                    self.add_error("url", message)
+                if not oauth_consumer_key:
+                    self.add_error("oauth_consumer_key", message)
+                if not shared_secret:
+                    self.add_error("shared_secret", message)
+
         return super().clean()

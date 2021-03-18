@@ -1,7 +1,10 @@
 """
 LTIConsumer CMS plugin factories
 """
+from django.conf import settings
+
 import factory
+import factory.fuzzy
 
 from .models import LTIConsumer
 
@@ -14,7 +17,17 @@ class LTIConsumerFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = LTIConsumer
 
-    url = factory.Faker("url")
-    lti_provider_id = "lti_provider_test"
-    oauth_consumer_key = None
-    shared_secret = None
+    lti_provider_id = factory.fuzzy.FuzzyChoice(
+        getattr(settings, "RICHIE_LTI_PROVIDERS", {}).keys()
+    )
+
+    @factory.lazy_attribute
+    def url(self):
+        """Generates a random url in accordance with the LTI provider."""
+        if self.lti_provider_id:
+            # Let the "save" method generate by returning None
+            return None
+
+        return factory.Faker("url").evaluate(
+            None, None, {"locale": settings.LANGUAGE_CODE}
+        )
