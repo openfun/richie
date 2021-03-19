@@ -7,6 +7,7 @@ from django.test import TestCase, override_settings
 
 import exrex
 
+from richie.plugins.lti_consumer.factories import LTIConsumerFactory
 from richie.plugins.lti_consumer.forms import LTIConsumerForm
 
 
@@ -164,3 +165,33 @@ class LTIConsumerFormTestCase(TestCase):
                 ]
             },
         )
+
+    @override_settings(RICHIE_LTI_PROVIDERS=get_lti_settings())
+    def test_forms_lti_consumer_reset_credentials(self):
+        """
+        The "oauth_consumer_key" and "shared_secret" fields should be reset when a value
+        is set for the "lti_provider_id" field.
+        """
+        lti_consumer = LTIConsumerFactory(
+            lti_provider_id=None,
+            oauth_consumer_key="OauthConsumerKey",
+            shared_secret="SharedSecret",
+        )
+        self.assertIsNotNone(lti_consumer.oauth_consumer_key)
+        self.assertIsNotNone(lti_consumer.shared_secret)
+
+        data = LTIConsumerForm(instance=lti_consumer).initial
+        data.update(
+            {
+                "lti_provider_id": "lti_provider_test",
+                "url": "http://localhost:8060/lti/videos/166d465f-f",
+            }
+        )
+        form = LTIConsumerForm(instance=lti_consumer, data=data)
+        form.is_valid()
+        self.assertTrue(form.is_valid())
+
+        form.save()
+        lti_consumer.refresh_from_db()
+        self.assertIsNone(lti_consumer.oauth_consumer_key)
+        self.assertIsNone(lti_consumer.shared_secret)

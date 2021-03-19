@@ -54,6 +54,10 @@ class LTIConsumerForm(forms.ModelForm):
                         'The url is not valid for this provider. It should start with "{:s}".'
                     ).format(base_url)
                     self.add_error("url", message)
+
+            # Reset credentials
+            self.cleaned_data["oauth_consumer_key"] = None
+            self.cleaned_data["shared_secret"] = None
         else:
             oauth_consumer_key = self.cleaned_data.get("oauth_consumer_key")
             shared_secret = self.cleaned_data.get("shared_secret")
