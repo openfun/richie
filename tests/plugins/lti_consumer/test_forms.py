@@ -31,8 +31,11 @@ class LTIConsumerFormTestCase(TestCase):
         Verify LTI consumer form lists predefined providers
         """
         self.assertListEqual(
-            [("", "---------"), ("lti_provider_test", "LTI Provider Test Video")],
             LTIConsumerForm().fields["lti_provider_id"].widget.choices,
+            [
+                (None, "Custom provider configuration"),
+                ("lti_provider_test", "LTI Provider Test Video"),
+            ],
         )
 
     def test_forms_lti_consumer_clean_errors(self):
