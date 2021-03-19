@@ -54,7 +54,7 @@ class LTIConsumerFormTestCase(TestCase):
                     "oauth_consumer_key": [
                         "Please choose a predefined provider above, or fill this field"
                     ],
-                    "shared_secret": [
+                    "form_shared_secret": [
                         "Please choose a predefined provider above, or fill this field"
                     ],
                     "url": [
@@ -66,7 +66,7 @@ class LTIConsumerFormTestCase(TestCase):
                 {
                     "lti_provider_id": "",
                     "oauth_consumer_key": "InsecureOauthConsumerKey",
-                    "shared_secret": "InsecureSharedSecret",
+                    "form_shared_secret": "InsecureSharedSecret",
                 },
                 {"url": ["Please fill this field"]},
             ),
@@ -74,7 +74,7 @@ class LTIConsumerFormTestCase(TestCase):
                 {
                     "lti_provider_id": "",
                     "url": "http://example.com",
-                    "shared_secret": "InsecureSharedSecret",
+                    "form_shared_secret": "InsecureSharedSecret",
                 },
                 {"oauth_consumer_key": ["Please fill this field"]},
             ),
@@ -84,13 +84,13 @@ class LTIConsumerFormTestCase(TestCase):
                     "url": "http://example.com",
                     "oauth_consumer_key": "InsecureOauthConsumerKey",
                 },
-                {"shared_secret": ["Please fill this field"]},
+                {"form_shared_secret": ["Please fill this field"]},
             ),
             (
                 {"lti_provider_id": "", "url": "http://example.com"},
                 {
                     "oauth_consumer_key": ["Please fill this field"],
-                    "shared_secret": ["Please fill this field"],
+                    "form_shared_secret": ["Please fill this field"],
                 },
             ),
         ]:
@@ -110,7 +110,7 @@ class LTIConsumerFormTestCase(TestCase):
                     "lti_provider_id": "",
                     "url": "http://example.com",
                     "oauth_consumer_key": "InsecureOauthConsumerKey",
-                    "shared_secret": "InsecureSharedSecret",
+                    "form_shared_secret": "InsecureSharedSecret",
                 }
             ),
         ]:
@@ -172,26 +172,81 @@ class LTIConsumerFormTestCase(TestCase):
         The "oauth_consumer_key" and "shared_secret" fields should be reset when a value
         is set for the "lti_provider_id" field.
         """
-        lti_consumer = LTIConsumerFactory(
-            lti_provider_id=None,
-            oauth_consumer_key="OauthConsumerKey",
-            shared_secret="SharedSecret",
-        )
-        self.assertIsNotNone(lti_consumer.oauth_consumer_key)
-        self.assertIsNotNone(lti_consumer.shared_secret)
+        data = {
+            "lti_provider_id": None,
+            "url": "http://example.com",
+            "oauth_consumer_key": "thisIsAtestOauthConsumerKey",
+            "form_shared_secret": "thisIsAtestSharedSecre",
+        }
+        form = LTIConsumerForm(data=data)
+        form.is_valid()
+        self.assertTrue(form.is_valid())
 
-        data = LTIConsumerForm(instance=lti_consumer).initial
-        data.update(
+        lti_consumer = form.save()
+        self.assertEqual(lti_consumer.oauth_consumer_key, "thisIsAtestOauthConsumerKey")
+        self.assertEqual(lti_consumer.shared_secret, "thisIsAtestSharedSecre")
+
+        modified_data = LTIConsumerForm(instance=lti_consumer).initial
+        modified_data.update(
             {
                 "lti_provider_id": "lti_provider_test",
                 "url": "http://localhost:8060/lti/videos/166d465f-f",
             }
         )
+        modified_form = LTIConsumerForm(instance=lti_consumer, data=modified_data)
+        modified_form.is_valid()
+        self.assertTrue(modified_form.is_valid())
+
+        modified_form.save()
+        lti_consumer.refresh_from_db()
+        self.assertIsNone(lti_consumer.oauth_consumer_key)
+        self.assertIsNone(lti_consumer.shared_secret)
+
+    @override_settings(RICHIE_LTI_PROVIDERS=get_lti_settings())
+    def test_forms_lti_consumer_shared_secret_placeholder(self):
+        """
+        The "form_shared_secret" should act as a proxy to the "shared_secret" field on the model
+        and allow hiding the shared secret from the form after creation.
+        """
+        lti_consumer = LTIConsumerFactory(
+            lti_provider_id=None,
+            oauth_consumer_key="thisIsAtestOauthConsumerKey",
+            shared_secret="thisIsAtestSharedSecret",
+        )
+
+        form = LTIConsumerForm(instance=lti_consumer)
+        rendered = form.as_p()
+
+        self.assertIn(
+            (
+                '<input type="password" name="form_shared_secret" '
+                'value="%%shared_secret_placeholder%%" onfocus="this.value=&#x27;&#x27;" '
+                'maxlength="50" id="id_form_shared_secret">'
+            ),
+            rendered,
+        )
+        self.assertNotIn('id="shared_secret"', rendered)
+        self.assertNotIn("thisIsAtestSharedSecret", rendered)
+
+        # Submitting the placeholder value for the secret should not
+        # impact the field on the model
+        data = form.initial
+        data["form_shared_secret"] = "%%shared_secret_placeholder%%"
+
         form = LTIConsumerForm(instance=lti_consumer, data=data)
         form.is_valid()
         self.assertTrue(form.is_valid())
 
         form.save()
         lti_consumer.refresh_from_db()
-        self.assertIsNone(lti_consumer.oauth_consumer_key)
-        self.assertIsNone(lti_consumer.shared_secret)
+        self.assertEqual(lti_consumer.shared_secret, "thisIsAtestSharedSecret")
+
+        # Submitting a new secret should update the corresponding field on the model
+        data["form_shared_secret"] = "NewSharedSecret"
+        form = LTIConsumerForm(instance=lti_consumer, data=data)
+        form.is_valid()
+        self.assertTrue(form.is_valid())
+
+        form.save()
+        lti_consumer.refresh_from_db()
+        self.assertEqual(lti_consumer.shared_secret, "NewSharedSecret")
