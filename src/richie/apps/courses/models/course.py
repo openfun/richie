@@ -11,7 +11,7 @@ from django.db import models
 from django.db.models import Prefetch, Q
 from django.urls import reverse
 from django.utils import timezone, translation
-from django.utils.functional import lazy
+from django.utils.functional import cached_property, lazy
 from django.utils.translation import gettext_lazy as _
 
 import pytz
@@ -484,7 +484,8 @@ class Course(BasePageExtension):
             direct_course__extended_object__publisher_is_draft=is_draft,
         ).order_by("-start")
 
-    def get_course_runs_dict(self):
+    @cached_property
+    def course_runs_dict(self):
         """Returns a dict of course runs grouped by their state."""
         course_runs_dict = {
             i: [] for i in range(len(CourseState.STATE_CALLS_TO_ACTION))

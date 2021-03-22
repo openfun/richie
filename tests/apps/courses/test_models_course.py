@@ -2,6 +2,7 @@
 Unit tests for the Course model
 """
 # pylint: disable=too-many-lines
+import functools
 import random
 from unittest import mock
 
@@ -621,6 +622,29 @@ class CourseModelsTestCase(TestCase):
             reverse=True,
         )
         self.assertEqual(result, expected_public_course_runs)
+
+    def test_models_course_course_runs_dict(self):
+        """The `course_runs_dict` property should be computed on once per request."""
+        course = factories.CourseFactory()
+
+        # Create random course runs for this course
+        factories.CourseRunFactory.create_batch(3, direct_course=course)
+        course.extended_object.publish("en")
+        course.refresh_from_db()
+
+        with self.assertNumQueries(4):
+            runs_dict = course.public_extension.course_runs_dict
+        self.assertEqual(
+            functools.reduce(lambda x, k: x + len(runs_dict[k]), runs_dict, 0), 3
+        )
+
+        # Check that getting the dict a second time gets it from the instance cache
+        with self.assertNumQueries(0):
+            runs_dict = course.public_extension.course_runs_dict
+
+        self.assertEqual(
+            functools.reduce(lambda x, k: x + len(runs_dict[k]), runs_dict, 0), 3
+        )
 
     def test_models_course_get_programs(self):
         """
