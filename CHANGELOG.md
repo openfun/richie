@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Cache getting the course runs dictionary from the course model
 - Take fallback languages into account in page extension plugins
 - Load components lazily in Root component
 

@@ -281,7 +281,7 @@
 
             {% block runs %}
                 <div class="course-detail__aside">
-                    {% with runs_dict=course.get_course_runs_dict %}
+                    {% with runs_dict=course.course_runs_dict %}
                         {% block runs_open %}
                             <div class="course-detail__row course-detail__runs course-detail__runs--open">
                                 <h2 class="course-detail__title">
