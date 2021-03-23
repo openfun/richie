@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [2.3.0] - 2021-03-23
+
 ### Changed
 
 - Cache getting the course runs dictionary from the course model
@@ -1218,7 +1220,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.2.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.3.0...master
+[2.3.0]: https://github.com/openfun/richie/compare/v2.2.0...v2.3.0
 [2.2.0]: https://github.com/openfun/richie/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/openfun/richie/compare/v2.0.1...v2.1.0
 [2.0.1]: https://github.com/openfun/richie/compare/v2.0.0...v2.0.1
