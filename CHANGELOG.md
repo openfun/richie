@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Fix course enrollment execution stack timing issue
+
 ## [2.3.0] - 2021-03-23
 
 ### Changed

@@ -92,10 +92,13 @@ type ReducerAction =
   | { type: ActionType.ENROLL }
   | { type: ActionType.ERROR; payload: { error: Error } };
 
-const initialState = (courseRun: CourseRunEnrollmentProps['courseRun']) => ({
+const initialState = (
+  user: Maybe<Nullable<User>>,
+  courseRun: CourseRunEnrollmentProps['courseRun'],
+) => ({
   step: Step.LOADING,
   context: {
-    currentUser: undefined,
+    currentUser: user,
     courseRun,
     isEnrolled: undefined,
   },
@@ -139,6 +142,7 @@ const reducer = ({ step, context }: ReducerState, action: ReducerAction): Reduce
 };
 
 const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonDataProps> = (props) => {
+  const { user, login } = useSession();
   const [
     {
       step,
@@ -148,10 +152,9 @@ const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonDataProps> 
     dispatch,
   ] = useReducer<React.Reducer<ReducerState, ReducerAction>, ReducerState>(
     reducer,
-    initialState(props.courseRun),
+    initialState(user, props.courseRun),
     (s) => s,
   );
-  const { user, login } = useSession();
 
   const enroll = useCallback(async () => {
     dispatch({ type: ActionType.ENROLL });
