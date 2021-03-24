@@ -20,8 +20,11 @@ $ make migrate
 
 - A new `COURSE_RUN_SYNC_NO_UPDATE_FIELDS` setting has been added to `RICHIE_LMS_BACKENDS`.
   These fields will not be updated by the course run synchronization hook.
-- A css `.banner` component has been created. You may have to import the component style
+- A css `.banner` component has been created. You need to import the component style
   `objects/_banner.scss` into your main stylesheet to be able to use it.
+- A css LtiConsumer component has been created for the new LTI consumer plugin. You need to
+  import the component style `../js/components/LtiConsumer/styles` into your main stylesheet
+  so the LTI consumer plugin renders as expected.
 
 ## 2.0.x to 2.1.x
 
