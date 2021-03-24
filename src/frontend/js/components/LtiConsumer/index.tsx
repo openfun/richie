@@ -16,10 +16,7 @@ const LtiConsumer = ({
       // Retrieve and inject current component container height to prevent flickering
       // and remove aspect-ratio trick which is not compatible with iframeResizer
       const componentContainer = document.querySelector('.richie-react--lti-consumer');
-      iframeResizer(
-        { sizeWidth: true, minHeight: componentContainer?.clientHeight },
-        iframeRef.current!,
-      );
+      iframeResizer({ minHeight: componentContainer?.clientHeight }, iframeRef.current!);
       componentContainer?.classList.remove('aspect-ratio');
       componentContainer?.attributes.removeNamedItem('style');
     }
@@ -45,7 +42,8 @@ const LtiConsumer = ({
         name="lti_iframe"
         title={url}
         src={url}
-        allow="microphone *; camera *; midi *; geolocation *; encrypted-media *"
+        allow="microphone *; camera *; midi *; geolocation *; encrypted-media *; fullscreen *"
+        allowFullScreen
       />
     </div>
   );

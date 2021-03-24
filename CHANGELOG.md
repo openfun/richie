@@ -8,6 +8,14 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Fix layout issue on LTI consumer resizing
+
+### Added
+
+- Allow fullscreen within LTI consumer iframe
+
 ## [2.3.1] - 2021-03-24
 
 ### Fixed
