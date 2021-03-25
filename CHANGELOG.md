@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Fix page extension plugins string representation
+
 ## [2.3.2] - 2021-03-25
 
 ### Fixed

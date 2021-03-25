@@ -225,5 +225,9 @@ class CategoryPluginModel(CMSPlugin):
         verbose_name = _("category plugin")
         verbose_name_plural = _("category plugins")
 
+    def __str__(self):
+        """Human representation of a page plugin"""
+        return self.page.get_title()
+
 
 extension_pool.register(Category)

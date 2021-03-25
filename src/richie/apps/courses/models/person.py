@@ -143,5 +143,9 @@ class PersonPluginModel(CMSPlugin):
         verbose_name = _("person plugin")
         verbose_name_plural = _("person plugins")
 
+    def __str__(self):
+        """Human representation of a page plugin"""
+        return self.page.get_title()
+
 
 extension_pool.register(Person)

@@ -980,6 +980,10 @@ class CoursePluginModel(CMSPlugin):
         verbose_name = _("course plugin")
         verbose_name_plural = _("course plugins")
 
+    def __str__(self):
+        """Human representation of a page plugin"""
+        return self.page.get_title()
+
 
 class Licence(TranslatableModel):
     """
