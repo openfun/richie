@@ -1,6 +1,6 @@
 {
   "name": "richie-education",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "description": "A CMS for Open Education",
   "main": "sandbox/manage.py",
   "scripts": {

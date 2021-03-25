@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [2.3.3] - 2021-03-25
+
 ### Fixed
 
 - Fix page extension plugins string representation
@@ -1240,7 +1242,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.3.2...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.3.3...master
+[2.3.3]: https://github.com/openfun/richie/compare/v2.3.2...v2.3.3
 [2.3.2]: https://github.com/openfun/richie/compare/v2.3.1...v2.3.2
 [2.3.1]: https://github.com/openfun/richie/compare/v2.3.0...v2.3.1
 [2.3.0]: https://github.com/openfun/richie/compare/v2.2.0...v2.3.0
