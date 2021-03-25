@@ -248,6 +248,10 @@ class OrganizationPluginModel(CMSPlugin):
         verbose_name = _("organization plugin")
         verbose_name_plural = _("organization plugins")
 
+    def __str__(self):
+        """Human representation of a page plugin"""
+        return self.page.get_title()
+
 
 class OrganizationsByCategoryPluginModel(CMSPlugin):
     """

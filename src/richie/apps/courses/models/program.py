@@ -50,5 +50,9 @@ class ProgramPluginModel(CMSPlugin):
         verbose_name = _("program plugin")
         verbose_name_plural = _("program plugins")
 
+    def __str__(self):
+        """Human representation of a page plugin"""
+        return self.page.get_title()
+
 
 extension_pool.register(Program)

@@ -105,5 +105,9 @@ class BlogPostPluginModel(CMSPlugin):
         verbose_name = _("blog post plugin")
         verbose_name_plural = _("blog post plugins")
 
+    def __str__(self):
+        """Human representation of a page plugin"""
+        return self.page.get_title()
+
 
 extension_pool.register(BlogPost)
