@@ -8,17 +8,22 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
-### Removed
+### Added
 
-- Creation date displayed on program glimpses
+- Add support for language fallback to get page extensions reversely related
+  to a page via a plugin
+
+### Changed
+
+- Retrieve LTI Consumer plugin context through an API endpoint
 
 ### Fixed
 
 - Fix pace computation when it is under an hour
 
-### Changed
+### Removed
 
-- Retrieve LTI Consumer plugin context through an API endpoint
+- Creation date displayed on program glimpses
 
 ## [2.3.3] - 2021-03-25
 

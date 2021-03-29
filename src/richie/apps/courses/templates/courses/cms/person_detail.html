@@ -112,9 +112,7 @@
                         <section class="course-glimpse-list">
                             <h2 class="person-detail__title">{% trans "Courses" %}</h2>
                             {% for course in page_obj.object_list %}
-                                {% if course.extended_object.publisher_is_draft or course.check_publication %}
-                                    {% include "courses/cms/fragment_course_glimpse.html" with course=course %}
-                                {% endif %}
+                                {% include "courses/cms/fragment_course_glimpse.html" with course=course %}
                             {% endfor %}
                             {% if paginator.num_pages > 1 %}
                                 {% paginate using "richie/pagination.html" %}
@@ -140,9 +138,7 @@
                         <section class="blogpost-glimpse-list">
                             <h2 class="person-detail__title">{% trans "Blogposts" %}</h2>
                             {% for blogpost in page_obj.object_list %}
-                                {% if blogpost.extended_object.publisher_is_draft or blogpost.check_publication %}
-                                    {% include "courses/cms/fragment_blogpost_glimpse.html" with blogpost=blogpost %}
-                                {% endif %}
+                                {% include "courses/cms/fragment_blogpost_glimpse.html" with blogpost=blogpost %}
                             {% endfor %}
                             {% if paginator.num_pages > 1 %}
                                 {% paginate using "richie/pagination.html" %}

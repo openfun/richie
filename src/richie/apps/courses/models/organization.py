@@ -1,18 +1,15 @@
 """
 Declare and configure the models for the courses application
 """
-from django.apps import apps
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import Prefetch
-from django.utils import translation
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
 from cms.api import Page, PagePermission
 from cms.extensions.extension_pool import extension_pool
-from cms.models import CMSPlugin, Title
+from cms.models import CMSPlugin
 from filer.models import FolderPermission
 
 from ...core.helpers import get_permissions
@@ -159,32 +156,8 @@ class Organization(BasePageExtension):
         Return a query to get the courses related to this organization ie for which a plugin for
         this organization is linked to the course page via any placeholder.
         """
-        is_draft = self.extended_object.publisher_is_draft
-        organization = self if is_draft else self.draft_extension
-        language = language or translation.get_language()
-
-        bfs = "extended_object__placeholders__cmsplugin__courses_organizationpluginmodel__page"
-        filter_dict = {
-            "extended_object__node__parent__cms_pages__course__isnull": True,
-            "extended_object__publisher_is_draft": is_draft,
-            "extended_object__placeholders__cmsplugin__language": language,
-            bfs: organization.extended_object,
-        }
-
-        course_model = apps.get_model(app_label="courses", model_name="course")
-        # pylint: disable=no-member
-        return (
-            course_model.objects.filter(**filter_dict)
-            .select_related("extended_object")
-            .prefetch_related(
-                Prefetch(
-                    "extended_object__title_set",
-                    to_attr="prefetched_titles",
-                    queryset=Title.objects.filter(language=language),
-                )
-            )
-            .order_by("extended_object__node__path")
-            .distinct()
+        return self.get_reverse_related_page_extensions("course", language=language).filter(
+            extended_object__node__parent__cms_pages__course__isnull=True
         )
 
     def get_persons(self, language=None):
@@ -192,31 +165,7 @@ class Organization(BasePageExtension):
         Return a query to get the persons related to this organization ie for which a plugin for
         this organization is linked to the person page via any placeholder.
         """
-        is_draft = self.extended_object.publisher_is_draft
-        organization = self if is_draft else self.draft_extension
-        language = language or translation.get_language()
-
-        bfs = "extended_object__placeholders__cmsplugin__courses_organizationpluginmodel__page"
-        filter_dict = {
-            "extended_object__publisher_is_draft": is_draft,
-            "extended_object__placeholders__cmsplugin__language": language,
-            bfs: organization.extended_object,
-        }
-
-        person_model = apps.get_model(app_label="courses", model_name="person")
-        # pylint: disable=no-member
-        return (
-            person_model.objects.filter(**filter_dict)
-            .select_related("extended_object")
-            .prefetch_related(
-                Prefetch(
-                    "extended_object__title_set",
-                    to_attr="prefetched_titles",
-                    queryset=Title.objects.filter(language=language),
-                )
-            )
-            .distinct()
-        )
+        return self.get_reverse_related_page_extensions("person", language=language)
 
 
 class OrganizationPluginModel(CMSPlugin):

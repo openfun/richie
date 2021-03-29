@@ -2,6 +2,8 @@
 Unit tests for the Person model
 """
 from django.test import TestCase
+from django.test.utils import override_settings
+from django.utils import translation
 
 from cms.api import add_plugin, create_page
 
@@ -47,6 +49,220 @@ class PersonModelsTestCase(TestCase):
                 self.assertEqual(
                     course.extended_object.prefetched_titles[0].title, "my title"
                 )
+
+    def test_models_person_get_courses_language_fallback_draft(self):
+        """
+        Validate that the reverse courses lookup works as expected with language fallback
+        on a draft page.
+        """
+        person1, person2, person3 = PersonFactory.create_batch(3, should_publish=True)
+        course = CourseFactory(should_publish=True)
+        placeholder = course.extended_object.placeholders.get(slot="course_team")
+        cms_languages = {
+            "default": {
+                "public": True,
+                "hide_untranslated": False,
+                "redirect_on_fallback": False,
+                "fallbacks": ["en", "fr", "de"],
+            }
+        }
+
+        # Reverse plugin lookups should fallback up to the second priority language
+        add_plugin(
+            language="de",
+            placeholder=placeholder,
+            plugin_type="PersonPlugin",
+            **{"page": person1.extended_object},
+        )
+        with override_settings(CMS_LANGUAGES=cms_languages):
+            with translation.override("en"):
+                self.assertEqual(list(person1.get_courses()), [course])
+                self.assertEqual(list(person2.get_courses()), [])
+                self.assertEqual(list(person3.get_courses()), [])
+
+            with translation.override("fr"):
+                self.assertEqual(list(person1.get_courses()), [course])
+                self.assertEqual(list(person2.get_courses()), [])
+                self.assertEqual(list(person3.get_courses()), [])
+
+            with translation.override("de"):
+                self.assertEqual(list(person1.get_courses()), [course])
+                self.assertEqual(list(person2.get_courses()), [])
+                self.assertEqual(list(person3.get_courses()), [])
+
+        # Reverse plugin lookups should fallback to the first priority language if available
+        # and ignore the second priority language unless it is the current language
+        add_plugin(
+            language="fr",
+            placeholder=placeholder,
+            plugin_type="PersonPlugin",
+            **{"page": person2.extended_object},
+        )
+        with override_settings(CMS_LANGUAGES=cms_languages):
+            with translation.override("en"):
+                self.assertEqual(list(person1.get_courses()), [])
+                self.assertEqual(list(person2.get_courses()), [course])
+                self.assertEqual(list(person3.get_courses()), [])
+
+            with translation.override("fr"):
+                self.assertEqual(list(person1.get_courses()), [])
+                self.assertEqual(list(person2.get_courses()), [course])
+                self.assertEqual(list(person3.get_courses()), [])
+
+            with translation.override("de"):
+                self.assertEqual(list(person1.get_courses()), [course])
+                self.assertEqual(list(person2.get_courses()), [])
+                self.assertEqual(list(person3.get_courses()), [])
+
+        # Reverse plugin lookups should stick to the current language if available and
+        # ignore plugins on fallback languages
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="PersonPlugin",
+            **{"page": person3.extended_object},
+        )
+        with override_settings(CMS_LANGUAGES=cms_languages):
+            with translation.override("en"):
+                self.assertEqual(list(person1.get_courses()), [])
+                self.assertEqual(list(person2.get_courses()), [])
+                self.assertEqual(list(person3.get_courses()), [course])
+
+            with translation.override("fr"):
+                self.assertEqual(list(person1.get_courses()), [])
+                self.assertEqual(list(person2.get_courses()), [course])
+                self.assertEqual(list(person3.get_courses()), [])
+
+            with translation.override("de"):
+                self.assertEqual(list(person1.get_courses()), [course])
+                self.assertEqual(list(person2.get_courses()), [])
+                self.assertEqual(list(person3.get_courses()), [])
+
+    @override_settings(
+        LANGUAGES=(("en", "en"), ("fr", "fr"), ("de", "de")),
+        CMS_LANGUAGES={
+            "default": {
+                "public": True,
+                "hide_untranslated": False,
+                "redirect_on_fallback": False,
+                "fallbacks": ["en", "fr", "de"],
+            }
+        },
+    )
+    # pylint: disable=too-many-statements
+    def test_models_person_get_courses_language_fallback_published(self):
+        """
+        Validate that the reverse courses lookup works as expected with language fallback
+        on a published page.
+        """
+        person1, person2, person3 = PersonFactory.create_batch(3, should_publish=True)
+        public_person1 = person1.public_extension
+        public_person2 = person2.public_extension
+        public_person3 = person3.public_extension
+
+        course, course_unpublished = CourseFactory.create_batch(
+            2, page_languages=["en", "fr", "de"], should_publish=True
+        )
+
+        public_course = course.public_extension
+
+        public_course_unpublished = course_unpublished.public_extension
+        course_unpublished.extended_object.unpublish("en")
+        course_unpublished.extended_object.unpublish("fr")
+        course_unpublished.extended_object.unpublish("de")
+
+        placeholder = public_course.extended_object.placeholders.get(slot="course_team")
+        placeholder_unpublished = (
+            public_course_unpublished.extended_object.placeholders.get(
+                slot="course_team"
+            )
+        )
+        # Reverse plugin lookups should fallback up to the second priority language
+        add_plugin(
+            language="de",
+            placeholder=placeholder,
+            plugin_type="PersonPlugin",
+            **{"page": person1.extended_object},
+        )
+        add_plugin(
+            language="de",
+            placeholder=placeholder_unpublished,
+            plugin_type="PersonPlugin",
+            **{"page": person1.extended_object},
+        )
+
+        with translation.override("en"):
+            self.assertEqual(list(public_person1.get_courses()), [public_course])
+            self.assertEqual(list(public_person2.get_courses()), [])
+            self.assertEqual(list(public_person3.get_courses()), [])
+
+        with translation.override("fr"):
+            self.assertEqual(list(public_person1.get_courses()), [public_course])
+            self.assertEqual(list(public_person2.get_courses()), [])
+            self.assertEqual(list(public_person3.get_courses()), [])
+
+        with translation.override("de"):
+            self.assertEqual(list(public_person1.get_courses()), [public_course])
+            self.assertEqual(list(public_person2.get_courses()), [])
+            self.assertEqual(list(public_person3.get_courses()), [])
+
+        # Reverse plugin lookups should fallback to the first priority language if available
+        # and ignore the second priority language unless it is the current language
+        add_plugin(
+            language="fr",
+            placeholder=placeholder,
+            plugin_type="PersonPlugin",
+            **{"page": person2.extended_object},
+        )
+        add_plugin(
+            language="fr",
+            placeholder=placeholder_unpublished,
+            plugin_type="PersonPlugin",
+            **{"page": person2.extended_object},
+        )
+        with translation.override("en"):
+            self.assertEqual(list(public_person1.get_courses()), [])
+            self.assertEqual(list(public_person2.get_courses()), [public_course])
+            self.assertEqual(list(public_person3.get_courses()), [])
+
+        with translation.override("fr"):
+            self.assertEqual(list(public_person1.get_courses()), [])
+            self.assertEqual(list(public_person2.get_courses()), [public_course])
+            self.assertEqual(list(public_person3.get_courses()), [])
+
+        with translation.override("de"):
+            self.assertEqual(list(public_person1.get_courses()), [public_course])
+            self.assertEqual(list(public_person2.get_courses()), [])
+            self.assertEqual(list(public_person3.get_courses()), [])
+
+        # Reverse plugin lookups should stick to the current language if available and
+        # ignore plugins on fallback languages
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="PersonPlugin",
+            **{"page": person3.extended_object},
+        )
+        add_plugin(
+            language="en",
+            placeholder=placeholder_unpublished,
+            plugin_type="PersonPlugin",
+            **{"page": person3.extended_object},
+        )
+        with translation.override("en"):
+            self.assertEqual(list(public_person1.get_courses()), [])
+            self.assertEqual(list(public_person2.get_courses()), [])
+            self.assertEqual(list(public_person3.get_courses()), [public_course])
+
+        with translation.override("fr"):
+            self.assertEqual(list(public_person1.get_courses()), [])
+            self.assertEqual(list(public_person2.get_courses()), [public_course])
+            self.assertEqual(list(public_person3.get_courses()), [])
+
+        with translation.override("de"):
+            self.assertEqual(list(public_person1.get_courses()), [public_course])
+            self.assertEqual(list(public_person2.get_courses()), [])
+            self.assertEqual(list(public_person3.get_courses()), [])
 
     def test_models_person_get_courses_public_person_page(self):
         """
@@ -130,6 +346,218 @@ class PersonModelsTestCase(TestCase):
                 self.assertEqual(
                     blogpost.extended_object.prefetched_titles[0].title, "my title"
                 )
+
+    def test_models_person_get_blogposts_language_fallback_draft(self):
+        """
+        Validate that the reverse blogposts lookup works as expected with language fallback
+        on a draft page.
+        """
+        person1, person2, person3 = PersonFactory.create_batch(3, should_publish=True)
+        blogpost = BlogPostFactory(should_publish=True)
+        placeholder = blogpost.extended_object.placeholders.get(slot="author")
+        cms_languages = {
+            "default": {
+                "public": True,
+                "hide_untranslated": False,
+                "redirect_on_fallback": False,
+                "fallbacks": ["en", "fr", "de"],
+            }
+        }
+
+        # Reverse plugin lookups should fallback up to the second priority language
+        add_plugin(
+            language="de",
+            placeholder=placeholder,
+            plugin_type="PersonPlugin",
+            **{"page": person1.extended_object},
+        )
+        with override_settings(CMS_LANGUAGES=cms_languages):
+            with translation.override("en"):
+                self.assertEqual(list(person1.get_blogposts()), [blogpost])
+                self.assertEqual(list(person2.get_blogposts()), [])
+                self.assertEqual(list(person3.get_blogposts()), [])
+
+            with translation.override("fr"):
+                self.assertEqual(list(person1.get_blogposts()), [blogpost])
+                self.assertEqual(list(person2.get_blogposts()), [])
+                self.assertEqual(list(person3.get_blogposts()), [])
+
+            with translation.override("de"):
+                self.assertEqual(list(person1.get_blogposts()), [blogpost])
+                self.assertEqual(list(person2.get_blogposts()), [])
+                self.assertEqual(list(person3.get_blogposts()), [])
+
+        # Reverse plugin lookups should fallback to the first priority language if available
+        # and ignore the second priority language unless it is the current language
+        add_plugin(
+            language="fr",
+            placeholder=placeholder,
+            plugin_type="PersonPlugin",
+            **{"page": person2.extended_object},
+        )
+        with override_settings(CMS_LANGUAGES=cms_languages):
+            with translation.override("en"):
+                self.assertEqual(list(person1.get_blogposts()), [])
+                self.assertEqual(list(person2.get_blogposts()), [blogpost])
+                self.assertEqual(list(person3.get_blogposts()), [])
+
+            with translation.override("fr"):
+                self.assertEqual(list(person1.get_blogposts()), [])
+                self.assertEqual(list(person2.get_blogposts()), [blogpost])
+                self.assertEqual(list(person3.get_blogposts()), [])
+
+            with translation.override("de"):
+                self.assertEqual(list(person1.get_blogposts()), [blogpost])
+                self.assertEqual(list(person2.get_blogposts()), [])
+                self.assertEqual(list(person3.get_blogposts()), [])
+
+        # Reverse plugin lookups should stick to the current language if available and
+        # ignore plugins on fallback languages
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="PersonPlugin",
+            **{"page": person3.extended_object},
+        )
+        with override_settings(CMS_LANGUAGES=cms_languages):
+            with translation.override("en"):
+                self.assertEqual(list(person1.get_blogposts()), [])
+                self.assertEqual(list(person2.get_blogposts()), [])
+                self.assertEqual(list(person3.get_blogposts()), [blogpost])
+
+            with translation.override("fr"):
+                self.assertEqual(list(person1.get_blogposts()), [])
+                self.assertEqual(list(person2.get_blogposts()), [blogpost])
+                self.assertEqual(list(person3.get_blogposts()), [])
+
+            with translation.override("de"):
+                self.assertEqual(list(person1.get_blogposts()), [blogpost])
+                self.assertEqual(list(person2.get_blogposts()), [])
+                self.assertEqual(list(person3.get_blogposts()), [])
+
+    @override_settings(
+        LANGUAGES=(("en", "en"), ("fr", "fr"), ("de", "de")),
+        CMS_LANGUAGES={
+            "default": {
+                "public": True,
+                "hide_untranslated": False,
+                "redirect_on_fallback": False,
+                "fallbacks": ["en", "fr", "de"],
+            }
+        },
+    )
+    # pylint: disable=too-many-statements
+    def test_models_person_get_blogposts_language_fallback_published(self):
+        """
+        Validate that the reverse blogposts lookup works as expected with language fallback
+        on a published page.
+        """
+        person1, person2, person3 = PersonFactory.create_batch(3, should_publish=True)
+        public_person1 = person1.public_extension
+        public_person2 = person2.public_extension
+        public_person3 = person3.public_extension
+
+        blogpost, blogpost_unpublished = BlogPostFactory.create_batch(
+            2, page_languages=["en", "fr", "de"], should_publish=True
+        )
+
+        public_blogpost = blogpost.public_extension
+
+        public_blogpost_unpublished = blogpost_unpublished.public_extension
+        blogpost_unpublished.extended_object.unpublish("en")
+        blogpost_unpublished.extended_object.unpublish("fr")
+        blogpost_unpublished.extended_object.unpublish("de")
+
+        placeholder = public_blogpost.extended_object.placeholders.get(slot="author")
+        placeholder_unpublished = (
+            public_blogpost_unpublished.extended_object.placeholders.get(slot="author")
+        )
+        # Reverse plugin lookups should fallback up to the second priority language
+        add_plugin(
+            language="de",
+            placeholder=placeholder,
+            plugin_type="PersonPlugin",
+            **{"page": person1.extended_object},
+        )
+        add_plugin(
+            language="de",
+            placeholder=placeholder_unpublished,
+            plugin_type="PersonPlugin",
+            **{"page": person1.extended_object},
+        )
+
+        with translation.override("en"):
+            self.assertEqual(list(public_person1.get_blogposts()), [public_blogpost])
+            self.assertEqual(list(public_person2.get_blogposts()), [])
+            self.assertEqual(list(public_person3.get_blogposts()), [])
+
+        with translation.override("fr"):
+            self.assertEqual(list(public_person1.get_blogposts()), [public_blogpost])
+            self.assertEqual(list(public_person2.get_blogposts()), [])
+            self.assertEqual(list(public_person3.get_blogposts()), [])
+
+        with translation.override("de"):
+            self.assertEqual(list(public_person1.get_blogposts()), [public_blogpost])
+            self.assertEqual(list(public_person2.get_blogposts()), [])
+            self.assertEqual(list(public_person3.get_blogposts()), [])
+
+        # Reverse plugin lookups should fallback to the first priority language if available
+        # and ignore the second priority language unless it is the current language
+        add_plugin(
+            language="fr",
+            placeholder=placeholder,
+            plugin_type="PersonPlugin",
+            **{"page": person2.extended_object},
+        )
+        add_plugin(
+            language="fr",
+            placeholder=placeholder_unpublished,
+            plugin_type="PersonPlugin",
+            **{"page": person2.extended_object},
+        )
+        with translation.override("en"):
+            self.assertEqual(list(public_person1.get_blogposts()), [])
+            self.assertEqual(list(public_person2.get_blogposts()), [public_blogpost])
+            self.assertEqual(list(public_person3.get_blogposts()), [])
+
+        with translation.override("fr"):
+            self.assertEqual(list(public_person1.get_blogposts()), [])
+            self.assertEqual(list(public_person2.get_blogposts()), [public_blogpost])
+            self.assertEqual(list(public_person3.get_blogposts()), [])
+
+        with translation.override("de"):
+            self.assertEqual(list(public_person1.get_blogposts()), [public_blogpost])
+            self.assertEqual(list(public_person2.get_blogposts()), [])
+            self.assertEqual(list(public_person3.get_blogposts()), [])
+
+        # Reverse plugin lookups should stick to the current language if available and
+        # ignore plugins on fallback languages
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="PersonPlugin",
+            **{"page": person3.extended_object},
+        )
+        add_plugin(
+            language="en",
+            placeholder=placeholder_unpublished,
+            plugin_type="PersonPlugin",
+            **{"page": person3.extended_object},
+        )
+        with translation.override("en"):
+            self.assertEqual(list(public_person1.get_blogposts()), [])
+            self.assertEqual(list(public_person2.get_blogposts()), [])
+            self.assertEqual(list(public_person3.get_blogposts()), [public_blogpost])
+
+        with translation.override("fr"):
+            self.assertEqual(list(public_person1.get_blogposts()), [])
+            self.assertEqual(list(public_person2.get_blogposts()), [public_blogpost])
+            self.assertEqual(list(public_person3.get_blogposts()), [])
+
+        with translation.override("de"):
+            self.assertEqual(list(public_person1.get_blogposts()), [public_blogpost])
+            self.assertEqual(list(public_person2.get_blogposts()), [])
+            self.assertEqual(list(public_person3.get_blogposts()), [])
 
     def test_models_person_get_blogposts_public_person_page(self):
         """

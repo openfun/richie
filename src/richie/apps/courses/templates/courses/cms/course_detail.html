@@ -132,9 +132,7 @@
                     {% block main_organization %}
                     {% with main_organization=course.get_main_organization %}
                         {% if main_organization %}
-                            {% if main_organization.check_publication is True %}
-                                {% include "courses/cms/fragment_organization_main_logo.html" with organization=main_organization.public_extension %}
-                            {% endif %}
+                            {% include "courses/cms/fragment_organization_main_logo.html" with organization=main_organization.public_extension %}
                         {% else %}
                             {% include "courses/cms/fragment_organization_main_logo.html" with organization=None %}
                         {% endif %}
@@ -365,9 +363,7 @@
                                 </h2>
                                 <div class="section__items section__items--programs">
                                     {% for program in page_obj.object_list %}
-                                        {% if program.extended_object.publisher_is_draft or program.check_publication %}
-                                            {% include "courses/cms/fragment_program_glimpse.html" with program=program %}
-                                        {% endif %}
+                                        {% include "courses/cms/fragment_program_glimpse.html" with program=program %}
                                     {% endfor %}
                                 </div>
                                 {% if paginator.num_pages > 1 %}

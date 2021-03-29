@@ -666,6 +666,226 @@ class CourseModelsTestCase(TestCase):
                     program.extended_object.prefetched_titles[0].title, "my title"
                 )
 
+    def test_models_course_get_programs_language_fallback_draft(self):
+        """
+        Validate that the reverse programs lookup works as expected with language fallback
+        on a draft page.
+        """
+        course1, course2, course3 = factories.CourseFactory.create_batch(
+            3, should_publish=True
+        )
+        program = factories.ProgramFactory(should_publish=True)
+        placeholder = program.extended_object.placeholders.get(slot="program_courses")
+        cms_languages = {
+            "default": {
+                "public": True,
+                "hide_untranslated": False,
+                "redirect_on_fallback": False,
+                "fallbacks": ["en", "fr", "de"],
+            }
+        }
+
+        # Reverse plugin lookups should fallback up to the second priority language
+        add_plugin(
+            language="de",
+            placeholder=placeholder,
+            plugin_type="CoursePlugin",
+            **{"page": course1.extended_object},
+        )
+        with override_settings(CMS_LANGUAGES=cms_languages):
+            with translation.override("en"):
+                self.assertEqual(list(course1.get_programs()), [program])
+                self.assertEqual(list(course2.get_programs()), [])
+                self.assertEqual(list(course3.get_programs()), [])
+
+            with translation.override("fr"):
+                self.assertEqual(list(course1.get_programs()), [program])
+                self.assertEqual(list(course2.get_programs()), [])
+                self.assertEqual(list(course3.get_programs()), [])
+
+            with translation.override("de"):
+                self.assertEqual(list(course1.get_programs()), [program])
+                self.assertEqual(list(course2.get_programs()), [])
+                self.assertEqual(list(course3.get_programs()), [])
+
+        # Reverse plugin lookups should fallback to the first priority language if available
+        # and ignore the second priority language unless it is the current language
+        add_plugin(
+            language="fr",
+            placeholder=placeholder,
+            plugin_type="CoursePlugin",
+            **{"page": course2.extended_object},
+        )
+        with override_settings(CMS_LANGUAGES=cms_languages):
+            with translation.override("en"):
+                self.assertEqual(list(course1.get_programs()), [])
+                self.assertEqual(list(course2.get_programs()), [program])
+                self.assertEqual(list(course3.get_programs()), [])
+
+            with translation.override("fr"):
+                self.assertEqual(list(course1.get_programs()), [])
+                self.assertEqual(list(course2.get_programs()), [program])
+                self.assertEqual(list(course3.get_programs()), [])
+
+            with translation.override("de"):
+                self.assertEqual(list(course1.get_programs()), [program])
+                self.assertEqual(list(course2.get_programs()), [])
+                self.assertEqual(list(course3.get_programs()), [])
+
+        # Reverse plugin lookups should stick to the current language if available and
+        # ignore plugins on fallback languages
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="CoursePlugin",
+            **{"page": course3.extended_object},
+        )
+        with override_settings(CMS_LANGUAGES=cms_languages):
+            with translation.override("en"):
+                self.assertEqual(list(course1.get_programs()), [])
+                self.assertEqual(list(course2.get_programs()), [])
+                self.assertEqual(list(course3.get_programs()), [program])
+
+            with translation.override("fr"):
+                self.assertEqual(list(course1.get_programs()), [])
+                self.assertEqual(list(course2.get_programs()), [program])
+                self.assertEqual(list(course3.get_programs()), [])
+
+            with translation.override("de"):
+                self.assertEqual(list(course1.get_programs()), [program])
+                self.assertEqual(list(course2.get_programs()), [])
+                self.assertEqual(list(course3.get_programs()), [])
+
+    @override_settings(
+        LANGUAGES=(("en", "en"), ("fr", "fr"), ("de", "de")),
+        CMS_LANGUAGES={
+            "default": {
+                "public": True,
+                "hide_untranslated": False,
+                "redirect_on_fallback": False,
+                "fallbacks": ["en", "fr", "de"],
+            }
+        },
+    )
+    # pylint: disable=too-many-statements
+    def test_models_course_get_programs_language_fallback_published(self):
+        """
+        Validate that the reverse programs lookup works as expected with language fallback
+        on a published page.
+        """
+        course1, course2, course3 = factories.CourseFactory.create_batch(
+            3, should_publish=True
+        )
+        public_course1 = course1.public_extension
+        public_course2 = course2.public_extension
+        public_course3 = course3.public_extension
+
+        program, program_unpublished = factories.ProgramFactory.create_batch(
+            2, page_languages=["en", "fr", "de"], should_publish=True
+        )
+
+        public_program = program.public_extension
+
+        public_program_unpublished = program_unpublished.public_extension
+        program_unpublished.extended_object.unpublish("en")
+        program_unpublished.extended_object.unpublish("fr")
+        program_unpublished.extended_object.unpublish("de")
+
+        placeholder = public_program.extended_object.placeholders.get(
+            slot="program_courses"
+        )
+        placeholder_unpublished = (
+            public_program_unpublished.extended_object.placeholders.get(
+                slot="program_courses"
+            )
+        )
+        # Reverse plugin lookups should fallback up to the second priority language
+        add_plugin(
+            language="de",
+            placeholder=placeholder,
+            plugin_type="CoursePlugin",
+            **{"page": course1.extended_object},
+        )
+        add_plugin(
+            language="de",
+            placeholder=placeholder_unpublished,
+            plugin_type="CoursePlugin",
+            **{"page": course1.extended_object},
+        )
+
+        with translation.override("en"):
+            self.assertEqual(list(public_course1.get_programs()), [public_program])
+            self.assertEqual(list(public_course2.get_programs()), [])
+            self.assertEqual(list(public_course3.get_programs()), [])
+
+        with translation.override("fr"):
+            self.assertEqual(list(public_course1.get_programs()), [public_program])
+            self.assertEqual(list(public_course2.get_programs()), [])
+            self.assertEqual(list(public_course3.get_programs()), [])
+
+        with translation.override("de"):
+            self.assertEqual(list(public_course1.get_programs()), [public_program])
+            self.assertEqual(list(public_course2.get_programs()), [])
+            self.assertEqual(list(public_course3.get_programs()), [])
+
+        # Reverse plugin lookups should fallback to the first priority language if available
+        # and ignore the second priority language unless it is the current language
+        add_plugin(
+            language="fr",
+            placeholder=placeholder,
+            plugin_type="CoursePlugin",
+            **{"page": course2.extended_object},
+        )
+        add_plugin(
+            language="fr",
+            placeholder=placeholder_unpublished,
+            plugin_type="CoursePlugin",
+            **{"page": course2.extended_object},
+        )
+        with translation.override("en"):
+            self.assertEqual(list(public_course1.get_programs()), [])
+            self.assertEqual(list(public_course2.get_programs()), [public_program])
+            self.assertEqual(list(public_course3.get_programs()), [])
+
+        with translation.override("fr"):
+            self.assertEqual(list(public_course1.get_programs()), [])
+            self.assertEqual(list(public_course2.get_programs()), [public_program])
+            self.assertEqual(list(public_course3.get_programs()), [])
+
+        with translation.override("de"):
+            self.assertEqual(list(public_course1.get_programs()), [public_program])
+            self.assertEqual(list(public_course2.get_programs()), [])
+            self.assertEqual(list(public_course3.get_programs()), [])
+
+        # Reverse plugin lookups should stick to the current language if available and
+        # ignore plugins on fallback languages
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="CoursePlugin",
+            **{"page": course3.extended_object},
+        )
+        add_plugin(
+            language="en",
+            placeholder=placeholder_unpublished,
+            plugin_type="CoursePlugin",
+            **{"page": course3.extended_object},
+        )
+        with translation.override("en"):
+            self.assertEqual(list(public_course1.get_programs()), [])
+            self.assertEqual(list(public_course2.get_programs()), [])
+            self.assertEqual(list(public_course3.get_programs()), [public_program])
+
+        with translation.override("fr"):
+            self.assertEqual(list(public_course1.get_programs()), [])
+            self.assertEqual(list(public_course2.get_programs()), [public_program])
+            self.assertEqual(list(public_course3.get_programs()), [])
+
+        with translation.override("de"):
+            self.assertEqual(list(public_course1.get_programs()), [public_program])
+            self.assertEqual(list(public_course2.get_programs()), [])
+            self.assertEqual(list(public_course3.get_programs()), [])
+
     def test_models_course_get_programs_public_course_page(self):
         """
         When a course is added on a draft program, the program should not be visible on
@@ -1022,9 +1242,7 @@ class CourseModelsTestCase(TestCase):
         get_pace should return None if course is self paced.
         """
         course = factories.CourseFactory(
-            duration=[5, "week"],
-            effort=[2, "hour"],
-            is_self_paced=True,
+            duration=[5, "week"], effort=[2, "hour"], is_self_paced=True
         )
         self.assertIsNone(course.get_pace())
 
@@ -1033,18 +1251,13 @@ class CourseModelsTestCase(TestCase):
         get_pace should raise a ValueError if effort is empty.
         """
         course = factories.CourseFactory(
-            duration=[1, "hour"],
-            effort=None,
-            is_self_paced=False,
+            duration=[1, "hour"], effort=None, is_self_paced=False
         )
 
         with self.assertRaises(ValueError) as context:
             course.get_pace()
 
-        self.assertEqual(
-            str(context.exception),
-            "Cannot compute pace without effort.",
-        )
+        self.assertEqual(str(context.exception), "Cannot compute pace without effort.")
 
     def test_models_course_get_pace_with_uncomputable_values(self):
         """
@@ -1095,9 +1308,7 @@ class CourseModelsTestCase(TestCase):
         If pace is near to 0, at least a 5 minutes pace should be display.
         """
         course = factories.CourseFactory(
-            duration=[7, "day"],
-            effort=[10, "minute"],
-            is_self_paced=False,
+            duration=[7, "day"], effort=[10, "minute"], is_self_paced=False
         )
         self.assertEqual(course.get_pace_display(), "~5 minutes/day")
 
@@ -1126,9 +1337,7 @@ class CourseModelsTestCase(TestCase):
         """
         If course is self paced, a "Self paced" label should be display
         """
-        course = factories.CourseFactory(
-            is_self_paced=True,
-        )
+        course = factories.CourseFactory(is_self_paced=True)
         self.assertEqual(course.get_pace_display(), "Self paced")
 
     def test_models_course_get_pace_display_with_empty_effort(self):
