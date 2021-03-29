@@ -10,13 +10,13 @@ from django.conf import settings
 from django.test import override_settings
 
 from cms.constants import PUBLISHER_STATE_DEFAULT, PUBLISHER_STATE_DIRTY
-from cms.models import Page
+from cms.models import Page, Title
 from cms.signals import post_publish
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.courses.factories import CourseFactory, CourseRunFactory
 from richie.apps.courses.lms.edx import SyncCourseRunSerializer
-from richie.apps.courses.models import Course, CourseRun, Title
+from richie.apps.courses.models import Course, CourseRun
 
 
 @mock.patch.object(post_publish, "send", wraps=post_publish.send)

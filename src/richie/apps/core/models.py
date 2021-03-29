@@ -1,8 +1,10 @@
 """Define a custom manager for page extensions"""
+from django.apps import apps
 from django.db import models
 from django.utils import translation
 
 from cms.extensions import PageExtension
+from cms.models import Title
 from cms.utils import get_current_site, i18n, page_permissions
 
 
@@ -114,12 +116,7 @@ class PageExtensionManager(models.Manager):
 
 class BasePageExtension(PageExtension):
     """
-    The organization page extension represents and records entities that manage courses.
-    It could be a university or a training company for example.
-
-    This model should be used to record structured data about the organization whereas the
-    associated page object is where we record the less structured information to display on the
-    page to present the organization.
+    The base page extension class is used as base for all our page extension models
     """
 
     objects = PageExtensionManager()
@@ -144,3 +141,93 @@ class BasePageExtension(PageExtension):
         """
         language = language or translation.get_language()
         return self.extended_object.is_published(language)
+
+    # pylint: disable=too-many-locals
+    def get_reverse_related_page_extensions(
+        self, model_name, language=None, include_descendants=False
+    ):
+        """
+        Return a query to get the page extensions of a given model type related to the current
+        page extension instance.
+
+        For example: for an organization, it will return all courses that are pointing to this
+        organization via an OrganizationPlugin in any placeholder of the course page.
+        """
+        is_draft = self.extended_object.publisher_is_draft
+        # pylint: disable=no-member
+        page_extension = self if is_draft else self.draft_extension
+        page = page_extension.extended_object
+        current_language = language or translation.get_language()
+        site = get_current_site()
+
+        languages = [current_language] + i18n.get_fallback_languages(
+            current_language, site_id=site.pk
+        )
+        languages = list(dict.fromkeys(languages))
+
+        for item in range(len(languages)):
+            for previous_item, previous_language in enumerate(languages[: item + 1]):
+
+                qop_dict = {
+                    "extended_object__placeholders__cmsplugin__language": previous_language
+                }
+                if previous_item == item:
+                    if not is_draft:
+                        qop_dict.update(
+                            {
+                                "extended_object__title_set__language": previous_language,
+                                "extended_object__title_set__published": True,
+                            }
+                        )
+                    qop = models.Q(**qop_dict)
+                else:
+                    qop = ~models.Q(**qop_dict)
+
+                if previous_item == 0:
+                    subclause = qop
+                else:
+                    subclause &= qop
+
+            if item == 0:
+                language_clause = subclause
+            else:
+                language_clause |= subclause
+
+        self_name = self._meta.model.__name__.lower()
+        if include_descendants is True:
+            bfs = (
+                "extended_object__placeholders__cmsplugin__"
+                f"courses_{self_name:s}pluginmodel__page__node"
+            )
+            selector = {
+                f"{bfs:s}__path__startswith": page.node.path,
+                f"{bfs:s}__depth__gte": page.node.depth,
+            }
+        else:
+            bfs = (
+                "extended_object__placeholders__cmsplugin__courses_"
+                f"{self_name:s}pluginmodel__page"
+            )
+            selector = {bfs: page}
+
+        page_extension_model = apps.get_model(
+            app_label="courses", model_name=model_name
+        )
+        # pylint: disable=no-member
+        return (
+            page_extension_model.objects.filter(
+                language_clause,
+                extended_object__publisher_is_draft=is_draft,
+                **selector,
+            )
+            .select_related("extended_object")
+            .prefetch_related(
+                models.Prefetch(
+                    "extended_object__title_set",
+                    to_attr="prefetched_titles",
+                    queryset=Title.objects.filter(language=current_language),
+                )
+            )
+            .distinct()
+            .order_by("extended_object__node__path")
+        )
