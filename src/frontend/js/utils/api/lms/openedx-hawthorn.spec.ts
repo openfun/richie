@@ -41,7 +41,8 @@ describe('OpenEdX Hawthorn API', () => {
 
   describe('enrollment', () => {
     beforeEach(() => {
-      courseId = faker.random.uuid();
+      // TODO remove `as any` when @types/faker will be up to date.
+      courseId = (faker as any).datatype.uuid();
       username = faker.internet.userName();
       fetchMock.restore();
       mockHandle.mockRestore();
