@@ -21,6 +21,8 @@ class LTIConsumer(CMSPlugin):
     LTI consumer plugin model.
     """
 
+    RESOURCE_NAME = "lti-consumer"
+
     url = models.URLField(
         verbose_name=_("LTI url"),
         help_text=_(

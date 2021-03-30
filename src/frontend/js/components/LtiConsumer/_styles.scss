@@ -1,12 +1,16 @@
 .lti-consumer {
-  animation: fadeIn 400ms ease-out forwards;
+  animation: fadeIn 600ms cubic-bezier(0.33, 1, 0.68, 1) forwards;
   background-color: #ffffff;
+
+  & > form {
+    display: none;
+  }
 }
 @keyframes fadeIn {
   from {
-    background-color: #ffffff00;
+    opacity: 0;
   }
   to {
-    background-color: #ffffff;
+    opacity: 1;
   }
 }

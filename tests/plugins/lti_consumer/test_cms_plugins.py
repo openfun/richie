@@ -1,7 +1,5 @@
 """Testing DjangoCMS plugin declaration for Richie's LTI consumer plugin."""
-import json
 import random
-from unittest import mock
 
 from django.contrib.auth.models import AnonymousUser
 from django.test import TestCase, override_settings
@@ -13,19 +11,14 @@ from cms.plugin_rendering import ContentRenderer
 from cms.toolbar.toolbar import CMSToolbar
 
 from richie.plugins.lti_consumer.cms_plugins import LTIConsumerPlugin
-from richie.plugins.lti_consumer.models import LTIConsumer
 
 
 class LTIConsumerPluginTestCase(TestCase):
     """Test suite for the LTI consumer plugin."""
 
-    @mock.patch.object(
-        LTIConsumer, "get_content_parameters", return_value="test_content"
-    )
-    def test_cms_plugins_lti_consumer_context_and_html(self, mock_params):
+    def test_cms_plugins_lti_consumer_context_and_html(self):
         """
-        Instanciating this plugin with an instance should populate the context
-        and render in the template.
+        Instanciating this plugin with an instance should render the template.
         """
         placeholder = Placeholder.objects.create(slot="test")
 
@@ -65,19 +58,9 @@ class LTIConsumerPluginTestCase(TestCase):
             context = plugin_instance.render(global_context, model_instance, None)
 
         self.assertEqual(context["instance"], model_instance)
-        widget_props = json.loads(context["widget_props"])
-        self.assertEqual(widget_props["automatic_resizing"], resizing)
-        self.assertEqual(widget_props["url"], "http://localhost:8060/lti/videos/")
-        self.assertEqual(widget_props["content_parameters"], "test_content")
-        mock_params.assert_called_once_with(edit=edit)
-
-        # Check rendered url is correct after save and sanitize
-        mock_params.reset_mock()
         renderer = ContentRenderer(request=request)
         with override_settings(RICHIE_LTI_PROVIDERS=lti_providers):
             html = renderer.render_plugin(model_instance, global_context)
 
-        self.assertIn(url, html)
-        self.assertIn("test_content", html)
+        self.assertIn(str(model_instance.pk), html)
         self.assertIn('style="padding-bottom: 33.12%"', html)
-        mock_params.assert_called_once_with(edit=edit)

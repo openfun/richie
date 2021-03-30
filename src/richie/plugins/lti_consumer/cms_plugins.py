@@ -1,8 +1,6 @@
 """
 LTI consumer CMS plugin
 """
-import json
-
 from django.utils.translation import gettext_lazy as _
 
 from cms.plugin_base import CMSPluginBase
@@ -35,24 +33,3 @@ class LTIConsumerPlugin(CMSPluginBase):
         """
 
         js = ("lti_consumer/js/change_form.js",)
-
-    def render(self, context, instance, placeholder):
-        """
-        Build plugin context passed to its template to perform rendering
-        and pass edit mode
-        """
-        edit = (
-            "request" in context
-            and context["request"].toolbar
-            and context["request"].toolbar.edit_mode_active
-        )
-
-        context = super().render(context, instance, placeholder)
-        context["widget_props"] = json.dumps(
-            {
-                "url": instance.url,
-                "content_parameters": instance.get_content_parameters(edit=edit),
-                "automatic_resizing": instance.automatic_resizing,
-            }
-        )
-        return context
