@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Fix pace computation when it is under an hour
+
 ## [2.3.3] - 2021-03-25
 
 ### Fixed
