@@ -16,6 +16,9 @@ $ make migrate
 
 ## Unreleased
 
+- An API endpoint has been created to retrieve the context of a LTI Consumer plugin.
+  You need to append this route to api routes in your `urls` configuration.
+
 ## 2.1.x to 2.2.x
 
 - A new `COURSE_RUN_SYNC_NO_UPDATE_FIELDS` setting has been added to `RICHIE_LMS_BACKENDS`.

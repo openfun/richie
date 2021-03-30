@@ -1,47 +1,63 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { iframeResizer } from 'iframe-resizer';
-import { LtiConsumer as LtiConsumerProps } from 'types/LtiConsumer';
+import { LtiConsumerContext, LtiConsumerProps } from 'types/LtiConsumer';
+import { useAsyncEffect } from 'utils/useAsyncEffect';
+import { handle } from 'utils/errors/handle';
 
-const LtiConsumer = ({
-  url,
-  content_parameters: contentParameters,
-  automatic_resizing,
-}: LtiConsumerProps) => {
+const LtiConsumer = ({ id }: LtiConsumerProps) => {
   const formRef = React.useRef<HTMLFormElement>(null);
   const iframeRef = React.useRef<HTMLIFrameElement>(null);
+  const [context, setContext] = useState<LtiConsumerContext>();
+
+  const checkResponseStatus = (response: Response) => {
+    if (!response.ok) {
+      throw new Error(`Failed to retrieve LTI consumer context at placeholder ${id}`);
+    }
+    return response.json();
+  };
+
+  useAsyncEffect(async () => {
+    await fetch(`/api/v1.0/plugins/lti-consumer/${id}/context/`)
+      .then(checkResponseStatus)
+      .then(setContext)
+      .catch(handle);
+  }, []);
 
   useEffect(() => {
-    formRef.current?.submit();
-    if (automatic_resizing) {
-      // Retrieve and inject current component container height to prevent flickering
-      // and remove aspect-ratio trick which is not compatible with iframeResizer
-      const componentContainer = document.querySelector('.richie-react--lti-consumer');
-      iframeResizer({ minHeight: componentContainer?.clientHeight }, iframeRef.current!);
-      componentContainer?.classList.remove('aspect-ratio');
-      componentContainer?.attributes.removeNamedItem('style');
+    if (context) {
+      formRef.current?.submit();
+      if (context.automatic_resizing) {
+        // Retrieve and inject current component container height to prevent flickering
+        // and remove aspect-ratio trick which is not compatible with iframeResizer
+        const componentContainer = document.querySelector('.richie-react--lti-consumer');
+        iframeResizer({ minHeight: componentContainer?.clientHeight }, iframeRef.current!);
+        componentContainer?.classList.remove('aspect-ratio');
+        componentContainer?.attributes.removeNamedItem('style');
+      }
     }
-  }, []);
+  }, [context]);
+
+  if (!context) return <div className="lti-consumer" />;
 
   return (
     <div className="lti-consumer">
       <form
         id="lti_form"
         ref={formRef}
-        action={url}
+        action={context.url}
         method="POST"
         encType="application/x-www-form-urlencoded"
         target="lti_iframe"
-        style={{ display: 'none' }}
       >
-        {Object.entries(contentParameters).map(([name, value]) => (
+        {Object.entries(context.content_parameters).map(([name, value]) => (
           <input key={name} type="hidden" name={name} value={value} />
         ))}
       </form>
       <iframe
         ref={iframeRef}
         name="lti_iframe"
-        title={url}
-        src={url}
+        title={context.url}
+        src={context.url}
         allow="microphone *; camera *; midi *; geolocation *; encrypted-media *; fullscreen *"
         allowFullScreen
       />

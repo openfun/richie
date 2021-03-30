@@ -14,9 +14,12 @@ export interface LtiConsumerContentParameters {
   roles: string;
   user_id: string;
 }
-
-export interface LtiConsumer {
+export interface LtiConsumerContext {
   url: string;
   content_parameters: LtiConsumerContentParameters;
   automatic_resizing: boolean;
+}
+
+export interface LtiConsumerProps {
+  id: number;
 }
