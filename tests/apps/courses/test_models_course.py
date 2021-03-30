@@ -1111,6 +1111,9 @@ class CourseModelsTestCase(TestCase):
         course = factories.CourseFactory(duration=[7, "day"], effort=[350, "minute"])
         self.assertEqual(course.get_pace_display(), "~45 minutes/day")
 
+        course = factories.CourseFactory(duration=[7, "day"], effort=[4, "hour"])
+        self.assertEqual(course.get_pace_display(), "~30 minutes/day")
+
     def test_models_course_get_pace_display_with_not_a_full_hour_pace(self):
         """
         If pace is not a full hour, a label with hour

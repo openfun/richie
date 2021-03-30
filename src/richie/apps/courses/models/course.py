@@ -559,7 +559,7 @@ class Course(BasePageExtension):
         if pace_hours == 0:
             resolution = 15 if pace_minutes > 15 else 5
             return _("~{pace:d} {effort_unit!s}/{duration_unit!s}").format(
-                pace=round(pace / resolution) * resolution
+                pace=round(pace_minutes / resolution) * resolution
                 or 5,  # Display at least 5 minutes
                 effort_unit=time_units[defaults.MINUTE][1],
                 duration_unit=time_units[pace_reference_unit][0],
