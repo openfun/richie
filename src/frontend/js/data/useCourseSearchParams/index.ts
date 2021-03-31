@@ -6,7 +6,7 @@ import { API_LIST_DEFAULT_PARAMS } from 'settings';
 import { APIListRequestParams } from 'types/api';
 import { FilterDefinition } from 'types/filters';
 import { location } from 'utils/indirection/window';
-import { Maybe } from 'utils/types';
+import { Maybe } from 'types/utils';
 import { computeNewFilterValue } from './computeNewFilterValue';
 
 export enum CourseSearchParamsAction {

@@ -6,7 +6,7 @@ import { fetchList } from 'data/getResourceList';
 import { CourseSearchParamsAction, useCourseSearchParams } from 'data/useCourseSearchParams';
 import { RequestStatus } from 'types/api';
 import { FacetedFilterDefinition, FilterValue } from 'types/filters';
-import { Nullable } from 'utils/types';
+import { Nullable } from 'types/utils';
 import { useAsyncEffect } from 'utils/useAsyncEffect';
 
 interface SearchFilterGroupModalProps {
