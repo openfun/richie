@@ -5,7 +5,7 @@ import { Spinner } from 'components/Spinner';
 import { useSession } from 'data/useSession';
 import { Priority } from 'types';
 import { User } from 'types/User';
-import { Maybe, Nullable } from 'utils/types';
+import { Maybe, Nullable } from 'types/utils';
 import { handle } from 'utils/errors/handle';
 import { useAsyncEffect } from 'utils/useAsyncEffect';
 import { CommonDataProps } from 'types/commonDataProps';

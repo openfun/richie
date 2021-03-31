@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 import { AuthenticationBackend, LMSBackend } from 'types/commonDataProps';
-import { Maybe, Nullable } from 'utils/types';
+import { Maybe, Nullable } from 'types/utils';
 import { User } from 'types/User';
 import { APILms, ApiOptions } from 'types/api';
 import { location } from 'utils/indirection/window';

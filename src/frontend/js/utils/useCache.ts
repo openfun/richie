@@ -1,4 +1,4 @@
-import { Maybe } from 'utils/types';
+import { Maybe } from 'types/utils';
 import { base64Decode, base64Encode } from 'utils/base64Parser';
 import { handle } from './errors/handle';
 /**

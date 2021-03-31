@@ -1,6 +1,6 @@
 import { Priority } from 'types';
 import { Resource } from 'types/Resource';
-import { Nullable } from 'utils/types';
+import { Nullable } from 'types/utils';
 
 export interface Course extends Resource {
   absolute_url: string;
