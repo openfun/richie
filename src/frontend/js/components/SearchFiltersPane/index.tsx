@@ -5,7 +5,7 @@ import { SearchFilterGroup } from 'components/SearchFilterGroup';
 import { CourseSearchParamsAction, useCourseSearchParams } from 'data/useCourseSearchParams';
 import { API_LIST_DEFAULT_PARAMS } from 'settings';
 import { APICourseSearchResponse } from 'types/api';
-import { Nullable } from 'utils/types';
+import { Nullable } from 'types/utils';
 
 interface SearchFiltersPaneProps {
   filters: Nullable<APICourseSearchResponse['filters']>;

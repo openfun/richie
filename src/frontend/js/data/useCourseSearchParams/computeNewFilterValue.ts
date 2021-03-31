@@ -1,5 +1,5 @@
 import { isMPTTChildOf, isMPTTParentOf } from 'utils/mptt';
-import { Maybe } from 'utils/types';
+import { Maybe } from 'types/utils';
 import { CourseSearchParamsAction } from '.';
 
 // Compute a new value for a filter to apply to course search, reacting to a user interaction by

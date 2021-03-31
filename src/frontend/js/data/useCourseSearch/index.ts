@@ -2,7 +2,7 @@ import { stringify } from 'query-string';
 import { useState } from 'react';
 
 import { APIListRequestParams } from 'types/api';
-import { Nullable } from 'utils/types';
+import { Nullable } from 'types/utils';
 import { useAsyncEffect } from 'utils/useAsyncEffect';
 import { fetchList, FetchListResponse } from '../getResourceList';
 

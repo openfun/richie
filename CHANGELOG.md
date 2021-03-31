@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Changed
+
+- Move type utils into type directory
+
 ## [2.9.1] - 2021-11-03
 
 ### Fixed

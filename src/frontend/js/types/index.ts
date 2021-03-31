@@ -1,4 +1,4 @@
-import { Nullable } from 'utils/types';
+import { Nullable } from 'types/utils';
 
 export interface CourseRun {
   id: number;

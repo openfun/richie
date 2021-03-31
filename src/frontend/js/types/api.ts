@@ -1,6 +1,6 @@
 import { Course } from 'types/Course';
 import { FacetedFilterDefinition } from 'types/filters';
-import { Maybe, Nullable } from 'utils/types';
+import { Maybe, Nullable } from 'types/utils';
 import { User } from 'types/User';
 import { Enrollment } from 'types';
 
