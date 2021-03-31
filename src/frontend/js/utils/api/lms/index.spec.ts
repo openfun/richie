@@ -1,4 +1,4 @@
-import { ApiBackend } from 'types/api';
+import { APIBackend } from 'types/api';
 
 import { handle } from 'utils/errors/handle';
 
@@ -10,12 +10,12 @@ describe('API LMS', () => {
     context: {
       lms_backends: [
         {
-          backend: ApiBackend.BASE,
+          backend: APIBackend.BASE,
           endpoint: 'https://demo.endpoint/api',
           course_regexp: /.*base.org\/.*/,
         },
         {
-          backend: ApiBackend.OPENEDX_HAWTHORN,
+          backend: APIBackend.OPENEDX_HAWTHORN,
           endpoint: 'https://edx.endpoint/api',
           course_regexp: /.*edx.org\/.*/,
         },

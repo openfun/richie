@@ -1,5 +1,5 @@
 import fetchMock from 'fetch-mock';
-import { ApiBackend } from 'types/api';
+import { APIBackend } from 'types/api';
 import { ContextFactory } from 'utils/test/factories';
 import faker from 'faker';
 
@@ -16,7 +16,7 @@ describe('OpenEdX Hawthorn API', () => {
   const context = ContextFactory({
     lms_backends: [
       {
-        backend: ApiBackend.OPENEDX_HAWTHORN,
+        backend: APIBackend.OPENEDX_HAWTHORN,
         course_regexp: 'course_id=(?<course_id>.*$)',
         endpoint: EDX_ENDPOINT,
       },

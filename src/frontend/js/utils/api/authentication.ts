@@ -8,7 +8,7 @@
 import { handle } from 'utils/errors/handle';
 import { AuthenticationBackend } from 'types/commonDataProps';
 import { Nullable } from 'types/utils';
-import { APIAuthentication, ApiBackend } from 'types/api';
+import { APIAuthentication, APIBackend } from 'types/api';
 import BaseApiInterface from './lms/base';
 import OpenEdxDogwoodApiInterface from './lms/openedx-dogwood';
 import OpenEdxHawthornApiInterface from './lms/openedx-hawthorn';
@@ -20,13 +20,13 @@ const AuthenticationAPIHandler = (): Nullable<APIAuthentication> => {
   if (!AUTHENTICATION) return null;
 
   switch (AUTHENTICATION.backend) {
-    case ApiBackend.BASE:
+    case APIBackend.BASE:
       return BaseApiInterface(AUTHENTICATION).user;
-    case ApiBackend.OPENEDX_DOGWOOD:
+    case APIBackend.OPENEDX_DOGWOOD:
       return OpenEdxDogwoodApiInterface(AUTHENTICATION).user;
-    case ApiBackend.OPENEDX_HAWTHORN:
+    case APIBackend.OPENEDX_HAWTHORN:
       return OpenEdxHawthornApiInterface(AUTHENTICATION).user;
-    case ApiBackend.FONZIE:
+    case APIBackend.FONZIE:
       return OpenEdxFonzieApiInterface(AUTHENTICATION).user;
     default:
       handle(new Error(`No Authentication Backend found for ${AUTHENTICATION.backend}.`));

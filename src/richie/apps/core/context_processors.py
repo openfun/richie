@@ -74,6 +74,10 @@ def site_metas(request):
             "backend": authentication_delegation["BACKEND"],
         }
 
+    if hasattr(settings, "JOANIE"):
+        context["FRONTEND_CONTEXT"]["context"]["joanie_backend"] = {
+            "endpoint": getattr(settings, "JOANIE")["BASE_URL"],
+        }
     if getattr(settings, "RICHIE_LMS_BACKENDS", None):
         context["FRONTEND_CONTEXT"]["context"]["lms_backends"] = [
             {
