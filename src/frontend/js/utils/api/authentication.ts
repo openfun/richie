@@ -7,7 +7,7 @@
  */
 import { handle } from 'utils/errors/handle';
 import { AuthenticationBackend } from 'types/commonDataProps';
-import { Nullable } from 'utils/types';
+import { Nullable } from 'types/utils';
 import { APIAuthentication, ApiBackend } from 'types/api';
 import BaseApiInterface from './lms/base';
 import OpenEdxDogwoodApiInterface from './lms/openedx-dogwood';

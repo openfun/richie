@@ -1,6 +1,6 @@
 import React, { createContext, useCallback, useContext, useState, PropsWithChildren } from 'react';
 import { handle } from 'utils/errors/handle';
-import { Maybe, Nullable } from 'utils/types';
+import { Maybe, Nullable } from 'types/utils';
 import { User } from 'types/User';
 import { AuthenticationApi } from 'utils/api/authentication';
 import { useAsyncEffect } from 'utils/useAsyncEffect';

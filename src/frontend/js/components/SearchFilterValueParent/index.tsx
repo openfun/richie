@@ -8,7 +8,7 @@ import { useFilterValue } from 'data/useFilterValue';
 import { RequestStatus } from 'types/api';
 import { FacetedFilterDefinition, FilterValue } from 'types/filters';
 import { getMPTTChildrenPathMatcher } from 'utils/mptt';
-import { Nullable } from 'utils/types';
+import { Nullable } from 'types/utils';
 import { useAsyncEffect } from 'utils/useAsyncEffect';
 
 const messages = defineMessages({

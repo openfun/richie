@@ -1,5 +1,5 @@
 import { AuthenticationBackend, LMSBackend } from 'types/commonDataProps';
-import { Nullable, Maybe } from 'utils/types';
+import { Nullable, Maybe } from 'types/utils';
 import { User } from 'types/User';
 import { APILms } from 'types/api';
 import OpenEdxHawthornApiInterface from './openedx-hawthorn';

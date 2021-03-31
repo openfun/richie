@@ -1,6 +1,6 @@
 import { Course } from 'types/Course';
 import { FacetedFilterDefinition } from 'types/filters';
-import { Maybe, Nullable } from 'utils/types';
+import { Maybe, Nullable } from 'types/utils';
 import { User } from 'types/User';
 import { Enrollment } from 'types';
 
@@ -55,17 +55,20 @@ export interface APILms {
   enrollment: APIEnrollment;
 }
 
+export interface APIJoanie {}
+
+interface APIRoute {
+  [key: string]: APIRoute | string;
+}
+
 export interface ApiOptions {
-  routes: {
-    [key: string]: {
-      [key: string]: string;
-    };
-  };
+  routes: APIRoute;
 }
 
 export enum ApiBackend {
   BASE = 'base',
   FONZIE = 'fonzie',
+  JOANIE = 'joanie',
   OPENEDX_DOGWOOD = 'openedx-dogwood',
   OPENEDX_HAWTHORN = 'openedx-hawthorn',
 }

@@ -1,4 +1,4 @@
-import { Nullable } from 'utils/types';
+import { Nullable } from 'types/utils';
 
 /**
  * Filter values are specific choices that are available for a given filter, eg. `Mathematics` and `Social sciences`

@@ -1,5 +1,5 @@
 import { User } from 'types/User';
-import { Nullable } from 'utils/types';
+import { Nullable } from 'types/utils';
 import APIHandler from './lms';
 
 const EnrollmentApi = {

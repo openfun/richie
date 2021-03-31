@@ -1,4 +1,4 @@
-import { Nullable } from 'utils/types';
+import { Nullable } from 'types/utils';
 
 /**
  * Common data properties that are passed by the backend to all React components as they are

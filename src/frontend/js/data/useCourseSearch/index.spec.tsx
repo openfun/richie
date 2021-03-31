@@ -3,7 +3,7 @@ import React from 'react';
 
 import { fetchList } from 'data/getResourceList';
 import { APIListRequestParams } from 'types/api';
-import { JestMockOf } from 'utils/types';
+import { JestMockOf } from 'types/utils';
 import { useCourseSearch } from '.';
 
 jest.mock('data/getResourceList', () => ({

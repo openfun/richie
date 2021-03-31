@@ -6,7 +6,7 @@ import { IntlProvider } from 'react-intl';
 import { fetchList } from 'data/getResourceList';
 import { History, HistoryContext } from 'data/useHistory';
 import { APIListRequestParams } from 'types/api';
-import { JestMockOf } from 'utils/types';
+import { JestMockOf } from 'types/utils';
 
 import { SearchFilterValueParent } from '.';
 

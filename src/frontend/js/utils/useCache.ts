@@ -1,4 +1,4 @@
-import { Maybe } from 'utils/types';
+import { Maybe } from 'types/utils';
 /**
  * useCache
  * Little utils to retrieve/store information in session storage.

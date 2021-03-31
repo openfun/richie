@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 
 import { FilterDefinition, StaticFilterDefinitions } from 'types/filters';
-import { Nullable } from 'utils/types';
+import { Nullable } from 'types/utils';
 import { useAsyncEffect } from 'utils/useAsyncEffect';
 
 // Our search and autosuggestion pipeline operated based on filter definitions. Obviously, we can't filters
