@@ -1,6 +1,6 @@
 import { createSpec, derived, faker } from '@helpscout/helix';
 import { CommonDataProps } from 'types/commonDataProps';
-import { ApiBackend } from 'types/api';
+import { APIBackend } from 'types/api';
 
 const CourseStateFactory = createSpec({
   priority: derived(() => Math.floor(Math.random() * 7)),
@@ -39,12 +39,12 @@ export const ContextFactory = (context: Partial<CommonDataProps['context']> = {}
     csrftoken: faker.random.alphaNumeric(64),
     environment: 'test',
     authentication: {
-      backend: ApiBackend.BASE,
+      backend: APIBackend.BASE,
       endpoint: 'https://endpoint.test',
     },
     lms_backends: [
       {
-        backend: ApiBackend.BASE,
+        backend: APIBackend.BASE,
         course_regexp: '.*',
         endpoint: 'https://endpoint.test',
       },

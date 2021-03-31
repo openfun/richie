@@ -55,17 +55,15 @@ export interface APILms {
   enrollment: APIEnrollment;
 }
 
-export interface APIJoanie {}
-
 interface APIRoute {
-  [key: string]: APIRoute | string;
+  [key: string]: string | APIRoute;
 }
 
-export interface ApiOptions {
+export interface APIOptions {
   routes: APIRoute;
 }
 
-export enum ApiBackend {
+export enum APIBackend {
   BASE = 'base',
   FONZIE = 'fonzie',
   JOANIE = 'joanie',

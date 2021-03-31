@@ -2,7 +2,7 @@ import Cookies from 'js-cookie';
 import { AuthenticationBackend, LMSBackend } from 'types/commonDataProps';
 import { Maybe, Nullable } from 'types/utils';
 import { User } from 'types/User';
-import { APILms, ApiOptions } from 'types/api';
+import { APILms, APIOptions } from 'types/api';
 import { location } from 'utils/indirection/window';
 import { handle } from 'utils/errors/handle';
 import { EDX_CSRF_TOKEN_COOKIE_NAME } from 'settings';
@@ -16,7 +16,7 @@ import { EDX_CSRF_TOKEN_COOKIE_NAME } from 'settings';
  *
  */
 
-const API = (APIConf: AuthenticationBackend | LMSBackend, options?: ApiOptions): APILms => {
+const API = (APIConf: AuthenticationBackend | LMSBackend, options?: APIOptions): APILms => {
   const extractCourseIdFromUrl = (url: string): Maybe<Nullable<string>> => {
     const matches = url.match((APIConf as LMSBackend).course_regexp);
     return matches && matches[1] ? matches[1] : null;
@@ -24,17 +24,17 @@ const API = (APIConf: AuthenticationBackend | LMSBackend, options?: ApiOptions):
 
   const ROUTES = {
     user: {
-      me: APIConf.endpoint.concat(options?.routes?.user?.me ?? '/api/user/v1/me'),
-      login: APIConf.endpoint.concat(options?.routes?.user?.login ?? `/login`),
-      register: APIConf.endpoint.concat(options?.routes?.user?.register ?? `/register`),
-      logout: APIConf.endpoint.concat(options?.routes?.user?.logout ?? '/logout'),
+      me: APIConf.endpoint.concat((options?.routes as any)?.user?.me || '/api/user/v1/me'),
+      login: APIConf.endpoint.concat((options?.routes as any)?.user.login ?? `/login`),
+      register: APIConf.endpoint.concat((options?.routes as any)?.user?.register ?? `/register`),
+      logout: APIConf.endpoint.concat((options?.routes as any)?.user?.logout ?? '/logout'),
     },
     enrollment: {
       get: APIConf.endpoint.concat(
-        options?.routes?.enrollment?.get ?? '/api/enrollment/v1/enrollment',
+        (options?.routes as any)?.enrollment?.get ?? '/api/enrollment/v1/enrollment',
       ),
       isEnrolled: APIConf.endpoint.concat(
-        options?.routes?.enrollment?.isEnrolled ?? '/api/enrollment/v1/enrollment',
+        (options?.routes as any)?.enrollment?.isEnrolled ?? '/api/enrollment/v1/enrollment',
       ),
       set: APIConf.endpoint.concat('/api/enrollment/v1/enrollment'),
     },
