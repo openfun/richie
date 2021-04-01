@@ -17,7 +17,9 @@ $ make migrate
 ## Unreleased
 
 - An API endpoint has been created to retrieve the context of a LTI Consumer plugin.
-  You need to append this route to api routes in your `urls` configuration.
+  You need to append this route to api routes in your `urls` configuration. Furthermore
+  to optimize db accesses, if a cache called `memory_cache` is defined in `CACHES`,
+  the response will be cached for 9min 30s.
 
 ## 2.1.x to 2.2.x
 
