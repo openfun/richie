@@ -92,23 +92,6 @@ $r-program-glimpse-gutter: 0.8rem !default;
     $absolute: false
   );
 
-  &__footer {
-    @include r-button-colors(r-theme-val(program-glimpse, footer), $apply-border: true);
-    display: flex;
-    padding: 0 0.5rem;
-    font-size: 0.8rem;
-    border-bottom-left-radius: $border-radius-lg;
-    border-bottom-right-radius: $border-radius-lg;
-  }
-
-  &__date {
-    @include sv-flex(1, 0, auto);
-    margin: 0;
-    padding: 0.75rem 0;
-    font-weight: bold;
-    line-height: 1.1;
-  }
-
   &:hover,
   &:focus {
     @if r-theme-val(program-glimpse, card-hover-border) {

@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Removed
+
+- Creation date displayed on program glimpses
+
 ### Fixed
 
 - Fix pace computation when it is under an hour
