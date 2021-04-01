@@ -8,25 +8,26 @@ from cms.models import Title
 from cms.utils import get_current_site, i18n, page_permissions
 
 
-def get_public_page_with_fallbacks(page, request):
+def get_relevant_page_with_fallbacks(context, instance):
     """
-    the plugin should show the published page whenever it exists or the draft page otherwise.
-
-    On a public content, the draft page should not be shown at all but this is left to the
-    caller.
+    The plugin should show the published page whenever it exists or the draft page
+    otherwise but only in edit mode.
 
     This is inspired by what DjangoCMS does in its main view:
     https://github.com/django-cms/django-cms/blob/3.8.0/cms/views.py#L37
     """
-    page = page.get_public_object()
-    request_language = translation.get_language_from_request(request, check_path=True)
-
-    if not page:
-        return None
+    request = context["request"]
+    site = get_current_site()
 
     # Check permissions
-    site = get_current_site()
-    if not page_permissions.user_can_view_page(request.user, page, site):
+    if not page_permissions.user_can_view_page(request.user, instance.page, site):
+        return None
+
+    relevant_page = instance.page.get_public_object()
+
+    if not relevant_page:
+        if context.get("current_page") and context["current_page"].publisher_is_draft:
+            return instance.page
         return None
 
     if request.user.is_staff:
@@ -38,9 +39,10 @@ def get_public_page_with_fallbacks(page, request):
     available_languages = [
         language
         for language in user_languages
-        if language in list(page.get_published_languages())
+        if language in list(relevant_page.get_published_languages())
     ]
 
+    request_language = translation.get_language_from_request(request, check_path=True)
     if request_language not in user_languages:
         # Language is not allowed
         # Use the default site language
@@ -62,12 +64,12 @@ def get_public_page_with_fallbacks(page, request):
             # There is no page with the requested language
             # and there's no configured fallbacks
             return None
-        if request_language in page.get_languages():
+        if request_language in relevant_page.get_languages():
             # The page was already published and later unpublished in the current
             # language. In this case we must not fallback to another language.
             return None
 
-    return page
+    return relevant_page
 
 
 class PageExtensionQuerySet(models.QuerySet):

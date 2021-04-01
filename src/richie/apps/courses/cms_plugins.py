@@ -8,7 +8,7 @@ from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 
 from richie.apps.core.defaults import PLUGINS_GROUP
-from richie.apps.core.models import get_public_page_with_fallbacks
+from richie.apps.core.models import get_relevant_page_with_fallbacks
 
 from .forms import LicencePluginForm
 from .models import (
@@ -38,7 +38,7 @@ class OrganizationPlugin(CMSPluginBase):
 
     def render(self, context, instance, placeholder):
         """Populate and return the context for rendering."""
-        target_page = get_public_page_with_fallbacks(instance.page, context["request"])
+        target_page = get_relevant_page_with_fallbacks(context, instance)
         context.update(
             {
                 "instance": instance,
@@ -68,7 +68,7 @@ class OrganizationsByCategoryPlugin(CMSPluginBase):
         Add to context a query of all the organizations linked to the target category or one of
         its descendants via a category plugin on the organization detail page.
         """
-        target_page = get_public_page_with_fallbacks(instance.page, context["request"])
+        target_page = get_relevant_page_with_fallbacks(context, instance)
         organizations = target_page.category.get_organizations() if target_page else []
         context.update(
             {
@@ -96,7 +96,7 @@ class CategoryPlugin(CMSPluginBase):
 
     def render(self, context, instance, placeholder):
         """Populate and return the context for rendering."""
-        target_page = get_public_page_with_fallbacks(instance.page, context["request"])
+        target_page = get_relevant_page_with_fallbacks(context, instance)
         context.update(
             {
                 "category_variant": instance.variant or context.get("category_variant"),
@@ -124,7 +124,7 @@ class CoursePlugin(CMSPluginBase):
 
     def render(self, context, instance, placeholder):
         """Populate and return the context for rendering."""
-        target_page = get_public_page_with_fallbacks(instance.page, context["request"])
+        target_page = get_relevant_page_with_fallbacks(context, instance)
         context.update(
             {
                 "instance": instance,
@@ -150,7 +150,7 @@ class PersonPlugin(CMSPluginBase):
 
     def render(self, context, instance, placeholder):
         """Populate and return the context for rendering."""
-        target_page = get_public_page_with_fallbacks(instance.page, context["request"])
+        target_page = get_relevant_page_with_fallbacks(context, instance)
         context.update(
             {
                 "instance": instance,
@@ -198,7 +198,7 @@ class BlogPostPlugin(CMSPluginBase):
 
     def render(self, context, instance, placeholder):
         """Populate and return the context for rendering."""
-        target_page = get_public_page_with_fallbacks(instance.page, context["request"])
+        target_page = get_relevant_page_with_fallbacks(context, instance)
         context.update(
             {
                 "blogpost_variant": instance.variant or context.get("blogpost_variant"),
@@ -224,7 +224,7 @@ class ProgramPlugin(CMSPluginBase):
 
     def render(self, context, instance, placeholder):
         """Populate and return the context for rendering."""
-        target_page = get_public_page_with_fallbacks(instance.page, context["request"])
+        target_page = get_relevant_page_with_fallbacks(context, instance)
         context.update(
             {
                 "instance": instance,

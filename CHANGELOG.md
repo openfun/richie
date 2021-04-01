@@ -15,6 +15,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- On draft pages, show page extension plugins targeting draft pages
 - Retrieve LTI Consumer plugin context through an API endpoint
 
 ### Fixed

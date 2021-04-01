@@ -1,8 +1,6 @@
 """
 End-to-end tests for the program detail view
 """
-import re
-
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
@@ -68,7 +66,7 @@ class ProgramCMSTestCase(CMSTestCase):
 
     def test_templates_program_detail_cms_draft_content(self):
         """
-        A staff user should see a draft program including only its public elements.
+        A staff user should see a draft program including draft elements.
         """
         user = UserFactory(is_staff=True, is_superuser=True)
         self.client.login(username=user.username, password="password")
@@ -90,8 +88,8 @@ class ProgramCMSTestCase(CMSTestCase):
         # The unpublished objects may have been published and unpublished which puts them in a
         # status different from objects that have never been published.
         # We want to test both cases.
-        courses[2].extended_object.publish("en")
-        courses[2].extended_object.unpublish("en")
+        courses[3].extended_object.publish("en")
+        courses[3].extended_object.unpublish("en")
 
         # The page should be visible as draft to the staff user
         url = page.get_absolute_url()
@@ -103,8 +101,13 @@ class ProgramCMSTestCase(CMSTestCase):
             response, '<h1 class="subheader__title">Preums</h1>', html=True
         )
 
-        # The published courses should be present on the page
+        # Draft and published courses should be present on the page
         for course in courses[:2]:
+            self.assertContains(
+                response,
+                '<a class="course-glimpse" '
+                'href="{:s}"'.format(course.extended_object.get_absolute_url()),
+            )
             self.assertContains(
                 response,
                 '<p class="course-glimpse__title">{:s}</p>'.format(
@@ -112,14 +115,17 @@ class ProgramCMSTestCase(CMSTestCase):
                 ),
                 html=True,
             )
-        # Draft courses should not be present on the page
-        for course in courses[-2:]:
-            self.assertNotIn(
-                course.extended_object.get_absolute_url(),
-                re.sub(" +", " ", str(response.content).replace("\\n", "")),
-            )
-            self.assertNotContains(
-                response,
-                course.extended_object.get_title(),
-                html=True,
-            )
+        self.assertContains(
+            response,
+            '<a class="course-glimpse course-glimpse--draft" '
+            'href="{:s}"'.format(courses[2].extended_object.get_absolute_url()),
+        )
+        self.assertContains(
+            response,
+            '<p class="course-glimpse__title">{:s}</p>'.format(
+                courses[2].extended_object.get_title()
+            ),
+            html=True,
+        )
+        # The unpublished course should not be present on the page
+        self.assertNotContains(response, courses[3].extended_object.get_title())

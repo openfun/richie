@@ -226,12 +226,26 @@ class PersonCMSTestCase(CMSTestCase):
             html=True,
         )
         # The not published category should not be on the page
-        self.assertNotContains(
+        self.assertContains(
             response,
-            not_published_category.extended_object.get_title(),
+            (
+                '<a class="category-badge category-badge--draft" href="{:s}">'
+                '<span class="category-badge__title">{:s}</span></a>'
+            ).format(
+                not_published_category.extended_object.get_absolute_url(),
+                not_published_category.extended_object.get_title(),
+            ),
+            html=True,
         )
 
         # The published organization should be on the page in its published version
+        self.assertContains(
+            response,
+            '<a class="organization-glimpse" '
+            'href="{:s}"'.format(
+                published_organization.extended_object.get_absolute_url()
+            ),
+        )
         self.assertContains(
             response,
             '<div class="organization-glimpse__title">{:s}</div>'.format(
@@ -239,10 +253,20 @@ class PersonCMSTestCase(CMSTestCase):
             ),
             html=True,
         )
-
         # The not published organization should not be on the page
-        self.assertNotContains(
-            response, not_published_organization.extended_object.get_title()
+        self.assertContains(
+            response,
+            '<a class="organization-glimpse organization-glimpse--draft" '
+            'href="{:s}"'.format(
+                not_published_organization.extended_object.get_absolute_url()
+            ),
+        )
+        self.assertContains(
+            response,
+            '<div class="organization-glimpse__title">{:s}</div>'.format(
+                not_published_organization.extended_object.get_title()
+            ),
+            html=True,
         )
 
         self.assertNotContains(response, "modified")

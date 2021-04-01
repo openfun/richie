@@ -88,7 +88,7 @@
                     <section class="course-glimpse-list">
                         <h2 class="organization-detail__title">{% trans "Related courses" %}</h2>
                         {% for course in page_obj.object_list %}
-                                {% include "courses/cms/fragment_course_glimpse.html" with course=course %}
+                            {% include "courses/cms/fragment_course_glimpse.html" with course=course %}
                         {% endfor %}
                         {% if paginator.num_pages > 1 %}
                             {% paginate using "richie/pagination.html" %}
