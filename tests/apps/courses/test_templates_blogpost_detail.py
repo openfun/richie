@@ -105,11 +105,17 @@ class DetailBlogPostCMSTestCase(CMSTestCase):
             ),
             html=True,
         )
-        self.assertNotContains(
+        self.assertContains(
             response,
-            category.extended_object.get_title(),
+            (
+                '<a class="category-tag category-tag--draft" '
+                'href="{:s}"><span class="category-tag__title">{:s}</span></a>'
+            ).format(
+                category.extended_object.get_absolute_url(),
+                category.extended_object.get_title(),
+            ),
+            html=True,
         )
-
         self.assertContains(
             response,
             '<p class="blogpost-detail__pubdate">Not published yet</p>',

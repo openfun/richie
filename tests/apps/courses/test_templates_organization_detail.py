@@ -260,10 +260,17 @@ class OrganizationCMSTestCase(CMSTestCase):
             ),
             html=True,
         )
-        # The not published category should not be on the page
-        self.assertNotContains(
+        # The not published category should be on the page
+        self.assertContains(
             response,
-            not_published_category.extended_object.get_title(),
+            (
+                '<a class="category-tag category-tag--draft" href="{:s}">'
+                '<span class="category-tag__title">{:s}</span></a>'
+            ).format(
+                not_published_category.extended_object.get_absolute_url(),
+                not_published_category.extended_object.get_title(),
+            ),
+            html=True,
         )
         # The modified draft category should not be leaked
         self.assertNotContains(response, "modified category")
@@ -275,8 +282,8 @@ class OrganizationCMSTestCase(CMSTestCase):
             html=True,
         )
 
-        # The not published course should not be on the page
-        self.assertNotContains(
+        # The not published course should be on the page
+        self.assertContains(
             response,
             not_published_course.extended_object.get_title(),
         )
