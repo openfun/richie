@@ -561,8 +561,8 @@ class CoursesIndexer:
             "_op_type": action,
             "_type": cls.document_type,
             "absolute_url": {
-                language: course.extended_object.get_absolute_url(language)
-                for language in titles.keys()
+                lang: course.extended_object.get_absolute_url(lang)
+                for lang, _ in settings.LANGUAGES
             },
             "categories": [page.category.get_es_id() for page in category_pages],
             # Index the names of categories to surface them in full text searches

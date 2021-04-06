@@ -299,7 +299,10 @@ class CoursesIndexersTestCase(TestCase):
                     "_index": "some_index",
                     "_op_type": "some_action",
                     "_type": "course",
-                    "absolute_url": {"en": "/en/enhanced-incremental-circuit/"},
+                    "absolute_url": {
+                        "en": "/en/enhanced-incremental-circuit/",
+                        "fr": "/fr/enhanced-incremental-circuit/",
+                    },
                     "categories": [],
                     "categories_names": {},
                     "complete": {
@@ -486,6 +489,22 @@ class CoursesIndexersTestCase(TestCase):
         self.assertEqual(
             indexed_courses[0]["icon"],
             {"en": {"color": "#654321", "title": category.extended_object.get_title()}},
+        )
+
+    def test_indexers_courses_get_es_documents_language_fallback(self):
+        """Absolute urls should be computed as expected with language fallback."""
+        CourseFactory(should_publish=True, page_title={"fr": "un titre court français"})
+
+        indexed_courses = list(
+            CoursesIndexer.get_es_documents(index="some_index", action="some_action")
+        )
+
+        self.assertEqual(
+            indexed_courses[0]["absolute_url"],
+            {
+                "en": "/en/un-titre-court-francais/",
+                "fr": "/fr/un-titre-court-francais/",
+            },
         )
 
     def test_indexers_courses_format_es_object_for_api(self):

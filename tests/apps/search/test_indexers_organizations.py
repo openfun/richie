@@ -121,6 +121,28 @@ class OrganizationsIndexersTestCase(TestCase):
             ],
         )
 
+    def test_indexers_organizations_get_es_documents_language_fallback(self):
+        """Absolute urls should be computed as expected with language fallback."""
+        OrganizationFactory(
+            page_title={
+                "fr": "ma première organisation",
+            },
+            should_publish=True,
+        )
+        indexed_organizations = list(
+            OrganizationsIndexer.get_es_documents(
+                index="some_index", action="some_action"
+            )
+        )
+
+        self.assertEqual(
+            indexed_organizations[0]["absolute_url"],
+            {
+                "en": "/en/ma-premiere-organisation/",
+                "fr": "/fr/ma-premiere-organisation/",
+            },
+        )
+
     def test_indexers_organizations_format_es_object_for_api(self):
         """
         Make sure format_es_object_for_api returns a properly formatted organization

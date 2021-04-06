@@ -141,6 +141,42 @@ class CategoriesIndexersTestCase(TestCase):
             ],
         )
 
+    def test_indexers_categories_get_es_documents_language_fallback(self):
+        """Absolute urls should be computed as expected with language fallback."""
+        # Our meta category and its page
+        meta = CategoryFactory(
+            page_parent=create_i18n_page({"fr": "Catégories"}, published=True),
+            page_reverse_id="subjects",
+            page_title={"en": "Subjects", "fr": "Sujets"},
+            fill_icon=True,
+            fill_logo=True,
+            should_publish=True,
+        )
+        category1 = CategoryFactory(
+            page_parent=meta.extended_object,
+            page_title={"fr": "ma première thématique"},
+            fill_icon=True,
+            fill_logo=True,
+            should_publish=True,
+        )
+        CategoryFactory(
+            page_parent=category1.extended_object,
+            page_title={"fr": "ma deuxième thématic"},
+            should_publish=True,
+        )
+
+        self.assertEqual(
+            list(
+                CategoriesIndexer.get_es_documents(
+                    index="some_index", action="some_action"
+                )
+            )[0]["absolute_url"],
+            {
+                "en": "/en/categories/sujets/ma-premiere-thematique/ma-deuxieme-thematic/",
+                "fr": "/fr/categories/sujets/ma-premiere-thematique/ma-deuxieme-thematic/",
+            },
+        )
+
     def test_indexers_categories_format_es_object_for_api(self):
         """
         Make sure format_es_object_for_api returns a properly formatted category.
