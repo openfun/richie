@@ -20,6 +20,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Pin Django to versions less than 3.2 which is not compatible with DjangoCMS
 - Fix pace computation when it is under an hour
 
 ### Removed
