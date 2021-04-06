@@ -47,9 +47,9 @@ class Person(BasePageExtension):
         Return a query to get the courses related to this person ie for which a plugin for
         this person is linked to the course page via any placeholder.
         """
-        return self.get_reverse_related_page_extensions("course", language=language).filter(
-            extended_object__node__parent__cms_pages__course__isnull=True
-        )
+        return self.get_reverse_related_page_extensions(
+            "course", language=language
+        ).filter(extended_object__node__parent__cms_pages__course__isnull=True)
 
     def get_blogposts(self, language=None):
         """

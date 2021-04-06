@@ -292,6 +292,78 @@ class CourseModelsTestCase(TestCase):
         with translation.override("en"):
             self.assertEqual(list(course.get_categories()), [category_en])
 
+    @override_settings(
+        LANGUAGES=(("en", "en"), ("fr", "fr"), ("de", "de")),
+        CMS_LANGUAGES={
+            "default": {
+                "public": True,
+                "hide_untranslated": False,
+                "redirect_on_fallback": False,
+                "fallbacks": ["en", "fr", "de"],
+            }
+        },
+    )
+    def test_models_course_get_categories_language_fallback(self):
+        """
+        The `get_categories` method should return categories linked to a course by
+        a plugin in fallback language by order of falling back.
+        """
+        category1, category2, category3 = factories.CategoryFactory.create_batch(
+            3, should_publish=True
+        )
+        course = factories.CourseFactory(should_publish=True)
+        placeholder = course.extended_object.placeholders.get(slot="course_team")
+
+        # Plugin lookups should fallback up to the second priority language
+        add_plugin(
+            language="de",
+            placeholder=placeholder,
+            plugin_type="CategoryPlugin",
+            **{"page": category1.extended_object},
+        )
+        with translation.override("en"):
+            self.assertEqual(list(course.get_categories()), [category1])
+
+        with translation.override("fr"):
+            self.assertEqual(list(course.get_categories()), [category1])
+
+        with translation.override("de"):
+            self.assertEqual(list(course.get_categories()), [category1])
+
+        # Plugin lookups should fallback to the first priority language if available
+        # and ignore the second priority language unless it is the current language
+        add_plugin(
+            language="fr",
+            placeholder=placeholder,
+            plugin_type="CategoryPlugin",
+            **{"page": category2.extended_object},
+        )
+        with translation.override("en"):
+            self.assertEqual(list(course.get_categories()), [category2])
+
+        with translation.override("fr"):
+            self.assertEqual(list(course.get_categories()), [category2])
+
+        with translation.override("de"):
+            self.assertEqual(list(course.get_categories()), [category1])
+
+        # Reverse plugin lookups should stick to the current language if available and
+        # ignore plugins on fallback languages
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="CategoryPlugin",
+            **{"page": category3.extended_object},
+        )
+        with translation.override("en"):
+            self.assertEqual(list(course.get_categories()), [category3])
+
+        with translation.override("fr"):
+            self.assertEqual(list(course.get_categories()), [category2])
+
+        with translation.override("de"):
+            self.assertEqual(list(course.get_categories()), [category1])
+
     def test_models_course_get_categories_other_placeholders(self):
         """
         The `get_categories` method should return all categories linked to a course via a plugin
@@ -358,7 +430,7 @@ class CourseModelsTestCase(TestCase):
             list(course.public_extension.get_organizations()), published_organizations
         )
 
-    def test_models_course_get_organizations_language(self):
+    def test_models_course_get_organizations_language_current(self):
         """
         The `get_organizations` method should only return organizations linked to a course by
         a plugin in the current language.
@@ -389,6 +461,82 @@ class CourseModelsTestCase(TestCase):
 
         with translation.override("en"):
             self.assertEqual(list(course.get_organizations()), [organization_en])
+
+    @override_settings(
+        LANGUAGES=(("en", "en"), ("fr", "fr"), ("de", "de")),
+        CMS_LANGUAGES={
+            "default": {
+                "public": True,
+                "hide_untranslated": False,
+                "redirect_on_fallback": False,
+                "fallbacks": ["en", "fr", "de"],
+            }
+        },
+    )
+    def test_models_course_get_organizations_language_fallback(self):
+        """
+        The `get_organizations` method should return organizations linked to a course by
+        a plugin in fallback language by order of falling back.
+        """
+        (
+            organization1,
+            organization2,
+            organization3,
+        ) = factories.OrganizationFactory.create_batch(3, should_publish=True)
+        course = factories.CourseFactory(should_publish=True)
+        placeholder = course.extended_object.placeholders.get(
+            slot="course_organizations"
+        )
+
+        # Plugin lookups should fallback up to the second priority language
+        add_plugin(
+            language="de",
+            placeholder=placeholder,
+            plugin_type="OrganizationPlugin",
+            **{"page": organization1.extended_object},
+        )
+        with translation.override("en"):
+            self.assertEqual(list(course.get_organizations()), [organization1])
+
+        with translation.override("fr"):
+            self.assertEqual(list(course.get_organizations()), [organization1])
+
+        with translation.override("de"):
+            self.assertEqual(list(course.get_organizations()), [organization1])
+
+        # Plugin lookups should fallback to the first priority language if available
+        # and ignore the second priority language unless it is the current language
+        add_plugin(
+            language="fr",
+            placeholder=placeholder,
+            plugin_type="OrganizationPlugin",
+            **{"page": organization2.extended_object},
+        )
+        with translation.override("en"):
+            self.assertEqual(list(course.get_organizations()), [organization2])
+
+        with translation.override("fr"):
+            self.assertEqual(list(course.get_organizations()), [organization2])
+
+        with translation.override("de"):
+            self.assertEqual(list(course.get_organizations()), [organization1])
+
+        # Reverse plugin lookups should stick to the current language if available and
+        # ignore plugins on fallback languages
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="OrganizationPlugin",
+            **{"page": organization3.extended_object},
+        )
+        with translation.override("en"):
+            self.assertEqual(list(course.get_organizations()), [organization3])
+
+        with translation.override("fr"):
+            self.assertEqual(list(course.get_organizations()), [organization2])
+
+        with translation.override("de"):
+            self.assertEqual(list(course.get_organizations()), [organization1])
 
     def test_models_course_get_organizations_other_placeholders(self):
         """
@@ -520,6 +668,78 @@ class CourseModelsTestCase(TestCase):
 
         with translation.override("en"):
             self.assertEqual(list(course.get_persons()), [person_en])
+
+    @override_settings(
+        LANGUAGES=(("en", "en"), ("fr", "fr"), ("de", "de")),
+        CMS_LANGUAGES={
+            "default": {
+                "public": True,
+                "hide_untranslated": False,
+                "redirect_on_fallback": False,
+                "fallbacks": ["en", "fr", "de"],
+            }
+        },
+    )
+    def test_models_course_get_persons_language_fallback(self):
+        """
+        The `get_persons` method should return persons linked to a course by
+        a plugin in fallback language by order of falling back.
+        """
+        person1, person2, person3 = factories.PersonFactory.create_batch(
+            3, should_publish=True
+        )
+        course = factories.CourseFactory(should_publish=True)
+        placeholder = course.extended_object.placeholders.get(slot="course_team")
+
+        # Plugin lookups should fallback up to the second priority language
+        add_plugin(
+            language="de",
+            placeholder=placeholder,
+            plugin_type="PersonPlugin",
+            **{"page": person1.extended_object},
+        )
+        with translation.override("en"):
+            self.assertEqual(list(course.get_persons()), [person1])
+
+        with translation.override("fr"):
+            self.assertEqual(list(course.get_persons()), [person1])
+
+        with translation.override("de"):
+            self.assertEqual(list(course.get_persons()), [person1])
+
+        # Plugin lookups should fallback to the first priority language if available
+        # and ignore the second priority language unless it is the current language
+        add_plugin(
+            language="fr",
+            placeholder=placeholder,
+            plugin_type="PersonPlugin",
+            **{"page": person2.extended_object},
+        )
+        with translation.override("en"):
+            self.assertEqual(list(course.get_persons()), [person2])
+
+        with translation.override("fr"):
+            self.assertEqual(list(course.get_persons()), [person2])
+
+        with translation.override("de"):
+            self.assertEqual(list(course.get_persons()), [person1])
+
+        # Reverse plugin lookups should stick to the current language if available and
+        # ignore plugins on fallback languages
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="PersonPlugin",
+            **{"page": person3.extended_object},
+        )
+        with translation.override("en"):
+            self.assertEqual(list(course.get_persons()), [person3])
+
+        with translation.override("fr"):
+            self.assertEqual(list(course.get_persons()), [person2])
+
+        with translation.override("de"):
+            self.assertEqual(list(course.get_persons()), [person1])
 
     def test_models_course_get_persons_other_placeholders(self):
         """

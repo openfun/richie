@@ -144,6 +144,50 @@ class BasePageExtension(PageExtension):
         language = language or translation.get_language()
         return self.extended_object.is_published(language)
 
+    def get_direct_related_page_extensions(
+        self, extension_model, plugin_model, language=None
+    ):
+        """
+        Return the page extensions linked to this page via a plugin in a placeholder, ranked by
+        their `path` to respect the order in the page tree.
+        """
+        current_language = language or translation.get_language()
+        site = get_current_site()
+
+        languages = [current_language] + i18n.get_fallback_languages(
+            current_language, site_id=site.pk
+        )
+        existing_languages = (
+            plugin_model.objects.filter(
+                cmsplugin_ptr__placeholder__page=self.extended_object
+            )
+            .values_list("cmsplugin_ptr__language", flat=True)
+            .distinct()
+        )
+
+        relevant_language = next(
+            filter(lambda l: l in existing_languages, languages), current_language
+        )
+
+        related_name = plugin_model.page.field.related_query_name()
+        selector = f"extended_object__{related_name:s}__cmsplugin_ptr"
+        # pylint: disable=no-member
+        filter_dict = {
+            f"{selector:s}__language": relevant_language,
+            f"{selector:s}__placeholder__page": self.extended_object,
+        }
+        # For a public course, we must filter out page extensions that are not published
+        # in any language
+        if self.extended_object.publisher_is_draft is False:
+            filter_dict["extended_object__title_set__published"] = True
+
+        return (
+            extension_model.objects.filter(**filter_dict)
+            .select_related("extended_object")
+            .order_by("extended_object__node__path")
+            .distinct()
+        )
+
     # pylint: disable=too-many-locals
     def get_reverse_related_page_extensions(
         self, model_name, language=None, include_descendants=False

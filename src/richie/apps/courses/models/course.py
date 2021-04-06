@@ -10,7 +10,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from django.urls import reverse
-from django.utils import timezone, translation
+from django.utils import timezone
 from django.utils.functional import cached_property, lazy
 from django.utils.translation import gettext_lazy as _
 
@@ -29,9 +29,9 @@ from ...core.fields.multiselect import MultiSelectField
 from ...core.helpers import get_permissions
 from ...core.models import BasePageExtension
 from .. import defaults
-from .category import Category
-from .organization import Organization
-from .person import Person
+from .category import Category, CategoryPluginModel
+from .organization import Organization, OrganizationPluginModel
+from .person import Person, PersonPluginModel
 from .role import PageRole
 
 MAX_DATE = datetime(MAXYEAR, 12, 31, tzinfo=pytz.utc)
@@ -317,55 +317,14 @@ class Course(BasePageExtension):
             ),
         )
 
-    def get_persons(self, language=None):
-        """
-        Return the persons linked to the course via a person plugin in any of the
-        placeholders on the course detail page, ranked by their `path` to respect
-        the order in the persons tree.
-        """
-        language = language or translation.get_language()
-
-        selector = "extended_object__person_plugins__cmsplugin_ptr"
-        filter_dict = {
-            "{:s}__language".format(selector): language,
-            "{:s}__placeholder__page".format(selector): self.extended_object,
-        }
-        # For a public course, we must filter out persons that are not published in
-        # any language
-        if self.extended_object.publisher_is_draft is False:
-            filter_dict["extended_object__title_set__published"] = True
-
-        return (
-            Person.objects.filter(**filter_dict)
-            .select_related("extended_object")
-            .order_by("extended_object__node__path")
-            .distinct()
-        )
-
     def get_organizations(self, language=None):
         """
         Return the organizations linked to the course via an organization plugin in any
         of the placeholders on the course detail page, ranked by their `path` to respect
         the order in the organizations tree.
         """
-        language = language or translation.get_language()
-
-        selector = "extended_object__organization_plugins__cmsplugin_ptr"
-        # pylint: disable=no-member
-        filter_dict = {
-            "{:s}__language".format(selector): language,
-            "{:s}__placeholder__page".format(selector): self.extended_object,
-        }
-        # For a public course, we must filter out organizations that are not published in
-        # any language
-        if self.extended_object.publisher_is_draft is False:
-            filter_dict["extended_object__title_set__published"] = True
-
-        return (
-            Organization.objects.filter(**filter_dict)
-            .select_related("extended_object")
-            .order_by("extended_object__node__path")
-            .distinct()
+        return self.get_direct_related_page_extensions(
+            Organization, OrganizationPluginModel, language=language
         )
 
     def get_main_organization(self):
@@ -384,30 +343,24 @@ class Course(BasePageExtension):
             .first()
         )
 
+    def get_persons(self, language=None):
+        """
+        Return the persons linked to the course via a person plugin in any of the
+        placeholders on the course detail page, ranked by their `path` to respect
+        the order in the persons tree.
+        """
+        return self.get_direct_related_page_extensions(
+            Person, PersonPluginModel, language=language
+        )
+
     def get_categories(self, language=None):
         """
         Return the categories linked to the course via a category plugin in any of the
         placeholders on the course detail page, ranked by their `path` to respect the
         order in the categories tree.
         """
-        language = language or translation.get_language()
-
-        selector = "extended_object__category_plugins__cmsplugin_ptr"
-        # pylint: disable=no-member
-        filter_dict = {
-            "{:s}__language".format(selector): language,
-            "{:s}__placeholder__page".format(selector): self.extended_object,
-        }
-        # For a public course, we must filter out categories that are not published in
-        # any language
-        if self.extended_object.publisher_is_draft is False:
-            filter_dict["extended_object__title_set__published"] = True
-
-        return (
-            Category.objects.filter(**filter_dict)
-            .select_related("extended_object")
-            .order_by("extended_object__node__path")
-            .distinct()
+        return self.get_direct_related_page_extensions(
+            Category, CategoryPluginModel, language=language
         )
 
     def get_root_to_leaf_category_pages(self):
