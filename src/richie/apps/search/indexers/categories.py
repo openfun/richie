@@ -120,8 +120,8 @@ class CategoriesIndexer:
             "_op_type": action,
             "_type": cls.document_type,
             "absolute_url": {
-                language: category.extended_object.get_absolute_url(language)
-                for language in titles.keys()
+                lang: category.extended_object.get_absolute_url(lang)
+                for lang, _ in settings.LANGUAGES
             },
             "complete": {
                 language: slice_string_for_completion(title)

@@ -88,8 +88,8 @@ class PersonsIndexer:
             "_op_type": action,
             "_type": cls.document_type,
             "absolute_url": {
-                language: person.extended_object.get_absolute_url(language)
-                for language in titles.keys()
+                lang: person.extended_object.get_absolute_url(lang)
+                for lang, _ in settings.LANGUAGES
             },
             "bio": {language: " ".join(st) for language, st in bio.items()},
             "complete": {
