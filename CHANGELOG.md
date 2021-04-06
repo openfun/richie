@@ -10,8 +10,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- Add support for language fallback to get page extensions reversely related
-  to a page via a plugin
+- Add support for language fallback to get page extensions directly and
+  reversely related to a page via a plugin
 
 ### Changed
 
