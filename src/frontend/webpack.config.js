@@ -49,10 +49,12 @@ module.exports = (env) => {
 
     output: {
       filename: 'index.js',
-      path: path.join(__dirname, '/../richie/static/richie/js'),
+      path: path.join(__dirname, '/../richie/static/richie/js/build'),
       // `chunkFilename` must have a unique and different name on each build. This will prevent overwriting
       // of existing chunks if backend static storage is on AWS.
       chunkFilename: '[id].[fullhash].index.js',
+      // Clean output directory before generate new files
+      clean: true,
     },
 
     // Enable sourcemaps for debugging webpack's output.

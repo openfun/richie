@@ -41,8 +41,8 @@ COPY ./src/richie /builder/src/richie/
 
 # Copy distributed application's statics
 COPY --from=front-builder \
-    /builder/src/richie/static/richie/js/*.js \
-    /builder/src/richie/static/richie/js/
+    /builder/src/richie/static/richie/js \
+    /builder/src/richie/static/richie/js
 COPY --from=front-builder \
     /builder/src/richie/static/richie/css/main.css \
     /builder/src/richie/static/richie/css/main.css

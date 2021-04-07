@@ -20,6 +20,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Fix filter pane quality issues on handheld devices
 - Fix small quality issues on the course search filters modal
 
+### Changed
+
+- Clean built frontend files before each build
+
 ## [2.4.0] - 2021-04-07
 
 ### Added
