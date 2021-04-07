@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [2.4.0] - 2021-04-07
+
 ### Added
 
 - Add support for language fallback on search indexes
@@ -1262,7 +1264,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.3.3...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.4.0...master
+[2.4.0]: https://github.com/openfun/richie/compare/v2.3.3...v2.4.0
 [2.3.3]: https://github.com/openfun/richie/compare/v2.3.2...v2.3.3
 [2.3.2]: https://github.com/openfun/richie/compare/v2.3.1...v2.3.2
 [2.3.1]: https://github.com/openfun/richie/compare/v2.3.0...v2.3.1
