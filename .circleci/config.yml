@@ -497,13 +497,13 @@ jobs:
           name: List builds
           command: |
             echo "== Javascript =="
-            ls ../richie/static/richie/js/*.js
+            ls ../richie/static/richie/js/**/*.js
             echo "== CSS =="
             ls ../richie/static/richie/css/*.css
       - persist_to_workspace:
           root: ~/fun
           paths:
-            - src/richie/static/richie/js/*.js
+            - src/richie/static/richie/js/**/*.js
             - src/richie/static/richie/css/*.css
 
   build-dependent-front:

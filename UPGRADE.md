@@ -16,6 +16,12 @@ $ make migrate
 
 ## Unreleased
 
+- Frontend JS is now generated into a dedicated `build` folder inside `static/js`. So if you need
+  these scripts in templates, you have to update the script tag src to new destination.
+  `static/js/index.js` becomes `static/js/build/index.js`
+
+## 2.2.x to 2.4.x
+
 - An API endpoint has been created to retrieve the context of a LTI Consumer plugin.
   You need to append this route to api routes in your `urls` configuration. Furthermore
   to optimize db accesses, if a cache called `memory_cache` is defined in `CACHES`,
