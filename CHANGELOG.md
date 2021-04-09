@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## Added
+
+- Add portuguese translations
+
 ## [2.4.0] - 2021-04-07
 
 ### Added
