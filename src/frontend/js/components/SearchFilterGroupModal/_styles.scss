@@ -70,10 +70,12 @@
     background: r-theme-val(search-filters-group-modal, close-background);
     border: none;
     border-top: 1px solid r-theme-val(search-filters-group-modal, close-border);
+    margin-top: -1px; // Avoid having a double border when the button overlaps with a list item
   }
 
   &__overlay {
-    z-index: 10; // Make sure the overlay is above any random 0-1-2 z-indexes in content
+    // Make sure the overlay is above any random 0-1-2 z-indexes in content and 200 z-index to the top bar
+    z-index: 300;
     position: fixed;
     top: 0;
     left: 0;
@@ -93,6 +95,27 @@
 
     &:hover {
       color: r-theme-val(search-filters-group-modal, button-color);
+    }
+  }
+}
+
+body.has-search-filter-group-modal {
+  overflow: hidden;
+
+  /*
+   * Flex children in a fixed/absolute container breaks Safari.
+   * Use a specific, admittedly hacky media query to target it with a special layout
+   * that solves the issue on that browser.
+   */
+  @media not all and (min-resolution: 0.001dpcm) {
+    @media all {
+      .search-filter-group-modal {
+        overflow: hidden;
+      }
+
+      .search-filter-group-modal__form__values {
+        overflow: auto;
+      }
     }
   }
 }
