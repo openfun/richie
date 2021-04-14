@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { defineMessages, FormattedMessage, MessageDescriptor } from 'react-intl';
+import { defineMessages, FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
 import ReactModal from 'react-modal';
 
 import { fetchList } from 'data/getResourceList';
@@ -24,6 +24,16 @@ const messages = defineMessages({
     description:
       'Error message when the search for more filter value fails in the search filters modal.',
     id: 'components.SearchFilterGroupModal.error',
+  },
+  inputLabel: {
+    defaultMessage: 'Search for filters to add',
+    description: 'Accessible label for the search input in the search filter modal.',
+    id: 'components.SearchFilterGroupModal.inputLabel',
+  },
+  inputPlaceholder: {
+    defaultMessage: 'Search in { filterName }',
+    description: 'Placeholder message for the search input in the search filter modal.',
+    id: 'components.SearchFilterGroupModal.inputPlaceholder',
   },
   modalTitle: {
     defaultMessage: 'Add filters for {filterName}',
@@ -53,6 +63,8 @@ if (!isTestEnv) {
 }
 
 export const SearchFilterGroupModal = ({ filter }: SearchFilterGroupModalProps) => {
+  const intl = useIntl();
+
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [values, setValues] = useState([] as FilterValue[]);
   const [query, setQuery] = useState('');
@@ -124,12 +136,14 @@ export const SearchFilterGroupModal = ({ filter }: SearchFilterGroupModalProps) 
             <FormattedMessage {...messages.modalTitle} values={{ filterName: filter.human_name }} />
           </legend>
           <input
-            aria-label="Search for filters to add"
+            aria-label={intl.formatMessage(messages.inputLabel)}
             className="search-filter-group-modal__form__input"
             onChange={(event) => {
               setQuery(event.target.value);
             }}
-            placeholder={`Search in ${filter.human_name}`}
+            placeholder={intl.formatMessage(messages.inputPlaceholder, {
+              filterName: filter.human_name,
+            })}
           />
           {error ? (
             <div className="search-filter-group-modal__form__error">

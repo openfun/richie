@@ -12,6 +12,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Add portuguese translations
 
+## Fixed
+
+- Fix small quality issues on the course search filters modal
+
 ## [2.4.0] - 2021-04-07
 
 ### Added
