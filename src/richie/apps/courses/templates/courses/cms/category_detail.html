@@ -142,7 +142,7 @@
             {% endif %}
         {% endwith %}
 
-        {% with blogposts=category.get_blogposts %}
+        {% with blogposts=category.get_blogposts|order_by:"-extended_object__publication_date" %}
             {% if blogposts %}
                 {% autopaginate blogposts GLIMPSE_PAGINATION_BLOGPOSTS %}
                 <div id="page{{ page_suffix }}" class="category-detail__blogposts category-detail__block">
