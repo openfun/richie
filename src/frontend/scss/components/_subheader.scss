@@ -6,6 +6,8 @@ $r-subheader-search-title-width: 19rem !default; // aligned on computed search r
 .subheader {
   $subheader-selector: &;
   @include r-scheme-colors(r-theme-val(subheader, base));
+  position: relative;
+  z-index: 100;
 
   // Top level base container to include possible main background and basic
   // spacing
