@@ -14,6 +14,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Fixed
 
+- Order blogposts by descending publication date within
+  (person|category)_detail template
 - Fix small quality issues on the course search filters modal
 
 ## [2.4.0] - 2021-04-07

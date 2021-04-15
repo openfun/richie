@@ -130,7 +130,7 @@
             {% endif %}
         {% endwith %}
 
-        {% with blogposts=person.get_blogposts %}
+        {% with blogposts=person.get_blogposts|order_by:"-extended_object__publication_date" %}
             {% if blogposts %}
                 {% autopaginate blogposts GLIMPSE_PAGINATION_BLOGPOSTS %}
                 <div id="page{{ page_suffix }}" class="person-detail__blogposts person-detail__block person-detail__block--divider">
