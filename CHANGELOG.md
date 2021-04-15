@@ -8,12 +8,14 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
-## Added
+## [2.5.0] - 2021-04-21
+
+### Added
 
 - Add support for language fallback on "get_related_blogposts"
 - Add portuguese translations
 
-## Fixed
+### Fixed
 
 - Avoid KeyError when an object is indexed with no titles
 - Add missing rel noopener noreferer on target blank links
@@ -1285,7 +1287,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.4.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.5.0...master
+[2.5.0]: https://github.com/openfun/richie/compare/v2.4.0...v2.5.0
 [2.4.0]: https://github.com/openfun/richie/compare/v2.3.3...v2.4.0
 [2.3.3]: https://github.com/openfun/richie/compare/v2.3.2...v2.3.3
 [2.3.2]: https://github.com/openfun/richie/compare/v2.3.1...v2.3.2
