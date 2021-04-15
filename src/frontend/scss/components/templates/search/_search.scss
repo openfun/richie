@@ -47,6 +47,7 @@ $r-search-filters-width: 15rem !default;
     position: absolute;
     left: 0;
     max-width: 85vw;
+    padding: 0 2rem 1rem 2rem;
     transform: translateX(-100.1%);
     transition: ease-in-out 0.5s;
 
@@ -56,6 +57,7 @@ $r-search-filters-width: 15rem !default;
       left: auto;
       flex-basis: $r-search-filters-width;
       max-width: $r-search-filters-width;
+      padding: 0;
       transform: none;
     }
 
@@ -84,7 +86,6 @@ $r-search-filters-width: 15rem !default;
   }
 
   &__results {
-    position: relative;
     flex-grow: 1;
     flex-shrink: 0;
     flex-basis: 100%;

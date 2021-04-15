@@ -14,7 +14,11 @@ let mockMatches = false;
 jest.mock('utils/indirection/window', () => ({
   history: { pushState: jest.fn() },
   location: { search: '' },
-  matchMedia: () => ({ matches: mockMatches }),
+  matchMedia: () => ({
+    matches: mockMatches,
+    addListener: jest.fn(),
+    removeListener: jest.fn(),
+  }),
   scroll: jest.fn(),
 }));
 

@@ -7,9 +7,10 @@ import { SearchFiltersPane } from 'components/SearchFiltersPane';
 import { Spinner } from 'components/Spinner';
 import { useCourseSearch } from 'data/useCourseSearch';
 import { useCourseSearchParams, CourseSearchParamsAction } from 'data/useCourseSearchParams';
+import useMatchMedia from 'utils/useMatchMedia';
 import { RequestStatus } from 'types/api';
 import { CommonDataProps } from 'types/commonDataProps';
-import { matchMedia, scroll } from 'utils/indirection/window';
+import { scroll } from 'utils/indirection/window';
 
 const messages = defineMessages({
   errorMessage: {
@@ -40,7 +41,7 @@ const Search = ({ context }: CommonDataProps) => {
   const { courseSearchParams, lastDispatchActions } = useCourseSearchParams();
   const courseSearchResponse = useCourseSearch(courseSearchParams);
 
-  const alwaysShowFilters = matchMedia('(min-width: 992px)').matches;
+  const alwaysShowFilters = useMatchMedia('(min-width: 992px)');
   const [showFilters, setShowFilters] = useState(false);
 
   const [referenceId] = useState(`control-${Math.random()}`);
