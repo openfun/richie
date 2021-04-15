@@ -111,6 +111,14 @@
     "description": "Error message when the search for more filter value fails in the search filters modal.",
     "message": "Ocorreu um erro ao pesquisar por {filterName}."
   },
+  "components.SearchFilterGroupModal.inputLabel": {
+    "description": "Accessible label for the search input in the search filter modal.",
+    "message": "Search for filters to add"
+  },
+  "components.SearchFilterGroupModal.inputPlaceholder": {
+    "description": "Placeholder message for the search input in the search filter modal.",
+    "message": "Search in { filterName }"
+  },
   "components.SearchFilterGroupModal.modalTitle": {
     "description": "Title for the modal to add more filter values in the search filters modal.",
     "message": "Adicionar filtros para {filterName}"

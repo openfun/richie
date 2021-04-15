@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-07 08:09+0000\n"
-"PO-Revision-Date: 2021-04-07 08:39\n"
+"POT-Creation-Date: 2021-04-19 07:33+0000\n"
+"PO-Revision-Date: 2021-04-21 15:26\n"
 "Last-Translator: \n"
 "Language-Team: French\n"
 "Language: fr_FR\n"
@@ -514,31 +514,31 @@ msgstr "Archivé le {now:%Y-%m-%d %H:%M:%S}"
 msgid "{title:s} ({version!s})"
 msgstr "{title:s} ({version!s})"
 
-#: apps/courses/models/blog.py:26
+#: apps/courses/models/blog.py:27
 msgid "blog post"
 msgstr "billet de blog"
 
-#: apps/courses/models/blog.py:27
+#: apps/courses/models/blog.py:28
 msgid "blog posts"
 msgstr "articles de blog"
 
-#: apps/courses/models/blog.py:95 apps/courses/models/category.py:166
+#: apps/courses/models/blog.py:91 apps/courses/models/category.py:166
 #: apps/courses/models/course.py:896 apps/courses/models/organization.py:187
 #: apps/courses/models/organization.py:221
 msgid "variant"
 msgstr "variante"
 
-#: apps/courses/models/blog.py:98 apps/courses/models/category.py:169
+#: apps/courses/models/blog.py:94 apps/courses/models/category.py:169
 #: apps/courses/models/course.py:899 apps/courses/models/organization.py:190
 #: apps/courses/models/organization.py:224
 msgid "Optional glimpse variant for a custom look."
 msgstr "Variante d'aperçu optionnelle pour un affichage personnalisé."
 
-#: apps/courses/models/blog.py:105
+#: apps/courses/models/blog.py:101
 msgid "blog post plugin"
 msgstr "plugin de billet de blog"
 
-#: apps/courses/models/blog.py:106
+#: apps/courses/models/blog.py:102
 msgid "blog post plugins"
 msgstr "plugins d'article de blog"
 

@@ -49,7 +49,9 @@ for site_language in LANGUAGES_DICT:
 # the first matching locale will be used if your LANGUAGES setting declares languages without
 # regions.
 RFC_5646_LOCALES = lazy(
-    lambda: getattr(settings, "RFC_5646_LOCALES", ["en-US", "es-ES", "fr-FR", "fr-CA"]),
+    lambda: getattr(
+        settings, "RFC_5646_LOCALES", ["en-US", "es-ES", "pt-PT", "fr-FR", "fr-CA"]
+    ),
     list,
 )()
 
