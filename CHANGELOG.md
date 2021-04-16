@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Added
 
+- Add support for language fallback on "get_related_blogposts"
 - Add portuguese translations
 
 ## Fixed

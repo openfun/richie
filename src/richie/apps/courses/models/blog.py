@@ -9,8 +9,9 @@ from cms.api import Page
 from cms.extensions.extension_pool import extension_pool
 from cms.models.pluginmodel import CMSPlugin
 
-from ...core.models import BasePageExtension
+from ...core.models import BasePageExtension, get_plugin_language_fallback_clause
 from .. import defaults
+from .category import Category, CategoryPluginModel
 
 
 class BlogPost(BasePageExtension):
@@ -32,26 +33,15 @@ class BlogPost(BasePageExtension):
             name=self.extended_object.get_title(), model=self._meta.verbose_name.title()
         )
 
-    def _get_category_pages(self, language=None):
+    def get_categories(self, language=None):
         """
-        Return the category pages linked to the blogpost via a category plugin in the "categories"
-        placeholder on the blogpost detail page, ranked by their `path` to respect the
+        Return the categories linked to the blog post via a category plugin in any of the
+        placeholders on the blog post detail page, ranked by their `path` to respect the
         order in the categories tree.
         """
-        language = language or translation.get_language()
-
-        selector = "category_plugins__cmsplugin_ptr"
-        # pylint: disable=no-member
-        filter_dict = {
-            f"{selector:s}__language": language,
-            f"{selector:s}__placeholder__page": self.extended_object,
-        }
-        # For a public blogpost, we must filter out categories that are not published in
-        # any language
-        if self.extended_object.publisher_is_draft is False:
-            filter_dict["title_set__published"] = True
-
-        return Page.objects.filter(**filter_dict).order_by("node__path").distinct()
+        return self.get_direct_related_page_extensions(
+            Category, CategoryPluginModel, language=language
+        )
 
     def get_related_blogposts(self, language=None):
         """
@@ -60,16 +50,22 @@ class BlogPost(BasePageExtension):
         tree.
         """
         is_draft = self.extended_object.publisher_is_draft
-        language = language or translation.get_language()
+        current_language = language or translation.get_language()
+        language_clause = get_plugin_language_fallback_clause(
+            current_language, is_draft
+        )
 
-        bfs = "extended_object__placeholders__cmsplugin__courses_categorypluginmodel__page__in"
-        selector = {bfs: self._get_category_pages()}
+        bfs = (
+            "extended_object__placeholders__cmsplugin__courses_categorypluginmodel"
+            "__page__category__in"
+        )
+        selector = {bfs: self.get_categories()}
 
         # pylint: disable=no-member
         return (
             BlogPost.objects.filter(
+                language_clause,
                 extended_object__publisher_is_draft=is_draft,
-                extended_object__placeholders__cmsplugin__language=language,
                 **selector,
             )
             .exclude(id=self.id)

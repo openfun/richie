@@ -8,6 +8,46 @@ from cms.models import Title
 from cms.utils import get_current_site, i18n, page_permissions
 
 
+def get_plugin_language_fallback_clause(language, is_draft):
+    """
+    Return a language fallback clause to apply in more complex queries where we
+    select plugins and need to apply language fallbacks.
+    """
+    site = get_current_site()
+    languages = [language] + i18n.get_fallback_languages(language, site_id=site.pk)
+    languages = list(dict.fromkeys(languages))
+
+    for item in range(len(languages)):
+        for previous_item, previous_language in enumerate(languages[: item + 1]):
+
+            qop_dict = {
+                "extended_object__placeholders__cmsplugin__language": previous_language
+            }
+            if previous_item == item:
+                if not is_draft:
+                    qop_dict.update(
+                        {
+                            "extended_object__title_set__language": previous_language,
+                            "extended_object__title_set__published": True,
+                        }
+                    )
+                qop = models.Q(**qop_dict)
+            else:
+                qop = ~models.Q(**qop_dict)
+
+            if previous_item == 0:
+                subclause = qop
+            else:
+                subclause &= qop
+
+        if item == 0:
+            language_clause = subclause
+        else:
+            language_clause |= subclause
+
+    return language_clause
+
+
 def get_relevant_page_with_fallbacks(context, instance):
     """
     The plugin should show the published page whenever it exists or the draft page
@@ -204,40 +244,9 @@ class BasePageExtension(PageExtension):
         page_extension = self if is_draft else self.draft_extension
         page = page_extension.extended_object
         current_language = language or translation.get_language()
-        site = get_current_site()
-
-        languages = [current_language] + i18n.get_fallback_languages(
-            current_language, site_id=site.pk
+        language_clause = get_plugin_language_fallback_clause(
+            current_language, is_draft
         )
-        languages = list(dict.fromkeys(languages))
-
-        for item in range(len(languages)):
-            for previous_item, previous_language in enumerate(languages[: item + 1]):
-
-                qop_dict = {
-                    "extended_object__placeholders__cmsplugin__language": previous_language
-                }
-                if previous_item == item:
-                    if not is_draft:
-                        qop_dict.update(
-                            {
-                                "extended_object__title_set__language": previous_language,
-                                "extended_object__title_set__published": True,
-                            }
-                        )
-                    qop = models.Q(**qop_dict)
-                else:
-                    qop = ~models.Q(**qop_dict)
-
-                if previous_item == 0:
-                    subclause = qop
-                else:
-                    subclause &= qop
-
-            if item == 0:
-                language_clause = subclause
-            else:
-                language_clause |= subclause
 
         self_name = self._meta.model.__name__.lower()
         if include_descendants is True:
