@@ -9,13 +9,7 @@ const users = [
   {
     caption: 'EDUlib',
     image: '/img/users/edulib.png',
-    infoLink: 'https://cours.edulib.org/',
-    pinned: true,
-  },
-  {
-    caption: 'CEA',
-    image: '/img/users/cea.jpg',
-    infoLink: 'https://github.com/cea-instn/instart',
+    infoLink: 'https://catalogue.edulib.org/',
     pinned: true,
   },
 ];

@@ -12,7 +12,9 @@ module.exports = class Users extends React.Component {
     }
 
     const showcase = siteConfig.users.map((user) => (
-      <img src={user.image} alt={user.caption} title={user.caption} key={user.caption} />
+      <a href={user.infoLink} target="_blank" rel="noopener noreferrer" title={user.caption}>
+        <img src={user.image} alt={user.caption} key={user.caption} />
+      </a>
     ));
 
     return (

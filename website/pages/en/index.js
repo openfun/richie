@@ -198,7 +198,9 @@ module.exports = class Index extends React.Component {
       const showcase = siteConfig.users
         .filter((user) => user.pinned)
         .map((user) => (
-          <img src={user.image} alt={user.caption} title={user.caption} key={user.caption} />
+          <a href={user.infoLink} target="_blank" rel="noopener noreferrer" title={user.caption}>
+            <img src={user.image} alt={user.caption} key={user.caption} />
+          </a>
         ));
 
       return (
