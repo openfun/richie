@@ -16,6 +16,10 @@ $ make migrate
 
 ## Unreleased
 
+- Named capturing group regex are still considered experimental in Javascript and may cause trouble
+  with old browsers, so we decided to remove this feature from Richie and use indexed capturing
+  group instead. As a consequence, you should update your `JS_COURSE_REGEX` setting to remove
+  the `course_id`named group.
 - Frontend JS is now generated into a dedicated `build` folder inside `static/js`. So if you need
   these scripts in templates, you have to update the script tag src to new destination.
   `static/js/index.js` becomes `static/js/build/index.js`

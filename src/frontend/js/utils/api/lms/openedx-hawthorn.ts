@@ -20,8 +20,10 @@ const API = (
   APIConf: AuthenticationBackend | LMSBackend,
   options?: ApiOptions,
 ): ApiImplementation => {
-  const extractCourseIdFromUrl = (url: string): Maybe<Nullable<string>> =>
-    url.match((APIConf as LMSBackend).course_regexp)?.groups?.course_id;
+  const extractCourseIdFromUrl = (url: string): Maybe<Nullable<string>> => {
+    const matches = url.match((APIConf as LMSBackend).course_regexp);
+    return matches && matches[1] ? matches[1] : null;
+  };
 
   const ROUTES = {
     user: {

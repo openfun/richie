@@ -26,6 +26,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Clean built frontend files before each build
+- Remove use of regexp group for JS_COURSE_REGEX setting
 
 ## [2.4.0] - 2021-04-07
 
