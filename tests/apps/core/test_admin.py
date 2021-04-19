@@ -43,7 +43,8 @@ class LinkFieldTestCase(TestCase):
         """
         method = link_field("my_field")
         self.assertEqual(
-            method(Obj()), '<a target="_blank" href="my-url">My Linked Object</a>'
+            method(Obj()),
+            '<a target="_blank" rel="noopener noreferrer" href="my-url">My Linked Object</a>',
         )
         mock_reverse.assert_called_once_with(
             "admin:app-label_model-name_change", args=[1]
@@ -54,7 +55,8 @@ class LinkFieldTestCase(TestCase):
         """It should be possible to force the view name used to reverse the url."""
         method = link_field("my_field", view_name="my_view")
         self.assertEqual(
-            method(Obj()), '<a target="_blank" href="my-url">My Linked Object</a>'
+            method(Obj()),
+            '<a target="_blank" rel="noopener noreferrer" href="my-url">My Linked Object</a>',
         )
         mock_reverse.assert_called_once_with("my_view", args=[1])
 
@@ -63,7 +65,8 @@ class LinkFieldTestCase(TestCase):
         """It should be possible to force the anchor."""
         method = link_field("my_field", anchor="My Forced Anchor")
         self.assertEqual(
-            method(Obj()), '<a target="_blank" href="my-url">My Forced Anchor</a>'
+            method(Obj()),
+            '<a target="_blank" rel="noopener noreferrer" href="my-url">My Forced Anchor</a>',
         )
         mock_reverse.assert_called_once_with(
             "admin:app-label_model-name_change", args=[1]
