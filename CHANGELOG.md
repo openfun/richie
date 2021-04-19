@@ -19,6 +19,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   (person|category)_detail template
 - Fix filter pane quality issues on handheld devices
 - Fix small quality issues on the course search filters modal
+- Fix initializeAccordions compatibility issue
 
 ### Changed
 
