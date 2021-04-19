@@ -5,8 +5,10 @@ import { ApiImplementation } from 'types/api';
 import OpenEdxHawthornApiInterface from './openedx-hawthorn';
 
 const API = (APIConf: LMSBackend | AuthenticationBackend): ApiImplementation => {
-  const extractCourseIdFromUrl = (url: string): Maybe<Nullable<string>> =>
-    url.match((APIConf as LMSBackend).course_regexp)?.groups?.course_id;
+  const extractCourseIdFromUrl = (url: string): Maybe<Nullable<string>> => {
+    const matches = url.match((APIConf as LMSBackend).course_regexp);
+    return matches && matches[1] ? matches[1] : null;
+  };
 
   return {
     user: OpenEdxHawthornApiInterface(APIConf).user,

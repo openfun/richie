@@ -298,7 +298,7 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
                 "base", environ_name="EDX_JS_BACKEND", environ_prefix=None
             ),
             "JS_COURSE_REGEX": values.Value(
-                r"^.*/courses/(?<course_id>.*)/course/?$",
+                r"^.*/courses/(.*)/course/?$",
                 environ_name="EDX_JS_COURSE_REGEX",
                 environ_prefix=None,
             ),
@@ -543,9 +543,7 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
 
     # For more details about CMS_CACHE_DURATION, see :
     # http://docs.django-cms.org/en/latest/reference/configuration.html#cms-cache-durations
-    CMS_CACHE_DURATIONS = values.DictValue(
-        {"menus": 3600, "content": 60, "permissions": 3600}
-    )
+    CMS_CACHE_DURATIONS = values.DictValue({"menus": 0, "content": 0, "permissions": 0})
 
     # Sessions
     SESSION_ENGINE = values.Value("django.contrib.sessions.backends.db")
@@ -621,7 +619,7 @@ class Test(Base):
             "BACKEND": "richie.apps.courses.lms.edx.EdXLMSBackend",
             "COURSE_REGEX": r"^.*/courses/(?P<course_id>.*)/course/?$",
             "JS_BACKEND": "base",
-            "JS_COURSE_REGEX": r"^.*/courses/(?<course_id>.*)/course/?$",
+            "JS_COURSE_REGEX": r"^.*/courses/(.*)/course/?$",
         }
     ]
 
