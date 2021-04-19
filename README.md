@@ -22,8 +22,8 @@ Among the features that `Richie` offers out of the box:
 - catalog of courses synchronized with one or more `LMS` instances,
 - search engine based on `Elasticsearch` and pre-configured to offer full-text queries,
   multi-facetting, auto-complete,...
-- flexible custom pages for courses, organizations, categories, teachers, blog posts (and their
-  inter-relations),
+- flexible custom pages for courses, organizations, categories, teachers, blog posts,
+  programs (and their inter-relations),
 - Extensible with any third-party `DjangoCMS` plugin or any third-party `Django` application.
 
 ## Quick preview
