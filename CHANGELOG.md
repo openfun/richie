@@ -15,6 +15,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## Fixed
 
+- Add missing rel noopener noreferer on target blank links
 - Order blogposts by descending publication date within
   (person|category)_detail template
 - Fix filter pane quality issues on handheld devices

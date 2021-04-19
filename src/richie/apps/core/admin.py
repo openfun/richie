@@ -56,7 +56,7 @@ def link_field(field_name, view_name=None, anchor=None, target_blank=True):
         local_anchor = anchor or str(linked_obj)
         link_url = reverse(local_view_name, args=[linked_obj.id])
         markup = (
-            '<a target="_blank" href="{:s}">{!s}</a>'
+            '<a target="_blank" rel="noopener noreferrer" href="{:s}">{!s}</a>'
             if target_blank
             else '<a href="{:s}">{!s}</a>'
         )
