@@ -192,8 +192,15 @@
                 if ($accordionItems.length > 0) {
                     $accordionItems.forEach(function(itemObject, itemIndex) {
                         itemObject.addEventListener('click', function () {
-                            itemObject.closest('li').toggleAttribute('data-accordion-active');
-                            itemObject.toggleAttribute('data-accordion-open');
+                            var $closestLi = itemObject.closest('li');
+
+                            $closestLi.hasAttribute('data-accordion-active')
+                                ? $closestLi.removeAttribute('data-accordion-active')
+                                : $closestLi.setAttribute('data-accordion-active', true);
+
+                            itemObject.hasAttribute('data-accordion-open')
+                                ? itemObject.removeAttribute('data-accordion-open')
+                                : itemObject.setAttribute('data-accordion-open', true);
                         });
                     });
                 }
