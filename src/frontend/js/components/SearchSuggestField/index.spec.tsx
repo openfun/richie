@@ -11,10 +11,6 @@ import { CommonDataProps } from 'types/commonDataProps';
 import { FilterDefinition } from 'types/filters';
 import SearchSuggestField from '.';
 
-// Unexplained difficulties with fake timers were encountered in these tests.
-// We decided to mock the debounce function instead.
-jest.mock('lodash-es/debounce', () => (fn: any) => (...args: any[]) => fn(...args));
-
 jest.mock('settings', () => ({
   API_LIST_DEFAULT_PARAMS: { limit: '13', offset: '0' },
 }));
@@ -69,6 +65,8 @@ describe('components/SearchSuggestField', () => {
   };
 
   afterEach(() => fetchMock.restore());
+  afterEach(() => jest.clearAllTimers());
+  beforeEach(() => jest.useFakeTimers('modern'));
   beforeEach(jest.resetAllMocks);
   beforeEach(() => (location.search = ''));
 
@@ -264,9 +262,15 @@ describe('components/SearchSuggestField', () => {
     fireEvent.focus(field);
     fireEvent.change(field, { target: { value: 'orga' } });
 
-    await waitFor(() => {
-      expect(history.pushState).toHaveBeenCalledTimes(1);
+    // As user typing is debounced, history.pushState is not fired immediately
+    expect(history.pushState).not.toHaveBeenCalled();
+
+    act(() => {
+      // run all pending timers (debounce) to update courseSearchParams
+      jest.runOnlyPendingTimers();
     });
+
+    expect(history.pushState).toHaveBeenCalledTimes(1);
     expect(history.pushState).toHaveBeenLastCalledWith(
       {
         name: 'courseSearch',
@@ -279,12 +283,14 @@ describe('components/SearchSuggestField', () => {
       '/search?limit=13&offset=0&query=orga',
     );
 
-    expect(fetchMock.called('/api/v1.0/levels/autocomplete/?query=orga')).toEqual(false);
-    expect(queryByText('Levels')).toEqual(null);
-
-    expect(fetchMock.called('/api/v1.0/organizations/autocomplete/?query=orga')).toEqual(true);
+    await waitFor(() => {
+      expect(fetchMock.called('/api/v1.0/organizations/autocomplete/?query=orga')).toEqual(true);
+    });
     getByText('Organizations');
     getByText('Organization #27');
+
+    expect(fetchMock.called('/api/v1.0/levels/autocomplete/?query=orga')).toEqual(false);
+    expect(queryByText('Levels')).toEqual(null);
 
     expect(fetchMock.called('/api/v1.0/persons/autocomplete/?query=orga')).toEqual(true);
     expect(queryByText('Persons')).toEqual(null);
@@ -348,9 +354,11 @@ describe('components/SearchSuggestField', () => {
     fireEvent.focus(field);
     fireEvent.change(field, { target: { value: 'doct' } });
 
-    await waitFor(() => {
-      expect(history.pushState).toHaveBeenCalledTimes(1);
+    act(() => {
+      // run all pending timers (debounce) to update courseSearchParams
+      jest.runOnlyPendingTimers();
     });
+    expect(history.pushState).toHaveBeenCalledTimes(1);
     expect(history.pushState).toHaveBeenCalledWith(
       {
         name: 'courseSearch',
@@ -363,11 +371,14 @@ describe('components/SearchSuggestField', () => {
       '/search?limit=13&offset=0&query=doct',
     );
 
+    await waitFor(() => {
+      expect(fetchMock.called('/api/v1.0/organizations/autocomplete/?query=doct')).toEqual(true);
+    });
+
+    expect(queryByText('Organizations')).toEqual(null);
+
     expect(fetchMock.called('/api/v1.0/levels/autocomplete/?query=doct')).toEqual(false);
     expect(queryByText('Levels')).toEqual(null);
-
-    expect(fetchMock.called('/api/v1.0/organizations/autocomplete/?query=doct')).toEqual(true);
-    expect(queryByText('Organizations')).toEqual(null);
 
     expect(fetchMock.called('/api/v1.0/persons/autocomplete/?query=doct')).toEqual(true);
     getByText('Persons');
@@ -466,17 +477,15 @@ describe('components/SearchSuggestField', () => {
     const field = getByPlaceholderText('Search for courses, organizations, categories');
     fireEvent.focus(field);
 
-    // NB: the tests below rely on the very crude debounce mock for lodash-debounce.
-    // TODO: rewrite them when we use mocked timers to test our debouncing strategy.
     fireEvent.change(field, { target: { value: 'ri' } });
-    await waitFor(() => {
-      expect(history.pushState).not.toHaveBeenCalled();
-    });
+    expect(history.pushState).not.toHaveBeenCalled();
 
     fireEvent.change(field, { target: { value: 'ric' } });
-    await waitFor(() => {
-      expect(history.pushState).toHaveBeenCalledTimes(1);
+    act(() => {
+      // run all pending timers (debounce) to update courseSearchParams
+      jest.runOnlyPendingTimers();
     });
+    expect(history.pushState).toHaveBeenCalledTimes(1);
     expect(history.pushState).toHaveBeenLastCalledWith(
       {
         name: 'courseSearch',
@@ -490,9 +499,12 @@ describe('components/SearchSuggestField', () => {
     );
 
     fireEvent.change(field, { target: { value: 'rich data driven' } });
-    await waitFor(() => {
-      expect(history.pushState).toHaveBeenCalledTimes(2);
+    expect(history.pushState).toHaveBeenCalledTimes(1);
+    act(() => {
+      // run all pending timers (debounce) to update courseSearchParams
+      jest.runOnlyPendingTimers();
     });
+    expect(history.pushState).toHaveBeenCalledTimes(2);
     expect(history.pushState).toHaveBeenLastCalledWith(
       {
         name: 'courseSearch',
@@ -506,9 +518,12 @@ describe('components/SearchSuggestField', () => {
     );
 
     fireEvent.change(field, { target: { value: '' } });
-    await waitFor(() => {
-      expect(history.pushState).toHaveBeenCalledTimes(3);
+    expect(history.pushState).toHaveBeenCalledTimes(2);
+    act(() => {
+      // run all pending timers (debounce) to update courseSearchParams
+      jest.runOnlyPendingTimers();
     });
+    expect(history.pushState).toHaveBeenCalledTimes(3);
     expect(history.pushState).toHaveBeenLastCalledWith(
       {
         name: 'courseSearch',
@@ -545,8 +560,6 @@ describe('components/SearchSuggestField', () => {
     const field = getByPlaceholderText('Search for courses, organizations, categories');
     fireEvent.focus(field);
 
-    // NB: the tests below rely on the very crude debounce mock for lodash-debounce.
-    // TODO: rewrite them when we use mocked timers to test our debouncing strategy.
     fireEvent.change(field, { target: { value: 'ri' } });
     await waitFor(() => {
       expect(history.pushState).not.toHaveBeenCalled();
@@ -564,8 +577,11 @@ describe('components/SearchSuggestField', () => {
 
     fireEvent.change(field, { target: { value: 'ric' } });
     await waitFor(() => {
-      expect(history.pushState).toHaveBeenCalledTimes(1);
+      // run all pending timers (debounce) to update courseSearchParams
+      jest.runOnlyPendingTimers();
     });
+
+    expect(history.pushState).toHaveBeenCalledTimes(1);
     expect(history.pushState).toHaveBeenLastCalledWith(
       {
         name: 'courseSearch',
@@ -652,8 +668,10 @@ describe('components/SearchSuggestField', () => {
     // The user starts typing a full-text search, the organization remains selected
     fireEvent.change(field, { target: { value: 'ric' } });
     await waitFor(() => {
-      expect(history.pushState).toHaveBeenCalledTimes(3);
+      // run all pending timers (debounce) to update courseSearchParams
+      jest.runOnlyPendingTimers();
     });
+    expect(history.pushState).toHaveBeenCalledTimes(3);
     expect(history.pushState).toHaveBeenLastCalledWith(
       {
         name: 'courseSearch',

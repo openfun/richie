@@ -1,12 +1,12 @@
 import debounce from 'lodash-es/debounce';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Autosuggest from 'react-autosuggest';
 import { defineMessages, useIntl } from 'react-intl';
 
 import {
   getRelevantFilter,
   getSuggestionValue,
-  onSuggestionsFetchRequested,
+  onSuggestionsFetchRequestedDebounced,
   renderSuggestion,
 } from 'common/searchFields';
 import { SearchInput } from 'components/SearchInput';
@@ -66,28 +66,39 @@ const SearchSuggestField = ({ context }: CommonDataProps) => {
    * Helper to update the course search params when the user types. We needed to take it out of
    * the `onChange` handler to wrap it in a `debounce` (and therefore a `useRef` to make the
    * debouncing effective).
+   *
+   * This method should be memoized and updated only when courseSearchParams change.
+   *
    * @param _ Unused: change event.
    * @param params Incoming parameters related to the change event.
    * - `method` is the way the value was updated.
    * - `newValue` is the search suggest form field value.
    */
-  const searchAsTheUserTypes: SearchAutosuggestProps['inputProps']['onChange'] = (
-    _,
-    { method, newValue },
-  ) => {
-    if (
-      method === 'type' &&
-      // Check length against trimmed version as our backend API needs 3 non-space characters to
-      // do a full-text search.
-      (newValue.length === 0 || newValue.trim().length >= 3)
-    ) {
-      dispatchCourseSearchParamsUpdate({
-        query: newValue,
-        type: CourseSearchParamsAction.queryUpdate,
-      });
-    }
-  };
-  const updateCourseSearchParamsDebounced = debounce(searchAsTheUserTypes, 500, { maxWait: 1100 });
+  const searchAsTheUserTypes: SearchAutosuggestProps['inputProps']['onChange'] = useCallback(
+    (_, { method, newValue }) => {
+      if (
+        method === 'type' &&
+        // Check length against trimmed version as our backend API needs 3 non-space characters to
+        // do a full-text search.
+        (newValue.length === 0 || newValue.trim().length >= 3)
+      ) {
+        dispatchCourseSearchParamsUpdate({
+          query: newValue,
+          type: CourseSearchParamsAction.queryUpdate,
+        });
+      }
+    },
+    [courseSearchParams],
+  );
+
+  /**
+   * Debounce the searchAsTheUserTypes method. We have to memoize it to prevent creation to a new
+   * debounce timer at each render. We only update this function when searchAsTheUserTypes change.
+   */
+  const updateCourseSearchParamsDebounced = useCallback(
+    debounce(searchAsTheUserTypes, 500, { maxWait: 1100 }),
+    [searchAsTheUserTypes],
+  );
 
   const inputProps: SearchAutosuggestProps['inputProps'] = {
     /**
@@ -157,7 +168,7 @@ const SearchSuggestField = ({ context }: CommonDataProps) => {
       multiSection={true}
       onSuggestionsClearRequested={() => setSuggestions([])}
       onSuggestionsFetchRequested={async ({ value: incomingValue }) =>
-        onSuggestionsFetchRequested(await getFilters(), setSuggestions, incomingValue)
+        onSuggestionsFetchRequestedDebounced(await getFilters(), setSuggestions, incomingValue)
       }
       onSuggestionSelected={onSuggestionSelected}
       renderInputComponent={(passthroughInputProps) => (
