@@ -51,7 +51,7 @@ class PersonsIndexer:
         },
     }
     scripts = {}
-    display_fields = ["absolute_url", "portrait", "title.*"]
+    display_fields = ["absolute_url", "portrait", "title"]
 
     @classmethod
     def get_es_document_for_person(cls, person, index=None, action="index"):

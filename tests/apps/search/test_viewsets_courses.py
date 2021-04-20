@@ -296,7 +296,7 @@ class CoursesViewsetsTestCase(CMSTestCase):
                 "icon",
                 "organization_highlighted",
                 "organizations",
-                "title.*",
+                "title",
             ],
             body={
                 "aggs": {"some": "aggs"},

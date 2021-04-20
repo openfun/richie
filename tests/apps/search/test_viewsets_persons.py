@@ -104,7 +104,7 @@ class PersonsViewSetTestCase(TestCase):
         )
         # The ES connector was called with a query that matches the client's request
         mock_search.assert_called_with(
-            _source=["absolute_url", "portrait", "title.*"],
+            _source=["absolute_url", "portrait", "title"],
             body={
                 "query": {
                     "bool": {

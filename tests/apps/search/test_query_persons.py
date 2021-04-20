@@ -29,7 +29,7 @@ class PersonsQueryTestCase(TestCase):
     Test search queries on persons.
     """
 
-    def execute_query(self, querystring=""):
+    def execute_query(self, persons=None, querystring=""):
         """
         Not a test.
         This method is doing the heavy lifting for the tests in this class: create and fill the
@@ -63,7 +63,7 @@ class PersonsQueryTestCase(TestCase):
                 "portrait": {"en": "en/image"},
                 **person,
             }
-            for person in PERSONS
+            for person in persons or PERSONS
         ]
         bulk(actions=actions, chunk_size=500, client=ES_CLIENT)
         indices_client.refresh()
@@ -95,7 +95,7 @@ class PersonsQueryTestCase(TestCase):
         Make sure only persons matching the text query are returned.
         """
         # Make a query without diacritics for an object with diacritics in its title
-        content = self.execute_query("query=jason")
+        content = self.execute_query(querystring="query=jason")
         self.assertEqual(
             content,
             {
@@ -106,7 +106,7 @@ class PersonsQueryTestCase(TestCase):
             },
         )
         # Make a query with diacritics for an object without diacritics in its title
-        content = self.execute_query("query=jõhń")
+        content = self.execute_query(querystring="query=jõhń")
         self.assertEqual(
             content,
             {
@@ -114,6 +114,35 @@ class PersonsQueryTestCase(TestCase):
                 "objects": [
                     {"id": "5987", "portrait": "en/image", "title": "John Blue"},
                     {"id": "5918", "portrait": "en/image", "title": "John Brown"},
+                ],
+            },
+        )
+
+    def test_query_persons_empty_content(self, *_):
+        """
+        Make sure no 500 error is raised if an empty person is indexed.
+        """
+        content = self.execute_query(
+            persons=[
+                {
+                    "id": "1234",
+                    "title": {},
+                    "absolute_url": {},
+                    "bio": {},
+                    "portrait": {},
+                }
+            ]
+        )
+        self.assertEqual(
+            content,
+            {
+                "meta": {"count": 1, "offset": 0, "total_count": 1},
+                "objects": [
+                    {
+                        "id": "1234",
+                        "portrait": None,
+                        "title": None,
+                    },
                 ],
             },
         )

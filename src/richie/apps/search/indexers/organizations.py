@@ -47,7 +47,7 @@ class OrganizationsIndexer:
         },
     }
     scripts = {}
-    display_fields = ["absolute_url", "logo", "title.*"]
+    display_fields = ["absolute_url", "logo", "title"]
 
     @classmethod
     def get_es_document_for_organization(cls, organization, index=None, action="index"):
