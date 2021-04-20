@@ -1161,6 +1161,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
     by Richie.
 - Translations are loaded dynamically in frontend application,
 - Optimized frontend build in our official Docker image.
+- Debounce search requests
 
 ### Fixed
 

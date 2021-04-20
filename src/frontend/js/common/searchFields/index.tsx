@@ -1,4 +1,5 @@
 import React from 'react';
+import debounce from 'lodash-es/debounce';
 
 import { StaticFilterDefinitions } from 'types/filters';
 import {
@@ -32,7 +33,7 @@ export const renderSuggestion: SearchAutosuggestProps['renderSuggestion'] = (sug
  * @param setSuggestions The suggestion setter method for the component using our helper.
  * @param incomingValue The current value of the search suggest form field.
  */
-export const onSuggestionsFetchRequested = async (
+const onSuggestionsFetchRequested = async (
   filters: StaticFilterDefinitions,
   setSuggestions: (suggestions: SearchSuggestionSection[]) => void,
   incomingValue: string,
@@ -61,6 +62,10 @@ export const onSuggestionsFetchRequested = async (
     sections.filter((section) => !!section!.values.length),
   );
 };
+
+export const onSuggestionsFetchRequestedDebounced = debounce(onSuggestionsFetchRequested, 200, {
+  maxWait: 1000,
+});
 
 /**
  * Helper to pick out the relevant filter for a suggestion from the general filters object.

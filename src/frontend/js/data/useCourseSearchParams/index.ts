@@ -1,7 +1,7 @@
 import { parse, stringify } from 'query-string';
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 
-import { HistoryContext } from 'data/useHistory';
+import { useHistory } from 'data/useHistory';
 import { API_LIST_DEFAULT_PARAMS } from 'settings';
 import { APIListRequestParams } from 'types/api';
 import { FilterDefinition } from 'types/filters';
@@ -95,7 +95,7 @@ const courseSearchParamsReducer = (
 export const useCourseSearchParams = (): CourseSearchParamsState => {
   // Grab HistoryContext so we can be kept updated when other parts of the component tree use pushState
   // to change the user search through the query string.
-  const [historyEntry, pushState, replaceState] = useContext(HistoryContext);
+  const [historyEntry, pushState, replaceState] = useHistory();
 
   // HistoryEntry.state includes parse query strings, which if we're on a search page should be course search params
   const courseSearchParams: APIListRequestParams = historyEntry.state.data.params;

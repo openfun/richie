@@ -6,7 +6,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import {
   getRelevantFilter,
   getSuggestionValue,
-  onSuggestionsFetchRequested,
+  onSuggestionsFetchRequestedDebounced,
   renderSuggestion,
 } from 'common/searchFields';
 import { SearchInput } from 'components/SearchInput';
@@ -130,7 +130,7 @@ const RootSearchSuggestField = ({
       multiSection={true}
       onSuggestionsClearRequested={() => setSuggestions([])}
       onSuggestionsFetchRequested={async ({ value: incomingValue }) =>
-        onSuggestionsFetchRequested(await getFilters(), setSuggestions, incomingValue)
+        onSuggestionsFetchRequestedDebounced(await getFilters(), setSuggestions, incomingValue)
       }
       onSuggestionHighlighted={({ suggestion }) => setHasHighlightedSuggestion(!!suggestion)}
       onSuggestionSelected={onSuggestionSelected}
