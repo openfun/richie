@@ -212,7 +212,7 @@ class CoursesIndexer:
         "icon",
         "organization_highlighted",
         "organizations",
-        "title.*",
+        "title",
     ]
     form = CourseSearchForm
 

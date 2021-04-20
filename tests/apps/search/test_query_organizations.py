@@ -29,7 +29,7 @@ class OrganizationsQueryTestCase(TestCase):
     Test search queries on organizations.
     """
 
-    def execute_query(self, querystring=""):
+    def execute_query(self, organizations=None, querystring=""):
         """
         Not a test.
         This method is doing the heavy lifting for the tests in this class: create and fill the
@@ -65,7 +65,7 @@ class OrganizationsQueryTestCase(TestCase):
                 "logo": {"en": "en/image"},
                 **organization,
             }
-            for organization in ORGANIZATIONS
+            for organization in organizations or ORGANIZATIONS
         ]
         bulk(actions=actions, chunk_size=500, client=ES_CLIENT)
         indices_client.refresh()
@@ -109,7 +109,7 @@ class OrganizationsQueryTestCase(TestCase):
         Make sure only organizations matching the text query are returned.
         """
         # Make a query without diacritics for an object with diacritics in its title
-        content = self.execute_query("query=univers")
+        content = self.execute_query(querystring="query=univers")
         self.assertEqual(
             content,
             {
@@ -129,13 +129,42 @@ class OrganizationsQueryTestCase(TestCase):
             },
         )
         # Make a query with diacritics for an object without diacritics in its title
-        content = self.execute_query("query=schøöl")
+        content = self.execute_query(querystring="query=schøöl")
         self.assertEqual(
             content,
             {
                 "meta": {"count": 1, "offset": 0, "total_count": 1},
                 "objects": [
                     {"id": "4213", "logo": "en/image", "title": "School of Lorem Ipsum"}
+                ],
+            },
+        )
+
+    def test_query_organizations_empty_content(self, *_):
+        """
+        Make sure no 500 error is raised if an empty organization is indexed.
+        """
+        content = self.execute_query(
+            organizations=[
+                {
+                    "id": "1234",
+                    "title": {},
+                    "absolute_url": {},
+                    "description": {},
+                    "logo": {},
+                }
+            ]
+        )
+        self.assertEqual(
+            content,
+            {
+                "meta": {"count": 1, "offset": 0, "total_count": 1},
+                "objects": [
+                    {
+                        "id": "1234",
+                        "logo": None,
+                        "title": None,
+                    },
                 ],
             },
         )

@@ -62,7 +62,7 @@ class CategoriesIndexer:
         "logo",
         "nb_children",
         "path",
-        "title.*",
+        "title",
     ]
 
     @classmethod

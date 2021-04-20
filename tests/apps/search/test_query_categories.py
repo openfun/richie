@@ -30,7 +30,7 @@ class CategoriesQueryTestCase(TestCase):
     Test search queries on categories.
     """
 
-    def execute_query(self, kind, querystring=""):
+    def execute_query(self, kind, categories=None, querystring=""):
         """
         Not a test.
         This method is doing the heavy lifting for the tests in this class: create and fill the
@@ -68,7 +68,7 @@ class CategoriesQueryTestCase(TestCase):
                 "path": category["id"],
                 **category,
             }
-            for category in CATEGORIES
+            for category in categories or CATEGORIES
         ]
         bulk(actions=actions, chunk_size=500, client=ES_CLIENT)
         indices_client.refresh()
@@ -149,6 +149,45 @@ class CategoriesQueryTestCase(TestCase):
                         "path": "8312",
                         "title": "Literature",
                     }
+                ],
+            },
+        )
+
+    def test_query_categories_empty_content(self, *_):
+        """
+        Make sure no 500 error is raised if an empty category is indexed.
+        """
+        content = self.execute_query(
+            kind="subjects",
+            categories=[
+                {
+                    "id": "1234",
+                    "absolute_url": {},
+                    "description": {},
+                    "icon": {},
+                    "is_meta": False,
+                    "logo": {},
+                    "nb_children": 0,
+                    "path": "1234",
+                    "kind": "subjects",
+                    "title": {},
+                }
+            ],
+        )
+        self.assertEqual(
+            content,
+            {
+                "meta": {"count": 1, "offset": 0, "total_count": 1},
+                "objects": [
+                    {
+                        "id": "1234",
+                        "icon": None,
+                        "is_meta": False,
+                        "logo": None,
+                        "nb_children": 0,
+                        "path": "1234",
+                        "title": None,
+                    },
                 ],
             },
         )

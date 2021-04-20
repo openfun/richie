@@ -285,3 +285,34 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
         result_ids = [o["id"] for o in content["objects"]]
         for index in range(3):
             self.assertEqual(str(index) in result_ids, index != hidden_id)
+
+    def test_query_courses_no_title(self, *_):
+        """
+        A course that has no title should not make the search fail with a 500 KeyError.
+        """
+        self.prepare_index(
+            [
+                {
+                    "absolute_url": {},
+                    "categories": [],
+                    "course_runs": [],
+                    "cover_image": {},
+                    "duration": {},
+                    "effort": {},
+                    "icon": {},
+                    "id": "xyz",
+                    "is_new": False,
+                    "is_listed": True,
+                    "organizations": [],
+                    "organizations_names": {},
+                    "title": {},
+                }
+            ]
+        )
+
+        response = self.client.get("/api/v1.0/courses/")
+        self.assertEqual(response.status_code, 200)
+
+        content = json.loads(response.content)
+        self.assertEqual(len(content["objects"]), 1)
+        self.assertEqual(content["objects"][0]["id"], "xyz")

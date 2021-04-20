@@ -139,7 +139,7 @@ class CategoriesViewsetsTestCase(TestCase):
                 "logo",
                 "nb_children",
                 "path",
-                "title.*",
+                "title",
             ],
             body={
                 "query": {

@@ -180,7 +180,7 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
         # pylint: disable=unexpected-keyword-arg
         search_query_response = ES_CLIENT.search(
             # We only need the titles to get the i18n names
-            _source=["title.*"],
+            _source=["title"],
             index=indexer.index_name,
             doc_type=indexer.document_type,
             body={
