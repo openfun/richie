@@ -129,3 +129,32 @@ class ProgramCMSTestCase(CMSTestCase):
         )
         # The unpublished course should not be present on the page
         self.assertNotContains(response, courses[3].extended_object.get_title())
+
+    def test_templates_program_detail_cms_no_course(self):
+        """
+        Validate that a program without course doesn't show the course section
+        on a published program page but does on the draft program page
+        """
+        program = ProgramFactory(
+            page_title="Preums",
+            fill_cover=True,
+            fill_excerpt=True,
+            fill_body=True,
+        )
+        page = program.extended_object
+
+        # Publish the program and ensure the content is absent
+        page.publish("en")
+        url = page.get_absolute_url()
+        response = self.client.get(url)
+        self.assertNotContains(
+            response, '<div class="program-detail__courses program-detail__block">'
+        )
+
+        # The content should be visible as draft to the staff user
+        user = UserFactory(is_staff=True, is_superuser=True)
+        self.client.login(username=user.username, password="password")
+        response = self.client.get(url)
+        self.assertContains(
+            response, '<div class="program-detail__courses program-detail__block">'
+        )
