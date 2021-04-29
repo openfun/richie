@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+- Make related courses optional for program page
+
 ## [2.6.0] - 2021-05-03
 
 ### Added
