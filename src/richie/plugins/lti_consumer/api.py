@@ -47,8 +47,8 @@ class LTIConsumerViewsSet(viewsets.GenericViewSet):
         }
 
         if cache is not None:
-            # Cache the response for 9 minutes 30 seconds,
-            # lti oauth credentials are stale after 10 minutes
-            cache.set(cache_key, response, 9.5 * 60)
+            # Cache the response for 5 minutes,
+            # lti oauth credentials are stale after this delay.
+            cache.set(cache_key, response, 5 * 60)
 
         return Response(response)

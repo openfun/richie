@@ -12,6 +12,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Add a new authentication backend `fonzie`
 
+### Fixed
+
+- Decrease LTI context API endpoint cache lifetime to 5 minutes
+
 ## [2.5.0] - 2021-04-21
 
 ### Added
