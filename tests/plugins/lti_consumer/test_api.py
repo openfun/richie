@@ -80,7 +80,7 @@ class LtiConsumerPluginApiTestCase(TestCase):
     def test_lti_consumer_view_set_get_context_method_is_cached(self, mock_params):
         """
         If "memory_cache" is defined, get_context method is cached
-        for 9 minutes and 30 seconds to optimize db accesses without return
+        for 5 minutes to optimize db accesses without return
         stale oauth credentials.
         """
         placeholder = Placeholder.objects.create(slot="test")
