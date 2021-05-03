@@ -1,0 +1,87 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta http-equiv="X-UA-Compatible" content="IE=edge"/><title>Internationalization · Richie</title><meta name="viewport" content="width=device-width, initial-scale=1.0"/><meta name="generator" content="Docusaurus"/><meta name="description" content="`richie` has built-in localization and internationalization:"/><meta name="docsearch:version" content="2.5.0"/><meta name="docsearch:language" content="en"/><meta property="og:title" content="Internationalization · Richie"/><meta property="og:type" content="website"/><meta property="og:url" content="https://richie.education/"/><meta property="og:description" content="`richie` has built-in localization and internationalization:"/><meta property="og:image" content="https://richie.education/img/undraw_online.svg"/><meta name="twitter:card" content="summary"/><meta name="twitter:image" content="https://richie.education/img/undraw_tweetstorm.svg"/><link rel="shortcut icon" href="/undefined"/><link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css"/><script type="text/javascript" src="https://buttons.github.io/buttons.js"></script><script src="/js/scrollSpy.js"></script><link rel="stylesheet" href="/css/main.css"/><script src="/js/codetabs.js"></script></head><body class="sideNavVisible separateOnPageNav"><div class="fixedHeaderContainer"><div class="headerWrapper wrapper"><header><a href="/"><h2 class="headerTitle">Richie</h2></a><a href="/versions"><h3>2.5.0</h3></a><div class="navigationWrapper navigationSlider"><nav class="slidingNav"><ul class="nav-site nav-site-internal"><li class=""><a href="/" target="_self">Home</a></li><li class=""><a href="https://github.com/openfun/richie" target="_self">GitHub</a></li><li class="siteNavGroupActive"><a href="/docs/2.5.0/quick-start" target="_self">Documentation</a></li><li class=""><a href="/help" target="_self">Help</a></li></ul></nav></div></header></div></div><div class="navPusher"><div class="docMainWrapper wrapper"><div class="docsNavContainer" id="docsNav"><nav class="toc"><div class="toggleNav"><section class="navWrapper wrapper"><div class="navBreadcrumb wrapper"><div class="navToggle" id="navToggler"><div class="hamburger-menu"><div class="line1"></div><div class="line2"></div><div class="line3"></div></div></div><h2><i>›</i><span>Recipes</span></h2><div class="tocToggler" id="tocToggler"><i class="icon-toc"></i></div></div><div class="navGroups"><div class="navGroup"><h3 class="navGroupCategoryTitle">Getting started</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/2.5.0/quick-start">Quick start</a></li><li class="navListItem"><a class="navItem" href="/docs/2.5.0/docker-development">Docker development</a></li><li class="navListItem"><a class="navItem" href="/docs/2.5.0/native-installation">Native installation</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Recipes</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/2.5.0/django-react-interop">Django &amp; React</a></li><li class="navListItem"><a class="navItem" href="/docs/2.5.0/building-the-frontend">Building the frontend</a></li><li class="navListItem navListItemActive"><a class="navItem" href="/docs/2.5.0/internationalization">I18n</a></li><li class="navListItem"><a class="navItem" href="/docs/2.5.0/frontend-overrides">Frontend overrides</a></li><li class="navListItem"><a class="navItem" href="/docs/2.5.0/lms-connection">LMS connection</a></li></ul></div><div class="navGroup"><h3 class="navGroupCategoryTitle">Contributing</h3><ul class=""><li class="navListItem"><a class="navItem" href="/docs/2.5.0/contributing-guide">Contributing guide</a></li><li class="navListItem"><a class="navItem" href="/docs/2.5.0/accessibility-testing">Accessibility testing</a></li><li class="navListItem"><a class="navItem" href="/docs/2.5.0/css-guidelines">CSS Guidelines</a></li></ul></div></div></section></div><script>
+            var coll = document.getElementsByClassName('collapsible');
+            var checkActiveCategory = true;
+            for (var i = 0; i < coll.length; i++) {
+              var links = coll[i].nextElementSibling.getElementsByTagName('*');
+              if (checkActiveCategory){
+                for (var j = 0; j < links.length; j++) {
+                  if (links[j].classList.contains('navListItemActive')){
+                    coll[i].nextElementSibling.classList.toggle('hide');
+                    coll[i].childNodes[1].classList.toggle('rotate');
+                    checkActiveCategory = false;
+                    break;
+                  }
+                }
+              }
+
+              coll[i].addEventListener('click', function() {
+                var arrow = this.childNodes[1];
+                arrow.classList.toggle('rotate');
+                var content = this.nextElementSibling;
+                content.classList.toggle('hide');
+              });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+              createToggler('#navToggler', '#docsNav', 'docsSliderActive');
+              createToggler('#tocToggler', 'body', 'tocActive');
+
+              var headings = document.querySelector('.toc-headings');
+              headings && headings.addEventListener('click', function(event) {
+                var el = event.target;
+                while(el !== headings){
+                  if (el.tagName === 'A') {
+                    document.body.classList.remove('tocActive');
+                    break;
+                  } else{
+                    el = el.parentNode;
+                  }
+                }
+              }, false);
+
+              function createToggler(togglerSelector, targetSelector, className) {
+                var toggler = document.querySelector(togglerSelector);
+                var target = document.querySelector(targetSelector);
+
+                if (!toggler) {
+                  return;
+                }
+
+                toggler.onclick = function(event) {
+                  event.preventDefault();
+
+                  target.classList.toggle(className);
+                };
+              }
+            });
+        </script></nav></div><div class="container mainContainer docsContainer"><div class="wrapper"><div class="post"><header class="postHeader"><h1 id="__docusaurus" class="postHeaderTitle">Internationalization</h1></header><article><div><span><p><code>richie</code> has built-in localization and internationalization:</p>
+<ul>
+<li>On the backend and CMS, i18n is built on the shoulders of Django and DjangoCMS,</li>
+<li>On the frontend, we use React Intl.</li>
+</ul>
+<h2><a class="anchor" aria-hidden="true" id="contributing-as-a-translator-or-proof-reader"></a><a href="#contributing-as-a-translator-or-proof-reader" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Contributing as a translator or proof-reader</h2>
+<p>We use the <a href="https://crowdin.com">Crowdin</a> web platform to translate Richie to different languages.
+All translations are hosted at <a href="https://i18n.richie.education">https://i18n.richie.education</a>, which allows translators and
+proof-readers to contribute on translations in the languages they master.</p>
+<h3><a class="anchor" aria-hidden="true" id="sign-up-on-crowdin"></a><a href="#sign-up-on-crowdin" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Sign-up on Crowdin</h3>
+<p>If you don't have an account on Crowdin already, go to <a href="https://accounts.crowdin.com/register">https://accounts.crowdin.com/register</a> and
+fill out the form to create a free account.</p>
+<h3><a class="anchor" aria-hidden="true" id="join-the-richie-project"></a><a href="#join-the-richie-project" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Join the Richie project</h3>
+<p>Now that you have an account on Crowdin,
+<a href="https://crowdin.com/project/richie">look for the project called &quot;Richie&quot;</a>, select the language
+on which you wish to contribute and click the &quot;Join&quot; button as demonstrated below:</p>
+<p><img src="/docs/assets/images/crowdin-join-richie.gif" alt="How to join Richie on Crowdin"></p>
+<p>We will then review you application and you should soon start translating strings!</p>
+<p>For more information on how Crowdin works, you can refer to
+<a href="https://support.crowdin.com">their documentation</a>.</p>
+<h3><a class="anchor" aria-hidden="true" id="add-a-new-language"></a><a href="#add-a-new-language" aria-hidden="true" class="hash-link"><svg class="hash-link-icon" aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>Add a new language</h3>
+<p>If Richie is not yet translated in the language you want, let us know by clicking the &quot;contact&quot;
+link on <a href="https://i18n.richie.education">Richie's Crowdin profile page</a> and we will consider adding
+it.</p>
+<p>If you request a new language, the Richie community will expect you to keep this language
+up-to-date each time strings are modified or new strings are added, and this before each
+release.</p>
+<p>Before asking for a new language, make sure it does not already exist. If your language already
+exists in another variant (e.g. Brazilian portuguese vs Portugal portuguese), you may consider
+contributing on the existing language if your resources to contribute are limited.</p>
+</span></div></article></div><div class="docLastUpdate"><em>Last updated on 1/28/2021</em></div><div class="docs-prevnext"><a class="docs-prev button" href="/docs/2.5.0/building-the-frontend"><span class="arrow-prev">← </span><span>Building the frontend</span></a><a class="docs-next button" href="/docs/2.5.0/frontend-overrides"><span>Frontend overrides</span><span class="arrow-next"> →</span></a></div></div></div><nav class="onPageNav"><ul class="toc-headings"><li><a href="#contributing-as-a-translator-or-proof-reader">Contributing as a translator or proof-reader</a><ul class="toc-headings"><li><a href="#sign-up-on-crowdin">Sign-up on Crowdin</a></li><li><a href="#join-the-richie-project">Join the Richie project</a></li><li><a href="#add-a-new-language">Add a new language</a></li></ul></li></ul></nav></div><footer class="nav-footer" id="footer"><section class="sitemap"><div><h5>Documentation</h5><a href="/docs/en/quick-start.html">Getting Started</a><a href="/versions">Versions</a><a href="/docs/en/contributing.html">Contributing</a></div><div><h5>Community</h5><a href="/en/users.html">User Showcase</a><a href="https://github.com/openfun/richie">GitHub</a></div></section><section class="copyright">Creative Commons 2021 — Richie contributors / Illustrations Katerina Limpitsouni</section></footer></div></body></html>
