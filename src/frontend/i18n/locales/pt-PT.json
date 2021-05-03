@@ -113,11 +113,11 @@
   },
   "components.SearchFilterGroupModal.inputLabel": {
     "description": "Accessible label for the search input in the search filter modal.",
-    "message": "Search for filters to add"
+    "message": "Pesquisar por filtros para adicionar"
   },
   "components.SearchFilterGroupModal.inputPlaceholder": {
     "description": "Placeholder message for the search input in the search filter modal.",
-    "message": "Search in { filterName }"
+    "message": "Pesquisar em { filterName }"
   },
   "components.SearchFilterGroupModal.modalTitle": {
     "description": "Title for the modal to add more filter values in the search filters modal.",
