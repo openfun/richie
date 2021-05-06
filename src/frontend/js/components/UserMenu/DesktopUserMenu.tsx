@@ -65,7 +65,6 @@ export const DesktopUserMenu: React.FC<UserMenuProps> = ({ user }) => {
                 <button
                   className={`selector__list__link
                   ${highlightedIndex === index ? 'selector__list__link--highlighted' : ''}`}
-                  onClick={link.action}
                 >
                   {link.label}
                 </button>
