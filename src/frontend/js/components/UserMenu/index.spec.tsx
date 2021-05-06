@@ -7,6 +7,8 @@ import { UserMenu } from '.';
 /* Enforce to use DesktopUserMenu by default */
 let mockMatches = true;
 
+const logout = jest.fn();
+
 const props = {
   user: {
     username: 'John Doe',
@@ -14,7 +16,7 @@ const props = {
       {
         key: 'logout',
         label: 'Log out',
-        action: '/logout',
+        action: logout,
       },
       {
         key: 'profile',
@@ -39,6 +41,8 @@ jest.mock('utils/indirection/window', () => ({
 }));
 
 describe('<UserMenu />', () => {
+  afterEach(() => jest.resetAllMocks());
+
   it('renders a dropdown with links matching the data passed to the "link" prop', async () => {
     render(
       <IntlProvider locale="en">
@@ -54,7 +58,11 @@ describe('<UserMenu />', () => {
 
     screen.getByRole('link', { name: 'Profile' });
     screen.getByRole('link', { name: 'My Dashboard' });
-    screen.getByRole('link', { name: 'Log out' });
+    const logoutButton = screen.getByRole('button', { name: 'Log out' });
+
+    userEvent.click(logoutButton);
+
+    expect(logout).toHaveBeenCalledTimes(1);
   });
 
   it('renders a list of links matching the data passed to the "link" prop on Mobile/Tablet', async () => {
@@ -70,6 +78,10 @@ describe('<UserMenu />', () => {
     screen.getByRole('heading', { name: 'John Doe' });
     screen.getByRole('link', { name: 'Profile' });
     screen.getByRole('link', { name: 'My Dashboard' });
-    screen.getByRole('link', { name: 'Log out' });
+    const logoutButton = screen.getByRole('button', { name: 'Log out' });
+
+    userEvent.click(logoutButton);
+
+    expect(logout).toHaveBeenCalledTimes(1);
   });
 });
