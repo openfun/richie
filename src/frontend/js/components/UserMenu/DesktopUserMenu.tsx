@@ -24,8 +24,9 @@ export const DesktopUserMenu: React.FC<UserMenuProps> = ({ user }) => {
   } = useSelect({
     items: labels,
     onSelectedItemChange: ({ selectedItem }) => {
-      // Manually handle action in case the user interacted with a keyboard, and therefore with a
-      // list item, and not by clicking on the actual links.
+      // We have to handle action manually in case the user
+      // is interacting through keyboard, and therefore with a list item, and
+      // not by clicking on the actual links.
       if (typeof selectedItem!.action === 'string') {
         location.replace(selectedItem!.action);
       } else {
@@ -65,7 +66,6 @@ export const DesktopUserMenu: React.FC<UserMenuProps> = ({ user }) => {
                 <button
                   className={`selector__list__link
                   ${highlightedIndex === index ? 'selector__list__link--highlighted' : ''}`}
-                  onClick={link.action}
                 >
                   {link.label}
                 </button>

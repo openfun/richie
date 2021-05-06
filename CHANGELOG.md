@@ -12,6 +12,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Move type utils into type directory
 
+### Fixed
+
+- Prevent logout action to be called twice
+
 ## [2.9.1] - 2021-11-03
 
 ### Fixed
