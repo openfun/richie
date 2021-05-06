@@ -75,6 +75,7 @@
       &--highlighted {
         background: r-theme-val(selector, hover-background);
         color: r-theme-val(selector, hover-color);
+        text-decoration: underline;
       }
 
       .selector--dark & {
