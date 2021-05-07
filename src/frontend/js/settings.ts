@@ -4,4 +4,16 @@ export const API_LIST_DEFAULT_PARAMS = {
 };
 
 export const EDX_CSRF_TOKEN_COOKIE_NAME = 'edx_csrf_token';
-export const SESSION_CACHE_KEY = 'richie_session';
+
+export const REACT_QUERY_SETTINGS = {
+  // Cache is garbage collected after this delay
+  cacheTime: 24 * 60 * 60 * 1000, // 24h in ms
+  // Data are considered as stale after this delay
+  staleTime: 15 * 60 * 1000, // 15 minutes
+  cacheStorage: {
+    // The key used to persist cache within cache storage
+    key: 'RICHIE_PERSISTED_QUERIES',
+    // Cache storage throttle time
+    throttleTime: 500,
+  },
+};
