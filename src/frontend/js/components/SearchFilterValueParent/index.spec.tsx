@@ -2,10 +2,12 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { stringify } from 'query-string';
 import React from 'react';
 import { IntlProvider } from 'react-intl';
+import { QueryClientProvider } from 'react-query';
 
 import { fetchList } from 'data/getResourceList';
 import { History, HistoryContext } from 'data/useHistory';
-import { APIListRequestParams } from 'types/api';
+import { APIListRequestParams, RequestStatus } from 'types/api';
+import createQueryClient from 'utils/react-query/createQueryClient';
 
 import { SearchFilterValueParent } from '.';
 
@@ -27,32 +29,38 @@ describe('<SearchFilterValueParent />', () => {
     historyPushState,
     historyReplaceState,
   ];
+  const queryClient = createQueryClient();
 
-  afterEach(jest.resetAllMocks);
+  afterEach(() => {
+    queryClient.clear();
+    jest.resetAllMocks();
+  });
 
   it('renders the parent filter value and a button to show the children', () => {
     const { getByLabelText, queryByLabelText } = render(
-      <IntlProvider locale="en">
-        <HistoryContext.Provider value={makeHistoryOf({ limit: '999', offset: '0' })}>
-          <SearchFilterValueParent
-            filter={{
-              base_path: '00010002',
-              has_more_values: false,
-              human_name: 'Subjects',
-              is_autocompletable: true,
-              is_searchable: true,
-              name: 'subjects',
-              position: 0,
-              values: [],
-            }}
-            value={{
-              count: 12,
-              human_name: 'Literature',
-              key: 'P-00040005',
-            }}
-          />
-        </HistoryContext.Provider>
-      </IntlProvider>,
+      <QueryClientProvider client={queryClient}>
+        <IntlProvider locale="en">
+          <HistoryContext.Provider value={makeHistoryOf({ limit: '999', offset: '0' })}>
+            <SearchFilterValueParent
+              filter={{
+                base_path: '00010002',
+                has_more_values: false,
+                human_name: 'Subjects',
+                is_autocompletable: true,
+                is_searchable: true,
+                name: 'subjects',
+                position: 0,
+                values: [],
+              }}
+              value={{
+                count: 12,
+                human_name: 'Literature',
+                key: 'P-00040005',
+              }}
+            />
+          </HistoryContext.Provider>
+        </IntlProvider>
+      </QueryClientProvider>,
     );
 
     getByLabelText((content) => content.startsWith('Literature'));
@@ -66,6 +74,7 @@ describe('<SearchFilterValueParent />', () => {
 
   it('shows the children when one of them is active', async () => {
     mockFetchList.mockResolvedValue({
+      status: RequestStatus.SUCCESS,
       content: {
         filters: {
           subjects: {
@@ -88,27 +97,29 @@ describe('<SearchFilterValueParent />', () => {
 
     // Helper to get the React element with the expected params
     const getElement = (params: APIListRequestParams) => (
-      <IntlProvider locale="en">
-        <HistoryContext.Provider value={makeHistoryOf(params)}>
-          <SearchFilterValueParent
-            filter={{
-              base_path: '00010002',
-              has_more_values: false,
-              human_name: 'Subjects',
-              is_autocompletable: true,
-              is_searchable: true,
-              name: 'subjects',
-              position: 0,
-              values: [],
-            }}
-            value={{
-              count: 12,
-              human_name: 'Literature',
-              key: 'P-00040005',
-            }}
-          />
-        </HistoryContext.Provider>
-      </IntlProvider>
+      <QueryClientProvider client={queryClient}>
+        <IntlProvider locale="en">
+          <HistoryContext.Provider value={makeHistoryOf(params)}>
+            <SearchFilterValueParent
+              filter={{
+                base_path: '00010002',
+                has_more_values: false,
+                human_name: 'Subjects',
+                is_autocompletable: true,
+                is_searchable: true,
+                name: 'subjects',
+                position: 0,
+                values: [],
+              }}
+              value={{
+                count: 12,
+                human_name: 'Literature',
+                key: 'P-00040005',
+              }}
+            />
+          </HistoryContext.Provider>
+        </IntlProvider>
+      </QueryClientProvider>
     );
     const { getByLabelText, queryByLabelText, rerender } = render(
       getElement({ limit: '999', offset: '0', subjects: [] }),
@@ -133,6 +144,7 @@ describe('<SearchFilterValueParent />', () => {
 
   it('hides/shows the children when the user clicks on the toggle button', async () => {
     mockFetchList.mockResolvedValue({
+      status: RequestStatus.SUCCESS,
       content: {
         filters: {
           subjects: {
@@ -154,33 +166,35 @@ describe('<SearchFilterValueParent />', () => {
     } as any);
 
     const { getByLabelText, queryByLabelText } = render(
-      <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({
-            limit: '999',
-            offset: '0',
-            subjects: ['L-000400050004'],
-          })}
-        >
-          <SearchFilterValueParent
-            filter={{
-              base_path: '00010002',
-              has_more_values: false,
-              human_name: 'Subjects',
-              is_autocompletable: true,
-              is_searchable: true,
-              name: 'subjects',
-              position: 0,
-              values: [],
-            }}
-            value={{
-              count: 12,
-              human_name: 'Literature',
-              key: 'P-00040005',
-            }}
-          />
-        </HistoryContext.Provider>
-      </IntlProvider>,
+      <QueryClientProvider client={queryClient}>
+        <IntlProvider locale="en">
+          <HistoryContext.Provider
+            value={makeHistoryOf({
+              limit: '999',
+              offset: '0',
+              subjects: ['L-000400050004'],
+            })}
+          >
+            <SearchFilterValueParent
+              filter={{
+                base_path: '00010002',
+                has_more_values: false,
+                human_name: 'Subjects',
+                is_autocompletable: true,
+                is_searchable: true,
+                name: 'subjects',
+                position: 0,
+                values: [],
+              }}
+              value={{
+                count: 12,
+                human_name: 'Literature',
+                key: 'P-00040005',
+              }}
+            />
+          </HistoryContext.Provider>
+        </IntlProvider>
+      </QueryClientProvider>,
     );
 
     getByLabelText((content) => content.startsWith('Literature'));
@@ -232,27 +246,29 @@ describe('<SearchFilterValueParent />', () => {
 
   it('shows the parent filter value itself as inactive when it is not in the search params', () => {
     const { getByLabelText } = render(
-      <IntlProvider locale="en">
-        <HistoryContext.Provider value={makeHistoryOf({ limit: '999', offset: '0' })}>
-          <SearchFilterValueParent
-            filter={{
-              base_path: '0009',
-              has_more_values: false,
-              human_name: 'Filter name',
-              is_autocompletable: true,
-              is_searchable: true,
-              name: 'filter_name',
-              position: 0,
-              values: [],
-            }}
-            value={{
-              count: 217,
-              human_name: 'Human name',
-              key: 'P-00040005',
-            }}
-          />
-        </HistoryContext.Provider>
-      </IntlProvider>,
+      <QueryClientProvider client={queryClient}>
+        <IntlProvider locale="en">
+          <HistoryContext.Provider value={makeHistoryOf({ limit: '999', offset: '0' })}>
+            <SearchFilterValueParent
+              filter={{
+                base_path: '0009',
+                has_more_values: false,
+                human_name: 'Filter name',
+                is_autocompletable: true,
+                is_searchable: true,
+                name: 'filter_name',
+                position: 0,
+                values: [],
+              }}
+              value={{
+                count: 217,
+                human_name: 'Human name',
+                key: 'P-00040005',
+              }}
+            />
+          </HistoryContext.Provider>
+        </IntlProvider>
+      </QueryClientProvider>,
     );
 
     // The filter value is displayed with its facet count
@@ -265,27 +281,29 @@ describe('<SearchFilterValueParent />', () => {
 
   it('disables the parent value when its count is 0', () => {
     const { getByLabelText } = render(
-      <IntlProvider locale="en">
-        <HistoryContext.Provider value={makeHistoryOf({ limit: '999', offset: '0' })}>
-          <SearchFilterValueParent
-            filter={{
-              base_path: '0009',
-              has_more_values: false,
-              human_name: 'Filter name',
-              is_autocompletable: true,
-              is_searchable: true,
-              name: 'filter_name',
-              position: 0,
-              values: [],
-            }}
-            value={{
-              count: 0,
-              human_name: 'Human name',
-              key: 'P-00040005',
-            }}
-          />
-        </HistoryContext.Provider>
-      </IntlProvider>,
+      <QueryClientProvider client={queryClient}>
+        <IntlProvider locale="en">
+          <HistoryContext.Provider value={makeHistoryOf({ limit: '999', offset: '0' })}>
+            <SearchFilterValueParent
+              filter={{
+                base_path: '0009',
+                has_more_values: false,
+                human_name: 'Filter name',
+                is_autocompletable: true,
+                is_searchable: true,
+                name: 'filter_name',
+                position: 0,
+                values: [],
+              }}
+              value={{
+                count: 0,
+                human_name: 'Human name',
+                key: 'P-00040005',
+              }}
+            />
+          </HistoryContext.Provider>
+        </IntlProvider>
+      </QueryClientProvider>,
     );
 
     // The filter shows its active state
@@ -296,33 +314,35 @@ describe('<SearchFilterValueParent />', () => {
   });
   it('shows the parent filter value itself as active when it is in the search params', () => {
     const { getByLabelText } = render(
-      <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({
-            filter_name: 'P-00040005',
-            limit: '999',
-            offset: '0',
-          })}
-        >
-          <SearchFilterValueParent
-            filter={{
-              base_path: '0009',
-              has_more_values: false,
-              human_name: 'Filter name',
-              is_autocompletable: true,
-              is_searchable: true,
-              name: 'filter_name',
-              position: 0,
-              values: [],
-            }}
-            value={{
-              count: 218,
-              human_name: 'Human name',
-              key: 'P-00040005',
-            }}
-          />
-        </HistoryContext.Provider>
-      </IntlProvider>,
+      <QueryClientProvider client={queryClient}>
+        <IntlProvider locale="en">
+          <HistoryContext.Provider
+            value={makeHistoryOf({
+              filter_name: 'P-00040005',
+              limit: '999',
+              offset: '0',
+            })}
+          >
+            <SearchFilterValueParent
+              filter={{
+                base_path: '0009',
+                has_more_values: false,
+                human_name: 'Filter name',
+                is_autocompletable: true,
+                is_searchable: true,
+                name: 'filter_name',
+                position: 0,
+                values: [],
+              }}
+              value={{
+                count: 218,
+                human_name: 'Human name',
+                key: 'P-00040005',
+              }}
+            />
+          </HistoryContext.Provider>
+        </IntlProvider>
+      </QueryClientProvider>,
     );
 
     const checkbox = getByLabelText((content) => content.startsWith('Human name'));
@@ -333,27 +353,29 @@ describe('<SearchFilterValueParent />', () => {
 
   it('dispatches a FILTER_ADD action on filter click if it was not active', () => {
     const { getByLabelText } = render(
-      <IntlProvider locale="en">
-        <HistoryContext.Provider value={makeHistoryOf({ limit: '999', offset: '0' })}>
-          <SearchFilterValueParent
-            filter={{
-              base_path: '0009',
-              has_more_values: false,
-              human_name: 'Filter name',
-              is_autocompletable: true,
-              is_searchable: true,
-              name: 'filter_name',
-              position: 0,
-              values: [],
-            }}
-            value={{
-              count: 217,
-              human_name: 'Human name',
-              key: 'P-00040005',
-            }}
-          />
-        </HistoryContext.Provider>
-      </IntlProvider>,
+      <QueryClientProvider client={queryClient}>
+        <IntlProvider locale="en">
+          <HistoryContext.Provider value={makeHistoryOf({ limit: '999', offset: '0' })}>
+            <SearchFilterValueParent
+              filter={{
+                base_path: '0009',
+                has_more_values: false,
+                human_name: 'Filter name',
+                is_autocompletable: true,
+                is_searchable: true,
+                name: 'filter_name',
+                position: 0,
+                values: [],
+              }}
+              value={{
+                count: 217,
+                human_name: 'Human name',
+                key: 'P-00040005',
+              }}
+            />
+          </HistoryContext.Provider>
+        </IntlProvider>
+      </QueryClientProvider>,
     );
 
     fireEvent.click(getByLabelText((content) => content.startsWith('Human name')));
@@ -372,33 +394,35 @@ describe('<SearchFilterValueParent />', () => {
 
   it('dispatches a FILTER_REMOVE action on filter click if it was active', () => {
     const { getByLabelText } = render(
-      <IntlProvider locale="en">
-        <HistoryContext.Provider
-          value={makeHistoryOf({
-            filter_name: 'P-00040005',
-            limit: '999',
-            offset: '0',
-          })}
-        >
-          <SearchFilterValueParent
-            filter={{
-              base_path: '0009',
-              has_more_values: false,
-              human_name: 'Filter name',
-              is_autocompletable: true,
-              is_searchable: true,
-              name: 'filter_name',
-              position: 0,
-              values: [],
-            }}
-            value={{
-              count: 217,
-              human_name: 'Human name',
-              key: 'P-00040005',
-            }}
-          />
-        </HistoryContext.Provider>
-      </IntlProvider>,
+      <QueryClientProvider client={queryClient}>
+        <IntlProvider locale="en">
+          <HistoryContext.Provider
+            value={makeHistoryOf({
+              filter_name: 'P-00040005',
+              limit: '999',
+              offset: '0',
+            })}
+          >
+            <SearchFilterValueParent
+              filter={{
+                base_path: '0009',
+                has_more_values: false,
+                human_name: 'Filter name',
+                is_autocompletable: true,
+                is_searchable: true,
+                name: 'filter_name',
+                position: 0,
+                values: [],
+              }}
+              value={{
+                count: 217,
+                human_name: 'Human name',
+                key: 'P-00040005',
+              }}
+            />
+          </HistoryContext.Provider>
+        </IntlProvider>
+      </QueryClientProvider>,
     );
 
     fireEvent.click(getByLabelText((content) => content.startsWith('Human name')));
