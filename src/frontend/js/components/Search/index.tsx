@@ -39,7 +39,7 @@ const messages = defineMessages({
 
 const Search = ({ context }: CommonDataProps) => {
   const { courseSearchParams, lastDispatchActions } = useCourseSearchParams();
-  const courseSearchResponse = useCourseSearch(courseSearchParams);
+  const { data: courseSearchResponse } = useCourseSearch(courseSearchParams);
 
   const alwaysShowFilters = useMatchMedia('(min-width: 992px)');
   const [showFilters, setShowFilters] = useState(false);

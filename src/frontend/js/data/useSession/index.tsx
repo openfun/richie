@@ -1,11 +1,12 @@
-import React, { createContext, useCallback, useContext, useState, PropsWithChildren } from 'react';
+import React, { createContext, useCallback, useContext, PropsWithChildren } from 'react';
 import { handle } from 'utils/errors/handle';
 import { Maybe, Nullable } from 'types/utils';
 import { User } from 'types/User';
 import { AuthenticationApi } from 'utils/api/authentication';
-import { useAsyncEffect } from 'utils/useAsyncEffect';
-import { useCache } from 'utils/useCache';
-import { SESSION_CACHE_KEY } from 'settings';
+
+import { useQuery, useQueryClient } from 'react-query';
+import { REACT_QUERY_SETTINGS } from 'settings';
+
 /**
  * useSession
  *
@@ -45,53 +46,38 @@ export const SessionProvider = ({ children }: PropsWithChildren<any>) => {
    * - `null` when the user is anonymous or the request failed;
    * - a user object when the user is logged in.
    */
-  const [getCachedSession, setCachedSession, clearCachedSession] = useCache(SESSION_CACHE_KEY);
-  const [user, setState] = useState<Maybe<Nullable<User>>>();
+  const { data: user } = useQuery('user', AuthenticationApi!.me, {
+    refetchOnWindowFocus: true,
+    staleTime: REACT_QUERY_SETTINGS.staleTimes.session,
+  });
 
-  const setUser = useCallback(
-    (nextUser: Maybe<Nullable<User>>) => {
-      if (nextUser === undefined) clearCachedSession();
-      else setCachedSession(nextUser);
-
-      setState(nextUser);
-    },
-    [setState, setCachedSession],
-  );
+  const queryClient = useQueryClient();
 
   const login = useCallback(() => {
     if (!AuthenticationApi) return handle(new Error('No AuthenticationAPI configured!'));
 
-    clearCachedSession();
+    queryClient.clear();
     AuthenticationApi!.login();
-  }, [clearCachedSession, AuthenticationApi?.login]);
+  }, [queryClient]);
 
   const register = useCallback(() => {
     if (!AuthenticationApi) return handle(new Error('No AuthenticationAPI configured!'));
 
-    clearCachedSession();
+    queryClient.clear();
     AuthenticationApi!.register();
-  }, [clearCachedSession, AuthenticationApi?.register]);
+  }, [queryClient]);
 
   const destroy = useCallback(async () => {
     if (!AuthenticationApi) return handle(new Error('No AuthenticationAPI configured!'));
 
-    setUser(undefined);
     await AuthenticationApi!.logout();
-    setUser(null);
-  }, [setUser]);
-
-  useAsyncEffect(async () => {
-    let me = null;
-    if (AuthenticationApi) {
-      const cachedUser = getCachedSession();
-      if (cachedUser !== undefined) {
-        me = cachedUser;
-      } else {
-        me = await AuthenticationApi.me();
-      }
-    }
-    setUser(me);
-  }, []);
+    /*
+      Invalidate all queries except 'user' as we can set it to null manually
+      after logout to avoid extra requests
+    */
+    queryClient.invalidateQueries({ predicate: (query) => query.options.queryKey !== 'user' });
+    queryClient.setQueryData('user', null);
+  }, [queryClient]);
 
   return <Session.Provider value={{ user, destroy, login, register }}>{children}</Session.Provider>;
 };

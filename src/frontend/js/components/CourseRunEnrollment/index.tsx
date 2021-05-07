@@ -7,9 +7,8 @@ import { Priority } from 'types';
 import { User } from 'types/User';
 import { Maybe, Nullable } from 'types/utils';
 import { handle } from 'utils/errors/handle';
-import { useAsyncEffect } from 'utils/useAsyncEffect';
 import { CommonDataProps } from 'types/commonDataProps';
-import CourseEnrollmentAPI from 'utils/api/courseEnrollment';
+import useEnrollment from 'data/useEnrollment';
 
 const messages = defineMessages({
   enroll: {
@@ -92,31 +91,19 @@ type ReducerAction =
   | { type: ActionType.ENROLL }
   | { type: ActionType.ERROR; payload: { error: Error } };
 
-const initialState = (
-  user: Maybe<Nullable<User>>,
-  courseRun: CourseRunEnrollmentProps['courseRun'],
-) => ({
-  step: Step.LOADING,
-  context: {
-    currentUser: user,
-    courseRun,
-    isEnrolled: undefined,
-  },
-});
-
 const getStepFromContext = (
   { currentUser, courseRun, isEnrolled }: ReducerState['context'],
-  previousStep: Step,
+  previousStep?: Maybe<Step>,
 ) => {
   switch (true) {
     case courseRun.priority > Priority.ARCHIVED_OPEN:
       return Step.CLOSED;
     case previousStep === Step.ENROLLING && !isEnrolled:
       return Step.ENROLLMENT_FAILED;
-    case currentUser === undefined || courseRun === undefined || isEnrolled === undefined:
-      return Step.LOADING;
     case currentUser === null:
       return Step.ANONYMOUS;
+    case currentUser === undefined || courseRun === undefined || isEnrolled === undefined:
+      return Step.LOADING;
     case !!isEnrolled:
       return Step.ENROLLED;
     case !isEnrolled:
@@ -125,6 +112,19 @@ const getStepFromContext = (
       throw new Error('Impossible state');
   }
 };
+
+const initialState = (
+  currentUser: Maybe<Nullable<User>>,
+  courseRun: CourseRunEnrollmentProps['courseRun'],
+  isEnrolled: Maybe<boolean>,
+) => ({
+  step: getStepFromContext({ currentUser, courseRun, isEnrolled }),
+  context: {
+    currentUser,
+    courseRun,
+    isEnrolled,
+  },
+});
 
 const reducer = ({ step, context }: ReducerState, action: ReducerAction): ReducerState => {
   switch (action.type) {
@@ -143,46 +143,38 @@ const reducer = ({ step, context }: ReducerState, action: ReducerAction): Reduce
 
 const CourseRunEnrollment: React.FC<CourseRunEnrollmentProps & CommonDataProps> = (props) => {
   const { user, login } = useSession();
+  const { enrollmentIsActive, setEnrollment } = useEnrollment(props.courseRun.resource_link);
+
   const [
     {
-      step,
-      context: { currentUser, isEnrolled, courseRun },
+      context: { currentUser, courseRun },
       error,
+      step,
     },
     dispatch,
   ] = useReducer<React.Reducer<ReducerState, ReducerAction>, ReducerState>(
     reducer,
-    initialState(user, props.courseRun),
+    initialState(user, props.courseRun, enrollmentIsActive),
     (s) => s,
   );
 
   const enroll = useCallback(async () => {
     dispatch({ type: ActionType.ENROLL });
     if (courseRun && currentUser) {
-      const enrollmentSucceeded = await CourseEnrollmentAPI.set(
-        courseRun.resource_link,
-        currentUser,
-      );
-      dispatch({ type: ActionType.UPDATE_CONTEXT, payload: { isEnrolled: enrollmentSucceeded } });
+      const response = await setEnrollment();
+      dispatch({
+        type: ActionType.UPDATE_CONTEXT,
+        payload: { isEnrolled: response },
+      });
     }
   }, [courseRun, currentUser, dispatch]);
 
   useEffect(() => {
     dispatch({
+      payload: { currentUser: user, isEnrolled: enrollmentIsActive },
       type: ActionType.UPDATE_CONTEXT,
-      payload: { currentUser: user, isEnrolled: undefined },
     });
-  }, [user]);
-
-  useAsyncEffect(async () => {
-    if (isEnrolled === undefined) {
-      let enrolled = false;
-      if (currentUser) {
-        enrolled = await CourseEnrollmentAPI.isEnrolled(courseRun.resource_link, currentUser);
-      }
-      dispatch({ type: ActionType.UPDATE_CONTEXT, payload: { isEnrolled: enrolled } });
-    }
-  }, [currentUser, courseRun]);
+  }, [user, enrollmentIsActive]);
 
   switch (true) {
     case step === Step.CLOSED:

@@ -1,16 +1,19 @@
 import React from 'react';
+import { QueryClientProvider, QueryClient } from 'react-query';
 import faker from 'faker';
 import fetchMock from 'fetch-mock';
-import { act } from '@testing-library/react';
+import { act, waitFor } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
-import { ContextFactory } from 'utils/test/factories';
+import { ContextFactory, PersistedClientFactory, QueryStateFactory } from 'utils/test/factories';
+import createQueryClient from 'utils/react-query/createQueryClient';
 import { Deferred } from 'utils/test/deferred';
-import { SESSION_CACHE_KEY } from 'settings';
+import { REACT_QUERY_SETTINGS } from 'settings';
 import { SessionContext } from '.';
 
 describe('useSession', () => {
   const context = ContextFactory().generate();
   (window as any).__richie_frontend_context__ = { context };
+  const queryClient = createQueryClient({ persistor: true });
   const {
     SessionProvider,
     useSession,
@@ -19,27 +22,45 @@ describe('useSession', () => {
     SessionProvider: ({ children }: React.PropsWithChildren<any>) => JSX.Element;
   } = require('.');
 
-  const wrapper = ({ children }: React.PropsWithChildren<any>) => (
-    <SessionProvider>{children}</SessionProvider>
+  const wrapper = ({
+    client = queryClient,
+    children,
+  }: React.PropsWithChildren<{ client: QueryClient }>) => (
+    <QueryClientProvider client={client}>
+      <SessionProvider>{children}</SessionProvider>
+    </QueryClientProvider>
   );
 
   beforeEach(() => {
-    sessionStorage.clear();
+    jest.useFakeTimers('modern');
+    queryClient.clear();
     fetchMock.restore();
+  });
+
+  afterEach(() => {
+    jest.clearAllTimers();
   });
 
   it('provides a null user if whoami return 401', async () => {
     const userDeferred = new Deferred();
     fetchMock.get('https://endpoint.test/api/user/v1/me', userDeferred.promise);
-    const { result } = renderHook(() => useSession(), { wrapper });
+    const { result } = renderHook(() => useSession(), {
+      wrapper,
+      initialProps: { client: queryClient },
+    });
 
     await act(async () => {
       userDeferred.resolve(401);
+      jest.runAllTimers();
     });
 
     expect(result.current.user).toBeNull();
     expect(result.all).toHaveLength(2);
-    expect(sessionStorage.getItem(SESSION_CACHE_KEY)).toBeDefined();
+    const cacheString = sessionStorage.getItem(REACT_QUERY_SETTINGS.cacheStorage.key);
+    expect(cacheString).not.toBeNull();
+    const client = JSON.parse(cacheString!);
+    expect(client.clientState.queries).toHaveLength(1);
+    expect(client.clientState.queries[0].queryKey).toEqual('user');
   });
 
   it('provides user infos if user is authenticated then stores in cache', async () => {
@@ -50,41 +71,64 @@ describe('useSession', () => {
 
     await act(async () => {
       userDeferred.resolve({ username });
+      jest.runAllTimers();
     });
 
     expect(result.current.user).toStrictEqual({ username });
     expect(result.all).toHaveLength(2);
-    expect(sessionStorage.getItem(SESSION_CACHE_KEY)).toBeDefined();
-    expect(atob(sessionStorage.getItem(SESSION_CACHE_KEY) || '')).toContain(username);
+    const cacheString = sessionStorage.getItem(REACT_QUERY_SETTINGS.cacheStorage.key);
+    expect(cacheString).not.toBeNull();
+    expect(cacheString).toContain(username);
   });
 
   it('destroy session then logout', async () => {
     const username = faker.internet.userName();
-    sessionStorage.setItem(
-      SESSION_CACHE_KEY,
-      btoa(JSON.stringify({ value: { username }, expiredAt: Date.now() + 60_000 })),
-    );
+    const userDeferred = new Deferred();
+
+    fetchMock.get('https://endpoint.test/api/user/v1/me', userDeferred.promise);
     fetchMock.get('https://endpoint.test/logout', 200);
     const { result } = renderHook(useSession, { wrapper });
 
-    expect(result.current.user).toStrictEqual({ username });
-    expect(atob(sessionStorage.getItem(SESSION_CACHE_KEY) || '')).toContain(username);
+    await act(async () => {
+      userDeferred.resolve({ username });
+      jest.runAllTimers();
+    });
 
-    await act(result.current.destroy);
+    const { user, destroy } = result.current;
+    expect(user).toStrictEqual({ username });
+    expect(sessionStorage.getItem(REACT_QUERY_SETTINGS.cacheStorage.key) || '').toContain(username);
+
+    await act(async () => {
+      await destroy();
+      jest.runAllTimers();
+    });
+
     expect(result.current.user).toBeNull();
-    expect(atob(sessionStorage.getItem(SESSION_CACHE_KEY) || '')).toContain('null');
+    expect(sessionStorage.getItem(REACT_QUERY_SETTINGS.cacheStorage.key) || '').toMatch(
+      /"data":null,.*"queryKey":"user"/,
+    );
   });
 
-  it('do not make request if there is a session in cache', () => {
+  it('does not make request if there is a valid session in cache', async () => {
     const username = faker.internet.userName();
-    sessionStorage.setItem(
-      SESSION_CACHE_KEY,
-      btoa(JSON.stringify({ value: { username }, expiredAt: Date.now() + 60_000 })),
-    );
-    fetchMock.get('https://endpoint.test/api/user/v1/me', 200);
-    renderHook(useSession, { wrapper });
+    const persistedClient = PersistedClientFactory({
+      queries: [QueryStateFactory('user', { data: { username } })],
+    });
+    sessionStorage.setItem(REACT_QUERY_SETTINGS.cacheStorage.key, JSON.stringify(persistedClient));
 
+    fetchMock.get('https://endpoint.test/api/user/v1/me', 200);
+
+    let client: QueryClient;
+    await waitFor(() => {
+      client = createQueryClient({ persistor: true });
+    });
+
+    const { result } = renderHook(useSession, {
+      wrapper,
+      initialProps: { client: client! },
+    });
+
+    expect(result.current.user).toStrictEqual({ username });
     expect(fetchMock.called()).toBeFalsy();
-    expect(atob(sessionStorage.getItem(SESSION_CACHE_KEY) || '')).toContain(username);
   });
 });

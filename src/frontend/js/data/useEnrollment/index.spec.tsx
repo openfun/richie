@@ -10,7 +10,7 @@ import { CourseRun } from 'types';
 import { Deferred } from 'utils/test/deferred';
 import { REACT_QUERY_SETTINGS } from 'settings';
 import * as factories from 'utils/test/factories';
-import createQueryClient from 'utils/api/queryClient';
+import createQueryClient from 'utils/react-query/createQueryClient';
 
 describe('useEnrollment', () => {
   const endpoint = 'https://endpoint.test';

@@ -1,4 +1,5 @@
 import React from 'react';
+import { QueryClientProvider } from 'react-query';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import { stringify } from 'query-string';
@@ -6,6 +7,7 @@ import { IntlProvider } from 'react-intl';
 
 import { History, HistoryContext } from 'data/useHistory';
 import * as mockWindow from 'utils/indirection/window';
+import createQueryClient from 'utils/react-query/createQueryClient';
 import { ContextFactory } from 'utils/test/factories';
 import { CommonDataProps } from 'types/commonDataProps';
 import Search from '.';
@@ -34,10 +36,11 @@ describe('<Search />', () => {
     historyPushState,
     historyReplaceState,
   ];
-
+  const queryClient = createQueryClient();
   const contextProps: CommonDataProps['context'] = ContextFactory().generate();
 
-  beforeEach(() => {
+  afterEach(() => {
+    queryClient.clear();
     fetchMock.restore();
     jest.resetAllMocks();
   });
@@ -51,11 +54,13 @@ describe('<Search />', () => {
     });
 
     render(
-      <IntlProvider locale="en">
-        <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
-          <Search context={contextProps} />
-        </HistoryContext.Provider>
-      </IntlProvider>,
+      <QueryClientProvider client={queryClient}>
+        <IntlProvider locale="en">
+          <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
+            <Search context={contextProps} />
+          </HistoryContext.Provider>
+        </IntlProvider>
+      </QueryClientProvider>,
     );
 
     expect(screen.getByText('Loading search results...').parentElement).toHaveAttribute(
@@ -72,11 +77,13 @@ describe('<Search />', () => {
     fetchMock.get('/api/v1.0/courses/?limit=20&offset=0', 500);
 
     render(
-      <IntlProvider locale="en">
-        <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
-          <Search context={contextProps} />
-        </HistoryContext.Provider>
-      </IntlProvider>,
+      <QueryClientProvider client={queryClient}>
+        <IntlProvider locale="en">
+          <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
+            <Search context={contextProps} />
+          </HistoryContext.Provider>
+        </IntlProvider>
+      </QueryClientProvider>,
     );
 
     expect(screen.getByText('Loading search results...').parentElement).toHaveAttribute(
@@ -100,11 +107,13 @@ describe('<Search />', () => {
 
     mockMatches = true;
     const { container } = render(
-      <IntlProvider locale="en">
-        <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
-          <Search context={contextProps} />
-        </HistoryContext.Provider>
-      </IntlProvider>,
+      <QueryClientProvider client={queryClient}>
+        <IntlProvider locale="en">
+          <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
+            <Search context={contextProps} />
+          </HistoryContext.Provider>
+        </IntlProvider>
+      </QueryClientProvider>,
     );
 
     await waitFor(() => {
@@ -127,11 +136,13 @@ describe('<Search />', () => {
 
     mockMatches = false;
     const { container } = render(
-      <IntlProvider locale="en">
-        <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
-          <Search context={contextProps} />
-        </HistoryContext.Provider>
-      </IntlProvider>,
+      <QueryClientProvider client={queryClient}>
+        <IntlProvider locale="en">
+          <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
+            <Search context={contextProps} />
+          </HistoryContext.Provider>
+        </IntlProvider>
+      </QueryClientProvider>,
     );
 
     await waitFor(() => {
@@ -189,17 +200,19 @@ describe('<Search />', () => {
       });
 
       render(
-        <IntlProvider locale="en">
-          <HistoryContext.Provider
-            value={makeHistoryOf({
-              limit: '20',
-              offset: '0',
-              lastDispatchActions: [{ type: 'FILTER_RESET' }],
-            })}
-          >
-            <Search context={contextProps} />
-          </HistoryContext.Provider>
-        </IntlProvider>,
+        <QueryClientProvider client={queryClient}>
+          <IntlProvider locale="en">
+            <HistoryContext.Provider
+              value={makeHistoryOf({
+                limit: '20',
+                offset: '0',
+                lastDispatchActions: [{ type: 'FILTER_RESET' }],
+              })}
+            >
+              <Search context={contextProps} />
+            </HistoryContext.Provider>
+          </IntlProvider>
+        </QueryClientProvider>,
       );
     });
 
@@ -219,17 +232,19 @@ describe('<Search />', () => {
       });
 
       render(
-        <IntlProvider locale="en">
-          <HistoryContext.Provider
-            value={makeHistoryOf({
-              limit: '20',
-              offset: '0',
-              lastDispatchActions: [{ type: 'QUERY_UPDATE' }],
-            })}
-          >
-            <Search context={contextProps} />
-          </HistoryContext.Provider>
-        </IntlProvider>,
+        <QueryClientProvider client={queryClient}>
+          <IntlProvider locale="en">
+            <HistoryContext.Provider
+              value={makeHistoryOf({
+                limit: '20',
+                offset: '0',
+                lastDispatchActions: [{ type: 'QUERY_UPDATE' }],
+              })}
+            >
+              <Search context={contextProps} />
+            </HistoryContext.Provider>
+          </IntlProvider>
+        </QueryClientProvider>,
       );
     });
 

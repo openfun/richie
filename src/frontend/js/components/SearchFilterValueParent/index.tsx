@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { SearchFilterValueLeaf } from 'components/SearchFilterValueLeaf';
-import { fetchList } from 'data/getResourceList';
 import { useCourseSearchParams } from 'data/useCourseSearchParams';
 import { useFilterValue } from 'data/useFilterValue';
 import { RequestStatus } from 'types/api';
 import { FacetedFilterDefinition, FilterValue } from 'types/filters';
 import { getMPTTChildrenPathMatcher } from 'utils/mptt';
 import { Nullable } from 'types/utils';
-import { useAsyncEffect } from 'utils/useAsyncEffect';
+import { useCourseSearch } from 'data/useCourseSearch';
+import { handle } from 'utils/errors/handle';
 
 const messages = defineMessages({
   ariaHideChildren: {
@@ -53,25 +53,28 @@ export const SearchFilterValueParent = ({ filter, value }: SearchFilterValuePare
   const [userShowChildren, setUserShowChildren] = useState(null as Nullable<boolean>);
   const showChildren = userShowChildren !== null ? !!userShowChildren : hasActiveChildren;
 
-  const [children, setChildren] = useState([] as FilterValue[]);
-  useAsyncEffect(async () => {
-    if (showChildren) {
-      // Get only the filters & facet counts for the children of the current parent
-      const childrenResponse = await fetchList('courses', {
-        ...courseSearchParams,
-        [`${filter.name}_include`]: childrenPathMatch,
-        scope: 'filters',
-      });
+  const { data: childrenResponse } = useCourseSearch(
+    {
+      ...courseSearchParams,
+      [`${filter.name}_include`]: childrenPathMatch,
+      scope: 'filters',
+    },
+    {
+      enabled: showChildren,
+      onSettled: (data) => {
+        if (data?.status === RequestStatus.FAILURE) {
+          handle(
+            new Error(`Failed to get children filters for ${filter.name}/${childrenPathMatch}`),
+          );
+        }
+      },
+    },
+  );
 
-      if (childrenResponse.status === RequestStatus.FAILURE) {
-        throw new Error(`Failed to get children filters for ${filter.name}/${childrenPathMatch}`);
-      }
-
-      setChildren(childrenResponse.content.filters[filter.name].values);
-    }
-    // Be sure to include courseSearchParams in the dependencies so the children counts are re-fetched whenever
-    // the user applies new filters or queries
-  }, [showChildren, value, courseSearchParams]);
+  const children =
+    childrenResponse?.status === RequestStatus.SUCCESS
+      ? childrenResponse.content.filters[filter.name].values
+      : [];
 
   // We also need to know if the current filter is active itself and let the user toggle it directly
   const [isActive, toggle] = useFilterValue(filter, value);

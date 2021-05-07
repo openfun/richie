@@ -1,6 +1,7 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import fetchMock from 'fetch-mock';
 import React from 'react';
+import { QueryClientProvider } from 'react-query';
 import { IntlProvider } from 'react-intl';
 import faker from 'faker';
 
@@ -9,8 +10,8 @@ import { CommonDataProps } from 'types/commonDataProps';
 import { APIBackend } from 'types/api';
 import { Deferred } from 'utils/test/deferred';
 import * as factories from 'utils/test/factories';
-import { SESSION_CACHE_KEY } from 'settings';
-
+import createQueryClient from 'utils/react-query/createQueryClient';
+import { REACT_QUERY_SETTINGS } from 'settings';
 import { handle } from 'utils/errors/handle';
 
 const mockHandle: jest.Mock<typeof handle> = handle as any;
@@ -41,11 +42,10 @@ describe('<CourseRunEnrollment />', () => {
   const initializeUser = (loggedin = true) => {
     const username = faker.internet.userName();
     sessionStorage.setItem(
-      SESSION_CACHE_KEY,
-      btoa(
-        JSON.stringify({
-          value: loggedin ? { username } : null,
-          expiredAt: Date.now() + 60_0000,
+      REACT_QUERY_SETTINGS.cacheStorage.key,
+      JSON.stringify(
+        factories.PersistedClientFactory({
+          queries: [factories.QueryStateFactory('user', { data: loggedin ? { username } : null })],
         }),
       ),
     );
@@ -60,7 +60,12 @@ describe('<CourseRunEnrollment />', () => {
     dashboard_link: courseRun.dashboard_link,
   });
 
+  beforeEach(() => {
+    jest.useFakeTimers('modern');
+  });
+
   afterEach(() => {
+    jest.clearAllTimers();
     sessionStorage.clear();
     fetchMock.restore();
   });
@@ -76,13 +81,17 @@ describe('<CourseRunEnrollment />', () => {
       enrollmentsDeferred.promise,
     );
 
-    render(
-      <IntlProvider locale="en">
-        <SessionProvider>
-          <CourseRunEnrollment context={contextProps} courseRun={getCourseRunProp(courseRun)} />
-        </SessionProvider>
-      </IntlProvider>,
-    );
+    await act(async () => {
+      render(
+        <QueryClientProvider client={createQueryClient({ persistor: true })}>
+          <IntlProvider locale="en">
+            <SessionProvider>
+              <CourseRunEnrollment context={contextProps} courseRun={getCourseRunProp(courseRun)} />
+            </SessionProvider>
+          </IntlProvider>
+        </QueryClientProvider>,
+      );
+    });
     screen.getByRole('status', { name: 'Loading enrollment information...' });
 
     await act(async () => {
@@ -110,27 +119,28 @@ describe('<CourseRunEnrollment />', () => {
     const courseRun: CourseRun = factories.CourseRunFactory.generate();
     courseRun.state.priority = 0;
 
-    const enrollmentsDeferred = new Deferred();
+    const enrollmentDeferred = new Deferred();
     fetchMock.get(
       `${endpoint}/api/enrollment/v1/enrollment/${username},${courseRun.resource_link}`,
-      enrollmentsDeferred.promise,
+      enrollmentDeferred.promise,
     );
 
-    render(
-      <IntlProvider locale="en">
-        <SessionProvider>
-          <CourseRunEnrollment
-            context={contextProps}
-            courseRun={getCourseRunProp(courseRun)}
-            loginUrl="/oauth/login/edx-oauth2/?next=/en/courses/"
-          />
-        </SessionProvider>
-      </IntlProvider>,
-    );
+    await act(async () => {
+      render(
+        <QueryClientProvider client={createQueryClient({ persistor: true })}>
+          <IntlProvider locale="en">
+            <SessionProvider>
+              <CourseRunEnrollment context={contextProps} courseRun={getCourseRunProp(courseRun)} />
+            </SessionProvider>
+          </IntlProvider>
+        </QueryClientProvider>,
+      );
+    });
+
     screen.getByRole('status', { name: 'Loading enrollment information...' });
 
     await act(async () => {
-      enrollmentsDeferred.resolve(false);
+      enrollmentDeferred.resolve({});
     });
 
     const button = screen.getByRole('button', { name: 'Enroll now' });
@@ -153,25 +163,27 @@ describe('<CourseRunEnrollment />', () => {
     const courseRun: CourseRun = factories.CourseRunFactory.generate();
     courseRun.state.priority = 0;
 
-    const courseRunDeferred = new Deferred();
-    fetchMock.get(`/api/v1.0/course-runs/${courseRun.id}/`, courseRunDeferred.promise);
     const enrollmentsDeferred = new Deferred();
     fetchMock.get(
       `${endpoint}/api/enrollment/v1/enrollment/${username},${courseRun.resource_link}`,
       enrollmentsDeferred.promise,
     );
 
-    render(
-      <IntlProvider locale="en">
-        <SessionProvider>
-          <CourseRunEnrollment context={contextProps} courseRun={getCourseRunProp(courseRun)} />
-        </SessionProvider>
-      </IntlProvider>,
-    );
+    await act(async () => {
+      render(
+        <QueryClientProvider client={createQueryClient({ persistor: true })}>
+          <IntlProvider locale="en">
+            <SessionProvider>
+              <CourseRunEnrollment context={contextProps} courseRun={getCourseRunProp(courseRun)} />
+            </SessionProvider>
+          </IntlProvider>
+        </QueryClientProvider>,
+      );
+    });
+
     screen.getByRole('status', { name: 'Loading enrollment information...' });
 
     await act(async () => {
-      courseRunDeferred.resolve(courseRun);
       enrollmentsDeferred.resolve({ is_active: true });
     });
 
@@ -186,25 +198,27 @@ describe('<CourseRunEnrollment />', () => {
     courseRun.starts_in_message = 'The course will start in 3 days';
     courseRun.dashboard_link = 'https://edx.local.dev:8073/dashboard';
 
-    const courseRunDeferred = new Deferred();
-    fetchMock.get(`/api/v1.0/course-runs/${courseRun.id}/`, courseRunDeferred.promise);
     const enrollmentsDeferred = new Deferred();
     fetchMock.get(
       `${endpoint}/api/enrollment/v1/enrollment/${username},${courseRun.resource_link}`,
       enrollmentsDeferred.promise,
     );
 
-    render(
-      <IntlProvider locale="en">
-        <SessionProvider>
-          <CourseRunEnrollment context={contextProps} courseRun={getCourseRunProp(courseRun)} />
-        </SessionProvider>
-      </IntlProvider>,
-    );
+    await act(async () => {
+      render(
+        <QueryClientProvider client={createQueryClient({ persistor: true })}>
+          <IntlProvider locale="en">
+            <SessionProvider>
+              <CourseRunEnrollment context={contextProps} courseRun={getCourseRunProp(courseRun)} />
+            </SessionProvider>
+          </IntlProvider>
+        </QueryClientProvider>,
+      );
+    });
+
     screen.getByRole('status', { name: 'Loading enrollment information...' });
 
     await act(async () => {
-      courseRunDeferred.resolve(courseRun);
       enrollmentsDeferred.resolve({ is_active: true });
     });
 
@@ -221,13 +235,17 @@ describe('<CourseRunEnrollment />', () => {
     const courseRun: CourseRun = factories.CourseRunFactory.generate();
     courseRun.state.priority = 4;
 
-    render(
-      <IntlProvider locale="en">
-        <SessionProvider>
-          <CourseRunEnrollment context={contextProps} courseRun={getCourseRunProp(courseRun)} />
-        </SessionProvider>
-      </IntlProvider>,
-    );
+    await act(async () => {
+      render(
+        <QueryClientProvider client={createQueryClient({ persistor: true })}>
+          <IntlProvider locale="en">
+            <SessionProvider>
+              <CourseRunEnrollment context={contextProps} courseRun={getCourseRunProp(courseRun)} />
+            </SessionProvider>
+          </IntlProvider>
+        </QueryClientProvider>,
+      );
+    });
 
     screen.getByText('Enrollment in this course run is closed at the moment');
     expect(screen.queryByRole('button', { name: 'Enroll now' })).toBeNull();
@@ -238,13 +256,17 @@ describe('<CourseRunEnrollment />', () => {
     const courseRun: CourseRun = factories.CourseRunFactory.generate();
     courseRun.state.priority = 0;
 
-    render(
-      <IntlProvider locale="en">
-        <SessionProvider>
-          <CourseRunEnrollment context={contextProps} courseRun={getCourseRunProp(courseRun)} />
-        </SessionProvider>
-      </IntlProvider>,
-    );
+    await act(async () => {
+      render(
+        <QueryClientProvider client={createQueryClient({ persistor: true })}>
+          <IntlProvider locale="en">
+            <SessionProvider>
+              <CourseRunEnrollment context={contextProps} courseRun={getCourseRunProp(courseRun)} />
+            </SessionProvider>
+          </IntlProvider>
+        </QueryClientProvider>,
+      );
+    });
 
     screen.getByRole('button', { name: 'Log in to enroll' });
   });
