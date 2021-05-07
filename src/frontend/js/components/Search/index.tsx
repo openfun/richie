@@ -48,7 +48,7 @@ const Search = ({ context }: CommonDataProps) => {
   const { courseSearchParams, lastDispatchActions } = useCourseSearchParams();
   const { query, ...courseSearchParamsWithoutQuery } = courseSearchParams;
 
-  const courseSearchResponse = useCourseSearch(
+  const { data: courseSearchResponse } = useCourseSearch(
     query && query.length < 3 ? courseSearchParamsWithoutQuery : courseSearchParams,
   );
 

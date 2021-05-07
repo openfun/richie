@@ -63,7 +63,7 @@ export interface ApiOptions {
   };
 }
 
-export enum ApiBackend {
+export enum APIBackend {
   BASE = 'base',
   FONZIE = 'fonzie',
   OPENEDX_DOGWOOD = 'openedx-dogwood',

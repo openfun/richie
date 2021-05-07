@@ -1,11 +1,11 @@
 import { ContextFactory } from 'utils/test/factories';
-import { ApiBackend } from 'types/api';
+import { APIBackend } from 'types/api';
 
 describe('Base API', () => {
   const context = ContextFactory({
     lms_backends: [
       {
-        backend: ApiBackend.BASE,
+        backend: APIBackend.BASE,
         course_regexp: '(?<course_id>.*)',
         endpoint: 'https://demo.endpoint/api',
       },

@@ -1,14 +1,16 @@
 import React from 'react';
+import faker from 'faker';
+import { QueryClientProvider } from 'react-query';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import fetchMock from 'fetch-mock';
 import { IntlProvider } from 'react-intl';
-
-import { ContextFactory } from 'utils/test/factories';
-import { SESSION_CACHE_KEY } from 'settings';
-import faker from 'faker';
-import { Deferred } from 'utils/test/deferred';
 import { act } from 'react-dom/test-utils';
+
+import { ContextFactory, PersistedClientFactory, QueryStateFactory } from 'utils/test/factories';
+import { Deferred } from 'utils/test/deferred';
+import createQueryClient from 'utils/react-query/createQueryClient';
+import { REACT_QUERY_SETTINGS } from 'settings';
 
 jest.mock('utils/errors/handle', () => ({
   handle: jest.fn(),
@@ -31,11 +33,10 @@ describe('<UserLogin />', () => {
   const initializeUser = () => {
     const username = faker.internet.userName();
     sessionStorage.setItem(
-      SESSION_CACHE_KEY,
-      btoa(
-        JSON.stringify({
-          value: { username },
-          expiredAt: Date.now() + 60_0000,
+      REACT_QUERY_SETTINGS.cacheStorage.key,
+      JSON.stringify(
+        PersistedClientFactory({
+          queries: [QueryStateFactory('user', { data: { username } })],
         }),
       ),
     );
@@ -50,13 +51,17 @@ describe('<UserLogin />', () => {
   it('gets and renders the user name and a dropdown containing a logout link', async () => {
     const username = initializeUser();
 
-    const { getByText, queryByText } = render(
-      <IntlProvider locale="en">
-        <SessionProvider>
-          <UserLogin context={contextProps} />
-        </SessionProvider>
-      </IntlProvider>,
-    );
+    await act(async () => {
+      render(
+        <QueryClientProvider client={createQueryClient({ persistor: true })}>
+          <IntlProvider locale="en">
+            <SessionProvider>
+              <UserLogin context={contextProps} />
+            </SessionProvider>
+          </IntlProvider>
+        </QueryClientProvider>,
+      );
+    });
 
     const button = screen.getByLabelText(`Access to your profile settings ${username}`, {
       selector: 'button',
@@ -64,9 +69,9 @@ describe('<UserLogin />', () => {
 
     userEvent.click(button);
 
-    getByText(username);
-    getByText('Log out');
-    expect(queryByText('Loading login status...')).toBeNull();
+    screen.getByText(username);
+    screen.getByText('Log out');
+    expect(screen.queryByText('Loading login status...')).toBeNull();
   });
 
   it('renders signup/login buttons when the user is not logged in', async () => {
@@ -74,11 +79,13 @@ describe('<UserLogin />', () => {
     fetchMock.get('https://endpoint.test/api/user/v1/me', loginDeferred.promise);
 
     const { getByText, queryByText } = render(
-      <IntlProvider locale="en">
-        <SessionProvider>
-          <UserLogin context={contextProps} />
-        </SessionProvider>
-      </IntlProvider>,
+      <QueryClientProvider client={createQueryClient({ persistor: true })}>
+        <IntlProvider locale="en">
+          <SessionProvider>
+            <UserLogin context={contextProps} />
+          </SessionProvider>
+        </IntlProvider>
+      </QueryClientProvider>,
     );
 
     await act(async () => {
@@ -90,20 +97,24 @@ describe('<UserLogin />', () => {
     expect(queryByText('Loading login status...')).toBeNull();
   });
 
-  it('should renders profile urls and bind user info if needed', () => {
+  it('should renders profile urls and bind user info if needed', async () => {
     const username = initializeUser();
     const profileUrls = {
       settings: { label: 'Settings', action: 'https://auth.local.test/settings' },
       account: { label: 'Account', action: 'https://auth.local.test/u/(username)' },
     };
 
-    const { getByText, getByRole } = render(
-      <IntlProvider locale="en">
-        <SessionProvider>
-          <UserLogin context={contextProps} profileUrls={profileUrls} />
-        </SessionProvider>
-      </IntlProvider>,
-    );
+    await act(async () => {
+      render(
+        <QueryClientProvider client={createQueryClient({ persistor: true })}>
+          <IntlProvider locale="en">
+            <SessionProvider>
+              <UserLogin context={contextProps} profileUrls={profileUrls} />
+            </SessionProvider>
+          </IntlProvider>
+        </QueryClientProvider>,
+      );
+    });
 
     const button = screen.getByLabelText(`Access to your profile settings ${username}`, {
       selector: 'button',
@@ -111,9 +122,9 @@ describe('<UserLogin />', () => {
 
     userEvent.click(button);
 
-    getByText(username);
-    const settingsLink = getByRole('link', { name: 'Settings' });
-    const accountLink = getByRole('link', { name: 'Account' });
+    screen.getByText(username);
+    const settingsLink = screen.getByRole('link', { name: 'Settings' });
+    const accountLink = screen.getByRole('link', { name: 'Account' });
     expect(settingsLink.getAttribute('href')).toEqual('https://auth.local.test/settings');
     expect(accountLink.getAttribute('href')).toEqual(`https://auth.local.test/u/${username}`);
   });

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import { IntlProvider } from 'react-intl';
 
 import { findByText, render } from '@testing-library/react';
@@ -13,6 +13,11 @@ jest.mock('components/RootSearchSuggestField', () => ({
   __esModule: true,
   default: ({ exampleProp }: { exampleProp: string }) =>
     `root search suggest field component rendered with ${exampleProp}`,
+}));
+
+jest.mock('data/useSession', () => ({
+  __esModule: true,
+  SessionProvider: (props: PropsWithChildren<any>) => props.children,
 }));
 
 describe('<Root />', () => {
@@ -73,7 +78,7 @@ describe('<Root />', () => {
     // Render the root component, passing our real element and our bogus one
     render(
       <IntlProvider locale="en">
-        <Root richieReactSpots={[userLoginContainer, userFeedbackContainer]} />
+        <Root richieReactSpots={[userFeedbackContainer, userLoginContainer]} />
       </IntlProvider>,
     );
 

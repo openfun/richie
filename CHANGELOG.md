@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Add react-query to manage API requests and local data store
 - Move type utils into type directory
 
 ### Fixed
