@@ -50,10 +50,12 @@ describe('Base API', () => {
           username: 'johndoe',
         });
 
-        const response = await BaseAPI.enrollment.isEnrolled(
+        const enrollment = await BaseAPI.enrollment.get(
           'https://demo.endpoint/courses?course_id=af1987efz98:afe78',
           { username: 'johndoe' },
         );
+
+        const response = await BaseAPI.enrollment.isEnrolled(enrollment);
 
         expect(response).toBeTruthy();
       });

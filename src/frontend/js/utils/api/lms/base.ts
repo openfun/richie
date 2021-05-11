@@ -2,6 +2,7 @@ import { AuthenticationBackend, LMSBackend } from 'types/commonDataProps';
 import { Nullable, Maybe } from 'types/utils';
 import { User } from 'types/User';
 import { APILms } from 'types/api';
+import { Enrollment, OpenEdXEnrollment } from 'types';
 import OpenEdxHawthornApiInterface from './openedx-hawthorn';
 
 const API = (APIConf: LMSBackend | AuthenticationBackend): APILms => {
@@ -61,11 +62,8 @@ const API = (APIConf: LMSBackend | AuthenticationBackend): APILms => {
           }
           resolve(null);
         }),
-      isEnrolled: async (url: string, user: Nullable<User>): Promise<boolean> =>
-        new Promise((resolve) => {
-          const courseId = extractCourseIdFromUrl(url);
-          resolve(Boolean(sessionStorage.getItem(`${user?.username}-${courseId}`)));
-        }),
+      isEnrolled: async (enrollment: Maybe<Nullable<Enrollment>>) =>
+        new Promise((resolve) => resolve((enrollment as OpenEdXEnrollment)?.is_active)),
       set: (url: string, user: User): Promise<boolean> =>
         new Promise((resolve) => {
           const courseId = extractCourseIdFromUrl(url);

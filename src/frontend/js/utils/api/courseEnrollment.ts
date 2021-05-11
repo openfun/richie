@@ -1,19 +1,22 @@
 import { User } from 'types/User';
-import { Nullable } from 'types/utils';
+import { Enrollment } from 'types';
+import { Maybe, Nullable } from 'types/utils';
 import APIHandler from './lms';
 
-const EnrollmentApi = {
-  get: (url: string, user: Nullable<User>) => {
-    const LMS = APIHandler(url);
-    return LMS.enrollment.get(url, user);
-  },
-  isEnrolled: (url: string, user: Nullable<User>) => {
-    const LMS = APIHandler(url);
-    return LMS.enrollment.isEnrolled(url, user);
-  },
-  set: (url: string, user: User) => {
-    const LMS = APIHandler(url);
-    return LMS.enrollment.set(url, user);
-  },
+const EnrollmentApi = (resourceLink: string) => {
+  const LMS = APIHandler(resourceLink);
+
+  return {
+    get: async (user: Nullable<User>) => {
+      return LMS.enrollment.get(resourceLink, user);
+    },
+    isEnrolled: async (enrollment: Maybe<Nullable<Enrollment>>) => {
+      return LMS.enrollment.isEnrolled(enrollment);
+    },
+    set: async (user: User) => {
+      return LMS.enrollment.set(resourceLink, user);
+    },
+  };
 };
+
 export default EnrollmentApi;

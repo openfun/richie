@@ -112,22 +112,15 @@ describe('OpenEdX Hawthorn API', () => {
 
       it('returns false if user is not enrolled', async () => {
         fetchMock.get(`${EDX_ENDPOINT}/api/enrollment/v1/enrollment/${username},${courseId}`, 200);
-        const response = await HawthornApi.enrollment.isEnrolled(
+
+        const enrollment = await HawthornApi.enrollment.get(
           `https://demo.endpoint/courses?course_id=${courseId}`,
           { username },
         );
 
-        expect(response).toBeFalsy();
-      });
+        const response = await HawthornApi.enrollment.isEnrolled(enrollment);
 
-      it('returns false if user is anonymous', async () => {
-        fetchMock.get(`${EDX_ENDPOINT}/api/enrollment/v1/enrollment/${username},${courseId}`, 401);
-        const response = await HawthornApi.enrollment.isEnrolled(
-          `https://demo.endpoint/courses?course_id=${courseId}`,
-          { username },
-        );
-
-        expect(response).toBeFalsy();
+        expect(response).toStrictEqual(false);
       });
     });
 
