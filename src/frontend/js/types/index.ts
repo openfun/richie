@@ -31,8 +31,24 @@ export interface CourseState {
   text: string;
 }
 
+export interface OpenEdXEnrollment {
+  created: Nullable<string>;
+  mode: 'audit' | 'honor' | 'verified';
+  is_active: boolean;
+  course_details: {
+    course_id: string;
+    course_name: string;
+    enrollment_start: Nullable<string>;
+    enrollment_end: Nullable<string>;
+    course_start: Nullable<string>;
+    course_end: Nullable<string>;
+    invite_only: boolean;
+  };
+  user: string;
+}
+
 /**
- * Use an empty type to make sure we do not depend on any LMS-specific fields
+ * Use an unknown type to make sure we do not depend on any LMS-specific fields
  * on enrollment objects, just use HTTP response codes.
  */
-export interface Enrollment {}
+export type Enrollment = unknown;

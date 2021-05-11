@@ -46,7 +46,7 @@ export interface APIAuthentication {
 
 export interface APIEnrollment {
   get: (url: string, user: Nullable<User>) => Promise<Nullable<Enrollment>>;
-  isEnrolled: (url: string, user: Nullable<User>) => Promise<boolean>;
+  isEnrolled: (enrollment: Maybe<Nullable<Enrollment>>) => Promise<Maybe<boolean>>;
   set: (url: string, user: User) => Promise<boolean>;
 }
 

@@ -6,6 +6,7 @@ import { APILms, ApiOptions } from 'types/api';
 import { location } from 'utils/indirection/window';
 import { handle } from 'utils/errors/handle';
 import { EDX_CSRF_TOKEN_COOKIE_NAME } from 'settings';
+import { Enrollment, OpenEdXEnrollment } from 'types';
 
 /**
  *
@@ -89,27 +90,8 @@ const API = (APIConf: AuthenticationBackend | LMSBackend, options?: ApiOptions):
             return null;
           });
       },
-      isEnrolled: async (url: string, user?: Nullable<User>): Promise<boolean> => {
-        const courseId = extractCourseIdFromUrl(url);
-        const params = user ? `${user.username},${courseId}` : courseId;
-
-        return fetch(`${ROUTES.enrollment.isEnrolled}/${params}`, {
-          credentials: 'include',
-        })
-          .then((response) => {
-            if (response.ok) {
-              return response.headers.get('Content-Type') === 'application/json'
-                ? response.json()
-                : false;
-            }
-            if (response.status === 401 || response.status === 403) return false;
-            throw new Error(`[GET - Enrollment] > ${response.status} - ${response.statusText}`);
-          })
-          .then((response) => response.is_active || false)
-          .catch((error) => {
-            handle(error);
-            return false;
-          });
+      isEnrolled: async (enrollment: Maybe<Nullable<Enrollment>>) => {
+        return new Promise((resolve) => resolve(!!(enrollment as OpenEdXEnrollment)?.is_active));
       },
       set: async (url: string, user: User): Promise<boolean> => {
         try {
