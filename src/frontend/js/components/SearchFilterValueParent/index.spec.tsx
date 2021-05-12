@@ -6,7 +6,6 @@ import { IntlProvider } from 'react-intl';
 import { fetchList } from 'data/getResourceList';
 import { History, HistoryContext } from 'data/useHistory';
 import { APIListRequestParams } from 'types/api';
-import { JestMockOf } from 'utils/types';
 
 import { SearchFilterValueParent } from '.';
 
@@ -14,7 +13,7 @@ jest.mock('data/getResourceList', () => ({
   fetchList: jest.fn(),
 }));
 
-const mockFetchList: JestMockOf<typeof fetchList> = fetchList as any;
+const mockFetchList: jest.MockedFunction<typeof fetchList> = fetchList as any;
 
 describe('<SearchFilterValueParent />', () => {
   const historyPushState = jest.fn();
