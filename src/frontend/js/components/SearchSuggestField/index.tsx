@@ -35,11 +35,8 @@ const SearchSuggestField = ({ context }: CommonDataProps) => {
 
   // Setup our filters updates (for full-text-search and specific filters) directly through the
   // search parameters hook.
-  const {
-    courseSearchParams,
-    dispatchCourseSearchParamsUpdate,
-    lastDispatchActions,
-  } = useCourseSearchParams();
+  const { courseSearchParams, dispatchCourseSearchParamsUpdate, lastDispatchActions } =
+    useCourseSearchParams();
 
   // Initialize hooks for the two pieces of state the controlled <Autosuggest> component needs to interact with:
   // the current list of suggestions and the input value.
