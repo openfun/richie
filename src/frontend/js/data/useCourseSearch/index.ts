@@ -6,9 +6,8 @@ import { useAsyncEffect } from 'utils/useAsyncEffect';
 import { fetchList, FetchListResponse } from '../getResourceList';
 
 export const useCourseSearch = (searchParams: APIListRequestParams) => {
-  const [courseSearchResponse, setCourseSearchResponse] = useState<Nullable<FetchListResponse>>(
-    null,
-  );
+  const [courseSearchResponse, setCourseSearchResponse] =
+    useState<Nullable<FetchListResponse>>(null);
 
   useAsyncEffect(async () => {
     const response = await fetchList('courses', searchParams);
