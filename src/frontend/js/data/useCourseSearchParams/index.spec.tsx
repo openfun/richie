@@ -1,4 +1,5 @@
-import { act, render } from '@testing-library/react';
+import { act } from '@testing-library/react';
+import { renderHook } from '@testing-library/react-hooks';
 import React from 'react';
 
 import { HistoryProvider } from 'data/useHistory';
@@ -15,14 +16,9 @@ jest.mock('utils/indirection/window', () => ({
 }));
 
 describe('data/useCourseSearchParams', () => {
-  // Build a helper component with an out-of-scope function to let us reach our Hook from
-  // our test cases.
-  let getLatestHookValues: any;
-  const TestComponent = () => {
-    const hookValues = useCourseSearchParams();
-    getLatestHookValues = () => hookValues;
-    return <div />;
-  };
+  const wrapper = ({ children }: React.PropsWithChildren<any>) => (
+    <HistoryProvider>{children}</HistoryProvider>
+  );
 
   beforeEach(() => {
     // Remove any keys added to the mockWindow location object, reset pathname to /search
@@ -31,15 +27,12 @@ describe('data/useCourseSearchParams', () => {
     jest.resetAllMocks();
   });
 
-  it('initializes with the URL query string', () => {
+  it('initializes with the URL query string', async () => {
     mockWindow.location.search =
       '?organizations=L-00010003&organizations=L-00010009&query=some%20query&limit=8&offset=3';
-    render(
-      <HistoryProvider>
-        <TestComponent />
-      </HistoryProvider>,
-    );
-    const { courseSearchParams } = getLatestHookValues();
+    const { result } = renderHook(useCourseSearchParams, { wrapper });
+    const { courseSearchParams } = result.current;
+
     expect(courseSearchParams).toEqual({
       limit: '8',
       offset: '3',
@@ -52,12 +45,9 @@ describe('data/useCourseSearchParams', () => {
 
   it('initializes with defaults if there is no query string param', () => {
     mockWindow.location.search = '';
-    render(
-      <HistoryProvider>
-        <TestComponent />
-      </HistoryProvider>,
-    );
-    const { courseSearchParams } = getLatestHookValues();
+    const { result } = renderHook(useCourseSearchParams, { wrapper });
+    const { courseSearchParams } = result.current;
+
     expect(courseSearchParams).toEqual({ limit: '13', offset: '0' });
     // We need an update so the URL reflects the actual query params
     expect(mockWindow.history.replaceState).toHaveBeenCalledTimes(1);
@@ -77,13 +67,10 @@ describe('data/useCourseSearchParams', () => {
   describe('PAGE_CHANGE', () => {
     it('updates the offset on the courseSearchParams & updates history', () => {
       mockWindow.location.search = '?languages=fr&limit=13&offset=26';
-      render(
-        <HistoryProvider>
-          <TestComponent />
-        </HistoryProvider>,
-      );
+      const { result } = renderHook(useCourseSearchParams, { wrapper });
+
       {
-        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = result.current;
         expect(courseSearchParams).toEqual({
           languages: 'fr',
           limit: '13',
@@ -97,7 +84,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const { courseSearchParams } = getLatestHookValues();
+        const { courseSearchParams } = result.current;
         expect(courseSearchParams).toEqual({
           languages: 'fr',
           limit: '13',
@@ -127,13 +114,9 @@ describe('data/useCourseSearchParams', () => {
   describe('QUERY_UPDATE', () => {
     it('sets the query on courseSearchParams, resets pagination & updates history', () => {
       mockWindow.location.search = '?languages=en&limit=17&offset=5';
-      render(
-        <HistoryProvider>
-          <TestComponent />
-        </HistoryProvider>,
-      );
+      const { result } = renderHook(useCourseSearchParams, { wrapper });
       {
-        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = result.current;
         expect(courseSearchParams).toEqual({
           languages: 'en',
           limit: '17',
@@ -147,7 +130,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const { courseSearchParams } = getLatestHookValues();
+        const { courseSearchParams } = result.current;
         expect(courseSearchParams).toEqual({
           languages: 'en',
           limit: '17',
@@ -181,13 +164,10 @@ describe('data/useCourseSearchParams', () => {
 
     it('replaces the query on courseSearchParams & updates history', () => {
       mockWindow.location.search = '?languages=fr&limit=999&offset=0&query=some%20previous%20query';
-      render(
-        <HistoryProvider>
-          <TestComponent />
-        </HistoryProvider>,
-      );
+      const { result } = renderHook(useCourseSearchParams, { wrapper });
+
       {
-        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = result.current;
         expect(courseSearchParams).toEqual({
           languages: 'fr',
           limit: '999',
@@ -202,7 +182,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const { courseSearchParams } = getLatestHookValues();
+        const { courseSearchParams } = result.current;
         expect(courseSearchParams).toEqual({
           languages: 'fr',
           limit: '999',
@@ -236,13 +216,10 @@ describe('data/useCourseSearchParams', () => {
 
     it('clears the query on courseSearchParams & updates query history', () => {
       mockWindow.location.search = '?languages=es&limit=999&offset=0&query=some%20existing%20query';
-      render(
-        <HistoryProvider>
-          <TestComponent />
-        </HistoryProvider>,
-      );
+      const { result } = renderHook(useCourseSearchParams, { wrapper });
+
       {
-        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = result.current;
         expect(courseSearchParams).toEqual({
           languages: 'es',
           limit: '999',
@@ -251,13 +228,13 @@ describe('data/useCourseSearchParams', () => {
         });
         act(() =>
           dispatchCourseSearchParamsUpdate({
-            query: undefined,
+            query: '',
             type: CourseSearchParamsAction.queryUpdate,
           }),
         );
       }
       {
-        const { courseSearchParams } = getLatestHookValues();
+        const { courseSearchParams } = result.current;
         expect(courseSearchParams).toEqual({
           languages: 'es',
           limit: '999',
@@ -271,7 +248,7 @@ describe('data/useCourseSearchParams', () => {
             data: {
               lastDispatchActions: [
                 {
-                  query: undefined,
+                  query: '',
                   type: CourseSearchParamsAction.queryUpdate,
                 },
               ],
@@ -294,13 +271,10 @@ describe('data/useCourseSearchParams', () => {
     it('adds the value to the existing list for this filter, resets pagination & updates history', () => {
       mockWindow.location.search =
         '?organizations=L-00010003&organizations=L-00010009&offset=999&limit=10';
-      render(
-        <HistoryProvider>
-          <TestComponent />
-        </HistoryProvider>,
-      );
+      const { result } = renderHook(useCourseSearchParams, { wrapper });
+
       {
-        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = result.current;
         expect(courseSearchParams).toEqual({
           limit: '10',
           offset: '999',
@@ -310,8 +284,13 @@ describe('data/useCourseSearchParams', () => {
         act(() =>
           dispatchCourseSearchParamsUpdate({
             filter: {
+              base_path: null,
+              human_name: 'Organizations',
+              is_autocompletable: false,
               is_drilldown: false,
+              is_searchable: false,
               name: 'organizations',
+              position: 0,
             },
             payload: 'L-00010017',
             type: CourseSearchParamsAction.filterAdd,
@@ -319,7 +298,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const { courseSearchParams } = getLatestHookValues();
+        const { courseSearchParams } = result.current;
         expect(courseSearchParams).toEqual({
           limit: '10',
           offset: '0',
@@ -333,8 +312,13 @@ describe('data/useCourseSearchParams', () => {
               lastDispatchActions: [
                 {
                   filter: {
+                    base_path: null,
+                    human_name: 'Organizations',
+                    is_autocompletable: false,
                     is_drilldown: false,
+                    is_searchable: false,
                     name: 'organizations',
+                    position: 0,
                   },
                   payload: 'L-00010017',
                   type: CourseSearchParamsAction.filterAdd,
@@ -355,13 +339,10 @@ describe('data/useCourseSearchParams', () => {
 
     it('adds to the existing list for non-MPTT-formatted filter value keys and resets pagination', () => {
       mockWindow.location.search = '?languages=en&languages=fr&offset=999&limit=10';
-      render(
-        <HistoryProvider>
-          <TestComponent />
-        </HistoryProvider>,
-      );
+      const { result } = renderHook(useCourseSearchParams, { wrapper });
+
       {
-        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = result.current;
         expect(courseSearchParams).toEqual({
           languages: ['en', 'fr'],
           limit: '10',
@@ -371,8 +352,13 @@ describe('data/useCourseSearchParams', () => {
         act(() =>
           dispatchCourseSearchParamsUpdate({
             filter: {
+              base_path: null,
+              human_name: 'Languages',
+              is_autocompletable: false,
               is_drilldown: false,
+              is_searchable: false,
               name: 'languages',
+              position: 0,
             },
             payload: 'it',
             type: CourseSearchParamsAction.filterAdd,
@@ -380,7 +366,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const { courseSearchParams } = getLatestHookValues();
+        const { courseSearchParams } = result.current;
         expect(courseSearchParams).toEqual({
           languages: ['en', 'fr', 'it'],
           limit: '10',
@@ -394,8 +380,13 @@ describe('data/useCourseSearchParams', () => {
               lastDispatchActions: [
                 {
                   filter: {
+                    base_path: null,
+                    human_name: 'Languages',
+                    is_autocompletable: false,
                     is_drilldown: false,
+                    is_searchable: false,
                     name: 'languages',
+                    position: 0,
                   },
                   payload: 'it',
                   type: CourseSearchParamsAction.filterAdd,
@@ -416,13 +407,10 @@ describe('data/useCourseSearchParams', () => {
 
     it('creates a list with the existing single value and the new value, resets pagination & updates history', () => {
       mockWindow.location.search = '?organizations=L-00010003&offset=999&limit=10';
-      render(
-        <HistoryProvider>
-          <TestComponent />
-        </HistoryProvider>,
-      );
+      const { result } = renderHook(useCourseSearchParams, { wrapper });
+
       {
-        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = result.current;
         expect(courseSearchParams).toEqual({
           limit: '10',
           offset: '999',
@@ -432,8 +420,13 @@ describe('data/useCourseSearchParams', () => {
         act(() =>
           dispatchCourseSearchParamsUpdate({
             filter: {
+              base_path: null,
+              human_name: 'Organizations',
+              is_autocompletable: false,
               is_drilldown: false,
+              is_searchable: false,
               name: 'organizations',
+              position: 0,
             },
             payload: 'L-00010017',
             type: CourseSearchParamsAction.filterAdd,
@@ -441,7 +434,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const { courseSearchParams } = getLatestHookValues();
+        const { courseSearchParams } = result.current;
         expect(courseSearchParams).toEqual({
           limit: '10',
           offset: '0',
@@ -455,8 +448,13 @@ describe('data/useCourseSearchParams', () => {
               lastDispatchActions: [
                 {
                   filter: {
+                    base_path: null,
+                    human_name: 'Organizations',
+                    is_autocompletable: false,
                     is_drilldown: false,
+                    is_searchable: false,
                     name: 'organizations',
+                    position: 0,
                   },
                   payload: 'L-00010017',
                   type: CourseSearchParamsAction.filterAdd,
@@ -477,13 +475,10 @@ describe('data/useCourseSearchParams', () => {
 
     it('creates the new list for non-MPTT-formatted filter value keys and resets pagination', () => {
       mockWindow.location.search = '?languages=de&offset=999&limit=10';
-      render(
-        <HistoryProvider>
-          <TestComponent />
-        </HistoryProvider>,
-      );
+      const { result } = renderHook(useCourseSearchParams, { wrapper });
+
       {
-        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = result.current;
         expect(courseSearchParams).toEqual({
           languages: 'de',
           limit: '10',
@@ -493,8 +488,13 @@ describe('data/useCourseSearchParams', () => {
         act(() =>
           dispatchCourseSearchParamsUpdate({
             filter: {
+              base_path: null,
+              human_name: 'Languages',
+              is_autocompletable: false,
               is_drilldown: false,
+              is_searchable: false,
               name: 'languages',
+              position: 0,
             },
             payload: 'zh',
             type: CourseSearchParamsAction.filterAdd,
@@ -502,7 +502,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const { courseSearchParams } = getLatestHookValues();
+        const { courseSearchParams } = result.current;
         expect(courseSearchParams).toEqual({
           languages: ['de', 'zh'],
           limit: '10',
@@ -516,8 +516,13 @@ describe('data/useCourseSearchParams', () => {
               lastDispatchActions: [
                 {
                   filter: {
+                    base_path: null,
+                    human_name: 'Languages',
+                    is_autocompletable: false,
                     is_drilldown: false,
+                    is_searchable: false,
                     name: 'languages',
+                    position: 0,
                   },
                   payload: 'zh',
                   type: CourseSearchParamsAction.filterAdd,
@@ -538,13 +543,10 @@ describe('data/useCourseSearchParams', () => {
 
     it('creates a new list with the value & updates history', () => {
       mockWindow.location.search = '?limit=999&offset=0&query=some%20query';
-      render(
-        <HistoryProvider>
-          <TestComponent />
-        </HistoryProvider>,
-      );
+      const { result } = renderHook(useCourseSearchParams, { wrapper });
+
       {
-        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = result.current;
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -554,8 +556,13 @@ describe('data/useCourseSearchParams', () => {
         act(() =>
           dispatchCourseSearchParamsUpdate({
             filter: {
+              base_path: null,
+              human_name: 'Organizations',
+              is_autocompletable: false,
               is_drilldown: false,
+              is_searchable: false,
               name: 'organizations',
+              position: 0,
             },
             payload: 'L-00010014',
             type: CourseSearchParamsAction.filterAdd,
@@ -563,7 +570,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const { courseSearchParams } = getLatestHookValues();
+        const { courseSearchParams } = result.current;
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -578,8 +585,13 @@ describe('data/useCourseSearchParams', () => {
               lastDispatchActions: [
                 {
                   filter: {
+                    base_path: null,
+                    human_name: 'Organizations',
+                    is_autocompletable: false,
                     is_drilldown: false,
+                    is_searchable: false,
                     name: 'organizations',
+                    position: 0,
                   },
                   payload: 'L-00010014',
                   type: CourseSearchParamsAction.filterAdd,
@@ -602,13 +614,10 @@ describe('data/useCourseSearchParams', () => {
     it('does nothing if the value is already in the list for this filter', () => {
       mockWindow.location.search =
         '?limit=999&offset=0&query=some%20query&organizations=L-00010009';
-      render(
-        <HistoryProvider>
-          <TestComponent />
-        </HistoryProvider>,
-      );
+      const { result } = renderHook(useCourseSearchParams, { wrapper });
+
       {
-        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = result.current;
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -619,8 +628,13 @@ describe('data/useCourseSearchParams', () => {
         act(() =>
           dispatchCourseSearchParamsUpdate({
             filter: {
+              base_path: null,
+              human_name: 'Organizations',
+              is_autocompletable: false,
               is_drilldown: false,
+              is_searchable: false,
               name: 'organizations',
+              position: 0,
             },
             payload: 'L-00010009',
             type: CourseSearchParamsAction.filterAdd,
@@ -628,7 +642,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const { courseSearchParams } = getLatestHookValues();
+        const { courseSearchParams } = result.current;
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -648,13 +662,10 @@ describe('data/useCourseSearchParams', () => {
         '&subjects=P-000200030012' +
         // some unrelated category from another meta-category
         '&levels=L-000200020005';
-      render(
-        <HistoryProvider>
-          <TestComponent />
-        </HistoryProvider>,
-      );
+      const { result } = renderHook(useCourseSearchParams, { wrapper });
+
       {
-        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = result.current;
         expect(courseSearchParams).toEqual({
           levels: 'L-000200020005',
           limit: '999',
@@ -666,8 +677,13 @@ describe('data/useCourseSearchParams', () => {
         act(() =>
           dispatchCourseSearchParamsUpdate({
             filter: {
+              base_path: null,
+              human_name: 'Subjects',
+              is_autocompletable: false,
               is_drilldown: false,
+              is_searchable: false,
               name: 'subjects',
+              position: 0,
             },
             payload: 'L-000200030005',
             type: CourseSearchParamsAction.filterAdd,
@@ -675,7 +691,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const { courseSearchParams } = getLatestHookValues();
+        const { courseSearchParams } = result.current;
         expect(courseSearchParams).toEqual({
           levels: 'L-000200020005',
           limit: '999',
@@ -691,8 +707,13 @@ describe('data/useCourseSearchParams', () => {
               lastDispatchActions: [
                 {
                   filter: {
+                    base_path: null,
+                    human_name: 'Subjects',
+                    is_autocompletable: false,
                     is_drilldown: false,
+                    is_searchable: false,
                     name: 'subjects',
+                    position: 0,
                   },
                   payload: 'L-000200030005',
                   type: CourseSearchParamsAction.filterAdd,
@@ -720,13 +741,10 @@ describe('data/useCourseSearchParams', () => {
         '&subjects=L-0002000300050001' +
         // some unrelated category from another meta-category
         '&levels=L-000200020005';
-      render(
-        <HistoryProvider>
-          <TestComponent />
-        </HistoryProvider>,
-      );
+      const { result } = renderHook(useCourseSearchParams, { wrapper });
+
       {
-        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = result.current;
         expect(courseSearchParams).toEqual({
           levels: 'L-000200020005',
           limit: '999',
@@ -738,8 +756,13 @@ describe('data/useCourseSearchParams', () => {
         act(() =>
           dispatchCourseSearchParamsUpdate({
             filter: {
+              base_path: null,
+              human_name: 'Subjects',
+              is_autocompletable: false,
               is_drilldown: false,
+              is_searchable: false,
               name: 'subjects',
+              position: 0,
             },
             payload: 'L-000200030005',
             type: CourseSearchParamsAction.filterAdd,
@@ -747,7 +770,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const { courseSearchParams } = getLatestHookValues();
+        const { courseSearchParams } = result.current;
         expect(courseSearchParams).toEqual({
           levels: 'L-000200020005',
           limit: '999',
@@ -763,8 +786,13 @@ describe('data/useCourseSearchParams', () => {
               lastDispatchActions: [
                 {
                   filter: {
+                    base_path: null,
+                    human_name: 'Subjects',
+                    is_autocompletable: false,
                     is_drilldown: false,
+                    is_searchable: false,
                     name: 'subjects',
+                    position: 0,
                   },
                   payload: 'L-000200030005',
                   type: CourseSearchParamsAction.filterAdd,
@@ -794,13 +822,10 @@ describe('data/useCourseSearchParams', () => {
         '&subjects=P-000200030012' +
         // some unrelated category from another meta-category
         '&levels=L-000200020005';
-      render(
-        <HistoryProvider>
-          <TestComponent />
-        </HistoryProvider>,
-      );
+      const { result } = renderHook(useCourseSearchParams, { wrapper });
+
       {
-        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = result.current;
         expect(courseSearchParams).toEqual({
           levels: 'L-000200020005',
           limit: '999',
@@ -812,8 +837,13 @@ describe('data/useCourseSearchParams', () => {
         act(() =>
           dispatchCourseSearchParamsUpdate({
             filter: {
+              base_path: null,
+              human_name: 'Subjects',
+              is_autocompletable: false,
               is_drilldown: false,
+              is_searchable: false,
               name: 'subjects',
+              position: 0,
             },
             payload: 'L-0002000300050013',
             type: CourseSearchParamsAction.filterAdd,
@@ -821,7 +851,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const { courseSearchParams } = getLatestHookValues();
+        const { courseSearchParams } = result.current;
         expect(courseSearchParams).toEqual({
           levels: 'L-000200020005',
           limit: '999',
@@ -837,8 +867,13 @@ describe('data/useCourseSearchParams', () => {
               lastDispatchActions: [
                 {
                   filter: {
+                    base_path: null,
+                    human_name: 'Subjects',
+                    is_autocompletable: false,
                     is_drilldown: false,
+                    is_searchable: false,
                     name: 'subjects',
+                    position: 0,
                   },
                   payload: 'L-0002000300050013',
                   type: CourseSearchParamsAction.filterAdd,
@@ -867,13 +902,10 @@ describe('data/useCourseSearchParams', () => {
         '&subjects=P-000200030005' +
         // some unrelated category from another meta-category
         '&levels=L-000200020005';
-      render(
-        <HistoryProvider>
-          <TestComponent />
-        </HistoryProvider>,
-      );
+      const { result } = renderHook(useCourseSearchParams, { wrapper });
+
       {
-        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = result.current;
         expect(courseSearchParams).toEqual({
           levels: 'L-000200020005',
           limit: '999',
@@ -885,8 +917,13 @@ describe('data/useCourseSearchParams', () => {
         act(() =>
           dispatchCourseSearchParamsUpdate({
             filter: {
+              base_path: null,
+              human_name: 'Subjects',
+              is_autocompletable: false,
               is_drilldown: false,
+              is_searchable: false,
               name: 'subjects',
+              position: 0,
             },
             payload: 'L-0002000300050013',
             type: CourseSearchParamsAction.filterAdd,
@@ -894,7 +931,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const { courseSearchParams } = getLatestHookValues();
+        const { courseSearchParams } = result.current;
         expect(courseSearchParams).toEqual({
           levels: 'L-000200020005',
           limit: '999',
@@ -910,8 +947,13 @@ describe('data/useCourseSearchParams', () => {
               lastDispatchActions: [
                 {
                   filter: {
+                    base_path: null,
+                    human_name: 'Subjects',
+                    is_autocompletable: false,
                     is_drilldown: false,
+                    is_searchable: false,
                     name: 'subjects',
+                    position: 0,
                   },
                   payload: 'L-0002000300050013',
                   type: CourseSearchParamsAction.filterAdd,
@@ -936,14 +978,11 @@ describe('data/useCourseSearchParams', () => {
   describe('FILTER_ADD [drilldown]', () => {
     it('sets the value for the filter', () => {
       mockWindow.location.search = '?limit=999&offset=0';
-      render(
-        <HistoryProvider>
-          <TestComponent />
-        </HistoryProvider>,
-      );
+      const { result } = renderHook(useCourseSearchParams, { wrapper });
+
       {
         // Set a value where there was no value
-        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = result.current;
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -952,8 +991,13 @@ describe('data/useCourseSearchParams', () => {
         act(() =>
           dispatchCourseSearchParamsUpdate({
             filter: {
+              base_path: null,
+              human_name: 'Level',
+              is_autocompletable: false,
               is_drilldown: true,
+              is_searchable: false,
               name: 'level',
+              position: 0,
             },
             payload: 'L-000200010003',
             type: CourseSearchParamsAction.filterAdd,
@@ -961,7 +1005,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const { courseSearchParams } = getLatestHookValues();
+        const { courseSearchParams } = result.current;
         expect(courseSearchParams).toEqual({
           level: 'L-000200010003',
           limit: '999',
@@ -975,8 +1019,13 @@ describe('data/useCourseSearchParams', () => {
               lastDispatchActions: [
                 {
                   filter: {
+                    base_path: null,
+                    human_name: 'Level',
+                    is_autocompletable: false,
                     is_drilldown: true,
+                    is_searchable: false,
                     name: 'level',
+                    position: 0,
                   },
                   payload: 'L-000200010003',
                   type: CourseSearchParamsAction.filterAdd,
@@ -996,12 +1045,17 @@ describe('data/useCourseSearchParams', () => {
       {
         // Replace an existing value
         jest.resetAllMocks();
-        const { dispatchCourseSearchParamsUpdate } = getLatestHookValues();
+        const { dispatchCourseSearchParamsUpdate } = result.current;
         act(() =>
           dispatchCourseSearchParamsUpdate({
             filter: {
+              base_path: null,
+              human_name: 'Level',
+              is_autocompletable: false,
               is_drilldown: true,
+              is_searchable: false,
               name: 'level',
+              position: 0,
             },
             payload: 'L-000200010002',
             type: CourseSearchParamsAction.filterAdd,
@@ -1009,7 +1063,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const { courseSearchParams } = getLatestHookValues();
+        const { courseSearchParams } = result.current;
         expect(courseSearchParams).toEqual({
           level: 'L-000200010002',
           limit: '999',
@@ -1023,8 +1077,13 @@ describe('data/useCourseSearchParams', () => {
               lastDispatchActions: [
                 {
                   filter: {
+                    base_path: null,
+                    human_name: 'Level',
+                    is_autocompletable: false,
                     is_drilldown: true,
+                    is_searchable: false,
                     name: 'level',
+                    position: 0,
                   },
                   payload: 'L-000200010002',
                   type: CourseSearchParamsAction.filterAdd,
@@ -1045,13 +1104,10 @@ describe('data/useCourseSearchParams', () => {
 
     it('does nothing if the value was already on the filter', () => {
       mockWindow.location.search = '?level=L-000200010001&limit=999&offset=0';
-      render(
-        <HistoryProvider>
-          <TestComponent />
-        </HistoryProvider>,
-      );
+      const { result } = renderHook(useCourseSearchParams, { wrapper });
+
       {
-        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = result.current;
         expect(courseSearchParams).toEqual({
           level: 'L-000200010001',
           limit: '999',
@@ -1061,8 +1117,13 @@ describe('data/useCourseSearchParams', () => {
         act(() =>
           dispatchCourseSearchParamsUpdate({
             filter: {
+              base_path: null,
+              human_name: 'Level',
+              is_autocompletable: false,
               is_drilldown: true,
+              is_searchable: false,
               name: 'level',
+              position: 0,
             },
             payload: 'L-000200010001',
             type: CourseSearchParamsAction.filterAdd,
@@ -1070,7 +1131,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const { courseSearchParams } = getLatestHookValues();
+        const { courseSearchParams } = result.current;
         expect(courseSearchParams).toEqual({
           level: 'L-000200010001',
           limit: '999',
@@ -1085,14 +1146,11 @@ describe('data/useCourseSearchParams', () => {
     it('removes the value from the existing list for this filter & updates history', () => {
       mockWindow.location.search =
         '?limit=999&offset=0&query=some%20query&organizations=L-00010009&organizations=L00010011';
-      render(
-        <HistoryProvider>
-          <TestComponent />
-        </HistoryProvider>,
-      );
+      const { result } = renderHook(useCourseSearchParams, { wrapper });
+
       {
         // Remove from a list of more than one value
-        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = result.current;
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -1103,8 +1161,13 @@ describe('data/useCourseSearchParams', () => {
         act(() =>
           dispatchCourseSearchParamsUpdate({
             filter: {
+              base_path: null,
+              human_name: 'Organizations',
+              is_autocompletable: false,
               is_drilldown: false,
+              is_searchable: false,
               name: 'organizations',
+              position: 0,
             },
             payload: 'L-00010009',
             type: CourseSearchParamsAction.filterRemove,
@@ -1112,7 +1175,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const { courseSearchParams } = getLatestHookValues();
+        const { courseSearchParams } = result.current;
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -1127,8 +1190,13 @@ describe('data/useCourseSearchParams', () => {
               lastDispatchActions: [
                 {
                   filter: {
+                    base_path: null,
+                    human_name: 'Organizations',
+                    is_autocompletable: false,
                     is_drilldown: false,
+                    is_searchable: false,
                     name: 'organizations',
+                    position: 0,
                   },
                   payload: 'L-00010009',
                   type: CourseSearchParamsAction.filterRemove,
@@ -1149,18 +1217,26 @@ describe('data/useCourseSearchParams', () => {
       {
         // Remove from a list of just one value
         jest.resetAllMocks();
-        const { dispatchCourseSearchParamsUpdate } = getLatestHookValues();
+        const { dispatchCourseSearchParamsUpdate } = result.current;
 
         act(() =>
           dispatchCourseSearchParamsUpdate({
-            filter: { is_drilldown: false, name: 'organizations' },
+            filter: {
+              base_path: null,
+              human_name: 'Organizations',
+              is_autocompletable: false,
+              is_drilldown: false,
+              is_searchable: false,
+              name: 'organizations',
+              position: 0,
+            },
             payload: 'L00010011',
             type: CourseSearchParamsAction.filterRemove,
           }),
         );
       }
       {
-        const { courseSearchParams } = getLatestHookValues();
+        const { courseSearchParams } = result.current;
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -1174,8 +1250,13 @@ describe('data/useCourseSearchParams', () => {
               lastDispatchActions: [
                 {
                   filter: {
+                    base_path: null,
+                    human_name: 'Organizations',
+                    is_autocompletable: false,
                     is_drilldown: false,
+                    is_searchable: false,
                     name: 'organizations',
+                    position: 0,
                   },
                   payload: 'L00010011',
                   type: CourseSearchParamsAction.filterRemove,
@@ -1199,13 +1280,10 @@ describe('data/useCourseSearchParams', () => {
       // just parsed and not interacted with yet.
       mockWindow.location.search =
         '?limit=999&offset=0&query=some%20query&organizations=L-00010013';
-      render(
-        <HistoryProvider>
-          <TestComponent />
-        </HistoryProvider>,
-      );
+      const { result } = renderHook(useCourseSearchParams, { wrapper });
+
       {
-        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = result.current;
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -1216,8 +1294,13 @@ describe('data/useCourseSearchParams', () => {
         act(() =>
           dispatchCourseSearchParamsUpdate({
             filter: {
+              base_path: null,
+              human_name: 'Organizations',
+              is_autocompletable: false,
               is_drilldown: false,
+              is_searchable: false,
               name: 'organizations',
+              position: 0,
             },
             payload: 'L-00010013',
             type: CourseSearchParamsAction.filterRemove,
@@ -1225,7 +1308,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const { courseSearchParams } = getLatestHookValues();
+        const { courseSearchParams } = result.current;
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -1239,8 +1322,13 @@ describe('data/useCourseSearchParams', () => {
               lastDispatchActions: [
                 {
                   filter: {
+                    base_path: null,
+                    human_name: 'Organizations',
+                    is_autocompletable: false,
                     is_drilldown: false,
+                    is_searchable: false,
                     name: 'organizations',
+                    position: 0,
                   },
                   payload: 'L-00010013',
                   type: CourseSearchParamsAction.filterRemove,
@@ -1261,13 +1349,10 @@ describe('data/useCourseSearchParams', () => {
 
     it('does nothing if there was no value for this filter', () => {
       mockWindow.location.search = '?limit=999&offset=0&query=some%20query';
-      render(
-        <HistoryProvider>
-          <TestComponent />
-        </HistoryProvider>,
-      );
+      const { result } = renderHook(useCourseSearchParams, { wrapper });
+
       {
-        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = result.current;
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -1277,8 +1362,13 @@ describe('data/useCourseSearchParams', () => {
         act(() =>
           dispatchCourseSearchParamsUpdate({
             filter: {
+              base_path: null,
+              human_name: 'Subjects',
+              is_autocompletable: false,
               is_drilldown: false,
+              is_searchable: false,
               name: 'subjects',
+              position: 0,
             },
             payload: 'L-00010076',
             type: CourseSearchParamsAction.filterRemove,
@@ -1286,7 +1376,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const { courseSearchParams } = getLatestHookValues();
+        const { courseSearchParams } = result.current;
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -1299,13 +1389,10 @@ describe('data/useCourseSearchParams', () => {
     it('does nothing if the value was not in the list for this filter', () => {
       mockWindow.location.search =
         '?limit=999&offset=0&organizations=L-00010003&organizations=L-00010009';
-      render(
-        <HistoryProvider>
-          <TestComponent />
-        </HistoryProvider>,
-      );
+      const { result } = renderHook(useCourseSearchParams, { wrapper });
+
       {
-        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = result.current;
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -1315,8 +1402,13 @@ describe('data/useCourseSearchParams', () => {
         act(() =>
           dispatchCourseSearchParamsUpdate({
             filter: {
+              base_path: null,
+              human_name: 'Organizations',
+              is_autocompletable: false,
               is_drilldown: false,
+              is_searchable: false,
               name: 'organizations',
+              position: 0,
             },
             payload: '121',
             type: CourseSearchParamsAction.filterRemove,
@@ -1324,7 +1416,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const { courseSearchParams } = getLatestHookValues();
+        const { courseSearchParams } = result.current;
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -1338,13 +1430,10 @@ describe('data/useCourseSearchParams', () => {
       // This is a special case when there is a single value not wrapper in an array after it was
       // just parsed and not interacted with yet.
       mockWindow.location.search = '?limit=999&offset=0&organizations=L-00010011';
-      render(
-        <HistoryProvider>
-          <TestComponent />
-        </HistoryProvider>,
-      );
+      const { result } = renderHook(useCourseSearchParams, { wrapper });
+
       {
-        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = result.current;
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -1354,8 +1443,13 @@ describe('data/useCourseSearchParams', () => {
         act(() =>
           dispatchCourseSearchParamsUpdate({
             filter: {
+              base_path: null,
+              human_name: 'Organizations',
+              is_autocompletable: false,
               is_drilldown: false,
+              is_searchable: false,
               name: 'organizations',
+              position: 0,
             },
             payload: '121',
             type: CourseSearchParamsAction.filterRemove,
@@ -1363,7 +1457,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const { courseSearchParams } = getLatestHookValues();
+        const { courseSearchParams } = result.current;
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -1377,13 +1471,10 @@ describe('data/useCourseSearchParams', () => {
   describe('FILTER_REMOVE [drilldown]', () => {
     it('removes the value from the filter', () => {
       mockWindow.location.search = '?level=L-000200010001&limit=999&offset=0&query=some%20query';
-      render(
-        <HistoryProvider>
-          <TestComponent />
-        </HistoryProvider>,
-      );
+      const { result } = renderHook(useCourseSearchParams, { wrapper });
+
       {
-        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = result.current;
         expect(courseSearchParams).toEqual({
           level: 'L-000200010001',
           limit: '999',
@@ -1394,8 +1485,13 @@ describe('data/useCourseSearchParams', () => {
         act(() =>
           dispatchCourseSearchParamsUpdate({
             filter: {
+              base_path: null,
+              human_name: 'Level',
+              is_autocompletable: false,
               is_drilldown: true,
+              is_searchable: false,
               name: 'level',
+              position: 0,
             },
             payload: 'L-000200010001',
             type: CourseSearchParamsAction.filterRemove,
@@ -1403,7 +1499,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const { courseSearchParams } = getLatestHookValues();
+        const { courseSearchParams } = result.current;
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -1417,8 +1513,13 @@ describe('data/useCourseSearchParams', () => {
               lastDispatchActions: [
                 {
                   filter: {
+                    base_path: null,
+                    human_name: 'Level',
+                    is_autocompletable: false,
                     is_drilldown: true,
+                    is_searchable: false,
                     name: 'level',
+                    position: 0,
                   },
                   payload: 'L-000200010001',
                   type: CourseSearchParamsAction.filterRemove,
@@ -1439,13 +1540,10 @@ describe('data/useCourseSearchParams', () => {
 
     it('does nothing if the value to remove was not the existing value', () => {
       mockWindow.location.search = '?level=L-000200010001&limit=999&offset=0&query=some%20query';
-      render(
-        <HistoryProvider>
-          <TestComponent />
-        </HistoryProvider>,
-      );
+      const { result } = renderHook(useCourseSearchParams, { wrapper });
+
       {
-        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = result.current;
         expect(courseSearchParams).toEqual({
           level: 'L-000200010001',
           limit: '999',
@@ -1456,8 +1554,13 @@ describe('data/useCourseSearchParams', () => {
         act(() =>
           dispatchCourseSearchParamsUpdate({
             filter: {
+              base_path: null,
+              human_name: 'Level',
+              is_autocompletable: false,
               is_drilldown: true,
+              is_searchable: false,
               name: 'level',
+              position: 0,
             },
             payload: 'L-000200010003',
             type: CourseSearchParamsAction.filterRemove,
@@ -1465,7 +1568,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const { courseSearchParams } = getLatestHookValues();
+        const { courseSearchParams } = result.current;
         expect(courseSearchParams).toEqual({
           level: 'L-000200010001',
           limit: '999',
@@ -1479,13 +1582,10 @@ describe('data/useCourseSearchParams', () => {
     it('does nothing if there was already no value for this filter', () => {
       mockWindow.location.search =
         '?organizations=L-00010009&limit=999&offset=0&query=some%20query';
-      render(
-        <HistoryProvider>
-          <TestComponent />
-        </HistoryProvider>,
-      );
+      const { result } = renderHook(useCourseSearchParams, { wrapper });
+
       {
-        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = result.current;
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -1496,8 +1596,13 @@ describe('data/useCourseSearchParams', () => {
         act(() =>
           dispatchCourseSearchParamsUpdate({
             filter: {
+              base_path: null,
+              human_name: 'Level',
+              is_autocompletable: false,
               is_drilldown: true,
+              is_searchable: false,
               name: 'level',
+              position: 0,
             },
             payload: 'L-000200010002',
             type: CourseSearchParamsAction.filterRemove,
@@ -1505,7 +1610,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const { courseSearchParams } = getLatestHookValues();
+        const { courseSearchParams } = result.current;
         expect(courseSearchParams).toEqual({
           limit: '999',
           offset: '0',
@@ -1521,13 +1626,10 @@ describe('data/useCourseSearchParams', () => {
     it('resets all the query parameters except limit', () => {
       mockWindow.location.search =
         '?organizations=L-00010004&subjects=P-00030004&subjects=P-00030007&limit=27&offset=54&query=some%20query';
-      render(
-        <HistoryProvider>
-          <TestComponent />
-        </HistoryProvider>,
-      );
+      const { result } = renderHook(useCourseSearchParams, { wrapper });
+
       {
-        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
+        const { courseSearchParams, dispatchCourseSearchParamsUpdate } = result.current;
         expect(courseSearchParams).toEqual({
           limit: '27',
           offset: '54',
@@ -1543,7 +1645,7 @@ describe('data/useCourseSearchParams', () => {
         );
       }
       {
-        const { courseSearchParams } = getLatestHookValues();
+        const { courseSearchParams } = result.current;
         expect(courseSearchParams).toEqual({ limit: '27', offset: '0' });
         expect(mockWindow.history.pushState).toHaveBeenCalledWith(
           {
@@ -1567,13 +1669,9 @@ describe('data/useCourseSearchParams', () => {
   it('can handle more than one action passed at the same time', () => {
     mockWindow.location.search =
       '?limit=20&offset=0&query=some%20query&organizations=L-00010009&organizations=L00010011';
-    render(
-      <HistoryProvider>
-        <TestComponent />
-      </HistoryProvider>,
-    );
+    const { result } = renderHook(useCourseSearchParams, { wrapper });
     {
-      const { courseSearchParams, dispatchCourseSearchParamsUpdate } = getLatestHookValues();
+      const { courseSearchParams, dispatchCourseSearchParamsUpdate } = result.current;
       expect(courseSearchParams).toEqual({
         limit: '20',
         offset: '0',
@@ -1585,16 +1683,26 @@ describe('data/useCourseSearchParams', () => {
         dispatchCourseSearchParamsUpdate(
           {
             filter: {
+              base_path: null,
+              human_name: 'Organizations',
+              is_autocompletable: false,
               is_drilldown: false,
+              is_searchable: false,
               name: 'organizations',
+              position: 0,
             },
             payload: 'L-00010009',
             type: CourseSearchParamsAction.filterRemove,
           },
           {
             filter: {
+              base_path: null,
+              human_name: 'Languages',
+              is_autocompletable: false,
               is_drilldown: false,
+              is_searchable: false,
               name: 'languages',
+              position: 0,
             },
             payload: 'it',
             type: CourseSearchParamsAction.filterAdd,
@@ -1607,7 +1715,7 @@ describe('data/useCourseSearchParams', () => {
       );
     }
     {
-      const { courseSearchParams } = getLatestHookValues();
+      const { courseSearchParams } = result.current;
       expect(courseSearchParams).toEqual({
         languages: ['it'],
         limit: '20',
@@ -1623,16 +1731,26 @@ describe('data/useCourseSearchParams', () => {
             lastDispatchActions: [
               {
                 filter: {
+                  base_path: null,
+                  human_name: 'Organizations',
+                  is_autocompletable: false,
                   is_drilldown: false,
+                  is_searchable: false,
                   name: 'organizations',
+                  position: 0,
                 },
                 payload: 'L-00010009',
                 type: CourseSearchParamsAction.filterRemove,
               },
               {
                 filter: {
+                  base_path: null,
+                  human_name: 'Languages',
+                  is_autocompletable: false,
                   is_drilldown: false,
+                  is_searchable: false,
                   name: 'languages',
+                  position: 0,
                 },
                 payload: 'it',
                 type: CourseSearchParamsAction.filterAdd,
