@@ -1,8 +1,8 @@
-import { render } from '@testing-library/react';
 import { stringify } from 'query-string';
 import React from 'react';
 
 import { CourseSearchParamsAction } from 'data/useCourseSearchParams';
+import { renderHook } from '@testing-library/react-hooks';
 import { History, HistoryContext } from 'data/useHistory';
 import { FacetedFilterDefinition, FilterValue } from 'types/filters';
 import { useFilterValue } from '.';
@@ -19,47 +19,38 @@ describe('data/useFilterValue', () => {
     historyPushState,
     historyReplaceState,
   ];
-
-  // Build a helper component with an out-of-scope function to let us reach our Hook from
-  // our test cases.
-  let getLatestHookValues: any;
-  const TestComponent = ({
-    filter,
-    value,
-  }: {
-    filter: FacetedFilterDefinition;
-    value: FilterValue;
-  }) => {
-    const hookValues = useFilterValue(filter, value);
-    getLatestHookValues = () => hookValues;
-    return <div />;
-  };
+  const wrapper = ({ history, children }: React.PropsWithChildren<{ history: History }>) => (
+    <HistoryContext.Provider value={history}>{children}</HistoryContext.Provider>
+  );
 
   beforeEach(jest.resetAllMocks);
 
   it('returns the active [false] status of the filter value and a function to toggle it', () => {
-    render(
-      <HistoryContext.Provider value={makeHistoryOf({ limit: '999', offset: '0' })}>
-        <TestComponent
-          filter={{
-            base_path: '0003',
-            has_more_values: false,
-            human_name: 'Organizations',
-            is_autocompletable: false,
-            is_searchable: false,
-            name: 'organizations',
-            position: 0,
-            values: [],
-          }}
-          value={{
-            count: 13,
-            human_name: 'Université Paris 14',
-            key: '87',
-          }}
-        />
-      </HistoryContext.Provider>,
-    );
-    const [isActive, toggle] = getLatestHookValues();
+    const props: [FacetedFilterDefinition, FilterValue] = [
+      // filter: FacetedFilterDefinition
+      {
+        base_path: '0003',
+        has_more_values: false,
+        human_name: 'Organizations',
+        is_autocompletable: false,
+        is_searchable: false,
+        name: 'organizations',
+        position: 0,
+        values: [],
+      },
+      // value: FilterValue
+      {
+        count: 13,
+        human_name: 'Université Paris 14',
+        key: '87',
+      },
+    ];
+    const { result } = renderHook(() => useFilterValue(...props), {
+      wrapper,
+      initialProps: { history: makeHistoryOf({ limit: '999', offset: '0' }) },
+    });
+
+    const [isActive, toggle] = result.current;
     expect(isActive).toEqual(false);
     toggle();
     expect(historyPushState).toHaveBeenCalledWith(
@@ -91,34 +82,33 @@ describe('data/useFilterValue', () => {
   });
 
   it('returns the active [true] status of the filter value and a function to toggle it', () => {
-    render(
-      <HistoryContext.Provider
-        value={makeHistoryOf({
-          limit: '999',
-          offset: '0',
-          organizations: ['87'],
-        })}
-      >
-        <TestComponent
-          filter={{
-            base_path: '0003',
-            has_more_values: false,
-            human_name: 'Organizations',
-            is_autocompletable: true,
-            is_searchable: true,
-            name: 'organizations',
-            position: 0,
-            values: [],
-          }}
-          value={{
-            count: 13,
-            human_name: 'Université Paris 14',
-            key: '87',
-          }}
-        />
-      </HistoryContext.Provider>,
-    );
-    const [isActive, toggle] = getLatestHookValues();
+    const props: [FacetedFilterDefinition, FilterValue] = [
+      // filter: FacetedFilterDefinition
+      {
+        base_path: '0003',
+        has_more_values: false,
+        human_name: 'Organizations',
+        is_autocompletable: true,
+        is_searchable: true,
+        name: 'organizations',
+        position: 0,
+        values: [],
+      },
+      // value: FilterValue
+      {
+        count: 13,
+        human_name: 'Université Paris 14',
+        key: '87',
+      },
+    ];
+    const { result } = renderHook(() => useFilterValue(...props), {
+      wrapper,
+      initialProps: {
+        history: makeHistoryOf({ limit: '999', offset: '0', organizations: ['87'] }),
+      },
+    });
+
+    const [isActive, toggle] = result.current;
     expect(isActive).toEqual(true);
     toggle();
     expect(historyPushState).toHaveBeenCalledWith(

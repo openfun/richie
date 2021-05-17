@@ -1,23 +1,27 @@
 import React from 'react';
 import faker from 'faker';
 import fetchMock from 'fetch-mock';
-import { act, render } from '@testing-library/react';
+import { act } from '@testing-library/react';
+import { renderHook } from '@testing-library/react-hooks';
 import { ContextFactory } from 'utils/test/factories';
 import { Deferred } from 'utils/test/deferred';
 import { SESSION_CACHE_KEY } from 'settings';
+import { SessionContext } from '.';
 
 describe('useSession', () => {
   const context = ContextFactory().generate();
   (window as any).__richie_frontend_context__ = { context };
-  const { SessionProvider, useSession } = require('.');
+  const {
+    SessionProvider,
+    useSession,
+  }: {
+    useSession: () => SessionContext;
+    SessionProvider: ({ children }: React.PropsWithChildren<any>) => JSX.Element;
+  } = require('.');
 
-  let getLatestHookValues: (prop?: string) => any;
-
-  const TestComponent = () => {
-    const hooksValues = useSession();
-    getLatestHookValues = (prop) => (prop ? hooksValues[prop] : hooksValues);
-    return null;
-  };
+  const wrapper = ({ children }: React.PropsWithChildren<any>) => (
+    <SessionProvider>{children}</SessionProvider>
+  );
 
   beforeEach(() => {
     sessionStorage.clear();
@@ -27,37 +31,29 @@ describe('useSession', () => {
   it('provides a null user if whoami return 401', async () => {
     const userDeferred = new Deferred();
     fetchMock.get('https://endpoint.test/api/user/v1/me', userDeferred.promise);
-
-    render(
-      <SessionProvider>
-        <TestComponent />
-      </SessionProvider>,
-    );
+    const { result } = renderHook(() => useSession(), { wrapper });
 
     await act(async () => {
       userDeferred.resolve(401);
     });
 
-    expect(getLatestHookValues('user')).toBeNull();
+    expect(result.current.user).toBeNull();
+    expect(result.all).toHaveLength(2);
     expect(sessionStorage.getItem(SESSION_CACHE_KEY)).toBeDefined();
   });
 
-  it('provides user infos if user is authenticated and store in cache', async () => {
+  it('provides user infos if user is authenticated then stores in cache', async () => {
     const username = faker.internet.userName();
     const userDeferred = new Deferred();
     fetchMock.get('https://endpoint.test/api/user/v1/me', userDeferred.promise);
-
-    render(
-      <SessionProvider>
-        <TestComponent />
-      </SessionProvider>,
-    );
+    const { result } = renderHook(useSession, { wrapper });
 
     await act(async () => {
       userDeferred.resolve({ username });
     });
 
-    expect(getLatestHookValues('user')).toStrictEqual({ username });
+    expect(result.current.user).toStrictEqual({ username });
+    expect(result.all).toHaveLength(2);
     expect(sessionStorage.getItem(SESSION_CACHE_KEY)).toBeDefined();
     expect(atob(sessionStorage.getItem(SESSION_CACHE_KEY) || '')).toContain(username);
   });
@@ -68,23 +64,14 @@ describe('useSession', () => {
       SESSION_CACHE_KEY,
       btoa(JSON.stringify({ value: { username }, expiredAt: Date.now() + 60_000 })),
     );
-
     fetchMock.get('https://endpoint.test/logout', 200);
+    const { result } = renderHook(useSession, { wrapper });
 
-    await act(async () => {
-      render(
-        <SessionProvider>
-          <TestComponent />
-        </SessionProvider>,
-      );
-    });
-
-    const { user, destroy } = getLatestHookValues();
-    expect(user).toStrictEqual({ username });
+    expect(result.current.user).toStrictEqual({ username });
     expect(atob(sessionStorage.getItem(SESSION_CACHE_KEY) || '')).toContain(username);
 
-    await act(destroy);
-    expect(getLatestHookValues('user')).toBeNull();
+    await act(result.current.destroy);
+    expect(result.current.user).toBeNull();
     expect(atob(sessionStorage.getItem(SESSION_CACHE_KEY) || '')).toContain('null');
   });
 
@@ -94,15 +81,10 @@ describe('useSession', () => {
       SESSION_CACHE_KEY,
       btoa(JSON.stringify({ value: { username }, expiredAt: Date.now() + 60_000 })),
     );
-    const request = fetchMock.get('https://endpoint.test/api/user/v1/me', 200);
+    fetchMock.get('https://endpoint.test/api/user/v1/me', 200);
+    renderHook(useSession, { wrapper });
 
-    render(
-      <SessionProvider>
-        <TestComponent />
-      </SessionProvider>,
-    );
-
-    expect(request.called()).toBeFalsy();
+    expect(fetchMock.called()).toBeFalsy();
     expect(atob(sessionStorage.getItem(SESSION_CACHE_KEY) || '')).toContain(username);
   });
 });

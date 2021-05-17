@@ -1,21 +1,12 @@
-import { act, render } from '@testing-library/react';
+import { act } from '@testing-library/react';
+import { renderHook } from '@testing-library/react-hooks';
 import fetchMock from 'fetch-mock';
-import React from 'react';
 
 import { FilterDefinition } from 'types/filters';
 import { Deferred } from 'utils/test/deferred';
 import { useStaticFilters } from '.';
 
 describe('data/useStaticFilters', () => {
-  // Build a helper component with an out-of-scope function to let us reach our Hook from
-  // our test cases.
-  let getLatestHookValues: any;
-  const TestComponent = ({ includeCoursesConfig = false }) => {
-    const hookValues = useStaticFilters(includeCoursesConfig);
-    getLatestHookValues = () => hookValues;
-    return <div />;
-  };
-
   // Make some static filter definition to use throughout our tests
   const levels: FilterDefinition = {
     base_path: '00030002',
@@ -60,39 +51,45 @@ describe('data/useStaticFilters', () => {
     subjects,
   };
 
-  beforeEach(() => fetchMock.restore());
+  afterEach(() => fetchMock.restore());
 
   it('gets and returns the static filter definitions', async () => {
     const deferred = new Deferred();
     fetchMock.get('/api/v1.0/filter-definitions/', deferred.promise);
+    const { result } = renderHook(useStaticFilters);
 
-    render(<TestComponent />);
     // No request is made until we actually use the hook's return value
     expect(fetchMock.called('/api/v1.0/filter-definitions/')).toEqual(false);
 
     // useStaticFilters returns a promise for the static filter definitions
+    deferred.resolve(staticFilterDefinitions);
     let filters;
     await act(async () => {
-      deferred.resolve(staticFilterDefinitions);
-      filters = await getLatestHookValues()();
+      filters = await result.current();
     });
     expect(filters).toEqual(staticFilterDefinitions);
     expect(fetchMock.calls('/api/v1.0/filter-definitions/').length).toEqual(1);
+
     fetchMock.restore();
     fetchMock.get('/api/v1.0/filter-definitions/', new Error('should not be called'));
     // More calls return the filter but don't request on the API again
     let filtersAgain;
-    await act(async () => (filtersAgain = await getLatestHookValues()()));
+    await act(async () => {
+      filtersAgain = await result.current();
+    });
     expect(filtersAgain).toEqual(staticFilterDefinitions);
     expect(fetchMock.calls('/api/v1.0/filter-definitions/').length).toEqual(0);
   });
 
   it('includes a course config when requested', async () => {
     fetchMock.get('/api/v1.0/filter-definitions/', staticFilterDefinitions);
-    render(<TestComponent includeCoursesConfig={true} />);
+    const { result } = renderHook(() => useStaticFilters(true));
 
     let filters;
-    await act(async () => (filters = await getLatestHookValues()()));
+    await act(async () => {
+      filters = await result.current();
+    });
+
     expect(filters).toEqual({
       ...staticFilterDefinitions,
       courses: {

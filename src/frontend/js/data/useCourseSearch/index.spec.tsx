@@ -1,8 +1,9 @@
-import { act, render } from '@testing-library/react';
-import React from 'react';
+import { act } from '@testing-library/react';
+import { renderHook } from '@testing-library/react-hooks';
 
 import { fetchList } from 'data/getResourceList';
 import { APIListRequestParams } from 'types/api';
+import { Deferred } from 'utils/test/deferred';
 import { useCourseSearch } from '.';
 
 jest.mock('data/getResourceList', () => ({
@@ -11,44 +12,38 @@ jest.mock('data/getResourceList', () => ({
 const mockFetchList = fetchList as jest.MockedFunction<typeof fetchList>;
 
 describe('data/useCourseSearch', () => {
-  // Build a helper component with an out-of-scope function to let us reach our Hook from
-  // our test cases.
-  let getLatestHookValue: any;
-  const TestComponent = ({ params }: { params: APIListRequestParams }) => {
-    const hookValue = useCourseSearch(params);
-    getLatestHookValue = () => hookValue;
-    return <div />;
-  };
-
   beforeEach(jest.resetAllMocks);
 
   it('gets the courses with the passed params', async () => {
-    let doResolve: (value: any) => void;
-    const responseOne = new Promise((resolve) => (doResolve = resolve));
-    mockFetchList.mockReturnValue(responseOne as any);
-    const { rerender } = render(<TestComponent params={{ limit: '999', offset: '0' }} />);
+    const deferred = new Deferred<any>();
+    let params: APIListRequestParams = { limit: '999', offset: '0' };
+    mockFetchList.mockReturnValue(deferred.promise);
+    const { result, rerender } = renderHook(() => useCourseSearch(params));
 
     // Initial pass gets us a null value but issues the call
-    expect(getLatestHookValue()).toEqual(null);
+    expect(result.current).toEqual(null);
     expect(mockFetchList).toHaveBeenCalledTimes(1);
     expect(mockFetchList).toHaveBeenCalledWith('courses', {
       limit: '999',
       offset: '0',
     });
 
-    await act(async () => doResolve('the response'));
     // Wait for the actual resolution under await
-    await responseOne;
-    expect(getLatestHookValue()).toEqual('the response');
+    await act(async () => {
+      deferred.resolve('the response');
+    });
+    expect(result.current).toEqual('the response');
 
     // We then reset our fetchList mock and change the search params
     mockFetchList.mockReset();
-    const responseTwo = new Promise((resolve) => (doResolve = resolve));
-    mockFetchList.mockReturnValue(responseTwo as any);
-    rerender(<TestComponent params={{ limit: '999', offset: '0', organizations: ['43'] }} />);
+    deferred.reset();
+
+    mockFetchList.mockReturnValue(deferred.promise as any);
+    params = { limit: '999', offset: '0', organizations: ['43'] };
+    rerender();
 
     // A new request is issued (meanwhile we still return the existing response)
-    expect(getLatestHookValue()).toEqual('the response');
+    expect(result.current).toEqual('the response');
     expect(mockFetchList).toHaveBeenCalledTimes(1);
     expect(mockFetchList).toHaveBeenCalledWith('courses', {
       limit: '999',
@@ -56,35 +51,32 @@ describe('data/useCourseSearch', () => {
       organizations: ['43'],
     });
 
-    await act(async () => doResolve('another response'));
-    // Wait for the actual resolution under await
-    await responseTwo;
-    expect(getLatestHookValue()).toEqual('another response');
+    await act(async () => {
+      deferred.resolve('another response');
+    });
+    expect(result.current).toEqual('another response');
   });
 
   it('does not trigger a new request if the params are unchanged', async () => {
-    let doResolve: (value: any) => void;
-    const responseOne = new Promise((resolve) => (doResolve = resolve));
-    mockFetchList.mockReturnValue(responseOne as any);
+    const deferred = new Deferred<any>();
+    mockFetchList.mockReturnValue(deferred.promise);
     const params = { limit: '999', offset: '0' };
-    const { rerender } = render(<TestComponent params={params} />);
+    const { result, rerender } = renderHook(() => useCourseSearch(params));
 
     // Initial pass gets us a null value but issues the call
-    expect(getLatestHookValue()).toEqual(null);
+    expect(result.current).toEqual(null);
     expect(mockFetchList).toHaveBeenCalledTimes(1);
     expect(mockFetchList).toHaveBeenCalledWith('courses', {
       limit: '999',
       offset: '0',
     });
 
-    await act(async () => doResolve('the response'));
-    // Wait for the actual resolution under await
-    await responseOne;
-    expect(getLatestHookValue()).toEqual('the response');
+    await act(async () => deferred.resolve('the response'));
+    expect(result.current).toEqual('the response');
 
     // We reset our fetchList mock but keep the same params
     mockFetchList.mockReset();
-    rerender(<TestComponent params={params} />);
+    rerender();
     // Now new request happens as the params are weakly identical
     expect(mockFetchList).not.toHaveBeenCalled();
   });
