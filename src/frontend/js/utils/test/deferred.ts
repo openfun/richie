@@ -8,7 +8,15 @@ export class Deferred<T> {
   resolve!: (value: T | PromiseLike<T>) => void;
 
   constructor() {
-    this.promise = new Promise((resolve, reject) => {
+    this.promise = this._init();
+  }
+
+  reset() {
+    this.promise = this._init();
+  }
+
+  private _init(): Promise<any> {
+    return new Promise((resolve, reject) => {
       this.reject = reject;
       this.resolve = resolve;
     });
