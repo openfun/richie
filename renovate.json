@@ -2,20 +2,46 @@
   "commitMessageAction": "update",
   "commitMessagePrefix": "⬆️(dependencies)",
   "commitMessageTopic": "{{depName}}",
-  "enabledManagers": ["npm"],
+  "enabledManagers": ["npm", "setup-cfg"],
   "extends": ["config:base"],
+  "labels": ["dependencies"],
+  "prConcurrentLimit": 2,
+  "prCreation": "not-pending",
+  "prHourlyLimit": 1,
+  "rebaseWhen": "behind-base-branch",
+  "semanticCommits": "disabled",
+  "separateMajorMinor": false,
+  "updateNotScheduled": true,
   "packageRules": [
     {
-      "packagePatterns": ["*"],
       "groupName": "npm dependencies",
-      "schedule": ["before 7am on monday"]
+      "matchManagers": ["npm"],
+      "schedule": ["before 7am on monday"],
+      "matchPackagePatterns": ["*"]
+    },
+    {
+      "groupName": "python dependencies",
+      "matchManagers": ["setup-cfg"],
+      "schedule": ["before 7am on monday"],
+      "matchPackagePatterns": ["*"],
+      "excludePackageNames": [
+        "arrow",
+        "dj-pagination",
+        "django-cms",
+        "django-parler",
+        "django-treebeard",
+        "Django",
+        "djangocms-file",
+        "djangocms-googlemap",
+        "djangocms-link",
+        "djangocms-picture",
+        "djangocms-text-ckeditor",
+        "djangocms-video",
+        "djangorestframework",
+        "elasticsearch",
+        "social-auth-app-django",
+        "social-auth-core[openidconnect]"
+      ]
     }
-  ],
-  "prConcurrentLimit": 2,
-  "prHourlyLimit": 1,
-  "prCreation": "not-pending",
-  "rebaseStalePrs": true,
-  "semanticCommits": false,
-  "separateMajorMinor": false,
-  "updateNotScheduled": true
+  ]
 }
