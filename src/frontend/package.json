@@ -65,7 +65,7 @@
     "babel-loader": "8.2.2",
     "babel-plugin-react-intl": "8.2.25",
     "babel-preset-react": "7.0.0-beta.3",
-    "bootstrap": "5.0.1",
+    "bootstrap": ">=4.6.0 <5",
     "cljs-merge": "1.1.1",
     "core-js": "3.12.1",
     "downshift": "6.1.3",
