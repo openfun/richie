@@ -16,6 +16,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Add a new authentication backend `fonzie`
 
+### Changed
+
+- Pin bootstrap to version below 5 to keep support of IE11
+
 ### Fixed
 
 - Decrease LTI context API endpoint cache lifetime to 5 minutes
