@@ -23,8 +23,13 @@
       "groupName": "python dependencies",
       "matchManagers": ["setup-cfg"],
       "schedule": ["before 7am on monday"],
-      "matchPackagePatterns": ["*"],
-      "excludePackageNames": [
+      "matchPackagePatterns": ["*"]
+    },
+    {
+      "enabled": false,
+      "groupName": "ignored python dependencies",
+      "matchManagers": ["setup-cfg"],
+      "matchPackageNames": [
         "arrow",
         "dj-pagination",
         "django-cms",
