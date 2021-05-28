@@ -8,6 +8,12 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Add "hreflang" meta to all pages to avoid duplicates in search engines
+
+### Changed
+
 - Make related courses optional for program page
 
 ## [2.6.0] - 2021-05-03

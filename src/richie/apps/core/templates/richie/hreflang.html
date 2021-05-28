@@ -1,0 +1,6 @@
+{% load i18n menu_tags cms_tags %}
+{% if languages|length > 1 %}
+    {% for code, name in languages %}
+        <link rel="alternate" href="{% page_language_url code %}" hreflang="{{ code }}" />
+    {% endfor %}
+{% endif %}

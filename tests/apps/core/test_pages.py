@@ -13,7 +13,7 @@ from richie.apps.core.helpers import create_i18n_page
 class PagesTests(CMSTestCase):
     """Integration tests that actually render pages"""
 
-    def test_pages_i18n(self):
+    def test_pages_i18n_menu(self):
         """
         Create an i18n page and check its rendering on the site
         """
@@ -36,6 +36,36 @@ class PagesTests(CMSTestCase):
         self.assertEqual(200, response.status_code)
         # ... and make sure the page menu is present in english on the page
         self.assertIn(content["en"], response.rendered_content)
+
+    @override_settings(
+        LANGUAGES=(("fr-ca", "Canadian"), ("es", "Spanish")),
+        LANGUAGE_CODE="fr-ca",
+        CMS_LANGUAGES={},
+    )
+    def test_pages_i18n_hreflang(self):
+        """
+        The hreflang links should be configured to avoid duplicate content accross languages.
+        """
+        content = {"fr-ca": "Un, deux", "es": "uno, dos"}
+        create_i18n_page(
+            content,
+            published=True,
+            template="richie/single_column.html",
+        )
+        page = Page.objects.get(publisher_is_draft=False)
+
+        # ... and make sure the hreflinks are on the page in all languages
+        for language in ["fr-ca", "es"]:
+            response = self.client.get(page.get_absolute_url(language))
+            self.assertEqual(200, response.status_code)
+            self.assertIn(
+                '<link rel="alternate" href="/fr-ca/un-deux/" hreflang="fr-ca" />',
+                response.rendered_content,
+            )
+            self.assertIn(
+                '<link rel="alternate" href="/es/uno-dos/" hreflang="es" />',
+                response.rendered_content,
+            )
 
     @override_settings(SENTRY_DSN="https://example.com/sentry/dsn")
     @override_settings(RELEASE="9.8.7")
