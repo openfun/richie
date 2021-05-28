@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { iframeResizer } from 'iframe-resizer';
 import { LtiConsumerContext, LtiConsumerProps } from 'types/LtiConsumer';
 import { useAsyncEffect } from 'utils/useAsyncEffect';
+import { useSession } from 'data/useSession';
 import { handle } from 'utils/errors/handle';
 
 const LtiConsumer = ({ id }: LtiConsumerProps) => {
+  const { user } = useSession();
   const formRef = React.useRef<HTMLFormElement>(null);
   const iframeRef = React.useRef<HTMLIFrameElement>(null);
   const [context, setContext] = useState<LtiConsumerContext>();
@@ -19,7 +21,15 @@ const LtiConsumer = ({ id }: LtiConsumerProps) => {
   useAsyncEffect(async () => {
     await fetch(`/api/v1.0/plugins/lti-consumer/${id}/context/`)
       .then(checkResponseStatus)
-      .then(setContext)
+      .then((ltiContext: LtiConsumerContext) =>
+        setContext({
+          ...ltiContext,
+          content_parameters: {
+            ...ltiContext.content_parameters,
+            ...(user && { lis_person_sourcedid: user.username }),
+          },
+        }),
+      )
       .catch(handle);
   }, []);
 

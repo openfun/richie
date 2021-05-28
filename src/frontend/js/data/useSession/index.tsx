@@ -28,7 +28,7 @@ export interface SessionContext {
   user: Maybe<Nullable<User>>;
 }
 
-const Session = createContext<SessionContext>({} as any);
+export const Session = createContext<SessionContext>({} as any);
 
 /**
  * SessionProvider
