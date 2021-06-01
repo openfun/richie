@@ -1,30 +1,8 @@
 {
-  "commitMessageAction": "update",
-  "commitMessagePrefix": "⬆️(dependencies)",
-  "commitMessageTopic": "{{depName}}",
-  "enabledManagers": ["npm", "setup-cfg"],
-  "extends": ["config:base"],
-  "labels": ["dependencies"],
-  "prConcurrentLimit": 2,
-  "prCreation": "not-pending",
-  "prHourlyLimit": 1,
-  "rebaseWhen": "behind-base-branch",
-  "semanticCommits": "disabled",
-  "separateMajorMinor": false,
-  "updateNotScheduled": true,
+  "extends": [
+    "github>openfun/renovate-configuration"
+  ],
   "packageRules": [
-    {
-      "groupName": "npm dependencies",
-      "matchManagers": ["npm"],
-      "schedule": ["before 7am on monday"],
-      "matchPackagePatterns": ["*"]
-    },
-    {
-      "groupName": "python dependencies",
-      "matchManagers": ["setup-cfg"],
-      "schedule": ["before 7am on monday"],
-      "matchPackagePatterns": ["*"]
-    },
     {
       "enabled": false,
       "groupName": "ignored python dependencies",
