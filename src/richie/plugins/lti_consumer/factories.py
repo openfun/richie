@@ -20,6 +20,8 @@ class LTIConsumerFactory(factory.django.DjangoModelFactory):
     lti_provider_id = factory.fuzzy.FuzzyChoice(
         getattr(settings, "RICHIE_LTI_PROVIDERS", {}).keys()
     )
+    is_automatic_resizing = factory.fuzzy.FuzzyChoice([True, False])
+    inline_ratio = factory.fuzzy.FuzzyFloat(0.1, 10)
 
     @factory.lazy_attribute
     def url(self):

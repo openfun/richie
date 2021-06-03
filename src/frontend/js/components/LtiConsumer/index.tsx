@@ -36,7 +36,7 @@ const LtiConsumer = ({ id }: LtiConsumerProps) => {
   useEffect(() => {
     if (context) {
       formRef.current?.submit();
-      if (context.automatic_resizing) {
+      if (context.is_automatic_resizing) {
         // Retrieve and inject current component container height to prevent flickering
         // and remove aspect-ratio trick which is not compatible with iframeResizer
         const componentContainer = formRef.current?.closest('.richie-react--lti-consumer');

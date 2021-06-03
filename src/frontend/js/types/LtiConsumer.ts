@@ -17,7 +17,7 @@ export interface LtiConsumerContentParameters {
 export interface LtiConsumerContext {
   url: string;
   content_parameters: LtiConsumerContentParameters;
-  automatic_resizing: boolean;
+  is_automatic_resizing: boolean;
 }
 
 export interface LtiConsumerProps {

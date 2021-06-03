@@ -25,7 +25,7 @@ class LTIConsumerViewsSet(viewsets.GenericViewSet):
         - response (JSON Object):
             - url: the LTI resource url
             - content_paramters: all generated parameters related to the lti provider
-            - automatic_resizing: boolean to control automatic resizing
+            - is_automatic_resizing: boolean to control automatic resizing
 
         """
         edit = request.toolbar and request.toolbar.edit_mode_active
@@ -41,7 +41,11 @@ class LTIConsumerViewsSet(viewsets.GenericViewSet):
 
         plugin = get_object_or_404(models.LTIConsumer, pk=pk)
         response = {
-            "automatic_resizing": plugin.automatic_resizing,
+            "is_automatic_resizing": plugin.lti_provider.get(
+                "is_automatic_resizing", True
+            )
+            if plugin.lti_provider_id
+            else plugin.is_automatic_resizing,
             "content_parameters": plugin.get_content_parameters(edit=edit),
             "url": plugin.url,
         }

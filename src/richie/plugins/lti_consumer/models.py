@@ -4,6 +4,7 @@ LTI consumer plugin models
 from urllib.parse import unquote
 
 from django.conf import settings
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.utils.functional import lazy
 from django.utils.translation import gettext_lazy as _
@@ -41,13 +42,17 @@ class LTIConsumer(CMSPlugin):
     )
     oauth_consumer_key = models.CharField(max_length=50, null=True, blank=True)
     shared_secret = models.CharField(max_length=50, null=True, blank=True)
+    is_automatic_resizing = models.BooleanField(default=True, blank=True)
+    inline_ratio = models.FloatField(
+        default=0.5625,  # default is 16/9
+        blank=True,
+        validators=[MinValueValidator(0.1), MaxValueValidator(10)],
+    )
 
     # pylint: disable=signature-differs
     def save(self, *args, **kwargs):
         """
-        Initialize attributes :
-        - context_id from current site domain
-        - url if predefined provider is used
+        Initialize the url attribute if a predefined provider is used.
         """
         lti_provider = self.lti_provider
 
@@ -70,26 +75,15 @@ class LTIConsumer(CMSPlugin):
             self.lti_provider_id, {}
         )
 
-    @property
-    def automatic_resizing(self):
+    def get_inline_ratio_percentage(self):
         """
-        Returns current predefined LTI provider automatic_resizing setting
+        Returns actual value to use for `inline_ratio` setting as a percentage
         """
-        return self.lti_provider.get("automatic_resizing", False)
-
-    @property
-    def inline_ratio(self):
-        """
-        Returns current predefined LTI provider inline_ratio setting
-        """
-        return self.lti_provider.get("inline_ratio", 0)
-
-    @property
-    def inline_ratio_css_padding_bottom(self):
-        """
-        Returns current predefined LTI provider inline_ratio css style
-        """
-        return f"padding-bottom: {self.inline_ratio * 100}%"
+        return 100 * (
+            self.lti_provider.get("inline_ratio", 0.5625)
+            if self.lti_provider_id
+            else self.inline_ratio
+        )
 
     def get_resource_link_id(self):
         """Use the plugin id as resource_link_id field."""
