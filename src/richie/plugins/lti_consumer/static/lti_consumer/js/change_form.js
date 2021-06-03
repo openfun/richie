@@ -1,17 +1,16 @@
 $(document).ready(() => {
   const $lti_provider_id = $("#id_lti_provider_id");
-  const $credentials_fields = $(".field-oauth_consumer_key, .field-form_shared_secret");
+  const $foldable_fields = $(".field-oauth_consumer_key, .field-form_shared_secret, .field-is_automatic_resizing, .field-inline_ratio");
 
-  const set_credentials_fields_visibility = () => {
+  const set_foldable_fields_visibility = () => {
     if ($lti_provider_id.val()) {
-      $credentials_fields.hide();
+      $foldable_fields.hide();
     }
     else {
-      $credentials_fields.show();
+      $foldable_fields.show();
     }
   };
 
-  set_credentials_fields_visibility();
-  $lti_provider_id.on('change', set_credentials_fields_visibility);
+  set_foldable_fields_visibility();
+  $lti_provider_id.on('change', set_foldable_fields_visibility);
 });
-

@@ -70,7 +70,7 @@ describe('components/LtiConsumer', () => {
     const ltiContextResponse: LtiConsumerContext = {
       url: 'http://localhost:8060/lti/videos/c761d6e9-5371-4650-b27a-fa4c8865fd34',
       content_parameters: contentParameters,
-      automatic_resizing: true,
+      is_automatic_resizing: true,
     };
 
     const ltiConsumerProps = {
@@ -133,7 +133,7 @@ describe('components/LtiConsumer', () => {
     const ltiContextResponse: LtiConsumerContext = {
       url: 'http://localhost:8060/lti/videos/c761d6e9-5371-4650-b27a-fa4c8865fd34',
       content_parameters: contentParameters,
-      automatic_resizing: false,
+      is_automatic_resizing: false,
     };
 
     const ltiConsumerProps = {
@@ -217,7 +217,7 @@ describe('components/LtiConsumer', () => {
     const ltiContextResponse: LtiConsumerContext = {
       url: 'http://localhost:8060/lti/videos/c761d6e9-5371-4650-b27a-fa4c8865fd34',
       content_parameters: contentParameters,
-      automatic_resizing: false,
+      is_automatic_resizing: false,
     };
 
     const ltiConsumerProps = {

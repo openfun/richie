@@ -3,6 +3,7 @@ Model tests
 """
 from unittest import mock
 
+from django.core.exceptions import ValidationError
 from django.test import TestCase, override_settings
 
 from richie.plugins.lti_consumer.factories import LTIConsumerFactory
@@ -24,6 +25,36 @@ def get_lti_settings(is_regex=True):
 
 class LTIConsumerModelsTestCase(TestCase):
     """Model tests case"""
+
+    def test_lti_consumer_models_is_automatic_resizing_default(self):
+        """Check fields default values."""
+        instance = LTIConsumer.objects.create()
+        self.assertTrue(instance.is_automatic_resizing)
+        self.assertEqual(instance.inline_ratio, 0.5625)
+
+    def test_lti_consumer_models_inline_ratio_min(self):
+        """The "inline_ratio" field should not accept values smaller than 0.1"""
+        instance = LTIConsumerFactory(inline_ratio=0.09)
+
+        with self.assertRaises(ValidationError) as context:
+            instance.full_clean()
+
+        self.assertEqual(
+            str(context.exception),
+            "{'inline_ratio': ['Ensure this value is greater than or equal to 0.1.']}",
+        )
+
+    def test_lti_consumer_models_inline_ratio_max(self):
+        """The "inline_ratio" field should not accept values bigger than 1"""
+        instance = LTIConsumerFactory(inline_ratio=10.01)
+
+        with self.assertRaises(ValidationError) as context:
+            instance.full_clean()
+
+        self.assertEqual(
+            str(context.exception),
+            "{'inline_ratio': ['Ensure this value is less than or equal to 10.']}",
+        )
 
     @override_settings(
         RICHIE_LTI_PROVIDERS={"lti_provider_test": {"is_base_url_regex": False}}

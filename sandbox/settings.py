@@ -334,8 +334,8 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
                 environ_prefix=None,
             ),
             "display_name": "LTI Provider Test Video",
-            "is_base_url_regex": True,
-            "automatic_resizing": True,
+            "is_base_url_regex": False,
+            "is_automatic_resizing": True,
             "inline_ratio": 0.5625,
         }
     }

@@ -28,7 +28,14 @@ class LTIConsumerForm(forms.ModelForm):
         """Form meta attributes"""
 
         model = LTIConsumer
-        fields = ["lti_provider_id", "url", "oauth_consumer_key", "form_shared_secret"]
+        fields = [
+            "lti_provider_id",
+            "url",
+            "oauth_consumer_key",
+            "form_shared_secret",
+            "is_automatic_resizing",
+            "inline_ratio",
+        ]
 
     def __init__(self, *args, **kwargs):
         """Initialize the "form_shared_secret" field with a placeholder value (whatever
