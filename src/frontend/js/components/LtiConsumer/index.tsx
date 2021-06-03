@@ -52,12 +52,11 @@ const LtiConsumer = ({ id }: LtiConsumerProps) => {
   return (
     <div className="lti-consumer">
       <form
-        id="lti_form"
         ref={formRef}
         action={context.url}
         method="POST"
         encType="application/x-www-form-urlencoded"
-        target="lti_iframe"
+        target={`lti_iframe_${id}`}
       >
         {Object.entries(context.content_parameters).map(([name, value]) => (
           <input key={name} type="hidden" name={name} value={value} />
@@ -65,7 +64,7 @@ const LtiConsumer = ({ id }: LtiConsumerProps) => {
       </form>
       <iframe
         ref={iframeRef}
-        name="lti_iframe"
+        name={`lti_iframe_${id}`}
         title={context.url}
         src={context.url}
         allow="microphone *; camera *; midi *; geolocation *; encrypted-media *; fullscreen *"

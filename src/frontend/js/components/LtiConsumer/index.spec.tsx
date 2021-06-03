@@ -22,6 +22,7 @@ jest.mock('utils/errors/handle');
 describe('components/LtiConsumer', () => {
   afterEach(() => {
     fetchMock.restore();
+    jest.resetAllMocks();
   });
 
   const SessionProvider = ({ username, children }: PropsWithChildren<{ username?: string }>) => {
@@ -34,6 +35,20 @@ describe('components/LtiConsumer', () => {
       <Session.Provider value={{ user, login, register, destroy }}>{children}</Session.Provider>
     );
   };
+
+  // As HTMLFormElement doesn't implement submit (see https://github.com/jsdom/jsdom/issues/1937),
+  // we need to fake iframe content loading
+  const mockSubmit = jest.fn(() => {
+    const iframeDocument = document.getElementsByTagName('iframe')[0].contentDocument!;
+    iframeDocument.open();
+    iframeDocument.write(
+      `<!DOCTYPE html><html lang=""><body>
+          <p style="height: 400px;">It works !!</p>
+         </body></html>,`,
+    );
+    iframeDocument.close();
+  });
+  HTMLFormElement.prototype.submit = mockSubmit;
 
   it('renders an auto-resized iframe with a LTI content', async () => {
     const contentParameters = {
@@ -65,19 +80,6 @@ describe('components/LtiConsumer', () => {
     const ltiContextDeferred = new Deferred();
     fetchMock.get('/api/v1.0/plugins/lti-consumer/1337/context/', ltiContextDeferred.promise);
 
-    // As HTMLFormElement doesn't implement submit (see https://github.com/jsdom/jsdom/issues/1937),
-    // we need to fake iframe content loading
-    HTMLFormElement.prototype.submit = jest.fn(() => {
-      const iframeDocument = document.getElementsByTagName('iframe')[0].contentDocument!;
-      iframeDocument.open();
-      iframeDocument.write(
-        `<!DOCTYPE html><html lang=""><body>
-          <p style="height: 400px;">It works !!</p>
-         </body></html>,`,
-      );
-      iframeDocument.close();
-    });
-
     const { container } = render(
       <IntlProvider locale="en">
         <LtiConsumer {...ltiConsumerProps} />
@@ -104,6 +106,11 @@ describe('components/LtiConsumer', () => {
     const form: HTMLFormElement = container.getElementsByTagName('form')[0];
     expect(iframe.id).toMatch(/^iFrameResizer[0-9]$/);
     expect(form.submit).toHaveBeenCalledTimes(1);
+
+    // Check that iframe name relies on resource id to be unique
+    expect(iframe.name).toEqual('lti_iframe_1337');
+    // Check that form target the iframe
+    expect(form.target).toEqual(iframe.name);
   });
 
   it('renders an iframe with a LTI content', async () => {
@@ -136,19 +143,6 @@ describe('components/LtiConsumer', () => {
     const ltiContextDeferred = new Deferred();
     fetchMock.get('/api/v1.0/plugins/lti-consumer/1337/context/', ltiContextDeferred.promise);
 
-    // As HTMLFormElement doesn't implement submit (see https://github.com/jsdom/jsdom/issues/1937),
-    // we need to fake iframe content loading
-    HTMLFormElement.prototype.submit = jest.fn(() => {
-      const iframeDocument = document.getElementsByTagName('iframe')[0].contentDocument!;
-      iframeDocument.open();
-      iframeDocument.write(
-        `<!DOCTYPE html><html lang=""><body>
-          <p style="height: 400px;">It works !!</p>
-         </body></html>,`,
-      );
-      iframeDocument.close();
-    });
-
     const { container } = render(
       <IntlProvider locale="en">
         <LtiConsumer {...ltiConsumerProps} />
@@ -169,6 +163,11 @@ describe('components/LtiConsumer', () => {
     const form: HTMLFormElement = container.getElementsByTagName('form')[0];
     expect(iframe.id).not.toMatch(/^iFrameResizer[0-9]$/);
     expect(form.submit).toHaveBeenCalledTimes(1);
+
+    // Check that iframe name relies on resource id to be unique
+    expect(iframe.name).toEqual('lti_iframe_1337');
+    // Check that form target the iframe
+    expect(form.target).toEqual(iframe.name);
   });
 
   it('renders nothing and handle error if context fetching failed', async () => {
@@ -229,19 +228,6 @@ describe('components/LtiConsumer', () => {
 
     const ltiContextDeferred = new Deferred();
     fetchMock.get('/api/v1.0/plugins/lti-consumer/1337/context/', ltiContextDeferred.promise);
-
-    // As HTMLFormElement doesn't implement submit (see https://github.com/jsdom/jsdom/issues/1937),
-    // we need to fake iframe content loading
-    HTMLFormElement.prototype.submit = jest.fn(() => {
-      const iframeDocument = document.getElementsByTagName('iframe')[0].contentDocument!;
-      iframeDocument.open();
-      iframeDocument.write(
-        `<!DOCTYPE html><html lang=""><body>
-          <p style="height: 400px;">It works !!</p>
-         </body></html>,`,
-      );
-      iframeDocument.close();
-    });
 
     const { container } = render(
       <IntlProvider locale="en">

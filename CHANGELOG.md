@@ -17,6 +17,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Send username to LTI Consumer if user is logged in
 - Make related courses optional for program page
 
+### Fixed
+
+- Use a unique name to LTIConsumerPlugin iframes to allow several plugins on the
+  same page
+
 ## [2.6.0] - 2021-05-03
 
 ### Added
