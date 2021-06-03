@@ -17,7 +17,7 @@ class LTIConsumerFactoriesTestCase(TestCase):
             }
         }
     )
-    def test_factories_lti_consumer_create_with_lti_provider(self):
+    def test_lti_consumer_factories_create_with_lti_provider(self):
         """
         The url field should be computed by the model's "save" method if an
         LTI provider is defined.
@@ -25,7 +25,7 @@ class LTIConsumerFactoriesTestCase(TestCase):
         lti_consumer = LTIConsumerFactory()
         self.assertIn(lti_consumer.url, "http://localhost:8060/lti/videos/")
 
-    def test_factories_lti_consumer_create_without_lti_provider(self):
+    def test_lti_consumer_factories_create_without_lti_provider(self):
         """The url field should be set to a random value for a custom provider."""
         lti_consumer = LTIConsumerFactory(lti_provider_id=None)
         self.assertIsNotNone(lti_consumer.url)

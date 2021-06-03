@@ -27,7 +27,7 @@ def get_lti_settings(is_regex=True):
 class LTIConsumerFormTestCase(TestCase):
     """Tests for the LTI consumer forms"""
 
-    def test_forms_lti_consumer_predefined_providers(self):
+    def test_lti_consumer_forms_predefined_providers(self):
         """
         Verify LTI consumer form lists predefined providers
         """
@@ -39,7 +39,7 @@ class LTIConsumerFormTestCase(TestCase):
             ],
         )
 
-    def test_forms_lti_consumer_clean_errors(self):
+    def test_lti_consumer_forms_clean_errors(self):
         """
         Verify that LTI consumer form is displaying errors with predefined or
         custom provider
@@ -99,7 +99,7 @@ class LTIConsumerFormTestCase(TestCase):
                 self.assertFalse(form.is_valid())
                 self.assertDictEqual(errors, form.errors)
 
-    def test_forms_lti_consumer_clean_valid(self):
+    def test_lti_consumer_forms_clean_valid(self):
         """
         Verify that LTI consumer form is valid with predefined or custom provider
         """
@@ -125,7 +125,7 @@ class LTIConsumerFormTestCase(TestCase):
     @mock.patch.object(
         exrex, "getone", return_value="http://localhost:8060/lti/videos/1234abcd-1"
     )
-    def test_forms_lti_consumer_url_regex_match(self, _mock_getone):
+    def test_lti_consumer_forms_url_regex_match(self, _mock_getone):
         """
         The url field should match the regex url if a predefined LTI provider is
         used and has a regex url.
@@ -146,7 +146,7 @@ class LTIConsumerFormTestCase(TestCase):
         )
 
     @override_settings(RICHIE_LTI_PROVIDERS=get_lti_settings(is_regex=False))
-    def test_forms_lti_consumer_url_not_regex_included(self):
+    def test_lti_consumer_forms_url_not_regex_included(self):
         """
         The url field should include the provider's base url if a predefined LTI provider
         is used and has a regex url.
@@ -167,7 +167,7 @@ class LTIConsumerFormTestCase(TestCase):
         )
 
     @override_settings(RICHIE_LTI_PROVIDERS=get_lti_settings())
-    def test_forms_lti_consumer_reset_credentials(self):
+    def test_lti_consumer_forms_reset_credentials(self):
         """
         The "oauth_consumer_key" and "shared_secret" fields should be reset when a value
         is set for the "lti_provider_id" field.
@@ -203,7 +203,7 @@ class LTIConsumerFormTestCase(TestCase):
         self.assertIsNone(lti_consumer.shared_secret)
 
     @override_settings(RICHIE_LTI_PROVIDERS=get_lti_settings())
-    def test_forms_lti_consumer_shared_secret_placeholder(self):
+    def test_lti_consumer_forms_shared_secret_placeholder(self):
         """
         The "form_shared_secret" should act as a proxy to the "shared_secret" field on the model
         and allow hiding the shared secret from the form after creation.

@@ -16,7 +16,7 @@ from richie.plugins.lti_consumer.cms_plugins import LTIConsumerPlugin
 class LTIConsumerPluginTestCase(TestCase):
     """Test suite for the LTI consumer plugin."""
 
-    def test_cms_plugins_lti_consumer_context_and_html(self):
+    def test_lti_consumer_cms_plugins_context_and_html(self):
         """
         Instanciating this plugin with an instance should render the template.
         """
