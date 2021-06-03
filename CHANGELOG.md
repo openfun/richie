@@ -20,6 +20,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Use a unique name to LTIConsumerPlugin iframes to allow several plugins on the
+- Fix iframeResizer on LTIConsumer component when several plugins are on the
   same page
 
 ## [2.6.0] - 2021-05-03
