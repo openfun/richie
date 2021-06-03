@@ -28,7 +28,7 @@ class LTIConsumerModelsTestCase(TestCase):
     @override_settings(
         RICHIE_LTI_PROVIDERS={"lti_provider_test": {"is_base_url_regex": False}}
     )
-    def test_models_lti_consumer_url_create_base_url_missing(self):
+    def test_lti_consumer_models_url_create_base_url_missing(self):
         """
         The LTIConsumer model should not fail if the LTI provider has no base url.
         """
@@ -41,7 +41,7 @@ class LTIConsumerModelsTestCase(TestCase):
             "lti_provider_test": {"base_url": "", "is_base_url_regex": False}
         }
     )
-    def test_models_lti_consumer_url_create_base_url_empty(self):
+    def test_lti_consumer_models_url_create_base_url_empty(self):
         """
         The LTIConsumer model should not fail if the LTI provider has an empty base url.
         """
@@ -50,7 +50,7 @@ class LTIConsumerModelsTestCase(TestCase):
         self.assertEqual(instance.url, "")
 
     @override_settings(RICHIE_LTI_PROVIDERS=get_lti_settings())
-    def test_models_lti_consumer_url_create_regex(self):
+    def test_lti_consumer_models_url_create_regex(self):
         """
         Verify that a regex url is generated when a plugin instance is created
         if a predefined LTI provider is used.
@@ -62,10 +62,10 @@ class LTIConsumerModelsTestCase(TestCase):
         self.assertRegex(instance.url, expected_regex)
 
     @override_settings(RICHIE_LTI_PROVIDERS=get_lti_settings(is_regex=False))
-    def test_models_lti_consumer_url_create_not_regex(self):
+    def test_lti_consumer_models_url_create_not_regex(self):
         """
-        Verify that a regex url is generated when a plugin instance is created
-        if a predefined LTI provider is used.
+        Verify that the base url is returned when a plugin instance is created
+        if a predefined LTI provider is used that is not marked as regex.
         """
         instance = LTIConsumer(lti_provider_id="lti_provider_test")
         self.assertEqual(instance.url, "")
@@ -85,7 +85,7 @@ class ParametersLTIConsumerModelsTestCase(TestCase):
 
     @override_settings(RICHIE_LTI_PROVIDERS=get_lti_settings())
     @mock.patch.object(LTIConsumer, "get_resource_link_id", return_value="1234")
-    def test_models_lti_consumer_auth_parameters_no_edit_mode_predefined(
+    def test_lti_consumer_models_auth_parameters_no_edit_mode_predefined(
         self, _mock_rl, _mock_ts, _mock_nonce
     ):
         """
@@ -121,7 +121,7 @@ class ParametersLTIConsumerModelsTestCase(TestCase):
 
     @override_settings(RICHIE_LTI_PROVIDERS=get_lti_settings())
     @mock.patch.object(LTIConsumer, "get_resource_link_id", return_value="1234")
-    def test_models_lti_consumer_auth_parameters_no_edit_mode_manual(
+    def test_lti_consumer_models_auth_parameters_no_edit_mode_manual(
         self, _mock_rl, _mock_ts, _mock_nonce
     ):
         """
@@ -156,7 +156,7 @@ class ParametersLTIConsumerModelsTestCase(TestCase):
 
     @override_settings(RICHIE_LTI_PROVIDERS=get_lti_settings())
     @mock.patch.object(LTIConsumer, "get_resource_link_id", return_value="1234")
-    def test_models_lti_consumer_auth_parameters_edit_mode_predefined(
+    def test_lti_consumer_models_auth_parameters_edit_mode_predefined(
         self, _mock_rl, _mock_ts, _mock_nonce
     ):
         """
@@ -188,7 +188,7 @@ class ParametersLTIConsumerModelsTestCase(TestCase):
 
     @override_settings(RICHIE_LTI_PROVIDERS=get_lti_settings())
     @mock.patch.object(LTIConsumer, "get_resource_link_id", return_value="1234")
-    def test_models_lti_consumer_auth_parameters_edit_mode_manual(
+    def test_lti_consumer_models_auth_parameters_edit_mode_manual(
         self, _mock_rl, _mock_ts, _mock_nonce
     ):
         """
