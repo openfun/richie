@@ -39,7 +39,7 @@ const LtiConsumer = ({ id }: LtiConsumerProps) => {
       if (context.automatic_resizing) {
         // Retrieve and inject current component container height to prevent flickering
         // and remove aspect-ratio trick which is not compatible with iframeResizer
-        const componentContainer = document.querySelector('.richie-react--lti-consumer');
+        const componentContainer = formRef.current?.closest('.richie-react--lti-consumer');
         iframeResizer({ minHeight: componentContainer?.clientHeight }, iframeRef.current!);
         componentContainer?.classList.remove('aspect-ratio');
         componentContainer?.attributes.removeNamedItem('style');
