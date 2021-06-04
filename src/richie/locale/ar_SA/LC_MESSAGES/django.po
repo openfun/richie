@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-19 07:33+0000\n"
-"PO-Revision-Date: 2021-04-19 13:16\n"
+"POT-Creation-Date: 2021-06-03 19:03+0000\n"
+"PO-Revision-Date: 2021-06-04 05:50\n"
 "Last-Translator: \n"
 "Language-Team: Arabic, Saudi Arabia\n"
 "Language: ar_SA\n"
@@ -103,21 +103,21 @@ msgstr ""
 msgid "You are here:"
 msgstr ""
 
-#: apps/core/templates/richie/base.html:96
+#: apps/core/templates/richie/base.html:100
 #: apps/courses/templates/courses/cms/course_detail.html:147
 msgid "Contact us"
 msgstr ""
 
-#: apps/core/templates/richie/base.html:124
+#: apps/core/templates/richie/base.html:128
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:32
 msgid "Learn more"
 msgstr ""
 
-#: apps/core/templates/richie/base.html:136
+#: apps/core/templates/richie/base.html:140
 msgid "Life-changing learning!"
 msgstr ""
 
-#: apps/core/templates/richie/base.html:150
+#: apps/core/templates/richie/base.html:154
 msgid "Powered by"
 msgstr ""
 
@@ -1664,39 +1664,39 @@ msgstr ""
 msgid "shared secret"
 msgstr ""
 
-#: plugins/lti_consumer/forms.py:71
+#: plugins/lti_consumer/forms.py:78
 msgid "The url is not valid for this provider. It should be of the form \"{:s}\"."
 msgstr ""
 
-#: plugins/lti_consumer/forms.py:77
+#: plugins/lti_consumer/forms.py:84
 msgid "The url is not valid for this provider. It should start with \"{:s}\"."
 msgstr ""
 
-#: plugins/lti_consumer/forms.py:90
+#: plugins/lti_consumer/forms.py:97
 msgid "Please choose a predefined provider, or fill fields below"
 msgstr ""
 
-#: plugins/lti_consumer/forms.py:93
+#: plugins/lti_consumer/forms.py:100
 msgid "Please choose a predefined provider above, or fill this field"
 msgstr ""
 
-#: plugins/lti_consumer/forms.py:99
+#: plugins/lti_consumer/forms.py:106
 msgid "Please fill this field"
 msgstr ""
 
-#: plugins/lti_consumer/models.py:27
+#: plugins/lti_consumer/models.py:28
 msgid "LTI url"
 msgstr ""
 
-#: plugins/lti_consumer/models.py:29
+#: plugins/lti_consumer/models.py:30
 msgid "For a predefined provider, leave this field empty for uploading new content."
 msgstr ""
 
-#: plugins/lti_consumer/models.py:35
+#: plugins/lti_consumer/models.py:36
 msgid "Predefined LTI provider"
 msgstr ""
 
-#: plugins/lti_consumer/models.py:40
+#: plugins/lti_consumer/models.py:41
 msgid "Please choose a predefined provider or fill fields below."
 msgstr ""
 
