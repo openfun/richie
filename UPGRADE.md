@@ -16,6 +16,8 @@ $ make migrate
 
 ## Unreleased
 
+## 2.4.x to 2.5.x
+
 - Named capturing group regex are still considered experimental in Javascript and may cause trouble
   with old browsers, so we decided to remove this feature from Richie and use indexed capturing
   group instead. As a consequence, you should update your `JS_COURSE_REGEX` setting to remove

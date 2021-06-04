@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-19 07:33+0000\n"
-"PO-Revision-Date: 2021-05-03 08:04\n"
+"POT-Creation-Date: 2021-06-03 19:03+0000\n"
+"PO-Revision-Date: 2021-06-04 05:50\n"
 "Last-Translator: \n"
 "Language-Team: Portuguese\n"
 "Language: pt_PT\n"
@@ -99,21 +99,21 @@ msgstr "O seu navegador não suporta este formato de vídeo."
 msgid "You are here:"
 msgstr "Você está aqui:"
 
-#: apps/core/templates/richie/base.html:96
+#: apps/core/templates/richie/base.html:100
 #: apps/courses/templates/courses/cms/course_detail.html:147
 msgid "Contact us"
 msgstr "Contacte-nos"
 
-#: apps/core/templates/richie/base.html:124
+#: apps/core/templates/richie/base.html:128
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:32
 msgid "Learn more"
 msgstr "Saiba mais"
 
-#: apps/core/templates/richie/base.html:136
+#: apps/core/templates/richie/base.html:140
 msgid "Life-changing learning!"
 msgstr "Aprendizagem que muda a sua vida!"
 
-#: apps/core/templates/richie/base.html:150
+#: apps/core/templates/richie/base.html:154
 msgid "Powered by"
 msgstr "Desenvolvido por"
 
@@ -1676,39 +1676,39 @@ msgstr "Configuração de fornecedor personalizado"
 msgid "shared secret"
 msgstr "segredo partilhado"
 
-#: plugins/lti_consumer/forms.py:71
+#: plugins/lti_consumer/forms.py:78
 msgid "The url is not valid for this provider. It should be of the form \"{:s}\"."
 msgstr "A url não é válida para este fornecedor. Deve ser no formato \"{:s}\"."
 
-#: plugins/lti_consumer/forms.py:77
+#: plugins/lti_consumer/forms.py:84
 msgid "The url is not valid for this provider. It should start with \"{:s}\"."
 msgstr "A url não é válida para este fornecedor. Deve começar com \"{:s}\"."
 
-#: plugins/lti_consumer/forms.py:90
+#: plugins/lti_consumer/forms.py:97
 msgid "Please choose a predefined provider, or fill fields below"
 msgstr "Por favor, escolha um fornecedor predefinido, ou preencha os campos abaixo"
 
-#: plugins/lti_consumer/forms.py:93
+#: plugins/lti_consumer/forms.py:100
 msgid "Please choose a predefined provider above, or fill this field"
 msgstr "Por favor, escolha um fornecedor predefinido acima, ou preencha este campo"
 
-#: plugins/lti_consumer/forms.py:99
+#: plugins/lti_consumer/forms.py:106
 msgid "Please fill this field"
 msgstr "Preencha este campo"
 
-#: plugins/lti_consumer/models.py:27
+#: plugins/lti_consumer/models.py:28
 msgid "LTI url"
 msgstr "LTI url"
 
-#: plugins/lti_consumer/models.py:29
+#: plugins/lti_consumer/models.py:30
 msgid "For a predefined provider, leave this field empty for uploading new content."
 msgstr "Para um fornecedor predefinido, deixe este campo vazio para carregar um novo conteúdo."
 
-#: plugins/lti_consumer/models.py:35
+#: plugins/lti_consumer/models.py:36
 msgid "Predefined LTI provider"
 msgstr "Fornecedor de LTI predefinido"
 
-#: plugins/lti_consumer/models.py:40
+#: plugins/lti_consumer/models.py:41
 msgid "Please choose a predefined provider or fill fields below."
 msgstr "Por favor, escolha um fornecedor predefinido ou preencha os campos abaixo."
 

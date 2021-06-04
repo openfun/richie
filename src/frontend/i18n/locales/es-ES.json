@@ -113,11 +113,11 @@
   },
   "components.SearchFilterGroupModal.inputLabel": {
     "description": "Accessible label for the search input in the search filter modal.",
-    "message": "Search for filters to add"
+    "message": "Buscar filtros para añadir"
   },
   "components.SearchFilterGroupModal.inputPlaceholder": {
     "description": "Placeholder message for the search input in the search filter modal.",
-    "message": "Search in { filterName }"
+    "message": "Buscar en { filterName }"
   },
   "components.SearchFilterGroupModal.modalTitle": {
     "description": "Title for the modal to add more filter values in the search filters modal.",
@@ -165,7 +165,7 @@
   },
   "components.UserLogin.signup": {
     "description": "Text for the signup button.",
-    "message": "Regístrarse"
+    "message": "Registrarse"
   },
   "components.UserLogin.spinnerText": {
     "description": "Accessibility text for the spinner in the login area.",

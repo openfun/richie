@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: richie\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-19 07:33+0000\n"
-"PO-Revision-Date: 2021-04-19 13:16\n"
+"POT-Creation-Date: 2021-06-03 19:03+0000\n"
+"PO-Revision-Date: 2021-06-04 05:50\n"
 "Last-Translator: \n"
 "Language-Team: Spanish\n"
 "Language: es_ES\n"
@@ -48,7 +48,7 @@ msgstr "Definir un esfuerzo"
 
 #: apps/core/fields/effort.py:244
 msgid "An effort should be a triplet: number, time unit and reference unit."
-msgstr ""
+msgstr "El esfuerzo debe ser una tripleta: número, unidad de tiempo y unidad de referencia."
 
 #: apps/core/fields/effort.py:257
 msgid "An effort should be a round number of time units."
@@ -97,33 +97,33 @@ msgstr "Su navegador no admite este formato de vídeo."
 
 #: apps/core/templates/menu/breadcrumbs.html:4
 msgid "You are here:"
-msgstr ""
+msgstr "Usted está aquí:"
 
-#: apps/core/templates/richie/base.html:96
+#: apps/core/templates/richie/base.html:100
 #: apps/courses/templates/courses/cms/course_detail.html:147
 msgid "Contact us"
-msgstr ""
+msgstr "Contáctenos"
 
-#: apps/core/templates/richie/base.html:124
+#: apps/core/templates/richie/base.html:128
 #: apps/courses/templates/courses/cms/fragment_blogpost_glimpse.html:32
 msgid "Learn more"
-msgstr ""
+msgstr "Saber más"
 
-#: apps/core/templates/richie/base.html:136
+#: apps/core/templates/richie/base.html:140
 msgid "Life-changing learning!"
-msgstr ""
+msgstr "¡Aprendizaje que cambia la vida!"
 
-#: apps/core/templates/richie/base.html:150
+#: apps/core/templates/richie/base.html:154
 msgid "Powered by"
-msgstr ""
+msgstr "Impulsado por"
 
 #: apps/core/templates/richie/child_pages_list.html:21
 msgid "This page has no child objects"
-msgstr ""
+msgstr "Esta página no tiene objetos secundarios"
 
 #: apps/core/templates/richie/error.html:17
 msgid "Back to home"
-msgstr ""
+msgstr "Volver al inicio"
 
 #: apps/core/templates/richie/pagination.html:5
 msgid "Pagination"
@@ -214,39 +214,39 @@ msgstr "Twitter"
 #: apps/core/templates/social-networks/footer-badges.html:27
 #: apps/core/templates/social-networks/footer-badges.html:30
 msgid "Linkedin"
-msgstr ""
+msgstr "Linkedin"
 
 #: apps/core/views/error.py:7
 msgid "Bad request"
-msgstr ""
+msgstr "Solicitud errónea"
 
 #: apps/core/views/error.py:9
 msgid "Your query seems to be malformed. Please check your data and try again."
-msgstr ""
+msgstr "Su consulta parece ser incorrecta. Por favor, compruebe sus datos e inténtelo de nuevo."
 
 #: apps/core/views/error.py:13
 msgid "Forbidden"
-msgstr ""
+msgstr "Prohibido"
 
 #: apps/core/views/error.py:15
 msgid "You do not have the required permissions to access this resource."
-msgstr ""
+msgstr "No tiene los permisos necesarios para acceder a este contenido."
 
 #: apps/core/views/error.py:19
 msgid "Page not found"
-msgstr ""
+msgstr "No se pudo encontrar la página"
 
 #: apps/core/views/error.py:20
 msgid "The requested resource does not exist."
-msgstr ""
+msgstr "El recurso solicitado no existe."
 
 #: apps/core/views/error.py:23
 msgid "Server bad request"
-msgstr ""
+msgstr "Solicitud errónea del servidor"
 
 #: apps/core/views/error.py:24
 msgid "Something went wrong. Please try again later."
-msgstr ""
+msgstr "Algo ha fallado. Por favor, inténtelo de nuevo más tarde."
 
 #: apps/courses/admin.py:260
 msgid "Course could not be found."
@@ -262,15 +262,15 @@ msgstr "Ver carpeta de archivos"
 
 #: apps/courses/cms_plugins.py:36
 msgid "Organization"
-msgstr ""
+msgstr "Organizaciones"
 
 #: apps/courses/cms_plugins.py:63
 msgid "Organization by Category"
-msgstr ""
+msgstr "Organización por categoría"
 
 #: apps/courses/cms_plugins.py:94
 msgid "Category"
-msgstr ""
+msgstr "Categoría"
 
 #: apps/courses/cms_plugins.py:122
 #: apps/courses/templates/courses/cms/fragment_course_run.html:10
@@ -287,11 +287,11 @@ msgstr "Licencia"
 
 #: apps/courses/cms_plugins.py:196
 msgid "Post"
-msgstr ""
+msgstr "Publicar"
 
 #: apps/courses/cms_plugins.py:222
 msgid "Program"
-msgstr ""
+msgstr "Programa"
 
 #: apps/courses/cms_toolbars.py:49
 msgid "{!s} settings"
@@ -299,11 +299,11 @@ msgstr "{!s} configuración"
 
 #: apps/courses/cms_toolbars.py:105
 msgid "Snapshot this page..."
-msgstr ""
+msgstr "Captura instantánea de esta página..."
 
 #: apps/courses/cms_toolbars.py:109
 msgid "This will place a copy of this page as its child and move all its courseruns as children of its new copy."
-msgstr ""
+msgstr "Esto colocará una copia de esta página como su hijo y moverá a todos sus sesiones de curso como hijos de su nueva copia."
 
 #: apps/courses/cms_wizards.py:57
 msgid "New page"
@@ -339,24 +339,24 @@ msgstr "Slug de la página en el idioma actual"
 
 #: apps/courses/cms_wizards.py:118
 msgid "This slug is too long. The length of the path built by prepending the slug of the parent page would be {:d} characters long and it should be less than 255"
-msgstr ""
+msgstr "Este slug es demasiado largo. La longitud de la ruta construida que antecede el slug de la página padre sería {:d} caracteres de largo y debería ser menor de 255"
 
 #: apps/courses/cms_wizards.py:131
 msgid "This slug is already in use"
-msgstr ""
+msgstr "Este slug ya ha sido utilizado"
 
 #: apps/courses/cms_wizards.py:149
 #, python-brace-format
 msgid "You must first create a parent page and set its `reverse_id` to `{reverse}`."
-msgstr ""
+msgstr "Primero debe crear una página padre y establecer su `reverse_id` a `{reverse}`."
 
 #: apps/courses/cms_wizards.py:179
 msgid "Code"
-msgstr ""
+msgstr "Código"
 
 #: apps/courses/cms_wizards.py:180 apps/courses/models/course.py:152
 msgid "Unique reference for the course."
-msgstr ""
+msgstr "Referencia única para el curso."
 
 #: apps/courses/cms_wizards.py:269
 msgid "New course page"
@@ -414,7 +414,7 @@ msgstr "Admin"
 #: apps/courses/defaults.py:246 apps/courses/defaults.py:257
 #: plugins/glimpse/defaults.py:20
 msgid "Inherit"
-msgstr ""
+msgstr "Heredar"
 
 #: apps/courses/defaults.py:227 apps/courses/defaults.py:237
 #: apps/courses/defaults.py:247 apps/courses/defaults.py:258
@@ -424,19 +424,19 @@ msgstr "Por defecto"
 
 #: apps/courses/defaults.py:228
 msgid "Mini"
-msgstr ""
+msgstr "Mini"
 
 #: apps/courses/defaults.py:229
 msgid "Favorite"
-msgstr ""
+msgstr "Favorito"
 
 #: apps/courses/defaults.py:238 plugins/glimpse/defaults.py:21
 msgid "Badge"
-msgstr ""
+msgstr "Badge"
 
 #: apps/courses/defaults.py:239
 msgid "Tag"
-msgstr ""
+msgstr "Etiqueta"
 
 #: apps/courses/defaults.py:248
 msgid "Small"
@@ -448,11 +448,11 @@ msgstr "Grande"
 
 #: apps/courses/defaults.py:259
 msgid "Card"
-msgstr ""
+msgstr "Tarjeta"
 
 #: apps/courses/defaults.py:260
 msgid "Row"
-msgstr ""
+msgstr "Fila"
 
 #: apps/courses/defaults.py:335
 msgid "minute"
@@ -496,23 +496,23 @@ msgstr "meses"
 
 #: apps/courses/factories.py:405
 msgid "Run {:d}"
-msgstr ""
+msgstr "Ejecutar {:d}"
 
 #: apps/courses/helpers.py:33
 msgid "You can't snapshot a snapshot."
-msgstr ""
+msgstr "No puedes hacer una captura instantánea de una captura instantánea."
 
 #: apps/courses/helpers.py:46
 msgid "You don't have sufficient permissions to snapshot this page."
-msgstr ""
+msgstr "No tiene permisos suficientes para hacer una captura instantánea en esta página."
 
 #: apps/courses/helpers.py:63
 msgid "Archived on {now:%Y-%m-%d %H:%M:%S}"
-msgstr ""
+msgstr "Archivado el {ahora:%Y-%m-%d %H:%M:%S}"
 
 #: apps/courses/helpers.py:68
 msgid "{title:s} ({version!s})"
-msgstr ""
+msgstr "{title:s} ({version!s})"
 
 #: apps/courses/models/blog.py:27
 msgid "blog post"
@@ -520,27 +520,27 @@ msgstr "entrada de blog"
 
 #: apps/courses/models/blog.py:28
 msgid "blog posts"
-msgstr ""
+msgstr "entradas de blog"
 
 #: apps/courses/models/blog.py:91 apps/courses/models/category.py:166
 #: apps/courses/models/course.py:896 apps/courses/models/organization.py:187
 #: apps/courses/models/organization.py:221
 msgid "variant"
-msgstr ""
+msgstr "variante"
 
 #: apps/courses/models/blog.py:94 apps/courses/models/category.py:169
 #: apps/courses/models/course.py:899 apps/courses/models/organization.py:190
 #: apps/courses/models/organization.py:224
 msgid "Optional glimpse variant for a custom look."
-msgstr ""
+msgstr "Variante vista previa optional para un aspecto personalizado."
 
 #: apps/courses/models/blog.py:101
 msgid "blog post plugin"
-msgstr ""
+msgstr "plugin de entrada de blog"
 
 #: apps/courses/models/blog.py:102
 msgid "blog post plugins"
-msgstr ""
+msgstr "plugins de entrada de blog"
 
 #: apps/courses/models/category.py:32
 msgid "category"
@@ -548,7 +548,7 @@ msgstr "categoría"
 
 #: apps/courses/models/category.py:33
 msgid "categories"
-msgstr ""
+msgstr "categorías"
 
 #: apps/courses/models/category.py:176
 msgid "category plugin"
@@ -556,7 +556,7 @@ msgstr "plugin de categoría"
 
 #: apps/courses/models/category.py:177
 msgid "category plugins"
-msgstr ""
+msgstr "plugins de categoría"
 
 #: apps/courses/models/course.py:55 apps/courses/models/course.py:56
 msgid "enroll now"
@@ -564,15 +564,15 @@ msgstr "inscribirse ahora"
 
 #: apps/courses/models/course.py:57
 msgid "study now"
-msgstr ""
+msgstr "estudiar ahora"
 
 #: apps/courses/models/course.py:66 apps/courses/models/course.py:68
 msgid "closing on"
-msgstr ""
+msgstr "cerrando en"
 
 #: apps/courses/models/course.py:67 apps/courses/models/course.py:69
 msgid "starting on"
-msgstr ""
+msgstr "comenzando el"
 
 #: apps/courses/models/course.py:70
 msgid "enrollment closed"
@@ -600,27 +600,27 @@ msgstr "código"
 
 #: apps/courses/models/course.py:163
 msgid "The course time range."
-msgstr ""
+msgstr "El intervalo de tiempo del curso."
 
 #: apps/courses/models/course.py:172
 msgid "Total amount of time to complete this course."
-msgstr ""
+msgstr "Cantidad total de tiempo para completar este curso."
 
 #: apps/courses/models/course.py:177
 msgid "is listed"
-msgstr ""
+msgstr "está listado"
 
 #: apps/courses/models/course.py:178
 msgid "Tick if you want the course to be visible on the search page."
-msgstr ""
+msgstr "Marque si desea que el curso sea visible en la página de búsqueda."
 
 #: apps/courses/models/course.py:183
 msgid "is self paced"
-msgstr ""
+msgstr "es a su propio ritmo"
 
 #: apps/courses/models/course.py:184
 msgid "Tick if the course pace is self paced."
-msgstr ""
+msgstr "Marque si el ritmo del curso es a ritmo propio."
 
 #: apps/courses/models/course.py:191
 msgid "course"
@@ -628,35 +628,35 @@ msgstr "curso"
 
 #: apps/courses/models/course.py:192
 msgid "courses"
-msgstr ""
+msgstr "cursos"
 
 #: apps/courses/models/course.py:498
 msgid "Self paced"
-msgstr ""
+msgstr "A ritmo propio"
 
 #: apps/courses/models/course.py:513 apps/courses/models/course.py:522
 msgid "~{pace:d} {effort_unit!s}/{duration_unit!s}"
-msgstr ""
+msgstr "~{pace:d} {esfuerzo_unidad!s}/{duración_unidad!s}"
 
 #: apps/courses/models/course.py:529
 msgid "~{pace_hours:d}h{pace_minutes:d}/{duration_unit!s}"
-msgstr ""
+msgstr "~{pace_hours:d}h{pace_minutes:d}/{duration_unit!s}"
 
 #: apps/courses/models/course.py:612
 msgid "Manual"
-msgstr ""
+msgstr "Manual"
 
 #: apps/courses/models/course.py:613
 msgid "Synchronization to draft page"
-msgstr ""
+msgstr "Sincronización a página de borrador"
 
 #: apps/courses/models/course.py:614
 msgid "Synchronization to public page"
-msgstr ""
+msgstr "Sincronización a página pública"
 
 #: apps/courses/models/course.py:644
 msgid "resource link"
-msgstr ""
+msgstr "enlace de recursos"
 
 #: apps/courses/models/course.py:646
 msgid "course start"
@@ -692,11 +692,11 @@ msgstr "título"
 
 #: apps/courses/models/course.py:840
 msgid "Course run translation"
-msgstr ""
+msgstr "Traducción de la sesión de curso"
 
 #: apps/courses/models/course.py:841
 msgid "Course run translations"
-msgstr ""
+msgstr "Traducciones de la sesión de curso"
 
 #: apps/courses/models/course.py:906
 msgid "course plugin"
@@ -728,7 +728,7 @@ msgstr "licencia"
 
 #: apps/courses/models/course.py:937
 msgid "licences"
-msgstr ""
+msgstr "licencias"
 
 #: apps/courses/models/course.py:960
 msgid "Licence translation"
@@ -736,7 +736,7 @@ msgstr "Traducción de la licencia"
 
 #: apps/courses/models/course.py:961
 msgid "licence translations"
-msgstr ""
+msgstr "traducciones de licencias"
 
 #: apps/courses/models/course.py:976
 msgid "description"
@@ -748,7 +748,7 @@ msgstr "plugin de licencia"
 
 #: apps/courses/models/course.py:981
 msgid "licence plugins"
-msgstr ""
+msgstr "plugins de licencia"
 
 #: apps/courses/models/organization.py:39
 msgid "organization"
@@ -768,11 +768,11 @@ msgstr "plugins de organización"
 
 #: apps/courses/models/organization.py:231
 msgid "organizations by category plugin"
-msgstr ""
+msgstr "organizaciones por plugin de categoría"
 
 #: apps/courses/models/organization.py:232
 msgid "organizations by category plugins"
-msgstr ""
+msgstr "organizaciones por plugins de categoría"
 
 #: apps/courses/models/person.py:29
 msgid "person"
@@ -784,11 +784,11 @@ msgstr "personas"
 
 #: apps/courses/models/person.py:75
 msgid "Custom bio"
-msgstr ""
+msgstr "Personalizar biografía"
 
 #: apps/courses/models/person.py:80
 msgid "Optional: provide a custom bio (if you leave it empty, it will display the person's bio)."
-msgstr ""
+msgstr "Opcional: proporcionar una biografía personalizada (si la deja vacía, se mostrará la biografía de la persona)."
 
 #: apps/courses/models/person.py:87
 msgid "person plugin"
@@ -796,7 +796,7 @@ msgstr "plugin de persona"
 
 #: apps/courses/models/person.py:88
 msgid "person plugins"
-msgstr ""
+msgstr "plugins de persona"
 
 #: apps/courses/models/program.py:25
 msgid "program"
@@ -812,7 +812,7 @@ msgstr "plugin del programa"
 
 #: apps/courses/models/program.py:51
 msgid "program plugins"
-msgstr ""
+msgstr "plugins de programa"
 
 #: apps/courses/models/role.py:20
 msgid "role"
@@ -820,7 +820,7 @@ msgstr "rol"
 
 #: apps/courses/models/role.py:22
 msgid "A role describes all the permissions that should be granted to the user group."
-msgstr ""
+msgstr "Un rol describe todos los permisos que deben concederse al grupo de usuarios."
 
 #: apps/courses/models/role.py:29
 msgid "page"
@@ -828,7 +828,7 @@ msgstr "página"
 
 #: apps/courses/models/role.py:30
 msgid "Page to which this role grants permissions."
-msgstr ""
+msgstr "Página a la que este rol concede permisos."
 
 #: apps/courses/models/role.py:40
 msgid "group"
@@ -836,7 +836,7 @@ msgstr "grupo"
 
 #: apps/courses/models/role.py:41
 msgid "User group that this role controls."
-msgstr ""
+msgstr "Grupo de usuarios que este rol controla."
 
 #: apps/courses/models/role.py:49
 msgid "filer folder"
@@ -844,7 +844,7 @@ msgstr "carpeta de archivos"
 
 #: apps/courses/models/role.py:50
 msgid "Filer folder that this role controls."
-msgstr ""
+msgstr "Carpeta del archivador que este rol controla."
 
 #: apps/courses/models/role.py:58
 msgid "page role"
@@ -880,7 +880,7 @@ msgstr "Página de categoría"
 
 #: apps/courses/settings/__init__.py:40
 msgid "Blog post list"
-msgstr ""
+msgstr "Lista de entradas de blog"
 
 #: apps/courses/settings/__init__.py:41
 msgid "Blog post page"
@@ -908,7 +908,7 @@ msgstr "Buscar"
 
 #: apps/courses/settings/__init__.py:47
 msgid "List of child pages"
-msgstr ""
+msgstr "Lista de páginas hijas"
 
 #: apps/courses/settings/__init__.py:48
 msgid "Homepage"
@@ -924,7 +924,7 @@ msgstr "Pie de página"
 
 #: apps/courses/settings/__init__.py:61
 msgid "Static headline"
-msgstr ""
+msgstr "Encabezado estático"
 
 #: apps/courses/settings/__init__.py:68 apps/courses/settings/__init__.py:90
 #: apps/courses/settings/__init__.py:317
@@ -941,15 +941,15 @@ msgstr "Contenido principal"
 #: apps/courses/templates/courses/cms/fragment_program_glimpse.html:8
 #: apps/courses/templates/courses/cms/program_detail.html:23
 msgid "Cover"
-msgstr ""
+msgstr "Portada"
 
 #: apps/courses/settings/__init__.py:125
 msgid "Catch phrase"
-msgstr ""
+msgstr "Eslogan"
 
 #: apps/courses/settings/__init__.py:130
 msgid "Teaser"
-msgstr ""
+msgstr "Teaser"
 
 #: apps/courses/settings/__init__.py:135
 msgid "About the course"
@@ -1045,15 +1045,15 @@ msgstr "Autor"
 
 #: apps/courses/settings/__init__.py:283 apps/courses/settings/__init__.py:303
 msgid "Excerpt"
-msgstr ""
+msgstr "Extracto"
 
 #: apps/courses/settings/__init__.py:288 apps/courses/settings/__init__.py:308
 msgid "Body"
-msgstr ""
+msgstr "Cuerpo"
 
 #: apps/courses/settings/__init__.py:292
 msgid "Headline"
-msgstr ""
+msgstr "Encabezado"
 
 #: apps/courses/settings/__init__.py:313
 #: apps/courses/templates/courses/cms/person_detail.html:113
@@ -1062,11 +1062,11 @@ msgstr "Cursos"
 
 #: apps/courses/settings/__init__.py:439
 msgid "Button caesura"
-msgstr ""
+msgstr "Botón cesura"
 
 #: apps/courses/settings/__init__.py:441
 msgid "Full width"
-msgstr ""
+msgstr "Anchura total"
 
 #: apps/courses/templates/courses/cms/blogpost_detail.html:50
 msgid "No categories yet."
@@ -1082,25 +1082,25 @@ msgstr "No hay autor aún"
 
 #: apps/courses/templates/courses/cms/blogpost_detail.html:107
 msgid "blog post cover image"
-msgstr ""
+msgstr "imagen de portada del post del blog"
 
 #: apps/courses/templates/courses/cms/blogpost_detail.html:117
 #: apps/courses/templates/courses/cms/program_detail.html:43
 msgid "No excerpt content"
-msgstr ""
+msgstr "No hay extracto de contenido"
 
 #: apps/courses/templates/courses/cms/blogpost_detail.html:127
 #: apps/courses/templates/courses/cms/program_detail.html:51
 msgid "No body content"
-msgstr ""
+msgstr "No hay contenido en el cuerpo"
 
 #: apps/courses/templates/courses/cms/blogpost_detail.html:146
 msgid "Related posts"
-msgstr ""
+msgstr "Entradas relacionadas"
 
 #: apps/courses/templates/courses/cms/blogpost_list.html:36
 msgid "No associated blogposts"
-msgstr ""
+msgstr "No hay entradas de blogs asociadas"
 
 #: apps/courses/templates/courses/cms/category_detail.html:28
 msgid "category banner"
@@ -1125,7 +1125,9 @@ msgstr "Cursos relacionados"
 msgid "\n"
 "                                        See all courses related to %(category_title)s\n"
 "                                    "
-msgstr ""
+msgstr "\n"
+"                                        Ver todos los cursos relacionados con %(category_title)s\n"
+"                                    "
 
 #: apps/courses/templates/courses/cms/category_detail.html:115
 msgid "See all courses"
@@ -1137,7 +1139,7 @@ msgstr "Organizaciones relacionadas"
 
 #: apps/courses/templates/courses/cms/category_detail.html:151
 msgid "Related blogposts"
-msgstr ""
+msgstr "Entradas de blog relacionadas"
 
 #: apps/courses/templates/courses/cms/category_detail.html:170
 #: apps/courses/templates/courses/cms/organization_detail.html:115
@@ -1156,7 +1158,7 @@ msgstr "No hay categorías asociadas"
 
 #: apps/courses/templates/courses/cms/course_detail.html:57
 msgid "Ref. "
-msgstr ""
+msgstr "Ref. "
 
 #: apps/courses/templates/courses/cms/course_detail.html:73
 msgid "Duration:"
@@ -1168,15 +1170,15 @@ msgstr "Esfuerzo:"
 
 #: apps/courses/templates/courses/cms/course_detail.html:89
 msgid "Pace:"
-msgstr ""
+msgstr "Ritmo:"
 
 #: apps/courses/templates/courses/cms/course_detail.html:101
 msgid "Enter here a introduction of your course."
-msgstr ""
+msgstr "Introduzca aquí una descripción de su curso."
 
 #: apps/courses/templates/courses/cms/course_detail.html:111
 msgid "Add a teaser video or add a cover image below and it will be used as teaser image as well."
-msgstr ""
+msgstr "Añada un video de teaser o añada una imagen de portada a continuación y se utilizará como imagen de teaser."
 
 #: apps/courses/templates/courses/cms/course_detail.html:123
 #: apps/courses/templates/courses/cms/course_detail.html:199
@@ -1188,7 +1190,9 @@ msgstr "imagen de portada del curso"
 msgid "\n"
 "                        Archived on %(creation_date)s\n"
 "                    "
-msgstr ""
+msgstr "\n"
+"                        Archivado el %(creation_date)s\n"
+"                    "
 
 #: apps/courses/templates/courses/cms/course_detail.html:177
 msgid "Go to current version"
@@ -1196,16 +1200,16 @@ msgstr "Ir a la sesión actual"
 
 #: apps/courses/templates/courses/cms/course_detail.html:186
 msgid "Glimpse cover"
-msgstr ""
+msgstr "Vista previa de la cobertura"
 
 #: apps/courses/templates/courses/cms/course_detail.html:188
 msgid "Add an image for course cover on its glimpse."
-msgstr ""
+msgstr "Agrega una imagen para la portada del curso en la vista previa."
 
 #: apps/courses/templates/courses/cms/course_detail.html:212
 msgctxt "course_detail__title"
 msgid "What you will learn"
-msgstr ""
+msgstr "Lo que aprenderá"
 
 #: apps/courses/templates/courses/cms/course_detail.html:213
 msgid "At the end of this course, you will be able to:"
@@ -1219,7 +1223,7 @@ msgstr "Descripción"
 #: apps/courses/templates/courses/cms/course_detail.html:231
 msgctxt "course_detail__title"
 msgid "Format"
-msgstr ""
+msgstr "Formato"
 
 #: apps/courses/templates/courses/cms/course_detail.html:233
 msgid "How is the course structured?"
@@ -1237,11 +1241,11 @@ msgstr "¿Cuáles son los perrequisitos para seguir este curso?"
 #: apps/courses/templates/courses/cms/course_detail.html:253
 msgctxt "course_detail__title"
 msgid "Assessment and certification"
-msgstr ""
+msgstr "Evaluación y certificación"
 
 #: apps/courses/templates/courses/cms/course_detail.html:256
 msgid "How is progress evaluated and/or certified?"
-msgstr ""
+msgstr "¿Cómo se evalúa y/o certifica el progreso?"
 
 #: apps/courses/templates/courses/cms/course_detail.html:268
 msgctxt "course_detail__title"
@@ -1255,11 +1259,11 @@ msgstr "Ingrese aquí el plan detallado del curso."
 #: apps/courses/templates/courses/cms/course_detail.html:286
 msgctxt "course_detail__title"
 msgid "Course runs"
-msgstr ""
+msgstr "Sesión de curso"
 
 #: apps/courses/templates/courses/cms/course_detail.html:292
 msgid "No open course runs"
-msgstr ""
+msgstr "Ninguna sesión de curso abierta"
 
 #: apps/courses/templates/courses/cms/course_detail.html:301
 msgctxt "Course runs to be scheduled (plural)"
@@ -1288,13 +1292,17 @@ msgid "\n"
 msgid_plural "\n"
 "                                        This course is part of programs\n"
 "                                    "
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "\n"
+"                                        Este curso hace parte de un programa\n"
+"                                    "
+msgstr[1] "\n"
+"                                        Este curso es parte de programas\n"
+"                                    "
 
 #: apps/courses/templates/courses/cms/course_detail.html:384
 msgctxt "course_detail__title"
 msgid "Course team"
-msgstr ""
+msgstr "Equipo del curso"
 
 #: apps/courses/templates/courses/cms/course_detail.html:389
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:13
@@ -1304,7 +1312,7 @@ msgstr "¿Quiénes son los profesores del equipo del curso?"
 #: apps/courses/templates/courses/cms/course_detail.html:403
 msgctxt "course_detail__title"
 msgid "Organizations"
-msgstr ""
+msgstr "Organizaciones"
 
 #: apps/courses/templates/courses/cms/course_detail.html:408
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:32
@@ -1314,7 +1322,7 @@ msgstr "¿Cuáles son las organizaciones que publican este curso?"
 #: apps/courses/templates/courses/cms/course_detail.html:428
 msgctxt "course_detail__title"
 msgid "License"
-msgstr ""
+msgstr "Licencia"
 
 #: apps/courses/templates/courses/cms/course_detail.html:434
 #: apps/courses/templates/courses/cms/fragment_course_relations.html:50
@@ -1358,14 +1366,18 @@ msgstr "Idiomas"
 msgid "\n"
 "                        %(title)s, from %(start)s to %(end)s\n"
 "                    "
-msgstr ""
+msgstr "\n"
+"                        %(title)s, de %(start)s a %(end)s\n"
+"                    "
 
 #: apps/courses/templates/courses/cms/fragment_course_runs_list.html:17
 #, python-format
 msgid "\n"
 "                        From %(start)s to %(end)s\n"
 "                    "
-msgstr ""
+msgstr "\n"
+"                        De %(start)s a %(end)s\n"
+"                    "
 
 #: apps/courses/templates/courses/cms/fragment_error_detail_template_banner.html:7
 #, python-format
@@ -1374,7 +1386,11 @@ msgid "\n"
 "        <br />\n"
 "        If what you need is a %(model)s page, you need to create it via the wizard and choose \"New %(model)s page\".\n"
 "        "
-msgstr ""
+msgstr "\n"
+"        Falta un objeto %(model)s en esta página %(model)s. Por favor, seleccione otra plantilla de página.\n"
+"        <br />\n"
+"        Si lo que necesita es una página %(model)s, necesita crearlo a través del asistente y seleccione \"Nueva página %(model)s\".\n"
+"        "
 
 #: apps/courses/templates/courses/cms/fragment_organization_main_logo.html:8
 #: apps/courses/templates/courses/cms/fragment_organization_main_logo.html:29
@@ -1398,11 +1414,13 @@ msgstr "logo de la organización"
 msgid "\n"
 "                                        See all courses related to %(organization_title)s\n"
 "                                    "
-msgstr ""
+msgstr "\n"
+"                                        Ver todos los cursos relacionados con %(organization_title)s\n"
+"                                    "
 
 #: apps/courses/templates/courses/cms/organization_list.html:24
 msgid "No organization yet"
-msgstr ""
+msgstr "Aún no hay organización"
 
 #: apps/courses/templates/courses/cms/person_detail.html:41
 msgid "Enter your bio here..."
@@ -1422,15 +1440,17 @@ msgstr "No hay organizaciones asociadas"
 msgid "\n"
 "                                        See all courses related to %(person_title)s\n"
 "                                    "
-msgstr ""
+msgstr "\n"
+"                                        Ver todos los cursos relacionados con %(person_title)s\n"
+"                                    "
 
 #: apps/courses/templates/courses/cms/person_detail.html:139
 msgid "Blogposts"
-msgstr ""
+msgstr "Artículos de blog"
 
 #: apps/courses/templates/courses/cms/person_list.html:21
 msgid "No persons"
-msgstr ""
+msgstr "No hay personas"
 
 #: apps/courses/templates/courses/cms/program_detail.html:34
 msgid "program cover image"
@@ -1444,12 +1464,12 @@ msgstr "No hay programas asociados"
 #. In english the string will be "The course will start in 3 days"
 #: apps/courses/templatetags/extra_tags.py:261
 msgid "The course will start {delay:s}"
-msgstr ""
+msgstr "El curso comenzará {delay:s}"
 
 #: apps/demo/management/commands/create_demo_site.py:382
 #, python-brace-format
 msgid "Run {i:d}"
-msgstr ""
+msgstr "Ejecutar {i:d}"
 
 #: apps/search/cms_toolbars.py:30
 msgid "Regenerate search index..."
@@ -1485,7 +1505,7 @@ msgstr "Inscripciones abiertas"
 
 #: apps/search/filter_definitions/courses.py:390
 msgid "Coming soon"
-msgstr ""
+msgstr "Próximamente"
 
 #: apps/search/filter_definitions/courses.py:391
 msgid "On-going"
@@ -1501,43 +1521,43 @@ msgstr "No está autorizado para administrar el índice de búsqueda."
 
 #: apps/search/views.py:28
 msgid "The search index was successfully bootstrapped"
-msgstr ""
+msgstr "El índice de búsqueda fue impulsado con éxito"
 
 #: plugins/glimpse/cms_plugins.py:24
 msgid "Glimpse"
-msgstr ""
+msgstr "Vista previa"
 
 #: plugins/glimpse/cms_plugins.py:29
 msgid "Link settings"
-msgstr ""
+msgstr "Configuración de enlace"
 
 #: plugins/glimpse/defaults.py:22
 msgid "Square card"
-msgstr ""
+msgstr "Tarjeta cuadrada"
 
 #: plugins/glimpse/defaults.py:24
 msgid "Quote"
-msgstr ""
+msgstr "Citación"
 
 #: plugins/glimpse/defaults.py:25
 msgid "Half row"
-msgstr ""
+msgstr "Media fila"
 
 #: plugins/glimpse/defaults.py:26
 msgid "Full row"
-msgstr ""
+msgstr "Fila completa"
 
 #: plugins/glimpse/models.py:22 plugins/nesteditem/models.py:20
 msgid "Variant"
-msgstr ""
+msgstr "Variante"
 
 #: plugins/glimpse/models.py:28 plugins/nesteditem/models.py:24
 msgid "Form factor variant"
-msgstr ""
+msgstr "Variante del factor de forma"
 
 #: plugins/glimpse/models.py:32
 msgid "image"
-msgstr ""
+msgstr "imagen"
 
 #: plugins/glimpse/models.py:37 plugins/large_banner/models.py:52
 #: plugins/nesteditem/models.py:18
@@ -1546,39 +1566,39 @@ msgstr "Contenido"
 
 #: plugins/glimpse/models.py:39
 msgid "External URL"
-msgstr ""
+msgstr "URL externa"
 
 #: plugins/glimpse/models.py:43
 msgid "Make the glimpse as a link with an external URL."
-msgstr ""
+msgstr "Configurar la vista previa como un enlace con una URL externa."
 
 #: plugins/glimpse/models.py:46
 msgid "Internal URL"
-msgstr ""
+msgstr "URL interna"
 
 #: plugins/glimpse/models.py:50
 msgid "Make the glimpse as a link with an internal (page) URL."
-msgstr ""
+msgstr "Configurar la vista previa como un enlace con una URL interna (página)."
 
 #: plugins/html_sitemap/cms_plugins.py:59 plugins/html_sitemap/models.py:59
 msgid "HTML Sitemap"
-msgstr ""
+msgstr "Mapa del sitio HTML"
 
 #: plugins/html_sitemap/cms_plugins.py:72
 msgid "Press save to create a site map. You will then be able to add a child plugin for each subtree in your sitemap."
-msgstr ""
+msgstr "Haga clic en guardar para crear un mapa del sitio. Luego podrá añadir un plugin hijo para cada subárbol en su mapa del sitio."
 
 #: plugins/html_sitemap/cms_plugins.py:82
 msgid "HTML sitemap page"
-msgstr ""
+msgstr "Página del mapa del sitio HTML"
 
 #: plugins/html_sitemap/models.py:25
 msgid "root page"
-msgstr ""
+msgstr "página raíz"
 
 #: plugins/html_sitemap/models.py:27
 msgid "This page will be at the root of your sitemap (or its children if the \"include root page\" flag is unticked)."
-msgstr ""
+msgstr "Esta página estará en la raíz del mapa del sitio (o sus hijos si la bandera \"incluir página raíz\" está desmarcada)."
 
 #: plugins/html_sitemap/models.py:34
 msgid "max depth"
@@ -1586,15 +1606,15 @@ msgstr "profundidad máxima"
 
 #: plugins/html_sitemap/models.py:36
 msgid "Limit the level of nesting that your sitemap will contain below this page. An empty field or 0 equals to no limit."
-msgstr ""
+msgstr "Limite el nivel de anidación que su mapa del sitio contendrá debajo de esta página. Un campo vacío o 0 es igual a ningún límite."
 
 #: plugins/html_sitemap/models.py:44
 msgid "in navigation"
-msgstr ""
+msgstr "en navegación"
 
 #: plugins/html_sitemap/models.py:46
 msgid "Tick to exclude from sitemap the pages that are excluded from navigation."
-msgstr ""
+msgstr "Marque para excluir del mapa del sitio las páginas que están excluidas de la navegación."
 
 #: plugins/html_sitemap/models.py:51
 msgid "include root page"
@@ -1602,27 +1622,27 @@ msgstr "incluir página raíz"
 
 #: plugins/html_sitemap/models.py:53
 msgid "Tick to include the root page and its descendants. Untick to include only its descendants."
-msgstr ""
+msgstr "Marque para incluir la página raíz y sus descendientes. Desmarque para incluir sólo sus descendientes."
 
 #: plugins/html_sitemap/models.py:60
 msgid "HTML Sitemaps"
-msgstr ""
+msgstr "Mapas de sitio HTML"
 
 #: plugins/html_sitemap/models.py:66
 msgid "Sitemap"
-msgstr ""
+msgstr "Mapa del sitio"
 
 #: plugins/large_banner/cms_plugins.py:26
 msgid "Large Banner"
-msgstr ""
+msgstr "Gran banner"
 
 #: plugins/large_banner/cms_plugins.py:34
 msgid "Medias"
-msgstr ""
+msgstr "Medias"
 
 #: plugins/large_banner/defaults.py:12
 msgid "Hero introduction"
-msgstr ""
+msgstr "Introducción"
 
 #: plugins/large_banner/models.py:31
 msgid "background image"
@@ -1634,75 +1654,75 @@ msgstr "Plantilla"
 
 #: plugins/large_banner/models.py:50
 msgid "Choose template to render plugin."
-msgstr ""
+msgstr "Elija la plantilla para proveer el plugin."
 
 #: plugins/large_banner/templates/richie/large_banner/hero-intro.html:17
 msgid "Search in our courses"
-msgstr ""
+msgstr "Buscar en nuestros cursos"
 
 #: plugins/large_banner/templates/richie/large_banner/hero-intro.html:24
 msgid "Explore our catalog"
-msgstr ""
+msgstr "Explore nuestro catálogo"
 
 #: plugins/lti_consumer/cms_plugins.py:27
 msgid "LTI consumer"
-msgstr ""
+msgstr "Consumidor LTI"
 
 #: plugins/lti_consumer/defaults.py:7
 msgid "Custom provider configuration"
-msgstr ""
+msgstr "Configuración de proveedor personalizado"
 
 #: plugins/lti_consumer/forms.py:19
 msgid "shared secret"
-msgstr ""
+msgstr "secreto compartido"
 
-#: plugins/lti_consumer/forms.py:71
+#: plugins/lti_consumer/forms.py:78
 msgid "The url is not valid for this provider. It should be of the form \"{:s}\"."
-msgstr ""
+msgstr "La url no es válida para este proveedor. Debería comenzar con \"{:s}\"."
 
-#: plugins/lti_consumer/forms.py:77
+#: plugins/lti_consumer/forms.py:84
 msgid "The url is not valid for this provider. It should start with \"{:s}\"."
-msgstr ""
+msgstr "La url no es válida para este proveedor. Debería comenzar con \"{:s}\"."
 
-#: plugins/lti_consumer/forms.py:90
+#: plugins/lti_consumer/forms.py:97
 msgid "Please choose a predefined provider, or fill fields below"
-msgstr ""
+msgstr "Por favor, elija un proveedor predefinido, o rellene los campos a continuación"
 
-#: plugins/lti_consumer/forms.py:93
+#: plugins/lti_consumer/forms.py:100
 msgid "Please choose a predefined provider above, or fill this field"
-msgstr ""
+msgstr "Por favor, elija un proveedor predefinido arriba, o rellene este campo"
 
-#: plugins/lti_consumer/forms.py:99
+#: plugins/lti_consumer/forms.py:106
 msgid "Please fill this field"
-msgstr ""
+msgstr "Por favor, rellene este campo"
 
-#: plugins/lti_consumer/models.py:27
+#: plugins/lti_consumer/models.py:28
 msgid "LTI url"
-msgstr ""
+msgstr "url LTI"
 
-#: plugins/lti_consumer/models.py:29
+#: plugins/lti_consumer/models.py:30
 msgid "For a predefined provider, leave this field empty for uploading new content."
-msgstr ""
+msgstr "Para un proveedor predefinido, deje este campo vacío para cargar nuevo contenido."
 
-#: plugins/lti_consumer/models.py:35
+#: plugins/lti_consumer/models.py:36
 msgid "Predefined LTI provider"
-msgstr ""
+msgstr "Proveedor de LTI predefinido"
 
-#: plugins/lti_consumer/models.py:40
+#: plugins/lti_consumer/models.py:41
 msgid "Please choose a predefined provider or fill fields below."
-msgstr ""
+msgstr "Por favor, elija un proveedor predefinido, o rellene los campos a continuación."
 
 #: plugins/nesteditem/cms_plugins.py:24
 msgid "Nested item"
-msgstr ""
+msgstr "Artículo anidado"
 
 #: plugins/nesteditem/defaults.py:12
 msgid "List"
-msgstr ""
+msgstr "Lista"
 
 #: plugins/nesteditem/defaults.py:12
 msgid "Accordion"
-msgstr ""
+msgstr "Acordión"
 
 #: plugins/plain_text/cms_plugins.py:29
 msgid "Plain text"
@@ -1718,39 +1738,39 @@ msgstr "Sección"
 
 #: plugins/section/defaults.py:12
 msgid "Primary scheme"
-msgstr ""
+msgstr "Esquema primario"
 
 #: plugins/section/defaults.py:13
 msgid "Secondary scheme"
-msgstr ""
+msgstr "Esquema secundario"
 
 #: plugins/section/defaults.py:14
 msgid "Tertiary scheme"
-msgstr ""
+msgstr "Esquema terciario"
 
 #: plugins/section/defaults.py:15
 msgid "Quaternary scheme"
-msgstr ""
+msgstr "Esquema cuaternario"
 
 #: plugins/section/defaults.py:16
 msgid "Quinary scheme"
-msgstr ""
+msgstr "Esquema Quinario"
 
 #: plugins/section/defaults.py:17
 msgid "Senary scheme"
-msgstr ""
+msgstr "Esquema senario"
 
 #: plugins/section/defaults.py:18
 msgid "Septenary scheme"
-msgstr ""
+msgstr "Esquema septenario"
 
 #: plugins/section/defaults.py:19
 msgid "Item tiles"
-msgstr ""
+msgstr "Mosaicos de objetos"
 
 #: plugins/section/models.py:28
 msgid "Optional template for custom look."
-msgstr ""
+msgstr "Plantilla opcional para aspecto personalizado."
 
 #: plugins/simple_picture/cms_plugins.py:27
 msgid "Image"
@@ -1762,7 +1782,7 @@ msgstr "Texto simple"
 
 #: plugins/simple_text_ckeditor/models.py:22
 msgid "body"
-msgstr ""
+msgstr "cuerpo"
 
 #: plugins/simple_text_ckeditor/validators.py:19
 #, python-format
