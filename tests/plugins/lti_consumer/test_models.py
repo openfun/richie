@@ -45,7 +45,7 @@ class LTIConsumerModelsTestCase(TestCase):
         )
 
     def test_lti_consumer_models_inline_ratio_max(self):
-        """The "inline_ratio" field should not accept values bigger than 1"""
+        """The "inline_ratio" field should not accept values bigger than 10"""
         instance = LTIConsumerFactory(inline_ratio=10.01)
 
         with self.assertRaises(ValidationError) as context:
