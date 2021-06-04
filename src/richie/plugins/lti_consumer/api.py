@@ -1,11 +1,11 @@
 """Declare API endpoints for LTI Consumer Plugin"""
 from django.core.cache import caches
 from django.core.cache.backends.base import InvalidCacheBackendError
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from rest_framework.response import Response
 
 from . import models
 
@@ -28,18 +28,30 @@ class LTIConsumerViewsSet(viewsets.GenericViewSet):
             - is_automatic_resizing: boolean to control automatic resizing
 
         """
+        cache_key = f"lti_consumer_plugin__pk_{pk}"
         edit = request.toolbar and request.toolbar.edit_mode_active
-        cache_key = f"lti_consumer_plugin__pk_{pk}__edit_{edit}"
 
-        try:
-            cache = caches["memory_cache"]
-            response = cache.get(cache_key)
-            if response is not None:
-                return Response(response)
-        except InvalidCacheBackendError:
+        # Send response from cache only if edition is off
+        if edit:
             cache = None
+        else:
+            try:
+                cache = caches["memory_cache"]
+            except InvalidCacheBackendError:
+                cache = None
+            else:
+                response = cache.get(cache_key)
+                if response is not None:
+                    return JsonResponse(response)
 
         plugin = get_object_or_404(models.LTIConsumer, pk=pk)
+
+        # If edition is on, check permissions to make sure it is also allowed
+        # before granting the instructor role
+        edit = edit and plugin.placeholder.has_change_plugin_permission(
+            request.user, plugin
+        )
+
         response = {
             "is_automatic_resizing": plugin.lti_provider.get(
                 "is_automatic_resizing", True
@@ -55,4 +67,4 @@ class LTIConsumerViewsSet(viewsets.GenericViewSet):
             # lti oauth credentials are stale after this delay.
             cache.set(cache_key, response, 5 * 60)
 
-        return Response(response)
+        return JsonResponse(response)

@@ -19,6 +19,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix permissions on the LTI consumer plugin when granting institutor role
 - Allow configuring the inline ratio and auto-resizing for manually-defined
   LTIConsumerPlugin instances
 - Use a unique name to LTIConsumerPlugin iframes to allow several plugins on the
