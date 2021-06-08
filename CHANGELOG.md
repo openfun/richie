@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Do not bind username to LTI Consumer if user is logged in
+
 ## [2.7.0] - 2021-06-04
 
 ### Added
