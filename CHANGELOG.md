@@ -8,9 +8,11 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [2.7.1] - 2021-06-08
+
 ### Fixed
 
-- Do not bind username to LTI Consumer if user is logged in
+- Stop sending username in LTI consumer requests as it breaks the signature
 
 ## [2.7.0] - 2021-06-04
 
@@ -1325,7 +1327,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.7.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.7.1...master
+[2.7.1]: https://github.com/openfun/richie/compare/v2.7.0...v2.7.1
 [2.7.0]: https://github.com/openfun/richie/compare/v2.6.0...v2.7.0
 [2.6.0]: https://github.com/openfun/richie/compare/v2.5.0...v2.6.0
 [2.5.0]: https://github.com/openfun/richie/compare/v2.4.0...v2.5.0
