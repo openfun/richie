@@ -4,7 +4,7 @@ title: Getting started with Richie
 sidebar_label: Quick start
 ---
 
-If you're just looking for a quick preview of `Richie`, you can take a look and have a tour of `Richie` on our dedicated [demo site](https://demo.richie.education).
+If you're looking for a quick preview of `Richie`, you can take a look and have a tour of `Richie` on our dedicated [demo site](https://demo.richie.education).
 
 Login/password are `admin`/`admin`. The database is regularly flushed.
 
@@ -69,25 +69,18 @@ You can create a basic demo site by running:
     $ make demo-site
 
 Note that if you don't create the demo site and start from a blank CMS, you will get some errors
-requesting you to create some required root pages. So it is easier as a first approach to test the
-CMS with the demo site.
+requesting you to create some required root pages. So it is easier as a first approach to test the CMS with the demo site.
 
 You should be able to view the site at [localhost:8070](http://localhost:8070)
 
-### Basic - Connecting Richie to OpenEdx
+## Connecting Richie to an LMS
 
-This project is pre-configured to connect with an OpenEdx instance started with
-[OpenEdx Docker](https://github.com/openfun/openedx-docker], which provides a ready to use
-docker-compose stack of OpenEdx in several flavors. Head over to
-[OpenEdx Docker README](https://github.com/openfun/openedx-docker#readme) for instructions on how
-to bootstrap an instance.
+It is possible to use Richie as a catalogue aggregating courses from one or more LMS
+without any specific connection. In this case, each course run in the catalogue points to
+a course on the LMS, and the LMS points back to the catalogue to browse courses.
 
-Just start apps with `make run`.
+This approach is used for example on https://www.fun-campus.fr or https://catalogue.edulib.org.
 
-Richie should respond on `http://localhost:8070` and OpenEdx on `http://localhost:8073`.
-
-### Advanced - Connecting Richie to OpenEdx
-
-If you want users to enroll on courses in OpenEdx directly from Richie via API calls, you should
-read [the advanced guide](lms-connection.md#connecting-richie-and-openedx-over-tls) to connect
-Richie to OpenEdx over TLS.
+For a seamless user experience, it is possible to connect a Richie instance to an OpenEdX instance
+(or some other LMS like Moodle at the cost of minor adaptations), in several ways that we explain in
+the [LMS connection guide](lms-connection).
