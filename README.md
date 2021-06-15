@@ -28,7 +28,7 @@ Among the features that `Richie` offers out of the box:
 
 ## Quick preview
 
-If you're just looking for a quick preview of `Richie`, you can take a look and have a tour of
+If you're looking for a quick preview of `Richie`, you can take a look and have a tour of
 `Richie` on our dedicated [demo site](https://demo.richie.education).
 
 It is connected back-to-back with a demo of OpenEdX running on

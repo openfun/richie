@@ -290,9 +290,6 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
                 environ_name="EDX_COURSE_REGEX",
                 environ_prefix=None,
             ),
-            # Synchronization
-            "COURSE_RUN_SYNC_NO_UPDATE_FIELDS": [],
-            "DEFAULT_COURSE_RUN_SYNC_MODE": "sync_to_public",
             # React frontend
             "JS_BACKEND": values.Value(
                 "base", environ_name="EDX_JS_BACKEND", environ_prefix=None
@@ -302,6 +299,9 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
                 environ_name="EDX_JS_COURSE_REGEX",
                 environ_prefix=None,
             ),
+            # Course runs synchronization
+            "COURSE_RUN_SYNC_NO_UPDATE_FIELDS": [],
+            "DEFAULT_COURSE_RUN_SYNC_MODE": "sync_to_public",
         }
     ]
     RICHIE_COURSE_RUN_SYNC_SECRETS = values.ListValue([])

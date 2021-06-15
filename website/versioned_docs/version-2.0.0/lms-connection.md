@@ -78,7 +78,7 @@ to make CORS XHR requests.
 If you want to develop with OpenEdx as `RICHIE_LMS_BACKENDS` of Richie, you need to enable TLS for your
 development servers. Both Richie and OpenEdx use Nginx as reverse proxy that ease the SSL setup.
 
-##### 1. Install mkcert ans its Certificate Authority
+##### 1. Install mkcert and its Certificate Authority
 
 First you will need to install mkcert and its Certificate Authority.
 [mkcert](https://mkcert.org/) is a little util to ease local certificate generation.

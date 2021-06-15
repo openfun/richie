@@ -1,121 +1,91 @@
 ---
 id: lms-connection
-title: Connecting Richie with an LMS
+title: Connecting Richie with one or more LMS
 sidebar_label: LMS connection
 ---
 
-`richie` can be connected to one or more Learning Management Systems (LMS) like OpenEdx, Moodle
-or Canvas for a seamless experience between browsing the course catalog on `richie` and following
-the course itself on the LMS.
+## Connecting Richie to an LMS
 
-In order to connect `richie` with a LMS, there is an API bridge
-to synchronize course information and enrollments.
+Richie can be connected to an LMS in several ways, ranging from SSO to a fully integrated
+seamless experience.
 
-### API bridge
+As of today, each approach has been implemented for OpenEdX but the same could be done for
+other LMSes like Moodle, at the cost of minor adaptations.
 
-The `APIHandler` utility acts as a proxy that routes queries to the correct LMS backend API,
-based on a regex match on the URL of the course.
 
-```python
-RICHIE_LMS_BACKENDS=[
-    {
-        "BASE_URL": "https://www.lms-example2.org",
-        "BACKEND": "richie.apps.courses.lms.edx.EdXLMSBackend",
-        "COURSE_REGEX": r"^.*/courses/(?P<course_id>.*)/course/?$",
-        "JS_BACKEND": "openedx-hawthorn",
-        "JS_COURSE_REGEX": r"^.*/course/(.*)$",
-    },
-]
-```
+### 1. Displaying connection status
 
-For information about how to generate an API access on your OpenEdx instance, refer to the
-documentation.
+OpenEdX can be configured to allow CORS requests. Doing so allows Richie to retrieve a user's
+connection status from OpenEdx and display the user's profile information directly on the Richie
+site: username, dashboard url, etc.
 
-_Note: `JS_BACKEND` accepts `base`, `openedx-dogwood` and `openedx-hawthorn` values._
-_We have to implement several interfaces to be compatible to OpenEdx API:_
-_`openedx-dogwood` has been tested with Dogwood and Eucalyptus versions._
-_`openedx-hawthorn` has been tested with Hawthorn and Ironwood versions._
-_If you encounter an issue with these API interfaces or need to have a new interface, propose a PR_
-_or create an issue on our repository_
+In this approach, a user visiting your Richie site and trying to signup or login, is sent to the
+OpenEdX site for authentication and is redirected back to the Richie site upon successful login.
 
-## Connecting Richie and OpenEdx over TLS
+You can see this in action on https://www.fun-mooc.fr.
 
-#### Purpose
+We provide detailed instructions on
+[how to configure displaying OpenEdX connection status in Richie](displaying-connection-status.md).
 
-About the default configuration, if you check `RICHIE_LMS_BACKENDS` settings in `env.d/development`
-you will see that we use `base.BaseLMSBackend` as `RICHIE_LMS_BACKENDS`.
-In fact, this base backend uses session storage to fake enrollment to course runs.
 
-Maybe are you asking why? Because, to make Create/Update/Delete requests from an external domain,
-OpenEdx requires the use of a CORS CSRF Cookie. This cookie is flagged as secure, that means we are
-not able to use it without a SSL connection.
+### 2. Seamless enrollment
 
-So if you need to use the OpenEdx API to Create, Update or Delete data from Richie, you have to
-enable SSL on Richie and OpenEdx on your development environment. So we need a little bit more 
-configuration. Below, we explain how to serve OpenEdx and Richie over SSL.
+Thanks to OpenEdX's enrollment API, it is possible to let users enroll on course runs without
+leaving Richie.
 
-#### Run OpenEdx and Richie on the same domain
+You can see this in action on https://www.fun-mooc.fr.
 
-Richie and OpenEdx must be on the same domain to work properly (Cookie security policy blocks
-secure cookie sharing on localhost) To do that you have to edit your hosts file 
-(_.e.g_ `/etc/hosts` on a \*NIX system) to alias a domain `local.dev` with
-two subdomains `richie` and `edx` to localhost:
+> This feature requires that Richie and OpenEdX be hosted on sibling domains i.e. domains that
+> are both subdomains of the same root domain, e.g. `richie.example.com` and `lms.example.com`.
 
-```
-# /etc/hosts
-127.0.0.1 richie.local.dev
-127.0.0.1 edx.local.dev
-```
+You should read our guide on [how to use OpenEdX as LMS backend for Richie](lms-backends).
 
-Once this has been done, the OpenEdx app should respond on http://edx.local.dev:8073
-and Richie should respond on http://richie.local.dev:8070 and should be able
-to make CORS XHR requests.
 
-#### Enable TLS
+### 3. Synchronizing course runs details
 
-If you want to develop with OpenEdx as `RICHIE_LMS_BACKENDS` of Richie, you need to enable TLS for your
-development servers. Both Richie and OpenEdx use Nginx as reverse proxy that ease the SSL setup.
+Course runs in Richie can be handled manually, filling all fields via the DjangoCMS front-end
+editing interface. But a better way to handle course runs is to synchronize them automatically
+from your LMS using the course run synchronization API.
 
-##### 1. Install mkcert ans its Certificate Authority
+Please refer to our guide on [how to synchronize course runs between Richie and OpenEdx][sync]
 
-First you will need to install mkcert and its Certificate Authority.
-[mkcert](https://mkcert.org/) is a little util to ease local certificate generation.
+### 4. Joanie, the enrollment manager
 
-###### a. Install `mkcert` on your local machine
+For more advanced use cases, we have started a new project called [Joanie] which acts as an
+enrollment manager for Richie.
 
-- [Read the doc](https://github.com/FiloSottile/mkcert)
-- Linux users who do not want to use linuxbrew : [read this article](https://www.prado.lt/how-to-create-locally-trusted-ssl-certificates-in-local-development-environment-on-linux-with-mkcert).
+Authentication in Joanie is done via JWT Tokens for maximum flexibility and decoupling in
+identity management.
 
-###### b. Install Mkcert Certificate Authority
+The project started early 2021, but over time, Joanie will handle:
 
-`mkcert -install`
+- paid enrollments / certification
+- micro-credentials
+- user dashboard
+- cohorts management (academic or B2B)
+- multi-LMS catalogs
+- time based enrollment
 
-> If you do not want to use mkcert, you can generate [CA and certificate with openssl](https://www.freecodecamp.org/news/how-to-get-https-working-on-your-local-development-environment-in-5-minutes-7af615770eec/).
-> You will have to put your certificate and its key in `docker/files/etc/nginx/ssl` directory
-> and named them `richie.local.dev.pem` and `richie.local.dev.key`.
 
-##### 2. On Richie
+## Development
 
-To setup SSL conf with mkcert, just run:
-`bin/setup-ssl`
+For development purposes, the docker-compose project provided on
+[Richie's code repository](https://github.com/openfun/richie) is pre-configured to connect
+with an OpenEdx instance started with
+[OpenEdx Docker](https://github.com/openfun/openedx-docker), which provides a ready-to-use
+docker-compose stack of OpenEdx in several flavors. Head over to
+[OpenEdx Docker README](https://github.com/openfun/openedx-docker#readme) for instructions on how to bootstrap an OpenEdX instance.
 
-> If you do not want to use mkcert, read instructions above to generate Richie certificate then
-> run `bin/setup-ssl --no-cert` instead.
+Now, start both the OpenEdX and Richie projects separately with `make run`.
 
-##### 3. On OpenEdx
+Richie should respond on `http://localhost:8070`, OpenEdx on `http://localhost:8073` and both
+apps should be able to communicate with each other via the network bridge defined in
+docker-compose.
 
-In the same way, about OpenEdx, you also have to update the Nginx configuration to enable SSL.
-Read how to [enable SSL on OpenEdx](https://github.com/openfun/openedx-docker#ssl).
+If you want to activate [seamless enrollment](#2-seamless-enrollment) locally for development,
+you will need to set-up TLS domains for both Richie and OpenEdX. To do this, head over to our
+guide on [setting-up TLS connections for Richie and OpenEdX](tls-connection).
 
-Once this has been done, the OpenEdx app should respond on https://edx.local.dev:8073
-and Richie should respond on https://richie.local.dev:8070 and should be able
-to share cookies with OpenEdx to allow CORS CSRF Protected XHR requests.
 
-##### 4. Start Richie and OpenEdx over SSL
-
-Now, OpenEdx app should respond on https://edx.local.dev:8073, and Richie
-on https://richie.local.dev:8070 without browser warning about the certificate validity.
-
-You need to follow these steps once. If you want to use SSL later, just use `make run-ssl` to run
-OpenEdx and Richie apps.
-Of course, you can still run apps without ssl by using `make run`.
+[Joanie]: https://github.com/openfun/joanie
+[sync]: synchronizing-course-runs
