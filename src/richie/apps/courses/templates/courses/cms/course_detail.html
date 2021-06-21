@@ -16,6 +16,7 @@
     <meta property="og:image" content="{% thumbnail plugins.0.picture 300x170 crop upscale subject_location=plugins.0.picture.subject_location %}">
 {% endblock meta_rdfa_context %}
 
+{% block body_rdfa %} vocab="https://schema.org/" typeof="Course"{% endblock body_rdfa %}
 
 {% block subheader %}
 <div class="subheader subheader--alternative">
@@ -49,11 +50,9 @@
                     {% endblock categories %}
 
                     {% block title %}
-                    <h1 class="subheader__title">
-                        {% render_model current_page "title" %}
-                    </h1>
+                    <h1 class="subheader__title" property="name">{% render_model current_page "title" %}</h1>
                     {% if course.code or current_page.publisher_is_draft %}
-                        <div class="subheader__code">
+                        <div class="subheader__code" property="courseCode" content="{{ course.code }}">
                             {% trans "Ref. " %}{% render_model course "code" "code,is_listed" "" "default:'...'" %}
                         </div>
                     {% endif %}
@@ -78,7 +77,9 @@
                                     <svg role="img" class="characteristics__icon" aria-hidden="true">
                                         <use href="#icon-clock" />
                                     </svg>
-                                    <span class="characteristics__term">{% trans "Effort:" %} {{ instance.get_effort_display|default:"NA" }}</span>
+                                    <span class="characteristics__term" property="timeRequired" content="{{ current_page.course.pt_effort }}">
+                                        {% trans "Effort:" %} {{ instance.get_effort_display|default:"NA" }}
+                                    </span>
                                 </li>
                                 {% endif %}
                                 {% if instance.get_pace_display or current_page.publisher_is_draft %}
@@ -96,11 +97,7 @@
                         {% endblock synopsis %}
 
                         {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_introduction" %}
-                            {% with header_level=3 %}
-                            {% placeholder "course_introduction" or %}
-                                <p>{% trans 'Enter here a introduction of your course.' %}</p>
-                            {% endplaceholder %}
-                            {% endwith %}
+                            <div property="description">{% placeholder "course_introduction" or %}<p>{% trans 'Enter here a introduction of your course.' %}</p>{% endplaceholder %}</div>
                         {% endif %}
                     </div>
 
@@ -180,14 +177,16 @@
                 {% endblock snapshot %}
 
                 {% block cover %}
+                    {% get_placeholder_plugins "course_cover" as cover_plugins %}
+                    <meta property="image" content="{% thumbnail cover_plugins.0.picture 300x170 crop upscale subject_location=cover_plugins.0.picture.subject_location %}" />
                     {% if current_page.publisher_is_draft %}
                     <div class="course-detail__block course-detail__cover">
                         <div class="course-detail__row">
                             <h2 class="course-detail__title">{% trans 'Glimpse cover' %}</h2>
-                            {% get_placeholder_plugins "course_cover" as plugins or %}
-                            <p class="course-detail__empty">{% trans 'Add an image for course cover on its glimpse.' %}</p>
-                            {% endget_placeholder_plugins %}
-                            {% blockplugin plugins.0 %}
+                            {% if not cover_plugins %}
+                                <p class="course-detail__empty">{% trans 'Add an image for course cover on its glimpse.' %}</p>
+                            {% endif %}
+                            {% blockplugin cover_plugins.0 %}
                             <img
                                 src="{% thumbnail instance.picture 300x170 crop upscale subject_location=instance.picture.subject_location %}"
                                 srcset="
@@ -220,7 +219,9 @@
                         {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_description" %}
                         <div class="course-detail__row course-detail__description">
                             <h2 class="course-detail__title">{% blocktrans context "course_detail__title" %}Description{% endblocktrans %}</h2>
-                            {% placeholder "course_description" %}
+                            <div{% if current_page|is_empty_placeholder:"course_introduction" %} property="description"{% endif %}>
+                                {% placeholder "course_description" %}
+                            </div>
                         </div>
                         {% endif %}
                     {% endblock description %}
@@ -240,9 +241,11 @@
                         {% if current_page.publisher_is_draft or not current_page|is_empty_placeholder:"course_prerequisites" %}
                             <section class="course-detail__prerequisites course-detail__row course-detail__prerequisites">
                                 <h2 class="course-detail__title">{% blocktrans context "course_detail__title" %}Prerequisites{% endblocktrans %}</h2>
+                                <div property="coursePrerequisites">
                                 {% placeholder "course_prerequisites" or %}
                                     <p>{% trans 'What are the prerequisites to follow this course?' %}</p>
                                 {% endplaceholder %}
+                                </div>
                             </section>
                         {% endif %}
                     {% endblock prerequisites %}
@@ -278,7 +281,7 @@
             </div>
 
             {% block runs %}
-                <div class="course-detail__aside">
+                <div class="course-detail__aside" property="isAccessibleForFree" content="true">
                     {% with runs_dict=course.course_runs_dict %}
                         {% block runs_open %}
                             <div class="course-detail__row course-detail__runs course-detail__runs--open">
@@ -438,7 +441,7 @@
 
                     <div class="course-detail__item">
                         <h3 class="course-detail__label">{% trans 'License for the content created by course participants' %}</h3>
-                        {% with header_level=4 %}
+                        {% with header_level=4 is_license_property=False %}
                             {% placeholder "course_license_participation" page or %}
                                 <p>{% trans 'What is the license for the content created by course participants?' %}</p>
                             {% endplaceholder %}

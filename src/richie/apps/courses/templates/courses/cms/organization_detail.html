@@ -10,6 +10,7 @@
     {% endblockplugin %}
 {% endblock meta_rdfa_context %}
 
+{% block body_rdfa %} vocab="https://schema.org/" typeof="Organization"{% endblock body_rdfa %}
 
 {% block content %}{% spaceless %}
 {% with organization=current_page.organization header_level=2 %}

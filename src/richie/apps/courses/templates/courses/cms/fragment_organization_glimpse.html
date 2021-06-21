@@ -3,7 +3,13 @@
 
 {% with organization_page=organization.extended_object organization_variant=organization_variant|default:"glimpse" %}
 {% if organization_variant == "row" %}
-    <a class="organization-{{ organization_variant }}{% if organization_page.publisher_is_draft is True %} organization-{{ organization_variant }}--draft{% endif %}" href="{{ organization_page.get_absolute_url }}" title="{{ organization_page.get_title }}">
+    <a
+      class="organization-{{ organization_variant }}{% if organization_page.publisher_is_draft is True %} organization-{{ organization_variant }}--draft{% endif %}"
+      href="{{ organization_page.get_absolute_url }}"
+      title="{{ organization_page.get_title }}"
+      property="{{ person_property|default:'contributor' }}" typeof="CollegeOrUniversity"
+    >
+        <meta property="url" content="{{ SITE.web_url }}{{ organization_page.get_absolute_url }}"/>
         <div class="organization-{{ organization_variant }}__logo">
             {% get_page_plugins "logo" organization_page as plugins or %}
                 <img src="{% static "richie/images/empty/organization_logo.png" %}"
@@ -20,25 +26,23 @@
                     "
                     sizes="(min-width: 576px) 50vw, (min-width: 1200px) 25vw, 100vw"
                     alt=""
+                    property="logo"
                 />
             {% endblockplugin %}
         </div>
         <div class="organization-{{ organization_variant }}__content">
-            <div class="organization-{{ organization_variant }}__title">
-                {{ organization_page.get_title }}
-            </div>
-            <div class="organization-{{ organization_variant }}__excerpt">
-                {% get_page_plugins "description" organization_page as plugins or %}
-                    {% trans "Description" %}
-                {% endget_page_plugins %}
-                {% blockplugin plugins.0 %}
-                    {{ instance.body|truncatewords_html:40|safe }}
-                {% endblockplugin %}
-            </div>
+            <div class="organization-{{ organization_variant }}__title" property="name">{{ organization_page.get_title }}</div>
+            <div class="organization-{{ organization_variant }}__excerpt" property="description">{% get_page_plugins "description" organization_page as plugins or %}{% trans "Description" %}{% endget_page_plugins %}{% blockplugin plugins.0 %}{{ instance.body|truncatewords_html:40|safe }}{% endblockplugin %}</div>
         </div>
     </a>
 {% else %}
-    <a class="organization-{{ organization_variant }}{% if organization_page.publisher_is_draft is True %} organization-{{ organization_variant }}--draft{% endif %}" href="{{ organization_page.get_absolute_url }}" title="{{ organization_page.get_title }}">
+    <a
+      class="organization-{{ organization_variant }}{% if organization_page.publisher_is_draft is True %} organization-{{ organization_variant }}--draft{% endif %}"
+      href="{{ organization_page.get_absolute_url }}"
+      title="{{ organization_page.get_title }}"
+      property="{{ person_property|default:'contributor' }}" typeof="CollegeOrUniversity"
+    >
+        <meta property="url" content="{{ SITE.web_url }}{{ organization_page.get_absolute_url }}"/>
         <div class="organization-{{ organization_variant }}__logo">
             {% get_page_plugins "logo" organization_page as plugins or %}
                 <img src="{% static "richie/images/empty/organization_logo.png" %}"
@@ -55,13 +59,12 @@
                     "
                     sizes="(min-width: 576px) 50vw, (min-width: 1200px) 25vw, 100vw"
                     alt=""
+                    property="logo"
                 />
             {% endblockplugin %}
         </div>
         <div class="organization-{{ organization_variant }}__content">
-            <div class="organization-{{ organization_variant }}__title">
-                {{ organization_page.get_title }}
-            </div>
+            <div class="organization-{{ organization_variant }}__title" property="name">{{ organization_page.get_title }}</div>
         </div>
     </a>
 {% endif %}

@@ -52,7 +52,7 @@
         <link rel="stylesheet" type="text/css" href="{% static 'richie/css/main.css' %}">
         {% endblock css_links %}
     </head>
-    <body>
+    <body{% block body_rdfa %}{% endblock body_rdfa %}>
         {% include "richie/icons.html" %}
         {% cms_toolbar %}
 

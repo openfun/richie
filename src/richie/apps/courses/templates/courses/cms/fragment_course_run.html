@@ -1,13 +1,19 @@
 {% load cms_tags i18n extra_tags %}{% spaceless %}
-<div class="course-detail__run-descriptions">
+<div class="course-detail__run-descriptions" rel="hasCourseInstance" typeof="CourseInstance">
     {% render_model_block run %}
         {% if run.title %}<h3>{{ run.title|capfirst }}</h3>{% endif %}
-        <dl>
+        <dl property="courseMode" content="online mooc">
             <dt>{% trans "Enrollment" %}</dt>
             <dd>
                 {% blocktrans with enrollment_start=run.enrollment_start|date:'DATE_FORMAT'|default:'...' enrollment_end=run.enrollment_end|date:'DATE_FORMAT'|default:'...' %}From {{ enrollment_start }} to {{ enrollment_end }}{% endblocktrans %}
             </dd>
             <dt>{% trans "Course" %}</dt>
+            {% if run.start %}
+            <meta property="startDate" content="{{ run.start|date:'Y-m-d' }}" />
+            {% endif %}
+            {% if run.end %}
+            <meta property="endDate" content="{{ run.end|date:'Y-m-d' }}" />
+            {% endif %}
             <dd>
                 {% blocktrans with start=run.start|date:'DATE_FORMAT'|default:'...' end=run.end|date:'DATE_FORMAT'|default:'...' %}From {{ start }} to {{ end }}{% endblocktrans %}
             </dd>
