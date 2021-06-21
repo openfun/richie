@@ -7,6 +7,7 @@ import re
 from django import forms
 from django.conf import settings
 
+import htmlmin
 from cms.api import add_plugin, create_page
 from cms.test_utils.testcases import CMSTestCase
 
@@ -117,15 +118,25 @@ class PersonPluginTestCase(CMSTestCase):
 
         # Person's portrait should be present
         pattern = (
-            r'<a class="person-glimpse__media" href="{href:s}" tabindex="-1" aria-hidden="true">'
+            r'<a class="person-glimpse__media" href="{href:s}" tabindex="-1" aria-hidden="true" '
+            r'property="url">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*portrait\.jpg__200x200'
-            r'.*alt=""'
+            r'.*alt="" property="image"'
         ).format(href=person_page.get_absolute_url())
-        self.assertIsNotNone(re.search(pattern, str(response.content)))
+        content = (
+            htmlmin.minify(
+                response.content.decode("UTF-8"),
+                reduce_empty_attributes=False,
+                remove_optional_attribute_quotes=False,
+            ),
+        )
+        self.assertIsNotNone(re.search(pattern, str(content)))
 
         # Short bio should be present
         self.assertContains(
-            response, '<div class="person-glimpse__bio">public bio</div>', html=True
+            response,
+            '<div class="person-glimpse__bio" property="description">public bio</div>',
+            html=True,
         )
         self.assertNotContains(response, "draft bio")
 
@@ -133,15 +144,26 @@ class PersonPluginTestCase(CMSTestCase):
         url = page.get_absolute_url(language="fr")
         response = self.client.get(url)
         self.assertContains(response, '<a href="/fr/titre-personne/">', status_code=200)
+
         pattern = (
-            r'<a class="person-glimpse__media" href="{href:s}" tabindex="-1" aria-hidden="true">'
+            r'<a class="person-glimpse__media" href="{href:s}" tabindex="-1" aria-hidden="true" '
+            r'property="url">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*portrait\.jpg__200x200'
-            r'.*alt=""'
+            r'.*alt="" property="image"'
         ).format(href=person_page.get_absolute_url())
-        self.assertIsNotNone(re.search(pattern, str(response.content)))
+        content = (
+            htmlmin.minify(
+                response.content.decode("UTF-8"),
+                reduce_empty_attributes=False,
+                remove_optional_attribute_quotes=False,
+            ),
+        )
+        self.assertIsNotNone(re.search(pattern, str(content)))
 
         self.assertContains(
-            response, '<div class="person-glimpse__bio">résumé public</div>', html=True
+            response,
+            '<div class="person-glimpse__bio" property="description">résumé public</div>',
+            html=True,
         )
 
     def test_cms_plugins_person_render_on_public_page_custom_bio(self):
@@ -294,11 +316,18 @@ class PersonPluginTestCase(CMSTestCase):
         # Person's portrait should be present
         pattern = (
             r'<a class="person-glimpse__media" href="/en/personne-publique/" '
-            r'tabindex="-1" aria-hidden="true">'
+            r'tabindex="-1" aria-hidden="true" property="url">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*portrait\.jpg__200x200'
-            r'.*alt=""'
+            r'.*alt="" property="image"'
         )
-        self.assertIsNotNone(re.search(pattern, str(response.content)))
+        content = (
+            htmlmin.minify(
+                response.content.decode("UTF-8"),
+                reduce_empty_attributes=False,
+                remove_optional_attribute_quotes=False,
+            ),
+        )
+        self.assertIsNotNone(re.search(pattern, str(content)))
 
     def test_cms_plugins_person_fallback_when_published_unpublished(self):
         """

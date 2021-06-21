@@ -7,11 +7,11 @@
     </p>
     <div class="licence-plugin__wrapper">
         <h{{ header_level|default:2 }} class="licence-plugin__title">
-            {% if instance.licence.url %}<a href="{{ instance.licence.url }}">{% endif %}
+            {% if instance.licence.url %}<a href="{{ instance.licence.url }}"{% if is_license_property|default_if_none:True is True %} property="license"{% endif %}>{% endif %}
             {{ instance.licence.name }}
             {% if instance.licence.url %}</a>{% endif %}
         </h{{ header_level|default:2 }}>
-        <div class="licence-plugin__content">
+        <div class="licence-plugin__content"{% if is_license_property|default_if_none:True and not instance.licence.url %} property="license"{% endif %}>
             {{ instance.licence.content|safe }}
         </div>
         {% if instance.description %}

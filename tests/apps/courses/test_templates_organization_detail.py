@@ -352,20 +352,25 @@ class OrganizationCMSTestCase(CMSTestCase):
         """The organization logo should be used as opengraph image."""
         organization = OrganizationFactory(
             fill_logo={"original_filename": "logo.jpg", "default_alt_text": "my logo"},
-            should_publish=True
+            should_publish=True,
         )
         url = organization.extended_object.get_absolute_url()
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
-        print(response.content)
         self.assertContains(response, '<meta property="og:type" content="website" />')
-        self.assertContains(response, f'<meta property="og:url" content="http://example.com{url:s}" />')
+        self.assertContains(
+            response, f'<meta property="og:url" content="http://example.com{url:s}" />'
+        )
         pattern = (
             r'<meta property="og:image" content="http://example.com'
-            r'/media/filer_public_thumbnails/filer_public/.*logo\.jpg__200x113'
+            r"/media/filer_public_thumbnails/filer_public/.*logo\.jpg__200x113"
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
         # No crop allowed so image stays square
-        self.assertContains(response, '<meta property="og:image:width" content="113" />')
-        self.assertContains(response, '<meta property="og:image:height" content="113" />')
+        self.assertContains(
+            response, '<meta property="og:image:width" content="113" />'
+        )
+        self.assertContains(
+            response, '<meta property="og:image:height" content="113" />'
+        )

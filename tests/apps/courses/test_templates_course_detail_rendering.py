@@ -1,7 +1,6 @@
 """
 End-to-end tests for the course detail view
 """
-# pylint: disable=too-many-lines
 import random
 import re
 from datetime import datetime, timedelta
@@ -9,6 +8,7 @@ from datetime import datetime, timedelta
 from django.test.utils import override_settings
 from django.utils import dateformat, timezone
 
+import htmlmin
 import pytz
 from cms.test_utils.testcases import CMSTestCase
 
@@ -24,8 +24,10 @@ from richie.apps.courses.factories import (
 from richie.apps.courses.models import CourseRun
 from richie.apps.demo.utils import pick_image
 
+# pylint: disable=too-many-lines
 
-class CourseCMSTestCase(CMSTestCase):
+
+class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
     """
     End-to-end test suite to validate the content and Ux of the course detail view
 
@@ -43,6 +45,8 @@ class CourseCMSTestCase(CMSTestCase):
         organizations = OrganizationFactory.create_batch(4)
 
         course = CourseFactory(
+            code="12345",
+            effort=[3, "hour"],
             page_title="Very interesting course",
             fill_organizations=organizations,
             fill_categories=categories,
@@ -52,7 +56,7 @@ class CourseCMSTestCase(CMSTestCase):
         # Create an ongoing open course run that will be published (created before
         # publishing the page)
         now = timezone.now()
-        CourseRunFactory(
+        run = CourseRunFactory(
             direct_course=course,
             start=now - timedelta(hours=1),
             end=now + timedelta(hours=2),
@@ -109,12 +113,15 @@ class CourseCMSTestCase(CMSTestCase):
         )
         self.assertContains(
             response,
-            f'<div class="subheader__code">Ref. {course.code:s}</div>',
+            (
+                f'<div class="subheader__code" property="courseCode" content="{course.code:s}">'
+                f"Ref. {course.code:s}</div>"
+            ),
             html=True,
         )
         self.assertContains(
             response,
-            '<h1 class="subheader__title">Very interesting course</h1>',
+            '<h1 class="subheader__title" property="name">Very interesting course</h1>',
             html=True,
         )
 
@@ -159,7 +166,7 @@ class CourseCMSTestCase(CMSTestCase):
         for organization in organizations[:2]:
             self.assertContains(
                 response,
-                '<div class="organization-glimpse__title">{title:s}</div>'.format(
+                '<div class="organization-glimpse__title" property="name">{title:s}</div>'.format(
                     title=organization.extended_object.get_title()
                 ),
                 html=True,
@@ -256,12 +263,15 @@ class CourseCMSTestCase(CMSTestCase):
         )
         self.assertContains(
             response,
-            '<h1 class="subheader__title">Very interesting course</h1>',
+            '<h1 class="subheader__title" property="name">Very interesting course</h1>',
             html=True,
         )
         self.assertContains(
             response,
-            f'<div class="subheader__code">Ref. {course.code:s}</div>',
+            (
+                f'<div class="subheader__code" property="courseCode" content="{course.code:s}">'
+                f"Ref. {course.code:s}</div>"
+            ),
             html=True,
         )
 
@@ -269,16 +279,14 @@ class CourseCMSTestCase(CMSTestCase):
         for organization in organizations[:3]:
             self.assertContains(
                 response,
-                '<div class="organization-glimpse__title">{title:s}</div>'.format(
+                '<div class="organization-glimpse__title" property="name">{title:s}</div>'.format(
                     title=organization.extended_object.get_title()
                 ),
                 html=True,
             )
         # The unpublished organization should not be present on the page
         self.assertNotContains(
-            response,
-            organizations[3].extended_object.get_title(),
-            html=True,
+            response, organizations[3].extended_object.get_title(), html=True
         )
 
         # Draft and published categories should be present on the page
@@ -307,9 +315,7 @@ class CourseCMSTestCase(CMSTestCase):
         )
         # The unpublished category should not be present on the page
         self.assertNotContains(
-            response,
-            categories[3].extended_object.get_title(),
-            html=True,
+            response, categories[3].extended_object.get_title(), html=True
         )
         # The course run should be in the page
         self.assertContains(response, "<dd>English and french</dd>", html=True, count=1)
@@ -344,7 +350,7 @@ class CourseCMSTestCase(CMSTestCase):
 
         self.assertContains(
             response,
-            '<div class="subheader__code">Ref. ...</div>',
+            '<div class="subheader__code" property="courseCode" content="">Ref. ...</div>',
             html=True,
         )
 
@@ -363,7 +369,7 @@ class CourseCMSTestCase(CMSTestCase):
         pattern = (
             r'<div class="course-detail__row course-detail__description">'
             r'<h2 class="course-detail__title">Description</h2>'
-            r'<div class="cms-placeholder'
+            r'<div property="description"><div class="cms-placeholder'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
         pattern = (
@@ -377,9 +383,10 @@ class CourseCMSTestCase(CMSTestCase):
             r'<div class="subheader__content">'
             r'<div class="characteristics">'
             r"<ul.*</ul>"
-            r"</div>"
+            r'</div><div property="description">'
             r'<div class="cms-placeholder'
         )
+
         self.assertIsNotNone(re.search(pattern, str(response.content)))
         pattern = (
             r'<div class="section__items section__items--organizations">'
@@ -431,17 +438,23 @@ class CourseCMSTestCase(CMSTestCase):
         course = CourseFactory(fill_organizations=organizations)
 
         response = self.client.get(course.extended_object.get_absolute_url())
+        content = htmlmin.minify(
+            response.content.decode("UTF-8"), remove_optional_attribute_quotes=False
+        )
 
         self.assertEqual(response.status_code, 200)
         pattern = (
-            r'<a href="{url:s}" title="{title:s}" class="subheader__cartouche">'
+            r'<a href="{url:s}" title="{title:s}" class="subheader__cartouche" '
+            r'property="provider" typeof="CollegeOrUniversity">'
+            r'<meta property="name" content="{title:s}">'
+            r'<meta property="url" content="http://example.com{url:s}">'
             r'<div class="subheader__media">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*logo\.jpg__200x113'
         ).format(
             url=organizations[0].extended_object.get_absolute_url(),
             title=organizations[0].extended_object.get_title(),
         )
-        self.assertIsNotNone(re.search(pattern, str(response.content)))
+        self.assertIsNotNone(re.search(pattern, str(content)))
 
     def test_templates_course_detail_no_programs(self):
         """

@@ -60,7 +60,7 @@ class WebAnalyticsTestCase(CMSTestCase):
         )
         response_content = response.content.decode("UTF-8")
         self.assertGreater(
-            response_content.index("<body>"),
+            response_content.index("<body"),
             response_content.index("googletagmanager"),
             "Web tracking should be at the bottom of the page",
         )
@@ -153,7 +153,7 @@ class WebAnalyticsTestCase(CMSTestCase):
 
         self.assertGreater(
             response_content.index("googletagmanager"),
-            response_content.index("<body>"),
+            response_content.index("<body"),
             "Web tracking should be at the bottom of the page",
         )
 
@@ -222,7 +222,7 @@ class WebAnalyticsTestCase(CMSTestCase):
             msg_prefix="Page should include the Google Analytics snippet code",
         )
         self.assertGreater(
-            response_content.index("<body>"),
+            response_content.index("<body"),
             response_content.index("googletagmanager"),
             "Web tracking should be at the head of the page",
         )

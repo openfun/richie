@@ -105,15 +105,14 @@ class OrganizationsByCategoryPluginTestCase(CMSTestCase):
         # The organization's name should be present as a link to the cms page
         # And CMS page title should be in title attribute of the link
         self.assertIn(
-            '<a class="organization-glimpse" '
-            'href="/en/public-title/" title="public title"',
+            '<a href="/en/public-title/" title="public title"',
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
 
         # The organization's title should be wrapped in a div
         self.assertContains(
             response,
-            '<div class="organization-glimpse__title">{:s}</div>'.format(
+            '<div class="organization-glimpse__title" property="name">{:s}</div>'.format(
                 published_organization.public_extension.extended_object.get_title()
             ),
             html=True,
@@ -133,8 +132,7 @@ class OrganizationsByCategoryPluginTestCase(CMSTestCase):
         url = page.get_absolute_url(language="fr")
         response = self.client.get(url)
         self.assertIn(
-            '<a class="organization-glimpse" '
-            'href="/fr/titre-public/" title="titre public"',
+            '<a href="/fr/titre-public/" title="titre public"',
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
         pattern = (

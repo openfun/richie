@@ -1,9 +1,17 @@
 {% load i18n cms_tags extra_tags static thumbnail %}{% spaceless %}
 {% comment %}Obviously, the context template variable "person" is required and must be a Person page extension{% endcomment %}
 {% with person_page=person.extended_object %}
-<div class="person-glimpse">
+<div class="person-glimpse" property="{{ person_property|default:'author' }}" typeof="Person">
     {% comment %}Use tabindex and aria-hidden on the image link as it is entirely redundant with the title link{% endcomment %}
-    <a class="person-glimpse__media" href="{{ person_page.get_absolute_url }}" tabindex="-1" aria-hidden="true">
+    <meta property="url" content="{{ SITE.web_url }}{{ person_page.get_absolute_url }}" />
+    <meta property="name" content="{{ person_page.get_title }}" />
+    <a
+      class="person-glimpse__media"
+      href="{{ person_page.get_absolute_url }}"
+      tabindex="-1"
+      aria-hidden="true"
+      property="url"
+    >
         {% get_page_plugins "portrait" person_page as plugins or %}
             <img src="{% static "richie/images/empty/person_portrait.png" %}"
                  class="person-glimpse__media__empty"
@@ -18,6 +26,7 @@
                 "
                 sizes="200px"
                 alt=""
+                property="image"
             />
         {% endblockplugin %}
     </a>
@@ -35,13 +44,7 @@
                     {% endwith %}
                 </div>
             </div>
-            <div class="person-glimpse__bio">
-                {% if instance.bio %}
-                    {{ instance.bio }}
-                {% else %}
-                    {% show_placeholder "bio" person_page %}
-                {% endif %}
-            </div>
+            <div class="person-glimpse__bio" property="description">{% if instance.bio %}{{ instance.bio }}{% else %}{% show_placeholder "bio" person_page %}{% endif %}</div>
         </div>
     </div>
 </div>
