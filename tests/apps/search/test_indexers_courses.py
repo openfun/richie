@@ -309,7 +309,7 @@ class CoursesIndexersTestCase(TestCase):
                     "enrollment_end": course_run.public_course_run.enrollment_end,
                     "languages": course_run.public_course_run.languages,
                 }
-                for course_run in course.get_course_runs().order_by("-end")
+                for course_run in course.course_runs.order_by("-end")
             ],
             "cover_image": {
                 "en": {"info": "picture info"},

@@ -443,7 +443,8 @@ class Course(BasePageExtension):
 
         return query
 
-    def get_course_runs(self):
+    @cached_property
+    def course_runs(self):
         """
         Returns a query yielding the course runs related to the course. They may be directly
         related to the course or to a snapshot of the course.
@@ -460,13 +461,13 @@ class Course(BasePageExtension):
             direct_course__extended_object__publisher_is_draft=is_draft,
         ).order_by("-start")
 
-    @cached_property
+    @property
     def course_runs_dict(self):
         """Returns a dict of course runs grouped by their state."""
         course_runs_dict = {
             i: [] for i in range(len(CourseState.STATE_CALLS_TO_ACTION))
         }
-        for run in self.get_course_runs():
+        for run in self.course_runs:
             course_runs_dict[run.state["priority"]].append(run)
 
         return dict(course_runs_dict)
@@ -573,7 +574,7 @@ class Course(BasePageExtension):
         # The default state is for a course that has no course runs
         best_state = CourseState(CourseState.TO_BE_SCHEDULED)
 
-        for course_run in self.get_course_runs().only(
+        for course_run in self.course_runs.only(
             "start", "end", "enrollment_start", "enrollment_end"
         ):
             state = course_run.state
