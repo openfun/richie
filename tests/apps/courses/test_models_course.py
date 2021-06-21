@@ -819,12 +819,12 @@ class CourseModelsTestCase(TestCase):
 
     def test_models_course_get_course_runs_empty(self):
         """
-        For a course without course runs the methods `get_course_runs` should
+        For a course without course runs the methods `course_runs` should
         return an empty query.
         """
         course = factories.CourseFactory(should_publish=True)
-        self.assertFalse(course.get_course_runs().exists())
-        self.assertFalse(course.public_extension.get_course_runs().exists())
+        self.assertFalse(course.course_runs.exists())
+        self.assertFalse(course.public_extension.course_runs.exists())
 
     def test_models_course_get_course_runs(self):
         """
@@ -875,14 +875,14 @@ class CourseModelsTestCase(TestCase):
             run.refresh_from_db()
 
         with self.assertNumQueries(2):
-            self.assertEqual(list(course.get_course_runs()), sorted_runs)
+            self.assertEqual(list(course.course_runs), sorted_runs)
 
         # Check that the published course retrieves only the published descendant course runs
         course.refresh_from_db()
         public_course = course.public_extension
 
         with self.assertNumQueries(3):
-            result = list(public_course.get_course_runs())
+            result = list(public_course.course_runs)
 
         expected_public_course_runs = sorted(
             [course_run.public_course_run, child_course_run.public_course_run],

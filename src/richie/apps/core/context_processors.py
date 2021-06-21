@@ -165,7 +165,7 @@ class WebAnalyticsContextProcessor:
         course = getattr(page, "course", None)
         dimensions["course_code"] = [getattr(course, "code", "")]
 
-        course_runs = course.get_course_runs() if course else []
+        course_runs = course.course_runs if course else []
         dimensions["course_runs_titles"] = [
             course_run.title
             for course_run in course_runs
