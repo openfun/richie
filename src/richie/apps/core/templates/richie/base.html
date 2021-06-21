@@ -31,26 +31,18 @@
                 {% if meta_description and meta_description != "None" %}<meta name="description" content="{% block meta-description %}{{ meta_description }}{% endblock %}">{% endif %}
             {% endblock meta_html %}
 
-            {% block meta_opengraph %}
-                {% block meta_opengraph_locale %}
-                    <meta property="og:locale" content="{{ LANGUAGE_CODE }}">
-                {% endblock meta_opengraph_locale %}
-                {% block meta_opengraph_type %}
-                    <meta property="og:type" content="website">
-                {% endblock meta_opengraph_type %}
-                {% block meta_opengraph_sitename %}
-                    <meta property="og:site_name" content="{{ SITE.name }}">
-                {% endblock meta_opengraph_sitename %}
-                {% comment %}Since we are not able yet to get relevant image contextually for each content kind, we
-                keep the logo as the ressource image for all{% endcomment %}
-                {% block meta_opengraph_image %}
-                    <meta property="og:image" content="{{ SITE.web_url }}{% static "richie/images/logo.png" %}">
-                {% endblock meta_opengraph_image %}
-                {% block meta_opengraph_contextuals %}
-                    <meta property="og:title" content="{{ SITE.name }}">
-                    <meta property="og:url" content="{{ SITE.web_url }}">
-                {% endblock meta_opengraph_contextuals %}
-            {% endblock meta_opengraph %}
+            {% block meta_rdfa %}
+            <meta property="og:locale" content="{{ LANGUAGE_CODE }}" />
+            <meta property="og:site_name" content="{{ SITE.name }}" />
+            <meta property="og:determiner" content="" />
+            <meta property="og:title" content="{{ current_page.get_title|truncatechars:65 }}" />
+            <meta property="og:url" content="{{ SITE.web_url }}{{ current_page.get_absolute_url }}">
+            {% block meta_rdfa_context %}
+            <meta property="og:type" content="website" />
+            <meta property="og:image" content="{{ SITE.web_url }}{% static "richie/images/logo.png" %}" />
+            {% endblock meta_rdfa_context %}
+            {% endblock meta_rdfa %}
+
         {% endblock meta %}
         {% endspaceless %}
 
