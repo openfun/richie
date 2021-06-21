@@ -113,7 +113,7 @@ class CategoryCMSTestCase(CMSTestCase):
         self._extension_cms_published_content(
             OrganizationFactory,
             "categories",
-            '<div class="organization-glimpse__title">{:s}</div>',
+            '<div class="organization-glimpse__title" property="name">{:s}</div>',
         )
 
     def test_templates_category_detail_cms_published_content_courses(self):
@@ -237,9 +237,7 @@ class CategoryCMSTestCase(CMSTestCase):
         related blogposts in all publication states.
         """
         self._extension_cms_published_content(
-            BlogPostFactory,
-            "categories",
-            '<p class="blogpost-glimpse__title">{:s}</p>',
+            BlogPostFactory, "categories", '<p class="blogpost-glimpse__title">{:s}</p>'
         )
 
     def test_templates_category_detail_cms_published_content_persons(self):
@@ -248,31 +246,34 @@ class CategoryCMSTestCase(CMSTestCase):
         related persons in all publication states.
         """
         self._extension_cms_published_content(
-            PersonFactory,
-            "categories",
-            '<h2 class="person-glimpse__title">{:s}</h2>',
+            PersonFactory, "categories", '<h2 class="person-glimpse__title">{:s}</h2>'
         )
 
     def test_templates_category_detail_cms_published_content_opengraph(self):
         """The category logo should be used as opengraph image."""
         category = CategoryFactory(
             fill_logo={"original_filename": "logo.jpg", "default_alt_text": "my logo"},
-            should_publish=True
+            should_publish=True,
         )
         url = category.extended_object.get_absolute_url()
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
-        print(response.content)
         self.assertContains(response, '<meta property="og:type" content="website" />')
-        self.assertContains(response, f'<meta property="og:url" content="http://example.com{url:s}" />')
+        self.assertContains(
+            response, f'<meta property="og:url" content="http://example.com{url:s}" />'
+        )
         pattern = (
             r'<meta property="og:image" content="http://example.com'
-            r'/media/filer_public_thumbnails/filer_public/.*logo\.jpg__200x200'
+            r"/media/filer_public_thumbnails/filer_public/.*logo\.jpg__200x200"
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
-        self.assertContains(response, '<meta property="og:image:width" content="200" />')
-        self.assertContains(response, '<meta property="og:image:height" content="200" />')
+        self.assertContains(
+            response, '<meta property="og:image:width" content="200" />'
+        )
+        self.assertContains(
+            response, '<meta property="og:image:height" content="200" />'
+        )
 
     def _extension_cms_draft_content(self, factory_model, control_string):
         """
@@ -322,7 +323,8 @@ class CategoryCMSTestCase(CMSTestCase):
     def test_templates_category_detail_cms_draft_content_organizations(self):
         """Validate how a draft category page is displayed with its related organizations."""
         self._extension_cms_draft_content(
-            OrganizationFactory, '<div class="organization-glimpse__title">{:s}</div>'
+            OrganizationFactory,
+            '<div class="organization-glimpse__title" property="name">{:s}</div>',
         )
 
     def test_templates_category_detail_cms_draft_content_courses(self):
@@ -340,8 +342,7 @@ class CategoryCMSTestCase(CMSTestCase):
     def test_templates_category_detail_cms_draft_content_persons(self):
         """Validate how a draft category page is displayed with its related persons."""
         self._extension_cms_draft_content(
-            PersonFactory,
-            '<h2 class="person-glimpse__title">{:s}</h2>',
+            PersonFactory, '<h2 class="person-glimpse__title">{:s}</h2>'
         )
 
     def test_template_category_detail_without_category(self):

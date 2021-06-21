@@ -9,6 +9,7 @@ from django.conf import settings
 from django.contrib.auth.models import AnonymousUser
 from django.test.client import RequestFactory
 
+import htmlmin
 from cms.api import add_plugin, create_page
 from cms.plugin_rendering import ContentRenderer
 from cms.test_utils.testcases import CMSTestCase
@@ -99,16 +100,19 @@ class OrganizationPluginTestCase(CMSTestCase):
         # And CMS page title should be in title attribute of the link
         self.assertIn(
             (
-                '<a class="organization-glimpse" href="/en/public-title/" '
+                '<div class="organization-glimpse" property="contributor" '
+                'typeof="CollegeOrUniversity"><a href="/en/public-title/" '
                 'title="public title">'
             ),
-            re.sub(" +", " ", str(response.content).replace("\\n", "")),
+            htmlmin.minify(
+                response.content.decode("UTF-8"), remove_optional_attribute_quotes=False
+            ),
         )
 
         # The organization's title should be wrapped in a div
         self.assertContains(
             response,
-            '<div class="organization-glimpse__title">{:s}</div>'.format(
+            '<div class="organization-glimpse__title" property="name">{:s}</div>'.format(
                 organization.public_extension.extended_object.get_title()
             ),
             html=True,
@@ -127,8 +131,7 @@ class OrganizationPluginTestCase(CMSTestCase):
         url = page.get_absolute_url(language="fr")
         response = self.client.get(url)
         self.assertIn(
-            '<a class="organization-glimpse" href="/fr/titre-public/" '
-            'title="titre public"',
+            '<a href="/fr/titre-public/" title="titre public"',
             re.sub(" +", " ", str(response.content).replace("\\n", "")),
         )
         pattern = (
@@ -281,18 +284,20 @@ class OrganizationPluginTestCase(CMSTestCase):
         response = self.client.get(url)
 
         # Organization's name should be present as a link to the cms page
-        self.assertContains(
-            response,
+        self.assertIn(
             (
-                '<a class="organization-glimpse" href="/en/organisation-publique/" '
+                '<div class="organization-glimpse" property="contributor" '
+                'typeof="CollegeOrUniversity"><a href="/en/organisation-publique/" '
                 'title="organisation publique">'
             ),
-            status_code=200,
+            htmlmin.minify(
+                response.content.decode("UTF-8"), remove_optional_attribute_quotes=False
+            ),
         )
         # The organization's full name should be wrapped in a h2
         self.assertContains(
             response,
-            '<div class="organization-glimpse__title">organisation publique</div>',
+            '<div class="organization-glimpse__title" property="name">organisation publique</div>',
             html=True,
         )
         self.assertNotContains(response, "public organization")

@@ -6,6 +6,7 @@ from unittest import mock
 
 from django.test.utils import override_settings
 
+import htmlmin
 from cms.api import add_plugin
 from cms.test_utils.testcases import CMSTestCase
 
@@ -139,7 +140,7 @@ class PersonCMSTestCase(CMSTestCase):
         # The published organization should be on the page in its published version
         self.assertContains(
             response,
-            '<div class="organization-glimpse__title">{:s}</div>'.format(
+            '<div class="organization-glimpse__title" property="name">{:s}</div>'.format(
                 published_organization.public_extension.extended_object.get_title()
             ),
             html=True,
@@ -201,6 +202,12 @@ class PersonCMSTestCase(CMSTestCase):
         # The page should be visible as draft to the superuser
         url = page.get_absolute_url()
         response = self.client.get(url)
+        content = htmlmin.minify(
+            response.content.decode("UTF-8"),
+            reduce_empty_attributes=False,
+            remove_optional_attribute_quotes=False,
+        )
+
         self.assertContains(
             response, "<title>My page title</title>", html=True, status_code=200
         )
@@ -240,31 +247,33 @@ class PersonCMSTestCase(CMSTestCase):
         )
 
         # The published organization should be on the page in its published version
-        self.assertContains(
-            response,
-            '<a class="organization-glimpse" '
-            'href="{:s}"'.format(
-                published_organization.extended_object.get_absolute_url()
+        self.assertIn(
+            '<div class="organization-glimpse" property="contributor" '
+            'typeof="CollegeOrUniversity"><a href="{:s}" title="{:s}">'.format(
+                published_organization.extended_object.get_absolute_url(),
+                published_organization.extended_object.get_title(),
             ),
+            content,
         )
         self.assertContains(
             response,
-            '<div class="organization-glimpse__title">{:s}</div>'.format(
+            '<div class="organization-glimpse__title" property="name">{:s}</div>'.format(
                 published_organization.public_extension.extended_object.get_title()
             ),
             html=True,
         )
         # The not published organization should not be on the page
-        self.assertContains(
-            response,
-            '<a class="organization-glimpse organization-glimpse--draft" '
-            'href="{:s}"'.format(
-                not_published_organization.extended_object.get_absolute_url()
+        self.assertIn(
+            '<a href="{:s}" title="{:s}">'.format(
+                not_published_organization.extended_object.get_absolute_url(),
+                not_published_organization.extended_object.get_title(),
             ),
+            content,
         )
+
         self.assertContains(
             response,
-            '<div class="organization-glimpse__title">{:s}</div>'.format(
+            '<div class="organization-glimpse__title" property="name">{:s}</div>'.format(
                 not_published_organization.extended_object.get_title()
             ),
             html=True,
@@ -436,19 +445,28 @@ class PersonCMSTestCase(CMSTestCase):
     def test_templates_person_detail_cms_published_content_opengraph(self):
         """The person logo should be used as opengraph image."""
         person = PersonFactory(
-            fill_portrait={"original_filename": "portrait.jpg", "default_alt_text": "my portrait"},
-            should_publish=True
+            fill_portrait={
+                "original_filename": "portrait.jpg",
+                "default_alt_text": "my portrait",
+            },
+            should_publish=True,
         )
         url = person.extended_object.get_absolute_url()
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
 
         self.assertContains(response, '<meta property="og:type" content="profile" />')
-        self.assertContains(response, f'<meta property="og:url" content="http://example.com{url:s}" />')
+        self.assertContains(
+            response, f'<meta property="og:url" content="http://example.com{url:s}" />'
+        )
         pattern = (
             r'<meta property="og:image" content="http://example.com'
-            r'/media/filer_public_thumbnails/filer_public/.*portrait\.jpg__200x200'
+            r"/media/filer_public_thumbnails/filer_public/.*portrait\.jpg__200x200"
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
-        self.assertContains(response, '<meta property="og:image:width" content="200" />')
-        self.assertContains(response, '<meta property="og:image:height" content="200" />')
+        self.assertContains(
+            response, '<meta property="og:image:width" content="200" />'
+        )
+        self.assertContains(
+            response, '<meta property="og:image:height" content="200" />'
+        )

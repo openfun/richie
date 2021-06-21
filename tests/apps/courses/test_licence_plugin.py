@@ -16,7 +16,7 @@ class LicencePluginTestCase(CMSPluginTestCase):
     """Licence plugin tests case"""
 
     @transaction.atomic
-    def test_section_context_and_html(self):
+    def test_licence_plugin_context_and_html(self):
         """
         Instanciating this plugin with an instance should populate the context
         and render in the template.
@@ -47,7 +47,7 @@ class LicencePluginTestCase(CMSPluginTestCase):
         self.assertIn(licence.name, html)
 
     @transaction.atomic
-    def test_section_header_level(self):
+    def test_licence_plugin_header_level(self):
         """
         Header level can be changed from context variable 'header_level'.
         """
@@ -66,7 +66,6 @@ class LicencePluginTestCase(CMSPluginTestCase):
         # level for header markup
         context = self.get_practical_plugin_context({"header_level": 10})
 
-        # Init base Section plugin with required title
         add_plugin(placeholder, LicencePlugin, "en", licence=licence)
 
         # Render placeholder so plugin is fully rendered in real situation
@@ -79,3 +78,76 @@ class LicencePluginTestCase(CMSPluginTestCase):
         # Expected header markup should match given 'header_level' context
         # variable
         self.assertInHTML(expected_header, html)
+
+    @transaction.atomic
+    def test_licence_plugin_rdfa_property_default_with_url(self):
+        """
+        The RDFa licence property should be present by default on the url if any.
+        """
+        # Dummy slot where to include plugin
+        placeholder = Placeholder.objects.create(slot="test")
+
+        licence = LicenceFactory(url="https://example.com")
+
+        context = self.get_practical_plugin_context({})
+        add_plugin(placeholder, LicencePlugin, "en", licence=licence)
+
+        # Render placeholder so plugin is fully rendered in real situation
+        html = context["cms_content_renderer"].render_placeholder(
+            placeholder, context=context, language="en"
+        )
+
+        # RDFa markup should be present by default
+        self.assertEqual(html.count('property="license"'), 1)
+        self.assertEqual(
+            html.count('<a href="https://example.com" property="license">'), 1
+        )
+
+    @transaction.atomic
+    def test_licence_plugin_rdfa_property_activated_no_url(self):
+        """
+        The RDFa licence property is tagged on the content if there is no url.
+        """
+        # Dummy slot where to include plugin
+        placeholder = Placeholder.objects.create(slot="test")
+
+        # Create a license with no url
+        licence = LicenceFactory(url="")
+
+        # Template context with additional variable to activate license property
+        context = self.get_practical_plugin_context({"is_license_property": True})
+        add_plugin(placeholder, LicencePlugin, "en", licence=licence)
+
+        # Render placeholder so plugin is fully rendered in real situation
+        html = context["cms_content_renderer"].render_placeholder(
+            placeholder, context=context, language="en"
+        )
+
+        # RDFa markup should be present but on the content
+        self.assertEqual(html.count('property="license"'), 1)
+        self.assertEqual(
+            html.count('<div class="licence-plugin__content" property="license">'), 1
+        )
+
+    @transaction.atomic
+    def test_licence_plugin_rdfa_property_deactivated(self):
+        """
+        The RDFa licence property can be deactivated from context variable 'is_license_property'.
+        """
+        # Dummy slot where to include plugin
+        placeholder = Placeholder.objects.create(slot="test")
+
+        # Create random values for parameters with a factory
+        licence = LicenceFactory()
+
+        # Template context with additional variable to deactivate license property
+        context = self.get_practical_plugin_context({"is_license_property": False})
+        add_plugin(placeholder, LicencePlugin, "en", licence=licence)
+
+        # Render placeholder so plugin is fully rendered in real situation
+        html = context["cms_content_renderer"].render_placeholder(
+            placeholder, context=context, language="en"
+        )
+
+        # RDFa markup should not be present
+        self.assertNotIn('property="license"', html)
