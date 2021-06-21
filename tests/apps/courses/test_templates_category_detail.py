@@ -1,6 +1,7 @@
 """
 End-to-end tests for the category detail view
 """
+import re
 from unittest import mock
 
 from django.test.utils import override_settings
@@ -251,6 +252,27 @@ class CategoryCMSTestCase(CMSTestCase):
             "categories",
             '<h2 class="person-glimpse__title">{:s}</h2>',
         )
+
+    def test_templates_category_detail_cms_published_content_opengraph(self):
+        """The category logo should be used as opengraph image."""
+        category = CategoryFactory(
+            fill_logo={"original_filename": "logo.jpg", "default_alt_text": "my logo"},
+            should_publish=True
+        )
+        url = category.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        print(response.content)
+        self.assertContains(response, '<meta property="og:type" content="website" />')
+        self.assertContains(response, f'<meta property="og:url" content="http://example.com{url:s}" />')
+        pattern = (
+            r'<meta property="og:image" content="http://example.com'
+            r'/media/filer_public_thumbnails/filer_public/.*logo\.jpg__200x200'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
+        self.assertContains(response, '<meta property="og:image:width" content="200" />')
+        self.assertContains(response, '<meta property="og:image:height" content="200" />')
 
     def _extension_cms_draft_content(self, factory_model, control_string):
         """

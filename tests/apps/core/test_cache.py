@@ -240,7 +240,7 @@ class TestSentinelClient(TestCase):
         self.assertEqual(res, "heló")
 
     def test_incr(self):
-        """"Test the incr cache operation"""
+        """Test the incr cache operation"""
         cache.set("num", 1)
 
         cache.incr("num")

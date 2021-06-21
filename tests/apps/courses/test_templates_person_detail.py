@@ -1,6 +1,7 @@
 """
 End-to-end tests for the person detail view
 """
+import re
 from unittest import mock
 
 from django.test.utils import override_settings
@@ -431,3 +432,23 @@ class PersonCMSTestCase(CMSTestCase):
             ),
             html=True,
         )
+
+    def test_templates_person_detail_cms_published_content_opengraph(self):
+        """The person logo should be used as opengraph image."""
+        person = PersonFactory(
+            fill_portrait={"original_filename": "portrait.jpg", "default_alt_text": "my portrait"},
+            should_publish=True
+        )
+        url = person.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertContains(response, '<meta property="og:type" content="profile" />')
+        self.assertContains(response, f'<meta property="og:url" content="http://example.com{url:s}" />')
+        pattern = (
+            r'<meta property="og:image" content="http://example.com'
+            r'/media/filer_public_thumbnails/filer_public/.*portrait\.jpg__200x200'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
+        self.assertContains(response, '<meta property="og:image:width" content="200" />')
+        self.assertContains(response, '<meta property="og:image:height" content="200" />')

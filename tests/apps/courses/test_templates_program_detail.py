@@ -1,6 +1,8 @@
 """
 End-to-end tests for the program detail view
 """
+import re
+
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.core.factories import UserFactory
@@ -158,3 +160,23 @@ class ProgramCMSTestCase(CMSTestCase):
         self.assertContains(
             response, '<div class="program-detail__courses program-detail__block">'
         )
+
+    def test_templates_program_detail_cms_published_content_opengraph(self):
+        """The program logo should be used as opengraph image."""
+        program = ProgramFactory(
+            fill_cover={"original_filename": "cover.jpg", "default_alt_text": "my cover"},
+            should_publish=True
+        )
+        url = program.extended_object.get_absolute_url()
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+        self.assertContains(response, '<meta property="og:type" content="website" />')
+        self.assertContains(response, f'<meta property="og:url" content="http://example.com{url:s}" />')
+        pattern = (
+            r'<meta property="og:image" content="http://example.com'
+            r'/media/filer_public_thumbnails/filer_public/.*cover\.jpg__1200x630'
+        )
+        self.assertIsNotNone(re.search(pattern, str(response.content)))
+        self.assertContains(response, '<meta property="og:image:width" content="1200" />')
+        self.assertContains(response, '<meta property="og:image:height" content="630" />')
