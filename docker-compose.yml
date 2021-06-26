@@ -46,7 +46,7 @@ services:
   nginx:
     image: nginx
     ports:
-      - "8070:8070"
+      - "${NGINX_PORT:-8070}:8070"
     networks:
       default:
         aliases:
