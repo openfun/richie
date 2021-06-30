@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Fix course teaser layout issues on Safari
+
 ### Added
 
 - Documentation on connecting Richie with OpenEdX
