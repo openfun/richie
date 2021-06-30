@@ -5,13 +5,11 @@
     iframe {
       position: absolute;
       height: 100%;
-      object-fit: contain;
-      object-position: center;
     }
   }
 
   & > .lti-consumer {
-    animation: fadeIn 600ms cubic-bezier(0.33, 1, 0.68, 1) forwards;
+    animation: fadeIn 600ms cubic-bezier(0.33, 1, 0.68, 1);
     background-color: #ffffff;
 
     & > form {

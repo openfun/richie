@@ -165,10 +165,8 @@ $r-subheader-search-title-width: 19rem !default; // aligned on computed search r
       padding-bottom: 56.25%; // Aspect ratio 16/9
 
       iframe {
-        position: absolute;
         height: 100%;
-        object-fit: contain;
-        object-position: center;
+        position: absolute;
       }
     }
 
