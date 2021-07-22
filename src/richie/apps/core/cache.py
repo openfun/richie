@@ -83,7 +83,7 @@ class SentinelClient(DefaultClient):
             return self._client_read, 0
         return self._client_read
 
-    # pylint: disable=arguments-differ
+    # pylint: disable=arguments-renamed
     def connect(self, write=True):
         """
         Create a redis connection with connection pool.
