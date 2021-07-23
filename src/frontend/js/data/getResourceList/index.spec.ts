@@ -64,7 +64,7 @@ describe('data/getResourceList', () => {
       })) as any;
 
       expect(response.status).toEqual(RequestStatus.FAILURE);
-      expect(response.error).toEqual(jasmine.any(Error));
+      expect(response.error).toBeInstanceOf(Error);
     });
 
     it('rejects with a FetchListResponse containing an error when the API returns an error code', async () => {
@@ -77,7 +77,7 @@ describe('data/getResourceList', () => {
 
       // Our polymorphic response object is properly shaped - with an error this time
       expect(response.objects).not.toBeDefined();
-      expect(response.error).toEqual(jasmine.any(Error));
+      expect(response.error).toBeInstanceOf(Error);
     });
   });
 });

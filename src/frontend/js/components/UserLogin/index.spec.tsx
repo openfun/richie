@@ -58,8 +58,8 @@ describe('<UserLogin />', () => {
       </IntlProvider>,
     );
 
-    const button = screen.getByRole('button', {
-      name: `Access to your profile settings ${username}`,
+    const button = screen.getByLabelText(`Access to your profile settings ${username}`, {
+      selector: 'button',
     });
 
     userEvent.click(button);
@@ -105,8 +105,8 @@ describe('<UserLogin />', () => {
       </IntlProvider>,
     );
 
-    const button = screen.getByRole('button', {
-      name: `Access to your profile settings ${username}`,
+    const button = screen.getByLabelText(`Access to your profile settings ${username}`, {
+      selector: 'button',
     });
 
     userEvent.click(button);

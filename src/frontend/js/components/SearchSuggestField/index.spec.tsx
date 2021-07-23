@@ -66,7 +66,7 @@ describe('components/SearchSuggestField', () => {
 
   afterEach(() => fetchMock.restore());
   afterEach(() => jest.clearAllTimers());
-  beforeEach(() => jest.useFakeTimers('modern'));
+  beforeEach(() => jest.useFakeTimers());
   beforeEach(jest.resetAllMocks);
   beforeEach(() => (location.search = ''));
 
@@ -561,22 +561,16 @@ describe('components/SearchSuggestField', () => {
     fireEvent.focus(field);
 
     fireEvent.change(field, { target: { value: 'ri' } });
-    await waitFor(() => {
-      expect(history.pushState).not.toHaveBeenCalled();
-    });
+    expect(history.pushState).not.toHaveBeenCalled();
 
     fireEvent.change(field, { target: { value: 'ri ' } });
-    await waitFor(() => {
-      expect(history.pushState).not.toHaveBeenCalled();
-    });
+    expect(history.pushState).not.toHaveBeenCalled();
 
     fireEvent.change(field, { target: { value: ' ri' } });
-    await waitFor(() => {
-      expect(history.pushState).not.toHaveBeenCalled();
-    });
+    expect(history.pushState).not.toHaveBeenCalled();
 
     fireEvent.change(field, { target: { value: 'ric' } });
-    await waitFor(() => {
+    act(() => {
       // run all pending timers (debounce) to update courseSearchParams
       jest.runOnlyPendingTimers();
     });
@@ -625,13 +619,19 @@ describe('components/SearchSuggestField', () => {
     );
 
     const field = getByPlaceholderText('Search for courses, organizations, categories');
-    fireEvent.focus(field);
 
     // The user is typing an organization name
+    fireEvent.focus(field);
     fireEvent.change(field, { target: { value: 'orga' } });
-    await waitFor(() => {
-      expect(history.pushState).toHaveBeenCalledTimes(1);
+
+    // As user typing is debounced, history.pushState is not fired immediately
+    expect(history.pushState).not.toHaveBeenCalled();
+
+    act(() => {
+      // run all pending timers (debounce) to update courseSearchParams
+      jest.runOnlyPendingTimers();
     });
+    expect(history.pushState).toHaveBeenCalledTimes(1);
     expect(history.pushState).toHaveBeenLastCalledWith(
       {
         name: 'courseSearch',
@@ -643,6 +643,13 @@ describe('components/SearchSuggestField', () => {
       '',
       '/search?limit=13&offset=0&query=orga',
     );
+
+    await waitFor(() => {
+      expect(fetchMock.called('/api/v1.0/organizations/autocomplete/?query=orga')).toEqual(true);
+    });
+    getByText('Organizations');
+    getByText('Organization #27');
+
     // The user selects an organization from suggestions
     fireEvent.click(getByText('Organization #27'));
     await waitFor(() => {
@@ -667,11 +674,13 @@ describe('components/SearchSuggestField', () => {
 
     // The user starts typing a full-text search, the organization remains selected
     fireEvent.change(field, { target: { value: 'ric' } });
-    await waitFor(() => {
+    act(() => {
       // run all pending timers (debounce) to update courseSearchParams
       jest.runOnlyPendingTimers();
     });
-    expect(history.pushState).toHaveBeenCalledTimes(3);
+    await waitFor(() => {
+      expect(history.pushState).toHaveBeenCalledTimes(3);
+    });
     expect(history.pushState).toHaveBeenLastCalledWith(
       {
         name: 'courseSearch',

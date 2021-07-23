@@ -26,10 +26,9 @@ describe('<LanguageSelector />', () => {
       </IntlProvider>,
     );
 
-    const button = screen.getByRole('button', {
-      name: 'Select a language: Français',
+    const button = screen.getByLabelText('Select a language: Français', {
+      selector: 'button',
     });
-
     userEvent.click(button);
 
     screen.getByRole('listbox', { name: 'Select a language:' });
