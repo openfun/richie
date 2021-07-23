@@ -10,7 +10,7 @@ const CourseStateFactory = createSpec({
 });
 
 export const CourseRunFactory = createSpec({
-  id: faker.random.number(),
+  id: faker.datatype.number(),
   resource_link: faker.internet.url(),
   start: derived(() => faker.date.past()().toISOString()),
   end: derived(() => faker.date.past()().toISOString()),
@@ -22,10 +22,10 @@ export const CourseRunFactory = createSpec({
 });
 
 export const EnrollmentFactory = createSpec({
-  id: faker.random.number(),
+  id: faker.datatype.number(),
   created_at: derived(() => faker.date.past()().toISOString()),
-  user: faker.random.number(),
-  course_run: faker.random.number(),
+  user: faker.datatype.number(),
+  course_run: faker.datatype.number(),
 });
 
 export const UserFactory = createSpec({
