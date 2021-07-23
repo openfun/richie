@@ -141,9 +141,7 @@ describe('<Search />', () => {
         'true',
       );
     });
-    expect(container.querySelector('.search__filters__toggle')).toEqual(
-      jasmine.any(HTMLButtonElement),
-    );
+    expect(container.querySelector('.search__filters__toggle')).toBeInstanceOf(HTMLButtonElement);
 
     {
       // We have a "Show" button with the appropriate aria helper

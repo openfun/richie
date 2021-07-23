@@ -10,6 +10,7 @@ module.exports = {
   testMatch: [`${__dirname}/js/**/*.spec.+(ts|tsx|js)`],
   testURL: 'https://localhost',
   coverageDirectory: '.coverage',
+  testEnvironment: 'jsdom',
   transformIgnorePatterns: ['node_modules/(?!(lodash-es)/)'],
   globals: {
     RICHIE_VERSION: 'test',

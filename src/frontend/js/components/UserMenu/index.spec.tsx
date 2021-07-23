@@ -46,8 +46,8 @@ describe('<UserMenu />', () => {
       </IntlProvider>,
     );
 
-    const button = screen.getByRole('button', {
-      name: 'Access to your profile settings John Doe',
+    const button = screen.getByLabelText('Access to your profile settings John Doe', {
+      selector: 'button',
     });
 
     userEvent.click(button);
