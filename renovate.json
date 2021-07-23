@@ -5,8 +5,20 @@
   "packageRules": [
     {
       "enabled": false,
+      "groupName": "ignored js dependencies",
+      "matchManagers": [
+        "npm"
+      ],
+      "matchPackageNames": [
+        "bootstrap"
+      ]
+    },
+    {
+      "enabled": false,
       "groupName": "ignored python dependencies",
-      "matchManagers": ["setup-cfg"],
+      "matchManagers": [
+        "setup-cfg"
+      ],
       "matchPackageNames": [
         "arrow",
         "dj-pagination",
