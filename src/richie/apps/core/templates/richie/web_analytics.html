@@ -1,0 +1,16 @@
+{% block web_analytics %}
+    {% if WEB_ANALYTICS_ID %} 
+        {% if WEB_ANALYTICS_PROVIDER == "google_analytics" %}
+            <script async src="https://www.googletagmanager.com/gtag/js?id={{ WEB_ANALYTICS_ID | safe }}"></script>
+            <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                {% for dimension_key, dimension_value_list in WEB_ANALYTICS_DIMENSIONS.items %}
+                    gtag('set', {'dimension{{forloop.counter}}': '{{ dimension_value_list|join:" | " }}'});
+                {% endfor %}
+                gtag('config', '{{ WEB_ANALYTICS_ID | safe }}');
+            </script>
+        {% endif %}
+    {% endif %}
+{% endblock web_analytics %}

@@ -553,6 +553,17 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
     # Sentry
     SENTRY_DSN = values.Value(None, environ_name="SENTRY_DSN")
 
+    # Web Analytics configuration
+    WEB_ANALYTICS_ID = values.Value(
+        None, environ_name="WEB_ANALYTICS_ID", environ_prefix=None
+    )
+    WEB_ANALYTICS_LOCATION = values.Value(
+        "head", environ_name="WEB_ANALYTICS_LOCATION", environ_prefix=None
+    )
+    WEB_ANALYTICS_PROVIDER = values.Value(
+        "google_analytics", environ_name="WEB_ANALYTICS_PROVIDER", environ_prefix=None
+    )
+
     # pylint: disable=invalid-name
     @property
     def ENVIRONMENT(self):

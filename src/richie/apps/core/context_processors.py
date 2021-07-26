@@ -2,15 +2,20 @@
 Template context processors
 """
 import json
+from collections import OrderedDict
 
 from django.conf import settings
 from django.contrib.sites.models import Site
+from django.http.request import HttpRequest
 from django.middleware.csrf import get_token
+from django.utils.translation import get_language_from_request
+
+from richie.apps.courses.models import Organization
 
 from . import defaults
 
 
-def site_metas(request):
+def site_metas(request: HttpRequest):
     """
     Context processor to add all information required by Richie CMS templates and frontend.
 
@@ -41,6 +46,7 @@ def site_metas(request):
                 "sentry_dsn": getattr(settings, "SENTRY_DSN", ""),
             }
         },
+        **WebAnalyticsContextProcessor().context_processor(request),
     }
 
     if getattr(settings, "CDN_DOMAIN", None):
@@ -86,3 +92,89 @@ def site_metas(request):
 
     context["FRONTEND_CONTEXT"] = json.dumps(context["FRONTEND_CONTEXT"])
     return context
+
+
+class WebAnalyticsContextProcessor:
+    """
+    Context processor to add Web Analytics tracking information to Richie CMS templates and
+    frontend.
+    """
+
+    def context_processor(self, request: HttpRequest) -> dict:
+        """
+        Real implementation of the context processor for the Web Analytics core app sub-module
+        """
+        context = {}
+        if hasattr(request, "current_page"):
+            # load web analytics settings to the context
+            if getattr(settings, "WEB_ANALYTICS_ID", None):
+                context["WEB_ANALYTICS_ID"] = settings.WEB_ANALYTICS_ID
+                context["WEB_ANALYTICS_DIMENSIONS"] = self.get_dimensions(request)
+
+            context["WEB_ANALYTICS_LOCATION"] = getattr(
+                settings, "WEB_ANALYTICS_LOCATION", "head"
+            )
+
+            context["WEB_ANALYTICS_PROVIDER"] = getattr(
+                settings, "WEB_ANALYTICS_PROVIDER", "google_analytics"
+            )
+        return context
+
+    # pylint: disable=no-self-use
+    def get_dimensions(self, request: HttpRequest) -> dict:
+        """
+        Compute the web analytics dimensions (dict) that would be added to the Django context
+        They are a dictionary like:
+        ```
+        {
+            "organizations_codes": ["UNIV_LISBON", "UNIV_PORTO"],
+            "course_code": ["COURSE_XPTO"],
+            "course_runs_titles": [
+                "Summer edition",
+                "Winter edition"
+            ],
+            "course_runs_resource_links": [
+                "http://example.edx:8073/courses/course-v1:edX+DemoX+Demo_Course/info",
+                "http://example.edx:8073/courses/course-v1:edX+DemoX+Demo_Course_2/info"
+            ],
+            "page_title": ["Introduction to Programming"],
+        }
+        ```
+
+        Args:
+            request (HttpRequest): The Http request
+            web_analytics_context (dict): the context relevant for the web analytics sub module
+
+        Returns:
+            dict: a dict with the dimensions, where each value is a list
+        """
+        # Warn do not change the order of evaluation of this methods, because on Google Analytics
+        # the key is a 'dimension1' instead of a more generic key like 'organizations'.
+        # That's why we are using an OrderedDict instead of a normal Python dict (don't support
+        # ordering)
+        dimensions = OrderedDict()
+
+        page = request.current_page or None
+        language = get_language_from_request(request, check_path=True)
+
+        organizations_codes = []
+        if page and not page.is_home:
+            organizations_codes = Organization.get_organizations_codes(page, language)
+        dimensions["organizations_codes"] = organizations_codes
+
+        course = getattr(page, "course", None)
+        dimensions["course_code"] = [getattr(course, "code", "")]
+
+        course_runs = course.get_course_runs() if course else []
+        dimensions["course_runs_titles"] = [
+            course_run.title
+            for course_run in course_runs
+            if course_run is not None and course_run.title is not None
+        ]
+
+        dimensions["course_runs_resource_links"] = map(
+            lambda course_run: course_run.resource_link, course_runs
+        )
+
+        dimensions["page_title"] = [page.get_title() if page else ""]
+        return dimensions
