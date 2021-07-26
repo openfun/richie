@@ -54,6 +54,10 @@
         {% endblock meta %}
         {% endspaceless %}
 
+        {% if not WEB_ANALYTICS_LOCATION or WEB_ANALYTICS_LOCATION == "head" %}
+            {% include "richie/web_analytics.html" %}
+        {% endif %}
+
         {% render_block "css" %}
 
         {% block css_links %}
@@ -227,6 +231,9 @@
                 initializeHamburgerMenu();
             });
         </script>
+        {% endif %}
+        {% if WEB_ANALYTICS_LOCATION == "footer" %}
+            {% include "richie/web_analytics.html" %}
         {% endif %}
         {% block body_js %}{% endblock body_js %}
     </body>

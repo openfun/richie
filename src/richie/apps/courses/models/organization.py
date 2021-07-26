@@ -4,6 +4,7 @@ Declare and configure the models for the courses application
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from cms.api import Page, PagePermission
@@ -165,6 +166,30 @@ class Organization(BasePageExtension):
         this organization is linked to the person page via any placeholder.
         """
         return self.get_reverse_related_page_extensions("person", language=language)
+
+    @staticmethod
+    def get_organizations_codes(page, language: str):
+        """
+        Return organization attached to the page and
+        organizations linked to the current page via an organization plugin in any of the
+        placeholders on the page.
+        """
+        return (
+            Organization.objects.filter(
+                Q(
+                    extended_object__organization_plugins__cmsplugin_ptr__language=language,
+                    extended_object__organization_plugins__cmsplugin_ptr__placeholder__page=page,  # noqa pylint: disable=line-too-long
+                )
+                | Q(
+                    extended_object__exact=page,
+                ),
+                extended_object__title_set__published=True,
+                code__isnull=False,
+            )
+            .distinct()
+            .order_by("code")
+            .values_list("code", flat=True)
+        )
 
 
 class OrganizationPluginModel(CMSPlugin):

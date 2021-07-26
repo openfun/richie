@@ -15,6 +15,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Documentation on connecting Richie with OpenEdX
 - Add robots.txt template with a sitemap rule so it is no longer need
   to register the sitemap.xml URL from each crawler administration panel
+- Add a new web analytics feature that currently only supports the Google
+  Analytics using the Google Tag Manage Javascrip code.
+  It includes custom dimensions for organizations, course code, run, resource
+  link and course name.
 
 ### Changed
 

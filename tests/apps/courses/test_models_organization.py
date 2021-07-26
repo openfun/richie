@@ -822,3 +822,41 @@ class OrganizationModelsTestCase(TestCase):
         )
         self.assertEqual(Person.objects.count(), 2)
         self.assertEqual(organization.get_persons().count(), 1)
+
+    def test_models_organization_get_organizations_codes_with_2_orgs(self):
+        """
+        Check if the get_organizations_codes works for an organization page.
+        """
+        org_page_code = "ORG_XPTO_1"
+        organization = OrganizationFactory(should_publish=True, code=org_page_code)
+        organization_page = organization.extended_object
+
+        organization_codes = list(
+            Organization.get_organizations_codes(organization_page, "en")
+        )
+        self.assertListEqual(
+            organization_codes,
+            [org_page_code],
+        )
+
+    def test_models_organization_get_organizations_codes_course_page_multiple_orgs(
+        self,
+    ):
+        """
+        Check if the method Organization.get_organizations_codes returns the correct organization
+        codes for a course page with multiple organizations
+        """
+        org_page_code_1 = "ORG_XPTO"
+        org_page_code_2 = "ORG_XPTO_2"
+        organization1 = OrganizationFactory(should_publish=True, code=org_page_code_1)
+        organization2 = OrganizationFactory(should_publish=True, code=org_page_code_2)
+
+        course = CourseFactory(
+            fill_organizations=[organization1, organization2],
+        )
+
+        course_page = course.extended_object
+        self.assertListEqual(
+            list(Organization.get_organizations_codes(course_page, "en")),
+            [org_page_code_1, org_page_code_2],
+        )
