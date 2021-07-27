@@ -4,3 +4,45 @@
   position: absolute;
   left: -9999rem;
 }
+
+// Screen reader only content
+.sr-only {
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  word-wrap: normal !important;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// Screen reader toggable function, including offscreen navigation
+.sr-only-focus:active,
+.sr-only-focus:focus {
+  clip: auto !important;
+  clip-path: none;
+  display: block;
+  font-size: 1em;
+  height: auto;
+  left: 5px;
+  line-height: normal;
+  padding: 15px 23px 14px;
+  text-decoration: none;
+  top: 5px;
+  width: auto;
+  z-index: 100000; /* Above WP toolbar. */
+  background-color: r-color('midnightblue');
+  color: r-color('white');
+  padding: 1rem;
+}

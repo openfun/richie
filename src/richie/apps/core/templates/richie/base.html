@@ -62,50 +62,60 @@
 
         {# Wrap all body content in an ID'd element to easily remove it from view (using aria-hidden) #}
         {# when a modal is open. This is important for accessibility. #}
+
+        {# First link on a website should always be a skip to content #}
+        {# Access key directive allows users to use keyboard shortcuts #}
+        <a href="#site-content" class="sr-only sr-only-focus" accesskey="c">{% trans "Skip to main content" %}</a>
+        
         <div id="modal-exclude">
             {% block body_header %}
-            <nav class="topbar {% block topbar_classes %}{% endblock topbar_classes %}" id="main-menu">
-                <div class="topbar__container">
-                    <div class="topbar__brand">
-                        <button class="topbar__hamburger"
-                                data-target="main-menu" aria-label="menu" aria-expanded="false">&#8801;</button>
-                        <a href="/">
-                        {% block topbar_branding %}
-                            <img src="{% static "richie/images/logo.png" %}" class="topbar__logo" alt="{{ SITE.name }}">
-                        {% endblock topbar_branding %}
-                        </a>
-                    </div>
-                    <div class="topbar__menu">
-                        <ul class="topbar__list">
-                            {% show_menu 0 100 0 0 "menu/header_menu.html" %}
-                        </ul>
-                    </div>
-                    <div class="topbar__menu topbar__menu--aside">
-                        {% block topbar_searchbar %}
-                        <div class="topbar__search richie-react richie-react--root-search-suggest-field"
-                            data-props='{"courseSearchPageUrl": "{% page_url 'courses' %}"}'></div>
-                        {% endblock topbar_searchbar %}
 
-                        <ul class="topbar__list topbar__list--controls">
-                            {% block userlogin %}
-                                {% if AUTHENTICATION %}
-                                    <li class="topbar__item topbar__item--login richie-react richie-react--user-login" data-props='{"profileUrls": {{ AUTHENTICATION.profile_urls }}}'></li>
-                                {% endif %}
-                            {% endblock userlogin %}
-                            {% block topbar_contact %}
-                            <li class="topbar__item topbar__item--cta">
-                                <a href="#">{% trans "Contact us" %}</a>
-                            </li>
-                            {% endblock topbar_contact %}
-                        </ul>
+            {# Wrap header content in a header tag to improve landmarks around the site #}
 
-                        {% language_chooser "menu/language_menu.html" %}
+            <header id="site-header">
+                <nav class="topbar {% block topbar_classes %}{% endblock topbar_classes %}" id="main-menu">
+                    <div class="topbar__container">
+                        <div class="topbar__brand">
+                            <button class="topbar__hamburger"
+                                    data-target="main-menu" aria-label="menu" aria-expanded="false">&#8801;</button>
+                            <a href="/">
+                                <img src="{% static "richie/images/logo.png" %}" class="topbar__logo" alt="{{ SITE.name }}">
+                            </a>
+                        </div>
+                        <div class="topbar__menu">
+                            <ul class="topbar__list"> 
+                                {% show_menu 0 100 0 0 "menu/header_menu.html" %}
+                            </ul>
+                        </div>
+                        <div class="topbar__menu topbar__menu--aside">
+                            {% block topbar_searchbar %}
+                            <div class="topbar__search richie-react richie-react--root-search-suggest-field"
+                                data-props='{"courseSearchPageUrl": "{% page_url 'courses' %}"}'></div>
+                            {% endblock topbar_searchbar %}
+
+                            <ul class="topbar__list topbar__list--controls">
+                                {% block userlogin %}
+                                    {% if AUTHENTICATION %}
+                                        <li class="topbar__item topbar__item--login richie-react richie-react--user-login" data-props='{"profileUrls": {{ AUTHENTICATION.profile_urls }}}'></li>
+                                    {% endif %}
+                                {% endblock userlogin %}
+                                {% block topbar_contact %}
+                                <li class="topbar__item topbar__item--cta">
+                                    <a href="#">{% trans "Contact us" %}</a>
+                                </li>
+                                {% endblock topbar_contact %}
+                            </ul>
+
+                            {% language_chooser "menu/language_menu.html" %}
+                        </div>
                     </div>
-                </div>
-            </nav>
+                </nav>
+            </header>
             {% endblock body_header %}
+            
+            {# Main landmark helps redirect users with dissabilities directly to the content #}
 
-            <div class="body-content">
+            <main id="site-content" class="body-content">
                 {% block subheader %}
                 <div class="subheader">
                     {% block breadcrumbs %}
@@ -116,45 +126,47 @@
                 {% endblock subheader %}
 
                 {% block content %}{% endblock content %}
-            </div>
+            </main>
 
             {% block body_footer %}
-            <div class="body-footer">
-                <div class="body-footer__container">
-                    <div class="body-footer__menu">
-                        <p class="body-footer__subtitle">{% trans "Learn more" %}</p>
-                        <div class="body-footer__items">
-                            {% static_placeholder "footer" %}
+            <footer id="site-footer">
+                <div class="body-footer">
+                    <div class="body-footer__container">
+                        <div class="body-footer__menu">
+                            <p class="body-footer__subtitle">{% trans "Learn more" %}</p>
+                            <div class="body-footer__items">
+                                {% static_placeholder "footer" %}
+                            </div>
                         </div>
-                    </div>
-                    <div class="body-footer__brand">
-                        <a href="/">
-                            <img src="{% static "richie/images/logo-alt.png" %}" alt="">
-                        </a>
-                    </div>
-                    <div class="body-footer__insert">
-                        {% block body_footer_title %}
-                            <p class="body-footer__title">{% trans "Life-changing learning!" %}</p>
-                        {% endblock body_footer_title %}
-                        {% language_chooser "menu/language_menu.html" %}
-                        <div class="body-footer__badges">
-                            {% include "social-networks/footer-badges.html" %}
+                        <div class="body-footer__brand">
+                            <a href="/">
+                                <img src="{% static "richie/images/logo-alt.png" %}" alt="">
+                            </a>
+                        </div>
+                        <div class="body-footer__insert">
+                            {% block body_footer_title %}
+                                <p class="body-footer__title">{% trans "Life-changing learning!" %}</p>
+                            {% endblock body_footer_title %}
+                            {% language_chooser "menu/language_menu.html" %}
+                            <div class="body-footer__badges">
+                                {% include "social-networks/footer-badges.html" %}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="body-mentions">
-                <div class="body-mentions__container">
-                    {% block body_mentions %}
-                    <div class="body-mentions__poweredby">
-                        <a href="https://richie.education">
-                            <small>{% trans "Powered by" %}</small>
-                            <strong>Richie</strong>
-                        </a>
+                <div class="body-mentions">
+                    <div class="body-mentions__container">
+                        {% block body_mentions %}
+                        <div class="body-mentions__poweredby">
+                            <a href="https://richie.education">
+                                <small>{% trans "Powered by" %}</small>
+                                <strong>Richie</strong>
+                            </a>
+                        </div>
+                        {% endblock body_mentions %}
                     </div>
-                    {% endblock body_mentions %}
                 </div>
-            </div>
+            </footer>
             {% endblock body_footer %}
         </div>
 
