@@ -74,7 +74,7 @@ class TestSentinelClient(TestCase):
         self.assertEqual(res, 9223372036854775805)
 
     def test_delete(self):
-        """Test the delete cache operation """
+        """Test the delete cache operation"""
         cache.set_many({"a": 1, "b": 2, "c": 3})
         res = cache.delete("a")
         self.assertTrue(bool(res))
@@ -136,7 +136,7 @@ class TestSentinelClient(TestCase):
         self.assertGreater(ttl + 0.5, 20)
 
     def test_get_default(self):
-        """Test get cache operation with a default value """
+        """Test get cache operation with a default value"""
         res = cache.get("test_key")
         self.assertIsNone(res)
 
@@ -240,7 +240,7 @@ class TestSentinelClient(TestCase):
         self.assertEqual(res, "heló")
 
     def test_incr(self):
-        """"Test the incr cache operation"""
+        """ "Test the incr cache operation"""
         cache.set("num", 1)
 
         cache.incr("num")

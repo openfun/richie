@@ -1,4 +1,4 @@
-{% load i18n cms_tags menu_tags rfc_5646_locale static sekizai_tags %}
+{% load i18n cms_tags menu_tags rfc_5646_locale static sekizai_tags full_static_tags %}
 <!doctype html>
 <html lang="{{ LANGUAGE_CODE|rfc_5646_locale }}">
     <head>
@@ -39,7 +39,7 @@
             <meta property="og:url" content="{{ SITE.web_url }}{{ current_page.get_absolute_url }}">
             {% block meta_rdfa_context %}
             <meta property="og:type" content="website" />
-            <meta property="og:image" content="{{ SITE.web_url }}{% static "richie/images/logo.png" %}" />
+            <meta property="og:image" content="{% static_absolute "richie/images/logo.png" %}" />
             {% endblock meta_rdfa_context %}
             {% endblock meta_rdfa %}
 

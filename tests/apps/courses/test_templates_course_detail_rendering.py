@@ -55,7 +55,7 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
         # Create an ongoing open course run that will be published (created before
         # publishing the page)
         now = timezone.now()
-        run = CourseRunFactory(
+        CourseRunFactory(
             direct_course=course,
             start=now - timedelta(hours=1),
             end=now + timedelta(hours=2),
