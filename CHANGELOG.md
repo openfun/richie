@@ -13,6 +13,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Course code information on the course glimpse
 - Course introduction and code to the search index and API
 - Documentation on connecting Richie with OpenEdX
+- Add robots.txt template with a sitemap rule so it is no longer need
+  to register the sitemap.xml URL from each crawler administration panel
 
 ### Changed
 
