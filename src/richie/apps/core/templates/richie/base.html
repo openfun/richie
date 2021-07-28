@@ -63,11 +63,12 @@
         {# Wrap all body content in an ID'd element to easily remove it from view (using aria-hidden) #}
         {# when a modal is open. This is important for accessibility. #}
 
+        <div id="modal-exclude">
+
         {# First link on a website should always be a skip to content #}
         {# Access key directive allows users to use keyboard shortcuts #}
         <a href="#site-content" class="sr-only sr-only-focus" accesskey="c">{% trans "Skip to main content" %}</a>
         
-        <div id="modal-exclude">
             {% block body_header %}
 
             {# Wrap header content in a header tag to improve landmarks around the site #}
@@ -113,7 +114,7 @@
             </header>
             {% endblock body_header %}
             
-            {# Main landmark helps redirect users with dissabilities directly to the content #}
+            {# Main landmark helps redirect users with disabilities directly to the content #}
 
             <main id="site-content" class="body-content">
                 {% block subheader %}
