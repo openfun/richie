@@ -12,6 +12,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 - Fix course teaser layout issues on Safari
 - Fix html landmarks for screen readers
+- Fix link to homepage should have a default title for context
 
 ### Added
 
