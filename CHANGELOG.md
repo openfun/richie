@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Fix course teaser layout issues on Safari
+- Added the course cover image using 1200x630 size for the open graph og:image meta
 
 ### Added
 

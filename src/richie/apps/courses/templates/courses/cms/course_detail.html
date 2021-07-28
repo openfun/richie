@@ -11,6 +11,19 @@
 {% endblock meta_index_rules %}
 
 
+{% block meta_opengraph_image %}
+    {% get_placeholder_plugins "course_cover" as plugins or %}
+        {{ block.super }}
+    {% endget_placeholder_plugins %}
+    {% blockplugin plugins.0 %}
+        {% thumbnail instance.picture 1200x630 crop upscale subject_location=instance.picture.subject_location as thumb %}
+        <meta property="og:image" content="{{ request.scheme }}:{% if CDN_DOMAIN is not defined %}//{{ request.get_host }}{% endif %}{{ thumb.url }}">
+        <meta property="og:image:width" content="{{ thumb.width }}">
+        <meta property="og:image:height" content="{{ thumb.height }}">
+    {% endblockplugin %}
+{% endblock meta_opengraph_image %}
+
+
 {% block meta_opengraph_contextuals %}
     <meta property="og:title" content="{{ current_page.get_title|truncatechars:65 }}">
     <meta property="og:url" content="{{ SITE.web_url }}{{ current_page.get_absolute_url }}">
