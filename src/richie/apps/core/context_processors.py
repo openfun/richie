@@ -52,6 +52,17 @@ def site_metas(request: HttpRequest):
     if getattr(settings, "CDN_DOMAIN", None):
         context["CDN_DOMAIN"] = settings.CDN_DOMAIN
 
+    # Add a MEDIA_URL_PREFIX to context to prefix the media url files to have an absolute URL
+    if settings.MEDIA_URL.startswith("//"):
+        # Eg. //my-cdn-user.cdn-provider.com/media/
+        context["MEDIA_URL_PREFIX"] = f"{request.scheme:s}:"
+    elif settings.MEDIA_URL.startswith("/"):
+        # Eg. /media/
+        context["MEDIA_URL_PREFIX"] = f"{protocol:s}://{site_current.domain:s}"
+    else:
+        # Eg. https://my-cdn-user.cdn-provider.com/media/
+        context["MEDIA_URL_PREFIX"] = ""
+
     authentication_delegation = getattr(
         settings, "RICHIE_AUTHENTICATION_DELEGATION", None
     )

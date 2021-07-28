@@ -120,7 +120,7 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
             URIRef("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
             URIRef("https://schema.org/Course"),
         )
-        self.assertEqual(len(list(graph.triples((subject, None, None)))), 34)
+        self.assertEqual(len(list(graph.triples((subject, None, None)))), 36)
 
         # Opengraph
         self.assertTrue(

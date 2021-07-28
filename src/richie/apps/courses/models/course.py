@@ -135,6 +135,7 @@ class CourseState(Mapping):
         return self._d["priority"] < other["priority"]
 
 
+# pylint: disable=too-many-public-methods
 class Course(BasePageExtension):
     """
     The course page extension represents and records a course in the catalog.
