@@ -1,4 +1,4 @@
-{% load i18n cms_tags menu_tags rfc_5646_locale static sekizai_tags %}
+{% load i18n cms_tags menu_tags rfc_5646_locale static sekizai_tags full_static_tags %}
 <!doctype html>
 <html lang="{{ LANGUAGE_CODE|rfc_5646_locale }}">
     <head>
@@ -44,7 +44,7 @@
                 {% comment %}Since we are not able yet to get relevant image contextually for each content kind, we
                 keep the logo as the ressource image for all{% endcomment %}
                 {% block meta_opengraph_image %}
-                    <meta property="og:image" content="{{ SITE.web_url }}{% static "richie/images/logo.png" %}">
+                    <meta property="og:image" content="{% fullstatic "richie/images/logo.png" %}">
                 {% endblock meta_opengraph_image %}
                 {% block meta_opengraph_contextuals %}
                     <meta property="og:title" content="{{ SITE.name }}">

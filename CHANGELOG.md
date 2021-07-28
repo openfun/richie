@@ -10,6 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix open graph og:image meta when static files are on a CDN
 - Fix course teaser layout issues on Safari
 
 ### Added
