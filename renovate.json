@@ -24,8 +24,6 @@
         "dj-pagination",
         "django-cms",
         "django-parler",
-        "django-treebeard",
-        "Django",
         "djangocms-file",
         "djangocms-googlemap",
         "djangocms-link",
