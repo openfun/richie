@@ -141,6 +141,57 @@ class CategoriesIndexersTestCase(TestCase):
             ],
         )
 
+    def test_indexers_categories_get_es_documents_unpublished(self):
+        """
+        Unpublished categories and children of unpublished categories should not be indexed
+        """
+        # Our meta category and its page
+        meta = CategoryFactory(
+            page_parent=create_i18n_page("Categories", published=True),
+            page_reverse_id="subjects",
+            page_title="Subjects",
+            should_publish=True,
+        )
+        parent = CategoryFactory(page_parent=meta.extended_object, should_publish=True)
+        CategoryFactory(
+            page_parent=parent.extended_object,
+            page_title="my second subject",
+            should_publish=True,
+        )
+
+        # Unpublish the parent category
+        self.assertTrue(parent.extended_object.unpublish("en"))
+
+        # The unpublished parent category and its child should not get indexed
+        self.assertEqual(
+            list(
+                CategoriesIndexer.get_es_documents(
+                    index="some_index", action="some_action"
+                )
+            ),
+            [
+                {
+                    "_id": "P-00010001",
+                    "_index": "some_index",
+                    "_op_type": "some_action",
+                    "_type": "category",
+                    "absolute_url": {
+                        "en": "/en/categories/subjects/",
+                        "fr": "/fr/categories/subjects/",
+                    },
+                    "complete": {"en": ["Subjects"]},
+                    "description": {},
+                    "icon": {},
+                    "is_meta": True,
+                    "kind": None,
+                    "logo": {},
+                    "nb_children": 1,
+                    "path": "00010001",
+                    "title": {"en": "Subjects"},
+                },
+            ],
+        )
+
     def test_indexers_categories_get_es_documents_language_fallback(self):
         """Absolute urls should be computed as expected with language fallback."""
         # Our meta category and its page

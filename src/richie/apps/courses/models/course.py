@@ -363,7 +363,7 @@ class Course(BasePageExtension):
             Category, CategoryPluginModel, language=language
         )
 
-    def get_root_to_leaf_category_pages(self):
+    def get_root_to_leaf_public_category_pages(self):
         """
         Build a query retrieving all pages linked to this course's categories or one of their
         ancestors excluding the meta category itself.
@@ -375,7 +375,9 @@ class Course(BasePageExtension):
         category_query = self.get_categories()
 
         # 1. We want the pages directly related to a category of the course
-        page_query = Page.objects.filter(publisher_draft__category__in=category_query)
+        page_query = Page.objects.filter(
+            publisher_draft__category__in=category_query, title_set__published=True
+        )
         # 2. We want the pages related to one of the ancestors of the categories of the course
         for category in category_query.select_related(
             "public_extension__extended_object"
@@ -386,7 +388,8 @@ class Course(BasePageExtension):
             # Don't include the meta category as it materializes a "filter bank" and not a
             # search option
             page_query = page_query | ancestor_query.filter(
-                node__parent__cms_pages__category__isnull=False
+                node__parent__cms_pages__category__isnull=False,
+                title_set__published=True,
             )
         return page_query.distinct()
 

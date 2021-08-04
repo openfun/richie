@@ -9,6 +9,7 @@ from django.test import TestCase
 import pytz
 from cms.api import add_plugin
 
+from richie.apps.core.helpers import create_i18n_page
 from richie.apps.courses.cms_plugins import CategoryPlugin
 from richie.apps.courses.defaults import HOUR, MINUTE, WEEK
 from richie.apps.courses.factories import (
@@ -80,6 +81,37 @@ class CoursesIndexersTestCase(TestCase):
         )
         self.assertEqual(len(indexed_courses), 1)
         self.assertEqual(indexed_courses[0]["course_runs"], [])
+
+    def test_indexers_courses_get_es_documents_unpublished_category(self):
+        """
+        Unpublished categories and children of unpublished categories should not be indexed
+        """
+        # Create a child category
+        meta = CategoryFactory(
+            page_parent=create_i18n_page("Categories", published=True),
+            page_reverse_id="subjects",
+            page_title="Subjects",
+            should_publish=True,
+        )
+        parent = CategoryFactory(page_parent=meta.extended_object, should_publish=True)
+        category = CategoryFactory(
+            page_parent=parent.extended_object,
+            page_title="my second subject",
+            should_publish=True,
+        )
+
+        CourseFactory(fill_categories=[category], should_publish=True)
+
+        # Unpublish the parent category
+        self.assertTrue(parent.extended_object.unpublish("en"))
+
+        course_document = list(
+            CoursesIndexer.get_es_documents(index="some_index", action="some_action")
+        )[0]
+
+        # Neither the category not its parent should be linked to the course
+        self.assertEqual(course_document["categories"], [])
+        self.assertEqual(course_document["categories_names"], {})
 
     def test_indexers_courses_get_es_documents_snapshots(self):
         """
