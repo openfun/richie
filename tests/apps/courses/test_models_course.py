@@ -1143,7 +1143,7 @@ class CourseModelsTestCase(TestCase):
         self.assertEqual(Program.objects.count(), 2)
         self.assertEqual(course.get_programs().count(), 1)
 
-    def test_models_course_get_root_to_leaf_category_pages_leaf(self):
+    def test_models_course_get_root_to_leaf_public_category_pages_leaf(self):
         """
         A course linked to a leaf category, in a nested category tree, should be associated
         with all the category's ancestors.
@@ -1166,9 +1166,11 @@ class CourseModelsTestCase(TestCase):
             parent_category.public_extension.extended_object,
             leaf_category.public_extension.extended_object,
         ]
-        self.assertEqual(expected_pages, list(course.get_root_to_leaf_category_pages()))
+        self.assertEqual(
+            expected_pages, list(course.get_root_to_leaf_public_category_pages())
+        )
 
-    def test_models_course_get_root_to_leaf_category_pages_parent(self):
+    def test_models_course_get_root_to_leaf_public_category_pages_parent(self):
         """
         A course linked to a parent category, in a nested category tree, should be associated
         with all the category's ancestors, but not we the child.
@@ -1188,9 +1190,11 @@ class CourseModelsTestCase(TestCase):
         )
 
         expected_pages = [parent_category.public_extension.extended_object]
-        self.assertEqual(expected_pages, list(course.get_root_to_leaf_category_pages()))
+        self.assertEqual(
+            expected_pages, list(course.get_root_to_leaf_public_category_pages())
+        )
 
-    def test_models_course_get_root_to_leaf_category_pages_duplicate(self):
+    def test_models_course_get_root_to_leaf_public_category_pages_duplicate(self):
         """
         If the course is linked to several categories, the ancestor categories should not get
         duplicated.
@@ -1217,7 +1221,9 @@ class CourseModelsTestCase(TestCase):
             leaf_category1.public_extension.extended_object,
             leaf_category2.public_extension.extended_object,
         ]
-        self.assertEqual(expected_pages, list(course.get_root_to_leaf_category_pages()))
+        self.assertEqual(
+            expected_pages, list(course.get_root_to_leaf_public_category_pages())
+        )
 
     # Fields: effort
 

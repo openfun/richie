@@ -18,6 +18,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Stop indexing unpublished categories
 - Repatriate within our codebase the deprecated bootstrap mixin
   make-container-max-widths
 - Fix course teaser layout issues on Safari

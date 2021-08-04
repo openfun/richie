@@ -490,7 +490,7 @@ class CoursesIndexer:
         # Prepare categories, making sure we get title information for categories
         # in the same query
         category_pages = (
-            course.get_root_to_leaf_category_pages()
+            course.get_root_to_leaf_public_category_pages()
             .select_related("node")
             .prefetch_related(
                 Prefetch(
