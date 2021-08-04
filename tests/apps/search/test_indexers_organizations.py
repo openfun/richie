@@ -121,6 +121,20 @@ class OrganizationsIndexersTestCase(TestCase):
             ],
         )
 
+    def test_indexers_organizations_get_es_documents_unpublished(self):
+        """Unpublished organizations should not be indexed"""
+        OrganizationFactory()
+
+        # The unpublished organization should not get indexed
+        self.assertEqual(
+            list(
+                OrganizationsIndexer.get_es_documents(
+                    index="some_index", action="some_action"
+                )
+            ),
+            [],
+        )
+
     def test_indexers_organizations_get_es_documents_language_fallback(self):
         """Absolute urls should be computed as expected with language fallback."""
         OrganizationFactory(

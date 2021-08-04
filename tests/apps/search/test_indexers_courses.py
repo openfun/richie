@@ -25,6 +25,8 @@ from richie.apps.search.indexers.courses import CoursesIndexer
 from richie.apps.search.indexers.organizations import OrganizationsIndexer
 from richie.plugins.simple_picture.cms_plugins import SimplePicturePlugin
 
+# pylint: disable=too-many-public-methods
+
 
 class CoursesIndexersTestCase(TestCase):
     """
@@ -82,6 +84,19 @@ class CoursesIndexersTestCase(TestCase):
         self.assertEqual(len(indexed_courses), 1)
         self.assertEqual(indexed_courses[0]["course_runs"], [])
 
+    def test_indexers_courses_get_es_documents_unpublished_course(self):
+        """Unpublished courses should not be indexed"""
+        CourseFactory()
+
+        self.assertEqual(
+            list(
+                CoursesIndexer.get_es_documents(
+                    index="some_index", action="some_action"
+                )
+            ),
+            [],
+        )
+
     def test_indexers_courses_get_es_documents_unpublished_category(self):
         """
         Unpublished categories and children of unpublished categories should not be indexed
@@ -112,6 +127,38 @@ class CoursesIndexersTestCase(TestCase):
         # Neither the category not its parent should be linked to the course
         self.assertEqual(course_document["categories"], [])
         self.assertEqual(course_document["categories_names"], {})
+
+    def test_indexers_courses_get_es_documents_unpublished_organization(self):
+        """Unpublished organizations should not be indexed."""
+        organization = OrganizationFactory(should_publish=True)
+        CourseFactory(fill_organizations=[organization], should_publish=True)
+
+        # Unpublish the organization
+        self.assertTrue(organization.extended_object.unpublish("en"))
+
+        course_document = list(
+            CoursesIndexer.get_es_documents(index="some_index", action="some_action")
+        )[0]
+
+        # The unpublished organization should not be linked to the course
+        self.assertEqual(course_document["organizations"], [])
+        self.assertEqual(course_document["organizations_names"], {})
+
+    def test_indexers_courses_get_es_documents_unpublished_person(self):
+        """Unpublished persons should not be indexed."""
+        person = PersonFactory(should_publish=True)
+        CourseFactory(fill_team=[person], should_publish=True)
+
+        # Unpublish the person
+        self.assertTrue(person.extended_object.unpublish("en"))
+
+        course_document = list(
+            CoursesIndexer.get_es_documents(index="some_index", action="some_action")
+        )[0]
+
+        # The unpublished person should not be linked to the course
+        self.assertEqual(course_document["persons"], [])
+        self.assertEqual(course_document["persons_names"], {})
 
     def test_indexers_courses_get_es_documents_snapshots(self):
         """
