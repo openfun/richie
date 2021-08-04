@@ -96,6 +96,20 @@ class PersonsIndexersTestCase(TestCase):
             ],
         )
 
+    def test_indexers_persons_get_es_documents_unpublished(self):
+        """Unpublished persons should not be indexed"""
+        PersonFactory()
+
+        # The unpublished person should not get indexed
+        self.assertEqual(
+            list(
+                PersonsIndexer.get_es_documents(
+                    index="some_index", action="some_action"
+                )
+            ),
+            [],
+        )
+
     def test_indexers_persons_get_es_documents_language_fallback(self):
         """Absolute urls should be computed as expected with language fallback."""
         PersonFactory(
