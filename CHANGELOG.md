@@ -8,15 +8,19 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Documentation on connecting Richie with OpenEdX
+
+### Changed
+
+- Upgrade to DjangoCMS 3.9.0 (and subsequently to Django 3.2.6)
+
 ### Fixed
 
 - Repatriate within our codebase the deprecated bootstrap mixin
   make-container-max-widths
 - Fix course teaser layout issues on Safari
-
-### Added
-
-- Documentation on connecting Richie with OpenEdX
 
 ## [2.7.1] - 2021-06-08
 
