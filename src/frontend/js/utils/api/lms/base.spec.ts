@@ -11,7 +11,7 @@ describe('Base API', () => {
       },
     ],
   }).generate();
-  (window as any).__richie_frontend_context__ = { context };
+  window.__richie_frontend_context__ = { context };
   const { default: API } = require('./base');
   const LMSConf = context.lms_backends[0];
   const BaseAPI = API(LMSConf);

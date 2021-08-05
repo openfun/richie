@@ -10,7 +10,7 @@ import { SessionContext } from '.';
 
 describe('useSession', () => {
   const context = ContextFactory().generate();
-  (window as any).__richie_frontend_context__ = { context };
+  window.__richie_frontend_context__ = { context };
   const {
     SessionProvider,
     useSession,

@@ -15,8 +15,8 @@ import OpenEdxHawthornApiInterface from './lms/openedx-hawthorn';
 import OpenEdxFonzieApiInterface from './lms/openedx-fonzie';
 
 const AuthenticationAPIHandler = (): Nullable<APIAuthentication> => {
-  const AUTHENTICATION: AuthenticationBackend = (window as any).__richie_frontend_context__?.context
-    ?.authentication;
+  const AUTHENTICATION: AuthenticationBackend =
+    window.__richie_frontend_context__?.context?.authentication;
   if (!AUTHENTICATION) return null;
 
   switch (AUTHENTICATION.backend) {
