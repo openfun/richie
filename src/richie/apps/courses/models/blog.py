@@ -71,7 +71,7 @@ class BlogPost(BasePageExtension):
             .exclude(id=self.id)
             .select_related("extended_object")
             .distinct()
-            .order_by("extended_object__node__path")
+            .order_by("-extended_object__publication_date")
         )
 
 

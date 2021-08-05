@@ -14,6 +14,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Sort related blogposts by their publication date (latest comes first)
 - Upgrade to DjangoCMS 3.9.0 (and subsequently to Django 3.2.6)
 
 ### Fixed
