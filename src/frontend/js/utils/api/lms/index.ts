@@ -5,7 +5,7 @@ import BaseApiInterface from './base';
 import OpenEdxDogwoodApiInterface from './openedx-dogwood';
 import OpenEdxHawthornApiInterface from './openedx-hawthorn';
 
-const context: CommonDataProps['context'] = (window as any).__richie_frontend_context__?.context;
+const context: CommonDataProps['context'] = window.__richie_frontend_context__?.context;
 if (!context) throw new Error('No context frontend context available');
 
 const LMS_BACKENDS = context.lms_backends;

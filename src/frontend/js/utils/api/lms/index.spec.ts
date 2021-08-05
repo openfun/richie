@@ -1,4 +1,5 @@
 import { ApiBackend } from 'types/api';
+import { ContextFactory } from 'utils/test/factories';
 
 import { handle } from 'utils/errors/handle';
 
@@ -6,23 +7,21 @@ const mockHandle: jest.Mock<typeof handle> = handle as any;
 jest.mock('utils/errors/handle');
 
 describe('API LMS', () => {
-  (window as any).__richie_frontend_context__ = {
-    context: {
-      lms_backends: [
-        {
-          backend: ApiBackend.BASE,
-          endpoint: 'https://demo.endpoint/api',
-          course_regexp: /.*base.org\/.*/,
-        },
-        {
-          backend: ApiBackend.OPENEDX_HAWTHORN,
-          endpoint: 'https://edx.endpoint/api',
-          course_regexp: /.*edx.org\/.*/,
-        },
-      ],
-      environment: 'test',
-    },
-  };
+  const context = ContextFactory({
+    lms_backends: [
+      {
+        backend: ApiBackend.BASE,
+        endpoint: 'https://demo.endpoint/api',
+        course_regexp: '.*base.org/.*',
+      },
+      {
+        backend: ApiBackend.OPENEDX_HAWTHORN,
+        endpoint: 'https://edx.endpoint/api',
+        course_regexp: '.*edx.org/.*',
+      },
+    ],
+  }).generate();
+  window.__richie_frontend_context__ = { context };
 
   const { default: LMSHandler } = require('./index');
 

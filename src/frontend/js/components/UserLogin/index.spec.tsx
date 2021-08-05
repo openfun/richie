@@ -24,7 +24,7 @@ jest.mock('utils/indirection/window', () => ({
 
 describe('<UserLogin />', () => {
   const contextProps = ContextFactory().generate();
-  (window as any).__richie_frontend_context__ = { context: contextProps };
+  window.__richie_frontend_context__ = { context: contextProps };
   const UserLogin = require('.').default;
   const { SessionProvider } = require('data/useSession');
 

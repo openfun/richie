@@ -1,9 +1,6 @@
 import * as Sentry from '@sentry/browser';
 
-import { CommonDataProps } from 'types/commonDataProps';
-
-const context: CommonDataProps['context'] = (window as any).__richie_frontend_context__?.context;
-
+const context = window.__richie_frontend_context__?.context;
 if (context?.sentry_dsn) {
   Sentry.init({
     dsn: context.sentry_dsn,

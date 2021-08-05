@@ -16,7 +16,7 @@ jest.mock('components/RootSearchSuggestField', () => ({
 }));
 
 describe('<Root />', () => {
-  (window as any).__richie_frontend_context__ = {
+  window.__richie_frontend_context__ = {
     context: ContextFactory({ authentication: undefined }).generate(),
   };
   const { Root } = require('.');

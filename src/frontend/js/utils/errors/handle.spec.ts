@@ -7,7 +7,7 @@ import { ContextFactory } from 'utils/test/factories';
 jest.mock('@sentry/browser');
 
 describe('handle', () => {
-  (window as any).__richie_frontend_context__ = {
+  window.__richie_frontend_context__ = {
     context: ContextFactory({
       sentry_dsn: 'https://sentry.local.test',
     }).generate(),

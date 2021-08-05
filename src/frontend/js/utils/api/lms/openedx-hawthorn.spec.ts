@@ -22,7 +22,7 @@ describe('OpenEdX Hawthorn API', () => {
       },
     ],
   }).generate();
-  (window as any).__richie_frontend_context__ = { context };
+  window.__richie_frontend_context__ = { context };
   const { default: API } = require('./openedx-hawthorn');
   const LMSConf = context.lms_backends[0];
   const HawthornApi = API(LMSConf);

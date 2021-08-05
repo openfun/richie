@@ -106,4 +106,4 @@ async function render() {
 document.addEventListener('DOMContentLoaded', render);
 
 // In some case, you would like to render Richie components manually
-(window as any).__RICHIE__ = Object.create({ render });
+window.__RICHIE__ = Object.create({ render });
