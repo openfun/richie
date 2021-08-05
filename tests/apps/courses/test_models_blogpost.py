@@ -1,6 +1,8 @@
 """
 Unit tests for the BlogPost model
 """
+import random
+
 from django.test import TestCase
 from django.test.utils import override_settings
 from django.utils import translation
@@ -50,15 +52,18 @@ class BlogPostModelsTestCase(TestCase):
         self._attach_category(blogpost1.public_extension, category)
         self._attach_category(blogpost3.public_extension, category)
 
-        # Draft blogposts
+        # - Draft blogposts
         with self.assertNumQueries(2):
             self.assertEqual(list(blogpost1.get_related_blogposts()), [blogpost2])
+
         with self.assertNumQueries(2):
             self.assertEqual(list(blogpost2.get_related_blogposts()), [blogpost1])
+
         # 3 queries because blogpost3 page fields were not retrieved when attaching categories
         with self.assertNumQueries(3):
             self.assertFalse(blogpost3.get_related_blogposts().exists())
 
+        # - Public blogposts
         blogpost1_public = blogpost1.public_extension
         with self.assertNumQueries(2):
             self.assertEqual(
@@ -66,7 +71,6 @@ class BlogPostModelsTestCase(TestCase):
                 [blogpost3.public_extension],
             )
 
-        # Public blogposts
         blogpost2_public = blogpost2.public_extension
         # 3 queries because blogpost2.public_extension page fields were not retrieved when
         # attaching categories
@@ -78,6 +82,31 @@ class BlogPostModelsTestCase(TestCase):
             self.assertEqual(
                 list(blogpost3_public.get_related_blogposts()),
                 [blogpost1.public_extension],
+            )
+
+    def test_models_blogpost_get_related_blogposts_ordering(self):
+        """Related blogposts should be ordered by their publication date."""
+        blogpost = BlogPostFactory(should_publish=True)
+        related_blogposts = BlogPostFactory.create_batch(3)
+
+        category = CategoryFactory()
+        self._attach_category(blogpost, category)
+
+        # Publish the related blogposts in a random order and attach them to the same category
+        random.shuffle(related_blogposts)
+        for post in related_blogposts:
+            post.extended_object.publish("en")
+            self._attach_category(post, category)
+
+        # Draft blogposts
+        previous_post = None
+        for post in blogpost.get_related_blogposts():
+            if previous_post is None:
+                previous_post = post
+                continue
+            self.assertGreater(
+                previous_post.extended_object.publication_date,
+                post.extended_object.publication_date,
             )
 
     @override_settings(
