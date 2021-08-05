@@ -1,21 +1,9 @@
 .search-filter-group-modal {
   display: flex;
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  max-width: 30rem;
-  margin: 3rem auto;
-  color: r-theme-val(search-filters-group-modal, base-color);
   flex-direction: column;
-  justify-content: space-between;
-  background: r-theme-val(search-filters-group-modal, base-background);
-  border: 1px solid r-theme-val(search-filters-group-modal, base-border);
-  border-radius: 4px;
-  outline: none;
-  overflow: auto;
   font-size: 1rem;
+  justify-content: space-between;
+  max-width: 30rem;
 
   &__form {
     display: flex;
@@ -73,17 +61,6 @@
     margin-top: -1px; // Avoid having a double border when the button overlaps with a list item
   }
 
-  &__overlay {
-    // Make sure the overlay is above any random 0-1-2 z-indexes in content and 200 z-index to the top bar
-    z-index: 300;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: r-theme-val(search-filters-group-modal, overlay-background);
-  }
-
   &-button {
     @include button-small();
     margin-top: 1rem;
@@ -99,9 +76,7 @@
   }
 }
 
-body.has-search-filter-group-modal {
-  overflow: hidden;
-
+body.has-opened-modal {
   /*
    * Flex children in a fixed/absolute container breaks Safari.
    * Use a specific, admittedly hacky media query to target it with a special layout

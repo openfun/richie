@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
-import ReactModal from 'react-modal';
+import { Modal } from 'components/Modal';
 
 import { fetchList } from 'data/getResourceList';
 import { CourseSearchParamsAction, useCourseSearchParams } from 'data/useCourseSearchParams';
@@ -53,14 +53,6 @@ const messages = defineMessages({
     id: 'components.SearchFilterGroupModal.queryTooShort',
   },
 });
-
-// The `setAppElement` needs to happen in proper code but breaks our testing environment.
-// This workaround is not satisfactory but it allows us to both test <SearchFilterGroupModal />
-// and avoid compromising accessibility in real-world use.
-const isTestEnv = typeof jest !== 'undefined';
-if (!isTestEnv) {
-  ReactModal.setAppElement('#modal-exclude');
-}
 
 export const SearchFilterGroupModal = ({ filter }: SearchFilterGroupModalProps) => {
   const intl = useIntl();
@@ -121,13 +113,11 @@ export const SearchFilterGroupModal = ({ filter }: SearchFilterGroupModalProps) 
       <button className="search-filter-group-modal-button" onClick={() => setModalIsOpen(true)}>
         <FormattedMessage {...messages.moreOptionsButton} />
       </button>
-      <ReactModal
-        ariaHideApp={!isTestEnv}
+      <Modal
         bodyOpenClassName="has-search-filter-group-modal"
-        className="search-filter-group-modal"
+        className="search-filter-group-modal modal--stretched"
         isOpen={modalIsOpen}
         onRequestClose={() => setModalIsOpen(false)}
-        overlayClassName="search-filter-group-modal__overlay"
       >
         <fieldset className="search-filter-group-modal__form">
           <legend className="search-filter-group-modal__form__title">
@@ -176,7 +166,7 @@ export const SearchFilterGroupModal = ({ filter }: SearchFilterGroupModalProps) 
         <button className="search-filter-group-modal__close" onClick={() => setModalIsOpen(false)}>
           <FormattedMessage {...messages.closeButton} />
         </button>
-      </ReactModal>
+      </Modal>
     </React.Fragment>
   );
 };

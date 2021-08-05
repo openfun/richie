@@ -1,0 +1,78 @@
+.modal {
+  background-color: r-theme-val(modal, base-background);
+  border-radius: $border-radius;
+  border: 1px solid r-theme-val(modal, base-border);
+  color: r-theme-val(modal, base-color);
+  left: 0;
+  margin: 3rem auto;
+  max-height: calc(100% - 6rem);
+  max-width: 1024px;
+  outline: none;
+  overflow: auto;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 75vw;
+
+  @include media-breakpoint-down(sm) {
+    margin: 1rem auto;
+    max-height: calc(100% - 2rem);
+    width: calc(100% - 2rem);
+  }
+
+  &--stretched {
+    bottom: 0;
+  }
+
+  &--centered {
+    bottom: initial;
+    left: 50%;
+    margin: 0;
+    max-height: calc(100vh - 6rem);
+    right: initial;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  &__closeButton {
+    @include button-reset-style();
+    background-color: r-theme-val(modal, close-background);
+    @if r-theme-val(modal, close-border) != null {
+      border: thin solid r-theme-val(modal, close-border);
+    }
+    box-sizing: initial;
+    color: r-theme-val(modal, close-color);
+    display: flex;
+    height: 24px;
+    margin: 0 0 0 auto;
+    padding: 12px;
+    position: sticky;
+    top: 0;
+    width: 24px;
+
+    &__icon {
+      fill: currentColor;
+      height: 100%;
+      width: 100%;
+    }
+  }
+
+  &__overlay {
+    // Make sure the overlay is above any random 0-1-2 z-indexes in content and 200 z-index to the top bar
+    background-color: r-theme-val(modal, overlay-background);
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 300;
+
+    &--transparent {
+      background-color: transparent;
+    }
+  }
+}
+
+body.has-opened-modal {
+  overflow: hidden;
+}
