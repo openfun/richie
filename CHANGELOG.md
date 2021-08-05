@@ -19,6 +19,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix search bug due to wrong ordering of char filters
 - Stop indexing unpublished categories
 - Repatriate within our codebase the deprecated bootstrap mixin
   make-container-max-widths

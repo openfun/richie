@@ -97,10 +97,10 @@ ANALYSIS_SETTINGS = {
                 "tokenizer": "standard",
                 "filter": [
                     "english_possessive_stemmer",
+                    "asciifolding",
                     "lowercase",
                     "english_stop",
                     "english_stemmer",
-                    "asciifolding",
                 ],
             },
             "english_trigram": {
@@ -108,10 +108,10 @@ ANALYSIS_SETTINGS = {
                 "tokenizer": "trigram",
                 "filter": [
                     "english_possessive_stemmer",
+                    "asciifolding",
                     "lowercase",
                     "english_stop",
                     "english_stemmer",
-                    "asciifolding",
                 ],
             },
             "french": {
@@ -119,10 +119,10 @@ ANALYSIS_SETTINGS = {
                 "tokenizer": "standard",
                 "filter": [
                     "french_elision",
+                    "asciifolding",
                     "lowercase",
                     "french_stop",
                     "french_stemmer",
-                    "asciifolding",
                 ],
             },
             "french_trigram": {
@@ -130,10 +130,10 @@ ANALYSIS_SETTINGS = {
                 "tokenizer": "trigram",
                 "filter": [
                     "french_elision",
+                    "asciifolding",
                     "lowercase",
                     "french_stop",
                     "french_stemmer",
-                    "asciifolding",
                 ],
             },
             "simple_diacritics_insensitive": {

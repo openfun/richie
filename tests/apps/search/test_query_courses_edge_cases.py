@@ -316,3 +316,44 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
         content = json.loads(response.content)
         self.assertEqual(len(content["objects"]), 1)
         self.assertEqual(content["objects"][0]["id"], "xyz")
+
+    def test_query_courses_french_ending_with_diacritic(self, *_):
+        """
+        Check that words ending in "ité" are well analyzed.
+        This test follows a bug in ordering of char filters.
+        We were stemming before doing the ascii folding. As a result:
+        - "électricité" was indexed as "electr"
+        - searching "électricité" was analyzed as "electr" => ok
+        - searching "electricite" was analylzed as "electricit" => nok
+        """
+        self.prepare_index(
+            [
+                {
+                    "absolute_url": {},
+                    "categories": [],
+                    "course_runs": [],
+                    "cover_image": {},
+                    "duration": {},
+                    "effort": {},
+                    "icon": {},
+                    "id": "001",
+                    "is_new": False,
+                    "is_listed": True,
+                    "organizations": [],
+                    "organizations_names": {},
+                    "title": {"fr": "électricité"},
+                    "description": {"fr": "text"},
+                }
+            ]
+        )
+
+        # The course should be found whether the query has accents or not
+        response = self.client.get("/api/v1.0/courses/?query=électricité")
+        self.assertEqual(response.status_code, 200)
+        content = json.loads(response.content)
+        self.assertEqual(len(content["objects"]), 1)
+
+        response = self.client.get("/api/v1.0/courses/?query=electricite")
+        self.assertEqual(response.status_code, 200)
+        content = json.loads(response.content)
+        self.assertEqual(len(content["objects"]), 1)
