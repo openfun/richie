@@ -478,14 +478,14 @@ describe('components/SearchSuggestField', () => {
     fireEvent.focus(field);
 
     fireEvent.change(field, { target: { value: 'ri' } });
-    expect(history.pushState).not.toHaveBeenCalled();
+    await waitFor(() => expect(history.pushState).not.toHaveBeenCalled());
 
     fireEvent.change(field, { target: { value: 'ric' } });
     act(() => {
       // run all pending timers (debounce) to update courseSearchParams
       jest.runOnlyPendingTimers();
     });
-    expect(history.pushState).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(history.pushState).toHaveBeenCalledTimes(1));
     expect(history.pushState).toHaveBeenLastCalledWith(
       {
         name: 'courseSearch',
@@ -499,12 +499,12 @@ describe('components/SearchSuggestField', () => {
     );
 
     fireEvent.change(field, { target: { value: 'rich data driven' } });
-    expect(history.pushState).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(history.pushState).toHaveBeenCalledTimes(1));
     act(() => {
       // run all pending timers (debounce) to update courseSearchParams
       jest.runOnlyPendingTimers();
     });
-    expect(history.pushState).toHaveBeenCalledTimes(2);
+    await waitFor(() => expect(history.pushState).toHaveBeenCalledTimes(2));
     expect(history.pushState).toHaveBeenLastCalledWith(
       {
         name: 'courseSearch',
@@ -518,12 +518,12 @@ describe('components/SearchSuggestField', () => {
     );
 
     fireEvent.change(field, { target: { value: '' } });
-    expect(history.pushState).toHaveBeenCalledTimes(2);
+    await waitFor(() => expect(history.pushState).toHaveBeenCalledTimes(2));
     act(() => {
       // run all pending timers (debounce) to update courseSearchParams
       jest.runOnlyPendingTimers();
     });
-    expect(history.pushState).toHaveBeenCalledTimes(3);
+    await waitFor(() => expect(history.pushState).toHaveBeenCalledTimes(3));
     expect(history.pushState).toHaveBeenLastCalledWith(
       {
         name: 'courseSearch',
@@ -561,13 +561,13 @@ describe('components/SearchSuggestField', () => {
     fireEvent.focus(field);
 
     fireEvent.change(field, { target: { value: 'ri' } });
-    expect(history.pushState).not.toHaveBeenCalled();
+    await waitFor(() => expect(history.pushState).not.toHaveBeenCalled());
 
     fireEvent.change(field, { target: { value: 'ri ' } });
-    expect(history.pushState).not.toHaveBeenCalled();
+    await waitFor(() => expect(history.pushState).not.toHaveBeenCalled());
 
     fireEvent.change(field, { target: { value: ' ri' } });
-    expect(history.pushState).not.toHaveBeenCalled();
+    await waitFor(() => expect(history.pushState).not.toHaveBeenCalled());
 
     fireEvent.change(field, { target: { value: 'ric' } });
     act(() => {
@@ -575,7 +575,7 @@ describe('components/SearchSuggestField', () => {
       jest.runOnlyPendingTimers();
     });
 
-    expect(history.pushState).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(history.pushState).toHaveBeenCalledTimes(1));
     expect(history.pushState).toHaveBeenLastCalledWith(
       {
         name: 'courseSearch',
@@ -625,13 +625,13 @@ describe('components/SearchSuggestField', () => {
     fireEvent.change(field, { target: { value: 'orga' } });
 
     // As user typing is debounced, history.pushState is not fired immediately
-    expect(history.pushState).not.toHaveBeenCalled();
+    await waitFor(() => expect(history.pushState).not.toHaveBeenCalled());
 
     act(() => {
       // run all pending timers (debounce) to update courseSearchParams
       jest.runOnlyPendingTimers();
     });
-    expect(history.pushState).toHaveBeenCalledTimes(1);
+    await waitFor(() => expect(history.pushState).toHaveBeenCalledTimes(1));
     expect(history.pushState).toHaveBeenLastCalledWith(
       {
         name: 'courseSearch',
