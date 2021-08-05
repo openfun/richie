@@ -130,3 +130,35 @@ class PartialMappingsTestCase(TestCase):
                 },
             },
         )
+
+    def test_partial_mappings_french_diacritics(self):
+        """
+        Make sure words ending in "icité" are analyzed the same way whether or not there
+        is an accent.
+        """
+        document_type = "stub"
+        index_name = "stub_index"
+        mapping = {"dynamic_templates": MULTILINGUAL_TEXT}
+
+        # Create the index and set a mapping that includes the pattern we want to test
+        self.indices_client.create(index=index_name)
+        self.indices_client.put_mapping(
+            index=index_name, doc_type=document_type, body=mapping
+        )
+        # The index needs to be closed before we set an analyzer
+        self.indices_client.close(index=index_name)
+        self.indices_client.put_settings(body=ANALYSIS_SETTINGS, index=index_name)
+        self.indices_client.open(index=index_name)
+
+        self.assertEqual(
+            self.indices_client.analyze(
+                body='{"analyzer": "french", "text": "électricité"}', index=index_name
+            )["tokens"][0]["token"],
+            "electricit",
+        )
+        self.assertEqual(
+            self.indices_client.analyze(
+                body='{"analyzer": "french", "text": "electricite"}', index=index_name
+            )["tokens"][0]["token"],
+            "electricit",
+        )
