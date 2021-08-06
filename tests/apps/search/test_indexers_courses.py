@@ -286,6 +286,7 @@ class CoursesIndexersTestCase(TestCase):
                 "en": ["Title L-0001", "Title L-0002"],
                 "fr": ["Titre L-0001", "Titre L-0002"],
             },
+            "code": course.code,
             "complete": {
                 "en": [
                     "an english course title",
@@ -396,6 +397,7 @@ class CoursesIndexersTestCase(TestCase):
                     },
                     "categories": [],
                     "categories_names": {},
+                    "code": course.code,
                     "complete": {
                         "en": [
                             "Enhanced incremental circuit",
@@ -608,6 +610,7 @@ class CoursesIndexersTestCase(TestCase):
             "_source": {
                 "absolute_url": {"en": "campo-qui-format-do"},
                 "categories": [43, 86],
+                "code": "abc123",
                 "cover_image": {"en": "cover_image.jpg"},
                 "duration": {"en": "6 months"},
                 "effort": {"en": "3 hours"},
@@ -630,6 +633,7 @@ class CoursesIndexersTestCase(TestCase):
                 "id": 93,
                 "absolute_url": "campo-qui-format-do",
                 "categories": [43, 86],
+                "code": "abc123",
                 "cover_image": "cover_image.jpg",
                 "duration": "6 months",
                 "effort": "3 hours",
@@ -654,6 +658,7 @@ class CoursesIndexersTestCase(TestCase):
             "_source": {
                 "absolute_url": {"en": "campo-qui-format-do"},
                 "categories": [43, 86],
+                "code": "abc123",
                 "cover_image": {"en": "cover_image.jpg"},
                 "duration": {"en": "3 weeks"},
                 "effort": {"en": "10 minutes"},
@@ -676,6 +681,7 @@ class CoursesIndexersTestCase(TestCase):
                 "id": 93,
                 "absolute_url": "campo-qui-format-do",
                 "categories": [43, 86],
+                "code": "abc123",
                 "cover_image": "cover_image.jpg",
                 "duration": "3 weeks",
                 "effort": "10 minutes",
@@ -699,6 +705,7 @@ class CoursesIndexersTestCase(TestCase):
             "_source": {
                 "absolute_url": {"en": "campo-qui-format-do"},
                 "categories": [43, 86],
+                "code": "abc123",
                 "cover_image": {"en": "cover_image.jpg"},
                 "duration": {"en": "N/A"},
                 "effort": {"en": "N/A"},
@@ -721,6 +728,7 @@ class CoursesIndexersTestCase(TestCase):
                 "id": 93,
                 "absolute_url": "campo-qui-format-do",
                 "categories": [43, 86],
+                "code": "abc123",
                 "cover_image": "cover_image.jpg",
                 "duration": "N/A",
                 "effort": "N/A",
@@ -744,6 +752,7 @@ class CoursesIndexersTestCase(TestCase):
             "_source": {
                 "absolute_url": {"en": "campo-qui-format-do"},
                 "categories": [43, 86],
+                "code": "abc123",
                 "cover_image": {},
                 "duration": {"en": "N/A"},
                 "effort": {"en": "N/A"},
@@ -766,6 +775,7 @@ class CoursesIndexersTestCase(TestCase):
                 "id": 93,
                 "absolute_url": "campo-qui-format-do",
                 "categories": [43, 86],
+                "code": "abc123",
                 "cover_image": None,
                 "duration": "N/A",
                 "effort": "N/A",

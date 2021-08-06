@@ -167,18 +167,45 @@ class CourseSearchForm(SearchForm):
                     "key": "query",
                     "fragment": [
                         {
-                            "multi_match": {
-                                "analyzer": QUERY_ANALYZERS[lang],
-                                "fields": [
-                                    "description.*",
-                                    "introduction.*",
-                                    "title.*^20",
-                                    f"categories_names.*^{related_content_boost}",
-                                    f"organizations_names.*^{related_content_boost}",
-                                    f"persons_names.*^{related_content_boost}",
-                                ],
-                                "query": full_text,
-                                "type": "best_fields",
+                            "bool": {
+                                "should": [
+                                    {
+                                        "multi_match": {
+                                            "analyzer": QUERY_ANALYZERS[lang],
+                                            "fields": [
+                                                "description.*",
+                                                "introduction.*",
+                                                "title.*^50",
+                                                f"categories_names.*^{related_content_boost}",
+                                                f"organizations_names.*^{related_content_boost}",
+                                                f"persons_names.*^{related_content_boost}",
+                                            ],
+                                            "query": full_text,
+                                            "type": "best_fields",
+                                        }
+                                    },
+                                    # Boost exact code matches so that they jump our state buckets
+                                    # A closed course with a perfect code match should be
+                                    # displayed before an open course with no perfect code match
+                                    {
+                                        "match": {
+                                            "code": {
+                                                "query": full_text,
+                                                "analyzer": "code",
+                                                "boost": 3000,
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "match": {
+                                            "code": {
+                                                "query": full_text,
+                                                "analyzer": "code",
+                                                "fuzziness": "AUTO",
+                                            }
+                                        }
+                                    },
+                                ]
                             }
                         }
                     ],
@@ -233,7 +260,7 @@ class CourseSearchForm(SearchForm):
                             "ms_since_epoch": arrow.utcnow().timestamp() * 1000,
                             "states": self.states,
                         },
-                    },
+                    }
                 },
             }
         }

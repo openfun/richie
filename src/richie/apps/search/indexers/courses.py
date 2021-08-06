@@ -183,6 +183,7 @@ class CoursesIndexer:
             # Searchable
             # description, title, category names & organization names are handled
             # by `MULTILINGUAL_TEXT`
+            "code": {"type": "text", "analyzer": "code_trigram"},
             **{
                 "complete.{:s}".format(lang): {
                     "type": "completion",
@@ -207,6 +208,7 @@ class CoursesIndexer:
     display_fields = [
         "absolute_url",
         "categories",
+        "code",
         "cover_image",
         "duration",
         "effort",
@@ -586,6 +588,7 @@ class CoursesIndexer:
                 [title for page in category_pages for title in page.published_titles],
                 {},
             ),
+            "code": course.code,
             "complete": {
                 language: slice_string_for_completion(title)
                 for language, title in titles.items()
@@ -700,6 +703,7 @@ class CoursesIndexer:
             },
             "id": es_course["_id"],
             "categories": source["categories"],
+            "code": source["code"],
             "organization_highlighted": get_best_field_language(
                 source["organization_highlighted"], language
             )

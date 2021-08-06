@@ -21,6 +21,7 @@ COURSES = [
     {
         "categories": ["P-00010001", "P-00010002", "L-000100010001", "L-00020001"],
         "categories_names": {"en": ["Artificial intelligence", "Autumn", "Wilderness"]},
+        "code": "001abc",
         "description": {
             "en": (
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam nec egestas "
@@ -42,6 +43,7 @@ COURSES = [
     {
         "categories": ["P-00010001", "P-00010003", "L-000100010002", "L-00020003"],
         "categories_names": {"en": ["Martial arts?", "Autumn"]},
+        "code": "002lmn",
         "description": {
             "en": (
                 "Artisanally-sourced clicks neque. erat volutpat. Nulla at laoreet. "
@@ -63,6 +65,7 @@ COURSES = [
     {
         "categories": ["P-00010002", "P-00010003", "L-000100020001", "L-00020001"],
         "categories_names": {"en": ["Artificial intelligence", "Water", "Wilderness"]},
+        "code": "003rst",
         "description": {
             "en": (
                 "Cursus honorum finite que non luctus ante. Etiam accumsan vulputate magna non "
@@ -84,6 +87,7 @@ COURSES = [
     {
         "categories": ["P-00010002", "P-00010004", "L-000100020002", "L-00020002"],
         "categories_names": {"en": ["Martial arts?", "Water"]},
+        "code": "004xyz",
         "description": {
             "en": (
                 "Nullam ornare finibus sollicitudin. Aliquam nisl leo, vestibulum a turpis quis, "
@@ -370,6 +374,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             "L-000100010001",
                             "L-00020001",
                         ],
+                        "code": "001abc",
                         "cover_image": "cover_image.jpg",
                         "duration": "N/A",
                         "effort": "N/A",
@@ -396,6 +401,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             "L-000100020001",
                             "L-00020001",
                         ],
+                        "code": "003rst",
                         "cover_image": "cover_image.jpg",
                         "duration": "N/A",
                         "effort": "N/A",
@@ -422,6 +428,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             "L-000100020002",
                             "L-00020002",
                         ],
+                        "code": "004xyz",
                         "cover_image": "cover_image.jpg",
                         "duration": "N/A",
                         "effort": "N/A",
@@ -448,6 +455,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                             "L-000100010002",
                             "L-00020003",
                         ],
+                        "code": "002lmn",
                         "cover_image": "cover_image.jpg",
                         "duration": "N/A",
                         "effort": "N/A",
@@ -1186,16 +1194,12 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         word through a language analyzer.
         The score of the text query impacts ordering.
         """
-        courses_definition, content = self.execute_query(
+        _courses_definition, content = self.execute_query(
             "query=artificial",
             suite=[["B", "F", "I"], ["E", "C"], ["H", "G"], ["D", "A"]],
         )
         # Keep only the courses that contain the word "artificial"
-        courses_definition = filter(lambda c: c[0] in [2, 0, 3], courses_definition)
-        self.assertEqual(
-            list((int(c["id"]) for c in content["objects"])),
-            [0, 3, 2],
-        )
+        self.assertEqual(list((int(c["id"]) for c in content["objects"])), [0, 3, 2])
 
     def test_query_courses_text_language_analyzer_with_filter_category(self, *_):
         """
@@ -1211,3 +1215,30 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             list((int(c["id"]) for c in content["objects"])),
             self.get_expected_courses(courses_definition, list(COURSE_RUNS)),
         )
+
+    def test_query_courses_code_partial(self, *_):
+        """Full-text search should match partial codes."""
+        for query in ["3rs", "3rst", "03rst", "003rst"]:
+            _courses_definition, content = self.execute_query(f"query={query:s}")
+            self.assertEqual(list((int(c["id"]) for c in content["objects"])), [2])
+
+    def test_query_courses_code_fuzzy(self, *_):
+        """Full-text search should match codes with automatic fuzziness."""
+        # A Levenshtein distance of 1 matches even our shortest search queries (3 characters)
+        for query in ["7rs", "3dst", "13rst", "003rsg"]:
+            _courses_definition, content = self.execute_query(f"query={query:s}")
+            self.assertEqual(list((int(c["id"]) for c in content["objects"])), [2])
+
+        # A Levenshtein distance of 2 matches only for search queries of at least 5 characters
+        for query in ["7ds", "3det", "14rst"]:
+            _courses_definition, content = self.execute_query(f"query={query:s}")
+            self.assertEqual(list((int(c["id"]) for c in content["objects"])), [])
+
+        _courses_definition, content = self.execute_query("query=003rfg")
+        self.assertEqual(list((int(c["id"]) for c in content["objects"])), [2])
+
+        # A Levenshtein distance of 3 doesn't match for search queries of 5 characters
+        # (we could test for longer queries...)
+        for query in ["7de", "3def", "14dst", "003efg"]:
+            _courses_definition, content = self.execute_query(f"query={query:s}")
+            self.assertEqual(list((int(c["id"]) for c in content["objects"])), [])
