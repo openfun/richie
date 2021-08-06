@@ -136,6 +136,22 @@ ANALYSIS_SETTINGS = {
                     "french_stemmer",
                 ],
             },
+            "code": {
+                "type": "custom",
+                "tokenizer": "standard",
+                "filter": [
+                    "asciifolding",
+                    "lowercase",
+                ],
+            },
+            "code_trigram": {
+                "type": "custom",
+                "tokenizer": "trigram",
+                "filter": [
+                    "asciifolding",
+                    "lowercase",
+                ],
+            },
             "simple_diacritics_insensitive": {
                 "tokenizer": "lowercase",
                 "filter": ["asciifolding"],

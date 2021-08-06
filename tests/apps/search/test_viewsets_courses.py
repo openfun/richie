@@ -290,6 +290,7 @@ class CoursesViewsetsTestCase(CMSTestCase):
             _source=[
                 "absolute_url",
                 "categories",
+                "code",
                 "cover_image",
                 "duration",
                 "effort",

@@ -222,18 +222,42 @@ class CourseSearchFormTestCase(TestCase):
                     "filter": {"term": {"is_listed": True}},
                     "must": [
                         {
-                            "multi_match": {
-                                "analyzer": "english",
-                                "fields": [
-                                    "description.*",
-                                    "introduction.*",
-                                    "title.*^20",
-                                    "categories_names.*^0.05",
-                                    "organizations_names.*^0.05",
-                                    "persons_names.*^0.05",
-                                ],
-                                "query": "some phrase terms",
-                                "type": "best_fields",
+                            "bool": {
+                                "should": [
+                                    {
+                                        "multi_match": {
+                                            "analyzer": "english",
+                                            "fields": [
+                                                "description.*",
+                                                "introduction.*",
+                                                "title.*^50",
+                                                "categories_names.*^0.05",
+                                                "organizations_names.*^0.05",
+                                                "persons_names.*^0.05",
+                                            ],
+                                            "query": "some phrase terms",
+                                            "type": "best_fields",
+                                        }
+                                    },
+                                    {
+                                        "match": {
+                                            "code": {
+                                                "query": "some phrase terms",
+                                                "analyzer": "code",
+                                                "boost": 3000,
+                                            }
+                                        }
+                                    },
+                                    {
+                                        "match": {
+                                            "code": {
+                                                "query": "some phrase terms",
+                                                "analyzer": "code",
+                                                "fuzziness": "AUTO",
+                                            }
+                                        }
+                                    },
+                                ]
                             }
                         }
                     ],

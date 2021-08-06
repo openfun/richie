@@ -10,7 +10,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- Course introduction to the search index and API
+- Course introduction and code to the search index and API
 - Documentation on connecting Richie with OpenEdX
 
 ### Changed

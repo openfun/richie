@@ -162,3 +162,46 @@ class PartialMappingsTestCase(TestCase):
             )["tokens"][0]["token"],
             "electricit",
         )
+
+    def test_partial_mappings_code(self):
+        """Make sure our code analyzer works as expected."""
+        index_name = "stub_index"
+
+        # Create the index and set a mapping that includes the pattern we want to test
+        self.indices_client.create(index=index_name)
+        # The index needs to be closed before we set an analyzer
+        self.indices_client.close(index=index_name)
+        self.indices_client.put_settings(body=ANALYSIS_SETTINGS, index=index_name)
+        self.indices_client.open(index=index_name)
+
+        self.assertEqual(
+            [
+                t["token"]
+                for t in self.indices_client.analyze(
+                    body='{"analyzer": "code_trigram", "text": "003rst"}',
+                    index=index_name,
+                )["tokens"]
+            ],
+            [
+                "003",
+                "003r",
+                "003rs",
+                "003rst",
+                "03r",
+                "03rs",
+                "03rst",
+                "3rs",
+                "3rst",
+                "rst",
+            ],
+        )
+
+        self.assertEqual(
+            [
+                t["token"]
+                for t in self.indices_client.analyze(
+                    body='{"analyzer": "code", "text": "003rst"}', index=index_name
+                )["tokens"]
+            ],
+            ["003rst"],
+        )

@@ -144,6 +144,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
                 {
                     "absolute_url": {"en": "url"},
                     "categories": [],
+                    "code": "abc123",
                     "course_runs": [],
                     "cover_image": {"en": "cover_image.jpg"},
                     "duration": {"en": "N/A"},
@@ -225,6 +226,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
                 {
                     "absolute_url": {"en": "url"},
                     "categories": [],
+                    "code": "abc123",
                     "course_runs": [],
                     "cover_image": {"en": "cover_image.jpg"},
                     "duration": {"en": "N/A"},
@@ -263,6 +265,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
                 {
                     "absolute_url": {"en": "url"},
                     "categories": [],
+                    "code": "abc123",
                     "course_runs": [],
                     "cover_image": {"en": "cover_image.jpg"},
                     "duration": {"en": "N/A"},
@@ -299,6 +302,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
                 {
                     "absolute_url": {},
                     "categories": [],
+                    "code": None,
                     "course_runs": [],
                     "cover_image": {},
                     "duration": {},
@@ -336,6 +340,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
                 {
                     "absolute_url": {},
                     "categories": [],
+                    "code": "abc123",
                     "course_runs": [],
                     "cover_image": {},
                     "duration": {},
@@ -378,6 +383,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
                 {
                     "absolute_url": {},
                     "categories": [],
+                    "code": None,
                     "course_runs": [
                         {
                             "start": arrow.utcnow().shift(days=-30).datetime,
@@ -404,6 +410,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
                 {
                     "absolute_url": {},
                     "categories": [],
+                    "code": None,
                     "course_runs": [
                         {
                             "start": arrow.utcnow().shift(days=+5).datetime,
@@ -442,6 +449,90 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
         self.assertEqual(content["objects"][0]["id"], "001")
 
         response = self.client.get("/api/v1.0/courses/?query=pont+recouvrance")
+        self.assertEqual(response.status_code, 200)
+        content = json.loads(response.content)
+        self.assertEqual(len(content["objects"]), 2)
+        self.assertEqual(content["objects"][0]["id"], "002")
+
+    def test_query_courses_code_vs_title(self, *_):
+        """
+        A match on the code field for an archived course should score better
+        than a match on another field for an open course.
+        """
+        self.prepare_index(
+            [
+                # An archived course
+                {
+                    "absolute_url": {},
+                    "categories": [],
+                    "code": "123abc",
+                    "course_runs": [
+                        {
+                            "start": arrow.utcnow().shift(days=-30).datetime,
+                            "end": arrow.utcnow().shift(days=-1).datetime,
+                            "enrollment_start": arrow.utcnow().shift(days=-50).datetime,
+                            "enrollment_end": arrow.utcnow().shift(days=-35).datetime,
+                            "languages": ["fr"],
+                        }
+                    ],
+                    "cover_image": {},
+                    "duration": {},
+                    "effort": {},
+                    "icon": {},
+                    "id": "001",
+                    "introduction": {},
+                    "is_new": False,
+                    "is_listed": True,
+                    "organizations": [],
+                    "organizations_names": {},
+                    "title": {"fr": "Lambda title"},
+                    "description": {"fr": "Lambda description"},
+                },
+                # An open course
+                {
+                    "absolute_url": {},
+                    "categories": [],
+                    "code": "456lmn",
+                    "course_runs": [
+                        {
+                            "start": arrow.utcnow().shift(days=+5).datetime,
+                            "end": arrow.utcnow().shift(days=+30).datetime,
+                            "enrollment_start": arrow.utcnow().shift(days=-5).datetime,
+                            "enrollment_end": arrow.utcnow().shift(days=+5).datetime,
+                            "languages": ["fr"],
+                        }
+                    ],
+                    "cover_image": {},
+                    "duration": {},
+                    "effort": {},
+                    "icon": {},
+                    "id": "002",
+                    "introduction": {},
+                    "is_new": False,
+                    "is_listed": True,
+                    "organizations": [],
+                    "organizations_names": {},
+                    "title": {"fr": "This title includes the code 123abc"},
+                    "description": {"fr": "Another text"},
+                },
+            ]
+        )
+
+        response = self.client.get("/api/v1.0/courses/?query=123abc")
+        self.assertEqual(response.status_code, 200)
+        content = json.loads(response.content)
+        self.assertEqual(len(content["objects"]), 2)
+        self.assertEqual(content["objects"][0]["id"], "001")
+
+        response = self.client.get("/api/v1.0/courses/?query=123abc+title")
+        self.assertEqual(response.status_code, 200)
+        content = json.loads(response.content)
+        self.assertEqual(len(content["objects"]), 2)
+        self.assertEqual(content["objects"][0]["id"], "001")
+
+        # If the code match is narrow and the title match is good, the title
+        # field should prevail
+        response = self.client.get("/api/v1.0/courses/?query=ab+title")
         self.assertEqual(response.status_code, 200)
         content = json.loads(response.content)
         self.assertEqual(len(content["objects"]), 2)
