@@ -263,6 +263,14 @@ class CoursesIndexersTestCase(TestCase):
         add_plugin(body="a propos français ligne 1.", language="fr", **plugin_params)
         add_plugin(body="a propos français ligne 2.", language="fr", **plugin_params)
 
+        # Add an introduction in several languages
+        placeholder = course.public_extension.extended_object.placeholders.get(
+            slot="course_introduction"
+        )
+        plugin_params = {"placeholder": placeholder, "plugin_type": "PlainTextPlugin"}
+        add_plugin(body="english introduction.", language="en", **plugin_params)
+        add_plugin(body="introduction française.", language="fr", **plugin_params)
+
         # The results were properly formatted and passed to the consumer
         expected_course = {
             "_id": str(course.public_extension.extended_object_id),
@@ -323,6 +331,10 @@ class CoursesIndexersTestCase(TestCase):
                     "info": "picture info",
                     "title": "Titre L-0001",
                 },
+            },
+            "introduction": {
+                "en": "english introduction.",
+                "fr": "introduction française.",
             },
             "is_new": False,
             "is_listed": True,
@@ -397,6 +409,7 @@ class CoursesIndexersTestCase(TestCase):
                     "duration": {"en": "12 weeks", "fr": "12 semaines"},
                     "effort": {"en": "5 minutes", "fr": "5 minutes"},
                     "icon": {},
+                    "introduction": {},
                     "is_new": False,
                     "is_listed": True,
                     "organization_highlighted": None,
@@ -599,6 +612,7 @@ class CoursesIndexersTestCase(TestCase):
                 "duration": {"en": "6 months"},
                 "effort": {"en": "3 hours"},
                 "icon": {"en": "icon.jpg"},
+                "introduction": {"en": "introductio est"},
                 "organization_highlighted": {"en": "Org 84"},
                 "organizations": [42, 84],
                 "organizations_names": {"en": ["Org 42", "Org 84"]},
@@ -620,6 +634,7 @@ class CoursesIndexersTestCase(TestCase):
                 "duration": "6 months",
                 "effort": "3 hours",
                 "icon": "icon.jpg",
+                "introduction": "introductio est",
                 "organization_highlighted": "Org 84",
                 "organizations": [42, 84],
                 "title": "Duis eu arcu erat",
@@ -643,6 +658,7 @@ class CoursesIndexersTestCase(TestCase):
                 "duration": {"en": "3 weeks"},
                 "effort": {"en": "10 minutes"},
                 "icon": {"en": "icon.jpg"},
+                "introduction": {"en": "introductio est"},
                 "organization_highlighted": None,
                 "organizations": [],
                 "organizations_names": {},
@@ -664,6 +680,7 @@ class CoursesIndexersTestCase(TestCase):
                 "duration": "3 weeks",
                 "effort": "10 minutes",
                 "icon": "icon.jpg",
+                "introduction": "introductio est",
                 "organization_highlighted": None,
                 "organizations": [],
                 "title": "Duis eu arcu erat",
@@ -686,6 +703,7 @@ class CoursesIndexersTestCase(TestCase):
                 "duration": {"en": "N/A"},
                 "effort": {"en": "N/A"},
                 "icon": {},
+                "introduction": {"en": "introductio est"},
                 "organization_highlighted": {"en": "Org 84"},
                 "organizations": [42, 84],
                 "organizations_names": {"en": ["Org 42", "Org 84"]},
@@ -707,6 +725,7 @@ class CoursesIndexersTestCase(TestCase):
                 "duration": "N/A",
                 "effort": "N/A",
                 "icon": None,
+                "introduction": "introductio est",
                 "organization_highlighted": "Org 84",
                 "organizations": [42, 84],
                 "title": "Duis eu arcu erat",
@@ -729,6 +748,7 @@ class CoursesIndexersTestCase(TestCase):
                 "duration": {"en": "N/A"},
                 "effort": {"en": "N/A"},
                 "icon": {"en": "icon.jpg"},
+                "introduction": {"en": "introductio est"},
                 "organization_highlighted": {"en": "Org 42"},
                 "organizations": [42, 84],
                 "organizations_names": {"en": ["Org 42", "Org 84"]},
@@ -750,6 +770,7 @@ class CoursesIndexersTestCase(TestCase):
                 "duration": "N/A",
                 "effort": "N/A",
                 "icon": "icon.jpg",
+                "introduction": "introductio est",
                 "organization_highlighted": "Org 42",
                 "organizations": [42, 84],
                 "title": "Duis eu arcu erat",

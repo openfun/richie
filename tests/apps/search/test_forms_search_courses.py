@@ -226,6 +226,7 @@ class CourseSearchFormTestCase(TestCase):
                                 "analyzer": "english",
                                 "fields": [
                                     "description.*",
+                                    "introduction.*",
                                     "title.*",
                                     "categories_names.*^0.05",
                                     "organizations_names.*^0.05",
