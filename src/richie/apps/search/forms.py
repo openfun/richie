@@ -171,6 +171,7 @@ class CourseSearchForm(SearchForm):
                                 "analyzer": QUERY_ANALYZERS[lang],
                                 "fields": [
                                     "description.*",
+                                    "introduction.*",
                                     "title.*",
                                     f"categories_names.*^{related_content_boost}",
                                     f"organizations_names.*^{related_content_boost}",

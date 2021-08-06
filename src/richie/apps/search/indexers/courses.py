@@ -12,6 +12,7 @@ from django.utils import translation
 from cms.models import Title
 from djangocms_picture.models import Picture
 
+from richie.plugins.plain_text.models import PlainText
 from richie.plugins.simple_picture.helpers import get_picture_info
 from richie.plugins.simple_text_ckeditor.models import SimpleText
 
@@ -210,6 +211,7 @@ class CoursesIndexer:
         "duration",
         "effort",
         "icon",
+        "introduction",
         "organization_highlighted",
         "organizations",
         "title",
@@ -475,6 +477,14 @@ class CoursesIndexer:
         ):
             descriptions[simple_text.cmsplugin_ptr.language].append(simple_text.body)
 
+        # Prepare introduction texts
+        introductions = defaultdict(list)
+        for plain_text in PlainText.objects.filter(
+            cmsplugin_ptr__placeholder__page=course.extended_object,
+            cmsplugin_ptr__placeholder__slot="course_introduction",
+        ):
+            introductions[plain_text.cmsplugin_ptr.language].append(plain_text.body)
+
         # Prepare localized duration texts
         duration = {}
         for language, _ in settings.LANGUAGES:
@@ -590,6 +600,9 @@ class CoursesIndexer:
             "duration": duration,
             "effort": effort,
             "icon": icon_images,
+            "introduction": {
+                language: " ".join(st) for language, st in introductions.items()
+            },
             "is_new": len(course_runs) == 1,
             "is_listed": course.is_listed,
             # Pick the highlighted organization from the organizations QuerySet to benefit from
@@ -681,6 +694,7 @@ class CoursesIndexer:
                     "duration",
                     "effort",
                     "icon",
+                    "introduction",
                     "title",
                 ]
             },

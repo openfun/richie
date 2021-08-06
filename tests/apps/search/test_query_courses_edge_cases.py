@@ -149,6 +149,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
                     "effort": {"en": "N/A"},
                     "icon": {"en": "icon.jpg"},
                     "id": index,
+                    "introduction": {"en": "introduction"},
                     "is_new": False,
                     "is_listed": True,
                     "organizations": [id],
@@ -229,6 +230,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
                     "effort": {"en": "N/A"},
                     "icon": {"en": "icon.jpg"},
                     "id": index,
+                    "introduction": {"en": "introduction"},
                     "is_new": False,
                     "is_listed": True,
                     "organizations": random.sample(
@@ -266,6 +268,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
                     "effort": {"en": "N/A"},
                     "icon": {"en": "icon.jpg"},
                     "id": index,
+                    "introduction": {"en": "introduction"},
                     "is_new": False,
                     "is_listed": index != hidden_id,
                     "organizations": [],
@@ -301,6 +304,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
                     "effort": {},
                     "icon": {},
                     "id": "xyz",
+                    "introduction": {},
                     "is_new": False,
                     "is_listed": True,
                     "organizations": [],
@@ -337,23 +341,27 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
                     "effort": {},
                     "icon": {},
                     "id": "001",
+                    "introduction": {"fr": "obscurité"},
                     "is_new": False,
                     "is_listed": True,
                     "organizations": [],
                     "organizations_names": {},
                     "title": {"fr": "électricité"},
-                    "description": {"fr": "text"},
+                    "description": {"fr": "pénalité"},
                 }
             ]
         )
 
         # The course should be found whether the query has accents or not
-        response = self.client.get("/api/v1.0/courses/?query=électricité")
-        self.assertEqual(response.status_code, 200)
-        content = json.loads(response.content)
-        self.assertEqual(len(content["objects"]), 1)
-
-        response = self.client.get("/api/v1.0/courses/?query=electricite")
-        self.assertEqual(response.status_code, 200)
-        content = json.loads(response.content)
-        self.assertEqual(len(content["objects"]), 1)
+        for query in [
+            "électricité",
+            "electricite",
+            "pénalité",
+            "penalite",
+            "obscurité",
+            "obscurite",
+        ]:
+            response = self.client.get(f"/api/v1.0/courses/?query={query:s}")
+            self.assertEqual(response.status_code, 200)
+            content = json.loads(response.content)
+            self.assertEqual(len(content["objects"]), 1)

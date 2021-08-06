@@ -29,6 +29,7 @@ COURSES = [
                 "ac turpis egestas. Integer ut eleifend massa."
             )
         },
+        "introduction": {"en": "Polarized non-volatile structure"},
         "is_new": True,
         "is_listed": True,
         "organization_highlighted": {"en": "Org 311"},
@@ -49,6 +50,7 @@ COURSES = [
                 "lobortis eget justo."
             )
         },
+        "introduction": {"en": "De-engineered demand-driven success"},
         "is_new": True,
         "is_listed": True,
         "organization_highlighted": {"en": "Org 33"},
@@ -69,6 +71,7 @@ COURSES = [
                 "ipsum, dignissim at augue."
             )
         },
+        "introduction": {"en": "Up-sized value-added project"},
         "is_new": False,
         "is_listed": True,
         "organization_highlighted": {"en": "Org 321"},
@@ -88,6 +91,7 @@ COURSES = [
                 "Artificial vulputate neque placerat, commodo quam gravida, maximus lectus."
             )
         },
+        "introduction": {"en": "Innovative encompassing extranet"},
         "is_new": False,
         "is_listed": True,
         "organization_highlighted": {"en": "Org 34"},
@@ -370,6 +374,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "duration": "N/A",
                         "effort": "N/A",
                         "icon": "icon.jpg",
+                        "introduction": "Polarized non-volatile structure",
                         "organization_highlighted": "Org 311",
                         "organizations": ["P-00030001", "P-00030004", "L-000300010001"],
                         "state": {
@@ -395,6 +400,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "duration": "N/A",
                         "effort": "N/A",
                         "icon": "icon.jpg",
+                        "introduction": "Up-sized value-added project",
                         "organization_highlighted": "Org 321",
                         "organizations": ["P-00030002", "P-00030003", "L-000300020001"],
                         "state": {
@@ -420,6 +426,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "duration": "N/A",
                         "effort": "N/A",
                         "icon": "icon.jpg",
+                        "introduction": "Innovative encompassing extranet",
                         "organization_highlighted": "Org 34",
                         "organizations": ["P-00030002", "P-00030004", "L-000300020002"],
                         "state": {
@@ -445,6 +452,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                         "duration": "N/A",
                         "effort": "N/A",
                         "icon": "icon.jpg",
+                        "introduction": "De-engineered demand-driven success",
                         "organization_highlighted": "Org 33",
                         "organizations": ["P-00030001", "P-00030003", "L-000300010002"],
                         "state": {
