@@ -227,7 +227,7 @@ class CourseSearchFormTestCase(TestCase):
                                 "fields": [
                                     "description.*",
                                     "introduction.*",
-                                    "title.*",
+                                    "title.*^20",
                                     "categories_names.*^0.05",
                                     "organizations_names.*^0.05",
                                     "persons_names.*^0.05",
