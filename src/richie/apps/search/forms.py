@@ -172,7 +172,7 @@ class CourseSearchForm(SearchForm):
                                 "fields": [
                                     "description.*",
                                     "introduction.*",
-                                    "title.*",
+                                    "title.*^20",
                                     f"categories_names.*^{related_content_boost}",
                                     f"organizations_names.*^{related_content_boost}",
                                     f"persons_names.*^{related_content_boost}",

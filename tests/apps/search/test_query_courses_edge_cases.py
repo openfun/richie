@@ -6,6 +6,7 @@ from unittest import mock
 
 from django.test import TestCase
 
+import arrow
 from elasticsearch.client import IndicesClient
 from elasticsearch.helpers import bulk
 
@@ -365,3 +366,83 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
             self.assertEqual(response.status_code, 200)
             content = json.loads(response.content)
             self.assertEqual(len(content["objects"]), 1)
+
+    def test_query_courses_title_boost(self, *_):
+        """
+        A good match on the title field for an archived course should score better
+        than a less good match on another field for an open course.
+        """
+        self.prepare_index(
+            [
+                # An archived course
+                {
+                    "absolute_url": {},
+                    "categories": [],
+                    "course_runs": [
+                        {
+                            "start": arrow.utcnow().shift(days=-30).datetime,
+                            "end": arrow.utcnow().shift(days=-1).datetime,
+                            "enrollment_start": arrow.utcnow().shift(days=-50).datetime,
+                            "enrollment_end": arrow.utcnow().shift(days=-35).datetime,
+                            "languages": ["fr"],
+                        }
+                    ],
+                    "cover_image": {},
+                    "duration": {},
+                    "effort": {},
+                    "icon": {},
+                    "id": "001",
+                    "introduction": {},
+                    "is_new": False,
+                    "is_listed": True,
+                    "organizations": [],
+                    "organizations_names": {},
+                    "title": {"fr": "Course de cuisine à l'Auberge du pont"},
+                    "description": {"fr": "Les Abers"},
+                },
+                # An open course
+                {
+                    "absolute_url": {},
+                    "categories": [],
+                    "course_runs": [
+                        {
+                            "start": arrow.utcnow().shift(days=+5).datetime,
+                            "end": arrow.utcnow().shift(days=+30).datetime,
+                            "enrollment_start": arrow.utcnow().shift(days=-5).datetime,
+                            "enrollment_end": arrow.utcnow().shift(days=+5).datetime,
+                            "languages": ["fr"],
+                        }
+                    ],
+                    "cover_image": {},
+                    "duration": {},
+                    "effort": {},
+                    "icon": {},
+                    "id": "002",
+                    "introduction": {},
+                    "is_new": False,
+                    "is_listed": True,
+                    "organizations": [],
+                    "organizations_names": {},
+                    "title": {"fr": "Demander la chambre 304 de l'hôtel Vauban"},
+                    "description": {"fr": "Pont Recouvrance"},
+                },
+            ]
+        )
+
+        response = self.client.get("/api/v1.0/courses/?query=pont")
+        self.assertEqual(response.status_code, 200)
+        content = json.loads(response.content)
+        self.assertEqual(len(content["objects"]), 2)
+        self.assertEqual(content["objects"][0]["id"], "002")
+
+        response = self.client.get("/api/v1.0/courses/?query=auberge+pont")
+        self.assertEqual(response.status_code, 200)
+        content = json.loads(response.content)
+        self.assertEqual(len(content["objects"]), 2)
+        self.assertEqual(content["objects"][0]["id"], "001")
+
+        response = self.client.get("/api/v1.0/courses/?query=pont+recouvrance")
+        self.assertEqual(response.status_code, 200)
+        content = json.loads(response.content)
+        self.assertEqual(len(content["objects"]), 2)
+        self.assertEqual(content["objects"][0]["id"], "002")
