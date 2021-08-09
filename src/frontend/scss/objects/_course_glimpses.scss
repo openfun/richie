@@ -150,6 +150,28 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
     position: relative;
   }
 
+  &__code {
+    display: flex;
+    position: absolute;
+    bottom: 0.4rem;
+    left: 0;
+    right: 0;
+    padding: 0 0.6rem;
+    font-size: 0.7rem;
+    color: r-theme-val(course-glimpse, code-color);
+    line-height: 1.1rem;
+    margin-bottom: 0;
+
+    svg {
+      @include sv-flex(1, 0, 1.4rem);
+      width: 1.4rem;
+      height: 0.9rem;
+      margin-bottom: 0.15rem;
+      margin-right: 0.5rem;
+      fill: r-theme-val(course-glimpse, code-color);
+    }
+  }
+
   &__title {
     @include font-size($h6-font-size);
     font-family: $r-font-family-montserrat;
@@ -160,7 +182,7 @@ $course-glimpse-content-padding-sides: 0.7rem !default;
   &__organization {
     display: flex;
     position: absolute;
-    bottom: 0.4rem;
+    bottom: 1.6rem;
     left: 0;
     right: 0;
     padding: 0 0.6rem;

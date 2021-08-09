@@ -39,6 +39,12 @@
                 <span>{{ main_org_title }}</span>
             </div>
             {% endif %}
+            <div class="course-{{ course_variant }}__code">
+                <svg role="img" aria-hidden="true" class="icon">
+                    <use href="#icon-barcode" />
+                </svg>
+                <span>{% if course.code %}{{ course.code }}{% else %}-{% endif %}
+            </div>
         </div>
 
         {% block course_glimpse_footer %}

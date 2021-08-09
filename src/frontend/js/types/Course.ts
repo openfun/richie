@@ -5,6 +5,7 @@ import { Nullable } from 'utils/types';
 export interface Course extends Resource {
   absolute_url: string;
   categories: string[];
+  code: Nullable<string>;
   cover_image: Nullable<{
     sizes: string;
     src: string;
