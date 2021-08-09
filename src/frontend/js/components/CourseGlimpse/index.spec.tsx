@@ -10,6 +10,7 @@ describe('components/CourseGlimpse', () => {
   const course = {
     absolute_url: 'https://example/com/courses/42/',
     categories: ['24', '42'],
+    code: '123abc',
     cover_image: {
       sizes: '330px',
       src: '/thumbs/small.png',
@@ -50,6 +51,7 @@ describe('components/CourseGlimpse', () => {
     expect(screen.getByRole('link')).not.toHaveAttribute('title');
     // The course glimpse shows the relevant information
     screen.getByText('Course 42');
+    screen.getByText('123abc');
     screen.getByText('Some Organization');
     // Matches on 'Starts on Mar 14, 2019', date is wrapped with intl <span>
     screen.getByText('Starts on Mar 14, 2019');
@@ -91,5 +93,15 @@ describe('components/CourseGlimpse', () => {
 
     screen.getByText('Course 42');
     screen.getByText('Cover');
+  });
+
+  it('does include "-" if the course code is not set', () => {
+    render(
+      <IntlProvider locale="en">
+        <CourseGlimpse context={contextProps} course={{ ...course, code: null }} />
+      </IntlProvider>,
+    );
+
+    expect(screen.getByText('-').parentElement).toHaveClass('course-glimpse__code');
   });
 });
