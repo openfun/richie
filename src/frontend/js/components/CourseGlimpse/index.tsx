@@ -46,7 +46,7 @@ const CourseGlimpseBase = ({ context, course }: CourseGlimpseProps & CommonDataP
         <p className="course-glimpse__title">{course.title}</p>
         <div className="course-glimpse__organization">
           <svg aria-hidden={true} role="img" className="icon">
-            <use xlinkHref="#icon-pin" />
+            <use xlinkHref="#icon-org" />
           </svg>
           <span>{course.organization_highlighted}</span>
         </div>
