@@ -442,7 +442,7 @@ DJANGOCMS_VIDEO_TEMPLATES = [("full-width", _("Full width"))]
 
 # Richie plugins
 
-RICHIE_PLAINTEXT_MAXLENGTH = {"course_introduction": 200, "bio": 150, "excerpt": 200}
+RICHIE_PLAINTEXT_MAXLENGTH = {"course_introduction": 200, "bio": 150, "excerpt": 240}
 
 RICHIE_SIMPLETEXT_CONFIGURATION = [
     {
