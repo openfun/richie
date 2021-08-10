@@ -16,6 +16,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- Increase blogpost excerpt size limit to 240 characters
 - Change organization icon on course glimpse to a building
 - Boost course title field by a factor of 20 (empirical) for fulltext queries
 - Sort related blogposts by their publication date (latest comes first)
