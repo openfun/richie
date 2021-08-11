@@ -40,14 +40,62 @@ class CourseModelsTestCase(TestCase):
         with self.assertNumQueries(2):
             self.assertEqual(str(course), "Course: Nano particles")
 
-    def test_models_course_unique_code_draft(self):
-        """The code field should be unique among all draft courses."""
-        factories.CourseFactory(code="123")
-        with self.assertRaises(ValidationError):
-            factories.CourseFactory(code="123")
+    def test_models_course_fields_code_unique_draft(self):
+        """The `code` field should be unique among draft pages."""
+        course = factories.CourseFactory(code="the-unique-code")
 
-    def test_models_course_unique_code_public(self):
-        """The code field can be repeated from a draft course to its public counterpart."""
+        # Creating a second course with the same code should raise an error...
+        with self.assertRaises(ValidationError) as context:
+            factories.CourseFactory(code="the-unique-code")
+
+        self.assertEqual(
+            context.exception.messages[0], "A course already exists with this code."
+        )
+        self.assertEqual(Course.objects.filter(code="THE-UNIQUE-CODE").count(), 1)
+
+        # ... but the page extension can exist in draft and published versions
+        course.extended_object.publish("en")
+        self.assertEqual(Course.objects.filter(code="THE-UNIQUE-CODE").count(), 2)
+
+    def test_models_course_fields_code_unique_public_self(self):
+        """The `code` field should be unique among public pages."""
+        course1 = factories.CourseFactory(code="the-old-code", should_publish=True)
+        course2 = factories.CourseFactory(code="the-new-code", should_publish=True)
+
+        course2.code = "another-code"
+        course2.save()
+
+        # The draft course1 can now be set to the new code
+        course1.code = "the-new-code"
+        course1.save()
+
+        # But it should fail if we try to publish course1 while the public course2
+        # still carries this code
+        with self.assertRaises(ValidationError) as context:
+            course1.extended_object.publish("en")
+
+        self.assertEqual(
+            context.exception.messages[0], "A course already exists with this code."
+        )
+        self.assertEqual(Course.objects.filter(code="THE-NEW-CODE").count(), 2)
+        self.assertEqual(
+            Course.objects.filter(
+                extended_object__publisher_is_draft=False, code="THE-OLD-CODE"
+            ).count(),
+            1,
+        )
+        self.assertEqual(
+            Course.objects.filter(
+                extended_object__publisher_is_draft=True, code="ANOTHER-CODE"
+            ).count(),
+            1,
+        )
+
+    def test_models_course_fields_code_unique_public_other(self):
+        """
+        The code field can be repeated from a draft course to its public counterpart
+        or snapshot.
+        """
         course = factories.CourseFactory(code="123", should_publish=True)
         snapshot = factories.CourseFactory(
             code="123", page_parent=course.extended_object, should_publish=True

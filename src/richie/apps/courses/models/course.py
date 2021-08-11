@@ -28,7 +28,7 @@ from ...core.fields.duration import CompositeDurationField
 from ...core.fields.multiselect import MultiSelectField
 from ...core.helpers import get_permissions
 from ...core.models import BasePageExtension
-from .. import defaults
+from .. import defaults, utils
 from .category import Category, CategoryPluginModel
 from .organization import Organization, OrganizationPluginModel
 from .person import Person, PersonPluginModel
@@ -198,6 +198,14 @@ class Course(BasePageExtension):
             title=self.extended_object.get_title(),
         )
 
+    def clean(self):
+        """
+        We normalize the code with slugify for better uniqueness
+        """
+        # Normalize the code by slugifying and capitalizing it
+        self.code = utils.normalize_code(self.code)
+        return super().clean()
+
     def validate_unique(self, exclude=None):
         """
         We can't enforce code unicity with a db constraint because it is repeated across
@@ -207,20 +215,26 @@ class Course(BasePageExtension):
         which is not possible.
         """
         super().validate_unique()
-        if (
-            self.extended_object.publisher_is_draft
-            and not self.is_snapshot
-            and self.__class__.objects.exclude(pk=self.pk)
-            .filter(
+
+        if self.code and not self.is_snapshot:
+            # Check unicity for the version being saved (draft or published)
+            is_draft = self.extended_object.publisher_is_draft
+            uniqueness_query = self.__class__.objects.filter(
                 code=self.code,
-                # allow public duplicates
-                extended_object__publisher_is_draft=True,
+                extended_object__publisher_is_draft=is_draft,
                 # allow snapshot duplicates
                 extended_object__node__parent__cms_pages__course__isnull=True,
             )
-            .exists()
-        ):
-            raise ValidationError({"code": ["Code must be unique."]})
+
+            # If the page is being updated, we should exclude it while looking for duplicates
+            if self.pk:
+                uniqueness_query = uniqueness_query.exclude(pk=self.pk)
+
+            # Raise a ValidationError if the code already exists
+            if uniqueness_query.exists():
+                raise ValidationError(
+                    {"code": ["A course already exists with this code."]}
+                )
 
     def get_admin_url_to_add_run(self, request):
         """

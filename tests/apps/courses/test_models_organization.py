@@ -24,6 +24,8 @@ from richie.apps.courses.factories import (
 )
 from richie.apps.courses.models import Course, Organization, Person
 
+# pylint: disable=too-many-public-methods
+
 
 class OrganizationModelsTestCase(TestCase):
     """
@@ -45,7 +47,7 @@ class OrganizationModelsTestCase(TestCase):
         organization = OrganizationFactory(code=None)
         self.assertIsNone(organization.code)
 
-    def test_models_organization_fields_code_unique(self):
+    def test_models_organization_fields_code_unique_draft(self):
         """
         The `code` field should be unique
         """
@@ -56,13 +58,57 @@ class OrganizationModelsTestCase(TestCase):
             OrganizationFactory(code="the-unique-code")
         self.assertEqual(
             context.exception.messages[0],
-            "An Organization already exists with this code.",
+            "An organization already exists with this code.",
         )
         self.assertEqual(Organization.objects.filter(code="THE-UNIQUE-CODE").count(), 1)
 
         # ... but the page extension can exist in draft and published versions
         organization.extended_object.publish("en")
         self.assertEqual(Organization.objects.filter(code="THE-UNIQUE-CODE").count(), 2)
+
+    def test_models_organization_fields_code_unique_public_self(self):
+        """The `code` field should be unique among public pages."""
+        organization1 = OrganizationFactory(code="the-old-code", should_publish=True)
+        organization2 = OrganizationFactory(code="the-new-code", should_publish=True)
+
+        organization2.code = "another-code"
+        organization2.save()
+
+        # The draft organization1 can now be set to the new code
+        organization1.code = "the-new-code"
+        organization1.save()
+
+        # But it should fail if we try to publish organization1 while the public organization2
+        # still carries this code
+        with self.assertRaises(ValidationError) as context:
+            organization1.extended_object.publish("en")
+
+        self.assertEqual(
+            context.exception.messages[0],
+            "An organization already exists with this code.",
+        )
+        self.assertEqual(Organization.objects.filter(code="THE-NEW-CODE").count(), 2)
+        self.assertEqual(
+            Organization.objects.filter(
+                extended_object__publisher_is_draft=False, code="THE-OLD-CODE"
+            ).count(),
+            1,
+        )
+        self.assertEqual(
+            Organization.objects.filter(
+                extended_object__publisher_is_draft=True, code="ANOTHER-CODE"
+            ).count(),
+            1,
+        )
+
+    def test_models_organization_fields_code_unique_public_other(self):
+        """
+        The code field can be repeated from a draft organization to its public counterpart.
+        """
+        organization = OrganizationFactory(code="123", should_publish=True)
+
+        self.assertEqual(organization.code, "123")
+        self.assertEqual(organization.public_extension.code, "123")
 
     def test_models_organization_fields_code_max_length(self):
         """
