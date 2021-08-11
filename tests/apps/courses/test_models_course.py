@@ -1178,6 +1178,12 @@ class CourseModelsTestCase(TestCase):
             list(course.public_extension.get_programs()), [program.public_extension]
         )
 
+        # If the program is unpublished, it should not be displayed on the public
+        # page anymore
+        program_page.unpublish("en")
+        self.assertEqual(list(course.get_programs()), [program])
+        self.assertEqual(list(course.public_extension.get_programs()), [])
+
     def test_models_course_get_programs_several_languages(self):
         """
         The programs should not be duplicated if they exist in several languages.

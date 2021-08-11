@@ -30,6 +30,8 @@ class PersonModelsTestCase(TestCase):
         with self.assertNumQueries(2):
             self.assertEqual(str(person), "Person: Page of Lady Louise Dupont")
 
+    # get_courses
+
     def test_models_person_get_courses(self):
         """
         It should be possible to retrieve the list of related courses on the person instance.
@@ -288,6 +290,12 @@ class PersonModelsTestCase(TestCase):
             list(person.public_extension.get_courses()), [course.public_extension]
         )
 
+        # If the course is unpublished, it should not be displayed on the public
+        # page anymore
+        course_page.unpublish("en")
+        self.assertEqual(list(person.get_courses()), [course])
+        self.assertEqual(list(person.public_extension.get_courses()), [])
+
     def test_models_person_get_courses_several_languages(self):
         """
         The courses should not be duplicated if they exist in several languages.
@@ -326,6 +334,8 @@ class PersonModelsTestCase(TestCase):
         self.assertEqual(Course.objects.count(), 4)
         self.assertEqual(person.get_courses().count(), 1)
         self.assertEqual(person.public_extension.get_courses().count(), 1)
+
+    # get_blogposts
 
     def test_models_person_get_blogposts(self):
         """
@@ -582,6 +592,12 @@ class PersonModelsTestCase(TestCase):
         self.assertEqual(
             list(person.public_extension.get_blogposts()), [blog_post.public_extension]
         )
+
+        # If the blog post is unpublished, it should not be displayed on the public
+        # page anymore
+        blog_post_page.unpublish("en")
+        self.assertEqual(list(person.get_blogposts()), [blog_post])
+        self.assertEqual(list(person.public_extension.get_blogposts()), [])
 
     def test_models_person_get_blogposts_several_languages(self):
         """

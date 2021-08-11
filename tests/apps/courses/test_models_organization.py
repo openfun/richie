@@ -215,6 +215,8 @@ class OrganizationModelsTestCase(TestCase):
         self.assertIsNone(organization.create_page_role())
         self.assertFalse(organization.extended_object.roles.exists())
 
+    # get_courses
+
     def test_models_organization_get_courses(self):
         """
         It should be possible to retrieve the list of related courses on the organization instance.
@@ -484,6 +486,12 @@ class OrganizationModelsTestCase(TestCase):
             list(organization.public_extension.get_courses()), [course.public_extension]
         )
 
+        # If the course is unpublished, it should not be displayed on the public
+        # page anymore
+        course_page.unpublish("en")
+        self.assertEqual(list(organization.get_courses()), [course])
+        self.assertEqual(list(organization.public_extension.get_courses()), [])
+
     def test_models_organization_get_courses_several_languages(self):
         """
         The courses should not be duplicated if they exist in several languages.
@@ -526,6 +534,8 @@ class OrganizationModelsTestCase(TestCase):
         self.assertEqual(Course.objects.count(), 4)
         self.assertEqual(organization.get_courses().count(), 1)
         self.assertEqual(organization.public_extension.get_courses().count(), 1)
+
+    # get_persons
 
     def test_models_organization_get_persons(self):
         """
@@ -793,6 +803,12 @@ class OrganizationModelsTestCase(TestCase):
         self.assertEqual(
             list(organization.public_extension.get_persons()), [person.public_extension]
         )
+
+        # If the person is unpublished, it should not be displayed on the public
+        # page anymore
+        person_page.unpublish("en")
+        self.assertEqual(list(organization.get_persons()), [person])
+        self.assertEqual(list(organization.public_extension.get_persons()), [])
 
     def test_models_organization_get_persons_several_languages(self):
         """
