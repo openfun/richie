@@ -116,6 +116,8 @@ class CategoryModelsTestCase(TestCase):
         )
         self.assertEqual(child_category.get_meta_category(), meta_category)
 
+    # get_courses
+
     def test_models_category_get_courses_queries(self):
         """
         It should be possible to retrieve the list of related courses on the category instance.
@@ -456,6 +458,12 @@ class CategoryModelsTestCase(TestCase):
             list(category.public_extension.get_courses()), [course.public_extension]
         )
 
+        # If the course is unpublished, it should not be displayed on the public
+        # page anymore
+        course_page.unpublish("en")
+        self.assertEqual(list(category.get_courses()), [course])
+        self.assertEqual(list(category.public_extension.get_courses()), [])
+
     def test_models_category_get_courses_several_languages(self):
         """
         The courses should not be duplicated if they exist in several languages.
@@ -496,6 +504,8 @@ class CategoryModelsTestCase(TestCase):
         self.assertEqual(Course.objects.count(), 4)
         self.assertEqual(category.get_courses().count(), 1)
         self.assertEqual(category.public_extension.get_courses().count(), 1)
+
+    # get_blogposts
 
     def test_models_category_get_blogposts(self):
         """
@@ -855,6 +865,12 @@ class CategoryModelsTestCase(TestCase):
             [blog_post.public_extension],
         )
 
+        # If the blog post is unpublished, it should not be displayed on the public
+        # page anymore
+        blog_post_page.unpublish("en")
+        self.assertEqual(list(category.get_blogposts()), [blog_post])
+        self.assertEqual(list(category.public_extension.get_blogposts()), [])
+
     def test_models_category_get_blogposts_several_languages(self):
         """
         The blogposts should not be duplicated if they exist in several languages.
@@ -867,6 +883,8 @@ class CategoryModelsTestCase(TestCase):
         )
         self.assertEqual(BlogPost.objects.count(), 2)
         self.assertEqual(category.get_blogposts().count(), 1)
+
+    # get_organizations
 
     def test_models_category_get_organizations(self):
         """
@@ -1247,6 +1265,12 @@ class CategoryModelsTestCase(TestCase):
             [organization.public_extension],
         )
 
+        # If the organization is unpublished, it should not be displayed on the public
+        # page anymore
+        organization_page.unpublish("en")
+        self.assertEqual(list(category.get_organizations()), [organization])
+        self.assertEqual(list(category.public_extension.get_organizations()), [])
+
     def test_models_category_get_organizations_several_languages(self):
         """
         The organizations should not be duplicated if they exist in several languages.
@@ -1259,6 +1283,8 @@ class CategoryModelsTestCase(TestCase):
         )
         self.assertEqual(Organization.objects.count(), 2)
         self.assertEqual(category.get_organizations().count(), 1)
+
+    # get_persons
 
     def test_models_category_get_persons(self):
         """
@@ -1597,6 +1623,12 @@ class CategoryModelsTestCase(TestCase):
         self.assertEqual(
             list(category.public_extension.get_persons()), [person.public_extension]
         )
+
+        # If the person is unpublished, it should not be displayed on the public
+        # page anymore
+        person_page.unpublish("en")
+        self.assertEqual(list(category.get_persons()), [person])
+        self.assertEqual(list(category.public_extension.get_persons()), [])
 
     def test_models_category_get_persons_several_languages(self):
         """

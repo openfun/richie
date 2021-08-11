@@ -265,6 +265,11 @@ class BasePageExtension(PageExtension):
             )
             selector = {bfs: page}
 
+        # For a public page, we must filter out page extensions that are not published
+        # in any language
+        if is_draft is False:
+            selector["extended_object__title_set__published"] = True
+
         page_extension_model = apps.get_model(
             app_label="courses", model_name=model_name
         )

@@ -24,6 +24,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Hide unpublished pages when getting related objects on a public page
 - Fix course and organization code fields normalization and validation
 - Fix search bug due to wrong ordering of char filters
 - Stop indexing unpublished categories
