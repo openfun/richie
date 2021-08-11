@@ -4,7 +4,6 @@ Declare and configure the models for the courses application
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
 from cms.api import Page, PagePermission
@@ -14,7 +13,7 @@ from filer.models import FolderPermission
 
 from ...core.helpers import get_permissions
 from ...core.models import BasePageExtension
-from .. import defaults
+from .. import defaults, utils
 from .role import PageRole
 
 
@@ -28,8 +27,10 @@ class Organization(BasePageExtension):
     page to present the organization.
     """
 
+    CODE_MAX_LENGTH = 100
+
     code = models.CharField(
-        _("code"), db_index=True, max_length=100, null=True, blank=True
+        _("code"), db_index=True, max_length=CODE_MAX_LENGTH, null=True, blank=True
     )
 
     PAGE = defaults.ORGANIZATIONS_PAGE
@@ -63,9 +64,7 @@ class Organization(BasePageExtension):
         """
         We normalize the code with slugify for better uniqueness
         """
-        if self.code:
-            # Normalize the code by slugifying and capitalizing it
-            self.code = slugify(self.code, allow_unicode=True).upper()
+        self.code = utils.normalize_code(self.code)
         return super().clean()
 
     def validate_unique(self, exclude=None):
@@ -87,7 +86,7 @@ class Organization(BasePageExtension):
             # Raise a ValidationError if the code already exists
             if uniqueness_query.exists():
                 raise ValidationError(
-                    {"code": ["An Organization already exists with this code."]}
+                    {"code": ["An organization already exists with this code."]}
                 )
         return super().validate_unique(exclude=exclude)
 

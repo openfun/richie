@@ -15,8 +15,9 @@ from django.utils.http import http_date
 from django_redis.serializers import json as json_serializer
 from django_redis.serializers import msgpack as msgpack_serializer
 
-# pylint: disable=too-many-public-methods
 from richie.apps.core.cache import LimitBrowserCacheTTLHeaders
+
+# pylint: disable=too-many-public-methods
 
 
 class TestSentinelClient(TestCase):

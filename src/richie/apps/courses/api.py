@@ -17,6 +17,7 @@ from rest_framework.viewsets import ModelViewSet
 from .lms import LMSHandler
 from .models import Course, CourseRun, CourseRunSyncMode
 from .serializers import CourseRunSerializer
+from .utils import normalize_code
 
 
 class NotAllowed(BasePermission):
@@ -182,7 +183,7 @@ def course_runs_sync(request, version):
         )
 
     # Look for the course targeted by the resource link
-    course_number = lms.extract_course_number(request.data)
+    course_number = normalize_code(lms.extract_course_number(request.data))
     try:
         course = Course.objects.get(
             code=course_number, extended_object__publisher_is_draft=True

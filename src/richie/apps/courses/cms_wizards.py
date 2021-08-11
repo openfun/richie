@@ -24,8 +24,7 @@ from cms.wizards.forms import BaseFormMixin
 from cms.wizards.wizard_base import Wizard
 from cms.wizards.wizard_pool import wizard_pool
 
-from . import defaults
-from .models import BlogPost, Category, Course, Organization, Person, Program
+from . import defaults, models, utils
 
 
 class ExcludeRootReverseIDMixin:
@@ -174,13 +173,13 @@ class CourseWizardForm(BaseWizardForm):
     """
 
     code = forms.CharField(
-        max_length=Course.CODE_MAX_LENGTH,
+        max_length=models.Course.CODE_MAX_LENGTH,
         required=getattr(settings, "RICHIE_COURSE_CODE_REQUIRED", False),
         label=_("Code"),
         help_text=_("Unique reference for the course."),
     )
 
-    model = Course
+    model = models.Course
 
     def clean(self):
         """
@@ -193,7 +192,7 @@ class CourseWizardForm(BaseWizardForm):
 
         try:
             self.page.organization
-        except Organization.DoesNotExist as error:
+        except models.Organization.DoesNotExist as error:
             raise PermissionDenied() from error
 
         # The user should be allowed to modify this organization page
@@ -206,6 +205,14 @@ class CourseWizardForm(BaseWizardForm):
 
         return super().clean()
 
+    def clean_code(self):
+        """Ensure that the code field is unique among pages."""
+        code = utils.normalize_code(self.cleaned_data["code"])
+        if code and models.Course.objects.filter(code=code).exists():
+            raise forms.ValidationError("A course already exists with this code.")
+
+        return code
+
     def save(self):
         """
         The parent form created the page.
@@ -214,14 +221,14 @@ class CourseWizardForm(BaseWizardForm):
         plugin, and the admin group of the organization should get admin access to the course.
         """
         page = super().save()
-        course = Course.objects.create(
+        course = models.Course.objects.create(
             extended_object=page, code=self.cleaned_data["code"]
         )
         course.create_page_role()
 
         try:
             organization = self.page.organization
-        except Organization.DoesNotExist:
+        except models.Organization.DoesNotExist:
             pass
         else:
             # Add a plugin for the organization
@@ -254,7 +261,7 @@ class CourseWizard(Wizard):
 
         try:
             organization = kwargs["page"].organization
-        except Organization.DoesNotExist:
+        except models.Organization.DoesNotExist:
             return False
 
         return (
@@ -268,7 +275,7 @@ wizard_pool.register(
     CourseWizard(
         title=_("New course page"),
         description=_("Create a new course page"),
-        model=Course,
+        model=models.Course,
         form=CourseWizardForm,
         weight=200,
     )
@@ -281,7 +288,14 @@ class OrganizationWizardForm(BaseWizardForm):
     A related organization model is created for each organization page
     """
 
-    model = Organization
+    code = forms.CharField(
+        max_length=models.Organization.CODE_MAX_LENGTH,
+        required=getattr(settings, "RICHIE_ORGANIZATION_CODE_REQUIRED", False),
+        label=_("Code"),
+        help_text=_("Unique reference for the organization."),
+    )
+
+    model = models.Organization
 
     def clean(self):
         """
@@ -300,9 +314,21 @@ class OrganizationWizardForm(BaseWizardForm):
         This method creates the associated organization.
         """
         page = super().save()
-        organization = Organization.objects.create(extended_object=page)
+        organization = models.Organization.objects.create(
+            extended_object=page, code=self.cleaned_data["code"]
+        )
         organization.create_page_role()
         return page
+
+    def clean_code(self):
+        """Ensure that the code field is unique among pages."""
+        code = utils.normalize_code(self.cleaned_data["code"])
+        if code and models.Organization.objects.filter(code=code).exists():
+            raise forms.ValidationError(
+                "An organization already exists with this code."
+            )
+
+        return code
 
 
 class OrganizationWizard(Wizard):
@@ -321,7 +347,7 @@ wizard_pool.register(
     OrganizationWizard(
         title=_("New organization page"),
         description=_("Create a new organization page"),
-        model=Organization,
+        model=models.Organization,
         form=OrganizationWizardForm,
         weight=200,
     )
@@ -334,7 +360,7 @@ class CategoryWizardForm(BaseWizardForm):
     A related Category model is created for each category page.
     """
 
-    model = Category
+    model = models.Category
 
     def clean(self):
         """
@@ -356,7 +382,7 @@ class CategoryWizardForm(BaseWizardForm):
         """
         try:
             self.page.category
-        except Category.DoesNotExist:
+        except models.Category.DoesNotExist:
             return super().parent_page
         else:
             return self.page
@@ -367,7 +393,7 @@ class CategoryWizardForm(BaseWizardForm):
         This method creates the associated category page extension.
         """
         page = super().save()
-        Category.objects.create(extended_object=page)
+        models.Category.objects.create(extended_object=page)
         return page
 
 
@@ -387,7 +413,7 @@ wizard_pool.register(
     CategoryWizard(
         title=_("New category page"),
         description=_("Create a new category page"),
-        model=Category,
+        model=models.Category,
         form=CategoryWizardForm,
         weight=200,
     )
@@ -400,7 +426,7 @@ class BlogPostWizardForm(BaseWizardForm):
     A related blogpost model is created for each blog post
     """
 
-    model = BlogPost
+    model = models.BlogPost
 
     def clean(self):
         """
@@ -419,7 +445,7 @@ class BlogPostWizardForm(BaseWizardForm):
         This method creates the associated blogpost.
         """
         page = super().save()
-        BlogPost.objects.create(extended_object=page)
+        models.BlogPost.objects.create(extended_object=page)
         return page
 
 
@@ -439,7 +465,7 @@ wizard_pool.register(
     BlogPostWizard(
         title=_("New blog post"),
         description=_("Create a new blog post"),
-        model=BlogPost,
+        model=models.BlogPost,
         form=BlogPostWizardForm,
         weight=200,
     )
@@ -452,7 +478,7 @@ class PersonWizardForm(BaseWizardForm):
     A related Person model is created for each person page.
     """
 
-    model = Person
+    model = models.Person
 
     def clean(self):
         """
@@ -471,7 +497,7 @@ class PersonWizardForm(BaseWizardForm):
         This method creates the associated person page extension.
         """
         page = super().save()
-        Person.objects.create(extended_object=page)
+        models.Person.objects.create(extended_object=page)
         return page
 
 
@@ -491,7 +517,7 @@ wizard_pool.register(
     PersonWizard(
         title=_("New person page"),
         description=_("Create a new person page"),
-        model=Person,
+        model=models.Person,
         form=PersonWizardForm,
         weight=200,
     )
@@ -504,7 +530,7 @@ class ProgramWizardForm(BaseWizardForm):
     A related program model is created for each program
     """
 
-    model = Program
+    model = models.Program
 
     def clean(self):
         """
@@ -523,7 +549,7 @@ class ProgramWizardForm(BaseWizardForm):
         This method creates the associated program.
         """
         page = super().save()
-        Program.objects.create(extended_object=page)
+        models.Program.objects.create(extended_object=page)
         return page
 
 
@@ -543,7 +569,7 @@ wizard_pool.register(
     ProgramWizard(
         title=_("New program"),
         description=_("Create a new program"),
-        model=Program,
+        model=models.Program,
         form=ProgramWizardForm,
         weight=200,
     )
