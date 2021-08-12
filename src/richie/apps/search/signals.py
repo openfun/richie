@@ -4,13 +4,15 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 
 from richie.apps.courses.models import Category, Course, Organization
+from cms.models import Title
+
 from richie.apps.search.index_manager import richie_bulk
 from richie.apps.search.indexers import ES_INDICES
 
 
-def update_course(instance, _language):
+def apply_es_action_to_course(instance, action, _language):
     """
-    Update Elasticsearch indices when a course was modified and published:
+    Update Elasticsearch indices when a course is modified:
     - update the course document in the Elasticsearch courses index.
 
     Returns None if the page was related to a course and the Elasticsearch update is done.
@@ -18,12 +20,14 @@ def update_course(instance, _language):
     """
     course = Course.objects.get(draft_extension__extended_object=instance)
     if not course.is_snapshot:
-        richie_bulk([ES_INDICES.courses.get_es_document_for_course(course)])
+        richie_bulk(
+            [ES_INDICES.courses.get_es_document_for_course(course, action=action)]
+        )
 
 
-def update_organization(instance, language):
+def apply_es_action_to_organization(instance, action, language):
     """
-    Update Elasticsearch indices when an organization was modified and published:
+    Update Elasticsearch indices when an organization is modified:
     - update the organization document in the Elasticsearch organizations index for the
       organization and its direct parent (because the parent ID may change from Parent to Leaf),
     - update the course documents in the Elasticsearch courses index for all courses linked to
@@ -39,7 +43,9 @@ def update_organization(instance, language):
         if not course.is_snapshot
     ]
     actions.append(
-        ES_INDICES.organizations.get_es_document_for_organization(organization)
+        ES_INDICES.organizations.get_es_document_for_organization(
+            organization, action=action
+        )
     )
 
     # Update the organization's parent only if it exists
@@ -55,9 +61,9 @@ def update_organization(instance, language):
     richie_bulk(actions)
 
 
-def update_category(instance, language):
+def apply_es_action_to_category(instance, action, language):
     """
-    Update Elasticsearch indices when a category was modified and published:
+    Update Elasticsearch indices when a category is modified:
     - update the category document in the Elasticsearch categories index for the category
       and its direct parent (because the parent ID may change from Parent to Leaf),
     - update the course documents in the Elasticsearch courses index for all courses linked to
@@ -72,7 +78,9 @@ def update_category(instance, language):
         for course in category.get_courses(language)
         if not course.is_snapshot
     ]
-    actions.append(ES_INDICES.categories.get_es_document_for_category(category))
+    actions.append(
+        ES_INDICES.categories.get_es_document_for_category(category, action=action)
+    )
 
     # Update the category's parent only if it exists
     try:
@@ -85,20 +93,20 @@ def update_category(instance, language):
     richie_bulk(actions)
 
 
-def update_page_extension(instance, language):
+def apply_es_action_to_page(page, action, language):
     """
     Try updating each type of page extension one-by-one until one works (because we don't know
     to which type of page extension this page is related).
     """
     for method in [
-        update_course,
-        update_category,
-        update_organization,
+        apply_es_action_to_course,
+        apply_es_action_to_category,
+        apply_es_action_to_organization,
     ]:
         try:
             # The method should raise an ObjectDoesNotExist exception if the page extension
-            # linked to this instance is of another type.
-            method(instance, language)
+            # linked to this page is of another type.
+            method(page, action, language)
         except ObjectDoesNotExist:
             continue
         else:
@@ -106,10 +114,31 @@ def update_page_extension(instance, language):
 
 
 # pylint: disable=unused-argument
-def on_page_publish(sender, instance, language, **kwargs):
+def on_page_published(sender, instance, language, **kwargs):
     """
     Trigger update of the Elasticsearch indices impacted by the modification of the instance
     only once the database transaction is successful.
     """
     if getattr(settings, "RICHIE_KEEP_SEARCH_UPDATED", True):
-        transaction.on_commit(lambda: update_page_extension(instance, language))
+        transaction.on_commit(
+            lambda: apply_es_action_to_page(instance, "index", language)
+        )
+
+
+# pylint: disable=unused-argument
+def on_page_unpublished(sender, instance, language, **kwargs):
+    """
+    Trigger update of the Elasticsearch indices impacted by the modification of the instance
+    only once the database transaction is successful.
+    """
+    if getattr(settings, "RICHIE_KEEP_SEARCH_UPDATED", True):
+        # Only unlist pages that are unpublished from all languages otherwise,
+        # reindex it to remove the unpublished language
+        action = (
+            "index"
+            if Title.objects.filter(page=instance, published=True).exists()
+            else "delete"
+        )
+        transaction.on_commit(
+            lambda: apply_es_action_to_page(instance, action, language)
+        )

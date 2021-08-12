@@ -607,7 +607,8 @@ class CoursesIndexer:
                 language: " ".join(st) for language, st in introductions.items()
             },
             "is_new": len(course_runs) == 1,
-            "is_listed": course.is_listed,
+            # If titles is an empty dict, it means the course is not published in any language:
+            "is_listed": bool(course.is_listed and titles),
             # Pick the highlighted organization from the organizations QuerySet to benefit from
             # the prefetch of related title sets
             "organization_highlighted": {

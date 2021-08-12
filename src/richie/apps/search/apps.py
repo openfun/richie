@@ -11,8 +11,11 @@ class SearchConfig(AppConfig):
     # pylint: disable=import-outside-toplevel
     def ready(self):
         """Register signals to update the Elasticsearch indices."""
-        from cms.signals import post_publish
+        from cms.signals import post_publish, post_unpublish
 
-        from .signals import on_page_publish
+        from .signals import on_page_published, on_page_unpublished
 
-        post_publish.connect(on_page_publish, dispatch_uid="search_post_publish")
+        post_publish.connect(on_page_published, dispatch_uid="search_post_publish")
+        post_unpublish.connect(
+            on_page_unpublished, dispatch_uid="search_post_unpublish"
+        )
