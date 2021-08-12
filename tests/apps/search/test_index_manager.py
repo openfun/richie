@@ -21,7 +21,7 @@ from richie.apps.search.index_manager import (
     regenerate_indices,
     store_es_scripts,
 )
-from richie.apps.search.signals import update_course
+from richie.apps.search.signals import apply_es_action_to_course
 
 
 class IndexManagerTestCase(TestCase):
@@ -313,7 +313,7 @@ class IndexManagerTestCase(TestCase):
         # Create a course and trigger a signal to index it. This will create a
         # broken "richie_test_courses" index
         course = CourseFactory(should_publish=True)
-        update_course(course.extended_object, "en")
+        apply_es_action_to_course(course.extended_object, "index", "en")
         self.assertIsNotNone(indices_client.get("richie_test_courses"))
 
         # Call our `regenerate_indices command`

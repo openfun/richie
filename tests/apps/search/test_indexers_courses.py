@@ -729,6 +729,26 @@ class CoursesIndexersTestCase(TestCase):
             course_document["persons_names"], {"en": ["Brian"], "fr": ["François"]}
         )
 
+    def test_indexers_courses_get_es_document_for_course_not_published(self):
+        """
+        A course indexed with no published title shoud not be listed.
+        """
+        course = CourseFactory(
+            page_title={"en": "a course", "fr": "un cours"}, should_publish=True
+        )
+
+        course_document = CoursesIndexer.get_es_document_for_course(course)
+        self.assertTrue(course_document["is_listed"])
+
+        # Only after unpublishing all languages, the course stops being listed
+        course.extended_object.unpublish("en")
+        course_document = CoursesIndexer.get_es_document_for_course(course)
+        self.assertTrue(course_document["is_listed"])
+
+        course.extended_object.unpublish("fr")
+        course_document = CoursesIndexer.get_es_document_for_course(course)
+        self.assertFalse(course_document["is_listed"])
+
     # format_es_object_for_api
 
     def test_indexers_courses_format_es_object_for_api(self):
