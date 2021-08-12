@@ -3,9 +3,9 @@ from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import transaction
 
-from richie.apps.courses.models import Category, Course, Organization
 from cms.models import Title
 
+from richie.apps.courses.models import Category, Course, Organization, Person
 from richie.apps.search.index_manager import richie_bulk
 from richie.apps.search.indexers import ES_INDICES
 
@@ -61,6 +61,28 @@ def apply_es_action_to_organization(instance, action, language):
     richie_bulk(actions)
 
 
+def apply_es_action_to_person(instance, action, language):
+    """
+    Update Elasticsearch indices when a person is modified:
+    - update the person document in the Elasticsearch persons index for the
+      person,
+    - update the course documents in the Elasticsearch courses index for all courses linked to
+      this person.
+
+    Returns None if the page was related to a person and the Elasticsearch update is done.
+    Raises ObjectDoesNotExist if the page instance is not related to a person.
+    """
+    person = Person.objects.get(draft_extension__extended_object=instance)
+    actions = [
+        ES_INDICES.courses.get_es_document_for_course(course)
+        for course in person.get_courses(language)
+        if not course.is_snapshot
+    ]
+    actions.append(ES_INDICES.persons.get_es_document_for_person(person, action=action))
+
+    richie_bulk(actions)
+
+
 def apply_es_action_to_category(instance, action, language):
     """
     Update Elasticsearch indices when a category is modified:
@@ -102,6 +124,7 @@ def apply_es_action_to_page(page, action, language):
         apply_es_action_to_course,
         apply_es_action_to_category,
         apply_es_action_to_organization,
+        apply_es_action_to_person,
     ]:
         try:
             # The method should raise an ObjectDoesNotExist exception if the page extension
