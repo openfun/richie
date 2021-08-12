@@ -24,6 +24,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix missing persons search index update on publish/unpublish
 - Delete object from search indices when its page is unpublished
 - Fix section on blogpost detail page which was breaking the flow for children
 - Hide unpublished pages when getting related objects on a public page

@@ -10,6 +10,7 @@ from richie.apps.courses.factories import (
     CategoryFactory,
     CourseFactory,
     OrganizationFactory,
+    PersonFactory,
 )
 from richie.apps.search.indexers.courses import CoursesIndexer
 
@@ -360,3 +361,100 @@ class CoursesSignalsTestCase(TestCase):
         self.assertEqual(actions[1]["_id"], "L-0001")
         self.assertEqual(actions[1]["_op_type"], "delete")
         self.assertEqual(actions[1]["_type"], "category")
+
+    def test_signals_persons_publish(self, mock_bulk, *_):
+        """
+        Publishing a person should update its document in the Elasticsearch persons
+        index, and the documents for published courses to which it is related, excluding snapshots.
+        """
+        person = PersonFactory()
+        published_course, _unpublished_course = CourseFactory.create_batch(
+            2, fill_team=[person]
+        )
+        self.assertTrue(published_course.extended_object.publish("en"))
+        published_course.refresh_from_db()
+        self.run_commit_hooks()
+        mock_bulk.reset_mock()
+
+        self.assertTrue(person.extended_object.publish("en"))
+        person.refresh_from_db()
+
+        # Elasticsearch should not be called before the db transaction is successful
+        self.assertFalse(mock_bulk.called)
+        self.run_commit_hooks()
+
+        self.assertEqual(mock_bulk.call_count, 1)
+        self.assertEqual(len(mock_bulk.call_args[1]["actions"]), 2)
+        actions = list(mock_bulk.call_args[1]["actions"])
+        self.assertEqual(
+            actions[0]["_id"], str(published_course.public_extension.extended_object_id)
+        )
+        self.assertEqual(actions[0]["_op_type"], "index")
+        self.assertEqual(actions[0]["_type"], "course")
+        self.assertEqual(
+            actions[1]["_id"], str(person.public_extension.extended_object_id)
+        )
+        self.assertEqual(actions[1]["_op_type"], "index")
+        self.assertEqual(actions[1]["_type"], "person")
+
+    def test_signals_persons_unpublish(self, mock_bulk, *_):
+        """
+        Unpublishing a person in a language should update its document in the Elasticsearch
+        persons index or delete it if there is no language published anymore.
+        It should also reindex the documents for published courses to which it is related,
+        excluding snapshots.
+        """
+        person = PersonFactory(page_languages=["en", "fr"], should_publish=True)
+        published_course, _unpublished_course = CourseFactory.create_batch(
+            2, fill_team=[person]
+        )
+        self.assertTrue(published_course.extended_object.publish("en"))
+        published_course.refresh_from_db()
+        self.run_commit_hooks()
+        mock_bulk.reset_mock()
+
+        # - Unpublish the first language
+        self.assertTrue(person.extended_object.unpublish("en"))
+        person.refresh_from_db()
+
+        # Elasticsearch should not be called before the db transaction is successful
+        self.assertFalse(mock_bulk.called)
+        self.run_commit_hooks()
+
+        self.assertEqual(mock_bulk.call_count, 1)
+        self.assertEqual(len(mock_bulk.call_args[1]["actions"]), 2)
+        actions = list(mock_bulk.call_args[1]["actions"])
+        self.assertEqual(
+            actions[0]["_id"], str(published_course.public_extension.extended_object_id)
+        )
+        self.assertEqual(actions[0]["_op_type"], "index")
+        self.assertEqual(actions[0]["_type"], "course")
+        self.assertEqual(
+            actions[1]["_id"], str(person.public_extension.extended_object_id)
+        )
+        self.assertEqual(actions[1]["_op_type"], "index")
+        self.assertEqual(actions[1]["_type"], "person")
+
+        mock_bulk.reset_mock()
+
+        # - Unpublish the second language
+        self.assertTrue(person.extended_object.unpublish("fr"))
+        person.refresh_from_db()
+
+        # Elasticsearch should not be called before the db transaction is successful
+        self.assertFalse(mock_bulk.called)
+        self.run_commit_hooks()
+
+        self.assertEqual(mock_bulk.call_count, 1)
+        self.assertEqual(len(mock_bulk.call_args[1]["actions"]), 2)
+        actions = list(mock_bulk.call_args[1]["actions"])
+        self.assertEqual(
+            actions[0]["_id"], str(published_course.public_extension.extended_object_id)
+        )
+        self.assertEqual(actions[0]["_op_type"], "index")
+        self.assertEqual(actions[0]["_type"], "course")
+        self.assertEqual(
+            actions[1]["_id"], str(person.public_extension.extended_object_id)
+        )
+        self.assertEqual(actions[1]["_op_type"], "delete")
+        self.assertEqual(actions[1]["_type"], "person")
