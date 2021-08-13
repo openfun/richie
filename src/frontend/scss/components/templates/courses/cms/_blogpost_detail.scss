@@ -272,37 +272,4 @@
       border-radius: $border-radius-lg;
     }
   }
-
-  // Neutralize and change sub section behaviors to display as an headline
-  // element
-  .section {
-    width: 100%;
-    margin: 0 !important;
-    padding: 0.5rem 0 !important;
-    font-size: 1rem;
-    color: r-theme-val(blogpost-detail, headline-color);
-    @if r-theme-val(blogpost-detail, headline-border) {
-      border-top: 0.625rem solid r-theme-val(blogpost-detail, headline-border);
-    }
-
-    &__row {
-      margin: 0 !important;
-      padding: 0 !important;
-    }
-
-    &__title {
-      @include font-size($h4-font-size);
-      margin: 0 0 0.5rem 0;
-      padding: 0;
-      color: r-theme-val(blogpost-detail, headline-title-color);
-      line-height: 1.4;
-      text-align: left;
-    }
-
-    &__items {
-      display: block;
-      margin: 0 !important;
-      padding: 0 !important;
-    }
-  }
 }
