@@ -601,6 +601,136 @@ class CoursesIndexersTestCase(TestCase):
             },
         )
 
+    # get_es_document_for_course
+
+    def test_indexers_courses_get_es_document_for_course_related_names_related_unpublished(
+        self,
+    ):
+        """
+        When related objects are unpublished in one language, that language should not be taken
+        into account to build related object names.
+        """
+        # Create a course with related pages in both english and french but only
+        # published in one language
+        category = CategoryFactory(
+            page_title={
+                "en": "english category title",
+                "fr": "titre catégorie français",
+            },
+            should_publish=True,
+        )
+        category.extended_object.unpublish("fr")
+
+        organization = OrganizationFactory(
+            page_title={
+                "en": "english organization title",
+                "fr": "titre organisation français",
+            },
+            should_publish=True,
+        )
+        organization.extended_object.unpublish("fr")
+
+        person = PersonFactory(
+            page_title={"en": "Brian", "fr": "François"}, should_publish=True
+        )
+        person.extended_object.unpublish("fr")
+
+        course = CourseFactory(
+            fill_categories=[category],
+            fill_organizations=[organization],
+            fill_team=[person],
+            page_title={
+                "en": "an english course title",
+                "fr": "un titre cours français",
+            },
+            should_publish=True,
+        )
+
+        course_document = CoursesIndexer.get_es_document_for_course(course)
+        self.assertEqual(
+            course_document["organizations_names"],
+            {"en": ["english organization title"]},
+        )
+        self.assertEqual(
+            course_document["organization_highlighted"],
+            {"en": "english organization title"},
+        )
+        self.assertEqual(
+            course_document["categories_names"], {"en": ["english category title"]}
+        )
+        self.assertEqual(course_document["persons_names"], {"en": ["Brian"]})
+
+    def test_indexers_courses_get_es_document_for_course_related_names_course_unpublished(
+        self,
+    ):
+        """
+        When a course is unpublished in one language, but it has related objects that are still
+        published in this language, should or shouldn't we use this language's content for the
+        related objects when building the course glimpse?
+
+        This choice is controversial and I had to write these tests to fully understand it. So I
+        propose to commit them to keep this memory.
+
+        Note: We could argue in the future that a course glimpse should be built with content
+        only in the same language and not with "as few fallback languages as possible, using
+        available content in each language".
+        """
+        # Create a course with related pages in both english and french but only
+        # published in one language
+        category = CategoryFactory(
+            page_title={
+                "en": "english category title",
+                "fr": "titre catégorie français",
+            },
+            should_publish=True,
+        )
+
+        organization_title = {
+            "en": "english organization title",
+            "fr": "titre organisation français",
+        }
+        organization = OrganizationFactory(
+            page_title=organization_title, should_publish=True
+        )
+
+        person = PersonFactory(
+            page_title={"en": "Brian", "fr": "François"}, should_publish=True
+        )
+
+        course = CourseFactory(
+            fill_categories=[category],
+            fill_organizations=[organization],
+            fill_team=[person],
+            page_title={
+                "en": "an english course title",
+                "fr": "un titre cours français",
+            },
+            should_publish=True,
+        )
+        course.extended_object.unpublish("fr")
+
+        course_document = CoursesIndexer.get_es_document_for_course(course)
+
+        self.assertEqual(
+            course_document["organizations_names"],
+            {
+                "en": ["english organization title"],
+                "fr": ["titre organisation français"],
+            },
+        )
+        self.assertEqual(
+            course_document["organization_highlighted"], organization_title
+        )
+        self.assertEqual(
+            course_document["categories_names"],
+            {"en": ["english category title"], "fr": ["titre catégorie français"]},
+        )
+        self.assertEqual(
+            course_document["persons_names"], {"en": ["Brian"], "fr": ["François"]}
+        )
+
+    # format_es_object_for_api
+
     def test_indexers_courses_format_es_object_for_api(self):
         """
         Make sure format_es_object_for_api returns a properly formatted course
