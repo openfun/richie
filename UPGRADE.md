@@ -16,6 +16,7 @@ $ make migrate
 
 ## Unreleased
 
+- Define the `form` scheme within `settings/_colors.scss`
 - Add to `spinner` scheme property `base-color-light`
 
 ## 2.8.x to 2.9.x
