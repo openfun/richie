@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Added
+
+- Add timing function variables
+
 ### Changed
 
 - Create a generic React Modal component
