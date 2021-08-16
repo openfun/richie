@@ -74,7 +74,9 @@
                         <button class="topbar__hamburger"
                                 data-target="main-menu" aria-label="menu" aria-expanded="false">&#8801;</button>
                         <a href="/">
+                        {% block topbar_branding %}
                             <img src="{% static "richie/images/logo.png" %}" class="topbar__logo" alt="{{ SITE.name }}">
+                        {% endblock topbar_branding %}
                         </a>
                     </div>
                     <div class="topbar__menu">
