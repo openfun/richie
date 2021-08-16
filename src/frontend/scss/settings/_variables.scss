@@ -166,3 +166,8 @@ $r-course-subheader-aside: 35%;
 
 // Course search page shared variables
 $r-search-filters-gutter: 0.2rem !default;
+
+// Easings (Quart)
+$r-ease-in: cubic-bezier(0.5, 0, 0.75, 0);
+$r-ease-out: cubic-bezier(0.25, 1, 0.5, 1);
+$r-ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
