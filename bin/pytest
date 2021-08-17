@@ -10,4 +10,3 @@ _dc_run \
     -e PYTHONPATH=/app/sandbox \
     app \
     pytest "$@"
-

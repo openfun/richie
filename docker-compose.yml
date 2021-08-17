@@ -13,7 +13,10 @@ services:
     command: mysqld --character-set-server=utf8 --collation-server=utf8_general_ci
 
   elasticsearch:
-    image: fundocker/openshift-elasticsearch:6.6.2
+    image: "${ELASTICSEARCH_IMAGE:-docker.elastic.co/elasticsearch/elasticsearch:7.14.0}"
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
 
   app:
     build:
@@ -113,4 +116,3 @@ networks:
   lms_outside:
     driver: bridge
     name: "${RICHIE_LMS_NETWORK:-edx_outside}"
-
