@@ -11,6 +11,7 @@ import createQueryClient from 'utils/react-query/createQueryClient';
 
 import { SearchFilterValueParent } from '.';
 
+jest.mock('utils/context', () => jest.fn());
 jest.mock('data/getResourceList', () => ({
   fetchList: jest.fn(),
 }));

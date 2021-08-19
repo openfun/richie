@@ -7,9 +7,9 @@ import { IntlProvider } from 'react-intl';
 
 import { History, HistoryContext } from 'data/useHistory';
 import * as mockWindow from 'utils/indirection/window';
+import { ContextFactory as mockContextFactory } from 'utils/test/factories';
 import createQueryClient from 'utils/react-query/createQueryClient';
-import { ContextFactory } from 'utils/test/factories';
-import { CommonDataProps } from 'types/commonDataProps';
+import context from 'utils/context';
 import Search from '.';
 
 let mockMatches = false;
@@ -22,6 +22,11 @@ jest.mock('utils/indirection/window', () => ({
     removeListener: jest.fn(),
   }),
   scroll: jest.fn(),
+}));
+
+jest.mock('utils/context', () => ({
+  __esModule: true,
+  default: mockContextFactory().generate(),
 }));
 
 describe('<Search />', () => {
@@ -37,7 +42,6 @@ describe('<Search />', () => {
     historyReplaceState,
   ];
   const queryClient = createQueryClient();
-  const contextProps: CommonDataProps['context'] = ContextFactory().generate();
 
   afterEach(() => {
     queryClient.clear();
@@ -57,7 +61,7 @@ describe('<Search />', () => {
       <QueryClientProvider client={queryClient}>
         <IntlProvider locale="en">
           <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
-            <Search context={contextProps} />
+            <Search context={context} />
           </HistoryContext.Provider>
         </IntlProvider>
       </QueryClientProvider>,
@@ -112,7 +116,7 @@ describe('<Search />', () => {
       <QueryClientProvider client={queryClient}>
         <IntlProvider locale="en">
           <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0', query: 'vi' })}>
-            <Search context={contextProps} />
+            <Search context={context} />
           </HistoryContext.Provider>
         </IntlProvider>
       </QueryClientProvider>,
@@ -136,7 +140,7 @@ describe('<Search />', () => {
       <QueryClientProvider client={queryClient}>
         <IntlProvider locale="en">
           <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
-            <Search context={contextProps} />
+            <Search context={context} />
           </HistoryContext.Provider>
         </IntlProvider>
       </QueryClientProvider>,
@@ -166,7 +170,7 @@ describe('<Search />', () => {
       <QueryClientProvider client={queryClient}>
         <IntlProvider locale="en">
           <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
-            <Search context={contextProps} />
+            <Search context={context} />
           </HistoryContext.Provider>
         </IntlProvider>
       </QueryClientProvider>,
@@ -195,7 +199,7 @@ describe('<Search />', () => {
       <QueryClientProvider client={queryClient}>
         <IntlProvider locale="en">
           <HistoryContext.Provider value={makeHistoryOf({ limit: '20', offset: '0' })}>
-            <Search context={contextProps} />
+            <Search context={context} />
           </HistoryContext.Provider>
         </IntlProvider>
       </QueryClientProvider>,
@@ -263,7 +267,7 @@ describe('<Search />', () => {
                 lastDispatchActions: [{ type: 'FILTER_RESET' }],
               })}
             >
-              <Search context={contextProps} />
+              <Search context={context} />
             </HistoryContext.Provider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -295,7 +299,7 @@ describe('<Search />', () => {
                 lastDispatchActions: [{ type: 'QUERY_UPDATE' }],
               })}
             >
-              <Search context={contextProps} />
+              <Search context={context} />
             </HistoryContext.Provider>
           </IntlProvider>
         </QueryClientProvider>,

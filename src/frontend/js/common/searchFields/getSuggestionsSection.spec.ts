@@ -5,6 +5,7 @@ import { getSuggestionsSection } from './getSuggestionsSection';
 
 const mockHandle: jest.Mock<typeof handle> = handle as any;
 jest.mock('utils/errors/handle');
+jest.mock('utils/context', () => jest.fn());
 
 describe('common/searchFields/getSuggestionsSection', () => {
   afterEach(() => {

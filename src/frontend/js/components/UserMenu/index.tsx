@@ -5,7 +5,13 @@ import { DesktopUserMenu } from './DesktopUserMenu';
 import { MobileUserMenu } from './MobileUserMenu';
 
 export interface UserMenuProps {
-  user: User;
+  user: User & {
+    urls: {
+      key: string;
+      label: string;
+      action: string | (() => void);
+    }[];
+  };
 }
 
 export const UserMenu: React.FC<UserMenuProps> = (props: UserMenuProps) => {

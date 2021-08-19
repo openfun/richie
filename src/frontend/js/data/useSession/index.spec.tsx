@@ -4,15 +4,27 @@ import faker from 'faker';
 import fetchMock from 'fetch-mock';
 import { act, waitFor } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
-import { ContextFactory, PersistedClientFactory, QueryStateFactory } from 'utils/test/factories';
+import {
+  ContextFactory as mockContextFactory,
+  PersistedClientFactory,
+  QueryStateFactory,
+} from 'utils/test/factories';
 import createQueryClient from 'utils/react-query/createQueryClient';
 import { Deferred } from 'utils/test/deferred';
 import { REACT_QUERY_SETTINGS } from 'settings';
 import { SessionContext } from '.';
 
+jest.mock('utils/context', () => ({
+  __esModule: true,
+  default: mockContextFactory({
+    authentication: {
+      endpoint: 'https://endpoint.test',
+      backend: 'openedx-hawthorn',
+    },
+  }).generate(),
+}));
+
 describe('useSession', () => {
-  const context = ContextFactory().generate();
-  window.__richie_frontend_context__ = { context };
   const queryClient = createQueryClient({ persistor: true });
   const {
     SessionProvider,
