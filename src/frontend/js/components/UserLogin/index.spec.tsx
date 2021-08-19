@@ -6,11 +6,17 @@ import userEvent from '@testing-library/user-event';
 import fetchMock from 'fetch-mock';
 import { IntlProvider } from 'react-intl';
 import { act } from 'react-dom/test-utils';
-
-import { ContextFactory, PersistedClientFactory, QueryStateFactory } from 'utils/test/factories';
+import {
+  ContextFactory as mockContextFactory,
+  PersistedClientFactory,
+  QueryStateFactory,
+} from 'utils/test/factories';
 import { Deferred } from 'utils/test/deferred';
 import createQueryClient from 'utils/react-query/createQueryClient';
+import context from 'utils/context';
 import { REACT_QUERY_SETTINGS } from 'settings';
+import { SessionProvider } from 'data/useSession';
+import UserLogin from '.';
 
 jest.mock('utils/errors/handle', () => ({
   handle: jest.fn(),
@@ -24,12 +30,12 @@ jest.mock('utils/indirection/window', () => ({
   }),
 }));
 
-describe('<UserLogin />', () => {
-  const contextProps = ContextFactory().generate();
-  window.__richie_frontend_context__ = { context: contextProps };
-  const UserLogin = require('.').default;
-  const { SessionProvider } = require('data/useSession');
+jest.mock('utils/context', () => ({
+  __esModule: true,
+  default: mockContextFactory().generate(),
+}));
 
+describe('<UserLogin />', () => {
   const initializeUser = () => {
     const username = faker.internet.userName();
     sessionStorage.setItem(
@@ -56,7 +62,7 @@ describe('<UserLogin />', () => {
         <QueryClientProvider client={createQueryClient({ persistor: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <UserLogin context={contextProps} />
+              <UserLogin context={context} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -82,7 +88,7 @@ describe('<UserLogin />', () => {
       <QueryClientProvider client={createQueryClient({ persistor: true })}>
         <IntlProvider locale="en">
           <SessionProvider>
-            <UserLogin context={contextProps} />
+            <UserLogin context={context} />
           </SessionProvider>
         </IntlProvider>
       </QueryClientProvider>,
@@ -109,7 +115,7 @@ describe('<UserLogin />', () => {
         <QueryClientProvider client={createQueryClient({ persistor: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <UserLogin context={contextProps} profileUrls={profileUrls} />
+              <UserLogin context={context} profileUrls={profileUrls} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,

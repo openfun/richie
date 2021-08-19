@@ -1,14 +1,11 @@
-import { CommonDataProps } from 'types/commonDataProps';
 import { handle } from 'utils/errors/handle';
+import context from 'utils/context';
 import { APILms, APIBackend } from 'types/api';
 import BaseApiInterface from './base';
 import OpenEdxDogwoodApiInterface from './openedx-dogwood';
 import OpenEdxHawthornApiInterface from './openedx-hawthorn';
 
-const context: CommonDataProps['context'] = window.__richie_frontend_context__?.context;
-if (!context) throw new Error('No context frontend context available');
-
-const LMS_BACKENDS = context.lms_backends;
+const LMS_BACKENDS = context.lms_backends || [];
 
 const selectAPIWithUrl = (url: string) => {
   const API = LMS_BACKENDS.find((lms) => new RegExp(lms.course_regexp).test(url));

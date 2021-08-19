@@ -4,34 +4,35 @@ import { renderHook } from '@testing-library/react-hooks';
 import faker from 'faker';
 import fetchMock from 'fetch-mock';
 import React from 'react';
-import { APIBackend } from 'types/api';
-import { CommonDataProps } from 'types/commonDataProps';
 import { CourseRun } from 'types';
 import { Deferred } from 'utils/test/deferred';
 import { REACT_QUERY_SETTINGS } from 'settings';
-import * as factories from 'utils/test/factories';
+import * as mockFactories from 'utils/test/factories';
 import createQueryClient from 'utils/react-query/createQueryClient';
+import { SessionProvider } from 'data/useSession';
+import useEnrollment from '.';
 
-describe('useEnrollment', () => {
-  const endpoint = 'https://endpoint.test';
-  const contextProps: CommonDataProps['context'] = factories
+jest.mock('utils/context', () => ({
+  __esModule: true,
+  default: mockFactories
     .ContextFactory({
       authentication: {
-        backend: APIBackend.OPENEDX_HAWTHORN,
-        endpoint,
+        backend: 'openedx-hawthorn',
+        endpoint: 'https://endpoint.test',
       },
       lms_backends: [
         {
-          backend: APIBackend.OPENEDX_HAWTHORN,
+          backend: 'openedx-hawthorn',
           course_regexp: '(.*)',
-          endpoint,
+          endpoint: 'https://endpoint.test',
         },
       ],
     })
-    .generate();
-  (window as any).__richie_frontend_context__ = { context: contextProps };
-  const { SessionProvider } = require('data/useSession');
-  const { default: useEnrollment } = require('.');
+    .generate(),
+}));
+
+describe('useEnrollment', () => {
+  const endpoint = 'https://endpoint.test';
   const wrapper = ({ client, children }: React.PropsWithChildren<{ client: QueryClient }>) => (
     <QueryClientProvider client={client}>
       <SessionProvider>{children}</SessionProvider>
@@ -43,22 +44,24 @@ describe('useEnrollment', () => {
     sessionStorage.setItem(
       REACT_QUERY_SETTINGS.cacheStorage.key,
       JSON.stringify(
-        factories.PersistedClientFactory({
-          queries: [factories.QueryStateFactory('user', { data: loggedin ? { username } : null })],
+        mockFactories.PersistedClientFactory({
+          queries: [
+            mockFactories.QueryStateFactory('user', { data: loggedin ? { username } : null }),
+          ],
         }),
       ),
     );
     return loggedin ? username : null;
   };
 
-  afterEach(() => {
+  beforeEach(() => {
     sessionStorage.clear();
     fetchMock.restore();
   });
 
   it('does not make request when user is not authenticated', async () => {
     const username = initializeUser(false);
-    const courseRun: CourseRun = factories.CourseRunFactory.generate();
+    const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
 
     fetchMock.get(
       `${endpoint}/api/enrollment/v1/enrollment/${username},${courseRun.resource_link}`,
@@ -82,7 +85,7 @@ describe('useEnrollment', () => {
 
   it('retrieves enrollment when user is authenticated', async () => {
     const username = initializeUser();
-    const courseRun: CourseRun = factories.CourseRunFactory.generate();
+    const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
     let client: QueryClient;
     await waitFor(() => {
       client = createQueryClient({ persistor: true });

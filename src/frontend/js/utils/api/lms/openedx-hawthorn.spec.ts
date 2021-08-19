@@ -1,30 +1,31 @@
 import fetchMock from 'fetch-mock';
-import { APIBackend } from 'types/api';
-import { ContextFactory } from 'utils/test/factories';
+import { ContextFactory as mockContextFactory } from 'utils/test/factories';
 import faker from 'faker';
-
 import { handle } from 'utils/errors/handle';
+import context from 'utils/context';
+import API from './openedx-hawthorn';
 
-const mockHandle: jest.Mock<typeof handle> = handle as any;
 jest.mock('utils/errors/handle');
+jest.mock('utils/context', () => ({
+  __esModule: true,
+  default: mockContextFactory({
+    lms_backends: [
+      {
+        backend: 'openedx-hawthorn',
+        course_regexp: 'course_id=(?<course_id>.*$)',
+        endpoint: 'https://demo.endpoint/api',
+      },
+    ],
+  }).generate(),
+}));
+const mockHandle: jest.Mock<typeof handle> = handle as any;
 
 describe('OpenEdX Hawthorn API', () => {
   const EDX_ENDPOINT = 'https://demo.endpoint/api';
   let courseId = '';
   let username = '';
 
-  const context = ContextFactory({
-    lms_backends: [
-      {
-        backend: APIBackend.OPENEDX_HAWTHORN,
-        course_regexp: 'course_id=(?<course_id>.*$)',
-        endpoint: EDX_ENDPOINT,
-      },
-    ],
-  }).generate();
-  window.__richie_frontend_context__ = { context };
-  const { default: API } = require('./openedx-hawthorn');
-  const LMSConf = context.lms_backends[0];
+  const LMSConf = context.lms_backends![0];
   const HawthornApi = API(LMSConf);
 
   describe('ApiOptions', () => {
@@ -61,6 +62,7 @@ describe('OpenEdX Hawthorn API', () => {
         fetchMock.get(`${EDX_ENDPOINT}/api/enrollment/v1/enrollment/${courseId}`, 401);
         const response = await HawthornApi.enrollment.get(
           `https://demo.endpoint/courses?course_id=${courseId}`,
+          null,
         );
         expect(response).toBeNull();
       });
@@ -85,7 +87,7 @@ describe('OpenEdX Hawthorn API', () => {
           user: username,
         });
 
-        const response = await HawthornApi.enrollment.get(
+        const response: any = await HawthornApi.enrollment.get(
           `https://demo.endpoint/courses?course_id=${courseId}`,
           { username },
         );

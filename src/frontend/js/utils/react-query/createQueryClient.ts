@@ -1,10 +1,10 @@
 import { createSessionStoragePersistor } from 'utils/react-query/createSessionStoragePersistor';
 import { persistQueryClient } from 'react-query/persistQueryClient-experimental';
 import { QueryClient, setLogger } from 'react-query';
-import { CommonDataProps } from 'types/commonDataProps';
 import { handle } from 'utils/errors/handle';
 import { REACT_QUERY_SETTINGS } from 'settings';
 import { noop } from 'utils';
+import context from 'utils/context';
 
 interface QueryClientOptions {
   logger?: boolean;
@@ -12,7 +12,6 @@ interface QueryClientOptions {
 }
 
 const createQueryClient = (options?: QueryClientOptions) => {
-  const context: CommonDataProps['context'] = (window as any)?.__richie_frontend_context__?.context;
   const environment = context?.environment;
 
   const queryClient = new QueryClient({

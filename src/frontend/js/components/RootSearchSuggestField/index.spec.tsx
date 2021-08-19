@@ -4,8 +4,8 @@ import React from 'react';
 import { IntlProvider } from 'react-intl';
 
 import { location } from 'utils/indirection/window';
-import { ContextFactory } from 'utils/test/factories';
-import { CommonDataProps } from 'types/commonDataProps';
+import { ContextFactory as mockContextFactory } from 'utils/test/factories';
+import context from 'utils/context';
 import RootSearchSuggestField from '.';
 
 jest.mock('settings', () => ({
@@ -18,9 +18,12 @@ jest.mock('utils/indirection/window', () => ({
   },
 }));
 
-describe('<RootSearchSuggestField />', () => {
-  const contextProps: CommonDataProps['context'] = ContextFactory().generate();
+jest.mock('utils/context', () => ({
+  __esModule: true,
+  default: mockContextFactory().generate(),
+}));
 
+describe('<RootSearchSuggestField />', () => {
   const subjects = {
     base_path: '00030001',
     has_more_values: false,
@@ -43,7 +46,7 @@ describe('<RootSearchSuggestField />', () => {
 
     render(
       <IntlProvider locale="en">
-        <RootSearchSuggestField courseSearchPageUrl="/en/courses/" context={contextProps} />
+        <RootSearchSuggestField courseSearchPageUrl="/en/courses/" context={context} />
       </IntlProvider>,
     );
 
@@ -68,7 +71,7 @@ describe('<RootSearchSuggestField />', () => {
 
     render(
       <IntlProvider locale="en">
-        <RootSearchSuggestField courseSearchPageUrl="/en/courses/" context={contextProps} />
+        <RootSearchSuggestField courseSearchPageUrl="/en/courses/" context={context} />
       </IntlProvider>,
     );
 
@@ -112,7 +115,7 @@ describe('<RootSearchSuggestField />', () => {
 
     render(
       <IntlProvider locale="en">
-        <RootSearchSuggestField courseSearchPageUrl="/en/courses/" context={contextProps} />
+        <RootSearchSuggestField courseSearchPageUrl="/en/courses/" context={context} />
       </IntlProvider>,
     );
 
@@ -152,7 +155,7 @@ describe('<RootSearchSuggestField />', () => {
 
     render(
       <IntlProvider locale="en">
-        <RootSearchSuggestField courseSearchPageUrl="/en/courses/" context={contextProps} />
+        <RootSearchSuggestField courseSearchPageUrl="/en/courses/" context={context} />
       </IntlProvider>,
     );
 
@@ -189,7 +192,7 @@ describe('<RootSearchSuggestField />', () => {
 
     render(
       <IntlProvider locale="en">
-        <RootSearchSuggestField courseSearchPageUrl="/en/courses/" context={contextProps} />
+        <RootSearchSuggestField courseSearchPageUrl="/en/courses/" context={context} />
       </IntlProvider>,
     );
 
@@ -225,7 +228,7 @@ describe('<RootSearchSuggestField />', () => {
 
     render(
       <IntlProvider locale="en">
-        <RootSearchSuggestField courseSearchPageUrl="/en/courses/" context={contextProps} />
+        <RootSearchSuggestField courseSearchPageUrl="/en/courses/" context={context} />
       </IntlProvider>,
     );
 

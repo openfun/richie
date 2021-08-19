@@ -6,7 +6,6 @@ import { Spinner } from 'components/Spinner';
 import { UserMenu } from 'components/UserMenu';
 import { useSession } from 'data/useSession';
 import { CommonDataProps } from 'types/commonDataProps';
-import { User } from 'types/User';
 
 const messages: { [key: string]: MessageDescriptor } = defineMessages({
   logIn: {
@@ -33,7 +32,12 @@ const messages: { [key: string]: MessageDescriptor } = defineMessages({
 
 interface UserLoginProps {
   context: CommonDataProps['context'];
-  profileUrls?: User['urls'];
+  profileUrls?: {
+    [key: string]: {
+      action: string | (() => void);
+      label: string;
+    };
+  };
 }
 
 /*
@@ -59,7 +63,7 @@ const bindUserDataToUrl = (url: string, user: any) =>
     typeof user[prop] === 'string' ? user[prop] : match,
   );
 
-const UserLogin = ({ profileUrls = [] }: UserLoginProps) => {
+const UserLogin = ({ profileUrls = {} }: UserLoginProps) => {
   /**
    * `user` is:
    * - `undefined` when we have not made the `whoami` request yet;

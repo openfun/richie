@@ -8,6 +8,7 @@
 import { handle } from 'utils/errors/handle';
 import { AuthenticationBackend } from 'types/commonDataProps';
 import { Nullable } from 'types/utils';
+import context from 'utils/context';
 import { APIAuthentication, APIBackend } from 'types/api';
 import BaseApiInterface from './lms/base';
 import OpenEdxDogwoodApiInterface from './lms/openedx-dogwood';
@@ -15,8 +16,7 @@ import OpenEdxHawthornApiInterface from './lms/openedx-hawthorn';
 import OpenEdxFonzieApiInterface from './lms/openedx-fonzie';
 
 const AuthenticationAPIHandler = (): Nullable<APIAuthentication> => {
-  const AUTHENTICATION: AuthenticationBackend =
-    window.__richie_frontend_context__?.context?.authentication;
+  const AUTHENTICATION: AuthenticationBackend = context?.authentication;
   if (!AUTHENTICATION) return null;
 
   switch (AUTHENTICATION.backend) {

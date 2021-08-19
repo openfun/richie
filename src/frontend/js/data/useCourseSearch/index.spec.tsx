@@ -9,6 +9,7 @@ import { APIListRequestParams } from 'types/api';
 import { Deferred } from 'utils/test/deferred';
 import { useCourseSearch } from '.';
 
+jest.mock('utils/context', () => jest.fn());
 jest.mock('data/getResourceList', () => ({
   fetchList: jest.fn(),
 }));

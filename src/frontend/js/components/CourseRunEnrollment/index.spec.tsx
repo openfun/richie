@@ -6,46 +6,49 @@ import { IntlProvider } from 'react-intl';
 import faker from 'faker';
 
 import { CourseRun } from 'types';
-import { CommonDataProps } from 'types/commonDataProps';
-import { APIBackend } from 'types/api';
 import { Deferred } from 'utils/test/deferred';
-import * as factories from 'utils/test/factories';
+import * as mockFactories from 'utils/test/factories';
 import createQueryClient from 'utils/react-query/createQueryClient';
 import { REACT_QUERY_SETTINGS } from 'settings';
 import { handle } from 'utils/errors/handle';
+import context from 'utils/context';
+import { SessionProvider } from 'data/useSession';
+import CourseRunEnrollment from '.';
 
-const mockHandle: jest.Mock<typeof handle> = handle as any;
 jest.mock('utils/errors/handle');
-
-describe('<CourseRunEnrollment />', () => {
-  const endpoint = 'https://demo.endpoint';
-
-  const contextProps: CommonDataProps['context'] = factories
+jest.mock('utils/context', () => ({
+  __esModule: true,
+  default: mockFactories
     .ContextFactory({
       authentication: {
-        endpoint,
-        backend: APIBackend.OPENEDX_HAWTHORN,
+        endpoint: 'https://demo.endpoint',
+        backend: 'openedx-hawthorn',
       },
       lms_backends: [
         {
-          backend: APIBackend.OPENEDX_HAWTHORN,
+          backend: 'openedx-hawthorn',
           course_regexp: '(?<course_id>.*)',
-          endpoint,
+          endpoint: 'https://demo.endpoint',
         },
       ],
     })
-    .generate();
-  window.__richie_frontend_context__ = { context: contextProps };
-  const CourseRunEnrollment = require('.').default;
-  const { SessionProvider } = require('data/useSession');
+    .generate(),
+}));
+
+const mockHandle = handle as jest.MockedFunction<typeof handle>;
+
+describe('<CourseRunEnrollment />', () => {
+  const endpoint = 'https://demo.endpoint';
 
   const initializeUser = (loggedin = true) => {
     const username = faker.internet.userName();
     sessionStorage.setItem(
       REACT_QUERY_SETTINGS.cacheStorage.key,
       JSON.stringify(
-        factories.PersistedClientFactory({
-          queries: [factories.QueryStateFactory('user', { data: loggedin ? { username } : null })],
+        mockFactories.PersistedClientFactory({
+          queries: [
+            mockFactories.QueryStateFactory('user', { data: loggedin ? { username } : null }),
+          ],
         }),
       ),
     );
@@ -72,7 +75,7 @@ describe('<CourseRunEnrollment />', () => {
 
   it('shows an "Enroll" button and allows the user to enroll', async () => {
     const username = initializeUser();
-    const courseRun: CourseRun = factories.CourseRunFactory.generate();
+    const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
     courseRun.state.priority = 0;
 
     const enrollmentsDeferred = new Deferred();
@@ -86,7 +89,7 @@ describe('<CourseRunEnrollment />', () => {
         <QueryClientProvider client={createQueryClient({ persistor: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <CourseRunEnrollment context={contextProps} courseRun={getCourseRunProp(courseRun)} />
+              <CourseRunEnrollment context={context} courseRun={getCourseRunProp(courseRun)} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -116,7 +119,7 @@ describe('<CourseRunEnrollment />', () => {
 
   it('shows an error message and the enrollment button when the enrollment fails', async () => {
     const username = initializeUser();
-    const courseRun: CourseRun = factories.CourseRunFactory.generate();
+    const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
     courseRun.state.priority = 0;
 
     const enrollmentDeferred = new Deferred();
@@ -130,7 +133,7 @@ describe('<CourseRunEnrollment />', () => {
         <QueryClientProvider client={createQueryClient({ persistor: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <CourseRunEnrollment context={contextProps} courseRun={getCourseRunProp(courseRun)} />
+              <CourseRunEnrollment context={context} courseRun={getCourseRunProp(courseRun)} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -160,7 +163,7 @@ describe('<CourseRunEnrollment />', () => {
 
   it('shows a link to the course if the user is already enrolled', async () => {
     const username = initializeUser();
-    const courseRun: CourseRun = factories.CourseRunFactory.generate();
+    const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
     courseRun.state.priority = 0;
 
     const enrollmentsDeferred = new Deferred();
@@ -174,7 +177,7 @@ describe('<CourseRunEnrollment />', () => {
         <QueryClientProvider client={createQueryClient({ persistor: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <CourseRunEnrollment context={contextProps} courseRun={getCourseRunProp(courseRun)} />
+              <CourseRunEnrollment context={context} courseRun={getCourseRunProp(courseRun)} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -193,7 +196,7 @@ describe('<CourseRunEnrollment />', () => {
 
   it("shows remaining course opening time and a link to the lms dashboard if the user is already enrolled and if the course hasn't started yet", async () => {
     const username = initializeUser();
-    const courseRun: CourseRun = factories.CourseRunFactory.generate();
+    const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
     courseRun.state.priority = 0;
     courseRun.starts_in_message = 'The course will start in 3 days';
     courseRun.dashboard_link = 'https://edx.local.dev:8073/dashboard';
@@ -209,7 +212,7 @@ describe('<CourseRunEnrollment />', () => {
         <QueryClientProvider client={createQueryClient({ persistor: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <CourseRunEnrollment context={contextProps} courseRun={getCourseRunProp(courseRun)} />
+              <CourseRunEnrollment context={context} courseRun={getCourseRunProp(courseRun)} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -232,7 +235,7 @@ describe('<CourseRunEnrollment />', () => {
 
   it('shows a helpful message if the course run is closed', async () => {
     initializeUser(false);
-    const courseRun: CourseRun = factories.CourseRunFactory.generate();
+    const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
     courseRun.state.priority = 4;
 
     await act(async () => {
@@ -240,7 +243,7 @@ describe('<CourseRunEnrollment />', () => {
         <QueryClientProvider client={createQueryClient({ persistor: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <CourseRunEnrollment context={contextProps} courseRun={getCourseRunProp(courseRun)} />
+              <CourseRunEnrollment context={context} courseRun={getCourseRunProp(courseRun)} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,
@@ -253,7 +256,7 @@ describe('<CourseRunEnrollment />', () => {
 
   it('prompts anonymous users to log in', async () => {
     initializeUser(false);
-    const courseRun: CourseRun = factories.CourseRunFactory.generate();
+    const courseRun: CourseRun = mockFactories.CourseRunFactory.generate();
     courseRun.state.priority = 0;
 
     await act(async () => {
@@ -261,7 +264,7 @@ describe('<CourseRunEnrollment />', () => {
         <QueryClientProvider client={createQueryClient({ persistor: true })}>
           <IntlProvider locale="en">
             <SessionProvider>
-              <CourseRunEnrollment context={contextProps} courseRun={getCourseRunProp(courseRun)} />
+              <CourseRunEnrollment context={context} courseRun={getCourseRunProp(courseRun)} />
             </SessionProvider>
           </IntlProvider>
         </QueryClientProvider>,

@@ -1,30 +1,29 @@
-import { APIBackend } from 'types/api';
-import { ContextFactory } from 'utils/test/factories';
-
+import { ContextFactory as mockContextFactory } from 'utils/test/factories';
 import { handle } from 'utils/errors/handle';
+import LMSHandler from '.';
+
+jest.mock('utils/context', () => ({
+  __esModule: true,
+  default: mockContextFactory({
+    lms_backends: [
+      {
+        backend: 'base',
+        endpoint: 'https://demo.endpoint/api',
+        course_regexp: '.*base.org/.*',
+      },
+      {
+        backend: 'openedx-hawthorn',
+        endpoint: 'https://edx.endpoint/api',
+        course_regexp: '.*edx.org/.*',
+      },
+    ],
+  }).generate(),
+}));
 
 const mockHandle: jest.Mock<typeof handle> = handle as any;
 jest.mock('utils/errors/handle');
 
 describe('API LMS', () => {
-  const context = ContextFactory({
-    lms_backends: [
-      {
-        backend: APIBackend.BASE,
-        endpoint: 'https://demo.endpoint/api',
-        course_regexp: '.*base.org/.*',
-      },
-      {
-        backend: APIBackend.OPENEDX_HAWTHORN,
-        endpoint: 'https://edx.endpoint/api',
-        course_regexp: '.*edx.org/.*',
-      },
-    ],
-  }).generate();
-  window.__richie_frontend_context__ = { context };
-
-  const { default: LMSHandler } = require('./index');
-
   it('returns OpenEdX API if url that match edx selector is provided', () => {
     const api = LMSHandler('https://edx.org/courses/a-test-course');
     expect(api).toBeDefined();
