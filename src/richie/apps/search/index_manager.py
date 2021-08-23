@@ -2,6 +2,7 @@
 ElasticSearch indices utilities.
 """
 from functools import reduce
+import re
 
 from django.conf import settings
 from django.utils import timezone
@@ -127,8 +128,13 @@ def regenerate_indices(logger):
             # attempting to create. In Richie, this is not supposed to happen and is usually the
             # result of a broken ES state.
             if exception.error == "invalid_alias_name_exception":
-                # Identify the broken index
-                broken_index = exception.info["error"]["index"]
+                try:
+                    # ES6 provides the name of the broken index directly
+                    broken_index = exception.info["error"]["index"]
+                except KeyError:
+                    # With ES7 we have to extract the name of the broken index from a string
+                    pattern = re.compile(r"Invalid alias name \[(.*)\].*")
+                    broken_index = pattern.match(exception.info["error"]["reason"]).group(1)
                 # Delete it (it was unusable and we can recreate its data at-will)
                 indices_client.delete(index=broken_index)
                 # Attempt to perform the operation again
