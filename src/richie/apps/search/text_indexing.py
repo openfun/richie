@@ -165,5 +165,6 @@ ANALYSIS_SETTINGS = {
                 "token_chars": ["letter", "digit"],
             }
         },
-    }
+    },
+    "max_ngram_diff": "20",
 }
