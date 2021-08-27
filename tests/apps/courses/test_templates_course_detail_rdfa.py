@@ -120,7 +120,7 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
             URIRef("http://www.w3.org/1999/02/22-rdf-syntax-ns#type"),
             URIRef("https://schema.org/Course"),
         )
-        self.assertEqual(len(list(graph.triples((subject, None, None)))), 36)
+        self.assertEqual(len(list(graph.triples((subject, None, None)))), 37)
 
         # Opengraph
         self.assertTrue(
@@ -149,6 +149,14 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
                 subject,
                 URIRef("http://ogp.me/ns#title"),
                 Literal("Very interesting course"),
+            )
+            in graph
+        )
+        self.assertTrue(
+            (
+                subject,
+                URIRef("http://ogp.me/ns#description"),
+                Literal("Introduction to interesting course"),
             )
             in graph
         )
@@ -303,11 +311,7 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
         self.assertIsNotNone(re.search(pattern, str(image_value)))
 
         self.assertTrue(
-            (
-                subject,
-                URIRef("https://schema.org/license"),
-                URIRef(licence_content.url),
-            )
+            (subject, URIRef("https://schema.org/license"), URIRef(licence_content.url))
             in graph
         )
         self.assertTrue(
@@ -447,8 +451,7 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
 
         for name in ["Fran\\xc3\\xa7ois", "Jeanne"]:
             (author_subject,) = graph.subjects(
-                URIRef("https://schema.org/name"),
-                Literal(name),
+                URIRef("https://schema.org/name"), Literal(name)
             )
             self.assertTrue(author_subject in author_subjects)
 
@@ -460,8 +463,7 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
 
         for url in ["http://example.com/en/francois/", "http://example.com/en/jeanne/"]:
             (author_subject,) = graph.subjects(
-                URIRef("https://schema.org/url"),
-                Literal(url),
+                URIRef("https://schema.org/url"), Literal(url)
             )
             self.assertTrue(author_subject in author_subjects)
 
@@ -516,14 +518,12 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
 
         for start_date in ["2030-06-01", "2030-06-30"]:
             (subject,) = graph.subjects(
-                URIRef("https://schema.org/startDate"),
-                Literal(start_date),
+                URIRef("https://schema.org/startDate"), Literal(start_date)
             )
             self.assertTrue(subject in course_run_subjects)
 
         for end_date in ["2030-07-10", "2030-08-01"]:
             (subject,) = graph.subjects(
-                URIRef("https://schema.org/endDate"),
-                Literal(end_date),
+                URIRef("https://schema.org/endDate"), Literal(end_date)
             )
             self.assertTrue(subject in course_run_subjects)

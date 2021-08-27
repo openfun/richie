@@ -5,6 +5,7 @@ import re
 
 from django.test.utils import override_settings
 
+from cms.api import add_plugin
 from cms.test_utils.testcases import CMSTestCase
 
 from richie.apps.courses.factories import CourseFactory
@@ -24,9 +25,7 @@ class TemplatesCourseDetailOpengraphCMSTestCase(CMSTestCase):
             page_title="Introduction to Programming",
             code="IntroProg",
             page_languages=["en", "fr"],
-            fill_cover={
-                "original_filename": cover_file_name,
-            },
+            fill_cover={"original_filename": cover_file_name},
         )
         course_page = course.extended_object
         course_page.publish("en")
@@ -68,9 +67,7 @@ class TemplatesCourseDetailOpengraphCMSTestCase(CMSTestCase):
             page_title="Introduction to Programming",
             code="IntroProg",
             page_languages=["en", "fr"],
-            fill_cover={
-                "original_filename": cover_file_name,
-            },
+            fill_cover={"original_filename": cover_file_name},
         )
         course_page = course.extended_object
         course_page.publish("en")
@@ -96,9 +93,7 @@ class TemplatesCourseDetailOpengraphCMSTestCase(CMSTestCase):
             page_title="Introduction to Programming",
             code="IntroProg",
             page_languages=["en", "fr"],
-            fill_cover={
-                "original_filename": cover_file_name,
-            },
+            fill_cover={"original_filename": cover_file_name},
         )
         course_page = course.extended_object
         course_page.publish("en")
@@ -154,3 +149,39 @@ class TemplatesCourseDetailOpengraphCMSTestCase(CMSTestCase):
         html_meta_og_image = match.group(0)
         self.assertIn('content="https://xyz.cloudfront.net/static/', html_meta_og_image)
         self.assertIn("richie/images/logo.png", html_meta_og_image)
+
+    def test_open_graph_course_description(self):
+        """
+        An opengraph description meta should be present if the introduction placeholder is set.
+        """
+        course = CourseFactory()
+        course_page = course.extended_object
+
+        # Add an introduction to the course
+        placeholder = course_page.placeholders.get(slot="course_introduction")
+        add_plugin(
+            language="en",
+            placeholder=placeholder,
+            plugin_type="PlainTextPlugin",
+            body="Introduction to interesting course",
+        )
+        course_page.publish("en")
+
+        url = course_page.get_absolute_url(language="en")
+        response = self.client.get(url)
+
+        self.assertContains(
+            response,
+            '<meta property="og:description" content="Introduction to interesting course">',
+        )
+
+    def test_open_graph_course_description_no_introduction(self):
+        """
+        A course with no introduction has no opengraph description meta.
+        """
+        course = CourseFactory(should_publish=True)
+
+        url = course.extended_object.get_absolute_url(language="en")
+        response = self.client.get(url)
+
+        self.assertNotContains(response, "og:description")
