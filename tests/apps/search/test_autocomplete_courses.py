@@ -6,10 +6,8 @@ from unittest import mock
 
 from django.test import TestCase
 
-from elasticsearch.client import IndicesClient
-from elasticsearch.helpers import bulk
-
-from richie.apps.search import ES_CLIENT
+from richie.apps.search import ES_CLIENT, ES_INDICES_CLIENT
+from richie.apps.search.elasticsearch import bulk_compat
 from richie.apps.search.indexers.courses import CoursesIndexer
 from richie.apps.search.text_indexing import ANALYSIS_SETTINGS
 from richie.apps.search.utils.indexers import slice_string_for_completion
@@ -87,21 +85,18 @@ class AutocompleteCoursesTestCase(TestCase):
         Prepare the ElasticSearch index and execute the query in it.
         """
 
-        indices_client = IndicesClient(client=ES_CLIENT)
         # Delete any existing indices so we get a clean slate
-        indices_client.delete(index="_all")
+        ES_INDICES_CLIENT.delete(index="_all")
         # Create an index we'll use to test the ES features
-        indices_client.create(index=COURSES_INDEX)
+        ES_INDICES_CLIENT.create(index=COURSES_INDEX)
 
         # The index needs to be closed before we set an analyzer
-        indices_client.close(index=COURSES_INDEX)
-        indices_client.put_settings(body=ANALYSIS_SETTINGS, index=COURSES_INDEX)
-        indices_client.open(index=COURSES_INDEX)
+        ES_INDICES_CLIENT.close(index=COURSES_INDEX)
+        ES_INDICES_CLIENT.put_settings(body=ANALYSIS_SETTINGS, index=COURSES_INDEX)
+        ES_INDICES_CLIENT.open(index=COURSES_INDEX)
 
         # Use the default courses mapping from the Indexer
-        indices_client.put_mapping(
-            body=CoursesIndexer.mapping, index=COURSES_INDEX
-        )
+        ES_INDICES_CLIENT.put_mapping(body=CoursesIndexer.mapping, index=COURSES_INDEX)
         # Add the sorting script
         ES_CLIENT.put_script(id="score", body=CoursesIndexer.scripts["score"])
         ES_CLIENT.put_script(
@@ -125,8 +120,8 @@ class AutocompleteCoursesTestCase(TestCase):
             }
             for course in courses
         ]
-        bulk(actions=actions, chunk_size=500, client=ES_CLIENT)
-        indices_client.refresh()
+        bulk_compat(actions=actions, chunk_size=500, client=ES_CLIENT)
+        ES_INDICES_CLIENT.refresh()
 
         results = self.client.get(
             f"/api/v1.0/courses/autocomplete/?{querystring:s}", **extra

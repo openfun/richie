@@ -111,7 +111,7 @@ class CategoriesIndexer:
             kind = category.get_meta_category().extended_object.reverse_id
         except Category.DoesNotExist:
             # Meta categories do not have a meta category themselves
-            kind = None
+            kind = "meta"
 
         return {
             "_id": category.get_es_id(),

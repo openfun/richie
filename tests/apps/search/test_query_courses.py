@@ -7,11 +7,10 @@ from unittest import mock
 from django.test import TestCase
 
 import arrow
-from elasticsearch.client import IndicesClient
-from elasticsearch.helpers import bulk
 
 from richie.apps.courses.factories import CategoryFactory, OrganizationFactory
-from richie.apps.search import ES_CLIENT
+from richie.apps.search import ES_CLIENT, ES_INDICES_CLIENT
+from richie.apps.search.elasticsearch import bulk_compat
 from richie.apps.search.filter_definitions import FILTERS, IndexableFilterDefinition
 from richie.apps.search.filter_definitions.courses import ALL_LANGUAGES_DICT
 from richie.apps.search.indexers.courses import CoursesIndexer
@@ -292,20 +291,16 @@ class CourseRunsCoursesQueryTestCase(TestCase):
         self.assertEqual(len(suite), 4)
         courses_definition = [[i, suite[i]] for i in range(4)]
 
-        # Index these 4 courses in Elasticsearch
-        indices_client = IndicesClient(client=ES_CLIENT)
         # Delete any existing indices so we get a clean slate
-        indices_client.delete(index="_all")
+        ES_INDICES_CLIENT.delete(index="_all")
         # Create an index we'll use to test the ES features
-        indices_client.create(index="test_courses")
-        indices_client.close(index="test_courses")
-        indices_client.put_settings(body=ANALYSIS_SETTINGS, index="test_courses")
-        indices_client.open(index="test_courses")
+        ES_INDICES_CLIENT.create(index="test_courses")
+        ES_INDICES_CLIENT.close(index="test_courses")
+        ES_INDICES_CLIENT.put_settings(body=ANALYSIS_SETTINGS, index="test_courses")
+        ES_INDICES_CLIENT.open(index="test_courses")
 
         # Use the default courses mapping from the Indexer
-        indices_client.put_mapping(
-            body=CoursesIndexer.mapping, index="test_courses"
-        )
+        ES_INDICES_CLIENT.put_mapping(body=CoursesIndexer.mapping, index="test_courses")
         # Add the sorting script
         ES_CLIENT.put_script(id="score", body=CoursesIndexer.scripts["score"])
         ES_CLIENT.put_script(
@@ -340,8 +335,8 @@ class CourseRunsCoursesQueryTestCase(TestCase):
             }
             for course_id, course_run_ids in courses_definition
         ]
-        bulk(actions=actions, chunk_size=500, client=ES_CLIENT)
-        indices_client.refresh()
+        bulk_compat(actions=actions, chunk_size=500, client=ES_CLIENT)
+        ES_INDICES_CLIENT.refresh()
 
         response = self.client.get(f"/api/v1.0/courses/?{querystring:s}")
         self.assertEqual(response.status_code, 200)

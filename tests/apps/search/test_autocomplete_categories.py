@@ -6,10 +6,8 @@ from unittest import mock
 
 from django.test import TestCase
 
-from elasticsearch.client import IndicesClient
-from elasticsearch.helpers import bulk
-
-from richie.apps.search import ES_CLIENT
+from richie.apps.search import ES_CLIENT, ES_INDICES_CLIENT
+from richie.apps.search.elasticsearch import bulk_compat
 from richie.apps.search.indexers.categories import CategoriesIndexer
 from richie.apps.search.text_indexing import ANALYSIS_SETTINGS
 from richie.apps.search.utils.indexers import slice_string_for_completion
@@ -85,19 +83,18 @@ class AutocompleteCategoriesTestCase(TestCase):
             },
         ]
 
-        indices_client = IndicesClient(client=ES_CLIENT)
         # Delete any existing indices so we get a clean slate
-        indices_client.delete(index="_all")
+        ES_INDICES_CLIENT.delete(index="_all")
         # Create an index we'll use to test the ES features
-        indices_client.create(index=CATEGORIES_INDEX)
+        ES_INDICES_CLIENT.create(index=CATEGORIES_INDEX)
 
         # The index needs to be closed before we set an analyzer
-        indices_client.close(index=CATEGORIES_INDEX)
-        indices_client.put_settings(body=ANALYSIS_SETTINGS, index=CATEGORIES_INDEX)
-        indices_client.open(index=CATEGORIES_INDEX)
+        ES_INDICES_CLIENT.close(index=CATEGORIES_INDEX)
+        ES_INDICES_CLIENT.put_settings(body=ANALYSIS_SETTINGS, index=CATEGORIES_INDEX)
+        ES_INDICES_CLIENT.open(index=CATEGORIES_INDEX)
 
         # Use the default categories mapping from the Indexer
-        indices_client.put_mapping(
+        ES_INDICES_CLIENT.put_mapping(
             body=CategoriesIndexer.mapping, index=CATEGORIES_INDEX
         )
 
@@ -116,8 +113,8 @@ class AutocompleteCategoriesTestCase(TestCase):
             }
             for category in categories
         ]
-        bulk(actions=actions, chunk_size=500, client=ES_CLIENT)
-        indices_client.refresh()
+        bulk_compat(actions=actions, chunk_size=500, client=ES_CLIENT)
+        ES_INDICES_CLIENT.refresh()
 
         response = self.client.get(
             f"/api/v1.0/subjects/autocomplete/?{querystring:s}", **extra

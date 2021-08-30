@@ -4,10 +4,8 @@ from unittest import mock
 
 from django.test import TestCase
 
-from elasticsearch.client import IndicesClient
-from elasticsearch.helpers import bulk
-
-from richie.apps.search import ES_CLIENT
+from richie.apps.search import ES_CLIENT, ES_INDICES_CLIENT
+from richie.apps.search.elasticsearch import bulk_compat
 from richie.apps.search.indexers.categories import CategoriesIndexer
 from richie.apps.search.text_indexing import ANALYSIS_SETTINGS
 
@@ -37,18 +35,16 @@ class CategoriesQueryTestCase(TestCase):
         index with our categories so we can run our queries and check the results.
         It also executes the query and returns the result from the API.
         """
-        # Index these categories in Elasticsearch
-        indices_client = IndicesClient(client=ES_CLIENT)
         # Delete any existing indices so we get a clean slate
-        indices_client.delete(index="_all")
+        ES_INDICES_CLIENT.delete(index="_all")
         # Create an index we'll use to test the ES features
-        indices_client.create(index="test_categories")
-        indices_client.close(index="test_categories")
-        indices_client.put_settings(body=ANALYSIS_SETTINGS, index="test_categories")
-        indices_client.open(index="test_categories")
+        ES_INDICES_CLIENT.create(index="test_categories")
+        ES_INDICES_CLIENT.close(index="test_categories")
+        ES_INDICES_CLIENT.put_settings(body=ANALYSIS_SETTINGS, index="test_categories")
+        ES_INDICES_CLIENT.open(index="test_categories")
 
         # Use the default categories mapping from the Indexer
-        indices_client.put_mapping(
+        ES_INDICES_CLIENT.put_mapping(
             body=CategoriesIndexer.mapping, index="test_categories"
         )
 
@@ -69,8 +65,8 @@ class CategoriesQueryTestCase(TestCase):
             }
             for category in categories or CATEGORIES
         ]
-        bulk(actions=actions, chunk_size=500, client=ES_CLIENT)
-        indices_client.refresh()
+        bulk_compat(actions=actions, chunk_size=500, client=ES_CLIENT)
+        ES_INDICES_CLIENT.refresh()
 
         response = self.client.get(f"/api/v1.0/{kind:s}/?{querystring:s}")
         self.assertEqual(response.status_code, 200)

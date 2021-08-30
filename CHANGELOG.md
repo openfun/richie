@@ -20,6 +20,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
   Analytics using the Google Tag Manage Javascrip code.
   It includes custom dimensions for organizations, course code, run, resource
   link and course name.
+- Richie is now compatible with both ES6 and ES7
 
 ### Changed
 
