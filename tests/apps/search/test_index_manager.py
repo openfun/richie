@@ -9,11 +9,10 @@ from django.test.utils import override_settings
 from django.utils import timezone
 
 import pytz
-from elasticsearch.client import IndicesClient
 from elasticsearch.exceptions import NotFoundError
 
 from richie.apps.courses.factories import CourseFactory
-from richie.apps.search import ES_CLIENT
+from richie.apps.search import ES_CLIENT, ES_INDICES_CLIENT
 from richie.apps.search.index_manager import (
     ES_INDICES,
     get_indices_by_alias,
@@ -34,8 +33,7 @@ class IndexManagerTestCase(TestCase):
         Make sure all indices are deleted before each new test is run.
         """
         super().setUp()
-        self.indices_client = IndicesClient(client=ES_CLIENT)
-        self.indices_client.delete(index="_all")
+        ES_INDICES_CLIENT.delete(index="_all")
 
     def test_index_manager_get_indices_by_alias(self):
         """
@@ -130,18 +128,18 @@ class IndexManagerTestCase(TestCase):
         now = datetime(2016, 5, 4, 3, 12, 33, 123456, tzinfo=pytz.utc)
 
         # Make sure our index is empty before we call the function
-        self.assertEqual(self.indices_client.get_alias("*"), {})
+        self.assertEqual(ES_INDICES_CLIENT.get_alias("*"), {})
 
         mock_logger = mock.Mock(spec=["info"])
 
         with mock.patch.object(timezone, "now", return_value=now):
             new_index = perform_create_index(indexable, mock_logger)
-        self.indices_client.refresh()
+        ES_INDICES_CLIENT.refresh()
 
         self.assertEqual(new_index, "richie_courses_2016-05-04-03h12m33.123456s")
         self.assertEqual(ES_CLIENT.count()["count"], 10)
         self.assertEqual(
-            self.indices_client.get_mapping(),
+            ES_INDICES_CLIENT.get_mapping(),
             {
                 "richie_courses_2016-05-04-03h12m33.123456s": {
                     "mappings": {
@@ -185,15 +183,16 @@ class IndexManagerTestCase(TestCase):
         Make sure indices are created, aliases updated and old, no longer useful indices
         are pruned when the `regenerate_elasticsearch` function is called.
         """
-        # The indices client will be used to test the actual indices in ElasticSearch
-        indices_client = IndicesClient(client=ES_CLIENT)
-
         # Create an unrelated index with an alias to make sure it is unaffected by our operations
-        indices_client.create(index="unrelated_index")
-        indices_client.put_alias(index="unrelated_index", name="unrelated_index_alias")
-        self.assertIsNotNone(indices_client.get("unrelated_index")["unrelated_index"])
+        ES_INDICES_CLIENT.create(index="unrelated_index")
+        ES_INDICES_CLIENT.put_alias(
+            index="unrelated_index", name="unrelated_index_alias"
+        )
+        self.assertIsNotNone(
+            ES_INDICES_CLIENT.get("unrelated_index")["unrelated_index"]
+        )
         self.assertEqual(
-            list(indices_client.get_alias("unrelated_index_alias").keys())[0],
+            list(ES_INDICES_CLIENT.get_alias("unrelated_index_alias").keys())[0],
             "unrelated_index",
         )
 
@@ -214,10 +213,10 @@ class IndexManagerTestCase(TestCase):
         for alias_name in expected_indices:
             new_index_name = f"{alias_name}_{creation1_string}"
             # The index is created
-            self.assertIsNotNone(indices_client.get(new_index_name)[new_index_name])
+            self.assertIsNotNone(ES_INDICES_CLIENT.get(new_index_name)[new_index_name])
             # The expected alias is associated with the index
             self.assertEqual(
-                list(indices_client.get_alias(alias_name).keys())[0], new_index_name
+                list(ES_INDICES_CLIENT.get_alias(alias_name).keys())[0], new_index_name
             )
 
         # Now regenerate the indices, replacing the ones we just created
@@ -230,19 +229,19 @@ class IndexManagerTestCase(TestCase):
         for alias_name in expected_indices:
             # The index is created
             new_index_name = f"{alias_name}_{creation2_string}"
-            self.assertIsNotNone(indices_client.get(new_index_name)[new_index_name])
+            self.assertIsNotNone(ES_INDICES_CLIENT.get(new_index_name)[new_index_name])
             # The expected alias is associated with the new index
             self.assertEqual(
-                list(indices_client.get_alias(alias_name).keys())[0], new_index_name
+                list(ES_INDICES_CLIENT.get_alias(alias_name).keys())[0], new_index_name
             )
             # The previous version of the index is still around
             creation1_index_name = f"{alias_name}_{creation1_string}"
             self.assertIsNotNone(
-                indices_client.get(creation1_index_name)[creation1_index_name]
+                ES_INDICES_CLIENT.get(creation1_index_name)[creation1_index_name]
             )
             # But not aliased any more
             self.assertEqual(
-                indices_client.get(creation1_index_name)[creation1_index_name][
+                ES_INDICES_CLIENT.get(creation1_index_name)[creation1_index_name][
                     "aliases"
                 ],
                 {},
@@ -259,31 +258,33 @@ class IndexManagerTestCase(TestCase):
         for index_name in expected_indices:
             new_index_name = f"{index_name}_{creation3_string}"
             # The index is created
-            self.assertIsNotNone(indices_client.get(new_index_name)[new_index_name])
+            self.assertIsNotNone(ES_INDICES_CLIENT.get(new_index_name)[new_index_name])
             # The expected alias is associated with the new index
             self.assertEqual(
-                list(indices_client.get_alias(index_name).keys())[0], new_index_name
+                list(ES_INDICES_CLIENT.get_alias(index_name).keys())[0], new_index_name
             )
             # The previous version of the index is still around
             creation2_index_name = f"{alias_name}_{creation2_string}"
             self.assertIsNotNone(
-                indices_client.get(creation2_index_name)[creation2_index_name]
+                ES_INDICES_CLIENT.get(creation2_index_name)[creation2_index_name]
             )
             # But not aliased any more
             self.assertEqual(
-                indices_client.get(creation2_index_name)[creation2_index_name][
+                ES_INDICES_CLIENT.get(creation2_index_name)[creation2_index_name][
                     "aliases"
                 ],
                 {},
             )
             # Version n-2 of the index does not exist any more
             with self.assertRaises(NotFoundError):
-                indices_client.get(f"{index_name}_{creation1_string}")
+                ES_INDICES_CLIENT.get(f"{index_name}_{creation1_string}")
 
         # Make sure our unrelated index was unaffected through regenerations
-        self.assertIsNotNone(indices_client.get("unrelated_index")["unrelated_index"])
+        self.assertIsNotNone(
+            ES_INDICES_CLIENT.get("unrelated_index")["unrelated_index"]
+        )
         self.assertEqual(
-            list(indices_client.get_alias("unrelated_index_alias").keys())[0],
+            list(ES_INDICES_CLIENT.get_alias("unrelated_index_alias").keys())[0],
             "unrelated_index",
         )
 
@@ -303,14 +304,11 @@ class IndexManagerTestCase(TestCase):
         This can occur when ES restarts and an update signal is triggered before
         Richie had a chance to bootstrap ES.
         """
-        # The indices client will be used to test the actual indices in ElasticSearch
-        indices_client = IndicesClient(client=ES_CLIENT)
-
         # Create a course and trigger a signal to index it. This will create a
         # broken "richie_test_courses" index
         course = CourseFactory(should_publish=True)
         apply_es_action_to_course(course.extended_object, "index", "en")
-        self.assertIsNotNone(indices_client.get("richie_test_courses"))
+        self.assertIsNotNone(ES_INDICES_CLIENT.get("richie_test_courses"))
 
         # Call our `regenerate_indices command`
         creation_datetime = datetime(2010, 1, 1, tzinfo=timezone.utc)
@@ -320,11 +318,11 @@ class IndexManagerTestCase(TestCase):
 
         # No error was thrown, the courses index (like all others) was bootstrapped
         self.assertIsNotNone(
-            indices_client.get(f"richie_test_courses_{creation_string}")
+            ES_INDICES_CLIENT.get(f"richie_test_courses_{creation_string}")
         )
         # The expected alias is associated with the index
         self.assertEqual(
-            list(indices_client.get_alias("richie_test_courses").keys())[0],
+            list(ES_INDICES_CLIENT.get_alias("richie_test_courses").keys())[0],
             f"richie_test_courses_{creation_string}",
         )
 

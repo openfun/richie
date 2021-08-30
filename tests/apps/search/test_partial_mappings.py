@@ -3,9 +3,7 @@ Test for our partial mappings
 """
 from django.test import TestCase
 
-from elasticsearch.client import IndicesClient
-
-from richie.apps.search import ES_CLIENT
+from richie.apps.search import ES_CLIENT, ES_INDICES_CLIENT
 from richie.apps.search.text_indexing import ANALYSIS_SETTINGS, MULTILINGUAL_TEXT
 
 
@@ -19,8 +17,7 @@ class PartialMappingsTestCase(TestCase):
         Instantiate our ES client and make sure all indices are deleted before each test
         """
         super().setUp()
-        self.indices_client = IndicesClient(client=ES_CLIENT)
-        self.indices_client.delete(index="_all")
+        ES_INDICES_CLIENT.delete(index="_all")
 
     def test_partial_mappings_multilingual_text(self):
         """
@@ -31,15 +28,14 @@ class PartialMappingsTestCase(TestCase):
         mapping = {"dynamic_templates": MULTILINGUAL_TEXT}
 
         # Create the index and set a mapping that includes the pattern we want to test
-        self.indices_client.create(index=index_name)
-        self.indices_client.put_mapping(index=index_name, body=mapping)
+        ES_INDICES_CLIENT.create(index=index_name)
+        ES_INDICES_CLIENT.put_mapping(index=index_name, body=mapping)
         # The index needs to be closed before we set an analyzer
-        self.indices_client.close(index=index_name)
-        self.indices_client.put_settings(body=ANALYSIS_SETTINGS, index=index_name)
-        self.indices_client.open(index=index_name)
-
+        ES_INDICES_CLIENT.close(index=index_name)
+        ES_INDICES_CLIENT.put_settings(body=ANALYSIS_SETTINGS, index=index_name)
+        ES_INDICES_CLIENT.open(index=index_name)
         # The stub mapping only contains our dynamic template
-        mapping = self.indices_client.get_mapping(index=index_name)
+        mapping = ES_INDICES_CLIENT.get_mapping(index=index_name)
         self.assertEqual(
             mapping[index_name]["mappings"],
             {"dynamic_templates": MULTILINGUAL_TEXT},
@@ -53,9 +49,7 @@ class PartialMappingsTestCase(TestCase):
         )
 
         # The stub mapping has been extended with a matching property for 'fr'
-        mapping = self.indices_client.get_mapping(
-            index=index_name
-        )
+        mapping = ES_INDICES_CLIENT.get_mapping(index=index_name)
         self.assertEqual(
             mapping[index_name]["mappings"],
             {
@@ -88,9 +82,7 @@ class PartialMappingsTestCase(TestCase):
         )
 
         # The sub mapping has been extended with a matching property for 'en'
-        mapping = self.indices_client.get_mapping(
-            index=index_name
-        )
+        mapping = ES_INDICES_CLIENT.get_mapping(index=index_name)
         self.assertEqual(
             mapping[index_name]["mappings"],
             {
@@ -135,23 +127,21 @@ class PartialMappingsTestCase(TestCase):
         mapping = {"dynamic_templates": MULTILINGUAL_TEXT}
 
         # Create the index and set a mapping that includes the pattern we want to test
-        self.indices_client.create(index=index_name)
-        self.indices_client.put_mapping(
-            index=index_name, body=mapping
-        )
+        ES_INDICES_CLIENT.create(index=index_name)
+        ES_INDICES_CLIENT.put_mapping(index=index_name, body=mapping)
         # The index needs to be closed before we set an analyzer
-        self.indices_client.close(index=index_name)
-        self.indices_client.put_settings(body=ANALYSIS_SETTINGS, index=index_name)
-        self.indices_client.open(index=index_name)
+        ES_INDICES_CLIENT.close(index=index_name)
+        ES_INDICES_CLIENT.put_settings(body=ANALYSIS_SETTINGS, index=index_name)
+        ES_INDICES_CLIENT.open(index=index_name)
 
         self.assertEqual(
-            self.indices_client.analyze(
+            ES_INDICES_CLIENT.analyze(
                 body='{"analyzer": "french", "text": "électricité"}', index=index_name
             )["tokens"][0]["token"],
             "electricit",
         )
         self.assertEqual(
-            self.indices_client.analyze(
+            ES_INDICES_CLIENT.analyze(
                 body='{"analyzer": "french", "text": "electricite"}', index=index_name
             )["tokens"][0]["token"],
             "electricit",
@@ -162,16 +152,16 @@ class PartialMappingsTestCase(TestCase):
         index_name = "stub_index"
 
         # Create the index and set a mapping that includes the pattern we want to test
-        self.indices_client.create(index=index_name)
+        ES_INDICES_CLIENT.create(index=index_name)
         # The index needs to be closed before we set an analyzer
-        self.indices_client.close(index=index_name)
-        self.indices_client.put_settings(body=ANALYSIS_SETTINGS, index=index_name)
-        self.indices_client.open(index=index_name)
+        ES_INDICES_CLIENT.close(index=index_name)
+        ES_INDICES_CLIENT.put_settings(body=ANALYSIS_SETTINGS, index=index_name)
+        ES_INDICES_CLIENT.open(index=index_name)
 
         self.assertEqual(
             [
                 t["token"]
-                for t in self.indices_client.analyze(
+                for t in ES_INDICES_CLIENT.analyze(
                     body='{"analyzer": "code_trigram", "text": "003rst"}',
                     index=index_name,
                 )["tokens"]
@@ -193,7 +183,7 @@ class PartialMappingsTestCase(TestCase):
         self.assertEqual(
             [
                 t["token"]
-                for t in self.indices_client.analyze(
+                for t in ES_INDICES_CLIENT.analyze(
                     body='{"analyzer": "code", "text": "003rst"}', index=index_name
                 )["tokens"]
             ],

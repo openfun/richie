@@ -76,7 +76,7 @@ class PersonsViewSetTestCase(TestCase):
                         },
                     },
                 ],
-                "total": {'relation': 'eq', 'value': 32},
+                "total": {"relation": "eq", "value": 32},
             }
         }
 

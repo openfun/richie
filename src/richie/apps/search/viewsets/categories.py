@@ -83,7 +83,6 @@ class CategoriesViewSet(ViewSet):
         try:
             query_response = ES_CLIENT.get(
                 index=self._meta.indexer.index_name,
-                doc_type="_doc",
                 id=pk,
             )
         except NotFoundError as error:

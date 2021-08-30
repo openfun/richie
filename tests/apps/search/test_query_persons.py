@@ -4,10 +4,8 @@ from unittest import mock
 
 from django.test import TestCase
 
-from elasticsearch.client import IndicesClient
-from elasticsearch.helpers import bulk
-
-from richie.apps.search import ES_CLIENT
+from richie.apps.search import ES_CLIENT, ES_INDICES_CLIENT
+from richie.apps.search.elasticsearch import bulk_compat
 from richie.apps.search.indexers.persons import PersonsIndexer
 from richie.apps.search.text_indexing import ANALYSIS_SETTINGS
 
@@ -36,20 +34,16 @@ class PersonsQueryTestCase(TestCase):
         index with our persons so we can run our queries and check the results.
         It also executes the query and returns the result from the API.
         """
-        # Index these persons in Elasticsearch
-        indices_client = IndicesClient(client=ES_CLIENT)
         # Delete any existing indices so we get a clean slate
-        indices_client.delete(index="_all")
+        ES_INDICES_CLIENT.delete(index="_all")
         # Create an index we'll use to test the ES features
-        indices_client.create(index="test_persons")
-        indices_client.close(index="test_persons")
-        indices_client.put_settings(body=ANALYSIS_SETTINGS, index="test_persons")
-        indices_client.open(index="test_persons")
+        ES_INDICES_CLIENT.create(index="test_persons")
+        ES_INDICES_CLIENT.close(index="test_persons")
+        ES_INDICES_CLIENT.put_settings(body=ANALYSIS_SETTINGS, index="test_persons")
+        ES_INDICES_CLIENT.open(index="test_persons")
 
         # Use the default persons mapping from the Indexer
-        indices_client.put_mapping(
-            body=PersonsIndexer.mapping, index="test_persons"
-        )
+        ES_INDICES_CLIENT.put_mapping(body=PersonsIndexer.mapping, index="test_persons")
 
         # Actually insert our persons in the index
         actions = [
@@ -64,8 +58,8 @@ class PersonsQueryTestCase(TestCase):
             }
             for person in persons or PERSONS
         ]
-        bulk(actions=actions, chunk_size=500, client=ES_CLIENT)
-        indices_client.refresh()
+        bulk_compat(actions=actions, chunk_size=500, client=ES_CLIENT)
+        ES_INDICES_CLIENT.refresh()
 
         response = self.client.get(f"/api/v1.0/persons/?{querystring:s}")
         self.assertEqual(response.status_code, 200)

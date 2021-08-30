@@ -21,7 +21,9 @@ from richie.apps.search.indexers.courses import CoursesIndexer
     new_callable=mock.PropertyMock,
     return_value="test_courses",
 )
-@mock.patch("richie.apps.search.index_manager.bulk")  # Mock call to Elasticsearch
+@mock.patch(
+    "richie.apps.search.index_manager.bulk_compat"
+)  # Mock call to Elasticsearch
 class CoursesSignalsTestCase(TestCase):
     """
     Test signals to keep the Elasticsearch indices up-to-date.

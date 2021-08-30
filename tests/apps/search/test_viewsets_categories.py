@@ -96,7 +96,7 @@ class CategoriesViewsetsTestCase(TestCase):
                         },
                     },
                 ],
-                "total": {'relation': 'eq', 'value': 32},
+                "total": {"relation": "eq", "value": 32},
             }
         }
 
