@@ -74,6 +74,10 @@ class PersonsIndexersTestCase(TestCase):
                     },
                     "portrait": {"en": "portrait info", "fr": "portrait info"},
                     "title": {"en": "my first person", "fr": "ma première personne"},
+                    "title_raw": {
+                        "en": "my first person",
+                        "fr": "ma première personne",
+                    },
                 },
                 {
                     "_id": str(person2.public_extension.extended_object.id),
@@ -90,6 +94,10 @@ class PersonsIndexersTestCase(TestCase):
                     },
                     "portrait": {},
                     "title": {"en": "my second person", "fr": "ma deuxième personne"},
+                    "title_raw": {
+                        "en": "my second person",
+                        "fr": "ma deuxième personne",
+                    },
                 },
             ],
         )

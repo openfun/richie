@@ -61,6 +61,7 @@ class CategoriesQueryTestCase(TestCase):
                 "logo": {"en": "en/logo"},
                 "nb_children": 0,
                 "path": category["id"],
+                "title_raw": category["title"],
                 **category,
             }
             for category in categories or CATEGORIES
@@ -85,21 +86,21 @@ class CategoriesQueryTestCase(TestCase):
                 "objects": [
                     {
                         "icon": "en/icon",
-                        "id": "8399",
-                        "is_meta": False,
-                        "logo": "en/logo",
-                        "nb_children": 0,
-                        "path": "8399",
-                        "title": "Science for beginners",
-                    },
-                    {
-                        "icon": "en/icon",
                         "id": "8312",
                         "is_meta": False,
                         "logo": "en/logo",
                         "nb_children": 0,
                         "path": "8312",
                         "title": "Literature",
+                    },
+                    {
+                        "icon": "en/icon",
+                        "id": "8399",
+                        "is_meta": False,
+                        "logo": "en/logo",
+                        "nb_children": 0,
+                        "path": "8399",
+                        "title": "Science for beginners",
                     },
                 ],
             },

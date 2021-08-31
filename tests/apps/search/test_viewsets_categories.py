@@ -155,7 +155,8 @@ class CategoriesViewsetsTestCase(TestCase):
                             },
                         ]
                     }
-                }
+                },
+                "sort": [{"title_raw.en": {"order": "asc"}}],
             },
             from_=0,
             index="richie_categories",
