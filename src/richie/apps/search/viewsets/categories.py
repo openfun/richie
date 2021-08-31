@@ -39,6 +39,10 @@ class CategoriesViewSet(ViewSet):
 
         limit, offset, query = params_form.build_es_query(kind=kind)
 
+        query["sort"] = [
+            {f"title_raw.{get_language_from_request(request)}": {"order": "asc"}}
+        ]
+
         try:
             # pylint: disable=unexpected-keyword-arg
             query_response = ES_CLIENT.search(

@@ -37,6 +37,10 @@ class PersonsViewSet(AutocompleteMixin, ViewSet):
 
         limit, offset, query = params_form.build_es_query()
 
+        query["sort"] = [
+            {f"title_raw.{get_language_from_request(request)}": {"order": "asc"}}
+        ]
+
         # pylint: disable=unexpected-keyword-arg
         search_query_response = ES_CLIENT.search(
             _source=getattr(self._meta.indexer, "display_fields", "*"),

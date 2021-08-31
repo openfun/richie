@@ -85,6 +85,10 @@ class OrganizationsIndexersTestCase(TestCase):
                         "en": "my second organization",
                         "fr": "ma deuxième organisation",
                     },
+                    "title_raw": {
+                        "en": "my second organization",
+                        "fr": "ma deuxième organisation",
+                    },
                 },
                 {
                     "_id": "L-0001",
@@ -112,6 +116,10 @@ class OrganizationsIndexersTestCase(TestCase):
                     },
                     "logo": {"en": "logo info", "fr": "logo info"},
                     "title": {
+                        "en": "my first organization",
+                        "fr": "ma première organisation",
+                    },
+                    "title_raw": {
                         "en": "my first organization",
                         "fr": "ma première organisation",
                     },

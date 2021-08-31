@@ -43,6 +43,12 @@ class OrganizationsIndexer:
             # Not searchable
             "absolute_url": {"type": "object", "enabled": False},
             "logo": {"type": "object", "enabled": False},
+            # Create a raw title field to enable alphabetical sorting
+            # We cannot use the default title field as the analysis prevents sorting on it
+            **{
+                f"title_raw.{lang}": {"type": "keyword"}
+                for lang, _ in settings.LANGUAGES
+            },
         },
     }
     scripts = {}
@@ -96,6 +102,7 @@ class OrganizationsIndexer:
                 language: " ".join(st) for language, st in description.items()
             },
             "title": titles,
+            "title_raw": titles,
         }
 
     @classmethod

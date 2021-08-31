@@ -12,7 +12,7 @@ from richie.apps.search.text_indexing import ANALYSIS_SETTINGS
 PERSONS = [
     {"id": "5918", "title": {"en": "John Brown"}},
     {"id": "5987", "title": {"en": "John Blue"}},
-    {"id": "5912", "title": {"en": "Jåsōn Gold"}},
+    {"id": "5912", "title": {"en": "Jaåsōn Gold"}},
 ]
 
 
@@ -54,6 +54,7 @@ class PersonsQueryTestCase(TestCase):
                 "absolute_url": {"en": "en/url"},
                 "bio": {"en": "en/bio"},
                 "portrait": {"en": "en/image"},
+                "title_raw": person["title"],
                 **person,
             }
             for person in persons or PERSONS
@@ -76,9 +77,9 @@ class PersonsQueryTestCase(TestCase):
             {
                 "meta": {"count": 3, "offset": 0, "total_count": 3},
                 "objects": [
-                    {"id": "5918", "portrait": "en/image", "title": "John Brown"},
+                    {"id": "5912", "portrait": "en/image", "title": "Jaåsōn Gold"},
                     {"id": "5987", "portrait": "en/image", "title": "John Blue"},
-                    {"id": "5912", "portrait": "en/image", "title": "Jåsōn Gold"},
+                    {"id": "5918", "portrait": "en/image", "title": "John Brown"},
                 ],
             },
         )
@@ -88,13 +89,13 @@ class PersonsQueryTestCase(TestCase):
         Make sure only persons matching the text query are returned.
         """
         # Make a query without diacritics for an object with diacritics in its title
-        content = self.execute_query(querystring="query=jason")
+        content = self.execute_query(querystring="query=jaason")
         self.assertEqual(
             content,
             {
                 "meta": {"count": 1, "offset": 0, "total_count": 1},
                 "objects": [
-                    {"id": "5912", "portrait": "en/image", "title": "Jåsōn Gold"}
+                    {"id": "5912", "portrait": "en/image", "title": "Jaåsōn Gold"}
                 ],
             },
         )

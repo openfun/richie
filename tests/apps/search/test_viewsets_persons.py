@@ -118,7 +118,8 @@ class PersonsViewSetTestCase(TestCase):
                             }
                         ]
                     }
-                }
+                },
+                "sort": [{"title_raw.en": {"order": "asc"}}],
             },
             from_=0,
             index="richie_persons",

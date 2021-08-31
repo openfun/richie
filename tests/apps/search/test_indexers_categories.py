@@ -88,6 +88,10 @@ class CategoriesIndexersTestCase(TestCase):
                     "nb_children": 0,
                     "path": "0001000100010001",
                     "title": {"en": "my second subject", "fr": "ma deuxième thématic"},
+                    "title_raw": {
+                        "en": "my second subject",
+                        "fr": "ma deuxième thématic",
+                    },
                 },
                 {
                     "_id": "P-000100010001",
@@ -116,6 +120,10 @@ class CategoriesIndexersTestCase(TestCase):
                     "nb_children": 1,
                     "path": "000100010001",
                     "title": {"en": "my first subject", "fr": "ma première thématique"},
+                    "title_raw": {
+                        "en": "my first subject",
+                        "fr": "ma première thématique",
+                    },
                 },
                 {
                     "_id": "P-00010001",
@@ -134,6 +142,7 @@ class CategoriesIndexersTestCase(TestCase):
                     "nb_children": 1,
                     "path": "00010001",
                     "title": {"en": "Subjects", "fr": "Sujets"},
+                    "title_raw": {"en": "Subjects", "fr": "Sujets"},
                 },
             ],
         )
@@ -184,6 +193,7 @@ class CategoriesIndexersTestCase(TestCase):
                     "nb_children": 1,
                     "path": "00010001",
                     "title": {"en": "Subjects"},
+                    "title_raw": {"en": "Subjects"},
                 },
             ],
         )

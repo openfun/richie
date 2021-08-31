@@ -10,8 +10,8 @@ from richie.apps.search.indexers.organizations import OrganizationsIndexer
 from richie.apps.search.text_indexing import ANALYSIS_SETTINGS
 
 ORGANIZATIONS = [
-    {"id": "4214", "title": {"en": "Ünìversity of Paris 14"}},
-    {"id": "4209", "title": {"en": "ÙnĪversity of Lyon VI"}},
+    {"id": "4214", "title": {"en": "University of Pârïs 14"}},
+    {"id": "4209", "title": {"en": "University of Lÿõn VI"}},
     {"id": "4213", "title": {"en": "School of Lorem Ipsum"}},
 ]
 
@@ -59,6 +59,7 @@ class OrganizationsQueryTestCase(TestCase):
                 "absolute_url": {"en": "en/url"},
                 "description": {"en": "en/description"},
                 "logo": {"en": "en/image"},
+                "title_raw": organization["title"],
                 **organization,
             }
             for organization in organizations or ORGANIZATIONS
@@ -82,19 +83,19 @@ class OrganizationsQueryTestCase(TestCase):
                 "meta": {"count": 3, "offset": 0, "total_count": 3},
                 "objects": [
                     {
-                        "id": "4214",
+                        "id": "4213",
                         "logo": "en/image",
-                        "title": "Ünìversity of Paris 14",
+                        "title": "School of Lorem Ipsum",
                     },
                     {
                         "id": "4209",
                         "logo": "en/image",
-                        "title": "ÙnĪversity of Lyon VI",
+                        "title": "University of Lÿõn VI",
                     },
                     {
-                        "id": "4213",
+                        "id": "4214",
                         "logo": "en/image",
-                        "title": "School of Lorem Ipsum",
+                        "title": "University of Pârïs 14",
                     },
                 ],
             },
@@ -114,12 +115,12 @@ class OrganizationsQueryTestCase(TestCase):
                     {
                         "id": "4209",
                         "logo": "en/image",
-                        "title": "ÙnĪversity of Lyon VI",
+                        "title": "University of Lÿõn VI",
                     },
                     {
                         "id": "4214",
                         "logo": "en/image",
-                        "title": "Ünìversity of Paris 14",
+                        "title": "University of Pârïs 14",
                     },
                 ],
             },
