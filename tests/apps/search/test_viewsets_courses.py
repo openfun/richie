@@ -305,7 +305,6 @@ class CoursesViewsetsTestCase(CMSTestCase):
                 "query": {"some": "query"},
                 "script_fields": {"some": "fields"},
             },
-            doc_type="course",
             from_=77,
             index="richie_courses",
             size=2,

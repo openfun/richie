@@ -106,7 +106,6 @@ class IndexManagerTestCase(TestCase):
         class IndexableClass:
             """Indexable stub"""
 
-            document_type = "course"
             index_name = "richie_courses"
             mapping = {
                 "properties": {"code": {"type": "keyword"}, "name": {"type": "text"}}
@@ -121,7 +120,6 @@ class IndexManagerTestCase(TestCase):
                         "_id": i,
                         "_index": index,
                         "_op_type": action,
-                        "_type": "course",
                         "code": "course-{:d}".format(i),
                         "name": "Course Number {:d}".format(i),
                     }
@@ -147,11 +145,9 @@ class IndexManagerTestCase(TestCase):
             {
                 "richie_courses_2016-05-04-03h12m33.123456s": {
                     "mappings": {
-                        "course": {
-                            "properties": {
-                                "code": {"type": "keyword"},
-                                "name": {"type": "text"},
-                            }
+                        "properties": {
+                            "code": {"type": "keyword"},
+                            "name": {"type": "text"},
                         }
                     }
                 }
@@ -361,7 +357,6 @@ class IndexManagerTestCase(TestCase):
 class ExOneIndexable:
     """First example indexable"""
 
-    document_type = "example"
     index_name = "richie_example"
     mapping = {"properties": {"name": "text"}}
 
@@ -369,6 +364,5 @@ class ExOneIndexable:
 class ExTwoIndexable:
     """Second example indexable"""
 
-    document_type = "stub"
     index_name = "richie_stub"
     mapping = {"properties": {"code": "keyword"}}

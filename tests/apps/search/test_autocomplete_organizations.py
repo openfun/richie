@@ -84,7 +84,6 @@ class AutocompleteOrganizationsTestCase(TestCase):
         # Use the default organizations mapping from the Indexer
         indices_client.put_mapping(
             body=OrganizationsIndexer.mapping,
-            doc_type="organization",
             index=ORGANIZATIONS_INDEX,
         )
         # Actually insert our organizations in the index
@@ -93,7 +92,6 @@ class AutocompleteOrganizationsTestCase(TestCase):
                 "_id": organization["id"],
                 "_index": ORGANIZATIONS_INDEX,
                 "_op_type": "create",
-                "_type": "organization",
                 "absolute_url": {"en": "url"},
                 "cover_image": {"en": "image"},
                 "is_meta": False,

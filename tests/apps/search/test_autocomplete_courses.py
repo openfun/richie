@@ -100,7 +100,7 @@ class AutocompleteCoursesTestCase(TestCase):
 
         # Use the default courses mapping from the Indexer
         indices_client.put_mapping(
-            body=CoursesIndexer.mapping, doc_type="course", index=COURSES_INDEX
+            body=CoursesIndexer.mapping, index=COURSES_INDEX
         )
         # Add the sorting script
         ES_CLIENT.put_script(id="score", body=CoursesIndexer.scripts["score"])
@@ -114,7 +114,6 @@ class AutocompleteCoursesTestCase(TestCase):
                 "_id": course["id"],
                 "_index": COURSES_INDEX,
                 "_op_type": "create",
-                "_type": "course",
                 "absolute_url": {"en": "en/url", "fr": "fr/url"},
                 "categories": ["1", "2", "3"],
                 "cover_image": {"en": "en/image", "fr": "fr/image"},

@@ -304,7 +304,7 @@ class CourseRunsCoursesQueryTestCase(TestCase):
 
         # Use the default courses mapping from the Indexer
         indices_client.put_mapping(
-            body=CoursesIndexer.mapping, doc_type="course", index="test_courses"
+            body=CoursesIndexer.mapping, index="test_courses"
         )
         # Add the sorting script
         ES_CLIENT.put_script(id="score", body=CoursesIndexer.scripts["score"])
@@ -319,7 +319,6 @@ class CourseRunsCoursesQueryTestCase(TestCase):
                 "_id": course_id,
                 "_index": "test_courses",
                 "_op_type": "create",
-                "_type": "course",
                 # The sorting algorithm assumes that course runs are sorted by decreasing
                 # end date in order to limit the number of iterations and courses with a
                 # lot of archived courses.

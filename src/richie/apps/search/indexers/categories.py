@@ -26,7 +26,6 @@ class CategoriesIndexer:
     objects getting into and out of ElasticSearch
     """
 
-    document_type = "category"
     index_name = f"{ES_INDICES_PREFIX}_categories"
     form = ItemSearchForm
     mapping = {
@@ -118,7 +117,6 @@ class CategoriesIndexer:
             "_id": category.get_es_id(),
             "_index": index,
             "_op_type": action,
-            "_type": cls.document_type,
             "absolute_url": {
                 lang: category.extended_object.get_absolute_url(lang)
                 for lang, _ in settings.LANGUAGES

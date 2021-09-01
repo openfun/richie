@@ -49,7 +49,7 @@ class CategoriesQueryTestCase(TestCase):
 
         # Use the default categories mapping from the Indexer
         indices_client.put_mapping(
-            body=CategoriesIndexer.mapping, doc_type="category", index="test_categories"
+            body=CategoriesIndexer.mapping, index="test_categories"
         )
 
         # Actually insert our categories in the index
@@ -58,7 +58,6 @@ class CategoriesQueryTestCase(TestCase):
                 "_id": category["id"],
                 "_index": "test_categories",
                 "_op_type": "create",
-                "_type": "category",
                 "absolute_url": {"en": "en/url"},
                 "description": {"en": "en/description"},
                 "icon": {"en": "en/icon"},

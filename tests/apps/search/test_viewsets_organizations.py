@@ -112,7 +112,6 @@ class OrganizationsViewsetsTestCase(TestCase):
                     }
                 }
             },
-            doc_type="organization",
             from_=0,
             index="richie_organizations",
             size=2,

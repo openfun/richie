@@ -157,7 +157,6 @@ class CategoriesViewsetsTestCase(TestCase):
                     }
                 }
             },
-            doc_type="category",
             from_=0,
             index="richie_categories",
             size=2,

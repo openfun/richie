@@ -44,7 +44,6 @@ class AutocompleteMixin:
         # Query our specific ES completion field
         autocomplete_query_response = ES_CLIENT.search(
             index=indexer.index_name,
-            doc_type=indexer.document_type,
             body={
                 "suggest": {
                     "objects": {

@@ -276,7 +276,6 @@ class CoursesIndexersTestCase(TestCase):
             "_id": str(course.public_extension.extended_object_id),
             "_index": "some_index",
             "_op_type": "some_action",
-            "_type": "course",
             "absolute_url": {
                 "en": "/en/an-english-course-title/",
                 "fr": "/fr/un-titre-cours-francais/",
@@ -390,7 +389,6 @@ class CoursesIndexersTestCase(TestCase):
                     "_id": str(course.extended_object.publisher_public_id),
                     "_index": "some_index",
                     "_op_type": "some_action",
-                    "_type": "course",
                     "absolute_url": {
                         "en": "/en/enhanced-incremental-circuit/",
                         "fr": "/fr/enhanced-incremental-circuit/",

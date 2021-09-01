@@ -182,17 +182,7 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
             # We only need the titles to get the i18n names
             _source=["title"],
             index=indexer.index_name,
-            doc_type=indexer.document_type,
-            body={
-                "query": {
-                    "terms": {
-                        "_uid": [
-                            "{:s}#{:s}".format(indexer.document_type, key)
-                            for key in keys
-                        ]
-                    }
-                }
-            },
+            body={"query": {"terms": {"_id": keys}}},
             size=len(keys),
         )
 

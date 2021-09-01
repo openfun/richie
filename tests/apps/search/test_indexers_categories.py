@@ -72,7 +72,6 @@ class CategoriesIndexersTestCase(TestCase):
                     "_id": "L-0001000100010001",
                     "_index": "some_index",
                     "_op_type": "some_action",
-                    "_type": "category",
                     "absolute_url": {
                         "en": "/en/categories/subjects/my-first-subject/my-second-subject/",
                         "fr": "/fr/categories/sujets/ma-premiere-thematique/ma-deuxieme-thematic/",
@@ -94,7 +93,6 @@ class CategoriesIndexersTestCase(TestCase):
                     "_id": "P-000100010001",
                     "_index": "some_index",
                     "_op_type": "some_action",
-                    "_type": "category",
                     "absolute_url": {
                         "en": "/en/categories/subjects/my-first-subject/",
                         "fr": "/fr/categories/sujets/ma-premiere-thematique/",
@@ -123,7 +121,6 @@ class CategoriesIndexersTestCase(TestCase):
                     "_id": "P-00010001",
                     "_index": "some_index",
                     "_op_type": "some_action",
-                    "_type": "category",
                     "absolute_url": {
                         "en": "/en/categories/subjects/",
                         "fr": "/fr/categories/sujets/",
@@ -174,7 +171,6 @@ class CategoriesIndexersTestCase(TestCase):
                     "_id": "P-00010001",
                     "_index": "some_index",
                     "_op_type": "some_action",
-                    "_type": "category",
                     "absolute_url": {
                         "en": "/en/categories/subjects/",
                         "fr": "/fr/categories/subjects/",

@@ -63,7 +63,6 @@ class OrganizationsIndexersTestCase(TestCase):
                     "_id": "L-0002",
                     "_index": "some_index",
                     "_op_type": "some_action",
-                    "_type": "organization",
                     "absolute_url": {
                         "en": "/en/my-second-organization/",
                         "fr": "/fr/ma-deuxieme-organisation/",
@@ -91,7 +90,6 @@ class OrganizationsIndexersTestCase(TestCase):
                     "_id": "L-0001",
                     "_index": "some_index",
                     "_op_type": "some_action",
-                    "_type": "organization",
                     "absolute_url": {
                         "en": "/en/my-first-organization/",
                         "fr": "/fr/ma-premiere-organisation/",
