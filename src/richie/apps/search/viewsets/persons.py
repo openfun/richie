@@ -54,7 +54,7 @@ class PersonsViewSet(AutocompleteMixin, ViewSet):
             "meta": {
                 "count": len(search_query_response["hits"]["hits"]),
                 "offset": offset,
-                "total_count": search_query_response["hits"]["total"],
+                "total_count": search_query_response["hits"]["total"]["value"],
             },
             "objects": [
                 self._meta.indexer.format_es_object_for_api(

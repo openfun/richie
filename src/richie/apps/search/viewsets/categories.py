@@ -59,7 +59,7 @@ class CategoriesViewSet(ViewSet):
             "meta": {
                 "count": len(query_response["hits"]["hits"]),
                 "offset": offset,
-                "total_count": query_response["hits"]["total"],
+                "total_count": query_response["hits"]["total"]["value"],
             },
             "objects": [
                 self._meta.indexer.format_es_object_for_api(

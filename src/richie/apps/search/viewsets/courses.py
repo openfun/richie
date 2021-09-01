@@ -64,7 +64,7 @@ class CoursesViewSet(AutocompleteMixin, ViewSet):
             "meta": {
                 "count": len(course_query_response["hits"]["hits"]),
                 "offset": offset,
-                "total_count": course_query_response["hits"]["total"],
+                "total_count": course_query_response["hits"]["total"]["value"],
             }
         }
         if form_class.OBJECTS in scope or not scope:
