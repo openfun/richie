@@ -26,7 +26,6 @@ class PersonsIndexer:
     objects into what we want to index in ElasticSearch
     """
 
-    document_type = "person"
     index_name = f"{ES_INDICES_PREFIX}_persons"
     form = ItemSearchForm
     mapping = {
@@ -86,7 +85,6 @@ class PersonsIndexer:
             "_id": str(person.extended_object_id),
             "_index": index,
             "_op_type": action,
-            "_type": cls.document_type,
             "absolute_url": {
                 lang: person.extended_object.get_absolute_url(lang)
                 for lang, _ in settings.LANGUAGES

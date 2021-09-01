@@ -60,7 +60,6 @@ class PersonsIndexersTestCase(TestCase):
                     "_id": str(person1.public_extension.extended_object.id),
                     "_index": "some_index",
                     "_op_type": "some_action",
-                    "_type": "person",
                     "absolute_url": {
                         "en": "/en/my-first-person/",
                         "fr": "/fr/ma-premiere-personne/",
@@ -80,7 +79,6 @@ class PersonsIndexersTestCase(TestCase):
                     "_id": str(person2.public_extension.extended_object.id),
                     "_index": "some_index",
                     "_op_type": "some_action",
-                    "_type": "person",
                     "absolute_url": {
                         "en": "/en/my-second-person/",
                         "fr": "/fr/ma-deuxieme-personne/",

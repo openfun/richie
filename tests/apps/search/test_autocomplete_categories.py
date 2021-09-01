@@ -98,7 +98,7 @@ class AutocompleteCategoriesTestCase(TestCase):
 
         # Use the default categories mapping from the Indexer
         indices_client.put_mapping(
-            body=CategoriesIndexer.mapping, doc_type="category", index=CATEGORIES_INDEX
+            body=CategoriesIndexer.mapping, index=CATEGORIES_INDEX
         )
 
         # Actually insert our categories in the index
@@ -107,7 +107,6 @@ class AutocompleteCategoriesTestCase(TestCase):
                 "_id": category["id"],
                 "_index": CATEGORIES_INDEX,
                 "_op_type": "create",
-                "_type": "category",
                 "absolute_url": {"en": "en/url", "fr": "fr/url"},
                 "cover_image": {"en": "en/image", "fr": "fr/image"},
                 "is_meta": False,

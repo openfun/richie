@@ -54,7 +54,6 @@ class CoursesViewSet(AutocompleteMixin, ViewSet):
         course_query_response = ES_CLIENT.search(
             _source=getattr(self._meta.indexer, "display_fields", "*"),
             index=self._meta.indexer.index_name,
-            doc_type=self._meta.indexer.document_type,
             body=body,
             # Directly pass meta-params through as arguments to the ES client
             from_=offset,
@@ -100,7 +99,6 @@ class CoursesViewSet(AutocompleteMixin, ViewSet):
         try:
             query_response = ES_CLIENT.get(
                 index=self._meta.indexer.index_name,
-                doc_type=self._meta.indexer.document_type,
                 id=pk,
             )
         except NotFoundError:

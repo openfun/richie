@@ -67,7 +67,7 @@ class AutocompletePersonsTestCase(TestCase):
 
         # Use the default persons mapping from the Indexer
         indices_client.put_mapping(
-            body=PersonsIndexer.mapping, doc_type="person", index=PERSONS_INDEX
+            body=PersonsIndexer.mapping, index=PERSONS_INDEX
         )
 
         # Actually insert our persons in the index
@@ -76,7 +76,6 @@ class AutocompletePersonsTestCase(TestCase):
                 "_id": person["id"],
                 "_index": PERSONS_INDEX,
                 "_op_type": "create",
-                "_type": "person",
                 "absolute_url": {"en": "url"},
                 "logo": {"en": "/some/img.png"},
                 **person,

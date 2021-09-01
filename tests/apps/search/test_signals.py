@@ -59,7 +59,7 @@ class CoursesSignalsTestCase(TestCase):
         action = mock_bulk.call_args[1]["actions"][0]
         self.assertEqual(action["_id"], str(course.public_extension.extended_object_id))
         self.assertEqual(action["_op_type"], "index")
-        self.assertEqual(action["_type"], "course")
+        self.assertEqual(action["_index"], "test_courses")
 
     def test_signals_courses_unpublish(self, mock_bulk, *_):
         """
@@ -84,7 +84,7 @@ class CoursesSignalsTestCase(TestCase):
         action = mock_bulk.call_args[1]["actions"][0]
         self.assertEqual(action["_id"], str(course.public_extension.extended_object_id))
         self.assertEqual(action["_op_type"], "index")
-        self.assertEqual(action["_type"], "course")
+        self.assertEqual(action["_index"], "test_courses")
 
         mock_bulk.reset_mock()
 
@@ -102,7 +102,7 @@ class CoursesSignalsTestCase(TestCase):
         action = mock_bulk.call_args[1]["actions"][0]
         self.assertEqual(action["_id"], str(course.public_extension.extended_object_id))
         self.assertEqual(action["_op_type"], "delete")
-        self.assertEqual(action["_type"], "course")
+        self.assertEqual(action["_index"], "test_courses")
 
     def test_signals_organizations_publish(self, mock_bulk, *_):
         """
@@ -133,13 +133,13 @@ class CoursesSignalsTestCase(TestCase):
             actions[0]["_id"], str(published_course.public_extension.extended_object_id)
         )
         self.assertEqual(actions[0]["_op_type"], "index")
-        self.assertEqual(actions[0]["_type"], "course")
+        self.assertEqual(actions[0]["_index"], "test_courses")
         self.assertEqual(actions[1]["_id"], "L-00010001")
         self.assertEqual(actions[1]["_op_type"], "index")
-        self.assertEqual(actions[1]["_type"], "organization")
+        self.assertEqual(actions[1]["_index"], "richie_organizations")
         self.assertEqual(actions[2]["_id"], "P-0001")
         self.assertEqual(actions[2]["_op_type"], "index")
-        self.assertEqual(actions[2]["_type"], "organization")
+        self.assertEqual(actions[2]["_index"], "richie_organizations")
 
     def test_signals_organizations_no_parent(self, mock_bulk, *_):
         """
@@ -169,10 +169,10 @@ class CoursesSignalsTestCase(TestCase):
             actions[0]["_id"], str(published_course.public_extension.extended_object_id)
         )
         self.assertEqual(actions[0]["_op_type"], "index")
-        self.assertEqual(actions[0]["_type"], "course")
+        self.assertEqual(actions[0]["_index"], "test_courses")
         self.assertEqual(actions[1]["_id"], "L-0001")
         self.assertEqual(actions[1]["_op_type"], "index")
-        self.assertEqual(actions[1]["_type"], "organization")
+        self.assertEqual(actions[1]["_index"], "richie_organizations")
 
     def test_signals_organizations_unpublish(self, mock_bulk, *_):
         """
@@ -207,10 +207,10 @@ class CoursesSignalsTestCase(TestCase):
             actions[0]["_id"], str(published_course.public_extension.extended_object_id)
         )
         self.assertEqual(actions[0]["_op_type"], "index")
-        self.assertEqual(actions[0]["_type"], "course")
+        self.assertEqual(actions[0]["_index"], "test_courses")
         self.assertEqual(actions[1]["_id"], "L-0001")
         self.assertEqual(actions[1]["_op_type"], "index")
-        self.assertEqual(actions[1]["_type"], "organization")
+        self.assertEqual(actions[1]["_index"], "richie_organizations")
 
         mock_bulk.reset_mock()
 
@@ -229,10 +229,10 @@ class CoursesSignalsTestCase(TestCase):
             actions[0]["_id"], str(published_course.public_extension.extended_object_id)
         )
         self.assertEqual(actions[0]["_op_type"], "index")
-        self.assertEqual(actions[0]["_type"], "course")
+        self.assertEqual(actions[0]["_index"], "test_courses")
         self.assertEqual(actions[1]["_id"], "L-0001")
         self.assertEqual(actions[1]["_op_type"], "delete")
-        self.assertEqual(actions[1]["_type"], "organization")
+        self.assertEqual(actions[1]["_index"], "richie_organizations")
 
     def test_signals_categories_publish(self, mock_bulk, *_):
         """
@@ -263,13 +263,13 @@ class CoursesSignalsTestCase(TestCase):
             actions[0]["_id"], str(published_course.public_extension.extended_object_id)
         )
         self.assertEqual(actions[0]["_op_type"], "index")
-        self.assertEqual(actions[0]["_type"], "course")
+        self.assertEqual(actions[0]["_index"], "test_courses")
         self.assertEqual(actions[1]["_id"], "L-00010001")
         self.assertEqual(actions[1]["_op_type"], "index")
-        self.assertEqual(actions[1]["_type"], "category")
+        self.assertEqual(actions[1]["_index"], "richie_categories")
         self.assertEqual(actions[2]["_id"], "P-0001")
         self.assertEqual(actions[2]["_op_type"], "index")
-        self.assertEqual(actions[2]["_type"], "category")
+        self.assertEqual(actions[2]["_index"], "richie_categories")
 
     def test_signals_categories_no_parent(self, mock_bulk, *_):
         """
@@ -299,10 +299,10 @@ class CoursesSignalsTestCase(TestCase):
             actions[0]["_id"], str(published_course.public_extension.extended_object_id)
         )
         self.assertEqual(actions[0]["_op_type"], "index")
-        self.assertEqual(actions[0]["_type"], "course")
+        self.assertEqual(actions[0]["_index"], "test_courses")
         self.assertEqual(actions[1]["_id"], "L-0001")
         self.assertEqual(actions[1]["_op_type"], "index")
-        self.assertEqual(actions[1]["_type"], "category")
+        self.assertEqual(actions[1]["_index"], "richie_categories")
 
     def test_signals_categories_unpublish(self, mock_bulk, *_):
         """
@@ -335,10 +335,10 @@ class CoursesSignalsTestCase(TestCase):
             actions[0]["_id"], str(published_course.public_extension.extended_object_id)
         )
         self.assertEqual(actions[0]["_op_type"], "index")
-        self.assertEqual(actions[0]["_type"], "course")
+        self.assertEqual(actions[0]["_index"], "test_courses")
         self.assertEqual(actions[1]["_id"], "L-0001")
         self.assertEqual(actions[1]["_op_type"], "index")
-        self.assertEqual(actions[1]["_type"], "category")
+        self.assertEqual(actions[1]["_index"], "richie_categories")
 
         mock_bulk.reset_mock()
 
@@ -357,10 +357,10 @@ class CoursesSignalsTestCase(TestCase):
             actions[0]["_id"], str(published_course.public_extension.extended_object_id)
         )
         self.assertEqual(actions[0]["_op_type"], "index")
-        self.assertEqual(actions[0]["_type"], "course")
+        self.assertEqual(actions[0]["_index"], "test_courses")
         self.assertEqual(actions[1]["_id"], "L-0001")
         self.assertEqual(actions[1]["_op_type"], "delete")
-        self.assertEqual(actions[1]["_type"], "category")
+        self.assertEqual(actions[1]["_index"], "richie_categories")
 
     def test_signals_persons_publish(self, mock_bulk, *_):
         """
@@ -390,12 +390,12 @@ class CoursesSignalsTestCase(TestCase):
             actions[0]["_id"], str(published_course.public_extension.extended_object_id)
         )
         self.assertEqual(actions[0]["_op_type"], "index")
-        self.assertEqual(actions[0]["_type"], "course")
+        self.assertEqual(actions[0]["_index"], "test_courses")
         self.assertEqual(
             actions[1]["_id"], str(person.public_extension.extended_object_id)
         )
         self.assertEqual(actions[1]["_op_type"], "index")
-        self.assertEqual(actions[1]["_type"], "person")
+        self.assertEqual(actions[1]["_index"], "richie_persons")
 
     def test_signals_persons_unpublish(self, mock_bulk, *_):
         """
@@ -428,12 +428,12 @@ class CoursesSignalsTestCase(TestCase):
             actions[0]["_id"], str(published_course.public_extension.extended_object_id)
         )
         self.assertEqual(actions[0]["_op_type"], "index")
-        self.assertEqual(actions[0]["_type"], "course")
+        self.assertEqual(actions[0]["_index"], "test_courses")
         self.assertEqual(
             actions[1]["_id"], str(person.public_extension.extended_object_id)
         )
         self.assertEqual(actions[1]["_op_type"], "index")
-        self.assertEqual(actions[1]["_type"], "person")
+        self.assertEqual(actions[1]["_index"], "richie_persons")
 
         mock_bulk.reset_mock()
 
@@ -452,9 +452,9 @@ class CoursesSignalsTestCase(TestCase):
             actions[0]["_id"], str(published_course.public_extension.extended_object_id)
         )
         self.assertEqual(actions[0]["_op_type"], "index")
-        self.assertEqual(actions[0]["_type"], "course")
+        self.assertEqual(actions[0]["_index"], "test_courses")
         self.assertEqual(
             actions[1]["_id"], str(person.public_extension.extended_object_id)
         )
         self.assertEqual(actions[1]["_op_type"], "delete")
-        self.assertEqual(actions[1]["_type"], "person")
+        self.assertEqual(actions[1]["_index"], "richie_persons")

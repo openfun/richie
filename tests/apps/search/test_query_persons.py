@@ -48,7 +48,7 @@ class PersonsQueryTestCase(TestCase):
 
         # Use the default persons mapping from the Indexer
         indices_client.put_mapping(
-            body=PersonsIndexer.mapping, doc_type="person", index="test_persons"
+            body=PersonsIndexer.mapping, index="test_persons"
         )
 
         # Actually insert our persons in the index
@@ -57,7 +57,6 @@ class PersonsQueryTestCase(TestCase):
                 "_id": person["id"],
                 "_index": "test_persons",
                 "_op_type": "create",
-                "_type": "person",
                 "absolute_url": {"en": "en/url"},
                 "bio": {"en": "en/bio"},
                 "portrait": {"en": "en/image"},

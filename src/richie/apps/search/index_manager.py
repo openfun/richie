@@ -56,7 +56,7 @@ def perform_create_index(indexable, logger=None):
     indices_client.open(index=new_index)
 
     indices_client.put_mapping(
-        body=indexable.mapping, doc_type=indexable.document_type, index=new_index
+        body=indexable.mapping, index=new_index
     )
 
     # Populate the new index with data provided from our indexable class

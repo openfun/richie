@@ -120,7 +120,6 @@ class PersonsViewSetTestCase(TestCase):
                     }
                 }
             },
-            doc_type="person",
             from_=0,
             index="richie_persons",
             size=2,

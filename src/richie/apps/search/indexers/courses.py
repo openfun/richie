@@ -160,7 +160,6 @@ class CoursesIndexer:
     objects getting into and out of ElasticSearch
     """
 
-    document_type = "course"
     index_name = f"{ES_INDICES_PREFIX}_courses"
     mapping = {
         "dynamic_templates": MULTILINGUAL_TEXT,
@@ -572,7 +571,6 @@ class CoursesIndexer:
             "_id": str(course.extended_object_id),
             "_index": index,
             "_op_type": action,
-            "_type": cls.document_type,
             "absolute_url": {
                 lang: course.extended_object.get_absolute_url(lang)
                 for lang, _ in settings.LANGUAGES

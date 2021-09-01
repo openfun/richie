@@ -83,7 +83,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
 
         # Use the default courses mapping from the Indexer
         indices_client.put_mapping(
-            body=CoursesIndexer.mapping, doc_type="course", index="test_courses"
+            body=CoursesIndexer.mapping, index="test_courses"
         )
         # Add the sorting script
         ES_CLIENT.put_script(id="score", body=CoursesIndexer.scripts["score"])
@@ -97,7 +97,6 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
                 "_id": course["id"],
                 "_index": "test_courses",
                 "_op_type": "create",
-                "_type": "course",
                 **course,
             }
             for course in courses

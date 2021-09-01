@@ -26,7 +26,6 @@ class OrganizationsIndexer:
     objects into what we want to index in ElasticSearch
     """
 
-    document_type = "organization"
     index_name = f"{ES_INDICES_PREFIX}_organizations"
     form = ItemSearchForm
     mapping = {
@@ -84,7 +83,6 @@ class OrganizationsIndexer:
             "_id": organization.get_es_id(),
             "_index": index,
             "_op_type": action,
-            "_type": cls.document_type,
             "absolute_url": {
                 lang: organization.extended_object.get_absolute_url(lang)
                 for lang, _ in settings.LANGUAGES

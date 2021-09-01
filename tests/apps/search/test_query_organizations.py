@@ -49,7 +49,6 @@ class OrganizationsQueryTestCase(TestCase):
         # Use the default organizations mapping from the Indexer
         indices_client.put_mapping(
             body=OrganizationsIndexer.mapping,
-            doc_type="organization",
             index="test_organizations",
         )
 
@@ -59,7 +58,6 @@ class OrganizationsQueryTestCase(TestCase):
                 "_id": organization["id"],
                 "_index": "test_organizations",
                 "_op_type": "create",
-                "_type": "organization",
                 "absolute_url": {"en": "en/url"},
                 "description": {"en": "en/description"},
                 "logo": {"en": "en/image"},
