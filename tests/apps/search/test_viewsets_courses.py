@@ -77,7 +77,10 @@ class CoursesViewsetsTestCase(CMSTestCase):
         def mock_search_implementation(index, **_):
             if index == "richie_courses":
                 return {
-                    "hits": {"hits": [{"_id": 523}, {"_id": 861}], "total": 35},
+                    "hits": {
+                        "hits": [{"_id": 523}, {"_id": 861}],
+                        "total": {"value": 35, "relation": "eq"},
+                    },
                     "aggregations": {
                         "all_courses": {
                             "availability@archived": {"doc_count": 11},
