@@ -287,7 +287,7 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
         )
 
         # Get internationalized names for all our keys
-        key_i18n_name_map = self.get_i18n_names(key_count_map.keys())
+        key_i18n_name_map = self.get_i18n_names([*key_count_map])
 
         return {
             self.name: {
