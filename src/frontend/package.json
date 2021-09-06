@@ -89,7 +89,7 @@
     "js-cookie": "3.0.1",
     "lodash-es": "4.17.21",
     "mdn-polyfills": "5.20.0",
-    "node-fetch": "3.0.0",
+    "node-fetch": "<3",
     "nodemon": "2.0.12",
     "prettier": "2.3.2",
     "query-string": "7.0.1",
