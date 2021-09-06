@@ -14,7 +14,7 @@ if (context?.sentry_dsn) {
  * Generic error handler to be called whenever we need to do error reporting throughout the app.
  * Passes errors to Sentry if available, logs the error to the console otherwise.
  */
-export const handle = (error: Error) => {
+export const handle = (error: unknown) => {
   if (context?.sentry_dsn) {
     Sentry.captureException(error);
   } else {
