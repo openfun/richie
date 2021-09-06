@@ -7,7 +7,7 @@ import { Maybe, Nullable } from 'utils/types';
 interface HistoryEntry {
   state: any;
   title: string;
-  url: Maybe<Nullable<string>>;
+  url: Maybe<Nullable<URL | string>>;
 }
 
 type PushStateFn = typeof history.pushState;

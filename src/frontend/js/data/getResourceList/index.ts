@@ -9,7 +9,7 @@ export interface GetListSagaSpecifics {
 
 export type FetchListResponse =
   | { status: RequestStatus.SUCCESS; content: APICourseSearchResponse }
-  | { status: RequestStatus.FAILURE; error: string };
+  | { status: RequestStatus.FAILURE; error: unknown };
 
 // Wrap fetch to handle params, headers, parsing & sane response handling
 export async function fetchList(
