@@ -40,7 +40,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             "/api/v1.0/course-runs-sync", data, content_type="application/json"
         )
 
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 403)
         self.assertEqual(json.loads(response.content), "Missing authentication.")
         self.assertEqual(CourseRun.objects.count(), 0)
         self.assertEqual(Course.objects.count(), 0)
@@ -65,7 +65,7 @@ class SyncCourseRunApiTestCase(CMSTestCase):
             HTTP_AUTHORIZATION=("invalid authorization"),
         )
 
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 401)
         self.assertEqual(json.loads(response.content), "Invalid authentication.")
         self.assertEqual(CourseRun.objects.count(), 0)
         self.assertEqual(Course.objects.count(), 0)

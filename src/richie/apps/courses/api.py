@@ -99,7 +99,7 @@ def course_runs_sync(request, version):
     # It then enables us to do updates and change the secret without incurring downtime.
     authorization_header = request.headers.get("Authorization")
     if not authorization_header:
-        return Response("Missing authentication.", status=401)
+        return Response("Missing authentication.", status=403)
 
     signature_is_valid = any(
         authorization_header
@@ -114,7 +114,7 @@ def course_runs_sync(request, version):
     )
 
     if not signature_is_valid:
-        return Response("Invalid authentication.", status=403)
+        return Response("Invalid authentication.", status=401)
 
     # Select LMS from resource link
     resource_link = request.data.get("resource_link")

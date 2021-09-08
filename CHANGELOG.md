@@ -32,6 +32,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Reverse 401 and 403 errors in course run synchronization webhook
 - Fix missing persons search index update on publish/unpublish
 - Delete object from search indices when its page is unpublished
 - Fix section on blogpost detail page which was breaking the flow for children
