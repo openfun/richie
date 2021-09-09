@@ -28,8 +28,9 @@ class UserMenuTests(CMSTestCase):
     )
     def test_user_menu_with_profile_urls(self):
         """
-        user menu should render correctly
-        and includes formatted profile_urls
+        User menu should render correctly and includes formatted profile_urls.
+        Characters should be escaped with the `escapejs` template tag to prevent
+        an issue when this variable contains unescaped characters for javascript (e.g: '\').
         """
         page = create_page(
             title="Home",
@@ -47,7 +48,10 @@ class UserMenuTests(CMSTestCase):
         self.assertIsNotNone(re.search(pattern, str(response.content)))
         self.assertContains(
             response,
-            r'"authentication": {{"endpoint": "{}", "backend": "{}"}}'.format(
+            (
+                r"\u0022authentication\u0022: "
+                r"{{\u0022endpoint\u0022: \u0022{}\u0022, \u0022backend\u0022: \u0022{}\u0022}}"
+            ).format(
                 "https://richie.education:9999",
                 "richie.apps.courses.lms.base.BaseLMSBackend",
             ),

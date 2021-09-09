@@ -70,16 +70,46 @@ class PagesTests(CMSTestCase):
     @override_settings(SENTRY_DSN="https://example.com/sentry/dsn")
     @override_settings(RELEASE="9.8.7")
     @override_settings(ENVIRONMENT="test_pages")
+    @override_settings(
+        RICHIE_LMS_BACKENDS=[
+            {
+                "BASE_URL": "https://lms.example.com",
+                "BACKEND": "richie.apps.courses.lms.edx.EdXLMSBackend",
+                "COURSE_REGEX": r"^https://lms\.example\.com/courses/(?P<course_id>.*)/course/?$",
+                "JS_BACKEND": "base",
+                "JS_COURSE_REGEX": r"^https://lms\.example\.com/courses/(.*)/course/?$",
+            }
+        ]
+    )
     def test_page_includes_frontend_context(self):
         """
         Create a page and make sure it includes the frontend context as included
-        in `base.html`.
+        in `base.html`. All characters for use in javascript string should be escaped
+        (i.e: '"' should be escaped with \u0022 and '\' with \u005C) to prevent an issue when
+        this variable contains unescaped characters for javascript (e.g: '\').
 
         ⚠️ If this test fails, before fixing it, identify if this change has had
         ⚠️ an impact on frontend and update frontend accordingly.
         """
         page = PageFactory(should_publish=True, template="richie/single_column.html")
         response = self.client.get(page.get_public_url())
-        self.assertContains(response, '"environment": "test_pages"')
-        self.assertContains(response, '"release": "9.8.7"')
-        self.assertContains(response, '"sentry_dsn": "https://example.com/sentry/dsn"')
+        self.assertContains(
+            response, r"\u0022environment\u0022: \u0022test_pages\u0022"
+        )
+        self.assertContains(response, r"\u0022release\u0022: \u00229.8.7\u0022")
+        self.assertContains(
+            response,
+            r"\u0022sentry_dsn\u0022: \u0022https://example.com/sentry/dsn\u0022",
+        )
+        self.assertContains(response, r"\u0022lms_backends\u0022: [")
+        self.assertContains(
+            response, r"\u0022endpoint\u0022: \u0022https://lms.example.com\u0022"
+        )
+        self.assertContains(response, r"\u0022backend\u0022: \u0022base\u0022")
+        self.assertContains(
+            response,
+            (
+                r"\u0022course_regexp\u0022: "
+                r"\u0022^https://lms\u005C\u005C.example\u005C\u005C.com/courses/(.*)/course/?$\u0022"  # noqa pylint: disable=line-too-long
+            ),
+        )
