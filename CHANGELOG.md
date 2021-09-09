@@ -32,6 +32,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Escape FRONTEND_CONTEXT characters for use in Javascript string
 - Reverse 401 and 403 errors in course run synchronization webhook
 - Fix missing persons search index update on publish/unpublish
 - Delete object from search indices when its page is unpublished
