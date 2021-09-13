@@ -10,7 +10,8 @@
         "npm"
       ],
       "matchPackageNames": [
-        "bootstrap"
+        "bootstrap",
+        "node-fetch"
       ]
     },
     {
