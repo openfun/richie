@@ -8,11 +8,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
-### Fixed
-
-- Fix course teaser layout issues on Safari
-- Fix html landmarks for screen readers
-- Fix link to homepage should have a default title for context
+## [2.8.0] - 2021-09-17
 
 ### Added
 
@@ -20,12 +16,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 - Course code information on the course glimpse
 - Course introduction and code to the search index and API
 - Documentation on connecting Richie with OpenEdX
-- Add robots.txt template with a sitemap rule so it is no longer need
+- Add robots.txt template with a sitemap rule so it is no longer needed
   to register the sitemap.xml URL from each crawler administration panel
-- Add a new web analytics feature that currently only supports the Google
-  Analytics using the Google Tag Manage Javascrip code.
-  It includes custom dimensions for organizations, course code, run, resource
-  link and course name.
+- Add a new web analytics feature with support for Google Analytics by default
 - Richie is now compatible with both ES6 and ES7
 
 ### Changed
@@ -38,6 +31,9 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Fix course teaser layout issues on Safari
+- Fix html landmarks for screen readers
+- Fix link to homepage should have a default title for context
 - Escape FRONTEND_CONTEXT characters for use in Javascript string
 - Reverse 401 and 403 errors in course run synchronization webhook
 - Fix missing persons search index update on publish/unpublish
@@ -1370,7 +1366,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.7.1...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.8.0...master
+[2.8.0]: https://github.com/openfun/richie/compare/v2.7.1...v2.8.0
 [2.7.1]: https://github.com/openfun/richie/compare/v2.7.0...v2.7.1
 [2.7.0]: https://github.com/openfun/richie/compare/v2.6.0...v2.7.0
 [2.6.0]: https://github.com/openfun/richie/compare/v2.5.0...v2.6.0
