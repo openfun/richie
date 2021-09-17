@@ -1,11 +1,19 @@
-// Helper class to hide elements from sighted users and have accessibility devices still read them
-// to users that need it.
-.offscreen {
-  position: absolute;
-  left: -9999rem;
-}
+// A mixin to create a box element with a slight box-shadow
+//
+// @param {length, percentage} border-radius the border-radius applied to the box
+// @param {color} background-color background-color of the box
+// @param {length, percentage} padding padding applied to the box
+// @param {length, percentage} margin margin applied to the box
 
-// Helper to force svg icons to be blocks by default for convenience at call sites
-.icon {
-  display: block;
+@mixin shadowed-box(
+  $border-radius: 4px,
+  $background-color: r-theme-val(shadowed-box, base-background),
+  $padding: 0.6rem 0.4rem,
+  $margin: 0
+) {
+  background-color: $background-color;
+  border-radius: $border-radius;
+  box-shadow: r-theme-val(shadowed-box, base-shadow);
+  margin: $margin;
+  padding: $padding;
 }

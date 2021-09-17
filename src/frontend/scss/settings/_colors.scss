@@ -589,6 +589,10 @@ $r-theme: (
     hover-color: r-color('charcoal'),
     base-border: r-color('light-grey'),
   ),
+  shadowed-box: (
+    base-background: r-color('white'),
+    base-shadow: 0 2px 4px rgba(5, 18, 42, 0.19),
+  ),
   spinner: (
     base-color: r-color('denim'),
   )
