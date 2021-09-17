@@ -32,19 +32,20 @@
 
 // Internal addons (import order does matter due to some mixin usage from
 // deeper mixins)
-@import './tools/shapes';
-@import './tools/flexbox';
-@import './tools/empty';
+@import './tools/accordion';
+@import './tools/background';
+@import './tools/buttons';
 @import './tools/cards';
+@import './tools/content';
+@import './tools/detail';
+@import './tools/empty';
+@import './tools/features';
+@import './tools/flexbox';
 @import './tools/hero';
 @import './tools/list-group';
-@import './tools/buttons';
-@import './tools/background';
+@import './tools/shapes';
 @import './tools/spacing';
-@import './tools/content';
-@import './tools/accordion';
-@import './tools/features';
-@import './tools/detail';
+@import './tools/utils';
 
 // Generic stuff
 @import './generic/background';

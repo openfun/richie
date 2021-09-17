@@ -7,6 +7,17 @@
 .button {
   @include button-base();
 
+  & > .button__icon {
+    height: 1em;
+    margin: 0 0.5rem 0 0;
+    transform: translateY(-$onepixel);
+    width: 1em;
+
+    &--right {
+      margin: 0 0 0 0.5rem;
+    }
+  }
+
   // Form factors
   &--square {
     @include button-base($form-factor: 'square');
@@ -75,6 +86,21 @@
       // selector to win priority
       &.disabled {
         @include r-button-colors($scheme, $apply-border: true);
+      }
+    }
+
+    &--outline-#{$name} {
+      &:not(.disabled) {
+        @include r-button-outline-colors($scheme, $apply-border: true);
+
+        &:hover {
+          @include r-button-colors($scheme, $apply-border: true, $prefix: hover);
+        }
+      }
+      // Enforce colors opposed to avoid framework 'disabled'
+      // selector to win priority
+      &.disabled {
+        @include r-button-outline-colors($scheme, $apply-border: true);
       }
     }
   }

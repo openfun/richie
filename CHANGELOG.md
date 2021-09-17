@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - Add timing function variables
+- Add a `outline` variant to button
 
 ### Changed
 
