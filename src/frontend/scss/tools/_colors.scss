@@ -315,6 +315,15 @@
 }
 
 ///
+/// A shortand to quickly get a color value
+/// from a property of one of base scheme
+///
+@function r-base-scheme-color($scheme, $property) {
+  $scheme: r-theme-val(base-schemes, $scheme);
+  @return map-get($scheme, $property);
+}
+
+///
 /// A shortand to quickly get a property value from theme schemes.
 /// Property get is safe, it will return `null` if does not exists. But required
 /// scheme have to be defined in `$r-theme` else an error will be
