@@ -1,6 +1,38 @@
 // Helper class to hide elements from sighted users and have accessibility devices still read them
 // to users that need it.
+
+// Screen reader only content
 .offscreen {
   position: absolute;
-  left: -9999rem;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+
+  // Screen reader toggleable function, including offscreen navigation
+  &:active,
+  &:focus {
+    left: 5px;
+    top: 5px;
+    width: auto;
+    height: auto;
+    overflow: auto;
+  }
+}
+
+// Skip to content button styles for it to be rendered on link focus
+.skip-to-content {
+  font-size: 1em;
+  line-height: normal;
+  background-color: r-color('midnightblue');
+  padding: 1rem;
+  z-index: 100000;
+
+  &:active,
+  &:hover,
+  &:focus {
+    color: r-color('white');
+    text-decoration: none;
+  }
 }
