@@ -39,15 +39,14 @@
   // border radius from arg
   $patched-radius: if($form-factor, null, $border-radius);
 
+  background-color: transparent;
+  border: $border-width solid transparent;
+  color: $font-color;
   display: $display;
   font-family: $font-family;
   font-weight: $font-weight;
-  color: $font-color;
   text-align: $text-align;
-  vertical-align: middle;
   user-select: none;
-  background-color: transparent;
-  border: $border-width solid transparent;
   @include button-size($padding-y, $padding-x, $font-size, $line-height, $patched-radius);
   @include transition($transition);
 

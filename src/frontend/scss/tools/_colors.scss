@@ -248,6 +248,64 @@
 }
 
 ///
+/// Include properties from a scheme color to an outlined button element.
+///
+/// Work like `r-scheme-colors()` mixin except properties for links and
+/// titles are ignored.
+///
+/// @arg {Map} $scheme [null]
+///   A Color scheme model.
+///
+/// @arg {Bool} $apply-border [false]
+///   If set to `true`, scheme border properties will be used, else they are
+///   ignored.
+///
+/// @arg {String} $prefix [null]
+///   If not null will prefix the property names to search.
+///
+/// @arg {Bool} $include-hover [false]
+///   If set to `true`, border properties for prefix "hover" will be
+///   automatically added.
+///
+@mixin r-button-outline-colors($scheme, $apply-border: true, $prefix: null, $include-hover: false) {
+  $props-prefix: '';
+
+  @if $prefix {
+    $props-prefix: $prefix + '-';
+  }
+
+  $background: map-get($scheme, $props-prefix + 'background');
+  $font-color: map-get($scheme, $props-prefix + 'background');
+  $svg-color: map-get($scheme, $props-prefix + 'background');
+
+  @if $font-color {
+    color: $font-color;
+  }
+
+  @if not $svg-color {
+    $svg-color: currentColor;
+  }
+
+  // Fill svg color but not for ".no-scheme-fill" class
+  @if $svg-color {
+    svg:not(.no-scheme-fill) {
+      fill: currentColor;
+    }
+  }
+
+  @if $apply-border {
+    border: thin solid $background;
+  }
+
+  @if $include-hover {
+    &:hover {
+      border: thin solid transparent;
+      @include r-button-outline-colors($scheme, $apply-border: $apply-border);
+    }
+  }
+}
+
+///
 /// A shortand to quickly get a color value in palette setting from given
 /// name. You should quote name to enforce it as a string, single word can be
 /// recognize as CSS keyword and would result as a null value.
