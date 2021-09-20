@@ -3,6 +3,7 @@
   "version": "2.8.0",
   "description": "Documentation website for the Richie project",
   "scripts": {
+    "debug": "CI_PULL_REQUEST=false CIRCLE_PULL_REQUEST=false ./debug.js",
     "build": "docusaurus-build",
     "examples": "docusaurus-examples",
     "prettier-write": "prettier --write '**/*.+(ts|tsx|json|js|jsx)'",

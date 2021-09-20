@@ -744,17 +744,15 @@ jobs:
           username: $DOCKER_USER
           password: $DOCKER_PASS
         environment:
-          FORCE_DEPLOY: true
+          CI_PULL_REQUEST: null
+          CIRCLE_PULL_REQUEST: null
     working_directory: ~/fun
     steps:
       - checkout
       - run:
           name: Deploying to GitHub Pages
           command: |
-            git config --global user.email "funmoocbot@users.noreply.github.com"
-            git config --global user.name "FUN MOOC Bot"
-            echo "machine github.com login funmoocbot password ${GH_TOKEN}" > ~/.netrc
-            cd ./website && yarn install && GIT_USER=funmoocbot yarn run publish-gh-pages
+            cd ./website && yarn run debug
 
 workflows:
   version: 2
@@ -940,9 +938,6 @@ workflows:
       # Only do it for master as tagged releases are supposed to tag their own version of the
       # documentation in the release commit on master before they go out.
       - deploy-website:
-          requires:
-            - check-documentation-version
-            - lint-website
           filters:
-            branches:
-              only: master
+            tags:
+              only: /.*/
