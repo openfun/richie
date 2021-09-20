@@ -19,10 +19,7 @@ class UserMenuTests(CMSTestCase):
             "BASE_URL": "https://richie.education:9999",
             "BACKEND": "richie.apps.courses.lms.base.BaseLMSBackend",
             "PROFILE_URLS": {
-                "profile": {
-                    "label": "Profile",
-                    "href": _("{base_url:s}/profile"),
-                }
+                "profile": {"label": "Profile", "href": _("{base_url:s}/profile")}
             },
         }
     )
@@ -41,14 +38,15 @@ class UserMenuTests(CMSTestCase):
         response = self.client.get(page.get_public_url())
         self.assertContains(response, "richie-react richie-react--user-login")
 
+        # pylint: disable=consider-using-f-string
         pattern = r".*data-props=.*{}.*{}.*".format(
             "Profile", "https://richie.education:9999/profile"
         )
-
         self.assertIsNotNone(re.search(pattern, str(response.content)))
         self.assertContains(
             response,
             (
+                # pylint: disable=consider-using-f-string
                 r"\u0022authentication\u0022: "
                 r"{{\u0022endpoint\u0022: \u0022{}\u0022, \u0022backend\u0022: \u0022{}\u0022}}"
             ).format(
@@ -71,13 +69,8 @@ class UserMenuTests(CMSTestCase):
         response = self.client.get(page.get_public_url())
 
         self.assertNotContains(response, "richie-react richie-react--user-login")
-        self.assertNotContains(
-            response,
-            r'"authentication": {{"endpoint": "{}", "backend": "{}"}}'.format(
-                "https://richie.education:9999",
-                "richie.apps.courses.lms.base.BaseLMSBackend",
-            ),
-        )
+        self.assertNotContains(response, "https://richie.education:9999")
+        self.assertNotContains(response, "richie.apps.courses.lms.base.BaseLMSBackend")
 
     @override_settings(
         RICHIE_AUTHENTICATION_DELEGATION={

@@ -190,7 +190,7 @@ COURSE_RUNS = {
 @mock.patch.dict(  # Reduce the number of languages
     ALL_LANGUAGES_DICT,
     {
-        language: "#{:s}".format(language)
+        language: f"#{language:s}"
         for cr in COURSE_RUNS.values()
         for language in cr["languages"]
     },

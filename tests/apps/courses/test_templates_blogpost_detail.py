@@ -98,6 +98,7 @@ class DetailBlogPostCMSTestCase(CMSTestCase):
         self.assertContains(
             response,
             (
+                # pylint: disable=consider-using-f-string
                 '<a class="category-tag" '
                 'href="{:s}"><span class="category-tag__title">{:s}</span></a>'
             ).format(
@@ -109,6 +110,7 @@ class DetailBlogPostCMSTestCase(CMSTestCase):
         self.assertContains(
             response,
             (
+                # pylint: disable=consider-using-f-string
                 '<a class="category-tag category-tag--draft" '
                 'href="{:s}"><span class="category-tag__title">{:s}</span></a>'
             ).format(

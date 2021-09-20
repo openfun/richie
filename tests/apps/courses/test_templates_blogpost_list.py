@@ -90,15 +90,14 @@ class ListBlogPostCMSTestCase(CMSTestCase):
         self.assertEqual(response.status_code, 200)
 
         for category in [category1, category2, category12]:
+            slug = category.extended_object.get_absolute_url()
+            title = category.extended_object.get_title()
             self.assertContains(
                 response,
                 (
-                    '<a class="category-tag" href="{slug:s}">'
-                    '<span class="category-tag__title">{title:s}</span>'
+                    f'<a class="category-tag" href="{slug:s}">'
+                    f'<span class="category-tag__title">{title:s}</span>'
                     "</a>"
-                ).format(
-                    slug=category.extended_object.get_absolute_url(),
-                    title=category.extended_object.get_title(),
                 ),
                 html=True,
             )

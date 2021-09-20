@@ -61,5 +61,5 @@ class PageRoleModelsTestCase(TestCase):
         self.assertEqual(role1.group.name, "Admin | My page")
         self.assertEqual(role1.folder.name, "Admin | My page")
 
-        self.assertEqual(role2.group.name, "Admin | My page [{:d}]".format(page2.id))
-        self.assertEqual(role2.folder.name, "Admin | My page [{:d}]".format(page2.id))
+        self.assertEqual(role2.group.name, f"Admin | My page [{page2.id:d}]")
+        self.assertEqual(role2.folder.name, f"Admin | My page [{page2.id:d}]")

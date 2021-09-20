@@ -130,6 +130,7 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
             self.assertContains(
                 response,
                 (
+                    # pylint: disable=consider-using-f-string
                     '<a class="category-badge" href="{:s}">'
                     '<span class="category-badge__title">{:s}</span></a>'
                 ).format(
@@ -152,6 +153,7 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
         for icon in icons[:2]:
             self.assertIsNotNone(
                 re.search(
+                    # pylint: disable=consider-using-f-string
                     pattern.format(
                         link=icon.extended_object.get_absolute_url(),
                         title=icon.extended_object.get_title(),
@@ -166,6 +168,7 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
         for organization in organizations[:2]:
             self.assertContains(
                 response,
+                # pylint: disable=consider-using-f-string
                 '<div class="organization-glimpse__title" property="name">{title:s}</div>'.format(
                     title=organization.extended_object.get_title()
                 ),
@@ -279,6 +282,7 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
         for organization in organizations[:3]:
             self.assertContains(
                 response,
+                # pylint: disable=consider-using-f-string
                 '<div class="organization-glimpse__title" property="name">{title:s}</div>'.format(
                     title=organization.extended_object.get_title()
                 ),
@@ -294,6 +298,7 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
             self.assertContains(
                 response,
                 (
+                    # pylint: disable=consider-using-f-string
                     '<a class="category-badge" href="{:s}">'
                     '<span class="category-badge__title">{:s}</span></a>'
                 ).format(
@@ -305,6 +310,7 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
         self.assertContains(
             response,
             (
+                # pylint: disable=consider-using-f-string
                 '<a class="category-badge category-badge--draft" href="{:s}">'
                 '<span class="category-badge__title">{:s}</span></a>'
             ).format(
@@ -363,7 +369,8 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
 
         course = CourseFactory(page_title="Very interesting course")
         page = course.extended_object
-        url = "{:s}?edit".format(page.get_absolute_url(language="en"))
+        page_url = page.get_absolute_url(language="en")
+        url = f"{page_url:s}?edit"
         response = self.client.get(url)
 
         pattern = (
@@ -450,7 +457,7 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
             r'<meta property="url" content="http://example.com{url:s}">'
             r'<div class="subheader__media">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*logo\.jpg__200x113'
-        ).format(
+        ).format(  # pylint: disable=consider-using-f-string
             url=organizations[0].extended_object.get_absolute_url(),
             title=organizations[0].extended_object.get_title(),
         )
@@ -515,10 +522,10 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
         pattern = (
             r'<div class="subheader__teaser">'
             r'<div class="aspect-ratio">'
-            r'<iframe src="{url:s}"  allowfullscreen></iframe>'
+            fr'<iframe src="{video_sample.url:s}"  allowfullscreen></iframe>'
             r"</div>"
             r"</div>"
-        ).format(url=video_sample.url)
+        )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
 
     def test_templates_course_detail_teaser_empty_cover_image(self):
@@ -534,8 +541,8 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
         response = self.client.get(course.extended_object.get_absolute_url())
 
         self.assertEqual(response.status_code, 200)
-        pattern = r'<div class="subheader__teaser"><img.*/{image:s}.*/></div>'.format(
-            image=video_sample.image
+        pattern = (
+            fr'<div class="subheader__teaser"><img.*/{video_sample.image:s}.*/></div>'
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
 
@@ -557,10 +564,10 @@ class TemplatesCourseDetailRenderingCMSTestCase(CMSTestCase):
         pattern = (
             r'<div class="subheader__teaser">'
             r'<div class="aspect-ratio">'
-            r'<iframe src="{url:s}"  allowfullscreen></iframe>'
+            fr'<iframe src="{video_sample.url:s}"  allowfullscreen></iframe>'
             r"</div>"
             r"</div>"
-        ).format(url=video_sample.url)
+        )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
 
 
@@ -717,6 +724,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
 
         response = self.client.get(course.extended_object.get_absolute_url())
 
+        # pylint: disable=consider-using-f-string
         pattern = r".*data-props=\"{{.*{}.*{}.*{}.*{}.*{}.*{}.*{}.*}}\"".format(
             "courseRun",
             "id",
@@ -790,6 +798,7 @@ class RunsCourseCMSTestCase(CMSTestCase):
 
         response = self.client.get(course.extended_object.get_absolute_url())
 
+        # pylint: disable=consider-using-f-string
         pattern = r".*data-props=\"{{.*{}.*{}.*{}.*{}.*{}.*{}.*{}.*}}\"".format(
             "courseRun",
             "id",
@@ -853,13 +862,13 @@ class RunsCourseCMSTestCase(CMSTestCase):
         self.assertContains(
             response, '<h3 class="course-detail__title">Upcoming</h3>', html=True
         )
+
+        start_string = dateformat.format(course_run.start, "N j, Y")
+        end_string = dateformat.format(course_run.end, "N j, Y")
         self.assertContains(
             response,
             '<ul class="course-detail__run-list"><li>'
-            "My course run, from {:s} to {:s}</li></ul>".format(
-                dateformat.format(course_run.start, "N j, Y"),
-                dateformat.format(course_run.end, "N j, Y"),
-            ),
+            f"My course run, from {start_string:s} to {end_string:s}</li></ul>",
             html=True,
         )
 
@@ -880,13 +889,13 @@ class RunsCourseCMSTestCase(CMSTestCase):
         self.assertContains(
             response, '<h3 class="course-detail__title">Ongoing</h3>', html=True
         )
+
+        start_string = dateformat.format(course_run.start, "N j, Y")
+        end_string = dateformat.format(course_run.end, "N j, Y")
         self.assertContains(
             response,
             '<ul class="course-detail__run-list"><li>'
-            "My course run, from {:s} to {:s}</li></ul>".format(
-                dateformat.format(course_run.start, "N j, Y"),
-                dateformat.format(course_run.end, "N j, Y"),
-            ),
+            f"My course run, from {start_string:s} to {end_string:s}</li></ul>",
             html=True,
         )
 
@@ -907,13 +916,13 @@ class RunsCourseCMSTestCase(CMSTestCase):
         self.assertContains(
             response, '<h3 class="course-detail__title">Ongoing</h3>', html=True
         )
+
+        start_string = dateformat.format(course_run.start, "N j, Y")
+        end_string = dateformat.format(course_run.end, "N j, Y")
         self.assertContains(
             response,
             '<ul class="course-detail__run-list"><li>'
-            "My course run, from {:s} to {:s}</li></ul>".format(
-                dateformat.format(course_run.start, "N j, Y"),
-                dateformat.format(course_run.end, "N j, Y"),
-            ),
+            f"My course run, from {start_string:s} to {end_string:s}</li></ul>",
             html=True,
         )
 
@@ -934,13 +943,13 @@ class RunsCourseCMSTestCase(CMSTestCase):
         self.assertContains(
             response, '<h3 class="course-detail__title">Archived</h3>', html=True
         )
+
+        start_string = dateformat.format(course_run.start, "N j, Y")
+        end_string = dateformat.format(course_run.end, "N j, Y")
         self.assertContains(
             response,
             '<ul class="course-detail__run-list"><li>'
-            "My course run, from {:s} to {:s}</li></ul>".format(
-                dateformat.format(course_run.start, "N j, Y"),
-                dateformat.format(course_run.end, "N j, Y"),
-            ),
+            f"My course run, from {start_string:s} to {end_string:s}</li></ul>",
             html=True,
         )
 

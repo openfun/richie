@@ -184,7 +184,7 @@ class CoursesIndexer:
             # by `MULTILINGUAL_TEXT`
             "code": {"type": "text", "analyzer": "code_trigram"},
             **{
-                "complete.{:s}".format(lang): {
+                f"complete.{lang:s}": {
                     "type": "completion",
                     "analyzer": "simple_diacritics_insensitive",
                 }
@@ -353,7 +353,7 @@ class CoursesIndexer:
                 }}
                 // The course has no course runs
                 return 0;
-                """.format(
+                """.format(  # pylint: disable=consider-using-f-string
                     **{
                         f"weight_{i:d}": weight
                         for i, weight in enumerate(ES_STATE_WEIGHTS)

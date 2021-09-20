@@ -76,14 +76,10 @@ class ItemSearchFormTestCase(TestCase):
         form = ItemSearchForm(data=QueryDict(query_string="query=aaa"))
         self.assertTrue(form.is_valid())
 
-        form = ItemSearchForm(
-            data=QueryDict(query_string="query={:s}".format("a" * 100))
-        )
+        form = ItemSearchForm(data=QueryDict(query_string=f"query={'a' * 100:s}"))
         self.assertTrue(form.is_valid())
 
-        form = ItemSearchForm(
-            data=QueryDict(query_string="query={:s}".format("a" * 101))
-        )
+        form = ItemSearchForm(data=QueryDict(query_string=f"query={'a' * 101:s}"))
         self.assertFalse(form.is_valid())
         self.assertEqual(
             form.errors,

@@ -94,14 +94,10 @@ class CourseSearchFormTestCase(TestCase):
         form = CourseSearchForm(data=QueryDict(query_string="query=aaa"))
         self.assertTrue(form.is_valid())
 
-        form = CourseSearchForm(
-            data=QueryDict(query_string="query={:s}".format("a" * 100))
-        )
+        form = CourseSearchForm(data=QueryDict(query_string=f"query={'a' * 100:s}"))
         self.assertTrue(form.is_valid())
 
-        form = CourseSearchForm(
-            data=QueryDict(query_string="query={:s}".format("a" * 101))
-        )
+        form = CourseSearchForm(data=QueryDict(query_string=f"query={'a' * 101:s}"))
         self.assertFalse(form.is_valid())
         self.assertEqual(
             form.errors,

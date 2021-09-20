@@ -112,6 +112,7 @@ class CategoriesViewSet(ViewSet):
         indexer = self._meta.indexer
 
         # Query our specific ES completion field
+        language = get_language_from_request(request)
         autocomplete_query_response = ES_CLIENT.search(
             index=indexer.index_name,
             body={
@@ -120,9 +121,7 @@ class CategoriesViewSet(ViewSet):
                         "prefix": request.query_params["query"],
                         "completion": {
                             "contexts": {"kind": [kind]},
-                            "field": "complete.{:s}".format(
-                                get_language_from_request(request)
-                            ),
+                            "field": f"complete.{language:s}",
                         },
                     }
                 }

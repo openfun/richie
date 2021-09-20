@@ -102,7 +102,7 @@ class LicenceAdminTestCase(CMSTestCase):
 
         # Get the admin change view in French
         url = reverse("admin:courses_licence_change", args=[licence.id])
-        response = self.client.get("{}?language=fr".format(url))
+        response = self.client.get(f"{url:s}?language=fr")
 
         # Check that the page includes the name and content in French
         with switch_language(licence, "fr"):

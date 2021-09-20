@@ -110,7 +110,7 @@ class CompositeDurationField(models.CharField):
         if self.default_unit and self.default_unit not in self.time_units:
             return [
                 checks.Error(
-                    "'{:s}' is not a valid time unit.".format(self.default_unit),
+                    f"'{self.default_unit:s}' is not a valid time unit.",
                     obj=self,
                     id="fields.E1022",
                 )
@@ -283,8 +283,6 @@ class CompositeDurationField(models.CharField):
             duration, unit = value
             duration = int(duration)
             count_index = 1 if duration > 1 else 0
-            return "{duration:d} {unit!s}".format(
-                duration=duration, unit=choices[unit][count_index]
-            )
+            return f"{duration:d} {choices[unit][count_index]!s}"
 
-        setattr(cls, "get_%s_display" % self.name, func)
+        setattr(cls, f"get_{self.name:s}_display", func)

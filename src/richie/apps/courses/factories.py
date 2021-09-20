@@ -154,7 +154,8 @@ class OrganizationFactory(BLDPageExtensionDjangoModelFactory):
         Since `name` is required, let's just slugify it to get a meaningful code (and keep it
         below 100 characters)
         """
-        return "{:s}-{:d}".format(self.extended_object.get_slug()[:90], sequence)
+        short_slug = self.extended_object.get_slug()[:90]
+        return f"{short_slug:s}-{sequence:d}"
 
     @factory.post_generation
     # pylint: disable=unused-argument

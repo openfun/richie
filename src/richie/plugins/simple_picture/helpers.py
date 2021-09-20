@@ -49,11 +49,8 @@ def get_picture_info(instance, preset_name):
     for info in preset.get("srcset", []):
         options = info["options"].copy()
         options.update(location_dict)
-        srcset.append(
-            "{:s} {:s}".format(
-                thumbnailer.get_thumbnail(options).url, info["descriptor"]
-            )
-        )
+        url = thumbnailer.get_thumbnail(options).url
+        srcset.append(f"{url:s} {info['descriptor']:s}")
     picture_info["srcset"] = ", ".join(srcset) if srcset else None
 
     # - sizes

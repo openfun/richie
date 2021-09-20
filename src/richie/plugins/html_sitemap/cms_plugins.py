@@ -161,7 +161,8 @@ class HTMLSitemapPagePlugin(CMSPluginBase):
             ).values_list("node__path", flat=True)
 
             if paths_to_exclude:
-                exclusion_regex = r"^({:s}).*".format("|".join(paths_to_exclude))
+                or_string = "|".join(paths_to_exclude)
+                exclusion_regex = fr"^({or_string:s}).*"
                 pages = pages.exclude(node__path__regex=exclusion_regex)
 
         # Annotate pages with "level" ie their depth relative to the root page

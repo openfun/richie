@@ -125,7 +125,7 @@ class EffortField(models.CharField):
         if self.default_effort_unit and self.default_effort_unit not in self.time_units:
             return [
                 checks.Error(
-                    "'{:s}' is not a valid time unit.".format(self.default_effort_unit),
+                    f"'{self.default_effort_unit:s}' is not a valid time unit.",
                     obj=self,
                     id="fields.E1012",
                 )
@@ -141,9 +141,7 @@ class EffortField(models.CharField):
         ):
             return [
                 checks.Error(
-                    "'{:s}' is not a valid time unit.".format(
-                        self.default_reference_unit
-                    ),
+                    f"'{self.default_reference_unit:s}' is not a valid time unit.",
                     obj=self,
                     id="fields.E1013",
                 )
@@ -331,11 +329,9 @@ class EffortField(models.CharField):
                 duration, unit, reference = value
                 duration = int(duration)
                 count_index = 1 if duration > 1 else 0
-                return "{duration:d} {unit!s}/{reference!s}".format(
-                    duration=duration,
-                    unit=choices[unit][count_index],
-                    reference=choices[reference][0],
-                )
+                unit = choices[unit][count_index]
+                reference = choices[reference][0]
+                return f"{duration:d} {unit!s}/{reference!s}"
             return ""
 
-        setattr(cls, "get_%s_display" % self.name, func)
+        setattr(cls, f"get_{self.name:s}_display", func)

@@ -65,12 +65,12 @@ class CheckToolbarMixin:
         factory = RequestFactory()
 
         if edit:
-            url = "{:s}?edit".format(url)
+            url = f"{url:s}?edit"
         else:
-            url = "{:s}?edit_off".format(url)
+            url = f"{url:s}?edit_off"
 
         if preview:
-            url = "{:s}&preview".format(url)
+            url = f"{url:s}&preview"
 
         request = factory.get(url)
         request.user = user

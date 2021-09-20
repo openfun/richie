@@ -113,11 +113,10 @@ class BlogPostPluginTestCase(CMSTestCase):
 
         # The blogpost's title should be wrapped in a p
         blogpost.refresh_from_db()
+        blogpost_title = blogpost.public_extension.extended_object.get_title()
         self.assertContains(
             response,
-            '<p class="blogpost-glimpse__title">{:s}</p>'.format(
-                blogpost.public_extension.extended_object.get_title()
-            ),
+            f'<p class="blogpost-glimpse__title">{blogpost_title:s}</p>',
             html=True,
         )
         self.assertNotContains(response, "draft title")
@@ -276,7 +275,8 @@ class BlogPostPluginTestCase(CMSTestCase):
         placeholder = page.placeholders.get(slot="maincontent")
         add_plugin(placeholder, BlogPostPlugin, "en", **{"page": blogpost_page})
 
-        url = "{:s}?edit".format(page.get_absolute_url(language="en"))
+        page_url = page.get_absolute_url(language="en")
+        url = f"{page_url:s}?edit"
 
         # The blogpost plugin should still be visible on the draft page
         response = self.client.get(url)
@@ -313,7 +313,8 @@ class BlogPostPluginTestCase(CMSTestCase):
         # Add blogpost plugin with default template
         add_plugin(placeholder, BlogPostPlugin, "en", page=blogpost_page)
 
-        url = "{:s}?edit".format(page.get_absolute_url(language="en"))
+        page_url = page.get_absolute_url(language="en")
+        url = f"{page_url:s}?edit"
 
         # The blogpost-glimpse default variant should be glimpse
         response = self.client.get(url)

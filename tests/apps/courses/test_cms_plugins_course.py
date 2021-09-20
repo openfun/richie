@@ -113,9 +113,7 @@ class CoursePluginTestCase(TestCase):
         # The course's name should be present
         self.assertContains(
             response,
-            '<p class="course-glimpse__title">{title}</p>'.format(
-                title=course_page.get_title()
-            ),
+            f'<p class="course-glimpse__title">{course_page.get_title():s}</p>',
             status_code=200,
         )
         # The course's main organization should be present
@@ -171,9 +169,7 @@ class CoursePluginTestCase(TestCase):
         # The course's name should be present
         self.assertContains(
             response,
-            '<p class="course-glimpse__title">{title}</p>'.format(
-                title=course_page.get_title()
-            ),
+            f'<p class="course-glimpse__title">{course_page.get_title():s}</p>',
             status_code=200,
         )
 
@@ -235,7 +231,8 @@ class CoursePluginTestCase(TestCase):
         course_page.publish("en")
         course_page.unpublish("en")
 
-        url = "{:s}?edit".format(page.get_absolute_url(language="en"))
+        page_url = page.get_absolute_url(language="en")
+        url = f"{page_url:s}?edit"
 
         # The unpublished course plugin should not be visible on the draft page
         response = self.client.get(url)
@@ -271,7 +268,8 @@ class CoursePluginTestCase(TestCase):
         # Add course plugin with default variant
         add_plugin(placeholder, CoursePlugin, "en", page=course_page)
 
-        url = "{:s}?edit".format(page.get_absolute_url(language="en"))
+        page_url = page.get_absolute_url(language="en")
+        url = f"{page_url:s}?edit"
 
         # The course-glimpse default variant should not have the large attribute
         response = self.client.get(url)

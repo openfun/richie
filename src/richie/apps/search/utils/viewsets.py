@@ -42,17 +42,14 @@ class AutocompleteMixin:
         indexer = self._meta.indexer
 
         # Query our specific ES completion field
+        language = get_language_from_request(request)
         autocomplete_query_response = ES_CLIENT.search(
             index=indexer.index_name,
             body={
                 "suggest": {
                     "objects": {
                         "prefix": request.query_params["query"],
-                        "completion": {
-                            "field": "complete.{:s}".format(
-                                get_language_from_request(request)
-                            )
-                        },
+                        "completion": {"field": f"complete.{language:s}"},
                     }
                 }
             },

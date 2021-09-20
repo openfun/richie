@@ -1,9 +1,6 @@
 """
 API endpoints for the courses app.
 """
-import hashlib
-import hmac
-
 from django.conf import settings
 from django.db.models import Q
 
@@ -17,7 +14,7 @@ from rest_framework.viewsets import ModelViewSet
 from .lms import LMSHandler
 from .models import Course, CourseRun, CourseRunSyncMode
 from .serializers import CourseRunSerializer
-from .utils import normalize_code
+from .utils import get_signature, normalize_code
 
 
 class NotAllowed(BasePermission):
@@ -91,7 +88,7 @@ def course_runs_sync(request, version):
     Type[rest_framework.response.Response]
         HttpResponse acknowledging the success or failure of the synchronization operation.
     """
-    msg = request.body.decode("utf-8")
+    message = request.body.decode("utf-8")
 
     # Check if the provided signature is valid against any secret in our list
     #
@@ -102,14 +99,7 @@ def course_runs_sync(request, version):
         return Response("Missing authentication.", status=403)
 
     signature_is_valid = any(
-        authorization_header
-        == "SIG-HMAC-SHA256 {:s}".format(
-            hmac.new(
-                secret.encode("utf-8"),
-                msg=msg.encode("utf-8"),
-                digestmod=hashlib.sha256,
-            ).hexdigest()
-        )
+        authorization_header == get_signature(message, secret)
         for secret in getattr(settings, "RICHIE_COURSE_RUN_SYNC_SECRETS", [])
     )
 

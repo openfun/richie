@@ -112,6 +112,7 @@ class OrganizationCMSTestCase(CMSTestCase):
         self.assertNotContains(
             response,
             (
+                # pylint: disable=consider-using-f-string
                 '<a class="category-tag" href="{:s}">'
                 '<span class="category-tag__title">{:s}</span></a>'
             ).format(
@@ -137,6 +138,7 @@ class OrganizationCMSTestCase(CMSTestCase):
         # The published courses should be on the page in its published version
         self.assertContains(
             response,
+            # pylint: disable=consider-using-f-string
             '<p class="course-glimpse__title">{:s}</p>'.format(
                 published_course.public_extension.extended_object.get_title()
             ),
@@ -252,6 +254,7 @@ class OrganizationCMSTestCase(CMSTestCase):
         self.assertContains(
             response,
             (
+                # pylint: disable=consider-using-f-string
                 '<a class="category-tag" href="{:s}">'
                 '<span class="category-tag__title">{:s}</span></a>'
             ).format(
@@ -264,6 +267,7 @@ class OrganizationCMSTestCase(CMSTestCase):
         self.assertContains(
             response,
             (
+                # pylint: disable=consider-using-f-string
                 '<a class="category-tag category-tag--draft" href="{:s}">'
                 '<span class="category-tag__title">{:s}</span></a>'
             ).format(
@@ -304,13 +308,12 @@ class OrganizationCMSTestCase(CMSTestCase):
         response = self.client.get(url)
 
         # The person should be present on the page
+        person_url = person.extended_object.get_absolute_url()
+        person_name = person.extended_object.get_title()
         pattern = (
-            r'<a href="{url:s}">'
+            fr'<a href="{person_url:s}">'
             r'<h3 class="person-glimpse__title">'
-            r".*{name:s}.*</h3></a>"
-        ).format(
-            url=person.extended_object.get_absolute_url(),
-            name=person.extended_object.get_title(),
+            fr".*{person_name:s}.*</h3></a>"
         )
         self.assertIsNotNone(re.search(pattern, str(response.content)))
 

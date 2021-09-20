@@ -111,9 +111,9 @@ class PermissionFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Permission
 
-    codename = factory.Sequence("permission_{:d}".format)
+    codename = factory.Sequence(lambda n: f"permission_{n:d}")
     content_type = factory.Iterator(ContentType.objects.all())
-    name = factory.Sequence("permission #{:d}".format)
+    name = factory.Sequence(lambda n: f"permission #{n:d}")
 
 
 class TitleFactory(factory.django.DjangoModelFactory):
