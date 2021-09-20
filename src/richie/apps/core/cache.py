@@ -54,7 +54,7 @@ class SentinelClient(DefaultClient):
             sentinel_hosts = [(host, int(port)) for host, port in servers]
         except (ValueError, TypeError, IndexError) as error:
             raise ImproperlyConfigured(
-                "Incorrect format '%s'" % (connection_string)
+                f"Incorrect format '{connection_string:s}'"
             ) from error
 
         return master_name, sentinel_hosts, database_name

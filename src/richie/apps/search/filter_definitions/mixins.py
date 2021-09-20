@@ -39,7 +39,7 @@ class ChoicesAggsMixin:
         return {
             # Create a custom aggregation for each possible choice for this filter
             # eg `availability@coming_soon` & `availability@current` & `availability@open`
-            "{:s}@{:s}".format(self.name, choice_key): {
+            f"{self.name:s}@{choice_key:s}": {
                 "filter": {
                     "bool": {
                         # Use all the query fragments from the queries *but* the one(s) that
@@ -110,7 +110,7 @@ class NestedChoicesAggsMixin:
         return {
             # Create a custom aggregation for each possible choice for this filter
             # eg `availability@coming_soon` & `availability@current` & `availability@open`
-            "{:s}@{:s}".format(self.name, choice_key): {
+            f"{self.name:s}@{choice_key:s}": {
                 "filter": {
                     "bool": {
                         # Use all the query fragments from the queries (the nesting parent is

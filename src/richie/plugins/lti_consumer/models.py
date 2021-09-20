@@ -60,7 +60,7 @@ class LTIConsumer(CMSPlugin):
             is_regex = lti_provider.get("is_base_url_regex")
             base_url = lti_provider.get("base_url", "")
             if is_regex:
-                self.url = "{:s}".format(exrex.getone(base_url))
+                self.url = str(exrex.getone(base_url))
             else:
                 self.url = base_url
 

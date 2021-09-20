@@ -101,11 +101,10 @@ class ProgramPluginTestCase(CMSTestCase):
             status_code=200,
         )
         # The program's title should be wrapped in a p
+        program_title = program.public_extension.extended_object.get_title()
         self.assertContains(
             response,
-            '<p class="program-glimpse__title">{:s}</p>'.format(
-                program.public_extension.extended_object.get_title()
-            ),
+            f'<p class="program-glimpse__title">{program_title:s}</p>',
             html=True,
         )
         self.assertNotContains(response, "draft title")
@@ -154,7 +153,8 @@ class ProgramPluginTestCase(CMSTestCase):
         program_page.unpublish("en")
         program_page.refresh_from_db()
 
-        url = "{:s}?edit".format(page.get_absolute_url(language="en"))
+        page_url = page.get_absolute_url(language="en")
+        url = f"{page_url:s}?edit"
 
         # The unpublished program plugin should not be visible on the draft page
         response = self.client.get(url)

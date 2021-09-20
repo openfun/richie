@@ -55,7 +55,7 @@ class SnapshotPageAdminTestCase(CMSTestCase):
         )
 
         # Trigger the creation of a snapshot for the course
-        url = "/en/admin/courses/course/{:d}/snapshot/".format(course.id)
+        url = f"/en/admin/courses/course/{course.id:d}/snapshot/"
         now = datetime(2010, 1, 1, tzinfo=timezone.utc)
         with mock.patch.object(timezone, "now", return_value=now):
             response = self.client.post(url, follow=True)
@@ -113,7 +113,7 @@ class SnapshotPageAdminTestCase(CMSTestCase):
         self.add_permission(user, "change_page")
 
         # Trigger the creation of a snapshot for the course
-        url = "/en/admin/courses/course/{:d}/snapshot/".format(course.id)
+        url = f"/en/admin/courses/course/{course.id:d}/snapshot/"
         response = self.client.post(url, follow=True)
 
         self.assertEqual(response.status_code, 403)
@@ -140,7 +140,7 @@ class SnapshotPageAdminTestCase(CMSTestCase):
         )
 
         # Trigger the creation of a snapshot for the course
-        url = "/en/admin/courses/course/{:d}/snapshot/".format(course.id)
+        url = f"/en/admin/courses/course/{course.id:d}/snapshot/"
         response = self.client.post(url, follow=True)
 
         self.assertEqual(response.status_code, 403)
@@ -167,7 +167,7 @@ class SnapshotPageAdminTestCase(CMSTestCase):
         self.add_permission(user, "change_page")
 
         # Trigger the creation of a snapshot for the course
-        url = "/en/admin/courses/course/{:d}/snapshot/".format(course.id)
+        url = f"/en/admin/courses/course/{course.id:d}/snapshot/"
         with mock.patch("time.time", mock.MagicMock(return_value=1541946888)):
             response = self.client.post(url, follow=True)
 
@@ -200,7 +200,7 @@ class SnapshotPageAdminTestCase(CMSTestCase):
             self.add_permission(user, "change_page")
 
         # Trigger the creation of a snapshot for the course
-        url = "/en/admin/courses/course/{:d}/snapshot/".format(course.id)
+        url = f"/en/admin/courses/course/{course.id:d}/snapshot/"
         with mock.patch("time.time", mock.MagicMock(return_value=1541946888)):
             response = self.client.post(url, follow=True)
 
@@ -230,7 +230,7 @@ class SnapshotPageAdminTestCase(CMSTestCase):
         )
 
         # Try triggering the snapshot with other methods
-        url = "/en/admin/courses/course/{:d}/snapshot/".format(course.id)
+        url = f"/en/admin/courses/course/{course.id:d}/snapshot/"
 
         response = self.client.get(url, follow=True)
         self.assertEqual(response.status_code, 405)
@@ -259,7 +259,7 @@ class SnapshotPageAdminTestCase(CMSTestCase):
         )
 
         # Try triggering the creation of a snapshot for the snapshot
-        url = "/en/admin/courses/course/{:d}/snapshot/".format(snapshot.id)
+        url = f"/en/admin/courses/course/{snapshot.id:d}/snapshot/"
         response = self.client.post(url, follow=True)
 
         self.assertEqual(response.status_code, 403)
@@ -282,7 +282,7 @@ class SnapshotPageAdminTestCase(CMSTestCase):
         )
 
         # Try triggering the creation of a snapshot for the course
-        url = "/en/admin/courses/course/{:d}/snapshot/".format(public_course.id)
+        url = f"/en/admin/courses/course/{public_course.id:d}/snapshot/"
         response = self.client.post(url, follow=True)
 
         self.assertEqual(response.status_code, 400)

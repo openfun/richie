@@ -99,7 +99,7 @@ class CourseState(Mapping):
             CourseState.FUTURE_NOT_YET_OPEN,
         ]:
             raise ValidationError(
-                "date_time should not be null for a {:d} course state.".format(priority)
+                f"date_time should not be null for a {priority:d} course state."
             )
 
         # A special case of being open is when enrollment never ends
@@ -194,10 +194,9 @@ class Course(BasePageExtension):
 
     def __str__(self):
         """Human representation of a course."""
-        return "{model}: {title}".format(
-            model=self._meta.verbose_name.title(),
-            title=self.extended_object.get_title(),
-        )
+        model = self._meta.verbose_name.title()
+        title = self.extended_object.get_title()
+        return f"{model:s}: {title:s}"
 
     def clean(self):
         """
@@ -692,7 +691,7 @@ class CourseRun(TranslatableModel):
 
     def __str__(self):
         """Human representation of a course run."""
-        start = "{:%y/%m/%d %H:%M} - ".format(self.start) if self.start else ""
+        start = f"{self.start:%y/%m/%d %H:%M} - " if self.start else ""
         return f"Course run {self.id!s} starting {start:s}"
 
     def copy_translations(self, oldinstance, language=None):
@@ -868,9 +867,8 @@ class CourseRunTranslation(TranslatedFieldsModel):
 
     def __str__(self):
         """Human representation of a course run translation."""
-        return "{model}: {name}".format(
-            model=self._meta.verbose_name.title(), name=self.title
-        )
+        model = self._meta.verbose_name.title()
+        return f"{model:s}: {self.title:s}"
 
     # pylint: disable=signature-differs
     def save(self, *args, **kwargs):
@@ -964,9 +962,8 @@ class Licence(TranslatableModel):
 
     def __str__(self):
         """Human representation of a licence."""
-        return "{model}: {name}".format(
-            model=self._meta.verbose_name.title(), name=self.name
-        )
+        model = self._meta.verbose_name.title()
+        return f"{model:s}: {self.name:s}"
 
 
 class LicenceTranslation(TranslatedFieldsModel):
@@ -988,9 +985,8 @@ class LicenceTranslation(TranslatedFieldsModel):
 
     def __str__(self):
         """Human representation of a licence translation."""
-        return "{model}: {name}".format(
-            model=self._meta.verbose_name.title(), name=self.name
-        )
+        model = self._meta.verbose_name.title()
+        return f"{model:s}: {self.name:s}"
 
 
 class LicencePluginModel(CMSPlugin):
@@ -1008,9 +1004,8 @@ class LicencePluginModel(CMSPlugin):
 
     def __str__(self):
         """Human representation of a licence plugin."""
-        return "{model:s}: {name:s}".format(
-            model=self._meta.verbose_name.title(), name=self.licence.name
-        )
+        model = self._meta.verbose_name.title()
+        return f"{model:s}: {self.licence.name:s}"
 
 
 extension_pool.register(Course)

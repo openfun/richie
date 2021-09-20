@@ -129,7 +129,7 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
                 # Create a custom aggregation for each value selected in the querystring
                 # and matching the include regex
                 # eg `organizations@P-0001` & `organizations@P-0002`
-                "{:s}@{:s}".format(self.name, value): {
+                f"{self.name:s}@{value:s}": {
                     "filter": {
                         "bool": {
                             # Use all the query fragments from the queries *but* the one(s) that
@@ -282,7 +282,7 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
             {
                 key.split("@")[1]: facet["doc_count"]
                 for key, facet in facets.items()
-                if "{:s}@".format(self.name) in key  # 6 times faster than startswith
+                if f"{self.name:s}@" in key  # 6 times faster than startswith
             }
         )
 

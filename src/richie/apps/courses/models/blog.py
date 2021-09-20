@@ -29,9 +29,9 @@ class BlogPost(BasePageExtension):
 
     def __str__(self):
         """Human representation of a blogpost"""
-        return "{model}: {name}".format(
-            name=self.extended_object.get_title(), model=self._meta.verbose_name.title()
-        )
+        model = self._meta.verbose_name.title()
+        name = self.extended_object.get_title()
+        return f"{model:s}: {name:s}"
 
     def get_categories(self, language=None):
         """

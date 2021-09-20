@@ -110,11 +110,12 @@ class OrganizationsByCategoryPluginTestCase(CMSTestCase):
         )
 
         # The organization's title should be wrapped in a div
+        public_title = (
+            published_organization.public_extension.extended_object.get_title()
+        )
         self.assertContains(
             response,
-            '<div class="organization-glimpse__title" property="name">{:s}</div>'.format(
-                published_organization.public_extension.extended_object.get_title()
-            ),
+            f'<div class="organization-glimpse__title" property="name">{public_title:s}</div>',
             html=True,
         )
         self.assertNotContains(response, "draft")
@@ -172,7 +173,8 @@ class OrganizationsByCategoryPluginTestCase(CMSTestCase):
         category_page.unpublish("en")
         category_page.refresh_from_db()
 
-        url = "{:s}?edit".format(page.get_absolute_url(language="en"))
+        page_url = page.get_absolute_url(language="en")
+        url = f"{page_url:s}?edit"
 
         # The unpublished organization should not be visible on the draft page
         response = self.client.get(url)

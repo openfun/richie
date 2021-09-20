@@ -58,9 +58,7 @@ class ProgramCMSTestCase(CMSTestCase):
         for course in courses[:2]:
             self.assertContains(
                 response,
-                '<p class="course-glimpse__title">{:s}</p>'.format(
-                    course.extended_object.get_title()
-                ),
+                f'<p class="course-glimpse__title">{course.extended_object.get_title():s}</p>',
                 html=True,
             )
         for course in courses[-2:]:
@@ -108,25 +106,21 @@ class ProgramCMSTestCase(CMSTestCase):
             self.assertContains(
                 response,
                 '<a class="course-glimpse" '
-                'href="{:s}"'.format(course.extended_object.get_absolute_url()),
+                f'href="{course.extended_object.get_absolute_url():s}"',
             )
             self.assertContains(
                 response,
-                '<p class="course-glimpse__title">{:s}</p>'.format(
-                    course.extended_object.get_title()
-                ),
+                f'<p class="course-glimpse__title">{course.extended_object.get_title():s}</p>',
                 html=True,
             )
         self.assertContains(
             response,
             '<a class="course-glimpse course-glimpse--draft" '
-            'href="{:s}"'.format(courses[2].extended_object.get_absolute_url()),
+            f'href="{courses[2].extended_object.get_absolute_url():s}"',
         )
         self.assertContains(
             response,
-            '<p class="course-glimpse__title">{:s}</p>'.format(
-                courses[2].extended_object.get_title()
-            ),
+            f'<p class="course-glimpse__title">{courses[2].extended_object.get_title():s}</p>',
             html=True,
         )
         # The unpublished course should not be present on the page

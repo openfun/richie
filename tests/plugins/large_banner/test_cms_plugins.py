@@ -59,7 +59,7 @@ class LargeBannerCMSPluginsTestCase(TestCase):
             placeholder,
             LargeBannerPlugin,
             "en",
-            **{field: getattr(large_banner, field) for field in fields_list}
+            **{field: getattr(large_banner, field) for field in fields_list},
         )
         plugin_instance = model_instance.get_plugin_class_instance()
         context = plugin_instance.render({}, model_instance, None)
@@ -86,31 +86,19 @@ class LargeBannerCMSPluginsTestCase(TestCase):
         background_image_base = large_banner.background_image.url.replace("/media", "")
         self.assertIn('class="large-banner__background"', html)
         rexp_background = re.compile(
-            'src="/media/(.)*{:s}__1900x450_q85_crop-smart'.format(
-                background_image_base
-            )
+            f'src="/media/(.)*{background_image_base:s}__1900x450_q85_crop-smart'
         )
         self.assertRegex(html, rexp_background)
-        self.assertIn(
-            "{:s}__2495x550_q85_crop-%2C0".format(background_image_base), html
-        )
-        self.assertIn(
-            "{:s}__2495x550_q85_crop-%2C0".format(background_image_base), html
-        )
-        self.assertIn(
-            "{:s}__1900x450_q85_crop-%2C0".format(background_image_base), html
-        )
-        self.assertIn(
-            "{:s}__1280x400_q85_crop-%2C0".format(background_image_base), html
-        )
-        self.assertIn("{:s}__768x450_q85_crop-%2C0".format(background_image_base), html)
+        self.assertIn(f"{background_image_base:s}__2495x550_q85_crop-%2C0", html)
+        self.assertIn(f"{background_image_base:s}__2495x550_q85_crop-%2C0", html)
+        self.assertIn(f"{background_image_base:s}__1900x450_q85_crop-%2C0", html)
+        self.assertIn(f"{background_image_base:s}__1280x400_q85_crop-%2C0", html)
+        self.assertIn(f"{background_image_base:s}__768x450_q85_crop-%2C0", html)
         logo_base = large_banner.logo.url.replace("/media", "")
-        rexp_logo = re.compile(
-            'src="/media/(.)*{:s}__200x100_q85_crop'.format(logo_base)
-        )
+        rexp_logo = re.compile(f'src="/media/(.)*{logo_base:s}__200x100_q85_crop')
         self.assertRegex(html, rexp_logo)
-        self.assertIn("{:s}__200x100_q85_crop".format(logo_base), html)
-        self.assertIn('alt="{:s}"'.format(large_banner.logo_alt_text), html)
+        self.assertIn(f"{logo_base:s}__200x100_q85_crop", html)
+        self.assertIn(f'alt="{large_banner.logo_alt_text:s}"', html)
 
     def test_cms_plugins_large_banner_no_background_image(self):
         """
@@ -135,7 +123,7 @@ class LargeBannerCMSPluginsTestCase(TestCase):
             placeholder,
             LargeBannerPlugin,
             "en",
-            **{field: getattr(large_banner, field) for field in fields_list}
+            **{field: getattr(large_banner, field) for field in fields_list},
         )
 
         # Get the generated html

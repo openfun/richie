@@ -260,7 +260,7 @@ class BaseChoicesFilterDefinition(BaseFilterDefinition):
         facet_counts = [
             (key.split("@")[1], facet["doc_count"])
             for key, facet in facets.items()
-            if "{:s}@".format(self.name) in key  # 6 times faster than startswith
+            if f"{self.name:s}@" in key  # 6 times faster than startswith
         ]
 
         # Detect the applicable facet counts limit depending on the request
@@ -356,7 +356,7 @@ class NestingWrapper(BaseFilterDefinition):
         self.path = path or name
         self.filter_definitions = {
             params["name"]: import_string(dotted_path)(
-                term="{:s}.{:s}".format(self.path, params["name"]), **params
+                term=f"{self.path:s}.{params['name']:s}", **params
             )
             for dotted_path, params in filters
         }

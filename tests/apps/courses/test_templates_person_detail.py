@@ -106,15 +106,14 @@ class PersonCMSTestCase(CMSTestCase):
         )
         self.assertContains(
             response,
-            '<h1 class="subheader__title">{:s}</h1>'.format(
-                person.extended_object.get_title()
-            ),
+            f'<h1 class="subheader__title">{person.extended_object.get_title():s}</h1>',
             html=True,
         )
         # The published category should be on the page in its published version
         self.assertContains(
             response,
             (
+                # pylint: disable=consider-using-f-string
                 '<a class="category-badge" href="{:s}">'
                 '<span class="category-badge__title">{:s}</span></a>'
             ).format(
@@ -140,6 +139,7 @@ class PersonCMSTestCase(CMSTestCase):
         # The published organization should be on the page in its published version
         self.assertContains(
             response,
+            # pylint: disable=consider-using-f-string
             '<div class="organization-glimpse__title" property="name">{:s}</div>'.format(
                 published_organization.public_extension.extended_object.get_title()
             ),
@@ -225,6 +225,7 @@ class PersonCMSTestCase(CMSTestCase):
         self.assertContains(
             response,
             (
+                # pylint: disable=consider-using-f-string
                 '<a class="category-badge" href="{:s}">'
                 '<span class="category-badge__title">{:s}</span></a>'
             ).format(
@@ -237,6 +238,7 @@ class PersonCMSTestCase(CMSTestCase):
         self.assertContains(
             response,
             (
+                # pylint: disable=consider-using-f-string
                 '<a class="category-badge category-badge--draft" href="{:s}">'
                 '<span class="category-badge__title">{:s}</span></a>'
             ).format(
@@ -248,6 +250,7 @@ class PersonCMSTestCase(CMSTestCase):
 
         # The published organization should be on the page in its published version
         self.assertIn(
+            # pylint: disable=consider-using-f-string
             '<div class="organization-glimpse" property="contributor" '
             'typeof="CollegeOrUniversity"><a href="{:s}" title="{:s}">'.format(
                 published_organization.extended_object.get_absolute_url(),
@@ -257,6 +260,7 @@ class PersonCMSTestCase(CMSTestCase):
         )
         self.assertContains(
             response,
+            # pylint: disable=consider-using-f-string
             '<div class="organization-glimpse__title" property="name">{:s}</div>'.format(
                 published_organization.public_extension.extended_object.get_title()
             ),
@@ -264,6 +268,7 @@ class PersonCMSTestCase(CMSTestCase):
         )
         # The not published organization should not be on the page
         self.assertIn(
+            # pylint: disable=consider-using-f-string
             '<a href="{:s}" title="{:s}">'.format(
                 not_published_organization.extended_object.get_absolute_url(),
                 not_published_organization.extended_object.get_title(),
@@ -273,6 +278,7 @@ class PersonCMSTestCase(CMSTestCase):
 
         self.assertContains(
             response,
+            # pylint: disable=consider-using-f-string
             '<div class="organization-glimpse__title" property="name">{:s}</div>'.format(
                 not_published_organization.extended_object.get_title()
             ),
@@ -340,9 +346,7 @@ class PersonCMSTestCase(CMSTestCase):
         # The course should be present on the page
         self.assertContains(
             response,
-            '<p class="course-glimpse__title">{:s}</p>'.format(
-                course.extended_object.get_title()
-            ),
+            f'<p class="course-glimpse__title">{course.extended_object.get_title():s}</p>',
             html=True,
         )
 
@@ -402,9 +406,7 @@ class PersonCMSTestCase(CMSTestCase):
         # The blog post should be present on the page
         self.assertContains(
             response,
-            '<p class="blogpost-glimpse__title">{:s}</p>'.format(
-                blog_post.extended_object.get_title()
-            ),
+            f'<p class="blogpost-glimpse__title">{blog_post.extended_object.get_title():s}</p>',
             html=True,
         )
 

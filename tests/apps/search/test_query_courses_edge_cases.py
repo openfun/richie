@@ -128,7 +128,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
         facet counts, even if it is not in the top 10.
         """
         organizations = [
-            "L-0003{:04d}".format(o + 1) for o in range(10)
+            f"L-0003{o + 1:04d}" for o in range(10)
         ] * 2  # 10 organizations with 2 occurences
         organizations.append("L-00030011")  # 1 organization with only 1 occurence
         # => organization with ID "L-00030011" is not in the top ten facets.
@@ -149,7 +149,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
                     "is_new": False,
                     "is_listed": True,
                     "organizations": [id],
-                    "organizations_names": {"en": ["Org #{:s}".format(id)]},
+                    "organizations_names": {"en": [f"Org #{id:s}"]},
                     "title": {"en": "title"},
                 }
                 for index, id in enumerate(organizations)
@@ -209,7 +209,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
         facet counts if it does not match the include regex.
         """
         organizations = [
-            "L-0003{:04d}".format(o + 1) for o in range(10)
+            f"L-0003{o+1:04d}" for o in range(10)
         ]  # 10 organizations matching the include regex
         organizations.append(
             "L-000300010001"
@@ -233,7 +233,7 @@ class EdgeCasesCoursesQueryTestCase(TestCase):
                     "organizations": random.sample(
                         organizations, random.randint(1, len(organizations))
                     ),
-                    "organizations_names": {"en": ["Org #{:s}".format(id)]},
+                    "organizations_names": {"en": [f"Org #{id:s}"]},
                     "title": {"en": "title"},
                 }
                 for index, id in enumerate(organizations)

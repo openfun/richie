@@ -115,8 +115,8 @@ class BaseWizardForm(BaseFormMixin, forms.Form):
                     "slug": [
                         _(
                             "This slug is too long. The length of the path built by "
-                            "prepending the slug of the parent page would be {:d} characters "
-                            "long and it should be less than 255".format(length)
+                            f"prepending the slug of the parent page would be {length:d} "
+                            "characters long and it should be less than 255"
                         )
                     ]
                 }
@@ -141,12 +141,13 @@ class BaseWizardForm(BaseFormMixin, forms.Form):
                 reverse_id=self.model.PAGE["reverse_id"], publisher_is_draft=True
             )
         except Page.DoesNotExist as error:
+            reverse_id = self.model.PAGE["reverse_id"]
             raise forms.ValidationError(
                 {
                     "slug": [
                         _(
                             "You must first create a parent page and set its `reverse_id` to "
-                            "`{reverse}`.".format(reverse=self.model.PAGE["reverse_id"])
+                            f"`{reverse_id:s}`."
                         )
                     ]
                 }

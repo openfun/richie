@@ -37,12 +37,11 @@ class Category(BasePageExtension):
         ancestors = self.extended_object.get_ancestor_pages().filter(
             category__isnull=False
         )
-        return "{ancestors:s}{title:s}".format(
-            ancestors="{:s} / ".format(" / ".join([a.get_title() for a in ancestors]))
-            if ancestors
-            else "",
-            title=self.extended_object.get_title(),
-        )
+        ancestors_titles = " / ".join([a.get_title() for a in ancestors])
+        if ancestors:
+            ancestors_titles = f"{ancestors_titles:s} / "
+        title = self.extended_object.get_title()
+        return f"{ancestors_titles:s}{title:s}"
 
     def get_es_id(self):
         """

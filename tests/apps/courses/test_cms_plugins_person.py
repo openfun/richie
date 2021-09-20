@@ -106,23 +106,23 @@ class PersonPluginTestCase(CMSTestCase):
         # Person's name should be present as a link to the cms page
         self.assertContains(response, '<a href="/en/person-title/">', status_code=200)
         # The person's full name should be wrapped in a h2
+        person_title = person.public_extension.extended_object.get_title()
         self.assertContains(
             response,
-            '<h2 class="person-glimpse__title">{:s}</h2>'.format(
-                person.public_extension.extended_object.get_title()
-            ),
+            f'<h2 class="person-glimpse__title">{person_title:s}</h2>',
             html=True,
         )
         self.assertContains(response, "person title")
         self.assertNotContains(response, "Jiji")
 
         # Person's portrait should be present
+        href = person_page.get_absolute_url()
         pattern = (
-            r'<a class="person-glimpse__media" href="{href:s}" tabindex="-1" aria-hidden="true" '
+            fr'<a class="person-glimpse__media" href="{href:s}" tabindex="-1" aria-hidden="true" '
             r'property="url">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*portrait\.jpg__200x200'
             r'.*alt="" property="image"'
-        ).format(href=person_page.get_absolute_url())
+        )
         content = (
             htmlmin.minify(
                 response.content.decode("UTF-8"),
@@ -145,12 +145,13 @@ class PersonPluginTestCase(CMSTestCase):
         response = self.client.get(url)
         self.assertContains(response, '<a href="/fr/titre-personne/">', status_code=200)
 
+        href = person_page.get_absolute_url()
         pattern = (
-            r'<a class="person-glimpse__media" href="{href:s}" tabindex="-1" aria-hidden="true" '
+            fr'<a class="person-glimpse__media" href="{href:s}" tabindex="-1" aria-hidden="true" '
             r'property="url">'
             r'<img src="/media/filer_public_thumbnails/filer_public/.*portrait\.jpg__200x200'
             r'.*alt="" property="image"'
-        ).format(href=person_page.get_absolute_url())
+        )
         content = (
             htmlmin.minify(
                 response.content.decode("UTF-8"),
@@ -185,7 +186,7 @@ class PersonPluginTestCase(CMSTestCase):
             bio_placeholder,
             PlainTextPlugin,
             "fr",
-            **{"body": "résumé public d'origine"}
+            **{"body": "résumé public d'origine"},
         )
 
         # Create a page to add the plugin to
@@ -195,13 +196,13 @@ class PersonPluginTestCase(CMSTestCase):
             placeholder,
             PersonPlugin,
             "en",
-            **{"page": person.extended_object, "bio": "custom public bio"}
+            **{"page": person.extended_object, "bio": "custom public bio"},
         )
         add_plugin(
             placeholder,
             PersonPlugin,
             "fr",
-            **{"page": person.extended_object, "bio": "résumé public modifié"}
+            **{"page": person.extended_object, "bio": "résumé public modifié"},
         )
         page.publish("en")
         page.publish("fr")
@@ -249,7 +250,8 @@ class PersonPluginTestCase(CMSTestCase):
         person_page.publish("en")
         person_page.unpublish("en")
 
-        url = "{:s}?edit".format(page.get_absolute_url(language="en"))
+        page_url = page.get_absolute_url(language="en")
+        url = f"{page_url:s}?edit"
 
         # The unpublished category plugin should not be visible on the draft page
         response = self.client.get(url)

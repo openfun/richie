@@ -36,7 +36,8 @@ class CourseCMSWizardTestCase(CMSTestCase):
         self.client.login(username=user.username, password="password")
 
         # Let the authorized user get the page with all wizards listed
-        url = "{:s}?page={:d}".format(reverse("cms_wizard_create"), page.id)
+        reverse_id = reverse("cms_wizard_create")
+        url = f"{reverse_id:s}?page={page.id:d}"
         response = self.client.get(url)
 
         # Check that our wizard to create courses is not on this page
@@ -52,9 +53,8 @@ class CourseCMSWizardTestCase(CMSTestCase):
         self.client.login(username=user.username, password="password")
 
         # Let the authorized user get the page with all wizards listed
-        url = "{:s}?page={:d}".format(
-            reverse("cms_wizard_create"), organization.extended_object_id
-        )
+        reverse_id = reverse("cms_wizard_create")
+        url = f"{reverse_id:s}?page={organization.extended_object_id:d}"
         response = self.client.get(url)
 
         # Check that our wizard to create courses is on this page
@@ -76,9 +76,8 @@ class CourseCMSWizardTestCase(CMSTestCase):
         required_permissions = ["courses.add_course", "cms.add_page", "cms.change_page"]
         required_page_permissions = ["can_add", "can_change"]
 
-        url = "{:s}?page={:d}".format(
-            reverse("cms_wizard_create"), organization.extended_object_id
-        )
+        reverse_id = reverse("cms_wizard_create")
+        url = f"{reverse_id:s}?page={organization.extended_object_id:d}"
 
         for permission_to_be_removed in required_permissions + [None]:
             for page_permission_to_be_removed in required_page_permissions + [None]:
@@ -140,9 +139,8 @@ class CourseCMSWizardTestCase(CMSTestCase):
         self.client.login(username=user.username, password="password")
 
         # Let the authorized user get the page with all wizards listed
-        url = "{:s}?page={:d}".format(
-            reverse("cms_wizard_create"), organization.extended_object_id
-        )
+        reverse_id = reverse("cms_wizard_create")
+        url = f"{reverse_id:s}?page={organization.extended_object_id:d}"
         response = self.client.get(url)
 
         # Check that our wizard to create courses is on this page

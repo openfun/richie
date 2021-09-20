@@ -34,7 +34,7 @@ class CategoriesIndexer:
             # Searchable
             # description & title are handled by `MULTILINGUAL_TEXT`
             **{
-                "complete.{:s}".format(lang): {
+                f"complete.{lang:s}": {
                     "type": "completion",
                     "analyzer": "simple_diacritics_insensitive",
                     # Allow filtering autocomplete results with a kindkey to match the value of

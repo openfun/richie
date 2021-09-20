@@ -44,11 +44,9 @@ class Organization(BasePageExtension):
 
     def __str__(self):
         """Human representation of an organization"""
-        return "{model}: {name} ({code})".format(
-            code=self.code,
-            name=self.extended_object.get_title(),
-            model=self._meta.verbose_name.title(),
-        )
+        model = self._meta.verbose_name.title()
+        name = self.extended_object.get_title()
+        return f"{model:s}: {name:s} ({self.code:s})"
 
     def get_es_id(self):
         """

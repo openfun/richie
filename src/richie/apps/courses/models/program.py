@@ -27,9 +27,9 @@ class Program(BasePageExtension):
 
     def __str__(self):
         """Human representation of a program"""
-        return "{model}: {name}".format(
-            model=self._meta.verbose_name.title(), name=self.extended_object.get_title()
-        )
+        model = self._meta.verbose_name.title()
+        name = self.extended_object.get_title()
+        return f"{model:s}: {name:s}"
 
 
 class ProgramPluginModel(CMSPlugin):

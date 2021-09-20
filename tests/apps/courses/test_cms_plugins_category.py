@@ -157,6 +157,7 @@ class CategoryPluginTestCase(CMSTestCase):
         # The category's title should be wrapped in a div
         self.assertContains(
             response,
+            # pylint: disable=consider-using-f-string
             '<h2 class="category-glimpse__title">{:s}</h2>'.format(
                 category.public_extension.extended_object.get_title()
             ),
@@ -206,7 +207,8 @@ class CategoryPluginTestCase(CMSTestCase):
         category_page.publish("en")
         category_page.unpublish("en")
 
-        url = "{:s}?edit".format(page.get_absolute_url(language="en"))
+        page_url = page.get_absolute_url(language="en")
+        url = f"{page_url:s}?edit"
 
         # The unpublished category plugin should not be visible on the draft page
         response = self.client.get(url)

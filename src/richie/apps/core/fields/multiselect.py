@@ -260,4 +260,4 @@ class MultiSelectField(models.CharField):
                     )
                 )
 
-            setattr(cls, "get_%s_display" % self.name, func)
+            setattr(cls, f"get_{self.name:s}_display", func)

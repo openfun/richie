@@ -110,11 +110,10 @@ class OrganizationPluginTestCase(CMSTestCase):
         )
 
         # The organization's title should be wrapped in a div
+        org_title = organization.public_extension.extended_object.get_title()
         self.assertContains(
             response,
-            '<div class="organization-glimpse__title" property="name">{:s}</div>'.format(
-                organization.public_extension.extended_object.get_title()
-            ),
+            f'<div class="organization-glimpse__title" property="name">{org_title:s}</div>',
             html=True,
         )
         self.assertNotContains(response, "draft title")
@@ -161,7 +160,8 @@ class OrganizationPluginTestCase(CMSTestCase):
         organization_page.unpublish("en")
         organization_page.refresh_from_db()
 
-        url = "{:s}?edit".format(page.get_absolute_url(language="en"))
+        page_url = page.get_absolute_url(language="en")
+        url = f"{page_url:s}?edit"
 
         # The unpublished organization plugin should not be visible on the draft page
         response = self.client.get(url)
@@ -199,7 +199,8 @@ class OrganizationPluginTestCase(CMSTestCase):
         # Add organization plugin with default variant
         add_plugin(placeholder, OrganizationPlugin, "en", page=organization_page)
 
-        url = "{:s}?edit".format(page.get_absolute_url(language="en"))
+        page_url = page.get_absolute_url(language="en")
+        url = f"{page_url:s}?edit"
 
         # The organization-glimpse default variant should not have the small attribute
         response = self.client.get(url)

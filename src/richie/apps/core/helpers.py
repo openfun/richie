@@ -35,8 +35,9 @@ def get_permissions(names):
         differences = names - {
             f"{p.content_type.app_label:s}.{p.codename:s}" for p in permissions
         }
+        diff_string = ", ".join(differences)
         raise Permission.DoesNotExist(
-            "Some permission names were not found: {:s}".format(", ".join(differences))
+            f"Some permission names were not found: {diff_string:s}"
         )
 
     return permissions
@@ -62,10 +63,9 @@ def create_i18n_page(title, languages=None, is_homepage=False, **kwargs):
         if languages:
             invalid_languages = set(languages) - set(title.keys())
             if invalid_languages:
+                languages_string = ",".join(invalid_languages)
                 raise ValueError(
-                    "Page titles are missing in some requested languages: {:s}".format(
-                        ",".join(invalid_languages)
-                    )
+                    f"Page titles are missing in some requested languages: {languages_string:s}"
                 )
         else:
             languages = title.keys()
@@ -86,10 +86,9 @@ def create_i18n_page(title, languages=None, is_homepage=False, **kwargs):
         language[0] for language in settings.LANGUAGES
     }
     if invalid_languages:
+        languages_string = ",".join(invalid_languages)
         raise ValueError(
-            "You can't create pages in languages that are not declared: {:s}".format(
-                ",".join(invalid_languages)
-            )
+            f"You can't create pages in languages that are not declared: {languages_string:s}"
         )
 
     # Make a copy of languages to avoid muting it in what follows
@@ -165,7 +164,7 @@ def recursive_page_creation(site, pages_info, parent=None):
             for child_name in children_pages:
                 if child_name in pages:
                     raise ImproperlyConfigured(
-                        "Page names should be unique: {:s}".format(child_name)
+                        f"Page names should be unique: {child_name:s}"
                     )
             pages.update(children_pages)
 

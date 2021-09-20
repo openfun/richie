@@ -28,7 +28,8 @@ class ProgramCMSWizardTestCase(CMSTestCase):
         self.client.login(username=user.username, password="password")
 
         # Let the authorized user get the page with all wizards listed
-        url = "{:s}?page={:d}".format(reverse("cms_wizard_create"), page.id)
+        reverse_id = reverse("cms_wizard_create")
+        url = f"{reverse_id:s}?page={page.id:d}"
         response = self.client.get(url)
 
         # Check that our wizard to create programs is on this page
@@ -53,7 +54,8 @@ class ProgramCMSWizardTestCase(CMSTestCase):
             "cms.change_page",
         ]
 
-        url = "{:s}?page={:d}".format(reverse("cms_wizard_create"), any_page.id)
+        reverse_id = reverse("cms_wizard_create")
+        url = f"{reverse_id:s}?page={any_page.id:d}"
 
         for permission_to_be_removed in required_permissions + [None]:
             if permission_to_be_removed is None:
@@ -88,7 +90,8 @@ class ProgramCMSWizardTestCase(CMSTestCase):
         self.client.login(username=user.username, password="password")
 
         # Let the authorized user get the page with all wizards listed
-        url = "{:s}?page={:d}".format(reverse("cms_wizard_create"), any_page.id)
+        reverse_id = reverse("cms_wizard_create")
+        url = f"{reverse_id:s}?page={any_page.id:d}"
         response = self.client.get(url)
 
         # Check that our wizard to create programs is on this page

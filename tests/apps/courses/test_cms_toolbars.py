@@ -70,7 +70,7 @@ class CoursesCMSToolbarTestCase(CheckToolbarMixin, CMSTestCase):
         in edit mode and for users with permission to edit the page.
         """
         course = CourseFactory()
-        url = "/en/admin/courses/course/{id:d}/change/".format(id=course.id)
+        url = f"/en/admin/courses/course/{course.id:d}/change/"
 
         for args, method in self.get_cases_for_page_change():
             toolbar = self.get_toolbar_for_page(course.extended_object, *args)
@@ -134,7 +134,7 @@ class CoursesCMSToolbarTestCase(CheckToolbarMixin, CMSTestCase):
             ([anonymous, False, True], self.check_absent),
         ]
 
-        url = "/en/admin/courses/course/{id:d}/snapshot/".format(id=course.id)
+        url = f"/en/admin/courses/course/{course.id:d}/snapshot/"
         for args, method in cases:
             toolbar = self.get_toolbar_for_page(course.extended_object, *args)
             item = method(toolbar, "Snapshot this page...", item_type=AjaxItem)
@@ -166,7 +166,7 @@ class CoursesCMSToolbarTestCase(CheckToolbarMixin, CMSTestCase):
         in edit mode and for users with permission to edit the page.
         """
         organization = OrganizationFactory()
-        url = "/en/admin/courses/organization/{id:d}/change/".format(id=organization.id)
+        url = f"/en/admin/courses/organization/{organization.id:d}/change/"
 
         for args, method in self.get_cases_for_page_change():
             toolbar = self.get_toolbar_for_page(organization.extended_object, *args)
@@ -254,7 +254,7 @@ class CoursesCMSToolbarTestCase(CheckToolbarMixin, CMSTestCase):
             ([anonymous, False, True], self.check_absent),
         ]
 
-        url = "/en/admin/courses/person/{id:d}/change/".format(id=person.id)
+        url = f"/en/admin/courses/person/{person.id:d}/change/"
 
         for args, method in cases:
             toolbar = self.get_toolbar_for_page(person.extended_object, *args)

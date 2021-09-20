@@ -1,8 +1,6 @@
 """
 Tests for CourseRun API endpoints in the courses app.
 """
-import hashlib
-import hmac
 import json
 from unittest import mock
 
@@ -202,12 +200,9 @@ class SyncCourseRunApiTestCase(CMSTestCase):
         )
         mock_signal.reset_mock()
 
-        authorization = "SIG-HMAC-SHA256 {:s}".format(
-            hmac.new(
-                "shared secret".encode("utf-8"),
-                msg=json.dumps(data).encode("utf-8"),
-                digestmod=hashlib.sha256,
-            ).hexdigest()
+        authorization = (
+            "SIG-HMAC-SHA256 "
+            "338f7c262254e8220fea54467526f8f1f4562ee3adf1e3a71abaf23a20b739e4"
         )
         response = self.client.post(
             "/api/v1.0/course-runs-sync",

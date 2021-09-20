@@ -118,8 +118,8 @@ class IndexManagerTestCase(TestCase):
                         "_id": i,
                         "_index": index,
                         "_op_type": action,
-                        "code": "course-{:d}".format(i),
-                        "name": "Course Number {:d}".format(i),
+                        "code": f"course-{i:d}",
+                        "name": f"Course Number {i:d}",
                     }
 
         indexable = IndexableClass()

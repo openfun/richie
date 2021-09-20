@@ -36,7 +36,8 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         self.client.login(username=user.username, password="password")
 
         # Let the authorized user get the page with all wizards listed
-        url = "{:s}?page={:d}".format(reverse("cms_wizard_create"), page.id)
+        reverse_id = reverse("cms_wizard_create")
+        url = f"{reverse_id:s}?page={page.id:d}"
         response = self.client.get(url)
 
         # Check that our wizard to create organizations is on this page
@@ -59,7 +60,8 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         self.client.login(username=user.username, password="password")
 
         # Let the authorized user get the page with all wizards listed
-        url = "{:s}?page={:d}".format(reverse("cms_wizard_create"), page.id)
+        page_url = reverse("cms_wizard_create")
+        url = f"{page_url:s}?page={page.id:d}"
         response = self.client.get(url)
         self.assertEqual(response.status_code, 403)
 
@@ -78,7 +80,8 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
             "cms.change_page",
         ]
 
-        url = "{:s}?page={:d}".format(reverse("cms_wizard_create"), page.id)
+        page_url = reverse("cms_wizard_create")
+        url = f"{page_url:s}?page={page.id:d}"
 
         for permission_to_be_removed in required_permissions + [None]:
             if permission_to_be_removed is None:
@@ -113,7 +116,8 @@ class OrganizationCMSWizardTestCase(CMSTestCase):
         self.client.login(username=user.username, password="password")
 
         # Let the authorized user get the page with all wizards listed
-        url = "{:s}?page={:d}".format(reverse("cms_wizard_create"), page.id)
+        reverse_id = reverse("cms_wizard_create")
+        url = f"{reverse_id:s}?page={page.id:d}"
         response = self.client.get(url)
 
         # Check that our wizard to create organizations is on this page

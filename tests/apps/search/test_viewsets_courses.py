@@ -19,7 +19,7 @@ from richie.apps.search.indexers.courses import CoursesIndexer
 @mock.patch.object(
     CoursesIndexer,
     "format_es_object_for_api",
-    side_effect=lambda es_course: "Course #{:n}".format(es_course["_id"]),
+    side_effect=lambda es_course: f"Course #{es_course['_id']:n}",
 )
 class CoursesViewsetsTestCase(CMSTestCase):
     """
