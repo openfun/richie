@@ -748,11 +748,13 @@ jobs:
       - checkout
       - run:
           name: Deploying to GitHub Pages
+          # NB: pass falsy values for the PULL REQUEST environment variables to make sure the
+          # deployment is not cancelled by Docusaurus based on incorrect values provide by Circle CI.
           command: |
             git config --global user.email "funmoocbot@users.noreply.github.com"
             git config --global user.name "FUN MOOC Bot"
             echo "machine github.com login funmoocbot password ${GH_TOKEN}" > ~/.netrc
-            cd ./website && yarn install && GIT_USER=funmoocbot CI_PULL_REQUEST=false CIRCLE_PULL_REQUEST=false yarn run publish-gh-pages
+            cd ./website && yarn install && GIT_USER=funmoocbot CI_PULL_REQUEST="" CIRCLE_PULL_REQUEST="" yarn run publish-gh-pages
 
 workflows:
   version: 2
