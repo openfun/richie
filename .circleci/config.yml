@@ -743,6 +743,8 @@ jobs:
         auth:
           username: $DOCKER_USER
           password: $DOCKER_PASS
+        environment:
+          FORCE_DEPLOY: true
     working_directory: ~/fun
     steps:
       - checkout
