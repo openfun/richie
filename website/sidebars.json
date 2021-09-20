@@ -6,7 +6,8 @@
       "building-the-frontend",
       "internationalization",
       "frontend-overrides",
-      "lms-connection"
+      "lms-connection",
+      "web-analytics"
     ],
     "Contributing": ["contributing-guide", "accessibility-testing", "css-guidelines"]
   }
