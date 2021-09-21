@@ -226,10 +226,21 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "values": [
                     {
                         "count": 2,
-                        "human_name": SUBJECTS[i]["title"]["en"],
-                        "key": SUBJECTS[i]["id"],
-                    }
-                    for i in range(0, 5)
+                        "human_name": "Economy and Finance",
+                        "key": "L-00010004",
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Education and Training",
+                        "key": "L-00010005",
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Human and social sciences",
+                        "key": "L-00010002",
+                    },
+                    {"count": 2, "human_name": "Law", "key": "L-00010003"},
+                    {"count": 2, "human_name": "Science", "key": "L-00010001"},
                 ],
             },
         )
@@ -245,11 +256,11 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "name": "languages",
                 "position": 5,
                 "values": [
-                    {"count": 2, "human_name": "Azerbaijani", "key": "az"},
-                    {"count": 2, "human_name": "Arabic", "key": "ar"},
-                    {"count": 2, "human_name": "Algerian Arabic", "key": "ar-dz"},
-                    {"count": 2, "human_name": "Asturian", "key": "ast"},
                     {"count": 2, "human_name": "Afrikaans", "key": "af"},
+                    {"count": 2, "human_name": "Algerian Arabic", "key": "ar-dz"},
+                    {"count": 2, "human_name": "Arabic", "key": "ar"},
+                    {"count": 2, "human_name": "Asturian", "key": "ast"},
+                    {"count": 2, "human_name": "Azerbaijani", "key": "az"},
                 ],
             },
         )
@@ -282,22 +293,32 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "name": "subjects",
                 "position": 2,
                 "values": [
-                    *[
-                        {
-                            "count": 2,
-                            "human_name": SUBJECTS[i]["title"]["en"],
-                            "key": SUBJECTS[i]["id"],
-                        }
-                        for i in range(0, 5)
-                    ],
-                    *[
-                        {
-                            "count": 1,
-                            "human_name": SUBJECTS[i]["title"]["en"],
-                            "key": SUBJECTS[i]["id"],
-                        }
-                        for i in range(5, 10)
-                    ],
+                    {
+                        "count": 2,
+                        "human_name": "Economy and Finance",
+                        "key": "L-00010004",
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Education and Training",
+                        "key": "L-00010005",
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Human and social sciences",
+                        "key": "L-00010002",
+                    },
+                    {"count": 2, "human_name": "Law", "key": "L-00010003"},
+                    {"count": 2, "human_name": "Science", "key": "L-00010001"},
+                    {"count": 1, "human_name": "Computer science", "key": "L-00010008"},
+                    {
+                        "count": 1,
+                        "human_name": "Education and career guidance",
+                        "key": "L-00010010",
+                    },
+                    {"count": 1, "human_name": "Entrepreneurship", "key": "L-00010007"},
+                    {"count": 1, "human_name": "Languages", "key": "L-00010009"},
+                    {"count": 1, "human_name": "Management", "key": "L-00010006"},
                 ],
             },
         )
@@ -315,11 +336,11 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "name": "languages",
                 "position": 5,
                 "values": [
-                    {"count": 2, "human_name": "Azerbaijani", "key": "az"},
-                    {"count": 2, "human_name": "Arabic", "key": "ar"},
-                    {"count": 2, "human_name": "Algerian Arabic", "key": "ar-dz"},
-                    {"count": 2, "human_name": "Asturian", "key": "ast"},
                     {"count": 2, "human_name": "Afrikaans", "key": "af"},
+                    {"count": 2, "human_name": "Algerian Arabic", "key": "ar-dz"},
+                    {"count": 2, "human_name": "Arabic", "key": "ar"},
+                    {"count": 2, "human_name": "Asturian", "key": "ast"},
+                    {"count": 2, "human_name": "Azerbaijani", "key": "az"},
                 ],
             },
         )
@@ -348,10 +369,14 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "values": [
                     {
                         "count": 2,
-                        "human_name": SUBJECTS[i]["title"]["en"],
-                        "key": SUBJECTS[i]["id"],
-                    }
-                    for i in [0, 1]
+                        "human_name": "Human and social sciences",
+                        "key": "L-00010002",
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Science",
+                        "key": "L-00010001",
+                    },
                 ],
             },
         )
@@ -367,8 +392,8 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "name": "languages",
                 "position": 5,
                 "values": [
-                    {"count": 2, "human_name": "Azerbaijani", "key": "az"},
                     {"count": 2, "human_name": "Arabic", "key": "ar"},
+                    {"count": 2, "human_name": "Azerbaijani", "key": "az"},
                 ],
             },
         )
@@ -396,22 +421,33 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "name": "subjects",
                 "position": 2,
                 "values": [
-                    *[
-                        {
-                            "count": 2,
-                            "human_name": SUBJECTS[i]["title"]["en"],
-                            "key": SUBJECTS[i]["id"],
-                        }
-                        for i in range(0, 5)
-                    ],
-                    *[
-                        {
-                            "count": 1,
-                            "human_name": SUBJECTS[i]["title"]["en"],
-                            "key": SUBJECTS[i]["id"],
-                        }
-                        for i in range(5, 11)
-                    ],
+                    {
+                        "count": 2,
+                        "human_name": "Economy and Finance",
+                        "key": "L-00010004",
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Education and Training",
+                        "key": "L-00010005",
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Human and social sciences",
+                        "key": "L-00010002",
+                    },
+                    {"count": 2, "human_name": "Law", "key": "L-00010003"},
+                    {"count": 2, "human_name": "Science", "key": "L-00010001"},
+                    {"count": 1, "human_name": "Computer science", "key": "L-00010008"},
+                    {
+                        "count": 1,
+                        "human_name": "Education and career guidance",
+                        "key": "L-00010010",
+                    },
+                    {"count": 1, "human_name": "Entrepreneurship", "key": "L-00010007"},
+                    {"count": 1, "human_name": "Health", "key": "L-00010011"},
+                    {"count": 1, "human_name": "Languages", "key": "L-00010009"},
+                    {"count": 1, "human_name": "Management", "key": "L-00010006"},
                 ],
             },
         )
@@ -427,16 +463,16 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "name": "languages",
                 "position": 5,
                 "values": [
-                    {"count": 2, "human_name": "Azerbaijani", "key": "az"},
-                    {"count": 2, "human_name": "Arabic", "key": "ar"},
-                    {"count": 2, "human_name": "Algerian Arabic", "key": "ar-dz"},
-                    {"count": 2, "human_name": "Asturian", "key": "ast"},
                     {"count": 2, "human_name": "Afrikaans", "key": "af"},
+                    {"count": 2, "human_name": "Algerian Arabic", "key": "ar-dz"},
+                    {"count": 2, "human_name": "Arabic", "key": "ar"},
+                    {"count": 2, "human_name": "Asturian", "key": "ast"},
+                    {"count": 2, "human_name": "Azerbaijani", "key": "az"},
+                    {"count": 1, "human_name": "Belarusian", "key": "be"},
+                    {"count": 1, "human_name": "Bengali", "key": "bn"},
                     {"count": 1, "human_name": "Bosnian", "key": "bs"},
                     {"count": 1, "human_name": "Breton", "key": "br"},
-                    {"count": 1, "human_name": "Bengali", "key": "bn"},
                     {"count": 1, "human_name": "Bulgarian", "key": "bg"},
-                    {"count": 1, "human_name": "Belarusian", "key": "be"},
                     {"count": 1, "human_name": "Catalan", "key": "ca"},
                 ],
             },
@@ -469,22 +505,28 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "name": "subjects",
                 "position": 2,
                 "values": [
-                    *[
-                        {
-                            "count": 2,
-                            "human_name": SUBJECTS[i]["title"]["en"],
-                            "key": SUBJECTS[i]["id"],
-                        }
-                        for i in range(0, 5)
-                    ],
-                    *[
-                        {
-                            "count": 1,
-                            "human_name": SUBJECTS[i]["title"]["en"],
-                            "key": SUBJECTS[i]["id"],
-                        }
-                        for i in [5, 6, 7, 8, 10]
-                    ],
+                    {
+                        "count": 2,
+                        "human_name": "Economy and Finance",
+                        "key": "L-00010004",
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Education and Training",
+                        "key": "L-00010005",
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Human and social sciences",
+                        "key": "L-00010002",
+                    },
+                    {"count": 2, "human_name": "Law", "key": "L-00010003"},
+                    {"count": 2, "human_name": "Science", "key": "L-00010001"},
+                    {"count": 1, "human_name": "Computer science", "key": "L-00010008"},
+                    {"count": 1, "human_name": "Entrepreneurship", "key": "L-00010007"},
+                    {"count": 1, "human_name": "Health", "key": "L-00010011"},
+                    {"count": 1, "human_name": "Languages", "key": "L-00010009"},
+                    {"count": 1, "human_name": "Management", "key": "L-00010006"},
                 ],
             },
         )
@@ -514,14 +556,14 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "name": "languages",
                 "position": 5,
                 "values": [
-                    {"count": 2, "human_name": "Azerbaijani", "key": "az"},
-                    {"count": 2, "human_name": "Arabic", "key": "ar"},
-                    {"count": 2, "human_name": "Algerian Arabic", "key": "ar-dz"},
-                    {"count": 2, "human_name": "Asturian", "key": "ast"},
                     {"count": 2, "human_name": "Afrikaans", "key": "af"},
+                    {"count": 2, "human_name": "Algerian Arabic", "key": "ar-dz"},
+                    {"count": 2, "human_name": "Arabic", "key": "ar"},
+                    {"count": 2, "human_name": "Asturian", "key": "ast"},
+                    {"count": 2, "human_name": "Azerbaijani", "key": "az"},
+                    {"count": 1, "human_name": "Bengali", "key": "bn"},
                     {"count": 1, "human_name": "Bosnian", "key": "bs"},
                     {"count": 1, "human_name": "Breton", "key": "br"},
-                    {"count": 1, "human_name": "Bengali", "key": "bn"},
                     {"count": 1, "human_name": "Bulgarian", "key": "bg"},
                     {"count": 1, "human_name": "Catalan", "key": "ca"},
                 ],
@@ -553,22 +595,33 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "name": "subjects",
                 "position": 2,
                 "values": [
-                    *[
-                        {
-                            "count": 2,
-                            "human_name": SUBJECTS[i]["title"]["en"],
-                            "key": SUBJECTS[i]["id"],
-                        }
-                        for i in range(0, 5)
-                    ],
-                    *[
-                        {
-                            "count": 1,
-                            "human_name": SUBJECTS[i]["title"]["en"],
-                            "key": SUBJECTS[i]["id"],
-                        }
-                        for i in range(5, 11)
-                    ],
+                    {
+                        "count": 2,
+                        "human_name": "Economy and Finance",
+                        "key": "L-00010004",
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Education and Training",
+                        "key": "L-00010005",
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Human and social sciences",
+                        "key": "L-00010002",
+                    },
+                    {"count": 2, "human_name": "Law", "key": "L-00010003"},
+                    {"count": 2, "human_name": "Science", "key": "L-00010001"},
+                    {"count": 1, "human_name": "Computer science", "key": "L-00010008"},
+                    {
+                        "count": 1,
+                        "human_name": "Education and career guidance",
+                        "key": "L-00010010",
+                    },
+                    {"count": 1, "human_name": "Entrepreneurship", "key": "L-00010007"},
+                    {"count": 1, "human_name": "Health", "key": "L-00010011"},
+                    {"count": 1, "human_name": "Languages", "key": "L-00010009"},
+                    {"count": 1, "human_name": "Management", "key": "L-00010006"},
                 ],
             },
         )
@@ -598,16 +651,16 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "name": "languages",
                 "position": 5,
                 "values": [
-                    {"count": 2, "human_name": "Azerbaijani", "key": "az"},
-                    {"count": 2, "human_name": "Arabic", "key": "ar"},
-                    {"count": 2, "human_name": "Algerian Arabic", "key": "ar-dz"},
-                    {"count": 2, "human_name": "Asturian", "key": "ast"},
                     {"count": 2, "human_name": "Afrikaans", "key": "af"},
+                    {"count": 2, "human_name": "Algerian Arabic", "key": "ar-dz"},
+                    {"count": 2, "human_name": "Arabic", "key": "ar"},
+                    {"count": 2, "human_name": "Asturian", "key": "ast"},
+                    {"count": 2, "human_name": "Azerbaijani", "key": "az"},
+                    {"count": 1, "human_name": "Belarusian", "key": "be"},
+                    {"count": 1, "human_name": "Bengali", "key": "bn"},
                     {"count": 1, "human_name": "Bosnian", "key": "bs"},
                     {"count": 1, "human_name": "Breton", "key": "br"},
-                    {"count": 1, "human_name": "Bengali", "key": "bn"},
                     {"count": 1, "human_name": "Bulgarian", "key": "bg"},
-                    {"count": 1, "human_name": "Belarusian", "key": "be"},
                     {"count": 1, "human_name": "Catalan", "key": "ca"},
                 ],
             },
@@ -639,14 +692,23 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "name": "subjects",
                 "position": 2,
                 "values": [
-                    *[
-                        {
-                            "count": 2,
-                            "human_name": SUBJECTS[i]["title"]["en"],
-                            "key": SUBJECTS[i]["id"],
-                        }
-                        for i in range(0, 5)
-                    ],
+                    {
+                        "count": 2,
+                        "human_name": "Economy and Finance",
+                        "key": "L-00010004",
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Education and Training",
+                        "key": "L-00010005",
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Human and social sciences",
+                        "key": "L-00010002",
+                    },
+                    {"count": 2, "human_name": "Law", "key": "L-00010003"},
+                    {"count": 2, "human_name": "Science", "key": "L-00010001"},
                     {"count": 1, "human_name": "Health", "key": "L-00010011"},
                 ],
             },
@@ -684,14 +746,23 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "name": "subjects",
                 "position": 2,
                 "values": [
-                    *[
-                        {
-                            "count": 2,
-                            "human_name": SUBJECTS[i]["title"]["en"],
-                            "key": SUBJECTS[i]["id"],
-                        }
-                        for i in range(0, 5)
-                    ]
+                    {
+                        "count": 2,
+                        "human_name": "Economy and Finance",
+                        "key": "L-00010004",
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Education and Training",
+                        "key": "L-00010005",
+                    },
+                    {
+                        "count": 2,
+                        "human_name": "Human and social sciences",
+                        "key": "L-00010002",
+                    },
+                    {"count": 2, "human_name": "Law", "key": "L-00010003"},
+                    {"count": 2, "human_name": "Science", "key": "L-00010001"},
                 ],
             },
         )
@@ -736,11 +807,11 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "name": "languages",
                 "position": 5,
                 "values": [
-                    {"count": 2, "human_name": "Azerbaijani", "key": "az"},
-                    {"count": 2, "human_name": "Arabic", "key": "ar"},
-                    {"count": 2, "human_name": "Algerian Arabic", "key": "ar-dz"},
-                    {"count": 2, "human_name": "Asturian", "key": "ast"},
                     {"count": 2, "human_name": "Afrikaans", "key": "af"},
+                    {"count": 2, "human_name": "Algerian Arabic", "key": "ar-dz"},
+                    {"count": 2, "human_name": "Arabic", "key": "ar"},
+                    {"count": 2, "human_name": "Asturian", "key": "ast"},
+                    {"count": 2, "human_name": "Azerbaijani", "key": "az"},
                     {"count": 1, "human_name": "Catalan", "key": "ca"},
                 ],
             },
@@ -792,11 +863,11 @@ class FacetsCoursesQueryTestCase(TestCase):
                 "name": "languages",
                 "position": 5,
                 "values": [
-                    {"count": 2, "human_name": "Azerbaijani", "key": "az"},
-                    {"count": 2, "human_name": "Arabic", "key": "ar"},
-                    {"count": 2, "human_name": "Algerian Arabic", "key": "ar-dz"},
-                    {"count": 2, "human_name": "Asturian", "key": "ast"},
                     {"count": 2, "human_name": "Afrikaans", "key": "af"},
+                    {"count": 2, "human_name": "Algerian Arabic", "key": "ar-dz"},
+                    {"count": 2, "human_name": "Arabic", "key": "ar"},
+                    {"count": 2, "human_name": "Asturian", "key": "ast"},
+                    {"count": 2, "human_name": "Azerbaijani", "key": "az"},
                 ],
             },
         )

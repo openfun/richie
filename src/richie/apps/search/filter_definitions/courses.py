@@ -3,6 +3,7 @@ import re
 from operator import itemgetter
 
 from django import forms
+from django.core.exceptions import ImproperlyConfigured
 from django.utils import timezone, translation
 from django.utils.translation import gettext as _
 
@@ -289,6 +290,38 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
         # Get internationalized names for all our keys
         key_i18n_name_map = self.get_i18n_names([*key_count_map])
 
+        # Add human names to keys and counts before sorting as some of our sortings
+        # use alphabetical ordering.
+        values = [
+            # Aggregate the information from right above to build the values
+            {
+                "count": count,
+                "human_name": key_i18n_name_map[key],
+                "key": key,
+            }
+            for key, count in key_count_map.items()
+        ]
+
+        # Sort facets as requested
+        if self.sorting == self.SORTING_NAME:
+            # Alphabetical ascending sorting
+            values = sorted(
+                values,
+                key=lambda value: (value["human_name"], value["count"] * -1),
+            )
+        elif self.sorting == self.SORTING_COUNT:
+            # Sorting by descending facet count
+            values = sorted(
+                values,
+                key=lambda value: (value["count"] * -1, value["human_name"]),
+            )
+        else:
+            # NB: self.SORTING_CONF is not appropriate for Indexables as they are not defined
+            # in the static filter definition but generated from indices.
+            raise ImproperlyConfigured(
+                f'Facet sorting "{self.sorting}" is invalid for filter {self.name}.'
+            )
+
         return {
             self.name: {
                 # We always need to pass the base definition to the frontend
@@ -296,16 +329,17 @@ class IndexableFilterDefinition(TermsQueryMixin, BaseFilterDefinition):
                 # If values are removed due to `min_doc_count`, we are not returning them, and
                 # therefore by definition our filter `has_more_values`.
                 "has_more_values": has_more_values
-                or any(count < self.min_doc_count for count in key_count_map.values()),
-                "values": [
-                    # Aggregate the information from right above to build the values
-                    {"count": count, "human_name": key_i18n_name_map[key], "key": key}
-                    for key, count in key_count_map.items()
-                    # We filter out values that do not meet `min_doc_count` manually instead of
-                    # using ElasticSearch's builtin feature so it does not interfere with our
-                    # `has_more_values` check.
-                    if count >= self.min_doc_count or key in data[self.name]
-                ],
+                or any(value["count"] < self.min_doc_count for value in values),
+                "values": list(
+                    filter(
+                        # We filter out values that do not meet `min_doc_count`manually instead of
+                        # using ElasticSearch's builtin feature so it does not interfere with our
+                        # `has_more_values` check.
+                        lambda value: value["count"] >= self.min_doc_count
+                        or value["key"] in data[self.name],
+                        values,
+                    )
+                ),
             }
         }
 
