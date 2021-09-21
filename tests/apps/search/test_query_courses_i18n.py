@@ -89,10 +89,14 @@ class CoursesI18nQueryTestCase(TestCase):
             page_reverse_id="organizations", should_publish=True
         )
         org_1 = OrganizationFactory(
-            page_parent=org_meta.extended_object, should_publish=True
+            page_parent=org_meta.extended_object,
+            page_title="First organization",
+            should_publish=True,
         )
         org_2 = OrganizationFactory(
-            page_parent=org_meta.extended_object, should_publish=True
+            page_parent=org_meta.extended_object,
+            page_title="Second organization",
+            should_publish=True,
         )
         # Create a course linked to our categories and organizations
         CourseFactory(

@@ -25,7 +25,7 @@ QUERY_ANALYZERS = getattr(
 # This lower score factor is the boost value we get or set here.
 RELATED_CONTENT_BOOST = 0.05
 
-FACET_SORTING_DEFAULT = "conf"
+FACET_SORTING_DEFAULT = "count"
 
 FACET_COUNTS_DEFAULT_LIMIT = getattr(settings, "RICHIE_FACET_COUNTS_DEFAULT_LIMIT", 10)
 FACET_COUNTS_MAX_LIMIT = getattr(settings, "RICHIE_FACET_COUNTS_MAX_LIMIT", 50)
@@ -49,6 +49,7 @@ FILTERS_CONFIGURATION = [
             "min_doc_count": 0,
             "name": "new",
             "position": 0,
+            "sorting": "conf",
             "values": {"new": _("First session")},
         },
     ),
@@ -65,6 +66,7 @@ FILTERS_CONFIGURATION = [
                         "min_doc_count": 0,
                         "name": "availability",
                         "position": 1,
+                        "sorting": "conf",
                     },
                 ),
                 (
@@ -76,7 +78,6 @@ FILTERS_CONFIGURATION = [
                         "min_doc_count": 1,
                         "name": "languages",
                         "position": 5,
-                        "sorting": "count",
                     },
                 ),
             ],

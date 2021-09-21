@@ -252,8 +252,7 @@ class BaseChoicesFilterDefinition(BaseFilterDefinition):
         Add the counts to the values from the initial definition to make them complete
         and sorted as the frontend expects them.
         """
-        # Get filter values to derive human names
-        values = self.get_values()
+        human_names = self.get_values()
 
         # for each facet, we derive the value and the count:
         # eg. for facet key `availability@coming_soon`, the value is `coming_soon`
@@ -281,25 +280,34 @@ class BaseChoicesFilterDefinition(BaseFilterDefinition):
         # Check if there are more available values than we're about to return on the API
         has_more_values = len(facet_counts) > len(facet_counts_dict)
 
+        # Add human names to keys and counts before sorting as some of our sortings
+        # use alphabetical ordering.
+        values = [
+            {"count": count, "human_name": human_names[name], "key": name}
+            for name, count in facet_counts_dict.items()
+        ]
+
         # Sort facets as requested
         if self.sorting == self.SORTING_NAME:
             # Alphabetical ascending sorting
-            facet_counts = sorted(facet_counts_dict.items(), key=itemgetter(0))
-        elif self.sorting == self.SORTING_COUNT:
-            # Sorting by descending facet count
-            facet_counts = sorted(
-                facet_counts_dict.items(), key=itemgetter(1), reverse=True
+            values = sorted(
+                values,
+                key=lambda value: (value["human_name"], value["count"] * -1),
             )
         elif self.sorting == self.SORTING_CONF:
             # Respect the order set in filter definitions
-            facet_counts = [
-                (name, facet_counts_dict[name])
-                for name in values
-                if name in facet_counts_dict
-            ]
+            values = sorted(
+                values, key=lambda value: [*human_names].index(value["key"])
+            )
+        elif self.sorting == self.SORTING_COUNT:
+            # Sorting by descending facet count
+            values = sorted(
+                values,
+                key=lambda value: (value["count"] * -1, value["human_name"]),
+            )
         else:
             raise ImproperlyConfigured(
-                'Facet sorting should be one of "conf", "count" or "name"'
+                f'Facet sorting "{self.sorting}" is invalid for filter {self.name}.'
             )
 
         return {
@@ -309,15 +317,17 @@ class BaseChoicesFilterDefinition(BaseFilterDefinition):
                 # If values are removed due to `min_doc_count`, we are not returning them, and
                 # therefore by definition our filter `has_more_values`.
                 "has_more_values": has_more_values
-                or any(count < self.min_doc_count for name, count in facet_counts),
-                "values": [
-                    {"count": count, "human_name": values[name], "key": name}
-                    for name, count in facet_counts
-                    # Filter out values that do not meet `min_doc_count` unless they are active
-                    # values. We do this at the very end so it does not mess with our facet limits
-                    # and `has_more_values` calculations.
-                    if count >= self.min_doc_count or name in data[self.name]
-                ],
+                or any(value["count"] < self.min_doc_count for value in values),
+                "values": list(
+                    filter(
+                        # Filter out values that do not meet `min_doc_count` unless they are
+                        # active values. We do this at the very end so it does not mess with
+                        # our facet limits and `has_more_values` calculations.
+                        lambda value: value["count"] >= self.min_doc_count
+                        or value["key"] in data[self.name],
+                        values,
+                    )
+                ),
             }
         }
 
