@@ -3,6 +3,8 @@ Build an interoperability layer that allows Richie to work with ElasticSearch 6
 just like it does with ElasticSearch 7.
 """
 # pragma pylint: disable=W0221
+from django.utils.functional import cached_property
+
 from elasticsearch import Elasticsearch, Transport
 from elasticsearch.client import IndicesClient
 from elasticsearch.helpers import bulk
@@ -24,9 +26,13 @@ class ElasticsearchClientCompat7to6(Elasticsearch):
         of Elasticsearch we're working with.
         """
         super().__init__(hosts=hosts, transport_class=transport_class, **kwargs)
-        # Store the ES version information in memory so we don't have to re-make the
-        # info request constantly.
-        self.__es_version__ = self.info()["version"]["number"][:1]
+
+    @cached_property
+    def __es_version__(self):
+        """
+        First retrieve version from elasticsearch server then returns the cached result
+        """
+        return self.info()["version"]["number"][:1]
 
     # pylint: disable=W0622
     def get(self, index, id):
@@ -95,7 +101,6 @@ def bulk_compat_7_to_6(client, actions, *args, stats_only=False, **kwargs):
     Patch a dummy type on all actions to satisfy the requirement for ES6. As types are not
     actually used for anything, we can use the same value everywhere.
     """
-
     if client.__es_version__ == "6":
         # Use a generator expression instead of a for loop to keep actions lazy
         actions = ({**action, "_type": DOC_TYPE} for action in actions)
