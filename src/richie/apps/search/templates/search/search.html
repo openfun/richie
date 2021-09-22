@@ -3,6 +3,7 @@
 {% get_current_language as LANGUAGE_CODE %}
 
 {% block meta %}
+  {{ block.super }}
   {% if CDN_DOMAIN %}
   <meta name="public-path" value="{{ CDN_DOMAIN }}" />
   {% endif %}

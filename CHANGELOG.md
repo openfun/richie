@@ -11,6 +11,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Fixed
 
 - Fix meta header "alternate" href value to avoid duplicates in search engine
+- Fix search template meta block like missing favicon and open graph metas
 
 ## [2.8.0] - 2021-09-17
 
