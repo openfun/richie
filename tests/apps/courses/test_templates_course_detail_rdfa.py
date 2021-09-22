@@ -290,7 +290,7 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
             (
                 subject,
                 URIRef("https://schema.org/alternate"),
-                URIRef("/en/very-interesting-course/"),
+                URIRef("http://example.com/en/very-interesting-course/"),
             )
             in graph
         )
@@ -298,7 +298,7 @@ class TemplatesCourseDetailRDFaCMSTestCase(CMSTestCase):
             (
                 subject,
                 URIRef("https://schema.org/alternate"),
-                URIRef("/fr/very-interesting-course/"),
+                URIRef("http://example.com/fr/very-interesting-course/"),
             )
             in graph
         )
