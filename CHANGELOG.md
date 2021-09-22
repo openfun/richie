@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Fixed
+
+- Fix meta header "alternate" href value to avoid duplicates in search engine
+
 ## [2.8.0] - 2021-09-17
 
 ### Added

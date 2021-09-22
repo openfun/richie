@@ -59,11 +59,14 @@ class PagesTests(CMSTestCase):
             response = self.client.get(page.get_absolute_url(language))
             self.assertEqual(200, response.status_code)
             self.assertIn(
-                '<link rel="alternate" href="/fr-ca/un-deux/" hreflang="fr-ca" />',
+                (
+                    '<link rel="alternate" href="http://example.com/fr-ca/un-deux/" '
+                    'hreflang="fr-ca" />'
+                ),
                 response.rendered_content,
             )
             self.assertIn(
-                '<link rel="alternate" href="/es/uno-dos/" hreflang="es" />',
+                '<link rel="alternate" href="http://example.com/es/uno-dos/" hreflang="es" />',
                 response.rendered_content,
             )
 
