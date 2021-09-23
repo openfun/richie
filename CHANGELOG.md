@@ -8,6 +8,10 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+### Changed
+
+- Set a proper default value to `DJANGO_SECRET_KEY` in `Base` configuration
+
 ### Fixed
 
 - Fix meta header "alternate" href value to avoid duplicates in search engine
