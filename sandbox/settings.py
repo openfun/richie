@@ -139,7 +139,7 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
 
     # Security
     ALLOWED_HOSTS = []
-    SECRET_KEY = values.Value(None)
+    SECRET_KEY = values.Value("ThisIsAnExampleKeyForDevPurposeOnly")
     # System check reference:
     # https://docs.djangoproject.com/en/2.2/ref/checks/#security
     SILENCED_SYSTEM_CHECKS = values.ListValue(
@@ -648,13 +648,15 @@ class ContinuousIntegration(Test):
 class Production(Base):
     """Production environment settings
 
-    You must define the DJANGO_ALLOWED_HOSTS environment variable in Production
-    configuration (and derived configurations):
+    You must define the DJANGO_ALLOWED_HOSTS and DJANGO_SECRET_KEY environment
+    variables in Production configuration (and derived configurations):
 
     DJANGO_ALLOWED_HOSTS="foo.com,foo.fr"
+    DJANGO_SECRET_KEY="your-secret-key"
     """
 
     # Security
+    SECRET_KEY = values.SecretValue()
     ALLOWED_HOSTS = values.ListValue(None)
     CSRF_COOKIE_SECURE = True
     SECURE_BROWSER_XSS_FILTER = True
