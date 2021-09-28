@@ -14,6 +14,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- Remove use of `f-strings` within `gettext_lazy`
 - Lazily retrieve elasticsearch server version
 - Fix meta header "alternate" href value to avoid duplicates in search engine
 - Fix search template meta block like missing favicon and open graph metas
