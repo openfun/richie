@@ -538,7 +538,20 @@ class Base(StyleguideMixin, DRFMixin, RichieCoursesConfigurationMixin, Configura
             "OPTIONS": values.DictValue(
                 {}, environ_name="CACHE_DEFAULT_OPTIONS", environ_prefix=None
             ),
-        }
+        },
+        "search": {
+            "BACKEND": values.Value(
+                "django.core.cache.backends.locmem.LocMemCache",
+                environ_name="SEARCH_CACHE_BACKEND",
+                environ_prefix=None,
+            ),
+            "LOCATION": values.Value(
+                "search_cache",
+                environ_name="SEARCH_CACHE_NAME",
+                environ_prefix=None,
+            ),
+            "TIMEOUT": 60,
+        },
     }
 
     # For more details about CMS_CACHE_DURATION, see :
@@ -623,7 +636,12 @@ class Test(Base):
             "BACKEND": "django_redis.cache.RedisCache",
             "LOCATION": "mymaster/redis-sentinel:26379,redis-sentinel:26379/0",
             "OPTIONS": {"CLIENT_CLASS": "richie.apps.core.cache.SentinelClient"},
-        }
+        },
+        "search": {
+            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+            "LOCATION": "search_cache",
+            "TIMEOUT": 60,
+        },
     }
 
     RICHIE_LMS_BACKENDS = [

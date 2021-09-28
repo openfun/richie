@@ -13,6 +13,7 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - Set a proper default value to `DJANGO_SECRET_KEY` in `Base` configuration
+- Update search filters to stop relying on CMS pages MPTT paths
 
 ### Fixed
 

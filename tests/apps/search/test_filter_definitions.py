@@ -1,6 +1,7 @@
 """
 Tests for environment ElasticSearch support
 """
+from django.core.cache import caches
 from django.test import TestCase
 
 from richie.apps.courses.factories import CategoryFactory
@@ -46,31 +47,42 @@ class FilterDefintionsTestCase(TestCase):
         The indexable filters (subjects, levels and organizations) should return a regex matching
         only the parent objects if the corresponding filter pages exist and are published.
         """
-        for index, filter_name in enumerate(["levels", "subjects", "organizations"]):
-            CategoryFactory(page_reverse_id=filter_name, should_publish=True)
+        for filter_name in ["levels", "subjects", "organizations"]:
+            filter_page = CategoryFactory(
+                page_reverse_id=filter_name, should_publish=True
+            )
+            item = CategoryFactory(
+                page_parent=filter_page.extended_object, should_publish=True
+            )
+            item_path = item.extended_object.node.path
 
-            with self.assertNumQueries(1):
+            with self.assertNumQueries(2):
                 self.assertEqual(
-                    FILTERS[filter_name].aggs_include, f".*-000{index+1:d}.{{4}}"
+                    FILTERS[filter_name].aggs_include,
+                    [f"P-{item_path}", f"L-{item_path}"],
                 )
 
             with self.assertNumQueries(0):
                 self.assertEqual(
-                    FILTERS[filter_name].aggs_include, f".*-000{index+1:d}.{{4}}"
+                    FILTERS[filter_name].aggs_include,
+                    [f"P-{item_path}", f"L-{item_path}"],
                 )
 
             # Reset cache for subsequent tests...
             # pylint: disable=protected-access
             FILTERS[filter_name]._base_page = None
+            caches["search"].clear()
 
-            with self.assertNumQueries(1):
+            with self.assertNumQueries(2):
                 self.assertEqual(
-                    FILTERS[filter_name].aggs_include, f".*-000{index+1:d}.{{4}}"
+                    FILTERS[filter_name].aggs_include,
+                    [f"P-{item_path}", f"L-{item_path}"],
                 )
 
             with self.assertNumQueries(0):
                 self.assertEqual(
-                    FILTERS[filter_name].aggs_include, f".*-000{index+1:d}.{{4}}"
+                    FILTERS[filter_name].aggs_include,
+                    [f"P-{item_path}", f"L-{item_path}"],
                 )
 
             # Reset cache for subsequent tests...
