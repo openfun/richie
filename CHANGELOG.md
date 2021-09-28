@@ -8,6 +8,8 @@ Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unrealeased]
 
+## [2.8.1] - 2021-09-28
+
 ### Changed
 
 - Set a proper default value to `DJANGO_SECRET_KEY` in `Base` configuration
@@ -1377,7 +1379,8 @@ us:
 - finish integrating the missing pages and improve the sandbox environment;
 - test and polish the use of richie as a django app / node dependency.
 
-[unreleased]: https://github.com/openfun/richie/compare/v2.8.0...master
+[unreleased]: https://github.com/openfun/richie/compare/v2.8.1...master
+[2.8.1]: https://github.com/openfun/richie/compare/v2.8.0...v2.8.1
 [2.8.0]: https://github.com/openfun/richie/compare/v2.7.1...v2.8.0
 [2.7.1]: https://github.com/openfun/richie/compare/v2.7.0...v2.7.1
 [2.7.0]: https://github.com/openfun/richie/compare/v2.6.0...v2.7.0
